@@ -1,95 +1,116 @@
-Return-Path: <linux-i2c+bounces-9960-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9961-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52BD7A6AFD4
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 Mar 2025 22:30:13 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B7091A6AFFB
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 Mar 2025 22:38:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A7A8F98492D
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 Mar 2025 21:29:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2EAE1468244
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 Mar 2025 21:38:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C87FD226D14;
-	Thu, 20 Mar 2025 21:29:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CADEA22173C;
+	Thu, 20 Mar 2025 21:38:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YhSKAK5h"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="bk68MoCa"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79D6C20C477;
-	Thu, 20 Mar 2025 21:29:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2375215162
+	for <linux-i2c@vger.kernel.org>; Thu, 20 Mar 2025 21:37:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742506164; cv=none; b=qCP4sGMGZKHZNFUuX8L1MLFozfzC8UvfG/G/8LUo6M7Vx17f+BHl22R8zwIo1Qe02YOIDKOd4sA3QDelkJ36Igo/weQVxT4UqXaZ2Qx8VxSV2TKtug8I7RJqBY8bGgfjJc5Hs0zHAw9TKSdhrOyRqkdBVSAanqVlaQFJ9QW15ho=
+	t=1742506681; cv=none; b=GGtcKZh0HVi9dE2L+nTcerPhadKnqSCjeebFyMqlNGrZBcETWH4wqlzr1nrqnHjy0BKt7ojZq1EatcYqNc9/8lrME1swKOj5e7Vg7VROTKpbv0lAQTDRny6xRP2OdfuITmvuM2rxl9Q1yoFbSj7v+gmW2cDmgGJ3m/i5+pR3D2w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742506164; c=relaxed/simple;
-	bh=BfFbmidVd0ga1sTaDOR7P/pNui14jGTWt28A2TXGhGI=;
+	s=arc-20240116; t=1742506681; c=relaxed/simple;
+	bh=lq0seSl838vsfvLLdwYgAkkukuUzoHZcWTN3JqN3KCM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oyL0INRMiGR1OL5aw8NeE5E4ErTsnX/mcEk6S39qR2r+x9xdM1TZz8JFOhn5dCNd8SHKAEFHWPeJYjnEm3JpHh/sthRcgSQbN6UP5Tjw/T2dfqEPsJL74/kHfM9oGlcaPmAiP832KRSr26nWizUY5lUUvjCn5YCzbBYDP37aHYE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YhSKAK5h; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D4D8C4CEDD;
-	Thu, 20 Mar 2025 21:29:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742506163;
-	bh=BfFbmidVd0ga1sTaDOR7P/pNui14jGTWt28A2TXGhGI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YhSKAK5h8Q82LHf7Hlg04L+bPGwJDVi54Y44giplGZxoxQE9w11cuLNOoUCnkgfEk
-	 vdcSP4uywjHrgTWuILvCl6+rHA5j58bzvHdlIh/PrliLUhGDw81yQipf5SctpAJNIx
-	 PyxXoDFWxD76kfcOfKVYaDPrRbtVvPgJYHBp5AVV6/H5qwIdY2o5eQxtU5EA7un32A
-	 IWlcR8oAWUw3m6dIanBa9A0E+Jirj8pub+fQkzffZmkKlK5kZ0lvie/0Rb90RdL7ie
-	 l0Tx6h3PD1uPJ8i9yscOeY73gfSSYlqw5KKksbLRaEkD91HI9PgvCiW4wI7ScN7iqC
-	 v9aMsqsLB804g==
-Date: Thu, 20 Mar 2025 22:29:20 +0100
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Wentao Liang <vulab@iscas.ac.cn>
-Cc: u.kleine-koenig@baylibre.com, rjui@broadcom.com, sbranden@broadcom.com, 
-	bcm-kernel-feedback-list@broadcom.com, linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] i2c: iproc: Refactor prototype and remove redundant
- error checks
-Message-ID: <brmzhl77j2lk7bghy5iuzeifar2fdwa6nhhzfywm7xvlidxwjm@3x4cy4f6pxvf>
-References: <20250121084818.2719-1-vulab@iscas.ac.cn>
+	 Content-Type:Content-Disposition:In-Reply-To; b=mowQhLl3EyUZdX5PXM8O33k4q7EQF9Z39PPsfPmxL/0O1YXEXwxaPj8qwFGRHhMr/0soawmQFPWCh4ILAeWpBw2dP36paFBw++7ABF3KTrnL/T5I6EOIFDRP2s93TCQhvFeHXDtIcmNp5AoHRR7O5Q7VDoTRk1rwHkqzIbbEO6c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=bk68MoCa; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=lq0s
+	eSl838vsfvLLdwYgAkkukuUzoHZcWTN3JqN3KCM=; b=bk68MoCaES45upC3oop2
+	Kn6s9GIVarGt8ZYCBcAi9u97pratXAXIEjkW+Z6ytiXFp9lLXvaB4OUoDi7gP+II
+	9ehRZDPAp15AFby/TssjgcnP8nmkQ/Q3MUJ4hQs+UOqBi9wEIy3cY49aNDXhoRY9
+	giZm8SToC2+7W79zKmyK9ugqLdi/4tB798ImBoeZFE7ve96fkBNvX/KZjcZc4vF/
+	cvdXL1huHO9oqusD6/EOTbu4s18isYsJjwXLSYGYCr6BxdVS+8MP6eNA6N2nwUuD
+	poRvKr8cyXUoyDHSM9vTu/wDlQq4ZZ6aDR7a+RPHiDOwpMW/KGzbo5SIRg8wA0vI
+	7A==
+Received: (qmail 890200 invoked from network); 20 Mar 2025 22:37:54 +0100
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 20 Mar 2025 22:37:54 +0100
+X-UD-Smtp-Session: l3s3148p1@MVRb88wwnOMujnsn
+Date: Thu, 20 Mar 2025 22:37:53 +0100
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Cc: Herve Codina <herve.codina@bootlin.com>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [RFC PATCH 0/3] i2c: Introduce i2c bus extensions
+Message-ID: <Z9yKsc3m3TGxan8Y@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Luca Ceresoli <luca.ceresoli@bootlin.com>,
+	Herve Codina <herve.codina@bootlin.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20250205173918.600037-1-herve.codina@bootlin.com>
+ <Z9wO8SIy1CcfO0bZ@shikoro>
+ <20250320173150.2c823635@booty>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="3WVTtqz3snV/MF4K"
+Content-Disposition: inline
+In-Reply-To: <20250320173150.2c823635@booty>
+
+
+--3WVTtqz3snV/MF4K
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250121084818.2719-1-vulab@iscas.ac.cn>
+Content-Transfer-Encoding: quoted-printable
 
-Hi Wentao,
 
-...
+> The i2c-parent was proposed by Rob [0]. The need for the double link
+> is what you, Herv=C3=A9 and I had agreed during our discussion after LPC,
+> based on having realized that the forward link is insufficient for some
+> cases (see "Second case" in the cover letter).
 
-> @@ -1169,9 +1165,7 @@ static int bcm_iproc_i2c_resume(struct device *dev)
->  	 * Power domain could have been shut off completely in system deep
->  	 * sleep, so re-initialize the block here
->  	 */
-> -	ret = bcm_iproc_i2c_init(iproc_i2c);
-> -	if (ret)
-> -		return ret;
-> +	bcm_iproc_i2c_init(iproc_i2c);
+Ah, we talked *after* LPC. Sorry, I remembered it wrong and thought we
+talked before it. Will check the patches.
 
-This caused a:
 
-   warning: unused variable ‘ret’
+--3WVTtqz3snV/MF4K
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Please, make sure next time to compile properly before submitting
-patches. For now I fixed the warning and merged your patch to
-i2c/i2c-hist.
+-----BEGIN PGP SIGNATURE-----
 
-Thanks,
-Andi
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmfciq0ACgkQFA3kzBSg
+KbZd8hAAoaLzOvv52m8y7eLlswiNwv28Qvdbkfcp23+eobue8OafMpTXWIjzxw8X
+T5U/S2bm31CWIaeyjc5GQXtGC4kCzzdZtQjbtQEv5nuNXI5NRNuXv0/i36L2u9Hd
+H5Q3bXBk/uFTi8/f39wFBSW+NMaoFsO6/bKKQ6fF3lnyzt2iCXmU4ocMiu0/Djm2
+QHOXXsjNa8Q7kPtkC/QPnMj4wRXJ4xBnkoCwGpO6ITQauTMo4XFDJmgK7ZTAQyfL
+bb2vSJfSJ6mxKd2V2bpxUVuBD2qOCPi+l5LM7GXrd58GySGUbRYvtKEpPL+CKmD8
+m6xA02RzYt4pGrTWOlrkya9Q47lFcVuwj8kBz1aOhpH9L2CyuwVHy8FtYOzXEj2X
+7qnuBoCpTtyl7GODOoCrLCJDTicJ8qJpVUQ0X70I8gAkkeuDHFelJ4noX7i1Qahh
+pP8UGkU9FCgSSjKIsJiOS77BWKLyQAkBVunJ11oO9u75AmK54CHUD2Ul9kL4qzO2
+znHQxcK6/0oRtmtOHxNqkZfpOoDxD0RzqS1pRJEGrP8CngcKdNTYxJTifXyfjTwa
+jGuFsekiejRtwqz7MVARZ4tp8liiB3+CqdWKMJsfHP6Mk1jjeMyiqBNVlkr9fOLf
+pGTgE8LXIqzuxjK9yy9lMJKXtmHuIuMaXwjR/mvDejO4ZBUO/Hg=
+=F3ay
+-----END PGP SIGNATURE-----
 
->  
->  	/* configure to the desired bus speed */
->  	val = iproc_i2c_rd_reg(iproc_i2c, TIM_CFG_OFFSET);
-> -- 
-> 2.42.0.windows.2
-> 
+--3WVTtqz3snV/MF4K--
 
