@@ -1,106 +1,114 @@
-Return-Path: <linux-i2c+bounces-9937-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9938-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 990E0A6A056
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 Mar 2025 08:22:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D092A6A20C
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 Mar 2025 10:02:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BF220189F6BC
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 Mar 2025 07:22:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 87E888A1E33
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 Mar 2025 09:01:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 432FC1F09AB;
-	Thu, 20 Mar 2025 07:22:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0632B220687;
+	Thu, 20 Mar 2025 09:01:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="cOpk/4WM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DOhGzdT2"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E3821EE7A1
-	for <linux-i2c@vger.kernel.org>; Thu, 20 Mar 2025 07:22:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B167121C189;
+	Thu, 20 Mar 2025 09:01:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742455336; cv=none; b=SeZnqqwp6nxxGmpPz/1B2AI9YtDnvd7pf6+rWC5+Ni+CuqWmepMu5yCi4SAxh0Z/oHwf7ewZ3EuX4E1wRa7emg7F2IUBRm17WgwaurYtpbZvcbCZld5vkX1YmIusbw8jV2iUqPZUklTT1H7jtP+AxflCwN7p+3XA4sqWm01FPq0=
+	t=1742461295; cv=none; b=AXy4wKc+/q3xICU4GrWXjxvvLY8D1WUL9QpXUejZDQ2cZeKmbaJTzcLV+Q/T53RW6n8yjNmeTjhy4PAgNPuzRYO2P7zZMFqOLZ7TzUj8/43O3lgRP+ofWtTtdyj13f1WqHdt4J7fX7TkxzvoX3wUYCa8FfxFTtDKTspyyQouQtw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742455336; c=relaxed/simple;
-	bh=VxiIaIGYPsQJ5ZaP30ByAl2xle8cn6Fjq+AfbVGI/ag=;
+	s=arc-20240116; t=1742461295; c=relaxed/simple;
+	bh=DnHoJ3J5mtJVjiNcOfb2OS4bFv3Yt80zMPMatsJJ0Nw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E7m7yyv5DBwTd083Vk5z7uZtkaCa0XeIoYiO3iul3qaWrpteJXD222JJ2AEycuIvfuF++BPzQe965wXJ+EcvBFubi2NoQ3FX7DVI/Pe9gl3BW0ZZWrR08karyBIEmN36gbnp8bqlZjZZnZBVtPjGBDh73ANgn/aFZT+WHGQ6yQw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=cOpk/4WM; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=VxiI
-	aIGYPsQJ5ZaP30ByAl2xle8cn6Fjq+AfbVGI/ag=; b=cOpk/4WMuXL5uLUtxOww
-	vj/nPwjyPmSbkFHS6Q3/hqaVkhN0Em3SwZawe+itzCKzRX7G6Sqg7vIVOd8y49P4
-	5Q3tOv0o3PWhi3B8mySdtwHP1Rsk17v0T3ZuOiVi30TkuzYMWlfkJtjt0CUPid3v
-	YtGAq/ww5YqsT8fo1u4kYCsSEUa0doRtbm3aBx2WKMyx+Ala0Xcx9BpBgl9ZfqNX
-	JmPef5hMtVhBdSN5+KkkiH29uZHrI3jLUBvpPkZT6p3pwAKibBmJj0k90ergf9Nv
-	plkynR/QP+FKr+I9GsF5WxBAcy0xqiWNvq5jLvuvefpJsyYi2qgeUDglygLcSwv9
-	IA==
-Received: (qmail 527233 invoked from network); 20 Mar 2025 08:22:04 +0100
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 20 Mar 2025 08:22:04 +0100
-X-UD-Smtp-Session: l3s3148p1@A6Cg/sAwZL8gAwDPXyTHAJp038nK7dx+
-Date: Thu, 20 Mar 2025 08:21:58 +0100
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Akhil R <akhilrajeev@nvidia.com>
-Cc: ldewangan@nvidia.com, digetx@gmail.com, andi.shyti@kernel.org,
-	thierry.reding@gmail.com, jonathanh@nvidia.com, wsa@kernel.org,
-	linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: tegra: Return if SMBUS message length is zero
-Message-ID: <Z9vCFkt3ycFDBw-i@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Akhil R <akhilrajeev@nvidia.com>, ldewangan@nvidia.com,
-	digetx@gmail.com, andi.shyti@kernel.org, thierry.reding@gmail.com,
-	jonathanh@nvidia.com, wsa@kernel.org, linux-i2c@vger.kernel.org,
-	linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250320062201.54070-1-akhilrajeev@nvidia.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=a/c3hGCSN9OCFP7lHBgTQMQJIGq8HDdrFzY3slBvh+R0vYsdfHMNtApO72B769m6x4YArqmpXIH2m1FkkdfgAqs2Y2jIVC+isC3urvGgSpgQp5Wce+E5oA0svGWB66geRbLlSmRQ+zQgJejFEYbEjXqGEETBCr0BF/I0cXRbsvI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DOhGzdT2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6E7BC4CEDD;
+	Thu, 20 Mar 2025 09:01:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742461295;
+	bh=DnHoJ3J5mtJVjiNcOfb2OS4bFv3Yt80zMPMatsJJ0Nw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=DOhGzdT2tWm1EOffIOqUAHkV3sRng5H4xWlDB8FxzOBQNpO4MWga28IT/0bRJgLca
+	 aD5bJJka+bq2avZ9t2E9lAx3qRlN2+qkIrov2gBP68v6mMrsoJSOFyqAgP9jlwdsgY
+	 VPvIbhhVaoes7mkoVtw02esK//+5swzVJF9ojMW26Wbf4vtyYP1OTag+QHMc2OlHTR
+	 o6wz3z5MAEqwnGGXB/dCiTgPJ5vcOchFBYj5YI8V2bqOFcoSSIHUuHuzMFe2hHXNAt
+	 6Uf5cSmYPnM+jxUgSXQuXSSuFbvxHG20QYdkFbQH0hh8z+DgwEXj/TSDI3WV7fDyB7
+	 UEIRQQRr8+eqQ==
+Date: Thu, 20 Mar 2025 10:01:30 +0100
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Aryan Srivastava <Aryan.Srivastava@alliedtelesis.co.nz>
+Cc: "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>, 
+	"Markus.Elfring@web.de" <Markus.Elfring@web.de>, "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "rric@kernel.org" <rric@kernel.org>
+Subject: Re: [PATCH v13 3/3] i2c: octeon: add block-mode i2c operations
+Message-ID: <2enq7ixb5m6nn2hlufsgeh6cqt24l5rmbtceflbtwaep64osxy@ej63czorl2tn>
+References: <20250318021632.2710792-1-aryan.srivastava@alliedtelesis.co.nz>
+ <20250318021632.2710792-4-aryan.srivastava@alliedtelesis.co.nz>
+ <thazi6n7jwqp6xoz4p6ce7ohxts7ubhgs5h6chqsnnexbkiy3j@q6xzdrze6a6f>
+ <d542d00d25e37a922c0fe9d25bba7bbc7220f580.camel@alliedtelesis.co.nz>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="kcHYkJHyVb6PiCu3"
+Content-Type: text/plain; charset=iso-8859-15
 Content-Disposition: inline
-In-Reply-To: <20250320062201.54070-1-akhilrajeev@nvidia.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d542d00d25e37a922c0fe9d25bba7bbc7220f580.camel@alliedtelesis.co.nz>
 
+Hi Aryan,
 
---kcHYkJHyVb6PiCu3
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Thu, Mar 20, 2025 at 01:36:12AM +0000, Aryan Srivastava wrote:
+> On Wed, 2025-03-19 at 23:19 +0100, Andi Shyti wrote:
+> > > +static int octeon_i2c_hlc_block_comp_read(struct octeon_i2c *i2c,
+> > > struct i2c_msg *msgs)
+> > > +{
+> > > +       int ret;
+> > > +       u16 len;
+> > > +       u64 cmd;
+> > > +
+> > > +       octeon_i2c_hlc_enable(i2c);
+> > > +       octeon_i2c_block_enable(i2c);
+> > > +
+> > > +       /* Write (size - 1) into block control register */
+> > > +       len = msgs[1].len - 1;
+> > > +       octeon_i2c_writeq_flush((u64)len, i2c->twsi_base +
+> > > OCTEON_REG_BLOCK_CTL(i2c));
+> > > +
+> > > +       /* Prepare core command */
+> > > +       cmd = SW_TWSI_V | SW_TWSI_R | SW_TWSI_SOVR |
+> > > SW_TWSI_OP_7_IA;
+> > > +       cmd |= (u64)(msgs[0].addr & 0x7full) << SW_TWSI_ADDR_SHIFT;
+> > > +
+> > > +       /* Send core command */
+> > > +       ret = octeon_i2c_hlc_read_cmd(i2c, msgs[0], cmd);
+> > > +       if (ret)
+> > > +               return ret;
+> > 
+> > Do we need to disable the block mode?
+> > 
+> Do you mean, do we need to disable the block mode at all? i.e. have it
+> on all the time? Otherwise, it gets disabled at the bottom of this
+> func.
 
-On Thu, Mar 20, 2025 at 11:52:01AM +0530, Akhil R wrote:
-> For SMBUS block read, do not continue to read if the message length
-> passed from the device is '0'.
+yes, but you return earlier, right?
 
-You probably should also check for I2C_SMBUS_BLOCK_MAX while here.
+Thanks,
+Andi
 
+...
 
---kcHYkJHyVb6PiCu3
-Content-Type: application/pgp-signature; name="signature.asc"
+> > > +       octeon_i2c_block_disable(i2c);
+> > > +       return ret;
+> > > +}
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmfbwhEACgkQFA3kzBSg
-KbYMRxAAhRzgjE8EO+1EugWLvKKE+pRLUYgQ/0ogaF7/5hCxFGkpuSfit9xPVKe7
-8SLONik+y1yA1H3e+lgLXYJVhX0JR4zIqTSIGr6l0YiFa5L0PLU0Tim1sCcV28P0
-RGwVeOkGR6MV6RPRGU3+OzwdmEdD+ewMpIw0D/i4bW09JsOzi9xxgDHeliSfRt3b
-DDVew9hJPuBpbYj8194k/sru9mfMAnmKuCj2WZ/rO1xpFBjLSCc2HbkzROI6+WzY
-G1a5h1A8SwW/dU6QQqqJ6OZxhgW4ssou45sJBlihIcJ2zj5MeUfmN94UymKBYDQx
-FX7mzUTvaY3PqxvBDolipY5spj6GBegL6vajlWdxxzye/93EthDHcxOQpGr7Zn7Y
-J82tV/Mwo+fKGCST3XMC63HcpIjADofBUpqgwXDKPVk2hwd+Meh7E6bY0jhBhpn4
-e/mcprXsrxCgiKL/Nrt3OWd1U435Uf2qYNXs9L1OGRaCZRzK9CbJg3QvRyUgXILQ
-e+nqAlykFkYlE2cNaQTRroxle2mR7X3depYHGUYj6B5sXES+RAq0EahIl/GOwxQN
-0qzeZu9XN4KxqCbuWXAJFDmKl5LaVabFhgICWAm+lnv3INLph3HdkQuTMEu27fLv
-ranqGLs9buJK7CJgt4axW7a4mYDJOJ1mf4MSWp5ji6SZfLDtAvw=
-=BrIG
------END PGP SIGNATURE-----
-
---kcHYkJHyVb6PiCu3--
+...
 
