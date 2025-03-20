@@ -1,59 +1,56 @@
-Return-Path: <linux-i2c+bounces-9963-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9964-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C145FA6B097
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 Mar 2025 23:17:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 81DBBA6B0A0
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 Mar 2025 23:19:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B1D68171467
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 Mar 2025 22:13:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BBE0C1690FD
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 Mar 2025 22:18:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C824227EAF;
-	Thu, 20 Mar 2025 22:13:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3665C2222B6;
+	Thu, 20 Mar 2025 22:18:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IUOSq3fe"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mn+ulCet"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF9C6222596;
-	Thu, 20 Mar 2025 22:13:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3C7C15D5B6;
+	Thu, 20 Mar 2025 22:18:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742508788; cv=none; b=SFaYjuSsndsisKzJlKHyzbtPRYfBcMWq5yNL4M6uM6nGU1hPpIehBag4pTT56vIn+47dbeJlqicrZiyw++0PsXpMVJQiX6j7G9Q7eiFsz5RsuFWQhjp1M0S8KaDrO0aJOi1YVzikjdfcwlzdMiEc6XPyJEw2CQH+p8/vJ8Hl4Yw=
+	t=1742509103; cv=none; b=k0nVQr7N/H1mbV2JBuBPnbAE9clCwH+lM07Y3cK+FYfgqh/N7ubG962G+Fo1OMXrNym9fKsT271/x2RsXZqm5O17yN5Fvp9qpRf06D/ONmWuZPXzQey2QRNVPvZkbIvTLhKHsHW2oJgmHkw177x4IHz2+SjzBI3ABj4Mqa3Mcmk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742508788; c=relaxed/simple;
-	bh=M7qrseV6fB8Hed0ymLja/KLmZm6erUG8Gh3U6YrkLzA=;
+	s=arc-20240116; t=1742509103; c=relaxed/simple;
+	bh=9O3RydOB0ZVkYcXG0exlOsEH1A3gmr9V7HhCFrKPCOY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VJdsfA2HoIderV0xKXNLlZHRDVg7v4cz7TST3qmpW7z/N42ftY96aZWAMeJ7wEb4LLKyAi3dpF+svrnPqBrsqDB3/sCxLtaY8Z2VEorrL8Pj+l8STDvlV8RS4mVX4YNCj5rd/pXjyU6BbgaEA0ujXrUKjfxZ31F3Fvu7cMoshNE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IUOSq3fe; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5B68C4CEDD;
-	Thu, 20 Mar 2025 22:13:06 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=huM0zhy6589XK5jxHloYg1AQZRZdZHRvGWvTelXz6KmzQ2b5kLQmCbnCi0DltUfsYnUczqLpBOCGFdV5oYF7mz2MTYS8I3HFOC2TEVF+xThjV3+4Ok3iobEHCOVijcHxEPzZ0ephaG2El4YJgh7S50ZtkB/X95AlzfxMr4Pzd/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mn+ulCet; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79299C4CEDD;
+	Thu, 20 Mar 2025 22:18:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742508787;
-	bh=M7qrseV6fB8Hed0ymLja/KLmZm6erUG8Gh3U6YrkLzA=;
+	s=k20201202; t=1742509102;
+	bh=9O3RydOB0ZVkYcXG0exlOsEH1A3gmr9V7HhCFrKPCOY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=IUOSq3feRUEOLLgSW7vUdrZ3wJPw87ZS4Toe3mUkTuhPH5XGp5YVvt9gMvIKPX1kf
-	 YB7nJQHtbQ5nu9G55CeNT0kxzrAPHXQc6s5EhvFJ1gz2Kkh1uUBY/OTAN2uMsOj8/D
-	 idKvcye6uePTP1C5zBx7UOvTb7aTTKcUFX0H+2gb9MvfDN0ybup9S0jlbU1OwxxALL
-	 QxHt8OlRrBIWUsskCpfVvS/58obwwGLzRf5ks1sVtktni2nzjB/oOZg0xuKogerK2w
-	 bbBC6i+/gQDKT154qksc8V0s86kNMrgFIUxyzzt94+lXxqcL5qzaaya7EV/tYeUcQn
-	 3ufYvYPor93WQ==
-Date: Thu, 20 Mar 2025 23:13:03 +0100
+	b=Mn+ulCetMTCG/4qlZQDzsJJ76CiHhF7e65TYAlrI3mDPFud0vAmTpVdCb7ysQT4ty
+	 EipVvGI55DH1LqgdhCekIm/e+uose39lI9y7t8pjUjhyKeQtr8+YgYv1JRUas7mbgv
+	 MeZb58JTBta1WtCD8N1RO3jxAn4PqepAnXCHvGVFfWGZrSl1so86czajaryIsZaUUc
+	 Z4Dm1UPlPQ/+pv7sOy/Rz5yPNERuWeutubxfMq5pOFlKIw9fRutQcIqdzYfBSHfUNY
+	 gvtA3qZX9G21P3GfnnrZYDa0Sy+/T21l5wEOZH6b4GVeT7+hypJoIQcJ/bYXjiTRoM
+	 bBBuLTYPXhkMw==
+Date: Thu, 20 Mar 2025 23:18:17 +0100
 From: Andi Shyti <andi.shyti@kernel.org>
-To: Potin Lai <potin.lai.pt@gmail.com>
-Cc: Brendan Higgins <brendanhiggins@google.com>, 
-	Benjamin Herrenschmidt <benh@kernel.crashing.org>, Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>, 
-	Rob Herring <robh+dt@kernel.org>, Rayn Chen <rayn_chen@aspeedtech.com>, 
-	Patrick Williams <patrick@stwcx.xyz>, Potin Lai <potin.lai@quantatw.com>, linux-i2c@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] aspeed: i2c: add clock duty cycle property
-Message-ID: <jcznjekoig6n5jtispbgxn6ingzteodwb5lib77evsvvufldoh@ia57mjlvie5k>
-References: <20220610054722.32229-1-potin.lai.pt@gmail.com>
- <20220610054722.32229-2-potin.lai.pt@gmail.com>
+To: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+Cc: linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com, 
+	ludovic.desroches@microchip.com, andrew@sanpeople.com, mhoffman@lightlink.com, khali@linux-fr.org, 
+	wsa@kernel.org, peda@axentia.se
+Subject: Re: [RESEND 0/3] i2c: at91: Fixes and updates
+Message-ID: <odbnk4zvjprs4ipdtxjeurdrubx3eu7zcmxkpwodlz6idnw3t7@6d2a4hl4dpe2>
+References: <20220614101347.16910-1-codrin.ciubotariu@microchip.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -62,22 +59,17 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220610054722.32229-2-potin.lai.pt@gmail.com>
+In-Reply-To: <20220614101347.16910-1-codrin.ciubotariu@microchip.com>
 
-Hi Potin,
+Hi Codrin,
 
-On Fri, Jun 10, 2022 at 01:47:21PM +0800, Potin Lai wrote:
-> Introduce i2c-clk-high-min-percent property for setting a minimum clock
-> high percentage.
-> 
-> This driver calculate clk_high and clk_low with giving duty cycle. If it
-> could not find a suit clk_high and clk_low, it apply default duty cycle
-> 50%.
-> 
-> Signed-off-by: Potin Lai <potin.lai.pt@gmail.com>
+> Codrin Ciubotariu (3):
+>   i2c: at91: move i2c_recover_bus() outside of at91_do_twi_transfer()
+>   i2c: at91: keep the controller disabled when it is not used
+>   i2c: at91: add advanced digital filtering support for SAMA5D4
 
-if you have still interest in getting this patch applied, may I
-ask you to please resubmit it?
+if you still have interest in applying this patch, may I please
+ask you to resend it?
 
 Thanks,
 Andi
