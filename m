@@ -1,114 +1,74 @@
-Return-Path: <linux-i2c+bounces-9938-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9939-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D092A6A20C
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 Mar 2025 10:02:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id DB0B4A6A25C
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 Mar 2025 10:16:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 87E888A1E33
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 Mar 2025 09:01:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8C40A3B68C9
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 Mar 2025 09:16:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0632B220687;
-	Thu, 20 Mar 2025 09:01:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13FE322154E;
+	Thu, 20 Mar 2025 09:16:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DOhGzdT2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AmeO5pc5"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B167121C189;
-	Thu, 20 Mar 2025 09:01:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C07B52139C9;
+	Thu, 20 Mar 2025 09:16:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742461295; cv=none; b=AXy4wKc+/q3xICU4GrWXjxvvLY8D1WUL9QpXUejZDQ2cZeKmbaJTzcLV+Q/T53RW6n8yjNmeTjhy4PAgNPuzRYO2P7zZMFqOLZ7TzUj8/43O3lgRP+ofWtTtdyj13f1WqHdt4J7fX7TkxzvoX3wUYCa8FfxFTtDKTspyyQouQtw=
+	t=1742462179; cv=none; b=q7uTTAFRu88IDo0Is0/6+UEXSXlZ+ZsNUpLoIUPX06DSw6s7Q/FpBozskk1SU2QwRqxiSwJK1sahtPy5znE/lmViHvGEdz3kKW0ZfxYYV2dXuE6qVd4cRV4s6tZc/NXbOf1bMKLTxJ3NJz3oAYSzzSb7/4l2gWWBbsDGyWOUF20=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742461295; c=relaxed/simple;
-	bh=DnHoJ3J5mtJVjiNcOfb2OS4bFv3Yt80zMPMatsJJ0Nw=;
+	s=arc-20240116; t=1742462179; c=relaxed/simple;
+	bh=FP5Msvwyil2Nnjhp7rcbhlKSlb1db3EzW/5fWUt/Ogc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=a/c3hGCSN9OCFP7lHBgTQMQJIGq8HDdrFzY3slBvh+R0vYsdfHMNtApO72B769m6x4YArqmpXIH2m1FkkdfgAqs2Y2jIVC+isC3urvGgSpgQp5Wce+E5oA0svGWB66geRbLlSmRQ+zQgJejFEYbEjXqGEETBCr0BF/I0cXRbsvI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DOhGzdT2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6E7BC4CEDD;
-	Thu, 20 Mar 2025 09:01:34 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=QmV10NH/CofetlLzUl+KejZhBKLvUMtuwBsq34es26X+gjzrxdBolmcWxJZknSTUJXHfmIlpwvAscF3fNHJpoZlJfy4zAux/bQYuyYlSaBN9NCThesY3xPDc0sVI8S8k2BjSebspllTt8d6mGpHwkoMzUTwquV8jWqjq1BAFll4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AmeO5pc5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E6BEC4CEDD;
+	Thu, 20 Mar 2025 09:16:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742461295;
-	bh=DnHoJ3J5mtJVjiNcOfb2OS4bFv3Yt80zMPMatsJJ0Nw=;
+	s=k20201202; t=1742462179;
+	bh=FP5Msvwyil2Nnjhp7rcbhlKSlb1db3EzW/5fWUt/Ogc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DOhGzdT2tWm1EOffIOqUAHkV3sRng5H4xWlDB8FxzOBQNpO4MWga28IT/0bRJgLca
-	 aD5bJJka+bq2avZ9t2E9lAx3qRlN2+qkIrov2gBP68v6mMrsoJSOFyqAgP9jlwdsgY
-	 VPvIbhhVaoes7mkoVtw02esK//+5swzVJF9ojMW26Wbf4vtyYP1OTag+QHMc2OlHTR
-	 o6wz3z5MAEqwnGGXB/dCiTgPJ5vcOchFBYj5YI8V2bqOFcoSSIHUuHuzMFe2hHXNAt
-	 6Uf5cSmYPnM+jxUgSXQuXSSuFbvxHG20QYdkFbQH0hh8z+DgwEXj/TSDI3WV7fDyB7
-	 UEIRQQRr8+eqQ==
-Date: Thu, 20 Mar 2025 10:01:30 +0100
+	b=AmeO5pc5BrxaK3AvQZIemzhloqfKrspC2y11iBrqWxtxQlz8F5BiW0h2RlXiz5+VP
+	 bBnx40Fq33A+ZdJ6nYM2sAtcuTm0+OV2KxagbDYKWIixF09p2V2NyjQTugKdRb/DOm
+	 +avZGDObrs0Jn/kaq0Kpgp5dgtH3LO1//xCBCtXlkW0+bToA6+OJjAhOSwwEDyiEHr
+	 kTBMnVx9fuz2dPgKfQ7RRjh4iPz+g324OtTNiFsF4WW4LP3xJ/F9Us5s/QmiGt40hy
+	 ol9qXti56JidYZxico76YXHi6WnPVe32Kq43yFTDOlMd2kdwf6lkyOmJs9eqH1QO77
+	 QUbgkW4OjPF0A==
+Date: Thu, 20 Mar 2025 10:16:14 +0100
 From: Andi Shyti <andi.shyti@kernel.org>
-To: Aryan Srivastava <Aryan.Srivastava@alliedtelesis.co.nz>
-Cc: "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>, 
-	"Markus.Elfring@web.de" <Markus.Elfring@web.de>, "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "rric@kernel.org" <rric@kernel.org>
-Subject: Re: [PATCH v13 3/3] i2c: octeon: add block-mode i2c operations
-Message-ID: <2enq7ixb5m6nn2hlufsgeh6cqt24l5rmbtceflbtwaep64osxy@ej63czorl2tn>
-References: <20250318021632.2710792-1-aryan.srivastava@alliedtelesis.co.nz>
- <20250318021632.2710792-4-aryan.srivastava@alliedtelesis.co.nz>
- <thazi6n7jwqp6xoz4p6ce7ohxts7ubhgs5h6chqsnnexbkiy3j@q6xzdrze6a6f>
- <d542d00d25e37a922c0fe9d25bba7bbc7220f580.camel@alliedtelesis.co.nz>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Khalil Blaiech <kblaiech@nvidia.com>, Asmaa Mnebhi <asmaa@nvidia.com>
+Subject: Re: [PATCH v1 1/1] i2c: mlxbf: Use readl_poll_timeout_atomic() for
+ polling
+Message-ID: <qvgk4wlbyp2mbyusexx3zvjshsocmdiq42yru6gfpj7hd26afe@7q5j6dwatwz7>
+References: <20250212165128.2413430-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d542d00d25e37a922c0fe9d25bba7bbc7220f580.camel@alliedtelesis.co.nz>
+In-Reply-To: <20250212165128.2413430-1-andriy.shevchenko@linux.intel.com>
 
-Hi Aryan,
+Hi Andy,
 
-On Thu, Mar 20, 2025 at 01:36:12AM +0000, Aryan Srivastava wrote:
-> On Wed, 2025-03-19 at 23:19 +0100, Andi Shyti wrote:
-> > > +static int octeon_i2c_hlc_block_comp_read(struct octeon_i2c *i2c,
-> > > struct i2c_msg *msgs)
-> > > +{
-> > > +       int ret;
-> > > +       u16 len;
-> > > +       u64 cmd;
-> > > +
-> > > +       octeon_i2c_hlc_enable(i2c);
-> > > +       octeon_i2c_block_enable(i2c);
-> > > +
-> > > +       /* Write (size - 1) into block control register */
-> > > +       len = msgs[1].len - 1;
-> > > +       octeon_i2c_writeq_flush((u64)len, i2c->twsi_base +
-> > > OCTEON_REG_BLOCK_CTL(i2c));
-> > > +
-> > > +       /* Prepare core command */
-> > > +       cmd = SW_TWSI_V | SW_TWSI_R | SW_TWSI_SOVR |
-> > > SW_TWSI_OP_7_IA;
-> > > +       cmd |= (u64)(msgs[0].addr & 0x7full) << SW_TWSI_ADDR_SHIFT;
-> > > +
-> > > +       /* Send core command */
-> > > +       ret = octeon_i2c_hlc_read_cmd(i2c, msgs[0], cmd);
-> > > +       if (ret)
-> > > +               return ret;
-> > 
-> > Do we need to disable the block mode?
-> > 
-> Do you mean, do we need to disable the block mode at all? i.e. have it
-> on all the time? Otherwise, it gets disabled at the bottom of this
-> func.
+On Wed, Feb 12, 2025 at 06:51:28PM +0200, Andy Shevchenko wrote:
+> Convert the usage of an open-coded custom tight poll while loop
+> with the provided readl_poll_timeout_atomic() macro.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-yes, but you return earlier, right?
+nice cleanup, thanks! Merged to i2c/i2c-host.
 
-Thanks,
 Andi
-
-...
-
-> > > +       octeon_i2c_block_disable(i2c);
-> > > +       return ret;
-> > > +}
-
-...
 
