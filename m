@@ -1,264 +1,227 @@
-Return-Path: <linux-i2c+bounces-9953-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9954-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A3A29A6A99C
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 Mar 2025 16:21:01 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5555A6AACF
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 Mar 2025 17:14:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C4C281882983
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 Mar 2025 15:19:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3A8C47A441B
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 Mar 2025 16:13:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4A611E834E;
-	Thu, 20 Mar 2025 15:18:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 439101E9B29;
+	Thu, 20 Mar 2025 16:13:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jtAZa04N"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WirxAWXH"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BBCF14B08A;
-	Thu, 20 Mar 2025 15:18:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A70974BED;
+	Thu, 20 Mar 2025 16:13:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742483937; cv=none; b=OMRJ94PgOp+SNGi6FwFDwH7e0smL2GYZNvHn/GdwtWsM95NdwPtSjzDgMkW7TWf561ejRlZ+EFCq0SfzMPE9SzS4X+xqCXPYUyqXZSnvIJjnjOc8j5Jb85MSk5BPWSZ2BvpoV3yCxVFjOGNW6PB3PLdDsMMdF102CN/dUsUlPTk=
+	t=1742487237; cv=none; b=E8QYZf5zg4GCbwuEdR0lxukFVOVozDu30DH9tJUAfHMjjFwmaKupLYQcXqcylposOa9xzCsaPscozRIqKaBcCe5XeWPnl4lglvsMp3uDVeBsrnhcfIeuV55akPYGyEVKpABoLKdiww5d9KWJyfxzTXjA2+yu9332PHaKv1shDTg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742483937; c=relaxed/simple;
-	bh=1Z6H2iLvH3rXMt19HL+9taZFJeo/GqQ1pEgfLHm/VO8=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=ffiktKpYT0dnPb3VPhH6Sm1TN4G5d03h4CC18XgEdoplTGPtyEJXlXWskCd4aM4oBLny5hi/h9dDFcytLmXEJkgiu1VOJn0kVQPipu07hdvDFxYBTAd3BmVzoZA+CiSNSCKBMxLq796yUehzDn7kYiiW7KkRpEnOx2XOvNpfd0s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jtAZa04N; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A232C4CEDD;
-	Thu, 20 Mar 2025 15:18:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742483936;
-	bh=1Z6H2iLvH3rXMt19HL+9taZFJeo/GqQ1pEgfLHm/VO8=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=jtAZa04NkVALEmArILtqhgvGWzNrqybg3hrSGdZZ2VVAFhkXh1nT4jpUcZ4Kc2DDn
-	 0A6i4ERYcuiCeprXqYIMy4u4kiFrkwJYEeYsWv+53EA4mBSJ6BqBYD7yzk5jl0BW7F
-	 3K+uSeS65G8FFh9VmSyWsSaODa9u59R3cNyzrD/bWKcMoby2y3/LjyBnzNkYD+iJSL
-	 9QHQkLG/EQ0PXCuzUmTG72RV9mKDT4ZRjt1NiAC6yuM4pg17khef1prwdyUg+6q41R
-	 XwbECsZNkZ4re5+LVruYEIZ107+IH+Jq6zDSLtPqFFjlA4zbkDNY4cbCQwK98Zoq0c
-	 4mfWfzYas3b3w==
-From: Mark Brown <broonie@kernel.org>
-To: tglx@linutronix.de, "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-Cc: maz@kernel.org, linux-kernel@vger.kernel.org, 
- Aaro Koskinen <aaro.koskinen@iki.fi>, 
- Abhinav Kumar <quic_abhinavk@quicinc.com>, 
- Albert Ou <aou@eecs.berkeley.edu>, 
- Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- Alexandre Ghiti <alex@ghiti.fr>, 
- Alexandre Torgue <alexandre.torgue@foss.st.com>, 
- Alex Deucher <alexander.deucher@amd.com>, Alex Shi <alexs@kernel.org>, 
- Alim Akhtar <alim.akhtar@samsung.com>, 
- =?utf-8?q?Alvin_=C5=A0ipraga?= <alsi@bang-olufsen.dk>, 
- Alyssa Rosenzweig <alyssa@rosenzweig.io>, amd-gfx@lists.freedesktop.org, 
- Amit Kucheria <amitk@kernel.org>, Anatolij Gustschin <agust@denx.de>, 
- Andi Shyti <andi.shyti@kernel.org>, 
- =?utf-8?q?Andreas_F=C3=A4rber?= <afaerber@suse.de>, 
- Andreas Kemnade <andreas@kemnade.info>, 
- Andrew Jeffery <andrew@codeconstruct.com.au>, Andrew Lunn <andrew@lunn.ch>, 
- Andy Shevchenko <andy@kernel.org>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
- Antoine Tenart <atenart@kernel.org>, 
- Anton Ivanov <anton.ivanov@cambridgegreys.com>, 
- Anup Patel <anup@brainfault.org>, Arnd Bergmann <arnd@arndb.de>, 
- asahi@lists.linux.dev, Bartosz Golaszewski <brgl@bgdev.pl>, 
- Baruch Siach <baruch@tkos.co.il>, 
- Benjamin Herrenschmidt <benh@kernel.crashing.org>, 
- Bharat Kumar Gogada <bharat.kumar.gogada@amd.com>, 
- Bjorn Andersson <andersson@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
- Borislav Petkov <bp@alien8.de>, 
- Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
- Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
- Corentin Chary <corentin.chary@gmail.com>, 
- Daire McNamara <daire.mcnamara@microchip.com>, 
- Daniel Golle <daniel@makrotopia.org>, 
- Daniel Lezcano <daniel.lezcano@linaro.org>, Daniel Mack <daniel@zonque.org>, 
- Daniel Palmer <daniel@thingy.jp>, Dave Hansen <dave.hansen@linux.intel.com>, 
- David Airlie <airlied@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
- DENG Qingfang <dqfext@gmail.com>, Dinh Nguyen <dinguyen@kernel.org>, 
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
- Dongliang Mu <dzm91@hust.edu.cn>, Doug Berger <opendmb@gmail.com>, 
- dri-devel@lists.freedesktop.org, Eddie James <eajames@linux.ibm.com>, 
- Eric Dumazet <edumazet@google.com>, Fabio Estevam <festevam@gmail.com>, 
- Florian Fainelli <florian.fainelli@broadcom.com>, 
- Geoff Levand <geoff@infradead.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Gregory Clement <gregory.clement@bootlin.com>, Guo Ren <guoren@kernel.org>, 
- Hans de Goede <hdegoede@redhat.com>, 
- Haojian Zhuang <haojian.zhuang@gmail.com>, 
- Haojian Zhuang <haojian.zhuang@linaro.org>, 
- Heiko Stuebner <heiko@sntech.de>, Herve Codina <herve.codina@bootlin.com>, 
- Hou Zhiqiang <Zhiqiang.Hou@nxp.com>, "H. Peter Anvin" <hpa@zytor.com>, 
- Huacai Chen <chenhuacai@kernel.org>, 
- Changhuang Liang <changhuang.liang@starfivetech.com>, 
- Chen-Yu Tsai <wens@csie.org>, "Chester A. Unal" <chester.a.unal@arinc9.com>, 
- =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
- Christophe Leroy <christophe.leroy@csgroup.eu>, 
- Chris Zankel <chris@zankel.net>, 
- =?utf-8?q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
- Imre Kaloz <kaloz@openwrt.org>, Ingo Molnar <mingo@redhat.com>, 
- Jakub Kicinski <kuba@kernel.org>, James Morse <james.morse@arm.com>, 
- Janne Grunau <j@jannau.net>, Janusz Krzysztofik <jmkrzyszt@gmail.com>, 
- Jaroslav Kysela <perex@perex.cz>, Jassi Brar <jassisinghbrar@gmail.com>, 
- Jernej Skrabec <jernej.skrabec@gmail.com>, 
- Jerome Brunet <jbrunet@baylibre.com>, 
- Jianjun Wang <jianjun.wang@mediatek.com>, 
- Jiawen Wu <jiawenwu@trustnetic.com>, Jiaxun Yang <jiaxun.yang@flygoat.com>, 
- Jim Quinlan <jim2101024@gmail.com>, Jingoo Han <jingoohan1@gmail.com>, 
- Joel Stanley <joel@jms.id.au>, Johannes Berg <johannes@sipsolutions.net>, 
- John Crispin <john@phrozen.org>, 
- John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
- Jonas Bonn <jonas@southpole.se>, Jonathan Cameron <jic23@kernel.org>, 
- Jonathan Corbet <corbet@lwn.net>, Jonathan Hunter <jonathanh@nvidia.com>, 
- =?utf-8?q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>, 
- Joyce Ooi <joyce.ooi@intel.com>, 
- Karthikeyan Mitran <m.karthikeyan@mobiveil.co.in>, 
- Keerthy <j-keerthy@ti.com>, Kevin Hilman <khilman@baylibre.com>, 
- Konrad Dybcio <konradybcio@kernel.org>, 
- Krzysztof Kozlowski <krzk@kernel.org>, 
- =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>, 
- Kunihiko Hayashi <hayashi.kunihiko@socionext.com>, 
- Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>, 
- Lars-Peter Clausen <lars@metafoo.de>, Lee Jones <lee@kernel.org>, 
- Liam Girdwood <lgirdwood@gmail.com>, 
- Linus Walleij <linus.walleij@linaro.org>, Linus Walleij <linusw@kernel.org>, 
- linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
- linux-arm-msm@vger.kernel.org, linux-doc@vger.kernel.org, 
- linux-edac@vger.kernel.org, linux-gpio@vger.kernel.org, 
- linux-iio@vger.kernel.org, linux-i2c@vger.kernel.org, 
- linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org, 
- linux-omap@vger.kernel.org, linux-pci@vger.kernel.org, 
- linuxppc-dev@lists.ozlabs.org, linux-remoteproc@vger.kernel.org, 
- linux-riscv@lists.infradead.org, linux-rpi-kernel@lists.infradead.org, 
- linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org, 
- linux-sound@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
- linux-um@lists.infradead.org, linux-wireless@vger.kernel.org, 
- loongarch@lists.linux.dev, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
- Ludovic Desroches <ludovic.desroches@microchip.com>, 
- Lukasz Luba <lukasz.luba@arm.com>, "Luke D. Jones" <luke@ljones.dev>, 
- Madhavan Srinivasan <maddy@linux.ibm.com>, 
- Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
- =?utf-8?q?Marek_Beh=C3=BAn?= <kabel@kernel.org>, 
- Marijn Suijten <marijn.suijten@somainline.org>, 
- Mark-PK Tsai <mark-pk.tsai@mediatek.com>, 
- Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
- Masami Hiramatsu <mhiramat@kernel.org>, 
- Mathieu Poirier <mathieu.poirier@linaro.org>, 
- Matthias Brugger <matthias.bgg@gmail.com>, 
- Mauro Carvalho Chehab <mchehab@kernel.org>, 
- Max Filippov <jcmvbkbc@gmail.com>, 
- Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
- Mengyuan Lou <mengyuanlou@net-swift.com>, Michael Buesch <m@bues.ch>, 
- Michael Ellerman <mpe@ellerman.id.au>, Michal Simek <michal.simek@amd.com>, 
- Miodrag Dinic <miodrag.dinic@mips.com>, Naveen N Rao <naveen@kernel.org>, 
- Neil Armstrong <neil.armstrong@linaro.org>, netdev@vger.kernel.org, 
- Nicolas Ferre <nicolas.ferre@microchip.com>, 
- Nicolas Saenz Julienne <nsaenz@kernel.org>, 
- Nicholas Piggin <npiggin@gmail.com>, 
- Nikhil Agarwal <nikhil.agarwal@amd.com>, Nipun Gupta <nipun.gupta@amd.com>, 
- Nishanth Menon <nm@ti.com>, =?utf-8?q?Pali_Roh=C3=A1r?= <pali@kernel.org>, 
- Palmer Dabbelt <palmer@dabbelt.com>, Paolo Abeni <pabeni@redhat.com>, 
- Paul Cercueil <paul@crapouillou.net>, 
- Paul Walmsley <paul.walmsley@sifive.com>, 
- Pengutronix Kernel Team <kernel@pengutronix.de>, 
- Peter Rosin <peda@axentia.se>, Philipp Zabel <p.zabel@pengutronix.de>, 
- Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>, 
- platform-driver-x86@vger.kernel.org, 
- Prasad Kumpatla <quic_pkumpatl@quicinc.com>, 
- Qiang Zhao <qiang.zhao@nxp.com>, Qin Jian <qinjian@cqplus1.com>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, 
- Randy Dunlap <rdunlap@infradead.org>, Ray Jui <rjui@broadcom.com>, 
- Rengarajan Sundararajan <Rengarajan.S@microchip.com>, 
- Richard Cochran <richardcochran@gmail.com>, 
- Richard Weinberger <richard@nod.at>, Rich Felker <dalias@libc.org>, 
- Rob Clark <robdclark@gmail.com>, Robert Jarzmik <robert.jarzmik@free.fr>, 
- Robert Richter <rric@kernel.org>, Rob Herring <robh@kernel.org>, 
- Roger Quadros <rogerq@kernel.org>, Russell King <linux@armlinux.org.uk>, 
- Ryan Chen <ryan_chen@aspeedtech.com>, Ryder Lee <ryder.lee@mediatek.com>, 
- Samuel Holland <samuel@sholland.org>, 
- Santosh Shilimkar <ssantosh@kernel.org>, 
- Sascha Hauer <s.hauer@pengutronix.de>, 
- Scott Branden <sbranden@broadcom.com>, Scott Wood <oss@buserror.net>, 
- Sean Paul <sean@poorly.run>, Sean Wang <sean.wang@kernel.org>, 
- Sean Wang <sean.wang@mediatek.com>, 
- Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, 
- Sergio Paracuellos <sergio.paracuellos@gmail.com>, 
- Shawn Guo <shawnguo@kernel.org>, Shawn Lin <shawn.lin@rock-chips.com>, 
- Siddharth Vadapalli <s-vadapalli@ti.com>, Simona Vetter <simona@ffwll.ch>, 
- Stafford Horne <shorne@gmail.com>, 
- Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>, 
- Stephen Boyd <sboyd@kernel.org>, Sven Peter <sven@svenpeter.dev>, 
- Takashi Iwai <tiwai@suse.com>, Talel Shenhar <talel@amazon.com>, 
- Tero Kristo <kristo@kernel.org>, 
- Thangaraj Samynathan <Thangaraj.S@microchip.com>, 
- Thara Gopinath <thara.gopinath@gmail.com>, 
- Thierry Reding <thierry.reding@gmail.com>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Toan Le <toan@os.amperecomputing.com>, Tony Lindgren <tony@atomide.com>, 
- Tony Luck <tony.luck@intel.com>, UNGLinuxDriver@microchip.com, 
- =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, 
- Vignesh Raghavendra <vigneshr@ti.com>, Vineet Gupta <vgupta@kernel.org>, 
- Vladimir Oltean <olteanv@gmail.com>, Vladimir Zapolskiy <vz@mleia.com>, 
- WANG Xuerui <kernel@xen0n.name>, Woojung Huh <woojung.huh@microchip.com>, 
- x86@kernel.org, Yanteng Si <si.yanteng@linux.dev>, 
- Yoshinori Sato <ysato@users.sourceforge.jp>, 
- Zhang Rui <rui.zhang@intel.com>
-In-Reply-To: <20250319092951.37667-1-jirislaby@kernel.org>
-References: <20250319092951.37667-1-jirislaby@kernel.org>
-Subject: Re: (subset) [PATCH v2 00/57] irqdomain: Cleanups and
- Documentation
-Message-Id: <174248389026.68765.4225899402848645156.b4-ty@kernel.org>
-Date: Thu, 20 Mar 2025 15:18:10 +0000
+	s=arc-20240116; t=1742487237; c=relaxed/simple;
+	bh=A03YcV29Mgcr2rKaPyzWSsbf12vj49Zgz++G2QQuW64=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dm2dWGyUGJ4BqcHoI6nJ0lYzCY0sUj+hjgHggzymqbC+UmV9JsymVXyk0qp0Sh4liJ15DjXsfhsxmSZk5GU/tT51ul6MD73sfdyIzowuknvtirIqObvC8TmzsTkM2BRPy8x8tm0giForM+hvSf1DacW9LzxazxmvEonIuAOwAxg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WirxAWXH; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1742487235; x=1774023235;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=A03YcV29Mgcr2rKaPyzWSsbf12vj49Zgz++G2QQuW64=;
+  b=WirxAWXHmaRzm//l9h6LcpMFRzr0OBveb9CdkVYiEeWf1LXc0WvM8qtM
+   sL9OKZg3ElGB6np96k0MBYV+ZB5wyWWLxDxCUIClNe1kD0rRWb1/tvlPP
+   KGcbG2aKJ+cspnA7bASGzhFzxrJWU0dlpt9fY3H4z6ZUaurGNfYmSvaHJ
+   IcUn3K0NAxyzo/VqAA1kvI68TG4n/urZi9kWsNQJs2PW9BkFpH+6LERhi
+   ne/cy62mTdNDZloppFPbHB2nAXaRTJ/0+yq1ws2wtCa10YtIisQ9nlcCq
+   NC2Pi9cefle25C3/47m7m3fHy2wthZyFJPicyP5H0UBEePMaNYkbrfHIN
+   g==;
+X-CSE-ConnectionGUID: hV6j0USwSSSkQdnTvb9bBQ==
+X-CSE-MsgGUID: oRURXpzAT22E7ooUeuqPCw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11379"; a="43899522"
+X-IronPort-AV: E=Sophos;i="6.14,262,1736841600"; 
+   d="scan'208";a="43899522"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2025 09:13:55 -0700
+X-CSE-ConnectionGUID: 9IoHnd4OQY+7JNpuWNeaCg==
+X-CSE-MsgGUID: ToR0l3G2R/iGOBy74YyI3g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,262,1736841600"; 
+   d="scan'208";a="123155500"
+Received: from lkp-server02.sh.intel.com (HELO e98e3655d6d2) ([10.239.97.151])
+  by orviesa006.jf.intel.com with ESMTP; 20 Mar 2025 09:13:51 -0700
+Received: from kbuild by e98e3655d6d2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tvIWj-0000aV-2C;
+	Thu, 20 Mar 2025 16:13:49 +0000
+Date: Fri, 21 Mar 2025 00:12:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
+Cc: oe-kbuild-all@lists.linux.dev, linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
+Subject: Re: [PATCH 2/2] hwmon: (pmbus/max3440): add support adpm12160
+Message-ID: <202503202311.5PZH0XKm-lkp@intel.com>
+References: <20250320-dev_adpm12160-v1-2-8f7b975eac75@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-1b0d6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250320-dev_adpm12160-v1-2-8f7b975eac75@analog.com>
 
-On Wed, 19 Mar 2025 10:28:53 +0100, Jiri Slaby (SUSE) wrote:
-> tl;dr if patches are agreed upon, I ask subsys maintainers to take the
-> respective ones via their trees (as they are split per subsys), so that
-> the IRQ tree can take only the rest. That would minimize churn/conflicts
-> during merges.
-> 
-> ===
-> 
-> [...]
+Hi Alexis,
 
-Applied to
+kernel test robot noticed the following build errors:
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+[auto build test ERROR on c812cc42f92d3d0b17c01b5db9a1dee5793a1491]
 
-Thanks!
+url:    https://github.com/intel-lab-lkp/linux/commits/Alexis-Czezar-Torreno/hwmon-pmbus-max34440-Fix-support-for-max34451/20250320-115905
+base:   c812cc42f92d3d0b17c01b5db9a1dee5793a1491
+patch link:    https://lore.kernel.org/r/20250320-dev_adpm12160-v1-2-8f7b975eac75%40analog.com
+patch subject: [PATCH 2/2] hwmon: (pmbus/max3440): add support adpm12160
+config: i386-buildonly-randconfig-005-20250320 (https://download.01.org/0day-ci/archive/20250320/202503202311.5PZH0XKm-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250320/202503202311.5PZH0XKm-lkp@intel.com/reproduce)
 
-[35/57] irqdomain: sound: Switch to irq_domain_create_linear()
-        commit: 83eddf0116b09186f909bc643f2093f266f204ea
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503202311.5PZH0XKm-lkp@intel.com/
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+All errors (new ones prefixed by >>):
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+   drivers/hwmon/pmbus/max34440.c: In function 'max34440_read_word_data':
+>> drivers/hwmon/pmbus/max34440.c:97:71: error: expected statement before ')' token
+      97 |                     data->id != max34451_na6 && data->id != adpm12160))
+         |                                                                       ^
+   drivers/hwmon/pmbus/max34440.c: At top level:
+   drivers/hwmon/pmbus/max34440.c:483:37: error: expected expression before ',' token
+     483 |                 MAX34451_COMMON_INFO,
+         |                                     ^
+   drivers/hwmon/pmbus/max34440.c:486:37: error: expected expression before ',' token
+     486 |                 MAX34451_COMMON_INFO,
+         |                                     ^
+   In file included from include/linux/module.h:22,
+                    from drivers/hwmon/pmbus/max34440.c:11:
+   drivers/hwmon/pmbus/max34440.c:603:18: error: expected ',' or ';' before 'PMBUS'
+     603 | MODULE_IMPORT_NS(PMBUS);
+         |                  ^~~~~
+   include/linux/moduleparam.h:26:61: note: in definition of macro '__MODULE_INFO'
+      26 |                 = __MODULE_INFO_PREFIX __stringify(tag) "=" info
+         |                                                             ^~~~
+   include/linux/module.h:299:33: note: in expansion of macro 'MODULE_INFO'
+     299 | #define MODULE_IMPORT_NS(ns)    MODULE_INFO(import_ns, ns)
+         |                                 ^~~~~~~~~~~
+   drivers/hwmon/pmbus/max34440.c:603:1: note: in expansion of macro 'MODULE_IMPORT_NS'
+     603 | MODULE_IMPORT_NS(PMBUS);
+         | ^~~~~~~~~~~~~~~~
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+vim +97 drivers/hwmon/pmbus/max34440.c
 
-Thanks,
-Mark
+    62	
+    63	static int max34440_read_word_data(struct i2c_client *client, int page,
+    64					   int phase, int reg)
+    65	{
+    66		int ret;
+    67		const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
+    68		const struct max34440_data *data = to_max34440_data(info);
+    69	
+    70		switch (reg) {
+    71		case PMBUS_IOUT_OC_FAULT_LIMIT:
+    72			if (data->id == max34451_na6 || data->id == adpm12160)
+    73				ret = pmbus_read_word_data(client, page, phase,
+    74							   PMBUS_IOUT_OC_FAULT_LIMIT);
+    75			else
+    76				ret = pmbus_read_word_data(client, page, phase,
+    77							   MAX34440_IOUT_OC_FAULT_LIMIT);
+    78			break;
+    79		case PMBUS_IOUT_OC_WARN_LIMIT:
+    80			if (data->id == max34451_na6 || data->id == adpm12160)
+    81				ret = pmbus_read_word_data(client, page, phase,
+    82							   PMBUS_IOUT_OC_WARN_LIMIT);
+    83			else
+    84				ret = pmbus_read_word_data(client, page, phase,
+    85							   MAX34440_IOUT_OC_WARN_LIMIT);
+    86			break;
+    87		case PMBUS_VIRT_READ_VOUT_MIN:
+    88			ret = pmbus_read_word_data(client, page, phase,
+    89						   MAX34440_MFR_VOUT_MIN);
+    90			break;
+    91		case PMBUS_VIRT_READ_VOUT_MAX:
+    92			ret = pmbus_read_word_data(client, page, phase,
+    93						   MAX34440_MFR_VOUT_PEAK);
+    94			break;
+    95		case PMBUS_VIRT_READ_IOUT_AVG:
+    96			if (data->id != max34446 && data->id != max34451 &&
+  > 97			    data->id != max34451_na6 && data->id != adpm12160))
+    98				return -ENXIO;
+    99			ret = pmbus_read_word_data(client, page, phase,
+   100						   MAX34446_MFR_IOUT_AVG);
+   101			break;
+   102		case PMBUS_VIRT_READ_IOUT_MAX:
+   103			ret = pmbus_read_word_data(client, page, phase,
+   104						   MAX34440_MFR_IOUT_PEAK);
+   105			break;
+   106		case PMBUS_VIRT_READ_POUT_AVG:
+   107			if (data->id != max34446)
+   108				return -ENXIO;
+   109			ret = pmbus_read_word_data(client, page, phase,
+   110						   MAX34446_MFR_POUT_AVG);
+   111			break;
+   112		case PMBUS_VIRT_READ_POUT_MAX:
+   113			if (data->id != max34446)
+   114				return -ENXIO;
+   115			ret = pmbus_read_word_data(client, page, phase,
+   116						   MAX34446_MFR_POUT_PEAK);
+   117			break;
+   118		case PMBUS_VIRT_READ_TEMP_AVG:
+   119			if (data->id != max34446 && data->id != max34460 &&
+   120			    data->id != max34461)
+   121				return -ENXIO;
+   122			ret = pmbus_read_word_data(client, page, phase,
+   123						   MAX34446_MFR_TEMPERATURE_AVG);
+   124			break;
+   125		case PMBUS_VIRT_READ_TEMP_MAX:
+   126			ret = pmbus_read_word_data(client, page, phase,
+   127						   MAX34440_MFR_TEMPERATURE_PEAK);
+   128			break;
+   129		case PMBUS_VIRT_RESET_POUT_HISTORY:
+   130			if (data->id != max34446)
+   131				return -ENXIO;
+   132			ret = 0;
+   133			break;
+   134		case PMBUS_VIRT_RESET_VOUT_HISTORY:
+   135		case PMBUS_VIRT_RESET_IOUT_HISTORY:
+   136		case PMBUS_VIRT_RESET_TEMP_HISTORY:
+   137			ret = 0;
+   138			break;
+   139		default:
+   140			ret = -ENODATA;
+   141			break;
+   142		}
+   143		return ret;
+   144	}
+   145	
 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
