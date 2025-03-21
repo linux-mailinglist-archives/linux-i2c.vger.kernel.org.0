@@ -1,140 +1,116 @@
-Return-Path: <linux-i2c+bounces-9970-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9971-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 715BCA6BC38
-	for <lists+linux-i2c@lfdr.de>; Fri, 21 Mar 2025 14:58:30 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6702A6BE35
+	for <lists+linux-i2c@lfdr.de>; Fri, 21 Mar 2025 16:21:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B7F607A73B9
-	for <lists+linux-i2c@lfdr.de>; Fri, 21 Mar 2025 13:56:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F37103B4941
+	for <lists+linux-i2c@lfdr.de>; Fri, 21 Mar 2025 15:20:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DC4D78F47;
-	Fri, 21 Mar 2025 13:57:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C96D1DE4E5;
+	Fri, 21 Mar 2025 15:20:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="jIXgKt0J"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 890EB78F29;
-	Fri, 21 Mar 2025 13:57:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C5A21D95A9
+	for <linux-i2c@vger.kernel.org>; Fri, 21 Mar 2025 15:20:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742565435; cv=none; b=Aqy2JtfWWNmnhHB8a1yhe28nrmsjplZfLdbDuUvhJSSIASaIved8M6xystvFhSpe/SLLCzpyfYaJb0jIabd4ByRscV1iesonvXmDA/lR63o+qpL+JLLbI64SitfukyMZwCSh1jWPrCDfn9vbqzS7+IZy60vlehZMrTOs7HZ3Z5w=
+	t=1742570411; cv=none; b=YPwQUi5+rnlTFkFOBk0Rb/aapn/NuFcjJRVv0eUqvQ90Hs3II4F+pheeGYzQrkOZGQmW8wcfzJWzuJW2Uq9jyvgbVB6Si5P1onuyL0myjeg7nKABMs7IyYkZhKKZm5WJJqcmTQZY15ilsV9FbTD0zN4/iMsXOMvLYls/Rb3Fc3g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742565435; c=relaxed/simple;
-	bh=mt5VrjA3cDeDU5iaGmha+OBFVRPyZDe+YhTGWVzJhKI=;
+	s=arc-20240116; t=1742570411; c=relaxed/simple;
+	bh=h7wMk5xJQiuYRTA9seubj2JOoaZer7gZ3AkwQXbkLMs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Xe64v9jsIOIfNUNm/LIzOv+2Ouz1uKGmvAL/y7ctmitR0XGyrJZrATRTHRSAlDVM4bl4S9eDMtoknZT3Pzg3Def0XZP44tU9Uc/zQcB4rRst1JTf9igSjBEPr5fSjoiGMqDDoySUIUBi7ftPXHVq3/YKOt3g8ZMKlOwkemqZFfQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com; spf=none smtp.mailfrom=foss.arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=foss.arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 13B44106F;
-	Fri, 21 Mar 2025 06:57:20 -0700 (PDT)
-Received: from bogus (e133711.arm.com [10.1.196.55])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7343D3F673;
-	Fri, 21 Mar 2025 06:57:10 -0700 (PDT)
-Date: Fri, 21 Mar 2025 13:57:07 +0000
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	Jassi Brar <jassisinghbrar@gmail.com>
-Cc: Sudeep Holla <sudeep.holla@arm.com>, Huisong Li <lihuisong@huawei.com>,
-	Adam Young <admiyo@os.amperecomputing.com>,
-	Robbie King <robbiek@xsightlabs.com>,
-	Andi Shyti <andi.shyti@kernel.org>, <linux-i2c@vger.kernel.org>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>, <linux-hwmon@vger.kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v3 00/13] mailbox: pcc: Fixes and cleanup/refactoring
-Message-ID: <20250321-elegant-ruby-bull-7d9c50@sudeepholla>
-References: <20250313-pcc_fixes_updates-v3-0-019a4aa74d0f@arm.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=eIa7usGNauTW2AElCdHMEJohaYR8XMr/wEKmpVjvfcPiIYfEvMSQGBsAJr8ddKbqcCdCvzrKdijXj93ktELq6/fZ7ER9iPxwXwrJdJxcR4HUVQm7v9jJTMr7K6LHOShI0X1CYExMiGcHnmjiGHgy9Cw6EeqNaPWYUVFlWPEBLPI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=jIXgKt0J; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=3atS
+	F2HRKp41o0+hEpGEldmL+PiVf8SnjXURcUIuoTE=; b=jIXgKt0JmHGErQJ8py1L
+	ZYE5yN+hZXqPnFUFQ73zOjeF6Ujl5kB/qW/2PsLR5qHrRxJg+nKSrt6MC/IgLKd9
+	vVCYFBPFhlNi9YGe+gpMbOrvIqaIA3bRvSlNevibjkQkUA6Wf2OTDtkTNyd0NpGl
+	qni0LCTPtyfpEg2IyjCIWFlSTFCPmc7YoGfazuV8uRuntVTQs0Z27IWhFVJnZjTX
+	87Ez1M393iractUxgd0m06rdqenboRiwt3iU3AmZUNUagjQjl4DLp4iEPaMN7l8Z
+	Bx0ensziTSvUUoQ9M9Qd9dw0kCt1QunuaIbztxqNe0I5Jzo/mzYm9dYLE8wBUikf
+	GQ==
+Received: (qmail 1291536 invoked from network); 21 Mar 2025 16:19:57 +0100
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 21 Mar 2025 16:19:57 +0100
+X-UD-Smtp-Session: l3s3148p1@qn2Mydsw+skgAwDPXyTHAJp038nK7dx+
+Date: Fri, 21 Mar 2025 16:19:57 +0100
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Andi Shyti <andi.shyti@kernel.org>
+Cc: linux-i2c <linux-i2c@vger.kernel.org>,
+	lkml <linux-kernel@vger.kernel.org>
+Subject: Re: i2c-host-fixes for v6.14-rc8
+Message-ID: <Z92DnVAtOzHIfCHl@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	linux-i2c <linux-i2c@vger.kernel.org>,
+	lkml <linux-kernel@vger.kernel.org>
+References: <pe5su4wqtac6oo7deqkuzihrm6oorqsonhksb2lshujaocyimk@ed3kwddo7ci6>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="EubtGhyDD0WiEUXj"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250313-pcc_fixes_updates-v3-0-019a4aa74d0f@arm.com>
+In-Reply-To: <pe5su4wqtac6oo7deqkuzihrm6oorqsonhksb2lshujaocyimk@ed3kwddo7ci6>
 
-On Thu, Mar 13, 2025 at 03:28:46PM +0000, Sudeep Holla wrote:
-> Here is a summary of the changes in this patch series:
-> 
-> 1. Fix for race condition in updating of the chan_in_use flag
-> 
->    Ensures correct updating of the chan_in_use flag to avoid potential race
->    conditions.
-> 
-> 2. Interrupt handling fix
-> 
->    Ensures platform acknowledgment interrupts are always cleared to avoid
->    leaving the interrupt asserted forever.
-> 
-> 3. Endian conversion cleanup
-> 
->    Removes unnecessary endianness conversion in the PCC mailbox driver.
-> 
-> 4. Memory mapping improvements
-> 
->    Uses acpi_os_ioremap() instead of direct mapping methods for better ACPI
->    compatibility.
-> 
-> 5. Return early if the command complete register is absent
-> 
->    Ensures that if no GAS (Generic Address Structure) register is available,
->    the function exits early.
-> 
-> 6. Refactor IRQ handler and move error handling to a separate function
-> 
->    Improves readability of error handling in the PCC mailbox driver’s
->    interrupt handler.
-> 
-> 7. Shared memory mapping refactoring/enhancements
-> 
->    Ensures the shared memory is always mapped and unmapped in the PCC
->    mailbox driver when the PCC channel is requested and release.
-> 
-> 8. Refactored check_and_ack() Function
-> 
->    Simplifies and improves the logic for handling type4 platform notification
->    acknowledgments.
-> 
-> 09-13. Shared memory handling simplifications across multiple drivers
-> 
->     Simplifies shared memory handling in:
->         Kunpeng HCCS driver (soc: hisilicon)
->         Apm X-Gene Slimpro I2C driver
->         X-Gene hardware monitoring driver (hwmon)
->         ACPI PCC driver
->         ACPI CPPC driver
-> 
-> The X-gene related changes now change the mapping attributes to align
-> with ACPI specification. There are possibilities for more cleanups on
-> top of these changes around how the shmem is accessed within these
-> driver.
-> 
-> Also, my main aim is to get 1-8 merged first and target 9-13 for
-> following merge window through respective tree.
-> 
-> Overall, the patch series focuses on improving correctness, efficiency, and
-> maintainability of the PCC mailbox driver and related components by fixing
-> race conditions, optimizing memory handling, simplifying shared memory
-> interactions, and refactoring code for clarity.
-> 
-> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
-> ---
-> Jassi,
-> 
-> Please take patch [1-8]/13 through the mailbox tree if and when you are
-> happy with the changes.
 
-Hi Jassi,
+--EubtGhyDD0WiEUXj
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I2C change is also acked now. Let me know if you prefer pull request or
-you prefer to take it via ACPI tree which may need you ACK.
 
--- 
-Regards,
-Sudeep
+> The following changes since commit 4701f33a10702d5fc577c32434eb62adde0a1a=
+e1:
+>=20
+>   Linux 6.14-rc7 (2025-03-16 12:55:17 -1000)
+>=20
+> are available in the Git repository at:
+>=20
+>   git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git tags=
+/i2c-host-fixes-6.14-rc8
+>=20
+> for you to fetch changes up to 6ea39cc388899a121b5b19b6968692e9460ee4a3:
+>=20
+>   i2c: amd-mp2: drop free_irq() of devm_request_irq() allocated irq (2025=
+-03-20 14:37:47 +0100)
+
+Thanks, pulled!
+
+
+--EubtGhyDD0WiEUXj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmfdg5cACgkQFA3kzBSg
+KbYvxhAAinX0xI1moOF+NzL9FY9UOQ/2sw7ZPnwFEXHoKoF5ESZ0HACxuM2L6XaL
+IpijeLUnXfNA+UAtqsn3gaH/fzQlcYCY5ngXShRZTC1eNoRGAncHlM96SsRZfEjv
+CL+is/VdG8m9X18ZPCzu4dcyEgYXKG4gmM0m2b0fuNVtacZe6J7+6oVyvc/erx/i
+g+9RNPrtXvqfKNfgnvqi81KTH7d2clSoWvmjcGrGN05JBJ6rsdpQ5OUv+ND7nqPN
+QQMvi+MuoPiiox7Ev/WIWcQiCtkjjA3sbUJZp+7qAi25c/Bt90BvWEH3/71/EOSh
+MyaNtX/EUUdsGHx89Jlx3JpcoJL1SzMvmanPVC4GAApTLjFqJODBWesV/jiZruPA
+lWn/GPx4mWJVdAqdC8tmH02lyoXLgY85IfZiJFIryYLbwY2fG+GMVeyybr7jHHKp
+lyFTqbGL0MT8VR06JtaoYMZa+EmwthP+FwfgPoQiTfdmU81aIpqlJsdi3wfWlJcn
+ZNDQZr3eIBq1qTeJGyKFaQ/bjXm22Vy5ApUeQaJX6Ksnz37ej2ZbO6lkKN8P6z1S
+jrO9X+i4MU+5c+BVWl3w6ej2g2S8pYuGjF1BVWU0H5FGnz6Vnaoex8kGlOrIff3a
+ZQC9ueR18BWdyP8WJjHLiKINSe38zXnrhvGeVfFlZBQuwz/TP0Q=
+=PckO
+-----END PGP SIGNATURE-----
+
+--EubtGhyDD0WiEUXj--
 
