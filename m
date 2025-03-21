@@ -1,61 +1,53 @@
-Return-Path: <linux-i2c+bounces-9966-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9967-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 31419A6B24E
-	for <lists+linux-i2c@lfdr.de>; Fri, 21 Mar 2025 01:34:12 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 200FCA6B5FF
+	for <lists+linux-i2c@lfdr.de>; Fri, 21 Mar 2025 09:20:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B15CD881DF9
-	for <lists+linux-i2c@lfdr.de>; Fri, 21 Mar 2025 00:33:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A71363AB278
+	for <lists+linux-i2c@lfdr.de>; Fri, 21 Mar 2025 08:20:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47EA01CF96;
-	Fri, 21 Mar 2025 00:34:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CB5F1EE008;
+	Fri, 21 Mar 2025 08:20:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TbtkBtFA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ImfLWmO/"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05D1B3232;
-	Fri, 21 Mar 2025 00:34:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28E461E98ED;
+	Fri, 21 Mar 2025 08:20:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742517247; cv=none; b=XhggKjvD1h44o0HeflLg180aCdlnsUqSC1hZ/SGPIPIvjeWMJ6UbsBkbwjzwssE2Z5Y7KGrmKb4bHV4i9rlSKpRLFAqoX6rGtmvujRQPeUmbV5KMU/5BQx9d509ry2xxas2uwtei7qsbRQQPm1Mb+uf1o2zVKVtEjmtLAvPQPGg=
+	t=1742545253; cv=none; b=J0DJeGYEgKmaOYGFUZM2Vag3SQAyJemOCw0RjvrDIHwY4BOja3lwXbX5GYiJCrTRoJrX24iQ/17Yarczq4wwe2+eGLQjPzkCGIjix8AyXc/Dyx77u2yBgvh6b4SmopuNZupM0ELIsFaVZ1rgBfm5iW3dqkc8OSIqS1y5eeN7Vfk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742517247; c=relaxed/simple;
-	bh=yyQrlBhrG3F+CCOPI4mDErllZmAnSGt+UetzoQZbtuU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=i3sLIv07LmTY4NKReoMVZYEMwwYvMS9SBLIe73xIdf/SmUE4x3vA6Bx833bVy2KnbXWAKHKlS731kZWbLUVaTEK6wnXNQWU6+XuwlmdGvorRuwZh1UH5h4f3e9dWQbuAP18GeRhWnAycXhsjV9g2STr0a1hVCgzXZQ1f6d+JUhs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TbtkBtFA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7EBEC4CEDD;
-	Fri, 21 Mar 2025 00:34:05 +0000 (UTC)
+	s=arc-20240116; t=1742545253; c=relaxed/simple;
+	bh=EV9CBzjf600nW+rcD5Nj7CVDfSsbZ9nJjWhRPymGwSo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Ja50ZHyvycO+8L32GLW1HQXIIntRxHpX2/0VHPGP4OBRFp3JJElC3MWVXBfaJ4s6ZG6sHOvt1zwWNbExsyqBUQ69h24rczRJFn7HkXecGsh8Vfp17eq1ojcnerQI+byWILXIuwTGJx8koCaqrT9cvzMEh9cra3JonVUV3BL/548=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ImfLWmO/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05EA2C4CEE3;
+	Fri, 21 Mar 2025 08:20:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742517246;
-	bh=yyQrlBhrG3F+CCOPI4mDErllZmAnSGt+UetzoQZbtuU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TbtkBtFAT2D4XbiiWv7EtfXCZHZmACPrbsp8E90MTGOBZa+L6qybBpWgWh+s/L/Pn
-	 xAkvRRfYPgHesPEru6KNMpajOe8flK/60o7pqolcLN2Wgx0895H5clX114AecJIOhX
-	 sG2p8e5sRtBWje45/o6WyWdQ3sb0WFKNcZ3CThJOTO9AhCeEae60lBU1JRDM5Dvwtj
-	 JPxN7b6fcN6Zfa2rf7WiwcgJJMTeCeL73yItD+I1fFqTt6ppGO7d3vFVGnVscdAb4l
-	 aFRAloY0t1b6BzB0sMdm0uAQYPaZ/uUL5jPXIV4VUKbDGScbSy7udzH1nggyPWtw/x
-	 yBcFFsod1EzeA==
-Date: Fri, 21 Mar 2025 01:34:02 +0100
+	s=k20201202; t=1742545252;
+	bh=EV9CBzjf600nW+rcD5Nj7CVDfSsbZ9nJjWhRPymGwSo=;
+	h=Date:From:To:Cc:Subject:From;
+	b=ImfLWmO/9Xxg543MM7ZzDe4lXCPXj+0YBv29x/4tYwW7b7G7tKUki/TnZaeeGDk8u
+	 UhVyttA8keQtM8LljgaMeOwl6dKXfRaqkjBXfNVdYwsID9oAmeyrtuUmAN9Hl3Ynj8
+	 /o+ZrVjGBPwsWnkXUl2CqrMAZq2HdpUuwiLu7RbeVzilnD9oaLYkyv4GmV4UPzasI6
+	 e5wmRHLnoy3OGwti45sWOfLexZUsxS7UBcOtHxPsP36Z1R5eay4NQq3D6uaJxnDTsJ
+	 5BqxU8ak0NLbxM7a3fS1E3omhZyvG0rlXtiKieRxCm2VI7q/sAnhExdjmhMCVpXB8M
+	 GHjuw0u5I6kBw==
+Date: Fri, 21 Mar 2025 09:20:48 +0100
 From: Andi Shyti <andi.shyti@kernel.org>
-To: Daniel Golle <daniel@makrotopia.org>
-Cc: Zoie Lin <zoie.lin@mediatek.com>, Qii Wang <qii.wang@mediatek.com>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Project_Global_Chrome_Upstream_Group@mediatek.com, 
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, teddy.chen@mediatek.com, 
-	joseph-cc.chang@mediatek.com, leilk.liu@mediatek.com, John Crispin <john@phrozen.org>
-Subject: Re: [PATCH v5 1/1] i2c: mediatek: add runtime PM operations and bus
- regulator control
-Message-ID: <em2y3tkiwlxc45f4sjtzdd3oy4v5zpqgdpqfppyzah2ilzidg2@wn6cnrezygpl>
-References: <20250314145407.2900190-1-zoie.lin@mediatek.com>
- <fqicrglyug7gmkmysok7hilhmkyhxmnkztzv4iffgry6xce6t3@2i6b2ihfu4rb>
- <Z9yR6pyg1mtqKynh@makrotopia.org>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-i2c <linux-i2c@vger.kernel.org>, 
+	lkml <linux-kernel@vger.kernel.org>, Andi Shyti <andi.shyti@kernel.org>
+Subject: i2c-host-fixes for v6.14-rc8
+Message-ID: <pe5su4wqtac6oo7deqkuzihrm6oorqsonhksb2lshujaocyimk@ed3kwddo7ci6>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -64,31 +56,38 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Z9yR6pyg1mtqKynh@makrotopia.org>
 
-Hi Daniel,
+Hi Wolfram,
 
-On Thu, Mar 20, 2025 at 10:08:42PM +0000, Daniel Golle wrote:
-> On Wed, Mar 19, 2025 at 12:34:53AM +0100, Andi Shyti wrote:
-> > On Fri, Mar 14, 2025 at 10:53:43PM +0800, Zoie Lin wrote:
-> > > Introduce support for runtime PM operations in
-> > > the I2C driver, enabling runtime suspend and resume functionality.
-> > > 
-> > > Although in most platforms, the bus power of i2c is always
-> > > on, some platforms disable the i2c bus power in order to meet
-> > > low power request.
-> > > 
-> > > This implementation includes bus regulator control to facilitate
-> > > proper handling of the bus power based on platform requirements.
-> > > 
-> > > Signed-off-by: Zoie Lin <zoie.lin@mediatek.com>
-> > 
-> > merged to i2c/i2c-host.
-> 
-> the change causes a crash during boot on MT7988 which typically uses
-> one of its I2C busses to connect a Richtek RT5190A PMIC.
+No new fixes arrived last week, but I fished out this one from
+a couple of years ago. Thanks to Shyam for acking it!
 
-Thanks a lot for testing it. I removed the commit.
+See you later with the pull request for the merge window.
 
+Thanks,
 Andi
+
+The following changes since commit 4701f33a10702d5fc577c32434eb62adde0a1ae1:
+
+  Linux 6.14-rc7 (2025-03-16 12:55:17 -1000)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git tags/i2c-host-fixes-6.14-rc8
+
+for you to fetch changes up to 6ea39cc388899a121b5b19b6968692e9460ee4a3:
+
+  i2c: amd-mp2: drop free_irq() of devm_request_irq() allocated irq (2025-03-20 14:37:47 +0100)
+
+----------------------------------------------------------------
+i2c-host-fixes for v6.14-rc8
+
+amd-mp2: fix double free of irq.
+
+----------------------------------------------------------------
+Yang Yingliang (1):
+      i2c: amd-mp2: drop free_irq() of devm_request_irq() allocated irq
+
+ drivers/i2c/busses/i2c-amd-mp2-pci.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
