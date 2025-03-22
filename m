@@ -1,158 +1,120 @@
-Return-Path: <linux-i2c+bounces-9982-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9983-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1EF68A6CB6B
-	for <lists+linux-i2c@lfdr.de>; Sat, 22 Mar 2025 17:18:43 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08034A6CD00
+	for <lists+linux-i2c@lfdr.de>; Sat, 22 Mar 2025 23:40:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 49BB67A5810
-	for <lists+linux-i2c@lfdr.de>; Sat, 22 Mar 2025 16:17:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8317C16EEAF
+	for <lists+linux-i2c@lfdr.de>; Sat, 22 Mar 2025 22:40:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 975AC13FEE;
-	Sat, 22 Mar 2025 16:18:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E49A61E32C5;
+	Sat, 22 Mar 2025 22:40:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ooXs3H3A"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DO22zueR"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9157522F392
-	for <linux-i2c@vger.kernel.org>; Sat, 22 Mar 2025 16:18:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E96417BEB6;
+	Sat, 22 Mar 2025 22:40:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742660316; cv=none; b=Fsq/zzl8taUkGjQuQ50KvnkuMaN9c9rrU04H5y0Va1v4EA0kZ13+nkcjJHXPVIxJex7mj0uNZoGkXOx0p+qdWm7gKzyBIx/ZJQ06Xt5T91M97G4eBFd5JIQk0gcJXvnRrut6Ov8rJGj+1wkuTBztRkKN5Wd6Bg6aKnBIvS/suCw=
+	t=1742683214; cv=none; b=DCDxnKdAYm9R+3+cicA1avT0KmZx8yV2SrV3lf4Cd9IewnW4iCYYZUld0Yr44rgt/bU+QfHYaKogPoPYLmodsvPd3GepOaLkkL21x5uFfvrZ4KkFxc30L92DtSad4GmgLRT7+NryoP2Qc+qLeas9XVgTAvniNR36RCxVDw9aoCs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742660316; c=relaxed/simple;
-	bh=EhSc4gMtJQ8VkenQ8q7Z4o6Gq8b7xOdff+lboxzPoxU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Tiw1YkJkuIZyV+/TJQ5wYUreFWFM38AzBFURqW1Ctiv8C0gFeQ2BwtUCxBQGW7YlRrgFhGNS1qiu7UxAz4TjW/GBp7oSrDBLagn6UbXqOlrNcYnRkbwkQLiRDnnJ8UzvucoCmsMtHUvLQCL06uANabD9fAmgkLIxISvlUv+czxk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ooXs3H3A; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-3997205e43eso2518073f8f.0
-        for <linux-i2c@vger.kernel.org>; Sat, 22 Mar 2025 09:18:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1742660313; x=1743265113; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=XQg7akAtbWC+F80WejdnIt/45y4xXX2jqP1rGiQwyO4=;
-        b=ooXs3H3AhCsiuyXIipjwFaBOAB6wacnrQhLHJLhO3ypFwA2NiaXliJoNqlWUuRo5R4
-         SLILP+vUKmOUkM6JlTPgUj0mGLXq2SZzgMrSmhJoi8j55q23Kavntc8zxiGaM1iURFFf
-         ps/FCEzFddE6bJBnHdF1ler91EQrkZvIrYOMuGcJMjk5A9Bbwjj+/VjkTJVO9SGMoum2
-         tNiKtXpxjBPWffJBhzhKeoLVWqwJtXGWOqSQjyw/rYYEAe/yQpeSSn64j7Q4wBRbs8P+
-         ZdLhS2iRLM8cFjaNFCydfFB8dvWWl4jwL+FOsVaHwefnzHfVi//E92oJTQqundgyu6BH
-         TR9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742660313; x=1743265113;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XQg7akAtbWC+F80WejdnIt/45y4xXX2jqP1rGiQwyO4=;
-        b=XznzO1a8eefVBY1YWMn6Ew+TBwLdjZ1GDsRzHPTWtnWH7twJ5+MNMG77fHuYzP1RLl
-         tanagN2JaDgLRc+FXT8jX4hw6pbuz32s0AU3EynjHe9DPoLosTZpfGYgMXHzr5xK6MgS
-         7+iUQds9U9NH62XzoKZhG+ZC4kHS0ERPrwSBXTXlad30UFSGmtOVBtConxNRbt0J63AK
-         UUBsL8EGDSZNhJ1QnJclGqnBpedWXlZ9b5BLmxPnNk9aCoL3MxW0FWybU8qdOw6oPabd
-         zOslm6eYudsuQ3B17zgEh5bbaEGFe5VG3y6t/um3B8Y5/qVf4KuNhqnltPlIcMu1L48V
-         6E0Q==
-X-Forwarded-Encrypted: i=1; AJvYcCU+xZbuS4zT7E0Dzcetl9slGu3SxIogpIRheewgu23aGZPevlZYIG/qWD0woYOQxk7Sqmkd0b5PX/M=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwDci3d2CU35+GUPq+X1aexCZbjbsY74C1N5rmy6JlxtLCuEYHU
-	Xc6VxxCVY4tVycBSIpeK6v8PBNokPepXI6l3GCYYBQje81dO+IxVqATck3WG6TLn9pdvMBj7M4L
-	5ZG8XgK/tZJqg4sZDcLtKmw8tjlxckDKukuuZFNFKLXFZ9FOv
-X-Gm-Gg: ASbGncuGJ5BewzqqkbteY6nDqgt82avhE/f/eaCVyoSzfpkrZXOHbN4APhgmgx9uHbk
-	DiUC60pvQLYSuSydBXfD9L+I14WnFEZxQNX8mIUavFi1cg5J9suJuGdmQn7IbSCX1cVOW3hZa8B
-	OOA/qnj4FjbHGLqLN2NPb50CFjkRtOIFsn0D2ZkL7axwyBzBspin2svO4EaFs=
-X-Google-Smtp-Source: AGHT+IG/dP5kfjpo9N6hZ95W4x5TZDS77CcIFlzLNp1DQjbAjfhRKFsF02WSvZgsoXhLBeGn8IYRmz0UhAyj7EU/6/s=
-X-Received: by 2002:a5d:64af:0:b0:391:2c0c:1247 with SMTP id
- ffacd0b85a97d-3997f8f8c14mr7295628f8f.1.1742660312674; Sat, 22 Mar 2025
- 09:18:32 -0700 (PDT)
+	s=arc-20240116; t=1742683214; c=relaxed/simple;
+	bh=k0RMfzIK44lnIUZqkCOSsSj3l6l0m4YWwTIV4C2RYq8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=bsMtbpvprk+2ancI3UxsFyGcqB96oEujO21N5QTFFC7t5N9TDfm/FEXJOUydhhhtrrBQ1TFvbdkmZnfv2ac+SpUdw/D+WS4x7DI20Qn6xIbR1ROKq8wbNWngiKZ1khXxvVO9lhzQhSjauQF+YAkJmkEW8JKoBmBktNkuQ4AJEsM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DO22zueR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95B8DC4CEDD;
+	Sat, 22 Mar 2025 22:40:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742683214;
+	bh=k0RMfzIK44lnIUZqkCOSsSj3l6l0m4YWwTIV4C2RYq8=;
+	h=Date:From:To:Cc:Subject:From;
+	b=DO22zueRnS6QT9WBFkXGNpOEWC9ByDqcP9u9K5uJ6fs9GUGkeaZAw8m7C8TGWdM0E
+	 fNg/VCIKEY9/bGg87a6RALdrl/xgYuXVQ89AuNmnI/qnpC7P/I9vV7s+A0kMveloBa
+	 sw206w4cQBTFDufy/NOgd5ifkd3wbD70PqtSfOJAEaOYyKRI3J0AsodxSt/BLM+lcl
+	 18uP+qLpRpW9p3z/QortACxi1JVxKbRgTpL3g6ufX08i33LqhJ9hXp/qSWQ01HsmQh
+	 zYnus4O42nlGVfbfhpMcltpisidyYMqQLpxEmQ6r+wvf+GbzZVHLA1w/bmWJTF7yWM
+	 I9cc5ov7BJ+CQ==
+Date: Sat, 22 Mar 2025 23:40:09 +0100
+From: Wolfram Sang <wsa@kernel.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Andi Shyti <andi.shyti@kernel.org>
+Subject: [PULL REQUEST] i2c-for-6.14-rc8
+Message-ID: <Z988SQUTmI1q7TlO@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Andi Shyti <andi.shyti@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250322144736.472777-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20250322144736.472777-1-andriy.shevchenko@linux.intel.com>
-From: Christopher Obbard <christopher.obbard@linaro.org>
-Date: Sat, 22 Mar 2025 16:18:22 +0000
-X-Gm-Features: AQ5f1JpS0ZHpf8trIuKoL__I_GBotdRkSDBFtV3W0xRYYiAh7VkraP9v-DaXLwI
-Message-ID: <CACr-zFCF_b0_3NSLFvtgfpAbsSwUOYv5fS==PPbn9zXPBS0NHw@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] i2c: qcom-geni: Use generic definitions for bus frequencies
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>, Viken Dadhaniya <quic_vdadhani@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="2hUaXQj6WLFQGRoV"
+Content-Disposition: inline
 
-Hi Andy,
 
-On Sat, 22 Mar 2025 at 14:59, Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> Since we have generic definitions for bus frequencies, let's use them.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+--2hUaXQj6WLFQGRoV
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Looks good to me.
+The following changes since commit 4701f33a10702d5fc577c32434eb62adde0a1ae1:
 
-Reviewed-by: Christopher Obbard <christopher.obbard@linaro.org>
+  Linux 6.14-rc7 (2025-03-16 12:55:17 -1000)
 
-> ---
->  drivers/i2c/busses/i2c-qcom-geni.c | 19 +++++++++----------
->  1 file changed, 9 insertions(+), 10 deletions(-)
->
-> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
-> index 515a784c951c..ccea575fb783 100644
-> --- a/drivers/i2c/busses/i2c-qcom-geni.c
-> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
-> @@ -71,7 +71,6 @@ enum geni_i2c_err_code {
->                                                                         << 5)
->
->  #define I2C_AUTO_SUSPEND_DELAY 250
-> -#define KHZ(freq)              (1000 * freq)
->  #define PACKING_BYTES_PW       4
->
->  #define ABORT_TIMEOUT          HZ
-> @@ -148,18 +147,18 @@ struct geni_i2c_clk_fld {
->   * source_clock = 19.2 MHz
->   */
->  static const struct geni_i2c_clk_fld geni_i2c_clk_map_19p2mhz[] = {
-> -       {KHZ(100), 7, 10, 12, 26},
-> -       {KHZ(400), 2,  5, 11, 22},
-> -       {KHZ(1000), 1, 2,  8, 18},
-> -       {},
-> +       { I2C_MAX_STANDARD_MODE_FREQ, 7, 10, 12, 26 },
-> +       { I2C_MAX_FAST_MODE_FREQ, 2,  5, 11, 22 },
-> +       { I2C_MAX_FAST_MODE_PLUS_FREQ, 1, 2,  8, 18 },
-> +       {}
->  };
->
->  /* source_clock = 32 MHz */
->  static const struct geni_i2c_clk_fld geni_i2c_clk_map_32mhz[] = {
-> -       {KHZ(100), 8, 14, 18, 40},
-> -       {KHZ(400), 4,  3, 11, 20},
-> -       {KHZ(1000), 2, 3,  6, 15},
-> -       {},
-> +       { I2C_MAX_STANDARD_MODE_FREQ, 8, 14, 18, 40 },
-> +       { I2C_MAX_FAST_MODE_FREQ, 4,  3, 11, 20 },
-> +       { I2C_MAX_FAST_MODE_PLUS_FREQ, 2, 3,  6, 15 },
-> +       {}
->  };
->
->  static int geni_i2c_clk_map_idx(struct geni_i2c_dev *gi2c)
-> @@ -812,7 +811,7 @@ static int geni_i2c_probe(struct platform_device *pdev)
->                                        &gi2c->clk_freq_out);
->         if (ret) {
->                 dev_info(dev, "Bus frequency not specified, default to 100kHz.\n");
-> -               gi2c->clk_freq_out = KHZ(100);
-> +               gi2c->clk_freq_out = I2C_MAX_STANDARD_MODE_FREQ;
->         }
->
->         if (has_acpi_companion(dev))
-> --
-> 2.47.2
->
->
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.14-rc8
+
+for you to fetch changes up to 807d47a6dc054859eef90066516ae4f44fe22e6d:
+
+  Merge tag 'i2c-host-fixes-6.14-rc8' of git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux into i2c/for-current (2025-03-21 16:18:59 +0100)
+
+----------------------------------------------------------------
+i2c-for-6.14-rc8
+
+amd-mp2 driver: fix double free of irq
+
+----------------------------------------------------------------
+Wolfram Sang (1):
+      Merge tag 'i2c-host-fixes-6.14-rc8' of git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux into i2c/for-current
+
+Yang Yingliang (1):
+      i2c: amd-mp2: drop free_irq() of devm_request_irq() allocated irq
+
+ drivers/i2c/busses/i2c-amd-mp2-pci.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
+
+--2hUaXQj6WLFQGRoV
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmffPEkACgkQFA3kzBSg
+KbZwFA//TZ6NwH1KUwXmhhyjmORYTqmf29BNtB1jLpN0UjI85NDyNV4UOko4yUUd
+mwQPaC0q7STrrQBhwwPbYe3uOeTWXxMh0Vg8yu8cdM6C0KxcFKtQHFwHmPLpRQAO
+4Sx/JlBpP1zYIwgdm/nxEoygfRC8W7MrvvgFIltVJHn2IzQJfNXyfS1/gREzDoNk
+KmgIQlTm1L2uFLWywIAG4txj4jr33cVT7FieCJ8V4UEEciT1QHs9747LEdYSjUkU
+2napRttSgZX9gNu3TXNg8iqT7Eex79uLoWcJcrfCdJO/w+ol8Z4aZ0zlyOdHkEOz
+8a/ICHwLTndx6VbXsVmmeZjrf8zi2StgN4kW1NmxTvhA13IXoost38DRZ/3/bnTr
+BHKRhME+5VuHSUpep4DMWTQZBcR90tSIghQecRgO1OPGBj92L4aPLgj32w2rGWBk
+jgwetpqRqJSzChaybVlq+lLeTFKaxrudSrlFWfvwKB4KLpbRsVFA0KZ9Uejj5/8r
+3aC3XxakH8BF4eXNZ3Bks8mOlk6qrQ2IPw7xibx4vjl304LCeCx+VNzrSQOQ8Fv5
+29DyibLu6bOOPa4xZrTkmEmCkmOP67FohO/qlpe9BTntdvrByWo8zK6IZv8iohPB
+WV3ks/s7EKrGq5BmiACxJBbh7xkiJ89r6njdM7uMYxTVD4UNZ64=
+=4AT/
+-----END PGP SIGNATURE-----
+
+--2hUaXQj6WLFQGRoV--
 
