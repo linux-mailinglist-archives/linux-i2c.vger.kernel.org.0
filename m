@@ -1,48 +1,80 @@
-Return-Path: <linux-i2c+bounces-9991-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9992-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0EFE2A6D8EB
-	for <lists+linux-i2c@lfdr.de>; Mon, 24 Mar 2025 12:10:54 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DFBEAA6DA93
+	for <lists+linux-i2c@lfdr.de>; Mon, 24 Mar 2025 13:58:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A915F7A6BA2
-	for <lists+linux-i2c@lfdr.de>; Mon, 24 Mar 2025 11:09:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2C0D87A1CBF
+	for <lists+linux-i2c@lfdr.de>; Mon, 24 Mar 2025 12:56:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEEFB25D217;
-	Mon, 24 Mar 2025 11:10:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B43DB25E46C;
+	Mon, 24 Mar 2025 12:57:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mGmp2VpL"
+	dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b="lCSkA6Fq"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65A9C1487D1;
-	Mon, 24 Mar 2025 11:10:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0470A63D
+	for <linux-i2c@vger.kernel.org>; Mon, 24 Mar 2025 12:57:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742814644; cv=none; b=jlrraj9T+L3ejCzMJpsy1fxbRVhr2wl6Oxdh4PepLhFao1w3A2fTCntx9ptL/G0S1kcr0kPZl3txFHmWntcwOU8iaJLyRX9WHO15M90d9i7OoJDkkj4WncINT7OP/NhfEE9eaQwirnfUhgnlpR+nZlx/fXzydtLIjL3NSkfl75c=
+	t=1742821062; cv=none; b=ToXkr4VWq7RFjih6nhwXQ8vrGgDM7kFA3Cqq+CRmZe52ba9vbF0G1IwmTjQCWBZcML86i1s2dDn4mdU90BtWin/vHw6T4g8un7H6swNBdp+FvRrVzLus5XbhDqCiDqxaeV+ROluUrIgkjoHhRorT/MkvtiIi/KeSRVXAbXPg3uA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742814644; c=relaxed/simple;
-	bh=z/Ldx6B4r8X95UnmP5VrbMIGre4B2pHGjVaFENYqI+Q=;
+	s=arc-20240116; t=1742821062; c=relaxed/simple;
+	bh=w1sIKw8VhqVpel2X4jkKgpcUEe1m4Bk1iPlqBxpEz9w=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Q7t9fNLoALg+ENHOXpBj9S4pTzrhX7drLZDAit2m8oe6SedjcLoacIKXdIAkJGljWqzg5MkDYqxq0WF5e9zDMXkh2UIrhU++8I3uCk6lZU7aQ2I8KlNYBILZNi4ICZMYWO8emh09qI6+1InUFmUnmwxa8qbPBq/oCsbY5ZxglN8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mGmp2VpL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C66A7C4CEDD;
-	Mon, 24 Mar 2025 11:10:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742814643;
-	bh=z/Ldx6B4r8X95UnmP5VrbMIGre4B2pHGjVaFENYqI+Q=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=mGmp2VpL+bJHTYiKFd6rCDqOfHFlHCpcIILSGQMUmBZ/7Rk8fDaeb8zraEfCIWnH1
-	 RwWJwcoM4nIKt4+KeJXMVvLqLT+sau5LzLG4HJdzTn0iNezKexA5TX6lnSIS4uE0eh
-	 9abFfUDPMxVWMCxgM7UpWZWU9w3xG8FOhCN+Hj4u3fFJfxTYZsMsyHChrK9wA3XoxH
-	 VcKulpzR9Uan9efDdJ+NsLFTviInfXc40t7KqMIrGkgLm6Y8nzir/iwmsmSB3L+xyn
-	 qUwuQesncTg+Z+i0fLVLhT/nGFITyfiu8MKIDoV2Q+GPoIz5AcVnadvNb8OgTm3J0p
-	 HMuDU5vyQcPkg==
-Message-ID: <8e8aa069-af9f-453f-9bd0-e3dc2eab59ab@kernel.org>
-Date: Mon, 24 Mar 2025 12:10:34 +0100
+	 In-Reply-To:Content-Type; b=lD/S+7/kkryQmTvg7jdgvBMN2CqzIlYGxhrMY86nM1sO7WMY91pkAzHnmVuSZoDGSPCzMrnc9yOd6bnbL4mXsF/54S+bq1maQbgQ6T4C+LcHGRMp1oMxsh5qty0Syj/41Azenth71hUbcdv0SaCl+bIGl8QFjMlxiIIwaBdXW7I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b=lCSkA6Fq; arc=none smtp.client-ip=209.85.210.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=riscstar.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
+Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-72bbead793dso3057101a34.1
+        for <linux-i2c@vger.kernel.org>; Mon, 24 Mar 2025 05:57:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=riscstar-com.20230601.gappssmtp.com; s=20230601; t=1742821060; x=1743425860; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Im+9aepQleDf029Fpq6gerBYD6e3zBrydq5RA3dPhpA=;
+        b=lCSkA6FqtUzejSeYM7v5GSq+0PRxeal4fECeZpokeKY/F2S+hLUcx16lf2CADCAceG
+         BRdmhlBxLQacp/FqDxFSMmeGMj6YXPDFSZwsMgI+xaEocwhIKGIeiMA7oR7SwDar8VPc
+         cmGJSRKR6v/4EPFpFeP1jD5Zqafkw1qshDqc4PsMArskMh5eoKvKnzgcaodCsQwyWFQi
+         1LO+C/Ejk1VNFPmmYnkvkyX4tIYW4U+5vYUtLeDVfv185Apb0Xor6VxZgVlfS2V7kyFr
+         65tac9+42jF60OzZKSNnMqLrjN9gjFJ9RGAfIsZcLyUQ3GZDWO31IRmeVg0t3bpJcRNp
+         fWhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742821060; x=1743425860;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Im+9aepQleDf029Fpq6gerBYD6e3zBrydq5RA3dPhpA=;
+        b=uXK2WJHftfGeonCAhksAnN4bne/MmvpZ+nv59mt/u5lVYSkDr9Hn4yDwghXuprldgq
+         WotaaGB/b4JrtKCFqOOv6yj7lhzhHyevxWQFyZuCjokE6/awGJp4kOsfyS3KByhV9KQL
+         o8HqHrVQ+x+Du1UWkwzlEfWNXNnp/tBK0hwY0Mxwi8IaHOU5QJLTMgj5SkziaJUEjZSY
+         Y7BgsmvjnA2m/2r6mwRUJaW9g/z5kzKsmN3koBXLOIQPKNOd2IseQcTi6qsX4wObW14j
+         ku2BQSItHEsSZ+t3hv88nm8Y4brCB1rmuwdDBL6kzCY7nGHjfwvZL2+j219sTCIdlCdY
+         Jdzw==
+X-Forwarded-Encrypted: i=1; AJvYcCXbckF0Wr9eFedbcGJ1E69oVJseuSfh35Da3b2Ebla+NeVedfRGqnU0sTKr3aBDSbLG7687pMXylvk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwoWIXWwleugt8D/F91wLo+9DbnxSCo6QtDMNKHb6Z7CAU5TfeN
+	4HbsofebXyEGlS9sTolND5Q8cT8u6wkQAgAP3Wfc9bYshtLmZiInkYxWU2LtPxI=
+X-Gm-Gg: ASbGncu8hOZhnJlib7BSP+5mrcsDOI3kHi1j9yJuZw+msyCZipr3w8uewj0O3QCHMVS
+	k5ov5HjSH66IGHcABMoVB4pjyKdCqByfpXLcwtP3WALezx7CrU+F2KF3P8kZJW9tvUBTsJMWUGp
+	m2EuEDf7VEph0yjQ7ty90gCCpIBp66nyc+qaiaXNamVbI92h0j7dgfQDUP+US1M3YqKDc046krz
+	cnkdaXxyfpoe+4prhPgRfgtR/Dd/tcNbZAivPfeiXGda8BQID4qNFHILC9XcQwIdAr162j9PAyq
+	jufFX8cNINMSnJA7Nen/Oyrrk1QscBVbXfmmarZ5VN9VkGPhVY+TgeqS4iLslWbbO+W3bqGyQgE
+	igNeb4oRj
+X-Google-Smtp-Source: AGHT+IE5aK4uB4tn7mHbF1k7Zswn65KeSQ5BvNMkopcTLJUJADT1mRVvPGIMYObU+wZiGGQym4pNMw==
+X-Received: by 2002:a05:6830:64c7:b0:72b:a712:4b72 with SMTP id 46e09a7af769-72c0ae5d2f7mr9130707a34.9.1742821059582;
+        Mon, 24 Mar 2025 05:57:39 -0700 (PDT)
+Received: from [172.22.22.28] (c-73-228-159-35.hsd1.mn.comcast.net. [73.228.159.35])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-2c77f05ec92sm2050688fac.35.2025.03.24.05.57.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Mar 2025 05:57:39 -0700 (PDT)
+Message-ID: <92efd4e1-3257-474d-8b59-820627cf5262@riscstar.com>
+Date: Mon, 24 Mar 2025 07:57:37 -0500
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,173 +82,56 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v16 1/3] dt-bindings: i2c: aspeed: support for
- AST2600-i2cv2
-To: Ryan Chen <ryan_chen@aspeedtech.com>
-Cc: "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
- "joel@jms.id.au" <joel@jms.id.au>,
- "andi.shyti@kernel.org" <andi.shyti@kernel.org>,
- "robh@kernel.org" <robh@kernel.org>, "krzk+dt@kernel.org"
- <krzk+dt@kernel.org>, "conor+dt@kernel.org" <conor+dt@kernel.org>,
- "andrew@codeconstruct.com.au" <andrew@codeconstruct.com.au>,
- "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
- "andriy.shevchenko@linux.intel.com" <andriy.shevchenko@linux.intel.com>,
- "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
- "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- Mo Elbadry <elbadrym@google.com>
-References: <20250224055936.1804279-1-ryan_chen@aspeedtech.com>
- <20250224-arrogant-adventurous-mackerel-0dc18a@krzk-bin>
- <OS8PR06MB75415E95342F26F576B5CF8AF2C22@OS8PR06MB7541.apcprd06.prod.outlook.com>
- <50327725-f3b8-4a8b-94a2-85afccd2868a@kernel.org>
- <OS8PR06MB7541B0DBC64B3EF6838DFE74F2CD2@OS8PR06MB7541.apcprd06.prod.outlook.com>
- <d1b184c5-84c1-4d76-a1d0-a9f37f1e363c@kernel.org>
- <OS8PR06MB7541D1D2E16C5E77037F3BB0F2CB2@OS8PR06MB7541.apcprd06.prod.outlook.com>
- <069b9fe4-c54a-4efd-923e-1558c59fe3f4@kernel.org>
- <OS8PR06MB7541C69AB8E6425313DA8606F2DF2@OS8PR06MB7541.apcprd06.prod.outlook.com>
- <677cb075-24ae-45d8-bfb4-9b23fbacc5df@kernel.org>
- <OS8PR06MB7541C3B70B15F45F4824772BF2D92@OS8PR06MB7541.apcprd06.prod.outlook.com>
- <994cb954-f3c4-4a44-800e-9303787c1be9@kernel.org>
- <SI6PR06MB753542037E1D6BBF5CE8D2E7F2A42@SI6PR06MB7535.apcprd06.prod.outlook.com>
- <4523caea-3406-4de0-9ab5-424fb7a0a474@kernel.org>
- <SI6PR06MB7535BAD19B51A381171A0E64F2A42@SI6PR06MB7535.apcprd06.prod.outlook.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH] i2c: k1: Initialize variable before use
+To: Andi Shyti <andi.shyti@kernel.org>, linux-i2c <linux-i2c@vger.kernel.org>
+Cc: Troy Mitchell <troymitchell988@gmail.com>,
+ kernel test robot <lkp@intel.com>
+References: <20250320113521.3966762-1-andi.shyti@kernel.org>
 Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <SI6PR06MB7535BAD19B51A381171A0E64F2A42@SI6PR06MB7535.apcprd06.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
+From: Alex Elder <elder@riscstar.com>
+In-Reply-To: <20250320113521.3966762-1-andi.shyti@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 24/03/2025 11:01, Ryan Chen wrote:
->> Subject: Re: [PATCH v16 1/3] dt-bindings: i2c: aspeed: support for
->> AST2600-i2cv2
->>
->> On 24/03/2025 09:30, Ryan Chen wrote:
->>>> Subject: Re: [PATCH v16 1/3] dt-bindings: i2c: aspeed: support for
->>>> AST2600-i2cv2
->>>>
->>>> On 19/03/2025 12:12, Ryan Chen wrote:
->>>>>> Subject: Re: [PATCH v16 1/3] dt-bindings: i2c: aspeed: support for
->>>>>> AST2600-i2cv2
->>>>>>
->>>>>> On 17/03/2025 10:21, Ryan Chen wrote:
->>>>>>>> Neither this.
->>>>>>>>
->>>>>>>> So it seems you describe already existing and documented I2C, but
->>>>>>>> for some reason you want second compatible. The problem is that
->>>>>>>> you do not provide reason from the point of view of bindings.
->>>>>>>>
->>>>>>>> To summarize: what your users want - don't care. Start properly
->>>>>>>> describing hardware and your SoC.
->>>>>>>
->>>>>>> OK, for ast2600 i2c controller have two register mode setting.
->>>>>>> One, I call it is old register setting, that is right now
->>>>>>> i2c-aspeed.c .compatible = "aspeed,ast2600-i2c-bus", And there
->>>>>>> have a global register
->>>>>> that can set i2c controller as new mode register set.
->>>>>>> That I am going to drive. That I post is all register in new an
->>>>>>> old register
->>>> list.
->>>>>>>
->>>>>>> For example,
->>>>>>> Global register [2] = 0 => i2c present as old register set Global
->>>>>>> register [2] = 1 => i2c present as new register set
->>>>>> It's the same device though, so the same compatible.
->>>>>
->>>>> Sorry, it is different design, and it share the same register space.
->>>>> So that the reason add new compatible "aspeed,ast2600-i2cv2" for
->>>>> this
->>>> driver.
->>>>> It is different register layout.
->>>>
->>>> Which device is described by the existing "aspeed,ast2600-i2c-bus"
->>>> compatible? And which device is described by new compatible?
->>>>
->>> On the AST2600 SoC, there are up to 16 I2C controller instances (I2C1 ~
->> I2C16).
->>
->> So you have 16 same devices.
-> Yes, one driver instance for 16 i2c device. 
->>
->>> Each of these controllers is hardwired at the SoC level to use either the
->> legacy register layout or the new v2 register layout.
->>> The mode is selected by a bit in the global register, these represent two
->> different hardware blocks:
->>> "aspeed,ast2600-i2c-bus" describes controllers using the legacy register
->> layout.
->>> "aspeed,ast2600-i2cv2" describes controllers using the new register
->>> layout
->>
->> Which part of "same device" is not clear? You have one device, one compatible.
->> Whatever you do with register layout, is already defined by that compatible. It
->> does not matter that you forgot to implement it in the Linux kernel.
+On 3/20/25 6:35 AM, Andi Shyti wrote:
+> Commit 95a8ca229032 ("i2c: spacemit: add support for SpacemiT K1
+> SoC") introduced a check in the probe function to warn the user
+> if the DTS has incorrect frequency settings. In such cases, the
+> driver falls back to default values.
 > 
-> Sorry, I still can't catch your point.
+> However, the return value of of_property_read_u32() was not
+> stored, making the check ineffective. Fix this by storing the
+> return value in 'ret' and evaluating it properly.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202503200928.eBWfwnHG-lkp@intel.com/
+> Signed-off-by: Andi Shyti <andi.shyti@kernel.org>
+> Cc: Troy Mitchell <troymitchell988@gmail.com>
 
+This landed in my junk folder for some reason.  I noticed this
+on an earlier version but didn't check in v8.  The fix looks
+good (in case you haven't already applied it).
 
-I repeated twice "You have one device, one compatible.", provided few
-more sentences and if this is still unclear, I don't know what to say more.
+Reviewed-by: Alex Elder <elder@riscstar.com>
 
-> I separated the support into two drivers:
+> ---
+> Cc: Alex Elder <elder@riscstar.com>
+> 
+>   drivers/i2c/busses/i2c-k1.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-k1.c b/drivers/i2c/busses/i2c-k1.c
+> index 0d8763b852db..5965b4cf6220 100644
+> --- a/drivers/i2c/busses/i2c-k1.c
+> +++ b/drivers/i2c/busses/i2c-k1.c
+> @@ -514,7 +514,7 @@ static int spacemit_i2c_probe(struct platform_device *pdev)
+>   	if (!i2c)
+>   		return -ENOMEM;
+>   
+> -	of_property_read_u32(of_node, "clock-frequency", &i2c->clock_freq);
+> +	ret = of_property_read_u32(of_node, "clock-frequency", &i2c->clock_freq);
+>   	if (ret && ret != -EINVAL)
+>   		dev_warn(dev, "failed to read clock-frequency property: %d\n", ret);
+>   
 
-I don't care about your drivers, why are you bringing them here?
-
-> i2c-aspeed.c for legacy layout, compatible "aspeed,ast2600-i2c-bus"
-> i2c-ast2600.c for the new register set, compatible compatible "aspeed,ast2600-i2cv2"
-> Do you mean I have integrate into 1 driver at i2c-aspeed.c ? can't be separate two driver?
-
-What is this patch about? Bindings. Not drivers. Look at email month ago:
-
-"All this describes driver, not hardware."
-
-Why are you keep bringing here drivers since a month?
-
-Best regards,
-Krzysztof
 
