@@ -1,400 +1,522 @@
-Return-Path: <linux-i2c+bounces-9998-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9999-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97EAFA6E386
-	for <lists+linux-i2c@lfdr.de>; Mon, 24 Mar 2025 20:30:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 09E94A6E39F
+	for <lists+linux-i2c@lfdr.de>; Mon, 24 Mar 2025 20:34:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C3A2D3A675E
-	for <lists+linux-i2c@lfdr.de>; Mon, 24 Mar 2025 19:29:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2EA0B16B093
+	for <lists+linux-i2c@lfdr.de>; Mon, 24 Mar 2025 19:34:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3ED17199FC9;
-	Mon, 24 Mar 2025 19:29:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 871FD19C554;
+	Mon, 24 Mar 2025 19:34:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="Wu+bzumv"
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="eolV1fIv"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37E5819539F
-	for <linux-i2c@vger.kernel.org>; Mon, 24 Mar 2025 19:29:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63579198E75;
+	Mon, 24 Mar 2025 19:33:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742844594; cv=none; b=u3jHopwM8LZPcbbQij9DxTFEh+AopPzrLODxObxgnB1N/dJ4v74u+pUAzPCto9GYShcA8R+yL1OtSlVbUP2y7KFT/hICFUwAgW+//NsosnOdVxIVQ9dahVnoB+MBr4hKgbbwlEFGgunCsexMMDYv/eP8Xj3ea/PLV0lit6cj61w=
+	t=1742844841; cv=none; b=ut8nlR4CL24bh2Se11PaSDJNjH5HRWqJdirBlr76psWOn3nRyR7WJsP2y3TOqIqHEm9mVZLxXkiaNHGh6PHSs7eL7jLQpIA6ufjrLmAEjanp8st8N0Kw0+8pwLwo36wVzTI6ln2HOALO6Sj6ALauTszYOPwMcYxjM3YIMftEZCM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742844594; c=relaxed/simple;
-	bh=j5OVxPFLq29GXiCKrU656RaWw4cyWIYA4WD+scEZ7Xk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RVAa4jBcwim93Sq9dLC5w9zwE6U7HwDRtNIYeZFEDArNQYKuN9Crj+8RSgp6N5S/02x8wrGwnIHgJYjL5wcSGMmjHLWx7xdI2npIrQxj7hvl1EbewQkeB15/UA2IMj+89C4UMPqJND9ln+dt6owy/+1Xn0U69BgrBg00LTNneUI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=Wu+bzumv; arc=none smtp.client-ip=202.36.163.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 7F5082C0526;
-	Tue, 25 Mar 2025 08:29:49 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1742844589;
-	bh=P5DjFWk3LK/sagkk45Rhp6cyX4c3fky3dNSl7gsy2pc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Wu+bzumvUetu+G+H9zXhyDuVmX2ztuPpphu5RI0n6GKf+wxjM8fZ0IsiC68gmsXKc
-	 uqW0I/98T/w6s580azvJK8q2D2KmyU8pbiwljcFuP/yMJccfEafp6dDmpBKSliNnn9
-	 JCpw4gj2zRjSiI1aujlkmyZS3Nzygi4d2t0Le2UlV3fyV84Dna+S0wmNXuRORZDX3v
-	 tSzflUE/AqpWxgMAfVzu4vfD6Wt6LNz+fqef4hNW28jwKsTTQ0mbOTjQoFHpNUDZmB
-	 x5V0v9HaEbMrIsJLWuaEcMC2FHSwfkhVszsQApSMHnGzqiutIGl4oGWfjGkjs19678
-	 EeYBsxpmanpHQ==
-Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B67e1b2ad0000>; Tue, 25 Mar 2025 08:29:49 +1300
-Received: from aryans-dl.ws.atlnz.lc (aryans-dl.ws.atlnz.lc [10.33.22.38])
-	by pat.atlnz.lc (Postfix) with ESMTP id 47D1D13ED56;
-	Tue, 25 Mar 2025 08:29:49 +1300 (NZDT)
-Received: by aryans-dl.ws.atlnz.lc (Postfix, from userid 1844)
-	id 453652A362E; Tue, 25 Mar 2025 08:29:49 +1300 (NZDT)
-From: Aryan Srivastava <aryan.srivastava@alliedtelesis.co.nz>
-To: Andi Shyti <andi.shyti@kernel.org>
-Cc: Andy Shevchenko <andy.shevchenko@gmail.com>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Markus Elfring <Markus.Elfring@web.de>,
-	linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Aryan Srivastava <aryan.srivastava@alliedtelesis.co.nz>,
-	Robert Richter <rric@kernel.org>
-Subject: [PATCH v14 1/1] i2c: octeon: add block-mode i2c operations
-Date: Tue, 25 Mar 2025 08:29:46 +1300
-Message-ID: <20250324192946.3078712-2-aryan.srivastava@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20250324192946.3078712-1-aryan.srivastava@alliedtelesis.co.nz>
-References: <20250324192946.3078712-1-aryan.srivastava@alliedtelesis.co.nz>
+	s=arc-20240116; t=1742844841; c=relaxed/simple;
+	bh=0Lha0d3hj+4yoFErNxqH4GvKDn12QT8RGBLwjaUl/sM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fIaC7JMwQVZNCYHsiKdzLqZ9FTTrgmIKoIU4Q6/RIiGCHt81JFRKHHyV9w5P3JponHmYayIVxfwyVKrB9yfLAgGntRL7bnWwG4f66c6vJ06odZSK+wZw932xCs/Xp3B31nOw0/SxMjI2/BChpOLyKHKV+xwXC6W01p7EMeJpaTw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=eolV1fIv; arc=none smtp.client-ip=212.227.15.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1742844836; x=1743449636; i=w_armin@gmx.de;
+	bh=t5GaNTB480hpdgq4ejKuLP4hA3aa2RsTcEY4RyrxJ1s=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=eolV1fIvRVc/xZrAwp8ozJAZDQLGZ7wdSTniVigZ6Ly15VVVt7uKHzoTJMy6c+pD
+	 MYIWzA3oOXy9b6DoHkFF1XDgD2FKMn+ocyyGb6YerwdB3UPaFY7hsblfsyUuBbT9j
+	 dx/mINt+ZpJdKwrr8/0E0QQXrussRF5rBN0DOSArOrFDoF02l1qAFeAaOMejNcjcU
+	 iJrlCpAIbJb5pd+Qk/9UtUmf2nBOMH5h+pMeedyiK6c8JaU60wZXIyJKvaMTWXMoe
+	 iDOYZ1GnN34+HIflEwGdL7mpMrf/aa1kfNjtkYhax4/PNlkEWTfpKLQY86Z9JNXWZ
+	 da3cSuMVTJxVW3V3uw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.0.69] ([87.177.78.219]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1N8ofE-1t38KY0osQ-012sLe; Mon, 24
+ Mar 2025 20:33:56 +0100
+Message-ID: <a86b80f2-0bff-4c39-bc03-c34bf9dd381d@gmx.de>
+Date: Mon, 24 Mar 2025 20:33:54 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: ACPI Error: AE_AML_LOOP_TIMEOUT in \_SB.PCI0.SBUS.RDWD &
+ \_SB.PCI0.SBRG.ADP1._PSR
+To: Naveen Kumar P <naveenkumar.parna@gmail.com>
+Cc: linux-acpi@vger.kernel.org, rafael@kernel.org,
+ linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+ andi.shyti@kernel.org, linux-i2c@vger.kernel.org
+References: <CAMciSVUVjLj44LW+3ALB1fJQsUiw_2BQ5tLgpNJH08Xmj=Wr9w@mail.gmail.com>
+ <07e2fb25-625b-441e-86f7-d0d54138c4aa@gmx.de>
+ <CAMciSVUwy2cB4=hdX7Qki4Uc3maYdyrWa9t=_c9Uth=Pzh-KAg@mail.gmail.com>
+ <d713393c-5d08-4b7f-8d5a-1a65f6f29f59@gmx.de>
+ <CAMciSVXLkCrhUTXcf2WZiDkhHSO-Wdp3MhuK6ASkUL+ObtWvmw@mail.gmail.com>
+Content-Language: en-US
+From: Armin Wolf <W_Armin@gmx.de>
+In-Reply-To: <CAMciSVXLkCrhUTXcf2WZiDkhHSO-Wdp3MhuK6ASkUL+ObtWvmw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.4 cv=Ko7u2nWN c=1 sm=1 tr=0 ts=67e1b2ad a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=Vs1iUdzkB0EA:10 a=VTaoIAi0P-8XhCTjSE4A:9 a=3ZKOabzyN94A:10
-X-SEG-SpamProfiler-Score: 0
-x-atlnz-ls: pat
+X-Provags-ID: V03:K1:SSFQ93jhfP/j87iXxWWkxF+7Zodclg1hWX3DhXv07rQD1tIEE4d
+ 2s3Gydkis2g3hiozQzSV1MgXBeE4muRu57Lybixk/qPZSZjcCDhBBHIQEZ0I6i1MgspvsLp
+ LfxwABoEFf7gHWCvRAnyySw5hhFkR5MgIYuhKrU1WL/wTwbGze0GZaV3Sdu7WXC4gYvEJxj
+ PeG8kTeO0jiPyLHUcK92Q==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:cRVZzTS5H8c=;XF7IE8ejlDVpdTRIszyYw3DsRE9
+ i7ysUAdhgHZPFyMEF0T3Q1v+fCtAt2Rhn18ZdyZp3G4QU9v/lZMHjCThPnjVKN/GcGSE3FuOp
+ GI3RHHLQuUrkiMXYOt9xO3ukusAWpIUpAtw2hsFRBqa77PPL56z5lHuKTOqCdWXZy8GokksE+
+ 8Cn7Ndijhz/xpFhA8NvrvpEOKina4/VZtHIq6WpCWf/dIxlHhbETojXXjvba1v47bkP0AVLGu
+ f9A2oioTgtun4N7uxn8si+KO+816K7t8sq9mz7lHdEgjtpjWCnN2HqGuzzBedJ++iVAFfcI6+
+ DUQjv/3/WdNZ8Ah01+UJ9EAns2yFw9Eh5kFIus/xhEGOjz1dyIenpyzAO2mgfyhbqU5dCPblb
+ EYWkcdG+gG5VbAXLnEciv4vQiEbRFIB3wzpLgbo83GV/2VqQoYtXE//cPk5kNWBf6G4/russL
+ hAQsBZ9fXYas4w8aXdBs8BWdhItdzp8wE7efvNT8E2njlphjLjcShjqDNVEE1r5hltbe1CKhQ
+ HURBya8WOCL9y+qdAnEt8EVuU/dhvgeh9uhnpKoBa7ViuDV0QLvNe1ziToxmrZ04RSD33q4d8
+ n2yUs0Xexn2ba4YvhnbRlTbVPjZWYAS7sCiek/XQZvN9t8OPMMKgs8XAGVEjTfZBwAjvkDaMP
+ HriANG275epnFr1Dt0jSc1TYvqEVQsAlQhu1HgU7HjiL3WHhZowYHGe1q8yS8raORjbtpfstL
+ 2La9tXEshhWP+5/EzX1X1HO+/ddT3uSuXcF/yZOz+N/Si1NIDkxEB1BMPSIVrXdfqGTGrEsh7
+ zeb2DI+fbEIxJfqnDdNmywNM7nSnDolzB+wORRfruQFWfSamEYx+RHGAL2XZWnAmMBuYahUu3
+ jpqE55QUQrNKwXrsRvR1YJCMRF5s8VBuFbFxNoNWxyAh88qzPtlFk38hgTRC5awfOGsGp/lPy
+ +Vi6l577Ja+LRrLCibsfhsT1agETR2srozV0gp5uoUNcOYwufYwXLT6nlYwSQdo/ofNSv/KE4
+ bAOXVpnnIHgRE+snOb89z1CJzB/iCv+cFFh2cyaRJN8v8WijVmCNGlUtPOXQWQs7E6vAxCg+X
+ V00T8vEc0m4GaV36EaWL8J6ESv7CTzQnH6+SKsFtwBUhgiMYbGs8Jn6+gQI8lUzmfzdReExHG
+ 1X9NFm45xvC7RS148GBDjI6kyj8ZFmdQDsvvsSCagKtGdYmVlzYZPM7jJ0c/MMuGZb7+Y6Jpz
+ 8X0Tttg05kHUi0h8MT34/1tuq6rD/hxcpWNUvRelEiP/za/nNmzApOtmYMrJ8dWutYGJcvLmP
+ 2LKxBVOTqpgSEyeMPUlPPhQhmn5rZB+TChTs0GrjTbTMoJDf0AYtnUlURJuMC9aCD7p+MPPg9
+ EferphWF/dl89d7MY5SgZITRq2m3PRd0LZCn1BL8h8P85poAF/ggLNOSHeVa1aTAsoJbILP8v
+ 6FbNMiA==
 
-Add functions to perform block read and write operations. This applies
-for cases where the requested operation is for >8 bytes of data.
+Am 24.03.25 um 07:06 schrieb Naveen Kumar P:
 
-When not using the block mode transfer, the driver will attempt a series
-of 8 byte i2c operations until it reaches the desired total. For
-example, for a 40 byte request the driver will complete 5 separate
-transactions. This results in large transactions taking a significant
-amount of time to process.
+> On Mon, Mar 24, 2025 at 3:25=E2=80=AFAM Armin Wolf <W_Armin@gmx.de> wrot=
+e:
+>> Am 22.03.25 um 16:40 schrieb Naveen Kumar P:
+>>
+>>> On Sat, Mar 22, 2025 at 3:02=E2=80=AFAM Armin Wolf <W_Armin@gmx.de> wr=
+ote:
+>>>> Am 19.03.25 um 12:29 schrieb Naveen Kumar P:
+>>>>
+>>>>> Hi all,
+>>>>>
+>>>>> I am encountering repeated AE_AML_LOOP_TIMEOUT errors in the ACPI RD=
+WD
+>>>>> & \_SB.PCI0.SBRG.ADP1._PSR methods. Below are relevant log entries
+>>>>> from my system running Linux kernel 6.13.0+:
+>>>>>
+>>>>> [77998.038653]
+>>>>>                   Initialized Local Variables for Method [RDWD]:
+>>>>> [77998.038691]   Local1: 00000000d0fe9fee <Obj>           Integer
+>>>>> 0000000000000015
+>>>>> [77998.038862]   Local6: 00000000f41c1645 <Obj>           Integer
+>>>>> 0000000000000000
+>>>>> [77998.039031]   Local7: 0000000040665c5c <Obj>           Integer
+>>>>> 000000000000AA55
+>>>>>
+>>>>> [77998.039237] Initialized Arguments for Method [RDWD]:  (2 argument=
+s
+>>>>> defined for method invocation)
+>>>>> [77998.039273]   Arg0:   00000000397dc53d <Obj>           Integer
+>>>>> 0000000000000014
+>>>>> [77998.039442]   Arg1:   000000001099e334 <Obj>           Integer
+>>>>> 0000000000000002
+>>>>>
+>>>>> [77998.039673] ACPI Error: Aborting method \_SB.PCI0.SBUS.RDWD due t=
+o
+>>>>> previous error (AE_AML_LOOP_TIMEOUT) (20240827/psparse-529)
+>>>>> [77998.040455] ACPI Error: Aborting method \_SB.PCI0.SBRG.ADP1._PSR
+>>>>> due to previous error (AE_AML_LOOP_TIMEOUT) (20240827/psparse-529)
+>>>>> [77998.043659] ACPI: \_SB_.PCI0.SBRG.ADP1: Error reading AC Adapter
+>>>>> state: AE_AML_LOOP_TIMEOUT
+>>>>>
+>>>>> [78028.442980]
+>>>>>                   Initialized Local Variables for Method [RDWD]:
+>>>>> [78028.443019]   Local1: 00000000898a9a7e <Obj>           Integer
+>>>>> 0000000000000017
+>>>>> [78028.443192]   Local6: 000000000cf0c853 <Obj>           Integer
+>>>>> 0000000000000000
+>>>>> [78028.443362]   Local7: 00000000bb4aa65f <Obj>           Integer
+>>>>> 000000000000AA55
+>>>>>
+>>>>> [78028.443569] Initialized Arguments for Method [RDWD]:  (2 argument=
+s
+>>>>> defined for method invocation)
+>>>>> [78028.443606]   Arg0:   00000000ef8d445b <Obj>           Integer
+>>>>> 0000000000000016
+>>>>> [78028.443775]   Arg1:   000000006cacc887 <Obj>           Integer
+>>>>> 0000000000000003
+>>>>>
+>>>>> [78028.444006] ACPI Error: Aborting method \_SB.PCI0.SBUS.RDWD due t=
+o
+>>>>> previous error (AE_AML_LOOP_TIMEOUT) (20240827/psparse-529)
+>>>>> [78028.446366] ACPI Error: Aborting method \_SB.PCI0.SBRG.ADP1._PSR
+>>>>> due to previous error (AE_AML_LOOP_TIMEOUT) (20240827/psparse-529)
+>>>>> [78028.451179] ACPI: \_SB_.PCI0.SBRG.ADP1: Error reading AC Adapter
+>>>>> state: AE_AML_LOOP_TIMEOUT
+>>>>>
+>>>>> [78032.877472]
+>>>>>                   Initialized Local Variables for Method [RDWD]:
+>>>>> [78032.877509]   Local1: 00000000cf6291ae <Obj>           Integer
+>>>>> 0000000000000017
+>>>>> [78032.877682]   Local6: 0000000026aa8a7a <Obj>           Integer
+>>>>> 0000000000000003
+>>>>> [78032.877851]   Local7: 00000000acfa20e0 <Obj>           Integer
+>>>>> 000000000000AA55
+>>>>>
+>>>>> [78032.878058] Initialized Arguments for Method [RDWD]:  (2 argument=
+s
+>>>>> defined for method invocation)
+>>>>> [78032.878094]   Arg0:   00000000a186096f <Obj>           Integer
+>>>>> 0000000000000016
+>>>>> [78032.878262]   Arg1:   00000000d0e1eefe <Obj>           Integer
+>>>>> 0000000000000003
+>>>>>
+>>>>> [78032.878492] ACPI Error: Aborting method \_SB.PCI0.SBUS.RDWD due t=
+o
+>>>>> previous error (AE_AML_LOOP_TIMEOUT) (20240827/psparse-529)
+>>>>> [78032.881011] ACPI Error: Aborting method \_SB.PCI0.SBRG.ADP1._PSR
+>>>>> due to previous error (AE_AML_LOOP_TIMEOUT) (20240827/psparse-529)
+>>>>> [78032.883061] ACPI: \_SB_.PCI0.SBRG.ADP1: Error reading AC Adapter
+>>>>> state: AE_AML_LOOP_TIMEOUT
+>>>>>
+>>>>>
+>>>>> This issue appears randomly, affecting the RDWD method, which is
+>>>>> likely responsible for reading data from a bus, and consequently
+>>>>> causing the _PSR method (power state read) to fail.
+>>>>>
+>>>>>
+>>>>> Questions:
+>>>>> 1. What typically causes AE_AML_LOOP_TIMEOUT errors?
+>>>> AFAIK this error is caused by a while loop taking too long to finish.=
+ I suspect that
+>>>> the ACPI bytecode tries to wait for a non-responsive hardware device.
+>>>>
+>>>>> 2. Could these ACPI errors impact PCI device access?
+>>>>> Since the error originates from _SB.PCI0.SBUS.RDWD, could this failu=
+re
+>>>>> affect PCI device communication or cause failures when accessing PCI
+>>>>> devices?
+>>>> I do not think so, the SBUS device is likely just a SMBus controller =
+attached to the PCI bus.
+>>>>
+>>>>> 3. Could this be a firmware/BIOS issue?If so, what tools or steps
+>>>>> should I use to verify and debug the ACPI tables?
+>>>> It is either a hardware issue or a BIOS bug. Can you share the output=
+ of the "acpidump" utility
+>>>> provided by the ACPICA project? Many Linux distributions already pack=
+age ACPICA in their package repositories.
+>>> I have attached the acpi.tar.gz file as requested. This archive
+>>> contains the output from the "acpidump" utility. Below is a list of
+>>> the files included in the archive:
+>>>
+>>> ls -ltr acpi
+>>> total 760
+>>> -rw-rw-r-- 1 murphy murphy 205609 Mar 19 18:30 acpi_tables.txt
+>>> -rw-r--r-- 1 root   root       60 Mar 19 18:31 mcfg.dat
+>>> -rw-r--r-- 1 root   root      132 Mar 19 18:31 apic.dat
+>>> -rw-r--r-- 1 root   root      656 Mar 19 18:31 ssdt2.dat
+>>> -rw-r--r-- 1 root   root       66 Mar 19 18:31 uefi.dat
+>>> -rw-r--r-- 1 root   root    36402 Mar 19 18:31 dsdt.dat
+>>> -rw-r--r-- 1 root   root      260 Mar 19 18:31 lpit.dat
+>>> -rw-r--r-- 1 root   root      378 Mar 19 18:31 ssdt3.dat
+>>> -rw-r--r-- 1 root   root      268 Mar 19 18:31 facp.dat
+>>> -rw-r--r-- 1 root   root       68 Mar 19 18:31 fpdt.dat
+>>> -rw-r--r-- 1 root   root     1891 Mar 19 18:31 ssdt1.dat
+>>> -rw-r--r-- 1 root   root      332 Mar 19 18:31 csrt.dat
+>>> -rw-r--r-- 1 root   root       56 Mar 19 18:31 hpet.dat
+>>> -rw-r--r-- 1 root   root       64 Mar 19 18:31 facs.dat
+>>> -rw-r--r-- 1 root   root      890 Mar 19 18:31 ssdt4.dat
+>>> -rw-r--r-- 1 root   root      141 Mar 19 18:31 ssdt7.dat
+>>> -rw-r--r-- 1 root   root     1075 Mar 19 18:31 ssdt5.dat
+>>> -rw-r--r-- 1 root   root      351 Mar 19 18:31 ssdt6.dat
+>>> -rw-rw-r-- 1 murphy murphy   5919 Mar 19 18:31 apic.dsl
+>>> -rw-rw-r-- 1 murphy murphy   8131 Mar 19 18:31 csrt.dsl
+>>> -rw-rw-r-- 1 murphy murphy 337832 Mar 19 18:31 dsdt.dsl
+>>> -rw-rw-r-- 1 murphy murphy  10103 Mar 19 18:31 facp.dsl
+>>> -rw-rw-r-- 1 murphy murphy   1368 Mar 19 18:31 facs.dsl
+>>> -rw-rw-r-- 1 murphy murphy   1802 Mar 19 18:31 fpdt.dsl
+>>> -rw-rw-r-- 1 murphy murphy   1863 Mar 19 18:31 hpet.dsl
+>>> -rw-rw-r-- 1 murphy murphy   7523 Mar 19 18:31 lpit.dsl
+>>> -rw-rw-r-- 1 murphy murphy   1524 Mar 19 18:31 mcfg.dsl
+>>> -rw-rw-r-- 1 murphy murphy   9996 Mar 19 18:31 ssdt1.dsl
+>>> -rw-rw-r-- 1 murphy murphy   7692 Mar 19 18:31 ssdt2.dsl
+>>> -rw-rw-r-- 1 murphy murphy   4296 Mar 19 18:31 ssdt3.dsl
+>>> -rw-rw-r-- 1 murphy murphy   8290 Mar 19 18:31 ssdt4.dsl
+>>> -rw-rw-r-- 1 murphy murphy  16968 Mar 19 18:31 ssdt5.dsl
+>>> -rw-rw-r-- 1 murphy murphy   2843 Mar 19 18:31 ssdt6.dsl
+>>> -rw-rw-r-- 1 murphy murphy   1337 Mar 19 18:31 ssdt7.dsl
+>>> -rw-rw-r-- 1 murphy murphy   1383 Mar 19 18:31 uefi.dsl
+>>>
+>>>
+>>> Please let me know if you need any further details or additional
+>>> information to assist in debugging the ACPI tables.
+>>>
+>>> Thank you for your help.
+>> Alright, it seems that the ACPI bytecode is trying to access the charge=
+r using the smbus interface.
+>> For some reason this takes over 30 seconds which causes the ACPI interp=
+reter to throw this error.
+>>
+>> Can you check how long it normally takes to read the "online" sysfs att=
+ribute of the charger located
+>> under "/sys/class/power_supply/ADP1"?
+> I have written a script to measure the time it takes to read the
+> "online" sysfs attribute of the charger located under
+> /sys/class/power_supply/ADP1. Below is the script and the results:
+>
+> $cat test.sh
+> #!/bin/bash
+>
+> start_time=3D$(date +%s%N)
+> cat /sys/class/power_supply/ADP1/online
+> end_time=3D$(date +%s%N)
+>
+> elapsed_time=3D$((end_time - start_time))
+> echo "Time taken: $((elapsed_time / 1000000)) ms"
+>
+> $ sudo ./test.sh
+> 1
+> Time taken: 3809 ms
+>
+> $ sudo ./test.sh
+> 1
+> Time taken: 1688 ms
+>
+> $ sudo ./test.sh
+> 1
+> Time taken: 1685 ms
+>
+> $ sudo ./test.sh
+> 1
+> Time taken: 1688 ms
+>
+>
+> As you can see, the first run took 3809 ms, and the subsequent runs
+> took around 1688 ms.
 
-Add block mode such that the driver can request larger transactions, up
-to 1024 bytes per transfer.
+That is suspiciously long for a smbus transaction, something is not right.
 
-Many aspects of the block mode transfer is common with the regular 8
-byte operations. Use generic functions for parts of the message
-construction and sending the message. The key difference for the block
-mode is the usage of separate FIFO buffer to store data.
+>> Also please share the output of "lspci -v".
+> $ sudo lspci -v
+> 00:00.0 Host bridge: Intel Corporation Atom Processor Z36xxx/Z37xxx
+> Series SoC Transaction Register (rev 11)
+>          Subsystem: Intel Corporation Atom Processor Z36xxx/Z37xxx
+> Series SoC Transaction Register
+>          Flags: bus master, fast devsel, latency 0
+>          Kernel driver in use: iosf_mbi_pci
+>
+> 00:02.0 VGA compatible controller: Intel Corporation Atom Processor
+> Z36xxx/Z37xxx Series Graphics & Display (rev 11) (prog-if 00 [VGA
+> controller])
+>          DeviceName:  Onboard IGD
+>          Subsystem: Intel Corporation Atom Processor Z36xxx/Z37xxx
+> Series Graphics & Display
+>          Flags: bus master, fast devsel, latency 0, IRQ 97
+>          Memory at b0000000 (32-bit, non-prefetchable) [size=3D4M]
+>          Memory at a0000000 (32-bit, prefetchable) [size=3D256M]
+>          I/O ports at e080 [size=3D8]
+>          Expansion ROM at 000c0000 [virtual] [disabled] [size=3D128K]
+>          Capabilities: [d0] Power Management version 2
+>          Capabilities: [90] MSI: Enable+ Count=3D1/1 Maskable- 64bit-
+>          Capabilities: [b0] Vendor Specific Information: Len=3D07 <?>
+>          Kernel driver in use: i915
+>          Kernel modules: i915
+>
+> 00:13.0 SATA controller: Intel Corporation Atom Processor E3800 Series
+> SATA AHCI Controller (rev 11) (prog-if 01 [AHCI 1.0])
+>          Subsystem: Intel Corporation Atom Processor E3800 Series SATA
+> AHCI Controller
+>          Flags: bus master, 66MHz, medium devsel, latency 0, IRQ 91
+>          I/O ports at e070 [size=3D8]
+>          I/O ports at e060 [size=3D4]
+>          I/O ports at e050 [size=3D8]
+>          I/O ports at e040 [size=3D4]
+>          I/O ports at e020 [size=3D32]
+>          Memory at b0b17000 (32-bit, non-prefetchable) [size=3D2K]
+>          Capabilities: [80] MSI: Enable+ Count=3D1/1 Maskable- 64bit-
+>          Capabilities: [70] Power Management version 3
+>          Capabilities: [a8] SATA HBA v1.0
+>          Kernel driver in use: ahci
+>          Kernel modules: ahci
+>
+> 00:14.0 USB controller: Intel Corporation Atom Processor
+> Z36xxx/Z37xxx, Celeron N2000 Series USB xHCI (rev 11) (prog-if 30
+> [XHCI])
+>          Subsystem: Intel Corporation Atom Processor Z36xxx/Z37xxx,
+> Celeron N2000 Series USB xHCI
+>          Flags: bus master, medium devsel, latency 0, IRQ 90
+>          Memory at b0b00000 (64-bit, non-prefetchable) [size=3D64K]
+>          Capabilities: [70] Power Management version 2
+>          Capabilities: [80] MSI: Enable+ Count=3D1/8 Maskable- 64bit+
+>          Kernel driver in use: xhci_hcd
+>
+> 00:17.0 SD Host controller: Intel Corporation Atom Processor E3800
+> Series eMMC 4.5 Controller (rev 11) (prog-if 01)
+>          Flags: bus master, fast devsel, latency 0, IRQ 23
+>          Memory at b0b16000 (32-bit, non-prefetchable) [size=3D4K]
+>          Memory at b0b15000 (32-bit, non-prefetchable) [size=3D4K]
+>          Capabilities: [80] Power Management version 3
+>          Kernel driver in use: sdhci-pci
+>          Kernel modules: sdhci_pci
+>
+> 00:1a.0 Encryption controller: Intel Corporation Atom Processor
+> Z36xxx/Z37xxx Series Trusted Execution Engine (rev 11)
+>          Subsystem: Intel Corporation Atom Processor Z36xxx/Z37xxx
+> Series Trusted Execution Engine
+>          Flags: bus master, fast devsel, latency 0, IRQ 98
+>          Memory at b0900000 (32-bit, non-prefetchable) [size=3D1M]
+>          Memory at b0800000 (32-bit, non-prefetchable) [size=3D1M]
+>          Capabilities: [80] Power Management version 3
+>          Capabilities: [a0] MSI: Enable+ Count=3D1/1 Maskable- 64bit-
+>          Kernel driver in use: mei_txe
+>          Kernel modules: mei_txe
+>
+> 00:1b.0 Audio device: Intel Corporation Atom Processor Z36xxx/Z37xxx
+> Series High Definition Audio Controller (rev 11)
+>          Subsystem: Intel Corporation Atom Processor Z36xxx/Z37xxx
+> Series High Definition Audio Controller
+>          Flags: bus master, fast devsel, latency 0, IRQ 10
+>          Memory at b0b10000 (64-bit, non-prefetchable) [size=3D16K]
+>          Capabilities: [50] Power Management version 2
+>          Capabilities: [60] MSI: Enable- Count=3D1/1 Maskable- 64bit+
+>          Kernel modules: snd_hda_intel
+>
+> 00:1c.0 PCI bridge: Intel Corporation Atom Processor E3800 Series PCI
+> Express Root Port 1 (rev 11) (prog-if 00 [Normal decode])
+>          Flags: bus master, fast devsel, latency 0, IRQ 87
+>          Bus: primary=3D00, secondary=3D01, subordinate=3D01, sec-latenc=
+y=3D0
+>          I/O behind bridge: 00001000-00001fff [size=3D4K]
+>          Memory behind bridge: b0400000-b07fffff [size=3D4M]
+>          Prefetchable memory behind bridge: [disabled]
+>          Capabilities: [40] Express Root Port (Slot+), MSI 00
+>          Capabilities: [80] MSI: Enable+ Count=3D1/1 Maskable- 64bit-
+>          Capabilities: [90] Subsystem: Intel Corporation Atom Processor
+> E3800 Series PCI Express Root Port 1
+>          Capabilities: [a0] Power Management version 3
+>          Kernel driver in use: pcieport
+>
+> 00:1c.2 PCI bridge: Intel Corporation Atom Processor E3800 Series PCI
+> Express Root Port 3 (rev 11) (prog-if 00 [Normal decode])
+>          Flags: bus master, fast devsel, latency 0, IRQ 88
+>          Bus: primary=3D00, secondary=3D02, subordinate=3D02, sec-latenc=
+y=3D0
+>          I/O behind bridge: 00002000-00002fff [size=3D4K]
+>          Memory behind bridge: [disabled]
+>          Prefetchable memory behind bridge: [disabled]
+>          Capabilities: [40] Express Root Port (Slot+), MSI 00
+>          Capabilities: [80] MSI: Enable+ Count=3D1/1 Maskable- 64bit-
+>          Capabilities: [90] Subsystem: Intel Corporation Atom Processor
+> E3800 Series PCI Express Root Port 3
+>          Capabilities: [a0] Power Management version 3
+>          Kernel driver in use: pcieport
+>
+> 00:1c.3 PCI bridge: Intel Corporation Atom Processor E3800 Series PCI
+> Express Root Port 4 (rev 11) (prog-if 00 [Normal decode])
+>          Flags: bus master, fast devsel, latency 0, IRQ 89
+>          Bus: primary=3D00, secondary=3D03, subordinate=3D03, sec-latenc=
+y=3D0
+>          I/O behind bridge: 0000d000-0000dfff [size=3D4K]
+>          Memory behind bridge: b0a00000-b0afffff [size=3D1M]
+>          Prefetchable memory behind bridge: [disabled]
+>          Capabilities: [40] Express Root Port (Slot+), MSI 00
+>          Capabilities: [80] MSI: Enable+ Count=3D1/1 Maskable- 64bit-
+>          Capabilities: [90] Subsystem: Intel Corporation Atom Processor
+> E3800 Series PCI Express Root Port 4
+>          Capabilities: [a0] Power Management version 3
+>          Kernel driver in use: pcieport
+>
+> 00:1f.0 ISA bridge: Intel Corporation Atom Processor Z36xxx/Z37xxx
+> Series Power Control Unit (rev 11)
+>          Subsystem: Intel Corporation Atom Processor Z36xxx/Z37xxx
+> Series Power Control Unit
+>          Flags: bus master, medium devsel, latency 0
+>          Capabilities: [e0] Vendor Specific Information: Len=3D0c <?>
+>          Kernel driver in use: lpc_ich
+>          Kernel modules: lpc_ich
+>
+> 00:1f.3 SMBus: Intel Corporation Atom Processor E3800 Series SMBus
+> Controller (rev 11)
+>          Subsystem: Intel Corporation Atom Processor E3800 Series SMBus
+> Controller
+>          Flags: medium devsel, IRQ 18
+>          Memory at b0b14000 (32-bit, non-prefetchable) [size=3D32]
+>          I/O ports at e000 [size=3D32]
+>          Capabilities: [50] Power Management version 3
+>          Kernel driver in use: i801_smbus
+>          Kernel modules: i2c_i801
 
-Write to this buffer in the case of a write (before command send).
-Read from this buffer in the case of a read (after command send).
+The i2c_i801 driver uses a custom operation region handler to intercept AC=
+PI accesses
+to the smbus controller registers, maybe this could be the reason for the =
+timeouts.
 
-Data is written into this buffer by placing data into the MSB onwards.
-This means the bottom 8 bits of the data will match the top 8 bits, and
-so on and so forth.
+I CCed the maintainers of this driver. Maybe they can help us here.
 
-Set specific bits in message for block mode, enable block mode transfers
-from global i2c management registers, construct message, send message,
-read or write from FIFO buffer as required.
+Thanks,
+Armin Wolf
 
-The block-mode transactions result in a significant speed increase in
-large i2c requests.
-
-Signed-off-by: Aryan Srivastava <aryan.srivastava@alliedtelesis.co.nz>
----
- drivers/i2c/busses/i2c-octeon-core.c     | 166 ++++++++++++++++++++++-
- drivers/i2c/busses/i2c-octeon-core.h     |  13 +-
- drivers/i2c/busses/i2c-thunderx-pcidrv.c |   3 +
- 3 files changed, 175 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-octeon-core.c b/drivers/i2c/busses/i2=
-c-octeon-core.c
-index baf6b27f3752..93a49e4637ec 100644
---- a/drivers/i2c/busses/i2c-octeon-core.c
-+++ b/drivers/i2c/busses/i2c-octeon-core.c
-@@ -135,6 +135,32 @@ static void octeon_i2c_hlc_disable(struct octeon_i2c=
- *i2c)
- 	octeon_i2c_ctl_write(i2c, TWSI_CTL_ENAB);
- }
-=20
-+static void octeon_i2c_block_enable(struct octeon_i2c *i2c)
-+{
-+	u64 mode;
-+
-+	if (i2c->block_enabled || !OCTEON_REG_BLOCK_CTL(i2c))
-+		return;
-+
-+	i2c->block_enabled =3D true;
-+	mode =3D __raw_readq(i2c->twsi_base + OCTEON_REG_MODE(i2c));
-+	mode |=3D TWSX_MODE_BLOCK_MODE;
-+	octeon_i2c_writeq_flush(mode, i2c->twsi_base + OCTEON_REG_MODE(i2c));
-+}
-+
-+static void octeon_i2c_block_disable(struct octeon_i2c *i2c)
-+{
-+	u64 mode;
-+
-+	if (!i2c->block_enabled || !OCTEON_REG_BLOCK_CTL(i2c))
-+		return;
-+
-+	i2c->block_enabled =3D false;
-+	mode =3D __raw_readq(i2c->twsi_base + OCTEON_REG_MODE(i2c));
-+	mode &=3D ~TWSX_MODE_BLOCK_MODE;
-+	octeon_i2c_writeq_flush(mode, i2c->twsi_base + OCTEON_REG_MODE(i2c));
-+}
-+
- /**
-  * octeon_i2c_hlc_wait - wait for an HLC operation to complete
-  * @i2c: The struct octeon_i2c
-@@ -281,6 +307,7 @@ static int octeon_i2c_start(struct octeon_i2c *i2c)
- 	u8 stat;
-=20
- 	octeon_i2c_hlc_disable(i2c);
-+	octeon_i2c_block_disable(i2c);
-=20
- 	octeon_i2c_ctl_write(i2c, TWSI_CTL_ENAB | TWSI_CTL_STA);
- 	ret =3D octeon_i2c_wait(i2c);
-@@ -604,6 +631,125 @@ static int octeon_i2c_hlc_comp_write(struct octeon_=
-i2c *i2c, struct i2c_msg *msg
- 	return ret;
- }
-=20
-+/**
-+ * octeon_i2c_hlc_block_comp_read - high-level-controller composite bloc=
-k read
-+ * @i2c: The struct octeon_i2c
-+ * @msgs: msg[0] contains address, place read data into msg[1]
-+ *
-+ * i2c core command is constructed and written into the SW_TWSI register=
-.
-+ * The execution of the command will result in requested data being
-+ * placed into a FIFO buffer, ready to be read.
-+ * Used in the case where the i2c xfer is for greater than 8 bytes of re=
-ad data.
-+ *
-+ * Returns: 0 on success, otherwise a negative errno.
-+ */
-+static int octeon_i2c_hlc_block_comp_read(struct octeon_i2c *i2c, struct=
- i2c_msg *msgs)
-+{
-+	int ret;
-+	u16 len, i;
-+	u64 cmd;
-+
-+	octeon_i2c_hlc_enable(i2c);
-+	octeon_i2c_block_enable(i2c);
-+
-+	/* Write (size - 1) into block control register */
-+	len =3D msgs[1].len - 1;
-+	octeon_i2c_writeq_flush((u64)len, i2c->twsi_base + OCTEON_REG_BLOCK_CTL=
-(i2c));
-+
-+	/* Prepare core command */
-+	cmd =3D SW_TWSI_V | SW_TWSI_R | SW_TWSI_SOVR | SW_TWSI_OP_7_IA;
-+	cmd |=3D (u64)(msgs[0].addr & 0x7full) << SW_TWSI_ADDR_SHIFT;
-+
-+	/* Send core command */
-+	ret =3D octeon_i2c_hlc_read_cmd(i2c, msgs[0], cmd);
-+	if (ret)
-+		goto err;
-+
-+	cmd =3D __raw_readq(i2c->twsi_base + OCTEON_REG_SW_TWSI(i2c));
-+	if ((cmd & SW_TWSI_R) =3D=3D 0) {
-+		octeon_i2c_block_disable(i2c);
-+		return octeon_i2c_check_status(i2c, false);
-+	}
-+
-+	/* read data in FIFO */
-+	octeon_i2c_writeq_flush(TWSX_BLOCK_STS_RESET_PTR,
-+				i2c->twsi_base + OCTEON_REG_BLOCK_STS(i2c));
-+	for (i =3D 0; i <=3D len; i +=3D 8) {
-+		/* Byte-swap FIFO data and copy into msg buffer */
-+		__be64 rd =3D cpu_to_be64(__raw_readq(i2c->twsi_base + OCTEON_REG_BLOC=
-K_FIFO(i2c)));
-+
-+		memcpy(&msgs[1].buf[i], &rd, min(8, msgs[1].len - i));
-+	}
-+
-+err:
-+	octeon_i2c_block_disable(i2c);
-+	return ret;
-+}
-+
-+/**
-+ * octeon_i2c_hlc_block_comp_write - high-level-controller composite blo=
-ck write
-+ * @i2c: The struct octeon_i2c
-+ * @msgs: msg[0] contains address, msg[1] contains data to be written
-+ *
-+ * i2c core command is constructed and write data is written into the FI=
-FO buffer.
-+ * The execution of the command will result in HW write, using the data =
-in FIFO.
-+ * Used in the case where the i2c xfer is for greater than 8 bytes of wr=
-ite data.
-+ *
-+ * Returns: 0 on success, otherwise a negative errno.
-+ */
-+static int octeon_i2c_hlc_block_comp_write(struct octeon_i2c *i2c, struc=
-t i2c_msg *msgs)
-+{
-+	bool set_ext;
-+	int ret;
-+	u16 len, i;
-+	u64 cmd, ext =3D 0;
-+
-+	octeon_i2c_hlc_enable(i2c);
-+	octeon_i2c_block_enable(i2c);
-+
-+	/* Write (size - 1) into block control register */
-+	len =3D msgs[1].len - 1;
-+	octeon_i2c_writeq_flush((u64)len, i2c->twsi_base + OCTEON_REG_BLOCK_CTL=
-(i2c));
-+
-+	/* Prepare core command */
-+	cmd =3D SW_TWSI_V | SW_TWSI_SOVR | SW_TWSI_OP_7_IA;
-+	cmd |=3D (u64)(msgs[0].addr & 0x7full) << SW_TWSI_ADDR_SHIFT;
-+
-+	/* Set parameters for extended message (if required) */
-+	set_ext =3D octeon_i2c_hlc_ext(i2c, msgs[0], &cmd, &ext);
-+
-+	/* Write msg into FIFO buffer */
-+	octeon_i2c_writeq_flush(TWSX_BLOCK_STS_RESET_PTR,
-+				i2c->twsi_base + OCTEON_REG_BLOCK_STS(i2c));
-+	for (i =3D 0; i <=3D len; i +=3D 8) {
-+		__be64 buf =3D 0;
-+
-+		/* Copy 8 bytes or remaining bytes from message buffer */
-+		memcpy(&buf, &msgs[1].buf[i], min(8, msgs[1].len - i));
-+
-+		/* Byte-swap message data and write into FIFO */
-+		buf =3D cpu_to_be64(buf);
-+		octeon_i2c_writeq_flush((u64)buf, i2c->twsi_base + OCTEON_REG_BLOCK_FI=
-FO(i2c));
-+	}
-+	if (set_ext)
-+		octeon_i2c_writeq_flush(ext, i2c->twsi_base + OCTEON_REG_SW_TWSI_EXT(i=
-2c));
-+
-+	/* Send command to core (send data in FIFO) */
-+	ret =3D octeon_i2c_hlc_cmd_send(i2c, cmd);
-+	if (ret)
-+		goto err;
-+
-+	cmd =3D __raw_readq(i2c->twsi_base + OCTEON_REG_SW_TWSI(i2c));
-+	if ((cmd & SW_TWSI_R) =3D=3D 0) {
-+		octeon_i2c_block_disable(i2c);
-+		return octeon_i2c_check_status(i2c, false);
-+	}
-+
-+err:
-+	octeon_i2c_block_disable(i2c);
-+	return ret;
-+}
-+
- /**
-  * octeon_i2c_xfer - The driver's xfer function
-  * @adap: Pointer to the i2c_adapter structure
-@@ -630,13 +776,21 @@ int octeon_i2c_xfer(struct i2c_adapter *adap, struc=
-t i2c_msg *msgs, int num)
- 			if ((msgs[0].flags & I2C_M_RD) =3D=3D 0 &&
- 			    (msgs[1].flags & I2C_M_RECV_LEN) =3D=3D 0 &&
- 			    msgs[0].len > 0 && msgs[0].len <=3D 2 &&
--			    msgs[1].len > 0 && msgs[1].len <=3D 8 &&
-+			    msgs[1].len > 0 &&
- 			    msgs[0].addr =3D=3D msgs[1].addr) {
--				if (msgs[1].flags & I2C_M_RD)
--					ret =3D octeon_i2c_hlc_comp_read(i2c, msgs);
--				else
--					ret =3D octeon_i2c_hlc_comp_write(i2c, msgs);
--				goto out;
-+				if (msgs[1].len <=3D 8) {
-+					if (msgs[1].flags & I2C_M_RD)
-+						ret =3D octeon_i2c_hlc_comp_read(i2c, msgs);
-+					else
-+						ret =3D octeon_i2c_hlc_comp_write(i2c, msgs);
-+					goto out;
-+				} else if (msgs[1].len <=3D 1024 && OCTEON_REG_BLOCK_CTL(i2c)) {
-+					if (msgs[1].flags & I2C_M_RD)
-+						ret =3D octeon_i2c_hlc_block_comp_read(i2c, msgs);
-+					else
-+						ret =3D octeon_i2c_hlc_block_comp_write(i2c, msgs);
-+					goto out;
-+				}
- 			}
- 		}
- 	}
-diff --git a/drivers/i2c/busses/i2c-octeon-core.h b/drivers/i2c/busses/i2=
-c-octeon-core.h
-index b265e21189a1..32a44f2d6274 100644
---- a/drivers/i2c/busses/i2c-octeon-core.h
-+++ b/drivers/i2c/busses/i2c-octeon-core.h
-@@ -96,18 +96,28 @@ struct octeon_i2c_reg_offset {
- 	unsigned int twsi_int;
- 	unsigned int sw_twsi_ext;
- 	unsigned int mode;
-+	unsigned int block_ctl;
-+	unsigned int block_sts;
-+	unsigned int block_fifo;
- };
-=20
- #define OCTEON_REG_SW_TWSI(x)		((x)->roff.sw_twsi)
- #define OCTEON_REG_TWSI_INT(x)		((x)->roff.twsi_int)
- #define OCTEON_REG_SW_TWSI_EXT(x)	((x)->roff.sw_twsi_ext)
- #define OCTEON_REG_MODE(x)		((x)->roff.mode)
-+#define OCTEON_REG_BLOCK_CTL(x)	((x)->roff.block_ctl)
-+#define OCTEON_REG_BLOCK_STS(x)	((x)->roff.block_sts)
-+#define OCTEON_REG_BLOCK_FIFO(x)	((x)->roff.block_fifo)
-=20
--/* Set REFCLK_SRC and HS_MODE in TWSX_MODE register */
-+/* TWSX_MODE register */
- #define TWSX_MODE_REFCLK_SRC	BIT(4)
-+#define TWSX_MODE_BLOCK_MODE	BIT(2)
- #define TWSX_MODE_HS_MODE	BIT(0)
- #define TWSX_MODE_HS_MASK	(TWSX_MODE_REFCLK_SRC | TWSX_MODE_HS_MODE)
-=20
-+/* TWSX_BLOCK_STS register */
-+#define TWSX_BLOCK_STS_RESET_PTR	BIT(0)
-+
- /* Set BUS_MON_RST to reset bus monitor */
- #define BUS_MON_RST_MASK	BIT(3)
-=20
-@@ -123,6 +133,7 @@ struct octeon_i2c {
- 	void __iomem *twsi_base;
- 	struct device *dev;
- 	bool hlc_enabled;
-+	bool block_enabled;
- 	bool broken_irq_mode;
- 	bool broken_irq_check;
- 	void (*int_enable)(struct octeon_i2c *);
-diff --git a/drivers/i2c/busses/i2c-thunderx-pcidrv.c b/drivers/i2c/busse=
-s/i2c-thunderx-pcidrv.c
-index 143d012fa43e..0dc08cd97e8a 100644
---- a/drivers/i2c/busses/i2c-thunderx-pcidrv.c
-+++ b/drivers/i2c/busses/i2c-thunderx-pcidrv.c
-@@ -168,6 +168,9 @@ static int thunder_i2c_probe_pci(struct pci_dev *pdev=
-,
- 	i2c->roff.twsi_int =3D 0x1010;
- 	i2c->roff.sw_twsi_ext =3D 0x1018;
- 	i2c->roff.mode =3D 0x1038;
-+	i2c->roff.block_ctl =3D 0x1048;
-+	i2c->roff.block_sts =3D 0x1050;
-+	i2c->roff.block_fifo =3D 0x1058;
-=20
- 	i2c->dev =3D dev;
- 	pci_set_drvdata(pdev, i2c);
---=20
-2.47.1
-
+> 01:00.0 RAM memory: PLDA Device 5555
+>          Subsystem: Device 4000:0000
+>          Flags: fast devsel, IRQ 11
+>          Memory at b0400000 (32-bit, non-prefetchable) [virtual] [size=
+=3D4M]
+>          Capabilities: [40] Power Management version 3
+>          Capabilities: [48] MSI: Enable- Count=3D1/1 Maskable- 64bit-
+>          Capabilities: [60] Express Endpoint, MSI 00
+>
+> 03:00.0 Ethernet controller: Intel Corporation I210 Gigabit Network
+> Connection (rev 03)
+>          Flags: bus master, fast devsel, latency 0, IRQ 19
+>          Memory at b0a00000 (32-bit, non-prefetchable) [size=3D512K]
+>          I/O ports at d000 [size=3D32]
+>          Memory at b0a80000 (32-bit, non-prefetchable) [size=3D16K]
+>          Capabilities: [40] Power Management version 3
+>          Capabilities: [50] MSI: Enable- Count=3D1/1 Maskable+ 64bit+
+>          Capabilities: [70] MSI-X: Enable+ Count=3D5 Masked-
+>          Capabilities: [a0] Express Endpoint, MSI 00
+>          Capabilities: [100] Advanced Error Reporting
+>          Capabilities: [140] Device Serial Number 00-30-64-ff-ff-a2-59-a=
+a
+>          Capabilities: [1a0] Transaction Processing Hints
+>          Kernel driver in use: igb
+>          Kernel modules: igb
+>
+>> Thanks,
+>> Armin Wolf
+>>
+>>>>> 4. Is there a recommended workaround to mitigate this issue?
+>>>> You can check if a BIOS update is available for your device.
+>>>>
+>>>>> 4. How can I debug this further?I can enable additional ACPI debuggi=
+ng
+>>>>> logs or provide dumps of ACPI tables if necessary.
+>>>> I can take a look at the \_SB.PCI0.SBUS.RDWD method inside the ACPI t=
+able dumps
+>>>> to see where the error is coming from.
+>>>>
+>>>> Thanks,
+>>>> Armin Wolf
+>>>>
+>>>>> Any guidance on resolving or further diagnosing this issue would be
+>>>>> highly appreciated.
+>>>>>
+>>>>> Best regards,
+>>>>> Naveen
+>>>>>
 
