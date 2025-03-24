@@ -1,82 +1,82 @@
-Return-Path: <linux-i2c+bounces-10001-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10002-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7774DA6E475
-	for <lists+linux-i2c@lfdr.de>; Mon, 24 Mar 2025 21:32:10 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B728A6E482
+	for <lists+linux-i2c@lfdr.de>; Mon, 24 Mar 2025 21:33:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B05653B252C
-	for <lists+linux-i2c@lfdr.de>; Mon, 24 Mar 2025 20:31:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 57AA3189622C
+	for <lists+linux-i2c@lfdr.de>; Mon, 24 Mar 2025 20:32:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B47311EBFED;
-	Mon, 24 Mar 2025 20:30:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43AA01C245C;
+	Mon, 24 Mar 2025 20:32:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jNxSyynZ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q6SHkBB8"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B5E71DB924;
-	Mon, 24 Mar 2025 20:30:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A003E2E3367;
+	Mon, 24 Mar 2025 20:32:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742848209; cv=none; b=VTYXxpIn1acL2qT6CCDNjEtzCN54LLZCyRn2gfEZDBQfKl+Z/CbjIoYjSFI3bwRJ8nvnardo8TUNoYoXkipoJLkX4hwohp3djP6wD8dYvgnS9JaZ5/K7eZ0D7waSlyteXulY6Q93+w6liNcIiEYQvM9VoFb9KifJJvQObULBQmE=
+	t=1742848362; cv=none; b=NxmMGOM0hMh9y0pY9pEXQCm4DPI9sQjeDOhZ7fWwmQhKIIufLCQOwUSklWm79Ny9c/qNXJyNCMlc3OvlDtG91nwB2gjIF2POInKqKH2cK5lGyEcVxF2xixrWVaS9GDc8U33gQqg66qd2obUoUUfOAxlYqh+KrLfZDfF8UU/nj18=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742848209; c=relaxed/simple;
-	bh=wJJhq3/wlH7TPRz9MWrbn18PJigvU4DbdV8z+Bppecg=;
+	s=arc-20240116; t=1742848362; c=relaxed/simple;
+	bh=m9qJ9hfcqsnhDr/y0t+0cgwjiivaOIccvHrnRP4/JvA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=U6C39/geXYc96OPFCmWYZQuETEwFwwX2vyQ0IyVMsUbSHyWctOFXXlcyYcQhkCL3qWqYTottY8xUWz9tM823Kbl2iuFYLOG2p3E9g8hdMyl7lPhd79h6vhzLR53inkJnrw0+tvU9z4bat/1t6jNGtiKGm6xDt6tS1q3Tt2dRYtY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jNxSyynZ; arc=none smtp.client-ip=209.85.214.176
+	 MIME-Version; b=ZJI1Vt+lTQETDPr0SVtYqhWbs0IsENY+wnvxHqvxT0nkX5rzEQI8PsQwMttXg3fwGroiC06qjfXC9hW1tyPc4OO40zL0fDV/RxOvt0mh9K1Hj2gVpoAcDXQKTDCRwXIG2YEKuxlE25V5R2t3SXaAT7f/VZqAqclEwBbi4zHvcws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q6SHkBB8; arc=none smtp.client-ip=209.85.214.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-22398e09e39so98303965ad.3;
-        Mon, 24 Mar 2025 13:30:07 -0700 (PDT)
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-225df540edcso113916515ad.0;
+        Mon, 24 Mar 2025 13:32:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742848207; x=1743453007; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1742848359; x=1743453159; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=kElO5D7Zqv8+xK19MHfo4Wrl9/d4L4ea0wa2HkxO4SI=;
-        b=jNxSyynZkZcs47NouC0GOoKGyLtQMzoq8Unt/XlpvYFXHwSLEnXrtPnQbUWvrbiAIO
-         6JcIU0f+Q1cwG6VUcUkItbgVkLIe4rOCNEw1rVkxVQ5ZIr7/atXsvBjXFTY44IQEgyLs
-         we1zejmtUhQchDCXeDfHwSkk7XWAr5F7pQXMaGitXlIt36ZO/gNQgSJ+CAUusL9LKWmD
-         k5J3FuRQyH/UdSpgoUAlcPA/9tKQly218zcKCp81Pl6+gdOA9SEZZ2fhb31lPoDVsGo1
-         zNkRZXYeUa6B0gobrOafrDGMQR/u/ib75tLbARbjpZBsSGbJHZE2q0B9bBn9oK3BX23X
-         u0Cg==
+        bh=c4Ttsoo8OWelVr1FIAW5txkAjwug6YJv1rO6LqO2moA=;
+        b=Q6SHkBB89mOoe9vq7mjhr+CBZBdpmUbQoEPZT3wjETPfKLjhS5E+SeJz2zUInkhYNx
+         3PAAonib1ZQ9TJ4CHxyLAmZIP6UKoHiLdHMLO8hPPXJSNoIZNAD/fKGwS967qY0i+StU
+         hfWnyRpNDJLMm9Mcl/SFEdGCg8xOkfrdV6/iduoezeqeSDtMLGAbN4BGGQ0mt5RKYOao
+         IiomKaIPrhUr5D46ac4pTjRDLNiBDUtNyWtid6GW8HJBJ787jIBnvw+LKhA/00kgve9t
+         759Ip2hOI0orgh6SyZWKhFSJRMmeENiOHpB+Bfcdgm4OmDMNjUb1SLf/dvPE37XAWc1J
+         vqwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742848207; x=1743453007;
+        d=1e100.net; s=20230601; t=1742848359; x=1743453159;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=kElO5D7Zqv8+xK19MHfo4Wrl9/d4L4ea0wa2HkxO4SI=;
-        b=tC+ksYf/ynX1bwfj5gypIUgr9fJ6p08OIWQmBIApCZIc/ftbUYctj2+eWZN2zcujD4
-         udgqRrAzFz8OFHQfR9RGnqbPRtykJ9fh/8fESpLQUEa3mGwkERTQO7QXkh6hJLOiz8uo
-         /rUd+PRKQ1K+pRxUL9Zj/hzAgTmAOOIN2vPI8jVYV+WW6MjvsKt9M8pf++lp/2PVoyrS
-         5IJu/8kULcMyC2x//3TfBwQX1E6qzueUJrN7BP4FFKb9aon1LYpkTfkLUds2ZmI5vUHS
-         UDOEdbrqw1lk0+ole3a7CB0v1mAEwFyKfqSPXrlEr2AfblDg+uoeq3M+687PukRNfqp/
-         q9yQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUpK7cBWqpc2CkHxzpGataankR9B1NvlNp5I3LGRh5i57af3FPrh14wNHYJdDUaBd+DjTudp5dXgRT4VWKe@vger.kernel.org, AJvYcCV2IaPCCC6Q4y+FrG2BpYTCAKfO5PZeG/R0oxgtZYrLzd5i8qTAYt0L9q3gx9WYZdbo/DiLAK17QMk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyU5qJ0+UX3bU8AfgRh4wd7YWZGhS+HOdthip8VWBqGyoDusnDX
-	17EwkdqEARTf8ojx24Xup19f/5hGUhxZrJqB2Jnz2q9XtnkND5Fc9wd9da2eTC8=
-X-Gm-Gg: ASbGncsxZaBK/oXQpHMfZyk4w1R6iFoo2Nyr/GyYiTqr8J3gvH7Ir98KhCZ/5ynRj56
-	O6ssTJb/miQ+/1bETQNCyzRBaiU8L6d/yBo8mRd2nxA55KIgLEdgcbWwXHvunAEW4Z3sjuzE7o4
-	0GX3O7UsO8vQfaunaIz/YeHZZoWe+nc7oTTfoKfW5ca9CAiqo+A6/2hpZbmsro7+yDWmTRx8L90
-	ZqxsEqLNaL7KuapTnA4I7e7ZwG061bEOpSITzQW1GrYQd2hwULJ6X1js8pzKHldHzHivM1/Mf/D
-	eT2qInVTNQhgQtyOc98+YjIPb0fp5qPa2A0Z7JxJxt/cwBFdBCI5uuQsNVVhiA/dfEzJlMHfoAc
-	RoM4CkSFzjkGxZRZNfRVnA+HhRm5NQQ+eiJd6Prb0xA==
-X-Google-Smtp-Source: AGHT+IEyfOvubyKcs/FYRHT1trQZfByq+iQfMNula2Al6lFJPKIE++NRjplQ5cwukg/PxXizviePFA==
-X-Received: by 2002:a05:6a00:2c98:b0:739:3f55:b23f with SMTP id d2e1a72fcca58-7393f55b36amr2374072b3a.14.1742848207061;
-        Mon, 24 Mar 2025 13:30:07 -0700 (PDT)
+        bh=c4Ttsoo8OWelVr1FIAW5txkAjwug6YJv1rO6LqO2moA=;
+        b=JXVdwkGOtTdPrm3Wpi6U3DRxVg12Ax6hiqr/BWaSQuizi5phx1UQVMboF/hEaZtVHP
+         Lgk9jSqDMeQP2jx0qYZqSnlC2pnwkPrWaocd93j5pkOn3htCXye69sPjYJeACYJ+iJ3D
+         ofQhFdRRxn7bV/nu+dEDw+S+t3sy7cXmbBpWxAwu75pDpjcZcz0DkjDk4E8qtC5xTCgV
+         ve3nBZtg9AymQ0GqOWc6qZczwtBwbdb8rLRlLA/QMsKA8mPb4RjrYk72NCZqKdTc+YSX
+         hWx5GLQy8EdWUUOJ7XUX9oT0HTTYiWO/9tAOuKGwuilGLp84Y4JH3sa4AQFGpVg7GZzz
+         /srg==
+X-Forwarded-Encrypted: i=1; AJvYcCWDFSkqSTFm5HBuwz3QlmsGPuSDbigcypD6xe9BI0W4DOtBri1BJR9oCNfL37LBJ/M8j9dTZNi+ItU=@vger.kernel.org, AJvYcCXBSrwbkRskMCZumOJF54OGkRm0syylNB+P59KG4HFo2PHoFc3To/kswY08Z7QpMbreRBspMCPP0jA5KaL3@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx1jMeDcZx9zvWivmEjS158Jy8IMftUMnqbbwB53ajM/jQSmtam
+	Ia7yr0WYnbTcXheM4q+MJUMXLHxHEoltbx3rxUjOJo+dW12Ng88j
+X-Gm-Gg: ASbGncuy64dPd96v/R+Nh8VBYTcWzL7shOj+JZtrZG6X+XGAYVuBj4rluOOTHWLgLql
+	xZE8dby0aLhz753lvtlzbaUZhy3Ro3pCb2YcYOMflRx//UOouBucdd/ptMtkmUXOfSKcJeICfww
+	a2VvnVyN9+dK/eMukoBSUtzY/bsN8mpMjyZbyl+uAUyu3fwx3ikNT6WcOhFBGdursJmAfd/Vxf2
+	a8T5RYuL34qvkKldP1krwI/f1n1MHYTexVAmuR7IBY8wqGyunu9/vO0qTkDl4znD+AbjVX+oDmU
+	zlnp2Mmrxcsj1fZ10X5hAQCtd3dR8KFMhXgf/02U8kGyVa1kzCDfZP0HtQ+46QI4Bj9vME8hhp7
+	/2er/pC8OcBiSkeOj+KLJCOS7GeKe+3k5jzSzpbeUMy2W7VkcUDVb
+X-Google-Smtp-Source: AGHT+IHgGPWF0ym+Tv4mM1Xv5CI6iXbrMz5Man/ozAwwl2nQXmJ4AX5iIxyiUBChusXdPmM6oqZJQw==
+X-Received: by 2002:a05:6a20:3d83:b0:1f5:8cf7:de4b with SMTP id adf61e73a8af0-1fe4291df24mr23305567637.16.1742848358937;
+        Mon, 24 Mar 2025 13:32:38 -0700 (PDT)
 Received: from elbadrym.c.googlers.com.com (34.125.168.34.bc.googleusercontent.com. [34.168.125.34])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7390611d212sm8771886b3a.95.2025.03.24.13.30.06
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-af8a2a23c31sm7593981a12.54.2025.03.24.13.32.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Mar 2025 13:30:06 -0700 (PDT)
+        Mon, 24 Mar 2025 13:32:38 -0700 (PDT)
 From: mohammed.0.elbadry@gmail.com
 To: 
 Cc: Tali Perry <tali.perry1@gmail.com>,
-	Mohammed Elbadry <mohammed.0.elbadry@google.com>,
+	Mohammed Elbadry <mohammed.0.elbadry@gmail.com>,
 	Avi Fishman <avifishman70@gmail.com>,
 	Tomer Maimon <tmaimon77@gmail.com>,
 	Patrick Venture <venture@google.com>,
@@ -86,13 +86,12 @@ Cc: Tali Perry <tali.perry1@gmail.com>,
 	openbmc@lists.ozlabs.org,
 	linux-i2c@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v1 1/1] i2c: npcm: Add clock toggle in case of stuck bus during init in npcm_i2c_init_module
-Date: Mon, 24 Mar 2025 20:30:02 +0000
-Message-ID: <20250324203005.1266044-2-mohammed.0.elbadry@gmail.com>
+Subject: [PATCH v1 0/1] i2c: npcm: Add clock toggle in case of stuck bus during init
+Date: Mon, 24 Mar 2025 20:32:02 +0000
+Message-ID: <20250324203233.1266772-1-mohammed.0.elbadry@gmail.com>
 X-Mailer: git-send-email 2.49.0.395.g12beb8f557-goog
-In-Reply-To: <20250324203005.1266044-1-mohammed.0.elbadry@gmail.com>
+In-Reply-To: <mohammed.0.elbadry@gmail.com>
 References: <mohammed.0.elbadry@gmail.com>
- <20250324203005.1266044-1-mohammed.0.elbadry@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -103,38 +102,24 @@ Content-Transfer-Encoding: 8bit
 
 From: Tali Perry <tali.perry1@gmail.com>
 
+Hi,
+
+During init of the bus, the module checks that the bus is idle.
+If one of the lines are stuck try to toggle them first.
+
+Fixes: 76487532f797 (i2c: npcm: Add slave enable/disable function)
 Signed-off-by: Tali Perry <tali.perry1@gmail.com>
-Signed-off-by: Mohammed Elbadry <mohammed.0.elbadry@google.com>
+Signed-off-by: Mohammed Elbadry <mohammed.0.elbadry@gmail.com>
 ---
+
+Tali Perry (1):
+  i2c: npcm: Add clock toggle in case of stuck bus during init in
+    npcm_i2c_init_module
+
  drivers/i2c/busses/i2c-npcm7xx.c | 12 ++++++++----
  1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-npcm7xx.c
-index 3ad6124be80f..78c85015d955 100644
---- a/drivers/i2c/busses/i2c-npcm7xx.c
-+++ b/drivers/i2c/busses/i2c-npcm7xx.c
-@@ -2043,10 +2043,14 @@ static int npcm_i2c_init_module(struct npcm_i2c *bus, enum i2c_mode mode,
- 
- 	/* Check HW is OK: SDA and SCL should be high at this point. */
- 	if ((npcm_i2c_get_SDA(&bus->adap) == 0) || (npcm_i2c_get_SCL(&bus->adap) == 0)) {
--		dev_err(bus->dev, "I2C%d init fail: lines are low\n", bus->num);
--		dev_err(bus->dev, "SDA=%d SCL=%d\n", npcm_i2c_get_SDA(&bus->adap),
--			npcm_i2c_get_SCL(&bus->adap));
--		return -ENXIO;
-+		dev_warn(bus->dev, " I2C%d SDA=%d SCL=%d, attempt recover\n", bus->num,
-+				 npcm_i2c_get_SDA(&bus->adap), npcm_i2c_get_SCL(&bus->adap));
-+		if (npcm_i2c_recovery_tgclk(&bus->adap)) {
-+			dev_err(bus->dev, "I2C%d init fail: lines are low\n", bus->num);
-+			dev_err(bus->dev, "SDA=%d SCL=%d\n", npcm_i2c_get_SDA(&bus->adap),
-+				npcm_i2c_get_SCL(&bus->adap));
-+			return -ENXIO;
-+		}
- 	}
- 
- 	npcm_i2c_int_enable(bus, true);
 -- 
 2.34.1
 
-**Reported-by: Mohammed Elbadry <mohammed.0.elbadry@google.com>**
-**Tested-by: Mohammed Elbadry <mohammed.0.elbadry@google.com>**
 
