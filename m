@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-9986-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9987-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6283FA6D4DA
-	for <lists+linux-i2c@lfdr.de>; Mon, 24 Mar 2025 08:16:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A280BA6D4E9
+	for <lists+linux-i2c@lfdr.de>; Mon, 24 Mar 2025 08:21:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F09C3A8D38
-	for <lists+linux-i2c@lfdr.de>; Mon, 24 Mar 2025 07:16:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CBE943A9943
+	for <lists+linux-i2c@lfdr.de>; Mon, 24 Mar 2025 07:21:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62B5A17CA1B;
-	Mon, 24 Mar 2025 07:16:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B43B19F436;
+	Mon, 24 Mar 2025 07:21:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HNalgoXV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V0V0ccYw"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1141A2E3376;
-	Mon, 24 Mar 2025 07:16:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1148113A244;
+	Mon, 24 Mar 2025 07:21:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742800579; cv=none; b=HKqHm1GobUR8ePOMgM8edaQme25Xe5gVdlial5e2BMOwHXyqwQ9KKFXpKNOcYSf8vSPtLqDlzdhHabk8xVlBS4eBSg9c319ivQabmIjs29+0tC+ZvWIM568lSb4HBFBqxeGacYjLmsNhP965uAQP2vRI5rOO4GPpwWVgNW2E6qE=
+	t=1742800878; cv=none; b=TbNHQi4s0xPg5cWBvbte8DkKobAzdaoTuzX2DW1TLTPfL+dnmDtIJ5+XAeyL61B+FXfXpuBQ9dTb3o9fWRTMffiEXJMLz/+it3IEkIszRAlV58VYsM3xRGaKR4M+BxvEmga0I9SeCHAf7no3D4O5QqnrXkoSJoBVI0wPjBI8hJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742800579; c=relaxed/simple;
-	bh=PDaSXdV0qjiIf8SH3jqQfPNPN4KLPgiUrlcPSH1OXbU=;
+	s=arc-20240116; t=1742800878; c=relaxed/simple;
+	bh=hZOLeXM0Ug3C3TwPfT34U466/uiJ/FqJQwwx+ag0N2o=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ikELH4XwHF3WobCgcQijg9uHKTpXX1Lbb8hp3kVgqBNmB8H28wVkXQyyVA9I1t+OyvGMngbOeMaOrqR8RAF/vRWTbRuJN+Zo8ts7Zygj+K/q4ahMF3YDXaZj0cPxXILCL6XtYi+G3jwtEPxGKIgHzrJRyT9eTg42DuNznpJjo9M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HNalgoXV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7C90C4CEDD;
-	Mon, 24 Mar 2025 07:16:12 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=cW0oT2cogozuFkaeYURQYrBOFlg82Xi7YQLHozWjO1mKTe7+V3rRib8it7JNkXaeA5kWgPRaA9a7GM8hRHmyM8Cxs0VCvJpClYf21mTHBqND++Kb8GBxTptsY27MbB6EI/X93RtV2XLMmU5hv+6G8GveaBjyrG8iVO7s9qBsPk8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V0V0ccYw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DBC8C4CEDD;
+	Mon, 24 Mar 2025 07:21:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742800577;
-	bh=PDaSXdV0qjiIf8SH3jqQfPNPN4KLPgiUrlcPSH1OXbU=;
+	s=k20201202; t=1742800877;
+	bh=hZOLeXM0Ug3C3TwPfT34U466/uiJ/FqJQwwx+ag0N2o=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=HNalgoXVe2VmyT/X27iMU2nbwLwzblRzPA/aDK77xuapwnW95NMR+jEvPzjtmBGnz
-	 yDu8eYb7K4wh3ylnZghdnAdNyIIitsraggiq2uHMd07qeUlEQVcprVcnhP/NUSvR9B
-	 a5DUniAdmrZ+io+NDBocr/+v99mtQ2Y1w3zpJ2PYX2+rNJU0qNHBSiOUFFHZzpIs8G
-	 dWHqIOE4XoLrCX+BtWeaGEBiF7wgHQmRWlLwGrFMkybHBc1Kdp+ziWXyqgn+PtD5Fu
-	 qXuXmYe9fmWpysUMu6xUPQdzJoqVj2F5Z1bZ8aqlG2mSmQSKGSxaOGrrZ9H5rtnWgF
-	 ixCgKuKxPSURQ==
-Message-ID: <7c3f107e-2732-4d6e-a9e4-652ae18c16c5@kernel.org>
-Date: Mon, 24 Mar 2025 08:16:10 +0100
+	b=V0V0ccYw3vDZ2ElMfWTcMXj8wMmna3rIjzOrMW6fNWlJR33R4JjLz0U/qebJT6bjm
+	 /stdXKZkCGLYpqPBsFaUGTaBUuo2RzfZvlOeoOLQ/d8NrIEKl0wZrPcorqX5ozv19c
+	 bazQG3zZnkL3n1LwJaIc7dKQYxHoq6WVY9QG0MH1exCiCLBnOfCwMJAJr8yhir90Vy
+	 tWH3jRHRE9WTpm7VAawb5JMOb3CGlmNVWBES5+zMxdMiPdasSt/aEFNZWnNdofWKBy
+	 stdik79Y1ltOAu15zDuRr6SKLw1ZkFA9Yoa2nIa8CU1xvYNdrdF/5k+E9sEHqYoyRW
+	 5V2nzVRF7ajjw==
+Message-ID: <994cb954-f3c4-4a44-800e-9303787c1be9@kernel.org>
+Date: Mon, 24 Mar 2025 08:21:09 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,31 +50,37 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: pmbus: add lt3074
-To: Guenter Roeck <linux@roeck-us.net>,
- "Encarnacion, Cedric justine" <Cedricjustine.Encarnacion@analog.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
- Jonathan Corbet <corbet@lwn.net>,
- Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
+Subject: Re: [PATCH v16 1/3] dt-bindings: i2c: aspeed: support for
+ AST2600-i2cv2
+To: Ryan Chen <ryan_chen@aspeedtech.com>
+Cc: "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
+ "joel@jms.id.au" <joel@jms.id.au>,
+ "andi.shyti@kernel.org" <andi.shyti@kernel.org>,
+ "robh@kernel.org" <robh@kernel.org>, "krzk+dt@kernel.org"
+ <krzk+dt@kernel.org>, "conor+dt@kernel.org" <conor+dt@kernel.org>,
+ "andrew@codeconstruct.com.au" <andrew@codeconstruct.com.au>,
+ "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+ "andriy.shevchenko@linux.intel.com" <andriy.shevchenko@linux.intel.com>,
+ "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+ "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
  "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+ "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
  "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
- "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
- "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-References: <20250225-upstream-lt3074-v2-0-18ad10ba542e@analog.com>
- <20250225-upstream-lt3074-v2-1-18ad10ba542e@analog.com>
- <20250226-gentle-spicy-jacamar-2dd36a@krzk-bin>
- <20250226145931.GA2314060-robh@kernel.org>
- <3f7b031d-7b83-4a00-996d-aabb26278b67@roeck-us.net>
- <20250227-sceptical-phenomenal-wolverine-56e3cf@krzk-bin>
- <dbd9cc84-a0b6-4323-b343-6e80aaaf2d14@roeck-us.net>
- <PH0PR03MB69385BEFFD04ECF850311E988EDE2@PH0PR03MB6938.namprd03.prod.outlook.com>
- <15ce883f-444c-4b27-a48d-b17e3df5895d@roeck-us.net>
- <PH0PR03MB693831397416C4247F8BA58D8ED92@PH0PR03MB6938.namprd03.prod.outlook.com>
- <PH0PR03MB6938087B8F2EDB9899DD0F1D8EDB2@PH0PR03MB6938.namprd03.prod.outlook.com>
- <ab329813-2903-4bd1-8734-ab36466650c2@roeck-us.net>
- <16b6b98e-711e-40d5-970e-af1feb46ce91@roeck-us.net>
+ Mo Elbadry <elbadrym@google.com>
+References: <20250224055936.1804279-1-ryan_chen@aspeedtech.com>
+ <20250224055936.1804279-2-ryan_chen@aspeedtech.com>
+ <20250224-arrogant-adventurous-mackerel-0dc18a@krzk-bin>
+ <OS8PR06MB75415E95342F26F576B5CF8AF2C22@OS8PR06MB7541.apcprd06.prod.outlook.com>
+ <50327725-f3b8-4a8b-94a2-85afccd2868a@kernel.org>
+ <OS8PR06MB7541B0DBC64B3EF6838DFE74F2CD2@OS8PR06MB7541.apcprd06.prod.outlook.com>
+ <d1b184c5-84c1-4d76-a1d0-a9f37f1e363c@kernel.org>
+ <OS8PR06MB7541D1D2E16C5E77037F3BB0F2CB2@OS8PR06MB7541.apcprd06.prod.outlook.com>
+ <069b9fe4-c54a-4efd-923e-1558c59fe3f4@kernel.org>
+ <OS8PR06MB7541C69AB8E6425313DA8606F2DF2@OS8PR06MB7541.apcprd06.prod.outlook.com>
+ <677cb075-24ae-45d8-bfb4-9b23fbacc5df@kernel.org>
+ <OS8PR06MB7541C3B70B15F45F4824772BF2D92@OS8PR06MB7541.apcprd06.prod.outlook.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -120,31 +126,43 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <16b6b98e-711e-40d5-970e-af1feb46ce91@roeck-us.net>
+In-Reply-To: <OS8PR06MB7541C3B70B15F45F4824772BF2D92@OS8PR06MB7541.apcprd06.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 21/03/2025 18:24, Guenter Roeck wrote:
+On 19/03/2025 12:12, Ryan Chen wrote:
+>> Subject: Re: [PATCH v16 1/3] dt-bindings: i2c: aspeed: support for
+>> AST2600-i2cv2
 >>
->> Figured. As it turns out, there is also a patch series pending which tries
->> to fix the problem for ir38060 by changing its bindings.
->>
->> I'll dig up my patch series to add a new macro and send it out as RFT.
->>
+>> On 17/03/2025 10:21, Ryan Chen wrote:
+>>>> Neither this.
+>>>>
+>>>> So it seems you describe already existing and documented I2C, but for
+>>>> some reason you want second compatible. The problem is that you do
+>>>> not provide reason from the point of view of bindings.
+>>>>
+>>>> To summarize: what your users want - don't care. Start properly
+>>>> describing hardware and your SoC.
+>>>
+>>> OK, for ast2600 i2c controller have two register mode setting.
+>>> One, I call it is old register setting, that is right now i2c-aspeed.c
+>>> .compatible = "aspeed,ast2600-i2c-bus", And there have a global register
+>> that can set i2c controller as new mode register set.
+>>> That I am going to drive. That I post is all register in new an old register list.
+>>>
+>>> For example,
+>>> Global register [2] = 0 => i2c present as old register set Global
+>>> register [2] = 1 => i2c present as new register set
+>> It's the same device though, so the same compatible.
 > 
-> Question for DT maintainers:
-> 
-> Existing bindings, such as
-> 	Documentation/devicetree/bindings/regulator/mps,mpq2286.yaml
-> expect a nested regulators node even though there is only a single
-> regulator. What is the correct approach: Keep the nesting requirement
-> for those regulators as is (even if there are no in-tree bindings
-> using them), or update the code and the bindings to drop the nesting ?
-> 
-I would recommend keep the nesting, so don't touch it. There might be
-external users, other projects relying on this. You can however
-deprecate old node (nesting), if the driver can support both. Not sure
-if it is worth the effort.
+> Sorry, it is different design, and it share the same register space.
+> So that the reason add new compatible "aspeed,ast2600-i2cv2" for this driver.
+> It is different register layout.
+
+Which device is described by the existing "aspeed,ast2600-i2c-bus"
+compatible? And which device is described by new compatible?
+
+
 
 Best regards,
 Krzysztof
