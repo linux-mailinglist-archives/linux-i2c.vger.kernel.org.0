@@ -1,197 +1,151 @@
-Return-Path: <linux-i2c+bounces-10016-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10017-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 046DBA707D5
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Mar 2025 18:15:05 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BEF45A7086B
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Mar 2025 18:47:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AE1B93AE110
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Mar 2025 17:14:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C6DA73B78F9
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Mar 2025 17:47:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B07A22620C4;
-	Tue, 25 Mar 2025 17:14:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85D98263F2C;
+	Tue, 25 Mar 2025 17:47:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ahSCyNqj"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="RiFmS2yP"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAF9F25FA1B;
-	Tue, 25 Mar 2025 17:14:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99700263F28
+	for <linux-i2c@vger.kernel.org>; Tue, 25 Mar 2025 17:47:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742922890; cv=none; b=O6wrPDqCCY1ZjplxyTUE6SY1qfjEbukfaBeDU8dOGe/UjQFmfo0cU6zMfaqBpRXfdwpX9TVDFNsaOEbfDHg4ixxTga0VvFjUp99Skb+KPYLVjOYeQtkxBBAolyyzUD4emIbhUlpZvutCDLkmEZCOC41Bq4/Lw5OZ5cHUoczbJNY=
+	t=1742924841; cv=none; b=XRC0f8FlANFD0nh9U89XOKyqsJ88do3C/4CrcVMlfvJFSG3j2VTeppSzRe4rBtFcJD0d4PIOEMlkz8GNeg5RPlaVi6nFlu67bA0RHVhdDFGfTaD3Q4iQ1gTswbLDmtbWHK397dJJGTqRtDKTHckAGKBlgUQOpYvQreiASrdEyGY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742922890; c=relaxed/simple;
-	bh=7LjuFHI+9x6bjZK/FeC+1TifxlFCEgZtEhKL3VJCkJ4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O2AfUzlY9BoWG2Bv9/yzgss7PRag2n0X2FxGfV9r3zSiGg/PtZMRXBe+y0qA0lom1N+ITjFBhejH/XscBWSZvMRjGQGj4QD4U/UAfIxQehUVoLGZdfOPadl2PC/+SDc5PLxFcXN1ExwBCWpUAxvcep8geVKVX0L+E4YJcbygLp4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ahSCyNqj; arc=none smtp.client-ip=209.85.221.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-39149bccb69so5205280f8f.2;
-        Tue, 25 Mar 2025 10:14:48 -0700 (PDT)
+	s=arc-20240116; t=1742924841; c=relaxed/simple;
+	bh=goKPkMeXynwdrhBXnRq9X1VvT6tW+FJCFrUGgCdOnmg=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tWW0NWxBW2kkqtXNpws8dHmDPPCm4I68bdG45dXLxzV+2c+iWhLYX4rfJqkgTI0nRJ9a5ztQAjPuPhQYjxifPKypQkp1HD/rPC9YpFOPntSu7I4cvbpH0jBOTwGQK6Ea5TONVYQqA7z6injS9YfXqDsGJfgLglMiuZLibuu06gY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=RiFmS2yP; arc=none smtp.client-ip=209.85.219.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-6e8fc176825so48513256d6.0
+        for <linux-i2c@vger.kernel.org>; Tue, 25 Mar 2025 10:47:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742922887; x=1743527687; darn=vger.kernel.org;
+        d=rowland.harvard.edu; s=google; t=1742924838; x=1743529638; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QLnwbdMaL1/FwcJKrrohuVnu32gSpBukuyMJRAcqUuU=;
-        b=ahSCyNqjBqgKtmZRcIN1ij9XOpPD2vovZzsHll63bNdcRrwL+9nIBsxqfXWcm0QJOb
-         dAENJx1OkDh5eMHAcJlfR3+WHRcAmUP4FRZw4un6DW6C441jq6FywWWQAVQcw/Aa1Wib
-         oE8O3t4j0AAyCOVxGzzye/TExb8Z7i64nz6VUrOMwRZqXja+1ulPEPxpONY+qgXp7r8u
-         MaOPjjm3964XysIXFczlNZgJzFciOmf+XJdPqPqKwYb5J1KyHc6cVrskBJQME0yStXVR
-         Qu3xzAC/Or9lvGNFbIC7lPKq1eRqlsuojEpU0bOKHRB+c8slLT5nFqBepfWgThqe+OXW
-         fZ4Q==
+         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=KjH1g6ftKk1WIu6TE8/3Mya2cmPNBafybymHxTD9mE4=;
+        b=RiFmS2yPwpzXwLruNurFXEeXSL2ike4PAgZjfJvw3f2bMQp7D+X5aQdEi+/iHOD6xb
+         QEXChE3bWBBE0BQXE+G0KwrGRxKb+BUFPVrblKcVnlgY+9t1Co34dsS6M6KReUaHicen
+         J8Y6tilYG818HT0ShqpexiSCxaeXC9GH3VZtUJvbMgZZICUHDAvgad0c+xTuBDgCqmVz
+         XcmPVcz0YqWGZLHenjXXW9syLh61SwAlL33m/RsgyYXm10vCl98ALzk3rEgQmq8eB+UF
+         yxvMWP2D7JV1Ab70eClf6abpx16+bPDt4nVOTV6LbuWKXIBBQNzcn52uQOUzNPEKIiPb
+         hjHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742922887; x=1743527687;
+        d=1e100.net; s=20230601; t=1742924838; x=1743529638;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=QLnwbdMaL1/FwcJKrrohuVnu32gSpBukuyMJRAcqUuU=;
-        b=kCSd6ywXIc/nIdOkuqA2N5UQVzU+bj0IR+p880lR5isO3OBe5ukR62eSKcYDM0AgWP
-         gNLfW/lg82K3LfYgdyUfRfwo/3L9EzEUetj4k6n/F6A8W+RUNBPXp3dI2ovuPmGXoc0e
-         5NXCkts5nniwau0ZAxg4cq+SyQifl0QcBh4aVTKAay3BQGfoia83PSFSJTbyre8hWw4J
-         4CyLfu6ruMfvRvFl+l0ZH4LDWV6iItArWimMT1K9/AJMlyWlEwzwt9M3ca81BD+lffHa
-         +WFYUNElJa8/FNbp2LC2KDMzQ5wQ2CkQa4oQbx85gdoM2NHdy2Zwcqzp15aXrLIFPlMv
-         ACtg==
-X-Forwarded-Encrypted: i=1; AJvYcCVkMceX2p2ocLITyuSFReCpe9ZOFAbxpSlEP6V9snF1XSos7PK8D87vJ1pQxb6u18laUFCBBOZWS1A=@vger.kernel.org, AJvYcCWWnuvdIUZet8SQVKCRnkmLAwP6Wiw8ARc2UmCr/xQniUELZo0kU0pTjpBOrJqG7u490JbPmDfVUvXqdf8=@vger.kernel.org, AJvYcCX+52sPWhPYhJjvIYnkXPXRR8XQYRtmLT2SMrtiE39FTWlgZAZqzCiIFsI1qbUL8zGw7jTaMAsc/zyl/bNI@vger.kernel.org
-X-Gm-Message-State: AOJu0YxtLFnKryr7pfijLaB8y13NKLt4Z38/cYF6/XnB6oiGQaIvfFz8
-	5jTdAJmOS59LzWntZ88mU4h+FxMi+f2u9U025Xyls/dp2OS03qJ6
-X-Gm-Gg: ASbGncsy1xCsVYMdxighPpchr5Y3WtLejYRvjrt2ieJApFO7T08If0GdHzomTYf1zA+
-	UPgUc2uVd9q7FT/siSveFkAI2cbnA4UQUNnRlg+3L5ClHDoRAZUNPaq053VQVg1dWxwbbtZYlQf
-	nD79ogRIpK9UWBinQF+uBlkl0b5xvDeIW1v/ae86TQFHg9fcSa/vGYm9/99EjtmpG0s0XOodQhu
-	rNi1Ht83Z2rMKHwBYkGzGcOyCsDmHtSGDYsYPT1fuuJqYJ73ODotxWWxwO13tTBE8ix/Ar04QFh
-	UF3fvm09I9hRAVnj9CF6wRDFAS8eDAl5R3FA8R5DV9wyL57ozAd3QTTvtfdEHQeJxGDYWxAOOmR
-	Mx5J109sLtIAAdKgTnedrXvOrIfoTY30=
-X-Google-Smtp-Source: AGHT+IHgo0Q0bPOcCYzchQiU6TCha3M2YaTp1OkI/gjnRtvmyKxZA1brxp4uLScoHj6BKvWm0D0joQ==
-X-Received: by 2002:a05:6000:188e:b0:391:31c8:ba59 with SMTP id ffacd0b85a97d-3997f8f26b5mr14688915f8f.4.1742922886794;
-        Tue, 25 Mar 2025 10:14:46 -0700 (PDT)
-Received: from orome (p200300e41f4bef00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f4b:ef00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3997f9e674fsm14021551f8f.80.2025.03.25.10.14.45
+        bh=KjH1g6ftKk1WIu6TE8/3Mya2cmPNBafybymHxTD9mE4=;
+        b=KB8LGBreCl5QYzIrqJ82vg6qP38pX1yvXUH3nQv5zPekBEBVx7BhUyMxwBS0StKguZ
+         xLMSCC1PTm9z+Gc6L3YWNs9rv+Kf/MJrj2X4HDHeC6CKFywLFVUQTU+RF4wffZe3Cs4U
+         79OfQTPtbGtcpBiOHbI1tha2KXRaTd2Mf18RcUIhv880QCbIbhdM+cbN3lYRnzshE84L
+         dg1zkrMLg4GyfUmOMZggql+xP7YX9+vxULRgdBGSizKGlOgCJP+GMQpqq+DjH3xHtilk
+         zVUdvZEXRaCd7WLM/LHonbCCQlRPFl+uOjZ2Kf5ViO4FdMhhZPbTb0g7l62ACXHoVzZK
+         fmUg==
+X-Forwarded-Encrypted: i=1; AJvYcCWxWyFT+ZXfHyIuwnZjkyK3h3JESMTdjLHF1u+pQI4eAKaggz1wPE7ljbTaipbXUMDoKsXwnvDcJno=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwXXheHwToKCJpm7oEVHltkSB7K85EGocTNCAPJUGnxpTjw/ltY
+	63bW/h3NFz80++epwQGPT74TW/QGSQHTJsdiddlcRrVInOc6bp7qakgiLOv1Cw==
+X-Gm-Gg: ASbGncsYgYpSUiv+1CSgIBQpMZKF9b2pKnmjnW3gWwBQ1icA2YM0p6hy7Q15c+dYEyk
+	kM9oJKBOfq925Uh7dhevvwGeLUUZ2eiwaH1sdbw41DgcnLNyXCT3V0YGZD5W6b+w/cbh4xoesGc
+	coE79Un42UvPtmDSKzznpAumD20iZICahXc8g0KDlu/9bRae7U/BgGNVD9vBzNBs/UbybqXHnvp
+	i3ZzO0oqo1/9HirpFMGR1EEI67dAppOpm45wM1P4wkv3mXTKvEHCcApfc4twBiVGQGM2rXb+jJt
+	ONQXQwPerVGEEa8ASIpf/b3YCgRye6FgK4K4DTB5x5d+2gNNq8XbTht/dQRkXcozRLgVQtZWFhf
+	1uLjdahKFoywmeaU0No7m1y/sIOg8YekHHtOuvQ==
+X-Google-Smtp-Source: AGHT+IEE3s2WyDicsHyN8I8hDTQsl58ko3gMhcMuYw+oTIF/jYZenScg9DM9xoAREespRcfMxIvUaA==
+X-Received: by 2002:a05:6214:19ef:b0:6e8:97f6:3229 with SMTP id 6a1803df08f44-6eb3f294676mr269179956d6.16.1742924838295;
+        Tue, 25 Mar 2025 10:47:18 -0700 (PDT)
+Received: from rowland.harvard.edu (nat-65-112-8-24.harvard-secure.wrls.harvard.edu. [65.112.8.24])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6eb3efc5a1dsm58469186d6.79.2025.03.25.10.47.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Mar 2025 10:14:45 -0700 (PDT)
-Date: Tue, 25 Mar 2025 18:14:43 +0100
-From: Thierry Reding <thierry.reding@gmail.com>
-To: Akhil R <akhilrajeev@nvidia.com>, 
-	Wolfram Sang <wsa+renesas@sang-engineering.com>, Andi Shyti <andi.shyti@kernel.org>
-Cc: Laxman Dewangan <ldewangan@nvidia.com>, 
-	"digetx@gmail.com" <digetx@gmail.com>, Jon Hunter <jonathanh@nvidia.com>, 
-	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>, "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] i2c: tegra: check msg length in SMBUS block read
-Message-ID: <cao4thtbeenv6b5rbp5icijr7knp3k25zmzg7u7vdxi62hfyrt@ymchhtpwskke>
-References: <20250320132144.34764-1-akhilrajeev@nvidia.com>
- <2rlnnjixgd65u6gbqxfuhzu5humehvjth7iysj23xvuv5fi2ft@i5su6kfrqnt5>
- <PH7PR12MB817882F6F4EEC820E22C092DC0DB2@PH7PR12MB8178.namprd12.prod.outlook.com>
+        Tue, 25 Mar 2025 10:47:17 -0700 (PDT)
+Date: Tue, 25 Mar 2025 13:47:15 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	syzbot <syzbot+c38e5e60d0041a99dbf5@syzkaller.appspotmail.com>,
+	gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+	linux-i2c@vger.kernel.org
+Subject: Re: [syzbot] [usb?] WARNING in dib0700_i2c_xfer/usb_submit_urb
+Message-ID: <6bb3b80b-a808-4992-8666-535ed9a5c980@rowland.harvard.edu>
+References: <67e1a1f5.050a0220.a7ebc.0029.GAE@google.com>
+ <acfa19a7-9d24-4cd6-9d1d-580a9ac7473c@rowland.harvard.edu>
+ <Z-GwRNe8NIigXYtS@shikoro>
+ <ecdc37c4-b178-4e43-bfbf-45bd3ed29ff2@rowland.harvard.edu>
+ <Z-Lg3glmnzA44R_H@shikoro>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="mbx6h5ohg5ujq2jw"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <PH7PR12MB817882F6F4EEC820E22C092DC0DB2@PH7PR12MB8178.namprd12.prod.outlook.com>
+In-Reply-To: <Z-Lg3glmnzA44R_H@shikoro>
+
+On Tue, Mar 25, 2025 at 05:59:10PM +0100, Wolfram Sang wrote:
+> 
+> > > > As far as I can tell from the source code, the dib0700 simply isn't able 
+> > > > to handle 0-length reads.  Should the dib0700_ctrl_rd() routine be 
+> > > > changed simply to return 0 in such cases?
+> > > 
+> > > The adapter (I assume the one in dvb-usb-i2c.c) should populate an
+> > > i2c_adapter_quirks struct with I2C_AQ_NO_ZERO_LEN and then the core will
+> > > bail out for you.
+> > 
+> > Or the I2C_AQ_NO_ZERO_LEN_READ flag bit.
+> 
+> Yes, that would be more convervative. Does USB allow zero-length writes?
+
+It does.
+
+> > What about all the other fields in the i2c_adapter_quirks structure?  
+> > How should they be set?  (Note: I don't know anything about this driver 
+> > or these devices; I'm just chasing down the syzbot bug report.)
+> 
+> As I also don't know the hardware, I suggest to leave them empty. 0
+> means "no quirk".
+
+Okay, let's see if this works.
+
+Alan Stern
 
 
---mbx6h5ohg5ujq2jw
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v2] i2c: tegra: check msg length in SMBUS block read
-MIME-Version: 1.0
+#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 5fc319360819
 
-On Fri, Mar 21, 2025 at 01:09:32PM +0000, Akhil R wrote:
-> > > For SMBUS block read, do not continue to read if the message length
-> > > passed from the device is '0' or greater than the maximum allowed byt=
-es.
-> > >
-> > > Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
-> > > ---
-> > > v1->v2: Add check for the maximum data as well.
-> > >
-> > >  drivers/i2c/busses/i2c-tegra.c | 5 +++++
-> > >  1 file changed, 5 insertions(+)
-> > >
-> > > diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-=
-tegra.c
-> > > index 87976e99e6d0..049b4d154c23 100644
-> > > --- a/drivers/i2c/busses/i2c-tegra.c
-> > > +++ b/drivers/i2c/busses/i2c-tegra.c
-> > > @@ -1395,6 +1395,11 @@ static int tegra_i2c_xfer(struct i2c_adapter *=
-adap,
-> > struct i2c_msg msgs[],
-> > >  			ret =3D tegra_i2c_xfer_msg(i2c_dev, &msgs[i],
-> > MSG_END_CONTINUE);
-> > >  			if (ret)
-> > >  				break;
-> > > +
-> > > +			/* Validate message length before proceeding */
-> > > +			if (msgs[i].buf[0] =3D=3D 0 || msgs[i].buf[0] >
-> > I2C_SMBUS_BLOCK_MAX)
-> >=20
-> > I wonder if this can ever happen. Looking at the implementation of the
-> > i2c_smbus_{read,write}_i2c_block_data() functions, they already cap the
-> > length at I2C_SMBUS_BLOCK_MAX.
-> >=20
-> > I suppose some user could be explicitly sending off messages with bad
-> > lengths, but wouldn't it be better to return an error in that case
-> > instead of just aborting silently?
->=20
-> For SMBUS read, if I understood it correctly, the check happens after the=
- whole data
-> is read. So, I believe it makes sense to abort the operation before an er=
-roneous read.
->=20
-> I have not verified this violation, but I think the error for I2C_SMBUS_B=
-LOCK_MAX will
-> also be printed at i2c_smbus_read_i2c_block_data() functions even though =
-we return
-> silently from the driver.
->=20
-> The check for '0' is not printed anywhere, but it is probably, okay? Ther=
-e is no data to
-> be read anyway. Please let me know your thoughts.
-
-I don't feel strongly either way. I think it's ultimately up to Wolfram
-and Andi to decide how they want host drivers to handle this. Na=C3=AFvely I
-would say that it's better for the core to check for validity, if
-possible, and refuse invalid messages or transfers, so that host drivers
-don't have to repeat these checks.
-
-It's also not clear to me how this should be handled if multiple
-messages are submitted and one of them ends up being invalid. Multiple
-messages in one means they are probably a logically atomic set, so any
-error should impact all of them.
-
-However, these are all issues that can be resolved at a later point or
-not, and this patch looks correct (worst case it's doing too much
-checking), so:
-
-Acked-by: Thierry Reding <treding@nvidia.com>
-
---mbx6h5ohg5ujq2jw
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmfi5IMACgkQ3SOs138+
-s6HHTw/+PeOIPsaHfi1pl2ATeqelhwaOzvQK3qIYbNmfneM/eChVeb/as0cr+Fb0
-nYDYQ8mW+2HagWwz2ROgJcdZ8kKwOm+7QumnmPhKOE+kN3Khaf5wP5LKdLJRqhMD
-u5ocGlseFO1c8eynmhtyZgp7LhCViYgJNOkHU5zZixDf65Zh6481/Ssf/YvhHZOc
-2yoJeXl3/SLvHAlmRuYzAVPkP7WTfnCBzb/ziFS5LIm/IXqIflcOk59QBYx/5OXJ
-w8fWa2Ysuv9Rmue9uYpr9F2pN9LBAgt0/MuIXhUPyqQ/5EY9JZ+N8IKfjV/X8a+5
-/OszCOLHtZmgeS2dVUEwT5vKjSp2h7CxBuk0SsmMzVBxWGb1JKlsSBRo+8Vb1Adm
-QlhTSZrTVwFFmKapL5xKqigAWiujfu//4eVrQ9IM8LQ4Ow7LjXnFhps5w5C6Id6l
-fATsXL3p6b0cpuQVZWUrrfKbxCFOvE1XXRD4V4+ENkOe1ULR4PBkyi2jKxHqhPNo
-SG7GWWXmt3q5IY7Nv4fmCYS3lM1QhJyeuNZR2ksK0PkBCUiovNDDMwDVKuhd7OHN
-K4wensrK1DXmU/khTsx7Yn/ZDAAGWZt33HP5qePCh1i1s946y6iqXF0wyFY5Nyyd
-N2ubAvh8BMAjiA1nScI4a4AHBT8piLZNLhoz9w3knUUCnhLjprM=
-=x6ig
------END PGP SIGNATURE-----
-
---mbx6h5ohg5ujq2jw--
+Index: usb-devel/drivers/media/usb/dvb-usb/dvb-usb-i2c.c
+===================================================================
+--- usb-devel.orig/drivers/media/usb/dvb-usb/dvb-usb-i2c.c
++++ usb-devel/drivers/media/usb/dvb-usb/dvb-usb-i2c.c
+@@ -10,6 +10,9 @@
+ 
+ int dvb_usb_i2c_init(struct dvb_usb_device *d)
+ {
++	static const struct i2c_adapter_quirks i2c_usb_quirks = {
++		.flags = I2C_AQ_NO_ZERO_LEN_READ,
++	};
+ 	int ret = 0;
+ 
+ 	if (!(d->props.caps & DVB_USB_IS_AN_I2C_ADAPTER))
+@@ -24,6 +27,7 @@ int dvb_usb_i2c_init(struct dvb_usb_devi
+ 	strscpy(d->i2c_adap.name, d->desc->name, sizeof(d->i2c_adap.name));
+ 	d->i2c_adap.algo      = d->props.i2c_algo;
+ 	d->i2c_adap.algo_data = NULL;
++	d->i2c_adap.quirks    = &i2c_usb_quirks;
+ 	d->i2c_adap.dev.parent = &d->udev->dev;
+ 
+ 	i2c_set_adapdata(&d->i2c_adap, d);
 
