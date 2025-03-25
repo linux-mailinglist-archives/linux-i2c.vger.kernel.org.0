@@ -1,139 +1,115 @@
-Return-Path: <linux-i2c+bounces-10013-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10014-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50C71A6F45B
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Mar 2025 12:38:22 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D17C3A7072F
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Mar 2025 17:43:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8C4B11886AA0
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Mar 2025 11:38:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 338D41886F99
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Mar 2025 16:41:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D01942561C5;
-	Tue, 25 Mar 2025 11:38:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C79525E812;
+	Tue, 25 Mar 2025 16:41:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="Fs8WdXg5"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="EX82g2J4"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B613255E3E
-	for <linux-i2c@vger.kernel.org>; Tue, 25 Mar 2025 11:38:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3B4B25E802
+	for <linux-i2c@vger.kernel.org>; Tue, 25 Mar 2025 16:41:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742902694; cv=none; b=Xx8YoI9YEkUriNsaNtfQzR3PN5aBv1S9jsRaNYbtmRxNkHE2RbCxRW5YRN0o4vcq2wnS9AXDkZM4V4VWjyxg7IYiuj+lufR2yBugvVVElUoj7e6liwGzXbOP46dBX5KWmmE/gdSceZsFxiFu+HtqusPrkxiW7O1y3Y7vtQgq/+k=
+	t=1742920885; cv=none; b=Ad2Vhi2dy/n75oyq91V+Hp6f56i3z3IQ6I8b5lZyOonjjXnxenoTQJTZqWAdXmsfQM4kcOGWDamKX7Mom3ah6r4hb9IttKOc3kq/TB+GnsMjkp1/GWajwQtG1yXx59z5M4wKljGVvAbkhs07ZMr4OIsQqaOlBUDF1vPJnuR7g0Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742902694; c=relaxed/simple;
-	bh=FA6d2dRVk8LxnzwIHtQlX5bcI9YBfV2aFKyu05XfbPI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fVVa8iiTximhx+n3oJtk0KbGniILYjuvz0gZn+P9p+0Uls6NmcwDf6STXo6dDQSFEueLQAcPmKuXp+SVxMP3x5P0SwUjzqCqfwZS297EoY4S/SGz1Vm+6xbeNAW79R4k1dKQqVEUzdndI+ZflHsKcID1RoDOuxnQxfy4I+p9+0I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=Fs8WdXg5; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=K3xC
-	bq1aSNfvAgcHKhHmE6cyJzpFHMkkBmPR4tehSj8=; b=Fs8WdXg5zgf3QXSDvskj
-	jPLkKvQCbpC6DzjVMeCCCadDQwpFjBLjVlm7V1DOM7TsZ+Bu52Grsr9QsHAvmdDO
-	4iANkHpo71hNwLNSxOIslp+/FUMg+VE+wjyvfveuzS4NGtEUnyzUE/YeRPefleeZ
-	StNmVyWqZhdlr3MiGrK4vnrVw+TjePiuOMQuMxUCcRSjplHUlzB1d26uvVAJ1tne
-	lnAAaa8vovXAAEwdsbddPAabe4BTOpkB9+tuY7xq0Yg2LUtyTOys+Ar+I4AUaB1d
-	MzvythRs1wmDnod/ht7l+JDDj120SOjo5wWnoO7h5beojc4LXDynLMW42wVc0GwQ
-	5g==
-Received: (qmail 3031330 invoked from network); 25 Mar 2025 12:38:09 +0100
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 25 Mar 2025 12:38:09 +0100
-X-UD-Smtp-Session: l3s3148p1@JR2pJykx3KAgAwDPXyTHAJp038nK7dx+
-Date: Tue, 25 Mar 2025 12:38:09 +0100
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Andi Shyti <andi.shyti@kernel.org>
-Cc: linux-i2c <linux-i2c@vger.kernel.org>,
-	lkml <linux-kernel@vger.kernel.org>
-Subject: Re: [GIT PULL] i2c-host for v6.15
-Message-ID: <Z-KVoRCm0fd-tLBs@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	linux-i2c <linux-i2c@vger.kernel.org>,
-	lkml <linux-kernel@vger.kernel.org>
-References: <u2isvs32qv53rrkmhwqfex25zeegyb4slbelxk42hpfkun2ruv@274wvt44675k>
+	s=arc-20240116; t=1742920885; c=relaxed/simple;
+	bh=HE0WwEEjXe2OvIj8FLiwdnpX+f7YNiat07ISj1wGnCQ=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FRG63SPsqzE5FdKk9+O1L/Zgk+/Loz+f4UzqIXNtFOSCn8XVm2Mslpv2wEAWpjPVKJpWqdh+SObxRNcz89qRNqW57lFoQ/xYBw8zvF5CJP5kn50gSQgaFv3lfW91ibIC6pjh8UVGGpAlM40QkmsiBA9q+4M3RWia4ePSY+hOEvI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=EX82g2J4; arc=none smtp.client-ip=209.85.219.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-6ecf0e07947so177796d6.0
+        for <linux-i2c@vger.kernel.org>; Tue, 25 Mar 2025 09:41:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1742920882; x=1743525682; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=miqKoY+UYVscqlsw94wZLt2jeTP0mGsCrBdRIv58gSg=;
+        b=EX82g2J4RfMYTVP0xtt//t6++4uw1IXPfjARXV/8V+HRSFf8vLvA0/0dXDpoPaDnDZ
+         yj3Be3YD1behcXq17dp0qbJzcH8JiYY4lAc9GSzl2DAr2CcT/kIhGSkUEghmxsJp1ElP
+         QkSyW7K71jWYFdJSz3tMHdoJe+wHqSi7QQ2ChgTU3xrn2DvYr0vKgCQSW2aKevQWEY+u
+         PjyTTyZz9JSwBPV97nBq0IaKUKmQIYQjCFue+3Pt98jj/WlsY22p/ZzkS8HOp5FK9SkG
+         lWc6jeTh1lgtQwESsxSo5D5DDm3Wwg6JzGvwcOgs8ox2FTjOjeRZZaeTWLhvl3lLmyFz
+         OdrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742920882; x=1743525682;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=miqKoY+UYVscqlsw94wZLt2jeTP0mGsCrBdRIv58gSg=;
+        b=qPw+VZnxaQwNSvL5f9/e1bnf4jBz8fIZTib8KlfSizEi9jBOvJE2wslvGlg9oWs394
+         BiwMdtA/mA2K46u+ZtpPjUn+aZl6OsaeC7mKD7YTHNtgLow1Mp0Y4lUtAGiN8aSJfWtc
+         pQBvJUWnAdbLp2GLvmM0Q1ZrUfViT3dG8MFVwzzZ/SHNc2LbzGEYNq5hFPygI4iaCxIb
+         r28pNy8eBQlgAyQZKWO6vh5IeFD5TlqSkZ2VVVFm5qNVtTO1uM25GgEJgdaKFCdccRZQ
+         TgXUu8dGik/Mjf9/5W7EkuRTs6pmZUQpmTNRl7SLAGLkBStbRuqnAaFO+Y9Rawb9yrYZ
+         OvKg==
+X-Forwarded-Encrypted: i=1; AJvYcCXRIa5tWevrAz/0qjRJulSFA+JyluiyzUdgsIXrnoQKldNmKqEA+6+vBaMpEcSHLbyqTUbYCEzWems=@vger.kernel.org
+X-Gm-Message-State: AOJu0YznWc74DYkyx2hqH6wKOMf+TpWFlPD8EtwtFhLzmz6O2Vm9RGOx
+	sMVKm1xe5PFrIbel/fLFXeGQWHZ7jkqH7H8tkWmlV20O6f9QFCPXBM+1lMAZkw==
+X-Gm-Gg: ASbGnctqAEuSyiWJFsqZMWBcKgVT2VvdCChvE6+WRIamySBh3W8P0do495B2Ta+mtXA
+	hihVz//+441ke0nmdfXTaeRBOp62+cm6t56v0dJdxsooNg9+GxPOSMhI81VMYAfttnt+JtB/KsJ
+	3Nw6QOwi8zxhrg5j8LhrlRRBZzm1SsK+1XQ/0+xDad/HpS66lUF6tedZSz8nx814RZRLni2s2lx
+	ZekdXlP9XVXNNIjNaVZ0r7PbFMCOMuKF8MEE6/2Z2gmcNC9J4N31wCZIeVbMFyO21+xOh782AAz
+	ZaVhXZ+Xj/PtHbUqVN9TUwxDgfb7a3C75SsAenHNAjZ7ILQnsTWIl958/4LruvY7xmz6kzI0kFn
+	XwH3AC2Ga35h1Wf6G+1OTXTBne2C2wKuQdRLCNA==
+X-Google-Smtp-Source: AGHT+IFeP8N81JAGt1FKSNUu0N8sqMwAbRybniXeyxbpbDyGTB3nk4kytpnyLPPjCGdlVLhPquev0w==
+X-Received: by 2002:a05:6214:3d9f:b0:6e6:5b8e:7604 with SMTP id 6a1803df08f44-6ed16cbbed1mr7940456d6.12.1742920882545;
+        Tue, 25 Mar 2025 09:41:22 -0700 (PDT)
+Received: from rowland.harvard.edu (nat-65-112-8-24.harvard-secure.wrls.harvard.edu. [65.112.8.24])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6eb3ef0ed7dsm58440546d6.25.2025.03.25.09.41.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Mar 2025 09:41:22 -0700 (PDT)
+Date: Tue, 25 Mar 2025 12:41:19 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	syzbot <syzbot+c38e5e60d0041a99dbf5@syzkaller.appspotmail.com>,
+	gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+	linux-i2c@vger.kernel.org
+Subject: Re: [syzbot] [usb?] WARNING in dib0700_i2c_xfer/usb_submit_urb
+Message-ID: <ecdc37c4-b178-4e43-bfbf-45bd3ed29ff2@rowland.harvard.edu>
+References: <67e1a1f5.050a0220.a7ebc.0029.GAE@google.com>
+ <acfa19a7-9d24-4cd6-9d1d-580a9ac7473c@rowland.harvard.edu>
+ <Z-GwRNe8NIigXYtS@shikoro>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="kAmn8II20RhuryIa"
-Content-Disposition: inline
-In-Reply-To: <u2isvs32qv53rrkmhwqfex25zeegyb4slbelxk42hpfkun2ruv@274wvt44675k>
-
-
---kAmn8II20RhuryIa
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <Z-GwRNe8NIigXYtS@shikoro>
 
-On Sat, Mar 22, 2025 at 04:45:15PM +0100, Andi Shyti wrote:
-> Hi Wolfram,
->=20
-> Here we go with the pull request for the merge window.
->=20
-> It's not a huge batch in terms of patch count, but a few pieces
-> of long standing work finally reached the finish line.
->=20
-> Some patches are refreshed from the past, something I plan to do
-> more often going forward.
->=20
-> One new driver was added: Spacemit K1.
->=20
-> Andy has also been very active, contributing the new
-> i2c_10bit_addr_*_from_msg() helper, which is now being adopted
-> across several drivers.
->=20
-> I don't think I've missed anything from the recent submissions,
-> and I'm happy to have caught up with the pending work. So I
-> don't expect the need for a part 2 pull request next week.
->=20
-> Thanks, and I wish you a great weekend!
-> Andi
->=20
-> The following changes since commit 4701f33a10702d5fc577c32434eb62adde0a1a=
-e1:
->=20
->   Linux 6.14-rc7 (2025-03-16 12:55:17 -1000)
->=20
-> are available in the Git repository at:
->=20
->   git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git tags=
-/i2c-host-6.15
->=20
-> for you to fetch changes up to 39f8d63804505222dccf265797c2d03de7f2d5b3:
->=20
->   i2c: iproc: Refactor prototype and remove redundant error checks (2025-=
-03-22 13:11:53 +0100)
+On Mon, Mar 24, 2025 at 08:19:32PM +0100, Wolfram Sang wrote:
+> 
+> > As far as I can tell from the source code, the dib0700 simply isn't able 
+> > to handle 0-length reads.  Should the dib0700_ctrl_rd() routine be 
+> > changed simply to return 0 in such cases?
+> 
+> The adapter (I assume the one in dvb-usb-i2c.c) should populate an
+> i2c_adapter_quirks struct with I2C_AQ_NO_ZERO_LEN and then the core will
+> bail out for you.
 
-Thank you, Andi, pulled!
+Or the I2C_AQ_NO_ZERO_LEN_READ flag bit.
 
+What about all the other fields in the i2c_adapter_quirks structure?  
+How should they be set?  (Note: I don't know anything about this driver 
+or these devices; I'm just chasing down the syzbot bug report.)
 
---kAmn8II20RhuryIa
-Content-Type: application/pgp-signature; name="signature.asc"
+Alan Stern
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmfilZ0ACgkQFA3kzBSg
-KbaJNxAAiw2IYuXOZ4iujuQ4hKbBePi+DKpVj07DMg2pYHuMtHU9Dxg1nUBhl/Nh
-VpgPwqt3Cs9fWLTbijE93lSLh2lObX4mTiW9rrxyzPEQ8Sho8sjJ5XalDE3598Q/
-xOddYkrdQL/nw4gYPm8hrxJai6O14vSK1BwajnNA8AS940htxh82IW0SxXLVCOKn
-1EpF9cdRs4aSbZJC+0ih2+jaoS4Q+3zgfJh71gMksnwaZnTmS/c1zMcorBn7utTg
-TULG3wmz0aQu2N2Z6YPqnFgNai8rUK1odrTfIRXmbnckVW5cSfgA+sihycziz47Y
-fLAdKPEtgHTiBZgPo2BHMxYfzPQeSq2AVgtbaKMNI39PRJQhLwMLrjkNfSrsdLys
-I9FCB+psiEGUnoTwMnAL+Mvx+B3JhEqoi9iQnLIXX63Gsq9FVyOsDMcnimtpa4ii
-h/+ICgg0QK+/AjYYdPKXsCTuUJcZcCiNnF7OBIo9lnXmgWL49H4C7+HieUO/6fol
-60x0SyOPXLyKpaCkEJAaU2u17DACbfodbnV/roItYyGDC3X4gHQJRmGsdxPhQjEO
-5SFYG8KzhagUutbeTAB+KvfV40Y/XCveaX7rGLb6JAS40R6hvz+c7yn8QPe8Me/O
-Wwk2z0/Vfe7yv1t4l7Hd0MagBXZ2WLbGCVPKUD0rHYCy4Fbku2k=
-=lptR
------END PGP SIGNATURE-----
-
---kAmn8II20RhuryIa--
 
