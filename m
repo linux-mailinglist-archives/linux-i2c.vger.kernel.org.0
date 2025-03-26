@@ -1,173 +1,116 @@
-Return-Path: <linux-i2c+bounces-10043-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10044-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3962DA72223
-	for <lists+linux-i2c@lfdr.de>; Wed, 26 Mar 2025 23:06:37 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id ECF8AA72247
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 Mar 2025 23:07:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7416A173CAC
-	for <lists+linux-i2c@lfdr.de>; Wed, 26 Mar 2025 22:06:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C3DD3189B1A9
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 Mar 2025 22:07:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 420FC1F8736;
-	Wed, 26 Mar 2025 22:06:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 178A11F239B;
+	Wed, 26 Mar 2025 22:07:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="ehIwNvUZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KtjxNbeR"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.smtpout.orange.fr (smtp-15.smtpout.orange.fr [80.12.242.15])
-	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6AD11B040D;
-	Wed, 26 Mar 2025 22:06:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF08D2E3364;
+	Wed, 26 Mar 2025 22:07:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743026778; cv=none; b=fIs/6oAgX/q15BL4N01pzI0W/9P+X9AkSWsLUvMdiXn4aT5X+ErwZ2rOhXbK3gdoQBJzjjwV1DdEQCo47KWzhvNwi/1EZgy305570Py17glIbskDevsV/73qom0H1gbZPz+pamdJIo0A2hdy+owI6OGJedF010iBMz4ZFoHOlkQ=
+	t=1743026842; cv=none; b=NmtxAFwns9coTPvTZxOSrXbHqKQGWf3qWVi/kSyWMQbDGTHLmq5RI2kx5ANZ/zOeUKx48wR2WHK6xUbU/15VcbJLCrADHgzSMP39dS4xFtqbIb+4tQFgzXy0m+g4MMqPkZba+2Y80PF0SIVY0VvwzzzY5O2tqLn15Q1bpDK2uR8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743026778; c=relaxed/simple;
-	bh=wBUZtm7tQMfLpH6iDp+77aS8r5MvIGZkKqcqaUwCPlc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MnznXBBkgJMDY4LR+nIU2hlBPA+gFf1vV9oSjGiIKNA389xgl3JbeNjzUsM3bhwXcRo0XlwiFq3GafNUFmoeAQCEP7BmMmbqj2dkHaoUT2MOI6oG9KsFa5ld95orDIpovZCvpOlYOaluL1vOMKY3dwyeHIWYCWA7Z2PIBQZX9Ho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=ehIwNvUZ; arc=none smtp.client-ip=80.12.242.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [192.168.1.37] ([90.11.132.44])
-	by smtp.orange.fr with ESMTPA
-	id xYjetXqeFG2llxYjhtb0U8; Wed, 26 Mar 2025 22:56:40 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1743026200;
-	bh=Hkg1tTedGB+Nrzuw+UGSEvgfhzz7DWhq6NfPcD6jls0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=ehIwNvUZRrYlyHrVPoKyhA9+6FelPnghZEwndDyTk9A7kX5ZiDyZT8xOF9MYv5AxH
-	 MJlqH6+TnWRuEC+VLGvnUFpwpoPkS957gtuI1Db/64vG1VT0s+n5oyRUEaa1Sy9ZeE
-	 sjLRmqegaUeObIO47DnC7Z6aI1y2gh6x49WfYR52riStnVUkv+ZtstQrZg0NEZMuLZ
-	 kYE9LlZxQeBgxRmLZw1CVWiqFYaUEeko2/SFASpYW01pxMjnbvtk5FH/5A/Ke0Zxqu
-	 MsNghiRcYtxVGichRbfu5nWMZQwUUAA6qLQFxMOGkI2IYsr3GtozA6PSHx2dhKnPjR
-	 U+bmi2yH/2OHw==
-X-ME-Helo: [192.168.1.37]
-X-ME-Auth: bWFyaW9uLmphaWxsZXRAd2FuYWRvby5mcg==
-X-ME-Date: Wed, 26 Mar 2025 22:56:40 +0100
-X-ME-IP: 90.11.132.44
-Message-ID: <08f1177f-6623-46ff-8936-5b628326d8bf@wanadoo.fr>
-Date: Wed, 26 Mar 2025 22:56:30 +0100
+	s=arc-20240116; t=1743026842; c=relaxed/simple;
+	bh=FRJikSsA8yzvaWCCYthGB510YL+dH/cvtcAVRudDpK8=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=THuMEYRa+nP8yTcQL0ambcnLh0N1gxK2/smrqJO0zE0Z41dySm18RCjyi6LMTFsLeP1PFAR4A6fyuggxCTMHl/UwoJLnL1h79qGCnTuwSukd6MDZAzgVhhznRBZOjPEugDm+phQsqD3cA4xiEEYxVR+0+XGChk5acw/czeVvKco=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KtjxNbeR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E105BC4CEE2;
+	Wed, 26 Mar 2025 22:07:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1743026842;
+	bh=FRJikSsA8yzvaWCCYthGB510YL+dH/cvtcAVRudDpK8=;
+	h=Date:From:To:Subject:References:In-Reply-To:From;
+	b=KtjxNbeRid7Qwv9XXTLetaZMhymEgYHug6k8kVO25e6aEak5TVC5mg0W/Y8n8UiCv
+	 A848AXYFBLNCiIkiXEktHUxCG7ced23DUZQFhfbAxKAc7CFtHEseXp1bkdDvvpvhRf
+	 y0mbTf3u2tujBrAmP7VgZnlP+ua1KPoAKIJlAW6JSrCqxZeC++Ww0WrFUiY6OnUP92
+	 vEaXSuua0UL+6+XJOSFAQuFT7qEDTAwGBgFUMX8DFrmgnPsM4nBDVSRICh8G72Gid3
+	 QqioJWV3dJE8o2TGFnlOWjKEmzcOqedj8u7JT37O3cGWDajuVEn7U96Fm+W7g3jPfQ
+	 Qf0mWqYGflhZw==
+Date: Wed, 26 Mar 2025 22:07:17 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	linux-renesas-soc@vger.kernel.org,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: i2c: snps,designware-i2c: describe Renesas
+ RZ/N1D variant
+Message-ID: <20250326-dispute-eloquence-b66b1574307f@spud>
+References: <20250326090112.22495-2-wsa+renesas@sang-engineering.com>
+ <20250326-unhidden-alfalfa-4dabbeb32c9d@spud>
+ <Z-RzfZKaw7qtYj0p@shikoro>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
-To: Ming Yu <a0282524688@gmail.com>, tmyu0@nuvoton.com, lee@kernel.org,
- linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org,
- mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
- jdelvare@suse.com, alexandre.belloni@bootlin.com
-Cc: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
- netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
- linux-usb@vger.kernel.org
-References: <20250225081644.3524915-1-a0282524688@gmail.com>
- <20250225081644.3524915-5-a0282524688@gmail.com>
-Content-Language: en-US, fr-FR
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20250225081644.3524915-5-a0282524688@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="X3x43n9K5NuFCM7M"
+Content-Disposition: inline
+In-Reply-To: <Z-RzfZKaw7qtYj0p@shikoro>
 
-Le 25/02/2025 à 09:16, Ming Yu a écrit :
-> This driver supports Socket CANFD functionality for NCT6694 MFD
-> device based on USB interface.
-> 
-> Signed-off-by: Ming Yu <a0282524688@gmail.com>
 
-...
+--X3x43n9K5NuFCM7M
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> +static int nct6694_can_probe(struct platform_device *pdev)
-> +{
-> +	const struct mfd_cell *cell = mfd_get_cell(pdev);
-> +	struct nct6694 *nct6694 = dev_get_drvdata(pdev->dev.parent);
-> +	struct nct6694_can_priv *priv;
-> +	struct net_device *ndev;
-> +	int ret, irq, can_clk;
-> +
-> +	irq = irq_create_mapping(nct6694->domain,
-> +				 NCT6694_IRQ_CAN0 + cell->id);
-> +	if (!irq)
-> +		return irq;
+On Wed, Mar 26, 2025 at 10:37:01PM +0100, Wolfram Sang wrote:
+>=20
+> > > +          - const: renesas,r9a06g032-i2c
+> > > +          - const: renesas,rzn1-i2c
+> >=20
+> > I don't really understand the rzn1/r9a06g032 difference here. Why are
+> > both needed?
+>=20
+> From our experience with Renesas R-Car, we concluded to have a binding
+> for the SoC and one for the family it belongs to.
+>=20
+> For example, the already upstream watchdog bindings:
+>=20
+>       - items:
+>           - enum:
+>               - renesas,r9a06g032-wdt    # RZ/N1D
+>           - const: renesas,rzn1-wdt      # RZ/N1
+>=20
+> I could add the comments here as well if that helps?
 
-Should irq_dispose_mapping() be caled in the error handling path and in 
-the remove function?
+I think that would be helpful, to explain the relationship between the
+devices. With it
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
-> +
-> +	ndev = alloc_candev(sizeof(struct nct6694_can_priv), 1);
-> +	if (!ndev)
-> +		return -ENOMEM;
-> +
-> +	ndev->irq = irq;
-> +	ndev->flags |= IFF_ECHO;
-> +	ndev->dev_port = cell->id;
-> +	ndev->netdev_ops = &nct6694_can_netdev_ops;
-> +	ndev->ethtool_ops = &nct6694_can_ethtool_ops;
-> +
-> +	priv = netdev_priv(ndev);
-> +	priv->nct6694 = nct6694;
-> +	priv->ndev = ndev;
-> +
-> +	can_clk = nct6694_can_get_clock(priv);
-> +	if (can_clk < 0) {
-> +		ret = dev_err_probe(&pdev->dev, can_clk,
-> +				    "Failed to get clock\n");
-> +		goto free_candev;
-> +	}
-> +
-> +	INIT_WORK(&priv->tx_work, nct6694_can_tx_work);
-> +
-> +	priv->can.state = CAN_STATE_STOPPED;
-> +	priv->can.clock.freq = can_clk;
-> +	priv->can.bittiming_const = &nct6694_can_bittiming_nominal_const;
-> +	priv->can.data_bittiming_const = &nct6694_can_bittiming_data_const;
-> +	priv->can.do_set_mode = nct6694_can_set_mode;
-> +	priv->can.do_get_berr_counter = nct6694_can_get_berr_counter;
-> +	priv->can.ctrlmode_supported = CAN_CTRLMODE_LOOPBACK |
-> +		CAN_CTRLMODE_LISTENONLY | CAN_CTRLMODE_BERR_REPORTING |
-> +		CAN_CTRLMODE_FD | CAN_CTRLMODE_FD_NON_ISO;
-> +
-> +	ret = can_rx_offload_add_manual(ndev, &priv->offload,
-> +					NCT6694_NAPI_WEIGHT);
-> +	if (ret) {
-> +		dev_err_probe(&pdev->dev, ret, "Failed to add rx_offload\n");
-> +		goto free_candev;
-> +	}
-> +
-> +	platform_set_drvdata(pdev, priv);
-> +	SET_NETDEV_DEV(priv->ndev, &pdev->dev);
-> +
-> +	ret = register_candev(priv->ndev);
-> +	if (ret)
-> +		goto rx_offload_del;
-> +
-> +	return 0;
-> +
-> +rx_offload_del:
-> +	can_rx_offload_del(&priv->offload);
-> +free_candev:
-> +	free_candev(ndev);
-> +	return ret;
-> +}
-> +
-> +static void nct6694_can_remove(struct platform_device *pdev)
-> +{
-> +	struct nct6694_can_priv *priv = platform_get_drvdata(pdev);
-> +
-> +	unregister_candev(priv->ndev);
-> +	can_rx_offload_del(&priv->offload);
-> +	free_candev(priv->ndev);
-> +}
 
-...
+--X3x43n9K5NuFCM7M
+Content-Type: application/pgp-signature; name="signature.asc"
 
-CJ
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ+R6lQAKCRB4tDGHoIJi
+0pmZAP94LgRG4Bi2cS0tjrdo86Fn0vQVZVXykyaAirCcl273dAD9EW+VyO18XGP+
+aMS1u1S6qZxh4qjFgJUPvxhSlyiEZQk=
+=Vk5v
+-----END PGP SIGNATURE-----
+
+--X3x43n9K5NuFCM7M--
 
