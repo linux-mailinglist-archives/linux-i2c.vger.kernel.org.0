@@ -1,116 +1,103 @@
-Return-Path: <linux-i2c+bounces-10044-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10045-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id ECF8AA72247
-	for <lists+linux-i2c@lfdr.de>; Wed, 26 Mar 2025 23:07:28 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D93C7A72401
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 Mar 2025 23:31:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C3DD3189B1A9
-	for <lists+linux-i2c@lfdr.de>; Wed, 26 Mar 2025 22:07:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C041B3AA7A2
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 Mar 2025 22:31:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 178A11F239B;
-	Wed, 26 Mar 2025 22:07:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D5BE1B5EA4;
+	Wed, 26 Mar 2025 22:31:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KtjxNbeR"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="WpahnDsE"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF08D2E3364;
-	Wed, 26 Mar 2025 22:07:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDB291B0421
+	for <linux-i2c@vger.kernel.org>; Wed, 26 Mar 2025 22:31:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743026842; cv=none; b=NmtxAFwns9coTPvTZxOSrXbHqKQGWf3qWVi/kSyWMQbDGTHLmq5RI2kx5ANZ/zOeUKx48wR2WHK6xUbU/15VcbJLCrADHgzSMP39dS4xFtqbIb+4tQFgzXy0m+g4MMqPkZba+2Y80PF0SIVY0VvwzzzY5O2tqLn15Q1bpDK2uR8=
+	t=1743028304; cv=none; b=n8yaxPrO/7pnz9J4fAbbDK8qsXMeDSWetWTPZEE4OJWwJVwWNAjdTl1CYVSDRwx/1oZ2oV5zTE1A8V+5mZI099UdaNsv6s832w8abn8Up9kP9FuRIa/jo6gx713yiwTYi6Blor7PvQ7hhisK/1gZZlgUsE/P2iYtmHfgMX/RDRg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743026842; c=relaxed/simple;
-	bh=FRJikSsA8yzvaWCCYthGB510YL+dH/cvtcAVRudDpK8=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=THuMEYRa+nP8yTcQL0ambcnLh0N1gxK2/smrqJO0zE0Z41dySm18RCjyi6LMTFsLeP1PFAR4A6fyuggxCTMHl/UwoJLnL1h79qGCnTuwSukd6MDZAzgVhhznRBZOjPEugDm+phQsqD3cA4xiEEYxVR+0+XGChk5acw/czeVvKco=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KtjxNbeR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E105BC4CEE2;
-	Wed, 26 Mar 2025 22:07:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743026842;
-	bh=FRJikSsA8yzvaWCCYthGB510YL+dH/cvtcAVRudDpK8=;
-	h=Date:From:To:Subject:References:In-Reply-To:From;
-	b=KtjxNbeRid7Qwv9XXTLetaZMhymEgYHug6k8kVO25e6aEak5TVC5mg0W/Y8n8UiCv
-	 A848AXYFBLNCiIkiXEktHUxCG7ced23DUZQFhfbAxKAc7CFtHEseXp1bkdDvvpvhRf
-	 y0mbTf3u2tujBrAmP7VgZnlP+ua1KPoAKIJlAW6JSrCqxZeC++Ww0WrFUiY6OnUP92
-	 vEaXSuua0UL+6+XJOSFAQuFT7qEDTAwGBgFUMX8DFrmgnPsM4nBDVSRICh8G72Gid3
-	 QqioJWV3dJE8o2TGFnlOWjKEmzcOqedj8u7JT37O3cGWDajuVEn7U96Fm+W7g3jPfQ
-	 Qf0mWqYGflhZw==
-Date: Wed, 26 Mar 2025 22:07:17 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	linux-renesas-soc@vger.kernel.org,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
+	s=arc-20240116; t=1743028304; c=relaxed/simple;
+	bh=UsfnaCbfHX0S6oDxk4pR3+seu3B0/AH8MOkOA8GiqOE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RIeOo1tlyHey9lPYL0bNTiOu6dEMq4NfIWANTHdsdIW6QD0zKhItYTEK1yzhZVei8O6chd1pV6i5BVLR7E1LiQQaaSx5hJXRz2Qcn4FjYOIW/BjF0FoRI5U0Vqzcl8sNP92z9n/Ic+ckT6BVbcBtxlTsBDaSDAhR+gKrhapEATg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=WpahnDsE; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=from:to:cc:subject:date:message-id
+	:mime-version:content-transfer-encoding; s=k1; bh=j+vnap5KKUmLNy
+	uj9wpVHMJmrsdxjxzBfUEJyBSA48o=; b=WpahnDsEeR1E0QhUxwXrqN1Af0cZTG
+	jpEBktE6NtEIhC3RW68StoIZ5VeSKDe24wfP9r9/NhK2RYGwDswwwRF14aDzSyuv
+	wTHxQL0YbRgabAAPWmKxnGURyxSZpnDB49oVavwVnZ07PiGYkaNikKbmsdici4R/
+	3Pm7G6JvHzHXnFtHccd9qE3ChPxKWDeFylClgsU1l4ZIwo991LFzdu6ZCvZGrOVE
+	ossM2UTtIBAriEZPJMNQsKE0pJR2yA/8vu3YDQK4cyhC+F1csFkGd6BHLwGoRPvd
+	cC7+F7/y/DvUd58YysXtnP5mBFLgVuNpjPPTDUKY6tFzKtIBytY6X9UA==
+Received: (qmail 3775632 invoked from network); 26 Mar 2025 23:31:39 +0100
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 26 Mar 2025 23:31:39 +0100
+X-UD-Smtp-Session: l3s3148p1@jkqcZkYxBK4ujnsv
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: linux-renesas-soc@vger.kernel.org
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
 	Geert Uytterhoeven <geert+renesas@glider.be>,
 	Magnus Damm <magnus.damm@gmail.com>,
 	Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: i2c: snps,designware-i2c: describe Renesas
- RZ/N1D variant
-Message-ID: <20250326-dispute-eloquence-b66b1574307f@spud>
-References: <20250326090112.22495-2-wsa+renesas@sang-engineering.com>
- <20250326-unhidden-alfalfa-4dabbeb32c9d@spud>
- <Z-RzfZKaw7qtYj0p@shikoro>
+	linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org
+Subject: [PATCH v2] dt-bindings: i2c: snps,designware-i2c: describe Renesas RZ/N1D variant
+Date: Wed, 26 Mar 2025 23:26:58 +0100
+Message-ID: <20250326223123.11113-2-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="X3x43n9K5NuFCM7M"
-Content-Disposition: inline
-In-Reply-To: <Z-RzfZKaw7qtYj0p@shikoro>
+Content-Transfer-Encoding: 8bit
 
+So far, no differences are known, so it can fallback to the default
+compatible.
 
---X3x43n9K5NuFCM7M
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, Mar 26, 2025 at 10:37:01PM +0100, Wolfram Sang wrote:
->=20
-> > > +          - const: renesas,r9a06g032-i2c
-> > > +          - const: renesas,rzn1-i2c
-> >=20
-> > I don't really understand the rzn1/r9a06g032 difference here. Why are
-> > both needed?
->=20
-> From our experience with Renesas R-Car, we concluded to have a binding
-> for the SoC and one for the family it belongs to.
->=20
-> For example, the already upstream watchdog bindings:
->=20
->       - items:
->           - enum:
->               - renesas,r9a06g032-wdt    # RZ/N1D
->           - const: renesas,rzn1-wdt      # RZ/N1
->=20
-> I could add the comments here as well if that helps?
-
-I think that would be helpful, to explain the relationship between the
-devices. With it
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 Acked-by: Conor Dooley <conor.dooley@microchip.com>
+---
 
+Changes since v1:
+* added comments to clarify SoC & family relationship
+* added Conor's ack (Thanks!)
 
---X3x43n9K5NuFCM7M
-Content-Type: application/pgp-signature; name="signature.asc"
+ .../devicetree/bindings/i2c/snps,designware-i2c.yaml         | 5 +++++
+ 1 file changed, 5 insertions(+)
 
------BEGIN PGP SIGNATURE-----
+diff --git a/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml b/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml
+index e5d05263c45a..bc5d0fb5abfe 100644
+--- a/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml
++++ b/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml
+@@ -27,6 +27,11 @@ properties:
+     oneOf:
+       - description: Generic Synopsys DesignWare I2C controller
+         const: snps,designware-i2c
++      - description: Renesas RZ/N1D I2C controller
++        items:
++          - const: renesas,r9a06g032-i2c  # RZ/N1D
++          - const: renesas,rzn1-i2c       # RZ/N1
++          - const: snps,designware-i2c
+       - description: Microsemi Ocelot SoCs I2C controller
+         items:
+           - const: mscc,ocelot-i2c
+-- 
+2.47.2
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ+R6lQAKCRB4tDGHoIJi
-0pmZAP94LgRG4Bi2cS0tjrdo86Fn0vQVZVXykyaAirCcl273dAD9EW+VyO18XGP+
-aMS1u1S6qZxh4qjFgJUPvxhSlyiEZQk=
-=Vk5v
------END PGP SIGNATURE-----
-
---X3x43n9K5NuFCM7M--
 
