@@ -1,63 +1,63 @@
-Return-Path: <linux-i2c+bounces-10028-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10029-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AAF10A70FF2
-	for <lists+linux-i2c@lfdr.de>; Wed, 26 Mar 2025 05:46:24 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0BA8A70FFA
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 Mar 2025 05:56:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E238E7A5E04
-	for <lists+linux-i2c@lfdr.de>; Wed, 26 Mar 2025 04:45:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9A2263B8BD6
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 Mar 2025 04:56:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBF5A4086A;
-	Wed, 26 Mar 2025 04:46:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65D5317A2F1;
+	Wed, 26 Mar 2025 04:56:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="KbjRNdC9"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="ECsaqbgT"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD07363CB;
-	Wed, 26 Mar 2025 04:46:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 912294A29;
+	Wed, 26 Mar 2025 04:56:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742964376; cv=none; b=iTKPFZLNpLuyfONt4ZWSiOq8VsyM4e0CduszYQ7/GVHJcSK7/Pe1BskURoIYwNYn5UeIekDXxxzgA2gsvdPOCxoUCxYLrMfs9zGKvX8dgBztsYofiFVqZrc0QjTqzHJs1lk+nTJQxBGfmwNZo1Y68ur8ZSsZOZzv89F4mpTVnsI=
+	t=1742964972; cv=none; b=eGmPx5b/B8ENf5S6MbZLUCEWZaL5WZXxIqX+kVXjCjKbgjLKByu73UAN4cFy4SbhK5ZD1f+Rs6eHYBSc3hdNH6xROq6FFvZUjjgtoAyQRw6LmaMdt6WOabs1rd9k8cEPNDt1KcCQyT81sdLkeTMKUv2GfiUaQdDFgCM8ujbCGH8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742964376; c=relaxed/simple;
-	bh=Wcep9kaIOaUUIs55MqLF0K7L284XXKAQIiInb57Qzbw=;
+	s=arc-20240116; t=1742964972; c=relaxed/simple;
+	bh=yTKIOfryki/fGti6w2Shb9aoBfWhc04+/l+3kndOBtw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=EuoGkVdYB6k9Odf/qk/QSUnxyfZLZjSNPYa9T7Q0al+o0Olycb4XVBuUeQgEan+j7G2r8mK2dymSyw5GS6dTWmUiJLxFlIh6J2kdYfJdtN2iaVcGErlIi3ss9dPUmLeeZFKzjcJJHpPaAOK4HznDiy2qcJJlQI3Cka8Nik1otkA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=KbjRNdC9; arc=none smtp.client-ip=205.220.180.131
+	 In-Reply-To:Content-Type; b=G6p5Tk4jZRAQI5aEkJZQ0BH0P+hy4sPKd7PQUtP7A7m62KG8PNutk98z1TE/vSkBC4XA/Hh4jXo82V5LjT1ocnb+N1kVs7tf5QCFyvy8klB46ZPL30iXWRW6b1pkTe0SocqrJEsUBhxOEdmVaAw5mqOjjDca5QZ8ugLxDqbd9VM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=ECsaqbgT; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 52PGahFA018583;
-	Wed, 26 Mar 2025 04:46:02 GMT
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 52Q18dJA008529;
+	Wed, 26 Mar 2025 04:56:06 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	weWf/etmMjUF0Qb0F8flw9F+ix2U8LpDumfAERq0wIo=; b=KbjRNdC9g+pJre7T
-	8v4jMcyHIMePqKPaXihKmoO45L27P6ejDBpny+VfK5k4FJyoPVJ29NhB9BkhqIRC
-	4YhftUvL/kqDLMpxY1ldfDgKgHwXawTRm48ESOsEbBaC/yuavIaM9kWz7s4UhjJQ
-	N9Yl+Bvvz2EnBt3Ql5sT2wgi0YQ8p/4ONUOT7Fi2XfjikQvKWR8foXxv+ZphG4ZE
-	64H8q3aQA3GM8nfVoDrs5OJ9RU+SC4XntoltuQ1Cv/H+IyBV7zqW2hSwOZ7Duo+Z
-	Gkj9l5wl7o4SG+1gGQBI8k86bmWub4EWGnIlTp01tZ1lOxBzioiJw++vyOPXNsk9
-	WpOZDA==
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 45kyr9heu4-1
+	ipBLkZWSXOLbfQtNCwRbaZjtD4DLXDasHWxjzOeqQQw=; b=ECsaqbgTUeNPSrd9
+	2MVNS5zS/viZVefHOtZl8IpmL8yYFCCnuy4sBewzrg6q0gQJMXZfPTlgf0944IWO
+	h5rdIykDegVoHoW7sA/Sgak0E2xLe5uFsPQB/IjS0tX/C+vIkH4jNqW2MBbaK7dy
+	iu8hxrHIqCxoUBrC74ZyUdFylSjqmckfb8CpjTuCoutB+zitoY6frmIOeus9pXXR
+	LR8LH9+B+ardMv7i5tC19o+kyvbBLlkoKVbrePIXLQkKVmZJfM9kdVR8RcfoIkBn
+	6EeXwJLcqN8drSeUIApvXpFywH9L7kCKgXZTwtJB0cCHj/iJkoZfPretLeuPd3Q/
+	6P5XmQ==
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 45m7nf0e2q-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 26 Mar 2025 04:46:01 +0000 (GMT)
+	Wed, 26 Mar 2025 04:56:05 +0000 (GMT)
 Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-	by NASANPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 52Q4k0He006920
+	by NASANPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 52Q4u5m5019647
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 26 Mar 2025 04:46:00 GMT
+	Wed, 26 Mar 2025 04:56:05 GMT
 Received: from [10.217.219.207] (10.80.80.8) by nasanex01c.na.qualcomm.com
  (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 25 Mar
- 2025 21:45:57 -0700
-Message-ID: <4025b7b8-e4ea-4853-83d9-7f9fd0d0f159@quicinc.com>
-Date: Wed, 26 Mar 2025 10:15:54 +0530
+ 2025 21:56:02 -0700
+Message-ID: <dc7ae8d3-f5c0-4d5b-8a21-1439f518fe4a@quicinc.com>
+Date: Wed, 26 Mar 2025 10:25:59 +0530
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -65,60 +65,112 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/1] i2c: npcm: Add clock toggle recovery
-To: <mohammed.0.elbadry@gmail.com>
-CC: Tali Perry <tali.perry1@gmail.com>, Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Patrick Venture <venture@google.com>, Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Andi
- Shyti <andi.shyti@kernel.org>, <openbmc@lists.ozlabs.org>,
-        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20250324203233.1266772-2-mohammed.0.elbadry@gmail.com>
- <20250324205901.1274708-1-mohammed.0.elbadry@gmail.com>
+Subject: Re: [PATCH v1 1/1] i2c: qcom-geni: Use generic definitions for bus
+ frequencies
+To: Christopher Obbard <christopher.obbard@linaro.org>,
+        Andy Shevchenko
+	<andriy.shevchenko@linux.intel.com>
+CC: Andi Shyti <andi.shyti@kernel.org>, <linux-i2c@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Viken
+ Dadhaniya" <quic_vdadhani@quicinc.com>
+References: <20250322144736.472777-1-andriy.shevchenko@linux.intel.com>
+ <CACr-zFCF_b0_3NSLFvtgfpAbsSwUOYv5fS==PPbn9zXPBS0NHw@mail.gmail.com>
 Content-Language: en-US
 From: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-In-Reply-To: <20250324205901.1274708-1-mohammed.0.elbadry@gmail.com>
+In-Reply-To: <CACr-zFCF_b0_3NSLFvtgfpAbsSwUOYv5fS==PPbn9zXPBS0NHw@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
 X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nasanex01c.na.qualcomm.com (10.45.79.139)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: ujOo-8RAHsdOMXFr2ttSnhpHxo-yvLlT
-X-Authority-Analysis: v=2.4 cv=UblRSLSN c=1 sm=1 tr=0 ts=67e38689 cx=c_pps a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17 a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=Vs1iUdzkB0EA:10 a=pGLkceISAAAA:8 a=vFwDpYeKrAHsOwN9NGAA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-ORIG-GUID: ujOo-8RAHsdOMXFr2ttSnhpHxo-yvLlT
+X-Proofpoint-ORIG-GUID: 1HdTFIfhCuIvupX-dt2yeFJm908t3X7f
+X-Proofpoint-GUID: 1HdTFIfhCuIvupX-dt2yeFJm908t3X7f
+X-Authority-Analysis: v=2.4 cv=IMMCChvG c=1 sm=1 tr=0 ts=67e388e5 cx=c_pps a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17 a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=Vs1iUdzkB0EA:10 a=QyXUC8HyAAAA:8 a=KKAkSRfTAAAA:8 a=COk6AnOGAAAA:8
+ a=umFOggLF3V42L3TlGzYA:9 a=QEXdDO2ut3YA:10 a=cvBusfyB2V15izCimMoJ:22 a=TjNXssC_j7lpFel5tvFf:22
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
  definitions=2025-03-25_10,2025-03-26_02,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- suspectscore=0 priorityscore=1501 phishscore=0 mlxscore=0 impostorscore=0
- adultscore=0 clxscore=1011 mlxlogscore=676 bulkscore=0 malwarescore=0
- spamscore=0 classifier=spam authscore=0 authtc=n/a authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.19.0-2502280000
- definitions=main-2503260026
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ impostorscore=0 malwarescore=0 mlxscore=0 clxscore=1011 phishscore=0
+ priorityscore=1501 mlxlogscore=999 adultscore=0 lowpriorityscore=0
+ bulkscore=0 spamscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2502280000
+ definitions=main-2503260027
 
+Thanks Andy for the change !
 
-On 3/25/2025 2:28 AM, mohammed.0.elbadry@gmail.com wrote:
-> From: Tali Perry <tali.perry1@gmail.com>
+On 3/22/2025 9:48 PM, Christopher Obbard wrote:
+> Hi Andy,
 > 
-> Hi,
+> On Sat, 22 Mar 2025 at 14:59, Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+>>
+>> Since we have generic definitions for bus frequencies, let's use them.
+>>
+>> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > 
-> During init of the bus, the module checks that the bus is idle.
-> If one of the lines are stuck try to toggle them first.
+> Looks good to me.
 > 
-As such there is one file change and single patch. You may go ahead 
-without cover-letter. Just my thought.
-> Fixes: 76487532f797 (i2c: npcm: Add slave enable/disable function)
-> Signed-off-by: Tali Perry <tali.perry1@gmail.com>
-> Signed-off-by: Mohammed Elbadry <mohammed.0.elbadry@gmail.com>
-> ---
+> Reviewed-by: Christopher Obbard <christopher.obbard@linaro.org>
+Reviewed-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
 > 
-> Tali Perry (1):
->    i2c: npcm: Add clock toggle recovery
-> 
->   drivers/i2c/busses/i2c-npcm7xx.c | 12 ++++++++----
->   1 file changed, 8 insertions(+), 4 deletions(-)
-> 
+>> ---
+>>   drivers/i2c/busses/i2c-qcom-geni.c | 19 +++++++++----------
+>>   1 file changed, 9 insertions(+), 10 deletions(-)
+>>
+>> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
+>> index 515a784c951c..ccea575fb783 100644
+>> --- a/drivers/i2c/busses/i2c-qcom-geni.c
+>> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
+>> @@ -71,7 +71,6 @@ enum geni_i2c_err_code {
+>>                                                                          << 5)
+>>
+>>   #define I2C_AUTO_SUSPEND_DELAY 250
+>> -#define KHZ(freq)              (1000 * freq)
+>>   #define PACKING_BYTES_PW       4
+>>
+>>   #define ABORT_TIMEOUT          HZ
+>> @@ -148,18 +147,18 @@ struct geni_i2c_clk_fld {
+>>    * source_clock = 19.2 MHz
+>>    */
+>>   static const struct geni_i2c_clk_fld geni_i2c_clk_map_19p2mhz[] = {
+>> -       {KHZ(100), 7, 10, 12, 26},
+>> -       {KHZ(400), 2,  5, 11, 22},
+>> -       {KHZ(1000), 1, 2,  8, 18},
+>> -       {},
+>> +       { I2C_MAX_STANDARD_MODE_FREQ, 7, 10, 12, 26 },
+>> +       { I2C_MAX_FAST_MODE_FREQ, 2,  5, 11, 22 },
+>> +       { I2C_MAX_FAST_MODE_PLUS_FREQ, 1, 2,  8, 18 },
+>> +       {}
+>>   };
+>>
+>>   /* source_clock = 32 MHz */
+>>   static const struct geni_i2c_clk_fld geni_i2c_clk_map_32mhz[] = {
+>> -       {KHZ(100), 8, 14, 18, 40},
+>> -       {KHZ(400), 4,  3, 11, 20},
+>> -       {KHZ(1000), 2, 3,  6, 15},
+>> -       {},
+>> +       { I2C_MAX_STANDARD_MODE_FREQ, 8, 14, 18, 40 },
+>> +       { I2C_MAX_FAST_MODE_FREQ, 4,  3, 11, 20 },
+>> +       { I2C_MAX_FAST_MODE_PLUS_FREQ, 2, 3,  6, 15 },
+>> +       {}
+>>   };
+>>
+>>   static int geni_i2c_clk_map_idx(struct geni_i2c_dev *gi2c)
+>> @@ -812,7 +811,7 @@ static int geni_i2c_probe(struct platform_device *pdev)
+>>                                         &gi2c->clk_freq_out);
+>>          if (ret) {
+>>                  dev_info(dev, "Bus frequency not specified, default to 100kHz.\n");
+>> -               gi2c->clk_freq_out = KHZ(100);
+>> +               gi2c->clk_freq_out = I2C_MAX_STANDARD_MODE_FREQ;
+>>          }
+>>
+>>          if (has_acpi_companion(dev))
+>> --
+>> 2.47.2
+>>
+>>
 
 
