@@ -1,150 +1,143 @@
-Return-Path: <linux-i2c+bounces-10026-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10027-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17A22A70F3C
-	for <lists+linux-i2c@lfdr.de>; Wed, 26 Mar 2025 03:53:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F3F1A70FEF
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 Mar 2025 05:44:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 926A9170CC4
-	for <lists+linux-i2c@lfdr.de>; Wed, 26 Mar 2025 02:53:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 05EA0171D81
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 Mar 2025 04:44:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C6AF1531E8;
-	Wed, 26 Mar 2025 02:53:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E55616F8E5;
+	Wed, 26 Mar 2025 04:43:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OwoA4H+y"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="pJMddc46"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFBFFEEC3;
-	Wed, 26 Mar 2025 02:53:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 408174A05;
+	Wed, 26 Mar 2025 04:43:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742957589; cv=none; b=cisu7RmgZ/WBNW2IhKaCXce3KCJAqd1CsZjt6Y9St3HoRFUwi6Ok762PRTWLKtk+ptKFuHSLOvD/MEG/rCUuWNXqGXnbenaGihv/PbiK7knmGe/lrRs7c/RI8ZNcG6KgKuUmXcXM0MCcAW383C/XeQcTec3fL1VtlvbsYPs0GAE=
+	t=1742964238; cv=none; b=nv3vw7lGXgHDotvdRNVxdwpCdPTmsEDkJkG6ifous3UJae1nO2a95NSgmU54Qf5JblYjYRPe+IyWSN9+4ZLgR9IX9BLPKiZ65bwx0zOK3ydHKeRqBDP/fnN2XLyAT5WhvvsDn6fY+plVdfuAwCclX/4pE8jVAtgiYaKUUWl8Nzk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742957589; c=relaxed/simple;
-	bh=tR0hpiSjFO/WspQVHGVT8zUQ9voaGhpKDs6/znEN4Yk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uOmWWwCRrJPB1ez2EhqQGRPCGJ3hC98u7cnxduuYqQgrqT06I3AdG74bIg8BnBHt05UrVZ4qppZFwH40wx9k6YXsZpR1HHm4K9scmjtrwhUFDlv7TsAcWJnsj1pkm/sSE5+ezLHIH6XMWzYZyj3HIIn0JS1Y9By+88PmCPHsWKM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OwoA4H+y; arc=none smtp.client-ip=209.85.128.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-6fecfae554bso54802517b3.0;
-        Tue, 25 Mar 2025 19:53:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742957586; x=1743562386; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fRVOk3+qVIByxfoFBHmyldpu57c1EQEApVPRpT4+B7I=;
-        b=OwoA4H+y9QtFLr/UPxpxX8uSphf1BuR5upEdkf3m4sitIyWWd3b+AhxsL/wPpH1f7D
-         ulTD0Fc2mfcqNGONcLpLsbSkdAg6KvepuyHOvJ+DN+wDpbsZ4XSBbKLtsLuAimSOplhK
-         78ICAfVyCwz8303RS3A3hmxn3tvzvfKTaZj2Mri1FZviCznK8S1JzFhVczSjXZrbHrMJ
-         4+Wh7Cmjy8fYl5q1pf+2e4U3HCDaS5RiLYpS5UVb0jZd841TW3bFYLpcADwgbqFQTtAP
-         IbHgfm6ZZpIJjK6cxIIAsz8GQoqfJyW5/4WixLKTcT7/YNiShlEuef3J4HpOVQ4SGGHg
-         gcBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742957586; x=1743562386;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fRVOk3+qVIByxfoFBHmyldpu57c1EQEApVPRpT4+B7I=;
-        b=qi1b1HGcGL0qblM0I2l811M6ZCbeVLDkP3WH+0aCKU/G48JBkwo3Ob8cra6Z+FxS4S
-         hP/R6+p/LzcJIA8+6x1LevrkQvin+355R83E09p6V/Q7Z/8ZK7brrO46CxSeO2kHhSkm
-         Qwbg3MPBBeON5ntYZVmIkTk33ai+p50Y0AMauTH94A9eRLp9JMb2Yj5FJuU2swlI9lTE
-         6SDWLvxUf/OPcLZlCO5JVdo0vk03RRwJQZxQO8Gj97UF1mO0fXKfzVBz+CqNcmmHP5e/
-         fEEvhtk8kWBTYzfBF/Amyci6T+aRsPYDZRRVqa6XxDYji+4Rg61zwPpBN3JZwNQrwS47
-         JHPw==
-X-Forwarded-Encrypted: i=1; AJvYcCUU/EFzSWGimenfJn/RCFCemPUSviJCxjpspLKhqk0rLCu8Gxw5+SdoMsPYKenP7r40UIQh2LNb8ShP@vger.kernel.org, AJvYcCUblOWL728ecvO4pqguuQo5Z3CsUuC9wcHcYPt4K7AAUbfhaJKCIFCbd5c0nxqCyWUYTCFafBeHjkxTtQ==@vger.kernel.org, AJvYcCUwETAayMPQst9+/HvousaxpvRH007ySznxBCOSjK5WL8tPGV7LgCGrIemueBHKjQAzCvP0qxOto6o=@vger.kernel.org, AJvYcCVc1vbPdsps0JNVQ8OfWFgGzv0T8BhhSUQzlYBbebHddq5yeE4kEPjLS3LRx2/GW2pLNBnxdZtLgTSgVgnr@vger.kernel.org, AJvYcCVsE71xkfTpIBkaMCBmutrvz4cAbUtfpaGj/ueEdeSBuGyL1fR37y8QgHjclwhqOMfy68VU8OUI4W8kBo0=@vger.kernel.org, AJvYcCW1RWrM9JDBaxazvfawaonn681JbuMqtMlnYl1FQDIbxmWgAH6liKOIQfh16rfiAaoP/8ba/lDhec0vKqTsFBo=@vger.kernel.org, AJvYcCWA3tZ/MWfMc+brJ3YzwaUlVTy4eJWrUV6dpesHhTA9eMQlMQC6bll9kAUzb3maMwp1bmQv7noi@vger.kernel.org, AJvYcCX+nVozsYRLyHOdFxRVIBtlKt7c769s9QuAzbc1nnT4SF/F38KFYNiKawmAbicKkXRc9G+4s6GsWJSl@vger.kernel.org, AJvYcCXVUjduQ49oRrjF3+EQPwabdnlbuUfjy6YPeh37+H8OGRziDTmCwQnfVjGhZuWc1GeuDybRlDRmR6Z3@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyccvm+edfmFmb12tlWXec36Ug52+c5LI8PUN/A8Urwt9jAtvlM
-	rofwd0ixbdvL2E5gl0z3qKmu8ykJRHejqnl2CcqrM/PHOivodDdg3ZlKsavIEn7rKxNcW9Aw/1K
-	9Y/5aKYvT1rs+LXnPtV+bsjWQ2Fc=
-X-Gm-Gg: ASbGncsFGJonJXSXzMnTgpE7Llfzy/pFyhT2rOZKqpM4NnnHxMegHi2JMy/lQK4HU/1
-	Zqy4Bx2zQgNOC/J51vE7tPh0WBIHvEcthq9RYnSf0O2cugSk/Ej34dJIcyDW8IaojPIqi9mQCVY
-	aHMQLbX9MZ2n60yUdaeJ0oaV3u35VbJfAAtTq+17RavsRAecgjs3t5/CLjaJIv
-X-Google-Smtp-Source: AGHT+IGFmM/43LiglnO1PLksaWD1bA8yVyyua4atAOI0toysfW72PAufjGsdZP3qrneDzJlMRZpR/DRSuqkw2K1SlX0=
-X-Received: by 2002:a05:690c:6c85:b0:6fd:33a5:59a with SMTP id
- 00721157ae682-700bac6b12cmr265622027b3.18.1742957586397; Tue, 25 Mar 2025
- 19:53:06 -0700 (PDT)
+	s=arc-20240116; t=1742964238; c=relaxed/simple;
+	bh=LE0p3PimDXlac2M63hkm7f6IveA9A05ueG1ZF8/JK2A=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=c16JhnvD1Wul8eaWukSZZPisRM0BHhbQ6imFtUSSg+bt8TRBCBdouNpo8T3DZ46WyGMGuQsN7lP0fnw5L7TTiFMoBpNwQJlZuH/BWoD8FV3dqNCrQdi+y0bgOm+up9znkb/Qz9sl6nWrg23TFvRg7pq0AmZN6HlPBJFj7Y9NHWU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=pJMddc46; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 52Q4XbXE023552;
+	Wed, 26 Mar 2025 04:43:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	ordMkqhPURoJANwH3hW5zg5e3kC1S+uEc5nh5B32xAY=; b=pJMddc46Sbrx4PRY
+	PaT1C7P9CDYlP4ha2yn4gQshzS6byxHd0lV6i2Wa5EmzZriSykW33nRWTrQElk2S
+	S0YHavkeUNvSjpw2bS3PpNxoGqdyL6Pz45ST0PtteSAWLYZoyLoYHp0SqWE4AU8h
+	wgb52PHJ1Oy4BVk0PAoUH6ePlXdmZVm6UEYPY0pO8oU7kJ2E3DIK7ySRd+3NwF/x
+	GUCCoBSWgf2DmbBCw7jXh19J4HvibBd5SohGmJlbwrg6bekGc0y6of1YeImWJhaO
+	4YN8ez/PzOT6lpasOl8s+lIAu8wUFU5pvFeska7m4mrJ9bUtblzxreyi7ysNWZhB
+	aC+bOA==
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 45manj00p5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 26 Mar 2025 04:43:33 +0000 (GMT)
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+	by NASANPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 52Q4hWp2001689
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 26 Mar 2025 04:43:32 GMT
+Received: from [10.217.219.207] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 25 Mar
+ 2025 21:43:28 -0700
+Message-ID: <ced540e5-7804-4569-9805-991a12d43c22@quicinc.com>
+Date: Wed, 26 Mar 2025 10:13:25 +0530
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250225081644.3524915-1-a0282524688@gmail.com>
- <20250225081644.3524915-2-a0282524688@gmail.com> <20250307011542.GE8350@google.com>
- <CAOoeyxUgiTqtSksfHopEDhZHwNkUq9+d-ojo8ma3PX2dosuwyQ@mail.gmail.com> <20250320145042.GS3890718@google.com>
-In-Reply-To: <20250320145042.GS3890718@google.com>
-From: Ming Yu <a0282524688@gmail.com>
-Date: Wed, 26 Mar 2025 10:52:54 +0800
-X-Gm-Features: AQ5f1Jr-qehcBUjCHKAC9Ig86kbnYpN20BwJHFrPhGUZx482dDzZ5qYruqNjkmE
-Message-ID: <CAOoeyxXZmrzBSNRdRx9vK84m5Z5y8T_A+wY98vVrPUZ7f4w4iw@mail.gmail.com>
-Subject: Re: [PATCH v8 1/7] mfd: Add core driver for Nuvoton NCT6694
-To: Lee Jones <lee@kernel.org>
-Cc: tmyu0@nuvoton.com, linus.walleij@linaro.org, brgl@bgdev.pl, 
-	andi.shyti@kernel.org, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, 
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
-	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org, 
-	linux@roeck-us.net, jdelvare@suse.com, alexandre.belloni@bootlin.com, 
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-Lee Jones <lee@kernel.org> =E6=96=BC 2025=E5=B9=B43=E6=9C=8820=E6=97=A5 =E9=
-=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=8810:50=E5=AF=AB=E9=81=93=EF=BC=9A
->
-...
-> > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x1),
-> > >
-> > > IDs are usually given in base-10.
-> > >
-> >
-> > Fix it in v9.
-> >
-> > > Why are you manually adding the device IDs?
-> > >
-> > > PLATFORM_DEVID_AUTO doesn't work for you?
-> > >
-> >
-> > I need to manage these IDs to ensure that child devices can be
-> > properly utilized within their respective modules.
->
-> How?  Please explain.
->
-> This numbering looks sequential and arbitrary.
->
-> What does PLATFORM_DEVID_AUTO do differently such that it is not useful?
->
-
-As far as I know, PLATFORM_DEVID_AUTO assigns dynamic IDs to devices,
-but I need fixed IDs.
-For example, the GPIO driver relies on these IDs to determine the
-group, allowing the firmware to identify which GPIO group to operate
-on through the API.
-
-> >
-> > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x2),
-> > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x3),
-> > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x4),
-> > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x5),
-> > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x6),
-> > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x7),
-> > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x8),
-> > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x9),
-> > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0xA),
-> > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0xB),
-> > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0xC),
-> > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0xD),
-> > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0xE),
-> > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0xF),
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/1] i2c: npcm: Add clock toggle recovery
+To: <mohammed.0.elbadry@gmail.com>
+CC: Tali Perry <tali.perry1@gmail.com>, Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Patrick Venture <venture@google.com>, Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Andi
+ Shyti <andi.shyti@kernel.org>, <openbmc@lists.ozlabs.org>,
+        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20250324203233.1266772-2-mohammed.0.elbadry@gmail.com>
+ <20250324205901.1274708-1-mohammed.0.elbadry@gmail.com>
+ <20250324205901.1274708-2-mohammed.0.elbadry@gmail.com>
+Content-Language: en-US
+From: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+In-Reply-To: <20250324205901.1274708-2-mohammed.0.elbadry@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: MHwPG1N0QwuRxFb7A_k0yYQtV68e-Nqt
+X-Proofpoint-ORIG-GUID: MHwPG1N0QwuRxFb7A_k0yYQtV68e-Nqt
+X-Authority-Analysis: v=2.4 cv=KvJN2XWN c=1 sm=1 tr=0 ts=67e385f5 cx=c_pps a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17 a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=Vs1iUdzkB0EA:10 a=pGLkceISAAAA:8 a=XycGwPUB66WHHuA_nGUA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-03-25_10,2025-03-26_02,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=999
+ malwarescore=0 priorityscore=1501 clxscore=1011 mlxscore=0 spamscore=0
+ impostorscore=0 suspectscore=0 phishscore=0 lowpriorityscore=0
+ adultscore=0 classifier=spam authscore=0 authtc=n/a authcc= route=outbound
+ adjust=0 reason=mlx scancount=1 engine=8.19.0-2502280000
+ definitions=main-2503260025
 
 
-Thanks,
-Ming
+
+On 3/25/2025 2:28 AM, mohammed.0.elbadry@gmail.com wrote:
+> From: Tali Perry <tali.perry1@gmail.com>
+> 
+> During init of the bus, the module checks that the bus is idle.
+> If one of the lines are stuck try to recover them first before failing.
+> Sometimes SDA and SCL are low if improper reset occurs (e.g., reboot).
+> 
+> Signed-off-by: Tali Perry <tali.perry1@gmail.com>
+> Signed-off-by: Mohammed Elbadry <mohammed.0.elbadry@gmail.com>
+> ---
+>   drivers/i2c/busses/i2c-npcm7xx.c | 12 ++++++++----
+>   1 file changed, 8 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-npcm7xx.c
+> index 3ad6124be80f..78c85015d955 100644
+> --- a/drivers/i2c/busses/i2c-npcm7xx.c
+> +++ b/drivers/i2c/busses/i2c-npcm7xx.c
+> @@ -2043,10 +2043,14 @@ static int npcm_i2c_init_module(struct npcm_i2c *bus, enum i2c_mode mode,
+>   
+>   	/* Check HW is OK: SDA and SCL should be high at this point. */
+>   	if ((npcm_i2c_get_SDA(&bus->adap) == 0) || (npcm_i2c_get_SCL(&bus->adap) == 0)) {
+> -		dev_err(bus->dev, "I2C%d init fail: lines are low\n", bus->num);
+> -		dev_err(bus->dev, "SDA=%d SCL=%d\n", npcm_i2c_get_SDA(&bus->adap),
+> -			npcm_i2c_get_SCL(&bus->adap));
+> -		return -ENXIO;
+> +		dev_warn(bus->dev, " I2C%d SDA=%d SCL=%d, attempt recover\n", bus->num,
+> +				 npcm_i2c_get_SDA(&bus->adap), npcm_i2c_get_SCL(&bus->adap));
+> +		if (npcm_i2c_recovery_tgclk(&bus->adap)) {
+> +			dev_err(bus->dev, "I2C%d init fail: lines are low\n", bus->num);
+> +			dev_err(bus->dev, "SDA=%d SCL=%d\n", npcm_i2c_get_SDA(&bus->adap),
+> +				npcm_i2c_get_SCL(&bus->adap));
+Should combine logging into one line. First line you say they are low, 
+second line you are printing the actual status, may be conflicting ?
+> +			return -ENXIO;
+> +		}
+>   	}
+>   
+>   	npcm_i2c_int_enable(bus, true);
+
 
