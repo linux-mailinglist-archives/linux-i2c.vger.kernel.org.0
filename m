@@ -1,151 +1,115 @@
-Return-Path: <linux-i2c+bounces-10069-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10070-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02089A75907
-	for <lists+linux-i2c@lfdr.de>; Sun, 30 Mar 2025 10:51:58 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 420D2A75F60
+	for <lists+linux-i2c@lfdr.de>; Mon, 31 Mar 2025 09:17:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B10C3A9F69
-	for <lists+linux-i2c@lfdr.de>; Sun, 30 Mar 2025 08:51:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9DA0E7A3E8C
+	for <lists+linux-i2c@lfdr.de>; Mon, 31 Mar 2025 07:16:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD8AA17C210;
-	Sun, 30 Mar 2025 08:51:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AB031ADC7E;
+	Mon, 31 Mar 2025 07:17:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=svenpeter.dev header.i=@svenpeter.dev header.b="DJnJtTkx";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="E1rLm3UZ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kRb9ECmN"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from fout-b7-smtp.messagingengine.com (fout-b7-smtp.messagingengine.com [202.12.124.150])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93E511581F0;
-	Sun, 30 Mar 2025 08:51:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.150
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BC13273F9;
+	Mon, 31 Mar 2025 07:16:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743324712; cv=none; b=a9saKyMUdfbr+3FrY1SHlHFoIg1/TfWGRJrBo1zJNmet2RVFj6ScKuRNxXZl1vWBuS+dAStPH7KdtMen+QbXu6vIs52IUmOSLUPZG9j+/oqQhX8I89aUuk5pv+37F9MUtl2AP0V/SS075cFsEVXMm/64ZqKg02osSetUK8SnttA=
+	t=1743405419; cv=none; b=QFFsdO8iN4SXYvdg8tfz2UY5WDc20VXkDOLt5vWFFG1c6b/bUzianWRQ9gJW/DHX5FitO8oNrEHHpgm4wKkNNHniGD4ZMSX4Sy4j/Z6QLOywKf3G2TYP0qQJlEpimY3NXjVX70Zy6t0gOtZwdZLI4EwJQiAGZija7UudV3yku4k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743324712; c=relaxed/simple;
-	bh=xPhwWDI3vRjZ0m2k4v3KogrcS24YICsNymfB02MqAIE=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=a96c47yCUpd/JelsDBRkUPWuK8a3OMe06g6M3/+SIak1W4Wqj8SxRsaSrVHgkBLmM1Zs5CK5M6DfwJ0w5Fr53TjseVSAQglfqxCK60OWwP03IL9GtZt1EYgzaGrF1/A5Ggm7hsBHjdOhCKUBHHYrERg172vV0KoKLX4uyfkIZDk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=svenpeter.dev; spf=pass smtp.mailfrom=svenpeter.dev; dkim=pass (2048-bit key) header.d=svenpeter.dev header.i=@svenpeter.dev header.b=DJnJtTkx; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=E1rLm3UZ; arc=none smtp.client-ip=202.12.124.150
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=svenpeter.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=svenpeter.dev
-Received: from phl-compute-12.internal (phl-compute-12.phl.internal [10.202.2.52])
-	by mailfout.stl.internal (Postfix) with ESMTP id 42846114011B;
-	Sun, 30 Mar 2025 04:51:48 -0400 (EDT)
-Received: from phl-imap-07 ([10.202.2.97])
-  by phl-compute-12.internal (MEProxy); Sun, 30 Mar 2025 04:51:48 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-	 h=cc:cc:content-transfer-encoding:content-type:content-type
-	:date:date:from:from:in-reply-to:in-reply-to:message-id
-	:mime-version:references:reply-to:subject:subject:to:to; s=fm3;
-	 t=1743324708; x=1743411108; bh=dTqWupLjl7cdoWEq+RC/Hw7jFYiUJzqN
-	ImVvEUcMouk=; b=DJnJtTkx4FtwTGs+MCsrm43hFIkfqw4YaAN/iAf6TgpR0LbC
-	o+1eLQsYmMCqFU1GY8C+JR/xcq53SyuUQywH6k3f+PP1xqqCMv9G5aU89r5KCy7E
-	esU9ANb6BbU6oi4EDQAzKVSib3TPZUA7xmK25k/ZZsKjfKtCF6MoRwSqR4WaoGe8
-	O5OzmT+DbH6fhcpx1/IDh8wahLKCbFydU1W83a2yls0+1pkAqVzGrWsoPFPE5XyJ
-	Y/XUuouU25KflRa/Z0Ls1fDdWHp1E198ihXjdvNIjSRzMTLSmO6B00nsLqG++heE
-	fHBafwieQnBMeyIkmNAQbORXHzaf3WjS83JPyg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1743324708; x=
-	1743411108; bh=dTqWupLjl7cdoWEq+RC/Hw7jFYiUJzqNImVvEUcMouk=; b=E
-	1rLm3UZ5lxXQ2IfWIxo+qXUsKga+l/AU8skmGxFy4QX4/GQMa7NMcwYOkgewM8MM
-	Ck2QOI5duUsk+T0zZ73+5fRGnrHWUJpLxQfmTBxKHvLxZ37Bzst3f4/D9Aet4zPK
-	vOgJMbpaqGbLUZxVKfusy3ZI1dT+e+3LN1NpU4mmUtL35tL+byFt99Z6c/pV4ZSN
-	uUeqpQfeoHqKB5nu19xAOrAniDep7IG7sgoWkpNOmIRjPokDdFYgVM+pSzZrLWEv
-	GnTOHRPwGChr0agwfrfbJJy/ClTXEAOTmVJpcLQ8GfyQO2s3598YjeYrrFFrG+l/
-	rFhIHueaTk3zZB6vnEPsg==
-X-ME-Sender: <xms:IQbpZzmp2KoRE1ljRh7hr-SHuOTQ2BaiFqboNbdzG_3Q0dfu64n51w>
-    <xme:IQbpZ21fyxznLm7bF4IiUP9f_YTDHzitZJ2fyRbK0EmkF6a6No9IdIhjWcm98H6T1
-    A2xYMiPn647jbr-MX4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddujeeiieduucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
-    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
-    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertder
-    tddtnecuhfhrohhmpedfufhvvghnucfrvghtvghrfdcuoehsvhgvnhesshhvvghnphgvth
-    gvrhdruggvvheqnecuggftrfgrthhtvghrnhepleefteeugeduudeuudeuhfefheegveek
-    ueefffdvffektdffffelveffvddvueffnecuvehluhhsthgvrhfuihiivgeptdenucfrrg
-    hrrghmpehmrghilhhfrhhomhepshhvvghnsehsvhgvnhhpvghtvghrrdguvghvpdhnsggp
-    rhgtphhtthhopeduhedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheptghhrhhish
-    htohhphhgvrdhlvghrohihsegtshhgrhhouhhprdgvuhdprhgtphhtthhopehmphgvsegv
-    lhhlvghrmhgrnhdrihgurdgruhdprhgtphhtthhopegrnhguhidrshhhvghvtghhvghnkh
-    hosehgmhgrihhlrdgtohhmpdhrtghpthhtohepnhhpihhgghhinhesghhmrghilhdrtgho
-    mhdprhgtphhtthhopehjsehjrghnnhgruhdrnhgvthdprhgtphhtthhopegrnhguihdrsh
-    hhhihtiheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepnhgrvhgvvghnsehkvghrnhgv
-    lhdrohhrghdprhgtphhtthhopehmrgguugihsehlihhnuhigrdhisghmrdgtohhmpdhrtg
-    hpthhtoheplhhinhhugidqrghrmhdqkhgvrhhnvghlsehlihhsthhsrdhinhhfrhgruggv
-    rggurdhorhhg
-X-ME-Proxy: <xmx:IQbpZ5rnL3CUphbOwpi10Itieqzl_zNrcEz9pXzntZMIsAR_r15lcA>
-    <xmx:IQbpZ7lkVSFcsxeK4r1GNWXI3qP-UoeTeih7LDrpKSLezZoXZ4wdPg>
-    <xmx:IQbpZx3dqW678wETZPJesy7jhheRYZyXtPWyvLhjpFCIv-K2IQuvLA>
-    <xmx:IQbpZ6vPnTiLL8VLuFuGSM6VQQv3--z4cZRdI-xpQHE9Lvz7z9kgOg>
-    <xmx:JAbpZ7MTq30YCxSfV2OaJOKEeOCcrUXIfDBhrimcqMIKp5boESOGqfpz>
-Feedback-ID: i51094778:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id B0DB1BA006F; Sun, 30 Mar 2025 04:51:45 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1743405419; c=relaxed/simple;
+	bh=NO9lYwQiYAhG5PP0Uf7qu8xrRfbHqtFPvo89un60yYA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Rn610mKxGT9fp3L6+l3zBc1A9Cq4QdA4A/KsEGRzJzB5tgPwHJJkAARyqh/N1l49eCFN4f+bHHddI5ofPy/tQCkROnbDE8mXqfeizs3pd1N4USrYXeZbGvJZR5B5ymziQ1Qcfx0Ks3jOYRgYl/cu1Qb0QAW1XIN1phwLajgiaeg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kRb9ECmN; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1743405418; x=1774941418;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=NO9lYwQiYAhG5PP0Uf7qu8xrRfbHqtFPvo89un60yYA=;
+  b=kRb9ECmNX3GBnEg+oWFcx2jQ4MsknCgEXUhS59chThv9ZfATnuPleIPh
+   DzGW7UQjeL6jHtX+zOyAHVOHbAhBUgKUos2Z2oZIMGzhTeo6SPO51xU9T
+   ivvoU83Vm+zXUIlRi6WOHPiCCqlHM0/BY8/TUY9UjY6lUyZ75ib/zVR9t
+   7GcEGMaVtsHhuEA+mfsbTd/0RodkIshcRoOlgUJlggEgVraDNKe2l+32y
+   V7CDdA1acKCXOzIPqrSSvtIX3TucOuWYJ6xNbi+YsbL7F2TafWKwGIbMh
+   AVCWUcSBEZSMXVMxe+oFzpsuHvGaVFe2NiQeHbZ44ipAL16Yg2/r5kO5Q
+   w==;
+X-CSE-ConnectionGUID: njrnNe1yT4uzE9ZeI4EAOg==
+X-CSE-MsgGUID: 0upk4tf1Sa23Kr8YnUWxiw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11389"; a="55676888"
+X-IronPort-AV: E=Sophos;i="6.14,290,1736841600"; 
+   d="scan'208";a="55676888"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2025 00:16:56 -0700
+X-CSE-ConnectionGUID: RRZn+VlQT3iYdOH6jFVPlw==
+X-CSE-MsgGUID: cbcLpFNMRxOS5wXYyddi+A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,290,1736841600"; 
+   d="scan'208";a="126014798"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmviesa007.fm.intel.com with ESMTP; 31 Mar 2025 00:16:56 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id 310621B4; Mon, 31 Mar 2025 10:16:53 +0300 (EEST)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Peter Zijlstra <peterz@infradead.org>,
+	linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+	Luca Ceresoli <luca.ceresoli@bootlin.com>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] i2c: atr: Remove (explicitly) unused header
+Date: Mon, 31 Mar 2025 10:16:46 +0300
+Message-ID: <20250331071646.3987361-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: T14a5dff03e1db70d
-Date: Sun, 30 Mar 2025 10:50:53 +0200
-From: "Sven Peter" <sven@svenpeter.dev>
-To: "Andy Shevchenko" <andy.shevchenko@gmail.com>,
- "Andi Shyti" <andi.shyti@kernel.org>
-Cc: "Janne Grunau" <j@jannau.net>, "Alyssa Rosenzweig" <alyssa@rosenzweig.io>,
- "Madhavan Srinivasan" <maddy@linux.ibm.com>,
- "Michael Ellerman" <mpe@ellerman.id.au>,
- "Nicholas Piggin" <npiggin@gmail.com>,
- "Christophe Leroy" <christophe.leroy@csgroup.eu>,
- "Naveen N Rao" <naveen@kernel.org>,
- linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, asahi@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
- linux-kernel@vger.kernel.org, "Hector Martin" <marcan@marcan.st>
-Message-Id: <b647d45f-32e3-4864-8a94-2e0b819fba18@app.fastmail.com>
-In-Reply-To: <Z965tVhC5jxy1kqZ@surfacebook.localdomain>
-References: <20250222-pasemi-fixes-v1-0-d7ea33d50c5e@svenpeter.dev>
- <20250222-pasemi-fixes-v1-1-d7ea33d50c5e@svenpeter.dev>
- <rjvak3c2k5a64jw4ef23i5uptg4zzl3u7lqszqbg56l4hqms77@hrkn5eydxwiy>
- <Z965tVhC5jxy1kqZ@surfacebook.localdomain>
-Subject: Re: [PATCH 1/4] i2c: pasemi: Add registers bits and switch to BIT()
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Sat, Mar 22, 2025, at 14:23, Andy Shevchenko wrote:
-> Thu, Mar 20, 2025 at 01:23:25AM +0100, Andi Shyti kirjoitti:
->> Hi Sven,
->> 
->> On Sat, Feb 22, 2025 at 01:38:33PM +0000, Sven Peter via B4 Relay wrote:
->> > From: Sven Peter <sven@svenpeter.dev>
->> > 
->> > Add the missing register bits to the defines and also switch
->> > those to use the BIT macro which is much more readable than
->> > using hardcoded masks
->> > 
->> > Co-developed-by: Hector Martin <marcan@marcan.st>
->> > Signed-off-by: Hector Martin <marcan@marcan.st>
->> > Signed-off-by: Sven Peter <sven@svenpeter.dev>
->> 
->> Just this patch merged to i2c/i2c-host.
->
-> This needs an update as well. The proper header for BIT() et al. is bits.h.
-> bitfield.h is for FIELD_*() et al.
+The fwnode.h is not supposed to be used by the drivers as it
+has the definitions for the core parts for different device
+property provider implementations. Drop it.
 
-Ugh, good catch. Since this commit is already on the way upstream I'll send a fix
-(and another one to sort the headers alphabetically while I'm at it anyway).
+Note, that fwnode API for drivers is provided in property.h
+which is included here.
 
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/i2c/i2c-atr.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks,
+diff --git a/drivers/i2c/i2c-atr.c b/drivers/i2c/i2c-atr.c
+index 8fe9ddff8e96..783fb8df2ebe 100644
+--- a/drivers/i2c/i2c-atr.c
++++ b/drivers/i2c/i2c-atr.c
+@@ -8,12 +8,12 @@
+  * Originally based on i2c-mux.c
+  */
+ 
+-#include <linux/fwnode.h>
+ #include <linux/i2c-atr.h>
+ #include <linux/i2c.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/mutex.h>
++#include <linux/property.h>
+ #include <linux/slab.h>
+ #include <linux/spinlock.h>
+ 
+-- 
+2.47.2
 
-
-Sven
 
