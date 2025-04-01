@@ -1,133 +1,190 @@
-Return-Path: <linux-i2c+bounces-10077-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10078-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4FC7A77984
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Apr 2025 13:26:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1837A77D25
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Apr 2025 16:03:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EC92E3AC623
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Apr 2025 11:26:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CE4D13AB57E
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Apr 2025 14:03:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA28D1F1902;
-	Tue,  1 Apr 2025 11:26:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B17D2046BB;
+	Tue,  1 Apr 2025 14:03:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gUEkvlT4"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 760651E5B7E;
-	Tue,  1 Apr 2025 11:26:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=63.216.63.35
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A15B202F7B;
+	Tue,  1 Apr 2025 14:03:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743506776; cv=none; b=eQ2uIzfPq022uuT6YHZE+SyaTR6uScIBrmksBi2YRTfOSDNGcMtblZpNddSZteDmGT9dC7o7BuUVmnErSJAY6kA7NpHHkxckuLEq21YoDRbmjf31btuEyEr+rbhTpRADgaS7ijiJjkEEivnc9zOzJ+IGNcmQ3Rf45P77pPWHinw=
+	t=1743516217; cv=none; b=hxZfhSjCgZxQdi7vhV0u+yRzrvJ6i3KbQs5+MbxVpN3b2mkPyJi9H87VXQZAwvnjR/pPXgwB9Wk2lhrOPTLhxnl48uaTpiHK5li72GzXVNExrGQqm3fxRCK2XFqDSalYKH5pZjWVa1sNjrCwJe/Q3Z35QLTVTiH0fmlK0MwFGCU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743506776; c=relaxed/simple;
-	bh=zoPSDo7tdhtE3qurVVo42MaDdzHKssSDq/6EMSeyRtg=;
-	h=Date:Message-ID:Mime-Version:From:To:Cc:Subject:Content-Type; b=JKFE0sXvZCVqzLv6vtdplkX38WepvSz9jjxe2m70mKxjojK4OxNoyn+Cov58GXO2pdaK3cgasmpgWE4Abd1Povf+LflIEexFGIbQbW46C6dttvuXvNQntAfC6/sWSu2r7HULvKBn7M9nC0Ru4NL86gSJxo5trmds7o3IvGdpQ7s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zte.com.cn; spf=pass smtp.mailfrom=zte.com.cn; arc=none smtp.client-ip=63.216.63.35
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zte.com.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zte.com.cn
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mxhk.zte.com.cn (FangMail) with ESMTPS id 4ZRm0M4BgYz5B1KS;
-	Tue,  1 Apr 2025 19:26:11 +0800 (CST)
-Received: from xaxapp04.zte.com.cn ([10.99.98.157])
-	by mse-fl2.zte.com.cn with SMTP id 531BQ0Lu086035;
-	Tue, 1 Apr 2025 19:26:00 +0800 (+08)
-	(envelope-from shao.mingyin@zte.com.cn)
-Received: from mapi (xaxapp02[null])
-	by mapi (Zmail) with MAPI id mid32;
-	Tue, 1 Apr 2025 19:26:03 +0800 (CST)
-Date: Tue, 1 Apr 2025 19:26:03 +0800 (CST)
-X-Zmail-TransId: 2afa67ebcd4bffffffffaa4-8ca27
-X-Mailer: Zmail v1.0
-Message-ID: <20250401192603311H5OxuFmUSbPc4VnQQkhZr@zte.com.cn>
+	s=arc-20240116; t=1743516217; c=relaxed/simple;
+	bh=0RKd6oq67uWIV2Q9JVMsvpnbRFAKV+wogJ/TuhTjTHg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ngCKtbYjTxGUYk7Uz87P9f+vwpvuYU3ZznAmH6rnxy95DL5+HBig9yT/iCoE3Ix6BYx7D9ZodVzK68RqkZWNLzF12xvlR3UDr+6L2wgKXzm3ERoReWwGnr9dHEmbb+Oi1mPYjb7wjxK4Hg3dX7YSD9MLFP9P+HJaZGm8mTgvuX4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gUEkvlT4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B234C4CEE5;
+	Tue,  1 Apr 2025 14:03:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1743516216;
+	bh=0RKd6oq67uWIV2Q9JVMsvpnbRFAKV+wogJ/TuhTjTHg=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=gUEkvlT48z3jr40KllXU3HwV3jBkMSZ5ZWaQaTb67GtmNpTpGkIZbW5tCXB20iCT/
+	 6QWweipAtNR5K728mYbikDy7mYUH6+R0b9dMhdtNF4XfVQgPD9/XgGdhFts+QIhosn
+	 hM+i/1Di+Gcyuh9C+BOhAysBcfXCteR2l3D5sSyDGIzSlprlM2MErwK+6IpJpiLbJc
+	 ZRQR7MnqM6jtIc0r8oO9TUpEjStyosLZhDXj7mVqDjwQOm2RUUBWC4pS/6D2XyUvyu
+	 PO+n9OLGke+6XMbgkv0abX0J3nZpBUgqtu9ibT+6NHeSCsMuVp93iHwIUKeT7Cqtyb
+	 eciuoTFZZ+R/g==
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-5eb5ecf3217so10450092a12.3;
+        Tue, 01 Apr 2025 07:03:36 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUndpOEZ2Vw2htAt1yQZ0c+QqHDGo0BA+/3h8aKdU2z3i56ui20uJXec2+no5Q1y16Dc8n+dss7Pgyp@vger.kernel.org, AJvYcCWTrB0YpF3iOGqWHySjF9Wie6TZ6wuST0icHpNiVCt5GuEVMiG4BJ8o8LAsdj0eFNFWqRwcp9MNDS5jPvaI@vger.kernel.org, AJvYcCWpqs2B3MIY+cZAkLKHfzYERGVtAQeXaVCPOFBl6vBpXdj4cAJMTc3zIH05WKAsXMFnRx0ULwlTzWGG4w==@vger.kernel.org, AJvYcCX+AYvi9eyxxyAjWBED2bb9FxvJkqIlQyVS8XTNp0ZSCWkjUkdhFdSFjypQ9w7EH/4kXlohteSoTsuHC13K4Ew=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw4ohkYekrUTT6ZMr952iiMXEmSM4mEk2zHKB7LiDwF4Yq+/Rvy
+	IOezz0J5kyrNo3iO9MBRV+QKFoEY7fpC+/kLlEvgAcH/6YBbRYY2E1+JK0DzUpQJ+kqB4Maq/Ax
+	/SmC4d7SBgv3ypc6Vdd0QQUhMUA==
+X-Google-Smtp-Source: AGHT+IFzoZbUPqDeYZjT5xtEjxq+tcB/eZ2eQGd0UQkFJzgfaNvYWG1GjgFMjCniyE6HAjXZwCVCB1wg+dFAtCBeOCI=
+X-Received: by 2002:a05:6402:1f83:b0:5ee:497:4b4f with SMTP id
+ 4fb4d7f45d1cf-5ee04974cdcmr12296382a12.33.1743516214916; Tue, 01 Apr 2025
+ 07:03:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-From: <shao.mingyin@zte.com.cn>
-To: <kblaiech@nvidia.com>
-Cc: <yang.yang29@zte.com.cn>, <xu.xin16@zte.com.cn>, <ye.xingchen@zte.com.cn>,
-        <asmaa@nvidia.com>, <andi.shyti@kernel.org>,
-        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <feng.wei8@zte.com.cn>
-Subject: =?UTF-8?B?W1BBVENIXSBpMmM6IG1seGJmOiBVc2Ugc3RyX3JlYWRfd3JpdGUoKSBoZWxwZXI=?=
-Content-Type: text/plain;
-	charset="UTF-8"
-X-MAIL:mse-fl2.zte.com.cn 531BQ0Lu086035
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 67EBCD53.001/4ZRm0M4BgYz5B1KS
+MIME-Version: 1.0
+References: <20250401081041.114333-1-herve.codina@bootlin.com> <20250401081041.114333-3-herve.codina@bootlin.com>
+In-Reply-To: <20250401081041.114333-3-herve.codina@bootlin.com>
+From: Rob Herring <robh@kernel.org>
+Date: Tue, 1 Apr 2025 09:03:23 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqKQdzDzAYHDctP-nmrONBynRfi-qyncnyj10r4xZNrx1A@mail.gmail.com>
+X-Gm-Features: AQ5f1Jrl7NVlqsPoX_Cqx9U5EDG_95BPE2e4WCqYw6qGyWJsIaZB1GmpR7k8jG0
+Message-ID: <CAL_JsqKQdzDzAYHDctP-nmrONBynRfi-qyncnyj10r4xZNrx1A@mail.gmail.com>
+Subject: Re: [PATCH 2/2] schemas: i2c: Introduce I2C bus extensions
+To: Herve Codina <herve.codina@bootlin.com>
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>, Andi Shyti <andi.shyti@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-i2c@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	devicetree-spec@vger.kernel.org, Luca Ceresoli <luca.ceresoli@bootlin.com>, 
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Feng Wei <feng.wei8@zte.com.cn>
+On Tue, Apr 1, 2025 at 3:11=E2=80=AFAM Herve Codina <herve.codina@bootlin.c=
+om> wrote:
+>
+> An I2C bus can be wired to the connector and allows an add-on board to
+> connect additional I2C devices to this bus.
+>
+> Those additional I2C devices could be described as sub-nodes of the I2C
+> bus controller node however for hotplug connectors described via device
+> tree overlays there is additional level of indirection, which is needed
+> to decouple the overlay and the base tree:
+>
+>   --- base device tree ---
+>
+>   i2c1: i2c@abcd0000 {
+>       compatible =3D "xyz,i2c-ctrl";
+>       i2c-bus-extension@0 {
 
-Remove hard-coded strings by using the str_read_write() helper.
+What does 0 represent? Some fake I2C address?
 
-Signed-off-by: Feng Wei <feng.wei8@zte.com.cn>
-Signed-off-by: Shao Mingyin <shao.mingyin@zte.com.cn>
----
- drivers/i2c/busses/i2c-mlxbf.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+Why do you even need a child node here?
 
-diff --git a/drivers/i2c/busses/i2c-mlxbf.c b/drivers/i2c/busses/i2c-mlxbf.c
-index 280dde53d7f3..2e8291e96323 100644
---- a/drivers/i2c/busses/i2c-mlxbf.c
-+++ b/drivers/i2c/busses/i2c-mlxbf.c
-@@ -19,6 +19,7 @@
- #include <linux/of.h>
- #include <linux/platform_device.h>
- #include <linux/string.h>
-+#include <linux/string_choices.h>
+>           i2c-bus =3D <&i2c_ctrl>;
+>       };
+>       ...
+>   };
+>
+>   i2c5: i2c@cafe0000 {
+>       compatible =3D "xyz,i2c-ctrl";
+>       i2c-bus-extension@0 {
+>           i2c-bus =3D <&i2c-sensors>;
+>       };
+>       ...
+>   };
+>
+>   connector {
+>       i2c_ctrl: i2c-ctrl {
+>           i2c-parent =3D <&i2c1>;
+>           #address-cells =3D <1>;
+>           #size-cells =3D <0>;
+>       };
+>
+>       i2c-sensors {
+>           i2c-parent =3D <&i2c5>;
+>           #address-cells =3D <1>;
+>           #size-cells =3D <0>;
+>       };
+>   };
+>
+>   --- device tree overlay ---
+>
+>   ...
+>   // This node will overlay on the i2c-ctrl node of the base tree
+>   i2c-ctrl {
+>       eeprom@50 { compatible =3D "atmel,24c64"; ... };
+>   };
+>   ...
+>
+>   --- resulting device tree ---
+>
+>   i2c1: i2c@abcd0000 {
+>       compatible =3D "xyz,i2c-ctrl";
+>       i2c-bus-extension@0 {
+>           i2c-bus =3D <&i2c_ctrl>;
+>       };
+>       ...
+>   };
+>
+>   i2c5: i2c@cafe0000 {
+>       compatible =3D "xyz,i2c-ctrl";
+>       i2c-bus-extension@0 {
+>           i2c-bus =3D <&i2c-sensors>;
+>       };
+>       ...
+>   };
+>
+>   connector {
+>       i2c-ctrl {
+>           i2c-parent =3D <&i2c1>;
+>           #address-cells =3D <1>;
+>           #size-cells =3D <0>;
+>
+>           eeprom@50 { compatible =3D "atmel,24c64"; ... };
+>       };
+>
+>       i2c-sensors {
+>           i2c-parent =3D <&i2c5>;
+>           #address-cells =3D <1>;
+>           #size-cells =3D <0>;
+>       };
+>   };
+>
+> Here i2c-ctrl (same goes for i2c-sensors) represent the part of I2C bus
+> that is on the hot-pluggable add-on. On hot-plugging it will physically
+> connect to the I2C adapter on the base board. Let's call the 'i2c-ctrl'
+> node an "extension node".
+>
+> In order to decouple the overlay from the base tree, the I2C adapter
+> (i2c@abcd0000) and the extension node (i2c-ctrl) are separate nodes.
+>
+> The extension node is linked to the I2C bus controller in two ways. The
+> first one with the i2c-bus-extension available in I2C controller
+> sub-node and the second one with the i2c-parent property available in
+> the extension node itself.
+>
+> The purpose of those two links is to provide the link in both direction
+> from the I2C controller to the I2C extension and from the I2C extension
+> to the I2C controller.
 
- /* Defines what functionality is present. */
- #define MLXBF_I2C_FUNC_SMBUS_BLOCK \
-@@ -2038,21 +2039,21 @@ static s32 mlxbf_i2c_smbus_xfer(struct i2c_adapter *adap, u16 addr,
- 					  read ? &data->byte : &command, read,
- 					  pec);
- 		dev_dbg(&adap->dev, "smbus %s byte, slave 0x%02x.\n",
--			read ? "read" : "write", addr);
-+			str_read_write(read), addr);
- 		break;
+Why do you need both directions? An i2c controller can search the tree
+for i2c-parent and find the one's that belong to it. Or the connector
+can register with the I2C controller somehow.
 
- 	case I2C_SMBUS_BYTE_DATA:
- 		mlxbf_i2c_smbus_data_byte_func(&request, &command, &data->byte,
- 					       read, pec);
- 		dev_dbg(&adap->dev, "smbus %s byte data at 0x%02x, slave 0x%02x.\n",
--			read ? "read" : "write", command, addr);
-+			str_read_write(read), command, addr);
- 		break;
-
- 	case I2C_SMBUS_WORD_DATA:
- 		mlxbf_i2c_smbus_data_word_func(&request, &command,
- 					       (u8 *)&data->word, read, pec);
- 		dev_dbg(&adap->dev, "smbus %s word data at 0x%02x, slave 0x%02x.\n",
--			read ? "read" : "write", command, addr);
-+			str_read_write(read), command, addr);
- 		break;
-
- 	case I2C_SMBUS_I2C_BLOCK_DATA:
-@@ -2060,7 +2061,7 @@ static s32 mlxbf_i2c_smbus_xfer(struct i2c_adapter *adap, u16 addr,
- 		mlxbf_i2c_smbus_i2c_block_func(&request, &command, data->block,
- 					       &byte_cnt, read, pec);
- 		dev_dbg(&adap->dev, "i2c %s block data, %d bytes at 0x%02x, slave 0x%02x.\n",
--			read ? "read" : "write", byte_cnt, command, addr);
-+			str_read_write(read), byte_cnt, command, addr);
- 		break;
-
- 	case I2C_SMBUS_BLOCK_DATA:
-@@ -2068,7 +2069,7 @@ static s32 mlxbf_i2c_smbus_xfer(struct i2c_adapter *adap, u16 addr,
- 		mlxbf_i2c_smbus_block_func(&request, &command, data->block,
- 					   &byte_cnt, read, pec);
- 		dev_dbg(&adap->dev, "smbus %s block data, %d bytes at 0x%02x, slave 0x%02x.\n",
--			read ? "read" : "write", byte_cnt, command, addr);
-+			str_read_write(read), byte_cnt, command, addr);
- 		break;
-
- 	case I2C_FUNC_SMBUS_PROC_CALL:
--- 
-2.25.1
+Rob
 
