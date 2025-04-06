@@ -1,114 +1,102 @@
-Return-Path: <linux-i2c+bounces-10102-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10103-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81FB0A7CE34
-	for <lists+linux-i2c@lfdr.de>; Sun,  6 Apr 2025 15:49:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74ECBA7CF67
+	for <lists+linux-i2c@lfdr.de>; Sun,  6 Apr 2025 20:16:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 64FEA7A5901
-	for <lists+linux-i2c@lfdr.de>; Sun,  6 Apr 2025 13:48:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 32F3A188C821
+	for <lists+linux-i2c@lfdr.de>; Sun,  6 Apr 2025 18:16:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 865711B0409;
-	Sun,  6 Apr 2025 13:49:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3529154BF0;
+	Sun,  6 Apr 2025 18:16:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lETP044n"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="WkqRMuJl"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from smtp.smtpout.orange.fr (smtp-27.smtpout.orange.fr [80.12.242.27])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0158314A4F9;
-	Sun,  6 Apr 2025 13:49:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0527955E69;
+	Sun,  6 Apr 2025 18:15:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.27
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743947366; cv=none; b=OcVilfP6M5sTfeVMCUWsmJpeM6XATMy85pgkbeysVTsxa5gc8XwJ1hrVAxh66NCHPQBvxXJUbZo8SZTa079DLSk/7t/Fvzl/ZA30a7fhf4i4RNkP94M1yEIaqODTJb+35w+yEaW6dFC2lOTPQvvwcUqSbWAsCkS2jTr3mXraRWw=
+	t=1743963362; cv=none; b=h5yitPt3G2QykQrob7WXJK+/6RQzmslPIuKKHkPckowk8IEAmEImyhSvwMeB+TUFPDDTzNJpWKtBpBE7pzzM19QeOTHIgIwopSnUwWh9JxG66bpp8wMSOcx/+VP+FhSDnvqESjlJxn/IQJVZvkYpabwCTJM9lMvp6lXOJmuH+ZQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743947366; c=relaxed/simple;
-	bh=ArgTWo4x2CFscJFkuLJcGxeqCgmy5qAUc5MwffAw1Cg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SI5D2zY/oood3C7KuGeNApvrydGCODLkspmKIjLqN8P+P9kJBje9imM7Sfz5TmOesik+dm+69JUvyo1UU/DlRDLEqu6P5UHUdA7dEddSZ59Gs1pW3p44QePskLOq/DWKdMbDRX08qN/5NfXselPzAHS6GWm8nuXFSDf2aQFAPTM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lETP044n; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-225df540edcso46460105ad.0;
-        Sun, 06 Apr 2025 06:49:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1743947364; x=1744552164; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=5XJJwHD/DSdygcA+azSZln/silKp7gLNndAvbGA0vLs=;
-        b=lETP044nP84Oq2C1DiI2O8NdeAXpebREuFsqf1f3PPChlQxjIKAeJNaaiF1+0WYr0l
-         v7sDYowkUu52Aeo5TOKUHIYdZXuD0/hfs/XIwt6RYtNW+WIGPO8Lx/ai8GiB8mWcAphC
-         wcXUUAJ/W/lT/trysyyY/0fRLqc6Jsa9oSQ1MjzOe5hsdvfSmVEio2yNUckh8ergKwm1
-         WENqTdJU6gBZCylgzjGU07zq5rTD8Y+QHC0/JPC74JNAWfL1VSvTWPzEW5Ta3tqFGRLI
-         33WMRGosDO1ssulDZTzxO4DXrB37StPViC/Z7fY/00tuaxJ3NAQnqu+8mlyo5y3ovq/T
-         ZcJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743947364; x=1744552164;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5XJJwHD/DSdygcA+azSZln/silKp7gLNndAvbGA0vLs=;
-        b=VAfyeSB6EJZnT9COrQP5aHdxSEbEba/Dj1tYfjPgFtsmCnMPUyEYaZMt2UyJFN3Vgf
-         ypcXnps2VfVuHNRtntAcVD9AlZHUSbIGVFqaj2i9TcpDya4coEiTKH5H/UDNCm7SJeLs
-         kAlfTbz9qxv4ODOw5o/AyLPO16KIMeaDdXV903udwKYt62AzojHRUDlTRwZrcCYuIb7S
-         OYxvS+dnnle8S4B289s2Hjd9WucVtl7AlW5t3WECLaSBjHuUHhXcgqWa15FRT0OWq7bp
-         jg5DHvR5fgD1rvBUjnT4DT23z9x5m03j6Ia/HKXLKS+wzQqcPhT8OJeP+TJmMVtlfrHi
-         4BPA==
-X-Forwarded-Encrypted: i=1; AJvYcCXs+Dy43htf1rtGT94bD4eloAEfbTEdntXp+SBWFL1rDvllPNCz3REdod9JAGQLTzGarnEE8izLgEeZbTU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywo/gNVPU5beCbTheOcqkFYwoclNgYxLT1OU/letBzeNvnVs8Vk
-	8k79CUmpXENgYqFISTltlA6mJyMUIAJaTwdFkY5wJkDr8KAF0my9Y1eSOvzp
-X-Gm-Gg: ASbGnctdFIU1faIZzLOMNx11rQGQzjmi3yiJXsXqY4npyoY7l9MQUSqyMD9iW6DeMzh
-	UTap628DtfW/jkLOVM96Vryk/zYXKIpDzPEGbFcdH2sl7/fFIFBV1NSaazMBTormMhhVsIa/fAU
-	JWdO7wVEYqJPOMg3VmKozOmr3faSC7pF+kwdXMqp3kKePwlqBHcjwaSgaVkqN+CB9VKR6smCrJu
-	HaGlg6yN3xrV2bn0iFbktJQJn2OdR2p1URpqzrudu68Utmvl64j+yyfE4c6m21VN4aqXSZOBngd
-	erkq3hV2nl+J33QHESx9UyZJQUk420epOaRyIRmLPdW1RuW1GR3a8ZkosY/z+g5sc73U
-X-Google-Smtp-Source: AGHT+IHhxQyzcJjmfjcUf+7IIE5KBMswZTaMesP3rbbfL0Nt6hI5f/R0zPxqX37RyPVsPWjqzutlfQ==
-X-Received: by 2002:a17:903:2406:b0:21f:6d63:6f4f with SMTP id d9443c01a7336-229765a492amr188388945ad.2.1743947364113;
-        Sun, 06 Apr 2025 06:49:24 -0700 (PDT)
-Received: from tech-Alienware-m15-R6.. ([223.185.134.10])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-af9bc41ae31sm5709960a12.72.2025.04.06.06.49.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Apr 2025 06:49:23 -0700 (PDT)
-From: Sunny Patel <nueralspacetech@gmail.com>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Sunny Patel <nueralspacetech@gmail.com>
-Subject: [PATCH] i2c: Fix reference leak in of_i2c_register_devices
-Date: Sun,  6 Apr 2025 19:18:43 +0530
-Message-ID: <20250406134843.67702-1-nueralspacetech@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1743963362; c=relaxed/simple;
+	bh=Or+lF0/ZbsQ6jbELO4bHg88MpeiUXKXg0thJ3mseWi0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FmuLJGvQ62xfedWef4w+5QE0aeHbj2SMmjm3UcTspNz6GUqHM0M5zMxYSaZ18Z7EFCiVvdbr2yTRv/38JAhQjYx6dET/kKfJB1jHDvDW00IzWAev7E5BdK+oQZ+xIGY2/ZSVQEVTBNKrwYbkWLMD2EA73khcavcSu9rfCosWLe8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=WkqRMuJl; arc=none smtp.client-ip=80.12.242.27
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from [192.168.1.37] ([90.11.132.44])
+	by smtp.orange.fr with ESMTPA
+	id 1UO6uCEDqk6Kc1UO9uCYzb; Sun, 06 Apr 2025 20:06:34 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1743962794;
+	bh=ZZuZBuWpQ4m4QhPze/IZCZP8nQ/j+5lRNXj0SrvdVBw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=WkqRMuJlGbPB+qrqKCc9gws3bwnl5Sdqdeb6x61nRE/jrLiDqJG/pyPruUf+5RheZ
+	 OJdGRY5+yJqOLpmrRnM1kbfLAR+1IO0Vpi2mTgwZ5p08g3nz//7AFQ1eWZ/jqefpFu
+	 AzwaV2ynKksfXICF48gR4orUXXYxJeajWrNkBhc4sVK/Us8P847YKmCBx0kgTXvGKj
+	 6sScMbOKirunK4c9zsnQ0lfasMNK2wh5oHD68jQ61anspQygd/jts37FFa8UezjDTS
+	 3PMM1w2Jdq3/Pi7H07PtrRJbpzWXYP4GhcY/gP674tef8rP+cm6HLyxAhFXHW13/JK
+	 dJIR9o4HVYf2w==
+X-ME-Helo: [192.168.1.37]
+X-ME-Auth: bWFyaW9uLmphaWxsZXRAd2FuYWRvby5mcg==
+X-ME-Date: Sun, 06 Apr 2025 20:06:34 +0200
+X-ME-IP: 90.11.132.44
+Message-ID: <33bf15be-f99a-40c1-a97c-a51ca8fa4c9e@wanadoo.fr>
+Date: Sun, 6 Apr 2025 20:06:29 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] i2c: Fix reference leak in of_i2c_register_devices
+To: Sunny Patel <nueralspacetech@gmail.com>,
+ Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250406134843.67702-1-nueralspacetech@gmail.com>
+Content-Language: en-US, fr-FR
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20250406134843.67702-1-nueralspacetech@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Fix a potential reference leak in of_i2c_register_devices where the
-reference to the node is not released if device registration fails.
-This ensures proper reference management and avoids memory leaks.
+Le 06/04/2025 à 15:48, Sunny Patel a écrit :
+> Fix a potential reference leak in of_i2c_register_devices where the
+> reference to the node is not released if device registration fails.
+> This ensures proper reference management and avoids memory leaks.
 
-Signed-off-by: Sunny Patel <nueralspacetech@gmail.com>
----
- drivers/i2c/i2c-core-of.c | 1 +
- 1 file changed, 1 insertion(+)
+There is no early exit path in the for_each_available_child_of_node() 
+block, so of_node_put((node) is called for all the nodes that are iterated.
 
-diff --git a/drivers/i2c/i2c-core-of.c b/drivers/i2c/i2c-core-of.c
-index 02feee6c9ba9..7c50905de8f1 100644
---- a/drivers/i2c/i2c-core-of.c
-+++ b/drivers/i2c/i2c-core-of.c
-@@ -107,6 +107,7 @@ void of_i2c_register_devices(struct i2c_adapter *adap)
- 				 "Failed to create I2C device for %pOF\n",
- 				 node);
- 			of_node_clear_flag(node, OF_POPULATED);
-+			of_node_put(node);
- 		}
- 	}
- 
--- 
-2.43.0
+Can you elaborate and explain how the reference leak can occur?
+
+CJ
+
+> 
+> Signed-off-by: Sunny Patel <nueralspacetech@gmail.com>
+> ---
+>   drivers/i2c/i2c-core-of.c | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/i2c/i2c-core-of.c b/drivers/i2c/i2c-core-of.c
+> index 02feee6c9ba9..7c50905de8f1 100644
+> --- a/drivers/i2c/i2c-core-of.c
+> +++ b/drivers/i2c/i2c-core-of.c
+> @@ -107,6 +107,7 @@ void of_i2c_register_devices(struct i2c_adapter *adap)
+>   				 "Failed to create I2C device for %pOF\n",
+>   				 node);
+>   			of_node_clear_flag(node, OF_POPULATED);
+> +			of_node_put(node);
+>   		}
+>   	}
+>   
 
 
