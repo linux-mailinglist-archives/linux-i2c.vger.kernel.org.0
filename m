@@ -1,76 +1,74 @@
-Return-Path: <linux-i2c+bounces-10151-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10152-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29F36A7E088
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 16:09:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61CD3A7E0AF
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 16:12:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6CCC017E350
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 14:02:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4987A3B1520
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 14:05:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 353571C4A10;
-	Mon,  7 Apr 2025 14:02:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7584B1C8602;
+	Mon,  7 Apr 2025 14:04:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Oh6ZWDP9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Lm9MTLWM"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D53572C6A3;
-	Mon,  7 Apr 2025 14:02:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F8BA156886;
+	Mon,  7 Apr 2025 14:04:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744034555; cv=none; b=bgJNmLQmsuq74JC2B0vkjHteTqRsEZvDJ4XkAzQZX0nYYtGb3Q/aA3sBjtkdF6bH9UbT71Syocjvk8BES82dXQ0kSHvrREdCic2kxlB72J+8ukbV9sBqHTr6weTAzCUvEMGB9Swk1JDORZ1sPJRuj/5ZpaqDVvGtCjMfR7GqCRc=
+	t=1744034662; cv=none; b=AQ5OhTDSZ1stOdpJ65RVl/BOdOJy88ggnU/UJtAIcgzA24XlhfKTOilUKRX4V8fdEas27FVaZpYWil46KSrOHU4OYR77nshuUZPssJWhKIZttTAvWnLIhYpltPpBElY4Xt1u6z2qrn4FYUn+eXALFyjiUse5p7DRwT/BWlY9y9I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744034555; c=relaxed/simple;
-	bh=W3SHYCW2Ors5dixyvIPe8YB5LgdUl989Vud2NXgXX8o=;
+	s=arc-20240116; t=1744034662; c=relaxed/simple;
+	bh=9XG8FxASO50Sf5GWUZAuiznC1VGVDHHjVjUYicIPg0c=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AV3azzfdZvqw2tHl/XwU900SOlCC7YvMXqs7r/KpzvTZJErAOQmtwnFCOiQ7byj0E8r+6qgCxeO239vQEojvrNfXaWm+0YwuyqKt0H9628Y1xQ6wBLD5Gze27qysiEkjBXBqTgQw1rOGJHeaX1hAojfdd/bLoX2+l0BbjD/rATw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Oh6ZWDP9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 108F3C4CEDD;
-	Mon,  7 Apr 2025 14:02:33 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=S5LAt4bCjgGPn8J0UeN2+l1wdkGtGwA7ODlQOX7fWE5Y2GfFRrUML2eD4zw1xVAXAe5SIOpr7eZK0XYdi7An8pBjzFn1wfPn7LVwLKnZ7/Paa2KMG16j+pAKrLg43a+OOSqQT/6TQJgfWzn22jyV3dN6mdceh3EGPe3FLiQ5NOM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Lm9MTLWM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3A14C4CEE7;
+	Mon,  7 Apr 2025 14:04:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744034553;
-	bh=W3SHYCW2Ors5dixyvIPe8YB5LgdUl989Vud2NXgXX8o=;
+	s=k20201202; t=1744034662;
+	bh=9XG8FxASO50Sf5GWUZAuiznC1VGVDHHjVjUYicIPg0c=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Oh6ZWDP9gO1f5r6MxG/QQ4EWDh52V6RzQQ4W7G/Wc2DM7wj67nRy0OXFJbv5EybBe
-	 3E8lu4uRJh1oVrYXIzz8yV2GKMlDPbPy54XIRlSDZE4covfbvrht5pFYl27TMhAKgs
-	 KfQtzOwxVM+MCBPE6AjTY3U3+OKA7H20Mc9YLqJUADIOHD6Ais16TqBgY4N/Bt0An5
-	 W1NnfOgXPvjITsah7honbXqtG+6fz5TDUHnkJy5E0kcn1cpJ8TJCgHQWAqD3PdXEfk
-	 Jp8I1XN7InWFptl0b/MMeQ7KFCkdDDNhSgjMqxOGL9Z1cV5qU8QmVj68Cx69PAOViN
-	 o5zvSOgAi1mKw==
-Date: Mon, 7 Apr 2025 09:02:32 -0500
-From: Rob Herring <robh@kernel.org>
+	b=Lm9MTLWM98znlU9G5vV2Xo5NhFHRhWUWVzbOpr/5eS8fxUIvzqxS9in87kTfpRtKv
+	 WlIzspzrZPd36MSFuzEInhkiI04F0htNcjJQHWJWzQEjKFWDvvk+Xv4hvJoZzH1FxT
+	 pk0kFhUOeK0bGUPJJciBAE5vDKXxf8DZSfBQpy9moR/hcwfd0IlDU2CVOFharyugdv
+	 ymAtSu9pJQsqkfMSNx4eRKhLOPETJcNq9BwLY9PCJe1nCJH0uKpUd4GcRr+JhP2YXo
+	 xTDuKmcmfdT6KQSK3Q9NnkY0MfcwxMkQ1wzEnWBJTAzsCR6tBmciOVpO9Flp136l0D
+	 xnDDfDRzdzBVw==
+Date: Mon, 7 Apr 2025 09:04:20 -0500
+From: "Rob Herring (Arm)" <robh@kernel.org>
 To: Inochi Amaoto <inochiama@gmail.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Chen Wang <unicorn_wang@outlook.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Samuel Holland <samuel.holland@sifive.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
+Cc: devicetree@vger.kernel.org, Philipp Zabel <p.zabel@pengutronix.de>,
+	linux-kernel@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>,
 	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+	Albert Ou <aou@eecs.berkeley.edu>, sophgo@lists.linux.dev,
+	Thomas Gleixner <tglx@linutronix.de>, ghost <2990955050@qq.com>,
+	Alexandre Ghiti <alex@ghiti.fr>, Conor Dooley <conor+dt@kernel.org>,
 	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Chao Wei <chao.wei@sophgo.com>, linux-i2c@vger.kernel.org,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Jean Delvare <jdelvare@suse.com>, Yixun Lan <dlan@gentoo.org>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Samuel Holland <samuel.holland@sifive.com>,
+	Jisheng Zhang <jszhang@kernel.org>,
 	Thomas Bonnefille <thomas.bonnefille@bootlin.com>,
-	ghost <2990955050@qq.com>,
-	Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-	Jisheng Zhang <jszhang@kernel.org>, Chao Wei <chao.wei@sophgo.com>,
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-	sophgo@lists.linux.dev, linux-kernel@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-mmc@vger.kernel.org, Yixun Lan <dlan@gentoo.org>,
-	Longbin Li <looong.bin@gmail.com>
-Subject: Re: [PATCH 7/9] dt-bindings: i2c: dw: Add Sophgo SG2044 SoC I2C
- controller
-Message-ID: <20250407140232.GA2165777-robh@kernel.org>
+	Longbin Li <looong.bin@gmail.com>, linux-hwmon@vger.kernel.org,
+	linux-mmc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	Chen Wang <unicorn_wang@outlook.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Subject: Re: [PATCH 8/9] dt-bindings: riscv: sophgo: Add SG2044 compatible
+ string
+Message-ID: <174403464532.2172777.7350680687448047256.robh@kernel.org>
 References: <20250407010616.749833-1-inochiama@gmail.com>
- <20250407010616.749833-8-inochiama@gmail.com>
+ <20250407010616.749833-9-inochiama@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -79,38 +77,19 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250407010616.749833-8-inochiama@gmail.com>
+In-Reply-To: <20250407010616.749833-9-inochiama@gmail.com>
 
-On Mon, Apr 07, 2025 at 09:06:12AM +0800, Inochi Amaoto wrote:
-> Add compatible string for Sophgo SG2044 SoC I2C controller which can be
-> used specifically for the SG2044 SoC.
+
+On Mon, 07 Apr 2025 09:06:13 +0800, Inochi Amaoto wrote:
+> Add compatible string for the Sophgo SG2044 SoC and the SRD3-10
+> board.
 > 
 > Signed-off-by: Inochi Amaoto <inochiama@gmail.com>
 > ---
->  .../devicetree/bindings/i2c/snps,designware-i2c.yaml          | 4 ++++
+>  Documentation/devicetree/bindings/riscv/sophgo.yaml | 4 ++++
 >  1 file changed, 4 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml b/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml
-> index bc5d0fb5abfe..677b39865af0 100644
-> --- a/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml
-> @@ -38,6 +38,10 @@ properties:
->            - const: snps,designware-i2c
->        - description: Baikal-T1 SoC System I2C controller
->          const: baikal,bt1-sys-i2c
-> +      - description: Sophgo SoCs I2C controller
-> +        items:
-> +          - const: sophgo,sg2044-i2c
-> +          - const: snps,designware-i2c
 
-This is not a great pattern we've started. T-HEAD, Ocelot, and this 
-should all be combined into 1 enum. The description here is not that 
-useful.
+Acked-by: Rob Herring (Arm) <robh@kernel.org>
 
->        - description: T-HEAD TH1520 SoCs I2C controller
->          items:
->            - const: thead,th1520-i2c
-> -- 
-> 2.49.0
-> 
 
