@@ -1,50 +1,50 @@
-Return-Path: <linux-i2c+bounces-10165-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10166-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E99C4A7E361
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 17:10:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4FC4A7E351
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 17:09:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 462AA3A96C6
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 15:01:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 30E5B188AA55
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 15:02:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8ADD201006;
-	Mon,  7 Apr 2025 14:56:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEF43202985;
+	Mon,  7 Apr 2025 14:56:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="J8r7OXfw"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="a1gjXm9U"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13C551FF610;
-	Mon,  7 Apr 2025 14:56:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E624200120;
+	Mon,  7 Apr 2025 14:56:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744037791; cv=none; b=Y/u5Hov0XQs9JI7/kk08EOg9hxnx6bl4n1lsH4Dvs2ecPdGq/fDIVO47AlPCumBUAsauraVI7MieHlH6+2frmPVsuefNDyP4px/LRvkUyQRvAA8FLqJbovZmSNXZPz9AzxVbjII2zZRqzsxdstnDnHOecVfacVw79gRDjtzhpio=
+	t=1744037793; cv=none; b=NHlxqkEWqhoX5iZ0qAjBwssIZSz6kqmRcW3CE/ltOE52wz3RXGut8c9iqMMTLMmjAVsrKDErqUNAgkvez4iWjtd47a4FAvXEjvkJ7mnp1LTU0y23tUlca8kLN195SuF/lTcja5z+o2PtVBht02xZuXF3XxiCUcVRHEcQxxs9Lq0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744037791; c=relaxed/simple;
-	bh=DIlr323RJGNavJ0ugKLIvn+Hb0Gq8qW3Vu1FKKC/mqw=;
+	s=arc-20240116; t=1744037793; c=relaxed/simple;
+	bh=U9bQtO+EvA4HTZzlOez/R20TCCnGu9vI35WBZPdTfRQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CXe6SZn1kkDUYlf15WEwgFJm2vmEbqfXHIz+Ur3AnGndXnGQ9FlVOAbQPdC1VBXbQMvDcx4RjOx7ltwpxvqMfrVW4J6OmIl/j+joS2iDOy2yvrKjQt8tNZDerifS4IO3dMtzmeeSif9ONcNSNEDUDxJ1G/pdhgWrooBS0M74D0Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=J8r7OXfw; arc=none smtp.client-ip=217.70.183.197
+	 MIME-Version; b=f743DSfIXFHANN9GJt0nB5r4yps3W0ToyrTKP3PqfdOA26mpiZGDAhUyfkV8ehZ/GMZ/MvseAzFkEL9uDVWwnsxP6GH5cKDf6SccUU3xB5rMKHuTr2cHmOmRVx4DvuYXYn0oeFrFOvLIbO8q+tu2WlCTHmikCj5Grx9a1ZPbqr4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=a1gjXm9U; arc=none smtp.client-ip=217.70.183.197
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPA id C3F9E44329;
-	Mon,  7 Apr 2025 14:56:25 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id C825B44342;
+	Mon,  7 Apr 2025 14:56:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1744037787;
+	t=1744037789;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=m5fgX4WKV1/kCAlxe6/AwpR3gsjy+U92TatippA7SK0=;
-	b=J8r7OXfwv7y3xhQyYwgkaxlt9iELX2QD7oMjfMdBqXAQqr+2p3BcmUOQMkAMBGgCLBFFxB
-	2sBz2K3znR5gNtBTmxGQhZj0wZF9hVSfJXfrH9ltG8lWXQIPbvUWa3QRB/+S17/dV+V4ef
-	MzLLBwdlbEXMDF2t0McQVHhioZJ7RBCMoQVN257xbonpoH+JCoPQzExTe+p+Fr2lgTM2YO
-	fhtTI0DUMkK+4Cque/QFT6pmoKHYZP/Rq95y45sTIx2KjdmC/LodW6tKUaAeRw1SKXPJCT
-	DlrhMjgxSgAD3H5WvR03n/TxpRVYyOgswskA2bTxUIg10eDFIb0CH8qDErMEyQ==
+	bh=k+2kDZZ4eHBobXo/9zEPdIoQifD0aFd2/G+4Th7PK44=;
+	b=a1gjXm9UcM6PaxdfzBrREMhOVsJX1WTOf1wmdW1qZoxqK5vrWEwnVmRhPITPGpuCbPDjQO
+	ZYedtdHNA6G+JhR//yNkqCv7Ltz7gfTXHcJWV+yUZqzl42RHk2g0RfwuSrRwMjjvz+DvVl
+	njU5s1iNPuBMKVd+MM/XFvvY7hHQdUYNzgD36RXdk7jkFERR8oPSwA2cqJNzGCYfmr6Blc
+	aDAw6s+v3Hy8c9E76yLf26AXejUQfx0yQCauDz4ZOsHEOdERxMOu4jtv02w/8yPR3Iznj8
+	GUXbkvWQ5BJPFbHUmmDENKVhuSAYmR6lcmP0lBfQeiAjN/XkwqV+Qtenh58DoQ==
 From: Herve Codina <herve.codina@bootlin.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	"Rafael J. Wysocki" <rafael@kernel.org>,
@@ -87,9 +87,9 @@ Cc: Wolfram Sang <wsa@kernel.org>,
 	Steen Hegelund <steen.hegelund@microchip.com>,
 	Luca Ceresoli <luca.ceresoli@bootlin.com>,
 	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH 11/16] of: property: Allow fw_devlink device-tree support for x86
-Date: Mon,  7 Apr 2025 16:55:40 +0200
-Message-ID: <20250407145546.270683-12-herve.codina@bootlin.com>
+Subject: [PATCH 12/16] clk: lan966x: Add MCHP_LAN966X_PCI dependency
+Date: Mon,  7 Apr 2025 16:55:41 +0200
+Message-ID: <20250407145546.270683-13-herve.codina@bootlin.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250407145546.270683-1-herve.codina@bootlin.com>
 References: <20250407145546.270683-1-herve.codina@bootlin.com>
@@ -102,62 +102,34 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-GND-State: clean
 X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvtddtgeekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefjvghrvhgvucevohguihhnrgcuoehhvghrvhgvrdgtohguihhnrgessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepleffudeludffledviefftedtffffjeehhfeiffelteejtdeugffggfffudffheegnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepledtrdekledrudeifedruddvjeenucevlhhushhtvghrufhiiigvpeefnecurfgrrhgrmhepihhnvghtpeeltddrkeelrdduieefrdduvdejpdhhvghloheplhhotggrlhhhohhsthdrlhhotggrlhguohhmrghinhdpmhgrihhlfhhrohhmpehhvghrvhgvrdgtohguihhnrgessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepgedupdhrtghpthhtohepghhrvghgkhhhsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtoheprhgrfhgrvghlsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghkrheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhhrgifnhhguhhosehkvghrnhgvlhdrohhrghdprhgtphhtthhopehsrdhhrghuv
- ghrsehpvghnghhuthhrohhnihigrdguvgdprhgtphhtthhopehkvghrnhgvlhesphgvnhhguhhtrhhonhhigidruggvpdhrtghpthhtohepfhgvshhtvghvrghmsehgmhgrihhlrdgtohhmpdhrtghpthhtohepmhhtuhhrqhhuvghtthgvsegsrgihlhhisghrvgdrtghomh
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvtddtgeekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefjvghrvhgvucevohguihhnrgcuoehhvghrvhgvrdgtohguihhnrgessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepheffiefgjeeuleeuueffleeufefglefhjefhheeigedukeetieeltddthfffkeffnecukfhppeeltddrkeelrdduieefrdduvdejnecuvehluhhsthgvrhfuihiivgepieenucfrrghrrghmpehinhgvthepledtrdekledrudeifedruddvjedphhgvlhhopehlohgtrghlhhhoshhtrdhlohgtrghlughomhgrihhnpdhmrghilhhfrhhomhephhgvrhhvvgdrtghoughinhgrsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeeguddprhgtphhtthhopehgrhgvghhkhheslhhinhhugihfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrkhhrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehshhgrfihnghhuoheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshdrhhgruhgvrhesphgvnhhguhhtrhhonhhigidruggvpdhrt
+ ghpthhtohepkhgvrhhnvghlsehpvghnghhuthhrohhnihigrdguvgdprhgtphhtthhopehfvghsthgvvhgrmhesghhmrghilhdrtghomhdprhgtphhtthhopehmthhurhhquhgvthhtvgessggrhihlihgsrhgvrdgtohhm
 X-GND-Sasl: herve.codina@bootlin.com
 
-PCI drivers can use a device-tree overlay to describe the hardware
-available on the PCI board. This is the case, for instance, of the
-LAN966x PCI device driver.
+The lan966x clock controller depends on the LAN969x architecture or the
+LAN966x SoC.
 
-Adding some more nodes in the device-tree overlay adds some more
-consumer/supplier relationship between devices instantiated from this
-overlay.
-
-Those fw_node consumer/supplier relationships are handled by fw_devlink
-and are created based on the device-tree parsing done by the
-of_fwnode_add_links() function.
-
-Those consumer/supplier links are needed in order to ensure a correct PM
-runtime management and a correct removal order between devices.
-
-For instance, without those links a supplier can be removed before its
-consumers is removed leading to all kind of issue if this consumer still
-want the use the already removed supplier.
-
-The support for the usage of an overlay from a PCI driver has been added
-on x86 systems in commit 1f340724419ed ("PCI: of: Create device tree PCI
-host bridge node").
-
-In the past, support for fw_devlink on x86 had been tried but this
-support has been removed in commit 4a48b66b3f52 ("of: property: Disable
-fw_devlink DT support for X86"). Indeed, this support was breaking some
-x86 systems such as OLPC system and the regression was reported in [0].
-
-Instead of disabling this support for all x86 system, use a finer grain
-and disable this support only for the possible problematic subset of x86
-system mixing ACPI and device-tree at boot time (i.e. OLPC and CE4100).
-
-[0] https://lore.kernel.org/lkml/3c1f2473-92ad-bfc4-258e-a5a08ad73dd0@web.de/
+This clock controller can be used by the LAN966x PCI device and so it
+needs to be available when the LAN966x PCI device is enabled.
 
 Signed-off-by: Herve Codina <herve.codina@bootlin.com>
 ---
- drivers/of/property.c | 2 +-
+ drivers/clk/Kconfig | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/of/property.c b/drivers/of/property.c
-index c1feb631e383..a4b367d056b8 100644
---- a/drivers/of/property.c
-+++ b/drivers/of/property.c
-@@ -1605,7 +1605,7 @@ static int of_fwnode_add_links(struct fwnode_handle *fwnode)
- 	const struct property *p;
- 	struct device_node *con_np = to_of_node(fwnode);
- 
--	if (IS_ENABLED(CONFIG_X86))
-+	if (IS_ENABLED(CONFIG_X86_INTEL_CE) || IS_ENABLED(CONFIG_OLPC))
- 		return 0;
- 
- 	if (!con_np)
+diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
+index 713573b6c86c..de4fe180cd4b 100644
+--- a/drivers/clk/Kconfig
++++ b/drivers/clk/Kconfig
+@@ -270,7 +270,7 @@ config COMMON_CLK_LAN966X
+ 	tristate "Generic Clock Controller driver for LAN966X SoC"
+ 	depends on HAS_IOMEM
+ 	depends on OF
+-	depends on SOC_LAN966 || ARCH_LAN969X || COMPILE_TEST
++	depends on SOC_LAN966 || ARCH_LAN969X || MCHP_LAN966X_PCI || COMPILE_TEST
+ 	help
+ 	  This driver provides support for Generic Clock Controller(GCK) on
+ 	  LAN966X SoC. GCK generates and supplies clock to various peripherals
 -- 
 2.49.0
 
