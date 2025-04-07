@@ -1,48 +1,50 @@
-Return-Path: <linux-i2c+bounces-10154-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10155-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AEFC1A7E3B7
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 17:15:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D37EA7E327
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 17:07:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A461F4219EF
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 14:57:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 869EB189AC6E
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 14:58:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 281041F8AC8;
-	Mon,  7 Apr 2025 14:56:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12ED81F9416;
+	Mon,  7 Apr 2025 14:56:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="AEfocUA/"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="lRHpLA5w"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E88A1EFF9E;
-	Mon,  7 Apr 2025 14:56:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6C441E8343;
+	Mon,  7 Apr 2025 14:56:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744037764; cv=none; b=EAjjI02sn+wG7l+5fCpEoyWoVeGwYIn6v87wyz8KaNBe07j+ott7JOX/WeYVAlWBoAeHGV/9vCeuYvV7Y/XdS7/59JkhFzbz0tyEqpUw8vpywGqKAKdzCnKI6PmK5McfWQD+3gNC14JJMUO1LbMp5dFtiMyi56HF6rKrAODpF8I=
+	t=1744037772; cv=none; b=lmGQFlRFSP91oGhHWObzcPLwl4v7/uVKkz1m5nhzo5KhaNsM+qZ4Jzm8oTS6pjHNOGPrNVMW7QH4dOhCITKCGiXM1Gv5n9GUxVNxJCZ5aB11ImESy3FYEU8j8vmJ0v40DSEVtcgVoXGlatWsVDxwyLAGnglUoMDHPP72hbwlRpU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744037764; c=relaxed/simple;
-	bh=3dIv9KA8LuHWus0/gPfXpZGDmk0o22eeLSJ/w1PnhmM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=RlXX/oZFtMc7OYLwpzWaZay3wwz/twg5Xn09WmPke12HkAbR15sDvAE1tx+r0B+39UQAf5nWfY++myCsA3zOmFMHNoc3c/Qa09cdZ7MU1UPiD7BQT1LXjCHcKk3RdWBcijKSctaI4ZwH81VG7K9KuiXh5gAjeIeciDyJ5sO9rnM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=AEfocUA/; arc=none smtp.client-ip=217.70.183.197
+	s=arc-20240116; t=1744037772; c=relaxed/simple;
+	bh=PQ+P9kqNCPN9d4qj/BBbmXF9niovrMD/hG0MVRi2gZw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=JQML9n3/1jEAF+OnHzz+vHFV66hwyHJvIcp5p28S+MTLYECwcaGX1Fc/UM6+yKwqijs3Di7eFD1ZyUEPDLQYY1LxirK644XlfmZPMvzjc6USC91JOBVvwlKx+8lumni9sy4YQkDC5INSaw7XCdNv775bUYLe0own4FAsPtpNUQ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=lRHpLA5w; arc=none smtp.client-ip=217.70.183.197
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPA id C7B0644333;
-	Mon,  7 Apr 2025 14:55:55 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id ABD4E44329;
+	Mon,  7 Apr 2025 14:56:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1744037759;
+	t=1744037768;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=BVPT0CFkqtX/ZcwT+Cc/lDNZWWWi2vq+Tcz4vrmiE6g=;
-	b=AEfocUA/21kPxWHKfw8jxdyA1UpdsBAP2ARoRqUIV44X1+NtGaOs+mvc5hbx7lGRON38EG
-	8EdRiyVXfjngizQzKPYdcaoIkLVFz70gC8PVdJCxKkx7FgLTqC3sd/CrhJaI+Xp52nJqj+
-	ydQYj8PltIX9XZVYmYg3meK3XegIY2trYNfqr3z81pTiQbi8IjUTml8T3avDvXlvrMbQBL
-	G9X7PgxgRXA2igkfN4KsY8oCmQz6/dG3FxctKN1x/XkM4eBr4N6QB5WZaA8Jw7c5Qppqnt
-	jW0ctNrXD66wH0yXieSqK0E8TaJhuS+4xX6VZuluZQQkb9Q9IvUCOgGdnAYhBg==
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=QhKSot0q9xebZtkkLeIRo3kHV/poSCeCT0Kvb7Cr33k=;
+	b=lRHpLA5weePDL73MrKW+Y3XHiB9W8k3hf91ur+nDVlnYHVXohgUG2cBaJSJcYPAmsWPozC
+	CsGVlTXRQWIYhWxLWfyuHjNTXXtot6dIJ/+W8qN+6igyAUvPQYBxwYI+cAZ+uZtxSTYRz8
+	Uc+QVyaA23Y1tQ8lXOVJXWdyiZMSmgnb3SV+/WYJo472JfR4UAw513fvcXbd4fstdlFMOz
+	GrtOidGitHrHg0XTfEJYiZ6AJCiUeLBHxs+9TIvZzW5jTTHSgA6g59xPnSqwH56GMCir5r
+	WQWGvl9TEUivUtIZqPaZehELitQ5tiGmr4SxzK9L654CoOLKG0idMa3ExgbbRQ==
 From: Herve Codina <herve.codina@bootlin.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	"Rafael J. Wysocki" <rafael@kernel.org>,
@@ -85,134 +87,128 @@ Cc: Wolfram Sang <wsa@kernel.org>,
 	Steen Hegelund <steen.hegelund@microchip.com>,
 	Luca Ceresoli <luca.ceresoli@bootlin.com>,
 	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH 00/16] lan966x pci device: Add support for SFPs
-Date: Mon,  7 Apr 2025 16:55:29 +0200
-Message-ID: <20250407145546.270683-1-herve.codina@bootlin.com>
+Subject: [PATCH 01/16] Revert "treewide: Fix probing of devices in DT overlays"
+Date: Mon,  7 Apr 2025 16:55:30 +0200
+Message-ID: <20250407145546.270683-2-herve.codina@bootlin.com>
 X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20250407145546.270683-1-herve.codina@bootlin.com>
+References: <20250407145546.270683-1-herve.codina@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-GND-State: clean
 X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvtddtgeekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffogggtgfesthekredtredtjeenucfhrhhomhepjfgvrhhvvgcuvehoughinhgruceohhgvrhhvvgdrtghoughinhgrsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeelteduffeltddvtdffgedugfejffeggeekheejiefggfeivefhkeffheehheeiueenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeeltddrkeelrdduieefrdduvdejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepledtrdekledrudeifedruddvjedphhgvlhhopehlohgtrghlhhhoshhtrdhlohgtrghlughomhgrihhnpdhmrghilhhfrhhomhephhgvrhhvvgdrtghoughinhgrsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeeguddprhgtphhtthhopehgrhgvghhkhheslhhinhhugihfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrkhhrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehshhgrfihnghhuoheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshdrhhgruhgvr
- hesphgvnhhguhhtrhhonhhigidruggvpdhrtghpthhtohepkhgvrhhnvghlsehpvghnghhuthhrohhnihigrdguvgdprhgtphhtthhopehfvghsthgvvhgrmhesghhmrghilhdrtghomhdprhgtphhtthhopehmthhurhhquhgvthhtvgessggrhihlihgsrhgvrdgtohhm
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvtddtgeekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefjvghrvhgvucevohguihhnrgcuoehhvghrvhgvrdgtohguihhnrgessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepleffudeludffledviefftedtffffjeehhfeiffelteejtdeugffggfffudffheegnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepledtrdekledrudeifedruddvjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeeltddrkeelrdduieefrdduvdejpdhhvghloheplhhotggrlhhhohhsthdrlhhotggrlhguohhmrghinhdpmhgrihhlfhhrohhmpehhvghrvhgvrdgtohguihhnrgessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepgedupdhrtghpthhtohepghhrvghgkhhhsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtoheprhgrfhgrvghlsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghkrheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhhrgifnhhguhhosehkvghrnhgvlhdrohhrghdprhgtphhtthhopehsrdhhrghuv
+ ghrsehpvghnghhuthhrohhnihigrdguvgdprhgtphhtthhopehkvghrnhgvlhesphgvnhhguhhtrhhonhhigidruggvpdhrtghpthhtohepfhgvshhtvghvrghmsehgmhgrihhlrdgtohhmpdhrtghpthhtohepmhhtuhhrqhhuvghtthgvsegsrgihlhhisghrvgdrtghomh
 X-GND-Sasl: herve.codina@bootlin.com
 
-Hi,
+From: Saravana Kannan <saravanak@google.com>
 
-This series add support for SFPs ports available on the LAN966x PCI
-device. In order to have the SFPs supported, additional devices are
-needed such as clock controller and I2C.
+From: Saravana Kannan <saravanak@google.com>
 
-As a reminder, the LAN966x PCI device driver use a device-tree overlay
-to describe devices available on the PCI board. Adding support for SFPs
-ports consists in adding more devices in the already existing
-device-tree overlay.
+This reverts commit 1a50d9403fb90cbe4dea0ec9fd0351d2ecbd8924.
 
-With those devices added, the device-tree overlay is more complex and
-some consumer/supplier relationship are needed in order to remove
-devices in correct order when the LAN966x PCI driver is removed.
+While the commit fixed fw_devlink overlay handling for one case, it
+broke it for another case. So revert it and redo the fix in a separate
+patch.
 
-Those links are typically provided by fw_devlink and we faced some
-issues with fw_devlink and overlays.
+Fixes: 1a50d9403fb9 ("treewide: Fix probing of devices in DT overlays")
+Reported-by: Herve Codina <herve.codina@bootlin.com>
+Closes: https://lore.kernel.org/lkml/CAMuHMdXEnSD4rRJ-o90x4OprUacN_rJgyo8x6=9F9rZ+-KzjOg@mail.gmail.com/
+Closes: https://lore.kernel.org/all/20240221095137.616d2aaa@bootlin.com/
+Closes: https://lore.kernel.org/lkml/20240312151835.29ef62a0@bootlin.com/
+Signed-off-by: Saravana Kannan <saravanak@google.com>
+Link: https://lore.kernel.org/lkml/20240411235623.1260061-2-saravanak@google.com/
+Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+---
+ drivers/bus/imx-weim.c    | 6 ------
+ drivers/i2c/i2c-core-of.c | 5 -----
+ drivers/of/dynamic.c      | 1 -
+ drivers/of/platform.c     | 5 -----
+ drivers/spi/spi.c         | 5 -----
+ 5 files changed, 22 deletions(-)
 
-This series gives the big picture related to the SFPs support from
-fixing issues to adding new devices. Of course, it can be split if
-needed.
-
-The first part of the series (patch 1, 2 and 3) fixes fw_devlink when it
-is used with overlay. Patches 1 and 3 were previously sent by Saravana
-[0]. I just rebased them on top of v6.15-rc1 and added patch 2 in order
-to take into account feedback received on the series sent by Saravana.
-
-Those modification were not sufficient in our case and so, on top of
-that, patch 4 and 5 fix some more issues related to fw_devlink.
-
-Patches 6 and 7 are related also to fw_devlink but specific to PCI and
-the device-tree nodes created during enumeration.
-
-Patches 8, 9 and 10 are related fw_devlink too but specific to I2C
-muxes. Patches purpose is to correctly set a link between an adapter
-supplier and its consumer. Indeed, an i2c mux adapter's parent is not
-the i2c mux supplier but the adapter the i2c mux is connected to. Adding
-a new link between the adapter supplier involved when i2c muxes are used
-avoid a freeze observed during device removal.
-
-Patch 11 adds support for fw_delink on x86. fw_devlink is needed to have
-the consumer/supplier relationship between devices in order to ensure a
-correct device removal order. Adding fw_devlink support for x86 has been
-tried in the past but was reverted [1] because it broke some systems.
-Instead of disabling fw_devlink on *all* x86 system, use a finer grain
-and disable it only on system which could be broken.
-
-Patches 12 and 13 allow to build clock and i2c controller used by the
-LAN966x PCI device when the LAN966x PCI device is enabled.
-
-The next 2 patches (patches 14 and 15) update the LAN966x device-tree
-overlay itself to have the SPF ports and devices they depends on
-described.
-
-The last patch (patch 16) adds new drivers in the needed driver list
-available in the Kconfig help to keep this list up to date with the
-devices described in the device-tree overlay.
-
-Once again, this series gives the big picture and can be split if
-needed. Let me know.
-
-[0] https://lore.kernel.org/lkml/20240411235623.1260061-1-saravanak@google.com/
-[1] https://lore.kernel.org/lkml/3c1f2473-92ad-bfc4-258e-a5a08ad73dd0@web.de/
-
-Best regards,
-Hervé
-
-Herve Codina (14):
-  driver core: Rename get_dev_from_fwnode() wrapper to
-    get_device_from_fwnode()
-  driver core: Avoid warning when removing a device while its supplier
-    is unbinding
-  bus: simple-pm-bus: Populate child nodes at probe
-  PCI: of: Set fwnode.dev of newly created PCI device nodes
-  PCI: of: Remove fwnode_dev_initialized() call for a PCI root bridge
-    node
-  i2c: core: Introduce i2c_get_adapter_supplier()
-  i2c: mux: Set adapter supplier
-  i2c: mux: Create missing devlink between mux and adapter supplier
-  of: property: Allow fw_devlink device-tree support for x86
-  clk: lan966x: Add MCHP_LAN966X_PCI dependency
-  i2c: busses: at91: Add MCHP_LAN966X_PCI dependency
-  misc: lan966x_pci: Fix dtso nodes ordering
-  misc: lan966x_pci: Add dtso nodes in order to support SFPs
-  misc: lan966x_pci: Add drivers needed to support SFPs in Kconfig help
-
-Saravana Kannan (2):
-  Revert "treewide: Fix probing of devices in DT overlays"
-  of: dynamic: Fix overlayed devices not probing because of fw_devlink
-
- drivers/base/core.c           |  93 ++++++++++++---
- drivers/bus/imx-weim.c        |   6 -
- drivers/bus/simple-pm-bus.c   |  23 ++--
- drivers/clk/Kconfig           |   2 +-
- drivers/i2c/busses/Kconfig    |   2 +-
- drivers/i2c/i2c-core-base.c   |  16 +++
- drivers/i2c/i2c-core-of.c     |   5 -
- drivers/i2c/i2c-mux.c         |  21 ++++
- drivers/misc/Kconfig          |   5 +
- drivers/misc/lan966x_pci.dtso | 206 ++++++++++++++++++++++++++--------
- drivers/of/dynamic.c          |   1 -
- drivers/of/overlay.c          |  15 +++
- drivers/of/platform.c         |   5 -
- drivers/of/property.c         |   2 +-
- drivers/pci/of.c              |   8 +-
- drivers/spi/spi.c             |   5 -
- include/linux/fwnode.h        |   1 +
- include/linux/i2c.h           |   3 +
- 18 files changed, 318 insertions(+), 101 deletions(-)
-
+diff --git a/drivers/bus/imx-weim.c b/drivers/bus/imx-weim.c
+index 83d623d97f5f..87070155b057 100644
+--- a/drivers/bus/imx-weim.c
++++ b/drivers/bus/imx-weim.c
+@@ -327,12 +327,6 @@ static int of_weim_notify(struct notifier_block *nb, unsigned long action,
+ 				 "Failed to setup timing for '%pOF'\n", rd->dn);
+ 
+ 		if (!of_node_check_flag(rd->dn, OF_POPULATED)) {
+-			/*
+-			 * Clear the flag before adding the device so that
+-			 * fw_devlink doesn't skip adding consumers to this
+-			 * device.
+-			 */
+-			rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
+ 			if (!of_platform_device_create(rd->dn, NULL, &pdev->dev)) {
+ 				dev_err(&pdev->dev,
+ 					"Failed to create child device '%pOF'\n",
+diff --git a/drivers/i2c/i2c-core-of.c b/drivers/i2c/i2c-core-of.c
+index 02feee6c9ba9..2b8d02b496fa 100644
+--- a/drivers/i2c/i2c-core-of.c
++++ b/drivers/i2c/i2c-core-of.c
+@@ -177,11 +177,6 @@ static int of_i2c_notify(struct notifier_block *nb, unsigned long action,
+ 			return NOTIFY_OK;
+ 		}
+ 
+-		/*
+-		 * Clear the flag before adding the device so that fw_devlink
+-		 * doesn't skip adding consumers to this device.
+-		 */
+-		rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
+ 		client = of_i2c_register_device(adap, rd->dn);
+ 		if (IS_ERR(client)) {
+ 			dev_err(&adap->dev, "failed to create client for '%pOF'\n",
+diff --git a/drivers/of/dynamic.c b/drivers/of/dynamic.c
+index 0aba760f7577..6a117e1b6798 100644
+--- a/drivers/of/dynamic.c
++++ b/drivers/of/dynamic.c
+@@ -225,7 +225,6 @@ static void __of_attach_node(struct device_node *np)
+ 	np->sibling = np->parent->child;
+ 	np->parent->child = np;
+ 	of_node_clear_flag(np, OF_DETACHED);
+-	np->fwnode.flags |= FWNODE_FLAG_NOT_DEVICE;
+ 
+ 	raw_spin_unlock_irqrestore(&devtree_lock, flags);
+ 
+diff --git a/drivers/of/platform.c b/drivers/of/platform.c
+index f77cb19973a5..ef9445ba168b 100644
+--- a/drivers/of/platform.c
++++ b/drivers/of/platform.c
+@@ -739,11 +739,6 @@ static int of_platform_notify(struct notifier_block *nb,
+ 		if (of_node_check_flag(rd->dn, OF_POPULATED))
+ 			return NOTIFY_OK;
+ 
+-		/*
+-		 * Clear the flag before adding the device so that fw_devlink
+-		 * doesn't skip adding consumers to this device.
+-		 */
+-		rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
+ 		/* pdev_parent may be NULL when no bus platform device */
+ 		pdev_parent = of_find_device_by_node(parent);
+ 		pdev = of_platform_device_create(rd->dn, NULL,
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index 90e27729ef6b..01a4e558a4fe 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -4798,11 +4798,6 @@ static int of_spi_notify(struct notifier_block *nb, unsigned long action,
+ 			return NOTIFY_OK;
+ 		}
+ 
+-		/*
+-		 * Clear the flag before adding the device so that fw_devlink
+-		 * doesn't skip adding consumers to this device.
+-		 */
+-		rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
+ 		spi = of_register_spi_device(ctlr, rd->dn);
+ 		put_device(&ctlr->dev);
+ 
 -- 
 2.49.0
 
