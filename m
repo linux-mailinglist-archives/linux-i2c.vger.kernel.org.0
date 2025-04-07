@@ -1,76 +1,77 @@
-Return-Path: <linux-i2c+bounces-10139-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10140-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6CA7A7DD90
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 14:23:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 161A4A7DE06
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 14:45:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ADDE2188E56E
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 12:23:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E0AFF1888B7F
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 12:45:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC6AB231A3B;
-	Mon,  7 Apr 2025 12:23:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3229F24DFFB;
+	Mon,  7 Apr 2025 12:45:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Eesl5/zA"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Q4DkUFiO"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84AE6192B89;
-	Mon,  7 Apr 2025 12:23:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AE0F22D4C3;
+	Mon,  7 Apr 2025 12:45:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744028610; cv=none; b=PVE5CLzCeRKfVfOeNam8r7zVZ1bJ2et16s3z2Mt1HLSW06sGRptJ0BcUkIjU+th6OCCKlZnb/xRsexCdNsX/FDbCzimaDmTzu/Mgr2GToUbJV/3XIJmmJCnRQ1b2itbFCi0m4UGuvJfsdnqyGntdu2A7VBjWpO6HW4f1sIabZ/M=
+	t=1744029939; cv=none; b=saAREuGulwr462xZcltMJrox4Gt+zaa2aQ72pfCRKikVfTO2pEUbySm8Ag+v+jDarO5/mAkYo+yRK9cEGGMZjm55oOzQAj8YXoVH22pklr0fu0WDt92tqesTod/PCixJaVJ+y1xdpJXGb2I2/foMXna31eG/LgbBOKL/DFaqm4Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744028610; c=relaxed/simple;
-	bh=grRP9IIZu+yzVT4nTI/ur2s0/bB6KpDJMElRNUUlS7k=;
+	s=arc-20240116; t=1744029939; c=relaxed/simple;
+	bh=oi7xvK7sq6Mk30ayGug3Cz0ce7Qbzy8vn4VUDnl94Fk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pYvyGp1KxzMUsPV9GdUc+O/pTk2UJru5777ZTsv++ZoVG2gKoTsviVhLxEVjpQ9houiYj5/5QAuZfBQxYwpc6uNnOdEMvNcdtFsrKvFC1eg8VXlUi1kaRzz5exijEraa/Hq3a3P8l05uZDQsrslcHIbec9qD/nL7AY1hvSrg5Qw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Eesl5/zA; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=jIsQCgYTAL6C4wzXWcxwKGpP8mQ1zJoFym0WAHD9ItPf8nM+1x5jZbpnBBz5XX/rd+yYtKP6zw3y+N2qWvMY/BMQZJEZ61xjkuMUaChIWbCM/T17YBLRL4LlcyeHJodxDEPWcDTLYynhBIBDMLOrTvP2Jb3pBxfI5LLLPi6aKEw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Q4DkUFiO; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744028608; x=1775564608;
+  t=1744029937; x=1775565937;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=grRP9IIZu+yzVT4nTI/ur2s0/bB6KpDJMElRNUUlS7k=;
-  b=Eesl5/zANuz024Lx2kvJhiepAKftOk/C2I7sPNdaxHd+NEXH198xUmb2
-   aQG9C4tG9ipcZHanOhI74tR10aKP8IzHZgaixV/2QNoGZpqrY8tmxs0t+
-   76Cveu+p8Aa/O5MREq8a/HSYx8T+U+7lM+HTYlY50WVl9uVctmzipLcBi
-   95FHCSCMZU7iRkq3RPDsCotl0hXqRKLMb/9pE5vxE7h6X/u4KAMUueF/e
-   7xc8U49fghRlVf0vfFgwnPpH9xy9Kf1LOSIMzaS+E1XEdprrTjQeSrM4k
-   6/aNGlNchnUpuI8os7aounWgZCJ6ZxgnZn/IrN66GGBtGXnpXNboXStyH
-   w==;
-X-CSE-ConnectionGUID: 5HxFY114QOeWVt2+BqMU0A==
-X-CSE-MsgGUID: eo423dVsQzqy2TUZCt39qA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11397"; a="44554989"
+  bh=oi7xvK7sq6Mk30ayGug3Cz0ce7Qbzy8vn4VUDnl94Fk=;
+  b=Q4DkUFiOhFowklIqPzGtu3CwTt1Ua2c3AnBn0Easq2fyZfO1Gcm0NPzg
+   InRLUH9+Mr/4ccMFnYrY5Q7M9hqDtZqT/CHAoK8YdqhQ5qw4szTej+2AC
+   Ay8SkNFFQ7d/SUm5X+LMI1T0UeJCJhPkw42dHy5tEyDGSFzx0nzd0kiFk
+   tfvbrvzByZsct/keSi+Da9NiR9SSZizHbTX0MKoKmMJiDfZQpi4ZKCCoU
+   9btS4r4Wq9ZR8NLYhqi+WkGONyuTDFV69gKtcIbj9jA2/hVVv50JZKSCr
+   Z7Zu578OGubQI0QUgtBc6BlZ6gr92u0v0G4+D6UCV6CwKDTqym0L61/UF
+   Q==;
+X-CSE-ConnectionGUID: pXrqrFN/Sr+4zIAyrmGRJQ==
+X-CSE-MsgGUID: aXZ3tTynQv6eWt25y4c34Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11397"; a="44660999"
 X-IronPort-AV: E=Sophos;i="6.15,194,1739865600"; 
-   d="scan'208";a="44554989"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2025 05:23:26 -0700
-X-CSE-ConnectionGUID: r9NFi8VXRgyZc6Z/TpGkLg==
-X-CSE-MsgGUID: +vw++kUxSJO/fOiJNdXVAQ==
+   d="scan'208";a="44660999"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2025 05:45:37 -0700
+X-CSE-ConnectionGUID: 9P08ZSozR0Kdsb1iejdrkw==
+X-CSE-MsgGUID: S8frljUTRLKrkL7PDqw5QQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,194,1739865600"; 
-   d="scan'208";a="128875979"
-Received: from smile.fi.intel.com ([10.237.72.58])
-  by orviesa008.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2025 05:23:26 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1u1lVa-0000000A3zK-2mje;
-	Mon, 07 Apr 2025 15:23:22 +0300
-Date: Mon, 7 Apr 2025 15:23:22 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+   d="scan'208";a="127829153"
+Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 07 Apr 2025 05:45:34 -0700
+Received: from kbuild by b207828170a5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1u1lr2-0003OR-0T;
+	Mon, 07 Apr 2025 12:45:32 +0000
+Date: Mon, 7 Apr 2025 20:45:14 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Wolfram Sang <wsa-dev@sang-engineering.com>,
 	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/6] i2c: core: Move client towards fwnode
-Message-ID: <Z_PDuilyIYM_3STr@smile.fi.intel.com>
-References: <20250407095852.215809-1-andriy.shevchenko@linux.intel.com>
- <d51a686c-583a-4fed-81bd-9287459c48fe@ideasonboard.com>
+Cc: oe-kbuild-all@lists.linux.dev,
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Subject: Re: [PATCH v2 2/6] i2c: core: Unify the firmware node type check
+Message-ID: <202504072041.Bv9mOk4o-lkp@intel.com>
+References: <20250407095852.215809-3-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -79,43 +80,76 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d51a686c-583a-4fed-81bd-9287459c48fe@ideasonboard.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20250407095852.215809-3-andriy.shevchenko@linux.intel.com>
 
-On Mon, Apr 07, 2025 at 02:34:48PM +0300, Tomi Valkeinen wrote:
-> On 07/04/2025 12:55, Andy Shevchenko wrote:
-> > The struct i2c_board_info has of_node and fwnode members. This is
-> > quite confusing as they are of the same semantics and it's tend
-> > to have an issue if user assigns both. Luckily there is only a
-> > single driver that does this and fix was sent today. Nevertheless
-> > the series moves the client handling code to use fwnode and deprecates
-> > the of_node member in the respective documentation.
-> > 
-> > Tomi, can you test this series + the patch we discussed earlier so it works as
-> > expected?
-> 
-> I tested this series, and then tested this series + "[PATCH v1 1/1] media:
-> i2c: ds90ub960: Remove of_node assignment". I didn't see anything amiss in
-> either case.
-> 
-> Tested-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Hi Andy,
 
-Thank you very much for the testing!
+kernel test robot noticed the following build errors:
 
-> I assume the ds90ub960 patch is the "single driver that does this and fix
-> was sent today"? If so, I think that patch could have been included in this
-> series as well, there's hardly a chance of conflicts with the one liner. And
-> if applied separately, we probably need to apply the ub960 patch one kernel
-> version later than this series.
+[auto build test ERROR on wsa/i2c/for-next]
+[also build test ERROR on linus/master v6.15-rc1 next-20250407]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Yeah, I forgot to update the cover letter to point to that one out.
-I agree on everything you said above. But let's wait a bit for Wolfram
-to comment on / apply this first. It would be nice to have it in, so
-we prevent new ambiguous users from appearing.
+url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/i2c-core-Drop-duplicate-check-before-calling-OF-APIs/20250407-180528
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
+patch link:    https://lore.kernel.org/r/20250407095852.215809-3-andriy.shevchenko%40linux.intel.com
+patch subject: [PATCH v2 2/6] i2c: core: Unify the firmware node type check
+config: arc-randconfig-002-20250407 (https://download.01.org/0day-ci/archive/20250407/202504072041.Bv9mOk4o-lkp@intel.com/config)
+compiler: arc-linux-gcc (GCC) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250407/202504072041.Bv9mOk4o-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504072041.Bv9mOk4o-lkp@intel.com/
+
+All error/warnings (new ones prefixed by >>):
+
+   drivers/i2c/i2c-core-slave.c: In function 'i2c_detect_slave_mode':
+>> drivers/i2c/i2c-core-slave.c:117:17: error: implicit declaration of function 'for_each_child_node_scoped'; did you mean 'for_each_child_of_node_scoped'? [-Wimplicit-function-declaration]
+     117 |                 for_each_child_node_scoped(fwnode, child) {
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                 for_each_child_of_node_scoped
+>> drivers/i2c/i2c-core-slave.c:117:52: error: 'child' undeclared (first use in this function)
+     117 |                 for_each_child_node_scoped(fwnode, child) {
+         |                                                    ^~~~~
+   drivers/i2c/i2c-core-slave.c:117:52: note: each undeclared identifier is reported only once for each function it appears in
+>> drivers/i2c/i2c-core-slave.c:117:58: error: expected ';' before '{' token
+     117 |                 for_each_child_node_scoped(fwnode, child) {
+         |                                                          ^~
+         |                                                          ;
+>> drivers/i2c/i2c-core-slave.c:115:21: warning: unused variable 'reg' [-Wunused-variable]
+     115 |                 u32 reg;
+         |                     ^~~
+
+
+vim +117 drivers/i2c/i2c-core-slave.c
+
+    97	
+    98	/**
+    99	 * i2c_detect_slave_mode - detect operation mode
+   100	 * @dev: The device owning the bus
+   101	 *
+   102	 * This checks the device nodes for an I2C slave by checking the address
+   103	 * used in the reg property. If the address match the I2C_OWN_SLAVE_ADDRESS
+   104	 * flag this means the device is configured to act as a I2C slave and it will
+   105	 * be listening at that address.
+   106	 *
+   107	 * Returns true if an I2C own slave address is detected, otherwise returns
+   108	 * false.
+   109	 */
+   110	bool i2c_detect_slave_mode(struct device *dev)
+   111	{
+   112		struct fwnode_handle *fwnode = dev_fwnode(dev);
+   113	
+   114		if (is_of_node(fwnode)) {
+ > 115			u32 reg;
+   116	
+ > 117			for_each_child_node_scoped(fwnode, child) {
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
