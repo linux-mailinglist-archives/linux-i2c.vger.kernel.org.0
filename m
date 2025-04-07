@@ -1,50 +1,50 @@
-Return-Path: <linux-i2c+bounces-10156-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10157-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA701A7E3AF
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 17:14:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A77D6A7E342
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 17:08:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2973C3ABB2E
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 14:57:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2138718846DD
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 14:58:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EAF61FA267;
-	Mon,  7 Apr 2025 14:56:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AB891FBCB0;
+	Mon,  7 Apr 2025 14:56:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="NCF8YrQe"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="JWB2xXDh"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 569CD1EFF9D;
-	Mon,  7 Apr 2025 14:56:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B9E21F9AB1;
+	Mon,  7 Apr 2025 14:56:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744037774; cv=none; b=Egt1CldNbDwiXd1xulUJdp5l1eLKPqPAcMRjD3uVlzh7hrRrklg4LOabrbh5RSx1u9adrfUxVZtHWqG4lSmqsWaQq5B5cQppRx/ANb/TlbuZczpWhdz9M/bdTNh9jGH9w+Wztg16vRwxHJ/fmzl2xwyqrDng8V8Vs7hMXfpYkFA=
+	t=1744037776; cv=none; b=HpiREri/1S/k3lVhRPVhoTraZ2vg1blStq9w+dbTOTuB4GaO5Crs3OfUP8kq/A+FmYd8nHUXkWgSntCpfmTTUpSvN0eqzEQDb95ySb6zU3+gvJtfIDRni5U22FA7hYnOpMQ9Rz8aBSSBMzeOkoaQbLQOTdwv2es7LAfhcRlg8OU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744037774; c=relaxed/simple;
-	bh=xTj0xUFlTJ9TBmQDcwePyyDlPC9wH/C+T229Nuw/zag=;
+	s=arc-20240116; t=1744037776; c=relaxed/simple;
+	bh=S1RNE/foQOEe0f5n9xpJX8PlLFrVv8iDwCepoPTPzKU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Cnp5W4aMIZMvciPxu0pZVaLubIwdM/6ovvtcu2JrDZhkuoTvWVXbgcsJwueDMwJGTc5ICUZp+xFa1JCCXQCzsqsMmwhe+9ns+Dukz4DpucACAI28O4TuDsDH9kfjZrAZMyRNquHGqDkJtPsCiGXnLSPhgRrrTapmJmCL5tjxk34=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=NCF8YrQe; arc=none smtp.client-ip=217.70.183.197
+	 MIME-Version; b=LX6KeJ7ac6Kr/DwjwNip9Kj8RUads4C8xSahTcr5alZva3C7D16g62SKPWInCjRr16Rjresl/jwKmSVYv904ePeAOMr2EC1EfWbTexR7iya+N7pBBA0Yh9HlEOl0h7AJyESGenOsD7YQvltZT1zbMqEaHNX9+csdNKzlmt7Gb8I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=JWB2xXDh; arc=none smtp.client-ip=217.70.183.197
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPA id 2E1D644327;
-	Mon,  7 Apr 2025 14:56:08 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id 0AE594433C;
+	Mon,  7 Apr 2025 14:56:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1744037769;
+	t=1744037771;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Qk5GQt8I+7R2pPHJxzjfQlsZZkZxJhgSQbQsHr0o/hI=;
-	b=NCF8YrQeurrOLg19iw0E0baRYjfFOrx6IjRNk2HdtyCK5rpNymla2co1/mcbptqDw16lzg
-	kVOBe9mOrYsbHFLOhcDH8QBJ7/jujj2CUYFuZ9T+3wT/r6jKwQY0NbM0uN+raSl7EUv1/p
-	JWipr2DsN+7bwFa5Ay7t8aDu9dmQvMV7DkJ0GOH31ZCg9LJMvh95C8mwgXobs5X7fPGyoZ
-	y8cMaI6RnpaohtMh4oavzvlRDV6lS0/RWjtncwfdBtktNuC+4o78xc7CAVXaEzAcVub/tO
-	YiR/icZTO5I4JqHS9sNecAECJeSDLBHdjc+kYDOiYxqrprxz68wmHzJuhsfA3g==
+	bh=d1/J1QHvD0gHIxXHgcwE+9Y7S0GOEwA3VIVOmZklP+E=;
+	b=JWB2xXDhdni2CkAAYmIKRjpRuLbHGorfOlbgWUti64EgO0JgK8wRFykcMhw+B26P1tL+cA
+	uNXSNpQ+fRc+up+EWnhp0rKmnz2As9ABRVLa0J9DV6TopGVXq+KeN3orARwGDaG2y/vhIa
+	rJ16ehLoRlOX3fSMDwue50nFrYPHtJ2N8pGMJITN/NiIaqOrIuhxvRClnj4B+T5QUrgATW
+	yWkvJ/RAObyYb79V5RGJtAGuD4aNHeD4YmSVmD9wFNv0PwTNAFoFwRvlMRRfZnm6fVZ+qz
+	IpFQUIITwcGPXJvIVYH50tbhY9TzO5yZGHdqka5eWBsakWXY0TASuhp9VhQwPA==
 From: Herve Codina <herve.codina@bootlin.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	"Rafael J. Wysocki" <rafael@kernel.org>,
@@ -87,9 +87,9 @@ Cc: Wolfram Sang <wsa@kernel.org>,
 	Steen Hegelund <steen.hegelund@microchip.com>,
 	Luca Ceresoli <luca.ceresoli@bootlin.com>,
 	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH 02/16] driver core: Rename get_dev_from_fwnode() wrapper to get_device_from_fwnode()
-Date: Mon,  7 Apr 2025 16:55:31 +0200
-Message-ID: <20250407145546.270683-3-herve.codina@bootlin.com>
+Subject: [PATCH 03/16] of: dynamic: Fix overlayed devices not probing because of fw_devlink
+Date: Mon,  7 Apr 2025 16:55:32 +0200
+Message-ID: <20250407145546.270683-4-herve.codina@bootlin.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250407145546.270683-1-herve.codina@bootlin.com>
 References: <20250407145546.270683-1-herve.codina@bootlin.com>
@@ -106,79 +106,187 @@ X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvtddtgeekucetufdoteggode
  ghrsehpvghnghhuthhrohhnihigrdguvgdprhgtphhtthhopehkvghrnhgvlhesphgvnhhguhhtrhhonhhigidruggvpdhrtghpthhtohepfhgvshhtvghvrghmsehgmhgrihhlrdgtohhmpdhrtghpthhtohepmhhtuhhrqhhuvghtthgvsegsrgihlhhisghrvgdrtghomh
 X-GND-Sasl: herve.codina@bootlin.com
 
-get_dev_from_fwnode() calls get_device() and so it acquires a reference
-on the device returned.
+From: Saravana Kannan <saravanak@google.com>
 
-In order to be more obvious that this wrapper is a get_device() variant,
-rename it to get_device_from_fwnode().
+From: Saravana Kannan <saravanak@google.com>
 
-Suggested-by: Mark Brown <broonie@kernel.org>
-Link: https://lore.kernel.org/lkml/CAGETcx97QjnjVR8Z5g0ndLHpK96hLd4aYSV=iEkKPNbNOccYmA@mail.gmail.com/
+When an overlay is applied, if the target device has already probed
+successfully and bound to a device, then some of the fw_devlink logic
+that ran when the device was probed needs to be rerun. This allows newly
+created dangling consumers of the overlayed device tree nodes to be
+moved to become consumers of the target device.
+
+Fixes: 1a50d9403fb9 ("treewide: Fix probing of devices in DT overlays")
+Reported-by: Herve Codina <herve.codina@bootlin.com>
+Closes: https://lore.kernel.org/lkml/CAMuHMdXEnSD4rRJ-o90x4OprUacN_rJgyo8x6=9F9rZ+-KzjOg@mail.gmail.com/
+Closes: https://lore.kernel.org/all/20240221095137.616d2aaa@bootlin.com/
+Closes: https://lore.kernel.org/lkml/20240312151835.29ef62a0@bootlin.com/
+Signed-off-by: Saravana Kannan <saravanak@google.com>
+Link: https://lore.kernel.org/lkml/20240411235623.1260061-3-saravanak@google.com/
+[Herve: Rebase on top of recent kernel and use get_device_from_fwnode()]
 Signed-off-by: Herve Codina <herve.codina@bootlin.com>
 ---
- drivers/base/core.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ drivers/base/core.c    | 78 ++++++++++++++++++++++++++++++++++++------
+ drivers/of/overlay.c   | 15 ++++++++
+ include/linux/fwnode.h |  1 +
+ 3 files changed, 83 insertions(+), 11 deletions(-)
 
 diff --git a/drivers/base/core.c b/drivers/base/core.c
-index d2f9d3a59d6b..f30260fd3031 100644
+index f30260fd3031..5d6687f38d00 100644
 --- a/drivers/base/core.c
 +++ b/drivers/base/core.c
-@@ -1881,7 +1881,7 @@ static void fw_devlink_unblock_consumers(struct device *dev)
+@@ -47,6 +47,8 @@ static bool fw_devlink_drv_reg_done;
+ static bool fw_devlink_best_effort;
+ static struct workqueue_struct *device_link_wq;
+ 
++#define get_device_from_fwnode(fwnode)	get_device((fwnode)->dev)
++
+ /**
+  * __fwnode_link_add - Create a link between two fwnode_handles.
+  * @con: Consumer end of the link.
+@@ -235,6 +237,70 @@ static void __fw_devlink_pickup_dangling_consumers(struct fwnode_handle *fwnode,
+ 		__fw_devlink_pickup_dangling_consumers(child, new_sup);
+ }
+ 
++static void fw_devlink_pickup_dangling_consumers(struct device *dev)
++{
++	struct fwnode_handle *child;
++
++	guard(mutex)(&fwnode_link_lock);
++
++	fwnode_for_each_available_child_node(dev->fwnode, child)
++		__fw_devlink_pickup_dangling_consumers(child, dev->fwnode);
++	__fw_devlink_link_to_consumers(dev);
++}
++
++/**
++ * fw_devlink_refresh_fwnode - Recheck the tree under this firmware node
++ * @fwnode: The fwnode under which the fwnode tree has changed
++ *
++ * This function is mainly meant to adjust the supplier/consumer dependencies
++ * after a fwnode tree overlay has occurred.
++ */
++void fw_devlink_refresh_fwnode(struct fwnode_handle *fwnode)
++{
++	struct device *dev;
++
++	/*
++	 * Find the closest ancestor fwnode that has been converted to a device
++	 * that can bind to a driver (bus device).
++	 */
++	fwnode_handle_get(fwnode);
++	do {
++		if (fwnode->flags & FWNODE_FLAG_NOT_DEVICE)
++			continue;
++
++		dev = get_device_from_fwnode(fwnode);
++		if (!dev)
++			continue;
++
++		if (dev->bus)
++			break;
++
++		put_device(dev);
++	} while ((fwnode = fwnode_get_next_parent(fwnode)));
++
++	/*
++	 * If none of the ancestor fwnodes have (yet) been converted to a device
++	 * that can bind to a driver, there's nothing to fix up.
++	 */
++	if (!fwnode)
++		return;
++
++	WARN(device_is_bound(dev) && dev->links.status != DL_DEV_DRIVER_BOUND,
++	     "Don't multithread overlaying and probing the same device!\n");
++
++	/*
++	 * If the device has already bound to a driver, then we need to redo
++	 * some of the work that was done after the device was bound to a
++	 * driver. If the device hasn't bound to a driver, running thing too
++	 * soon would incorrectly pick up consumers that it shouldn't.
++	 */
++	if (dev->links.status == DL_DEV_DRIVER_BOUND)
++		fw_devlink_pickup_dangling_consumers(dev);
++
++	put_device(dev);
++	fwnode_handle_put(fwnode);
++}
++
+ static DEFINE_MUTEX(device_links_lock);
+ DEFINE_STATIC_SRCU(device_links_srcu);
+ 
+@@ -1313,16 +1379,8 @@ void device_links_driver_bound(struct device *dev)
+ 	 * child firmware node.
+ 	 */
+ 	if (dev->fwnode && dev->fwnode->dev == dev) {
+-		struct fwnode_handle *child;
+-
+ 		fwnode_links_purge_suppliers(dev->fwnode);
+-
+-		guard(mutex)(&fwnode_link_lock);
+-
+-		fwnode_for_each_available_child_node(dev->fwnode, child)
+-			__fw_devlink_pickup_dangling_consumers(child,
+-							       dev->fwnode);
+-		__fw_devlink_link_to_consumers(dev);
++		fw_devlink_pickup_dangling_consumers(dev);
+ 	}
+ 	device_remove_file(dev, &dev_attr_waiting_for_supplier);
+ 
+@@ -1881,8 +1939,6 @@ static void fw_devlink_unblock_consumers(struct device *dev)
  	device_links_write_unlock();
  }
  
--#define get_dev_from_fwnode(fwnode)	get_device((fwnode)->dev)
-+#define get_device_from_fwnode(fwnode)	get_device((fwnode)->dev)
- 
+-#define get_device_from_fwnode(fwnode)	get_device((fwnode)->dev)
+-
  static bool fwnode_init_without_drv(struct fwnode_handle *fwnode)
  {
-@@ -1891,7 +1891,7 @@ static bool fwnode_init_without_drv(struct fwnode_handle *fwnode)
- 	if (!(fwnode->flags & FWNODE_FLAG_INITIALIZED))
- 		return false;
- 
--	dev = get_dev_from_fwnode(fwnode);
-+	dev = get_device_from_fwnode(fwnode);
- 	ret = !dev || dev->links.status == DL_DEV_NO_DRIVER;
- 	put_device(dev);
- 
-@@ -1960,7 +1960,7 @@ static struct device *fwnode_get_next_parent_dev(const struct fwnode_handle *fwn
  	struct device *dev;
+diff --git a/drivers/of/overlay.c b/drivers/of/overlay.c
+index 1af6f52d0708..6bd93153d695 100644
+--- a/drivers/of/overlay.c
++++ b/drivers/of/overlay.c
+@@ -185,6 +185,15 @@ static int overlay_notify(struct overlay_changeset *ovcs,
+ 	return 0;
+ }
  
- 	fwnode_for_each_parent_node(fwnode, parent) {
--		dev = get_dev_from_fwnode(parent);
-+		dev = get_device_from_fwnode(parent);
- 		if (dev) {
- 			fwnode_handle_put(parent);
- 			return dev;
-@@ -2016,8 +2016,8 @@ static bool __fw_devlink_relax_cycles(struct fwnode_handle *con_handle,
- 		goto out;
- 	}
++static void overlay_fw_devlink_refresh(struct overlay_changeset *ovcs)
++{
++	for (int i = 0; i < ovcs->count; i++) {
++		struct device_node *np = ovcs->fragments[i].target;
++
++		fw_devlink_refresh_fwnode(of_fwnode_handle(np));
++	}
++}
++
+ /*
+  * The values of properties in the "/__symbols__" node are paths in
+  * the ovcs->overlay_root.  When duplicating the properties, the paths
+@@ -951,6 +960,12 @@ static int of_overlay_apply(struct overlay_changeset *ovcs,
+ 		pr_err("overlay apply changeset entry notify error %d\n", ret);
+ 	/* notify failure is not fatal, continue */
  
--	sup_dev = get_dev_from_fwnode(sup_handle);
--	con_dev = get_dev_from_fwnode(con_handle);
-+	sup_dev = get_device_from_fwnode(sup_handle);
-+	con_dev = get_device_from_fwnode(con_handle);
- 	/*
- 	 * If sup_dev is bound to a driver and @con hasn't started binding to a
- 	 * driver, sup_dev can't be a consumer of @con. So, no need to check
-@@ -2156,7 +2156,7 @@ static int fw_devlink_create_devlink(struct device *con,
- 	if (sup_handle->flags & FWNODE_FLAG_NOT_DEVICE)
- 		sup_dev = fwnode_get_next_parent_dev(sup_handle);
- 	else
--		sup_dev = get_dev_from_fwnode(sup_handle);
-+		sup_dev = get_device_from_fwnode(sup_handle);
++	/*
++	 * Needs to happen after changeset notify to give the listeners a chance
++	 * to finish creating all the devices they need to create.
++	 */
++	overlay_fw_devlink_refresh(ovcs);
++
+ 	ret_tmp = overlay_notify(ovcs, OF_OVERLAY_POST_APPLY);
+ 	if (ret_tmp)
+ 		if (!ret)
+diff --git a/include/linux/fwnode.h b/include/linux/fwnode.h
+index 6fa0a268d538..af76de93bee2 100644
+--- a/include/linux/fwnode.h
++++ b/include/linux/fwnode.h
+@@ -223,6 +223,7 @@ int fwnode_link_add(struct fwnode_handle *con, struct fwnode_handle *sup,
+ 		    u8 flags);
+ void fwnode_links_purge(struct fwnode_handle *fwnode);
+ void fw_devlink_purge_absent_suppliers(struct fwnode_handle *fwnode);
++void fw_devlink_refresh_fwnode(struct fwnode_handle *fwnode);
+ bool fw_devlink_is_strict(void);
  
- 	if (sup_dev) {
- 		/*
-@@ -2225,7 +2225,7 @@ static void __fw_devlink_link_to_consumers(struct device *dev)
- 		bool own_link = true;
- 		int ret;
- 
--		con_dev = get_dev_from_fwnode(link->consumer);
-+		con_dev = get_device_from_fwnode(link->consumer);
- 		/*
- 		 * If consumer device is not available yet, make a "proxy"
- 		 * SYNC_STATE_ONLY link from the consumer's parent device to
+ #endif
 -- 
 2.49.0
 
