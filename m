@@ -1,50 +1,50 @@
-Return-Path: <linux-i2c+bounces-10162-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10163-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3CBF6A7E341
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 17:08:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 118B8A7E350
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 17:09:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C880B16D180
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 15:00:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 078D5442257
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 15:00:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A3AA1FECBF;
-	Mon,  7 Apr 2025 14:56:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 223501FF7B9;
+	Mon,  7 Apr 2025 14:56:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="UJibLhzS"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="FQfYn7qs"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F1001FE466;
-	Mon,  7 Apr 2025 14:56:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4868C1FF1B4;
+	Mon,  7 Apr 2025 14:56:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744037786; cv=none; b=JrfCh9d8U6YFpWdB/s+9N4DeGcShcXBfL/4/90hRpzvCsehdtvrK62pKzo+R/9dLQCk92dUErSXcfocq6Bscy2qKYZQaqj6MQvZvhwqxXHtYsyBr7uv2cD/+T8Qf8HL9GDj+friFczy5IrQMGd0zmMmU8YWmYUjSIdIoho/SpiA=
+	t=1744037787; cv=none; b=mlU+Z+KUTxilw28bJIIVfVmCbATfmICbNdVp/M4Ubo+4oTod2N6mcGiGzcQK1/GRWiWaaTMFDoPRjMJAEzu2SGz0SwYxWm1bdCp0lE9yjpnzIjMWNzF5o9EClVnd4u5uMJxcCmTj6CMm2qumpzOeACulvRp8RcuHWFtG8cDzWPk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744037786; c=relaxed/simple;
-	bh=RDAW+fwe74PiptUzUxnrAskSMUYIXh+Kc23D7ubwCJk=;
+	s=arc-20240116; t=1744037787; c=relaxed/simple;
+	bh=qG/EdnABcRAM07jh4b1faP/sUl4MITBy9QXu1oGMS3A=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IR/0o9nCLYeaH6Ejyhqm6ZWgfUZkOlPvD8zdhCTOOJWlDhjED6tDCOhJ1w8Ylw6rXG1/SmQIBVCixBOA2nNe2trN4IPhoUQdSVfYCI/GCU+/sSFKlJGcqXoOdnm3uz1mx38LqVxh/8aaxwuqhJS8Sr0NZVhrG1PPAdfZ7sRVWrc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=UJibLhzS; arc=none smtp.client-ip=217.70.183.197
+	 MIME-Version; b=WNxOIQp2XTgjEnan9y9+gC4w0P+08E+dKTkEF4/jyZZKatrrU4HVh1IC6L2D4oo8TFt7t6emt4OpYt23Vc3QzICbCDmjGe6QjZVN9i1Qq+7arsk5eChQSRjIwKyVeKKk54xm8/XT0CPeST9KF2nM6w5c4/7p+JNouYBNTonc97o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=FQfYn7qs; arc=none smtp.client-ip=217.70.183.197
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPA id CBF4C4433C;
-	Mon,  7 Apr 2025 14:56:19 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id DB33744333;
+	Mon,  7 Apr 2025 14:56:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1744037781;
+	t=1744037783;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=5QbRycxm7vGCRrdBNEytaF89Hh6LdVDglF4TAZ/Eo8Q=;
-	b=UJibLhzStnjURTT2XwpbZOd/6Vf219UgdhYLn+PxsXj4jnL10BOZ7x87fHKoVxidadXbhD
-	nHe0+/tfmjeO8ZilO7s8/s0ghjzg+WAiMHYAjGcvqY3zzd7H6ilAGI5MsRsKvKh2oo/u/N
-	P8CUVcAG4zkuJqCZ8dg0BoDQIsFr5tb/57AhOW7OUP6YwrzCiXT+GpFlJnFY9iA0v4fgPY
-	/qhm3a5MlpPOocTB0z2mZrXROElCOebT5Z98DYHQbYSTlWTvym32kdm039P7EWFBRzQ7VY
-	QsCjVNaYNKc7qdbSLrcN50bdnTjzbULIp7027d26L53FIMypPI0HJmgvLNXJyw==
+	bh=3M1B7x/lA6Oqem0SGDN8XKIqllVggUQZW1mA9DMNsaU=;
+	b=FQfYn7qsZ44E+ycd0BD5xImSVjs+mW1KMw6HZx+hB5kOQqF+2Wky3xT+TrOoep/nFdJQHj
+	BnZsMo9+Ml1eolp6bzsh+PperNWyLkPzYXvM4UmqI7eNSFn5vpGL9Aid7C4MK8XOFrtu/B
+	ZcNv/IGyBkf2Kbv+epYAOY5PZ1iNGV8TofAuLBlb/BxcsZWJ5oZ43f7p4UXDAmU2+KGKS+
+	tL0pTnX0NWRYzfx01W64EaC8rLDsecrx6oRr5yB/t2S27NjwtcEwct6lUY1s1ficgPWiNs
+	gAlWucUo8sFUZ0grtxBdbml06eqI6aFecySQ8xqELVu8Y5KyyCBxdIDCWCkGSQ==
 From: Herve Codina <herve.codina@bootlin.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	"Rafael J. Wysocki" <rafael@kernel.org>,
@@ -87,9 +87,9 @@ Cc: Wolfram Sang <wsa@kernel.org>,
 	Steen Hegelund <steen.hegelund@microchip.com>,
 	Luca Ceresoli <luca.ceresoli@bootlin.com>,
 	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH 08/16] i2c: core: Introduce i2c_get_adapter_supplier()
-Date: Mon,  7 Apr 2025 16:55:37 +0200
-Message-ID: <20250407145546.270683-9-herve.codina@bootlin.com>
+Subject: [PATCH 09/16] i2c: mux: Set adapter supplier
+Date: Mon,  7 Apr 2025 16:55:38 +0200
+Message-ID: <20250407145546.270683-10-herve.codina@bootlin.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250407145546.270683-1-herve.codina@bootlin.com>
 References: <20250407145546.270683-1-herve.codina@bootlin.com>
@@ -106,72 +106,31 @@ X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvtddtgeekucetufdoteggode
  ghpthhtohepkhgvrhhnvghlsehpvghnghhuthhrohhnihigrdguvgdprhgtphhtthhopehfvghsthgvvhgrmhesghhmrghilhdrtghomhdprhgtphhtthhopehmthhurhhquhgvthhtvgessggrhihlihgsrhgvrdgtohhm
 X-GND-Sasl: herve.codina@bootlin.com
 
-The supplier device of an I2C adapter is the device that calls
-i2c_add_adapter() or variants and i2c_del_adapter().
+For i2c muxes, the parent of the mux adapter dev is the adapter dev the
+mux is connected to.
 
-Most of the time this supplier device is the parent of the adapter dev.
+This parent is not the supplier of the mux adapter. Indeed, the supplier
+of the mux adapter is the mux device itself.
 
-Exceptions exist with i2c muxes. Indeed, in case of i2c muxes, the
-parent of the adapter dev points to the adapter dev the mux is connected
-to instead of the supplier of this adapter.
-
-Introduce i2c_get_adapter_supplier() and a new supplier field in the
-adapter structure in order to ease the adapter supplier retrieval.
+Fill the adap.supplier with the mux device.
 
 Signed-off-by: Herve Codina <herve.codina@bootlin.com>
 ---
- drivers/i2c/i2c-core-base.c | 16 ++++++++++++++++
- include/linux/i2c.h         |  3 +++
- 2 files changed, 19 insertions(+)
+ drivers/i2c/i2c-mux.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index 7ad1ad5c8c3f..e3eeac0b2b49 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -1917,6 +1917,22 @@ struct i2c_adapter *i2c_get_adapter_by_fwnode(struct fwnode_handle *fwnode)
- }
- EXPORT_SYMBOL(i2c_get_adapter_by_fwnode);
- 
-+/**
-+ * i2c_get_adapter_supplier() - Get the supplier of an adapter
-+ * @adapter: the adapter to get the supplier from
-+ *
-+ * return:
-+ * Look up and return the &struct device corresponding to the device supplying
-+ * this adapter.
-+ *
-+ * The user must call put_device() once done with the supplier returned.
-+ */
-+struct device *i2c_get_adapter_supplier(struct i2c_adapter *adapter)
-+{
-+	return get_device(adapter->supplier ?: adapter->dev.parent);
-+}
-+EXPORT_SYMBOL(i2c_get_adapter_supplier);
-+
- static void i2c_parse_timing(struct device *dev, char *prop_name, u32 *cur_val_p,
- 			    u32 def_val, bool use_def)
- {
-diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-index 2e4903b7f7bc..04b85703bcd6 100644
---- a/include/linux/i2c.h
-+++ b/include/linux/i2c.h
-@@ -746,6 +746,7 @@ struct i2c_adapter {
- 	int timeout;			/* in jiffies */
- 	int retries;
- 	struct device dev;		/* the adapter device */
-+	struct device *supplier;	/* the device that supply this adapter */
- 	unsigned long locked_flags;	/* owned by the I2C core */
- #define I2C_ALF_IS_SUSPENDED		0
- #define I2C_ALF_SUSPEND_REPORTED	1
-@@ -913,6 +914,8 @@ struct i2c_adapter *i2c_get_adapter(int nr);
- void i2c_put_adapter(struct i2c_adapter *adap);
- unsigned int i2c_adapter_depth(struct i2c_adapter *adapter);
- 
-+struct device *i2c_get_adapter_supplier(struct i2c_adapter *adap);
-+
- void i2c_parse_fw_timings(struct device *dev, struct i2c_timings *t, bool use_defaults);
- 
- /* Return the functionality mask */
+diff --git a/drivers/i2c/i2c-mux.c b/drivers/i2c/i2c-mux.c
+index fda72e8be885..d8bdb3b40acf 100644
+--- a/drivers/i2c/i2c-mux.c
++++ b/drivers/i2c/i2c-mux.c
+@@ -318,6 +318,7 @@ int i2c_mux_add_adapter(struct i2c_mux_core *muxc,
+ 	priv->adap.algo = &priv->algo;
+ 	priv->adap.algo_data = priv;
+ 	priv->adap.dev.parent = &parent->dev;
++	priv->adap.supplier = muxc->dev;
+ 	priv->adap.retries = parent->retries;
+ 	priv->adap.timeout = parent->timeout;
+ 	priv->adap.quirks = parent->quirks;
 -- 
 2.49.0
 
