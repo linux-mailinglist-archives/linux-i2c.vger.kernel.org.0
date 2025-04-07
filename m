@@ -1,77 +1,74 @@
-Return-Path: <linux-i2c+bounces-10140-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10141-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 161A4A7DE06
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 14:45:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7983AA7DFBA
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 15:44:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E0AFF1888B7F
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 12:45:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E26973B6972
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 13:38:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3229F24DFFB;
-	Mon,  7 Apr 2025 12:45:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9BCB1A3A95;
+	Mon,  7 Apr 2025 13:38:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Q4DkUFiO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="shGgD5Gc"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AE0F22D4C3;
-	Mon,  7 Apr 2025 12:45:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 562C719F103;
+	Mon,  7 Apr 2025 13:38:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744029939; cv=none; b=saAREuGulwr462xZcltMJrox4Gt+zaa2aQ72pfCRKikVfTO2pEUbySm8Ag+v+jDarO5/mAkYo+yRK9cEGGMZjm55oOzQAj8YXoVH22pklr0fu0WDt92tqesTod/PCixJaVJ+y1xdpJXGb2I2/foMXna31eG/LgbBOKL/DFaqm4Y=
+	t=1744033100; cv=none; b=aibCLk12fAaV6YAjLR1UGGUgAPhBQLbyb/SvH6a2QF+GN+U4E57Wgyr9PTY3p7U76DU2l9MyrpOI5nQTWOIVYn0p5dikNNnVeai/ip2lT082SUFHAyxxVbEvxCserCloQLjv5+JcvrRIP+qqS7FxNW0iB2H6I7Bo68+MYjTeXts=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744029939; c=relaxed/simple;
-	bh=oi7xvK7sq6Mk30ayGug3Cz0ce7Qbzy8vn4VUDnl94Fk=;
+	s=arc-20240116; t=1744033100; c=relaxed/simple;
+	bh=iJcvqyuDnRs1UUEVLb9o2DZdzokURwcVSh0sWsAF0WI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jIsQCgYTAL6C4wzXWcxwKGpP8mQ1zJoFym0WAHD9ItPf8nM+1x5jZbpnBBz5XX/rd+yYtKP6zw3y+N2qWvMY/BMQZJEZ61xjkuMUaChIWbCM/T17YBLRL4LlcyeHJodxDEPWcDTLYynhBIBDMLOrTvP2Jb3pBxfI5LLLPi6aKEw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Q4DkUFiO; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744029937; x=1775565937;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=oi7xvK7sq6Mk30ayGug3Cz0ce7Qbzy8vn4VUDnl94Fk=;
-  b=Q4DkUFiOhFowklIqPzGtu3CwTt1Ua2c3AnBn0Easq2fyZfO1Gcm0NPzg
-   InRLUH9+Mr/4ccMFnYrY5Q7M9hqDtZqT/CHAoK8YdqhQ5qw4szTej+2AC
-   Ay8SkNFFQ7d/SUm5X+LMI1T0UeJCJhPkw42dHy5tEyDGSFzx0nzd0kiFk
-   tfvbrvzByZsct/keSi+Da9NiR9SSZizHbTX0MKoKmMJiDfZQpi4ZKCCoU
-   9btS4r4Wq9ZR8NLYhqi+WkGONyuTDFV69gKtcIbj9jA2/hVVv50JZKSCr
-   Z7Zu578OGubQI0QUgtBc6BlZ6gr92u0v0G4+D6UCV6CwKDTqym0L61/UF
-   Q==;
-X-CSE-ConnectionGUID: pXrqrFN/Sr+4zIAyrmGRJQ==
-X-CSE-MsgGUID: aXZ3tTynQv6eWt25y4c34Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11397"; a="44660999"
-X-IronPort-AV: E=Sophos;i="6.15,194,1739865600"; 
-   d="scan'208";a="44660999"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2025 05:45:37 -0700
-X-CSE-ConnectionGUID: 9P08ZSozR0Kdsb1iejdrkw==
-X-CSE-MsgGUID: S8frljUTRLKrkL7PDqw5QQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,194,1739865600"; 
-   d="scan'208";a="127829153"
-Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 07 Apr 2025 05:45:34 -0700
-Received: from kbuild by b207828170a5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1u1lr2-0003OR-0T;
-	Mon, 07 Apr 2025 12:45:32 +0000
-Date: Mon, 7 Apr 2025 20:45:14 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Wolfram Sang <wsa-dev@sang-engineering.com>,
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev,
-	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: Re: [PATCH v2 2/6] i2c: core: Unify the firmware node type check
-Message-ID: <202504072041.Bv9mOk4o-lkp@intel.com>
-References: <20250407095852.215809-3-andriy.shevchenko@linux.intel.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=DIDmACw7QkWq7FaPMvEeo7yaDGRFP9Wd3dy/FW+K6OYG+lFuJEdaHQXDc76Ehc9AIYtJi4azTngU+RuD8MThUxcZ2z/nUe0ti2P5J0dLoIou+Poh7lznFoz+oY6NZynoegqHjGHgUTtZ7A4WdyDhc7GJTR5cjeECOxzp94Oshkw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=shGgD5Gc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81925C4CEE9;
+	Mon,  7 Apr 2025 13:38:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744033098;
+	bh=iJcvqyuDnRs1UUEVLb9o2DZdzokURwcVSh0sWsAF0WI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=shGgD5GcvoukPBR7IKo4QrWf9lMxSBN0wZOrqRrrC5X2KDzeGjC8MA3dF3eWVQ/L/
+	 VaMAiey9R8D3X7e75z/KSxv/EZH4m6hFVnbm4MuSEdLPI0pfjWa1i+iSYqpxSnGyNR
+	 syEa9hDIWIYB4Cfg/DfyGaIRLKhH6G9AqJG9FfMS9uz2VFi1iuMfZyJgL/79KZ4l0/
+	 Ur3cwy2t80bBXz6K/BopNTHi+rfENnFEuMK41pFxWB6eQDFbE6Qx13ILCe9X8dG0zX
+	 NK6u//exi8jzgWX6rsgwTxCloOg9TTTgQioF4Wtj5MZKw+ZccCvFFoU3/jjc4iOg8E
+	 hJPaHJIY1P87A==
+Date: Mon, 7 Apr 2025 08:38:17 -0500
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Inochi Amaoto <inochiama@gmail.com>
+Cc: linux-i2c@vger.kernel.org, linux-riscv@lists.infradead.org,
+	Jisheng Zhang <jszhang@kernel.org>, Yixun Lan <dlan@gentoo.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, ghost <2990955050@qq.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Chen Wang <unicorn_wang@outlook.com>, linux-mmc@vger.kernel.org,
+	Philipp Zabel <p.zabel@pengutronix.de>, linux-hwmon@vger.kernel.org,
+	Longbin Li <looong.bin@gmail.com>, Jean Delvare <jdelvare@suse.com>,
+	devicetree@vger.kernel.org,
+	Samuel Holland <samuel.holland@sifive.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@dabbelt.com>,
+	sophgo@lists.linux.dev, Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Thomas Bonnefille <thomas.bonnefille@bootlin.com>,
+	Chao Wei <chao.wei@sophgo.com>
+Subject: Re: [PATCH 1/9] dt-bindings: timer: Add Sophgo SG2044 ACLINT timer
+Message-ID: <174403309704.2081482.4050249481827035310.robh@kernel.org>
+References: <20250407010616.749833-1-inochiama@gmail.com>
+ <20250407010616.749833-2-inochiama@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -80,76 +77,19 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250407095852.215809-3-andriy.shevchenko@linux.intel.com>
-
-Hi Andy,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on wsa/i2c/for-next]
-[also build test ERROR on linus/master v6.15-rc1 next-20250407]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/i2c-core-Drop-duplicate-check-before-calling-OF-APIs/20250407-180528
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
-patch link:    https://lore.kernel.org/r/20250407095852.215809-3-andriy.shevchenko%40linux.intel.com
-patch subject: [PATCH v2 2/6] i2c: core: Unify the firmware node type check
-config: arc-randconfig-002-20250407 (https://download.01.org/0day-ci/archive/20250407/202504072041.Bv9mOk4o-lkp@intel.com/config)
-compiler: arc-linux-gcc (GCC) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250407/202504072041.Bv9mOk4o-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504072041.Bv9mOk4o-lkp@intel.com/
-
-All error/warnings (new ones prefixed by >>):
-
-   drivers/i2c/i2c-core-slave.c: In function 'i2c_detect_slave_mode':
->> drivers/i2c/i2c-core-slave.c:117:17: error: implicit declaration of function 'for_each_child_node_scoped'; did you mean 'for_each_child_of_node_scoped'? [-Wimplicit-function-declaration]
-     117 |                 for_each_child_node_scoped(fwnode, child) {
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                 for_each_child_of_node_scoped
->> drivers/i2c/i2c-core-slave.c:117:52: error: 'child' undeclared (first use in this function)
-     117 |                 for_each_child_node_scoped(fwnode, child) {
-         |                                                    ^~~~~
-   drivers/i2c/i2c-core-slave.c:117:52: note: each undeclared identifier is reported only once for each function it appears in
->> drivers/i2c/i2c-core-slave.c:117:58: error: expected ';' before '{' token
-     117 |                 for_each_child_node_scoped(fwnode, child) {
-         |                                                          ^~
-         |                                                          ;
->> drivers/i2c/i2c-core-slave.c:115:21: warning: unused variable 'reg' [-Wunused-variable]
-     115 |                 u32 reg;
-         |                     ^~~
+In-Reply-To: <20250407010616.749833-2-inochiama@gmail.com>
 
 
-vim +117 drivers/i2c/i2c-core-slave.c
+On Mon, 07 Apr 2025 09:06:06 +0800, Inochi Amaoto wrote:
+> Like SG2042, SG2044 implements an enhanced ACLINT, so add necessary
+> compatible string for SG2044 SoC.
+> 
+> Signed-off-by: Inochi Amaoto <inochiama@gmail.com>
+> ---
+>  .../devicetree/bindings/timer/thead,c900-aclint-mtimer.yaml      | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
-    97	
-    98	/**
-    99	 * i2c_detect_slave_mode - detect operation mode
-   100	 * @dev: The device owning the bus
-   101	 *
-   102	 * This checks the device nodes for an I2C slave by checking the address
-   103	 * used in the reg property. If the address match the I2C_OWN_SLAVE_ADDRESS
-   104	 * flag this means the device is configured to act as a I2C slave and it will
-   105	 * be listening at that address.
-   106	 *
-   107	 * Returns true if an I2C own slave address is detected, otherwise returns
-   108	 * false.
-   109	 */
-   110	bool i2c_detect_slave_mode(struct device *dev)
-   111	{
-   112		struct fwnode_handle *fwnode = dev_fwnode(dev);
-   113	
-   114		if (is_of_node(fwnode)) {
- > 115			u32 reg;
-   116	
- > 117			for_each_child_node_scoped(fwnode, child) {
+Acked-by: Rob Herring (Arm) <robh@kernel.org>
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
 
