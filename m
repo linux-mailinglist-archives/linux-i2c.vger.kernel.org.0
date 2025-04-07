@@ -1,50 +1,50 @@
-Return-Path: <linux-i2c+bounces-10161-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10162-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4CF86A7E3E5
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 17:20:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CBF6A7E341
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 17:08:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9FB76421033
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 14:59:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C880B16D180
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 15:00:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 025791FECA7;
-	Mon,  7 Apr 2025 14:56:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A3AA1FECBF;
+	Mon,  7 Apr 2025 14:56:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Y6FdI6Me"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="UJibLhzS"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 106BB1FDA97;
-	Mon,  7 Apr 2025 14:56:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F1001FE466;
+	Mon,  7 Apr 2025 14:56:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744037783; cv=none; b=DT5H4Nvu9590S3OaNyBYsFA6VYBZxS10/nZgWTFHvgusf8S43D5QJdVS+JD2f7SE+SrLFuNE115eKipCMn2n8iL4NMRF+dH1LF1e14bqJx7kIcjlMCeiEJzH6ORouoeNKLn/slWKJHmO361cdhsuOdKHIxRfg5HdO4gxLOwuaGY=
+	t=1744037786; cv=none; b=JrfCh9d8U6YFpWdB/s+9N4DeGcShcXBfL/4/90hRpzvCsehdtvrK62pKzo+R/9dLQCk92dUErSXcfocq6Bscy2qKYZQaqj6MQvZvhwqxXHtYsyBr7uv2cD/+T8Qf8HL9GDj+friFczy5IrQMGd0zmMmU8YWmYUjSIdIoho/SpiA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744037783; c=relaxed/simple;
-	bh=dtbU+4kHEsOU58BQ2Rn9Hu0fGEMIwCuVmF05rH/6j/0=;
+	s=arc-20240116; t=1744037786; c=relaxed/simple;
+	bh=RDAW+fwe74PiptUzUxnrAskSMUYIXh+Kc23D7ubwCJk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=p6wwz6MRZJuPMCuZQZoQtyv0vmvHAPe17EFVXSymDknmvz5TpkuRMXqM+7QU2qP/n6CU0fXN28tfwI2KqTV4KJGGCVCiAMgLdB12UyvWm/qitbYOgXic6aeIHUSchrrB106TLBNQJ/Fs6FJjZJyIqZCxDo6k5NPaVZFR91ZQAEg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Y6FdI6Me; arc=none smtp.client-ip=217.70.183.197
+	 MIME-Version; b=IR/0o9nCLYeaH6Ejyhqm6ZWgfUZkOlPvD8zdhCTOOJWlDhjED6tDCOhJ1w8Ylw6rXG1/SmQIBVCixBOA2nNe2trN4IPhoUQdSVfYCI/GCU+/sSFKlJGcqXoOdnm3uz1mx38LqVxh/8aaxwuqhJS8Sr0NZVhrG1PPAdfZ7sRVWrc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=UJibLhzS; arc=none smtp.client-ip=217.70.183.197
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPA id C3CDA44327;
-	Mon,  7 Apr 2025 14:56:17 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id CBF4C4433C;
+	Mon,  7 Apr 2025 14:56:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1744037779;
+	t=1744037781;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=HpuUFRAKvqUt1ookpZdD9oyOxoSDFiuAMlGsrO+YCik=;
-	b=Y6FdI6Meq4FeMBr9XnuEJrp0IY8NFPfPIqn0k9d8NFKxqLeGD042WmKnZ/YRG19YKk5atD
-	EXy9rbDW/ZFTwS350JEf6so/KFb27eGnU6ImAlCs8kYv+ZWBwmdnXuXsPseQepwXCiRO5V
-	FkvuAnJDmyvl3T1ADS65uQW50zDFbQbMmpJsnQ2WXDexdZK8tlc2HZY+QkftNmIwkdLaXp
-	Q/DYbgwknx+aI7v0K7x35ItXSgMUmDRk8OrD+Gbbo41mVX5uASQVyvoJ1WWaY5tkFZbe2E
-	c+WowlaeQsRCTJxhGZZ9NOLbsM2A91RB1zuUWybDw2Q25Kcx0wsBQjAP1Tzh4A==
+	bh=5QbRycxm7vGCRrdBNEytaF89Hh6LdVDglF4TAZ/Eo8Q=;
+	b=UJibLhzStnjURTT2XwpbZOd/6Vf219UgdhYLn+PxsXj4jnL10BOZ7x87fHKoVxidadXbhD
+	nHe0+/tfmjeO8ZilO7s8/s0ghjzg+WAiMHYAjGcvqY3zzd7H6ilAGI5MsRsKvKh2oo/u/N
+	P8CUVcAG4zkuJqCZ8dg0BoDQIsFr5tb/57AhOW7OUP6YwrzCiXT+GpFlJnFY9iA0v4fgPY
+	/qhm3a5MlpPOocTB0z2mZrXROElCOebT5Z98DYHQbYSTlWTvym32kdm039P7EWFBRzQ7VY
+	QsCjVNaYNKc7qdbSLrcN50bdnTjzbULIp7027d26L53FIMypPI0HJmgvLNXJyw==
 From: Herve Codina <herve.codina@bootlin.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	"Rafael J. Wysocki" <rafael@kernel.org>,
@@ -87,9 +87,9 @@ Cc: Wolfram Sang <wsa@kernel.org>,
 	Steen Hegelund <steen.hegelund@microchip.com>,
 	Luca Ceresoli <luca.ceresoli@bootlin.com>,
 	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH 07/16] PCI: of: Remove fwnode_dev_initialized() call for a PCI root bridge node
-Date: Mon,  7 Apr 2025 16:55:36 +0200
-Message-ID: <20250407145546.270683-8-herve.codina@bootlin.com>
+Subject: [PATCH 08/16] i2c: core: Introduce i2c_get_adapter_supplier()
+Date: Mon,  7 Apr 2025 16:55:37 +0200
+Message-ID: <20250407145546.270683-9-herve.codina@bootlin.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250407145546.270683-1-herve.codina@bootlin.com>
 References: <20250407145546.270683-1-herve.codina@bootlin.com>
@@ -106,53 +106,72 @@ X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvtddtgeekucetufdoteggode
  ghpthhtohepkhgvrhhnvghlsehpvghnghhuthhrohhnihigrdguvgdprhgtphhtthhopehfvghsthgvvhgrmhesghhmrghilhdrtghomhdprhgtphhtthhopehmthhurhhquhgvthhtvgessggrhihlihgsrhgvrdgtohhm
 X-GND-Sasl: herve.codina@bootlin.com
 
-During the instantiation of devices described by a device-tree overlay
-applied on a PCI device, devlink displays the following kind of debug
-messages instead of creating the expected links:
-   'Not linking xxxx - might never become dev'
+The supplier device of an I2C adapter is the device that calls
+i2c_add_adapter() or variants and i2c_del_adapter().
 
-Without those expected links, the device removal order cannot be
-correct.
+Most of the time this supplier device is the parent of the adapter dev.
 
-Those debug traces are printed by fw_devlink_create_devlink(). In our
-use case, they are all printed because the supplier of the link has at
-least one of its ancestor with its fwnode flag FWNODE_FLAG_INITIALIZED
-set.
+Exceptions exist with i2c muxes. Indeed, in case of i2c muxes, the
+parent of the adapter dev points to the adapter dev the mux is connected
+to instead of the supplier of this adapter.
 
-The culprit ancestor is the PCI root bridge.
-
-The fwnode related to the PCI root bridge is created dynamically by the
-of_pci_make_host_bridge_node() function. During this creation
-fwnode_dev_initialized() is called which set the FWNODE_FLAG_INITIALIZED
-flag.
-
-Calling fwnode_dev_initialized() tells devlink that the device related
-to this node is handled out of the driver core. This is not correct in
-our case. Indeed the device related to this firmware node is handled
-using driver core mechanisms and is fully compliant devlink
-expectations.
-
-Simply remove the fwnode_dev_initialized() call. With that done, the
-devlink debug messages are no more displayed and links that were missing
-are correctly created.
+Introduce i2c_get_adapter_supplier() and a new supplier field in the
+adapter structure in order to ease the adapter supplier retrieval.
 
 Signed-off-by: Herve Codina <herve.codina@bootlin.com>
 ---
- drivers/pci/of.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/i2c/i2c-core-base.c | 16 ++++++++++++++++
+ include/linux/i2c.h         |  3 +++
+ 2 files changed, 19 insertions(+)
 
-diff --git a/drivers/pci/of.c b/drivers/pci/of.c
-index ac6c4e1d68e5..5ea55a6416c0 100644
---- a/drivers/pci/of.c
-+++ b/drivers/pci/of.c
-@@ -811,7 +811,6 @@ void of_pci_make_host_bridge_node(struct pci_host_bridge *bridge)
- 	 */
- 	of_node_set_flag(np, OF_POPULATED);
- 	np->fwnode.dev = &bridge->dev;
--	fwnode_dev_initialized(&np->fwnode, true);
+diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+index 7ad1ad5c8c3f..e3eeac0b2b49 100644
+--- a/drivers/i2c/i2c-core-base.c
++++ b/drivers/i2c/i2c-core-base.c
+@@ -1917,6 +1917,22 @@ struct i2c_adapter *i2c_get_adapter_by_fwnode(struct fwnode_handle *fwnode)
+ }
+ EXPORT_SYMBOL(i2c_get_adapter_by_fwnode);
  
- 	ret = of_changeset_apply(cset);
- 	if (ret)
++/**
++ * i2c_get_adapter_supplier() - Get the supplier of an adapter
++ * @adapter: the adapter to get the supplier from
++ *
++ * return:
++ * Look up and return the &struct device corresponding to the device supplying
++ * this adapter.
++ *
++ * The user must call put_device() once done with the supplier returned.
++ */
++struct device *i2c_get_adapter_supplier(struct i2c_adapter *adapter)
++{
++	return get_device(adapter->supplier ?: adapter->dev.parent);
++}
++EXPORT_SYMBOL(i2c_get_adapter_supplier);
++
+ static void i2c_parse_timing(struct device *dev, char *prop_name, u32 *cur_val_p,
+ 			    u32 def_val, bool use_def)
+ {
+diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+index 2e4903b7f7bc..04b85703bcd6 100644
+--- a/include/linux/i2c.h
++++ b/include/linux/i2c.h
+@@ -746,6 +746,7 @@ struct i2c_adapter {
+ 	int timeout;			/* in jiffies */
+ 	int retries;
+ 	struct device dev;		/* the adapter device */
++	struct device *supplier;	/* the device that supply this adapter */
+ 	unsigned long locked_flags;	/* owned by the I2C core */
+ #define I2C_ALF_IS_SUSPENDED		0
+ #define I2C_ALF_SUSPEND_REPORTED	1
+@@ -913,6 +914,8 @@ struct i2c_adapter *i2c_get_adapter(int nr);
+ void i2c_put_adapter(struct i2c_adapter *adap);
+ unsigned int i2c_adapter_depth(struct i2c_adapter *adapter);
+ 
++struct device *i2c_get_adapter_supplier(struct i2c_adapter *adap);
++
+ void i2c_parse_fw_timings(struct device *dev, struct i2c_timings *t, bool use_defaults);
+ 
+ /* Return the functionality mask */
 -- 
 2.49.0
 
