@@ -1,159 +1,159 @@
-Return-Path: <linux-i2c+bounces-10122-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10123-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5DBAFA7D2CE
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 06:04:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id AF519A7D337
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 07:00:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2486C7A3627
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 04:03:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A29227A30E8
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 04:58:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F16D221F01;
-	Mon,  7 Apr 2025 04:04:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75466221F1D;
+	Mon,  7 Apr 2025 04:59:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wf9Wjbkc"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Iw/IL21T"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EB94213254;
-	Mon,  7 Apr 2025 04:04:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D76923C9;
+	Mon,  7 Apr 2025 04:59:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743998674; cv=none; b=ZHHqwYJp2rhTJ74dGnY56BDLOT/gLgRghMb9KbDp7o/ZK9hUas0JPnSjBLFS3Ef0OqeLwcHcHwXkrwhX07zp0RehFQG2uqLmR/pTINCXV+hlP9bEjcKX28RGUl4eevDtneuWB/fhIcS4CvFlcfA4bn1TrE0a30TbxPp1Jrk+2kI=
+	t=1744001996; cv=none; b=F3h1BOGSDCraWK96lMHscLtji5PSG65PQg4oBWFd9iOUgjReOntkzcV8y85pCpmWRl9hCMxnRxOwsN4t+2lxHxI4cu27hS8G6Qo2A2ypOwbpHe9HmWi3e9u53AoY3TA/7XtrmNEHun8XRaIJrdczZwhCBiqFF8Nag+kVPMlXtZg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743998674; c=relaxed/simple;
-	bh=m6Xuj0TJRW756Jn/RBGPzGsbpImEdtEG9o3zvOpUzyc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FPuJQTctd8NvPpWAiRjIslVEh43Ex2X5sVS5VKwKVbRHs9nfpHbfuhpeqY0L8mYF+210UIv00+rT1cLOdXl/gNdqXrRmQ7Rfu2VtSB2LubG9MO3b67IK7GZB9gdJDtgUvEm8j3+1LohEhH/KLluvdJw2TegGKgfzHl7jMQi3TF0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Wf9Wjbkc; arc=none smtp.client-ip=209.85.219.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-6ed0cc5eca4so52372586d6.1;
-        Sun, 06 Apr 2025 21:04:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1743998672; x=1744603472; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fOq1SITZwZx53Waxl1kAcNYG/rxGN0T4WohynMVLlhw=;
-        b=Wf9WjbkcCXQHS6+HadNVXSvDAo9E0LbOAORfzsz4eNefTQXgIOYJiLdO1LFNnQImHW
-         UtFBT2Tx8DAPkfMYpJFSg2Y+HRGx5Q3VzP66Kw4Xh8gpz9DuUt/nqL4Fc0Q5/TgbKGD2
-         QBLuQp2nh1GnbUsvOPrwmvVCLFrn19QQSOH/lE4zEcYxXtSl/pKz5aVIc/pVVYP0M93r
-         02Hp5MnSKsAKYzK7f0IUcaFpA3vgrY0hQ7q1Ks1EwhaeDDj0OHFZqvZloqVlK80XMeTJ
-         a0eS8CwiYWSMPZ/pjyTWHtb7WFpLUIhVrLTMk7qSMvOjgGBsU+NCQP09XVCostSp4a39
-         XQ4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743998672; x=1744603472;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fOq1SITZwZx53Waxl1kAcNYG/rxGN0T4WohynMVLlhw=;
-        b=aJ7pqm9KXAC2KXcMvp7oOWPBQ4jIYUC6hbLwFcQENllg+Co1RFmSdsfr6RzH+ZJ7PB
-         9czKkK/HLpfSx9DZZ3oufXcaPTOozu4vkbtwBQBLlG3odmZVzdgCWlOCQNL3npYMBg/F
-         dazvpiKkOdE6Ot6yK462sM4nVEGGM/eaXO05kyGfJyV6meigSWrPdR0CF/YA7Xj7Opbm
-         LGLXAgGX75m+XFakQBuBQYStoZtU1ukyw2eWEPsZqJFbCTUdPEGo5h6RHkxbPFF3Mozt
-         zw/67/qdkRJoSTXwvOutXs8RnVZ+pTl1n3x5qGWR+SUgGhk5b7+xXdP7zrZeZlxmCczC
-         jnVA==
-X-Forwarded-Encrypted: i=1; AJvYcCU3sqc6buOiDSQrQhYHW1SeolAxBwalZpas2WJyXLUHwho+bEbyiaNCbIAZv5ifLSIqjxQ6Wq6SDKbqHr3d@vger.kernel.org, AJvYcCV4UYoRP5gbWwjs62vW/WI62UAZ2X9Eyn24uCqOzfgLfI+jnhMKy1R3xsHUWlkW0Kt1PTSfoWApuw8u@vger.kernel.org, AJvYcCWo1kWnTxW26FBYZGcvfYLqX8l6oGjMK4QBN734DDCNlH0F40kemxyVKNb3fNMQuqd/v4im1G3Ag583@vger.kernel.org, AJvYcCXD07UulJPTscrrSRbJHBaDddodqoeJomtMh6F69MXfR6QqBwJDZkMp/L6r1o0PoXGigVrQealHFXR1BcQ=@vger.kernel.org, AJvYcCXxKRXatiBGnq+ENWWtPgmZIajU23kBCnhV/GYbas4M1HrX7bCN7NQK42OGE249qwpKlyj8eJRLOTJf@vger.kernel.org
-X-Gm-Message-State: AOJu0YwCws+58sJ95a1essJbmGDQmaPh3Gep0zn1tj1o/xnFIDIpsUcR
-	Qu9+/h2LuU2lyZCKdfDZXVTKV6Yyil6VKJCdm0nJceQJV1VSNbpG
-X-Gm-Gg: ASbGncsLb2G5U9vD2xgrglIhQP/p/UcmesA3vOCiJEsVpci6Jt/GA+QOkYmhvd0tsWl
-	H5W4AxlSNs1hGVyvFhlsd0tnjzLw+9zasjWsjQpRNYX8YHNirDjr57K3I27bAMtZtWlhnrjbM81
-	sUW5xgBmeHJhMdSRk0sDotUxsIKijyTbtZNxxRg8yRlDfrqvj7J3YCN/Hg9CEekTR12HVmDDENX
-	tYs1U13EGTaTJkpeWcwnIYVprM2U+0ITY2jcDeh71drLH0DJyhENM1WeMONRxtV6P+cFd+KPg8L
-	Z2ljBpbbT3MkGVxbqPTb
-X-Google-Smtp-Source: AGHT+IEFWeaPs0k9l/nRl6SOPQWLI77kf3bipNHxa565PpRnQyV/lSkvI2bJRICX3oG/ZiqYwkUBpw==
-X-Received: by 2002:a05:6214:1c07:b0:6ea:c5be:f21b with SMTP id 6a1803df08f44-6eff5515024mr175586886d6.13.1743998671997;
-        Sun, 06 Apr 2025 21:04:31 -0700 (PDT)
-Received: from localhost ([2001:da8:7001:11::cb])
-        by smtp.gmail.com with UTF8SMTPSA id af79cd13be357-7c76ea7ee17sm542867685a.92.2025.04.06.21.04.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Apr 2025 21:04:31 -0700 (PDT)
-Date: Mon, 7 Apr 2025 12:03:56 +0800
-From: Inochi Amaoto <inochiama@gmail.com>
-To: Yixun Lan <dlan@gentoo.org>, Inochi Amaoto <inochiama@gmail.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Chen Wang <unicorn_wang@outlook.com>, 
-	Andi Shyti <andi.shyti@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Samuel Holland <samuel.holland@sifive.com>, 
-	Ulf Hansson <ulf.hansson@linaro.org>, Philipp Zabel <p.zabel@pengutronix.de>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Alexandre Ghiti <alex@ghiti.fr>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Thomas Bonnefille <thomas.bonnefille@bootlin.com>, ghost <2990955050@qq.com>, 
-	Jarkko Nikula <jarkko.nikula@linux.intel.com>, Jisheng Zhang <jszhang@kernel.org>, 
-	Chao Wei <chao.wei@sophgo.com>, linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
-	sophgo@lists.linux.dev, linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, linux-mmc@vger.kernel.org, Longbin Li <looong.bin@gmail.com>
-Subject: Re: [PATCH 5/9] dt-bindings: hwmon: Add Sophgo SG2044 external
- hardware monitor support
-Message-ID: <wqbglycwmrfqxr7cus4vpaksobxvubozx44giwtfnv3ikwvpqn@kszl3yo6mcry>
-References: <20250407010616.749833-1-inochiama@gmail.com>
- <20250407010616.749833-6-inochiama@gmail.com>
- <20250407020517-GYA13159@gentoo>
+	s=arc-20240116; t=1744001996; c=relaxed/simple;
+	bh=i5Az6s4Uz4Os3x1Z4HzhsdquTwzcqJRCywqd8ZT3CNs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=Yt8ofcAQ4f/eDo1zmvP9AKx88yzLxZWY0gCElfo/dXk4HQVhV7E9hErOE9c5esMzj870tvKEMTnf1ytxItXoelOUUaJbZrZNTNKDfJreXff/2o/4G4AcMUVeQul/74UN3ZMiTzNOtzFjiiQUHt7d82cb3dOsYhJB0qKh7rd2nVk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Iw/IL21T; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 536N3ult005318;
+	Mon, 7 Apr 2025 04:59:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	ztQ5YSj80wUwaLRAIitp2dOkqdq8fO/OXPcocD9Xslo=; b=Iw/IL21TxN3D+Hz5
+	19urqSx+Qq+GP+B0RGM7zxSUNIujcSSSCvtDaPb7F2ZwnA1ZLC/vrprI4WjCr5tt
+	vWImAAUopA45xFcEYsdSIE9VNoizqIcRgLpIxx31qhE6VCylbA/vRxrORHleT/n4
+	UXJo4UOxb48bY6jIvcKyWCqZKZWW5A1GcdqyuXnIEVEtBwFW4id66hJHgOHrlb1b
+	A9x9gmBeW6n6xZlRnkNXvb6QPl0R5TY8DvAFrfzU6DJSBvyxjsYhfk7O6D3h5bJx
+	RzedeoLt4z41Lr+kgMvfD+nuZbFTKb5C/eaieppNjXhq0NpdLvZmHdbhME2i3gGm
+	ZBReIA==
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 45twd2jyvp-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 07 Apr 2025 04:59:26 +0000 (GMT)
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+	by NASANPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 5374xPaH032423
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 7 Apr 2025 04:59:25 GMT
+Received: from [10.217.219.207] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Sun, 6 Apr 2025
+ 21:59:20 -0700
+Message-ID: <eeef6c60-8de2-4a4d-8bc5-2c321d759672@quicinc.com>
+Date: Mon, 7 Apr 2025 10:29:17 +0530
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250407020517-GYA13159@gentoo>
+User-Agent: Mozilla Thunderbird
+Subject: Re: Update driver xdpe152c4.c
+To: <Shirley.Lin@infineon.com>, <robh@kernel.org>, <krzk+dt@kernel.org>,
+        <conor+dt@kernel.org>, <jdelvare@suse.com>, <linux@roeck-us.net>,
+        <corbet@lwn.net>, <patrick.rudolph@9elements.com>,
+        <bhelgaas@google.com>, <ninad@linux.ibm.com>, <festevam@denx.de>,
+        <devicetree@vger.kernel.org>, <linux-hwmon@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>
+CC: <Mills.Liu@infineon.com>, <Ashish.Yadav@infineon.com>,
+        <Ian.Fang@infineon.com>
+References: <3f7d0644a1f844b8b3ee9b3139b85339@infineon.com>
+Content-Language: en-US
+From: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+In-Reply-To: <3f7d0644a1f844b8b3ee9b3139b85339@infineon.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: n-lFTR5fMXP9Vu9JfrJZOrl24y7hDTqs
+X-Proofpoint-GUID: n-lFTR5fMXP9Vu9JfrJZOrl24y7hDTqs
+X-Authority-Analysis: v=2.4 cv=NaLm13D4 c=1 sm=1 tr=0 ts=67f35bae cx=c_pps a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17 a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=XR8D0OoHHMoA:10 a=NEAV23lmAAAA:8 a=VwQbUJbxAAAA:8 a=bUQKSiCPAAAA:8
+ a=3j4BkbkPAAAA:8 a=6FPNYluCAAAA:8 a=jU4qhlNgAAAA:8 a=XCMJsyS4DNymqqp2DlcA:9 a=lqcHg5cX4UMA:10 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=cXjm9OtRhicA:10 a=Xo8hRRjfBGoA:10 a=CwQxHXgAaE4A:10 a=rccF8FsX4-AA:10 a=ImwWUX5h3JJ3gRE9moBe:22 a=z2U-W3hJrleVIN9YIjzO:22
+ a=-fHZXUhsFbuwFN3fwQAr:22 a=0TkXfT2pXjVnQC2iIllu:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-04-07_01,2025-04-03_03,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 impostorscore=0
+ priorityscore=1501 adultscore=0 malwarescore=0 suspectscore=0
+ lowpriorityscore=0 bulkscore=0 mlxlogscore=910 clxscore=1011 phishscore=0
+ spamscore=0 classifier=spam authscore=0 authtc=n/a authcc= route=outbound
+ adjust=0 reason=mlx scancount=1 engine=8.19.0-2502280000
+ definitions=main-2504070033
 
-On Mon, Apr 07, 2025 at 02:05:17AM +0000, Yixun Lan wrote:
-> Hi Inochi:
+
+
+On 4/7/2025 9:22 AM, Shirley.Lin@infineon.com wrote:
+> Dear Linux Kernel administrators, Good Day.
 > 
-> On 09:06 Mon 07 Apr     , Inochi Amaoto wrote:
-> > The MCU device on SG2044 exposes the same interface as SG2042, which is
-> > already supported by the kernel.
-> > 
-> > Add compatible string for monitor device of SG2044.
-> > 
-> > Signed-off-by: Inochi Amaoto <inochiama@gmail.com>
-> > ---
-> >  .../devicetree/bindings/hwmon/sophgo,sg2042-hwmon-mcu.yaml  | 6 +++++-
-> >  1 file changed, 5 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/hwmon/sophgo,sg2042-hwmon-mcu.yaml b/Documentation/devicetree/bindings/hwmon/sophgo,sg2042-hwmon-mcu.yaml
-> > index f0667ac41d75..b76805d39427 100644
-> > --- a/Documentation/devicetree/bindings/hwmon/sophgo,sg2042-hwmon-mcu.yaml
-> > +++ b/Documentation/devicetree/bindings/hwmon/sophgo,sg2042-hwmon-mcu.yaml
-> > @@ -11,7 +11,11 @@ maintainers:
-> >  
-> >  properties:
-> >    compatible:
-> > -    const: sophgo,sg2042-hwmon-mcu
-> > +    oneOf:
-> > +      - items:
-> > +          - const: sophgo,sg2044-hwmon-mcu
-> > +          - const: sophgo,sg2042-hwmon-mcu
-> > +      - const: sophgo,sg2042-hwmon-mcu
+> We have urgent requirement to update driver link, https://github.com/ 
+> torvalds/linux/blob/master/drivers/hwmon/pmbus/xdpe152c4.c <https:// 
+> github.com/torvalds/linux/blob/master/drivers/hwmon/pmbus/xdpe152c4.c#L72>
 > 
-> the compatible added here but not used in dts (or driver), e.g 9/9 patch
-> I'd personally prefer to add it when actually being used
-> (so it can be validated in the real use cases..)
+> Please help to reviewthe attached Linux Kernel patch for xdpe152xx driver.
+> 
+This is not the way to upstream from your side and get it reviewed by 
+others.
+
+please follow standard upstream process. Review others drivers the way 
+it's uploaded first time and then raise new patch.
+
+https://www.kernel.org/doc/html/v4.10/process/submitting-drivers.html
+https://www.kernel.org/doc/html/v4.10/process/howto.html
+> PEC Retry Functionality added for both read_word_data() 
+> & read_byte_data() cases of PMBUS.
+> 
+> Updated by : Yadav Ashish (PSS PCS RD FW HD) Ashish.Yadav@infineon.com 
+> <mailto:Ashish.Yadav@infineon.com>
+> 
+> Kindly leave your comment or give us approval for upstream.
+> 
+> Thanks a lot.
+> 
+> Best Regards,
+> 
+> *Shirley Lin*
+> 
+> *Infineon Technologies Taiwan Co. Ltd.*
+> 
+> Field Application Engineer
+> 
+> IFTW PSS SMD GC TM DCO
+> 
+> Office: +886 2 2652 6866
+> 
+> Mobile: +886 9 7822 9671
+> 
+> Shirley.Lin@infineon.com <mailto:Shirley.Lin@infineon.com>
+> 
+> 17F, No. 335, Ruiguang Road
+> 
+> Neihu District, Taipei 114063
+> 
+> Taiwan
+> 
+> www.infineon.com <http://www.infineon.com/> Discoveries <http:// 
+> www.infineon.com/discoveries> Facebook <http://www.facebook.com/ 
+> infineon> X <https://x.com/Infineon> LinkedIn <http://www.linkedin.com/ 
+> company/infineon-technologies>
 > 
 
-The dts patch is blocked by the dependency (in most case, it is
-the clk). I choose to sumbit these binding patch as they can be
-reviewed in early stage so I can throw the dts patch only when
-the clk is ready.
-
-In fact, these binding changes are trivial so I think it is okay
-to go with the initial patch.
-
-> another concern is whether better to just use 'enum'? (maybe not)
-> but I got your idea to fallback to compatible of sophgo,sg2042-hwmon-mcu..
-> 
-> same with mmc, i2c..
-> 
-
-I do not think it is a good idea to use enum. It lost the fallback
-info.
-
-Regards,
-Inochi
 
