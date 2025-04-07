@@ -1,167 +1,213 @@
-Return-Path: <linux-i2c+bounces-10127-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10128-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DD64A7D56C
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 09:20:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 09A96A7D612
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 09:35:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CD501173C0E
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 07:19:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4237117A0DD
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 07:31:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36742228CAD;
-	Mon,  7 Apr 2025 07:17:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DD5A229B23;
+	Mon,  7 Apr 2025 07:24:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="SXahJSac"
+	dkim=pass (1024-bit key) header.d=infineon.com header.i=@infineon.com header.b="E465NOXN";
+	dkim=pass (1024-bit key) header.d=infineon.com header.i=@infineon.com header.b="JdQsRew5"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp14.infineon.com (smtp14.infineon.com [217.10.52.160])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16E922288FE
-	for <linux-i2c@vger.kernel.org>; Mon,  7 Apr 2025 07:17:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D2AB221F35;
+	Mon,  7 Apr 2025 07:24:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.10.52.160
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744010240; cv=none; b=Msj9SFfaEqOVWOBBFwO7h8wdPnQb20nlBjn1Qrz6sskpmNslflLmrInMCTDb/pZRXi/RAkmaH7Q73lo7QbZPDNkMQ2/OUlJoIMy08J7qDKL448yB6h67Kx3csOIzcKJWTsEPDlAZ29NJ62b2aHUIor0awcubbpOnO+jMomxoY+E=
+	t=1744010692; cv=none; b=KXJ8yUUedJ/ZdtZzda2OyXdIcESWAaQryf8aArQQWBeABuaGu6/jPJMkWlz+5tDLm3QtBv9P+RcGL7Jr7358YT4miVkiRbaKd8YRmrIXdmi6aOWOK3XAsUmrt+mjnTte9TwwYfv50YhgD4d/lmEsD8CY1W6cwHOBgg2pv1jwjrE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744010240; c=relaxed/simple;
-	bh=1O8lqW8cS1dNqbfy6OMrbFG9L0GlTpQ+kAMyz+Y1LR0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=ocOI+sOeSCozxixxdyilXSPt8qMVO9YD7/OwD9UF8Kq4KZfvrZm6D/Z73oyVVPYaOAV1hwAUbznUqumfYZXXJPbUp2Aumxf7Q42NcU+4v8ZCdMjfBWP+z9VFjAC67Uv26BhBhpCMub5C55RnbwKXcC1BxUUSDp01lQMb/L6rPxg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=SXahJSac; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-43cf628cb14so32529045e9.1
-        for <linux-i2c@vger.kernel.org>; Mon, 07 Apr 2025 00:17:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1744010235; x=1744615035; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=fJ5k9V1gZZBaoixqt8Dqhche1ximAkFV+Q8ydYzr4lM=;
-        b=SXahJSacAdCF0QL1Y7mi05opQvJLK1XNfktIWE0ClizuYk9wH0VmlJ8OZkTQDmu617
-         MKuD5iHlullw7amlsouTK52DaeDQGboS/vlnhKFkx5AehWGTmf3w2dCJ6JXBGiuQVI+u
-         o9fwjSJOS8bpQa6ne+VY4BZYlhK/9QnxwsyQZmWmFGgm0qZCdgCozg+0aBwsZ3z6SIax
-         /PlSI94TfRW5K2fTlJ5TYZQY983VxeoeXHkYVA22crYcF/fWhs5Mj1a7Rga75jrVcglB
-         eU8jvilnr5uIRVp6ob6YCwTvaRtcJZ+sAjQU+zcfVf0SL4k19kjM5sa2CiVPFpSMJG0a
-         +B0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744010235; x=1744615035;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fJ5k9V1gZZBaoixqt8Dqhche1ximAkFV+Q8ydYzr4lM=;
-        b=tPgmMmAG8mAHEOcH+ASVD51otLcVZvUZc4UFoAGwOZLcBJoQnNwCW2/a0/al/fQTAK
-         0dlyS3QSoKEK8CwgWVNVlJoAvLoK6z1dL9WYDc4Wk3zN32OKGVD3mBa05Z4XuZL5ixvv
-         XarlZDEYulW78U7hrxAKERgSyPAYyFSHi+Wym4Z179tMjBQQkGXbhiVriO/Xxq4SH8z2
-         5Jar93zNZh/GK+iF3RA8jNx6RcE6U6mqTmWqFLuww0h7kbM1hPhe4JHAto+p6zvG8z8t
-         NPpuDO1azA51dwizMjQ9uawaRpXRg2rDOkJDXGsQcmoD82gROfc8Jdl2sj3B1yYxhE3j
-         6bGw==
-X-Gm-Message-State: AOJu0YxTRpW4kGGQELml1gzLDSlIJ/fVhUs3b10LHGMpjIQpX+bfnoTQ
-	pqw0HN6cASRhIv1RaMoOWay6pZ7kxfGSZdMply9OjfM0n8MJbYdXpmrLZR14c7g=
-X-Gm-Gg: ASbGnctifDfJmN/D35cI4AUSXSHsjLRbcGJJ3sPvezBkFfdzn+Ivd6r19osJ9K+w/5E
-	ZPPBYJTdhV1Gk4+/ArdSe4Pa2Y0Pi3JFU1bB0mLP7Wb3aUWx6+ndOeB+4LZP19D/kYNFUxGAEr4
-	vu85hjiR3jp6Iz+silvm4gxf8984mIOjdRhZ8KwV7a6/q069/LLJVnO6M2hNSrsJEQihMePVCvc
-	XqD7cmJLwUL+dOnI41OCvJwzWPGDlmCEwDvA4Efof0a3bmFsWrz457JDhWhjy1eCAxnMEFK1VFo
-	JyIRFkocAWqSaIr7gz73SjoMkc/WAKRAv8pZCGhO8gjijDT0
-X-Google-Smtp-Source: AGHT+IEpoa/PZ2AejlY650G8XiTE+W12xCG7yD0eGrhUNC7DsoqDYf34mekXbyvr4lJDgzHkjgQCZw==
-X-Received: by 2002:a05:6000:4211:b0:391:2a79:a110 with SMTP id ffacd0b85a97d-39cba967942mr8565795f8f.29.1744010235273;
-        Mon, 07 Apr 2025 00:17:15 -0700 (PDT)
-Received: from [127.0.1.1] ([2a01:cb1d:dc:7e00:8c64:734d:705a:39a7])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39c30096ed7sm10922620f8f.8.2025.04.07.00.17.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Apr 2025 00:17:14 -0700 (PDT)
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Mon, 07 Apr 2025 09:17:14 +0200
-Subject: [PATCH] i2c: mux: ltc4306: use new GPIO line value setter
- callbacks
+	s=arc-20240116; t=1744010692; c=relaxed/simple;
+	bh=oAGPqDTX3zmSA83g9u7XMjn0BqfmdVqu2X1s/bGMqi0=;
+	h=From:To:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=F5q+tGQcStABJB9rrVeoJ2p41XSKZHTH8+TATgQaGCJfaXDKFMapYn0EPsKB6CvhsIXvcNGGJrV+j0obQLojyumQj9uRDQNPUg0uSx29wSKt3cRbvU/p8go9mEd5YPp19DEB1ULRfVds/5l+iVYz0VO9PN8v38wH2a5Yqhb8gH8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infineon.com; spf=pass smtp.mailfrom=infineon.com; dkim=pass (1024-bit key) header.d=infineon.com header.i=@infineon.com header.b=E465NOXN; dkim=pass (1024-bit key) header.d=infineon.com header.i=@infineon.com header.b=JdQsRew5; arc=none smtp.client-ip=217.10.52.160
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infineon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infineon.com
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
+  t=1744010690; x=1775546690;
+  h=from:to:subject:date:message-id:references:in-reply-to:
+   mime-version;
+  bh=oAGPqDTX3zmSA83g9u7XMjn0BqfmdVqu2X1s/bGMqi0=;
+  b=E465NOXNu4rJLZzlx7o650TAchsKugtEgU4UBbpTOh5XkMPALrhKWgL9
+   ngB+7tIghQ7xYfmy3agk2CFRZEk7dQ6UtO596by8/jiaJ+RfjIe1YE4aV
+   7y6PG0M3hQGdfs/eUiX1lUEUUw1wE2hZ9hyEhq88VYCUfAUbkCRt7A+ZG
+   I=;
+X-CSE-ConnectionGUID: tfUnLbm1SDmVDGLeyBXZxg==
+X-CSE-MsgGUID: SbuofVYMSsWFqFGImftvMw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11396"; a="81401858"
+X-IronPort-AV: E=Sophos;i="6.15,193,1739833200"; 
+   d="p7s'346?scan'346,208,346";a="81401858"
+Received: from unknown (HELO mucxv003.muc.infineon.com) ([172.23.11.20])
+  by smtp14.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2025 09:23:38 +0200
+Received: from mucxv003 (localhost [127.0.0.1])
+	by mucxv003.muc.infineon.com (Postfix) with SMTP id 4ZWLKj5zl0zbkc;
+	Mon,  7 Apr 2025 09:23:37 +0200 (CEST)
+Received: from smtp9.infineon.com (unknown [10.32.30.36])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mucxv003.muc.infineon.com (Postfix) with ESMTPS;
+	Mon,  7 Apr 2025 09:23:37 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
+  t=1744010617; x=1775546617;
+  h=from:to:subject:date:message-id:references:in-reply-to:
+   mime-version;
+  bh=oAGPqDTX3zmSA83g9u7XMjn0BqfmdVqu2X1s/bGMqi0=;
+  b=JdQsRew5Jt2xzXCddLZ0L0SoNUxfswmEXnCR3dQ79v/BADRmNGz5dE46
+   2VPusxIxSpkSGelrMHxnnpS5ZUzrmQ0DCfM9GxhFtJXxXn3VXCdnBsl4B
+   kXg5isYG8Rk7i3kVf133HfBMRzKwz0BYiJlVwu4P90gwSMiW4hNCyujQM
+   Y=;
+X-CSE-ConnectionGUID: lOXucf8lSCGGqJ14bxOALg==
+X-CSE-MsgGUID: MkvOx1pGRWWUqy3E07GYAw==
+X-Encrypted-To-SeppBox: True
+X-IronPort-AV: E=McAfee;i="6700,10204,11396"; a="47963969"
+X-IronPort-AV: E=Sophos;i="6.15,193,1739833200"; 
+   d="p7s'346?scan'346,208,346";a="47963969"
+Received: from unknown (HELO MUCSE812.infineon.com) ([172.23.29.38])
+  by smtp9.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2025 09:23:37 +0200
+Received: from MUCSE833.infineon.com (172.23.7.105) by MUCSE812.infineon.com
+ (172.23.29.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.39; Mon, 7 Apr
+ 2025 09:23:36 +0200
+Received: from MUCSE830.infineon.com (172.23.29.23) by MUCSE833.infineon.com
+ (172.23.7.105) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.39; Mon, 7 Apr
+ 2025 09:23:36 +0200
+Received: from MUCSE830.infineon.com ([fe80::8a9e:b625:94f9:169d]) by
+ MUCSE830.infineon.com ([fe80::8a9e:b625:94f9:169d%19]) with mapi id
+ 15.02.1258.039; Mon, 7 Apr 2025 09:23:36 +0200
+From: <Shirley.Lin@infineon.com>
+To: <quic_msavaliy@quicinc.com>, <wsa+renesas@sang-engineering.com>,
+	<robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
+	<jdelvare@suse.com>, <linux@roeck-us.net>, <corbet@lwn.net>,
+	<patrick.rudolph@9elements.com>, <bhelgaas@google.com>,
+	<ninad@linux.ibm.com>, <festevam@denx.de>, <devicetree@vger.kernel.org>,
+	<linux-hwmon@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+	<Mills.Liu@infineon.com>, <Ashish.Yadav@infineon.com>,
+	<Ian.Fang@infineon.com>
+Subject: RE: Update driver xdpe152c4.c
+Thread-Topic: Update driver xdpe152c4.c
+Thread-Index: AduncG4+KOQ8tLMYRdSyF3hlAwcSU///8T2AgAAUjoCAAAzUAP//3JNw
+Date: Mon, 7 Apr 2025 07:23:36 +0000
+Message-ID: <a47a4741e79044df98a1369e6dc6175f@infineon.com>
+References: <3f7d0644a1f844b8b3ee9b3139b85339@infineon.com>
+ <eeef6c60-8de2-4a4d-8bc5-2c321d759672@quicinc.com> <Z_Ns419SpW_z2Xnr@shikoro>
+ <441ccdc7-bc0e-41ad-9878-d922ec1bfaa1@quicinc.com>
+In-Reply-To: <441ccdc7-bc0e-41ad-9878-d922ec1bfaa1@quicinc.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: yes
+X-MS-TNEF-Correlator:
+Content-Type: multipart/signed; protocol="application/x-pkcs7-signature";
+	micalg=SHA1; boundary="----=_NextPart_000_0055_01DBA7D1.00106700"
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+
+------=_NextPart_000_0055_01DBA7D1.00106700
+Content-Type: text/plain;
+	charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250407-gpiochip-set-rv-i2c-mux-v1-1-7330a0f4df1a@linaro.org>
-X-B4-Tracking: v=1; b=H4sIAPl782cC/x3MPQqAMAxA4atIZgNp/cWriIPEqBnU0moRxLtbH
- L/hvQeCeJUAXfaAl6hBjz3B5BnwOu6LoE7JYMlWVBQGF6cHr+owyIk+olrG7bpxpJpa07BhKiH
- Vzsus93/uh/f9ANmrOb5pAAAA
-To: Michael Hennerich <michael.hennerich@analog.com>, 
- Peter Rosin <peda@axentia.se>, Linus Walleij <linus.walleij@linaro.org>, 
- Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-gpio@vger.kernel.org, 
- Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1998;
- i=bartosz.golaszewski@linaro.org; h=from:subject:message-id;
- bh=HUva6KxkFsPb6XhDalpn8pFG6qq9F7QxSjA+2auuqw0=;
- b=owEBbQKS/ZANAwAKARGnLqAUcddyAcsmYgBn83v6pQEaPrRb+WyfidLqHn+m4WTU6ulxgomxY
- LWL9BPGC1WJAjMEAAEKAB0WIQQWnetsC8PEYBPSx58Rpy6gFHHXcgUCZ/N7+gAKCRARpy6gFHHX
- cgVHD/9TVSPUw0US9f5r+ibdGFf5bnBluIH6R0yTN83DJJx/xGcBBT34JhNgD//8U2QvVoWREFE
- TIfsKr/XgPxjgylbOtA1AS12IQC6aG20ipMfo2ILXFw7cn05vM7xwI0ANyqkYLyth3wd1dnHqOV
- tEYFHwJqrpgjgkb0mzaQdtDCe3OepC2dL2zPcNgJzto/3CXdZNZAIAB+C/P/8odckguo2I1jqKZ
- t9cdVEIHgUHnrU648QNijPK7IFS96QUVRwR9E40PXVXlRTgpnvBhpcTt5LhMh38LDs8M3qCTcvo
- L4rPCJLzTVnpEOXNOtKZxqpZ7olnqlWL8J7K3xxOFzOgDX5s69eqj+oToGAgawq0Hu/ClR5n3Zo
- QYWujeEt9Dge1iX5BDOfveBas/dKjLtUJO3Tq2QGre+H068fGZSLsQsCpCRv5FNOIL011ZUF1bE
- lniRd8Xp8TjwAeMqZK8kbPVFb+VAs/f6E26GWpY+eDdf/DnhQ1LvuXdRT/F/zxQSGJ69rUBSzBs
- NVAQRN52mIsmxCBC17aawjIMxsM/aW+fpnnEMIuEvZrg8p5I0KmabYnY29i5i0bIR3HtdXv++51
- H9lm46t+g4pPvMYWHb7dEkYiXlCLkFALjoJZfGrdF5GzZuWf3u12pgUQJAyiJugH3AkYkUiJ5Dd
- DNhdPNUw0eZejdw==
-X-Developer-Key: i=bartosz.golaszewski@linaro.org; a=openpgp;
- fpr=169DEB6C0BC3C46013D2C79F11A72EA01471D772
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-struct gpio_chip now has callbacks for setting line values that return
-an integer, allowing to indicate failures. Convert the driver to using
-them.
+Thanks a lot for prompt reviewing and kind comments from Mukesh Kumar Savaliya 
+<quic_msavaliy@quicinc.com> and Wolfram Sang 
+<wsa+renesas@sang-engineering.com>. We will include/amend with patch and 
+resend. Sincerely appreciate your kind help.
 
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
----
-Peter: I know you've not been very active recently. If you prefer to
-just Ack it and let me take it through the GPIO tree, please do.
----
- drivers/i2c/muxes/i2c-mux-ltc4306.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/i2c/muxes/i2c-mux-ltc4306.c b/drivers/i2c/muxes/i2c-mux-ltc4306.c
-index 8a87f19bf5d5..c688af270a11 100644
---- a/drivers/i2c/muxes/i2c-mux-ltc4306.c
-+++ b/drivers/i2c/muxes/i2c-mux-ltc4306.c
-@@ -85,13 +85,13 @@ static int ltc4306_gpio_get(struct gpio_chip *chip, unsigned int offset)
- 	return !!(val & BIT(1 - offset));
- }
- 
--static void ltc4306_gpio_set(struct gpio_chip *chip, unsigned int offset,
--			     int value)
-+static int ltc4306_gpio_set(struct gpio_chip *chip, unsigned int offset,
-+			    int value)
- {
- 	struct ltc4306 *data = gpiochip_get_data(chip);
- 
--	regmap_update_bits(data->regmap, LTC_REG_CONFIG, BIT(5 - offset),
--			   value ? BIT(5 - offset) : 0);
-+	return regmap_update_bits(data->regmap, LTC_REG_CONFIG,
-+				  BIT(5 - offset), value ? BIT(5 - offset) : 0);
- }
- 
- static int ltc4306_gpio_get_direction(struct gpio_chip *chip,
-@@ -164,7 +164,7 @@ static int ltc4306_gpio_init(struct ltc4306 *data)
- 	data->gpiochip.direction_input = ltc4306_gpio_direction_input;
- 	data->gpiochip.direction_output = ltc4306_gpio_direction_output;
- 	data->gpiochip.get = ltc4306_gpio_get;
--	data->gpiochip.set = ltc4306_gpio_set;
-+	data->gpiochip.set_rv = ltc4306_gpio_set;
- 	data->gpiochip.set_config = ltc4306_gpio_set_config;
- 	data->gpiochip.owner = THIS_MODULE;
- 
+------=_NextPart_000_0055_01DBA7D1.00106700
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
 
----
-base-commit: 0af2f6be1b4281385b618cb86ad946eded089ac8
-change-id: 20250331-gpiochip-set-rv-i2c-mux-a060817c1c04
+MIAGCSqGSIb3DQEHAqCAMIACAQExCzAJBgUrDgMCGgUAMIAGCSqGSIb3DQEHAQAAoIIMyjCCA+4w
+ggLWoAMCAQICEGsk517Bqmu0TbjoYC/BbAIwDQYJKoZIhvcNAQEFBQAwXTELMAkGA1UEBhMCZGUx
+ITAfBgNVBAoTGEluZmluZW9uIFRlY2hub2xvZ2llcyBBRzErMCkGA1UEAxMiSW5maW5lb24gVGVj
+aG5vbG9naWVzIEFHIFJvb3QgQ0EgMjAeFw0xMTA3MjYxMzEyMjBaFw0zNjA3MjYxMzIyMjBaMF0x
+CzAJBgNVBAYTAmRlMSEwHwYDVQQKExhJbmZpbmVvbiBUZWNobm9sb2dpZXMgQUcxKzApBgNVBAMT
+IkluZmluZW9uIFRlY2hub2xvZ2llcyBBRyBSb290IENBIDIwggEiMA0GCSqGSIb3DQEBAQUAA4IB
+DwAwggEKAoIBAQDMQpw2+wMM1Zu9gvlmBJSMi0GGkpvNL+RUfdNatlMGrliwyaCEB+HZzZP9CLys
+cLIglTKWeANzKozlAjE4ubdO/Y1IBmnuJMDW2lI73bZOwR2Y0shwmO1esRd2EyGCtVa9RgKa7HD3
+pEHJAXlu9+IejoYv94lF80E/5jsNMeczlwUV7cF3NwXQKMoRd1BHGtFnwwOqIVELmDC/coQM6UXe
+MlUzYpfVJyqdCiNHU0wPzFNyeDObgDOLNIH222OuRR5wsDvmDiP/6j8QPTBJ71uGWlFE6B7cVvAO
+QXVDCZYLpfQLkNFnG8BElOH7gSzuAiBvQtoERRC1QyZZC2MEValdAgMBAAGjgakwgaYwDgYDVR0P
+AQH/BAQDAgEGMBIGA1UdEwEB/wQIMAYBAf8CAQEwHQYDVR0OBBYEFDhv1fR35slaIStRFWrWIKsC
+DacVMDwGA1UdHwQ1MDMwMaAvoC2GK2h0dHA6Ly9jcmwuaW5maW5lb24uY29tL3Jvb3RjYTIvcm9v
+dGNhMi5jcmwwEAYJKwYBBAGCNxUBBAMCAQAwEQYDVR0gBAowCDAGBgRVHSAAMA0GCSqGSIb3DQEB
+BQUAA4IBAQCsiCetpToA0t9yFxPkiw1pekvEPPEeOqsMEGa/Xf6JyqZCC0lSAyu9Uo6l6YSCAb73
+f0TjNH0JDNApW2q6556qloVM0almOTirDaM+R8bJzeRg7xHeZriif9QWfA9czBfK6MSDTDULatcH
+mJwNznVQWuRBefTg/txo0OuPvvmbuGVT8hhdEf1fu0rcX7fE1X7zP27opZ3DjMk+ocu9MRk3L+Cw
+ISxiCfo2af0hWLZBTuQPqODjx73waxOAK317QwRC4m84BwUEZ3IR3CfvK3ukk6UQ8Pgl6SmDdzNw
+KGVNo+tNELKtgW125xQ5znatvPJQjYJjhB0XikvWjdKJL48PMIIEIzCCAwugAwIBAgIKYR4k+gAA
+AAAAAjANBgkqhkiG9w0BAQUFADBdMQswCQYDVQQGEwJkZTEhMB8GA1UEChMYSW5maW5lb24gVGVj
+aG5vbG9naWVzIEFHMSswKQYDVQQDEyJJbmZpbmVvbiBUZWNobm9sb2dpZXMgQUcgUm9vdCBDQSAy
+MB4XDTExMDcyNzEyMzIwNVoXDTI2MDcyNzEyNDIwNVowXTELMAkGA1UEBhMCZGUxITAfBgNVBAoT
+GEluZmluZW9uIFRlY2hub2xvZ2llcyBBRzErMCkGA1UEAxMiSW5maW5lb24gVGVjaG5vbG9naWVz
+IEFHIFVzZXIgQ0EgMjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAKBHZyb03ScBt//g
+4A4cOg5bRHXlpCBOyzJo/X4sMpuxu+47KFkVAIWhUlyhVk4f22+EDos6Ley7/10Pl7VNBuTj0i07
+P5vjTbT/CgshA3mcRb4xqyXZx4Eh/rnMicAlXQ8OUhbg+uBMjBOuvQrhXg2epP6+etKdg6LlXDrD
+edZflpmIGvn8sgGyfbAiH0Wy/HGJngg6dncHacL6hPzGTrhR4bJwTnogxhN7NaDmuU1OxzKjsPc7
+cidAmTtIlGpEfXj162C8GZ6vQjmBjH+ZqEdnz86IPGnUHb4Ifoa/GVzSlH0hPtMmybczi/BAcAQO
+obiKhfCbpNU8/nXhuiQ3kbcCAwEAAaOB5DCB4TALBgNVHQ8EBAMCAYYwHQYDVR0OBBYEFBoYmNi4
+E/3bHsoMirMTA3B3wxeWMB8GA1UdIwQYMBaAFDhv1fR35slaIStRFWrWIKsCDacVMDwGA1UdHwQ1
+MDMwMaAvoC2GK2h0dHA6Ly9jcmwuaW5maW5lb24uY29tL3Jvb3RjYTIvcm9vdGNhMi5jcmwwEgYD
+VR0TAQH/BAgwBgEB/wIBADBABgNVHSAEOTA3MDUGCyqCFABEChQBAQEBMCYwJAYIKwYBBQUHAgEW
+GGh0dHBzOi8vY3BzLmluZmluZW9uLmNvbTANBgkqhkiG9w0BAQUFAAOCAQEAbOjg2haQMCPP0ZcS
+1+hd0teYaBpi2LpwADGVyFAUO2UuPKGxAfYxWf3/v0FNW2IOhNKj8w3f076sKkeSlb6WiZZIe+ao
+kG2H6AimMIlhvv4GGAFHzQLVclXIz9jM7H4fH/wA/gHE4wDE1dvsGVjeM2fEjwTOtNrPzGF9SF1s
+NyJy8a2AZ83b6J6WIN72Jg2KXXQuVsa61/q2C5AAMfXLL4shuWN1JnYO03PBUjYWxqNdcETppKhc
+swaIZJ0MjKDttzuT9IntFeoOYMJx27KGowOqMDbmRoXRGWZahO4m4UkjIo9uzMX7U5EQymoMiVJc
+Ndp3qT5b48QXhmDe7Cmd4DCCBK0wggOVoAMCAQICAwKfGzANBgkqhkiG9w0BAQUFADBdMQswCQYD
+VQQGEwJkZTEhMB8GA1UEChMYSW5maW5lb24gVGVjaG5vbG9naWVzIEFHMSswKQYDVQQDEyJJbmZp
+bmVvbiBUZWNobm9sb2dpZXMgQUcgVXNlciBDQSAyMB4XDTIyMDMwODExMTA1NVoXDTI2MDMwODEx
+MTA1NVowejELMAkGA1UEBhMCVFcxLjAsBgNVBAoTJUluZmluZW9uIFRlY2hub2xvZ2llcyBUYWl3
+YW4gQ28uIEx0ZC4xEjAQBgNVBAMTCVl1LUp1IExpbjEnMCUGCSqGSIb3DQEJARYYU2hpcmxleS5M
+aW5AaW5maW5lb24uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgDs0ynVd4meT
+2rX3L6tInFY7OR15+UH0skOnj87kokM2jZIGKfpo9adMADnd9uBErtHPwvDzqAcFbCKQHrYPPwN9
+rHw5OiuOwR6LYK0uYnZoRw66XwQ6wxRHgGWRf3rffhkt5TqIAHPyQ7he0PeGZtf0MPGhRL7+F+np
+9zKRcVkhLFPjSiHhuz6q56W6w1AKpCNVrZeWF3ENIBqiu2QXc28l+q591QG4hIltna8v0dWDIyqk
+syN8DnQ7jX2FFrk0ziUW+XZ+MPf8qQIZnYlNkgW0hkang49ZwIAvDB7mBjQCHVUk3uNAD2dR3IsG
+AGvMKdLwK6FqJ3BEr8CK8sXcRQIDAQABo4IBVzCCAVMwIwYDVR0RBBwwGoEYU2hpcmxleS5MaW5A
+aW5maW5lb24uY29tMEAGA1UdIAQ5MDcwNQYLKoIUAEQKFAEBAQEwJjAkBggrBgEFBQcCARYYaHR0
+cHM6Ly9jcHMuaW5maW5lb24uY29tMDwGA1UdHwQ1MDMwMaAvoC2GK2h0dHA6Ly9jcmwuaW5maW5l
+b24uY29tL3VzZXJjYTIvdXNlcmNhMi5jcmwwDgYDVR0PAQH/BAQDAgTwMBMGA1UdJQQMMAoGCCsG
+AQUFBwMEMEcGCCsGAQUFBwEBBDswOTA3BggrBgEFBQcwAoYraHR0cDovL2NybC5pbmZpbmVvbi5j
+b20vdXNlcmNhMi91c2VyY2EyLmNydDAfBgNVHSMEGDAWgBQaGJjYuBP92x7KDIqzEwNwd8MXljAd
+BgNVHQ4EFgQUrwtYSHJ3S+EU2JUrqd1KvSA0tAUwDQYJKoZIhvcNAQEFBQADggEBABeLjTB14zW9
+sBtyq9NG7IEN6GWxhPe5KZ+5JBOIiiQDbsrscZkPgLT0XJQmBm8043UMGCF8WtQx6HEBlg17cMA+
+llVItLiMIEBMLK5misLGs3eGOjsCNQw4lT683jtS9oyqcfJ0NUGzLExsmUr5OjC3Cd5KTUMOhiEU
+ux06JDD60vZDjNS7gThg3lQvNaUVJPeJ+cF+bEknYrP1IK3GLfD1JcAwsCVxe5qCPf2XPdqeeGt2
+dKN0lLtiT1o8LJ8lWc2Im1z0Yxwg8iPSBSM14yfNNzt6aTKfkv+oxdp6svfk4Y/RqFk2Fgf52KS/
+wsy5R+PTMcWrfBeQu/SEf5q3cKwxggNuMIIDagIBATBkMF0xCzAJBgNVBAYTAmRlMSEwHwYDVQQK
+ExhJbmZpbmVvbiBUZWNobm9sb2dpZXMgQUcxKzApBgNVBAMTIkluZmluZW9uIFRlY2hub2xvZ2ll
+cyBBRyBVc2VyIENBIDICAwKfGzAJBgUrDgMCGgUAoIIB3zAYBgkqhkiG9w0BCQMxCwYJKoZIhvcN
+AQcBMBwGCSqGSIb3DQEJBTEPFw0yNTA0MDcwNzIzMjJaMCMGCSqGSIb3DQEJBDEWBBRX97TqJICx
+fl6b8eGpdPmbjb+qvjBzBgkrBgEEAYI3EAQxZjBkMF0xCzAJBgNVBAYTAmRlMSEwHwYDVQQKExhJ
+bmZpbmVvbiBUZWNobm9sb2dpZXMgQUcxKzApBgNVBAMTIkluZmluZW9uIFRlY2hub2xvZ2llcyBB
+RyBVc2VyIENBIDICAwKfGzB1BgsqhkiG9w0BCRACCzFmoGQwXTELMAkGA1UEBhMCZGUxITAfBgNV
+BAoTGEluZmluZW9uIFRlY2hub2xvZ2llcyBBRzErMCkGA1UEAxMiSW5maW5lb24gVGVjaG5vbG9n
+aWVzIEFHIFVzZXIgQ0EgMgIDAp8bMIGTBgkqhkiG9w0BCQ8xgYUwgYIwCwYJYIZIAWUDBAEqMAsG
+CWCGSAFlAwQBFjAKBggqhkiG9w0DBzALBglghkgBZQMEAQIwDgYIKoZIhvcNAwICAgCAMA0GCCqG
+SIb3DQMCAgFAMAcGBSsOAwIaMAsGCWCGSAFlAwQCAzALBglghkgBZQMEAgIwCwYJYIZIAWUDBAIB
+MA0GCSqGSIb3DQEBAQUABIIBAC4ZLWJes1j3nxQ15GlxRwLCKaSq+QG4z9oOa+PxxoulpSxqe9Yl
+6QLGUVjNEbR9YVW8seCBqxNJjhWPcG4bNd/DhHJB+Cdfn1nFwTHDB7uCfccSSwtwDwnHlAB+hLjQ
+KADhC0mRPMSdhLPrlUa71bKZq4CmPRbL8+6ZLkkPvf77WD1a3v+nSwDpj9SuMaPb8NY/vuXitYqd
+uQoDCcI1D3qhvMFvx9BFCOmvImX1GiV1GqUbFfFdBPjo4zrZ3NXdtbonB9Idpdc3c25u8kRqdjf6
+Zv9AG96G1VTSX/SpfUk5WwXW9Iv9/nw/4lYmoyF2NiBE5yPm5UXbkcfBwrNe/t4AAAAAAAA=
 
-Best regards,
--- 
-Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-
+------=_NextPart_000_0055_01DBA7D1.00106700--
 
