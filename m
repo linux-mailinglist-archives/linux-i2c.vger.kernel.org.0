@@ -1,50 +1,50 @@
-Return-Path: <linux-i2c+bounces-10158-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10159-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5AEF5A7E33A
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 17:08:08 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4C16A7E347
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 17:08:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A4B76167E9C
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 14:58:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B86204227B2
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 14:59:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 783C51FC7DA;
-	Mon,  7 Apr 2025 14:56:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADD781FDA6F;
+	Mon,  7 Apr 2025 14:56:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="efEwBXRe"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="fHeh3Q3v"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 746C01FAC51;
-	Mon,  7 Apr 2025 14:56:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 672FC1FBEB3;
+	Mon,  7 Apr 2025 14:56:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744037778; cv=none; b=p8HaAv0a1M+zgYTIA8yYbUtBUy6qKozLXI52G5h3afo7KlSdO0ZSajRtrO5/bvuV6G26acKQrJbNj0KNuvj0uGKCjENJPL5HrPSSg9/dVJ9CpzUgpejMPbscuyqZvEYom42773l2NqeLSOOoEtyup0UItmBvuXEIfzATILvQp4Q=
+	t=1744037780; cv=none; b=PcMy1ELJ1dDJkCqo8bK+V87UYSpH2BamgO8nQmy20FYELJL57XC+xxFOzC1/4UfHYUxKpr3vToDTQp0Yf11VmDL1YC7frZ/lMbNSLaWhnZlq/GSsBqaLFekhPq+XNlyCNfGuqzZGwzs3cT8cGfsE8YXnvHca0KcMtQ4/7w70hqs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744037778; c=relaxed/simple;
-	bh=/KlJMDRmtsNfGVkxPtdv7OTdn9lYP2ciCr/3JPzB5fw=;
+	s=arc-20240116; t=1744037780; c=relaxed/simple;
+	bh=fLzE27/3suP4hmOEW1zmKPVQsjlEg4bWnt3EcWvQMLM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TdUFVXrZ7SintkJrBGP5I929BhRM6MS9ZATdCCdLSKbFykGVc1YsJ+TOI1HVuTf33arIpTFvQTRow6ZsP5RMhicxN8EO1lbckFTDhmAF2YWHcxwpf3Tt2f9l8MfRVFrzhXmsoBpZwBKqsczJMAjZy/5KdVs4zJzp2O89m4N2DGQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=efEwBXRe; arc=none smtp.client-ip=217.70.183.197
+	 MIME-Version; b=Hx4roAAZM8fJUEeV/e7btVtQeNX633NhJ61HjhBq+yfBWE8UFLa0c9+MLOnx5lmc9r/S2m/8i5yul2USw+MM7jJm/E1XI0y+Oua0tKqFCpXAF8iBa6ag/CS9d+I7uaL03FfHNZltgTFLQv8HSUNqahoAGXriPLq9bGeaNoX/7cs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=fHeh3Q3v; arc=none smtp.client-ip=217.70.183.197
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPA id F163744334;
-	Mon,  7 Apr 2025 14:56:11 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id E468844333;
+	Mon,  7 Apr 2025 14:56:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1744037773;
+	t=1744037775;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=itxan9EuG0FuUpqxKlqCP8iOs9iWcsyZKP4fqZ5Hxr0=;
-	b=efEwBXRehy/6Ml+rezaWVQvpizgDmvIcpLdgBJIh2gC51Tp2wtPSaRaUVUT3nDh1NhCWEu
-	Lw6Hq6oqN1FwBOjd1JiX7+gEfNEEEVd+eDZz5yDVBfnZ2+Nzy/UMAN1d7eRbnNNVoHD+ns
-	1OcFuv0YxFqJAVUj+9fDjINpMmORRI3KTxSQRXjwNVxcUzIRiMXGoT19OvnXrkZTG6Wcz7
-	MELi+nnClNM41C+u5xsDMA2p4yw2JGvrL9xcghbUOm8C+m9FYiEqUlT5ZVimn4fNvNlgaA
-	f5HCC5ZftDElg99rPfpsktzXzzW7MgO94dt96LbDUY2VCNpGyCCcVRKon7CuHQ==
+	bh=kD9ClAPkcPNvQ2iYHfbuGpRxSpQFRsp0tY1oJ6ehDRk=;
+	b=fHeh3Q3vAiE9f7/1NRTt3k6LL7EWHzVL7T54/lfobgBmrEP0/5nUc2RTcQwDPt3Zrd5nvv
+	dl1vEeW16POzheafzz6mu6bSPmCffJM/waRZpyl4IfbvMiWPbho4XACOv97EbkEvkg3apQ
+	8aavhArgyVvN7sUZjG6zODH/nTDKmr2hMEHitAN8zowVvRjcx74kBkvLucXCgPw4f1grKb
+	9kTJhKR0+J1yZyGZztFbxI009FPTKNkDAsCbWSPAdU+ZG8nBcvxdsNZau154HQ2dtrhFc6
+	oEa43NV7TeUuk6/PF2QIuqWZnU4v6XCddxalNoudJpAxfJsxNB3WSe2Z3uY9gw==
 From: Herve Codina <herve.codina@bootlin.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	"Rafael J. Wysocki" <rafael@kernel.org>,
@@ -87,9 +87,9 @@ Cc: Wolfram Sang <wsa@kernel.org>,
 	Steen Hegelund <steen.hegelund@microchip.com>,
 	Luca Ceresoli <luca.ceresoli@bootlin.com>,
 	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH 04/16] driver core: Avoid warning when removing a device while its supplier is unbinding
-Date: Mon,  7 Apr 2025 16:55:33 +0200
-Message-ID: <20250407145546.270683-5-herve.codina@bootlin.com>
+Subject: [PATCH 05/16] bus: simple-pm-bus: Populate child nodes at probe
+Date: Mon,  7 Apr 2025 16:55:34 +0200
+Message-ID: <20250407145546.270683-6-herve.codina@bootlin.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250407145546.270683-1-herve.codina@bootlin.com>
 References: <20250407145546.270683-1-herve.codina@bootlin.com>
@@ -106,100 +106,99 @@ X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvtddtgeekucetufdoteggode
  ghpthhtohepkhgvrhhnvghlsehpvghnghhuthhrohhnihigrdguvgdprhgtphhtthhopehfvghsthgvvhgrmhesghhmrghilhdrtghomhdprhgtphhtthhopehmthhurhhquhgvthhtvgessggrhihlihgsrhgvrdgtohhm
 X-GND-Sasl: herve.codina@bootlin.com
 
-During driver removal, the following warning can appear:
-   WARNING: CPU: 1 PID: 139 at drivers/base/core.c:1497 __device_links_no_driver+0xcc/0xfc
-   ...
-   Call trace:
-     __device_links_no_driver+0xcc/0xfc (P)
-     device_links_driver_cleanup+0xa8/0xf0
-     device_release_driver_internal+0x208/0x23c
-     device_links_unbind_consumers+0xe0/0x108
-     device_release_driver_internal+0xec/0x23c
-     device_links_unbind_consumers+0xe0/0x108
-     device_release_driver_internal+0xec/0x23c
-     device_links_unbind_consumers+0xe0/0x108
-     device_release_driver_internal+0xec/0x23c
-     driver_detach+0xa0/0x12c
-     bus_remove_driver+0x6c/0xbc
-     driver_unregister+0x30/0x60
-     pci_unregister_driver+0x20/0x9c
-     lan966x_pci_driver_exit+0x18/0xa90 [lan966x_pci]
+The simple-pm-bus drivers handles several simple bus. When it is used
+with busses other than a compatible "simple-pm-bus", it don't populate
+its child devices during its probe.
 
-This warning is triggered when a consumer is removed because the links
-status of its supplier is not DL_DEV_DRIVER_BOUND and the link flag
-DL_FLAG_SYNC_STATE_ONLY is not set.
+This confuses fw_devlink and results in wrong or missing devlinks.
 
-The topology in terms of consumers/suppliers used was the following
-(consumer ---> supplier):
+Once a driver is bound to a device and the probe() has been called,
+device_links_driver_bound() is called.
 
-      i2c -----------> OIC ----> PCI device
-       |                ^
-       |                |
-       +---> pinctrl ---+
+This function performs operation based on the following assumption:
+    If a child firmware node of the bound device is not added as a
+    device, it will never be added.
 
-When the PCI device is removed, the OIC (interrupt controller) has to be
-removed. In order to remove the OIC, pinctrl and i2c need to be removed
-and to remove pinctrl, i2c need to be removed. The removal order is:
-  1) i2c
-  2) pinctrl
-  3) OIC
-  4) PCI device
+Among operations done on fw_devlinks of those "never be added" devices,
+device_links_driver_bound() changes their supplier.
 
-In details, the removal sequence is the following (with 0000:01:00.0 the
-PCI device):
-  driver_detach: call device_release_driver_internal(0000:01:00.0)...
-    device_links_busy(0000:01:00.0):
-      links->status = DL_DEV_UNBINDING
-    device_links_unbind_consumers(0000:01:00.0):
-      0000:01:00.0--oic link->status = DL_STATE_SUPPLIER_UNBIND
-      call device_release_driver_internal(oic)...
-        device_links_busy(oic):
-          links->status = DL_DEV_UNBINDING
-        device_links_unbind_consumers(oic):
-          oic--pinctrl link->status = DL_STATE_SUPPLIER_UNBIND
-          call device_release_driver_internal(pinctrl)...
-            device_links_busy(pinctrl):
-              links->status = DL_DEV_UNBINDING
-            device_links_unbind_consumers(pinctrl):
-              pinctrl--i2c link->status = DL_STATE_SUPPLIER_UNBIND
-              call device_release_driver_internal(i2c)...
-                device_links_busy(i2c): links->status = DL_DEV_UNBINDING
-                __device_links_no_driver(i2c)...
-                  pinctrl--i2c link->status is DL_STATE_SUPPLIER_UNBIND
-                  oic--i2c link->status is DL_STATE_ACTIVE
-                  oic--i2c link->supplier->links.status is DL_DEV_UNBINDING
+With devices attached to a simple-bus compatible device, this change
+leads to wrong devlinks where supplier of devices points to the device
+parent (i.e. simple-bus compatible device) instead of the device itself
+(i.e. simple-bus child).
 
-The warning is triggered by the i2c removal because the OIC (supplier)
-links status is not DL_DEV_DRIVER_BOUND. Its links status is indeed set
-to DL_DEV_UNBINDING.
+When the device attached to the simple-bus is removed, because devlinks
+are not correct, its consumers are not removed first.
 
-It is perfectly legit to have the links status set to DL_DEV_UNBINDING
-in that case. Indeed we had started to unbind the OIC which triggered
-the consumer unbinding and didn't finish yet when the i2c is unbound.
-
-Avoid the warning when the supplier links status is set to
-DL_DEV_UNBINDING and thus support this removal sequence without any
-warnings.
+In order to have correct devlinks created, make the simple-pm-bus driver
+compliant with the devlink assumption and create its child devices
+during its probe.
 
 Signed-off-by: Herve Codina <herve.codina@bootlin.com>
 ---
- drivers/base/core.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/bus/simple-pm-bus.c | 23 ++++++++++++++---------
+ 1 file changed, 14 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/base/core.c b/drivers/base/core.c
-index 5d6687f38d00..b44f9d371d47 100644
---- a/drivers/base/core.c
-+++ b/drivers/base/core.c
-@@ -1494,7 +1494,8 @@ static void __device_links_no_driver(struct device *dev)
- 		if (link->supplier->links.status == DL_DEV_DRIVER_BOUND) {
- 			WRITE_ONCE(link->status, DL_STATE_AVAILABLE);
- 		} else {
--			WARN_ON(!(link->flags & DL_FLAG_SYNC_STATE_ONLY));
-+			if (link->supplier->links.status != DL_DEV_UNBINDING)
-+				WARN_ON(!(link->flags & DL_FLAG_SYNC_STATE_ONLY));
- 			WRITE_ONCE(link->status, DL_STATE_DORMANT);
- 		}
+diff --git a/drivers/bus/simple-pm-bus.c b/drivers/bus/simple-pm-bus.c
+index d8e029e7e53f..93c6ba605d7a 100644
+--- a/drivers/bus/simple-pm-bus.c
++++ b/drivers/bus/simple-pm-bus.c
+@@ -42,14 +42,14 @@ static int simple_pm_bus_probe(struct platform_device *pdev)
+ 	match = of_match_device(dev->driver->of_match_table, dev);
+ 	/*
+ 	 * These are transparent bus devices (not simple-pm-bus matches) that
+-	 * have their child nodes populated automatically.  So, don't need to
+-	 * do anything more. We only match with the device if this driver is
+-	 * the most specific match because we don't want to incorrectly bind to
+-	 * a device that has a more specific driver.
++	 * have their child nodes populated automatically. So, don't need to
++	 * do anything more except populate child nodes. We only match with the
++	 * device if this driver is the most specific match because we don't
++	 * want to incorrectly bind to a device that has a more specific driver.
+ 	 */
+ 	if (match && match->data) {
+ 		if (of_property_match_string(np, "compatible", match->compatible) == 0)
+-			return 0;
++			goto populate;
+ 		else
+ 			return -ENODEV;
  	}
+@@ -64,13 +64,14 @@ static int simple_pm_bus_probe(struct platform_device *pdev)
+ 
+ 	dev_set_drvdata(&pdev->dev, bus);
+ 
+-	dev_dbg(&pdev->dev, "%s\n", __func__);
+-
+ 	pm_runtime_enable(&pdev->dev);
+ 
++populate:
+ 	if (np)
+ 		of_platform_populate(np, NULL, lookup, &pdev->dev);
+ 
++	dev_dbg(&pdev->dev, "%s\n", __func__);
++
+ 	return 0;
+ }
+ 
+@@ -78,12 +79,16 @@ static void simple_pm_bus_remove(struct platform_device *pdev)
+ {
+ 	const void *data = of_device_get_match_data(&pdev->dev);
+ 
+-	if (pdev->driver_override || data)
++	if (pdev->driver_override)
+ 		return;
+ 
+ 	dev_dbg(&pdev->dev, "%s\n", __func__);
+ 
+-	pm_runtime_disable(&pdev->dev);
++	if (pdev->dev.of_node)
++		of_platform_depopulate(&pdev->dev);
++
++	if (!data)
++		pm_runtime_disable(&pdev->dev);
+ }
+ 
+ static int simple_pm_bus_runtime_suspend(struct device *dev)
 -- 
 2.49.0
 
