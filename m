@@ -1,50 +1,50 @@
-Return-Path: <linux-i2c+bounces-10159-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10160-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4C16A7E347
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 17:08:50 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5D55A7E2EF
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 17:01:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B86204227B2
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 14:59:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6A08C7A310A
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 14:58:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADD781FDA6F;
-	Mon,  7 Apr 2025 14:56:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40A6C1FDE3D;
+	Mon,  7 Apr 2025 14:56:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="fHeh3Q3v"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="I9uOzSP7"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 672FC1FBEB3;
-	Mon,  7 Apr 2025 14:56:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D02B1FCFC5;
+	Mon,  7 Apr 2025 14:56:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744037780; cv=none; b=PcMy1ELJ1dDJkCqo8bK+V87UYSpH2BamgO8nQmy20FYELJL57XC+xxFOzC1/4UfHYUxKpr3vToDTQp0Yf11VmDL1YC7frZ/lMbNSLaWhnZlq/GSsBqaLFekhPq+XNlyCNfGuqzZGwzs3cT8cGfsE8YXnvHca0KcMtQ4/7w70hqs=
+	t=1744037782; cv=none; b=pIbc4Ckaf9/PNwUCvNA1c6Lm2Nd3Yfj+sk+0tWZMam31Xc1eykh3HeeBsKhNBrQJ2q5HUPwGZmtXDJFPeoHRNrvXE+11IZNnsphezK8iups/d3Q5FO50Q0UFY7lRoj1uwUuOGGSm5/1lPNisYjGoftsroLkWnGTu/qV4m2U4vn8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744037780; c=relaxed/simple;
-	bh=fLzE27/3suP4hmOEW1zmKPVQsjlEg4bWnt3EcWvQMLM=;
+	s=arc-20240116; t=1744037782; c=relaxed/simple;
+	bh=lt0SoHZIR+cwSE9xNh50rvLIcfG/wlH4uA5tI9IDsbU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Hx4roAAZM8fJUEeV/e7btVtQeNX633NhJ61HjhBq+yfBWE8UFLa0c9+MLOnx5lmc9r/S2m/8i5yul2USw+MM7jJm/E1XI0y+Oua0tKqFCpXAF8iBa6ag/CS9d+I7uaL03FfHNZltgTFLQv8HSUNqahoAGXriPLq9bGeaNoX/7cs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=fHeh3Q3v; arc=none smtp.client-ip=217.70.183.197
+	 MIME-Version; b=TYdCiySiPgpm4t110Ja3zw+3JR9axVV080moMfo0D9NP/kT+UI8qz0IGoQHMqWYLKSkLcFU2371qG6pkuwffGhcqQ697dtcnSCqYwqQy8lYGQcM/p+tJOfyAtHT5u637Z7imO6utSPX2oJNLRVIdHqemIMcfly3B5aKh7VBape4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=I9uOzSP7; arc=none smtp.client-ip=217.70.183.197
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPA id E468844333;
-	Mon,  7 Apr 2025 14:56:13 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id D99DB44342;
+	Mon,  7 Apr 2025 14:56:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1744037775;
+	t=1744037777;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=kD9ClAPkcPNvQ2iYHfbuGpRxSpQFRsp0tY1oJ6ehDRk=;
-	b=fHeh3Q3vAiE9f7/1NRTt3k6LL7EWHzVL7T54/lfobgBmrEP0/5nUc2RTcQwDPt3Zrd5nvv
-	dl1vEeW16POzheafzz6mu6bSPmCffJM/waRZpyl4IfbvMiWPbho4XACOv97EbkEvkg3apQ
-	8aavhArgyVvN7sUZjG6zODH/nTDKmr2hMEHitAN8zowVvRjcx74kBkvLucXCgPw4f1grKb
-	9kTJhKR0+J1yZyGZztFbxI009FPTKNkDAsCbWSPAdU+ZG8nBcvxdsNZau154HQ2dtrhFc6
-	oEa43NV7TeUuk6/PF2QIuqWZnU4v6XCddxalNoudJpAxfJsxNB3WSe2Z3uY9gw==
+	bh=SKRkBSja/o7ORAvQYrt/LIQOqrRkQaDjQ9l7ROg3bho=;
+	b=I9uOzSP7ZKO+JrlLDJlmlW54yLQhUymmzCjH+uOCBjArAz03etKCoQ80+NFgnNnkmynx1m
+	YLAXXh1JzDlirh4Lpi9yTFNovfhBu+3xaR9brTCvbvU9kex6fvon4DOmoUs25U86EibKmI
+	+h3pkFqSWVjfrOlr50VHZpQabSOExGGdfHUkyurHqt9WFX6S/XctbQ9ZYq1yRkqj4OBclv
+	D2q84wdfr5K+3u45bzMQ+7MbtDIDA5yn+R9luZwq8g53CPO+iQlVOE81/Oen8Xfe/x9pJW
+	6b281sHcM5sfI924Cob9lj4ZMr02IJUsBKdNZ3ZL6v80PFa7zQ7zu5xPbJR5mQ==
 From: Herve Codina <herve.codina@bootlin.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	"Rafael J. Wysocki" <rafael@kernel.org>,
@@ -87,9 +87,9 @@ Cc: Wolfram Sang <wsa@kernel.org>,
 	Steen Hegelund <steen.hegelund@microchip.com>,
 	Luca Ceresoli <luca.ceresoli@bootlin.com>,
 	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH 05/16] bus: simple-pm-bus: Populate child nodes at probe
-Date: Mon,  7 Apr 2025 16:55:34 +0200
-Message-ID: <20250407145546.270683-6-herve.codina@bootlin.com>
+Subject: [PATCH 06/16] PCI: of: Set fwnode.dev of newly created PCI device nodes
+Date: Mon,  7 Apr 2025 16:55:35 +0200
+Message-ID: <20250407145546.270683-7-herve.codina@bootlin.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250407145546.270683-1-herve.codina@bootlin.com>
 References: <20250407145546.270683-1-herve.codina@bootlin.com>
@@ -106,99 +106,45 @@ X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvtddtgeekucetufdoteggode
  ghpthhtohepkhgvrhhnvghlsehpvghnghhuthhrohhnihigrdguvgdprhgtphhtthhopehfvghsthgvvhgrmhesghhmrghilhdrtghomhdprhgtphhtthhopehmthhurhhquhgvthhtvgessggrhihlihgsrhgvrdgtohhm
 X-GND-Sasl: herve.codina@bootlin.com
 
-The simple-pm-bus drivers handles several simple bus. When it is used
-with busses other than a compatible "simple-pm-bus", it don't populate
-its child devices during its probe.
+Device-tree node can be created when CONFIG_PCI_DYNAMIC_OF_NODES. Those
+node are created and filled based on PCI core information but the
+fwnode.dev field is not set.
 
-This confuses fw_devlink and results in wrong or missing devlinks.
+When later an overlay is applied, this consuses fw_devlink. Indeed,
+without any device attached to the node, fw_devlink considers that this
+node will never become a device. When this node is pointed as a
+supplier, devlink looks at its ancestors in order to find a node with a
+device that could be used as the supplier.
 
-Once a driver is bound to a device and the probe() has been called,
-device_links_driver_bound() is called.
+In the PCI use case, this leads to links that wrongly use the PCI root
+bridge device as the supplier instead of the expected PCI device.
 
-This function performs operation based on the following assumption:
-    If a child firmware node of the bound device is not added as a
-    device, it will never be added.
-
-Among operations done on fw_devlinks of those "never be added" devices,
-device_links_driver_bound() changes their supplier.
-
-With devices attached to a simple-bus compatible device, this change
-leads to wrong devlinks where supplier of devices points to the device
-parent (i.e. simple-bus compatible device) instead of the device itself
-(i.e. simple-bus child).
-
-When the device attached to the simple-bus is removed, because devlinks
-are not correct, its consumers are not removed first.
-
-In order to have correct devlinks created, make the simple-pm-bus driver
-compliant with the devlink assumption and create its child devices
-during its probe.
+Setting fwnode.dev to the dev of the PCI device allows devlink to use
+this device as a supplier and so, correct links are created.
 
 Signed-off-by: Herve Codina <herve.codina@bootlin.com>
 ---
- drivers/bus/simple-pm-bus.c | 23 ++++++++++++++---------
- 1 file changed, 14 insertions(+), 9 deletions(-)
+ drivers/pci/of.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/bus/simple-pm-bus.c b/drivers/bus/simple-pm-bus.c
-index d8e029e7e53f..93c6ba605d7a 100644
---- a/drivers/bus/simple-pm-bus.c
-+++ b/drivers/bus/simple-pm-bus.c
-@@ -42,14 +42,14 @@ static int simple_pm_bus_probe(struct platform_device *pdev)
- 	match = of_match_device(dev->driver->of_match_table, dev);
- 	/*
- 	 * These are transparent bus devices (not simple-pm-bus matches) that
--	 * have their child nodes populated automatically.  So, don't need to
--	 * do anything more. We only match with the device if this driver is
--	 * the most specific match because we don't want to incorrectly bind to
--	 * a device that has a more specific driver.
-+	 * have their child nodes populated automatically. So, don't need to
-+	 * do anything more except populate child nodes. We only match with the
-+	 * device if this driver is the most specific match because we don't
-+	 * want to incorrectly bind to a device that has a more specific driver.
- 	 */
- 	if (match && match->data) {
- 		if (of_property_match_string(np, "compatible", match->compatible) == 0)
--			return 0;
-+			goto populate;
- 		else
- 			return -ENODEV;
- 	}
-@@ -64,13 +64,14 @@ static int simple_pm_bus_probe(struct platform_device *pdev)
+diff --git a/drivers/pci/of.c b/drivers/pci/of.c
+index ab7a8252bf41..ac6c4e1d68e5 100644
+--- a/drivers/pci/of.c
++++ b/drivers/pci/of.c
+@@ -709,6 +709,13 @@ void of_pci_make_dev_node(struct pci_dev *pdev)
+ 	if (ret)
+ 		goto out_free_node;
  
- 	dev_set_drvdata(&pdev->dev, bus);
- 
--	dev_dbg(&pdev->dev, "%s\n", __func__);
--
- 	pm_runtime_enable(&pdev->dev);
- 
-+populate:
- 	if (np)
- 		of_platform_populate(np, NULL, lookup, &pdev->dev);
- 
-+	dev_dbg(&pdev->dev, "%s\n", __func__);
++	/*
++	 * Set the fwnode.dev in order to have fw_devlink creating links
++	 * pointing to this PCI device instead of walking up to the PCI host
++	 * bridge.
++	 */
++	np->fwnode.dev = &pdev->dev;
 +
- 	return 0;
- }
- 
-@@ -78,12 +79,16 @@ static void simple_pm_bus_remove(struct platform_device *pdev)
- {
- 	const void *data = of_device_get_match_data(&pdev->dev);
- 
--	if (pdev->driver_override || data)
-+	if (pdev->driver_override)
- 		return;
- 
- 	dev_dbg(&pdev->dev, "%s\n", __func__);
- 
--	pm_runtime_disable(&pdev->dev);
-+	if (pdev->dev.of_node)
-+		of_platform_depopulate(&pdev->dev);
-+
-+	if (!data)
-+		pm_runtime_disable(&pdev->dev);
- }
- 
- static int simple_pm_bus_runtime_suspend(struct device *dev)
+ 	ret = of_changeset_apply(cset);
+ 	if (ret)
+ 		goto out_free_node;
 -- 
 2.49.0
 
