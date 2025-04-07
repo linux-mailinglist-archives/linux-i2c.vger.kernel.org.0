@@ -1,68 +1,68 @@
-Return-Path: <linux-i2c+bounces-10174-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10175-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 07ADEA7E4FE
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 17:44:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86B0AA7E4DF
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 17:41:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3528A3AFABD
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 15:28:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 59AF216CCDA
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Apr 2025 15:31:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B2241FECC0;
-	Mon,  7 Apr 2025 15:27:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 767361FF5E3;
+	Mon,  7 Apr 2025 15:30:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KDkweTAB"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m8CzBLsT"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50C731FE468;
-	Mon,  7 Apr 2025 15:27:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 826591FBEB3;
+	Mon,  7 Apr 2025 15:30:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744039643; cv=none; b=jmApTsU57UfJdi1Sg8/0NzXhTC7eyVQ6Vm5ubfRY+xoyaBHdJldIY0LB2029YNcELg8o1Mu/FZUQlzSEvxWXq4gr7z0W0gjL9/UKnoJUg++xonthPJFw6v57yPayglH149sW3anV45RQxQPyWzmaP6d3+lJPkKNHHk3nC+1xbZA=
+	t=1744039829; cv=none; b=YpWcqMX4hgh8GMc0l7gXsIUhLZBi/60X99HW8YlD5iezo8oZbCLAcIqnL7LjG8ZUEhp29JgaYYRt60MloqlRLsLgtk0t/HbMOq1Sdga+ld8oEKpeUUowDnI1vh+H7AwqQ/DFSfnvPHQRy6m4AGJ1Cq0OBQ3a9bjrI+bYBedAM00=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744039643; c=relaxed/simple;
-	bh=wzVkiX1WHW1+VEd41zgoCl+IvRzbkG2erhgb/grMY6c=;
+	s=arc-20240116; t=1744039829; c=relaxed/simple;
+	bh=g0yyqdpKhTJeG+BAd0Yg/gUdc7l4ULmzVrzx9Rpmr6U=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F+5Bcz+UUIlKhEGpIvq8qn97C+8mUc9g1362tyxvAlTRrUKL85JA98OXQhbZmJjbH7rUlbCh/v/o1uCmsnXQ9cuLP4N4DfFgvp9aqvlj6JWmAaevawimUooy60RJEScJLbu07f7/eQ+MgkF3jRJ/Eia2mv6Z8Tgj+s9fAHB6nMU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KDkweTAB; arc=none smtp.client-ip=192.198.163.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=pBxalocNEFs7gTvKfVEtz4QbVkAyytoX30xhNsIWFJaZig1tJw1Y80yXfy1rF3nzpc0qRXpbaovopL0cNeJTow+ZrzQfRDQIry2fB/Pe/ytXLROlgRseEKOHPgATVjG1YSv0cYl9zYH7irAf85uSo4w54qetb++Ln+YmFyr1To8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=m8CzBLsT; arc=none smtp.client-ip=192.198.163.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744039641; x=1775575641;
+  t=1744039827; x=1775575827;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=wzVkiX1WHW1+VEd41zgoCl+IvRzbkG2erhgb/grMY6c=;
-  b=KDkweTABnKRrWzNr6Ob3RSO09XarIaNp1DlAebYbttNksP0PgKwlM6Yx
-   HTyskV5KxRdChGsoPSeq+ltCSh/4BUHjBNKszyM14p4ADjs9D1nk1C81d
-   3o8XHhiF8ls69Hx/2zyoDKSJBcWyVxKZrkYWGl7U/feFuz0C6DCiVbJF7
-   UnYqeLZaaQ91G9FDAGxzH+ZgEDBRQWejsd6SbBjf9idwhFmUE5fNF+wkw
-   WZtotpUtMOEIShzOlfRKM75UTttZ8/iZAIjzUD/WoH5Q/bdGq5L5K8u2o
-   d5H771YKwNBmjymqX4Ls2WrbxCdTqxYzvNNT9sjQQrw9F8H3+XVXKKqNL
-   A==;
-X-CSE-ConnectionGUID: g+cQroHrQ/aRapVHbeMvJA==
-X-CSE-MsgGUID: LrAqoUG7RNe1ITvknoee2g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11397"; a="56071565"
+  bh=g0yyqdpKhTJeG+BAd0Yg/gUdc7l4ULmzVrzx9Rpmr6U=;
+  b=m8CzBLsTptY3Xf6g3XGx7Ym50hFjohPW/qs+GBGQ6LppT0LzwxgHXsF3
+   b0RlRYiFnDC69Xo5CEYZNaKCkyoRN2N+6Gvdv+SEzmGn3jUkdORwPheSW
+   W45YupKX0EaGQIamqCggIelu14V1pNYZWcNQavmy/uwfbkz+rwy+9xVJL
+   z+cp9ChupGNaBLWvhp3iDkRHy/kWSbReTKXr8Fl7sVhufSFgnQly11azp
+   FVR3MKMEqMSNWG5j5/1QRBvzy3skwEOedskXRt9kymYNaHmesK7E6h8rr
+   5HyiXcZGDJYYYI8eB06pfXDtTezsXuHiiyxuC6gTcGeTBArKJ1iGRZe/K
+   w==;
+X-CSE-ConnectionGUID: 7Y0wuLzKRNCsdabDtOZTmA==
+X-CSE-MsgGUID: v3+w/jUsRFWofwKutn407g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11397"; a="62980181"
 X-IronPort-AV: E=Sophos;i="6.15,194,1739865600"; 
-   d="scan'208";a="56071565"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2025 08:27:20 -0700
-X-CSE-ConnectionGUID: jvFf7bVAQseoAmXxE0FYLw==
-X-CSE-MsgGUID: HlBrMmKlQUu/6KGFBwYp/w==
+   d="scan'208";a="62980181"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2025 08:30:26 -0700
+X-CSE-ConnectionGUID: GDqsXhTrRFKRa8fqJC2lKA==
+X-CSE-MsgGUID: vQcAL9GpSRixUUMsO+9hag==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,194,1739865600"; 
-   d="scan'208";a="128496587"
+   d="scan'208";a="158982543"
 Received: from smile.fi.intel.com ([10.237.72.58])
-  by fmviesa010.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2025 08:27:12 -0700
+  by orviesa002.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2025 08:30:17 -0700
 Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
 	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1u1oNQ-0000000A6q5-0tDQ;
-	Mon, 07 Apr 2025 18:27:08 +0300
-Date: Mon, 7 Apr 2025 18:27:07 +0300
+	id 1u1oQP-0000000A6tV-2nff;
+	Mon, 07 Apr 2025 18:30:13 +0300
+Date: Mon, 7 Apr 2025 18:30:13 +0300
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Herve Codina <herve.codina@bootlin.com>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -96,10 +96,11 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Steen Hegelund <steen.hegelund@microchip.com>,
 	Luca Ceresoli <luca.ceresoli@bootlin.com>,
 	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH 08/16] i2c: core: Introduce i2c_get_adapter_supplier()
-Message-ID: <Z_Puy8eEBc6tubEx@smile.fi.intel.com>
+Subject: Re: [PATCH 06/16] PCI: of: Set fwnode.dev of newly created PCI
+ device nodes
+Message-ID: <Z_PvhVkdhubA9jAe@smile.fi.intel.com>
 References: <20250407145546.270683-1-herve.codina@bootlin.com>
- <20250407145546.270683-9-herve.codina@bootlin.com>
+ <20250407145546.270683-7-herve.codina@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -108,53 +109,42 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250407145546.270683-9-herve.codina@bootlin.com>
+In-Reply-To: <20250407145546.270683-7-herve.codina@bootlin.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Mon, Apr 07, 2025 at 04:55:37PM +0200, Herve Codina wrote:
-> The supplier device of an I2C adapter is the device that calls
-> i2c_add_adapter() or variants and i2c_del_adapter().
+On Mon, Apr 07, 2025 at 04:55:35PM +0200, Herve Codina wrote:
+> Device-tree node can be created when CONFIG_PCI_DYNAMIC_OF_NODES. Those
+> node are created and filled based on PCI core information but the
+> fwnode.dev field is not set.
 > 
-> Most of the time this supplier device is the parent of the adapter dev.
+> When later an overlay is applied, this consuses fw_devlink. Indeed,
+> without any device attached to the node, fw_devlink considers that this
+> node will never become a device. When this node is pointed as a
+> supplier, devlink looks at its ancestors in order to find a node with a
+> device that could be used as the supplier.
 > 
-> Exceptions exist with i2c muxes. Indeed, in case of i2c muxes, the
-> parent of the adapter dev points to the adapter dev the mux is connected
-
-dev --> device (in both cases)
-
-> to instead of the supplier of this adapter.
+> In the PCI use case, this leads to links that wrongly use the PCI root
+> bridge device as the supplier instead of the expected PCI device.
 > 
-> Introduce i2c_get_adapter_supplier() and a new supplier field in the
-> adapter structure in order to ease the adapter supplier retrieval.
+> Setting fwnode.dev to the dev of the PCI device allows devlink to use
+> this device as a supplier and so, correct links are created.
 
 ...
 
-> +/**
-> + * i2c_get_adapter_supplier() - Get the supplier of an adapter
-> + * @adapter: the adapter to get the supplier from
-> + *
-> + * return:
+> +	/*
+> +	 * Set the fwnode.dev in order to have fw_devlink creating links
+> +	 * pointing to this PCI device instead of walking up to the PCI host
+> +	 * bridge.
+> +	 */
+> +	np->fwnode.dev = &pdev->dev;
 
-Return:
+This is too invasive. I suppose here should be a helper for this kind of
+operation. If not, create one.
 
-> + * Look up and return the &struct device corresponding to the device supplying
-> + * this adapter.
+	fw_devlink_set_device(...);
 
-@adapter
 
-> + * The user must call put_device() once done with the supplier returned.
-> + */
-> +struct device *i2c_get_adapter_supplier(struct i2c_adapter *adapter)
-> +{
-> +	return get_device(adapter->supplier ?: adapter->dev.parent);
-
-What will be the meaning when both are set? Why dev.parent is not the same
-as supplier in this case?  Looking at the commit message example, it seems
-like you want to provide a physdev or sysdev (as term supplier seems more
-devlink:ish), like it's done elsewhere. And in the same way _always_ initialise
-it. In such a case, the ambiguity will be gone.
-
-> +}
+or alike.
 
 -- 
 With Best Regards,
