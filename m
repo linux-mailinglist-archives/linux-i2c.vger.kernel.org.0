@@ -1,51 +1,51 @@
-Return-Path: <linux-i2c+bounces-10211-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10212-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36AAFA80CF7
-	for <lists+linux-i2c@lfdr.de>; Tue,  8 Apr 2025 15:54:16 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E2FFA80D7D
+	for <lists+linux-i2c@lfdr.de>; Tue,  8 Apr 2025 16:14:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E61844A3642
-	for <lists+linux-i2c@lfdr.de>; Tue,  8 Apr 2025 13:49:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1D4D01B832C1
+	for <lists+linux-i2c@lfdr.de>; Tue,  8 Apr 2025 14:07:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 099681AA1C8;
-	Tue,  8 Apr 2025 13:49:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F3DF1DF268;
+	Tue,  8 Apr 2025 14:03:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ocTueDsO"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="l4hAQeZm"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 477AD175D50;
-	Tue,  8 Apr 2025 13:49:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 393F217E00E;
+	Tue,  8 Apr 2025 14:03:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744120174; cv=none; b=BjRk8fgQSYaKEkLS5gxh0gE2+H+YNUyqm2zxcXGK2P5ERFx1OjuACqIE/cGgP7Wlo1qI/tFOVEkCnDB4Wuj7hjwY5UIgG5fVO5al9qiT7wbbIqoMveBj/Z1IZRBY7xBxbwT+wT98fx3+i0+0ZtzmsVUreuyUEhYKJRvqJKVfFRQ=
+	t=1744121036; cv=none; b=Z4cqCqv0GNQLgz9EWvW0DAIeC5mGbnl4t6vSIwv+2vUbnayqzfJ2FOea3M3/CS68i2z4zmb9f1VFNOWhBvQb60PWCTFXVWltMxS3rOaHjcctrriKzcH/YhSTWKjCrx/AawDXj/D82BTtdeAKN0zYgBtvLYxU1PGR1GyVp8BCiQw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744120174; c=relaxed/simple;
-	bh=bJHBesezYdSwQj977PGWwvjWknkqIgR5+rczhLN73tc=;
+	s=arc-20240116; t=1744121036; c=relaxed/simple;
+	bh=Sf45kr7cUtCH9nLRIxWk9P6majZZZ7qoDJBtQNh1WRs=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Sukp6UFaT68e5xEoVSDU1lFnZe4mTOeJ0Easr8d8jj3UP0iNRZRjM7Mjhyt8TC3/kX8Lv5EyJxD4Xf6598EymOCucbSzs8Vc4UBfLolAgqjhAMTJ6bBadfpReyV4xtQ3g700odSqQNewFn9VZQ+vHJ7xXCvPI1Ihw2Xpnjx8E/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=ocTueDsO; arc=none smtp.client-ip=217.70.183.201
+	 MIME-Version:Content-Type; b=Y2HHNd3SbHOEZPlIAfKUFguAXkLlfXQz4yRg8KEYzqPe6WkT6jFaMpjexjSR6FpZ6kU5GVHs3j3645tieeB53dsLprWZo7aC7Kx+tq/8dIsTVErjgP1rddBMd9Ha1oodQMGhMA6Oe/mYiFtK1B8yefAGUC56dUWvU8SmZS2jGAY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=l4hAQeZm; arc=none smtp.client-ip=217.70.183.197
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B7CA443E60;
-	Tue,  8 Apr 2025 13:49:26 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id F197044327;
+	Tue,  8 Apr 2025 14:03:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1744120169;
+	t=1744121031;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=FGv7EI/vb/WroSRb61QAnWmRAgGHfwWpS5vWQR/P62w=;
-	b=ocTueDsOQBY97b6OOGZOl+0+CGjLCjgOKSwwXqHwiCnH6vmx1anE6O9yAj63OnXYrkuzyc
-	ROeY6i+mCpKNCUjvpEnBoBGRjljPmj9YGxlYTA/MdqwYN0OvjRnHcXpWfG+ih9o15hA3om
-	cSFR/SgeScMlY632kxbwMBT9LJSqMUtWn+KBqMpAkjocWWk9R/fDd/CBhILERv7yvmijyw
-	d/Z/iOC9dEKOrcjowZeFJyqfiBe//l55JzjDhjW1oY0QoY71+uBBGstbso15FwiONrrOyg
-	nYDzGAt8fmeGJE1pR3EzZACDqmlnhQmlHzJPn/UrRwysA5i1M4/SQN4buqsMSQ==
-Date: Tue, 8 Apr 2025 15:49:25 +0200
+	bh=JoHpHGrHvAWvhU7WqsQUuRPEF36RuyRVdBvT8MviKt0=;
+	b=l4hAQeZmLC5TBAns0oXotjt35VFAVSgOe8VItJYKZBXR/JTgmG4mFx+mLLC+YZ09PT1PQn
+	IgcQ5XgjFd6R+LQZ/Ca/rD8cIIxblv50Pc0HceVa4xxDBag3jg70UiwZsK+W/ffrwkXTXm
+	J/NlvHM0suGF4SfgCPO/f/VMxvOJZfb1deFP9s60qCPHuX9egj4CjqXBI2Hq0O0irkW5Vj
+	6qQ5wnA7slRnIBspIo+Q6eHd6vwsgouiokXn6ChDwTS7ZGR69VRxSze3J2xk/sA0yzw+nB
+	W4Jfz79hgJsczIM+2YjLZ6eT/b7Uw8IHPn3d7X/fYDzjv9gEC09G204x/G4VmQ==
+Date: Tue, 8 Apr 2025 16:03:44 +0200
 From: Herve Codina <herve.codina@bootlin.com>
 To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki"
@@ -70,13 +70,12 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki"
  <horatiu.vultur@microchip.com>, Steen Hegelund
  <steen.hegelund@microchip.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH 11/16] of: property: Allow fw_devlink device-tree
- support for x86
-Message-ID: <20250408154925.5653d506@bootlin.com>
-In-Reply-To: <Z_Pw_MoPpVNwiEhc@smile.fi.intel.com>
+Subject: Re: [PATCH 12/16] clk: lan966x: Add MCHP_LAN966X_PCI dependency
+Message-ID: <20250408160344.3d3c834b@bootlin.com>
+In-Reply-To: <Z_PxdmKbBGlhpQpr@smile.fi.intel.com>
 References: <20250407145546.270683-1-herve.codina@bootlin.com>
-	<20250407145546.270683-12-herve.codina@bootlin.com>
-	<Z_Pw_MoPpVNwiEhc@smile.fi.intel.com>
+	<20250407145546.270683-13-herve.codina@bootlin.com>
+	<Z_PxdmKbBGlhpQpr@smile.fi.intel.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 Precedence: bulk
@@ -89,84 +88,53 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-GND-State: clean
 X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvtdefvdehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtkeertdertdejnecuhfhrohhmpefjvghrvhgvucevohguihhnrgcuoehhvghrvhgvrdgtohguihhnrgessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepfeevgfefffejteefveffkefffefgtedugedvhfevjedvgeekieelffeihfeuvdeknecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegvtdgrmedvgeeimeejjeeltdemvdeitgegmegvvddvmeeitdefugemheekrgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemvgdtrgemvdegieemjeejledtmedviegtgeemvgdvvdemiedtfegumeehkegrpdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpehhvghrvhgvrdgtohguihhnrgessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepgedtpdhrtghpthhtoheprghnughrihihrdhshhgvvhgthhgvnhhkoheslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopehgrhgvghhkhheslhhinhhugihfohhunhgurghtihhonhdrohhrghdpr
- hgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrkhhrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehshhgrfihnghhuoheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshdrhhgruhgvrhesphgvnhhguhhtrhhonhhigidruggvpdhrtghpthhtohepkhgvrhhnvghlsehpvghnghhuthhrohhnihigrdguvgdprhgtphhtthhopehfvghsthgvvhgrmhesghhmrghilhdrtghomh
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvtdefvdekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtkeertdertdejnecuhfhrohhmpefjvghrvhgvucevohguihhnrgcuoehhvghrvhgvrdgtohguihhnrgessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepvdfhleejtdeftdejveffgedtuddtgefhtedtudfhuefhtddtffeiueeigfdvhfdvnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepvdgrtddumegvtdgrmedvgeeimeejjeeltdemvdeitgegmegvvddvmeeitdefugemheekrgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemvgdtrgemvdegieemjeejledtmedviegtgeemvgdvvdemiedtfegumeehkegrpdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpehhvghrvhgvrdgtohguihhnrgessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepgedtpdhrtghpthhtoheprghnughrihihrdhshhgvvhgthhgvnhhkoheslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopehgrhgvghhkhheslhhinhhugihfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopehrrghfrggvl
+ heskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrkhhrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehshhgrfihnghhuoheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshdrhhgruhgvrhesphgvnhhguhhtrhhonhhigidruggvpdhrtghpthhtohepkhgvrhhnvghlsehpvghnghhuthhrohhnihigrdguvgdprhgtphhtthhopehfvghsthgvvhgrmhesghhmrghilhdrtghomh
 X-GND-Sasl: herve.codina@bootlin.com
 
 Hi Andy,
 
-On Mon, 7 Apr 2025 18:36:28 +0300
+On Mon, 7 Apr 2025 18:38:30 +0300
 Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
 
-> On Mon, Apr 07, 2025 at 04:55:40PM +0200, Herve Codina wrote:
-> > PCI drivers can use a device-tree overlay to describe the hardware
-> > available on the PCI board. This is the case, for instance, of the
-> > LAN966x PCI device driver.
+> On Mon, Apr 07, 2025 at 04:55:41PM +0200, Herve Codina wrote:
+> > The lan966x clock controller depends on the LAN969x architecture or the
+> > LAN966x SoC.
 > > 
-> > Adding some more nodes in the device-tree overlay adds some more
-> > consumer/supplier relationship between devices instantiated from this
-> > overlay.
-> > 
-> > Those fw_node consumer/supplier relationships are handled by fw_devlink
-> > and are created based on the device-tree parsing done by the
-> > of_fwnode_add_links() function.
-> > 
-> > Those consumer/supplier links are needed in order to ensure a correct PM
-> > runtime management and a correct removal order between devices.
-> > 
-> > For instance, without those links a supplier can be removed before its
-> > consumers is removed leading to all kind of issue if this consumer still
-> > want the use the already removed supplier.
-> > 
-> > The support for the usage of an overlay from a PCI driver has been added
-> > on x86 systems in commit 1f340724419ed ("PCI: of: Create device tree PCI
-> > host bridge node").
-> > 
-> > In the past, support for fw_devlink on x86 had been tried but this
-> > support has been removed in commit 4a48b66b3f52 ("of: property: Disable
-> > fw_devlink DT support for X86"). Indeed, this support was breaking some
-> > x86 systems such as OLPC system and the regression was reported in [0].
-> > 
-> > Instead of disabling this support for all x86 system, use a finer grain
-> > and disable this support only for the possible problematic subset of x86  
+> > This clock controller can be used by the LAN966x PCI device and so it
+> > needs to be available when the LAN966x PCI device is enabled.  
 > 
-> > system mixing ACPI and device-tree at boot time (i.e. OLPC and CE4100).  
+> ...
 > 
-> This is incorrect, they never had ACPI to begin with. Also there is third
-> platform that are using DT on x86 core — SpreadTrum based phones.
-
-I will rework the commit log to avoid 'mixing ACPI and device-tree'
-
-For "SpreadTrum based phones", do you have an idea about the Kconfig symbol
-I could use to filter our this x86 systems?
-
-Anything I find upstream related to SpreadTrum seems base on ARM cpus.
-I probably miss something.
-
+> >  	depends on HAS_IOMEM
+> >  	depends on OF
+> > -	depends on SOC_LAN966 || ARCH_LAN969X || COMPILE_TEST
+> > +	depends on SOC_LAN966 || ARCH_LAN969X || MCHP_LAN966X_PCI || COMPILE_TEST  
 > 
-> And not sure about AMD stuff (Geode?).
-
-Same here, if some AMD devices need to be filtered out, is there a specific
-Kconfig symbol I can use ?
-
+> This doesn't seem to scale. Why not simply
 > 
-> > [0] https://lore.kernel.org/lkml/3c1f2473-92ad-bfc4-258e-a5a08ad73dd0@web.de/  
+> 	depends on HAS_IOMEM
+> 	depends on OF || COMPILE_TEST
 > 
-> Can you make this to be a Link tag?
-> 
-> Link: https://lore.kernel.org/lkml/3c1f2473-92ad-bfc4-258e-a5a08ad73dd0@web.de/ [0]
+> ?
 > 
 
-Yes, of course, I will do that in the next iteration.
+With your proposal, if we configure a kernel without SOC_LAN966x or
+ARCH_LAN969x or MCHP_LAN966X_PCI, in other words we configure a kernel
+without a real needed for this clock controller driver, the user will be
+asked about this driver.
+
+This was already reported by Geert
+   https://lore.kernel.org/all/369233dfded88ff6fb342e03794fe31985d84d82.1737383314.git.geert+renesas@glider.be/
+
+I agreed with Geert that asking the user about those driver the LAN966x
+depends on was not a good things and leads to confusion.
+
+So, to prevent asking the user about this driver, I followed the same
+strategy and added the dependencies.
+
+IMHO, we should keep those dependencies here.
 
 Best regards,
 Hervé
-
-
-
-
--- 
-Hervé Codina, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
 
