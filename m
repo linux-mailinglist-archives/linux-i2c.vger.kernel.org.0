@@ -1,142 +1,111 @@
-Return-Path: <linux-i2c+bounces-10220-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10221-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D462A80ECD
-	for <lists+linux-i2c@lfdr.de>; Tue,  8 Apr 2025 16:48:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 063DCA80EE7
+	for <lists+linux-i2c@lfdr.de>; Tue,  8 Apr 2025 16:53:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 676C61B86E5E
-	for <lists+linux-i2c@lfdr.de>; Tue,  8 Apr 2025 14:46:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6B0833B521B
+	for <lists+linux-i2c@lfdr.de>; Tue,  8 Apr 2025 14:47:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0563225779;
-	Tue,  8 Apr 2025 14:45:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46DE01E98ED;
+	Tue,  8 Apr 2025 14:47:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="TLs5lB9Q"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Fcj7MZvl"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90BEF1C5D61;
-	Tue,  8 Apr 2025 14:45:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7E321B6CE5;
+	Tue,  8 Apr 2025 14:47:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744123543; cv=none; b=COryo1jWpcVmTaM390ngMOR/tWoLC4ug+m8/SDRtcoNg+e67JAUoXjNZa41eNOH8d5nVolrWGOygN6lmOshp85nxcImsKOQNOuUbB4BTJWcfeRYOu5poiIDjtUPq+LLPGvcgWdA7k7T2WZ9xDMeX5ojD0ugSS1mSY3pkAtHMlU8=
+	t=1744123676; cv=none; b=Sfqx9Bvn3Q5guRfe62UHeXCKaxLeEdUeIaaQ8JoT1Zj92XjRRRSG2GUivvTqz7nKIHSL0HgwEU7ZgogyBvgeET8/eE/igIQcNFCDuLkQ4hyBCC7DP+4JBrsUN0vXW3BZviJd1RFAH0mIuWMmVUg3wu1HPOcdLVMKtWAktH5RM80=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744123543; c=relaxed/simple;
-	bh=7T4CpB6DGc+gXmXeKE+QAVK5wOG1xBkOti6BP2/W8Ow=;
+	s=arc-20240116; t=1744123676; c=relaxed/simple;
+	bh=xyRTLeNVsfmRHdJr1PsshTXXrynstulle4PHUc3yX4k=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DLZgpcM71DsPuNZsDIc5qsB8tdQ0KoOMnQ7FyDzsFY1tRuSol9rHPYKyikFqRoTAJfTLmaQJHAJFMOi7dPWgOcFNCWrnrQC3rZvYQKvw0dR9a/aAyCdTmAkDtZACmyrQPzmX0ibMp3u8iXTf93y0C+1XFB2a9Bd6gzP+Jahh8zg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=TLs5lB9Q; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=ZU8AgxcMgNb7+V6IhjT3po2+emT09ZzOnp6Z/8jLn6c=; b=TLs5lB9Q6k6NOM0ejAiZKSUmbw
-	Dj+iAfTAAhm+Ug5dOAXdaCUR0ebD73P/pVGjYFtKaTG8ZV+/atjxB8tqHRg7WBYsJwW5Vwwr7EF9c
-	EXg2eTLofm8UMCn7fjXC4Ewz5LuW28/Ib8u6LPJzVd95vL9xcZUe0UdgFLyk1LVTAELk=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1u2ACU-008PSe-Gy; Tue, 08 Apr 2025 16:45:18 +0200
-Date: Tue, 8 Apr 2025 16:45:18 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: Herve Codina <herve.codina@bootlin.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=MmClEWywwRnDIV8RpEvBgUQtuMYcH0ce8w4vAx214kkkZDBsaazcUBPsWeKK05zvDTyFjxUF4dFJNsVNK0MLN0rZK9shC8CbYSxxfT8YXEcLnlWdVGJ8A3+vj1UQxY/mmrgDDUZVUX6pVMDXjMgxyiIf5tyhF7xe9mxPUc46yT8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Fcj7MZvl; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1744123675; x=1775659675;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=xyRTLeNVsfmRHdJr1PsshTXXrynstulle4PHUc3yX4k=;
+  b=Fcj7MZvl5HkUaqDgQegEPerWo99QLglUW5A575keADWWEm+AE47ow9vR
+   p3NTgKeLhTZQoDtkGyp+4KSAB1wohuwd+sENN5yEk5Zru5fF8/qGJTAfW
+   B/GIfqsO/Tg5LQZ66usyQ4chG9tzfpX+1gr+753x8ZVt9dg+9W/sA+Qss
+   0+cfuaXxYz4EHHNSvuvLnxjqgy5IMBjd1CkdSrCWToKKUVwFuQxXqUyGh
+   pD5Ajq37IUi6krWUr7hdRLPCiRH/FAqjGUkXXMmmgaoeWdUyjuvq/Y4j6
+   zKym8uyxTaWc0Z3W4t2tAcB0gAoWbIEn8P4i8YNh1TFUeD/dzs8jsnW5S
+   Q==;
+X-CSE-ConnectionGUID: eR5k+H1hSS2u6J6FVYVL6A==
+X-CSE-MsgGUID: FPISMuAcR32qqaJ/VplIbQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11397"; a="49220051"
+X-IronPort-AV: E=Sophos;i="6.15,198,1739865600"; 
+   d="scan'208";a="49220051"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2025 07:47:54 -0700
+X-CSE-ConnectionGUID: DGOQxxVNS2WoQ432qPNqYw==
+X-CSE-MsgGUID: Jo5vtBjhQ7+afDU2Q06ijg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,198,1739865600"; 
+   d="scan'208";a="133159877"
+Received: from smile.fi.intel.com ([10.237.72.58])
+  by orviesa003.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2025 07:47:52 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1u2AEv-0000000AQv2-105M;
+	Tue, 08 Apr 2025 17:47:49 +0300
+Date: Tue, 8 Apr 2025 17:47:48 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+	Jai Luthra <jai.luthra@ideasonboard.com>,
 	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Peter Rosin <peda@axentia.se>,
-	Derek Kiernan <derek.kiernan@amd.com>,
-	Dragan Cvetic <dragan.cvetic@amd.com>,
-	Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh@kernel.org>,
-	Saravana Kannan <saravanak@google.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Mark Brown <broonie@kernel.org>, Len Brown <lenb@kernel.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Daniel Scally <djrscally@gmail.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Wolfram Sang <wsa@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	linux-kernel@vger.kernel.org, imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-spi@vger.kernel.org,
-	linux-acpi@vger.kernel.org,
-	Allan Nielsen <allan.nielsen@microchip.com>,
-	Horatiu Vultur <horatiu.vultur@microchip.com>,
-	Steen Hegelund <steen.hegelund@microchip.com>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH 15/16] misc: lan966x_pci: Add dtso nodes in order to
- support SFPs
-Message-ID: <e370fcd3-bd58-47d1-bc0c-c0abeebbefdc@lunn.ch>
-References: <20250407145546.270683-1-herve.codina@bootlin.com>
- <20250407145546.270683-16-herve.codina@bootlin.com>
- <19f1a382-1b6b-42bd-a548-a1a5644c9a1b@lunn.ch>
- <20250408162603.02d6c3a1@bootlin.com>
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org,
+	Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: Re: [PATCH v3 6/7] i2c: core: Deprecate of_node in struct
+ i2c_board_info
+Message-ID: <Z_U3FNa0ay_Sb9Cs@smile.fi.intel.com>
+References: <20250407154937.744466-1-andriy.shevchenko@linux.intel.com>
+ <20250407154937.744466-7-andriy.shevchenko@linux.intel.com>
+ <Z_U162kNEPSZI3zD@kekkonen.localdomain>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20250408162603.02d6c3a1@bootlin.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Z_U162kNEPSZI3zD@kekkonen.localdomain>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Tue, Apr 08, 2025 at 04:26:03PM +0200, Herve Codina wrote:
-> Hi Andrew,
+On Tue, Apr 08, 2025 at 02:42:51PM +0000, Sakari Ailus wrote:
+> On Mon, Apr 07, 2025 at 06:45:02PM +0300, Andy Shevchenko wrote:
+> > Two members of the same or similar semantics is quite confusing to begin with.
+> > Moreover, the fwnode covers all possible firmware descriptions that Linux kernel
+> > supports. Deprecate of_node in struct i2c_board_info, so users will be warned
+> > and in the future remote it completely.
 > 
-> On Mon, 7 Apr 2025 22:05:31 +0200
-> Andrew Lunn <andrew@lunn.ch> wrote:
-> 
-> > On Mon, Apr 07, 2025 at 04:55:44PM +0200, Herve Codina wrote:
-> > > Add device-tree nodes needed to support SFPs.
-> > > Those nodes are:
-> > >  - the clock controller
-> > >  - the i2c controller
-> > >  - the i2c mux
-> > >  - the SFPs themselves and their related ports in the switch
-> > > 
-> > > Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-> > > ---
-> > >  drivers/misc/lan966x_pci.dtso | 111 ++++++++++++++++++++++++++++++++++
-> > >  1 file changed, 111 insertions(+)
-> > > 
-> > > diff --git a/drivers/misc/lan966x_pci.dtso b/drivers/misc/lan966x_pci.dtso
-> > > index 94a967b384f3..a2015b46cd44 100644
-> > > --- a/drivers/misc/lan966x_pci.dtso
-> > > +++ b/drivers/misc/lan966x_pci.dtso  
-> > 
-> > What exactly does this DTSO file represent?
-> 
-> The dsto represents de board connected to the PCI slot and identified
-> by its PCI vendor/device IDs.
+> Too long lines, should be up to 75 characters long only.
 
-Then i think the name lan966x_pci.dtso is too generic. It should be
-named after whatever microchip calls the RDK.
+It's media CI complains, but this code is for I²C :-)
+But in _this_ case I agree with you. It's more for the
+external users of Git, rather than for us.
 
-> We can move the PCI chip in a dtsi included by this dtso but in the
-> end this leads to the exact same representation. Further more, moving
-> out the PCI chip description in its own dtsi out of this dtso can be
-> done in a second step when an other dtso uses the same chip.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-And what would you call this pulled out dtsi file? lan966x_pci.dtsi?
-That is going to be confusing.
 
-Naming is hard, but we should assume this PCIe device is going to be
-successful, and a number of OEMs will build cards around it, so there
-needs to be space within the naming scheme for them.
-
-	Andrew
 
