@@ -1,236 +1,235 @@
-Return-Path: <linux-i2c+bounces-10245-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10247-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id DEDE9A836CB
-	for <lists+linux-i2c@lfdr.de>; Thu, 10 Apr 2025 04:46:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3009DA838E3
+	for <lists+linux-i2c@lfdr.de>; Thu, 10 Apr 2025 08:05:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EC4607B0287
-	for <lists+linux-i2c@lfdr.de>; Thu, 10 Apr 2025 02:44:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7D6328C11CE
+	for <lists+linux-i2c@lfdr.de>; Thu, 10 Apr 2025 06:05:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2A191EA7D4;
-	Thu, 10 Apr 2025 02:45:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nmidTwk5"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39155201261;
+	Thu, 10 Apr 2025 06:05:13 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A52C91E9B12;
-	Thu, 10 Apr 2025 02:45:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56CA31FBCAA
+	for <linux-i2c@vger.kernel.org>; Thu, 10 Apr 2025 06:05:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744253143; cv=none; b=nHjQM66NMMz3ztN6RkBOBt58nDiNU0OYnVAs10Zq+18yi2Kitg8A2kZKaw0ckLWCnnp6NNC8p5Kv2MLgLbfrTOQixlpgFrkTNw2OJXVQ3nyE1wdeov5Kj0WBsLv/idXiMXD9TYWATUZEoAxZcR/MJiyDgzc+GVFJbdUg4Ncm6rE=
+	t=1744265113; cv=none; b=pKGCtjfKbo8bOi4gWQ6b0+QitUye3+PyYGR8cvTVvVnFchoSj69/1fqkIHkCbQhRalFCkTdtNJNUwu2aHdIab4mYW4acCbYTbcu17VGyBjiUBSS20PLm44wJ/pntUF+UqqXFvzfyyQNroS0T0m61KAwwZ5H/uzDjB4ppWv8H0cU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744253143; c=relaxed/simple;
-	bh=KQEZ6JB9t3IyUQNsiOrY7AJyXfw3Qo1A9Jq0dntRkQs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Q79gRVRc1y/aR9ZKqAhbRTG1Pu8uE13nltyLslq9CsdWzW/Zo8GelH85JN3TdYzR/quCe/zMkk+NnGu6mLN2e1M1NFlGkzLF0SUYEt0YYfXigGilkdGsWja1q0HimXQWiDQiSpyEejre1/XYs2e5KcxMmoGHoGOZt4RgE4tX4mI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nmidTwk5; arc=none smtp.client-ip=209.85.219.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-e643f235a34so245437276.1;
-        Wed, 09 Apr 2025 19:45:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744253140; x=1744857940; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0znVcofdMZqSyY8rQG7+aec/wD05C2MOziJfKOlp+SY=;
-        b=nmidTwk560GLmGFg2K40a/+bFqQ8E5tLP8c1xw+sA1WoI6ognbi+0DJdU8tcIZ0Ehv
-         bRj8BIsiTxP0bB4RFlO1jEqR/Lv35zliMCm8zQ/kEQSsllDYQ96s+Dm9Ge6a3LLYW6Vr
-         HslVQsuKPDkeUENTYQfCkw/iUMKGgpCu5KZqcHT7CXi2uzRXJ+ZfgUbReqTNuBz+qztR
-         ozCah6jcBLwayHQ2MwOzN3aCgwM3blod7iks79UdJyx+JqqOc03iGssbs5T6AYnsBxHY
-         ZOdcd8Dwe1o+BsNwdiUT3MvJko0dYWorRZK0jIuNh2HFv/W4DAtKygh21C52X027G6S3
-         mJog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744253140; x=1744857940;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0znVcofdMZqSyY8rQG7+aec/wD05C2MOziJfKOlp+SY=;
-        b=XKr7gIvibpLRWvZVHHHghhe43MUNqIOW65c63D4T+WQZoSOfdmxzXYd3oOeMH5CL1E
-         3WQNE86hXZtOJHHaEM+QnP6Ln/DsPeTM+SwZtDMwifGP4SH6eFIjSyMmhtqvvnXb/Z8I
-         fW/Ngq41sE+bQlsRDEIWdL9jcAGZWH8oZzaWd4wHIqgCdUoDnSF1yW6VkQZd5z+CqaS7
-         vd9lJbWged/WWKjQKXf5xW7lwCx164MqXefrUSqYxKPsnlHhcAdHwWDswScCzoXvVr+X
-         3CA1478p/Y2UwrszjMbz/X+iZ4IwSl/f/P9llyF1ztp8W3KX7WVJ+NxbUDfAYqy+fLXv
-         A5fQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU8yPY2krDaIEGwCCqJgYgghggiKx4cVXKvEpNhoRG8AyNF6F0e+vxwvi/RZejIasKbwexgdLH935qa@vger.kernel.org, AJvYcCUGOOiTbxsqJHI9ISmlu0D8+HAFyXr58U1n7UlCmldGCfWRnhmS15iwOitPKndNY+86voWjEFeRdtsGHYQ=@vger.kernel.org, AJvYcCUhpVQ/F1a9qgnPVIWTuSwWHZN3yX8l92EdEDvygXRXRjEcmIfzarz/nXpzN2cl2k2uCW0Bhp/v+1tHe/g50Ec=@vger.kernel.org, AJvYcCUrsFBhU1OO5+PljPdEQ7okjpYFWn9VvsWxo6gIjRRIIt8WQf7An/O1TSXZQNL3/q/+zV0wBdh+256HEy8f@vger.kernel.org, AJvYcCV6jubxqhTke9bmkte5duvKmbgMlKvjWyn8u7zDLNzgPxhGA4cKv9sft2r/Q+rqoTzSYYrenyC6b58Xmg==@vger.kernel.org, AJvYcCVd8A/6MR/rtcZbPCFJTBgDvMbcpErNah6DvLXqOtpiG/LVbXSbqvdw722JRm5w+rX17pabABGHYZNS@vger.kernel.org, AJvYcCVsz4Af2fWwLxmXi69nTEiwZAbhIOh+Qwpc4ag0XX7qCemJcnu5lwC0EaeIBkr7KgxGY7/P3am8BcI=@vger.kernel.org, AJvYcCXlyPrqWPU3/ogI/h2HZ6qyOUB43dkHRCZaDK581rrWN5QXYD6Fg7BzSilZ6kpbS8BbHTFzhvaCSEeh@vger.kernel.org, AJvYcCXvt7OGFyztPZ6kEbGQ8Dgt9YKsz5FdnTN2vhmaDM0ynG2X6KOpe/PzugcDL7jolwblimWAJ65Q@vger.kernel.org
-X-Gm-Message-State: AOJu0YzGyq8yXog+Mxja3B62XE510IaihgcCYC+bE27JAm/bbhHLEKxP
-	VKt1h/SGrSI5GHfa+5Asg2RIMiZZa12GwJ7cnLnDP73uXjGkNcTOKbUIU2dhtTBJuZDra9HO7/d
-	9NkD2y2v/8hFB7/s6E+tpuJF446Y=
-X-Gm-Gg: ASbGncslzyd+DvcB0Cma93sLR7pOiZMBgsKltTP0+VMpQQteBemMyoy14e3iiiEakZT
-	omGtXGR41P6VwiCLXRV7VYg/3+vOXEqeYQuH0zugEwyG5Xvz5Nh7Dh64rWylwwrQUL6YtMP+pmQ
-	9QeUZKAB/M3z1hzehPDVvfEFH8U0vtuFfj4MTI5L8Xv7IYtH9R2tjrn2B3
-X-Google-Smtp-Source: AGHT+IETiR/1KKEvz2i91Lzay52EaRmEEzm9KCbaz7jAfvh7zeS7SKPtkYiHbWjyz5dZb3/vI/JCYJ/mC4Z8SvrnQbw=
-X-Received: by 2002:a05:6902:2503:b0:e5b:1b55:1325 with SMTP id
- 3f1490d57ef6-e703e15f292mr1852380276.25.1744253140506; Wed, 09 Apr 2025
- 19:45:40 -0700 (PDT)
+	s=arc-20240116; t=1744265113; c=relaxed/simple;
+	bh=q/kBApj8o1DODVLckuFXHWT1k9Qcxm273pF1C9ox4ro=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GQIGIw65ktsGr8p8MWs1dsNb6gCla5r4Rg8aFojtFUZ5h5rGptbP+zycWEajEXO96MAd5hXKKi9ExJ7WQzoMk3MAQHYk8ehGejCAm0iSB1Kwr1CgcTbLhy6/0xjFfGVdk0/fXZ6reAODr7OPFmEvKs0/mw8/fJT5HMCWDpMsglM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1u2l1d-0004XD-C7; Thu, 10 Apr 2025 08:04:33 +0200
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1u2l1Z-004Dlj-2z;
+	Thu, 10 Apr 2025 08:04:29 +0200
+Received: from pengutronix.de (p5b1645f7.dip0.t-ipconnect.de [91.22.69.247])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 75A153F4AE6;
+	Thu, 10 Apr 2025 06:04:29 +0000 (UTC)
+Date: Thu, 10 Apr 2025 08:04:26 +0200
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Ming Yu <a0282524688@gmail.com>
+Cc: lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
+	andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org, 
+	linux-usb@vger.kernel.org, Ming Yu <tmyu0@nuvoton.com>
+Subject: Re: [PATCH v9 4/7] can: Add Nuvoton NCT6694 CANFD support
+Message-ID: <20250410-artichoke-swan-of-abracadabra-33c1dc-mkl@pengutronix.de>
+References: <20250409082752.3697532-1-tmyu0@nuvoton.com>
+ <20250409082752.3697532-5-tmyu0@nuvoton.com>
+ <20250409-cooperative-elastic-pillbug-672a03-mkl@pengutronix.de>
+ <CAOoeyxULns52vAwzsLoXB+BwT+CN+VGBwqrg61pjKJH8bTD5bw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250409082752.3697532-1-tmyu0@nuvoton.com> <20250409082752.3697532-3-tmyu0@nuvoton.com>
- <CAMRc=Meb9wbhd_wH0OBGAivgUA3-3_+-E5neE+b32T54zQkQjg@mail.gmail.com>
-In-Reply-To: <CAMRc=Meb9wbhd_wH0OBGAivgUA3-3_+-E5neE+b32T54zQkQjg@mail.gmail.com>
-From: Ming Yu <a0282524688@gmail.com>
-Date: Thu, 10 Apr 2025 10:45:29 +0800
-X-Gm-Features: ATxdqUHvPStCEjIlmPeYzUqkG4uY8NTbLVYUUSUQKfLVy60efJKv3B8SbaTKJeo
-Message-ID: <CAOoeyxV3WajFf+YCAP6y5pzEmQdcNHrU2yFqU9LGgO1e8Faq5g@mail.gmail.com>
-Subject: Re: [PATCH v9 2/7] gpio: Add Nuvoton NCT6694 GPIO support
-To: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: lee@kernel.org, linus.walleij@linaro.org, andi.shyti@kernel.org, 
-	mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org, 
-	Ming Yu <tmyu0@nuvoton.com>, Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="6ebpqmmsutfol6xr"
+Content-Disposition: inline
+In-Reply-To: <CAOoeyxULns52vAwzsLoXB+BwT+CN+VGBwqrg61pjKJH8bTD5bw@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+
+
+--6ebpqmmsutfol6xr
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v9 4/7] can: Add Nuvoton NCT6694 CANFD support
+MIME-Version: 1.0
 
-Dear Bartosz,
+On 10.04.2025 10:40:34, Ming Yu wrote:
+> Dear Marc,
+>=20
+> Thank you for reviewing.
+>=20
+> Marc Kleine-Budde <mkl@pengutronix.de> =E6=96=BC 2025=E5=B9=B44=E6=9C=889=
+=E6=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=886:21=E5=AF=AB=E9=81=93=EF=BC=
+=9A
+> ...
+> > > +static void nct6694_canfd_handle_state_change(struct net_device *nde=
+v, u8 status)
+> > > +{
+> > > +     struct nct6694_canfd_priv *priv =3D netdev_priv(ndev);
+> > > +     enum can_state new_state, rx_state, tx_state;
+> > > +     struct can_berr_counter bec;
+> > > +     struct can_frame *cf;
+> > > +     struct sk_buff *skb;
+> > > +
+> > > +     nct6694_canfd_get_berr_counter(ndev, &bec);
+> > > +     can_state_get_by_berr_counter(ndev, &bec, &tx_state, &rx_state);
+> > > +
+> > > +     new_state =3D max(tx_state, rx_state);
+> > > +
+> > > +     /* state hasn't changed */
+> > > +     if (new_state =3D=3D priv->can.state)
+> > > +             return;
+> > > +
+> > > +     skb =3D alloc_can_err_skb(ndev, &cf);
+> > > +
+> > > +     can_change_state(ndev, cf, tx_state, rx_state);
+> > > +
+> > > +     if (new_state =3D=3D CAN_STATE_BUS_OFF) {
+> > > +             can_bus_off(ndev);
+> >
+> > What does your device do when it goes into bus off? Does it recover its=
+elf?
+> >
+>=20
+> No, the device does not support automatic bus-off recovery. It
+> requires an explicit CAN Setting and Initialization(CMD0) command to
+> re-initialize the controller after entering bus-off state.
 
-Thank you for reviewing.
+Ok
 
-Bartosz Golaszewski <brgl@bgdev.pl> =E6=96=BC 2025=E5=B9=B44=E6=9C=889=E6=
-=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=887:39=E5=AF=AB=E9=81=93=EF=BC=9A
->
-...
-> > +static int nct6694_gpio_probe(struct platform_device *pdev)
-> > +{
-> > +       const struct mfd_cell *cell =3D mfd_get_cell(pdev);
-> > +       struct device *dev =3D &pdev->dev;
-> > +       struct nct6694 *nct6694 =3D dev_get_drvdata(pdev->dev.parent);
-> > +       struct nct6694_gpio_data *data;
-> > +       struct gpio_irq_chip *girq;
-> > +       int ret, irq, i;
-> > +       char **names;
-> > +
-> > +       irq =3D irq_create_mapping(nct6694->domain,
-> > +                                NCT6694_IRQ_GPIO0 + cell->id);
-> > +       if (!irq)
-> > +               return -EINVAL;
-> > +
-> > +       data =3D devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-> > +       if (!data) {
-> > +               ret =3D -ENOMEM;
-> > +               goto dispose_irq;
-> > +       }
-> > +
-> > +       names =3D devm_kcalloc(dev, NCT6694_NR_GPIO, sizeof(char *),
-> > +                            GFP_KERNEL);
-> > +       if (!names) {
-> > +               ret =3D -ENOMEM;
-> > +               goto dispose_irq;
-> > +       }
-> > +
-> > +       for (i =3D 0; i < NCT6694_NR_GPIO; i++) {
-> > +               names[i] =3D devm_kasprintf(dev, GFP_KERNEL, "GPIO%X%d"=
-,
-> > +                                         cell->id, i);
-> > +               if (!names[i]) {
-> > +                       ret =3D -ENOMEM;
-> > +                       goto dispose_irq;
-> > +               }
-> > +       }
-> > +
-> > +       data->irq =3D irq;
-> > +       data->nct6694 =3D nct6694;
-> > +       data->group =3D cell->id;
-> > +
-> > +       data->gpio.names                =3D (const char * const*)names;
-> > +       data->gpio.label                =3D pdev->name;
-> > +       data->gpio.direction_input      =3D nct6694_direction_input;
-> > +       data->gpio.get                  =3D nct6694_get_value;
-> > +       data->gpio.direction_output     =3D nct6694_direction_output;
-> > +       data->gpio.set                  =3D nct6694_set_value;
->
-> Please use the set_rv variant, regular set is deprecated now.
->
+[...]
 
-Understood. Fix it in v10.
+> > > +static int nct6694_canfd_start(struct net_device *ndev)
+> > > +{
+> > > +     struct nct6694_canfd_priv *priv =3D netdev_priv(ndev);
+> > > +     const struct can_bittiming *d_bt =3D &priv->can.data_bittiming;
+> > > +     const struct can_bittiming *n_bt =3D &priv->can.bittiming;
+> > > +     struct nct6694_canfd_setting *setting __free(kfree) =3D NULL;
+> > > +     const struct nct6694_cmd_header cmd_hd =3D {
+> > > +             .mod =3D NCT6694_CANFD_MOD,
+> > > +             .cmd =3D NCT6694_CANFD_SETTING,
+> > > +             .sel =3D ndev->dev_port,
+> > > +             .len =3D cpu_to_le16(sizeof(*setting))
+> > > +     };
+> > > +     int ret;
+> > > +
+> > > +     setting =3D kzalloc(sizeof(*setting), GFP_KERNEL);
+> > > +     if (!setting)
+> > > +             return -ENOMEM;
+> > > +
+> > > +     setting->nbr =3D cpu_to_le32(n_bt->bitrate);
+> > > +     setting->dbr =3D cpu_to_le32(d_bt->bitrate);
+> > > +
+> > > +     if (priv->can.ctrlmode & CAN_CTRLMODE_LISTENONLY)
+> > > +             setting->ctrl1 |=3D cpu_to_le16(NCT6694_CANFD_SETTING_C=
+TRL1_MON);
+> > > +
+> > > +     if (priv->can.ctrlmode & CAN_CTRLMODE_FD_NON_ISO)
+> > > +             setting->ctrl1 |=3D cpu_to_le16(NCT6694_CANFD_SETTING_C=
+TRL1_NISO);
+> > > +
+> > > +     if (priv->can.ctrlmode & CAN_CTRLMODE_LOOPBACK)
+> > > +             setting->ctrl1 |=3D cpu_to_le16(NCT6694_CANFD_SETTING_C=
+TRL1_LBCK);
+> > > +
+> > > +     setting->nbtp =3D cpu_to_le32(FIELD_PREP(NCT6694_CANFD_SETTING_=
+NBTP_NSJW,
+> > > +                                            n_bt->sjw - 1) |
+> > > +                                 FIELD_PREP(NCT6694_CANFD_SETTING_NB=
+TP_NBRP,
+> > > +                                            n_bt->brp - 1) |
+> > > +                                 FIELD_PREP(NCT6694_CANFD_SETTING_NB=
+TP_NTSEG2,
+> > > +                                            n_bt->phase_seg2 - 1) |
+> > > +                                 FIELD_PREP(NCT6694_CANFD_SETTING_NB=
+TP_NTSEG1,
+> > > +                                            n_bt->prop_seg + n_bt->p=
+hase_seg1 - 1));
+> > > +
+> > > +     setting->dbtp =3D cpu_to_le32(FIELD_PREP(NCT6694_CANFD_SETTING_=
+DBTP_DSJW,
+> > > +                                            d_bt->sjw - 1) |
+> > > +                                 FIELD_PREP(NCT6694_CANFD_SETTING_DB=
+TP_DBRP,
+> > > +                                            d_bt->brp - 1) |
+> > > +                                 FIELD_PREP(NCT6694_CANFD_SETTING_DB=
+TP_DTSEG2,
+> > > +                                            d_bt->phase_seg2 - 1) |
+> > > +                                 FIELD_PREP(NCT6694_CANFD_SETTING_DB=
+TP_DTSEG1,
+> > > +                                            d_bt->prop_seg + d_bt->p=
+hase_seg1 - 1));
+> >
+> > What does your device do, if you set the bitrates _and_ the bit timing
+> > parameters? They are redundant.
+>=20
+> The firmware calculates the default bit timing parameters when it
+> receives the bitrates, and then overwrites them if it later receives
+> explicit bit timing parameters.
+>=20
+> To avoid confusion and ensure consistent behavior, I will remove the
+> bitrate setting logic in next patch. Instead, the bit timing will be
+> determined solely based on the provided bit timing parameters.
 
-> > +       data->gpio.get_direction        =3D nct6694_get_direction;
-> > +       data->gpio.set_config           =3D nct6694_set_config;
-> > +       data->gpio.init_valid_mask      =3D nct6694_init_valid_mask;
-> > +       data->gpio.base                 =3D -1;
-> > +       data->gpio.can_sleep            =3D false;
-> > +       data->gpio.owner                =3D THIS_MODULE;
-> > +       data->gpio.ngpio                =3D NCT6694_NR_GPIO;
-> > +
-> > +       platform_set_drvdata(pdev, data);
-> > +
-> > +       ret =3D devm_mutex_init(dev, &data->lock);
-> > +       if (ret)
-> > +               goto dispose_irq;
-> > +
-> > +       ret =3D devm_mutex_init(dev, &data->irq_lock);
-> > +       if (ret)
-> > +               goto dispose_irq;
-> > +
-> > +       ret =3D nct6694_get_irq_trig(data);
-> > +       if (ret) {
-> > +               dev_err_probe(dev, ret, "Failed to get irq trigger type=
-\n");
-> > +               goto dispose_irq;
-> > +       }
-> > +
-> > +       girq =3D &data->gpio.irq;
-> > +       gpio_irq_chip_set_chip(girq, &nct6694_irq_chip);
-> > +       girq->parent_handler =3D NULL;
-> > +       girq->num_parents =3D 0;
-> > +       girq->parents =3D NULL;
-> > +       girq->default_type =3D IRQ_TYPE_NONE;
-> > +       girq->handler =3D handle_level_irq;
-> > +       girq->threaded =3D true;
-> > +
-> > +       ret =3D devm_request_threaded_irq(dev, irq, NULL, nct6694_irq_h=
-andler,
-> > +                                       IRQF_ONESHOT | IRQF_SHARED,
-> > +                                       "gpio-nct6694", data);
-> > +       if (ret) {
-> > +               dev_err_probe(dev, ret, "Failed to request irq\n");
-> > +               goto dispose_irq;
-> > +       }
-> > +
-> > +       ret =3D devm_gpiochip_add_data(dev, &data->gpio, data);
-> > +       if (ret)
-> > +               goto dispose_irq;
-> > +
-> > +       return 0;
-> > +
-> > +dispose_irq:
-> > +       irq_dispose_mapping(irq);
-> > +       return ret;
-> > +}
-> > +
-> > +static void nct6694_gpio_remove(struct platform_device *pdev)
-> > +{
-> > +       struct nct6694_gpio_data *data =3D platform_get_drvdata(pdev);
-> > +
-> > +       devm_free_irq(&pdev->dev, data->irq, data);
->
-> That's definitely not right. If you need to use the devm_free variant
-> in remove(), then you're doing something wrong. Most likely you can
-> rely on the devres release path here...
->
-> > +       irq_dispose_mapping(data->irq);
->
-> ... and schedule this as a custom devm action.
->
+Sounds good.
 
-Okay, I will add the devm_add_action_or_reset() to call
-irq_dispose_mapping() in the next patch.
+regards,
+Marc
 
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
-Best regards,
-Ming
+--6ebpqmmsutfol6xr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmf3X2cACgkQDHRl3/mQ
+kZy+Bwf/cD7PcXTrBFCGsudbvqhERiXg3j4fGxKlZVoNrTxY13w0WWxCpMBfL9lZ
+k+VJ+pxjPqL64WK5QAAem80jd8Pc+BqG+jdZIMEfTfYXvArLqzvnlfC16d6OoKmS
+cZCI+XAbNQMFCkOSLNa3tS6jA5/rwlsy+mV7CMLeOphSUl+sTbW2PlIiPJIQQXzG
+9Y1kcIlI1HLOTj2ilQ/8xgx+cNGh561Erou4H0fnNyoi4nuvlNcglfNm/m4B2DiQ
+oybJYK34/vHSiz361rkyU32z6TNcW5PaR7FwDGM/pMScYdQOnZSgOhuIBrl71etT
+/MLF7/H4MWskq7PZ97+8f+THFvhH2g==
+=67Py
+-----END PGP SIGNATURE-----
+
+--6ebpqmmsutfol6xr--
 
