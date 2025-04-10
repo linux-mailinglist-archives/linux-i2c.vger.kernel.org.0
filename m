@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-10250-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10251-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 944F5A83BD5
-	for <lists+linux-i2c@lfdr.de>; Thu, 10 Apr 2025 09:56:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC2D0A83BE7
+	for <lists+linux-i2c@lfdr.de>; Thu, 10 Apr 2025 09:59:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 660DE7A907F
-	for <lists+linux-i2c@lfdr.de>; Thu, 10 Apr 2025 07:54:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 06E5E17C819
+	for <lists+linux-i2c@lfdr.de>; Thu, 10 Apr 2025 07:58:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05CAC1E3793;
-	Thu, 10 Apr 2025 07:55:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC8F21E98EA;
+	Thu, 10 Apr 2025 07:58:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aEOoJf+y"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IKl+WEqE"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C4AC130A54;
-	Thu, 10 Apr 2025 07:55:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BD0F1E32A3;
+	Thu, 10 Apr 2025 07:58:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744271755; cv=none; b=k0NRi9PaakvQq43lI3ojzFaB3vpoDDFg0KNUNZhSgpda1XB0drrcRX4VdPZxYZ+N6+geTv/2HaohyAy4XBmTyrdDhg0C7kP4vc63WH6LRO5ZUgtiIxsCCEx/Z74W9MltxNUleF0Vcfhf+9kldwfxPMgviKmzaE3ZYbgqaPNHkUw=
+	t=1744271927; cv=none; b=cPmajS6yxbfPk9upiPk+FsG8UmMT+QqOY7L4hKT9JTf+e0isS/Lw/S1N2F0dt9C2e4ovEInQw3p6b5lrQXpUaG0cHqWYatVKZSw76G9swCNoDHmN18zjirqmlotjqyqCRQ5cBDDxBBQudJgTjemgpjcf3jlg8QgAAau8wc9cWIA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744271755; c=relaxed/simple;
-	bh=rUbEEvvc1TPtm5AtTLAZF2apcyb6fC04ZE3v237YxYo=;
+	s=arc-20240116; t=1744271927; c=relaxed/simple;
+	bh=71Rfgf2yRqlfiS9p2925TC7yG6tm0ZpKyipflmSA2d0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bIF/Sc4sfssTZPf+GXv1bMTQySZsYiMf0wJbMy6ghi5/Iw7TAt84sMjcDtxO1J6ZGm6Dbdo0cljp0qpynBF716U4EEYM/CWQlw5qgDbBVBCPeH9rdBLZFFptf/yzg3HkJsLQU+gcyE2HlFnTqHapCeJaZArCSzvQfGofGoCfSkU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aEOoJf+y; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A804C4CEE3;
-	Thu, 10 Apr 2025 07:55:49 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=RuFsAwjlywZ6jBLzkCLrhNw8W6U0Ot8UANYq/U1n3+e7VChqu/J60pyBVVCMV8yzPU7j4hLUKr0Harw+JGUXQ3FsOADqIMIucTkQBJ0BQLVgJZEv6A9cneXVcsxv39wsjgsMHGbVrMVMbJzL2S5NOvcCWLaenHtADAtz1MOeg3w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IKl+WEqE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8835C4CEE9;
+	Thu, 10 Apr 2025 07:58:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744271755;
-	bh=rUbEEvvc1TPtm5AtTLAZF2apcyb6fC04ZE3v237YxYo=;
+	s=k20201202; t=1744271925;
+	bh=71Rfgf2yRqlfiS9p2925TC7yG6tm0ZpKyipflmSA2d0=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=aEOoJf+y5EIXVU1G2BqklP3ajU6AFhPDVq/DpNe0SfrJ/0sQw+nFYebbHs9gv+iW/
-	 +5Wv+hx9zxY/X+vef+rP/6mQpDudwHPwU2j9hubWZt6ArWNo10vpG94EpaUG91TLK3
-	 acXWWlIYgJSVtK+MliAtKEO7V9dxmqzaUv7rjwxdUoW72baZuLlnZGT5bRDnRo7QSC
-	 1NV6Sp+JHvmUHPwe5rBmNceDgd0lA3C1fvqzDkMVyO9gtLRY5vypFCMP8LikMoLEID
-	 Lrs3bHgk/rFN68cmyXvcpmjlfVzi9waa99585FBcGT7d9kvHwpVX2JguTA3UurEOKh
-	 6A+sZxcjGPI3Q==
-Message-ID: <14782b0e-3890-4d11-9a40-658da0951dfc@kernel.org>
-Date: Thu, 10 Apr 2025 09:55:47 +0200
+	b=IKl+WEqEoEOyurj+PuJ0zeklluNjrmMu21SCPdSthnjOPwuYOQxiMC90ApTmjpyaY
+	 hpW411fYLc/wbiD0bDsjjB6AofuCLUR8d+YjmyTwwHCZYAdH9jqt0ZvuCjJvHu5DHe
+	 9MwgqlIhDBQb4UBrfCLK1LNpfn4FVg6Kaot1dbmFly/2xnGbhmKIuzCVoPRRnzmoao
+	 l9aoC+zJ2R1NdrPMih55JDwfdHIu0fUGNkd97riWWUVlgQ7u8XnH3IbmkjEYuxJlDJ
+	 9eJoDsLyBK8/IBwHiQ6NbiLfo2Edi0+sco1KAtDtDfJgNXskPdrnkxndC0MDSsoOR5
+	 5CZL1KdOqOILQ==
+Message-ID: <e369a368-6729-4f67-9bb0-28bfd833356f@kernel.org>
+Date: Thu, 10 Apr 2025 09:58:37 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,22 +50,20 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 1/7] mfd: Add core driver for Nuvoton NCT6694
-To: Lee Jones <lee@kernel.org>
-Cc: a0282524688@gmail.com, linus.walleij@linaro.org, brgl@bgdev.pl,
- andi.shyti@kernel.org, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr,
- andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org,
- linux@roeck-us.net, jdelvare@suse.com, alexandre.belloni@bootlin.com,
- linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+Subject: Re: [PATCH v9 7/7] rtc: Add Nuvoton NCT6694 RTC support
+To: a0282524688@gmail.com, lee@kernel.org, linus.walleij@linaro.org,
+ brgl@bgdev.pl, andi.shyti@kernel.org, mkl@pengutronix.de,
+ mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+ wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com,
+ alexandre.belloni@bootlin.com
+Cc: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
  linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
  netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
  linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
  linux-usb@vger.kernel.org, Ming Yu <tmyu0@nuvoton.com>
 References: <20250409082752.3697532-1-tmyu0@nuvoton.com>
- <20250409082752.3697532-2-tmyu0@nuvoton.com>
- <11d2541e-580b-4060-ad92-ed721e98793e@kernel.org>
- <20250410075225.GL372032@google.com>
+ <20250409082752.3697532-8-tmyu0@nuvoton.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -111,49 +109,43 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20250410075225.GL372032@google.com>
+In-Reply-To: <20250409082752.3697532-8-tmyu0@nuvoton.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 10/04/2025 09:52, Lee Jones wrote:
-> On Thu, 10 Apr 2025, Krzysztof Kozlowski wrote:
-> 
->> On 09/04/2025 10:27, a0282524688@gmail.com wrote:
->>> +
->>> +static int nct6694_response_err_handling(struct nct6694 *nct6694,
->>> +					 unsigned char err_status)
->>> +{
->>> +	switch (err_status) {
->>> +	case NCT6694_NO_ERROR:
->>> +		return 0;
->>> +	case NCT6694_NOT_SUPPORT_ERROR:
->>> +		dev_err(nct6694->dev, "Command is not supported!\n");
->>> +		break;
->>> +	case NCT6694_NO_RESPONSE_ERROR:
->>> +		dev_warn(nct6694->dev, "Command received no response!\n");
->>> +		break;
->>> +	case NCT6694_TIMEOUT_ERROR:
->>> +		dev_warn(nct6694->dev, "Command timed out!\n");
->>> +		break;
->>> +	case NCT6694_PENDING:
->>> +		dev_err(nct6694->dev, "Command is pending!\n");
->>> +		break;
->>> +	default:
->>> +		return -EINVAL;
->>> +	}
->>> +
->>> +	return -EIO;
->>> +}
->>> +
->>
->> Missing Kconfig. Exported functions are supposed to have it.
->           -------
-> 
-> KernelDoc
+On 09/04/2025 10:27, a0282524688@gmail.com wrote:
+> +	data->irq = irq;
+> +	data->nct6694 = nct6694;
+> +	data->rtc->ops = &nct6694_rtc_ops;
+> +	data->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
+> +	data->rtc->range_max = RTC_TIMESTAMP_END_2099;
+> +
+> +	platform_set_drvdata(pdev, data);
+> +
+> +	ret = devm_request_threaded_irq(&pdev->dev, irq, NULL,
+> +					nct6694_irq, IRQF_ONESHOT,
+> +					"rtc-nct6694", data);
+> +	if (ret < 0) {
+> +		dev_err_probe(&pdev->dev, ret, "Failed to request irq\n");
+> +		goto dispose_irq;
+> +	}
+> +
+> +	ret = devm_rtc_register_device(data->rtc);
+> +	if (ret)
+> +		goto dispose_irq;
+> +
+> +	device_init_wakeup(&pdev->dev, true);
 
+devm_device_init_wakeup
 
-Yes, thank you. -ENOCOFFEE
+Let's save us from one more patch...
 
+As pointed out in other patch by Bartosz, you have messed cleanups. Use
+only devm, because currently your cleanup looks like this:
+1. dispose mapping
+2. free IRQ
+
+and this should be reversed.
 
 Best regards,
 Krzysztof
