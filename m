@@ -1,235 +1,238 @@
-Return-Path: <linux-i2c+bounces-10247-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10246-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3009DA838E3
-	for <lists+linux-i2c@lfdr.de>; Thu, 10 Apr 2025 08:05:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 76B95A838DD
+	for <lists+linux-i2c@lfdr.de>; Thu, 10 Apr 2025 08:05:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7D6328C11CE
-	for <lists+linux-i2c@lfdr.de>; Thu, 10 Apr 2025 06:05:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5000B1B605D4
+	for <lists+linux-i2c@lfdr.de>; Thu, 10 Apr 2025 06:05:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39155201261;
-	Thu, 10 Apr 2025 06:05:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7194D201278;
+	Thu, 10 Apr 2025 06:04:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pE6bNzha"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56CA31FBCAA
-	for <linux-i2c@vger.kernel.org>; Thu, 10 Apr 2025 06:05:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01D7417A309;
+	Thu, 10 Apr 2025 06:04:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744265113; cv=none; b=pKGCtjfKbo8bOi4gWQ6b0+QitUye3+PyYGR8cvTVvVnFchoSj69/1fqkIHkCbQhRalFCkTdtNJNUwu2aHdIab4mYW4acCbYTbcu17VGyBjiUBSS20PLm44wJ/pntUF+UqqXFvzfyyQNroS0T0m61KAwwZ5H/uzDjB4ppWv8H0cU=
+	t=1744265094; cv=none; b=K7UkSybUxqXo5+BsySUIjEH2Xewo5xz7VwerWgasqNCCRlO4fBXxFf7b9goCc8ATaY65rPEglbsQv6IcV30wzGpLj1rAY16roLcbIu8N1+6dahDpEPzgsha9Y7E7Rh5/oKk2N2pZIF+kN7CKcCxH9n4ek0ZeN0fUfEAJdfCmrqk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744265113; c=relaxed/simple;
-	bh=q/kBApj8o1DODVLckuFXHWT1k9Qcxm273pF1C9ox4ro=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GQIGIw65ktsGr8p8MWs1dsNb6gCla5r4Rg8aFojtFUZ5h5rGptbP+zycWEajEXO96MAd5hXKKi9ExJ7WQzoMk3MAQHYk8ehGejCAm0iSB1Kwr1CgcTbLhy6/0xjFfGVdk0/fXZ6reAODr7OPFmEvKs0/mw8/fJT5HMCWDpMsglM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1u2l1d-0004XD-C7; Thu, 10 Apr 2025 08:04:33 +0200
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1u2l1Z-004Dlj-2z;
-	Thu, 10 Apr 2025 08:04:29 +0200
-Received: from pengutronix.de (p5b1645f7.dip0.t-ipconnect.de [91.22.69.247])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 75A153F4AE6;
-	Thu, 10 Apr 2025 06:04:29 +0000 (UTC)
-Date: Thu, 10 Apr 2025 08:04:26 +0200
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
-	andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org, 
-	linux-usb@vger.kernel.org, Ming Yu <tmyu0@nuvoton.com>
-Subject: Re: [PATCH v9 4/7] can: Add Nuvoton NCT6694 CANFD support
-Message-ID: <20250410-artichoke-swan-of-abracadabra-33c1dc-mkl@pengutronix.de>
-References: <20250409082752.3697532-1-tmyu0@nuvoton.com>
- <20250409082752.3697532-5-tmyu0@nuvoton.com>
- <20250409-cooperative-elastic-pillbug-672a03-mkl@pengutronix.de>
- <CAOoeyxULns52vAwzsLoXB+BwT+CN+VGBwqrg61pjKJH8bTD5bw@mail.gmail.com>
+	s=arc-20240116; t=1744265094; c=relaxed/simple;
+	bh=FYrBWSCKFVtEQ8dqrWonuh8PblTo1bjrFXM916oA1Z8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HKtiSsZ7q+JTHiudKcdNxJOWOjo6CXzAez8xJ+IrfQvewV06WJU+g4aPQxRW8GWwECj5ueg+jvIAEKMhqlnzogGyTy2VeOE/VntdzYsIdlrCYTKL32bpeGW4AV+h9w3zBibsEy90C5lwK+2s2tHq/1+9c9xb3V1bJ4TDSSckal0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pE6bNzha; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C720EC4CEE8;
+	Thu, 10 Apr 2025 06:04:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744265093;
+	bh=FYrBWSCKFVtEQ8dqrWonuh8PblTo1bjrFXM916oA1Z8=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=pE6bNzhaXcXOVCREnHA9o+CvitfxrvKq4sQ8deVGbMdDCLRhGoX/LalA91CeAbe24
+	 9X3bAWjtstpdxGKLt3vxoGsjQj7oM/WM7Xo4778mqYlrztV9TOz9PVAhooXj35XDZV
+	 6k/SlLjwchM7YQjuusm1VP+UC9o+5R6U62fVaaLCVNI+Cx2qQ+JVxEZgp/HiarRnLu
+	 pJqYY5blC7Zr1sCy5uerI3dXcdekHYjBzbZhzpbv9E7s9FEgV0WdG+62Im2dlAySfb
+	 ySMiUXnuQNVO3akeP3JoKh31HY6WOGig4Va/c0PA8eA2sPpUcpkURLrayFoVt3PyBi
+	 oSjLCjHLVXWwA==
+Message-ID: <11d2541e-580b-4060-ad92-ed721e98793e@kernel.org>
+Date: Thu, 10 Apr 2025 08:04:45 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="6ebpqmmsutfol6xr"
-Content-Disposition: inline
-In-Reply-To: <CAOoeyxULns52vAwzsLoXB+BwT+CN+VGBwqrg61pjKJH8bTD5bw@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 1/7] mfd: Add core driver for Nuvoton NCT6694
+To: a0282524688@gmail.com, lee@kernel.org, linus.walleij@linaro.org,
+ brgl@bgdev.pl, andi.shyti@kernel.org, mkl@pengutronix.de,
+ mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+ wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com,
+ alexandre.belloni@bootlin.com
+Cc: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
+ netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
+ linux-usb@vger.kernel.org, Ming Yu <tmyu0@nuvoton.com>
+References: <20250409082752.3697532-1-tmyu0@nuvoton.com>
+ <20250409082752.3697532-2-tmyu0@nuvoton.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20250409082752.3697532-2-tmyu0@nuvoton.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+On 09/04/2025 10:27, a0282524688@gmail.com wrote:
+> +
+> +static int nct6694_response_err_handling(struct nct6694 *nct6694,
+> +					 unsigned char err_status)
+> +{
+> +	switch (err_status) {
+> +	case NCT6694_NO_ERROR:
+> +		return 0;
+> +	case NCT6694_NOT_SUPPORT_ERROR:
+> +		dev_err(nct6694->dev, "Command is not supported!\n");
+> +		break;
+> +	case NCT6694_NO_RESPONSE_ERROR:
+> +		dev_warn(nct6694->dev, "Command received no response!\n");
+> +		break;
+> +	case NCT6694_TIMEOUT_ERROR:
+> +		dev_warn(nct6694->dev, "Command timed out!\n");
+> +		break;
+> +	case NCT6694_PENDING:
+> +		dev_err(nct6694->dev, "Command is pending!\n");
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	return -EIO;
+> +}
+> +
 
---6ebpqmmsutfol6xr
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v9 4/7] can: Add Nuvoton NCT6694 CANFD support
-MIME-Version: 1.0
+Missing Kconfig. Exported functions are supposed to have it.
 
-On 10.04.2025 10:40:34, Ming Yu wrote:
-> Dear Marc,
->=20
-> Thank you for reviewing.
->=20
-> Marc Kleine-Budde <mkl@pengutronix.de> =E6=96=BC 2025=E5=B9=B44=E6=9C=889=
-=E6=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=886:21=E5=AF=AB=E9=81=93=EF=BC=
-=9A
-> ...
-> > > +static void nct6694_canfd_handle_state_change(struct net_device *nde=
-v, u8 status)
-> > > +{
-> > > +     struct nct6694_canfd_priv *priv =3D netdev_priv(ndev);
-> > > +     enum can_state new_state, rx_state, tx_state;
-> > > +     struct can_berr_counter bec;
-> > > +     struct can_frame *cf;
-> > > +     struct sk_buff *skb;
-> > > +
-> > > +     nct6694_canfd_get_berr_counter(ndev, &bec);
-> > > +     can_state_get_by_berr_counter(ndev, &bec, &tx_state, &rx_state);
-> > > +
-> > > +     new_state =3D max(tx_state, rx_state);
-> > > +
-> > > +     /* state hasn't changed */
-> > > +     if (new_state =3D=3D priv->can.state)
-> > > +             return;
-> > > +
-> > > +     skb =3D alloc_can_err_skb(ndev, &cf);
-> > > +
-> > > +     can_change_state(ndev, cf, tx_state, rx_state);
-> > > +
-> > > +     if (new_state =3D=3D CAN_STATE_BUS_OFF) {
-> > > +             can_bus_off(ndev);
-> >
-> > What does your device do when it goes into bus off? Does it recover its=
-elf?
-> >
->=20
-> No, the device does not support automatic bus-off recovery. It
-> requires an explicit CAN Setting and Initialization(CMD0) command to
-> re-initialize the controller after entering bus-off state.
+> +int nct6694_read_msg(struct nct6694 *nct6694, const struct nct6694_cmd_header *cmd_hd, void *buf)
+> +{
+> +	union nct6694_usb_msg *msg = nct6694->usb_msg;
+> +	struct usb_device *udev = nct6694->udev;
+> +	int tx_len, rx_len, ret;
+> +
+> +	guard(mutex)(&nct6694->access_lock);
+> +
+> +	memcpy(&msg->cmd_header, cmd_hd, sizeof(*cmd_hd));
+> +	msg->cmd_header.hctrl = NCT6694_HCTRL_GET;
+> +
+> +	/* Send command packet to USB device */
+> +	ret = usb_bulk_msg(udev, usb_sndbulkpipe(udev, NCT6694_BULK_OUT_EP), &msg->cmd_header,
+> +			   sizeof(*msg), &tx_len, NCT6694_URB_TIMEOUT);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Receive response packet from USB device */
+> +	ret = usb_bulk_msg(udev, usb_rcvbulkpipe(udev, NCT6694_BULK_IN_EP), &msg->response_header,
+> +			   sizeof(*msg), &rx_len, NCT6694_URB_TIMEOUT);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Receive data packet from USB device */
+> +	ret = usb_bulk_msg(udev, usb_rcvbulkpipe(udev, NCT6694_BULK_IN_EP), buf,
+> +			   le16_to_cpu(cmd_hd->len), &rx_len, NCT6694_URB_TIMEOUT);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (rx_len != le16_to_cpu(cmd_hd->len)) {
+> +		dev_err(nct6694->dev, "Expected received length %d, but got %d\n",
+> +			le16_to_cpu(cmd_hd->len), rx_len);
+> +		return -EIO;
+> +	}
+> +
+> +	return nct6694_response_err_handling(nct6694, msg->response_header.sts);
+> +}
+> +EXPORT_SYMBOL(nct6694_read_msg);
 
-Ok
+GPL
 
-[...]
+> +
+> +int nct6694_write_msg(struct nct6694 *nct6694, const struct nct6694_cmd_header *cmd_hd, void *buf)
+> +{
+> +	union nct6694_usb_msg *msg = nct6694->usb_msg;
+> +	struct usb_device *udev = nct6694->udev;
+> +	int tx_len, rx_len, ret;
+> +
+> +	guard(mutex)(&nct6694->access_lock);
+> +
+> +	memcpy(&msg->cmd_header, cmd_hd, sizeof(*cmd_hd));
+> +	msg->cmd_header.hctrl = NCT6694_HCTRL_SET;
+> +
+> +	/* Send command packet to USB device */
+> +	ret = usb_bulk_msg(udev, usb_sndbulkpipe(udev, NCT6694_BULK_OUT_EP), &msg->cmd_header,
+> +			   sizeof(*msg), &tx_len, NCT6694_URB_TIMEOUT);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Send data packet to USB device */
+> +	ret = usb_bulk_msg(udev, usb_sndbulkpipe(udev, NCT6694_BULK_OUT_EP), buf,
+> +			   le16_to_cpu(cmd_hd->len), &tx_len, NCT6694_URB_TIMEOUT);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Receive response packet from USB device */
+> +	ret = usb_bulk_msg(udev, usb_rcvbulkpipe(udev, NCT6694_BULK_IN_EP), &msg->response_header,
+> +			   sizeof(*msg), &rx_len, NCT6694_URB_TIMEOUT);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Receive data packet from USB device */
+> +	ret = usb_bulk_msg(udev, usb_rcvbulkpipe(udev, NCT6694_BULK_IN_EP), buf,
+> +			   le16_to_cpu(cmd_hd->len), &rx_len, NCT6694_URB_TIMEOUT);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (rx_len != le16_to_cpu(cmd_hd->len)) {
+> +		dev_err(nct6694->dev, "Expected transmitted length %d, but got %d\n",
+> +			le16_to_cpu(cmd_hd->len), rx_len);
+> +		return -EIO;
+> +	}
+> +
+> +	return nct6694_response_err_handling(nct6694, msg->response_header.sts);
+> +}
+> +EXPORT_SYMBOL(nct6694_write_msg);
+> +
 
-> > > +static int nct6694_canfd_start(struct net_device *ndev)
-> > > +{
-> > > +     struct nct6694_canfd_priv *priv =3D netdev_priv(ndev);
-> > > +     const struct can_bittiming *d_bt =3D &priv->can.data_bittiming;
-> > > +     const struct can_bittiming *n_bt =3D &priv->can.bittiming;
-> > > +     struct nct6694_canfd_setting *setting __free(kfree) =3D NULL;
-> > > +     const struct nct6694_cmd_header cmd_hd =3D {
-> > > +             .mod =3D NCT6694_CANFD_MOD,
-> > > +             .cmd =3D NCT6694_CANFD_SETTING,
-> > > +             .sel =3D ndev->dev_port,
-> > > +             .len =3D cpu_to_le16(sizeof(*setting))
-> > > +     };
-> > > +     int ret;
-> > > +
-> > > +     setting =3D kzalloc(sizeof(*setting), GFP_KERNEL);
-> > > +     if (!setting)
-> > > +             return -ENOMEM;
-> > > +
-> > > +     setting->nbr =3D cpu_to_le32(n_bt->bitrate);
-> > > +     setting->dbr =3D cpu_to_le32(d_bt->bitrate);
-> > > +
-> > > +     if (priv->can.ctrlmode & CAN_CTRLMODE_LISTENONLY)
-> > > +             setting->ctrl1 |=3D cpu_to_le16(NCT6694_CANFD_SETTING_C=
-TRL1_MON);
-> > > +
-> > > +     if (priv->can.ctrlmode & CAN_CTRLMODE_FD_NON_ISO)
-> > > +             setting->ctrl1 |=3D cpu_to_le16(NCT6694_CANFD_SETTING_C=
-TRL1_NISO);
-> > > +
-> > > +     if (priv->can.ctrlmode & CAN_CTRLMODE_LOOPBACK)
-> > > +             setting->ctrl1 |=3D cpu_to_le16(NCT6694_CANFD_SETTING_C=
-TRL1_LBCK);
-> > > +
-> > > +     setting->nbtp =3D cpu_to_le32(FIELD_PREP(NCT6694_CANFD_SETTING_=
-NBTP_NSJW,
-> > > +                                            n_bt->sjw - 1) |
-> > > +                                 FIELD_PREP(NCT6694_CANFD_SETTING_NB=
-TP_NBRP,
-> > > +                                            n_bt->brp - 1) |
-> > > +                                 FIELD_PREP(NCT6694_CANFD_SETTING_NB=
-TP_NTSEG2,
-> > > +                                            n_bt->phase_seg2 - 1) |
-> > > +                                 FIELD_PREP(NCT6694_CANFD_SETTING_NB=
-TP_NTSEG1,
-> > > +                                            n_bt->prop_seg + n_bt->p=
-hase_seg1 - 1));
-> > > +
-> > > +     setting->dbtp =3D cpu_to_le32(FIELD_PREP(NCT6694_CANFD_SETTING_=
-DBTP_DSJW,
-> > > +                                            d_bt->sjw - 1) |
-> > > +                                 FIELD_PREP(NCT6694_CANFD_SETTING_DB=
-TP_DBRP,
-> > > +                                            d_bt->brp - 1) |
-> > > +                                 FIELD_PREP(NCT6694_CANFD_SETTING_DB=
-TP_DTSEG2,
-> > > +                                            d_bt->phase_seg2 - 1) |
-> > > +                                 FIELD_PREP(NCT6694_CANFD_SETTING_DB=
-TP_DTSEG1,
-> > > +                                            d_bt->prop_seg + d_bt->p=
-hase_seg1 - 1));
-> >
-> > What does your device do, if you set the bitrates _and_ the bit timing
-> > parameters? They are redundant.
->=20
-> The firmware calculates the default bit timing parameters when it
-> receives the bitrates, and then overwrites them if it later receives
-> explicit bit timing parameters.
->=20
-> To avoid confusion and ensure consistent behavior, I will remove the
-> bitrate setting logic in next patch. Instead, the bit timing will be
-> determined solely based on the provided bit timing parameters.
+Same comments.
 
-Sounds good.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---6ebpqmmsutfol6xr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmf3X2cACgkQDHRl3/mQ
-kZy+Bwf/cD7PcXTrBFCGsudbvqhERiXg3j4fGxKlZVoNrTxY13w0WWxCpMBfL9lZ
-k+VJ+pxjPqL64WK5QAAem80jd8Pc+BqG+jdZIMEfTfYXvArLqzvnlfC16d6OoKmS
-cZCI+XAbNQMFCkOSLNa3tS6jA5/rwlsy+mV7CMLeOphSUl+sTbW2PlIiPJIQQXzG
-9Y1kcIlI1HLOTj2ilQ/8xgx+cNGh561Erou4H0fnNyoi4nuvlNcglfNm/m4B2DiQ
-oybJYK34/vHSiz361rkyU32z6TNcW5PaR7FwDGM/pMScYdQOnZSgOhuIBrl71etT
-/MLF7/H4MWskq7PZ97+8f+THFvhH2g==
-=67Py
------END PGP SIGNATURE-----
-
---6ebpqmmsutfol6xr--
+Best regards,
+Krzysztof
 
