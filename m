@@ -1,248 +1,156 @@
-Return-Path: <linux-i2c+bounces-10258-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10259-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09F7EA84DCA
-	for <lists+linux-i2c@lfdr.de>; Thu, 10 Apr 2025 22:05:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 35AA9A852FD
+	for <lists+linux-i2c@lfdr.de>; Fri, 11 Apr 2025 07:21:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 518AE9A3887
-	for <lists+linux-i2c@lfdr.de>; Thu, 10 Apr 2025 20:02:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1D9C34A629B
+	for <lists+linux-i2c@lfdr.de>; Fri, 11 Apr 2025 05:21:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2B87290094;
-	Thu, 10 Apr 2025 20:02:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3627527CB1D;
+	Fri, 11 Apr 2025 05:21:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UHnCNir2"
+	dkim=pass (2048-bit key) header.d=rootcommit.com header.i=@rootcommit.com header.b="Dxi03vPx"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from iguana.tulip.relay.mailchannels.net (iguana.tulip.relay.mailchannels.net [23.83.218.253])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53456293453;
-	Thu, 10 Apr 2025 20:02:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744315348; cv=none; b=lvh8DitAbAUfoi7XFrMIecLoAeJizi0S/1c3zsbTWObzUcRzwB1HktG81TDm/6mvHFjl7RPh+HrmqPUs2gpPCHnW0daIH/vMIEUaOp9XV4ThebIzj8mia+FHM4cItCR38wNTGre2vvbzL+FKy93AzBI1gnRt4T2Ykr22o6CuxnY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744315348; c=relaxed/simple;
-	bh=HKokz0uKDHtOCWF8mVU98Ua+9d+BqiXJ5Xr3OER4avA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cKtS+lbp2TqrYkPkAXl2BBD7A8uOTPqMbqnejLeyidz9LLHP+THbbLoKwzcwUn6u+CANd29X8R99LADZ8BHJEZW7sqbj2CKayONiL3Gl7Kl3rqFglzVR6a09cBvgxXuxvfapVLcij35lKa8hBGPi1S8HBoD50w9/dYhgt7JcEJo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UHnCNir2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FF2CC4CEEB;
-	Thu, 10 Apr 2025 20:02:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744315346;
-	bh=HKokz0uKDHtOCWF8mVU98Ua+9d+BqiXJ5Xr3OER4avA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=UHnCNir2w/qC/TUDrEZF6CUuXnAq7z4ttCiWJ7Zl6E4G4rJEXXpWt+vq2GKISyhsO
-	 IqItkZJyoRyEZuzecc8VL4x0QTWnbFALNEcjHwd9EvC1iyAysslm7SQsCE9dL4z6d9
-	 0FE58oRWLowJTRzzppEA4JDmElzf1Y3GjsDbrl9ZK038s4lWkpAxmFhx86oPAjhjdU
-	 vmRUwPMkNKwJ3Fpen4X3sUgqAuK5ZXaymtAWbKUnwN8+/xDOFjQUoHuJ4XJEg3Uf7G
-	 YVbGSupTFtRkeDWSzIJg9wQucb/eEEEcLvcLB8qDASxtfXed2IQOngDwYPDTzxkP5O
-	 5jmb6uFdZEsOw==
-From: Mario Limonciello <superm1@kernel.org>
-To: Borislav Petkov <bp@alien8.de>,
-	Jean Delvare <jdelvare@suse.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc: Jonathan Corbet <corbet@lwn.net>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Yazen Ghannam <yazen.ghannam@amd.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
-	"H . Peter Anvin" <hpa@zytor.com>,
-	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-	Hans de Goede <hdegoede@redhat.com>,
-	linux-doc@vger.kernel.org (open list:DOCUMENTATION),
-	linux-kernel@vger.kernel.org (open list),
-	linux-i2c@vger.kernel.org (open list:I2C/SMBUS CONTROLLER DRIVERS FOR PC),
-	platform-driver-x86@vger.kernel.org (open list:AMD PMC DRIVER)
-Subject: [PATCH v3 4/4] x86/CPU/AMD: Print the reason for the last reset
-Date: Thu, 10 Apr 2025 15:02:02 -0500
-Message-ID: <20250410200202.2974062-5-superm1@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250410200202.2974062-1-superm1@kernel.org>
-References: <20250410200202.2974062-1-superm1@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F4B326F462;
+	Fri, 11 Apr 2025 05:21:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=23.83.218.253
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1744348912; cv=pass; b=e2ENkxVa5u4R3u44Lfe53th/CmZggKBBZL6Exlfqbn7TKDvyrZGLjx6CkiVYFXEF/EMR9HVXDQ+nKer3dM1YlwWbZ0w+C3mDmSx13BoK2mibP+bkXCpxBKFdcxZMhCLMvFr8U0IL5jKBt06MiILjWPm2j8mbzN8yCS4kHxEHoQw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1744348912; c=relaxed/simple;
+	bh=ghJg1fzJlUqK2ACARda3ABDItb6T2P9W/s7Gb/UsuVY=;
+	h=Message-ID:MIME-Version:Cc:To:From:Subject:Content-Type:Date; b=lV0J64tSq/bRxqcOmNXX+TGVNV0Lkqy1WFsw9Y/URelQD8SC9X2+FmzfvSN40LgfkLs9wjRRbRziLWPvii32NfxyLXT9H84rxhLsLXWpViFKpSLEyppU032V8ysopkT5D3MugBLSVMoc7r/s1Lsy1GLB83PLZIXRmzwUeUkeuhw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rootcommit.com; spf=pass smtp.mailfrom=rootcommit.com; dkim=pass (2048-bit key) header.d=rootcommit.com header.i=@rootcommit.com header.b=Dxi03vPx; arc=pass smtp.client-ip=23.83.218.253
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rootcommit.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rootcommit.com
+X-Sender-Id: hostingeremail|x-authuser|michael.opdenacker@rootcommit.com
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+	by relay.mailchannels.net (Postfix) with ESMTP id 8127D783A89;
+	Fri, 11 Apr 2025 05:21:43 +0000 (UTC)
+Received: from uk-fast-smtpout6.hostinger.io (100-101-172-36.trex-nlb.outbound.svc.cluster.local [100.101.172.36])
+	(Authenticated sender: hostingeremail)
+	by relay.mailchannels.net (Postfix) with ESMTPA id 831D4782DA3;
+	Fri, 11 Apr 2025 05:21:42 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1744348903; a=rsa-sha256;
+	cv=none;
+	b=51SRycbY/fZ8hrpt97EA2sciMsRWNj7PvmaeFM7wcGUvI5JdSoJZSSH3mzOnHgE/QrF7X4
+	OEG0VHMuCrZaV8ZIdtgji4beBKgrWukYUlhP1ofuad+5Uy0OY4ONEzr6F39ciKY2EF3tMv
+	RKtPOTEOCPxyrwXtkebyBgo+sowkSNJToohkJqzjHlAjqllMM4IQQuFZ0YyGAbyGG1HIvt
+	zdib0tjxVhmJVvi0k9CSfoF3C3VJ5+7V+8+y+nJxLZOr9mzGhpachdMZm1XkUT5aUKBXyd
+	7V/d2jZm9EjnbaCnZvWU1vU4M7/rSdEeC4wk36DqpdWiTu5DQj+WDNKkoqLcrg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+	s=arc-2022; t=1744348903;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:dkim-signature;
+	bh=7WQSLHWxiG2839YngCI+C460yPq7/TxwoGIFaGZ+IDM=;
+	b=jAf6kN7ODPBqjmgXqhVVPd6pVmqPd5YjNn/0srsgWkRR2l7Z7AKKNpvnvBVbvUBXy9R1qT
+	wTwSBYoNE3q9D7gmxfgbXbW4KUuNDA9tq2jeQsgB34DgPyQNE+IuzmmPpdcEHVi48yfyga
+	FEi23fWbNdp3CJt1xkJ7tNLA370dfsipf4+D7xzBFKTYeERCewU4Av+aKhhUsiD+RBXyGq
+	N4yk3IWVz/c2PM5h/npBCoIJpfGRMJGjUZv4m4t05vWR/r3eQ2E70gWcRPo96ot50yesx8
+	HxHmkamp0XP4LRjxN+YRJ7UsyGq8fYL1n3jHkPmd/W5mMHxB+C9XjsAsG8ZBYA==
+ARC-Authentication-Results: i=1;
+	rspamd-5b8c5f5bfd-6fqm6;
+	auth=pass smtp.auth=hostingeremail
+ smtp.mailfrom=michael.opdenacker@rootcommit.com
+X-Sender-Id: hostingeremail|x-authuser|michael.opdenacker@rootcommit.com
+X-MC-Relay: Neutral
+X-MailChannels-SenderId:
+ hostingeremail|x-authuser|michael.opdenacker@rootcommit.com
+X-MailChannels-Auth-Id: hostingeremail
+X-Tank-Supply: 4f9b6ebd536be484_1744348903315_4233801821
+X-MC-Loop-Signature: 1744348903315:3045225038
+X-MC-Ingress-Time: 1744348903315
+Received: from uk-fast-smtpout6.hostinger.io (uk-fast-smtpout6.hostinger.io
+ [31.220.23.86])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+	by 100.101.172.36 (trex/7.0.3);
+	Fri, 11 Apr 2025 05:21:43 +0000
+Received: from [IPV6:2001:861:4448:6b00:bbea:d018:4fdc:24e4] (unknown [IPv6:2001:861:4448:6b00:bbea:d018:4fdc:24e4])
+	(Authenticated sender: michael.opdenacker@rootcommit.com)
+	by smtp.hostinger.com (smtp.hostinger.com) with ESMTPSA id 4ZYlR82qfkzFJxJT;
+	Fri, 11 Apr 2025 05:21:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rootcommit.com;
+	s=hostingermail-a; t=1744348900;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=7WQSLHWxiG2839YngCI+C460yPq7/TxwoGIFaGZ+IDM=;
+	b=Dxi03vPxWwJhCVw480Sfs2PctY4Sg6CVXygOhYB5ypG/lllrlDTDMpxx6UlS1EoL0Wx3oU
+	05WKg3MLb4ZgWirDF0S3fxCFrH3j4rbyWexpe6m4+2GCOzu3Ts3BlP+lUlf6M8Bh4vX0UY
+	uLBO5s+5ddvQ+aXgnHTlX5gKV/nEmRZJhlDD4xVfVLXMzWheFMncvafuS6SFSyTjA/vtsk
+	/gAHOaOrP4JaeF6nYJqVFbTu/vH8JWUQd7I5Rfvs/elYqPGCD2w82yrXmF4ZoiwSDMry+z
+	RCfbW/ZZ1Lz/HYv+CfQVnDCj/vy0q0X7rnPZpMue7/U2wIQfsLechy29ZEbv5A==
+Message-ID: <24f08a7b-4a3c-4cd6-82b7-0f2c9ab4bbef@rootcommit.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Cc: michael.opdenacker@rootcommit.com, linux-input@vger.kernel.org,
+ linux-i2c@vger.kernel.org
+Content-Language: en-US, fr
+To: Anshul Dalal <anshulusr@gmail.com>
+From: Michael Opdenacker <michael.opdenacker@rootcommit.com>
+Subject: I2C: can't detect Adafruit Mini I2C Gamepad on Linux - other devices
+ detected
+Organization: Root Commit
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Date: Fri, 11 Apr 2025 05:21:40 +0000 (UTC)
+X-CM-Analysis: v=2.4 cv=IrhMc6/g c=1 sm=1 tr=0 ts=67f8a6e4 a=8+4xeDqrJsAY8/1lIYDdcg==:617 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10 a=NEAV23lmAAAA:8 a=cju8CbfmAAAA:8 a=d70CFdQeAAAA:8 a=9rg4GbEzaSoKOJLvICAA:9 a=QEXdDO2ut3YA:10 a=cIk2X3N1rHUA:10 a=tW1rARU34SgA:10 a=YB-nZ-73YzLyBzHtmm9I:22 a=NcxpMcIZDGm-g932nG_k:22
+X-CM-Envelope: MS4xfAiUXJl8aGsPifmbOQIn5XvFkV5tLWLIPwi3/e2Teb2RSe/nWasGo7dt/iu+xIdAjgQo5FyAwxgm3g1Ofg6eWWhdkF4M4d9Qg7mGap3TBE54aW1oiK5e mFuerPTMcGJnPRbrqmjm98LVfw1gTzOr3Y4gva2+hA5TMDXn90z6lvHlJazgWPV9aGiPRFiC8li42Gpvt0IFyW/SweN1hL3je5ryr5SkSER2oB2EWdNzi1FE yFdle1zTmR7MTZWM5tT2bPOwfAHVZU/UM7QRJzh3QgP+F0HfpuS1lcjtHBCNv647pHDXD59m0UjRMFT4BNxclbxy9d6xBH3qJOtbLviMnbF6VmmOSibZ+ejT J1fQzV8zoVtYk7wGsmJxBL4/CbAGD2aT55HSYnSnVbNCAKYZPPIPFO040HnHbptBj+7gXiQ9ifn9eJ9yzItL0UqmIldgjQ==
+X-AuthUser: michael.opdenacker@rootcommit.com
 
-From: Yazen Ghannam <yazen.ghannam@amd.com>
+Hi Anshul
 
-The following register contains bits that indicate the cause for the
-previous reset.
+I contact you as the maintainer for the Adafruit Mini I2C Gamepad driver.
 
-        PMx000000C0 (FCH::PM::S5_RESET_STATUS)
+I'm trying to use the Adafruit Seesaw I2C gamepad in my embedded Linux 
+training courses, to demonstrate driving I2C hardware, and the gamepad 
+would be perfect to play an ASCII Pac-Man clone 
+(https://github.com/michaelopdenacker/myman 
+<https://github.com/michaelopdenacker/myman>).
 
-This is useful for debug. The reasons for reset are broken into 6 high
-level categories. Decode it by category and print during boot.
+Even before your driver is loaded, the device has to be detected. My 
+problem is the gamepad is never detected on Linux (running "i2cdetect -r 
+<num>"), while other I2C devices connected to the same bus are, proving 
+that the bus is correctly enabled. This happens on all these boards 
+running recent kernels:
+- BeaglePlay (Linux 6.14.2!)
+- BeagleBone Black
+- Raspberry Pi5
 
-Specifics within a category are split off into debugging documentation.
+I double checked my gamepads (I have 4 of them) and wires: they work 
+fine on Arduino Uno.
 
-The register is accessed indirectly through a "PM" port in the FCH. Use
-MMIO access in order to avoid restrictions with legacy port access.
+Any clue why none of my 4 gamepads are never detected while two other 
+types of I2C devices are detected on the same bus, and the same gamepads 
+work on Arduino Uno?
 
-Use a late_initcall() to ensure that MMIO has been set up before trying
-to access the register.
+Maybe something stupid but I'm running out of clues...
 
-This register was introduced with AMD Family 17h, so avoid access on
-older families. There is no CPUID feature bit for this register.
+You can also have a look at the questions I asked on the Adafruit forums 
+and the pictures I shared:
+https://forums.adafruit.com/viewtopic.php?p=1052577#p1052577
 
-Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
-Co-developed-by: Mario Limonciello <mario.limonciello@amd.com>
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
-v3:
- * Align strings in the CSV and code.
- * Switch to an array of strings
- * Switch to looking up bit of first value
- * Re-order message to have number first (makes grepping easier)
- * Add x86/amd prefix to message
-v2:
- * Add string for each reason, but still include value in case multiple
-   values are set.
----
- Documentation/admin-guide/amd/index.rst | 42 ++++++++++++++++++++
- arch/x86/include/asm/amd_node.h         |  1 +
- arch/x86/kernel/cpu/amd.c               | 51 +++++++++++++++++++++++++
- 3 files changed, 94 insertions(+)
+Cheers
+Michael.
 
-diff --git a/Documentation/admin-guide/amd/index.rst b/Documentation/admin-guide/amd/index.rst
-index 5a721ab4fe013..c888b192365c5 100644
---- a/Documentation/admin-guide/amd/index.rst
-+++ b/Documentation/admin-guide/amd/index.rst
-@@ -268,3 +268,45 @@ EPP Policy
- The ``energy_performance_preference`` sysfs file can be used to set a bias
- of efficiency or performance for a CPU.  This has a direct relationship on
- the battery life when more heavily biased towards performance.
-+
-+Random reboot issues
-+====================
-+When a random reboot occurs, the high-level reason for the reboot is stored
-+in a register that will persist onto the next boot.
-+
-+There are 6 classes of reasons for the reboot:
-+ * Software induced
-+ * Power state transition
-+ * Pin induced
-+ * Hardware induced
-+ * Remote reset
-+ * Internal CPU event
-+
-+.. csv-table::
-+   :header: "Bit", "Type", "Reason"
-+   :align: left
-+
-+   "0",  "Pin",      "thermal pin BP_THERMTRIP_L was tripped"
-+   "1",  "Pin",      "power button was pressed for 4 seconds"
-+   "2",  "Pin",      "shutdown pin was shorted"
-+   "4",  "Remote",   "remote ASF power off command was received"
-+   "9",  "Internal", "internal CPU thermal limit was tripped"
-+   "16", "Pin",      "system reset pin BP_SYS_RST_L was tripped"
-+   "17", "Software", "software issued PCI reset"
-+   "18", "Software", "software wrote 0x4 to reset control register 0xCF9"
-+   "19", "Software", "software wrote 0x6 to reset control register 0xCF9"
-+   "20", "Software", "software wrote 0xE to reset control register 0xCF9"
-+   "21", "Sleep",    "ACPI power state transition occurred"
-+   "22", "Pin",      "keyboard reset pin KB_RST_L was asserted"
-+   "23", "Internal", "internal CPU shutdown event occurred"
-+   "24", "Hardware", "system failed to boot before failed boot timer expired"
-+   "25", "Hardware", "hardware watchdog timer expired"
-+   "26", "Remote",   "remote ASF reset command was received"
-+   "27", "Internal", "an uncorrected error caused a data fabric sync flood event"
-+   "29", "Internal", "FCH and MP1 failed warm reset handshake"
-+   "30", "Internal", "a parity error occurred"
-+   "31", "Internal", "a software sync flood event occurred"
-+
-+This information is read by the kernel at bootup and is saved into the
-+kernel ring buffer. When a random reboot occurs this message can be helpful
-+to determine the next component to debug such an issue.
-diff --git a/arch/x86/include/asm/amd_node.h b/arch/x86/include/asm/amd_node.h
-index f4993201834ea..a945d146f1a77 100644
---- a/arch/x86/include/asm/amd_node.h
-+++ b/arch/x86/include/asm/amd_node.h
-@@ -20,6 +20,7 @@
- #include <linux/pci.h>
- 
- #define FCH_PM_BASE		0xFED80300
-+#define FCH_PM_S5_RESET_STATUS	0xC0
- 
- #define MAX_AMD_NUM_NODES	8
- #define AMD_NODE0_PCI_SLOT	0x18
-diff --git a/arch/x86/kernel/cpu/amd.c b/arch/x86/kernel/cpu/amd.c
-index 79569f72b8ee5..ddb17f0ad580e 100644
---- a/arch/x86/kernel/cpu/amd.c
-+++ b/arch/x86/kernel/cpu/amd.c
-@@ -9,6 +9,7 @@
- #include <linux/sched/clock.h>
- #include <linux/random.h>
- #include <linux/topology.h>
-+#include <asm/amd_node.h>
- #include <asm/processor.h>
- #include <asm/apic.h>
- #include <asm/cacheinfo.h>
-@@ -1231,3 +1232,53 @@ void amd_check_microcode(void)
- 	if (cpu_feature_enabled(X86_FEATURE_ZEN2))
- 		on_each_cpu(zenbleed_check_cpu, NULL, 1);
- }
-+
-+static const char * const s5_reset_reason_txt[] = {
-+	[0] = "thermal pin BP_THERMTRIP_L was tripped",
-+	[1] = "power button was pressed for 4 seconds",
-+	[2] = "shutdown pin was shorted",
-+	[4] = "remote ASF power off command was received",
-+	[9] = "internal CPU thermal limit was tripped",
-+	[16] = "system reset pin BP_SYS_RST_L was tripped",
-+	[17] = "software issued PCI reset",
-+	[18] = "software wrote 0x4 to reset control register 0xCF9",
-+	[19] = "software wrote 0x6 to reset control register 0xCF9",
-+	[20] = "software wrote 0xE to reset control register 0xCF9",
-+	[21] = "ACPI power state transition occurred",
-+	[22] = "keyboard reset pin KB_RST_L was asserted",
-+	[23] = "internal CPU shutdown event occurred",
-+	[24] = "system failed to boot before failed boot timer expired",
-+	[25] = "hardware watchdog timer expired",
-+	[26] = "remote ASF reset command was received",
-+	[27] = "an uncorrected error caused a data fabric sync flood event",
-+	[29] = "FCH and MP1 failed warm reset handshake",
-+	[30] = "a parity error occurred",
-+	[31] = "a software sync flood event occurred",
-+	[32] = "unknown",
-+};
-+
-+static __init int print_s5_reset_status_mmio(void)
-+{
-+	void __iomem *addr;
-+	unsigned long value;
-+	int bit = -1;
-+
-+	if (!cpu_feature_enabled(X86_FEATURE_ZEN))
-+		return 0;
-+
-+	addr = ioremap(FCH_PM_BASE + FCH_PM_S5_RESET_STATUS, sizeof(value));
-+	if (!addr)
-+		return 0;
-+	value = ioread32(addr);
-+	iounmap(addr);
-+
-+	do {
-+		bit = find_next_bit(&value, BITS_PER_LONG, bit + 1);
-+	} while (!s5_reset_reason_txt[bit]);
-+
-+	pr_info("x86/amd: Previous system reset reason [0x%08lx]: %s\n",
-+		value, s5_reset_reason_txt[bit]);
-+
-+	return 0;
-+}
-+late_initcall(print_s5_reset_status_mmio);
 -- 
-2.43.0
+Michael Opdenacker
+Root Commit
+Yocto Project and OpenEmbedded Training course - Learn by doing:
+https://rootcommit.com/training/yocto/
 
 
