@@ -1,80 +1,98 @@
-Return-Path: <linux-i2c+bounces-10271-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10272-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73C6BA8600D
-	for <lists+linux-i2c@lfdr.de>; Fri, 11 Apr 2025 16:09:06 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91E2CA86239
+	for <lists+linux-i2c@lfdr.de>; Fri, 11 Apr 2025 17:46:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 638733B4436
-	for <lists+linux-i2c@lfdr.de>; Fri, 11 Apr 2025 14:07:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1ACD84C4D7F
+	for <lists+linux-i2c@lfdr.de>; Fri, 11 Apr 2025 15:45:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 390361F418E;
-	Fri, 11 Apr 2025 14:06:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FEFC210185;
+	Fri, 11 Apr 2025 15:44:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SM2WS/bn"
+	dkim=pass (2048-bit key) header.d=rootcommit.com header.i=@rootcommit.com header.b="scwctkd0"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dog.elm.relay.mailchannels.net (dog.elm.relay.mailchannels.net [23.83.212.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 447631F3FC3;
-	Fri, 11 Apr 2025 14:06:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744380419; cv=none; b=NBK+G1utnDHevkT3/oYkyBEZiZjWcC8H/UIA5XMH00iK6GKPLRqufmbxl5Ej9OSOwhWuqfvcMjNIKul5IILjh3wDewNwPlb51B+C2rRqOIMuHqwS8Ic/ftJp8NgB9ygEAwfUndtcOSqC+Gr11St0qH105V+W0K0fIRdIYvLvHYQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744380419; c=relaxed/simple;
-	bh=NOvfAcC4nSHwovxfMmc7lJ6Xohxm7kKLQxmp9yLUv58=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AqyQGLdwG0z9f3oBrl+9qpROKOG9uUwNhofACYTVQr94zcjeYz/L1P4v6R9orSQutz4SI3zBsLk1/tZBynJ/xI4b2ajt19Y8y1v3+kqnI0Lm1Uxy0dgYNl0otfbbMUztexNA5GFFVuPbTiWujUprxaoSlVA8Ppd1p6wHVGvcesM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SM2WS/bn; arc=none smtp.client-ip=209.85.208.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-5e686d39ba2so3749241a12.2;
-        Fri, 11 Apr 2025 07:06:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744380415; x=1744985215; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NOvfAcC4nSHwovxfMmc7lJ6Xohxm7kKLQxmp9yLUv58=;
-        b=SM2WS/bng0Webpqq68WV7vdAwqPjIPHu7rmH8f3d1Llk9bjRMSCk5T/OWM0rDjqGk2
-         6z68Mr5yGBrrkZrW4mu4RQAUtNgo2Ne61BRYWJP6g7dlqpo7VETQozsaWkoFqrz5yNqH
-         cSqrl5/5yFtm8GyPgKZVSf0LTRhrn2H3FIuQuxB896PQxdIh4HRJz283+kmrLjp3bJsT
-         IlYqVmAC0sQ0ApbSC3ncFiPL++20hp6a5tiRlPUBLdVTIBa/nPZLoPgnq4i/x2ZrQlG+
-         LNEsgjnYcHIGuUDdKn78YIx/TsHnPzG1XWLK2/CFHItDLmdYGQ87bIsRElXU92wzx+yo
-         Q5RQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744380415; x=1744985215;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NOvfAcC4nSHwovxfMmc7lJ6Xohxm7kKLQxmp9yLUv58=;
-        b=ZKGZbuWwsneSeVPRWsfxrIA1stX6fhRL2bW5T3eDBHgKSE/NMRs811jDHlJ9o7wne9
-         TnxJVdNws0UaxRMn+HG2JwoIyuCvnWm91Lgi52UTFTebnNosiD1IAN9821ObAVO6lN4S
-         1vVeyFetOksHxFTdW5mVn+p1lEIzYD1Uh/P2y0lnjrozQOqgNygZLfn/K6epy2tLJgx9
-         nsgnUvOzJW/qjCUQ0MocS2o2UQKj1vGh5DNW2sPUmp8BWWQXyi02TGK/zPMWyk8tUdjQ
-         2TVnqnbMymZwT6LUx6Nhq+urb75xIk25hEisbLR/idSM3iwn2GQ8+7oWk5ZcT3hu2upk
-         Ro4w==
-X-Forwarded-Encrypted: i=1; AJvYcCVfJf7RaPmDMZsW8DVYss6eJTnOi5arTYb/2chrQ3V94uRT3bL25Wmu2ud7EGUhLqSPmusZld/sI3/ZaiYu@vger.kernel.org, AJvYcCXL8NhFxOSHUcc8D4QuRh2WwMkD8vMWPMrvLvDwGIZy6gr4ihYJQC/r7aNYMRT84nrnyI4Wmu1TfkU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YycW2X1mUnCaMq7m4CeCJjcpFDH4RcppK6CkjCUp/p7zgxggF64
-	a083ez0TQRW54zr/z+KVMyxYXHvMkIHWBbbkqg216oK/JHA+Xq0fGfw3tpP+
-X-Gm-Gg: ASbGncuZtMXAbqmLnWpOuQwNLP6saHZ/ChpEa5Baf1FOnwU2RiIYdGNVL3PuVzjKMIv
-	kj6xB+t9FwQMqnxvlLyLc5JEenTtAsi4MHLrLcohsy9G+eAUXWwraxnM7gAKH9NdpSMRUYj3P1K
-	ouusyCCt9sg1kaFRvG/R8glTqidCyk9agM9s7yhp1mNccdi65+aYTjke3ViKqBRN1r7rj79l8HL
-	vq8Ouf+0nqXe1ZbD+aejRm//V3A6sfjDZr3MB21Otx3u/1kY14zkgtHDFZLD4s1RBVZZozmaF+p
-	MckGWzo8N2onPzwLe+ggsJgnYqaizJC0t1xRrKvNt05QsFFY9YU1cJjYvBsX7I/XJ9BWArVO/G1
-	He74WnN/bx+B8Fag0AA==
-X-Google-Smtp-Source: AGHT+IE1yOeDj9VvnJ4cJ143MdQvjsuVm7s+alTj6cIAtIkzd0ZDaU4JF1U6ysR5rjPt1629SVONMQ==
-X-Received: by 2002:a05:6402:1ecc:b0:5ec:9352:7b20 with SMTP id 4fb4d7f45d1cf-5f36ee45999mr2263715a12.0.1744380415128;
-        Fri, 11 Apr 2025 07:06:55 -0700 (PDT)
-Received: from ?IPV6:2001:b07:aac:705d:8db5:5583:1b6d:7bba? ([2001:b07:aac:705d:8db5:5583:1b6d:7bba])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5f36ee54fa9sm1005741a12.1.2025.04.11.07.06.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Apr 2025 07:06:54 -0700 (PDT)
-Message-ID: <2af51b9c-cde6-4347-b062-daa87bddd8ff@gmail.com>
-Date: Fri, 11 Apr 2025 16:06:53 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3681620DD6B;
+	Fri, 11 Apr 2025 15:44:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=23.83.212.48
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1744386288; cv=pass; b=Q9UQMjkLeEqC2E6mCzJQk/pE/HO0wci1SUgt/2oTxfZAoA3zJwwgfPDPyp2mmov5xMN/PzLlukHtI90ZlbUQEj49Dh/Ao+dfCCT0bXGnjvkwSRKiFyQVSxXmvobOAI6uMPYdo6OI03SiFnjZ+sCTM4F6x2YvnKpqOl1vV4CS7P0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1744386288; c=relaxed/simple;
+	bh=3t86MQntUtxPGvkfEmR+IVFiTubcV3YLknpxY/7jYH8=;
+	h=Message-ID:MIME-Version:Cc:Subject:To:References:From:In-Reply-To:
+	 Content-Type:Date; b=MMRLrLvzjBjX+uX6H2ayy2P0iwEpRBJWF3ux8JGyzIir34+3KJLL4QapJ14CvoMtHvDhC9yzKntglU7TgytAqNfNW+U8EJ5dv4vJDWILwJbcG0Mx0oP8SB/WnBn3XvZJsihQicujQbos4aH93x6QGZUF2Y6oE2nsaWZ2bT/Jy8Y=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rootcommit.com; spf=pass smtp.mailfrom=rootcommit.com; dkim=pass (2048-bit key) header.d=rootcommit.com header.i=@rootcommit.com header.b=scwctkd0; arc=pass smtp.client-ip=23.83.212.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rootcommit.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rootcommit.com
+X-Sender-Id: hostingeremail|x-authuser|michael.opdenacker@rootcommit.com
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+	by relay.mailchannels.net (Postfix) with ESMTP id 363C68A3D59;
+	Fri, 11 Apr 2025 15:44:39 +0000 (UTC)
+Received: from fr-int-smtpout4.hostinger.io (trex-3.trex.outbound.svc.cluster.local [100.102.82.140])
+	(Authenticated sender: hostingeremail)
+	by relay.mailchannels.net (Postfix) with ESMTPA id 2E3868A3B15;
+	Fri, 11 Apr 2025 15:44:38 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1744386278; a=rsa-sha256;
+	cv=none;
+	b=dJdxgvhvZxMJrnVk9TI/eGTYuEHbk88CZEDc/VKYmIbcqR7Dvj2iz0yk0kUcZbWI3+wmit
+	Go5IGh3mIzHO1GEMRLfwwImtmqm1nlSX6/ajtCSIVAI5KGVsdLTHmnoNnN/NfhmuhS98GX
+	o0R2F0qdiXgybILifiIfWmg3G3tVMcwzPilG0KJa2uqXB5aigw+oM1Q/2ia4j/DPFS/PdT
+	iBkF3ZVwClZ3cqz9YB6p6dizjgLE9PrH8M8Y2bQCXZxmBDZ4GAae0lZ8xsgBqacQlriVRr
+	rYhcSJXG6Jyl28sqNCrAAJ9oexbhWWIEsckvJT1aBYLdrnBN/BRISHq0hv47xQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+	s=arc-2022; t=1744386278;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:dkim-signature;
+	bh=9QJSQapbF8rlDXleERb7i8Kqaa3j5k66yvH3bh7ZlkY=;
+	b=q2Xmka7wqIT800I8dEXPYQfU5srtgZq++4oWn6jGj27R1tQFg9ySBUK9q+s/WFt1hxwdnO
+	wh2ZgCF+C03x9dFFiS+gcuX/98SZCgc8GnSHS1bvjgEx7LMZm12zBNNz7CZ+jlDfIOR9+l
+	zKmAGgOI1uwkpxCOSX8KuVQ3Bu/xHhyKbRcBcwwr0NZ1B1T2qqNEQFwE2G4I9Abj7UpGPy
+	YCrNOiNf+bBXAkT4nf6pBHw7C83o+NgS9h5kUlkkRKfHRzkBg0KIRdR2VoudX722Kgwx1T
+	hN/TxHpKZHRMAw/lbiEfQIlbVZqXfouC8fLCAi/52213cAOpqyg0fSLjajc10Q==
+ARC-Authentication-Results: i=1;
+	rspamd-648cbcd874-bfrwz;
+	auth=pass smtp.auth=hostingeremail
+ smtp.mailfrom=michael.opdenacker@rootcommit.com
+X-Sender-Id: hostingeremail|x-authuser|michael.opdenacker@rootcommit.com
+X-MC-Relay: Neutral
+X-MailChannels-SenderId:
+ hostingeremail|x-authuser|michael.opdenacker@rootcommit.com
+X-MailChannels-Auth-Id: hostingeremail
+X-Abortive-Reaction: 1ee031766fdae0ce_1744386278978_1655867756
+X-MC-Loop-Signature: 1744386278978:4078894570
+X-MC-Ingress-Time: 1744386278977
+Received: from fr-int-smtpout4.hostinger.io (fr-int-smtpout4.hostinger.io
+ [89.116.146.83])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+	by 100.102.82.140 (trex/7.0.3);
+	Fri, 11 Apr 2025 15:44:38 +0000
+Received: from [IPV6:2001:861:4448:6b00:1ad0:a378:9b21:958] (unknown [IPv6:2001:861:4448:6b00:1ad0:a378:9b21:958])
+	(Authenticated sender: michael.opdenacker@rootcommit.com)
+	by smtp.hostinger.com (smtp.hostinger.com) with ESMTPSA id 4ZZ1Fw0kvxz2SrxC;
+	Fri, 11 Apr 2025 15:44:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rootcommit.com;
+	s=hostingermail-a; t=1744386276;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9QJSQapbF8rlDXleERb7i8Kqaa3j5k66yvH3bh7ZlkY=;
+	b=scwctkd0T8XsW1WU3AZPFxjV7gCcR6jazxVyW5A72DoJUGbrsISA5umdbxxm2ncunrOEW2
+	HdeZuxKU1wyBz8IfT5yVQ4ugAPSX0iqDxzuj21KTH/O6PVzOPC7YvzgN8+AvpHPdubUY93
+	CoR44uYLrDk/7pfs2bF77dy+ITOCByvIogZAA+2ZXYmeVGS5rBK6j50hCGrz3KPCrAjaSE
+	OrZAvYSMzIBNSzoS8zMi6U/zYB7ig56oF9U02611tHu8EGBM//txsb4Zo5fQhC8VkYvaUY
+	0UodpDtdupr7ysEZLyAEmYNZ21kdpxrcdcU1f6w4HExJ+8erVdY2+tk103WwTg==
+Message-ID: <8d0c8005-57fa-4883-8a01-343ab9170643@rootcommit.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -82,54 +100,71 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1] i2c: lpi2c: implement master_xfer_atomic callback
-To: Carlos Song <carlos.song@nxp.com>
-Cc: Pengutronix Kernel Team <kernel@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>,
- Emanuele Ghidoli <emanuele.ghidoli@toradex.com>,
- "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
- "imx@lists.linux.dev" <imx@lists.linux.dev>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- Francesco Dolcini <francesco.dolcini@toradex.com>,
- Francesco Dolcini <francesco@dolcini.it>, Aisheng Dong
- <aisheng.dong@nxp.com>, Andi Shyti <andi.shyti@kernel.org>,
- Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>
-References: <20250319145114.50771-1-francesco@dolcini.it>
- <20250411114738.GA43965@francesco-nb>
- <FRWPR04MB11150B555044300A70102DAF5E8B62@FRWPR04MB11150.eurprd04.prod.outlook.com>
-Content-Language: en-US
-From: Emanuele Ghidoli <ghidoliemanuele@gmail.com>
-In-Reply-To: <FRWPR04MB11150B555044300A70102DAF5E8B62@FRWPR04MB11150.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
+Cc: michael.opdenacker@rootcommit.com, linux-input@vger.kernel.org,
+ linux-i2c@vger.kernel.org
+Subject: Re: I2C: can't detect Adafruit Mini I2C Gamepad on Linux - other
+ devices detected
+To: Anshul Dalal <anshulusr@gmail.com>
+References: <24f08a7b-4a3c-4cd6-82b7-0f2c9ab4bbef@rootcommit.com>
+Content-Language: en-US, fr
+From: Michael Opdenacker <michael.opdenacker@rootcommit.com>
+Organization: Root Commit
+In-Reply-To: <24f08a7b-4a3c-4cd6-82b7-0f2c9ab4bbef@rootcommit.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+Date: Fri, 11 Apr 2025 15:44:36 +0000 (UTC)
+X-CM-Envelope: MS4xfBVEPfC0hAlH4rImMsVbMm0KuU4fFLvSnuW6b4vd3bSlMT1VZ758Ti3QJJFabfPdj9UZABII24+Dqs0iAmNsao5AvpBAtsblJgBEi2sPRF1cd8iHzlo2 YGZiwlp7m+ex836WMYSOk6+Mi1RU7jr0lpRDloobgcVsyeWnzQpppCxqs8GYgIsLHZMplW11ybZmE/+6YmnooWO2O4pLIkoaQyso9aJ7aoe1/4h6F7dItV05 z8lxTAyzftTFAncAVP/3pwHE0VPFTPivTzoyZ5CSobJ9HvC99560kmpa5E5YO9wkCalIJ3Y9cd/jmW/39yLGaC2T+ur8yJZV3kT+qJDddVfcPpmRwVRES8k7 FAoCKkDiLt7fMBUtNxuV4MV1a33psbTDRV1Qic16wG5xfl8oytl2nkfQKn82dFA4KTMJYypFn+ZxxUVaMJ16vWZiUk2Q/w==
+X-CM-Analysis: v=2.4 cv=Vv1xAP2n c=1 sm=1 tr=0 ts=67f938e4 a=hJmfl69EHLbX5Pto27Pacg==:617 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10 a=NEAV23lmAAAA:8 a=d70CFdQeAAAA:8 a=q1W2NvDeohNq8XC1ktoA:9 a=QEXdDO2ut3YA:10 a=NcxpMcIZDGm-g932nG_k:22
+X-AuthUser: michael.opdenacker@rootcommit.com
 
-On 11/04/2025 13:55, Carlos Song wrote:
->> On Wed, Mar 19, 2025 at 03:51:14PM +0100, Francesco Dolcini wrote:
->>> From: Emanuele Ghidoli <emanuele.ghidoli@toradex.com>
->>>
->>> Rework the read and write code paths in the driver to support
->>> operation in atomic contexts. To achieve this, the driver must not
->>> rely on IRQs or perform any scheduling, e.g., via a sleep or schedule
->>> routine. Even jiffies do not advance in atomic contexts, so timeouts
->>> based on them are substituted with delays.
->>>
->>> Implement atomic, sleep-free, and IRQ-less operation. This increases
->>> complexity but is necessary for atomic I2C transfers required by some
->>> hardware configurations, e.g., to trigger reboots on an external PMIC chip.
->>>
->>> Signed-off-by: Emanuele Ghidoli <emanuele.ghidoli@toradex.com>
->>> Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
->>
->> Any comment on this?
-> Looks good. Thank you for your work!
-> Do you test it at some board? How can we test simply?
+Greetings
 
-We tested it also by using the xfer_atomic for "normal" transfers
-(.master_xfer = lpi2c_imx_xfer_atomic).
-The driver is used to drive multiple buses with different devices.
+On 4/11/25 07:21, Michael Opdenacker wrote:
+> Hi Anshul
+>
+> I contact you as the maintainer for the Adafruit Mini I2C Gamepad driver.
+>
+> I'm trying to use the Adafruit Seesaw I2C gamepad in my embedded Linux 
+> training courses, to demonstrate driving I2C hardware, and the gamepad 
+> would be perfect to play an ASCII Pac-Man clone 
+> (https://github.com/michaelopdenacker/myman 
+> <https://github.com/michaelopdenacker/myman>).
+>
+> Even before your driver is loaded, the device has to be detected. My 
+> problem is the gamepad is never detected on Linux (running "i2cdetect 
+> -r <num>"), while other I2C devices connected to the same bus are, 
+> proving that the bus is correctly enabled. This happens on all these 
+> boards running recent kernels:
+> - BeaglePlay (Linux 6.14.2!)
+> - BeagleBone Black
+> - Raspberry Pi5
+>
+> I double checked my gamepads (I have 4 of them) and wires: they work 
+> fine on Arduino Uno.
+>
+> Any clue why none of my 4 gamepads are never detected while two other 
+> types of I2C devices are detected on the same bus, and the same 
+> gamepads work on Arduino Uno?
 
-Emanuele
+
+Some progress here... On BeaglePlay, which is my primary target, I 
+realized that if I declare the device in the device tree AND load the 
+driver for the device, then the device seems to work fine. When I press 
+the buttons, I get data in /dev/input/event<x>.
+
+Plus "i2cdetect -r <num>" shows the device as UU for address 0x50, as 
+usually happens with a driver is loaded.
+
+I thought that connected I2C devices always showed in i2cdetect output, 
+whether they are declared in the device tree and have a driver or not.
+
+Cheers
+Michael.
+
+-- 
+Michael Opdenacker
+Root Commit
+Yocto Project and OpenEmbedded Training course - Learn by doing:
+https://rootcommit.com/training/yocto/
 
 
