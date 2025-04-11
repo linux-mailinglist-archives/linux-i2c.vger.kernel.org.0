@@ -1,156 +1,170 @@
-Return-Path: <linux-i2c+bounces-10259-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10260-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35AA9A852FD
-	for <lists+linux-i2c@lfdr.de>; Fri, 11 Apr 2025 07:21:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ACD39A85B7E
+	for <lists+linux-i2c@lfdr.de>; Fri, 11 Apr 2025 13:23:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1D9C34A629B
-	for <lists+linux-i2c@lfdr.de>; Fri, 11 Apr 2025 05:21:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2C1C5160DE5
+	for <lists+linux-i2c@lfdr.de>; Fri, 11 Apr 2025 11:23:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3627527CB1D;
-	Fri, 11 Apr 2025 05:21:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rootcommit.com header.i=@rootcommit.com header.b="Dxi03vPx"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1F9F298CBE;
+	Fri, 11 Apr 2025 11:23:08 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from iguana.tulip.relay.mailchannels.net (iguana.tulip.relay.mailchannels.net [23.83.218.253])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F4B326F462;
-	Fri, 11 Apr 2025 05:21:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=23.83.218.253
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744348912; cv=pass; b=e2ENkxVa5u4R3u44Lfe53th/CmZggKBBZL6Exlfqbn7TKDvyrZGLjx6CkiVYFXEF/EMR9HVXDQ+nKer3dM1YlwWbZ0w+C3mDmSx13BoK2mibP+bkXCpxBKFdcxZMhCLMvFr8U0IL5jKBt06MiILjWPm2j8mbzN8yCS4kHxEHoQw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744348912; c=relaxed/simple;
-	bh=ghJg1fzJlUqK2ACARda3ABDItb6T2P9W/s7Gb/UsuVY=;
-	h=Message-ID:MIME-Version:Cc:To:From:Subject:Content-Type:Date; b=lV0J64tSq/bRxqcOmNXX+TGVNV0Lkqy1WFsw9Y/URelQD8SC9X2+FmzfvSN40LgfkLs9wjRRbRziLWPvii32NfxyLXT9H84rxhLsLXWpViFKpSLEyppU032V8ysopkT5D3MugBLSVMoc7r/s1Lsy1GLB83PLZIXRmzwUeUkeuhw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rootcommit.com; spf=pass smtp.mailfrom=rootcommit.com; dkim=pass (2048-bit key) header.d=rootcommit.com header.i=@rootcommit.com header.b=Dxi03vPx; arc=pass smtp.client-ip=23.83.218.253
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rootcommit.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rootcommit.com
-X-Sender-Id: hostingeremail|x-authuser|michael.opdenacker@rootcommit.com
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-	by relay.mailchannels.net (Postfix) with ESMTP id 8127D783A89;
-	Fri, 11 Apr 2025 05:21:43 +0000 (UTC)
-Received: from uk-fast-smtpout6.hostinger.io (100-101-172-36.trex-nlb.outbound.svc.cluster.local [100.101.172.36])
-	(Authenticated sender: hostingeremail)
-	by relay.mailchannels.net (Postfix) with ESMTPA id 831D4782DA3;
-	Fri, 11 Apr 2025 05:21:42 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1744348903; a=rsa-sha256;
-	cv=none;
-	b=51SRycbY/fZ8hrpt97EA2sciMsRWNj7PvmaeFM7wcGUvI5JdSoJZSSH3mzOnHgE/QrF7X4
-	OEG0VHMuCrZaV8ZIdtgji4beBKgrWukYUlhP1ofuad+5Uy0OY4ONEzr6F39ciKY2EF3tMv
-	RKtPOTEOCPxyrwXtkebyBgo+sowkSNJToohkJqzjHlAjqllMM4IQQuFZ0YyGAbyGG1HIvt
-	zdib0tjxVhmJVvi0k9CSfoF3C3VJ5+7V+8+y+nJxLZOr9mzGhpachdMZm1XkUT5aUKBXyd
-	7V/d2jZm9EjnbaCnZvWU1vU4M7/rSdEeC4wk36DqpdWiTu5DQj+WDNKkoqLcrg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-	s=arc-2022; t=1744348903;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:dkim-signature;
-	bh=7WQSLHWxiG2839YngCI+C460yPq7/TxwoGIFaGZ+IDM=;
-	b=jAf6kN7ODPBqjmgXqhVVPd6pVmqPd5YjNn/0srsgWkRR2l7Z7AKKNpvnvBVbvUBXy9R1qT
-	wTwSBYoNE3q9D7gmxfgbXbW4KUuNDA9tq2jeQsgB34DgPyQNE+IuzmmPpdcEHVi48yfyga
-	FEi23fWbNdp3CJt1xkJ7tNLA370dfsipf4+D7xzBFKTYeERCewU4Av+aKhhUsiD+RBXyGq
-	N4yk3IWVz/c2PM5h/npBCoIJpfGRMJGjUZv4m4t05vWR/r3eQ2E70gWcRPo96ot50yesx8
-	HxHmkamp0XP4LRjxN+YRJ7UsyGq8fYL1n3jHkPmd/W5mMHxB+C9XjsAsG8ZBYA==
-ARC-Authentication-Results: i=1;
-	rspamd-5b8c5f5bfd-6fqm6;
-	auth=pass smtp.auth=hostingeremail
- smtp.mailfrom=michael.opdenacker@rootcommit.com
-X-Sender-Id: hostingeremail|x-authuser|michael.opdenacker@rootcommit.com
-X-MC-Relay: Neutral
-X-MailChannels-SenderId:
- hostingeremail|x-authuser|michael.opdenacker@rootcommit.com
-X-MailChannels-Auth-Id: hostingeremail
-X-Tank-Supply: 4f9b6ebd536be484_1744348903315_4233801821
-X-MC-Loop-Signature: 1744348903315:3045225038
-X-MC-Ingress-Time: 1744348903315
-Received: from uk-fast-smtpout6.hostinger.io (uk-fast-smtpout6.hostinger.io
- [31.220.23.86])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-	by 100.101.172.36 (trex/7.0.3);
-	Fri, 11 Apr 2025 05:21:43 +0000
-Received: from [IPV6:2001:861:4448:6b00:bbea:d018:4fdc:24e4] (unknown [IPv6:2001:861:4448:6b00:bbea:d018:4fdc:24e4])
-	(Authenticated sender: michael.opdenacker@rootcommit.com)
-	by smtp.hostinger.com (smtp.hostinger.com) with ESMTPSA id 4ZYlR82qfkzFJxJT;
-	Fri, 11 Apr 2025 05:21:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rootcommit.com;
-	s=hostingermail-a; t=1744348900;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=7WQSLHWxiG2839YngCI+C460yPq7/TxwoGIFaGZ+IDM=;
-	b=Dxi03vPxWwJhCVw480Sfs2PctY4Sg6CVXygOhYB5ypG/lllrlDTDMpxx6UlS1EoL0Wx3oU
-	05WKg3MLb4ZgWirDF0S3fxCFrH3j4rbyWexpe6m4+2GCOzu3Ts3BlP+lUlf6M8Bh4vX0UY
-	uLBO5s+5ddvQ+aXgnHTlX5gKV/nEmRZJhlDD4xVfVLXMzWheFMncvafuS6SFSyTjA/vtsk
-	/gAHOaOrP4JaeF6nYJqVFbTu/vH8JWUQd7I5Rfvs/elYqPGCD2w82yrXmF4ZoiwSDMry+z
-	RCfbW/ZZ1Lz/HYv+CfQVnDCj/vy0q0X7rnPZpMue7/U2wIQfsLechy29ZEbv5A==
-Message-ID: <24f08a7b-4a3c-4cd6-82b7-0f2c9ab4bbef@rootcommit.com>
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E758D27BF82;
+	Fri, 11 Apr 2025 11:23:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1744370588; cv=none; b=NISdDc6Omjmgem7C69e9RxmnYmlUwWCPIyumGFIpR3ofgYJelsjOdPBeQ8mkrVMX/TNED5HP4W8aYQRwFHReux2CpYPNXGWthED3igyVL+00niXTfXt+514XYUfbC2TRwrhYxvEqVyZJuvKlIY3qCy3R34I0qyk3FuaZR1oDw/g=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1744370588; c=relaxed/simple;
+	bh=JPqWn5zSZ2P34Z5dMgc400dC1XwDpykcXnA7Qi26IZA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=tJ+bGrVcW/geo7qrozwZ05S9rZP6jJPc+xckmnElDPl+bRWU2Mvw3fpyfW2ipxzlyVjXv6n0MTBDVtIGt1iS2v7RshUasdmbwH8ZIjEKoEGiL6NszrNHM9/qUuEvPBB22QjJA+1c/X8KsbQAck5fSQMdbt5jVVTZfCyKYBludjU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com; spf=none smtp.mailfrom=foss.arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=foss.arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 002BF106F;
+	Fri, 11 Apr 2025 04:23:06 -0700 (PDT)
+Received: from usa.arm.com (e133711.arm.com [10.1.196.55])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 619213F694;
+	Fri, 11 Apr 2025 04:23:05 -0700 (PDT)
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: linux-kernel@vger.kernel.org
+Cc: Sudeep Holla <sudeep.holla@arm.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	linux-i2c@vger.kernel.org
+Subject: [PATCH] i2c: xgene-slimpro: Simplify PCC shared memory region handling
+Date: Fri, 11 Apr 2025 12:23:03 +0100
+Message-Id: <20250411112303.1149086-1-sudeep.holla@arm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: michael.opdenacker@rootcommit.com, linux-input@vger.kernel.org,
- linux-i2c@vger.kernel.org
-Content-Language: en-US, fr
-To: Anshul Dalal <anshulusr@gmail.com>
-From: Michael Opdenacker <michael.opdenacker@rootcommit.com>
-Subject: I2C: can't detect Adafruit Mini I2C Gamepad on Linux - other devices
- detected
-Organization: Root Commit
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Date: Fri, 11 Apr 2025 05:21:40 +0000 (UTC)
-X-CM-Analysis: v=2.4 cv=IrhMc6/g c=1 sm=1 tr=0 ts=67f8a6e4 a=8+4xeDqrJsAY8/1lIYDdcg==:617 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10 a=NEAV23lmAAAA:8 a=cju8CbfmAAAA:8 a=d70CFdQeAAAA:8 a=9rg4GbEzaSoKOJLvICAA:9 a=QEXdDO2ut3YA:10 a=cIk2X3N1rHUA:10 a=tW1rARU34SgA:10 a=YB-nZ-73YzLyBzHtmm9I:22 a=NcxpMcIZDGm-g932nG_k:22
-X-CM-Envelope: MS4xfAiUXJl8aGsPifmbOQIn5XvFkV5tLWLIPwi3/e2Teb2RSe/nWasGo7dt/iu+xIdAjgQo5FyAwxgm3g1Ofg6eWWhdkF4M4d9Qg7mGap3TBE54aW1oiK5e mFuerPTMcGJnPRbrqmjm98LVfw1gTzOr3Y4gva2+hA5TMDXn90z6lvHlJazgWPV9aGiPRFiC8li42Gpvt0IFyW/SweN1hL3je5ryr5SkSER2oB2EWdNzi1FE yFdle1zTmR7MTZWM5tT2bPOwfAHVZU/UM7QRJzh3QgP+F0HfpuS1lcjtHBCNv647pHDXD59m0UjRMFT4BNxclbxy9d6xBH3qJOtbLviMnbF6VmmOSibZ+ejT J1fQzV8zoVtYk7wGsmJxBL4/CbAGD2aT55HSYnSnVbNCAKYZPPIPFO040HnHbptBj+7gXiQ9ifn9eJ9yzItL0UqmIldgjQ==
-X-AuthUser: michael.opdenacker@rootcommit.com
+Content-Transfer-Encoding: 8bit
 
-Hi Anshul
+The PCC driver now handles mapping and unmapping of shared memory
+areas as part of pcc_mbox_{request,free}_channel(). Without these before,
+this xgene-slimpro I2C driver did handling of those mappings like several
+other PCC mailbox client drivers.
 
-I contact you as the maintainer for the Adafruit Mini I2C Gamepad driver.
+There were redundant operations, leading to unnecessary code. Maintaining
+the consistency across these driver was harder due to scattered handling
+of shmem.
 
-I'm trying to use the Adafruit Seesaw I2C gamepad in my embedded Linux 
-training courses, to demonstrate driving I2C hardware, and the gamepad 
-would be perfect to play an ASCII Pac-Man clone 
-(https://github.com/michaelopdenacker/myman 
-<https://github.com/michaelopdenacker/myman>).
+Just use the mapped shmem and remove all redundant operations from this
+driver.
 
-Even before your driver is loaded, the device has to be detected. My 
-problem is the gamepad is never detected on Linux (running "i2cdetect -r 
-<num>"), while other I2C devices connected to the same bus are, proving 
-that the bus is correctly enabled. This happens on all these boards 
-running recent kernels:
-- BeaglePlay (Linux 6.14.2!)
-- BeagleBone Black
-- Raspberry Pi5
+Cc: Andi Shyti <andi.shyti@kernel.org>
+Cc: linux-i2c@vger.kernel.org
+Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+---
+ drivers/i2c/busses/i2c-xgene-slimpro.c | 39 +++-----------------------
+ 1 file changed, 4 insertions(+), 35 deletions(-)
 
-I double checked my gamepads (I have 4 of them) and wires: they work 
-fine on Arduino Uno.
+Hi,
 
-Any clue why none of my 4 gamepads are never detected while two other 
-types of I2C devices are detected on the same bus, and the same gamepads 
-work on Arduino Uno?
+This is just resend of the same patch that was part of a series [1].
+Only core PCC mailbox changes were merged during v6.15 merge window.
+So dropping all the maintainer(Andi) acks and reposting it so that it can
+be picked up for v6.16 via maintainers tree.
 
-Maybe something stupid but I'm running out of clues...
+Regards,
+Sudeep
 
-You can also have a look at the questions I asked on the Adafruit forums 
-and the pictures I shared:
-https://forums.adafruit.com/viewtopic.php?p=1052577#p1052577
+[1] https://lore.kernel.org/all/20250313-pcc_fixes_updates-v3-10-019a4aa74d0f@arm.com/
 
-Cheers
-Michael.
-
+diff --git a/drivers/i2c/busses/i2c-xgene-slimpro.c b/drivers/i2c/busses/i2c-xgene-slimpro.c
+index 663fe5604dd6..a0880f4a056d 100644
+--- a/drivers/i2c/busses/i2c-xgene-slimpro.c
++++ b/drivers/i2c/busses/i2c-xgene-slimpro.c
+@@ -101,8 +101,6 @@ struct slimpro_i2c_dev {
+ 	struct completion rd_complete;
+ 	u8 dma_buffer[I2C_SMBUS_BLOCK_MAX + 1]; /* dma_buffer[0] is used for length */
+ 	u32 *resp_msg;
+-	phys_addr_t comm_base_addr;
+-	void *pcc_comm_addr;
+ };
+ 
+ #define to_slimpro_i2c_dev(cl)	\
+@@ -148,7 +146,8 @@ static void slimpro_i2c_rx_cb(struct mbox_client *cl, void *mssg)
+ static void slimpro_i2c_pcc_rx_cb(struct mbox_client *cl, void *msg)
+ {
+ 	struct slimpro_i2c_dev *ctx = to_slimpro_i2c_dev(cl);
+-	struct acpi_pcct_shared_memory *generic_comm_base = ctx->pcc_comm_addr;
++	struct acpi_pcct_shared_memory __iomem *generic_comm_base =
++							ctx->pcc_chan->shmem;
+ 
+ 	/* Check if platform sends interrupt */
+ 	if (!xgene_word_tst_and_clr(&generic_comm_base->status,
+@@ -169,7 +168,8 @@ static void slimpro_i2c_pcc_rx_cb(struct mbox_client *cl, void *msg)
+ 
+ static void slimpro_i2c_pcc_tx_prepare(struct slimpro_i2c_dev *ctx, u32 *msg)
+ {
+-	struct acpi_pcct_shared_memory *generic_comm_base = ctx->pcc_comm_addr;
++	struct acpi_pcct_shared_memory __iomem *generic_comm_base =
++							ctx->pcc_chan->shmem;
+ 	u32 *ptr = (void *)(generic_comm_base + 1);
+ 	u16 status;
+ 	int i;
+@@ -464,15 +464,12 @@ static int xgene_slimpro_i2c_probe(struct platform_device *pdev)
+ 	} else {
+ 		struct pcc_mbox_chan *pcc_chan;
+ 		const struct acpi_device_id *acpi_id;
+-		int version = XGENE_SLIMPRO_I2C_V1;
+ 
+ 		acpi_id = acpi_match_device(pdev->dev.driver->acpi_match_table,
+ 					    &pdev->dev);
+ 		if (!acpi_id)
+ 			return -EINVAL;
+ 
+-		version = (int)acpi_id->driver_data;
+-
+ 		if (device_property_read_u32(&pdev->dev, "pcc-channel",
+ 					     &ctx->mbox_idx))
+ 			ctx->mbox_idx = MAILBOX_I2C_INDEX;
+@@ -494,34 +491,6 @@ static int xgene_slimpro_i2c_probe(struct platform_device *pdev)
+ 			goto mbox_err;
+ 		}
+ 
+-		/*
+-		 * This is the shared communication region
+-		 * for the OS and Platform to communicate over.
+-		 */
+-		ctx->comm_base_addr = pcc_chan->shmem_base_addr;
+-		if (ctx->comm_base_addr) {
+-			if (version == XGENE_SLIMPRO_I2C_V2)
+-				ctx->pcc_comm_addr = memremap(
+-							ctx->comm_base_addr,
+-							pcc_chan->shmem_size,
+-							MEMREMAP_WT);
+-			else
+-				ctx->pcc_comm_addr = memremap(
+-							ctx->comm_base_addr,
+-							pcc_chan->shmem_size,
+-							MEMREMAP_WB);
+-		} else {
+-			dev_err(&pdev->dev, "Failed to get PCC comm region\n");
+-			rc = -ENOENT;
+-			goto mbox_err;
+-		}
+-
+-		if (!ctx->pcc_comm_addr) {
+-			dev_err(&pdev->dev,
+-				"Failed to ioremap PCC comm region\n");
+-			rc = -ENOMEM;
+-			goto mbox_err;
+-		}
+ 	}
+ 	rc = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
+ 	if (rc)
 -- 
-Michael Opdenacker
-Root Commit
-Yocto Project and OpenEmbedded Training course - Learn by doing:
-https://rootcommit.com/training/yocto/
+2.34.1
 
 
