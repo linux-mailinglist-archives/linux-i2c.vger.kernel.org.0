@@ -1,127 +1,106 @@
-Return-Path: <linux-i2c+bounces-10266-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10267-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0C53A85CB0
-	for <lists+linux-i2c@lfdr.de>; Fri, 11 Apr 2025 14:15:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 05EEEA85D6D
+	for <lists+linux-i2c@lfdr.de>; Fri, 11 Apr 2025 14:43:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9B6027B5BD5
-	for <lists+linux-i2c@lfdr.de>; Fri, 11 Apr 2025 12:13:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C29087AF7DE
+	for <lists+linux-i2c@lfdr.de>; Fri, 11 Apr 2025 12:42:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1116629AB09;
-	Fri, 11 Apr 2025 12:12:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A3B42367A6;
+	Fri, 11 Apr 2025 12:41:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZKJfHHJy"
+	dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b="E3btRzli"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6B2229AAF3;
-	Fri, 11 Apr 2025 12:12:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACB7E2367A0;
+	Fri, 11 Apr 2025 12:41:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.194.8.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744373547; cv=none; b=VNFp7FvdhmQXeACqwpSSdt1XCBvCTOpuZPv+H7YKXdqg5R8KLUF+Y+YxrGbOvpMNpcqo1CUqEy8UEBoW0SGSB+dsnh7sqg3EogQhzqnQ63+Pr0BmtyQe1Ak2lKTMSCbPmKjXNnGlrIQkcdcIKWkaKi88Za3cfsJfpWanmnU7fik=
+	t=1744375300; cv=none; b=c4IH/TWGWy4nCT87RZkx4LmPHD6y7BGyjjCBhlfiVpsBOK+dj8cfTq+OITv4oj4K5GDeGMl7jzCXjyKY3vxsHtWV5mSoHlqSTD/45leiGhNFJNGFPQxlWxQoZTqW3Jq6IOfBRPz5nXoA0IdwmUUygLtuWvHQlcpFaSloDuu58UI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744373547; c=relaxed/simple;
-	bh=OgiHmzAMJV/c6pK5hif8A/swuofjSwyYdjGM252Al4I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PM/HmtBuz1gR3L3gc4Vrd28iFAoRGR+gHSKDFEvUo+uMYJy9b9l/KSReZX1zP7JuHlafM/rEeqTjpKjfCZFx3vXRSIxy0nu97il+Ljnsit0XtbjIy5dCkGeAWD/MavZT5zIsv6kkkWJpauULBcfFLXo0ukkNFizgz8vSHVWjqXc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZKJfHHJy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86E57C4CEE7;
-	Fri, 11 Apr 2025 12:12:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744373547;
-	bh=OgiHmzAMJV/c6pK5hif8A/swuofjSwyYdjGM252Al4I=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ZKJfHHJyYcGvqjYidnEdh8euHtbuinPbP6cdaZSEqUi7bzcfkPnSL7swwOH6yxhAX
-	 gDwsQFbMZlI3PEgWeNs1Iy5e5391s9T6ySobR+MoHlCuICPMlTDuKbgJkeRONmQtaO
-	 ypN3kLxkdU1k2t3ob0oH5U7EsKYn+tsr/ZxWKDzsysLrwf5JLLxgV2XpT6Aqgp0G/H
-	 xc2nw8/ryVcV/TTlYoEN6Sb9QAVsPAh/EVfIj7+wgECvkB9pUh7BXO1tNUZ40qI5mu
-	 E7GeeGlSTAlib3jzC6EeFR+64GVoEQ1TQlFCtNmB20/uWKWdwVcaqRNaNBSTE3d21e
-	 YEBTcy/yLl3xA==
-Message-ID: <42b7547d-c1f7-4509-a381-7bf0a485a5f5@kernel.org>
-Date: Fri, 11 Apr 2025 07:12:24 -0500
+	s=arc-20240116; t=1744375300; c=relaxed/simple;
+	bh=zDL/ObZQj8eM62TAxARSjoBDC8yqTO1LrkfozSlxMZs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ifOu0dLN/1agWjCjyajmmWUV22uw2Ke0By8j0blqlhIjTbVihOCFGcwzbPb+kg7bdaWTEjcpT6TiSC5t3AwFG6BwQgkVlgiMUAV4bXLH3WCofuXvBwbGxrxGtjnMmxASoihWZzArzmPipgnap0WAJHCBLmJCkPDkViu+WIFjwvQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it; spf=pass smtp.mailfrom=dolcini.it; dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b=E3btRzli; arc=none smtp.client-ip=217.194.8.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dolcini.it
+Received: from francesco-nb (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
+	by mail11.truemail.it (Postfix) with ESMTPA id 2D7CA1FEC1;
+	Fri, 11 Apr 2025 14:41:34 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dolcini.it;
+	s=default; t=1744375294;
+	bh=EOH8CIdz65AlaprFUzkJc8PL6lMT1kHFZ8SCjFlHZ9c=; h=From:To:Subject;
+	b=E3btRzlir8gNK+aXDl3vPeVu4yeZ/AEtyTxwgKCsw8IULkGr+8Wid5/IKqHV6MMhs
+	 coudJUidzaoGjnYB/rZMq/WPqLgms0I7TMW2KyPmoLu2RIvwbQssuA8exOmAGPGCq1
+	 zTbZfp708FVTHIDztLVGSehqjJHi2fRFWoKhJ+tVPh/7wAhAfPIaMxlbUUg5URzSNv
+	 4+1SZhkjzFgr0hLM8bIbZL3R1TMtnpC4XHpegMk/T9rVWg2IrZhGSCdneamI2OvcER
+	 tNLxDjAF1Z8xMtxEKdaed9CxUIIL21V1OVYaWCODqs49g8HwRU8xQ4/AA6JkoUJn7n
+	 qklDoVJJhmGnw==
+Date: Fri, 11 Apr 2025 14:41:29 +0200
+From: Francesco Dolcini <francesco@dolcini.it>
+To: Carlos Song <carlos.song@nxp.com>
+Cc: Francesco Dolcini <francesco@dolcini.it>,
+	Aisheng Dong <aisheng.dong@nxp.com>,
+	Andi Shyti <andi.shyti@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Emanuele Ghidoli <emanuele.ghidoli@toradex.com>,
+	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+	"imx@lists.linux.dev" <imx@lists.linux.dev>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	Francesco Dolcini <francesco.dolcini@toradex.com>
+Subject: Re: [PATCH v1] i2c: lpi2c: implement master_xfer_atomic callback
+Message-ID: <20250411124129.GA48732@francesco-nb>
+References: <20250319145114.50771-1-francesco@dolcini.it>
+ <20250411114738.GA43965@francesco-nb>
+ <FRWPR04MB11150B555044300A70102DAF5E8B62@FRWPR04MB11150.eurprd04.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 4/4] x86/CPU/AMD: Print the reason for the last reset
-To: Borislav Petkov <bp@alien8.de>
-Cc: Jean Delvare <jdelvare@suse.com>, Andi Shyti <andi.shyti@kernel.org>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- Jonathan Corbet <corbet@lwn.net>,
- Mario Limonciello <mario.limonciello@amd.com>,
- Yazen Ghannam <yazen.ghannam@amd.com>, Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>,
- "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
- "H . Peter Anvin" <hpa@zytor.com>,
- Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
- Hans de Goede <hdegoede@redhat.com>,
- "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
- open list <linux-kernel@vger.kernel.org>,
- "open list:I2C/SMBUS CONTROLLER DRIVERS FOR PC" <linux-i2c@vger.kernel.org>,
- "open list:AMD PMC DRIVER" <platform-driver-x86@vger.kernel.org>
-References: <20250410200202.2974062-1-superm1@kernel.org>
- <20250410200202.2974062-5-superm1@kernel.org>
- <20250411120617.GMZ_kFucLFQQ7LJkys@fat_crate.local>
-Content-Language: en-US
-From: Mario Limonciello <superm1@kernel.org>
-In-Reply-To: <20250411120617.GMZ_kFucLFQQ7LJkys@fat_crate.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <FRWPR04MB11150B555044300A70102DAF5E8B62@FRWPR04MB11150.eurprd04.prod.outlook.com>
 
+Hello,
 
+On Fri, Apr 11, 2025 at 11:55:31AM +0000, Carlos Song wrote:
+> > On Wed, Mar 19, 2025 at 03:51:14PM +0100, Francesco Dolcini wrote:
+> > > From: Emanuele Ghidoli <emanuele.ghidoli@toradex.com>
+> > >
+> > > Rework the read and write code paths in the driver to support
+> > > operation in atomic contexts. To achieve this, the driver must not
+> > > rely on IRQs or perform any scheduling, e.g., via a sleep or schedule
+> > > routine. Even jiffies do not advance in atomic contexts, so timeouts
+> > > based on them are substituted with delays.
+> > >
+> > > Implement atomic, sleep-free, and IRQ-less operation. This increases
+> > > complexity but is necessary for atomic I2C transfers required by some
+> > > hardware configurations, e.g., to trigger reboots on an external PMIC chip.
+> > >
+> > > Signed-off-by: Emanuele Ghidoli <emanuele.ghidoli@toradex.com>
+> > > Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
+> > 
+> > Any comment on this?
+> Looks good. Thank you for your work!
+> Do you test it at some board? How can we test simply?
 
-On 4/11/25 07:06, Borislav Petkov wrote:
-> On Thu, Apr 10, 2025 at 03:02:02PM -0500, Mario Limonciello wrote:
->> +static __init int print_s5_reset_status_mmio(void)
->> +{
->> +	void __iomem *addr;
->> +	unsigned long value;
->> +	int bit = -1;
->> +
->> +	if (!cpu_feature_enabled(X86_FEATURE_ZEN))
->> +		return 0;
->> +
->> +	addr = ioremap(FCH_PM_BASE + FCH_PM_S5_RESET_STATUS, sizeof(value));
->> +	if (!addr)
->> +		return 0;
-> 
-> newline.
-> 
->> +	value = ioread32(addr);
->> +	iounmap(addr);
->> +
->> +	do {
->> +		bit = find_next_bit(&value, BITS_PER_LONG, bit + 1);
->> +	} while (!s5_reset_reason_txt[bit]);
-> 
-> What's the idea here? The highest bit is the most fitting one?
-> 
-> So why don't you do fls() or so?
+It was tested on Toradex SMARC iMX95, there to power-off/reset the board
+we have some I2C communication required [1].
 
-The idea was to walk all the bits and pick the first one that has a 
-string associated with it.  I was finding that sometimes the reserved 
-bits are set which would get you a NULL pointer deref.
+[1] https://lore.kernel.org/all/20250407114947.41421-3-francesco@dolcini.it/
 
-> 
->> +	pr_info("x86/amd: Previous system reset reason [0x%08lx]: %s\n",
->> +		value, s5_reset_reason_txt[bit]);
-> 
-> What's guaranteeing that s5_reset_reason_txt[bit] is still set here?
-> 
-> I'd suggest you check it again and never trust the hw because we'll be fixing
-> a null ptr here at some point otherwise...
-> 
-
-Right; I was worried about that too but find_next_bit() will return the 
-size argument when it doesn't find anything.
-
-So that should be s5_reset_reason_txt[32] which has the "Unknown" string.
+Francesco
 
 
