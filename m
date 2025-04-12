@@ -1,233 +1,158 @@
-Return-Path: <linux-i2c+bounces-10278-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10280-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43EFFA86A67
-	for <lists+linux-i2c@lfdr.de>; Sat, 12 Apr 2025 04:28:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6443EA86ABA
+	for <lists+linux-i2c@lfdr.de>; Sat, 12 Apr 2025 06:10:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ECE644A5264
-	for <lists+linux-i2c@lfdr.de>; Sat, 12 Apr 2025 02:28:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8ED81166FB1
+	for <lists+linux-i2c@lfdr.de>; Sat, 12 Apr 2025 04:09:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7874E143736;
-	Sat, 12 Apr 2025 02:28:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HkJUwkkb"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1D7D13AA3C;
+	Sat, 12 Apr 2025 04:09:54 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from CHN02-BJS-obe.outbound.protection.partner.outlook.cn (mail-bjschn02on2118.outbound.protection.partner.outlook.cn [139.219.17.118])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDF032D7BF;
-	Sat, 12 Apr 2025 02:28:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744424930; cv=none; b=I5q1pZP9b9QGMDyeUSy5XBJ07d1jTPakHQhID0CBXBl7rS/tkXwDa75cuuVkOVnoygbJ16DPl0NUe/BMG4cmNuGOIJmaqmhBqKGo9LqBGKNrCcNDxxTOqEK73cOxqt+v46ksUTbTtXEQy+oDpXsvftQScpxsjf1b5McW8YL9Q8E=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744424930; c=relaxed/simple;
-	bh=+uB0/KeWoS+78o/K4+P1lOYb8Brc3GUB6FoOcaDAEb8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VQzlYTsR0arJD3lL07XTIOCMUVFFPuSKPtKUxAvjfnt0t4UBt7t9eYuDgQuKI8WhLq1FwB6rByi2rlDBXPFSXbghIYQcpRc4mpT8cCMTVL1LCnFrBqkD+3xGrNOeRJSA18gYxWBMPoYww9hyDOV4ZOh68Lvzw3aZa1zRiZYCQCU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HkJUwkkb; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-223fb0f619dso28777515ad.1;
-        Fri, 11 Apr 2025 19:28:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744424928; x=1745029728; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=uS59NBreB8JVw6WZXaddYSZve8l7pZ2vm6Mp80Lo0qg=;
-        b=HkJUwkkbRtJ3IbRpItdTFz0VO9n7Qbei6hhAASZp+jrbbvn8dqFSsoRc0X/ESg2AAa
-         qCCCRfCcM40C90RKK7ARvdix90ZuKv65/gIZPJRKIkcIWCFbqFxGH9ok8ycluNV0DdGC
-         N+EI8nqMRzNxLIjUQU8JEPIbG6I6JeN4l/8uk10EkMPslsxYasmlr+Da6LdvEUHM2qyg
-         QK2UAUbJ+INwknegS0dGKYPDF3Fs01D/lx+GbA2BJhCtHqnsKh9kBCJT9MYzz+9w76LE
-         gk7SA0cnma3LGEmWqVhV2Js6OR5r7G7v3zlerUvef4wvw0USTBBolEXvV0Yt3WYOTbNu
-         rFjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744424928; x=1745029728;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uS59NBreB8JVw6WZXaddYSZve8l7pZ2vm6Mp80Lo0qg=;
-        b=Wsjtco6t8+26umMOq1qlmMJWo8h0OarHIqfA0JqlVLuTQffrN6paSu4ogivDVK9Uot
-         0RmCwZyiNYN2ixNK5dLQE2vSKhQFJoJvR41GS+rVrd8CUD4ByfmTTlWiKxlFmYxwQnC1
-         0pm9Whow0GgMMena9UBvcxBvCVMGDtuZ2l07lTRXxBcaXMyTbSvlnvA6gm+tvkVWYxt0
-         nOm09h7fO04aZQREV4tm08UPKgQKTNGbvfI+4nDjT+zGCA5zkG/qcFMyiaok7rVytZEi
-         ZgwdRM/l6mXU9HlYT/XvmS/d9TYA+n1jAVUvndqPu752nQDcQTtt6d5RCftR6R8gt45g
-         tYwA==
-X-Forwarded-Encrypted: i=1; AJvYcCU1GSpXbKeTI7k5LtJnxhEJtOFixKRM/ZsUhSioNVyfcBduq+vurMAxj6dY3eHxKDORqeyay/CoacLh@vger.kernel.org, AJvYcCUMaHN7TO/Q3NaI4edeFdRqXqKxecL8lTZ4utqjaWVoSCdSU6EjmD/IXmfinKaDUdLs/txDOGp2Qjc=@vger.kernel.org, AJvYcCVcUtl8umfRP01qBwoyeKR/HesCBz9HEOy2mE2aQgEXv7Y8eC2/uuy3t9mWpe0nCIZLI6TYxPNC06NEXmZHhYlKQT998w==@vger.kernel.org, AJvYcCWnDjHuAHEBh4wPBq+9UOCcjmdMKOQIe5cuAYbcvkW6UjewNneQtOVnzgV0wZfFBE7rBmvcq86P5jx7ny49@vger.kernel.org
-X-Gm-Message-State: AOJu0YwcaroZTSVoULrMjIGkEe0SENiYqK31Y5T1h+WjnX+5AzAWe6Pq
-	PV/jDzK0ypr5D529FKX2uLeio1MERvhlxcp8DbT6lRGYBnxjr8zn
-X-Gm-Gg: ASbGncsn1E+6zisUfDZHZCCWvqzpZ5m8y73PhmDG1p6BoI0LJwSgFhOcMek+LKxQb+x
-	hfcjVTx/qMwH05n4k/OLD1jbbzlEblNolvE3lA7Y/OFRVTTE4EFu1ZgqkhuPg3JzEGDPjSaIwb/
-	uJUfiS4AqoV50TPWUeik4Ltno1w0hXoz7/FyCQlnrQFcKrbeGAcCKJXawpegrifzI6yQm0wrs9O
-	iOklN+xCKSKEb+FE7w/+TKmk7p8KXZ6wEQts7ysnygSQQbn+/Po2SsjfHdTGxYgeN6BqX+NvYKV
-	x/C6XEaW16UQ08NftJh3tvMFdtg3ATbhUbd5iiLZ
-X-Google-Smtp-Source: AGHT+IF7yQgtxx+Pvoj+nBOJQAO+OSo9hSesRaYvYmdz+vl6sbpTrhSzTeHhEoT89B0HPOGTeKZpFQ==
-X-Received: by 2002:a17:903:2308:b0:221:331:1d46 with SMTP id d9443c01a7336-22bea495302mr66673465ad.2.1744424927728;
-        Fri, 11 Apr 2025 19:28:47 -0700 (PDT)
-Received: from archie.me ([103.124.138.155])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22ac7badb24sm58027815ad.105.2025.04.11.19.28.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Apr 2025 19:28:46 -0700 (PDT)
-Received: by archie.me (Postfix, from userid 1000)
-	id CFD86422656C; Sat, 12 Apr 2025 09:28:44 +0700 (WIB)
-Date: Sat, 12 Apr 2025 09:28:44 +0700
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-To: Mario Limonciello <superm1@kernel.org>, Borislav Petkov <bp@alien8.de>,
-	Jean Delvare <jdelvare@suse.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>
-Cc: Jonathan Corbet <corbet@lwn.net>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Yazen Ghannam <yazen.ghannam@amd.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-	"H . Peter Anvin" <hpa@zytor.com>,
-	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-	Hans de Goede <hdegoede@redhat.com>,
-	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:I2C/SMBUS CONTROLLER DRIVERS FOR PC" <linux-i2c@vger.kernel.org>,
-	"open list:AMD PMC DRIVER" <platform-driver-x86@vger.kernel.org>,
-	"Gautham R . Shenoy" <gautham.shenoy@amd.com>
-Subject: Re: [PATCH v3 1/4] Documentation: Add AMD Zen debugging document
-Message-ID: <Z_nP3FGEZzvRf26g@archie.me>
-References: <20250410200202.2974062-1-superm1@kernel.org>
- <20250410200202.2974062-2-superm1@kernel.org>
- <Z_nMEwobMzGbG74L@archie.me>
- <8497954e-38de-43f5-b3e9-f354c308289e@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B27C231A89;
+	Sat, 12 Apr 2025 04:09:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=139.219.17.118
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1744430994; cv=fail; b=K9giMl+bG2NPcDVYxeTH27zUPgN3iQ/+OzjZtCzw+1b5ui7E2M5pDPUOGIh1bG9BQ0SvF/1XE1PHdUaaxHBNjyMURilcLasc8i4N98tlqq3+I8CClODXyCIWGCvuTMYaUmt8Bfxm9cnsbvh/rXnN7jqnzLAwm/KITtVW1KSq9ms=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1744430994; c=relaxed/simple;
+	bh=WPvU+3oSdomrfY2Bx87+c8paCg4jvkPMmrQesPrTXxM=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=AGZ++CHFRXOSykh+F8o3LDMIbsnLKVoEA7dvehQUTKIoG0mbLWA0nLliQM7pyXh0Wj/URxR2WQaFESk+oiKAkfDEEnQ55OnPO30l7EApU98fUxO82lBd8VMh9Z/TzpiEoQ/ae69qepj40C6zepPYe48+pQCWeljU32coPMjxM+8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com; spf=pass smtp.mailfrom=starfivetech.com; arc=fail smtp.client-ip=139.219.17.118
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=starfivetech.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=T1IWRV/ONwbuaM1TWZ/7ZbuFuyBso/JmcQX/hyDpvjjWKu0rzvjLLuDdHL9lbbdGpb3n13O88WFW0ucIvHcFKQvox1YqDTRbvoPF6ev/2Mbqn1Vtk3ogutZ1t7BDH4N5V5/yEM/w8WYc6hjlfa+ZDoRcklLFhQ9rM44mYY4aUJFmatBRpt9lcnoboRiByajXUh6IGsrtQ0uHNBmENtdfabkB8qTNmONz2DUATYix0/g+c0FdVmdfSOO3VlLm2UdQGACyZypOnyFI8BdzVZmFeWkyWzzH5qv3BZNkjdhJ0Z4iCsM17kku2fgYidL74gyL+MAmIHM1Hq8n21zlMGP7Bg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7An5XqsvMWQ5Z7RtPeoET4czl/0Z69rdjoekG0DPtJk=;
+ b=ax1OxkSHINQHEldavjX1L3OvY2LfTVDwrW58MmqZqRe7fN/VnC5vDtq8NJYyffbIFo4vTaD7PaLtnplH6LTtDgf1NWzKsOxw7aeedWgqfn/LPaXmGtf5b/lMAD6jbj3ebH6mX5B83I1hNs3B8iCx33nLieYwLvi5rjOohAanbscVhV2vBuNStiEnNcLwclOlemvQHYFJFJihTgpeJc++Jrbhl+d5OoBHcwkt8TOglDW9OyRQmR/WqXzn9JDAFGgkrWReeT6PsgU7CuoQEEL+SxZlHtE4JlhiX6JPAHAaUJJXjwUnXN5LE5FJPmhLsiVkzv4dO2uGcnrvGbBkGfhfRw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=starfivetech.com; dmarc=pass action=none
+ header.from=starfivetech.com; dkim=pass header.d=starfivetech.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=starfivetech.com;
+Received: from NTZPR01MB1018.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c510:b::7) by NTZPR01MB1129.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c510:a::5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8632.29; Sat, 12 Apr
+ 2025 02:34:00 +0000
+Received: from NTZPR01MB1018.CHNPR01.prod.partner.outlook.cn
+ ([fe80::e1c4:5bb3:adc:97f5]) by NTZPR01MB1018.CHNPR01.prod.partner.outlook.cn
+ ([fe80::e1c4:5bb3:adc:97f5%5]) with mapi id 15.20.8632.025; Sat, 12 Apr 2025
+ 02:34:00 +0000
+From: ende.tan@starfivetech.com
+To: linux-i2c@vger.kernel.org
+Cc: jarkko.nikula@linux.intel.com,
+	andriy.shevchenko@linux.intel.com,
+	mika.westerberg@linux.intel.com,
+	jsd@semihalf.com,
+	andi.shyti@kernel.org,
+	linux-kernel@vger.kernel.org,
+	leyfoon.tan@starfivetech.com,
+	endeneer@gmail.com,
+	Tan En De <ende.tan@starfivetech.com>
+Subject: [1/1] i2c: designware: Ensure runtime suspend is invoked during rapid slave unregistration and registration
+Date: Sat, 12 Apr 2025 10:33:03 +0800
+Message-Id: <20250412023303.378600-1-ende.tan@starfivetech.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: ZQ0PR01CA0018.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c550:5::15) To NTZPR01MB1018.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c510:b::7)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ZEyrUDEPnAmvIh5K"
-Content-Disposition: inline
-In-Reply-To: <8497954e-38de-43f5-b3e9-f354c308289e@kernel.org>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: NTZPR01MB1018:EE_|NTZPR01MB1129:EE_
+X-MS-Office365-Filtering-Correlation-Id: bf868552-4fd0-4953-1964-08dd796a7b63
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|52116014|1800799024|41320700013|366016|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	12j9vEaI+5rMlfj8hHYI3CYk8o5C+1638LZ4TBM4aExYf/NBaHACLq5fPIFFFd+8GYzdCc88wYlH1q3wI50hYFgOkL2KVir1HCCExdIz+WNFcAO/b7z1af3hSqxNgyTJGpzzZ1a/1VgUNNjtrmbddPCtueTt1rg7S7nKE5AFvAlnX8Ny79gH0zGFVk/W7V/rzBLW1G0nyMqYXx8mSKcgNrK/OLbEJZmLd68A7Hsy6lePrFOxZMLPRcmDM8EjqvMS7uY6d9geCyWqvMRwfFyGBangiBt395aJPLyalY6SsD85ShLK2XAkHA7KTd9xiZCNvyU0S0arFsatvMMWspHU87ONFbTGHWWh78IrJfSq9+b4t3NMRUp3IBkjqZCkpnn4ODEXNKeAHYsW019LXosyxHZgabf1R5xyDHXMtmv9sbq5JLOmZ1yVjcpHeHGUYIVxoq+iympqMaDLPWIDv+yE5sGzZ0fhxconRmvqLwLxZhBDm3V7HGcQ6FpTvRnIn+ZI9+xVbYcgkK6NUbqJdXd8C8NiWrJ9ew+kdCo+z4ESOQvNlqCsacnflOzrRZyjJWw7cqi4f2AS2J2J0liGGMmh8fOR2svkOfMBDWJ357cPuWM=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:NTZPR01MB1018.CHNPR01.prod.partner.outlook.cn;PTR:;CAT:NONE;SFS:(13230040)(52116014)(1800799024)(41320700013)(366016)(38350700014);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?uZvYcl+GIo2Ya8A44C3RjtqhllKndjW3F7wX4lb6Z0CSLzUqat9/Mu9rDhe/?=
+ =?us-ascii?Q?mM00luRHrwknOiwiMOp+FbGxENwUWfueNEte9rZ4NjSxNSGsS1lg2Ibt3JTH?=
+ =?us-ascii?Q?8zqk23UvtbkzB1jZ3N3L0YWfbcbImNX8EUEtHdyfQ7pSCw+qqdlfZTrtjyCS?=
+ =?us-ascii?Q?yLEW2xnB47wNM1tKX7F/rJWpNwONAD2HmqD7lEm5Al5HoNT0kSCMh6SAumU1?=
+ =?us-ascii?Q?xZFtyQzuXvA0KvDcHIo9S1N+8tJnY8VMm5FR9CLFlhZBoticHw+lBPd8LLuu?=
+ =?us-ascii?Q?jng4TS7vHgcpDg1ffZDWHgV795r8cZLbF6y8L6IrUWJROVs8P9znD+Y5fQee?=
+ =?us-ascii?Q?/lXiF7pw2H6mxSlirb+QhwA9rUv3/ky6i6NauqyhmjdokkppmKPFUAId5m5w?=
+ =?us-ascii?Q?LncHh3YZQaMN/tvv6JL0/X0DvGRF65mmk4hfN0sstdgwsKAetKXMb/PcKoO5?=
+ =?us-ascii?Q?OUcshHiPjLNv2/KWT3V9TkCNUPraSr4KcFJNb7WqCP+JEUoPQ37blBT8wUpl?=
+ =?us-ascii?Q?axU3lxMwZUQV+6hOHN0UWYQ75gW5OMG5e8i/QipQ4h88hZHUmXqPrE4gGK7q?=
+ =?us-ascii?Q?MfDsgG4GD0f5zxEBny/tiO6IV8ik1QnYYJSBVNMy06FkXpFKNs+ztn4dSVv8?=
+ =?us-ascii?Q?LkaGhAQkZQQuMMuaSqfvBxDQ+E5OT/z3gC2nCmi2aAWHfF3vrj6QQa1M/n7E?=
+ =?us-ascii?Q?+5T9Elp/Vt2E6iXsaF84iF8Ah1zYRZ8tWrLXEHcfWbq6Du/dOMZKf73bq9Zp?=
+ =?us-ascii?Q?oDtCrJpanv6JOK9lnnQlqb9oVx/AUTj0Aaiq6L3OkD5tmxSHEUvG6h0FmZS4?=
+ =?us-ascii?Q?rhj7cKVNaQKuo2WA5AouN4+qzLcvjX6gFyrMel6XSDlr+Ef0Y0C20kNMKlwO?=
+ =?us-ascii?Q?N5XjvRRWIE5n4H71JalFpwDJWoSxglfFKiIy4r6rKo+OuD4kBbL4lJHCI92d?=
+ =?us-ascii?Q?gj5YixReS9UnYd9+Zlzvw74ujar+m5H4qHy5+QCQYGF3MCapdexWsufStksG?=
+ =?us-ascii?Q?yfPUwQ+utkjPyXQd+JSwRFYntHJEr0Miy5H19UMq5L4KKvcvxrhso9Umxzoc?=
+ =?us-ascii?Q?bXHhzhYjGcgmKCIJ8Zmmi1ApUQAAsjdDmgtwyBs+hZDO8P86wSlcWAA4//xM?=
+ =?us-ascii?Q?WExYrzqzipHek6AeEMPecckSlqd0JI1aTcicLqOlXrG5/uBT25A9NtrsBMng?=
+ =?us-ascii?Q?QeYsVdY2XzUEl7eeqwSLISuVvZLjlm7FIgc8AG4TslXLKjnl+ZqbiXa3FH/u?=
+ =?us-ascii?Q?7FXyokxi2Hkr/2rtgrv1NJTqK8c0Bl9bY3CJUBrM5wwKCi1Js1T/s/GunzyB?=
+ =?us-ascii?Q?e0VsrmccNE4G5zYPtaojy5GdjlcVOJeTPsI34e0BRJdaUOulsVcNuVtd9EW9?=
+ =?us-ascii?Q?19+vRBov8LFTpe0/OfFEN+FvUHLsY4YhOWytU4FHSwSKsRZQonOlrKjZSL6I?=
+ =?us-ascii?Q?aBfm9gdLjVqyjKnfcKF0dqXCCam0xGuJc3Lff8pmK7p53Ga7fKM+9+3s6+Eh?=
+ =?us-ascii?Q?EBtvTLUL4FH330yCeMYE14e+z+vs1mYORql2IKEKYH7yvWp3ClzOtohsJifP?=
+ =?us-ascii?Q?opwmCmZ0++7CSblYmJ2ic6Gup1wGZpoXGa7cYmBQfSmt1+1ddOgo4pYSDWYl?=
+ =?us-ascii?Q?6g=3D=3D?=
+X-OriginatorOrg: starfivetech.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bf868552-4fd0-4953-1964-08dd796a7b63
+X-MS-Exchange-CrossTenant-AuthSource: NTZPR01MB1018.CHNPR01.prod.partner.outlook.cn
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Apr 2025 02:34:00.2936
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 06fe3fa3-1221-43d3-861b-5a4ee687a85c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: cCvd52ha2h2bAYzpnLckkXn8Qc8oTUU1ENkw6A7XkLJETeQalLo6KGQe3uMFVcYsDrUOdr5NnY46ROlCnArddwqB8wpS07bp9ZKfHZqvJjc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: NTZPR01MB1129
 
+From: Tan En De <ende.tan@starfivetech.com>
 
---ZEyrUDEPnAmvIh5K
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Replaced pm_runtime_put() with pm_runtime_put_sync_suspend() to ensure
+the runtime suspend is invoked immediately when unregistering a slave.
+This prevents a race condition where suspend was skipped when
+unregistering and registering slave in quick succession.
 
-On Fri, Apr 11, 2025 at 09:19:09PM -0500, Mario Limonciello wrote:
->=20
->=20
-> On 4/11/25 21:12, Bagas Sanjaya wrote:
-> > On Thu, Apr 10, 2025 at 03:01:59PM -0500, Mario Limonciello wrote:
-> > > v3:
-> > >   * Move debugging.rst to index.rst
-> >=20
-> > Do you plan to add more AMD-specific admin docs in the future?
->=20
-> I don't have any others planned right now.  That move was because I notic=
-ed
-> a toc warning with how I had it structured before.
->=20
-> > (BTW, I don't
-> > follow v2 discussions.)
->=20
-> Don't worry; documentation hasn't been talked about in v2, it's all been
-> discussion on the S5_RESET_STATUS.
+Signed-off-by: Tan En De <ende.tan@starfivetech.com>
+---
+ drivers/i2c/busses/i2c-designware-slave.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Understand.
+diff --git a/drivers/i2c/busses/i2c-designware-slave.c b/drivers/i2c/busses/i2c-designware-slave.c
+index 5cd4a5f7a472..b936a240db0a 100644
+--- a/drivers/i2c/busses/i2c-designware-slave.c
++++ b/drivers/i2c/busses/i2c-designware-slave.c
+@@ -96,7 +96,7 @@ static int i2c_dw_unreg_slave(struct i2c_client *slave)
+ 	i2c_dw_disable(dev);
+ 	synchronize_irq(dev->irq);
+ 	dev->slave = NULL;
+-	pm_runtime_put(dev->dev);
++	pm_runtime_put_sync_suspend(dev->dev);
+ 
+ 	return 0;
+ }
+-- 
+2.34.1
 
->=20
-> >=20
-> > > +As there are a lot of places that problems can occur, a debugging sc=
-ript has
-> > > +been created that can help test for common problems and offer sugges=
-tions.
-> > > +
-> > > +https://git.kernel.org/pub/scm/linux/kernel/git/superm1/amd-debug-to=
-ols.git/tree/amd_s2idle.py
-> > > +
-> > > +If you have an s2idle issue, it's best to start with this and follow=
- instructions
-> > > +from its findings.  If you continue to have an issue, raise a bug wi=
-th the
-> > > +report generated from this script.
-> >=20
-> > To mailing list following Documentation/admin-guide/reporting-issues.rs=
-t?
->=20
-> Actually I prefer them to drm/amd with the s2idle bug template.  I'll add
-> this detail.
->=20
-> >=20
-> > > +First convert the GPIO number into hex. ::
-> > > +
-> > > +  $ python3 -c "print(hex(59))"
-> > > +  0x3b
-> > > +
-> > > +Next determine which ACPI table has the ``_EVT`` entry. For example:=
- ::
-> > > +
-> > > +  $ sudo grep EVT /sys/firmware/acpi/tables/SSDT*
-> > > +  grep: /sys/firmware/acpi/tables/SSDT27: binary file matches
-> > > +
-> > > +Decode this table:::
-> > > +
-> > > +  $ sudo cp /sys/firmware/acpi/tables/SSDT27 .
-> > > +  $ sudo iasl -d SSDT27
-> >=20
-> > Nit: two colons are sufficient for literal code-block.
->=20
-> Thanks.
->=20
-> >=20
-> > > +To activate PM debugging, use the kernel command line option: ``pm_d=
-ebug_messages``.
-> > > +
-> > > +Or enable the feature using the sysfs file: ``/sys/power/pm_debug_me=
-ssages``
-> > > +Constraints that are not met will be displayed in the kernel log and=
- can be
-> > > +viewed using anything that processes the kernel ring buffer such as =
-``dmesg``` or
-> > > +``journalctl``.
-> >=20
-> > "To activate PM debugging, either specify ``pm_debug_messagess`` kernel
-> > command-line option at boot or write to ``/sys/power/pm_debug_messages`=
-`.
-> > Unmet constraints will be displayed in the kernel log and can be
-> > viewed by logging tools that process kernel ring buffer like dmesg or
-> > journalctl."
-> >=20
-> > > +`patch <https://lore.kernel.org/amd-gfx/20250305051402.1550046-3-chi=
-ahsuan.chung@amd.com/T/#u>`_
-> >=20
-> > What about that patchset status? It was not reviewed by upstream mainta=
-iners,
-> > right?
-> >=20
->=20
-> At the time I wrote this document it wasn't yet merged.  It's been since
-> merged, I will update to the commit details.
->=20
-
-OK, thanks!
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---ZEyrUDEPnAmvIh5K
-Content-Type: application/pgp-signature; name=signature.asc
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZ/nP3AAKCRD2uYlJVVFO
-o15qAQCHblhM69t0Xc0j/spdbJnAlpiGhGiV2ZAWomX+adiGKwEAuY6uI/j1royt
-FWMMMFRVStGfBo4HLqzUWcimkOK6dgM=
-=yv/A
------END PGP SIGNATURE-----
-
---ZEyrUDEPnAmvIh5K--
 
