@@ -1,48 +1,65 @@
-Return-Path: <linux-i2c+bounces-10347-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10348-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F31FEA89E7E
-	for <lists+linux-i2c@lfdr.de>; Tue, 15 Apr 2025 14:46:26 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 482F0A8A06B
+	for <lists+linux-i2c@lfdr.de>; Tue, 15 Apr 2025 15:59:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 671633B4093
-	for <lists+linux-i2c@lfdr.de>; Tue, 15 Apr 2025 12:46:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6D4CB16B7BF
+	for <lists+linux-i2c@lfdr.de>; Tue, 15 Apr 2025 13:59:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 243E9296D26;
-	Tue, 15 Apr 2025 12:46:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4B3A20469E;
+	Tue, 15 Apr 2025 13:57:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aBPZ//rr"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b0jPI117"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D27CB293B62;
-	Tue, 15 Apr 2025 12:46:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2A9C1C5D4C;
+	Tue, 15 Apr 2025 13:57:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744721161; cv=none; b=EJ1pml5Gr1okk4hy09IRYTxuWN0Ef9bhZOrS7/0/kmaPqhB4cx+C3vNgvUQK2S8vglklfU89t6pO2zgxWQ9S99czU5t9l5bUWRgJZ25cJv7EbY8kFC8tpLrLpnefs6Oh+lPZmi/7CZ5OHUXLzwILCbUNMwQ70RnMk3cG8byFehg=
+	t=1744725429; cv=none; b=c27xBgNLEuggplNkwgBvgMU8rTPN5eRdKxvl3KDuTR1r8KozFdgUFYN6Q5Sj1xDolApn12PZpJsrIMyLGq00pKWk0sMqvZ6Hi0G8Ksk9q8ETrPUoHVU6twUbCAo0bwP3LysaMhRBRGNpYpOwtTn4m1Sy8TXfqIFTfX3gukD/N7o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744721161; c=relaxed/simple;
-	bh=ek+Tpc14e/doNmpLlpka8XJmXm9f6H6t6AJorGwuoYw=;
+	s=arc-20240116; t=1744725429; c=relaxed/simple;
+	bh=xDB93y/tolv30TZZ39hnGlCE9eoTPd+dBm7VxO5zwRs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qkJcXh2McpwrBCLVYs3uGPyNfnXX+Wjc8Gkh9jtKJGsXPTNa5v7LDxTozMLQ9Rp9KpeDREJd0/ve4n0ktUR7CnTWcQ63rVFmNPKBNf6GADTpxOaW76KBQ4tOnoy6+kPfhlAg1YNuzKJ1EzRRCNSeRIr1pSn/53VOOJ8ROG8IkYs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aBPZ//rr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45D24C4CEDD;
-	Tue, 15 Apr 2025 12:45:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744721161;
-	bh=ek+Tpc14e/doNmpLlpka8XJmXm9f6H6t6AJorGwuoYw=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=aBPZ//rrXCmUwRtvbmUfo/qWNHN/Z+Tevk8llMjTQR2d+z4R7RFhNuo6XHyY3Qbng
-	 zbgnXDw2Qvktx3Bl74E6uqocClku9RQyckQ0kn8Q5+bRznZohd/lyCaqPc+XwYAROc
-	 O+q8j6x2LUmrC7yZRwoZ8g7fqr6dEN+I+qDf5SnoxaQhVM3dc9dXIoPuyxAHUdKLLQ
-	 PtNW/AKKRK4a0O/OHBnXQOM0XDolPbQlSj2CKBftIDIFQDLjXPVuAltxAdw+EihT6U
-	 ZMze82kX2xqRI+fPN8k1C+StuQUj9B+YDavUZV6GC9VHYDllLneKAhF82DIg7HeZ7i
-	 eSOOZdKw6i5mQ==
-Message-ID: <4493e1f6-eb08-4384-9257-575491a57c40@kernel.org>
-Date: Tue, 15 Apr 2025 14:45:55 +0200
+	 In-Reply-To:Content-Type; b=qQMUBh5qtc3Aen7XjudXVkZkVNZD3ttbUtjA2e5JOU8lQeXSOhgLrhbGMwBqJ69DFzahpmAL3zgWEJt5TrieuEMCVG5xcTQt/ODctskaNeW60K6k413cOZYzXVD59wnAC2eq0xYlClBxXoTfr6jj+DtwbHkcuhH43xDszvhrLLE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b0jPI117; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1744725428; x=1776261428;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=xDB93y/tolv30TZZ39hnGlCE9eoTPd+dBm7VxO5zwRs=;
+  b=b0jPI117z4YD/BV7TPaSyZN6lKEYjYl9rs6/3S50VSCCibitBgnsYnJa
+   oAGW/b41QFxqUnUzRnGt5G/aesklLZv9kZ/JNcdGlHY/I1VclTjHr8NUI
+   kncqPbCG4FsqcjtlAY7jtmWDL2T0uM8wQqv9V46wotzQxlpBsLxE8akZP
+   q1CagULxzJB6XcKfJy/Q0s6ypqtKbQPyUxr3PYkWSp56BEI24+o4pG4U+
+   +7ew/BUFkM6Vp736IszJsb3gqj56nrUVd0ehpzpcviOBTqY7/ouaaBPfi
+   sA/+1ZqX5PjFs7dt17KU1m+N429nOpRtdTyijOhHIOdQBjByT+RkKcKZi
+   g==;
+X-CSE-ConnectionGUID: IklxvyMvSK6LKIhoIiptNQ==
+X-CSE-MsgGUID: 6TbphEs8QvyR7oHgbEknrg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11404"; a="46323797"
+X-IronPort-AV: E=Sophos;i="6.15,213,1739865600"; 
+   d="scan'208";a="46323797"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2025 06:57:07 -0700
+X-CSE-ConnectionGUID: nTgDRg9hTGijLljhIphB/w==
+X-CSE-MsgGUID: Mv6/SomiQwy0IMeuXmwkPQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,213,1739865600"; 
+   d="scan'208";a="130661257"
+Received: from mylly.fi.intel.com (HELO [10.237.72.154]) ([10.237.72.154])
+  by orviesa007.jf.intel.com with ESMTP; 15 Apr 2025 06:57:05 -0700
+Message-ID: <6e155241-3403-49df-8f0d-5aa63e2e74ab@linux.intel.com>
+Date: Tue, 15 Apr 2025 16:57:03 +0300
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,66 +67,51 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: Hitting WARN_ON_ONCE in i2c-designware-common.c
-To: Jarkko Nikula <jarkko.nikula@linux.intel.com>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Mika Westerberg <mika.westerberg@linux.intel.com>,
- Jan Dabros <jsd@semihalf.com>, Andi Shyti <andi.shyti@kernel.org>,
- linux-i2c@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
- kernel-team <kernel-team@cloudflare.com>
-References: <20c191d9-5f7a-4ec6-a663-dcc8d0b54c18@kernel.org>
- <715d883f-184f-474a-a222-208d3aa03d2c@linux.intel.com>
+Subject: Re: [1/1] i2c: designware: Ensure runtime suspend is invoked during
+ rapid slave unregistration and registration
+To: ende.tan@starfivetech.com, linux-i2c@vger.kernel.org
+Cc: andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
+ jsd@semihalf.com, andi.shyti@kernel.org, linux-kernel@vger.kernel.org,
+ leyfoon.tan@starfivetech.com, endeneer@gmail.com
+References: <20250412023303.378600-1-ende.tan@starfivetech.com>
 Content-Language: en-US
-From: Jesper Dangaard Brouer <hawk@kernel.org>
-In-Reply-To: <715d883f-184f-474a-a222-208d3aa03d2c@linux.intel.com>
+From: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+In-Reply-To: <20250412023303.378600-1-ende.tan@starfivetech.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
+Hi
 
-
-
-On 15/04/2025 14.28, Jarkko Nikula wrote:
-> Hi
+On 4/12/25 5:33 AM, ende.tan@starfivetech.com wrote:
+> From: Tan En De <ende.tan@starfivetech.com>
 > 
-> On 4/15/25 3:03 PM, Jesper Dangaard Brouer wrote:
->> Hi Maintainers,
->>
->> I'm hitting a WARN_ON_ONCE in drivers/i2c/busses/i2c-designware-common.c
->> when booting the kernel on our Gen12 hardware.
->>
->> I'm using devel kernel net-next at commit 1a9239bb425 (merge tag 'net- 
->> next-6.15').
->>
-> Is this a regression so was this working before?
+> Replaced pm_runtime_put() with pm_runtime_put_sync_suspend() to ensure
+> the runtime suspend is invoked immediately when unregistering a slave.
+> This prevents a race condition where suspend was skipped when
+> unregistering and registering slave in quick succession.
 > 
-
-I'm seeing this when doing kernel development and booting net-next on
-our Gen12 servers[1].  [1] https://blog.cloudflare.com/gen-12-servers/
-
-I've not seen this WARN on our production kernels (stable 6.6 and 6.12).
-This is likely due to different kernel configs.
-
-> Support for this platform was added back in 2016 by the commit 
-> e4e666ba74d4 ("i2c: designware: Add device HID for future AMD I2C 
-> controller").
+> Signed-off-by: Tan En De <ende.tan@starfivetech.com>
+> ---
+>   drivers/i2c/busses/i2c-designware-slave.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
+> diff --git a/drivers/i2c/busses/i2c-designware-slave.c b/drivers/i2c/busses/i2c-designware-slave.c
+> index 5cd4a5f7a472..b936a240db0a 100644
+> --- a/drivers/i2c/busses/i2c-designware-slave.c
+> +++ b/drivers/i2c/busses/i2c-designware-slave.c
+> @@ -96,7 +96,7 @@ static int i2c_dw_unreg_slave(struct i2c_client *slave)
+>   	i2c_dw_disable(dev);
+>   	synchronize_irq(dev->irq);
+>   	dev->slave = NULL;
+> -	pm_runtime_put(dev->dev);
+> +	pm_runtime_put_sync_suspend(dev->dev);
+>   
+>   	return 0;
+>   }
 
-Maybe we have just not enabled the module on our prod kernels.
+What kind of issue you are seeing?
 
->> [   10.062651] i2c_designware AMDI0010:00: Unknown Synopsys component type: 0xffffffff
->> [   10.073312] pps_core: LinuxPPS API ver. 1 registered
->> [   10.073372] piix4_smbus 0000:00:14.0: SMBus Host Controller at 0xb00, revision 0
->> [   10.075433] i2c_designware AMDI0010:01: Unknown Synopsys component type: 0xffffffff
-> 
-> These "Unknown Synopsys component type: 0xffffffff" errors indicate IP 
-> is not alive. Perhaps linked to the missing clock or not powered.
-
-It is possible that this hardware is special as I believe it is 
-customized for us.
-
-The dmesg output also contained:
-  Hardware name: Lenovo HR355M-V3-G12/HR355M_V3_HPM
-(see the extra -G12 to the SKU.)
-
---Jesper
+I tried to test with no delay and 1 second delays between registering 
+and unregistering. Power state was changing between D0 and D3 if there 
+was delay between unregister and register but I could not see any issue.
 
