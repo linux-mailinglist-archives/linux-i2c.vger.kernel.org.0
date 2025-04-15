@@ -1,119 +1,114 @@
-Return-Path: <linux-i2c+bounces-10374-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10375-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F141A8A6E8
-	for <lists+linux-i2c@lfdr.de>; Tue, 15 Apr 2025 20:36:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 01F84A8A8D1
+	for <lists+linux-i2c@lfdr.de>; Tue, 15 Apr 2025 22:06:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AD7BF1902038
-	for <lists+linux-i2c@lfdr.de>; Tue, 15 Apr 2025 18:36:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 94F783A80FC
+	for <lists+linux-i2c@lfdr.de>; Tue, 15 Apr 2025 20:06:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3A2F225A32;
-	Tue, 15 Apr 2025 18:36:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72D1825291C;
+	Tue, 15 Apr 2025 20:06:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L2BZsJ0x"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="NFlRSWdE"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D01B204F73
-	for <linux-i2c@vger.kernel.org>; Tue, 15 Apr 2025 18:36:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A47D12522A9
+	for <linux-i2c@vger.kernel.org>; Tue, 15 Apr 2025 20:06:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744742164; cv=none; b=KuRT7NTSZQw34p1GOxviP58jDyhkuZ0NUpBCMehumjhErbrbilrEDb/+uSzXyjVFW+apAnQMxZkDAlx5i9KPVW4/7jJcBJLvaq0y6KNbdrYMkdlxv/JFXYUAhn2+TeXvQpWSlfu4dLj0dtuWwIBDt7KUxu+804wSJM+TH4TER+4=
+	t=1744747582; cv=none; b=Z/5WYR6olBedIepxnUrkwknKw3o2/uopXcmgsRoN2IPGYV3LeIYWHPJm3eoDdiWG+foTzSmOo7oDWYMT2vWn2QxpvX0ZjUiSZ8w2Gtskotu/0TlXidCOOCGWJXypoH++Qla9jCa2mU70+lysLYqEahNu0/uliH3hOVfQdfoUWtE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744742164; c=relaxed/simple;
-	bh=J0uYXjvD8Hpwh3hGZsfbLf46JUN/Psj+ddfsZVtxfyY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NDtqGQ/KppC95eEtJEDsGVEJufj+b0zcupySN2t/uuprmSfRgaEq1fmeGUZjaRyKcL+tXS0wA4Uy2+wgRjs7gtE/X4nrR82GGOrdnS5o1zwu5G16zAyPKBB8rW4AFNOMFKjTfD7Gc2+KY7MM1s4BLIXUg+Sk7KJec3DOxrjLXGE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=L2BZsJ0x; arc=none smtp.client-ip=209.85.208.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-5e61da95244so10176615a12.2
-        for <linux-i2c@vger.kernel.org>; Tue, 15 Apr 2025 11:36:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744742162; x=1745346962; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WfryQvIzOUjhiY3qFCzORTuNHV2UwDURqLCegwa/tk4=;
-        b=L2BZsJ0x2wFgWrMYCdl+0msPguTTMOMWc9oQ9oy+sy1chJvVv6qE3MiLapYm4R8YYK
-         NS6sgKWZLqqnbRZgXc+acmtLsQbT4RfWDnVOE8hhGQqAijqicS2KUEt+x8foa13bS35z
-         HEcpEOUPPn1v/XmsIOTFf+qUQPStoV7+cQw0CoQL32iJoykTpMNi4zVCbQJDsOio9eLf
-         N0ZSliexgRjJP5ivZC2rmQ/HiusPj0kYONyniG0x93/iFGV+/5DMbGANtsqUXNaD6luD
-         OC3LdECdtyFPoWA5eQh/dZJUCEbrOiRGxCpqTYns828V4L9JPzWKapEVK0Aol/NUHJxz
-         ZHrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744742162; x=1745346962;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WfryQvIzOUjhiY3qFCzORTuNHV2UwDURqLCegwa/tk4=;
-        b=Ut5LgaPUUva44mKD4lkJTyxS7/x4XsVkr7L9vhNY8LpA2L/wd90qqH/lAnnw4J2w9o
-         j694klnQ2YK6boY8QLCwar69vFrZCMx+mtGwC0wwy98V/8Yd4HIHAkohnXRW6lAYuQBi
-         Jov3v4AlEc1OsL3Cbgnp9w9Q8oeOer4HWgR9+b21CwUsMJDsB+MStd3CyXBdkSrBqDMQ
-         3MkYt7SjQSgJYYerZsSGg0Bna8KfASUpY68TpsEb1AnRNorpM9eTOdDF9LMI3TItMmEP
-         PmbWAEyaUmS6kf9/E5oUtagZ9GjmwTnohCrLlDveQNkTCHQp9Fr6rIRFHrIXk6lWUvAP
-         p0Lg==
-X-Gm-Message-State: AOJu0YzgmwvZ5ii1m7o2cAlhEe901FcrGAEUZqVOZp9/ZOsc5xHum5pD
-	hmYDYp+ctNfbYLrXu3+Q9hsULPIjhZwWd02HQJuyvAizDLWLy4GS8vVWuezQ
-X-Gm-Gg: ASbGncua5l8TrT/6adKM+NjNocleLMuoIeuM9zPOi7wJmH18yz0ZFBGRCmxM7fe/hR2
-	Z46PRld97EytjBohw2baO7qNZ9v9ht7gSnVKzKt/qsG1hAw8oOx9VT9QFEdnAMqsQSwEnUOmMhJ
-	9zo6h+oFqyYuhmNO3YNuW3F6ZikqDkteqNM9hCI94JW12f82qPCsFW9jd9YZ9dTMrTOZC6v6APg
-	a2uawfLbyg4d635XqaFe4etekcFns4oy8B6bGhRSB3iQgrL9p8m158DBsgMTZ8EZukrMUQ7rCfj
-	ppJsBcl4gswCNy4obiSJzO6ay65HCv8WTSeWE1E+Kr+PXJZZoI5PSuhgljG6KhscAWMcmBk=
-X-Google-Smtp-Source: AGHT+IHJGsewST6jnmj9yIH26E+Sgv/g2O/o6nz6W1pZh6kt6TBXhanEvsuCzFh2W+goShSflm9Q9g==
-X-Received: by 2002:a17:907:7e86:b0:abf:6cc9:7ef2 with SMTP id a640c23a62f3a-acb384e070emr7427666b.42.1744742161497;
-        Tue, 15 Apr 2025 11:36:01 -0700 (PDT)
-Received: from ez-X1.. (mob-194-230-145-83.cgn.sunrise.net. [194.230.145.83])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-acaa1ccd1adsm1148844266b.145.2025.04.15.11.36.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Apr 2025 11:36:01 -0700 (PDT)
-From: Enrico Zanda <e.zanda1@gmail.com>
-To: linux-i2c@vger.kernel.org
-Cc: andi.shyti@kernel.org,
-	Enrico Zanda <e.zanda1@gmail.com>
-Subject: [PATCH 10/10] i2c: scx200_acb: Replace dev_err() with dev_err_probe() in probe function
-Date: Tue, 15 Apr 2025 20:34:47 +0200
-Message-ID: <20250415183447.396277-11-e.zanda1@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250415183447.396277-1-e.zanda1@gmail.com>
-References: <20250415183447.396277-1-e.zanda1@gmail.com>
+	s=arc-20240116; t=1744747582; c=relaxed/simple;
+	bh=DeDrcltpbQdrtm4FdzGHBLKrbrARjHG3sfxX8PWJV8Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EPdozSgQMn10ohnHv3lsgcLXYfI85t6nmjxuZFibHJ1ytEqTsQLf4Ba0Gf0GfrI6XuVlqrFBcjsw5zzcrpXsQaJe2DyWXSy7nRC28nxUErPfLFl2dvN+d69j/tnr5W/GiNB/5CoJSKy2qU6sUqE941+5vdjDaIlPWrZBXeePmvg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=NFlRSWdE; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=DeDr
+	cltpbQdrtm4FdzGHBLKrbrARjHG3sfxX8PWJV8Q=; b=NFlRSWdEf3XpRDxFAgWD
+	H61FRX71pmvgrK5wbYg4uoRxgZSqDgDuVaHJlmV7r6PMVyMFxkODahYPOA6NQuYm
+	DDtUC3gauZfMT/ZMwZPtMdUNqR2f2c7jtQRwjvoeOCMSvTW6PIg+XKjUmGI2nIFM
+	6XiSza/5a7ksXjvVWR1ONorx2isodPn1EKMtr1PUSOBtu5BpwgTS4zBlnlp09fqo
+	kJpddYESNEBNwJVDLJJxcbL1klOPCO8sNd7c+ujVw+r0Zuw3eixCSGs7wEEonklG
+	2OjmgaKeezk5nHtaCtTPXy8WVmJYlur+8RUOLgrOyxF5sBnhJyJ/BthCkixedZAD
+	Tw==
+Received: (qmail 429706 invoked from network); 15 Apr 2025 22:06:08 +0200
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 15 Apr 2025 22:06:08 +0200
+X-UD-Smtp-Session: l3s3148p1@1zkHs9YyEIAujnsq
+Date: Tue, 15 Apr 2025 22:06:06 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+	Jai Luthra <jai.luthra@ideasonboard.com>, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+	Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: Re: [PATCH v4 3/7] i2c: core: Switch to fwnode APIs to get IRQ
+Message-ID: <Z_68LsxyaQ-Q0k5j@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+	Jai Luthra <jai.luthra@ideasonboard.com>, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+	Mauro Carvalho Chehab <mchehab@kernel.org>
+References: <20250414100409.3910312-1-andriy.shevchenko@linux.intel.com>
+ <20250414100409.3910312-4-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="ALtox1r3cqq093/m"
+Content-Disposition: inline
+In-Reply-To: <20250414100409.3910312-4-andriy.shevchenko@linux.intel.com>
 
-This simplifies the code while improving log.
 
-Signed-off-by: Enrico Zanda <e.zanda1@gmail.com>
----
- drivers/i2c/busses/scx200_acb.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+--ALtox1r3cqq093/m
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/drivers/i2c/busses/scx200_acb.c b/drivers/i2c/busses/scx200_acb.c
-index 4d6abd7e92ce..06cf221557f2 100644
---- a/drivers/i2c/busses/scx200_acb.c
-+++ b/drivers/i2c/busses/scx200_acb.c
-@@ -500,10 +500,8 @@ static int scx200_probe(struct platform_device *pdev)
- 	struct resource *res;
- 
- 	res = platform_get_resource(pdev, IORESOURCE_IO, 0);
--	if (!res) {
--		dev_err(&pdev->dev, "can't fetch device resource info\n");
--		return -ENODEV;
--	}
-+	if (!res)
-+		return dev_err_probe(&pdev->dev, -ENODEV, "can't fetch device resource info\n");
- 
- 	iface = scx200_create_dev("CS5535", res->start, 0, &pdev->dev);
- 	if (!iface)
--- 
-2.43.0
+On Mon, Apr 14, 2025 at 01:01:53PM +0300, Andy Shevchenko wrote:
+> Switch to fwnode APIs to get IRQ. In particular this enables
+> a support of the separate wakeup IRQ. The rest is converted
 
+You mean it enables the support of wakeup irqs for ACPI? Otherwise I
+wouldn't know what you mean here...
+
+> just for the sake of consistency and fwnode reuse.
+
+--ALtox1r3cqq093/m
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmf+vCoACgkQFA3kzBSg
+KbbMoxAAm8vpH266VBjRXIyhWkvCG8G+FLWWD3ANJ/UiaV++sKRXg7dI9qNyKFSS
+qU0q5wFDr04uAgosA40t76qONuyA5TyZe55jTIA82rarcYhAu4aUEat2qzy4IRPw
+C+U0ywywQfrzcJYOgWQdUhka0DNqbb1ZBzVygLLQPpWfUt1c1H3+J1fpSc9eQfp5
+KM2iEkoj915FvmkDL+kn3iuvwI4AxQJkEHZvwF0SI6DWPZ/kG4hXvnmDV8EhhFXU
+w0ulqVp7BJbivLAxM3VwlXT3YZv347zlCeI5mrDkBxpFPLUMLBFH9svTp09sn4J3
+ChRjml84xFCXv+a92kIWzb38Xu7HOcbKjb2jItyvslK0TpPIFYkZPoaR9O8ZMKTl
+TNolA9brFKPwJVEjDNlXCWq2WmkDz5p8HiSlXUrclAEz1uJr/qNFzQqmijzlDbF1
+1FhsI3rAMwvfMW8SFQc7Csg+e7WocoRXJAVzUj7HsJl6vjeWHK+B04JlGbdnNwyg
+nO/Zhj+4gOa/4sB+oYSLXu2ER/qvaWNTB7wG/om3bmsfBmy8esLRZ7/iIzbtxB5j
+26evBahw5rJZkI4RXG1x7FZtoS07D/g6PlQdN5eADVjxYWNtzX5w0lkp6Kf9mhJJ
+80HuU5z94G4PLgxUd8PJYDqzC3a8dwya/2J+gFOJIwver2bhXso=
+=XvN6
+-----END PGP SIGNATURE-----
+
+--ALtox1r3cqq093/m--
 
