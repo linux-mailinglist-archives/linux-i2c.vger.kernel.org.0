@@ -1,80 +1,80 @@
-Return-Path: <linux-i2c+bounces-10403-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10404-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA7E5A8B36B
-	for <lists+linux-i2c@lfdr.de>; Wed, 16 Apr 2025 10:23:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A034A8B373
+	for <lists+linux-i2c@lfdr.de>; Wed, 16 Apr 2025 10:23:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 95DF6168EA3
-	for <lists+linux-i2c@lfdr.de>; Wed, 16 Apr 2025 08:22:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BFBE11644DC
+	for <lists+linux-i2c@lfdr.de>; Wed, 16 Apr 2025 08:23:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2580D233718;
-	Wed, 16 Apr 2025 08:22:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46B3F234987;
+	Wed, 16 Apr 2025 08:22:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j5Vsvsdb"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GGtcvzL6"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 118BB22FDF2;
-	Wed, 16 Apr 2025 08:22:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 344FD23373B;
+	Wed, 16 Apr 2025 08:22:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744791728; cv=none; b=NgJU5n4boHV2yhxHLIkO3QZb1V9G1KUPtGqFNPhUNo66XADgZ4mc+Y4QlLNsQ+TzGY4GIPy+l/9lfscDhDuZSV/zS4j90mitNJ/65tuShIvxXaSHsuuLp35FUhYfpc0JjqgHhBP0dT9pR5/xuyK5h8bRQnkw3tWHCxpg3Y8Evsw=
+	t=1744791732; cv=none; b=IHinD5WFYPmBDD3T/M8ojEIHAVAizGEGRFAbHuCAAfkrHNo6ppHF23Xw4Rg+Om4dZrn8/aOtwaWUSDPkxV6lVosJpvxd928J5CCSSkWqXYsMwdc/0zF22rQlMttx5unboUif5jviP2/4bJiGPWTVACik0xh7WvcX+/sJCDaZFMk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744791728; c=relaxed/simple;
-	bh=GDEv30ykcwNrp+ITbOwo9y2a8t6U4fArDqmF8aS5Xdk=;
+	s=arc-20240116; t=1744791732; c=relaxed/simple;
+	bh=dcxoptYL9HCbCFT2aZUHR8rimZgrebZryeu0MSpFEqQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=So7Xh3tGoJ/Vrw2vboj699wpYv8xg+BcgvEqXg1jf5G3Y54EAWPYH/CPcooFxhdisTc7vV8jsyIeNmAgbk8UkJ0crer3FoKKU2M6zdJolfQDDErKbs31MPz31dKcakpJYC1qX0BOTAyUaLXF23SlkmJYtw1MbH3c2s8/GUHM/lY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j5Vsvsdb; arc=none smtp.client-ip=209.85.167.44
+	 In-Reply-To:To:Cc; b=gfmGMZGw+6P8al7uBfqq3iCxbi4OJ4gbIvEFQxHcWaC63inmg0ud8KKDMtMfHzYVupWFVa3jkmOQTv0l1AebTssKTV6Jt4uSmA3QqybWPP54FP6pvv/w+E9EzwULJnVzeeKTASfG85sjpIO2JVV2ZIzSL4CIkzg/Byx2hvep4bg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GGtcvzL6; arc=none smtp.client-ip=209.85.208.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-548409cd2a8so8473239e87.3;
-        Wed, 16 Apr 2025 01:22:05 -0700 (PDT)
+Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-30de488cf81so62187241fa.1;
+        Wed, 16 Apr 2025 01:22:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744791724; x=1745396524; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1744791728; x=1745396528; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=hz3xMnjSXc8Vbo6UN6ksVtAm9/A6drzyntoCMibD+UY=;
-        b=j5VsvsdbcgxD5ywKDT7raR4kAralZD/IrvwUv6fR68BbkResrrqXL/DJhr+EBWiMwD
-         xW76Ot7ryiOkGZM0V/1jI3plAx9JlRvG+N5j2ZGNqFLqwW0GTFMow0DF7pNDiIcbPZmS
-         aCU0f05Z4JO7CQRmaVF1JVCWB5RJDf6Rf8b+ZcWfN45blWtFqy0lxEgrv0RqxFDeLfDw
-         laCQYlyL5yey5+LsgpLIHzeNy5xx7nCnIa5KMdE451g9wJpOmkDhObP+tXVHCPHrmCyn
-         aigAOHqPV6Wku26Xf4AKZ/Lcb6mYfadhveieJ3oA3kn+nYYhnMhoFHaZcvz87nO4i15v
-         PHDQ==
+        bh=X8qy9kZJ9vS/40HWYigFrcHUynaDvE5wR9i1xbTW0Jw=;
+        b=GGtcvzL6Qn6FhFq3yHfF2H1/dmXhbfkVYvQgj7L0ZqY3Z12N9L9krHAalbqEO1beul
+         /Q0pYJKfHUKR5axQ8/w+ucAn/+6ccGEqDUYkLde/0BVdfPN9GFxtNcJRaxv9saL/Ujne
+         UDvDOjdgduZCp3AwvTyKDM0Gy9RF4hZTRfzRs3AYCl9fOBW15017uNnDtp97n3ANjZL1
+         j/HUY0LHy983/Pb5KU3lW8mgWPIVVtlbGAtiJk7F3Wqumn5T9gazhZp8Rfw61DHJ+1nk
+         4S/fOniAOLwXKP3O17XRO7YYAo/Jf7xa4//9uLx2n72GQkvOW7PApj5UuQtc5sx0+3h1
+         oWlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744791724; x=1745396524;
+        d=1e100.net; s=20230601; t=1744791728; x=1745396528;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=hz3xMnjSXc8Vbo6UN6ksVtAm9/A6drzyntoCMibD+UY=;
-        b=NdsCz4LF7KR/nQa3hKbqhrhwAL4M618ZBLW5PEdLHAgfharITNSyoxZ+oERcGxYMIL
-         b5mKAaOJyLPDgKfloB5imigGw7a+7oe3YmW/4vL6yBVmS4MJmw6c09U+b+Mo4IVzkcj9
-         Q+ogqxy5vdUNKh5UNlZCTzbDuVSX25ombnGqpT2GgDrkhhlCNiLnrje75Ufz12Y0WE8x
-         kPhQQOWtSey86Rp3tKPRbO5YiP/wRfl/p+0RkCMnkdnGqGTwaEAaFpKpPfeTJWMu6EYb
-         SNd1UdD2o8/tKPj7l9oqs3DsYy5wToQqDh2lEPy61ZOvuGYFrYG2TBjn7JWsd18FrvTM
-         1RiQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUBoKtEYnFJpmTokmkVXjb/cLDWetPHgxL1qnA427X1xMKrS1ZBIg0eHtNJ7gH5ckLAX471fF9IJgr6@vger.kernel.org, AJvYcCUo9AYkFMlAO4qLgqlJEoMOT/2lnnFMg++SAGKUBpKvJ0b63Ou2IK6Ig/z3vtBi4Tukz2/U71liofOt@vger.kernel.org, AJvYcCUqyDFIoGCQZcLB2lsk0e/YdqcmvBVJJxX5KfYRqfaewaIq8zbdtS1/xLwIsu/Z00QOXzkN9WXT@vger.kernel.org, AJvYcCUtfyBilEDmo7ZFCWWfneKdwz0bmTl2Om4ejtvZb7CSMz8+xuqJABOXPKsKPHgh/8niQ4tGrzYzdUUIOwkz@vger.kernel.org, AJvYcCVkci/17Jls8b/MDK0SBy/AfNVLPxD7DkgDYLbnHbTUwWQsGKeN6e71s6LHmyzW+RYy52KNbAvy9k69@vger.kernel.org, AJvYcCWq4ooCqp8lfQztRXVUqf3VYbP0J5KaNf2AWxeTQ9cD6LId/JY7NaCdUnSwk6Vw9dV1Q20J7FuycxYt@vger.kernel.org
-X-Gm-Message-State: AOJu0YxHXe95a9Jc6cvwf+y9AAuSxMeUMuFyBQdOK2pM79dCm80jEejo
-	29MuiiM117bUP1mbF5IHF3kB0LNCIYXJUPx8E9k2XhyGpPAXhnN8
-X-Gm-Gg: ASbGncvL7R09QC7cORMtlCpkdZzdJ4SZmaFqbFMproYIKA0FvGI1dTz51lezVTFV307
-	c48nd+ZCEZ5KuikMvTp7bIgIGdFKJk6HHzQnp6JYSJfm5Bvfqr98LNoKuF2QB22JIXCWxoglH5p
-	IqOgZYPCu+BIfCkccMu5+gVsVQtRmssMq5x6Yo2zf8YtMMF0v946SZua2Fa+a1y+pQMSQteyFYM
-	ZJEYazOJqmB33Sv66yDqjHjWjynXLAR3vUre4V79vj7N5WKCFBx8PMB+DJOE73pyXVoimINzqLs
-	K4Yq86ynrNm8ksxVHjDtjIHLe0he2h4aZpUL0xiXVx5IeTLCdx+w
-X-Google-Smtp-Source: AGHT+IEuJuLfFCt+9GyN1idWy06ZmoWNGkSGMSxNf750gdW+sq3Ker5OqE2naLWKfRaLvI2raaZoxQ==
-X-Received: by 2002:a05:6512:1041:b0:54c:a49:d3e4 with SMTP id 2adb3069b0e04-54d64a7b65cmr279874e87.9.1744791723651;
-        Wed, 16 Apr 2025 01:22:03 -0700 (PDT)
+        bh=X8qy9kZJ9vS/40HWYigFrcHUynaDvE5wR9i1xbTW0Jw=;
+        b=oWzRNPGz2KT0E0O/owIrxErKLlUrv0ZXuTwdTyRsBT2HuAQh6gNgJLoAwzGAFKook/
+         XuK5kM/JLQmjL+cfksD4GIVyMw8gwlrG7tYpSlksq2GnEw9WyETPDtxYBbvXc+dbS1wo
+         VNHUK3fw3NwD7L+rpSakKQULpM6ii4J1axEFey/jmfDMXVBgRMTOIDEMYqWEprvX3L1w
+         OV5ZoHtC1HrevyXmMTqZaBfmRE1J/EBwb4oiH2PuMwuBNQVWtZDkFe6Ig80MQMuPLxbt
+         4WfxM7vMV04mvXN40nIxV9dKQZwCBIJGT8SUCZmvwg6hIComt+FT7f6CCwRJMjGCDGVA
+         xUSA==
+X-Forwarded-Encrypted: i=1; AJvYcCU1M6+HR31VJth7XtUKiU6W83UoOS2SHKu3ZMgLSP2tJpzlyib8mgoqif1Icjzn3B7TQtSQoT5OI1G7@vger.kernel.org, AJvYcCUSLr+qR6kQtYHgSO/IcmrIXsCyYScVOAR0ZiRGIsjDQqz4KxTUS2GyT0jqXhGVMaOle63ib9bd@vger.kernel.org, AJvYcCUpJtbtsx5sKPl8mxURI80h6sQaOxvB2xsqO6LvETko5HFyXUTo1mVhFqRFmY9X/aa9PWAxHA3wu+KWRrf2@vger.kernel.org, AJvYcCVdCh5OAwlE50FHIirpf9TsF06qX6nFzbNll/M3JVBhG2pA+jZuWZpaAGknpR92XAOQw9RBxd0zUguz@vger.kernel.org, AJvYcCWDNKmQpqacP/+sIlXewVu++jAMRKHzROJaux2JSN62iqlxLzUu5eaiLWJxysmMfvl6rUfvWuD1FjZ3@vger.kernel.org, AJvYcCXP7I7WxVNOq9MyYiphbelDPBN4dqnVltJeGtSJweOvgjEBKPPwIYpZqXbGkwRyoRRn6t3PnfulRi2G@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz1CERLGudJ/75UlWmmwrCFKaI10SJ4Pefuqj77axExn0tOGmxT
+	DAuomHXlLvSFoICIBDaBT/gD1tElgoEH5j2rHSUZx5B7q5zLTpg+
+X-Gm-Gg: ASbGncvTJ7rXaSjJ+1g/y5/WDhFiQFYYufxD+VHoLAfjKiC275y9PDvmkH8HcTW18F7
+	QX4kh6vlwjfvF0w1cS1df2aNgRlsNK6Pjx/DWNYzXbrFqOEQ8o7ypICmrnxXZUnT5ZlcRSHuPE3
+	Kq3lDknX9RjE3WwiefCo1mthfF3iTQ6JJxMU93RGs2vNPduZu1fjg8/+1KcssPisc5yXddQHBq0
+	1t4aAtK8ge7DKRqBVtfSS7qN8fqGxKdPk+vfp3fFYSFzF9a3fal3IQqkj8jzub3RD8UiEvQ/A1e
+	jUCP+t4ymQ453N++EdRwW+lxMKGtZjHhnk/x0P7EXGt1QZyDVJm8
+X-Google-Smtp-Source: AGHT+IGwzEZB6Wbmx5s+djW77Fr70WX50lyYPxCuVy7xrw+kB3xOzYK/2x15WkC714ccSbYnStizXQ==
+X-Received: by 2002:a2e:9a0b:0:b0:30b:a20b:6667 with SMTP id 38308e7fff4ca-3107f6c05aamr3727991fa.9.1744791728015;
+        Wed, 16 Apr 2025 01:22:08 -0700 (PDT)
 Received: from NB-GIGA003.letovo.school ([5.194.95.139])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-30f465f7b20sm23025391fa.97.2025.04.16.01.21.59
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-30f465f7b20sm23025391fa.97.2025.04.16.01.22.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Apr 2025 01:22:03 -0700 (PDT)
+        Wed, 16 Apr 2025 01:22:07 -0700 (PDT)
 From: Alexey Charkov <alchark@gmail.com>
-Date: Wed, 16 Apr 2025 12:21:28 +0400
-Subject: [PATCH 03/13] dt-bindings: mmc: vt8500-sdmmc: Convert to YAML
+Date: Wed, 16 Apr 2025 12:21:29 +0400
+Subject: [PATCH 04/13] dt-bindings: net: via-rhine: Convert to YAML
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -83,7 +83,7 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250416-wmt-updates-v1-3-f9af689cdfc2@gmail.com>
+Message-Id: <20250416-wmt-updates-v1-4-f9af689cdfc2@gmail.com>
 References: <20250416-wmt-updates-v1-0-f9af689cdfc2@gmail.com>
 In-Reply-To: <20250416-wmt-updates-v1-0-f9af689cdfc2@gmail.com>
 To: Krzysztof Kozlowski <krzk@kernel.org>, 
@@ -100,130 +100,104 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
  linux-mmc@vger.kernel.org, netdev@vger.kernel.org, 
  linux-pwm@vger.kernel.org, Alexey Charkov <alchark@gmail.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1744791712; l=3702;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1744791712; l=3176;
  i=alchark@gmail.com; s=20250416; h=from:subject:message-id;
- bh=GDEv30ykcwNrp+ITbOwo9y2a8t6U4fArDqmF8aS5Xdk=;
- b=GCpdFEkoTHE9ybEwUmMP3zyIuVwotvOJHUhwhdPuS+K23AdgM+TEtrCEsV9kNiqMrLEc7Go9c
- pPuHSamLO18BrZxR9rp9FI8e2Nx/MOHbD9zNhPB3twsFUREVO16jeWc
+ bh=dcxoptYL9HCbCFT2aZUHR8rimZgrebZryeu0MSpFEqQ=;
+ b=bKiVZ4hj2U8YtTwvKXSFiS4NkhtwWoP+P9aKp8A/9LH8ZAT7I4eZiFe/vANxcE9TXeY64CXXo
+ 8oxCvDfslRACOPN9zaJsiJo8fsniCDH3sTpfUx2IYeNPt39dHTsV8z+
 X-Developer-Key: i=alchark@gmail.com; a=ed25519;
  pk=ltKbQzKLTJPiDgPtcHxdo+dzFthCCMtC3V9qf7+0rkc=
 
-Rewrite the textual description for the WonderMedia SDMMC controller
-as YAML schema, and switch the filename to follow the compatible
-string.
+Rewrite the textual description for the VIA Rhine platform Ethernet
+controller as YAML schema, and switch the filename to follow the
+compatible string. These are used in several VIA/WonderMedia SoCs
 
 Signed-off-by: Alexey Charkov <alchark@gmail.com>
 ---
- .../devicetree/bindings/mmc/vt8500-sdmmc.txt       | 23 --------
- .../devicetree/bindings/mmc/wm,wm8505-sdhc.yaml    | 61 ++++++++++++++++++++++
+ .../devicetree/bindings/net/via,vt8500-rhine.yaml  | 41 ++++++++++++++++++++++
+ .../devicetree/bindings/net/via-rhine.txt          | 17 ---------
  MAINTAINERS                                        |  1 +
- 3 files changed, 62 insertions(+), 23 deletions(-)
+ 3 files changed, 42 insertions(+), 17 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/mmc/vt8500-sdmmc.txt b/Documentation/devicetree/bindings/mmc/vt8500-sdmmc.txt
-deleted file mode 100644
-index d7fb6abb3eb8c87e698ca4f30270c949878f3cbf..0000000000000000000000000000000000000000
---- a/Documentation/devicetree/bindings/mmc/vt8500-sdmmc.txt
-+++ /dev/null
-@@ -1,23 +0,0 @@
--* Wondermedia WM8505/WM8650 SD/MMC Host Controller
--
--This file documents differences between the core properties described
--by mmc.txt and the properties used by the wmt-sdmmc driver.
--
--Required properties:
--- compatible: Should be "wm,wm8505-sdhc".
--- interrupts: Two interrupts are required - regular irq and dma irq.
--
--Optional properties:
--- sdon-inverted: SD_ON bit is inverted on the controller
--
--Examples:
--
--sdhc@d800a000 {
--	compatible = "wm,wm8505-sdhc";
--	reg = <0xd800a000 0x1000>;
--	interrupts = <20 21>;
--	clocks = <&sdhc>;
--	bus-width = <4>;
--	sdon-inverted;
--};
--
-diff --git a/Documentation/devicetree/bindings/mmc/wm,wm8505-sdhc.yaml b/Documentation/devicetree/bindings/mmc/wm,wm8505-sdhc.yaml
+diff --git a/Documentation/devicetree/bindings/net/via,vt8500-rhine.yaml b/Documentation/devicetree/bindings/net/via,vt8500-rhine.yaml
 new file mode 100644
-index 0000000000000000000000000000000000000000..a7d962bc13c7ff70b50448201b0416efc7f787af
+index 0000000000000000000000000000000000000000..e663d5a2f014788481dfa0c612c261eb6adb6423
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/mmc/wm,wm8505-sdhc.yaml
-@@ -0,0 +1,61 @@
++++ b/Documentation/devicetree/bindings/net/via,vt8500-rhine.yaml
+@@ -0,0 +1,41 @@
 +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/mmc/wm,wm8505-sdhc.yaml#
++$id: http://devicetree.org/schemas/net/via,vt8500-rhine.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: WonderMedia SOC SoC SDHCI Controller
++title: VIA Rhine 10/100 Network Controller
++
++description:
++  VIA's Ethernet controller integrated into VIA VT8500,
++  WonderMedia WM8950 and related SoCs
 +
 +maintainers:
 +  - Alexey Charkov <alchark@gmail.com>
 +
 +allOf:
-+  - $ref: mmc-controller.yaml#
++  - $ref: ethernet-controller.yaml#
 +
 +properties:
 +  compatible:
-+    oneOf:
-+      - const: wm,wm8505-sdhc
-+      - items:
-+          - const: wm,wm8650-sdhc
-+          - const: wm,wm8505-sdhc
-+      - items:
-+          - const: wm,wm8750-sdhc
-+          - const: wm,wm8505-sdhc
-+      - items:
-+          - const: wm,wm8850-sdhc
-+          - const: wm,wm8505-sdhc
++    const: via,vt8500-rhine
 +
 +  reg:
 +    maxItems: 1
 +
-+  clocks:
++  interrupts:
 +    maxItems: 1
 +
-+  interrupts:
-+    items:
-+      - description: SDMMC controller interrupt
-+      - description: SDMMC controller DMA interrupt
-+
-+  sdon-inverted:
-+    type: boolean
-+    description: SD_ON bit is inverted on the controller
-+
 +required:
-+  - compatible
 +  - reg
 +  - interrupts
-+  - clocks
 +
 +unevaluatedProperties: false
 +
 +examples:
 +  - |
-+    mmc@d800a000 {
-+        compatible = "wm,wm8505-sdhc";
-+        reg = <0xd800a000 0x1000>;
-+        interrupts = <20>, <21>;
-+        clocks = <&sdhc>;
-+        bus-width = <4>;
-+        sdon-inverted;
++    ethernet@d8004000 {
++        compatible = "via,vt8500-rhine";
++        reg = <0xd8004000 0x100>;
++        interrupts = <10>;
 +    };
+diff --git a/Documentation/devicetree/bindings/net/via-rhine.txt b/Documentation/devicetree/bindings/net/via-rhine.txt
+deleted file mode 100644
+index 334eca2bf937cc4a383be87f952ed7b5acbbeb59..0000000000000000000000000000000000000000
+--- a/Documentation/devicetree/bindings/net/via-rhine.txt
++++ /dev/null
+@@ -1,17 +0,0 @@
+-* VIA Rhine 10/100 Network Controller
+-
+-Required properties:
+-- compatible : Should be "via,vt8500-rhine" for integrated
+-	Rhine controllers found in VIA VT8500, WonderMedia WM8950
+-	and similar. These are listed as 1106:3106 rev. 0x84 on the
+-	virtual PCI bus under vendor-provided kernels
+-- reg : Address and length of the io space
+-- interrupts : Should contain the controller interrupt line
+-
+-Examples:
+-
+-ethernet@d8004000 {
+-	compatible = "via,vt8500-rhine";
+-	reg = <0xd8004000 0x100>;
+-	interrupts = <10>;
+-};
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 2444282096e03b301ed0e3209b4de7a114709764..f106850b9d3d349d82953b672588b967a37ea27b 100644
+index f106850b9d3d349d82953b672588b967a37ea27b..001dc954fb44cc9b26570d663ea3bf9214c2deff 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -3429,6 +3429,7 @@ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
- S:	Odd Fixes
+@@ -3430,6 +3430,7 @@ S:	Odd Fixes
  F:	Documentation/devicetree/bindings/i2c/wm,wm8505-i2c.yaml
  F:	Documentation/devicetree/bindings/interrupt-controller/via,vt8500-intc.yaml
-+F:	Documentation/devicetree/bindings/mmc/wm,wm8505-sdhc.yaml
+ F:	Documentation/devicetree/bindings/mmc/wm,wm8505-sdhc.yaml
++F:	Documentation/devicetree/bindings/net/via,vt8500-rhine.yaml
  F:	arch/arm/boot/dts/vt8500/
  F:	arch/arm/mach-vt8500/
  F:	drivers/clocksource/timer-vt8500.c
