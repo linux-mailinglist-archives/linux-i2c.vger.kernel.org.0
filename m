@@ -1,80 +1,81 @@
-Return-Path: <linux-i2c+bounces-10410-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10411-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 451B6A8B3AE
-	for <lists+linux-i2c@lfdr.de>; Wed, 16 Apr 2025 10:26:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 38C43A8B3B1
+	for <lists+linux-i2c@lfdr.de>; Wed, 16 Apr 2025 10:27:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 28A965A3413
-	for <lists+linux-i2c@lfdr.de>; Wed, 16 Apr 2025 08:25:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 871045A4EDA
+	for <lists+linux-i2c@lfdr.de>; Wed, 16 Apr 2025 08:25:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C8A423A980;
-	Wed, 16 Apr 2025 08:22:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3A8D23BCE0;
+	Wed, 16 Apr 2025 08:22:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AvJngSQh"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MqgxexMr"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 327F923956E;
-	Wed, 16 Apr 2025 08:22:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F59222B8CC;
+	Wed, 16 Apr 2025 08:22:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744791758; cv=none; b=uqnTzXSMXbM2JKe0hXO/YIxc3ebklOyeEdLoe50f8b5kkBI5JAxv0K15BizbI2lyVdG97XUgo4mkAqDRK/HDIoKMv9BFLbjk7ZZ9Q8VTQZxSf8vhTnScGdWYSiuSwSk7kTaQtzbBvClNMHEPAeNznL4pznsDrnrEnBDOp90Eq00=
+	t=1744791762; cv=none; b=tBpmxDn4BoAq3/14hNKy/pdYrbvkHMhucQv7Y+jeqAvj6Zy2Wjc98lDW8QYJ/ICyK86eMCWMXbFCF9Tqw+EqJrHcqRzPJovYyQVHIFPUxWp2ZKC+KXuZ5RanJlc+HAZG4PUi1lSweafFQ0+kcPU9tjs3NOD2+gIYkHi+yEvtuxI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744791758; c=relaxed/simple;
-	bh=sXBBymomR0aMqR41BnxGJR23ORnc03EabD898mjy8I0=;
+	s=arc-20240116; t=1744791762; c=relaxed/simple;
+	bh=FAOknd5/teloNUV93bWzTFvFaFt+Ny9oXh5ASvg22yU=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=HJaHXrsxaLvKPvxYrZ4byt8wELfv7XbTINMwxToERNBMHKztK8W9dglnvnewMn8B2H0fjGukUXMTpTgWeEseWxxpbKJg3VWauBHcjo7TCiJRM/G7bCZS3w8oV84VjfszKdm+uWH097FmhfdIXAP8WZWH+yZgF5IAI+ZFyu8c3sw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AvJngSQh; arc=none smtp.client-ip=209.85.167.48
+	 In-Reply-To:To:Cc; b=bKPu1Ps7MGwwnulRM15cyYbSXzxYM+x7M57wHOPZ7ygyAzkZJVCgX7oMbrX/41Jnfw0ith5gvy/AlYHYwq7WuQ9ZsBGp3cHYVE7KzpCuAy5Iwzb78GBgl2jska9mMRgeheeWHVw5Mv4+QBTXfXp1diNqgKz9Wa++tj4GmgOwe34=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MqgxexMr; arc=none smtp.client-ip=209.85.167.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-54d65cb6e8aso50235e87.1;
-        Wed, 16 Apr 2025 01:22:35 -0700 (PDT)
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-54af20849bbso7999037e87.0;
+        Wed, 16 Apr 2025 01:22:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744791754; x=1745396554; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1744791759; x=1745396559; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=2St31bPcYlMznkhjWLvtUzdzjZa/jmylV06mo55Op4g=;
-        b=AvJngSQhkVXD+rC+TGw3sJ84aogjDUx5fzrnTHztvZkTbJbbv7lr/59x/VrIEPLVdx
-         FPG0M50X8jTSaNVCXesJeUwn/ufjapVhSib5ZoFqe8Ayktpp0G9pwMXQdIrc5GT0O2is
-         uGHy5H8DJTS4gzVqUcocooR+cEev9PjnrJZfHXZiJ/S+Yh578nfrgvL3a2Zk4gPm5byW
-         byGTNjoXUCNyNC4TBNhZTlgRiTsHornCQb5q0nAGb0vMqvnDeZGiZaS3C2F/EsiMpYc4
-         Qq0JkxlaPuOCtJvvl3qBvQZkhIRyD3RASjgXBtWHptYgpEgx3ukwJWCSuI4n58Pjewh5
-         Cd4Q==
+        bh=rN3T808R3XeniltkqTvP/grwdD/ekkru3ZTmvy+YPmo=;
+        b=MqgxexMrsi0oTqAbd9bBqCBvfBqPYvqM2j6EsRjTjI/Je/fpr0W+6f5JqxAOkjL9ys
+         nb3mcn+waED+SimAoW8zkO7ddz/HTaBd1TzeJriz+bKiD/yLwypnznp4OobJbMDudqgZ
+         AERcIVtG/2DIPAk+cj4Aq90OH4LJ889E90KIC11qxIQPCjS4OrsuJqC4fhV8LGTZ6WM4
+         WMj8l785CsBTdDNe8+44Pw7zkq7a9FSHY6uYQY4eHWie8QiJF6Zu/SFhivf1RO9zB7x4
+         TFWdz4e/0jJoroxgaOrtA9Ek5mO/NDmmqvGycS4xKQQolYwlSnuMc8ehAb9H7Aj58tM1
+         VilQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744791754; x=1745396554;
+        d=1e100.net; s=20230601; t=1744791759; x=1745396559;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2St31bPcYlMznkhjWLvtUzdzjZa/jmylV06mo55Op4g=;
-        b=XpAEMxeOKP2T72u3snAHcxoGzwpRmZUN7SpqwWP59OiD0We52zmtLRxQH025ezbNuh
-         qg9krKl/H7MZS7U/efn3WmxpN2/yvteMF2PX1qAXNIghzbMdjX7rNWRBrWWNgvWZ0uVy
-         2Vtops4iuI6f5NoJVHipf3353xKIuxMoZeLXcgOD3OUguKZ0UmIvWLvrfXKymw8Z+15r
-         Mj2+8RXJZp7oEb5LkJ3LdsflCifwIS1J47kU+Lg6jRDYbHAjaOK08VAX4bHYo78eDfD9
-         ALxMS40pmLnQv3QzXN+ROvagnMqR4ZbcwvQgVW6INRmfDPpKwMw97VkA/HdrvkPtts3o
-         eImw==
-X-Forwarded-Encrypted: i=1; AJvYcCU5qJxNGR7hGgdZjQjxrseYP5OstndHbo5dREhddQEDrHiiAANmRqK0nB5pI2kfPkVkysiyYd1+@vger.kernel.org, AJvYcCUnLwNoaU4Zx7WKnFLS+kOeIjFe5Qt3Vb7b8co7wdlFNEApx6W/FbCKu0YUShf/DMeP2Nl3YhJSVwtq@vger.kernel.org, AJvYcCViXJa8cWqy0z/gtYG6G6vWXkEx2pRoe2S91lvWA/R2G3AYDbbjROb+sPCIVtKrGI68aa5R70cEodgxHutW@vger.kernel.org, AJvYcCVwp/d12fFBSyDEK0TjNoJTaBF8w2eZQhJbXynkHLAsHqw/YYB9KLY6R2t7Jr3SpUZD0RySWBE5Lwg9@vger.kernel.org, AJvYcCVzZz+pqHocjAXJ4y5+3b3DaTbVQ/qJSHnLHrb6C5wXsedCSkm4hVNHFqVgIcTYGdMYgB5bSUjl3VVc@vger.kernel.org, AJvYcCXaav/Vg3C6MoGZSusA/RVdmVyFB89ZIQQiC2tuKIVWIecdnk363xaXFBSh0b1KouSh7kwtr6MjWQhu@vger.kernel.org
-X-Gm-Message-State: AOJu0YxbH/IBYl/Z40/GtfzlOCK3RlquUlMzYHS9wCLoqx9au92vdYQn
-	RULkL949uG8UFV2BZ0xFRD9yHjywdFOjPl4bKLLpseedoJ9M00ai
-X-Gm-Gg: ASbGncuW4ASEnNl8HT9OEIKWX627T+r4LfVsp2AxiGrV2357v3UzQdgeqIHtgI+B3pI
-	cttLNBOeb0k3FileSixcw20H3h6V1Qe327Utd58jzGMWuvNNt/WCAjlTrCX5XBSSUBnpS8hWPFk
-	zxK78WMjcChqpzJGI6vrx0V/VHLUdi3PxiS+EMRUFEaBHGV2viP9tAj0cMZ+sEd9E/4SQMoUKrV
-	HHWWnnJKz7+YDQFNPXO45ce0JuQiXuMNNJv/eendvjKensENqsCe3LHCmcT/I9uPsHs8qSCJF7R
-	CTwXG0H/cU5hAOz4vLzSVSbc7Y74bhAjnkqteji9JbnGnIfT8TltZQH5Lsu0UOU=
-X-Google-Smtp-Source: AGHT+IFb5qX0XvmZ5ZsVgPWiDomLFb6aepfbcplxh8QI9Sk/uDZL++otj+xKzMeCKeaOxLywh0T8Vw==
-X-Received: by 2002:a05:6512:118a:b0:54c:348d:19b7 with SMTP id 2adb3069b0e04-54d64af007dmr288077e87.46.1744791754143;
-        Wed, 16 Apr 2025 01:22:34 -0700 (PDT)
+        bh=rN3T808R3XeniltkqTvP/grwdD/ekkru3ZTmvy+YPmo=;
+        b=RGSnm746aaJEpMkna4Xz4G5hZk7RI740d3ulcJRg1OAaEmrWyIcq+zHEF+KCs8q/Q5
+         S7WoG+eOFWMnKuSCO0KaO7WP5Q7QJbTkr+CFYwaBkiStQ+WrWNG5kmOFybi0lMgezIgF
+         bejI716n02sI2l3jm9KYw8oyFdxDU1z5ckijci7CkxVwJaKWELC4Bpx9qvuABrtkJn00
+         wYXqQe0LedpbgJVOL6uuKOgdcUcn8cBrikXG72DPi1ygwxYW9Y2JB+PwjryYSiokUWNJ
+         wOBAt3d6YG/ckB5Epd5J7UMtbFCLn/m7wFSKr5+pfq53FN2XaACb8ClufnK9R2cs36N3
+         HIrw==
+X-Forwarded-Encrypted: i=1; AJvYcCUPECyvv8yFUnhgyR9Fi1f3L/q9u4dnDrUlG8b7+s2cH0lMl/Goz0ut48k+e+aZRKx3t6U8jxRn@vger.kernel.org, AJvYcCUYQTRkvJOOTgp2ORcdEDTawbfZo0OKUiCtabzfnHgsa2tML5Pz0anAfpcWcJ6SvgCFYnpHrpAwjz/o@vger.kernel.org, AJvYcCUqtgpBlQx3lljvE/c2ZoWWAyERPv/Scj0gKrZxX6hSC33R5+Uw+Fk63RIwF3y59/yxhhx7evVne2lH@vger.kernel.org, AJvYcCVtYb9uzRxJPYPbnxhQZA4bErjrYOuBXINupf8Sx44I/qC6RUBWKIzX6AQ01Zug8MbSpVlE3ZpzcHJ7@vger.kernel.org, AJvYcCWw44yg4BN/rfQpf+rBRohA/jm9+FaePpM8U7gUJfxvKnQMt6AEt9tQE405PUeKtg86KvxdBg/MYtqv@vger.kernel.org, AJvYcCX2fhmj5PSlq8eNSHyZQmPf/RGv4X3CPGMXyp7Fw2gYIj1n1Bfr3Ty5RnnSrG30HsSmKhbglL+Sr2mvbLWY@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw3wstAq3RbUiMJpMdCoESMgDgv53QeKiScb41RXS2mJ+zvcz2q
+	BxpBMM36xS4Vqu5XNK4IbIfJP1DKVq8RyzuLepbIelYdDtG2gt9a
+X-Gm-Gg: ASbGncuGMaMGF9Xs6MzEJSwntZ9Va/Jow8OjRBHNNgo6obkrA++YAzzQIysmWNocfkF
+	gNcwjxEMRhNEzkO6TQMAMZz5APwT2LkbgLxvEtCdNZZ1MmZl8ptkNETBrLGZeUZsYlvLcs1MEZU
+	lGOm9dXdSAex6Cq2GFndk9XGT5dg1h70I1StI3fzW5dYOcvInbdNhx49jA3NCJnxJf6IIYpDFl9
+	LCID2M815fFMVIW1IR/zNBnkWAqZaSovhH89qqaeuHRq40WLntvhGvHuTj6SH3jQ/1igSqEgwBp
+	mcjYQq26Q4mClteupvre5Abc2J07//8mEPQu6a269rLFMfwGE0uQ
+X-Google-Smtp-Source: AGHT+IHLnzhAfUmS07LQuEAg0BM6zGBKpHgV7Xn52yUhaC1Tl7AKbKAALF0drT2m1wxPOraEhGXkVw==
+X-Received: by 2002:a05:651c:512:b0:308:e54d:61b1 with SMTP id 38308e7fff4ca-3107f73b104mr2702101fa.34.1744791758498;
+        Wed, 16 Apr 2025 01:22:38 -0700 (PDT)
 Received: from NB-GIGA003.letovo.school ([5.194.95.139])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-30f465f7b20sm23025391fa.97.2025.04.16.01.22.30
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-30f465f7b20sm23025391fa.97.2025.04.16.01.22.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Apr 2025 01:22:33 -0700 (PDT)
+        Wed, 16 Apr 2025 01:22:38 -0700 (PDT)
 From: Alexey Charkov <alchark@gmail.com>
-Date: Wed, 16 Apr 2025 12:21:35 +0400
-Subject: [PATCH 10/13] ARM: dts: vt8500: Use generic compatibles for EHCI
+Date: Wed, 16 Apr 2025 12:21:36 +0400
+Subject: [PATCH 11/13] ARM: dts: vt8500: Use generic node name for the
+ SD/MMC controller
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -83,7 +84,7 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250416-wmt-updates-v1-10-f9af689cdfc2@gmail.com>
+Message-Id: <20250416-wmt-updates-v1-11-f9af689cdfc2@gmail.com>
 References: <20250416-wmt-updates-v1-0-f9af689cdfc2@gmail.com>
 In-Reply-To: <20250416-wmt-updates-v1-0-f9af689cdfc2@gmail.com>
 To: Krzysztof Kozlowski <krzk@kernel.org>, 
@@ -100,97 +101,76 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
  linux-mmc@vger.kernel.org, netdev@vger.kernel.org, 
  linux-pwm@vger.kernel.org, Alexey Charkov <alchark@gmail.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1744791712; l=3187;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1744791712; l=2298;
  i=alchark@gmail.com; s=20250416; h=from:subject:message-id;
- bh=sXBBymomR0aMqR41BnxGJR23ORnc03EabD898mjy8I0=;
- b=phH1l+ArqkItHllKUYxgujxVUZbixuP6/yDZMbVo9thwv4ACvTy/s4XPnDaRM2uzyQ2ho1VOr
- OXL6RgN4A0pCh6kidlqxTrKQumUKlP/GZBHpsmQSZaHYW1WUQC+iEBE
+ bh=FAOknd5/teloNUV93bWzTFvFaFt+Ny9oXh5ASvg22yU=;
+ b=yNnCqyrdqnzkXsOrIil79eRxohcRBpFCYcHpQzQIW4YbtsecxwKAhq9mOXcV1BEY67kfFvzDN
+ Pp47FfqQTBjDEozLzPnn/iGSaCJh/OvNh0JrDJ/7ki0H9gNvnKNYTiY
 X-Developer-Key: i=alchark@gmail.com; a=ed25519;
  pk=ltKbQzKLTJPiDgPtcHxdo+dzFthCCMtC3V9qf7+0rkc=
 
-VIA/WonderMedia SoCs don't have anything special about their EHCI
-controllers: in fact, vendor provided kernels just use the
-generic PCI driver by emulating a virtual PCI bus with fixed MMIO
-mappings just to bind the existing driver as-is. So switch to the
-generic compatible to save further additions to bindings.
-
-Note that these devices have only ever supported appended-DTB boot,
-so changing the compatible should not affect any existing users.
+Current guidelines recommend mmc@ node names, so use that instead.
 
 Signed-off-by: Alexey Charkov <alchark@gmail.com>
 ---
- arch/arm/boot/dts/vt8500/vt8500.dtsi | 2 +-
  arch/arm/boot/dts/vt8500/wm8505.dtsi | 2 +-
  arch/arm/boot/dts/vt8500/wm8650.dtsi | 2 +-
  arch/arm/boot/dts/vt8500/wm8750.dtsi | 2 +-
  arch/arm/boot/dts/vt8500/wm8850.dtsi | 2 +-
- 5 files changed, 5 insertions(+), 5 deletions(-)
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm/boot/dts/vt8500/vt8500.dtsi b/arch/arm/boot/dts/vt8500/vt8500.dtsi
-index 143daf983d1d926c2c837c43002d1a86cff3866a..b848fc33aa13796c098a511c26b4c2280ff453db 100644
---- a/arch/arm/boot/dts/vt8500/vt8500.dtsi
-+++ b/arch/arm/boot/dts/vt8500/vt8500.dtsi
-@@ -106,7 +106,7 @@ timer@d8130100 {
- 		};
- 
- 		usb@d8007900 {
--			compatible = "via,vt8500-ehci";
-+			compatible = "generic-ehci";
- 			reg = <0xd8007900 0x200>;
- 			interrupts = <43>;
- 		};
 diff --git a/arch/arm/boot/dts/vt8500/wm8505.dtsi b/arch/arm/boot/dts/vt8500/wm8505.dtsi
-index 69d2351a81dbc816efd19ffe3ba5ef80eaa4e9dc..1b9a18f498613d649d4f8bf87ade32d1f7edd9e4 100644
+index 1b9a18f498613d649d4f8bf87ade32d1f7edd9e4..f39632d3f96130dde1696509ddcff4dd8ac177b5 100644
 --- a/arch/arm/boot/dts/vt8500/wm8505.dtsi
 +++ b/arch/arm/boot/dts/vt8500/wm8505.dtsi
-@@ -204,7 +204,7 @@ timer@d8130100 {
+@@ -279,7 +279,7 @@ rtc@d8100000 {
+ 			interrupts = <48>;
  		};
  
- 		usb@d8007100 {
--			compatible = "via,vt8500-ehci";
-+			compatible = "generic-ehci";
- 			reg = <0xd8007100 0x200>;
- 			interrupts = <1>;
- 		};
+-		sdhc@d800a000 {
++		mmc@d800a000 {
+ 			compatible = "wm,wm8505-sdhc";
+ 			reg = <0xd800a000 0x400>;
+ 			interrupts = <20>, <21>;
 diff --git a/arch/arm/boot/dts/vt8500/wm8650.dtsi b/arch/arm/boot/dts/vt8500/wm8650.dtsi
-index deebe9b933876bc1eb188f82ce8c1c17098d04a2..34378a49ec2017fe2771a38033788fd753dee875 100644
+index 34378a49ec2017fe2771a38033788fd753dee875..3990a6b3de96f5fa1f63aeac306fdb252b1509ea 100644
 --- a/arch/arm/boot/dts/vt8500/wm8650.dtsi
 +++ b/arch/arm/boot/dts/vt8500/wm8650.dtsi
-@@ -176,7 +176,7 @@ timer@d8130100 {
- 		};
- 
- 		usb@d8007900 {
--			compatible = "via,vt8500-ehci";
-+			compatible = "generic-ehci";
- 			reg = <0xd8007900 0x200>;
+@@ -187,7 +187,7 @@ usb@d8007b00 {
  			interrupts = <43>;
  		};
+ 
+-		sdhc@d800a000 {
++		mmc@d800a000 {
+ 			compatible = "wm,wm8505-sdhc";
+ 			reg = <0xd800a000 0x400>;
+ 			interrupts = <20>, <21>;
 diff --git a/arch/arm/boot/dts/vt8500/wm8750.dtsi b/arch/arm/boot/dts/vt8500/wm8750.dtsi
-index bde825b59074eb74af4ab296895a3968e992aefe..1b7a02834ac14fcd51389a6a809b5f0960d63312 100644
+index 1b7a02834ac14fcd51389a6a809b5f0960d63312..081bc5bb5a697c849fc6bccde2ce5fb91c110a32 100644
 --- a/arch/arm/boot/dts/vt8500/wm8750.dtsi
 +++ b/arch/arm/boot/dts/vt8500/wm8750.dtsi
-@@ -248,7 +248,7 @@ timer@d8130100 {
+@@ -319,7 +319,7 @@ rtc@d8100000 {
+ 			interrupts = <48>;
  		};
  
- 		usb@d8007900 {
--			compatible = "via,vt8500-ehci";
-+			compatible = "generic-ehci";
- 			reg = <0xd8007900 0x200>;
- 			interrupts = <26>;
- 		};
+-		sdhc@d800a000 {
++		mmc@d800a000 {
+ 			compatible = "wm,wm8505-sdhc";
+ 			reg = <0xd800a000 0x1000>;
+ 			interrupts = <20 21>;
 diff --git a/arch/arm/boot/dts/vt8500/wm8850.dtsi b/arch/arm/boot/dts/vt8500/wm8850.dtsi
-index e8385c03e04bf5644c86a85aeb41e1cc1eedb202..76337244a8e051732e9ce3432eee36ccca9ed463 100644
+index 76337244a8e051732e9ce3432eee36ccca9ed463..55de8d439688c5710d1e9a37890bbd274895be42 100644
 --- a/arch/arm/boot/dts/vt8500/wm8850.dtsi
 +++ b/arch/arm/boot/dts/vt8500/wm8850.dtsi
-@@ -234,7 +234,7 @@ timer@d8130100 {
+@@ -289,7 +289,7 @@ rtc@d8100000 {
+ 			interrupts = <48>;
  		};
  
- 		usb@d8007900 {
--			compatible = "via,vt8500-ehci";
-+			compatible = "generic-ehci";
- 			reg = <0xd8007900 0x200>;
- 			interrupts = <26>;
- 		};
+-		sdhc@d800a000 {
++		mmc@d800a000 {
+ 			compatible = "wm,wm8505-sdhc";
+ 			reg = <0xd800a000 0x1000>;
+ 			interrupts = <20 21>;
 
 -- 
 2.49.0
