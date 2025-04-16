@@ -1,133 +1,173 @@
-Return-Path: <linux-i2c+bounces-10399-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10400-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ADF33A8B2CF
-	for <lists+linux-i2c@lfdr.de>; Wed, 16 Apr 2025 09:58:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F805A8B35D
+	for <lists+linux-i2c@lfdr.de>; Wed, 16 Apr 2025 10:22:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 20DDC3B3755
-	for <lists+linux-i2c@lfdr.de>; Wed, 16 Apr 2025 07:58:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E45663AACA9
+	for <lists+linux-i2c@lfdr.de>; Wed, 16 Apr 2025 08:21:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEDDF22DFBF;
-	Wed, 16 Apr 2025 07:58:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB99B22D7BC;
+	Wed, 16 Apr 2025 08:21:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AxUdxyRr"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YHJEPI2j"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79A9521D3F4;
-	Wed, 16 Apr 2025 07:58:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2726158520;
+	Wed, 16 Apr 2025 08:21:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744790307; cv=none; b=qbJhPdVk02EZwzmmM3hYzS/BHMMwlswNy6vqeHdIuxzKo6HVG4VEdp2vHEsAiXG1TY0w5uOtLVR5WSYO9xJgZXGVIuc+cAMHTisfGW3ipRkaO4grsTsLynt19fuC5CwCOYPG8CjwZy+wA1tHh5J5Pzn1kcY+yER2aKSQG7ILmKs=
+	t=1744791715; cv=none; b=u9KoRSzIB3r8tnMb6BrbkDUNR1GcMU3sAuoZSJ7FWJDJDfGRkE2/YSKNSurE5o8N6AaCY57rK9KYWRnGRfFtJxnnAJX+q4LqjxCV1zGOsWHK1V40emzquo16hzpcN7tJ6sG49mWg4zbkzBmzUiKY2I39OYrMqW//PonWq6ktu68=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744790307; c=relaxed/simple;
-	bh=g8YPW39hxmx5YvNcbfIuiJT1dut85FSOVUEZdSWmv5Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IOLKeqrpDzfRGLEaUfa7pRQDRUHVh4e6ca65wwn+Rfr2bTD1i1nROlxWAkXBVMZ0tRGslxODsvw2OfbdkHm+iRrlR6Vav/8ZXAg0gEzjG/LlwL2LLi9pwp5YKnwl5A0i26MB/nIPSqmHksSBRyT7B1Yq4NIjE63lHjzcgawQVEU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AxUdxyRr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FA2DC4CEE2;
-	Wed, 16 Apr 2025 07:58:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744790306;
-	bh=g8YPW39hxmx5YvNcbfIuiJT1dut85FSOVUEZdSWmv5Q=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AxUdxyRr+0hwSePWXRQg5uJqs1WDb20uf76494nsnCj+SUjMJiZ7ntGelXhOqX0TJ
-	 cHHuJ+LrlQVB7xPfdqMD+LhYExgPondKE7L+fn3oJXQfUJUq0rRJ95WxSmQ5W1f0Cw
-	 OxZ2PFpK6WqXaUHfz94IKBCUCt5FOWv366Wba2ALriB1H/bdwapOhX076N9hCD+iab
-	 i2jMditYsnNLPgxXvH3u32wZXdtIDIjq+EUUt0eQR3t5hnJLQ+pZ0z2TjvVs6VSx70
-	 ZQgy4w3bszc0ZbepNphCNR9JwUh8VvKZZQPPcq0gJuyx61jSVxUbFOr/4oWyWii0yf
-	 tn9AWX93yb+yQ==
-Date: Wed, 16 Apr 2025 09:58:20 +0200
-From: Ingo Molnar <mingo@kernel.org>
-To: Yazen Ghannam <yazen.ghannam@amd.com>
-Cc: Mario Limonciello <superm1@kernel.org>, Borislav Petkov <bp@alien8.de>,
-	Jean Delvare <jdelvare@suse.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-	"H . Peter Anvin" <hpa@zytor.com>,
-	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-	Hans de Goede <hdegoede@redhat.com>,
-	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:I2C/SMBUS CONTROLLER DRIVERS FOR PC" <linux-i2c@vger.kernel.org>,
-	"open list:AMD PMC DRIVER" <platform-driver-x86@vger.kernel.org>
-Subject: Re: [PATCH v4 4/5] platform/x86/amd: pmc: use FCH_PM_BASE definition
-Message-ID: <Z_9jHCpbTciJ8d2_@gmail.com>
-References: <20250415002658.1320419-1-superm1@kernel.org>
- <20250415002658.1320419-5-superm1@kernel.org>
- <20250415151326.GA624550@yaz-khff2.amd.com>
+	s=arc-20240116; t=1744791715; c=relaxed/simple;
+	bh=VWW+FjoSMr2BVYRu/X2g0WXpS/3nXWF7DuGik59WEqM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=hUDJBfAw3GilSrFZ8GT73Q5cf0LoF1p8Q8hHK8Yxb9+upJ1LSxCE8jYERgd6ohY44Xb4pfLEZzqvqkOhcim/cNVkw74Q8lRcnn6rhr5FavymNdgtZX3BtV9wJ3ypHOsv10pOrz4uuy7ZojaG6Q2aXdgZeDbF/uy5kw0dW5ZVeFs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YHJEPI2j; arc=none smtp.client-ip=209.85.208.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-3105ef2a06cso34213671fa.2;
+        Wed, 16 Apr 2025 01:21:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1744791711; x=1745396511; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=kSn8ywScBr2S49CSRan+oKzZUY5sWQo+CXS/MBhnnS8=;
+        b=YHJEPI2jpEGnXGKs3WKdJVTs9+qUCkJ+DeUJbJR71TRFQbTTiP/myzYk3wqINlXZeT
+         YhoF5rUeIyqYMbrr4MfUp+16qTU6EBYxVnRhlF/Ts3np3DI2/b17n/IaYOPZcrDT4t+L
+         Mz9i4sV0RJuCtsKLBVeS2ocxoONyrfV1GhRgrWoTd5p5mvV0WWgyGlZS2JYjZequoKeE
+         7qXsVLrl+ZTFwI6QofHHcK7+W0hmCDouL63K/Yh7k7SNpX1F8UP800YBHnARV1HKsXIb
+         G6INo7F3G5kDZhyw3Emfa0IFE4rEqc0ctztSCJ7Jv+2/ZwmLSeVsL7UIlsZbzaOW+eZy
+         bPpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744791711; x=1745396511;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kSn8ywScBr2S49CSRan+oKzZUY5sWQo+CXS/MBhnnS8=;
+        b=OEwAp4uq4eCv5qL2fwgWE4x63mnHTzNzRnrH77C8gRflDLst4Emxto8Mi3mMdaoVBV
+         66nmzTwGKhsmccmdPJtDSj544ruI+OeG8BK3W4/vlhlrx8AqZ7IF2ejUvg63CRele6+R
+         Za1OM3fsaU1rfkX9By7QA6C5gJrAjRcYUnMnt2kC0l8MeSaOg2/6ijgpTSboz2J7HXUs
+         sJWSnWRA96SkUQU41RHBlY4rgG/fK9W4huOz1NqXHypWqqt56g782xyKW/haeQyuUROr
+         TTRuYg3CgLiFVt6b9swSYTebx7rjsunST2SRpJW5i+P/ZpLSyOpPCCN8nvKXeOhuIe4Z
+         Mvcg==
+X-Forwarded-Encrypted: i=1; AJvYcCUTxHzXGYLDKkeINdPrrggMFczDzBpaUdqzhmQuNys+RzkrtHk7/LySc+Vj3VQj/xG7ePNyaYnS@vger.kernel.org, AJvYcCVVJz6ZGRjEeU8LFVbNSiUard0dTjnLtui/5llJllk/9lefOclgEdq4Rv4ElDCNn5/hi33HbpER4vODW+mV@vger.kernel.org, AJvYcCW4Ns0c7TK4IcNYy3RyEZikJAbWspEQOie6fzjLA70bPKoHwKjG5LmZdljjxZmxSP/uSuP4MrOcxdYc@vger.kernel.org, AJvYcCW6Kl+6QojfNHkcgWyoTUOnA0A1+6k74YGxjruiUz/1YMeE9ENLDKU5Rm0fK0bq29aW9IGU4ManHeAg@vger.kernel.org, AJvYcCW88VFWmEDZB3buERNox57NSO88rdEEfmSynXGhZwCI5tP//hp515EcwXsWNqwc/3o+1DAVacD7vQJ8@vger.kernel.org, AJvYcCXv01/HEfkFgQ9Szw677HWSzYXHU+oUMhhcvDX8KFj15G/0DpHUb+MpNe61nOPNQzkNvRl10wH4BjY1@vger.kernel.org
+X-Gm-Message-State: AOJu0YylZriNctxEJd+YeJ8L0/V2CTxigrWUTThYOVk64LZAualfNvkS
+	6F5NIn4Z7n7DxW8QUddOG95mxweWwSn9MFbF80ESrw+SlyMFdwPW
+X-Gm-Gg: ASbGncs2s1eOq84mBGZuepupi+YPw2ycfTNzFD6iPNjbnm1wFVdJxqlCHF2DE62uxiY
+	jtVvIRtVf3SEdApuockyvsx/JIpy7xz5YnakKaPk/6pN64hhAM6HzIRPJb2u7uf5cjdolCYbuFD
+	ev0HhN/f/bYR0qRMvRTlUt77/jv1sjQJ9Y0CN4IbqU03hL2UUO3TNcC/tHG055NmeJ04tfm6dZp
+	0Xqhqbk4VremRXHRwJSreo9wnQrIjnPlHQLoj94NdYPjuSI9qimtZ4fBn3B9suTVsesyob8HGFU
+	pfXz5bdrwPKaR8ikY5XF/vn6tLswZAVhDsqtJgIAipP/GYIxoh5K
+X-Google-Smtp-Source: AGHT+IHs8w/edsjtM3rOM3Yclg32oaNqFZGls9C6H68akxr8+2plKYYeBm64f3z6Q4QArp+Lekmm2g==
+X-Received: by 2002:a2e:8404:0:b0:30c:aae:6d4a with SMTP id 38308e7fff4ca-3107f718b7bmr2182291fa.26.1744791710377;
+        Wed, 16 Apr 2025 01:21:50 -0700 (PDT)
+Received: from NB-GIGA003.letovo.school ([5.194.95.139])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-30f465f7b20sm23025391fa.97.2025.04.16.01.21.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Apr 2025 01:21:49 -0700 (PDT)
+From: Alexey Charkov <alchark@gmail.com>
+Subject: [PATCH 00/13] ARM: vt8500: DT bindings and dts updates
+Date: Wed, 16 Apr 2025 12:21:25 +0400
+Message-Id: <20250416-wmt-updates-v1-0-f9af689cdfc2@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250415151326.GA624550@yaz-khff2.amd.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAIVo/2cC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDEwNL3fLcEt3SgpTEktRiXVMLQ4NkM1NDI9NUEyWgjoKi1LTMCrBp0bG
+ 1tQD/e5EXXQAAAA==
+X-Change-ID: 20250409-wmt-updates-5810c65125e4
+To: Krzysztof Kozlowski <krzk@kernel.org>, 
+ Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Ulf Hansson <ulf.hansson@linaro.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-mmc@vger.kernel.org, netdev@vger.kernel.org, 
+ linux-pwm@vger.kernel.org, Alexey Charkov <alchark@gmail.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1744791712; l=3242;
+ i=alchark@gmail.com; s=20250416; h=from:subject:message-id;
+ bh=VWW+FjoSMr2BVYRu/X2g0WXpS/3nXWF7DuGik59WEqM=;
+ b=OE98dlaCoHtAdZilXLnTnuUMVF49Z4hZHmnAalJtuuKjjULVM27W5tpvrpJQD1KM7AV/MZCRX
+ fNJJtvtC0pHDBujTVpynkLYIbwLLeVLKIXeMo4GnDqOoMsFzt4LL7uX
+X-Developer-Key: i=alchark@gmail.com; a=ed25519;
+ pk=ltKbQzKLTJPiDgPtcHxdo+dzFthCCMtC3V9qf7+0rkc=
 
+Convert some more VT8500 related textual DT binding descriptions to
+YAML schema, do minor dts correctness fixes, and add a DT for the
+board I'm actually testing those on (VIA APC Rock).
 
-* Yazen Ghannam <yazen.ghannam@amd.com> wrote:
+While at that, also describe the PL310 L2 cache controller present on
+WM8850/WM8950.
 
-> On Mon, Apr 14, 2025 at 07:26:57PM -0500, Mario Limonciello wrote:
-> > From: Mario Limonciello <mario.limonciello@amd.com>
-> > 
-> > The s2idle mmio quirk uses a scratch register in the FCH.
-> > Adjust the code to clarify that.
-> > 
-> > Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> > ---
-> > v4:
-> >  * Use fch.h instead
-> > ---
-> >  arch/x86/include/asm/amd/fch.h            | 1 +
-> >  drivers/platform/x86/amd/pmc/pmc-quirks.c | 3 ++-
-> >  2 files changed, 3 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/x86/include/asm/amd/fch.h b/arch/x86/include/asm/amd/fch.h
-> > index a5fd91ff92df3..9b32e8a03193e 100644
-> > --- a/arch/x86/include/asm/amd/fch.h
-> > +++ b/arch/x86/include/asm/amd/fch.h
-> > @@ -8,5 +8,6 @@
-> >  /* register offsets from PM base */
-> >  #define FCH_PM_DECODEEN			0x00
-> >  #define FCH_PM_DECODEEN_SMBUS0SEL	GENMASK(20, 19)
-> > +#define FCH_PM_SCRATCH			0x80
-> >  
-> >  #endif
-> > diff --git a/drivers/platform/x86/amd/pmc/pmc-quirks.c b/drivers/platform/x86/amd/pmc/pmc-quirks.c
-> > index b4f49720c87f6..3c680d2029f62 100644
-> > --- a/drivers/platform/x86/amd/pmc/pmc-quirks.c
-> > +++ b/drivers/platform/x86/amd/pmc/pmc-quirks.c
-> > @@ -8,6 +8,7 @@
-> >   * Author: Mario Limonciello <mario.limonciello@amd.com>
-> >   */
-> >  
-> > +#include <asm/amd/fch.h>
-> 
-> Arch headers should go after linux headers, I think.
+Note that this series is based upon Krzysztof's linux-dt/for-next
 
-That's true, but it's a mostly stylistic requirement these days.
+Signed-off-by: Alexey Charkov <alchark@gmail.com>
+---
+Alexey Charkov (13):
+      dt-bindings: i2c: i2c-wmt: Convert to YAML
+      dt-bindings: interrupt-controller: via,vt8500-intc: Convert to YAML
+      dt-bindings: mmc: vt8500-sdmmc: Convert to YAML
+      dt-bindings: net: via-rhine: Convert to YAML
+      dt-bindings: pwm: vt8500-pwm: Convert to YAML
+      dt-bindings: timer: via,vt8500-timer: Convert to YAML
+      dt-bindings: arm: vt8500: Add VIA APC Rock/Paper boards
+      ARM: dts: vt8500: Add node address and reg in CPU nodes
+      ARM: dts: vt8500: Move memory nodes to board dts and fix addr/size
+      ARM: dts: vt8500: Use generic compatibles for EHCI
+      ARM: dts: vt8500: Use generic node name for the SD/MMC controller
+      ARM: dts: vt8500: Add VIA APC Rock/Paper board
+      ARM: dts: vt8500: Add L2 cache controller on WM8850/WM8950
 
-> So that arch stuff can override generic stuff.
+ Documentation/devicetree/bindings/arm/vt8500.yaml  | 19 ++++---
+ Documentation/devicetree/bindings/i2c/i2c-wmt.txt  | 24 ---------
+ .../devicetree/bindings/i2c/wm,wm8505-i2c.yaml     | 47 +++++++++++++++++
+ .../interrupt-controller/via,vt8500-intc.txt       | 16 ------
+ .../interrupt-controller/via,vt8500-intc.yaml      | 47 +++++++++++++++++
+ .../devicetree/bindings/mmc/vt8500-sdmmc.txt       | 23 --------
+ .../devicetree/bindings/mmc/wm,wm8505-sdhc.yaml    | 61 ++++++++++++++++++++++
+ .../devicetree/bindings/net/via,vt8500-rhine.yaml  | 41 +++++++++++++++
+ .../devicetree/bindings/net/via-rhine.txt          | 17 ------
+ .../devicetree/bindings/pwm/via,vt8500-pwm.yaml    | 43 +++++++++++++++
+ .../devicetree/bindings/pwm/vt8500-pwm.txt         | 18 -------
+ .../devicetree/bindings/timer/via,vt8500-timer.txt | 15 ------
+ .../bindings/timer/via,vt8500-timer.yaml           | 36 +++++++++++++
+ MAINTAINERS                                        |  7 ++-
+ arch/arm/boot/dts/vt8500/Makefile                  |  3 +-
+ arch/arm/boot/dts/vt8500/vt8500-bv07.dts           |  5 ++
+ arch/arm/boot/dts/vt8500/vt8500.dtsi               | 12 ++---
+ arch/arm/boot/dts/vt8500/wm8505-ref.dts            |  5 ++
+ arch/arm/boot/dts/vt8500/wm8505.dtsi               | 14 ++---
+ arch/arm/boot/dts/vt8500/wm8650-mid.dts            |  5 ++
+ arch/arm/boot/dts/vt8500/wm8650.dtsi               | 14 ++---
+ arch/arm/boot/dts/vt8500/wm8750-apc8750.dts        |  5 ++
+ arch/arm/boot/dts/vt8500/wm8750.dtsi               | 14 ++---
+ arch/arm/boot/dts/vt8500/wm8850-w70v2.dts          |  5 ++
+ arch/arm/boot/dts/vt8500/wm8850.dtsi               | 23 +++++---
+ arch/arm/boot/dts/vt8500/wm8950-apc-rock.dts       | 21 ++++++++
+ arch/arm/boot/dts/vt8500/wm8950.dtsi               | 11 ++++
+ 27 files changed, 386 insertions(+), 165 deletions(-)
+---
+base-commit: 62db22c2af6ce306943df5de6f5198ea9bd3d47b
+change-id: 20250409-wmt-updates-5810c65125e4
 
-Arch headers that override generic stuff are very much supposed to be 
-able to build stand-alone and in pretty much any order with other 
-headers, with very few exceptions. Ordering dependencies are very much 
-frowned upon, because if they don't trigger build failures they can 
-result in subtle breakages.
+Best regards,
+-- 
+Alexey Charkov <alchark@gmail.com>
 
-Thanks,
-
-	Ingo
 
