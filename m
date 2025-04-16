@@ -1,139 +1,148 @@
-Return-Path: <linux-i2c+bounces-10424-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10425-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E0C0A90814
-	for <lists+linux-i2c@lfdr.de>; Wed, 16 Apr 2025 17:54:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA048A9086E
+	for <lists+linux-i2c@lfdr.de>; Wed, 16 Apr 2025 18:11:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C4B595A24CF
-	for <lists+linux-i2c@lfdr.de>; Wed, 16 Apr 2025 15:54:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E7E0A1883C00
+	for <lists+linux-i2c@lfdr.de>; Wed, 16 Apr 2025 16:11:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0CDA20DD65;
-	Wed, 16 Apr 2025 15:54:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8CC1210F59;
+	Wed, 16 Apr 2025 16:11:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CYsB7iLF"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="AlGYOEU9"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C9001F193D;
-	Wed, 16 Apr 2025 15:54:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C3961DF985
+	for <linux-i2c@vger.kernel.org>; Wed, 16 Apr 2025 16:11:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744818885; cv=none; b=YBUVOpp6Otg1poRmAGFikienfeA0t9yxMlzoyKyr/wsQ2sVxylEfFkapMDjF7PJX4Ik8EOAGoz/1hzIII+RX2vKsWEmpYJllUsi5NqwAC+YRULS2OTQWAeNNJVRmvuMyx2q5GT8MMLcDvfMhuwp7A3NjR2AMeyBtXtzw8SUdqnU=
+	t=1744819869; cv=none; b=ThHQthaH442hVY5SSVr42A+TrLzAweu9TLjVnNi7G4WmbMuzx2kkpab+omCpmbXMrDnNv+K8nYUUe7BwdNY/PaoQwyPigyJfLc43MbxILcAo3C2zQIfErctgG6XyznO7uNdtivR2g2XGxgxvR3ZjSY5Y9JlZNMLyETeibnKChkQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744818885; c=relaxed/simple;
-	bh=BK6yw88CCQMOuS+aZ2Cf0kz3xcaYu31IAHaHB7+z3cw=;
+	s=arc-20240116; t=1744819869; c=relaxed/simple;
+	bh=r7nXonSwEu68bLebps2Xf8cTuO1u5ko/8r+nHwK3ugI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=k4oZu9xVFXBRgOKJcFHrXbI7dDzqqWc46H3ZlgFA5NBZfJTQbxGvJzKMpAUL0ha0BHGs8dC2yjnark5FtC4L4+Dm8vES+YFefV0gFoF886YGjTjbyxztcKEwaV9hmsao+bQ+b5QzRVnJejT9UGaopLM/gbhoBiU53SKnzez/ebE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CYsB7iLF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EF83C4CEE2;
-	Wed, 16 Apr 2025 15:54:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744818883;
-	bh=BK6yw88CCQMOuS+aZ2Cf0kz3xcaYu31IAHaHB7+z3cw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CYsB7iLFu7CRO3Le0pvmC1k268EFLWH7CYrVAhgxHXz/hQKlGrhkytRRyfxhrFRLa
-	 kLWtrgRIFCVezFrhVYZi/slKn9mmAhE5BNzwbioipRzXvxBRe20qSGWRYEoBVVOn4C
-	 EHs3j8eTEtQA7Y1GrcktDJQf0XFLzKInpzctB45OjBhPa2rSJmMnw1aUcZjTSYAK6s
-	 CiSdKNvuxd/I+GZEiYg3us08A1t4SeJm1Z+KQq8BkAxgxhMAYAFQZ/tbuLHPWbWvlI
-	 i4d9EwJSJCI4WiRJ34sJF0ZXuEn3EmuFUh8xOpPzpJWwrT7Oh77TTOUTXNZWnb8eyN
-	 kDLHP3E9Of9dA==
-Date: Wed, 16 Apr 2025 10:54:42 -0500
-From: Rob Herring <robh@kernel.org>
-To: Alexey Charkov <alchark@gmail.com>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mmc@vger.kernel.org, netdev@vger.kernel.org,
-	linux-pwm@vger.kernel.org
-Subject: Re: [PATCH 00/13] ARM: vt8500: DT bindings and dts updates
-Message-ID: <20250416155442.GA3255418-robh@kernel.org>
-References: <20250416-wmt-updates-v1-0-f9af689cdfc2@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=NFrH9RguQQm0JTzlN8adUwdmaxhub9N15VgDZicqc2SPcuqz7Q8PKobLCGn+4f+njTrtpqTKMasckkbZ/L4RACP8qEZgEZ/nuTNiF2FkI3ru4qHGDVdLd0Qxa1DeAJL3U+a3KOtrCPT3WqC5joygi1f1CJnN/9HqZVfBptm30mo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=AlGYOEU9; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=CD82
+	aaEtrX3qt91NG+am4gW8qYGsJOF0kgldIcobva0=; b=AlGYOEU95X51qyDBtNSD
+	XeCXS8XfmIMqq9TzOUX1X5igA0XFmf6tUEbjDLh+Ir2KWErKTQYwb69waitO7+Wc
+	ZIFDWF4Fd6njngLAk10PNBRG7fheyq0ndi/hACFMFhS/1Ou2kJBV7Ebvj+f7FYXX
+	vYnsz/FsTxmj2sWhDDrFkEnVHEoCgo4Pi5a0vdmiAiIjcuws9NcxmmIc7lPvUe5V
+	JNUyoa4odK9W3KcxtcNhzLe+MxGlcTiS6yISso60ShbqDxJCr7mBGUYWuMztBN6o
+	28dTHPmKEZvn3Kfa3GQ3lGP15xSSiJ1/Pb887oShWiFk+oSsQkhZlstLwW5OoBqd
+	dQ==
+Received: (qmail 786598 invoked from network); 16 Apr 2025 18:11:02 +0200
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 16 Apr 2025 18:11:02 +0200
+X-UD-Smtp-Session: l3s3148p1@ZPkViOcyruAujnsq
+Date: Wed, 16 Apr 2025 18:11:02 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+	Jai Luthra <jai.luthra@ideasonboard.com>, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+	Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: Re: [PATCH v5 0/7] i2c: core: Move client towards fwnode
+Message-ID: <Z__Wlri8-tjuctsa@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+	Jai Luthra <jai.luthra@ideasonboard.com>, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+	Mauro Carvalho Chehab <mchehab@kernel.org>
+References: <20250416070409.1867862-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="3liHQc8JqCGglSNk"
+Content-Disposition: inline
+In-Reply-To: <20250416070409.1867862-1-andriy.shevchenko@linux.intel.com>
+
+
+--3liHQc8JqCGglSNk
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250416-wmt-updates-v1-0-f9af689cdfc2@gmail.com>
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Apr 16, 2025 at 12:21:25PM +0400, Alexey Charkov wrote:
-> Convert some more VT8500 related textual DT binding descriptions to
-> YAML schema, do minor dts correctness fixes, and add a DT for the
-> board I'm actually testing those on (VIA APC Rock).
-> 
-> While at that, also describe the PL310 L2 cache controller present on
-> WM8850/WM8950.
-> 
-> Note that this series is based upon Krzysztof's linux-dt/for-next
-> 
-> Signed-off-by: Alexey Charkov <alchark@gmail.com>
-> ---
-> Alexey Charkov (13):
->       dt-bindings: i2c: i2c-wmt: Convert to YAML
->       dt-bindings: interrupt-controller: via,vt8500-intc: Convert to YAML
->       dt-bindings: mmc: vt8500-sdmmc: Convert to YAML
->       dt-bindings: net: via-rhine: Convert to YAML
->       dt-bindings: pwm: vt8500-pwm: Convert to YAML
->       dt-bindings: timer: via,vt8500-timer: Convert to YAML
->       dt-bindings: arm: vt8500: Add VIA APC Rock/Paper boards
->       ARM: dts: vt8500: Add node address and reg in CPU nodes
->       ARM: dts: vt8500: Move memory nodes to board dts and fix addr/size
->       ARM: dts: vt8500: Use generic compatibles for EHCI
->       ARM: dts: vt8500: Use generic node name for the SD/MMC controller
->       ARM: dts: vt8500: Add VIA APC Rock/Paper board
->       ARM: dts: vt8500: Add L2 cache controller on WM8850/WM8950
-> 
->  Documentation/devicetree/bindings/arm/vt8500.yaml  | 19 ++++---
->  Documentation/devicetree/bindings/i2c/i2c-wmt.txt  | 24 ---------
->  .../devicetree/bindings/i2c/wm,wm8505-i2c.yaml     | 47 +++++++++++++++++
->  .../interrupt-controller/via,vt8500-intc.txt       | 16 ------
->  .../interrupt-controller/via,vt8500-intc.yaml      | 47 +++++++++++++++++
->  .../devicetree/bindings/mmc/vt8500-sdmmc.txt       | 23 --------
->  .../devicetree/bindings/mmc/wm,wm8505-sdhc.yaml    | 61 ++++++++++++++++++++++
->  .../devicetree/bindings/net/via,vt8500-rhine.yaml  | 41 +++++++++++++++
->  .../devicetree/bindings/net/via-rhine.txt          | 17 ------
->  .../devicetree/bindings/pwm/via,vt8500-pwm.yaml    | 43 +++++++++++++++
->  .../devicetree/bindings/pwm/vt8500-pwm.txt         | 18 -------
->  .../devicetree/bindings/timer/via,vt8500-timer.txt | 15 ------
->  .../bindings/timer/via,vt8500-timer.yaml           | 36 +++++++++++++
->  MAINTAINERS                                        |  7 ++-
->  arch/arm/boot/dts/vt8500/Makefile                  |  3 +-
->  arch/arm/boot/dts/vt8500/vt8500-bv07.dts           |  5 ++
->  arch/arm/boot/dts/vt8500/vt8500.dtsi               | 12 ++---
->  arch/arm/boot/dts/vt8500/wm8505-ref.dts            |  5 ++
->  arch/arm/boot/dts/vt8500/wm8505.dtsi               | 14 ++---
->  arch/arm/boot/dts/vt8500/wm8650-mid.dts            |  5 ++
->  arch/arm/boot/dts/vt8500/wm8650.dtsi               | 14 ++---
->  arch/arm/boot/dts/vt8500/wm8750-apc8750.dts        |  5 ++
->  arch/arm/boot/dts/vt8500/wm8750.dtsi               | 14 ++---
->  arch/arm/boot/dts/vt8500/wm8850-w70v2.dts          |  5 ++
->  arch/arm/boot/dts/vt8500/wm8850.dtsi               | 23 +++++---
->  arch/arm/boot/dts/vt8500/wm8950-apc-rock.dts       | 21 ++++++++
->  arch/arm/boot/dts/vt8500/wm8950.dtsi               | 11 ++++
->  27 files changed, 386 insertions(+), 165 deletions(-)
-> ---
-> base-commit: 62db22c2af6ce306943df5de6f5198ea9bd3d47b
+On Wed, Apr 16, 2025 at 10:01:30AM +0300, Andy Shevchenko wrote:
+> The struct i2c_board_info has of_node and fwnode members. This is quite
+> confusing as they are of the same semantics and it's tend to have an issue
+> if user assigns both. Luckily there is only a single driver that does this
+> and fix is provided in the last patch. Nevertheless the series moves
+> the client handling code to use fwnode and deprecates the of_node member
+> in the respective documentation.
+>=20
+> In v5:
+> - reformatted conditionals to make media CI happy (media CI)
+> - updated commit messages in patches 3 & 6 to make it more clear (Wolfram)
+>=20
+> In v4:
+> - fixed spelling in the first patch commit message (Sakari)
+> - wrapped the commit message in the patch before the last (Sakari)
+> - added tag to the last patch (Tomi)
+>=20
+> In v3:
+> - fixed compile issues with i2c-core-slave.c (LKP)
+> - fixed compile issues with IRQ APIs, i.e. missing header (LKP)
+> - added patch for the only user which assigns two fields (Tomi)
+> - added tags (Tomi)
+>=20
+> In v2:
+> - covered i2c-core-slave.c where it makes sense
+> - covered i2c-core-of.c where it makes sense
+> - rebased on top of the latest code base
+>=20
+> Andy Shevchenko (7):
+>   i2c: core: Drop duplicate check before calling OF APIs
+>   i2c: core: Unify the firmware node type check
+>   i2c: core: Switch to fwnode APIs to get IRQ
+>   i2c: core: Reuse fwnode variable where it makes sense
+>   i2c: core: Do not dereference fwnode in struct device
+>   i2c: core: Deprecate of_node in struct i2c_board_info
+>   media: i2c: ds90ub960: Remove of_node assignment
+>=20
 
-I could not apply this series for testing. What base is this? It is 
-unknown to anything I have. Please use most recent rc1 unless you have 
-a dependency then use recent linux-next or a branch in it.
+Works at least on my OF-based platform. Let's go CI.
 
-Rob
+Applied to for-next, thanks!
+
+
+--3liHQc8JqCGglSNk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmf/1pIACgkQFA3kzBSg
+Kbb8Pw/+IszgCGVXNlw6c/miI0lJl/qMnSp912U1Cbr8dtrVMBR8KQB+67dNMVJU
+D2t2bNHaOkYgv7E4uaBQNeo6NzTjCTOnjaN3BFWZKcCG6a9E7knKKYJ6V12ywNuV
+xrGp6IRLj6zTubXIP2n56s1d+toB1YsIqYlMKeJYgS0Cw8A4o6hChEFLYfG8nqRZ
+Tj3qRMk1I+KA3RtnAC+7e8/X+qJQYPmQYa13inuFTWmGVQxohae3Rjk8Hu4A+31V
+tTzF232MCktI2CGS59fH5FSdAirYdBkoi+/icGFfSO4QCuBkPD44FnzlW06PnRSa
+rXjYt+h9Cvh6IHTlQik24+2jdV9vEZLs2zwa2PqDygbrX9OAzf+HC5WoRG7aPIgv
+Ur69M4d5cYnOPg1yH3NvkXDOnsXaf5Xuzmg65P1gofMfeEVvysmXaJXuQ5AsvvQi
+CovIOoYxVu+BWaC4Y9gSsDQE6ba2V+PEA5BnxHdIOnMA4FPSPxgZk9F5Jn0ka+TX
+gWOiT0OuVcibb/peK7IEvy1a6UZWmkONhbIuOFV/8NNNeptW1OkFVGysb77IeVaM
+0V0L1i2qN6ENAUfskSahh5Bux0eq2Qf1jzUulBvMkUn9p1r9lQlyKbKgQPhEkSsx
+va+/hTJMyzk2IBpzGZfl1hWC22ELTEMH9UgVqB26K43C167/xI4=
+=6xgd
+-----END PGP SIGNATURE-----
+
+--3liHQc8JqCGglSNk--
 
