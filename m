@@ -1,106 +1,92 @@
-Return-Path: <linux-i2c+bounces-10439-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10440-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E055A90E7A
-	for <lists+linux-i2c@lfdr.de>; Thu, 17 Apr 2025 00:13:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F197EA90EF8
+	for <lists+linux-i2c@lfdr.de>; Thu, 17 Apr 2025 00:54:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AB2BB19074DB
-	for <lists+linux-i2c@lfdr.de>; Wed, 16 Apr 2025 22:13:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 714DE5A16EC
+	for <lists+linux-i2c@lfdr.de>; Wed, 16 Apr 2025 22:54:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 757C224887F;
-	Wed, 16 Apr 2025 22:13:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41FA02417DD;
+	Wed, 16 Apr 2025 22:54:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="cW1jJYDP"
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="np0Ezbwa"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.smtpout.orange.fr (smtp-76.smtpout.orange.fr [80.12.242.76])
-	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E863223E337;
-	Wed, 16 Apr 2025 22:13:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1B8E221F25
+	for <linux-i2c@vger.kernel.org>; Wed, 16 Apr 2025 22:54:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744841593; cv=none; b=qn+LvRPXIUNAWVEF9X8qc0YJ+Gv+A6UaJb6a+qBd4Jkg+zVuaK1QPvIyMAKnCJsDxFtCI2WP0kggoIO/pueUR5mIQSPVFPIYjNEr5F08OYwWSVdxNwJdGPKiIX8b8hqM9wVuY4psIlUX0OPmUK/CIH+yP0Dv8B5N+sMYuByKABQ=
+	t=1744844059; cv=none; b=m3xLLeQ/71TjE3Wt4WJIThEcQXJKmub+QNRoDmCoNPnX7kA8kVBQAtZiUJxRoylgVaD6Cn5y6ZuWi/knkh5db9ibnqR2zBjk0QukoQ6pKaYXtiKFmenHNciNHuzu+6CVqOGzV4ZiSImu+ww9p8p6qpOhM17yez/IVYiORXi5Hcw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744841593; c=relaxed/simple;
-	bh=3bKyZYWUalNrwQszDcOUxuHDdhvZgg/fHH3jT5lMJc0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YQex/BgEYwBBku+xLh2rlYni6onLLCrdjl/nnSSVpeDocu81BYwW1SlcRgudRgbXOY+KMrVRhR4nIsu4ft67C3V2tc+K/6lpX6w7gClJtrP4e9vSKRGUSHOQsKwBAfssrWZP6ZZ75sJ1DA9U/0KFq5HBPQaFrvy/0dKmn7lR/n0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=cW1jJYDP; arc=none smtp.client-ip=80.12.242.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [192.168.1.37] ([90.11.132.44])
-	by smtp.orange.fr with ESMTPA
-	id 5Az3ua0kIGpxt5Az7uBigD; Thu, 17 Apr 2025 00:11:57 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1744841517;
-	bh=SjrNmlRrkGDIQEmcssUoZOv3MOsPjmBKRLcUPgyGHhU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=cW1jJYDPKWw12QGyMUYkRY2pm9O5E96diRTHIjM04AJY7rvn4jkcD6nFPDv1/tcz/
-	 smZnekfvEQuasuXGjF5oRPxOy3ZYGzp2lFV80lBBjYXw0gVOeg2g9E8ZLbyHqTBKqO
-	 TixXXmfedo9zn8kURpjj75VmYXqqsbj7+NV1UoEhYB6AkVHXk2xzoNk/5XvRdP0eHJ
-	 73TrAC2Ln4NDLpbDBNwJE2/qetoc10BaboQePhbOcXAdlZs5brc6HtsF6/SzwaUj/5
-	 iz3WHY/vZMPb+S0DR7lew0VisfrIsBd5qgqExmrMqPCLDav72PpK9j7fwc0ZNqy4DI
-	 ixR7c0BGBXOsQ==
-X-ME-Helo: [192.168.1.37]
-X-ME-Auth: bWFyaW9uLmphaWxsZXRAd2FuYWRvby5mcg==
-X-ME-Date: Thu, 17 Apr 2025 00:11:57 +0200
-X-ME-IP: 90.11.132.44
-Message-ID: <f4742d44-0ea3-4af1-91ab-8bb5af6d781b@wanadoo.fr>
-Date: Thu, 17 Apr 2025 00:11:53 +0200
+	s=arc-20240116; t=1744844059; c=relaxed/simple;
+	bh=xH3lhJi1xTJv/A92jkdgVUHaGo0cZIKK/YnO663brp4=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=ohcZZOHVChy+WJbV0LvgZ70B3VojDkYgIjFO8v1gC/SwHhl0UtXgtslWwMm8VuNiEGet0qERjtjTADqbNg7LsoeQgJI7+59rS0yXG/f1/iUbV+ffb8viY1dU9RpYYnTsApNB9vn9+RWMCxUsTd7X6KGQTbsZg0GQZKBvS7dGXhU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=np0Ezbwa; arc=none smtp.client-ip=202.36.163.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 44D4E2C03DC;
+	Thu, 17 Apr 2025 10:54:14 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+	s=mail181024; t=1744844054;
+	bh=xH3lhJi1xTJv/A92jkdgVUHaGo0cZIKK/YnO663brp4=;
+	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+	b=np0Ezbwak1pNA1zl4FcdjeQaiTfB0VEzmABPOL8AV6qPp3mWArsVeKWwfvKWBFPLB
+	 zH/cVM4sMeDiTgxc7jczGyYX7x1R+oDGY/TgieLlSlHrMCC5Sic0AbHrJghhq4Ey7t
+	 JXmvBH6tWxmSsTwQSyML+UOFG0/DI2wTNx2lvMg1BkVPyT15xyNTjCfC0QzybyjLVy
+	 SJtTFqGuJZeSLjAC5QCifNxnUUbIm8tPMlpIi+cwDMbfywCZe9KH9dJh6pBQemZB65
+	 KbIr6igzJB3a8stK3V45NrFaWuZXj6a541JX6A6yPscznBb5wbXax3Uko2yJaASk3Q
+	 gWbx36Rzx3TnQ==
+Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+	id <B680035160001>; Thu, 17 Apr 2025 10:54:14 +1200
+Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) by
+ svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.14; Thu, 17 Apr 2025 10:54:13 +1200
+Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
+ svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
+ 15.02.1544.014; Thu, 17 Apr 2025 10:54:13 +1200
+From: Aryan Srivastava <Aryan.Srivastava@alliedtelesis.co.nz>
+To: "andi.shyti@kernel.org" <andi.shyti@kernel.org>
+CC: "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
+	"wsa+renesas@sang-engineering.com" <wsa+renesas@sang-engineering.com>,
+	"Markus.Elfring@web.de" <Markus.Elfring@web.de>, "linux-i2c@vger.kernel.org"
+	<linux-i2c@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "rric@kernel.org" <rric@kernel.org>
+Subject: Re: [PATCH v14 1/1] i2c: octeon: add block-mode i2c operations
+Thread-Topic: [PATCH v14 1/1] i2c: octeon: add block-mode i2c operations
+Thread-Index: AQHbnPMbfNxK7MTC8UuzggnLBpR1ibOmQeGA
+Date: Wed, 16 Apr 2025 22:54:13 +0000
+Message-ID: <3a02a3711cfb105921c2cf672a32ef96864ff0fb.camel@alliedtelesis.co.nz>
+References: <20250324192946.3078712-1-aryan.srivastava@alliedtelesis.co.nz>
+	 <20250324192946.3078712-2-aryan.srivastava@alliedtelesis.co.nz>
+In-Reply-To: <20250324192946.3078712-2-aryan.srivastava@alliedtelesis.co.nz>
+Accept-Language: en-US, en-NZ
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <DF9BAC5E1277B6468ED06A9E78FA1AE2@alliedtelesis.co.nz>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] i2c: Fix reference leak in of_i2c_register_devices
-To: Sunny Patel <nueralspacetech@gmail.com>
-Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1dacfce7-c66d-44c6-9a0c-2dd00bc24ffc@wanadoo.fr>
- <20250414154224.27836-1-nueralspacetech@gmail.com>
-Content-Language: en-US, fr-FR
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20250414154224.27836-1-nueralspacetech@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=W+WbVgWk c=1 sm=1 tr=0 ts=68003516 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=w1vUsAckAk8A:10 a=IkcTkHD0fZMA:10 a=XR8D0OoHHMoA:10 a=lBS4choEUxMPvCBz5qMA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-SEG-SpamProfiler-Score: 0
 
-Le 14/04/2025 à 17:42, Sunny Patel a écrit :
-> Fix a potential reference leak in of_i2c_register_devices where the
-> reference to the node is not released if device registration fails.
-> This ensures proper reference management and avoids memory leaks.
-> 
-> Signed-off-by: Sunny Patel <nueralspacetech@gmail.com>
-> ---
->   drivers/i2c/i2c-core-of.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/i2c/i2c-core-of.c b/drivers/i2c/i2c-core-of.c
-> index 02feee6c9ba9..7c50905de8f1 100644
-> --- a/drivers/i2c/i2c-core-of.c
-> +++ b/drivers/i2c/i2c-core-of.c
-> @@ -107,6 +107,7 @@ void of_i2c_register_devices(struct i2c_adapter *adap)
->   				 "Failed to create I2C device for %pOF\n",
->   				 node);
->   			of_node_clear_flag(node, OF_POPULATED);
-> +			of_node_put(node);
->   		}
->   	}
->   
-
-Hi,
-
-Why resending this patch?
-it is the same has before,, so my understanding is still the same and I 
-still think that it is just wrong.
-
-See [1].
-
-CJ
-
-[1]: 
-https://lore.kernel.org/all/1dacfce7-c66d-44c6-9a0c-2dd00bc24ffc@wanadoo.fr/
+SGkgQW5kaSwNCg0KRGlkIHlvdSBoYXZlIGFueSBtb3JlIGNvbW1lbnRzIG9uIHRoaXMgcGF0Y2g/
+DQoNClRoYW5rcywNCkFyeWFuLg0K
 
