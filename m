@@ -1,114 +1,147 @@
-Return-Path: <linux-i2c+bounces-10377-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10378-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75BA9A8A912
-	for <lists+linux-i2c@lfdr.de>; Tue, 15 Apr 2025 22:17:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 03850A8AD93
+	for <lists+linux-i2c@lfdr.de>; Wed, 16 Apr 2025 03:39:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EA4FF188DD01
-	for <lists+linux-i2c@lfdr.de>; Tue, 15 Apr 2025 20:17:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 70D201902D57
+	for <lists+linux-i2c@lfdr.de>; Wed, 16 Apr 2025 01:39:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F6C5252912;
-	Tue, 15 Apr 2025 20:17:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="ZsVSG5ei"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA0A2226D1E;
+	Wed, 16 Apr 2025 01:39:13 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22756242927
-	for <linux-i2c@vger.kernel.org>; Tue, 15 Apr 2025 20:17:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EC6A1A2658;
+	Wed, 16 Apr 2025 01:39:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744748225; cv=none; b=hHgNb4GlUzabO8KqTezHVK6Ulea3FZB5BIZyG/+fex+PW9tODTO01UB+F32dx4+naBgzvcs/n1fxV6j+Qe2qZRRFNKnM6tKUO59MBxaRuv7fCdP9dlMNEkKlimcFs449VHwcHlRcSR54vsAw35IuMGnTgjZPCtLtezEFibnxcrs=
+	t=1744767553; cv=none; b=nNLyayMDDabuOXbwGoL6xqCoOAmbgd6PE7zASTvks6As7HREEC80BbuUioB8YfVjCFjCgWIJTatlb1xVAXCDu4kF/6wwtf7WDqb5GOc/F7UaMRohxye8KMG1jb1kShsRq6zi6OMFsCI2g10g1eevSy2PaEj8tKYDtOZxy7EtpRA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744748225; c=relaxed/simple;
-	bh=Aoh6we8ZAkk3RvfV9IuYePjpW6SHUl1r7VIbhUuvXEY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VZ8su4si7rZddjkE8qAv1qJu6E0CRWl9Y7Rk8/FP0bhAjNhDfoFOJpg6NP9prLxLWN5MNTTzDhbqJ3eROPMLGwi+aFuN3jirXbF5ibI617AD48c4/fH276vIkKzetpdo//bkohGWhky44VPTixcH7RMvReZWjaRSbUWA3ZffNn0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=ZsVSG5ei; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=Aoh6
-	we8ZAkk3RvfV9IuYePjpW6SHUl1r7VIbhUuvXEY=; b=ZsVSG5eiqn5UiuIqspot
-	SWOHyxuBIpQP+VN3BdXmLYKsEBFDn3Yvrlw8ciSXcGLEiDpNw9omUDnAfaNEmLNs
-	9vMJL5/FadqL1PgJctyh/YZPcJYsfJHkQR2kAtU5fjfvOf3yhluZrNu0WZ7zAryQ
-	3lSBUFCMHENAiUyru+/i2mkT9LdMu+WzxzSDjXzSNyJ5+M839BJ0x4urEY2+LiEw
-	naDXuDOhGJL0yfgHyWzJLXTUcD2XN/aL1xsCwabCNRvueO27OGL15uuimt6Msckk
-	TyWNbwQx/ErTI9AuB/QsDKucBB+cpGae2HSHPSpvKjvvqzfCGuGJyixSR30Yo9R2
-	OA==
-Received: (qmail 434349 invoked from network); 15 Apr 2025 22:17:00 +0200
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 15 Apr 2025 22:17:00 +0200
-X-UD-Smtp-Session: l3s3148p1@uJHd2dYy5pcujnsq
-Date: Tue, 15 Apr 2025 22:16:59 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>
-Subject: Re: [PATCH v1 1/1] i2c: atr: Remove (explicitly) unused header
-Message-ID: <Z_6-u9o4_v2l13Tg@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Peter Zijlstra <peterz@infradead.org>, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>
-References: <20250331071646.3987361-1-andriy.shevchenko@linux.intel.com>
+	s=arc-20240116; t=1744767553; c=relaxed/simple;
+	bh=splohQJw8U1XANtyUsXhKKF8Cy9tRT9Bwe2SzN0BEbw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=S2A6Aq6j++MSsGD/eEe393o5NCTS0w9yzUbU95mazJDBQE5r8Eel1wxV+LCBEGAVwekjE8wPGTFAQIrP8va1Jp4vRrK7Mp5dTIBP55+gHKnG1clAT0kUfrIYmeQTuhrVMUHjwtI4Jb5w0RNhIcJsymU+lOIjUq75bFhe9OxmPLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gompa.dev; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gompa.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-ac73723b2d5so1232528866b.3;
+        Tue, 15 Apr 2025 18:39:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744767549; x=1745372349;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=V1HXQ+Xi113ayzUNabjj8NTshwQmo5mZvOv0N53Neb4=;
+        b=lPQ3rHdCNWMHKTTnhsyr9fS7wdwlWVywIOFL56A/N8Cu1/gYuNCwLrhIoHEIFsqhlT
+         SYq+hleAsBnBeQc46oJTVc8Q2Byd0FiC8mfWoeVEAoFNuJdJ7ieq9chRTXo/xD0aSriP
+         kielyulv4q2wJAzjtQ+w58LLvr3HwAQ1+oTnidteckRSuQx+2aYcc10A3joiNAlqBqgE
+         XDLjhcvQw4puIHbXNFNLShqCvSquAbkld7P7fZ68EMQDOl+OIhj9NaA+gbrdEabq8g76
+         xgKcrhK4nHu64n+oNcr22w5g+1QuRO52X+fxFLW7ROxYsQx5p+8KGPpnPg06ankoX/AO
+         iSSw==
+X-Forwarded-Encrypted: i=1; AJvYcCXjRs01epEeNSPkExnt7kqlcRdgxuJHOeUr9A/VemkNJ0MqU4m3npz0XP23ZYiXXjISYENPE9yHN0U=@vger.kernel.org, AJvYcCXyJSBRDtiSdFSfaOgjCcyS+uDg2cpM3SgCUQ6KkA5ET1b5tmD/2UE5bjlztmJMglrlXU+V6563pXacGzhK@vger.kernel.org
+X-Gm-Message-State: AOJu0YzrGbJbGERD9cNKFOpOoEZWXWfXqVJ+VqVq9eY78/eFcRZZspK1
+	igk5CEUNYRwpu7ADZoaLZ0h5J+8KZIcINCVR0ESlHClm40mVPmSNVua5bXs0/hg=
+X-Gm-Gg: ASbGncu7pj2z1x11wPDHy1NoxyY8+Mh4aNlA+Ni+7DxqRAK27/Kk7DG8LFEHoPaFHzv
+	wp97U/BfKyLZLThftqYaZj0LJWm2Gtn28+VX5Rpl7fco5/DK1rWzTXB8vLXgAVTDwRn9UmCoA/J
+	vXUwiZWquFQrDNv6MY5uQRbgZnvWBISDKCC883a0mWNw8BHUw1qcyShE39NdiOWholgDY9Qcpxb
+	IwUosN+vkU4Ba05cCpFky2BgLEst3xhxvdvNK1TVkmxsQGZ08b2aYxO8NZN7aLxm28kVZRZ3Hra
+	uYfXH3IeyPA0EzxEPXk58TLNjPTBhrbpBciFRmvGQJgcl5wrU3DevwavhyJypbCiHTpjGJM=
+X-Google-Smtp-Source: AGHT+IHgHIJADHseDzKH72XvS0TxfebXufKy/lOPcvTeaf6MAdKq0tS9P7LMI703Bf7LGTq+x3OIaQ==
+X-Received: by 2002:a17:907:2d27:b0:ac8:179a:42f5 with SMTP id a640c23a62f3a-acb38222672mr89261966b.14.1744767549076;
+        Tue, 15 Apr 2025 18:39:09 -0700 (PDT)
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com. [209.85.218.48])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-acb3d349d24sm27776466b.182.2025.04.15.18.39.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Apr 2025 18:39:08 -0700 (PDT)
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-ac73723b2d5so1232522866b.3;
+        Tue, 15 Apr 2025 18:39:08 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUIH/UAmESSo2GHgUqjkmj8/H0dMxDN6uJ3IOQrd8D0Fz6er1ycu9H/SRNwAGrxwtkvKl7wy3XPm/YspbSV@vger.kernel.org, AJvYcCXEe+TMjDitnQu6ZB5VEEbFXJE4tPRUsq3+/R0LL/neN6qyovaUHo7tiuxI3q0bxWicHl9t40VdXDc=@vger.kernel.org
+X-Received: by 2002:a17:907:6ea1:b0:ac6:e327:8de7 with SMTP id
+ a640c23a62f3a-acb3849df86mr88724666b.42.1744767548484; Tue, 15 Apr 2025
+ 18:39:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="p8/w+R2ikgAeb3U9"
-Content-Disposition: inline
-In-Reply-To: <20250331071646.3987361-1-andriy.shevchenko@linux.intel.com>
-
-
---p8/w+R2ikgAeb3U9
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20250415-pasemi-fixes-v2-0-c543bf53151a@svenpeter.dev>
+In-Reply-To: <20250415-pasemi-fixes-v2-0-c543bf53151a@svenpeter.dev>
+From: Neal Gompa <neal@gompa.dev>
+Date: Tue, 15 Apr 2025 21:38:32 -0400
+X-Gmail-Original-Message-ID: <CAEg-Je9vfqKe8tThUNxy2hKGGMYR4F2RJaKXqaXJx8f856Oncg@mail.gmail.com>
+X-Gm-Features: ATxdqUGM2YL7UPwB2q8EHrpPvcO9cfPSM4k-2kB4UVuY2Jof3nZs232BzqVAc98
+Message-ID: <CAEg-Je9vfqKe8tThUNxy2hKGGMYR4F2RJaKXqaXJx8f856Oncg@mail.gmail.com>
+Subject: Re: [PATCH v2 0/6] Apple/PASemi i2c error recovery fixes
+To: Sven Peter <sven@svenpeter.dev>
+Cc: Janne Grunau <j@jannau.net>, Alyssa Rosenzweig <alyssa@rosenzweig.io>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	Naveen N Rao <naveen@kernel.org>, Andi Shyti <andi.shyti@kernel.org>, 
+	Hector Martin <marcan@marcan.st>, linuxppc-dev@lists.ozlabs.org, asahi@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Andy Shevchenko <andy.shevchenko@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 31, 2025 at 10:16:46AM +0300, Andy Shevchenko wrote:
-> The fwnode.h is not supposed to be used by the drivers as it
-> has the definitions for the core parts for different device
-> property provider implementations. Drop it.
->=20
-> Note, that fwnode API for drivers is provided in property.h
-> which is included here.
->=20
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+On Tue, Apr 15, 2025 at 11:37=E2=80=AFAM Sven Peter via B4 Relay
+<devnull+sven.svenpeter.dev@kernel.org> wrote:
+>
+> Hi,
+>
+> This series adds a few fixes/improvements to the error recovery for
+> Apple/PASemi i2c controllers.
+> The patches have been in our downstream tree and were originally used
+> to debug a rare glitch caused by clock strechting but are useful in
+> general. We haven't seen the controller misbehave since adding these.
+>
+> Best,
+>
+> Sven
+>
+> Signed-off-by: Sven Peter <sven@svenpeter.dev>
+> ---
+> Changes in v2:
+> - Added commit to use the correct include (bits.h instead of bitfield.h)
+> - Added commit to sort includes
+> - Moved timeout explanations to code instead of just the commit log
+> - Made timeout recovery also work correctly in the interrupt case when
+>   waiting for the condition failed
+> - Used readx_poll_timeout instead of open-coded alternative
+> - Link to v1: https://lore.kernel.org/r/20250222-pasemi-fixes-v1-0-d7ea33=
+d50c5e@svenpeter.dev
+>
+> ---
+> Hector Martin (3):
+>       i2c: pasemi: Improve error recovery
+>       i2c: pasemi: Enable the unjam machine
+>       i2c: pasemi: Log bus reset causes
+>
+> Sven Peter (3):
+>       i2c: pasemi: Use correct bits.h include
+>       i2c: pasemi: Sort includes alphabetically
+>       i2c: pasemi: Improve timeout handling
+>
+>  drivers/i2c/busses/i2c-pasemi-core.c | 114 ++++++++++++++++++++++++++++-=
+------
+>  drivers/i2c/busses/i2c-pasemi-pci.c  |  10 +--
+>  2 files changed, 96 insertions(+), 28 deletions(-)
+> ---
+> base-commit: 0af2f6be1b4281385b618cb86ad946eded089ac8
+> change-id: 20250220-pasemi-fixes-916cb77404ba
+>
 
-Applied to for-current, thanks!
+The series looks good to me, especially the new patches.
+
+Reviewed-by: Neal Gompa <neal@gompa.dev>
 
 
---p8/w+R2ikgAeb3U9
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmf+vrsACgkQFA3kzBSg
-KbYH2w/9FvUVt6QDu7+/6wmC2YYMpiF40l9EEWRn9dMJzABR4xjAez8kFaxn2dpN
-BcEpJ7gOmhMJpiL0stPtzeLU+y8M9Gogs8vTU1TtaqO7NvqVSx2XZ6QJAJZH+q4R
-Oky09nTygkcOwORS/AVrVjwOBnowPCky/g2h4HdIJMdJQ3z3wWDU6SCWimXwc/Ah
-bIEFwwjzngqBBbkNJ/MtKJssUnQJMlmgxcEprQbnxf2ml6bohsDhIEOp+BD1b9Md
-4vjyLJnmU+pY/ZoLSaNFcNiInagTuaK2jUHzUPeIC8F+ccoKA88LMkkfqo3JCftK
-vLovbcYUJCtfti3IivxlZAa8vilbSOn0RQu78e2+HWzjEsI3RSg5yCCHQTrK4GFB
-wEqBwtQxIAKQfWIw0ldR/4jhh4B6lPX0FXmLnXDNCCpPvnfcXFaU+QZXVx6WRFtZ
-7SYrRely1051BxtD2s6rXwygQujdHxzWhKn689Q7piMhSsp1UvgD3WuLw29GvFRm
-E3+5HbspG67uzkq1cH5wpn7DY1zzk7Vw3V/GiHSn8CZnyjdcpN09Lpsr4gUQZ9XU
-SLRglexZl/qjQGC8Tq4aTmrVj1OXi0kTdJJ+BiWjuEa2G6EO1E9AVoy+eugz0uFq
-Zo0TcNdOkbqpF6k+UjqznpKZpjj+uquCZrstmvn5BnoEyE3N2/A=
-=eZMz
------END PGP SIGNATURE-----
-
---p8/w+R2ikgAeb3U9--
+--=20
+=E7=9C=9F=E5=AE=9F=E3=81=AF=E3=81=84=E3=81=A4=E3=82=82=E4=B8=80=E3=81=A4=EF=
+=BC=81/ Always, there's only one truth!
 
