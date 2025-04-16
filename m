@@ -1,104 +1,106 @@
-Return-Path: <linux-i2c+bounces-10438-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10439-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89994A90DFC
-	for <lists+linux-i2c@lfdr.de>; Wed, 16 Apr 2025 23:49:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E055A90E7A
+	for <lists+linux-i2c@lfdr.de>; Thu, 17 Apr 2025 00:13:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 21A8D1905F06
-	for <lists+linux-i2c@lfdr.de>; Wed, 16 Apr 2025 21:49:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AB2BB19074DB
+	for <lists+linux-i2c@lfdr.de>; Wed, 16 Apr 2025 22:13:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAE4922AE7F;
-	Wed, 16 Apr 2025 21:49:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 757C224887F;
+	Wed, 16 Apr 2025 22:13:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KdpSlWcO"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="cW1jJYDP"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp.smtpout.orange.fr (smtp-76.smtpout.orange.fr [80.12.242.76])
+	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B9091DA634
-	for <linux-i2c@vger.kernel.org>; Wed, 16 Apr 2025 21:49:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E863223E337;
+	Wed, 16 Apr 2025 22:13:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744840161; cv=none; b=Tq4JLlNkMYzwyFqRtyD82pAANcO6FX4MYbKJr2jjASrzRuqEBLV2w0v+d/g3BLsOZ7Eg2UmxHR+d/VDKJk/GZ5nLnYQTvbk3Ox8Jjxi7rojtnent6WdcuWtKiPFINF28PzHOXRTkEkkaY3BAb4I7f9QBLdzYq8JJrQ8TOLmx6eY=
+	t=1744841593; cv=none; b=qn+LvRPXIUNAWVEF9X8qc0YJ+Gv+A6UaJb6a+qBd4Jkg+zVuaK1QPvIyMAKnCJsDxFtCI2WP0kggoIO/pueUR5mIQSPVFPIYjNEr5F08OYwWSVdxNwJdGPKiIX8b8hqM9wVuY4psIlUX0OPmUK/CIH+yP0Dv8B5N+sMYuByKABQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744840161; c=relaxed/simple;
-	bh=2GWlyX8AkWQPOJemZSkW21mVn9HEIpn4CXNML2fGSdg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KLNjGSoL4B5Hao4VU/zjSypUXf7qCkQlADLzsJ7kxn1RU27HSPz8492J9vmOxg3btmibvz07bwuFkHTMmzNZh6TJm4lI25LxS6WfNJox+UV7jocaO7g172qpXZEcBigmhFHjoU8thp9AgEBmmw3H+TZDGmC/iXFlOEFnLi/PO68=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KdpSlWcO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 643D7C4CEE2;
-	Wed, 16 Apr 2025 21:49:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744840161;
-	bh=2GWlyX8AkWQPOJemZSkW21mVn9HEIpn4CXNML2fGSdg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KdpSlWcO5AqYHxcje9dJ9+ogKGK8+SVU2W9MmvSym8hPMRURdAt0clICt/wWVN4c/
-	 J78KWSIg104j8UJK3qDuGRBzeq6H1gtf/JxWU4zzk8XRBlLcUaNQrrK810+AiMV5mI
-	 wewZKvEPQBaN26ilTGFQPdumhVZ9/Fq6D15crzEvS7zSKfxRgy1DGLYb/5kvSJfWoe
-	 u2w1QP20PjH5Nob1AeLEnYp48EV4bp1v3hUUpZ7S7xvYoMtLl95QANMnbMBVrxTKT9
-	 SKG11apUpOlJXSRXh2qjn0Fdt/aZzpEsxP9XekVXMbDMVib54NC4IYqDIHT/alLCwG
-	 sPSdpkMMe1GMg==
-Date: Wed, 16 Apr 2025 23:49:16 +0200
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Enrico Zanda <e.zanda1@gmail.com>
-Cc: linux-i2c@vger.kernel.org
-Subject: Re: [PATCH 00/10] i2c: Replace dev_err() with dev_err_probe()
-Message-ID: <u6qtceh5khhjanllmfnnptbskcuuhfo62gj56bjy6bbkuvtc6y@neiethy2fkcz>
-References: <20250415183447.396277-1-e.zanda1@gmail.com>
+	s=arc-20240116; t=1744841593; c=relaxed/simple;
+	bh=3bKyZYWUalNrwQszDcOUxuHDdhvZgg/fHH3jT5lMJc0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YQex/BgEYwBBku+xLh2rlYni6onLLCrdjl/nnSSVpeDocu81BYwW1SlcRgudRgbXOY+KMrVRhR4nIsu4ft67C3V2tc+K/6lpX6w7gClJtrP4e9vSKRGUSHOQsKwBAfssrWZP6ZZ75sJ1DA9U/0KFq5HBPQaFrvy/0dKmn7lR/n0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=cW1jJYDP; arc=none smtp.client-ip=80.12.242.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from [192.168.1.37] ([90.11.132.44])
+	by smtp.orange.fr with ESMTPA
+	id 5Az3ua0kIGpxt5Az7uBigD; Thu, 17 Apr 2025 00:11:57 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1744841517;
+	bh=SjrNmlRrkGDIQEmcssUoZOv3MOsPjmBKRLcUPgyGHhU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=cW1jJYDPKWw12QGyMUYkRY2pm9O5E96diRTHIjM04AJY7rvn4jkcD6nFPDv1/tcz/
+	 smZnekfvEQuasuXGjF5oRPxOy3ZYGzp2lFV80lBBjYXw0gVOeg2g9E8ZLbyHqTBKqO
+	 TixXXmfedo9zn8kURpjj75VmYXqqsbj7+NV1UoEhYB6AkVHXk2xzoNk/5XvRdP0eHJ
+	 73TrAC2Ln4NDLpbDBNwJE2/qetoc10BaboQePhbOcXAdlZs5brc6HtsF6/SzwaUj/5
+	 iz3WHY/vZMPb+S0DR7lew0VisfrIsBd5qgqExmrMqPCLDav72PpK9j7fwc0ZNqy4DI
+	 ixR7c0BGBXOsQ==
+X-ME-Helo: [192.168.1.37]
+X-ME-Auth: bWFyaW9uLmphaWxsZXRAd2FuYWRvby5mcg==
+X-ME-Date: Thu, 17 Apr 2025 00:11:57 +0200
+X-ME-IP: 90.11.132.44
+Message-ID: <f4742d44-0ea3-4af1-91ab-8bb5af6d781b@wanadoo.fr>
+Date: Thu, 17 Apr 2025 00:11:53 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250415183447.396277-1-e.zanda1@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] i2c: Fix reference leak in of_i2c_register_devices
+To: Sunny Patel <nueralspacetech@gmail.com>
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1dacfce7-c66d-44c6-9a0c-2dd00bc24ffc@wanadoo.fr>
+ <20250414154224.27836-1-nueralspacetech@gmail.com>
+Content-Language: en-US, fr-FR
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20250414154224.27836-1-nueralspacetech@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi Enrico,
+Le 14/04/2025 à 17:42, Sunny Patel a écrit :
+> Fix a potential reference leak in of_i2c_register_devices where the
+> reference to the node is not released if device registration fails.
+> This ensures proper reference management and avoids memory leaks.
+> 
+> Signed-off-by: Sunny Patel <nueralspacetech@gmail.com>
+> ---
+>   drivers/i2c/i2c-core-of.c | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/i2c/i2c-core-of.c b/drivers/i2c/i2c-core-of.c
+> index 02feee6c9ba9..7c50905de8f1 100644
+> --- a/drivers/i2c/i2c-core-of.c
+> +++ b/drivers/i2c/i2c-core-of.c
+> @@ -107,6 +107,7 @@ void of_i2c_register_devices(struct i2c_adapter *adap)
+>   				 "Failed to create I2C device for %pOF\n",
+>   				 node);
+>   			of_node_clear_flag(node, OF_POPULATED);
+> +			of_node_put(node);
+>   		}
+>   	}
+>   
 
-thanks a lot for this cleanup and welcome to the commnuity!
+Hi,
 
-On Tue, Apr 15, 2025 at 08:34:37PM +0200, Enrico Zanda wrote:
-> This patch series replaces dev_err() with dev_err_probe() in the probe() 
-> functions of each module.
-> This simplifies the code and improves logs.
+Why resending this patch?
+it is the same has before,, so my understanding is still the same and I 
+still think that it is just wrong.
 
-I merged your patches into i2c/i2c-host with some exceptions:
+See [1].
 
-> Enrico Zanda (10):
->   i2c: uniphier(-f): Replace dev_err() with dev_err_probe() in probe
->     function
->   i2c: uniphier: Replace dev_err() with dev_err_probe() in probe
->     function
->   i2c: via: Replace dev_err() with dev_err_probe() in probe function
+CJ
 
-I removed the "i2c-via:" string
-
->   i2c: viai2c-wmt: Replace dev_err() with dev_err_probe() in probe
->     function
-
-Please resend a v2 of this patch.
-
->   i2c: viapro: Replace dev_err() with dev_err_probe() in probe function
->   i2c: viperboard: Replace dev_err() with dev_err_probe() in probe
->     function
->   i2c: virtio: Replace dev_err() with dev_err_probe() in probe function
->   i2c: xgene-slimpro: Replace dev_err() with dev_err_probe() in probe
->     function
-
-Please, rebase and send a v2 of this patch.
-
->   i2c: i2c-xiic: Replace dev_err() with dev_err_probe() in probe
->     function
->   i2c: scx200_acb: Replace dev_err() with dev_err_probe() in probe
->     function
-
-The rest has been already merged.
-
-Thanks,
-Andi
+[1]: 
+https://lore.kernel.org/all/1dacfce7-c66d-44c6-9a0c-2dd00bc24ffc@wanadoo.fr/
 
