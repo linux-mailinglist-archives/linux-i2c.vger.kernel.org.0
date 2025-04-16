@@ -1,47 +1,47 @@
-Return-Path: <linux-i2c+bounces-10429-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10430-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9EEBA90CCD
-	for <lists+linux-i2c@lfdr.de>; Wed, 16 Apr 2025 22:11:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91DCDA90CD6
+	for <lists+linux-i2c@lfdr.de>; Wed, 16 Apr 2025 22:14:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 69AE15A1164
-	for <lists+linux-i2c@lfdr.de>; Wed, 16 Apr 2025 20:10:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A0F0B442AC8
+	for <lists+linux-i2c@lfdr.de>; Wed, 16 Apr 2025 20:14:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B97C226CFE;
-	Wed, 16 Apr 2025 20:11:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7681E226CFB;
+	Wed, 16 Apr 2025 20:14:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fSmCipVi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iYXPqZTW"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5952226863;
-	Wed, 16 Apr 2025 20:10:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23DD322371A;
+	Wed, 16 Apr 2025 20:14:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744834260; cv=none; b=gtJzlH1zILuZ7VpEc89+nCOC0q6hWE5EnEKy0+21KIbVN/99fyx6gFyNo25KfKsDGlOc/kuuqpjCGN+YScUye1Lzd4DqMvvq74oTq37WH+W3C2OHKOY9+iTuGN1LvgWMvARxJ55MWsFslRXorI3p3nkBP8it5VHfow5fA97RF3c=
+	t=1744834450; cv=none; b=oAHj0qV1b4A75ORJSNMQbn3yPtoYdtWvXzeqIXemmgs8/5fiLukX26+T2Oxes2MZtDqtL7FYVxY0zlugKhtkGJ8vcxSrk2R34/mmIwBFJRGyUtC6ftkICoOu3XAR18MzJKkEHBA3glJTipSYMfWKuhCDZF8oT5Qdv1P21patXek=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744834260; c=relaxed/simple;
-	bh=SSak+u5jFVfFMUW7Av1ja2Nldu+0bF8pHTXYXRdifBk=;
+	s=arc-20240116; t=1744834450; c=relaxed/simple;
+	bh=Hbyp2qYIwULebz/O5rS6U/XZYTxGIC5Vje0hnCXZaSE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eI7jBcJFL8DlDhzEJyR9HPKYiezs+1KtWizc6kpX3kBnAlCm1qEIpNPYCfsOYgK+O9K4GHdRzvA7sehGubVaZPaaSf0LfrdZQX0ZPPXsgEirqbQw3Psl3NkszVtbZbl2YVSGbkLb4yhlZdBDdjdShursG5jlCNxfHZLQFeWAe+Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fSmCipVi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C191C4CEE2;
-	Wed, 16 Apr 2025 20:10:59 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=O+l3bRNUkXQC2g4VlrdKN39oW+xRn4aKJUz2YN1MfpWt76EMZIfddFlSeL0OCLzSyU9EfdK0DYeNSt2msEd6BkzwZ4aaETo1UIGHOHIQvZaprY7oxaIsA+yoLjaeelrD8dep4/opYnWnO7Ywl8i1Pnb7YLLcF0SJf6AxjBA2nlI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iYXPqZTW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F3C2C4CEE2;
+	Wed, 16 Apr 2025 20:14:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744834259;
-	bh=SSak+u5jFVfFMUW7Av1ja2Nldu+0bF8pHTXYXRdifBk=;
+	s=k20201202; t=1744834449;
+	bh=Hbyp2qYIwULebz/O5rS6U/XZYTxGIC5Vje0hnCXZaSE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fSmCipViEcJV+5wzo8ibu91cJy8mSWinHenOYUSP3XrBcgNiYzN7aKvzlWIl2bQzR
-	 6D6r+lCekEyI1+XiujroVPVDf0Vk1lFlRfcJjUfLQ4KnJapYGxkHYEy7tyMhgX3C4T
-	 T5+NMzmiZVdY7RRytwgwu5mxOKduWHl0gEeAP+5BCc153/3UCebfPvDz/1Kn2Z5mjJ
-	 5jV04x52lEniGY8jPu/HVU5XcDd1tafOVDSnM6Q5+ZER2StD3fIMzxRPC28fmzHSp6
-	 kuM7dgb9X3O1KUeQKZU6GS0B6EzQV3ZRzmAErBVPcLw9WyTQ+GHgrY/fCj0C5uGcrt
-	 0D2LXPLBfNeJQ==
-Date: Wed, 16 Apr 2025 15:10:57 -0500
+	b=iYXPqZTWE69cli1lV6YFlQpvGFrMMKKucFTo10PJSXWkST2M8/3S+SC1Whvcwc3Vx
+	 QlTQDqPmBc0yWRGlf2ivEtWCRS6dha9DvolhgVeyaTEv/qpyGrAZc7dyrchzFNTUzi
+	 feYk0JSpEpcXhbYLNOCytilKbAbYM0G2z3byX7zoeGq+IH6fZQO1eldPDQKiLd2EKG
+	 FkbKt6Wqe/ctklnx9U6VpLnYLWOvioi0mIDO8wfxQHuvLFKnMaemkuOEnrGGp0t5U7
+	 y4rWx9+/dOoZP8dxijEMLOr5HtlJJhxySd6xjztGO48YwEGQEJ9H2pDPb4DwBRz15/
+	 V/J8G6QYK6AJw==
+Date: Wed, 16 Apr 2025 15:14:07 -0500
 From: Rob Herring <robh@kernel.org>
 To: Alexey Charkov <alchark@gmail.com>
 Cc: Krzysztof Kozlowski <krzk@kernel.org>,
@@ -60,11 +60,10 @@ Cc: Krzysztof Kozlowski <krzk@kernel.org>,
 	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-mmc@vger.kernel.org, netdev@vger.kernel.org,
 	linux-pwm@vger.kernel.org
-Subject: Re: [PATCH 02/13] dt-bindings: interrupt-controller:
- via,vt8500-intc: Convert to YAML
-Message-ID: <20250416201057.GB3811555-robh@kernel.org>
+Subject: Re: [PATCH 03/13] dt-bindings: mmc: vt8500-sdmmc: Convert to YAML
+Message-ID: <20250416201407.GC3811555-robh@kernel.org>
 References: <20250416-wmt-updates-v1-0-f9af689cdfc2@gmail.com>
- <20250416-wmt-updates-v1-2-f9af689cdfc2@gmail.com>
+ <20250416-wmt-updates-v1-3-f9af689cdfc2@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -73,107 +72,132 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250416-wmt-updates-v1-2-f9af689cdfc2@gmail.com>
+In-Reply-To: <20250416-wmt-updates-v1-3-f9af689cdfc2@gmail.com>
 
-On Wed, Apr 16, 2025 at 12:21:27PM +0400, Alexey Charkov wrote:
-> Rewrite the textual description for the VIA/WonderMedia interrupt
-> controller as YAML schema.
+On Wed, Apr 16, 2025 at 12:21:28PM +0400, Alexey Charkov wrote:
+> Rewrite the textual description for the WonderMedia SDMMC controller
+> as YAML schema, and switch the filename to follow the compatible
+> string.
 > 
 > Signed-off-by: Alexey Charkov <alchark@gmail.com>
 > ---
->  .../interrupt-controller/via,vt8500-intc.txt       | 16 --------
->  .../interrupt-controller/via,vt8500-intc.yaml      | 47 ++++++++++++++++++++++
+>  .../devicetree/bindings/mmc/vt8500-sdmmc.txt       | 23 --------
+>  .../devicetree/bindings/mmc/wm,wm8505-sdhc.yaml    | 61 ++++++++++++++++++++++
 >  MAINTAINERS                                        |  1 +
->  3 files changed, 48 insertions(+), 16 deletions(-)
+>  3 files changed, 62 insertions(+), 23 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/interrupt-controller/via,vt8500-intc.txt b/Documentation/devicetree/bindings/interrupt-controller/via,vt8500-intc.txt
+> diff --git a/Documentation/devicetree/bindings/mmc/vt8500-sdmmc.txt b/Documentation/devicetree/bindings/mmc/vt8500-sdmmc.txt
 > deleted file mode 100644
-> index 0a4ce1051b0252bbbdeef3288b90e9913d3f16f0..0000000000000000000000000000000000000000
-> --- a/Documentation/devicetree/bindings/interrupt-controller/via,vt8500-intc.txt
+> index d7fb6abb3eb8c87e698ca4f30270c949878f3cbf..0000000000000000000000000000000000000000
+> --- a/Documentation/devicetree/bindings/mmc/vt8500-sdmmc.txt
 > +++ /dev/null
-> @@ -1,16 +0,0 @@
-> -VIA/Wondermedia VT8500 Interrupt Controller
-> ------------------------------------------------------
+> @@ -1,23 +0,0 @@
+> -* Wondermedia WM8505/WM8650 SD/MMC Host Controller
+> -
+> -This file documents differences between the core properties described
+> -by mmc.txt and the properties used by the wmt-sdmmc driver.
 > -
 > -Required properties:
-> -- compatible : "via,vt8500-intc"
-> -- reg : Should contain 1 register ranges(address and length)
-> -- #interrupt-cells : should be <1>
+> -- compatible: Should be "wm,wm8505-sdhc".
+> -- interrupts: Two interrupts are required - regular irq and dma irq.
 > -
-> -Example:
+> -Optional properties:
+> -- sdon-inverted: SD_ON bit is inverted on the controller
 > -
-> -	intc: interrupt-controller@d8140000 {
-> -		compatible = "via,vt8500-intc";
-> -		interrupt-controller;
-> -		reg = <0xd8140000 0x10000>;
-> -		#interrupt-cells = <1>;
-> -	};
-> diff --git a/Documentation/devicetree/bindings/interrupt-controller/via,vt8500-intc.yaml b/Documentation/devicetree/bindings/interrupt-controller/via,vt8500-intc.yaml
+> -Examples:
+> -
+> -sdhc@d800a000 {
+> -	compatible = "wm,wm8505-sdhc";
+> -	reg = <0xd800a000 0x1000>;
+> -	interrupts = <20 21>;
+> -	clocks = <&sdhc>;
+> -	bus-width = <4>;
+> -	sdon-inverted;
+> -};
+> -
+> diff --git a/Documentation/devicetree/bindings/mmc/wm,wm8505-sdhc.yaml b/Documentation/devicetree/bindings/mmc/wm,wm8505-sdhc.yaml
 > new file mode 100644
-> index 0000000000000000000000000000000000000000..a3fbe985db276e6a3b65cc66c7de097ed0719c0c
+> index 0000000000000000000000000000000000000000..a7d962bc13c7ff70b50448201b0416efc7f787af
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/interrupt-controller/via,vt8500-intc.yaml
-> @@ -0,0 +1,47 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +++ b/Documentation/devicetree/bindings/mmc/wm,wm8505-sdhc.yaml
+> @@ -0,0 +1,61 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
 > +%YAML 1.2
 > +---
-> +$id: http://devicetree.org/schemas/interrupt-controller/via,vt8500-intc.yaml#
+> +$id: http://devicetree.org/schemas/mmc/wm,wm8505-sdhc.yaml#
 > +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +title: VIA and WonderMedia SoCs Interrupt Controller
+> +title: WonderMedia SOC SoC SDHCI Controller
 > +
 > +maintainers:
 > +  - Alexey Charkov <alchark@gmail.com>
 > +
 > +allOf:
-> +  - $ref: /schemas/interrupt-controller.yaml#
-> +
+> +  - $ref: mmc-controller.yaml#
 > +
 > +properties:
 > +  compatible:
-> +    const: via,vt8500-intc
+> +    oneOf:
+> +      - const: wm,wm8505-sdhc
+> +      - items:
+> +          - const: wm,wm8650-sdhc
+> +          - const: wm,wm8505-sdhc
+> +      - items:
+> +          - const: wm,wm8750-sdhc
+> +          - const: wm,wm8505-sdhc
+> +      - items:
+> +          - const: wm,wm8850-sdhc
+> +          - const: wm,wm8505-sdhc
+
+Combine the last 3 entries into 1 using 'enum' for the 1st compatible.
+
 > +
 > +  reg:
 > +    maxItems: 1
 > +
+> +  clocks:
+> +    maxItems: 1
+> +
 > +  interrupts:
-> +    maxItems: 8
-
-This wasn't in the original binding. Find to add, but note that in 
-the commit msg. Here, what each of the 8 entries are must be defined.
-
+> +    items:
+> +      - description: SDMMC controller interrupt
+> +      - description: SDMMC controller DMA interrupt
 > +
-> +  interrupt-controller: true
-> +
-> +  '#interrupt-cells':
-> +    const: 1
+> +  sdon-inverted:
+> +    type: boolean
+> +    description: SD_ON bit is inverted on the controller
+
+This implies I know what the non-inverted state is. If you know, please 
+state that here.
+
 > +
 > +required:
 > +  - compatible
 > +  - reg
-> +  - interrupt-controller
-> +  - '#interrupt-cells'
+> +  - interrupts
+> +  - clocks
 > +
-> +additionalProperties: false
+> +unevaluatedProperties: false
 > +
 > +examples:
 > +  - |
-> +    interrupt-controller@d8140000 {
-> +        compatible = "via,vt8500-intc";
-> +        interrupt-controller;
-> +        reg = <0xd8140000 0x10000>;
-> +        #interrupt-cells = <1>;
+> +    mmc@d800a000 {
+> +        compatible = "wm,wm8505-sdhc";
+> +        reg = <0xd800a000 0x1000>;
+> +        interrupts = <20>, <21>;
+> +        clocks = <&sdhc>;
+> +        bus-width = <4>;
+> +        sdon-inverted;
 > +    };
-> +...
 > diff --git a/MAINTAINERS b/MAINTAINERS
-> index c5195a98b15a39583d337fb6310b80432b0f6922..2444282096e03b301ed0e3209b4de7a114709764 100644
+> index 2444282096e03b301ed0e3209b4de7a114709764..f106850b9d3d349d82953b672588b967a37ea27b 100644
 > --- a/MAINTAINERS
 > +++ b/MAINTAINERS
-> @@ -3428,6 +3428,7 @@ M:	Krzysztof Kozlowski <krzk@kernel.org>
->  L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+> @@ -3429,6 +3429,7 @@ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
 >  S:	Odd Fixes
 >  F:	Documentation/devicetree/bindings/i2c/wm,wm8505-i2c.yaml
-> +F:	Documentation/devicetree/bindings/interrupt-controller/via,vt8500-intc.yaml
+>  F:	Documentation/devicetree/bindings/interrupt-controller/via,vt8500-intc.yaml
+> +F:	Documentation/devicetree/bindings/mmc/wm,wm8505-sdhc.yaml
 >  F:	arch/arm/boot/dts/vt8500/
 >  F:	arch/arm/mach-vt8500/
 >  F:	drivers/clocksource/timer-vt8500.c
