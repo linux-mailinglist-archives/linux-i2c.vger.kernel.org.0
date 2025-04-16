@@ -1,76 +1,70 @@
-Return-Path: <linux-i2c+bounces-10415-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10416-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96F62A8B690
-	for <lists+linux-i2c@lfdr.de>; Wed, 16 Apr 2025 12:17:24 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 81F3FA8B830
+	for <lists+linux-i2c@lfdr.de>; Wed, 16 Apr 2025 14:04:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 04284189F073
-	for <lists+linux-i2c@lfdr.de>; Wed, 16 Apr 2025 10:17:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 996D3445CE0
+	for <lists+linux-i2c@lfdr.de>; Wed, 16 Apr 2025 12:04:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28243238C29;
-	Wed, 16 Apr 2025 10:17:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8ABD248875;
+	Wed, 16 Apr 2025 12:03:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="csTsuOXO"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Zz4KKZpB"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75D5E238177;
-	Wed, 16 Apr 2025 10:17:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F269323BD08;
+	Wed, 16 Apr 2025 12:03:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744798638; cv=none; b=mQnNfvZc8WUjq1bdEiFCeBk4W6gXJHFQOvjEP/9Krx7C5fFUrRJn3mCN3nxcvTeE79GHUmW4ykllFSInRnjH4DgzutYLe5dydXdPAC4lMTgds+4pXPRtc+zE2Nn6QEVSJYp4sqb7XzR8hTwohO/8BokFF5jLBba8UFS11jTHw9Q=
+	t=1744804988; cv=none; b=efl8EFKzosUQBWA53Wxtyd0alw5hLcRl0W9i2F0G3TDIULR7lL1z8lbGsOf926YpD+vBWRq3Lv2EZdHyRSfLuEXvmDaPA59ErtohfxzaWMsmeMmI+GI7m0hH08UZ9bgl+R4JzlIs7DDkJP/x8s1dAJ4pfeh7bohJbqEn5zRu7bk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744798638; c=relaxed/simple;
-	bh=syFNB16+rK3gdet27U6GHad1bDdbvsx6+zFInmrGubE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QIczlOuslUz3LwojvGCFHPc312kCmGZUzmiym1AzRQVN8xRneOO8DwbPifqRxWr1Ek6BIjP2a+cPgustpeAjHMNSfdySSAtPpiXy0S4MB6xQanGQO3ppc8Fcd9B/ItPwsf+vq21Wsh53gTfX8/YNvicEC4a8JTFE4p3twZi5TTU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=csTsuOXO; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744798638; x=1776334638;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=syFNB16+rK3gdet27U6GHad1bDdbvsx6+zFInmrGubE=;
-  b=csTsuOXOa5INoh6jjhJsdmRum/FwlHOxnIMngc5vRYvxY+pleIlJyW87
-   ekV6UjQ08MOjlh3vpubvEBaGZKF5ZA5EA7OP4oTy6fi4kPfOoQ6tgL5e7
-   e3+mGnZ6ysASIrws0cl9bHcy3c4+wMWyv3prCpUPzBGIbK3yW8NO1yTGs
-   3Gbsq58JtfLtCC7I3ZBfEr2AYM5tmLhcZmcIM2owbWZdZ0UbtKvGL+lXP
-   MKhJ08BFXIO/w8XUlI8upRQxoeiOwGlDwrVIu93eNe+YUvr6xiU4Mm/Ax
-   sPTH6HaFLEZklcuxMvfiqu6Hui8dHqX6ZbIP1FGWVFEkfJEiKS9+vcpWj
-   A==;
-X-CSE-ConnectionGUID: IqWb/c+BSv2RPq/r6uxj6A==
-X-CSE-MsgGUID: OjXaw8fnTRaxNACRe6R0UQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11404"; a="46464950"
-X-IronPort-AV: E=Sophos;i="6.15,215,1739865600"; 
-   d="scan'208";a="46464950"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2025 03:17:17 -0700
-X-CSE-ConnectionGUID: 0XKG7WLQTMekDl3xgg1UAA==
-X-CSE-MsgGUID: vPGXiA75R/OaX8YcMDY8eQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,215,1739865600"; 
-   d="scan'208";a="135588527"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa005.jf.intel.com with ESMTP; 16 Apr 2025 03:17:15 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 8A2B0F4; Wed, 16 Apr 2025 13:17:13 +0300 (EEST)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Andi Shyti <andi.shyti@kernel.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	s=arc-20240116; t=1744804988; c=relaxed/simple;
+	bh=a3Pe3Q3KK3rIPOMbZY0oB2O3qG07DQXIJk6fVXXFwog=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=cc8tALv18lWoREsIXd+4h1RdfKQcu/OF5kCdcJta7vhvcIm9WOnFeNatsAYegKjeB++cQU2I6YovCdt+w8gD22gonYBUEykCUc1zYdeiSglKAGuvhGR0m1Wqn/nKQsz7Z3Xmkq630iYc5hAegZ0r2g/zT7YD5pmL4xm6R+eq7fE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Zz4KKZpB; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1744804985;
+	bh=a3Pe3Q3KK3rIPOMbZY0oB2O3qG07DQXIJk6fVXXFwog=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Zz4KKZpBr6XhCNIn3G4W9V2tJq9uR/eIDxV0hl5bjgYugc+BAJY2ao9E1qy2Z6BcU
+	 EZWE+A/SgOnY34qNpfgCOVMVi1AER5BBl6RTN0hw65QDK68s++1pY+06+gJiZ/jFxd
+	 N99gie7UbqpU/dqvQEjw3m3FyUb2opbmSKy7JDk/N0i/8lDZ440wXrLkl5SYD8aeY8
+	 4PWkCf2Rup1TGTwOVU5zS/ESoTYxCBkNT/D6rvpP9b0MskvEgemk/hANBy6cUBHPMY
+	 VlvFl2YgdFtOu8SKYmX8gAhOpHuYJKrm96CASatd8HYp2wiyggiBp1tC5ca0+KrMqx
+	 Q0MdBvKB+WvIQ==
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id AACAA17E35EB;
+	Wed, 16 Apr 2025 14:03:04 +0200 (CEST)
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+To: qii.wang@mediatek.com
+Cc: andi.shyti@kernel.org,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	matthias.bgg@gmail.com,
+	angelogioacchino.delregno@collabora.com,
 	linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Jan Dabros <jsd@semihalf.com>
-Subject: [PATCH v1 1/1] i2c: designware: Use better constants from units.h
-Date: Wed, 16 Apr 2025 13:17:02 +0300
-Message-ID: <20250416101702.2128740-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.47.2
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
+	kernel@collabora.com
+Subject: [PATCH] dt-bindings: i2c: i2c-mt65xx: Add MediaTek Dimensity 1200 MT6893
+Date: Wed, 16 Apr 2025 14:03:03 +0200
+Message-ID: <20250416120303.148017-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -79,30 +73,28 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-When we use constants in a time or frequency related contexts,
-it's better to utilise the respective definitions that have
-encoded units in them. This will make code better to read and
-understand.
+Add support for the MediaTek Dimensity 1200 (MT6893) SoC; this
+chip's multiple I2C controller instances are fully compatible
+with the ones found in the MT8192 SoC.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- drivers/i2c/busses/i2c-designware-platdrv.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
-index d6e1ee935399..879719e91df2 100644
---- a/drivers/i2c/busses/i2c-designware-platdrv.c
-+++ b/drivers/i2c/busses/i2c-designware-platdrv.c
-@@ -34,7 +34,7 @@
+diff --git a/Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml b/Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml
+index fda0467cdd95..23fe8ff76645 100644
+--- a/Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml
++++ b/Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml
+@@ -52,6 +52,7 @@ properties:
+           - const: mediatek,mt8173-i2c
+       - items:
+           - enum:
++              - mediatek,mt6893-i2c
+               - mediatek,mt8195-i2c
+           - const: mediatek,mt8192-i2c
  
- static u32 i2c_dw_get_clk_rate_khz(struct dw_i2c_dev *dev)
- {
--	return clk_get_rate(dev->clk) / KILO;
-+	return clk_get_rate(dev->clk) / HZ_PER_KHZ;
- }
- 
- #ifdef CONFIG_OF
 -- 
-2.47.2
+2.49.0
 
 
