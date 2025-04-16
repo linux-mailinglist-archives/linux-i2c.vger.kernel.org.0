@@ -1,55 +1,53 @@
-Return-Path: <linux-i2c+bounces-10437-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10438-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F600A90DBA
-	for <lists+linux-i2c@lfdr.de>; Wed, 16 Apr 2025 23:20:40 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 89994A90DFC
+	for <lists+linux-i2c@lfdr.de>; Wed, 16 Apr 2025 23:49:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 118C5445024
-	for <lists+linux-i2c@lfdr.de>; Wed, 16 Apr 2025 21:20:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 21A8D1905F06
+	for <lists+linux-i2c@lfdr.de>; Wed, 16 Apr 2025 21:49:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 285D1221DA5;
-	Wed, 16 Apr 2025 21:19:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAE4922AE7F;
+	Wed, 16 Apr 2025 21:49:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SrLXxxFN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KdpSlWcO"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9EDA14B950
-	for <linux-i2c@vger.kernel.org>; Wed, 16 Apr 2025 21:19:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B9091DA634
+	for <linux-i2c@vger.kernel.org>; Wed, 16 Apr 2025 21:49:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744838367; cv=none; b=e2F7hJi6sQA4j6vOiHnfmriQY0VTlNSncRbfzhipmV1kXzDx/Gq/tUIycg4ybvDUxJrcaDvMFH16f69KW5VJXLx8MkBMH5Nm1kShBDOiXio8s3DkSXav+MIwXDP5I/zNa7azk+AUTPb+1gvRJEUXCZcciE2xQT9UeWnh40FZ1QY=
+	t=1744840161; cv=none; b=Tq4JLlNkMYzwyFqRtyD82pAANcO6FX4MYbKJr2jjASrzRuqEBLV2w0v+d/g3BLsOZ7Eg2UmxHR+d/VDKJk/GZ5nLnYQTvbk3Ox8Jjxi7rojtnent6WdcuWtKiPFINF28PzHOXRTkEkkaY3BAb4I7f9QBLdzYq8JJrQ8TOLmx6eY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744838367; c=relaxed/simple;
-	bh=7cl8hylKfNbFnYi8oaMGR+2XnxtWGpWOmspLzELh5cc=;
+	s=arc-20240116; t=1744840161; c=relaxed/simple;
+	bh=2GWlyX8AkWQPOJemZSkW21mVn9HEIpn4CXNML2fGSdg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CMgXDu5xZQvyuaJ1og7IYFbGRu/Q5+JCoUAkeSiyMWKupnhxeD5UcHYdRjqPfOjP6WhGtSpuxSQkgz2TOJWsxJuVsCUcV7ON3VYa368GuTvGYe84sENkiAj+SXglnMoD0E7dnhZRDWNVNdnPb9Ia1/NizaLaiS9yjpg/OKJdh0Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SrLXxxFN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE4E2C4CEE4;
-	Wed, 16 Apr 2025 21:19:26 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=KLNjGSoL4B5Hao4VU/zjSypUXf7qCkQlADLzsJ7kxn1RU27HSPz8492J9vmOxg3btmibvz07bwuFkHTMmzNZh6TJm4lI25LxS6WfNJox+UV7jocaO7g172qpXZEcBigmhFHjoU8thp9AgEBmmw3H+TZDGmC/iXFlOEFnLi/PO68=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KdpSlWcO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 643D7C4CEE2;
+	Wed, 16 Apr 2025 21:49:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744838367;
-	bh=7cl8hylKfNbFnYi8oaMGR+2XnxtWGpWOmspLzELh5cc=;
+	s=k20201202; t=1744840161;
+	bh=2GWlyX8AkWQPOJemZSkW21mVn9HEIpn4CXNML2fGSdg=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SrLXxxFNd0H0lubREaGQxs3L1Ktfg+hVPxrRrWKYCBecMR59oHlxmtNinEtid87n6
-	 hX4/I8IXZDgiiAUhrUGvB2uUPOvGlnFR798mMtCCcnSo5MPNKobi+P6QvlK1LdiaLA
-	 Sp8wxFGrLygLxXK3d+e2B9cEVazUHBIzm1RtjcDFOqlyEfNvQ99Uij1y9jqLZtfAFK
-	 1S6hI9n1u1Mkd6Q8xgrzsKnx17KO/kuAgOeiFMgH0qi/FFkndbnF866lIlIN/B3qQ0
-	 Vpol2OigGGXCHesPTdV1oNEH1IsUm/+uZ4zoDeD62qSpH7qQnxGvWkuN8KQbXn6FoP
-	 ABxV7ol9tX/+A==
-Date: Wed, 16 Apr 2025 23:19:22 +0200
+	b=KdpSlWcO5AqYHxcje9dJ9+ogKGK8+SVU2W9MmvSym8hPMRURdAt0clICt/wWVN4c/
+	 J78KWSIg104j8UJK3qDuGRBzeq6H1gtf/JxWU4zzk8XRBlLcUaNQrrK810+AiMV5mI
+	 wewZKvEPQBaN26ilTGFQPdumhVZ9/Fq6D15crzEvS7zSKfxRgy1DGLYb/5kvSJfWoe
+	 u2w1QP20PjH5Nob1AeLEnYp48EV4bp1v3hUUpZ7S7xvYoMtLl95QANMnbMBVrxTKT9
+	 SKG11apUpOlJXSRXh2qjn0Fdt/aZzpEsxP9XekVXMbDMVib54NC4IYqDIHT/alLCwG
+	 sPSdpkMMe1GMg==
+Date: Wed, 16 Apr 2025 23:49:16 +0200
 From: Andi Shyti <andi.shyti@kernel.org>
 To: Enrico Zanda <e.zanda1@gmail.com>
 Cc: linux-i2c@vger.kernel.org
-Subject: Re: [PATCH 08/10] i2c: xgene-slimpro: Replace dev_err() with
- dev_err_probe() in probe function
-Message-ID: <irmthictkubsmmz3cln65hz7pj227m7neqhuws5ecnzgvgdac3@tznat4u3jlic>
+Subject: Re: [PATCH 00/10] i2c: Replace dev_err() with dev_err_probe()
+Message-ID: <u6qtceh5khhjanllmfnnptbskcuuhfo62gj56bjy6bbkuvtc6y@neiethy2fkcz>
 References: <20250415183447.396277-1-e.zanda1@gmail.com>
- <20250415183447.396277-9-e.zanda1@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -58,46 +56,49 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250415183447.396277-9-e.zanda1@gmail.com>
+In-Reply-To: <20250415183447.396277-1-e.zanda1@gmail.com>
 
 Hi Enrico,
 
-...
+thanks a lot for this cleanup and welcome to the commnuity!
 
-> @@ -511,15 +509,14 @@ static int xgene_slimpro_i2c_probe(struct platform_device *pdev)
->  							pcc_chan->shmem_size,
->  							MEMREMAP_WB);
->  		} else {
-> -			dev_err(&pdev->dev, "Failed to get PCC comm region\n");
-> -			rc = -ENOENT;
-> +			rc = dev_err_probe(&pdev->dev, -ENOENT,
-> +					   "Failed to get PCC comm region\n");
->  			goto mbox_err;
->  		}
->  
->  		if (!ctx->pcc_comm_addr) {
-> -			dev_err(&pdev->dev,
-> -				"Failed to ioremap PCC comm region\n");
-> -			rc = -ENOMEM;
-> +			rc = dev_err_probe(&pdev->dev, -ENOMEM,
-> +				      "Failed to ioremap PCC comm region\n");
+On Tue, Apr 15, 2025 at 08:34:37PM +0200, Enrico Zanda wrote:
+> This patch series replaces dev_err() with dev_err_probe() in the probe() 
+> functions of each module.
+> This simplifies the code and improves logs.
 
-these lines were removed by 1dde04276b4d ("i2c: xgene-slimpro:
-Simplify PCC shared memory region handling").
+I merged your patches into i2c/i2c-host with some exceptions:
 
-Can you please rebase your work on top of my branch:
+> Enrico Zanda (10):
+>   i2c: uniphier(-f): Replace dev_err() with dev_err_probe() in probe
+>     function
+>   i2c: uniphier: Replace dev_err() with dev_err_probe() in probe
+>     function
+>   i2c: via: Replace dev_err() with dev_err_probe() in probe function
 
-https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git
+I removed the "i2c-via:" string
 
-branch i2c/i2c-host.
+>   i2c: viai2c-wmt: Replace dev_err() with dev_err_probe() in probe
+>     function
+
+Please resend a v2 of this patch.
+
+>   i2c: viapro: Replace dev_err() with dev_err_probe() in probe function
+>   i2c: viperboard: Replace dev_err() with dev_err_probe() in probe
+>     function
+>   i2c: virtio: Replace dev_err() with dev_err_probe() in probe function
+>   i2c: xgene-slimpro: Replace dev_err() with dev_err_probe() in probe
+>     function
+
+Please, rebase and send a v2 of this patch.
+
+>   i2c: i2c-xiic: Replace dev_err() with dev_err_probe() in probe
+>     function
+>   i2c: scx200_acb: Replace dev_err() with dev_err_probe() in probe
+>     function
+
+The rest has been already merged.
 
 Thanks,
 Andi
-
->  			goto mbox_err;
->  		}
->  	}
-> -- 
-> 2.43.0
-> 
 
