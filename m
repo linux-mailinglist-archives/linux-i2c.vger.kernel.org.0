@@ -1,80 +1,81 @@
-Return-Path: <linux-i2c+bounces-10405-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10406-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B38FA8B38A
-	for <lists+linux-i2c@lfdr.de>; Wed, 16 Apr 2025 10:24:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E876DA8B382
+	for <lists+linux-i2c@lfdr.de>; Wed, 16 Apr 2025 10:24:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 492AD5A25EA
-	for <lists+linux-i2c@lfdr.de>; Wed, 16 Apr 2025 08:23:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 82304444EDB
+	for <lists+linux-i2c@lfdr.de>; Wed, 16 Apr 2025 08:24:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80EE0236426;
-	Wed, 16 Apr 2025 08:22:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5E43236A7A;
+	Wed, 16 Apr 2025 08:22:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FP8RIrsQ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Kgpq9zmM"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E79C2356BD;
-	Wed, 16 Apr 2025 08:22:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9A3A236A7C;
+	Wed, 16 Apr 2025 08:22:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744791736; cv=none; b=STldTlrN/9yUwXwCAIzAWHRz3dRxNMgi+BvGZfwweyg+KPM6UUAE5Teid0SGv1g/Iqa3dkXUst69a0LZI1kmEqDgoaOfBnN7RK2M4ICRUhDuwNFzfXQC48Wd+x4jQZmwUtbZ2r/jx/Ub1u7nmuZfjTfI5cjN4zj5ypRnJ19Zt0g=
+	t=1744791741; cv=none; b=CTYWXVQ30JIvWReYBUobRM+O3S6OB6A43a1NZ6+gda36MHmkD0TkhH4np2MbrJAw66w1jhFO83mNVlLJpP208a706b/MJaSHmboj855cDw4P1u4qF5vIJRstTHvXQeNzm2PQ6RVGs6CJwmt/Y1/LknDZD6tSvuTztu1jWHGoLdY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744791736; c=relaxed/simple;
-	bh=pSa2/+lArCQElaZ7zv8t6mgy94jBQOEPi6HZFwmgmf0=;
+	s=arc-20240116; t=1744791741; c=relaxed/simple;
+	bh=rQgBMOj5Ew34+i8Xh45VB7HVlc0vQ+Js8dV6FOcVoJc=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=hjPcwt3hM0GQO2YBmWa30+dXCQcECJ74aY2nQA9yPePKRVC04f2xyQwBYDrHzRFnJdt6hemYGHIEaVm1rlQQ6BCLt43o+UDtJ56gdwOGUzsgl8WQ/+06hqjR8LWMXSzBlCRlHdIIh+BLVF2eMbGBwYTVPM378WZPvGhUrsuiKIA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FP8RIrsQ; arc=none smtp.client-ip=209.85.208.175
+	 In-Reply-To:To:Cc; b=e6+Kfu8aRPn/zfWl7U7zhiObYUyOmC29wnqCGA4bZw2qsX4c4MZYBEztaadqJW4DrickH9zXHR/fSNLFrG5z3Dx6zTczYhZbmrHzE3/MUqHgQWByQXWeFDhNvaVr0BuBy8mGAhu0Rdk1uhUHSux8Hpfr2+jrdEsE2+ZGHMQ5ajQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Kgpq9zmM; arc=none smtp.client-ip=209.85.208.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-30db2c2c609so69877251fa.3;
-        Wed, 16 Apr 2025 01:22:14 -0700 (PDT)
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-30eef9ce7feso65317631fa.0;
+        Wed, 16 Apr 2025 01:22:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744791732; x=1745396532; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1744791737; x=1745396537; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=dj5PT88n8b2JvNXoUABiLvbxSkILiT0Rl9oj3LLY50Q=;
-        b=FP8RIrsQBGljIqhzi7sL/OTHO5JO3jNBVzUWq7zqanAhB3NiP++IWfkOrO3LEbBHnw
-         mWB6m8w2gQ/iUbhh+R6ybvYG7/u6AZdZORa6xXQWr8u0+h/dJXZgWD5dQoKmmfDGbKG8
-         zRm6pEhZtrVIk6OywuXnTjR5JnQ3yHtvKFO3zeSbV/CMaf7OfdS3WgUUSKTKkFk6Yi83
-         xAmre3agx4V7CE14nXo98agv8P0/9G/WCmG7WdYZ1pa++uLbqDpusCIABMnRjFKMpqz6
-         xz2Ozc93o6neNYImCdqwvFphiRTvCX/D2cVZmeZaeovG/GRem/YaXaco6F8QPzDoABru
-         2yxw==
+        bh=cTk8dSc3+rRa4E8pHZeAjgILOJTnN61ZfwytEWQJJy0=;
+        b=Kgpq9zmMvRLUexpOU6NUGe8qgqmBojJjvd5Qj/pzQaiLIGyecppt4JTVV3rShmeEpT
+         QCw8NaIUWdC7XCLaUo901LaRyOQvgXwFqDfWGX9GshZndzNR5omELlNMYc+r7MsVy8N/
+         3ZFY3CtM2aUut6yKQ2unL/CyT3iEoGmTrfkS5gxuDleOhu3GxUld/wxgyeKlg0I0G9Ag
+         1oHfymMQLcLgGGEdZasgPEJLxcNtT4PQD2fON9CBwHfJLOTFxiV8jusV69sB/GB0AgRB
+         84d8qt+x9kfEg1MudiJK4GfiFZEbnpNrkzQYXG8heLqiVCxZZSL7joatoXpM/mBx9lxs
+         hfKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744791732; x=1745396532;
+        d=1e100.net; s=20230601; t=1744791737; x=1745396537;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=dj5PT88n8b2JvNXoUABiLvbxSkILiT0Rl9oj3LLY50Q=;
-        b=bJkvJqvexWQWZW1FFADOcjCVcOjT83TvjDnZF6V20t6KkICaOvTP+wWiJ8KuGKkkEK
-         SfYVM+0d9xIYqn59PmcZ/XDhxRJ5wW/SQRfeBeA3aygrbbrpVV7V8hKrTu+yfMaYujFF
-         kjRLYMG5lIlr6uGFEbuSsBHATVWdkLw+fyfVo0pHvV04Uu450KLjlC0PiYmYFtYN3V7Z
-         rA5+oT+fZkiSUP7RugFcc7qtH3HFdEuoSlCqlspPSPnskeLAOGhLMHjT4HeFTWWCDX0Q
-         fr0kVs2HPgtUM2uxAK5PhqCLb8stUBb6GXL6sGmZm6qIU2Wt1fegGRzMwTaCF/iK6jHb
-         9NMg==
-X-Forwarded-Encrypted: i=1; AJvYcCVbtoaXHkrX2fzsIPcB3OlbVEFWWSfRrPJay3FM3htwc7926HdWaYLGN9qoA1pSGbAUbfsMm9eByBw6@vger.kernel.org, AJvYcCVbxtffmA7NRTazoJFbnnleSR9Z8RlgTWbal4vj9MhE8Uk5xRONlCQtx9fITdAOmf/BP5Zrh7q3KSPbOstE@vger.kernel.org, AJvYcCWCZb3Ses0grqZXCptyMX8QX12OcawZKcSHhQw71NTom0uemDCTeiAdkDcWLy0o57nKVD7fehw/7tLj@vger.kernel.org, AJvYcCWKKcCFKVx1mF05CaetB+T2I1YKGbxONEdvLJd/EB9zlZB4DK7mJE6dd32Xn/fgRVKoa2f5X6kDKxyE@vger.kernel.org, AJvYcCXY1IF4MWHkeFKpJgK45G/0yoibZPOZnDn2WI3Hdxu38is/DW7IVu0SiuVagecX5FxdUtlkcOw6@vger.kernel.org, AJvYcCXrk2LX48Xvr0YL4yC+tc0LSNbYCpnJi0e7nn44J+PRvjlQnhAxRkpT2b7BFxU0awv53TMkGWRwSd2Z@vger.kernel.org
-X-Gm-Message-State: AOJu0YxVAq1UkbXzL/bTTWAK/gqMd3oJQrUsC1Lnpg3Pm3ax8w69IXK5
-	FqrzajX8iQP3XVBxVLy9GALFF5fA0nx89g/i50W2X3pX3VEJjTXU
-X-Gm-Gg: ASbGncvDNikvyj7g5Rr2yzHa6wtThqtfNCiPnvSTWgpa4StkutwqERyRlDDNWpxZ/FU
-	4IxOYJk5zuStsLISL3E5PWXc//+/wH7VC7rRM8z2JzIPDpEe9Mrr4SmddVANVQcqRNmMEjhDpS3
-	hg63kSr79nqZjet7WNEUcSeWZCJru4dTb0bknzEMx36iVPtAuBbYl271srG3Ql8ofF9cNgMpRTD
-	HXduMZ/wiWqI7DTR6TDZ6xWw3HbwtUNL2Kytuj6XoIsqDj6PJAfAycxVbZ9963LZVXj+097hsNS
-	D+BBxcLE2nt6+TGGkKERwN611TNt4vECtL6dVaeKbEOyEXfbN53N
-X-Google-Smtp-Source: AGHT+IE9lnGE1KsUoj9JV0gEDYMhu1y4IoeMb6WofbocdBnl/7R5ilrJ5bpyWUq8Z39pTLiMZzYGWQ==
-X-Received: by 2002:a05:651c:30c2:b0:30c:719:1145 with SMTP id 38308e7fff4ca-3107f6cdb69mr3020381fa.17.1744791732408;
-        Wed, 16 Apr 2025 01:22:12 -0700 (PDT)
+        bh=cTk8dSc3+rRa4E8pHZeAjgILOJTnN61ZfwytEWQJJy0=;
+        b=R0N7dk8+LUJl80ia+6C1VdxZHIFniPwTKUn8uxlH5/IlFjQKN2rEOTEYgadbeR9C4+
+         wc5lZEq08xyK0PaEMK4ZfSQifNRjfEgsMaXX8m0tt2d5vEF1uXADbA4/D93wCAfZEx4h
+         11QRC2smCjdjRG4zu2EsmZ0c+SxJaCzC5882PuFR+MdkagAIgQemOk8SjBLqyS/zirwD
+         7vtTm4lpoFcoQxSThhKtTfFLUgJWIwb8pQL0n/cwpFFuPc68Sa9D/azCFR5Vxh9GPRF1
+         qbwXvpizp+1/lNhy368ocr1cArCXwFccxiHglPDjCG/Lt/x6rnX7Xjwr3fCgbkj67Z3l
+         Wcqw==
+X-Forwarded-Encrypted: i=1; AJvYcCU/rm8L40elyhOMoLvJaw0w9zAHQUbJj64YC/1+Ey4uJF8zrvvzOrIjXReO2EPt9KC7ToJaBy0u1WmT@vger.kernel.org, AJvYcCU7uyufFO4DRtoHYB84IE9jjY1ducXUxbEnWohVHGWAyHbm1vZaZnsm/Vy55QaMtcO4QNTmGJRfDmj+@vger.kernel.org, AJvYcCUetu16T/lQqLKe5ZGZsKRk5Fx9pN6QvzVyfIu0sUWUxmKwOBBPGNSbE+I/lAyPg8yJSFNZTLyTsXQ17ZPf@vger.kernel.org, AJvYcCViMHKTeCBlZ39KUlMAUmzthsPYGQ1l1BrIQu5LqSpnWxtGYF8ioznIVRw8cWGYjnTv+KhV7Fh0@vger.kernel.org, AJvYcCVmJsCDzzJ6PR3/YG9NDGb5qnzcfnuKmrkBpXlQGqhketGZ9ReZXDeqy0ZjIB75gN9sfjE51SbpOizy@vger.kernel.org, AJvYcCXOXDbOFXkqmdYsHVBqVsQVwTXC9SP04IkJX6wONlWulMK0y4RAIPXe5NrZRfZ3/hC0mj15HLDHGCLY@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxbss7A4EbVzSYfTopxfaSzfyfobVdgi8gpZxNtSAA4nDyBAmCF
+	SdK8me7hIDNNd1XwYruXpvFDyvvcW9pR7EeHyIPWpBbk73Yj7Dqd
+X-Gm-Gg: ASbGncsxFeHIuRNC8a4DpsGrdn2clprRquGQGYY4LAwlgfMn8s5+R0/uh3rcDFOs2ET
+	zsVLcmAcoYHwWTDQSj0B8+jhtzWy/Huai3rpP7MwO1dvl8Xh0YDGlN6SClhU1YvcBPkH5IFAm8O
+	W2lMw7VQRHfhFsAdjb8OCvODZzkX8HEdwpUaPjZzSQr79FtwnzCoMYrBZMu6LZhGJPgSJqF4df/
+	1PZmiFqlM8M6NvmM6u0Bqav315Qwk6oivrH5JMZGDFD6IIGrgJoxFccsqEkFrvmnsOjyL2Vt6B6
+	cjqwxysd4dNO9Ert77g5a9Mnj1gy8369v9TBmO0WtQAC+OgG5Qo2
+X-Google-Smtp-Source: AGHT+IENb6XUcPxgjKLkbP0qmMhjj4SlaApewj8OHzgfqDb3t6JpoTvdMHoBjymD6/Dx/su/LKlmPQ==
+X-Received: by 2002:a05:651c:158d:b0:30b:f924:3554 with SMTP id 38308e7fff4ca-3107f6ceb59mr3523531fa.21.1744791736738;
+        Wed, 16 Apr 2025 01:22:16 -0700 (PDT)
 Received: from NB-GIGA003.letovo.school ([5.194.95.139])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-30f465f7b20sm23025391fa.97.2025.04.16.01.22.08
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-30f465f7b20sm23025391fa.97.2025.04.16.01.22.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Apr 2025 01:22:11 -0700 (PDT)
+        Wed, 16 Apr 2025 01:22:16 -0700 (PDT)
 From: Alexey Charkov <alchark@gmail.com>
-Date: Wed, 16 Apr 2025 12:21:30 +0400
-Subject: [PATCH 05/13] dt-bindings: pwm: vt8500-pwm: Convert to YAML
+Date: Wed, 16 Apr 2025 12:21:31 +0400
+Subject: [PATCH 06/13] dt-bindings: timer: via,vt8500-timer: Convert to
+ YAML
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -83,7 +84,7 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250416-wmt-updates-v1-5-f9af689cdfc2@gmail.com>
+Message-Id: <20250416-wmt-updates-v1-6-f9af689cdfc2@gmail.com>
 References: <20250416-wmt-updates-v1-0-f9af689cdfc2@gmail.com>
 In-Reply-To: <20250416-wmt-updates-v1-0-f9af689cdfc2@gmail.com>
 To: Krzysztof Kozlowski <krzk@kernel.org>, 
@@ -100,107 +101,99 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
  linux-mmc@vger.kernel.org, netdev@vger.kernel.org, 
  linux-pwm@vger.kernel.org, Alexey Charkov <alchark@gmail.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1744791712; l=3177;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1744791712; l=2962;
  i=alchark@gmail.com; s=20250416; h=from:subject:message-id;
- bh=pSa2/+lArCQElaZ7zv8t6mgy94jBQOEPi6HZFwmgmf0=;
- b=5IArVazk/Vp7LbhkSLdoFtXb1jIC+84A1bxqEt5dF1N5SFJ/vY/W23YdW1D3UTtXNTpblMARY
- j/mELPMv6Z7Atzr05vYG8E6JVZSf03GFFz6XvrHPh1UESoohzwmf5mg
+ bh=rQgBMOj5Ew34+i8Xh45VB7HVlc0vQ+Js8dV6FOcVoJc=;
+ b=cyrY8bMMM4FzShamz8Jror+JqU2ISzf6zzaPROlnVffmoBLzeE/nIs/54j2YnWjYCMyICGaYB
+ JTE1vN/oiyZBT4fRur+pa8iTMnrcMs6Mp6t4Y9oNmKFM2Z3LQb5CkuF
 X-Developer-Key: i=alchark@gmail.com; a=ed25519;
  pk=ltKbQzKLTJPiDgPtcHxdo+dzFthCCMtC3V9qf7+0rkc=
 
-Rewrite the textual description for the WonderMedia PWM controller
-as YAML schema, and switch the filename to follow the compatible
-string.
+Rewrite the textual description for the VIA/WonderMedia timer
+as YAML schema.
+
+The IP can generate up to four interrupts from four respective match
+registers, so reflect that in the schema.
 
 Signed-off-by: Alexey Charkov <alchark@gmail.com>
 ---
- .../devicetree/bindings/pwm/via,vt8500-pwm.yaml    | 43 ++++++++++++++++++++++
- .../devicetree/bindings/pwm/vt8500-pwm.txt         | 18 ---------
+ .../devicetree/bindings/timer/via,vt8500-timer.txt | 15 ---------
+ .../bindings/timer/via,vt8500-timer.yaml           | 36 ++++++++++++++++++++++
  MAINTAINERS                                        |  1 +
- 3 files changed, 44 insertions(+), 18 deletions(-)
+ 3 files changed, 37 insertions(+), 15 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/pwm/via,vt8500-pwm.yaml b/Documentation/devicetree/bindings/pwm/via,vt8500-pwm.yaml
+diff --git a/Documentation/devicetree/bindings/timer/via,vt8500-timer.txt b/Documentation/devicetree/bindings/timer/via,vt8500-timer.txt
+deleted file mode 100644
+index 901c73f0d8ef05fb54d517b807d04f80eef2e736..0000000000000000000000000000000000000000
+--- a/Documentation/devicetree/bindings/timer/via,vt8500-timer.txt
++++ /dev/null
+@@ -1,15 +0,0 @@
+-VIA/Wondermedia VT8500 Timer
+------------------------------------------------------
+-
+-Required properties:
+-- compatible : "via,vt8500-timer"
+-- reg : Should contain 1 register ranges(address and length)
+-- interrupts : interrupt for the timer
+-
+-Example:
+-
+-	timer@d8130100 {
+-		compatible = "via,vt8500-timer";
+-		reg = <0xd8130100 0x28>;
+-		interrupts = <36>;
+-	};
+diff --git a/Documentation/devicetree/bindings/timer/via,vt8500-timer.yaml b/Documentation/devicetree/bindings/timer/via,vt8500-timer.yaml
 new file mode 100644
-index 0000000000000000000000000000000000000000..a5f77fa848e0f604bed63c36b8e0996cf599cec0
+index 0000000000000000000000000000000000000000..7d9dc93b708823de9594d20ef6b7e0367c5a36f1
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/pwm/via,vt8500-pwm.yaml
-@@ -0,0 +1,43 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++++ b/Documentation/devicetree/bindings/timer/via,vt8500-timer.yaml
+@@ -0,0 +1,36 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/pwm/via,vt8500-pwm.yaml#
++$id: http://devicetree.org/schemas/timer/via,vt8500-timer.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: VIA/Wondermedia VT8500/WM8xxx series SoC PWM controller
++title: VIA/Wondermedia VT8500 Timer
 +
 +maintainers:
 +  - Alexey Charkov <alchark@gmail.com>
 +
-+allOf:
-+  - $ref: pwm.yaml#
-+
 +properties:
 +  compatible:
-+    items:
-+      - const: via,vt8500-pwm
++    const: via,vt8500-timer
 +
 +  reg:
 +    maxItems: 1
 +
-+  '#pwm-cells':
-+    const: 3
-+
-+  clocks:
-+    maxItems: 1
++  interrupts:
++    minItems: 1
++    maxItems: 4
 +
 +required:
 +  - compatible
 +  - reg
-+  - clocks
++  - interrupts
 +
 +additionalProperties: false
 +
 +examples:
 +  - |
-+    pwm1: pwm@d8220000 {
-+        #pwm-cells = <3>;
-+        compatible = "via,vt8500-pwm";
-+        reg = <0xd8220000 0x1000>;
-+        clocks = <&clkpwm>;
++    timer@d8130100 {
++        compatible = "via,vt8500-timer";
++        reg = <0xd8130100 0x28>;
++        interrupts = <36>;
 +    };
-diff --git a/Documentation/devicetree/bindings/pwm/vt8500-pwm.txt b/Documentation/devicetree/bindings/pwm/vt8500-pwm.txt
-deleted file mode 100644
-index 4fba93ce1985a1e4c5a361423725fafb10eaa339..0000000000000000000000000000000000000000
---- a/Documentation/devicetree/bindings/pwm/vt8500-pwm.txt
-+++ /dev/null
-@@ -1,18 +0,0 @@
--VIA/Wondermedia VT8500/WM8xxx series SoC PWM controller
--
--Required properties:
--- compatible: should be "via,vt8500-pwm"
--- reg: physical base address and length of the controller's registers
--- #pwm-cells: should be 3. See pwm.yaml in this directory for a description of
--  the cells format. The only third cell flag supported by this binding is
--  PWM_POLARITY_INVERTED.
--- clocks: phandle to the PWM source clock
--
--Example:
--
--pwm1: pwm@d8220000 {
--	#pwm-cells = <3>;
--	compatible = "via,vt8500-pwm";
--	reg = <0xd8220000 0x1000>;
--	clocks = <&clkpwm>;
--};
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 001dc954fb44cc9b26570d663ea3bf9214c2deff..d131004add981446b08b1b3d572a3daa8377fd61 100644
+index d131004add981446b08b1b3d572a3daa8377fd61..46339ed45ad18ab2b9470c749f604d9aaf72015b 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -3431,6 +3431,7 @@ F:	Documentation/devicetree/bindings/i2c/wm,wm8505-i2c.yaml
- F:	Documentation/devicetree/bindings/interrupt-controller/via,vt8500-intc.yaml
+@@ -3432,6 +3432,7 @@ F:	Documentation/devicetree/bindings/interrupt-controller/via,vt8500-intc.yaml
  F:	Documentation/devicetree/bindings/mmc/wm,wm8505-sdhc.yaml
  F:	Documentation/devicetree/bindings/net/via,vt8500-rhine.yaml
-+F:	Documentation/devicetree/bindings/pwm/via,vt8500-pwm.yaml
+ F:	Documentation/devicetree/bindings/pwm/via,vt8500-pwm.yaml
++F:	Documentation/devicetree/bindings/timer/via,vt8500-timer.yaml
  F:	arch/arm/boot/dts/vt8500/
  F:	arch/arm/mach-vt8500/
  F:	drivers/clocksource/timer-vt8500.c
