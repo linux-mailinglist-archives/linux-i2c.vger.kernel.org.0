@@ -1,79 +1,80 @@
-Return-Path: <linux-i2c+bounces-10400-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10401-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F805A8B35D
-	for <lists+linux-i2c@lfdr.de>; Wed, 16 Apr 2025 10:22:12 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65164A8B364
+	for <lists+linux-i2c@lfdr.de>; Wed, 16 Apr 2025 10:22:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E45663AACA9
-	for <lists+linux-i2c@lfdr.de>; Wed, 16 Apr 2025 08:21:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0499D3A6293
+	for <lists+linux-i2c@lfdr.de>; Wed, 16 Apr 2025 08:22:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB99B22D7BC;
-	Wed, 16 Apr 2025 08:21:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30246230BCA;
+	Wed, 16 Apr 2025 08:22:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YHJEPI2j"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Iw7hXb5j"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
+Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2726158520;
-	Wed, 16 Apr 2025 08:21:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F677230278;
+	Wed, 16 Apr 2025 08:21:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744791715; cv=none; b=u9KoRSzIB3r8tnMb6BrbkDUNR1GcMU3sAuoZSJ7FWJDJDfGRkE2/YSKNSurE5o8N6AaCY57rK9KYWRnGRfFtJxnnAJX+q4LqjxCV1zGOsWHK1V40emzquo16hzpcN7tJ6sG49mWg4zbkzBmzUiKY2I39OYrMqW//PonWq6ktu68=
+	t=1744791720; cv=none; b=IFti66U4nXd3BDH9PdqTfTE5XHl/HujHelYUNEXnqAYFUFxX2GpB77IgG/Vu8/UZUy1Q0S3Mm9czIHQ0apo4Y0ZFbwOU0q32QCOjcYh9PFHFP310N5NnsbNq7RCUTnimxaGsS5wAKtvm1jsG13BM1pxWhi1O9Wbbd+wPHl2M36s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744791715; c=relaxed/simple;
-	bh=VWW+FjoSMr2BVYRu/X2g0WXpS/3nXWF7DuGik59WEqM=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=hUDJBfAw3GilSrFZ8GT73Q5cf0LoF1p8Q8hHK8Yxb9+upJ1LSxCE8jYERgd6ohY44Xb4pfLEZzqvqkOhcim/cNVkw74Q8lRcnn6rhr5FavymNdgtZX3BtV9wJ3ypHOsv10pOrz4uuy7ZojaG6Q2aXdgZeDbF/uy5kw0dW5ZVeFs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YHJEPI2j; arc=none smtp.client-ip=209.85.208.169
+	s=arc-20240116; t=1744791720; c=relaxed/simple;
+	bh=rLGOiAxFmtYr1z3EibKMzDrgcDWDiyp5KqoWHiu8Zvk=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=O8sm2YDr0jo8HXvKMBrVEgfC1FOLdMKATcR+wxVNIQ/nfy+ayCv4/wOCQ9i5AVB0wEbWGmwZB26GmxFxPRNNT1n30gBwo6i9YIo4kNO2zznskNXAYZBjdSf+C3vJWqcvSrAN8ZdV9p26gfH7319Nx4bBlCf9ldC6v/jG5nXemT0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Iw7hXb5j; arc=none smtp.client-ip=209.85.208.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-3105ef2a06cso34213671fa.2;
-        Wed, 16 Apr 2025 01:21:52 -0700 (PDT)
+Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-30bfb6ab47cso59443631fa.3;
+        Wed, 16 Apr 2025 01:21:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744791711; x=1745396511; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=kSn8ywScBr2S49CSRan+oKzZUY5sWQo+CXS/MBhnnS8=;
-        b=YHJEPI2jpEGnXGKs3WKdJVTs9+qUCkJ+DeUJbJR71TRFQbTTiP/myzYk3wqINlXZeT
-         YhoF5rUeIyqYMbrr4MfUp+16qTU6EBYxVnRhlF/Ts3np3DI2/b17n/IaYOPZcrDT4t+L
-         Mz9i4sV0RJuCtsKLBVeS2ocxoONyrfV1GhRgrWoTd5p5mvV0WWgyGlZS2JYjZequoKeE
-         7qXsVLrl+ZTFwI6QofHHcK7+W0hmCDouL63K/Yh7k7SNpX1F8UP800YBHnARV1HKsXIb
-         G6INo7F3G5kDZhyw3Emfa0IFE4rEqc0ctztSCJ7Jv+2/ZwmLSeVsL7UIlsZbzaOW+eZy
-         bPpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744791711; x=1745396511;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20230601; t=1744791715; x=1745396515; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=kSn8ywScBr2S49CSRan+oKzZUY5sWQo+CXS/MBhnnS8=;
-        b=OEwAp4uq4eCv5qL2fwgWE4x63mnHTzNzRnrH77C8gRflDLst4Emxto8Mi3mMdaoVBV
-         66nmzTwGKhsmccmdPJtDSj544ruI+OeG8BK3W4/vlhlrx8AqZ7IF2ejUvg63CRele6+R
-         Za1OM3fsaU1rfkX9By7QA6C5gJrAjRcYUnMnt2kC0l8MeSaOg2/6ijgpTSboz2J7HXUs
-         sJWSnWRA96SkUQU41RHBlY4rgG/fK9W4huOz1NqXHypWqqt56g782xyKW/haeQyuUROr
-         TTRuYg3CgLiFVt6b9swSYTebx7rjsunST2SRpJW5i+P/ZpLSyOpPCCN8nvKXeOhuIe4Z
-         Mvcg==
-X-Forwarded-Encrypted: i=1; AJvYcCUTxHzXGYLDKkeINdPrrggMFczDzBpaUdqzhmQuNys+RzkrtHk7/LySc+Vj3VQj/xG7ePNyaYnS@vger.kernel.org, AJvYcCVVJz6ZGRjEeU8LFVbNSiUard0dTjnLtui/5llJllk/9lefOclgEdq4Rv4ElDCNn5/hi33HbpER4vODW+mV@vger.kernel.org, AJvYcCW4Ns0c7TK4IcNYy3RyEZikJAbWspEQOie6fzjLA70bPKoHwKjG5LmZdljjxZmxSP/uSuP4MrOcxdYc@vger.kernel.org, AJvYcCW6Kl+6QojfNHkcgWyoTUOnA0A1+6k74YGxjruiUz/1YMeE9ENLDKU5Rm0fK0bq29aW9IGU4ManHeAg@vger.kernel.org, AJvYcCW88VFWmEDZB3buERNox57NSO88rdEEfmSynXGhZwCI5tP//hp515EcwXsWNqwc/3o+1DAVacD7vQJ8@vger.kernel.org, AJvYcCXv01/HEfkFgQ9Szw677HWSzYXHU+oUMhhcvDX8KFj15G/0DpHUb+MpNe61nOPNQzkNvRl10wH4BjY1@vger.kernel.org
-X-Gm-Message-State: AOJu0YylZriNctxEJd+YeJ8L0/V2CTxigrWUTThYOVk64LZAualfNvkS
-	6F5NIn4Z7n7DxW8QUddOG95mxweWwSn9MFbF80ESrw+SlyMFdwPW
-X-Gm-Gg: ASbGncs2s1eOq84mBGZuepupi+YPw2ycfTNzFD6iPNjbnm1wFVdJxqlCHF2DE62uxiY
-	jtVvIRtVf3SEdApuockyvsx/JIpy7xz5YnakKaPk/6pN64hhAM6HzIRPJb2u7uf5cjdolCYbuFD
-	ev0HhN/f/bYR0qRMvRTlUt77/jv1sjQJ9Y0CN4IbqU03hL2UUO3TNcC/tHG055NmeJ04tfm6dZp
-	0Xqhqbk4VremRXHRwJSreo9wnQrIjnPlHQLoj94NdYPjuSI9qimtZ4fBn3B9suTVsesyob8HGFU
-	pfXz5bdrwPKaR8ikY5XF/vn6tLswZAVhDsqtJgIAipP/GYIxoh5K
-X-Google-Smtp-Source: AGHT+IHs8w/edsjtM3rOM3Yclg32oaNqFZGls9C6H68akxr8+2plKYYeBm64f3z6Q4QArp+Lekmm2g==
-X-Received: by 2002:a2e:8404:0:b0:30c:aae:6d4a with SMTP id 38308e7fff4ca-3107f718b7bmr2182291fa.26.1744791710377;
-        Wed, 16 Apr 2025 01:21:50 -0700 (PDT)
+        bh=zF2nLiIalRwSIJzUkKVjQarCty9tVHGhPYWypqzVXUk=;
+        b=Iw7hXb5jT1lcTliZ4UI169GCw6zbK7s6CPdVrIIE4xFNIaYh+mNKKu5LVb1B72QPR7
+         8TnZ88pLUZSvmXyBI8120R3hrRmLF0kuOmIEVLUOdSNGoAsYOdEpudFmKKmtlTPhk0hO
+         ae32qXuRYOca2tWUy44PpLwhaZ7B09uBhGx2zL8hTBSvlQ0gfuuEistj4MzInZ4TWPZh
+         g80DWasnag81TAwAnTSC9ELzeFkEidpXWGSBbQfqWNptx7fCsT2eqjyhOQbElsMIr3UI
+         k9a/5ia/db7RNuIstSj0+IX4uU4UJxBanpkxwGKgkKq6ugxrQtKfbzmKTLmshVIsF2RO
+         hFNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744791715; x=1745396515;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zF2nLiIalRwSIJzUkKVjQarCty9tVHGhPYWypqzVXUk=;
+        b=Gg7fK0ebHjw5dYj00nA2ORIajd4YstPOrk18g280yW3y2NcSBNf3Slgdt6JEDXx2zr
+         /j6CAbpMtOHJNP6jVTgQMDcMIseTrkZfGhkz8fKP6e6iPcMdlpXBYzMN0b0vzqSoXERU
+         FkoITfdp9C5/TMeT2aozgNXqzs7ssuzLKWnmWivOmtHfvwvKu8Th6jDHGGUZYoB/Z+ww
+         zYdZTLuuZv/0RjHsNPFRoqf2KVK77gPcfmtG1IbK9utSnoABFymEg4dqB1IjzCXXsQi0
+         /HW5tBJY10rDfmj+xH/2lfcrhKj3AqktExgRHUhn48eloYgmoNBjOpEDs/1glI43Ky8e
+         LxRA==
+X-Forwarded-Encrypted: i=1; AJvYcCU3DyzUfRWcMaAAkIo8SYbZy9l1BWFuUfcqRfb9CYMRqKo2fn+me5uyRUSPrPI2D1xaPZlwIaoOgQFD@vger.kernel.org, AJvYcCUcel/O2q6aw78pVQsSFL1DDjJjF5xkTPDkyQq8Vis354xHtygSVPBFyB59V8NhgQ78wAtnPtb73d3m@vger.kernel.org, AJvYcCVT4lmrYn+7nBSywN8ymQjWRvjTNEmp+l4fzAM5/bMArZx6zjK4uANhysaa6JkE/LwdcvgpSekJnVTH@vger.kernel.org, AJvYcCWr/yz+lC13NclIMPU1XBI4WMpa+Dv4d3kmYkGlAuUPUjOsf+GeLzBDY5HFhVLCGVhN37kSqyxZ@vger.kernel.org, AJvYcCX0Vm6tGkgXF/HUaggPyx3LfXK3ZRDorQrBx0ozjo8cq/UegeiMmMYLHvFCoCTTPrHUMEJPwBggcD8kyHsz@vger.kernel.org, AJvYcCXKwfN8LQCWh4vFlpEIjeEjW57ZMOZszAYyuH9waWdubKSgjEZVk/dnmXanuo6Iy9g3aIsygge13+mb@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx3LuR6Los5oVi0B89vWW8T7bE7I1f9+VWLBZe7y+IhOANvYbPT
+	NTKn71dn+b6zaM8Di0HfMti8LSDO9JjxO5t5krE5odUOqytfTFKj
+X-Gm-Gg: ASbGncujnZhufrxQDYd9AXkAGhOIseAb73hkt0b+k+hIIUhX7hmOud0lp0BN07uRvRE
+	MY8/oj/EuTv/EFa0mZyb0tcYKAv3zT4YhYSEWobitZu3gDuqEu6lCNh3mwQ62Twk6J9xxbabAuL
+	SENcoDYgB+Lbd4ooLFl1y7CsvAk12Wizguo4i7krqXSCtK8c2ssYxksF7D36N2mfr0eP0TyUyye
+	k6vIaquTY50uYio2LGEg8HfV2d9NDiqkafiWKrSea5b145/yKO4jdLs0yxh9oogV1e9x5xxi1D0
+	LljBbC8uSOkka20ETE9QbcqKFCF6LAA4uTGcfiGXDSb2Ftd4U6yC
+X-Google-Smtp-Source: AGHT+IGKgbxsPUZ8e6QYd3i4IL00BMajnpxY3Tdn5JifjzSLJUZac+Wl2mqvZhg7yql0uqt789LhJg==
+X-Received: by 2002:a05:651c:514:b0:30b:bf4e:f6fa with SMTP id 38308e7fff4ca-3107f6ccf73mr2651111fa.17.1744791714786;
+        Wed, 16 Apr 2025 01:21:54 -0700 (PDT)
 Received: from NB-GIGA003.letovo.school ([5.194.95.139])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-30f465f7b20sm23025391fa.97.2025.04.16.01.21.46
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-30f465f7b20sm23025391fa.97.2025.04.16.01.21.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Apr 2025 01:21:49 -0700 (PDT)
+        Wed, 16 Apr 2025 01:21:54 -0700 (PDT)
 From: Alexey Charkov <alchark@gmail.com>
-Subject: [PATCH 00/13] ARM: vt8500: DT bindings and dts updates
-Date: Wed, 16 Apr 2025 12:21:25 +0400
-Message-Id: <20250416-wmt-updates-v1-0-f9af689cdfc2@gmail.com>
+Date: Wed, 16 Apr 2025 12:21:26 +0400
+Subject: [PATCH 01/13] dt-bindings: i2c: i2c-wmt: Convert to YAML
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -82,10 +83,9 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAIVo/2cC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDI1MDEwNL3fLcEt3SgpTEktRiXVMLQ4NkM1NDI9NUEyWgjoKi1LTMCrBp0bG
- 1tQD/e5EXXQAAAA==
-X-Change-ID: 20250409-wmt-updates-5810c65125e4
+Message-Id: <20250416-wmt-updates-v1-1-f9af689cdfc2@gmail.com>
+References: <20250416-wmt-updates-v1-0-f9af689cdfc2@gmail.com>
+In-Reply-To: <20250416-wmt-updates-v1-0-f9af689cdfc2@gmail.com>
 To: Krzysztof Kozlowski <krzk@kernel.org>, 
  Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>, 
  Conor Dooley <conor+dt@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
@@ -100,74 +100,126 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
  linux-mmc@vger.kernel.org, netdev@vger.kernel.org, 
  linux-pwm@vger.kernel.org, Alexey Charkov <alchark@gmail.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1744791712; l=3242;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1744791712; l=3424;
  i=alchark@gmail.com; s=20250416; h=from:subject:message-id;
- bh=VWW+FjoSMr2BVYRu/X2g0WXpS/3nXWF7DuGik59WEqM=;
- b=OE98dlaCoHtAdZilXLnTnuUMVF49Z4hZHmnAalJtuuKjjULVM27W5tpvrpJQD1KM7AV/MZCRX
- fNJJtvtC0pHDBujTVpynkLYIbwLLeVLKIXeMo4GnDqOoMsFzt4LL7uX
+ bh=rLGOiAxFmtYr1z3EibKMzDrgcDWDiyp5KqoWHiu8Zvk=;
+ b=AvOr1yeaqVjcM1b5V5n4K1CJRJqYHkLcBKvJWXi7s5DMJOf09NZaw6K648Ll8yfbyrTB3ZFZD
+ 6i4O11iiDG5Ajw3JEeQqkInw/fcubjZaW+5LjzieHsw4wBG6FC/ToiH
 X-Developer-Key: i=alchark@gmail.com; a=ed25519;
  pk=ltKbQzKLTJPiDgPtcHxdo+dzFthCCMtC3V9qf7+0rkc=
 
-Convert some more VT8500 related textual DT binding descriptions to
-YAML schema, do minor dts correctness fixes, and add a DT for the
-board I'm actually testing those on (VIA APC Rock).
+Rewrite the textual description for the WonderMedia I2C controller
+as YAML schema, and switch the filename to follow the compatible
+string.
 
-While at that, also describe the PL310 L2 cache controller present on
-WM8850/WM8950.
-
-Note that this series is based upon Krzysztof's linux-dt/for-next
+The controller only supports two bus speeds (100kHz and 400kHz)
+so restrict clock-frequency values accordingly.
 
 Signed-off-by: Alexey Charkov <alchark@gmail.com>
 ---
-Alexey Charkov (13):
-      dt-bindings: i2c: i2c-wmt: Convert to YAML
-      dt-bindings: interrupt-controller: via,vt8500-intc: Convert to YAML
-      dt-bindings: mmc: vt8500-sdmmc: Convert to YAML
-      dt-bindings: net: via-rhine: Convert to YAML
-      dt-bindings: pwm: vt8500-pwm: Convert to YAML
-      dt-bindings: timer: via,vt8500-timer: Convert to YAML
-      dt-bindings: arm: vt8500: Add VIA APC Rock/Paper boards
-      ARM: dts: vt8500: Add node address and reg in CPU nodes
-      ARM: dts: vt8500: Move memory nodes to board dts and fix addr/size
-      ARM: dts: vt8500: Use generic compatibles for EHCI
-      ARM: dts: vt8500: Use generic node name for the SD/MMC controller
-      ARM: dts: vt8500: Add VIA APC Rock/Paper board
-      ARM: dts: vt8500: Add L2 cache controller on WM8850/WM8950
+ Documentation/devicetree/bindings/i2c/i2c-wmt.txt  | 24 -----------
+ .../devicetree/bindings/i2c/wm,wm8505-i2c.yaml     | 47 ++++++++++++++++++++++
+ MAINTAINERS                                        |  2 +-
+ 3 files changed, 48 insertions(+), 25 deletions(-)
 
- Documentation/devicetree/bindings/arm/vt8500.yaml  | 19 ++++---
- Documentation/devicetree/bindings/i2c/i2c-wmt.txt  | 24 ---------
- .../devicetree/bindings/i2c/wm,wm8505-i2c.yaml     | 47 +++++++++++++++++
- .../interrupt-controller/via,vt8500-intc.txt       | 16 ------
- .../interrupt-controller/via,vt8500-intc.yaml      | 47 +++++++++++++++++
- .../devicetree/bindings/mmc/vt8500-sdmmc.txt       | 23 --------
- .../devicetree/bindings/mmc/wm,wm8505-sdhc.yaml    | 61 ++++++++++++++++++++++
- .../devicetree/bindings/net/via,vt8500-rhine.yaml  | 41 +++++++++++++++
- .../devicetree/bindings/net/via-rhine.txt          | 17 ------
- .../devicetree/bindings/pwm/via,vt8500-pwm.yaml    | 43 +++++++++++++++
- .../devicetree/bindings/pwm/vt8500-pwm.txt         | 18 -------
- .../devicetree/bindings/timer/via,vt8500-timer.txt | 15 ------
- .../bindings/timer/via,vt8500-timer.yaml           | 36 +++++++++++++
- MAINTAINERS                                        |  7 ++-
- arch/arm/boot/dts/vt8500/Makefile                  |  3 +-
- arch/arm/boot/dts/vt8500/vt8500-bv07.dts           |  5 ++
- arch/arm/boot/dts/vt8500/vt8500.dtsi               | 12 ++---
- arch/arm/boot/dts/vt8500/wm8505-ref.dts            |  5 ++
- arch/arm/boot/dts/vt8500/wm8505.dtsi               | 14 ++---
- arch/arm/boot/dts/vt8500/wm8650-mid.dts            |  5 ++
- arch/arm/boot/dts/vt8500/wm8650.dtsi               | 14 ++---
- arch/arm/boot/dts/vt8500/wm8750-apc8750.dts        |  5 ++
- arch/arm/boot/dts/vt8500/wm8750.dtsi               | 14 ++---
- arch/arm/boot/dts/vt8500/wm8850-w70v2.dts          |  5 ++
- arch/arm/boot/dts/vt8500/wm8850.dtsi               | 23 +++++---
- arch/arm/boot/dts/vt8500/wm8950-apc-rock.dts       | 21 ++++++++
- arch/arm/boot/dts/vt8500/wm8950.dtsi               | 11 ++++
- 27 files changed, 386 insertions(+), 165 deletions(-)
----
-base-commit: 62db22c2af6ce306943df5de6f5198ea9bd3d47b
-change-id: 20250409-wmt-updates-5810c65125e4
+diff --git a/Documentation/devicetree/bindings/i2c/i2c-wmt.txt b/Documentation/devicetree/bindings/i2c/i2c-wmt.txt
+deleted file mode 100644
+index 94a425eaa6c78bc9e3136ae7055b51635baf16ca..0000000000000000000000000000000000000000
+--- a/Documentation/devicetree/bindings/i2c/i2c-wmt.txt
++++ /dev/null
+@@ -1,24 +0,0 @@
+-* Wondermedia I2C Controller
+-
+-Required properties :
+-
+- - compatible : should be "wm,wm8505-i2c"
+- - reg : Offset and length of the register set for the device
+- - interrupts : <IRQ> where IRQ is the interrupt number
+- - clocks : phandle to the I2C clock source
+-
+-Optional properties :
+-
+- - clock-frequency : desired I2C bus clock frequency in Hz.
+-	Valid values are 100000 and 400000.
+-	Default to 100000 if not specified, or invalid value.
+-
+-Example :
+-
+-	i2c_0: i2c@d8280000 {
+-		compatible = "wm,wm8505-i2c";
+-		reg = <0xd8280000 0x1000>;
+-		interrupts = <19>;
+-		clocks = <&clki2c0>;
+-		clock-frequency = <400000>;
+-	};
+diff --git a/Documentation/devicetree/bindings/i2c/wm,wm8505-i2c.yaml b/Documentation/devicetree/bindings/i2c/wm,wm8505-i2c.yaml
+new file mode 100644
+index 0000000000000000000000000000000000000000..e498ce47b885203fcfe233b946f987abdac6784a
+--- /dev/null
++++ b/Documentation/devicetree/bindings/i2c/wm,wm8505-i2c.yaml
+@@ -0,0 +1,47 @@
++# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/i2c/wm,wm8505-i2c.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: I2C Controller on WonderMedia WM8505 and related SoCs
++
++maintainers:
++  - Alexey Charkov <alchark@gmail.com>
++
++allOf:
++  - $ref: /schemas/i2c/i2c-controller.yaml#
++
++properties:
++  compatible:
++    const: wm,wm8505-i2c
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  clock-frequency:
++    enum: [100000, 400000]
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    i2c_0: i2c@d8280000 {
++        compatible = "wm,wm8505-i2c";
++        reg = <0xd8280000 0x1000>;
++        interrupts = <19>;
++        clocks = <&clki2c0>;
++        clock-frequency = <400000>;
++    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 96b82704950184bd71623ff41fc4df31e4c7fe87..c5195a98b15a39583d337fb6310b80432b0f6922 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -3427,7 +3427,7 @@ M:	Alexey Charkov <alchark@gmail.com>
+ M:	Krzysztof Kozlowski <krzk@kernel.org>
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+ S:	Odd Fixes
+-F:	Documentation/devicetree/bindings/i2c/i2c-wmt.txt
++F:	Documentation/devicetree/bindings/i2c/wm,wm8505-i2c.yaml
+ F:	arch/arm/boot/dts/vt8500/
+ F:	arch/arm/mach-vt8500/
+ F:	drivers/clocksource/timer-vt8500.c
 
-Best regards,
 -- 
-Alexey Charkov <alchark@gmail.com>
+2.49.0
 
 
