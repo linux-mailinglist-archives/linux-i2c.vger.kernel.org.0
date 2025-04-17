@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-10463-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10464-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7FE74A91FCD
-	for <lists+linux-i2c@lfdr.de>; Thu, 17 Apr 2025 16:36:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17D87A91FD6
+	for <lists+linux-i2c@lfdr.de>; Thu, 17 Apr 2025 16:37:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E1F203B6140
-	for <lists+linux-i2c@lfdr.de>; Thu, 17 Apr 2025 14:36:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DBCA719E7116
+	for <lists+linux-i2c@lfdr.de>; Thu, 17 Apr 2025 14:37:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DD582512DD;
-	Thu, 17 Apr 2025 14:36:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A19AB2512E2;
+	Thu, 17 Apr 2025 14:37:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U47VK4s2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pk/gCEDN"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C65C0224247;
-	Thu, 17 Apr 2025 14:36:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5664A15A868;
+	Thu, 17 Apr 2025 14:37:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744900587; cv=none; b=gYl4f4nCZA1rUYHwl+lRskGEJOs8AowCPTVeOeaZePgWsR0hXSVCndVI+WwLl38c8tUCKmh9SmB0dhKjtjWb6jz0fTZQVOA6BVvDIRqMajiGwyjT8x62ptJ4n3CN9jaipl1mCLK6BQlHjAsYlwHOGpCMchXdlIQk9fFim6SJ3K4=
+	t=1744900622; cv=none; b=AmguU0Vr1kI+Ck5Ma6ruCmvIGsQd64jUatC4RSZ3PK4OrzPos4BGSfV1BybeKAjPb+2Bo7mG7pdXWwojzL3QtZxuZYQtd6qVGofvksCxcySJiXHn2BpcEUu1lNkN6E9+UuA+Ps9VtnCtAjWHilSLCnsGbFE7A2sboMqiowoITLw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744900587; c=relaxed/simple;
-	bh=SBvQ73WYivvfdzl3CJZHVlcNEi0joPRJF/v4trctjCU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aT1B7fVxRz5TNCruKXo0WBNZrmviwjdkhXF0R/T5AXUEEy62WZAJjnGArhN7yMLjW22CZ+68P+qzlKwNg5d0NJlrYBKhhqjm0m1ZsJCdGleJuQr92DGKhlT4If9euFd8ImhcFIG0LO5++XLijM59h849EvXcYMpd7OgD5qTJL9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U47VK4s2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F77EC4CEE4;
-	Thu, 17 Apr 2025 14:36:24 +0000 (UTC)
+	s=arc-20240116; t=1744900622; c=relaxed/simple;
+	bh=Y4mpXQaMpeWkp9waH3d1fmjKivjlRtPJBQfXTXDaeJ4=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=nohxYweQQs0VUw3UnDk0UXXNz97K8ZTiD8bZxdAXWitwvBTa3pD4Bk3p2Z4Xe68TH7Y1Mm5ZhcSes4SNw9hMB6ieMXHVrlCH8++viUg1on8yBbfh40kDP355LMwGNkErhy53+xhoBGuFY3JMnmtwILIFhEMEkU5Pa+SV9yuNcls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Pk/gCEDN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DC85C4CEE4;
+	Thu, 17 Apr 2025 14:36:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744900587;
-	bh=SBvQ73WYivvfdzl3CJZHVlcNEi0joPRJF/v4trctjCU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=U47VK4s2ZLew93JI7p+xs+UYJC7O9l2oKkXj/dF+84H5ZIdRl+s5L+fGRGn3cPnpm
-	 20PraA0E0V/8SWFpgKmIW8a/BluR0EShkgjGNq887euZwD+gN1UU5O5JZGhkH3TVuu
-	 TBy45c1Bo+EogU8RTAY3Ot/WRKRFHq8LGeWZ17YmPDmntGkJnuohmGu2nPm6s0uvhB
-	 yIaEsbIgAANXe2eteArELeqvf9rjPi/4icHcF/P7mWUBAHGoEBf/hv4f4wewlbIKVh
-	 vcGiyjnIPIcZPYqVNbUOxNv3TJ1zzWUlXtGH8l4k1vWxVc3LnNQK/76fyIIc9qnKRY
-	 2k/B64gxl/T6g==
-Message-ID: <ff583eb3-d01d-4850-9f9b-f6b15ddaf137@kernel.org>
-Date: Thu, 17 Apr 2025 16:36:18 +0200
+	s=k20201202; t=1744900621;
+	bh=Y4mpXQaMpeWkp9waH3d1fmjKivjlRtPJBQfXTXDaeJ4=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=Pk/gCEDN3KXb+CZF1QvEJUAvh9nRY6NrrEa8/7jELTpIsCHhIeVANNRXwRsPlom3y
+	 5sMATAS9SnbzXQOkwUuSc336pG71/heINr8gpHxoSmf2Qxsi0scfFnZgbH9hRPEsv+
+	 zXfQhVogmRxtc1idbHw3RGq9xyQPNfnPzO1orVQ5uZk1dXIteP8Dvxf4sylzY70nKq
+	 hC1dMSHyza6cX2qButHjFd5/RKkN9nJR7mC15M91yGK6Y12W6WK9A+qxG8elgC/R+z
+	 A7Zfa4GAGsMmAC77bQ4oFWm7NCYKRy4hbpBDoedWQInC/ye0YQkA/zTrhCjZDQHllV
+	 j0NSbWRo342PA==
+Message-ID: <c6d3e343-7005-48a9-a133-bf39cb6790ee@kernel.org>
+Date: Thu, 17 Apr 2025 16:36:57 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -52,6 +52,7 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v2 2/3] arm64: dts: rockchip: Add I2C controllers for
  RK3528
+From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Yao Zi <ziyao@disroot.org>, Heiko Stuebner <heiko@sntech.de>,
  Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
@@ -62,8 +63,8 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org,
  linux-kernel@vger.kernel.org
 References: <20250417120118.17610-3-ziyao@disroot.org>
  <20250417120118.17610-5-ziyao@disroot.org>
+ <ff583eb3-d01d-4850-9f9b-f6b15ddaf137@kernel.org>
 Content-Language: en-US
-From: Krzysztof Kozlowski <krzk@kernel.org>
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
  cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
@@ -107,37 +108,40 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20250417120118.17610-5-ziyao@disroot.org>
+In-Reply-To: <ff583eb3-d01d-4850-9f9b-f6b15ddaf137@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 17/04/2025 14:01, Yao Zi wrote:
-> Describe I2C controllers shipped by RK3528 in devicetree. For I2C-2,
-> I2C-4 and I2C-7 which come with only a set of possible pins, a default
-> pin configuration is included.
-> 
-> Signed-off-by: Yao Zi <ziyao@disroot.org>
-> ---
->  arch/arm64/boot/dts/rockchip/rk3528.dtsi | 110 +++++++++++++++++++++++
->  1 file changed, 110 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/rockchip/rk3528.dtsi b/arch/arm64/boot/dts/rockchip/rk3528.dtsi
-> index 826f9be0be19..2c9780069af9 100644
-> --- a/arch/arm64/boot/dts/rockchip/rk3528.dtsi
-> +++ b/arch/arm64/boot/dts/rockchip/rk3528.dtsi
-> @@ -24,6 +24,14 @@ aliases {
->  		gpio2 = &gpio2;
->  		gpio3 = &gpio3;
->  		gpio4 = &gpio4;
-> +		i2c0 = &i2c0;
-> +		i2c1 = &i2c1;
-> +		i2c2 = &i2c2;
-> +		i2c3 = &i2c3;
-> +		i2c4 = &i2c4;
-> +		i2c5 = &i2c5;
-> +		i2c6 = &i2c6;
-> +		i2c7 = &i2c7;
-Aliases are not properties of the SoC but boards.
+On 17/04/2025 16:36, Krzysztof Kozlowski wrote:
+> On 17/04/2025 14:01, Yao Zi wrote:
+>> Describe I2C controllers shipped by RK3528 in devicetree. For I2C-2,
+>> I2C-4 and I2C-7 which come with only a set of possible pins, a default
+>> pin configuration is included.
+>>
+>> Signed-off-by: Yao Zi <ziyao@disroot.org>
+>> ---
+>>  arch/arm64/boot/dts/rockchip/rk3528.dtsi | 110 +++++++++++++++++++++++
+>>  1 file changed, 110 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/rockchip/rk3528.dtsi b/arch/arm64/boot/dts/rockchip/rk3528.dtsi
+>> index 826f9be0be19..2c9780069af9 100644
+>> --- a/arch/arm64/boot/dts/rockchip/rk3528.dtsi
+>> +++ b/arch/arm64/boot/dts/rockchip/rk3528.dtsi
+>> @@ -24,6 +24,14 @@ aliases {
+>>  		gpio2 = &gpio2;
+>>  		gpio3 = &gpio3;
+>>  		gpio4 = &gpio4;
+>> +		i2c0 = &i2c0;
+>> +		i2c1 = &i2c1;
+>> +		i2c2 = &i2c2;
+>> +		i2c3 = &i2c3;
+>> +		i2c4 = &i2c4;
+>> +		i2c5 = &i2c5;
+>> +		i2c6 = &i2c6;
+>> +		i2c7 = &i2c7;
+> Aliases are not properties of the SoC but boards.
+
+Of course this should be: Bus/interface aliases are not...
 
 Best regards,
 Krzysztof
