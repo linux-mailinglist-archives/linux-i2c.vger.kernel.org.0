@@ -1,73 +1,73 @@
-Return-Path: <linux-i2c+bounces-10447-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10448-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83DB6A913FE
-	for <lists+linux-i2c@lfdr.de>; Thu, 17 Apr 2025 08:26:07 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0BB2EA9140A
+	for <lists+linux-i2c@lfdr.de>; Thu, 17 Apr 2025 08:27:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E989C3BB4D7
-	for <lists+linux-i2c@lfdr.de>; Thu, 17 Apr 2025 06:25:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DEC7B7ACDA5
+	for <lists+linux-i2c@lfdr.de>; Thu, 17 Apr 2025 06:26:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46A4D1FAC59;
-	Thu, 17 Apr 2025 06:26:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B20E1FBCB0;
+	Thu, 17 Apr 2025 06:27:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iv/zivPU"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K0f8DkOx"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
+Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74DD91E1DE8;
-	Thu, 17 Apr 2025 06:25:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C46B1E0DE8;
+	Thu, 17 Apr 2025 06:27:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744871160; cv=none; b=tgQhYLf05U/fgN5QxrrLDjsZGn5YQzUwM+HWznY+AOk2Dwi7P4uokJiEeR48DMMUBxriHAXI4rhq7OLCZkFtyHBnbv9w9px90WhxLb+ZxZgyrHJpAhO9RPEn+sk0vmQr66QZELYsa9HY/D8zrzIO5fGTo2ePirkm+XOxaKEa/oc=
+	t=1744871243; cv=none; b=I5R86iwoD2/rlJxOODQhZ1K1NJre0drZuCOsu2TVyUMgzky8asc5XjfHEQ+u+RTEUbSydl0oa+IwVWYa2hG9Gox7b6Ont2ywEb13R9HmOJDGnxgitigXuSJVBmEyMhVE2/hEbH5QO8gdFILtLNcb8eRl5EpNRTZ3La+4pLgD338=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744871160; c=relaxed/simple;
-	bh=dw1Ek1919FgPg/uC5+Y9RdiuRk0gjvI3OK49Td9EDoU=;
+	s=arc-20240116; t=1744871243; c=relaxed/simple;
+	bh=hzJBWmW8lICSwnMRPi/LH9kPNvWBF+pCWcOfKl3VUD8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MNfKUuKf83ZWYL9yI57nWqSG3DGjOzq9CG3ctC+WOe9Ka9+c3hRcr9iLzTRwh64ddeINloVV5AiJ493Y6UJqxBldTasnF0nk8FsJ/Kbc2hf4ty9C+QxxCTa5GtjOomBC0u7K5VSmyChnZpBOJgr2byOUXepu3xleIlngEAV+vJo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iv/zivPU; arc=none smtp.client-ip=209.85.222.181
+	 To:Cc:Content-Type; b=dRUuc6VT6DZmpqh3Iss3VhErDezgMj2EzYIS7gWSby5+HauJwOTOx4KnoFiovPQ4oJWZCVi5kNVa+xP0mOHigt3lmKJCvNhGIKF1sWXzTRiMEiPrASGrk2VnD+gqvb1Y68Ua2t+mr0E4aOoX+v7kQNL47jhzcTMj+ncU5d8coVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K0f8DkOx; arc=none smtp.client-ip=209.85.219.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-7c922734cc2so3725085a.1;
-        Wed, 16 Apr 2025 23:25:58 -0700 (PDT)
+Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-6ecf99dd567so6222576d6.0;
+        Wed, 16 Apr 2025 23:27:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744871157; x=1745475957; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1744871240; x=1745476040; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ZST5O+ENabbKZFG4u9ZlHE3mu44ycA1WpCteAX/mCTI=;
-        b=iv/zivPUQU23CeXaBhFrkU0ndDTPAqrXsNPoOFdl/WFq/gttYkBAYyyRL7on1vxxhh
-         s1t0Hs45PsWqxz03wuNGVzZM/OhIGtUVYs67Y0Emr3By/uIhv9HQ1zQ4l/to1+kaF9ll
-         9NoE+1P6KfT2WOQ0FvzjJYaXXDU+Ak6YNJa3sJ3KJzyk+3ZlpSZFXchcPZdNwZR7nv2D
-         vW6ydi/YoMr6Ea6FQUd5gxLvO6oGrKD9hK4csUp9wHAdwFMKg0xKRFhk/1CS+BOWyjPi
-         IoKa+iqKKSJQ6P5dh/sTyajSkBh5q7G2CS8w1DkL/Z5Zin8sSGNKAt4NFQtKe/YeuM41
-         09Ig==
+        bh=lYASVlhOcfaq1av7/fl04126jANP6cWR4NufJae7Xbg=;
+        b=K0f8DkOxBPpGU9vtVJk6I/BydF3S3qqcM7t49DV2rOGwOX/6flFpHtD/GcKeeF0LJh
+         yzEZMCll0Pv7m2QpG9mTA2iDBVeKFgnDrj82MnZYPSoKJcfbiWQa4ETqkPmBi7FPRpJW
+         C/BCPBBgJRZgzZtOM3QXwvu+W+v+WtwQMLdGXlDkHZNNCTUhXftQ45zeUG29QTI+kWia
+         dG6HC8bx9Ys8Xs5+L45jJl5+ywnzNEiEr7ffdxcbQ78VDdPpKwiW9qjg/q4WihUow4EW
+         MA2zYHTKRGRiPQc6JAeoDyk7FnnYSUOhe/Y9GlrCPGu32PPWpVg/SGKCKsdZff78n9VQ
+         a3hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744871157; x=1745475957;
+        d=1e100.net; s=20230601; t=1744871240; x=1745476040;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ZST5O+ENabbKZFG4u9ZlHE3mu44ycA1WpCteAX/mCTI=;
-        b=fSPcpXLCnM/jPoZGEKbJxYLypABTs1AE8r5VJ/z50bSw5zRCDafZID13qLBD4pJs3U
-         5OZ60FaP27z5sPoVDEYGJZ8vDTtWpmKPZhQtFjR/NwX2k/RbABNnBRzPy7PN8EMWK4yi
-         fWVpzwOpIVfMSsp2FkZnwBFjA4foGFI6KhMM9GGZLE7g/URtlL/1lJnVXCr3+5LD5OMA
-         7XvxspjU8iGw5Lk7OAf4P/94XapfD2fnmtw0joz3NrUpUoSDvgPY1wHaP1LzG1CDMfE5
-         LYx3hC7VK8rEQTJ1Gp1SOS99/7k9UCPM09ppwijnDdSRBVAGBlIbjqEPSjLmdz0NRNzk
-         gUwQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUnQsPxoYr2M4++RupreBf1aKA+CM4FBTtx+1tCTKRFkO5NlvmcP9K9RW9L6uZo6tGgRS6TV1q+KhU9@vger.kernel.org, AJvYcCVKkxS0+10RXkKt1VlEQB89AXLmMFEkR12GAPiZwydC8z5eWxraDDQwOxp4p/7TQrFmw/M/M//a96qO@vger.kernel.org, AJvYcCWMEZLeh5TYgvboEwhF4rlIjX0HRp5z9j9Q2y7KopENrcKq572qtpDZOsfLIGEywQVU8gqm1A5V@vger.kernel.org, AJvYcCWU/pvIJ2ItEF4tGfT6dFXwGeUL984WlZXuKZFWpfxatMYdyYmoZzDHmDc09NNHbg+DXn6ovPJHKUCnnIq4@vger.kernel.org, AJvYcCWzbrT8jKXC8saIOWvi4W0BhOW80LVgSH3uJCrFedxvFM86r4RMhIR59UyT1NkOrW3ocQ9whC7kLCaF@vger.kernel.org, AJvYcCX2GKjZgdLRc8Ig/bWnltboyBP7ptD7b4c9KIvkzfzplQdP6eP8ZNoz7padHS1TdbscBqwW3NKtW1DN@vger.kernel.org
-X-Gm-Message-State: AOJu0YyXmYuNIapr/CJVwZab9yO2W5at1zOHM5W/VrSDQ3I3447YTdHw
-	KUALWMVJCLp5E8pfEbx5W5goGAxHo7Nl8y1mBK+1XhNb6rfMIUqyEOuSb3i6XGADDeewDxENuTi
-	2Mzqrnh4dw4DmjcfKcg/mnTUzHZA=
-X-Gm-Gg: ASbGnct1U1r+gM2M5MQvdNUXWDn85sRQvNSLHa3lh1iZZDQn7LGUtTrP4241ToOulXB
-	Jh3EYm7b0xj7E4g7O5Yt6bOlCMF4xrZNIhc4AcCedfAR0iLPlUoOldL6bnfjUxPainal1iSqht6
-	IZgdqcm7+1LeMCW3uqSwJWgX4njLbqZBPG29GF7O58i0mxa/spq50p7Go=
-X-Google-Smtp-Source: AGHT+IEUG2qKwwAEec639Bxod8wzMz7dx75qAc7U0rBWKEyq4yVPfHNSFLQqm7Sf3Cgg0Jwvm52KKhOAOvEG7cdfGyE=
-X-Received: by 2002:a05:620a:172b:b0:7c5:3b8d:9f2f with SMTP id
- af79cd13be357-7c91e2440bbmr275101085a.17.1744871157183; Wed, 16 Apr 2025
- 23:25:57 -0700 (PDT)
+        bh=lYASVlhOcfaq1av7/fl04126jANP6cWR4NufJae7Xbg=;
+        b=qV+BHr81na6jHrS1WoLDBxVqwi04diD8ToJNMiAjzwJO3qdsrr204KJv2Hw037lYe/
+         eYG2ygH5zydn3BTMCQX4/8BPOp+Oh/9K8NEbTTRmSfFnRP2RE21L2aG6owm+dDtnY/LE
+         g1YTEpvnm9gKdpF5XYQ5p00vGxXqpyGdzzBrIDJERgymjrhhBYxIcdRM+FVKjeQvuKXX
+         ybANPmszuelBUVhlkWHl1i0FS3tbORbk4i6vUsTl7spcXpSz6L+Z6zmtaxficnUWsgeu
+         yQItQrESz/qaaHJbRvt6yezFjg4NfUQ8E69n5vmZD9cWT7Y+DBgE7rxGBnhG79AMjDEV
+         6rlA==
+X-Forwarded-Encrypted: i=1; AJvYcCUbe098sOYVIlQ/182OY7H/HnBErSVGKudYl7f79ACXBMvX03THl635tiutIDvDm9qQdy4QjOeo552w@vger.kernel.org, AJvYcCUyVoj70R/m0SzHw36e/esswnqZTBO1kuu57DMZWACJncJP336K9DXjjBya9dj20avN2GaKbxpdhzTU@vger.kernel.org, AJvYcCVbQOx80itgI5HzcOqVCiYoHMosXq17ZYQjZqsMiz6yfFWc1RDflf2iYe3X3fOvOIthmpKQSHAfH7cv@vger.kernel.org, AJvYcCWhWx5ROiTkx6IuLIZ3Wl6+m0WpTgukoXkmiD2QvvygCpBFsmMABOwQ+RoM0aFk/athx3jYKTQoaK9kHaxP@vger.kernel.org, AJvYcCWqVO6Dd6OhDkPmytxXJeSTIJUMbuZIZ4jCAe2nVblnruc0a7KvPQWm9t1wIytZNyImR2bUnkoKT24o@vger.kernel.org, AJvYcCX398VqUskBjUoUYFQ3e77RZJPnUUPVXi/dQiHkQCUsPPzuLZrMEQM/VdWL/64Io2pXN+W55c2x@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx80vLtUDyXI2mAwtSoSsm6JRx5QBGidP1Na5ekHf2SNFmd+wsE
+	FDZoIkJM5E3U2QvYNGuzJfUHbUQA3JqT9dvquzaEd9frwg7q1g/bwhQ5ADihBPMhL2fEmLFrFMS
+	qHVz9NRZyuIXn7W+4MfzMOkYHmbE=
+X-Gm-Gg: ASbGnctFSpW6wanqwVFxnfFfIpp6K1zek80cgDatkUJNqT8wtc7svJY8uXBqd9wRdVY
+	nwCWpVD1I8bcqvYdoxOvuRcpUgiGxjYAfmpw567KMOzrZMHtum7hhwNjS2G0YYrsmos3wHbMszT
+	/XQQo1Yb4U8bpmURuXvrKyU9Tof8uCeGp1EIFi+KjR0qeEGjTisqCYKlo=
+X-Google-Smtp-Source: AGHT+IFtGW1OUCxVsFYK0aS+AATgm+R1KxN8WtGUG42EZWSWUImsJZzN5NBoIDk83tn8feVZCpeI87IWUhbWn44GVCc=
+X-Received: by 2002:ac8:7f8c:0:b0:478:dcdd:a257 with SMTP id
+ d75a77b69052e-47ad80c2478mr62378561cf.25.1744871240118; Wed, 16 Apr 2025
+ 23:27:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -75,13 +75,13 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20250416-wmt-updates-v1-0-f9af689cdfc2@gmail.com>
- <20250416-wmt-updates-v1-3-f9af689cdfc2@gmail.com> <20250416201407.GC3811555-robh@kernel.org>
-In-Reply-To: <20250416201407.GC3811555-robh@kernel.org>
+ <20250416-wmt-updates-v1-5-f9af689cdfc2@gmail.com> <20250416201523.GD3811555-robh@kernel.org>
+In-Reply-To: <20250416201523.GD3811555-robh@kernel.org>
 From: Alexey Charkov <alchark@gmail.com>
-Date: Thu, 17 Apr 2025 10:25:51 +0400
-X-Gm-Features: ATxdqUFKu43OJ9xK0QSQwijmtHN6PzWQ7tNDf-5s79MH0fFlMz0UJN-MS1W5jhg
-Message-ID: <CABjd4YyTKquLcYC+DVg_koi3p7AhqwBNiazCiC713DQKjCaBSA@mail.gmail.com>
-Subject: Re: [PATCH 03/13] dt-bindings: mmc: vt8500-sdmmc: Convert to YAML
+Date: Thu, 17 Apr 2025 10:27:15 +0400
+X-Gm-Features: ATxdqUFawBnxynRxMiSVdRnmhaCCPBo4utOuqT_7dUg0IVBqoTqf8a1fVYs9mBE
+Message-ID: <CABjd4Yw5g8oKn=j08a6pr2o=TK7bMPx_NgfEh5cMFX9MVfgP-g@mail.gmail.com>
+Subject: Re: [PATCH 05/13] dt-bindings: pwm: vt8500-pwm: Convert to YAML
 To: Rob Herring <robh@kernel.org>
 Cc: Krzysztof Kozlowski <krzk@kernel.org>, Andi Shyti <andi.shyti@kernel.org>, 
 	Conor Dooley <conor+dt@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
@@ -96,120 +96,76 @@ Cc: Krzysztof Kozlowski <krzk@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 17, 2025 at 12:14=E2=80=AFAM Rob Herring <robh@kernel.org> wrot=
+On Thu, Apr 17, 2025 at 12:15=E2=80=AFAM Rob Herring <robh@kernel.org> wrot=
 e:
 >
-> On Wed, Apr 16, 2025 at 12:21:28PM +0400, Alexey Charkov wrote:
-> > Rewrite the textual description for the WonderMedia SDMMC controller
+> On Wed, Apr 16, 2025 at 12:21:30PM +0400, Alexey Charkov wrote:
+> > Rewrite the textual description for the WonderMedia PWM controller
 > > as YAML schema, and switch the filename to follow the compatible
 > > string.
 > >
 > > Signed-off-by: Alexey Charkov <alchark@gmail.com>
 > > ---
-> >  .../devicetree/bindings/mmc/vt8500-sdmmc.txt       | 23 --------
-> >  .../devicetree/bindings/mmc/wm,wm8505-sdhc.yaml    | 61 ++++++++++++++=
+> >  .../devicetree/bindings/pwm/via,vt8500-pwm.yaml    | 43 ++++++++++++++=
 ++++++++
+> >  .../devicetree/bindings/pwm/vt8500-pwm.txt         | 18 ---------
 > >  MAINTAINERS                                        |  1 +
-> >  3 files changed, 62 insertions(+), 23 deletions(-)
+> >  3 files changed, 44 insertions(+), 18 deletions(-)
 > >
-> > diff --git a/Documentation/devicetree/bindings/mmc/vt8500-sdmmc.txt b/D=
-ocumentation/devicetree/bindings/mmc/vt8500-sdmmc.txt
-> > deleted file mode 100644
-> > index d7fb6abb3eb8c87e698ca4f30270c949878f3cbf..00000000000000000000000=
-00000000000000000
-> > --- a/Documentation/devicetree/bindings/mmc/vt8500-sdmmc.txt
-> > +++ /dev/null
-> > @@ -1,23 +0,0 @@
-> > -* Wondermedia WM8505/WM8650 SD/MMC Host Controller
-> > -
-> > -This file documents differences between the core properties described
-> > -by mmc.txt and the properties used by the wmt-sdmmc driver.
-> > -
-> > -Required properties:
-> > -- compatible: Should be "wm,wm8505-sdhc".
-> > -- interrupts: Two interrupts are required - regular irq and dma irq.
-> > -
-> > -Optional properties:
-> > -- sdon-inverted: SD_ON bit is inverted on the controller
-> > -
-> > -Examples:
-> > -
-> > -sdhc@d800a000 {
-> > -     compatible =3D "wm,wm8505-sdhc";
-> > -     reg =3D <0xd800a000 0x1000>;
-> > -     interrupts =3D <20 21>;
-> > -     clocks =3D <&sdhc>;
-> > -     bus-width =3D <4>;
-> > -     sdon-inverted;
-> > -};
-> > -
-> > diff --git a/Documentation/devicetree/bindings/mmc/wm,wm8505-sdhc.yaml =
-b/Documentation/devicetree/bindings/mmc/wm,wm8505-sdhc.yaml
+> > diff --git a/Documentation/devicetree/bindings/pwm/via,vt8500-pwm.yaml =
+b/Documentation/devicetree/bindings/pwm/via,vt8500-pwm.yaml
 > > new file mode 100644
-> > index 0000000000000000000000000000000000000000..a7d962bc13c7ff70b504482=
-01b0416efc7f787af
+> > index 0000000000000000000000000000000000000000..a5f77fa848e0f604bed63c3=
+6b8e0996cf599cec0
 > > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/mmc/wm,wm8505-sdhc.yaml
-> > @@ -0,0 +1,61 @@
+> > +++ b/Documentation/devicetree/bindings/pwm/via,vt8500-pwm.yaml
+> > @@ -0,0 +1,43 @@
 > > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
 > > +%YAML 1.2
 > > +---
-> > +$id: http://devicetree.org/schemas/mmc/wm,wm8505-sdhc.yaml#
+> > +$id: http://devicetree.org/schemas/pwm/via,vt8500-pwm.yaml#
 > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > > +
-> > +title: WonderMedia SOC SoC SDHCI Controller
+> > +title: VIA/Wondermedia VT8500/WM8xxx series SoC PWM controller
 > > +
 > > +maintainers:
 > > +  - Alexey Charkov <alchark@gmail.com>
 > > +
 > > +allOf:
-> > +  - $ref: mmc-controller.yaml#
+> > +  - $ref: pwm.yaml#
 > > +
 > > +properties:
 > > +  compatible:
-> > +    oneOf:
-> > +      - const: wm,wm8505-sdhc
-> > +      - items:
-> > +          - const: wm,wm8650-sdhc
-> > +          - const: wm,wm8505-sdhc
-> > +      - items:
-> > +          - const: wm,wm8750-sdhc
-> > +          - const: wm,wm8505-sdhc
-> > +      - items:
-> > +          - const: wm,wm8850-sdhc
-> > +          - const: wm,wm8505-sdhc
->
-> Combine the last 3 entries into 1 using 'enum' for the 1st compatible.
-
-Fair enough, will do.
-
+> > +    items:
+> > +      - const: via,vt8500-pwm
 > > +
 > > +  reg:
 > > +    maxItems: 1
 > > +
+> > +  '#pwm-cells':
+> > +    const: 3
+> > +
 > > +  clocks:
 > > +    maxItems: 1
 > > +
-> > +  interrupts:
-> > +    items:
-> > +      - description: SDMMC controller interrupt
-> > +      - description: SDMMC controller DMA interrupt
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - clocks
 > > +
-> > +  sdon-inverted:
-> > +    type: boolean
-> > +    description: SD_ON bit is inverted on the controller
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    pwm1: pwm@d8220000 {
+> > +        #pwm-cells =3D <3>;
+> > +        compatible =3D "via,vt8500-pwm";
+> > +        reg =3D <0xd8220000 0x1000>;
+> > +        clocks =3D <&clkpwm>;
 >
-> This implies I know what the non-inverted state is. If you know, please
-> state that here.
+> Same order as in 'properties'.
 
-This is a tricky one. The only answer I have is "it's inverted in
-later versions vs. the first version I saw in the wild, and I'm not
-sure if it's board related or IP version related - nor if the original
-was active low or high". No docs, no schematics, no vendor left around
-to chase for answers.
-
-Will dig around some more and update the description if I succeed in
-uncovering any further clues :)
+Noted, thanks, will adjust.
 
 Best regards,
 Alexey
