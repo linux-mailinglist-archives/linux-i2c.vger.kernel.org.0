@@ -1,144 +1,198 @@
-Return-Path: <linux-i2c+bounces-10445-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10446-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5DBE6A91385
-	for <lists+linux-i2c@lfdr.de>; Thu, 17 Apr 2025 08:07:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 83301A913D3
+	for <lists+linux-i2c@lfdr.de>; Thu, 17 Apr 2025 08:16:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6B0F7444715
-	for <lists+linux-i2c@lfdr.de>; Thu, 17 Apr 2025 06:07:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8F526444EE4
+	for <lists+linux-i2c@lfdr.de>; Thu, 17 Apr 2025 06:16:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AEE71F4199;
-	Thu, 17 Apr 2025 06:07:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E84B1E98EF;
+	Thu, 17 Apr 2025 06:16:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dt2i8lYs"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L1mpszgG"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E988F1F12F2;
-	Thu, 17 Apr 2025 06:07:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE7F91A2554;
+	Thu, 17 Apr 2025 06:16:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744870038; cv=none; b=Pi8oNmnN8/ps6ZlC6XXp4DRGfMJB0Q8zBH7SzlfUleAgyQdZccf5qQkWVPceFPTu90YX8MVtuaFHn+V/Uq4d7Z0WNrl/5OAAyx4btqKTBBLyz2Q/6sjKT+4MhGD/GvplU2yuYvRX24hcyyqVDx3BmnSOF0B3QMZ6dAW3GVKIMGc=
+	t=1744870566; cv=none; b=DdjNwWiqWbkND+aiN4cAOSV/hAFKOOim3MZrvzkINgnDAXH4a5HCDt+bk1QVczgblQPbeuNlGw+RtAe0O5KdU1vvkhUbCMXNR6f/AB6R5ny+dMslbuAE92J/dOm3Dyb5ecgKbXohU6X30IUci36/xZNZM/p9GenYHGTcVXuf+Ug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744870038; c=relaxed/simple;
-	bh=T0O/tNUKkb54MomY9u1IkE+AolkQsb1wSNigh3NAVIw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sEaCjPfloNllbgiZl3dz6/NR3GAtgxLiGKbf4cXraBFhZ9OA6Z3RGILd6/lehZxHXMC5XCiBVMJ/VXnjZOE0jnQV2Mt3dh9XaBQ8NE4rXfLczlfx/j7YKwcY5DC6WXO3D8bftNMfxC6DV07SCsgj8a6dsCCU1pucbFLjK6JOxfs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dt2i8lYs; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6720C4CEE4;
-	Thu, 17 Apr 2025 06:07:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744870037;
-	bh=T0O/tNUKkb54MomY9u1IkE+AolkQsb1wSNigh3NAVIw=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=dt2i8lYs+vcjVDnLlSyLo+fncM+M8xA20OuARj3Ov4wowD50gJVTsp+2pT9868d0K
-	 gkwd4tQOgk4QarfZ7QLKjkMp6l+j0GTJtG/XaFAGbC8Rb/sXw7TQ4gb54daX8fosHN
-	 DGOgNSPQ4l+ggFNyLkFEiAJasWdlC0qNVrKLDoEgU+cuX+b9X9aRGi1SdShWQSQNZa
-	 Ex4VERx0dsvmSOzKzsuUg9i8vyuB1fv5/a0dVvu+lEfQv75pBmwhpAfuPfP71OmLcD
-	 dLXXbdTj0IxXm/KywOKwZku8hwVP+MKfKGOiltsPjoqbyyfK9pa2yz1tGW7YJsM1I0
-	 OK6sCE1IsEi+A==
-Message-ID: <d2f07476-d65e-4fc5-ad15-222cd6f749bd@kernel.org>
-Date: Thu, 17 Apr 2025 08:07:11 +0200
+	s=arc-20240116; t=1744870566; c=relaxed/simple;
+	bh=mRMaq+/rAaWrqvEjYLnNBHEYBJm0nTahID7wtaPBLbw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VcE8tormQm1GWhMZOKRBnQPZtEUyAonlguxJCehPglUAU0fV3n/JCwmFxurAKpMphpgN8rXsy5R0Bneqn67Ht0J2ea9S43SEcITYrScD+8nb6IchU7eXshzL8KTSEpJaK9dAm654dZYMURMd54f424U3UYA8iDZy5NkSzwkf+mo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=L1mpszgG; arc=none smtp.client-ip=209.85.160.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-4766631a6a4so4083051cf.2;
+        Wed, 16 Apr 2025 23:16:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1744870564; x=1745475364; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wmcYADO6Ts8LiEjQjRl2AEglFUJkqPE38Uht7fpIgwo=;
+        b=L1mpszgG28gIw9uQV1fYbFu4+gCYNLhwPPzvXf9l412bRvAKEuvdS2sK+sxngwgpXa
+         MDkmCY1X5X6vi7+f80oQxtuyfA9zR/hJUzG7VipDFjLSzsdFulPvXpMH8dVSNAClgq7h
+         m3Yl9eEfUE2zfaKQ2MfFPo0BU7PP0z2qqGk7aTqG0oemOfrSqlFloHTlJLU2qXI4RHAF
+         fcHZ0FlomkJL0/sNdzk+Sj+K2oV4wMR4VSChM19Pmvee/E3aG8f3MZ1i2NdgwwyTJodq
+         wbgTJ/DgwfNe6d2s/q1XH8o250IXgpwef64uotfNM9M2Mrf+8Aoo2glMOSFGvYwrLJEG
+         zztw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744870564; x=1745475364;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wmcYADO6Ts8LiEjQjRl2AEglFUJkqPE38Uht7fpIgwo=;
+        b=cBcw2eJQykU9GPHJ6VjK3Fm9lgxYAFeBjG5O3ZH+ZepMhp39ALdzcbEqnfvGdYJ5ml
+         PAdbJ/mj5Jkdves2FQ27lKeiGDNnEUl8Qt7p6dHw/DeRJS3fzQQ24kjSD1d0woDmyXP2
+         3iEmvtgF9h7PlbgitP10vejm7/U55jtSyW4bdeSPxVGd5OOA70EYm135ccs8aExfpPiK
+         sG8BRfPfledQandGNuVX0nwGpL1vpoYefJfQf7ML6HznyNxzktrcQ4Q7W6aCeJCBwSeR
+         Tv23C29cKuW9zJ/nwAIuQyQYoWt7LVcwJt8Purjd0VWUaE69ZJA4ND58VQAFnmlv2LJN
+         Qv2Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVIYq3OwkIpIDNb8nTsjxfa+1C18tewqHQAF1xUWESkUexqo3hRMXmYqS153xKnyEI7Sds+oQqv3A7o@vger.kernel.org, AJvYcCVb697+Y9qPsJxsi6Vlj7x0hiYscxQjOyHgDyG94XHGfzQ5geQC04jd4yrfQKMBAppEah8OPNv9TZW7@vger.kernel.org, AJvYcCWNfD7OHLrFCsQ2P74Waj+Pe/lDXr5STp5P+Pop1VYXUzvPqkNcoQhzgb8+yFkYEBcKdP4AHIq9x/yv2cGP@vger.kernel.org, AJvYcCXBQOWVJaTOfDfG/YZjsemGBiYgVs66rZ4CnH5OsYdooaJml7O/eZQdGIqq0xy3e5HhPAi0ZhwCb094@vger.kernel.org, AJvYcCXjen3aGzL8IU7EmBS0zF8FR32fMgKQ1txFHlrFrPFJUncwvTXA9CfcdzY/9BxC8S3P2XU+ElK0/Ek0@vger.kernel.org, AJvYcCXzi6IRMcQtppQKFXaiLZO7YkMLDG6BEKtLW6jBHL2XVE5xQ6Bv9Cy+WrCXIaPCOuNPOOuu72su@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxq+4eXptcdKVwOuwZi47zGNrt6fVp4y8jS4raEuNBD4u8i2mwY
+	9kZnl4V70D+37S0WK2b8nA98ANnAvzgsn3bV32m9g+AhCUAzjgi0iQ4c+vW7RnWcdx0LrELOTyn
+	gqxrkT6nizfpwAodqHnBawM/eYuk=
+X-Gm-Gg: ASbGncsfiHnA4yOHqGYzyi4SBPA2IDXwOmBcDPM4ZoasMGRUye98QLaIQ0wlN3ZpK1V
+	wmCPEQ0VZk+sCPnHBqVl/rtE/EXlysw3nNQZsjjFGmxbuptE9J6g0fRkezY8crxHCrjnZQTUK52
+	5f8ieERuP6qztDKPrgDKiEZkgAPwezvQ3AzCXrkCy33aeoUELqb2GeFZg=
+X-Google-Smtp-Source: AGHT+IFKuzFZMBDi/GpEynCqLVtlNq8r4VkyTy96KVOsHsHaj4cpcrwJwQ/3ExydfNXFnduwqBQ1lh8ibHmlutTFGnI=
+X-Received: by 2002:a05:622a:149:b0:477:4224:9607 with SMTP id
+ d75a77b69052e-47ad80b4308mr56619511cf.12.1744870563720; Wed, 16 Apr 2025
+ 23:16:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 12/13] ARM: dts: vt8500: Add VIA APC Rock/Paper board
-To: Alexey Charkov <alchark@gmail.com>
-Cc: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Ulf Hansson <ulf.hansson@linaro.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>,
- linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-mmc@vger.kernel.org, netdev@vger.kernel.org, linux-pwm@vger.kernel.org
 References: <20250416-wmt-updates-v1-0-f9af689cdfc2@gmail.com>
- <20250416-wmt-updates-v1-12-f9af689cdfc2@gmail.com>
- <8feea1ba-2d4a-4898-9882-cf3ec8b03852@kernel.org>
- <CABjd4YzkUYE3B7sPCm97NFcv7=nkwQTNFjSiomjCHzTFRDCLZg@mail.gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <CABjd4YzkUYE3B7sPCm97NFcv7=nkwQTNFjSiomjCHzTFRDCLZg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+ <20250416-wmt-updates-v1-2-f9af689cdfc2@gmail.com> <20250416201057.GB3811555-robh@kernel.org>
+In-Reply-To: <20250416201057.GB3811555-robh@kernel.org>
+From: Alexey Charkov <alchark@gmail.com>
+Date: Thu, 17 Apr 2025 10:15:59 +0400
+X-Gm-Features: ATxdqUH_PzZ6LbO2fyRH_TSqVCYYVFFi8jocQlkWEwLVvGPaJEDpipkomz_BGGY
+Message-ID: <CABjd4YyQVGZROse9kJtV1pEk0uk+=2h86cAyB1aCujg7+9SZEg@mail.gmail.com>
+Subject: Re: [PATCH 02/13] dt-bindings: interrupt-controller: via,vt8500-intc:
+ Convert to YAML
+To: Rob Herring <robh@kernel.org>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>, Andi Shyti <andi.shyti@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <ukleinek@kernel.org>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, linux-arm-kernel@lists.infradead.org, 
+	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-pwm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 17/04/2025 08:01, Alexey Charkov wrote:
->>> diff --git a/arch/arm/boot/dts/vt8500/wm8950-apc-rock.dts b/arch/arm/boot/dts/vt8500/wm8950-apc-rock.dts
->>> new file mode 100644
->>> index 0000000000000000000000000000000000000000..58b3c8deb4f20ae072bf1381f1dfa5e5adeb414a
->>> --- /dev/null
->>> +++ b/arch/arm/boot/dts/vt8500/wm8950-apc-rock.dts
->>> @@ -0,0 +1,21 @@
->>> +// SPDX-License-Identifier: GPL-2.0-or-later
->>
->>
->> Odd license, we don't do GPL v4 in the kernel. We do however dual
->> license for bindings and DTS. Why choosing such license? Did you take
->> the code from somewhere?
-> 
-> I picked the license identifier of the wm8850.dtsi include, which
-> defines most of the functionality for this board. No preference from
-> my side, and happy to use whichever license is common practice for
-> DTS, but I'm simply not sure how differently licensed files and
-> includes combine together - thus the conservative choice to stick to
-> what's already there. The original .dtsi was written by Tony Prisk,
-> not me.
-OK, that's fine.
+On Thu, Apr 17, 2025 at 12:10=E2=80=AFAM Rob Herring <robh@kernel.org> wrot=
+e:
+>
+> On Wed, Apr 16, 2025 at 12:21:27PM +0400, Alexey Charkov wrote:
+> > Rewrite the textual description for the VIA/WonderMedia interrupt
+> > controller as YAML schema.
+> >
+> > Signed-off-by: Alexey Charkov <alchark@gmail.com>
+> > ---
+> >  .../interrupt-controller/via,vt8500-intc.txt       | 16 --------
+> >  .../interrupt-controller/via,vt8500-intc.yaml      | 47 ++++++++++++++=
+++++++++
+> >  MAINTAINERS                                        |  1 +
+> >  3 files changed, 48 insertions(+), 16 deletions(-)
+> >
+> > diff --git a/Documentation/devicetree/bindings/interrupt-controller/via=
+,vt8500-intc.txt b/Documentation/devicetree/bindings/interrupt-controller/v=
+ia,vt8500-intc.txt
+> > deleted file mode 100644
+> > index 0a4ce1051b0252bbbdeef3288b90e9913d3f16f0..00000000000000000000000=
+00000000000000000
+> > --- a/Documentation/devicetree/bindings/interrupt-controller/via,vt8500=
+-intc.txt
+> > +++ /dev/null
+> > @@ -1,16 +0,0 @@
+> > -VIA/Wondermedia VT8500 Interrupt Controller
+> > ------------------------------------------------------
+> > -
+> > -Required properties:
+> > -- compatible : "via,vt8500-intc"
+> > -- reg : Should contain 1 register ranges(address and length)
+> > -- #interrupt-cells : should be <1>
+> > -
+> > -Example:
+> > -
+> > -     intc: interrupt-controller@d8140000 {
+> > -             compatible =3D "via,vt8500-intc";
+> > -             interrupt-controller;
+> > -             reg =3D <0xd8140000 0x10000>;
+> > -             #interrupt-cells =3D <1>;
+> > -     };
+> > diff --git a/Documentation/devicetree/bindings/interrupt-controller/via=
+,vt8500-intc.yaml b/Documentation/devicetree/bindings/interrupt-controller/=
+via,vt8500-intc.yaml
+> > new file mode 100644
+> > index 0000000000000000000000000000000000000000..a3fbe985db276e6a3b65cc6=
+6c7de097ed0719c0c
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/interrupt-controller/via,vt8500=
+-intc.yaml
+> > @@ -0,0 +1,47 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/interrupt-controller/via,vt8500-int=
+c.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: VIA and WonderMedia SoCs Interrupt Controller
+> > +
+> > +maintainers:
+> > +  - Alexey Charkov <alchark@gmail.com>
+> > +
+> > +allOf:
+> > +  - $ref: /schemas/interrupt-controller.yaml#
+> > +
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: via,vt8500-intc
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  interrupts:
+> > +    maxItems: 8
+>
+> This wasn't in the original binding. Find to add, but note that in
+> the commit msg. Here, what each of the 8 entries are must be defined.
+
+Will do, thank you.
+
+The primary interrupt controller only has a single line routed to the
+CPU (out of the 8 outputs it technically has), while the (identical)
+chained interrupt controller has all its 8 output lines routed to the
+primary controller. There's not much difference between those outputs
+other than the names IC1_IRQ0~7.
+
+The original textual description only listed one interrupt, because it
+worked ok with one interrupt (the chained controller can be configured
+wrt. which output to trigger for each of the inputs, and those can all
+be IC1_IRQ0), even though it is not a complete description of the
+actual hardware.
+
+Will reflect that in the commit message and descriptions.
 
 Best regards,
-Krzysztof
+Alexey
 
