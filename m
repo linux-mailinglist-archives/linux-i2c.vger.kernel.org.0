@@ -1,116 +1,343 @@
-Return-Path: <linux-i2c+bounces-10465-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10466-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20076A92016
-	for <lists+linux-i2c@lfdr.de>; Thu, 17 Apr 2025 16:47:09 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C33E0A921C8
+	for <lists+linux-i2c@lfdr.de>; Thu, 17 Apr 2025 17:38:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C4D4C3B134E
-	for <lists+linux-i2c@lfdr.de>; Thu, 17 Apr 2025 14:46:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D33994633F6
+	for <lists+linux-i2c@lfdr.de>; Thu, 17 Apr 2025 15:38:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 548092528E8;
-	Thu, 17 Apr 2025 14:46:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95A41253B7D;
+	Thu, 17 Apr 2025 15:38:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="luH7tDRQ"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="gAN3cbpA"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A14782522A0;
-	Thu, 17 Apr 2025 14:46:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5296253345;
+	Thu, 17 Apr 2025 15:38:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744901216; cv=none; b=U5UWZfSLcUV2NYQ9ptAnXV9aD+PPINixPUMqCoPWmNzQmzqdGJEVqn7PEaFIQgTp8HwDb25aKS6NCjBOI0f+x8rdpNX6vpEJxCjWZv3ONARC5Gyc/VDo31FY5Lo3n5MFSABrfItP6IwIy5rtl9akIqpYAJwSUrJysCSDbeROhrQ=
+	t=1744904304; cv=none; b=pWdTQjbd4KTJ0lIVSmai61XrgPDPsFsCfAcmcJLQMXwAYx+/Mpw9ZBzpVoJj1CCN0rzaqoNKrQGCOTUjfQghQk+1TAb3eTWNnyTK1XVu+fLITFOK/zsWmsRj+UzaUST3NAd9nQqqVhPcNMt9jFmyFGGlnxoOrEXC+HcSFjLObXQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744901216; c=relaxed/simple;
-	bh=H70yVHYWvJ5Z8+txqrRrnuk6aHTbOYbR3Ii5eVeOgvM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E2YvAFvSLglvX6Dc1vkVBKATTMmH4LW60vjA23F1zYeY3Eqzzc7kbWbDP3xLiAA+IM+qLw83M2DRxWJS37JE3tNvCZ4xtGdINw13HgAYtH6XdHy0r+K6rWw4KC+rWF1ws++hOUgcSsZZtPOA4Fen8Tm6WPRthQAnofwfRTAa5vY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=luH7tDRQ; arc=none smtp.client-ip=178.21.23.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
-Received: from mail01.disroot.lan (localhost [127.0.0.1])
-	by disroot.org (Postfix) with ESMTP id 260612053D;
-	Thu, 17 Apr 2025 16:46:53 +0200 (CEST)
-X-Virus-Scanned: SPAM Filter at disroot.org
-Received: from layka.disroot.org ([127.0.0.1])
- by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Yks9lixajrJd; Thu, 17 Apr 2025 16:46:52 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
-	t=1744901210; bh=H70yVHYWvJ5Z8+txqrRrnuk6aHTbOYbR3Ii5eVeOgvM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=luH7tDRQhPOJIbn/CeP7p11nW39ynuzSqQO3wQqRbdFcN6g6xV8Y1tEEfAE2qxG5x
-	 aV0WQflcd7f4fnhm84pQSUW4Ls4kUBc/lq20rjm7Aoy4Jh7/UmjzwoPbGCC43bGrbC
-	 R/cyqUNjfzlTUR5zlVoPkB/l+QGtImggJMOxiP/uxozzBFo3pT6Or+p/aIY9hE5YKQ
-	 yT4FrLlKTyZrYkxU3Eo3Fs4kF0G9b/mmdDMHS+Yh+1YVA484zRXjwsJ4HDrwsxzFyr
-	 KpvCz8k8xX+yjihoTtR/uOF5mBvpNG+2yGOQxMgFGBVRhCdUdiLA87D6+XMltkRaIO
-	 LtMEmPytLFcGg==
-Date: Thu, 17 Apr 2025 14:46:35 +0000
-From: Yao Zi <ziyao@disroot.org>
-To: Krzysztof Kozlowski <krzk@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
-	Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Jonas Karlman <jonas@kwiboo.se>,
-	Chukun Pan <amadeus@jmu.edu.cn>
-Cc: linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org, linux-i2c@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] arm64: dts: rockchip: Add I2C controllers for
- RK3528
-Message-ID: <aAEUS7QQbXSvrcEs@pie.lan>
-References: <20250417120118.17610-3-ziyao@disroot.org>
- <20250417120118.17610-5-ziyao@disroot.org>
- <ff583eb3-d01d-4850-9f9b-f6b15ddaf137@kernel.org>
- <c6d3e343-7005-48a9-a133-bf39cb6790ee@kernel.org>
+	s=arc-20240116; t=1744904304; c=relaxed/simple;
+	bh=yzLDAS6A/GX7McgtGzi2ROyNyZLwH044A8OQupLDivg=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=FnFpcwqdeOj8MwCSsd7nYNOmDMd2IKSfXHe1ukpc+HIJaV5kkPd/qp3XwtXOJAnb1sZLm3ktkEfIILCUjQNqiRnFnxG7gIUUIRI9fWdOS308cJoD7DBxEW288ZQXr7dinvsSpn89UpyqUZdYYzi9qY078mhNqeAO+rKWU6B47TU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=gAN3cbpA; arc=none smtp.client-ip=217.70.183.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E152E43B3C;
+	Thu, 17 Apr 2025 15:38:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1744904293;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8pxVZw7n7OixPD/CTbfzF//IsHt1XOo0+mfNj04Rhsg=;
+	b=gAN3cbpAlGKvedIP4zxpeZShiRnZKs+WVhYCoRvNqbVP+C54p+fy85ABgf8WGiWZZDbDxG
+	VIxqETscqSVvxJeR/JSsRnRzYHDicDz31mgpbxhxyw2tOzbrovCil9Ie6ZG9pm8lx+iZeN
+	QI0X/FOJictjZbJnV11q0iBoD901Qt1xU14DoqQAimfTobivJoVi92t6D8+htFLAHJ8KVb
+	/Nyxzntr5/mQ/v1HsW5Q7gWl85/39sWCZR9AhRwEzrZ89LvGHLO80yG2UwkNqd4v6IaEgV
+	WBUXjJP+tsttBak1oQw7awAc3c2pWEtQVCgUY3VrfETmLz4NvwMwjmNYaBkxmQ==
+Date: Thu, 17 Apr 2025 17:38:10 +0200
+From: Herve Codina <herve.codina@bootlin.com>
+To: Rob Herring <robh@kernel.org>
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>, Andi Shyti
+ <andi.shyti@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor
+ Dooley <conor+dt@kernel.org>, linux-i2c@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ devicetree-spec@vger.kernel.org, Luca Ceresoli <luca.ceresoli@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH 2/2] schemas: i2c: Introduce I2C bus extensions
+Message-ID: <20250417173810.4697b2b8@bootlin.com>
+In-Reply-To: <20250402102123.30391c27@bootlin.com>
+References: <20250401081041.114333-1-herve.codina@bootlin.com>
+	<20250401081041.114333-3-herve.codina@bootlin.com>
+	<CAL_JsqKQdzDzAYHDctP-nmrONBynRfi-qyncnyj10r4xZNrx1A@mail.gmail.com>
+	<20250402102123.30391c27@bootlin.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c6d3e343-7005-48a9-a133-bf39cb6790ee@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvvdelieegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtkeertdertdejnecuhfhrohhmpefjvghrvhgvucevohguihhnrgcuoehhvghrvhgvrdgtohguihhnrgessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepveeiffefgeeitdelleeigefhjeelueeuveekveetgeffheeltdekgeduiefggfdvnecukfhppedvrgdtgeemtggvtgdtmeduvddtvdemfegufedtmedufhdufhemieegjeegmegsgeejrgemieeileelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtdegmegtvggttdemuddvtddvmeefugeftdemudhfudhfmeeigeejgeemsgegjegrmeeiieelledphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomhephhgvrhhvvgdrtghoughinhgrsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeduuddprhgtphhtthhopehrohgshheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepfihsrgdorhgvnhgvshgrshesshgrnhhgqdgvnhhgihhnvggvrhhinhhgrdgtohhmpdhrtghpthhtoheprghnughirdhshhihthhisehkvghrnhgvlhdrohhrghdprhgtphhtthhop
+ ehkrhiikhdoughtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegtohhnohhrodgutheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqihdvtgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopeguvghvihgtvghtrhgvvgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-GND-Sasl: herve.codina@bootlin.com
 
-On Thu, Apr 17, 2025 at 04:36:57PM +0200, Krzysztof Kozlowski wrote:
-> On 17/04/2025 16:36, Krzysztof Kozlowski wrote:
-> > On 17/04/2025 14:01, Yao Zi wrote:
-> >> Describe I2C controllers shipped by RK3528 in devicetree. For I2C-2,
-> >> I2C-4 and I2C-7 which come with only a set of possible pins, a default
-> >> pin configuration is included.
-> >>
-> >> Signed-off-by: Yao Zi <ziyao@disroot.org>
-> >> ---
-> >>  arch/arm64/boot/dts/rockchip/rk3528.dtsi | 110 +++++++++++++++++++++++
-> >>  1 file changed, 110 insertions(+)
-> >>
-> >> diff --git a/arch/arm64/boot/dts/rockchip/rk3528.dtsi b/arch/arm64/boot/dts/rockchip/rk3528.dtsi
-> >> index 826f9be0be19..2c9780069af9 100644
-> >> --- a/arch/arm64/boot/dts/rockchip/rk3528.dtsi
-> >> +++ b/arch/arm64/boot/dts/rockchip/rk3528.dtsi
-> >> @@ -24,6 +24,14 @@ aliases {
-> >>  		gpio2 = &gpio2;
-> >>  		gpio3 = &gpio3;
-> >>  		gpio4 = &gpio4;
-> >> +		i2c0 = &i2c0;
-> >> +		i2c1 = &i2c1;
-> >> +		i2c2 = &i2c2;
-> >> +		i2c3 = &i2c3;
-> >> +		i2c4 = &i2c4;
-> >> +		i2c5 = &i2c5;
-> >> +		i2c6 = &i2c6;
-> >> +		i2c7 = &i2c7;
-> > Aliases are not properties of the SoC but boards.
-> 
-> Of course this should be: Bus/interface aliases are not...
+Hi Rob, device-tree maintainers,
 
-Thanks for the explanation. Will move them to the board DT.
+This discussion started a few weeks ago and hasn't reached any conclusion.
+I answered questions and comments but didn't receive any feedback.
 
-> Best regards,
-> Krzysztof
+In order to move forward on that topic, can we revive this discussion?
+
+As a reminder, topics started in the discussion were the following:
+ - i2c-bus-extension@0: usage of a subnode with unit address
+ - Presence of phandles in both direction (double linked list)
 
 Best regards,
-Yao Zi
+Hervé
+
+On Wed, 2 Apr 2025 10:21:23 +0200
+Herve Codina <herve.codina@bootlin.com> wrote:
+
+> Hi Rob,
+> 
+> On Tue, 1 Apr 2025 09:03:23 -0500
+> Rob Herring <robh@kernel.org> wrote:
+> 
+> > On Tue, Apr 1, 2025 at 3:11 AM Herve Codina <herve.codina@bootlin.com> wrote:  
+> > >
+> > > An I2C bus can be wired to the connector and allows an add-on board to
+> > > connect additional I2C devices to this bus.
+> > >
+> > > Those additional I2C devices could be described as sub-nodes of the I2C
+> > > bus controller node however for hotplug connectors described via device
+> > > tree overlays there is additional level of indirection, which is needed
+> > > to decouple the overlay and the base tree:
+> > >
+> > >   --- base device tree ---
+> > >
+> > >   i2c1: i2c@abcd0000 {
+> > >       compatible = "xyz,i2c-ctrl";
+> > >       i2c-bus-extension@0 {    
+> > 
+> > What does 0 represent? Some fake I2C address?
+> > 
+> > Why do you even need a child node here?  
+> 
+> 0 represent the extension number. Multiple extensions can be connected
+> to a single i2c controller:
+>                                       +-------------+
+>   +------------+                 .----+ Connector 1 |
+>   |   i2c      |                 |    +-------------+
+>   | controller +---- i2c bus ----+
+>   +------------+                 |    +-------------+
+>                                  '----+ Connector 2 |
+>                                       +-------------+
+> 
+> I need a child node because extensions don't modify existing hardware (adding/removing
+> a property) but add an entry point, the extension for a new set of devices.
+> As it is not a existing hardware modification it is better represented as a node.
+> 
+> 
+> Those extensions can be chained:
+>   +-----------------------------------+         +-------------------+
+>   | Base board                        |         | addon board       |
+>   |                                   |         |    +------------+ |
+>   | +------------+                    |         | .--+ i2c device | |
+>   | |   i2c      |             +-------------+  | |  +------------+ |
+>   | | controller +-- i2c bus --+ connector A +----+                 |
+>   | +------------+             +-------------+  | |          +-------------+
+>   +-----------------------------------+         | '----------+ connector B |
+>                                                 |            +-------------+
+>                                                 +-------------------+
+> The addon board is described using an overlay.
+> 
+> In that case, we have:
+> - base-board.dts:
+>     i2c0: i2c@cafe0000 {
+>         compatible = "xyz,i2c-ctrl";
+>         #address-cells = <1>;
+>         #size-cells = <0>;
+> 
+>         i2c-bus-extension@0 {
+>             reg = <0>;
+>             i2c-bus = <&i2c_connector_a>;
+>         };
+>         ...
+>     };
+> 
+>     connector-a {
+>         devices {
+>            /* Entry point for devices available on the addon
+>             * board that are not connected to a bus such as
+>             * fixed-clock, fixed-regulator, connectors, ...
+>             */
+>         };
+>         i2c_connector_a: i2c-connector-a {
+>             /* The i2c available at connector */
+>             #address-cells = <1>;
+>             #size-cells = <0>;
+>             i2c_parent <&i2c0>;
+>        };
+>     };
+> 
+> - addon-board.dtso
+>     __overlay__ { /* This is applied at connector_a node */
+>         i2c_connector_a: i2c-connector-a {
+>             /* We do not modify the existing device i2c_connector_a
+>              * by changing, adding or removing its properties but
+>              * we add new devices (sub-nodes)
+>              */
+> 
+>             /* The i2c device available in the addon-board */
+>             i2c-device@0x10 {
+>                 compatible = "foo,bar";
+>                 reg = 0x10;
+>             };
+> 
+>             /* The i2c extension forwarding the i2c bus */
+>             i2c-bus-extension@0 {
+> 	        reg = <0>;
+>                 i2c-bus = <&i2c_connector_b>;
+>             };
+>        };
+>        
+>        devices {
+>           /* addon-board connector b */
+>           connector_b {
+>               i2c_connector_b: i2c_connector_b {
+>               /* The i2c available at connector */
+>               #address-cells = <1>;
+>               #size-cells = <0>;
+>               i2c_parent = <&i2c_connector_a>;
+>           };
+>        };
+>    };
+> 
+> Without a child node for i2c-bus-extension, we need to add
+> properties on already existing node (i2c-connector-a) to add
+> the bus extension and adding/modifying/removing a property
+> on a device-tree node correspond to modifying the device
+> itself (description changed) whereas adding/removing sub-nodes
+> correspond to adding/removing devices handled by the parent
+> parent node of those sub-nodes.
+> 
+> From the controller point of view, an extension is "a collection of
+> devices described somewhere else in the device-tree and connected
+> to the I2C SDA/SCL pins". Having that described as a sub-node seems
+> correct.
+> 
+> >   
+> > >           i2c-bus = <&i2c_ctrl>;
+> > >       };
+> > >       ...
+> > >   };
+> > >
+> > >   i2c5: i2c@cafe0000 {
+> > >       compatible = "xyz,i2c-ctrl";
+> > >       i2c-bus-extension@0 {
+> > >           i2c-bus = <&i2c-sensors>;
+> > >       };
+> > >       ...
+> > >   };
+> > >
+> > >   connector {
+> > >       i2c_ctrl: i2c-ctrl {
+> > >           i2c-parent = <&i2c1>;
+> > >           #address-cells = <1>;
+> > >           #size-cells = <0>;
+> > >       };
+> > >
+> > >       i2c-sensors {
+> > >           i2c-parent = <&i2c5>;
+> > >           #address-cells = <1>;
+> > >           #size-cells = <0>;
+> > >       };
+> > >   };
+> > >
+> > >   --- device tree overlay ---
+> > >
+> > >   ...
+> > >   // This node will overlay on the i2c-ctrl node of the base tree
+> > >   i2c-ctrl {
+> > >       eeprom@50 { compatible = "atmel,24c64"; ... };
+> > >   };
+> > >   ...
+> > >
+> > >   --- resulting device tree ---
+> > >
+> > >   i2c1: i2c@abcd0000 {
+> > >       compatible = "xyz,i2c-ctrl";
+> > >       i2c-bus-extension@0 {
+> > >           i2c-bus = <&i2c_ctrl>;
+> > >       };
+> > >       ...
+> > >   };
+> > >
+> > >   i2c5: i2c@cafe0000 {
+> > >       compatible = "xyz,i2c-ctrl";
+> > >       i2c-bus-extension@0 {
+> > >           i2c-bus = <&i2c-sensors>;
+> > >       };
+> > >       ...
+> > >   };
+> > >
+> > >   connector {
+> > >       i2c-ctrl {
+> > >           i2c-parent = <&i2c1>;
+> > >           #address-cells = <1>;
+> > >           #size-cells = <0>;
+> > >
+> > >           eeprom@50 { compatible = "atmel,24c64"; ... };
+> > >       };
+> > >
+> > >       i2c-sensors {
+> > >           i2c-parent = <&i2c5>;
+> > >           #address-cells = <1>;
+> > >           #size-cells = <0>;
+> > >       };
+> > >   };
+> > >
+> > > Here i2c-ctrl (same goes for i2c-sensors) represent the part of I2C bus
+> > > that is on the hot-pluggable add-on. On hot-plugging it will physically
+> > > connect to the I2C adapter on the base board. Let's call the 'i2c-ctrl'
+> > > node an "extension node".
+> > >
+> > > In order to decouple the overlay from the base tree, the I2C adapter
+> > > (i2c@abcd0000) and the extension node (i2c-ctrl) are separate nodes.
+> > >
+> > > The extension node is linked to the I2C bus controller in two ways. The
+> > > first one with the i2c-bus-extension available in I2C controller
+> > > sub-node and the second one with the i2c-parent property available in
+> > > the extension node itself.
+> > >
+> > > The purpose of those two links is to provide the link in both direction
+> > > from the I2C controller to the I2C extension and from the I2C extension
+> > > to the I2C controller.    
+> > 
+> > Why do you need both directions? An i2c controller can search the tree
+> > for i2c-parent and find the one's that belong to it. Or the connector
+> > can register with the I2C controller somehow.  
+> 
+> Yes, but this is sub-optimal compare to the double-link references.
+> 
+> I discarded any kind of registering from the connector which implies
+> extra complexity compared to a simple double-link reference. In the I2C
+> path, the connector is really a passive component and fully transparent.
+> It should be transparent as well in the implementation.
+> 
+> Using only i2c-parent (i.e. the reference from extension to i2c controller)
+> works when the walk from extension to i2c controller but using it on the
+> other direction is not as trivial as it could be.
+> 
+> Indeed, starting from the i2c controller, we have to search for the entire
+> tree any i2c-parent that references the i2c controller.
+> Those i2c-parent can exist in node that are not at all related to i2c
+> extensions.
+> 
+> i2c-parent in all cases represents an i2c parent bus but not only for i2c
+> extensions. I2C muxes and some other devices use this property.
+> 
+> Here also, searching the entire tree for i2c-parent and being sure that
+> the property found is related to an I2C extension adds extra complexity
+> that is simply not present with the double-link references.
+> 
+> Best regards,
+> Hervé
+
 
