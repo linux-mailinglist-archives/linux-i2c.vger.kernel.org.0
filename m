@@ -1,65 +1,53 @@
-Return-Path: <linux-i2c+bounces-10477-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10478-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70DA1A935B3
-	for <lists+linux-i2c@lfdr.de>; Fri, 18 Apr 2025 11:58:16 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2AEDA936F2
+	for <lists+linux-i2c@lfdr.de>; Fri, 18 Apr 2025 14:19:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ED287189F5E0
-	for <lists+linux-i2c@lfdr.de>; Fri, 18 Apr 2025 09:58:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8B8F61B65CB3
+	for <lists+linux-i2c@lfdr.de>; Fri, 18 Apr 2025 12:19:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEA6626FA7D;
-	Fri, 18 Apr 2025 09:57:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C1C62522A1;
+	Fri, 18 Apr 2025 12:18:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GlChjmoS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jjvk5QoY"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6206E26989D;
-	Fri, 18 Apr 2025 09:57:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 372F91B4145;
+	Fri, 18 Apr 2025 12:18:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744970277; cv=none; b=slYnyuHExWy49HQ4uRzxApsRRxfkD8l+Ka3xhXh09sqSkhnuWccAha2/gxIDceHjvLWaRLATMWYp728UpcjnCxKBqF6jsXqfRHx89h6kpp/DY6HEqUijF9kX9/JfPZR1w0SJ3f/9yHdgrdnKpGeHwj4150ysrl3WOE9VRns3Huk=
+	t=1744978728; cv=none; b=NgppPqCwClqm1Lq8gXr8P+16vAw4LweYRdA627YrH5QASpkucRFukWX6hn4+zy+vNbIZpeRWwBJGevCg7BOIuz70tgfT2a4gCaoEPKuPSte6w7YOA+ow85SjbwL69X1htsp8wephjAfa9woIcD0z2R+H04S6ZWRkQ1YgouILrlk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744970277; c=relaxed/simple;
-	bh=p6b/J69kfFLUTq+QOgF6Rld0J2Pgf1L3YSf+igHN4mI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Uj05TERyeXi8MCg3LvDV/YYcHjfD+IHVBYmcWOnNQilGi2+5vSpz6aX/pnpa5svm8WKqGXYLOwtW4vRo1SMLF3iP3618SuK/IIpqciEaODQBJEISIDFf1ykmDGjgD5uE1350DTgDJSizVcbVcrSHKs0EkB7uCBTg3VmBI5YM7Yk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GlChjmoS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAED8C4CEE2;
-	Fri, 18 Apr 2025 09:57:56 +0000 (UTC)
+	s=arc-20240116; t=1744978728; c=relaxed/simple;
+	bh=9SK70E7929mT6SYZygI4BwxZ2Vh/2y0vyBLbyfLsegA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=EtA4bm1BRv1SaJ2rWAIF8pqFweDpgbPg8dOWHF3kIGDcULXXBS2IywVeu8FYUDwvTnH4+/yZKXJm8xDkr29IMYwAtaprTqvmtVDYQEnqzlM50tyPAjyLJM+XVKQa+ZK+8vDtLSmlU549lN5d0BQNz1LKPgKec4+WPf3Ae1uq81o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jjvk5QoY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C034FC4CEE2;
+	Fri, 18 Apr 2025 12:18:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744970276;
-	bh=p6b/J69kfFLUTq+QOgF6Rld0J2Pgf1L3YSf+igHN4mI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GlChjmoScEr38nS5joVdOx23M6ct7g6/LappZMSOJiX4qHa8iRI/uH5nY3jjl7lL5
-	 YRfd2VdRZ6rYq7eFehtFIcQtNNUYkB0V9jvXCj9FIXVfDsqQeFV9Z96D3ixRc0Omtn
-	 QdlDPJf5SKCNR7Q302y6eAjyozMjQi+zPb0ePmByVn/b0TAZjyG4pXKrTLmK8hcYB3
-	 QxM2MXfCqD0ZMtiuMy+xBiWmj2VCi8B6Sz7tE/JdbVlnDmcSYVNA5PgeRWLfpoaIE1
-	 +dvNw0/tKUq7HlchgHhkmnqcOYOCCYO1IbMa8zbc4xTapy/VcvLDnTBjQy8nOyAyoL
-	 l93MeZ9ObhIww==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1u5iTt-0000000014D-0AfD;
-	Fri, 18 Apr 2025 11:57:57 +0200
-Date: Fri, 18 Apr 2025 11:57:57 +0200
-From: Johan Hovold <johan@kernel.org>
-To: Andi Shyti <andi.shyti@kernel.org>
-Cc: Johan Hovold <johan+linaro@kernel.org>, Vignesh R <vigneshr@ti.com>,
-	Aaro Koskinen <aaro.koskinen@iki.fi>,
-	Andreas Kemnade <andreas@kemnade.info>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Roger Quadros <rogerq@kernel.org>, Tony Lindgren <tony@atomide.com>,
-	Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-	linux-omap@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Jayesh Choudhary <j-choudhary@ti.com>
-Subject: Re: [PATCH] i2c: omap: fix deprecated of_property_read_bool() use
-Message-ID: <aAIiJQVAUdWJFVy7@hovoldconsulting.com>
-References: <20250415075230.16235-1-johan+linaro@kernel.org>
- <vcwjwrjgzwoil5ydds4findhcgl2ujoxwia7eh7yrbdc45yx26@kmpmvataffzr>
+	s=k20201202; t=1744978727;
+	bh=9SK70E7929mT6SYZygI4BwxZ2Vh/2y0vyBLbyfLsegA=;
+	h=Date:From:To:Cc:Subject:From;
+	b=jjvk5QoYQOkxdCHXMhTrvXH37XF8cEF4CFCvpMeDDlr9zk+uf9g7mngNtH1u2nm8w
+	 5gmtOd48jSHIWeamx107cep58/QEog2nhfIv/QrNY15YdF/0fDW9rrx58mG5s7SeRi
+	 p2OhO7X+L6L6Rq3dtjwJnp3+g1LgW+ZRsFfrPp4cBiW/+BS509i6NLzvtZRW8yoNpQ
+	 S6MmDLmUfLHBHhBFAOfWQTidCUHf5xDRkiLDkvL5xhhRja5+VAmR8upfRY7Yg9qe/Q
+	 ola8y2MMe9kdfxA+9mr939xrL2pdvZSW2JPrUfUtFELgjrM8PvIPButhhy9FQ4rt40
+	 G02O41kIFLv7g==
+Date: Fri, 18 Apr 2025 14:18:43 +0200
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-i2c <linux-i2c@vger.kernel.org>, 
+	lkml <linux-kernel@vger.kernel.org>, Andi Shyti <andi.shyti@kernel.org>
+Subject: [GIT PULL] i2c-host-fixes for v6.15-rc3
+Message-ID: <mtqiyp7mtyuivs7snzfp3dcinr2u5jw63afxqto4s2rnqe6nyc@ozaxoxvtvdxt>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -68,30 +56,36 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <vcwjwrjgzwoil5ydds4findhcgl2ujoxwia7eh7yrbdc45yx26@kmpmvataffzr>
 
-On Thu, Apr 17, 2025 at 11:41:51PM +0200, Andi Shyti wrote:
-> On Tue, Apr 15, 2025 at 09:52:30AM +0200, Johan Hovold wrote:
-> > Using of_property_read_bool() for non-boolean properties is deprecated
-> > and results in a warning during runtime since commit c141ecc3cecd ("of:
-> > Warn when of_property_read_bool() is used on non-boolean properties").
-> > 
-> > Fixes: b6ef830c60b6 ("i2c: omap: Add support for setting mux")
-> > Cc: Jayesh Choudhary <j-choudhary@ti.com>
-> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> 
-> Thanks for your patch! I'm going to drop the Fixes tag, as this
-> isn't really a bug fix but rather a warning suppression during
-> boot time.
+Hi Wolfram,
 
-Thanks, but I think you should have kept the Fixes tag and merged this
-for 6.15 (i2c-host-fixes) since this is a new warning in 6.15-rc1 (and
-that does warrant a Fixes tag). Perhaps I should have highlighted that
-better.
+one fix for this week which prevents a potential NULL pointer
+dereference by adding an extra check in probe.
 
-If the offending patch had been posted or merged before such uses
-started generating warnings in 6.14-rc1 then that would have been a
-different matter.
+Have a good weekend,
+Andi
 
-Johan
+The following changes since commit 8ffd015db85fea3e15a77027fda6c02ced4d2444:
+
+  Linux 6.15-rc2 (2025-04-13 11:54:49 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git tags/i2c-host-fixes-6.15-rc3
+
+for you to fetch changes up to 424eafe65647a8d6c690284536e711977153195a:
+
+  i2c: cros-ec-tunnel: defer probe if parent EC is not present (2025-04-13 21:33:44 +0200)
+
+----------------------------------------------------------------
+i2c-host-fixes for v6.15-rc3
+
+- ChromeOS EC tunnel: fix potential NULL pointer dereference
+
+----------------------------------------------------------------
+Thadeu Lima de Souza Cascardo (1):
+      i2c: cros-ec-tunnel: defer probe if parent EC is not present
+
+ drivers/i2c/busses/i2c-cros-ec-tunnel.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
