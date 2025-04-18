@@ -1,164 +1,124 @@
-Return-Path: <linux-i2c+bounces-10475-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10476-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2CCC7A93448
-	for <lists+linux-i2c@lfdr.de>; Fri, 18 Apr 2025 10:14:09 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30D9EA934E6
+	for <lists+linux-i2c@lfdr.de>; Fri, 18 Apr 2025 10:53:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B56241B66289
-	for <lists+linux-i2c@lfdr.de>; Fri, 18 Apr 2025 08:14:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5445D466548
+	for <lists+linux-i2c@lfdr.de>; Fri, 18 Apr 2025 08:53:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9AC426B095;
-	Fri, 18 Apr 2025 08:14:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AC5A26F468;
+	Fri, 18 Apr 2025 08:53:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KRG3qrrk"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="gl5GH0JR"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 676D726AABC;
-	Fri, 18 Apr 2025 08:14:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45ECA8C0E
+	for <linux-i2c@vger.kernel.org>; Fri, 18 Apr 2025 08:53:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744964042; cv=none; b=LwJF2DRzADvKIJiuUnt9yB7xepSA4k9q649D3oQeewcZ8bW2tUECNdYkknG9xKZQYhhYcugjkDFJcShjeC88752p8pExzyfjTTdThG7tDKhnzc1cLOe18OlqgtBYJ6PVLL/o0r0TWW1/6nG2a/3gQKY7BMwbyX9dTTDYU6pumio=
+	t=1744966418; cv=none; b=fnygDeo0hTaNl/6UPigE6AvxgBEH7a2LsDFyJvIfpqQiHhPv2E+7ZmMrzy7eFVR3V/pd8XiPWBY5dQrhlXBFznkgwAPW+NKsulus54ncwYvvEJwRCoS27ug+AuAcnsdB/7QFtPHyWTXETQ3hD9rS/uZ7arwt0q3El5J18+m6ktc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744964042; c=relaxed/simple;
-	bh=GHCa+D5ED4Z7P9UO7A6wuIcTDN5pqLVDOaEFzRs4DS8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Content-Type; b=GIMBW5PD9TR9c963Y+gT67AGLIgoAb7VOwtmmjM22pmPqv96s6fMbd2dDzlg5IVvq1lzddIEQ/zyPahaILVi0Jc4DuvqjA6Ya1piJODXhZYzvKYajFvyd8KmMxVUvWyjRE9n5vPCdlf59Lq/B7MET2h62UVdoRulXQVa8y2uPw0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KRG3qrrk; arc=none smtp.client-ip=209.85.221.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-3995ff6b066so901531f8f.3;
-        Fri, 18 Apr 2025 01:14:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744964039; x=1745568839; darn=vger.kernel.org;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ysES0mGIKICmlz7bXkgEqZ80p/S+y8pioakYf1xuDpQ=;
-        b=KRG3qrrk51InaJxgu1BbxtYttPTpXE1mHwftDFvJUZZy/kYKaKiV7QNuibIzRV5has
-         43ZQPVsILJxcSV+3xlxP2Oyi6KpSpKu7UHwvGeah+G2A35PARtxeUbkgNzKkwDHJWONj
-         HWuLZCooZEa16ii1aHczamLttmRSh5grTAFg/c26RBNKDSKixP7/vbyd/zP83GHw81vv
-         l9afk1QGd99j7G39vcwCb6jDATtfD8g8hFKz7/Do5JTz+w46//h1HJVG3KVeEVwTd0dJ
-         DYl+9sM5QdybRJfi4AYP5bpNepfvcbBcmNkJe03Phf2eOi5SfedH7PZ/OvokgmwMfapT
-         F8Yg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744964039; x=1745568839;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ysES0mGIKICmlz7bXkgEqZ80p/S+y8pioakYf1xuDpQ=;
-        b=rXsdAF+vMfohf429KJxGQdUZMEsQhc9PJ2+eCW6V+k9nf3Zqiknj75P2MvBKdhLOoI
-         VhCQ0p8+ST2z4T2L/3FLXNJoDv5yso+oaSqsmTocN95mtPxaxgM4qA1UYIVesd8ElKuf
-         hnscQjIzVqAGvumwQOJtriBRDgUTjOFWm6kT0R+VKRn2Vb9MkoaRrO6ycWrseBEqolHt
-         8k5C0jbG5ObLw2eRkEWZN8OYm8eAQwAFOP6m/ZGiI3UCK30cdrSLt9L5ucoJOttIYbg+
-         AZQH6SZo0MJEge8vTAU/C+jtyWslEPPG2eyYMN1FdwUzZPwamixBz/fe/89haKW+COsQ
-         zj+g==
-X-Forwarded-Encrypted: i=1; AJvYcCUXF3XSqpK1TFQzJ+BkB4lZoF/4f4r4g4fRUqa77YGb9DJaIs2iaR013S8NBe+/lKzDX3AYhlancVMtI4Yz@vger.kernel.org, AJvYcCVstdKy7wntIfjb+ulEgUD6csuHlyQ9xc5VJaw7gdldq3yXe1NMgE76F6qa5b8QBdZHL5vZ7Pi97ytoCLnAI0LtxLg=@vger.kernel.org, AJvYcCX1nc+l5ADH1IGtcibwhUePzmIVY1I+oT+iozFX47NH2ao29B56i4Z4yfPklvLVowodJM0Y0AFAfJc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzMNhpCR9HF5OdNK2f9Ro9heyZvTwBDAxktm8FziGemRDGRTAih
-	oT/OlObbtSc5+5vnd/1uTc5ZIBdtJeysSaRc8N73CcYOEqYNKJPjZo9X3Zu7cmGhNm8k7F1DpNJ
-	S8ijD4/+5tUmyV5WmkE8oRIGPggnyi7aQfZc=
-X-Gm-Gg: ASbGncuarmwIN6xpQXEf4zyOxDeOgFYoa2ddLqO2feVDwy4UbSktO9GrZiBJ+f8vOfm
-	2i6nExIlKJw7Xz/U8TllSXqmIXjgK6qxVdYMWV40Py0cBOmlKoM/5TmgYHRtmSbDaiQQ+pRwtfN
-	tH6qMNjuy3WbMtdlspsCjwnQ==
-X-Google-Smtp-Source: AGHT+IEixeG56vKRHIfQZ9WsOF29rSKcalIFuTYowp5DR2TTigZduRtRr3/kyEZsUTNoi6kty3vschsKLRALWMCsvN4=
-X-Received: by 2002:a05:6000:18af:b0:38f:3a89:fdb5 with SMTP id
- ffacd0b85a97d-39efba39855mr1321236f8f.11.1744964038466; Fri, 18 Apr 2025
- 01:13:58 -0700 (PDT)
+	s=arc-20240116; t=1744966418; c=relaxed/simple;
+	bh=qm4MW58veILwB7f8dzjqEcog3i7hkBRAtsCKwvb8XrU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IHKdOvu/u/CuGGPcBfeCreTQaOfTV6KViRgMvxqsrgdfdiaCmPQnmCAVg50TxPgSjCJsNas7TLL5lGPIEH30UTQnIM7oX/M16x5cQbKZglSjWdDS47fuXYGu4f6U406SGW21vD1PCb4tkVjkPTgcxL+RwHg/3ZrlKWwiKAGbN4g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=gl5GH0JR; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=qm4M
+	W58veILwB7f8dzjqEcog3i7hkBRAtsCKwvb8XrU=; b=gl5GH0JRK3RMYJAiEheR
+	+jHsDHwUaOyhMofic/6Q8K6rgX4rNW906zDIhNufsRRo8vITLAme5WCKPUbzlegZ
+	srTLnOms/5zqFd2TqAmkXEx2CodX17HhF6gcWQ4CQwExY9hGLZz7ydx+chnS0k/H
+	Llw0qQC2fI5uf7RbQ2dZXknYIYevt90QvU+IEmSulUFIzCQIQxX4sEqpK+byENY5
+	GlKV4jMjVtCiu7sIZdnYZ0isZTkZjjxKFboWDnyLNNkZf9uAzczOmBllBYV+hnOg
+	fZBMTSt6jy1YYoU1mOiNo5QMFI277JPwivQWScCScKY8SSqhl+cbllMbjVIr3GAA
+	8A==
+Received: (qmail 1372250 invoked from network); 18 Apr 2025 10:53:26 +0200
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 18 Apr 2025 10:53:26 +0200
+X-UD-Smtp-Session: l3s3148p1@ZenDpgkzbLwujnsE
+Date: Fri, 18 Apr 2025 10:53:25 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc: Chris Brandt <chris.brandt@renesas.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
+	Andy Shevchenko <andy@kernel.org>
+Subject: Re: [PATCH v8] i2c: riic: Implement bus recovery
+Message-ID: <aAITBfrOI0GAhGRA@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	"Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+	Chris Brandt <chris.brandt@renesas.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
+	Andy Shevchenko <andy@kernel.org>
+References: <20250407121859.131156-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <aAC8f0dAMERD8GjW@shikoro>
+ <CA+V-a8sM2mFS--zLSZt28mOUDuO2FpW0TsaV50A_VxFZ-juP4Q@mail.gmail.com>
+ <aAFgwEB4SdgH-1fQ@shikoro>
+ <CA+V-a8tmTqFi4iqGhR3cfUgKw7mxJrm6ixGAHq747ptrL3t2jA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250407121859.131156-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <aAC8f0dAMERD8GjW@shikoro> <CA+V-a8sM2mFS--zLSZt28mOUDuO2FpW0TsaV50A_VxFZ-juP4Q@mail.gmail.com>
- <aAFgwEB4SdgH-1fQ@shikoro>
-In-Reply-To: <aAFgwEB4SdgH-1fQ@shikoro>
-From: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date: Fri, 18 Apr 2025 09:13:32 +0100
-X-Gm-Features: ATxdqUFA9156Eu4fxE42CTO7RyOYL7H7N298Z-M17LvBAVxksQ4kwAlr1vrCh38
-Message-ID: <CA+V-a8tmTqFi4iqGhR3cfUgKw7mxJrm6ixGAHq747ptrL3t2jA@mail.gmail.com>
-Subject: Re: [PATCH v8] i2c: riic: Implement bus recovery
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	"Lad, Prabhakar" <prabhakar.csengg@gmail.com>, Chris Brandt <chris.brandt@renesas.com>, 
-	Andi Shyti <andi.shyti@kernel.org>, Geert Uytterhoeven <geert+renesas@glider.be>, 
-	linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>, 
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>, 
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>, Andy Shevchenko <andy@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="yam72VpGQJnm4f/3"
+Content-Disposition: inline
+In-Reply-To: <CA+V-a8tmTqFi4iqGhR3cfUgKw7mxJrm6ixGAHq747ptrL3t2jA@mail.gmail.com>
 
-Hi Wolfram,
 
-On Thu, Apr 17, 2025 at 9:12=E2=80=AFPM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
->
->
-> > As suggested I have the below now, (are there any changes Ive missed?)
->
-> Well, get_sda should really only get SDA :)
-> >
-> > +static int riic_get_sda(struct i2c_adapter *adap)
-> > +{
-> > +       struct riic_dev *riic =3D i2c_get_adapdata(adap);
-> > +
-> > +       /* Check if the bus is busy or SDA is not high */
-> > +       if ((riic_readb(riic, RIIC_ICCR2) & ICCR2_BBSY) ||
-> > +           !(riic_readb(riic, RIIC_ICCR1) & ICCR1_SDAI))
-> > +               return -EBUSY;
-> > +
-> > +       return 1;
-> > +}
->
-> I have
->
-> +static int riic_get_sda(struct i2c_adapter *adap)
-> +{
-> +       struct riic_dev *riic =3D i2c_get_adapdata(adap);
-> +
-> +       return !!(riic_readb(riic, RIIC_ICCR1) & ICCR1_SDAI);
-> +}
->
-> I believe the BBSY handling could be why it does not work.
->
-Thanks, that did the trick. The incomplete_write_byte test case is
-passing for me. Now moving onto the incomplete_address_phase case this
-seems to be failing on my side. Did you test this on your side?
+--yam72VpGQJnm4f/3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-root@smarc-rzg2l:~/i2c# cat incomplete_address_phase.sh
-cd /sys/kernel/debug/i2c/i2c-4/
-for i in {1..1}; do
-        echo 0x68 > incomplete_address_phase;
-        val=3D$(i2cget -y -f 3 0x68 8)
-        if [ "$?" !=3D "0" ] || [ "${val}" !=3D "0x83" ]; then
-                echo "I2C Read error (ret:$?) ${val}!!"
-                exit 1
-        fi
-        echo "Read val:${val}"
-done
 
-root@smarc-rzg2l:~/i2c# ./incomplete_address_phase.sh
-Error: Read failed
-I2C Read error (ret:0) !!
-root@smarc-rzg2l:~/i2c# ./incomplete_address_phase.sh
-Read val:0x83
-root@smarc-rzg2l:~/i2c# ./incomplete_address_phase.sh
-Error: Read failed
-I2C Read error (ret:0) !!
-root@smarc-rzg2l:~/i2c# ./incomplete_address_phase.sh
-Read val:0x83
-root@smarc-rzg2l:~/i2c# ./incomplete_address_phase.sh
-Error: Read failed
-I2C Read error (ret:0) !!
-root@smarc-rzg2l:~/i2c#
-root@smarc-rzg2l:~/i2c#
+> Thanks, that did the trick. The incomplete_write_byte test case is
+> passing for me. Now moving onto the incomplete_address_phase case this
+> seems to be failing on my side. Did you test this on your side?
 
-Cheers,
-Prabhakar
+Well, frankly, this is the only test I tried and, yes, it did work for
+me. Will check 'incomplete_write_byte' later today. I will also check if
+I need to run the tests more often. I did not do an endless loop.
+
+
+--yam72VpGQJnm4f/3
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmgCEwEACgkQFA3kzBSg
+KbaiIA//Yrwio7XjPV3sRQkpmuxtSnYx15g1m1r/EaKTI1d4zoSpAZ+xnk/dOySC
+yZrQQrPb6btVTxpBRU2ID8/vwWGZjeLNtrMMs1xKBcA+wEKabqypVhAho2OUurYU
+EkJMusKGhdlfTga8YkNixE4Mboa81TLveb03iqb7MfSYv5ZoCZBjd8f9e/bT9Z11
+BDqNdjz715kgoxN4AHXbIxJqq50T6GS3o4ATWzTh3+9Acw07FSCNGxlAvFFQSxl/
+TPSCBrdBnT5vHqEYLfN4+3Si49q6v56chtwNkDj1trKqWqieINvDPI2ZrnI9IMCW
+g0eCs5on9J2y+x3HQs4eZyGbVSLff+1e2NTqS7krIaTjB9bsn0/oZ1o+m8oI5CkA
+yL5S6ky5v41VnjAJgbtSUehVWRAMv2OgDa4Jlmo/synfq8nPLi6Hbk1L2OwvL1Wo
+n97cx4IvTiwH55jnDhQGllqsxTX6hoX2BMBSMUdAEDVbOOejEFPHkl2a/R7Ss+ds
+FSfjjHOSIEZepOKK83uSZxRLJgvIP9K8eGnnu7ugrQS3qkHCdI/i2Y+Ov3aisgxa
+JLOttz1SCpas4dw4CTZledfCAPN51pWv7elmkiNJ1uJVyM1NmdtxfelQZk/KgdF/
+mvfDnoRr/wH/dwFdjtPDA8/fvWdzmc6r8c1GgQr4ns8nu5wIrzc=
+=q3e0
+-----END PGP SIGNATURE-----
+
+--yam72VpGQJnm4f/3--
 
