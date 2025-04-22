@@ -1,46 +1,46 @@
-Return-Path: <linux-i2c+bounces-10569-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10570-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 79BF4A97B4D
-	for <lists+linux-i2c@lfdr.de>; Wed, 23 Apr 2025 01:49:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 048BFA97B54
+	for <lists+linux-i2c@lfdr.de>; Wed, 23 Apr 2025 01:50:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2BCB97AD1E5
-	for <lists+linux-i2c@lfdr.de>; Tue, 22 Apr 2025 23:48:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CA8213B7D3F
+	for <lists+linux-i2c@lfdr.de>; Tue, 22 Apr 2025 23:49:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02A6222154F;
-	Tue, 22 Apr 2025 23:48:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE5D5221FBF;
+	Tue, 22 Apr 2025 23:48:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y9Nkqa7k"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VRwJE6Gm"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3A3D221297;
-	Tue, 22 Apr 2025 23:48:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 877DC21C16E;
+	Tue, 22 Apr 2025 23:48:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745365723; cv=none; b=dJ8/G9AV7ylWlmUM0dst8ogbZIpkulT9jQ5xTmbvlmxtNcjEHichSl14zS8HeCjiAvKkp7J75Ucvn9hcE26y12MPz2lW0LtezhrX8PLN90YicrqzUeJsm7Ovr6TYpxvK77c56kNTjOUGWxgVzl/nx1y8/xQ2crJcYknXp2mSS6k=
+	t=1745365725; cv=none; b=GIfM6W1XAf/0sBUXUzGZF8t/HyJgp+KfiyT5nJ9/01JwKdeBG9v9RM7gzV2gg1C9o3Ap7HGdRnjB1kiI106B90wjjr+nzJiz2KCY4HU7jT3wtrsbSU3SKKTXNGv7PL5N8LeLTclOnw7pXY2vxkOd0XZs6Jl5RLGGrz+oUsWSVUw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745365723; c=relaxed/simple;
-	bh=JERBCNirUYW0nl42YoGzR6YiaDG4lMhqiqllwc48Oqg=;
+	s=arc-20240116; t=1745365725; c=relaxed/simple;
+	bh=FfDhZLx0ZCH2UPSNB8/x4ysPdIG2kObs5Tx0TBfNCOI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MB/v0syqx5LOsXT2qlszrreSwHvWEcBzPiDSDLGcfOLAkHtArqVpszW8Dun5o7Eezk3omGIOtVr4vfGNT/e3IckMJWlWckSmYPMEgMhfydCEVkIN3D8snUURqgUH1pTSAwI1BN2dZUaL7Y1MpsM5c5yoV4/cNZr8zWXLbPR8eRw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y9Nkqa7k; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A8BAC4CEEE;
-	Tue, 22 Apr 2025 23:48:41 +0000 (UTC)
+	 MIME-Version; b=R6imm+wCc+5yNj59qJ6ZqtjbFWs9rTgP6h+K6nR40EDAHOPqL7Y4003HnMhPlGFRUNmiNppUqxsrqLTq+N1qe6rJE0dsmLZEhP0wRwvr2gZDuYnXczsHxxH1M3n5nR7dzteLeeUeaSW/7KFR8945PxrJeHuoCdvQFdu4bRXp6mk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VRwJE6Gm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64E36C4CEEC;
+	Tue, 22 Apr 2025 23:48:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745365723;
-	bh=JERBCNirUYW0nl42YoGzR6YiaDG4lMhqiqllwc48Oqg=;
+	s=k20201202; t=1745365725;
+	bh=FfDhZLx0ZCH2UPSNB8/x4ysPdIG2kObs5Tx0TBfNCOI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Y9Nkqa7kyu4ELNCRXE0zpw8M+DwpdDEfy7pSTljw1KCELvfvnKkeS1lP7sM0DTyvI
-	 2iLiK2o/I3QPJyj6bKuM8ntI1/+XvwrjlaKqO2qUZ3DjgSWZXiDIjInb+KA60qjAQ7
-	 LgMdJxQthfoxs4ePXAlanMGeD8BfJ+ZxT9RpezN8N5hF/1WICXbkes7RMovB/fFwr3
-	 GVp/Q860gvQTPcoWVmn1wz4Dhrbqhs07KqkBQeZR4HCVJwHUkAEPK0oL/PVP2jhwxv
-	 yaphL6Hm5gr3sRoc8ma3dy3h6NPeg5szQkIHP7cRbEAGE5Xf4xBzQXGB+FpVSRh9nC
-	 QY4WFa3ss2Jcw==
+	b=VRwJE6GmmZMdKHaKwbnmuF///JGC/J7w9x30NuLv82oOt3zi7s+KqYNiDxByZ1C8h
+	 dT3dYt2JP2bzcRRTy+3wpyD9CEiw5yDa2EyRiZxePtiKFr1gU9S1LLc4ASUpzfa4/O
+	 9S1TB7+ij2KBkQoyaGr1i0S5ATuGoUeN3pzLCnqfZ0pXac7iDwo+ykHkIRM7GwiVps
+	 8QqukgBf4aMgupB6dJB8Wasq2azY5xlFbpKnmDOhDoV6upf8kN6oZMPdyoo3qE0iYc
+	 63oC/ZxILyCziZ+7G6ftB87aIvcX4jfMzJpiWxcIs2w1M8tXLoI0dDp4/6mN5C790J
+	 BmtvgLd0O1Syg==
 From: Mario Limonciello <superm1@kernel.org>
 To: Borislav Petkov <bp@alien8.de>,
 	Jean Delvare <jdelvare@suse.com>,
@@ -60,9 +60,9 @@ Cc: Jonathan Corbet <corbet@lwn.net>,
 	linux-kernel@vger.kernel.org (open list),
 	linux-i2c@vger.kernel.org (open list:I2C/SMBUS CONTROLLER DRIVERS FOR PC),
 	platform-driver-x86@vger.kernel.org (open list:AMD PMC DRIVER)
-Subject: [PATCH v5 3/5] i2c: piix4: Move SB800_PIIX4_FCH_PM_ADDR definition to amd/fch.h
-Date: Tue, 22 Apr 2025 18:48:28 -0500
-Message-ID: <20250422234830.2840784-4-superm1@kernel.org>
+Subject: [PATCH v5 4/5] platform/x86/amd: pmc: use FCH_PM_BASE definition
+Date: Tue, 22 Apr 2025 18:48:29 -0500
+Message-ID: <20250422234830.2840784-5-superm1@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250422234830.2840784-1-superm1@kernel.org>
 References: <20250422234830.2840784-1-superm1@kernel.org>
@@ -76,102 +76,52 @@ Content-Transfer-Encoding: 8bit
 
 From: Mario Limonciello <mario.limonciello@amd.com>
 
-SB800_PIIX4_FCH_PM_ADDR is used to indicate the base address for the
-FCH PM registers.  Multiple drivers may need this base address, so
-move it to a common header location and rename accordingly.
+The s2idle mmio quirk uses a scratch register in the FCH.
+Adjust the code to clarify that.
 
 Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 ---
 v5:
  * Move <asm> header after <linux> headers
 v4:
- * Move FCH_PM_DECODEEN to fch.h, but shift it for use in piix4 because
-   piix4 does 8 bit reads
+ * Use fch.h instead
 ---
- arch/x86/include/asm/amd/fch.h | 12 ++++++++++++
- drivers/i2c/busses/i2c-piix4.c | 18 +++++++++---------
- 2 files changed, 21 insertions(+), 9 deletions(-)
- create mode 100644 arch/x86/include/asm/amd/fch.h
+ arch/x86/include/asm/amd/fch.h            | 1 +
+ drivers/platform/x86/amd/pmc/pmc-quirks.c | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/arch/x86/include/asm/amd/fch.h b/arch/x86/include/asm/amd/fch.h
-new file mode 100644
-index 0000000000000..a5fd91ff92df3
---- /dev/null
+index a5fd91ff92df3..9b32e8a03193e 100644
+--- a/arch/x86/include/asm/amd/fch.h
 +++ b/arch/x86/include/asm/amd/fch.h
-@@ -0,0 +1,12 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#ifndef _ASM_X86_AMD_FCH_H_
-+#define _ASM_X86_AMD_FCH_H_
-+
-+#define FCH_PM_BASE			0xFED80300
-+
-+/* register offsets from PM base */
-+#define FCH_PM_DECODEEN			0x00
-+#define FCH_PM_DECODEEN_SMBUS0SEL	GENMASK(20, 19)
-+
-+#endif
-diff --git a/drivers/i2c/busses/i2c-piix4.c b/drivers/i2c/busses/i2c-piix4.c
-index dd75916157f05..59ecaa990bce3 100644
---- a/drivers/i2c/busses/i2c-piix4.c
-+++ b/drivers/i2c/busses/i2c-piix4.c
-@@ -34,6 +34,7 @@
+@@ -8,5 +8,6 @@
+ /* register offsets from PM base */
+ #define FCH_PM_DECODEEN			0x00
+ #define FCH_PM_DECODEEN_SMBUS0SEL	GENMASK(20, 19)
++#define FCH_PM_SCRATCH			0x80
+ 
+ #endif
+diff --git a/drivers/platform/x86/amd/pmc/pmc-quirks.c b/drivers/platform/x86/amd/pmc/pmc-quirks.c
+index b4f49720c87f6..b706b1f4d94bf 100644
+--- a/drivers/platform/x86/amd/pmc/pmc-quirks.c
++++ b/drivers/platform/x86/amd/pmc/pmc-quirks.c
+@@ -11,6 +11,7 @@
  #include <linux/dmi.h>
- #include <linux/acpi.h>
  #include <linux/io.h>
+ #include <linux/ioport.h>
 +#include <asm/amd/fch.h>
  
- #include "i2c-piix4.h"
+ #include "pmc.h"
  
-@@ -80,12 +81,11 @@
- #define SB800_PIIX4_PORT_IDX_MASK	0x06
- #define SB800_PIIX4_PORT_IDX_SHIFT	1
+@@ -20,7 +21,7 @@ struct quirk_entry {
+ };
  
--/* On kerncz and Hudson2, SmBus0Sel is at bit 20:19 of PMx00 DecodeEn */
--#define SB800_PIIX4_PORT_IDX_KERNCZ		0x02
--#define SB800_PIIX4_PORT_IDX_MASK_KERNCZ	0x18
-+/* SmBus0Sel is at bit 20:19 of PMx00 DecodeEn */
-+#define SB800_PIIX4_PORT_IDX_KERNCZ		(FCH_PM_DECODEEN + 0x02)
-+#define SB800_PIIX4_PORT_IDX_MASK_KERNCZ	(FCH_PM_DECODEEN_SMBUS0SEL >> 16)
- #define SB800_PIIX4_PORT_IDX_SHIFT_KERNCZ	3
+ static struct quirk_entry quirk_s2idle_bug = {
+-	.s2idle_bug_mmio = 0xfed80380,
++	.s2idle_bug_mmio = FCH_PM_BASE + FCH_PM_SCRATCH,
+ };
  
--#define SB800_PIIX4_FCH_PM_ADDR			0xFED80300
- #define SB800_PIIX4_FCH_PM_SIZE			8
- #define SB800_ASF_ACPI_PATH			"\\_SB.ASFC"
- 
-@@ -162,19 +162,19 @@ int piix4_sb800_region_request(struct device *dev, struct sb800_mmio_cfg *mmio_c
- 	if (mmio_cfg->use_mmio) {
- 		void __iomem *addr;
- 
--		if (!request_mem_region_muxed(SB800_PIIX4_FCH_PM_ADDR,
-+		if (!request_mem_region_muxed(FCH_PM_BASE,
- 					      SB800_PIIX4_FCH_PM_SIZE,
- 					      "sb800_piix4_smb")) {
- 			dev_err(dev,
- 				"SMBus base address memory region 0x%x already in use.\n",
--				SB800_PIIX4_FCH_PM_ADDR);
-+				FCH_PM_BASE);
- 			return -EBUSY;
- 		}
- 
--		addr = ioremap(SB800_PIIX4_FCH_PM_ADDR,
-+		addr = ioremap(FCH_PM_BASE,
- 			       SB800_PIIX4_FCH_PM_SIZE);
- 		if (!addr) {
--			release_mem_region(SB800_PIIX4_FCH_PM_ADDR,
-+			release_mem_region(FCH_PM_BASE,
- 					   SB800_PIIX4_FCH_PM_SIZE);
- 			dev_err(dev, "SMBus base address mapping failed.\n");
- 			return -ENOMEM;
-@@ -201,7 +201,7 @@ void piix4_sb800_region_release(struct device *dev, struct sb800_mmio_cfg *mmio_
- {
- 	if (mmio_cfg->use_mmio) {
- 		iounmap(mmio_cfg->addr);
--		release_mem_region(SB800_PIIX4_FCH_PM_ADDR,
-+		release_mem_region(FCH_PM_BASE,
- 				   SB800_PIIX4_FCH_PM_SIZE);
- 		return;
- 	}
+ static struct quirk_entry quirk_spurious_8042 = {
 -- 
 2.43.0
 
