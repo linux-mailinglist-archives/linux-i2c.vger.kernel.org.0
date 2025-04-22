@@ -1,113 +1,145 @@
-Return-Path: <linux-i2c+bounces-10522-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10523-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75491A96CBB
-	for <lists+linux-i2c@lfdr.de>; Tue, 22 Apr 2025 15:30:18 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D3229A97023
+	for <lists+linux-i2c@lfdr.de>; Tue, 22 Apr 2025 17:12:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AE78617A01A
-	for <lists+linux-i2c@lfdr.de>; Tue, 22 Apr 2025 13:29:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7D1257A5FB1
+	for <lists+linux-i2c@lfdr.de>; Tue, 22 Apr 2025 15:11:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FE8228369C;
-	Tue, 22 Apr 2025 13:25:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IKyCoDN/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 224C7289356;
+	Tue, 22 Apr 2025 15:12:22 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A295B281367;
-	Tue, 22 Apr 2025 13:25:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E67D211488;
+	Tue, 22 Apr 2025 15:12:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745328340; cv=none; b=HoqvZuY4OlxGg7YCm3sOl3Z8lwm9zbwcsZRl+YGhrlf9qbUv9jRdLn4TbI7XZW3fIkYqPlBPueFPn3u9hbE8ZqmHDFV5cy94ap4WIpSWmgoC8UplUuKpTpq7js+lhHhYlOzQxN4S/PB2SB3s1EdqHdPMK4jYoRgGOpOp+pM4Qn8=
+	t=1745334742; cv=none; b=VypNjc7iuG5RugmbdyH0meovc6G9DwTrsRt/QNa745l/08aTEHs4hnT9dEXzO3uwyUKZIbRR5ijaHWdhYD+epf+38jklQc2/3HqZM9Fn0Lk5GzdnOknnR3tGkr/xI4/oLMZy1b1QWbMrAAqczfqaU8M9UGsmv8TjUVic1hc0Km4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745328340; c=relaxed/simple;
-	bh=sIwen7WsPPQoT2R+raijeINXf73DVD6D+YM6rXvMk9s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=u3PfQt9fj8tOFB8K/rZCOqSoTPX5kjD8sVn4rquLmMO5KYOneU+9YO5m/vmDGmasFPSN5dWUtnCiG9s/kFNDnPzxxMCDRUPzntDjFwvkSYbv3TBGUkVbrEm/VfB6i9N2Pub92Lx7k9iUN5dZVxPZUyXy3G7Wcvzf0mz+zb0//r4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IKyCoDN/; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2241053582dso71492745ad.1;
-        Tue, 22 Apr 2025 06:25:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1745328338; x=1745933138; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qtV3DhJOKkxTU+wj+E4JlDxdRWyHpER3HDjZAA/FV7w=;
-        b=IKyCoDN/IeeTKiGFOjyDcTekwRltrjOKEBMNHYACg23hJAwHWXn33/qNmAvRnaYjFK
-         gpVk7OZDwu2M1PgV8G+UcSD3ITOUalTStVKaGg5cObjAB7Ih6d0QXqHTqNs0S1570td+
-         V6BGK3ZcRdB3UJFyCPn7iPsrTBH2ebVj5dF6hdUuzg0ByZEZj4ZTVmGJa3lH01m3FPg3
-         YtSjPX1KAfnBgTXAWl3feQK4RJRqmVE08qGxXgMUiJ+jMczbUEh6GlWmz8SgYfRlGQp6
-         xI7fhzR6QyOo441xQ+Xdj4PZCHa7I1N+9KF/LOWQnuF16k9dccXXihEIzQRp9CQ4lCpc
-         t2lA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745328338; x=1745933138;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qtV3DhJOKkxTU+wj+E4JlDxdRWyHpER3HDjZAA/FV7w=;
-        b=gq9lPkoa76OCfFaZmfAXW3fqp93d9khCRCHK0DOOyJc+mFIyZCH0qcjz4vzF9O3TMI
-         7AVXNtqRdYGFO4+fx3yC5MgUaVU+wnAidZBlsGhe4OIBw4qmWibKxhoCE/6JOJHIiSNR
-         9EIMoKd6jcoOhun8gFEnx1WNLf2c0CIK+uIYSva8XfRwOzIKS0XamihRpqKDyQoQp2Kk
-         dd5Ms/Jj1dwtvyeqgReNb12xQ9uUHWNp9AHcqojVuE7uqCQT79DssnJJP+jRSwMC20aR
-         Yzsr6pC4XamA+rD9JopA1h2+li5W2Rko8ivR3t60IFGv8p9Ku64YeJl/QjI4uXXDKYRV
-         mhvA==
-X-Forwarded-Encrypted: i=1; AJvYcCVMt+FKzO2EPVZq8DHmstkUSe//YpOpaOmMjMNWzlEWYOJORaDeT6gr8BSJNyDETVNMXDd8sbwZQA6P@vger.kernel.org, AJvYcCVmwZlZhW0RLNAt6wG69p3t937yNE8ryBbknDeJTjToT1srQvNiOpOjkeU82AdwSY5zaKIeqaoZnWDk@vger.kernel.org, AJvYcCWSynwR+ReBPuT/l5VdfwNjvR/9yQX+uQuNfrP7q9EULqurSZtTGTnqNnvvxw/zp7lUL5NfhFqJuChp@vger.kernel.org, AJvYcCXOKfj6NiwJCRMBlduskGYilkAjYr1XuUcogq/LugI0YtBdWS7LawcVEL7Cz74Ch5/a7dFx+z6EnfAe2gBE@vger.kernel.org, AJvYcCXv5+tIR9jSD5rtGFjwd2LOkvx5ABMq1OTHIzE/nmqyJyMIY2DXpmfYVodcrfIXLOrfpdZSaQSZ24OIoyQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzrI0QxXMH9hDDmIlijwK2WsjOh8G/mC+foXKOqOw7Puw/+qZ05
-	IZpPrt+nVc1Dg0jzoJ1TojEipImXOMZuk63yoPy0K0YDJqQUnSDZ
-X-Gm-Gg: ASbGncukDpFP9uukr+0Dd1cthoz/GgHmiRZ0C70lL715jQQPhWtcsa0L2CLSZGjhduL
-	oR5MXpNXwLX/wNmdlPcpu3zRRwLOzfM6nY+qC6gdu3sQLn1Uru0Lrr1xGCmzGb7UA94+letTPvq
-	YKNtt5VLxh5PQL+t801eRdzYCgARcFpRzYz9dD3r9566ik3ExPLY752+TZsVIghD4bdWqd4Jc8U
-	44TpNahBy7JXlJqFQRA+FX7q+MMC4CZlEHtRDD3pyQXNOFqUXjIrB6zBSVPJyr7hHJIWQganJWH
-	TO+F5B/WsMMBZ0WSRfJfPbxpM5MLeE2/OOIJciM2602qw0iCDC2kZ718173p+1En
-X-Google-Smtp-Source: AGHT+IF788IeKgjdtqU+/vaSukLZXfULJRHLvzd/tFEY8O9tspAjkjBGc1I1/V+TOAmDpvF1epaJaA==
-X-Received: by 2002:a17:902:d58b:b0:220:c86d:d7eb with SMTP id d9443c01a7336-22c5360454cmr242767575ad.36.1745328337792;
-        Tue, 22 Apr 2025 06:25:37 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22c50bf5929sm84380785ad.104.2025.04.22.06.25.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Apr 2025 06:25:37 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Tue, 22 Apr 2025 06:25:36 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] hwmon: (pmbus/lt3074): add support for lt3074
-Message-ID: <9ee5014d-7403-4eba-908f-8c1d10b102aa@roeck-us.net>
-References: <20250421-upstream-lt3074-v3-0-71636322f9fe@analog.com>
- <20250421-upstream-lt3074-v3-2-71636322f9fe@analog.com>
+	s=arc-20240116; t=1745334742; c=relaxed/simple;
+	bh=YPH9lUmW+CZTk7C70D5/ab8R8uD4KZUBGVM3jWOHML8=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=m41qgK2YDlJWC/2Wm908UzTAEkFs0SFivyyvm+6WSpfTT8bqrFb0umBA95MTOaCo1tb2CnE5XKqyoaSaIld60xT2pYAPqDGYXNnj1MO1C1lTYQeR9o+Rr/9Dbvqc6IWuj4eqvmTYvrZvHIYPQ0sdiUrL03aB4D8xeDKxY8Mi00E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.216])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Zhlzb1gQSz6L51r;
+	Tue, 22 Apr 2025 23:10:35 +0800 (CST)
+Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
+	by mail.maildlp.com (Postfix) with ESMTPS id B55E61400CA;
+	Tue, 22 Apr 2025 23:12:15 +0800 (CST)
+Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
+ (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Tue, 22 Apr
+ 2025 17:12:15 +0200
+Date: Tue, 22 Apr 2025 16:12:13 +0100
+From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To: Troy Mitchell <troymitchell988@gmail.com>
+CC: Oleksij Rempel <o.rempel@pengutronix.de>, Pengutronix Kernel Team
+	<kernel@pengutronix.de>, Andi Shyti <andi.shyti@kernel.org>, Shawn Guo
+	<shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, Fabio Estevam
+	<festevam@gmail.com>, <linux-i2c@vger.kernel.org>, <imx@lists.linux.dev>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+	Yongchao Jia <jyc0019@gmail.com>
+Subject: Re: [PATCH 1/2] i2c: imx: use guard to take spinlock
+Message-ID: <20250422161213.0000597d@huawei.com>
+In-Reply-To: <20250421-i2c-imx-update-v1-1-1137f1f353d5@gmail.com>
+References: <20250421-i2c-imx-update-v1-0-1137f1f353d5@gmail.com>
+	<20250421-i2c-imx-update-v1-1-1137f1f353d5@gmail.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250421-upstream-lt3074-v3-2-71636322f9fe@analog.com>
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml500006.china.huawei.com (7.191.161.198) To
+ frapeml500008.china.huawei.com (7.182.85.71)
 
-On Mon, Apr 21, 2025 at 08:18:19PM +0800, Cedric Encarnacion wrote:
-> Add hardware monitoring and regulator support for LT3074. The LT3074 is an
-> ultrafast, ultralow noise 3A, 5.5V dropout linear regulator. The PMBus
-> serial interface allows telemetry for input/output voltage, bias voltage,
-> output current, and die temperature.
+On Mon, 21 Apr 2025 13:36:38 +0800
+Troy Mitchell <troymitchell988@gmail.com> wrote:
+
+> Use guard to automatically release the lock after going out of scope
+> instead of calling it manually.
+
+Drive by review, but this changes behavior in a subtle way so we
+should have more commentary here...
+
 > 
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-> Signed-off-by: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
+> Co-developed-by: Yongchao Jia <jyc0019@gmail.com>
+> Signed-off-by: Yongchao Jia <jyc0019@gmail.com>
+> Signed-off-by: Troy Mitchell <troymitchell988@gmail.com>
+> ---
+>  drivers/i2c/busses/i2c-imx.c | 22 ++++++++++------------
+>  1 file changed, 10 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
+> index 9e5d454d8318..cb96a57df4a0 100644
+> --- a/drivers/i2c/busses/i2c-imx.c
+> +++ b/drivers/i2c/busses/i2c-imx.c
+> @@ -23,6 +23,7 @@
+>  
+>  #include <linux/acpi.h>
+>  #include <linux/clk.h>
+> +#include <linux/cleanup.h>
+>  #include <linux/completion.h>
+>  #include <linux/delay.h>
+>  #include <linux/dma-mapping.h>
 
-Applied.
+>  
+> @@ -1125,30 +1126,27 @@ static irqreturn_t i2c_imx_isr(int irq, void *dev_id)
+>  {
+>  	struct imx_i2c_struct *i2c_imx = dev_id;
+>  	unsigned int ctl, status;
+> -	unsigned long flags;
+>  
+> -	spin_lock_irqsave(&i2c_imx->slave_lock, flags);
+> +	guard(spinlock_irqsave)(&i2c_imx->slave_lock);
+> +
+>  	status = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2SR);
+>  	ctl = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2CR);
+>  
+>  	if (status & I2SR_IIF) {
+>  		i2c_imx_clear_irq(i2c_imx, I2SR_IIF);
+> +
+>  		if (i2c_imx->slave) {
+>  			if (!(ctl & I2CR_MSTA)) {
+>  				irqreturn_t ret;
+>  
+> -				ret = i2c_imx_slave_handle(i2c_imx,
+> -							   status, ctl);
+> -				spin_unlock_irqrestore(&i2c_imx->slave_lock,
+> -						       flags);
+> -				return ret;
+> +				return i2c_imx_slave_handle(i2c_imx,
+> +							    status, ctl);
+>  			}
+>  			i2c_imx_slave_finish_op(i2c_imx);
+>  		}
+> -		spin_unlock_irqrestore(&i2c_imx->slave_lock, flags);
 
-Thanks,
-Guenter
+In this path the patch changes the lock release to occur after
+i2c_imx_master_isr(i2c_imx, status);
+
+That may well be safe; I have no idea!  You should talk about that
+in the patch description if it is.
+
+> +
+>  		return i2c_imx_master_isr(i2c_imx, status);
+>  	}
+> -	spin_unlock_irqrestore(&i2c_imx->slave_lock, flags);
+>  
+>  	return IRQ_NONE;
+>  }
+> 
+
 
