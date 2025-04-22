@@ -1,46 +1,46 @@
-Return-Path: <linux-i2c+bounces-10568-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10569-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34FC5A97B47
-	for <lists+linux-i2c@lfdr.de>; Wed, 23 Apr 2025 01:49:35 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 79BF4A97B4D
+	for <lists+linux-i2c@lfdr.de>; Wed, 23 Apr 2025 01:49:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3B6A41B6024D
-	for <lists+linux-i2c@lfdr.de>; Tue, 22 Apr 2025 23:49:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2BCB97AD1E5
+	for <lists+linux-i2c@lfdr.de>; Tue, 22 Apr 2025 23:48:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8A8622129F;
-	Tue, 22 Apr 2025 23:48:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02A6222154F;
+	Tue, 22 Apr 2025 23:48:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O0bwBqXl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y9Nkqa7k"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 880BF21C176;
-	Tue, 22 Apr 2025 23:48:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3A3D221297;
+	Tue, 22 Apr 2025 23:48:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745365721; cv=none; b=cSPFkS1GYBzkCFnZguYq0OItGEuyRbW9eiZCI2kYUCoGtoJ9TjRXLmCiKJor9KMX0/n3t9zUc2YV2fds3GOcmgi8XA+qbImNIsWq/4s8UCoFc+eXnzq51jOumQP912B5MWO/n2+i0YMjo31tWfoaqx2+bQ0qSkkoI1MhbWEgRhQ=
+	t=1745365723; cv=none; b=dJ8/G9AV7ylWlmUM0dst8ogbZIpkulT9jQ5xTmbvlmxtNcjEHichSl14zS8HeCjiAvKkp7J75Ucvn9hcE26y12MPz2lW0LtezhrX8PLN90YicrqzUeJsm7Ovr6TYpxvK77c56kNTjOUGWxgVzl/nx1y8/xQ2crJcYknXp2mSS6k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745365721; c=relaxed/simple;
-	bh=wL6gDQfw388khyaqD8+VfVvWWoocwoI1GrR8u1BVqWk=;
+	s=arc-20240116; t=1745365723; c=relaxed/simple;
+	bh=JERBCNirUYW0nl42YoGzR6YiaDG4lMhqiqllwc48Oqg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=eIiIkFARIGg1LQ5/u7xQCu0x2knIy4ijXCbsAq1eCqzWwfMwRGCusDzPNGzxgmzNFbMBszlioxHr4BQ+W6D9eysjcmkgC7cW02Ls4mzBANgboEqN4fixuvF0rhdPwFrqChWncWijQFDbYXD7Hju7qqeT6zTTPUxjFW/ycIXgtSM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O0bwBqXl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5513C4CEEF;
-	Tue, 22 Apr 2025 23:48:39 +0000 (UTC)
+	 MIME-Version; b=MB/v0syqx5LOsXT2qlszrreSwHvWEcBzPiDSDLGcfOLAkHtArqVpszW8Dun5o7Eezk3omGIOtVr4vfGNT/e3IckMJWlWckSmYPMEgMhfydCEVkIN3D8snUURqgUH1pTSAwI1BN2dZUaL7Y1MpsM5c5yoV4/cNZr8zWXLbPR8eRw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y9Nkqa7k; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A8BAC4CEEE;
+	Tue, 22 Apr 2025 23:48:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745365721;
-	bh=wL6gDQfw388khyaqD8+VfVvWWoocwoI1GrR8u1BVqWk=;
+	s=k20201202; t=1745365723;
+	bh=JERBCNirUYW0nl42YoGzR6YiaDG4lMhqiqllwc48Oqg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=O0bwBqXlheSNkear2jotn7mthe475T3tCn0WGGL1gKZue2FCIItEfTvV0ed0TJHsn
-	 jjPuHcgk5m20iyKKfJPPfLzAQpOdKokkLlYSuVIrDAPOGydWD7H+jfa5nVxOpuk2mR
-	 9LPHdxqO+c7lR8JlIPBFgYGp3IUBgUxq3evTTOJxBdfBXBX3cuCMrlqElt03a3FpnC
-	 Uy42ui6KmzkznWZk+modXbEBexWHf5HH3o7kPTpl+vg/F37/mDIsAtEU3CMmi3S9M2
-	 vcVrspV6Ya4z/DxHFSLkwsP3fT+T+hiHWnkypfhxfTqZIfVpEeIuwyG429TU1K1kP/
-	 QQ8QJqihqywRA==
+	b=Y9Nkqa7kyu4ELNCRXE0zpw8M+DwpdDEfy7pSTljw1KCELvfvnKkeS1lP7sM0DTyvI
+	 2iLiK2o/I3QPJyj6bKuM8ntI1/+XvwrjlaKqO2qUZ3DjgSWZXiDIjInb+KA60qjAQ7
+	 LgMdJxQthfoxs4ePXAlanMGeD8BfJ+ZxT9RpezN8N5hF/1WICXbkes7RMovB/fFwr3
+	 GVp/Q860gvQTPcoWVmn1wz4Dhrbqhs07KqkBQeZR4HCVJwHUkAEPK0oL/PVP2jhwxv
+	 yaphL6Hm5gr3sRoc8ma3dy3h6NPeg5szQkIHP7cRbEAGE5Xf4xBzQXGB+FpVSRh9nC
+	 QY4WFa3ss2Jcw==
 From: Mario Limonciello <superm1@kernel.org>
 To: Borislav Petkov <bp@alien8.de>,
 	Jean Delvare <jdelvare@suse.com>,
@@ -59,11 +59,10 @@ Cc: Jonathan Corbet <corbet@lwn.net>,
 	linux-doc@vger.kernel.org (open list:DOCUMENTATION),
 	linux-kernel@vger.kernel.org (open list),
 	linux-i2c@vger.kernel.org (open list:I2C/SMBUS CONTROLLER DRIVERS FOR PC),
-	platform-driver-x86@vger.kernel.org (open list:AMD PMC DRIVER),
-	Ingo Molnar <mingo@kernel.org>
-Subject: [PATCH v5 2/5] i2c: piix4: Depends on X86
-Date: Tue, 22 Apr 2025 18:48:27 -0500
-Message-ID: <20250422234830.2840784-3-superm1@kernel.org>
+	platform-driver-x86@vger.kernel.org (open list:AMD PMC DRIVER)
+Subject: [PATCH v5 3/5] i2c: piix4: Move SB800_PIIX4_FCH_PM_ADDR definition to amd/fch.h
+Date: Tue, 22 Apr 2025 18:48:28 -0500
+Message-ID: <20250422234830.2840784-4-superm1@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250422234830.2840784-1-superm1@kernel.org>
 References: <20250422234830.2840784-1-superm1@kernel.org>
@@ -77,31 +76,102 @@ Content-Transfer-Encoding: 8bit
 
 From: Mario Limonciello <mario.limonciello@amd.com>
 
-PIIX4 and compatible controllers are only for X86. As some headers are
-being moved into x86 specific headers PIIX4 won't compile on non-x86.
+SB800_PIIX4_FCH_PM_ADDR is used to indicate the base address for the
+FCH PM registers.  Multiple drivers may need this base address, so
+move it to a common header location and rename accordingly.
 
-Suggested-by: Ingo Molnar <mingo@kernel.org>
 Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 ---
 v5:
- * Drop unnecessary tags
+ * Move <asm> header after <linux> headers
+v4:
+ * Move FCH_PM_DECODEEN to fch.h, but shift it for use in piix4 because
+   piix4 does 8 bit reads
 ---
- drivers/i2c/busses/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/x86/include/asm/amd/fch.h | 12 ++++++++++++
+ drivers/i2c/busses/i2c-piix4.c | 18 +++++++++---------
+ 2 files changed, 21 insertions(+), 9 deletions(-)
+ create mode 100644 arch/x86/include/asm/amd/fch.h
 
-diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index 83c88c79afe20..bbbd6240fa6ed 100644
---- a/drivers/i2c/busses/Kconfig
-+++ b/drivers/i2c/busses/Kconfig
-@@ -200,7 +200,7 @@ config I2C_ISMT
+diff --git a/arch/x86/include/asm/amd/fch.h b/arch/x86/include/asm/amd/fch.h
+new file mode 100644
+index 0000000000000..a5fd91ff92df3
+--- /dev/null
++++ b/arch/x86/include/asm/amd/fch.h
+@@ -0,0 +1,12 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++#ifndef _ASM_X86_AMD_FCH_H_
++#define _ASM_X86_AMD_FCH_H_
++
++#define FCH_PM_BASE			0xFED80300
++
++/* register offsets from PM base */
++#define FCH_PM_DECODEEN			0x00
++#define FCH_PM_DECODEEN_SMBUS0SEL	GENMASK(20, 19)
++
++#endif
+diff --git a/drivers/i2c/busses/i2c-piix4.c b/drivers/i2c/busses/i2c-piix4.c
+index dd75916157f05..59ecaa990bce3 100644
+--- a/drivers/i2c/busses/i2c-piix4.c
++++ b/drivers/i2c/busses/i2c-piix4.c
+@@ -34,6 +34,7 @@
+ #include <linux/dmi.h>
+ #include <linux/acpi.h>
+ #include <linux/io.h>
++#include <asm/amd/fch.h>
  
- config I2C_PIIX4
- 	tristate "Intel PIIX4 and compatible (ATI/AMD/Serverworks/Broadcom/SMSC)"
--	depends on PCI && HAS_IOPORT
-+	depends on PCI && HAS_IOPORT && X86
- 	select I2C_SMBUS
- 	help
- 	  If you say yes to this option, support will be included for the Intel
+ #include "i2c-piix4.h"
+ 
+@@ -80,12 +81,11 @@
+ #define SB800_PIIX4_PORT_IDX_MASK	0x06
+ #define SB800_PIIX4_PORT_IDX_SHIFT	1
+ 
+-/* On kerncz and Hudson2, SmBus0Sel is at bit 20:19 of PMx00 DecodeEn */
+-#define SB800_PIIX4_PORT_IDX_KERNCZ		0x02
+-#define SB800_PIIX4_PORT_IDX_MASK_KERNCZ	0x18
++/* SmBus0Sel is at bit 20:19 of PMx00 DecodeEn */
++#define SB800_PIIX4_PORT_IDX_KERNCZ		(FCH_PM_DECODEEN + 0x02)
++#define SB800_PIIX4_PORT_IDX_MASK_KERNCZ	(FCH_PM_DECODEEN_SMBUS0SEL >> 16)
+ #define SB800_PIIX4_PORT_IDX_SHIFT_KERNCZ	3
+ 
+-#define SB800_PIIX4_FCH_PM_ADDR			0xFED80300
+ #define SB800_PIIX4_FCH_PM_SIZE			8
+ #define SB800_ASF_ACPI_PATH			"\\_SB.ASFC"
+ 
+@@ -162,19 +162,19 @@ int piix4_sb800_region_request(struct device *dev, struct sb800_mmio_cfg *mmio_c
+ 	if (mmio_cfg->use_mmio) {
+ 		void __iomem *addr;
+ 
+-		if (!request_mem_region_muxed(SB800_PIIX4_FCH_PM_ADDR,
++		if (!request_mem_region_muxed(FCH_PM_BASE,
+ 					      SB800_PIIX4_FCH_PM_SIZE,
+ 					      "sb800_piix4_smb")) {
+ 			dev_err(dev,
+ 				"SMBus base address memory region 0x%x already in use.\n",
+-				SB800_PIIX4_FCH_PM_ADDR);
++				FCH_PM_BASE);
+ 			return -EBUSY;
+ 		}
+ 
+-		addr = ioremap(SB800_PIIX4_FCH_PM_ADDR,
++		addr = ioremap(FCH_PM_BASE,
+ 			       SB800_PIIX4_FCH_PM_SIZE);
+ 		if (!addr) {
+-			release_mem_region(SB800_PIIX4_FCH_PM_ADDR,
++			release_mem_region(FCH_PM_BASE,
+ 					   SB800_PIIX4_FCH_PM_SIZE);
+ 			dev_err(dev, "SMBus base address mapping failed.\n");
+ 			return -ENOMEM;
+@@ -201,7 +201,7 @@ void piix4_sb800_region_release(struct device *dev, struct sb800_mmio_cfg *mmio_
+ {
+ 	if (mmio_cfg->use_mmio) {
+ 		iounmap(mmio_cfg->addr);
+-		release_mem_region(SB800_PIIX4_FCH_PM_ADDR,
++		release_mem_region(FCH_PM_BASE,
+ 				   SB800_PIIX4_FCH_PM_SIZE);
+ 		return;
+ 	}
 -- 
 2.43.0
 
