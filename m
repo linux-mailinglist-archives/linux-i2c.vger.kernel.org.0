@@ -1,58 +1,50 @@
-Return-Path: <linux-i2c+bounces-10537-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10538-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9335A97716
-	for <lists+linux-i2c@lfdr.de>; Tue, 22 Apr 2025 22:23:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50763A9771E
+	for <lists+linux-i2c@lfdr.de>; Tue, 22 Apr 2025 22:24:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2FAD73AF059
-	for <lists+linux-i2c@lfdr.de>; Tue, 22 Apr 2025 20:22:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A13101B63E1A
+	for <lists+linux-i2c@lfdr.de>; Tue, 22 Apr 2025 20:23:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5443C2BEC49;
-	Tue, 22 Apr 2025 20:22:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11AC72C109B;
+	Tue, 22 Apr 2025 20:23:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=jiaxyga.com header.i=@jiaxyga.com header.b="ICCr6CG5";
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=jiaxyga.com header.i=@jiaxyga.com header.b="A5WeYtsT";
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=jiaxyga.com header.i=@jiaxyga.com header.b="YWu+rsb0"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=jiaxyga.com header.i=@jiaxyga.com header.b="ZOqx59y7";
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=jiaxyga.com header.i=@jiaxyga.com header.b="V5KBvdH0"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from fallback2.i.mail.ru (fallback2.i.mail.ru [79.137.243.68])
+Received: from send146.i.mail.ru (send146.i.mail.ru [89.221.237.241])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B93C25D202;
-	Tue, 22 Apr 2025 20:22:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.137.243.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71DBC25D202;
+	Tue, 22 Apr 2025 20:23:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.221.237.241
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745353379; cv=none; b=kUxL9/bp2lQfyThJHTXrj7zgFd6SejE++UHheOYVkjXJmLET06CA1cZlJfDMCHv2fsOfc5gqpLveBxObfSi8oq8UeFeZRN70C6xT+2C0kRyWkmwb1ZgJV3jm4ypuQIanSQJ1Jy8v/nsJCZ/zBJ18ZtUlOY8Wc50HT1sEQk4Ag7Y=
+	t=1745353386; cv=none; b=QGs0zg8InN+cXQTVvUxe7zMsgKvri2fVnjXc8KAf6Z8ZDkGw+aZ1NQzn1LqT8LVnNpYQ0q4j1jwJmM8Ti818j/lYRXoxMoIwcJwehhsABaMS3ztEeHByacl77dg6ULKI87qP8LL6oIgw3l2SbZqlwsXDuW3VOTloUTg4CJ1TcUE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745353379; c=relaxed/simple;
-	bh=QANK6tWHXIdxZA8F26rDiGxktgdOH42ddHx62c95ArQ=;
+	s=arc-20240116; t=1745353386; c=relaxed/simple;
+	bh=sBJdog2zi6b26gsPWBIf5WELTnZ3kFxj8i209fbda4U=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=me5KsF7dxOpHUP91NHhsqvaIprDj1IaVxYGWvp6EutJIxQw9BavA50kYi8YWynq4yM1Q7uiam+lOmLf4Dg6kJwwXtEkV7rRp6weSQ3mF2Kv75+Robl15ohxKovK+OfwQGNH/i5WBe+NUshbZFcXzb59SLO/YglML4RkrSZeK3KM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jiaxyga.com; spf=pass smtp.mailfrom=jiaxyga.com; dkim=pass (1024-bit key) header.d=jiaxyga.com header.i=@jiaxyga.com header.b=ICCr6CG5; dkim=pass (1024-bit key) header.d=jiaxyga.com header.i=@jiaxyga.com header.b=A5WeYtsT; dkim=pass (1024-bit key) header.d=jiaxyga.com header.i=@jiaxyga.com header.b=YWu+rsb0; arc=none smtp.client-ip=79.137.243.68
+	 In-Reply-To:To:Cc; b=JqIAfa99e9vblOA59LQdWWvZJ+qH2QzgTb+co/s0cmL7Na4P433avZpLzP9yR6d0+E0KneozVHsP8JNWNLPNy9Jso10dIv1ZH+Gv4q/Mgd1kHxA3miatwwu2Og95Wga7703d8PeOkn5J8k4RDWCg892Mw9hNz4uNBcfbQekfS8s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jiaxyga.com; spf=pass smtp.mailfrom=jiaxyga.com; dkim=pass (1024-bit key) header.d=jiaxyga.com header.i=@jiaxyga.com header.b=ZOqx59y7; dkim=pass (1024-bit key) header.d=jiaxyga.com header.i=@jiaxyga.com header.b=V5KBvdH0; arc=none smtp.client-ip=89.221.237.241
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jiaxyga.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jiaxyga.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=jiaxyga.com; s=mailru;
-	h=Cc:To:In-Reply-To:References:Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc; bh=Zo115PiP9d6FJK1F6lMkwC+6B58zP/Ggz0uYW12zkjQ=;
-	t=1745353376;x=1745443376; 
-	b=ICCr6CG5EumhHqE1v3hCDFLLFTXvv4ukDvmsBM61y0mCYxFZu4srSAzNFYZ1PYqq7s/NqobuWc4wAsu1bmsH5VFDSDuYUcrCBZJ3PVjZwZeiyvqVndoKOAVZdBHNHMTyF/Xd/GyBS0UdFlxthLDWy018EjVDdvVcw6zsL4n5r+w=;
-Received: from [10.113.214.101] (port=57146 helo=send146.i.mail.ru)
-	by fallback2.i.mail.ru with esmtp (envelope-from <danila@jiaxyga.com>)
-	id 1u7K8q-00CTmP-8a; Tue, 22 Apr 2025 23:22:54 +0300
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=jiaxyga.com
 	; s=mailru; h=Cc:To:In-Reply-To:References:Message-Id:
 	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From:Sender:
 	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
 	:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
 	List-Subscribe:List-Post:List-Owner:List-Archive:X-Cloud-Ids;
-	bh=Zo115PiP9d6FJK1F6lMkwC+6B58zP/Ggz0uYW12zkjQ=; t=1745353372; x=1745443372; 
-	b=A5WeYtsTJWWcrUCSJREYjWr/vbZTnF23ZT5hQQgeQnmWSDoajdXEle3bCd/6E6RnXdWXI9UsPou
-	8XI9Q48KOHx3KS1r8P/xPMrFROQFM3TEr7m9f24ULKTun3ON4xQ2edIwwqT3BP+VB3wB/+e/ZYRn9
-	PtoDsGQdnMXnGiQUJxg=;
-Received: from [10.113.93.27] (port=33132 helo=send240.i.mail.ru)
-	by exim-fallback-5f8f9b6d5b-pg8mc with esmtp (envelope-from <danila@jiaxyga.com>)
-	id 1u7K8e-00000000MiY-1lFg; Tue, 22 Apr 2025 23:22:40 +0300
+	bh=7yhPP/a4NtCck19ygFDXjab96ezqRShxQ5wae9k2EWQ=; t=1745353384; x=1745443384; 
+	b=ZOqx59y7+yWz9s1e3JVf7/TNhGqYAbnb1ApLLhr+QkhAcVV/fJ8zVnc8pbzQpawikByjk4n2T96
+	Iks9Lf0MJqU1wA1VxUK84lthhVfgrwYpQsAbeX7rDBmu1m9GWwduOlMN66pugv4TNrWacr1FTzNzd
+	K9VQst7jwTxxnc09BIQ=;
+Received: from [10.113.82.193] (port=38778 helo=send174.i.mail.ru)
+	by exim-fallback-5f8f9b6d5b-w7qbt with esmtp (envelope-from <danila@jiaxyga.com>)
+	id 1u7K90-000000008ky-0DiU; Tue, 22 Apr 2025 23:23:02 +0300
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=jiaxyga.com
 	; s=mailru; h=Cc:To:In-Reply-To:References:Message-Id:
 	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From:From:
@@ -60,16 +52,16 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=jiaxyga.com
 	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
 	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
 	List-Post:List-Owner:List-Archive:X-Cloud-Ids:Disposition-Notification-To;
-	bh=Zo115PiP9d6FJK1F6lMkwC+6B58zP/Ggz0uYW12zkjQ=; t=1745353360; x=1745443360; 
-	b=YWu+rsb071/lZ9JB3FjqiJZtvljUYgJPxf9cynqLCT/vSofiIxGDwrB7y4odsHjqmT5U1mZE1MX
-	EO5mHj0IrV7UjB0sgq9wZSnpU6g0ykfRHdZUdxYQi809k6ybBnIjOYr6x59kvZ0kf3aW4Uz4tjCZZ
-	s474MNgrd5if5U6Solc=;
+	bh=7yhPP/a4NtCck19ygFDXjab96ezqRShxQ5wae9k2EWQ=; t=1745353382; x=1745443382; 
+	b=V5KBvdH0DxjrycrrWqYuRQjCsFr+4A0Md4OPJtEdfPfvQGgTT1I0hpBI+zwpMirmKXl4XlHe4uM
+	wmFsSkrWXxfqCQpx0Xiv79n127g3B5EhvBua47ft2BLLTSnt7BLkGU+UQj0kyL+Rm2/yOFsm7f171
+	WhjO0e/ep2em701deus=;
 Received: by exim-smtp-77d8cdf77b-httmk with esmtpa (envelope-from <danila@jiaxyga.com>)
-	id 1u7K8A-00000000Adc-0ZCH; Tue, 22 Apr 2025 23:22:10 +0300
+	id 1u7K8g-00000000Adc-1kHY; Tue, 22 Apr 2025 23:22:42 +0300
 From: Danila Tikhonov <danila@jiaxyga.com>
-Date: Tue, 22 Apr 2025 23:17:08 +0300
-Subject: [PATCH 07/33] dt-bindings: thermal: tsens: Add the SM7150
- compatible
+Date: Tue, 22 Apr 2025 23:17:09 +0300
+Subject: [PATCH 08/33] dt-bindings: interrupt-controller: qcom-pdc: Add the
+ SM7150 compatible
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -78,7 +70,7 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250422-sm7150-upstream-v1-7-bf9a9081631d@jiaxyga.com>
+Message-Id: <20250422-sm7150-upstream-v1-8-bf9a9081631d@jiaxyga.com>
 References: <20250422-sm7150-upstream-v1-0-bf9a9081631d@jiaxyga.com>
 In-Reply-To: <20250422-sm7150-upstream-v1-0-bf9a9081631d@jiaxyga.com>
 To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
@@ -139,53 +131,52 @@ Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-hardening@vger.kernel.org, linux@mainlining.org, 
  ~postmarketos/upstreaming@lists.sr.ht, Danila Tikhonov <danila@jiaxyga.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1745353049; l=866;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1745353049; l=953;
  i=danila@jiaxyga.com; s=20250422; h=from:subject:message-id;
- bh=QANK6tWHXIdxZA8F26rDiGxktgdOH42ddHx62c95ArQ=;
- b=I8BVcWkpBR1H66hT8vv7+m77Ny1owcV7wPiOC2o6NshVH3ZS/Ulwv7hzW2XtQTpjf2Qc1Kiaq
- G8QgVMycUniCIAsGo/en6aR+LOjaz1QxrzdkI+qKvMNUgH3L8chjhbD
+ bh=tyacewPIHvCFUOZehJ2J5amLOXgu1VKNniYGd9sZlBI=;
+ b=E/dVEWwrq/ISCspJQOzW4d6kUcKJSjrJU30TQzouq133u4l33qCtpqesStjbdAiloYTXf6BP+
+ 7cdX0/Ni2c1CnymJ/Lbvbj7gJR59Nb/ScOBhZKsIKqx3L83qHBEJpMC
 X-Developer-Key: i=danila@jiaxyga.com; a=ed25519;
  pk=kkU4G47tvpSEUdBQEkXuWvTk/3WmGrVrdzZiKAKjBJo=
 X-Mailru-Src: smtp
-X-7564579A: B8F34718100C35BD
-X-77F55803: 4F1203BC0FB41BD985535D2C87FE65BBCCDA5DC2A972A8A1B27DFF87B8EC301900894C459B0CD1B9BD4B072ABEEB5E0EC591814E25D11F9FA1EEAFFF85891568EB70ABB35CB9DA26C7997A56A7FEE5D2
-X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE75AD53DF1D86BACA3EA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F79006371D5B197C6EC5B4BE8638F802B75D45FF914D58D5BE9E6BC1A93B80C6DEB9DEE97C6FB206A91F05B24F16DA1DE1C032E82E070BE324C7D3C43C48FE2AB118F8F1F6B57BC7E64490618DEB871D839B73339E8FC8737B5C2249D6FBC3EC642A93BBCC7F00164DA146DAFE8445B8C89999729449624AB7ADAF37F6B57BC7E64490611E7FA7ABCAF51C92176DF2183F8FC7C000E2D00546020E658941B15DA834481F9449624AB7ADAF37BA3038C0950A5D3613377AFFFEAFD269176DF2183F8FC7C0DC19892156F48AD57B076A6E789B0E97A8DF7F3B2552694AD5FFEEA1DED7F25D49FD398EE364050F0AC5B80A05675ACDA9539A8B24243104B3661434B16C20ACC84D3B47A649675FE827F84554CEF5019E625A9149C048EE9ECD01F8117BC8BEE2021AF6380DFAD18AA50765F790063735872C767BF85DA227C277FBC8AE2E8B9F5955FECEF5819E75ECD9A6C639B01B4E70A05D1297E1BBCB5012B2E24CD356
-X-C1DE0DAB: 0D63561A33F958A5E5886E5AFE96B3E75002B1117B3ED696D88D5189CCCE893DC638DF663A625AFA823CB91A9FED034534781492E4B8EEAD6A17C1D737525568C79554A2A72441328621D336A7BC284946AD531847A6065A535571D14F44ED41
-X-C8649E89: 1C3962B70DF3F0ADE00A9FD3E00BEEDF77DD89D51EBB7742D3581295AF09D3DF87807E0823442EA2ED31085941D9CD0AF7F820E7B07EA4CF852853A9454229A6CACC80B0D1FC24139946669BB3446D36494D1999B6938B7A66DF14FFBF4EC71468A835CA8743990BD84DCC8E226230A00E280A9F3BCC449BCD7C19084423A263EFF8118B638B08AA02C26D483E81D6BE72B480F99247062FEE42F474E8A1C6FD34D382445848F2F3
-X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu53w8ahmwBjZKM/YPHZyZHvz5uv+WouB9+ObcCpyrx6l7KImUglyhkEat/+ysWwi0gdhEs0JGjl6ggRWTy1haxBpVdbIX1nthFXMZebaIdHP2ghjoIc/363UZI6Kf1ptIMVS+uSU+BUhgvF5Pdpo7wIjE=
-X-Mailru-Sender: 9EB879F2C80682A0D0AE6A344B45275FE5A8EBF7A2685AA972C88FB39F7EDAED71782DFC934E545B436904D20E5BA9D32C62728BC403A049225EC17F3711B6CF1A6F2E8989E84EC137BFB0221605B344978139F6FA5A77F05FEEDEB644C299C0ED14614B50AE0675
+X-7564579A: EEAE043A70213CC8
+X-77F55803: 4F1203BC0FB41BD9563C565BC821923718DD0F16394DDC55291EFB6454FA8A08182A05F5380850404C228DA9ACA6FE2721A233363E085E9A3DE06ABAFEAF67059E0A03DE16E3B8F06CAB699290A87B9AD599AB4818251001
+X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE7A3DED2DACB82E709C2099A533E45F2D0395957E7521B51C2CFCAF695D4D8E9FCEA1F7E6F0F101C6778DA827A17800CE792C68BF9CD4C0E9EEA1F7E6F0F101C67CDEEF6D7F21E0D1D9295C2E9FA3191EE1B59CA4C82EFA6588D3AA93E92E509421F6BA703804E69A2EA6BCCBF4D4FE35D117882F4460429724CE54428C33FAD305F5C1EE8F4F765FC974A882099E279BDA471835C12D1D9774AD6D5ED66289B52BA9C0B312567BB23117882F446042972877693876707352033AC447995A7AD18BDFBBEFFF4125B51D2E47CDBA5A96583BA9C0B312567BB2376E601842F6C81A19E625A9149C048EE0AC5B80A05675ACD0A5971FBB7557E96D8FC6C240DEA76429C9F4D5AE37F343AA9539A8B242431040A6AB1C7CE11FEE3E3786DD2C77EBDAAAD7EC71F1DB88427C4224003CC836476E2F48590F00D11D6E2021AF6380DFAD1A18204E546F3947CB11811A4A51E3B096D1867E19FE1407959CC434672EE6371089D37D7C0E48F6C8AA50765F79006373BC478629CBEC79DEFF80C71ABB335746BA297DBC24807EABDAD6C7F3747799A
+X-C1DE0DAB: 0D63561A33F958A53A8D0A8415BD4C635002B1117B3ED6962B81CA794E8BB887CCE9A60C8CB01D7C823CB91A9FED034534781492E4B8EEAD69BF13FED57427F1C79554A2A72441328621D336A7BC284946AD531847A6065A17B107DEF921CE79BDAD6C7F3747799A
+X-C8649E89: 1C3962B70DF3F0ADE00A9FD3E00BEEDF77DD89D51EBB7742D3581295AF09D3DF87807E0823442EA2ED31085941D9CD0AF7F820E7B07EA4CFB04D49FE8FD8E4B963859CA6A21BF817C4FBE98B6F66C1A4A6C7C953DA19F89524DE828755D94EE968A835CA8743990B90E28C76A248F50D0E280A9F3BCC449B424FF39BAB00101BEFF8118B638B08AA02C26D483E81D6BE72B480F99247062FEE42F474E8A1C6FD34D382445848F2F3
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu53w8ahmwBjZKM/YPHZyZHvz5uv+WouB9+ObcCpyrx6l7KImUglyhkEat/+ysWwi0gdhEs0JGjl6ggRWTy1haxBpVdbIX1nthFXMZebaIdHP2ghjoIc/363UZI6Kf1ptIMVS+uSU+BUhgvfKq5yOb2suI=
+X-Mailru-Sender: 9EB879F2C80682A0D0AE6A344B45275FE5A8EBF7A2685AA9EDE2FBCE1621770A7AACE39726CB11214DC34F5A1C6DD33D2C62728BC403A049225EC17F3711B6CF1A6F2E8989E84EC137BFB0221605B344978139F6FA5A77F05FEEDEB644C299C0ED14614B50AE0675
 X-Mras: Ok
 X-Mailru-Src: fallback
 X-7564579A: 646B95376F6C166E
-X-77F55803: 6242723A09DB00B4F4CF43BFC943A6052140CF51BDAE00CD9067EF4BE7899B3068F3CF0E9FE49B693D0DD15183EF2CA631930921D6C4BDE446379187598F9E8A988E93761E96A7056919C17EF7A6FC8E
-X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu53w8ahmwBjZKM/YPHZyZHvz5uv+WouB9+OYcBso8Zm+oliTz8oZwnDrFsY77LZRcHyw5ht0smWrfSeTW5FiI8avd9v29gUBslpEZ9wIMwqVP4jLQVQ+dVm7x9BpDHadBV9RMjI809PraZHZq4sRGdDlYVYys/TP5nhg==
-X-Mras: Ok
-X-7564579A: B8F34718100C35BD
-X-77F55803: 6242723A09DB00B4F4CF43BFC943A605C6C1A77FDB0143BE94EA45A41698E33D68F3CF0E9FE49B693D0DD15183EF2CA65D710BEBF26F9B78116A060412AC5AD72CF5CBBBA3F4D84F
+X-77F55803: 6242723A09DB00B4F4CF43BFC943A6052140CF51BDAE00CD9067EF4BE7899B3068F3CF0E9FE49B693D0DD15183EF2CA66C43C7466DCEDE189CF77EBDA2E0EB8518A2EB87CB5148FA8DEE4FE8C7B72197
 X-87b9d050: 1
-X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu53w8ahmwBjZKM/YPHZyZHvz5uv+WouB9+OYcBso8Zm+oliTz8oZwnDrFsY77LZRcHyw5ht0smWrfSeTW5FiI8avd9v29gUBslpEZ9wIMwqVP4jLQVQ+dVm7x9BpDHadBV9RMjI809PraZHZq4sRGdDlac2mCzyXTKwQ==
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu53w8ahmwBjZKM/YPHZyZHvz5uv+WouB9+OYcBso8Zm+oliTz8oZwnDrFsY77LZRcHyw5ht0smWrfSeTW5FiI8avd9v29gUBslpEZ9wIMwqVP4jLQVQ+dVm7x9BpDHadBV9RMjI809PraZHZq4sRGdDlb0XBVlPOyn4g==
 X-Mailru-MI: 20000000000000800
 X-Mras: Ok
 
-Add the TSENS v2.x controller found on SM7150.
+From: David Wronek <david@mainlining.org>
 
+Add a compatible for the Power Domain Controller on SM7150 platforms.
+
+Signed-off-by: David Wronek <david@mainlining.org>
 Signed-off-by: Danila Tikhonov <danila@jiaxyga.com>
 ---
- Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 1 +
+ Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.yaml | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-index f9d8012c8cf513db94787d44b885c622f62fcf56..8515c2014643380e15ccec6cc20a28c25e00b784 100644
---- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-+++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-@@ -64,6 +64,7 @@ properties:
-               - qcom,sm6115-tsens
-               - qcom,sm6350-tsens
-               - qcom,sm6375-tsens
-+              - qcom,sm7150-tsens
-               - qcom,sm8150-tsens
-               - qcom,sm8250-tsens
-               - qcom,sm8350-tsens
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.yaml b/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.yaml
+index f06b40f88778929579ef9b3b3206f075e140ba96..bcad0fd34d015094f65872ab2b393fdbf427caad 100644
+--- a/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.yaml
++++ b/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.yaml
+@@ -43,6 +43,7 @@ properties:
+           - qcom,sdx75-pdc
+           - qcom,sm4450-pdc
+           - qcom,sm6350-pdc
++          - qcom,sm7150-pdc
+           - qcom,sm8150-pdc
+           - qcom,sm8250-pdc
+           - qcom,sm8350-pdc
 
 -- 
 2.49.0
