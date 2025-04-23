@@ -1,138 +1,128 @@
-Return-Path: <linux-i2c+bounces-10573-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10574-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7CF38A98370
-	for <lists+linux-i2c@lfdr.de>; Wed, 23 Apr 2025 10:33:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E844A98395
+	for <lists+linux-i2c@lfdr.de>; Wed, 23 Apr 2025 10:35:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 172585A51F9
-	for <lists+linux-i2c@lfdr.de>; Wed, 23 Apr 2025 08:31:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5B1AC16DEB8
+	for <lists+linux-i2c@lfdr.de>; Wed, 23 Apr 2025 08:35:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13C24280CE3;
-	Wed, 23 Apr 2025 08:21:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 719B928CF64;
+	Wed, 23 Apr 2025 08:26:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ozVjPv2E"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="bW39eyc1"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0114C280CD9
-	for <linux-i2c@vger.kernel.org>; Wed, 23 Apr 2025 08:21:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30C2B26E16A
+	for <linux-i2c@vger.kernel.org>; Wed, 23 Apr 2025 08:26:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745396485; cv=none; b=oZSnLYKk56MVxy2BTAT/MP90WXlJqxpDPvH7/6K87YLr3BNHFPEJgBRbQA1DBh93dthzNiAnP29OXHkYR9l4p+yX+DPfbZ0kWLHP4kdYnGaVniCja+bxl9/UqzAwKsNJrTVN2zEK/9l4qVERJZvTWu5kxRTeLMx+o5W2HD5aL08=
+	t=1745396787; cv=none; b=PXLf32AMAPzIcFrAzeM8eTiw5QMYibu9vNbxHXPGVpTCeSAFRJWfHmOLx/d8y95yV3fQ6uW74TDMTDzAcE8kEDsQTwBaoQn8CTwwPOF8Jq0cUuANInv9UaXDdkpIFKoBjlPoI+mUnuNpioW8e2Y3Stl42OaEaIyK1lBoorp9gQw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745396485; c=relaxed/simple;
-	bh=0XEqfSAxlPY5os2nxDoIwRW/AGhrDkurjFzqdCvEZyo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=FZ++WKbadHjMqLTKVFkfG8iykjl3kD3L/65feaqFu4uz1rICfX4QhdZfWYSXqo2+8IEEKrQgcUF1V62rrnulWDcDnNUkeK0ToR68oErmDD76xy4GUdTtHRQmjjd3X0/mABrfTEo99QnonMm3b3i4KKa0CZ3z/1g5KsTl3toXMHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ozVjPv2E; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4394a823036so49606995e9.0
-        for <linux-i2c@vger.kernel.org>; Wed, 23 Apr 2025 01:21:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1745396482; x=1746001282; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=c8gf1/v5lhBj3nTJ7U9oiBRoFIhc/ib+8WshbuHJPe0=;
-        b=ozVjPv2EvWvqWbFFDCuonjx+z/Lz6ZvSEDHCzbc5Nvo+TyqVBFmVK+BbmUqi/H3Roe
-         8mPR5AVbtjfD26khBXumkCKjd5Yv1A3qg54Ko8heYdQIVHzLZJybbGQTuheMHwEd7Q0l
-         NmNyldolTZZOnMFRAZtKu3M7tpiBIOIybRD8GRFeh2H7QoBAHY1UavFQnH0HtiCWdP+P
-         /mOdAoGQp7ux3IY0XL46ZC6WYYicT3i2l4cScUfeCWsxl36nF3mDrCVnNMiVQGN56+Qv
-         VThP5gs7A8TtKPNPWZem3XjY4fAM0ZZBqEtl91bUCwxLrAFIQo4S6puIRaCg2Enhzvf0
-         +B+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745396482; x=1746001282;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=c8gf1/v5lhBj3nTJ7U9oiBRoFIhc/ib+8WshbuHJPe0=;
-        b=UqFxiDAWDW/BmpOKF/7ix10rRbDh0jOnvx+SYM52C3uM1rWbF9mR1w+YYrt46/MDrx
-         Ct4VmYccJgnoql5p9dI6AEspLZVRlgoQHXUoxeYSAi2qnvq27sJwxgqNV95JllaEXC2H
-         9/8mCVJaicSSBRSubcX3VwO+wa4FObCkeSRjr4y4Zz7tgeD5iFxVdXHqdt4Z/aLy6txA
-         +xy1ZX9sfWoG/q4lWUeCGIzo8WqhIbGPRKsA8lSPgzo/y3mN8d/UYnHTECL+34ZIwQWB
-         AsfXQ1c2tcK1o0hU7FaH3oUB8TG/tM4W0ux1s0PllrSS1aTlHWl75Xgi3UMSEQWfgJqf
-         hq7Q==
-X-Forwarded-Encrypted: i=1; AJvYcCX4/1TwVFCchZm1uRXleJVJA++uq4QSPL83LXrxSolkHHwOuDcVsEYnSSBjEia7xS3as+8xZaOK+Gc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyJO7mtoJUHPQUwE1gKQ7QLKQLBa3KrpHr3Qhy1I0RSKyphSB12
-	AIYTKQSf2WQOLa6TOo+hJxSXSDYi+WVOcZEI/Pz4S1sPdV8awFqOTmbLU1Q2568=
-X-Gm-Gg: ASbGncs05t1hSLlfNWoZpQE3sGF/oqshPMjPRJdegtUQo6ezYUWV1uAPHH/QvtTNX19
-	gqThiFG5aNR296GOCZPfZGYCQHFrr3q+N85Qjnxb94kypRdg7uL5v2zt+sVYBYuc6eoUSZFW8tL
-	MWFDqauuYkyEsxrKuael6xjZ3NRHzDwAEGZOTAPEKNG+A8004efP41ajsFFTuDRwdwguLZM7xmK
-	1WdhMggxedhrEVNGPLXi1Pg0q+Xuds6K0RxCohoGR3orlj9MGwnFiDevlfgDJnUl1UWQGOH73ml
-	fL0gQ8awwDgGkPQWvoD0NOPGzfbJ+iNr2rYP5PtLGRMgdw==
-X-Google-Smtp-Source: AGHT+IHWYSrmnac2ZIJgkK3CcnsC+6t1hYnQGT7QpTZYVmOgik/OcS5nSxSw/Lh3KD6scYknsYVhAQ==
-X-Received: by 2002:a05:600c:3c85:b0:43c:f64c:44a4 with SMTP id 5b1f17b1804b1-4406ab98242mr134584375e9.8.1745396482254;
-        Wed, 23 Apr 2025 01:21:22 -0700 (PDT)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-44092db2bd5sm16760175e9.26.2025.04.23.01.21.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Apr 2025 01:21:21 -0700 (PDT)
-Date: Wed, 23 Apr 2025 11:21:18 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Romain Gantois <romain.gantois@bootlin.com>
-Cc: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: [PATCH next] i2c: Fix end of loop test in
- i2c_atr_find_mapping_by_addr()
-Message-ID: <aAii_iawJdptQyCt@stanley.mountain>
+	s=arc-20240116; t=1745396787; c=relaxed/simple;
+	bh=zd76tPWLvz03FGMRE8CwkIY4StHtha9RgA2vfs7dSNk=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Tiwd+HmKDLssAT+lcxfny/W2Ox7qxsI4o76VFRtylRtI9WpBpZreHpn5tFEvvt4dDYCsg0KdLmCA3rEku6HhW1YKK14rM5xAyKuXiwav4358m91QAlHvubgDP4+P2Eve1yJ/TuZQosOUoijL61gaK+3PoIpqJt777e/gHFCfr0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=bW39eyc1; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=zd76
+	tPWLvz03FGMRE8CwkIY4StHtha9RgA2vfs7dSNk=; b=bW39eyc1Zdqb7rdfP2F5
+	ieY6UgWtp/+V4BS8I1m4xQx/dVMgWvxNAmrFmuJyWfGqWHOC82aJQtPMDmRxjaaC
+	khIXz0V503r+QdyccqIDl5NZKEvxB/sZn2cKgHYEtIdVK1NgrvP0u8BnA+AtkIHv
+	CSX26KQEnqVf8RVbCl9kptC3RGyfiA65cPtBUwPp6ZV86/y9rOzFXm7XSbZvBSbG
+	vl84MUTbQXn8rDWW+8abP72BsFj252Ahen/lMHxrFNyATrdSsEB8dePrdK1rS3VN
+	4lWc9nyIoq2iLNcWLW+CxYIusHhg9gqOsUUjZwfQM+MIt90fyZx6eduBzBfOuLlN
+	gw==
+Received: (qmail 3005372 invoked from network); 23 Apr 2025 10:26:18 +0200
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 23 Apr 2025 10:26:18 +0200
+X-UD-Smtp-Session: l3s3148p1@/wX82m0z4OUgAwDPXx6JAAunYj8Nf7DC
+Date: Wed, 23 Apr 2025 10:26:18 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+	Chris Brandt <chris.brandt@renesas.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
+	Andy Shevchenko <andy@kernel.org>
+Subject: Re: [PATCH v8] i2c: riic: Implement bus recovery
+Message-ID: <aAikKreK-BCP-zLp@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	"Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+	Chris Brandt <chris.brandt@renesas.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
+	Andy Shevchenko <andy@kernel.org>
+References: <20250407121859.131156-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <aAC8f0dAMERD8GjW@shikoro>
+ <CA+V-a8sM2mFS--zLSZt28mOUDuO2FpW0TsaV50A_VxFZ-juP4Q@mail.gmail.com>
+ <aAFgwEB4SdgH-1fQ@shikoro>
+ <CA+V-a8tmTqFi4iqGhR3cfUgKw7mxJrm6ixGAHq747ptrL3t2jA@mail.gmail.com>
+ <aAITBfrOI0GAhGRA@shikoro>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="eYv3UB7V5mlJ9iEk"
+Content-Disposition: inline
+In-Reply-To: <aAITBfrOI0GAhGRA@shikoro>
+
+
+--eYv3UB7V5mlJ9iEk
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Mailer: git-send-email haha only kidding
 
-When the list_for_each_entry_reverse() exits without hitting a break
-then the list cursor points to invalid memory.  So this check for
-if (c2a->fixed) is checking bogus memory.  Fix it by using a "found"
-variable to track if we found what we were looking for or not.
 
-Fixes: c3f55241882b ("i2c: Support dynamic address translation")
-Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
----
- drivers/i2c/i2c-atr.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+> Well, frankly, this is the only test I tried and, yes, it did work for
+> me. Will check 'incomplete_write_byte' later today. I will also check if
+> I need to run the tests more often. I did not do an endless loop.
 
-diff --git a/drivers/i2c/i2c-atr.c b/drivers/i2c/i2c-atr.c
-index d5aa6738370c..1aeaecacc26c 100644
---- a/drivers/i2c/i2c-atr.c
-+++ b/drivers/i2c/i2c-atr.c
-@@ -240,6 +240,7 @@ i2c_atr_find_mapping_by_addr(struct i2c_atr_chan *chan, u16 addr)
- 	struct i2c_atr *atr = chan->atr;
- 	struct i2c_atr_alias_pair *c2a;
- 	struct list_head *alias_pairs;
-+	bool found = false;
- 	u16 alias;
- 	int ret;
- 
-@@ -258,11 +259,14 @@ i2c_atr_find_mapping_by_addr(struct i2c_atr_chan *chan, u16 addr)
- 		if (unlikely(list_empty(alias_pairs)))
- 			return NULL;
- 
--		list_for_each_entry_reverse(c2a, alias_pairs, node)
--			if (!c2a->fixed)
-+		list_for_each_entry_reverse(c2a, alias_pairs, node) {
-+			if (!c2a->fixed) {
-+				found = true;
- 				break;
-+			}
-+		}
- 
--		if (c2a->fixed)
-+		if (!found)
- 			return NULL;
- 
- 		atr->ops->detach_addr(atr, chan->chan_id, c2a->addr);
--- 
-2.47.2
+Both tests work for me, even in an endless loop. I also get the desired
+signal outputs checking with the logic analyzer.
 
+Here is the branch I used:
+
+git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git renesas/g3s/riic-recovery-experimental
+
+
+--eYv3UB7V5mlJ9iEk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmgIpCYACgkQFA3kzBSg
+KbYICg//YRlqSOeTRx9J+3cE0wYqmYTceyFoeDieEwHHdgw8XbU2bWLrIrIiC+aA
+XfUVbc/TFcfXCOmzVueXWo+HQAJ5KWSsrwW7wOAlkD+SxgJVMDC7+GjKE0Yu8zLf
+7y8E+fGop+9hoPCmsJ2dzDVrja5URBfFy6fLn/xdjzGTmm6PIlcwvp+8Hi3ySMLe
+amXYX1zfUf5YqmC2JpyivLannnQ6/AA4yWSHH5UKRlO2wKr2rCbdbmV7nmASFYJp
+FZa2Iu86k0WLYSVz6FuWx5/ObT5lhZvmhR3s30MwKE+FvUKWeDRFQ2dTUwKB/SK7
+nKo5bXmCT0sB60SX+FrUeoLdbP2JiB/cSQbsVuZ3z75rqULI5dkE+bUOvgfxFsfe
+WqZ5DpSBsBanxvHx12r37xNl+/bCWtJMsO/iXqhp3m4SBg9WseQ/bgKbRWQwp/yi
+I+z3ZY5I0lgcijwjdQuwcSYyQPRlUJU/uO7poVFvWzqGzBwoErj5lnfHWtmRdOp5
+iLhXhZ90U33uDoSAn9ukrFKXox8TgavFfaG5MHZMWOtpw+CmBHpNIso69q+WTD0O
+i40k0Sgpr38oJjXtMYfELVtFX2E/3m/P2ZXETEDzp0Pa0AfnnVLJd0C0NAGfaxFQ
+GnL+w+r98SFDHiXEM9HE80PiwfnqhFO5V5dH34tktpyCDeZNDVU=
+=dlc3
+-----END PGP SIGNATURE-----
+
+--eYv3UB7V5mlJ9iEk--
 
