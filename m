@@ -1,152 +1,138 @@
-Return-Path: <linux-i2c+bounces-10572-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10573-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 259F2A980C0
-	for <lists+linux-i2c@lfdr.de>; Wed, 23 Apr 2025 09:27:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7CF38A98370
+	for <lists+linux-i2c@lfdr.de>; Wed, 23 Apr 2025 10:33:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6062618936AB
-	for <lists+linux-i2c@lfdr.de>; Wed, 23 Apr 2025 07:27:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 172585A51F9
+	for <lists+linux-i2c@lfdr.de>; Wed, 23 Apr 2025 08:31:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5F3326A095;
-	Wed, 23 Apr 2025 07:27:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13C24280CE3;
+	Wed, 23 Apr 2025 08:21:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="WJsYG4G5"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ozVjPv2E"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED1DC267709
-	for <linux-i2c@vger.kernel.org>; Wed, 23 Apr 2025 07:26:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0114C280CD9
+	for <linux-i2c@vger.kernel.org>; Wed, 23 Apr 2025 08:21:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745393222; cv=none; b=PAOvTIH3c80EI82OIE7kwR3n87YqOKY4OkmwSa+ZM8VJlAPd/dq8al2jVS7FNsHe9bCaCoWpbThxT13ZNoJ+22filyIji6iVhBmLzaLioOYyzx7Vzo6WdKzsE2FWSpCsyzwD5gGsjU/8+QIW1tDkAtfrZCcasqEvuKwHTI3/69c=
+	t=1745396485; cv=none; b=oZSnLYKk56MVxy2BTAT/MP90WXlJqxpDPvH7/6K87YLr3BNHFPEJgBRbQA1DBh93dthzNiAnP29OXHkYR9l4p+yX+DPfbZ0kWLHP4kdYnGaVniCja+bxl9/UqzAwKsNJrTVN2zEK/9l4qVERJZvTWu5kxRTeLMx+o5W2HD5aL08=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745393222; c=relaxed/simple;
-	bh=Jrbw0OKpQbJ1dFid4p4N4XtPsI8/qSLnEpsHW9bCCKg=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=brIDoFNDZisqK835Zu37v7pW/pjI1GES6ZsgMeZ4WW7xw1YcgtWtgVlRyl+exyHqrdZOXSTmf1YQOzAils0FB3yCkX9NG0cmfsJ2qguGLrMrZqDOJdlNIWOPh+WRkFUVMltjanOrSgcN5VbtCI6+UPAwtSL0JfWbhrwOkz1GekA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=WJsYG4G5; arc=none smtp.client-ip=209.85.128.50
+	s=arc-20240116; t=1745396485; c=relaxed/simple;
+	bh=0XEqfSAxlPY5os2nxDoIwRW/AGhrDkurjFzqdCvEZyo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=FZ++WKbadHjMqLTKVFkfG8iykjl3kD3L/65feaqFu4uz1rICfX4QhdZfWYSXqo2+8IEEKrQgcUF1V62rrnulWDcDnNUkeK0ToR68oErmDD76xy4GUdTtHRQmjjd3X0/mABrfTEo99QnonMm3b3i4KKa0CZ3z/1g5KsTl3toXMHU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ozVjPv2E; arc=none smtp.client-ip=209.85.128.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-43cfe574976so44702405e9.1
-        for <linux-i2c@vger.kernel.org>; Wed, 23 Apr 2025 00:26:59 -0700 (PDT)
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4394a823036so49606995e9.0
+        for <linux-i2c@vger.kernel.org>; Wed, 23 Apr 2025 01:21:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1745393218; x=1745998018; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kn/kdeC0hIJ6fPjKrtocu5NnRgujubxfAbJ5Urbgh9w=;
-        b=WJsYG4G5Le7NxcMduHBEdH1Cuadj5L7FAZjqaEd5mYiMF/Qi6ppXkTUuDDk22WovVY
-         O7B5DQAXeTfnr8i6cS+KbgmElCDTMFYIy2ECwPXpJaB3JeoMNYQZ/2ll4krvLhDrl0ry
-         XWWTUjEF+7PJnsDC+7ryWRsgboKsQww8oCHwjnyrsKXY0gIeOF3zFgeZ4kyZGKIkcSA/
-         8PxE1bS7/EyDFy8xpBfc+BpcJI9Cro2kEeAw/dG8GeFSA4Ky0taUyAn5Rs/tCD4hcZAp
-         J/CUYtr3Rlwo+y9zOka/9al+MhVV66wL+2jOPfBCVsxlMCkn7Y45wIQSBrCGS1BpJrx8
-         qsYg==
+        d=linaro.org; s=google; t=1745396482; x=1746001282; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=c8gf1/v5lhBj3nTJ7U9oiBRoFIhc/ib+8WshbuHJPe0=;
+        b=ozVjPv2EvWvqWbFFDCuonjx+z/Lz6ZvSEDHCzbc5Nvo+TyqVBFmVK+BbmUqi/H3Roe
+         8mPR5AVbtjfD26khBXumkCKjd5Yv1A3qg54Ko8heYdQIVHzLZJybbGQTuheMHwEd7Q0l
+         NmNyldolTZZOnMFRAZtKu3M7tpiBIOIybRD8GRFeh2H7QoBAHY1UavFQnH0HtiCWdP+P
+         /mOdAoGQp7ux3IY0XL46ZC6WYYicT3i2l4cScUfeCWsxl36nF3mDrCVnNMiVQGN56+Qv
+         VThP5gs7A8TtKPNPWZem3XjY4fAM0ZZBqEtl91bUCwxLrAFIQo4S6puIRaCg2Enhzvf0
+         +B+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745393218; x=1745998018;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=kn/kdeC0hIJ6fPjKrtocu5NnRgujubxfAbJ5Urbgh9w=;
-        b=X7EWIYk4iHl0LdPUF4u4RUtkqrwmlDzi0yCQGnhGjRCOIsWvKzksACtCTUlpzqrIpJ
-         Yi5hGJSr9e3VZ4AoIXX2ZIHx+j8ASq3T+ui9pIgOIZr0uz+gvZjC9Iz3pfJmTZG29MO5
-         168Rebt1drYXfRjsUMp88aMp4FUz91wxhzRGodZC1NLnxhgGOHT0d5o7Eje2k5eY0wBd
-         W8cjbLO7DvO1MnzOOwSJaVXRecKg/XrjLGM5oUE7YydpdcaiEwP8PTCcaAtgp1whQMP4
-         vUcRWBz9ccjmTPXK8IY59ONC4jsz/3nzcxfzlTV9MrzGTEl0tqfz5HTO5YbMBiNFqiNR
-         z3yQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXGqVVF6Sgnf+e9yiF28gtjtlFPVOvC+JoNZu5s3m+o1s+acB/5YzaT9l59/Z9Zpbuyt2oS1pRoEpM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxs56iij9arHSI/0nzA41u6gDbfdchzQkxkMkwQdC4dsapgVKZr
-	UyILDOxKv5fMK7TLAJsqHjazwaqL0GIMt3kJi9B9VujrURdQi4XrL7gUExGeHLs=
-X-Gm-Gg: ASbGncvIf/Egktd0PV2qAXR0k087eZ750uni98UPbW8yWw+gmRX6WE6Qj1luMIwOxpE
-	PO9af5vRG5GM85/uWV5q++f2mTQyC+FPXSopBFMN1XvGHAAh2QyQ4f8WGBsQiBP9OesYt66yyIL
-	eVoDFiLnBPgWEDPJBVj6WK4GDzV/eY/rGcDyWC4gElqbuSsPkF6FCS7So8xz3Sli8SSQWHKjz9J
-	s3XDwboL8Wv2XMptPkUNT3RxFJimm8ysT7K65nEp7d2/KbJ/gCbn+CzBkFWQZ4PYjxtVbB/ONZ2
-	W8IngP3a31lQ26NEJwK8AGMijjzjRRc0K3IvL8HAP1wHEsZKi3CHYUw0Jc+RTqnXhG6EdWIzMIC
-	KmBdorMDGJRiGQPJaKA==
-X-Google-Smtp-Source: AGHT+IGQjZAyp9xHW8ASlQKrR9fCiGMeMbCakgAb3SkKNca/+Rt6CnnTlRW63K73V1hHmlOCRLIMvA==
-X-Received: by 2002:a05:600c:1c8f:b0:43c:fe5e:f040 with SMTP id 5b1f17b1804b1-4406abffc5emr134620725e9.23.1745393218300;
-        Wed, 23 Apr 2025 00:26:58 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:3d9:2080:2835:c2f4:c226:77dd? ([2a01:e0a:3d9:2080:2835:c2f4:c226:77dd])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-44092db2bd5sm15015645e9.26.2025.04.23.00.26.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Apr 2025 00:26:57 -0700 (PDT)
-Message-ID: <283096ad-ae1b-42b8-8312-b192f735fc80@linaro.org>
-Date: Wed, 23 Apr 2025 09:26:56 +0200
+        d=1e100.net; s=20230601; t=1745396482; x=1746001282;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=c8gf1/v5lhBj3nTJ7U9oiBRoFIhc/ib+8WshbuHJPe0=;
+        b=UqFxiDAWDW/BmpOKF/7ix10rRbDh0jOnvx+SYM52C3uM1rWbF9mR1w+YYrt46/MDrx
+         Ct4VmYccJgnoql5p9dI6AEspLZVRlgoQHXUoxeYSAi2qnvq27sJwxgqNV95JllaEXC2H
+         9/8mCVJaicSSBRSubcX3VwO+wa4FObCkeSRjr4y4Zz7tgeD5iFxVdXHqdt4Z/aLy6txA
+         +xy1ZX9sfWoG/q4lWUeCGIzo8WqhIbGPRKsA8lSPgzo/y3mN8d/UYnHTECL+34ZIwQWB
+         AsfXQ1c2tcK1o0hU7FaH3oUB8TG/tM4W0ux1s0PllrSS1aTlHWl75Xgi3UMSEQWfgJqf
+         hq7Q==
+X-Forwarded-Encrypted: i=1; AJvYcCX4/1TwVFCchZm1uRXleJVJA++uq4QSPL83LXrxSolkHHwOuDcVsEYnSSBjEia7xS3as+8xZaOK+Gc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyJO7mtoJUHPQUwE1gKQ7QLKQLBa3KrpHr3Qhy1I0RSKyphSB12
+	AIYTKQSf2WQOLa6TOo+hJxSXSDYi+WVOcZEI/Pz4S1sPdV8awFqOTmbLU1Q2568=
+X-Gm-Gg: ASbGncs05t1hSLlfNWoZpQE3sGF/oqshPMjPRJdegtUQo6ezYUWV1uAPHH/QvtTNX19
+	gqThiFG5aNR296GOCZPfZGYCQHFrr3q+N85Qjnxb94kypRdg7uL5v2zt+sVYBYuc6eoUSZFW8tL
+	MWFDqauuYkyEsxrKuael6xjZ3NRHzDwAEGZOTAPEKNG+A8004efP41ajsFFTuDRwdwguLZM7xmK
+	1WdhMggxedhrEVNGPLXi1Pg0q+Xuds6K0RxCohoGR3orlj9MGwnFiDevlfgDJnUl1UWQGOH73ml
+	fL0gQ8awwDgGkPQWvoD0NOPGzfbJ+iNr2rYP5PtLGRMgdw==
+X-Google-Smtp-Source: AGHT+IHWYSrmnac2ZIJgkK3CcnsC+6t1hYnQGT7QpTZYVmOgik/OcS5nSxSw/Lh3KD6scYknsYVhAQ==
+X-Received: by 2002:a05:600c:3c85:b0:43c:f64c:44a4 with SMTP id 5b1f17b1804b1-4406ab98242mr134584375e9.8.1745396482254;
+        Wed, 23 Apr 2025 01:21:22 -0700 (PDT)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-44092db2bd5sm16760175e9.26.2025.04.23.01.21.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Apr 2025 01:21:21 -0700 (PDT)
+Date: Wed, 23 Apr 2025 11:21:18 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Romain Gantois <romain.gantois@bootlin.com>
+Cc: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+	Luca Ceresoli <luca.ceresoli@bootlin.com>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: [PATCH next] i2c: Fix end of loop test in
+ i2c_atr_find_mapping_by_addr()
+Message-ID: <aAii_iawJdptQyCt@stanley.mountain>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH 00/33] Add support for Qualcomm Snapdragon SM7150 SoC and
- Google Pixel 4a
-To: Jens Reidel <adrian@mainlining.org>, Danila Tikhonov <danila@jiaxyga.com>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- linux-watchdog@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-phy@lists.infradead.org, linux-mmc@vger.kernel.org,
- netdev@vger.kernel.org, linux-scsi@vger.kernel.org,
- dmaengine@vger.kernel.org, linux-crypto@vger.kernel.org,
- linux-i2c@vger.kernel.org, linux-clk@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
- linux-remoteproc@vger.kernel.org, dri-devel@lists.freedesktop.org,
- linux-hardening@vger.kernel.org, linux@mainlining.org,
- ~postmarketos/upstreaming@lists.sr.ht, Connor Mitchell <c.dog29@hotmail.com>
-References: <20250422-sm7150-upstream-v1-0-bf9a9081631d@jiaxyga.com>
- <2ca2b774-fd7f-4612-b38d-f60e32ff6f9a@mainlining.org>
-Content-Language: en-US, fr
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro
-In-Reply-To: <2ca2b774-fd7f-4612-b38d-f60e32ff6f9a@mainlining.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email haha only kidding
 
-Hi,
+When the list_for_each_entry_reverse() exits without hitting a break
+then the list cursor points to invalid memory.  So this check for
+if (c2a->fixed) is checking bogus memory.  Fix it by using a "found"
+variable to track if we found what we were looking for or not.
 
-On 23/04/2025 00:07, Jens Reidel wrote:
-> Hi everyone,
-> 
-> apologies for the mess this created. Danila's mail provider ratelimited him halfway through sending the series and the attempt to re-try sending the second half an hour later ended up with a new message ID (I think due to not using --in-reply-to).
-> He asked me to let you know that this will be resolved later and the whole series will be re-sent once the problems are resolved.
+Fixes: c3f55241882b ("i2c: Support dynamic address translation")
+Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+---
+ drivers/i2c/i2c-atr.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-The b4 web submission is a great alternative when the mail provider is rate limited:
-https://b4.docs.kernel.org/en/latest/contributor/send.html#web-endpoint
-
-Neil
-
-> 
-> Best regards,
-> Jens
+diff --git a/drivers/i2c/i2c-atr.c b/drivers/i2c/i2c-atr.c
+index d5aa6738370c..1aeaecacc26c 100644
+--- a/drivers/i2c/i2c-atr.c
++++ b/drivers/i2c/i2c-atr.c
+@@ -240,6 +240,7 @@ i2c_atr_find_mapping_by_addr(struct i2c_atr_chan *chan, u16 addr)
+ 	struct i2c_atr *atr = chan->atr;
+ 	struct i2c_atr_alias_pair *c2a;
+ 	struct list_head *alias_pairs;
++	bool found = false;
+ 	u16 alias;
+ 	int ret;
+ 
+@@ -258,11 +259,14 @@ i2c_atr_find_mapping_by_addr(struct i2c_atr_chan *chan, u16 addr)
+ 		if (unlikely(list_empty(alias_pairs)))
+ 			return NULL;
+ 
+-		list_for_each_entry_reverse(c2a, alias_pairs, node)
+-			if (!c2a->fixed)
++		list_for_each_entry_reverse(c2a, alias_pairs, node) {
++			if (!c2a->fixed) {
++				found = true;
+ 				break;
++			}
++		}
+ 
+-		if (c2a->fixed)
++		if (!found)
+ 			return NULL;
+ 
+ 		atr->ops->detach_addr(atr, chan->chan_id, c2a->addr);
+-- 
+2.47.2
 
 
