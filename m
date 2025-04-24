@@ -1,99 +1,108 @@
-Return-Path: <linux-i2c+bounces-10610-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10609-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8737BA9A5A8
-	for <lists+linux-i2c@lfdr.de>; Thu, 24 Apr 2025 10:20:14 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91EADA9A573
+	for <lists+linux-i2c@lfdr.de>; Thu, 24 Apr 2025 10:12:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CD5557A51D4
-	for <lists+linux-i2c@lfdr.de>; Thu, 24 Apr 2025 08:19:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 05B381B63B89
+	for <lists+linux-i2c@lfdr.de>; Thu, 24 Apr 2025 08:12:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EC23207A2A;
-	Thu, 24 Apr 2025 08:20:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B5E8208961;
+	Thu, 24 Apr 2025 08:12:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="LRczqBk7"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from pokefinder.org (pokefinder.org [135.181.139.117])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6FBB19CCEA;
-	Thu, 24 Apr 2025 08:20:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=135.181.139.117
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E9EA2063F6
+	for <linux-i2c@vger.kernel.org>; Thu, 24 Apr 2025 08:12:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745482805; cv=none; b=WZF42kKyAeKWwhu8CQslmAgsAPL1GoCxvIV4NxoLpNzK6adywlMDkClXHEQJ2d9hHpI+pNG3AXWWJbCacjQAv98PtbNw1pASjPTmkAvoKp4FV6WJhqJVsprD6xIScLnPLSHCiVBBYIi1PmGobQDXUAwnZUleL2bZk+zvyesk1RQ=
+	t=1745482334; cv=none; b=OYARKROVNoa1z1xqbTb1hAZcgBRw/4X4P7zNFT1b5ggKkWCrXyH6N8NaCJcJiG5V9W5mSxqfhWGPWQNs279dRLx6k4e92NUFwNg7TEkdPpVYnK83JfJFBehZrW02MqHUtuLHtnmfQ6K1BPwqYifFhfHPEGhlLt+7qkfXtk3VJyQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745482805; c=relaxed/simple;
-	bh=RrjENBwGBydfJ3wNE3Qb/aLC0QcnJGiP9/DanmF+4TY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=G37Lpd0L0N1aocnWOLm5DRt8dmRnQfkYPP8viOwMWQwvcf62zMbU5BZSCi+INh9FaS9nN5UYDaQKUz3fNr8STxsh8HRjogQeE7QDNHhf2mlkU1p/RugWM0llizvpele6ux54Y8uNUW1csyp+42WYG87vwIB60hHOCRbSk3TOglE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=the-dreams.de; spf=pass smtp.mailfrom=the-dreams.de; arc=none smtp.client-ip=135.181.139.117
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=the-dreams.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=the-dreams.de
-Received: from localhost (p5486c924.dip0.t-ipconnect.de [84.134.201.36])
-	by pokefinder.org (Postfix) with UTF8SMTPSA id 8CF42A400EE;
-	Thu, 24 Apr 2025 10:10:41 +0200 (CEST)
-Date: Thu, 24 Apr 2025 10:10:40 +0200
-From: Wolfram Sang <wsa@the-dreams.de>
-To: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Peter Rosin <peda@axentia.se>, Andi Shyti <andi.shyti@kernel.org>,
-	Michael Hennerich <michael.hennerich@analog.com>,
-	Linus Walleij <linus.walleij@linaro.org>, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH] i2c: mux: ltc4306: use new GPIO line value setter
- callbacks
-Message-ID: <aAnyAASQID8SK107@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@the-dreams.de>,
-	Bartosz Golaszewski <brgl@bgdev.pl>, Peter Rosin <peda@axentia.se>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Michael Hennerich <michael.hennerich@analog.com>,
-	Linus Walleij <linus.walleij@linaro.org>, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-References: <20250407-gpiochip-set-rv-i2c-mux-v1-1-7330a0f4df1a@linaro.org>
- <16b14e5e-e5eb-5203-4cdf-44fbde9a5688@axentia.se>
- <CAMRc=MeYs0W31Kj-o530_8+EvhoDNzyZunk4xu6PbwK8N1OE4Q@mail.gmail.com>
+	s=arc-20240116; t=1745482334; c=relaxed/simple;
+	bh=ngjogseDjbLoUNeCcKqcDS1JihcnEkNMlcYUIV+DoNk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Content-Type; b=PsSLThWO/EubqObLpe6PcbvHUpWlADZ6mzWxZnDgtO7lj39zp+M6GQH0m4J4C5qZuxsCzHAlV7Fd0K7CSFpK8UMP4XVfe9NrRmkco9F0vQh/DaQ27BhTUOwzyoyVyFWFY3rQp3tmhe58vhPSo5XUZZqZI6hIfRIb6xN3CXxIKsY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=LRczqBk7; arc=none smtp.client-ip=209.85.208.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-30db1bc464dso8122121fa.0
+        for <linux-i2c@vger.kernel.org>; Thu, 24 Apr 2025 01:12:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1745482330; x=1746087130; darn=vger.kernel.org;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ngjogseDjbLoUNeCcKqcDS1JihcnEkNMlcYUIV+DoNk=;
+        b=LRczqBk7+fTEuqOuvf/sG+ueEjruAUrFhaa6WPL49sgTP+bsK0peeL6KsxCSbHVWkZ
+         5hs+ARh5sedq/MXm0lAqvdTXTfqrhuiXFXSIpy1wI9XcpQKAfkO/KZHmQGBBqe72IUbX
+         HmCjgMsXkWZvrsKBs8wo9k8HNMpFSWLZEcvQiZYy+Sp52l2dil0TjwSwG8KHwSDQVx+2
+         HaJVaiOlMux1nfbZSf1xLy7kOe+mXCNc+2C49eYbrPMnSjGV8/5f4OJvu7CvBNwOZq3G
+         coWbyXrvP+jB+lz27pn57MeK2cu21jrv1Tb3mmb4+C34APn50xQk0ZoKPVR67utiP3dG
+         uILw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745482330; x=1746087130;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ngjogseDjbLoUNeCcKqcDS1JihcnEkNMlcYUIV+DoNk=;
+        b=MmuIbhSuZz7rp+GttN2JnVgmmvEySDQXhon1wk0x+3doGyrgZr9qgFmVUB+bL6YdAF
+         0gAbVcMobIS0Z9ZT8Uaka7MjAzXyL2Rz7Jq9eFgYBwVViheYm3z0me2fxsLsy/29M+8C
+         FFiSNduSeirlsIbCfmIGO3H37BKmzDDeKe1QMjcQQxastANxWi1BT6HlSEoScElC9Zdn
+         QFcPHFez6cUilryYpfWaC5ZDVSMqn/NV8AGmQp0ZN6bHBRqV8unK2/aghsHliLiIt4rx
+         7bU49ivN/CTx5XrK1uDx26EPeXT7qLkO51sp+udULLWyytz3gc2Kxs/25+msIuiLR++q
+         Twlg==
+X-Forwarded-Encrypted: i=1; AJvYcCUAONadxwf/53PmTV2+OTJugnDqBevUNj/s1PE8vNn5BUrUVPhfdpTkSUOTyaA1vSHPguguq73f/hg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyvzsj9d8xNXAMKvWQRYYwbiWAOYSrnLib7oGZF59xnZmr9X5HV
+	2GBPRNwTA1YImn1zOa7lo9VW9zMK9+2+xcU80rvYumIuOIC57EQRz5upbuCYE2T3jYRZRbKfavr
+	v1wxcx1sxocyHfRoVtDx1zGif3yLtlWe9CN06MA==
+X-Gm-Gg: ASbGncvfbreRxwGL/eyLLgO0HP+ngofndt6k8DK72jtcNrIzGVTfSC1SB/E3XwI6ld/
+	ZfbpMtRmwQ3Uv8sQxz18kgWp60QtmxK9W0lgS60Hn5EBrW4R74AvD5ppfIBNp03gj6JKy7nAciI
+	r34Y0yWl6pT6Eou9PtNgmLbdVhd5lkX14Ctf0zO1XEOHS3LiQ3B2r6GA==
+X-Google-Smtp-Source: AGHT+IFbceL7o3clhs2RuiDyAIdchIBr6aL/LMDMKc7zOsM9dZhn008UBHhrWBGXFXtx2+8UxJ4Pdl2ytx5iQJL1TOE=
+X-Received: by 2002:a2e:bd15:0:b0:304:4e03:f9d9 with SMTP id
+ 38308e7fff4ca-3179facad69mr7495011fa.28.1745482330540; Thu, 24 Apr 2025
+ 01:12:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="wOEuWl4I5xqqjUrR"
-Content-Disposition: inline
-In-Reply-To: <CAMRc=MeYs0W31Kj-o530_8+EvhoDNzyZunk4xu6PbwK8N1OE4Q@mail.gmail.com>
+References: <20250407-gpiochip-set-rv-i2c-mux-v1-1-7330a0f4df1a@linaro.org>
+ <16b14e5e-e5eb-5203-4cdf-44fbde9a5688@axentia.se> <CAMRc=MeYs0W31Kj-o530_8+EvhoDNzyZunk4xu6PbwK8N1OE4Q@mail.gmail.com>
+ <aAnyAASQID8SK107@shikoro>
+In-Reply-To: <aAnyAASQID8SK107@shikoro>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Thu, 24 Apr 2025 10:11:58 +0200
+X-Gm-Features: ATxdqUGHb7ZpzSc5O8AT5fXNftZF_IaZxwgwcmYklmj1TMA5Isf7jQ0qXPGf3u0
+Message-ID: <CAMRc=MfdcH5dugiBLigTtoqAAsqZ_-fKJpJXnrDzQuSbKfw6oA@mail.gmail.com>
+Subject: Re: [PATCH] i2c: mux: ltc4306: use new GPIO line value setter callbacks
+To: Wolfram Sang <wsa@the-dreams.de>, Bartosz Golaszewski <brgl@bgdev.pl>, Peter Rosin <peda@axentia.se>, 
+	Andi Shyti <andi.shyti@kernel.org>, Michael Hennerich <michael.hennerich@analog.com>, 
+	Linus Walleij <linus.walleij@linaro.org>, linux-i2c@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Thu, Apr 24, 2025 at 10:10=E2=80=AFAM Wolfram Sang <wsa@the-dreams.de> w=
+rote:
+>
+>
+> > I just realized their emails didn't pop up in b4 --auto-to-cc. Cc'ed
+> > now. Wolfram, Andi: do you want to pick it up or should I take it via
+> > the GPIO tree?
+>
+> If there is no dependency in your tree, then I prefer to pick it myself.
+>
 
---wOEuWl4I5xqqjUrR
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+No, everything's upstream.
 
-
-> I just realized their emails didn't pop up in b4 --auto-to-cc. Cc'ed
-> now. Wolfram, Andi: do you want to pick it up or should I take it via
-> the GPIO tree?
-
-If there is no dependency in your tree, then I prefer to pick it myself.
-
-
---wOEuWl4I5xqqjUrR
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmgJ8f0ACgkQFA3kzBSg
-Kbb2ORAApGJ1FGxEhKM7cqNVETbPYWu4LnFSMldEADzZTfDj0OoYrLg+CAuFKdwE
-spNDQiLi0INKL5ldauQ/c8NoeS8hadkLt3WR50O9/PTQrOO0Qf9iEJAi5yXwT7P0
-hl/lbU2UXE7CIFateJVGygip7S6zA8fX8LQtzn2DR2oMkqA5FnAumCCNae2o2LI8
-m4zTu93KjvtdOugKgatkGS0BllpuhxxWJOTTRwKcEa9QJdU6/rmmp/5GCP40RlnE
-kyJAIAnk/CM+2b/GEWDQYKYTPfMYvn1hTDZw7v5p7/YqZ6tRsi0alompjEWfbnpc
-Q12EbzS5D2U+cTg5KLFdhFESCHeFqRrsjQyVWi6lCvXSvovB7h1F8JG/FsDQK79d
-ytIif5tEriAOMKzcJ1/z8X0/BCFT0KjhMAgOFp16rP4+ZI7mCEAq3s2OuhXnCFUR
-h0X8n35Q2y2RYTRKwm+CyY4JTck1frJR0vz/oLFO7hE50ruW+z8YZP3XcOE9sYM2
-zjx7tFUUeVoM/C0xL2lDQjboZQ+Z6DgITFo/C0d9c5ETnSkwbQF1PrDVNrBdMXd9
-cFedWmv3ujOtYtidRDDglywAoJfMtUBXD4h+sqFlkEPVxQnVuFTm2w3pLiaKL1Mp
-Cs8kKEWODT0vq5zDvQBVUKXEagBM5a6dvo7bFLl9HX+1m3ue9xs=
-=hxPe
------END PGP SIGNATURE-----
-
---wOEuWl4I5xqqjUrR--
+Bartosz
 
