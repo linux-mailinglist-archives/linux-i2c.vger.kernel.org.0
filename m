@@ -1,127 +1,132 @@
-Return-Path: <linux-i2c+bounces-10601-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10604-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 256B8A996AE
-	for <lists+linux-i2c@lfdr.de>; Wed, 23 Apr 2025 19:30:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D64FA99FB2
+	for <lists+linux-i2c@lfdr.de>; Thu, 24 Apr 2025 05:45:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3C0967B19C4
-	for <lists+linux-i2c@lfdr.de>; Wed, 23 Apr 2025 17:29:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D31D0460042
+	for <lists+linux-i2c@lfdr.de>; Thu, 24 Apr 2025 03:45:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7682B28BA95;
-	Wed, 23 Apr 2025 17:29:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F8751C5496;
+	Thu, 24 Apr 2025 03:45:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="HL/jtx2c"
+	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="vVhkAc1m"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49124280CDC
-	for <linux-i2c@vger.kernel.org>; Wed, 23 Apr 2025 17:29:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F7E917A2FF;
+	Thu, 24 Apr 2025 03:45:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.120
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745429398; cv=none; b=W0yaI5IH0a8O5T/bsYtLDD5d1rBlSb0FbafIt2mdIU1jyq0UGIE+XiFdTpTJmqFBQKj0HtEr0va4wZFzskJOtMZaoLXq5dMwrkIEdYyRxwak+Z20GlU37hk9uYL5kkRZ3fF6CsbQadTCWP8tFFOXOugNBHnkbi0KK/luWYO7QtQ=
+	t=1745466307; cv=none; b=gRIJdk438lGpX8VHelQdi2LznS4Aw5ncxwYC2BCMLot1fDzNwPqAa96Zv48wIsqLkl/grUlgif1i1RwTAdMaBG2xsvhleC8cpFi9fHBWiLAZuMAhFDTFHOpqWjNWLZ/x5iil6oLtMRb6QP8cfXWeOThXRaJFJ/1CQbzABTKU8Ho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745429398; c=relaxed/simple;
-	bh=0PhYhQW3e9niKo2H334ixansrbnvf1A301EOSSFBo6U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hwGBwewHmL01Edc+BLuAfCHm0733F6i6gJOWVxxJzxL6E9nAFyOmNBYKv6uY2soYA/sDcBBd7P3FpePLcUs99oblKqTY0QJw16Mcqpy3hv5cWGdeXHolpP5dnJ4l0f05M7Q6LA10sJoehTteNZYQXZk36BWcPbqUkF3bsnlyKHM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=HL/jtx2c; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-43d0359b1fcso1158335e9.0
-        for <linux-i2c@vger.kernel.org>; Wed, 23 Apr 2025 10:29:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1745429394; x=1746034194; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=oH2LFbAba/qda5PxRdibIeZbcQh5j5Nil5v6rguHVm8=;
-        b=HL/jtx2cjZihqX5BOg4aSg79hqiANrp5ZWl2xMRv/RMpSXfMkY+tpQzSWO09XGbKm+
-         3WRSm1kDssuM8sk13ag/TGfkSQ56AZswsu1qi/T4Y2AxIlqFqhvV+Y0Jj9lj84f3tqDx
-         u1Yj1hZzx+/KdOrByUlU9TosArtzlTORqqvPHxdk9PVbeTOcQOlcCgtIfD8/+9zerZ2D
-         I9gTT9kMwW0NYpdu5NytDGaQKObYRAj4CTQbVHPFCd/74l4JkAptLVUqUAweBFUjUvc9
-         DTw60MGjoaC9i9dgk4HYXE7z2T/niyz28B9gJuB9Hsxi2yKjS41bpbm3IllayS9nJTgG
-         06wA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745429394; x=1746034194;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oH2LFbAba/qda5PxRdibIeZbcQh5j5Nil5v6rguHVm8=;
-        b=skohd9wLjtUYVHytIv3vz+nW7KhmpH/u9+QI1c5/We/z+Oj5Yb74SWC9yMM3x4JJxI
-         icQj7VqIkKzKUWZ8cfOUBo3A3Sl6/BxbBIdlKdBRuYcM7hwEy+6siyWklfHvXPUs01eJ
-         gQiYLJIEsqpKLE1yz/XbzvP4BVWxmo54ZkEon6nHNQ5CB83IrNMyd8WKEOtcaRWIOkEC
-         iqSAaEb1aQRFuqMSQ8DD1J+gacx+rCBjfqbxvWuhf3+vHhqec0gX2ej66EldeFL4Pziz
-         GaRgiok9U4iaUD1CMVCEGbtPzXncwVnt/NK1DJrtZE6VWJgfPJsKltNWuno44PSRXVuO
-         dd4A==
-X-Forwarded-Encrypted: i=1; AJvYcCUoc0xwb3fmGw86xn5VeyqXwOjWy+oDQ/Rzs1MaURYiGEjzMvhO7YrVaqCGkX3aAGD560zHX3YFDGc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxxuZVT53ku/hxzkMr0DIsFG4eTRjDGiR/1zZZvQWEurBe5Wzo/
-	f9JLCzC6RxPqts2qErnFlgXCXIdmc+TopAkYOyRR09o92GPGD0YGAu5sngDrxVY=
-X-Gm-Gg: ASbGncvNcQ0X6hgIN/0EwUWRPMIve7G7GKFwIdPq0zfqlHvLHu48at745P97yPqbk4A
-	16MwgymI9IO+UbAZQ0ESPw51woPZTcuxenso1HaenjRB6DiQMs2xL52JUtnceK2cFq47I1ZJ9bc
-	3urG8DzYRvIgqbtmjWbW4k3Y7Aymd3jPE6yhy1hsNPFyccQ5D7n81nCV63poO99UyBAsk5M2kBS
-	Io0gLtziOr93dH7tjwCKzS7dvmD0zrvQxsuE0lJ4gHiLe25G7SIrMaOwaJVrqKrGwEkWqrpUbnx
-	phozkIymG4Bmjaj2FEzLs00NrmY7a3Mml76pe3qR7h+jqeyGgYdLocPL
-X-Google-Smtp-Source: AGHT+IHrc3jKIu/dZDdMN5LGx7SYc5pxapEttECD3if6r0VvjDHa20st5SLgP98C6SszLOfYP04REA==
-X-Received: by 2002:a05:600c:cce:b0:43d:1bf6:15e1 with SMTP id 5b1f17b1804b1-4409aa605c0mr554375e9.1.1745429394577;
-        Wed, 23 Apr 2025 10:29:54 -0700 (PDT)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-44092dc229esm33348255e9.40.2025.04.23.10.29.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Apr 2025 10:29:54 -0700 (PDT)
-Date: Wed, 23 Apr 2025 20:29:51 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Romain Gantois <romain.gantois@bootlin.com>
-Cc: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH next] i2c: Fix end of loop test in
- i2c_atr_find_mapping_by_addr()
-Message-ID: <a22d74b9-06b1-4a4b-9c06-4b0ff7f9b6c2@stanley.mountain>
-References: <aAii_iawJdptQyCt@stanley.mountain>
- <2427370.em1n7HOibB@fw-rgant>
+	s=arc-20240116; t=1745466307; c=relaxed/simple;
+	bh=qaFVrgFP5F1nuKMveHCBZx5qHUQCmCkHc1x1hZRR9+g=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=m7x3FsLZf4m+RGrMzWTrkiPRPoqIeQaC3Oc85xCv+kYUWO49F8/N7gpqKMmr4ZxuGC9w+XqBNSJ+WgkgJ8dFK0Xc493286ic94oIj1PT41rJwze0+088VRNJ8wi8Vambi9dXxI8h5GCMRoGO/jLva1VfxB1D0L8D+SNqFO1u0KQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=vVhkAc1m; arc=none smtp.client-ip=185.125.188.120
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+Received: from [10.102.98.142] (unknown [10.101.200.229])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 6E5D03FDB0;
+	Thu, 24 Apr 2025 03:36:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1745465793;
+	bh=d5WfvOqQjyeeGPF2w/ILFr41bfYXh8teGuVYt3zWlRM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc;
+	b=vVhkAc1mPN5dCFZ5N4oIZugxymgluE78pYUQAgqs+/8LMcqhjFn4S5cIkTKIqs0X8
+	 TDdHX/s+RMxQLjb/ifOvzP9Ev9zmjgBwt8BcsNZZiqHHfqTDcOaAiva9hgcWRYjumH
+	 igX0jSHFHBJEvGrCDHUVlJ+eGwBgDo1zcJc0yNUWqjk9VVqt1MZCH1+MLD7Z4K4rGE
+	 4j868oCZjAQP8ZaFCRffMg/xKI0FKDAM3Umd1ffiPeeemizBx1wMxE37agmEVpsGlH
+	 M3gLmOUSvqbcsIPqP5pZSWduI7cAcaSIkv9txdmPm4jKj/1A4dsJB4VOqNAcYLKeKN
+	 tfKCwzXyOreiA==
+From: "Yo-Jung (Leo) Lin" <leo.lin@canonical.com>
+Subject: [PATCH 0/2] i2c: i801: Don't instantiate spd5118 under SPD Write
+ Disable
+Date: Thu, 24 Apr 2025 11:35:42 +0800
+Message-Id: <20250424-for-upstream-i801-spd5118-no-instantiate-v1-0-627398268a1f@canonical.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2427370.em1n7HOibB@fw-rgant>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAI6xCWgC/x3NQQ7CIBBA0as0s3YSoEXRqzQupjLVWQiEQWPS9
+ O4lLt/m/w2Uq7DCbdig8ldUcuqwpwEeL0pPRond4IzzZnIjrrnip2irTG+UYCxqid7agCmjJG2
+ UmlBjHBfv4hSufKEz9FypvMrvv5rv+34AonTQ4HoAAAA=
+To: Jean Delvare <jdelvare@suse.com>, Andi Shyti <andi.shyti@kernel.org>, 
+ Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: Guenter Roeck <linux@roeck-us.net>, 
+ "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>, 
+ linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ "Yo-Jung Lin (Leo)" <leo.lin@canonical.com>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1758; i=leo.lin@canonical.com;
+ h=from:subject:message-id; bh=qaFVrgFP5F1nuKMveHCBZx5qHUQCmCkHc1x1hZRR9+g=;
+ b=owEBbQKS/ZANAwAKAV8XsZZKKe6GAcsmYgBoCbG01nWbQEm2FizVxkaYFT9pnDnjYrTFPOdot
+ 7BI76WvpL+JAjMEAAEKAB0WIQQzqV4kW+yguuqHrw5fF7GWSinuhgUCaAmxtAAKCRBfF7GWSinu
+ hrQwD/0VNwhw+jB+7E6ExkkqEhIAvhEDoJ9BFTHmkP93TYo8xHeJRAkiCt2QZOXXNRbC8ITwZCj
+ zXwJlikyCc+18MTP+a+YJtOuGKhFDhJFhQoVEEz9OOgU4RFsFXjrRZeccjiAe3OhPY9e130s2HM
+ 9LBwpEbX1wv5wEo8Fdioq20slBCMNEmn3t3288sYQOK6ep5Zy8ibsY4Wy9pDSYJilQvPutk2a3D
+ T8Lm52SzJkRyCNQgclgdQuLhxKDx2UCtLozpUVmVxTw5tCeiMwGeTHMwmHKeE+aNKGkneuZT+Fj
+ 7LRKGy858RSvn6aevxepSnDHlq5G2NuFJTcf2SRXHMgHdaLWrtS+cMbZXzOvveaeFo47/SZiQsG
+ iH+KyuajMEFSBry8tjJwxPII6XVStnHkHcH06Dnn97wxKVTqF28Fna/GcpBKyjWVOQeJvH8ut5R
+ ZteVKVScaE1WjHU4U2tcQ59MoXcvTO8GLWWurjZ8r69zWyJRTTDMYf5/V5UrypJUE9TlBxharin
+ FONrjK/iiqRxhtf4nXREn6uEEpg6eAytdvDT/wgI1hju0bUCXMk5nJVmlHhQ8GhkSJHy2HfRKuu
+ O9YzMWy0zoyKzszUusuYqoI8qX8IpYjYNUZLPHXDHCp19EmoAsC2EAqEdLaixxWzCEnaW63ALsX
+ obrEoHtwrXJhjHw==
+X-Developer-Key: i=leo.lin@canonical.com; a=openpgp;
+ fpr=33A95E245BECA0BAEA87AF0E5F17B1964A29EE86
 
-On Wed, Apr 23, 2025 at 05:25:44PM +0200, Romain Gantois wrote:
-> Hello Dan,
-> 
-> On Wednesday, 23 April 2025 10:21:18 CEST Dan Carpenter wrote:
-> > When the list_for_each_entry_reverse() exits without hitting a break
-> > then the list cursor points to invalid memory.  So this check for
-> > if (c2a->fixed) is checking bogus memory.  Fix it by using a "found"
-> > variable to track if we found what we were looking for or not.
-> 
-> IIUC the for loop ending condition in list_for_each_entry_reverse() is
-> "!list_entry_is_head(pos, head, member);", so even if the loop runs to 
-> completion, the pointer should still be valid right?
-> 
+On some PC platforms, the BIOS may enable i801's SPD Write Disable bit and
+forbid writes to certain SMBus addresses. For the i801 family those addresses
+are 0x50 to 0x57[1], where the spd5118 sensors are usually probed.
 
-head is &chan->alias_pairs.  pos is an offset off the head.  In this
-case, the offset is zero.  So it's &chan->alias_pairs minus zero.
+The write-disabling bit will make sensor functions related to writes and
+nvmem access unusable.
 
-So we exit the list with c2a = (void *)&chan->alias_pairs.
+Also, the driver is unable to sync back values from regcache to the sensors
+during resume, leading to resume failure. This has been observed on multiple
+existing PC platforms from Dell and HP.
 
-If you look how struct i2c_atr_chan is declareted the next struct member
-after alias_pairs is:
+Furthermore, for the sensors from certain manufacturers, after a reset they
+may need to select page value to 0 before sensor values can be read. Not
+being able to write to the registers renders the temperature reading
+unusable. See discussion in [2].
 
-	struct i2c_atr_alias_pool *alias_pool;
+To address these issues, do not instantiate spd5118 if SPD Write Disable
+bit is set.
 
-So if (c2a->fixed) is poking around in the alias_pool pointer.  It's not
-out of bounds but it's not valid either.
+[1] 18.1.16 HOSTC—Host Configuration Register (SMBus—D31:F3),
+    Intel 8 Series/C220 Series Chipset Family Platform Controller Hub(PCH)
 
-regards,
-dan carpenter
+[2] https://lore.kernel.org/all/acf31929-5d13-4fc5-b370-ab7fc5062455@roeck-us.net/
+
+Signed-off-by: Yo-Jung Lin (Leo) <leo.lin@canonical.com>
+---
+Yo-Jung (Leo) Lin (2):
+      i2c: smbus: pass write disabling bit to spd instantiating function
+      i2c: i801: don't instantiate spd5118 if SPD Write Disable is set
+
+ drivers/i2c/busses/i2c-i801.c  | 6 ++++--
+ drivers/i2c/busses/i2c-piix4.c | 2 +-
+ drivers/i2c/i2c-smbus.c        | 7 ++++++-
+ include/linux/i2c-smbus.h      | 4 ++--
+ 4 files changed, 13 insertions(+), 6 deletions(-)
+---
+base-commit: b425262c07a6a643ebeed91046e161e20b944164
+change-id: 20250423-for-upstream-i801-spd5118-no-instantiate-3b52d489e7a6
+
+Best regards,
+-- 
+Yo-Jung (Leo) Lin <leo.lin@canonical.com>
 
 
