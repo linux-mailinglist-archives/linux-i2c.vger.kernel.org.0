@@ -1,154 +1,179 @@
-Return-Path: <linux-i2c+bounces-10602-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10605-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CFC8DA99FAE
-	for <lists+linux-i2c@lfdr.de>; Thu, 24 Apr 2025 05:45:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA10DA9A072
+	for <lists+linux-i2c@lfdr.de>; Thu, 24 Apr 2025 07:34:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0F12F4600A1
-	for <lists+linux-i2c@lfdr.de>; Thu, 24 Apr 2025 03:45:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D72D24429A2
+	for <lists+linux-i2c@lfdr.de>; Thu, 24 Apr 2025 05:34:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5319D1B3F3D;
-	Thu, 24 Apr 2025 03:45:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D304019D07E;
+	Thu, 24 Apr 2025 05:34:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="Tt5LiOcQ"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="smiVdXAN"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2040.outbound.protection.outlook.com [40.107.92.40])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 335D11A8F8A;
-	Thu, 24 Apr 2025 03:45:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.120
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745466306; cv=none; b=UOfVWkL+Dezea9Vf0ieDvoaUVApQIi6vv3kglpxbAdLlU1g+/TvqtGXoTUVUvG6D+oBa2+FHMgeRMgYavuZl105qnAqJpFITnIwpRoo4PGW7OwDOJ7cQNLViIPnFBlpqpZmB3xAZrLJAUsJ42LIMrOldrv68nJ7BA7Oo2xCsu38=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745466306; c=relaxed/simple;
-	bh=NnqERpE7eR8g8r0iLIpxS2uNkqlSpGP9aGgq+2djYg4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=pENzuJXNFqpz+azhLPUThtnqztKuK2+t4gSHm3SeAb0jxXa+0niclR29I0gRE2ZQ28kGOMv4sBnFUObJsiG1vLSLBKUrVvCU2r169HdyJ53kckh+K7cFq3gMcTumFZfz9pglqZQNUYofN7hkIZObIMwe3ilz8F2cnXBLrNXHD/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=Tt5LiOcQ; arc=none smtp.client-ip=185.125.188.120
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
-Received: from [10.102.98.142] (unknown [10.101.200.229])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id B5C913FFEC;
-	Thu, 24 Apr 2025 03:36:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1745465800;
-	bh=9TuPK+Tu+4yd7SCrzNeveB7vgYe62My2LDqUfykqOFc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc;
-	b=Tt5LiOcQKE1L/PtyBiv/DnoXVkcXZKjrW8gvZ2XrCSHD+yKSqup/MpCDyWq0hL/9q
-	 i92PECtVLm8IkhcEtnWFLipqraRLHFR9amxKgOQIOTc18R0M8TlmlhcRhCd+Dp2nuY
-	 CJ42FF4S3UfV6uzW/D6W+LoRzu2ZjMICNlJuCo6N92k4rTvNmXsFbJNdoaFvPTWCrO
-	 HhFcni9PEzl1ayXzDUdmOho8ZCIUriIF1OAl1SwnNPe6h8vT9Vgm2TjGApVUhef9Tg
-	 /pVFs2g1/YJPVfI9mLpG52aYEz9U5iCw4vXAk+njdTWlcnOxvy1XdjgMW0v27myxmZ
-	 m+Nnm2X73Ra6A==
-From: "Yo-Jung (Leo) Lin" <leo.lin@canonical.com>
-Date: Thu, 24 Apr 2025 11:35:44 +0800
-Subject: [PATCH 2/2] i2c: i801: don't instantiate spd5118 if SPD Write
- Disable is set
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 198A58F5C;
+	Thu, 24 Apr 2025 05:34:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.40
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1745472844; cv=fail; b=GF+Oz9OLhmXb1H117dTYYiCSYCfkAldGxs0gWipn4wsRhvbuFeT7QBKbPcpyuo4Eqscn+TO7QCGwSRHSfaa9dAk4YIoJjoPN1G8f/Jg0hFuElt9R9gGI/eMQN9Xoh8wClj9DPZ9yHf30H8RHmf+nVktcZ7UPaBc/5JXSMnb75pM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1745472844; c=relaxed/simple;
+	bh=zx3XgtaqzjznZauA83EPjORemynJVQ60sMi95/78lkE=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=OC3ZJ0vzsI7akRMO3AKNtW9bxrVylEGC5adKfjFF5WwTWo3VrLBpjn4yIwxguc5OaVcY0aQ2imFNvbTg/2DuYEIZTXxQ3BJ/fcHbX3Uw5kGyclTnA8TUkDXsNTvr5pySYBMeFEDq2cpQ2uh4iIHQ0RDz8DrPjkTUMwDixAxXoEk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=smiVdXAN; arc=fail smtp.client-ip=40.107.92.40
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=JM99ATB19EYzcuzkaUXF7PpKJMGYl8nQ70JimN3kacygOQb0LMknUqmfTI7qfhCuop7fUsh5QIk/DTiOLZ32sVAW6hY5n9mJn90NAf/vK7sNgaIfEaOJc+kJBy9hpx9ByPWAawjvcDTlANqnRxPB18BRwDLHVqw05kuvYuIYZDj2SRDm0y4J1wRj3W3/z9uhl78BNYulUN+5XJ4fsYnfKJVPoiIq/s+fQyOjswOaJgt/zGSOzdtptpwy4lyCBufC54zmZOua2kcdtVqxQTiLURQ1zMy8RoLmxPK3r5NWizHvkj70wZIXikd9SQgGtemIaFQGBMlONw5i3101fYYJfQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=AnN2auT+5LLEeLzgKurinturUTdahwXIL4XZLKFRx5g=;
+ b=IRbAHLtBI7JHexku06nUOFlCRjr5zizUeTEQ3IYKK+1l3oNDfw09x4IBfFbDHwcrJ1IfxsF19c0K+8yOJWK0B/bQhyEYJ5MfHKKZ88KEenwlSr+3+mj+adzg6jn22bAu6wyqXuu54Q9cH/nul/h4lUdIw4R9Y0LMVfnhyylKP5m/CvNRTZK13V23bcOluHqdTrIJ3w1rdSct9T4/Vq0k8RoseGJnaEMgzPdfCzUj5M4WO1S1vwaXV9CNXCSRhewM3QbnqmGjV/Y+bkMKPZCKpicRSyb1IdpWvYJVKXdNOdiSNlOH6sSHkAEgGcWzdrr/Ga9RS8nG53iWmkLgukyGiQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=AnN2auT+5LLEeLzgKurinturUTdahwXIL4XZLKFRx5g=;
+ b=smiVdXANZOw+QtWlRC6R0PfeoVMyRekyXy8C8AkNlH7idMEcBA+5atsxoOvU07xKW0AvCw3lTrF1rTUoP/orCFuFUZZWnrcCCE8zwf98N3BFldVn63YTl6BnJtA5yrMkenJ95NgjGkP2oKZcxAxCxBXLavQkleurn4ebMz8hpduhJvGa8qJ1HxtYTqcbpYM24Jlxn5L/HKvetJT0hA+BKbrvOiceohDe6iHDslH8cM03l8eYdqV5aPsBGU/510RcWBjurj8xXSomFlWhURrLzu8VjbMr3Sxt5Gau/UZ0STTVb/Pdb0W/cyTz9iPPFX9XXTvQR4ttukFObCc60a1Y8g==
+Received: from MW3PR06CA0005.namprd06.prod.outlook.com (2603:10b6:303:2a::10)
+ by CH3PR12MB8969.namprd12.prod.outlook.com (2603:10b6:610:17c::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8655.36; Thu, 24 Apr
+ 2025 05:33:58 +0000
+Received: from MWH0EPF000989E7.namprd02.prod.outlook.com
+ (2603:10b6:303:2a:cafe::28) by MW3PR06CA0005.outlook.office365.com
+ (2603:10b6:303:2a::10) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8655.36 via Frontend Transport; Thu,
+ 24 Apr 2025 05:33:57 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ MWH0EPF000989E7.mail.protection.outlook.com (10.167.241.134) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8655.12 via Frontend Transport; Thu, 24 Apr 2025 05:33:57 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 23 Apr
+ 2025 22:33:39 -0700
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail203.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Wed, 23 Apr
+ 2025 22:33:38 -0700
+Received: from BUILDSERVER-IO-L4T.nvidia.com (10.127.8.9) by mail.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server id 15.2.1544.14 via Frontend
+ Transport; Wed, 23 Apr 2025 22:33:35 -0700
+From: Akhil R <akhilrajeev@nvidia.com>
+To: <ldewangan@nvidia.com>, <digetx@gmail.com>, <andi.shyti@kernel.org>,
+	<thierry.reding@gmail.com>, <jonathanh@nvidia.com>, <wsa@kernel.org>,
+	<linux-i2c@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+CC: Akhil R <akhilrajeev@nvidia.com>, Thierry Reding <treding@nvidia.com>
+Subject: [PATCH v2 RESEND] i2c: tegra: check msg length in SMBUS block read
+Date: Thu, 24 Apr 2025 11:03:20 +0530
+Message-ID: <20250424053320.19211-1-akhilrajeev@nvidia.com>
+X-Mailer: git-send-email 2.43.2
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250424-for-upstream-i801-spd5118-no-instantiate-v1-2-627398268a1f@canonical.com>
-References: <20250424-for-upstream-i801-spd5118-no-instantiate-v1-0-627398268a1f@canonical.com>
-In-Reply-To: <20250424-for-upstream-i801-spd5118-no-instantiate-v1-0-627398268a1f@canonical.com>
-To: Jean Delvare <jdelvare@suse.com>, Andi Shyti <andi.shyti@kernel.org>, 
- Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: Guenter Roeck <linux@roeck-us.net>, 
- "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>, 
- linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
- "Yo-Jung Lin (Leo)" <leo.lin@canonical.com>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2192; i=leo.lin@canonical.com;
- h=from:subject:message-id; bh=NnqERpE7eR8g8r0iLIpxS2uNkqlSpGP9aGgq+2djYg4=;
- b=owEBbQKS/ZANAwAKAV8XsZZKKe6GAcsmYgBoCbG9Stdu01Wp2ar44hPp3CIGHsuW4dvAyyq/X
- fD466cwV2qJAjMEAAEKAB0WIQQzqV4kW+yguuqHrw5fF7GWSinuhgUCaAmxvQAKCRBfF7GWSinu
- hgl+D/988uFs6hJ3+3qTA3IDg7pYKd2cw3W2eJUAJben9yBdu6Mxu70241Xih3tY5bgwq9aZGv1
- SxGOskARCwOZaAWe//d9LrOZxebnOOAMndiEwHSm4RiOUnf/Nli6DZGzvq5J67ZTz+Jq8IpjDDv
- 9fhLx1jSlTDNnATLcRqyj/amCxrWvHE/CD3tEquuQky6sl5IE26D8A0QheVh2y+kcG5BG+1XS9d
- qAnSZONUVEeCnQf/Q0UTCk/pcUJDIFRq5ENNF4y9AgpmGfwW2XHTWA+wjfeUfH0jdHqmU1UFGrg
- hI7DOofls/mi9IiY4yma4JMumUNta7Cm6WcQyGsatQa0nStkNzLf9eJ28zRyoTvl3tLdsUMfBoF
- LTY0YFgZMTls71t44hiAHBVrNZMfbbAfGiXpw5G6/5cmI8vz70V6KDZ/UtkV+NGA/2DogvTldSo
- fSPFNzx1PS+ecYoCOaKBrGWO8UyQiCufYCwzopy8F927SvHro44//0CjdqCfWJxxDpmWcKGfHjK
- 3j2LpZzr0NscROZmpkpdO3TEE44I4e0FrOZt1rFhFFqGE3dZZn3m6GDVzoueyFAGskb+x0PLDPy
- s+/HAGclTAdsMR+gse6njr2SlpaFsiMiUcOc3KYgGw5thO7WvQG8Y9Sp0cVe45rGIfVfnLSbYEI
- vkdowSPIRlDVhGw==
-X-Developer-Key: i=leo.lin@canonical.com; a=openpgp;
- fpr=33A95E245BECA0BAEA87AF0E5F17B1964A29EE86
+X-NVConfidentiality: public
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NV-OnPremToCloud: AnonymousSubmission
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MWH0EPF000989E7:EE_|CH3PR12MB8969:EE_
+X-MS-Office365-Filtering-Correlation-Id: 77359d3c-a66a-425b-d4e1-08dd82f19c34
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|36860700013|82310400026|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?MwATC47g3drs+xdXbC8iyd2lqn7/ShB3qqVFbYbDMCwHxQ6l2OejNUxg+O5W?=
+ =?us-ascii?Q?xHFwlJtu4xeQuRVNSg+ObjiCVNmd1vBe75vtMnw+EdJyi67um4PszuTNFpmJ?=
+ =?us-ascii?Q?W6Be0FMomwk4zi3Btk5Kv5g8X4YriWJyTaeqgsMDaKbqBrfOlDiLJ6vFkBho?=
+ =?us-ascii?Q?T3SWwa+Rbh8v0xDshEF44eVR0NDQ05vOJoK4L6FOaBzjlzbpoi5u7ObGNsYx?=
+ =?us-ascii?Q?UIjHjKmXRv71DaRhSn3f08LKDhxx1zfoQdWCQLIPmyMFXGWTYQ5DPVRMF2NU?=
+ =?us-ascii?Q?sNisPd2Zss3qU2dLdIS3InDZC+0Hx+hZrq3NRe/TmFs+Cj4nSEWaG0Kxsb1Q?=
+ =?us-ascii?Q?fFYAZ9y+JY4q+6IWbzECWa5mhpJUIoG8xahnheoyI6zR/GhH0XrCHvJSMRLd?=
+ =?us-ascii?Q?4C9qPJIkfLa8kv7W09HWFMFqvCCsc/F2QmvCy68qM8m1A9d439v3Mm5ZBguK?=
+ =?us-ascii?Q?RHS9/G7RdpXKALGm0TVPvFLgbnkK2pQVk3nguv4n8x8l3h3/LQNhYY0EOJj+?=
+ =?us-ascii?Q?3hgX4hIoxNK9QL98L8LeCW0eS21T2zXRLxmMgRz2Ipj9MihH5rVjq4Bfk2YL?=
+ =?us-ascii?Q?t0SS0zLflZJE8s8usfvRPnQrIYHmjXGKtkU4S41AtWZxSVDKv+CzzNjboKQi?=
+ =?us-ascii?Q?+BDweEaAG56BsT3C4QicTNAu4+ekSdMtl46EYLpmqNhrby6aCWIU7+0BGpLM?=
+ =?us-ascii?Q?L5uvjmhjdle+pvii/MZSD09lobiY/gXrbaYfLhnZ83oaYiUWEWkV+RC9LIuA?=
+ =?us-ascii?Q?8RPeKWwoZIgrTSlvDAcgPf4sqWRCReMgSXgkCJZ/JuO4+pzP81AEdQ/ti8Gg?=
+ =?us-ascii?Q?vjwfF+mng23Ckn1PWgYZfdmOvK7Jj29ymxQl+5vYoLfNoJdKA+7Kns8NMYw2?=
+ =?us-ascii?Q?P5SQ7s1JdTihwbnC6oImPcxMly2fRf0xOb31nl89hm+Csm++8QOyY1U/NPv4?=
+ =?us-ascii?Q?/zCBs413VlUDL4Uesb085RHIxCGI1Em0VsT0j9u0rUPFpo2ObJlkjKDfmron?=
+ =?us-ascii?Q?4tfrGRyEvrmWF210kLtAVo0WDcjOM8kOhf3gHlRGexB7B2V9GvCVWm86NKVk?=
+ =?us-ascii?Q?DurF4E3MIdTr5T2LVnehHuOGBE19u3VRCxhyBxubGylbuzdTT9h7reCRhyes?=
+ =?us-ascii?Q?jhvYSykJRFCdR1IBBQkoRlDPeoZr97BzjP3nmElQtf4EsdatL7YRrYhb470V?=
+ =?us-ascii?Q?sFeNef6NNDNT/U/5Q3I52xMeFt7Zn7V0ZOZW87aPzmemeQ3k49TA6t51QGgn?=
+ =?us-ascii?Q?Dl6mydji59LvKEz8dJsfMQeFD00eE1kloTRdq1KekFVB8erO+fpNN4DL0Toh?=
+ =?us-ascii?Q?qetBIhO7wEKks8z9QeshoZZRWbiW+AodtlQyrSsMHlULEvMDKOQkYDl6JBVZ?=
+ =?us-ascii?Q?7d4LRb9RGSb8RFNMUamt6xsZN74IsibOOGhiFBE7ZHFXz7/+RpnQA+FmQvgV?=
+ =?us-ascii?Q?/JyAhYujvlYWbF3Fls5UjpEsi/qPYwoiQmic3QVWFaNVZzHkGyCh8sQX1Wzd?=
+ =?us-ascii?Q?wSEj8dM5os3QApX5uOVaLA71M7Mj4ZPpkC8a?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(36860700013)(82310400026)(376014);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Apr 2025 05:33:57.4966
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 77359d3c-a66a-425b-d4e1-08dd82f19c34
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	MWH0EPF000989E7.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8969
 
-If SPD Write Disable bit in the SMBus is enabled, writing data to
-addresses from 0x50 to 0x57 is forbidden. This may lead to the
-following issues for spd5118 device:
+For SMBUS block read, do not continue to read if the message length
+passed from the device is '0' or greater than the maximum allowed bytes.
 
-  1) Writes to the sensor hwmon sysfs attributes will always result
-     in ENXIO.
-
-  2) System-wide resume, errors may occur during regcache sync,
-     resulting in the following error messages:
-
-     kernel: spd5118 1-0050: Failed to write b = 0: -6
-     kernel: spd5118 1-0050: PM: dpm_run_callback(): spd5118_resume [spd5118] returns -6
-     kernel: spd5118 1-0050: PM: failed to resume async: error -6
-
-  3) nvmem won't be usable, because writing to the page selector becomes
-     impossible.
-
-Also, spd5118 from some manufacturers may set the page to a value != 0
-after a sensor reset. This will make the sensor not functional unless
-its MR11 register can be changed, which is impossible due to writes being
-disabled.
-
-To address these issues, don't instantiate it at all if SPD Write Disable
-bit is set.
-
-Signed-off-by: Yo-Jung (Leo) Lin <leo.lin@canonical.com>
+Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+Acked-by: Thierry Reding <treding@nvidia.com>
 ---
- drivers/i2c/i2c-smbus.c | 5 +++++
+v1->v2: Add check for the maximum data as well.
+
+ drivers/i2c/busses/i2c-tegra.c | 5 +++++
  1 file changed, 5 insertions(+)
 
-diff --git a/drivers/i2c/i2c-smbus.c b/drivers/i2c/i2c-smbus.c
-index 97e833895dd7..cb7ef6a7a174 100644
---- a/drivers/i2c/i2c-smbus.c
-+++ b/drivers/i2c/i2c-smbus.c
-@@ -378,6 +378,7 @@ void i2c_register_spd(struct i2c_adapter *adap, bool write_disabled)
- 	u16 handle;
- 	u8 common_mem_type = 0x0, mem_type;
- 	u64 mem_size;
-+	bool scan_needed = true;
- 	const char *name;
- 
- 	while ((handle = dmi_memdev_handle(slot_count)) != 0xffff) {
-@@ -438,6 +439,7 @@ void i2c_register_spd(struct i2c_adapter *adap, bool write_disabled)
- 	case 0x22:	/* DDR5 */
- 	case 0x23:	/* LPDDR5 */
- 		name = "spd5118";
-+		scan_needed = !write_disabled;
- 		break;
- 	default:
- 		dev_info(&adap->dev,
-@@ -461,6 +463,9 @@ void i2c_register_spd(struct i2c_adapter *adap, bool write_disabled)
- 		addr_list[0] = 0x50 + n;
- 		addr_list[1] = I2C_CLIENT_END;
- 
-+		if (!scan_needed)
-+			continue;
+diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
+index 87976e99e6d0..049b4d154c23 100644
+--- a/drivers/i2c/busses/i2c-tegra.c
++++ b/drivers/i2c/busses/i2c-tegra.c
+@@ -1395,6 +1395,11 @@ static int tegra_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[],
+ 			ret = tegra_i2c_xfer_msg(i2c_dev, &msgs[i], MSG_END_CONTINUE);
+ 			if (ret)
+ 				break;
 +
- 		if (!IS_ERR(i2c_new_scanned_device(adap, &info, addr_list, NULL))) {
- 			dev_info(&adap->dev,
- 				 "Successfully instantiated SPD at 0x%hx\n",
-
++			/* Validate message length before proceeding */
++			if (msgs[i].buf[0] == 0 || msgs[i].buf[0] > I2C_SMBUS_BLOCK_MAX)
++				break;
++
+ 			/* Set the msg length from first byte */
+ 			msgs[i].len += msgs[i].buf[0];
+ 			dev_dbg(i2c_dev->dev, "reading %d bytes\n", msgs[i].len);
 -- 
-2.43.0
+2.43.2
 
 
