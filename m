@@ -1,153 +1,124 @@
-Return-Path: <linux-i2c+bounces-10607-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10608-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2DE1A9A2F5
-	for <lists+linux-i2c@lfdr.de>; Thu, 24 Apr 2025 09:10:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D8B5EA9A31F
+	for <lists+linux-i2c@lfdr.de>; Thu, 24 Apr 2025 09:17:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E5CCA19465E3
-	for <lists+linux-i2c@lfdr.de>; Thu, 24 Apr 2025 07:11:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 766AF3AD096
+	for <lists+linux-i2c@lfdr.de>; Thu, 24 Apr 2025 07:16:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DE461E0E0C;
-	Thu, 24 Apr 2025 07:10:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55BF01EDA1E;
+	Thu, 24 Apr 2025 07:17:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="RRBIE2FG"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="iFgq2CrK"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5659510F9;
-	Thu, 24 Apr 2025 07:10:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FDC61ACEC7
+	for <linux-i2c@vger.kernel.org>; Thu, 24 Apr 2025 07:17:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745478649; cv=none; b=cRbzJAyCmBaE15ZbceoUVU3eVCkPFA3+o6d5NMgSj3n+2pMCu3kOcPXX4i5kFV0d3WOYe4PMEjQanovpCcaXz/dGhM7XNV11YfOYHCIGdzW0QwXD38mVp5HoEJG9PTaWqYnWiU2SSw9kESJwL5WpcWrAa5NgAmsw5YXSl2hfZjw=
+	t=1745479024; cv=none; b=DK1RBYuIcI3SX4Z7aDdqtcZ3IY9P7pe6d+2k1rx4oeaLd92KhIgJd5GVx0VdEAmnF2y84SdFBJZRFft3i7ijXApx/iHcHfHTFw9boII2Z4k/X5lz58xQs2/QeIwykw8X1YyPY8znDQc/xc+z3ono5ANeajZn7i/AdgTvt0ZvfVE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745478649; c=relaxed/simple;
-	bh=t+K0ESiXzCsl44QHMLJtE1n+4hg/PkQFOPFvd9iGyuc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LvQXhNELiZCGjEvlOSsdLDU6OmrMzve0awBIJSwCPy95dXMlh2mdJLCSXJB8cvRMgjPhcX8XPZzlLw+Ny9pq2rL/7XP+pmzQyLkuD4ICyem/vxBw6Ra0lPaV3vM1M26vVpGzuJ0OaHRDNP3SZlOOnRelX8LUFyRkRkHv5tcL+Lk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=RRBIE2FG; arc=none smtp.client-ip=217.70.183.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id BEA6743A57;
-	Thu, 24 Apr 2025 07:10:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1745478644;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Ls6ZOwr4X07+mFxbErQdmry+CO4o/SQ2lrx34X9QQTE=;
-	b=RRBIE2FGJdwYRYGLOTx1+qCnf8F/EKYhYO66/Phh3rBBsU7Sm7K3d4FwxTzxfu3pEaP8zA
-	N1LaVgnsNvsX5eSgFrkjccYzmxUWQ0tVj7ubeBRvVq2E8rUMVgsf+qHk/SbkIb1oGRkrcf
-	36aRsLbmScl4x3KCQCny5ulOX84AI924X01GPoReJDQuPHyKR54IhOatvaOMeG2C96IAsC
-	pzh5oR9CuACWcJF35qS9rJTXFVzC2ZGePcT3FKKHQqujSfo7WP/0+0ZadxcyYIRda8XlAd
-	ZdiI8dTQM/UvG5r3k2yAr2kx/f3VENswIkuLQVvvf2XXAKuxE9iyTzW9MAOQxg==
-From: Romain Gantois <romain.gantois@bootlin.com>
-To: Dan Carpenter <dan.carpenter@linaro.org>,
- Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>,
- Wolfram Sang <wsa+renesas@sang-engineering.com>,
- Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
- linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject:
- Re: [PATCH next] i2c: Fix end of loop test in i2c_atr_find_mapping_by_addr()
-Date: Thu, 24 Apr 2025 09:10:43 +0200
-Message-ID: <2778486.mvXUDI8C0e@fw-rgant>
-In-Reply-To: <9cd0c3cc-9f3c-4a3e-9080-c832def8f317@ideasonboard.com>
-References:
- <aAii_iawJdptQyCt@stanley.mountain>
- <a22d74b9-06b1-4a4b-9c06-4b0ff7f9b6c2@stanley.mountain>
- <9cd0c3cc-9f3c-4a3e-9080-c832def8f317@ideasonboard.com>
+	s=arc-20240116; t=1745479024; c=relaxed/simple;
+	bh=guNwUuYB1XS70rv7UL0LfJmT859rRszSPJy1YBjgdfM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Ux3isa9fHN53YxhI1PEuAXJmaco2bsHZSNDPJ6Po2H/8cIaJ5HFzmXA9P8SBqwWCCIVVbD8NJKeGrema0XBaiSEVgq19JDCyo+4lyvs6JfbRg9N7lEawcFcdemt6ZpqtFNmAmLHo+N/vhGVZZSocU3RV2B36aKTf9qs1PK85uqI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=iFgq2CrK; arc=none smtp.client-ip=209.85.167.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-54d6f93316dso722935e87.2
+        for <linux-i2c@vger.kernel.org>; Thu, 24 Apr 2025 00:17:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1745479020; x=1746083820; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=guNwUuYB1XS70rv7UL0LfJmT859rRszSPJy1YBjgdfM=;
+        b=iFgq2CrKN5ooXXvj1AdN3AukOU1QQBrq7qbmTZwNi+gDnVp28ahPlbABX2zKqj433Q
+         iOx5eplyI5CJpxSRGEOecMF5Yf1p+OUiI6NWbThKgfJhlVGmTUMds0LZBzCf6zIVXn9L
+         o80BJ1t0pVW9nkFbuHkSPFyhnoNYSAerCS8gVuO9I2fL6gO1Va/XEgFpWnYMBY36CWlE
+         XwLTrTrpcGQArNPz/zB3W6na1sNp3a5sTiTA7kg/79slgAlE1F83UjHVar+nw5LLtSoT
+         wGztuShaeoNOdNgZUVRDY/mURz4bG4ANHSFlDfcwWJ/9B0z7N8iUwY8fiuTKlEAeay6y
+         BAuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745479020; x=1746083820;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=guNwUuYB1XS70rv7UL0LfJmT859rRszSPJy1YBjgdfM=;
+        b=wo+BhKfR+OTeVqXqivREnDDDZeKVOYYgIeMhWi7M4O+Utgil8650Sofy5APrgGrsRE
+         MSV4R3cK+kF39JmcHm7NVAgIOQ/7bEj3MrstLryr5hyIBEf7pI76an47qB5HS6nTP8Pi
+         oFW1j0J5SCHRPVH79krSLdUsNxfy5h99HVSEpURXlAgMImE0Djudmgn21ODhimlUqqb3
+         PYBhv4b57i0YxzGyEx8GSjgvXfpylZtNPgYSltLxkKUqISwgQma5byZFkAIBi57JoWwH
+         OQbFrPQ3URvE+6bp/VPOxcsyBSOR4dpdaaqmYgfvnV31bRexrI4nemC/6TUBGwYzlHot
+         PvZA==
+X-Forwarded-Encrypted: i=1; AJvYcCUTjE3FY9w27ZTXdDLvABHmizEY2wH4VDWIw6gGK/VrBdl/AHzbqDRHmV6U2dJvrYpFqi+EvRWn+2Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwzNJBpV46Bmd1jiCRxkGYzthziLHD/IcA4AJRc6AwtM4t/eN8h
+	uOAn9rYRjpndWd5mduhiU1EaPuIoGzNNPZKoj/RW8BiT920pM0umbUtT0B254iAsHMDaNFKOF2M
+	ghkvGpBOy4UIKfU/UwxtRNZvgGvWQ+7JTKuqVUA==
+X-Gm-Gg: ASbGncssIHV+iusSL2k/srJMt8rWdX4f8vxITAoggQ/11GiI3bG5OmCNOQRUo8e2LMt
+	W/u4pwr+TR2E+N5SkFpgzrdo13oBA6u3tX+Dvug+SHddNOOgQ/GkcdNVidEMnox//2AmVynqho8
+	QV3ZmUUBPccFtkEduItCUMPK+5Q/vkWYMBCbqD4zHnBO1Vq9hBQbp9jg==
+X-Google-Smtp-Source: AGHT+IG7sbNkW6K4E+gZCj9BvmRurRuIOdRBZYRXKnKeo9MdE3o52+XU5EDUC66JU8GTial2FaxDd9hruPwHijYGY+Q=
+X-Received: by 2002:a05:6512:15a5:b0:549:8e54:da9c with SMTP id
+ 2adb3069b0e04-54e7c41682fmr591334e87.4.1745479019474; Thu, 24 Apr 2025
+ 00:16:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart12651876.O9o76ZdvQC";
- micalg="pgp-sha256"; protocol="application/pgp-signature"
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvgeekkeefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhggtgesghdtreertddtjeenucfhrhhomheptfhomhgrihhnucfirghnthhoihhsuceorhhomhgrihhnrdhgrghnthhoihhssegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeikeekffdvuefgkeejgeefhfdvteeuhfdtleeiudehieeludelvdetleeggfffffenucfkphepledtrdekledrudeifedruddvjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeeltddrkeelrdduieefrdduvdejpdhhvghlohepfhifqdhrghgrnhhtrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpehrohhmrghinhdrghgrnhhtohhishessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepkedprhgtphhtthhopegurghnrdgtrghrphgvnhhtvghrsehlihhnrghrohdrohhrghdprhgtphhtthhopehtohhmihdrvhgrlhhkvghinhgvnhesihguvggrshhonhgsohgrrhgurdgtohhmpdhrtghpthhtoheplhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomhdprhgtphhtthhopeifshgrodhrvghnvghsrghssehsrghnghdqvghnghhinhgvvghrihhnghdrt
- ghomhdprhgtphhtthhopegrnhguihdrshhhhihtiheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqihdvtgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehkvghrnhgvlhdqjhgrnhhithhorhhssehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-GND-Sasl: romain.gantois@bootlin.com
+References: <20250407-gpiochip-set-rv-i2c-mux-v1-1-7330a0f4df1a@linaro.org> <16b14e5e-e5eb-5203-4cdf-44fbde9a5688@axentia.se>
+In-Reply-To: <16b14e5e-e5eb-5203-4cdf-44fbde9a5688@axentia.se>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Thu, 24 Apr 2025 09:16:48 +0200
+X-Gm-Features: ATxdqUGJSrKABbl7cdx0FUWA6bl4aWMdgNufCjq59VS62rLqVUFNqJgqC7ohSmc
+Message-ID: <CAMRc=MeYs0W31Kj-o530_8+EvhoDNzyZunk4xu6PbwK8N1OE4Q@mail.gmail.com>
+Subject: Re: [PATCH] i2c: mux: ltc4306: use new GPIO line value setter callbacks
+To: Peter Rosin <peda@axentia.se>, Wolfram Sang <wsa@the-dreams.de>, 
+	Andi Shyti <andi.shyti@kernel.org>
+Cc: Michael Hennerich <michael.hennerich@analog.com>, Linus Walleij <linus.walleij@linaro.org>, 
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, 
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
---nextPart12651876.O9o76ZdvQC
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="utf-8"; protected-headers="v1"
-From: Romain Gantois <romain.gantois@bootlin.com>
-Date: Thu, 24 Apr 2025 09:10:43 +0200
-Message-ID: <2778486.mvXUDI8C0e@fw-rgant>
-In-Reply-To: <9cd0c3cc-9f3c-4a3e-9080-c832def8f317@ideasonboard.com>
-MIME-Version: 1.0
+On Mon, Apr 7, 2025 at 10:08=E2=80=AFAM Peter Rosin <peda@axentia.se> wrote=
+:
+>
+> Hi!
+>
+> 2025-04-07 at 09:17, Bartosz Golaszewski wrote:
+> > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> >
+> > struct gpio_chip now has callbacks for setting line values that return
+> > an integer, allowing to indicate failures. Convert the driver to using
+> > them.
+> >
+> > Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> > ---
+> > Peter: I know you've not been very active recently. If you prefer to
+> > just Ack it and let me take it through the GPIO tree, please do.
+>
+> What normally happens is that I just Ack trivial things like this, and
+> then either Wolfram or Andi picks it. The risk of future conflicts in
+> this area (and cycle) should be low, so I don't think it really matters
+> if you pick it, but Wolfram/Andi should have first dibs, since it makes
+> for slightly neater PRs during the merge window.
+>
+> Acked-by: Peter Rosin <peda@axentia.se>
+>
 
-On Thursday, 24 April 2025 08:32:22 CEST Tomi Valkeinen wrote:
-> Hi,
-> 
-> On 23/04/2025 20:29, Dan Carpenter wrote:
-> > On Wed, Apr 23, 2025 at 05:25:44PM +0200, Romain Gantois wrote:
-> >> Hello Dan,
-> >> 
-> >> On Wednesday, 23 April 2025 10:21:18 CEST Dan Carpenter wrote:
-> >>> When the list_for_each_entry_reverse() exits without hitting a break
-> >>> then the list cursor points to invalid memory.  So this check for
-> >>> if (c2a->fixed) is checking bogus memory.  Fix it by using a "found"
-> >>> variable to track if we found what we were looking for or not.
-> >> 
-> >> IIUC the for loop ending condition in list_for_each_entry_reverse() is
-> >> "!list_entry_is_head(pos, head, member);", so even if the loop runs to
-> >> completion, the pointer should still be valid right?
-> > 
-> > head is &chan->alias_pairs.  pos is an offset off the head.  In this
-> > case, the offset is zero.  So it's &chan->alias_pairs minus zero.
-> > 
-> > So we exit the list with c2a = (void *)&chan->alias_pairs.
-> > 
-> > If you look how struct i2c_atr_chan is declareted the next struct member
-> > 
-> > after alias_pairs is:
-> > 	struct i2c_atr_alias_pool *alias_pool;
-> > 
-> > So if (c2a->fixed) is poking around in the alias_pool pointer.  It's not
-> > out of bounds but it's not valid either.
-> 
-> Maybe it's just me, but I had hard time following that explanation. So
-> here's mine:
-> 
-> The list head (i2c_atr_chan.alias_pairs) is not a full entry, it's just
-> a struct list_head. When the for loop runs to completion, c2a doesn't
-> point to a struct i2c_atr_alias_pair, so you can't access c2a->fixed.
+I just realized their emails didn't pop up in b4 --auto-to-cc. Cc'ed
+now. Wolfram, Andi: do you want to pick it up or should I take it via
+the GPIO tree?
 
-Ah I see, in that case thanks for the fix Dan!
-
-Reviewed-by: Romain Gantois <romain.gantois@bootlin.com>
-
---nextPart12651876.O9o76ZdvQC
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEYFZBShRwOvLlRRy+3R9U/FLj284FAmgJ4/MACgkQ3R9U/FLj
-286FVQ/8DWmGsioZ0zngygJdrvQPd3X3Sf3Kd/9u0lB5kzV4sTCbc3yY5dug60Jm
-ol0peHRedrLQCyudxFWTnjkM/LTgdZ7plaUtOJox8tvPD1lyvcfGLwzl67xM+7Re
-PMqhyZNB2tClFQpUC7/buQjJdo5MzOZSmbl3TtLzz0+NB0sCeVw6XwIqvc+KWz92
-QfP7Ni8X65mdqWuT4faAAV0PCkZeBknh8v1He6MnKsjXxOaJ0yO/6IUYUl8COJS/
-22CIjOHNI3ZgfDzg11bEDI/qaHbuuWv7Ke1np6wLyOhD26sqoCP5TQUGA7Fw/c+H
-V0TQB/08nW13SDHdtB6LgbnCvri59paDJM5gMyUwVMxYOLHPN3u+VXIxSpRc/6aC
-1N62+xZ7SRf/TkoEfxeZILnQib5m8GyvjR1PRhMi7QIgdXFfbH+g2j/BTNQmup/0
-1o7Q+Z90Hi3OSoR5Bviktk8eLh00C0H+pPk7V03b0oh4xx7KVzGXYikeIV9jp/+U
-gkzeLCCVAFjM2wm/DYwGos+Ys2zNWUjb1C7KJlCP2Fl/JGCQO9txPO1BZ3pRrRyf
-/oXcI5tpTj3x5oZpuIdPZzpOZjS4LvHojFkvUBNFP3JO9r8GHaLeoA4X+UknqN1r
-gH73eOfSbUFAPDwDiuOG3hxte9WOdKiIZ8Fcb6pRgk+p9HnCDHs=
-=pYya
------END PGP SIGNATURE-----
-
---nextPart12651876.O9o76ZdvQC--
-
-
-
+Bartosz
 
