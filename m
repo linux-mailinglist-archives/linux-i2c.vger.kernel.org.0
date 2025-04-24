@@ -1,179 +1,155 @@
-Return-Path: <linux-i2c+bounces-10605-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10606-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA10DA9A072
-	for <lists+linux-i2c@lfdr.de>; Thu, 24 Apr 2025 07:34:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD769A9A23F
+	for <lists+linux-i2c@lfdr.de>; Thu, 24 Apr 2025 08:33:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D72D24429A2
-	for <lists+linux-i2c@lfdr.de>; Thu, 24 Apr 2025 05:34:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 848E51942539
+	for <lists+linux-i2c@lfdr.de>; Thu, 24 Apr 2025 06:32:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D304019D07E;
-	Thu, 24 Apr 2025 05:34:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02D301DA0E0;
+	Thu, 24 Apr 2025 06:32:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="smiVdXAN"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="J0WOX4ef"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2040.outbound.protection.outlook.com [40.107.92.40])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 198A58F5C;
-	Thu, 24 Apr 2025 05:34:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.40
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745472844; cv=fail; b=GF+Oz9OLhmXb1H117dTYYiCSYCfkAldGxs0gWipn4wsRhvbuFeT7QBKbPcpyuo4Eqscn+TO7QCGwSRHSfaa9dAk4YIoJjoPN1G8f/Jg0hFuElt9R9gGI/eMQN9Xoh8wClj9DPZ9yHf30H8RHmf+nVktcZ7UPaBc/5JXSMnb75pM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745472844; c=relaxed/simple;
-	bh=zx3XgtaqzjznZauA83EPjORemynJVQ60sMi95/78lkE=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=OC3ZJ0vzsI7akRMO3AKNtW9bxrVylEGC5adKfjFF5WwTWo3VrLBpjn4yIwxguc5OaVcY0aQ2imFNvbTg/2DuYEIZTXxQ3BJ/fcHbX3Uw5kGyclTnA8TUkDXsNTvr5pySYBMeFEDq2cpQ2uh4iIHQ0RDz8DrPjkTUMwDixAxXoEk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=smiVdXAN; arc=fail smtp.client-ip=40.107.92.40
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=JM99ATB19EYzcuzkaUXF7PpKJMGYl8nQ70JimN3kacygOQb0LMknUqmfTI7qfhCuop7fUsh5QIk/DTiOLZ32sVAW6hY5n9mJn90NAf/vK7sNgaIfEaOJc+kJBy9hpx9ByPWAawjvcDTlANqnRxPB18BRwDLHVqw05kuvYuIYZDj2SRDm0y4J1wRj3W3/z9uhl78BNYulUN+5XJ4fsYnfKJVPoiIq/s+fQyOjswOaJgt/zGSOzdtptpwy4lyCBufC54zmZOua2kcdtVqxQTiLURQ1zMy8RoLmxPK3r5NWizHvkj70wZIXikd9SQgGtemIaFQGBMlONw5i3101fYYJfQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=AnN2auT+5LLEeLzgKurinturUTdahwXIL4XZLKFRx5g=;
- b=IRbAHLtBI7JHexku06nUOFlCRjr5zizUeTEQ3IYKK+1l3oNDfw09x4IBfFbDHwcrJ1IfxsF19c0K+8yOJWK0B/bQhyEYJ5MfHKKZ88KEenwlSr+3+mj+adzg6jn22bAu6wyqXuu54Q9cH/nul/h4lUdIw4R9Y0LMVfnhyylKP5m/CvNRTZK13V23bcOluHqdTrIJ3w1rdSct9T4/Vq0k8RoseGJnaEMgzPdfCzUj5M4WO1S1vwaXV9CNXCSRhewM3QbnqmGjV/Y+bkMKPZCKpicRSyb1IdpWvYJVKXdNOdiSNlOH6sSHkAEgGcWzdrr/Ga9RS8nG53iWmkLgukyGiQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AnN2auT+5LLEeLzgKurinturUTdahwXIL4XZLKFRx5g=;
- b=smiVdXANZOw+QtWlRC6R0PfeoVMyRekyXy8C8AkNlH7idMEcBA+5atsxoOvU07xKW0AvCw3lTrF1rTUoP/orCFuFUZZWnrcCCE8zwf98N3BFldVn63YTl6BnJtA5yrMkenJ95NgjGkP2oKZcxAxCxBXLavQkleurn4ebMz8hpduhJvGa8qJ1HxtYTqcbpYM24Jlxn5L/HKvetJT0hA+BKbrvOiceohDe6iHDslH8cM03l8eYdqV5aPsBGU/510RcWBjurj8xXSomFlWhURrLzu8VjbMr3Sxt5Gau/UZ0STTVb/Pdb0W/cyTz9iPPFX9XXTvQR4ttukFObCc60a1Y8g==
-Received: from MW3PR06CA0005.namprd06.prod.outlook.com (2603:10b6:303:2a::10)
- by CH3PR12MB8969.namprd12.prod.outlook.com (2603:10b6:610:17c::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8655.36; Thu, 24 Apr
- 2025 05:33:58 +0000
-Received: from MWH0EPF000989E7.namprd02.prod.outlook.com
- (2603:10b6:303:2a:cafe::28) by MW3PR06CA0005.outlook.office365.com
- (2603:10b6:303:2a::10) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8655.36 via Frontend Transport; Thu,
- 24 Apr 2025 05:33:57 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- MWH0EPF000989E7.mail.protection.outlook.com (10.167.241.134) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8655.12 via Frontend Transport; Thu, 24 Apr 2025 05:33:57 +0000
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 23 Apr
- 2025 22:33:39 -0700
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail203.nvidia.com
- (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Wed, 23 Apr
- 2025 22:33:38 -0700
-Received: from BUILDSERVER-IO-L4T.nvidia.com (10.127.8.9) by mail.nvidia.com
- (10.129.68.6) with Microsoft SMTP Server id 15.2.1544.14 via Frontend
- Transport; Wed, 23 Apr 2025 22:33:35 -0700
-From: Akhil R <akhilrajeev@nvidia.com>
-To: <ldewangan@nvidia.com>, <digetx@gmail.com>, <andi.shyti@kernel.org>,
-	<thierry.reding@gmail.com>, <jonathanh@nvidia.com>, <wsa@kernel.org>,
-	<linux-i2c@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-CC: Akhil R <akhilrajeev@nvidia.com>, Thierry Reding <treding@nvidia.com>
-Subject: [PATCH v2 RESEND] i2c: tegra: check msg length in SMBUS block read
-Date: Thu, 24 Apr 2025 11:03:20 +0530
-Message-ID: <20250424053320.19211-1-akhilrajeev@nvidia.com>
-X-Mailer: git-send-email 2.43.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFFFF1A2564;
+	Thu, 24 Apr 2025 06:32:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1745476350; cv=none; b=RsnXpOISgR2JF1i8bGPhqmCZ0xOmim/80yNpEqjJSy9hM8BBA+C8HAphz0MBfGz5C39WChMvhNs9au8sI+8DQoYfMqULUxrhkZot3sHO0nbWSpkystHdNa7pfOKLm36vXZDTtMf7zgUnrIOXBFCeo/TKt4zqWks+NpkdZN1WjO8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1745476350; c=relaxed/simple;
+	bh=liyLOHEfidVTyWtRf+MLB60Y1iLLOVmBw2oiN28abxY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=O7li+0Z8ufPrS7IsLkoPIf6AYiItJyXI+YLCnGk0GhWh4sDHdlvDuvxDHrj6vTWVD0UzOJKcZIE2iKCj52YKotDW7FJNM+CnJBJGpDpy9dbk16+Sl98JTSNeGlGEQxVoyFWSIGAXoZmMeD8Y2ktcN/cEZyQFrxwzyPUp1EUu+vg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=J0WOX4ef; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+Received: from [192.168.88.20] (91-158-153-178.elisa-laajakaista.fi [91.158.153.178])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 93EE59CE;
+	Thu, 24 Apr 2025 08:32:23 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1745476344;
+	bh=liyLOHEfidVTyWtRf+MLB60Y1iLLOVmBw2oiN28abxY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=J0WOX4efldDHhA54s9NegRnXYRg4BEGkNNnyX3Ki6WBkH6IfYCP4iJeQMQgTbf3ZN
+	 1haGrB6KgxZ1q+oLXFeaeRNG99mHtD3RCbc+DF9KYGo4kQ9gM1iOtTdVPeBFf/oy98
+	 Emgkqk5Pag9o6Yg8m4loaLH9EffMIOLCJbwdPh6c=
+Message-ID: <9cd0c3cc-9f3c-4a3e-9080-c832def8f317@ideasonboard.com>
+Date: Thu, 24 Apr 2025 09:32:22 +0300
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-NVConfidentiality: public
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-NV-OnPremToCloud: AnonymousSubmission
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWH0EPF000989E7:EE_|CH3PR12MB8969:EE_
-X-MS-Office365-Filtering-Correlation-Id: 77359d3c-a66a-425b-d4e1-08dd82f19c34
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|36860700013|82310400026|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?MwATC47g3drs+xdXbC8iyd2lqn7/ShB3qqVFbYbDMCwHxQ6l2OejNUxg+O5W?=
- =?us-ascii?Q?xHFwlJtu4xeQuRVNSg+ObjiCVNmd1vBe75vtMnw+EdJyi67um4PszuTNFpmJ?=
- =?us-ascii?Q?W6Be0FMomwk4zi3Btk5Kv5g8X4YriWJyTaeqgsMDaKbqBrfOlDiLJ6vFkBho?=
- =?us-ascii?Q?T3SWwa+Rbh8v0xDshEF44eVR0NDQ05vOJoK4L6FOaBzjlzbpoi5u7ObGNsYx?=
- =?us-ascii?Q?UIjHjKmXRv71DaRhSn3f08LKDhxx1zfoQdWCQLIPmyMFXGWTYQ5DPVRMF2NU?=
- =?us-ascii?Q?sNisPd2Zss3qU2dLdIS3InDZC+0Hx+hZrq3NRe/TmFs+Cj4nSEWaG0Kxsb1Q?=
- =?us-ascii?Q?fFYAZ9y+JY4q+6IWbzECWa5mhpJUIoG8xahnheoyI6zR/GhH0XrCHvJSMRLd?=
- =?us-ascii?Q?4C9qPJIkfLa8kv7W09HWFMFqvCCsc/F2QmvCy68qM8m1A9d439v3Mm5ZBguK?=
- =?us-ascii?Q?RHS9/G7RdpXKALGm0TVPvFLgbnkK2pQVk3nguv4n8x8l3h3/LQNhYY0EOJj+?=
- =?us-ascii?Q?3hgX4hIoxNK9QL98L8LeCW0eS21T2zXRLxmMgRz2Ipj9MihH5rVjq4Bfk2YL?=
- =?us-ascii?Q?t0SS0zLflZJE8s8usfvRPnQrIYHmjXGKtkU4S41AtWZxSVDKv+CzzNjboKQi?=
- =?us-ascii?Q?+BDweEaAG56BsT3C4QicTNAu4+ekSdMtl46EYLpmqNhrby6aCWIU7+0BGpLM?=
- =?us-ascii?Q?L5uvjmhjdle+pvii/MZSD09lobiY/gXrbaYfLhnZ83oaYiUWEWkV+RC9LIuA?=
- =?us-ascii?Q?8RPeKWwoZIgrTSlvDAcgPf4sqWRCReMgSXgkCJZ/JuO4+pzP81AEdQ/ti8Gg?=
- =?us-ascii?Q?vjwfF+mng23Ckn1PWgYZfdmOvK7Jj29ymxQl+5vYoLfNoJdKA+7Kns8NMYw2?=
- =?us-ascii?Q?P5SQ7s1JdTihwbnC6oImPcxMly2fRf0xOb31nl89hm+Csm++8QOyY1U/NPv4?=
- =?us-ascii?Q?/zCBs413VlUDL4Uesb085RHIxCGI1Em0VsT0j9u0rUPFpo2ObJlkjKDfmron?=
- =?us-ascii?Q?4tfrGRyEvrmWF210kLtAVo0WDcjOM8kOhf3gHlRGexB7B2V9GvCVWm86NKVk?=
- =?us-ascii?Q?DurF4E3MIdTr5T2LVnehHuOGBE19u3VRCxhyBxubGylbuzdTT9h7reCRhyes?=
- =?us-ascii?Q?jhvYSykJRFCdR1IBBQkoRlDPeoZr97BzjP3nmElQtf4EsdatL7YRrYhb470V?=
- =?us-ascii?Q?sFeNef6NNDNT/U/5Q3I52xMeFt7Zn7V0ZOZW87aPzmemeQ3k49TA6t51QGgn?=
- =?us-ascii?Q?Dl6mydji59LvKEz8dJsfMQeFD00eE1kloTRdq1KekFVB8erO+fpNN4DL0Toh?=
- =?us-ascii?Q?qetBIhO7wEKks8z9QeshoZZRWbiW+AodtlQyrSsMHlULEvMDKOQkYDl6JBVZ?=
- =?us-ascii?Q?7d4LRb9RGSb8RFNMUamt6xsZN74IsibOOGhiFBE7ZHFXz7/+RpnQA+FmQvgV?=
- =?us-ascii?Q?/JyAhYujvlYWbF3Fls5UjpEsi/qPYwoiQmic3QVWFaNVZzHkGyCh8sQX1Wzd?=
- =?us-ascii?Q?wSEj8dM5os3QApX5uOVaLA71M7Mj4ZPpkC8a?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(36860700013)(82310400026)(376014);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Apr 2025 05:33:57.4966
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 77359d3c-a66a-425b-d4e1-08dd82f19c34
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	MWH0EPF000989E7.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8969
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH next] i2c: Fix end of loop test in
+ i2c_atr_find_mapping_by_addr()
+To: Dan Carpenter <dan.carpenter@linaro.org>,
+ Romain Gantois <romain.gantois@bootlin.com>
+Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>,
+ Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
+ linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+References: <aAii_iawJdptQyCt@stanley.mountain> <2427370.em1n7HOibB@fw-rgant>
+ <a22d74b9-06b1-4a4b-9c06-4b0ff7f9b6c2@stanley.mountain>
+Content-Language: en-US
+From: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Autocrypt: addr=tomi.valkeinen@ideasonboard.com; keydata=
+ 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
+In-Reply-To: <a22d74b9-06b1-4a4b-9c06-4b0ff7f9b6c2@stanley.mountain>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-For SMBUS block read, do not continue to read if the message length
-passed from the device is '0' or greater than the maximum allowed bytes.
+Hi,
 
-Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
-Acked-by: Thierry Reding <treding@nvidia.com>
----
-v1->v2: Add check for the maximum data as well.
+On 23/04/2025 20:29, Dan Carpenter wrote:
+> On Wed, Apr 23, 2025 at 05:25:44PM +0200, Romain Gantois wrote:
+>> Hello Dan,
+>>
+>> On Wednesday, 23 April 2025 10:21:18 CEST Dan Carpenter wrote:
+>>> When the list_for_each_entry_reverse() exits without hitting a break
+>>> then the list cursor points to invalid memory.  So this check for
+>>> if (c2a->fixed) is checking bogus memory.  Fix it by using a "found"
+>>> variable to track if we found what we were looking for or not.
+>>
+>> IIUC the for loop ending condition in list_for_each_entry_reverse() is
+>> "!list_entry_is_head(pos, head, member);", so even if the loop runs to
+>> completion, the pointer should still be valid right?
+>>
+> 
+> head is &chan->alias_pairs.  pos is an offset off the head.  In this
+> case, the offset is zero.  So it's &chan->alias_pairs minus zero.
+> 
+> So we exit the list with c2a = (void *)&chan->alias_pairs.
+> 
+> If you look how struct i2c_atr_chan is declareted the next struct member
+> after alias_pairs is:
+> 
+> 	struct i2c_atr_alias_pool *alias_pool;
+> 
+> So if (c2a->fixed) is poking around in the alias_pool pointer.  It's not
+> out of bounds but it's not valid either.
 
- drivers/i2c/busses/i2c-tegra.c | 5 +++++
- 1 file changed, 5 insertions(+)
+Maybe it's just me, but I had hard time following that explanation. So 
+here's mine:
 
-diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
-index 87976e99e6d0..049b4d154c23 100644
---- a/drivers/i2c/busses/i2c-tegra.c
-+++ b/drivers/i2c/busses/i2c-tegra.c
-@@ -1395,6 +1395,11 @@ static int tegra_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[],
- 			ret = tegra_i2c_xfer_msg(i2c_dev, &msgs[i], MSG_END_CONTINUE);
- 			if (ret)
- 				break;
-+
-+			/* Validate message length before proceeding */
-+			if (msgs[i].buf[0] == 0 || msgs[i].buf[0] > I2C_SMBUS_BLOCK_MAX)
-+				break;
-+
- 			/* Set the msg length from first byte */
- 			msgs[i].len += msgs[i].buf[0];
- 			dev_dbg(i2c_dev->dev, "reading %d bytes\n", msgs[i].len);
--- 
-2.43.2
+The list head (i2c_atr_chan.alias_pairs) is not a full entry, it's just 
+a struct list_head. When the for loop runs to completion, c2a doesn't 
+point to a struct i2c_atr_alias_pair, so you can't access c2a->fixed.
+
+For the patch:
+
+Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+
+  Tomi
 
 
