@@ -1,271 +1,136 @@
-Return-Path: <linux-i2c+bounces-10636-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10637-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 201CAA9DD21
-	for <lists+linux-i2c@lfdr.de>; Sat, 26 Apr 2025 22:35:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7C92A9DF4A
+	for <lists+linux-i2c@lfdr.de>; Sun, 27 Apr 2025 08:16:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 595393AB988
-	for <lists+linux-i2c@lfdr.de>; Sat, 26 Apr 2025 20:34:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 629753B3B7B
+	for <lists+linux-i2c@lfdr.de>; Sun, 27 Apr 2025 06:16:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92B671B0F33;
-	Sat, 26 Apr 2025 20:35:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5260C23770D;
+	Sun, 27 Apr 2025 06:16:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RfKLc7ae"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from 5.mo584.mail-out.ovh.net (5.mo584.mail-out.ovh.net [188.165.44.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f194.google.com (mail-pg1-f194.google.com [209.85.215.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 512291A256E
-	for <linux-i2c@vger.kernel.org>; Sat, 26 Apr 2025 20:35:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.165.44.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9C2C2376E6;
+	Sun, 27 Apr 2025 06:16:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745699710; cv=none; b=Z3P7FCUJSVgR6pdy6OTOVNnh5gTSeZtw8Sbx1cejDl8xRSM2uqHkjXGHXLgzoFVGq7kjyuEB3RZYBab/pM5IphoLug+l/tCYt5unrkEwajNL5mpABA9R+jJsoEdeQYyy7QYG99YvGrt0suM2OhAmGpgKqvEG7jSZUX5bKZghqI0=
+	t=1745734583; cv=none; b=WtsIdtAagAPPiGnlw2wqo9hAcOw66YiUIA+qzsyQdckOG9K2SJ9H728VDGGbYK1jRmRhGbD6elAMPo3+5eYry7PAl92R81jzO8mE/AFlZ87coKKT4tKuFopqq+xlghNyF/6awFZC7fQxJxkX7MjhFSC7Qky3PxEFl0ES9P7W9UU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745699710; c=relaxed/simple;
-	bh=LJbb8Cz77i/6Uh6ECZb6yKAqgpAu34nfZfypyzSg9a0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uGgFg+Cmsi9CXpu0RUCMbKFzg5ICjPq4tcokGyiNUFjPq83ghvTJARJDP/JUbHqMHn+KYbXLrvRJoi9uajQeNzxDlDKf8s63mjAMtDf3PU6aRVNl7ktElSh+ay01fWEJ4nAEqYpGLP9ujPk8N6NrYMOnbizy4h1UHmkcEynunRw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=etezian.org; arc=none smtp.client-ip=188.165.44.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etezian.org
-Received: from director1.ghost.mail-out.ovh.net (unknown [10.109.140.54])
-	by mo584.mail-out.ovh.net (Postfix) with ESMTP id 4ZlLfT0pmWz1Rtk
-	for <linux-i2c@vger.kernel.org>; Sat, 26 Apr 2025 20:19:45 +0000 (UTC)
-Received: from ghost-submission-5b5ff79f4f-7ffsh (unknown [10.111.174.233])
-	by director1.ghost.mail-out.ovh.net (Postfix) with ESMTPS id B271A1FE48;
-	Sat, 26 Apr 2025 20:19:44 +0000 (UTC)
-Received: from etezian.org ([37.59.142.102])
-	by ghost-submission-5b5ff79f4f-7ffsh with ESMTPSA
-	id x3iFGeA/DWgpMQAAVaAaLw
-	(envelope-from <andi@etezian.org>); Sat, 26 Apr 2025 20:19:44 +0000
-Authentication-Results:garm.ovh; auth=pass (GARM-102R0049db3968a-746d-4132-a2e2-2a63eec7556b,
-                    2A76D30921F14D4573FDC1C3147F166593CB1B6B) smtp.auth=andi@etezian.org
-X-OVh-ClientIp:178.39.90.92
-From: Andi Shyti <andi.shyti@kernel.org>
-To: linux-i2c <linux-i2c@vger.kernel.org>
-Cc: Andi Shyti <andi.shyti@kernel.org>,
-	Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-Subject: [PATCH v2 08/10] i2c: iproc: Move function and avoid prototypes
-Date: Sat, 26 Apr 2025 22:19:20 +0200
-Message-ID: <20250426201920.272135-1-andi.shyti@kernel.org>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <6d3ac68e-d4de-4ea3-bfee-b4ac43e5ed1d@quicinc.com>
-References: <6d3ac68e-d4de-4ea3-bfee-b4ac43e5ed1d@quicinc.com>
+	s=arc-20240116; t=1745734583; c=relaxed/simple;
+	bh=DtaW7OP2HYTPn66Jo2Rzozz1dqRdlYrtqq0+MD41MKA=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=aAZAqvU4hljU+vbNEQ0myx8qdQuEVZ8Nu2WoSsAPFzE+kGx3pY47WRI8wSMBJTHEo5NNn6hDL8OIwzCcgvkT2WcoAnI2Wao9gsv4k/dUgJLnQp0UZXFWTTkWyjbLsSLUi8BRpnucaBOkb02uRNgl0uY2azkjrk/fLe3K8UYiSjg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RfKLc7ae; arc=none smtp.client-ip=209.85.215.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f194.google.com with SMTP id 41be03b00d2f7-af9a6b3da82so2373949a12.0;
+        Sat, 26 Apr 2025 23:16:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1745734579; x=1746339379; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=sVkOXl+FItqnBG4PWwNvXOPdmDOL8HuWkGunCwBr2+Y=;
+        b=RfKLc7aeBoqMFB20O9dG2TGIxdUPTBQKy5wvpZCsTaJRSHy4Jokg+xLR7wmfSbUcmS
+         Q8d7ClF5L+DRlrsyVAMmtAZlW+jgIQ5/JqCdH/0Uvfk2hU5h32OMZT/9He7/yldXzSgX
+         tyacy2ao6Zf8cmausLSDM2qEUPCP/2V9fVLySCfiPRL4i1ovwYbL9O+2VInTJ4erw+ZS
+         UuGyYGBWyY4vN6xMZs9kPH5SU0EfhYXn2wg/MtQ9KiNrcg4Xpoan6f0TmCK7tQ87lsEM
+         1FLuPOQ3q5C7n6FPKXxa6KWXHPVAPK+21Z/7yJU3PWZLLk3t1IOda9XYHrnqTlXVoxGo
+         ezog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745734579; x=1746339379;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sVkOXl+FItqnBG4PWwNvXOPdmDOL8HuWkGunCwBr2+Y=;
+        b=hgLGbYn+d2DL01YCsEpofNvQV7ROV4XhpASwj3zaKzVxbLPTJKGDENNdiXq2w/uowd
+         1wWLkwy2K6mSQNpTKcXUzpamRnbkHJBPkGO9SPZMTWeurmkhLNjLTpWyDEjp0BZCi029
+         H5NveiB8oMwknOK/n3VFSj3mSUcrMDBEwYa3nYuDDWtgfOIe2xash/2TDJrDB2WnwU6G
+         dOni9VZalYx0R1grjJ25KmsbwxJoUxyuFO+FNgIG3k1DpB4IZUFPibdcFUP7xbGlnT01
+         1EoEivaHreHtT54FqX2MD6lQzq72mETUbveUMv8fiFbNG3tTB0Tj3sgIkuTp65yb/3mJ
+         9LqQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWoHo9Ph6/JEK+/tMMkHqDgmNRmk20TGB5d6osjVRStiYvy5iaTloYBKTV7sEbGl9xXsH323e+FmyYo7E8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzyaT215majCRgluZHle83XRLhaY/O0NjRUtgzAb2Pmw069wbXs
+	NVojYTPuojjHiOl/O33cqVYECGCUNFE1ooKasdYPh3eM3+PvTKJhEPY6dNMGkKVVfaZM
+X-Gm-Gg: ASbGnctwWiYqSTELgBGMAxq089q7LhNkyVT5ObaUkrMV6hZ6OSs0xb/4iclcDQO4d4R
+	o8DXn4Hx4MhUXvx8DtuDgCFEPfF5vJqbaDNhggUQAToi8Zce8Ezti43CUGn4fo557FV0SZ6LxaZ
+	yYaHb0OMZgzYiGGFOfRNT2xL5Wh2pjwYqvyRIP8b8fVT1mz7NJ4iJ5DkR3u63wEWXJJ1kyKhqqd
+	qP+ceNik+Qh4VdbjRY7dqvf9+MM5UM5EpkmI++G58Bj8b5ZfJLANjfFirreWkzWz+F4rKNt8on4
+	YXfRQrJrJ0zUfdbBmfaoDwWDsPt8Y8JQVLA=
+X-Google-Smtp-Source: AGHT+IGBhNvZrPFXBrP6EMdlDeC9iJtG6LNBbpfeI0Y349BALjf9LLYTf9Dnt8oACeh5pZIUz91ILQ==
+X-Received: by 2002:a17:90b:3a0e:b0:305:2d68:8d39 with SMTP id 98e67ed59e1d1-309f7ddd52dmr14596177a91.12.1745734578705;
+        Sat, 26 Apr 2025 23:16:18 -0700 (PDT)
+Received: from [127.0.1.1] ([2a0d:2683:c100::bf])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-309f782d461sm5080287a91.39.2025.04.26.23.16.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 26 Apr 2025 23:16:18 -0700 (PDT)
+From: Troy Mitchell <troymitchell988@gmail.com>
+Subject: [PATCH v2 0/2] i2c: imx: adapting the mainline
+Date: Sun, 27 Apr 2025 14:16:08 +0800
+Message-Id: <20250427-i2c-imx-update-v2-0-d312e394b573@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 4602960295764626024
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: 0
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvheeiudegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucenucfjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeetnhguihcuufhhhihtihcuoegrnhguihdrshhhhihtiheskhgvrhhnvghlrdhorhhgqeenucggtffrrghtthgvrhhnpefgudevjeetgeetlefhteeuteehgeefhefhkedtvdelheethfehveekudelueeuveenucfkphepuddvjedrtddrtddruddpudejkedrfeelrdeltddrledvpdefjedrheelrddugedvrddutddvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpegrnhguihesvghtvgiiihgrnhdrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhivdgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehkeegmgdpmhhouggvpehsmhhtphhouhht
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAKjLDWgC/3XMywqDMBCF4VeRWXeKkzQqXfU9igvJjDpQLyRWL
+ OK7N3Xf5X/gfDtECSoR7tkOQVaNOo0pzCUD3zdjJ6icGkxuXH4zhGo86rDhe+ZmEWQiLgrmqpQ
+ K0mkO0up2gs86da9xmcLn9Ff6rX+plTBHIlu21Fpn2T26odHX1U8D1MdxfAGDSpRyrAAAAA==
+To: Oleksij Rempel <o.rempel@pengutronix.de>, 
+ Pengutronix Kernel Team <kernel@pengutronix.de>, 
+ Andi Shyti <andi.shyti@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
+ Sascha Hauer <s.hauer@pengutronix.de>, Fabio Estevam <festevam@gmail.com>
+Cc: linux-i2c@vger.kernel.org, imx@lists.linux.dev, 
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ Troy Mitchell <troymitchell988@gmail.com>, Yongchao Jia <jyc0019@gmail.com>, 
+ Frank Li <Frank.Li@nxp.com>, Ahmad Fatoum <a.fatoum@pengutronix.de>
+X-Mailer: b4 0.14.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1745734572; l=1057;
+ i=troymitchell988@gmail.com; h=from:subject:message-id;
+ bh=DtaW7OP2HYTPn66Jo2Rzozz1dqRdlYrtqq0+MD41MKA=;
+ b=UQtKorS1lD5nKkZmkn2u6pSa0dlWJkQzqKzsVPpcbHAb8Slpn66/D3G0oDkLFVwsW3schQyFm
+ P7g6OrbvRz9CPWLOHqVmAs8/0owueY6zScF+rcKWD8vSwBXI/eVJbrO
+X-Developer-Key: i=troymitchell988@gmail.com; a=ed25519;
+ pk=2spEMGBd/Wkpd36N1aD9KFWOk0aHrhVxZQt+jxLXVC0=
 
-Shuffle a bit the code in order to avoid prototypes.
+Since this patch[1], we have new callback function names.
+Since this patch[2], we can use `guard` to call `spin_lock_irqsave`
+and release this lock when it goes out of scope.
 
-Signed-off-by: Andi Shyti <andi.shyti@kernel.org>
+Link:
+https://lore.kernel.org/all/20240706112116.24543-2-wsa+renesas@sang-engineering.com/ [1]
+https://lore.kernel.org/all/20250227221924.265259-10-lyude@redhat.com/ [2]
+
+Signed-off-by: Troy Mitchell <troymitchell988@gmail.com>
 ---
-Hi,
+Changes in v2:
+- Add more details in the commit message
+- Drop a useless variable
+- Refactor the logic of i2c_imx_isr function
+- Link to v1: https://lore.kernel.org/r/20250421-i2c-imx-update-v1-0-1137f1f353d5@gmail.com
 
-as I am moving the functions, I can take the chance to fix the
-two style issues that Mukesh has pointed out:
+---
+Troy Mitchell (2):
+      i2c: imx: use guard to take spinlock
+      i2c: imx: drop master prefix
 
- - Leave a blank line before the return.
- - Arrange variable declaration in a reverse xmas tree alignment.
+ drivers/i2c/busses/i2c-imx.c | 43 ++++++++++++++++++++-----------------------
+ 1 file changed, 20 insertions(+), 23 deletions(-)
+---
+base-commit: 9d7a0577c9db35c4cc52db90bc415ea248446472
+change-id: 20250421-i2c-imx-update-d11d66dd87e8
 
-Thanks Mukesh,
-Andi
-
- drivers/i2c/busses/i2c-bcm-iproc.c | 144 ++++++++++++++---------------
- 1 file changed, 70 insertions(+), 74 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-bcm-iproc.c b/drivers/i2c/busses/i2c-bcm-iproc.c
-index d25b393f456b..4553225d7cdd 100644
---- a/drivers/i2c/busses/i2c-bcm-iproc.c
-+++ b/drivers/i2c/busses/i2c-bcm-iproc.c
-@@ -224,11 +224,6 @@ static void slave_rx_tasklet_fn(unsigned long);
- 		| BIT(IS_S_TX_UNDERRUN_SHIFT) | BIT(IS_S_RX_FIFO_FULL_SHIFT)\
- 		| BIT(IS_S_RX_THLD_SHIFT))
- 
--static int bcm_iproc_i2c_reg_slave(struct i2c_client *slave);
--static int bcm_iproc_i2c_unreg_slave(struct i2c_client *slave);
--static void bcm_iproc_i2c_enable_disable(struct bcm_iproc_i2c_dev *iproc_i2c,
--					 bool enable);
--
- static inline u32 iproc_i2c_rd_reg(struct bcm_iproc_i2c_dev *iproc_i2c,
- 				   u32 offset)
- {
-@@ -316,6 +311,19 @@ static void bcm_iproc_i2c_slave_init(struct bcm_iproc_i2c_dev *iproc_i2c,
- 	iproc_i2c_wr_reg(iproc_i2c, IE_OFFSET, val);
- }
- 
-+static void bcm_iproc_i2c_enable_disable(struct bcm_iproc_i2c_dev *iproc_i2c,
-+					 bool enable)
-+{
-+	u32 val;
-+
-+	val = iproc_i2c_rd_reg(iproc_i2c, CFG_OFFSET);
-+	if (enable)
-+		val |= BIT(CFG_EN_SHIFT);
-+	else
-+		val &= ~BIT(CFG_EN_SHIFT);
-+	iproc_i2c_wr_reg(iproc_i2c, CFG_OFFSET, val);
-+}
-+
- static bool bcm_iproc_i2c_check_slave_status
- 	(struct bcm_iproc_i2c_dev *iproc_i2c, u32 status)
- {
-@@ -707,19 +715,6 @@ static void bcm_iproc_i2c_init(struct bcm_iproc_i2c_dev *iproc_i2c)
- 	iproc_i2c_wr_reg(iproc_i2c, IS_OFFSET, 0xffffffff);
- }
- 
--static void bcm_iproc_i2c_enable_disable(struct bcm_iproc_i2c_dev *iproc_i2c,
--					 bool enable)
--{
--	u32 val;
--
--	val = iproc_i2c_rd_reg(iproc_i2c, CFG_OFFSET);
--	if (enable)
--		val |= BIT(CFG_EN_SHIFT);
--	else
--		val &= ~BIT(CFG_EN_SHIFT);
--	iproc_i2c_wr_reg(iproc_i2c, CFG_OFFSET, val);
--}
--
- static int bcm_iproc_i2c_check_status(struct bcm_iproc_i2c_dev *iproc_i2c,
- 				      struct i2c_msg *msg)
- {
-@@ -988,6 +983,63 @@ static u32 bcm_iproc_i2c_functionality(struct i2c_adapter *adap)
- 	return val;
- }
- 
-+static int bcm_iproc_i2c_reg_slave(struct i2c_client *slave)
-+{
-+	struct bcm_iproc_i2c_dev *iproc_i2c = i2c_get_adapdata(slave->adapter);
-+
-+	if (iproc_i2c->slave)
-+		return -EBUSY;
-+
-+	if (slave->flags & I2C_CLIENT_TEN)
-+		return -EAFNOSUPPORT;
-+
-+	iproc_i2c->slave = slave;
-+
-+	tasklet_init(&iproc_i2c->slave_rx_tasklet, slave_rx_tasklet_fn,
-+		     (unsigned long)iproc_i2c);
-+
-+	bcm_iproc_i2c_slave_init(iproc_i2c, false);
-+
-+	return 0;
-+}
-+
-+static int bcm_iproc_i2c_unreg_slave(struct i2c_client *slave)
-+{
-+	struct bcm_iproc_i2c_dev *iproc_i2c = i2c_get_adapdata(slave->adapter);
-+	u32 tmp;
-+
-+	if (!iproc_i2c->slave)
-+		return -EINVAL;
-+
-+	disable_irq(iproc_i2c->irq);
-+
-+	tasklet_kill(&iproc_i2c->slave_rx_tasklet);
-+
-+	/* disable all slave interrupts */
-+	tmp = iproc_i2c_rd_reg(iproc_i2c, IE_OFFSET);
-+	tmp &= ~(IE_S_ALL_INTERRUPT_MASK <<
-+			IE_S_ALL_INTERRUPT_SHIFT);
-+	iproc_i2c_wr_reg(iproc_i2c, IE_OFFSET, tmp);
-+
-+	/* Erase the slave address programmed */
-+	tmp = iproc_i2c_rd_reg(iproc_i2c, S_CFG_SMBUS_ADDR_OFFSET);
-+	tmp &= ~BIT(S_CFG_EN_NIC_SMB_ADDR3_SHIFT);
-+	iproc_i2c_wr_reg(iproc_i2c, S_CFG_SMBUS_ADDR_OFFSET, tmp);
-+
-+	/* flush TX/RX FIFOs */
-+	tmp = (BIT(S_FIFO_RX_FLUSH_SHIFT) | BIT(S_FIFO_TX_FLUSH_SHIFT));
-+	iproc_i2c_wr_reg(iproc_i2c, S_FIFO_CTRL_OFFSET, tmp);
-+
-+	/* clear all pending slave interrupts */
-+	iproc_i2c_wr_reg(iproc_i2c, IS_OFFSET, ISR_MASK_SLAVE);
-+
-+	iproc_i2c->slave = NULL;
-+
-+	enable_irq(iproc_i2c->irq);
-+
-+	return 0;
-+}
-+
- static struct i2c_algorithm bcm_iproc_algo = {
- 	.master_xfer = bcm_iproc_i2c_xfer,
- 	.functionality = bcm_iproc_i2c_functionality,
-@@ -1173,62 +1225,6 @@ static const struct dev_pm_ops bcm_iproc_i2c_pm_ops = {
- 	.resume_early = &bcm_iproc_i2c_resume
- };
- 
--static int bcm_iproc_i2c_reg_slave(struct i2c_client *slave)
--{
--	struct bcm_iproc_i2c_dev *iproc_i2c = i2c_get_adapdata(slave->adapter);
--
--	if (iproc_i2c->slave)
--		return -EBUSY;
--
--	if (slave->flags & I2C_CLIENT_TEN)
--		return -EAFNOSUPPORT;
--
--	iproc_i2c->slave = slave;
--
--	tasklet_init(&iproc_i2c->slave_rx_tasklet, slave_rx_tasklet_fn,
--		     (unsigned long)iproc_i2c);
--
--	bcm_iproc_i2c_slave_init(iproc_i2c, false);
--	return 0;
--}
--
--static int bcm_iproc_i2c_unreg_slave(struct i2c_client *slave)
--{
--	u32 tmp;
--	struct bcm_iproc_i2c_dev *iproc_i2c = i2c_get_adapdata(slave->adapter);
--
--	if (!iproc_i2c->slave)
--		return -EINVAL;
--
--	disable_irq(iproc_i2c->irq);
--
--	tasklet_kill(&iproc_i2c->slave_rx_tasklet);
--
--	/* disable all slave interrupts */
--	tmp = iproc_i2c_rd_reg(iproc_i2c, IE_OFFSET);
--	tmp &= ~(IE_S_ALL_INTERRUPT_MASK <<
--			IE_S_ALL_INTERRUPT_SHIFT);
--	iproc_i2c_wr_reg(iproc_i2c, IE_OFFSET, tmp);
--
--	/* Erase the slave address programmed */
--	tmp = iproc_i2c_rd_reg(iproc_i2c, S_CFG_SMBUS_ADDR_OFFSET);
--	tmp &= ~BIT(S_CFG_EN_NIC_SMB_ADDR3_SHIFT);
--	iproc_i2c_wr_reg(iproc_i2c, S_CFG_SMBUS_ADDR_OFFSET, tmp);
--
--	/* flush TX/RX FIFOs */
--	tmp = (BIT(S_FIFO_RX_FLUSH_SHIFT) | BIT(S_FIFO_TX_FLUSH_SHIFT));
--	iproc_i2c_wr_reg(iproc_i2c, S_FIFO_CTRL_OFFSET, tmp);
--
--	/* clear all pending slave interrupts */
--	iproc_i2c_wr_reg(iproc_i2c, IS_OFFSET, ISR_MASK_SLAVE);
--
--	iproc_i2c->slave = NULL;
--
--	enable_irq(iproc_i2c->irq);
--
--	return 0;
--}
--
- static const struct of_device_id bcm_iproc_i2c_of_match[] = {
- 	{
- 		.compatible = "brcm,iproc-i2c",
+Best regards,
 -- 
-2.49.0
+Troy Mitchell <troymitchell988@gmail.com>
 
 
