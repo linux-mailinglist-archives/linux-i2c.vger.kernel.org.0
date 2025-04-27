@@ -1,52 +1,52 @@
-Return-Path: <linux-i2c+bounces-10646-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10645-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94C66A9E2BF
-	for <lists+linux-i2c@lfdr.de>; Sun, 27 Apr 2025 13:31:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B6B44A9E2BD
+	for <lists+linux-i2c@lfdr.de>; Sun, 27 Apr 2025 13:31:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2D4DD7B00E4
-	for <lists+linux-i2c@lfdr.de>; Sun, 27 Apr 2025 11:30:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B1C5C7B00D8
+	for <lists+linux-i2c@lfdr.de>; Sun, 27 Apr 2025 11:30:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72E842517A3;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F7232517A1;
 	Sun, 27 Apr 2025 11:31:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DmqObJfS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qfaV6dGI"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25AAB17A2F0;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25A6249641;
 	Sun, 27 Apr 2025 11:31:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745753466; cv=none; b=h7sTSrj94DaTY2o+gxFeXr6llk3YJvHvmmcopQ6tSKHxae0QOgtx0XGgRVgF4tER8nUQzKmC45D8z4MDDix7rxUEYXpKgs3Ko5tE0QIIZk57cM63VdFO4rFurPkOHJgEqCaGGZOcdS4gom4njPkpzyBgz3HJ3WS3jwaVHhtm0mI=
+	t=1745753466; cv=none; b=c2B139Oq4h7VEQVk0zQfWvx57CJGTMAQn/vYV9uNQAvF3vOIqrRKv2xM7jqGn4tQ8rnATHR0OyVnVvaZtMCLrEuTRhzC9UpITYMCPqJwwd8Z/gKk3D/XmngefOmrvotTqjUvoBPRZyXkBe18UUAEDXYPhkiNDySH2/y17jI++8Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1745753466; c=relaxed/simple;
-	bh=nYEoUAOYWWe1YgrKh5F/Uu0ClKx/Vy3NGeA0qWcOwyo=;
+	bh=jlJuPXHBo4V6kE+SAD+mznONPEWYXzJs3olM8EU6rcA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=q9ytfxZHvPv9ksS/2TNbR20HCPjSrGXyZgCDWO30LBM6nh39gWpsII/qhjGDlZDWgLQvecFyBmxcqZJuA9bbIffAyNbT0wVkkDlEeWwOQygZlPwJGt6yD9Qg+jEn/sDpvcci7heAa/+oYsY0KGbx0UCJhxCCk30EH5nKC0jvXjQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DmqObJfS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B0FDFC4CEEF;
+	 In-Reply-To:To:Cc; b=BcDMlU1mUCAnyEokXs3HhxCCvL0YU7geIvh49arhRDpin/brn5HdLLBpMJXQ5Q9d2zKiOkJ4gQbx64S6HAJk1sfz6a3hmaKzV5+10zyxPOJ/m5bHhppl/KDBs1s7TzII+2DSCH7gxAhHTzeEjOE3DckkkUQAtALxN4EknQ0P5TE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qfaV6dGI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BF2E5C4AF0C;
 	Sun, 27 Apr 2025 11:31:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1745753465;
-	bh=nYEoUAOYWWe1YgrKh5F/Uu0ClKx/Vy3NGeA0qWcOwyo=;
+	bh=jlJuPXHBo4V6kE+SAD+mznONPEWYXzJs3olM8EU6rcA=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=DmqObJfSjvkHnlkZgErAaxvRjqcppPchhkfMe39U+sJFKtK5w4iCL7c9x6ObknXww
-	 EicxT+HQ6/5+hvieORhsBZ6VkeAvE3cmMVSuS2BYhziV6O6weI/d1fVTmQbwz70NLE
-	 48vX687s1P/ix4xLr1DYmXYTHIISIgTCdOyEDHiKA4B3doVmScS2ZGfQ6y2sUtw3V/
-	 78HZvxM1AKJAblOgIsDdd72L8pp8ajiZArUk280ziOa8+71GyXLwYDvDeLq+YLX4td
-	 iWjkjoxF8OsQAUcXmLzqSigRYE6rzwfbrj2ozFVFlSEJzHiUr+D4NWPRvOIlyXDA+a
-	 gF8cpNsXhjBew==
+	b=qfaV6dGI2WDYnpHvfNWbbQPBT7ZfegJjbadpA2H4Cw2OdIzGpRNF3zSoG6w3TVYE1
+	 kEgCj2kimyUIdFI4mMtgayVuwe1IA567FoRR7DOqlHQL0ct+Zc7jQSn8XiwbF/6Kwr
+	 CUc62jd7aNVfx1NCXrSUZLib7BNx9cssTu3fv2ADWsuPTBydgHZuWhA3Ep7f4rzQHg
+	 WLrQeMECdTmXwLSWD3wlcjy1BkDRR6FJ7330Qa2p00ciHHrsBnM/3oTG09BpPJQfRL
+	 Ou5v1at6TS9MobPnlJwH4/g/E9LOYLHn/Xt5SIFOH4YIuG9RUT4B2qolUoIKuHER2Q
+	 JL9Cc5CJjJeng==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A4935C369D1;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B29C6C3ABA1;
 	Sun, 27 Apr 2025 11:31:05 +0000 (UTC)
 From: Sven Peter via B4 Relay <devnull+sven.svenpeter.dev@kernel.org>
-Date: Sun, 27 Apr 2025 11:30:45 +0000
-Subject: [PATCH v3 3/4] i2c: pasemi: Improve error recovery
+Date: Sun, 27 Apr 2025 11:30:46 +0000
+Subject: [PATCH v3 4/4] i2c: pasemi: Log bus reset causes
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -55,7 +55,7 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250427-pasemi-fixes-v3-3-af28568296c0@svenpeter.dev>
+Message-Id: <20250427-pasemi-fixes-v3-4-af28568296c0@svenpeter.dev>
 References: <20250427-pasemi-fixes-v3-0-af28568296c0@svenpeter.dev>
 In-Reply-To: <20250427-pasemi-fixes-v3-0-af28568296c0@svenpeter.dev>
 To: Janne Grunau <j@jannau.net>, Alyssa Rosenzweig <alyssa@rosenzweig.io>, 
@@ -68,13 +68,13 @@ Cc: linuxppc-dev@lists.ozlabs.org, asahi@lists.linux.dev,
  linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org, 
  linux-kernel@vger.kernel.org, Sven Peter <sven@svenpeter.dev>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3408; i=sven@svenpeter.dev;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1721; i=sven@svenpeter.dev;
  h=from:subject:message-id;
- bh=RQjUShH7rfus6djDqHEQgJ89KeDc5Vm8l5ffHfaOO3w=;
- b=owGbwMvMwCHmIlirolUq95LxtFoSQwafaCnnKomj7TVR2fJPP2nrKIu1nnmY/XB6sRmL7W2Gl
- TN/u3zrKGVhEONgkBVTZNm+3970ycM3gks3XXoPM4eVCWQIAxenAExk4wNGhrVvj6W+rlAuuXsr
- W8ns8tK0Hf2G+9n57Wq43vz8EOrK8Jjhf+CO+N5Tsxav/3Hhxfn8aVvfMWhIvs189/nVKb4s3op
- 3F3kA
+ bh=nRlmnXOqgPKLCOyL2YLd20qO5WoVbBnMs4FETTpxuT0=;
+ b=owGbwMvMwCHmIlirolUq95LxtFoSQwafaNkZs3Xm+Uc2HqnaujX3wlmuf03pS3wKklQ7jgs8V
+ BEKbgzuKGVhEONgkBVTZNm+3970ycM3gks3XXoPM4eVCWQIAxenAEwkSoCRoe3lrfgzK9alnTzR
+ d2rmUuMbDCpCXdXT70tf3vTUUX9q0yxGhlNHouR9UuSX7eNuUgib6ON3wELfcflEo8f23nPvry0
+ 9wAAA
 X-Developer-Key: i=sven@svenpeter.dev; a=openpgp;
  fpr=A1E3E34A2B3C820DBC4955E5993B08092F131F93
 X-Endpoint-Received: by B4 Relay for sven@svenpeter.dev/default with
@@ -84,117 +84,50 @@ Reply-To: sven@svenpeter.dev
 
 From: Hector Martin <marcan@marcan.st>
 
-Add handling for all the missing error condition, and better recovery in
-pasemi_smb_clear().
+This ensures we get all information we need to debug issues when users
+forward us their logs.
 
-Reviewed-by: Alyssa Rosenzweig <alyssa@rosenzweig.io>
-Reviewed-by: Neal Gompa <neal@gompa.dev>
 Signed-off-by: Hector Martin <marcan@marcan.st>
-Co-developed-by: Sven Peter <sven@svenpeter.dev>
+Reviewed-by: Neal Gompa <neal@gompa.dev>
+Reviewed-by: Alyssa Rosenzweig <alyssa@rosenzweig.io>
 Signed-off-by: Sven Peter <sven@svenpeter.dev>
 ---
- drivers/i2c/busses/i2c-pasemi-core.c | 61 +++++++++++++++++++++++++++++++-----
- 1 file changed, 54 insertions(+), 7 deletions(-)
+ drivers/i2c/busses/i2c-pasemi-core.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-pasemi-core.c b/drivers/i2c/busses/i2c-pasemi-core.c
-index ee38e8a1e1f5d062384e85a2fd49d7da9257aacc..dad20ee0c6689eda309cb0374aa75b42669cbcdc 100644
+index dad20ee0c6689eda309cb0374aa75b42669cbcdc..f4eca44ed18395331a366537bd06f2eb3ba08e21 100644
 --- a/drivers/i2c/busses/i2c-pasemi-core.c
 +++ b/drivers/i2c/busses/i2c-pasemi-core.c
-@@ -87,12 +87,31 @@ static void pasemi_reset(struct pasemi_smbus *smbus)
- 	reinit_completion(&smbus->irq_completion);
- }
+@@ -22,6 +22,7 @@
+ /* Register offsets */
+ #define REG_MTXFIFO	0x00
+ #define REG_MRXFIFO	0x04
++#define REG_XFSTA	0x0c
+ #define REG_SMSTA	0x14
+ #define REG_IMASK	0x18
+ #define REG_CTL		0x1c
+@@ -99,14 +100,18 @@ static int pasemi_smb_clear(struct pasemi_smbus *smbus)
+ 				 USEC_PER_MSEC * PASEMI_TRANSFER_TIMEOUT_MS);
  
--static void pasemi_smb_clear(struct pasemi_smbus *smbus)
-+static int pasemi_smb_clear(struct pasemi_smbus *smbus)
- {
- 	unsigned int status;
-+	int ret;
- 
--	status = reg_read(smbus, REG_SMSTA);
-+	/* First wait for the bus to go idle */
-+	ret = readx_poll_timeout(ioread32, smbus->ioaddr + REG_SMSTA,
-+				 status, !(status & (SMSTA_XIP | SMSTA_JAM)),
-+				 USEC_PER_MSEC,
-+				 USEC_PER_MSEC * PASEMI_TRANSFER_TIMEOUT_MS);
-+
-+	if (ret < 0) {
-+		dev_err(smbus->dev, "Bus is still stuck (status 0x%08x)\n", status);
-+		return -EIO;
-+	}
-+
-+	/* If any badness happened or there is data in the FIFOs, reset the FIFOs */
-+	if ((status & (SMSTA_MRNE | SMSTA_JMD | SMSTA_MTO | SMSTA_TOM | SMSTA_MTN | SMSTA_MTA)) ||
-+	    !(status & SMSTA_MTE))
-+		pasemi_reset(smbus);
-+
-+	/* Clear the flags */
- 	reg_write(smbus, REG_SMSTA, status);
-+
-+	return 0;
- }
- 
- static int pasemi_smb_waitready(struct pasemi_smbus *smbus)
-@@ -130,9 +149,35 @@ static int pasemi_smb_waitready(struct pasemi_smbus *smbus)
- 		}
+ 	if (ret < 0) {
+-		dev_err(smbus->dev, "Bus is still stuck (status 0x%08x)\n", status);
++		dev_err(smbus->dev, "Bus is still stuck (status 0x%08x xfstatus 0x%08x)\n",
++			 status, reg_read(smbus, REG_XFSTA));
+ 		return -EIO;
  	}
  
-+	/* Controller timeout? */
-+	if (status & SMSTA_TOM) {
-+		dev_err(smbus->dev, "Controller timeout, status 0x%08x\n", status);
-+		return -EIO;
-+	}
-+
-+	/* Peripheral timeout? */
-+	if (status & SMSTA_MTO) {
-+		dev_err(smbus->dev, "Peripheral timeout, status 0x%08x\n", status);
-+		return -ETIME;
-+	}
-+
-+	/* Still stuck in a transaction? */
-+	if (status & SMSTA_XIP) {
-+		dev_err(smbus->dev, "Bus stuck, status 0x%08x\n", status);
-+		return -EIO;
-+	}
-+
-+	/* Arbitration loss? */
-+	if (status & SMSTA_MTA) {
-+		dev_err(smbus->dev, "Arbitration loss, status 0x%08x\n", status);
-+		return -EBUSY;
-+	}
-+
- 	/* Got NACK? */
--	if (status & SMSTA_MTN)
-+	if (status & SMSTA_MTN) {
-+		dev_err(smbus->dev, "NACK, status 0x%08x\n", status);
- 		return -ENXIO;
+ 	/* If any badness happened or there is data in the FIFOs, reset the FIFOs */
+ 	if ((status & (SMSTA_MRNE | SMSTA_JMD | SMSTA_MTO | SMSTA_TOM | SMSTA_MTN | SMSTA_MTA)) ||
+-	    !(status & SMSTA_MTE))
++	    !(status & SMSTA_MTE)) {
++		dev_warn(smbus->dev, "Issuing reset due to status 0x%08x (xfstatus 0x%08x)\n",
++			 status, reg_read(smbus, REG_XFSTA));
+ 		pasemi_reset(smbus);
 +	}
  
- 	/* Clear XEN */
- 	reg_write(smbus, REG_SMSTA, SMSTA_XEN);
-@@ -194,9 +239,9 @@ static int pasemi_i2c_xfer(struct i2c_adapter *adapter,
- 	struct pasemi_smbus *smbus = adapter->algo_data;
- 	int ret, i;
- 
--	pasemi_smb_clear(smbus);
--
--	ret = 0;
-+	ret = pasemi_smb_clear(smbus);
-+	if (ret)
-+		return ret;
- 
- 	for (i = 0; i < num && !ret; i++)
- 		ret = pasemi_i2c_xfer_msg(adapter, &msgs[i], (i == (num - 1)));
-@@ -217,7 +262,9 @@ static int pasemi_smb_xfer(struct i2c_adapter *adapter,
- 	addr <<= 1;
- 	read_flag = read_write == I2C_SMBUS_READ;
- 
--	pasemi_smb_clear(smbus);
-+	err = pasemi_smb_clear(smbus);
-+	if (err)
-+		return err;
- 
- 	switch (size) {
- 	case I2C_SMBUS_QUICK:
+ 	/* Clear the flags */
+ 	reg_write(smbus, REG_SMSTA, status);
 
 -- 
 2.34.1
