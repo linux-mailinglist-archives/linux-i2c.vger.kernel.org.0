@@ -1,58 +1,57 @@
-Return-Path: <linux-i2c+bounces-10667-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10668-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20CDBA9FD38
-	for <lists+linux-i2c@lfdr.de>; Tue, 29 Apr 2025 00:45:23 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4944FA9FDCC
+	for <lists+linux-i2c@lfdr.de>; Tue, 29 Apr 2025 01:34:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 96E1A1A87ABD
-	for <lists+linux-i2c@lfdr.de>; Mon, 28 Apr 2025 22:45:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BEF81465CBD
+	for <lists+linux-i2c@lfdr.de>; Mon, 28 Apr 2025 23:34:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 992FF212FBE;
-	Mon, 28 Apr 2025 22:45:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9B42212FBC;
+	Mon, 28 Apr 2025 23:34:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qKGA7d4I"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Um23Bc4m"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BFFF1DF988;
-	Mon, 28 Apr 2025 22:45:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E4781DF988;
+	Mon, 28 Apr 2025 23:34:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745880317; cv=none; b=Ps2Iqdj53byfkfprnQKl/MpVqX8fO3v3Y09QCY1RozbvMfWWCJw5ft5h/fuY5EcNcqgbzwg4wGKkCowdQUahD5bpZ5bDsXvUCI3A99YCysYaaGgUOB7K4sWlWhQ5dlOJvfhQZqZYACSCihRH2FaWGn1D5iy8fgE45wfuidG09ks=
+	t=1745883270; cv=none; b=OK6sQqH9lnMY1mYpwmp7F2P7n8eZljB2fOvC0wXJkPK9Ex1iT27zQChF48sjfSBLwPZRCi2AcAz7tnBL+OS6HJvPFbHVmy7TAbna36oJ6n9122g0ahGG/to1MWrgjeuhBvyA+a9zLbCqExo2cn9n3Zp7WGPvlnZyG0ag9Pl+3qw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745880317; c=relaxed/simple;
-	bh=iEgcLTkDkFJOT7HlI3aSWIUb6zLNar111Rw+B+KVd0E=;
+	s=arc-20240116; t=1745883270; c=relaxed/simple;
+	bh=R3ouIl/VZaTIzsxRQARD82utq+24mV2Fl+0Qm8daJt8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FMUd9a018oGnlQgHmEdOLpxFIiBzBEcxJsUNVTqUezeQVALVCuw9rgKNeVNPsX2xElyopL+JGZXF6949F+NZQoMF6ZINn99AJmxbg62Av2M6UXdKPs4gY5b4MoD3nPA0b+oaYV/xKWJHkiuga/i7QP4XBytkMs1sXCQQ9rkUML0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qKGA7d4I; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 986C3C4CEE4;
-	Mon, 28 Apr 2025 22:45:15 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=GNXs1JQaWcNptflflzDlD1R9HQedr9rL+3PFe/tBMW+NwseV1ThE0CGx53Dt8shjfJUCbMErjRGjQtHI85yZgGRm9ItMZNKHCqsBxobulKkVD8skAtVsPxOwMck6MP8eJmAu+fZFBDKlPxNpNPzby99+y2EkqgWaSJ0pAr91G4g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Um23Bc4m; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1C63C4CEED;
+	Mon, 28 Apr 2025 23:34:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745880316;
-	bh=iEgcLTkDkFJOT7HlI3aSWIUb6zLNar111Rw+B+KVd0E=;
+	s=k20201202; t=1745883270;
+	bh=R3ouIl/VZaTIzsxRQARD82utq+24mV2Fl+0Qm8daJt8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qKGA7d4I1Xv4lnO2QEvAFptiF/Bk8yCyZlzREFkxc8/ZbydV/Io4cKBOfsFiepgbx
-	 faoR2VNi7zkUBoJk10MO/Cy+DPlgiJf7FQnBHCd9GwRokCO6HNBXQbFFhr65FUiFmc
-	 Ipt4egabLR2vqhIJpvijiGY3y+5zCOUMlvVDnL2w8K1EyM6OSneipar6rwIBIpfLoh
-	 35ITA8fTL4cG8OcFr5r1VIiZArG0GO2mf8LM1FVUQBBaql/FwO029E5PPjrIARsiUD
-	 Rz990rOVpRtTaZxytBdzAqS8q3wpYYuBhgM+LS8juAwbkU0X1hvbS00qrq3xI/G00c
-	 BPha6HbRhfIKg==
-Date: Tue, 29 Apr 2025 00:45:12 +0200
+	b=Um23Bc4mR6gnTUpoi3x5ciimc/jrfd9g0mM4eOhPscs2RkmdghYaGrRPY+GfecpdD
+	 4P297ENelgDBFGFaxXKVslmEmO0AJPn48Onjse3vTWGKX9d3MWGRBgFFDNI70XhlYp
+	 VjuxjW3fdmKdUNisSYfmBs3NvEGkfPQVR0uXm2Bk+7kz0JLCh8VwfWD7luA2L60VqG
+	 9pQL52kBpk+YpbsBOLGqXfjCNzb9PlZWovc0tLmrJlgsxY05IwQHkPQAbiPm1JN4a+
+	 skEc2D5YfUkybUZQCVdMUStL5v4ejNNRvQ4gPuW//WjIP/x9PtfO535LkKbIi/Ejth
+	 i56wo9bOoG73Q==
+Date: Tue, 29 Apr 2025 01:34:23 +0200
 From: Andi Shyti <andi.shyti@kernel.org>
-To: sven@svenpeter.dev
-Cc: Janne Grunau <j@jannau.net>, Alyssa Rosenzweig <alyssa@rosenzweig.io>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Naveen N Rao <naveen@kernel.org>, Neal Gompa <neal@gompa.dev>, Hector Martin <marcan@marcan.st>, 
-	linuxppc-dev@lists.ozlabs.org, asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/4] Apple/PASemi i2c error recovery fixes
-Message-ID: <enap4curtpjaiazxpcsw3sk64aq2i7wqi3iwm6l2pfph5qduwj@gkagpeazcumg>
-References: <20250427-pasemi-fixes-v3-0-af28568296c0@svenpeter.dev>
+To: Akhil R <akhilrajeev@nvidia.com>
+Cc: ldewangan@nvidia.com, digetx@gmail.com, thierry.reding@gmail.com, 
+	jonathanh@nvidia.com, wsa@kernel.org, linux-i2c@vger.kernel.org, 
+	linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Thierry Reding <treding@nvidia.com>
+Subject: Re: [PATCH v2 RESEND] i2c: tegra: check msg length in SMBUS block
+ read
+Message-ID: <j3jxuuwu2joyn6jsfa63lkkuwqazd2mpeki6gamdpktllhpkhv@tfoqnztsa7zw>
+References: <20250424053320.19211-1-akhilrajeev@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -61,20 +60,51 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250427-pasemi-fixes-v3-0-af28568296c0@svenpeter.dev>
+In-Reply-To: <20250424053320.19211-1-akhilrajeev@nvidia.com>
 
-Hi Sven,
+Hi Akhil,
 
-> Hector Martin (3):
->       i2c: pasemi: Enable the unjam machine
->       i2c: pasemi: Improve error recovery
->       i2c: pasemi: Log bus reset causes
+On Thu, Apr 24, 2025 at 11:03:20AM +0530, Akhil R wrote:
+> For SMBUS block read, do not continue to read if the message length
+> passed from the device is '0' or greater than the maximum allowed bytes.
 > 
-> Sven Peter (1):
->       i2c: pasemi: Improve timeout handling
+> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+> Acked-by: Thierry Reding <treding@nvidia.com>
+> ---
+> v1->v2: Add check for the maximum data as well.
+> 
+>  drivers/i2c/busses/i2c-tegra.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
+> index 87976e99e6d0..049b4d154c23 100644
+> --- a/drivers/i2c/busses/i2c-tegra.c
+> +++ b/drivers/i2c/busses/i2c-tegra.c
+> @@ -1395,6 +1395,11 @@ static int tegra_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[],
+>  			ret = tegra_i2c_xfer_msg(i2c_dev, &msgs[i], MSG_END_CONTINUE);
+>  			if (ret)
+>  				break;
+> +
+> +			/* Validate message length before proceeding */
+> +			if (msgs[i].buf[0] == 0 || msgs[i].buf[0] > I2C_SMBUS_BLOCK_MAX)
+> +				break;
+> +
 
-merged to i2c/i2c-host.
+I agree with Thierry, this check is driver independent and it
+should be done in the library. Anyway, for now, I'm going to take
+this as this check is now left to the drivers and it would be
+huge to shift it somewhere else.
+
+Before I merge, I want to know if you have you seen any failure
+here? What is the reason you are sending it?
 
 Thanks,
 Andi
+
+>  			/* Set the msg length from first byte */
+>  			msgs[i].len += msgs[i].buf[0];
+>  			dev_dbg(i2c_dev->dev, "reading %d bytes\n", msgs[i].len);
+> -- 
+> 2.43.2
+> 
 
