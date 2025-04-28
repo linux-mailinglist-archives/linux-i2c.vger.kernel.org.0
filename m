@@ -1,52 +1,58 @@
-Return-Path: <linux-i2c+bounces-10666-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10667-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CBB19A9F987
-	for <lists+linux-i2c@lfdr.de>; Mon, 28 Apr 2025 21:31:23 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20CDBA9FD38
+	for <lists+linux-i2c@lfdr.de>; Tue, 29 Apr 2025 00:45:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5DF283ABD8D
-	for <lists+linux-i2c@lfdr.de>; Mon, 28 Apr 2025 19:30:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 96E1A1A87ABD
+	for <lists+linux-i2c@lfdr.de>; Mon, 28 Apr 2025 22:45:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8614D15ECD7;
-	Mon, 28 Apr 2025 19:30:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 992FF212FBE;
+	Mon, 28 Apr 2025 22:45:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iC5te5aj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qKGA7d4I"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46DE142AA6
-	for <linux-i2c@vger.kernel.org>; Mon, 28 Apr 2025 19:30:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BFFF1DF988;
+	Mon, 28 Apr 2025 22:45:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745868658; cv=none; b=OksnshOBXhzcsRYc+WZ1kohryyVOvUC3W18m8Zgzt7+7/ni4lW2EmACcy5p/5jhjW/KBWMoVQv+raQq4c0nYxvpsDHCA4I2vDE/WsCsOFZaScfIlxcWZBxLiond6kCVb6bEJU+WSfTIhJUCtojpx48DtIJTvNIFGboQxpahLC6M=
+	t=1745880317; cv=none; b=Ps2Iqdj53byfkfprnQKl/MpVqX8fO3v3Y09QCY1RozbvMfWWCJw5ft5h/fuY5EcNcqgbzwg4wGKkCowdQUahD5bpZ5bDsXvUCI3A99YCysYaaGgUOB7K4sWlWhQ5dlOJvfhQZqZYACSCihRH2FaWGn1D5iy8fgE45wfuidG09ks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745868658; c=relaxed/simple;
-	bh=DJeR3ktAPtij/oM4F9bBTuZ8OWA82J5NoBOCrzdKfM0=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gAS+UZ6R7VKXewP5wDR+Gw/ODfYxCvBMtMGS/ujGSDqcYgvOQk7idnge2pDlqu+jc9XCKQ/9urIFbUfswlvv9Rk/hunHa59hVh9+pEZmb3DOh4b6eSE+RNGEKw5QP+ORKVGaNTp4iO7V0qG8uX1gf7d/+cdbMLART4oXxm+syfA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iC5te5aj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32633C4CEE4
-	for <linux-i2c@vger.kernel.org>; Mon, 28 Apr 2025 19:30:56 +0000 (UTC)
+	s=arc-20240116; t=1745880317; c=relaxed/simple;
+	bh=iEgcLTkDkFJOT7HlI3aSWIUb6zLNar111Rw+B+KVd0E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FMUd9a018oGnlQgHmEdOLpxFIiBzBEcxJsUNVTqUezeQVALVCuw9rgKNeVNPsX2xElyopL+JGZXF6949F+NZQoMF6ZINn99AJmxbg62Av2M6UXdKPs4gY5b4MoD3nPA0b+oaYV/xKWJHkiuga/i7QP4XBytkMs1sXCQQ9rkUML0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qKGA7d4I; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 986C3C4CEE4;
+	Mon, 28 Apr 2025 22:45:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745868658;
-	bh=DJeR3ktAPtij/oM4F9bBTuZ8OWA82J5NoBOCrzdKfM0=;
-	h=Date:From:To:Subject:References:In-Reply-To:From;
-	b=iC5te5ajOsf65jWRacULELAhVHvV5B7/6dBFRz4dUJjB0Evp4RBtnovc5m338CkWz
-	 YYEnkPwlx9IfnAm7uejHBo+H5ZuooaSJX2Nz8r0rlrFDk3EeoPx1yBnLKAnfsQJhnt
-	 leOU7eflVaCBYWUzgZVsyEw7rWFZ7bEXDvoD4y7NH+wfxPocSPY3fhtVUEkPHhKwXh
-	 4obr361Uc4mhDpbwUGb7Ojnb7BhVnfjfGeFiJUcCgfXnvX0UhrByFVxB1Jse8nvLvi
-	 kEvXYAOR5JtY2MVdUIQxNuq2nW7RMHXs80erNjEIysGtuKxxXSB5kcUIOgxayQBe+j
-	 bNzaVChpzBDsg==
-Date: Mon, 28 Apr 2025 21:30:53 +0200
+	s=k20201202; t=1745880316;
+	bh=iEgcLTkDkFJOT7HlI3aSWIUb6zLNar111Rw+B+KVd0E=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=qKGA7d4I1Xv4lnO2QEvAFptiF/Bk8yCyZlzREFkxc8/ZbydV/Io4cKBOfsFiepgbx
+	 faoR2VNi7zkUBoJk10MO/Cy+DPlgiJf7FQnBHCd9GwRokCO6HNBXQbFFhr65FUiFmc
+	 Ipt4egabLR2vqhIJpvijiGY3y+5zCOUMlvVDnL2w8K1EyM6OSneipar6rwIBIpfLoh
+	 35ITA8fTL4cG8OcFr5r1VIiZArG0GO2mf8LM1FVUQBBaql/FwO029E5PPjrIARsiUD
+	 Rz990rOVpRtTaZxytBdzAqS8q3wpYYuBhgM+LS8juAwbkU0X1hvbS00qrq3xI/G00c
+	 BPha6HbRhfIKg==
+Date: Tue, 29 Apr 2025 00:45:12 +0200
 From: Andi Shyti <andi.shyti@kernel.org>
-To: linux-i2c <linux-i2c@vger.kernel.org>
-Subject: Re: [PATCH 00/10] Few improvements on the Broadcom iProc
-Message-ID: <zw74krxgwsi6qjhlwb7l5bd7e4y2gdomwbdyrzmxborr7muovd@3wwzehqwmizk>
-References: <20250418211635.2666234-1-andi.shyti@kernel.org>
+To: sven@svenpeter.dev
+Cc: Janne Grunau <j@jannau.net>, Alyssa Rosenzweig <alyssa@rosenzweig.io>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	Naveen N Rao <naveen@kernel.org>, Neal Gompa <neal@gompa.dev>, Hector Martin <marcan@marcan.st>, 
+	linuxppc-dev@lists.ozlabs.org, asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/4] Apple/PASemi i2c error recovery fixes
+Message-ID: <enap4curtpjaiazxpcsw3sk64aq2i7wqi3iwm6l2pfph5qduwj@gkagpeazcumg>
+References: <20250427-pasemi-fixes-v3-0-af28568296c0@svenpeter.dev>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -55,21 +61,20 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250418211635.2666234-1-andi.shyti@kernel.org>
+In-Reply-To: <20250427-pasemi-fixes-v3-0-af28568296c0@svenpeter.dev>
 
-> Andi Shyti (10):
->   i2c: iproc: Drop unnecessary initialisation of 'ret'
->   i2c: iproc: Use dev_err_probe in probe
->   i2c: iproc: Use u32 instead of uint32_t
->   i2c: iproc: Fix alignment to match the open parenthesis
->   i2c: iproc: Remove stray blank line in slave ISR
->   i2c: iproc: Replace udelay() with usleep_range()
->   i2c: iproc: Fix indentation of bcm_iproc_i2c_slave_init()
->   i2c: iproc: Move function and avoid prototypes
->   i2c: iproc: When there's an error treat it as an error
->   i2c: iproc: Remove unnecessary double negation
+Hi Sven,
+
+> Hector Martin (3):
+>       i2c: pasemi: Enable the unjam machine
+>       i2c: pasemi: Improve error recovery
+>       i2c: pasemi: Log bus reset causes
+> 
+> Sven Peter (1):
+>       i2c: pasemi: Improve timeout handling
 
 merged to i2c/i2c-host.
 
+Thanks,
 Andi
 
