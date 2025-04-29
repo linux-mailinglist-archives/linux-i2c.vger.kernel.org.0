@@ -1,161 +1,300 @@
-Return-Path: <linux-i2c+bounces-10680-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10681-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2181DAA0F37
-	for <lists+linux-i2c@lfdr.de>; Tue, 29 Apr 2025 16:40:32 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D1977AA1958
+	for <lists+linux-i2c@lfdr.de>; Tue, 29 Apr 2025 20:10:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 67E293A524E
-	for <lists+linux-i2c@lfdr.de>; Tue, 29 Apr 2025 14:39:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 575A89C3691
+	for <lists+linux-i2c@lfdr.de>; Tue, 29 Apr 2025 18:04:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05013217F29;
-	Tue, 29 Apr 2025 14:39:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DB0B2AE96;
+	Tue, 29 Apr 2025 18:04:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="L4KdXSAn"
+	dkim=pass (2048-bit key) header.d=beagleboard-org.20230601.gappssmtp.com header.i=@beagleboard-org.20230601.gappssmtp.com header.b="Fxwj7p23"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D30D18A93F;
-	Tue, 29 Apr 2025 14:39:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EC2221ABC6
+	for <linux-i2c@vger.kernel.org>; Tue, 29 Apr 2025 18:04:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745937556; cv=none; b=QvM1B3QPCdK1xJyYOuxo9+8bkHNX8RgZNmEif++oxuC1V7yD3N4IHqgkbekZGcBxqABgLrYxJB6gpyi+ROdS/dbR5I58l/nzwdvCit/9nyCDIzMTh5xShvepWlsR1dFyj2dMePhoGkN0aCPBdBXMKRFvozmReWQIeabqayTE3RQ=
+	t=1745949861; cv=none; b=CjEZq8Sh9yDAncLMs6rX84h3Ihz1rzswRf+uHOEOjmOqgvYflIOQP5SrKO9HS/KeEj5+neTiHMk3OnmQmiRTjHNslNkaScvZZP1PdOIkQqq/hgZEFqxIV1dxmwGO7BNffaudcCg5gODSCo95qwoCuWRj/MmsNHjQ/+2esqWOpT0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745937556; c=relaxed/simple;
-	bh=ZC8ueqExZjMa8LECXOCWJ/qGA+lpkuk87Elx4I4QX4M=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=M91gqtAEhrQpjV9cPXy990ge7bimTn0RFz2jEmVw2+/65kpzszd2Xsin9mo+embwBSQL5j0N14E+0pcngAONFrTsoOed90uGxnKTWFun9PRLD7keIqCHipY3kUFKsi2nIRp0XqU5gZ3v7AbAU/1tKEK1TDOxNoA5UbJ65z+BLZ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=L4KdXSAn; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745937555; x=1777473555;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=ZC8ueqExZjMa8LECXOCWJ/qGA+lpkuk87Elx4I4QX4M=;
-  b=L4KdXSAnDwPt/kUjauaW8cShmbA6kao+JcBz4tGeIOYOj7WJfUObL9L3
-   X1NzGAJtVVBRhlscGZOSauJHT7H537dPiaBftTsSlWlnVEHpOZZnbYzV/
-   kBgqR6Bw4colGQz395Df/WqiHfmDScNbn3ZdJwlHBYrgKv8qI1TZME0wy
-   81fS8jjfVgQq495z7Sv4EbuNU4dhwcEI7NVwMe236pDJUolt2gvu76TMU
-   ch340Bepot0xA1bKpkZqh2HBNn9n5m/gMOw/k9LSTCqe+mzwXAbDWPe9W
-   vBOZQ540XKFUoWbAwxpwEwiPmslOar97TOyCxy13ET8abAxfuaG7pt/To
-   g==;
-X-CSE-ConnectionGUID: Ek/4+rg6SwiVt0oQQty9YA==
-X-CSE-MsgGUID: 4T252o0uTF+HCnv+KTc66w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11418"; a="51231565"
-X-IronPort-AV: E=Sophos;i="6.15,249,1739865600"; 
-   d="scan'208";a="51231565"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2025 07:39:14 -0700
-X-CSE-ConnectionGUID: KkqNdPTISbWg3K8s1DQf+w==
-X-CSE-MsgGUID: m/Rk5MezSIKyMqFe+gT75w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,249,1739865600"; 
-   d="scan'208";a="134361173"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.205])
-  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2025 07:39:08 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Tue, 29 Apr 2025 17:39:04 +0300 (EEST)
-To: Mario Limonciello <superm1@kernel.org>
-cc: Borislav Petkov <bp@alien8.de>, Jean Delvare <jdelvare@suse.com>, 
-    Andi Shyti <andi.shyti@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-    Mario Limonciello <mario.limonciello@amd.com>, 
-    Yazen Ghannam <yazen.ghannam@amd.com>, 
-    Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
-    Dave Hansen <dave.hansen@linux.intel.com>, 
-    "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>, 
-    "H . Peter Anvin" <hpa@zytor.com>, 
-    Shyam Sundar S K <Shyam-sundar.S-k@amd.com>, 
-    Hans de Goede <hdegoede@redhat.com>, 
-    "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, 
-    open list <linux-kernel@vger.kernel.org>, 
-    "open list:I2C/SMBUS CONTROLLER DRIVERS FOR PC" <linux-i2c@vger.kernel.org>, 
-    "open list:AMD PMC DRIVER" <platform-driver-x86@vger.kernel.org>
-Subject: Re: [PATCH v5 4/5] platform/x86/amd: pmc: use FCH_PM_BASE
- definition
-In-Reply-To: <20250422234830.2840784-5-superm1@kernel.org>
-Message-ID: <21363441-13a0-b5bc-4674-238526b16b5b@linux.intel.com>
-References: <20250422234830.2840784-1-superm1@kernel.org> <20250422234830.2840784-5-superm1@kernel.org>
+	s=arc-20240116; t=1745949861; c=relaxed/simple;
+	bh=rAks88TKI5UJtVnpuF6h5jVqqQnNM42d6RJm/OLQMxI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ex/y8Qk5hCIgWCwDbeSzTnAZ7a6lyHOOxnSmGAAMkLY9JUte1h1NZYEhgs1SrzkLx76jDn/nU/nW566lJtOKEBay7DNRLe5NA1wr1VgkzVZJp4OkCSxZkNRO64ckpBdDNgN+x00NGNk6OsLmmjyJFixxJ07XrCOf2SvJK2l1kVk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=beagleboard.org; spf=fail smtp.mailfrom=beagleboard.org; dkim=pass (2048-bit key) header.d=beagleboard-org.20230601.gappssmtp.com header.i=@beagleboard-org.20230601.gappssmtp.com header.b=Fxwj7p23; arc=none smtp.client-ip=209.85.210.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=beagleboard.org
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=beagleboard.org
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-73bf1cef6ceso6449583b3a.0
+        for <linux-i2c@vger.kernel.org>; Tue, 29 Apr 2025 11:04:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=beagleboard-org.20230601.gappssmtp.com; s=20230601; t=1745949859; x=1746554659; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TF5zvq+dwouurJsmOFisci0GfULvxMNmW9FvbbMePLQ=;
+        b=Fxwj7p23ujTAx41E8ObrcpbBLq0sL7mfPhtS7srtaHqgpWTdFUgQKU6vBVFiU2xX4V
+         q0IEPH4CfjGYXgdMYdvSTnqBU2dV8NpfvgYkbiqhSMcZf1Mb9oD5/lVEL5MDS+UUMOMu
+         XeLBtNaiJJ9CZydsV1OPnSBMHoDxuCDOPGpd87s1wLeJx7KP2pHHykhX7hWOUz6KTQNA
+         ude5FjEbhrWmQb5vb5GgfgyOiHMPJp7oW+GLotarH8W6U1f121/xR3LkeGLp2KkekyC9
+         3sbD1KFMlVXAmbbliIE3xarT4tXL9ipAYk03Kg2393V1pGChPPOu6URPuSWJ3zwQ41e8
+         QiLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745949859; x=1746554659;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TF5zvq+dwouurJsmOFisci0GfULvxMNmW9FvbbMePLQ=;
+        b=iS28MEJxYLXCMLj7d4ZkIIST+65AkubCr6s6nF5EMaSLYcyACAP0Rlz8derYaXeEo0
+         qHQaIPqEU9Bvp+YjpvkTvKMgNaajuCol6s5v8MioTmV5A1ogcYBqVzguhYGz6vrzp+XZ
+         h2wt7lsrC1guuixpBUVkwOM95HseRVtduP6J95oINxoUjXljHF5T8XUv7Jmpa/cCmJN/
+         +O7kHRwZqtRKWRKJcGi8UqDcmUhzzjLwis++5h994mVFGQPZGLD5BRlOP1pJrUBrEl5Z
+         lX/uox5geERq4Ci8/0V/m0S+LrOg6wYASoQMMC8PRJLTgSE4d+v7+GfNvQEV2oHv6hu/
+         lqfQ==
+X-Gm-Message-State: AOJu0YwRq0PXlmv0eYKdpar7KuPw4f6aimQpxV1lCzcP6DyVTAAMdWuq
+	Yq65u6M/++jHm9Q0Dt2sfrL+T1ddEqbcCekjZG8igQgdmSGlX4yldf1f10/2zQ==
+X-Gm-Gg: ASbGncvvp68iGwo1L8t+85xF53tY/un6e1AWidYGjLBm22fArJx6uPZMDv6s2kGMuBJ
+	N5QRd7meeKlOw2ysOM509INANKhKqk3tSyCBxsTsOSlwuhwgd5k3v0Hqhrsst2ZyN+/M8mtZ/dG
+	jRzPNsAlWudL14hpGHWJP6b2o2/HeLQvEcnYS5yzLuky8i6ZCQyHhD/FoFujXztq7KNI6qG3RIi
+	wumYoqNHLqNZkTLE4XynaSQQt/tvxOb6JSwY1QMdAE2lIfyJ6Rk+hwFE8F3bwFjbgsDMlqzuZis
+	0G1ESNPCYrYCgpONYxgrEdRwHZ+Fq1beygYUA6AFbJhUt0XY4ACL1om+NA==
+X-Google-Smtp-Source: AGHT+IH6MS3bZbEKvU9ZIkPz0etq8wy02LqJGtPPuVrhlRpUYewJVc/Smzwo8DIrS9bHhVaeokgm0A==
+X-Received: by 2002:a05:6a20:9d93:b0:1f5:7eb5:72dc with SMTP id adf61e73a8af0-2046a3abe8amr17646432637.3.1745949859182;
+        Tue, 29 Apr 2025 11:04:19 -0700 (PDT)
+Received: from [172.16.116.85] ([103.15.228.94])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b15f76f580asm7724722a12.2.2025.04.29.11.04.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Apr 2025 11:04:18 -0700 (PDT)
+Message-ID: <6afe226c-4bf4-48be-84be-034261914ee5@beagleboard.org>
+Date: Tue, 29 Apr 2025 23:34:01 +0530
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323328-352066760-1745937544=:938"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] schemas: i2c: Introduce I2C bus extensions
+To: Herve Codina <herve.codina@bootlin.com>,
+ Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
+Cc: linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, devicetree-spec@vger.kernel.org,
+ Luca Ceresoli <luca.ceresoli@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20250401081041.114333-1-herve.codina@bootlin.com>
+ <20250401081041.114333-3-herve.codina@bootlin.com>
+Content-Language: en-US
+From: Ayush Singh <ayush@beagleboard.org>
+In-Reply-To: <20250401081041.114333-3-herve.codina@bootlin.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+On 4/1/25 13:40, Herve Codina wrote:
 
---8323328-352066760-1745937544=:938
-Content-Type: text/plain; charset=ISO-8859-15
-Content-Transfer-Encoding: QUOTED-PRINTABLE
-
-On Tue, 22 Apr 2025, Mario Limonciello wrote:
-
-> From: Mario Limonciello <mario.limonciello@amd.com>
->=20
-> The s2idle mmio quirk uses a scratch register in the FCH.
-> Adjust the code to clarify that.
->=20
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-
-This is quite trivial change, but here is this for completeness in case=20
-x86 maintainers want to have it:
-
-Acked-by: Ilpo J=E4rvinen <ilpo.jarvinen@linux.intel.com>
-
---
- i.
-
+> An I2C bus can be wired to the connector and allows an add-on board to
+> connect additional I2C devices to this bus.
+>
+> Those additional I2C devices could be described as sub-nodes of the I2C
+> bus controller node however for hotplug connectors described via device
+> tree overlays there is additional level of indirection, which is needed
+> to decouple the overlay and the base tree:
+>
+>    --- base device tree ---
+>
+>    i2c1: i2c@abcd0000 {
+>        compatible = "xyz,i2c-ctrl";
+>        i2c-bus-extension@0 {
+>            i2c-bus = <&i2c_ctrl>;
+>        };
+>        ...
+>    };
+>
+>    i2c5: i2c@cafe0000 {
+>        compatible = "xyz,i2c-ctrl";
+>        i2c-bus-extension@0 {
+>            i2c-bus = <&i2c-sensors>;
+>        };
+>        ...
+>    };
+>
+>    connector {
+>        i2c_ctrl: i2c-ctrl {
+>            i2c-parent = <&i2c1>;
+>            #address-cells = <1>;
+>            #size-cells = <0>;
+>        };
+>
+>        i2c-sensors {
+>            i2c-parent = <&i2c5>;
+>            #address-cells = <1>;
+>            #size-cells = <0>;
+>        };
+>    };
+>
+>    --- device tree overlay ---
+>
+>    ...
+>    // This node will overlay on the i2c-ctrl node of the base tree
+>    i2c-ctrl {
+>        eeprom@50 { compatible = "atmel,24c64"; ... };
+>    };
+>    ...
+>
+>    --- resulting device tree ---
+>
+>    i2c1: i2c@abcd0000 {
+>        compatible = "xyz,i2c-ctrl";
+>        i2c-bus-extension@0 {
+>            i2c-bus = <&i2c_ctrl>;
+>        };
+>        ...
+>    };
+>
+>    i2c5: i2c@cafe0000 {
+>        compatible = "xyz,i2c-ctrl";
+>        i2c-bus-extension@0 {
+>            i2c-bus = <&i2c-sensors>;
+>        };
+>        ...
+>    };
+>
+>    connector {
+>        i2c-ctrl {
+>            i2c-parent = <&i2c1>;
+>            #address-cells = <1>;
+>            #size-cells = <0>;
+>
+>            eeprom@50 { compatible = "atmel,24c64"; ... };
+>        };
+>
+>        i2c-sensors {
+>            i2c-parent = <&i2c5>;
+>            #address-cells = <1>;
+>            #size-cells = <0>;
+>        };
+>    };
+>
+> Here i2c-ctrl (same goes for i2c-sensors) represent the part of I2C bus
+> that is on the hot-pluggable add-on. On hot-plugging it will physically
+> connect to the I2C adapter on the base board. Let's call the 'i2c-ctrl'
+> node an "extension node".
+>
+> In order to decouple the overlay from the base tree, the I2C adapter
+> (i2c@abcd0000) and the extension node (i2c-ctrl) are separate nodes.
+>
+> The extension node is linked to the I2C bus controller in two ways. The
+> first one with the i2c-bus-extension available in I2C controller
+> sub-node and the second one with the i2c-parent property available in
+> the extension node itself.
+>
+> The purpose of those two links is to provide the link in both direction
+> from the I2C controller to the I2C extension and from the I2C extension
+> to the I2C controller.
+>
+> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
 > ---
-> v5:
->  * Move <asm> header after <linux> headers
-> v4:
->  * Use fch.h instead
-> ---
->  arch/x86/include/asm/amd/fch.h            | 1 +
->  drivers/platform/x86/amd/pmc/pmc-quirks.c | 3 ++-
->  2 files changed, 3 insertions(+), 1 deletion(-)
->=20
-> diff --git a/arch/x86/include/asm/amd/fch.h b/arch/x86/include/asm/amd/fc=
-h.h
-> index a5fd91ff92df3..9b32e8a03193e 100644
-> --- a/arch/x86/include/asm/amd/fch.h
-> +++ b/arch/x86/include/asm/amd/fch.h
-> @@ -8,5 +8,6 @@
->  /* register offsets from PM base */
->  #define FCH_PM_DECODEEN=09=09=090x00
->  #define FCH_PM_DECODEEN_SMBUS0SEL=09GENMASK(20, 19)
-> +#define FCH_PM_SCRATCH=09=09=090x80
-> =20
->  #endif
-> diff --git a/drivers/platform/x86/amd/pmc/pmc-quirks.c b/drivers/platform=
-/x86/amd/pmc/pmc-quirks.c
-> index b4f49720c87f6..b706b1f4d94bf 100644
-> --- a/drivers/platform/x86/amd/pmc/pmc-quirks.c
-> +++ b/drivers/platform/x86/amd/pmc/pmc-quirks.c
-> @@ -11,6 +11,7 @@
->  #include <linux/dmi.h>
->  #include <linux/io.h>
->  #include <linux/ioport.h>
-> +#include <asm/amd/fch.h>
-> =20
->  #include "pmc.h"
-> =20
-> @@ -20,7 +21,7 @@ struct quirk_entry {
->  };
-> =20
->  static struct quirk_entry quirk_s2idle_bug =3D {
-> -=09.s2idle_bug_mmio =3D 0xfed80380,
-> +=09.s2idle_bug_mmio =3D FCH_PM_BASE + FCH_PM_SCRATCH,
->  };
-> =20
->  static struct quirk_entry quirk_spurious_8042 =3D {
->=20
---8323328-352066760-1745937544=:938--
+>   dtschema/schemas/i2c/i2c-controller.yaml | 67 ++++++++++++++++++++++++
+>   1 file changed, 67 insertions(+)
+>
+> diff --git a/dtschema/schemas/i2c/i2c-controller.yaml b/dtschema/schemas/i2c/i2c-controller.yaml
+> index 018d266..509b581 100644
+> --- a/dtschema/schemas/i2c/i2c-controller.yaml
+> +++ b/dtschema/schemas/i2c/i2c-controller.yaml
+> @@ -30,6 +30,13 @@ properties:
+>       minimum: 1
+>       maximum: 5000000
+>   
+> +  i2c-parent:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description:
+> +      In case of an I2C bus extension, reference to the I2C bus controller
+> +      this extension is connected to. In other word, reference the I2C bus
+> +      controller on the fixed side that drives the bus extension.
+> +
+>     i2c-scl-falling-time-ns:
+>       description:
+>         Number of nanoseconds the SCL signal takes to fall; t(f) in the I2C
+> @@ -159,6 +166,25 @@ allOf:
+>           - i2c-scl-has-clk-low-timeout
+>   
+>   patternProperties:
+> +  'i2c-bus-extension@[0-9a-f]+$':
+> +    type: object
+> +    description:
+> +      An I2C bus extension connected to an I2C bus. Those extensions allow to
+> +      decouple I2C busses when they are wired to connectors.
+> +
+> +    properties:
+> +      reg:
+> +        maxItems: 1
+> +
+> +      i2c-bus:
+> +        $ref: /schemas/types.yaml#/definitions/phandle
+> +        description:
+> +          Reference to the extension bus.
+> +
+> +    required:
+> +      - reg
+> +      - i2c-bus
+> +
+>     '@[0-9a-f]+$':
+>       type: object
+>   
+> @@ -221,3 +247,44 @@ dependentRequired:
+>     i2c-digital-filter-width-ns: [ i2c-digital-filter ]
+>   
+>   additionalProperties: true
+> +
+> +examples:
+> +  # I2C bus extension example involving an I2C bus controller and a connector.
+> +  #
+> +  #  +--------------+     +-------------+     +-------------+
+> +  #  | i2c@abcd0000 |     |  Connector  |     | Addon board |
+> +  #  |    (i2c1)    +-----+ (i2c-addon) +-----+ (device@10) |
+> +  #  |              |     |             |     |             |
+> +  #  +--------------+     +-------------+     +-------------+
+> +  #
+> +  # The i2c1 I2C bus is wired from a I2C controller to a connector. It is
+> +  # identified at connector level as i2c-addon bus.
+> +  # An addon board can be connected to this connector and connects a device
+> +  # (device@10) to this i2c-addon extension bus.
+> +  - |
+> +    i2c1: i2c@abcd0000 {
+> +        compatible = "xyz,i2c-ctrl";
+> +        reg = <0xabcd0000 0x100>;
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        i2c-bus-extension@0 {
+> +            reg = <0>;
+> +            i2c-bus = <&i2c_addon>;
+> +        };
+> +    };
+> +
+> +    connector {
+> +        i2c_addon: i2c-addon {
+> +            i2c-parent = <&i2c1>;
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +
+> +            device@10 {
+> +                compatible = "xyz,foo";
+> +                reg = <0x10>;
+> +            };
+> +        };
+> +    };
+> +
+> +...
+
+
+Reviewed-by: Ayush Singh <ayush@beagleboard.org>
+
 
