@@ -1,300 +1,218 @@
-Return-Path: <linux-i2c+bounces-10681-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10682-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1977AA1958
-	for <lists+linux-i2c@lfdr.de>; Tue, 29 Apr 2025 20:10:32 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2DC57AA3FD4
+	for <lists+linux-i2c@lfdr.de>; Wed, 30 Apr 2025 02:52:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 575A89C3691
-	for <lists+linux-i2c@lfdr.de>; Tue, 29 Apr 2025 18:04:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1EC8B5A0B1F
+	for <lists+linux-i2c@lfdr.de>; Wed, 30 Apr 2025 00:50:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DB0B2AE96;
-	Tue, 29 Apr 2025 18:04:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE03363B9;
+	Wed, 30 Apr 2025 00:50:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=beagleboard-org.20230601.gappssmtp.com header.i=@beagleboard-org.20230601.gappssmtp.com header.b="Fxwj7p23"
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="n7Qgoeg2"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from MA0PR01CU012.outbound.protection.outlook.com (mail-southindiaazolkn19011038.outbound.protection.outlook.com [52.103.67.38])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EC2221ABC6
-	for <linux-i2c@vger.kernel.org>; Tue, 29 Apr 2025 18:04:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745949861; cv=none; b=CjEZq8Sh9yDAncLMs6rX84h3Ihz1rzswRf+uHOEOjmOqgvYflIOQP5SrKO9HS/KeEj5+neTiHMk3OnmQmiRTjHNslNkaScvZZP1PdOIkQqq/hgZEFqxIV1dxmwGO7BNffaudcCg5gODSCo95qwoCuWRj/MmsNHjQ/+2esqWOpT0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745949861; c=relaxed/simple;
-	bh=rAks88TKI5UJtVnpuF6h5jVqqQnNM42d6RJm/OLQMxI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ex/y8Qk5hCIgWCwDbeSzTnAZ7a6lyHOOxnSmGAAMkLY9JUte1h1NZYEhgs1SrzkLx76jDn/nU/nW566lJtOKEBay7DNRLe5NA1wr1VgkzVZJp4OkCSxZkNRO64ckpBdDNgN+x00NGNk6OsLmmjyJFixxJ07XrCOf2SvJK2l1kVk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=beagleboard.org; spf=fail smtp.mailfrom=beagleboard.org; dkim=pass (2048-bit key) header.d=beagleboard-org.20230601.gappssmtp.com header.i=@beagleboard-org.20230601.gappssmtp.com header.b=Fxwj7p23; arc=none smtp.client-ip=209.85.210.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=beagleboard.org
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=beagleboard.org
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-73bf1cef6ceso6449583b3a.0
-        for <linux-i2c@vger.kernel.org>; Tue, 29 Apr 2025 11:04:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=beagleboard-org.20230601.gappssmtp.com; s=20230601; t=1745949859; x=1746554659; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TF5zvq+dwouurJsmOFisci0GfULvxMNmW9FvbbMePLQ=;
-        b=Fxwj7p23ujTAx41E8ObrcpbBLq0sL7mfPhtS7srtaHqgpWTdFUgQKU6vBVFiU2xX4V
-         q0IEPH4CfjGYXgdMYdvSTnqBU2dV8NpfvgYkbiqhSMcZf1Mb9oD5/lVEL5MDS+UUMOMu
-         XeLBtNaiJJ9CZydsV1OPnSBMHoDxuCDOPGpd87s1wLeJx7KP2pHHykhX7hWOUz6KTQNA
-         ude5FjEbhrWmQb5vb5GgfgyOiHMPJp7oW+GLotarH8W6U1f121/xR3LkeGLp2KkekyC9
-         3sbD1KFMlVXAmbbliIE3xarT4tXL9ipAYk03Kg2393V1pGChPPOu6URPuSWJ3zwQ41e8
-         QiLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745949859; x=1746554659;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TF5zvq+dwouurJsmOFisci0GfULvxMNmW9FvbbMePLQ=;
-        b=iS28MEJxYLXCMLj7d4ZkIIST+65AkubCr6s6nF5EMaSLYcyACAP0Rlz8derYaXeEo0
-         qHQaIPqEU9Bvp+YjpvkTvKMgNaajuCol6s5v8MioTmV5A1ogcYBqVzguhYGz6vrzp+XZ
-         h2wt7lsrC1guuixpBUVkwOM95HseRVtduP6J95oINxoUjXljHF5T8XUv7Jmpa/cCmJN/
-         +O7kHRwZqtRKWRKJcGi8UqDcmUhzzjLwis++5h994mVFGQPZGLD5BRlOP1pJrUBrEl5Z
-         lX/uox5geERq4Ci8/0V/m0S+LrOg6wYASoQMMC8PRJLTgSE4d+v7+GfNvQEV2oHv6hu/
-         lqfQ==
-X-Gm-Message-State: AOJu0YwRq0PXlmv0eYKdpar7KuPw4f6aimQpxV1lCzcP6DyVTAAMdWuq
-	Yq65u6M/++jHm9Q0Dt2sfrL+T1ddEqbcCekjZG8igQgdmSGlX4yldf1f10/2zQ==
-X-Gm-Gg: ASbGncvvp68iGwo1L8t+85xF53tY/un6e1AWidYGjLBm22fArJx6uPZMDv6s2kGMuBJ
-	N5QRd7meeKlOw2ysOM509INANKhKqk3tSyCBxsTsOSlwuhwgd5k3v0Hqhrsst2ZyN+/M8mtZ/dG
-	jRzPNsAlWudL14hpGHWJP6b2o2/HeLQvEcnYS5yzLuky8i6ZCQyHhD/FoFujXztq7KNI6qG3RIi
-	wumYoqNHLqNZkTLE4XynaSQQt/tvxOb6JSwY1QMdAE2lIfyJ6Rk+hwFE8F3bwFjbgsDMlqzuZis
-	0G1ESNPCYrYCgpONYxgrEdRwHZ+Fq1beygYUA6AFbJhUt0XY4ACL1om+NA==
-X-Google-Smtp-Source: AGHT+IH6MS3bZbEKvU9ZIkPz0etq8wy02LqJGtPPuVrhlRpUYewJVc/Smzwo8DIrS9bHhVaeokgm0A==
-X-Received: by 2002:a05:6a20:9d93:b0:1f5:7eb5:72dc with SMTP id adf61e73a8af0-2046a3abe8amr17646432637.3.1745949859182;
-        Tue, 29 Apr 2025 11:04:19 -0700 (PDT)
-Received: from [172.16.116.85] ([103.15.228.94])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b15f76f580asm7724722a12.2.2025.04.29.11.04.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Apr 2025 11:04:18 -0700 (PDT)
-Message-ID: <6afe226c-4bf4-48be-84be-034261914ee5@beagleboard.org>
-Date: Tue, 29 Apr 2025 23:34:01 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D8723FC7;
+	Wed, 30 Apr 2025 00:50:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.67.38
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1745974228; cv=fail; b=CFHuHy/Bf3fjfWUlelzyWNnFrhprXh8N8MeeecTiZORVSXpmufhM9PrDG98LCNQ5g7OICAi+p307xy/lN1QxC6fljGD0qtSrH4hcZNX7mBhtzeM7d7ic7YXRomoxcgs500yVj5y14D5BeyemMdYPIiMt4A+PXnfPbNhAMWiC6CU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1745974228; c=relaxed/simple;
+	bh=8Og1O7vXnB7x9FrhSaeqZE1Pih8jl1dCwhxNp6HzDyQ=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=iPnSOj5QdbPNIv4WlNBD8GjzXqOlmdemPUm8HahJ0VJ8j0SSGPRCsk5SDkCcacjcG8p6mHuJJgg3Pyw9hKvREUXGXmwtdARKUxkTR4zxyjXNmVmQcJNByzFE+o4LfIhCxX6biSCXotbeNuOxftqnpDEbQbCME8BdqFr7qdusy9M=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=n7Qgoeg2; arc=fail smtp.client-ip=52.103.67.38
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=O5l16X3XO7dpU0q8EeDpVp8RIGg9DtWjhI/eVizFM3Do9+T7d9XtlGEvKDz2bBTXpzTniBoKXiEXXvJElhDczI1pHcs19zgFyEkm5IwLvYVjvzoAwkAoFerDQ22pSWzSrISbyGa4SDHxgEHPVed2qSzul6DnrFYN+P5w1RClaH7JC00kBSej+xukV/5vo97FqmxxURtFUjbDiyjH05a0JQL/PxtfSei1lqRVJOw481aTMbBhaTi2cmZzvB0JE0G2ricDT2U+GWCiLc428dKcbQA9vCowsWE/3yoX82nv8qDG7MIqHR2vt9dxLime5B1YBwfPc5fV9dUbsePc3jrCZw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jsz9pMkvBImV6EOqjUdo6lInD8icHyHyWCobqyW7+kU=;
+ b=M2yRGkXGjqq3pMJsIZJ+6klYhmshW6izl0hbtv4evVrZ1mb5inq+/Bf9LCp/TI32p7cs1vokIeBxvP8bPD5BN6ZxZJCAXrPX/Rt7BHJFDMX8SOGy7blCCZ8+yQ3emnM5WnR3ob5rjHSqg1MTA9nYoSPAALWR/vItkJaJh5pjkQHLvG/G2VqFCh+5lqVqbib+h9vL2VJRh5lNsc1H441EHmzHRK7/O9RA7t+Xo4pB8wEPlY+DnVDdergAP4z4g1+ZuxwFvgB9n2EA0YrDaLpa4NY2O5UPcCdY3Y1yOe8i/p8+UdxfOEDQ9nEaVmC69tR0nU+heP2PtGkwUPAEpBxK+w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jsz9pMkvBImV6EOqjUdo6lInD8icHyHyWCobqyW7+kU=;
+ b=n7Qgoeg2eCYz0T07RJJty8acSXMVaCXn/+D1qw4nmD0mRv5VRZQ8wREO/B2zppN/HV0AjNQw2d8PDk/VzEJLEI6RX7OlG8q1WjvnGLITaaJfV7VzbBBTEs95WmNYIeXD8SQIrtoYS9WDRt59TQklds4+b+zTE9poTuGAjIpu7eU8HBIllaX8GMAGN5UCXO9Kz7KE71I/1cenQQGdBkwdpi+fEQBKlrR8jj7hH/6kbKNTzr65dkkqwG7EIQadBwRvwqi2Id1Ckaej+Au27LYcTvWblGi6ywlqMWWL7z409edFl744UtrLh0j7CpBeiqMBndJFsHTH/kjDo4/7yxrNjg==
+Received: from MA0P287MB2262.INDP287.PROD.OUTLOOK.COM (2603:1096:a01:100::6)
+ by PN0P287MB0476.INDP287.PROD.OUTLOOK.COM (2603:1096:c01:121::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8678.34; Wed, 30 Apr
+ 2025 00:50:16 +0000
+Received: from MA0P287MB2262.INDP287.PROD.OUTLOOK.COM
+ ([fe80::ca81:3600:b1e4:fcf4]) by MA0P287MB2262.INDP287.PROD.OUTLOOK.COM
+ ([fe80::ca81:3600:b1e4:fcf4%5]) with mapi id 15.20.8699.019; Wed, 30 Apr 2025
+ 00:50:16 +0000
+Message-ID:
+ <MA0P287MB226233A10BD5082A7D6B7F5EFE832@MA0P287MB2262.INDP287.PROD.OUTLOOK.COM>
+Date: Wed, 30 Apr 2025 08:50:09 +0800
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 05/10] dt-bindings: reset: sophgo: Add SG2044 bindings.
+To: Philipp Zabel <p.zabel@pengutronix.de>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+ sophgo@lists.linux.dev, linux-kernel@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-riscv@lists.infradead.org,
+ linux-mmc@vger.kernel.org, Yixun Lan <dlan@gentoo.org>,
+ Longbin Li <looong.bin@gmail.com>, Inochi Amaoto <inochiama@gmail.com>,
+ Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
+ Thomas Gleixner <tglx@linutronix.de>,
+ Paul Walmsley <paul.walmsley@sifive.com>,
+ Samuel Holland <samuel.holland@sifive.com>,
+ Ulf Hansson <ulf.hansson@linaro.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Thomas Bonnefille <thomas.bonnefille@bootlin.com>,
+ Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+ Jisheng Zhang <jszhang@kernel.org>, Chao Wei <chao.wei@sophgo.com>
+References: <20250413223507.46480-1-inochiama@gmail.com>
+ <20250413223507.46480-6-inochiama@gmail.com>
+From: Chen Wang <unicorn_wang@outlook.com>
+In-Reply-To: <20250413223507.46480-6-inochiama@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SG2PR02CA0102.apcprd02.prod.outlook.com
+ (2603:1096:4:92::18) To MA0P287MB2262.INDP287.PROD.OUTLOOK.COM
+ (2603:1096:a01:100::6)
+X-Microsoft-Original-Message-ID:
+ <cffc744c-430e-4e11-8c7e-6957cf8e0259@outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] schemas: i2c: Introduce I2C bus extensions
-To: Herve Codina <herve.codina@bootlin.com>,
- Wolfram Sang <wsa+renesas@sang-engineering.com>,
- Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
-Cc: linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, devicetree-spec@vger.kernel.org,
- Luca Ceresoli <luca.ceresoli@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20250401081041.114333-1-herve.codina@bootlin.com>
- <20250401081041.114333-3-herve.codina@bootlin.com>
-Content-Language: en-US
-From: Ayush Singh <ayush@beagleboard.org>
-In-Reply-To: <20250401081041.114333-3-herve.codina@bootlin.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MA0P287MB2262:EE_|PN0P287MB0476:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8e0fafd8-6e54-4467-7cf9-08dd8780f8d6
+X-Microsoft-Antispam:
+	BCL:0;ARA:14566002|7092599003|19110799003|15080799006|5072599009|6090799003|8060799006|461199028|440099028|3412199025|12071999003|21061999003;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?T2xUK1NiU2JFa0tSRE1HZ21KRjZrY1FyekE4TU80c3pJWmE5d1RLU2VaSnhk?=
+ =?utf-8?B?SHByMlJid01jRnc2b29mcXRLa1NpSG9DSE9McTlPNW1vRkdBWFIxdTNnbGY5?=
+ =?utf-8?B?c3g4blE3dHVncjhpYmhHMWhRSlMxSklDMkhjNG8xVm8vQmdBMy83Wm5kYUV4?=
+ =?utf-8?B?L0dMdnZ4ZS9tSENJL0k2eXB6aDY0cGZ6Q0txZVI5K3ZiZkVBT3hBSXNsTGgw?=
+ =?utf-8?B?ZkhMUzZaN1ZtZ0ZuQW03UFRhVE5WUVY5K3hoRHp0OUh0RERxSGpDRGZZS0JE?=
+ =?utf-8?B?bVdHOTkxNUdHMG41YTJwcGw1K2svT2x1VFdwU210MVlROHZleWk0eXE4TVY1?=
+ =?utf-8?B?L1pXUFVTSWVSRzQ4dHhSSjIvSHQ2Qy9hTGZaVWtCYXphK3FWdks3V3lXL1Ns?=
+ =?utf-8?B?d3NSVnBlNVgva2YyVm5DNXpUaEl5YTM2bzZnakQ4K3NWZ3dVbGN2MUx6c3hM?=
+ =?utf-8?B?OE1IekU2Z2dBQm9tVXJFT0hmQUw3SnBhY0RNVDh0SWhBc0k3KzlWSmNTYnhn?=
+ =?utf-8?B?L2JJb2dqN1RtdXVYR2ZDa0xweUlaYnExa1BIVFBmakpBYmZnUTM0dGhHWUth?=
+ =?utf-8?B?aGh6aVIvemRwV2hqcmVKUnd3TnFJaXpwWFN4VzdIdHd4MGtWYm5HWitpODJq?=
+ =?utf-8?B?K1lNQ2xQeEVZQVo0VUFyWVE0ZUV5dkQySmRraWxoRjNmOVNsdlNwOWhMaWpm?=
+ =?utf-8?B?SmRnZmFRbW40dFhCZ2JvYVRZYU1BMWVDdVVKQTVsZ3ZKOG9PZnV0NlpUNTNj?=
+ =?utf-8?B?K3BvamNpN3dYNjdMRmRwVkcrMHVNY1Y1QitEMXJiaGRvODZ3NUJMeTdmY1dF?=
+ =?utf-8?B?VkNXOW9xc0U4aGNkYWhMVGlrd1pIaUlidllVQTV2YWVSVEhkNnIxSUN5U1VX?=
+ =?utf-8?B?Qmh2MW56a1hwWlljTlhlb1YvL2RrTUh2SHNVRnRZUGxWNEF1Y1NRV01vVEN1?=
+ =?utf-8?B?RXZiYWo0YXVKb0pOSy9pMDZMZC8rYmtpN3RBbzhUZFdld1hTUVFFb25hTUNI?=
+ =?utf-8?B?T1JBQ3VWWiszM0dGZGpieUE4ZEJkRVA3cUg4cFFpTjBseGl6ZWk5UmJGcW1D?=
+ =?utf-8?B?eW5yM2VKVVduZGl1ZUN1clZmaEdVZTBHNmNtNmVQM0dzUUNDTldxRERyTFRS?=
+ =?utf-8?B?Y1BxSHRLVi8zMDBJeTdZSDIrR1hMVmtzNWY1RkRVOGhYcllnWk9RcjBYck9F?=
+ =?utf-8?B?R203UTNQTXRuTFhRU2YzUU1QNlp2TklwN09NMUVnZ2tJRFpSYXlxVzViT2E2?=
+ =?utf-8?B?VnVMSUdnN0g1WkFFRmVzc1pDUDkzWG8yTUlkaVNQMWdCY29nRjhqWkVVQ1k2?=
+ =?utf-8?B?S2xFZ0pjRlI1cFdoWEpKT1JPZTRXbzlDbldUNWxuL3lkSnhuQ2RLOVNyRENZ?=
+ =?utf-8?B?OHROSHcwT2NmTlBSM3crT3hzUXY0ZVQ0QldKVEZhNlA5ekpQZ2xHTlV3QlhP?=
+ =?utf-8?B?N0FqQU8yRm93SkR3a2dqMElLa1ZYY1RvaXMvMkJuWDFzU053QnI3blUvZWNT?=
+ =?utf-8?B?ZmVvUWxIWWh6cGFxdFY3VmdlMmxodDdHenFiNHEwN0ZNN1RvVnRPcFRKZzk1?=
+ =?utf-8?B?Yk80dTcxZ0xYck5MaFYvVmovMUxMb0ZNWlBWcnlGMzVTV2k4Z3JFc1AzeFZJ?=
+ =?utf-8?B?QkNJa1RQN25kMlU3OXkxMDhOTkYvQUE9PQ==?=
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?WGJGUitmZDFPMXZWSDNtRGc3S2xUSHU2TEhzNGtUNEl2SFZ3TWNHU0pJSTVZ?=
+ =?utf-8?B?ckM1V2VXRG55MVZneDZubjFidUZPcU8vckdmSGJuTm1yWVd6Z0tBNVFkVGdv?=
+ =?utf-8?B?dTJYZWJKRW4waWRCa1VET01pdUZ2K2VweVYxRmI5cklSV05acno2R0JPemJL?=
+ =?utf-8?B?MVRHeStraVdJUCtEQk9hME9sR0QrOU1FV0pKQjBFdFBiUVZjTU84OHU1UjRh?=
+ =?utf-8?B?THpla0c5K1FlR0pZTFBSRnBodlZBMHRMMGNmbzBqNXFmVXFCVVRqUU5lZElN?=
+ =?utf-8?B?NysrYWU0Tm5SZThja1B6TDhhSFhEUVNSRlNMNUhOYzZSNzJDUFk3Qmc1NjJu?=
+ =?utf-8?B?ZnVqOE9zREx5T3ZDekZKNHFGWExyTEk1TkpFVWo0Q21TdjJMTHY3UklFcm1o?=
+ =?utf-8?B?RW5KYUUwK0pMUzkzeFQvd2o3NkcwYjg2NGE3aGtXc0hGY0liTi95RmVKNEp6?=
+ =?utf-8?B?SjlhNkFEbTdSUnAvYzk5U1pwTkVzQUpMOWwyTTVUblhHYlQxNVo3QzB2Z0ZL?=
+ =?utf-8?B?b0o1eEZRQWNZR0t3STNZZC9na05FMWl3Tm9wVEk0ZnoyeVZESjhROG1MdDMy?=
+ =?utf-8?B?MmNYeC85UkdLZXVBZVRER3Nkd2F4cjdFUjRDNGRtZUFjQ1poYmR2amhpbGts?=
+ =?utf-8?B?dEJnK3VKa0xHdGhsLzRUWTNObGtud3JDd1NDRS9nV2xvbTFHbW43dTVJVXU5?=
+ =?utf-8?B?TGhSUnExcDcxTWtKTUsxYmxIekRVSUxIajhnYXAxbG9DWFc1N1BoNE8vMW5X?=
+ =?utf-8?B?NUpaTjVNcnd1R2tKODI1NWFTUTFHV2NHOVM3VzNkV2RJTDNDTGord2MwT3Jq?=
+ =?utf-8?B?QmV3N2JUaW81WUVFSzVlSjArWnVsYnJPWEM0Ni9CNE92MlZaWkVoZEc3RGFO?=
+ =?utf-8?B?V0ZwTE9aRENIdEhVbVVyNjl5bEtMTU04SlBxYVYvS1d6SVRlOGRVK0RrRkNa?=
+ =?utf-8?B?bnRsMUNpRTVWVnVCcEpOWWt2U21UN0JnQWhCcU9nc1dOTkRKVGl4NXUzUGY3?=
+ =?utf-8?B?SHd3MEZmTCs1dEo1eUxtMWJldkVPOWk2Z1pKTmw2OWhMWEdxeDVlUzdYdklI?=
+ =?utf-8?B?d3daUXJoWG1CUktsTnJOZThjeDFQUUEvNzNmZGxhSkw3b2lJcjBReVQzNzBG?=
+ =?utf-8?B?dzVQL1VmYlMrRmNsYkRWeDE3RnRiZjNDYWp5TnZwVC8wbDRoNHBRZWZGL3Ru?=
+ =?utf-8?B?WVlYOFhRVm5iLzVnUkVqV2hUYUNYdVdJajF5VHdsYVBRL012Z3NPbmRWU1VX?=
+ =?utf-8?B?WlFqQzcrZUM4Z2FQTFcvemZlUWpZSE5SbmhWN25aVVBVZWJiVU5Bc2ZZeURT?=
+ =?utf-8?B?S1huMUpIcWNOZXBDMEZGUVpsZWlPTjdBS0ZoZWpTZzEvZ3ZaS1VmbVBFa2ZQ?=
+ =?utf-8?B?N2kwNUliYXZ3T2ZGNElPZ3BZbmVrc1dpRENDUEdvWkVrdDFNeU1YL1RVbUM5?=
+ =?utf-8?B?NzVsckJuWGZkblluUTJsRnc3UVpIdUxBLytZeTBQaHNZcW9GRFdKOE5TTFBQ?=
+ =?utf-8?B?YzEwb2xybTYxRXkwckFFV0JvMnhHRG9ScHlzZHFEdndqSGxzcmFGMEdsVXFr?=
+ =?utf-8?B?bFhia1NyZnkvWFVZbjNBMFllcEtqNDZTTUZOL0k1UTR3V1FpbTFXTXoyRE5M?=
+ =?utf-8?B?MkRHemh3REFjSmp2SkZHMXliU3dJUjk3Vnc3bWhiaHQwcWJ1eHI1bUJxcjNv?=
+ =?utf-8?B?RDVLQUFnT2NNdHM4czlSWUlkTDZHRzFSdXc3a2x1NStjUHpZWVd1M0FwaGpt?=
+ =?utf-8?Q?1GRCAURnV2Rp4Tfpw3lzCCry0ePe5wq5AEJO+/G?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8e0fafd8-6e54-4467-7cf9-08dd8780f8d6
+X-MS-Exchange-CrossTenant-AuthSource: MA0P287MB2262.INDP287.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Apr 2025 00:50:16.0727
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+	00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN0P287MB0476
 
-On 4/1/25 13:40, Herve Codina wrote:
+Hi, Philipp,
 
-> An I2C bus can be wired to the connector and allows an add-on board to
-> connect additional I2C devices to this bus.
+Would you please apply this on reset/for-next for 6.16? I checked the 
+change history of sophgo,sg2042-reset.yaml and looks like you submitted 
+it last time.
+
+Thanks,
+
+Chen
+
+On 2025/4/14 6:34, Inochi Amaoto wrote:
+> The SG2044 shares the same reset controller as SG2042, so it
+> is just enough to use the compatible string of SG2042 as a
+> basis.
 >
-> Those additional I2C devices could be described as sub-nodes of the I2C
-> bus controller node however for hotplug connectors described via device
-> tree overlays there is additional level of indirection, which is needed
-> to decouple the overlay and the base tree:
+> Add compatible string for the reset controller of SG2044.
 >
->    --- base device tree ---
->
->    i2c1: i2c@abcd0000 {
->        compatible = "xyz,i2c-ctrl";
->        i2c-bus-extension@0 {
->            i2c-bus = <&i2c_ctrl>;
->        };
->        ...
->    };
->
->    i2c5: i2c@cafe0000 {
->        compatible = "xyz,i2c-ctrl";
->        i2c-bus-extension@0 {
->            i2c-bus = <&i2c-sensors>;
->        };
->        ...
->    };
->
->    connector {
->        i2c_ctrl: i2c-ctrl {
->            i2c-parent = <&i2c1>;
->            #address-cells = <1>;
->            #size-cells = <0>;
->        };
->
->        i2c-sensors {
->            i2c-parent = <&i2c5>;
->            #address-cells = <1>;
->            #size-cells = <0>;
->        };
->    };
->
->    --- device tree overlay ---
->
->    ...
->    // This node will overlay on the i2c-ctrl node of the base tree
->    i2c-ctrl {
->        eeprom@50 { compatible = "atmel,24c64"; ... };
->    };
->    ...
->
->    --- resulting device tree ---
->
->    i2c1: i2c@abcd0000 {
->        compatible = "xyz,i2c-ctrl";
->        i2c-bus-extension@0 {
->            i2c-bus = <&i2c_ctrl>;
->        };
->        ...
->    };
->
->    i2c5: i2c@cafe0000 {
->        compatible = "xyz,i2c-ctrl";
->        i2c-bus-extension@0 {
->            i2c-bus = <&i2c-sensors>;
->        };
->        ...
->    };
->
->    connector {
->        i2c-ctrl {
->            i2c-parent = <&i2c1>;
->            #address-cells = <1>;
->            #size-cells = <0>;
->
->            eeprom@50 { compatible = "atmel,24c64"; ... };
->        };
->
->        i2c-sensors {
->            i2c-parent = <&i2c5>;
->            #address-cells = <1>;
->            #size-cells = <0>;
->        };
->    };
->
-> Here i2c-ctrl (same goes for i2c-sensors) represent the part of I2C bus
-> that is on the hot-pluggable add-on. On hot-plugging it will physically
-> connect to the I2C adapter on the base board. Let's call the 'i2c-ctrl'
-> node an "extension node".
->
-> In order to decouple the overlay from the base tree, the I2C adapter
-> (i2c@abcd0000) and the extension node (i2c-ctrl) are separate nodes.
->
-> The extension node is linked to the I2C bus controller in two ways. The
-> first one with the i2c-bus-extension available in I2C controller
-> sub-node and the second one with the i2c-parent property available in
-> the extension node itself.
->
-> The purpose of those two links is to provide the link in both direction
-> from the I2C controller to the I2C extension and from the I2C extension
-> to the I2C controller.
->
-> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> Signed-off-by: Inochi Amaoto <inochiama@gmail.com>
+> Acked-by: Rob Herring (Arm) <robh@kernel.org>
+> Reviewed-by: Chen Wang <unicorn_wang@outlook.com>
 > ---
->   dtschema/schemas/i2c/i2c-controller.yaml | 67 ++++++++++++++++++++++++
->   1 file changed, 67 insertions(+)
+>   .../devicetree/bindings/reset/sophgo,sg2042-reset.yaml     | 7 ++++++-
+>   1 file changed, 6 insertions(+), 1 deletion(-)
 >
-> diff --git a/dtschema/schemas/i2c/i2c-controller.yaml b/dtschema/schemas/i2c/i2c-controller.yaml
-> index 018d266..509b581 100644
-> --- a/dtschema/schemas/i2c/i2c-controller.yaml
-> +++ b/dtschema/schemas/i2c/i2c-controller.yaml
-> @@ -30,6 +30,13 @@ properties:
->       minimum: 1
->       maximum: 5000000
+> diff --git a/Documentation/devicetree/bindings/reset/sophgo,sg2042-reset.yaml b/Documentation/devicetree/bindings/reset/sophgo,sg2042-reset.yaml
+> index 76e1931f0908..1d1b84575960 100644
+> --- a/Documentation/devicetree/bindings/reset/sophgo,sg2042-reset.yaml
+> +++ b/Documentation/devicetree/bindings/reset/sophgo,sg2042-reset.yaml
+> @@ -11,7 +11,12 @@ maintainers:
 >   
-> +  i2c-parent:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description:
-> +      In case of an I2C bus extension, reference to the I2C bus controller
-> +      this extension is connected to. In other word, reference the I2C bus
-> +      controller on the fixed side that drives the bus extension.
-> +
->     i2c-scl-falling-time-ns:
->       description:
->         Number of nanoseconds the SCL signal takes to fall; t(f) in the I2C
-> @@ -159,6 +166,25 @@ allOf:
->           - i2c-scl-has-clk-low-timeout
+>   properties:
+>     compatible:
+> -    const: sophgo,sg2042-reset
+> +    oneOf:
+> +      - items:
+> +          - enum:
+> +              - sophgo,sg2044-reset
+> +          - const: sophgo,sg2042-reset
+> +      - const: sophgo,sg2042-reset
 >   
->   patternProperties:
-> +  'i2c-bus-extension@[0-9a-f]+$':
-> +    type: object
-> +    description:
-> +      An I2C bus extension connected to an I2C bus. Those extensions allow to
-> +      decouple I2C busses when they are wired to connectors.
-> +
-> +    properties:
-> +      reg:
-> +        maxItems: 1
-> +
-> +      i2c-bus:
-> +        $ref: /schemas/types.yaml#/definitions/phandle
-> +        description:
-> +          Reference to the extension bus.
-> +
-> +    required:
-> +      - reg
-> +      - i2c-bus
-> +
->     '@[0-9a-f]+$':
->       type: object
->   
-> @@ -221,3 +247,44 @@ dependentRequired:
->     i2c-digital-filter-width-ns: [ i2c-digital-filter ]
->   
->   additionalProperties: true
-> +
-> +examples:
-> +  # I2C bus extension example involving an I2C bus controller and a connector.
-> +  #
-> +  #  +--------------+     +-------------+     +-------------+
-> +  #  | i2c@abcd0000 |     |  Connector  |     | Addon board |
-> +  #  |    (i2c1)    +-----+ (i2c-addon) +-----+ (device@10) |
-> +  #  |              |     |             |     |             |
-> +  #  +--------------+     +-------------+     +-------------+
-> +  #
-> +  # The i2c1 I2C bus is wired from a I2C controller to a connector. It is
-> +  # identified at connector level as i2c-addon bus.
-> +  # An addon board can be connected to this connector and connects a device
-> +  # (device@10) to this i2c-addon extension bus.
-> +  - |
-> +    i2c1: i2c@abcd0000 {
-> +        compatible = "xyz,i2c-ctrl";
-> +        reg = <0xabcd0000 0x100>;
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        i2c-bus-extension@0 {
-> +            reg = <0>;
-> +            i2c-bus = <&i2c_addon>;
-> +        };
-> +    };
-> +
-> +    connector {
-> +        i2c_addon: i2c-addon {
-> +            i2c-parent = <&i2c1>;
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +
-> +            device@10 {
-> +                compatible = "xyz,foo";
-> +                reg = <0x10>;
-> +            };
-> +        };
-> +    };
-> +
-> +...
-
-
-Reviewed-by: Ayush Singh <ayush@beagleboard.org>
-
+>     reg:
+>       maxItems: 1
 
