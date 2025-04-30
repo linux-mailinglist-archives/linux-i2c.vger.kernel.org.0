@@ -1,78 +1,78 @@
-Return-Path: <linux-i2c+bounces-10712-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10713-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CAFB8AA54FA
-	for <lists+linux-i2c@lfdr.de>; Wed, 30 Apr 2025 21:47:09 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0BDBEAA54FF
+	for <lists+linux-i2c@lfdr.de>; Wed, 30 Apr 2025 21:47:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 543641C22810
-	for <lists+linux-i2c@lfdr.de>; Wed, 30 Apr 2025 19:47:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6676A4A81A4
+	for <lists+linux-i2c@lfdr.de>; Wed, 30 Apr 2025 19:47:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB416276025;
-	Wed, 30 Apr 2025 19:46:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE46927817E;
+	Wed, 30 Apr 2025 19:47:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IL85ScRX"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RUEJUPA1"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE17B1DDC0B;
-	Wed, 30 Apr 2025 19:46:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C881D20E032;
+	Wed, 30 Apr 2025 19:46:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746042419; cv=none; b=GI6hgNsY/y+oPXR76axThSzjcWOQ5gBJ9SMrGtKjF+7EU/mBRnLXA70qLZTBvBcz7rKqQ2Mz3E8OnI5ntoAZ/hQJ/7hRE0rCXIVpA2sLXVmVerDNYCSRyrw4OOKCQ5sqcaarDB3tc74T/GtAzTIcsj+xXwdfOQDjdv16Za+6Euc=
+	t=1746042420; cv=none; b=uwJj11wuSG49TkLxLqOL4X9mg7ZP38plzHun0Kk36UfBGk0S/OgTcfxaFf4kCBgMNTRRuXCwCphZYXJM1YNysxiTQS4cLshs0IbjXT1jL4ss4O/AG4/dzSjT+26imPBnHDY8RhnBgEfjXoB+bRYHH58gYxPH0velR9//Q8QjLAQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746042419; c=relaxed/simple;
-	bh=WKCK2tn5wB2qCSrWfSxehJ1Pi1fyjtSVwxfap0lLWZc=;
+	s=arc-20240116; t=1746042420; c=relaxed/simple;
+	bh=9LtxQBPKOiUjXtlTHWPxFOjZNz4jsv5g8e0uGwjCZfI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cNbB9N9aE+TtmrLZXnz5M24pdEoEbPprTvcR9iAtzMnM+OQ6lTGS2vWnWQ6+9Hbi99hMdMn6Ri15rxO/n3VpnxA7banyHyowMN1VuZlDTrmVz+ijxxQ74mZsSP5D999oOCsikvbWwfhiBhWC4xS/3tGF8GA+ORIuyQ10lJLUU0A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IL85ScRX; arc=none smtp.client-ip=209.85.128.53
+	 MIME-Version; b=RhyqICbUrCmGl4iWrex0lhGfzDuKyfpfFxs6PC2U2T8FqSoF2TlTbqU0uTAHkH6a62Lmx3Hd5c2GfHbepneuMLBfRmrqiHz0Nxoc/Ms+Oy8qBpyOL9Z7WuTE3w17KU0uuAEx4zCAc/lDpniWiMWRQX8VW2tcKvFi4AqNVBHWQos=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RUEJUPA1; arc=none smtp.client-ip=209.85.221.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-43cf680d351so7913055e9.0;
-        Wed, 30 Apr 2025 12:46:57 -0700 (PDT)
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-39149bccb69so105978f8f.2;
+        Wed, 30 Apr 2025 12:46:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746042416; x=1746647216; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1746042417; x=1746647217; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=DoQqeV/Aw5s9vNmJJr19RcGCs9WfikYSyXiIiBXDlJc=;
-        b=IL85ScRXQzQbuOCNHerdcFcn4HmfVWJ/ezD1GtzJd5aqwhyDNjpKY+3Zg8GoeDot+n
-         6/6YRrxKdgsiqUJbfhHlj3mQzCajwRge3uYw7dYBNtN0ANZgTsU8Z/mfbdiqgRuKhK0d
-         4j1tLb4YFgDlqQ/S4hN4iQ/CpoMMiiQI7XCfJHaFNKgKXpidVGsRWDDGlL7cVEy8gBJu
-         UWAu8NcOUxlvdonC/hejnFIfJI54EXCogRDxURJ9Cakk1zIL+mB1GQT5m1NOk6DGGeQY
-         fn+NI1AoYpocRBDcvC+o1wSe7Jqnj4fhwCCJ0HK9vB9xseTVc2UiARzItVi7KbCwmAKQ
-         6goQ==
+        bh=221neJIU1ejQ3qf8VHMblePVKbx+mBZh8+ACZ1QYRxg=;
+        b=RUEJUPA1bSUBBZ4HRvlW1WRPkeV1cmEn+q0j2RIkqw1QHaZNfqanVoOoWmNwL5VqZ9
+         2jeGFzEI47OXZ6Z+vwpMRhHkbW7wtyG5uIfaUTXb86qHy4W7ftztOcnAlXCHL+plcrcG
+         cRcu7YPfuu8VZrZEGMdvLaiTxkaAmIpwehnZqtgUZnWaGmndhMW9B4EGaAn8h9s84qBM
+         VrnT0N//dVhuVNpPfJpdDesqG1+I5hFK25gZskLwdtyvxv0wE1cccZWzQUmXQyNzsmXZ
+         fTMTyCbuTdr1NpGccc5wFGrY6XE1xvSCCuV2P8/smOZkzz33N7K6hmBzTDs7yp8LhsFA
+         TWWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746042416; x=1746647216;
+        d=1e100.net; s=20230601; t=1746042417; x=1746647217;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=DoQqeV/Aw5s9vNmJJr19RcGCs9WfikYSyXiIiBXDlJc=;
-        b=W+nTbSQe8DrbAdYi46t3M/NSUKCV24aGzs1l8l/R2mjD9hCORlkWWeCBiggEaQ/6AI
-         8CSaQOmEwH/tKrZwR+xVpLej8K3v4adjMWRtuSCYlXQ/USBYuw7P4Ti8YSqCYPUwr3fg
-         ZQDu0lk70G/+13p5GO4FSNXlUCpIrqHGuqOjErt6izUsLCDisribpOdmXkAN3zz079uO
-         jORDIIBikUKEUQZkhW6+3GXMt9uOCJIOTZkjhbMXBuLiYA53T7N+3tNMZqlpqa0v/fAf
-         fbzC/7F4xAQ18RDub+z05Oct+DBCSdfKHZQP/HaVrsK/pDuxWVhm3oSUS63EVKXTgSIR
-         LZaA==
-X-Forwarded-Encrypted: i=1; AJvYcCWcETtG5rhIVmpAV4g7ozsChqq4VtDkXW6OueoPSHgOPDaUW9730xPK39GPE6cNHOx/d6Vsm/Qmw7+rbu52@vger.kernel.org, AJvYcCWn3mQK/Ct1jfmilO1P5PVY3Qk9KnSzzhOyx6E5x5P/ZQA0zDCy9ipAFbAwm6A/s3EVdtcvfXPhsek=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZiAslOmKrAufWvnKPqwt1nltjYKnRwcgMv+JDfxYMaL8szYnF
-	33WIv/XI5A50xp9CLSKmcTL7R8slPkwshhVypkrvR6l5dJtG/RAT
-X-Gm-Gg: ASbGncuLqnkD/c9wKvSq+1llo4tBuyO7jw+chCtL3dJ7dPZLDIbZkgE4qBR9Ny59YiE
-	smR6xukXXKdUml8g0PKqdnhk8O87CAvN1/hZfhZDMfVH+hzzT9J0LoR03hXtZ5/0NL1Eac07jh7
-	R9raimm0O7jO5wK576lOkgDzmqaaP2euBDnwZniSH5Kdoc6Ip8Q0lUpurSi3SzNYlykPBW00Zff
-	ouokKhLo4KRhFhUJBOnsn6f01GK8n2y6sQ6+cFmvP4E0RJ2lXm/r23CF3VxHItye1QBxm8cyM5M
-	BNFYc3pGKaiaSp7DAUDzsn7i+TOhjlIzTFdWJX6nhJ/LEJbkmWBxJlUQSBIZUAtAb60e4qHA47s
+        bh=221neJIU1ejQ3qf8VHMblePVKbx+mBZh8+ACZ1QYRxg=;
+        b=tJ0To90VMRFOlG+bO0q0yeaRwG1nyQgZ5REnb3sUD7qL2A+zJMKIygRrx4EdvMIufM
+         huTNljG81ZB8fif17LILLl3BOZ/Eu2vVafaQ5WVEtlfjVt+ZYrTr5j79wfsr+tliu3Tg
+         ZCpCzntjXaWARgQFuW/GYKPXqy9znEVeXJLRW1Kdz7EXNRMcHsL287G0jHYbudNjHLKf
+         hvgkwggYc1RoCtt5bYYScQM1a7d9qTWXX/FoouG7xMPJJGXk4MAzxqcsXPBd25+b8q2I
+         fe9tgzmHie0b3pkxVvClw2YuUGlwEdaG26wPgTH5uR+T7NDNtvbEA0TcMe6z91bq5V/m
+         tioA==
+X-Forwarded-Encrypted: i=1; AJvYcCV4E4QcGhcAUc9BDlx0zJEn8ku0HhZ2G+fV4YiVg8iD2yHw7MAVqFS/dwNA8TzB5E0CgUudLyKZtHT5XOOn@vger.kernel.org, AJvYcCV7DqstczHyVx9ECjxagQIOhVUg7qJliwUMjeWXofVKty3agZRiu6Vaz/t2YPm1TRrTLP/PAKXqR9M=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwzxtxAArIoT8Mh1+yLif9BjXqY79HdJ0WtR5Go1rjxVsWH9/Cr
+	UvRGCgrB47DwCbrh1vh59iOAVp0QM9rEpOfUmfBolrR/rtQkXxzGnO7Z2uQS
+X-Gm-Gg: ASbGncvCEbbLF7NhEIEim6S6dWwX/1MYMatOwySPS8qjUZ4ELaQPMeJcabvTdNmQNyd
+	wzdJCYnGOR3LasNqrvazRNReF4BNao6rgJK88FISL47om8Kzoz1q6WrWZNBRHl24QgC947MAMqT
+	D6ZFfQ7QndTwg7YKfIVWxBDcYbx7QcVa5L7/72NXIJWYUPYBtZjRZ5NADKOhZ+U+doy/FPQkSCE
+	SvJZo4pNNPoKH9yrEULdq6/VHKu+cgRCNvrVEi1nQxGWYOZc5M22BaEvRudq4af3k004QYRxf4e
+	1itfHxgX1qixyqOg8S4u9W8UXgphI5CItqB9YIBEq3Ns2CsCohVK/7PqMaO17CruXnt3VNpCkM4
 	=
-X-Google-Smtp-Source: AGHT+IGsdAAvCLhiw2OjKgxq3viK7+pv6o27XdNNwzYFElUloDVRGL8LC8ht5HFJtSwnmf/rEHayiw==
-X-Received: by 2002:a05:6000:1807:b0:3a0:7caf:7de with SMTP id ffacd0b85a97d-3a092cf4c0dmr636821f8f.11.1746042415953;
-        Wed, 30 Apr 2025 12:46:55 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFqdejLBnkd9J3TsRgL/QFN+1GBCgffUsVhPYHdn7SILN/NvpuykFboLuGaK2KpbWOmv6ufXw==
+X-Received: by 2002:a5d:5887:0:b0:3a0:6c62:8169 with SMTP id ffacd0b85a97d-3a08f770be0mr4571395f8f.25.1746042416998;
+        Wed, 30 Apr 2025 12:46:56 -0700 (PDT)
 Received: from iku.example.org ([2a06:5906:61b:2d00:c5ac:bf15:f358:81a8])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a073e46517sm17861646f8f.71.2025.04.30.12.46.55
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a073e46517sm17861646f8f.71.2025.04.30.12.46.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Apr 2025 12:46:55 -0700 (PDT)
+        Wed, 30 Apr 2025 12:46:56 -0700 (PDT)
 From: Prabhakar <prabhakar.csengg@gmail.com>
 X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 To: Chris Brandt <chris.brandt@renesas.com>,
@@ -87,9 +87,9 @@ Cc: linux-renesas-soc@vger.kernel.org,
 	Biju Das <biju.das.jz@bp.renesas.com>,
 	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
 	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH v9 1/2] i2c: riic: Implement bus recovery
-Date: Wed, 30 Apr 2025 20:46:46 +0100
-Message-ID: <20250430194647.332553-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH v9 2/2] i2c: riic: Recover from arbitration loss
+Date: Wed, 30 Apr 2025 20:46:47 +0100
+Message-ID: <20250430194647.332553-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250430194647.332553-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 References: <20250430194647.332553-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
@@ -103,110 +103,55 @@ Content-Transfer-Encoding: 8bit
 
 From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Implement I2C bus recovery support for the RIIC controller by making use
-of software-controlled SCL and SDA line manipulation. The controller allows
-forcing SCL and SDA levels through control bits, which enables generation
-of manual clock pulses and a stop condition to free a stuck bus.
+Add support for detecting arbitration loss in the RIIC controller. For
+certain slave devices, it was observed that after I2C recovery, the
+transmission triggered an arbitration loss. To handle this, initiate
+the I2C recovery sequence and retry the transfer.
 
-This implementation wires up the bus recovery mechanism using
-i2c_generic_scl_recovery and provides get/set operations for SCL and SDA.
-
-This allows the RIIC driver to recover from bus hang scenarios where SDA
-is held low by a slave.
+This ensures reliable communication in scenarios where arbitration
+loss may occur after recovery.
 
 Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 ---
- drivers/i2c/busses/i2c-riic.c | 53 +++++++++++++++++++++++++++++++++--
- 1 file changed, 51 insertions(+), 2 deletions(-)
+ drivers/i2c/busses/i2c-riic.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/i2c/busses/i2c-riic.c b/drivers/i2c/busses/i2c-riic.c
-index d7dddd6c296a..740e53bdb2a9 100644
+index 740e53bdb2a9..86404d2df244 100644
 --- a/drivers/i2c/busses/i2c-riic.c
 +++ b/drivers/i2c/busses/i2c-riic.c
-@@ -53,6 +53,8 @@
- #define ICCR1_IICRST	BIT(6)
- #define ICCR1_SOWP	BIT(4)
- #define ICCR1_SCLI	BIT(1)
-+#define ICCR1_SCLO     BIT(3)
-+#define ICCR1_SDAO     BIT(2)
- #define ICCR1_SDAI	BIT(0)
+@@ -79,6 +79,7 @@
+ #define ICIER_SPIE	BIT(3)
  
- #define ICCR2_BBSY	BIT(7)
-@@ -151,11 +153,11 @@ static int riic_bus_barrier(struct riic_dev *riic)
- 	ret = readb_poll_timeout(riic->base + riic->info->regs[RIIC_ICCR2], val,
- 				 !(val & ICCR2_BBSY), 10, riic->adapter.timeout);
- 	if (ret)
--		return ret;
-+		return i2c_recover_bus(&riic->adapter);
+ #define ICSR2_NACKF	BIT(4)
++#define ICSR2_AL	BIT(1)
  
- 	if ((riic_readb(riic, RIIC_ICCR1) & (ICCR1_SDAI | ICCR1_SCLI)) !=
- 	     (ICCR1_SDAI | ICCR1_SCLI))
--		return -EBUSY;
-+		return i2c_recover_bus(&riic->adapter);
+ #define ICBR_RESERVED	GENMASK(7, 5) /* Should be 1 on writes */
  
- 	return 0;
- }
-@@ -439,6 +441,52 @@ static int riic_init_hw(struct riic_dev *riic)
- 	return 0;
- }
+@@ -180,6 +181,7 @@ static int riic_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
  
-+static int riic_get_scl(struct i2c_adapter *adap)
-+{
-+	struct riic_dev *riic = i2c_get_adapdata(adap);
-+
-+	return !!(riic_readb(riic, RIIC_ICCR1) & ICCR1_SCLI);
-+}
-+
-+static int riic_get_sda(struct i2c_adapter *adap)
-+{
-+	struct riic_dev *riic = i2c_get_adapdata(adap);
-+
-+	return !!(riic_readb(riic, RIIC_ICCR1) & ICCR1_SDAI);
-+}
-+
-+static void riic_set_scl(struct i2c_adapter *adap, int val)
-+{
-+	struct riic_dev *riic = i2c_get_adapdata(adap);
-+
-+	if (val)
-+		riic_clear_set_bit(riic, ICCR1_SOWP, ICCR1_SCLO, RIIC_ICCR1);
-+	else
-+		riic_clear_set_bit(riic, ICCR1_SOWP | ICCR1_SCLO, 0, RIIC_ICCR1);
-+
-+	riic_clear_set_bit(riic, 0, ICCR1_SOWP, RIIC_ICCR1);
-+}
-+
-+static void riic_set_sda(struct i2c_adapter *adap, int val)
-+{
-+	struct riic_dev *riic = i2c_get_adapdata(adap);
-+
-+	if (val)
-+		riic_clear_set_bit(riic, ICCR1_SOWP, ICCR1_SDAO, RIIC_ICCR1);
-+	else
-+		riic_clear_set_bit(riic, ICCR1_SOWP | ICCR1_SDAO, 0, RIIC_ICCR1);
-+
-+	riic_clear_set_bit(riic, 0, ICCR1_SOWP, RIIC_ICCR1);
-+}
-+
-+static struct i2c_bus_recovery_info riic_bri = {
-+	.recover_bus = i2c_generic_scl_recovery,
-+	.get_scl = riic_get_scl,
-+	.set_scl = riic_set_scl,
-+	.get_sda = riic_get_sda,
-+	.set_sda = riic_set_sda,
-+};
-+
- static const struct riic_irq_desc riic_irqs[] = {
- 	{ .res_num = 0, .isr = riic_tend_isr, .name = "riic-tend" },
- 	{ .res_num = 1, .isr = riic_rdrf_isr, .name = "riic-rdrf" },
-@@ -495,6 +543,7 @@ static int riic_i2c_probe(struct platform_device *pdev)
- 	adap->algo = &riic_algo;
- 	adap->dev.parent = dev;
- 	adap->dev.of_node = dev->of_node;
-+	adap->bus_recovery_info = &riic_bri;
+ 	reinit_completion(&riic->msg_done);
  
- 	init_completion(&riic->msg_done);
++retry:
+ 	riic_writeb(riic, 0, RIIC_ICSR2);
  
+ 	for (i = 0, start_bit = ICCR2_ST; i < num; i++) {
+@@ -193,8 +195,14 @@ static int riic_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
+ 		riic_writeb(riic, start_bit, RIIC_ICCR2);
+ 
+ 		time_left = wait_for_completion_timeout(&riic->msg_done, riic->adapter.timeout);
+-		if (time_left == 0)
++		if (time_left == 0) {
++			if (riic_readb(riic, RIIC_ICSR2) & ICSR2_AL) {
++				ret = i2c_recover_bus(&riic->adapter);
++				if (!ret)
++					goto retry;
++			}
+ 			riic->err = -ETIMEDOUT;
++		}
+ 
+ 		if (riic->err)
+ 			break;
 -- 
 2.49.0
 
