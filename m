@@ -1,139 +1,130 @@
-Return-Path: <linux-i2c+bounces-10690-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10691-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 315D3AA4A39
-	for <lists+linux-i2c@lfdr.de>; Wed, 30 Apr 2025 13:36:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD7E6AA4B15
+	for <lists+linux-i2c@lfdr.de>; Wed, 30 Apr 2025 14:26:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A13034E79EB
-	for <lists+linux-i2c@lfdr.de>; Wed, 30 Apr 2025 11:36:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 55A561BC2FFE
+	for <lists+linux-i2c@lfdr.de>; Wed, 30 Apr 2025 12:26:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DECC23815D;
-	Wed, 30 Apr 2025 11:36:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D189325A331;
+	Wed, 30 Apr 2025 12:25:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="ieOpJtdV"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="RppvKdCq"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BD301DF25A;
-	Wed, 30 Apr 2025 11:36:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F31F1C173F;
+	Wed, 30 Apr 2025 12:25:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746012981; cv=none; b=GB8W+4nJnyCAjelco+ZqXpqUMVWoNs6WLH+E6pzbWr7ayQVx35YUQMOz+y4ZHWPoBstrj+yk8iHUKNmjlgkkjpTF+LciqbN8aoj/N6TTWPVU1P6pmHmoEq7Ao8zs45tr84JT1pjueRB2ClKjcsB3nBUBEP8GxLJOX3L7wcSiQ2I=
+	t=1746015936; cv=none; b=M4whI79ThanZmS5JQn4XB7wWm/GsUkq6Q6SHC/VnkClLMc+JDHj8LgqlO9BSfPpXFyELPm+HZI68sUExwO0fCdTw5a4Ly/aTCpAuJdl8JxtpkxhsadXzsqjwcxuVT2qpMQlESu7Gs6ULjE92t61ESVQSROqeNTx4rRRCqeJbLJ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746012981; c=relaxed/simple;
-	bh=DVQVf8tGK954V/VM/YHVvqZHZv78CTJdMafVxqu9h1Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=EiYeO/jJrbLTWwgbwTapUu1DlEUsm9PyGzlTzo3H0zyz72qe2GfGCbiUNCOnVK3Mtf7vEJItx9V7a+ufUFL2sWNTTtLu+YbX719mwponoWtLCQZb+w6bbNZHuymJ0zL/krYsDrQ1YyanTIdyUpZ7eXc8n+YPnSS+mSrUpQVqAJg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=ieOpJtdV; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53U91j2i016541;
-	Wed, 30 Apr 2025 11:36:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	a50UEAwiOb8y9ESyJsNhO0gkMcWF26Xwavxt6R+RHGA=; b=ieOpJtdV5xrv7VE8
-	DWl7jl6m5QnQFj/UmRw1cirqtowjzTBFG8vCzHqvx7pXhDRc3tC+QGA3FKp5kgX4
-	9tOngySY0OGW8RoEtTu8Ckyh0Sl+IxE2KK7SrObZzhGXrG36JiqWMnssTa3GuO3w
-	ivF9moq7/POqesvKsTr9AepVvk5ogiuH5CNmyoPcFg/7GufHuoUhYTI7L9coJhcQ
-	vXPHv/L48uaQaJRtGrh2m6/o3pqsEgZssaRTklbKgyvvfeCRc+dif1tS2jgph+QP
-	3UOqHwplj90bU7GQ8wWQXYYmEg0qMWyL0MA0t0X+aCugd73uRv6JxH7Sg0LN2w7R
-	PonjJg==
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 46b6ubhysh-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 30 Apr 2025 11:36:15 +0000 (GMT)
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-	by NASANPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 53UBaEgH023021
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 30 Apr 2025 11:36:14 GMT
-Received: from [10.217.219.207] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 30 Apr
- 2025 04:36:12 -0700
-Message-ID: <3421bf4a-afa1-4b4c-8421-bad7187d3d8e@quicinc.com>
-Date: Wed, 30 Apr 2025 17:06:09 +0530
+	s=arc-20240116; t=1746015936; c=relaxed/simple;
+	bh=+9/PAdkrDSDqpHYeIfDrz2L4yaVxct43eEk6fcpaB+Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=jO6L7DshPVco4xqCsxGkT2E1kxN83fnkLid4J8nBJd6607DUBToRJBEpzxbT6hNEaycMo69r/XwuUL8YbtrXXfrpaY6nCPhlneOjRtQw6//JY/Obz8IPIEi8fDZU5ewO/bsCNHU9YF8SDNa15IM0Tv2l0gi7lI1PsGY5iR9BPBQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=RppvKdCq; arc=none smtp.client-ip=217.70.183.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2499943B05;
+	Wed, 30 Apr 2025 12:25:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1746015926;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=CnxkKMiK9jWlWadYD48cBMF6FzVo3oyStOXi6SWjg9k=;
+	b=RppvKdCqXCV9/hK3z2ydxaKP8etv6srFQ9bDgPS28xeXT3aRB22YLp0ufsPBSJe2sqghZI
+	ZyAPdNSU5OqMZLv/fafjKPfLZK+m4iYGMMn2CYhUNHP75BukturXSLUhsM/SwDwjxsvgnL
+	DrhE/QfF6lgf/UTT/5/j7qipgf9ipuoMJfV2nGwQA/S0DLZG+2JUdhVUdptYGqxGBsWEXd
+	WogXIG4MF+nOzTUzGV/Ro4o/hH190zsnJJJBSimX/1QICK4zzk7Wx+ahSREw4iys/RNhDi
+	sYAusSyCGWnn1Yzmv7O3YXAsX2/Cka4cWRSygMkKCsgOrlcaCV4u+qgkKhMXxw==
+Date: Wed, 30 Apr 2025 14:25:22 +0200
+From: Luca Ceresoli <luca.ceresoli@bootlin.com>
+To: Romain Gantois <romain.gantois@bootlin.com>
+Cc: Dan Carpenter <dan.carpenter@linaro.org>, Tomi Valkeinen
+ <tomi.valkeinen@ideasonboard.com>, Wolfram Sang
+ <wsa+renesas@sang-engineering.com>, Andi Shyti <andi.shyti@kernel.org>,
+ linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+ kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH next] i2c: Fix end of loop test in
+ i2c_atr_find_mapping_by_addr()
+Message-ID: <20250430142522.6cf327c3@booty>
+In-Reply-To: <2778486.mvXUDI8C0e@fw-rgant>
+References: <aAii_iawJdptQyCt@stanley.mountain>
+	<a22d74b9-06b1-4a4b-9c06-4b0ff7f9b6c2@stanley.mountain>
+	<9cd0c3cc-9f3c-4a3e-9080-c832def8f317@ideasonboard.com>
+	<2778486.mvXUDI8C0e@fw-rgant>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1] i2c: microchip-corei2c: add smbus support
-To: Conor Dooley <conor@kernel.org>, <linux-i2c@vger.kernel.org>
-CC: prashanth kumar burujukindi <prashanthkumar.burujukindi@microchip.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Daire McNamara
-	<daire.mcnamara@microchip.com>,
-        Andi Shyti <andi.shyti@kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20250430-preview-dormitory-85191523283d@spud>
-Content-Language: en-US
-From: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-In-Reply-To: <20250430-preview-dormitory-85191523283d@spud>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 5Vkv07b8MEri7t1SYChgmh7JplFEZxvh
-X-Authority-Analysis: v=2.4 cv=bsxMBFai c=1 sm=1 tr=0 ts=68120b2f cx=c_pps a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17 a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=XR8D0OoHHMoA:10 a=XYAwZIGsAAAA:8 a=VwQbUJbxAAAA:8 a=RYsg2ln_6DacrSxsmtsA:9
- a=QEXdDO2ut3YA:10 a=E8ToXWR_bxluHZ7gmE-Z:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNDMwMDA4MiBTYWx0ZWRfX6xr545OjjidE Jy5UcusWl7h0vbWFEsGV71JomCmis714Kad9qzVnTBS6ejeG+CGqcxN76zDWHVnPZjXq1x8dapv QB9/mkxG0FmQdjHB3VMQoyTGPJIf0IGkuUWPUmRo2FOVGiDEUyJx5vWj34ytilrpIZL/84X9DEH
- CAczunl5q/5FKnbTIcGCzKdLrv0yUSthy8WdZhmH3vnYzQkmE1OCMwb7Sr9fJJ6SjXt/24ifq/q wRDqP/275B6oVT3r6hwk2R/f6zRt4M4A/2WYU7wOFQkL/bhSc0l4TQDoEkSUVEjR3NuCasDzgBf 2Dd5L+YQ1dL9YGmwKD1jm3rkfIjVPf7/uY43nVSGmdzmsO4uTfSqhLWDN4cXc9mi3dkC3ERMgtS
- rbqbHOFjauVEfUIB5K+1sJ8xEzqk07R8Hh3/ZU/O4tKbBEh/78AMOa4QsioVKifAvUOwgUuM
-X-Proofpoint-ORIG-GUID: 5Vkv07b8MEri7t1SYChgmh7JplFEZxvh
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-04-30_03,2025-04-24_02,2025-02-21_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
- clxscore=1011 mlxscore=0 priorityscore=1501 spamscore=0 lowpriorityscore=0
- adultscore=0 malwarescore=0 bulkscore=0 suspectscore=0 mlxlogscore=985
- classifier=spam authscore=0 authtc=n/a authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2504070000
- definitions=main-2504300082
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvieeijedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefnuhgtrgcuvegvrhgvshholhhiuceolhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepgeelffefgfehhfdtvdefueefieevkefggfelkeeiudetkeektedvhedukefgvddvnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppedvrgdtvdemieejtdemvddtvddtmegvrgdtudemsggvgedumeelhegvjeemfeegfeemledufegvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddvmeeijedtmedvtddvtdemvggrtddumegsvgegudemleehvgejmeefgeefmeeludefvgdphhgvlhhopegsohhothihpdhmrghilhhfrhhomheplhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepkedprhgtphhtthhopehrohhmrghinhdrghgrnhhtohhishessghoohhtlhhinhdrtghomhdprhgtphhtthhopegurghnrdgtrghrphgvnhhtvghrsehlihhnrghrohdrohhrghdprhgtphhtthhopehtohhmihdrvhgrlhhkvghin
+ hgvnhesihguvggrshhonhgsohgrrhgurdgtohhmpdhrtghpthhtohepfihsrgdorhgvnhgvshgrshesshgrnhhgqdgvnhhgihhnvggvrhhinhhgrdgtohhmpdhrtghpthhtoheprghnughirdhshhihthhisehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhivdgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepkhgvrhhnvghlqdhjrghnihhtohhrshesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-GND-Sasl: luca.ceresoli@bootlin.com
 
+On Thu, 24 Apr 2025 09:10:43 +0200
+Romain Gantois <romain.gantois@bootlin.com> wrote:
 
-
-On 4/30/2025 4:53 PM, Conor Dooley wrote:
-> From: prashanth kumar burujukindi <prashanthkumar.burujukindi@microchip.com>
+> On Thursday, 24 April 2025 08:32:22 CEST Tomi Valkeinen wrote:
+> > Hi,
+> > 
+> > On 23/04/2025 20:29, Dan Carpenter wrote:  
+> > > On Wed, Apr 23, 2025 at 05:25:44PM +0200, Romain Gantois wrote:  
+> > >> Hello Dan,
+> > >> 
+> > >> On Wednesday, 23 April 2025 10:21:18 CEST Dan Carpenter wrote:  
+> > >>> When the list_for_each_entry_reverse() exits without hitting a break
+> > >>> then the list cursor points to invalid memory.  So this check for
+> > >>> if (c2a->fixed) is checking bogus memory.  Fix it by using a "found"
+> > >>> variable to track if we found what we were looking for or not.  
+> > >> 
+> > >> IIUC the for loop ending condition in list_for_each_entry_reverse() is
+> > >> "!list_entry_is_head(pos, head, member);", so even if the loop runs to
+> > >> completion, the pointer should still be valid right?  
+> > > 
+> > > head is &chan->alias_pairs.  pos is an offset off the head.  In this
+> > > case, the offset is zero.  So it's &chan->alias_pairs minus zero.
+> > > 
+> > > So we exit the list with c2a = (void *)&chan->alias_pairs.
+> > > 
+> > > If you look how struct i2c_atr_chan is declareted the next struct member
+> > > 
+> > > after alias_pairs is:
+> > > 	struct i2c_atr_alias_pool *alias_pool;
+> > > 
+> > > So if (c2a->fixed) is poking around in the alias_pool pointer.  It's not
+> > > out of bounds but it's not valid either.  
+> > 
+> > Maybe it's just me, but I had hard time following that explanation. So
+> > here's mine:
+> > 
+> > The list head (i2c_atr_chan.alias_pairs) is not a full entry, it's just
+> > a struct list_head. When the for loop runs to completion, c2a doesn't
+> > point to a struct i2c_atr_alias_pair, so you can't access c2a->fixed.  
 > 
-> In this driver the supported SMBUS commands are smbus_quick,
-> smbus_byte, smbus_byte_data, smbus_word_data and smbus_block_data.
+> Ah I see, in that case thanks for the fix Dan!
 > 
-Write completely in imperative mood. something like :
+> Reviewed-by: Romain Gantois <romain.gantois@bootlin.com>
 
-Add support for SMBUS commands in driver
+Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 
-Add support for SMBUS commands: smbus_quick, smbus_byte, 
-smbus_byte_data, smbus_word_data, and smbus_block_data.
-
-Also mention below limitations here .
-SMBUS block read is supported by the controller but has not been tested 
-due to lack of hardware. However, SMBUS I2C block read has been tested.
-
-> Signed-off-by: prashanth kumar burujukindi <prashanthkumar.burujukindi@microchip.com>
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
-> smbus block read is not tested, due to lack of hardware, but is supported
-> by the controller, although we have tested smbus i2c block read.
-> 
-> CC: Conor Dooley <conor.dooley@microchip.com>
-> CC: Daire McNamara <daire.mcnamara@microchip.com>
-> CC: Andi Shyti <andi.shyti@kernel.org>
-> CC: linux-i2c@vger.kernel.org
-> CC: linux-kernel@vger.kernel.org
-> ---
->   drivers/i2c/busses/i2c-microchip-corei2c.c | 102 +++++++++++++++++++++
->   1 file changed, 102 insertions(+)
-> 
-> diff --git a/drivers/i2c/busses/i2c-microchip-corei2c.c b/drivers/i2c/busses/i2c-microchip-corei2c.c
-
-[...]
+-- 
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
