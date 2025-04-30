@@ -1,138 +1,103 @@
-Return-Path: <linux-i2c+bounces-10692-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10693-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D177AA4E53
-	for <lists+linux-i2c@lfdr.de>; Wed, 30 Apr 2025 16:19:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44F81AA4EA0
+	for <lists+linux-i2c@lfdr.de>; Wed, 30 Apr 2025 16:32:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 205EE3B3EA4
-	for <lists+linux-i2c@lfdr.de>; Wed, 30 Apr 2025 14:19:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A9D4B1BC54AA
+	for <lists+linux-i2c@lfdr.de>; Wed, 30 Apr 2025 14:32:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33CBF25A625;
-	Wed, 30 Apr 2025 14:19:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED16C25D1F4;
+	Wed, 30 Apr 2025 14:32:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mAUtO5JM"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="a5qG/3vK"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53D4D1DD889;
-	Wed, 30 Apr 2025 14:19:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13EC325A323;
+	Wed, 30 Apr 2025 14:32:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746022771; cv=none; b=IGWvjdGQhBs0FJ/CH56FqcuEjnyumKTaJmJ2ws2vIzBfOIbg71OAffBbwtaG5JLED9wtmb83kCekh2vOfK///vSwzZF0I6GunPc19Fp8zIJtRej20SQQTy8TW8vaTNeyELsEn4PsZMYjvC8TT+N0jivTwOu/OXrNwHpNbTfyKc4=
+	t=1746023526; cv=none; b=it7cDM9ob3k42gqWdjIUUDjsfomrftjjCREpV16eYrbGMxwEQCvMucEuKV8zC3ql8P9CFHJD+1tZ7iiZHA7JoPW8oVWsG5tAp1rySUd/jQ87jhdt0phwakAm1Bz8J2GOuKIxP4E2EleXE3114cOtq+9e644pMx5CZaJvDdMQKOw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746022771; c=relaxed/simple;
-	bh=qYXytSF/h4BAw3XvCix160+CM+1Pr/rGmOL9cZ5Dxso=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Content-Type; b=CZ6x3Ft5mB0QZyKKDSo+I2lf/Na5gCn06haTkkAKybNrc5LSrINUnYKH9AAy0tDT9SayXGHgc6L4TVmjbSb+7mwjOTPoTfa3KOkuPD3r/Zm8lBJEgLrrTV4SjfBzaqy8A3GMgy8g4bePjAuSq5mSNqfiN1ysbNCzTRJBHhvh3iA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mAUtO5JM; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-39c1efbefc6so5235748f8f.1;
-        Wed, 30 Apr 2025 07:19:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746022768; x=1746627568; darn=vger.kernel.org;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qYXytSF/h4BAw3XvCix160+CM+1Pr/rGmOL9cZ5Dxso=;
-        b=mAUtO5JMi/9lo6gqEhCRE3995IttP0ZwlCWCI44NoPh/7eosa7nofiG/Zg/THKyyki
-         bB5/63u5tPnlOI6slKSuxQRl74t7pEfUNAw9Wg79V5YvmGHesCQnh89xNu3iyBLpVehD
-         qrtgfb5uF11Id6lap1oDIHKeOdBa+xB62m5Ey+IiT0hq/6A1fe3akA3Y+nvQMpk1Dxmr
-         ALQD1qiwu6hVUBUBjuHg9f67F3OFkCt2HpVIqpmD/L3Ms5nHdhIsKC7DwGiPeryX5NdP
-         dSJOetjlCnYQXF0tqGPeveQf3p0SPlkYWC1M5OYO0GOKQk6+sw2hp8TVUr4ctLQpkuZP
-         995g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746022768; x=1746627568;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qYXytSF/h4BAw3XvCix160+CM+1Pr/rGmOL9cZ5Dxso=;
-        b=fONCBVBhkiitkeiA1s814phD2/hrUzmMGF8s6o82RSxfB9qs8BrHkT4yzfv4Vza2tF
-         KPH+JPYGRypuRVYwqGgM/R6NBfSsBm23CiTNWPklnFQrBkPJdiN0cRtDNRIPZy8+wkFO
-         I8DqORaanjSzae1U8RTkmTveYz/HDd2pzlkMdR4IyDETHWyBxBi4JjMI4b4odR5IfW/1
-         Pyvpr5cRIj3jkguJhRQrLtI4Vem7acbxo0WKm/VPwmb30D+J0N8W7QvW3iNPQoRgRsxn
-         vb2nUBngZFu/epjS/dlZfFVLLG1nUtotSBIwkZWtm/irDs5hJPUHZ0uQIHo7G3oi4//H
-         Ueww==
-X-Forwarded-Encrypted: i=1; AJvYcCVhy67+bbKvER2T39hVHC4Cvat0WDcFQQztxv+H11MyHxn9xSH6GI0q4HrZ6IqBxDVG7fM32cqWB4OV/U08FAXLMTg=@vger.kernel.org, AJvYcCW3UYWItPc80imRcATQM0+BHdCmArPmFtHV7mJHg/zT+vCPLqmfYiYFUojh1DRO2UIzOVcDMgO17OU=@vger.kernel.org, AJvYcCXWtSygCiMblCAnA9tO+IHPnOxNG00dZLblxmAR0ylsbrhKVmLKjzd/npfEi3J/45PEaD3bUlVDZXvtDCXv@vger.kernel.org
-X-Gm-Message-State: AOJu0YwVe7fcm9H4l8AS0MPz+fm8RDCW+LMdPq9wnBEhAvJBqUegIUPl
-	tI9H+B7E3ipvNv0MUiQyRHulXMN9ryqpmMr/GxmoZbTAFtGr5ZQX5AT0EzOSgF4DSfq8DwG0A4S
-	4hV6KrsRYQ2fq+xr9oli7PK0CqZg=
-X-Gm-Gg: ASbGncvvh/iHoQaTFpClqhWzjgaKQVM5NkR7p6O+FFdEzVnAzVTkJhg1eYkVlgp9THK
-	s2Xjsk9RfpEESfPMUGPcI+QnPW5oMSfyTl4QqcixIunbegHFo9IDZJ7JpheWfTRpkmragc+YT2j
-	BzI9KQYD/UW+YoANYix6bUow==
-X-Google-Smtp-Source: AGHT+IHeVVx97jV8CvcEwLno1fQedZbosuupGPjGSFQ/trOVbpjS3wz2VStDQdszZITBakzfY8RQp7A9SzLo5OCvsso=
-X-Received: by 2002:a05:6000:310b:b0:39e:cbe3:881 with SMTP id
- ffacd0b85a97d-3a08f7549f2mr2811481f8f.12.1746022767422; Wed, 30 Apr 2025
- 07:19:27 -0700 (PDT)
+	s=arc-20240116; t=1746023526; c=relaxed/simple;
+	bh=x8Zyxf3qAOiBO+ner8y9AGHPRbsBT+r2KYaVKPhpVfs=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=qtd2mNkDYC8TokT4luantXWshTGH8lu6PbTAiXKz+/1Z5qfCK6OphNT99ACrKx6ANSZBEX/EsCOHP6a12XbbO4mJ4Mh+xpG1zACEZzmNKrDhL8W1/m1LJ9y3dI+Ua9stWLBGTPlDnsZAX2I2l4xF8AybU+O5/enrvsW9l5kG52Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=a5qG/3vK; arc=none smtp.client-ip=217.70.183.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A05A943A14;
+	Wed, 30 Apr 2025 14:31:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1746023522;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8qrjxqLVA+MvO12pot+Nu2uRSJsBadIKUx39D7i6TxQ=;
+	b=a5qG/3vK+zAkLrBw7RHJZe6KcVhK9Vw1iwni/qHe+3Zz2w+kTWEY0bFvF9M9cKFFzdtGQG
+	4VqB9c6Z/KtYdywtOGM1sj9fv9aWGyHHcfadLlAWJsAzMwf6SHQ9YU9lTfV6uMb9l1NhJw
+	tpy2pDX36w2Ct8ROfKME23NztWut4k42NKiQZ99AZgPuBBc0Unw13Sp3/ad4Ih7AHZTnJl
+	qA511tH29c4AR05L/XOS+KTtYcU4IIABjMQpj3tpXgUoXZEX4W7JX+1BWf5NwTLxjiTHiU
+	lFOPVuWznSw2PMrQDdmQh+VB+hzZ/Uc/lFj5nCwqsFUxKQfdNLtyUNlUjzHkFQ==
+Date: Wed, 30 Apr 2025 16:31:57 +0200
+From: Luca Ceresoli <luca.ceresoli@bootlin.com>
+To: Cosmin Tanislav <demonsingur@gmail.com>
+Cc: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, Wolfram Sang
+ <wsa+renesas@sang-engineering.com>, Mauro Carvalho Chehab
+ <mchehab@kernel.org>, Romain Gantois <romain.gantois@bootlin.com>, Arnd
+ Bergmann <arnd@arndb.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-media@vger.kernel.org, Tomi Valkeinen
+ <tomi.valkeinen+renesas@ideasonboard.com>
+Subject: Re: [PATCH v4 1/9] i2c: atr: Fix lockdep for nested ATRs
+Message-ID: <20250430163157.15508066@booty>
+In-Reply-To: <20250428102516.933571-2-demonsingur@gmail.com>
+References: <20250428102516.933571-1-demonsingur@gmail.com>
+	<20250428102516.933571-2-demonsingur@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250407121859.131156-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <aAC8f0dAMERD8GjW@shikoro> <CA+V-a8sM2mFS--zLSZt28mOUDuO2FpW0TsaV50A_VxFZ-juP4Q@mail.gmail.com>
- <aAFgwEB4SdgH-1fQ@shikoro> <CA+V-a8tmTqFi4iqGhR3cfUgKw7mxJrm6ixGAHq747ptrL3t2jA@mail.gmail.com>
- <aAITBfrOI0GAhGRA@shikoro> <aAikKreK-BCP-zLp@shikoro> <CA+V-a8uHxfmJLOO25acfK2=EZt41f_G6LShNpeL9RVy-X=Q3Cw@mail.gmail.com>
- <aAtSayFrtSh9LC-J@shikoro>
-In-Reply-To: <aAtSayFrtSh9LC-J@shikoro>
-From: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date: Wed, 30 Apr 2025 15:19:00 +0100
-X-Gm-Features: ATxdqUE44CXC8WnKFwq3_VVnLNnAIvGPlZ2qSZSscL6iMQzvtr-GBdjlm2x7PMc
-Message-ID: <CA+V-a8smaANOtJ9ETNudArHUcwvOAnKB+fEeEFnb_5ioxFSMKw@mail.gmail.com>
-Subject: Re: [PATCH v8] i2c: riic: Implement bus recovery
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	"Lad, Prabhakar" <prabhakar.csengg@gmail.com>, Chris Brandt <chris.brandt@renesas.com>, 
-	Andi Shyti <andi.shyti@kernel.org>, Geert Uytterhoeven <geert+renesas@glider.be>, 
-	linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>, 
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>, 
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>, Andy Shevchenko <andy@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvieeileehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeeftdertddvnecuhfhrohhmpefnuhgtrgcuvegvrhgvshholhhiuceolhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepgeehffejffekudfhkeeklefgjeeuheekffelheejgfeijeehieelkedttdfhjedtnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppedvrgdtvdemieejtdemvddtvddtmegvrgdtudemsggvgedumeelhegvjeemfeegfeemledufegvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddvmeeijedtmedvtddvtdemvggrtddumegsvgegudemleehvgejmeefgeefmeeludefvgdphhgvlhhopegsohhothihpdhmrghilhhfrhhomheplhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepuddupdhrtghpthhtohepuggvmhhonhhsihhnghhurhesghhmrghilhdrtghomhdprhgtphhtthhopehtohhmihdrvhgrlhhkvghinhgvnhesihguvggrshhonhgsohgrrhgurdgtohhmpdhrtghpthhtohepfihsrgdorhgvnhgvs
+ hgrshesshgrnhhgqdgvnhhgihhnvggvrhhinhhgrdgtohhmpdhrtghpthhtohepmhgthhgvhhgrsgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhomhgrihhnrdhgrghnthhoihhssegsohhothhlihhnrdgtohhmpdhrtghpthhtoheprghrnhgusegrrhhnuggsrdguvgdprhgtphhtthhopehgrhgvghhkhheslhhinhhugihfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopehlihhnuhigqdhivdgtsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-GND-Sasl: luca.ceresoli@bootlin.com
 
-Hi Wolfram,
+On Mon, 28 Apr 2025 13:25:06 +0300
+Cosmin Tanislav <demonsingur@gmail.com> wrote:
 
-On Fri, Apr 25, 2025 at 10:14=E2=80=AFAM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
->
-> Hi Prabhakar,
->
-> > I prepared a setup on SMARC2 RZ/G3S and I can confirm it is working
->
-> This is good news!
->
-> > (but this is failing on SMARC RZ/G2L I'll look further into this)
->
-> This not so much. Hmmm, are you verifying against the same I2C device
-> on the carrier board? If you compare against different I2C devices on
-> the module board, the culprit might be the I2C device.
->
-You were right, it was the slave indeed. After recovery from the
-generic algorithm during the transfer I am seeing arbitration lost due
-to which there was a timeout during transmission. So for now we can
-conclude the generic I2C recovery algo works for RIIC. I have tested
-with two slaves:
+> From: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+> 
+> When we have an ATR, and another ATR as a subdevice of the first ATR,
+> we get lockdep warnings for the i2c_atr.lock and
+> i2c_atr_chan.orig_addrs_lock. This is because lockdep uses a static key
+> for the locks, and doesn't see the locks of the separate ATR instances
+> as separate.
+> 
+> Fix this by generating a dynamic lock key per lock instance.
+> 
+> Signed-off-by: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
 
-- PMOD RTC on SMARC RZ/G2L
-- PMOD RTC + Audio codec on SMARC RZ/G3S
+I'm not very qualified about the lockdep side of the changes, but
+regarding the ATR side this looks OK:
 
-After tidying up, I'll resping a new version of the patch.
+Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 
-> > For the SMARC2 RZ/G3S to make sure the I2C GPIO pins behave as
-> > opendrain I have the below patch for pinctrl
->
-> Do you really need this patch? The GPIO lines are wired to SCL/SDA which
-> are already pulled up. Search for R118 in the module schematics.
->
-Agreed the pullup isn't needed. This was needed on SMARC RZ/G2L as
-there were spikes.
-
-Cheers,
-Prabhakar
+-- 
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
