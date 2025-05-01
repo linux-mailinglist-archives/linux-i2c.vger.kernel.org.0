@@ -1,140 +1,121 @@
-Return-Path: <linux-i2c+bounces-10719-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10720-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6FB02AA5C72
-	for <lists+linux-i2c@lfdr.de>; Thu,  1 May 2025 11:02:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 38574AA5CB1
+	for <lists+linux-i2c@lfdr.de>; Thu,  1 May 2025 11:37:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D74924C3019
-	for <lists+linux-i2c@lfdr.de>; Thu,  1 May 2025 09:02:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9CBF14A3EEB
+	for <lists+linux-i2c@lfdr.de>; Thu,  1 May 2025 09:37:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53C8B221F09;
-	Thu,  1 May 2025 09:02:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29A6A25B1C7;
+	Thu,  1 May 2025 09:37:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i3P/nP0f"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aK1Q1Mcd"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1442D288DA;
-	Thu,  1 May 2025 09:02:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B09522D7BD;
+	Thu,  1 May 2025 09:37:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746090168; cv=none; b=hemAGjDWvXV+SRspAgcT7zfx2ZQgf7YASGK3xrV74KgYN8KJiqU5oZ1gLRSz+ZCmwPsluupyuZRvvnNTKP5n18XBrl5yuzwrK/HC3ackYLZI/MCGydDUO/kjf1FvOIvfL5B8Gilz2jPD1qe22/nPfSOktQSVoneFF0fAsCwgrSk=
+	t=1746092239; cv=none; b=hQOoE92H3irXgd2sAqpwt11VhZcscDpF3/Md/keR+2wmKJaFSs/JBzKF3q51fhF1bURA0usRldPolZEb0pE9upOs9DsX3fS0kK/KHHInCg51UlMWYHFDgjvgHj+zw79lzd3tgjXxRyT27yKXfGCQeaE19anGcrpjz5jc0QD/9nM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746090168; c=relaxed/simple;
-	bh=Z0djQjxdkhG4vVVS1uhIzDAJWy/7M3SViprXNnH/Dtw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Content-Type; b=T8dL2WtdQuFXcgu0j+lxMPVS3vbb01V3G39rdmaWK0s+tOfhiVPblwTBrrmojJR3RqZ0zNx64nfRbOcY0X57W4PTgOwcxMM/t5eGvsU7WEcooazBH5bzTUdS93r+QezQ4l55w1Yb+OWFXqTQXQZTMFXW1N/nc71JqrKlXbj4I9A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i3P/nP0f; arc=none smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-39c0dfad22aso420845f8f.2;
-        Thu, 01 May 2025 02:02:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746090164; x=1746694964; darn=vger.kernel.org;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Z0djQjxdkhG4vVVS1uhIzDAJWy/7M3SViprXNnH/Dtw=;
-        b=i3P/nP0ffK0xEj8um2mqVWkM2fSw2OnjYzfxpu8+fn4Qus1tpYLlqMVntsk4GyDw7f
-         xy6oNEG2bCVWPx/de274vex7FzUaxm900jwlBPleOh8eHB00UBL80gA0RxR0rZhr/5xI
-         +Lqt9vqayQFk8EgAEBZ0FmMA3+OVscz3xqtd1Ex6Hwwo2ZWRBOvCTrvrPswaM5wrNz0M
-         o5RGZ0HAV3Hd7wk9WviB3u3gp14Jk2Q3/n0McPMLpkuHNooL4m8l4DGgnXTzpqQaJtXV
-         Gcg3n9sUhDpbX0os32fjq3ZJYzA2p4g/Vg87AcdpJVUQaL/vaBnjdevcXFlskfpnaBZ3
-         OgFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746090164; x=1746694964;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Z0djQjxdkhG4vVVS1uhIzDAJWy/7M3SViprXNnH/Dtw=;
-        b=GOh4Y9/4kFU07cMNrTe5/5W8/37wvO3t5UyXEMAk8P8sgmSSLUjA1yen/TBSz7Z2Z2
-         fAjZz+G4bv8rviJxZJ5sTH2GpmdlYl2nEeiU9klJRfaCNw/BA4nWTc4i4NNdF4UCG+VX
-         M8KJ1acTtSuLfGbN6XIW5d7LvcS919QJFIz9znX7ZL0OIwL4qENYRLshHRQZsq/wrgim
-         P30aibMFhCFpiA59maT+MnmzlxDM8qzkgKsIl0pgb3mvEZDfKxMQW1YkTppBgbENxbFv
-         SXw7cHcYvLTp3gH93D6CksKT55lGRqLwpKrXp+lJijC7EMnECOZvwjuPrHFLE7P+6FBZ
-         rEJg==
-X-Forwarded-Encrypted: i=1; AJvYcCUEtQPqU+bZvpi18w9iBouf6s/SBCfeAlnqAPNwn8NwZj7ykd7vrD1PTKs21PvwClZcZcCR2CkPTqC1gRpJ@vger.kernel.org, AJvYcCUlIy35e4G2YnIVvIwa06INgQSLqk75MKivfnwW1FmxpLjspuJKA7xYytoZC4Dq3EP54GNtvJwxmjmm7z/y5duHCaY=@vger.kernel.org, AJvYcCWaolWym1ygqOd3TEUYWpwLwkBMvgiJ3E3pZagy88b5UwTUWH2OTS0EcyZHAtZKrSEBgz5dJ6aaSUI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxMWoTNo1hgUkg8BjD41XDVe/Rr4UuQFigCZyF3eZQHg2LB3vkr
-	9tREdO4XlqEvDsfeeOzcPtqbaUTMIzv62KYAjhZekmnYjFGclwZoJCwhDWVlTeKNkeNuU8UGaW8
-	4E/LXp0vK4M+LdhuvfImioWh+c1xsD031iSI=
-X-Gm-Gg: ASbGncuRBarN4kSn3zW0NI/DGU9qCpjKscr9k1g0CezOAK8maMw4/eeu7qv3MvMvcUM
-	i8FYeMIzTzUOImw/m1K/Zr5zJzK1mKbG/9CovHTRJSWJB+nhVUZhMO2JvAtuZNtMNda63mMLldD
-	3KNAeKx3k+jG7Bu2gwJP2oZg==
-X-Google-Smtp-Source: AGHT+IHGb1/CXknd/+CZ+q+Dk1/Rttb+ctd1LTyGXsEcnkmKUPDn89n4e7eUzxUtBlCjXD3Uo9haKpMTwGLTmsoY4Dc=
-X-Received: by 2002:a5d:64cd:0:b0:3a0:6ae3:a1a with SMTP id
- ffacd0b85a97d-3a09404cae6mr1195041f8f.23.1746090164111; Thu, 01 May 2025
- 02:02:44 -0700 (PDT)
+	s=arc-20240116; t=1746092239; c=relaxed/simple;
+	bh=7HkpmBy4uOXtgP/kfZ+4ul+zjnVdkK+uvMav1IDO7GE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KLcrIVq3PvnWwrGrFc09nwjNlAguwnfROoxw1U2zBY7qUDfPx6E9b+oif/H4tP8HQ9Z2lpJIokYI43b85shqLKG4R/WGwBIz2IpvFijIPEJaOkHtpfcfKHOEQsGpaem9G83JPmr6td9+IybErO1D75DcbweTycKDcXc0N2wh7gA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aK1Q1Mcd; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1746092236; x=1777628236;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7HkpmBy4uOXtgP/kfZ+4ul+zjnVdkK+uvMav1IDO7GE=;
+  b=aK1Q1Mcdw884lCDiNc5dnvs39bceZSH/pIXSeAX5EjYBX8TJ04i7nVqp
+   45FfuQ99lBBoPiPZPITb4a7mHskWyY+YeA0Rbrk6ddPMuWUc+EWX6lSnX
+   dLIFxmbxoFEn+on6nJd8L5uMhN44miPaXAofKI+pQl48OCA8LXEAip4PP
+   QiqQcVHrtxkmB4tk0vlSIPjzOkb+m+/pN7T8shpVAou4zpl78ff6qufJY
+   19/10b5pFl75JpxJjX/iloPT4ylGuiudFx/sK/Yc/URbBKxRDSCOat7SG
+   p/B1TonittlYSln2Lvw7WHrDtKJAJoK4fMlqn7oEkL3M+uOAnIOAxV2/9
+   w==;
+X-CSE-ConnectionGUID: StTCXCWHSuaQWuHRbs+4OQ==
+X-CSE-MsgGUID: gpI9amrDSzKFPoDR7/2FMw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11419"; a="47672299"
+X-IronPort-AV: E=Sophos;i="6.15,254,1739865600"; 
+   d="scan'208";a="47672299"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2025 02:37:15 -0700
+X-CSE-ConnectionGUID: +oETbooFSmyuPuIsABmWhA==
+X-CSE-MsgGUID: A8hsURclRcGMFwsZ1uWTrg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,254,1739865600"; 
+   d="scan'208";a="171577908"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 01 May 2025 02:37:14 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uAQLv-00045B-1z;
+	Thu, 01 May 2025 09:37:11 +0000
+Date: Thu, 1 May 2025 17:37:02 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alexey Charkov <alchark@gmail.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: oe-kbuild-all@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Alexey Charkov <alchark@gmail.com>
+Subject: Re: [PATCH v2] dt-bindings: i2c: i2c-wmt: Convert to YAML
+Message-ID: <202505011756.SZDFqCew-lkp@intel.com>
+References: <20250430-vt8500-i2c-binding-v2-1-0cf22d0c2d42@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250430194647.332553-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20250430194647.332553-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <aBKFWxIRaa4W7TDf@shikoro> <CA+V-a8v5qFC+uxzC8Qw4F3M1XSFnVq90MWxbvmiRks=ZbkzZjw@mail.gmail.com>
- <aBMpjKtQYYB-teNt@shikoro>
-In-Reply-To: <aBMpjKtQYYB-teNt@shikoro>
-From: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date: Thu, 1 May 2025 10:02:18 +0100
-X-Gm-Features: ATxdqUG9Jh624LeCKraAtGmTg0blNv-HVvQoE3BTxD_xFYY0aFCLpbyOU3qV9tQ
-Message-ID: <CA+V-a8t8AApJTgF8Zc3w+JjAu6yPvzUEgTo0g+1H+6GhvJUdbA@mail.gmail.com>
-Subject: Re: [PATCH v9 2/2] i2c: riic: Recover from arbitration loss
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	"Lad, Prabhakar" <prabhakar.csengg@gmail.com>, Chris Brandt <chris.brandt@renesas.com>, 
-	Andi Shyti <andi.shyti@kernel.org>, Geert Uytterhoeven <geert+renesas@glider.be>, 
-	Andy Shevchenko <andy@kernel.org>, linux-renesas-soc@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Biju Das <biju.das.jz@bp.renesas.com>, 
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250430-vt8500-i2c-binding-v2-1-0cf22d0c2d42@gmail.com>
 
-Hi Wolfram,
+Hi Alexey,
 
-On Thu, May 1, 2025 at 8:58=E2=80=AFAM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
->
->
-> > Do you mean that upon detecting an arbitration loss, we simply clear
-> > the arbitration bit and retry?
->
-> Yes, after the bus is considered free again.
->
-I'll give that a try but in my case the SDA line has gone low.
+kernel test robot noticed the following build warnings:
 
-> > However, when observing the SDA line after recovery, it goes LOW again
-> > during the transfer. I've attached a screenshot of this case: we
-> > recovered from a bus hang, the I2C recovery algorithm brought the bus
-> > to a STOP state, and then a START condition was issued. But after
-> > initiating the transfer, we can see the SDA line being held LOW again.
->
-> That looks weird. Why are there two SDA transitions around 30us? Why is
-> SDA changed while SCL is high around 45us? Then, this small SCL spike
-> around 55us... What device is this?
->
-From 10=C2=B5s to 50=C2=B5s, the clock pulses are part of the recovery sequ=
-ence.
-The SDA line is likely being toggled by the slave around 30=C2=B5s, after
-two clock pulses. At 45=C2=B5s, we are still within the recovery algorithm
--- SCL is set to 1, followed by SDA. The recovery algorithm then
-checks if SCL is high and whether the bus is free (i.e., SDA is also
-high). At that point, i2c_generic_scl_recovery() returns, assuming the
-bus has been successfully recovered.
-Around 55=C2=B5s, the transfer function starts attempting to send data
-hence the clock pulse.
+[auto build test WARNING on 0af2f6be1b4281385b618cb86ad946eded089ac8]
 
-The slave device is versa clock geberator 5P35023 (exact part number
-on SMARC RZ/G2L 5P35023B-629NLGI)
-https://www.renesas.com/en/products/clocks-timing/clock-generation/programm=
-able-clocks/5p35023-versaclock-3s-programmable-clock-generator?srsltid=3DAf=
-mBOoqlLSt_ul3hLh7NHYlCShXsnH-QZf90uSdoxZXI_Pre5Qg7soD6#overview
+url:    https://github.com/intel-lab-lkp/linux/commits/Alexey-Charkov/dt-bindings-i2c-i2c-wmt-Convert-to-YAML/20250430-183538
+base:   0af2f6be1b4281385b618cb86ad946eded089ac8
+patch link:    https://lore.kernel.org/r/20250430-vt8500-i2c-binding-v2-1-0cf22d0c2d42%40gmail.com
+patch subject: [PATCH v2] dt-bindings: i2c: i2c-wmt: Convert to YAML
+reproduce: (https://download.01.org/0day-ci/archive/20250501/202505011756.SZDFqCew-lkp@intel.com/reproduce)
 
-Cheers,
-Prabhaka
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505011756.SZDFqCew-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   Warning: Documentation/translations/zh_CN/dev-tools/gdb-kernel-debugging.rst references a file that doesn't exist: Documentation/dev-tools/gdb-kernel-debugging.rst
+   Warning: Documentation/translations/zh_TW/admin-guide/README.rst references a file that doesn't exist: Documentation/dev-tools/kgdb.rst
+   Warning: Documentation/translations/zh_TW/dev-tools/gdb-kernel-debugging.rst references a file that doesn't exist: Documentation/dev-tools/gdb-kernel-debugging.rst
+   Warning: Documentation/userspace-api/netlink/index.rst references a file that doesn't exist: Documentation/networking/netlink_spec/index.rst
+   Warning: Documentation/userspace-api/netlink/specs.rst references a file that doesn't exist: Documentation/networking/netlink_spec/index.rst
+>> Warning: MAINTAINERS references a file that doesn't exist: Documentation/devicetree/bindings/i2c/i2c-wmt.txt
+   Warning: MAINTAINERS references a file that doesn't exist: Documentation/devicetree/bindings/leds/backlight/ti,lp8864.yaml
+   Can't build as 1 mandatory dependency is missing at ./scripts/sphinx-pre-install line 984.
+   make[2]: *** [Documentation/Makefile:121: htmldocs] Error 255
+   make[1]: *** [Makefile:1801: htmldocs] Error 2
+   make: *** [Makefile:248: __sub-make] Error 2
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
