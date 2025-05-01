@@ -1,165 +1,140 @@
-Return-Path: <linux-i2c+bounces-10718-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10719-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0CE36AA5C2A
-	for <lists+linux-i2c@lfdr.de>; Thu,  1 May 2025 10:32:36 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FB02AA5C72
+	for <lists+linux-i2c@lfdr.de>; Thu,  1 May 2025 11:02:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C92E6981BD6
-	for <lists+linux-i2c@lfdr.de>; Thu,  1 May 2025 08:32:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D74924C3019
+	for <lists+linux-i2c@lfdr.de>; Thu,  1 May 2025 09:02:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12AA41E9B29;
-	Thu,  1 May 2025 08:32:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53C8B221F09;
+	Thu,  1 May 2025 09:02:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="grdPDUNk"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i3P/nP0f"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 821531411DE;
-	Thu,  1 May 2025 08:32:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1442D288DA;
+	Thu,  1 May 2025 09:02:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746088350; cv=none; b=Hb3DIwsKsnGLmT4LpvxLo1J6f+kC8MejVlt+39SQ8dsRtOS6En36TGo4WbXvi0ocKJmX74r9vaA8kiEvj3AMxUd2lbMt4p2aQSzl+Wpt1I/eVu0Wf51SH9G0IkkafMqchHyJ/T3vkl9M4LWUC6HqxwShpl5PBjduWdh557/ZGWY=
+	t=1746090168; cv=none; b=hemAGjDWvXV+SRspAgcT7zfx2ZQgf7YASGK3xrV74KgYN8KJiqU5oZ1gLRSz+ZCmwPsluupyuZRvvnNTKP5n18XBrl5yuzwrK/HC3ackYLZI/MCGydDUO/kjf1FvOIvfL5B8Gilz2jPD1qe22/nPfSOktQSVoneFF0fAsCwgrSk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746088350; c=relaxed/simple;
-	bh=xhScCuujTBLSHXMAWc67rVw37G+w/pTe/c1qVenSZ0A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Dr2qtBdvI/BF+1/wEPOzWsA1LfqGbTot7l9SnwMmGdG4vG3/7IpzTecyMAlfg5PGQqdX08af+mfTwCcnhbPQx59xZgk1AyK6r1T7NjObmS4Gfo+ttBmff5hT1ZFp+Hu26olj89WVz4i7c1rD1dB/uzY9K2nKeu5NV62gQrZrgRQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=grdPDUNk; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 1368640E0192;
-	Thu,  1 May 2025 08:32:20 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id pu2YYr3UXysN; Thu,  1 May 2025 08:32:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1746088336; bh=vkoqS5AVfaq+JA/SmzMOmYIXh6QXvrBBLiDRYKQCsoE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=grdPDUNk3MRwcnlAj50ykrP8/RpPIXq0+q1OXSKSfu/3NJiWbrqT+Nz0jPrO9Snz5
-	 DluI8QnPWFKpUjoB5dzRSL5T+6D/strKiUrlH1gA5G2MIwsxvKnKQNMDTtAsygPEyq
-	 4/qJ6GKvub3QZLVwYPsfO32FEqFCQ9bymYKhKrG2rXo8NOauuACBwlgk1s994YoHmB
-	 DOF+9ckNWAi/dHOzdFHjcvtVm8pblsvgSSK/W6yn91YmBb4jQuQL/EvqWIALS9KRMr
-	 ZbqceWZ95RyMq/wtSDO3KGHiLW6K3xvJ51/Aa9g0iJrCPedhctKiS/pT/NgOlA4TCt
-	 2u6H5ZGUfXtLWenkZl90TxIK9oUwO9KbRPCr/q7FsWM0xdd3qCGUa/KTYaMwvX4zb8
-	 QZaknUC0KSd+hdRL0DQFv1lfRwOCLr1v4rb6VbdjqQA5y1vPA2oC8TLxkuM1mtNy1a
-	 NKuyZIHIq6OFvuDPFJlPSzjQpZR4iJVUa97vbWKEuCsijtgcw22H1nrxmxBM6rwlkl
-	 SFfqGyStkN1vQqjsC6YZxXGCkq5qTKvh/VzbGA8nifHrDkLN5n7ekysctfmIxtrtr0
-	 bVTx24vg8CkfIJ6JlXf4eVwa8rlpF4/mCfXTnbFW7LpaGqNw10BTwQRGXgfbFiF9+b
-	 1KTVQoxQb0RpuG1eX2VcSuQg=
-Received: from zn.tnic (p579690ee.dip0.t-ipconnect.de [87.150.144.238])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D03C240E01FA;
-	Thu,  1 May 2025 08:31:57 +0000 (UTC)
-Date: Thu, 1 May 2025 10:31:51 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Mario Limonciello <superm1@kernel.org>
-Cc: Jean Delvare <jdelvare@suse.com>, Andi Shyti <andi.shyti@kernel.org>,
-	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Yazen Ghannam <yazen.ghannam@amd.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-	"H . Peter Anvin" <hpa@zytor.com>,
-	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-	Hans de Goede <hdegoede@redhat.com>,
-	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:I2C/SMBUS CONTROLLER DRIVERS FOR PC" <linux-i2c@vger.kernel.org>,
-	"open list:AMD PMC DRIVER" <platform-driver-x86@vger.kernel.org>
-Subject: Re: [PATCH v5 5/5] x86/CPU/AMD: Print the reason for the last reset
-Message-ID: <20250501083151.GBaBMxdyrtpcVlQaei@fat_crate.local>
-References: <20250422234830.2840784-1-superm1@kernel.org>
- <20250422234830.2840784-6-superm1@kernel.org>
- <20250430190333.GIaBJ0BWuMdZ1KNVQ7@fat_crate.local>
- <e80be47b-5f8d-409c-8c3d-cd1af46944d0@kernel.org>
- <20250430191025.GFaBJ1oQjxCuig1vS6@fat_crate.local>
- <35bae46e-3b57-438a-a561-c93868120dcb@kernel.org>
- <20250430192538.GGaBJ5MuS4CEKa4kIX@fat_crate.local>
- <4bf62335-2e67-43c5-b2dc-4b0bed0521ed@kernel.org>
+	s=arc-20240116; t=1746090168; c=relaxed/simple;
+	bh=Z0djQjxdkhG4vVVS1uhIzDAJWy/7M3SViprXNnH/Dtw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Content-Type; b=T8dL2WtdQuFXcgu0j+lxMPVS3vbb01V3G39rdmaWK0s+tOfhiVPblwTBrrmojJR3RqZ0zNx64nfRbOcY0X57W4PTgOwcxMM/t5eGvsU7WEcooazBH5bzTUdS93r+QezQ4l55w1Yb+OWFXqTQXQZTMFXW1N/nc71JqrKlXbj4I9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i3P/nP0f; arc=none smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-39c0dfad22aso420845f8f.2;
+        Thu, 01 May 2025 02:02:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1746090164; x=1746694964; darn=vger.kernel.org;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Z0djQjxdkhG4vVVS1uhIzDAJWy/7M3SViprXNnH/Dtw=;
+        b=i3P/nP0ffK0xEj8um2mqVWkM2fSw2OnjYzfxpu8+fn4Qus1tpYLlqMVntsk4GyDw7f
+         xy6oNEG2bCVWPx/de274vex7FzUaxm900jwlBPleOh8eHB00UBL80gA0RxR0rZhr/5xI
+         +Lqt9vqayQFk8EgAEBZ0FmMA3+OVscz3xqtd1Ex6Hwwo2ZWRBOvCTrvrPswaM5wrNz0M
+         o5RGZ0HAV3Hd7wk9WviB3u3gp14Jk2Q3/n0McPMLpkuHNooL4m8l4DGgnXTzpqQaJtXV
+         Gcg3n9sUhDpbX0os32fjq3ZJYzA2p4g/Vg87AcdpJVUQaL/vaBnjdevcXFlskfpnaBZ3
+         OgFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746090164; x=1746694964;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Z0djQjxdkhG4vVVS1uhIzDAJWy/7M3SViprXNnH/Dtw=;
+        b=GOh4Y9/4kFU07cMNrTe5/5W8/37wvO3t5UyXEMAk8P8sgmSSLUjA1yen/TBSz7Z2Z2
+         fAjZz+G4bv8rviJxZJ5sTH2GpmdlYl2nEeiU9klJRfaCNw/BA4nWTc4i4NNdF4UCG+VX
+         M8KJ1acTtSuLfGbN6XIW5d7LvcS919QJFIz9znX7ZL0OIwL4qENYRLshHRQZsq/wrgim
+         P30aibMFhCFpiA59maT+MnmzlxDM8qzkgKsIl0pgb3mvEZDfKxMQW1YkTppBgbENxbFv
+         SXw7cHcYvLTp3gH93D6CksKT55lGRqLwpKrXp+lJijC7EMnECOZvwjuPrHFLE7P+6FBZ
+         rEJg==
+X-Forwarded-Encrypted: i=1; AJvYcCUEtQPqU+bZvpi18w9iBouf6s/SBCfeAlnqAPNwn8NwZj7ykd7vrD1PTKs21PvwClZcZcCR2CkPTqC1gRpJ@vger.kernel.org, AJvYcCUlIy35e4G2YnIVvIwa06INgQSLqk75MKivfnwW1FmxpLjspuJKA7xYytoZC4Dq3EP54GNtvJwxmjmm7z/y5duHCaY=@vger.kernel.org, AJvYcCWaolWym1ygqOd3TEUYWpwLwkBMvgiJ3E3pZagy88b5UwTUWH2OTS0EcyZHAtZKrSEBgz5dJ6aaSUI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxMWoTNo1hgUkg8BjD41XDVe/Rr4UuQFigCZyF3eZQHg2LB3vkr
+	9tREdO4XlqEvDsfeeOzcPtqbaUTMIzv62KYAjhZekmnYjFGclwZoJCwhDWVlTeKNkeNuU8UGaW8
+	4E/LXp0vK4M+LdhuvfImioWh+c1xsD031iSI=
+X-Gm-Gg: ASbGncuRBarN4kSn3zW0NI/DGU9qCpjKscr9k1g0CezOAK8maMw4/eeu7qv3MvMvcUM
+	i8FYeMIzTzUOImw/m1K/Zr5zJzK1mKbG/9CovHTRJSWJB+nhVUZhMO2JvAtuZNtMNda63mMLldD
+	3KNAeKx3k+jG7Bu2gwJP2oZg==
+X-Google-Smtp-Source: AGHT+IHGb1/CXknd/+CZ+q+Dk1/Rttb+ctd1LTyGXsEcnkmKUPDn89n4e7eUzxUtBlCjXD3Uo9haKpMTwGLTmsoY4Dc=
+X-Received: by 2002:a5d:64cd:0:b0:3a0:6ae3:a1a with SMTP id
+ ffacd0b85a97d-3a09404cae6mr1195041f8f.23.1746090164111; Thu, 01 May 2025
+ 02:02:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <4bf62335-2e67-43c5-b2dc-4b0bed0521ed@kernel.org>
+References: <20250430194647.332553-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20250430194647.332553-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <aBKFWxIRaa4W7TDf@shikoro> <CA+V-a8v5qFC+uxzC8Qw4F3M1XSFnVq90MWxbvmiRks=ZbkzZjw@mail.gmail.com>
+ <aBMpjKtQYYB-teNt@shikoro>
+In-Reply-To: <aBMpjKtQYYB-teNt@shikoro>
+From: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date: Thu, 1 May 2025 10:02:18 +0100
+X-Gm-Features: ATxdqUG9Jh624LeCKraAtGmTg0blNv-HVvQoE3BTxD_xFYY0aFCLpbyOU3qV9tQ
+Message-ID: <CA+V-a8t8AApJTgF8Zc3w+JjAu6yPvzUEgTo0g+1H+6GhvJUdbA@mail.gmail.com>
+Subject: Re: [PATCH v9 2/2] i2c: riic: Recover from arbitration loss
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+	"Lad, Prabhakar" <prabhakar.csengg@gmail.com>, Chris Brandt <chris.brandt@renesas.com>, 
+	Andi Shyti <andi.shyti@kernel.org>, Geert Uytterhoeven <geert+renesas@glider.be>, 
+	Andy Shevchenko <andy@kernel.org>, linux-renesas-soc@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Biju Das <biju.das.jz@bp.renesas.com>, 
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Apr 30, 2025 at 02:32:44PM -0500, Mario Limonciello wrote:
-> This would work, but would still need to track if "no" known bits were set
-> to emit an "unknown" message.
+Hi Wolfram,
 
-No, when no bits are set, you don't emit anything. Because the information
-content of "oh, your system rebooted due to an unknown reason" is minimal and
-even actively confusing at best.
+On Thu, May 1, 2025 at 8:58=E2=80=AFAM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+>
+>
+> > Do you mean that upon detecting an arbitration loss, we simply clear
+> > the arbitration bit and retry?
+>
+> Yes, after the bus is considered free again.
+>
+I'll give that a try but in my case the SDA line has gone low.
 
-Let sleeping dogs lie.
+> > However, when observing the SDA line after recovery, it goes LOW again
+> > during the transfer. I've attached a screenshot of this case: we
+> > recovered from a bus hang, the I2C recovery algorithm brought the bus
+> > to a STOP state, and then a START condition was issued. But after
+> > initiating the transfer, we can see the SDA line being held LOW again.
+>
+> That looks weird. Why are there two SDA transitions around 30us? Why is
+> SDA changed while SCL is high around 45us? Then, this small SCL spike
+> around 55us... What device is this?
+>
+From 10=C2=B5s to 50=C2=B5s, the clock pulses are part of the recovery sequ=
+ence.
+The SDA line is likely being toggled by the slave around 30=C2=B5s, after
+two clock pulses. At 45=C2=B5s, we are still within the recovery algorithm
+-- SCL is set to 1, followed by SDA. The recovery algorithm then
+checks if SCL is high and whether the bus is free (i.e., SDA is also
+high). At that point, i2c_generic_scl_recovery() returns, assuming the
+bus has been successfully recovered.
+Around 55=C2=B5s, the transfer function starts attempting to send data
+hence the clock pulse.
 
----
-diff --git a/arch/x86/kernel/cpu/amd.c b/arch/x86/kernel/cpu/amd.c
-index bef871adbf84..9a8c590456d0 100644
---- a/arch/x86/kernel/cpu/amd.c
-+++ b/arch/x86/kernel/cpu/amd.c
-@@ -1264,10 +1264,9 @@ static const char * const s5_reset_reason_txt[] = {
- 
- static __init int print_s5_reset_status_mmio(void)
- {
--	void __iomem *addr;
- 	unsigned long value;
--	int nr_reasons = 0;
--	int bit = -1;
-+	void __iomem *addr;
-+	int i;
- 
- 	if (!cpu_feature_enabled(X86_FEATURE_ZEN))
- 		return 0;
-@@ -1279,23 +1278,13 @@ static __init int print_s5_reset_status_mmio(void)
- 	value = ioread32(addr);
- 	iounmap(addr);
- 
--	/* Iterate on each bit in the 'value' mask: */
--	while (true) {
--		bit = find_next_bit(&value, BITS_PER_LONG, bit + 1);
--
--		/* Reached the end of the word, no more bits: */
--		if (bit >= BITS_PER_LONG) {
--			if (!nr_reasons)
--				pr_info("x86/amd: Previous system reset reason [0x%08lx]: Unknown\n", value);
--			break;
--		}
--
--		if (!s5_reset_reason_txt[bit])
-+	for (i = 0; i <= ARRAY_SIZE(s5_reset_reason_txt); i++) {
-+		if (!(value & BIT(i)))
- 			continue;
- 
--		nr_reasons++;
--		pr_info("x86/amd: Previous system reset reason [0x%08lx]: %s\n",
--			value, s5_reset_reason_txt[bit]);
-+		if (s5_reset_reason_txt[i])
-+			pr_info("x86/amd: Previous system reset reason [0x%08lx]: %s\n",
-+				value, s5_reset_reason_txt[i]);
- 	}
- 
- 	return 0;
+The slave device is versa clock geberator 5P35023 (exact part number
+on SMARC RZ/G2L 5P35023B-629NLGI)
+https://www.renesas.com/en/products/clocks-timing/clock-generation/programm=
+able-clocks/5p35023-versaclock-3s-programmable-clock-generator?srsltid=3DAf=
+mBOoqlLSt_ul3hLh7NHYlCShXsnH-QZf90uSdoxZXI_Pre5Qg7soD6#overview
 
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Cheers,
+Prabhaka
 
