@@ -1,116 +1,160 @@
-Return-Path: <linux-i2c+bounces-10741-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10742-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1C52AA752E
-	for <lists+linux-i2c@lfdr.de>; Fri,  2 May 2025 16:40:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 368B5AA79A0
+	for <lists+linux-i2c@lfdr.de>; Fri,  2 May 2025 20:58:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3C2F97B7FFF
-	for <lists+linux-i2c@lfdr.de>; Fri,  2 May 2025 14:39:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BCF309A66AA
+	for <lists+linux-i2c@lfdr.de>; Fri,  2 May 2025 18:58:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64A21256C9A;
-	Fri,  2 May 2025 14:40:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="Q2WY/Vwe"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 667831E25F2;
+	Fri,  2 May 2025 18:58:33 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f79.google.com (mail-io1-f79.google.com [209.85.166.79])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42CA9256C89
-	for <linux-i2c@vger.kernel.org>; Fri,  2 May 2025 14:40:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45F65194080
+	for <linux-i2c@vger.kernel.org>; Fri,  2 May 2025 18:58:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.79
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746196835; cv=none; b=awY83gnn1cohsRpRM5ZLMG64/dQCuJq5MAldJuISorcu4WDgmFIWcZm6K6BoEEqdt4eyLGaoitHpDuo+7HS6BvTK66pauUAY6mYZ1OznXdST8707OA7NGQNPc0fGPknBTRo/zou7b2G1WpyF7lYSvgqlU0E3p5JhmEg41i3eJBk=
+	t=1746212313; cv=none; b=T9IgUI+cYuMzyR+B5JYWhgMdMDNfidPDZfkc0AXItcUOkcEVZT03KxTAM4T1/rKrN3KzRC0pMuDhdMwPL6LnxRCiHihUo/0xwSsgmtQWdap7Pu23rvza2nAqxZvYa7eHKTF7U96njqgt0LgjCXvKggD3XjZvJBLadBM77QTlWnQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746196835; c=relaxed/simple;
-	bh=39dqUcCyMzTRb5cdM8I0FifJ7XYO5FNlhwLMdUzWL7I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YezQ8mX0odb+UVV4ATiHyfp4ZUHSEKY+2tyvL/k/2C+U/Kz4aqFDYvLYulyrmRWHgWta4NjjGqBdmbhs2QWSUdmh0VNAzoh0+/Gr4TeTLT6QU7YzIvnFVv3x/whsNyj1Uev0kvaU7Ao0TZs5Q4ROlNbtbkqhmW7O/Up0NRx2NOI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=Q2WY/Vwe; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=cWF0
-	S/1MBrwO3AaGE2PAgjZIEyMy68anUlG7dJSs91g=; b=Q2WY/Vwe8J5D1vT9P09U
-	8kKZDCQVALh8zn4acmMb0P353LbK/DV16VFKsOyhoTa24bqe4HVGyxPX9Gg5P3SV
-	uVM1eMjeNCHIgyV7ZIClCSwCQEXrP4qJkrLZoxKP5bNahGCfQO4XJsjCBDQA+LX0
-	jkg5A+r9oKPYXKvZ2VVdc7vmkJBhK3VSdQRlQ4it39CYUMPebVl3L4+GwVOO9zPw
-	PUSMmFKKEonwan+zaHt1gIMpH5O8swr/584+RY6dFNkiFyLy0iO3tlO2TtytHbI3
-	DDwue0PkH/NOab1elzrRqjYtF3zzKcL2hdornlSy1k276CcAcpt0nW5uizfgc0X3
-	Lg==
-Received: (qmail 1483228 invoked from network); 2 May 2025 16:40:30 +0200
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 2 May 2025 16:40:30 +0200
-X-UD-Smtp-Session: l3s3148p1@C7HKISg0ioAujnsd
-Date: Fri, 2 May 2025 16:40:30 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Dan Carpenter <dan.carpenter@linaro.org>
-Cc: Romain Gantois <romain.gantois@bootlin.com>,
-	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH next] i2c: Fix end of loop test in
- i2c_atr_find_mapping_by_addr()
-Message-ID: <aBTZXsMJK3lsiUiU@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	Romain Gantois <romain.gantois@bootlin.com>,
-	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-References: <aAii_iawJdptQyCt@stanley.mountain>
+	s=arc-20240116; t=1746212313; c=relaxed/simple;
+	bh=zoTQVjJ3FyrRRCnyr5OBzcdq2EmPXQ1x0Lb2YQyaxy8=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=dZ1HaePs8wjY+bL68Im5xlWKapU4Z4CTdiB1nuDDm0JzNFg/hbfdfmK4t1nYgJP3OiiADx864Cn1sZG5KXC/QNTYK/JrVNpNWp/RBIFrKE80RexAdFNSSCHun177WKb60jUoCQe9c6M/Z7nN6i1WT7NvaciNcP+2xzUPMB8hqGQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.79
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f79.google.com with SMTP id ca18e2360f4ac-85ed07f832dso243318839f.2
+        for <linux-i2c@vger.kernel.org>; Fri, 02 May 2025 11:58:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746212310; x=1746817110;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uAOzJSFBfDSYukAOktP0k0eJ72hAOlOQTKQeME/mnmU=;
+        b=FA/Q+bNzlifHJnkwZG6I6RFI73Hvd2h2EAHNzeo+xRLrZ5xYC/6PdT5q595bIoPAnT
+         Sa34XE1bx/YuE6qr2P0TjOc4cSgksD9iRRZkFV9qK0YXJ4fBAOuXDQt24VGsFBLnvpAL
+         7EOoMZVghWtULhZU0B7gm5794ue/gDu+GKDNXAu8MUDWly3QfGncSZgifuNsO1vXiBOD
+         wqTgWv+qyuA8PSpAccxsewdA8uozW86dMvYoC+2qDe//uPS4k6CFS0pmy/rUi9j72xTR
+         plwC9D1Ug7esDtC/m78WJ/YVLklzbT6LtD3lax6tOF4LAYGdwQjrBamh2+DCLuoyjLdP
+         zr9A==
+X-Gm-Message-State: AOJu0YzRgegYVSdt7B6A9hWD4Npu5IRZGmVNjc1a0i+u0F+UDBRfBJm2
+	yjCfB6kcSpyvOn0qDHfTpBU+sdawBFd7tIjn8pOIxQWBl8XeaPUpfojcE2tQm6XDyASbg9HrW1S
+	g+dJ0sb21bRtb3U9rZNlYlqfGEFaHvYKHCd0z4DlySM0dt2WL/hCsRnPOpA==
+X-Google-Smtp-Source: AGHT+IEvo5HzJ1SeLr8XPnomT+eKZlYj0uEg29543xurggx1vIJ1iMF2xCzAsVlfrK4um5l3l1C7o3e3GwCC3f7qXKhuYkxGzjlB
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="CJGHFGT6dwZtPHAX"
-Content-Disposition: inline
-In-Reply-To: <aAii_iawJdptQyCt@stanley.mountain>
+X-Received: by 2002:a05:6602:2d8b:b0:861:c744:5a4a with SMTP id
+ ca18e2360f4ac-8670b7d17e6mr27261039f.5.1746212310400; Fri, 02 May 2025
+ 11:58:30 -0700 (PDT)
+Date: Fri, 02 May 2025 11:58:30 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <681515d6.a70a0220.254cdc.0007.GAE@google.com>
+Subject: [syzbot] [i2c?] KMSAN: kernel-infoleak in i2cdev_ioctl_smbus
+From: syzbot <syzbot+08b819a87faa6def6dfb@syzkaller.appspotmail.com>
+To: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	syzkaller-bugs@googlegroups.com, wsa+renesas@sang-engineering.com
+Content-Type: text/plain; charset="UTF-8"
+
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    02ddfb981de8 Merge tag 'scsi-fixes' of git://git.kernel.or..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=166989b3980000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=9dc42c34a3f5c357
+dashboard link: https://syzkaller.appspot.com/bug?extid=08b819a87faa6def6dfb
+compiler:       Debian clang version 20.1.2 (++20250402124445+58df0ef89dd6-1~exp1~20250402004600.97), Debian LLD 20.1.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1593b02f980000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=154d41cc580000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/5ca57f5a3f77/disk-02ddfb98.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/3f23cbc11e68/vmlinux-02ddfb98.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/73e63afac354/bzImage-02ddfb98.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+08b819a87faa6def6dfb@syzkaller.appspotmail.com
+
+=====================================================
+BUG: KMSAN: kernel-infoleak in instrument_copy_to_user include/linux/instrumented.h:114 [inline]
+BUG: KMSAN: kernel-infoleak in _inline_copy_to_user include/linux/uaccess.h:196 [inline]
+BUG: KMSAN: kernel-infoleak in _copy_to_user+0xcc/0x120 lib/usercopy.c:26
+ instrument_copy_to_user include/linux/instrumented.h:114 [inline]
+ _inline_copy_to_user include/linux/uaccess.h:196 [inline]
+ _copy_to_user+0xcc/0x120 lib/usercopy.c:26
+ copy_to_user include/linux/uaccess.h:225 [inline]
+ i2cdev_ioctl_smbus+0x586/0x660 drivers/i2c/i2c-dev.c:394
+ i2cdev_ioctl+0xa14/0xf40 drivers/i2c/i2c-dev.c:478
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:906 [inline]
+ __se_sys_ioctl+0x239/0x400 fs/ioctl.c:892
+ __x64_sys_ioctl+0x97/0xe0 fs/ioctl.c:892
+ x64_sys_call+0x1ebe/0x3db0 arch/x86/include/generated/asm/syscalls_64.h:17
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0xd9/0x1b0 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+Uninit was stored to memory at:
+ i2c_smbus_xfer_emulated drivers/i2c/i2c-core-smbus.c:495 [inline]
+ __i2c_smbus_xfer+0x254d/0x2f60 drivers/i2c/i2c-core-smbus.c:607
+ i2c_smbus_xfer+0x31d/0x4d0 drivers/i2c/i2c-core-smbus.c:545
+ i2cdev_ioctl_smbus+0x4a1/0x660 drivers/i2c/i2c-dev.c:389
+ i2cdev_ioctl+0xa14/0xf40 drivers/i2c/i2c-dev.c:478
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:906 [inline]
+ __se_sys_ioctl+0x239/0x400 fs/ioctl.c:892
+ __x64_sys_ioctl+0x97/0xe0 fs/ioctl.c:892
+ x64_sys_call+0x1ebe/0x3db0 arch/x86/include/generated/asm/syscalls_64.h:17
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0xd9/0x1b0 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+Local variable msgbuf1.i created at:
+ i2c_smbus_xfer_emulated drivers/i2c/i2c-core-smbus.c:334 [inline]
+ __i2c_smbus_xfer+0x86a/0x2f60 drivers/i2c/i2c-core-smbus.c:607
+ i2c_smbus_xfer+0x31d/0x4d0 drivers/i2c/i2c-core-smbus.c:545
+
+Bytes 0-1 of 2 are uninitialized
+Memory access of size 2 starts at ffff88812e8b7d06
+Data copied to user address 0000200000000080
+
+CPU: 1 UID: 0 PID: 5885 Comm: syz-executor221 Not tainted 6.15.0-rc3-syzkaller-00094-g02ddfb981de8 #0 PREEMPT(undef) 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/19/2025
+=====================================================
 
 
---CJGHFGT6dwZtPHAX
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-On Wed, Apr 23, 2025 at 11:21:18AM +0300, Dan Carpenter wrote:
-> When the list_for_each_entry_reverse() exits without hitting a break
-> then the list cursor points to invalid memory.  So this check for
-> if (c2a->fixed) is checking bogus memory.  Fix it by using a "found"
-> variable to track if we found what we were looking for or not.
->=20
-> Fixes: c3f55241882b ("i2c: Support dynamic address translation")
-> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-Applied to for-next with Tomi's description added, thanks!
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
 
---CJGHFGT6dwZtPHAX
-Content-Type: application/pgp-signature; name="signature.asc"
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
 
------BEGIN PGP SIGNATURE-----
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmgU2V4ACgkQFA3kzBSg
-KbYizQ/+NjG++zs7zSh4UTa3D4bQq/KDsq4uK1Lzg5zgy2VNhdkp4gGR5RXuCCO9
-UMifyNKEE0NDNInI8xIPc4LA8YtC1inlB7j53dFisRMXDw0KDdFyCtcYT7tG+lcI
-209Tc/mpnB1UgbF/LxE6Uj6xuDSWlxdsKENByJ7mBiJEBK162HYe273VHc3m1UjE
-dhAK8Y46mMXLwJ9U3XuXh5NVox9suQxeBxtO927yKAGLEzrAhm25Io3u5crwbXbp
-pg8jA9+NwTd+RYmlwmqS/Z72CxuLWaJX+T3623KPeiJOo4Fhet7nRcOD3w/CmFHH
-G17P3tXboDcoVuu7E15Db/QVg2JN4JdsseuMx/K+wBkn9geOguiZ2ltP5IeN3DyJ
-4gS8K3UMxgmUrW2oDlQhAYr2sEBjoBI2sVNtXIfXGSbA2C8ag4lwlhhDcd3IMyI7
-bF0gDj3ZmGR4I5ZluA61oTm7+9y41WUhtPELO4WrvPHx2WTtmYex69EqTdnKTdG8
-U+4IvQMPmdYdauA5Skr5fexF03cNhZ7WwQUMJM2CSJyA7dufnvzt9jYH9PyLc4ez
-HlRVG28nb0mOZ3TWOlqb4RIrYHbFEFJdHx31gitvb62xSNVHKRP08k3Z1qdFtR6A
-Cl4xQ/Q//y0ZbqmJmebrOBxi5ylxeFcbMkWmpkOQhx4Qz2is3Po=
-=8SXg
------END PGP SIGNATURE-----
-
---CJGHFGT6dwZtPHAX--
+If you want to undo deduplication, reply with:
+#syz undup
 
