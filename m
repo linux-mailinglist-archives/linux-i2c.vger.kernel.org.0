@@ -1,126 +1,116 @@
-Return-Path: <linux-i2c+bounces-10735-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10736-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 07BD0AA702E
-	for <lists+linux-i2c@lfdr.de>; Fri,  2 May 2025 13:03:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A743AA7127
+	for <lists+linux-i2c@lfdr.de>; Fri,  2 May 2025 14:05:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6D9164A468F
-	for <lists+linux-i2c@lfdr.de>; Fri,  2 May 2025 11:03:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 16E123AE5FD
+	for <lists+linux-i2c@lfdr.de>; Fri,  2 May 2025 12:05:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B29523770D;
-	Fri,  2 May 2025 11:03:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FV9eo+oQ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B9F62550AE;
+	Fri,  2 May 2025 12:04:27 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A77B231825;
-	Fri,  2 May 2025 11:03:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA42E252914;
+	Fri,  2 May 2025 12:04:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746183812; cv=none; b=ix2+AtEbQ4zH0G1nAWFf205VFcJmkkzH3xNv2ZYSzuqOKKypGBCouaI7XexoUr6y6SQ7LuQppjSI8Wa7fKn6RoG1XzdxwbCboXFoK2Vumg9unJ1rQT2PI8C2mtf06vqn5USqyHYwmdcqmCLMaWQCkqw6XwAdM5S/nlf7wONoMn0=
+	t=1746187467; cv=none; b=PIadk/LT4KEzFcSwo1Nl5amG5HZze9KtYoaiuRxglgndk6DpiUZJnl8IhExdz8BHVTNkOpAXpSjdvkN1maRUtqHaHvBCJ+qn4pVTZzb8oM3lBCJBg1cWzgesl7eW2yvo8lvswGxmb+mGYmsvwpcNW7g7qyh63+F1E6qXy6WJ2t8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746183812; c=relaxed/simple;
-	bh=7B/Fs9f12a/EfZazo7rvvUt2On0lD//L6IQUV+aiOCk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QxenjAmOG1OAIcACNMMrdPWxfSeYLcqgAmG3IF7ZhiWJsHAxmCTMP4CtZjXCsmqzv5W5TR9CcypkrFu6Qf8eKJV5qQt1pbucN3HY2nqYzOVJ7xw2EYsjJpPWwNIUJrpCrA/NupITzzfD9g2scrGaMrJ08PqjEzj5ThFTK0LlBIc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FV9eo+oQ; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746183811; x=1777719811;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=7B/Fs9f12a/EfZazo7rvvUt2On0lD//L6IQUV+aiOCk=;
-  b=FV9eo+oQE2Xa9oDwfi6fD+YZDZVvdmmtBfDzuJSM5CPHoyitjYBB3x8A
-   I0Tp0Wqwmm9+hyPW8ufpO4juuVyW7vRpdlCrGSQ4x3yeoZwsWDlXoXH8D
-   uo0VXzqgLSqc/tfCN7HfTsYsvRpZxXYg7CZBv50ecbo3Nueha9riA37tM
-   VwSVo5Q9+ZeyggAVGF+pKXVUit3yd4gsfmBm+BqasiM9oeT7IYxkm/mp5
-   o7qRv2yqUtPTyeuhF34PTG+jGjRwLzgi3DC0kM69Pl1mRGOIwS7Yvp3dF
-   Zkc/jxMwR2xd8sjhaYBqQTPLOxwVo2rMlir6he8B5/r/pkFTdY3E9zYso
-   g==;
-X-CSE-ConnectionGUID: QIbEIllLS3y4t14Wc08lhQ==
-X-CSE-MsgGUID: 2iNDd2yAR8WwY68DbJOsOA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11420"; a="51680488"
-X-IronPort-AV: E=Sophos;i="6.15,256,1739865600"; 
-   d="scan'208";a="51680488"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2025 04:03:30 -0700
-X-CSE-ConnectionGUID: Q7u3S9JzQ/qGa9N64ULX0w==
-X-CSE-MsgGUID: AH+Hw+WDRuyKN+bf962HHw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,256,1739865600"; 
-   d="scan'208";a="165540944"
-Received: from mylly.fi.intel.com (HELO [10.237.72.50]) ([10.237.72.50])
-  by orviesa002.jf.intel.com with ESMTP; 02 May 2025 04:03:27 -0700
-Message-ID: <6a3b756f-6fbd-4ee5-b511-c5a32e4a6a34@linux.intel.com>
-Date: Fri, 2 May 2025 14:03:25 +0300
+	s=arc-20240116; t=1746187467; c=relaxed/simple;
+	bh=XWPx6xFTy9CLJ6Wlt8NgWF6CuTT4a7VdsWU7Y8a9FZk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AFOy8XEoR53Kqa2vS4ixAlnPlyFRAdLiMjlAHQ2MSL33pndVP9XdpBmSeuNBVkfJKJ++QEaanu3+wxvL4PoSCHAS9IFulKHpcYCybxng08fuYsCu+tNmd8b1Rsmhf35akSeyYVrVCwU5dCBTIxR3isbcGph8HYbAHyDXvfZfDP0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-7c55500cf80so190272085a.1;
+        Fri, 02 May 2025 05:04:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746187463; x=1746792263;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UOzPOAHQMCOmxdJ2d2e+AsU+FXI1A0XpJIu1H20/Q4s=;
+        b=AVffqMcx9088huzkde79Hq5AOihRGMPdl9XSK7lEqgvapPk9MT9iWcfFeNdWRn9g3Q
+         hYA6IVEf3O053BJr/J1saydFKjPWoznuM0wvssdo59S/fwfZ7NNqHPP/YL5u5hn1e+eJ
+         0x7et39Vd/pAlD9/rOqdzHNwuukBk4EFh85/bF7v1eOOUgp7t10y4WCURWKgDqXwECWI
+         D94iNIgZ9q+/ywWIbXfu0qbgexA/kN0NCtDUdA6Hsw6YPy4fJGoDHGoZ4swEfhmOHolC
+         6BeYDC1Q9BgNQyqeotKlfZAb/mp/g53axOAkYy2P7Ql1Q82sH5JGnAhLP9edFIQeGJW0
+         58Lg==
+X-Forwarded-Encrypted: i=1; AJvYcCV3vchOUlGrnIx3f/u03pwFv0ZEJXWrkuk0DKBu8jeyIJY87TQoh2fc7KtCp1ioJw4mCyXr06g4CgHf@vger.kernel.org, AJvYcCWtEuqPoVuyd71HYOX9b5Rrp5Ycq1EsqBNeRwh3zq4ac9jZgm3Cfr2tWrD4gSpJSWUabkB+4+GP0SUj@vger.kernel.org, AJvYcCXAFCGa9iboHj3GpL1e9qhmoPDWKAS1qULkbLGMAfpSjs9lzqR7JjvXfgNEsexY9NZZjwgdOQ/NBNdHcELJ@vger.kernel.org, AJvYcCXmg6HPv5L7iqfwKQLrE7semsZVd080PQ6O7y7GCg6nZQ+WNwXMABqfPB8SJRtBN1Y/H3clJvjSU1EZ7gCHxoH4tT0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxq8rjM9B17gszPnsA3INQ7CT32q75Oke23y9ottWnrClgNxFR3
+	XphPeT//XVYbqUNgn7lbWY2HOIw7WbPsep3s1ng4OinfV+XwUPYTBoMegdrh
+X-Gm-Gg: ASbGncuVPENeszZrRxAVqfXzSdvtZ9U9Xg5ArlbYNxfU6jErPun1jKM7vEkFr1R5SkZ
+	Ip4JgYpy3NRjraGPwVsMnogFhC/Z6g0PLicrt7V+6LppCWgzgPOyGhjQUth4XbwqF/lP9XepF17
+	p1oW/scrow3hzBvG2syjNCEIwfaUKTGYs4OGxqPxcbQ9JtnW4JlI7Q8HU+oq89VSZF3dXiVsbXO
+	9FoBQhM2i6ImI/EhzEGekz8tE/Cb3DThLNCmm2lTQ8B7dKvT72GTZWEAbj2QGmrGebbX1jv+UA+
+	oNMovbuGW8xgaoN5ZBzenD1TH60guZUeGHlMT0oFJnCX9sg+9LzSg3r28CS781XeZ6/FlPNKALB
+	YmedHFJM=
+X-Google-Smtp-Source: AGHT+IENK4Pel0k6kzKGAMVpIiHHD0NWpIQc4fa7VVXS490kDieCwVNBueFzYVwM/lb4fv05NTbljQ==
+X-Received: by 2002:a05:620a:bd5:b0:7c5:60c7:339 with SMTP id af79cd13be357-7cad5b23c32mr362364585a.9.1746187463564;
+        Fri, 02 May 2025 05:04:23 -0700 (PDT)
+Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com. [209.85.160.174])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7cad23d1c8dsm174633885a.60.2025.05.02.05.04.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 May 2025 05:04:22 -0700 (PDT)
+Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-47686580529so23902791cf.2;
+        Fri, 02 May 2025 05:04:22 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVLiRxTqZFfJx6YPgqDh9umSqa089E/8n6PoIE9YzxToxgNx3+MidwAv7bMRJFfKBJEQCnQA21W3GQtbjCcduyNPi4=@vger.kernel.org, AJvYcCWg1IzYBtXuQXu3gvJUih2dCPeWd9oB0l5jDiF2i7AqPmKgnOuLxY4OHXNTzQLeo1uaUINNqbDEMWpF@vger.kernel.org, AJvYcCWl+51jIj0W40ejOizznjMuqnmaQNhXgGepSurJ/7QhJAwYFrxSEKzZrv/P7e6qIq8eSq/xLWAw3PRC@vger.kernel.org, AJvYcCXbY/psSh3+/2UO8w8JkKk/1opqL3/F9sHEpXDxXzNQuCfBgI0Edg7/MAa3CWQNCrB+a650Me29DNuPICNb@vger.kernel.org
+X-Received: by 2002:a05:622a:1b10:b0:476:78a8:4356 with SMTP id
+ d75a77b69052e-48c3183797bmr34905511cf.26.1746187462708; Fri, 02 May 2025
+ 05:04:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [1/1] i2c: designware: Ensure runtime suspend is invoked during
- rapid slave unregistration and registration
-To: EnDe Tan <ende.tan@starfivetech.com>,
- "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-Cc: "andriy.shevchenko@linux.intel.com" <andriy.shevchenko@linux.intel.com>,
- "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
- "jsd@semihalf.com" <jsd@semihalf.com>,
- "andi.shyti@kernel.org" <andi.shyti@kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- Leyfoon Tan <leyfoon.tan@starfivetech.com>,
- "endeneer@gmail.com" <endeneer@gmail.com>
-References: <20250412023303.378600-1-ende.tan@starfivetech.com>
- <6e155241-3403-49df-8f0d-5aa63e2e74ab@linux.intel.com>
- <NTZPR01MB10182E9F6E50D679A6EAC3B4F8B92@NTZPR01MB1018.CHNPR01.prod.partner.outlook.cn>
-Content-Language: en-US
-From: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-In-Reply-To: <NTZPR01MB10182E9F6E50D679A6EAC3B4F8B92@NTZPR01MB1018.CHNPR01.prod.partner.outlook.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20250501203310.140137-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20250501203310.140137-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Fri, 2 May 2025 14:04:11 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVQZBSoOVUN=Q9qiDRgPXGYiApZ+ao462+xtCjZiXNoBg@mail.gmail.com>
+X-Gm-Features: ATxdqUEJgHYtUiuy-xcdw0i5gv_WbXbGpCAVJDeLjetj7gfcOPxvIqq6CYKlgKs
+Message-ID: <CAMuHMdVQZBSoOVUN=Q9qiDRgPXGYiApZ+ao462+xtCjZiXNoBg@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: i2c: renesas,riic: Document RZ/V2N
+ (R9A09G056) support
+To: Prabhakar <prabhakar.csengg@gmail.com>
+Cc: Chris Brandt <chris.brandt@renesas.com>, Andi Shyti <andi.shyti@kernel.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Wolfram Sang <wsa+renesas@sang-engineering.com>, Magnus Damm <magnus.damm@gmail.com>, 
+	Andy Shevchenko <andy@kernel.org>, linux-renesas-soc@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>, 
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi
+On Thu, 1 May 2025 at 22:33, Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>
+> Document support for the I2C Bus Interface (RIIC) found on the Renesas
+> RZ/V2N (R9A09G056) SoC. The RIIC IP is identical to that on RZ/V2H(P),
+> so `renesas,riic-r9a09g057` will be used as a fallback compatible,
+> enabling reuse of the existing driver without changes.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Sorry the delay. Comment below.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-On 4/20/25 6:31 AM, EnDe Tan wrote:
-> It appears that when performing a rapid sequence of `delete_device -> new_device -> delete_device -> new_device`, the `dw_i2c_plat_runtime_suspend` is not invoked for the second `delete_device`.
-> 
-> This seems to happen because when `i2c_dw_unreg_slave` is about to trigger suspend during the second `delete_device`, the second `new_device` operation cancels the suspend. As a result, `dw_i2c_plat_runtime_resume` is not called (since there was no suspend), which means `i_dev->init` (i.e., `i2c_dw_init_slave`) is skipped.
-> 
-> Because `i2c_dw_init_slave` is skipped, `i2c_dw_configure_fifo_slave` is not invoked, which leaves `DW_IC_INTR_MASK` unconfigured.
-> If we inspect the interrupt mask register using devmem, it will show as zero.
-> 
-> Here's an example shell script to reproduce the issue:
-> ```
-> #!/bin/sh
-> 
-> SLAVE_LADDR=0x1010
-> SLAVE_BUS=13
-> NEW_DEVICE=/sys/bus/i2c/devices/i2c-$SLAVE_BUS/new_device
-> DELETE_DEVICE=/sys/bus/i2c/devices/i2c-$SLAVE_BUS/delete_device
-> 
-> # Create initial device
-> echo slave-24c02 $SLAVE_LADDR > $NEW_DEVICE
-> sleep 2
-> 
-> # Rapid sequence of delete_device -> new_device -> delete_device -> new_device
-> echo $SLAVE_LADDR > $DELETE_DEVICE
-> echo slave-24c02 $SLAVE_LADDR > $NEW_DEVICE
-> echo $SLAVE_LADDR > $DELETE_DEVICE
-> echo slave-24c02 $SLAVE_LADDR > $NEW_DEVICE
-> 
-> # If we use devmem to inspect IC_INTR_MASK, it will show as zero
-> ```
-> 
-Good explanation and could you add it the commit log together with the 
-example?
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
