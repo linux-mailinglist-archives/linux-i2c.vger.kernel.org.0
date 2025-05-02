@@ -1,116 +1,112 @@
-Return-Path: <linux-i2c+bounces-10736-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10737-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A743AA7127
-	for <lists+linux-i2c@lfdr.de>; Fri,  2 May 2025 14:05:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DFC2EAA729E
+	for <lists+linux-i2c@lfdr.de>; Fri,  2 May 2025 14:54:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 16E123AE5FD
-	for <lists+linux-i2c@lfdr.de>; Fri,  2 May 2025 12:05:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 859063A8A75
+	for <lists+linux-i2c@lfdr.de>; Fri,  2 May 2025 12:54:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B9F62550AE;
-	Fri,  2 May 2025 12:04:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB8A62522AB;
+	Fri,  2 May 2025 12:54:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="tefFsVbb"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [178.238.236.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA42E252914;
-	Fri,  2 May 2025 12:04:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D237F211A1E;
+	Fri,  2 May 2025 12:54:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.238.236.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746187467; cv=none; b=PIadk/LT4KEzFcSwo1Nl5amG5HZze9KtYoaiuRxglgndk6DpiUZJnl8IhExdz8BHVTNkOpAXpSjdvkN1maRUtqHaHvBCJ+qn4pVTZzb8oM3lBCJBg1cWzgesl7eW2yvo8lvswGxmb+mGYmsvwpcNW7g7qyh63+F1E6qXy6WJ2t8=
+	t=1746190482; cv=none; b=AvSeRhMkrIbryT303F56W3mUagfwdQUWOVjyOowwGDzw22xReuhZ95ZJI9mpNQ8ZWHggtZO0TkBxQL7Es4h8fkSWQuOKwJVtS1rDS1uJcyZaCeCcffA4DHSVFWgzw77SrMxmmtDPlKmmSSzL3ExfB4vn1McD0wDcHmNEDYF0kCA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746187467; c=relaxed/simple;
-	bh=XWPx6xFTy9CLJ6Wlt8NgWF6CuTT4a7VdsWU7Y8a9FZk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AFOy8XEoR53Kqa2vS4ixAlnPlyFRAdLiMjlAHQ2MSL33pndVP9XdpBmSeuNBVkfJKJ++QEaanu3+wxvL4PoSCHAS9IFulKHpcYCybxng08fuYsCu+tNmd8b1Rsmhf35akSeyYVrVCwU5dCBTIxR3isbcGph8HYbAHyDXvfZfDP0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-7c55500cf80so190272085a.1;
-        Fri, 02 May 2025 05:04:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746187463; x=1746792263;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UOzPOAHQMCOmxdJ2d2e+AsU+FXI1A0XpJIu1H20/Q4s=;
-        b=AVffqMcx9088huzkde79Hq5AOihRGMPdl9XSK7lEqgvapPk9MT9iWcfFeNdWRn9g3Q
-         hYA6IVEf3O053BJr/J1saydFKjPWoznuM0wvssdo59S/fwfZ7NNqHPP/YL5u5hn1e+eJ
-         0x7et39Vd/pAlD9/rOqdzHNwuukBk4EFh85/bF7v1eOOUgp7t10y4WCURWKgDqXwECWI
-         D94iNIgZ9q+/ywWIbXfu0qbgexA/kN0NCtDUdA6Hsw6YPy4fJGoDHGoZ4swEfhmOHolC
-         6BeYDC1Q9BgNQyqeotKlfZAb/mp/g53axOAkYy2P7Ql1Q82sH5JGnAhLP9edFIQeGJW0
-         58Lg==
-X-Forwarded-Encrypted: i=1; AJvYcCV3vchOUlGrnIx3f/u03pwFv0ZEJXWrkuk0DKBu8jeyIJY87TQoh2fc7KtCp1ioJw4mCyXr06g4CgHf@vger.kernel.org, AJvYcCWtEuqPoVuyd71HYOX9b5Rrp5Ycq1EsqBNeRwh3zq4ac9jZgm3Cfr2tWrD4gSpJSWUabkB+4+GP0SUj@vger.kernel.org, AJvYcCXAFCGa9iboHj3GpL1e9qhmoPDWKAS1qULkbLGMAfpSjs9lzqR7JjvXfgNEsexY9NZZjwgdOQ/NBNdHcELJ@vger.kernel.org, AJvYcCXmg6HPv5L7iqfwKQLrE7semsZVd080PQ6O7y7GCg6nZQ+WNwXMABqfPB8SJRtBN1Y/H3clJvjSU1EZ7gCHxoH4tT0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxq8rjM9B17gszPnsA3INQ7CT32q75Oke23y9ottWnrClgNxFR3
-	XphPeT//XVYbqUNgn7lbWY2HOIw7WbPsep3s1ng4OinfV+XwUPYTBoMegdrh
-X-Gm-Gg: ASbGncuVPENeszZrRxAVqfXzSdvtZ9U9Xg5ArlbYNxfU6jErPun1jKM7vEkFr1R5SkZ
-	Ip4JgYpy3NRjraGPwVsMnogFhC/Z6g0PLicrt7V+6LppCWgzgPOyGhjQUth4XbwqF/lP9XepF17
-	p1oW/scrow3hzBvG2syjNCEIwfaUKTGYs4OGxqPxcbQ9JtnW4JlI7Q8HU+oq89VSZF3dXiVsbXO
-	9FoBQhM2i6ImI/EhzEGekz8tE/Cb3DThLNCmm2lTQ8B7dKvT72GTZWEAbj2QGmrGebbX1jv+UA+
-	oNMovbuGW8xgaoN5ZBzenD1TH60guZUeGHlMT0oFJnCX9sg+9LzSg3r28CS781XeZ6/FlPNKALB
-	YmedHFJM=
-X-Google-Smtp-Source: AGHT+IENK4Pel0k6kzKGAMVpIiHHD0NWpIQc4fa7VVXS490kDieCwVNBueFzYVwM/lb4fv05NTbljQ==
-X-Received: by 2002:a05:620a:bd5:b0:7c5:60c7:339 with SMTP id af79cd13be357-7cad5b23c32mr362364585a.9.1746187463564;
-        Fri, 02 May 2025 05:04:23 -0700 (PDT)
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com. [209.85.160.174])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7cad23d1c8dsm174633885a.60.2025.05.02.05.04.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 May 2025 05:04:22 -0700 (PDT)
-Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-47686580529so23902791cf.2;
-        Fri, 02 May 2025 05:04:22 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVLiRxTqZFfJx6YPgqDh9umSqa089E/8n6PoIE9YzxToxgNx3+MidwAv7bMRJFfKBJEQCnQA21W3GQtbjCcduyNPi4=@vger.kernel.org, AJvYcCWg1IzYBtXuQXu3gvJUih2dCPeWd9oB0l5jDiF2i7AqPmKgnOuLxY4OHXNTzQLeo1uaUINNqbDEMWpF@vger.kernel.org, AJvYcCWl+51jIj0W40ejOizznjMuqnmaQNhXgGepSurJ/7QhJAwYFrxSEKzZrv/P7e6qIq8eSq/xLWAw3PRC@vger.kernel.org, AJvYcCXbY/psSh3+/2UO8w8JkKk/1opqL3/F9sHEpXDxXzNQuCfBgI0Edg7/MAa3CWQNCrB+a650Me29DNuPICNb@vger.kernel.org
-X-Received: by 2002:a05:622a:1b10:b0:476:78a8:4356 with SMTP id
- d75a77b69052e-48c3183797bmr34905511cf.26.1746187462708; Fri, 02 May 2025
- 05:04:22 -0700 (PDT)
+	s=arc-20240116; t=1746190482; c=relaxed/simple;
+	bh=0S4njLBx477UY0EGQFCzlms0FZEfXroNv1KmF3jVh3w=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=jcqItCZuKJ5rs3HYwS+jjY/GzZ+uxUS7F2u6x4wpmrzdVMGpxcm9rleZt7EgWQjBxId+OC2erzRvgN4oJAdlNcK8MYjOkaoNCZRQ5PIMiBYXHLx3pQWnr2xD9QYc8g0047Wo8MWqiKeAcCBbYNQGuJEV7ixKZpZhBZ104nzIwS8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info; spf=pass smtp.mailfrom=kemnade.info; dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b=tefFsVbb; arc=none smtp.client-ip=178.238.236.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kemnade.info
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=kemnade.info; s=20220719; h=References:In-Reply-To:Cc:From:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=fdclFqSEaIk6BP0kwR3B1xdvCQwhZtNIC8kiyckL4fw=; b=tefFsVbbmieIaZxr6uA2/anU1g
+	k5v7LsaWGOffxM3gI22D/S19P9jGpatY0I/0oZwayz6xjHv/6xUm0WltatFayDFTdKe1OwucSY1OS
+	57MlVNPgsFcgJpfsHEYztOTk/I5iZ5Av7I3Q3/n/zxTEa1AdvOBRLDrsmJDSmOaM6JHt2SjnR1BZh
+	i5afFoydi+2HqxggIxX0YtqnCou8R5FlDgpQCRfmDvvSz7qK+CdZRaREeCVAHsDWueArLBGt+Cz2k
+	eg2CRZgqPXJx4JeLpHwMlj2sXdp3dhgnbT9mpQWGY7f2Wik9JZnmMzkYM8EFdQEF8OR/RLenGr4x4
+	hucT8ymg==;
+Date: Fri, 2 May 2025 14:54:20 +0200
+From: Andreas Kemnade <andreas@kemnade.info>
+To: Andi Shyti <andi.shyti@kernel.org>
+Cc: Johan Hovold <johan@kernel.org>, Johan Hovold <johan+linaro@kernel.org>,
+ Vignesh R <vigneshr@ti.com>, Aaro Koskinen <aaro.koskinen@iki.fi>, Kevin
+ Hilman <khilman@baylibre.com>, Roger Quadros <rogerq@kernel.org>, Tony
+ Lindgren <tony@atomide.com>, Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+ linux-omap@vger.kernel.org, linux-i2c@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Jayesh Choudhary <j-choudhary@ti.com>
+Subject: Re: [PATCH] i2c: omap: fix deprecated of_property_read_bool() use
+Message-ID: <20250502145420.6bca53f9@akair>
+In-Reply-To: <hn3gsrizar6xbr4seclnb6xot4fo4ztryks4w7exvztsdzj4f6@jhobhujf3ezi>
+References: <20250415075230.16235-1-johan+linaro@kernel.org>
+	<vcwjwrjgzwoil5ydds4findhcgl2ujoxwia7eh7yrbdc45yx26@kmpmvataffzr>
+	<aAIiJQVAUdWJFVy7@hovoldconsulting.com>
+	<hn3gsrizar6xbr4seclnb6xot4fo4ztryks4w7exvztsdzj4f6@jhobhujf3ezi>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250501203310.140137-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20250501203310.140137-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Fri, 2 May 2025 14:04:11 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVQZBSoOVUN=Q9qiDRgPXGYiApZ+ao462+xtCjZiXNoBg@mail.gmail.com>
-X-Gm-Features: ATxdqUEJgHYtUiuy-xcdw0i5gv_WbXbGpCAVJDeLjetj7gfcOPxvIqq6CYKlgKs
-Message-ID: <CAMuHMdVQZBSoOVUN=Q9qiDRgPXGYiApZ+ao462+xtCjZiXNoBg@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: i2c: renesas,riic: Document RZ/V2N
- (R9A09G056) support
-To: Prabhakar <prabhakar.csengg@gmail.com>
-Cc: Chris Brandt <chris.brandt@renesas.com>, Andi Shyti <andi.shyti@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Wolfram Sang <wsa+renesas@sang-engineering.com>, Magnus Damm <magnus.damm@gmail.com>, 
-	Andy Shevchenko <andy@kernel.org>, linux-renesas-soc@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>, 
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Thu, 1 May 2025 at 22:33, Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> Document support for the I2C Bus Interface (RIIC) found on the Renesas
-> RZ/V2N (R9A09G056) SoC. The RIIC IP is identical to that on RZ/V2H(P),
-> so `renesas,riic-r9a09g057` will be used as a fallback compatible,
-> enabling reuse of the existing driver without changes.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Am Tue, 29 Apr 2025 15:10:13 +0200
+schrieb Andi Shyti <andi.shyti@kernel.org>:
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Hi Johan,
+> 
+> On Fri, Apr 18, 2025 at 11:57:57AM +0200, Johan Hovold wrote:
+> > On Thu, Apr 17, 2025 at 11:41:51PM +0200, Andi Shyti wrote:  
+> > > On Tue, Apr 15, 2025 at 09:52:30AM +0200, Johan Hovold wrote:  
+> > > > Using of_property_read_bool() for non-boolean properties is deprecated
+> > > > and results in a warning during runtime since commit c141ecc3cecd ("of:
+> > > > Warn when of_property_read_bool() is used on non-boolean properties").
+> > > > 
+> > > > Fixes: b6ef830c60b6 ("i2c: omap: Add support for setting mux")
+> > > > Cc: Jayesh Choudhary <j-choudhary@ti.com>
+> > > > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>  
+> > > 
+> > > Thanks for your patch! I'm going to drop the Fixes tag, as this
+> > > isn't really a bug fix but rather a warning suppression during
+> > > boot time.  
+> > 
+> > Thanks, but I think you should have kept the Fixes tag and merged this
+> > for 6.15 (i2c-host-fixes) since this is a new warning in 6.15-rc1 (and
+> > that does warrant a Fixes tag). Perhaps I should have highlighted that
+> > better.
+> > 
+> > If the offending patch had been posted or merged before such uses
+> > started generating warnings in 6.14-rc1 then that would have been a
+> > different matter.  
+> 
+> I'm sorry, but as I understand it, the Fixes tag should be used
+> only when an actual bug is being fixed. I've seen stable
+> maintainers getting annoyed when it's used for non-bug issues.
+> 
+hmm, some issue new in -rc1 could be fixed in a later -rcX. I have seen
+a lot of typos and other minor stuff getting fixed that way. So
+it does not need to be backported to any stable/longterm tree at all.
+Are the rules for that really that tough as for stable trees? I really
+doubt.
 
-Gr{oetje,eeting}s,
+Regards,
+Andreas 
 
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
 
