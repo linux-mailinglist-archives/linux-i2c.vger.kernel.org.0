@@ -1,109 +1,95 @@
-Return-Path: <linux-i2c+bounces-10782-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10779-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 682E6AA9DD6
-	for <lists+linux-i2c@lfdr.de>; Mon,  5 May 2025 23:07:44 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4BF36AA9D88
+	for <lists+linux-i2c@lfdr.de>; Mon,  5 May 2025 22:47:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DF21A17F8F9
-	for <lists+linux-i2c@lfdr.de>; Mon,  5 May 2025 21:07:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BBEB47ADAE3
+	for <lists+linux-i2c@lfdr.de>; Mon,  5 May 2025 20:46:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 734DA2701B4;
-	Mon,  5 May 2025 21:07:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1B6325D213;
+	Mon,  5 May 2025 20:47:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mattcorallo.com header.i=@mattcorallo.com header.b="jGY3MJlz";
-	dkim=pass (2048-bit key) header.d=clients.mail.as397444.net header.i=@clients.mail.as397444.net header.b="IAoWBOUV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="icXJXNJk"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.as397444.net (mail.as397444.net [69.59.18.99])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16C5D202C31;
-	Mon,  5 May 2025 21:07:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.59.18.99
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76DEF1E5B73;
+	Mon,  5 May 2025 20:47:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746479256; cv=none; b=bnBOvU3NvBDKLvtS53HAZYPl/cOe1cRgVAaFOOx6tpW+zmFNzOGSBsK5KrdHzbRiPOyFaYUN3Kjrno5deT143ieXuXBopSstx8wb8k/RkW8zeveVMUJoC94YydTOGUdDQqK1KDCINEo9ta1lsohhOOEbXiNUj0VlST0jbrSOqVw=
+	t=1746478028; cv=none; b=bCTsdCY18JqtgyEYhyH6CHBrh3sUGnBiEj4Ny2bgZoNmA2yxRIJS5rtmehTJWOMIYW4i8KqXL8BY+m6ZJ6F+0PX2VzgEVlMl+wOgIgXI/VtmB3TWq9z6oF5kDpU7j7B3NctlPwXd8FNBys0T5pBABHG9VU9DmzBwAb8QqZT6r9M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746479256; c=relaxed/simple;
-	bh=OeKSYQM0y4acgK9Dg3KckFONPyAn/+wg5t5V/RDgh3E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=b9rlcXuUL2ovQYdQi4Oz6sdCI3ATDzzwkdfYgsNGCTLceT3lBuarwZoVtiRE6MDfexhK8IhBWfymn3q7psxhQPNpEWVNiMhD8BmxbH5p5vU14qwdWoFMeaaOgubfH3fUCYwfwPRyP8IBHDafOYpKXOW8/fvkw5amTcmq+lfqq6U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mattcorallo.com; spf=pass smtp.mailfrom=mattcorallo.com; dkim=pass (2048-bit key) header.d=mattcorallo.com header.i=@mattcorallo.com header.b=jGY3MJlz; dkim=pass (2048-bit key) header.d=clients.mail.as397444.net header.i=@clients.mail.as397444.net header.b=IAoWBOUV; arc=none smtp.client-ip=69.59.18.99
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mattcorallo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mattcorallo.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=mattcorallo.com; s=1746477663; h=In-Reply-To:From:References:To:Subject:
-	From:Subject:To:Cc:Cc:Reply-To;
-	bh=kvFNPuKhYHPYwuvjJeByf4oFzEWjO5/uCzgmJyvUC2s=; b=jGY3MJlzH1ZLOEC4J+8HeADl6N
-	NUCkE0kXqjhrOP9y+cvLdb41kYSfKm8Zw3SaBxZ7vzVcXUSbySd4eqV1pllSMmGcUBBR2fHc2U1mB
-	Ft6a8wGE+H5Bq5Q/p+kl8MbrWMNF2GaAzGOx9au4j09AayAvWbKXQwjvlSf2Lk63O5EvA9xPXqXeq
-	d3/YFriuwu6qEUKJQwPxRXek+tWBgbATiePxowW40yriZLMQ2PnST0gasXAMB+tJQvMzvhoHygAnI
-	DLEx9eEU2w2xxKnReR13/8N+TZ8PdBXAEx06MycE85zttMpHmYU8bWlTDsV4Uut8pd79kwnFBs+m6
-	B5mvzZAA==;
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=clients.mail.as397444.net; s=1746477665; h=In-Reply-To:From:References:To:
-	Subject:From:Subject:To:Cc:Cc:Reply-To;
-	bh=kvFNPuKhYHPYwuvjJeByf4oFzEWjO5/uCzgmJyvUC2s=; b=IAoWBOUVppqL6f/UhCJMh6z8if
-	WYXPaMBvjD/wQtSmeb7VarcMHuHjfNCVt188sjlIcId7GTO3dDu+rh1YQ3AKx2zEltIb2UGw6/x3/
-	ZUATrfy6XgZwHBxY7hlpUTc1aHbJ7nIuvvLXdr7y/ZLyHEZrYNTZYUVs40bvEWYF0el51T1lyxTFj
-	5x7ic25bPX6DXObYmWgxYp7nKNfQie8j+POjUXfWVVMV3MRa/640/7y1oKASk2gGNBoiQMrL3L0om
-	cYsG/PGUv8KEIjAdm7/mf0sCt5/Q75AoBUvHXN2S/R/l/F0QdGArvuQfEvGtxKW2fEg1+vW4/SaFt
-	FPaISjAw==;
-X-DKIM-Note: Keys used to sign are likely public at
-X-DKIM-Note: https://as397444.net/dkim/mattcorallo.com and
-X-DKIM-Note: https://as397444.net/dkim/clients.mail.as397444.net
-X-DKIM-Note: For more info, see https://as397444.net/dkim/
-Received: by mail.as397444.net with esmtpsa (TLS1.3) (Exim)
-	(envelope-from <yalbrymrb@mattcorallo.com>)
-	id 1uC2ch-00CHmI-1D;
-	Mon, 05 May 2025 20:41:11 +0000
-Message-ID: <3a9ab7bf-6761-4a14-983e-e6bb288ce58a@mattcorallo.com>
-Date: Mon, 5 May 2025 16:41:09 -0400
+	s=arc-20240116; t=1746478028; c=relaxed/simple;
+	bh=ddICR0mNLi+4InQVuEWoff9w1rDtvhO3HLxEJlaCnm4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YrvWMp1gMSDOSQvTdJEmPXJSovMmEzW+RTtqrJq1sQcsf/ThlNi5wH1FkFmb4QwDeNcsvTlVsrczbAW3TvZtBE0aF7aDe1FOiRPJI8AD04wS/B/9a5j4f2guTEXBnRbp54zqsiznUVyCZbxQD2VRDYLweZtMiYLGTyF+77hT0JI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=icXJXNJk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48B18C4CEE4;
+	Mon,  5 May 2025 20:47:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746478027;
+	bh=ddICR0mNLi+4InQVuEWoff9w1rDtvhO3HLxEJlaCnm4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=icXJXNJkCkS3jEBYBORhYqhUxh4ijb8wCNsrwpLDigvQZTu34Ixq0g5KDz6Y+m05y
+	 IqmJjx+isaC5GgW7iJRdYYT6lfi2YrQW4VB7h4iGBZi60Zrr86alt2rTnqy4R065IE
+	 DAlm2PYfwlNhdzbYGhbx1834+Mpq301d8pDoy22ydcFvrQ2dy319Jm67hLwB7b9I7Y
+	 fRmFaurIX3eEcL5osM5jAI7YpspBaSYGnDOwoNpCIjHyrormRj6zC9Letnu891gSG5
+	 t/LP3UrJ2Cz0N0piHmmXkXoTw6D6crpEYCewgK10rnk6r66AHvjv+10TQEMqJXFCxT
+	 eFNqc0vjXr7TA==
+Date: Mon, 5 May 2025 22:47:04 +0200
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Heiko =?utf-8?Q?St=C3=BCbner?= <heiko@sntech.de>
+Cc: Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Jonas Karlman <jonas@kwiboo.se>, Yao Zi <ziyao@disroot.org>, Chukun Pan <amadeus@jmu.edu.cn>, 
+	linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, linux-i2c@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Conor Dooley <conor.dooley@microchip.com>
+Subject: Re: [PATCH v2 1/3] dt-bindings: i2c: i2c-rk3x: Add compatible string
+ for RK3528
+Message-ID: <h4hpaadpeu2pnsbcfbg4iye7w5sn26wflth4uztdghafuegqi5@2xbtygdwe2hu>
+References: <20250417120118.17610-3-ziyao@disroot.org>
+ <20250417120118.17610-4-ziyao@disroot.org>
+ <4864135.rnE6jSC6OK@diego>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: PMBus memory overflow
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
- Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
- Linux I2C <linux-i2c@vger.kernel.org>
-References: <336f298f-497f-4dd9-97ee-50b81221be06@roeck-us.net>
- <1b1eccff-a306-4e17-a6bf-fd3203c61605@mattcorallo.com>
- <1edc8396-535d-4cdf-bbb7-11d559d4c257@roeck-us.net>
- <cfc2b3c8-3f94-407a-a4d5-e7d81686eb2d@mattcorallo.com>
- <84258b48-03b5-4129-bed5-f8200996f2eb@roeck-us.net>
- <fcfd78d2-238d-4b68-b6ec-5ee809c4ef08@mattcorallo.com>
- <eb5796e8-de76-4e91-9192-65b9af7a4d49@roeck-us.net>
- <284466fd-39e8-419e-8af5-41dbabb788af@roeck-us.net>
- <d5abeb59-8286-425c-9f78-cd60b0e26ada@mattcorallo.com>
- <00baca6f-8046-46ae-a68c-525472562be7@roeck-us.net>
- <aAtEydwUfVcE0XeA@shikoro>
-Content-Language: en-US
-From: Matt Corallo <yalbrymrb@mattcorallo.com>
-In-Reply-To: <aAtEydwUfVcE0XeA@shikoro>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <4864135.rnE6jSC6OK@diego>
 
+Hi Heiko,
 
-
-On 4/25/25 4:16 AM, Wolfram Sang wrote:
+On Mon, May 05, 2025 at 09:49:36AM +0200, Heiko Stübner wrote:
+> Am Donnerstag, 17. April 2025, 14:01:17 Mitteleuropäische Sommerzeit schrieb Yao Zi:
+> > Document I2C controllers integrated in RK3528, which are compatible with
+> > the RK3399 variant.
+> > 
+> > Signed-off-by: Yao Zi <ziyao@disroot.org>
+> > Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+> > Acked-by: Conor Dooley <conor.dooley@microchip.com>
+> > Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
 > 
->> Wolfram, what do you suggest ? Fixing the cp2112 driver is obviously necessary, but
->> I do wonder if a check such as the one above would be appropriate as well, possibly
->> even combined with a WARN_ONCE().
-> 
-> How annoying, there was still an unchecked case left? Sorry. Yes, the
-> core can have a check for a short-term solution. The long-term solution
-> is to support SMBUS3.x which allows for 255 byte transfers.
+> do you expect to apply this patch to the i2c tree individually,
+> or have it go together with the devicetree patch?
 
-Thanks!
+with these patches, I normally wait a bit to see how the others
+in the same series go before merging.
 
-Any update here? I guess we already have a patch so no use in me trying to write one. Would be nice 
-to get this in a pull so it can head through backports.
+I now merged this patch into i2c/i2c-host.
+
+If there is any particular need to merge everything together in
+the devicetree, then I can take it out.
 
 Thanks,
-Matt
+Andi
 
