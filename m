@@ -1,117 +1,107 @@
-Return-Path: <linux-i2c+bounces-10786-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10787-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C721FAA9E5F
-	for <lists+linux-i2c@lfdr.de>; Mon,  5 May 2025 23:48:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DD72AA9E6D
+	for <lists+linux-i2c@lfdr.de>; Mon,  5 May 2025 23:53:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A72291A802A4
-	for <lists+linux-i2c@lfdr.de>; Mon,  5 May 2025 21:48:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7C26D17DA96
+	for <lists+linux-i2c@lfdr.de>; Mon,  5 May 2025 21:53:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F541259493;
-	Mon,  5 May 2025 21:48:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B01A27467C;
+	Mon,  5 May 2025 21:53:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M9klhOfj"
+	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="DdC3AwJ7"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37FEF1C6FF5;
-	Mon,  5 May 2025 21:48:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1058270548;
+	Mon,  5 May 2025 21:53:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746481719; cv=none; b=XSv850sVd1wKiZ7NXQZE/W6Pkq+Wy1Z/eLeW0tTyiokN0lg+dVSEkSuvZmwlFvsGoJ28I1KjIgh5cKVwozPmHqfrMNcBKL0Y4k5o2Iyyv8HFA6ISPArsUGwWrwQnbarlXGv/7sp93/QgkD1pxIDabBXNCOScG0XmjNY2E8egvj8=
+	t=1746482009; cv=none; b=c+gC+dYLNTQ3INVWvOqjwM4060unLnkHt117x7f5z4gskZ/voRmkERaRWqKXhxrbtsfLupwR9BZgaNCFiq2RJzl5FPnqjQ0aR30UnTidNuY/Is2KXcEVuGpb9KUueVUGpVWOvlerI8gxNu+rr2CSJLvfBhQVsOKwTztO1DnlAZw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746481719; c=relaxed/simple;
-	bh=SROOiakuclIYPxvkMWA0nKr4EXNUpsU6f6JjzTlZu2Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NO2CJDU5Q0mkkBY5jx/Aoso/Bh0PmOWv8u2f9XqFdBEqhw59yqhBJhRyQ1pUB5wEf/etWGPAmnr4NW/SK6dn6CjxsYuivJhf1BD9OsXW1N45sGbY6Ckhj4cp9f/py8po67DUNU2QZX7Ci2lVM1WZv+9BhrTCtipLvx6jN9U0wlw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M9klhOfj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 552D6C4CEE4;
-	Mon,  5 May 2025 21:48:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746481718;
-	bh=SROOiakuclIYPxvkMWA0nKr4EXNUpsU6f6JjzTlZu2Q=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=M9klhOfj09VJhXC+4pfeLg05amT1S0SHkgEC+Kc07HmQ5o3Hxayyk7A3p3ASiDMle
-	 HP/pPnxebSd8/VsrJqo1Z9RcOsidG9PYEWsgpMkdQ9F5d8L91DrZ6J/mWBkXq03wg1
-	 7rLDmAkeLNyi87BCqyMoLKRq+LlY9f726zw7G1l1XwUoFA51D3O9aE0nQHrIlMQ/rZ
-	 7onQDqs0vV1X4m9vpxEaVjNtb1R9DB3djCQo3x1w7aeNrdR54eGM8sVjeLxPSlGyAG
-	 XTn5+fXhsOhNm7rmb25C/BAhgMNA51c8MrASKuOmPICHSmi73NULAGT6bX8Hdt8uV3
-	 btkRaQFj2D2zA==
-Date: Mon, 5 May 2025 23:48:35 +0200
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Cc: EnDe Tan <ende.tan@starfivetech.com>, 
-	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>, 
-	"andriy.shevchenko@linux.intel.com" <andriy.shevchenko@linux.intel.com>, 
-	"mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>, "jsd@semihalf.com" <jsd@semihalf.com>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Leyfoon Tan <leyfoon.tan@starfivetech.com>, 
-	"endeneer@gmail.com" <endeneer@gmail.com>
-Subject: Re: [1/1] i2c: designware: Ensure runtime suspend is invoked during
- rapid slave unregistration and registration
-Message-ID: <2l2tpeictfp3o2kcq5fquqkm3nyjijq65ejanafrshh7icc5c4@guynosug2ve7>
-References: <20250412023303.378600-1-ende.tan@starfivetech.com>
- <6e155241-3403-49df-8f0d-5aa63e2e74ab@linux.intel.com>
- <NTZPR01MB10182E9F6E50D679A6EAC3B4F8B92@NTZPR01MB1018.CHNPR01.prod.partner.outlook.cn>
- <6a3b756f-6fbd-4ee5-b511-c5a32e4a6a34@linux.intel.com>
+	s=arc-20240116; t=1746482009; c=relaxed/simple;
+	bh=+FQHZZM7aoI7UialL3yB5/dJRd4nVbYfzohSTv3bLmM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=dsdmj9T57cW8fjg3VsJ4WXLaQ0eWBwt0+ucO46mRX/wMnaR4KdUZyQrWJ3UvdFfmjbVcbs9XLcgmWSwty55o0DTLF4YUDF6PP6pR0/Dl1KWP4MiLM4RRBcUNuG9Au2kTY7ncBQZEp9ivUFuv2mhqSMSJIHsH1PBMHaxy69oRyD0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=DdC3AwJ7; arc=none smtp.client-ip=185.11.138.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
+	s=gloria202408; h=Content-Transfer-Encoding:Content-Type:MIME-Version:
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=ky2FY8wQi0hoWGwOjDyfpng6BVXAqJP2zLIjZqhEWZA=; b=DdC3AwJ7cAtgun0b6u5kgbdY5+
+	MYldwYok5u4hquFQNeMD6gHgOoDzmnS6HmEoYWikdz5TTtdpWkxyuxqbnf0+974VNsQkyPyRI3MHC
+	mgmpcwVl9gL2hAM8qKL3nGifuLykHuNPDmKRhDbgKPfR+PCYAh65SMOPqk7KxYDM/Aba3XLKVo3K/
+	2thz9Nm6ua3t++DMLO5DdMOiJxUxU4sWfysIHA57NwHEdJLfn6/olIf0jGes5ZOnnXz4jh/qGsa5q
+	LQoJsKmRVOCf68Bk+Uymma2vKbF40Rgr4zKXwb5QGx7nshJkyBC464hQySo9EiSxpuLXKMK1g/+7B
+	av8er3RA==;
+Received: from i53875a1d.versanet.de ([83.135.90.29] helo=localhost.localdomain)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1uC3kW-0000QT-94; Mon, 05 May 2025 23:53:20 +0200
+From: Heiko Stuebner <heiko@sntech.de>
+To: Andi Shyti <andi.shyti@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jonas Karlman <jonas@kwiboo.se>,
+	Chukun Pan <amadeus@jmu.edu.cn>,
+	Yao Zi <ziyao@disroot.org>
+Cc: Heiko Stuebner <heiko@sntech.de>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org,
+	linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: (subset) [PATCH v2 0/3] Support I2C controllers in RK3528
+Date: Mon,  5 May 2025 23:53:09 +0200
+Message-ID: <174648198304.1334687.5769287856260852986.b4-ty@sntech.de>
+X-Mailer: git-send-email 2.47.2
+In-Reply-To: <20250417120118.17610-3-ziyao@disroot.org>
+References: <20250417120118.17610-3-ziyao@disroot.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6a3b756f-6fbd-4ee5-b511-c5a32e4a6a34@linux.intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-Hi EnDe,
 
-On Fri, May 02, 2025 at 02:03:25PM +0300, Jarkko Nikula wrote:
-> On 4/20/25 6:31 AM, EnDe Tan wrote:
-> > It appears that when performing a rapid sequence of `delete_device -> new_device -> delete_device -> new_device`, the `dw_i2c_plat_runtime_suspend` is not invoked for the second `delete_device`.
-> > 
-> > This seems to happen because when `i2c_dw_unreg_slave` is about to trigger suspend during the second `delete_device`, the second `new_device` operation cancels the suspend. As a result, `dw_i2c_plat_runtime_resume` is not called (since there was no suspend), which means `i_dev->init` (i.e., `i2c_dw_init_slave`) is skipped.
-> > 
-> > Because `i2c_dw_init_slave` is skipped, `i2c_dw_configure_fifo_slave` is not invoked, which leaves `DW_IC_INTR_MASK` unconfigured.
-> > If we inspect the interrupt mask register using devmem, it will show as zero.
-> > 
-> > Here's an example shell script to reproduce the issue:
-> > ```
-> > #!/bin/sh
-> > 
-> > SLAVE_LADDR=0x1010
-> > SLAVE_BUS=13
-> > NEW_DEVICE=/sys/bus/i2c/devices/i2c-$SLAVE_BUS/new_device
-> > DELETE_DEVICE=/sys/bus/i2c/devices/i2c-$SLAVE_BUS/delete_device
-> > 
-> > # Create initial device
-> > echo slave-24c02 $SLAVE_LADDR > $NEW_DEVICE
-> > sleep 2
-> > 
-> > # Rapid sequence of delete_device -> new_device -> delete_device -> new_device
-> > echo $SLAVE_LADDR > $DELETE_DEVICE
-> > echo slave-24c02 $SLAVE_LADDR > $NEW_DEVICE
-> > echo $SLAVE_LADDR > $DELETE_DEVICE
-> > echo slave-24c02 $SLAVE_LADDR > $NEW_DEVICE
-> > 
-> > # If we use devmem to inspect IC_INTR_MASK, it will show as zero
-> > ```
+On Thu, 17 Apr 2025 12:01:16 +0000, Yao Zi wrote:
+> RK3528 integrates eight I2C controllers which are compatible with the
+> RK3399 variant of i2c-rk3x. This series documents the controllers in
+> dt-bindings, describe them in SoC devicetree and enable the onboard
+> EEPROM of Radxa E20C which is connected to I2C-2.
+> 
+> Changed from v1
+> - rebase on top of linux-rockchip/for-next
+> - dt-binding: collect review tags
+> - SoC devicetree
+>   - sort i2c and gpio in /aliases
+>   - provide default pinctrl for controllers with only one set of
+>     possible pins
+> - Radxa E20C devicetree: mark eeprom as read-only
+> 
+> [...]
 
-Please, don't remove the interesting parts of the original email
-from your reply, otherwise it wouldn't be easy to follow the
-discussion. Please refer to the email netiquette[*].
+Applied, thanks!
 
-> Good explanation and could you add it the commit log together with the
-> example?
+[2/3] arm64: dts: rockchip: Add I2C controllers for RK3528
+      commit: d3a05f490d048808968df1e0d3240ab01fe82211
+[3/3] arm64: dts: rockchip: Add onboard EEPROM for Radxa E20C
+      commit: 101fe8b5627c68b3f2f941266e26ac355131e2fe
 
-If you want you can paste the new commit log as reply to this
-e-mail.
-
-Thanks,
-Andi
-
-[*] https://www.ietf.org/rfc/rfc1855.txt
+Best regards,
+-- 
+Heiko Stuebner <heiko@sntech.de>
 
