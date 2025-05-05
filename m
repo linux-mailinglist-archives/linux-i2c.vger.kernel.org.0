@@ -1,56 +1,58 @@
-Return-Path: <linux-i2c+bounces-10777-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10778-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 644AFAA9CF6
-	for <lists+linux-i2c@lfdr.de>; Mon,  5 May 2025 22:04:35 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id CEA21AA9D5B
+	for <lists+linux-i2c@lfdr.de>; Mon,  5 May 2025 22:39:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6BD151A807D7
-	for <lists+linux-i2c@lfdr.de>; Mon,  5 May 2025 20:04:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D1DB17A618A
+	for <lists+linux-i2c@lfdr.de>; Mon,  5 May 2025 20:37:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF89225D539;
-	Mon,  5 May 2025 20:04:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBF442701A0;
+	Mon,  5 May 2025 20:38:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kOo966Ko"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ncz+Tbkt"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A66081F7575;
-	Mon,  5 May 2025 20:04:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AF8B2561DC;
+	Mon,  5 May 2025 20:38:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746475470; cv=none; b=ehBxhFSnik9XatQLUAgYzjQpemMkgxwWmkpUz3b0k5T30eCdUNkFsf74WYTm5Sl6CCfoQ/qVUBAmbR141SSSJF1zXT53z9oIOAugKDMFQHnCc73jA29MRWbe2RbYv3ebxcnD+0TzjPjgN1XVcAua3A7FiWYSPLWzyDHjVFRycT8=
+	t=1746477533; cv=none; b=JWtnhUazSz09aYJFeRycfLyfK3aUkHIs+S3MQ53yBUe3JhEgwRqc2CpL9+dcKaiBx+PDvfjzPrB9YD1q4cg1E7GQwkA9tqQrqLBv2hVwlzMwY+eSCzg0Wba/zZxaTQVPSQ3toUMg95zhwQ1S7Y8nmMAavMiVA80QZPgpeezDwI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746475470; c=relaxed/simple;
-	bh=g8P/5YESNc2yPifNkAcmzvCrXKnr2yjpGlHFSKAky70=;
+	s=arc-20240116; t=1746477533; c=relaxed/simple;
+	bh=Nwkb4533cnkgEOovGIY8bmWIMqTqCYeGxbR5tYw46QM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gekMqCQcM71swDpvZWnNud65UYAPjLM0Holm4cySGczBbq5SwCux9kXjS0nHSdvhqmVVZrDBJRNoEksognZIlipemY7LVB7NxFqTze7gSgsco+8bPFHAu5bFZqOaRz+tSGB1llHsrVR+fw/zN1H50N5z5b68f6mR9h9u7/Hqk6Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kOo966Ko; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD546C4CEE4;
-	Mon,  5 May 2025 20:04:29 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=l4FTEzdz8Ba7ZyK3/p4s7Zz3G+/OQSzQCtXOvppeK089d7Bw7/SICpuxNyUnMv/4yh3BxJjU3qkMsacznnlyW8W6/RAzCxTDzNWH5yLP+ui80saV/r9mlkN/9c2FM7u3LmbHTdgccEmcLckUjaZkiYu7JUuBq241oEveiVsqq4Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ncz+Tbkt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90450C4CEE4;
+	Mon,  5 May 2025 20:38:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746475470;
-	bh=g8P/5YESNc2yPifNkAcmzvCrXKnr2yjpGlHFSKAky70=;
+	s=k20201202; t=1746477533;
+	bh=Nwkb4533cnkgEOovGIY8bmWIMqTqCYeGxbR5tYw46QM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kOo966KoK/I+4+9rci6oaQgOmrGGUUGC84XI/ugfAv9AZXApY0dciw7PSdcrXSamx
-	 0M4bT7YdUe2SKH6O3BUbGDHhPIwsDG5e+V+lGzoRwS4VcuyWnYAHxE/kjmQyTb7KpQ
-	 20/TKT9hwL4ih/D1tNzLIl8c0rnM5zEV8aUjJ6CgSIbVo2nHLBky56ixO8JxhHol1T
-	 LJrmQd09Nck/3HQytTQR7vsOebZSiZ3bVeeU+0c3fVuK4INPEg9NnRjjIstAQE7BYt
-	 N2tMdAWbkaOAIg14+HKYCLarwZbETHdMYKz6kSfUQRJwVPxynr7TgTr5Y0HAACKH+i
-	 IOnZRMeXPqb4A==
-Date: Mon, 5 May 2025 22:04:27 +0200
+	b=Ncz+TbktmSTf07F89Z3vST5L7x2VI2HxQppVQkwLJzo1Tld2luiXvdmYLiVhp//7f
+	 rHxPilqU3LgSPxmaihCPbJTwjLX9+U5MT0+kO8a6kFg3NPdb/9CsNlSKE41+g4eQ1F
+	 xRM//DI4BFJbgc5mNMEAOwOQgHdopU21C6wR/oidwHe2uVl9uArPKLojdt2yWypt0l
+	 Neo0CXkyscsTr+HTeF1Ek+ceEs+wHrPndwf/4ogYSKQMr/HUbwi/vH34hCBhErsno+
+	 W+YBwvax50EmWl4iV+9iLMcf3I0mplgMw3KWh4u2UI9vF30g2uyDqOdFzQil+88kBB
+	 x/zDDalYyAwvA==
+Date: Mon, 5 May 2025 22:38:49 +0200
 From: Andi Shyti <andi.shyti@kernel.org>
-To: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-Cc: Conor Dooley <conor@kernel.org>, linux-i2c@vger.kernel.org, 
-	prashanth kumar burujukindi <prashanthkumar.burujukindi@microchip.com>, Conor Dooley <conor.dooley@microchip.com>, 
-	Daire McNamara <daire.mcnamara@microchip.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] i2c: microchip-corei2c: add smbus support
-Message-ID: <7q4gdh3jcbnsptmdv6fywnwqta5nekof4wtut35apw5wphhkio@veeu4ogcm44h>
-References: <20250430-preview-dormitory-85191523283d@spud>
- <3421bf4a-afa1-4b4c-8421-bad7187d3d8e@quicinc.com>
+To: kernel test robot <lkp@intel.com>
+Cc: Alexey Charkov <alchark@gmail.com>, 
+	Krzysztof Kozlowski <krzk@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, oe-kbuild-all@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] dt-bindings: i2c: i2c-wmt: Convert to YAML
+Message-ID: <7oxuyl2d6zcv4ucqrny5bytodiqmxdxgcxovdere3cier53mlb@tuuw4ooldnvv>
+References: <20250430-vt8500-i2c-binding-v2-1-0cf22d0c2d42@gmail.com>
+ <202505011756.SZDFqCew-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -59,32 +61,13 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3421bf4a-afa1-4b4c-8421-bad7187d3d8e@quicinc.com>
+In-Reply-To: <202505011756.SZDFqCew-lkp@intel.com>
 
-Hi,
+Hi Alexey,
 
-On Wed, Apr 30, 2025 at 05:06:09PM +0530, Mukesh Kumar Savaliya wrote:
-> On 4/30/2025 4:53 PM, Conor Dooley wrote:
-> > From: prashanth kumar burujukindi <prashanthkumar.burujukindi@microchip.com>
-> > 
-> > In this driver the supported SMBUS commands are smbus_quick,
-> > smbus_byte, smbus_byte_data, smbus_word_data and smbus_block_data.
-> > 
-> Write completely in imperative mood. something like :
-> 
-> Add support for SMBUS commands in driver
-> 
-> Add support for SMBUS commands: smbus_quick, smbus_byte, smbus_byte_data,
-> smbus_word_data, and smbus_block_data.
+> >> Warning: MAINTAINERS references a file that doesn't exist: Documentation/devicetree/bindings/i2c/i2c-wmt.txt
 
-yes, I agree that the original commit log is a bit lazy written :-)
-
-> Also mention below limitations here .
-> SMBUS block read is supported by the controller but has not been tested due
-> to lack of hardware. However, SMBUS I2C block read has been tested.
-
-Smbus i2c block has not been tested? If so, can we leave it out?
-What is the interest to keep it in?
+please send a v3 with the MAINTAINERS file updated.
 
 Thanks,
 Andi
