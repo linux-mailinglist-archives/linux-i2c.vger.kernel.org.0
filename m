@@ -1,139 +1,138 @@
-Return-Path: <linux-i2c+bounces-10758-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10760-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00B16AA8CD1
-	for <lists+linux-i2c@lfdr.de>; Mon,  5 May 2025 09:06:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A1511AA8CE6
+	for <lists+linux-i2c@lfdr.de>; Mon,  5 May 2025 09:16:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 67FF416D643
-	for <lists+linux-i2c@lfdr.de>; Mon,  5 May 2025 07:06:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E9DF03AD2D0
+	for <lists+linux-i2c@lfdr.de>; Mon,  5 May 2025 07:16:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE97E14AA9;
-	Mon,  5 May 2025 07:06:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kwiboo.se header.i=@kwiboo.se header.b="CQ7Wwaul"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60F901C863D;
+	Mon,  5 May 2025 07:16:35 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.forwardemail.net (smtp.forwardemail.net [121.127.44.73])
+Received: from mail-il1-f207.google.com (mail-il1-f207.google.com [209.85.166.207])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD6EB1805A
-	for <linux-i2c@vger.kernel.org>; Mon,  5 May 2025 07:06:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=121.127.44.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BF521ACEAC
+	for <linux-i2c@vger.kernel.org>; Mon,  5 May 2025 07:16:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.207
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746428793; cv=none; b=Zr+d/BgUmY0N70qLLeylnRCxQ0iM30k2uFOPb6NkWkHdN5ojDNQpBlhfcXLQAeaLOnfALCxyDmPyo3X6sr5CRCG7c9Qj/yxapY5TKJuhr7mYuOKAI/gCXCVoM54DcQISUy2GaiC6qZ6u+pDa26TfjdC4V0ii0PFGwXkMI/8L4IY=
+	t=1746429395; cv=none; b=h+oTWC35cXQN4VEe1YOTQoCP1vAG1ArSOwOCa77CqsBZmRTNFbddmJ1iutMexbElKIS/wavjmJH2T+VYHxzhx8XTIyHeaS4hvbESf6c9E2Pu7J8aPFsLMZzK2Acbz2IkI27K0P14F//sEE9nM7Gjik91oa+m450LRDo50wy9wjM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746428793; c=relaxed/simple;
-	bh=agdf8tfyPqTN/rAN9Hf6YgKVYC9qjd+YRImPZNohMIc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GkzrYndu4yAhPBegcT5Rbm0zeRDfmyC3Ht4fgxZFXaqq3HXnHLyho/id079T/FBeaSHN2a47JCUQ23gOOgi/ToYZVBp2Z2sfz9+n2583DgmSMRSPYKatRd1Lrid/KkAhktPDMm5i2mRucGcmYIqUhmHXl4EjMMIlyP6imZgwhfY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kwiboo.se; spf=pass smtp.mailfrom=fe-bounces.kwiboo.se; dkim=pass (2048-bit key) header.d=kwiboo.se header.i=@kwiboo.se header.b=CQ7Wwaul; arc=none smtp.client-ip=121.127.44.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kwiboo.se
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fe-bounces.kwiboo.se
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kwiboo.se;
- h=Content-Transfer-Encoding: Content-Type: In-Reply-To: From: References:
- Cc: To: Subject: MIME-Version: Date: Message-ID; q=dns/txt;
- s=fe-e1b5cab7be; t=1746428790;
- bh=gIXg7np9usec25+u5f5CPg2C+dLhyz1Hb6Nl/ECOjP4=;
- b=CQ7Wwaulma4QRhTixZ0UHxzavdchAaPfJHOE7fHk5QhMwgA0XOApJMfHPUkC4MGJ3IuY2txcX
- F5NUGMDNQUAk0J4gJ2Ql55tAXxTq4/ud/O9DZuoO6YbAvwUiuobC3dhdYc1l4uEqQk0hUHYnkJr
- UfYi3ZUBYN9zFVGzSjcB08qpO8CW5xgmtJ0Y0sQFBWJ8iWuZmR8JnknSp5FW7L4IoPl46eGKh1S
- 1ICS8z31Xs5So17Y6yGs2K037r+e02HczAfNbLnqw9Yc6lBIros1HZspef45noSKvoDfsQwH23K
- CQvjkLPBNpFVimpYxhrfYT3V8eREBYYpqXCAF+Xo/a4w==
-X-Forward-Email-ID: 68186375baed44ffca19f440
-X-Forward-Email-Sender: rfc822; jonas@kwiboo.se, smtp.forwardemail.net,
- 121.127.44.73
-X-Forward-Email-Version: 1.0.2
-X-Forward-Email-Website: https://forwardemail.net
-X-Complaints-To: abuse@forwardemail.net
-X-Report-Abuse: abuse@forwardemail.net
-X-Report-Abuse-To: abuse@forwardemail.net
-Message-ID: <9b804428-1c36-437b-9d48-4bce2a79ce63@kwiboo.se>
-Date: Mon, 5 May 2025 09:06:25 +0200
+	s=arc-20240116; t=1746429395; c=relaxed/simple;
+	bh=EMSJKUDzSBAb77SoebBMNvAxBP/EkXe/jQiB+gH+Wts=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=uPtB7beebeufxftZmsd0jGJmPCHMxZxkX+xdTRT3giCb1atN/BhYjnwdxQpHyv2mx6WHS2gNo7f1gZce2D6ZSOcQ9jawFiioTUHILIKdDCX0dr/4DTYnNXnZRv1QGc8/H7HzNKMT88WZjwpKDre6aud4mplpbgIWDR8egNqnTRM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.207
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f207.google.com with SMTP id e9e14a558f8ab-3d922570570so52654195ab.3
+        for <linux-i2c@vger.kernel.org>; Mon, 05 May 2025 00:16:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746429392; x=1747034192;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MHfdXx64Ba+sX/D56yZyl1OIE6j4n+qi0pYdDMpu7z8=;
+        b=VwrNnuW8N+AZGkRqNJQaRnQjXtihN3vHs4QVvLo9t0ryvfNx2ED7BUt1iIOZawzRJ1
+         EOpGTg8xnT3hesM5RZENH6OErwSCKJwpUHzJx5cxDl2YZzRnotaVkPB/c45D06IM5FlD
+         NKi9/+lkjBI3METck6hlOsKjh3gz9nalNj86ITmlYX+B1HmgXfZZwQthAkIraTLaaKq6
+         65ZqT7hfMt2qvsdfvN5v3aNAWeuG8AvstRn3jJpB//xXAWZUwlWmArPHZhIo1k10+r/h
+         Onu8+AQHwH3L0IMpheNZOBFU4CDNzKrqWcvmkhScSfDoIXJi8lkuFiclSltepzlc1qzF
+         VHJw==
+X-Gm-Message-State: AOJu0Yx18iwFI+6Dtul0lrM2oOJeHKi9Y/k4hIz027+5i/+Mn13N6xgE
+	pRESmc1YFDEVAT4PPNnYhOHFFcri/RntPj67vywSR1ie4fF/bQ8Kurq6KZGRRkARMBM6m/FUNoJ
+	1uHnnc9xazHIr60ANn5DO4DucxnoHJrTLY1WfvIRSGlTs4nCtZvls+DKVIg==
+X-Google-Smtp-Source: AGHT+IEBTI4+qSrx+O/JX6tEl9JoXNB1Mfqno3SpHuC5+Syea8HBrLMkS77b4J+W3VCYhYrS0ENDfIYvhB1GOX3jphb1pXym/Xz5
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/3] arm64: dts: rockchip: Add onboard EEPROM for Radxa
- E20C
-To: Yao Zi <ziyao@disroot.org>, Heiko Stuebner <heiko@sntech.de>
-Cc: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Chukun Pan <amadeus@jmu.edu.cn>,
- linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org,
- linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250417120118.17610-3-ziyao@disroot.org>
- <20250417120118.17610-6-ziyao@disroot.org>
-Content-Language: en-US
-From: Jonas Karlman <jonas@kwiboo.se>
-In-Reply-To: <20250417120118.17610-6-ziyao@disroot.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a05:6e02:250e:b0:3d8:211c:9891 with SMTP id
+ e9e14a558f8ab-3da5b23b7e2mr57455755ab.2.1746429392744; Mon, 05 May 2025
+ 00:16:32 -0700 (PDT)
+Date: Mon, 05 May 2025 00:16:32 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <681865d0.a70a0220.254cdc.0048.GAE@google.com>
+Subject: [syzbot] [i2c?] KMSAN: uninit-value in __i2c_smbus_xfer
+From: syzbot <syzbot+0a36c1fec090c67a9885@syzkaller.appspotmail.com>
+To: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	syzkaller-bugs@googlegroups.com, wsa+renesas@sang-engineering.com
+Content-Type: text/plain; charset="UTF-8"
 
-On 2025-04-17 14:01, Yao Zi wrote:
-> Radxa E20C ships an onboard I2C EEPROM for storing production
-> information. Enable it in devicetree.
-> 
-> Signed-off-by: Yao Zi <ziyao@disroot.org>
+Hello,
 
-Reading from the EEPROM on my E20C works:
+syzbot found the following issue on:
 
-  $ hexdump -C /sys/devices/platform/soc/ffa58000.i2c/i2c-1/1-0050/1-00500/nvmem
-  00000000  52 41 44 58 01 00 03 00  00 01 00 00 01 00 01 00  |RADX............|
-  00000010  58 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |X...............|
-  00000020  00 00 00 00 00 00 00 00  20 20 52 61 64 78 61 20  |........  Radxa |
-  00000030  54 65 63 68 6e 6f 6c 6f  67 79 20 43 6f 2e 2c 20  |Technology Co., |
-  00000040  4c 74 64 2e 00 00 00 00  00 00 44 31 45 38 31 30  |Ltd.......D1E810|
-  00000050  4f 32 52 32 39 58 34 59  36 00 00 00 00 00 00 00  |O2R29X4Y6.......|
-  00000060  00 00 00 00 00 00 00 00  00 00 9e 69 04 00 02 00  |...........i....|
-  00000070  0c 00 00 00 01 00 56 31  2e 31 30 32 00 00 ed 09  |......V1.102....|
-  00000080  05 00 03 00 78 00 00 00  01 00 30 00 00 00 00 00  |....x.....0.....|
-  00000090  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 e0  |................|
-  000000a0  4c 0d 0a 5c 00 e0 4c 0d  0a 5b 00 00 00 00 00 00  |L..\..L..[......|
-  000000b0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
-  *
-  000000f0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 cf 50  |...............P|
+HEAD commit:    02ddfb981de8 Merge tag 'scsi-fixes' of git://git.kernel.or..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=1034139b980000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=9dc42c34a3f5c357
+dashboard link: https://syzkaller.appspot.com/bug?extid=0a36c1fec090c67a9885
+compiler:       Debian clang version 20.1.2 (++20250402124445+58df0ef89dd6-1~exp1~20250402004600.97), Debian LLD 20.1.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10c9df74580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1550f1b3980000
 
-So this is:
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/5ca57f5a3f77/disk-02ddfb98.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/3f23cbc11e68/vmlinux-02ddfb98.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/73e63afac354/bzImage-02ddfb98.xz
 
-Reviewed-by: Jonas Karlman <jonas@kwiboo.se>
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+0a36c1fec090c67a9885@syzkaller.appspotmail.com
 
-Regards,
-Jonas
+=====================================================
+BUG: KMSAN: uninit-value in i2c_smbus_xfer_emulated drivers/i2c/i2c-core-smbus.c:481 [inline]
+BUG: KMSAN: uninit-value in __i2c_smbus_xfer+0x23e7/0x2f60 drivers/i2c/i2c-core-smbus.c:607
+ i2c_smbus_xfer_emulated drivers/i2c/i2c-core-smbus.c:481 [inline]
+ __i2c_smbus_xfer+0x23e7/0x2f60 drivers/i2c/i2c-core-smbus.c:607
+ i2c_smbus_xfer+0x31d/0x4d0 drivers/i2c/i2c-core-smbus.c:545
+ i2cdev_ioctl_smbus+0x4a1/0x660 drivers/i2c/i2c-dev.c:389
+ i2cdev_ioctl+0xa14/0xf40 drivers/i2c/i2c-dev.c:478
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:906 [inline]
+ __se_sys_ioctl+0x239/0x400 fs/ioctl.c:892
+ __x64_sys_ioctl+0x97/0xe0 fs/ioctl.c:892
+ x64_sys_call+0x1ebe/0x3db0 arch/x86/include/generated/asm/syscalls_64.h:17
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0xd9/0x1b0 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
 
-> ---
->  arch/arm64/boot/dts/rockchip/rk3528-radxa-e20c.dts | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/rockchip/rk3528-radxa-e20c.dts b/arch/arm64/boot/dts/rockchip/rk3528-radxa-e20c.dts
-> index 57a446b5cbd6..6e77f7753ff7 100644
-> --- a/arch/arm64/boot/dts/rockchip/rk3528-radxa-e20c.dts
-> +++ b/arch/arm64/boot/dts/rockchip/rk3528-radxa-e20c.dts
-> @@ -110,6 +110,20 @@ vcc5v0_sys: regulator-5v0-vcc-sys {
->  	};
->  };
->  
-> +&i2c1 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&i2c1m0_xfer>;
-> +	status = "okay";
-> +
-> +	eeprom@50 {
-> +		compatible = "belling,bl24c16a", "atmel,24c16";
-> +		reg = <0x50>;
-> +		pagesize = <16>;
-> +		read-only;
-> +		vcc-supply = <&vcc_3v3>;
-> +	};
-> +};
-> +
->  &pinctrl {
->  	gpio-keys {
->  		user_key: user-key {
+Local variable page created at:
+ get_futex_key+0x6f/0x11d0 kernel/futex/core.c:227
+ futex_wake+0xfe/0x890 kernel/futex/waitwake.c:166
 
+CPU: 1 UID: 0 PID: 5795 Comm: syz-executor470 Not tainted 6.15.0-rc3-syzkaller-00094-g02ddfb981de8 #0 PREEMPT(undef) 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/19/2025
+=====================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
