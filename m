@@ -1,145 +1,123 @@
-Return-Path: <linux-i2c+bounces-10762-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10763-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12843AA8E24
-	for <lists+linux-i2c@lfdr.de>; Mon,  5 May 2025 10:22:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD8E7AA9076
+	for <lists+linux-i2c@lfdr.de>; Mon,  5 May 2025 12:00:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4D4213B74A2
-	for <lists+linux-i2c@lfdr.de>; Mon,  5 May 2025 08:21:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1006F3AB95B
+	for <lists+linux-i2c@lfdr.de>; Mon,  5 May 2025 09:59:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 886E71F12FF;
-	Mon,  5 May 2025 08:22:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D13571FBCA1;
+	Mon,  5 May 2025 10:00:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="mVtwl5fo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IIwW5rwV"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED2531EFFAF;
-	Mon,  5 May 2025 08:22:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8753C1F7580;
+	Mon,  5 May 2025 10:00:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746433333; cv=none; b=iX2i8sMx/oJnTRhxaeI5JMGTuZrXzX6ru2Up+qkQ0+pNNJfnU6aE28NmEVD1XHuaGyhF42ovl6wkLHpZFZtFefAnR2l9rr3C5na03jXeqfTrlztATwkzh1ZHTBtYH2+9bX7qaCIz8OogC2FIW+x+r3olGfO04v8vscJQI2KD/Z8=
+	t=1746439213; cv=none; b=SMK5xMFgwzKVDcfSN3BCgMeQue0NtPt6n4zfyqhcp7H+kmme7OBZZRQTzqeCm0taiygc8OExpaPRLxUgnd9IqoPE1ueqD+J8tidOn8lu6heMy5BDkPyzKuKKbLBNMmhBTK9y0Cdcm/TgWIEX7vmbeBoovzYTezUQIOV1Lmx4Ik8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746433333; c=relaxed/simple;
-	bh=zCrAasw3aT6zagyU+hfu0KLmpivQDVk4DpsxMEgM65k=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=IPrDhdAQwHelVZhU2u6eOqaA47+WAXSZD5ydDBlYU+cMg49TdE09c70JkyYQjsI43blZXa3iweWHqokcoYcK3dqAtV7WaYeYdrWQj+1XcIA0Iyfo1q9xXu3XF85Zgoav6mVZWoCFt0gEoWTFlKrEG6mhuYdeEZxb1cpywjRxNjA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=mVtwl5fo; arc=none smtp.client-ip=217.70.183.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id ADCF31FD48;
-	Mon,  5 May 2025 08:22:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1746433329;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=YM3k1ODh/XrTfaviGoaAW5WSeUPQLJS+hciVRusS5Yg=;
-	b=mVtwl5foQ/Tm6luhAVmCrNrTxB1YGeVTjiF4WibQSEH4i5AGSKe4AuqPq90zZTB8TdFwWD
-	DgXjCeVVoc/zW/nQpbT0tqpiB0/2lhCCBZPIuUdhtNJzW8Xha8Y8fp0yzCSnREF6aFhORr
-	op3cMN7xmlf7L/HK3FPQ0oZFFyCJEOyV+NkESvWupHQdJCfDh9kU84EuQWUUOHE3PMWvwG
-	NTijzjDcAKYW0zGkpFBgNnX+M5Lz0DjWRPdniq1oar8C27c3QgLrMYXugVro5LrV252bHs
-	0gC3lFxa2OX9/IOD04n+1n9d1B7VPJm4oQV1R/+PlZD1EmnWqvDPP72FzGEaNQ==
-Date: Mon, 5 May 2025 10:22:07 +0200
-From: Herve Codina <herve.codina@bootlin.com>
-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc: Ayush Singh <ayush@beagleboard.org>, Wolfram Sang
- <wsa+renesas@sang-engineering.com>, Andi Shyti <andi.shyti@kernel.org>, Rob
- Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor
- Dooley <conor+dt@kernel.org>, linux-i2c@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- devicetree-spec@vger.kernel.org, Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v2 1/1] schemas: i2c: Introduce I2C bus extensions
-Message-ID: <20250505102207.2c54cbaf@bootlin.com>
-In-Reply-To: <20250502160910.448f63dd@booty>
-References: <20250430152201.209797-1-herve.codina@bootlin.com>
-	<20250430152201.209797-2-herve.codina@bootlin.com>
-	<20250502160910.448f63dd@booty>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+	s=arc-20240116; t=1746439213; c=relaxed/simple;
+	bh=FRuf5HxXYzqbfy/RUvMEK/inDPxU9w9/ccNfofTTt/k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=i4864rtkXVMXQuE+xujIM6d38d0Qics7YORjEqwSBl6N9O/wMsAG6VVWr1GE2meXCdTcWWOKBmKfvV6O3yWnrrQxKEAb0kWlxSLpVE1AzTvDSXsaOKhj+CVG9KdIKO+T8NEPHKftN2rryobCM3SMRljMTDdjD+HPrqHT/anWAS4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IIwW5rwV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0997C4CEE4;
+	Mon,  5 May 2025 10:00:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746439213;
+	bh=FRuf5HxXYzqbfy/RUvMEK/inDPxU9w9/ccNfofTTt/k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=IIwW5rwVPrNTtiP0ofBDyXZNRZiVT5pSEc4KBGVD0mn+LdPDS8pTKaep1q9yFc2P+
+	 WKgTMvWCMy/i+1Cz2O3qLNjRnmoMDBmjU/LYW1wBudC5QMfBQIPpuKUvZRADJoC93w
+	 pI77gm48N82opgZrsBxqpHyND2FCcZ4GZAa9O4hxlHgQytKbRyW5PdbN75BRSAtpg+
+	 iKRo5Fet+dik+AqV6JuWilVRsPof1/IBMwBRTnTFbRg2S+0ICUm2hiMhfbyu+bpVqg
+	 MRKkZ0Ww4kmZIyS5k0Tf7bb+744BvgPBMFIGnlM/G5B0OKJMosA+s50RTXNshp7yw0
+	 y2U8L/Rx7LYQw==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1uBscJ-000000003oT-36GC;
+	Mon, 05 May 2025 12:00:07 +0200
+Date: Mon, 5 May 2025 12:00:07 +0200
+From: Johan Hovold <johan@kernel.org>
+To: Andi Shyti <andi.shyti@kernel.org>
+Cc: Johan Hovold <johan+linaro@kernel.org>, Vignesh R <vigneshr@ti.com>,
+	Aaro Koskinen <aaro.koskinen@iki.fi>,
+	Andreas Kemnade <andreas@kemnade.info>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Roger Quadros <rogerq@kernel.org>, Tony Lindgren <tony@atomide.com>,
+	Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+	linux-omap@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Jayesh Choudhary <j-choudhary@ti.com>
+Subject: Re: [PATCH] i2c: omap: fix deprecated of_property_read_bool() use
+Message-ID: <aBiMJ0z5q4K2xTGT@hovoldconsulting.com>
+References: <20250415075230.16235-1-johan+linaro@kernel.org>
+ <vcwjwrjgzwoil5ydds4findhcgl2ujoxwia7eh7yrbdc45yx26@kmpmvataffzr>
+ <aAIiJQVAUdWJFVy7@hovoldconsulting.com>
+ <hn3gsrizar6xbr4seclnb6xot4fo4ztryks4w7exvztsdzj4f6@jhobhujf3ezi>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvkedtheelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtkeertdertdejnecuhfhrohhmpefjvghrvhgvucevohguihhnrgcuoehhvghrvhgvrdgtohguihhnrgessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepveeiffefgeeitdelleeigefhjeelueeuveekveetgeffheeltdekgeduiefggfdvnecukfhppeeltddrkeelrdduieefrdduvdejnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehinhgvthepledtrdekledrudeifedruddvjedphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomhephhgvrhhvvgdrtghoughinhgrsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeduvddprhgtphhtthhopehluhgtrgdrtggvrhgvshholhhisegsohhothhlihhnrdgtohhmpdhrtghpthhtoheprgihuhhshhessggvrghglhgvsghorghrugdrohhrghdprhgtphhtthhopeifshgrodhrvghnvghsrghssehsrghnghdqvghnghhinhgvvghrihhnghdrtghomhdprhgtphhtthhopegrnhguihdrshhhhihtiheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhosghhsehkvghrnhgvlhdro
- hhrghdprhgtphhtthhopehkrhiikhdoughtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegtohhnohhrodgutheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqihdvtgesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-GND-Sasl: herve.codina@bootlin.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <hn3gsrizar6xbr4seclnb6xot4fo4ztryks4w7exvztsdzj4f6@jhobhujf3ezi>
 
-Hi Luca,
-
-On Fri, 2 May 2025 16:09:10 +0200
-Luca Ceresoli <luca.ceresoli@bootlin.com> wrote:
-
-> Hello Hervé,
-> 
-> On Wed, 30 Apr 2025 17:22:00 +0200
-> Herve Codina <herve.codina@bootlin.com> wrote:
-> 
-> > An I2C bus can be wired to the connector and allows an add-on board to
-> > connect additional I2C devices to this bus.
+On Tue, Apr 29, 2025 at 03:10:13PM +0200, Andi Shyti wrote:
+> On Fri, Apr 18, 2025 at 11:57:57AM +0200, Johan Hovold wrote:
+> > On Thu, Apr 17, 2025 at 11:41:51PM +0200, Andi Shyti wrote:
+> > > On Tue, Apr 15, 2025 at 09:52:30AM +0200, Johan Hovold wrote:
+> > > > Using of_property_read_bool() for non-boolean properties is deprecated
+> > > > and results in a warning during runtime since commit c141ecc3cecd ("of:
+> > > > Warn when of_property_read_bool() is used on non-boolean properties").
+> > > > 
+> > > > Fixes: b6ef830c60b6 ("i2c: omap: Add support for setting mux")
+> > > > Cc: Jayesh Choudhary <j-choudhary@ti.com>
+> > > > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> > > 
+> > > Thanks for your patch! I'm going to drop the Fixes tag, as this
+> > > isn't really a bug fix but rather a warning suppression during
+> > > boot time.
 > > 
-> > Those additional I2C devices could be described as sub-nodes of the I2C
-> > bus controller node however for hotplug connectors described via device
-> > tree overlays there is additional level of indirection, which is needed
-> > to decouple the overlay and the base tree:
+> > Thanks, but I think you should have kept the Fixes tag and merged this
+> > for 6.15 (i2c-host-fixes) since this is a new warning in 6.15-rc1 (and
+> > that does warrant a Fixes tag). Perhaps I should have highlighted that
+> > better.
 > > 
-> >   --- base device tree ---
-> > 
-> >   i2c1: i2c@abcd0000 {
-> >       compatible = "xyz,i2c-ctrl";
-> >       i2c-bus-extension@0 {
-> >           i2c-bus = <&i2c_ctrl>;
-> >       };
-> >       ...
-> >   };
-> > 
-> >   i2c5: i2c@cafe0000 {
-> >       compatible = "xyz,i2c-ctrl";
-> >       i2c-bus-extension@0 {
-> >           i2c-bus = <&i2c-sensors>;  
->                         ^^^^^^^^^^^
+> > If the offending patch had been posted or merged before such uses
+> > started generating warnings in 6.14-rc1 then that would have been a
+> > different matter.
 > 
-> This should be i2c_sensors (with an underscore)...
-> 
-> >       };
-> >       ...
-> >   };
-> > 
-> >   connector {
-> >       i2c_ctrl: i2c-ctrl {
-> >           i2c-parent = <&i2c1>;
-> >           #address-cells = <1>;
-> >           #size-cells = <0>;
-> >       };
-> > 
-> >       i2c-sensors {  
-> 
-> ...and this should have a label:
-> 
->         i2c-sensors: i2c-sensors {
-> 
-> With those fixed you can add my:
+> I'm sorry, but as I understand it, the Fixes tag should be used
+> only when an actual bug is being fixed. I've seen stable
+> maintainers getting annoyed when it's used for non-bug issues.
 
-Indeed, thanks for pointing out.
+You seem to confuse the Fixes tag with a CC stable tag. A Fixes tag is
+used to indicate which commit introduced an issue, while the CC stable
+tag is used to flag a commit for backporting (and the fact that autosel
+tends to pick up patches with just a Fixes doesn't change this).
 
-I will fix them in the next iteration and add your 'Reviewed-by' tag.
+It's perfectly fine to fix an issue and use a Fixes tag when doing so
+even if the fix itself does not qualify for backporting (for whatever
+reason).
 
-> 
-> +Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-> 
+> The system works perfectly fine even with the warning printed.
+> It might confuse CI systems, but that shouldn't really be our
+> concern.
 
-Best regards,
-Hervé
+You should not knowingly be introducing new warnings. The Fixes tag I
+added showed that this was an issue introduced in 6.15-rc1, and, unless
+discovered really late in the cycle, it should be fixed before 6.15 is
+out.
+
+Johan
 
