@@ -1,49 +1,49 @@
-Return-Path: <linux-i2c+bounces-10774-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10775-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36534AA981B
-	for <lists+linux-i2c@lfdr.de>; Mon,  5 May 2025 17:58:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D32AAA9865
+	for <lists+linux-i2c@lfdr.de>; Mon,  5 May 2025 18:14:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6EE863B0998
-	for <lists+linux-i2c@lfdr.de>; Mon,  5 May 2025 15:57:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C6770189EE3A
+	for <lists+linux-i2c@lfdr.de>; Mon,  5 May 2025 16:14:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21F8826560B;
-	Mon,  5 May 2025 15:58:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E8FC268C6B;
+	Mon,  5 May 2025 16:14:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="M7a/U7ZX"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="HR/jDw76"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1809F25B66A;
-	Mon,  5 May 2025 15:58:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 811A2204096;
+	Mon,  5 May 2025 16:14:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746460689; cv=none; b=MCzqteBbBa0CtTFlj7HfPYc5FXutwFpqpOgRnqLhQAfTj+c6+kah4pFdg6+IFN4EHV5rQiTlJeZ2M6n2vorwfCBfdFBmhIctA+CDWJ+q05uAijdhyhccUpaDtuNvCjEHNHBxdlS4jFPN38Nk3FDgERunkoPf1k/yJw6J/osms1Q=
+	t=1746461651; cv=none; b=PDQWDoikvYiPGAJIT4iHPNa2ibfmQrWXQWhLUcD8Pq8CwoFoKDhfcLjDYDW3OnzpN/0A5IKRfDllRZJENPQNaz95IT8CUvpQ43OUz/ZiOYjt21kDYeuS+LXoVu/AXOBkD7v5fZ7hcBatNooliB3PoW1g8wwHD6CE+4k1+RFLubM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746460689; c=relaxed/simple;
-	bh=5Nf1ONawn/3pq8fypVYQWovaSHr8Yas3zfQL2/N3jqM=;
+	s=arc-20240116; t=1746461651; c=relaxed/simple;
+	bh=l0x7QpnKNM65NzV/IFWEVen7rZ6tmS8Ul5cZGDUB1Bk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YhfOzPYZiS7HW8iInTcJQj+PZzmDcNnswONjZz0lnHoWvDgDHlI8SIJRb2JYvGScey8rD42U4iXjZa9xy2xE/4cOTUcsMk9hhj6elfsiIjPahbMY9k1mywQRNT/A61/c0mdJkxpeQFeG6zLPRX44hlhXWDLZ0eegkbkX7G6JG3k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=M7a/U7ZX; arc=none smtp.client-ip=217.70.183.198
+	 MIME-Version:Content-Type; b=iZEKYteL7PV+V2z3eq9ILFRwDcaNlVLtqexixQuQkfd80RbGnUCjfz6lzjUhiMiqSUB+qs4BJLO4lJqXeSeLTrr0LDVjRXKPiA5IjTZYeNHUyaSSqcKlm9nNXmrPhGQ8Huq6PU/P4N4UNlsozm0nM56MKEsYQF6cDnyGNFyrZ3Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=HR/jDw76; arc=none smtp.client-ip=217.70.183.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 6C0CD439B8;
-	Mon,  5 May 2025 15:58:04 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 27A6F438BD;
+	Mon,  5 May 2025 16:14:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1746460685;
+	t=1746461641;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=JFmuo7F9CLf+vvIaxCtxGrFjdiEXZfxCn0ypaUjKkz0=;
-	b=M7a/U7ZXmMbeiugP3oETnY/b9DO3wQH2AfU9CzthyDOPlgYC1JIYpc7xXgy5mhs2fjAwbU
-	z4yg8KtmBgFzxdbjcE8MzO8ZnrWrssRxKnK/gKfb9y7bZyPhMughSo4HZOzq7i6d2h2CBZ
-	4nqocZwHDxin7Ti3Iks+++5eF/y/TLEpmH+v78Brffy7C++My2GKahduJOh5/v1iXAtJP2
-	wBlElJn9/aDgBZfnGfpyO4VWjZ8Ky48mVTr/icbOU+NAtDnP/X6mkAxK1r8yw1+l5V4m08
-	upP+JQzC7NUmDu9FD/9Mjc/avCG5U/uXD9CMKq+Wu030s6RrDsmuOygRt+TmJg==
+	bh=Qm4w28GJG8W0gRihHu9MypRoYQ1YCK2AOK3Kul43uzI=;
+	b=HR/jDw76UgCXjwX7tG/FATDO9we+vkIPBzHSNZS3tm2WqP60Fm3rA0f2r8nfMPCgg4HWjr
+	K3rPNEufvi53Magy+ckxzsP9nSKc43qq0Obh4i6D//K7wAzM82CEc+oYKX3GQESr2D4wwq
+	B6oMkOjabXcY69q74IiWrNbaKouHb0gBHdMKqJBEimXEmpIGbWO1nPvoHcrEz5KDUYC6eh
+	h0TA0LPGXKvlYL8uhsNTEYxWUsmZww0rbukzIgGFoppN8MfIJStJZZFmmu+PaEDi0FXO0M
+	6RMXwHXKMbBFATqaVceopgrHymexsIYqfYC/FEJU+Y4kBHZwivEaorJYr5L03g==
 From: Romain Gantois <romain.gantois@bootlin.com>
 To: Cosmin Tanislav <demonsingur@gmail.com>
 Cc: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
@@ -53,125 +53,138 @@ Cc: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-i2c@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
  Cosmin Tanislav <demonsingur@gmail.com>
-Subject: Re: [PATCH v4 8/9] i2c: atr: add static flag
-Date: Mon, 05 May 2025 17:58:03 +0200
-Message-ID: <1966497.tdWV9SEqCh@fw-rgant>
-In-Reply-To: <20250428102516.933571-9-demonsingur@gmail.com>
+Subject: Re: [PATCH v4 9/9] i2c: atr: add passthrough flag
+Date: Mon, 05 May 2025 18:13:56 +0200
+Message-ID: <3034821.e9J7NaK4W3@fw-rgant>
+In-Reply-To: <20250428102516.933571-10-demonsingur@gmail.com>
 References:
  <20250428102516.933571-1-demonsingur@gmail.com>
- <20250428102516.933571-9-demonsingur@gmail.com>
+ <20250428102516.933571-10-demonsingur@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart2268553.irdbgypaU6";
+Content-Type: multipart/signed; boundary="nextPart3395128.aeNJFYEL58";
  micalg="pgp-sha256"; protocol="application/pgp-signature"
 X-GND-State: clean
 X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvkeduhedvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhggtgesghdtreertddtjeenucfhrhhomheptfhomhgrihhnucfirghnthhoihhsuceorhhomhgrihhnrdhgrghnthhoihhssegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpefhvdelkeevgfeijedtudeiheefffejhfelgeduuefhleetudeiudektdeiheelgfenucffohhmrghinhepsghoohhtlhhinhdrtghomhenucfkphepvdgrtddvmeekgedvgeemkedtkedvmeehrgdtudemrgdtgegvmehfjeeiheemleehrgemughfkeeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddvmeekgedvgeemkedtkedvmeehrgdtudemrgdtgegvmehfjeeiheemleehrgemughfkeeipdhhvghlohepfhifqdhrghgrnhhtrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpehrohhmrghinhdrghgrnhhtohhishessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepuddtpdhrtghpthhtohepuggvmhhonhhsihhnghhurhesghhmrghilhdrtghomhdprhgtphhtthhopehtohhmihdrvhgrlhhkvghinhgvnhesihguvggrshhonhgsohgrrhgurdgtohhmpdhrt
- ghpthhtoheplhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomhdprhgtphhtthhopeifshgrodhrvghnvghsrghssehsrghnghdqvghnghhinhgvvghrihhnghdrtghomhdprhgtphhtthhopehmtghhvghhrggssehkvghrnhgvlhdrohhrghdprhgtphhtthhopegrrhhnugesrghrnhgusgdruggvpdhrtghpthhtohepghhrvghgkhhhsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtoheplhhinhhugidqihdvtgesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvkeduheehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhggtgesghdtreertddtjeenucfhrhhomheptfhomhgrihhnucfirghnthhoihhsuceorhhomhgrihhnrdhgrghnthhoihhssegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeikeekffdvuefgkeejgeefhfdvteeuhfdtleeiudehieeludelvdetleeggfffffenucfkphepvdgrtddvmeekgedvgeemkedtkedvmeehrgdtudemrgdtgegvmehfjeeiheemleehrgemughfkeeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddvmeekgedvgeemkedtkedvmeehrgdtudemrgdtgegvmehfjeeiheemleehrgemughfkeeipdhhvghlohepfhifqdhrghgrnhhtrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpehrohhmrghinhdrghgrnhhtohhishessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepuddtpdhrtghpthhtohepuggvmhhonhhsihhnghhurhesghhmrghilhdrtghomhdprhgtphhtthhopehtohhmihdrvhgrlhhkvghinhgvnhesihguvggrshhonhgsohgrrhgurdgtohhmpdhrtghpthhtoheplhhutggrrdgtvghrvghsohhlihess
+ ghoohhtlhhinhdrtghomhdprhgtphhtthhopeifshgrodhrvghnvghsrghssehsrghnghdqvghnghhinhgvvghrihhnghdrtghomhdprhgtphhtthhopehmtghhvghhrggssehkvghrnhgvlhdrohhrghdprhgtphhtthhopegrrhhnugesrghrnhgusgdruggvpdhrtghpthhtohepghhrvghgkhhhsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtoheplhhinhhugidqihdvtgesvhhgvghrrdhkvghrnhgvlhdrohhrgh
 X-GND-Sasl: romain.gantois@bootlin.com
 
---nextPart2268553.irdbgypaU6
+--nextPart3395128.aeNJFYEL58
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="utf-8"; protected-headers="v1"
 From: Romain Gantois <romain.gantois@bootlin.com>
 To: Cosmin Tanislav <demonsingur@gmail.com>
-Subject: Re: [PATCH v4 8/9] i2c: atr: add static flag
-Date: Mon, 05 May 2025 17:58:03 +0200
-Message-ID: <1966497.tdWV9SEqCh@fw-rgant>
-In-Reply-To: <20250428102516.933571-9-demonsingur@gmail.com>
+Subject: Re: [PATCH v4 9/9] i2c: atr: add passthrough flag
+Date: Mon, 05 May 2025 18:13:56 +0200
+Message-ID: <3034821.e9J7NaK4W3@fw-rgant>
+In-Reply-To: <20250428102516.933571-10-demonsingur@gmail.com>
 MIME-Version: 1.0
 
-Hi Cosmin,
-
-On Monday, 28 April 2025 12:25:13 CEST Cosmin Tanislav wrote:
-> Some I2C ATRs do not support dynamic remapping, only static mapping
-> of direct children.
+On Monday, 28 April 2025 12:25:14 CEST Cosmin Tanislav wrote:
+> Some I2C ATRs can have other I2C ATRs as children. The I2C messages of
+> the child ATRs need to be forwarded as-is if the parent I2C ATR can
+> only do static mapping.
 > 
-> Add a new flag that prevents old mappings to be replaced or new mappings
-> to be created in the alias finding code paths.
+> In the case of GMSL, the deserializer I2C ATR actually doesn't have I2C
+> address remapping hardware capabilities, but it is able to select which
+> GMSL link to talk to, allowing it to change the address of the
+> serializer.
+> 
+> The child ATRs need to have their alias pools defined in such a way to
+> prevent overlapping addresses between them, but there's no way around
+> this without orchestration between multiple ATR instances.
+> 
+> To allow for this use-case, add a flag that allows unmapped addresses
+> to be passed through, since they are already remapped by the child ATRs.
+> 
+> There's no case where an address that has not been remapped by the child
+> ATR will hit the parent ATR.
 > 
 > Signed-off-by: Cosmin Tanislav <demonsingur@gmail.com>
 > ---
->  drivers/i2c/i2c-atr.c   | 6 +++++-
->  include/linux/i2c-atr.h | 3 +++
->  2 files changed, 8 insertions(+), 1 deletion(-)
+>  drivers/i2c/i2c-atr.c   | 7 +++++--
+>  include/linux/i2c-atr.h | 2 ++
+>  2 files changed, 7 insertions(+), 2 deletions(-)
 > 
 > diff --git a/drivers/i2c/i2c-atr.c b/drivers/i2c/i2c-atr.c
-> index e2350fcf3d68..721dd680f2ac 100644
+> index 721dd680f2ac..eccb85c34609 100644
 > --- a/drivers/i2c/i2c-atr.c
 > +++ b/drivers/i2c/i2c-atr.c
-> @@ -341,12 +341,16 @@ i2c_atr_create_mapping_by_addr(struct i2c_atr_chan
-> *chan, u16 addr) static struct i2c_atr_alias_pair *
->  i2c_atr_get_mapping_by_addr(struct i2c_atr_chan *chan, u16 addr)
->  {
-> +	struct i2c_atr *atr = chan->atr;
->  	struct i2c_atr_alias_pair *c2a;
+> @@ -394,6 +394,9 @@ static int i2c_atr_map_msgs(struct i2c_atr_chan *chan,
+> struct i2c_msg *msgs, c2a = i2c_atr_get_mapping_by_addr(chan,
+> msgs[i].addr);
 > 
->  	c2a = i2c_atr_find_mapping_by_addr(chan, addr);
->  	if (c2a)
->  		return c2a;
-> 
-> +	if (atr->flags & I2C_ATR_F_STATIC)
-> +		return NULL;
+>  		if (!c2a) {
+> +			if (atr->flags & I2C_ATR_F_PASSTHROUGH)
+> +				continue;
 > +
-...
->  		c2a = i2c_atr_replace_mapping_by_addr(chan, addr);
+>  			dev_err(atr->dev, "client 0x%02x not mapped!\n",
+>  				msgs[i].addr);
 > 
->  	if (!c2a) {
+> @@ -486,13 +489,13 @@ static int i2c_atr_smbus_xfer(struct i2c_adapter
+> *adap, u16 addr,
+> 
+>  	c2a = i2c_atr_get_mapping_by_addr(chan, addr);
+> 
+> -	if (!c2a) {
+> +	if (!c2a && !(atr->flags & I2C_ATR_F_PASSTHROUGH)) {
+>  		dev_err(atr->dev, "client 0x%02x not mapped!\n", addr);
+>  		mutex_unlock(&chan->alias_pairs_lock);
+>  		return -ENXIO;
+>  	}
+> 
+> -	alias = c2a->alias;
+> +	alias = c2a ? c2a->alias : addr;
+> 
+>  	mutex_unlock(&chan->alias_pairs_lock);
+> 
 > diff --git a/include/linux/i2c-atr.h b/include/linux/i2c-atr.h
-> index 5082f4dd0e23..7c6a9627191d 100644
+> index 7c6a9627191d..f979b931ca05 100644
 > --- a/include/linux/i2c-atr.h
 > +++ b/include/linux/i2c-atr.h
-> @@ -20,8 +20,11 @@ struct i2c_atr;
+> @@ -22,9 +22,11 @@ struct i2c_atr;
+>   * enum i2c_atr_flags - Flags for an I2C ATR driver
+>   *
+>   * @I2C_ATR_F_STATIC: ATR does not support dynamic mapping, use static
+> mapping + * @I2C_ATR_F_PASSTHROUGH: Allow unmapped incoming addresses to
+> pass through */
+>  enum i2c_atr_flags {
+>  	I2C_ATR_F_STATIC = BIT(0),
+> +	I2C_ATR_F_PASSTHROUGH = BIT(1),
+>  };
 > 
 >  /**
->   * enum i2c_atr_flags - Flags for an I2C ATR driver
-> + *
-> + * @I2C_ATR_F_STATIC: ATR does not support dynamic mapping, use static
-> mapping */
 
-I would suggest clarifying a bit more what "dynamic mapping" means in this 
-doc. Maybe something like "ATR does not support on-the-fly modifications of its 
-translation table, use static mappings". IMO this will make it easier for 
-people who don't have the full technical context of this series and want to 
-understand what the flag is for.
+Reviewed-by: Romain Gantois <romain.gantois@bootlin.com>
 
-Everything else looks good to me.
-
-Thanks,
-
--- 
-Romain Gantois, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
---nextPart2268553.irdbgypaU6
+--nextPart3395128.aeNJFYEL58
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: This is a digitally signed message part.
 Content-Transfer-Encoding: 7Bit
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEYFZBShRwOvLlRRy+3R9U/FLj284FAmgY4AsACgkQ3R9U/FLj
-284oZw/+I26o99MZp5adYZRz6Bwn3LAyupi4YGSpY+PJxqDEvQNByCZdvHgzugp6
-5vZUgfGk0NHEROz1f2gaMKlQvJqPWjlOlvDns6RL9AfWVg9LabYY1lMilAdT8loB
-bFmUA/C0aeiIssZ76fXey5cvefYPO+/1X27e5QscyxcAYkDk2aKFlCBh1F1vvlcb
-nHhHqd+RnB0QYL+bEi8xLDQa5MLrZa8mfXoHgybuLgwrlCEDLK8OYPEMNy1U1vW5
-jDLeWQhe9RAX/nBhL8wgSt40XNcQY+Rh5IPI1F/3aEDlPN2UBFBJNZtUHOYpPTOJ
-6eqXL9/ikLV88BPp28eIJn0Gaja1UfpGFzoMHvmiokxgHI8xpkhprenQhcFBMD50
-8lroGNbAT2ghmXMiWr2lIji9OzizWZXe3e0fOdIVgkfjsOE0aqLR1FLPOumlirEk
-jFR2Bovgdr4q43AGmuDRI6HwvdkRqu/cTqLOwqPmfNbRc7KpIC8s9xIcAiFZyXRU
-st6vcL0XkiE0Q8Vk4HinX+Db7GlXAO36fzQpEgNQJcpdsid/YNwRT92AePfglrda
-5qBK+JD2636mJ8CD2VIdFsVUssJZbd8UfMF8mZBA9XJl0NlYb2HgEyPgTzbUJxkp
-aeKb1JBYzeALsmMheK75zbHnf4My/RNiZtsC0OimWOxhfcAia7c=
-=aAV1
+iQIzBAABCAAdFiEEYFZBShRwOvLlRRy+3R9U/FLj284FAmgY48QACgkQ3R9U/FLj
+286Qhw//WK8qW0lMvyrTdm2J/jkXMz46h2If/bll0FOrDJlngudBZZXEIBq39IeS
+FeeHPoxZNyckkOYB8ZPVjmx06BGXv4sHmewjacmeAKTIZEDJL+p/2J8OwkJQUuHi
+y3aVX6dayMKr7g1kd1vBfSM7FEgaf4s84Qd/+5yfy/ZRGPF2WxLwQSaRZknjReqT
+Izoy5Hx1DR2FqfHYKg/xkjdNOOE/9hAkl27Bkv15onv7n5hAFKiPu589f91rgXYO
+xF3Aue/4iFFF0MflS1s2v6Qinkbk/5AUXgqzuDe13/noAcvnyF5/HhxTY/wXQnlG
+0qf3jojvSyfRdtJwj9o9CjrKqwiXdOxrLqEo/10kA3MgbS/NBBKEs8xlN2rDdZc1
+WfL9MpqPjWybVerUg3F1FEVUQP89ez8KhsxLcZuuhAHMzKlivc8Zd1Qk7ygthd4E
+Y3v8usC100iy2oKidQ+1sqi5dDHKP0IkuWnBzRC17u/2Ix7ym5YTGCIpn2eoeUrI
+z4Psqrt8m3TEj2tfabpAzKOSwgwjxQl+XcLfxMWJtLSukEz32AqhPclH9n8NBGBS
+zQn9PtXqOlCBzNjeHO39Rn3uX5O/WAGUYIT7I9b3Gwnc6L7NV7oB/Bef+ttYWnWP
+01B1LWu7UK+GvjtchB97rnhZ0xRMyoHJixy6Zvwej9F8ANeGjw8=
+=8dxA
 -----END PGP SIGNATURE-----
 
---nextPart2268553.irdbgypaU6--
+--nextPart3395128.aeNJFYEL58--
 
 
 
