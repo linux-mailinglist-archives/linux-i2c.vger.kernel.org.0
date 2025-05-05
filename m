@@ -1,105 +1,158 @@
-Return-Path: <linux-i2c+bounces-10769-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10770-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0479DAA9490
-	for <lists+linux-i2c@lfdr.de>; Mon,  5 May 2025 15:30:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A552AA94C3
+	for <lists+linux-i2c@lfdr.de>; Mon,  5 May 2025 15:45:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 195E93B8D37
-	for <lists+linux-i2c@lfdr.de>; Mon,  5 May 2025 13:29:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 808393A4D72
+	for <lists+linux-i2c@lfdr.de>; Mon,  5 May 2025 13:44:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D568259C92;
-	Mon,  5 May 2025 13:30:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 841D1259C80;
+	Mon,  5 May 2025 13:44:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hkvTsU8G"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 627A2259C83
-	for <linux-i2c@vger.kernel.org>; Mon,  5 May 2025 13:30:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6795B2561AA;
+	Mon,  5 May 2025 13:44:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746451803; cv=none; b=pt7k6hEZ94VTOWq2GodGY+lFpjGy1nJQwauVYtWY1m4kcKkJj21gYXdHm08PmQ8RbcrF4MXT+o7+/I8NzouYmtQHq+VFPK7anKEY1hOeejzHqtdDuJp7fNzJHWqQVT2A1Dw3Yut1W9EpwbcQJ24T9cVFcaBpZh60o3oUNT1OI64=
+	t=1746452697; cv=none; b=QG8rAoTyR+jOLL0HFeV9hvOOM7amA+8Y4qYxJpIKclacpuHwooxwHfxPsBzcEYizHW3uebwVRPf2pGUQpASrdyzP17cqS7OXjQL+YQOQh0Q/hrARuWsESfOTunN4skTk22nwXyNV8YucD2atTokYwNusi1tpOZJ+yftudizP0nM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746451803; c=relaxed/simple;
-	bh=nxv8omxoWylB/thmP6M3rQdOrACdO/QSPsp7iDIySd0=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ZwLHg0l/4v6FAsMaCS0vi/Myhz4dSQh9NaFf6DYT/UrNEjSnooi31bER4Bgx1nwxH/HywcOxUOExPht72RyDXv6tOnyZRvWI+R2cttIQoDUn+jL51+7UDgtB8Z2uyV0LGAWtwG0jKvttqnC8cwtVfhl+s37Td7mVKLK8i23LCdk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1uBvsv-0001kY-OL; Mon, 05 May 2025 15:29:29 +0200
-Received: from lupine.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::4e] helo=lupine)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1uBvsr-001EmE-2j;
-	Mon, 05 May 2025 15:29:25 +0200
-Received: from pza by lupine with local (Exim 4.96)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1uBvsr-000KtU-2N;
-	Mon, 05 May 2025 15:29:25 +0200
-Message-ID: <a21bc1518141c38b064360ff4c2b7953bfdfda41.camel@pengutronix.de>
-Subject: Re: [PATCH v2 05/10] dt-bindings: reset: sophgo: Add SG2044
- bindings.
-From: Philipp Zabel <p.zabel@pengutronix.de>
-To: Inochi Amaoto <inochiama@gmail.com>, Jean Delvare <jdelvare@suse.com>, 
- Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>,  Conor Dooley
- <conor+dt@kernel.org>, Chen Wang <unicorn_wang@outlook.com>, Andi Shyti
- <andi.shyti@kernel.org>,  Thomas Gleixner <tglx@linutronix.de>, Paul
- Walmsley <paul.walmsley@sifive.com>, Samuel Holland
- <samuel.holland@sifive.com>, Ulf Hansson <ulf.hansson@linaro.org>, Palmer
- Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Alexandre
- Ghiti <alex@ghiti.fr>,  Daniel Lezcano <daniel.lezcano@linaro.org>, Thomas
- Bonnefille <thomas.bonnefille@bootlin.com>, Jarkko Nikula
- <jarkko.nikula@linux.intel.com>, Jisheng Zhang <jszhang@kernel.org>, Chao
- Wei <chao.wei@sophgo.com>
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
- sophgo@lists.linux.dev, linux-kernel@vger.kernel.org,
- linux-i2c@vger.kernel.org,  linux-riscv@lists.infradead.org,
- linux-mmc@vger.kernel.org, Yixun Lan <dlan@gentoo.org>, Longbin Li
- <looong.bin@gmail.com>
-Date: Mon, 05 May 2025 15:29:25 +0200
-In-Reply-To: <20250413223507.46480-6-inochiama@gmail.com>
-References: <20250413223507.46480-1-inochiama@gmail.com>
-	 <20250413223507.46480-6-inochiama@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-2 
+	s=arc-20240116; t=1746452697; c=relaxed/simple;
+	bh=tvXmTrMlbV/uyUl//wrOaAloL94MOBt9zGN5gBgIYs4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nbiVlB/ovZcq+zYe0ELsnNxx7uGiLP6YSVd0iSQ/FNGLbOc7RbyYJx/Q/CA/uFgwsvx1hFOziHxPoE8EbIRf2pvxQVnHdWZIeHOXHrh1S//2c3JftEQL13Ki9V3nvlwY0IwAes4y9plRMNK+3hPxdvdRw5HSR2b1nBRVVdJqAKA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hkvTsU8G; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1746452696; x=1777988696;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tvXmTrMlbV/uyUl//wrOaAloL94MOBt9zGN5gBgIYs4=;
+  b=hkvTsU8GMfkN4Vi4LfDqBYoudNALrfd1G7P5m2vNanlbJmY4QDazIimK
+   kiHo8rD16lVo/IdHkWLI0mD3kqVTiHXJlGQlLsMKSxp10k0041iQzFmss
+   0bG+27U02qbMArowgm09xfeWqiGwpkEQlQn69MJX/WRLTHYiyLFLV8t+H
+   WZnaw64vPgNWCwBnlDCA0vEwYAOzG3iloZFdsric5T4tLGN2BSvfvDa9c
+   wX55WCeY5sP13ZbpI4TKtNnqXNecno9m5IX3mnwC+WRqa8gzov+EMHdYw
+   Tjk9v9xgPrWB3gzsy/3e8M9QJq43cy2huf/ysNZXgEkEIKahnQOa4fbjs
+   A==;
+X-CSE-ConnectionGUID: TnExC6r2T7OuiuCUKg7jTA==
+X-CSE-MsgGUID: 7FN84kZqSyODCr6yTiFcxw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11423"; a="59452994"
+X-IronPort-AV: E=Sophos;i="6.15,262,1739865600"; 
+   d="scan'208";a="59452994"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2025 06:44:55 -0700
+X-CSE-ConnectionGUID: VF7NT8weTueZ2L9N2tgJAg==
+X-CSE-MsgGUID: PKzhnYjiSreTpmlerRUWgg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,262,1739865600"; 
+   d="scan'208";a="140246991"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 05 May 2025 06:44:49 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uBw7h-0005lZ-22;
+	Mon, 05 May 2025 13:44:45 +0000
+Date: Mon, 5 May 2025 21:43:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: Viken Dadhaniya <quic_vdadhani@quicinc.com>, andi.shyti@kernel.org,
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	gregkh@linuxfoundation.org, jirislaby@kernel.org, broonie@kernel.or,
+	andersson@kernel.org, konradybcio@kernel.org,
+	johan+linaro@kernel.org, dianders@chromium.org, agross@kernel.org,
+	linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-serial@vger.kernel.org, linux-spi@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, quic_msavaliy@quicinc.com,
+	quic_anupkulk@quicinc.com,
+	Viken Dadhaniya <quic_vdadhani@quicinc.com>
+Subject: Re: [PATCH v4 2/5] soc: qcom: geni-se: Add support to load QUP SE
+ Firmware via Linux subsystem
+Message-ID: <202505052109.5N8caeeW-lkp@intel.com>
+References: <20250503111029.3583807-3-quic_vdadhani@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250503111029.3583807-3-quic_vdadhani@quicinc.com>
 
-On Mo, 2025-04-14 at 06:34 +0800, Inochi Amaoto wrote:
-> The SG2044 shares the same reset controller as SG2042, so it
-> is just enough to use the compatible string of SG2042 as a
-> basis.
->=20
-> Add compatible string for the reset controller of SG2044.
->=20
-> Signed-off-by: Inochi Amaoto <inochiama@gmail.com>
-> Acked-by: Rob Herring (Arm) <robh@kernel.org>
-> Reviewed-by: Chen Wang <unicorn_wang@outlook.com>
+Hi Viken,
 
-Applied patch 5 to reset/next, thanks!
+kernel test robot noticed the following build errors:
 
-[05/10] dt-bindings: reset: sophgo: Add SG2044 bindings.
-        https://git.pengutronix.de/cgit/pza/linux/commit/?id=3D1c64de886b88
+[auto build test ERROR on andi-shyti/i2c/i2c-host]
+[also build test ERROR on tty/tty-testing tty/tty-next tty/tty-linus broonie-spi/for-next linus/master v6.15-rc5 next-20250505]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-regards
-Philipp
+url:    https://github.com/intel-lab-lkp/linux/commits/Viken-Dadhaniya/dt-bindings-qcom-se-common-Add-QUP-Peripheral-specific-properties-for-I2C-SPI-and-SERIAL-bus/20250503-191235
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
+patch link:    https://lore.kernel.org/r/20250503111029.3583807-3-quic_vdadhani%40quicinc.com
+patch subject: [PATCH v4 2/5] soc: qcom: geni-se: Add support to load QUP SE Firmware via Linux subsystem
+config: sparc64-randconfig-002-20250505 (https://download.01.org/0day-ci/archive/20250505/202505052109.5N8caeeW-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 12.4.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250505/202505052109.5N8caeeW-lkp@intel.com/reproduce)
 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505052109.5N8caeeW-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/tty/serial/qcom_geni_serial.c:18:
+   include/linux/soc/qcom/geni-se.h: In function 'geni_se_read_proto':
+>> include/linux/soc/qcom/geni-se.h:351:16: error: implicit declaration of function 'FIELD_GET' [-Werror=implicit-function-declaration]
+     351 |         return FIELD_GET(FW_REV_PROTOCOL_MSK, val);
+         |                ^~~~~~~~~
+   cc1: some warnings being treated as errors
+--
+   In file included from drivers/soc/qcom/qcom-geni-se.c:21:
+   include/linux/soc/qcom/geni-se.h: In function 'geni_se_read_proto':
+>> include/linux/soc/qcom/geni-se.h:351:16: error: implicit declaration of function 'FIELD_GET' [-Werror=implicit-function-declaration]
+     351 |         return FIELD_GET(FW_REV_PROTOCOL_MSK, val);
+         |                ^~~~~~~~~
+   drivers/soc/qcom/qcom-geni-se.c: In function 'geni_write_fw_revision':
+>> drivers/soc/qcom/qcom-geni-se.c:1042:21: error: implicit declaration of function 'FIELD_PREP' [-Werror=implicit-function-declaration]
+    1042 |         reg_value = FIELD_PREP(FW_REV_PROTOCOL_MSK, serial_protocol);
+         |                     ^~~~~~~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +/FIELD_GET +351 include/linux/soc/qcom/geni-se.h
+
+   338	
+   339	/**
+   340	 * geni_se_read_proto() - Read the protocol configured for a serial engine
+   341	 * @se:		Pointer to the concerned serial engine.
+   342	 *
+   343	 * Return: Protocol value as configured in the serial engine.
+   344	 */
+   345	static inline u32 geni_se_read_proto(struct geni_se *se)
+   346	{
+   347		u32 val;
+   348	
+   349		val = readl_relaxed(se->base + SE_GENI_FW_REVISION_RO);
+   350	
+ > 351		return FIELD_GET(FW_REV_PROTOCOL_MSK, val);
+   352	}
+   353	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
