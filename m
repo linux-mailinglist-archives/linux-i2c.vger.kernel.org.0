@@ -1,117 +1,145 @@
-Return-Path: <linux-i2c+bounces-10761-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10762-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD5A3AA8D54
-	for <lists+linux-i2c@lfdr.de>; Mon,  5 May 2025 09:49:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 12843AA8E24
+	for <lists+linux-i2c@lfdr.de>; Mon,  5 May 2025 10:22:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 51B96172745
-	for <lists+linux-i2c@lfdr.de>; Mon,  5 May 2025 07:49:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4D4213B74A2
+	for <lists+linux-i2c@lfdr.de>; Mon,  5 May 2025 08:21:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CAA41DDC1B;
-	Mon,  5 May 2025 07:49:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 886E71F12FF;
+	Mon,  5 May 2025 08:22:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="z+11W6G6"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="mVtwl5fo"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D78D1C3BE2;
-	Mon,  5 May 2025 07:49:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED2531EFFAF;
+	Mon,  5 May 2025 08:22:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746431391; cv=none; b=Yi2PLi8WiObjPLKHvPsIUEdyFnnr8lpeD8CSr78e2XdXuy5+6qkRqy029zYEs7lUiLhxNglyvQCH51zniGWPF77o/4/FNsnkLQgcUpR20qe9tmST3teyUH8oqFQumnnL58MKnntuKAysJNsN7hSfg7xV4JXKlF4MmnGSC9OXGvs=
+	t=1746433333; cv=none; b=iX2i8sMx/oJnTRhxaeI5JMGTuZrXzX6ru2Up+qkQ0+pNNJfnU6aE28NmEVD1XHuaGyhF42ovl6wkLHpZFZtFefAnR2l9rr3C5na03jXeqfTrlztATwkzh1ZHTBtYH2+9bX7qaCIz8OogC2FIW+x+r3olGfO04v8vscJQI2KD/Z8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746431391; c=relaxed/simple;
-	bh=V3I2N452zoAxRjRuyGOUZILKBEKeiRMPPSSgMieldXA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tkK9NXG+Cj1hiz/SpKCj0kTl2L1DAyLYD5qNxNING8b1z0O06d1NwPoBrYM03ndG5WTP/cSIYVj5YmajbyZAWVt0mYv94+MAGtR+O6VEksNzGiCgLBkeWZhCqtzfgexSTU9LnD0j/x1/MNvi32pDZ1fMJbdzJs4U5uddZWu+6LU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=z+11W6G6; arc=none smtp.client-ip=185.11.138.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=g6E3Fmt7cfqXOAXJWZj3GI0CXUJV8EUTYEDTm9gMTDg=; b=z+11W6G6rm+LkV+kCDHjVKwpO+
-	tKOxP1CyIwwUl0Qse5Upck55bH9iZOyMOxFQvw8LXXyXbFgCqbWcWFo+KfmeXdURYL5i+mlDlDCwk
-	zKDEErGrPdWb3dQb6qp+PvKDgipiboBueGPJUEGM0xVmN99v7LlepjRC5SngXtKh93x58SvcLORLS
-	XL5FKwYxRkybBQdVcGszmKFiKnKL3PZibkEXs4PloDGXyg5blkXW0/l1Zw/66Odasjj3aQ1L4BRLG
-	ENqn1dvE69j3Q5mL1sqJqQYaSouY76WFBF+AtXae4eTEtRYLvfzKuo6CH4P+0rutUZk3hHzGWYWOy
-	WgEGsypQ==;
-Received: from i53875a1d.versanet.de ([83.135.90.29] helo=diego.localnet)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1uBqa1-0000dB-Ff; Mon, 05 May 2025 09:49:37 +0200
-From: Heiko =?UTF-8?B?U3TDvGJuZXI=?= <heiko@sntech.de>
-To: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
- Jonas Karlman <jonas@kwiboo.se>, Yao Zi <ziyao@disroot.org>,
- Chukun Pan <amadeus@jmu.edu.cn>, Yao Zi <ziyao@disroot.org>
-Cc: linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org,
- linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, Conor Dooley <conor.dooley@microchip.com>
-Subject:
- Re: [PATCH v2 1/3] dt-bindings: i2c: i2c-rk3x: Add compatible string for
- RK3528
-Date: Mon, 05 May 2025 09:49:36 +0200
-Message-ID: <4864135.rnE6jSC6OK@diego>
-In-Reply-To: <20250417120118.17610-4-ziyao@disroot.org>
-References:
- <20250417120118.17610-3-ziyao@disroot.org>
- <20250417120118.17610-4-ziyao@disroot.org>
+	s=arc-20240116; t=1746433333; c=relaxed/simple;
+	bh=zCrAasw3aT6zagyU+hfu0KLmpivQDVk4DpsxMEgM65k=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=IPrDhdAQwHelVZhU2u6eOqaA47+WAXSZD5ydDBlYU+cMg49TdE09c70JkyYQjsI43blZXa3iweWHqokcoYcK3dqAtV7WaYeYdrWQj+1XcIA0Iyfo1q9xXu3XF85Zgoav6mVZWoCFt0gEoWTFlKrEG6mhuYdeEZxb1cpywjRxNjA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=mVtwl5fo; arc=none smtp.client-ip=217.70.183.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id ADCF31FD48;
+	Mon,  5 May 2025 08:22:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1746433329;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YM3k1ODh/XrTfaviGoaAW5WSeUPQLJS+hciVRusS5Yg=;
+	b=mVtwl5foQ/Tm6luhAVmCrNrTxB1YGeVTjiF4WibQSEH4i5AGSKe4AuqPq90zZTB8TdFwWD
+	DgXjCeVVoc/zW/nQpbT0tqpiB0/2lhCCBZPIuUdhtNJzW8Xha8Y8fp0yzCSnREF6aFhORr
+	op3cMN7xmlf7L/HK3FPQ0oZFFyCJEOyV+NkESvWupHQdJCfDh9kU84EuQWUUOHE3PMWvwG
+	NTijzjDcAKYW0zGkpFBgNnX+M5Lz0DjWRPdniq1oar8C27c3QgLrMYXugVro5LrV252bHs
+	0gC3lFxa2OX9/IOD04n+1n9d1B7VPJm4oQV1R/+PlZD1EmnWqvDPP72FzGEaNQ==
+Date: Mon, 5 May 2025 10:22:07 +0200
+From: Herve Codina <herve.codina@bootlin.com>
+To: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Cc: Ayush Singh <ayush@beagleboard.org>, Wolfram Sang
+ <wsa+renesas@sang-engineering.com>, Andi Shyti <andi.shyti@kernel.org>, Rob
+ Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor
+ Dooley <conor+dt@kernel.org>, linux-i2c@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ devicetree-spec@vger.kernel.org, Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v2 1/1] schemas: i2c: Introduce I2C bus extensions
+Message-ID: <20250505102207.2c54cbaf@bootlin.com>
+In-Reply-To: <20250502160910.448f63dd@booty>
+References: <20250430152201.209797-1-herve.codina@bootlin.com>
+	<20250430152201.209797-2-herve.codina@bootlin.com>
+	<20250502160910.448f63dd@booty>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvkedtheelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtkeertdertdejnecuhfhrohhmpefjvghrvhgvucevohguihhnrgcuoehhvghrvhgvrdgtohguihhnrgessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepveeiffefgeeitdelleeigefhjeelueeuveekveetgeffheeltdekgeduiefggfdvnecukfhppeeltddrkeelrdduieefrdduvdejnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehinhgvthepledtrdekledrudeifedruddvjedphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomhephhgvrhhvvgdrtghoughinhgrsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeduvddprhgtphhtthhopehluhgtrgdrtggvrhgvshholhhisegsohhothhlihhnrdgtohhmpdhrtghpthhtoheprgihuhhshhessggvrghglhgvsghorghrugdrohhrghdprhgtphhtthhopeifshgrodhrvghnvghsrghssehsrghnghdqvghnghhinhgvvghrihhnghdrtghomhdprhgtphhtthhopegrnhguihdrshhhhihtiheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhosghhsehkvghrnhgvlhdro
+ hhrghdprhgtphhtthhopehkrhiikhdoughtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegtohhnohhrodgutheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqihdvtgesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-GND-Sasl: herve.codina@bootlin.com
 
-Hi Andi,
+Hi Luca,
 
-Am Donnerstag, 17. April 2025, 14:01:17 Mitteleurop=C3=A4ische Sommerzeit s=
-chrieb Yao Zi:
-> Document I2C controllers integrated in RK3528, which are compatible with
-> the RK3399 variant.
->=20
-> Signed-off-by: Yao Zi <ziyao@disroot.org>
-> Reviewed-by: Heiko Stuebner <heiko@sntech.de>
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
-> Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
+On Fri, 2 May 2025 16:09:10 +0200
+Luca Ceresoli <luca.ceresoli@bootlin.com> wrote:
 
-do you expect to apply this patch to the i2c tree individually,
-or have it go together with the devicetree patch?
+> Hello Hervé,
+> 
+> On Wed, 30 Apr 2025 17:22:00 +0200
+> Herve Codina <herve.codina@bootlin.com> wrote:
+> 
+> > An I2C bus can be wired to the connector and allows an add-on board to
+> > connect additional I2C devices to this bus.
+> > 
+> > Those additional I2C devices could be described as sub-nodes of the I2C
+> > bus controller node however for hotplug connectors described via device
+> > tree overlays there is additional level of indirection, which is needed
+> > to decouple the overlay and the base tree:
+> > 
+> >   --- base device tree ---
+> > 
+> >   i2c1: i2c@abcd0000 {
+> >       compatible = "xyz,i2c-ctrl";
+> >       i2c-bus-extension@0 {
+> >           i2c-bus = <&i2c_ctrl>;
+> >       };
+> >       ...
+> >   };
+> > 
+> >   i2c5: i2c@cafe0000 {
+> >       compatible = "xyz,i2c-ctrl";
+> >       i2c-bus-extension@0 {
+> >           i2c-bus = <&i2c-sensors>;  
+>                         ^^^^^^^^^^^
+> 
+> This should be i2c_sensors (with an underscore)...
+> 
+> >       };
+> >       ...
+> >   };
+> > 
+> >   connector {
+> >       i2c_ctrl: i2c-ctrl {
+> >           i2c-parent = <&i2c1>;
+> >           #address-cells = <1>;
+> >           #size-cells = <0>;
+> >       };
+> > 
+> >       i2c-sensors {  
+> 
+> ...and this should have a label:
+> 
+>         i2c-sensors: i2c-sensors {
+> 
+> With those fixed you can add my:
 
+Indeed, thanks for pointing out.
 
-Thanks a lot
-Heiko
+I will fix them in the next iteration and add your 'Reviewed-by' tag.
 
-> ---
->  Documentation/devicetree/bindings/i2c/i2c-rk3x.yaml | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/i2c/i2c-rk3x.yaml b/Docume=
-ntation/devicetree/bindings/i2c/i2c-rk3x.yaml
-> index 8101afa6f146..2f1e97969c3f 100644
-> --- a/Documentation/devicetree/bindings/i2c/i2c-rk3x.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/i2c-rk3x.yaml
-> @@ -37,6 +37,7 @@ properties:
->                - rockchip,px30-i2c
->                - rockchip,rk3308-i2c
->                - rockchip,rk3328-i2c
-> +              - rockchip,rk3528-i2c
->                - rockchip,rk3562-i2c
->                - rockchip,rk3568-i2c
->                - rockchip,rk3576-i2c
->=20
+> 
+> +Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+> 
 
-
-
-
+Best regards,
+Hervé
 
