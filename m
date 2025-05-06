@@ -1,104 +1,187 @@
-Return-Path: <linux-i2c+bounces-10806-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10807-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E1F5AAB7CC
-	for <lists+linux-i2c@lfdr.de>; Tue,  6 May 2025 08:18:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2AC0DAAB8F4
+	for <lists+linux-i2c@lfdr.de>; Tue,  6 May 2025 08:46:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 075A8188E17C
-	for <lists+linux-i2c@lfdr.de>; Tue,  6 May 2025 06:13:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E580717FD71
+	for <lists+linux-i2c@lfdr.de>; Tue,  6 May 2025 06:44:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BE9049F056;
-	Tue,  6 May 2025 00:47:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEB92280321;
+	Tue,  6 May 2025 04:00:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i8MWo3gH"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TvvpZ8jn"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46F303ABCFD;
-	Mon,  5 May 2025 23:18:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E57F2C0306;
+	Tue,  6 May 2025 01:39:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746487136; cv=none; b=I3Pqe8NkOZ6RgG1hNSzrAvhaEUquFqA64XO0Yh78ppjuC5jfMPGu4WRIXJhtIix1kyjV5ltoBjYPEIQsSYrjIcNn38ueDebUlNy2atHMFqqId1cdsliHk4NknPY9xUiPVQfbo7z24cT6EpMWPCYoHxPGrSi+0rORyMHd0VRpxIg=
+	t=1746495600; cv=none; b=iBVlMKd5Z67zRGTtKjedliQVKa+QSPlmgJ1ROeijdz8SztprwDhYRE6vDdg8drsaIXNn2maWDePcd+UjihYYquUDH59eQsrsJf9qXC84xGuuITc2ljpkrYBhfyLI8phbH1iiHkOqld80RWkA3KviZikUYlkBokg1nhHypVK1A7g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746487136; c=relaxed/simple;
-	bh=2pjdD08KhMw6FeRr9Qku1Tz+bsPUVl0cVg+Ep97vitY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=iejWh3j6cUASAHwdumWQz9er79KE8OscQDIcjcL1S1CQaQy4yoYVbIQ0jEUrELxYyqfLdTpWtL8ZCu9UJu447RCcu6D4iyUt8Sz9icOwsvIKwwDsIy0VTPn3gzcM7nUEtwrLaM0Lx3kcaJzlzWCBllp29AiAKL1k/bEncNdzPJo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i8MWo3gH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DF5BC4CEED;
-	Mon,  5 May 2025 23:18:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746487136;
-	bh=2pjdD08KhMw6FeRr9Qku1Tz+bsPUVl0cVg+Ep97vitY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=i8MWo3gHGCzq+SaZQztvyEIeLk8RWPYGZpGpnTe8SD6lp/qVs24QzWF57LZhBnVf3
-	 nx7q2AjFdvfUP+C+7kfNkxXFhkTAcUTcI/15QRGtXHyDVXlTmPiWDNsfgxolMCteL5
-	 pjavyjGL0Qs+Tj0isUq+TJrfS1I3eh0hX5lKkZWckgt2es3h4AEQGA7WLsTcRy8W+Y
-	 U+gF/FmynT+zSjlzJdOBvVhPZ8CXbyRcLual4FtHZwvnpM6l2wUewH8INnrqENRjZx
-	 9gliYpYXR2/1as0kwuz3h1Q2CqZk2OtOlC5VxgNfb2VuDkBi/OoTv0oYQZ9AqM57Db
-	 GGZEmQDpcXr0w==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Vitalii Mordan <mordan@ispras.ru>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Sasha Levin <sashal@kernel.org>,
-	linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 018/114] i2c: pxa: fix call balance of i2c->clk handling routines
-Date: Mon,  5 May 2025 19:16:41 -0400
-Message-Id: <20250505231817.2697367-18-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250505231817.2697367-1-sashal@kernel.org>
-References: <20250505231817.2697367-1-sashal@kernel.org>
+	s=arc-20240116; t=1746495600; c=relaxed/simple;
+	bh=u1WbMmqIPYHmg4ZpMHmZTcrcFke7vDkf0GAa/y7+usQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=g34i0X9io7FGcsSrsyeEMZPedBwp7dzC+y16zz6F6Vccx8qUKWk3j7bBXT7evxb8iWmOPKxwiTQjmrvFrIZNVy5y0Uv7zy9Tu+eAWJO0OokN7BzFJr7LrxUYHSZubY2GaFNgucWcAGlrWSdw5JtaJiF2Uk37jIsbk602hejnodU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TvvpZ8jn; arc=none smtp.client-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-74068f95d9fso2260938b3a.0;
+        Mon, 05 May 2025 18:39:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1746495597; x=1747100397; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=3pmsBCeE+JylrhzVHnlF0iL2vbbeaTYULW+ECUdnQOE=;
+        b=TvvpZ8jn1qPkfvSVkXiROtqsiMFTKd1dCyqJP/wR7zkrKQnmiA9D/8uWSAIwwtqnvc
+         4qXlZZpWjelYeGDBT18VHf8e12FLSdsu/Tmjj86en1LHQjCCU3YEej41RWRH3366sasS
+         uymqIjh3eZoXlQ+WXkV/ZB4qIlJGFJuU+Hzj7fcQPZEFtGL2bxgxetV/v1RO3wCPSVC2
+         8F9oR2Le9ASKYT0xBwYkYnYATrE/nszQ9vo1Vt1w+xc6vOTBlysHCRgwmafmg0cBf0FY
+         oRkSD8OkVmlv+YOgfgunK+PIeKWqU2AZbJpRJH9lsh8PyxWZC43t+C4lf90M1YUV7eNx
+         wltA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746495597; x=1747100397;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3pmsBCeE+JylrhzVHnlF0iL2vbbeaTYULW+ECUdnQOE=;
+        b=CuJdXdT31T5eSxbZ0LnPXbcGtDlP1FgjTlJG7xKkLrkW+UbY2ygrjwl03IbNMLjIx3
+         ZYdzYCssK0k/nLrvVeV0HCV4JOvpw/biHHFl0b5FwOwqpLHUrXjo4gtXisRx69afE3XU
+         8zxvIOQf1LTn0ZtVSINbGAyZiHSulXpppBgR5iNMi3/NhMFv7Bfpc4u8b+NZdp/JjOI+
+         gU9LlY3so94VLOudDZ5xKuQhai7tg6AUIi3dDaiuRxx/x+uXpk9PLslPa731E6j/h+fC
+         RVi3nF6eDHQUaFKyrsE6KPFlcNE8UVTJw1mVEHGJLMgpxqBIrmWD+uUBbtTQRJ0nKkF3
+         +Zyw==
+X-Forwarded-Encrypted: i=1; AJvYcCUsKjMa2zuyQcu2dvmvfydgFXDeGBElp5+sa8dg6x2slyaK4fAmi1xaINSK5KzfMsmXVhWiCVT87aEvrA==@vger.kernel.org, AJvYcCWMX9zIEIXU1tZgjQSpO+oko11vDlQbLJ2QUABgW8u/Nyci9vqDZffT8yhUnOF4Wu2+syGmAOdJx2+v@vger.kernel.org
+X-Gm-Message-State: AOJu0YxAymx6dTOJp3wbhxP1F2c4vMcVFhaPhUigSQ25jmKcv93jPE0F
+	DwZSiHpDXEkH5r51Jn8VdhE0i/n6hobpCPSE+y5dCL9BVYeErGu6/2z+jA==
+X-Gm-Gg: ASbGnctsUHRiGHMevXO9guepf03CyKd0uH+oBQQVKUjXYyYAkm9mKh5G40u3QQqb2f+
+	XGJo3u7Zw4o12PposX6uYohKxpPzOVtZmssfM6/6Fy2h+HP8innASenKGkW1s+1FHihXWsHFkMC
+	eShBTRiOpSkblpdjobNWcklu5Z+dg24Upse1HTR+2oS6voVuYn1CbMB0O8SSLBnKtSCtGOBjii8
+	USSSakuevhgWnFIY2FT68SYeSRh7oiklpq4KuDHkUvC7yuN4MBWsNGGSI/Ii+oy1hLtJ+hoo2Uv
+	Bsk3mz2zRLOap12CpbKtzfgi7IPl8SqgnCbT5axQqEmQny6LQzbvyNEPTB7/NCd6OwH9Fto/YdN
+	uk1MswLSH+LDMfw==
+X-Google-Smtp-Source: AGHT+IGIlUvBjrCzREI1SJ0LDTDWDrIg6fQCZMBOkZGzTzPAYKBTMGTdIc4yr/CyamSieTlACxKxgQ==
+X-Received: by 2002:a05:6a00:f0b:b0:73c:b86:b47f with SMTP id d2e1a72fcca58-740919adee9mr1827170b3a.4.1746495597575;
+        Mon, 05 May 2025 18:39:57 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-740590a5bfesm7867956b3a.171.2025.05.05.18.39.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 May 2025 18:39:57 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <4e198aa1-527b-4ad8-abc5-e7408296bfbd@roeck-us.net>
+Date: Mon, 5 May 2025 18:39:55 -0700
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.10.237
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: PMBus memory overflow
+To: Matt Corallo <yalbrymrb@mattcorallo.com>,
+ Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ linux-hwmon@vger.kernel.org, Linux I2C <linux-i2c@vger.kernel.org>
+References: <336f298f-497f-4dd9-97ee-50b81221be06@roeck-us.net>
+ <1b1eccff-a306-4e17-a6bf-fd3203c61605@mattcorallo.com>
+ <1edc8396-535d-4cdf-bbb7-11d559d4c257@roeck-us.net>
+ <cfc2b3c8-3f94-407a-a4d5-e7d81686eb2d@mattcorallo.com>
+ <84258b48-03b5-4129-bed5-f8200996f2eb@roeck-us.net>
+ <fcfd78d2-238d-4b68-b6ec-5ee809c4ef08@mattcorallo.com>
+ <eb5796e8-de76-4e91-9192-65b9af7a4d49@roeck-us.net>
+ <284466fd-39e8-419e-8af5-41dbabb788af@roeck-us.net>
+ <d5abeb59-8286-425c-9f78-cd60b0e26ada@mattcorallo.com>
+ <00baca6f-8046-46ae-a68c-525472562be7@roeck-us.net>
+ <aAtEydwUfVcE0XeA@shikoro>
+ <3a9ab7bf-6761-4a14-983e-e6bb288ce58a@mattcorallo.com>
+ <e0e789b3-24c2-4ea3-9c79-fa815d801d83@roeck-us.net>
+ <bc9a14b5-8b10-436f-a791-28df245465e6@mattcorallo.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <bc9a14b5-8b10-436f-a791-28df245465e6@mattcorallo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Vitalii Mordan <mordan@ispras.ru>
+On 5/5/25 13:57, Matt Corallo wrote:
+> 
+> 
+> On 5/5/25 4:50 PM, Guenter Roeck wrote:
+>> On 5/5/25 13:41, Matt Corallo wrote:
+>>>
+>>>
+>>> On 4/25/25 4:16 AM, Wolfram Sang wrote:
+>>>>
+>>>>> Wolfram, what do you suggest ? Fixing the cp2112 driver is obviously necessary, but
+>>>>> I do wonder if a check such as the one above would be appropriate as well, possibly
+>>>>> even combined with a WARN_ONCE().
+>>>>
+>>>> How annoying, there was still an unchecked case left? Sorry. Yes, the
+>>>> core can have a check for a short-term solution. The long-term solution
+>>>> is to support SMBUS3.x which allows for 255 byte transfers.
+>>>
+>>> Thanks!
+>>>
+>>> Any update here? I guess we already have a patch so no use in me trying to write one. Would be nice to get this in a pull so it can head through backports.
+>>>
+>>
+>> Not from my side, sorry. I am deeply buried in work and don't have time for anything
+>> that isn't super-urgent :-(
+> 
+> Mmm, shame, its kinda annoying to leave a buffer overflow reachable from a malicious USB device sitting around (okay, with the default hardening configs it gets caught, but still). Can we just land the above patch from Wolfram to check the length before writing the buffer? Happy to clean it up as a formal patch submission if its easier for you.
+> 
 
-[ Upstream commit be7113d2e2a6f20cbee99c98d261a1fd6fd7b549 ]
+Please go ahead.
 
-If the clock i2c->clk was not enabled in i2c_pxa_probe(), it should not be
-disabled in any path.
-
-Found by Linux Verification Center (linuxtesting.org) with Klever.
-
-Signed-off-by: Vitalii Mordan <mordan@ispras.ru>
-Signed-off-by: Andi Shyti <andi.shyti@kernel.org>
-Link: https://lore.kernel.org/r/20250212172803.1422136-1-mordan@ispras.ru
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/i2c/busses/i2c-pxa.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/i2c/busses/i2c-pxa.c b/drivers/i2c/busses/i2c-pxa.c
-index 35ca2c02c9b9b..7fdc7f213b114 100644
---- a/drivers/i2c/busses/i2c-pxa.c
-+++ b/drivers/i2c/busses/i2c-pxa.c
-@@ -1508,7 +1508,10 @@ static int i2c_pxa_probe(struct platform_device *dev)
- 				i2c->adap.name);
- 	}
- 
--	clk_prepare_enable(i2c->clk);
-+	ret = clk_prepare_enable(i2c->clk);
-+	if (ret)
-+		return dev_err_probe(&dev->dev, ret,
-+				     "failed to enable clock\n");
- 
- 	if (i2c->use_pio) {
- 		i2c->adap.algo = &i2c_pxa_pio_algorithm;
--- 
-2.39.5
+Thanks,
+Guenter
 
 
