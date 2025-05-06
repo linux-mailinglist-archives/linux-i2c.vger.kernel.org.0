@@ -1,130 +1,91 @@
-Return-Path: <linux-i2c+bounces-10828-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10829-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55DE1AAC358
-	for <lists+linux-i2c@lfdr.de>; Tue,  6 May 2025 14:05:03 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A092AAC50B
+	for <lists+linux-i2c@lfdr.de>; Tue,  6 May 2025 15:04:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7859E3A3D14
-	for <lists+linux-i2c@lfdr.de>; Tue,  6 May 2025 12:04:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A2CFD52442C
+	for <lists+linux-i2c@lfdr.de>; Tue,  6 May 2025 13:02:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFC3E27E7CC;
-	Tue,  6 May 2025 12:04:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FDZgC0ls"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF36127FD67;
+	Tue,  6 May 2025 13:02:18 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [195.130.132.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C0F327CB2E;
-	Tue,  6 May 2025 12:04:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E354026B08C
+	for <linux-i2c@vger.kernel.org>; Tue,  6 May 2025 13:02:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.132.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746533099; cv=none; b=YtRfU3RA12h7z2Aff+WkUdK6fTAfRoPvmSUgEKG2PcD1CcC9RxegGcyrjlw733zQtHLi4NgyTSSFthgnzmZvIvMS5/P2oXfwTrufiNLWub6beabUXBt8Cc1A8pNz+L6hmZrDi8QZb+n4eWbcntmx8uclb5x8PYJ1q+XtocP9sRw=
+	t=1746536538; cv=none; b=nt6Ra/dQuidyMM6UPN0oDxIRSZ9ml3dTHfFy9kWWU2fmQn7JIEglAyS6+L6Qey8uTLJXLCrZld2BzuQitmSvGVnwWH4gjewR/SWpuufroie6AvgdgcMaTPAGBg7KNHawsgeN8aAHvn3TKFREUhF3h7OR/F1nyk3DxeT7dYfA078=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746533099; c=relaxed/simple;
-	bh=38N7dD0e4+KYfV/czsKShRXlNWz07SRSUqANCpL8X6I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e9b7lrDsr3Mgh57k8N7xcrC5xjmvFrRyNqDcjPZOnQVIs29zr+KKP6W0th1+iQrdqYhOMZL7WqRCxX4/isdQw/gYTAOe356b82H/f5Tkp0ypmeCPFfB9Fk2/79YE2WJoZe0SaUsebu7KzPNhEA8EOSS6B5j16FTKXDZKrk5SlaM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FDZgC0ls; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3407C4CEE4;
-	Tue,  6 May 2025 12:04:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746533099;
-	bh=38N7dD0e4+KYfV/czsKShRXlNWz07SRSUqANCpL8X6I=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FDZgC0ls5X/S/0kA71uGcJA87m1+q1jpiBT1uryX+zKkkY5dMdls7PLaZFwChqzVk
-	 h2imYWYElJ1K+/A9QjLNFeKcr7h/HiCssQSENBU60w7YFY8nyUfczuz8n518w4S7Vs
-	 BpXxKkPQOLiCtEZH5WTVq3sBlzcr3BG0seCzdxIbQqvTilGQshxcFUaEbeZEEX4QFZ
-	 pnl0Qg79Raw0jWj9KgwwBNA4MZeaGR1z5mAHKoRQvXTtM+g1xdF/7w3IsvQ3b+Xy0d
-	 Ae/y1NpQE9rjP8GjzEovfXrzxdHWQmDb1yjfVw0fFBNCJI7dJQIrcQvsTQ1DEbfOxs
-	 xGEIwjrFVcaLg==
-Date: Tue, 6 May 2025 14:04:55 +0200
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Conor Dooley <conor@kernel.org>
-Cc: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>, 
-	linux-i2c@vger.kernel.org, 
-	prashanth kumar burujukindi <prashanthkumar.burujukindi@microchip.com>, Conor Dooley <conor.dooley@microchip.com>, 
-	Daire McNamara <daire.mcnamara@microchip.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] i2c: microchip-corei2c: add smbus support
-Message-ID: <4xyehpobtsyj2k5xlhupq7x6z7es7bvzek4zsf4roramy5h7kn@duxhfxd4gxsq>
-References: <20250430-preview-dormitory-85191523283d@spud>
- <3421bf4a-afa1-4b4c-8421-bad7187d3d8e@quicinc.com>
- <7q4gdh3jcbnsptmdv6fywnwqta5nekof4wtut35apw5wphhkio@veeu4ogcm44h>
- <20250506-bunny-puma-996aafbf3f56@spud>
+	s=arc-20240116; t=1746536538; c=relaxed/simple;
+	bh=qoz+Wgd3VMX13u5K7HiRc9FbP5MkFBF3SNSVx3IwBrk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gLbAgwd61dy2IBlDoSpOTTxaprvUOi6EC7F8jQVc/YsVbIStNpFNuFiEIsCOmaSQhu0Ny00sW7hhqixaHoFDTZgVF3orqppBcxKguHRAn0X5UI/4iy+bV7bcqRUq2DZh5GyRAtzIRHywgHmxuJNvuJYLwrtGy0Lr8Usm8YfHvN0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.132.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:ed69:3ad8:f2dc:ba56])
+	by baptiste.telenet-ops.be with cmsmtp
+	id lp282E00F2coBU201p280g; Tue, 06 May 2025 15:02:08 +0200
+Received: from rox.of.borg ([192.168.97.57])
+	by ramsan.of.borg with esmtp (Exim 4.97)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1uCHvu-00000000qog-1PHp;
+	Tue, 06 May 2025 15:02:08 +0200
+Received: from geert by rox.of.borg with local (Exim 4.97)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1uCHw0-00000001dbt-1K6z;
+	Tue, 06 May 2025 15:02:08 +0200
+From: Geert Uytterhoeven <geert+renesas@glider.be>
+To: Andi Shyti <andi.shyti@kernel.org>,
+	Pratap Nirujogi <pratap.nirujogi@amd.com>,
+	Bin Du <bin.du@amd.com>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Venkata Narendra Kumar Gutta <vengutta@amd.com>
+Cc: linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] i2c: I2C_DESIGNWARE_AMDISP should depend on DRM_AMD_ISP
+Date: Tue,  6 May 2025 15:02:06 +0200
+Message-ID: <3888f892b8c4d8c8acd17e56581e726ace7f7092.1746536495.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250506-bunny-puma-996aafbf3f56@spud>
 
-Hi Conor,
+The AMD Image Signal Processor I2C functionality is only present on AMD
+platforms with ISP support, and its platform device is instantiated by
+the AMD ISP driver.  Hence add a dependency on DRM_AMD_ISP, to prevent
+asking the user about this driver when configuring a kernel that does
+not support the AMD ISP.
 
-On Tue, May 06, 2025 at 11:56:19AM +0100, Conor Dooley wrote:
-> On Mon, May 05, 2025 at 10:04:27PM +0200, Andi Shyti wrote:
-> > On Wed, Apr 30, 2025 at 05:06:09PM +0530, Mukesh Kumar Savaliya wrote:
-> > > On 4/30/2025 4:53 PM, Conor Dooley wrote:
-> > > > From: prashanth kumar burujukindi <prashanthkumar.burujukindi@microchip.com>
+Fixes: 63f0545cb1bf0840 ("i2c: amd-isp: Add ISP i2c-designware driver")
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+ drivers/i2c/busses/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-Do we want to keep lower case for names and surnames? Can I use
-upper cases?
+diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+index 865b760866ef42ba..7c348491e1bbac7c 100644
+--- a/drivers/i2c/busses/Kconfig
++++ b/drivers/i2c/busses/Kconfig
+@@ -594,6 +594,7 @@ config I2C_DESIGNWARE_PLATFORM
+ 
+ config I2C_DESIGNWARE_AMDISP
+ 	tristate "Synopsys DesignWare Platform for AMDISP"
++	depends on DRM_AMD_ISP || COMPILE_TEST
+ 	depends on I2C_DESIGNWARE_CORE
+ 	help
+ 	  If you say yes to this option, support will be included for the
+-- 
+2.43.0
 
-> > > > In this driver the supported SMBUS commands are smbus_quick,
-> > > > smbus_byte, smbus_byte_data, smbus_word_data and smbus_block_data.
-> > > > 
-> > > Write completely in imperative mood. something like :
-> > > 
-> > > Add support for SMBUS commands in driver
-> > > 
-> > > Add support for SMBUS commands: smbus_quick, smbus_byte, smbus_byte_data,
-> > > smbus_word_data, and smbus_block_data.
-> > 
-> > yes, I agree that the original commit log is a bit lazy written :-)
-> 
-> I don't personally think the suggested wording makes any meaningful
-> difference, but I can rework it if required.
-
-The point of using the imperative form is to clearly state what
-the patch does. Saying "the supported commands are..." feels a
-bit lazy, in my opinion, and requires a peek into the change to
-fully understand what the patch introduces.
-
-To be honest, I wouldn't reject the patch over this, but it
-doesn't hurt to expand the log a little.
-
-(No need to resend—you can just reply to this mail with your
-updated commit log.)
-
-> > > Also mention below limitations here .
-> 
-> I actually removed them from the commit message, since they're not
-> limitations just what was and was not tested. I can put them back too
-> if that's needed.
-> 
-> > > SMBUS block read is supported by the controller but has not been tested due
-> > > to lack of hardware. However, SMBUS I2C block read has been tested.
-> > 
-> > Smbus i2c block has not been tested? If so, can we leave it out?
-> > What is the interest to keep it in?
-> 
-> What's the interest in adding any feature? Someone might want to use it.
-
-What's the point of adding a feature that no one uses? :-)
-
-> We did not have a piece of hardware that uses it, so didn't do testing
-> of that specific command, but a customer may well want to so we included
-> it. Again, if you think removing it is the play, I can do that.
-
-No worries, please leave it as it is if you think it will be
-useful in the future. I just wanted to clarify.
-
-Thanks,
-Andi
 
