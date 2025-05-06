@@ -1,116 +1,89 @@
-Return-Path: <linux-i2c+bounces-10809-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10810-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34D6CAABBE0
-	for <lists+linux-i2c@lfdr.de>; Tue,  6 May 2025 09:50:14 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC7C5AABBF1
+	for <lists+linux-i2c@lfdr.de>; Tue,  6 May 2025 09:51:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 113D0189B26D
-	for <lists+linux-i2c@lfdr.de>; Tue,  6 May 2025 07:45:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8DBB01BC849F
+	for <lists+linux-i2c@lfdr.de>; Tue,  6 May 2025 07:46:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2A6E21D595;
-	Tue,  6 May 2025 07:01:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDCEC253955;
+	Tue,  6 May 2025 07:05:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lNnbg1RP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Qy1kyuLd"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ABCC2153E8;
-	Tue,  6 May 2025 07:01:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82CB8230BC8;
+	Tue,  6 May 2025 07:05:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746514911; cv=none; b=uK4o49KMGkj615RziDQdCYbLAX4pxvocZT3/b53ZHtmiMad0HJuTr0CcqHja5Qo31HYKlESpxEYZGACCzvhgzfKZFCI/GNr8fB+PRtfkhNfH0pzKsYAGyivu1E3q7szd32n6/eO1qpfsEzZc7hl7Blhnz6nfNlHnDGEw5FcHwd4=
+	t=1746515124; cv=none; b=MU/gr6pfYWf6G/0AWYszHYYXifXuzdCZjKxeNQTfvd8N3gmMMUE+GKBtwqZNIM141f+/4/rOY+QgO8y6y9mgPPUE7S/J04a4SPfEjxl0TTl+lU9gbqj9PWPR0zEAny3QnvSQpdIRToIa/JmFeXV75KWonOZMCH05nuk95W04Kuo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746514911; c=relaxed/simple;
-	bh=3e+bXisIVgWVW5HiHUl8/1fadTRryB6P+vRz6FYW0m8=;
+	s=arc-20240116; t=1746515124; c=relaxed/simple;
+	bh=tfHqe1+/LVxt7tapSLkZl712evbljUfVYhNvFheJdPk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WUG888kXqGAD7uaQdPUSr087E7cs5vOJVKMWOd/R60KYxOShM8oIgwJr9GLkVfSZNYUQsklRti7/b7YaSLiwaHcql3vDG60//hnqZ1JLFwEI8930TuaMl73gKiwkKU/LdjLj3Ow01yYXIrENu1+jRI3mXU63y+oTz/tO1Dh1354=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lNnbg1RP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 188A8C4CEED;
-	Tue,  6 May 2025 07:01:51 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=PalSw1VBCX3HiG6Qf8ByfGq/hKwq2GoWO1GSsqp0WcGf9LxHTHjMMmiwEcCT/ZCT7tTEag8WIUjc+OJ2uK65eSWabaDScYvVjA8C4fWtS3nzXhzZ0vfbO7C3mRxBCHEo8vxwOEL2nPopVhXC7VHM2FKPVEn5v+4Z0GOyrko+uZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Qy1kyuLd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90E69C4CEE4;
+	Tue,  6 May 2025 07:05:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746514911;
-	bh=3e+bXisIVgWVW5HiHUl8/1fadTRryB6P+vRz6FYW0m8=;
+	s=k20201202; t=1746515124;
+	bh=tfHqe1+/LVxt7tapSLkZl712evbljUfVYhNvFheJdPk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lNnbg1RP+v6AaxdDJ0aFA4TWtGcGpc6wqQgXuji88MvtJv6q++0/k3JWsLEpSF0PB
-	 iG1xEe/z3hYd/iUYCbp2OTFyWT6UgI5Kqaox8j+MqSEVdg3MO8/U4UkeHYKlYXLA2A
-	 RhpFKe6BT8JW0mlKs7pBmZSrCYduS1YwnmNle8UYtI+Od1Cp9pdYEDjIg680+rCCCD
-	 0zgFU/a/Zo7P8Ij3B1yn1L66z2SVE7xlNRsdk08pSRflVjly59euY/5rVZbJygWjJX
-	 kQnqv92FUBVNJsOdRztnWkvsh09II9WxZZItN/CpwkyArno8WfrH7J355DykJmtkd0
-	 C3kPvHfnD0JAg==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1uCCJG-000000006rV-2OBA;
-	Tue, 06 May 2025 09:01:46 +0200
-Date: Tue, 6 May 2025 09:01:46 +0200
-From: Johan Hovold <johan@kernel.org>
-To: Andi Shyti <andi.shyti@kernel.org>
-Cc: Johan Hovold <johan+linaro@kernel.org>, Vignesh R <vigneshr@ti.com>,
-	Aaro Koskinen <aaro.koskinen@iki.fi>,
-	Andreas Kemnade <andreas@kemnade.info>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Roger Quadros <rogerq@kernel.org>, Tony Lindgren <tony@atomide.com>,
-	Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-	linux-omap@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Jayesh Choudhary <j-choudhary@ti.com>
-Subject: Re: [PATCH] i2c: omap: fix deprecated of_property_read_bool() use
-Message-ID: <aBmz2iDObAgendMc@hovoldconsulting.com>
-References: <20250415075230.16235-1-johan+linaro@kernel.org>
- <vcwjwrjgzwoil5ydds4findhcgl2ujoxwia7eh7yrbdc45yx26@kmpmvataffzr>
- <aAIiJQVAUdWJFVy7@hovoldconsulting.com>
- <hn3gsrizar6xbr4seclnb6xot4fo4ztryks4w7exvztsdzj4f6@jhobhujf3ezi>
- <aBiMJ0z5q4K2xTGT@hovoldconsulting.com>
- <6nn2l75kkbkdu3wf3kta4mezno6cy4e3zzwzdc4cpmujjhr6lp@ct7w72zwbrhu>
+	b=Qy1kyuLdabK04PJp8dn95pC+Um02H/yfH5OLfzJdq2lD2RsxSBWqVM4+NxdtSx4wF
+	 TCxJkADf2V2LxE9IgRgRwAc4VptcFd/Efga850l0cIDjXzMJj1aR343q4L1LdC7aFp
+	 EQlmSK6YdAZ3wLWxL1BucVkPljH+nvxUKp3MHELn7yeSLgbGhvLI8Fe5VgdzEEPXGC
+	 quYD3DKjRTbXHd5ONpQsGOY1bRX4sLekbTvd8OKQ3BE7Qnnr1wI/67l4OWfCbG8IOr
+	 LCV9OlvK/FCYvruGpT6MBmAYg2U6y0s2qst2bV4PVZ+pB1AzdePOLWKW0MY0dSjvMd
+	 YO0qkT3oUIPSw==
+Date: Tue, 6 May 2025 09:05:21 +0200
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Viken Dadhaniya <quic_vdadhani@quicinc.com>
+Cc: andi.shyti@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
+	conor+dt@kernel.org, gregkh@linuxfoundation.org, jirislaby@kernel.org, 
+	broonie@kernel.or, andersson@kernel.org, konradybcio@kernel.org, 
+	johan+linaro@kernel.org, dianders@chromium.org, agross@kernel.org, 
+	linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org, linux-spi@vger.kernel.org, 
+	quic_msavaliy@quicinc.com, quic_anupkulk@quicinc.com
+Subject: Re: [PATCH v4 1/5] dt-bindings: qcom: se-common: Add QUP
+ Peripheral-specific properties for I2C, SPI, and SERIAL bus
+Message-ID: <20250506-positive-viper-of-prowess-3d1f6e@kuoka>
+References: <20250503111029.3583807-1-quic_vdadhani@quicinc.com>
+ <20250503111029.3583807-2-quic_vdadhani@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <6nn2l75kkbkdu3wf3kta4mezno6cy4e3zzwzdc4cpmujjhr6lp@ct7w72zwbrhu>
+In-Reply-To: <20250503111029.3583807-2-quic_vdadhani@quicinc.com>
 
-On Tue, May 06, 2025 at 12:13:00AM +0200, Andi Shyti wrote:
-> On Mon, May 05, 2025 at 12:00:07PM +0200, Johan Hovold wrote:
-> > On Tue, Apr 29, 2025 at 03:10:13PM +0200, Andi Shyti wrote:
-
-> > > I'm sorry, but as I understand it, the Fixes tag should be used
-> > > only when an actual bug is being fixed. I've seen stable
-> > > maintainers getting annoyed when it's used for non-bug issues.
-> > 
-> > You seem to confuse the Fixes tag with a CC stable tag. A Fixes tag is
-> > used to indicate which commit introduced an issue, while the CC stable
-> > tag is used to flag a commit for backporting (and the fact that autosel
-> > tends to pick up patches with just a Fixes doesn't change this).
+On Sat, May 03, 2025 at 04:40:25PM GMT, Viken Dadhaniya wrote:
+> Introduce a new YAML schema for QUP-supported peripherals. Define common
+> properties used across QUP-supported peripherals.
 > 
-> (the Cc tag for fixes is not mandatory, it's more a courtesy)
-
-You should still add it as described by the stable tree docs:
-
-	To have a patch you submit for mainline inclusion later
-	automatically picked up for stable trees, add this tag in the
-	sign-off area::
-
-	Cc: stable@vger.kernel.org
-
-The stable team also scans through patches with just a Fixes tag because
-some people forget to add the tag, don't know that they should, or don't
-care about stable, but you should not rely on that (as I alluded to
-above).
-
-> > It's perfectly fine to fix an issue and use a Fixes tag when doing so
-> > even if the fix itself does not qualify for backporting (for whatever
-> > reason).
+> Add property `qcom,enable-gsi-dma` to configure the Serial Engine (SE) for
+> QCOM GPI DMA mode.
 > 
-> Oh yes, I forgot that patch was part of the 6.15 merge window. I
-> will then move it to the -fixes and send it for this week's merge
-> request.
+> Reference the common schema YAML in the GENI I2C, SPI, and SERIAL YAML
+> files.
+> 
+> Co-developed-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+> Signed-off-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+> Signed-off-by: Viken Dadhaniya <quic_vdadhani@quicinc.com>
+> ---
 
-Perfect, thanks.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Johan
+Best regards,
+Krzysztof
+
 
