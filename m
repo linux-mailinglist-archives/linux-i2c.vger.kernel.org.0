@@ -1,59 +1,60 @@
-Return-Path: <linux-i2c+bounces-10822-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10823-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23C4BAAC251
-	for <lists+linux-i2c@lfdr.de>; Tue,  6 May 2025 13:19:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91BBFAAC257
+	for <lists+linux-i2c@lfdr.de>; Tue,  6 May 2025 13:19:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 63D891B68634
-	for <lists+linux-i2c@lfdr.de>; Tue,  6 May 2025 11:19:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9D9133B72ED
+	for <lists+linux-i2c@lfdr.de>; Tue,  6 May 2025 11:19:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4623527A91C;
-	Tue,  6 May 2025 11:19:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 192BA27AC56;
+	Tue,  6 May 2025 11:19:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="TgMSa8gh"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="mqs5R1CM"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CD9427A939;
-	Tue,  6 May 2025 11:19:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43F2D27AC59;
+	Tue,  6 May 2025 11:19:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746530355; cv=none; b=Te5l53kVPVgI43kCQs8zU2vsccs5+lZ0HrPaKiPjxd7BqYMeI1UiBeMIf+bIBlbQ9td/GRbDnDmDWlMKruDFDTbD1DD63UMoiYOnXq8T/RSCL4QJ8+IiLhBg11MusaugSxRit2lD/BHZjOFIy07K0QcM81Ti55fxIuTzkEzAaRQ=
+	t=1746530359; cv=none; b=nW/igTCFMUWFBtWYeZCHy9qHWbAzfx+1eJ8jz+W/uxgYuS9j/mt1WXSby1f7ckvKP+UI1cuDRp4pkA6NdZ2poa3ZcQY4VQutH5iINsrWlN0/KfTsygczMmGqLszZh20Fnic7nlPGtA3QVEMVFh6kWmfOFfoM3d9ynpf5r/T5eWQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746530355; c=relaxed/simple;
-	bh=Q4ptrZzuR6AE70wnRLbBNjV7Y8kpiJ7rLfEo5P+D7tE=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=mbgt2fsb1nJXJYsaHIMLv4eu0debk6VuiW5bJ6cWG3tRkR8tBhJhBXGvr+m7OtOBeZAx1l1/9ks877MHAjOBgnBHMWVg8ojTgPqwD7FPBhRyrihSU4/Fqku+Fjv6a3fI3HAauM9YlUeJx275yOjwD7eZzv1doyO5cfe1h/kQ+PM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=TgMSa8gh; arc=none smtp.client-ip=205.220.168.131
+	s=arc-20240116; t=1746530359; c=relaxed/simple;
+	bh=x6TiEqVvF6dcpdg7HoUHt+Ef8RwWNgehZD0MngwB99c=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=SCRup1mqi6zul23TVvx7147ebMYFqqpkWoPdyDgn8DZahEXcAxiVcgPHdLzDz2JbyW5Klbtq7yxettstV0C01PqflDibExZEftZtU/ZmBw8KU3OKVuzkULaNbxvmhFsAEKzsVVIGLrmWg04+n1iTmnLJd5rOV/NXRjWgZQBYNXM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=mqs5R1CM; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54690pSb025917;
-	Tue, 6 May 2025 11:19:05 GMT
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 546A1Wiw017859;
+	Tue, 6 May 2025 11:19:09 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-type:date:from:message-id:mime-version:subject:to; s=
-	qcppdkim1; bh=sq/XukGZUXYYVsOD5xL/hcID5GPFU2bSXyfbBAjjLZQ=; b=Tg
-	MSa8gh90nq3spjC+Ckx4XFniKRuAZCzGOrN/nms9OvsrmQ3GlcG5OqUbhv0I4bsw
-	bCvDnaABoTnHsKgBtAW9BwQQmjIxKzyHgse+sCebdMZ84aMiR+OpwShH+WvUsDdw
-	iowhf67S22/7C5zpTU1zC+bRXR0vJtlCPvw+zRssx2ifKq2LoJjEv1mhUtEvnM0u
-	PrhsJZ5NxoNk0QPgXkzEvcQViUPPfxqz1Wiuh/TKO1a/byK1txPXRE2Y17WPKpYV
-	JlAznmF1SmnK9PzLKiTnnRd6lwPvBisAN1L5V/7EGQMkI3aAKaRg3yI2OJlYmT0k
-	9RDVH5shT15WPkfP/ABg==
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 46f5sv22cs-1
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=hNzrM86H8/Sl+GfeIpuqD7rH
+	r1aeC0XaSYBc3yrTtjA=; b=mqs5R1CMeUmcD7na0X39GgDLvq0m/WKagLx4PuqG
+	bCEnDOxYDq8mHIczfHHtYpBCLTgOsI8HiqH67CW+w+JDTjRkcGR6HNiRWpFR+SmS
+	3obeme90QX4smMJlxSqGmkkKwe8TXBRur1LfaIbZOqUDNOCjumA2wwzfT+o6nAvR
+	BOoJW6rtIqQfwr3S4seIGlw2AeFOS6mlOILWuTGOsejDxsiKWNdKbPFNsMJeRgK+
+	iTC7gmEVxwfI2Kmgz/MI6BrtC5sRJdgi/VQUFJjfxXNHg1yU129jjDH7QRj8Vvfy
+	kZtnkcp8LZHX+rRwellXO9/dlKhOS3ALP4C87krMMwTZTQ==
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 46f8gv1phm-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 06 May 2025 11:19:05 +0000 (GMT)
+	Tue, 06 May 2025 11:19:09 +0000 (GMT)
 Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 546BJ4TZ020004
+	by NASANPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 546BJ8TE005162
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 6 May 2025 11:19:04 GMT
+	Tue, 6 May 2025 11:19:08 GMT
 Received: from hu-jseerapu-hyd.qualcomm.com (10.80.80.8) by
  nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Tue, 6 May 2025 04:19:00 -0700
+ 15.2.1544.9; Tue, 6 May 2025 04:19:04 -0700
 From: Jyothi Kumar Seerapu <quic_jseerapu@quicinc.com>
 To: Vinod Koul <vkoul@kernel.org>,
         Mukesh Kumar Savaliya
@@ -66,10 +67,12 @@ CC: <linux-arm-msm@vger.kernel.org>, <dmaengine@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
         <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
         <linaro-mm-sig@lists.linaro.org>, <quic_vtanuku@quicinc.com>
-Subject: [PATCH v6 0/2] Add Block event interrupt support for I2C protocol
-Date: Tue, 6 May 2025 16:48:42 +0530
-Message-ID: <20250506111844.1726-1-quic_jseerapu@quicinc.com>
+Subject: [PATCH v6 1/2] dmaengine: qcom: gpi: Add GPI Block event interrupt support
+Date: Tue, 6 May 2025 16:48:43 +0530
+Message-ID: <20250506111844.1726-2-quic_jseerapu@quicinc.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20250506111844.1726-1-quic_jseerapu@quicinc.com>
+References: <20250506111844.1726-1-quic_jseerapu@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -81,104 +84,112 @@ X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nasanex01b.na.qualcomm.com (10.46.141.250)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: Qavxbg1SzTLizwsNslDnoj8DnphgRz2O
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTA2MDEwOCBTYWx0ZWRfX6h0ajjpsTg3W
- KaSMEsGpYYIzjVxLfx5meXqX/NLhwV4fqUHaC+X7Z739wf9FNlTlIBY0gqB/Llu62/BefPv5hTK
- B1SYJDyxHLZEjZZN4IfIWDxHNJkRk/VaSDLAyiHvwLZebKWqfAKoeFecppUgDhbZ1Ly/N3qQACW
- nnWx3Q+gKEzjAX5KshNuG5N9+jliNE0FetYtRqOgEMvZhpcpp8ZMwVek+f3N8wlPweKeYcqvYnL
- jFk0YmOdSd9qNYElqj5SsVawuxGNpHvVfnCWrK+of9UcQVX06qxQMZmIrW+K9/OEIMHBQKPP7De
- VfCqDuTjRQtnFTI6s88xapyAC33RXEnFkRK9w/Hz1lkblyovaj025oHMsfuBNBdEOKZvCbmhG45
- E767CYDU8M/4bUUrt1WvPc6FVQEpqwxX9fFcSk33n2/ZkDy3wawJP2K3uu9kbo2H9vHC0ni/
-X-Authority-Analysis: v=2.4 cv=cOXgskeN c=1 sm=1 tr=0 ts=6819f029 cx=c_pps
+X-Authority-Analysis: v=2.4 cv=dYmA3WXe c=1 sm=1 tr=0 ts=6819f02d cx=c_pps
  a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17
- a=GEpy-HfZoHoA:10 a=dt9VzEwgFbYA:10 a=Bp52wIM_v22GRZO56cAA:9
-X-Proofpoint-ORIG-GUID: Qavxbg1SzTLizwsNslDnoj8DnphgRz2O
+ a=GEpy-HfZoHoA:10 a=dt9VzEwgFbYA:10 a=COk6AnOGAAAA:8 a=NISQXaMT3V-eHe_uHBIA:9
+ a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-ORIG-GUID: LsbNNL4t4SJ4u437EngkHGJo5ABxZVS4
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTA2MDEwOCBTYWx0ZWRfXxduG0wT/Tiqj
+ BYUaMbD1Ma7y2dQax0FLdxmi0XmunAl820iuBI7xTHCowqdS8zVjTIUCwwamGWJiMsExq60A3x3
+ U4tM4oR8kZ5PKoso3RVrg0oxH2ceBA+1Uzw8MEOY4d5hocyOXaXO2rK7Poy9ddH7PEOcnfW3Aiq
+ Y8jR8zNpF81pVSv9eusYKVvH5YeXuRkE6+Dp2PQteDhqKTywa3SUdD+Vq27GCerjBkWi7vO2a3N
+ QcxrTdSFab9I8J4sVq5r0SOJ7PkaEhjCL7NvaR0qDpWLrSu8t2OG+lh+mfT3a4sHHmic+xw+H80
+ JCCqafi8jI9x+lFSq0Wmuvor7C/x8Chka2PHGsikTfp15xtK5Y42meIic8uvuKAp0OdA//T0HAG
+ atKYhfX1A+TUNXuhsygHPRJ+G4NgHek0b6BjC/rC/8Nw3Z/k/Jnsdiwf01Yt1uNNx9w/HdGF
+X-Proofpoint-GUID: LsbNNL4t4SJ4u437EngkHGJo5ABxZVS4
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
  definitions=2025-05-06_05,2025-05-05_01,2025-02-21_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- mlxscore=0 clxscore=1011 suspectscore=0 priorityscore=1501 bulkscore=0
- mlxlogscore=999 adultscore=0 impostorscore=0 malwarescore=0 spamscore=0
- phishscore=0 lowpriorityscore=0 classifier=spam authscore=0 authtc=n/a
- authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2504070000 definitions=main-2505060108
+ suspectscore=0 bulkscore=0 priorityscore=1501 clxscore=1011 adultscore=0
+ mlxlogscore=999 impostorscore=0 malwarescore=0 mlxscore=0 phishscore=0
+ lowpriorityscore=0 spamscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2504070000
+ definitions=main-2505060108
 
-The I2C driver gets an interrupt upon transfer completion.
-When handling multiple messages in a single transfer, this
-results in N interrupts for N messages, leading to significant
-software interrupt latency.
+GSI hardware generates an interrupt for each transfer completion.
+For multiple messages within a single transfer, this results in
+N interrupts for N messages, leading to significant software
+interrupt latency.
 
-To mitigate this latency, utilize Block Event Interrupt (BEI)
-mechanism. Enabling BEI instructs the hardware to prevent interrupt
-generation and BEI is disabled when an interrupt is necessary.
+To mitigate this latency, utilize Block Event Interrupt (BEI) mechanism.
+Enabling BEI instructs the GSI hardware to prevent interrupt generation
+and BEI is disabled when an interrupt is necessary.
 
-Large I2C transfer can be divided into chunks of 8 messages internally.
-Interrupts are not expected for the first 7 message completions, only
-the last message triggers an interrupt, indicating the completion of
-8 messages. This BEI mechanism enhances overall transfer efficiency.
+When using BEI, consider splitting a single multi-message transfer into
+chunks of 8 messages internally and so interrupts are not expected for
+the first 7 message completions, only the last message triggers
+an interrupt, indicating the completion of 8 messages.
 
-This optimization reduces transfer time from 168 ms to 48 ms for a
-series of 200 I2C write messages in a single transfer, with a
-clock frequency support of 100 kHz.
+This BEI mechanism enhances overall transfer efficiency.
 
-BEI optimizations are currently implemented for I2C write transfers only,
-as there is no use case for multiple I2C read messages in a single transfer
-at this time.
-
-v5 -> v6:
-   - Instead of using bei_flag, moved the logic to use with DMA
-     supported flags like DMA_PREP_INTERRUPT.
-   - Additional parameter comments removed from geni_i2c_gpi_multi_desc_unmap
-     function documentation.
-
+Signed-off-by: Jyothi Kumar Seerapu <quic_jseerapu@quicinc.com>
+---
+v5 ->v6:
+  - For updating the block event interrupt bit, instead of relying on
+    bei_flag, decision check is moved with DMA_PREP_INTERRUPT flag.
+ 
 v4 -> v5:
-   -  BEI flag naming changed from flags to bei_flag.
-   -  QCOM_GPI_BLOCK_EVENT_IRQ macro is removed from qcom-gpi-dma.h
-      file, and Block event support is checked with bei_flag.
-   -  Documentation added for "struct geni_i2c_dev".
+  - BEI flag naming changed from flags to bei_flag.
+  - QCOM_GPI_BLOCK_EVENT_IRQ macro is removed from qcom-gpi-dma.h
+    file, and Block event interrupt support is checked with bei_flag.
 
 v3 -> v4:
-  - API's added for Block event interrupt with multi descriptor support is
-    moved from qcom-gpi-dma.h file to I2C geni qcom driver file.
+  - API's added for Block event interrupt with multi descriptor support for
+    I2C is moved from qcom-gpi-dma.h file to I2C geni qcom driver file.
   - gpi_multi_xfer_timeout_handler function is moved from GPI driver to
     I2C driver.
-  - geni_i2c_gpi_multi_desc_xfer structure is added as a member of
-    struct geni_i2c_dev.
-  - Removed the changes of making I2C driver is dependent on GPI driver.
 
-v2 -> v3:
-  - Updated commit description
-  - In I2C GENI driver, for i2c_gpi_cb_result moved the logic of
-    "!is_tx_multi_xfer" to else part.
-  - MIN_NUM_OF_MSGS_MULTI_DESC changed from 4 to 2
-  - Changes of I2C GENI driver to depend on the GPI driver moved
-    to patch3.
-  - Renamed gpi_multi_desc_process to gpi_multi_xfer_timeout_handler
-  - Added description for newly added changes in "qcom-gpi-dma.h" file.
+v2-> v3:
+   - Renamed gpi_multi_desc_process to gpi_multi_xfer_timeout_handler
+   - MIN_NUM_OF_MSGS_MULTI_DESC changed from 4 to 2
+   - Added documentation for newly added changes in "qcom-gpi-dma.h" file
+   - Updated commit description.
 
 v1 -> v2:
-  - DT changes are reverted for adding dma channel size as a new arg of
-    dma-cells property.
-  - DT binding change reveted for dma channel size as a new arg of
-    dma-cells property.
-  - In GPI driver, reverted the changes to parse the channel TRE size
-    from device tree.
-  - Made the changes in QCOM I2C geni driver to support the BEI
-    functionality with the existing TRE size of 64.
-  - Made changes in QCOM I2C geni driver as per the review comments.
-  - Fixed Kernel test robot reported compiltion issues.
+   - Changed dma_addr type from array of pointers to array.
+   - To support BEI functionality with the TRE size of 64 defined in GPI driver,
+     updated QCOM_GPI_MAX_NUM_MSGS to 16 and NUM_MSGS_PER_IRQ to 4.
 
-Jyothi Kumar Seerapu (2):
-  dmaengine: qcom: gpi: Add GPI Block event interrupt support
-  i2c: i2c-qcom-geni: Add Block event interrupt support
+ drivers/dma/qcom/gpi.c           | 3 +++
+ include/linux/dma/qcom-gpi-dma.h | 2 ++
+ 2 files changed, 5 insertions(+)
 
- drivers/dma/qcom/gpi.c             |   3 +
- drivers/i2c/busses/i2c-qcom-geni.c | 307 ++++++++++++++++++++++++++---
- include/linux/dma/qcom-gpi-dma.h   |   2 +
- 3 files changed, 285 insertions(+), 27 deletions(-)
-
+diff --git a/drivers/dma/qcom/gpi.c b/drivers/dma/qcom/gpi.c
+index b1f0001cc99c..7e511f54166a 100644
+--- a/drivers/dma/qcom/gpi.c
++++ b/drivers/dma/qcom/gpi.c
+@@ -1695,6 +1695,9 @@ static int gpi_create_i2c_tre(struct gchan *chan, struct gpi_desc *desc,
+ 
+ 		tre->dword[3] = u32_encode_bits(TRE_TYPE_DMA, TRE_FLAGS_TYPE);
+ 		tre->dword[3] |= u32_encode_bits(1, TRE_FLAGS_IEOT);
++
++		if (!(i2c->dma_flags & DMA_PREP_INTERRUPT))
++			tre->dword[3] |= u32_encode_bits(1, TRE_FLAGS_BEI);
+ 	}
+ 
+ 	for (i = 0; i < tre_idx; i++)
+diff --git a/include/linux/dma/qcom-gpi-dma.h b/include/linux/dma/qcom-gpi-dma.h
+index 6680dd1a43c6..ebac0d3edff2 100644
+--- a/include/linux/dma/qcom-gpi-dma.h
++++ b/include/linux/dma/qcom-gpi-dma.h
+@@ -65,6 +65,7 @@ enum i2c_op {
+  * @rx_len: receive length for buffer
+  * @op: i2c cmd
+  * @muli-msg: is part of multi i2c r-w msgs
++ * @dma_flags: Flags indicating DMA capabilities
+  */
+ struct gpi_i2c_config {
+ 	u8 set_config;
+@@ -78,6 +79,7 @@ struct gpi_i2c_config {
+ 	u32 rx_len;
+ 	enum i2c_op op;
+ 	bool multi_msg;
++	unsigned int dma_flags;
+ };
+ 
+ #endif /* QCOM_GPI_DMA_H */
 -- 
-base-commit: 55bcd2e0d04c1171d382badef1def1fd04ef66c5
 2.17.1
 
 
