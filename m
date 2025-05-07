@@ -1,34 +1,34 @@
-Return-Path: <linux-i2c+bounces-10881-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10882-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37699AAEE9D
-	for <lists+linux-i2c@lfdr.de>; Thu,  8 May 2025 00:15:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2946DAAEEB6
+	for <lists+linux-i2c@lfdr.de>; Thu,  8 May 2025 00:24:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2DEBD3A6D9D
-	for <lists+linux-i2c@lfdr.de>; Wed,  7 May 2025 22:14:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 850FA4C523A
+	for <lists+linux-i2c@lfdr.de>; Wed,  7 May 2025 22:24:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC3D929114F;
-	Wed,  7 May 2025 22:15:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 497BC29115A;
+	Wed,  7 May 2025 22:24:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="U/Toc8P1"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="H3AhQNzf"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A946290DAD;
-	Wed,  7 May 2025 22:15:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CF07290DA4;
+	Wed,  7 May 2025 22:24:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746656112; cv=none; b=FReJGvYOEtg0N/YfTNx1rhiZsGjy/qYanzxEVBNe7A/KMuWQnG0xz4d+vHWA6BcuiwQZEkhIvtA5ZIGncFlCdPc0sdF5huj5u5xDeAha6tLSEv+/INuaX3u1fkWSD1dcj6Acqs2OfReubHRPsVSAl0F69ivuv88+1RFJLTNbOjI=
+	t=1746656661; cv=none; b=il771HPd3xstg3MlZHOVB9S0LnGntdpA8zhYLpWdjcOduQLDSUi66Ii7/vrJiL2T0sJX9v5YF8vEw/qJredljO0qsWoYwrwRM5mGqEhKHCgVGGe8a1n1kl+6gBU+8G0X/n9f5ryO2641dB+HJYmzudxv6zElzebMT+PS/GC8AIM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746656112; c=relaxed/simple;
-	bh=qGouDji2QH0Uc7Ws9dxYQpLQ7LU1sAfC1XRs3EeIi7o=;
+	s=arc-20240116; t=1746656661; c=relaxed/simple;
+	bh=AzuzgfE6GFKxTRRxcmQmVIVwtjphxNohFQ1mkjj32Gs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BHUXfIHthmEBFIBBHSPWYh3l9bKOTjSu+AGo8/+Nytgqj6YxsThnELxd2Exyl45w1kS5nIqnSyimCfq08qJogK/pgOOwgtZfzk6xLykFgDt93777F1UUyvrqha2J/qesrfPwXAX1ec9I4cwGeBSARIQzM3Xb0kzql4POnH3HPc4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=U/Toc8P1; arc=none smtp.client-ip=156.67.10.101
+	 Content-Type:Content-Disposition:In-Reply-To; b=gS/FwG0VxdZkL1MG94ysJ+xODHnHe7ETZCYV8mD7/ytD2yF7snK/4AuJ0K4bMhHR7etar/4UOYwo/mJq0QpGzdsoIbGMOMRaONp306SJJBMgzj3XrqPgpWOrHFPYCLLPCIrHLwPPDvqxzeFMbs/qI/KZAdOM//SYh4JEQeJwCEs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=H3AhQNzf; arc=none smtp.client-ip=156.67.10.101
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
@@ -36,13 +36,13 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
 	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
 	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
 	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=CPkQ9CydGnG5tF/EHT21gmnn1PO6zhIZzOrZPNx4PgA=; b=U/Toc8P1QESr/ikkBlUdgnkPeZ
-	wtmk8RevqEbmM0rvr1ojqNGeRhJe76CZ7XVDMiDnBlPvJTpsGybkWEQPVN4jDWkTmMPCzd2Kg2zVe
-	DRcNXD0c3AlEyc50C97JLBRg6L0r/ubgs5FUC4kGnUvDYE7ZMVesEit9HWwG5OgMYRGg=;
+	bh=PzMdG6ucufIYiDDg070rOIAisSRRkIriDyNiBBXVH3U=; b=H3AhQNzfKur7H3echOL82K5wSj
+	UWauEM7K0xtUngTkTiumFckVqkxTSQmxx04ybKUuXMGDwQxdg9v4LTVktEbeK1wYbAEG7wA2phbCJ
+	WOEUl0ZmHpOetacgwgUET9KPOR85GwrqWO+zoimHuICTlzt/azYqhg8fHIiVUKBeUXS8=;
 Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
 	(envelope-from <andrew@lunn.ch>)
-	id 1uCn2W-00BwA0-Op; Thu, 08 May 2025 00:14:56 +0200
-Date: Thu, 8 May 2025 00:14:56 +0200
+	id 1uCnBL-00BwDo-6P; Thu, 08 May 2025 00:24:03 +0200
+Date: Thu, 8 May 2025 00:24:03 +0200
 From: Andrew Lunn <andrew@lunn.ch>
 To: Herve Codina <herve.codina@bootlin.com>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -77,11 +77,10 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Steen Hegelund <steen.hegelund@microchip.com>,
 	Luca Ceresoli <luca.ceresoli@bootlin.com>,
 	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v2 22/26] misc: lan966x_pci: Rename lan966x_pci.dtso to
- lan966x_evb_lan9662_nic.dtso
-Message-ID: <0c3028dd-8c98-4816-bb52-7383391e5a94@lunn.ch>
+Subject: Re: [PATCH v2 23/26] misc: lan966x_pci: Introduce board specific data
+Message-ID: <8b97e095-dbed-438c-9c6d-d3c2c5929fc0@lunn.ch>
 References: <20250507071315.394857-1-herve.codina@bootlin.com>
- <20250507071315.394857-23-herve.codina@bootlin.com>
+ <20250507071315.394857-24-herve.codina@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -90,18 +89,31 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250507071315.394857-23-herve.codina@bootlin.com>
+In-Reply-To: <20250507071315.394857-24-herve.codina@bootlin.com>
 
-On Wed, May 07, 2025 at 09:13:04AM +0200, Herve Codina wrote:
-> The lan966x_pci.dtso describes the Microchip EVB-LAN9662-NIC board [0]
+On Wed, May 07, 2025 at 09:13:05AM +0200, Herve Codina wrote:
+> Only one device-tree overlay (lan966x_evb_lan9662_nic.dtbo) is handled
+> and this overlay is directly referenced in lan966x_pci_load_overlay().
 > 
-> This PCI board embeds a LAN9962 PCI device chip, part of the LAN966x
-> family.
+> This avoid to use the code for an other board.
 > 
-> Rename the lan966x_pci.dtso accordingly.
+> In order to be more generic and to allow support for other boards (PCI
+> Vendor/Device IDs), introduce the lan966x_pci_info structure and attach
+> it to PCI Vendor/Device IDs handled by the driver.
 > 
-> Link: https://www.microchip.com/en-us/development-tool/EV53U25A [0]
+> This structure contains information related to the PCI board such as
+> information related to the dtbo describing the board we have to load.
+> 
 > Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+
+How big is the dtbo ?
+
+This is going in the right direction. I'm just wondering if each dtbo
+should be wrapped in its own very slim PCI driver, which simply
+registers its lan966x_pci_info structure to a core driver. Only the
+needed dtbo will then be loaded into memory as a module, not them all.
+
+Pretty much all the pieces are here, so it can be done later.
 
 Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 
