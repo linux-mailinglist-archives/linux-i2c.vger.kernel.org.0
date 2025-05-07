@@ -1,191 +1,136 @@
-Return-Path: <linux-i2c+bounces-10862-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10863-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9BF1AADC65
-	for <lists+linux-i2c@lfdr.de>; Wed,  7 May 2025 12:25:25 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41682AADD51
+	for <lists+linux-i2c@lfdr.de>; Wed,  7 May 2025 13:28:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0D0EE4A69F7
-	for <lists+linux-i2c@lfdr.de>; Wed,  7 May 2025 10:25:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4D8047B9159
+	for <lists+linux-i2c@lfdr.de>; Wed,  7 May 2025 11:27:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E37C20F09B;
-	Wed,  7 May 2025 10:25:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9026A231C87;
+	Wed,  7 May 2025 11:28:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="ZMrtiwCy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H9g7Uo3K"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from EUR02-DB5-obe.outbound.protection.outlook.com (mail-db5eur02on2079.outbound.protection.outlook.com [40.107.249.79])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2536F17E4
-	for <linux-i2c@vger.kernel.org>; Wed,  7 May 2025 10:25:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.249.79
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746613521; cv=fail; b=F0+4wJIFQk2ZuRa4rNEgWf87YNs7B+huZdbIX/WMFVLsgKHw7kDAlgwVOh98cKSH7+uPFCFe3aOePCdAPobVYdj8llexK59kkQtPFNMwEvOnKZmY4em2xAQXus6paSuJawSTzTyi1jrAjSJzZl53wK/CoF+3u7Q2fb28Jncsilk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746613521; c=relaxed/simple;
-	bh=ozEPgFogBnDWtLi0Eshh1wIkKfdFBzhGHREz9k9hq7Y=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=O9Jt36aZBD+cTjYTHvBKNf/wUG5AHUUckDJrE/L2OyayaGGSCmWRg8TYxx0kqKoQJ/IIi2gLbpg0dFH2J57AuasbyWMeeKBXusuMqtW9rkP1iaONFoxGErZ92nCeFDjWL9eBSVdJKwix2X41hPuRYnlO4oRdM7Qo3/7c7qZv3A0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=ZMrtiwCy; arc=fail smtp.client-ip=40.107.249.79
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=agROxhKs/NybyQ0zAobvFKJ0fTYXBEgsZLEGf8CUgvBQpTX9fl30a+vbtkHB9oSHATS1EusFGCorcxJeQOmOaLKSgTf3cUpvPE7EtHVZupcPLMEnKiBwV52VHbs4swMJKSqt3Ysdooh557Nk731vZFNTp2NVBYWR7RiAQSKnrrKxxbnU+PwfmaG72cjDuNpnjHqP7EChvdwLMRg3USKtDtPY+l+Wiwvawfm8GGzJMecoqAtvgNGHCsWZwxc8358mDjwlqqRvEoZlUTO9N0gOMzLq2hmvhpSqRa6M+lY8nZHLUhne3OwprGL+iestYMGolHDDrrGyn9BAB8UeHpiKrQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xsB5WKeJy2Zcc2e8lFlQ93r6EIOrYvc+nS40g7lvJ8Q=;
- b=Ik6w68nAHvzSKkYhOLWD5UafOMV6x1pZYZvJCB7/Yq0cRQIlADoKc9H5z1VJ02mEZnSe7WJN629MLzF3uNdk+5x6sOXX+l8wK6JEKaWudWcsozkgBTKOvIl+NYCrs9NUKLBMN8B/CSCl4dK452HHoljmsgrEYGQq9/QWgGPFSbf5dqhkNXISdsf4KgtGt4iSdHjEyFvSaM/GSujzUqIV+1dO6YaGyd4gGPolEanpsGw6TmC5YIay6vYRfrY9UNuqK2qP9mC+ClMBP+KZLU8P1Oakumej099RQzBC11sAoA+Vs3e4gWhtPR3ALchuQjSoYt3fCEpoJFCxFaO/hignWQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xsB5WKeJy2Zcc2e8lFlQ93r6EIOrYvc+nS40g7lvJ8Q=;
- b=ZMrtiwCyPgkYEDo7OHcZs+b/+sORDWDc3FFLCeecPMVw2id7W6CCSXmTUoi8Z+TlzEa2HgG6k4unFqPfGuX34yEC+t7Nn0N5ufX3s7blAPqlQhMJcK5yKYZba/HSa1XahmVkpdheGdnEHypBL/cNg+3IUpo77SMqnHImLU2I6wr8Efokz9FkQc+6rrKnJ9foNFTL2epxbjI7nJCGiQkvXgRCo7wyJRQaTS4JuWvUmwJw0/B5OIbvOpbKBOAhF0hd5G3neqQhzGWsd5jGdatfcnBsFPE3XKHudxPZnwu3FRHwu1hNXc72yg+UVCQOe76vkwNWaOhyhPf2mMET5fczVQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
- by DBBPR04MB7817.eurprd04.prod.outlook.com (2603:10a6:10:1ef::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8699.24; Wed, 7 May
- 2025 10:25:16 +0000
-Received: from DU2PR04MB8822.eurprd04.prod.outlook.com
- ([fe80::4e24:c2c7:bd58:c5c7]) by DU2PR04MB8822.eurprd04.prod.outlook.com
- ([fe80::4e24:c2c7:bd58:c5c7%5]) with mapi id 15.20.8699.022; Wed, 7 May 2025
- 10:25:16 +0000
-From: Xu Yang <xu.yang_2@nxp.com>
-To: wsa+renesas@sang-engineering.com
-Cc: linux-i2c@vger.kernel.org,
-	imx@lists.linux.dev
-Subject: [PATCH] i2c: core: add useful info when defer probe
-Date: Wed,  7 May 2025 18:27:14 +0800
-Message-Id: <20250507102714.3535412-1-xu.yang_2@nxp.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: MA0PR01CA0058.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a01:ac::16) To DU2PR04MB8822.eurprd04.prod.outlook.com
- (2603:10a6:10:2e1::11)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29E52189B8C;
+	Wed,  7 May 2025 11:28:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1746617287; cv=none; b=Kj7a+OQe8IHutWnqTN6NnxZxU37YhrmfKUNy4LB5qpBiCyyOvhbBYnZ43pIiZ0rbrNuv12J/7KYNubqGXSCeMQjzA761LfZ6DSyzbWiKbI6XMQIbDhbGFRRWsNFIw5i6NLrC7Muzxi5Yj4bovBxlE8umz1FplcZgg0xXHEbCGYc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1746617287; c=relaxed/simple;
+	bh=+myiwgE5IaBaXJzmpEL8CqSZA8uzkotePvS5m/azOWI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AehfhQnq9nCydWCalbTeJqsmBRIe3XsRafo2MwCcUdLo+tvQLWt8rmgVIAhPhBE9EV+DrHYownjKwZ1how4HI21ytunbqZLfzilC4AI0Eo8VNcX8GKWGzjmn4kVJNibjvfRMcsw/dCoJliPK2ViAaW8+f3C5XjFKJpEnT8oqLjo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H9g7Uo3K; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16050C4CEE7;
+	Wed,  7 May 2025 11:28:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746617286;
+	bh=+myiwgE5IaBaXJzmpEL8CqSZA8uzkotePvS5m/azOWI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=H9g7Uo3KF3gdhcH2ZEMV9V3wNqXA8tWVr4h+XSChpAk8ADpc3AiALZ4luZs+qiP11
+	 Z/MMgQA+W8firplqY6wsfvaRlyKDnu2GwFBPbbSs260wPnfiIZNYS/X+7RgVASh77m
+	 RpC/hLSnA/nsP75LVgIyB2iQqMj3uUQrguNMZM870ct6AHpi0KrvjkwwfISkMW7V3a
+	 YOPAoo049AzlkO+K5zbADyxXnj6XpUO50IDuoOngkJTqfSy9VuxxdFuvsHaky5egwP
+	 KzvfbiAMDQAUjIzdffkOIksa2UyWdR9eJyQ0Y56Uy3z2fvqMFG3OeJNxR8UwUZLFBh
+	 Co6k62Ve2SILg==
+Date: Wed, 7 May 2025 20:28:03 +0900
+From: Mark Brown <broonie@kernel.org>
+To: Herve Codina <herve.codina@bootlin.com>
+Cc: Andrew Lunn <andrew@lunn.ch>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Peter Rosin <peda@axentia.se>,
+	Derek Kiernan <derek.kiernan@amd.com>,
+	Dragan Cvetic <dragan.cvetic@amd.com>,
+	Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh@kernel.org>,
+	Saravana Kannan <saravanak@google.com>,
+	Bjorn Helgaas <bhelgaas@google.com>, Len Brown <lenb@kernel.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Daniel Scally <djrscally@gmail.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Wolfram Sang <wsa@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	linux-kernel@vger.kernel.org, imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-pci@vger.kernel.org, linux-spi@vger.kernel.org,
+	linux-acpi@vger.kernel.org,
+	Allan Nielsen <allan.nielsen@microchip.com>,
+	Horatiu Vultur <horatiu.vultur@microchip.com>,
+	Steen Hegelund <steen.hegelund@microchip.com>,
+	Luca Ceresoli <luca.ceresoli@bootlin.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v2 01/26] Revert "treewide: Fix probing of devices in DT
+ overlays"
+Message-ID: <aBtDw-qXUCH9U-7l@finisterre.sirena.org.uk>
+References: <20250507071315.394857-1-herve.codina@bootlin.com>
+ <20250507071315.394857-2-herve.codina@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU2PR04MB8822:EE_|DBBPR04MB7817:EE_
-X-MS-Office365-Filtering-Correlation-Id: 07651309-4b22-48ce-3119-08dd8d51757b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|52116014|366016|376014|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?lwM/HEB1SXCkTffG2x5W542UglMSuTFWk6caVNgMvJpKu+KDp84BN/V/JS7J?=
- =?us-ascii?Q?nOzJNkkKIubJ3ZXHrqb/EClX9eVuWtA7x1WpCNuuh5GgkJaJiuTrY+ufxLQY?=
- =?us-ascii?Q?5lDgtgFip6GdyV1TxJf61YlB9nIH7JgUUU8s1nvkHkP5FxyzuwTAvV2otL0s?=
- =?us-ascii?Q?3+oCNBfqQx7d8mpZGwkSHxvOY0cZ6qvqDKuN+XLBjuzI1Y6VNgmk/g8Wdr71?=
- =?us-ascii?Q?bWTgr7jEc8UWfmEWVDG/+CnEEuXtrelZ+5qhjk5jxB89rnTZGB+rUchtytWE?=
- =?us-ascii?Q?s7wDufCAYiohvmMRnqWIgX49Ypy/5xUbbhXofjnOIuwRxCwr3vbxj2tGLgic?=
- =?us-ascii?Q?FtUZXPP7mqM45oiXTZKdvvGG4fHnswkY3gWZs5R1RTUUFmy8qf/oFXGHaUt+?=
- =?us-ascii?Q?Oe/T37OAB0WzKPjFOlxUl/dos2vrDyCPTKRwOnN5c/RiqU4X35AUVFKrQyPM?=
- =?us-ascii?Q?JoR5gMaehBJWZUuXbVZUlGzRayFkUyiZGkha4rpgYZJQylXI7yO3jskTupKZ?=
- =?us-ascii?Q?mXDXLdMHQ5RAtc2UMwdmi9uu3p04CgjNo9eI1pwjbKPdTpeRCD30dZ47ezNp?=
- =?us-ascii?Q?ldEYZ5Xocr8N09i9lam24WlzR5I+1xzdnZPNcSj/5hyv92Lf5SWO6AAnxif5?=
- =?us-ascii?Q?Lyr+pG85/ybMGz2RJiOcBg6mI/ghQHfFJkJ2ON4UJlrYSblV4kM7vn98IpIx?=
- =?us-ascii?Q?0dsjpej7/DJkznqcHNIgVdYhm85H63x2KEEcpIzOCz/HxpowNB6EFawfd/eC?=
- =?us-ascii?Q?iRs5CcFzdsn25Azp6LFzCC46JglcoC7ln337Y89mobB0srDDZaRhd9zSsNZq?=
- =?us-ascii?Q?sh/nSsGIqgV0JbNN/hk0qzHWUxGPzuYAi0e+DuDoK1rmqskFjPCWOGUZ3ODM?=
- =?us-ascii?Q?UTjFnGPTlT4pzVrPOOifDcgnBD8s0HDWIOR+9fcUTQg9UOB68qWD0p/d4izn?=
- =?us-ascii?Q?KKKeclrkh2Am11XsrSCL4ZGTNalvT8DHbq+c/XZo6S+tT0BwcwCn3ytW6DdR?=
- =?us-ascii?Q?i4aNTYJhURYPi/xlDE6CxdQ6UnMUXXJUoYJFTYW6oAfa6DmON47rNup8eg+W?=
- =?us-ascii?Q?nNEpXU1gOwTGRm0nPswNYY/lhI8nURMgA+YQoDPjU5dsZ5Kkwfjcjgj52Fvo?=
- =?us-ascii?Q?B74CAQ60rc4TybSd1EyfJAukW4VSLX1rcZdjjc7CKvRl3EehcPRsP5o3+ZMS?=
- =?us-ascii?Q?RS+XhSmtS0EqrdxYoCZh4RQ9s9zvmUEPjMZ2bEQBvwIxSMB6g5l0vo918oKI?=
- =?us-ascii?Q?CON+N9uKcx9QBSU9cXqbEeZ2hQpRz74MrGc5LuNz5bDRLOwKUTeAGjAkcFWM?=
- =?us-ascii?Q?YjIrn8+aeWjWqFS/HLX/PYHMFXxkZqq/Y+P3ekepGkU1VD7/BRdqnr180BxB?=
- =?us-ascii?Q?X3mD75PylsH6sp3JNUjnuuf+FhjLM95Z2U31hE3imLA/T5AqllDhmkIXC50+?=
- =?us-ascii?Q?PlsN68quvw2LmMxCj94H/fL41W5RtMLOCPD+/dQ98FIIYSabKnD/JA=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(52116014)(366016)(376014)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?NasnpTDAadX9LuaTrm2kLObMV0RLCUaRd8vGbqKCATshK0C223kBDJUrOV3p?=
- =?us-ascii?Q?KxEzYQusY5UbcLj9HYOTPfvCES/bqew/Y7hmAKS6fPDsQqLvYGTdTVanHXg9?=
- =?us-ascii?Q?BaeQVQoiv0mOZMcHwt+l7biFu6BuuHZPU27MMJtYQv+bCfJxnDVnZzhai8Bl?=
- =?us-ascii?Q?cCh5LL4zLDTD10SP851q6WbhTOJAdhK3AkuB0lb3pkNTxkZzZMbu03IcZYCR?=
- =?us-ascii?Q?cIcqQExfuBSVS9WLA3Eq4ucLXa5n3CrKsRG8wv8crlSSdD6Xz1omnMFy0V4G?=
- =?us-ascii?Q?OpcbeRmJHa2ypwYpcC7hEZPoDk5asUxBJjV8Y6sJpZz4Tnxd0rgzbXTKofWs?=
- =?us-ascii?Q?v4ZkX6LRowBgdHWRiMr4S07jwh3YL7HXOtSKwuphD3HblFBdB76i3QpQNgd2?=
- =?us-ascii?Q?rIBpnB2O92BafhP6GovFYDxqgijhn4eW9H7QxMEpfemOZ65rSvFEhiV2EFhv?=
- =?us-ascii?Q?1Mjl3OxgNzzQVC8/P00qUNQhoJBy+jKCEddTrHSqXS9WZOu7CqELIOCRScEM?=
- =?us-ascii?Q?thdVrbp4jyQGrunbu7jzTKHC0WFXYcdNgJRO3a+JPDcyaHdBol17orePYmRC?=
- =?us-ascii?Q?M2bfwm/UaLxd/Cg+c1W3joipLlcTWUw2dTs5mSUtNw03ywClOa9qfmrQGE8s?=
- =?us-ascii?Q?jBuAC7wyjc8q0ri9QR8UaIEOtruEkfiBwTylTw5ayNw0mYLGjeRAcAvmq2qJ?=
- =?us-ascii?Q?U3/jEgbgIPlvvelMQFCYAYI41IE0rhYtUg78+IOeisTBsardpQmJTtsVKr3I?=
- =?us-ascii?Q?HeoWI1eHVkPfw8npAJskQfBUPmqJ5wZmbn5wHbc9s5BS3T5XoE82MVTxACH7?=
- =?us-ascii?Q?0CgLsDJnekdCae4gVg5HvLyW6DEOiZu+Giw6nIAXXvbhfWC306Y7L4o49IzJ?=
- =?us-ascii?Q?b94N9ibf5IxW7CV06ugErCVMS8Co0J735EQGvmkeoBMWhbE3w4mTsaKvxIRu?=
- =?us-ascii?Q?2kn5ojJXZREDSmCsqUUevdsqT/XDtV70HLom2NNeTdVj3GvGufprvScTP7RF?=
- =?us-ascii?Q?WDVAeut0BxwjIwDawtd38XSNVFO6qgSWdL+YDGeuA7EVzlGAfohW4nxvauWE?=
- =?us-ascii?Q?ChvWHQ7gRQDpmSgIDlAE/b7fXvNopESFeVifONwfh2Oxxw3vjLJemGqFvV/o?=
- =?us-ascii?Q?4HS6POSM0a5Ctrq7ke/TlSES4j4cUbK9PYjCkeWkUQe1yIhWrjrqXXWC0KZe?=
- =?us-ascii?Q?3icasxK4vcT0dmHCjUFBVwHCZZM3vtWpyvkR46WxiMCdVI/WTTIQcJqlJZc7?=
- =?us-ascii?Q?s7cfT8Or05qRrf0XbjAdk7KyozBlEFcKtKaiydcjbqet7f2zJ8aHK9N27Ms6?=
- =?us-ascii?Q?RrPLtA+QNqIU5NYe4eCcCNSv+PDZFEfcqRm52kpcwWG3QZw1+uNbXuxD2/I5?=
- =?us-ascii?Q?4c7oudQEodpCz5lObaITA+1LG+ICbqrEcnhZa+Aruo158AJ0Rqs3bBIfxEIk?=
- =?us-ascii?Q?VBUZyqPeIbM/IAXlkO18J44uftXeHx6wPTvQQcLjUaAMMpPmG9yMQ5c+BAtF?=
- =?us-ascii?Q?ITpIHAzfCoceCGptN4HGZeo2YipuCS/LnIwvgHslC3mI1r1r63u5oBOYn6DE?=
- =?us-ascii?Q?tZkZ1NBzq+DP6N9pYoJxUTM2bCOHZFkxBWeVaf7N?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 07651309-4b22-48ce-3119-08dd8d51757b
-X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8822.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 May 2025 10:25:16.2722
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: F+My6QZwM838Lg1lTb2ocCVUT293tTtP2SzKC5WgkiRYq2Xq6m3irbEkpRyET4P42LRynQpCWBhvACVCsqnDUQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB7817
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="oe+RepqPNVL4+bmX"
+Content-Disposition: inline
+In-Reply-To: <20250507071315.394857-2-herve.codina@bootlin.com>
+X-Cookie: Well begun is half done.
 
-Add an useful info when failed to get irq/wakeirq due to -EPROBE_DEFER.
 
-Before:
-[   15.737361] i2c 2-0050: deferred probe pending: (reason unknown)
+--oe+RepqPNVL4+bmX
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-After:
-[   15.816295] i2c 2-0050: deferred probe pending: tcpci: can't get irq
+On Wed, May 07, 2025 at 09:12:43AM +0200, Herve Codina wrote:
+> From: Saravana Kannan <saravanak@google.com>
+>=20
+> This reverts commit 1a50d9403fb90cbe4dea0ec9fd0351d2ecbd8924.
 
-Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
----
- drivers/i2c/i2c-core-base.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> While the commit fixed fw_devlink overlay handling for one case, it
+> broke it for another case. So revert it and redo the fix in a separate
+> patch.
 
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index dc3c60a7d382..32ffd12bff9f 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -520,7 +520,7 @@ static int i2c_device_probe(struct device *dev)
- 				client->flags |= I2C_CLIENT_WAKE;
- 		}
- 		if (irq == -EPROBE_DEFER) {
--			status = irq;
-+			status = dev_err_probe(dev, irq, "can't get irq\n");
- 			goto put_sync_adapter;
- 		}
- 
-@@ -548,7 +548,7 @@ static int i2c_device_probe(struct device *dev)
- 
- 		wakeirq = fwnode_irq_get_byname(fwnode, "wakeup");
- 		if (wakeirq == -EPROBE_DEFER) {
--			status = wakeirq;
-+			status = dev_err_probe(dev, wakeirq, "can't get wakeirq\n");
- 			goto put_sync_adapter;
- 		}
- 
--- 
-2.34.1
+Acked-by: Mark Brown <broonie@kernel.org>
 
+Please include human readable descriptions of things like commits and
+issues being discussed in e-mail in your mails, this makes them much
+easier for humans to read especially when they have no internet access.
+I do frequently catch up on my mail on flights or while otherwise
+travelling so this is even more pressing for me than just being about
+making things a bit easier to read.
+
+--oe+RepqPNVL4+bmX
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmgbQ8MACgkQJNaLcl1U
+h9A3/wf8D6c+36MLT2mhvh2zxesAYWfdL1e5vpcKQk0H/bkk+8KQLEBRl9w9syn2
+MFtk87xXOIdfli0pvEnP2cUrCHKDrD2ehLcNFcur8Vq6IOjjX2Gs3Iboe5CfqnoS
+tPRSxFS31DY3g7DhUGmQ7fUUlPYGwpYIK1QgXrfiR+uhEbooIq6yN1/hcKL2rFS4
+Y21v0te/hUxHTpeTMlcOkXqqu/1UExRszOly4m0YB9mZoswASG024vcrx4paZFjF
+sJ6hXYEyI/PDpMSVthVLe0jK7jyBsiVGSSVDRcimNQj6nAokmye1VeKejWhV3Flv
+7epg7YG5YuZjEXoQ3CaQaDdESm7PnA==
+=5SSZ
+-----END PGP SIGNATURE-----
+
+--oe+RepqPNVL4+bmX--
 
