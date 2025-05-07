@@ -1,50 +1,50 @@
-Return-Path: <linux-i2c+bounces-10841-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10842-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03CC0AAD721
-	for <lists+linux-i2c@lfdr.de>; Wed,  7 May 2025 09:15:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C8E5BAAD735
+	for <lists+linux-i2c@lfdr.de>; Wed,  7 May 2025 09:16:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6C32E4E167F
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E43499814DB
 	for <lists+linux-i2c@lfdr.de>; Wed,  7 May 2025 07:15:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6CFE221291;
-	Wed,  7 May 2025 07:13:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E38F9221713;
+	Wed,  7 May 2025 07:13:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ENDXT8AR"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="n8tLUtyL"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C078B214A76;
-	Wed,  7 May 2025 07:13:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F071822126A;
+	Wed,  7 May 2025 07:13:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746602021; cv=none; b=NYHmweN0NhtPjSXbzPaAM3zf6srrqboFxrQiTNJLYpM/gX0bpQpaZRKn/1UVJSvua6mMfWw3TVTXcAiS1OVJhhZBpYuaZLUa4hIeEdEX2dgcuJhMeFT41ZHPWJe7AxDmCnjltAaxwcrXJmFSv6NInmVJilri6kyJAUcD3jDAnok=
+	t=1746602023; cv=none; b=FCivLdrh7eR3GxUu+/TSze2aVcs2KYY+Sl+e35uu6ZqWlcdu585Z7t1YzG/JEb++GdExFS86QFrNfmoDXOTQVBTTzcAhfRHa4fYPVMiLg8dB40wCDAw232/Qn+4Oo9MekFbce3Q4uLG/Dm/++DfwhDgjwVH/uJy3wy+tp0VfyDU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746602021; c=relaxed/simple;
-	bh=1DcZuoYGRh2Esh9fKMYpedBis/4qzUCQZzveLLKVgqQ=;
+	s=arc-20240116; t=1746602023; c=relaxed/simple;
+	bh=7GxMpqmF0g9uEIdiZGO9TomrwRN/BpMZzDcaGfW0OXU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=exoNMCfz7Ock1BUmnedjAz7+mstAtr5Pe/gaPsmvoyNqZfPDM2n0kpvm8C/CKWDxh1o9PLRvQfKxijyi9TcdYIqnyTTFsxG7P5hUKkavK751x7sRqteEDVTNtmSe3e2uUnf3/nmVJCMw4Jkaz0IgfoI0yYHV/cmrz13dtzmV7Y8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=ENDXT8AR; arc=none smtp.client-ip=217.70.183.201
+	 MIME-Version; b=Foo8MU5zSZ27dw+RchjwFU69STMqa9bDrY8s5hbLhdv5yeJHr0wLUKN+f1XxzCiuT5veoFPOQnWmJJnsDu21t7c1N7dDdX80m8NjVYckhOgE/JzolC2kSOuBmb9rNRKVuC5aeDlNySBwJH6XGpy83bpMKiepllsRFl/M9SoE5Ek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=n8tLUtyL; arc=none smtp.client-ip=217.70.183.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPA id 736A043B5C;
-	Wed,  7 May 2025 07:13:35 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id 799FA43B65;
+	Wed,  7 May 2025 07:13:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1746602017;
+	t=1746602019;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=bM7jvZqmy084X5j1L0Rje+1jGmylYBillNkAGMry0Qc=;
-	b=ENDXT8ARMsm0auWG0xdEYrkTjDvqG8Y2ruNM+vrccrvnAWn0QRAh/bBvU17p3KCRPwcLNM
-	JndA/JdFYHOH05o1GiBVA8BXkAkI+hQlnlEGvxxy/zwa03tcFnIQpNzbX3wSD8vjOzldcP
-	N3rsuoLvkRpM5X0h/KhaXBivC27r1cToff19OsR5cIQbQiJjRi/FDe24LBfz0lhqILItV/
-	R4URJ613oZKVdPrZth2DvQUNVwS2voYb8aGszL42oObgNMalI443UfgIF8VDghRQggsu3R
-	oX7Pci/gCBlgc7phYiOI25Y3jEOqJXdIWAVVVgHe6mlsGv9Rty3hVpy4N9uERw==
+	bh=2R0l117YVj2nUp6r7jbfF+K1JZdkKK405pX2U7tObcE=;
+	b=n8tLUtyLOHm1g5HdHGf/CjsMiD94zrFHSGsSw+cLSXBa/eUn6opyYXh89GYQdDx4IZ0rwC
+	PEjzgyzLj5ZCiirdTff4J+UuVxLuTOfifwfXKG71/avn2+FIPOX6pjpR6uo9TmiH1oKrcw
+	fcBXSIu7bTCYnFtmV0j+vb/ETjEqdGQh2R8SILvc6OO59RU+tDRVYNmLgC3nzXaMEdrov8
+	Jbo2Im029YIhldiIO2mfXM/Vpvn/kosuHzsHzET6d48bHuWgylfuxhs+Fs6euwWvqLSSGU
+	T9D6nGimrXYCClDUYDVWRFGcO6Bg00Q12pT4pyN//RkxMcLptxBPa6FKoErexg==
 From: Herve Codina <herve.codina@bootlin.com>
 To: Andrew Lunn <andrew@lunn.ch>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -88,9 +88,9 @@ Cc: Wolfram Sang <wsa@kernel.org>,
 	Steen Hegelund <steen.hegelund@microchip.com>,
 	Luca Ceresoli <luca.ceresoli@bootlin.com>,
 	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH v2 06/26] driver core: fw_devlink: Introduce fw_devlink_set_device()
-Date: Wed,  7 May 2025 09:12:48 +0200
-Message-ID: <20250507071315.394857-7-herve.codina@bootlin.com>
+Subject: [PATCH v2 07/26] drivers: core: Use fw_devlink_set_device()
+Date: Wed,  7 May 2025 09:12:49 +0200
+Message-ID: <20250507071315.394857-8-herve.codina@bootlin.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250507071315.394857-1-herve.codina@bootlin.com>
 References: <20250507071315.394857-1-herve.codina@bootlin.com>
@@ -103,36 +103,42 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-GND-State: clean
 X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvkeeivdefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefjvghrvhgvucevohguihhnrgcuoehhvghrvhgvrdgtohguihhnrgessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepheffiefgjeeuleeuueffleeufefglefhjefhheeigedukeetieeltddthfffkeffnecukfhppeeltddrkeelrdduieefrdduvdejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepledtrdekledrudeifedruddvjedphhgvlhhopehlohgtrghlhhhoshhtrdhlohgtrghlughomhgrihhnpdhmrghilhhfrhhomhephhgvrhhvvgdrtghoughinhgrsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeegvddprhgtphhtthhopegrnhgurhgvfieslhhunhhnrdgthhdprhgtphhtthhopehgrhgvghhkhheslhhinhhugihfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrkhhrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehshhgrfihnghhuoheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshdrh
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvkeeivdefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefjvghrvhgvucevohguihhnrgcuoehhvghrvhgvrdgtohguihhnrgessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepheffiefgjeeuleeuueffleeufefglefhjefhheeigedukeetieeltddthfffkeffnecukfhppeeltddrkeelrdduieefrdduvdejnecuvehluhhsthgvrhfuihiivgepfeenucfrrghrrghmpehinhgvthepledtrdekledrudeifedruddvjedphhgvlhhopehlohgtrghlhhhoshhtrdhlohgtrghlughomhgrihhnpdhmrghilhhfrhhomhephhgvrhhvvgdrtghoughinhgrsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeegvddprhgtphhtthhopegrnhgurhgvfieslhhunhhnrdgthhdprhgtphhtthhopehgrhgvghhkhheslhhinhhugihfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrkhhrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehshhgrfihnghhuoheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshdrh
  hgruhgvrhesphgvnhhguhhtrhhonhhigidruggvpdhrtghpthhtohepkhgvrhhnvghlsehpvghnghhuthhrohhnihigrdguvgdprhgtphhtthhopehfvghsthgvvhgrmhesghhmrghilhdrtghomh
 X-GND-Sasl: herve.codina@bootlin.com
 
-Setting fwnode->dev is specific to fw_devlink.
+The code set directly fwnode->dev field.
 
-In order to avoid having a direct 'fwnode->dev = dev;' in several
-place in the kernel, introduce fw_devlink_set_device() helper to perform
-this operation.
+Use the dedicated fw_devlink_set_device() helper to perform this
+operation.
 
 Signed-off-by: Herve Codina <herve.codina@bootlin.com>
 ---
- include/linux/fwnode.h | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/base/core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/fwnode.h b/include/linux/fwnode.h
-index af76de93bee2..9fc4427b1004 100644
---- a/include/linux/fwnode.h
-+++ b/include/linux/fwnode.h
-@@ -226,4 +226,10 @@ void fw_devlink_purge_absent_suppliers(struct fwnode_handle *fwnode);
- void fw_devlink_refresh_fwnode(struct fwnode_handle *fwnode);
- bool fw_devlink_is_strict(void);
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index b44f9d371d47..6870c966ffa3 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -3716,7 +3716,7 @@ int device_add(struct device *dev)
+ 	 * device and the driver sync_state callback is called for this device.
+ 	 */
+ 	if (dev->fwnode && !dev->fwnode->dev) {
+-		dev->fwnode->dev = dev;
++		fw_devlink_set_device(dev->fwnode, dev);
+ 		fw_devlink_link_device(dev);
+ 	}
  
-+static inline void fw_devlink_set_device(struct fwnode_handle *fwnode,
-+					 struct device *dev)
-+{
-+	fwnode->dev = dev;
-+}
-+
- #endif
+@@ -3876,7 +3876,7 @@ void device_del(struct device *dev)
+ 	device_unlock(dev);
+ 
+ 	if (dev->fwnode && dev->fwnode->dev == dev)
+-		dev->fwnode->dev = NULL;
++		fw_devlink_set_device(dev->fwnode, NULL);
+ 
+ 	/* Notify clients of device removal.  This call must come
+ 	 * before dpm_sysfs_remove().
 -- 
 2.49.0
 
