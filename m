@@ -1,77 +1,77 @@
-Return-Path: <linux-i2c+bounces-10867-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10868-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF73FAADEDF
-	for <lists+linux-i2c@lfdr.de>; Wed,  7 May 2025 14:20:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 16376AADEE4
+	for <lists+linux-i2c@lfdr.de>; Wed,  7 May 2025 14:21:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 31E94985CBD
-	for <lists+linux-i2c@lfdr.de>; Wed,  7 May 2025 12:19:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2AD8E9A2B39
+	for <lists+linux-i2c@lfdr.de>; Wed,  7 May 2025 12:20:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B916525F7A0;
-	Wed,  7 May 2025 12:19:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8177325F984;
+	Wed,  7 May 2025 12:19:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U0N/H+w7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mUFJBmJ4"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2E5B25E830;
-	Wed,  7 May 2025 12:19:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2EEE25F79C;
+	Wed,  7 May 2025 12:19:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746620370; cv=none; b=dISbYWbgToWOg5qsLF3LnVB64aW1BJwrw4ktXNzik47ia6ytBpV4T1mlUzOL7+5uz3QMRUwxiRo0jKM3ioxd9MJ11llmGGbmkAq6j92ZXt+oA5+6CU1/HBo7UUCPSQzFKeeqruzhBJ2otWxqwano344KWB1jXFt7zpY8N7wldFs=
+	t=1746620372; cv=none; b=OOmOGGQF4PXJ9STx9wLUzLjNMAJ5snNMBBYt48mF8wMoBWNxK9S1nTn0OHdtzKtYomBzQSGw1HqcWvJGZLmpBxP/0CuyZeFmo5NLuXyYkywsH9ogXkg10S1a9Cf8RBk9B6c2Irnshh9zpSGPpnCqUJT5iKvLGAIXp5bLkLr7mhc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746620370; c=relaxed/simple;
-	bh=y31c164//hMoRMj4bwFFX6K1nZlMX0bLwVirQFOWUx8=;
+	s=arc-20240116; t=1746620372; c=relaxed/simple;
+	bh=lctrcFQ6u0h5yUi4JGVq1rQdGkWFCwASe2sFOWRpklY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=OVjemuTvSqQXlYct2TWtAxay1QM7b8QbdvnCCe95p0r/Ch60d8jOY51wQVjJnYqdfQRVzdKxaRdcMgFNVI7m7fxEY1FdfrV24e2cpt8PydtAyYSlKMj2UN/adtq3fxThY3SWqbHdd9qbcamTwa8LBXlOKZEMR82lVSxRRrOLEvI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U0N/H+w7; arc=none smtp.client-ip=209.85.208.44
+	 MIME-Version; b=pilLPCHwj4E4R8nE/flXiqNP5QmkF6Ru7ykVHPAEJofhtSo0b/+hNEXLRadgfSBFPsh8wo8QMY+kYSnbIhoqjJeECJCjUErSlz2g9ZteU8znxfoouapCq/pbgFgLWRwHF4OsElWgl1e3oNzEAROqEuRf7KD5Rm7u5xyI/ROR9RY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mUFJBmJ4; arc=none smtp.client-ip=209.85.208.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5f63ac6ef0fso1775797a12.1;
-        Wed, 07 May 2025 05:19:28 -0700 (PDT)
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5fbda5a8561so1907612a12.2;
+        Wed, 07 May 2025 05:19:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746620367; x=1747225167; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1746620369; x=1747225169; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mrRU6Pf/P1bThTd+6V5PvGeSOBGAjbmMmA+OOg2zIk8=;
-        b=U0N/H+w7Bv0ym4jmZHPd2ndtlIWeFKciUmqqhebIowjyPA+1lG9yzk9FptY0OiY1H/
-         is5rN635pdtjfnMp9NBocRdwhFQG2XZ5H98+jYiwV2f36jKox4pZOlnx7ZxS8yXsxRt+
-         TjGA4QzTdCtFGmXrr19Z8XZZ/WAJg2yg8aCT7GY2FheFdK9qLFcycQuj2dthh9vfDRJC
-         l6LiiCA+8Ib2RianoOqNGWOJOmy6zVu1GJXFWsHl4GDpFPxcrAMlWgAXOxvKlgK1sn20
-         RQNUVIL69YWWghvUuv5issg7+93PrMm3/RfKl4qGK17YOd68If2o5pj5KHWff2xsRN+a
-         74Zw==
+        bh=h9UBtmB9zYRXrNN2sqjqR5grKIOrEsHM+Wf3UFhuRp8=;
+        b=mUFJBmJ4MR7E+qOnKpVXoSzLuQGpobi1y/TCQj5pPeGEAocnAY9rD4Lwj7nfZhQuGb
+         t0lzc14Eo6BSc+xtpuHD/gFmP9s3dHn5hJbp6ngTkCxGkKMCGL98lz8gb5wX1uCl7fwU
+         dLZRRpZM8LrWrjDA9SSWYBi/ajuJiKotntMPgZ91I7kzszVLb7o7MxTORCvVD9YC8LwR
+         /tzXQcO3oTImyniRoxZXhklIrMp+zZX/ZXpi34AsbDtXQ8QUVraeWZc/KTd28k3RBWQq
+         t8xxppHFzoz7MkjJhcu5mcQvCSvu+1galVvJfE2JS+cj0JJTasFunu2BdNfpOi3VRu2u
+         nM1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746620367; x=1747225167;
+        d=1e100.net; s=20230601; t=1746620369; x=1747225169;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=mrRU6Pf/P1bThTd+6V5PvGeSOBGAjbmMmA+OOg2zIk8=;
-        b=BKmH2vxFwoBU25WG3siyttoAr2PQ8GtN8rGV+5+srcBXGVujD1Hovmfw5NCAF3bNtt
-         UJxY+Ifoko8iXcQFMzxaCwRB386Gd6cKIsQSA16e0RhrfdWUXNE88DhSPcRyy3WgEaTs
-         wSFffiJ9bXq2Jb1VF1M4avqe15nW293Iz0foJF7JQ5s6y4E3YNza7dlsAwjf1U016A9M
-         tXua6wDEc69AEk8YL3tdlE4gWVuhQTfTuLsAwBYJmfgiUk32s0ZW0yFFXTxnSedXtFSM
-         KS8At/JVfFJvQpDz+5OQ4vyTGCzoTf/ZJSR+Ti/YXNty1OvBvoUodKhPkiIz3FEBJ3RL
-         mzTw==
-X-Forwarded-Encrypted: i=1; AJvYcCU8B5qqz0k+kNTZwwEyIxJgXKtBhKGtzodxet8TcSY/BcjDqDa6gqMpyIBz2W7mBrvXsFzxENc+bhs=@vger.kernel.org, AJvYcCVQKZc8ypgYKF9Sj6vefmAtNwA3sjGKt+Lp6LK/toe6fAf1Xk0vVq35hsVKzXqXVKhDrDwaIAOFBGeJxQtE@vger.kernel.org, AJvYcCXSeRhrlKuWtrK3l2hx6RpaMB6NExAwFrcJD1ddun5MwyEPvuHgGGno+Od8mYtTt4QgUwcwi9iRY+GidO8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw4hMy7NTUDsVrqE8f3wI+B9SvQ1vQqyWVJf+9IXMOy7F6qoD+k
-	qejEZEmPD3S6hnrhBnJXtWFRtRw8kJ94nX6c1ikXSd44DPI6jydw
-X-Gm-Gg: ASbGncsCneEOVT0c9dNp4Xc2YNNYmYV2xBZcMS37gqaG+wp7hT3J/CEkga5e/TzNZzh
-	effYxqrgLVZlwnZ29LwqWlabRPvCvoaGjQrMKoPrSKjkFrykraqZKY80NXrXAoS29I2SseOQW/5
-	oXntomi2RmUe7G379z1r4cBBwRZJo4zCCzR7hagx3WqaMsZaysKHuPt8E/OQ7anWycHsUCRleIf
-	28y9Mqb+2FAVfmcxKvSJFGy2rebCMA7f/nKNJAQJO8Zas2E3HdyS6xyO+qPVtDVF97mwsds6iJs
-	9T3Jz/0zPEBaTrktNNfB4v+wyR+cJhej9c3YlLgClsClOwMtkFcn
-X-Google-Smtp-Source: AGHT+IFIJc5xU1Unm+agSmBC+K37E72qe4SuokRlUVPAh6NESxpxRoYFKRESXNTMv2a66Z/L4gRzcw==
-X-Received: by 2002:a05:6402:34d5:b0:5fb:5be8:3e2c with SMTP id 4fb4d7f45d1cf-5fbe766e7abmr2764976a12.9.1746620366664;
-        Wed, 07 May 2025 05:19:26 -0700 (PDT)
+        bh=h9UBtmB9zYRXrNN2sqjqR5grKIOrEsHM+Wf3UFhuRp8=;
+        b=OxIt6DB3hBNhNEUm6Z2Ygqkz16MgIon1yVwKHSyjII/FfPhr5/F3mGQIrEkUhwpAyZ
+         DBjek+iS5sSlnkfEJQ3cufzS40kxlqPCBbNl58GUGMhHVarEWGFBklEkFKHfyy3xJziq
+         zA6LrUUvT9JChTFkRkY9brb9SvS+Tz1zGV8OOBomLMXw28eYhT5SeIpib78pdnprSIws
+         /6n0uP8aaZIP3QCWLOBAgBHjx5kOqCdcNO81x+Ur3eJJZzXmFcKxMCkB4GbSbaG61A8h
+         LwYahJkOW1BTXw/0o4zSV3hRC0LzM3mfFtNqnIxMI7O5MWQRIginu7gceWvARYD55GK2
+         IwXw==
+X-Forwarded-Encrypted: i=1; AJvYcCUs+N6+G3V+Z+bULwgy1o8T1ay6hDoRU68ipGivEpuTTTkLLje+rPzy+Aio1nZAxJyrb8I27dl6RiOo3JWc@vger.kernel.org, AJvYcCVDc/cwTMLNjyIiwVcWSn5BfFHz8/rdp18QRgCwtxISVTTu1+j2497jgPaDAIkAfGQz1B8bOAGB7zztKqc=@vger.kernel.org, AJvYcCVXKjK0wxsLaR2gQjBmkrMypLPLzMkUAW8M10zKkpdUdEW+IBMnaOA+JccD/1nWlaBh7GsCG9ntUCI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxa081eEWUJM86W4oZduzjFeAjAxCoPQp9SZ8HckGcCaA1z9X47
+	WCH3/DvBYTA/sDE9QYa/ZfL2jsKR7K46PSxi7aM0xSvyLOp12CH0
+X-Gm-Gg: ASbGncsB+jp2euOXsec3Rnjzm9pu/NQHq3m6kjnKWlgMgVTN2+vjX3lqYQMzqLau+O+
+	6+U6/1A35hiYZL35Qiq3/9J5qfJHczalA3D1I4WSQhrdzc/KWrHi+rw0V7yEZi6E2feT35hfpuT
+	p9Q7TcPKqXx1Kz6tSPkImqlaLD2UeZzcHaGlcAygnmYLtAFPm24FnTNY1IbawIMX1cjComV6m7H
+	XB2onUFv8IcF4qZRx0cMy1+j6Ng0bb6GfCo6NOxJX/smrY7NvcjWtagNGgR1qTYuRKxBjHo6jjU
+	U7q9XWHxeo+Tj+Qa8+EfXUc9jU7/8D4jlhTVT9ijvRmWG58L/8bx
+X-Google-Smtp-Source: AGHT+IHo8QlU181o7K8+pmDxKCcN0PlkDif/QNKIrYLyBMZRtuBLcy6gkM3KLxlckajlARtewvq33Q==
+X-Received: by 2002:a05:6402:4341:b0:5e7:5b30:3c4f with SMTP id 4fb4d7f45d1cf-5fbe9dfbeedmr2254052a12.14.1746620368727;
+        Wed, 07 May 2025 05:19:28 -0700 (PDT)
 Received: from demon-pc.localdomain ([188.27.128.5])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5fa777557b9sm9350002a12.10.2025.05.07.05.19.25
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5fa777557b9sm9350002a12.10.2025.05.07.05.19.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 May 2025 05:19:26 -0700 (PDT)
+        Wed, 07 May 2025 05:19:28 -0700 (PDT)
 From: Cosmin Tanislav <demonsingur@gmail.com>
 To: 
 Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
@@ -85,9 +85,9 @@ Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	linux-kernel@vger.kernel.org,
 	linux-media@vger.kernel.org,
 	Cosmin Tanislav <demonsingur@gmail.com>
-Subject: [PATCH v5 3/9] i2c: atr: split up i2c_atr_get_mapping_by_addr()
-Date: Wed,  7 May 2025 15:19:09 +0300
-Message-ID: <20250507121917.2364416-4-demonsingur@gmail.com>
+Subject: [PATCH v5 4/9] i2c: atr: do not create mapping in detach_addr()
+Date: Wed,  7 May 2025 15:19:10 +0300
+Message-ID: <20250507121917.2364416-5-demonsingur@gmail.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250507121917.2364416-1-demonsingur@gmail.com>
 References: <20250507121917.2364416-1-demonsingur@gmail.com>
@@ -99,171 +99,33 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The i2c_atr_get_mapping_by_addr() function handles three separate
-usecases: finding an existing mapping, creating a new mapping, or
-replacing an existing mapping if a new mapping cannot be created
-because there aren't enough aliases available.
+It is useless to create a new mapping just to detach it immediately.
 
-Split up the function into three different functions handling its
-individual usecases to prepare for better usage of each one.
+Use the newly added i2c_atr_find_mapping_by_addr() function to avoid it,
+and exit without logging an error if not found.
 
 Signed-off-by: Cosmin Tanislav <demonsingur@gmail.com>
+Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 ---
- drivers/i2c/i2c-atr.c | 122 +++++++++++++++++++++++++++++-------------
- 1 file changed, 84 insertions(+), 38 deletions(-)
+ drivers/i2c/i2c-atr.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
 diff --git a/drivers/i2c/i2c-atr.c b/drivers/i2c/i2c-atr.c
-index 939fb95fe781..215b6773fe06 100644
+index 215b6773fe06..178b203c8777 100644
 --- a/drivers/i2c/i2c-atr.c
 +++ b/drivers/i2c/i2c-atr.c
-@@ -239,56 +239,40 @@ static void i2c_atr_release_alias(struct i2c_atr_alias_pool *alias_pool, u16 ali
- 	spin_unlock(&alias_pool->lock);
- }
+@@ -586,10 +586,8 @@ static void i2c_atr_detach_addr(struct i2c_adapter *adapter,
  
--/* Must be called with alias_pairs_lock held */
- static struct i2c_atr_alias_pair *
--i2c_atr_get_mapping_by_addr(struct i2c_atr_chan *chan, u16 addr)
-+i2c_atr_find_mapping_by_addr(struct i2c_atr_chan *chan, u16 addr)
-+{
-+	struct i2c_atr_alias_pair *c2a;
-+
-+	lockdep_assert_held(&chan->alias_pairs_lock);
-+
-+	list_for_each_entry(c2a, &chan->alias_pairs, node) {
-+		if (c2a->addr == addr)
-+			return c2a;
-+	}
-+
-+	return NULL;
-+}
-+
-+static struct i2c_atr_alias_pair *
-+i2c_atr_create_mapping_by_addr(struct i2c_atr_chan *chan, u16 addr)
- {
- 	struct i2c_atr *atr = chan->atr;
- 	struct i2c_atr_alias_pair *c2a;
--	struct list_head *alias_pairs;
--	bool found = false;
- 	u16 alias;
- 	int ret;
+ 	mutex_lock(&chan->alias_pairs_lock);
  
- 	lockdep_assert_held(&chan->alias_pairs_lock);
- 
--	alias_pairs = &chan->alias_pairs;
--
--	list_for_each_entry(c2a, alias_pairs, node) {
--		if (c2a->addr == addr)
--			return c2a;
--	}
--
- 	ret = i2c_atr_reserve_alias(chan->alias_pool);
--	if (ret < 0) {
--		// If no free aliases are left, replace an existing one
--		if (unlikely(list_empty(alias_pairs)))
--			return NULL;
-+	if (ret < 0)
-+		return NULL;
- 
--		list_for_each_entry_reverse(c2a, alias_pairs, node) {
--			if (!c2a->fixed) {
--				found = true;
--				break;
--			}
--		}
-+	alias = ret;
- 
--		if (!found)
--			return NULL;
--
--		atr->ops->detach_addr(atr, chan->chan_id, c2a->addr);
--		c2a->addr = addr;
--
--		// Move updated entry to beginning of list
--		list_move(&c2a->node, alias_pairs);
--
--		alias = c2a->alias;
--	} else {
--		alias = ret;
--
--		c2a = i2c_atr_create_c2a(chan, alias, addr);
--		if (!c2a)
--			goto err_release_alias;
--	}
-+	c2a = i2c_atr_create_c2a(chan, alias, addr);
-+	if (!c2a)
-+		goto err_release_alias;
- 
- 	ret = atr->ops->attach_addr(atr, chan->chan_id, c2a->addr, c2a->alias);
- 	if (ret) {
-@@ -306,6 +290,68 @@ i2c_atr_get_mapping_by_addr(struct i2c_atr_chan *chan, u16 addr)
- 	return NULL;
- }
- 
-+static struct i2c_atr_alias_pair *
-+i2c_atr_replace_mapping_by_addr(struct i2c_atr_chan *chan, u16 addr)
-+{
-+	struct i2c_atr *atr = chan->atr;
-+	struct i2c_atr_alias_pair *c2a;
-+	struct list_head *alias_pairs;
-+	bool found = false;
-+	u16 alias;
-+	int ret;
-+
-+	lockdep_assert_held(&chan->alias_pairs_lock);
-+
-+	alias_pairs = &chan->alias_pairs;
-+
-+	if (unlikely(list_empty(alias_pairs)))
-+		return NULL;
-+
-+	list_for_each_entry_reverse(c2a, alias_pairs, node) {
-+		if (!c2a->fixed) {
-+			found = true;
-+			break;
-+		}
-+	}
-+
-+	if (!found)
-+		return NULL;
-+
-+	atr->ops->detach_addr(atr, chan->chan_id, c2a->addr);
-+	c2a->addr = addr;
-+
-+	list_move(&c2a->node, alias_pairs);
-+
-+	alias = c2a->alias;
-+
-+	ret = atr->ops->attach_addr(atr, chan->chan_id, c2a->addr, c2a->alias);
-+	if (ret) {
-+		dev_err(atr->dev, "failed to attach 0x%02x on channel %d: err %d\n",
-+			addr, chan->chan_id, ret);
-+		i2c_atr_destroy_c2a(&c2a);
-+		i2c_atr_release_alias(chan->alias_pool, alias);
-+		return NULL;
-+	}
-+
-+	return c2a;
-+}
-+
-+static struct i2c_atr_alias_pair *
-+i2c_atr_get_mapping_by_addr(struct i2c_atr_chan *chan, u16 addr)
-+{
-+	struct i2c_atr_alias_pair *c2a;
-+
+-	c2a = i2c_atr_get_mapping_by_addr(chan, addr);
 +	c2a = i2c_atr_find_mapping_by_addr(chan, addr);
-+	if (c2a)
-+		return c2a;
-+
-+	c2a = i2c_atr_create_mapping_by_addr(chan, addr);
-+	if (c2a)
-+		return c2a;
-+
-+	return i2c_atr_replace_mapping_by_addr(chan, addr);
-+}
-+
- /*
-  * Replace all message addresses with their aliases, saving the original
-  * addresses.
+ 	if (!c2a) {
+-		 /* This should never happen */
+-		dev_warn(atr->dev, "Unable to find address mapping\n");
+ 		mutex_unlock(&chan->alias_pairs_lock);
+ 		return;
+ 	}
 -- 
 2.49.0
 
