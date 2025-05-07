@@ -1,107 +1,84 @@
-Return-Path: <linux-i2c+bounces-10877-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10878-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A17DAAE456
-	for <lists+linux-i2c@lfdr.de>; Wed,  7 May 2025 17:17:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DAFDBAAE679
+	for <lists+linux-i2c@lfdr.de>; Wed,  7 May 2025 18:23:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7E0C152154E
-	for <lists+linux-i2c@lfdr.de>; Wed,  7 May 2025 15:16:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0D9E8983414
+	for <lists+linux-i2c@lfdr.de>; Wed,  7 May 2025 16:22:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9392628A70D;
-	Wed,  7 May 2025 15:15:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9044028D8F6;
+	Wed,  7 May 2025 16:19:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Yy44zIO9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kde1Y7nx"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B8361FDA61;
-	Wed,  7 May 2025 15:15:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 771FB28C2C2;
+	Wed,  7 May 2025 16:19:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746630950; cv=none; b=Tz2+7UTDWpPkfMG/2V42hWhkwjPExzU2316FSbP1/hZeJu0a5NWUuli9zgetclUP4tTUAnWhD8PzYwzmvSroNUm6JDXvjbkcBS/aHoqfl4MrPN7pAMn0PsseLqWm/yeKrgv1Qa9KkBIAeGt6abzRaf52wwiGCXY6ruwbeTnLfmE=
+	t=1746634763; cv=none; b=GQxIzk6+DwZ+9A7aGCt7gdiZbR0A3rberCuq8yfU63X9lJ5D7nlYVc20O2sYm9nvy3h2KemnCnDL5t8SnnMN407Djf3osrN1vjsI5+j5jNapaxKWXx7lP1TS9G0r+jldIgTjQj+fmaZ2MiTjUQVHNHtwRpCjTIP4bDgBSfou/ic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746630950; c=relaxed/simple;
-	bh=yO+CLLJleqQCOJ1P7Cw9+o2RW0jsGz/mD7j9rcWCyFk=;
+	s=arc-20240116; t=1746634763; c=relaxed/simple;
+	bh=bjvKIxu4eG9uCBmREGHiuI3YzEktQh1+u8s53l9D5c0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=erYOFfOwJLpeg7FTnqWPECC9AJwDqdCRYOmCCW7hBeCQxQH8J+edYGm2+NQPo8qkSQBFIZEXWaB2B6+qJWhwnDwRM41NTmoB2y3gypKkPf0hXtsJ9YTO+5q/eNWS9TMjGEQkvv1Lo5lQ7SRI2Nbg2/v7NtUT8Mg5gWeKcdBu+ik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Yy44zIO9; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=s6ApguIN5erGByg/IeRtb2ANogKZiXrNGL+lu7H+BeLP4rp4RbeylcEsUrbDeBRn06AV2NeR3U15lSbLU6ghS4RVWWtFVl2pt993VTr6lXvAwhFeg6I+CX4oQ16hVmY3FVdcR0MfEsyv/lPYFPG+u2FPixgXcton2xRsfjPyWE8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kde1Y7nx; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746630949; x=1778166949;
+  t=1746634761; x=1778170761;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=yO+CLLJleqQCOJ1P7Cw9+o2RW0jsGz/mD7j9rcWCyFk=;
-  b=Yy44zIO9S8es7yCDyOqM/+Bmx2BiBh12nDbqIb322z+UvoZMnQk0Ifcx
-   LH/HvLGt8VzdfLnnCoqPIb3+qRlGR0FM3nw/Ski5f7aXWLR7OhMmpZa28
-   FqtKkwOckmSWKXK+tO/+j5tHoA32iSJuVO43Q67UhSVLNCunj4ZS31U8A
-   c8GsWCWUCceNjYyguH+Fi+GsdG54u3Ls3RF4Lj2H2n+ldMArYk8u/wKxk
-   +DRph4ibvsJy5fKTa/1PjtwJGr8TI14eoS/cEuiZe5t8xc1wVyQh006VO
-   e0EUQEhy7Qb1TUs4bTWTotfZ4jVoCr8I7bEzGQV+mdrs9kZM4G+a1YW43
-   Q==;
-X-CSE-ConnectionGUID: mG/VuD5BThS7DPpV4/tNQw==
-X-CSE-MsgGUID: tUMIjCwfSaqpZZ5qtc3QoQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11426"; a="48480563"
+  bh=bjvKIxu4eG9uCBmREGHiuI3YzEktQh1+u8s53l9D5c0=;
+  b=kde1Y7nxnJK+llHE2wJylU5eyF7s1whCukTnhHvIXyR8X+b5vtqQdely
+   QtloJaj/kaYuW3Tujk2s/Ip3a5NUhVhXCvf7hICsMu5ZA0867w2jp2doL
+   vdd2MkTSalbHiHdferPXkw70efj0mfNuACMkJxpX8G4zWX4d9Z99P7MKD
+   nIXGdLiRuhDLGZo5H4ygqYxGIkl0HNiiO9UgZqTsFIqWOdZ+x2dqH1kOT
+   aQR6ILW0GYopITUxE358n1YUQUQpi6U0496X6Qh6e4QBSH7vSO7TAhfEx
+   sZPjVfC/lorD+luygBEyNHMabn3MiG01YiXqCcyS9yUSI5wfhqudptY+h
+   A==;
+X-CSE-ConnectionGUID: 6TTN1G5CQCutI7U6mwcJdQ==
+X-CSE-MsgGUID: b76AnggTS26A/vkoOsm9qA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11426"; a="59772965"
 X-IronPort-AV: E=Sophos;i="6.15,269,1739865600"; 
-   d="scan'208";a="48480563"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2025 08:15:47 -0700
-X-CSE-ConnectionGUID: OcLle1K7QPmnpTiiYJJHXQ==
-X-CSE-MsgGUID: jQAKSpd0R9iEv0m2vr7j7w==
+   d="scan'208";a="59772965"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2025 09:19:20 -0700
+X-CSE-ConnectionGUID: b/FN9FoPQpuKIolEffre2w==
+X-CSE-MsgGUID: fdCGD3zBSKSaMGmZkOdFcw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,269,1739865600"; 
-   d="scan'208";a="135906012"
-Received: from smile.fi.intel.com ([10.237.72.55])
-  by orviesa006.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2025 08:15:38 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1uCgUg-00000003lXp-2GW9;
-	Wed, 07 May 2025 18:15:34 +0300
-Date: Wed, 7 May 2025 18:15:34 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Herve Codina <herve.codina@bootlin.com>
-Cc: Andrew Lunn <andrew@lunn.ch>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Peter Rosin <peda@axentia.se>,
-	Derek Kiernan <derek.kiernan@amd.com>,
-	Dragan Cvetic <dragan.cvetic@amd.com>,
-	Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh@kernel.org>,
-	Saravana Kannan <saravanak@google.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Mark Brown <broonie@kernel.org>, Len Brown <lenb@kernel.org>,
-	Daniel Scally <djrscally@gmail.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Wolfram Sang <wsa@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	linux-kernel@vger.kernel.org, imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-spi@vger.kernel.org,
-	linux-acpi@vger.kernel.org,
-	Allan Nielsen <allan.nielsen@microchip.com>,
-	Horatiu Vultur <horatiu.vultur@microchip.com>,
-	Steen Hegelund <steen.hegelund@microchip.com>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v2 04/26] driver core: Avoid warning when removing a
- device while its supplier is unbinding
-Message-ID: <aBt5FvZ95S1Y_Mba@smile.fi.intel.com>
-References: <20250507071315.394857-1-herve.codina@bootlin.com>
- <20250507071315.394857-5-herve.codina@bootlin.com>
+   d="scan'208";a="141200324"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 07 May 2025 09:19:13 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uChUE-00089N-22;
+	Wed, 07 May 2025 16:19:10 +0000
+Date: Thu, 8 May 2025 00:18:37 +0800
+From: kernel test robot <lkp@intel.com>
+To: a0282524688@gmail.com, lee@kernel.org, linus.walleij@linaro.org,
+	brgl@bgdev.pl, andi.shyti@kernel.org, mkl@pengutronix.de,
+	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
+	jdelvare@suse.com, alexandre.belloni@bootlin.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
+	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
+	linux-usb@vger.kernel.org, Ming Yu <tmyu0@nuvoton.com>
+Subject: Re: [PATCH v10 4/7] can: Add Nuvoton NCT6694 CANFD support
+Message-ID: <202505072336.mhh6H9Ma-lkp@intel.com>
+References: <20250423094058.1656204-5-tmyu0@nuvoton.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -110,105 +87,108 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250507071315.394857-5-herve.codina@bootlin.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20250423094058.1656204-5-tmyu0@nuvoton.com>
 
-On Wed, May 07, 2025 at 09:12:46AM +0200, Herve Codina wrote:
-> During driver removal, the following warning can appear:
->    WARNING: CPU: 1 PID: 139 at drivers/base/core.c:1497 __device_links_no_driver+0xcc/0xfc
->    ...
->    Call trace:
->      __device_links_no_driver+0xcc/0xfc (P)
->      device_links_driver_cleanup+0xa8/0xf0
->      device_release_driver_internal+0x208/0x23c
->      device_links_unbind_consumers+0xe0/0x108
->      device_release_driver_internal+0xec/0x23c
->      device_links_unbind_consumers+0xe0/0x108
->      device_release_driver_internal+0xec/0x23c
->      device_links_unbind_consumers+0xe0/0x108
->      device_release_driver_internal+0xec/0x23c
->      driver_detach+0xa0/0x12c
->      bus_remove_driver+0x6c/0xbc
->      driver_unregister+0x30/0x60
->      pci_unregister_driver+0x20/0x9c
->      lan966x_pci_driver_exit+0x18/0xa90 [lan966x_pci]
-> 
-> This warning is triggered when a consumer is removed because the links
-> status of its supplier is not DL_DEV_DRIVER_BOUND and the link flag
-> DL_FLAG_SYNC_STATE_ONLY is not set.
-> 
-> The topology in terms of consumers/suppliers used was the following
-> (consumer ---> supplier):
-> 
->       i2c -----------> OIC ----> PCI device
->        |                ^
->        |                |
->        +---> pinctrl ---+
-> 
-> When the PCI device is removed, the OIC (interrupt controller) has to be
-> removed. In order to remove the OIC, pinctrl and i2c need to be removed
-> and to remove pinctrl, i2c need to be removed. The removal order is:
->   1) i2c
->   2) pinctrl
->   3) OIC
->   4) PCI device
-> 
-> In details, the removal sequence is the following (with 0000:01:00.0 the
-> PCI device):
->   driver_detach: call device_release_driver_internal(0000:01:00.0)...
->     device_links_busy(0000:01:00.0):
->       links->status = DL_DEV_UNBINDING
->     device_links_unbind_consumers(0000:01:00.0):
->       0000:01:00.0--oic link->status = DL_STATE_SUPPLIER_UNBIND
->       call device_release_driver_internal(oic)...
->         device_links_busy(oic):
->           links->status = DL_DEV_UNBINDING
->         device_links_unbind_consumers(oic):
->           oic--pinctrl link->status = DL_STATE_SUPPLIER_UNBIND
->           call device_release_driver_internal(pinctrl)...
->             device_links_busy(pinctrl):
->               links->status = DL_DEV_UNBINDING
->             device_links_unbind_consumers(pinctrl):
->               pinctrl--i2c link->status = DL_STATE_SUPPLIER_UNBIND
->               call device_release_driver_internal(i2c)...
->                 device_links_busy(i2c): links->status = DL_DEV_UNBINDING
->                 __device_links_no_driver(i2c)...
->                   pinctrl--i2c link->status is DL_STATE_SUPPLIER_UNBIND
->                   oic--i2c link->status is DL_STATE_ACTIVE
->                   oic--i2c link->supplier->links.status is DL_DEV_UNBINDING
-> 
-> The warning is triggered by the i2c removal because the OIC (supplier)
-> links status is not DL_DEV_DRIVER_BOUND. Its links status is indeed set
-> to DL_DEV_UNBINDING.
-> 
-> It is perfectly legit to have the links status set to DL_DEV_UNBINDING
-> in that case. Indeed we had started to unbind the OIC which triggered
-> the consumer unbinding and didn't finish yet when the i2c is unbound.
-> 
-> Avoid the warning when the supplier links status is set to
-> DL_DEV_UNBINDING and thus support this removal sequence without any
-> warnings.
+Hi,
 
-...
+kernel test robot noticed the following build errors:
 
->  		if (link->supplier->links.status == DL_DEV_DRIVER_BOUND) {
->  			WRITE_ONCE(link->status, DL_STATE_AVAILABLE);
->  		} else {
-> -			WARN_ON(!(link->flags & DL_FLAG_SYNC_STATE_ONLY));
-> +			if (link->supplier->links.status != DL_DEV_UNBINDING)
-> +				WARN_ON(!(link->flags & DL_FLAG_SYNC_STATE_ONLY));
+[auto build test ERROR on lee-mfd/for-mfd-next]
+[also build test ERROR on brgl/gpio/for-next andi-shyti/i2c/i2c-host mkl-can-next/testing groeck-staging/hwmon-next abelloni/rtc-next linus/master lee-mfd/for-mfd-fixes v6.15-rc5 next-20250507]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Why not
+url:    https://github.com/intel-lab-lkp/linux/commits/a0282524688-gmail-com/mfd-Add-core-driver-for-Nuvoton-NCT6694/20250423-174637
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-next
+patch link:    https://lore.kernel.org/r/20250423094058.1656204-5-tmyu0%40nuvoton.com
+patch subject: [PATCH v10 4/7] can: Add Nuvoton NCT6694 CANFD support
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20250507/202505072336.mhh6H9Ma-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250507/202505072336.mhh6H9Ma-lkp@intel.com/reproduce)
 
-			WARN_ON(link->supplier->links.status != DL_DEV_UNBINDING &&
-			        !(link->flags & DL_FLAG_SYNC_STATE_ONLY));
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505072336.mhh6H9Ma-lkp@intel.com/
 
->  			WRITE_ONCE(link->status, DL_STATE_DORMANT);
->  		}
+All errors (new ones prefixed by >>):
+
+>> drivers/net/can/usb/nct6694_canfd.c:543:30: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     543 |         setting->nbtp = cpu_to_le32(FIELD_PREP(NCT6694_CANFD_SETTING_NBTP_NSJW,
+         |                                     ^
+   include/linux/byteorder/generic.h:88:21: note: expanded from macro 'cpu_to_le32'
+      88 | #define cpu_to_le32 __cpu_to_le32
+         |                     ^
+   1 error generated.
+
+
+vim +/FIELD_PREP +543 drivers/net/can/usb/nct6694_canfd.c
+
+   512	
+   513	static int nct6694_canfd_start(struct net_device *ndev)
+   514	{
+   515		struct nct6694_canfd_priv *priv = netdev_priv(ndev);
+   516		const struct can_bittiming *d_bt = &priv->can.data_bittiming;
+   517		const struct can_bittiming *n_bt = &priv->can.bittiming;
+   518		struct nct6694_canfd_setting *setting __free(kfree) = NULL;
+   519		const struct nct6694_cmd_header cmd_hd = {
+   520			.mod = NCT6694_CANFD_MOD,
+   521			.cmd = NCT6694_CANFD_SETTING,
+   522			.sel = ndev->dev_port,
+   523			.len = cpu_to_le16(sizeof(*setting))
+   524		};
+   525		int ret;
+   526	
+   527		setting = kzalloc(sizeof(*setting), GFP_KERNEL);
+   528		if (!setting)
+   529			return -ENOMEM;
+   530	
+   531		if (priv->can.ctrlmode & CAN_CTRLMODE_LISTENONLY)
+   532			setting->ctrl1 |= cpu_to_le16(NCT6694_CANFD_SETTING_CTRL1_MON);
+   533	
+   534		if (priv->can.ctrlmode & CAN_CTRLMODE_FD_NON_ISO)
+   535			setting->ctrl1 |= cpu_to_le16(NCT6694_CANFD_SETTING_CTRL1_NISO);
+   536	
+   537		if (priv->can.ctrlmode & CAN_CTRLMODE_LOOPBACK)
+   538			setting->ctrl1 |= cpu_to_le16(NCT6694_CANFD_SETTING_CTRL1_LBCK);
+   539	
+   540		/* Disable clock divider */
+   541		setting->ctrl2 = 0;
+   542	
+ > 543		setting->nbtp = cpu_to_le32(FIELD_PREP(NCT6694_CANFD_SETTING_NBTP_NSJW,
+   544						       n_bt->sjw - 1) |
+   545					    FIELD_PREP(NCT6694_CANFD_SETTING_NBTP_NBRP,
+   546						       n_bt->brp - 1) |
+   547					    FIELD_PREP(NCT6694_CANFD_SETTING_NBTP_NTSEG2,
+   548						       n_bt->phase_seg2 - 1) |
+   549					    FIELD_PREP(NCT6694_CANFD_SETTING_NBTP_NTSEG1,
+   550						       n_bt->prop_seg + n_bt->phase_seg1 - 1));
+   551	
+   552		setting->dbtp = cpu_to_le32(FIELD_PREP(NCT6694_CANFD_SETTING_DBTP_DSJW,
+   553						       d_bt->sjw - 1) |
+   554					    FIELD_PREP(NCT6694_CANFD_SETTING_DBTP_DBRP,
+   555						       d_bt->brp - 1) |
+   556					    FIELD_PREP(NCT6694_CANFD_SETTING_DBTP_DTSEG2,
+   557						       d_bt->phase_seg2 - 1) |
+   558					    FIELD_PREP(NCT6694_CANFD_SETTING_DBTP_DTSEG1,
+   559						       d_bt->prop_seg + d_bt->phase_seg1 - 1));
+   560	
+   561		setting->active = NCT6694_CANFD_SETTING_ACTIVE_CTRL1 |
+   562				  NCT6694_CANFD_SETTING_ACTIVE_CTRL2 |
+   563				  NCT6694_CANFD_SETTING_ACTIVE_NBTP_DBTP;
+   564	
+   565		ret = nct6694_write_msg(priv->nct6694, &cmd_hd, setting);
+   566		if (ret)
+   567			return ret;
+   568	
+   569		priv->can.state = CAN_STATE_ERROR_ACTIVE;
+   570	
+   571		return 0;
+   572	}
+   573	
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
