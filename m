@@ -1,77 +1,77 @@
-Return-Path: <linux-i2c+bounces-10871-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10872-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B6E5AADEE5
-	for <lists+linux-i2c@lfdr.de>; Wed,  7 May 2025 14:21:15 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99F2AAADEE8
+	for <lists+linux-i2c@lfdr.de>; Wed,  7 May 2025 14:21:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EDF361C05FAE
-	for <lists+linux-i2c@lfdr.de>; Wed,  7 May 2025 12:21:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 31B7F7B805B
+	for <lists+linux-i2c@lfdr.de>; Wed,  7 May 2025 12:20:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17A4E2641F8;
-	Wed,  7 May 2025 12:19:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5750F265621;
+	Wed,  7 May 2025 12:19:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TkzqlYwQ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZUySwLQL"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 176D2262FE1;
-	Wed,  7 May 2025 12:19:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70A1E263F43;
+	Wed,  7 May 2025 12:19:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746620377; cv=none; b=WyhYA/E+WJVG83i2jLKt+NLOCrAjJSYBAE538AOkrclnwbDdd9TmueLoGk1axRnmJP6xYxuBJrvqNq15pweDToGyB9hYQwpsRb1VHXj9asvQzThUOEKpuVsvayr/ZKYsJZNaJCOakaKCQtitP0IBUJVcVeaJgXNURiI1RU0J2Jo=
+	t=1746620379; cv=none; b=Bs/FlHD212HgS4R2iqPHn5GxHjabbbp35ZujiS7y9g0k0KRpNrLzLKRo2zd/f7pYFLgXZ3/kQygUavFqemuIbRlSQN6S2BNCVxyBkGSFVUedYD8QVnPgUlptuvUOqop+xgJcGFga7jUUf53z6CpkKxBKBLih5ysz9o8aMIoANro=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746620377; c=relaxed/simple;
-	bh=HM6DuinZx2sh+jnebnCxT6tDq2JN3DjrUqzB8IGTLFM=;
+	s=arc-20240116; t=1746620379; c=relaxed/simple;
+	bh=IncmGeBrDS5I/fgmp8yiaekm5sPKDwdxDosYXHlXQvc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=B+emsB1F+EX5Ix0zFrTK2LT42VNCQ4wR/f3uKlOm39SxAEvWvdqKuZ+Zxx373PaQbcDrtoQbUHP9qt03rG1z6bpluEk/E6RZuHc5l2aB8K+pA7z3aH+eHx0mXgvXvfTAjIrxk+2G1/gp+lBC/cf8MbbV18xwJXtUvW4xkvn9B6w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TkzqlYwQ; arc=none smtp.client-ip=209.85.208.51
+	 MIME-Version; b=SSC3hm0TRSAvz8mIqPO8PIjUemFHdL4cQH3HOMfPp3Lkca585NsahaaZocLqSPEipO6K7tZ445dRjgbmMKQsn1iJp3ND3CPwPE2WzkkRwvO+AWxxG+Jt+LAiauUzQvzZRsuoBpWrm7FPi4RuB7RG7YujJ6qimT+W4YPjH0cci5w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZUySwLQL; arc=none smtp.client-ip=209.85.208.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-5f6214f189bso12817539a12.2;
-        Wed, 07 May 2025 05:19:35 -0700 (PDT)
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5fbf007ea38so1190024a12.3;
+        Wed, 07 May 2025 05:19:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746620374; x=1747225174; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1746620376; x=1747225176; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=flOyTeGVhHyrcy5QyC0fGApva7GlKNGyqlIku/vedqo=;
-        b=TkzqlYwQxFITD1QATy4TaSczSkk6e4BuLaiMbto5xQrQq3aIoOYT5+eIVfNTJVV3Lm
-         BpMJp4oHYeVn1hcFxkGYy1/RBFqecGS0HLblJcAf1IvOyqrn+mQuIi6yjAYMIPhdn30a
-         wX4JozuytDTrGarXGYHX7qhEL7uXQYYwaM5p6GTzmIbQx08lReMwO/sdnVDtZWjUK0/i
-         tDae4ncsnHSs0xZS6Im/tQ/Jgau5ncaJsa5VrTNtxJTHzgvSqHWlPEJK777eH6M0tqZh
-         uXA7270QlorSWVPYeHqg1PEZFXNO9jHvZ4uCNezbUQvHSKhhnq3J++b1Sf6nZ0AfXK6e
-         g1jA==
+        bh=Q2KJ26YIlL26ps6IFL0kVpu1NN+yB+jxrYA5HLOizf4=;
+        b=ZUySwLQLfldzo6fd8idLe9U9HwPfReOYHrzB7jHS2HbrIHMlkkLFrl2Wzh/3xaUHWx
+         z7KdjC14Usz74/gGqI1T/EOVLtDyFRUIs1hGxiXuze0sTHF75ZzwY2/ZVigAuYYzaoUx
+         MQXq4i8GM3Oqt6FW4M4RfQnOIHQerUjKkStOYLH/1kNMbHtEXfKQAPZb8qer2rXC0C5B
+         95UaRPNmL48TjL9qOwKTJm9O488/ARb7CG3xCvg82GyVqt0Ik1jAoLOtQqmT+jg8GGlg
+         EhJlgmXK7r19ypuyUcYFt/WsBkbjzrrYrmTNBt9YR0eJMdhtQwTmj9UpaO7m7l4EaHr1
+         v1cg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746620374; x=1747225174;
+        d=1e100.net; s=20230601; t=1746620376; x=1747225176;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=flOyTeGVhHyrcy5QyC0fGApva7GlKNGyqlIku/vedqo=;
-        b=hN0qbT6ufKdj8BzdtstgCK1Sr2FWUGryoikMSR8SajCDFoDTS1uEtoJiCAOw576JxR
-         6uvaDeoPRsyyM31qrNoKnAemrPN/SrBEAlcs2tK+HvT0CCbC5F5bUQoYscQlNlchXLcF
-         oNo5DJs72MwbQhXr9kI4XEXCT8ykzyPycm5+fDgnmPjn//F3HdRw5bdUInjgoHF/Qr1C
-         bZnKWlX3w+Drvd0SzKZ3lF39zkzVME2cSDJKaQ8mIgkZNK1OCp3LBqrNFeyhT1076uM4
-         Y2sLBje5ZU4ridvFjHn/y2GS758hu4eOAULCWIoNhzTxX4LfLnDmCKxEqIVsi2vZ0Brn
-         b1Yg==
-X-Forwarded-Encrypted: i=1; AJvYcCWU2k7k9DfutDzoi+4nWXRmNNRm49Sf5JvpDbFJsXHF2JqM/bwQR/r3FMSsEn8ndi2wL4StLHyDHOo=@vger.kernel.org, AJvYcCWd7UumGLBpgySdm7N4c+4NsyU/DnsYMwuzyQn+ghtmuxPMkRGO7/wJsd9IlG5j8qBa5rx7KeHnAW8rnE0=@vger.kernel.org, AJvYcCXXdcsxz5MQqpaZfEdylshu8KBpEmvzijVFUbOaZdA7RBoQ/PsotK1TZxfjUYiEcXLzgD34DlbD+R3be2xF@vger.kernel.org
-X-Gm-Message-State: AOJu0YyJK3RKYPkz1VSxxR25Ty/05ra7c9qxFVnb195EAaIJVwHKSlMp
-	F7JnKrSsquWZ5H8lG5ZO8ylQ9JGGyl36IeHrLg/Qc6idcbyR1A6m
-X-Gm-Gg: ASbGncsqZbbClbFpzsq8ZiI3Or1zLeHf7AwwiL0bMWOgI0t63f62egozQW+Ph7iyuCP
-	LrO7bqeMB/w5miPKdAx2CMhB7JXfSYrXOuPkviftQnD95n57lLYqHY0IzRzCloZ5NxLT9MWg5Hd
-	cA4xRDi05Q57fUk07wu9u6FJ7PLOwesDFnEuYS5T7mAUIyoMwxjUPNKu1zBWNa6DXBQoqBxWIC1
-	uGJhkKlX/kMynwyN8SZPulDOP9g2ILkeVHJXBaerQ9CvbySwtt6DW9Ia1HATC3YCoobvup+6Tyl
-	CQqoiLmhiy3KWM+3zBq7ykQq0BFwhnDFUPAf9dE9cZp6oo5KRs5g
-X-Google-Smtp-Source: AGHT+IFXxlV6jbXujbUAb2lsCzZuE2meSKGq3ePsN0BK3i/iCUSHX/XmMKa+JC7qeZBiNLyqyUxaEw==
-X-Received: by 2002:a05:6402:1941:b0:5fb:9f73:d0e3 with SMTP id 4fb4d7f45d1cf-5fbe9e29f20mr2446496a12.18.1746620374056;
-        Wed, 07 May 2025 05:19:34 -0700 (PDT)
+        bh=Q2KJ26YIlL26ps6IFL0kVpu1NN+yB+jxrYA5HLOizf4=;
+        b=naDHX+JIe7IMsLirhM1rAA9qceoFn5NVTE4uWqbWiaDpRIaSRcpA9P+Ltr2N20XkeC
+         1MwpP/tk09fL0VT9i9gPSg5aDkeHueNDRcOqYzo/ywkIIvd2Sq2HmbxgI5mo0UekjkbT
+         Jfy8U6abj7+gySV0jmHym5Rs0hHtwWuURJLeOj8UTt/sfexYgehGNEpPrkbDXLhCLv0f
+         w3IS+cOQuJaQSk+eJ1jC1i3Oiu7dL5lI1j9/VtVa2fFTTCQo4DU5QI32jhaQawSih7+/
+         0LLxS4DK4yS7ft/jHNDqeDUJWgUBc8qbf74kkxvobQKzQEsQJZhTwZ36640mCuMVI0xv
+         FMvw==
+X-Forwarded-Encrypted: i=1; AJvYcCVB6HC5jjY/zkU+cQYM7yRSHPPYvmcliEGwlHgWgzTR4dXzvr4y3imBGFhq6Y39RqnwOxIz5d3/dc3vr0Y=@vger.kernel.org, AJvYcCW55V2Atdf7JtokIf+G9XqFT8pKuPtGLTp9+pBTerPsPNNYJ+JSMnphNla4dEFpJ3pWuIMgBPwiKhM=@vger.kernel.org, AJvYcCWytIJNremnxzsgzZBSzTzT1qYLPysaOgtEkTeJvXFehBWFIZSokedbt4is8Ab/mSy7ZfjaP89oSefSUUN+@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxvz5wHhIaOyRutHVENWuNSGrF9PYvitPdsApRC2X9v7fINAusE
+	347gZcugZq1VjWFUHXPwuuyrB5MfgcYkTcNh8sE/DOcVZ8tj5+9U
+X-Gm-Gg: ASbGnct4k8mOznOWPC2u/gJ15JXkVam7A29C28k4yDYoSZTbkUFIKtrhBwFQSgLAaW+
+	FNJv29MxQ/YnmPksUCspTkOYTXp1e3mFNycFl1Z2Y1esW/16uu32JzY0YVUI01GAp5kYUUt0Hlo
+	ACb3J295LmqQatdn/ZqKlc+t215nE9VeemlD5wRmVl1xgdUX2E/9aP3R1P2ZeSkHKNMRhceIAKh
+	RtQ5sNxUajPLuChK+68W/HXl8jUTzbN8xXjQrfhcpCiTRS91/eY0u7aAzeSinbcUzOLor+nNyaF
+	5FutpcJJ0OwOSaFjdqZNmF/0R0v3Gtwtew2NFrkxBcbZAU3EolXQ
+X-Google-Smtp-Source: AGHT+IEvLotDHhdb7KPxeTvSHi1rKTMFXmu+F9vTFpZBRVBhkjY5JDO4yOcT8sqnDe3jtEEKcN3ozA==
+X-Received: by 2002:a05:6402:4307:b0:5fa:a495:6904 with SMTP id 4fb4d7f45d1cf-5fbe9f3c4d7mr2450261a12.23.1746620375615;
+        Wed, 07 May 2025 05:19:35 -0700 (PDT)
 Received: from demon-pc.localdomain ([188.27.128.5])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5fa777557b9sm9350002a12.10.2025.05.07.05.19.33
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5fa777557b9sm9350002a12.10.2025.05.07.05.19.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 May 2025 05:19:33 -0700 (PDT)
+        Wed, 07 May 2025 05:19:35 -0700 (PDT)
 From: Cosmin Tanislav <demonsingur@gmail.com>
 To: 
 Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
@@ -85,9 +85,9 @@ Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	linux-kernel@vger.kernel.org,
 	linux-media@vger.kernel.org,
 	Cosmin Tanislav <demonsingur@gmail.com>
-Subject: [PATCH v5 7/9] i2c: atr: add flags parameter to i2c_atr_new()
-Date: Wed,  7 May 2025 15:19:13 +0300
-Message-ID: <20250507121917.2364416-8-demonsingur@gmail.com>
+Subject: [PATCH v5 8/9] i2c: atr: add static flag
+Date: Wed,  7 May 2025 15:19:14 +0300
+Message-ID: <20250507121917.2364416-9-demonsingur@gmail.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250507121917.2364416-1-demonsingur@gmail.com>
 References: <20250507121917.2364416-1-demonsingur@gmail.com>
@@ -99,118 +99,74 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-In preparation for adding multiple flags that change the behavior,
-add a flags parameter to i2c_atr_new() and an i2c_atr_flags enum.
+Some I2C ATRs do not support dynamic remapping, only static mapping
+of direct children.
+
+Mappings will only be added or removed as a result of devices being
+added or removed from a child bus.
+
+The ATR pool will have to be big enough to accomodate all devices
+expected to be added to the child buses.
+
+Add a new flag that prevents old mappings to be replaced or new mappings
+to be created in the alias finding code paths.
 
 Signed-off-by: Cosmin Tanislav <demonsingur@gmail.com>
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Reviewed-by: Romain Gantois <romain.gantois@bootlin.com>
 ---
- drivers/i2c/i2c-atr.c         |  6 +++++-
- drivers/media/i2c/ds90ub960.c |  2 +-
- drivers/misc/ti_fpc202.c      |  2 +-
- include/linux/i2c-atr.h       | 10 +++++++++-
- 4 files changed, 16 insertions(+), 4 deletions(-)
+ drivers/i2c/i2c-atr.c   | 6 +++++-
+ include/linux/i2c-atr.h | 7 +++++++
+ 2 files changed, 12 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/i2c/i2c-atr.c b/drivers/i2c/i2c-atr.c
-index 91aabfb4379b..121cabbdb85d 100644
+index 121cabbdb85d..76d70efdf190 100644
 --- a/drivers/i2c/i2c-atr.c
 +++ b/drivers/i2c/i2c-atr.c
-@@ -106,6 +106,7 @@ struct i2c_atr_chan {
-  * @lock:      Lock for the I2C bus segment (see &struct i2c_lock_operations)
-  * @lock_key:  Lock key for @lock
-  * @max_adapters: Maximum number of adapters this I2C ATR can have
-+ * @flags:     Flags for ATR
-  * @alias_pool: Optional common pool of available client aliases
-  * @i2c_nb:    Notifier for remote client add & del events
-  * @adapter:   Array of adapters
-@@ -122,6 +123,7 @@ struct i2c_atr {
- 	struct mutex lock;
- 	struct lock_class_key lock_key;
- 	int max_adapters;
-+	u32 flags;
- 
- 	struct i2c_atr_alias_pool *alias_pool;
- 
-@@ -703,7 +705,8 @@ static int i2c_atr_parse_alias_pool(struct i2c_atr *atr)
- }
- 
- struct i2c_atr *i2c_atr_new(struct i2c_adapter *parent, struct device *dev,
--			    const struct i2c_atr_ops *ops, int max_adapters)
-+			    const struct i2c_atr_ops *ops, int max_adapters,
-+			    u32 flags)
+@@ -341,12 +341,16 @@ i2c_atr_replace_mapping_by_addr(struct i2c_atr_chan *chan, u16 addr)
+ static struct i2c_atr_alias_pair *
+ i2c_atr_get_mapping_by_addr(struct i2c_atr_chan *chan, u16 addr)
  {
- 	struct i2c_atr *atr;
- 	int ret;
-@@ -725,6 +728,7 @@ struct i2c_atr *i2c_atr_new(struct i2c_adapter *parent, struct device *dev,
- 	atr->dev = dev;
- 	atr->ops = ops;
- 	atr->max_adapters = max_adapters;
-+	atr->flags = flags;
++	struct i2c_atr *atr = chan->atr;
+ 	struct i2c_atr_alias_pair *c2a;
  
- 	if (parent->algo->master_xfer)
- 		atr->algo.master_xfer = i2c_atr_master_xfer;
-diff --git a/drivers/media/i2c/ds90ub960.c b/drivers/media/i2c/ds90ub960.c
-index 869e32bd07e8..6f475bae94b3 100644
---- a/drivers/media/i2c/ds90ub960.c
-+++ b/drivers/media/i2c/ds90ub960.c
-@@ -1122,7 +1122,7 @@ static int ub960_init_atr(struct ub960_data *priv)
- 	struct i2c_adapter *parent_adap = priv->client->adapter;
+ 	c2a = i2c_atr_find_mapping_by_addr(chan, addr);
+ 	if (c2a)
+ 		return c2a;
  
- 	priv->atr = i2c_atr_new(parent_adap, dev, &ub960_atr_ops,
--				priv->hw_data->num_rxports);
-+				priv->hw_data->num_rxports, 0);
- 	if (IS_ERR(priv->atr))
- 		return PTR_ERR(priv->atr);
++	if (atr->flags & I2C_ATR_F_STATIC)
++		return NULL;
++
+ 	c2a = i2c_atr_create_mapping_by_addr(chan, addr);
+ 	if (c2a)
+ 		return c2a;
+@@ -545,7 +549,7 @@ static int i2c_atr_attach_addr(struct i2c_adapter *adapter,
+ 	mutex_lock(&chan->alias_pairs_lock);
  
-diff --git a/drivers/misc/ti_fpc202.c b/drivers/misc/ti_fpc202.c
-index b9c9ee4bfc4e..f7cde245ac95 100644
---- a/drivers/misc/ti_fpc202.c
-+++ b/drivers/misc/ti_fpc202.c
-@@ -349,7 +349,7 @@ static int fpc202_probe(struct i2c_client *client)
- 		goto disable_gpio;
- 	}
+ 	c2a = i2c_atr_create_mapping_by_addr(chan, addr);
+-	if (!c2a)
++	if (!c2a && !(atr->flags & I2C_ATR_F_STATIC))
+ 		c2a = i2c_atr_replace_mapping_by_addr(chan, addr);
  
--	priv->atr = i2c_atr_new(client->adapter, dev, &fpc202_atr_ops, 2);
-+	priv->atr = i2c_atr_new(client->adapter, dev, &fpc202_atr_ops, 2, 0);
- 	if (IS_ERR(priv->atr)) {
- 		ret = PTR_ERR(priv->atr);
- 		dev_err(dev, "failed to create i2c atr err %d\n", ret);
+ 	if (!c2a) {
 diff --git a/include/linux/i2c-atr.h b/include/linux/i2c-atr.h
-index 1c3a5bcd939f..5082f4dd0e23 100644
+index 5082f4dd0e23..5aaab1598084 100644
 --- a/include/linux/i2c-atr.h
 +++ b/include/linux/i2c-atr.h
-@@ -18,6 +18,12 @@ struct device;
- struct fwnode_handle;
- struct i2c_atr;
+@@ -20,8 +20,15 @@ struct i2c_atr;
  
-+/**
-+ * enum i2c_atr_flags - Flags for an I2C ATR driver
-+ */
-+enum i2c_atr_flags {
-+};
-+
  /**
-  * struct i2c_atr_ops - Callbacks from ATR to the device driver.
-  * @attach_addr: Notify the driver of a new device connected on a child
-@@ -65,6 +71,7 @@ struct i2c_atr_adap_desc {
-  * @dev:          The device acting as an ATR
-  * @ops:          Driver-specific callbacks
-  * @max_adapters: Maximum number of child adapters
-+ * @flags:        Flags for ATR
-  *
-  * The new ATR helper is connected to the parent adapter but has no child
-  * adapters. Call i2c_atr_add_adapter() to add some.
-@@ -74,7 +81,8 @@ struct i2c_atr_adap_desc {
-  * Return: pointer to the new ATR helper object, or ERR_PTR
+  * enum i2c_atr_flags - Flags for an I2C ATR driver
++ *
++ * @I2C_ATR_F_STATIC: ATR does not support dynamic mapping, use static mapping.
++ *                    Mappings will only be added or removed as a result of
++ *                    devices being added or removed from a child bus.
++ *                    The ATR pool will have to be big enough to accomodate all
++ *                    devices expected to be added to the child buses.
   */
- struct i2c_atr *i2c_atr_new(struct i2c_adapter *parent, struct device *dev,
--			    const struct i2c_atr_ops *ops, int max_adapters);
-+			    const struct i2c_atr_ops *ops, int max_adapters,
-+			    u32 flags);
+ enum i2c_atr_flags {
++	I2C_ATR_F_STATIC = BIT(0),
+ };
  
  /**
-  * i2c_atr_delete - Delete an I2C ATR helper.
 -- 
 2.49.0
 
