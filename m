@@ -1,116 +1,152 @@
-Return-Path: <linux-i2c+bounces-10896-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10897-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DED2FAAF900
-	for <lists+linux-i2c@lfdr.de>; Thu,  8 May 2025 13:47:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30C5BAAF937
+	for <lists+linux-i2c@lfdr.de>; Thu,  8 May 2025 13:56:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CB3CD9E20C7
-	for <lists+linux-i2c@lfdr.de>; Thu,  8 May 2025 11:47:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 776DB1C204C1
+	for <lists+linux-i2c@lfdr.de>; Thu,  8 May 2025 11:56:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36B33223702;
-	Thu,  8 May 2025 11:47:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AFDF22425B;
+	Thu,  8 May 2025 11:56:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TXTKhO8j"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6099F35957;
-	Thu,  8 May 2025 11:47:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F12FF35280;
+	Thu,  8 May 2025 11:56:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746704868; cv=none; b=fDvpRdrvyn0V/u8bgEtB7cUOzzhMSbFdL4N/vdAPBL9s93j/jCTZ+lg7TWXxDm9y7BPSWOuagrFjA5uUHixKbJ9EwY7JHyCCNqQ7uGDOaMgzo73TItM/LciFd/EJGVC0+a648PoTxeRm/A5Rn5KIejqilra9E86CXGXSMwF3cqs=
+	t=1746705362; cv=none; b=GLtzRA6Pr0tR6mB1JwcvFRppqnnHNJ31LSSZLZZjwO4eddfkAYUXJV2ai50o2niqctshHL6G2fCrWZrS0mEYqiuleR632ir3YzhuvFbQiDZei3NvjM6LrOh1h4JHRaJbPHk83ekWfr0p8ewfiRzQH0rUXIJPCRuPth9ati/CCRI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746704868; c=relaxed/simple;
-	bh=wY2rXlF9lNnn5R10zAhDvzddR0b8o48odmpoov1tV7A=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=CBQRkGaEdl95YU9iIk04EqWnFgIgugW+DfHo4KQaZ3bo2/xSOsV6r2ryyrndRymbT2wCsHcakMz2DeG8AMwjZdZKrj4G744GFc4MvuNSKxGA+aXAGKKiDZfwHmad0vggMDNDYkQ4w7a8t1b57w7L+CbwV+ob/dvYaQycWKH2zbk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4ZtVg63KzCz6L5VR;
-	Thu,  8 May 2025 19:45:06 +0800 (CST)
-Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
-	by mail.maildlp.com (Postfix) with ESMTPS id 95D9C140121;
-	Thu,  8 May 2025 19:47:36 +0800 (CST)
-Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
- (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Thu, 8 May
- 2025 13:47:34 +0200
-Date: Thu, 8 May 2025 12:47:33 +0100
-From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC: Herve Codina <herve.codina@bootlin.com>, Andrew Lunn <andrew@lunn.ch>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki"
-	<rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>, Shawn Guo
-	<shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, "Pengutronix
- Kernel Team" <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>,
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>,
-	Andi Shyti <andi.shyti@kernel.org>, Wolfram Sang
-	<wsa+renesas@sang-engineering.com>, Peter Rosin <peda@axentia.se>, "Derek
- Kiernan" <derek.kiernan@amd.com>, Dragan Cvetic <dragan.cvetic@amd.com>, Arnd
- Bergmann <arnd@arndb.de>, Rob Herring <robh@kernel.org>, "Saravana Kannan"
-	<saravanak@google.com>, Bjorn Helgaas <bhelgaas@google.com>, "Mark Brown"
-	<broonie@kernel.org>, Len Brown <lenb@kernel.org>, Daniel Scally
-	<djrscally@gmail.com>, Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>, Wolfram Sang <wsa@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>, <linux-kernel@vger.kernel.org>,
-	<imx@lists.linux.dev>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-clk@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-	<devicetree@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-	<linux-spi@vger.kernel.org>, <linux-acpi@vger.kernel.org>, Allan Nielsen
-	<allan.nielsen@microchip.com>, Horatiu Vultur <horatiu.vultur@microchip.com>,
-	Steen Hegelund <steen.hegelund@microchip.com>, Luca Ceresoli
-	<luca.ceresoli@bootlin.com>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	<linux-cxl@vger.kernel.org>, Davidlohr Bueso <dave@stgolabs.net>, Dave Jiang
-	<dave.jiang@intel.com>, Alison Schofield <alison.schofield@intel.com>, Vishal
- Verma <vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>, Dan
- Williams <dan.j.williams@intel.com>, <linux-cxl@vger.kernel.org>
-Subject: Re: [PATCH v2 09/26] cxl/test: Use device_set_node()
-Message-ID: <20250508124733.00001208@huawei.com>
-In-Reply-To: <aBt38JR-YGD5nnC4@smile.fi.intel.com>
-References: <20250507071315.394857-1-herve.codina@bootlin.com>
-	<20250507071315.394857-10-herve.codina@bootlin.com>
-	<aBt38JR-YGD5nnC4@smile.fi.intel.com>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
+	s=arc-20240116; t=1746705362; c=relaxed/simple;
+	bh=WhV7qfCeaJTOCc2Bz6hIHso6klJhA/nzuOO+FMim/1A=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cRVxGZk+2IAO9HYPAwxY61oLAQhjKU36ApmWv1UY0LJBwPvqrJl7BmHvEQcpm88aWo6QLTRSiPVtst11l5QBhk9jJzzNDqSFwT4WOoQeWzdx6MQ/81zcdJuVfhGMw0HE05NdxJAkvw299DFPp9HDjzIt+y716RsGQx8f8UzIchA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TXTKhO8j; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1746705361; x=1778241361;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=WhV7qfCeaJTOCc2Bz6hIHso6klJhA/nzuOO+FMim/1A=;
+  b=TXTKhO8jDq/TVjc+Xprjqv9hExurJG4d9/CFNZFgP62YEMm5TBCSdJN/
+   gAOHK0UHI0gefO4CknSM1sWmosar4x0F61I0gAVWn44lxR9Rwvpdo1+SF
+   IEU79tGQkT//fpyWJMXpEp37KgtTBLhyawJ7frERzLKljwUfBw+mHCK2L
+   /gXwNd/+MiPC0Dpd8n/x3fsa32c6wSKgRKnSZFVFdnMGv/gHmSn2EjomO
+   faRvHc8HhkQlnEztLZ6S8+ChyvJnlELr3Hk7b3+rgNNl0FBdxmoJj8MYG
+   8W0jnfnP/Nzmrt60aXuFdnFpL37a99I+7u+dxfx56JGS7V5SbvBfgHeZF
+   A==;
+X-CSE-ConnectionGUID: yC8WOvJWTKWlTBvWm+XDkg==
+X-CSE-MsgGUID: I/JIM4zcT3Sz9uzL2kvrNA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11426"; a="59114386"
+X-IronPort-AV: E=Sophos;i="6.15,272,1739865600"; 
+   d="scan'208";a="59114386"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2025 04:56:00 -0700
+X-CSE-ConnectionGUID: HBfJVvzrT0G9DvK/tuyNJQ==
+X-CSE-MsgGUID: Oq/KER5ISxSIONZxO1crmQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,272,1739865600"; 
+   d="scan'208";a="167342931"
+Received: from mylly.fi.intel.com (HELO [10.237.72.151]) ([10.237.72.151])
+  by fmviesa001.fm.intel.com with ESMTP; 08 May 2025 04:55:58 -0700
+Message-ID: <fc3703cd-50b7-4b6e-8073-23bd636ff61f@linux.intel.com>
+Date: Thu, 8 May 2025 14:55:57 +0300
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [1/1] i2c: designware: Ensure runtime suspend is invoked during
+ rapid slave unregistration and registration
+To: EnDe Tan <ende.tan@starfivetech.com>, Andi Shyti <andi.shyti@kernel.org>
+Cc: "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+ "andriy.shevchenko@linux.intel.com" <andriy.shevchenko@linux.intel.com>,
+ "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
+ "jsd@semihalf.com" <jsd@semihalf.com>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ Leyfoon Tan <leyfoon.tan@starfivetech.com>,
+ "endeneer@gmail.com" <endeneer@gmail.com>
+References: <20250412023303.378600-1-ende.tan@starfivetech.com>
+ <6e155241-3403-49df-8f0d-5aa63e2e74ab@linux.intel.com>
+ <NTZPR01MB10182E9F6E50D679A6EAC3B4F8B92@NTZPR01MB1018.CHNPR01.prod.partner.outlook.cn>
+ <6a3b756f-6fbd-4ee5-b511-c5a32e4a6a34@linux.intel.com>
+ <2l2tpeictfp3o2kcq5fquqkm3nyjijq65ejanafrshh7icc5c4@guynosug2ve7>
+ <NTZPR01MB1018FD0E9913437D4B34E751F88B2@NTZPR01MB1018.CHNPR01.prod.partner.outlook.cn>
+Content-Language: en-US
+From: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+In-Reply-To: <NTZPR01MB1018FD0E9913437D4B34E751F88B2@NTZPR01MB1018.CHNPR01.prod.partner.outlook.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml500001.china.huawei.com (7.191.163.213) To
- frapeml500008.china.huawei.com (7.182.85.71)
 
-On Wed, 7 May 2025 18:10:40 +0300
-Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-
-> On Wed, May 07, 2025 at 09:12:51AM +0200, Herve Codina wrote:
-> > The code set directly dev->fwnode.
-> > 
-> > Use the dedicated helper to perform this operation.  
+On 5/8/25 11:30 AM, EnDe Tan wrote:
+> Hi Andi and Jarkko, thank you for the feedback.
 > 
+>> -----Original Message-----
+>> From: Andi Shyti <andi.shyti@kernel.org>
+>> Sent: Tuesday, 6 May, 2025 5:49 AM
+>> To: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+>> Cc: EnDe Tan <ende.tan@starfivetech.com>; linux-i2c@vger.kernel.org;
 > ...
+>>> Good explanation and could you add it the commit log together with the
+>>> example?
+>>
+>> If you want you can paste the new commit log as reply to this e-mail.
 > 
-> > @@ -1046,7 +1046,7 @@ static void mock_companion(struct acpi_device *adev, struct device *dev)
-> >  {
-> >  	device_initialize(&adev->dev);
-> >  	fwnode_init(&adev->fwnode, NULL);
-> > -	dev->fwnode = &adev->fwnode;
-> > +	device_set_node(dev, &adev->fwnode);
-> >  	adev->fwnode.dev = dev;
-> >  }  
+> Here is the new commit log, feel free to let me know if further changes are required:
 > 
-> This code is questionable to begin with. Can the original author explain what
-> is the motivation behind this as the only callers of fwnode_init() are deep
-> core pieces _and_ this only module. Why?!
+> Replaced pm_runtime_put() with pm_runtime_put_sync_suspend() to ensure
+> the runtime suspend is invoked immediately when unregistering a slave.
+> This prevents a race condition where suspend was skipped when
+> unregistering and registering slave in quick succession.
 > 
-
-More likely to happen if CXL folk are +CC.  Added.
-
-Dan, maybe one for you?
+> For example, consider the rapid sequence of
+> `delete_device -> new_device -> delete_device -> new_device`.
+> In this sequence, it is observed that the dw_i2c_plat_runtime_suspend() might
+> not be invoked after `delete_device` operation.
+> 
+> This is because after `delete_device` operation, when the
+> pm_runtime_put() is about to trigger suspend, the following `new_device`
+> operation might race and cancel the suspend.
+> 
+> If that happens, during the `new_device` operation,
+> dw_i2c_plat_runtime_resume() is skipped (since there was no suspend), which
+> means `i_dev->init()`, i.e. i2c_dw_init_slave(), is skipped.
+> Since i2c_dw_init_slave() is skipped, i2c_dw_configure_fifo_slave() is
+> skipped too, which leaves `DW_IC_INTR_MASK` unconfigured. If we inspect
+> the interrupt mask register using devmem, it will show as zero.
+> 
+> Example shell script to reproduce the issue:
+> ```
+>    #!/bin/sh
+> 
+>    SLAVE_LADDR=0x1010
+>    SLAVE_BUS=13
+>    NEW_DEVICE=/sys/bus/i2c/devices/i2c-$SLAVE_BUS/new_device
+>    DELETE_DEVICE=/sys/bus/i2c/devices/i2c-$SLAVE_BUS/delete_device
+> 
+>    # Create initial device
+>    echo slave-24c02 $SLAVE_LADDR > $NEW_DEVICE
+>    sleep 2
+> 
+>    # Rapid sequence of
+>    # delete_device -> new_device -> delete_device -> new_device
+>    echo $SLAVE_LADDR > $DELETE_DEVICE
+>    echo slave-24c02 $SLAVE_LADDR > $NEW_DEVICE
+>    echo $SLAVE_LADDR > $DELETE_DEVICE
+>    echo slave-24c02 $SLAVE_LADDR > $NEW_DEVICE
+> 
+>    # Using devmem to inspect IC_INTR_MASK will show as zero
+> ```
+Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
 
