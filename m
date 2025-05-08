@@ -1,125 +1,141 @@
-Return-Path: <linux-i2c+bounces-10902-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10903-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9D90AAFED7
-	for <lists+linux-i2c@lfdr.de>; Thu,  8 May 2025 17:17:01 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A611FAB02CF
+	for <lists+linux-i2c@lfdr.de>; Thu,  8 May 2025 20:32:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4E67C188BD1D
-	for <lists+linux-i2c@lfdr.de>; Thu,  8 May 2025 15:15:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AE92B502DEC
+	for <lists+linux-i2c@lfdr.de>; Thu,  8 May 2025 18:32:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DE34283151;
-	Thu,  8 May 2025 15:10:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B840A2882B1;
+	Thu,  8 May 2025 18:31:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GkmD0J1l"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kbVWD+89"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1746283127;
-	Thu,  8 May 2025 15:10:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6495286895;
+	Thu,  8 May 2025 18:31:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746717002; cv=none; b=AtrS4CCuDtQ8vuXHkV/Y2j3sUo6C+25ljtakZEzjIS+/lQnIuQffjeMpLPTrdoQXsVhlt7pvYKqeyyD/1tvL9A3GO26ga/YiaFGzDAK//wqfi8wdC5vYQ9onHldpZmZP7HYBmLMKvRR5MMvJYmjltTOcRuLpyug0T//SLIlEOt4=
+	t=1746729107; cv=none; b=TnPYu+YOcxo06yT/IAFtC9EXZq6evey0QyHG6ZqyzgOHUizT/fSMpFgtwR2fWvNedyFiHlld8gvwrFL307VuQrxsaC+Sb07BM52IbXl0xZ0gSRyu0aSTISxzKk1zXr3bY6LhuC/aXG8za3D07lKDuOaKPBv0et9cZgPApIzkKcQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746717002; c=relaxed/simple;
-	bh=rVR/N/7ODChG6fZhtF8ZvMaMmZ6Fx13049NqQCPPeMg=;
+	s=arc-20240116; t=1746729107; c=relaxed/simple;
+	bh=lmW0Dg0L5hEpYSQrGyyAU2RGWEg1vYLosLy8p05Df9E=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NYVA/s+dFrrtML3YMLTI+/cwdIL1r8ZqOAWUODrrBCzeYTIlVcNyvWliUPbj2UBhsoCY4ydsS85Mjyalwf7O1ofcxz9EtH4nv62yduTVTovGone6ysrZ3q75UhW89PhW4MaACjRDiVzXGw8nR29KMPpQSZ88/7ELi+AgDhulth4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GkmD0J1l; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22AECC4CEF0;
-	Thu,  8 May 2025 15:09:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746717001;
-	bh=rVR/N/7ODChG6fZhtF8ZvMaMmZ6Fx13049NqQCPPeMg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GkmD0J1lOEP2v5R6Gl6VpW7bpQlNU+pvI1gjVPllebBtvu3VgZcVkbVEEUACCHxKA
-	 hITDaX6O72YKW7Abv8VD3qWeh0KvPv/oGLqBhNCazutTxVMaqx8kVCZmEtEO6TAfBP
-	 46u+J3V7ImhbwA+1hvN7ONIeaLBJ25VEkS29d6ZOU7GG8KfRNU1MGC3Ww2ZaEFGdEx
-	 eDKIrKCdFJ7FxhlrE0n5HeR31facf7qqtvPXnMMkl/8L+mzQ1cFAqsGNwsVwhqzDuJ
-	 LQ/rXhCaKJqR73NioMyZwo+eCDJ1zg0u//SIEb+IvDkg21Rds8Ptm260xSuIJdS644
-	 1cd60ulMzEOBQ==
-Date: Thu, 8 May 2025 16:09:56 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Akhil R <akhilrajeev@nvidia.com>
-Cc: andi.shyti@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, thierry.reding@gmail.com, jonathanh@nvidia.com,
-	ldewangan@nvidia.com, digetx@gmail.com, p.zabel@pengutronix.de,
+	 Content-Type:Content-Disposition:In-Reply-To; b=Myb0yBbGBrUJy8k5vDNVBHFqWgtqn5UWrIU/q/MZMXs7o4jzTIXtNQEDjx++fLEBG2NjylVxHo5pcDvnHtd2bMfXzrsG1ot5+uwyP/D1RLYx7I0H6h8NJ89+6qUTayzMo+tFwPV1ZXiur5D4UI7qb0NVwQ2uVJ7b0QJkiPdPvNc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kbVWD+89; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1746729106; x=1778265106;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=lmW0Dg0L5hEpYSQrGyyAU2RGWEg1vYLosLy8p05Df9E=;
+  b=kbVWD+89TsaU5YN6EeJnLmwbUupdjkow/0bxOu/0lZXHnNbx6RQsEAMP
+   PcB1Zk0B1fIc/OI47O5I+ZtgGe1dyM0dEDCU7FGYnjuKtU7oA9vylHufi
+   JMBOd3EUX3y4iUck3Zf8aQsb/OG9QKrX9ZhC6KvWq++apEz9Jwd4KhI77
+   6bK12Q/shFFXesKqSqD6xhnzmIWe0RdQ3Q89vomA1Ep0uVEUqL7BHcxrO
+   ebXWClVt9Xa/z/hYRYwIjX5wHoWZWufgBwzMiniBk7g0Egm+rl9k2tjkj
+   qyEZoZJq9V7VxQ+r4uCDtl87wvsl5sGRQYQnWIsaq4MAOASvSbIiSHf31
+   g==;
+X-CSE-ConnectionGUID: GRsompNIStSFtz5SCJkYfA==
+X-CSE-MsgGUID: igImZrYDQXyD8wHkfRtOIw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11427"; a="52185445"
+X-IronPort-AV: E=Sophos;i="6.15,272,1739865600"; 
+   d="scan'208";a="52185445"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2025 11:31:45 -0700
+X-CSE-ConnectionGUID: XR1rcrq6RLiCNe1U0w4udg==
+X-CSE-MsgGUID: lI5CdtKsTd+NqPODxBCj3g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,272,1739865600"; 
+   d="scan'208";a="136774458"
+Received: from smile.fi.intel.com ([10.237.72.55])
+  by fmviesa008.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2025 11:31:35 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1uD61r-00000004C9z-45LZ;
+	Thu, 08 May 2025 21:31:31 +0300
+Date: Thu, 8 May 2025 21:31:31 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Herve Codina <herve.codina@bootlin.com>
+Cc: Andrew Lunn <andrew@lunn.ch>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Peter Rosin <peda@axentia.se>,
+	Derek Kiernan <derek.kiernan@amd.com>,
+	Dragan Cvetic <dragan.cvetic@amd.com>,
+	Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh@kernel.org>,
+	Saravana Kannan <saravanak@google.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Mark Brown <broonie@kernel.org>, Len Brown <lenb@kernel.org>,
+	Daniel Scally <djrscally@gmail.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Wolfram Sang <wsa@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	linux-kernel@vger.kernel.org, imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
 	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/4] dt-bindings: i2c: Specify reset as optional
-Message-ID: <20250508-atrocious-till-30aad5010c3e@spud>
-References: <20250506095936.10687-1-akhilrajeev@nvidia.com>
+	linux-pci@vger.kernel.org, linux-spi@vger.kernel.org,
+	linux-acpi@vger.kernel.org,
+	Allan Nielsen <allan.nielsen@microchip.com>,
+	Horatiu Vultur <horatiu.vultur@microchip.com>,
+	Steen Hegelund <steen.hegelund@microchip.com>,
+	Luca Ceresoli <luca.ceresoli@bootlin.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v2 12/26] PCI: of: Set fwnode device of newly created PCI
+ device nodes
+Message-ID: <aBz4gxUlnSgEtHn8@smile.fi.intel.com>
+References: <20250507071315.394857-1-herve.codina@bootlin.com>
+ <20250507071315.394857-13-herve.codina@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="iwu+DycW32HAkSb8"
-Content-Disposition: inline
-In-Reply-To: <20250506095936.10687-1-akhilrajeev@nvidia.com>
-
-
---iwu+DycW32HAkSb8
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20250507071315.394857-13-herve.codina@bootlin.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Tue, May 06, 2025 at 03:29:33PM +0530, Akhil R wrote:
-> Specify reset as optional in the description for controllers that has an
-> internal software reset available
+On Wed, May 07, 2025 at 09:12:54AM +0200, Herve Codina wrote:
+> Device-tree node can be created when CONFIG_PCI_DYNAMIC_OF_NODES. Those
+> node are created and filled based on PCI core information but the
+> fwnode device field is not set.
+> 
+> When later an overlay is applied, this consuses fw_devlink. Indeed,
 
-Optionality of properties is not determined by text. The property is not
-marked required in the binding, and therefore is optionally on all
-platforms. If some platforms require it, you should submit a patch making
-it mandatory there (via the required keyword).
+consuses?
 
-Cheers,
-Conor.
+> without any device attached to the node, fw_devlink considers that this
+> node will never become a device. When this node is pointed as a
+> supplier, devlink looks at its ancestors in order to find a node with a
+> device that could be used as the supplier.
+> 
+> In the PCI use case, this leads to links that wrongly use the PCI root
+> bridge device as the supplier instead of the expected PCI device.
+> 
+> Setting the fwnode device to the device of the PCI device allows devlink
+> to use this device as a supplier and so, correct links are created.
 
->=20
-> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
-> ---
->  Documentation/devicetree/bindings/i2c/nvidia,tegra20-i2c.yaml | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->=20
-> diff --git a/Documentation/devicetree/bindings/i2c/nvidia,tegra20-i2c.yam=
-l b/Documentation/devicetree/bindings/i2c/nvidia,tegra20-i2c.yaml
-> index b57ae6963e62..19aefc022c8b 100644
-> --- a/Documentation/devicetree/bindings/i2c/nvidia,tegra20-i2c.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/nvidia,tegra20-i2c.yaml
-> @@ -97,7 +97,9 @@ properties:
-> =20
->    resets:
->      items:
-> -      - description: module reset
-> +      - description: |
-> +          Module reset. This property is optional for controllers in Teg=
-ra194 and later
-> +          chips where an internal software reset is available as an alte=
-rnative.
-> =20
->    reset-names:
->      items:
-> --=20
-> 2.43.2
->=20
->=20
+-- 
+With Best Regards,
+Andy Shevchenko
 
---iwu+DycW32HAkSb8
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaBzJRAAKCRB4tDGHoIJi
-0vgnAP9UM812drDNILFwXxq22fplvS0kxJiN9gGVH+/OGyOlEQD+JBBjHC1MU1Lt
-okfKuk6deNpkgC+viWGs12HgWWuu8g4=
-=9QSL
------END PGP SIGNATURE-----
-
---iwu+DycW32HAkSb8--
 
