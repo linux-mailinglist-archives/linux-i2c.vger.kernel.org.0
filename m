@@ -1,148 +1,125 @@
-Return-Path: <linux-i2c+bounces-10901-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10902-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AAFEDAAFED3
-	for <lists+linux-i2c@lfdr.de>; Thu,  8 May 2025 17:16:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A9D90AAFED7
+	for <lists+linux-i2c@lfdr.de>; Thu,  8 May 2025 17:17:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D91659C6DDB
-	for <lists+linux-i2c@lfdr.de>; Thu,  8 May 2025 15:14:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4E67C188BD1D
+	for <lists+linux-i2c@lfdr.de>; Thu,  8 May 2025 15:15:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F7562797AE;
-	Thu,  8 May 2025 15:09:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DE34283151;
+	Thu,  8 May 2025 15:10:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GkmD0J1l"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 883AC1865EE
-	for <linux-i2c@vger.kernel.org>; Thu,  8 May 2025 15:08:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1746283127;
+	Thu,  8 May 2025 15:10:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746716941; cv=none; b=jXmmFMTCF0BTqq0vpbSx3EKJmbyUeawc8hz9K73X1u8ydcN99fF74l6/q7oka6NdqGP8NYXj0NLRSYrHr+xEhocp5Kb/GoWmjuCI5LNFp/qvXsYf62tZ8tnBT7x2CXyxvvsQbWp21PnQsSFT8066D8q5lGeSbVRog85WVln7o58=
+	t=1746717002; cv=none; b=AtrS4CCuDtQ8vuXHkV/Y2j3sUo6C+25ljtakZEzjIS+/lQnIuQffjeMpLPTrdoQXsVhlt7pvYKqeyyD/1tvL9A3GO26ga/YiaFGzDAK//wqfi8wdC5vYQ9onHldpZmZP7HYBmLMKvRR5MMvJYmjltTOcRuLpyug0T//SLIlEOt4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746716941; c=relaxed/simple;
-	bh=EUta3aTRjT21bXtQrcK4rhz7dH2rAHVXhefracRyNDo=;
+	s=arc-20240116; t=1746717002; c=relaxed/simple;
+	bh=rVR/N/7ODChG6fZhtF8ZvMaMmZ6Fx13049NqQCPPeMg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZaqszQ1ZnYEgZF2ZfaP+OtWe8GcxLqBZX2ELcDryHfNcXubH94IrOzRHpEIRxKhkuBl14cAGiZJWy25Vank+ky3q76MuJCin76eHUttnkbiAAfa0JGB3HsM5NlUsyBIdB+dDhwMxMrVMv3sO76Qzm3SgcWJJPHOawthIhQmeQ8s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1uD2rJ-0006ko-49; Thu, 08 May 2025 17:08:25 +0200
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1uD2rG-001kE3-0o;
-	Thu, 08 May 2025 17:08:22 +0200
-Received: from pengutronix.de (p5b1645f7.dip0.t-ipconnect.de [91.22.69.247])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id CA5A940BC73;
-	Thu, 08 May 2025 15:08:21 +0000 (UTC)
-Date: Thu, 8 May 2025 17:08:15 +0200
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
-	andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org, 
-	linux-usb@vger.kernel.org, Ming Yu <tmyu0@nuvoton.com>
-Subject: Re: [PATCH v10 4/7] can: Add Nuvoton NCT6694 CANFD support
-Message-ID: <20250508-prudent-festive-puffin-83f666-mkl@pengutronix.de>
-References: <20250423094058.1656204-1-tmyu0@nuvoton.com>
- <20250423094058.1656204-5-tmyu0@nuvoton.com>
- <20250503-fulmar-of-sexy-upgrade-1184a7-mkl@pengutronix.de>
- <CAOoeyxWbr6jfZjPvYFD+vHKMZ9CpM6SLt+2xo-4E-NnhGinfvg@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=NYVA/s+dFrrtML3YMLTI+/cwdIL1r8ZqOAWUODrrBCzeYTIlVcNyvWliUPbj2UBhsoCY4ydsS85Mjyalwf7O1ofcxz9EtH4nv62yduTVTovGone6ysrZ3q75UhW89PhW4MaACjRDiVzXGw8nR29KMPpQSZ88/7ELi+AgDhulth4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GkmD0J1l; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22AECC4CEF0;
+	Thu,  8 May 2025 15:09:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746717001;
+	bh=rVR/N/7ODChG6fZhtF8ZvMaMmZ6Fx13049NqQCPPeMg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=GkmD0J1lOEP2v5R6Gl6VpW7bpQlNU+pvI1gjVPllebBtvu3VgZcVkbVEEUACCHxKA
+	 hITDaX6O72YKW7Abv8VD3qWeh0KvPv/oGLqBhNCazutTxVMaqx8kVCZmEtEO6TAfBP
+	 46u+J3V7ImhbwA+1hvN7ONIeaLBJ25VEkS29d6ZOU7GG8KfRNU1MGC3Ww2ZaEFGdEx
+	 eDKIrKCdFJ7FxhlrE0n5HeR31facf7qqtvPXnMMkl/8L+mzQ1cFAqsGNwsVwhqzDuJ
+	 LQ/rXhCaKJqR73NioMyZwo+eCDJ1zg0u//SIEb+IvDkg21Rds8Ptm260xSuIJdS644
+	 1cd60ulMzEOBQ==
+Date: Thu, 8 May 2025 16:09:56 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Akhil R <akhilrajeev@nvidia.com>
+Cc: andi.shyti@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, thierry.reding@gmail.com, jonathanh@nvidia.com,
+	ldewangan@nvidia.com, digetx@gmail.com, p.zabel@pengutronix.de,
+	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/4] dt-bindings: i2c: Specify reset as optional
+Message-ID: <20250508-atrocious-till-30aad5010c3e@spud>
+References: <20250506095936.10687-1-akhilrajeev@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="fkxqes6nz57lm4hv"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="iwu+DycW32HAkSb8"
 Content-Disposition: inline
-In-Reply-To: <CAOoeyxWbr6jfZjPvYFD+vHKMZ9CpM6SLt+2xo-4E-NnhGinfvg@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+In-Reply-To: <20250506095936.10687-1-akhilrajeev@nvidia.com>
 
 
---fkxqes6nz57lm4hv
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
+--iwu+DycW32HAkSb8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v10 4/7] can: Add Nuvoton NCT6694 CANFD support
-MIME-Version: 1.0
 
-On 08.05.2025 11:26:09, Ming Yu wrote:
-> > > This driver supports Socket CANFD functionality for NCT6694 MFD
-> > > device based on USB interface.
-> > >
-> > > Signed-off-by: Ming Yu <tmyu0@nuvoton.com>
-> >
-> > The destroy functions nct6694_canfd_close() and nct6694_canfd_remove()
-> > are not the exact inverse of their init functions. Se comments inline.
-> >
-> > Please fix and add:
-> >
-> > Reviewed-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> >
-> > Feel free to mainline this patch as part of the series outside of the
-> > linux-can-next tree. Better ask the netdev maintainers for their OK, to=
-o.
-> >
-> > What about transceiver delay compensation for higher CAN-FD bitrates?
-> > How does you device handle these?
-> >
+On Tue, May 06, 2025 at 03:29:33PM +0530, Akhil R wrote:
+> Specify reset as optional in the description for controllers that has an
+> internal software reset available
+
+Optionality of properties is not determined by text. The property is not
+marked required in the binding, and therefore is optionally on all
+platforms. If some platforms require it, you should submit a patch making
+it mandatory there (via the required keyword).
+
+Cheers,
+Conor.
+
 >=20
-> In the CAN CMD0's DBTP field, bit 23 is the TDC flag, I will add
-> support for enabling tdc, and firmware will automatically configure
-> tdco. Do you think this approach is appropriate?
+> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+> ---
+>  Documentation/devicetree/bindings/i2c/nvidia,tegra20-i2c.yaml | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/i2c/nvidia,tegra20-i2c.yam=
+l b/Documentation/devicetree/bindings/i2c/nvidia,tegra20-i2c.yaml
+> index b57ae6963e62..19aefc022c8b 100644
+> --- a/Documentation/devicetree/bindings/i2c/nvidia,tegra20-i2c.yaml
+> +++ b/Documentation/devicetree/bindings/i2c/nvidia,tegra20-i2c.yaml
+> @@ -97,7 +97,9 @@ properties:
+> =20
+>    resets:
+>      items:
+> -      - description: module reset
+> +      - description: |
+> +          Module reset. This property is optional for controllers in Teg=
+ra194 and later
+> +          chips where an internal software reset is available as an alte=
+rnative.
+> =20
+>    reset-names:
+>      items:
+> --=20
+> 2.43.2
+>=20
+>=20
 
-Can you configure the TDC manually via USB?
-
-If the firmware does automatic TDCO configuration, does it take care of
-not enabling TCDO if the Data-BRP is > 2?
-
-BTW: What's the CAN clock of the device? I want to add it to the
-can-utils' bitrate calculation tool.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---fkxqes6nz57lm4hv
+--iwu+DycW32HAkSb8
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmgcyNwACgkQDHRl3/mQ
-kZzE7Af9FGhvmDVRrnQ/F4bSbWoG2NTq/f6c3fZSGEWA89N5tefMfjZvh7dlyYji
-VaHiukxhQV4tR1h1zXxI/eZ9VQA3NyE5dv4XDcTtPDQILQ03+/sEQOOCSoI8Nb+d
-1WJ6Wvj7apYZa6Qvl+s9K5JVrgaRiQOBFXeKIQYAqTaR0DpQ8nB0gYdClnRowTeB
-gTYVRD/j3fNoE6Cm2DTMs/rzDxp57S/RTZTWuqpbo6i39xQZnv4c6IX6kRHS51Lg
-pQQNi1JctlAO52n2YZnYbBVa3P6XM3f/qLDmL7PYzYFo4v5O19avY0wiuanBk+hK
-wllO7zAOx6+Zxj0ABxJ9edXuP0H61g==
-=EkV4
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaBzJRAAKCRB4tDGHoIJi
+0vgnAP9UM812drDNILFwXxq22fplvS0kxJiN9gGVH+/OGyOlEQD+JBBjHC1MU1Lt
+okfKuk6deNpkgC+viWGs12HgWWuu8g4=
+=9QSL
 -----END PGP SIGNATURE-----
 
---fkxqes6nz57lm4hv--
+--iwu+DycW32HAkSb8--
 
