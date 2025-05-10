@@ -1,125 +1,113 @@
-Return-Path: <linux-i2c+bounces-10921-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10922-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE7C4AB2345
-	for <lists+linux-i2c@lfdr.de>; Sat, 10 May 2025 12:12:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87B3FAB247F
+	for <lists+linux-i2c@lfdr.de>; Sat, 10 May 2025 17:58:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 352F14A74A5
-	for <lists+linux-i2c@lfdr.de>; Sat, 10 May 2025 10:12:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EFC3A1B6564B
+	for <lists+linux-i2c@lfdr.de>; Sat, 10 May 2025 15:58:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1323322157B;
-	Sat, 10 May 2025 10:12:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9512D22CBC1;
+	Sat, 10 May 2025 15:58:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LWJv9tFZ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Hw6uoiLV"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C03982222BB;
-	Sat, 10 May 2025 10:12:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 134D91F0982
+	for <linux-i2c@vger.kernel.org>; Sat, 10 May 2025 15:58:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746871934; cv=none; b=uejqGZM1dEWRMoWQlI32q20aTZMrkG28+BNGDc4cI0Vu0+CLJOy9ekWMrRXSN3yW0g6rHXYIIuXKWJs6vDa4YHd7lyrfHd4qGglPr2sLkntMR4FiIaV7NlACwq3P/QfR7jk5qDKCVHf9JfPmIEQ6FdxztrEHnCl4NKJ+VrzPDpU=
+	t=1746892714; cv=none; b=bQTbSsz14tHgPrvsR9MpEt41ZUlwm5s9uB77o2tDS7HXwE+dU727qaqrZx7n6CD98D8pgVvQr8l+LESMeD8U1Xv1n7X1dbzVpqo5dVex0hzjcAGHLhe3ECgyjJE3hFCfunlTOw1OQ0QCXLxlNUPTkhdqVmef1ChOe3dJOCWgWR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746871934; c=relaxed/simple;
-	bh=Pg4V0meN3L3Yz//A/BdYQj6sOEw4qJtZuQhEeL7Cnvw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=EiXiJKwji6k4Q+4LG536F1hF0T1PJWfDcULmzJEw/Yu8UYFGyhm72A9xJvs3gfmGQd7YHTEhBnxui83ldIDBJncHAY8i2Lmv1LsqZKQzkuYo84q5JEBay0tpzEL33mSu+sO1Oh/NJb7X+VGwJz+MUWAFGeATShwndoxpRNCTgRE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LWJv9tFZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5C86C4CEE2;
-	Sat, 10 May 2025 10:12:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746871934;
-	bh=Pg4V0meN3L3Yz//A/BdYQj6sOEw4qJtZuQhEeL7Cnvw=;
-	h=Date:From:To:Cc:Subject:From;
-	b=LWJv9tFZ2gs0umparpARp9quhqRJm0hB09VmLrv3SBSA/LOBSM54rq5D/+/3QzhZ6
-	 ADl0D/dOb1QrakOHTo0WVpGzVqx4OXL6zyF1d5KeuFff+EtBFaPVjFOEEbiuIrSOX2
-	 cHCbZgoexQiLwZoH05uLLuNVGUtspfSY0ShOjFXOYjmaUNIGGGIRCEHK2yqX2qXBCJ
-	 kyYNBPTmzO9uqJyac1Gfs6TgAz6mvAU6bVj5x12Q4x7LHaS/bmJfwO/sHL0MqF0xUa
-	 ayCkh7B5NbttoUqSuJIOEljeclcsBE1U/MHslmip2PrR2T67EkHzck2t8gPVg8BJGV
-	 cj6nM3c4GiM2w==
-Date: Sat, 10 May 2025 12:12:10 +0200
-From: Wolfram Sang <wsa@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Andi Shyti <andi.shyti@kernel.org>
-Subject: [PULL REQUEST] i2c-for-6.15-rc6
-Message-ID: <aB8memMatOtJhqDr@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Andi Shyti <andi.shyti@kernel.org>
+	s=arc-20240116; t=1746892714; c=relaxed/simple;
+	bh=0XtGWeuHms1co+4sbJXxkH/nrBQ8rDUScbrSWsUEdl4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=i78JoqEXVOTHmiw+tt+NbkFsI3G/7TIguePMR7WYL0cBFNSWY0nnw4hCRsp3aYDJtSlCtnJ4yZ7XTYLYEnBYLbiwzAbc7MxE9m/A+Yk67Z2m49IeC7n17bB5vLh+hjD5c+FMusHt6y/DQZHXOgXEt1l0M3xCrsOFTCH6aiKBtsw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Hw6uoiLV; arc=none smtp.client-ip=209.85.216.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-30a8c9906e5so3950216a91.1
+        for <linux-i2c@vger.kernel.org>; Sat, 10 May 2025 08:58:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1746892712; x=1747497512; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ItNIE0AcZ9Oje5hbGBo69QPzUy1IzZ60Emtu+bwgaKI=;
+        b=Hw6uoiLVQNvMLYtvOueanOi2pyWpAvIfOhQXrxVUwR63i0tzkCfIPnog/Ye9+1q4E9
+         2jm4SUl74J+n05r9OXerJj0LBcOX+eWicGgI6n1Hm9y3CmIzDnlufCF6CzmKACL6FL3h
+         zJgvIE5QBUynlgN0frWR2a8mLYBc9R9Vr5/hlMSzxKP2vZ6JjG7j5LUkrhVogDWunhFO
+         vaLO3QvNITCy70bOz2GRfsXhHfKHaFrmd6DyRW0bIYK+ZN/15nQyDOuZY8E+Ivtu92wT
+         edUU/CPKuROlPXm+QXPIBTpPce7TH+OssFcpaPL7q0N+BC4wVt9KhqHtQzFj2DOn+22B
+         rUSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746892712; x=1747497512;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ItNIE0AcZ9Oje5hbGBo69QPzUy1IzZ60Emtu+bwgaKI=;
+        b=J/dXBT3Le1QacVlQv8GCA6mdt4ko2Pfjq7o4Ru14F4JNVGpho0wnB+f9jnfUlTKbDm
+         5YMxBwG9uVM+VtnPAUq7zhr5HGV7y7Dpa9bMw8pv/pT1fM/lbTT/butm4uDv9yQjlpy/
+         ggrc3tbAykVH2FkR4BFj12ID6/cqjuodwCvdn6OqP8V1d2ACUPE3VnFw+8BGsL4XV5l0
+         SLGpPsq1rMXd9z6mHLji2xMCeClL0ob9oVCLc/cibqjkm6cZTaf19uxrQZ4HzColhu/J
+         4mzhbAzWB56Qv800N2DZKztYkR697yJqvbmoC7I2Be1qD0I59dJyAHxi1pgNxbBiUa0e
+         JJNA==
+X-Gm-Message-State: AOJu0YzmDn1fBwPkXDrKLprKPhbgv+ueyQUBuyE/YN082G/rXcZq+mLS
+	CIRrInM68OKhgl7mQDqAtyYi8Gf61w9dKb6ibSrt8Us9plwQBeIsu0/ZJUFc
+X-Gm-Gg: ASbGncvvO++3+FkRN9bIq82axVHdiYvNJ/FD8iDZON5heT3hBPf3UxfLXMBwStA21+D
+	3yWJjbYMMJVIJDDGb9YpyKJucQkhrS2QF3rs+rGswcVryZ+pNlBVTDx1150zymkdgVnsDgWgLai
+	9NIWHBK35GgthLtww8vmDz9GEHd07w49PVLHkeo+6/TJ9rUVy3o35sglyHRQedwYmvGjNyAhCii
+	1PLaZhMfY4Lj6Hn1IuziAV3jleETSmLQ3xa58xKBoG+nXlFkUPOjNDZ2shA8gpxjtAGXAaTaY7q
+	qjnu6vjnUsVFNzLx1cBLU59gteOX03plVvWQZcw/kdzcAwwqMx921cier5rhD+Ngy40vmbb1urI
+	=
+X-Google-Smtp-Source: AGHT+IG4hUOOs6y+dbgJwCKTdXZYlWl0Q4w9E0Hs4/96ziMmPCCe06XZczj6CxKkr7vbB6/x/RtTfg==
+X-Received: by 2002:a17:90b:1a89:b0:2f6:f32e:90ac with SMTP id 98e67ed59e1d1-30c3cefc37bmr11498200a91.11.1746892711578;
+        Sat, 10 May 2025 08:58:31 -0700 (PDT)
+Received: from localhost.localdomain ([223.181.104.76])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-30ad4ffb6f1sm5884178a91.47.2025.05.10.08.58.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 10 May 2025 08:58:31 -0700 (PDT)
+From: Viswanath <viswanathiyyappan@gmail.com>
+To: linux-i2c@vger.kernel.org
+Cc: Viswanath <viswanathiyyappan@gmail.com>
+Subject: [PATCH v2] i2c: Clarify behavior of I2C_M_RD flag
+Date: Sun, 11 May 2025 02:57:21 +0530
+Message-ID: <20250510212721.29829-1-viswanathiyyappan@gmail.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="NfGmAbLQGMTFTJUc"
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
+Update the description of I2C_M_RD to clarify that not setting it
+signals a write transaction
 
---NfGmAbLQGMTFTJUc
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Viswanath <viswanathiyyappan@gmail.com>
+---
+ include/uapi/linux/i2c.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-The following changes since commit 92a09c47464d040866cf2b4cd052bc60555185fb:
+diff --git a/include/uapi/linux/i2c.h b/include/uapi/linux/i2c.h
+index aa751389de07..29b149ca4b70 100644
+--- a/include/uapi/linux/i2c.h
++++ b/include/uapi/linux/i2c.h
+@@ -21,7 +21,8 @@
+  *
+  * @flags:
+  *   Supported by all adapters:
+- *   %I2C_M_RD: read data (from slave to master). Guaranteed to be 0x0001!
++ *   %I2C_M_RD: read data (from slave to master). Guaranteed to be 0x0001! If
++ *   not set, the transaction is interpreted as write.
+  *
+  *   Optional:
+  *   %I2C_M_DMA_SAFE: the buffer of this message is DMA safe. Makes sense only
+-- 
+2.49.0
 
-  Linux 6.15-rc5 (2025-05-04 13:55:04 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.15-rc6
-
-for you to fetch changes up to b6c08bcddb2af9ea6d1846bcd36a35371e249003:
-
-  Merge tag 'i2c-host-fixes-6.15-rc6' of git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux into i2c/for-current (2025-05-10 11:41:13 +0200)
-
-----------------------------------------------------------------
-i2c-for-6.15-rc6
-
-- omap: use correct function to read from device tree
-- MAINTAINERS: remove Seth from ISMT maintainership
-
-----------------------------------------------------------------
-Andi Shyti (1):
-      MAINTAINERS: Remove entry for Seth Heasley
-
-Johan Hovold (1):
-      i2c: omap: fix deprecated of_property_read_bool() use
-
-Wolfram Sang (1):
-      Merge tag 'i2c-host-fixes-6.15-rc6' of git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux into i2c/for-current
-
- MAINTAINERS                   | 1 -
- drivers/i2c/busses/i2c-omap.c | 2 +-
- 2 files changed, 1 insertion(+), 2 deletions(-)
-
---NfGmAbLQGMTFTJUc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmgfJnoACgkQFA3kzBSg
-KbZKsA//eOzw+wsiW58Lj8W+AF5M+VDkfxYdaPI50tDCfcJP7RkQRScI9SVnnYHo
-xMXrhR3ZI5X+sF3e8w4vVAUZpTGo5dAqacyqmH7IEX4iGAJY12QW6QCYpE+68rY1
-Ks3iKUKzOrzsXxbzjouWkoKOhcSNMjwMbTdizKCDsOPq0llJ6D5W8mPIf3SuBIxV
-qld4PvSzRGna/Ic7Cc59bi0l7FWOUC1qM6tZPGh/5MaY65LsQXB9Qx3pGoPPJAYJ
-GGZmyEG1LgFto3z/lD4XonBfOTHBpaDQOo6fZ9bAVqTQBK7VDztJo9RALTwz+DNX
-E3K3+TfXX0diAaPoz8i2rq6GHiBJDxYKWgiJ+fVJOg6M8cH1kZfMDVPYI3KQ3zJ1
-VQWeoqrUqo3vQ9Ij/+EesH8HYTiITiq+AqnSc607ZW0dbXCnoiPD+iCN2h5EJ0bk
-w8caKMdJXzaQY2s6HCHm3JH7MGv13jgUM39c4jMHBJXr7Iqq58kiOzk7x2hcFcr0
-aWmKBZnPYTgJzBP3LCRCpgkz78K9pftdDxvwv579cwCbkcULVFDoXLDnZSbpbzu4
-wL9bJBdAY2GgbvufZPvQlOamX4W6AQ42FFB+XAP0ypW+lQ+wtCOJqNXAElG6Zr1p
-DQIE4s6iWH9VNFEGT8tvYSnpPKV9i6SmjvKCf/x+uhJUJF8Ree0=
-=i4R4
------END PGP SIGNATURE-----
-
---NfGmAbLQGMTFTJUc--
 
