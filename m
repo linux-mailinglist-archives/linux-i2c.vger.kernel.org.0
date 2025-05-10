@@ -1,115 +1,116 @@
-Return-Path: <linux-i2c+bounces-10919-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10920-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48DC0AB2077
-	for <lists+linux-i2c@lfdr.de>; Sat, 10 May 2025 02:19:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A85CAB2306
+	for <lists+linux-i2c@lfdr.de>; Sat, 10 May 2025 11:45:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B05097B505F
-	for <lists+linux-i2c@lfdr.de>; Sat, 10 May 2025 00:17:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 861E44A3481
+	for <lists+linux-i2c@lfdr.de>; Sat, 10 May 2025 09:45:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24F7C3594C;
-	Sat, 10 May 2025 00:18:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B306221F2C;
+	Sat, 10 May 2025 09:45:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="NrnMwztr"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="B7WvgvF8"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E37251D6AA;
-	Sat, 10 May 2025 00:18:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12AA21E51EB
+	for <linux-i2c@vger.kernel.org>; Sat, 10 May 2025 09:44:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746836337; cv=none; b=i6Ll6UWYWsr3JE1Ebo6Cz4veubXJ1KUEb9CfUY4VPcgTi9gSPKEtcbIoDO/XWNsTUUfp2+NsR1fFtOf+/Nosz16gy7A22/mUW/iufFRahcIh2LAFFjDuQUNtHTKGwzwlwqA5MGc0E1HnfeE3245Ov1A48ID3K0p93MkJjngX+UQ=
+	t=1746870303; cv=none; b=rTeby6uYNEM+WS6Unlh/ta42n1lj4CSpx7g7XsaYVB+azmhn6U7lS2BkfgbUvATWZe34yo5tuyx2dvPdL8dBr9hBfxXkN4wlHJXT5Tv9KrfoKH38bkavtxm6woi3OtBHMrVz84jaWF9Y48ZrDl59brQHLMAuoKWg2t6h5H6bEqA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746836337; c=relaxed/simple;
-	bh=lsLtnFSVphBZGRaEOpHYnW/43K3L3GszCrMpsXdOAAU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Cb3/FtmR3dpfSKCxfba0XQ8KSCGSS5YfeI4mrTpze4G06IfuZbaaS53RqYGF4dlCwppvKDi12VnCBnfEDn1yR7FtjOFt/5FHgaTcc2Dj5XGfq8HjI8EbQMIyaN7itTL/+reyJURhgJUyPa/izRZrq//9cgeyVsHDW4qFOMvLFoE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=NrnMwztr; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-	:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-	Sender:Reply-To:Content-ID:Content-Description;
-	bh=JxEjBAQahXn7jOCRVGcyOqQ96R/5yhjHGXWRQR573Kg=; b=NrnMwztrylTNvdmJfJ9q0Qh+I6
-	K8qZyCmISUX3nEEtgcOFP1QVwEkkU7Vn3JE5kkZvfjsSlYFUtC3rZrbwhmD7AkH+FFenzHL8sfF+y
-	hdHgK/hqqNxe+pLxAaSXg0g5i5XI5DhKGudPqXbfQ2pLuG1Ed7rYl8AKWdc6vgiSzeZT5H6fMtXLg
-	74mAF3AbRGaZsXoVPKK1tP4v9ADylxl3mcO1b7DJqP6VKQoIDpfAZy4vUt7NA1f2CIDomqVT2ssK9
-	MuuhwTXyWAtics6zMrlC27a9SF/y1896pKxCbh3OMohIp+f7e7llOWbcs+Lwc3eK1D+Ku30oATR5A
-	nZptyVvw==;
-Received: from [50.39.124.201] (helo=[192.168.254.17])
-	by desiato.infradead.org with esmtpsa (Exim 4.98.1 #2 (Red Hat Linux))
-	id 1uDXvU-0000000GO9z-0NBe;
-	Sat, 10 May 2025 00:18:48 +0000
-Message-ID: <a4e821f9-9daa-4a65-b41a-200a6da85191@infradead.org>
-Date: Fri, 9 May 2025 17:18:40 -0700
+	s=arc-20240116; t=1746870303; c=relaxed/simple;
+	bh=zqlh9T6lprqhOCs89lpTlZP7/3GWg+hgKWkX6nmed60=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Lv4MwLgqaHhUDesN+6HTxNk3n2JTki8T+RNVXQsynqAAkPdm5gp/N3c9ot8884P88b3SnYbu0yF74DLHGkDCPtmICoqW+IbLUnElYZFLcQLnbny0+4X7UL/H8k6kzcSwFZYFi4RgcUwklU55Z4wV9I4ytbfloulVFeO6Rf9h8X8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=B7WvgvF8; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=zqlh
+	9T6lprqhOCs89lpTlZP7/3GWg+hgKWkX6nmed60=; b=B7WvgvF8dMkzBKswDZJx
+	FA06frZF6aUJ9Cx86BMAHbRcooYVmQ2zZtSmmEASUcXvVfYa7joQ983d1ixz+YMp
+	ZcK2Jkx38Ccq0veZvOxX+0EN3HfrjmRcbkztrn/ZuFGvcpqq58ssN+uePGzVrGT5
+	pUpZpIDxlD5WWlj+WWIqf+vnz/ceeZDoocGU0ipfkmIXiF9WP4COXduTKewr35Wp
+	CkpyaNBEaTO7cbItu2GgdXdOtxowtYnR7iZrkqTij9sCWnoYbzxN6u8/MqApfqjt
+	0u/EyTrwuY6unSlcIpyMGR01dzdtDh7G/rerMhObSHGGikB25nqfdAZ5P7jwr0rW
+	MA==
+Received: (qmail 263804 invoked from network); 10 May 2025 11:44:49 +0200
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 10 May 2025 11:44:49 +0200
+X-UD-Smtp-Session: l3s3148p1@H4AG78Q0lk4vQDLS
+Date: Sat, 10 May 2025 11:44:48 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Andi Shyti <andi.shyti@kernel.org>
+Cc: linux-i2c <linux-i2c@vger.kernel.org>,
+	lkml <linux-kernel@vger.kernel.org>
+Subject: Re: [GIT PULL] i2c-host-fixes for v6.15-rc6
+Message-ID: <aB8gEAEBtIW3ATB4@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	linux-i2c <linux-i2c@vger.kernel.org>,
+	lkml <linux-kernel@vger.kernel.org>
+References: <xpvrz2zt7jm7k56vu6txgyorg73yrfag2omwyqbkpqdkxyoikl@rh5wcugtqwhf>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: Tree for May 9 (i2c/busses/i2c-mlxbf.c)
-To: Stephen Rothwell <sfr@canb.auug.org.au>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Khalil Blaiech <kblaiech@nvidia.com>, Asmaa Mnebhi <asmaa@nvidia.com>,
- linux-i2c@vger.kernel.org
-References: <20250509195816.7f0a67a3@canb.auug.org.au>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20250509195816.7f0a67a3@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="IvN/djnseQK5rpJl"
+Content-Disposition: inline
+In-Reply-To: <xpvrz2zt7jm7k56vu6txgyorg73yrfag2omwyqbkpqdkxyoikl@rh5wcugtqwhf>
 
 
+--IvN/djnseQK5rpJl
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 5/9/25 2:58 AM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Changes since 20250508:
-> 
+On Fri, May 09, 2025 at 02:09:01PM +0200, Andi Shyti wrote:
+> Hi Wolfram,
+>=20
+> Two patches in this pull request. The first one updates the
+> MAINTAINERS file to remove Seth from the ISMT entry. His email
+> bounces, and he no longer works at Intel. I had a chat with him
+> before he left, and he did not intend to continue in the role.
+>=20
+> The second patch is a minor fix, barely worth a Fixes tag, but
+> we decided to include it since it addresses a warning introduced
+> in the latest merge window. We preferred to keep the patch and
+> its fix in the same release cycle.
+>=20
+> That said, I hope to see you soon, and in the meantime I wish
+> you a great weekend.
 
-on i386:
-
-ld: drivers/i2c/busses/i2c-mlxbf.o: in function `mlxbf_i2c_set_timings':
-i2c-mlxbf.c:(.text+0x67): undefined reference to `__udivdi3'
-ld: i2c-mlxbf.c:(.text+0x8a): undefined reference to `__udivdi3'
-ld: i2c-mlxbf.c:(.text+0xc7): undefined reference to `__udivdi3'
-ld: i2c-mlxbf.c:(.text+0xeb): undefined reference to `__udivdi3'
-ld: i2c-mlxbf.c:(.text+0x112): undefined reference to `__udivdi3'
-
-ld: drivers/i2c/busses/i2c-mlxbf.o: in function `mlxbf_i2c_calculate_freq_from_tyu':
-i2c-mlxbf.c:(.text+0x194): undefined reference to `__udivdi3'
-ld: drivers/i2c/busses/i2c-mlxbf.o: in function `mlxbf_i2c_calculate_freq_from_yu':
-i2c-mlxbf.c:(.text+0x1e0): undefined reference to `__udivdi3'
-
-These come fromm using '/' instead of one of the kernel's DIV macros when using
-u64 or ULL  data types.
-
-in mlxbf_i2c_get_ticks():
-
-	ticks = (nanoseconds * frequency) / MLXBF_I2C_FREQUENCY_1GHZ;
-
-in mlxbf_i2c_calculate_freq_from_yu():
-
-	corepll_frequency = (MLXBF_I2C_PLL_IN_FREQ * core_f) / MLNXBF_I2C_COREPLL_CONST;
-	corepll_frequency /= (++core_r) * (++core_od);
-
-in mlxbf_i2c_calculate_freq_from_tyu():
-
-	core_frequency /= (++core_r) * (++core_od);
+Thanks, pulled. Yes, see you soon :)
 
 
-commit 37f071ec327b0 ("i2c: mlxbf: Fix frequency calculation")
+--IvN/djnseQK5rpJl
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
--- 
-~Randy
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmgfIAwACgkQFA3kzBSg
+Kbb0VA/8DwLyAx0UwZ2an+52TdkTsf0FQyoUoqLb7HvGKQ01kpC4pYTVlXdYDpPY
+OBknU8LFdEdAEvLCdzImc9IBDuRzGTyO0jonI00T6+48s8WVkU2Tl9umPfz+T9+L
+zdRRE7kXR8GW25YY5SILsXBGcJTEe6nY8YRS6TRXiL7IvSOL2eotU0/p6WehBrGD
+uQZh8awbmHpO+oYiOiHWKLKFYVajsd8GplbKAwup3FNIUWkWgabreyDhc1NPxFdZ
+hBz3N1bmnWVw/NTQKZzSzCHZVhr9JLAcsIDPe34D/VnOK60v7SNoq7SEd+UFsEAw
+9oOJZte8kPIiWq52VZkzUdHl/MqyX0dlf+HMXYTppAfFDs5OWT9RX8EGXwlsA+5W
+GxFXZ6HkUUvIyzYh62/x2QyCQVas9CgQq4RqFnH0/JtkTeTJLMd0/NyGhcYbBbcB
+fkNu+G16vEFDODsqX9+TKN6cCuegyxQ0HBikTs5v4HnoHZSW5/AH8dlJA2KrnQnO
+7rMftNpupMRfqwKu9XLCAaWdg1JI0WeBHDhYM4/PxQecAmnyFAz1s4w6vgi0d4aZ
+hlbl40RuVKIg1sO1fR55T3kEmQhKOBUTur5wUmAJaWiSfEjIIceetRvqJtdlzdC/
+yZJi+04hrhhAM4i71E7yCBwPiGS7L9uYAa37dyxAgNI4/6fXV/g=
+=QTrs
+-----END PGP SIGNATURE-----
 
+--IvN/djnseQK5rpJl--
 
