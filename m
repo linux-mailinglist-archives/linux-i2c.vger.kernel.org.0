@@ -1,35 +1,35 @@
-Return-Path: <linux-i2c+bounces-10933-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10934-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1BA5AB3E2F
-	for <lists+linux-i2c@lfdr.de>; Mon, 12 May 2025 18:55:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4597AB3E43
+	for <lists+linux-i2c@lfdr.de>; Mon, 12 May 2025 18:55:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 265337AAFBE
-	for <lists+linux-i2c@lfdr.de>; Mon, 12 May 2025 16:54:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3E9E43ACBAE
+	for <lists+linux-i2c@lfdr.de>; Mon, 12 May 2025 16:55:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A413E2777E5;
-	Mon, 12 May 2025 16:54:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D7002951A8;
+	Mon, 12 May 2025 16:54:51 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30DC225A2C7;
-	Mon, 12 May 2025 16:54:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7FD925E45B;
+	Mon, 12 May 2025 16:54:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747068886; cv=none; b=gNNFWj6AnUW+n8BfJtVDLe9VdQp5Pv3F2eYbi+zyEMV2bBngfs1QdD2vv01wrQ3ElRcbntLhxMUUayv+C31Ct4MKEqHK8e5BSHm98GYrFIISHYM6Dj8dqWGgXg1SktidNW097xTIAXYJ1bttu4B0Bq20ekJyuBkWfxLxbGiiX54=
+	t=1747068891; cv=none; b=THiRnx0+bORR5wuRw5lG1kBEBupgVGBZIJefqYISsCv6u4E9ZGH2Ozs19kGDhNeJ/DeWbMvZAWAf9sPHlHgM7Du4RmcqTSUerGnEBXc+ZXzW4gGRTLK98ZWOoKESPxhYAoEB1P1Vg42Uu04woXpuZ2EzM8iuh1zHNy2jJ884x+k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747068886; c=relaxed/simple;
-	bh=GHfBzMz6hvOT4FNqopeQP9A6JOY7MLEh312/qsRWIQc=;
+	s=arc-20240116; t=1747068891; c=relaxed/simple;
+	bh=0fjjg9dWpILcBjHooGrKtGvtx89imrki/aMtIkX/3AM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qaLWhraFrr2QZyd1mkAQStejcCw2GGOniGUG+Cie5HWijvECIklSw4E9wDuS9uoboGFB9N/JSCae7dhcIoiPbxh4v+5szCS8LUj4C6vkNzlyemRLh+WRepX8PiSf1OyJUrR6p/BK4kxr6Hc67mR9YQzedwPwZSaHAgFZLssBXOY=
+	 Content-Type:Content-Disposition:In-Reply-To; b=evk4Ed+VoLUNoNyWiOjY8irMJ4cP+/Tpp/H878OfixIOLbq62DiohGmZFUXeCq0NrXHCbRxPP5IZ22uHY7/ih/0j+/HZ6saJAj/HEiml0QWaw2uIxtIKuNEi283H34BlbXeh4GYa4e6feHVn6r2Ih7KvMyLMIgkMsXXqVc1eVwk=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F219FC4CEE7;
-	Mon, 12 May 2025 16:54:44 +0000 (UTC)
-Date: Mon, 12 May 2025 18:54:43 +0200
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD11EC4CEEE;
+	Mon, 12 May 2025 16:54:49 +0000 (UTC)
+Date: Mon, 12 May 2025 18:54:48 +0200
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To: Danila Tikhonov <danila@jiaxyga.com>
 Cc: Rob Herring <robh@kernel.org>, 
@@ -71,11 +71,11 @@ Cc: Rob Herring <robh@kernel.org>,
 	linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev, linux-remoteproc@vger.kernel.org, 
 	dri-devel@lists.freedesktop.org, linux-hardening@vger.kernel.org, linux@mainlining.org, 
 	~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [PATCH 20/33] dt-bindings: i2c: qcom-cci: Add the SM7150
+Subject: Re: [PATCH 21/33] dt-bindings: clock: qcom-rpmhcc: Add the SM7150
  compatible
-Message-ID: <20250512-incredible-radiant-jackrabbit-d0c77b@kuoka>
+Message-ID: <20250512-victorious-neon-crane-4c7edc@kuoka>
 References: <20250422213137.80366-1-danila@jiaxyga.com>
- <20250422213137.80366-4-danila@jiaxyga.com>
+ <20250422213137.80366-5-danila@jiaxyga.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -84,17 +84,53 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250422213137.80366-4-danila@jiaxyga.com>
+In-Reply-To: <20250422213137.80366-5-danila@jiaxyga.com>
 
-On Wed, Apr 23, 2025 at 12:31:24AM GMT, Danila Tikhonov wrote:
-> Add the SM7150 CCI device string compatible.
+On Wed, Apr 23, 2025 at 12:31:25AM GMT, Danila Tikhonov wrote:
+> Update the documentation for clock rpmh driver on SM7150 SoCs.
 > 
 > Signed-off-by: Danila Tikhonov <danila@jiaxyga.com>
 > ---
->  Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml | 2 ++
->  1 file changed, 2 insertions(+)
+>  .../bindings/clock/qcom,rpmhcc.yaml           | 53 ++++++++++---------
+>  1 file changed, 29 insertions(+), 24 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/qcom,rpmhcc.yaml b/Documentation/devicetree/bindings/clock/qcom,rpmhcc.yaml
+> index dcb872b9cf3e..311aae5c9828 100644
+> --- a/Documentation/devicetree/bindings/clock/qcom,rpmhcc.yaml
+> +++ b/Documentation/devicetree/bindings/clock/qcom,rpmhcc.yaml
+> @@ -16,30 +16,35 @@ description: |
+>  
+>  properties:
+>    compatible:
+> -    enum:
+> -      - qcom,qcs615-rpmh-clk
+> -      - qcom,qdu1000-rpmh-clk
+> -      - qcom,sa8775p-rpmh-clk
+> -      - qcom,sar2130p-rpmh-clk
+> -      - qcom,sc7180-rpmh-clk
+> -      - qcom,sc7280-rpmh-clk
+> -      - qcom,sc8180x-rpmh-clk
+> -      - qcom,sc8280xp-rpmh-clk
+> -      - qcom,sdm670-rpmh-clk
+> -      - qcom,sdm845-rpmh-clk
+> -      - qcom,sdx55-rpmh-clk
+> -      - qcom,sdx65-rpmh-clk
+> -      - qcom,sdx75-rpmh-clk
+> -      - qcom,sm4450-rpmh-clk
+> -      - qcom,sm6350-rpmh-clk
+> -      - qcom,sm8150-rpmh-clk
+> -      - qcom,sm8250-rpmh-clk
+> -      - qcom,sm8350-rpmh-clk
+> -      - qcom,sm8450-rpmh-clk
+> -      - qcom,sm8550-rpmh-clk
+> -      - qcom,sm8650-rpmh-clk
+> -      - qcom,sm8750-rpmh-clk
+> -      - qcom,x1e80100-rpmh-clk
+> +    oneOf:
+> +      - enum:
+> +        - qcom,qcs615-rpmh-clk
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Wrong indentation, needs testing.
 
 Best regards,
 Krzysztof
