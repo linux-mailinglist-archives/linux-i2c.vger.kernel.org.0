@@ -1,35 +1,35 @@
-Return-Path: <linux-i2c+bounces-10935-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10936-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 191C8AB3E4C
-	for <lists+linux-i2c@lfdr.de>; Mon, 12 May 2025 18:56:26 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 03803AB3E68
+	for <lists+linux-i2c@lfdr.de>; Mon, 12 May 2025 18:57:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A7E10189EBDD
-	for <lists+linux-i2c@lfdr.de>; Mon, 12 May 2025 16:56:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3FE7A4640FE
+	for <lists+linux-i2c@lfdr.de>; Mon, 12 May 2025 16:56:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F20502957D2;
-	Mon, 12 May 2025 16:54:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A87D29615D;
+	Mon, 12 May 2025 16:55:01 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B1AC248F7C;
-	Mon, 12 May 2025 16:54:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 949C7252284;
+	Mon, 12 May 2025 16:55:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747068896; cv=none; b=Ej333FhSqsOS3RUXcxh90zneE1jQsp/gw4ulyDrkjBklNRrkuJSlJvooHsSzG87XNseDVMPJqR/P0jighSOQver1wK71cxqHHlqKoKxNnwePmqRfLckRnAlPymavyJ7cvFLKunATohEz3Xh0ubVyJR2/6uCdLhIeX3TzljTTbag=
+	t=1747068900; cv=none; b=s4p0nX5pva6HSe7vOA9TwfUEZFUtq7oKCLBJcunw8512WvCY2zU48wKPzvLqdPmM9/i7sEWBNJyZSgFnZ/WRkfjvfbc+qd3VNOZVcui5BqfGt8tg+8KAngHTBaSf8YCyUbPhJvXN+cNn3zLqbiYvGGoPmE7+pZhEQbeX/P2itSs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747068896; c=relaxed/simple;
-	bh=bMVn7+ucxgeES2ifi+JgPFuPDA8SzMtoLsX4wg6m1kQ=;
+	s=arc-20240116; t=1747068900; c=relaxed/simple;
+	bh=8z507PFpRnuBGU0rmubsHUbboXlxkzV1akcEHGxPMz8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pGj8gjhaOzqfoPxSs2HsQj84eX2nXPR3g6yJf22b98R/8QUXd0fizpns/q0d5Ck6UFD1egek+J1foiZAb5cWLuMulE6Njg2OL3Y4Amxbi0jJC4RTUq5ViGniw7CuI9qsSQm/3ZrdhXaVguGix6taYhfcMR0MLcu+2DUZ7mIuoMk=
+	 Content-Type:Content-Disposition:In-Reply-To; b=phgeL5ELBnHHJCBKd65UKQIC/k4KpHapdSdT9K60o6p+E+KFjBWyzSDg9llp/1R69S3EpKEnoiKoh2ZDyrYhsygVxG4nDWIQ51czqI6MsUIxGcMhP3zh6k4OBAgdbqTB77gl/XTeoQx9zbtobkNmd4Q9szFLSQzX3gKiV5pKgRk=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F7FBC4CEF2;
-	Mon, 12 May 2025 16:54:55 +0000 (UTC)
-Date: Mon, 12 May 2025 18:54:53 +0200
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C894C4CEE7;
+	Mon, 12 May 2025 16:54:59 +0000 (UTC)
+Date: Mon, 12 May 2025 18:54:57 +0200
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To: Danila Tikhonov <danila@jiaxyga.com>
 Cc: Rob Herring <robh@kernel.org>, 
@@ -71,10 +71,11 @@ Cc: Rob Herring <robh@kernel.org>,
 	linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev, linux-remoteproc@vger.kernel.org, 
 	dri-devel@lists.freedesktop.org, linux-hardening@vger.kernel.org, linux@mainlining.org, 
 	~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [PATCH 23/33] dt-bindings: arm-smmu: Add the SM7150 compatible
-Message-ID: <20250512-fearless-hoatzin-of-triumph-acccf1@kuoka>
+Subject: Re: [PATCH 24/33] dt-bindings: clock: qcom,gpucc: Add the SM7150
+ compatible
+Message-ID: <20250512-flashy-snobbish-hoatzin-ea9a47@kuoka>
 References: <20250422213137.80366-1-danila@jiaxyga.com>
- <20250422213137.80366-7-danila@jiaxyga.com>
+ <20250422213137.80366-8-danila@jiaxyga.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -83,15 +84,17 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250422213137.80366-7-danila@jiaxyga.com>
+In-Reply-To: <20250422213137.80366-8-danila@jiaxyga.com>
 
-On Wed, Apr 23, 2025 at 12:31:27AM GMT, Danila Tikhonov wrote:
-> Document the SM7150 SMMU block.
+On Wed, Apr 23, 2025 at 12:31:28AM GMT, Danila Tikhonov wrote:
+> SM7150 is fully compatible with the existing SC7180 GPU Clock
+> Controller driver. Define corresponding compatible string, having the
+> qcom,sc7180-gpucc as a fallback.
 > 
 > Signed-off-by: Danila Tikhonov <danila@jiaxyga.com>
 > ---
->  Documentation/devicetree/bindings/iommu/arm,smmu.yaml | 3 +++
->  1 file changed, 3 insertions(+)
+>  .../devicetree/bindings/clock/qcom,gpucc.yaml | 29 +++++++++++--------
+>  1 file changed, 17 insertions(+), 12 deletions(-)
 > 
 
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
