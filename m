@@ -1,80 +1,87 @@
-Return-Path: <linux-i2c+bounces-10953-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10954-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E9A3AB4C1B
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 May 2025 08:37:10 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F82BAB5378
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 May 2025 13:09:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9DF8D7AE00A
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 May 2025 06:35:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 38C187A7DE1
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 May 2025 11:07:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0897F1EB5DC;
-	Tue, 13 May 2025 06:36:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F2A628C876;
+	Tue, 13 May 2025 11:08:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fY5oruqO"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Ll0RsFi3"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pf1-f193.google.com (mail-pf1-f193.google.com [209.85.210.193])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65E041EB5C2;
-	Tue, 13 May 2025 06:36:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA2CF28C863
+	for <linux-i2c@vger.kernel.org>; Tue, 13 May 2025 11:08:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747118207; cv=none; b=JbY6dY5oh+hY/JrE4myjuNBhfE+DUfQicl9uLVc4Tsk3M8mUWYpZDjuPLR/ktP95O83IQhMqOZ1DA0L+fG5rt0zp5/KzU8Za0YzF56opRogUOPFK8nZUl19aZAyVG3flf27MvmrdOZiaOcQFyd5Ed/oNfLw8B/2p806o+ddYL9k=
+	t=1747134531; cv=none; b=I22mxp9CrkOnOgG7wn3SuhtC1cXKgM1nEHaJgZHDmUT8mLfu4zgo3foxWnAS7J+2v14A6oafYbglYSuNMx4aD/6Fi9xwSNFNqXAj8LJOBmg97+z5BMEVf/9pYrVZtpY8xkBCQey20pghYAAv5yn22ekKPTZhtl+fdkcamxXK4bw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747118207; c=relaxed/simple;
-	bh=Ip3fCjtKHIWdXoxS2ayjmqQZ2CXz2QC9JgKDfWc8a7w=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=eWyWhO9j2lekTgtBk/pUCF47dtEWhfDmy+11/3Euhl0J5hOUudIW3xnA/IIp5ka2wc2Lzc+TvOc03/5Vma+DC/9CA/t3GURKdrPGkaJD4B57F+0uBFj6SorYc0AZ3bs0EUWkt2G7pgbL160wbd6OuQFxzqnhvR63KrtDJHmgJm8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fY5oruqO; arc=none smtp.client-ip=209.85.210.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f193.google.com with SMTP id d2e1a72fcca58-740b3a18e26so4435909b3a.2;
-        Mon, 12 May 2025 23:36:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747118205; x=1747723005; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=y99xS7SY2LAz3TrF1rHqHfHg9H2RdQzzJUTTaDgx+SY=;
-        b=fY5oruqOqJPhWFv2/R+I3/fShgzF11z2IU5cXkQQnozY7N+vZ/u7GhsMFXCCwbMvkt
-         gm+fvUDTX+FjEkvyHM4MpOm4hVl+IefPolXQcnwZ9+fchFb66d5fZ7Snbg0m1vTf6JNc
-         hvXnKM+In2gW2g0ACzgJlSwA2ryKqsKdjZnBRd6j6E/SwXcK/q5nDHJ8AkaOVzpwptWn
-         Jm18/8Hydul/LimXDTywt45d9rRKqqW9SEuE4218qt+eDO1niBJaO43HtulI8ykOI2Qz
-         tWJ7F86DgoHRWaipIlbB9cLnPieLiZ4tNcRxQ2mdynvrVBsP7okpUV7b2ltIYu87GQmu
-         7NxA==
+	s=arc-20240116; t=1747134531; c=relaxed/simple;
+	bh=rdpI6SyCzEcz0rHhDFC3KBNtrPw+BnurZ+tDNY7GaGg=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=n9P+rOBVF7vGKWxui9ZK2fR3R6lz9dFz8gsS5BGu5gXQpKO+IFAppfizTsIqvL3Fbzs5Yx/fZ/6KK8iwNOMxbGAp9/ePu3Ib8HEesMWCB1mr6AJYAYRZXNFdC3s9brCcq9PLm6RabH9car0YitOBMullFtx38ETW8Wu4EGHrPl0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Ll0RsFi3; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54D6bgJo022687
+	for <linux-i2c@vger.kernel.org>; Tue, 13 May 2025 11:08:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=TdcskCO2K/Wyi90DbkJBCc
+	6FCyelyPLh1fYHTqrysmg=; b=Ll0RsFi3Z1nYvX2B6WtHFLRhJFf/frMjBJf0QM
+	egtXLOPCcB/nrv0CEZF3N91IiA/pdiY8hHv52Up+7Kepqa66gBBBOthKH0YMN+zy
+	y0lEJSi2tvX6XvzrKrsUJwzQVHyUgax+Rew4qreFo/aSoLNt2aEvGd6CTo1HADQA
+	Dquth35rwQxKa4+boK/7vOpCaSnNqJWXc1qD3rfcR5c12mhExYTOr7aGu+I71Cqz
+	NrSQGEQzkjlxYLmzjnlZd1H80Y3mfzSYhjx+LMBQRyAoBgUyuaYf8cg3Dygh3V5J
+	6aOoBIBzXZT6uRIZwGzBfsaF4kmSZdklZT/EnZv+uf762LKg==
+Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com [209.85.215.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 46kdsp3pqs-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-i2c@vger.kernel.org>; Tue, 13 May 2025 11:08:48 +0000 (GMT)
+Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-b20027d9ac0so3130988a12.1
+        for <linux-i2c@vger.kernel.org>; Tue, 13 May 2025 04:08:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747118205; x=1747723005;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=y99xS7SY2LAz3TrF1rHqHfHg9H2RdQzzJUTTaDgx+SY=;
-        b=UxOcDp/9SzVVP/hNsWBEqw0QVA7KGGrO2BVlXk4muT7g2YQk0NhJUqhURD3XMQ0HGe
-         gkLsaMphCu9e+hqDdAk4GzauaZLWQQ2mi1b58ZzfsyrnkZX5oDJieTdG9mG5A3R7zVHY
-         gteyGZsuN8Q8LqhSNe38FLmQCtF2nYHj6N+sNGUN5mmajBuSFBmLi5md41+5kNe3RUQU
-         tT1SUwoRcIpAwxDmKdJmCcqNxV2OMKbGHFwcRpsCqKBDJk+PKpBXcW6umyJdGfrz7P37
-         V9q34JlQ1YmL+hFymvP0/QQKqpMgSAZYR67oyThkTLgMkkd/GIXDmidcrjpWNuLFe19d
-         O53w==
-X-Forwarded-Encrypted: i=1; AJvYcCVKiGIdw7FKeyVXAq1tAhnxryL+R8cfb5nlveXSGJcrNav6ke0zd6alaW6Tn3CBnLcW6yyepodzDRQ/798=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx3y3lIp5UPaEG5mxT9PNmadlxUa0YJlEz7dF/1shI1OXAR1+BZ
-	Fx3RIMat4h76UCGSpnT8n8X2qN1eUfeuZgw31lyVniY1UHRCXqtU/5Qa0qYDqnHZspzk
-X-Gm-Gg: ASbGncsJa7qjkbAJL4ezueZj0m8wSx5hFxknLxSGQXxTu6zLr2lqQBMDZTBtsTjMiCB
-	+6H3uWz/ldQSAZiY/w0hGNbuxFYY+T9cDcAyj+VC9T+SyQMYCvUt/7rLPvaMYpbEJ5M2BB5d/+q
-	Gd6f2Oagg4tQe2lUjwM4GfQejs+fCr60wdz4OPw/IBkMdXJzkcQYc7JLF07GvqJYLna2RjSe+z6
-	awr8HDnW+CQ9EvfXuERu1u0/zFVlBPjL+7p8jQjFvTHGSel5/pBbYwrf7KE6dh7L7Fq00eLCKs6
-	1LQhI17zO6c5rGesIXpEzcdM1VWDbdJoKA6wETDN9fp6lz5R0lX8eUE=
-X-Google-Smtp-Source: AGHT+IFJWXy24yaetI34omZb1r4anR0SzeBfbfb+3vCHkMA5r41DKDPTr4sjv1kUrFcK6m2M+hxgTw==
-X-Received: by 2002:a05:6a21:3510:b0:1f5:7cb4:b713 with SMTP id adf61e73a8af0-215abb3a301mr23308487637.19.1747118204664;
-        Mon, 12 May 2025 23:36:44 -0700 (PDT)
-Received: from [127.0.1.1] ([91.124.30.36])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b234a0b76ccsm6657936a12.27.2025.05.12.23.36.39
+        d=1e100.net; s=20230601; t=1747134526; x=1747739326;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TdcskCO2K/Wyi90DbkJBCc6FCyelyPLh1fYHTqrysmg=;
+        b=fp/5DtlBGyt+k81ZRUXNAOG7NEDNAzTGDUu7+4pOnxbQ92fKTporU7TwJEakiHSjj1
+         EbdOREcEnZSSCm7AKbZ3PEm4ZrdSewM5KVPZqK1v/z7eOenBuaM3aL3y2Qr/OXfTZZua
+         BGfAI9QP9GuKpcum9frE2KQoh0CDoGfwJ2YkAGmIVArnXTCAnXIVWorEVrUQvnV3aTZp
+         iX5MQtHPJe7o5WWxF4yJuZEhn2rUzVHrK8fo9A2m7V2dZSVZ9X0ufOklTF5fRmLi/1VF
+         fT7gSdWch1r9eXidCeme3pv5h2kHByYXcvjnM1gmo0c1BswXfFUGM/cJsQSk5d3/sCCe
+         cehA==
+X-Gm-Message-State: AOJu0Yz9e4t5HCrgjBzglJ5fyh3BYNGQEUfU1GPi0b/ciGmvFwiGVlOQ
+	voBApucNFUzI0mQGrWPgHdEXxufzqBFk1ZelBYoAtwZ4aLvDFZTOVO0tkvsVLm2yBItapWFV8ty
+	QzZRfdRQ0a/PUOP4QMO6miwFL6UR90n73IV2HF1OK1F1so2QAWXpkdg6LW8s=
+X-Gm-Gg: ASbGncthW0tNfDlh8FZFnBrB4eQkMI8bEC47hritgsQyDNzQw38s5AnIHlz/oSVvU+C
+	zm6ywYlHg1jeJ07Z5qXjh7LstYSpkESuRVn0lEjU36BIWGdXuWDjsF6phrW7ZsSiRBdfAtz+H5Q
+	r8dgwHZezuAJHtWc2FLc04gw6C3k5O71JayUCXgUrKMraKbFb08Y7drKB5Mgzktqv9MBnqELFFv
+	OOh1j4HsJoIIZbcCtAeoMuJsbuAAW+sLk0CsXXyVCkBGNLqmL0/Ey4arKl3kR+JtQPy857DEP6m
+	5OIHDe3S/XdoEMhYyS643nmknECL27kxbsb6aiU0UMbRJj61n+Z2SkfaobXqxaqtVxuZfz+JCy2
+	aA4E6IgIz0KmkRaC2/zI2d2eH6jQ7gB5BjkJB9kCIFxthxG4=
+X-Received: by 2002:a05:6a21:9982:b0:1f3:2e85:c052 with SMTP id adf61e73a8af0-215abc613a1mr29416448637.35.1747134526220;
+        Tue, 13 May 2025 04:08:46 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHwN2TRFlFW2UrWDD2VPfw/5b4OcIVv3/BEHBl6G3cH26syPZhvz9HpnkVuSopGz++v8+1RpQ==
+X-Received: by 2002:a05:6a21:9982:b0:1f3:2e85:c052 with SMTP id adf61e73a8af0-215abc613a1mr29416412637.35.1747134525847;
+        Tue, 13 May 2025 04:08:45 -0700 (PDT)
+Received: from hu-kathirav-blr.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com. [103.229.18.19])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b251957fef4sm6051656a12.75.2025.05.13.04.08.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 May 2025 23:36:44 -0700 (PDT)
-From: Troy Mitchell <troymitchell988@gmail.com>
-Date: Tue, 13 May 2025 14:36:14 +0800
-Subject: [PATCH v3 2/2] i2c: imx: drop master prefix
+        Tue, 13 May 2025 04:08:45 -0700 (PDT)
+From: Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>
+Date: Tue, 13 May 2025 16:38:33 +0530
+Subject: [PATCH] i2c: qcom-geni: fix I2C frequency table to achieve
+ accurate bus rates
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -82,53 +89,89 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250513-i2c-imx-update-v3-2-817b7426a67e@gmail.com>
-References: <20250513-i2c-imx-update-v3-0-817b7426a67e@gmail.com>
-In-Reply-To: <20250513-i2c-imx-update-v3-0-817b7426a67e@gmail.com>
-To: Oleksij Rempel <o.rempel@pengutronix.de>, 
- Pengutronix Kernel Team <kernel@pengutronix.de>, 
- Andi Shyti <andi.shyti@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
- Sascha Hauer <s.hauer@pengutronix.de>, Fabio Estevam <festevam@gmail.com>
-Cc: linux-i2c@vger.kernel.org, imx@lists.linux.dev, 
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
- Troy Mitchell <troymitchell988@gmail.com>, Yongchao Jia <jyc0019@gmail.com>, 
- Ahmad Fatoum <a.fatoum@pengutronix.de>
-X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1747118187; l=873;
- i=troymitchell988@gmail.com; h=from:subject:message-id;
- bh=Ip3fCjtKHIWdXoxS2ayjmqQZ2CXz2QC9JgKDfWc8a7w=;
- b=dtZzgsLgDl4KFfOlioaf2TlzkSvJK7YIv+UGk86oqaYvH+1y/9yehAeMD3OYYPYJjYj4B7deQ
- sLWQG6khLQIDMDqVZzcC3TMjq2ndve+vwEALeKmMzhawudTm3ezOiut
-X-Developer-Key: i=troymitchell988@gmail.com; a=ed25519;
- pk=2spEMGBd/Wkpd36N1aD9KFWOk0aHrhVxZQt+jxLXVC0=
+Content-Transfer-Encoding: 8bit
+Message-Id: <20250513-i2c-bus-freq-v1-1-9a333ad5757f@oss.qualcomm.com>
+X-B4-Tracking: v=1; b=H4sIADAoI2gC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDU0Nj3UyjZN2k0mLdtKLUQt3EZBMzYxNjCzPLRBMloJaCotS0zAqwcdG
+ xtbUATUlz714AAAA=
+X-Change-ID: 20250513-i2c-bus-freq-ac46343869a4
+To: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>,
+        Viken Dadhaniya <quic_vdadhani@quicinc.com>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Manikanta Mylavarapu <quic_mmanikan@quicinc.com>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc: linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@kernel.org,
+        Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1747134522; l=1564;
+ i=kathiravan.thirumoorthy@oss.qualcomm.com; s=20230906;
+ h=from:subject:message-id; bh=rdpI6SyCzEcz0rHhDFC3KBNtrPw+BnurZ+tDNY7GaGg=;
+ b=LCHz9YCCEIlr+bjBQdea52XKoMJwQDH+j2d3dmop+sliEw7Fqh/3EA9PeKXG5vTE6dxR5fRNo
+ jw2wBTtLHrBChGI68l+LbQvNJi5gGwM3e1IJJpS8ktEabI6RyF7Srtq
+X-Developer-Key: i=kathiravan.thirumoorthy@oss.qualcomm.com; a=ed25519;
+ pk=xWsR7pL6ch+vdZ9MoFGEaP61JUaRf0XaZYWztbQsIiM=
+X-Proofpoint-GUID: csigSs2dfCDAIorcuY_GgC6ENvHpgMdc
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTEzMDEwNiBTYWx0ZWRfX0KSlVWN7jx7S
+ nMWmFdXqxhBRD0e3m8IffYqC/EJ/K4vtC3ksLCz7fVEdjJA9jIpJNjqoYm8UveatcW4kMhiQTQ0
+ M7udKOnkszbGXe7eL7b5BgIRMF/wU0FscE2EJTf4AmxpvNDnH/xYhTLQVcMNWaJ369KLGvsln89
+ tgbY39Pc2ORxmaUiS1yek4BpC8BdfAC9BRhHIcG2V0dZ2RTu/S/2ZfRCtLr9F71NDwW8syL4U5k
+ UKtJw8nCMrd5COyMVDyIzbSwqwjZ7lZ1XrYt3RxX2Xf1X8unBbd6KzhBwFaMuhBb96EB2kTZt3s
+ nELQFflaTABdr4O+2XRSZz5qbwFN+uR4TZKfj07liWxfxOQaSIppEWmIdT6UWMmz4cpIKxiXQ7U
+ 5SAO0DetF3lr48JfcEWasMXfhuevmbMudCHx7p719NmgsRKTZSHDgogdIQbFaFg7lRh7I8PE
+X-Authority-Analysis: v=2.4 cv=TrfmhCXh c=1 sm=1 tr=0 ts=68232840 cx=c_pps
+ a=Qgeoaf8Lrialg5Z894R3/Q==:117 a=Ou0eQOY4+eZoSc0qltEV5Q==:17
+ a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8
+ a=c3nHYIS01CY_1xjDKk0A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=x9snwWr2DeNwDh03kgHS:22
+X-Proofpoint-ORIG-GUID: csigSs2dfCDAIorcuY_GgC6ENvHpgMdc
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-05-12_07,2025-05-09_01,2025-02-21_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 clxscore=1011 spamscore=0 malwarescore=0 mlxlogscore=999
+ suspectscore=0 phishscore=0 bulkscore=0 lowpriorityscore=0 adultscore=0
+ mlxscore=0 impostorscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2504070000
+ definitions=main-2505130106
 
-In light of the recent updates to the i2c subsystem,
-drop master prefix.
+Update the I2C frequency table to match the recommended values
+specified in the I2C hardware programming guide. In the current IPQ5424
+configuration where 32MHz is the source clock, the I2C bus frequencies do
+not meet expectations—for instance, 363KHz is achieved instead of the
+expected 400KHz.
 
-Reviewed-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
-Signed-off-by: Troy Mitchell <troymitchell988@gmail.com>
+Cc: stable@kernel.org
+Fixes: 506bb2ab0075 ("i2c: qcom-geni: Support systems with 32MHz serial engine clock")
+Signed-off-by: Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>
 ---
- drivers/i2c/busses/i2c-imx.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/i2c/busses/i2c-qcom-geni.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
-index 5b276e007292..d85adfb73bac 100644
---- a/drivers/i2c/busses/i2c-imx.c
-+++ b/drivers/i2c/busses/i2c-imx.c
-@@ -1687,8 +1687,8 @@ static u32 i2c_imx_func(struct i2c_adapter *adapter)
- }
+diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
+index ccea575fb7838db864ca4a2b21ebb3835b2567b2..2fec7b44bfc1baec68e321a9f57de4156120919b 100644
+--- a/drivers/i2c/busses/i2c-qcom-geni.c
++++ b/drivers/i2c/busses/i2c-qcom-geni.c
+@@ -155,9 +155,9 @@ static const struct geni_i2c_clk_fld geni_i2c_clk_map_19p2mhz[] = {
  
- static const struct i2c_algorithm i2c_imx_algo = {
--	.master_xfer = i2c_imx_xfer,
--	.master_xfer_atomic = i2c_imx_xfer_atomic,
-+	.xfer = i2c_imx_xfer,
-+	.xfer_atomic = i2c_imx_xfer_atomic,
- 	.functionality = i2c_imx_func,
- 	.reg_slave	= i2c_imx_reg_slave,
- 	.unreg_slave	= i2c_imx_unreg_slave,
+ /* source_clock = 32 MHz */
+ static const struct geni_i2c_clk_fld geni_i2c_clk_map_32mhz[] = {
+-	{ I2C_MAX_STANDARD_MODE_FREQ, 8, 14, 18, 40 },
+-	{ I2C_MAX_FAST_MODE_FREQ, 4,  3, 11, 20 },
+-	{ I2C_MAX_FAST_MODE_PLUS_FREQ, 2, 3,  6, 15 },
++	{ I2C_MAX_STANDARD_MODE_FREQ, 8, 14, 18, 38 },
++	{ I2C_MAX_FAST_MODE_FREQ, 4,  3, 9, 19 },
++	{ I2C_MAX_FAST_MODE_PLUS_FREQ, 2, 3, 5, 15 },
+ 	{}
+ };
+ 
 
+---
+base-commit: edef457004774e598fc4c1b7d1d4f0bcd9d0bb30
+change-id: 20250513-i2c-bus-freq-ac46343869a4
+
+Best regards,
 -- 
-2.34.1
+Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>
 
 
