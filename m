@@ -1,75 +1,78 @@
-Return-Path: <linux-i2c+bounces-10983-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10984-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9910AB6B57
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 May 2025 14:22:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7F7BAB6B58
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 May 2025 14:22:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1E1B0189E2BF
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 May 2025 12:22:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2D6E34A8571
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 May 2025 12:22:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EA9C275864;
-	Wed, 14 May 2025 12:22:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CA602777ED;
+	Wed, 14 May 2025 12:22:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nokia.com header.i=@nokia.com header.b="jpPbe8AD"
+	dkim=pass (2048-bit key) header.d=nokia.com header.i=@nokia.com header.b="sCPrQkUc"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2072.outbound.protection.outlook.com [40.107.247.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 581EE2741A0;
-	Wed, 14 May 2025 12:22:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98C20276033;
+	Wed, 14 May 2025 12:22:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.247.72
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747225357; cv=fail; b=s7QfEI0r5884FKsFUkltDtrmNv101Wcgr2bsgmVPovOkwQB42v/rVr8l+olVWp6PW96WdMmPO5EKpzfT0Vte+ifpxpduOl+2/Xcf8Kt0ZcM7/Qy55Z7RaHIonufzTaXScbGlvNrUJCj4ah3DID3/E+KqnSyDbymHdlH4S/2hHrs=
+	t=1747225359; cv=fail; b=rWHkSXavrRswG5yHQKpARdtguxVFJZUo3V+5Dl5cQ6T1qyT1tH2ycJ8Tg2R0qW/fZUx2hemeNepa053uNtRLiRNco00cFfmql8gkKmTbk3szphXkKWV4FS14g31lnmVtXfC/STdBKBCCJw5TP3JWjf8F++N4t3bbA9S6SCDnuBc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747225357; c=relaxed/simple;
-	bh=VVzHdSoWBjLzTAug6qlQIa9jhEmT0+pZgv/5ETFVPww=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=aCMUY4na5S49MTjPvMXFfjXmxC+E/yZCb9d3de76Dm7EpLjyWaBUyIaKndWhRqhcPDGLSI/HSfVIYguUkPNNOY4x7wJtjTFyiHCiw/2ohX62t5ScrMtYC+RZoOHW9mP3ndEuM1M7POxUb07vMxMkYRNb0tqR6BqFxEC+pwNHyNg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia.com; spf=fail smtp.mailfrom=nokia.com; dkim=pass (2048-bit key) header.d=nokia.com header.i=@nokia.com header.b=jpPbe8AD; arc=fail smtp.client-ip=40.107.247.72
+	s=arc-20240116; t=1747225359; c=relaxed/simple;
+	bh=2TvzqW9N3+cKSnMQK7F3e7V9kyyZtH3QvEgFz+4Qk6E=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=pv6wWlkapVHEsZP08VX+qHGMW3mnLTrWpn0socbZiSheKpPiMBHil1J2rd7AYE9pxVGjP3KzkSY1pvkSCnsppaJkaAqjb8QqPPgX1drZie2fDJM2WEMuZGuxgh/gXrB/8sf+HKH7PkShVJ3oa42KuhoirZ5EJRfyZB9MIZLy2IE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia.com; spf=fail smtp.mailfrom=nokia.com; dkim=pass (2048-bit key) header.d=nokia.com header.i=@nokia.com header.b=sCPrQkUc; arc=fail smtp.client-ip=40.107.247.72
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=rTneJmmKiCk9kQoUl/gNg9UlhGKRJNlzC8a/Y0HovXeAkKy3CvJ0VljdeFJvDg48FqjL0dZbx/+l2dSLc5d6/JPd8NhNy82CrrVAQxFmaKHCJ1+WrOhnFAn2bYIPcMTQ37mrO9FhVgHNfqdhXiJFf2StF7ux3GUXM5u0+UqZcfW5L9rD95zMV0vAupcp0Txht48c2FSoZBSXg5AxwTozWsrq5lzow2Kar9b7lEJXuxrEGUaBES16TFkAu8CgPg6s5DYwWKHV1sQrAducO40dNmXHkstwpfW4YoOzEO4tFV6wh4YnGI8HMOC4nZEa8vS3E2O8+c9ES8Nbf27jmN/+Qw==
+ b=Lxkd00Nvj8rlbfG3iTwPvfST6TZbIsvSf7bsD5JQC0Aw23VT9cJi/+NvO3rEiPwtmSdc5mzWKMwgjFl78k6kT76iOYg7lGkgduyL4aqg0C9J1xSQPARa5UcC96xlx0TSQVfAoplFSUZNPR/BwPAxzguuAbYLkRn+PgHVjipubB69mpMOzpi51liOnHIeeS7ne6hUUQ0W4095efFzq9hazGxucizQKlYkk8dFQxBvPz2aSePFvVkNKvRIIigR+HLCER/1C9DocWOAEJg7i1QhdGgHVS0IotkTDWZqNq+dGj8RlgT5omJWiHpKsuzwlxlCaD9R3kwbHYb/wUrBaHC9wg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DI+GH9EHg/bJQmwm+CI+t21umN2AwnOZyRTlXOToPmY=;
- b=gvN6xrU/RVrQGwEBUxfPb90QIS5K8Tx+yZ6X0jpg1QbUBb+JN2Viq56TfmlyJvRX8zlrphdZbmqXwgZCG2lKrOgLspTQA69SdSF2kqoYF2NbUPjMZKr0TbfkH0lJA25qUUHaxHy+M0nK5nU+blmEc0ZZStiRtf7Ep5kSbQoJxy6wtNay7XEhUp0uaEAxZJPyVJcmtGTvLi61ZSPpG7AMCxBYQdI2upvejYqgQStir0PeOT7Ejld6Fm95gStsfcuQ8u6laTjp16ub4CpN4D1vvBcnTSnFu/YdSAqNPOLZTF80Rv/QJ2CcWGdGp0BVFHelTTPe2f8PUtjWnP9LOvOSmg==
+ bh=h9KaK2j/jizZifQ71DI0SgeL8R/zpeKvPtev5DfBiO4=;
+ b=aWsbr6LUfF8nNNk3cu7kkRM0PMtdT9H4fGwIWDPemvV0kHViolrX4yZRyYvQmFJ+P03jS9Mer+ExPKx+QZ0Z1zFXp6DmxRex8AwmUAytg4NhYtQ8SKxYFQZ/OCH1JcvHso649YM3/1hL1y4BLuanXptXUQ8aVg9b4HUcVkbpuZtA2tcy2oapUSQkCDjlmRAADzhL8x7Wd4ooN6Vl+5yIScL5AvmbSD5K4hijj7xN1Jp5IzpEveHUfxh3y2BfiersXnJWWrk5KglrRshbnlbt0JYbBpCYMtoAa9DJLNx8KnWHqtIczm05Rh8oJUSiwAVoD/yCXKri7hhj2Ep/y4Kfpg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nokia.com; dmarc=pass action=none header.from=nokia.com;
  dkim=pass header.d=nokia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DI+GH9EHg/bJQmwm+CI+t21umN2AwnOZyRTlXOToPmY=;
- b=jpPbe8ADwCJFXVz44LDZp5KkEK0oEBkAPTjCBtXrjpbJh8Wc7w2RYgjq8iOT25KttuO8koEqD7O+nelnlStOC8U9T/3BvTYaWcO1VudnpIVGKpDnXvhAZSnOtBMTdJD5omDruSs5Ae+9al0Nvrar+uy8DS6s/OwMbrn0OomAFEZrT5ETDSCJy8Kal0ZCVqwN92YLsrU4XDqWubhRnG1v7I18Ck61HYs+/xN+8urW3lnUVUh9Ufo99TOO2DY3ZA5iTSypkSb1XLULtSgnIVLwAp0+0U+ACVkMo0iGgZ1AbSLZ+4/upC57yCm7AF39B/pVKguP738YQOo4x6lb5aSoYA==
+ bh=h9KaK2j/jizZifQ71DI0SgeL8R/zpeKvPtev5DfBiO4=;
+ b=sCPrQkUc8KZwabA/ScDI+n0Jh2TZy3DDhAHIoHO5MPNOzgMGy4O/n3JAVRjuzPNeVtT5+Po8jUDwO8Kmv2XdHQUiO2iyykfpeYU2UhREKKwmXvb2JxJ6GLJ3dgYvFeIxqWy7Ni2iEiB8GlK7ZFsnyTmXqZxU2jQBas42d6Shzj++aIpE77v7gDkfv7v5R0jN/E1k2tcS60XAXdnbmiG2uG3aWsGPd47ryjNw50+yBRvVp5tdAKXD+oWDcXMeTgKN4WCSHtGiQRTjf1WGV4WJEsC0x/GSVOyS3301Xct5AWMzHIv1nAhTtG9J6HDI6/BkLLf0DoNwIcj/YYLk2BipTA==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nokia.com;
 Received: from AM0PR0702MB3794.eurprd07.prod.outlook.com
  (2603:10a6:208:19::23) by DU0PR07MB9140.eurprd07.prod.outlook.com
  (2603:10a6:10:404::14) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8722.30; Wed, 14 May
- 2025 12:22:31 +0000
+ 2025 12:22:34 +0000
 Received: from AM0PR0702MB3794.eurprd07.prod.outlook.com
  ([fe80::aea5:bbb4:c75:9faa]) by AM0PR0702MB3794.eurprd07.prod.outlook.com
  ([fe80::aea5:bbb4:c75:9faa%2]) with mapi id 15.20.8722.027; Wed, 14 May 2025
- 12:22:30 +0000
+ 12:22:34 +0000
 From: Wojciech Siudy <wojciech.siudy@nokia.com>
 To: linux-kernel@vger.kernel.org,
 	linux-i2c@vger.kernel.org
 Cc: andi.shyti@kernel.org,
 	mariusz.madej@nokia.com,
 	Wojciech Siudy <wojciech.siudy@nokia.com>
-Subject: [PATCH v6 0/2] i2c: muxes: pca954x: Reset if (de)select fails
-Date: Wed, 14 May 2025 14:22:24 +0200
-Message-Id: <20250514122226.3267855-1-wojciech.siudy@nokia.com>
+Subject: [PATCH v6 1/2] i2c: muxes: pca954x: Use reset controller only
+Date: Wed, 14 May 2025 14:22:25 +0200
+Message-Id: <20250514122226.3267855-2-wojciech.siudy@nokia.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20250514122226.3267855-1-wojciech.siudy@nokia.com>
+References: <20250514122226.3267855-1-wojciech.siudy@nokia.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: FR2P281CA0155.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:98::15) To AM0PR0702MB3794.eurprd07.prod.outlook.com
+X-ClientProxiedBy: FR0P281CA0062.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:49::23) To AM0PR0702MB3794.eurprd07.prod.outlook.com
  (2603:10a6:208:19::23)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
@@ -79,121 +82,136 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: AM0PR0702MB3794:EE_|DU0PR07MB9140:EE_
-X-MS-Office365-Filtering-Correlation-Id: cd22e70d-052f-40f5-1864-08dd92e1feff
+X-MS-Office365-Filtering-Correlation-Id: f7400ac1-218b-40c6-5ebf-08dd92e2017d
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?R9FeXCkZ2FopxS1KbmbQgtLaOliMKDigD4a/Ta25yGEGxrbKCDj7yYaLCL6G?=
- =?us-ascii?Q?yzajaIUrboN0q6M+2RzBgnOqtAa7tBnDyICDC/Ms5IZ6VrJ12HeyyHZLz1pm?=
- =?us-ascii?Q?3WufTCdBhImWKOrD17iOXdenfrBJnATTIv0w106QmQhdmv+Bt7Ce8DrHb/bX?=
- =?us-ascii?Q?76LQse/2UFAXiUxo0B+tPsN5jTpWVl7vjJ27ygyKGsRALU8GaDZ5XIvdDXq1?=
- =?us-ascii?Q?F4DXl9SIa+IrShKhGoRnamtZOaGLcpj3VOktDcVOHE+VCjwtFfLOCI5eyWxm?=
- =?us-ascii?Q?Ljfrayb01sU5Z20tAbXF0SQugDLz5g8qA336rU9l6nwquMKHVxLPy6IoqJQt?=
- =?us-ascii?Q?bv41CyHojiiJFxESAxKmBdBD6Q2Qj9WcHLMbcAzJE/XQdzqw2zDrMyL0dPIC?=
- =?us-ascii?Q?LwqPGaUGbFluhufylgrgCVqKREP+p1ZAgMIIqBP3WxcJTU9sSU1pvxhV/36S?=
- =?us-ascii?Q?/h1Qw4OTqhdY8gwhg1xZEdf/Sm1kGbIWQQlH7fr5LFctmGJlV+UHI7S6JZWg?=
- =?us-ascii?Q?Mb/UsJZHp26iWs6ctgdGSPuYCLHnIbpyKpyiCX5qK/fKbuu7pOB5yC7nzgN3?=
- =?us-ascii?Q?SNwzHxFnDwbFZTD8nbbFwsfpuwAg4qnX9A7j6we0QQCWxCHFuVrb4WdPqvbR?=
- =?us-ascii?Q?KxNiCD2xTwN8E7Jua/FZ49qhsREr3NgY85ZuqX01+ppKKtcuBZKFft1W/sDD?=
- =?us-ascii?Q?hriXrvGxYqIk1z1Y8IG0idmGehF+yXZarObyfzb2xsKHMacbdNbu1x84YSD0?=
- =?us-ascii?Q?E6N7ZjIl00mTsBGUje5J3tvbH1yz1Hmzy4XFxE9IMtu1oLy72sKwbMp9Ah/t?=
- =?us-ascii?Q?y7ChP/d15PR6+haAUCVdaeLREfdcnXPej4bikKG+FwHzbZMNjZg3UOzF51wT?=
- =?us-ascii?Q?2e0MG+qGakewUElE0SjrEIeF5bAliBw1ZESD1ETrSW1H4vD3D9hQCUTgL+1Z?=
- =?us-ascii?Q?hTTiStJEnwr0I2u/CR/zDDDjD+VMMkkqVkQY7Igk2r9djdT9fsUQjGcDxsfw?=
- =?us-ascii?Q?eNxdOIlNxKe2uBGG6md3IFcEeEoBrC66OlQiCm3oBlSc/94nwAq+6fvo/y9Z?=
- =?us-ascii?Q?C759M+VrciTqXv60U3iBU2bHDNBjNsCHVobBn7rbR5KCpVgJrX0hMDSm2Ie6?=
- =?us-ascii?Q?kTc0UYb+XuY1jhKOTcReqJ4i+4HuQQQK6NwxwzVpqBoxJKJgud9HKmFrPKdr?=
- =?us-ascii?Q?irAgscIzOx1g+kQxpuhC6dB7cDWWYGpSS+rEbVMJjR3Fjza0ThjdK6BP7pss?=
- =?us-ascii?Q?7Z/xJtBXenn+yo+t5Vq8Au6yQ8HANaUH1rnfNEEbL7pXNJkC9uBgpYbVcPAC?=
- =?us-ascii?Q?d7xcCSoFl4C6KoZ8Y23cCEH42KO/7KcN+qa6c3WZPBuF/HDoRtKhcZd1mAPb?=
- =?us-ascii?Q?ORwgBm31VmRVxwojBl30EQENdcw6WOvzRmX/6ccBoHonZHU17Z3NrKFiWMaH?=
- =?us-ascii?Q?sswL0oam9VU=3D?=
+	=?us-ascii?Q?bCQubRvfUC9x4ODOrRvFbb4v7O+7FxCiaZAW8J2B0OgF/SV1PG/6hs3nCFN1?=
+ =?us-ascii?Q?SYfpLDaK1lBMkAjVVUP6V2q+Gssx0LOBAQFikzuq+08h5P9dEILkIZfburVA?=
+ =?us-ascii?Q?iNOujllzSVEAKqTselWNZOIk4HHHS47av5Xtyq4uOED1FjLuwnvwrqpCIxaw?=
+ =?us-ascii?Q?djlJ8qSmgMynwF+GNoDj9Dlwqy0NjJsAIVSp2OmgeaMvJw4ALkbfaEv4rO78?=
+ =?us-ascii?Q?k878jsjsW/dnOUsZWHtZYJi2PNnAyav/UT2A6HJ3bkPuJ+CNFNMElCx63KyR?=
+ =?us-ascii?Q?bgd1jakCE5utm2QqBYdid6CVWg6+0bZ3tNvOJQlW0IjT2pZkB941OYSl61JH?=
+ =?us-ascii?Q?YUABUUyo4dxSJ1oWcPQNHMgvZnhaANrO1zmUpig8bivQqyHs08ekLJCNZnof?=
+ =?us-ascii?Q?9z/+LD62NvNAJcT2kGu99MrWBcfCQc1b7iIgZQUoNv3FLHcUnlk+yp3HNK9A?=
+ =?us-ascii?Q?KUVBRpBngQ50Y0O+V8t2rpk+0P1DyGDlcKW8/KyD4NXE2Pgd71N1hzbGXb9U?=
+ =?us-ascii?Q?kFaYk9dRMMJgaZ+cAkeAbOspeVfj/dYNQp6cZ9gnd6YcpYyDemPhd8gQhVTP?=
+ =?us-ascii?Q?o+Lh7eB/9B2Ny/V8MgA8iub7+RZQNMkwwKJonj1ZRI85B/F/8B3l86tuIrlg?=
+ =?us-ascii?Q?+UsBy3vc7s6JIpRnuKtJSKlxoxHU82B3fG30QJ/KYPKSP6yQJjh0bZyCzv36?=
+ =?us-ascii?Q?c2Xeuz4ajycSEphGJOiBrhQwMKnUkJoE2oikAfLmfoBT7ARbi/W/97bCK43Q?=
+ =?us-ascii?Q?wqqaE2ZY3M0FaB3X1NW5cfN2EGMDbzojZLdmZ6WTiK6nvetEXU2bcmZTogwf?=
+ =?us-ascii?Q?gUxQAETl9SPdjLog2D8KE7TUEtbtB9aBFpinr1H8Sgiob+dGLl8fZsCKd1y+?=
+ =?us-ascii?Q?XDlqdW55eDNUgn16dW1Tn8S6iudV6754Qy938RT9Bo27mqTizjM2LfPdddO+?=
+ =?us-ascii?Q?U85LtXyFOmd9nCpZ0yCBilnerbrp6gBE0HsaqGG1JuGmZ88/wQBhPqRaQAKr?=
+ =?us-ascii?Q?0Nx6XZVPSg0dcQqjvWWvXcN+JYlfpKJmIcTy9Cg+W4b9aOFfcR30/JHCiGhq?=
+ =?us-ascii?Q?KNifA4XNDexbSy94cMxeGofQPqN96EKP6XnnORdKaDevKoR+jfZWBbsrJtQV?=
+ =?us-ascii?Q?xp+HoMYyAnfbOT6VwNndPYSn/bZzyQUX4QB/VBp8qX4jUL76XEPF+yGCFT3m?=
+ =?us-ascii?Q?kRgbTvN4sQM+DjjU+XfU89jrbPBflx0Hut4DlQvQezEmvkxVZKaVRaTLSYwt?=
+ =?us-ascii?Q?TVfd3GyR9/mpAXKEE4f9DH933sQz0AoPAkebX6wbbPATQid3KUEq9ZqTsArO?=
+ =?us-ascii?Q?5e5sa9v/g7cYrtpD/56JIr+6aMCs6HRE5F9G1sL9ngTmzB/HBwKRxHHO69U4?=
+ =?us-ascii?Q?nAYDTw8PNvyJ0CI8uewnMyTgwSmY7n2fb9X+TGg1cJgNuKnPkp+d7SfPn9OW?=
+ =?us-ascii?Q?qmOnxIYsqGY=3D?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR0702MB3794.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?qBYCmC2XYvXZSDMD/iPGmCZFbbpppLWvBc9sgFRJLad9PwL1uS7D5UodNcsk?=
- =?us-ascii?Q?wUjuORrjVuBorrTYtCmJdPZYPYl3zPm0UhU8k4rPhblrCA+kceg6dJ27qwbJ?=
- =?us-ascii?Q?+Td74mYkYEPc/r4ZHQEfG8HZOo0HOs0qR4N4beolqOGIrnJeXxKV/YArcRES?=
- =?us-ascii?Q?3ZcKzD3vN7BuOBCIsBm+tBWB5TEIc4Yginvbp3jZyPd3rUZDcNyM8ay+QdoH?=
- =?us-ascii?Q?7RoWCfiFYziungGFERUCZLGE2kHbSpIEGf+EDW1Orvvl5ZLb6I/ChLth2+se?=
- =?us-ascii?Q?nrkTMlMzuV9HmfCZ518Dz3XQ7s5/0VAKPXRgEOLydqGFJ/X8Ayi8W4jac3ji?=
- =?us-ascii?Q?fJISQcCFHu6hdaXnVyS6j7CUZnaBZbqNQ5AQGSO3IfPjlz8Kzrc9jJdiXXfB?=
- =?us-ascii?Q?YDwRS8I7Yzf2a3P7ypCEd+uY3WrvebRhX0lGzvBEZ7nQxenIlMZ3qzaUSOx2?=
- =?us-ascii?Q?PLKS+mm2q2YOS/cXmBXXQCe0flxfy48Lv79CkHDSXF4XQWaYvVp6nYEwCLgi?=
- =?us-ascii?Q?KRe+sEyIvactdqyarr2UxKDwC8pDaTbic4JZOnom1EfuRhQOwBgSVNW2wWg7?=
- =?us-ascii?Q?YMSYtiQdX4ioOIDqRwo7ed5KH6wxH0+f9lV2IWmMGn+rJfZaL20lI6s3G7VD?=
- =?us-ascii?Q?3o6loZIqexeN4NK2kfkQz8fgWh6WmeA/c6G3MJojzVgLcePbfG74oWShzCwY?=
- =?us-ascii?Q?btRsjw9lLnFi8sMDTTr6j/+E0ZGbOggKJi63cpf4nytLJLWThYssoCcqf+FN?=
- =?us-ascii?Q?OURsuHDMUE30RZ7IOg8cS+Pm0QpmildPeieG0ZoEaTVvdEqJoyt0umvzAs2+?=
- =?us-ascii?Q?97OvHEq/g0z+X2GgqxXwBAdl9BlcFDcuds9tk/2JIUyn+RsHK5mrl85sI92r?=
- =?us-ascii?Q?3l5m6GjMJw1O9JbN6Rfb1P3JyIwBa3QOOdLWNAYBE8H/IyBEAkjHebs2RWQE?=
- =?us-ascii?Q?otnGTuE8/9hQE3N8iuLZAIMf6nu7zhcpzs0wCuBEJxQ6e9puQS0mUDjxYR38?=
- =?us-ascii?Q?j1D0bMUBV9lCtetdjPWA7gnUKhfLL/JeqZaxStjSccp+Dlh86Fmp0/QemGmd?=
- =?us-ascii?Q?PpfrNCduyqTCRrU+aO+MLwbVthLhXEqb0BlIMiiex4yFCZflZ9Dgpb98wb+X?=
- =?us-ascii?Q?VQaLRMJO+/i9CwRwCEfHXfnKwbisD4wf82woor30Dn2iKJnUTtsTKmFkRJ1R?=
- =?us-ascii?Q?OpPQIQN3CkNWJY56fmNKmt//WorFxzHrSMFMaRU17EUwp31iZpPt/OoIBJMp?=
- =?us-ascii?Q?1Z0SQmytstQJiGvW2WyUr57YQCsp9PWFIWydaNXskFs4Kue+iGKfIt50BzNl?=
- =?us-ascii?Q?qdRbvckMUcrsEwypHvRETCMO+Cc3py8ptuYGPeMW9wg8HXNgNISmc6FOzVC/?=
- =?us-ascii?Q?zLRXtmdwL6nWbrnIRd+Ji2xGKzvKSUMq0fChnaHqXC8tw8Hpug/qjpV5+tfZ?=
- =?us-ascii?Q?rAfzUIXzAAgLQHc2Aw5bTgt8+7EzhbxPju0fteqLaAYYSzQsn4XKh/3Otdj7?=
- =?us-ascii?Q?590f6e6iP19NHx29iaCq4CQOri4/0/ojwgauuhQGR+uNzBKU9ArKKzzAVT0z?=
- =?us-ascii?Q?uygu0g5zTUIpINu/tRvHv4poxhEvVlVddzedUfN6BToJpPEx4f25RmXLrYYr?=
- =?us-ascii?Q?2g=3D=3D?=
+	=?us-ascii?Q?pUqd+L9C3M7U4HKEIJGA4bbiFvaMskmyizLrB00V6pz9Qh3dkXuhLWlsgq9C?=
+ =?us-ascii?Q?KW+SC2KGi7fbyOUAK3PgcBL0SsUlg1wV/xUtdYZ0geQgBZjnp7mUYi/Nzp8X?=
+ =?us-ascii?Q?CyVe4FSUGNah1UFYENE3VIS5yrMY7u9IABQQcz7o02vGrUupEU65lFv5zP8b?=
+ =?us-ascii?Q?d0YmyEeExUHff80VGWfxZFHSuTY+Er1WzsOEirKH4A5UkvUbynY0WBsWfJfk?=
+ =?us-ascii?Q?6/1NIdSRt20BOsbVtWF8oCegXsTIdllcZTyxxm9Ios6PHK1kh6pFJztD+Tmm?=
+ =?us-ascii?Q?laiL7nOAJ1kogcvXLnm3NPwGJ6dc+wZvQFB7qSMigXe5msOcLKyzVpxBUG4I?=
+ =?us-ascii?Q?CI1RjSFhs+x6z5viiYgISjmye29bK8xewP7fM+Czi7h0Wj2o3f7MSXGSv2uE?=
+ =?us-ascii?Q?xUl3ASaf8CxYrDgV/YIshsrzjx7fehjsJHPixWVk8kpFULkfvqPjPnQPaRcK?=
+ =?us-ascii?Q?1E9F+XDIWB1SUBf26b4P2MVVOi+aCmk3cPMfA3bGs++OifSNgbXSw1sUDfaa?=
+ =?us-ascii?Q?gBqeQgKMUboWL2asCw6oLrIu/+3WUtWA6JYKuLTCVDcMYVglRRqcfTapuiq5?=
+ =?us-ascii?Q?Gnb9bakkOIZfhBqkbNoPS9kB09kP/CpaJbuQ7ZF0r5VtUn5Fw7f0g5dV4V69?=
+ =?us-ascii?Q?/Ay67ReTIZPgRm3N8G1LcHUyDjnVdmFqz47p0rIeXe+sBDRWvTo8yZAtFoLG?=
+ =?us-ascii?Q?05xj2tiVrIClFPXVvxXbieYPJY98Dzl1eyqSH4DOQost5pG9YCisDaVH35iN?=
+ =?us-ascii?Q?+jBimc6m18wHMv6xZ2i2OPOqBg9ZGW4njarybUPrROLkcGSYB6dBKMn4ezjp?=
+ =?us-ascii?Q?dZOtm3HeThOs26OtnRKdmDV9sU+NJ7g9lBgmnxBKPxiDsfenfcBdd3xRRs6/?=
+ =?us-ascii?Q?0d0JO43mo2ZcS5AigndW2M+6l+ks07cMoCL7+zkrwsNS5n1IwmxziVgqnT6L?=
+ =?us-ascii?Q?1QGuHuBC1V0Jdg5VQUIk8+Si6ZS0b0xukflkFKVD/NuVZXFwZ0AI6OP0LIx3?=
+ =?us-ascii?Q?9pRF5XMSPp4ajZrzjEWYJheszbyooWUXvzRkTkjfsmJ1Qou58DExD/2l+JiT?=
+ =?us-ascii?Q?dxMBCHSE2f1HkduP2byKfkJMwVp9K2WamIeYAaFBkdTdULtbHAnuf6yP8auL?=
+ =?us-ascii?Q?vioNEU0nB1Vw44Hd5kBSwYlPyDoaxI4stk1SGorbUt/UIMTMck0CpnaW8xpg?=
+ =?us-ascii?Q?7beBddNDATICu1eVg6b3zgr236FoFUtKH2RGxsKQlHgIuhUVYFrd5WTrFaBb?=
+ =?us-ascii?Q?ZNfx56mpyDz4Nu89HYYnmAah1nlJEubYUuDTsmTapbbg6cG3UJpipjAE2V7g?=
+ =?us-ascii?Q?+Uu9MDkpYJ4cJdNfmwWjbgyuTphZN9Ji1DoiQBP4x/utKtMnh5ViAswZZXL5?=
+ =?us-ascii?Q?jNTG2ACWMA/QDGnQW8Z5rnHuH/BhzmNt8KUm3Bx4UBBegwbJzMH3EhJDb/uP?=
+ =?us-ascii?Q?g/tQhxn3BjTUSpXTQny1zgWuspwmZi5b/VcSJNYRqfVNzicTQp8+xNl2Avg3?=
+ =?us-ascii?Q?Rnd3JmKwXE0Xws5jmb5kf3NLKRrsVOPAtjDuI13IodP2buViNslC8mhOVqRp?=
+ =?us-ascii?Q?BzIGHNvrRrNzZLNDu7h39tu0A0AxHovFSkRLgzwgZCcYsfKVcIiuIkqqtzGH?=
+ =?us-ascii?Q?Xw=3D=3D?=
 X-OriginatorOrg: nokia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cd22e70d-052f-40f5-1864-08dd92e1feff
+X-MS-Exchange-CrossTenant-Network-Message-Id: f7400ac1-218b-40c6-5ebf-08dd92e2017d
 X-MS-Exchange-CrossTenant-AuthSource: AM0PR0702MB3794.eurprd07.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 May 2025 12:22:30.1438
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 May 2025 12:22:34.2776
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: nBK62P+3Ut9EQxeFZ9nq6Y/PsuDsmA7Pbxotw56KWTjwtEwKJnbtBnbzC8136pihI9T8eolL6jtPPA/SobRYOpoZE6ZwaKjAgUihfhqZy8A=
+X-MS-Exchange-CrossTenant-UserPrincipalName: DgMx8ufz6AMXMPpl0IqNxlBPu+gcBdDDZ3XIvNxfVQz15w/3QmIje6oLTPIHVg5VuxMSztusCAlA9/XutWnPWqvb7mXgBBvFaYIyhNqIumY=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR07MB9140
 
-The pca954x mux might not respond under certain circumstances, like
-device behind it holding SDA after recovery loop or some internal issue
-in mux itself. Those situations are indicated by ETIMEDOUT returned
-from I2C transaction attempting selecting or deselecting the channel.
-According to device documentation the reset pulse restores I2C
-subsystem of the mux and deselects the channel.
+Fallback to legacy reset-gpios is no more needed, because the framework
+can use reset-gpios properity now as well.
 
-Since the mux switches using transistor switches, the failure of line
-behind mux that is currently connected prevents sending commands to mux
-itself, so external reset signal is required. 
-
-The following series of patches removes legacy gpio-based reset calls,
-because reset controller framework already uses reset-gpios property
-and resets the device when channel selection or deselection fails.
-
-Even through the current transaction will fail anyway, the next will
-be possible to perform without resetting the whole system.
-
+Signed-off-by: Wojciech Siudy <wojciech.siudy@nokia.com>
 ---
-Changelog:
-v2:
-  * Removed mail header from the commit log
-  * Decreased reset pulse hold time from 10 to 1 ms
-v3:
-  * Make this functionality enabled by appropriate property in
-    devicetree
-v4:
-  * Fix missing condition check from devicetree
-v5:
-  * Declare dependency of a new property
-v6:
-  * Don't add any new properties, use reset controller only
----
+ drivers/i2c/muxes/i2c-mux-pca954x.c | 16 +---------------
+ 1 file changed, 1 insertion(+), 15 deletions(-)
 
-Wojciech Siudy (2):
-  i2c: muxes: pca954x: Use reset controller only
-  i2c: muxes: pca954x: Reset if (de)select fails
-
- drivers/i2c/muxes/i2c-mux-pca954x.c | 49 ++++++++++++++++-------------
- 1 file changed, 27 insertions(+), 22 deletions(-)
-
+diff --git a/drivers/i2c/muxes/i2c-mux-pca954x.c b/drivers/i2c/muxes/i2c-mux-pca954x.c
+index db95113a5b49..e09230df7059 100644
+--- a/drivers/i2c/muxes/i2c-mux-pca954x.c
++++ b/drivers/i2c/muxes/i2c-mux-pca954x.c
+@@ -118,7 +118,6 @@ struct pca954x {
+ 	raw_spinlock_t lock;
+ 	struct regulator *supply;
+ 
+-	struct gpio_desc *reset_gpio;
+ 	struct reset_control *reset_cont;
+ };
+ 
+@@ -528,17 +527,6 @@ static int pca954x_get_reset(struct device *dev, struct pca954x *data)
+ 	if (IS_ERR(data->reset_cont))
+ 		return dev_err_probe(dev, PTR_ERR(data->reset_cont),
+ 				     "Failed to get reset\n");
+-	else if (data->reset_cont)
+-		return 0;
+-
+-	/*
+-	 * fallback to legacy reset-gpios
+-	 */
+-	data->reset_gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HIGH);
+-	if (IS_ERR(data->reset_gpio)) {
+-		return dev_err_probe(dev, PTR_ERR(data->reset_gpio),
+-					"Failed to get reset gpio");
+-	}
+ 
+ 	return 0;
+ }
+@@ -547,8 +535,6 @@ static void pca954x_reset_deassert(struct pca954x *data)
+ {
+ 	if (data->reset_cont)
+ 		reset_control_deassert(data->reset_cont);
+-	else
+-		gpiod_set_value_cansleep(data->reset_gpio, 0);
+ }
+ 
+ /*
+@@ -590,7 +576,7 @@ static int pca954x_probe(struct i2c_client *client)
+ 	if (ret)
+ 		goto fail_cleanup;
+ 
+-	if (data->reset_cont || data->reset_gpio) {
++	if (data->reset_cont) {
+ 		udelay(1);
+ 		pca954x_reset_deassert(data);
+ 		/* Give the chip some time to recover. */
 -- 
 2.34.1
 
