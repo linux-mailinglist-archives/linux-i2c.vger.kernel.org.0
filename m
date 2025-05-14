@@ -1,111 +1,88 @@
-Return-Path: <linux-i2c+bounces-10987-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10988-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A3DC4AB6EDD
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 May 2025 17:07:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D0B51AB6F6F
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 May 2025 17:17:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 78F271BA34F6
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 May 2025 15:06:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 20117189D3A7
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 May 2025 15:17:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9069A1C3BE2;
-	Wed, 14 May 2025 15:06:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0196F28153C;
+	Wed, 14 May 2025 15:14:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="L5vMmYL4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eDl1Eynw"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43BD11CCB40
-	for <linux-i2c@vger.kernel.org>; Wed, 14 May 2025 15:05:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A86B28136B;
+	Wed, 14 May 2025 15:14:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747235169; cv=none; b=nzT8L2eKhWniSNqfHgJ7ABEDH6xgG0iBrwiPRt2vF5fGEGxYHTgK8C0dlD7KkGfGXUA15ypmHZFsy32rAvkHp35+2EB7+uRRs/7teXTBmeRDkwxltiTpSBjR+2RJpblscbLZw5TIA2piQKPAmrT24RCJWf5Av68Ua3jRNFElvQU=
+	t=1747235679; cv=none; b=HPSy+yNcljVuSa58+Tj7yrZ7QcxNL8U2qt9kHF9KwHtQOc8u5d96l3tKMk9jHo2sf73mjRgqD/CwK3YnEBZBSJf2gomtYZmoylTybTp6BaDLqi+UO8XRw1fVE0OCxyO/QtFMcr8PHquNle4jHCVN9aBCLm+v7vYqFM+sAgyqD1o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747235169; c=relaxed/simple;
-	bh=fjyMK3Ik4p5smQfx0a/O5B6QIXMbgwHJdG83wA9f8cU=;
+	s=arc-20240116; t=1747235679; c=relaxed/simple;
+	bh=Y+K0CTNazLFlZpMgylFelX29INIzg+H1k2D8sZ3bDcA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Hc+N/aGlb/yBJ01W3g22VfJcWigPmRFoQalN9k61IF2kAivdinE9nPS2vp077hyxvAz7k3A1o2AepCvoz7rUMAWhFbivSofa+ST2tvG9zHv6KCjVP96XecvfYKqh5vuFEmnoH41PHgcIbd82v/iEU1nCwRGvfkblCafpr3mgI2E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=L5vMmYL4; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=fjyM
-	K3Ik4p5smQfx0a/O5B6QIXMbgwHJdG83wA9f8cU=; b=L5vMmYL4NM56quje8RDz
-	g0PHRZiXgQxqN+KbqDlnTb3PXtis3Axds23xxo5QmtbSaUnptEh70k12OFx5Racg
-	PwTwgdNz7wKxGswZlucODAQgF7PkeBaIz8uyE19Lq4UWKkK5sq0SCGYRlYBW5gTS
-	dDwykvdACLHu1Tp4Fzcq9z3rtQtYLiOJpZt9lkb9ObAN9FP3kqc0xLxN5ZVfgutp
-	DpPNADMxlR9oBZsEcVfHLJ1rOqLHfUcFJYSG9Z2S8Wy+8nNcZL9N1p0U8hDwqGVb
-	bKystXnXZ0HCJlycjEiHDHKgSRn5Q6Zqbf7nwOFtGyqGe9jjH/uQeCsaMLoNmxpF
-	qQ==
-Received: (qmail 712433 invoked from network); 14 May 2025 17:05:57 +0200
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 14 May 2025 17:05:57 +0200
-X-UD-Smtp-Session: l3s3148p1@O3jY4hk17NFtKLK8
-Date: Wed, 14 May 2025 17:05:56 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: =?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>
-Cc: Linus Walleij <linus.walleij@linaro.org>,
-	Yuanjun Gong <ruc_gongyuanjun@163.com>,
-	Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH 1/1] drivers/i2c: fix a potential null pointer dereference
-Message-ID: <aCSxVFMOAg070xHW@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	=?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Yuanjun Gong <ruc_gongyuanjun@163.com>,
-	Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org
-References: <20250513123754.3041911-1-ruc_gongyuanjun@163.com>
- <CACRpkdb6-cjyvXornKcVrYSRqJLE3LqtzotwapHwrYGVm4RNDw@mail.gmail.com>
- <D9VS2G7S3T9Q.26QDCDRTC2S11@bootlin.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=OZ5AhcclKpVdFscczBQO1I7LNAGMYQykQ9X2oWQET/IsGMbcWknrU8rIHEJejOL6Y0B+THHQhkmLO/nvaV/OTt9TAc1xLkly4h2Jkls4Cy4kpAcoEcTcwFUpXpURdqMIbu5S9EMxSZdOKdNMl+j0NKvvlGCwW0oGMVWmWSa324Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eDl1Eynw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E92A1C4CEE3;
+	Wed, 14 May 2025 15:14:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747235679;
+	bh=Y+K0CTNazLFlZpMgylFelX29INIzg+H1k2D8sZ3bDcA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=eDl1EynwApjePrzqmYaRrqbwX6nnm/wMyxORcRzAaGmYbRq3J0exTHedYZIokVLqx
+	 p3FqD3hdkB3pXgRwqpPPfEDXe+oFlCu5Klz4JiyjsaBu6H98BFH4UmWuA1ohiNLgvm
+	 D75u7YH/Wt6zY/mw4npsQHfHbMORIsPkRvEewfK//AZ22J7moOPWUTZxbZHHGivW8l
+	 VCYOdmCjMUwCvDDYZFxLVWE/7mgOVY2EQfEgIp8pcedDFCMY6CRPvM3qZLQedePs8o
+	 EOu+b5IqY0/YFHMNOmtH/ISof9ldZevBTgNSwY8uJsT/4rgbR5/x/QdMDvNIPFV8E8
+	 HM6KjfqQKg9/Q==
+Date: Wed, 14 May 2025 17:14:32 +0200
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Francesco Dolcini <francesco@dolcini.it>
+Cc: Dong Aisheng <aisheng.dong@nxp.com>, Shawn Guo <shawnguo@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
+	Fabio Estevam <festevam@gmail.com>, Emanuele Ghidoli <emanuele.ghidoli@toradex.com>, 
+	linux-i2c@vger.kernel.org, imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, Francesco Dolcini <francesco.dolcini@toradex.com>
+Subject: Re: [PATCH v1] i2c: lpi2c: implement master_xfer_atomic callback
+Message-ID: <tds5osuthulo4bnlck6dgx3g3aoanca3my2uczdhcipcfcxgpp@opzseflynjar>
+References: <20250319145114.50771-1-francesco@dolcini.it>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="c98qNdZvB1kkRDSt"
-Content-Disposition: inline
-In-Reply-To: <D9VS2G7S3T9Q.26QDCDRTC2S11@bootlin.com>
-
-
---c98qNdZvB1kkRDSt
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20250319145114.50771-1-francesco@dolcini.it>
 
+Hi Francesco and Emanuele,
 
-> > Also including Theo on this, he is the major industrial user of this dr=
-iver now.
->=20
-> Thanks for the Cc; I agree with your reading of the code and don't see
-> the issue.
+On Wed, Mar 19, 2025 at 03:51:14PM +0100, Francesco Dolcini wrote:
+> From: Emanuele Ghidoli <emanuele.ghidoli@toradex.com>
+> 
+> Rework the read and write code paths in the driver to support operation
+> in atomic contexts. To achieve this, the driver must not rely on IRQs
+> or perform any scheduling, e.g., via a sleep or schedule routine. Even
+> jiffies do not advance in atomic contexts, so timeouts based on them
+> are substituted with delays.
+> 
+> Implement atomic, sleep-free, and IRQ-less operation. This increases
+> complexity but is necessary for atomic I2C transfers required by some
+> hardware configurations, e.g., to trigger reboots on an external PMIC chip.
+> 
+> Signed-off-by: Emanuele Ghidoli <emanuele.ghidoli@toradex.com>
+> Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
 
-Likely a false positive from static code analysis.
+this patch is causing a build regression. I'm going to revert it,
+please check the test report that has been reported and you are
+cc'ed.
 
-
---c98qNdZvB1kkRDSt
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmgksVQACgkQFA3kzBSg
-Kbbq9w/8D2ZSvoyHilOyIH+QxbNOURmRA0hOLykgfcyqih8H8oIC7H9AqX5iU+RK
-H9XDaQzkdP6Q+Mf5c4VfpDcgu1vtGCG+lXghhY774Z8MeoveiASBis2rAy4cm5Dj
-DAP63k8gCb2+pS+pMTdoegk6RWxBRKsdWhU7TrJTiaB6EGsUEnZbXcmG77RlfZ2B
-GwZsGh7ANgSU+jDz+KFtF54ViEcIn1XY+kAvyTAf6nr5Pd4Wmj5onw50IzWfiurV
-WjA3FT3I9bwjYkToCr6eEOKHLJoNn841N8l1WodbkgIDxXDGUY7+yEi07SLGQ7WO
-hCzONncDly2DKMSt+Yk3i28SG6jjOg+00itIi0VpescccB3oa1M2LbAKaDTPD5wy
-oqhb/vHgNIHWixjvuaqGn3Og+cY8c2CCuXASdtsFAVHKwO+XGgbBL69rHXV2G2O+
-LshBUL786dCFd2dSCHGuKg7WZPOsTqUJFaGeT/rYT5RfXzrzzwSfRbN+66MqcMd0
-NuXYEPpryVEYVVUg9fLvmWFUISFZXPd5cji5bXdUDTQJkJTCeZePW5LSwlNYJF/p
-07N3AvvC88HmHLZA6VRfMbB3OGR+lIGBItUNnoCBHN0sr3KpVl/b2kOmPDN6UlAB
-k1hwM/l3cCwJYwOzSJTylBpaLRmR16UsVRbNiOB9TeHSN5r3Jls=
-=zZ+O
------END PGP SIGNATURE-----
-
---c98qNdZvB1kkRDSt--
+Andi
 
