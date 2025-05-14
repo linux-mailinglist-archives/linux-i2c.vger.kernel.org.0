@@ -1,57 +1,59 @@
-Return-Path: <linux-i2c+bounces-10988-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10989-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0B51AB6F6F
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 May 2025 17:17:15 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BBAABAB6FF4
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 May 2025 17:35:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 20117189D3A7
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 May 2025 15:17:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8D4B03BA5F2
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 May 2025 15:31:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0196F28153C;
-	Wed, 14 May 2025 15:14:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F1971E7C24;
+	Wed, 14 May 2025 15:32:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eDl1Eynw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o/1r6hnr"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A86B28136B;
-	Wed, 14 May 2025 15:14:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 365DF86342;
+	Wed, 14 May 2025 15:32:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747235679; cv=none; b=HPSy+yNcljVuSa58+Tj7yrZ7QcxNL8U2qt9kHF9KwHtQOc8u5d96l3tKMk9jHo2sf73mjRgqD/CwK3YnEBZBSJf2gomtYZmoylTybTp6BaDLqi+UO8XRw1fVE0OCxyO/QtFMcr8PHquNle4jHCVN9aBCLm+v7vYqFM+sAgyqD1o=
+	t=1747236724; cv=none; b=T24kc+FvUeB73SHpqKaarl4zJGdajZ4lhNgAH546aX34nETZrzUwNQzjtGgrU3ldm24gYfWig8g48cxxRHnTd/7dogxgEvBayMIsY23cxdm+lF3TIzvTr0H2WvhANDSuP5A8Ur0dLdUz1HCS1SlpzODTZQUjSrqonIPGYPE1MUY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747235679; c=relaxed/simple;
-	bh=Y+K0CTNazLFlZpMgylFelX29INIzg+H1k2D8sZ3bDcA=;
+	s=arc-20240116; t=1747236724; c=relaxed/simple;
+	bh=ihibllTK5dNCmqfG3tHi2CbY4kCGDEdbxwlZxVd311c=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OZ5AhcclKpVdFscczBQO1I7LNAGMYQykQ9X2oWQET/IsGMbcWknrU8rIHEJejOL6Y0B+THHQhkmLO/nvaV/OTt9TAc1xLkly4h2Jkls4Cy4kpAcoEcTcwFUpXpURdqMIbu5S9EMxSZdOKdNMl+j0NKvvlGCwW0oGMVWmWSa324Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eDl1Eynw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E92A1C4CEE3;
-	Wed, 14 May 2025 15:14:37 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=dXh3pur5gH+Ezc+/opSvBUkWu0+pAU4Ql2jFUfbEhy5D1t0PkIIsUkQeYkRInNv9BhOcIz2zFULhjtxnoG9oJd1A6HwXXDHQZdqoyJmlHRJAWFwT7IPpF1FjhBd0+Adsrwr9ylPQ9PugC6vhY+BC4n523ex4nEkqUUStRiEI+YE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o/1r6hnr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53615C4CEE9;
+	Wed, 14 May 2025 15:32:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747235679;
-	bh=Y+K0CTNazLFlZpMgylFelX29INIzg+H1k2D8sZ3bDcA=;
+	s=k20201202; t=1747236723;
+	bh=ihibllTK5dNCmqfG3tHi2CbY4kCGDEdbxwlZxVd311c=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=eDl1EynwApjePrzqmYaRrqbwX6nnm/wMyxORcRzAaGmYbRq3J0exTHedYZIokVLqx
-	 p3FqD3hdkB3pXgRwqpPPfEDXe+oFlCu5Klz4JiyjsaBu6H98BFH4UmWuA1ohiNLgvm
-	 D75u7YH/Wt6zY/mw4npsQHfHbMORIsPkRvEewfK//AZ22J7moOPWUTZxbZHHGivW8l
-	 VCYOdmCjMUwCvDDYZFxLVWE/7mgOVY2EQfEgIp8pcedDFCMY6CRPvM3qZLQedePs8o
-	 EOu+b5IqY0/YFHMNOmtH/ISof9ldZevBTgNSwY8uJsT/4rgbR5/x/QdMDvNIPFV8E8
-	 HM6KjfqQKg9/Q==
-Date: Wed, 14 May 2025 17:14:32 +0200
+	b=o/1r6hnroO6sRKCZTeKK8nUJy754L3JPrwucXbKnenZfru2xcZH1pqwakgbHl8/Sm
+	 5sQAjzAo7kx5rfsxAoz5fcw898u6+28lZWXAWcT1l7aLHn8FjJMiJet8SToU9Inpej
+	 d8uLMrr04xssUkZ6R/NTOdnjz24rY0/OkSeZI3dbj0W0MqzG7MuOlI8BepyGkrzmpU
+	 Gcual0K5jAZDmJ4fm6Arh8lLbiaYZMR7vYIzcv21t5Uv2phIdzzvkVn/Tm5UrATj1h
+	 eJcsVjRpvh31+H/sECUOQQ65HROx5p8s2XnI40t+FF7rpzK/a1+jSwsXCY70pSSiJS
+	 kk0QxhBzLEJ9w==
+Date: Wed, 14 May 2025 17:31:57 +0200
 From: Andi Shyti <andi.shyti@kernel.org>
-To: Francesco Dolcini <francesco@dolcini.it>
-Cc: Dong Aisheng <aisheng.dong@nxp.com>, Shawn Guo <shawnguo@kernel.org>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
-	Fabio Estevam <festevam@gmail.com>, Emanuele Ghidoli <emanuele.ghidoli@toradex.com>, 
-	linux-i2c@vger.kernel.org, imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, Francesco Dolcini <francesco.dolcini@toradex.com>
-Subject: Re: [PATCH v1] i2c: lpi2c: implement master_xfer_atomic callback
-Message-ID: <tds5osuthulo4bnlck6dgx3g3aoanca3my2uczdhcipcfcxgpp@opzseflynjar>
-References: <20250319145114.50771-1-francesco@dolcini.it>
+To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc: Jarkko Nikula <jarkko.nikula@linux.intel.com>, 
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Mika Westerberg <mika.westerberg@linux.intel.com>, 
+	Jan Dabros <jsd@semihalf.com>, Sanket Goswami <Sanket.Goswami@amd.com>, 
+	Wolfram Sang <wsa@kernel.org>, Shyam Sundar S K <Shyam-sundar.S-k@amd.com>, 
+	Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>, linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org, 
+	linux-i2c@vger.kernel.org
+Subject: Re: [PATCH] i2c: designware: Fix an error handling path in
+ i2c_dw_pci_probe()
+Message-ID: <757u65xqcuadsr5uteb5x6vnnps4wq3tqrheexxekuf2mxnbj2@wdjzz7wkjdkb>
+References: <fcd9651835a32979df8802b2db9504c523a8ebbb.1747158983.git.christophe.jaillet@wanadoo.fr>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -60,29 +62,20 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250319145114.50771-1-francesco@dolcini.it>
+In-Reply-To: <fcd9651835a32979df8802b2db9504c523a8ebbb.1747158983.git.christophe.jaillet@wanadoo.fr>
 
-Hi Francesco and Emanuele,
+Hi Christophe,
 
-On Wed, Mar 19, 2025 at 03:51:14PM +0100, Francesco Dolcini wrote:
-> From: Emanuele Ghidoli <emanuele.ghidoli@toradex.com>
+On Tue, May 13, 2025 at 07:56:41PM +0200, Christophe JAILLET wrote:
+> If navi_amd_register_client() fails, the previous i2c_dw_probe() call
+> should be undone by a corresponding i2c_del_adapter() call, as already done
+> in the remove function.
 > 
-> Rework the read and write code paths in the driver to support operation
-> in atomic contexts. To achieve this, the driver must not rely on IRQs
-> or perform any scheduling, e.g., via a sleep or schedule routine. Even
-> jiffies do not advance in atomic contexts, so timeouts based on them
-> are substituted with delays.
-> 
-> Implement atomic, sleep-free, and IRQ-less operation. This increases
-> complexity but is necessary for atomic I2C transfers required by some
-> hardware configurations, e.g., to trigger reboots on an external PMIC chip.
-> 
-> Signed-off-by: Emanuele Ghidoli <emanuele.ghidoli@toradex.com>
-> Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
+> Fixes: 17631e8ca2d3 ("i2c: designware: Add driver support for AMD NAVI GPU")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-this patch is causing a build regression. I'm going to revert it,
-please check the test report that has been reported and you are
-cc'ed.
+merged to i2c/i2c-host-fixes.
 
+Thanks,
 Andi
 
