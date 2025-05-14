@@ -1,100 +1,114 @@
-Return-Path: <linux-i2c+bounces-10981-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10982-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E22BAB643F
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 May 2025 09:26:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 72C76AB678A
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 May 2025 11:32:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3CF373BDD44
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 May 2025 07:26:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4CE9618939E9
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 May 2025 09:32:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 165FE2144A3;
-	Wed, 14 May 2025 07:25:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8548227EAC;
+	Wed, 14 May 2025 09:32:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BlL1+zLr"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="JK1vTSb7"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FD86215075;
-	Wed, 14 May 2025 07:25:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2FA019F416
+	for <linux-i2c@vger.kernel.org>; Wed, 14 May 2025 09:32:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747207515; cv=none; b=SaL/qbwgdEEWZv9Og+ztMYOZItgmT+jEa0Tbde9Z4KgSwA7Ora17hAIxv7vNdLF306nnuNZboF6LtW9JCJaKF+DS2l8T9PWRWA6BRfV3RiDSHQZp0on4seNF3RhHiafDbGFX6z50ZNwBr7PiJ0Gsr3SloiFSlsj12rigMlJ6qaA=
+	t=1747215123; cv=none; b=MIXhulQzT/D52xpJXkWjrBnVaHcKGr98/pxYyWukuce6WcTIDhWmKCi8X1mDwJtOz3wnivU2ud/opitj3kWBfIU3/4QgHYL+mvTDuHhFdqEAb8of9HWrr2R0bt/IZJyG+jkrPxnF4Ghq6B5oi9/eZAfnPKOeoLXHeOJj1mX/2A0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747207515; c=relaxed/simple;
-	bh=BilRJ6f8t76bTmUmG4gNO1cINv8bzGBDa+3qwuJJbbg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Fx7+NfeqgzgLYpPdcWawF1SalHCB3BdrdkDwbPgs2bBisdDypNDmxlsp2TiQUG7I826BjSLTtuBIkCPMNlKOJFpeTbGg1vzwXhHan1aYbdNueQYTZvGEbnbvVuHOGbGPS23phLXFiIMifZxVTeQaHLs2cFhfMQN1yFToqHotr90=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BlL1+zLr; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747207513; x=1778743513;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=BilRJ6f8t76bTmUmG4gNO1cINv8bzGBDa+3qwuJJbbg=;
-  b=BlL1+zLrMlqnPZm6QgntIrM533VcQyvGEBRDf1eb8MgujGlgdA/E3aIs
-   Lv4NaLy/MOG9bll5StccxBx6r8h0hH+HVHwzRlqUeJQ+b4xh1wt9UbYp+
-   AYx0hc6FB14OCpvL1oDPwn7r2+vf63+6ei1ORSWihcGKjw3nzb/A2uKKq
-   FJWKNjrh3EePkm2ISNzYI0EW/kDpOyZjTuyt/s2NZr5plqUVLvJdfNO/Z
-   mOBcM3TkdeC0vuM+syFjWGswZQjaThs+UlXmdsRLYEuvJ61kJrDC1gin/
-   8c8Iu28iG875azBhgJsLDIh4d2hNjAw+UR7VRxULM2pufQdsDgndvloUg
-   w==;
-X-CSE-ConnectionGUID: 5D8MoYKtSIuGaR7/6UeQoQ==
-X-CSE-MsgGUID: lGVNGCB3SNuW7D3U7XYoRw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11432"; a="59747129"
-X-IronPort-AV: E=Sophos;i="6.15,287,1739865600"; 
-   d="scan'208";a="59747129"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2025 00:25:12 -0700
-X-CSE-ConnectionGUID: ZqYaBnWjQwyzCriZP917pw==
-X-CSE-MsgGUID: RkVqje+FQ1eb7+rf2PELNQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,287,1739865600"; 
-   d="scan'208";a="175083321"
-Received: from unknown (HELO [10.237.72.53]) ([10.237.72.53])
-  by orviesa001.jf.intel.com with ESMTP; 14 May 2025 00:25:10 -0700
-Message-ID: <6fe4e253-330d-4681-af89-834a045dd183@linux.intel.com>
-Date: Wed, 14 May 2025 10:25:08 +0300
+	s=arc-20240116; t=1747215123; c=relaxed/simple;
+	bh=DKJPQc2UnDSjTx7nZLHqJP7cJoeJGHqZa8YDeDrbSlY=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:From:Subject:Cc:
+	 References:In-Reply-To; b=Z+A+U0I05fA1ncT+SxHigLb5sWy5If3z6Gg0ETw6mFXJOZO46r9tF8fwGJZTBOaCbuBYSYfpG1I8Oug4U28c3DEnrvUZb9lSs5ay/jcSaeW19DA8cEMihG31NNLbFnb/o/OrAJ/MKHvS3i8qUgh5ydV4wJXJhq7BZQBVN8aZ894=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=JK1vTSb7; arc=none smtp.client-ip=217.70.183.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8B35043AD3;
+	Wed, 14 May 2025 09:31:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1747215119;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Dfv45bnichpjCAGq207bFcZlXwMMK/d535qeWmESpzY=;
+	b=JK1vTSb76jiCXGtp9jYMuHjcCO1yDmVHmnQ5TSFIkWkhTBGTUIzhZxb3d1FITdkaFV5bPX
+	5bFjWFpVpWu/PHCApYZ5jXDqP60eDUXjIBeLnpt1IJa6gmtIRUaOvk+fMv0QYoHVjgVxHl
+	8VLOqKSIYHf2GaV2ahgX6ugssAM8UuFejKQdrYhNRQiQvkUi0a0jnll3x9Y42EVzT9VUt0
+	VbHmkZkwW/Uzdvjx5EePlz5wquWTDY0L1AT6yM0G7w/bE13tYOoi+gIE9TyXMJVUemypy1
+	0LyT+4f4JaGQRskZYQbBA35TZ88s0sF3BxwIKBtyuaOnwfNMWJMb/X/KQul16g==
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] i2c: designware: Fix an error handling path in
- i2c_dw_pci_probe()
-To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Mika Westerberg <mika.westerberg@linux.intel.com>,
- Jan Dabros <jsd@semihalf.com>, Andi Shyti <andi.shyti@kernel.org>,
- Sanket Goswami <Sanket.Goswami@amd.com>, Wolfram Sang <wsa@kernel.org>,
- Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
- Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>
-Cc: linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
- linux-i2c@vger.kernel.org
-References: <fcd9651835a32979df8802b2db9504c523a8ebbb.1747158983.git.christophe.jaillet@wanadoo.fr>
-Content-Language: en-US
-From: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-In-Reply-To: <fcd9651835a32979df8802b2db9504c523a8ebbb.1747158983.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 14 May 2025 11:31:57 +0200
+Message-Id: <D9VS2G7S3T9Q.26QDCDRTC2S11@bootlin.com>
+To: "Linus Walleij" <linus.walleij@linaro.org>, "Yuanjun Gong"
+ <ruc_gongyuanjun@163.com>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: Re: [PATCH 1/1] drivers/i2c: fix a potential null pointer
+ dereference
+Cc: "Andi Shyti" <andi.shyti@kernel.org>, <linux-i2c@vger.kernel.org>
+X-Mailer: aerc 0.20.1-0-g2ecb8770224a
+References: <20250513123754.3041911-1-ruc_gongyuanjun@163.com>
+ <CACRpkdb6-cjyvXornKcVrYSRqJLE3LqtzotwapHwrYGVm4RNDw@mail.gmail.com>
+In-Reply-To: <CACRpkdb6-cjyvXornKcVrYSRqJLE3LqtzotwapHwrYGVm4RNDw@mail.gmail.com>
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdeftdeiieefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpegggfgtfffkvffhufevofhfjgesthhqredtredtjeenucfhrhhomhepvfhhrohoucfnvggsrhhunhcuoehthhgvohdrlhgvsghruhhnsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeutdeugfdtffefhfefleeiiefgleefueeltefgjedtueejjedvhfeugfeikeekveenucffohhmrghinhepsghoohhtlhhinhdrtghomhenucfkphepudejiedrudeiuddrvdefvddruddvleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedujeeirdduiedurddvfedvrdduvdelpdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpehthhgvohdrlhgvsghruhhnsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeegpdhrtghpthhtoheplhhinhhushdrfigrlhhlvghijheslhhinhgrrhhordhorhhgpdhrtghpthhtoheprhhutggpghhonhhghihurghnjhhunhesudeifedrtghomhdprhgtphhtthhopegrnhguihdrshhhhihtiheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqihdvtgesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-On 5/13/25 8:56 PM, Christophe JAILLET wrote:
-> If navi_amd_register_client() fails, the previous i2c_dw_probe() call
-> should be undone by a corresponding i2c_del_adapter() call, as already done
-> in the remove function.
-> 
-> Fixes: 17631e8ca2d3 ("i2c: designware: Add driver support for AMD NAVI GPU")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
->   drivers/i2c/busses/i2c-designware-pcidrv.c | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Hello Linus, Yuanjun,
+
+On Wed May 14, 2025 at 12:10 AM CEST, Linus Walleij wrote:
+> On Tue, May 13, 2025 at 2:38=E2=80=AFPM Yuanjun Gong <ruc_gongyuanjun@163=
+.com> wrote:
+>
+>> Add check to *priv to make sure the input *dev is not NULL,
+>> and to avoid a potential null pointer dereference.
+>>
+>> Signed-off-by: Yuanjun Gong <ruc_gongyuanjun@163.com>
+>
+> Why is this a problem? Reading nmk_i2c_probe():
+>
+>         priv =3D devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+>         if (!priv)
+>                 return -ENOMEM;
+>
+> OK so priv is not NULL.
+>
+>         amba_set_drvdata(adev, priv);
+>
+> It is unconditionally assigned to the AMBA device.
+>
+> Surely runtime resume isn't called before probe() has commenced
+> successfully?
+>
+> I don't understand when this condition can occur.
+>
+> Also including Theo on this, he is the major industrial user of this driv=
+er now.
+
+Thanks for the Cc; I agree with your reading of the code and don't see
+the issue.
+
+Thanks,
+
+--
+Th=C3=A9o Lebrun, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
 
