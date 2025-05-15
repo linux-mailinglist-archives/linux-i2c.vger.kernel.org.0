@@ -1,154 +1,101 @@
-Return-Path: <linux-i2c+bounces-10993-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10994-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D3E9AB8228
-	for <lists+linux-i2c@lfdr.de>; Thu, 15 May 2025 11:12:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D3C14AB8517
+	for <lists+linux-i2c@lfdr.de>; Thu, 15 May 2025 13:40:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3A2717A7042
-	for <lists+linux-i2c@lfdr.de>; Thu, 15 May 2025 09:11:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 999531B61704
+	for <lists+linux-i2c@lfdr.de>; Thu, 15 May 2025 11:41:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89799296736;
-	Thu, 15 May 2025 09:12:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDBA12980B7;
+	Thu, 15 May 2025 11:40:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jJv3vwR0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TnOivIrM"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B651F28CF65
-	for <linux-i2c@vger.kernel.org>; Thu, 15 May 2025 09:12:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4923819;
+	Thu, 15 May 2025 11:40:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747300326; cv=none; b=Wtg+xwUMuJo2e66+y1XO3yskQTGu3vZ3ibk1SWk4RXo0hMiy1mVz8oNw2enBHko+8m6q6EVOZkpBeOwYOO7wQs+PABO0hrRCaeb7ObQ4ekwBHdjGQCfnPOrqA0dQRfWScBC4D3/abr2Uv2hG7M87Q9sZZt8Mw38Ahcif8aAc6vg=
+	t=1747309251; cv=none; b=LGrxeKB5PSjSwigjkhCK2C1oG1wMpPaCB/1OwdlwsapVH2ViDnEuYccPkpiULAtQMon8uxxb9zfwPYuAemJA3z0Kmt6i3Pzpdawr+xLm08WYSVy6DYU0QxSsmuD6vFHZkKpppwiIfBJghhF9/C8oRrljFIoBSK3e2IEVaFeNYAE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747300326; c=relaxed/simple;
-	bh=Y8fh0ydbwDFuT4JP0Uktyo5VIuBqssqojenovaU59/E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mD5e85g0bI/ttM+v/m3HnNFXuLJfoEttp9fY+yheD6Vz8jXYsdLu3584N4vDRivhLHWjxGR7Nj7Vzy/pFfUwYVq3+wKs8Lm3HJjb0s2RjXVk5YuWW6ViaJLuofWwCgRo2S9fCZzVGXWWW/PnQhY1T/4G86ZZsdHLl9WHyyo743w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jJv3vwR0; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-442ea95f738so4914885e9.3
-        for <linux-i2c@vger.kernel.org>; Thu, 15 May 2025 02:12:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1747300322; x=1747905122; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CAE9bz2isgxzUGbrKGqqEdeq1PEN+8OwnZGGftLgteU=;
-        b=jJv3vwR0aSTmk0oZeJL61m/SKSS731rgOU+85WuPrAwyCrQspNh4lPIk3tIJKmWaYD
-         u3zp9d2VeDqo/yRrfPqotiW+R5Jzvu+J386ew48fRkQOEiFKEXrwP05CHUgDflCFgS1S
-         bAlh2Cvx1MXcvEE1v4ENNQGy0adlfxzQDXMJ4Ucug9W3v1FXX3STo9cpedj1XwgUII/f
-         B4yO/3D0sP4PVAiDBL0iNqWf2eVVGdkauG/LMQkow1Ny/vU6jysg7uK17qJ+6ZyngIIo
-         n59n+6/2j13DMfRym3MC6S/QwAmi+XuJb+TKLAxSZ8URqSJvFgdE7WTH4YGU9Z/VqDmz
-         RO7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747300322; x=1747905122;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CAE9bz2isgxzUGbrKGqqEdeq1PEN+8OwnZGGftLgteU=;
-        b=edM0CG4ypplh23oUJ6IckxGsteyYEj9W7p01uF4rNgTNEmKWrLmReFa66VCss0IdyJ
-         2uJlXTgHoPUo0DEar2y3Zv2ZKwWy0S2bW2a0nssyvoL8Ed75F4+hPW78/cCJBLxUm2er
-         +l+aUEGhjj3Vqj0PcLByackfFEue4yrc1vA8cEX2MJBEMaCrQyGl8p5fPLMgGZTDVjNK
-         PMOsqTljYBkY+ZHpkETupXOBMnAydJtazpEuwEQ92nSaVptASUe3XcikbzJW+mNu4hOX
-         G7ShO4EAxjZpeSz9oZa27Rr0WJ+8dNCK17/XUIxgQTRPC53vHTH/5tL5PFZXR8MzGirp
-         pv1A==
-X-Forwarded-Encrypted: i=1; AJvYcCW41dkHkr2j/2/yTfxZT6+yI6Cimzvibf6d02OtCM/5CsDrgPvsfl6lIOJiWnIB01v1dda4WXHeEMg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx/j22gj0Y7rdIAPmI39sGYLcQbAHcra0KVCQxUzVzjaPE2yLUS
-	WEkgtwjvbcVm7tfXrIg+ci5pQTLAiu1COxuXS+huoBHg/uW1hdAWP+HBCXGR/90=
-X-Gm-Gg: ASbGncuulLJCGTzLi5AR6taJOggEcTNemZ+zUi95k9OVfxJJ/SqXhM61jVAnwoImF8x
-	KtHcxoT+iahz9AHmwju0MMYEnk6TBrz3RozKD2+B8IB28LwlTkN6ZWXG8bSq0vH4rjyoCUCh9jw
-	1eZdDx5EE67I/wMbaZ60w8eRL1GxE4H0rXv2VP/9Ly+wq+kMbopQCk1g8E5YOjOCfY0qFqTAFs3
-	oWrQ6HjyVSpmgPT5XjFnMh9TekP3v1uFz1wcrhU+KHHMCEdwVW8QXWdkkDNbnHclQqravcv/Osx
-	DcXCvXosoVHE2RWwMHrC6CDnqzesHOlb7Eaaj0Hh9wQtIxxI5UWBi29Ptsyj3NIx3ukY+h5IbpV
-	bjQ+bx0/OYelk
-X-Google-Smtp-Source: AGHT+IEiWqZK+wIF0dIQPPNEPiVIMFChIw3pA6T9sTYgeSc0xYst5cv/piO7TsYycRsa/pH81nx0gg==
-X-Received: by 2002:a05:600c:b91:b0:43c:f597:d589 with SMTP id 5b1f17b1804b1-442f2177567mr56412345e9.27.1747300321871;
-        Thu, 15 May 2025 02:12:01 -0700 (PDT)
-Received: from [192.168.2.1] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3a1f57de100sm21837759f8f.2.2025.05.15.02.11.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 May 2025 02:12:01 -0700 (PDT)
-Message-ID: <726e96bd-d4c9-450b-9161-241f05d3d82f@linaro.org>
-Date: Thu, 15 May 2025 11:11:56 +0200
+	s=arc-20240116; t=1747309251; c=relaxed/simple;
+	bh=AtLrKuyB/2mv1b3YAJljBOxYlY0Y4WwepVYWImQje1Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jal3KKph9jtrNQRweYiKraNGrPYkhK1xa+n96y9K+VjAJUMEISrmTHGl3fgfhwNz5CPyb0fF5YN83gKGzlMAdHBqxgG+n8VSC/9ZDwZC8652l/0dwllkDJGzsb0U8ZAIl5E7WF+IL6jTVkdHEnQhM1FfljBfIDifMuVZfPwuQUw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TnOivIrM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54D59C4CEE7;
+	Thu, 15 May 2025 11:40:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747309251;
+	bh=AtLrKuyB/2mv1b3YAJljBOxYlY0Y4WwepVYWImQje1Q=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=TnOivIrMpnQgHRo/eEvXMJRZ6zFtOo1KqVTzjuYabmi1wOzGb6TFo2fxKlbCKAFDc
+	 Qdm7ri21X1blh4QyzFqFK5p+92yj+TEs9UNZa0/Uy/65s6S0nBkG1zBPMorZq/Wkg2
+	 XbUsf+fHGIX6dQJG7x1ZW1Chr9XEFTFG99ZyYexGRMvIqP2EcK3bdZXrhIji4OJ3Vz
+	 J82Xb8iQ1D5wAhTjJhcWs6FKCRK4yXLbALX9lF4f0cn37h2k4rfJlpVYZYcijpwFnK
+	 3EcakqZvpDzlKNDB4hy4QQcL/X6hfMqBvNND5fXbFJN/oiMM8q3t9g8jLj/dZokUv6
+	 wqjbfkQfssTYA==
+Date: Thu, 15 May 2025 13:40:44 +0200
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Francesco Dolcini <francesco@dolcini.it>
+Cc: Dong Aisheng <aisheng.dong@nxp.com>, Shawn Guo <shawnguo@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
+	Fabio Estevam <festevam@gmail.com>, Emanuele Ghidoli <emanuele.ghidoli@toradex.com>, 
+	linux-i2c@vger.kernel.org, imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, Francesco Dolcini <francesco.dolcini@toradex.com>
+Subject: Re: [PATCH v1] i2c: lpi2c: implement master_xfer_atomic callback
+Message-ID: <lqspn72kegy6b7rrpefbajvomcefs3d764ndtwescwhg7jz6bx@hhu4gzkcms62>
+References: <20250319145114.50771-1-francesco@dolcini.it>
+ <tds5osuthulo4bnlck6dgx3g3aoanca3my2uczdhcipcfcxgpp@opzseflynjar>
+ <3C1EEBEB-E691-4EB7-A008-A1FE9CEE7238@dolcini.it>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/9] dt-bindings: timer: Add Sophgo SG2044 ACLINT timer
-To: Chen Wang <unicorn_wang@outlook.com>, Inochi Amaoto
- <inochiama@gmail.com>, Andi Shyti <andi.shyti@kernel.org>
-Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
- Paul Walmsley <paul.walmsley@sifive.com>,
- Samuel Holland <samuel.holland@sifive.com>,
- Ulf Hansson <ulf.hansson@linaro.org>, Philipp Zabel
- <p.zabel@pengutronix.de>, Palmer Dabbelt <palmer@dabbelt.com>,
- Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
- Thomas Bonnefille <thomas.bonnefille@bootlin.com>, ghost
- <2990955050@qq.com>, Jarkko Nikula <jarkko.nikula@linux.intel.com>,
- Jisheng Zhang <jszhang@kernel.org>, Chao Wei <chao.wei@sophgo.com>,
- linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
- sophgo@lists.linux.dev, linux-kernel@vger.kernel.org,
- linux-i2c@vger.kernel.org, linux-riscv@lists.infradead.org,
- linux-mmc@vger.kernel.org, Yixun Lan <dlan@gentoo.org>,
- Longbin Li <looong.bin@gmail.com>
-References: <20250407010616.749833-1-inochiama@gmail.com>
- <20250407010616.749833-2-inochiama@gmail.com>
- <aCSmNRTVXQ51xj0m@mai.linaro.org>
- <MA0P287MB2262A447A98778BF4BC3DB2BFE90A@MA0P287MB2262.INDP287.PROD.OUTLOOK.COM>
-Content-Language: en-US
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <MA0P287MB2262A447A98778BF4BC3DB2BFE90A@MA0P287MB2262.INDP287.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3C1EEBEB-E691-4EB7-A008-A1FE9CEE7238@dolcini.it>
 
-On 5/15/25 02:03, Chen Wang wrote:
-> Hi, Daniel,
+Hi Francesco,
+
+On Wed, May 14, 2025 at 05:51:27PM +0200, Francesco Dolcini wrote:
+> Il 14 maggio 2025 17:14:32 CEST, Andi Shyti <andi.shyti@kernel.org> ha scritto:
+> >On Wed, Mar 19, 2025 at 03:51:14PM +0100, Francesco Dolcini wrote:
+> >> Rework the read and write code paths in the driver to support operation
+> >> in atomic contexts. To achieve this, the driver must not rely on IRQs
+> >> or perform any scheduling, e.g., via a sleep or schedule routine. Even
+> >> jiffies do not advance in atomic contexts, so timeouts based on them
+> >> are substituted with delays.
+> >> 
+> >> Implement atomic, sleep-free, and IRQ-less operation. This increases
+> >> complexity but is necessary for atomic I2C transfers required by some
+> >> hardware configurations, e.g., to trigger reboots on an external PMIC chip.
+> >> 
+> >> Signed-off-by: Emanuele Ghidoli <emanuele.ghidoli@toradex.com>
+> >> Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
+> >
+> >this patch is causing a build regression. I'm going to revert it,
+> >please check the test report that has been reported and you are
+> >cc'ed.
 > 
-> Just a kindly reminder. There is a v2 of this patcheset [1], and I see 
-> [1/9] of v2 has been picked by Andi [2].
-> 
-> Please double check if anything wrong or conflicted.
+> I am looking at it, it's a warning with W=1, not a build error.
+> I would not revert this patch, just wait for a follow up patch
+> or comment that will address that warning.
 
-Thanks for the heads up
+please send a v2 already fixed I don't want to keep a regression
+even if it's a small warning.
 
-I think it is ok, I have the right version in my tree.
+We still have time until the merge window and this patch is
+already reviewed by Carlos.
 
-If you want to double check, it is here:
-
-https://git.linaro.org/plugins/gitiles/people/daniel.lezcano/linux/+/refs/heads/timers/drivers/next
-
-
-> Link: https://lore.kernel.org/linux-riscv/20250413223507.46480-1- 
-> inochiama@gmail.com/ [1]
-> 
-> Link: https://lore.kernel.org/linux-riscv/ 
-> egkwz23tyr3psl3eaqhzdhmvxlufem5vqdlwvl4y6henyeazuz@ch3oflv4ekw7/ [2]
-> 
-> 
-> On 2025/5/14 22:18, Daniel Lezcano wrote:
->> On Mon, Apr 07, 2025 at 09:06:06AM +0800, Inochi Amaoto wrote:
->>> Like SG2042, SG2044 implements an enhanced ACLINT, so add necessary
->>> compatible string for SG2044 SoC.
->>>
->>> Signed-off-by: Inochi Amaoto <inochiama@gmail.com>
->>> ---
->> Applied, thanks
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Thanks,
+Andi
 
