@@ -1,93 +1,116 @@
-Return-Path: <linux-i2c+bounces-10998-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-10999-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E08F8AB9832
-	for <lists+linux-i2c@lfdr.de>; Fri, 16 May 2025 10:59:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 55F37AB99AC
+	for <lists+linux-i2c@lfdr.de>; Fri, 16 May 2025 12:05:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CCF1D1BA78FF
-	for <lists+linux-i2c@lfdr.de>; Fri, 16 May 2025 08:59:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id ECA30189E495
+	for <lists+linux-i2c@lfdr.de>; Fri, 16 May 2025 10:05:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E1D122E3F1;
-	Fri, 16 May 2025 08:59:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C69B23183F;
+	Fri, 16 May 2025 10:05:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eXxmZ7lJ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U1M1bucr"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58A2B282E1;
-	Fri, 16 May 2025 08:59:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87B4A381C4;
+	Fri, 16 May 2025 10:05:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747385960; cv=none; b=fr8pXloyI2r9omHhlTKUU33ptGEt0N7yjixkcw/QWz54gYbNBBH67fKG99UVcRmx3jsZOBwQNd7tL5Pe+R7rPn4uW225c89Wml5TWb99YF1ghk/+GGZGEp/C8tVCpC5EUopTjHfiYVwKL8lFXxnfWg88lZ4IVAoLDj2bgjicYic=
+	t=1747389919; cv=none; b=cG8435gScA0j1kr8a8wg5A+uWIfTXjmucvCYi3VDQtIpfNiA5aTl0PPI9pafENIvDNx1/dJpvPL4tjze4I4YX5GFbLLgeel0ThTOPp09xlbjUANzNzCMprFmsU1sX3W0EC3WXQUrfsssNgn121sj7rTCnPfHTtlBRp+Kay4wHNg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747385960; c=relaxed/simple;
-	bh=Y34VStSLFYSd7A3fQu+01kwEHYE3em+enlgbonrvEB4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=E7i+iB3MIZMCtGQ1U3LDnphgs65v7xkqndd8BamMcM82ktYQziP6EbJo65xD0/Hx3vx/EwuABrNCmhmqlcJBhAwAlMqZmwnYkLDDShOfECCetwZ3nlXNZg0pSqSFAFGuG1LwhnvCEtNvvN+YkAREC876fk0yI9UK+WVdrrC8oO0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eXxmZ7lJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8804BC4CEE4;
-	Fri, 16 May 2025 08:59:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747385959;
-	bh=Y34VStSLFYSd7A3fQu+01kwEHYE3em+enlgbonrvEB4=;
-	h=Date:From:To:Cc:Subject:From;
-	b=eXxmZ7lJ3qTadvjLUIpdnGUBCz+fdldh45l/T/wOlxpsPtHfcqq6e0631aXQ216Hy
-	 QPg69h2CdU2RAerH5eDUS11xN9GWZeAcrPpXYk/pDr6g9cZjqxHX+US7zoTUVK1HVa
-	 oesF3GKXIGDSoDqfFEbfyXymCxTNvM6wo8pM4c4+qvDqsyFqYsRTLYGHJ6Tu8/C2wO
-	 HEJ+LdVlWR62EuxVodilEn2e1iwdKKG2I1Mid54RuPfvkkS4JRtWf0eJWQz+j6igDJ
-	 d4+HK4cmXbfmFe2IafFOzmmlT7917fqeEFA/yRi1lgi6zqPWLoPCdMOhfA3qIUj3I2
-	 myIWHv8Y4yO6g==
-Date: Fri, 16 May 2025 10:59:14 +0200
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: linux-i2c <linux-i2c@vger.kernel.org>, 
-	lkml <linux-kernel@vger.kernel.org>, Andi Shyti <andi.shyti@kernel.org>
-Subject: [GIT PULL] i2c-host-fixes for v6.15-rc7
-Message-ID: <v2tjgz5opkfbnlwsl4ptiauqq3bcahgxjfwx6edk6c6lhyhzm2@nlcpfl6lse6b>
+	s=arc-20240116; t=1747389919; c=relaxed/simple;
+	bh=/1cSL/Lh7tlBOp4/gUuenclvwCFSIFtB1YjDaNqi7c8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bHH/l/7WDmBakZ2UFgHaEMSz15Zp2tGEvBSGP4inNSDbc+b/OAYdiregopzAvHwvXqd43T9o59Uh6sRDrE3ze4Eyotl5GSrFSsAs8sU+HBug1wVrzQX2kK1dL0sXpd8lE2+SYmBOoCUp0Lrk4mOCZCglAxosOLXBe/ePzHe1/TI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U1M1bucr; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-231e98e46c0so1683365ad.3;
+        Fri, 16 May 2025 03:05:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1747389918; x=1747994718; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RFijRLgGDoaMi5lWPDlmsyQ4o4dXkE7VloEdKbWCl3Q=;
+        b=U1M1bucrfDgWLTP448EbmAWu3FUyTSMoyeoohuxmES5xqyPpqV6zNovE5v6nTDL/ad
+         DhwjZGjyq487UJGiYF+3GCZyPhIYijuqL2+PPPlRfDfzPoIq29XTFHznbFaeOG2+hWvV
+         6zMBTm+1yVIdR6nSSbqkyyFiGc2/0BDMZB2FIYePI8C8QB4u9XAAbqtv/rCL8AQUedyB
+         t5sTO9wYD9vbn+Tr+mUNdOS6o8E/FmGtvwCSRcaQsuFzBIZ/twZdoysCk5HWD3Ahj8aw
+         LIZb2vjosZgdK/PEh4QSHJ+WR2pv0P/LkB3rrL1lL0YLYpPO7ApvTxQziDubZlBhHNN4
+         jnNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747389918; x=1747994718;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RFijRLgGDoaMi5lWPDlmsyQ4o4dXkE7VloEdKbWCl3Q=;
+        b=Rn00ayWiPbr8a1nPbBl07i0lL5pJEI8jvA8YzNKHYHNgdaN99zcy6gfUYcA2CzGCjf
+         m34iPojytHbpxm/IWils+5L2OKuOis23zKpZjBp91Zdd0gL+QaRgXVQ7ZuI2drG+THp8
+         Bl0HnGP8LH8FcQZ6J/n6wsov6bJO+RdQ6oUieUVKVTulQZ/IcZXRE7o8es+gbG2YrGSy
+         Ftnde4ECfpYBYjNZFtnhBXFruSnKyT61lpFXJRC0p/HLmAgRIGD8BDDEx43eae2MNEal
+         C8iq6ZPbTn57hxeWl0pCO35A1dtb72i1S46+/iC5VMIcmBvR2ZktZ4rdVBmkI16gPc49
+         vzQQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVVV2tQ4Y6kEBZPNFSHrgC6qwrL+iH02nxbFeU+k0P+RWH8l3cD5n4qTZjlHYD3Ev322336uU9QEozecZfk@vger.kernel.org, AJvYcCXpo+lUbvYOTTMyHky3nKUC8OYr5Eh0o0W06lG9FLQCCavhfyDt9tP2GCc7R5UTO2PBLixokCx0xVI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyl6WRMEhVhL7evoD7GBgx3bI80SdJeLkh0sOu/fRxhI0t8fHUs
+	HEMoZSpqagMtO8xRoS0PledzaxjBPuvkj8+A5ff74UT21XYj6aO1Yhuct5fo1xBw
+X-Gm-Gg: ASbGncv3NcfnKl7jh1ExptQfUw3pG0YZRvtHZRRWt4tiQISa1FZi2KtKs0xA1TqABfe
+	nJyEOQcLgeQpOriedfApRSzv6vdGqmnuK6IAtc2u/K7MCLkita2Fb/od+wViR2Z7p12EtTroMou
+	cHUIQtayrLPwZClt2XFPgeGp8sf97C8hrubCJza7p3oznc412jcfskgsRLid69uSewaTNx8AsO7
+	v3RYC/hwfmClbe8HDeJ+FxEuTHk0Tr/HGdPAE3fvUOkvHIBseSihImARxlYQgkyQo2dMLIIjzml
+	NkhsxdbooL/paRdu4qekSpPuvyHNIFTEZVU4+Qz/mJY1EgAG4D0/tKYM1CeP0oQ=
+X-Google-Smtp-Source: AGHT+IFnBvl/fc5vkXH6aoPRzVyKb0aBPkGRkmKPOR1gB40ebLaewudBvyA06ohiC/L+TZL2gX7XJg==
+X-Received: by 2002:a17:903:24e:b0:22e:4a6c:fef2 with SMTP id d9443c01a7336-231d45ae355mr38262335ad.53.1747389917675;
+        Fri, 16 May 2025 03:05:17 -0700 (PDT)
+Received: from harshPC.. ([2405:201:400a:31fb:f6e6:d112:b6:cd3d])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-231d4e9828esm10988575ad.114.2025.05.16.03.05.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 May 2025 03:05:17 -0700 (PDT)
+From: Harshal <embedkari167@gmail.com>
+To: jdelvare@suse.com,
+	wsa+renesas@sang-engineering.com,
+	skhan@linuxfoundation.org
+Cc: Harshal <embedkari167@gmail.com>,
+	linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kernel-mentees@lists.linux.dev
+Subject: [PATCH] docs: i2c: fix spelling mistake
+Date: Fri, 16 May 2025 15:34:38 +0530
+Message-ID: <20250516100445.8484-1-embedkari167@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-Hi Wolfram,
+fix resistors spelling in i2c-parport.rst
 
-I could have delivered this pull request personally, printed on a
-roll of paper and handed over with a big bow :-)
+Signed-off-by: Harshal <embedkari167@gmail.com>
+---
+ Documentation/i2c/busses/i2c-parport.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-From sunny Nice, here's this week's pull request. Now, time for a
-dip in the water.
+diff --git a/Documentation/i2c/busses/i2c-parport.rst b/Documentation/i2c/busses/i2c-parport.rst
+index a9b4e8133700..4cbf45952d52 100644
+--- a/Documentation/i2c/busses/i2c-parport.rst
++++ b/Documentation/i2c/busses/i2c-parport.rst
+@@ -84,7 +84,7 @@ Remarks:
+                    \|
+ 
+    must be 74HC05, they must be open collector output.
+- - All resitors are 10k.
++ - All resistors are 10k.
+  - Pins 18-25 of the parallel port connected to GND.
+  - Pins 4-9 (D2-D7) could be used as VDD is the driver drives them high.
+    The ADM1032 evaluation board uses D4-D7. Beware that the amount of
+-- 
+2.43.0
 
-Andi
-
-The following changes since commit 82f2b0b97b36ee3fcddf0f0780a9a0825d52fec3:
-
-  Linux 6.15-rc6 (2025-05-11 14:54:11 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git tags/i2c-host-fixes-6.15-rc7
-
-for you to fetch changes up to 1cfe51ef07ca3286581d612debfb0430eeccbb65:
-
-  i2c: designware: Fix an error handling path in i2c_dw_pci_probe() (2025-05-14 17:28:24 +0200)
-
-----------------------------------------------------------------
-i2c-host-fixes for v6.15-rc7
-
-- designware: cleanup properly on probe failure
-
-----------------------------------------------------------------
-Christophe JAILLET (1):
-      i2c: designware: Fix an error handling path in i2c_dw_pci_probe()
-
- drivers/i2c/busses/i2c-designware-pcidrv.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
 
