@@ -1,125 +1,211 @@
-Return-Path: <linux-i2c+bounces-11032-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11033-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72733ABC1C2
-	for <lists+linux-i2c@lfdr.de>; Mon, 19 May 2025 17:10:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB990ABC20E
+	for <lists+linux-i2c@lfdr.de>; Mon, 19 May 2025 17:17:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2004C165B05
-	for <lists+linux-i2c@lfdr.de>; Mon, 19 May 2025 15:11:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F2E804A3166
+	for <lists+linux-i2c@lfdr.de>; Mon, 19 May 2025 15:16:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AC512853E0;
-	Mon, 19 May 2025 15:10:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C200285404;
+	Mon, 19 May 2025 15:16:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="Cb35S6o5"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="frnhOcHk"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C356284B45
-	for <linux-i2c@vger.kernel.org>; Mon, 19 May 2025 15:10:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 875312746A;
+	Mon, 19 May 2025 15:16:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747667456; cv=none; b=gMmNAn9g/vPrCzRp0Z1CIcanrcMQtrSxGKdz7I6snwmj/LMTiRKTZfHXY8oXcwqYENjo1AETGgYerikDeXHf4cMxn3OyE0iq+FztaTv2X96CTE92RiqQMgjKTe58nk+YqPMXKFJl8eVmWmNZN4gvR/+pcBxJe4yrON7uKNKmA2A=
+	t=1747667801; cv=none; b=sZk32WzQV91Xs6gRDqbj6qKzR8POhq9M0GCT1hBXmQOajEtejsiCGlfobSecp1lv8goR9TAIPejIerESm59DGSDzC1Lv7tX20V/WSdxe7krpN+06AbshGjF+0BoqLHojvC+O8OImUGdoCQ8Gf4en7pNdIHpiW0OG9iHjHIeYKwg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747667456; c=relaxed/simple;
-	bh=EfpEBuNJzIRp53V+zQiIC147eCn5a8qcge5EgSQo3L0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WIVdDLrfqstA0McvrE6XpmGnjMKmw/O9TVpzSFI549bj9Gb8fNpld21JQ4G87CyWnzAzyipWJQsI8bASd+lVvm/iiNcDYCE03KK4jGQ4ez7aiK3VHBqkicK8Z1PEC/Htp6qgnYORU9PYqLO8MrQWQu294AqP2YNKt68JdRnXT0E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=Cb35S6o5; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=EfpE
-	BuNJzIRp53V+zQiIC147eCn5a8qcge5EgSQo3L0=; b=Cb35S6o5vp34zOlnBBgM
-	0jGxMjGpcpF/50LmvH2IvBtOxc3xta6k1hUHxREDfoJCvlaIQvSxhh+28fxFjGEl
-	5KFEtWaxVJuQj4jxXaA2+1+SX4oKyd5mFun61lRv1iQz9JtRGN92/unYyHg0TXqT
-	Wg+r7INbeu5FjCOE6cZ3BDJZPO4NtPkilgjueftmfREuB6ibX4x0ZEX+7S3tfIC2
-	B93jtyY7aT0B7+w2ayUPRcB7zcZEoQ5oFhFhYshle+HrVtlN2Y1kfb0PFMuFM7Hj
-	3BsRFIaTO9jW9w0n1FCQUPxbr9LRbfJPLI6YfK7XfoDBjKlbu3b6AJPfrkOGJifM
-	CQ==
-Received: (qmail 2535207 invoked from network); 19 May 2025 17:10:50 +0200
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 19 May 2025 17:10:50 +0200
-X-UD-Smtp-Session: l3s3148p1@8OyMiX41mqJZz6uL
-Date: Mon, 19 May 2025 17:10:49 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Wenmeng Liu <quic_wenmliu@quicinc.com>
-Cc: Robert Foss <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Vikram Sharma <quic_vikramsa@quicinc.com>,
-	Loic Poulain <loic.poulain@oss.qualcomm.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-i2c@vger.kernel.org
-Subject: Re: [PATCH 2/4] dt-bindings: media: Add sa8775p cci dt binding
-Message-ID: <aCtJ-Vj7oebFcqBX@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Wenmeng Liu <quic_wenmliu@quicinc.com>,
-	Robert Foss <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Vikram Sharma <quic_vikramsa@quicinc.com>,
-	Loic Poulain <loic.poulain@oss.qualcomm.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-i2c@vger.kernel.org
-References: <20250514-rb8_camera-v1-0-bf4a39e304e9@quicinc.com>
- <20250514-rb8_camera-v1-2-bf4a39e304e9@quicinc.com>
+	s=arc-20240116; t=1747667801; c=relaxed/simple;
+	bh=dIjfsbvuKpv6FNDMYT0qk3KQ3CM+SITjSH1AsPbbXss=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=WKu3q09LHfUSewT49WZo+oYaM65yocnEy8IgI07F5WtZlOKUCAzcfcPe0lLiKf7+77NPsV0i07IiuxZuJRhUuX/2Ok3Z2eUNSvgtdRENtqFp8QKQItk311cK+3qf2I74luzRIfDOqbihVY9E0u8g5jXrE/ITULtU83psruU5yA0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=frnhOcHk; arc=none smtp.client-ip=217.70.183.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 06A8443A2F;
+	Mon, 19 May 2025 15:16:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1747667791;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=2wQIT894SQnF9B43BAXvpVRW81bs6p0fZUPIOxbNKi4=;
+	b=frnhOcHkyXiwP6GvtKz99dhW7VYYrYNx7PpnkUB0nIG7MfN5HyqajRVS9TdcLY14i8gKWs
+	8wAWcqLiVTDzZUC0WpPOWLOzvTYuC34UTtjUStslX4fTDku+OQXynL+sb25vu/3HryI8CY
+	Lpskap2J9FdH5evionIK+RwIF6l+mLZ4BDUvG4jYYG5IbfK1iBNyeC/UrrjVkYg3ts4z0T
+	wvGJoqX9gUSu5RtRDqijsiLH4mqvqUBjVuOeqOb9VLsIXnX/nojv+0OplD3rRoNrKLxjTw
+	8o9dZHy7e6W4BY1ClOUHTyUOEOFyiW7ckAibvmXDHg0cjozHJS48TeT8kKddsg==
+Date: Mon, 19 May 2025 17:16:26 +0200
+From: Luca Ceresoli <luca.ceresoli@bootlin.com>
+To: Daniel Thompson <daniel.thompson@linaro.org>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Andrzej Hajda
+ <andrzej.hajda@intel.com>, Neil Armstrong <neil.armstrong@linaro.org>,
+ Robert Foss <rfoss@kernel.org>, Laurent Pinchart
+ <Laurent.pinchart@ideasonboard.com>, Jonas Karlman <jonas@kwiboo.se>,
+ Jernej Skrabec <jernej.skrabec@gmail.com>, Maarten Lankhorst
+ <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>,
+ Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
+ Daniel Vetter <daniel@ffwll.ch>, Derek Kiernan <derek.kiernan@amd.com>,
+ Dragan Cvetic <dragan.cvetic@amd.com>, Arnd Bergmann <arnd@arndb.de>, Greg
+ Kroah-Hartman <gregkh@linuxfoundation.org>, Saravana Kannan
+ <saravanak@google.com>, Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Lee Jones <lee@kernel.org>, Jingoo
+ Han <jingoohan1@gmail.com>, Helge Deller <deller@gmx.de>, Paul Kocialkowski
+ <contact@paulk.fr>, =?UTF-8?B?SGVydsOp?= Codina <herve.codina@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linux-i2c@vger.kernel.org,
+ linux-fbdev@vger.kernel.org, Paul Kocialkowski
+ <paul.kocialkowski@bootlin.com>
+Subject: Re: [PATCH v4 6/8] backlight: led-backlight: add devlink to
+ supplier LEDs
+Message-ID: <20250519171626.2885902f@booty>
+In-Reply-To: <20240920144113.427606a7@booty>
+References: <20240917-hotplug-drm-bridge-v4-0-bc4dfee61be6@bootlin.com>
+	<20240917-hotplug-drm-bridge-v4-6-bc4dfee61be6@bootlin.com>
+	<20240919124323.GB28725@aspen.lan>
+	<20240920144113.427606a7@booty>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="/qqJFcc3uppywh4A"
-Content-Disposition: inline
-In-Reply-To: <20250514-rb8_camera-v1-2-bf4a39e304e9@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefvddujeduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtqhertdertdejnecuhfhrohhmpefnuhgtrgcuvegvrhgvshholhhiuceolhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepteekieeihfevhfffieehiefgfeeutdduueeggeffieejgeefhfdthfeugeefvdegnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmpdhkvghrnhgvlhdrohhrghenucfkphepvdgrtddvmeeijedtmedvtddvtdemvggrtddumegsvgegudemleehvgejmeefgeefmeeludefvgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtvdemieejtdemvddtvddtmegvrgdtudemsggvgedumeelhegvjeemfeegfeemledufegvpdhhvghlohepsghoohhthidpmhgrihhlfhhrohhmpehluhgtrgdrtggvrhgvshholhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeefgedprhgtphhtthhopegurghnihgvlhdrthhhohhmphhsohhnsehlihhnrghrohdrohhrghdprhgtphhtthhopehrohgshheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepkhhriihkodguthesk
+ hgvrhhnvghlrdhorhhgpdhrtghpthhtoheptghonhhorhdoughtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegrnhgurhiivghjrdhhrghjuggrsehinhhtvghlrdgtohhmpdhrtghpthhtohepnhgvihhlrdgrrhhmshhtrhhonhhgsehlihhnrghrohdrohhrghdprhgtphhtthhopehrfhhoshhssehkvghrnhgvlhdrohhrghdprhgtphhtthhopefnrghurhgvnhhtrdhpihhntghhrghrthesihguvggrshhonhgsohgrrhgurdgtohhm
+X-GND-Sasl: luca.ceresoli@bootlin.com
 
+Hello Daniel,
 
---/qqJFcc3uppywh4A
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I wonder whether you remember about this conversation...
 
+On Fri, 20 Sep 2024 14:41:13 +0200
+Luca Ceresoli <luca.ceresoli@bootlin.com> wrote:
 
-$subject is wrong mentioning "media" instead of "i2c"
+> Hello Daniel,
+>=20
+> On Thu, 19 Sep 2024 14:43:23 +0200
+> Daniel Thompson <daniel.thompson@linaro.org> wrote:
+>=20
+> > On Tue, Sep 17, 2024 at 10:53:10AM +0200, Luca Ceresoli wrote: =20
+> > > led-backlight is a consumer of one or multiple LED class devices, but=
+ no
+> > > devlink is created for such supplier-producer relationship. One conse=
+quence
+> > > is that removal ordered is not correctly enforced.
+> > >
+> > > Issues happen for example with the following sections in a device tree
+> > > overlay:
+> > >
+> > >     // An LED driver chip
+> > >     pca9632@62 {
+> > >         compatible =3D "nxp,pca9632";
+> > >         reg =3D <0x62>;
+> > >
+> > > 	// ...
+> > >
+> > >         addon_led_pwm: led-pwm@3 {
+> > >             reg =3D <3>;
+> > >             label =3D "addon:led:pwm";
+> > >         };
+> > >     };
+> > >
+> > >     backlight-addon {
+> > >         compatible =3D "led-backlight";
+> > >         leds =3D <&addon_led_pwm>;
+> > >         brightness-levels =3D <255>;
+> > >         default-brightness-level =3D <255>;
+> > >     };
+> > >
+> > > On removal of the above overlay, the LED driver can be removed before=
+ the
+> > > backlight device, resulting in:
+> > >
+> > >     Unable to handle kernel NULL pointer dereference at virtual addre=
+ss 0000000000000010
+> > >     ...
+> > >     Call trace:
+> > >      led_put+0xe0/0x140
+> > >      devm_led_release+0x6c/0x98   =20
+> >=20
+> > This looks like the object became invalid whilst we were holding a refe=
+rence
+> > to it. Is that reasonable? Put another way, is using devlink here fixin=
+g a
+> > bug or merely hiding one? =20
+>=20
+> Thanks for your comment.
+>=20
+> Herv=C3=A9 and I just had a look at the code and there actually might be a
+> bug here, which we will be investigating (probably next week).
+>=20
+> Still I think the devlink needs to be added to describe the
+> relationship between the supplier (LED) and consumer (backlight).
 
+It took "slightly more" than "next week", but we are here finally. In
+reality this topics went pretty much forgotten until Alexander
+Sverdlin's feedback [0].
 
---/qqJFcc3uppywh4A
-Content-Type: application/pgp-signature; name="signature.asc"
+About your concern, I'm not totally sure devlink is the tool expected
+to solve this issue, but if it isn't I don't know any other tool that
+should.
 
------BEGIN PGP SIGNATURE-----
+In other words, because devlink is exactly meant to represent
+supplier-consumer relationships and enforce them to be respected, it
+seems the appropriate tool. Moreover devlink already handles such
+relationships quite well in many cases, and takes care of removing
+consumers before their suppliers, when suppliers get removed.
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmgrSfkACgkQFA3kzBSg
-Kbbung//U6jDHPsnAuSWJgZKTKEzq0UJXA73DtnjBLtXCZ2aADELhg4R9nx4PNLU
-FHuk6N5xI8XAiFZpUescMuTmMSvM1gMhb9wGfDGt3fJQsgJH37r2TKNUOYIyWMGu
-+14UuGmL6cZQIHH02jLrU+w219ZzazKGJxGRZFUoqRfufA/vb/bxO2k2uUB7THQm
-6alkPPD4j0Mhs8pRE8975TsTQnBkJwogFJBdX8lqOhnylCrdrczNckWSTY40FaD5
-sO1rv6vgHrSpEGLntcl1D/6FIZ9VJEKodQ2/B9eB3T2hXgByqH2/Zlqn7EpJ6GEy
-MeN+uq7sxJ1/4ShtaHlqlSUE6m66RAoRtLWFPE7JBoy95GkoBHueBEbZMPTIiGjF
-uCGLP6NrCjv1syp7VmMVJ+NcUt23m4IihCkdJTF3AnX3mOcjC2rySr/kC5Pepuiz
-eHSBz82Yrs8VyEj2FBOe74ArIfqn77Ktnxi7M4rLRi2NAEvEYsi+uXkkqXX6PrnG
-Tfz5aa/b/vajjczKFOFPWSFeqR1gETaYWAGRQ0Zqte338C25n0LQ+OltKIoziOKf
-hOcBXc5+PVwIWV3g9hBkdpaNK9jLKVVI1PoHKgnT/uHapicXLnSALs9sKr3XvBgB
-IJrXuBUP1s0QHmoHvCm2592wR7peRPbKtHVIapxN20QoZ+V1hIg=
-=v2yA
------END PGP SIGNATURE-----
+One missing piece in devlink is it doesn't (yet) handle class devices
+correctly. When the supplier is a class device (such as the LED device
+in this case), then devlink creates a link to the parent of the
+supplier, and not the supplier itself.
 
---/qqJFcc3uppywh4A--
+This problem is well known and it is under Saravana's radar. Adding
+such devlinks at the device core level would be of course be the best
+and most generic solution, but it seems to be much more tricky that it
+may look. So other drivers and subsystems are "manually" creating
+devlinks, to have the right links in place until devlink can figure
+them out automatically. Some examples ('git grep device_link_add' for
+more):
+
+  https://elixir.bootlin.com/linux/v6.14.7/source/drivers/pwm/core.c#L1660
+  https://elixir.bootlin.com/linux/v6.14.7/source/drivers/iio/industrialio-=
+backend.c#L710
+  https://elixir.bootlin.com/linux/v6.14.7/source/drivers/pmdomain/imx/gpc.=
+c#L204
+
+I hope this clarifies the need for this patch.
+
+I am going to send this patch alone in a moment, detached from the
+entire series because it is orthogonal.
+
+[0]
+https://lore.kernel.org/all/fa87471d31a62017067d4c3ba559cf79d6c3afec.camel@=
+siemens.com/
+
+Best regards,
+Luca
+
+--=20
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
