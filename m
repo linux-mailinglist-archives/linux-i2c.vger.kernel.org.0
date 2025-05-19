@@ -1,63 +1,56 @@
-Return-Path: <linux-i2c+bounces-11016-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11014-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95BF6ABBC21
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13115ABBC1F
 	for <lists+linux-i2c@lfdr.de>; Mon, 19 May 2025 13:13:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 41A8517C722
-	for <lists+linux-i2c@lfdr.de>; Mon, 19 May 2025 11:13:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 87E093B6562
+	for <lists+linux-i2c@lfdr.de>; Mon, 19 May 2025 11:13:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9C362750FB;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3581135961;
 	Mon, 19 May 2025 11:13:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="FlgA5dG8"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="iQVH6dK/"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0B1D224895
-	for <linux-i2c@vger.kernel.org>; Mon, 19 May 2025 11:13:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BAF7274FDE
+	for <linux-i2c@vger.kernel.org>; Mon, 19 May 2025 11:13:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747653208; cv=none; b=V8Ml3gXvmguriUCnfHCm8PA0+zwBGwB2RxXZ/ZWV9FxMYmE2gFvxQ+SSCn1256wQNbWUQfAwOOosPf/13/o6brKwid5jkN99d9TrVwGMJVhbMR0GaUtrN0WLK2XDeQDvs3f1CbI84FX2+5nv6S5MEd1rmPxvQqmbqmWNhhIq+YI=
+	t=1747653208; cv=none; b=DG3/koia4VsVGfY6NGJ+xdHQURtvhnhzIG1wUwfRZI4iGc25+I26WOiPeXW4kc6KAggq1Duh1jCYiqDkM0yqKBQcqnAoche25Z4s03f0PvxygsiZ8fTjVNgwMn3CbM34+IVANSLnLuVhNUJ6aJHNRxe7b+eplSolbSL+irEVoKA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1747653208; c=relaxed/simple;
-	bh=d0YH/RUQ2Y9+RUrzEbOSu6slh6dkfZWjG6vLO7QPACc=;
+	bh=RTRj09vqetCc3R5wOnxeYoFWLM53HNJJTbv6q9syoCk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dVqUdwu942S/yH2tQAFxaRbMk3/ndEmOsTvMcZAvgWC67C4ZOn8YIAqtNizvB/fb6TmX7JZ+hCemJwff3UC+4lfprD/NkXcXgy4UKIUoA7dn5GamDdRwuc6wfjce+8SOLxZOQppQ5UlKYrZv5Vs1ofwQPzIN/xlyUCjmjFeTsyA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=FlgA5dG8; arc=none smtp.client-ip=194.117.254.33
+	 MIME-Version; b=cOknXwOl3A6gBcSC/2VwFosSj1zDj20SLFBHtVgQAW2V8CTs2S0n9nrVMiz4P9WKgFbI7L/soOWmPe/2Z9yDMyTJ5mNIl69TqszJRWvmZC1NnuhR2igODJKJCEwp7jX4EZVFRAJLPcAdOtTUgpT43ciAevEHqDJR3Tb2Bd/kIxY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=iQVH6dK/; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=from:to:cc:subject:date:message-id
 	:in-reply-to:references:mime-version:content-transfer-encoding;
-	 s=k1; bh=Pg/h+3AUuXh+Lp//vEQMpLvp/Pda67WjMagYQLQYIHw=; b=FlgA5d
-	G8GgeflPZkA3xueZMltVQcJhbp0y8nMWJgZ3oNs6jLij1j5LdEDjvj+BvITOrNa6
-	rNNdINIX0aIGFIkDrYKLy29isibdUvofLEdqu1Eucx9GawQFTpqZz+BFa8UDM1Hv
-	xCrX4SKz9V46cFD3s9IdtbPOG+D95OrHU+Rq7tMLertpU4PVjCJ/eRHwAgcP8cbm
-	m2YNGJLellYWSgvYk/9CwoAUImH/xPqpNS9kelaph2PsRvwtZSMpbzTG05W53skF
-	tNnO6rVSwliO6kkv8iF21N1+Lq+BoovqRY5zTmDM662HQV3JqtTQbo+udRBGLT3Q
-	8mBVy0hFBbFc1EAA==
-Received: (qmail 2453716 invoked from network); 19 May 2025 13:13:21 +0200
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 19 May 2025 13:13:21 +0200
-X-UD-Smtp-Session: l3s3148p1@q6k3OHs1estZz6+V
+	 s=k1; bh=i2BK8GIpTb62nl2a+Wd6Fp6A8rDO1DQatwQW1+PcGs4=; b=iQVH6d
+	K/KsgRy4ml0cRvW2RZSRYp7rb4qJjPWVLGIMOrppwfRFJGpo6Bm5ZHd+etGQh2mH
+	06MTuH083qq8UfYqVl+A2SY1+LaOUAR0hTfucW8btrG/d/9sRTxlMr3262PlMaUW
+	MooG6XH13EK/5FmJyi/PrRNyylEfjVWi4G6JRQwEiQuCEgyv0ecn9rGZM4ngUbfi
+	Qy3gWOwr8217Utw476TAcD6FBIFJNm5RtYs2XaRzxUl2HgGdgAQ0dMBIg5w22au5
+	76OrLKvDUhK1d1lcW4Nio0tpRrcG/XPLxBBe9tm1otJq83tNHJWJZzi825h4KQcn
+	sgApZx7wEnCvytKg==
+Received: (qmail 2453768 invoked from network); 19 May 2025 13:13:22 +0200
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 19 May 2025 13:13:22 +0200
+X-UD-Smtp-Session: l3s3148p1@WO9JOHs1ft5Zz6+V
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 To: linux-i2c@vger.kernel.org
 Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>,
-	linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH 1/3] i2c: powermac: convert of_node usage to fwnode
-Date: Mon, 19 May 2025 13:13:12 +0200
-Message-ID: <20250519111311.2390-6-wsa+renesas@sang-engineering.com>
+	Wolfram Sang <wsa+renesas@sang-engineering.com>
+Subject: [PATCH 2/3] i2c: use only 'fwnode' for client devices
+Date: Mon, 19 May 2025 13:13:13 +0200
+Message-ID: <20250519111311.2390-7-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.47.2
 In-Reply-To: <20250519111311.2390-5-wsa+renesas@sang-engineering.com>
 References: <20250519111311.2390-5-wsa+renesas@sang-engineering.com>
@@ -69,27 +62,35 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-'of_node' in i2c_boardinfo is deprecated in favor of 'fwnode'. The I2C
-core handles them equally, so simply convert this driver to fwnode.
+No client sets 'of_node' anymore, so we don't need to handle the case in
+the core anymore.
 
 Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
- drivers/i2c/busses/i2c-powermac.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/i2c/i2c-core-base.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-powermac.c b/drivers/i2c/busses/i2c-powermac.c
-index 9a867c817db0..f99a2cc721a8 100644
---- a/drivers/i2c/busses/i2c-powermac.c
-+++ b/drivers/i2c/busses/i2c-powermac.c
-@@ -349,7 +349,7 @@ static void i2c_powermac_register_devices(struct i2c_adapter *adap,
- 		/* Fill out the rest of the info structure */
- 		info.addr = addr;
- 		info.irq = irq_of_parse_and_map(node, 0);
--		info.of_node = of_node_get(node);
-+		info.fwnode = of_fwnode_handle(of_node_get(node));
+diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+index dc3c60a7d382..63ffde07a143 100644
+--- a/drivers/i2c/i2c-core-base.c
++++ b/drivers/i2c/i2c-core-base.c
+@@ -961,7 +961,7 @@ static void i2c_unlock_addr(struct i2c_adapter *adap, unsigned short addr,
+ struct i2c_client *
+ i2c_new_client_device(struct i2c_adapter *adap, struct i2c_board_info const *info)
+ {
+-	struct fwnode_handle *fwnode;
++	struct fwnode_handle *fwnode = info->fwnode;
+ 	struct i2c_client *client;
+ 	bool need_put = false;
+ 	int status;
+@@ -1005,7 +1005,6 @@ i2c_new_client_device(struct i2c_adapter *adap, struct i2c_board_info const *inf
  
- 		newdev = i2c_new_client_device(adap, &info);
- 		if (IS_ERR(newdev)) {
+ 	device_enable_async_suspend(&client->dev);
+ 
+-	fwnode = info->fwnode ?: of_fwnode_handle(info->of_node);
+ 	device_set_node(&client->dev, fwnode_handle_get(fwnode));
+ 
+ 	if (info->swnode) {
 -- 
 2.47.2
 
