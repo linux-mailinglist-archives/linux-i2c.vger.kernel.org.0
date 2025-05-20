@@ -1,118 +1,136 @@
-Return-Path: <linux-i2c+bounces-11086-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11087-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC3BAABE533
-	for <lists+linux-i2c@lfdr.de>; Tue, 20 May 2025 22:51:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE41EABE62B
+	for <lists+linux-i2c@lfdr.de>; Tue, 20 May 2025 23:33:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1DCAB8A7342
-	for <lists+linux-i2c@lfdr.de>; Tue, 20 May 2025 20:50:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 98AA1188A6F9
+	for <lists+linux-i2c@lfdr.de>; Tue, 20 May 2025 21:34:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79FD221129A;
-	Tue, 20 May 2025 20:50:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABC6C25E814;
+	Tue, 20 May 2025 21:33:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="NFJa2xx+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="U3VL1+gF"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14A472010EE
-	for <linux-i2c@vger.kernel.org>; Tue, 20 May 2025 20:50:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E1C524C09E;
+	Tue, 20 May 2025 21:33:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747774246; cv=none; b=CLb75DL7YE/qjdP8YbLFYhRYEz91MssVyCLsonYf+A5sEVZh1Ud/NzfGUzHaMT3ccCLU048oocCsSWAi1DKWmRLyrMIz351bXYBxHl1dvwe8hlhGcj/bxtW+1PMmlpbbXzJ5RiT9tNg4OPnrRrlh5UFzYCzQcpxwWgDy1uegxQA=
+	t=1747776824; cv=none; b=BG4NHua2dY6u1/EPm2vPDRejZA6QgUD/Tw19FACYiBehGkdLk7Mo3r4TDdpvyq0O8pSStOORQQp1/ObF2CbV4mSLgmlv5WPHWB28qW/EGiM0c/Jc20cQ7xFQuV6S+HLnmSFhjA5XiSRV5TiqNgNDMu41YlA5OpqPpt70Vn01DP4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747774246; c=relaxed/simple;
-	bh=6j/xQ/XDZ/5vwEelfWdXLSBU/lb9tzGJP7hwiRt5/ic=;
+	s=arc-20240116; t=1747776824; c=relaxed/simple;
+	bh=2dBBkVKAjPqMQO6yAxkJdcJQvunb0imiwfvphMP3bMs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=g3KYuMiJyHUzfkjz2vj58gLv9Qsh0a8lfsHghI3uL02ywT/bPL9pTBrUa2ubXrYb0fYr2Q7Ro/JR3UfDLYtRDr7Nhm9BImQnnuxMRjuURV4MOur996lBfUh8HUGWGfR53WYmaqTwO+KbV7Jb3YRDmATLwMO7qBwn1eNF/GKPlDY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=NFJa2xx+; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=6j/x
-	Q/XDZ/5vwEelfWdXLSBU/lb9tzGJP7hwiRt5/ic=; b=NFJa2xx+LcX1VpOg/hNu
-	qWyZoVtAkXbIi98iC6qH2/8R2H8b3Qfv0gutbNjmtHmsG+pz9pvBi6jQjhOqVE6F
-	0T1QG+t0PoH6lc9myEQAeKU0ZF5v60uMQcpfKGC4ihFCcmxASp1rnA3VWxS9Wwzw
-	tiUyzt9TCw9fQICxmvsEbbYcjxAA9I1ZC8B9xd1cxwEHaU5svar7mLwZ99QHYbdr
-	+79O7y30stwO9M4V31HgQti0wL3DfAgERW4E3BoFvsNyuj+vOQh+HG3eWY14dvdV
-	wJJXEBrYPcuM3CeqezAfB3yENFbYfgYQXOCJY6Q+LEqpgBhqJ+L58bNHokDUp+JB
-	TA==
-Received: (qmail 3015612 invoked from network); 20 May 2025 22:50:37 +0200
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 20 May 2025 22:50:37 +0200
-X-UD-Smtp-Session: l3s3148p1@AOeSZpc1xpZehhrK
-Date: Tue, 20 May 2025 22:50:37 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: linux-i2c@vger.kernel.org
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	linuxppc-dev@lists.ozlabs.org,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Naveen N Rao <naveen@kernel.org>,
-	Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH 0/3] i2c: remove 'of_node' from i2c_board_info
-Message-ID: <aCzrHZK_YN6dLxzO@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	linux-i2c@vger.kernel.org,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	linuxppc-dev@lists.ozlabs.org,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Naveen N Rao <naveen@kernel.org>,
-	Nicholas Piggin <npiggin@gmail.com>
-References: <20250519111311.2390-5-wsa+renesas@sang-engineering.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=mV/twWMJeYfcGzs1uNwmtMrYTsfNZ9+Z7oM1GmU0V8wXuTMesf9vLKbKxxfIGbzxh0x76mdgxkV2zAGoN9pTb9rf/LaJJU5r06SPYaok3C6Y4l/2QU7j+FaaQocA3ap9yHFIbG7kXN1ICaeVPFgOe9l9jdz/QlsT4HZVJkvmAmc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=U3VL1+gF; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1747776823; x=1779312823;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2dBBkVKAjPqMQO6yAxkJdcJQvunb0imiwfvphMP3bMs=;
+  b=U3VL1+gFt75Uj4DOsCKLH8QYfNgR1GPQY25lWmrGXmqBYWIqCGGvhOI2
+   98x8ef9oOE/zUESh2vz7JOiX7n743wjbCbOU+oxyMjIg3tbpIB4aTTSm2
+   K5vsfPpNre5pjFCby2u4AH7tyQBT0JnnpmUhGSfbwr9O/2CyIpw9+1n94
+   j37ai65XObRaCs62/h/1ZFZttnMil1/YAh3VFSKGLR7RklFSiKxqgQboX
+   HVARqCR13II+eoh8NNPg3E0ZwHbWIIcAHbntV2JaCeI05dPCE0pyHIdbf
+   lnwATr0nFw+A4a7E90pYxamnvm1QWvlv4q5/I2Y47Qed1yKy9qHXwf5mu
+   g==;
+X-CSE-ConnectionGUID: FX8r+Xt7Q9SzCLKEYX4Fig==
+X-CSE-MsgGUID: dvasTuh4QGuMPUdGONXEgQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11439"; a="49886560"
+X-IronPort-AV: E=Sophos;i="6.15,302,1739865600"; 
+   d="scan'208";a="49886560"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2025 14:33:41 -0700
+X-CSE-ConnectionGUID: qKGsHbZ/Soe+T5yrGWF48w==
+X-CSE-MsgGUID: Rx5ednNxSfq2WVZorJIWPg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,302,1739865600"; 
+   d="scan'208";a="143811827"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 20 May 2025 14:33:35 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uHUab-000NaO-0J;
+	Tue, 20 May 2025 21:33:33 +0000
+Date: Wed, 21 May 2025 05:32:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: a0282524688@gmail.com, lee@kernel.org, linus.walleij@linaro.org,
+	brgl@bgdev.pl, andi.shyti@kernel.org, mkl@pengutronix.de,
+	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
+	jdelvare@suse.com, alexandre.belloni@bootlin.com
+Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-can@vger.kernel.org, netdev@vger.kernel.org,
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org,
+	Ming Yu <tmyu0@nuvoton.com>
+Subject: Re: [PATCH v11 6/7] hwmon: Add Nuvoton NCT6694 HWMON support
+Message-ID: <202505210555.mud6jZoi-lkp@intel.com>
+References: <20250520020355.3885597-7-tmyu0@nuvoton.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="+gdyaTKa0CKxLXgW"
-Content-Disposition: inline
-In-Reply-To: <20250519111311.2390-5-wsa+renesas@sang-engineering.com>
-
-
---+gdyaTKa0CKxLXgW
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250520020355.3885597-7-tmyu0@nuvoton.com>
 
-On Mon, May 19, 2025 at 01:13:11PM +0200, Wolfram Sang wrote:
-> I promised Andy to support him in his cleanup efforts, and here is the
-> outcome for tidying up i2c_board_info. It seems it was easier than
-> anticipated. But my scanning scripts (awk, coccinelle) didn't find any
-> more occurences and the build bots are happy, too. It really seems this
-> is all that is left to do. No complaint, though.
+Hi,
 
-Applied to for-next.
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on andi-shyti/i2c/i2c-host]
+[also build test ERROR on mkl-can-next/testing groeck-staging/hwmon-next abelloni/rtc-next linus/master lee-mfd/for-mfd-fixes v6.15-rc7]
+[cannot apply to lee-mfd/for-mfd-next brgl/gpio/for-next next-20250516]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/a0282524688-gmail-com/mfd-Add-core-driver-for-Nuvoton-NCT6694/20250520-100732
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
+patch link:    https://lore.kernel.org/r/20250520020355.3885597-7-tmyu0%40nuvoton.com
+patch subject: [PATCH v11 6/7] hwmon: Add Nuvoton NCT6694 HWMON support
+config: i386-randconfig-013-20250521 (https://download.01.org/0day-ci/archive/20250521/202505210555.mud6jZoi-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250521/202505210555.mud6jZoi-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505210555.mud6jZoi-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/hwmon/nct6694-hwmon.c:12:10: fatal error: linux<mfd/core.h: No such file or directory
+      12 | #include <linux<mfd/core.h>
+         |          ^~~~~~~~~~~~~~~~~~
+   compilation terminated.
 
 
---+gdyaTKa0CKxLXgW
-Content-Type: application/pgp-signature; name="signature.asc"
+vim +12 drivers/hwmon/nct6694-hwmon.c
 
------BEGIN PGP SIGNATURE-----
+  > 12	#include <linux<mfd/core.h>
+    13	#include <linux/mfd/nct6694.h>
+    14	#include <linux/module.h>
+    15	#include <linux/platform_device.h>
+    16	#include <linux/slab.h>
+    17	
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmgs6xkACgkQFA3kzBSg
-KbYIcA/+Mwkwe+oxJeIG0cOfe2SNYP4uJEPz9J2/exPnSVguGXIF2+V2SfOFQjh8
-zpjJnZxnKkS6Ja8lrrMvxWHpf6uExX2CtN6DA/O3Q2air0NTl4TezzzOGxMHgfZv
-2aiVTjYANHnENTHQx29eWZx27WkKKqNMdVPm2K89JeUFpikEXPHJRsoUKiqYErGF
-DgTuUorcj4wmsxZc7qE1HlzEnMpSguQeWQa+XT1TFZ2wazJRPveg330gVvBCT3q8
-lTVkb9MkzBEEBVfbsVMHWn2wuuw/E1WeeOO7dkENGCMhHHjbjBBImRc6IKP82qtW
-h60nxdw6BrcSHHhKwQvEQiQ83IZhDXzUeThLQ/gkog42S27uAAHVbt0Vc/fKmy6x
-Ug7CvLupjzqDEqNYKZYHBzi1hckNgAR3Gz2wWs2Rf65dHFhcLPKmiMLzXGrkkiSq
-gT+zp+JoLttG6RH4XtfFHZ7rmRMptO9r//JcUKFlp3in9lsyJyYqQqnJ4ziaUl6L
-v/hhIfM4BPqAc4kljqmr9fggkEaHNw8LfBQVPC7KuYDEqsc8mrmekxFnFYJMSd+P
-L3kyh3zdxnb0BMg33Vjyu+t4tXbqlqR6755ySE1tUbKRFWV0jI4GkMbB7b5eQwRw
-Yqtbm1VKkit7akyPquHHk0gVl7It2n3KBmidaNSFf9v53K2cZ70=
-=dOW6
------END PGP SIGNATURE-----
-
---+gdyaTKa0CKxLXgW--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
