@@ -1,110 +1,119 @@
-Return-Path: <linux-i2c+bounces-11070-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11071-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AFC73ABD836
-	for <lists+linux-i2c@lfdr.de>; Tue, 20 May 2025 14:29:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46C1FABDF2E
+	for <lists+linux-i2c@lfdr.de>; Tue, 20 May 2025 17:34:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 316093A58EE
-	for <lists+linux-i2c@lfdr.de>; Tue, 20 May 2025 12:29:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 445604C765D
+	for <lists+linux-i2c@lfdr.de>; Tue, 20 May 2025 15:27:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D64371C4609;
-	Tue, 20 May 2025 12:29:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6FDA262808;
+	Tue, 20 May 2025 15:26:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AEOF1xkA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eFLPnB6E"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 911B81D554;
-	Tue, 20 May 2025 12:29:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FFD125FA2E;
+	Tue, 20 May 2025 15:26:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747744181; cv=none; b=aprcmF1fjoVCZXRQzvnJb0wzcd5ocTlsFTofgbsz3ms/ScZcIsZDfT9k4i+EFSkAMgMGZK7SBZHQAf7TU/qZhPFER+h7L2p6jgwycbCNBiSVET0rweNRZdh/noHwihns6WgaabdTsz+57oR4dnMzhAJ9fzIxH+jDppjugQ2iy+s=
+	t=1747754765; cv=none; b=PG7CZjNa5aG4m/AMZi/NbY85+qLftwnY7hxsPGHWILPjphb6rVK29TwQkZFjU2ExeRWObZPpWzZk97w72vxBwCzjRXYJeGmy/Tea77fiE6YzMF+3AENFkJGVP9SJrjJN75qVMeq9vubvnMimIa8P3rRqr4lT28QPXoichgV+mf8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747744181; c=relaxed/simple;
-	bh=otdy0gj6v9t3yu2PkIBmFIF6Tt+1vULwohKrUAvm0yY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Content-Type; b=sY7d1Wr+j1yt7hUr8fd1GRJ42GvLaEVeEzfQFkXynevZJlCuIvUaqhEle0yyoGWdEVa1Vvip74LDUnfljlOjjpFaW31FFVWu9RXNXwCY6hohYz2Svk6AjBJhH7pwW2oPgrpWOpDBAIYWm/h9wlC9WCvKU7U9xhY6Ek1nYaZU05Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AEOF1xkA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA8BCC4CEE9;
-	Tue, 20 May 2025 12:29:40 +0000 (UTC)
+	s=arc-20240116; t=1747754765; c=relaxed/simple;
+	bh=uma6Yq0KvtOpiTvEXjx9dMJRNblWQRQl509jbvRCsdU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=R8a/upJD+YVI6uBizkxiqrt8u8Se7npm0Rpqt0eTSOZoTV4Heb1MRQP8gF6BmstaFPzT4aXhb93ZD2z76ShrwhNjDg2mPidLl1OIMt9OosaD/myaPazgvKwxire+OyCAyrHHFWGdDqw8jUe2BXNFC2pauxeZ92+hB0rjeqUE4t0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eFLPnB6E; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B27FEC4CEE9;
+	Tue, 20 May 2025 15:26:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747744181;
-	bh=otdy0gj6v9t3yu2PkIBmFIF6Tt+1vULwohKrUAvm0yY=;
-	h=References:In-Reply-To:From:Date:Subject:To:From;
-	b=AEOF1xkAvspZIMxlqJU++FoMGMfmrUG3vV3vuDCDhBPk/YY9BuElisiRXMKR6dC4M
-	 hj1YCDtfaCYlnW/KP2eVhEvqT1+2D3Ka6AfJyMXZ5xVeQsyu03H1bv5aBlUoie7ATL
-	 Kg9ZkmHpi91kQEKefJ4dA7SLbrHxhU7J9XIRny7IdGK4xXxYzRncZHV+Up7nnINsvg
-	 fO7WAPAAUY02H6EHPilWqNasqqPj55vrDR4fl/8RxvDG0XioxbXFo8YnmmBvuvX5rg
-	 Cz+cyYMLGZScjn9uQQjfGXXtu2uaeLF1OOsgjLRS+MxWHGpysQb0QBWFyUL8P0BWiU
-	 1sgiwEkZGkeqg==
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-5f3f04b5dbcso7887104a12.1;
-        Tue, 20 May 2025 05:29:40 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUKY1uhKH+NnaLFUxU3gFLGYsQ+rnvDEDbXU71P4JAOfI3TQk0QRBy3na/FxIlOJBwqD+t6o88ugwpC@vger.kernel.org, AJvYcCVWZ0wviR6ZR8uM+2eaOKCpQZc+q74fWgvnyHQJ54jqIDV7OQ8rbDqQe8COeyVWCX11ICjMkk5tMcyILKB0MR8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwP3VxysuZoH25dnnsPDyqn8E5go7nhq4tkVXoE5mwWtJgGmiZT
-	2DCJlNX7pNzuKBjLDPCmmoo4Jrl8dGIMpHGB+kMJq+qkfbh+oPkQX9s1Wz0HmW3QbKPj1JlN/fr
-	JgGkbQT7CHVNsVSPttczqFY+uMua+cg==
-X-Google-Smtp-Source: AGHT+IHyQN353A/uwLSNuLP227CqS6FWSa1S1hmDkcYfXYkNrY7nLkglTVvVmjhUVaYygP7eRACgyrx4Egh9t13xQt0=
-X-Received: by 2002:a17:907:6096:b0:ad5:c07:49f8 with SMTP id
- a640c23a62f3a-ad52d575894mr1569447466b.41.1747744179546; Tue, 20 May 2025
- 05:29:39 -0700 (PDT)
+	s=k20201202; t=1747754765;
+	bh=uma6Yq0KvtOpiTvEXjx9dMJRNblWQRQl509jbvRCsdU=;
+	h=From:To:Cc:Subject:Date:From;
+	b=eFLPnB6EJ/WiBwLv8/CijKvOc7dtX/mR5Y1WaPTfu5io7Mpq3SzsvnOsfpWJ5h4t1
+	 y2f1CTi8fr1ZdkfVitU6k0vCRVDKEyJuQs+SEP5b6BFAsF7nWi0fzU+dO9QBHt87NY
+	 oAy/NaXAfopxNDGcfdRnQqbkIuEnssxAP7SqXhXGxVqh4LklwpZFBpcBYLf6mvIrpG
+	 2PfNFGqLZ//Ioq6O3a10+lbLp231gZOVsxDA7H+hFk8RDoGeZKddUonqJjyEbGuDVV
+	 TQm3nK0c/lgG3pHad8Gwbs0V/Ggy3ju2fm9iM0WrqG80RxRz+wcBb+ABESLvV6ykG5
+	 q4NeBSu4nlMQA==
+From: Arnd Bergmann <arnd@kernel.org>
+To: Khalil Blaiech <kblaiech@nvidia.com>,
+	Asmaa Mnebhi <asmaa@nvidia.com>,
+	Andi Shyti <andi.shyti@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] i2c: mlxbf: avoid 64-bit division
+Date: Tue, 20 May 2025 17:25:45 +0200
+Message-Id: <20250520152600.1975628-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250519184530.21845-1-wsa+renesas@sang-engineering.com>
- <CAL_Jsq+UCU8RdAGVPbsFDo6aaAyoAKtjDd4yYfs47YOt__VhgQ@mail.gmail.com> <aCxKlniEUCJq-aqu@shikoro>
-In-Reply-To: <aCxKlniEUCJq-aqu@shikoro>
-From: Rob Herring <robh@kernel.org>
-Date: Tue, 20 May 2025 07:29:28 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqL6CdmrCTbvbFEUjhbd+yDtd9Jf9r+OcV0imcoB117iAg@mail.gmail.com>
-X-Gm-Features: AX0GCFsseX5UsSVIQcg5aNMvQODxZR3i0B4-8Ft-IxxK46nz9V_LnUTCOzENOMQ
-Message-ID: <CAL_JsqL6CdmrCTbvbFEUjhbd+yDtd9Jf9r+OcV0imcoB117iAg@mail.gmail.com>
-Subject: Re: [PATCH dt-schema] schemas: i2c: Allow '-' in 'i2c-.*' node names
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>, Rob Herring <robh@kernel.org>, 
-	devicetree-spec@vger.kernel.org, linux-i2c@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, May 20, 2025 at 4:25=E2=80=AFAM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
->
-> On Mon, May 19, 2025 at 08:18:53PM -0500, Rob Herring wrote:
-> > On Mon, May 19, 2025 at 1:45=E2=80=AFPM Wolfram Sang
-> > <wsa+renesas@sang-engineering.com> wrote:
-> > >
-> > > When allowing extended i2c node names, the '-' character was not adde=
-d
-> > > to the character class. Fixes the following error:
-> > >
-> > > .../Kernel/linux/arch/arm/boot/dts/microchip/usb_a9g20.dtb: i2c-gpio-=
-0 (i2c-gpio): $nodename:0: 'i2c-gpio-0' does not match '^i2c(@.+|-[a-z0-9]+=
-)?$'
-> > >         from schema $id: http://devicetree.org/schemas/i2c/i2c-gpio.y=
-aml#
-> >
-> > IMO, we should change the node name to "i2c-0". While I'm on the fence
-> > whether it's worth changing these, I do think it is worth not getting
-> > new ones.
->
-> It is hard changing the existing ones. They are numbered based on the
-> numbers of GPIO based I2C busses only. If we drop "gpio-", they need to
-> be mixed with other non-GPIO busses. That numbering is usually unique
-> per board and can't be automated.
+From: Arnd Bergmann <arnd@arndb.de>
 
-I don't understand. For arm32, I see 1 case of possibly already having
-an i2c-[0-9] name and that's in
-arch/arm/boot/dts/samsung/exynos5250-arndale.dts. The non-GPIO I2C
-buses are all MMIO and have unit addresses (and also aren't at the
-root level).
+The 64-bit division in mlxbf_i2c_get_ticks() causes link failures
+when compile-testing on 32-bit machines:
 
-The hardest part is doing a dtb->dts pass and comparing those before
-and after to make sure you haven't combined or split nodes.
+ERROR: modpost: "__udivdi3" [drivers/i2c/busses/i2c-mlxbf.ko] undefined!
 
-Rob
+Change this to a div_u64(), which should replace the constant division
+with a a multiply/shift combination in the mlxbf_i2c_get_ticks().
+
+The frequency calculation functions require a slow library call but
+should be used much rarer.
+
+Fixes: 9c6c6fa671f9 ("i2c: mlxbf: Allow build with COMPILE_TEST")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/i2c/busses/i2c-mlxbf.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-mlxbf.c b/drivers/i2c/busses/i2c-mlxbf.c
+index 39359942e4d7..8345f7e6385d 100644
+--- a/drivers/i2c/busses/i2c-mlxbf.c
++++ b/drivers/i2c/busses/i2c-mlxbf.c
+@@ -1083,7 +1083,7 @@ static u32 mlxbf_i2c_get_ticks(struct mlxbf_i2c_priv *priv, u64 nanoseconds,
+ 	 *         Frequency
+ 	 */
+ 	frequency = priv->frequency;
+-	ticks = (nanoseconds * frequency) / MLXBF_I2C_FREQUENCY_1GHZ;
++	ticks = div_u64(nanoseconds * frequency, MLXBF_I2C_FREQUENCY_1GHZ);
+ 	/*
+ 	 * The number of ticks is rounded down and if minimum is equal to 1
+ 	 * then add one tick.
+@@ -1460,9 +1460,8 @@ static u64 mlxbf_i2c_calculate_freq_from_tyu(struct mlxbf_i2c_resource *corepll_
+ 	 * and PadFrequency, respectively.
+ 	 */
+ 	core_frequency = MLXBF_I2C_PLL_IN_FREQ * (++core_f);
+-	core_frequency /= (++core_r) * (++core_od);
+ 
+-	return core_frequency;
++	return div_u64(core_frequency, (++core_r) * (++core_od));
+ }
+ 
+ static u64 mlxbf_i2c_calculate_freq_from_yu(struct mlxbf_i2c_resource *corepll_res)
+@@ -1491,9 +1490,8 @@ static u64 mlxbf_i2c_calculate_freq_from_yu(struct mlxbf_i2c_resource *corepll_r
+ 	 * and PadFrequency, respectively.
+ 	 */
+ 	corepll_frequency = (MLXBF_I2C_PLL_IN_FREQ * core_f) / MLNXBF_I2C_COREPLL_CONST;
+-	corepll_frequency /= (++core_r) * (++core_od);
+ 
+-	return corepll_frequency;
++	return div_u64(corepll_frequency, (++core_r) * (++core_od));
+ }
+ 
+ static int mlxbf_i2c_calculate_corepll_freq(struct platform_device *pdev,
+-- 
+2.39.5
+
 
