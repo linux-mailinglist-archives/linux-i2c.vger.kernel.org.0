@@ -1,56 +1,57 @@
-Return-Path: <linux-i2c+bounces-11096-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11097-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2DC00AC04C0
-	for <lists+linux-i2c@lfdr.de>; Thu, 22 May 2025 08:43:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6BED3AC04C3
+	for <lists+linux-i2c@lfdr.de>; Thu, 22 May 2025 08:44:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 24ECC4E1F91
-	for <lists+linux-i2c@lfdr.de>; Thu, 22 May 2025 06:43:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 25F694E07DB
+	for <lists+linux-i2c@lfdr.de>; Thu, 22 May 2025 06:44:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F913221F0C;
-	Thu, 22 May 2025 06:43:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C985221719;
+	Thu, 22 May 2025 06:43:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="czexWMaV"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="HWRHeBA3"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A544D4317D
-	for <linux-i2c@vger.kernel.org>; Thu, 22 May 2025 06:43:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFF9F221D9A
+	for <linux-i2c@vger.kernel.org>; Thu, 22 May 2025 06:43:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747896227; cv=none; b=gbZZBTABXpsMlIDGEZxrf1h7x5RY2gXuJ7SQh8IvG3q+WUQ+D8baJqiG39NTzKdYub9+xYwbmDUHprdMUShteEGPtjoQ8l5fAOHMIQ5W90Gwd9b0vwjE2IfVXv9nAc03rRyrw6cg2AXdmqX9s9u4mOom4FGDRHV+dsNdocXYaLg=
+	t=1747896238; cv=none; b=rSZxWauQN89dNirBRd8GD0TGjADwojR9pPCsfYrZyHBTveGyIJHIzJj2ir56XKLZwyZe4DfswGhcOjumxvvCPdVtPJQIgN9PXT46jfKQSfHs2EqApN3JGdT9jyiHn1TFjLA2rV41kiqtYSnivVg8/2iKgagVESo9CvkgEnRHBv8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747896227; c=relaxed/simple;
-	bh=mH3fmbl7refCg1HHhe13TwvWENwPLSE30fOG0HIsIP8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=d0t5QvG1J8r9cy3Ak55GSHRzbYPJss79MVtmp4ZV4EdPFr5VWcZ6HDbbVQdl6u8Jvfy/BGGa0ldvdelD50gqMlox6ka2t4v/P4lcl5RCdMeUpCrQwtO114fnA+sPc8R814N7VOznxJ3MPGc/Q6A578/ZGLko6cWLJjDnpEBXtQA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=czexWMaV; arc=none smtp.client-ip=194.117.254.33
+	s=arc-20240116; t=1747896238; c=relaxed/simple;
+	bh=iwosjGa1+dzWBytJRhObLGPI10QCu4QJwWEIdpV9VJo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FzbVCGuvQTpjBe+6aqSH8bEVIcC9KLuP1pB5fJ4D2WC1LYh4FhzLl7RvC13HEZ6wMALtw663XHeVZZwxyvIPZxp6cagVQGHmzYhn8A96/3HerR6SvekSG/piZwGdRpMAQBqbgampx3CutLrjZQZ9A5xX8H35mlK3nT9xjF7jl/8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=HWRHeBA3; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=from:to:cc:subject:date:message-id
-	:mime-version:content-transfer-encoding; s=k1; bh=X4ywNBT+2ixEDx
-	gCJhbD21DvdI8ZosRQ3D/wNsbS894=; b=czexWMaVqv6xKW+2BYobY+uW6K+kbA
-	uK37NXJb4qhi1JHyT4DZI3nIGh4mvekPQJNchdjO1B+GZbwWL8fWe7fcJpwWdTOG
-	tWCe0f4Xjr0vh8iKGnauIauTFWvjI/L6ImyzKsQaFApus3jBIPzPLhe6kxV+ATye
-	Oess59/Ul+cOXP9jnkyZgkoF/dcFIbjZVoRKVHNf8jleGsJh2Cb8q336X1kZbiEM
-	/imrJHuk3XM4DNr7Oot6WpiBChs9tAqAry3Ds90bHpwsD+xdsA0DX0EcoYKDzUse
-	IH8sgApPa+2mwaOE1XKC/+jjd7VFvregEswvclH2Zziuu397OpYW+tFA==
-Received: (qmail 3533900 invoked from network); 22 May 2025 08:43:38 +0200
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 22 May 2025 08:43:38 +0200
-X-UD-Smtp-Session: l3s3148p1@i7ktzbM1LrMgAwDPXwj7ADHm2wGe7qss
+	:mime-version:content-transfer-encoding; s=k1; bh=z2uDdfs7vPu+Qu
+	xVOd6pqSgCZscHMGXP4l/SvREWjyk=; b=HWRHeBA3Oq87zKwCth8mb5wk8hkjt1
+	dBkZCSg+f7Ik5ziMbjESmzoB4txYiUzGTTqRwfB6g4afumJXRRxdx4bVjc79ZFtk
+	iZN7uqB8iFdIphWUIUG5fvE4wde0sYy7HrPdlqp/TL1vZW1Vrg3DDIp0OR5iPVNg
+	tQUQMPtjIGqeJgAxroPysxJe7OONr0fy9f9Wqu43f0uX+EwXXnRzceLy1NXFjST1
+	5aGVMVqdlyaVFYF6XN2juI74XwtKlT8zy1CM8g8quilapsuXOxFRuN9o1/awhhLW
+	KUK+IYm7zUsbOGsEMyYQBU2swDN3dCi2HS0JXVHLRHd0sm7bcMjjfVYg==
+Received: (qmail 3533990 invoked from network); 22 May 2025 08:43:52 +0200
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 22 May 2025 08:43:52 +0200
+X-UD-Smtp-Session: l3s3148p1@OfIDzrM1yM4gAwDPXwj7ADHm2wGe7qss
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 To: linux-i2c@vger.kernel.org
 Cc: Alan Stern <stern@rowland.harvard.edu>,
 	Nikita Zhandarovich <n.zhandarovich@fintech.ru>,
 	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Till Harbaum <till@harbaum.org>,
 	Andi Shyti <andi.shyti@kernel.org>
-Subject: [PATCH] i2c: robotfuzz-osif: disable zero-length read messages
-Date: Thu, 22 May 2025 08:42:35 +0200
-Message-ID: <20250522064234.3721-2-wsa+renesas@sang-engineering.com>
+Subject: [PATCH] i2c: tiny-usb: disable zero-length read messages
+Date: Thu, 22 May 2025 08:43:49 +0200
+Message-ID: <20250522064349.3823-2-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
@@ -68,33 +69,33 @@ read messages altogether.
 
 Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
- drivers/i2c/busses/i2c-robotfuzz-osif.c | 6 ++++++
+ drivers/i2c/busses/i2c-tiny-usb.c | 6 ++++++
  1 file changed, 6 insertions(+)
 
-diff --git a/drivers/i2c/busses/i2c-robotfuzz-osif.c b/drivers/i2c/busses/i2c-robotfuzz-osif.c
-index 80d45079b763..e0a76fb5bc31 100644
---- a/drivers/i2c/busses/i2c-robotfuzz-osif.c
-+++ b/drivers/i2c/busses/i2c-robotfuzz-osif.c
-@@ -111,6 +111,11 @@ static u32 osif_func(struct i2c_adapter *adapter)
- 	return I2C_FUNC_I2C | I2C_FUNC_SMBUS_EMUL;
+diff --git a/drivers/i2c/busses/i2c-tiny-usb.c b/drivers/i2c/busses/i2c-tiny-usb.c
+index 0f2ed181b266..0cc7c0a816fc 100644
+--- a/drivers/i2c/busses/i2c-tiny-usb.c
++++ b/drivers/i2c/busses/i2c-tiny-usb.c
+@@ -138,6 +138,11 @@ static u32 usb_func(struct i2c_adapter *adapter)
+ 	return ret;
  }
  
 +/* prevent invalid 0-length usb_control_msg */
-+static const struct i2c_adapter_quirks osif_quirks = {
++static const struct i2c_adapter_quirks usb_quirks = {
 +	.flags = I2C_AQ_NO_ZERO_LEN_READ,
 +};
 +
- static const struct i2c_algorithm osif_algorithm = {
- 	.xfer = osif_xfer,
- 	.functionality = osif_func,
-@@ -143,6 +148,7 @@ static int osif_probe(struct usb_interface *interface,
- 
- 	priv->adapter.owner = THIS_MODULE;
- 	priv->adapter.class = I2C_CLASS_HWMON;
-+	priv->adapter.quirks = &osif_quirks;
- 	priv->adapter.algo = &osif_algorithm;
- 	priv->adapter.algo_data = priv;
- 	snprintf(priv->adapter.name, sizeof(priv->adapter.name),
+ /* This is the actual algorithm we define */
+ static const struct i2c_algorithm usb_algorithm = {
+ 	.xfer = usb_xfer,
+@@ -246,6 +251,7 @@ static int i2c_tiny_usb_probe(struct usb_interface *interface,
+ 	/* setup i2c adapter description */
+ 	dev->adapter.owner = THIS_MODULE;
+ 	dev->adapter.class = I2C_CLASS_HWMON;
++	dev->adapter.quirks = &usb_quirks;
+ 	dev->adapter.algo = &usb_algorithm;
+ 	dev->adapter.algo_data = dev;
+ 	snprintf(dev->adapter.name, sizeof(dev->adapter.name),
 -- 
 2.47.2
 
