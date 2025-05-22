@@ -1,103 +1,141 @@
-Return-Path: <linux-i2c+bounces-11113-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11114-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18008AC0982
-	for <lists+linux-i2c@lfdr.de>; Thu, 22 May 2025 12:11:14 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95511AC0985
+	for <lists+linux-i2c@lfdr.de>; Thu, 22 May 2025 12:12:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C62C1175E48
-	for <lists+linux-i2c@lfdr.de>; Thu, 22 May 2025 10:11:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D5B041B61AF5
+	for <lists+linux-i2c@lfdr.de>; Thu, 22 May 2025 10:12:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AD1A28851A;
-	Thu, 22 May 2025 10:11:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B15E828853B;
+	Thu, 22 May 2025 10:12:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="BonY2GZQ"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="G4Jk7NuK"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88828C2EF;
-	Thu, 22 May 2025 10:11:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84CB818027
+	for <linux-i2c@vger.kernel.org>; Thu, 22 May 2025 10:12:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747908669; cv=none; b=V0fDNGOu5DEayKsBpudmAQfSQBFJLsEb1GC0qhFSkArT2HyFEUP86HyINd7WGfVD6duHA1o3H5jtOfwJEbGylNosNoM8IthtWL0YscvQNE9LSuSS0jAzk5qgbaBh24sgtTkQObMO3zSk2YIY106hTECbpQkrPXo/R8wj1VB1Abk=
+	t=1747908731; cv=none; b=mjWVysRkzdcrn2h7UJTvkIfDE6NnXqCHtIX5hkcEQ3plveMb1H76c+bqyLT0xwxksTyl0LQsoYpMW8CLskuO8Bm2jlBL1Nyk1AYYfcrq14thmVv9AOPwkVC4DVG22oPUofhbbJF8LE8WhIyqkkNa5uFTxFhkdv6FZ3ORB8/E19Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747908669; c=relaxed/simple;
-	bh=fWR/juEyTHsQD1NrYSJu/7H9kQS9MO2kkYk6SJDs8Yc=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=nDwgLCT36fVw7RQL46fio1aOgsPAu1AHtdOkJyRvg/ym6n1FYyHvcTVzT6hDVC+mAal1u+akq4AZLk8D6vakqI+L2Aq3V1TZLep8PF3FxfEUx8vlggxMzTCIHda+6ABYFXPCvvDMXVjCduFF9QuoD0h+rG+OIfYN//vAYaaLI30=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=BonY2GZQ; arc=none smtp.client-ip=217.70.183.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0B3A81FCF3;
-	Thu, 22 May 2025 10:10:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1747908659;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=vVseXxkZGy7zDZxv+n6mkcP25YSvXNhLwd1kEp9tP3U=;
-	b=BonY2GZQN51u4iAJ2gkHL1efROjfxU5dWAxK9upogjKxTAo+rFzIdoRh4UHJBQG3jhXnxo
-	K3oknqvafUOIUZSvl4ULUvKDA0tfjpYFeoEYULFMMIT5xm9qDX6PBh5qxYVTQVRdpYPv+D
-	3tsNR6aExXhYYAOPDDBJQ96+N4REtm+QOUIeJo1JLWVGxV1hkljQdl5RjecIhRxU7Qy8+r
-	PB2rwUCHujb68QhL1/fSwGbQiLvJv+nUIqEcZwDsZ1iA+oMk+MRAwh1JI5ZcfBoYpN+n8V
-	zXsBxD/L0Obw4xzezQA8NZzTk1m2iHhuYv942nxReqVKa6uyaWb9IrgabWqUqw==
-Date: Thu, 22 May 2025 12:10:56 +0200
-From: Luca Ceresoli <luca.ceresoli@bootlin.com>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: Cosmin Tanislav <demonsingur@gmail.com>, Tomi Valkeinen
- <tomi.valkeinen@ideasonboard.com>, Mauro Carvalho Chehab
- <mchehab@kernel.org>, Romain Gantois <romain.gantois@bootlin.com>, Arnd
- Bergmann <arnd@arndb.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-media@vger.kernel.org
-Subject: Re: [PATCH v5 7/9] i2c: atr: add flags parameter to i2c_atr_new()
-Message-ID: <20250522121056.685637cd@booty>
-In-Reply-To: <aC7lUE4kj8fnVVgM@shikoro>
+	s=arc-20240116; t=1747908731; c=relaxed/simple;
+	bh=bnSUdK2lXeMpPqOWyA/0Y9zVP+s/O/C4wk6c9eUhpjQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fJ2x6sHts4z8BzYZ91y13PB9yFcOyp5U6D7hEV0w6M7/78DCM5zZbUc598458D3g3CYj+eYI8m3rGsAtfeBx1oEslyjVrXUlZjHqWTafkOff6kGPCvmQ0nS2Ei0Z6K9Frf4DdVthIItwE5NDoQS+dCx8uS+sdtJx4aC2k7CXvHg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=G4Jk7NuK; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=bnSU
+	dK2lXeMpPqOWyA/0Y9zVP+s/O/C4wk6c9eUhpjQ=; b=G4Jk7NuKQ0AnU6XlrFiu
+	SIq9EHWBg1rcbsyFLZQ9pJZsQDUGcxgSQGiBxdRixyO63NaHpc1UnXhYZ8lfwhrT
+	z8qhetzzPFiGCkSiyS3fse5KpDYBqGwVuoCee2epSqAEvRh3UQZpfQZsMJhwxEIY
+	lOQbmsV8Qddk/AneqHkTYzkGo6b1CQqZaxERII4R+41ojJWJdtZ7Y1Du+0CbjciH
+	lVHVFZTABDTqmrYa5KNxcRt45uEuIMKlLi+2OYXcDa/OVTyDNWWa8Ua0n8LekMI4
+	mWEssIBGfuWvtFKsbbwxCctWQUpbB9LEUlPt+9S9HsDN7MCKAhGkuIPC8q6jFkH4
+	Pg==
+Received: (qmail 3610525 invoked from network); 22 May 2025 12:11:57 +0200
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 22 May 2025 12:11:57 +0200
+X-UD-Smtp-Session: l3s3148p1@CPAptrY1joIgAwDPXwj7ADHm2wGe7qss
+Date: Thu, 22 May 2025 12:11:56 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Cc: Cosmin Tanislav <demonsingur@gmail.com>,
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Romain Gantois <romain.gantois@bootlin.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org,
+	Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+Subject: Re: [PATCH v5 1/9] i2c: atr: Fix lockdep for nested ATRs
+Message-ID: <aC74bCOXhPl5F5fX@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Luca Ceresoli <luca.ceresoli@bootlin.com>,
+	Cosmin Tanislav <demonsingur@gmail.com>,
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Romain Gantois <romain.gantois@bootlin.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org,
+	Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
 References: <20250507121917.2364416-1-demonsingur@gmail.com>
-	<20250507121917.2364416-8-demonsingur@gmail.com>
-	<aC7lUE4kj8fnVVgM@shikoro>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-redhat-linux-gnu)
+ <20250507121917.2364416-2-demonsingur@gmail.com>
+ <aC7o_obqzBlhW0tE@shikoro>
+ <20250522120713.7feafa47@booty>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddtgdehieelucdltddurdegfedvrddttddmucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefnuhgtrgcuvegvrhgvshholhhiuceolhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepgeelffefgfehhfdtvdefueefieevkefggfelkeeiudetkeektedvhedukefgvddvnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppedvrgdtvdemieejtdemvddtvddtmegvrgdtudemsggvgedumeelhegvjeemfeegfeemledufegvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddvmeeijedtmedvtddvtdemvggrtddumegsvgegudemleehvgejmeefgeefmeeludefvgdphhgvlhhopegsohhothihpdhmrghilhhfrhhomheplhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepuddtpdhrtghpthhtohepfihsrgdorhgvnhgvshgrshesshgrnhhgqdgvnhhgihhnvggvrhhinhhgrdgtohhmpdhrtghpthhtohepuggvmhhonhhsihhnghhurhesghhmrghilhdrtghomhdprhgtphhtt
- hhopehtohhmihdrvhgrlhhkvghinhgvnhesihguvggrshhonhgsohgrrhgurdgtohhmpdhrtghpthhtohepmhgthhgvhhgrsgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhomhgrihhnrdhgrghnthhoihhssegsohhothhlihhnrdgtohhmpdhrtghpthhtoheprghrnhgusegrrhhnuggsrdguvgdprhgtphhtthhopehgrhgvghhkhheslhhinhhugihfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopehlihhnuhigqdhivdgtsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-GND-Sasl: luca.ceresoli@bootlin.com
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="62XMAXwLz+/kICRi"
+Content-Disposition: inline
+In-Reply-To: <20250522120713.7feafa47@booty>
 
-On Thu, 22 May 2025 10:50:24 +0200
-Wolfram Sang <wsa+renesas@sang-engineering.com> wrote:
 
-> On Wed, May 07, 2025 at 03:19:13PM +0300, Cosmin Tanislav wrote:
-> > In preparation for adding multiple flags that change the behavior,
-> > add a flags parameter to i2c_atr_new() and an i2c_atr_flags enum.
-> > 
-> > Signed-off-by: Cosmin Tanislav <demonsingur@gmail.com>
-> > Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-> > Reviewed-by: Romain Gantois <romain.gantois@bootlin.com>  
-> 
-> How did you guys get it to build?
+--62XMAXwLz+/kICRi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I haven't :-)
+On Thu, May 22, 2025 at 12:07:13PM +0200, Luca Ceresoli wrote:
+> On Thu, 22 May 2025 11:06:06 +0200
+> Wolfram Sang <wsa+renesas@sang-engineering.com> wrote:
+>=20
+> > On Wed, May 07, 2025 at 03:19:07PM +0300, Cosmin Tanislav wrote:
+> > > From: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+> > >=20
+> > > When we have an ATR, and another ATR as a subdevice of the first ATR,
+> > > we get lockdep warnings for the i2c_atr.lock and
+> > > i2c_atr_chan.orig_addrs_lock. This is because lockdep uses a static k=
+ey
+> > > for the locks, and doesn't see the locks of the separate ATR instances
+> > > as separate.
+> > >=20
+> > > Fix this by generating a dynamic lock key per lock instance.
+> > >=20
+> > > Signed-off-by: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.co=
+m>
+> > > Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com> =20
+> >=20
+> > Your SoB is missing. I will add it for you if you confirm here.
+>=20
+> Mine? I didn't think it would be needed based on:
 
-I just reviewed the code, and apparently gcc's parser is stricter than
-I am.
+Ah, I was talking to Cosmin. Sorry if that wasn't clear.
 
-Luca
 
--- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+--62XMAXwLz+/kICRi
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmgu+GkACgkQFA3kzBSg
+Kba4CQ//c4plwCDlYO4chjk+dVfOF4RHFjNv1l6doF4ENZHW8bfFbWPzqd7L28OY
+bXXJcK7obRJ6ynzVhEWYnzfDPsRs9UKqm2VTxVnKpAtpFvrezM3YiXDxg/lBy2W+
+cpWG2wYkTcOL4safx6I+u2eWnsEFAzQgxCcx9j3vBN6mt6oJNZa1Iu9pwpLxs2Fw
+CsIo7RT8tzyOC5lZlogKUxo5K7VieJ+WkrdI+0eJnHkhy/M/A67q1SJypd0+Fk4p
+LZL6Wncw32htW1WVnWiOx8O9JGAEJSbuEQx93Nf6Hrm2MY8Q10+pCgBD8Ph0pMtJ
+M6P5Zr0IdXhxquLu0pDVBW+is4xsjjL+l5kl+dlbf7OhMoVFSszTRkF5pE3w9uDq
+kwtu5gN6HEmL3YmBq6jmR7sfBWCpPDzM/LKrKuEb3UKW0zd8JUcvZmJrfHrWjKTs
+lODhQhe0CB5qeRDMcDN0p7GO9CB6UAXLiPl4ckLpoQMHiLHYqaRk1m59fo8vQnqR
+nD9zf6koWo/WcmBmMyTteeLKWakRR/nf0MGKqQvpX6pX7IHnuHJh6tb9u2Gd2soW
+nUpqi/tLvna82HlAMu5ssg8dyDaMdRJxAbkukiO2RYn53RgRuJLblVjy5ZzJ7Mht
+X2j8C4k30j5aENnLJhVO6uvdecGV/aRbfNxsAlONmDP8sKapsF0=
+=tKQD
+-----END PGP SIGNATURE-----
+
+--62XMAXwLz+/kICRi--
 
