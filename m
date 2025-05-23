@@ -1,272 +1,288 @@
-Return-Path: <linux-i2c+bounces-11127-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11128-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0020AC1F28
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 May 2025 11:02:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 27B5AAC1FAF
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 May 2025 11:24:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2B28C7B9DA9
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 May 2025 09:01:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 67A431BA3920
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 May 2025 09:25:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E92332236F0;
-	Fri, 23 May 2025 09:02:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C41AB224256;
+	Fri, 23 May 2025 09:24:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SO2S6mFS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lRf3A7Nm"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 812391487FE;
-	Fri, 23 May 2025 09:02:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C65B5D8F0;
+	Fri, 23 May 2025 09:24:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747990935; cv=none; b=YHUnk2879VhpB0Zm7Gs5daDywvLYqr6K37ZVLk2hDHMAd+HJlmK1lndOtGMwZvv2xAkQxRP3f/Khz6bdQGaIPuLD5owkjU3wy2GQ4pSa0FkyBoLpgOpdzd7yuaKE881+rtzJawXgMRHp0pkkN6uSCBQ5c0JyvYdjYBocNbRaB6g=
+	t=1747992291; cv=none; b=dW1Kysoj6soV6/rfSSNv54SIoaltspHSUyWgzftMXZirXOivACiCJLirSsK/KlaaEuaibkFK1RzpR/Npwza9RdnF4Hi8TxboDkHpI+lTDzeAl0ccOfhjhk0JxCuuwalLvKInghkG8jw2asgvhc6ByrdviGuww+qesk5XTvdCKyc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747990935; c=relaxed/simple;
-	bh=Dzl9IFdwpkzphmorX3MPHRaZcbXOQp1myGl9QI6CyzA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NrQR9hbNDmdFuHA1utNBLezAhpPdv6XmxmAHrzUvCnMg2hL6NYJ3naEKykRCGUmDM25JvOVpH/jPQptAtnvE5YI1P6AQ7WmFOYTs90uanNNmaciljnWesxWxg9UJPBzubcGVspzdYpb9/li4Fazkd9ht4h2WztetJAY6wpwwg2Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SO2S6mFS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D1FEC4CEE9;
-	Fri, 23 May 2025 09:02:10 +0000 (UTC)
+	s=arc-20240116; t=1747992291; c=relaxed/simple;
+	bh=n83FIuvqZgH7UR8ZIskd3h/2XvNQ6gI+CqfbEbWYlEI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=MNCxDpAxPFZocwgyPSMkgwiUdye6xkclGpMAW7kQ6hSgB9anHIFrP7zq1kveQOPcFHPujSVQKKnjHynTvw4mv19AcpBcpixgG5sskY2Htlg+3GgRdoTHEKv4zzKFUHHgqBJ6Dm85gT4PiC3QAsL5OakxabljgXk06HWYWqcs6J8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lRf3A7Nm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6425C4CEE9;
+	Fri, 23 May 2025 09:24:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747990934;
-	bh=Dzl9IFdwpkzphmorX3MPHRaZcbXOQp1myGl9QI6CyzA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SO2S6mFSwXeblGzqX9iEYu9fX0ncmNGLIrqWngvPyBmhDg3Wkz0+Fn5khZb5Q30uC
-	 IkiYUrP61FOr9UY6lBXWKuob9jj4Ze7Q1Tjj1oh/plV08Hf7nMW4jVJ/7t7IgPl5H7
-	 GvFhns9q1gjfpLXQysVyBIcRKHs+b1BjgOCG+VxCyJ6G/IGQnPN5Ami366qNjzS70u
-	 mCuddrf7E3vWwhhCMB52hNWRuEw6QHoEstzq6D4FlACW4ROqjkzqQcFmkfQP7RQey9
-	 u+fKW6YF0YH5sTWU+r74CBgmDq7g/NCOt+kvc6J3fqVLA/XWTZY+xRhUy33NVUJAoC
-	 nPSFhZg41q1Lg==
-Date: Fri, 23 May 2025 10:02:07 +0100
-From: Lee Jones <lee@kernel.org>
-To: a0282524688@gmail.com
-Cc: linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org,
-	mkl@pengutronix.de, mailhol.vincent@wanadoo.fr,
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org,
-	linux@roeck-us.net, jdelvare@suse.com,
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-can@vger.kernel.org, netdev@vger.kernel.org,
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org,
-	Ming Yu <tmyu0@nuvoton.com>
-Subject: Re: [PATCH v11 1/7] mfd: Add core driver for Nuvoton NCT6694
-Message-ID: <20250523090207.GD1378991@google.com>
-References: <20250520020355.3885597-1-tmyu0@nuvoton.com>
- <20250520020355.3885597-2-tmyu0@nuvoton.com>
+	s=k20201202; t=1747992290;
+	bh=n83FIuvqZgH7UR8ZIskd3h/2XvNQ6gI+CqfbEbWYlEI=;
+	h=Date:From:To:Cc:Subject:From;
+	b=lRf3A7NmYquDtcwdiZaycsZsA5AnaUIvr6w9Hl5A6wgtjlrUne5ZDwvyjVod16u2/
+	 QlxhuQnMiL06BER2uuHE8SecjPR7/ZRpnPK+vfP7CjG72T/Ovm6gaszBFeIXOVdky8
+	 Wm31JJL0+swQLbqeyJhUOeQm55G+Xjg7RI6Xdx1omYONVvnijDtO5KZqYAETtZCLIJ
+	 DkNKP6N8eqw6mRbYDq4Q06P7l6sJdwUai4kN5SdrCg9J6pxpQC8SwJ+lqoU5Qpcofe
+	 v2GfXPyJL+5YOJST0h5jdsogmfwFp9SlFCBaOmCIwhBszxCDUm+ZjqZFDxnVvmPVyX
+	 ylfk26KHZlm5Q==
+Date: Fri, 23 May 2025 11:24:36 +0200
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-i2c <linux-i2c@vger.kernel.org>, 
+	lkml <linux-kernel@vger.kernel.org>, Andi Shyti <andi.shyti@kernel.org>
+Subject: [GIT PULL] i2c-host for v6.16
+Message-ID: <frzddxvvcax5asrhkwaauxdbjqkgdfyoejkmjgozwlcssq7x7e@ra3a7bxvpzgg>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250520020355.3885597-2-tmyu0@nuvoton.com>
 
-On Tue, 20 May 2025, a0282524688@gmail.com wrote:
+Hi Wolfram,
 
-> From: Ming Yu <tmyu0@nuvoton.com>
-> 
-> The Nuvoton NCT6694 provides an USB interface to the host to
-> access its features.
-> 
-> Sub-devices can use the USB functions nct6694_read_msg() and
-> nct6694_write_msg() to issue a command. They can also request
-> interrupt that will be called when the USB device receives its
-> interrupt pipe.
-> 
-> Signed-off-by: Ming Yu <tmyu0@nuvoton.com>
-> ---
-> 
-> Changes since version 10:
-> - Add change log for the patch
-> - Fix mfd_cell to MFD_CELL_NAME()
-> - Remove unnecessary blank line
-> 
-> Changes since version 9:
-> - Add KernelDoc to exported functions
-> 
-> Changes since version 8:
-> - Modify the signed-off-by with my work address
-> - Rename all MFD cell names to "nct6694-xxx"
-> - Fix some comments in nct6694.c and in nct6694.h
-> 
-> Changes since version 7:
-> - Add error handling for devm_mutex_init()
-> 
-> Changes since version 6:
-> 
-> Changes since version 5:
-> - Fix mfd_cell to MFD_CELL_NAME() and MFD_CELL_BASIC()
-> - Drop unnecessary macros
-> 
-> Changes since version 4:
-> - Modify arguments in read/write function to a pointer to cmd_header
-> 
-> Changes since version 3:
-> - Modify array buffer to structure
-> - Fix defines and comments
-> - Add header <linux/bits.h> and use BIT macro
-> - Modify mutex_init() to devm_mutex_init()
-> 
-> Changes since version 2:
-> 
-> Changes since version 1:
-> - Implement IRQ domain to handle IRQ demux
-> - Modify USB_DEVICE to USB_DEVICE_AND_INTERFACE_INFO API
-> - Add command structure
-> - Fix USB functions
-> - Sort each driver's header files alphabetically
-> 
->  MAINTAINERS                 |   6 +
->  drivers/mfd/Kconfig         |  15 ++
->  drivers/mfd/Makefile        |   2 +
->  drivers/mfd/nct6694.c       | 387 ++++++++++++++++++++++++++++++++++++
->  include/linux/mfd/nct6694.h |  98 +++++++++
->  5 files changed, 508 insertions(+)
->  create mode 100644 drivers/mfd/nct6694.c
->  create mode 100644 include/linux/mfd/nct6694.h
+Here is a relatively small pull request for 6.16. It mainly
+includes cleanups, refactorings, some driver improvements, new
+bindings and just one new driver.
 
-[...]
+A few patches intended for this merge window arrived in the past
+couple of weeks, but I chose to leave them out for now. If they
+mature and get enough testing, I may send a part 2 pull request
+next week. Perhaps I am being a bit too cautious, but because I
+have experienced a few build issues this release cycle, I want to
+improve the flow and avoid avoidable mistakes.
 
-I was just going to fix this up for you when I applied the set, but
-seeing as it looks like you have to re-submit anyway ...
+I wish you a great weekend,
+Andi
 
-> +static const struct usb_device_id nct6694_ids[] = {
-> +	{ USB_DEVICE_AND_INTERFACE_INFO(NCT6694_VENDOR_ID, NCT6694_PRODUCT_ID, 0xFF, 0x00, 0x00)},
+The following changes since commit a5806cd506af5a7c19bcd596e4708b5c464bfd21:
 
-You need a space before the '}'.
+  Linux 6.15-rc7 (2025-05-18 13:57:29 -0700)
 
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(usb, nct6694_ids);
-> +
-> +static struct usb_driver nct6694_usb_driver = {
-> +	.name		= "nct6694",
-> +	.id_table	= nct6694_ids,
-> +	.probe		= nct6694_usb_probe,
-> +	.disconnect	= nct6694_usb_disconnect,
-> +};
-> +module_usb_driver(nct6694_usb_driver);
-> +
-> +MODULE_DESCRIPTION("Nuvoton NCT6694 core driver");
-> +MODULE_AUTHOR("Ming Yu <tmyu0@nuvoton.com>");
-> +MODULE_LICENSE("GPL");
-> diff --git a/include/linux/mfd/nct6694.h b/include/linux/mfd/nct6694.h
-> new file mode 100644
-> index 000000000000..5e172609be3f
-> --- /dev/null
-> +++ b/include/linux/mfd/nct6694.h
-> @@ -0,0 +1,98 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (C) 2025 Nuvoton Technology Corp.
-> + *
-> + * Nuvoton NCT6694 USB transaction and data structure.
-> + */
-> +
-> +#ifndef __MFD_NCT6694_H
-> +#define __MFD_NCT6694_H
-> +
-> +#define NCT6694_VENDOR_ID	0x0416
-> +#define NCT6694_PRODUCT_ID	0x200B
-> +#define NCT6694_INT_IN_EP	0x81
-> +#define NCT6694_BULK_IN_EP	0x02
-> +#define NCT6694_BULK_OUT_EP	0x03
-> +
-> +#define NCT6694_HCTRL_SET	0x40
-> +#define NCT6694_HCTRL_GET	0x80
-> +
-> +#define NCT6694_URB_TIMEOUT	1000
-> +
-> +enum nct6694_irq_id {
-> +	NCT6694_IRQ_GPIO0 = 0,
-> +	NCT6694_IRQ_GPIO1,
-> +	NCT6694_IRQ_GPIO2,
-> +	NCT6694_IRQ_GPIO3,
-> +	NCT6694_IRQ_GPIO4,
-> +	NCT6694_IRQ_GPIO5,
-> +	NCT6694_IRQ_GPIO6,
-> +	NCT6694_IRQ_GPIO7,
-> +	NCT6694_IRQ_GPIO8,
-> +	NCT6694_IRQ_GPIO9,
-> +	NCT6694_IRQ_GPIOA,
-> +	NCT6694_IRQ_GPIOB,
-> +	NCT6694_IRQ_GPIOC,
-> +	NCT6694_IRQ_GPIOD,
-> +	NCT6694_IRQ_GPIOE,
-> +	NCT6694_IRQ_GPIOF,
-> +	NCT6694_IRQ_CAN0,
-> +	NCT6694_IRQ_CAN1,
-> +	NCT6694_IRQ_RTC,
-> +	NCT6694_NR_IRQS,
-> +};
-> +
-> +enum nct6694_response_err_status {
-> +	NCT6694_NO_ERROR = 0,
-> +	NCT6694_FORMAT_ERROR,
-> +	NCT6694_RESERVED1,
-> +	NCT6694_RESERVED2,
-> +	NCT6694_NOT_SUPPORT_ERROR,
-> +	NCT6694_NO_RESPONSE_ERROR,
-> +	NCT6694_TIMEOUT_ERROR,
-> +	NCT6694_PENDING,
-> +};
-> +
-> +struct __packed nct6694_cmd_header {
-> +	u8 rsv1;
-> +	u8 mod;
-> +	union __packed {
-> +		__le16 offset;
-> +		struct __packed {
-> +			u8 cmd;
-> +			u8 sel;
-> +		};
-> +	};
-> +	u8 hctrl;
-> +	u8 rsv2;
-> +	__le16 len;
-> +};
-> +
-> +struct __packed nct6694_response_header {
-> +	u8 sequence_id;
-> +	u8 sts;
-> +	u8 reserved[4];
-> +	__le16 len;
-> +};
-> +
-> +union __packed nct6694_usb_msg {
-> +	struct nct6694_cmd_header cmd_header;
-> +	struct nct6694_response_header response_header;
-> +};
-> +
-> +struct nct6694 {
-> +	struct device *dev;
-> +	struct irq_domain *domain;
-> +	struct mutex access_lock;
-> +	struct mutex irq_lock;
-> +	struct urb *int_in_urb;
-> +	struct usb_device *udev;
-> +	union nct6694_usb_msg *usb_msg;
-> +	unsigned char *int_buffer;
-> +	unsigned int irq_enable;
-> +};
-> +
-> +int nct6694_read_msg(struct nct6694 *nct6694, const struct nct6694_cmd_header *cmd_hd, void *buf);
-> +int nct6694_write_msg(struct nct6694 *nct6694, const struct nct6694_cmd_header *cmd_hd, void *buf);
-> +
-> +#endif
-> -- 
-> 2.34.1
-> 
+are available in the Git repository at:
 
--- 
-Lee Jones [李琼斯]
+  git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git tags/i2c-host-6.16
+
+for you to fetch changes up to 2b2805404c926b8dcd5c5c13d240722da714906e:
+
+  i2c: mlxbf: avoid 64-bit division (2025-05-23 10:02:27 +0200)
+
+----------------------------------------------------------------
+i2c-host updates for v6.16
+
+Cleanups and refactorings
+- Many drivers switched to dev_err_probe()
+- Generic cleanups applied to designware, iproc, ismt, mlxbf,
+  npcm7xx, qcom-geni, pasemi, and thunderx
+- davinci: declare I2C mangling support among I2C features
+- designware: clean up DTS handling
+- designware: fix PM runtime on driver unregister
+- imx: improve error logging during probe
+- lpc2k: improve checks in probe error path
+- xgene-slimpro: improve PCC shared memory handling
+- pasemi: improve error handling in reset, smbus clear, timeouts
+- tegra: validate buffer length during transfers
+- wmt: convert binding to YAML format
+
+Improvements and extended support:
+- microchip-core: add SMBus support
+- mlxbf: add support for repeated start in block transfers
+- mlxbf: improve timer configuration
+- npcm: attempt clock toggle recovery before failing init
+- octeon: add support for block mode operations
+- pasemi: add support for unjam device feature
+- riic: add support for bus recovery
+
+New device support:
+- MediaTek Dimensity 1200 (MT6893)
+- Sophgo SG2044
+- Renesas RZ/V2N (R9A09G056)
+- Rockchip RK3528
+- AMD ISP (new driver)
+
+Core changes:
+- i2c-core: add support for Write Disable-aware SPD
+
+----------------------------------------------------------------
+Akhil R (1):
+      i2c: tegra: check msg length in SMBUS block read
+
+Alexander Stein (1):
+      i2c: imx: add some dev_err_probe calls
+
+Alexey Charkov (1):
+      dt-bindings: i2c: i2c-wmt: Convert to YAML
+
+Andi Shyti (11):
+      i2c: iproc: Drop unnecessary initialisation of 'ret'
+      i2c: iproc: Use dev_err_probe in probe
+      i2c: iproc: Use u32 instead of uint32_t
+      i2c: iproc: Fix alignment to match the open parenthesis
+      i2c: iproc: Remove stray blank line in slave ISR
+      i2c: iproc: Replace udelay() with usleep_range()
+      i2c: iproc: Fix indentation of bcm_iproc_i2c_slave_init()
+      i2c: iproc: Move function and avoid prototypes
+      i2c: iproc: When there's an error treat it as an error
+      i2c: iproc: Remove unnecessary double negation
+      i2c: mlxbf: Allow build with COMPILE_TEST
+
+Andy Shevchenko (2):
+      i2c: qcom-geni: Use generic definitions for bus frequencies
+      i2c: designware: Use better constants from units.h
+
+AngeloGioacchino Del Regno (1):
+      dt-bindings: i2c: i2c-mt65xx: Add MediaTek Dimensity 1200 MT6893
+
+Arnd Bergmann (1):
+      i2c: mlxbf: avoid 64-bit division
+
+Aryan Srivastava (1):
+      i2c: octeon: add block-mode i2c operations
+
+Chenyuan Yang (1):
+      i2c: lpc2k: Add check for clk_enable()
+
+Chris Babroski (2):
+      i2c-mlxbf: Add repeated start condition support
+      i2c-mlxbf: Improve I2C bus timing configuration
+
+Christophe JAILLET (1):
+      i2c: rzv2m: Constify struct i2c_algorithm
+
+Enrico Zanda (10):
+      i2c: uniphier(-f): Replace dev_err() with dev_err_probe() in probe function
+      i2c: uniphier: Replace dev_err() with dev_err_probe() in probe function
+      i2c: via: Replace dev_err() with dev_err_probe() in probe function
+      i2c: viapro: Replace dev_err() with dev_err_probe() in probe function
+      i2c: viperboard: Replace dev_err() with dev_err_probe() in probe function
+      i2c: virtio: Replace dev_err() with dev_err_probe() in probe function
+      i2c: i2c-xiic: Replace dev_err() with dev_err_probe() in probe function
+      i2c: scx200_acb: Replace dev_err() with dev_err_probe() in probe function
+      i2c: xgene-slimpro: Replace dev_err() with dev_err_probe() in probe function
+      i2c: viai2c-wmt: Replace dev_err() with dev_err_probe() in probe function
+
+Feng Wei (1):
+      i2c: mlxbf: Use str_read_write() helper
+
+Geert Uytterhoeven (1):
+      i2c: I2C_DESIGNWARE_AMDISP should depend on DRM_AMD_ISP
+
+Hector Martin (3):
+      i2c: pasemi: Enable the unjam machine
+      i2c: pasemi: Improve error recovery
+      i2c: pasemi: Log bus reset causes
+
+Heikki Krogerus (1):
+      i2c: designware: Don't warn about missing get_clk_rate_khz
+
+Inochi Amaoto (2):
+      dt-bindings: i2c: dw: merge duplicate compatible entry.
+      dt-bindings: i2c: dw: Add Sophgo SG2044 SoC I2C controller
+
+Lad Prabhakar (2):
+      i2c: riic: Implement bus recovery
+      dt-bindings: i2c: renesas,riic: Document RZ/V2N (R9A09G056) support
+
+Marcus Folkesson (1):
+      i2c: davinci: add I2C_FUNC_PROTOCOL_MANGLING to feature list
+
+Philipp Stanner (2):
+      i2c: ismt: Use non-hybrid PCI devres API
+      i2c: thunderx: Use non-hybrid PCI devres API
+
+Pratap Nirujogi (1):
+      i2c: amd-isp: Add ISP i2c-designware driver
+
+Sudeep Holla (1):
+      i2c: xgene-slimpro: Simplify PCC shared memory region handling
+
+Sven Peter (3):
+      i2c: pasemi: Use correct bits.h include
+      i2c: pasemi: Sort includes alphabetically
+      i2c: pasemi: Improve timeout handling
+
+Tali Perry (1):
+      i2c: npcm: Add clock toggle recovery
+
+Tan En De (1):
+      i2c: designware: Invoke runtime suspend on quick slave re-registration
+
+Yao Zi (1):
+      dt-bindings: i2c: i2c-rk3x: Add compatible string for RK3528
+
+Yo-Jung (Leo) Lin (1):
+      i2c: smbus: introduce Write Disable-aware SPD instantiating functions
+
+Zhang Songyi (1):
+      i2c: npcm7xx: Remove redundant ret variable
+
+prashanth kumar burujukindi (1):
+      i2c: microchip-corei2c: add smbus support
+
+ .../devicetree/bindings/i2c/i2c-mt65xx.yaml        |   1 +
+ .../devicetree/bindings/i2c/i2c-rk3x.yaml          |   1 +
+ Documentation/devicetree/bindings/i2c/i2c-wmt.txt  |  24 ---
+ .../devicetree/bindings/i2c/renesas,riic.yaml      |   1 +
+ .../bindings/i2c/snps,designware-i2c.yaml          |  12 +-
+ .../devicetree/bindings/i2c/wm,wm8505-i2c.yaml     |  47 +++++
+ MAINTAINERS                                        |   9 +-
+ drivers/i2c/busses/Kconfig                         |  13 +-
+ drivers/i2c/busses/Makefile                        |   1 +
+ drivers/i2c/busses/i2c-bcm-iproc.c                 | 223 ++++++++++-----------
+ drivers/i2c/busses/i2c-davinci.c                   |   3 +-
+ drivers/i2c/busses/i2c-designware-amdisp.c         | 205 +++++++++++++++++++
+ drivers/i2c/busses/i2c-designware-common.c         |   4 +-
+ drivers/i2c/busses/i2c-designware-platdrv.c        |   2 +-
+ drivers/i2c/busses/i2c-designware-slave.c          |   2 +-
+ drivers/i2c/busses/i2c-i801.c                      |   4 +-
+ drivers/i2c/busses/i2c-imx.c                       |  12 +-
+ drivers/i2c/busses/i2c-ismt.c                      |   2 +-
+ drivers/i2c/busses/i2c-lpc2k.c                     |   7 +-
+ drivers/i2c/busses/i2c-microchip-corei2c.c         | 102 ++++++++++
+ drivers/i2c/busses/i2c-mlxbf.c                     |  87 ++++----
+ drivers/i2c/busses/i2c-npcm7xx.c                   |  18 +-
+ drivers/i2c/busses/i2c-octeon-core.c               | 166 ++++++++++++++-
+ drivers/i2c/busses/i2c-octeon-core.h               |  13 +-
+ drivers/i2c/busses/i2c-pasemi-core.c               | 119 ++++++++---
+ drivers/i2c/busses/i2c-pasemi-pci.c                |  10 +-
+ drivers/i2c/busses/i2c-piix4.c                     |   2 +-
+ drivers/i2c/busses/i2c-qcom-geni.c                 |  19 +-
+ drivers/i2c/busses/i2c-riic.c                      |  53 ++++-
+ drivers/i2c/busses/i2c-rzv2m.c                     |   2 +-
+ drivers/i2c/busses/i2c-tegra.c                     |   5 +
+ drivers/i2c/busses/i2c-thunderx-pcidrv.c           |   5 +-
+ drivers/i2c/busses/i2c-uniphier-f.c                |  24 +--
+ drivers/i2c/busses/i2c-uniphier.c                  |  24 +--
+ drivers/i2c/busses/i2c-via.c                       |  15 +-
+ drivers/i2c/busses/i2c-viai2c-wmt.c                |  20 +-
+ drivers/i2c/busses/i2c-viapro.c                    |  33 ++-
+ drivers/i2c/busses/i2c-viperboard.c                |  14 +-
+ drivers/i2c/busses/i2c-virtio.c                    |   7 +-
+ drivers/i2c/busses/i2c-xgene-slimpro.c             |  57 ++----
+ drivers/i2c/busses/i2c-xiic.c                      |   4 +-
+ drivers/i2c/busses/scx200_acb.c                    |   6 +-
+ drivers/i2c/i2c-smbus.c                            |  21 +-
+ include/linux/i2c-smbus.h                          |   6 +-
+ 44 files changed, 1006 insertions(+), 399 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-wmt.txt
+ create mode 100644 Documentation/devicetree/bindings/i2c/wm,wm8505-i2c.yaml
+ create mode 100644 drivers/i2c/busses/i2c-designware-amdisp.c
 
