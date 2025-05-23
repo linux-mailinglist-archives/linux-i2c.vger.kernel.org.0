@@ -1,101 +1,117 @@
-Return-Path: <linux-i2c+bounces-11117-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11118-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9340AC1CD6
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 May 2025 08:17:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30A30AC1D43
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 May 2025 08:51:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C2C443B296C
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 May 2025 06:16:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DFA6D50167B
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 May 2025 06:51:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD7C318FC86;
-	Fri, 23 May 2025 06:17:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9C541AA1FF;
+	Fri, 23 May 2025 06:51:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="YQF9J7Bq"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE51D2DCBEA;
-	Fri, 23 May 2025 06:17:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=183.62.165.209
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 916131A3172
+	for <linux-i2c@vger.kernel.org>; Fri, 23 May 2025 06:51:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747981027; cv=none; b=Mt327dss2NmXTpM8w4WQzWjWc/zZ+RqTLWg8wxsXKv44AhxhSpzloKKntpxgy7kJhnmZw9LP9RLRITKD0BQSG6c6aMCcT3tFVLltQf0421c3grSSggaD+vqQs+nhBtZJzuvHwRpJ1GPK8rsn3hyVjxC/rzwWtB50cd5Gp5M0zHY=
+	t=1747983101; cv=none; b=t/n4YP3vVVD1Lit+qXzRneHWd4P2tBk/SLA8bSGjboorA1dCeDp/49sPql9dhFFmtd/oIIB5OvkkfGE78ny44FIWS2I+ZGZ+PbgrUwntt10TTaHdZLS/AYKpchXCrkAVnhnjuDu1fX6Xq9dHAhopTwhINxiJAb+ergjCTSO6cgk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747981027; c=relaxed/simple;
-	bh=Fk+7wOad/ajMAghLzzmUTQUL2QeW7IGagkLYpXsM1o0=;
-	h=Date:Message-ID:Mime-Version:From:To:Cc:Subject:Content-Type; b=JnRWk8DpjTO7VSnXEKMf8Pn/tR6w21DifTGJCQqKH4BSQZevDhrXKM/KLToSR80WeeqGVffijWjSU06q3xILqQz+3VCjFbbYKZhWqFUFzlLzzhXG/rp3M/yxLOubKemhCdMt1Fry8dTnzEPhwMXcDhZ1u39zouaOnL2pVmKbEpA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zte.com.cn; spf=pass smtp.mailfrom=zte.com.cn; arc=none smtp.client-ip=183.62.165.209
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zte.com.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zte.com.cn
-Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mxct.zte.com.cn (FangMail) with ESMTPS id 4b3ZgS2Yxlz4x5pd;
-	Fri, 23 May 2025 14:16:52 +0800 (CST)
-Received: from njb2app06.zte.com.cn ([10.55.23.119])
-	by mse-fl1.zte.com.cn with SMTP id 54N6GifQ010301;
-	Fri, 23 May 2025 14:16:44 +0800 (+08)
-	(envelope-from long.yunjian@zte.com.cn)
-Received: from mapi (njb2app05[null])
-	by mapi (Zmail) with MAPI id mid201;
-	Fri, 23 May 2025 14:16:47 +0800 (CST)
-Date: Fri, 23 May 2025 14:16:47 +0800 (CST)
-X-Zmail-TransId: 2afd683012cfffffffffe09-86aef
-X-Mailer: Zmail v1.0
-Message-ID: <20250523141647052h8sceSvH_KRJYFgqd6iuJ@zte.com.cn>
+	s=arc-20240116; t=1747983101; c=relaxed/simple;
+	bh=9ppj9PmljhSnv/Q/2BF+4qkTSC2zjD/oSdOtKPEv79Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DxfD6RQD4148qly6s+tK7YKSra5rjcj4Yi+YhQeNtnHAS+NxcV6uFoDYaaiCOUIeE1YTA6o891lnC4pJrDwM19E1NozFaWMt4gRfemEbnSHqmQSpZ4LZjRflLypQcNNVB48j80XH5+h1YZey1BJ6279MboWmej0KcByLrIcNkbg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=YQF9J7Bq; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=9ppj
+	9PmljhSnv/Q/2BF+4qkTSC2zjD/oSdOtKPEv79Q=; b=YQF9J7Bq2+hHfpdSPzSt
+	dv7IidbOJRrc04gzzLHFWogxoU/pDTIZMReNonGAPgRj6lRAe6ZpjCAn0FKzyOmz
+	dMbOm6P1cy04siXWpqErz+dqlehjSpq/EuLzYGPEvjGpznBnCGD1MkcjgJ3nTZXV
+	Vj8OEDzFPKfDQnhuAlpYy9HmDZivCOUuLgmJIPc6p3CKNK62azziq8rFm/tqIS4c
+	5KFpeE22ogxUc7rlYIWSxzx2aXTDrEf1gVzkyDXrGNWbja27+Mi+J64YzVCKg+LA
+	hiMmXcvNelLitgbnvYn8l/DWiucMqbzX1AZ72RcuQ7ghNijo3gCdYY8edEalz9bG
+	/w==
+Received: (qmail 3936123 invoked from network); 23 May 2025 08:51:33 +0200
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 23 May 2025 08:51:33 +0200
+X-UD-Smtp-Session: l3s3148p1@e1pVB8g1GuNehhrS
+Date: Fri, 23 May 2025 08:51:32 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: long.yunjian@zte.com.cn
+Cc: codrin.ciubotariu@microchip.com, andi.shyti@kernel.org,
+	nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+	claudiu.beznea@tuxon.dev, linux-i2c@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	mou.yi@zte.com.cn, xu.lifeng1@zte.com.cn, fang.yumeng@zte.com.cn,
+	ouyang.maochun@zte.com.cn
+Subject: Re: [PATCH] i2c: at91: Use str_read_write() helper
+Message-ID: <aDAa9OqEak_s3lU8@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	long.yunjian@zte.com.cn, codrin.ciubotariu@microchip.com,
+	andi.shyti@kernel.org, nicolas.ferre@microchip.com,
+	alexandre.belloni@bootlin.com, claudiu.beznea@tuxon.dev,
+	linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, mou.yi@zte.com.cn,
+	xu.lifeng1@zte.com.cn, fang.yumeng@zte.com.cn,
+	ouyang.maochun@zte.com.cn
+References: <20250523141647052h8sceSvH_KRJYFgqd6iuJ@zte.com.cn>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-From: <long.yunjian@zte.com.cn>
-To: <codrin.ciubotariu@microchip.com>
-Cc: <andi.shyti@kernel.org>, <nicolas.ferre@microchip.com>,
-        <alexandre.belloni@bootlin.com>, <claudiu.beznea@tuxon.dev>,
-        <linux-i2c@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <mou.yi@zte.com.cn>,
-        <xu.lifeng1@zte.com.cn>, <fang.yumeng@zte.com.cn>,
-        <ouyang.maochun@zte.com.cn>
-Subject: =?UTF-8?B?W1BBVENIXSBpMmM6IGF0OTE6IFVzZSBzdHJfcmVhZF93cml0ZSgpIGhlbHBlcg==?=
-Content-Type: text/plain;
-	charset="UTF-8"
-X-MAIL:mse-fl1.zte.com.cn 54N6GifQ010301
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 683012D4.003/4b3ZgS2Yxlz4x5pd
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="Ir00NtPtgiJQh0DG"
+Content-Disposition: inline
+In-Reply-To: <20250523141647052h8sceSvH_KRJYFgqd6iuJ@zte.com.cn>
 
-From: Yumeng Fang <fang.yumeng@zte.com.cn>
 
-Remove hard-coded strings by using the str_read_write() helper.
+--Ir00NtPtgiJQh0DG
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Yumeng Fang <fang.yumeng@zte.com.cn>
-Signed-off-by: Yunjian Long <long.yunjian@zte.com.cn>
----
- drivers/i2c/busses/i2c-at91-master.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+On Fri, May 23, 2025 at 02:16:47PM +0800, long.yunjian@zte.com.cn wrote:
+> From: Yumeng Fang <fang.yumeng@zte.com.cn>
+>=20
+> Remove hard-coded strings by using the str_read_write() helper.
+>=20
+> Signed-off-by: Yumeng Fang <fang.yumeng@zte.com.cn>
+> Signed-off-by: Yunjian Long <long.yunjian@zte.com.cn>
 
-diff --git a/drivers/i2c/busses/i2c-at91-master.c b/drivers/i2c/busses/i2c-at91-master.c
-index ee3b469ddfb9..374fc50bb205 100644
---- a/drivers/i2c/busses/i2c-at91-master.c
-+++ b/drivers/i2c/busses/i2c-at91-master.c
-@@ -26,6 +26,7 @@
- #include <linux/pinctrl/consumer.h>
- #include <linux/platform_device.h>
- #include <linux/pm_runtime.h>
-+#include <linux/string_choices.h>
+Thank you, but please fix this for the whole subsystem in a single
+patch.
 
- #include "i2c-at91.h"
 
-@@ -523,7 +524,7 @@ static int at91_do_twi_transfer(struct at91_twi_dev *dev)
- 	 */
+--Ir00NtPtgiJQh0DG
+Content-Type: application/pgp-signature; name="signature.asc"
 
- 	dev_dbg(dev->dev, "transfer: %s %zu bytes.\n",
--		(dev->msg->flags & I2C_M_RD) ? "read" : "write", dev->buf_len);
-+		str_read_write(dev->msg->flags & I2C_M_RD), dev->buf_len);
+-----BEGIN PGP SIGNATURE-----
 
- 	reinit_completion(&dev->cmd_complete);
- 	dev->transfer_status = 0;
--- 
-2.25.1
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmgwGvAACgkQFA3kzBSg
+KbaYkw/+NHM+h+v+Ctyr1yd3xUmRb1Gocb46PIHyk0al5SMQZcyfieWHdqtlKKXj
+qCgNCf0hUp6MBrZo9PZQtaNnppUwbifI+bn7WrwwqyAXXouBXHx7LFtrTtFWQxG9
+ZC6aPWKtdGHKv3tPyehquybCiu8UMz8VM0sTFQxOWV4fHMdXmeoE2vJe4IHVKZhr
+0FG/jAnZHrMIZsiM+JDZP5q0zaDWGpFA0BZl6ckCc5wDq8tjsUQmjDrChTZ2eBUb
+R984SIzy3E0m1JSKqCs3EdF7LZYITz8Yd/QgRn6FHdA11CZXvP3cXQxXxTDcTOss
+8qoYrryy80beJY7CvlDXTi5Ke0A4ekokPK0HZVxzqby+5rWbnxmzesVFq7Sz6ZEd
+nbFvrRBoZhJMuXnZOEkvXYez5eAkHt8kKwZ5UgfW6CjQ86pAT/kp2ntGsLEFL62d
+imExiSAiTVOq8tilgJapIOtPySnTBmXg66AKxs8xUkQowsZqyPJrVPDFgCQRQVdj
+U91XhRjLmtWJD52FV2ne1pytZcTKV6Bzp1NmFfFmgBLZIYBUaj25S69ybkHVFPNP
+0xBxZvtTBs63wqTHu6DRNsGcscz3bQj9wIlON5Tk0PBw7PFEClw54WMnYnp/MUfj
+pPwzoTOFdJ0r2Rkg1/UbnMK8syjhBPcplU9yNaJDdlCxeWteQkE=
+=oDgL
+-----END PGP SIGNATURE-----
+
+--Ir00NtPtgiJQh0DG--
 
