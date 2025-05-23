@@ -1,97 +1,101 @@
-Return-Path: <linux-i2c+bounces-11116-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11117-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45D90AC1146
-	for <lists+linux-i2c@lfdr.de>; Thu, 22 May 2025 18:38:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B9340AC1CD6
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 May 2025 08:17:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A2B961673B4
-	for <lists+linux-i2c@lfdr.de>; Thu, 22 May 2025 16:38:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C2C443B296C
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 May 2025 06:16:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CD3629AAE8;
-	Thu, 22 May 2025 16:38:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="MrA6cTl+"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD7C318FC86;
+	Fri, 23 May 2025 06:17:07 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 309B381741;
-	Thu, 22 May 2025 16:38:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
+Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE51D2DCBEA;
+	Fri, 23 May 2025 06:17:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=183.62.165.209
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747931925; cv=none; b=Z1vHXbdwsWYh+5VwCM5YVbBdMCsvcG32ZFFLX8LO+bSpTLuDjK6kzlpWLbPvpu06V8q8IkCNI+ToA9feUYNLGaCglDW1D3fAaRat/ABBkF24DPZXGTDQVGOQmmNBYP8x4nReGr3URu7K+hjMahOkiP3+0xxGpjsgoPzyv+w3q8I=
+	t=1747981027; cv=none; b=Mt327dss2NmXTpM8w4WQzWjWc/zZ+RqTLWg8wxsXKv44AhxhSpzloKKntpxgy7kJhnmZw9LP9RLRITKD0BQSG6c6aMCcT3tFVLltQf0421c3grSSggaD+vqQs+nhBtZJzuvHwRpJ1GPK8rsn3hyVjxC/rzwWtB50cd5Gp5M0zHY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747931925; c=relaxed/simple;
-	bh=BNpi2nFBQAFV/WMKJHvYLfcwSSej3dZ3v1djNDve9jk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=rrj6Ad5mjOZwcBZGRJkJKXqoaxfkaqS5gci64wruAgziQ10Dj6WKF+tiwyNyi7FSQzl0GuTWcv/XnGR5FH7/t5rTlupf1AllRmqGG9NgSDnBJYerYblN7+2coSAZuXnOGpoAMwfB37GGIMaClecW77hFPcA0w5qZLSk6EoenIGU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=MrA6cTl+; arc=none smtp.client-ip=117.135.210.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=x3
-	IEnvTJUGCZMysuw/nTm9ZVJwxYs3uYCivFSvi4Vsk=; b=MrA6cTl+mJySoMZcWx
-	j6w+aEuPXz08+r6Dm7n0uzPxuzv+gugAm9t//DkukYhCpFixbQgl67RfZZm+Jlwr
-	gMQuGsqUMZ/RfZ8q9sR5o9WN9TlkGZa57rbasDZi522+xSWj4LISC0VeqTxuuHw5
-	Cr3ziAwV6OLGzYNPU+s2eq8U8=
-Received: from localhost.localdomain (unknown [])
-	by gzsmtp1 (Coremail) with SMTP id PCgvCgAHCmX6Ui9ohoENBg--.33019S2;
-	Fri, 23 May 2025 00:38:20 +0800 (CST)
-From: Hans Zhang <18255117159@163.com>
-To: ldewangan@nvidia.com,
-	andi.shyti@kernel.org,
-	thierry.reding@gmail.com,
-	jonathanh@nvidia.com
-Cc: digetx@gmail.com,
-	linux-i2c@vger.kernel.org,
-	linux-tegra@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	hans.zhang@cixtech.com,
-	Hans Zhang <18255117159@163.com>
-Subject: [PATCH] i2c: tegra: Add missing kernel-doc for dma_dev member
-Date: Fri, 23 May 2025 00:38:14 +0800
-Message-Id: <20250522163814.399630-1-18255117159@163.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1747981027; c=relaxed/simple;
+	bh=Fk+7wOad/ajMAghLzzmUTQUL2QeW7IGagkLYpXsM1o0=;
+	h=Date:Message-ID:Mime-Version:From:To:Cc:Subject:Content-Type; b=JnRWk8DpjTO7VSnXEKMf8Pn/tR6w21DifTGJCQqKH4BSQZevDhrXKM/KLToSR80WeeqGVffijWjSU06q3xILqQz+3VCjFbbYKZhWqFUFzlLzzhXG/rp3M/yxLOubKemhCdMt1Fry8dTnzEPhwMXcDhZ1u39zouaOnL2pVmKbEpA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zte.com.cn; spf=pass smtp.mailfrom=zte.com.cn; arc=none smtp.client-ip=183.62.165.209
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zte.com.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zte.com.cn
+Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mxct.zte.com.cn (FangMail) with ESMTPS id 4b3ZgS2Yxlz4x5pd;
+	Fri, 23 May 2025 14:16:52 +0800 (CST)
+Received: from njb2app06.zte.com.cn ([10.55.23.119])
+	by mse-fl1.zte.com.cn with SMTP id 54N6GifQ010301;
+	Fri, 23 May 2025 14:16:44 +0800 (+08)
+	(envelope-from long.yunjian@zte.com.cn)
+Received: from mapi (njb2app05[null])
+	by mapi (Zmail) with MAPI id mid201;
+	Fri, 23 May 2025 14:16:47 +0800 (CST)
+Date: Fri, 23 May 2025 14:16:47 +0800 (CST)
+X-Zmail-TransId: 2afd683012cfffffffffe09-86aef
+X-Mailer: Zmail v1.0
+Message-ID: <20250523141647052h8sceSvH_KRJYFgqd6iuJ@zte.com.cn>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:PCgvCgAHCmX6Ui9ohoENBg--.33019S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrKr45Kry3trWDZw1rury7trb_yoWkXrgEvF
-	n7WF47tr1q9rnIyF13WF4fXryjkrWYgF1ktas7t39aka4qqw15GF1DZrWfCrW8X3ZrtFsr
-	Wr1DtFWIyrnxAjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sREqXdUUUUUU==
-X-CM-SenderInfo: rpryjkyvrrlimvzbiqqrwthudrp/xtbBDxtVo2gvSyDDsAAAs9
+Mime-Version: 1.0
+From: <long.yunjian@zte.com.cn>
+To: <codrin.ciubotariu@microchip.com>
+Cc: <andi.shyti@kernel.org>, <nicolas.ferre@microchip.com>,
+        <alexandre.belloni@bootlin.com>, <claudiu.beznea@tuxon.dev>,
+        <linux-i2c@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <mou.yi@zte.com.cn>,
+        <xu.lifeng1@zte.com.cn>, <fang.yumeng@zte.com.cn>,
+        <ouyang.maochun@zte.com.cn>
+Subject: =?UTF-8?B?W1BBVENIXSBpMmM6IGF0OTE6IFVzZSBzdHJfcmVhZF93cml0ZSgpIGhlbHBlcg==?=
+Content-Type: text/plain;
+	charset="UTF-8"
+X-MAIL:mse-fl1.zte.com.cn 54N6GifQ010301
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 683012D4.003/4b3ZgS2Yxlz4x5pd
 
-Fix the kernel-doc warning by describing the 'dma_dev' member in
-the tegra_i2c_dev struct.  This resolves the compilation warning:
+From: Yumeng Fang <fang.yumeng@zte.com.cn>
 
-drivers/i2c/busses/i2c-tegra.c:297: warning: Function parameter or struct member 'dma_dev' not described in 'tegra_i2c_dev'
+Remove hard-coded strings by using the str_read_write() helper.
 
-Fixes: cdbf26251d3b ("i2c: tegra: Allocate DMA memory for DMA engine")
-Signed-off-by: Hans Zhang <18255117159@163.com>
+Signed-off-by: Yumeng Fang <fang.yumeng@zte.com.cn>
+Signed-off-by: Yunjian Long <long.yunjian@zte.com.cn>
 ---
- drivers/i2c/busses/i2c-tegra.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/i2c/busses/i2c-at91-master.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
-index 87976e99e6d0..07bb1e7e84cc 100644
---- a/drivers/i2c/busses/i2c-tegra.c
-+++ b/drivers/i2c/busses/i2c-tegra.c
-@@ -253,6 +253,7 @@ struct tegra_i2c_hw_feature {
-  * @dma_phys: handle to DMA resources
-  * @dma_buf: pointer to allocated DMA buffer
-  * @dma_buf_size: DMA buffer size
-+ * @dma_dev: DMA device used for transfers
-  * @dma_mode: indicates active DMA transfer
-  * @dma_complete: DMA completion notifier
-  * @atomic_mode: indicates active atomic transfer
+diff --git a/drivers/i2c/busses/i2c-at91-master.c b/drivers/i2c/busses/i2c-at91-master.c
+index ee3b469ddfb9..374fc50bb205 100644
+--- a/drivers/i2c/busses/i2c-at91-master.c
++++ b/drivers/i2c/busses/i2c-at91-master.c
+@@ -26,6 +26,7 @@
+ #include <linux/pinctrl/consumer.h>
+ #include <linux/platform_device.h>
+ #include <linux/pm_runtime.h>
++#include <linux/string_choices.h>
 
-base-commit: fee3e843b309444f48157e2188efa6818bae85cf
+ #include "i2c-at91.h"
+
+@@ -523,7 +524,7 @@ static int at91_do_twi_transfer(struct at91_twi_dev *dev)
+ 	 */
+
+ 	dev_dbg(dev->dev, "transfer: %s %zu bytes.\n",
+-		(dev->msg->flags & I2C_M_RD) ? "read" : "write", dev->buf_len);
++		str_read_write(dev->msg->flags & I2C_M_RD), dev->buf_len);
+
+ 	reinit_completion(&dev->cmd_complete);
+ 	dev->transfer_status = 0;
 -- 
 2.25.1
-
 
