@@ -1,288 +1,193 @@
-Return-Path: <linux-i2c+bounces-11128-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11129-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27B5AAC1FAF
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 May 2025 11:24:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44362AC2002
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 May 2025 11:44:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 67A431BA3920
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 May 2025 09:25:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 423293BCE53
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 May 2025 09:44:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C41AB224256;
-	Fri, 23 May 2025 09:24:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CF1222370F;
+	Fri, 23 May 2025 09:44:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lRf3A7Nm"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QiBlGgpn"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C65B5D8F0;
-	Fri, 23 May 2025 09:24:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82AFE225788;
+	Fri, 23 May 2025 09:44:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747992291; cv=none; b=dW1Kysoj6soV6/rfSSNv54SIoaltspHSUyWgzftMXZirXOivACiCJLirSsK/KlaaEuaibkFK1RzpR/Npwza9RdnF4Hi8TxboDkHpI+lTDzeAl0ccOfhjhk0JxCuuwalLvKInghkG8jw2asgvhc6ByrdviGuww+qesk5XTvdCKyc=
+	t=1747993463; cv=none; b=FsW1NfVYi4Ob8PMKybRI73tEJFTtLdii8Ea2MzDp3aE8W0gQ3+ZHtAQmdUJE5jtbl6QpUWHKSWrRMOGcLzIP2ZSsjdOFD/+hzGsRXpFkqskypc4Z5391NM3T9Rivi80w62atRazFbXs2Un5tUxdls6PjJnpdEvCzPjuPkDiy6iA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747992291; c=relaxed/simple;
-	bh=n83FIuvqZgH7UR8ZIskd3h/2XvNQ6gI+CqfbEbWYlEI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=MNCxDpAxPFZocwgyPSMkgwiUdye6xkclGpMAW7kQ6hSgB9anHIFrP7zq1kveQOPcFHPujSVQKKnjHynTvw4mv19AcpBcpixgG5sskY2Htlg+3GgRdoTHEKv4zzKFUHHgqBJ6Dm85gT4PiC3QAsL5OakxabljgXk06HWYWqcs6J8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lRf3A7Nm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6425C4CEE9;
-	Fri, 23 May 2025 09:24:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747992290;
-	bh=n83FIuvqZgH7UR8ZIskd3h/2XvNQ6gI+CqfbEbWYlEI=;
-	h=Date:From:To:Cc:Subject:From;
-	b=lRf3A7NmYquDtcwdiZaycsZsA5AnaUIvr6w9Hl5A6wgtjlrUne5ZDwvyjVod16u2/
-	 QlxhuQnMiL06BER2uuHE8SecjPR7/ZRpnPK+vfP7CjG72T/Ovm6gaszBFeIXOVdky8
-	 Wm31JJL0+swQLbqeyJhUOeQm55G+Xjg7RI6Xdx1omYONVvnijDtO5KZqYAETtZCLIJ
-	 DkNKP6N8eqw6mRbYDq4Q06P7l6sJdwUai4kN5SdrCg9J6pxpQC8SwJ+lqoU5Qpcofe
-	 v2GfXPyJL+5YOJST0h5jdsogmfwFp9SlFCBaOmCIwhBszxCDUm+ZjqZFDxnVvmPVyX
-	 ylfk26KHZlm5Q==
-Date: Fri, 23 May 2025 11:24:36 +0200
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: linux-i2c <linux-i2c@vger.kernel.org>, 
-	lkml <linux-kernel@vger.kernel.org>, Andi Shyti <andi.shyti@kernel.org>
-Subject: [GIT PULL] i2c-host for v6.16
-Message-ID: <frzddxvvcax5asrhkwaauxdbjqkgdfyoejkmjgozwlcssq7x7e@ra3a7bxvpzgg>
+	s=arc-20240116; t=1747993463; c=relaxed/simple;
+	bh=ORiCYXX2+npBuaxXBl6BF2rywetWpqgFK7lleNfKm7Q=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Jf5W4Tqz5pX5fJjxtV1gMWTB5TASL0gjoA9Y1mHKZHRlB4TdyXFOfMTtzudXW/0vRpS/yx5C8HbEnmSADL/ocJwp0C36KzWMwZj5hlCaKbl0iG++8dRphdMBzpWqGfxljf+OvEX0SQy6mOYY/TWeSaKd37otKE8XSCmbgAdQg0A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QiBlGgpn; arc=none smtp.client-ip=209.85.210.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-742c5eb7d1cso7644858b3a.3;
+        Fri, 23 May 2025 02:44:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1747993461; x=1748598261; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=g8/vi7y8OuYvTC1jd4K4hOxCAgA29QQePM/SNMh/GDY=;
+        b=QiBlGgpnn7tK7GnFr2R1beNfdfhbVOXoZXyzUT9kyTEnAOU6tOUk4DMOKS1S6IA4VO
+         gQI5eoDPe+xHfqoQkxKP6MteOyx6ID7ZBZ/+wCFzuH5naDCFlQVVMp6zs5fEhrAVxAEs
+         X7NMPuj9OelFXQqBw7HX0YCv3TraYtsEM6zjfWVKyw4UGhH7yTNgI9hxZtXi9nFb1YW8
+         sIGRw3QyXygBH+ubxoICm8Ivvx5+PgqNaI+ZKliO6bqwUVe50VtWm8GUeSN5rGXhhxBz
+         +FI1/HW5XAhIzApd/Nmhv64lu2VwJMa3XfOIjxu8Jdg3R00D3ZHzsLZloEqxiGdveaCN
+         bS4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747993461; x=1748598261;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=g8/vi7y8OuYvTC1jd4K4hOxCAgA29QQePM/SNMh/GDY=;
+        b=eh2EkqhvFFCucXLY/CEZu5rFtSEU2uQjwJmIU6+i8w/lM0qbcFdNumW8og+9TeKkn2
+         +g82uVUPmTmjaHP4ZfM9NySJgdawfsheTjTMxZKk/LItHJBu8FVb2rNIUYs+xFzZCDkw
+         LsL9BtbE2QAYpLGqU4hysnQGUeOaxTby3RDe2TaE6J84wtwKsjg556CDennGQJChM7vL
+         QcMf6g8y2k2VJnIYvHuFX/qOwRke5yyHEy1PaEanmivfkuiJhvStej61quhVO+97DfwT
+         HVu1qDrAtLgRwSekQAbvhVYFL/bCSDmWwntDdLkd4sPNPoaomBFkiWCOjv5Ew8G5V6Pc
+         76uA==
+X-Forwarded-Encrypted: i=1; AJvYcCUAD+GYLzWIEWlegWeII/OimQUk3nKK/tSwKFixWv6xASvq7eLJAbmJAoPxdwGecatTDkqksCMz/kLh8kwG@vger.kernel.org, AJvYcCUiWkMzGoKtALo+LfhA22PPkeiBSJdpdfyDWLW7cARq8Frnw/j1ESPxYKHOnDLBpo5jcZDY6Hxk9DHM5BoEElo=@vger.kernel.org, AJvYcCUspnRIGqCkCJfUZ+vEUEuCxkBE46zp4S618X+dvRAhsJQskbw7ICguqiWVU03aqru0UXsOwxqo/LmT@vger.kernel.org, AJvYcCUw2J3rGQs+7F1RSdsANRpfqFhYWBwjIiJoxJgC3PdqyXpQ8b9g2Wx/DR+Yp8fJ7cqd7FHxV/QU@vger.kernel.org, AJvYcCUy5eggD/1FFNS7sbMextodwyf4usntF26dTfC26IngdVhGZzAArnPXupKGSKptau+DRjWmtKIZhcEw@vger.kernel.org, AJvYcCV068AdcrqPnuV0y8HrZ2TVNafffapwIdQRyI5AIZKy6t7ZI/5QN8WsDb9MBAhze/eeXrXSUX2GRSfqrg==@vger.kernel.org, AJvYcCVPNsrQZ+nBkFa1rQiG+UeMhL8X3t38ofqewS1jVSmeFKkPQ58kyhssGR/SrqNs3fr9eqWIIai0QbmxYrM=@vger.kernel.org, AJvYcCViuX8L4xRcnqTHwu28sEoIaeFXwIrRhlYOxUF7UNdGW9uchD1njyvK5MMJQHlPTDUbf75iuOK+P6gO@vger.kernel.org, AJvYcCXxR6oeBp9CsPRUV4Er2MQXnjvGxR0NX765en907ShHXyev92GHiINf7GK7brDe5kq4nKR/OUj18/U=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwlPqqNOyrJ9W0Gvx+XOu47yNHYazv88h8E43hk7zOLF9qaRiEc
+	sMv/hb2/DXe6uLKWLkjQ8SCi4saGdgxamBhw/NC6j3wHEevsi+sDcD1x
+X-Gm-Gg: ASbGnct/o9YeXC39vXQzsf0CDVjVHuWkgGgnSp7PnRnDeC8lFppzzSkRi85lcNDxkaD
+	juiJ1yNV58GJexMvLB7gnmpXqFBgvdvjEmSSn6qCmPVowZnvaZm984nByUZv5MSuYmCEwYF/xrG
+	fh12Pp9ra06LOKar3xbllRphr428wLwgnYQ1R0XN/HNIWvnycR4sCPVFmzYeHCuCQ31T9vRxuDs
+	j0FYW+xNPXiUQ5Qtj54r6npTKsKDQl8SuiQCwYy3WaXnqG2kHfSuzJ47AV6NSQsS1BuisoI/hir
+	7yoK5WTjk93KVEaxKAOqlIeI4VTZ96TVHkhZ2nEhQaneJ96bBknrYM72/xoOEy20xv223YKYabr
+	zWnwqqzsdEI4YsDI34Lrv+wmy
+X-Google-Smtp-Source: AGHT+IE/sQH3ZW0UkNSF+9aZjlAJCbKRFBYOtpRaA2RS69otWpX7DsNz/DLWL0QdW+j2Nm/PHm34NA==
+X-Received: by 2002:a05:6a00:894:b0:740:a921:f6de with SMTP id d2e1a72fcca58-742a98e9c0cmr38825737b3a.23.1747993460624;
+        Fri, 23 May 2025 02:44:20 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-742a970ba0csm12919783b3a.54.2025.05.23.02.44.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 May 2025 02:44:20 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <0838e48b-c995-42f8-8803-18ed593a89ef@roeck-us.net>
+Date: Fri, 23 May 2025 02:44:17 -0700
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v11 6/7] hwmon: Add Nuvoton NCT6694 HWMON support
+To: Lee Jones <lee@kernel.org>, kernel test robot <lkp@intel.com>
+Cc: a0282524688@gmail.com, linus.walleij@linaro.org, brgl@bgdev.pl,
+ andi.shyti@kernel.org, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr,
+ andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org,
+ jdelvare@suse.com, alexandre.belloni@bootlin.com,
+ oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+ linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+ linux-can@vger.kernel.org, netdev@vger.kernel.org,
+ linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org,
+ Ming Yu <tmyu0@nuvoton.com>
+References: <20250520020355.3885597-7-tmyu0@nuvoton.com>
+ <202505210555.mud6jZoi-lkp@intel.com> <20250523090004.GC1378991@google.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20250523090004.GC1378991@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Wolfram,
+On 5/23/25 02:00, Lee Jones wrote:
+> On Wed, 21 May 2025, kernel test robot wrote:
+> 
+>> Hi,
+>>
+>> kernel test robot noticed the following build errors:
+>>
+>> [auto build test ERROR on andi-shyti/i2c/i2c-host]
+>> [also build test ERROR on mkl-can-next/testing groeck-staging/hwmon-next abelloni/rtc-next linus/master lee-mfd/for-mfd-fixes v6.15-rc7]
+>> [cannot apply to lee-mfd/for-mfd-next brgl/gpio/for-next next-20250516]
+>> [If your patch is applied to the wrong git tree, kindly drop us a note.
+>> And when submitting patch, we suggest to use '--base' as documented in
+>> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>>
+>> url:    https://github.com/intel-lab-lkp/linux/commits/a0282524688-gmail-com/mfd-Add-core-driver-for-Nuvoton-NCT6694/20250520-100732
+>> base:   https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
+>> patch link:    https://lore.kernel.org/r/20250520020355.3885597-7-tmyu0%40nuvoton.com
+>> patch subject: [PATCH v11 6/7] hwmon: Add Nuvoton NCT6694 HWMON support
+>> config: i386-randconfig-013-20250521 (https://download.01.org/0day-ci/archive/20250521/202505210555.mud6jZoi-lkp@intel.com/config)
+>> compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+>> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250521/202505210555.mud6jZoi-lkp@intel.com/reproduce)
+>>
+>> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+>> the same patch/commit), kindly add following tags
+>> | Reported-by: kernel test robot <lkp@intel.com>
+>> | Closes: https://lore.kernel.org/oe-kbuild-all/202505210555.mud6jZoi-lkp@intel.com/
+>>
+>> All errors (new ones prefixed by >>):
+>>
+>>>> drivers/hwmon/nct6694-hwmon.c:12:10: fatal error: linux<mfd/core.h: No such file or directory
+>>        12 | #include <linux<mfd/core.h>
+> 
+> This suggests that the set wasn't even build (let alone run) tested!
+> 
 
-Here is a relatively small pull request for 6.16. It mainly
-includes cleanups, refactorings, some driver improvements, new
-bindings and just one new driver.
+Apparently. Guess that slipped in when they updated the copyright in the driver.
+There is no other change since v9.
 
-A few patches intended for this merge window arrived in the past
-couple of weeks, but I chose to leave them out for now. If they
-mature and get enough testing, I may send a part 2 pull request
-next week. Perhaps I am being a bit too cautious, but because I
-have experienced a few build issues this release cycle, I want to
-improve the flow and avoid avoidable mistakes.
+Otherwise the code looks good, though. With that fixed:
 
-I wish you a great weekend,
-Andi
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-The following changes since commit a5806cd506af5a7c19bcd596e4708b5c464bfd21:
-
-  Linux 6.15-rc7 (2025-05-18 13:57:29 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git tags/i2c-host-6.16
-
-for you to fetch changes up to 2b2805404c926b8dcd5c5c13d240722da714906e:
-
-  i2c: mlxbf: avoid 64-bit division (2025-05-23 10:02:27 +0200)
-
-----------------------------------------------------------------
-i2c-host updates for v6.16
-
-Cleanups and refactorings
-- Many drivers switched to dev_err_probe()
-- Generic cleanups applied to designware, iproc, ismt, mlxbf,
-  npcm7xx, qcom-geni, pasemi, and thunderx
-- davinci: declare I2C mangling support among I2C features
-- designware: clean up DTS handling
-- designware: fix PM runtime on driver unregister
-- imx: improve error logging during probe
-- lpc2k: improve checks in probe error path
-- xgene-slimpro: improve PCC shared memory handling
-- pasemi: improve error handling in reset, smbus clear, timeouts
-- tegra: validate buffer length during transfers
-- wmt: convert binding to YAML format
-
-Improvements and extended support:
-- microchip-core: add SMBus support
-- mlxbf: add support for repeated start in block transfers
-- mlxbf: improve timer configuration
-- npcm: attempt clock toggle recovery before failing init
-- octeon: add support for block mode operations
-- pasemi: add support for unjam device feature
-- riic: add support for bus recovery
-
-New device support:
-- MediaTek Dimensity 1200 (MT6893)
-- Sophgo SG2044
-- Renesas RZ/V2N (R9A09G056)
-- Rockchip RK3528
-- AMD ISP (new driver)
-
-Core changes:
-- i2c-core: add support for Write Disable-aware SPD
-
-----------------------------------------------------------------
-Akhil R (1):
-      i2c: tegra: check msg length in SMBUS block read
-
-Alexander Stein (1):
-      i2c: imx: add some dev_err_probe calls
-
-Alexey Charkov (1):
-      dt-bindings: i2c: i2c-wmt: Convert to YAML
-
-Andi Shyti (11):
-      i2c: iproc: Drop unnecessary initialisation of 'ret'
-      i2c: iproc: Use dev_err_probe in probe
-      i2c: iproc: Use u32 instead of uint32_t
-      i2c: iproc: Fix alignment to match the open parenthesis
-      i2c: iproc: Remove stray blank line in slave ISR
-      i2c: iproc: Replace udelay() with usleep_range()
-      i2c: iproc: Fix indentation of bcm_iproc_i2c_slave_init()
-      i2c: iproc: Move function and avoid prototypes
-      i2c: iproc: When there's an error treat it as an error
-      i2c: iproc: Remove unnecessary double negation
-      i2c: mlxbf: Allow build with COMPILE_TEST
-
-Andy Shevchenko (2):
-      i2c: qcom-geni: Use generic definitions for bus frequencies
-      i2c: designware: Use better constants from units.h
-
-AngeloGioacchino Del Regno (1):
-      dt-bindings: i2c: i2c-mt65xx: Add MediaTek Dimensity 1200 MT6893
-
-Arnd Bergmann (1):
-      i2c: mlxbf: avoid 64-bit division
-
-Aryan Srivastava (1):
-      i2c: octeon: add block-mode i2c operations
-
-Chenyuan Yang (1):
-      i2c: lpc2k: Add check for clk_enable()
-
-Chris Babroski (2):
-      i2c-mlxbf: Add repeated start condition support
-      i2c-mlxbf: Improve I2C bus timing configuration
-
-Christophe JAILLET (1):
-      i2c: rzv2m: Constify struct i2c_algorithm
-
-Enrico Zanda (10):
-      i2c: uniphier(-f): Replace dev_err() with dev_err_probe() in probe function
-      i2c: uniphier: Replace dev_err() with dev_err_probe() in probe function
-      i2c: via: Replace dev_err() with dev_err_probe() in probe function
-      i2c: viapro: Replace dev_err() with dev_err_probe() in probe function
-      i2c: viperboard: Replace dev_err() with dev_err_probe() in probe function
-      i2c: virtio: Replace dev_err() with dev_err_probe() in probe function
-      i2c: i2c-xiic: Replace dev_err() with dev_err_probe() in probe function
-      i2c: scx200_acb: Replace dev_err() with dev_err_probe() in probe function
-      i2c: xgene-slimpro: Replace dev_err() with dev_err_probe() in probe function
-      i2c: viai2c-wmt: Replace dev_err() with dev_err_probe() in probe function
-
-Feng Wei (1):
-      i2c: mlxbf: Use str_read_write() helper
-
-Geert Uytterhoeven (1):
-      i2c: I2C_DESIGNWARE_AMDISP should depend on DRM_AMD_ISP
-
-Hector Martin (3):
-      i2c: pasemi: Enable the unjam machine
-      i2c: pasemi: Improve error recovery
-      i2c: pasemi: Log bus reset causes
-
-Heikki Krogerus (1):
-      i2c: designware: Don't warn about missing get_clk_rate_khz
-
-Inochi Amaoto (2):
-      dt-bindings: i2c: dw: merge duplicate compatible entry.
-      dt-bindings: i2c: dw: Add Sophgo SG2044 SoC I2C controller
-
-Lad Prabhakar (2):
-      i2c: riic: Implement bus recovery
-      dt-bindings: i2c: renesas,riic: Document RZ/V2N (R9A09G056) support
-
-Marcus Folkesson (1):
-      i2c: davinci: add I2C_FUNC_PROTOCOL_MANGLING to feature list
-
-Philipp Stanner (2):
-      i2c: ismt: Use non-hybrid PCI devres API
-      i2c: thunderx: Use non-hybrid PCI devres API
-
-Pratap Nirujogi (1):
-      i2c: amd-isp: Add ISP i2c-designware driver
-
-Sudeep Holla (1):
-      i2c: xgene-slimpro: Simplify PCC shared memory region handling
-
-Sven Peter (3):
-      i2c: pasemi: Use correct bits.h include
-      i2c: pasemi: Sort includes alphabetically
-      i2c: pasemi: Improve timeout handling
-
-Tali Perry (1):
-      i2c: npcm: Add clock toggle recovery
-
-Tan En De (1):
-      i2c: designware: Invoke runtime suspend on quick slave re-registration
-
-Yao Zi (1):
-      dt-bindings: i2c: i2c-rk3x: Add compatible string for RK3528
-
-Yo-Jung (Leo) Lin (1):
-      i2c: smbus: introduce Write Disable-aware SPD instantiating functions
-
-Zhang Songyi (1):
-      i2c: npcm7xx: Remove redundant ret variable
-
-prashanth kumar burujukindi (1):
-      i2c: microchip-corei2c: add smbus support
-
- .../devicetree/bindings/i2c/i2c-mt65xx.yaml        |   1 +
- .../devicetree/bindings/i2c/i2c-rk3x.yaml          |   1 +
- Documentation/devicetree/bindings/i2c/i2c-wmt.txt  |  24 ---
- .../devicetree/bindings/i2c/renesas,riic.yaml      |   1 +
- .../bindings/i2c/snps,designware-i2c.yaml          |  12 +-
- .../devicetree/bindings/i2c/wm,wm8505-i2c.yaml     |  47 +++++
- MAINTAINERS                                        |   9 +-
- drivers/i2c/busses/Kconfig                         |  13 +-
- drivers/i2c/busses/Makefile                        |   1 +
- drivers/i2c/busses/i2c-bcm-iproc.c                 | 223 ++++++++++-----------
- drivers/i2c/busses/i2c-davinci.c                   |   3 +-
- drivers/i2c/busses/i2c-designware-amdisp.c         | 205 +++++++++++++++++++
- drivers/i2c/busses/i2c-designware-common.c         |   4 +-
- drivers/i2c/busses/i2c-designware-platdrv.c        |   2 +-
- drivers/i2c/busses/i2c-designware-slave.c          |   2 +-
- drivers/i2c/busses/i2c-i801.c                      |   4 +-
- drivers/i2c/busses/i2c-imx.c                       |  12 +-
- drivers/i2c/busses/i2c-ismt.c                      |   2 +-
- drivers/i2c/busses/i2c-lpc2k.c                     |   7 +-
- drivers/i2c/busses/i2c-microchip-corei2c.c         | 102 ++++++++++
- drivers/i2c/busses/i2c-mlxbf.c                     |  87 ++++----
- drivers/i2c/busses/i2c-npcm7xx.c                   |  18 +-
- drivers/i2c/busses/i2c-octeon-core.c               | 166 ++++++++++++++-
- drivers/i2c/busses/i2c-octeon-core.h               |  13 +-
- drivers/i2c/busses/i2c-pasemi-core.c               | 119 ++++++++---
- drivers/i2c/busses/i2c-pasemi-pci.c                |  10 +-
- drivers/i2c/busses/i2c-piix4.c                     |   2 +-
- drivers/i2c/busses/i2c-qcom-geni.c                 |  19 +-
- drivers/i2c/busses/i2c-riic.c                      |  53 ++++-
- drivers/i2c/busses/i2c-rzv2m.c                     |   2 +-
- drivers/i2c/busses/i2c-tegra.c                     |   5 +
- drivers/i2c/busses/i2c-thunderx-pcidrv.c           |   5 +-
- drivers/i2c/busses/i2c-uniphier-f.c                |  24 +--
- drivers/i2c/busses/i2c-uniphier.c                  |  24 +--
- drivers/i2c/busses/i2c-via.c                       |  15 +-
- drivers/i2c/busses/i2c-viai2c-wmt.c                |  20 +-
- drivers/i2c/busses/i2c-viapro.c                    |  33 ++-
- drivers/i2c/busses/i2c-viperboard.c                |  14 +-
- drivers/i2c/busses/i2c-virtio.c                    |   7 +-
- drivers/i2c/busses/i2c-xgene-slimpro.c             |  57 ++----
- drivers/i2c/busses/i2c-xiic.c                      |   4 +-
- drivers/i2c/busses/scx200_acb.c                    |   6 +-
- drivers/i2c/i2c-smbus.c                            |  21 +-
- include/linux/i2c-smbus.h                          |   6 +-
- 44 files changed, 1006 insertions(+), 399 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-wmt.txt
- create mode 100644 Documentation/devicetree/bindings/i2c/wm,wm8505-i2c.yaml
- create mode 100644 drivers/i2c/busses/i2c-designware-amdisp.c
 
