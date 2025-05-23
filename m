@@ -1,193 +1,199 @@
-Return-Path: <linux-i2c+bounces-11129-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11130-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44362AC2002
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 May 2025 11:44:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D630AC201B
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 May 2025 11:47:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 423293BCE53
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 May 2025 09:44:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C7C6C18981CF
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 May 2025 09:47:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CF1222370F;
-	Fri, 23 May 2025 09:44:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1E2E222581;
+	Fri, 23 May 2025 09:46:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QiBlGgpn"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="RsPUVxUP"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82AFE225788;
-	Fri, 23 May 2025 09:44:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D49F6226D16
+	for <linux-i2c@vger.kernel.org>; Fri, 23 May 2025 09:46:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747993463; cv=none; b=FsW1NfVYi4Ob8PMKybRI73tEJFTtLdii8Ea2MzDp3aE8W0gQ3+ZHtAQmdUJE5jtbl6QpUWHKSWrRMOGcLzIP2ZSsjdOFD/+hzGsRXpFkqskypc4Z5391NM3T9Rivi80w62atRazFbXs2Un5tUxdls6PjJnpdEvCzPjuPkDiy6iA=
+	t=1747993570; cv=none; b=MfQ+rM4o99otwhKKI9qRWKBIZSFsSOmatWwcHNW7fde326DkadjqAglxSEg/prqQF/ZYGKdLCSqHNRVL4LOypr/i7ffhOebxPL3lX601YewHQ6IUiQpnbgn5UgM/kithwx0U+Qh04QNfgalyMWRaItCqDPd8ZOHbBTOPeLWqyeI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747993463; c=relaxed/simple;
-	bh=ORiCYXX2+npBuaxXBl6BF2rywetWpqgFK7lleNfKm7Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Jf5W4Tqz5pX5fJjxtV1gMWTB5TASL0gjoA9Y1mHKZHRlB4TdyXFOfMTtzudXW/0vRpS/yx5C8HbEnmSADL/ocJwp0C36KzWMwZj5hlCaKbl0iG++8dRphdMBzpWqGfxljf+OvEX0SQy6mOYY/TWeSaKd37otKE8XSCmbgAdQg0A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QiBlGgpn; arc=none smtp.client-ip=209.85.210.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-742c5eb7d1cso7644858b3a.3;
-        Fri, 23 May 2025 02:44:21 -0700 (PDT)
+	s=arc-20240116; t=1747993570; c=relaxed/simple;
+	bh=g0CqvvMKzLeMKYjz7hRE+LMOROw08soSCEk9jR0MjeI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=lusX+toYNeOImjZb1iNimWKFNPj1is0ako7qXKM4v+qO5nYAFZXfv7EOoMwiaEue6D4BX2Ot+FlDccdDvMFdhF0c2f5MVVns1xdKWsmynXBpTWXmpap23O04qyrcp9Y1dFvWayBz7ZW9tKMpceV+xhCBvBvV+TR/Vcj1xN5Sh4s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=RsPUVxUP; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-43cfe574976so65600695e9.1
+        for <linux-i2c@vger.kernel.org>; Fri, 23 May 2025 02:46:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747993461; x=1748598261; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=g8/vi7y8OuYvTC1jd4K4hOxCAgA29QQePM/SNMh/GDY=;
-        b=QiBlGgpnn7tK7GnFr2R1beNfdfhbVOXoZXyzUT9kyTEnAOU6tOUk4DMOKS1S6IA4VO
-         gQI5eoDPe+xHfqoQkxKP6MteOyx6ID7ZBZ/+wCFzuH5naDCFlQVVMp6zs5fEhrAVxAEs
-         X7NMPuj9OelFXQqBw7HX0YCv3TraYtsEM6zjfWVKyw4UGhH7yTNgI9hxZtXi9nFb1YW8
-         sIGRw3QyXygBH+ubxoICm8Ivvx5+PgqNaI+ZKliO6bqwUVe50VtWm8GUeSN5rGXhhxBz
-         +FI1/HW5XAhIzApd/Nmhv64lu2VwJMa3XfOIjxu8Jdg3R00D3ZHzsLZloEqxiGdveaCN
-         bS4A==
+        d=linaro.org; s=google; t=1747993566; x=1748598366; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=foNTOHpzt5e+CVfMRgO4/fjIO/6hBNq5r7JEJPhTgRc=;
+        b=RsPUVxUPMOJVXlJCNjJXgbN6GtVcxrEogzF+Fte6ugjwsujVAqvTFTvM+oTce/F1aB
+         9j9cIfEbgaM8jyZMJDqEmCfOUF/TuIoZ9nAMFwhxyG4+27+kgPsfLDyAgX9nw+b9lR36
+         hiSbLqRkInPYpHc1ceHRfugACkIpX1G8yq93mD2wGeSK1W7OMG07dJrtqivgxnJMXVg0
+         Kiiu3/hLwC+/inELHqvV7GQ//8NyasMB6wBCARu40nuvb6UV8NayVoMLskvBjvR6jsnT
+         Ui6+8DJFQv+FTZdY9hy/HtzPOiRBUNvLVUBoPpA8fHjlYfIk2Piu08dZrNaZdn3JxXgQ
+         ApNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747993461; x=1748598261;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=g8/vi7y8OuYvTC1jd4K4hOxCAgA29QQePM/SNMh/GDY=;
-        b=eh2EkqhvFFCucXLY/CEZu5rFtSEU2uQjwJmIU6+i8w/lM0qbcFdNumW8og+9TeKkn2
-         +g82uVUPmTmjaHP4ZfM9NySJgdawfsheTjTMxZKk/LItHJBu8FVb2rNIUYs+xFzZCDkw
-         LsL9BtbE2QAYpLGqU4hysnQGUeOaxTby3RDe2TaE6J84wtwKsjg556CDennGQJChM7vL
-         QcMf6g8y2k2VJnIYvHuFX/qOwRke5yyHEy1PaEanmivfkuiJhvStej61quhVO+97DfwT
-         HVu1qDrAtLgRwSekQAbvhVYFL/bCSDmWwntDdLkd4sPNPoaomBFkiWCOjv5Ew8G5V6Pc
-         76uA==
-X-Forwarded-Encrypted: i=1; AJvYcCUAD+GYLzWIEWlegWeII/OimQUk3nKK/tSwKFixWv6xASvq7eLJAbmJAoPxdwGecatTDkqksCMz/kLh8kwG@vger.kernel.org, AJvYcCUiWkMzGoKtALo+LfhA22PPkeiBSJdpdfyDWLW7cARq8Frnw/j1ESPxYKHOnDLBpo5jcZDY6Hxk9DHM5BoEElo=@vger.kernel.org, AJvYcCUspnRIGqCkCJfUZ+vEUEuCxkBE46zp4S618X+dvRAhsJQskbw7ICguqiWVU03aqru0UXsOwxqo/LmT@vger.kernel.org, AJvYcCUw2J3rGQs+7F1RSdsANRpfqFhYWBwjIiJoxJgC3PdqyXpQ8b9g2Wx/DR+Yp8fJ7cqd7FHxV/QU@vger.kernel.org, AJvYcCUy5eggD/1FFNS7sbMextodwyf4usntF26dTfC26IngdVhGZzAArnPXupKGSKptau+DRjWmtKIZhcEw@vger.kernel.org, AJvYcCV068AdcrqPnuV0y8HrZ2TVNafffapwIdQRyI5AIZKy6t7ZI/5QN8WsDb9MBAhze/eeXrXSUX2GRSfqrg==@vger.kernel.org, AJvYcCVPNsrQZ+nBkFa1rQiG+UeMhL8X3t38ofqewS1jVSmeFKkPQ58kyhssGR/SrqNs3fr9eqWIIai0QbmxYrM=@vger.kernel.org, AJvYcCViuX8L4xRcnqTHwu28sEoIaeFXwIrRhlYOxUF7UNdGW9uchD1njyvK5MMJQHlPTDUbf75iuOK+P6gO@vger.kernel.org, AJvYcCXxR6oeBp9CsPRUV4Er2MQXnjvGxR0NX765en907ShHXyev92GHiINf7GK7brDe5kq4nKR/OUj18/U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwlPqqNOyrJ9W0Gvx+XOu47yNHYazv88h8E43hk7zOLF9qaRiEc
-	sMv/hb2/DXe6uLKWLkjQ8SCi4saGdgxamBhw/NC6j3wHEevsi+sDcD1x
-X-Gm-Gg: ASbGnct/o9YeXC39vXQzsf0CDVjVHuWkgGgnSp7PnRnDeC8lFppzzSkRi85lcNDxkaD
-	juiJ1yNV58GJexMvLB7gnmpXqFBgvdvjEmSSn6qCmPVowZnvaZm984nByUZv5MSuYmCEwYF/xrG
-	fh12Pp9ra06LOKar3xbllRphr428wLwgnYQ1R0XN/HNIWvnycR4sCPVFmzYeHCuCQ31T9vRxuDs
-	j0FYW+xNPXiUQ5Qtj54r6npTKsKDQl8SuiQCwYy3WaXnqG2kHfSuzJ47AV6NSQsS1BuisoI/hir
-	7yoK5WTjk93KVEaxKAOqlIeI4VTZ96TVHkhZ2nEhQaneJ96bBknrYM72/xoOEy20xv223YKYabr
-	zWnwqqzsdEI4YsDI34Lrv+wmy
-X-Google-Smtp-Source: AGHT+IE/sQH3ZW0UkNSF+9aZjlAJCbKRFBYOtpRaA2RS69otWpX7DsNz/DLWL0QdW+j2Nm/PHm34NA==
-X-Received: by 2002:a05:6a00:894:b0:740:a921:f6de with SMTP id d2e1a72fcca58-742a98e9c0cmr38825737b3a.23.1747993460624;
-        Fri, 23 May 2025 02:44:20 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-742a970ba0csm12919783b3a.54.2025.05.23.02.44.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 May 2025 02:44:20 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <0838e48b-c995-42f8-8803-18ed593a89ef@roeck-us.net>
-Date: Fri, 23 May 2025 02:44:17 -0700
+        d=1e100.net; s=20230601; t=1747993566; x=1748598366;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=foNTOHpzt5e+CVfMRgO4/fjIO/6hBNq5r7JEJPhTgRc=;
+        b=DibtoXthVhRoP6I6XrjK4tLRBko77IVS2WxTYnesTHmWmfM9Dwya2ZLlyyD5s2/zMu
+         wS5g4s5X3RjisR1rPSwYvYYrmMAB4WqAGyCpfJ6TKsFi2UIpohGajXfqecV86hhzWBXz
+         4wFOJqlm78F8T3/aJg9nMfAR8PTzBxC7MrX/ab2E2Dr1DKugRx6awC4/DNCU0zX4LlN+
+         wYB9OC2CiAj6F0l7ixKTB2lIyvf4eoMDNxSLbdMmjiGtJSYVZhw4TLu0aakcipC7BuZD
+         +iQe85wU9Z8YYl56AZQPatcuSnsq4hLD4+sKcfC5CJxODqJEArR5JA5mcQ4isWmzFAFt
+         9JBQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVtjoOjd7EGA5bxobKV6kAFsKdiG7nQD2YbmhpCifeGz/ESVYL+g6w4TfsPgB1LefJlp/h3vGgwf2k=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxVn+im1hHsohJM7xhzeiN6ll0CQsv9avGYsTJUsLM9w1/QAuQ5
+	jGwtuSudmemXcV6XqlzulKtFm+VGgfPoD9jRzD7fsUDSYnAXHC86lYomiVENsL1ko8s=
+X-Gm-Gg: ASbGncs3Ae5mjIvb0ZhFq8fsbXljkxdsnEflC+YOKuieYIVFLy3lbdjwhIY5XTTE3xl
+	14pbLY57teLIrsa2nzWcO438yaTNbowsxRMg6Q2fPh8Yoozfd5Gge12jdzQGgPdiE86Tec8q1nI
+	kS+V1wmXfwtrG1py5+Sr3Rve5+D5BN5NrOZ8Ksgwzd6fxR9mSV2a3GfFbuxukRooC34PGMEFeJF
+	kyZxmAY4MIXRGWeKg2/Ujq7Kl0WBQ8l7/Xozpqz+5eMU+b16Tr7MWR/RfvIfnBumCHKlv2ZYajt
+	jAJf+V8G0ANIAGLbdcHE2G9yOsHvqOV+Rj0jfoQzzsYUmf9NLvVJR1ch
+X-Google-Smtp-Source: AGHT+IFeXuzRSP3te/4kJrabY82cymAda1Ah/IMjxYAHTLxROVr9nV9wVlqZWpQQfGQ7Ndx2j/Asnw==
+X-Received: by 2002:a05:600c:3114:b0:43c:fa24:8721 with SMTP id 5b1f17b1804b1-442fd6445bdmr296392075e9.17.1747993566028;
+        Fri, 23 May 2025 02:46:06 -0700 (PDT)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-447f6f062fcsm131130745e9.15.2025.05.23.02.46.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 May 2025 02:46:05 -0700 (PDT)
+Date: Fri, 23 May 2025 12:46:01 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: oe-kbuild@lists.linux.dev, Wentao Liang <vulab@iscas.ac.cn>,
+	andi.shyti@kernel.org
+Cc: lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+	linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Wentao Liang <vulab@iscas.ac.cn>,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] i2c: qup: Add error handling in qup_i2c_xfer_v2()
+Message-ID: <202505221445.quJVHqSz-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v11 6/7] hwmon: Add Nuvoton NCT6694 HWMON support
-To: Lee Jones <lee@kernel.org>, kernel test robot <lkp@intel.com>
-Cc: a0282524688@gmail.com, linus.walleij@linaro.org, brgl@bgdev.pl,
- andi.shyti@kernel.org, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr,
- andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org,
- jdelvare@suse.com, alexandre.belloni@bootlin.com,
- oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
- linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
- linux-can@vger.kernel.org, netdev@vger.kernel.org,
- linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org,
- Ming Yu <tmyu0@nuvoton.com>
-References: <20250520020355.3885597-7-tmyu0@nuvoton.com>
- <202505210555.mud6jZoi-lkp@intel.com> <20250523090004.GC1378991@google.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20250523090004.GC1378991@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250519141918.2522-1-vulab@iscas.ac.cn>
 
-On 5/23/25 02:00, Lee Jones wrote:
-> On Wed, 21 May 2025, kernel test robot wrote:
-> 
->> Hi,
->>
->> kernel test robot noticed the following build errors:
->>
->> [auto build test ERROR on andi-shyti/i2c/i2c-host]
->> [also build test ERROR on mkl-can-next/testing groeck-staging/hwmon-next abelloni/rtc-next linus/master lee-mfd/for-mfd-fixes v6.15-rc7]
->> [cannot apply to lee-mfd/for-mfd-next brgl/gpio/for-next next-20250516]
->> [If your patch is applied to the wrong git tree, kindly drop us a note.
->> And when submitting patch, we suggest to use '--base' as documented in
->> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->>
->> url:    https://github.com/intel-lab-lkp/linux/commits/a0282524688-gmail-com/mfd-Add-core-driver-for-Nuvoton-NCT6694/20250520-100732
->> base:   https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
->> patch link:    https://lore.kernel.org/r/20250520020355.3885597-7-tmyu0%40nuvoton.com
->> patch subject: [PATCH v11 6/7] hwmon: Add Nuvoton NCT6694 HWMON support
->> config: i386-randconfig-013-20250521 (https://download.01.org/0day-ci/archive/20250521/202505210555.mud6jZoi-lkp@intel.com/config)
->> compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
->> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250521/202505210555.mud6jZoi-lkp@intel.com/reproduce)
->>
->> If you fix the issue in a separate patch/commit (i.e. not just a new version of
->> the same patch/commit), kindly add following tags
->> | Reported-by: kernel test robot <lkp@intel.com>
->> | Closes: https://lore.kernel.org/oe-kbuild-all/202505210555.mud6jZoi-lkp@intel.com/
->>
->> All errors (new ones prefixed by >>):
->>
->>>> drivers/hwmon/nct6694-hwmon.c:12:10: fatal error: linux<mfd/core.h: No such file or directory
->>        12 | #include <linux<mfd/core.h>
-> 
-> This suggests that the set wasn't even build (let alone run) tested!
-> 
+Hi Wentao,
 
-Apparently. Guess that slipped in when they updated the copyright in the driver.
-There is no other change since v9.
+kernel test robot noticed the following build warnings:
 
-Otherwise the code looks good, though. With that fixed:
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+url:    https://github.com/intel-lab-lkp/linux/commits/Wentao-Liang/i2c-qup-Add-error-handling-in-qup_i2c_xfer_v2/20250519-222137
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
+patch link:    https://lore.kernel.org/r/20250519141918.2522-1-vulab%40iscas.ac.cn
+patch subject: [PATCH] i2c: qup: Add error handling in qup_i2c_xfer_v2()
+config: powerpc64-randconfig-r071-20250522 (https://download.01.org/0day-ci/archive/20250522/202505221445.quJVHqSz-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+| Closes: https://lore.kernel.org/r/202505221445.quJVHqSz-lkp@intel.com/
+
+smatch warnings:
+drivers/i2c/busses/i2c-qup.c:1621 qup_i2c_xfer_v2() error: uninitialized symbol 'err'.
+
+vim +/err +1621 drivers/i2c/busses/i2c-qup.c
+
+191424bb6166f6 Sricharan Ramabadhran 2016-01-19  1565  static int qup_i2c_xfer_v2(struct i2c_adapter *adap,
+191424bb6166f6 Sricharan Ramabadhran 2016-01-19  1566  			   struct i2c_msg msgs[],
+191424bb6166f6 Sricharan Ramabadhran 2016-01-19  1567  			   int num)
+191424bb6166f6 Sricharan Ramabadhran 2016-01-19  1568  {
+191424bb6166f6 Sricharan Ramabadhran 2016-01-19  1569  	struct qup_i2c_dev *qup = i2c_get_adapdata(adap);
+61f647e9d36d67 Wentao Liang          2025-05-19  1570  	int ret, err, idx = 0;
+191424bb6166f6 Sricharan Ramabadhran 2016-01-19  1571  
+fbf9921f8b35d9 Sricharan Ramabadhran 2016-06-10  1572  	qup->bus_err = 0;
+fbf9921f8b35d9 Sricharan Ramabadhran 2016-06-10  1573  	qup->qup_err = 0;
+fbf9921f8b35d9 Sricharan Ramabadhran 2016-06-10  1574  
+191424bb6166f6 Sricharan Ramabadhran 2016-01-19  1575  	ret = pm_runtime_get_sync(qup->dev);
+191424bb6166f6 Sricharan Ramabadhran 2016-01-19  1576  	if (ret < 0)
+191424bb6166f6 Sricharan Ramabadhran 2016-01-19  1577  		goto out;
+191424bb6166f6 Sricharan Ramabadhran 2016-01-19  1578  
+7545c7dba169c4 Abhishek Sahu         2018-03-12  1579  	ret = qup_i2c_determine_mode_v2(qup, msgs, num);
+7545c7dba169c4 Abhishek Sahu         2018-03-12  1580  	if (ret)
+7545c7dba169c4 Abhishek Sahu         2018-03-12  1581  		goto out;
+7545c7dba169c4 Abhishek Sahu         2018-03-12  1582  
+191424bb6166f6 Sricharan Ramabadhran 2016-01-19  1583  	writel(1, qup->base + QUP_SW_RESET);
+191424bb6166f6 Sricharan Ramabadhran 2016-01-19  1584  	ret = qup_i2c_poll_state(qup, QUP_RESET_STATE);
+191424bb6166f6 Sricharan Ramabadhran 2016-01-19  1585  	if (ret)
+191424bb6166f6 Sricharan Ramabadhran 2016-01-19  1586  		goto out;
+191424bb6166f6 Sricharan Ramabadhran 2016-01-19  1587  
+191424bb6166f6 Sricharan Ramabadhran 2016-01-19  1588  	/* Configure QUP as I2C mini core */
+191424bb6166f6 Sricharan Ramabadhran 2016-01-19  1589  	writel(I2C_MINI_CORE | I2C_N_VAL_V2, qup->base + QUP_CONFIG);
+191424bb6166f6 Sricharan Ramabadhran 2016-01-19  1590  	writel(QUP_V2_TAGS_EN, qup->base + QUP_I2C_MASTER_GEN);
+191424bb6166f6 Sricharan Ramabadhran 2016-01-19  1591  
+191424bb6166f6 Sricharan Ramabadhran 2016-01-19  1592  	if (qup_i2c_poll_state_i2c_master(qup)) {
+191424bb6166f6 Sricharan Ramabadhran 2016-01-19  1593  		ret = -EIO;
+191424bb6166f6 Sricharan Ramabadhran 2016-01-19  1594  		goto out;
+191424bb6166f6 Sricharan Ramabadhran 2016-01-19  1595  	}
+191424bb6166f6 Sricharan Ramabadhran 2016-01-19  1596  
+eb422b539c1f39 Abhishek Sahu         2018-03-12  1597  	if (qup->use_dma) {
+7545c7dba169c4 Abhishek Sahu         2018-03-12  1598  		reinit_completion(&qup->xfer);
+7545c7dba169c4 Abhishek Sahu         2018-03-12  1599  		ret = qup_i2c_bam_xfer(adap, &msgs[0], num);
+eb422b539c1f39 Abhishek Sahu         2018-03-12  1600  		qup->use_dma = false;
+9cedf3b2f09946 Sricharan Ramabadhran 2016-02-22  1601  	} else {
+7545c7dba169c4 Abhishek Sahu         2018-03-12  1602  		qup_i2c_conf_mode_v2(qup);
+7545c7dba169c4 Abhishek Sahu         2018-03-12  1603  
+7545c7dba169c4 Abhishek Sahu         2018-03-12  1604  		for (idx = 0; idx < num; idx++) {
+7545c7dba169c4 Abhishek Sahu         2018-03-12  1605  			qup->msg = &msgs[idx];
+7545c7dba169c4 Abhishek Sahu         2018-03-12  1606  			qup->is_last = idx == (num - 1);
+7545c7dba169c4 Abhishek Sahu         2018-03-12  1607  
+7545c7dba169c4 Abhishek Sahu         2018-03-12  1608  			ret = qup_i2c_xfer_v2_msg(qup, idx,
+7545c7dba169c4 Abhishek Sahu         2018-03-12  1609  					!!(msgs[idx].flags & I2C_M_RD));
+7545c7dba169c4 Abhishek Sahu         2018-03-12  1610  			if (ret)
+7545c7dba169c4 Abhishek Sahu         2018-03-12  1611  				break;
+7545c7dba169c4 Abhishek Sahu         2018-03-12  1612  		}
+7545c7dba169c4 Abhishek Sahu         2018-03-12  1613  		qup->msg = NULL;
+191424bb6166f6 Sricharan Ramabadhran 2016-01-19  1614  	}
+191424bb6166f6 Sricharan Ramabadhran 2016-01-19  1615  
+f74187932d30e4 Sricharan Ramabadhran 2016-01-19  1616  	if (!ret)
+7545c7dba169c4 Abhishek Sahu         2018-03-12  1617  		ret = qup_i2c_bus_active(qup, ONE_BYTE);
+7545c7dba169c4 Abhishek Sahu         2018-03-12  1618  
+7545c7dba169c4 Abhishek Sahu         2018-03-12  1619  	if (!ret)
+61f647e9d36d67 Wentao Liang          2025-05-19  1620  		err = qup_i2c_change_state(qup, QUP_RESET_STATE);
+
+if ret was already set then err isn't initialized.
+
+61f647e9d36d67 Wentao Liang          2025-05-19 @1621  	if (err)
+                                                            ^^^
+Uninitialized.  In production obviously the only sane choice is
+CONFIG_INIT_STACK_ALL_ZERO but I really encourage developers to set
+CONFIG_INIT_STACK_ALL_PATTERN=y so that we catch these sorts of
+bugs in testing.
+
+61f647e9d36d67 Wentao Liang          2025-05-19  1622  		return err;
+f74187932d30e4 Sricharan Ramabadhran 2016-01-19  1623  
+191424bb6166f6 Sricharan Ramabadhran 2016-01-19  1624  	if (ret == 0)
+191424bb6166f6 Sricharan Ramabadhran 2016-01-19  1625  		ret = num;
+191424bb6166f6 Sricharan Ramabadhran 2016-01-19  1626  out:
+191424bb6166f6 Sricharan Ramabadhran 2016-01-19  1627  	pm_runtime_mark_last_busy(qup->dev);
+191424bb6166f6 Sricharan Ramabadhran 2016-01-19  1628  	pm_runtime_put_autosuspend(qup->dev);
+191424bb6166f6 Sricharan Ramabadhran 2016-01-19  1629  
+191424bb6166f6 Sricharan Ramabadhran 2016-01-19  1630  	return ret;
+191424bb6166f6 Sricharan Ramabadhran 2016-01-19  1631  }
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
 
