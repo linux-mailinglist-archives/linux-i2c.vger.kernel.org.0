@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-11140-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11141-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A16DAC395E
-	for <lists+linux-i2c@lfdr.de>; Mon, 26 May 2025 07:41:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B7F5AC3968
+	for <lists+linux-i2c@lfdr.de>; Mon, 26 May 2025 07:48:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 23A87171845
-	for <lists+linux-i2c@lfdr.de>; Mon, 26 May 2025 05:41:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 13ADA1893ADC
+	for <lists+linux-i2c@lfdr.de>; Mon, 26 May 2025 05:48:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC73A1C5F09;
-	Mon, 26 May 2025 05:41:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 851F81C84BB;
+	Mon, 26 May 2025 05:48:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cFmVplLZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cprSY10D"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59090282F5;
-	Mon, 26 May 2025 05:40:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 333741A26B;
+	Mon, 26 May 2025 05:48:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748238060; cv=none; b=aBF9xM1jAP0iNHezkf22DKrOAziKjBa+k+XT6rIkXdW+Dr+gDaXXETPKq3bkpDEhMSyXolBzztKxWJ4sYsD8i5P+nndBf2OBnMn3E0WRFm2SBykNq2pxr88bP1d/PuveaWb3nKp3pKzSux8ciJD/g0IGGBFTI+jPWOX38taJT+g=
+	t=1748238494; cv=none; b=Udd2Sc8klFTqSPnsfuHjM7Uo1I+H9Bez5VtcL/fsIW0EnW6k+nNSWkYfa1yDYIHuIzdoI2OHS0HsNV+das7lkrX+A26Cj+nHEcgKLyoTsadyi6AmXhxzt8BubMZvmkefEvCW8YfW257X8im6HT9IlPwKplw/iT1T+KXnM1NG3Kc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748238060; c=relaxed/simple;
-	bh=XRqjBzDwgvw1xP62Qq+XZ1FkytUcGBM5prprQQPTZFY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=q9P78Ltl1IpdK0fkpX6kpHVIuiPKNvjItf/33+m9vbZbuUM9leAFDKs6Lo47URbHv5fTS+RjMSIwCq+selywU7RB3cVwz8aai851gozFPGQfL/G9TisPLUbGRB2t1tz/YYMMamEkYQW4DdT+OB9VWCCvCOiXvlfR43lpQrHDKic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cFmVplLZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9EA6C4CEE7;
-	Mon, 26 May 2025 05:40:56 +0000 (UTC)
+	s=arc-20240116; t=1748238494; c=relaxed/simple;
+	bh=bdCCiAUM39wgNEBtRijLIZNzyMM8ZIX0c28i/gBEN9g=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:References:
+	 In-Reply-To:Content-Type; b=I9vzqlSCql8/BSNyGRi9dwRQuqpPsziRzFalKuC5o4nF+n9tPMIgCEJPdP9viQbt0H+doEkv8llaszAykfwQ1kYw/1WXvn33+ZQgDD/W0GjEr7SGu1tR+Q3+uOuXGWgDjZYVjmL+u1cEtMyOlcthfzagePv0k5N7eGByn66WdJM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cprSY10D; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 579B6C4CEE7;
+	Mon, 26 May 2025 05:48:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748238059;
-	bh=XRqjBzDwgvw1xP62Qq+XZ1FkytUcGBM5prprQQPTZFY=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=cFmVplLZxAboZR4UYVMChIsRFViFCY3046HF2Xrmu+HfB+6+OOBh60eQ8hFWiit4s
-	 +ABXAYoP8DLLPCAk4jI4qC8offdiCsflbCh821YeAtQypEyzv8hsuOqwu0GR1mBykj
-	 R9Gkv3TigUwjqSECQ7VQppDvF39zbWD2SO9jurYSuUl6D196/1igG3cB0lg3gA2FhY
-	 WLlo8FI6pNI9anlqwpLUrwkbovMCvBT/gvIhZ+SmgOoCxaE5XO9rji7ekASMFffiWP
-	 bl6hJcbhcioZIv00vrayHVkmKnwjqHECZLBc76fdUfL5VUsnJYAGarQxAR2Z2npETT
-	 W7RMqHAMNNZHw==
-Message-ID: <44b5d5f1-f45e-4d81-809f-707bd756257d@kernel.org>
-Date: Mon, 26 May 2025 07:40:55 +0200
+	s=k20201202; t=1748238493;
+	bh=bdCCiAUM39wgNEBtRijLIZNzyMM8ZIX0c28i/gBEN9g=;
+	h=Date:Subject:From:To:References:In-Reply-To:From;
+	b=cprSY10DcSwnHX3T8uesB5jegtXD8Gt8oxLbuZ49sz613i76bKDJT1dF3nJDK6bby
+	 uIMibDFhXVQ+R/H+Wrr2ZOC0YPh8aJ88RzKw3zKYIcLU8dAWxmOXCJH4p8KO7CzE6i
+	 9ujStQd9vczJZjIJltiDlfCdTgom3DJskR/5hhcWL4M21jOBl7z8iVQkiNgJiESN2u
+	 TldvRfP9Y2GqEejuxAzO4FDoGonL/KkRv+ZCxWZn8xh6Xk/cSMmEmD6jFRLC3GA53Z
+	 F9LclGtRDhAUoyI59VBsekGbMoHHpqlFB+EU1x3gP5sz7MS1Dav04VXDgdmXlVYn5C
+	 9249rAKTNy/iw==
+Message-ID: <6067561e-14d4-4512-afd7-4a4eca27ecfa@kernel.org>
+Date: Mon, 26 May 2025 07:48:08 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -52,6 +52,7 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v3 1/3] dt-bindings: i2c: nvidia,tegra20-i2c: Specify the
  required properties
+From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Akhil R <akhilrajeev@nvidia.com>, andi.shyti@kernel.org, robh@kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org, thierry.reding@gmail.com,
  jonathanh@nvidia.com, ldewangan@nvidia.com, digetx@gmail.com,
@@ -59,7 +60,7 @@ To: Akhil R <akhilrajeev@nvidia.com>, andi.shyti@kernel.org, robh@kernel.org,
  devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20250526052553.42766-1-akhilrajeev@nvidia.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+ <44b5d5f1-f45e-4d81-809f-707bd756257d@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -104,70 +105,25 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250526052553.42766-1-akhilrajeev@nvidia.com>
+In-Reply-To: <44b5d5f1-f45e-4d81-809f-707bd756257d@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 26/05/2025 07:25, Akhil R wrote:
-> Specify the properties which are essential for the Tegra I2C driver to
-> function correctly. Though all the existing DT nodes have these
-> properties already, it was not mandated by the DT bindings.
+On 26/05/2025 07:40, Krzysztof Kozlowski wrote:
+> On 26/05/2025 07:25, Akhil R wrote:
+>> Specify the properties which are essential for the Tegra I2C driver to
+>> function correctly. Though all the existing DT nodes have these
+>> properties already, it was not mandated by the DT bindings.
+> 
+> I was rather expecting to see explanation why these were missing.
 
-I was rather expecting to see explanation why these were missing.
-
-Fixes: f10a9b722f80 ("dt-bindings: i2c: tegra: Convert to json-schema")
-
+To clarify: I meant, explain the bug/mistake. Rest of explanation is ok.
 
 > 
-> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
-> ---
-> v2->v3:
->   * Updated commit description on the details and fixed indentation
->     issue.
-> v1->v2:
->   * Added all required properties
+> Fixes: f10a9b722f80 ("dt-bindings: i2c: tegra: Convert to json-schema")
 > 
->  .../bindings/i2c/nvidia,tegra20-i2c.yaml      | 23 ++++++++++++++++++-
->  1 file changed, 22 insertions(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/i2c/nvidia,tegra20-i2c.yaml b/Documentation/devicetree/bindings/i2c/nvidia,tegra20-i2c.yaml
-> index b57ae6963e62..c1d38e6ff7d7 100644
-> --- a/Documentation/devicetree/bindings/i2c/nvidia,tegra20-i2c.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/nvidia,tegra20-i2c.yaml
-> @@ -97,7 +97,9 @@ properties:
->  
->    resets:
->      items:
-> -      - description: module reset
-> +      - description: |
 
-Do not need '|' unless you need to preserve formatting.
-
-
-> +          Module reset. This property is optional for controllers in Tegra194 and later
-
-Your binding says Tegra210 requires it, but 210 feels like something
-later than 194. Maybe that's obvious for people knowing that device?
-
-Anyway, please wrap at 80 (see kernel coding style).
-
-> +          chips where an internal software reset is available as an alternative.
->  
->    reset-names:
->      items:
-> @@ -116,6 +118,13 @@ properties:
->        - const: rx
->        - const: tx
->  
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
-
-dmas, dma-names, power-domains, see TXT binding... or extend commit
-description why this should be different comparing to original binding.
 
 Best regards,
 Krzysztof
