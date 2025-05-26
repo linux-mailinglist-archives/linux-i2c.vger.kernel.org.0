@@ -1,238 +1,217 @@
-Return-Path: <linux-i2c+bounces-11135-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11136-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6160AC386D
-	for <lists+linux-i2c@lfdr.de>; Mon, 26 May 2025 06:09:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A6E37AC3912
+	for <lists+linux-i2c@lfdr.de>; Mon, 26 May 2025 07:26:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 75FB018904DF
-	for <lists+linux-i2c@lfdr.de>; Mon, 26 May 2025 04:09:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5F748171F33
+	for <lists+linux-i2c@lfdr.de>; Mon, 26 May 2025 05:26:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86D9719E971;
-	Mon, 26 May 2025 04:09:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 964561C5496;
+	Mon, 26 May 2025 05:26:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TVivXdLq"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="aO9mURyV"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84C95136E;
-	Mon, 26 May 2025 04:09:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748232559; cv=none; b=CfJ09hLIrEvSMkWiAel2XzZ6bwK1yzsK6LlT6ZeaJNYxV4ipQc7+6nouMaPR5Z9KvIbEL3mSX6JA2rG3xICo8658HYpu/0GymWg2OnPuHKl24cxKKilrVL9ndWcJCZdw6OzahG+YuHXD+gLK9a/WIKVmqxzN3RmGKqwZ0LAaFw8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748232559; c=relaxed/simple;
-	bh=zFybjZBAwqOPQRHXISprk73GwCPp84zyLJgW8FKg/fc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IqkCmsOYAQuu4Yd9h+79msDwfUname1jEt7o+c0a1ooNNPyp8pwgLfaUDUaC2v0EzgJh+Ew4Ombbct7GU/nrmrNvGI8bHvs5XQOzFmaehVjyf4NOcYPDovMbnVU8LUF0rjvy/C3PcCzqhZb5bxgafspzXPDTiQ7vdZ2+tHi/X3I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TVivXdLq; arc=none smtp.client-ip=209.85.128.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-70e5d3d52c0so2402147b3.1;
-        Sun, 25 May 2025 21:09:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1748232556; x=1748837356; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XRsxlN+6DHzqakc/p1oPgH+ae8ppKGO0+KoYULOIVI0=;
-        b=TVivXdLq76AhnHHkzroOgsyCuYAWACJMpQbzoJ7zzIqx4sMX1/bK0wmpuVG29BoE80
-         2TVfruSM1mZYX3IjzUFopwYoaxCIvwQ3Q/BZ0MhK+KBd88nAN8zi/1SsKcL+KMpxDjpH
-         fIlDoyW0u9h9KnYUPMGa9SNQsVQKwY0Dh4NxzAiUn1b38uydMS9MBaVma8trlXDOzmHL
-         c+R8ZFQaz5/87teROwIr8CHaBDuUNELoOS0orCxrd0PizfweUKDwvRJf8/hdH3hVOaSR
-         ayUCuCayGhCdm93OXYoIpKi+8XxNUA1x7vgckRbYJZunF57bXqXMgpH9WImQ4Pc4bOrK
-         prOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748232556; x=1748837356;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XRsxlN+6DHzqakc/p1oPgH+ae8ppKGO0+KoYULOIVI0=;
-        b=t7KodSWX+3a08g0YssMVp7EiOaxQ/37yptEu4dXqtHzsM2DUPJxAde9ZsbRNCJ1mrG
-         fuhM7Mh9vXb0LZ2zKrlRc6H5QZPd9rRd11ngtr+iFcQQ5IsJlf847Ns6maZrDfLakwPu
-         6pgx3WWTQt1S1lFPN/t69MCf5oDE/tP4bvHQzEgZsbpYc+AX+/DsTbnTEA9tOS8BMeZt
-         AIqsneUzj3CLSyZ3CQTfZ1n6wxDApjxGRZbYGWT2eCZfx8A7f08wg0rp5hCJMe6Avlez
-         MVGXI1bx6yMF6ZwsGdXw+HCFfvAK2l5+cZq9M3RBZRrzY2+s0jLLEDMmdxasFgGrziQu
-         pKzQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUBt9EJsYCu35F4KxgnmZlEK+jC3q+EOXc/J9kzmyPpgknqeWbBlP08ZqE3oDPvp2KY8o6PjKZeiG4aSnWt@vger.kernel.org, AJvYcCUkKjPNkMLUzulsj2MQSsl+juYf9Z/VftXbqNUlrqRBujS4BWxmmO8b8H0XeEo1wccm7/EZSMy19u7v@vger.kernel.org, AJvYcCV2mX69Vso3ZYevmPQSJF5LXKcVOgO+ZleuSLBuaC+GfMVJzUrJPw5Z+wyE6h59cKu3hpKD4O4RCYF/@vger.kernel.org, AJvYcCVtKDyNBMV1IW7K6H/NDBvtnALkzMS844P+mBn0CDXHsXAKuk32UCvDP6WrU1NvlWiQyflTBPy2uFA=@vger.kernel.org, AJvYcCVw/XiSZjG8SatQwvPVUGqE6SwVxbH1pUgaVSsf3vvGOjUurPU7ynRWXcQ8kLaPqSEjZf3I45qu@vger.kernel.org, AJvYcCWtFwB7GVaCi7Tt4YKzN/sGCTShHvOgFsAGSOkW5C0eBFYg9JyNU/Ok3dwYfQg8Hq2R2XI+TAfPucO0uqBxFmw=@vger.kernel.org, AJvYcCX5ELNH/KqGsHf6g6fHghAfySkm+cj2ifwlnxZRNowBUxj3oGDkuCcYPLEkJjUczzhrEtJMPG3PWUYkTQ==@vger.kernel.org, AJvYcCXZEtZpEUiCbxtRxePoBzIJY5ORFxhTJAfd+9zYTekwRuCQpNJcny9bjLUtQtyRVgUQZF7h7yLGh7Wu@vger.kernel.org, AJvYcCXwaHTqBYQ9xv4mdpk9J4sDpgg65QISxAwDUr8dzSQY7qujtaTNvZ2leyh7vgWvFi3MmRnebWoMfc1p5eA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxtv38zQdX1e+ZjL+IPWFDkJegkLUij6GvqQNPkPkZ+XKgHL+Z3
-	Lz38q4u0QMLsI/HWEUnm8H71S8y8nleE4I+nCCB1XqikKrezzO7J0F8MP0st0sPBV7MNjL3NOex
-	9z/Pve0Q+2aROvuZWWs+GiCVQ3zNJZ6M=
-X-Gm-Gg: ASbGncskpFWKtf1ZBJn6jFjthx7i5cSClwpusjr5RJREo9IEX9Mgzqgf2gGkk1GErA4
-	SbsN244Mz/PHcGvkO51MbIXCF3SFRjxBLV4jEf4kQXleXpXneXUZeEXmMhsrty/P4UNO/OZzng5
-	t5kK9o+LBQ4VCJYNl38ZGnig4jP9S6IuQH4hg1SajgfkRFFmmZmS1tntXkLwURnZ0bn5U=
-X-Google-Smtp-Source: AGHT+IFD4nkg9WD+T6GdV6j4yA+x5r2Vrje8LG18zmUMxyOuvQsEyEx7MaBiv8GoPkxW33bEG6Oq5m6STvO6yCEYoKU=
-X-Received: by 2002:a05:690c:660f:b0:70d:f3f9:189c with SMTP id
- 00721157ae682-70e2da77feamr74948577b3.24.1748232556257; Sun, 25 May 2025
- 21:09:16 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A538A33DF;
+	Mon, 26 May 2025 05:26:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1748237185; cv=fail; b=psisBTO2DY4/e6zZL3S6rHIhQxG1Wd5HEegq4y1AedTRWDyZLRfH0AWz3qPslym3ePnqrbbX8N6/qyR9aqIDajmp29wJkAXfY2W2OKONT0CSr6wFWz9mNXEVycdumu4iNVoAAqqSGyAE75/TlEfiO2tNKyJ5h5V4Kvk5tk2p3oI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1748237185; c=relaxed/simple;
+	bh=sm8AA79VKWiNNvfhcx3ie4VztK4XytASfp01aRnF6co=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ryc7WoKdkpqGToDRImHmTsMFTp9qkrVsNk8LCNqTp0vRWyFucLMvpGKkxF2AwBlJIq0HxU5Ydq3N31/HqG4e1uRuk7a22ogETO8G+DWiQvFvK4NlGOA1J4LL7Pn8bEXRQptKsb3V1X0fse3toyEZosEGR7ytNhaNlkAHfc6PSR8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=aO9mURyV; arc=fail smtp.client-ip=40.107.236.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=sSvIzOddZOYUfYazE+fh8BeY/cdlmilrrCWw/R+DOWHWMwWFDZLpIWG8UE69ssnDe5eO8pKdQA1Xz4gKQX8R3KlrCF91C7bvAvo94ZH5xCDu5fA7McTSWxhqNEuq37VtoHJg2qrSHT+HnKaAfwTilF6na+HPQlm3ViU2sNpRASyHKpIdlRNnvskdP+GXz6MmeMEVfwUl7ksKFU0ZFELQS+HWg0r0D+TjKMc3UXij5B3HAEwax38bn2KrBdhWbN5imevE4DBy3ZgMYdgEcg0eGnwOZouCd6yXIdA1ZjKNyk7kJcustijWfOQwJj2cgAcNWp65pBx6XNlkE7q58TRi1g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=O7GpbBaoL2p7kUcJTBeJ6RSVxib3TWwJqhguQFQBJ9s=;
+ b=jZJMMySOKsr7IIvUa8qLqMaA/VUqK8uLesSZrTJ1BRJJTLQE+LeyVzdbdvpkV8o/GuD3bAG7PxNekdmDpyhLAhhtaUUT6Ld/l0jgdbpOoOTmOQQCSSQT7uM9vjeHh47HWbNclNCdR4u7WqOqEVObi5Mu5P/zqp+tMly/FEjCJR8Qk03ASe6l+H8uAyU+hydcE9Tnsc91LAtoJTf+gLB7hzH2bmvrcJyorelTQcQrp3pL4Mg6a9bnZ1O/PdsHC9gP/ILKUShL4R4MNUV0AuFniVbrPR/7ySwmjI/E+k8D+ObdPawDvQTovLlSvDLNRl2L+PVq3U7B3Pwbn6YI/14EzQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.232) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=O7GpbBaoL2p7kUcJTBeJ6RSVxib3TWwJqhguQFQBJ9s=;
+ b=aO9mURyVYtWP1NjDf8U0zPAPre0PWpd60IZ4sqcVzACz4li75eY9yMmxtKuQZCWfmhmiCAbqwj4cUQXV4m3sTjsB5uk6NWrvw27xB3hcLhCKGVFQFck+XT9QtlCxbHNNkrtY6RMRJ8GiXBjL10p8xEeRjR/lQJvCKaLHpay9/KqT7EbAi88zaoWzMrIcXMT7NAT5L7Pd+6q+zOS8jxD4YSuDPw0CjIylQ2Vbu4H1HXuBl3VYCnrTMt1yyzvJI5gFI7kGTn4SPZhiFfD1gT6DyT2bI6IdHPV+xBWhRXlrvodWMUFuCR4wPFFURgxsJM3ytgVzCTgDXL5ABD5RPioe1w==
+Received: from CH2PR10CA0029.namprd10.prod.outlook.com (2603:10b6:610:4c::39)
+ by SA3PR12MB9160.namprd12.prod.outlook.com (2603:10b6:806:399::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8769.24; Mon, 26 May
+ 2025 05:26:19 +0000
+Received: from CH2PEPF00000146.namprd02.prod.outlook.com
+ (2603:10b6:610:4c:cafe::4d) by CH2PR10CA0029.outlook.office365.com
+ (2603:10b6:610:4c::39) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8746.30 via Frontend Transport; Mon,
+ 26 May 2025 05:26:19 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.232) by
+ CH2PEPF00000146.mail.protection.outlook.com (10.167.244.103) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8769.18 via Frontend Transport; Mon, 26 May 2025 05:26:19 +0000
+Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
+ (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Sun, 25 May
+ 2025 22:26:14 -0700
+Received: from drhqmail202.nvidia.com (10.126.190.181) by
+ drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.14; Sun, 25 May 2025 22:26:13 -0700
+Received: from BUILDSERVER-IO-L4T.nvidia.com (10.127.8.9) by mail.nvidia.com
+ (10.126.190.181) with Microsoft SMTP Server id 15.2.1544.14 via Frontend
+ Transport; Sun, 25 May 2025 22:26:10 -0700
+From: Akhil R <akhilrajeev@nvidia.com>
+To: <andi.shyti@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
+	<conor+dt@kernel.org>, <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+	<ldewangan@nvidia.com>, <digetx@gmail.com>, <p.zabel@pengutronix.de>,
+	<linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC: Akhil R <akhilrajeev@nvidia.com>
+Subject: [PATCH v3 1/3] dt-bindings: i2c: nvidia,tegra20-i2c: Specify the required properties
+Date: Mon, 26 May 2025 10:55:51 +0530
+Message-ID: <20250526052553.42766-1-akhilrajeev@nvidia.com>
+X-Mailer: git-send-email 2.43.2
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250520020355.3885597-1-tmyu0@nuvoton.com> <20250520020355.3885597-6-tmyu0@nuvoton.com>
- <4cc7d25b-35de-4303-94cf-7a8e33bdd246@roeck-us.net>
-In-Reply-To: <4cc7d25b-35de-4303-94cf-7a8e33bdd246@roeck-us.net>
-From: Ming Yu <a0282524688@gmail.com>
-Date: Mon, 26 May 2025 12:09:05 +0800
-X-Gm-Features: AX0GCFs-oVdTFcQ06xtCcdpDTQZ0ix05e7U2vH5otbE_aO34st4zkTxf4Ye5r-U
-Message-ID: <CAOoeyxWoShYNPtBtvOHeYa439cwF-e0ZXRqyOOPGQ+Vqo0HWig@mail.gmail.com>
-Subject: Re: [PATCH v11 5/7] watchdog: Add Nuvoton NCT6694 WDT support
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
-	andi.shyti@kernel.org, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, 
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
-	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org, jdelvare@suse.com, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org, 
-	Ming Yu <tmyu0@nuvoton.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-NVConfidentiality: public
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NV-OnPremToCloud: AnonymousSubmission
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH2PEPF00000146:EE_|SA3PR12MB9160:EE_
+X-MS-Office365-Filtering-Correlation-Id: 886878ce-6b02-43f4-8841-08dd9c15d891
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|36860700013|7416014|1800799024|376014|921020;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?5X81886+0hMzMQll8Jq63Q8fOcsoRqQ6zsP8FO3e+TPBP2X6MJJdcJXSPBs8?=
+ =?us-ascii?Q?b6XqKS0e6gncQKsbe2yixMMK1uE861BKtcctJ/a8fk1+IwL9OzvBP+EEKWDw?=
+ =?us-ascii?Q?Dhm+OcBHyifrmNtvSFOZbVePlL6PmY0vZT8aL/OQrw7+NO2uxIQgRrwhlEO2?=
+ =?us-ascii?Q?IAtafFuhapgFExnk2s75t1R3S8DM5vBOqT2haP5sbOu1P2dwnhelzXT4WC0n?=
+ =?us-ascii?Q?vDyZlLxdQaicC0mmWseb1uPYix2DxIaV7P0cshHkLQMvbPFBMTfKZ1YveK9/?=
+ =?us-ascii?Q?5Ey0rtZYHO0X/7UW7Fu+FglDkEbyf/8wvOKjMhYMfTpw3vaBcK1vs1wKNpQQ?=
+ =?us-ascii?Q?i1+YetMITujNgYh9ZfJwrUwK5M8aA6dHVYWME9BZZhm2VwkTjJ03lRX8o2c5?=
+ =?us-ascii?Q?PwZExYqftNApvUHWR5C54ZeVmiCiwhOBg5Wt1wyzGPlqIFKJOf8b4NPauLPl?=
+ =?us-ascii?Q?v8LrmusQqjre21MFXUSBMPD7d8VZ7Uk/GRPctaaHnqnhhr/Fpp4LLqWZgEF5?=
+ =?us-ascii?Q?4tsRRs2Us9AYsd0E61ealzr+Wq8cPRH6hlU97r8hfhcw/sIJ/bjmTNwsXCLj?=
+ =?us-ascii?Q?Y99Crsqsv2HoO31cJPKxler/t9sHSkWB7eTRj24SokODX1EEa4doZNN1Vlxm?=
+ =?us-ascii?Q?o8rqnNZHpZ/8Czr6F76GnI4LE0rsJ9+bZMJsGvOSExsF749PrzBJmGNnMeLy?=
+ =?us-ascii?Q?nvY3l6/ndqUmQF1htvef8CpKZOt+xdj21DBQ/FPROmDIgm29TpFdLo7maZF7?=
+ =?us-ascii?Q?Mzz5Uqd3Wvm5XLSdug3ctRedsacpSoooA0XGV0v/XUPuzlchQDEBq/C9kZC1?=
+ =?us-ascii?Q?5UKq985Ka+RhQ1pOyHMz7QNJqtJRa3ZXcCqzM56OOo7uxHa/Urs5gdDnLgp8?=
+ =?us-ascii?Q?xCMRaD08QQXG2vTZMFCQVxvU9yh4+hdJRbBSGHj9rmHCAfm2exht/Taapf7I?=
+ =?us-ascii?Q?Ky1G0EfmGOWtdF7XaQwlSNNAHNfkjCV8ezOXQLKgUVLYR0vOU4HB8ov92ltG?=
+ =?us-ascii?Q?B/xX30IuDGWns/m3/9rvxdUKUFzWfdJ0g71CDCwSrfxQRFma8RCCN0qy4ORR?=
+ =?us-ascii?Q?0ayEfsWsOn+w1v9O4JWO1Cu/OSlBb+5j0N94hLSAGxrfHhYismJ86+oO+NnW?=
+ =?us-ascii?Q?sQQ9mUF87r72yhdMHLr38ANsXoAfx4GsK6pS+8Pg7nKGHloh2RG80rB06gSw?=
+ =?us-ascii?Q?PPdkrDkYhEGaPtZOUDQ2w7qo4Snuavle9hwTgxzp9sog/fvYMQ9yQGVeixqE?=
+ =?us-ascii?Q?epqAcnFWnMVGsjbeKd+wEyHQG02/bH7k202v9RF+L1Xo33S6XBKnY4L+RTKQ?=
+ =?us-ascii?Q?gkWqizkIn7BarDsXLrdFy6csdEwLQOWlmsvO8vk+pP/AJn4eHCL7OI3U6AaI?=
+ =?us-ascii?Q?+ll4kgiMM5T4aGOKWp4NYBmCiHWS4OWYJtcp19cUvO2XoNwhKXBhuJH1SZE8?=
+ =?us-ascii?Q?cOp1DKSk3Itjtt+ki682/OFxhITfWQb9N7OoJHmlnersHIbYUz5x+cPpiKJX?=
+ =?us-ascii?Q?UC1QIn39kmiYf22243pX23hwBTOOn9xU8xIQQIP+fJ+/h3iRvm33d058zQ?=
+ =?us-ascii?Q?=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(36860700013)(7416014)(1800799024)(376014)(921020);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 May 2025 05:26:19.6889
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 886878ce-6b02-43f4-8841-08dd9c15d891
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CH2PEPF00000146.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR12MB9160
 
-Dear Guenter,
+Specify the properties which are essential for the Tegra I2C driver to
+function correctly. Though all the existing DT nodes have these
+properties already, it was not mandated by the DT bindings.
 
-Thank you for reviewing,
+Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+---
+v2->v3:
+  * Updated commit description on the details and fixed indentation
+    issue.
+v1->v2:
+  * Added all required properties
 
-Guenter Roeck <linux@roeck-us.net> =E6=96=BC 2025=E5=B9=B45=E6=9C=8823=E6=
-=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=886:02=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> > +static unsigned int timeout[NCT6694_WDT_MAX_DEVS] =3D {
-> > +     [0 ... (NCT6694_WDT_MAX_DEVS - 1)] =3D NCT6694_DEFAULT_TIMEOUT
-> > +};
-> > +module_param_array(timeout, int, NULL, 0644);
-> > +MODULE_PARM_DESC(timeout, "Watchdog timeout in seconds");
-> > +
-> > +static unsigned int pretimeout[NCT6694_WDT_MAX_DEVS] =3D {
-> > +     [0 ... (NCT6694_WDT_MAX_DEVS - 1)] =3D NCT6694_DEFAULT_PRETIMEOUT
-> > +};
-> > +module_param_array(pretimeout, int, NULL, 0644);
-> > +MODULE_PARM_DESC(pretimeout, "Watchdog pre-timeout in seconds");
-> > +
->
-> How is this supposed to work if there are multiple NCT6694 in the system =
-?
->
+ .../bindings/i2c/nvidia,tegra20-i2c.yaml      | 23 ++++++++++++++++++-
+ 1 file changed, 22 insertions(+), 1 deletion(-)
 
-As far as I can tell, they only share the same default timeout and
-pretimeout values, which can be overriden using ioctl for individual
-devices.
+diff --git a/Documentation/devicetree/bindings/i2c/nvidia,tegra20-i2c.yaml b/Documentation/devicetree/bindings/i2c/nvidia,tegra20-i2c.yaml
+index b57ae6963e62..c1d38e6ff7d7 100644
+--- a/Documentation/devicetree/bindings/i2c/nvidia,tegra20-i2c.yaml
++++ b/Documentation/devicetree/bindings/i2c/nvidia,tegra20-i2c.yaml
+@@ -97,7 +97,9 @@ properties:
+ 
+   resets:
+     items:
+-      - description: module reset
++      - description: |
++          Module reset. This property is optional for controllers in Tegra194 and later
++          chips where an internal software reset is available as an alternative.
+ 
+   reset-names:
+     items:
+@@ -116,6 +118,13 @@ properties:
+       - const: rx
+       - const: tx
+ 
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++  - clock-names
++
+ allOf:
+   - $ref: /schemas/i2c/i2c-controller.yaml
+   - if:
+@@ -169,6 +178,18 @@ allOf:
+       properties:
+         power-domains: false
+ 
++  - if:
++      not:
++        properties:
++          compatible:
++            contains:
++              enum:
++                - nvidia,tegra194-i2c
++    then:
++      required:
++        - resets
++        - reset-names
++
+ unevaluatedProperties: false
+ 
+ examples:
+-- 
+2.43.2
 
-> > +static bool nowayout =3D WATCHDOG_NOWAYOUT;
-> > +module_param(nowayout, bool, 0);
-> > +MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (d=
-efault=3D"
-> > +                        __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
-...
-> > +static int nct6694_wdt_setting(struct watchdog_device *wdev,
-> > +                            u32 timeout_val, u8 timeout_act,
-> > +                            u32 pretimeout_val, u8 pretimeout_act)
-> > +{
-> > +     struct nct6694_wdt_data *data =3D watchdog_get_drvdata(wdev);
-> > +     struct nct6694_wdt_setup *setup =3D &data->msg->setup;
-> > +     const struct nct6694_cmd_header cmd_hd =3D {
-> > +             .mod =3D NCT6694_WDT_MOD,
-> > +             .cmd =3D NCT6694_WDT_SETUP,
-> > +             .sel =3D NCT6694_WDT_SETUP_SEL(data->wdev_idx),
-> > +             .len =3D cpu_to_le16(sizeof(*setup))
-> > +     };
-> > +     unsigned int timeout_fmt, pretimeout_fmt;
-> > +
-> > +     guard(mutex)(&data->lock);
-> > +
->
-> Watchdog drivers are already mutex protected in the watchdog core.
->
-
-Okay, I will remove the mutex in v12.
-
-> > +     if (pretimeout_val =3D=3D 0)
-> > +             pretimeout_act =3D NCT6694_ACTION_NONE;
-> > +
-> > +     timeout_fmt =3D (timeout_val * 1000) | (timeout_act << 24);
-> > +     pretimeout_fmt =3D (pretimeout_val * 1000) | (pretimeout_act << 2=
-4);
-> > +
-> > +     memset(setup, 0, sizeof(*setup));
-> > +     setup->timeout =3D cpu_to_le32(timeout_fmt);
-> > +     setup->pretimeout =3D cpu_to_le32(pretimeout_fmt);
-> > +
-> > +     return nct6694_write_msg(data->nct6694, &cmd_hd, setup);
-> > +}
-...
-> > +static int nct6694_wdt_probe(struct platform_device *pdev)
-> > +{
-> > +     struct device *dev =3D &pdev->dev;
-> > +     struct nct6694 *nct6694 =3D dev_get_drvdata(pdev->dev.parent);
-> > +     struct nct6694_wdt_data *data;
-> > +     struct watchdog_device *wdev;
-> > +     int ret, wdev_idx;
-> > +
-> > +     data =3D devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
-> > +     if (!data)
-> > +             return -ENOMEM;
-> > +
-> > +     data->msg =3D devm_kzalloc(dev, sizeof(union nct6694_wdt_msg),
-> > +                              GFP_KERNEL);
-> > +     if (!data->msg)
-> > +             return -ENOMEM;
-> > +
-> > +     wdev_idx =3D ida_alloc(&nct6694_wdt_ida, GFP_KERNEL);
-> > +     if (wdev_idx < 0)
-> > +             return wdev_idx;
-> > +
->
-> Sorry, I fail to understand why this is needed or even makes sense.
-> That ID is global, so if there is more than one chip they all get more or
-> less random IDs assigned. Why would that be valuable or necessary ?
-> If it is just necessary to give the watchdog different IDs, and the
-> values don't matter, why not just use pdev->id ?
-> I guess that won't work either because it is used as array index below.
-> You'll have to find a different means to identify which of the two watchd=
-ogs
-> is handled by this instance of the driver.
->
-> This warrants a detailed explanation why there need to be globally unique=
- IDs
-> across multiple chips.
->
-
-I will update the code to use pdev->id as assigned by the MFD in the next p=
-atch.
-
-> > +     ret =3D devm_add_action_or_reset(dev, nct6694_wdt_ida_remove, dat=
-a);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     data->dev =3D dev;
-> > +     data->nct6694 =3D nct6694;
-> > +     data->wdev_idx =3D wdev_idx;
-> > +
-> > +     wdev =3D &data->wdev;
-> > +     wdev->info =3D &nct6694_wdt_info;
-> > +     wdev->ops =3D &nct6694_wdt_ops;
-> > +     wdev->timeout =3D timeout[wdev_idx];
-> > +     wdev->pretimeout =3D pretimeout[wdev_idx];
-> > +     if (timeout[wdev_idx] < pretimeout[wdev_idx]) {
->
-> Maybe I am missing it, but I don't see where wdev_idx is bound to [0,1].
-> It is global. There could be a dozen of those chips connected through
-> USB.
->
-> > +             dev_warn(data->dev, "pretimeout < timeout. Setting to zer=
-o\n");
-> > +             wdev->pretimeout =3D 0;
-> > +     }
-> > +
-
-
-Best regards,
-Ming
 
