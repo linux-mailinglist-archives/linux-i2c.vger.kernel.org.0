@@ -1,78 +1,97 @@
-Return-Path: <linux-i2c+bounces-11143-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11144-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09657AC3EEF
-	for <lists+linux-i2c@lfdr.de>; Mon, 26 May 2025 13:51:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44DAFAC462D
+	for <lists+linux-i2c@lfdr.de>; Tue, 27 May 2025 04:22:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BC88E7A147F
-	for <lists+linux-i2c@lfdr.de>; Mon, 26 May 2025 11:50:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EB9513B5505
+	for <lists+linux-i2c@lfdr.de>; Tue, 27 May 2025 02:22:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CEBE1F8723;
-	Mon, 26 May 2025 11:51:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4C1715A864;
+	Tue, 27 May 2025 02:22:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="vNauEA0N";
-	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="h1uYi9+z"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZOnODSpy"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mout-y-111.mailbox.org (mout-y-111.mailbox.org [91.198.250.236])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F49D1C8601;
-	Mon, 26 May 2025 11:51:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.198.250.236
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E2CC1E49F;
+	Tue, 27 May 2025 02:22:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748260307; cv=none; b=YN3etR9T9zCcIe3LsPEECRusCw1palhcaIEBwT5ahKUWBEEMIuEV21Nxjsc4j5j+D/Kze7v8qnLq81t0LvBMARTNfY0kNyoM0A4RVeSU+YUkhI/lVSB6UHHHJCtW/UH2D6LBXvBnCI4UuUnp4wYbEk+I//XHQpKUtN6SE7gsYVc=
+	t=1748312549; cv=none; b=YMBHVs7JMuBBwnAWvMa3B3BeA/7Feut61qWMGHk4YJSOqmCxw+AkfzTtBGop07BTxX2qRKfLPUSh/5fnsy6m0AiIhz89Tn4souMUTft92rN5thTW0OY4PT2aZbMhnAn8CM2bGiBCWnFvMYV8/UtJBKTMQDzoFbJ3AJnHaqbcd2E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748260307; c=relaxed/simple;
-	bh=V00na71ORZdQe7cyi9jM8wn2nHHwRLWsEta5FlPqy64=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=VExWqFXJXllt1cBXnSDQS3jQ09Arj89KGqBcG+02MsY3wj6ZZzIHu6J50Ut9DDrAsL1rc0Ie/6B2+N/RY4CySx3+gweDm/7srDWMmNF8Fa0ObFcoxAKix7GQEsDKWSEoWenHGQPVxSdgDAxNxLPj32q4bloqB9TZuKvcR1B0V68=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=vNauEA0N; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=h1uYi9+z; arc=none smtp.client-ip=91.198.250.236
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [10.196.197.102])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-y-111.mailbox.org (Postfix) with ESMTPS id 4b5Yql2Kshz9xn8;
-	Mon, 26 May 2025 13:45:55 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-	t=1748259955;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=0iEnhsMyyhLqVb+t9d6JK42KoDeD/BDXMFXX8vR1gm8=;
-	b=vNauEA0NxP92F1Au9esFhltpHvXYYxuNADdZkqOwq190xijq8sUJeedWgjFV++/D2nPqWo
-	2wKvs0ebgRzCxSwbUatxTa59OJuLpxGTBj3tyD+L0cA8XVOhv5WUC+VoQCj6zUsRuS6ny+
-	fzgd3fdsAv5Zln8oQMaDKDAp2zVQEfaH4btyj58iXEMIbocpe35DzPZJtGmYh0hLA/EBcQ
-	MH7pnSRBvuekHXsSh6TPEPjPb1UXxv4YLUA16qAMR/PEOHw673PdOajkdyfJzqyyzJIQOZ
-	SFdFF8AEVXgXwiXG1efukjs8s+muR1EyCMzeIK5pnwcGDhRttamqqVvah0AJmQ==
-From: George Stark <george.stark@mailbox.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-	t=1748259953;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=0iEnhsMyyhLqVb+t9d6JK42KoDeD/BDXMFXX8vR1gm8=;
-	b=h1uYi9+zl/rZ0lNwjhkRUL/tTmVRKunr5taucBku1n8wKTMNXzp2fZvVCXUPTcEJAm/XLj
-	AZWVxxgski972QfvxEHhWTt/dzVTflx+t7Jrakov4FmHXPElAsb7/FbGqQy8KbSkcKim3l
-	k5H5vf4UW0Q+xLjOpSsCSlEMpx0+M7knLpbLe1ohTuZ/qeg29aNJIneGLC1R+VYZ1TaldP
-	Z78IdPF4uPhcXljRmMVxunYX5AvK7JLGxBdvIUIQA6zOlUN+CrENrApQDc8pZseZIsDc3Q
-	V3lH0i0i787ghx6NVDaDfQHB5XAPr+bajA21B5SbHCHKAFaN4ndfkOKkChHBFA==
-To: andi.shyti@kernel.org,
-	neil.armstrong@linaro.org,
-	khilman@baylibre.com,
-	jbrunet@baylibre.com,
-	martin.blumenstingl@googlemail.com,
-	george.stark@mailbox.org,
+	s=arc-20240116; t=1748312549; c=relaxed/simple;
+	bh=ax8DORt3nl7M7bKwe/Q/K2IsL+RxtQY7M0N+mXFv2nA=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=mWVLLD3CfFGWuAqunvmDQgcN2+mKViAESv32F3wH3OWSO28pCMB4+FFZPt/Gesq0mowwqd4rpyUpWSMMsMqhpLt3C7Z8ZiCoIxtJBsv/rVvilJHnvuiNcFC3U4wJEz9Wx4hlQcISGRKVLWlekq1ayyGMO6UpShxMUvN+Epxf2rk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZOnODSpy; arc=none smtp.client-ip=209.85.210.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-73bf5aa95e7so1896257b3a.1;
+        Mon, 26 May 2025 19:22:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1748312547; x=1748917347; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zZFVvRJY1fTqIBxgYmrtUDDZUclFNtpBJuPYEOpKE84=;
+        b=ZOnODSpyUiHXkgMTUpJLRpSi+PGrXx3NlAEy0kiK6eXDWzbpFFZeq/TsQg9N8cXq0X
+         l4ktnkfhNaIwBLFLVuuSq+yeORcxws0wD0RczSe7+xw9TyffLRlC1brxSma/osj/0uHh
+         GTct6gOsnw/dw4ZxlDCNkZMs/CeIKbC8dXQS8+TL+i0jnlSV6EodOlQFyykG3Yvvmx89
+         DHiN8rZT1jJokSiyuGdS6nY5N85pFVhOpB46NdoheHqxEJUIXwAueqBRr4McCC6dQxFd
+         r/rZVYRTR/qTFGQeNRN5Dx35hjrxp/l/mtOAFRODLLbP+eiVOGQcN2ruOPxe3kwuHQca
+         BneQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748312547; x=1748917347;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zZFVvRJY1fTqIBxgYmrtUDDZUclFNtpBJuPYEOpKE84=;
+        b=rn3Pzat414aeV+uqimVDwvSFrZo5znjuwZ4Zu+EJ3L/wOt0f7JXapRWb9XnFB3Uedo
+         K1YOqrwdmTwcClyAprpgw/Gi/yaW2xLGDYOgdX0xJdOB0RLgH4qBKoQSrPbGHxCjwM0t
+         eMQXwI6iBUoJcgLhvo+ozj5Or9yXUV8d1d0sqn12NkFzw6tmABFry2/9k8MplHWvRuaE
+         30RDE4C4wr8IcqI7hY92Bdcb/qkP7k9UCOkCb64g/l2M1oGJl/LeY9gBUzMhbvCafe37
+         hnOCTUQG9PNE0kWurhGphHyOtcgbFZ2uXcXdC8VBKZKkxZJ1oPjwlKchweQ6Ovvk5et1
+         nZ9A==
+X-Forwarded-Encrypted: i=1; AJvYcCUVqXiAVT3aoyfjf6KFWoJ5eIT9Kg2HGfffgh8NDvOVAQCr1c/9kvhTWcYecIVoFeazZNwTzLYeZwKsQ8SS@vger.kernel.org, AJvYcCVz4aEBEBG4ADk4/fxT85I9BuRiXvLygRQeQIws95ujKvMb8yorlKKctWgceaXagYUsbQumUA0lavE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwD39tIycDkN2xjLL8pQkPuaI+ob5g0fTGkOxKTmy+KctreEFqO
+	2pWG/McrV/oqS6ylbmj2nfqqoHc73kHTZyLnu6E3vOWk/W40HKaZzKCU
+X-Gm-Gg: ASbGncuuJ0t5whF7DKCRWT8coKntNihAaAUoG7dfx5sYxFLJK+Iu1XbGXe56gQhnPvK
+	DOW8zFXzCnuRLFCMqhboI7U9+Xx9306UQ/sbMZCCcNTX012iwfOp0xhKKzQq1KiMrXjwimiawB9
+	LQC2tfA6fost0ZnP7T/xRMTw63WcMt69YexhIK5sqGy3koNjesJbl38J54pVtZfN3Qmww2ONisr
+	DQ9lYNvZ9/8MperIt5+9DGF0O4T7jPDZ+ATijzj2tN9W39bFRsxlRx0l3PVyMggxTbEjYFPM+eV
+	w5C9da6f3BxJ5M4bePIbD0EoMjoPNn8u9kwoHr0Aq2T1XK89sBDqmqQhQEQm2iTrycFbaCEyvws
+	mKgDmnpcV+JlTpmD49mu3QxWC9CAB5hOhsqJ0004jKx2YPw==
+X-Google-Smtp-Source: AGHT+IFiuntnsnK15d+0mwYVXj7s4P44ohb8smQc2OgNgWwbXnwz5k1zyE7Ux7qber3BmRexfWOpAQ==
+X-Received: by 2002:a05:6a00:4646:b0:742:ae7e:7da8 with SMTP id d2e1a72fcca58-745fdfcc5e9mr16452708b3a.8.1748312547237;
+        Mon, 26 May 2025 19:22:27 -0700 (PDT)
+Received: from localhost.localdomain (c-98-42-219-30.hsd1.ca.comcast.net. [98.42.219.30])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-742a982a08esm17664706b3a.112.2025.05.26.19.22.25
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Mon, 26 May 2025 19:22:26 -0700 (PDT)
+From: Mohammed Elbadry <mohammed.0.elbadry@gmail.com>
+To: 
+Cc: avifishman70@gmail.com,
+	tmaimon77@gmail.com,
+	tali.perry1@gmail.com,
+	venture@google.com,
+	yuenn@google.com,
+	benjaminfair@google.com,
+	andi.shyti@kernel.org,
+	openbmc@lists.ozlabs.org,
 	linux-i2c@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-amlogic@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1] i2c: meson: support smbus block read function
-Date: Mon, 26 May 2025 14:45:33 +0300
-Message-ID: <20250526114533.3287944-1-george.stark@mailbox.org>
+	linux-kernel@vger.kernel.org,
+	Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+Subject: [PATCH v5] i2c: npcm: Add clock toggle recovery
+Date: Mon, 26 May 2025 19:22:23 -0700
+Message-Id: <20250527022223.78371-1-mohammed.0.elbadry@gmail.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+In-Reply-To: <20250328193252.1570811-1-mohammed.0.elbadry@gmail.com>
+References: <20250328193252.1570811-1-mohammed.0.elbadry@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -80,95 +99,45 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-MBO-RS-META: ydmzzk1c465fug6ojipqhh39tsnq41gs
-X-MBO-RS-ID: 4ee51b3cee18d95dcd0
 
-In order to implement reading I2C_SMBUS_BLOCK_DATA call i2c bus driver
-has to support I2C_M_RECV_LEN flag meaning that total block size to read
-will be received in the first byte of the message. So add support for
-I2C_M_RECV_LEN flag.
+From: Tali Perry <tali.perry1@gmail.com>
 
-Signed-off-by: George Stark <george.stark@mailbox.org>
+During init of the bus, the module checks that the bus is idle.
+If one of the lines are stuck try to recover them first before failing.
+Sometimes SDA and SCL are low if improper reset occurs (e.g., reboot).
+
+Signed-off-by: Tali Perry <tali.perry1@gmail.com>
+Signed-off-by: Mohammed Elbadry <mohammed.0.elbadry@gmail.com>
+Reviewed-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
 ---
- drivers/i2c/busses/i2c-meson.c | 27 +++++++++++++++++++++++----
- 1 file changed, 23 insertions(+), 4 deletions(-)
+ drivers/i2c/busses/i2c-npcm7xx.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-meson.c b/drivers/i2c/busses/i2c-meson.c
-index c7b203cc4434..6d8fe151325a 100644
---- a/drivers/i2c/busses/i2c-meson.c
-+++ b/drivers/i2c/busses/i2c-meson.c
-@@ -95,6 +95,7 @@ struct meson_i2c {
- 	int			count;
- 	int			pos;
- 	int			error;
-+	bool			recv_len;
+diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-npcm7xx.c
+index de713b5747fe..0757a23dc1cd 100644
+--- a/drivers/i2c/busses/i2c-npcm7xx.c
++++ b/drivers/i2c/busses/i2c-npcm7xx.c
+@@ -2178,10 +2178,15 @@ static int npcm_i2c_init_module(struct npcm_i2c *bus, enum i2c_mode mode,
  
- 	spinlock_t		lock;
- 	struct completion	done;
-@@ -259,7 +260,7 @@ static void meson_i2c_prepare_xfer(struct meson_i2c *i2c)
- 		meson_i2c_add_token(i2c, TOKEN_DATA);
- 
- 	if (i2c->count) {
--		if (write || i2c->pos + i2c->count < i2c->msg->len)
-+		if (write || i2c->pos + i2c->count < i2c->msg->len || i2c->recv_len)
- 			meson_i2c_add_token(i2c, TOKEN_DATA);
- 		else
- 			meson_i2c_add_token(i2c, TOKEN_DATA_LAST);
-@@ -268,7 +269,7 @@ static void meson_i2c_prepare_xfer(struct meson_i2c *i2c)
- 	if (write)
- 		meson_i2c_put_data(i2c, i2c->msg->buf + i2c->pos, i2c->count);
- 
--	if (i2c->last && i2c->pos + i2c->count >= i2c->msg->len)
-+	if (i2c->last && i2c->pos + i2c->count >= i2c->msg->len && !i2c->recv_len)
- 		meson_i2c_add_token(i2c, TOKEN_STOP);
- 
- 	writel(i2c->tokens[0], i2c->regs + REG_TOK_LIST0);
-@@ -288,9 +289,26 @@ static void meson_i2c_transfer_complete(struct meson_i2c *i2c, u32 ctrl)
- 		i2c->error = -ENXIO;
- 		i2c->state = STATE_IDLE;
- 	} else {
--		if (i2c->state == STATE_READ && i2c->count)
-+		if (i2c->state == STATE_READ && i2c->count) {
- 			meson_i2c_get_data(i2c, i2c->msg->buf + i2c->pos,
- 					   i2c->count);
-+			if (i2c->recv_len) {
-+				unsigned int len = i2c->msg->buf[0];
-+
-+				if (unlikely(len > I2C_SMBUS_BLOCK_MAX)) {
-+					dev_dbg(i2c->dev,
-+						"smbus block size %d is too big\n",
-+						len);
-+
-+					i2c->error = -EPROTO;
-+					i2c->state = STATE_IDLE;
-+					return;
-+				}
-+
-+				i2c->recv_len = false;
-+				i2c->msg->len += len;
-+			}
+ 	/* Check HW is OK: SDA and SCL should be high at this point. */
+ 	if ((npcm_i2c_get_SDA(&bus->adap) == 0) || (npcm_i2c_get_SCL(&bus->adap) == 0)) {
+-		dev_err(bus->dev, "I2C%d init fail: lines are low\n", bus->num);
+-		dev_err(bus->dev, "SDA=%d SCL=%d\n", npcm_i2c_get_SDA(&bus->adap),
+-			npcm_i2c_get_SCL(&bus->adap));
+-		return -ENXIO;
++		dev_warn(bus->dev, " I2C%d SDA=%d SCL=%d, attempting to recover\n", bus->num,
++				 npcm_i2c_get_SDA(&bus->adap), npcm_i2c_get_SCL(&bus->adap));
++		ret = npcm_i2c_recovery_tgclk(&bus->adap);
++		if (ret) {
++			dev_err(bus->dev, "I2C%d init fail: SDA=%d SCL=%d\n",
++				bus->num, npcm_i2c_get_SDA(&bus->adap),
++				npcm_i2c_get_SCL(&bus->adap));
++			return ret;
 +		}
+ 	}
  
- 		i2c->pos += i2c->count;
- 
-@@ -371,6 +389,7 @@ static int meson_i2c_xfer_msg(struct meson_i2c *i2c, struct i2c_msg *msg,
- 		meson_i2c_do_start(i2c, msg);
- 
- 	i2c->state = (msg->flags & I2C_M_RD) ? STATE_READ : STATE_WRITE;
-+	i2c->recv_len = (msg->flags & I2C_M_RD) && (i2c->msg->flags & I2C_M_RECV_LEN);
- 	meson_i2c_prepare_xfer(i2c);
- 
- 	if (!atomic)
-@@ -444,7 +463,7 @@ static int meson_i2c_xfer_atomic(struct i2c_adapter *adap,
- 
- static u32 meson_i2c_func(struct i2c_adapter *adap)
- {
--	return I2C_FUNC_I2C | I2C_FUNC_SMBUS_EMUL;
-+	return I2C_FUNC_I2C | I2C_FUNC_SMBUS_EMUL | I2C_FUNC_SMBUS_READ_BLOCK_DATA;
- }
- 
- static const struct i2c_algorithm meson_i2c_algorithm = {
+ 	npcm_i2c_int_enable(bus, true);
 -- 
-2.25.1
+2.39.5 (Apple Git-154)
 
 
