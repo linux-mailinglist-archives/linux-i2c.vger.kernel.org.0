@@ -1,245 +1,154 @@
-Return-Path: <linux-i2c+bounces-11148-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11149-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF43CAC5EE7
-	for <lists+linux-i2c@lfdr.de>; Wed, 28 May 2025 03:51:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 546E4AC62B5
+	for <lists+linux-i2c@lfdr.de>; Wed, 28 May 2025 09:14:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 802551BA478B
-	for <lists+linux-i2c@lfdr.de>; Wed, 28 May 2025 01:51:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CA3B73A5873
+	for <lists+linux-i2c@lfdr.de>; Wed, 28 May 2025 07:13:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C1461A841F;
-	Wed, 28 May 2025 01:51:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4E9724395C;
+	Wed, 28 May 2025 07:14:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="CVvMjFAh"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ls50IZf6"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11010009.outbound.protection.outlook.com [52.101.69.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 680E7148838;
-	Wed, 28 May 2025 01:50:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.69.9
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748397059; cv=fail; b=h3BPdWncKSt+f5JSJhnuXH3o7cZb9H8okTuF3Jwt/sAhYbRhWSvDGD9SmHV4jxoLK621fI7NCZrrfZ3faSEWw4hKYEDmqDCUUMzjMlfKHoKi8drXr61WIc2K7aJnngsN40k67XdvRosyqec835wIDHCFSerc0DQ9X+C43UooY1Q=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748397059; c=relaxed/simple;
-	bh=4UZJhi9j3RBXHt11F+pOsVPPrN416s99JSGJwxAe/mI=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=eOPMY1phUlS/LoCSTxzSFJmLOwjtiKpUc3VUrSoOZ67tGcubckgETGFhJZjFZPttvsOBTGPG3ne/fQSZKCPWbv7Fj2+l6vMdKGKloaG+UpOUigRzdKYUKyrc2+vxm3IVX+rm5Zgw4CsctNeGDxxTB7hJ26aRhq6wifKoi+zxtlA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=CVvMjFAh; arc=fail smtp.client-ip=52.101.69.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=xIDULv1PlDhE+/YHN4WkSb/b5o1N2JHlDdFyJccR3WZUMFqZ1WEz7GTvxux5DJ19/wkMHOHPU6yiuVjEBYdsOCDAfJVlyugSji2mhNZYpGMFL1W9I8lzb9yBLoOYqDe209hiIyT1jNnysV1qTx/J+TgIyxdE9OJTEQ6NBTahwC67K+qvjRcpA0TLd1jaud5n7CNDM9P5cxqoqZSXAbiesbn/7uNWkb+HlUutJQ3PSeEwIg2sFO+9cID73DNCfI/l5pZ94GaLvVK+AO2C8Oyn1zVc6ZavABJRg0EX81cv0KDrd9qmbCtvGNuzpRUvhJH9eB5ei7MOTasnO8+ag8aOQQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IUPmQLckLD3bKgkRnwdcjXEmylTPnhBf/XgCTqcGmcI=;
- b=EywfDWhuUdmVe/fsJEp/q4Q5ZiMICZjyonug9+eCHJZLl3dKSffH4WH4JPKaiwy6qRmjtSfO+H2fpl/fgeHPOX22CHrC/2GzgeEqgXqreumy0vPTEMOHnGBJK7gcKTyDXeFw/lOfRN0gPhAH3zXca/H29Jjf8ENfnNaxTthZd5jsUKdDpkNo/J+Mztdyb0EHqDNFWX9uj7YJ1BwLqgNsYLz/iAggun1ZZcOhbVVedCbvAHPAMdIms/+HizYrNlAbmdCzFVIMwmlUmSZpORBdlh38eEdMgXobwlhKhQI6n72qvkFNFldO2Tw1rhG8kANyV6Co8DPLCfXvaLBf91REJA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IUPmQLckLD3bKgkRnwdcjXEmylTPnhBf/XgCTqcGmcI=;
- b=CVvMjFAhRNRK/tuPGCicKXUnC0+eyfwVM83IS2kywAdsZW93vyQaoikMC4KU3HgAIKNDQFQBnxA5UIg7iAwaOFyDNSkfuPLP51xwOoQYiQH7AzP991qRzPECoXbeHGqUTh7m74st9xFt4j7yc8qXnWoi08WC3kgN1TlEvIBvC+f6L2H4Kls2T8iZfp0tEnzKNf3xBogOovrW8gTNCPEgCf/1qouyn7mIpRC6ubUSK/pKKs+UbfQJQ+Qe+PkugiUo/CBiMpkgKD6ncjQU7qTCt8PWOnsXMr2hacU5dcKPTBpxMiXCtL/F/TDT6nTImMcrWO2kOTZiggJGPFlfA1iF/g==
-Received: from VI2PR04MB11147.eurprd04.prod.outlook.com
- (2603:10a6:800:293::14) by GV2PR04MB11240.eurprd04.prod.outlook.com
- (2603:10a6:150:27b::10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8769.21; Wed, 28 May
- 2025 01:50:52 +0000
-Received: from VI2PR04MB11147.eurprd04.prod.outlook.com
- ([fe80::75ad:fac7:cfe7:b687]) by VI2PR04MB11147.eurprd04.prod.outlook.com
- ([fe80::75ad:fac7:cfe7:b687%6]) with mapi id 15.20.8769.019; Wed, 28 May 2025
- 01:50:51 +0000
-From: Carlos Song <carlos.song@nxp.com>
-To: KUCHARCZYK Lukasz <lukasz.kucharczyk@leica-geosystems.com>, Oleksij Rempel
-	<o.rempel@pengutronix.de>, "stefan.eichenberger@toradex.com"
-	<stefan.eichenberger@toradex.com>, Pengutronix Kernel Team
-	<kernel@pengutronix.de>, Andi Shyti <andi.shyti@kernel.org>, Shawn Guo
-	<shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, Fabio Estevam
-	<festevam@gmail.com>
-CC: "open list:FREESCALE IMX I2C DRIVER" <linux-i2c@vger.kernel.org>, "open
- list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" <imx@lists.linux.dev>,
-	"moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE"
-	<linux-arm-kernel@lists.infradead.org>, open list
-	<linux-kernel@vger.kernel.org>, GEO-CHHER-bsp-development
-	<bsp-development.geo@leica-geosystems.com>,
-	"customers.leicageo@pengutronix.de" <customers.leicageo@pengutronix.de>
-Subject: RE: [PATCH] i2c: imx: fix emulated smbus block read
-Thread-Topic: [PATCH] i2c: imx: fix emulated smbus block read
-Thread-Index: AQHbz3LwOG6Zi4G6CE6xFwOmWKlW/g==
-Date: Wed, 28 May 2025 01:50:51 +0000
-Message-ID:
- <VI2PR04MB11147341238F4D0531E1E6102E867A@VI2PR04MB11147.eurprd04.prod.outlook.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C57EAEEB2;
+	Wed, 28 May 2025 07:13:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1748416441; cv=none; b=ZndKYbyytIfOLkxDJ5gwsK89BRp9XK1D3etVg7SVdH86xDjn4LmyC8YHrvM7gcOJV7s/wGov3hM1+ctlRUbxI5pa9eaO9/0m8d/mq0UER4zh7wP6iIueh3nQBmc2rdX0nQ/hkvP2Lvf4hI5KgklVpeQyJ1ysRM3/sIZTQRZFkN4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1748416441; c=relaxed/simple;
+	bh=NA01JuBV6s2RqUnPspO8lP68OW1tJ4ZIkKhFb8sGOqI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aS8GXvV9PlMFFMHmrF3Mu8Iaggdgkts0AkyCeLbrjYEgeJ8bpHzLrFXwrxjS+pOgtsEl2lIs2+PQVOwQsf2kJpGR+/xjpR8iC2AQNYe91y+nYACRoA/hKyCaJdDYqYeUEI5pkJBub8Y9F5SEI+Bh+cMq4oxQw4MSp7qZSFKv7uk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ls50IZf6; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-441ab63a415so49193415e9.3;
+        Wed, 28 May 2025 00:13:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1748416438; x=1749021238; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8z38qczvZbxO76S2l6qCCFYCsTxTOPBbrJdkHVddxqs=;
+        b=ls50IZf6S7gTgjssKkwT3+X5ZAiWo14FeesTM7XU1h8G1A3Fargr41caUganQNjEK8
+         WNTr6/rdldGhncgm935lFvGrz8aJB1OPHvAEjsAFmZodeS7Z8y2W5b2dfUk6B/tRMhq3
+         w1x/OznO6chKWaD1k1sUBo8yhzfTqzPeXSGT1SrEEW9qXdOFRTmCBqSaF+Wg9Lim30tV
+         FDkwWAnrRH7iGZdtNyTnLj2XgHujCZXyW05M942G59DADeYBIpN0cac//VibNXpreo2V
+         bt9XooJdQ3VxhebVUmS78F/+ztDa1jHsizHaacLsoN7ExGTVQVelx2Q5C8I6u1WygOkr
+         7G8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748416438; x=1749021238;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8z38qczvZbxO76S2l6qCCFYCsTxTOPBbrJdkHVddxqs=;
+        b=Be5XxqE7KY3DCYvrlnjJuyUXi+c53xUFlcAExSfKGC+DHQlzC4BjhWVXa9rQ0oyZmd
+         XUCEBtL1q+1BcozmofMtoT/8r39Qlyjx07B0/zp7bk319a6FE5W3JgO1lxqSMCAPcPm0
+         3DLHM9Fiv+GhGPt906vPSEn7dwVdyXe9Hj0dAUn9CaifGf5i9AYNYRWBgfgawJhsCLAa
+         7yMldfwMbxDPqndhDSq8zgaZ90cawEAkrj1s2n+3St+nqF6+sf51A9f59xInYRYyFphc
+         EpmWPW4/C0wHu220SPoZxF1h3/upF6csS2stdAkcnpCWGmUpUkiUbk71psxNhwQaeVpC
+         6zUw==
+X-Forwarded-Encrypted: i=1; AJvYcCUohqPlwLTnHU8P/Asf9wHo9Fe7FsCBjdt/0O4McNu0rgihEQjql46+JBSPih9WunnPOng50Qh0N3sdo7ri@vger.kernel.org, AJvYcCX0MopLLSf53HrMokp3xrGnNJuFoSBzUv5emdjIs2t/48/Bg1oGXmIF/NUQ4/Hd0Mz3SuZRcvsDtlg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwlUdMZx3xMbHscqSu8ipRpurPFB68SQ3sYU8MdbW9VUOycSCHw
+	mL7EaqoeAHz75ZnVHeFfU9OfbSlqJFxXdd1+il2mmfPeW1FpISlhuU4XqN+d6Dgp
+X-Gm-Gg: ASbGncuanzINB3JxqPWkM29+gjmSIuyxo2dNgtoRiZFNngFducXi8eP9oWQYWyNs2z9
+	IU92osj3ScZOz71raswon6JY1c7s3Al0lBo+Il35JIDQA97wR/cvCzRU0xPLMkEk8yDsFVqot7g
+	EQuWi8LOeoap9TzI1nNSXY13GNfivYQZJ7+E0O8w+vNacviYhSiWQEXW3ASFg96+gzF6fwa1d5+
+	qadGDxMjs9CCNCbBbOUvoIhGVAwc6N6UVcQkpZr2wzPmqjhIaqGQZTmHMmcCKCtCvPaM6ogUdoJ
+	tcZeAbaLupE8u38wZZTXkcMNYgeB1uYqs9dDaQEqa0K/j3E/jt0=
+X-Google-Smtp-Source: AGHT+IFUeDV6q6xaB+r06fKVdY1G8cH/8XvdGuTg+xFtJRhZxSlobft7u22w3aTFnbPx2ZJc7hHSZg==
+X-Received: by 2002:a05:600c:4ed0:b0:441:b5cb:4f94 with SMTP id 5b1f17b1804b1-44c91ad6b5cmr121816275e9.5.1748416437876;
+        Wed, 28 May 2025 00:13:57 -0700 (PDT)
+Received: from eichest-laptop ([2a02:168:af72:0:a46c:90a2:a3c0:b012])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4500e1ddaeesm11501665e9.35.2025.05.28.00.13.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 May 2025 00:13:57 -0700 (PDT)
+Date: Wed, 28 May 2025 09:13:55 +0200
+From: Stefan Eichenberger <eichest@gmail.com>
+To: Lukasz Kucharczyk <lukasz.kucharczyk@leica-geosystems.com>
+Cc: Oleksij Rempel <o.rempel@pengutronix.de>,
+	stefan.eichenberger@toradex.com,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Andi Shyti <andi.shyti@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	"open list:FREESCALE IMX I2C DRIVER" <linux-i2c@vger.kernel.org>,
+	"open list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" <imx@lists.linux.dev>,
+	"moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" <linux-arm-kernel@lists.infradead.org>,
+	open list <linux-kernel@vger.kernel.org>,
+	bsp-development.geo@leica-geosystems.com,
+	customers.leicageo@pengutronix.de
+Subject: Re: [PATCH] i2c: imx: fix emulated smbus block read
+Message-ID: <aDa3s2TR-GvPmF3z@eichest-laptop>
 References: <20250520122252.1475403-1-lukasz.kucharczyk@leica-geosystems.com>
- <VI2PR04MB11147245BA69A4C19B0DD037EE864A@VI2PR04MB11147.eurprd04.prod.outlook.com>
- <VI1PR06MB8616FBEE8A355BF5A314D504D864A@VI1PR06MB8616.eurprd06.prod.outlook.com>
-In-Reply-To:
- <VI1PR06MB8616FBEE8A355BF5A314D504D864A@VI1PR06MB8616.eurprd06.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: VI2PR04MB11147:EE_|GV2PR04MB11240:EE_
-x-ms-office365-filtering-correlation-id: 54786da8-a9df-41db-4157-08dd9d8a1374
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|376014|1800799024|366016|7416014|7053199007|38070700018;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?QPHnstJNM6SqF34YDt0mYWM19m4r42ti6CMp2Nti8qZxeBbZiWAFQZoPeyvk?=
- =?us-ascii?Q?+/WQv4G4P9QIfVhmmdAgmzAFD9WRPUe7qF1Ftr0/c201b8dviTu4lDBNjAyM?=
- =?us-ascii?Q?F4HW7HAGZD9KUyOiDvWYud/GKJq+TC62cHprFnqHuaD7BHQsnXRFAsSkEblH?=
- =?us-ascii?Q?bHX5lQKbcixuVAu8AFbP2pwB2s2immFVxWdLaGogsS7lbayPkP3ZHYCM+6Ed?=
- =?us-ascii?Q?Tvx5/y58FgHDOWi5FH9iTb9iMV2Aw7btZD0hyedpfDMQc7iBvVrsW2AChP26?=
- =?us-ascii?Q?yLWBMoC0748Rnu6qlW9ePeiZ4rtNRdgs6TcjZ3LRgoOrPDksv9R0fJCikZkt?=
- =?us-ascii?Q?U3bzGob9a4yy3SfsKYzWWgfzd9Uk3qzy14LsRfYC9xz/RYZFKmdHRVatBwEV?=
- =?us-ascii?Q?awS9X7nBAmYNZE9JKFQo3d9YF1Op9MoWbqtU4HMDkHQOShkzWzzUeEtQYEK9?=
- =?us-ascii?Q?WIVZ2tGG5qd2Cxh56V1Kr4bbYmhwx4n+4sjCSf+bT9fTzVKdL6BkFdug8MkE?=
- =?us-ascii?Q?2Pr422GD1SjaIYbZ/z32frTm0KsY8RP7fPzyK7dzySsdJ4ZCnVNaKjPgZWXi?=
- =?us-ascii?Q?2D7YvUxT6Gg2+YH+II7wqgPXptUcaW4Nt4Iw+H3psi01q6UTl67LJrD3u0Xn?=
- =?us-ascii?Q?tMrZEAVK8tMg7mvdovC35sEZGOCRNTTbx8CxjIkBzC/5u+6RMFFZA1TPcCnm?=
- =?us-ascii?Q?Whinxf68T4yo+6a4ldKdnMbrsbkBedOOdeZUKuFrTg+ChOH9HMrd91+atBLR?=
- =?us-ascii?Q?6pUtqPMqOZAlcEmvKI4YPHmKFX8jQ3xHyTJLMf7W/DloORq5FClogB5w6MnU?=
- =?us-ascii?Q?osxk0t+/60gR8giNr6DLTRliE4NC94zyOgRlw7eeJiujN1SyVFxYaUcVWQsW?=
- =?us-ascii?Q?OtR458QJOl8btDtuF1E8Z8o7aD4RR6m1dIpTE20fVeec2D/4YZcTWb0K0wm2?=
- =?us-ascii?Q?/P8JYuX3iFBoloj2bIL0y0J4HKUltbs7tVNIhqqeeo8mrcFniRyXuI5BJJj2?=
- =?us-ascii?Q?zYdwwgK3Ls3Y238r2yEpHr7wZz7Nj3VFQYfbX9vqRO7tAK2vXnU9Y8CaVwWp?=
- =?us-ascii?Q?sn6eUjRhuL1xKGnkeUsYilZsUKPF03FpUxXe4awDLrwFoZXsUrcrxliELZTK?=
- =?us-ascii?Q?q2R9KHYJYoy5vGs1cpWAWJ6cM3FKzL367aN2l2nIjzMK8v07Z+/dQTvjFk8m?=
- =?us-ascii?Q?PYYRKbkZehNWOsBCOApTRNud8iabkyf+9ItvfcyzpkIvPcw6xRwUiMFjoxA6?=
- =?us-ascii?Q?lXChSUHtQdBJrdCDcWODzZtKSxYpo1MbY6XFA/x5uJX5LIvkEcGBA3hNVely?=
- =?us-ascii?Q?O/igFqmIV989ZGhRIR3YHfh1v90g0AkocXeZm3RtNVbajY9o2ehgd1cuqoaI?=
- =?us-ascii?Q?78UHB2i0zhUMbw7CM9cMXv+ZTxHyjAiAA3xAVrbH1KSkpPkWWbS099ZeY/Rn?=
- =?us-ascii?Q?+CKGdvYsrv1nnSCmQNXbXgE3iBRlJAFPcr1mRsAVP9jHWKdpOyG4qg=3D=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI2PR04MB11147.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016)(7416014)(7053199007)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?ONi71GtnHqfAhu7eoyKZ1nJQnvcnCkbMjZ5rcdx7WjBuTvtdp3RCJ/pQlLOL?=
- =?us-ascii?Q?NteRhK2kRaVNjU1U0k3A6EcAcNvyNR0rUjWnL+xFiDqqYh2tt44ULjxOdCy9?=
- =?us-ascii?Q?mY6I6esrV4AiAQfrBEQB//EWcj+IAUu3UvuPy64bF7fW9i/v7598owfOJLh5?=
- =?us-ascii?Q?NJvnkaF9KLdmalbYJgyRcaXPsJpgpIhX9eOt5TKZ5TWF53DrJDLduS0it/ko?=
- =?us-ascii?Q?b74iNHCI3tBqmNkr6CHzBLBgVM6Bz6XI4JtXws3rEoL2CroqHSSo47cnIB5C?=
- =?us-ascii?Q?F72UYwC3fil8MiCUsAAYJ/yFE4nsyxQ9nYSGVh0yEV/0klmkjadEHdtE/Hwe?=
- =?us-ascii?Q?5M228oFny1gk8uoA0YugFXt79j9q1waVW2fNOTpVSoPKMoeHtrGgaRBFK+jv?=
- =?us-ascii?Q?ZYx2bb58VIB0/1mKiL6wB0ah4sVRLwZjGp4vVWgKnTVHIWFqOM9nPZzGAjer?=
- =?us-ascii?Q?pi4GqPRB5xKJeVHHulfMarAwe9muqScPSYDy2sF20tz7vf3DyuHYwcGgyQUr?=
- =?us-ascii?Q?MJ/2bzx0NOmCapg2ZzGxteKPNzbpnVXGITg3ADG1Zl3Tj1XfdYlO9weBf7iS?=
- =?us-ascii?Q?Lzo7AxdDcVQ3nFcssmVYYWZL+mkb+7nnHe7kVPyaCPRM5/FSiyliCJGmhGQm?=
- =?us-ascii?Q?dBYRkV9NFBpHOWbxcoAI1cW8rplVzJL3sok8MeQ/nRnYxf0quU3Fe2+8zI4n?=
- =?us-ascii?Q?x6MIaa1jrMg/i4wR71+IFUyfJ5llaB2hOEj3FrSpNb8vnUfuX6b4EBaCeC1K?=
- =?us-ascii?Q?zguskrLXp+k6uYKkU2RBbhYQIvITzaZxovcsY/f+bYF8/Dt2RGtrvq4Hd4D5?=
- =?us-ascii?Q?y8jHSQlbdqOtyq/VoU0t8y0wLs94ahg+T/7eRywpMXBzHcGtX5phTPwR8O65?=
- =?us-ascii?Q?zRfx+qIk6GK3Nt3AhdAQyM1AELQrJnWQ4El7tRiJfeGcligbX2fZlbF0azJT?=
- =?us-ascii?Q?DkhzYJXz0RgmMkCuAG0je09vPztzIYQLlBl7jVCjYds/dINrxY6qkueLaLnZ?=
- =?us-ascii?Q?fKYYIcEfrcMy70BlerG3OE8d/4/3Bz1jXhFHU2wQu6HkxgYw1qKkvBglJZw/?=
- =?us-ascii?Q?kvx003F1Vw2YLkO636W5JiCG3auS+UoN7rTlsB5zrw7ShLOR35XBfWHgL61x?=
- =?us-ascii?Q?AaYiTu5lzn5ApM6+WywBnaR7TBqk4nzRXzXnEf0lz2UGRUzpeeVArYlsZY6b?=
- =?us-ascii?Q?9lTeGkvXnXgi+JBQMFJ+UT4kIjr1tJ00DDfN6NtRos3a7NX0kIvavi0QWd/F?=
- =?us-ascii?Q?6/9m303WMbGMXDQVTg3SNUSAk+4FeLdS2TuzC+mHPr1uf0y5XYHxTLBIdlAy?=
- =?us-ascii?Q?RD1qWo9VuuzdQ0d3ovYl6sY2gHb34yksZi2FCWw+CllQ8rPGriFiHDwhktdw?=
- =?us-ascii?Q?utVCESl77lr70SAf824Pm9vgAsCKMQH5ovfjLsvWYlYJtEB2Zg9xa3XZoxFG?=
- =?us-ascii?Q?JoyDoN0g7xHfleKUexO5v/uJvzs00lDvTKGJiq3AAQJ1zgSxd6bXuLYzh20Y?=
- =?us-ascii?Q?hEW1kL/APIr5wuXAMG/bMxCVHW39Kz4D3uIif0/T5fMfltWzkxcNXRKSILnm?=
- =?us-ascii?Q?vAGjjLytZpH/IEVtihQCIaaTy1pr+bNUV+3M4IIa?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI2PR04MB11147.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 54786da8-a9df-41db-4157-08dd9d8a1374
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 May 2025 01:50:51.3365
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: OLCH1xohZW9hiQcTQAIB8SNB8omb1KIsWW5/xkdhoKp24n+tubbFybBbZBOAdZSwHGAST8YE9AqcomUbcadtlQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV2PR04MB11240
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250520122252.1475403-1-lukasz.kucharczyk@leica-geosystems.com>
 
+Hi Lukasz,
 
+On Tue, May 20, 2025 at 02:22:52PM +0200, Lukasz Kucharczyk wrote:
+> Acknowledge the byte count submitted by the target.
+> When I2C_SMBUS_BLOCK_DATA read operation is executed by
+> i2c_smbus_xfer_emulated(), the length of the second (read) message is set
+> to 1. Length of the block is supposed to be obtained from the target by the
+> underlying bus driver.
+> The i2c_imx_isr_read() function should emit the acknowledge on i2c bus
+> after reading the first byte (i.e., byte count) while processing such
+> message (as defined in Section 6.5.7 of System Management Bus
+> Specification [1]). Without this acknowledge, the target does not submit
+> subsequent bytes and the controller only reads 0xff's.
+> 
+> In addition, store the length of block data obtained from the target in
+> the buffer provided by i2c_smbus_xfer_emulated() - otherwise the first
+> byte of actual data is erroneously interpreted as length of the data
+> block.
+> 
+> [1] https://smbus.org/specs/SMBus_3_3_20240512.pdf
+> 
+> Fixes: 5f5c2d4579ca ("i2c: imx: prevent rescheduling in non dma mode")
+> Signed-off-by: Lukasz Kucharczyk <lukasz.kucharczyk@leica-geosystems.com>
+> ---
+>  drivers/i2c/busses/i2c-imx.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
+> index ee0d25b498cb..4bf550a3b98d 100644
+> --- a/drivers/i2c/busses/i2c-imx.c
+> +++ b/drivers/i2c/busses/i2c-imx.c
+> @@ -1008,7 +1008,7 @@ static inline int i2c_imx_isr_read(struct imx_i2c_struct *i2c_imx)
+>  	/* setup bus to read data */
+>  	temp = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2CR);
+>  	temp &= ~I2CR_MTX;
+> -	if (i2c_imx->msg->len - 1)
+> +	if ((i2c_imx->msg->len - 1) || (i2c_imx->msg->flags & I2C_M_RECV_LEN))
+>  		temp &= ~I2CR_TXAK;
+>  
+>  	imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2CR);
+> @@ -1063,6 +1063,7 @@ static inline void i2c_imx_isr_read_block_data_len(struct imx_i2c_struct *i2c_im
+>  		wake_up(&i2c_imx->queue);
+>  	}
+>  	i2c_imx->msg->len += len;
+> +	i2c_imx->msg->buf[i2c_imx->msg_buf_idx++] = len;
+>  }
+>  
+>  static irqreturn_t i2c_imx_master_isr(struct imx_i2c_struct *i2c_imx, unsigned int status)
 
-> -----Original Message-----
-> From: KUCHARCZYK Lukasz <lukasz.kucharczyk@leica-geosystems.com>
-> Sent: Tuesday, May 27, 2025 8:03 PM
-> To: Carlos Song <carlos.song@nxp.com>; Oleksij Rempel
-> <o.rempel@pengutronix.de>; stefan.eichenberger@toradex.com; Pengutronix
-> Kernel Team <kernel@pengutronix.de>; Andi Shyti <andi.shyti@kernel.org>;
-> Shawn Guo <shawnguo@kernel.org>; Sascha Hauer <s.hauer@pengutronix.de>;
-> Fabio Estevam <festevam@gmail.com>
-> Cc: open list:FREESCALE IMX I2C DRIVER <linux-i2c@vger.kernel.org>; open
-> list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE <imx@lists.linux.dev>;
-> moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE
-> <linux-arm-kernel@lists.infradead.org>; open list
-> <linux-kernel@vger.kernel.org>; GEO-CHHER-bsp-development
-> <bsp-development.geo@leica-geosystems.com>;
-> customers.leicageo@pengutronix.de
-> Subject: [EXT] RE: [PATCH] i2c: imx: fix emulated smbus block read
->=20
-> [You don't often get email from lukasz.kucharczyk@leica-geosystems.com.
-> Learn why this is important at
-> https://aka.ms/LearnAboutSenderIdentification ]
->=20
-> Caution: This is an external email. Please take care when clicking links =
-or
-> opening attachments. When in doubt, report the message using the 'Report
-> this email' button
->=20
->=20
-> > -----Original Message-----
-> > From: Carlos Song <carlos.song@nxp.com>
-> > Sent: 27 May 2025 12:46
-> > Subject: RE: [PATCH] i2c: imx: fix emulated smbus block read
-> >
-> > I2C SMBUS block read need first read one byte from data length offset
-> > then I2C will know how many bytes need to continue read. For this
-> > issue you can meet " Error: Read failed " when using i2cget -f -y bus a=
-ddress
-> offset s to test.
-> >
-> > So you apply this change to make i2c-imx controller can behavior like t=
-his:
-> >
-> > S Addr Wr [A] Comm [A] Sr Addr Rd [A] [Count] A [Data] A [Data] A ...
-> > A [Data] NA P
-> >
-> > Do I understand this right?
->=20
-> hi Carlos; thanks for the message! Yes, exactly, that's correct.
->=20
-> I run into this issue while trying to integrate a smart battery into a IM=
-X8-based
-> system. Fetching of properties that rely on data block read operation (i.=
-e.,
-> ManufacturerName, DeviceName,  DeviceChemistry and
-> ManufacturerData) was failing.
->=20
-> With the fix the block read looks just like you described.
->=20
->=20
-> Without the fix, the transaction on the bus looked somehow like:
-> S Addr Wr [A] Comm [A] Sr Addr Rd [A] [Count] NA [0xff] NA [0xff] NA ... =
-[0xff]
-> NA P
->=20
-> (i.e., the Count is not acknowledged and SDA remains high afterwards).
->=20
+This makes sense, we never tested the actual SMBus emulation. Thanks a lot for the fix.
 
-Good, thank you for your work!
-Reviewed-by: Carlos Song <carlos.song@nxp.com>
-
-> Lukasz
-
+Reviewed-by: Stefan Eichenberger <eichest@gmail.com>
 
