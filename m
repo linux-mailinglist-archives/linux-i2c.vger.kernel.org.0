@@ -1,154 +1,195 @@
-Return-Path: <linux-i2c+bounces-11149-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11150-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 546E4AC62B5
-	for <lists+linux-i2c@lfdr.de>; Wed, 28 May 2025 09:14:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 27742AC6480
+	for <lists+linux-i2c@lfdr.de>; Wed, 28 May 2025 10:30:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CA3B73A5873
-	for <lists+linux-i2c@lfdr.de>; Wed, 28 May 2025 07:13:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A3B7B3ACBF1
+	for <lists+linux-i2c@lfdr.de>; Wed, 28 May 2025 08:29:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4E9724395C;
-	Wed, 28 May 2025 07:14:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA1C4268FF1;
+	Wed, 28 May 2025 08:30:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ls50IZf6"
+	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="HqzETtbx"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C57EAEEB2;
-	Wed, 28 May 2025 07:13:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2DF9268C7F;
+	Wed, 28 May 2025 08:30:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.120
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748416441; cv=none; b=ZndKYbyytIfOLkxDJ5gwsK89BRp9XK1D3etVg7SVdH86xDjn4LmyC8YHrvM7gcOJV7s/wGov3hM1+ctlRUbxI5pa9eaO9/0m8d/mq0UER4zh7wP6iIueh3nQBmc2rdX0nQ/hkvP2Lvf4hI5KgklVpeQyJ1ysRM3/sIZTQRZFkN4=
+	t=1748421006; cv=none; b=daP3He3F/l79GbRzv85c6/MVnFvfK+ps2Og4GXqeGqYE8OFUvif+pqsDP6VFMENaNMn/XpIq8ID8DGfUj5ZgFcPdXnwJXzn5AAvvq3f35/aknokrYGRK7Orm17T2Y493eGdf5jjIDmOFPTpJ5KKvAv1nPCPS/HV0YS/7otf0LQM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748416441; c=relaxed/simple;
-	bh=NA01JuBV6s2RqUnPspO8lP68OW1tJ4ZIkKhFb8sGOqI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aS8GXvV9PlMFFMHmrF3Mu8Iaggdgkts0AkyCeLbrjYEgeJ8bpHzLrFXwrxjS+pOgtsEl2lIs2+PQVOwQsf2kJpGR+/xjpR8iC2AQNYe91y+nYACRoA/hKyCaJdDYqYeUEI5pkJBub8Y9F5SEI+Bh+cMq4oxQw4MSp7qZSFKv7uk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ls50IZf6; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-441ab63a415so49193415e9.3;
-        Wed, 28 May 2025 00:13:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1748416438; x=1749021238; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8z38qczvZbxO76S2l6qCCFYCsTxTOPBbrJdkHVddxqs=;
-        b=ls50IZf6S7gTgjssKkwT3+X5ZAiWo14FeesTM7XU1h8G1A3Fargr41caUganQNjEK8
-         WNTr6/rdldGhncgm935lFvGrz8aJB1OPHvAEjsAFmZodeS7Z8y2W5b2dfUk6B/tRMhq3
-         w1x/OznO6chKWaD1k1sUBo8yhzfTqzPeXSGT1SrEEW9qXdOFRTmCBqSaF+Wg9Lim30tV
-         FDkwWAnrRH7iGZdtNyTnLj2XgHujCZXyW05M942G59DADeYBIpN0cac//VibNXpreo2V
-         bt9XooJdQ3VxhebVUmS78F/+ztDa1jHsizHaacLsoN7ExGTVQVelx2Q5C8I6u1WygOkr
-         7G8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748416438; x=1749021238;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8z38qczvZbxO76S2l6qCCFYCsTxTOPBbrJdkHVddxqs=;
-        b=Be5XxqE7KY3DCYvrlnjJuyUXi+c53xUFlcAExSfKGC+DHQlzC4BjhWVXa9rQ0oyZmd
-         XUCEBtL1q+1BcozmofMtoT/8r39Qlyjx07B0/zp7bk319a6FE5W3JgO1lxqSMCAPcPm0
-         3DLHM9Fiv+GhGPt906vPSEn7dwVdyXe9Hj0dAUn9CaifGf5i9AYNYRWBgfgawJhsCLAa
-         7yMldfwMbxDPqndhDSq8zgaZ90cawEAkrj1s2n+3St+nqF6+sf51A9f59xInYRYyFphc
-         EpmWPW4/C0wHu220SPoZxF1h3/upF6csS2stdAkcnpCWGmUpUkiUbk71psxNhwQaeVpC
-         6zUw==
-X-Forwarded-Encrypted: i=1; AJvYcCUohqPlwLTnHU8P/Asf9wHo9Fe7FsCBjdt/0O4McNu0rgihEQjql46+JBSPih9WunnPOng50Qh0N3sdo7ri@vger.kernel.org, AJvYcCX0MopLLSf53HrMokp3xrGnNJuFoSBzUv5emdjIs2t/48/Bg1oGXmIF/NUQ4/Hd0Mz3SuZRcvsDtlg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwlUdMZx3xMbHscqSu8ipRpurPFB68SQ3sYU8MdbW9VUOycSCHw
-	mL7EaqoeAHz75ZnVHeFfU9OfbSlqJFxXdd1+il2mmfPeW1FpISlhuU4XqN+d6Dgp
-X-Gm-Gg: ASbGncuanzINB3JxqPWkM29+gjmSIuyxo2dNgtoRiZFNngFducXi8eP9oWQYWyNs2z9
-	IU92osj3ScZOz71raswon6JY1c7s3Al0lBo+Il35JIDQA97wR/cvCzRU0xPLMkEk8yDsFVqot7g
-	EQuWi8LOeoap9TzI1nNSXY13GNfivYQZJ7+E0O8w+vNacviYhSiWQEXW3ASFg96+gzF6fwa1d5+
-	qadGDxMjs9CCNCbBbOUvoIhGVAwc6N6UVcQkpZr2wzPmqjhIaqGQZTmHMmcCKCtCvPaM6ogUdoJ
-	tcZeAbaLupE8u38wZZTXkcMNYgeB1uYqs9dDaQEqa0K/j3E/jt0=
-X-Google-Smtp-Source: AGHT+IFUeDV6q6xaB+r06fKVdY1G8cH/8XvdGuTg+xFtJRhZxSlobft7u22w3aTFnbPx2ZJc7hHSZg==
-X-Received: by 2002:a05:600c:4ed0:b0:441:b5cb:4f94 with SMTP id 5b1f17b1804b1-44c91ad6b5cmr121816275e9.5.1748416437876;
-        Wed, 28 May 2025 00:13:57 -0700 (PDT)
-Received: from eichest-laptop ([2a02:168:af72:0:a46c:90a2:a3c0:b012])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4500e1ddaeesm11501665e9.35.2025.05.28.00.13.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 May 2025 00:13:57 -0700 (PDT)
-Date: Wed, 28 May 2025 09:13:55 +0200
-From: Stefan Eichenberger <eichest@gmail.com>
-To: Lukasz Kucharczyk <lukasz.kucharczyk@leica-geosystems.com>
-Cc: Oleksij Rempel <o.rempel@pengutronix.de>,
-	stefan.eichenberger@toradex.com,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Andi Shyti <andi.shyti@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	"open list:FREESCALE IMX I2C DRIVER" <linux-i2c@vger.kernel.org>,
-	"open list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" <imx@lists.linux.dev>,
-	"moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" <linux-arm-kernel@lists.infradead.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	bsp-development.geo@leica-geosystems.com,
-	customers.leicageo@pengutronix.de
-Subject: Re: [PATCH] i2c: imx: fix emulated smbus block read
-Message-ID: <aDa3s2TR-GvPmF3z@eichest-laptop>
-References: <20250520122252.1475403-1-lukasz.kucharczyk@leica-geosystems.com>
+	s=arc-20240116; t=1748421006; c=relaxed/simple;
+	bh=/Ow1PmBI4yy/CopXyfAdNlFq6FA7vnRAq4zgFhQTxKw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=hGStCR5LNi5yNyQT4PtE7qr+XFd+cGFhiv0tt7kNUhw9sMN25MYQKa8pewlKY6onWKG8CtuXwQLLSU9iijsmgkGNH+JCnQKc0KCEdOjA0MicCMCpcwdnY4FahB3Nwb9lD9i6ZnunyOHfMXySx4v4lByzpYUL/Ch5tWgpG5/8ZUc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=HqzETtbx; arc=none smtp.client-ip=185.125.188.120
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+Received: from 2001-b400-e281-d348-7542-b73b-b580-4415.emome-ip6.hinet.net (unknown [10.101.200.229])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 775C73F796;
+	Wed, 28 May 2025 08:23:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1748420640;
+	bh=AstLYq3VMdkE8US+TLkn18adQxf0vcyp/yq783YeBek=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc;
+	b=HqzETtbxp9eSvSjd4i+6yFEnSZEb1i9MEzQcHtZ7FoLQF476btywbmOYZgbqxhPHh
+	 Lxvb/WY6lVhCBQtUWs+inJsmeQ1835urs+4znbxuqWoQSl8v5Tqr5t2cZFXgwOkzvK
+	 fa30jjEkYkTqJRJteD135smOcUuFk51YVSVzZCs3+skQc7eirzxEqyHkxAwQdYyN9F
+	 pdJuM/SENumq5xo/yFmME1FTQGbvKq8qwvGc7AXDl47ssvH5tlJnVmDpG352kwNinz
+	 mkxP/ZpNxit7Pdp/9fVDHEW0iEJsnTlI7P1tlbbi3VYM8eHMxJ4aRUIaC5NbkS2ggB
+	 H87eJbr6P/Low==
+From: "Yo-Jung (Leo) Lin" <leo.lin@canonical.com>
+Date: Wed, 28 May 2025 16:23:40 +0800
+Subject: [PATCH] i2c: i801: Do not instantiate spd5118 under SPD Write
+ Disable
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250520122252.1475403-1-lukasz.kucharczyk@leica-geosystems.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250528-for-upstream-not-instantiate-spd5118-v1-1-8216e2d38918@canonical.com>
+X-B4-Tracking: v=1; b=H4sIAAvINmgC/x3NwQrCMAyA4VcZORtos7WIryIeOpdpDrYl6UQYe
+ /cVj9/l/3cwVmGD27CD8ldMSu7wlwGe75RfjLJ0AzkKLlDEtShu1Zpy+mAuDSVbS7lJaoxWl+D
+ 9Fac4EoV5nGJy0FNVeZXff3N/HMcJlOgKb3YAAAA=
+To: Jean Delvare <jdelvare@suse.com>, Andi Shyti <andi.shyti@kernel.org>, 
+ Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: Guenter Roeck <linux@roeck-us.net>, 
+ "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>, 
+ linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ "Yo-Jung Lin (Leo)" <leo.lin@canonical.com>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3638; i=leo.lin@canonical.com;
+ h=from:subject:message-id; bh=/Ow1PmBI4yy/CopXyfAdNlFq6FA7vnRAq4zgFhQTxKw=;
+ b=owEBbQKS/ZANAwAKAV8XsZZKKe6GAcsmYgBoNsgdiyPwpuPkoaBHvJPCxpFGouM9JGEIYo+Kx
+ dhDZaHqswyJAjMEAAEKAB0WIQQzqV4kW+yguuqHrw5fF7GWSinuhgUCaDbIHQAKCRBfF7GWSinu
+ hjv9D/9ln2uf0BMDipKtSG5gJLMIsM2aDUV2VLoqJkm2bTaI3BIX0EckM7cI/Cpw+zecR2+eo2b
+ 7JWz9I8LjrD+l/BlI1hNXR9Z32XousFTKB0QZX9N6Bt/lhwY1a1uVwuj/Yq//irnPtA2l0zGbBg
+ ubyyqSPNBGu9TML/BVFRrtWCAL6X37HqqrFhkNBck9Lpxx1husx/+VQRsujad3leL3qaDEAVMKi
+ QHrL56I6yMfVTuTTyz6Xad6Q4si8ZpLZmkU1CxWY2/5fBrgX48Gnrc95A2n5hB3BGZ8nUGBBE5l
+ DzHrFA7IE/ReqwyKZTbLcEnGg/4Xq0NGTOkw9TNbXm7/4NrQ9CyzcKvtX/f9/aVfrmIzUC0cGY0
+ 7XMtGH98dexr5gTU2zgLSdIJJgmq5xid8WFFJLpIlk7B5jwHr8AvHqCubBXYWX7X5Mibazr47gg
+ CS1Yv00UsyJfWIfIAWNpYaEJSFMCwJGD3NMrGNZQtjct1vnLqavLPIWGC4CtAaktyFKdmtgb/pq
+ BMk7Eha4H3H5Myg/Wc2/Jy34kQ625BO13BAU/Zl4f64TVL6AiJKMMg0zRgGU728K5flvEp/OWan
+ K4r9Z75wwQYH9CPxCUEfvFjrYqsn9VmZJYLlEw5JtabzY+koEBo5D8SHZQx8SeS+ehkabIjOTjb
+ CDJPnYLWbAJcXpg==
+X-Developer-Key: i=leo.lin@canonical.com; a=openpgp;
+ fpr=33A95E245BECA0BAEA87AF0E5F17B1964A29EE86
 
-Hi Lukasz,
+If SPD Write Disable bit in the SMBus is enabled, writing data to
+addresses from 0x50 to 0x57 is forbidden. This may lead to the
+following issues for spd5118 devices:
 
-On Tue, May 20, 2025 at 02:22:52PM +0200, Lukasz Kucharczyk wrote:
-> Acknowledge the byte count submitted by the target.
-> When I2C_SMBUS_BLOCK_DATA read operation is executed by
-> i2c_smbus_xfer_emulated(), the length of the second (read) message is set
-> to 1. Length of the block is supposed to be obtained from the target by the
-> underlying bus driver.
-> The i2c_imx_isr_read() function should emit the acknowledge on i2c bus
-> after reading the first byte (i.e., byte count) while processing such
-> message (as defined in Section 6.5.7 of System Management Bus
-> Specification [1]). Without this acknowledge, the target does not submit
-> subsequent bytes and the controller only reads 0xff's.
-> 
-> In addition, store the length of block data obtained from the target in
-> the buffer provided by i2c_smbus_xfer_emulated() - otherwise the first
-> byte of actual data is erroneously interpreted as length of the data
-> block.
-> 
-> [1] https://smbus.org/specs/SMBus_3_3_20240512.pdf
-> 
-> Fixes: 5f5c2d4579ca ("i2c: imx: prevent rescheduling in non dma mode")
-> Signed-off-by: Lukasz Kucharczyk <lukasz.kucharczyk@leica-geosystems.com>
-> ---
->  drivers/i2c/busses/i2c-imx.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
-> index ee0d25b498cb..4bf550a3b98d 100644
-> --- a/drivers/i2c/busses/i2c-imx.c
-> +++ b/drivers/i2c/busses/i2c-imx.c
-> @@ -1008,7 +1008,7 @@ static inline int i2c_imx_isr_read(struct imx_i2c_struct *i2c_imx)
->  	/* setup bus to read data */
->  	temp = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2CR);
->  	temp &= ~I2CR_MTX;
-> -	if (i2c_imx->msg->len - 1)
-> +	if ((i2c_imx->msg->len - 1) || (i2c_imx->msg->flags & I2C_M_RECV_LEN))
->  		temp &= ~I2CR_TXAK;
->  
->  	imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2CR);
-> @@ -1063,6 +1063,7 @@ static inline void i2c_imx_isr_read_block_data_len(struct imx_i2c_struct *i2c_im
->  		wake_up(&i2c_imx->queue);
->  	}
->  	i2c_imx->msg->len += len;
-> +	i2c_imx->msg->buf[i2c_imx->msg_buf_idx++] = len;
->  }
->  
->  static irqreturn_t i2c_imx_master_isr(struct imx_i2c_struct *i2c_imx, unsigned int status)
+  1) Writes to the sensor hwmon sysfs attributes will always result
+     in ENXIO.
 
-This makes sense, we never tested the actual SMBus emulation. Thanks a lot for the fix.
+  2) During system-wide resume, errors may occur during regcache sync,
+     resulting in the following error messages:
 
-Reviewed-by: Stefan Eichenberger <eichest@gmail.com>
+     kernel: spd5118 1-0050: failed to write b = 0: -6
+     kernel: spd5118 1-0050: pm: dpm_run_callback(): spd5118_resume [spd5118] returns -6
+     kernel: spd5118 1-0050: pm: failed to resume async: error -6
+
+  3) nvmem won't be usable, because writing to the page selector becomes
+     impossible.
+
+Also, BIOS vendors may choose to set the page to a value != 0 after a board
+reset. This will make the sensor not functional unless its MR11 register
+can be changed, which is impossible due to writes being disabled.
+
+To address these issues, don't instantiate it at all if the SPD Write Disable
+bit is set.
+
+Signed-off-by: Yo-Jung Lin (Leo) <leo.lin@canonical.com>
+---
+This is intended to be the fixed version of the second patch in the
+following patch series[1]:
+
+[PATCH v2 0/2] i2c: i801: don't instantiate spd5118 under SPD Write Disable
+
+The original version got reverted due to breaking i386 defconfig build.
+However the first patch in that series didn't. To avoid the first patch in
+the series being repeatedly sent and applied, this is sent as a separate
+patch. 
+
+Also not pulling Reviewed-by from Guenter because the patch differs from
+what was originally reviewed.
+
+[1] https://lore.kernel.org/all/20250430-for-upstream-i801-spd5118-no-instantiate-v2-0-2f54d91ae2c7@canonical.com/
+---
+ drivers/i2c/busses/i2c-i801.c | 28 +++++++++++++++++++++++-----
+ 1 file changed, 23 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+index a7f89946dad4..de17532402b9 100644
+--- a/drivers/i2c/busses/i2c-i801.c
++++ b/drivers/i2c/busses/i2c-i801.c
+@@ -1157,6 +1157,27 @@ static void dmi_check_onboard_devices(const struct dmi_header *dm, void *adap)
+ 	}
+ }
+ 
++static void __i801_register_spd(struct i801_priv *priv)
++{
++	if (priv->original_hstcfg & SMBHSTCFG_SPD_WD)
++		i2c_register_spd_write_disable(&priv->adapter);
++	else
++		i2c_register_spd_write_enable(&priv->adapter);
++}
++
++#ifdef CONFIG_I2C_I801_MUX
++static void i801_register_spd(struct i801_priv *priv)
++{
++	if (!priv->mux_pdev)
++		__i801_register_spd(priv);
++}
++#else
++static void i801_register_spd(struct i801_priv *priv)
++{
++	__i801_register_spd(priv);
++}
++#endif
++
+ /* Register optional targets */
+ static void i801_probe_optional_targets(struct i801_priv *priv)
+ {
+@@ -1177,10 +1198,7 @@ static void i801_probe_optional_targets(struct i801_priv *priv)
+ 		dmi_walk(dmi_check_onboard_devices, &priv->adapter);
+ 
+ 	/* Instantiate SPD EEPROMs unless the SMBus is multiplexed */
+-#ifdef CONFIG_I2C_I801_MUX
+-	if (!priv->mux_pdev)
+-#endif
+-		i2c_register_spd_write_enable(&priv->adapter);
++	i801_register_spd(priv);
+ }
+ #else
+ static void __init input_apanel_init(void) {}
+@@ -1283,7 +1301,7 @@ static int i801_notifier_call(struct notifier_block *nb, unsigned long action,
+ 		return NOTIFY_DONE;
+ 
+ 	/* Call i2c_register_spd for muxed child segments */
+-	i2c_register_spd_write_enable(to_i2c_adapter(dev));
++	__i801_register_spd(priv);
+ 
+ 	return NOTIFY_OK;
+ }
+
+---
+base-commit: 176e917e010cb7dcc605f11d2bc33f304292482b
+change-id: 20250526-for-upstream-not-instantiate-spd5118-463225b346a0
+
+Best regards,
+-- 
+Yo-Jung (Leo) Lin <leo.lin@canonical.com>
+
 
