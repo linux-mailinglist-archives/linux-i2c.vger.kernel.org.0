@@ -1,140 +1,174 @@
-Return-Path: <linux-i2c+bounces-11151-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11152-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC4E6AC74BB
-	for <lists+linux-i2c@lfdr.de>; Thu, 29 May 2025 02:00:13 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id ECFAFAC76CB
+	for <lists+linux-i2c@lfdr.de>; Thu, 29 May 2025 05:56:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9370A1C00204
-	for <lists+linux-i2c@lfdr.de>; Thu, 29 May 2025 00:00:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9676C1BC101C
+	for <lists+linux-i2c@lfdr.de>; Thu, 29 May 2025 03:56:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0757BE65;
-	Thu, 29 May 2025 00:00:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B0552505BA;
+	Thu, 29 May 2025 03:55:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="n+Isr71s"
+	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="H8OwxZ9V"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 948F9268685;
-	Thu, 29 May 2025 00:00:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC7CC24DFF4
+	for <linux-i2c@vger.kernel.org>; Thu, 29 May 2025 03:55:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748476810; cv=none; b=rRjKWXMMbYT2b5vnCc+u+ETNa9+y5KtSrEJdMft6kpJ8y7lcxIMGqUIvXvmM6KbVi9SZg5rBfWfIDZ3L4HWc/lS0wYniAI//qB9NR+TJCIg08gjSyCnoA//A9nVW8Gs2ngfQa0063TEHP5B5piWo2oTiZ0nYiITB7AdfTWBXRMI=
+	t=1748490912; cv=none; b=FqRnNHD4eFTAcRFlJfGIOg0GyJVZCc3XuI9l07b61paVzjCUDZEK70t76TtaWHqzOYMh2tLqs4FuCz91VHP34Sd8edmSfzHpQ3vpUJeXUCiM0wKJuwoQWJyYu8jrZejCvPfAMs5wOEBx5JGr0W3RRkBJaZmqGwvnWyT/5gRpdmw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748476810; c=relaxed/simple;
-	bh=aZqOxp92Ys+aIo+jdyqdVvFWBEXiUqE+1611Mk1Hygg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fKl63tRHqTCIUgXHQAzsci1TTjnea0aqqHgUZgI9KfsoH2PHwa20JQ2BzYsOaVKIg/GFDhQg7vSK0BjE5LrMAiekZWD27jXQQnJ/b6osSpqpnDzKy+H2C/GK32xtpDUcyMzNUwouE4ZwXcXQEoNuDi2+cN5/XG8WWw7wnRlse78=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=n+Isr71s; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1748476809; x=1780012809;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=aZqOxp92Ys+aIo+jdyqdVvFWBEXiUqE+1611Mk1Hygg=;
-  b=n+Isr71sqOBEEw9qACn4/TykcsjO/9BnZuBogwJcaKaj6ThUuzPVVCGk
-   BGDNmRb+I8j0OC0nF/MEGWX8XsEJ7K/lRm4AZe6f83VLzYAD7yRwpp5XM
-   0iHqCy99ZUNISlIxEggnXj8BlVlIhoIxsGvSzS0kLyKaypEMpvgn2KDTC
-   SB5F7yGt/7PPEudP+JxGnuSLfXWd08MqmzXS6chTAoB5sthbYlEOJVm1H
-   hRyocGlik2sdTtxSoBgYnepvUk4rwy9nzopKOM1EXxmq1Vx9SVEV8CrSi
-   Q+/NFyk2d3idbOr35byc5kC3igNyPmIGmQY5ctRHb7D73Dkkiyb+vlhWw
-   w==;
-X-CSE-ConnectionGUID: JFfsWyGkQ66P9zk3wGMdoA==
-X-CSE-MsgGUID: xwqI3S1eRF63VdwR4vWcrQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11447"; a="61577736"
-X-IronPort-AV: E=Sophos;i="6.15,322,1739865600"; 
-   d="scan'208";a="61577736"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2025 17:00:08 -0700
-X-CSE-ConnectionGUID: 1z5J1C5zSuWrDEBzOv7fyQ==
-X-CSE-MsgGUID: MOGkxtCZQeeIz1BS4roItA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,322,1739865600"; 
-   d="scan'208";a="143372266"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 28 May 2025 17:00:05 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uKQgl-000WAi-0E;
-	Thu, 29 May 2025 00:00:03 +0000
-Date: Thu, 29 May 2025 07:59:25 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Yo-Jung (Leo) Lin" <leo.lin@canonical.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Wolfram Sang <wsa-dev@sang-engineering.com>
-Cc: oe-kbuild-all@lists.linux.dev, Guenter Roeck <linux@roeck-us.net>,
-	"Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>,
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-	"Yo-Jung Lin (Leo)" <leo.lin@canonical.com>
-Subject: Re: [PATCH] i2c: i801: Do not instantiate spd5118 under SPD Write
- Disable
-Message-ID: <202505290728.VsNgBfDO-lkp@intel.com>
-References: <20250528-for-upstream-not-instantiate-spd5118-v1-1-8216e2d38918@canonical.com>
+	s=arc-20240116; t=1748490912; c=relaxed/simple;
+	bh=bjf/JLayP19bwsqdRmI9LExctVLA/PfSC/qjpvMxmXA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=c3rFrkFksq5v1NaSS9Ox+FM5fIt8mlRWG37u0l8KZqSxB88rbpWjGHVyC+WC/noyVenRYJjOZIbgSpfBzJmTaSDfP+2jcp9KM7k/jphpYfZwt3c23JnDCd14F53ghRC1vUTg27x+QnPfKQDqxL2ugFaM9bhGh0ybLBZZihnygDE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=H8OwxZ9V; arc=none smtp.client-ip=185.125.188.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id D7A9E405DA
+	for <linux-i2c@vger.kernel.org>; Thu, 29 May 2025 03:55:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1748490901;
+	bh=V4vVrDxJRiSVvwJTAsACN8FW8gcbiroxOJCqMNoZKGU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type;
+	b=H8OwxZ9VzSKAECel3Kiz1vldLBXew6ORsOSOubY1Tz8fS00Z6/0XO01pv5DMceqM1
+	 H5aFPsdjjbp8LC/BL0xNCOktVubBAX9AYF9LJudMMBmovDib/BAgurOseVXCXx7v0B
+	 Cf6N+u3sxgdCZr/pHnP4tZRxSW6KwvmHWAGnhw7x42+w2WcmCr7EyexGoQY++0rk2S
+	 k56q6Zv9B1EY5myj+ZQqJfeqP7fUzh5NX8dOu08us8ZYbnMzHNPartBMrenIYe163S
+	 5bz8BuzjVdCQPf1GMc1sWRQKBXJ6sOQ1uwd7CUQvjrjZvKZcMXEAnuCFytK67Iron4
+	 e4D+/NIRsPhhg==
+Received: by mail-ed1-f71.google.com with SMTP id 4fb4d7f45d1cf-60498322443so443616a12.2
+        for <linux-i2c@vger.kernel.org>; Wed, 28 May 2025 20:55:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748490901; x=1749095701;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=V4vVrDxJRiSVvwJTAsACN8FW8gcbiroxOJCqMNoZKGU=;
+        b=CvWaBHMurEM9uRgGVDdAKyzGLQJaEhNY6aVBasliBi0JegKUG1uI6XXvPvKripi96M
+         LP2DZUpXyVmo0ZStGQgeKh8iKm8rqslcP3nM5vX4kTOicRXqQsidagQ5Si04RHutjKh9
+         OJyvTKJugXKy2uIhjNw3eDB7yYlidQB3DgErnjxknmkKUcIoy/A+beTZQiJPvwm21q2G
+         4ljrxqWy1yIysyVdZM9BowrZOkY93jY0mM5kH9QdOiTa58sMKoM6poLQMMGmwGZOP5vS
+         uQtfeTn44jhHBfa2ns6SqP9DqMPHCJ1GChSxGlgEA1rD8/h8yyOASRYr+MfEgw4+937+
+         i7QA==
+X-Forwarded-Encrypted: i=1; AJvYcCXtPUUgjb9StrUY/nlIhjkE3Yra1iU5dT9mUx0koR00RoiUozEkA/xupALMLvygM6zeOs/+Spi05wo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyMmyCKbCDCnmUrXclu6fDc9jLjwAPH4cl7r60VqBprpzwbJRAb
+	Q9Pe4HR4N1eGZNTYdFjVS+BzdLJ7/ByE8L2bZ2vdjmiv/6zixLr/E+7gxZh96aI4J/u3H+9d2nG
+	5Mb17o1Dc+j63vZlBiM1L2anwYfKp69zlQ+it0Z1Budo7KHVNGIV9pqvmw0hhAmiAgSPI0I6frP
+	WPpEe8OLRkzyH0yCatBtqpmPlx3W7qiMDa/2YaU84wYIaB7yTytJIX
+X-Gm-Gg: ASbGncuqY4Wuqzc8kWX1rbDksCHSC06oVWe+Pu76C6UXXkWJxXEbVxLFSv1pWluwjVZ
+	K653YoC9IbHLAkUwVaa4l6lhuMBMquDHEOR0xC64lZEDa8jErkHYZ5WlPIWnYjqUgYM0Ngw==
+X-Received: by 2002:a05:6402:1d4b:b0:601:3f5b:39ee with SMTP id 4fb4d7f45d1cf-602d8f5d70dmr18033632a12.3.1748490901400;
+        Wed, 28 May 2025 20:55:01 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHR0ej2bZUX3SVv9aAplyxdVXsmtwHM6QDoYTrTihqt5ALCD/GbQf0L7mvCwR+nlHJCc5oIyUGYNq9gu+JSggw=
+X-Received: by 2002:a05:6402:1d4b:b0:601:3f5b:39ee with SMTP id
+ 4fb4d7f45d1cf-602d8f5d70dmr18033620a12.3.1748490901054; Wed, 28 May 2025
+ 20:55:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250528-for-upstream-not-instantiate-spd5118-v1-1-8216e2d38918@canonical.com>
+References: <20250528-for-upstream-not-instantiate-spd5118-v1-1-8216e2d38918@canonical.com>
+ <202505290728.VsNgBfDO-lkp@intel.com>
+In-Reply-To: <202505290728.VsNgBfDO-lkp@intel.com>
+From: "Yo-Jung (Leo) Lin" <leo.lin@canonical.com>
+Date: Thu, 29 May 2025 11:54:49 +0800
+X-Gm-Features: AX0GCFuvPqKC8O7DWOhXj72SBZClr0XkXQZTp2dRyjUTIGZ3F1XCKz6JwMpGoeY
+Message-ID: <CABscksPBjQ14UrvCVwgVMHZ6NsPKN9tWscaOGBy8TjufgzPGFA@mail.gmail.com>
+Subject: Re: [PATCH] i2c: i801: Do not instantiate spd5118 under SPD Write Disable
+To: kernel test robot <lkp@intel.com>
+Cc: Jean Delvare <jdelvare@suse.com>, Andi Shyti <andi.shyti@kernel.org>, 
+	Wolfram Sang <wsa-dev@sang-engineering.com>, oe-kbuild-all@lists.linux.dev, 
+	Guenter Roeck <linux@roeck-us.net>, "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>, linux-i2c@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Yo-Jung,
+On Thu, May 29, 2025 at 8:00=E2=80=AFAM kernel test robot <lkp@intel.com> w=
+rote:
+>
+> Hi Yo-Jung,
+>
+> kernel test robot noticed the following build errors:
+>
+> [auto build test ERROR on 176e917e010cb7dcc605f11d2bc33f304292482b]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Yo-Jung-Leo-Lin/i2=
+c-i801-Do-not-instantiate-spd5118-under-SPD-Write-Disable/20250528-163253
+> base:   176e917e010cb7dcc605f11d2bc33f304292482b
+> patch link:    https://lore.kernel.org/r/20250528-for-upstream-not-instan=
+tiate-spd5118-v1-1-8216e2d38918%40canonical.com
+> patch subject: [PATCH] i2c: i801: Do not instantiate spd5118 under SPD Wr=
+ite Disable
+> config: loongarch-randconfig-001-20250529 (https://download.01.org/0day-c=
+i/archive/20250529/202505290728.VsNgBfDO-lkp@intel.com/config)
+> compiler: loongarch64-linux-gcc (GCC) 15.1.0
+> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
+ve/20250529/202505290728.VsNgBfDO-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202505290728.VsNgBfDO-lkp=
+@intel.com/
+>
+> All errors (new ones prefixed by >>):
+>
+>    drivers/i2c/busses/i2c-i801.c: In function 'i801_notifier_call':
+> >> drivers/i2c/busses/i2c-i801.c:1304:9: error: implicit declaration of f=
+unction '__i801_register_spd' [-Wimplicit-function-declaration]
+>     1304 |         __i801_register_spd(priv);
+>          |         ^~~~~~~~~~~~~~~~~~~
+>
+>
+> vim +/__i801_register_spd +1304 drivers/i2c/busses/i2c-i801.c
+>
+>   1291
+>   1292  static int i801_notifier_call(struct notifier_block *nb, unsigned=
+ long action,
+>   1293                                void *data)
+>   1294  {
+>   1295          struct i801_priv *priv =3D container_of(nb, struct i801_p=
+riv, mux_notifier_block);
+>   1296          struct device *dev =3D data;
+>   1297
+>   1298          if (action !=3D BUS_NOTIFY_ADD_DEVICE ||
+>   1299              dev->type !=3D &i2c_adapter_type ||
+>   1300              i2c_root_adapter(dev) !=3D &priv->adapter)
+>   1301                  return NOTIFY_DONE;
+>   1302
+>   1303          /* Call i2c_register_spd for muxed child segments */
+> > 1304          __i801_register_spd(priv);
+>   1305
+>   1306          return NOTIFY_OK;
+>   1307  }
+>   1308
 
-kernel test robot noticed the following build errors:
+I think this happens likely because I put the __i801_register_spd() inside =
+the:
 
-[auto build test ERROR on 176e917e010cb7dcc605f11d2bc33f304292482b]
+#if defined CONFIG_X86 && defined CONFIG_DMI
+...
+#endif
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Yo-Jung-Leo-Lin/i2c-i801-Do-not-instantiate-spd5118-under-SPD-Write-Disable/20250528-163253
-base:   176e917e010cb7dcc605f11d2bc33f304292482b
-patch link:    https://lore.kernel.org/r/20250528-for-upstream-not-instantiate-spd5118-v1-1-8216e2d38918%40canonical.com
-patch subject: [PATCH] i2c: i801: Do not instantiate spd5118 under SPD Write Disable
-config: loongarch-randconfig-001-20250529 (https://download.01.org/0day-ci/archive/20250529/202505290728.VsNgBfDO-lkp@intel.com/config)
-compiler: loongarch64-linux-gcc (GCC) 15.1.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250529/202505290728.VsNgBfDO-lkp@intel.com/reproduce)
+So the function went missing in loongarch. Will fix this in v2.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505290728.VsNgBfDO-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   drivers/i2c/busses/i2c-i801.c: In function 'i801_notifier_call':
->> drivers/i2c/busses/i2c-i801.c:1304:9: error: implicit declaration of function '__i801_register_spd' [-Wimplicit-function-declaration]
-    1304 |         __i801_register_spd(priv);
-         |         ^~~~~~~~~~~~~~~~~~~
-
-
-vim +/__i801_register_spd +1304 drivers/i2c/busses/i2c-i801.c
-
-  1291	
-  1292	static int i801_notifier_call(struct notifier_block *nb, unsigned long action,
-  1293				      void *data)
-  1294	{
-  1295		struct i801_priv *priv = container_of(nb, struct i801_priv, mux_notifier_block);
-  1296		struct device *dev = data;
-  1297	
-  1298		if (action != BUS_NOTIFY_ADD_DEVICE ||
-  1299		    dev->type != &i2c_adapter_type ||
-  1300		    i2c_root_adapter(dev) != &priv->adapter)
-  1301			return NOTIFY_DONE;
-  1302	
-  1303		/* Call i2c_register_spd for muxed child segments */
-> 1304		__i801_register_spd(priv);
-  1305	
-  1306		return NOTIFY_OK;
-  1307	}
-  1308	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
 
