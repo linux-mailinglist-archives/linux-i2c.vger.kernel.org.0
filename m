@@ -1,539 +1,274 @@
-Return-Path: <linux-i2c+bounces-11178-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11179-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A8D7AC9322
-	for <lists+linux-i2c@lfdr.de>; Fri, 30 May 2025 18:12:13 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD778AC93C0
+	for <lists+linux-i2c@lfdr.de>; Fri, 30 May 2025 18:42:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EC82D7B6255
-	for <lists+linux-i2c@lfdr.de>; Fri, 30 May 2025 16:10:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A95D81C20C33
+	for <lists+linux-i2c@lfdr.de>; Fri, 30 May 2025 16:42:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A0F4235341;
-	Fri, 30 May 2025 16:12:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C0F31D5154;
+	Fri, 30 May 2025 16:42:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XKUqyt/N"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="SYDzNE7+"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA228235073;
-	Fri, 30 May 2025 16:12:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8EB91C6FE8
+	for <linux-i2c@vger.kernel.org>; Fri, 30 May 2025 16:42:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748621523; cv=none; b=pCCYw6dm/biHiuUloDkVmWFMXih7UkiXqQHCsu1+u3mLihtRMjr5MyRzPmwLMBSEGcwJ9S4DNJoZAVF0+YJmE79wLV9toUJKy8xx72nkbQv356qeqsZZCLFE5JznirZELgo5n0DX5qFWsWRc14JeXJ219TimAEYxCct2+qHu3YA=
+	t=1748623329; cv=none; b=EesmhFeMb0F+b2wkIyPXIWxSM5Tf5ug3YArqpcD/1Zfrpl2EgvViK9BnBWtpjYSw2yraCBEwvq/0oJDRmOlsnqdXD9ucLiBsdLa3a7W2Ss0J39MKhd9KwIlLdure7c+6VvLo/JcrfrAS2DBtpd2+oSS99Z7m4OpQmgEgcYf1zIs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748621523; c=relaxed/simple;
-	bh=VXDtu8WcS71EWWqqfe+cE5P5dRpKHm04HDkKtFU7tzc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Q6WIYMGa6WcCpQgolWbsSabkHDOHxMW07QYzgzftwGaeSGJBnv8laS05CzFGHcUJlTumSJLg911CzWcBbhnzhjZl3QlDw/8LET9dIAlmxVWaeGfb/q2cNHIS1Zuiby4319sZ2cneedXSnej6rDqQJko7jJwJ8uSyVUJfrjMKoc0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XKUqyt/N; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9003C4CEE9;
-	Fri, 30 May 2025 16:12:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748621523;
-	bh=VXDtu8WcS71EWWqqfe+cE5P5dRpKHm04HDkKtFU7tzc=;
-	h=Date:From:To:Cc:Subject:From;
-	b=XKUqyt/NyNxLwjKGeI9hQNOnBU3rUBH/yEJ6QvW0T+YqdDPDM1KRkU7dK448eEUT9
-	 1s7oh7NcUvDGgd7ZFFAhFXUgjRZJooWyJejuR2B4D9Xp2iSeJ1BEGWg5DV8Lhim+bz
-	 jxev8LiEkU+NP3oNGfa28Oe/ObaCKqgTMg4qvRoRSmS3d5qm/KsYwjByhFPZPXFl+M
-	 NuEPUq7H2hOX3SjSNeUrHCAKHdGq2rCdmKYKZrDSVg5sCrqYtwuLZhckbOUpD89J9j
-	 3UlQ+9SHUM48Pc05v1K6DZDCBE31SGe5arRlg4S3+wi56K30+Rhd1VQz2fwO6ephXi
-	 ThIoa6SzWn3tA==
-Date: Fri, 30 May 2025 18:11:59 +0200
-From: Wolfram Sang <wsa@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Andi Shyti <andi.shyti@kernel.org>
-Subject: [PULL REQUEST] i2c-for-6.16-rc1
-Message-ID: <aDnYz2PB_euziA01@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Andi Shyti <andi.shyti@kernel.org>
+	s=arc-20240116; t=1748623329; c=relaxed/simple;
+	bh=k0r3jAdN0yq9usoh2WWpT1HcqWj23B9/RTpZqizK8xg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ViNOvELIsxs+gijW+8HjjCyUu5xP5MgJ1iHC8/5sax5Ig1jhX1Z5QONj4Z2lWbP3nVzXtbmgG3sJd5WOuJd0+lMCJDv5466fnuK5ldQKZrLGTWI/j7XPiK56eZ3g2/4oxYJkIAqmHEsge9HVFNHnmxKNK62ieMtXRRbXECh9rNE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=SYDzNE7+; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54UAx8Gv007161
+	for <linux-i2c@vger.kernel.org>; Fri, 30 May 2025 16:42:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	dR7iDYHwxHQyVpZ0FR3nn7vovmsedDiyUz4cLKOAiXY=; b=SYDzNE7+O0bygCAE
+	rlaLgorWaRZG5WEOWvfqnQUOYdEJO1GuvfPt9Hb91QRcE3DT1eUSvfAKAhSqNES1
+	Qoou5l0Ji/ilQW4ccGpSqXFA8cGDsT6KmPwILCDbgVSyNI+skgZKvdR3f7BT+U+Q
+	2+VaRzZ9qp9aEA7/KDG6fFisGYzyorWjZ0RGb1IhbRIehf+lcRAwvkcvSHYfF2cv
+	8cikVvzVsf/LRiAAGUs9y7E/eVcdWe6fRAiPA8kPM3d+luxFOsY5BtFKBwz5QZZP
+	BcV/lZKLJY9TqZW9q0WSVsvk7HqkrjdNiy3XVuAW3ADhOoWe/MBq8Afw0irEnyFx
+	r/hmCQ==
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com [209.85.222.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 46u3fqhy59-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-i2c@vger.kernel.org>; Fri, 30 May 2025 16:42:06 +0000 (GMT)
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-7d0962035b7so348715085a.1
+        for <linux-i2c@vger.kernel.org>; Fri, 30 May 2025 09:42:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748623325; x=1749228125;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dR7iDYHwxHQyVpZ0FR3nn7vovmsedDiyUz4cLKOAiXY=;
+        b=WfOL2/L7+qlOqzO0sIanTjc177zpZoc9APfU7UTX74qJsLE1wsjX7K6Z9LR+rHp6c2
+         qAyA+Gw8aOuMZ/qTeIsi24Py84h+fLFycMIPmstgUd62ec/DV+QX+/mcM5Y3hiSgegA+
+         e3emACA/Kqj+ZjYWj5p48CItWRwZmz2aEpY3PaKw3QAzXGGIeT8pmJL0gm7NYMNZf3YH
+         nrn4RjGT7VBTs1WbSQ8AH/mWJLhUats0ZvlzTT4CIOwuJ7sRQ7Y5ebJU0vKfWEcSyxPf
+         vKgns34XmWA8jd119p1tcbhJJdLzZcBrq6kYGFI2M6ZZdg8mmdxMFBXNSCtCfhRcKo83
+         0Xjw==
+X-Forwarded-Encrypted: i=1; AJvYcCXxRl/8ekdqFg09doU8PfViORpjfDu+aa5GZZZpPBzx3NtJRPaCRoOGPQdJAmTTicwLPadz426h8Ag=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwZFlWvMw+Oz2McNoJOm5py1qobmFj5PuX50v6efDmFGCZCAGhJ
+	Sguo41dziEn3fQkDxWd9KF3in6xVUzCr2+QcQzphgIuC8CTINZPoBHEqYS8EBSROGcGWUWrw7Z7
+	WJLdFcFZB3NfcjW+Hw2E8vGwFGfbCFC7a2dxJNWymxbYwhCgJUzj+gpHBm0q5ebQ=
+X-Gm-Gg: ASbGncuEtB78ymj9RPldbYIOca7iMXQvlqaGBEC2tGWRmmsaLzHkokR2T7Rus8Wtkt9
+	znjSpvyCxdoW3vai55MCj6Z/jQ/J5uQNt5ayb27dTd66UsTtn1X3203d17GKUd1x/uHUiem0LUm
+	k1fLgkCaje3+VWp65xFl7vOLRT+z8D8LtWCs7z5iVWmH/vVQuaSRudz7G8lLSDoOEQbB5vDZwV6
+	60UlFgDyL/OvlXirIpvAwu4u2Ni2PocdG7UO16xIn5niKQRHA6S+jRWoXvAEH7XpEGXoOsHMKxt
+	niggNweR61thitYDYuOh0Ng+414T79hi9kJX9fUpAKV4OCMVYOjpsMpO5u8UfM2sx4IGfpkYYcS
+	DEejxfN669Q==
+X-Received: by 2002:a05:620a:40d4:b0:7c0:b523:e1b6 with SMTP id af79cd13be357-7d0a49e7ba2mr373935285a.11.1748623325392;
+        Fri, 30 May 2025 09:42:05 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHmLJH2eYXh48Y1EMT6w54qghRK+Ixc8oH91zfHpViI5rEh5CCU1ZanUtnkUIi0JSYuzlqzYg==
+X-Received: by 2002:a05:620a:40d4:b0:7c0:b523:e1b6 with SMTP id af79cd13be357-7d0a49e7ba2mr373932285a.11.1748623324980;
+        Fri, 30 May 2025 09:42:04 -0700 (PDT)
+Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-32a85bd2e1dsm6556581fa.100.2025.05.30.09.42.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 May 2025 09:42:04 -0700 (PDT)
+Date: Fri, 30 May 2025 19:42:02 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+To: Jyothi Kumar Seerapu <quic_jseerapu@quicinc.com>
+Cc: Vinod Koul <vkoul@kernel.org>,
+        Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>,
+        Viken Dadhaniya <quic_vdadhani@quicinc.com>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, quic_vtanuku@quicinc.com
+Subject: Re: [PATCH v6 2/2] i2c: i2c-qcom-geni: Add Block event interrupt
+ support
+Message-ID: <644oygj43z2um42tmmldp3feemgzrdoirzfw7pu27k4zi76bwg@wfxbtgqqgh4p>
+References: <20250506111844.1726-1-quic_jseerapu@quicinc.com>
+ <20250506111844.1726-3-quic_jseerapu@quicinc.com>
+ <qizkfszruwcny7f3g3i7cjst342s6ma62k5sgc6pg6yfoti7b3@fo2ssj7jvff2>
+ <3aa92123-e43e-4bf5-917a-2db6f1516671@quicinc.com>
+ <a98f0f1a-d814-4c6a-9235-918091399e4b@oss.qualcomm.com>
+ <ba7559c8-36b6-4628-8fc4-26121f00abd5@quicinc.com>
+ <w6epbao7dwwx65crst6md4uxi3iivkcj55mhr2ko3z5olezhdl@ffam3xif6tmh>
+ <5ed77f6d-14d7-4b62-9505-ab988fa43bf2@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="AEjmkLNbeyZsZEOT"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-
-
---AEjmkLNbeyZsZEOT
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-Linus,
-
-this pull-request will have a merge conflict with the media-tree. You
-can find a resolution from the author of the I2C changes here [1]. The
-diff there is mangled, sadly. I already asked for a better version. Hope
-it arrived when you process this request.
-
-Please pull,
-
-   Wolfram
-
-[1] https://lore.kernel.org/all/3352024.aeNJFYEL58@fw-rgant/
-
-
-
-The following changes since commit a5806cd506af5a7c19bcd596e4708b5c464bfd21:
-
-  Linux 6.15-rc7 (2025-05-18 13:57:29 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.16-rc1
-
-for you to fetch changes up to 17b7d785fc7fc94b94acc080e09de4b5023fbc1e:
-
-  i2c: Use str_read_write() helper (2025-05-23 17:28:07 +0200)
-
-----------------------------------------------------------------
-i2c-for-6.16-rc1
-
-i2c-core updates
-
-- move towards using the 'fwnode' handle instead of 'of_node'
-  (meaning 'of_node' even gets removed from i2c_board_info)
-- add support for Write Disable-aware SPD eeproms
-- minor stuff (use new helpers, typo fixes)
-
-i2c-atr (address translator) updates
-
-- support per-channel alias pools
-- added support for dynamic address translation
-  (also adds FPC202 driver as its user)
-- add 'static' and 'passthrough' flags
-
-i2c-host updates
-
-Cleanups and refactorings
-- Many drivers switched to dev_err_probe()
-- Generic cleanups applied to designware, iproc, ismt, mlxbf,
-  npcm7xx, qcom-geni, pasemi, and thunderx
-- davinci: declare I2C mangling support among I2C features
-- designware: clean up DTS handling
-- designware: fix PM runtime on driver unregister
-- imx: improve error logging during probe
-- lpc2k: improve checks in probe error path
-- xgene-slimpro: improve PCC shared memory handling
-- pasemi: improve error handling in reset, smbus clear, timeouts
-- tegra: validate buffer length during transfers
-- wmt: convert binding to YAML format
-
-Improvements and extended support:
-- microchip-core: add SMBus support
-- mlxbf: add support for repeated start in block transfers
-- mlxbf: improve timer configuration
-- npcm: attempt clock toggle recovery before failing init
-- octeon: add support for block mode operations
-- pasemi: add support for unjam device feature
-- riic: add support for bus recovery
-
-New device support:
-- MediaTek Dimensity 1200 (MT6893)
-- Sophgo SG2044
-- Renesas RZ/V2N (R9A09G056)
-- Rockchip RK3528
-- AMD ISP (new driver)
-
-----------------------------------------------------------------
-Akhil R (1):
-      i2c: tegra: check msg length in SMBUS block read
-
-Alexander Stein (1):
-      i2c: imx: add some dev_err_probe calls
-
-Alexey Charkov (1):
-      dt-bindings: i2c: i2c-wmt: Convert to YAML
-
-Andi Shyti (11):
-      i2c: iproc: Drop unnecessary initialisation of 'ret'
-      i2c: iproc: Use dev_err_probe in probe
-      i2c: iproc: Use u32 instead of uint32_t
-      i2c: iproc: Fix alignment to match the open parenthesis
-      i2c: iproc: Remove stray blank line in slave ISR
-      i2c: iproc: Replace udelay() with usleep_range()
-      i2c: iproc: Fix indentation of bcm_iproc_i2c_slave_init()
-      i2c: iproc: Move function and avoid prototypes
-      i2c: iproc: When there's an error treat it as an error
-      i2c: iproc: Remove unnecessary double negation
-      i2c: mlxbf: Allow build with COMPILE_TEST
-
-Andy Shevchenko (9):
-      i2c: core: Drop duplicate check before calling OF APIs
-      i2c: core: Unify the firmware node type check
-      i2c: core: Switch to fwnode APIs to get IRQ
-      i2c: core: Reuse fwnode variable where it makes sense
-      i2c: core: Do not dereference fwnode in struct device
-      i2c: core: Deprecate of_node in struct i2c_board_info
-      media: i2c: ds90ub960: Remove of_node assignment
-      i2c: qcom-geni: Use generic definitions for bus frequencies
-      i2c: designware: Use better constants from units.h
-
-AngeloGioacchino Del Regno (1):
-      dt-bindings: i2c: i2c-mt65xx: Add MediaTek Dimensity 1200 MT6893
-
-Arnd Bergmann (1):
-      i2c: mlxbf: avoid 64-bit division
-
-Aryan Srivastava (1):
-      i2c: octeon: add block-mode i2c operations
-
-Bartosz Golaszewski (1):
-      i2c: mux: ltc4306: use new GPIO line value setter callbacks
-
-Chenyuan Yang (1):
-      i2c: lpc2k: Add check for clk_enable()
-
-Chris Babroski (2):
-      i2c-mlxbf: Add repeated start condition support
-      i2c-mlxbf: Improve I2C bus timing configuration
-
-Christophe JAILLET (1):
-      i2c: rzv2m: Constify struct i2c_algorithm
-
-Cosmin Tanislav (7):
-      i2c: atr: find_mapping() -> get_mapping()
-      i2c: atr: split up i2c_atr_get_mapping_by_addr()
-      i2c: atr: do not create mapping in detach_addr()
-      i2c: atr: deduplicate logic in attach_addr()
-      i2c: atr: allow replacing mappings in attach_addr()
-      i2c: atr: add static flag
-      i2c: atr: add passthrough flag
-
-Dan Carpenter (1):
-      i2c: atr: Fix end of loop test in i2c_atr_find_mapping_by_addr()
-
-Enrico Zanda (10):
-      i2c: uniphier(-f): Replace dev_err() with dev_err_probe() in probe function
-      i2c: uniphier: Replace dev_err() with dev_err_probe() in probe function
-      i2c: via: Replace dev_err() with dev_err_probe() in probe function
-      i2c: viapro: Replace dev_err() with dev_err_probe() in probe function
-      i2c: viperboard: Replace dev_err() with dev_err_probe() in probe function
-      i2c: virtio: Replace dev_err() with dev_err_probe() in probe function
-      i2c: i2c-xiic: Replace dev_err() with dev_err_probe() in probe function
-      i2c: scx200_acb: Replace dev_err() with dev_err_probe() in probe function
-      i2c: xgene-slimpro: Replace dev_err() with dev_err_probe() in probe function
-      i2c: viai2c-wmt: Replace dev_err() with dev_err_probe() in probe function
-
-Feng Wei (1):
-      i2c: mlxbf: Use str_read_write() helper
-
-Geert Uytterhoeven (1):
-      i2c: I2C_DESIGNWARE_AMDISP should depend on DRM_AMD_ISP
-
-Hector Martin (3):
-      i2c: pasemi: Enable the unjam machine
-      i2c: pasemi: Improve error recovery
-      i2c: pasemi: Log bus reset causes
-
-Heikki Krogerus (1):
-      i2c: designware: Don't warn about missing get_clk_rate_khz
-
-Inochi Amaoto (2):
-      dt-bindings: i2c: dw: merge duplicate compatible entry.
-      dt-bindings: i2c: dw: Add Sophgo SG2044 SoC I2C controller
-
-Lad Prabhakar (2):
-      i2c: riic: Implement bus recovery
-      dt-bindings: i2c: renesas,riic: Document RZ/V2N (R9A09G056) support
-
-Marcus Folkesson (1):
-      i2c: davinci: add I2C_FUNC_PROTOCOL_MANGLING to feature list
-
-Philipp Stanner (2):
-      i2c: ismt: Use non-hybrid PCI devres API
-      i2c: thunderx: Use non-hybrid PCI devres API
-
-Pratap Nirujogi (1):
-      i2c: amd-isp: Add ISP i2c-designware driver
-
-Romain Gantois (9):
-      dt-bindings: misc: Describe TI FPC202 dual port controller
-      media: i2c: ds90ub960: Replace aliased clients list with address list
-      media: i2c: ds90ub960: Protect alias_use_mask with a mutex
-      i2c: use client addresses directly in ATR interface
-      i2c: move ATR alias pool to a separate struct
-      i2c: rename field 'alias_list' of struct i2c_atr_chan to 'alias_pairs'
-      i2c: support per-channel ATR alias pools
-      i2c: Support dynamic address translation
-      misc: add FPC202 dual port controller driver
-
-Sudeep Holla (1):
-      i2c: xgene-slimpro: Simplify PCC shared memory region handling
-
-Sumanth Gavini (1):
-      docs: i2c: Fix "resitors" to "resistors"
-
-Sven Peter (3):
-      i2c: pasemi: Use correct bits.h include
-      i2c: pasemi: Sort includes alphabetically
-      i2c: pasemi: Improve timeout handling
-
-Tali Perry (1):
-      i2c: npcm: Add clock toggle recovery
-
-Tan En De (1):
-      i2c: designware: Invoke runtime suspend on quick slave re-registration
-
-Tomi Valkeinen (1):
-      i2c: atr: Fix lockdep for nested ATRs
-
-Wolfram Sang (4):
-      i2c: powermac: convert of_node usage to fwnode
-      i2c: use only 'fwnode' for client devices
-      i2c: remove 'of_node' member from i2c_boardinfo
-      Merge tag 'i2c-host-6.16' of git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux into i2c/for-mergewindow
-
-Xu Yang (1):
-      i2c: core: add useful info when defer probe
-
-Yao Zi (1):
-      dt-bindings: i2c: i2c-rk3x: Add compatible string for RK3528
-
-Yo-Jung (Leo) Lin (1):
-      i2c: smbus: introduce Write Disable-aware SPD instantiating functions
-
-Yumeng Fang (1):
-      i2c: Use str_read_write() helper
-
-Zhang Songyi (1):
-      i2c: npcm7xx: Remove redundant ret variable
-
-prashanth kumar burujukindi (1):
-      i2c: microchip-corei2c: add smbus support
-
-
-with much appreciated quality assurance from
-----------------------------------------------------------------
-Alyssa Rosenzweig (5):
-      (Rev.) i2c: pasemi: Log bus reset causes
-      (Rev.) i2c: pasemi: Improve error recovery
-      (Rev.) i2c: pasemi: Enable the unjam machine
-      (Rev.) i2c: pasemi: Sort includes alphabetically
-      (Rev.) i2c: pasemi: Use correct bits.h include
-
-Andi Shyti (4):
-      (Rev.) i2c: remove 'of_node' member from i2c_boardinfo
-      (Rev.) i2c: use only 'fwnode' for client devices
-      (Rev.) i2c: powermac: convert of_node usage to fwnode
-      (Rev.) dt-bindings: i2c: i2c-rk3x: Add compatible string for RK3528
-
-Andy Shevchenko (3):
-      (Rev.) i2c: remove 'of_node' member from i2c_boardinfo
-      (Rev.) i2c: use only 'fwnode' for client devices
-      (Rev.) i2c: powermac: convert of_node usage to fwnode
-
-Asmaa Mnebhi (2):
-      (Rev.) i2c-mlxbf: Improve I2C bus timing configuration
-      (Rev.) i2c-mlxbf: Add repeated start condition support
-
-Carlos Song (1):
-      (Rev.) i2c: core: add useful info when defer probe
-
-Christopher Obbard (1):
-      (Rev.) i2c: qcom-geni: Use generic definitions for bus frequencies
-
-Conor Dooley (1):
-      (Rev.) dt-bindings: misc: Describe TI FPC202 dual port controller
-
-Fabrizio Castro (2):
-      (Rev.) i2c: riic: Implement bus recovery
-      (Rev.) i2c: rzv2m: Constify struct i2c_algorithm
-
-Frank Li (2):
-      (Rev.) i2c: core: add useful info when defer probe
-      (Rev.) i2c: imx: add some dev_err_probe calls
-
-Geert Uytterhoeven (1):
-      (Rev.) dt-bindings: i2c: renesas,riic: Document RZ/V2N (R9A09G056) support
-
-Guenter Roeck (1):
-      (Rev.) i2c: smbus: introduce Write Disable-aware SPD instantiating functions
-
-Heiko Stuebner (1):
-      (Rev.) dt-bindings: i2c: i2c-rk3x: Add compatible string for RK3528
-
-Khalil Blaiech (2):
-      (Rev.) i2c-mlxbf: Improve I2C bus timing configuration
-      (Rev.) i2c-mlxbf: Add repeated start condition support
-
-Krzysztof Kozlowski (2):
-      (Rev.) dt-bindings: i2c: i2c-wmt: Convert to YAML
-      (Rev.) dt-bindings: i2c: dw: merge duplicate compatible entry.
-
-Linus Walleij (2):
-      (Rev.) i2c: mux: ltc4306: use new GPIO line value setter callbacks
-      (Rev.) misc: add FPC202 dual port controller driver
-
-Luca Ceresoli (9):
-      (Rev.) i2c: atr: add passthrough flag
-      (Rev.) i2c: atr: add static flag
-      (Rev.) i2c: atr: allow replacing mappings in attach_addr()
-      (Rev.) i2c: atr: deduplicate logic in attach_addr()
-      (Rev.) i2c: atr: do not create mapping in detach_addr()
-      (Rev.) i2c: atr: split up i2c_atr_get_mapping_by_addr()
-      (Rev.) i2c: atr: find_mapping() -> get_mapping()
-      (Rev.) i2c: atr: Fix lockdep for nested ATRs
-      (Rev.) i2c: atr: Fix end of loop test in i2c_atr_find_mapping_by_addr()
-
-Mario Limonciello (1):
-      (Rev.) i2c: amd-isp: Add ISP i2c-designware driver
-
-Mukesh Kumar Savaliya (2):
-      (Rev.) i2c: npcm: Add clock toggle recovery
-      (Rev.) i2c: qcom-geni: Use generic definitions for bus frequencies
-
-Neal Gompa (5):
-      (Rev.) i2c: pasemi: Log bus reset causes
-      (Rev.) i2c: pasemi: Improve error recovery
-      (Rev.) i2c: pasemi: Enable the unjam machine
-      (Rev.) i2c: pasemi: Sort includes alphabetically
-      (Rev.) i2c: pasemi: Use correct bits.h include
-
-Pratap Nirujogi (1):
-      (Rev.) i2c: I2C_DESIGNWARE_AMDISP should depend on DRM_AMD_ISP
-
-Romain Gantois (4):
-      (Rev.) i2c: atr: add passthrough flag
-      (Rev.) i2c: atr: add static flag
-      (Rev.) i2c: atr: deduplicate logic in attach_addr()
-      (Rev.) i2c: atr: Fix end of loop test in i2c_atr_find_mapping_by_addr()
-
-Sakari Ailus (7):
-      (Rev.) media: i2c: ds90ub960: Remove of_node assignment
-      (Rev.) i2c: core: Deprecate of_node in struct i2c_board_info
-      (Rev.) i2c: core: Do not dereference fwnode in struct device
-      (Rev.) i2c: core: Reuse fwnode variable where it makes sense
-      (Rev.) i2c: core: Switch to fwnode APIs to get IRQ
-      (Rev.) i2c: core: Unify the firmware node type check
-      (Rev.) i2c: core: Drop duplicate check before calling OF APIs
-
-Tomi Valkeinen (18):
-      (Rev.) i2c: atr: Fix end of loop test in i2c_atr_find_mapping_by_addr()
-      (Test) misc: add FPC202 dual port controller driver
-      (Test) i2c: Support dynamic address translation
-      (Test) i2c: support per-channel ATR alias pools
-      (Test) i2c: rename field 'alias_list' of struct i2c_atr_chan to 'alias_pairs'
-      (Test) i2c: move ATR alias pool to a separate struct
-      (Rev.) i2c: use client addresses directly in ATR interface
-      (Test) i2c: use client addresses directly in ATR interface
-      (Test) media: i2c: ds90ub960: Protect alias_use_mask with a mutex
-      (Test) media: i2c: ds90ub960: Replace aliased clients list with address list
-      (Test) dt-bindings: misc: Describe TI FPC202 dual port controller
-      (Test) media: i2c: ds90ub960: Remove of_node assignment
-      (Test) i2c: core: Deprecate of_node in struct i2c_board_info
-      (Test) i2c: core: Do not dereference fwnode in struct device
-      (Test) i2c: core: Reuse fwnode variable where it makes sense
-      (Test) i2c: core: Switch to fwnode APIs to get IRQ
-      (Test) i2c: core: Unify the firmware node type check
-      (Test) i2c: core: Drop duplicate check before calling OF APIs
-
-Wolfram Sang (3):
-      (Rev.) dt-bindings: i2c: renesas,riic: Document RZ/V2N (R9A09G056) support
-      (Rev.) i2c: riic: Implement bus recovery
-      (Test) i2c: riic: Implement bus recovery
-
- .../devicetree/bindings/i2c/i2c-mt65xx.yaml        |   1 +
- .../devicetree/bindings/i2c/i2c-rk3x.yaml          |   1 +
- Documentation/devicetree/bindings/i2c/i2c-wmt.txt  |  24 -
- .../devicetree/bindings/i2c/renesas,riic.yaml      |   1 +
- .../bindings/i2c/snps,designware-i2c.yaml          |  12 +-
- .../devicetree/bindings/i2c/wm,wm8505-i2c.yaml     |  47 ++
- .../devicetree/bindings/misc/ti,fpc202.yaml        |  94 ++++
- Documentation/i2c/busses/i2c-parport.rst           |   2 +-
- MAINTAINERS                                        |  16 +-
- drivers/i2c/algos/i2c-algo-pcf.c                   |   3 +-
- drivers/i2c/busses/Kconfig                         |  13 +-
- drivers/i2c/busses/Makefile                        |   1 +
- drivers/i2c/busses/i2c-at91-master.c               |   3 +-
- drivers/i2c/busses/i2c-bcm-iproc.c                 | 223 ++++----
- drivers/i2c/busses/i2c-davinci.c                   |   3 +-
- drivers/i2c/busses/i2c-designware-amdisp.c         | 205 ++++++++
- drivers/i2c/busses/i2c-designware-common.c         |   4 +-
- drivers/i2c/busses/i2c-designware-platdrv.c        |   2 +-
- drivers/i2c/busses/i2c-designware-slave.c          |   2 +-
- drivers/i2c/busses/i2c-i801.c                      |   4 +-
- drivers/i2c/busses/i2c-imx.c                       |  12 +-
- drivers/i2c/busses/i2c-ismt.c                      |   2 +-
- drivers/i2c/busses/i2c-lpc2k.c                     |   7 +-
- drivers/i2c/busses/i2c-microchip-corei2c.c         | 102 ++++
- drivers/i2c/busses/i2c-mlxbf.c                     |  87 ++--
- drivers/i2c/busses/i2c-npcm7xx.c                   |  18 +-
- drivers/i2c/busses/i2c-octeon-core.c               | 166 +++++-
- drivers/i2c/busses/i2c-octeon-core.h               |  13 +-
- drivers/i2c/busses/i2c-pasemi-core.c               | 119 ++++-
- drivers/i2c/busses/i2c-pasemi-pci.c                |  10 +-
- drivers/i2c/busses/i2c-piix4.c                     |   2 +-
- drivers/i2c/busses/i2c-powermac.c                  |   2 +-
- drivers/i2c/busses/i2c-qcom-geni.c                 |  19 +-
- drivers/i2c/busses/i2c-riic.c                      |  53 +-
- drivers/i2c/busses/i2c-rzv2m.c                     |   2 +-
- drivers/i2c/busses/i2c-sh_mobile.c                 |   3 +-
- drivers/i2c/busses/i2c-tegra.c                     |   5 +
- drivers/i2c/busses/i2c-thunderx-pcidrv.c           |   5 +-
- drivers/i2c/busses/i2c-tiny-usb.c                  |   3 +-
- drivers/i2c/busses/i2c-uniphier-f.c                |  24 +-
- drivers/i2c/busses/i2c-uniphier.c                  |  24 +-
- drivers/i2c/busses/i2c-via.c                       |  15 +-
- drivers/i2c/busses/i2c-viai2c-wmt.c                |  20 +-
- drivers/i2c/busses/i2c-viapro.c                    |  33 +-
- drivers/i2c/busses/i2c-viperboard.c                |  17 +-
- drivers/i2c/busses/i2c-virtio.c                    |   7 +-
- drivers/i2c/busses/i2c-xgene-slimpro.c             |  57 +--
- drivers/i2c/busses/i2c-xiic.c                      |   4 +-
- drivers/i2c/busses/scx200_acb.c                    |   6 +-
- drivers/i2c/i2c-atr.c                              | 570 +++++++++++++++------
- drivers/i2c/i2c-core-base.c                        |  67 ++-
- drivers/i2c/i2c-core-of.c                          |   1 -
- drivers/i2c/i2c-core-slave.c                       |  12 +-
- drivers/i2c/i2c-core-smbus.c                       |   3 +-
- drivers/i2c/i2c-smbus.c                            |  21 +-
- drivers/i2c/muxes/i2c-mux-ltc4306.c                |  10 +-
- drivers/media/i2c/ds90ub913.c                      |   9 +-
- drivers/media/i2c/ds90ub953.c                      |   9 +-
- drivers/media/i2c/ds90ub960.c                      |  52 +-
- drivers/misc/Kconfig                               |  12 +
- drivers/misc/Makefile                              |   1 +
- drivers/misc/ti_fpc202.c                           | 438 ++++++++++++++++
- include/linux/i2c-atr.h                            |  73 ++-
- include/linux/i2c-smbus.h                          |   6 +-
- include/linux/i2c.h                                |   2 -
- 65 files changed, 2123 insertions(+), 661 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-wmt.txt
- create mode 100644 Documentation/devicetree/bindings/i2c/wm,wm8505-i2c.yaml
- create mode 100644 Documentation/devicetree/bindings/misc/ti,fpc202.yaml
- create mode 100644 drivers/i2c/busses/i2c-designware-amdisp.c
- create mode 100644 drivers/misc/ti_fpc202.c
-
---AEjmkLNbeyZsZEOT
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmg52M8ACgkQFA3kzBSg
-KbYvTA//diGgwRF8XQmNG9jl1DUPR3W0udUHZk16fBNFOaSptMP1uEBWZRfkQ8RD
-+weYIph6FINM/EpG4Ze9ERPYkWgOWhBRxKy0DUWrbBl0XR6kxQwQzEK5kYqJgZSV
-LDXPS/QjsJcU4THf4SksvdPoJPSWp64+fU1Hs3D+Cbhv96kGpiqdo34z4UPTwAzn
-xIQVQCpv5Q+Pb9eL/kmpkLUzjIntIcZZTOUdh6uX7SsumeZp1+q7w8KvdkYmUInq
-N6Fo0XKcl3Dcp8v7paEfgni+GKtw/Yxz7HFpvtaOton1hLh76YIsT686Gcc3neOm
-D+D8wUVD8ZRI0VFwYKhBwN+OLRSllLqdsnQSurw+K7Id2e5yV99AevKlXEHrOSuP
-5u8aLViMkTwfEajhLqQ0Whg+ELXValFyl/P++kT3O12WRDXzLJkx3DsKLTAwq1Ky
-WY6a61OJnNKK1pI4nHaze86piW2J/59bFqLuUj2cazNMwHmmSblmUiEKiKzs+XBo
-8Ixo/2GP+Fug9NULRw11l93vHdOFAS7GYt9NVX9o5iIr9K8kXSKvpzFOpz7yn9uq
-iQ06C0rm1sXeA811wrhisLd+0J1yVF0a9CTP5a09JqKHA0MIqSy5RHHuyT8nlXMP
-ToAn700Rh9ZO5PW7dAk0HhGyCD+F08RsJ5RZag8iVh6Hx4RWZpI=
-=AMj+
------END PGP SIGNATURE-----
-
---AEjmkLNbeyZsZEOT--
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5ed77f6d-14d7-4b62-9505-ab988fa43bf2@quicinc.com>
+X-Proofpoint-GUID: rvy8V1bcYTZyqD73TkxSM4CFCnceiIXi
+X-Proofpoint-ORIG-GUID: rvy8V1bcYTZyqD73TkxSM4CFCnceiIXi
+X-Authority-Analysis: v=2.4 cv=X8FSKHTe c=1 sm=1 tr=0 ts=6839dfde cx=c_pps
+ a=HLyN3IcIa5EE8TELMZ618Q==:117 a=xqWC_Br6kY4A:10 a=8nJEP1OIZ-IA:10
+ a=dt9VzEwgFbYA:10 a=hMb-uB02kSkghMJ30ZAA:9 a=3ZKOabzyN94A:10
+ a=wPNLvfGTeEIA:10 a=bTQJ7kPSJx9SKPbeHEYW:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTMwMDE0NyBTYWx0ZWRfX2pBaMAonos5K
+ EGQ4H7aMitR9sWWER93k8B6R5TNlHl75VSz0xdoLNZrV2GQ/XPLfqsrd1qr/Vj7vgUFj9I/NVq9
+ 4X+RnLeDHmGM01qq50uO5Cm268h/cA7M5l4qDb3eOHOLDKChZfz81ZSSKIOxYai0eBIiuePAXyN
+ tBfNfX7ynitQWoVhg4BSs30r0cyhnp4nhhvKEuH7Q5DPEJaWRE3uFSbYXVeJDMEbucC6vyK8gWN
+ RcHxKOga2UatdKK66hEceEVQSlRT/xvHMj43t8FYJaL5FJtF2/u4/GELXlUEvHBbispYjQoSXPo
+ SK7/+nmNRyTeN62DyIJ0alhMY7gChv4fW3+sBuGLnqiD9OohJHdzICTtmPPRQQgYfPMLPc0Sav8
+ OZd7QggdFTLBzftTDXsmOY2jYHGTpjoDenl+Q3Kc9JwuUEW+/uwjjBAxdmoaHk9biaK16a94
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-05-30_07,2025-05-30_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 suspectscore=0 phishscore=0 bulkscore=0 mlxlogscore=999
+ mlxscore=0 clxscore=1015 priorityscore=1501 spamscore=0 adultscore=0
+ malwarescore=0 lowpriorityscore=0 classifier=spam authscore=0 authtc=n/a
+ authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2505160000 definitions=main-2505300147
+
+On Fri, May 30, 2025 at 07:36:05PM +0530, Jyothi Kumar Seerapu wrote:
+> 
+> 
+> On 5/21/2025 6:15 PM, Dmitry Baryshkov wrote:
+> > On Wed, May 21, 2025 at 03:58:48PM +0530, Jyothi Kumar Seerapu wrote:
+> > > 
+> > > 
+> > > On 5/9/2025 9:31 PM, Dmitry Baryshkov wrote:
+> > > > On 09/05/2025 09:18, Jyothi Kumar Seerapu wrote:
+> > > > > Hi Dimitry, Thanks for providing the review comments.
+> > > > > 
+> > > > > On 5/6/2025 5:16 PM, Dmitry Baryshkov wrote:
+> > > > > > On Tue, May 06, 2025 at 04:48:44PM +0530, Jyothi Kumar Seerapu wrote:
+> > > > > > > The I2C driver gets an interrupt upon transfer completion.
+> > > > > > > When handling multiple messages in a single transfer, this
+> > > > > > > results in N interrupts for N messages, leading to significant
+> > > > > > > software interrupt latency.
+> > > > > > > 
+> > > > > > > To mitigate this latency, utilize Block Event Interrupt (BEI)
+> > > > > > > mechanism. Enabling BEI instructs the hardware to prevent interrupt
+> > > > > > > generation and BEI is disabled when an interrupt is necessary.
+> > > > > > > 
+> > > > > > > Large I2C transfer can be divided into chunks of 8 messages internally.
+> > > > > > > Interrupts are not expected for the first 7 message completions, only
+> > > > > > > the last message triggers an interrupt, indicating the completion of
+> > > > > > > 8 messages. This BEI mechanism enhances overall transfer efficiency.
+> > > > > > 
+> > > > > > Why do you need this complexity? Is it possible to set the
+> > > > > > DMA_PREP_INTERRUPT flag on the last message in the transfer?
+> > > > > 
+> > > > > If i undertsand correctly, the suggestion is to get the single
+> > > > > intetrrupt for last i2c message only.
+> > > > > 
+> > > > > But With this approach, we can't handle large number of i2c messages
+> > > > > in the transfer.
+> > > > > 
+> > > > > In GPI driver, number of max TREs support is harcoded to 64 (#define
+> > > > > CHAN_TRES   64) and for I2C message, we need Config TRE, GO TRE and
+> > > > > DMA TREs. So, the avilable TREs are not sufficient to handle all the
+> > > > > N messages.
+> > > > 
+> > > > It sounds like a DMA driver issue. In other words, the DMA driver can
+> > > > know that it must issue an interrupt before exausting 64 TREs in order
+> > > > to
+> > > > 
+> > > > > 
+> > > > > Here, the plan is to queue i2c messages (QCOM_I2C_GPI_MAX_NUM_MSGS
+> > > > > or 'num' incase for less messsages), process and unmap/free upon the
+> > > > > interrupt based on QCOM_I2C_GPI_NUM_MSGS_PER_IRQ.
+> > > > 
+> > > > Why? This is some random value which has no connection with CHAN_TREs.
+> > > > Also, what if one of the platforms get a 'liter' GPI which supports less
+> > > > TREs in a single run? Or a super-premium platform which can use 256
+> > > > TREs? Please don't workaround issues from one driver in another one.
+> > > 
+> > > We are trying to utilize the existing CHAN_TRES mentioned in the GPI driver.
+> > > With the following approach, the GPI hardware can process N number of I2C
+> > > messages, thereby improving throughput and transfer efficiency.
+> > > 
+> > > The main design consideration for using the block event interrupt is as
+> > > follows:
+> > > 
+> > > Allow the hardware to process the TREs (I2C messages), while the software
+> > > concurrently prepares the next set of TREs to be submitted to the hardware.
+> > > Once the TREs are processed, they can be freed, enabling the software to
+> > > queue new TREs. This approach enhances overall optimization.
+> > > 
+> > > Please let me know if you have any questions, concerns, or suggestions.
+> > 
+> > The question was why do you limit that to QCOM_I2C_GPI_NUM_MSGS_PER_IRQ.
+> > What is the reason for that limit, etc. If you think about it, The GENI
+> > / I2C doesn't impose any limit on the number of messages processed in
+> > one go (if I understand it correctly). Instead the limit comes from the
+> > GPI DMA driver. As such, please don't add extra 'handling' to the I2C
+> > driver. Make GPI DMA driver responsible for saying 'no more for now',
+> > then I2C driver can setup add an interrupt flag and proceed with
+> > submitting next messages, etc.
+> > 
+> 
+> For I2C messages, we need to prepare TREs for Config, Go and DMAs. However,
+> if a large number of I2C messages are submitted then may may run out of
+> memory for serving the TREs. The GPI channel supports a maximum of 64 TREs,
+> which is insufficient to serve 32 or even 16 I2C messages concurrently,
+> given the multiple TREs required per message.
+> 
+> To address this limitation, a strategy has been implemented to manage how
+> many messages can be queued and how memory is recycled. The constant
+> QCOM_I2C_GPI_MAX_NUM_MSGS is set to 16, defining the upper limit of
+> messages that can be queued at once. Additionally,
+> QCOM_I2C_GPI_NUM_MSGS_PER_IRQ is set to 8, meaning that
+> half of the queued messages are expected to be freed or deallocated per
+> interrupt.
+> This approach ensures that the driver can efficiently manage TRE resources
+> and continue queuing new I2C messages without exhausting memory.
+> > I really don't see a reason for additional complicated handling in the
+> > geni driver that you've implemented. Maybe I misunderstand something. In
+> > such a case it usually means that you have to explain the design in the
+> > commit message / in-code comments.
+> > 
+> 
+> 
+> The I2C Geni driver is designed to prepare and submit descriptors to the GPI
+> driver one message at a time.
+> As a result, the GPI driver does not have visibility into the current
+> message index or the total number of I2C messages in a transfer. This lack
+> of context makes it challenging to determine when to set the block event
+> interrupt, which is typically used to signal the completion of a batch of
+> messages.
+> 
+> So, the responsibility for deciding when to set the BEI should lie with the
+> I2C driver.
+> 
+> If this approach is acceptable, I will proceed with updating the relevant
+> details in the commit message.
+> 
+> Please let me know if you have any concerns or suggestions.
+
+- Make gpi_prep_slave_sg() return NULL if flags don't have
+  DMA_PREP_INTERRUPT flag and there are no 3 empty TREs for the
+  interrupt-enabled transfer.
+
+- If I2C driver gets NULL from dmaengine_prep_slave_single(), retry
+  again, adding DMA_PREP_INTERRUPT. Make sure that the last one always
+  gets DMA_PREP_INTERRUPT.
+
+- In geni_i2c_gpi_xfer() split the loop to submit messages until you
+  can, then call wait_for_completion_timeout() and then
+  geni_i2c_gpi_unmap() for submitted messages, then continue with a new
+  portion of messages.
+
+-- 
+With best wishes
+Dmitry
 
