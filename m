@@ -1,61 +1,61 @@
-Return-Path: <linux-i2c+bounces-11209-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11211-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C826ACCF43
-	for <lists+linux-i2c@lfdr.de>; Tue,  3 Jun 2025 23:47:30 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4FDA9ACCF4A
+	for <lists+linux-i2c@lfdr.de>; Tue,  3 Jun 2025 23:47:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7A4D317652F
-	for <lists+linux-i2c@lfdr.de>; Tue,  3 Jun 2025 21:47:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0B0701896C95
+	for <lists+linux-i2c@lfdr.de>; Tue,  3 Jun 2025 21:47:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4319F23BCE4;
-	Tue,  3 Jun 2025 21:47:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDDB92528FD;
+	Tue,  3 Jun 2025 21:47:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Rx5M3KNf"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="PjiZ2zAW"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2051.outbound.protection.outlook.com [40.107.244.51])
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2079.outbound.protection.outlook.com [40.107.212.79])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68995228CB8;
-	Tue,  3 Jun 2025 21:47:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31941228CB8;
+	Tue,  3 Jun 2025 21:47:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.212.79
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748987228; cv=fail; b=GGBA+WK5exd/uz8x1jWxLEymJQ3eJlckSEzDXJAQja38H6Y50WcNey6reP093MqBOmAwxoE5EW7cipTmU9U6cqoHbVegME/2HMf9/fxiQB5/R8gRvTcQyY3FXjmm3m8B2X+86oOjJXQH6psRwHxxtXfTh2Rk6s8ZSq0qaNXOxac=
+	t=1748987238; cv=fail; b=j0LlRO86PC2Bbga5cYNbUiBiVkIi3JONx31yPvYPuevN02TWzW/J1YWFzLr5HLp3R3yGYwRolUOhsaE9qd70kzDYzp23vJZAOAbVHBfQl73/vqmoDRzPJxGcjCADlSoe2m5O62M47zLreFUruNf4e0Z3YoHolEFq5sErw29Cwnc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748987228; c=relaxed/simple;
-	bh=pkOOQLfcs3faXAzB/KS0AvOlAVzcwhXhBfnQlUHmPuw=;
+	s=arc-20240116; t=1748987238; c=relaxed/simple;
+	bh=7zA2Q4st5GonzsQtXmlaT8VgBTu8gNp8q9hH8Fc4TIQ=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=sM9wrzqsK+MtLZZwxzj9PsZz7lJJRcWqtezQVBb5ClKQwcEqDuI9PXBXHqm44zyumqizbZCN8hGSK6cHmCC5xT2F+JpzfHhOJ1flG06GHsxbNOBEwU5Ur0hfmmibfBdMKxSZBPtu9s/7KwQFG0Eb77nlNWIYQaeXeEK/8+KlwzQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=Rx5M3KNf; arc=fail smtp.client-ip=40.107.244.51
+	 MIME-Version:Content-Type; b=NunM+gn2ZtsDU+lQHFRP67wGEoftK4RDs5Rga47UDoBoyJxEotM7TV1m1WlQ+b1V0UjUakuaVVKopyzk67vw44o/zfYdK8xwfZiJmQFv9I0lozFcnXE6jknx9aHz5c+3k1AWpZXkiSVT3dMN45E9VJDDbcaS3SzQaJpf7DyUHqw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=PjiZ2zAW; arc=fail smtp.client-ip=40.107.212.79
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=QyeqSuOVHI3//UD7945wcw1k4oJ0Fd8tLAMpBXplcncLCHBOIPtBYcXjtxHXzjIQ1jsPAcrPXVRjSkNc4XU/UXG8RGvRW2Bwoqze2vp2qWvi7Mbn6UjSFo+8wUNLNxhnCbsHaSTAfcfoHcJt49sWPJXK+QzAdzCHNZIT9GgZtmo1asM/uG8vRjryxldFVrzEyMGcANDSqriurjox1b78n1Shz1g8UyClhp2WbYZ5vlwqdOgdiALFWGipQVLJetEuE+OTCRa27Ze1dgN13JoM2uIaULDgy8abfHSLcYqyAMTmM8G3pEmIkUO+S/b7TysK3HQ3HoISIwscm/F5BqGUPw==
+ b=qIwF6TaeUJ1OSSdrOYL6Bvg81IwPEztbCun8IumCEINr7keXLCZW4NawMkjy64lJGS4YyIxOwvAqruU6GgoWbWkocQGDXlYurYVsWa/K2+/zrQ4bgi/DZhlKFjmaaKWLeaaNdbaogtGHgd8xfxVxi7jRIsBHgBdpqwzQnhKlFJfbEoPaKh5TcslL/jflhZByUXim0xRXIbwLE6B1imRBtaEVZU1CqmhL7R569LdNK5DAPi04g8taOsX6YSxI0p4kYd4WrrEmQIlhIBYRWg0jYQSSgTjfsLLDIDbImlWMt3KSz2JdmhVzzUNujXYi9mDMGLpPxaLFkvqrDROZGn6DlQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FzsyuRMNx+HUMxyOkN56AZEuJPfQY2zoJb4t6d0nBeY=;
- b=ijA+6wCt4aMYQaNauDhY/KUZ6c8DScPViCBMyvccjdiEeiPZIl7TN2NLgA07AQe9Y54ilZ+iRweOj/Z8YVGI/z1s5PUFbaLp8zwwMegOkUbWCzkONSR7OpVd2zsyn+JUV5KqZsQZuLnEqZ4QSYV7gnKrKxRhCJczpL/iO6crJfID5KcTmGh6lMykqjdCGw4eZJK+MRoc7CQCEIggR69sEMAZVzZbaTyRiKRmOtPON9lqKs6jsQkAEXOUSHHkm68WSQhSqd5geB+b3GNHRKfeim0pH4fYbr6ZMtbbbi8QeII/+JClXUGlNCuaH0XmLu1IcLryniDny8WbEPKsoo2p5A==
+ bh=Oow/ifob46Ag4yR+jB4UukJjTk9cxilBemzAgMqe7ok=;
+ b=V64rmEJB6kAw5TSq0DPIOrJFfzFaUIVr/YXptGNpG6rEKHem+CUHmv8EqeAlduKNDYBM8siLzrjWXgjsVHHzmvXX7mPKH9JJdtiqiEbk/BeYVh0e3GjSDyDbverZotxtpkct0pzKBVasRDEykcaDyuo4sWfBrA4nlWYJHBtH3jaxGsPx6SFrOegDauTu5n9uBjbJ7SuPSg+qo4Mc7R0Scj1HA5nzxxeJySih6HdgZnunQTJ6+eY9eeJOxxFhW+7Q6dnlR6++IbtztAvgz5aJhpVWlcG0WrndGXzHxMT1ac7GPoN9bC+0CnzAQSTxbW/Pu9TldzYeqG0XH1DeJ5oB/A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FzsyuRMNx+HUMxyOkN56AZEuJPfQY2zoJb4t6d0nBeY=;
- b=Rx5M3KNfrKeWgAeH4PIjrWJSfcuck7IWr4DB9osc50evnCL1HPUlzKMYEqUH501Y6cH2z+3tDpjjfgErP+bSMBWrH62QVI5Yiu57RWuiwqAZGfJfMbm4PxhaNPJ3m4oRSUSokKfwsh4akzE6J9V/jSyo0yBlKakU/Cmos65dHlo=
-Received: from SA1P222CA0128.NAMP222.PROD.OUTLOOK.COM (2603:10b6:806:3c2::10)
- by LV2PR12MB5749.namprd12.prod.outlook.com (2603:10b6:408:17f::20) with
+ bh=Oow/ifob46Ag4yR+jB4UukJjTk9cxilBemzAgMqe7ok=;
+ b=PjiZ2zAWrskKR97hInf320XbkJ/UptMemN/F9o9xRyffgDhwI1Rch0l0GsoARATKnXVFw/NfLQthkMuvpkJD2JMPLu90dJQuhjB5H3ITr9mCo2E5XYgOv/u1v0ritxw0oggxyg4ZzHz+sED9S3zPXba32hLUViyrdSLYgK4v3pY=
+Received: from SA1P222CA0127.NAMP222.PROD.OUTLOOK.COM (2603:10b6:806:3c2::17)
+ by BL1PR12MB5946.namprd12.prod.outlook.com (2603:10b6:208:399::8) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8792.33; Tue, 3 Jun
- 2025 21:47:03 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8769.32; Tue, 3 Jun
+ 2025 21:47:08 +0000
 Received: from SA2PEPF00003F64.namprd04.prod.outlook.com
- (2603:10b6:806:3c2:cafe::78) by SA1P222CA0128.outlook.office365.com
- (2603:10b6:806:3c2::10) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8769.21 via Frontend Transport; Tue,
- 3 Jun 2025 21:47:03 +0000
+ (2603:10b6:806:3c2:cafe::52) by SA1P222CA0127.outlook.office365.com
+ (2603:10b6:806:3c2::17) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8792.23 via Frontend Transport; Tue,
+ 3 Jun 2025 21:47:08 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -65,11 +65,11 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
  SA2PEPF00003F64.mail.protection.outlook.com (10.167.248.39) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8792.29 via Frontend Transport; Tue, 3 Jun 2025 21:47:02 +0000
+ 15.20.8792.29 via Frontend Transport; Tue, 3 Jun 2025 21:47:08 +0000
 Received: from maple-stxh-linux-10.amd.com (10.180.168.240) by
  SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Tue, 3 Jun 2025 16:47:01 -0500
+ 15.1.2507.39; Tue, 3 Jun 2025 16:47:07 -0500
 From: Pratap Nirujogi <pratap.nirujogi@amd.com>
 To: <andi.shyti@kernel.org>, <rdunlap@infradead.org>, <hdegoede@redhat.com>,
 	<ilpo.jarvinen@linux.intel.com>, <mario.limonciello@amd.com>,
@@ -78,9 +78,9 @@ CC: <linux-i2c@vger.kernel.org>, <platform-driver-x86@vger.kernel.org>,
 	<linux-kernel@vger.kernel.org>, <benjamin.chan@amd.com>, <bin.du@amd.com>,
 	<gjorgji.rosikopulos@amd.com>, <king.li@amd.com>, <dantony@amd.com>, "Pratap
  Nirujogi" <pratap.nirujogi@amd.com>
-Subject: [PATCH v2 1/3] i2c: designware: Initialize adapter name only when not set
-Date: Tue, 3 Jun 2025 17:40:11 -0400
-Message-ID: <20250603214611.3039787-2-pratap.nirujogi@amd.com>
+Subject: [PATCH v2 2/3] i2c: amd-isp: Initialize unique adpater name
+Date: Tue, 3 Jun 2025 17:40:12 -0400
+Message-ID: <20250603214611.3039787-3-pratap.nirujogi@amd.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250603214611.3039787-1-pratap.nirujogi@amd.com>
 References: <20250603214611.3039787-1-pratap.nirujogi@amd.com>
@@ -96,77 +96,106 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA2PEPF00003F64:EE_|LV2PR12MB5749:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1cb2d7cb-eb00-47b0-3b05-08dda2e82d01
+X-MS-TrafficTypeDiagnostic: SA2PEPF00003F64:EE_|BL1PR12MB5946:EE_
+X-MS-Office365-Filtering-Correlation-Id: dca9d224-720c-4d56-1305-08dda2e830a1
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|82310400026|36860700013|376014;
+	BCL:0;ARA:13230040|1800799024|376014|82310400026|36860700013;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?YMU9Er7yyT3O/Ob7SedC9daOkWRb8pxmWMt1YDFA+NdLJh1L+uskiGBPSnlX?=
- =?us-ascii?Q?/1V9bvd4y9IPACO8lGb4zPW9MaovCKGJ2JXQO0m8XGZyK0irmltHlp+WG0Gl?=
- =?us-ascii?Q?QvCrOtQQA+kpl9QOog9K7I+l5H4WHZwP1tu5PY7aCVIjOvpjnewV0LM/O1qN?=
- =?us-ascii?Q?6SWWZoZgtF7Z+RxXqx3xdIlWF/yf6vuNKlyi8dtYO5LgIAW7954s5ZTzgXMj?=
- =?us-ascii?Q?zV/bo9LFXcw5R5NyO/n+fNOEAX/NjZpG0FdJA3Jfd9ClogEJt6x+vJ6OMhl7?=
- =?us-ascii?Q?Q2qdWSeUtE2zTqUjmlJuW/fmHzMNJdpuSHnQzobGORV7XOCkJTh2CJrYNfp2?=
- =?us-ascii?Q?0OrYj/rJTNr+CcWJ1tVqV/CcT3z4gLlHJDnxSvALRQxJagK9Uuh09WxDFTi/?=
- =?us-ascii?Q?Ki4Qlu03jI9LBkRkM6X1YoTj93mT9qq+vxUEzonwaNUlaarnFEjkeQ4vvsd4?=
- =?us-ascii?Q?Mm2n2J9+vI030/xTD8lW28nTBPvhaOvtf+omhQoOMaO/m8JUUXZuoH4bwZc9?=
- =?us-ascii?Q?B4r5QhahHxLCd2wk+AQa6suFUu3zoLrT1/xMCZ46VRDMDJGDq+uKy0WajHlC?=
- =?us-ascii?Q?S6Y2+twWQyTMA6f7oX5lj3i93+pacTTgG1ItAukNYWEK9wGWSpIWK+taxRTW?=
- =?us-ascii?Q?qbZ+L1vHt0scro0eVzCDJKx87O7/OY0SUCK+i6CzOcaH16n5KiXVKaz7jZjl?=
- =?us-ascii?Q?WkzMXD84cRmwbZaJIQ14QfN1ryv9VxcC4c4VyagMAkvuhnwz464ZWrriI2au?=
- =?us-ascii?Q?7y2BSXuykLfSninobAV9qlYNTupGrvc2LSVXCNQ91i/P97nbjuRmMw6uUEXM?=
- =?us-ascii?Q?pweEWW/JzxrxFHAuJARC/D4HdAe1rX5Zd1CYNL8x4EAoLZK3uATkn9xAZvmN?=
- =?us-ascii?Q?gzllDXllTrQXurlVRaSm6Yu4D8Cz6iYnZYiPtZOaqru74I4iamDHI+4vUFzV?=
- =?us-ascii?Q?XwL1Ht3mwTzjKVVSJDNcwRZw73zTfNZBpycaa/J4POR3EoBAYNQlrmIXpOvR?=
- =?us-ascii?Q?GwM8TN41llY4fPxxbBEI3f3ZfoWH5d3wP96xdB2GuuPL2348VenU1r/vu/Ah?=
- =?us-ascii?Q?yZXOFN6en/VU559Slz8JY9c5WvO1Xfy6FI6OL6hPHM5aN5FWuxr8/NjcuSEG?=
- =?us-ascii?Q?w5HYG1YR4LiOf7GA6Rzd9yBXs140ehOhwxBqTin5v+oFTmtXmgwPQyY91nVs?=
- =?us-ascii?Q?IDtD3TAOQeThLl/8gwnCRE46jFZI+43TMuDS3rbVQFMh1t4fNvghZoDKZTO+?=
- =?us-ascii?Q?l1UzZkB9vdLE3GvXujF5+H9Y/QYb1DFepgmLk9AkQjL3d5SG1AHvw93Dyskx?=
- =?us-ascii?Q?t922iz/uH+0rtl4k+//IVVuX6wiKolf3+r8KCfenhyJ6+L1rOQDdoCwSgy8X?=
- =?us-ascii?Q?OF/zTcarbGb18DNCbER1rrKb5ZZMGlvjLNrlsgOXd6ksCDnhHOUvM0aFT2p0?=
- =?us-ascii?Q?erV5mZpa4pxot+SxWZE6xaUzpQi0QHDEn5NohYr8VWjG1v1wuFjIK+ueNFN2?=
- =?us-ascii?Q?KzBnDP6bY39CnzWsVIJbkW1bXZGzk9P/C5nU?=
+	=?us-ascii?Q?rbPDAoTU7gcaOS5VRECqxSPFb1GS+kIJRDo+5x6Ez50A07wlMLXHgPThu/Lx?=
+ =?us-ascii?Q?snfzg+PAB039LuIu/m2/JJ48rmFsbTMT6gHbq+iQKMG8DkWFjr7zWhKJ9U4b?=
+ =?us-ascii?Q?7eGsGa2NPZqTrvMhQ2KQ/zfxtD9clqHA76CMqUhV8gYqM9MgHjqFJTrOcq5p?=
+ =?us-ascii?Q?ZxHLxFVXqLsE7xH+dopxiEKWE2fvtVGsYlUKLHk/nP9lAVCJmJsfBmIouDD5?=
+ =?us-ascii?Q?ATxS9NK8tSOdQWGGO+kqUk6qLGtB+wgAquQ9WZelNhgrcpdbe+p/+m8FDqBd?=
+ =?us-ascii?Q?y6IHkBNTauGtUSRI7MCrhWr49bWYq77705Am9B7D9hkXCzsvKHL9XqV8pj/t?=
+ =?us-ascii?Q?zfk1F/RcYodQ8F13Vq78f8UAq4OPOZIXnv2Of9Kw4KqoWZSio3Vw262y9yYn?=
+ =?us-ascii?Q?TWvD6WSxQb6mkiV6d9lcSzWSrBjCuyWuBB/g8pgCmvXD9E8I35VtmAxKjX+E?=
+ =?us-ascii?Q?u/leOJPrE353PJ89v63Hf2pZmBFLWufv8jjITsI/t1XaHexKxSegIP3kSRAH?=
+ =?us-ascii?Q?8tGgcZdy1jCg640GpD6GXxDjDyFsyaxAD6EciKN7Lg8lKEYETJ3mVob+BtUa?=
+ =?us-ascii?Q?klUc9GrfwQqB/b1nuFlEGqExe1/Mo3/rY7G8dwK9iZ2724U1J7LeF2rrZRhp?=
+ =?us-ascii?Q?UlXO5pOOj/zcq0eLqcj8+ACZNDH/gZnJFkHy+IgOWCJ7/wDSEA57/sP4ApA/?=
+ =?us-ascii?Q?5jq8Q9Hv3jlCvUVfF2v5G7FyFuaVibWT2OfNlxLBLDHAHD92dMzy/5eEH2cL?=
+ =?us-ascii?Q?rt2ygjIUzfXuidhbpP/jMnKy3I3/fWmoyIcvJ3hm83KoJ4NPa6jMNbB56OT2?=
+ =?us-ascii?Q?tLIkfGN1ByHczBHYhondEjWOX2tyfxVDJLoVdshfGgVbDzi8GB5bQ3TKpNtD?=
+ =?us-ascii?Q?kpxZvwcemUYAc4owirYB+Znje80J1ctmWJmVIYHFRcSqnq0sw5nwr+JRkXJt?=
+ =?us-ascii?Q?hXZEyOIJ+1P1Cxfn3t6oP6eo8kXfcEuw125wPHIuSv1+Hua4e95dtErz1oA2?=
+ =?us-ascii?Q?ernU0ROAMaki0gAuz84kI5lFvSUdUKDQKzDzVJF2jM7hZhrvFcvaYf8jDnGJ?=
+ =?us-ascii?Q?fWQ3Eh4Sqzpx6/SLn8bByxCswiH/r4tTTB7RsoIoT6Tv/jT7rNM+UWURuASs?=
+ =?us-ascii?Q?LoNArXpoBRcfvJsauQVyPiPmqn5CCe2e+DQnCee5hgiR0jaFjSOh0ujoUhAt?=
+ =?us-ascii?Q?0wc/Hmkhy1s9nW03Ba95HVG1DrsmAmctlx3RI9yVQIIL4ugU923Ora9xIU0o?=
+ =?us-ascii?Q?WtsH6oEU9crvd93c8rkf722JyIutbeg9+im7d3lC5Lya82WFirPk4AuQmT3C?=
+ =?us-ascii?Q?CWKgMjlaMdZcbwQhTyyJC0V/vm/sC8guoTzNIt4/9vC4Z15qUfH9P5yM4/cU?=
+ =?us-ascii?Q?+uf6GSK61UQ1WIwFo27BFfmP66Cxx7WvtHq5fdzwLvokCTNm2jEqdy09i30+?=
+ =?us-ascii?Q?7X3Tk1l3WS/pUOL5CxNu/k9j9D85X86leN201EkyD3XqmfDHH4D/h2gAivuh?=
+ =?us-ascii?Q?29wLn3STNy8V/a0ioD3zFd4xaNiI3ox6+JZe?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(82310400026)(36860700013)(376014);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(376014)(82310400026)(36860700013);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jun 2025 21:47:02.6857
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jun 2025 21:47:08.7721
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1cb2d7cb-eb00-47b0-3b05-08dda2e82d01
+X-MS-Exchange-CrossTenant-Network-Message-Id: dca9d224-720c-4d56-1305-08dda2e830a1
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
 	SA2PEPF00003F64.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5749
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5946
 
-Check if the adapter name is already set in the driver prior
-to initializing with generic name in i2c_dw_probe_master().
+Initialize unique name for amdisp i2c adapter, which is used
+in the platform driver to detect the matching adapter for
+i2c_client creation.
+
+Add definition of amdisp i2c adapter name in a new header file
+(include/linux/soc/amd/isp4_misc.h) as it is referred in different
+driver modules.
 
 Signed-off-by: Pratap Nirujogi <pratap.nirujogi@amd.com>
 ---
- drivers/i2c/busses/i2c-designware-master.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/i2c/busses/i2c-designware-amdisp.c |  2 ++
+ include/linux/soc/amd/isp4_misc.h          | 12 ++++++++++++
+ 2 files changed, 14 insertions(+)
+ create mode 100644 include/linux/soc/amd/isp4_misc.h
 
-diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
-index c5394229b77f..9d7d9e47564a 100644
---- a/drivers/i2c/busses/i2c-designware-master.c
-+++ b/drivers/i2c/busses/i2c-designware-master.c
-@@ -1042,8 +1042,9 @@ int i2c_dw_probe_master(struct dw_i2c_dev *dev)
- 	if (ret)
- 		return ret;
+diff --git a/drivers/i2c/busses/i2c-designware-amdisp.c b/drivers/i2c/busses/i2c-designware-amdisp.c
+index ad6f08338124..450793d5f839 100644
+--- a/drivers/i2c/busses/i2c-designware-amdisp.c
++++ b/drivers/i2c/busses/i2c-designware-amdisp.c
+@@ -8,6 +8,7 @@
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+ #include <linux/pm_runtime.h>
++#include <linux/soc/amd/isp4_misc.h>
  
--	snprintf(adap->name, sizeof(adap->name),
--		 "Synopsys DesignWare I2C adapter");
-+	if (!adap->name[0])
-+		scnprintf(adap->name, sizeof(adap->name),
-+			  "Synopsys DesignWare I2C adapter");
- 	adap->retries = 3;
- 	adap->algo = &i2c_dw_algo;
- 	adap->quirks = &i2c_dw_quirks;
+ #include "i2c-designware-core.h"
+ 
+@@ -62,6 +63,7 @@ static int amd_isp_dw_i2c_plat_probe(struct platform_device *pdev)
+ 
+ 	adap = &isp_i2c_dev->adapter;
+ 	adap->owner = THIS_MODULE;
++	scnprintf(adap->name, sizeof(adap->name), AMDISP_I2C_ADAP_NAME);
+ 	ACPI_COMPANION_SET(&adap->dev, ACPI_COMPANION(&pdev->dev));
+ 	adap->dev.of_node = pdev->dev.of_node;
+ 	/* use dynamically allocated adapter id */
+diff --git a/include/linux/soc/amd/isp4_misc.h b/include/linux/soc/amd/isp4_misc.h
+new file mode 100644
+index 000000000000..6738796986a7
+--- /dev/null
++++ b/include/linux/soc/amd/isp4_misc.h
+@@ -0,0 +1,12 @@
++// SPDX-License-Identifier: GPL-2.0+
++
++/*
++ * Copyright (C) 2025 Advanced Micro Devices, Inc.
++ */
++
++#ifndef __SOC_ISP4_MISC_H
++#define __SOC_ISP4_MISC_H
++
++#define AMDISP_I2C_ADAP_NAME "AMDISP DesignWare I2C adapter"
++
++#endif
 -- 
 2.43.0
 
