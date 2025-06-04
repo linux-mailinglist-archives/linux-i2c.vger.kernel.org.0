@@ -1,61 +1,66 @@
-Return-Path: <linux-i2c+bounces-11216-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11217-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30AC2ACD14D
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Jun 2025 02:54:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2FC68ACD13F
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Jun 2025 02:53:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0A0D53A8CAC
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Jun 2025 00:53:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 61B29177E4D
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Jun 2025 00:53:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9CE672624;
-	Wed,  4 Jun 2025 00:51:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2305619E7D0;
+	Wed,  4 Jun 2025 00:51:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s6U3Qaj8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AQVzTD85"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0310846C;
-	Wed,  4 Jun 2025 00:51:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB66E224CC;
+	Wed,  4 Jun 2025 00:51:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748998297; cv=none; b=Lbi4FRd7HLk9qVWfPAVpk6pkS+JYbA5Y+9NiYRT2oD0Vs0fj5rNeKJVQX0TZ9CF1eMLNuExhOYgjwLlGAMvEumIU2O6+PVhRGSmIhsLbVI0/lIg1izLcePM7QSF7X/DiPj7Gkk25Ekswmq8+telBKXFgC9aeTxOL6ejeHejJcXE=
+	t=1748998299; cv=none; b=DXdRK2hwglnyeqRvRiD+bfbyh9YAJx+UrzqlcG2up6iPkb1PWlWK439iucL4jEwN5NISL+SLL4Fjpkfyzorlu2VGt8TaHW2JQoesaD1xEFnXEbrWbLTttyFB1/u1ZhtVvH8RqFBP4ANLC6WrqmLKKfJsLJfQHczWgJUxr6+HlmE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748998297; c=relaxed/simple;
-	bh=9nYkW3WOfD9ZTiIkSZXcDzADWTK4YLHDkxj/pHoXQsE=;
+	s=arc-20240116; t=1748998299; c=relaxed/simple;
+	bh=i2guXKq/zzHATlE+CQ8FXCickmwgBEE1jP63DXsldoM=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=WBRs00/WrlbJn64y1STiQOVd3rGomFRvDIi61JKQ7iCJNFX7bkX23gS65t9aqUuYUky+FJAEboTffjs3ofKAuBTvWjNMS8D4WRArXephF04Y4r5udMDdbUjzW1gvo73RDip+MnPEE79GF9aAzhPk0o+Pe9wJBHA8lTWVrYkYBr8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s6U3Qaj8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D73ECC4CEF2;
-	Wed,  4 Jun 2025 00:51:35 +0000 (UTC)
+	 MIME-Version:Content-Type; b=hEhc8IHbm+Ac8OF4FTww0zyVTg2eap7rKkKPon1GDB071CgHp/xhvpCB9CMJ9ih6wyp3dqhGbhNaerenWM1o/Z5HwCx3p/3gRtLubmYxv+CxIMrlUhZ16cQ7zLkahVu1ZV1/uV+1WeRhFQ4yH68jGoAO2uXSXITwPFCIDGgt5J8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AQVzTD85; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 983B3C4CEEF;
+	Wed,  4 Jun 2025 00:51:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748998297;
-	bh=9nYkW3WOfD9ZTiIkSZXcDzADWTK4YLHDkxj/pHoXQsE=;
+	s=k20201202; t=1748998299;
+	bh=i2guXKq/zzHATlE+CQ8FXCickmwgBEE1jP63DXsldoM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=s6U3Qaj8ej7DI+69soVLlSwFrADkUtGZb/Zcru0hHZA6FXCcTQLfvUtOhQ8JGZkbd
-	 h2mVQ1BOCMYSD6SOw4SpgQvEVUQImqOdG9HimMHhhtN4BNy+D7OM6rPWGwhEbkwyi6
-	 1vZSqM1EnGIe2yNl3KYe3UamiKmbC1qIPZDzWhPoHu6axunJUK/aQhPnnh2Fb2GHYO
-	 Hp2cqnrCJkFV3QjhsTfyK5Xe2bhknLDZdTizDI+lW6kpzyhoVoO/X7ueFeuX1G7hAl
-	 REoANmMWS/Ez2wlfE5rCOpoT89aT3cJTV9C5UeMhlru2Yl7uf+bCuf01oMTCJQ3a6s
-	 tuPu2Ht0k1w+g==
+	b=AQVzTD85R3zrqLUEBtuwoLPt3sLfaFkf4E4JD493Y8scQ4dlavKM0xbsuWwXgqvUQ
+	 zX1fxUCY0Ym1A/CHBS/KZEPe01OVlliHYl5zxB9YFZVJdrPiDhYRNB+ZXKhTGlXZhs
+	 43Ghr2QGrL4SRglSo89kUspDtaNZA0IdDg8VJx7j31YoeM8ZxrWm18ciaM/cqppYSl
+	 CnHuBQURdr7VfjMlrxJpf1m7abogAtpF+O/0dBemhHBteBIV8mEHT+3qyV5DpZGqfj
+	 78D2ZxbLmIz763WKOLzuowCXMtOM5Fszccdw10LVfpcfI3LmFzbmh1WZd/3ZMkyccL
+	 BT4JUbSpGZuUQ==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
-Cc: Akhil R <akhilrajeev@nvidia.com>,
-	Thierry Reding <treding@nvidia.com>,
+Cc: Hector Martin <marcan@marcan.st>,
+	Neal Gompa <neal@gompa.dev>,
+	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	Sven Peter <sven@svenpeter.dev>,
 	Andi Shyti <andi.shyti@kernel.org>,
 	Sasha Levin <sashal@kernel.org>,
-	ldewangan@nvidia.com,
-	thierry.reding@gmail.com,
-	jonathanh@nvidia.com,
-	linux-i2c@vger.kernel.org,
-	linux-tegra@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.15 023/118] i2c: tegra: check msg length in SMBUS block read
-Date: Tue,  3 Jun 2025 20:49:14 -0400
-Message-Id: <20250604005049.4147522-23-sashal@kernel.org>
+	maddy@linux.ibm.com,
+	mpe@ellerman.id.au,
+	sven@kernel.org,
+	j@jannau.net,
+	linuxppc-dev@lists.ozlabs.org,
+	asahi@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	linux-i2c@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.15 024/118] i2c: pasemi: Enable the unjam machine
+Date: Tue,  3 Jun 2025 20:49:15 -0400
+Message-Id: <20250604005049.4147522-24-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250604005049.4147522-1-sashal@kernel.org>
 References: <20250604005049.4147522-1-sashal@kernel.org>
@@ -68,83 +73,88 @@ MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.15
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Akhil R <akhilrajeev@nvidia.com>
+From: Hector Martin <marcan@marcan.st>
 
-[ Upstream commit a6e04f05ce0b070ab39d5775580e65c7d943da0b ]
+[ Upstream commit 88fe3078b54c9efaea7d1adfcf295e37dfb0274f ]
 
-For SMBUS block read, do not continue to read if the message length
-passed from the device is '0' or greater than the maximum allowed bytes.
+The I2C bus can get stuck under some conditions (desync between
+controller and device). The pasemi controllers include an unjam feature
+that is enabled on reset, but was being disabled by the driver. Keep it
+enabled by explicitly setting the UJM bit in the CTL register. This
+should help recover the bus from certain conditions, which would
+otherwise remain stuck forever.
 
-Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
-Acked-by: Thierry Reding <treding@nvidia.com>
-Link: https://lore.kernel.org/r/20250424053320.19211-1-akhilrajeev@nvidia.com
+Signed-off-by: Hector Martin <marcan@marcan.st>
+Reviewed-by: Neal Gompa <neal@gompa.dev>
+Reviewed-by: Alyssa Rosenzweig <alyssa@rosenzweig.io>
+Signed-off-by: Sven Peter <sven@svenpeter.dev>
+Link: https://lore.kernel.org/r/20250427-pasemi-fixes-v3-1-af28568296c0@svenpeter.dev
 Signed-off-by: Andi Shyti <andi.shyti@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
 
-Based on my analysis of both the commit message, code changes, and the
-kernel tree context, here is my assessment: **YES** This commit should
-be backported to stable kernel trees for the following reasons: ##
-Analysis of Code Changes The commit adds a critical validation check for
-SMBUS block read operations: ```c /bin /bin.usr-is-merged /boot /dev
-/etc /home /init /lib /lib.usr-is-merged /lib64 /lost+found /media /mnt
-/opt /proc /root /run /sbin /sbin.usr-is-merged /snap /srv /sys /tmp
-/usr /var Validate message length before proceeding linux/ if
-(msgs[i].buf[0] == 0 || msgs[i].buf[0] > I2C_SMBUS_BLOCK_MAX) break; ```
-## Why This Should Be Backported: ### 1. **Security and Data Integrity
-Protection** The change prevents two critical issues: - **Buffer
-overflow protection**: Without this check, a malicious or faulty device
-could specify a block length > 32 bytes (I2C_SMBUS_BLOCK_MAX), causing
-the driver to read beyond allocated buffer boundaries - **Zero-length
-validation**: Prevents processing zero-length blocks which could cause
-undefined behavior in subsequent operations ### 2. **Clear Bug Fix
-Nature** This is a straightforward bug fix that: - Adds missing input
-validation for a critical path - Uses existing constants
-(I2C_SMBUS_BLOCK_MAX = 32) - Follows validation patterns used in other
-I2C drivers - Is confined to a single, well-understood code path ### 3.
-**Minimal Risk and Contained Change** - Only 3 lines of code added -
-Simple conditional check with well-defined behavior - No architectural
-changes or new features - Limited to SMBUS block read functionality in
-Tegra I2C driver ### 4. **Alignment with Stable Tree Criteria**
-Examining the similar commits provided: - **Similar Commit #2** (YES
-status): Also a bug fix for SMBUS block read functionality - **Similar
-Commit #4** (YES status): Simple validation improvement using core
-functionality - Both demonstrate that contained I2C validation fixes are
-appropriate for backporting ### 5. **Critical Subsystem Protection** I2C
-is a fundamental communication protocol used throughout embedded
-systems. SMBUS block reads are commonly used for: - Battery management
-systems - Temperature sensors - EEPROM access - Hardware monitoring
-Unvalidated block lengths could lead to system instability or security
-vulnerabilities. ### 6. **Follows Precedent** The commit references
-fixing behavior "for SMBUS block read" - this type of protocol-specific
-validation fix has been consistently backported in similar scenarios. ##
-Risk Assessment: **LOW** - Simple validation addition - Well-tested I2C
-constant (I2C_SMBUS_BLOCK_MAX) - Fail-safe behavior (breaks loop on
-invalid input) - No impact on valid use cases This commit represents
-exactly the type of important, low-risk bug fix that stable trees are
-designed to include.
+Based on my thorough analysis of the commit and the surrounding
+codebase, I can now provide a comprehensive assessment. **YES** ##
+Extensive Analysis ### Nature of the Fix This commit addresses a **real
+hardware bug** where I2C buses can become permanently stuck under
+certain conditions. The analysis shows: 1. **Hardware Feature**: CTL_UJM
+is defined as `BIT(8)` in the control register and stands for "UnJaM
+mode" - a hardware feature specifically designed to automatically detect
+and recover from bus jam conditions. 2. **Real Problem**: The codebase
+reveals extensive jam detection mechanisms: - `SMSTA_JAM` (BIT(24)) and
+`SMSTA_JMD` (BIT(25)) status bits for detecting jams - Bus status
+polling that specifically waits for `!(status & SMSTA_JAM)` - Automatic
+resets triggered when `SMSTA_JMD` is detected 3. **User Impact**: The
+commit message states "The I2C bus can get stuck under some conditions
+(desync between controller and device)" and "would otherwise remain
+stuck forever" - indicating this causes **complete system functionality
+loss** for affected I2C peripherals. ### Code Change Analysis The fix is
+**minimal and surgical**: ```c -u32 val = (CTL_MTR | CTL_MRR |
+(smbus->clk_div & CTL_CLK_M)); +u32 val = (CTL_MTR | CTL_MRR | CTL_UJM |
+(smbus->clk_div & CTL_CLK_M)); ``` This single-line change adds
+`CTL_UJM` to the control register value during reset, enabling the
+hardware unjam feature that was previously being disabled. ### Stability
+Criteria Assessment ✅ **Fixes Important Bug**: Resolves permanent I2C
+bus lockups affecting system functionality ✅ **Small and Contained**:
+Single bit flip in one register during reset operation ✅ **Minimal
+Risk**: - Uses existing hardware feature (CTL_UJM already defined) -
+Only affects reset behavior - Hardware designed to handle this bit
+safely - No architectural changes ✅ **Clear Side Effects**: Only enables
+a hardware recovery mechanism - no negative side effects expected ✅
+**Critical Subsystem**: I2C is fundamental infrastructure used by many
+system components ### Platform Context This affects **production
+hardware**: - Apple Silicon (M1, M2, etc.) devices - Maintained by
+active Asahi Linux team - Real users depend on functional I2C for USB-
+PD, audio, and other critical peripherals ### Comparison to Similar
+Commits This aligns closely with **Similar Commit #2** (marked YES)
+which also addressed I2C bus recovery by improving lockup detection and
+triggering recovery mechanisms. Both commits: - Fix real I2C bus lockup
+issues - Make minimal, targeted changes - Improve hardware recovery
+capabilities - Have low regression risk ### Conclusion This commit
+represents an ideal stable backport candidate: it fixes a serious
+hardware issue that completely breaks I2C functionality with a minimal,
+low-risk change that enables an existing hardware recovery feature. The
+fix prevents permanent system failures on affected hardware platforms.
 
- drivers/i2c/busses/i2c-tegra.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/i2c/busses/i2c-pasemi-core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
-index 87976e99e6d00..049b4d154c233 100644
---- a/drivers/i2c/busses/i2c-tegra.c
-+++ b/drivers/i2c/busses/i2c-tegra.c
-@@ -1395,6 +1395,11 @@ static int tegra_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[],
- 			ret = tegra_i2c_xfer_msg(i2c_dev, &msgs[i], MSG_END_CONTINUE);
- 			if (ret)
- 				break;
-+
-+			/* Validate message length before proceeding */
-+			if (msgs[i].buf[0] == 0 || msgs[i].buf[0] > I2C_SMBUS_BLOCK_MAX)
-+				break;
-+
- 			/* Set the msg length from first byte */
- 			msgs[i].len += msgs[i].buf[0];
- 			dev_dbg(i2c_dev->dev, "reading %d bytes\n", msgs[i].len);
+diff --git a/drivers/i2c/busses/i2c-pasemi-core.c b/drivers/i2c/busses/i2c-pasemi-core.c
+index bd128ab2e2ebb..27ab09854c927 100644
+--- a/drivers/i2c/busses/i2c-pasemi-core.c
++++ b/drivers/i2c/busses/i2c-pasemi-core.c
+@@ -71,7 +71,7 @@ static inline int reg_read(struct pasemi_smbus *smbus, int reg)
+ 
+ static void pasemi_reset(struct pasemi_smbus *smbus)
+ {
+-	u32 val = (CTL_MTR | CTL_MRR | (smbus->clk_div & CTL_CLK_M));
++	u32 val = (CTL_MTR | CTL_MRR | CTL_UJM | (smbus->clk_div & CTL_CLK_M));
+ 
+ 	if (smbus->hw_rev >= 6)
+ 		val |= CTL_EN;
 -- 
 2.39.5
 
