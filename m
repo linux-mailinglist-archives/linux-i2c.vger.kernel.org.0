@@ -1,64 +1,60 @@
-Return-Path: <linux-i2c+bounces-11234-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11235-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C78FACD46B
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Jun 2025 03:29:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 555E1ACD497
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Jun 2025 03:30:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8D13C17AD7F
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Jun 2025 01:28:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 337E817AE5C
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Jun 2025 01:30:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 890C0275104;
-	Wed,  4 Jun 2025 01:06:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF2CC25392B;
+	Wed,  4 Jun 2025 01:07:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yaj3OD2C"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EtZcK1uB"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4372E2750F4;
-	Wed,  4 Jun 2025 01:06:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B4D112B73;
+	Wed,  4 Jun 2025 01:07:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748999193; cv=none; b=maN6qjwwEGZkw8fji9EggrHI2/6vtLLb2pqI7e7R7y5IqXLVqjgeWp5C7sXDPh8sOa3QXkKRmj6qaIvXDNU3bo8qZURsWWaHRLFm3+U0mcINc9avy9lvilrJfbNppgwadPiXWhPKQe+NC+/eIPeDIy5t4Km6UKMWNjAZ0E+3xgY=
+	t=1748999230; cv=none; b=BGEOSpAPBTZKxAY83QUbuboR+wI8ynPKT+MNnGDVeaKLGXw0ff1pL/jtrSClGBt/3eIrY71YO7gXoFFavuSO9/N9LZB2f4fmTYjkbrajW4kHLZS/U0AI9N2ax0Dunnm1U6cIDdWdEe7T3hHMQiVm5L4VDXTUozWFry3OPTiFVIU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748999193; c=relaxed/simple;
-	bh=SA6HIY3yDC4xKt1COY2bbznzUxE8mwjPYmgofmI2pxg=;
+	s=arc-20240116; t=1748999230; c=relaxed/simple;
+	bh=C525Jn/1uIiLflF6jKCwlSvYRCR0eiNrylGZT+slQE8=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=OIIFH3V3Oej7WduRZR5wv4tKbsmUyxJ1TAlLaUBbpdyGJQKnKjAvGKCqWmEzIlVT3CLIU9/IJz+HCcGOJOu3sd6vtlZl5rUodlH3AVRci0Tlo6DZZmBlc+1DgzB1tNDusF8USlEXWIKMAFaqAtpkcxd8k6ic2uTxPAsOzEsssPM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Yaj3OD2C; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC1D8C4CEF1;
-	Wed,  4 Jun 2025 01:06:31 +0000 (UTC)
+	 MIME-Version:Content-Type; b=Xz6RwNBXrVSiqplXTYXI/CjW+q00w1epFFMdv6yswyKLZzRDU8V5oGHBxpgpiRLkjEQr0B9wYgFlfE+lAhY36Uy5uqHE8cNTCIUzKPTnvoKbS/spozUqibv1uhR1YLiTETCxXZRANu2qAnaghZTvEO6P700ddMVkF67kjD4+59o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EtZcK1uB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EA01C4CEED;
+	Wed,  4 Jun 2025 01:07:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748999193;
-	bh=SA6HIY3yDC4xKt1COY2bbznzUxE8mwjPYmgofmI2pxg=;
+	s=k20201202; t=1748999229;
+	bh=C525Jn/1uIiLflF6jKCwlSvYRCR0eiNrylGZT+slQE8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Yaj3OD2CnRVWQU43/02AXyAGsaac0n11yXDWpoyIioxiX4q9/dXNvBoHWu7B9TpxW
-	 O9NMZ2Tw0nE2v/G6WXdZ7tTzoPBD7JYJryjz8Wc8tCka+FgxhyRVpgDLSpl9BlgtDn
-	 Ntm7SJ3bUXkK6ZqA//6bK+s/1pb5xL3TFFOzJohJzmCGnaMyJXxBygM0i4vBcCRUkW
-	 0noyUJ+Z+1eP1kOUdIGi8qCytcG7/mjhrHLsQxHL8vmpNsrY1N9t2/5dwG0joBr9xD
-	 B7IWRHCzgUhULE1yKmpl5q61UB8pygJjGBaHyjK88VH7LzvVcYTZTOGKENqSKPo/D5
-	 JnwjuO/iFbm+g==
+	b=EtZcK1uBQjs1wWGBXRjDiyiwNBlcdM2gAjxzbWYDvP5jtmvm+o8PIvJA+vtskYfx4
+	 uBYDtlsNTr868ZXxy5HURHk8Phw47WmFrob6jWLjh3fZ9ZDSR0g7vCLRUICMHtjLA1
+	 DGuYx6Qc7EsOwbM2Cxu7EaHZSM2PL+pvXf1oSWJ9dJ+7Xnd1tDyliAvPHZddhCjUxB
+	 /UZCs6t69jkV0O+dtFIw1mLLBiHJABilVpmgPrJq9KNDYMoIVX1+8BCYVzNTxAus5t
+	 CKHEQ2/WDA29Vp1jukYzycnVc14dZzthf8kXHYQYdDbEt4Gt1IFc2HW420rm5gCF82
+	 +EIrG2BIQ6ifg==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
-Cc: Tali Perry <tali.perry1@gmail.com>,
-	Mohammed Elbadry <mohammed.0.elbadry@gmail.com>,
-	Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>,
+Cc: Tan En De <ende.tan@starfivetech.com>,
+	Jarkko Nikula <jarkko.nikula@linux.intel.com>,
 	Andi Shyti <andi.shyti@kernel.org>,
 	Sasha Levin <sashal@kernel.org>,
-	avifishman70@gmail.com,
-	tmaimon77@gmail.com,
-	openbmc@lists.ozlabs.org,
 	linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 07/27] i2c: npcm: Add clock toggle recovery
-Date: Tue,  3 Jun 2025 21:06:00 -0400
-Message-Id: <20250604010620.6819-7-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 02/20] i2c: designware: Invoke runtime suspend on quick slave re-registration
+Date: Tue,  3 Jun 2025 21:06:48 -0400
+Message-Id: <20250604010706.7395-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250604010620.6819-1-sashal@kernel.org>
-References: <20250604010620.6819-1-sashal@kernel.org>
+In-Reply-To: <20250604010706.7395-1-sashal@kernel.org>
+References: <20250604010706.7395-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -67,94 +63,139 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.10.237
+X-stable-base: Linux 5.4.293
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Tali Perry <tali.perry1@gmail.com>
+From: Tan En De <ende.tan@starfivetech.com>
 
-[ Upstream commit 38010591a0fc3203f1cee45b01ab358b72dd9ab2 ]
+[ Upstream commit 2fe2b969d911a09abcd6a47401a3c66c38a310e6 ]
 
-During init of the bus, the module checks that the bus is idle.
-If one of the lines are stuck try to recover them first before failing.
-Sometimes SDA and SCL are low if improper reset occurs (e.g., reboot).
+Replaced pm_runtime_put() with pm_runtime_put_sync_suspend() to ensure
+the runtime suspend is invoked immediately when unregistering a slave.
+This prevents a race condition where suspend was skipped when
+unregistering and registering slave in quick succession.
 
-Signed-off-by: Tali Perry <tali.perry1@gmail.com>
-Signed-off-by: Mohammed Elbadry <mohammed.0.elbadry@gmail.com>
-Reviewed-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-Link: https://lore.kernel.org/r/20250328193252.1570811-1-mohammed.0.elbadry@gmail.com
+For example, consider the rapid sequence of
+`delete_device -> new_device -> delete_device -> new_device`.
+In this sequence, it is observed that the dw_i2c_plat_runtime_suspend()
+might not be invoked after `delete_device` operation.
+
+This is because after `delete_device` operation, when the
+pm_runtime_put() is about to trigger suspend, the following `new_device`
+operation might race and cancel the suspend.
+
+If that happens, during the `new_device` operation,
+dw_i2c_plat_runtime_resume() is skipped (since there was no suspend), which
+means `i_dev->init()`, i.e. i2c_dw_init_slave(), is skipped.
+Since i2c_dw_init_slave() is skipped, i2c_dw_configure_fifo_slave() is
+skipped too, which leaves `DW_IC_INTR_MASK` unconfigured. If we inspect
+the interrupt mask register using devmem, it will show as zero.
+
+Example shell script to reproduce the issue:
+```
+  #!/bin/sh
+
+  SLAVE_LADDR=0x1010
+  SLAVE_BUS=13
+  NEW_DEVICE=/sys/bus/i2c/devices/i2c-$SLAVE_BUS/new_device
+  DELETE_DEVICE=/sys/bus/i2c/devices/i2c-$SLAVE_BUS/delete_device
+
+  # Create initial device
+  echo slave-24c02 $SLAVE_LADDR > $NEW_DEVICE
+  sleep 2
+
+  # Rapid sequence of
+  # delete_device -> new_device -> delete_device -> new_device
+  echo $SLAVE_LADDR > $DELETE_DEVICE
+  echo slave-24c02 $SLAVE_LADDR > $NEW_DEVICE
+  echo $SLAVE_LADDR > $DELETE_DEVICE
+  echo slave-24c02 $SLAVE_LADDR > $NEW_DEVICE
+
+  # Using devmem to inspect IC_INTR_MASK will show as zero
+```
+
+Signed-off-by: Tan En De <ende.tan@starfivetech.com>
+Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Link: https://lore.kernel.org/r/20250412023303.378600-1-ende.tan@starfivetech.com
 Signed-off-by: Andi Shyti <andi.shyti@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
 
 **YES** This commit should be backported to stable kernel trees. Here's
-my detailed analysis: ## **Primary Reasons for Backporting:** ### **1.
-Fixes a Real Hardware Bug** The commit addresses a legitimate hardware
-initialization issue where the NPCM I2C controller can fail to
-initialize if SDA or SCL lines are stuck low after system reset. This is
-not a theoretical problem but a real-world scenario that occurs when: -
-External I2C devices (sensors, EEPROMs) hold SDA low after improper
-reset - Power cycling leaves slave devices in an inconsistent state -
-BMC systems reboot while I2C transactions are in progress ### **2.
-Small, Contained Fix** The code change is minimal and well-contained: -
-**Before**: Hard failure with `dev_err()` and `return -ENXIO` when lines
-are stuck - **After**: Attempts recovery first, only fails if recovery
-doesn't work - Uses existing `npcm_i2c_recovery_tgclk()` function that's
-already proven and in use for runtime recovery ### **3. Prevents System
-Boot Failures** Without this fix, systems can fail to boot completely
-when I2C controllers can't initialize due to stuck bus lines. The commit
-message specifically mentions "Sometimes SDA and SCL are low if improper
-reset occurs (e.g., reboot)" - this is a boot-critical issue. ### **4.
-Conservative Error Handling** The fix uses defensive programming: -
-First attempts recovery using hardware-specific TGCLK mechanism - Only
-fails initialization if recovery is unsuccessful - Downgrades the
-initial error from `dev_err` to `dev_warn` with recovery attempt -
-Maintains the same failure path if recovery doesn't work ### **5.
-Alignment with Similar Successful Backports** Looking at the reference
-commits, this follows the pattern of similar commit #4 (npcm timeout
-calculation fix) which was marked "YES" for backporting. Both: - Fix
-NPCM I2C driver issues - Address real hardware problems - Make small,
-targeted changes - Don't introduce new features ### **6. Hardware-
-Specific, Low Risk** The change only affects the NPCM I2C controller
-initialization path and uses existing recovery mechanisms. The risk of
-regression is minimal since: - It only adds a recovery attempt before an
-existing failure case - Uses proven recovery logic already in the driver
-- Specific to Nuvoton BMC hardware ## **Code Analysis:** The key change
-replaces immediate failure: ```c // OLD: Immediate failure
-dev_err(bus->dev, "I2C%d init fail: lines are low\n", bus->num); return
--ENXIO; ``` With recovery attempt: ```c // NEW: Try recovery first
-dev_warn(bus->dev, " I2C%d SDA=%d SCL=%d, attempting to recover\n",
-...); if (npcm_i2c_recovery_tgclk(&bus->adap)) { dev_err(bus->dev,
-"I2C%d init fail: SDA=%d SCL=%d\n", ...); return -ENXIO; } ``` This is a
-textbook example of a good stable backport candidate: it fixes a real
-bug that prevents system functionality, uses minimal changes, and has
-low regression risk.
+my extensive analysis: ## Critical Bug Fix Analysis ### 1. **Nature of
+the Bug** This commit fixes a **race condition** that causes I2C slave
+functionality to completely break. The problem occurs during rapid slave
+device registration/unregistration sequences where: - `pm_runtime_put()`
+is asynchronous and may not complete suspend before the next
+`pm_runtime_get_sync()` - If suspend doesn't happen, runtime resume is
+skipped - Runtime resume is where `i2c_dw_init_slave()` and
+`i2c_dw_configure_fifo_slave()` restore critical hardware configuration
+- When these initialization functions are skipped, the interrupt mask
+register (`DW_IC_INTR_MASK`) remains zero, disabling all interrupts ###
+2. **Impact on Users** This is a **high-impact functional bug** that: -
+Completely breaks I2C slave functionality in affected scenarios -
+Affects real-world use cases (rapid device creation/deletion as shown in
+the shell script) - Leaves hardware in a non-functional state requiring
+manual intervention - Results in silent failures where the slave appears
+registered but cannot handle transactions ### 3. **Code Change
+Analysis** The fix is **minimal and surgical**: ```c -
+pm_runtime_put(dev->dev); + pm_runtime_put_sync_suspend(dev->dev); ```
+This single-line change: - Replaces asynchronous `pm_runtime_put()` with
+synchronous `pm_runtime_put_sync_suspend()` - Ensures runtime suspend
+happens immediately before unregistration completes - Eliminates the
+race window where suspend could be skipped - Has **no functional side
+effects** beyond the intended timing change ### 4. **Risk Assessment**
+**Very low risk** for several reasons: - **Single line change** with
+clear, well-understood semantics - **Conservative fix** - makes behavior
+more predictable, not fundamentally different - **Same end result** -
+both functions eventually suspend the device, just with different timing
+- **No new code paths** - uses existing, well-tested runtime PM
+infrastructure - **Maintains all existing error handling and power
+management policies** ### 5. **Stable Tree Criteria Compliance** ✅
+**Important bugfix** - Fixes complete loss of I2C slave functionality ✅
+**Minimal risk** - Single line change with well-understood behavior ✅
+**No new features** - Pure bug fix with no feature additions ✅ **No
+architectural changes** - Uses existing runtime PM APIs ✅ **Confined to
+subsystem** - Only affects i2c-designware slave mode ✅ **Clear
+reproduction case** - Includes shell script demonstrating the problem
+### 6. **Comparison with Similar Commits** Looking at the provided
+examples: - **Similar Commit #3 (Status: YES)**: Also fixed a race
+condition in slave mode with `synchronize_irq()` - this shows precedent
+for backporting race condition fixes in this driver - **Similar Commits
+#1,2,4,5 (Status: NO)**: Were cleanup, optimization, or architectural
+changes rather than critical bug fixes ### 7. **Technical Validation**
+The commit demonstrates understanding of the underlying issue: - **Root
+cause identified**: Async suspend being canceled by subsequent
+operations - **Mechanism explained**: Missing initialization during
+runtime resume - **Hardware impact documented**: Interrupt mask register
+left unconfigured - **Reproduction provided**: Clear test case showing
+the failure ### 8. **Maintainer Confidence** The commit has strong
+technical validation: - **Acked-by: Jarkko Nikula** - A key
+i2c-designware maintainer - **Detailed commit message** with technical
+explanation and reproduction steps - **Clean implementation** using
+standard kernel APIs ## Conclusion This commit fixes a critical race
+condition that completely breaks I2C slave functionality with minimal
+risk and clear precedent for backporting similar fixes. It meets all
+stable tree criteria for an important, low-risk bugfix that should be
+available to users running stable kernels.
 
- drivers/i2c/busses/i2c-npcm7xx.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ drivers/i2c/busses/i2c-designware-slave.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-npcm7xx.c
-index d97694ac29ca9..3f30c3cff7201 100644
---- a/drivers/i2c/busses/i2c-npcm7xx.c
-+++ b/drivers/i2c/busses/i2c-npcm7xx.c
-@@ -1950,10 +1950,14 @@ static int npcm_i2c_init_module(struct npcm_i2c *bus, enum i2c_mode mode,
+diff --git a/drivers/i2c/busses/i2c-designware-slave.c b/drivers/i2c/busses/i2c-designware-slave.c
+index f5f001738df5e..57e67962a602f 100644
+--- a/drivers/i2c/busses/i2c-designware-slave.c
++++ b/drivers/i2c/busses/i2c-designware-slave.c
+@@ -96,7 +96,7 @@ static int i2c_dw_unreg_slave(struct i2c_client *slave)
+ 	dev->disable(dev);
+ 	synchronize_irq(dev->irq);
+ 	dev->slave = NULL;
+-	pm_runtime_put(dev->dev);
++	pm_runtime_put_sync_suspend(dev->dev);
  
- 	/* check HW is OK: SDA and SCL should be high at this point. */
- 	if ((npcm_i2c_get_SDA(&bus->adap) == 0) || (npcm_i2c_get_SCL(&bus->adap) == 0)) {
--		dev_err(bus->dev, "I2C%d init fail: lines are low\n", bus->num);
--		dev_err(bus->dev, "SDA=%d SCL=%d\n", npcm_i2c_get_SDA(&bus->adap),
--			npcm_i2c_get_SCL(&bus->adap));
--		return -ENXIO;
-+		dev_warn(bus->dev, " I2C%d SDA=%d SCL=%d, attempting to recover\n", bus->num,
-+				 npcm_i2c_get_SDA(&bus->adap), npcm_i2c_get_SCL(&bus->adap));
-+		if (npcm_i2c_recovery_tgclk(&bus->adap)) {
-+			dev_err(bus->dev, "I2C%d init fail: SDA=%d SCL=%d\n",
-+				bus->num, npcm_i2c_get_SDA(&bus->adap),
-+				npcm_i2c_get_SCL(&bus->adap));
-+			return -ENXIO;
-+		}
- 	}
- 
- 	npcm_i2c_int_enable(bus, true);
+ 	return 0;
+ }
 -- 
 2.39.5
 
