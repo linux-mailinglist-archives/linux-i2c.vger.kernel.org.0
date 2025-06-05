@@ -1,143 +1,154 @@
-Return-Path: <linux-i2c+bounces-11255-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11256-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBC4EACEEBE
-	for <lists+linux-i2c@lfdr.de>; Thu,  5 Jun 2025 13:55:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8650DACEF80
+	for <lists+linux-i2c@lfdr.de>; Thu,  5 Jun 2025 14:49:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4629C7A59F3
-	for <lists+linux-i2c@lfdr.de>; Thu,  5 Jun 2025 11:54:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 024F83AD0A2
+	for <lists+linux-i2c@lfdr.de>; Thu,  5 Jun 2025 12:48:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E782214A64;
-	Thu,  5 Jun 2025 11:55:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D28702144A3;
+	Thu,  5 Jun 2025 12:49:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="2nn0JsqU"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from cstnet.cn (smtp87.cstnet.cn [159.226.251.87])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06D4920E023;
-	Thu,  5 Jun 2025 11:55:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.87
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AF741E7C1B
+	for <linux-i2c@vger.kernel.org>; Thu,  5 Jun 2025 12:49:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749124536; cv=none; b=Wia8iWcRGGB54eJteAl+V+hqZGBF9/lK3pK/gMPORKxMEOvWDgP6cQ1VV0AqC38s9+9aZCURz6zHrdkfKxZ1BcVImca0XXWfA3u2sjUVmYgZbc6b6n9WCIipWdMSOjrGnrrzlOkpETYVqIZ3tGjRO2KtGtPeUCms5Lx5y57LCjg=
+	t=1749127749; cv=none; b=KQ0bjl9N+DaKvQ7bKrE7lfe9o+5RjBUhGvZylbzfH3atBGmfrJDX4iSjXRRG+EEVCQEN5VZDaPsUbfOHzV3FLd4LfH6h1ZHv+rsYKOxO20u7Fm6y0XBxsOz4aOBaCjVpsWm8U5gp7Y4nlfJOozCUlIrr3SBRULTFUwgiHroIdII=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749124536; c=relaxed/simple;
-	bh=rXlgnrnD2yeES9tC2kP2vDA8Z0bsnayASllAK5ZGhkc=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=j6BJ/cVFl2ahn5q00vNvSn1wjBdoXIMVbHHiNNH98Zp2p3hYB3s+k3yGlW8fXqkfdSG146NlIBSJnJy/lXpz7SvfroBfTz1alAc+5uu3WetldppYG8gLhgVJpKUmYOqMrNirQ+5+ll5XCfFUW5GGkagnSkwVk9ZxSR1DPEb+LUE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ict.ac.cn; spf=pass smtp.mailfrom=ict.ac.cn; arc=none smtp.client-ip=159.226.251.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ict.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ict.ac.cn
-Received: from chenglingfei22s$ict.ac.cn ( [115.42.62.11] ) by
- ajax-webmail-APP-17 (Coremail) ; Thu, 5 Jun 2025 19:55:00 +0800 (GMT+08:00)
-Date: Thu, 5 Jun 2025 19:55:00 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From: chenglingfei <chenglingfei22s@ict.ac.cn>
-To: "Sven Peter" <sven@kernel.org>
-Cc: j@jannau.net, alyssa@rosenzweig.io, neal@gompa.dev, 
-	zhangzhenwei22b@ict.ac.cn, wangzhe12@ict.ac.cn, maddy@linux.ibm.com, 
-	mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu, 
-	naveen@kernel.org, andi.shyti@kernel.org, asahi@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: Re: [BUG] rmmod i2c-pasemi-platform causing kernel crash on
- Apple M1.
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version 2024.1-cmXT5 build
- 20240627(e6c6db66) Copyright (c) 2002-2025 www.mailtech.cn cnic.cn
-In-Reply-To: <dafd58ae-0a08-4fe6-b94d-c8c6c8c1fa97@kernel.org>
-References: <5c598fea.3165d.1973e0a9a3a.Coremail.chenglingfei22s@ict.ac.cn>
- <dafd58ae-0a08-4fe6-b94d-c8c6c8c1fa97@kernel.org>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+	s=arc-20240116; t=1749127749; c=relaxed/simple;
+	bh=yR6efVVpA6EPWN+z/VOHVYIVZkFbz0f4SOZXeX/ZaLA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lhl0TZWqgoXPLrnn2WeswojfBdSmcolt7I4sxdaI06NT50CbUPz1SocPgh0A3lCz9JxG1/RaXK4WWdwIznQfxGHsmu6bZH/vB/IjZMPze9JWDs4lS0mO2lKjPZCBHXjYHQLdi9m9unn68/N4/5iledx4PE8HlP1b8h2XjQllO9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=2nn0JsqU; arc=none smtp.client-ip=209.85.208.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-606c5c9438fso1909728a12.2
+        for <linux-i2c@vger.kernel.org>; Thu, 05 Jun 2025 05:49:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1749127744; x=1749732544; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=WtN4QxoUXsZ1MljIDTCQVSg0h+sC7boiBejFEQtKgSo=;
+        b=2nn0JsqUEqu1wP7QWlrKbuKe1+3s7wnWm1fnhF/v4s82+ifHLuwMK7pnuLJLZBDX+L
+         UwATXQGL4TVBISHxOtZx6oEm46wzl4IFFb+NLSQepv2mo8iz2ygvI8VVf9kIqrqi8sVY
+         8INGi8iuaYcVBx0O2C5axMsiF7ROVOaYRNzt+bmQNeiLs91QoG0uwKcFGkXDQD1OWLJD
+         AlqNjsltdlU7B9MigMGjI/VCKrVQfxEQjbnaoIPv+zSyaVBnNTY48nJ05IORA+heo6oy
+         ms0JiLMq0myg6s9h96gO6SWNbh5vG4MUrbENd/RiiMo+tcUTWbz+fonnb0S5pa+wINij
+         PHpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749127744; x=1749732544;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WtN4QxoUXsZ1MljIDTCQVSg0h+sC7boiBejFEQtKgSo=;
+        b=ep6fCwa73mozp+jY5G5yX3uOdLE9UbdlsSErrh6XOLhd3L4prxlcEECUZBWSrmU/TB
+         2dC71LVJNZyq3lJYTkugtU8117Zgp9qgOjd5wziA0WI6fH8UNLP4sCeRP279WcQVBwjv
+         U2HesY+RI/02hXDJNwgEcMnymgWe4RL9z8x5eUTg5aEK6DJxI1PqS3iIiEs+wG/idbaC
+         mYrtP7v7gHhIYwVnZWX3v/VbFPlmZTqbKYNsyj6tVIdiWNX+o+1eZsBAayffyuGh7BlK
+         h/+fab036Pkgmal4z4vUh0JsVRCvKxJVixCgU6/63nd1/pEhD/ietJjQBbatDrahsLiT
+         afEQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV4BXeZHjwANzoxKs91ZaIOaVr20XxXDpMkJWnEbznKjqXPc1usOMR0n7zhfyr38J/HR5vTT6uE5EU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwiXT2CQgwjpsTIsj3eugyJPMa1roxbE6PmRTtqMOkQlKBsFZHJ
+	7Q2cRUhI9aLXIKin7NfesZn1PNcWfr0Ey1M4/6YSlI5g3sUHmQ3w9dChiR4xesGKyfE=
+X-Gm-Gg: ASbGnctEcWJJCy1s/PKOpFXdQg/mW+syz6EJgtekMlsjh+sUckj1AJu3p3YoJPhI10d
+	yfM9qWbgpZsiOS+u5g/qWFSilGxkUEXjWYjXVSn6wsz2SsCwfr5yRPymxpqO/dpm1MTeVzB3c/A
+	pcBYJdhNFWeLOZ9reroLquhSunZ6ZdiUOGNgNvNzb0vsDWpSbeszuJpK7M6ZuUCGXWqCsiJg9Oz
+	DwB5b5owyQavvBuebvld9vMtK/rJ2JehP6pKQ1zZdjl+yL7SWsZ8pkOKhBDvsakao+teb6/gyHP
+	GYribQazr2nCVxJrqj5V+/rwjv8VApP9xafntM5RoflRzhHoJMHenfZQDSI4yU6aW4U=
+X-Google-Smtp-Source: AGHT+IHt4YfvlTuTknTwQwhcQ4507vc2Wi1EDhV+gn7GZ+jvyV4ZeWPzfTmI75x3ArDL0ghbhiNPHQ==
+X-Received: by 2002:a05:6402:510e:b0:606:df70:7aa2 with SMTP id 4fb4d7f45d1cf-606ea3a78d7mr6609486a12.31.1749127744398;
+        Thu, 05 Jun 2025 05:49:04 -0700 (PDT)
+Received: from localhost ([2a02:8071:b783:6940:36f3:9aff:fec2:7e46])
+        by smtp.gmail.com with UTF8SMTPSA id 4fb4d7f45d1cf-60732ee3cbcsm470019a12.11.2025.06.05.05.49.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Jun 2025 05:49:03 -0700 (PDT)
+Date: Thu, 5 Jun 2025 14:49:01 +0200
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+To: sergio <sazamoracl@gmail.com>, 1106498@bugs.debian.org
+Cc: Jean Delvare <jdelvare@suse.com>, Andi Shyti <andi.shyti@kernel.org>, 
+	linux-i2c@vger.kernel.org
+Subject: Re: Bug#1106498: Acknowledgement (linux-image-6.1.0-37-amd64: Ouput
+ sound disappeared after last update on Lenovo Yoga Laptop)
+Message-ID: <xhozce5yxcyszo4fzesiejpxoj64fvb4vnrlzprhsseo5zregt@ha7myfagvkco>
+References: <174814452778.7037.3139530479075309721.reportbug@debian>
+ <handler.1106498.B.1748144532663278.ack@bugs.debian.org>
+ <174814452778.7037.3139530479075309721.reportbug@debian>
+ <QVAUWS.D0WMICKBJT0C2@gmail.com>
+ <174814452778.7037.3139530479075309721.reportbug@debian>
+ <d7e5wempkmwckq3xegeucuj7ckfqino647no6czey4n4s7efig@5um3az3z3ysu>
+ <2ctrnceanjbxe65k4e6hcljyqfq7esotiinabwd3rb4dqsfcrs@pyo4wulkjgy7>
+ <174814452778.7037.3139530479075309721.reportbug@debian>
+ <D7VCXS.KDIVZPLA89WX1@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <4cfe2276.2c0da.1973ff1cc40.Coremail.chenglingfei22s@ict.ac.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:qgCowAAn2AGUhUFonO0EAA--.19078W
-X-CM-SenderInfo: xfkh0wpolqwwthlsj2g6lf3hldfou0/1tbiBgoEDmhBUZjeHwAAsn
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VW3Jw
-	CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-	daVFxhVjvjDU=
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="sew2myoldbsz63yy"
+Content-Disposition: inline
+In-Reply-To: <D7VCXS.KDIVZPLA89WX1@gmail.com>
 
-CgoKJmd0OyAtLS0tLeWOn+Wni+mCruS7ti0tLS0tCiZndDsg5Y+R5Lu25Lq6OiAiU3ZlbiBQZXRl
-ciIgPHN2ZW5Aa2VybmVsLm9yZz4KJmd0OyDlj5HpgIHml7bpl7Q6IDIwMjUtMDYtMDUgMTg6MjU6
-MDkgKOaYn+acn+WbmykKJmd0OyDmlLbku7bkuro6IOeoi+WHjOmjniA8Y2hlbmdsaW5nZmVpMjJz
-QGljdC5hYy5jbj4sIGpAamFubmF1Lm5ldCwgYWx5c3NhQHJvc2VuendlaWcuaW8sIG5lYWxAZ29t
-cGEuZGV2CiZndDsg5oqE6YCBOiB6aGFuZ3poZW53ZWkyMmJAaWN0LmFjLmNuLCB3YW5nemhlMTJA
-aWN0LmFjLmNuLCBtYWRkeUBsaW51eC5pYm0uY29tLCBtcGVAZWxsZXJtYW4uaWQuYXUsIG5waWdn
-aW5AZ21haWwuY29tLCBjaHJpc3RvcGhlLmxlcm95QGNzZ3JvdXAuZXUsIG5hdmVlbkBrZXJuZWwu
-b3JnLCBhbmRpLnNoeXRpQGtlcm5lbC5vcmcsIGFzYWhpQGxpc3RzLmxpbnV4LmRldiwgbGludXgt
-YXJtLWtlcm5lbEBsaXN0cy5pbmZyYWRlYWQub3JnLCBsaW51eHBwYy1kZXZAbGlzdHMub3psYWJz
-Lm9yZywgbGludXgtaTJjQHZnZXIua2VybmVsLm9yZywgbGludXgta2VybmVsQHZnZXIua2VybmVs
-Lm9yZwomZ3Q7IOS4u+mimDogUmU6IFtCVUddIHJtbW9kIGkyYy1wYXNlbWktcGxhdGZvcm0gY2F1
-c2luZyBrZXJuZWwgY3Jhc2ggb24gQXBwbGUgTTEuCiZndDsgCiZndDsgSGksCiZndDsgCiZndDsg
-T24gMDUuMDYuMjUgMDU6MDIsIOeoi+WHjOmjniB3cm90ZToKJmd0OyAmZ3Q7IEhpLCBhbGwhCiZn
-dDsgJmd0OyAKJmd0OyAmZ3Q7IFdl4oCZdmUgZW5jb3VudGVyZWQgYSBrZXJuZWwgY3Jhc2ggd2hl
-biBydW5uaW5nIHJtbW9kIGkyYy1wYXNlbWktcGxhdGZvcm0gb24gYSBNYWMgTWluaSBNMSAoVDgx
-MDMpIHJ1bm5pbmcgQXNhaGkgQXJjaCBMaW51eC4KJmd0OyAmZ3Q7IAomZ3Q7ICZndDsgVGhlIGJ1
-ZyB3YXMgZmlyc3QgZm91bmQgb24gdGhlIExpbnV4IHY2LjYsIHdoaWNoIGlzIGJ1aWx0IG1hbnVh
-bGx5IHdpdGggdGhlIEFzYWhpIGdpdmVuIGNvbmZpZyB0byBydW4gb3VyIHNlcnZpY2VzLgomZ3Q7
-ICZndDsgQXQgdGhhdCB0aW1lLCB0aGUgaTJjLXBhc2VtaS1wbGF0Zm9ybSB3YXMgaTJjLWFwcGxl
-LgomZ3Q7ICZndDsgCiZndDsgJmd0OyBXZSBub3RpY2VkIGluIHRoZSBMaW51eCB2Ni43LCB0aGUg
-cGFzZW1pIGlzIHNwbGl0dGVkIGludG8gdHdvIHNlcGFyYXRlIG1vZHVsZXMsIG9uZSBvZiB3aGlj
-aCBpcyBpMmMtcGFzZW1pLXBsYXRmb3JtLgomZ3Q7ICZndDsgVGhlcmVmb3JlLCB3ZSBidWlsdCBM
-aW51eCB2Ni4xNC42IGFuZCB0cmllZCB0byBybW1vZCBpMmMtcGFzZW1pLXBsYXRmb3JtIGFnYWlu
-LCB0aGUgY3Jhc2ggc3RpbGwgZXhpc3RzLiBNb3Jlb3Zlciwgd2UgZmV0Y2hlZAomZ3Q7ICZndDsg
-dGhlIGxhdGVzdCBpMmMtcGFzZW1pLXBsYXRmb3JtIG9uIGxpbnV4LW5leHQoOTExNDgzYjI1NjEy
-YzhiYzMyYTcwNmJhOTQwNzM4Y2M0MzI5OTQ5NikgYW5kIGFzYWhpLCBidWlsdCB0aGVtIGFuZAom
-Z3Q7ICZndDsgdGVzdGVkIGFnYWluIHdpdGggTGludXggdjYuMTQuNiwgYnV0IHRoZSBjcmFzaCBy
-ZW1haW5zLgomZ3Q7ICZndDsgCiZndDsgJmd0OyBCZWNhdXNlIGtleGVjIGlzIG5vdCBzdXBwb3J0
-ZWQgYW5kIHdpbGwgbmV2ZXIgYmUgZnVsbHkgc3VwcG9ydGVkIG9uIEFwcGxlIFNpbGljb24gcGxh
-dGZvcm1zIGR1ZSB0byBoYXJkd2FyZSBhbmQgZmlybXdhcmUKJmd0OyAmZ3Q7IGRlc2lnbiBjb25z
-dHJhaW50cywgd2UgY2FuIG5vdCByZWNvcmQgdGhlIHBhbmljIGxvZ3MgdGhyb3VnaCBrZHVtcC4K
-Jmd0OyAKJmd0OyBEbyB5b3UgaGF2ZSBVQVJUIGNvbm5lY3RlZCB0byBhIGRldmljZSB1bmRlciB0
-ZXN0IHdoaWNoIHlvdSBjb3VsZCB1c2UgdG8gCiZndDsgZ3JhYiB0aGUgcGFuaWMgbG9nIGZyb20g
-dGhlIGtlcm5lbD8gQWx0ZXJuYXRpdmVseSB5b3UgY2FuIGFsc28gcnVuIHRoZSAKJmd0OyBrZXJu
-ZWwgdW5kZXIgbTFuMSdzIGh5cGVydmlzb3IgYW5kIGdyYWIgdGhlIGxvZyB0aGF0IHdheS4gSXQn
-bGwgZW11bGF0ZSAKJmd0OyB0aGUgc2VyaWFsIHBvcnQgYW5kIHJlZGlyZWN0IGl0cyBvdXRwdXQg
-dmlhIFVTQi4KJmd0OyAKCkkgZG9uJ3QgaGF2ZSBVQVJULCBidXQgSSBoYXZlIHRyaWVkIHRvIHJ1
-biB0aGUga2VybmVsIHVuZGVyIG0xbjEncyBoeXBlcnZpc29yLiBIb3dldmVyLCBpdCBkb2VzIG5v
-dCB0cmlnZ2VyIHRoZSByZWxlYXNlIG9mIGNzNDJsODMuIApHaXZlbiB0aGF0IG0xbjEgcHJvdmlk
-ZXMgZnVsbCBwZXJpcGhlcmFsIGRldmljZSBlbXVsYXRpb24gY2FwYWJpbGl0eSwgdGhlIG1vc3Qg
-cGxhdXNpYmxlIGV4cGxhbmF0aW9uIHdvdWxkIGJlIGFuIGluY29ycmVjdCAKZmlybXdhcmUgbG9h
-ZGluZyBzZXF1ZW5jZS4gQnV0IHRoZSBkb2N1bWVudGF0aW9uIG9mIEFzYWhpIHByb3ZpZGVzIGxp
-dHRsZSBkZXRhaWxzIGFib3V0IGhvdyB0byBnZW5lcmF0ZSBhbiBpbml0cmFtZnMgd2l0aCAKZmly
-bXdhcmUgKEkgdGhpbmspLCBjYW4geW91IGdpdmUgbW9yZSBndWlkYW5jZSBhYm91dCBpdD8KCiZn
-dDsgJmd0OyAKJmd0OyAmZ3Q7IFRodXMgd2UgdHJpZWQgdG8gZmluZCB0aGUgcm9vdCBjYXVzZSBv
-ZiB0aGUgaXNzdWUgbWFudWFsbHkuIFdoZW4gd2UgcGVyZm9ybSBybW1vZCwgdGhlIGtlcm5lbCBw
-ZXJmb3JtcyBkZXZpY2UgcmVsZWFzaW5nIG9uCiZndDsgJmd0OyB0aGUgaTJjIGJ1cywgdGhlbiBj
-YWxscyB0aGUgcmVtb3ZlIGZ1bmN0aW9uIGluIHNuZC1zb2MtY3M0Mmw4My1pMmMsIHdoaWNoIGNh
-bGxzIHRoZSBjczQybDQyX2NvbW1vbl9yZW1vdmUgaW4gY3M0Mmw0MiwKJmd0OyAmZ3Q7IGJlY2F1
-c2UgY3M0Mmw0Mi0mZ3Q7aW5pdF9kb25lIGlzIHRydWUsIGl0IHBlcmZvcm1zIHJlZ21hcF93cml0
-ZSwgYW5kIGZpbmFsbHkgY2FsbHMgaW50byBwYXNlbWlfc21iX3dhaXRyZWFkeSBpbiBpMmMtcGFz
-ZW1pCiZndDsgJmd0OyAtY29yZS5jLiBXZSBub3RpY2VkIHRoYXQgc21idXMtJmd0O3VzZV9pcnEg
-aXMgdHJ1ZSwgYW5kIGFmdGVyIGl0IGNhbGxzIGludG8gd2FpdF9mb3JfY29tcGxldGlvbl90aW1l
-b3V0LCB0aGUgc3lzdGVtIGNyYXNocyEmZ3Q7CiZndDsgJmd0OyBXZSBmb3VuZCB0aGF0IHdhaXRf
-Zm9yX2NvbXBsZXRpb25fdGltZW91dCBpcyBvbmUgb2YgdGhlIGNvcmUgc2NoZWR1bGVyIEFQSXMg
-dXNlZCBieSB0ZW5zIG9mIHRob3VzYW5kcyBvZiBvdGhlciBkcml2ZXJzLAomZ3Q7ICZndDsgaXQg
-aXMgdW5saWtlbHkgY2F1c2luZyB0aGUgY3Jhc2guIFNvIHdlIHRyaWVkIHRvIHJlbW92ZSB0aGUg
-Y2FsbCB0byB3YWl0X2Zvcl9jb21wbGV0aW9uX3RpbWVvdXQsIHRoZW4gdGhlIHN5c3RlbSBzZWVt
-cyB0bwomZ3Q7ICZndDsgcnVuIHdlbGwuCiZndDsgJmd0OyAKJmd0OyAmZ3Q7IEhvd2V2ZXIsIGJl
-Y2F1c2Ugd2UgaGF2ZSBsaXR0bGUga25vd2xlZGdlIGFib3V0IGkyYyBkZXZpY2VzIGFuZCBzcGVj
-aWZpY2F0aW9ucywgd2UgYXJlIG5vdCBzdXJlIHdoZXRoZXIgdGhpcyBjaGFuZ2Ugd2lsbAomZ3Q7
-ICZndDsgY2F1c2Ugb3RoZXIgcG90ZW50aWFsIGhhcm1zIGZvciB0aGUgc3lzdGVtIGFuZCBkZXZp
-Y2UuIElzIHRoaXMgY2FsbCB0byB3YWl0IG5lY2VzYXJ5IGhlcmU/IE9yIGNhbiB5b3UgZ2l2ZSBh
-IG1vcmUKJmd0OyAmZ3Q7IHNvcGhpc3RpY2F0ZWQgZml4PwomZ3Q7IAomZ3Q7IFllcywgdGhhdCBj
-YWxsIGlzIG5lY2Vzc2FyeS4gSXQgd2FpdHMgZm9yIHRoZSAidHJhbnNmZXIgY29tcGxldGVkIiAK
-Jmd0OyBpbnRlcnJ1cHQgZnJvbSB0aGUgaGFyZHdhcmUuIFdpdGhvdXQgaXQgdGhlIGRyaXZlciB3
-aWxsIHRyeSB0byByZWFkIGRhdGEgCiZndDsgYmVmb3JlIGl0J3MgYXZhaWxhYmxlIGFuZCB5b3Un
-bGwgc2VlIGNvcnJ1cHRpb24uIEknbSBzdXJwcmlzZWQgaGFyZHdhcmUgCiZndDsgYXR0YWNoZWQg
-dG8gaTJjICh1c2IgcGQgY29udHJvbGxlciBhbmQgYXVkaW8gSSB0aGluaykgd29ya3MgYXQgYWxs
-IHdpdGggCiZndDsgdGhhdCBjaGFuZ2UuCiZndDsgCiZndDsgCiZndDsgU3ZlbgoKQXJlIHRoZXJl
-IGFueSBtZXRob2RzIG9yIHRvb2xzIHRvIHN5c3RlbWF0aWNhbGx5IHZlcmlmeSBpdHMgZnVuY3Rp
-b25hbGl0eT8gSSBhbSBub3Qgc3VyZSB3aGV0aGVyIHRoZSBkZXZpY2VzIGF0dGFjaGVkIHRvIGky
-YwpzaG91bGQgd29yayB3ZWxsIGV2ZW4gYWZ0ZXIgdGhlIGkyYy1wYXNlbWktcGxhdGZvcm0gaGFz
-IGJlZW4gcmVtb3ZlZC4KPC9jaGVuZ2xpbmdmZWkyMnNAaWN0LmFjLmNuPjwvc3ZlbkBrZXJuZWwu
-b3JnPg==
+
+--sew2myoldbsz63yy
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Subject: Re: Bug#1106498: Acknowledgement (linux-image-6.1.0-37-amd64: Ouput
+ sound disappeared after last update on Lenovo Yoga Laptop)
+MIME-Version: 1.0
+
+Hello,
+
+On Wed, Jun 04, 2025 at 07:42:49PM -0400, sergio wrote:
+> > /Hi Salvatore,/
+> > /
+> > /
+> > /at the moment of reporting this issue I had already lost the mic hot
+> > key also, so I took advantage of this second inconvenience to upgrade to
+> > Debian 13. Both, the hot key and the audio, back to work after upgrade./
+> > /
+> > /
+> > /
+> > /
+> > /Anyway, when the audio issue appeared i done three things:/
+> > /
+> > /
+> > /- back to intel-microcode and kernel previous version + reboot (
+> > randomly worked )/
+> > /- back only to previous kernel version  + reboot ( randomly worked )/
+> > /- back only to previous intel-microcode version + reboot (randomly
+> > worked )/
+
+Can you confirm that after a cold boot audio (and the mic hotkey) works
+and after a reboot it doesn't?
+
+Best regards
+Uwe
+
+--sew2myoldbsz63yy
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmhBkjkACgkQj4D7WH0S
+/k7ahQf8CenlChi/Kp/0Kz3aNvxRTcVnkLWVLmsxyeLJ75EF0GoshwAY2Xzx0aye
+4UImxYrl6qY1QapUbccQW1GpDro9VlciqLc2Q77zwCYQfZKc6KiuuZdpqOa4IPhc
+T5OpSnCk34YobyJk+tIIxqt0SDu7tYLp1BH9LYBWGx5jkS0CDXgvwnV6yFeuEpFH
+8ZdpOZLPPk2fbnEbzE+0iI1NgV2Y9m7XO0TvcBmREq0njiitY4fox9xYmqZwBaIp
+j38LLDtMb5Cq1kM1rXldCilpSWjTGA5kBv8C6FWkYmvAHlgielNAMRfOWT4bNWI1
+TMjnuZs3su7xclOJ48QFx3T9ysJYRw==
+=gUd/
+-----END PGP SIGNATURE-----
+
+--sew2myoldbsz63yy--
 
