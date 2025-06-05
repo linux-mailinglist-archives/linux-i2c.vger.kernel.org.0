@@ -1,154 +1,113 @@
-Return-Path: <linux-i2c+bounces-11253-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11254-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9B64ACEB31
-	for <lists+linux-i2c@lfdr.de>; Thu,  5 Jun 2025 09:50:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 07D7DACED80
+	for <lists+linux-i2c@lfdr.de>; Thu,  5 Jun 2025 12:25:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E7B4C18964C8
-	for <lists+linux-i2c@lfdr.de>; Thu,  5 Jun 2025 07:50:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B9D5616FF4F
+	for <lists+linux-i2c@lfdr.de>; Thu,  5 Jun 2025 10:25:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1848E1FECAD;
-	Thu,  5 Jun 2025 07:50:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4215A2147E5;
+	Thu,  5 Jun 2025 10:25:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d0TT3FFQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f4PPodmG"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 551191ACEDC;
-	Thu,  5 Jun 2025 07:50:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA63E20B7FC;
+	Thu,  5 Jun 2025 10:25:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749109809; cv=none; b=nAkN6PaIuhGykr1PPnFCx5XIjmJhvuo8/s5Gg3lW67+TJ0/CH2jQtLzXIHSufSGDXmqseyIVAx7XQFiSH8IGLg5+fRLBTNhCuTo/1+Q+He9IXwRzNQlKAgtX2GBBuoOZA+aYlJ1NNICXtWyphqpyLuqRNCyvCb9E+r9jFjRIZYw=
+	t=1749119115; cv=none; b=N1fpYdbDRomai4tGzlCgStnmce1uxQPuIghxRYxnpkLe1GUZEE/adBGNQLMYdJy+Sm/7egzm4mwz3MDOKqmsP2Dv+CgX6hSeDTc/hohotSo2T3Fe43BQ32G8FgGIVoi1wTmSW6+1W475tfkdTNmiQXJcd417G3s1HQfONYWcclo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749109809; c=relaxed/simple;
-	bh=NFEt3ikujWPaJWewthF9QhICJ+AtUtfzhLL2sKi7ryI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=M5s7bf1g9ydh/CMW2mugiiCU4xDAMl/Q9BgCIgIe9CsFBLUFbKOdXIY/MDxtKvvrmltkLQGxvHT1r6gjxJ7t6mzfH415iC57Xhpd3EGMOBGd7/fmIiIRTii/n51F4+s5Gy29UkdOzqpVmDJi9yZDNxpUfwVh4/bu9luOGbE6Asc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d0TT3FFQ; arc=none smtp.client-ip=209.85.128.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-70e78e04e48so5958897b3.1;
-        Thu, 05 Jun 2025 00:50:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749109807; x=1749714607; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Vv9G32NpLFaX25gDQw1bEAmle7ctnzmIrCsVohjdytg=;
-        b=d0TT3FFQ9L0UjrOI9uQ0IpfkdfBOVGaZ8q2KiNXe90zr9nuWdzyrrpQK0JsxzKHdkg
-         BC0rXcYk85uTSXcSNwSXnd+TngZlyVwEpOFRh6O+uhvaARl/OCTqoDP+eIo0ZpijiRRA
-         jzj0LDQcZK7KapKj2q1s+K2xiL/2OutpjMm1YngynTzH7ex2tMjtFFiMFb4b73TU77c+
-         X8AtIjatpPhFStZ3BBhH3z7+jYnZ5EX6seNKWOs7Trh4qO8fpmNJq/4srE5g1N1EFUgB
-         6vDcmNVD5FWTbQy6CAVDzHTNRV65RRvAgCFs+G5TQclZ/4RgPY8/PawCcH0t6v2nP4yV
-         y8AA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749109807; x=1749714607;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Vv9G32NpLFaX25gDQw1bEAmle7ctnzmIrCsVohjdytg=;
-        b=V/RQF0Yk16ZSSaAXu9Hjyi5+iLqIAwgL1PUBT0txtiOeHIwy3V70w7t1XU+Tqe0Fda
-         KpumFxnIFv3urbCg78xaAKJniC7R6FUD62TLZfO96Sl1ruP3oY2HA5k79iLuGxzbJF+u
-         Sw4DuSiRcmae7s0RYQLVEBgQGNhLNvbCUW072Bv4BCK2RP34+St97I0GoicDjNmHuee3
-         2TCdO5CQfCNg1eW/H33bGArjx1NSzqXNC7YrhN3pWYERRSq4i5y2m7ux/sm+0g1p5too
-         IEWKxqG41au6kTgc+G2gVJEOsdTlVSAwYMExAVNLtsf0dfIpMh/SX30TX/Rk3syUDqsg
-         iiRw==
-X-Forwarded-Encrypted: i=1; AJvYcCULNg/s+xqpiYe0Fo3Am6YtvnjjFcVCig2niSG3sJwEZ4EZLU3EQpiu7piHxQZRS0lQ3Q3cIXFDP8v8@vger.kernel.org, AJvYcCUX7qcoH4rORxjumwnBf+1mZDv5lc5O822j6oRbkI9yW4bJ6dcpB03P99FtXUam1qese5HUCT6kDA4=@vger.kernel.org, AJvYcCUk95mmQNOQqssOq4nJSNtSqqsJxomB0BZn4AUr7Wnq1HjdCi6QUj5Nh+i1zTmiqehu/AMG8qD77ZYm@vger.kernel.org, AJvYcCVZcBQIJBjXeyZwyyxdOH4GohjFMgtlgJ12f5kbO4YL0V9dVmIiiTzQAHwN3EYhBUlIxzOXKwCfW+3bPMXy0AE=@vger.kernel.org, AJvYcCX7Vq4BCuB5ZYvxUkLg/7f2Ag5TOQ47oP/mXj5QDJqsw5yc+WpGy5UkUlJW2mVkNEagFdvZ93eQ9gt7TZ0d@vger.kernel.org, AJvYcCXEzolLmyyZeWCTJuWSsNPxP2/7oKlHtFb4a+fnJueBv5eL9106kqKE73EkwN5fEoPQWRPVEIEBA19w@vger.kernel.org, AJvYcCXHpRMLMVr9jnwsjiFmtK5NBX8rDUr+JQh56dpmoxYMUvmDwosx/mbf1VIaatzEMT/R/LNDEF7KX4ZvzA==@vger.kernel.org, AJvYcCXj/dgT7m6xrSIKoHWhyf8Dmk6MwawqgkdTDWyCxTsgSbycvrCyAfjxU/HN+bkdAByfGPiAqUoBqtN2iKQ=@vger.kernel.org, AJvYcCXykNscGC+DQvPq4u31nTxmMjbpu173KrP9G8VdQ/WtXgnl1B5adt2DQz1gSOyuAmfmu+OdNfsc@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/vlr2KxemO+/HofwlrSINMSOyjrSgRZ92QVAiVdWbI401m0fw
-	q99vrrlJoN972JTY+32j34ADZZp8XEAbDAnp1bTLobInY0MEUC+v7xd3FkJqS5BfVQAhoQQl4HK
-	0RXTSixtN4WF4j5h1su3s33fwd0KKOQE=
-X-Gm-Gg: ASbGnct90y+wmuRklmDfo+MzCK1822qzjMTv53zAyNfm9FfMu/m+8cIsxEfr70VeBJF
-	AM1xRQZfeySUeUER1nfXspR0IvP10tg+BqOTf4pqtY0A59wayf6UwEtUysK01g3R0uK3Tpc0C6N
-	MA3BYE4vCLRvWJQjV5AR3jvuiv5SxAojF2KhrCss1GyWdpkG0qhHqoJw3ao6wqTj95wtfENcdoK
-	JXKpg==
-X-Google-Smtp-Source: AGHT+IEKl7dOmjqUWqH25+XmsY5+Z8Pbe84hzqNlaHy8+eh2tbFgL93ikeyaEq28vtyB7pfuEhhqZi96LHD/oy0/HzM=
-X-Received: by 2002:a05:6902:10c3:b0:e7f:7d5f:f2f6 with SMTP id
- 3f1490d57ef6-e8179d77130mr7100063276.30.1749109807043; Thu, 05 Jun 2025
- 00:50:07 -0700 (PDT)
+	s=arc-20240116; t=1749119115; c=relaxed/simple;
+	bh=YdJvMMxNeJZ4ws+mkLoEmNugy4D3YfkKWs3ds4JIL/4=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=CxN8gLmnvS0NaItUgHx7bKdKFB6i/EU82FFRpbkomdIN83kgGSPT1VcNt0ItxBkrkzE7IH48a+zHgDTkrFQoVd2Ty3uhmB2dvyGm0dumPZBJ51c1i0bHGzy7bECUdnZQhgy5UHdRMZIDNagW6GlvWkothBJmgSoVLZOw7Dn14Xw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f4PPodmG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFA39C4CEE7;
+	Thu,  5 Jun 2025 10:25:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749119114;
+	bh=YdJvMMxNeJZ4ws+mkLoEmNugy4D3YfkKWs3ds4JIL/4=;
+	h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
+	b=f4PPodmGDavBEPsrZH6CTP09Oz6VdO24835qnpwrQF7qR5Ng57NXXpxvd9Fe6yCJ9
+	 ZWQs9LT6MR03KUhBwDM+qyCAhlW/qA9J50X9SLcQs4lViFsNGn8mbG7/ExG/rpwBvF
+	 HetZqNnqNbBtJYhDcKMwRW5OX0z+RL+shCvGmS6oFnEJpeivlSVd5GGzTMRj/wbffB
+	 CNU3TYc10Nm6vaNPxFg7B03NQ9Jx816OJyV79UqJ14fSJ1ef36k/DxAvFNmruTRIuV
+	 f696TTLTlqadTX1aCP2YtcxX3zueLEj39X9pXWt/9ttLekYbtlJqC2HjFb8K4Y7JTj
+	 98dbQqEkzkQ4w==
+Message-ID: <dafd58ae-0a08-4fe6-b94d-c8c6c8c1fa97@kernel.org>
+Date: Thu, 5 Jun 2025 12:25:09 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250604041418.1188792-1-tmyu0@nuvoton.com> <20250604041418.1188792-2-tmyu0@nuvoton.com>
- <b4c15a6b-0906-4fea-b218-4467afdd8345@suse.com> <12098259-32c4-4524-813e-38aeced837a0@roeck-us.net>
-In-Reply-To: <12098259-32c4-4524-813e-38aeced837a0@roeck-us.net>
-From: Ming Yu <a0282524688@gmail.com>
-Date: Thu, 5 Jun 2025 15:49:55 +0800
-X-Gm-Features: AX0GCFuUxMlMU_KMxBpnhMPmDDfld3GWVUhukFRMKc6rmekAAGk7TR-a7l1-mUA
-Message-ID: <CAOoeyxWd29OWvmp2cHVmit5kJpngYWUJ2Xfdt7C9hOv4iZvArg@mail.gmail.com>
-Subject: Re: [PATCH v12 1/7] mfd: Add core driver for Nuvoton NCT6694
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Oliver Neukum <oneukum@suse.com>, lee@kernel.org, linus.walleij@linaro.org, 
-	brgl@bgdev.pl, andi.shyti@kernel.org, mkl@pengutronix.de, 
-	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, davem@davemloft.net, 
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	wim@linux-watchdog.org, jdelvare@suse.com, alexandre.belloni@bootlin.com, 
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org, 
-	Ming Yu <tmyu0@nuvoton.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+From: Sven Peter <sven@kernel.org>
+Subject: Re: [BUG] rmmod i2c-pasemi-platform causing kernel crash on Apple M1.
+To: =?UTF-8?B?56iL5YeM6aOe?= <chenglingfei22s@ict.ac.cn>, j@jannau.net,
+ alyssa@rosenzweig.io, neal@gompa.dev
+Cc: zhangzhenwei22b@ict.ac.cn, wangzhe12@ict.ac.cn, maddy@linux.ibm.com,
+ mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+ naveen@kernel.org, andi.shyti@kernel.org, asahi@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+ linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <5c598fea.3165d.1973e0a9a3a.Coremail.chenglingfei22s@ict.ac.cn>
+Content-Language: en-US
+In-Reply-To: <5c598fea.3165d.1973e0a9a3a.Coremail.chenglingfei22s@ict.ac.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Dear Guenter,
+Hi,
 
-Thank you for reviewing,
+On 05.06.25 05:02, 程凌飞 wrote:
+> Hi, all!
+> 
+> We’ve encountered a kernel crash when running rmmod i2c-pasemi-platform on a Mac Mini M1 (T8103) running Asahi Arch Linux.
+> 
+> The bug was first found on the Linux v6.6, which is built manually with the Asahi given config to run our services.
+> At that time, the i2c-pasemi-platform was i2c-apple.
+> 
+> We noticed in the Linux v6.7, the pasemi is splitted into two separate modules, one of which is i2c-pasemi-platform.
+> Therefore, we built Linux v6.14.6 and tried to rmmod i2c-pasemi-platform again, the crash still exists. Moreover, we fetched
+> the latest i2c-pasemi-platform on linux-next(911483b25612c8bc32a706ba940738cc43299496) and asahi, built them and
+> tested again with Linux v6.14.6, but the crash remains.
+> 
+> Because kexec is not supported and will never be fully supported on Apple Silicon platforms due to hardware and firmware
+> design constraints, we can not record the panic logs through kdump.
 
-Guenter Roeck <linux@roeck-us.net> =E6=96=BC 2025=E5=B9=B46=E6=9C=884=E6=97=
-=A5 =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=888:40=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> >> +static void usb_int_callback(struct urb *urb)
-> >> +{
-> >> +    struct nct6694 *nct6694 =3D urb->context;
-> >> +    unsigned int *int_status =3D urb->transfer_buffer;
-> >> +    int ret;
-> >> +
-> >> +    switch (urb->status) {
-> >> +    case 0:
-> >> +        break;
-> >> +    case -ECONNRESET:
-> >> +    case -ENOENT:
-> >> +    case -ESHUTDOWN:
-> >> +        return;
-> >> +    default:
-> >> +        goto resubmit;
-> >> +    }
-> >> +
-> >> +    while (*int_status) {
-> >> +        int irq =3D __ffs(*int_status);
-> >> +
-> >> +        generic_handle_irq_safe(irq_find_mapping(nct6694->domain, irq=
-));
-> >> +        *int_status &=3D ~BIT(irq);
-> >> +    }
-> >
-> > Does modifying the byte have any benefit?
-> >
->
-> Not sure if I understand the question, and assuming your question is rega=
-rding
-> *int_status: *int_status!=3D0 is the loop invariant, so, yes, modifying i=
-t does
-> have a benefit.
->
-> I'd be more concerned that transfer_buffer is the raw buffer, and that da=
-ta
-> read from it is not endianness converted. That makes me wonder if and how=
- the
-> code would work on a big endian system.
->
+Do you have UART connected to a device under test which you could use to 
+grab the panic log from the kernel? Alternatively you can also run the 
+kernel under m1n1's hypervisor and grab the log that way. It'll emulate 
+the serial port and redirect its output via USB.
 
-I will update the code in the next patch to use __le32 for the
-variable to ensure proper endianness handling across architectures.
+> 
+> Thus we tried to find the root cause of the issue manually. When we perform rmmod, the kernel performs device releasing on
+> the i2c bus, then calls the remove function in snd-soc-cs42l83-i2c, which calls the cs42l42_common_remove in cs42l42,
+> because cs42l42-&gt;init_done is true, it performs regmap_write, and finally calls into pasemi_smb_waitready in i2c-pasemi
+> -core.c. We noticed that smbus-&gt;use_irq is true, and after it calls into wait_for_completion_timeout, the system crashs!>
+> We found that wait_for_completion_timeout is one of the core scheduler APIs used by tens of thousands of other drivers,
+> it is unlikely causing the crash. So we tried to remove the call to wait_for_completion_timeout, then the system seems to
+> run well.
+> 
+> However, because we have little knowledge about i2c devices and specifications, we are not sure whether this change will
+> cause other potential harms for the system and device. Is this call to wait necesary here? Or can you give a more
+> sophisticated fix?
+
+Yes, that call is necessary. It waits for the "transfer completed" 
+interrupt from the hardware. Without it the driver will try to read data 
+before it's available and you'll see corruption. I'm surprised hardware 
+attached to i2c (usb pd controller and audio I think) works at all with 
+that change.
 
 
-Best regards,
-Ming
+Sven
+
 
