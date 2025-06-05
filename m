@@ -1,158 +1,207 @@
-Return-Path: <linux-i2c+bounces-11257-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11258-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98348ACF177
-	for <lists+linux-i2c@lfdr.de>; Thu,  5 Jun 2025 16:03:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1FA60ACF2C8
+	for <lists+linux-i2c@lfdr.de>; Thu,  5 Jun 2025 17:16:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 58DCD166606
-	for <lists+linux-i2c@lfdr.de>; Thu,  5 Jun 2025 14:02:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6100D16526C
+	for <lists+linux-i2c@lfdr.de>; Thu,  5 Jun 2025 15:15:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 966982749E1;
-	Thu,  5 Jun 2025 14:02:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gu1SckNE"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2EF51AA782;
+	Thu,  5 Jun 2025 15:14:38 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp83.cstnet.cn [159.226.251.83])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E8581DB34B;
-	Thu,  5 Jun 2025 14:02:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33E791E0B62;
+	Thu,  5 Jun 2025 15:14:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.83
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749132161; cv=none; b=AaAx4fv22YZ+6ssubVT/3fLCUO9ioTHOaWX/S5EjK7ctATwkl9NqRArK3YLTRz3ipkn+MpRFIzpe/plbYGGqp+uxfPXrLO2L2ssFVs8JOvmApGJSHrSLHPpel0guVPo/DA7KHC/8DEKn7v6gf+W6PjwudnBaoootUoyizIhNIu0=
+	t=1749136478; cv=none; b=HmiQ/aY3ZWnhWCj2uFta30Do2kImJGC6GTHGh18OcNPBecSGH9JFzi+oxQsVqihh1Qt6L8AoH4k+x2pjTF4ezWfe9bXeHJveNOcFNLxA4rKqMxpqncxwf4meRNuWSrOLAjQiCMAik75NuNoZnVhpivnHaezyHT8G2aVTZRTIpT4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749132161; c=relaxed/simple;
-	bh=iat9T/bPiMblSlK8d+zjpseMEDTU2L2gOx5NeoRkbMg=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=CsLJrdn0FrVCA8lPIUTCfSrqEExspHNUJ3YREt4lfRRvQ/6abpU7FFwmf0K4cREYpV8zfOaA2EDcxEE0C1gEWIBGjySZmbjWr4sdSZT3Vx/a9RPGv/69Ly1Dhcqv1KTP9eAhEfaKLpge2CrGzAwJn1VceJ/PMmeiQdBPv8tEU4Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gu1SckNE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C7D4C4CEE7;
-	Thu,  5 Jun 2025 14:02:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749132160;
-	bh=iat9T/bPiMblSlK8d+zjpseMEDTU2L2gOx5NeoRkbMg=;
-	h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
-	b=gu1SckNE3ydDy4+TPJ5hb90KWEtEJL7UQ4YxDNMsCyoErspywvpPZflGF86/Lds8N
-	 2CepgkWnmX/C16+jg8uf0zefUHcv5auHG6x2dW5P6PhyMoiB+q5pH51bhoHvYgkb9v
-	 tGsLt46b1Jqd/jhpUJI3Jl7q9DCtRCN9yDpqIAviHRmN0ab4xzWs1PixjB96Z5INAT
-	 ZsejwGMdmWfHwMfA8LlF1ebjHAbcdqooW1LTqAD6Jxf9E0b70Sk2n5IGeagqT2HfNB
-	 WSWBlRXkdzNSbUWRdhhQ8zCHndoIk8LmySF1ueBCBm2mr8YscM9fWJqP8/Rc8vAOAA
-	 KK15FRZIK7PYQ==
-Message-ID: <b3cbeae1-b0c5-43c3-80ec-3b6654582565@kernel.org>
-Date: Thu, 5 Jun 2025 16:02:35 +0200
+	s=arc-20240116; t=1749136478; c=relaxed/simple;
+	bh=zZreN04nK8+vTsIG0gu6h4T8Uemqs4MIlRjKn2kiIZw=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
+	 MIME-Version:Message-ID; b=pzFF13yotpzuXXdv0FMEzEqSSKItIl0LrIkgXw84Ho1OHsZeJg7LyhYhSKXg+Md0sZ6bRgxROeCcji4mnSaHtj4x5psGoxkjmiwkT9gIpDQRUnzZMxW2mRV5cRcOKOuvGrbY47FroeCGjVo8As0a9PPUxQkHvKHAmbdGb8uSEJY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ict.ac.cn; spf=pass smtp.mailfrom=ict.ac.cn; arc=none smtp.client-ip=159.226.251.83
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ict.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ict.ac.cn
+Received: from chenglingfei22s$ict.ac.cn ( [120.245.58.6] ) by
+ ajax-webmail-APP-09 (Coremail) ; Thu, 5 Jun 2025 23:13:55 +0800 (GMT+08:00)
+Date: Thu, 5 Jun 2025 23:13:55 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From: chenglingfei <chenglingfei22s@ict.ac.cn>
+To: "Sven Peter" <sven@kernel.org>
+Cc: j@jannau.net, alyssa@rosenzweig.io, neal@gompa.dev, 
+	zhangzhenwei22b@ict.ac.cn, chenglingfei22s@ict.ac.cn, 
+	wangzhe12@ict.ac.cn, maddy@linux.ibm.com, mpe@ellerman.id.au, 
+	npiggin@gmail.com, christophe.leroy@csgroup.eu, naveen@kernel.org, 
+	andi.shyti@kernel.org, asahi@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, 
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: Re: [BUG] rmmod i2c-pasemi-platform causing kernel crash on
+ Apple M1.
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version 2024.1-cmXT5 build
+ 20240627(e6c6db66) Copyright (c) 2002-2025 www.mailtech.cn cnic.cn
+In-Reply-To: <b3cbeae1-b0c5-43c3-80ec-3b6654582565@kernel.org>
+References: <5c598fea.3165d.1973e0a9a3a.Coremail.chenglingfei22s@ict.ac.cn>
+ <dafd58ae-0a08-4fe6-b94d-c8c6c8c1fa97@kernel.org>
+ <4cfe2276.2c0da.1973ff1cc40.Coremail.chenglingfei22s@ict.ac.cn>
+ <b3cbeae1-b0c5-43c3-80ec-3b6654582565@kernel.org>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Sven Peter <sven@kernel.org>
-Subject: Re: [BUG] rmmod i2c-pasemi-platform causing kernel crash on Apple M1.
-To: chenglingfei <chenglingfei22s@ict.ac.cn>
-Cc: j@jannau.net, alyssa@rosenzweig.io, neal@gompa.dev,
- zhangzhenwei22b@ict.ac.cn, wangzhe12@ict.ac.cn, maddy@linux.ibm.com,
- mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
- naveen@kernel.org, andi.shyti@kernel.org, asahi@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
- linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <5c598fea.3165d.1973e0a9a3a.Coremail.chenglingfei22s@ict.ac.cn>
- <dafd58ae-0a08-4fe6-b94d-c8c6c8c1fa97@kernel.org>
- <4cfe2276.2c0da.1973ff1cc40.Coremail.chenglingfei22s@ict.ac.cn>
-Content-Language: en-US
-In-Reply-To: <4cfe2276.2c0da.1973ff1cc40.Coremail.chenglingfei22s@ict.ac.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Message-ID: <6064d018.2b279.19740a7eb1c.Coremail.chenglingfei22s@ict.ac.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID:swCowAD3tJc1tEFoQ5gDAA--.30803W
+X-CM-SenderInfo: xfkh0wpolqwwthlsj2g6lf3hldfou0/1tbiCQ4EDmhBszABnAABs7
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWkKw
+	CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+	daVFxhVjvjDU=
 
-Hi,
-
-On 05.06.25 13:55, chenglingfei wrote:
-> 
-> 
-> 
-> &gt; -----原始邮件-----
-> &gt; 发件人: "Sven Peter" <sven@kernel.org>
-> &gt; 发送时间: 2025-06-05 18:25:09 (星期四)
-> &gt; 收件人: 程凌飞 <chenglingfei22s@ict.ac.cn>, j@jannau.net, alyssa@rosenzweig.io, neal@gompa.dev
-> &gt; 抄送: zhangzhenwei22b@ict.ac.cn, wangzhe12@ict.ac.cn, maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu, naveen@kernel.org, andi.shyti@kernel.org, asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-> &gt; 主题: Re: [BUG] rmmod i2c-pasemi-platform causing kernel crash on Apple M1.
-> &gt;
-> &gt; Hi,
-> &gt;
-> &gt; On 05.06.25 05:02, 程凌飞 wrote:
-> &gt; &gt; Hi, all!
-> &gt; &gt;
-> &gt; &gt; We’ve encountered a kernel crash when running rmmod i2c-pasemi-platform on a Mac Mini M1 (T8103) running Asahi Arch Linux.
-> &gt; &gt;
-> &gt; &gt; The bug was first found on the Linux v6.6, which is built manually with the Asahi given config to run our services.
-> &gt; &gt; At that time, the i2c-pasemi-platform was i2c-apple.
-> &gt; &gt;
-> &gt; &gt; We noticed in the Linux v6.7, the pasemi is splitted into two separate modules, one of which is i2c-pasemi-platform.
-> &gt; &gt; Therefore, we built Linux v6.14.6 and tried to rmmod i2c-pasemi-platform again, the crash still exists. Moreover, we fetched
-> &gt; &gt; the latest i2c-pasemi-platform on linux-next(911483b25612c8bc32a706ba940738cc43299496) and asahi, built them and
-> &gt; &gt; tested again with Linux v6.14.6, but the crash remains.
-> &gt; &gt;
-> &gt; &gt; Because kexec is not supported and will never be fully supported on Apple Silicon platforms due to hardware and firmware
-> &gt; &gt; design constraints, we can not record the panic logs through kdump.
-> &gt;
-> &gt; Do you have UART connected to a device under test which you could use to
-> &gt; grab the panic log from the kernel? Alternatively you can also run the
-> &gt; kernel under m1n1's hypervisor and grab the log that way. It'll emulate
-> &gt; the serial port and redirect its output via USB.
-> &gt;
-> 
-> I don't have UART, but I have tried to run the kernel under m1n1's hypervisor. However, it does not trigger the release of cs42l83.
-> Given that m1n1 provides full peripheral device emulation capability, the most plausible explanation would be an incorrect
-> firmware loading sequence. But the documentation of Asahi provides little details about how to generate an initramfs with
-> firmware (I think), can you give more guidance about it?
-
-I'm not sure why you are even trying to create a special initramfs. Just
-load your usual kernel using the usual boot flow as a guest. There's 
-also no firmware involved in i2c and I'm not sure what you mean with 
-"full peripheral device emulation" either or how that's related to firmware.
-You also mention that the crash happens when you run rmmod so I again 
-don't understand what "it does not trigger the release of cs42l83" means 
-here.
-
-> 
-> &gt; &gt;
-> &gt; &gt; Thus we tried to find the root cause of the issue manually. When we perform rmmod, the kernel performs device releasing on
-> &gt; &gt; the i2c bus, then calls the remove function in snd-soc-cs42l83-i2c, which calls the cs42l42_common_remove in cs42l42,
-> &gt; &gt; because cs42l42-&gt;init_done is true, it performs regmap_write, and finally calls into pasemi_smb_waitready in i2c-pasemi
-> &gt; &gt; -core.c. We noticed that smbus-&gt;use_irq is true, and after it calls into wait_for_completion_timeout, the system crashs!&gt;
-> &gt; &gt; We found that wait_for_completion_timeout is one of the core scheduler APIs used by tens of thousands of other drivers,
-> &gt; &gt; it is unlikely causing the crash. So we tried to remove the call to wait_for_completion_timeout, then the system seems to
-> &gt; &gt; run well.
-> &gt; &gt;
-> &gt; &gt; However, because we have little knowledge about i2c devices and specifications, we are not sure whether this change will
-> &gt; &gt; cause other potential harms for the system and device. Is this call to wait necesary here? Or can you give a more
-> &gt; &gt; sophisticated fix?
-> &gt;
-> &gt; Yes, that call is necessary. It waits for the "transfer completed"
-> &gt; interrupt from the hardware. Without it the driver will try to read data
-> &gt; before it's available and you'll see corruption. I'm surprised hardware
-> &gt; attached to i2c (usb pd controller and audio I think) works at all with
-> &gt; that change.
-> &gt;
-> &gt;
-> &gt; Sven
-> 
-> Are there any methods or tools to systematically verify its functionality? I am not sure whether the devices attached to i2c
-> should work well even after the i2c-pasemi-platform has been removed.
-
-I don't understand. You say you saw a crash inside pasemi_smb_waitready 
-when calling wait_for_completion_timeout and decided to remove that 
-method. When you remove the call you break the entire driver because it 
-will now try to read data long before the i2c transaction has been 
-completed.
-Obviously, no i2c device will work when the driver isn't loaded but 
-without waiting for the completion they also won't work when the driver 
-is loaded.
-
-
-Sven
-
+CgoKJmd0OyAtLS0tLeWOn+Wni+mCruS7ti0tLS0tCiZndDsg5Y+R5Lu25Lq6OiAiU3ZlbiBQZXRl
+ciIgPHN2ZW5Aa2VybmVsLm9yZz4KJmd0OyDlj5HpgIHml7bpl7Q6IDIwMjUtMDYtMDUgMjI6MDI6
+MzUgKOaYn+acn+WbmykKJmd0OyDmlLbku7bkuro6IGNoZW5nbGluZ2ZlaSA8Y2hlbmdsaW5nZmVp
+MjJzQGljdC5hYy5jbj4KJmd0OyDmioTpgIE6IGpAamFubmF1Lm5ldCwgYWx5c3NhQHJvc2Vuendl
+aWcuaW8sIG5lYWxAZ29tcGEuZGV2LCB6aGFuZ3poZW53ZWkyMmJAaWN0LmFjLmNuLCB3YW5nemhl
+MTJAaWN0LmFjLmNuLCBtYWRkeUBsaW51eC5pYm0uY29tLCBtcGVAZWxsZXJtYW4uaWQuYXUsIG5w
+aWdnaW5AZ21haWwuY29tLCBjaHJpc3RvcGhlLmxlcm95QGNzZ3JvdXAuZXUsIG5hdmVlbkBrZXJu
+ZWwub3JnLCBhbmRpLnNoeXRpQGtlcm5lbC5vcmcsIGFzYWhpQGxpc3RzLmxpbnV4LmRldiwgbGlu
+dXgtYXJtLWtlcm5lbEBsaXN0cy5pbmZyYWRlYWQub3JnLCBsaW51eHBwYy1kZXZAbGlzdHMub3ps
+YWJzLm9yZywgbGludXgtaTJjQHZnZXIua2VybmVsLm9yZywgbGludXgta2VybmVsQHZnZXIua2Vy
+bmVsLm9yZwomZ3Q7IOS4u+mimDogUmU6IFtCVUddIHJtbW9kIGkyYy1wYXNlbWktcGxhdGZvcm0g
+Y2F1c2luZyBrZXJuZWwgY3Jhc2ggb24gQXBwbGUgTTEuCiZndDsgCiZndDsgSGksCiZndDsgCiZn
+dDsgT24gMDUuMDYuMjUgMTM6NTUsIGNoZW5nbGluZ2ZlaSB3cm90ZToKJmd0OyAmZ3Q7IAomZ3Q7
+ICZndDsgCiZndDsgJmd0OyAKJmd0OyAmZ3Q7ICZndDsgLS0tLS3ljp/lp4vpgq7ku7YtLS0tLQom
+Z3Q7ICZndDsgJmd0OyDlj5Hku7bkuro6ICJTdmVuIFBldGVyIiA8c3ZlbkBrZXJuZWwub3JnPgom
+Z3Q7ICZndDsgJmd0OyDlj5HpgIHml7bpl7Q6IDIwMjUtMDYtMDUgMTg6MjU6MDkgKOaYn+acn+Wb
+mykKJmd0OyAmZ3Q7ICZndDsg5pS25Lu25Lq6OiDnqIvlh4zpo54gPGNoZW5nbGluZ2ZlaTIyc0Bp
+Y3QuYWMuY24+LCBqQGphbm5hdS5uZXQsIGFseXNzYUByb3Nlbnp3ZWlnLmlvLCBuZWFsQGdvbXBh
+LmRldgomZ3Q7ICZndDsgJmd0OyDmioTpgIE6IHpoYW5nemhlbndlaTIyYkBpY3QuYWMuY24sIHdh
+bmd6aGUxMkBpY3QuYWMuY24sIG1hZGR5QGxpbnV4LmlibS5jb20sIG1wZUBlbGxlcm1hbi5pZC5h
+dSwgbnBpZ2dpbkBnbWFpbC5jb20sIGNocmlzdG9waGUubGVyb3lAY3Nncm91cC5ldSwgbmF2ZWVu
+QGtlcm5lbC5vcmcsIGFuZGkuc2h5dGlAa2VybmVsLm9yZywgYXNhaGlAbGlzdHMubGludXguZGV2
+LCBsaW51eC1hcm0ta2VybmVsQGxpc3RzLmluZnJhZGVhZC5vcmcsIGxpbnV4cHBjLWRldkBsaXN0
+cy5vemxhYnMub3JnLCBsaW51eC1pMmNAdmdlci5rZXJuZWwub3JnLCBsaW51eC1rZXJuZWxAdmdl
+ci5rZXJuZWwub3JnCiZndDsgJmd0OyAmZ3Q7IOS4u+mimDogUmU6IFtCVUddIHJtbW9kIGkyYy1w
+YXNlbWktcGxhdGZvcm0gY2F1c2luZyBrZXJuZWwgY3Jhc2ggb24gQXBwbGUgTTEuCiZndDsgJmd0
+OyAmZ3Q7CiZndDsgJmd0OyAmZ3Q7IEhpLAomZ3Q7ICZndDsgJmd0OwomZ3Q7ICZndDsgJmd0OyBP
+biAwNS4wNi4yNSAwNTowMiwg56iL5YeM6aOeIHdyb3RlOgomZ3Q7ICZndDsgJmd0OyAmZ3Q7IEhp
+LCBhbGwhCiZndDsgJmd0OyAmZ3Q7ICZndDsKJmd0OyAmZ3Q7ICZndDsgJmd0OyBXZeKAmXZlIGVu
+Y291bnRlcmVkIGEga2VybmVsIGNyYXNoIHdoZW4gcnVubmluZyBybW1vZCBpMmMtcGFzZW1pLXBs
+YXRmb3JtIG9uIGEgTWFjIE1pbmkgTTEgKFQ4MTAzKSBydW5uaW5nIEFzYWhpIEFyY2ggTGludXgu
+CiZndDsgJmd0OyAmZ3Q7ICZndDsKJmd0OyAmZ3Q7ICZndDsgJmd0OyBUaGUgYnVnIHdhcyBmaXJz
+dCBmb3VuZCBvbiB0aGUgTGludXggdjYuNiwgd2hpY2ggaXMgYnVpbHQgbWFudWFsbHkgd2l0aCB0
+aGUgQXNhaGkgZ2l2ZW4gY29uZmlnIHRvIHJ1biBvdXIgc2VydmljZXMuCiZndDsgJmd0OyAmZ3Q7
+ICZndDsgQXQgdGhhdCB0aW1lLCB0aGUgaTJjLXBhc2VtaS1wbGF0Zm9ybSB3YXMgaTJjLWFwcGxl
+LgomZ3Q7ICZndDsgJmd0OyAmZ3Q7CiZndDsgJmd0OyAmZ3Q7ICZndDsgV2Ugbm90aWNlZCBpbiB0
+aGUgTGludXggdjYuNywgdGhlIHBhc2VtaSBpcyBzcGxpdHRlZCBpbnRvIHR3byBzZXBhcmF0ZSBt
+b2R1bGVzLCBvbmUgb2Ygd2hpY2ggaXMgaTJjLXBhc2VtaS1wbGF0Zm9ybS4KJmd0OyAmZ3Q7ICZn
+dDsgJmd0OyBUaGVyZWZvcmUsIHdlIGJ1aWx0IExpbnV4IHY2LjE0LjYgYW5kIHRyaWVkIHRvIHJt
+bW9kIGkyYy1wYXNlbWktcGxhdGZvcm0gYWdhaW4sIHRoZSBjcmFzaCBzdGlsbCBleGlzdHMuIE1v
+cmVvdmVyLCB3ZSBmZXRjaGVkCiZndDsgJmd0OyAmZ3Q7ICZndDsgdGhlIGxhdGVzdCBpMmMtcGFz
+ZW1pLXBsYXRmb3JtIG9uIGxpbnV4LW5leHQoOTExNDgzYjI1NjEyYzhiYzMyYTcwNmJhOTQwNzM4
+Y2M0MzI5OTQ5NikgYW5kIGFzYWhpLCBidWlsdCB0aGVtIGFuZAomZ3Q7ICZndDsgJmd0OyAmZ3Q7
+IHRlc3RlZCBhZ2FpbiB3aXRoIExpbnV4IHY2LjE0LjYsIGJ1dCB0aGUgY3Jhc2ggcmVtYWlucy4K
+Jmd0OyAmZ3Q7ICZndDsgJmd0OwomZ3Q7ICZndDsgJmd0OyAmZ3Q7IEJlY2F1c2Uga2V4ZWMgaXMg
+bm90IHN1cHBvcnRlZCBhbmQgd2lsbCBuZXZlciBiZSBmdWxseSBzdXBwb3J0ZWQgb24gQXBwbGUg
+U2lsaWNvbiBwbGF0Zm9ybXMgZHVlIHRvIGhhcmR3YXJlIGFuZCBmaXJtd2FyZQomZ3Q7ICZndDsg
+Jmd0OyAmZ3Q7IGRlc2lnbiBjb25zdHJhaW50cywgd2UgY2FuIG5vdCByZWNvcmQgdGhlIHBhbmlj
+IGxvZ3MgdGhyb3VnaCBrZHVtcC4KJmd0OyAmZ3Q7ICZndDsKJmd0OyAmZ3Q7ICZndDsgRG8geW91
+IGhhdmUgVUFSVCBjb25uZWN0ZWQgdG8gYSBkZXZpY2UgdW5kZXIgdGVzdCB3aGljaCB5b3UgY291
+bGQgdXNlIHRvCiZndDsgJmd0OyAmZ3Q7IGdyYWIgdGhlIHBhbmljIGxvZyBmcm9tIHRoZSBrZXJu
+ZWw/IEFsdGVybmF0aXZlbHkgeW91IGNhbiBhbHNvIHJ1biB0aGUKJmd0OyAmZ3Q7ICZndDsga2Vy
+bmVsIHVuZGVyIG0xbjEncyBoeXBlcnZpc29yIGFuZCBncmFiIHRoZSBsb2cgdGhhdCB3YXkuIEl0
+J2xsIGVtdWxhdGUKJmd0OyAmZ3Q7ICZndDsgdGhlIHNlcmlhbCBwb3J0IGFuZCByZWRpcmVjdCBp
+dHMgb3V0cHV0IHZpYSBVU0IuCiZndDsgJmd0OyAmZ3Q7CiZndDsgJmd0OyAKJmd0OyAmZ3Q7IEkg
+ZG9uJ3QgaGF2ZSBVQVJULCBidXQgSSBoYXZlIHRyaWVkIHRvIHJ1biB0aGUga2VybmVsIHVuZGVy
+IG0xbjEncyBoeXBlcnZpc29yLiBIb3dldmVyLCBpdCBkb2VzIG5vdCB0cmlnZ2VyIHRoZSByZWxl
+YXNlIG9mIGNzNDJsODMuCiZndDsgJmd0OyBHaXZlbiB0aGF0IG0xbjEgcHJvdmlkZXMgZnVsbCBw
+ZXJpcGhlcmFsIGRldmljZSBlbXVsYXRpb24gY2FwYWJpbGl0eSwgdGhlIG1vc3QgcGxhdXNpYmxl
+IGV4cGxhbmF0aW9uIHdvdWxkIGJlIGFuIGluY29ycmVjdAomZ3Q7ICZndDsgZmlybXdhcmUgbG9h
+ZGluZyBzZXF1ZW5jZS4gQnV0IHRoZSBkb2N1bWVudGF0aW9uIG9mIEFzYWhpIHByb3ZpZGVzIGxp
+dHRsZSBkZXRhaWxzIGFib3V0IGhvdyB0byBnZW5lcmF0ZSBhbiBpbml0cmFtZnMgd2l0aAomZ3Q7
+ICZndDsgZmlybXdhcmUgKEkgdGhpbmspLCBjYW4geW91IGdpdmUgbW9yZSBndWlkYW5jZSBhYm91
+dCBpdD8KJmd0OyAKJmd0OyBJJ20gbm90IHN1cmUgd2h5IHlvdSBhcmUgZXZlbiB0cnlpbmcgdG8g
+Y3JlYXRlIGEgc3BlY2lhbCBpbml0cmFtZnMuIEp1c3QKJmd0OyBsb2FkIHlvdXIgdXN1YWwga2Vy
+bmVsIHVzaW5nIHRoZSB1c3VhbCBib290IGZsb3cgYXMgYSBndWVzdC4gVGhlcmUncyAKJmd0OyBh
+bHNvIG5vIGZpcm13YXJlIGludm9sdmVkIGluIGkyYyBhbmQgSSdtIG5vdCBzdXJlIHdoYXQgeW91
+IG1lYW4gd2l0aCAKJmd0OyAiZnVsbCBwZXJpcGhlcmFsIGRldmljZSBlbXVsYXRpb24iIGVpdGhl
+ciBvciBob3cgdGhhdCdzIHJlbGF0ZWQgdG8gZmlybXdhcmUuCiZndDsgWW91IGFsc28gbWVudGlv
+biB0aGF0IHRoZSBjcmFzaCBoYXBwZW5zIHdoZW4geW91IHJ1biBybW1vZCBzbyBJIGFnYWluIAom
+Z3Q7IGRvbid0IHVuZGVyc3RhbmQgd2hhdCAiaXQgZG9lcyBub3QgdHJpZ2dlciB0aGUgcmVsZWFz
+ZSBvZiBjczQybDgzIiBtZWFucyAKJmd0OyBoZXJlLgomZ3Q7IAoKV2VsbCwgc2ltcGx5IHJ1bm5p
+bmcgcm1tb2QgaTJjLXBhc2VtaS1wbGF0Zm9ybSBkb2Vzbid0IGRpcmVjdGx5IGNhdXNlIGEgY3Jh
+c2guIApUaGUgY3Jhc2ggb2NjdXJzIHdoZW4gdGhlIG1vZHVsZSByZW1vdmFsIHRyaWdnZXJzIGRl
+dmljZV9yZW1vdmUgZm9yIGNzNDJsODMsIAp3aGljaCB1bHRpbWF0ZWx5IGNhbGxzIHBhc2VtaV9z
+bWJfd2FpdHJlYWR5IGluIGkyYy1wYXNlbWktcGxhdGZvcm0uIFlvdSBtYXkgcmVmZXIKdG8gdGhl
+IGJyaWVmIGFuYWx5c2lzIHByb3ZpZGVkIGluIG15IGZpcnN0IGVtYWlsIGZvciBtb3JlIGRldGFp
+bHMuCgpXaGVuIGJvb3RpbmcgdGhlIGtlcm5lbCB3aXRob3V0IG0xbjEsIGNzNDJsODMgaXMgYXV0
+b21hdGljYWxseSBwcm9iZWQgYWZ0ZXIgCmkyYy1wYXNlbWktcGxhdGZvcm0gbG9hZHMgYW5kIHN1
+YnNlcXVlbnRseSByZW1vdmVkIHdoZW4gZXhlY3V0aW5nIHJtbW9kIAppMmMtcGFzZW1pLXBsYXRm
+b3JtLCByZXN1bHRpbmcgaW4gYSBrZXJuZWwgY3Jhc2guIEhvd2V2ZXIsIHdoZW4gYm9vdGluZyB1
+bmRlciBtMW4xLApjczQybDgzIGlzbid0IHByb2JlZCBvciByZW1vdmVkIC0tIHRoZSBkZXZpY2Ug
+YXBwZWFycyB0byBiZSBub24tZXhpc3RlbnQuIFRoaXMgCm9ic2VydmF0aW9uIGxlZCBtZSB0byBt
+ZW50aW9uICJmdWxsIHBlcmlwaGVyYWwgZGV2aWNlIGVtdWxhdGlvbi4iCgpGdXJ0aGVybW9yZSwg
+c2luY2UgY3M0Mmw4MyByZW1haW5zIHVudG91Y2hlZCB1bmRlciBtMW4xLCB0aGUgY2hhaW4gb2Yg
+b3BlcmF0aW9ucyAKaW52b2x2aW5nIGRldmljZV9yZW1vdmUgYW5kIHRoZSBzdWJzZXF1ZW50IGNh
+bGwgdG8gcGFzZW1pX3NtYl93YWl0cmVhZHkgbmV2ZXIgb2NjdXJzLgpUaGlzIGluaGVyZW50bHkg
+cHJldmVudHMgdGhlIGNyYXNoIHNjZW5hcmlvLCB3aGljaCBleHBsYWlucyB3aHkgSSdtIHVuYWJs
+ZSB0byByZXByb2R1Y2UKdGhlIGNyYXNoIHdoZW4gcnVubmluZyB1bmRlciBtMW4xLgoKSSBjYW4g
+dHJ5IGFnYWluIGJ5ICdsb2FkaW5nIHlvdXIgdXN1YWwga2VybmVsIHVzaW5nIHRoZSB1c3VhbCBi
+b290IGZsb3cgYXMgYSBndWVzdCwnLApidXQgSSBkb24ndCB0aGluayBpdCdsbCBtYWtlIG11Y2gg
+ZGlmZmVyZW5jZS4KCiZndDsgJmd0OyAKJmd0OyAmZ3Q7ICZndDsgJmd0OwomZ3Q7ICZndDsgJmd0
+OyAmZ3Q7IFRodXMgd2UgdHJpZWQgdG8gZmluZCB0aGUgcm9vdCBjYXVzZSBvZiB0aGUgaXNzdWUg
+bWFudWFsbHkuIFdoZW4gd2UgcGVyZm9ybSBybW1vZCwgdGhlIGtlcm5lbCBwZXJmb3JtcyBkZXZp
+Y2UgcmVsZWFzaW5nIG9uCiZndDsgJmd0OyAmZ3Q7ICZndDsgdGhlIGkyYyBidXMsIHRoZW4gY2Fs
+bHMgdGhlIHJlbW92ZSBmdW5jdGlvbiBpbiBzbmQtc29jLWNzNDJsODMtaTJjLCB3aGljaCBjYWxs
+cyB0aGUgY3M0Mmw0Ml9jb21tb25fcmVtb3ZlIGluIGNzNDJsNDIsCiZndDsgJmd0OyAmZ3Q7ICZn
+dDsgYmVjYXVzZSBjczQybDQyLSZndDtpbml0X2RvbmUgaXMgdHJ1ZSwgaXQgcGVyZm9ybXMgcmVn
+bWFwX3dyaXRlLCBhbmQgZmluYWxseSBjYWxscyBpbnRvIHBhc2VtaV9zbWJfd2FpdHJlYWR5IGlu
+IGkyYy1wYXNlbWkKJmd0OyAmZ3Q7ICZndDsgJmd0OyAtY29yZS5jLiBXZSBub3RpY2VkIHRoYXQg
+c21idXMtJmd0O3VzZV9pcnEgaXMgdHJ1ZSwgYW5kIGFmdGVyIGl0IGNhbGxzIGludG8gd2FpdF9m
+b3JfY29tcGxldGlvbl90aW1lb3V0LCB0aGUgc3lzdGVtIGNyYXNocyEmZ3Q7CiZndDsgJmd0OyAm
+Z3Q7ICZndDsgV2UgZm91bmQgdGhhdCB3YWl0X2Zvcl9jb21wbGV0aW9uX3RpbWVvdXQgaXMgb25l
+IG9mIHRoZSBjb3JlIHNjaGVkdWxlciBBUElzIHVzZWQgYnkgdGVucyBvZiB0aG91c2FuZHMgb2Yg
+b3RoZXIgZHJpdmVycywKJmd0OyAmZ3Q7ICZndDsgJmd0OyBpdCBpcyB1bmxpa2VseSBjYXVzaW5n
+IHRoZSBjcmFzaC4gU28gd2UgdHJpZWQgdG8gcmVtb3ZlIHRoZSBjYWxsIHRvIHdhaXRfZm9yX2Nv
+bXBsZXRpb25fdGltZW91dCwgdGhlbiB0aGUgc3lzdGVtIHNlZW1zIHRvCiZndDsgJmd0OyAmZ3Q7
+ICZndDsgcnVuIHdlbGwuCiZndDsgJmd0OyAmZ3Q7ICZndDsKJmd0OyAmZ3Q7ICZndDsgJmd0OyBI
+b3dldmVyLCBiZWNhdXNlIHdlIGhhdmUgbGl0dGxlIGtub3dsZWRnZSBhYm91dCBpMmMgZGV2aWNl
+cyBhbmQgc3BlY2lmaWNhdGlvbnMsIHdlIGFyZSBub3Qgc3VyZSB3aGV0aGVyIHRoaXMgY2hhbmdl
+IHdpbGwKJmd0OyAmZ3Q7ICZndDsgJmd0OyBjYXVzZSBvdGhlciBwb3RlbnRpYWwgaGFybXMgZm9y
+IHRoZSBzeXN0ZW0gYW5kIGRldmljZS4gSXMgdGhpcyBjYWxsIHRvIHdhaXQgbmVjZXNhcnkgaGVy
+ZT8gT3IgY2FuIHlvdSBnaXZlIGEgbW9yZQomZ3Q7ICZndDsgJmd0OyAmZ3Q7IHNvcGhpc3RpY2F0
+ZWQgZml4PwomZ3Q7ICZndDsgJmd0OwomZ3Q7ICZndDsgJmd0OyBZZXMsIHRoYXQgY2FsbCBpcyBu
+ZWNlc3NhcnkuIEl0IHdhaXRzIGZvciB0aGUgInRyYW5zZmVyIGNvbXBsZXRlZCIKJmd0OyAmZ3Q7
+ICZndDsgaW50ZXJydXB0IGZyb20gdGhlIGhhcmR3YXJlLiBXaXRob3V0IGl0IHRoZSBkcml2ZXIg
+d2lsbCB0cnkgdG8gcmVhZCBkYXRhCiZndDsgJmd0OyAmZ3Q7IGJlZm9yZSBpdCdzIGF2YWlsYWJs
+ZSBhbmQgeW91J2xsIHNlZSBjb3JydXB0aW9uLiBJJ20gc3VycHJpc2VkIGhhcmR3YXJlCiZndDsg
+Jmd0OyAmZ3Q7IGF0dGFjaGVkIHRvIGkyYyAodXNiIHBkIGNvbnRyb2xsZXIgYW5kIGF1ZGlvIEkg
+dGhpbmspIHdvcmtzIGF0IGFsbCB3aXRoCiZndDsgJmd0OyAmZ3Q7IHRoYXQgY2hhbmdlLgomZ3Q7
+ICZndDsgJmd0OwomZ3Q7ICZndDsgJmd0OwomZ3Q7ICZndDsgJmd0OyBTdmVuCiZndDsgJmd0OyAK
+Jmd0OyAmZ3Q7IEFyZSB0aGVyZSBhbnkgbWV0aG9kcyBvciB0b29scyB0byBzeXN0ZW1hdGljYWxs
+eSB2ZXJpZnkgaXRzIGZ1bmN0aW9uYWxpdHk/IEkgYW0gbm90IHN1cmUgd2hldGhlciB0aGUgZGV2
+aWNlcyBhdHRhY2hlZCB0byBpMmMKJmd0OyAmZ3Q7IHNob3VsZCB3b3JrIHdlbGwgZXZlbiBhZnRl
+ciB0aGUgaTJjLXBhc2VtaS1wbGF0Zm9ybSBoYXMgYmVlbiByZW1vdmVkLgomZ3Q7IAomZ3Q7IEkg
+ZG9uJ3QgdW5kZXJzdGFuZC4gWW91IHNheSB5b3Ugc2F3IGEgY3Jhc2ggaW5zaWRlIHBhc2VtaV9z
+bWJfd2FpdHJlYWR5IAomZ3Q7IHdoZW4gY2FsbGluZyB3YWl0X2Zvcl9jb21wbGV0aW9uX3RpbWVv
+dXQgYW5kIGRlY2lkZWQgdG8gcmVtb3ZlIHRoYXQgCiZndDsgbWV0aG9kLiBXaGVuIHlvdSByZW1v
+dmUgdGhlIGNhbGwgeW91IGJyZWFrIHRoZSBlbnRpcmUgZHJpdmVyIGJlY2F1c2UgaXQgCiZndDsg
+d2lsbCBub3cgdHJ5IHRvIHJlYWQgZGF0YSBsb25nIGJlZm9yZSB0aGUgaTJjIHRyYW5zYWN0aW9u
+IGhhcyBiZWVuIAomZ3Q7IGNvbXBsZXRlZC4KJmd0OyBPYnZpb3VzbHksIG5vIGkyYyBkZXZpY2Ug
+d2lsbCB3b3JrIHdoZW4gdGhlIGRyaXZlciBpc24ndCBsb2FkZWQgYnV0IAomZ3Q7IHdpdGhvdXQg
+d2FpdGluZyBmb3IgdGhlIGNvbXBsZXRpb24gdGhleSBhbHNvIHdvbid0IHdvcmsgd2hlbiB0aGUg
+ZHJpdmVyIAomZ3Q7IGlzIGxvYWRlZC4KJmd0OyAKJmd0OyAKJmd0OyBTdmVuCgoKPC9jaGVuZ2xp
+bmdmZWkyMnNAaWN0LmFjLmNuPjwvc3ZlbkBrZXJuZWwub3JnPjwvY2hlbmdsaW5nZmVpMjJzQGlj
+dC5hYy5jbj48L3N2ZW5Aa2VybmVsLm9yZz4=
 
