@@ -1,152 +1,136 @@
-Return-Path: <linux-i2c+bounces-11267-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11268-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D169AD033D
-	for <lists+linux-i2c@lfdr.de>; Fri,  6 Jun 2025 15:32:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 382CCAD0955
+	for <lists+linux-i2c@lfdr.de>; Fri,  6 Jun 2025 23:07:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 184493AE9EB
-	for <lists+linux-i2c@lfdr.de>; Fri,  6 Jun 2025 13:32:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 00B8B169838
+	for <lists+linux-i2c@lfdr.de>; Fri,  6 Jun 2025 21:07:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2ABD289356;
-	Fri,  6 Jun 2025 13:32:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A920221F1F;
+	Fri,  6 Jun 2025 21:07:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=mattcorallo.com header.i=@mattcorallo.com header.b="ipVhB3pI";
+	dkim=pass (2048-bit key) header.d=clients.mail.as397444.net header.i=@clients.mail.as397444.net header.b="ES2fhaDp"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.as397444.net (mail.as397444.net [69.59.18.99])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 205EF2F2E;
-	Fri,  6 Jun 2025 13:32:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCA6221CA03;
+	Fri,  6 Jun 2025 21:07:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.59.18.99
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749216733; cv=none; b=Tnlttf9z/fGCU3KM45pjIhFu+Kw9yvhscnlYSXifmrmeiT94qPCmEtCBV6M1T2KXhn86jLxiSu2uz1M2/awyelDfsX45JIxlhTffNFBhOR19WsxAf91fTPQjLEExhq3PESVcGQZvQ/Zu/dE7BNOIDObGqaeYgcUx6L3ZM4BGJSs=
+	t=1749244057; cv=none; b=aqiextdTsS3eomuJ/QA8zkgRZVWMoPrV+hpR2I+TrfH2GWPCwfFYinVtNMYy7PQLoZ+zvlYQjiIXgFTHGC9sNzfe2OZ/QgZOCsSE34P4NMh9BMPM+//xzoIpcNjps6J7e0aMqx3ow/MVXocVdVVXVL35hdCRa5j2CXHF8RpyRW4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749216733; c=relaxed/simple;
-	bh=rDhuXebl9LfoDzStrAyuudg6kEWfHwfevtQnt6H057M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Kw9Rf61U9wkAQF/Dx/KTpqJsWqxpsmNoD38pYdyAemqeyZuagr8Ba9Lmfh3+5G1MI3tx67CdqCJTmFqgBJJ1YGOM7crrXSMUBxAlL52m8Y8Aoj3Whe8osYY/VgixmWSRbbqTXwNa+8GnAiKM06XIG3vM4eDk8M2JeY4lbkwkzXE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.160.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-4a43d2d5569so26049341cf.0;
-        Fri, 06 Jun 2025 06:32:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749216730; x=1749821530;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dDtNol4Z+GeSmVmtFuSAOZHVVS18b4JA8DnUVIUdu24=;
-        b=glB1ZN3KQB1Xiz3sG7Y2ENUl5+rKrut4MAlLTOk+JLiZbX/iJgfZQ+dydWAULZgHbr
-         KssW512vHZU+bsJI6EKTw/KKK7N2eztEsqLojzx0FjpLgkYRJ0pocyNr175ZVNW9X13v
-         BinPLhcCCjztzIGkBSIZKqVuAxaHoKwzTlNmgwCEI9/smpngdFMmwm2K62Q8QPX2LwLA
-         amBlCe9xiIAFnJHVStbrLpFqtRXxriPSXvHwuI4oAX3EyESLGFcGDoyhxBGk7kkpjUWv
-         FWWPfa0dF7m31gUBKgO7Ju5BJAnk+Sdnin/N0jf638KaHQDl34rkRjAhXrcWvPyud8M4
-         eaLA==
-X-Forwarded-Encrypted: i=1; AJvYcCUEjy6fRM9h1vKpU6AfngZk/EmMlXLYLdaWdf/CFyLLrWapkRuAmH4FNx8Ovg8q0fmtFQZslq2IJU5Moe0Y@vger.kernel.org, AJvYcCWKz5rKeNp8kBKozaipJ8D+mXxnkObmMTQ/PHBKdLm+bnrHkMw4/piw797bwFVP5qxHOF+4lxoN+6QfIjqW1nAyBKc=@vger.kernel.org, AJvYcCX3P+l6w9EbCAbypOBmjvWBtvx5LrLKwki+vwRNV/kqRX2RHxBNi05QElpvTHZ910GqsQqa5AeZq2Of@vger.kernel.org, AJvYcCX65bSQSX/R3ygBD/2RX/CzIuOGgh9r/lCCq/SStWmPcR9h27VImm0nkrKvVG+9Gc2l0l7PgIfv3fYl@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxyfq1jV6w5gZh9n7zvZxBV6mSistDtVrpmrPZopK0+TsFsGEtF
-	Kpe0mLybMkz2fXdGKNEX6ZfeGTtmynxNpYyzxLyWdgDPqsKSrkB/44kA+S3gkXOB
-X-Gm-Gg: ASbGncuLzNCDZplbs5oBRrUKSk82b8We5a8bokRQ4D3m25qRKxrnZj6beLGuzgSpJ9M
-	B4o+LchxxtA5RDjPjLrnQ8lJj52IxrseITesuZKj6zE0n/UshMOkQZUwx7eOI5hlw4jEm8+lX7z
-	px+V0lMt4a5+CJJ5jACy7O9ndnN6jQCfgqGGgPxca3pA7kvgbZFUc71gg6D0kpmw2yTrb18CFmV
-	xpVXt+mM5g94sSY8V30Jkzx/gmdYgphiLtR2vsywIlZF2yAxJvvRLSvzXRAYDvDt6RJrOKfvjN4
-	RQx7las2BTB0CFGhmF/B0IhB3sXdEDtcIyEoDJtTTLDFXXGdtjfyB7GbF6AkrxyTZbSeJsPVZVY
-	Ye/mFyKmOaNEe5HsX1MR/+wwEc9HJd+Sa2UPJBTw=
-X-Google-Smtp-Source: AGHT+IHXY6E3zBR6z0gcyqUkpE40OHp3HzckSuyUnmS9XnM8THApTgx2xRpW3NXJEopXhhAgFTHZuw==
-X-Received: by 2002:a05:622a:4293:b0:497:6a94:dba0 with SMTP id d75a77b69052e-4a5b9d325f1mr49826651cf.25.1749216729537;
-        Fri, 06 Jun 2025 06:32:09 -0700 (PDT)
-Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com. [209.85.222.174])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4a61116b81asm12917071cf.21.2025.06.06.06.32.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Jun 2025 06:32:08 -0700 (PDT)
-Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-7d09b0a5009so206391685a.1;
-        Fri, 06 Jun 2025 06:32:08 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVoBUBpwBjPBG5waqIu8p2X/JHvFmJUgs2A4GTKPb97h4YWXU0NnrRyaTKdppLesOO8gl74B3NugPyinX6w@vger.kernel.org, AJvYcCWkRHq7tZQX15QF3snABw3C3CIXRqx7ZjhK3pKH1H4AuxRrwE53pK9c0RccOBDWSdeWXAinJf4CuVoZHDwYikd65E4=@vger.kernel.org, AJvYcCX7HKBVUyT4Xi7hI240gIDVCKHEnhTEaHPtJM065KGV80te8EH7Jwj8RIn+gtf8f660kWC3Z8Udf1ur@vger.kernel.org, AJvYcCXLAb3utE2AgsDnUNMWLvFWQIE9jXuPCHSHnK3CTbxO7ZqtV93mbYs9NPIyc6TOvP1xzfgtP70T8hI9@vger.kernel.org
-X-Received: by 2002:a05:620a:24d5:b0:7c7:a5cb:2b65 with SMTP id
- af79cd13be357-7d2298ad9f1mr465138785a.26.1749216728311; Fri, 06 Jun 2025
- 06:32:08 -0700 (PDT)
+	s=arc-20240116; t=1749244057; c=relaxed/simple;
+	bh=UM+vRO5hSydtuoeDrU+ex28r71pECYQGzzhBILiPAJQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=YElnSJu4k5QpfV6pb+J5S35UW+TpVP7AqEZb8XeeU7ONpZfBtCTjpKfJU2Wj0RAqdHdBQ4iVWV5uZjEzfh4UfTxxmvSwvCH+N1dXqerb9uNKUfW1LZ9RhtPjCbXoZxrCq39X2KBupuHW8b+0KtPbAKrFaHD4AK/y30uMaXikeoE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mattcorallo.com; spf=pass smtp.mailfrom=mattcorallo.com; dkim=pass (2048-bit key) header.d=mattcorallo.com header.i=@mattcorallo.com header.b=ipVhB3pI; dkim=pass (2048-bit key) header.d=clients.mail.as397444.net header.i=@clients.mail.as397444.net header.b=ES2fhaDp; arc=none smtp.client-ip=69.59.18.99
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mattcorallo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mattcorallo.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=mattcorallo.com; s=1749242463; h=In-Reply-To:From:References:To:Subject:
+	From:Subject:To:Cc:Cc:Reply-To;
+	bh=uX+SmtXFw2vm97wnzVAxVc1ps9775QcFr3R+1Xmhi7U=; b=ipVhB3pIhsSZPdDjR2Tawiqam5
+	Ms9cpnO5PqQgmXmZDW58mStfhAgKVFNskY6OaKVNC5II/jHu5gmb+O4vBNOkxNXqKMmTi5UsK9gqV
+	LbUodKHn0FP5kPzWlAulqIKwa4ZnhifA2Sd3kRjg+NHo6gvqR8B5QJgu3VXUNlLUr3LsHpIvvMg6O
+	YQdypP+p2GogSi5lJx6jyQbYpHoIFQJ1+nDie7XZKNAmNRxiUwUf14H9xccd+WEBR4VdTpVH3J2hL
+	dDs/i8ihgJskjsCRP+xOYrfnrouyYVW13PyDuFRg05ioo3OOPN5r3GBTyvRH1BSm0DZ8ShjLPZyeH
+	gdCuMRTw==;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=clients.mail.as397444.net; s=1749242465; h=In-Reply-To:From:References:To:
+	Subject:From:Subject:To:Cc:Cc:Reply-To;
+	bh=uX+SmtXFw2vm97wnzVAxVc1ps9775QcFr3R+1Xmhi7U=; b=ES2fhaDpRNAC4t0gdRYaV3xYDL
+	whC+jGwtvKn+d8EDLkHuvzngBkfEKa0joHJYs8Y+DxiFlhdg8mehm3AsGRj5XQ95k3y9cQZiQqtL5
+	tjanVijdSdQnOfdBuGnD+QDHrqoNuyMnZzKKZSKm2P/uj5haZ45iR0gSo+mlTol8IF8Gar3YbAqry
+	J2mASx0hsywBtgzZxpiPIxZQq1osUsontK59fQEoHa5OaczmtZxvOVz3cXG+ynsxTOx8ucXqLDlwc
+	ri69ifYMXuIHaGGXnF52voMILW+RcDjsrnp5DOkPguDCwNr4oGafASqzpW1NJbahuTxawKFUWqjtW
+	d14TiKcg==;
+X-DKIM-Note: Keys used to sign are likely public at
+X-DKIM-Note: https://as397444.net/dkim/mattcorallo.com and
+X-DKIM-Note: https://as397444.net/dkim/clients.mail.as397444.net
+X-DKIM-Note: For more info, see https://as397444.net/dkim/
+Received: by mail.as397444.net with esmtpsa (TLS1.3) (Exim)
+	(envelope-from <yalbrymrb@mattcorallo.com>)
+	id 1uNe8B-000EHH-0V;
+	Fri, 06 Jun 2025 20:57:39 +0000
+Message-ID: <03da7997-74f4-4435-a6c5-6aa5aea2f6d7@mattcorallo.com>
+Date: Fri, 6 Jun 2025 16:57:37 -0400
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250530143135.366417-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20250530143135.366417-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20250530143135.366417-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Fri, 6 Jun 2025 15:31:55 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdX61j-6_GwnibUs-m0ASm5JGhGGzLe6i41vjcz1ouZUjQ@mail.gmail.com>
-X-Gm-Features: AX0GCFvMLlrc8WWZ659b2wYy_2MgUzXn1Vl-0zrZy5LFvjpEPaA4YkZ5mevdJ28
-Message-ID: <CAMuHMdX61j-6_GwnibUs-m0ASm5JGhGGzLe6i41vjcz1ouZUjQ@mail.gmail.com>
-Subject: Re: [PATCH 6/6] i2c: riic: Add support for RZ/T2H SoC
-To: Prabhakar <prabhakar.csengg@gmail.com>
-Cc: Chris Brandt <chris.brandt@renesas.com>, Andi Shyti <andi.shyti@kernel.org>, 
-	Andy Shevchenko <andy@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Magnus Damm <magnus.damm@gmail.com>, Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Biju Das <biju.das.jz@bp.renesas.com>, 
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: PMBus memory overflow
+To: Guenter Roeck <linux@roeck-us.net>,
+ Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ linux-hwmon@vger.kernel.org, Linux I2C <linux-i2c@vger.kernel.org>,
+ security@kernel.org
+References: <336f298f-497f-4dd9-97ee-50b81221be06@roeck-us.net>
+ <1b1eccff-a306-4e17-a6bf-fd3203c61605@mattcorallo.com>
+ <1edc8396-535d-4cdf-bbb7-11d559d4c257@roeck-us.net>
+ <cfc2b3c8-3f94-407a-a4d5-e7d81686eb2d@mattcorallo.com>
+ <84258b48-03b5-4129-bed5-f8200996f2eb@roeck-us.net>
+ <fcfd78d2-238d-4b68-b6ec-5ee809c4ef08@mattcorallo.com>
+ <eb5796e8-de76-4e91-9192-65b9af7a4d49@roeck-us.net>
+ <284466fd-39e8-419e-8af5-41dbabb788af@roeck-us.net>
+ <d5abeb59-8286-425c-9f78-cd60b0e26ada@mattcorallo.com>
+ <00baca6f-8046-46ae-a68c-525472562be7@roeck-us.net>
+ <aAtEydwUfVcE0XeA@shikoro>
+ <3a9ab7bf-6761-4a14-983e-e6bb288ce58a@mattcorallo.com>
+ <e0e789b3-24c2-4ea3-9c79-fa815d801d83@roeck-us.net>
+ <bc9a14b5-8b10-436f-a791-28df245465e6@mattcorallo.com>
+ <4e198aa1-527b-4ad8-abc5-e7408296bfbd@roeck-us.net>
+Content-Language: en-US
+From: Matt Corallo <yalbrymrb@mattcorallo.com>
+In-Reply-To: <4e198aa1-527b-4ad8-abc5-e7408296bfbd@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Prabhakar,
+Adding security@kernel.org cause probably they should make sure this gets fixed.
 
-On Fri, 30 May 2025 at 16:31, Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> Add support for the Renesas RZ/T2H (R9A09G077) SoC, which features a
-> different interrupt layout for the RIIC controller. Unlike other SoCs
-> with individual error interrupts, RZ/T2H uses a combined error interrupt
-> (EEI).
->
-> Introduce a new IRQ descriptor table for RZ/T2H, along with a custom
-> ISR (`riic_eei_isr`) to handle STOP and NACK detection from the shared
-> interrupt.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+On 5/5/25 9:39 PM, Guenter Roeck wrote:
+> On 5/5/25 13:57, Matt Corallo wrote:
+>>
+>>
+>> On 5/5/25 4:50 PM, Guenter Roeck wrote:
+>>> On 5/5/25 13:41, Matt Corallo wrote:
+>>>>
+>>>>
+>>>> On 4/25/25 4:16 AM, Wolfram Sang wrote:
+>>>>>
+>>>>>> Wolfram, what do you suggest ? Fixing the cp2112 driver is obviously necessary, but
+>>>>>> I do wonder if a check such as the one above would be appropriate as well, possibly
+>>>>>> even combined with a WARN_ONCE().
+>>>>>
+>>>>> How annoying, there was still an unchecked case left? Sorry. Yes, the
+>>>>> core can have a check for a short-term solution. The long-term solution
+>>>>> is to support SMBUS3.x which allows for 255 byte transfers.
+>>>>
+>>>> Thanks!
+>>>>
+>>>> Any update here? I guess we already have a patch so no use in me trying to write one. Would be 
+>>>> nice to get this in a pull so it can head through backports.
+>>>>
+>>>
+>>> Not from my side, sorry. I am deeply buried in work and don't have time for anything
+>>> that isn't super-urgent :-(
+>>
+>> Mmm, shame, its kinda annoying to leave a buffer overflow reachable from a malicious USB device 
+>> sitting around (okay, with the default hardening configs it gets caught, but still). Can we just 
+>> land the above patch from Wolfram to check the length before writing the buffer? Happy to clean it 
+>> up as a formal patch submission if its easier for you.
+>>
+> 
+> Please go ahead.
+> 
+> Thanks,
+> Guenter
+> 
 
-Thanks for your patch!
-
-> --- a/drivers/i2c/busses/i2c-riic.c
-> +++ b/drivers/i2c/busses/i2c-riic.c
-> @@ -326,6 +327,19 @@ static irqreturn_t riic_stop_isr(int irq, void *data)
->         return IRQ_HANDLED;
->  }
->
-> +static irqreturn_t riic_eei_isr(int irq, void *data)
-> +{
-> +       u8 icsr2 = riic_readb(data, RIIC_ICSR2);
-> +
-> +       if (icsr2 & ICSR2_NACKF)
-> +               return riic_tend_isr(irq, data);
-> +
-> +       if (icsr2 & ICSR2_STOP)
-> +               return riic_stop_isr(irq, data);
-
-Just wondering: can both ICSR2_NACKF and ICSR2_STOP be set?
-As riic_tend_isr() clears only ICSR2_NACKF, while riic_stop_isr()
-clears all bits, the two calls could be chained, if needed.
-
-> +
-> +       return IRQ_NONE;
-> +}
-> +
->  static u32 riic_func(struct i2c_adapter *adap)
->  {
->         return I2C_FUNC_I2C | I2C_FUNC_SMBUS_EMUL;
-
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
 
