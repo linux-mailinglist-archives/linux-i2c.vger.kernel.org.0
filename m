@@ -1,85 +1,84 @@
-Return-Path: <linux-i2c+bounces-11261-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11262-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86786AD02C6
-	for <lists+linux-i2c@lfdr.de>; Fri,  6 Jun 2025 15:05:32 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53C81AD0308
+	for <lists+linux-i2c@lfdr.de>; Fri,  6 Jun 2025 15:21:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 15B741899655
-	for <lists+linux-i2c@lfdr.de>; Fri,  6 Jun 2025 13:05:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AD5F9189DC3B
+	for <lists+linux-i2c@lfdr.de>; Fri,  6 Jun 2025 13:22:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3ED37288C8B;
-	Fri,  6 Jun 2025 13:05:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBB65288C1E;
+	Fri,  6 Jun 2025 13:21:48 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
+Received: from mail-ua1-f48.google.com (mail-ua1-f48.google.com [209.85.222.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46213288C80;
-	Fri,  6 Jun 2025 13:05:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EE8320330;
+	Fri,  6 Jun 2025 13:21:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749215114; cv=none; b=TjlAQW4TkahnFD70xG0AXkuGfIEOqZQzjuu6Arb/OqDG2dpsHiVIbvsZzPoZ6ts1HVQPUomtGzunU4ZXp3i2tSqZlj0UlpcFYdOG+E0RVPHIhVPTp6Ps4+eMPApn8b7OfWHzPYYlcrNskiWqA/NS20emKv5Y5HUaBOXq5TkbHY0=
+	t=1749216108; cv=none; b=W/TAjhpOtPwxPDsweYPMU8HvblMH0MNaQG/dfSXYL3nhxJ/5RdJ+e4IsKdQGtWNXXRskAVL4oLKIS5Kq/yNDkjtNs27W8ijPox58zKOparEJmtKw49c5OqYTqUKiROtzLF04qlR1OyCqaLOcpvqzuP6Np186TNQGFTmgVLtlfCw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749215114; c=relaxed/simple;
-	bh=4OB8rRNnYyxfAn7/3hyYL1XNoSisYk8DCDF9QSdxXWE=;
+	s=arc-20240116; t=1749216108; c=relaxed/simple;
+	bh=Zc3hOlE1rh4BeCCJuVCK2t0CTBXnExBS3agU5ssS/Bo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YrkaXUWF7Ctu/v9ct8mOUWyMPonhxJydKMnj4jY0LrQ9AlnvmaEfpOJb8LKchu7sZHEOUv2iC3CGilBLvMTmKSj1WYcWiJ5FOATNsRyQNkFaIvHq+G70Onht4mf9cYkC6byI+e4JYDAJ4PYEsY7CFlzf8sueOccMTZKghidk/pU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.167.177
+	 To:Cc:Content-Type; b=gBSE7SbQZadGCzT2dRUi0R3gRPmW7mt6YieGRqHk2ee4NwQ4e+VUsRPr/N2nsOdjohZhrak8qcpLW/bU4qgN/zwHstkLgGldsBbWBfl38C2OBzhfogyJWguAuoVQlKf3mqze/sR3oMJmVjJ+53lhRl9NHvLVNDq1Bh/ESSYHGBI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f177.google.com with SMTP id 5614622812f47-408e0986303so1572184b6e.2;
-        Fri, 06 Jun 2025 06:05:12 -0700 (PDT)
+Received: by mail-ua1-f48.google.com with SMTP id a1e0cc1a2514c-87ec4d69b12so68092241.1;
+        Fri, 06 Jun 2025 06:21:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749215109; x=1749819909;
+        d=1e100.net; s=20230601; t=1749216105; x=1749820905;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=P4smyQ+8WqK0jxifR87KRhifMuRayG5/N77gUPFqbRM=;
-        b=czYqHBOJGa3AHoLWi48JCmxeXHDrfg5szWUef+4IcUSiY0o/cm7DFYJPiqs8RVv2MX
-         POr41VPwQo4W/OLojRp+L3RJriEbT0niITvmfY4SZ0yQf0AXXbwRP6SgEJ/bhOBFt4JU
-         tyKWfGsbdxx6gNfKaW4dY9+/1gQpNxk/DfxQR1VcgXJpNhtXk71Yv0fl9fKdyfOZJM/N
-         MJgs5u2yE4K4cukbvz9dMvIHUD6kzVxKBWaX0yuBldbPz0uEkhWbhuq6TWYNM+OjWCCn
-         RyWa0ziG0vnYZu9V5dXE9HS8bmDx9j8rP3g7fnth8ke68iZvzaY0GuQtCUz8YaOeRtyO
-         QXkw==
-X-Forwarded-Encrypted: i=1; AJvYcCUoBysI3oPN6mLuX0odRAF16nvXyYAAcNoSYnrMARUzNvQqmtOWCfOlS/fbs65dvvi7JEgHPnTCsHkN+cZNhk9jDvs=@vger.kernel.org, AJvYcCVdcTFfX/DGb07aOv1gukNjQRmkj9EwsNX7pRR/c+omNFwbRTv3DM2TY5zBdk4WDdjownp54aEihPahlqYH@vger.kernel.org, AJvYcCVk2OkmjGtjlyNujYMpQrogg5MyB6pWL6uXvKQASYB58YxBR4mWFRNBgGNAHaUJVYuS3Wt5/46hjD+v@vger.kernel.org, AJvYcCWMPnWAtBmGwMA6CrYuGO1e5G5j4xsAkGafwDRMg7+LMwythnlQ6x3qtPTk1yFDJ95bojiq9qU9v/iB@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxg0Y8xNcoXCPmDuBax2K7BVORHClmhRJ1I9rXspUgLokisQWzZ
-	86CIPc+cz1BrzybYwhit3r2Rqiz230a0GReG1bMlHveqpsqHycbVxKOl9t/AzJVQ
-X-Gm-Gg: ASbGncuuwQr8CvOz/OzxXmyog8N32vUuqb/M7lkJllhsm+UEpK0Zn0eLYrlzU/nt468
-	V19J6yN/Fn9J4DqtJwfkZXMl6H44DEC1DiXsoh2oo1aelgfXlYBrgpnTm4peE6gZw17ecCuZEMq
-	VnvU85nlng7AhEpmCJ+Tq8WqJA3Yeb/k4PXDr1z0+vOc/OCYWVuoBhK1qYHyHdebTpX0uu27Ras
-	GJo+uaxNkYmnW0uzht4B3aFe5sCBfugSTy+VPiX87AAqb8pQZIxpj8kH2hYUxcQn1hV2uDn8c/v
-	F3F0llh6erdKJxhUoM4y/+XuJZxZ2v1ZgMvHms5AGG6DsK0jRE7j9lKg3gywMLKL+O57WQnraM2
-	iZJkfn7VERMjbWQ==
-X-Google-Smtp-Source: AGHT+IEmuW2nj1cLyaotcR1JMQ67J+dMe0mE4Y/SpoqVoE9+UQfXUp3ChqvjyWvlG5a2rMPARV4P6g==
-X-Received: by 2002:a05:6808:30a4:b0:404:f4a0:7fbf with SMTP id 5614622812f47-40905134ec3mr2517084b6e.31.1749215109352;
-        Fri, 06 Jun 2025 06:05:09 -0700 (PDT)
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com. [209.85.210.42])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7388a089859sm270017a34.63.2025.06.06.06.05.08
+        bh=5SHPgJGpGwWRpAKXV7TD2IvmmZsZIIUaR3p49SfxukY=;
+        b=cRyjiXPoWB8TvAm/gyw+t1UR/xQdaBg0zdqjEHwOIB1uiX2UNl/sobCFyWIVJSFThR
+         n65swkSlPUH7+6n5/rwq8zfyi7OtesvSPf4QaGknaZo3y7ug5zlMOcET3saqAKMzx1Q2
+         iO46eC4x58s6exZ91LgCJ32yMGRDW9PQJgf5yPr+hvHwWqVQG73YjwwE2gfD6qVvOZSE
+         R0IrQhVAR2sEGKf5cSO7YfyCf71pUk/BaT2j3zP67dzHc4D+ZH0uA60p8c2iN243CSf+
+         q608IFRSz8NIxZJgPhGNXZZEonEN0h6yL0c9f9AGW6Z8YSLCw2bz69HUR/SEir3OG1nQ
+         9k3A==
+X-Forwarded-Encrypted: i=1; AJvYcCUa2RgczKWthvuwRzVojYyHXr9jhxT6Abow99AIpmaxUhBDgZGtxkJx95hZuhFXuI7TiRE5D8PhwwpO+9b7@vger.kernel.org, AJvYcCV3XIrnM/XpfEhhZP75ArzVGkS3A9Z6FFcFgoIy0VEgi1WSc8tUOrEvKspFr+P1Pdaw9tVVh2fEMUfn@vger.kernel.org, AJvYcCV5PID3I/IlZJ1ReMeU2cqNpYheWYQx9YMYu/gM/PiuYFGziwjO8CBkDj+nCfhlT9VulrZ25ae10ERh@vger.kernel.org, AJvYcCXygsh6zWNPHT0qpVo36TcU9Eq25cHWqXAl0aqwpSKraofDN7N33CfqDobw9BqQyCoks9dbRObzKFt6C/UbXq6mCXc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyHBWdqsjthYPsdQWmvhW3Frks3BocaSmtCDcyC5nKVe0G3QzEY
+	2gbIPAA36J4GuKhe1GwZcRc1KSi01pEfgDKzgWQCYqIQFDeD0ttSD5SA5ZHR/Ato
+X-Gm-Gg: ASbGnctU1ido/mJpYHdo1TB7lvHI9LzwrQXHpGIRrM4G7cn9lcrpvkT730eN4tg++rA
+	760FYM9xRP+yPV8oTu9h4kGI/cDD5lBbswH24aVEk5B3n7DgdtpSKV66L6ObQmSECE6QH5C9MkB
+	xBMVz/Zl/SEqQB1MucNSAvDWdmkirxJORel2Egn+d2X7MgHL3lSQCKhkLj0Ja/BnghRs2r/9tnb
+	DtZnHPhlMi0pw7R0r0Et/lWzrgtQzU7gFpFt1hI/wNj5sDB9hW/a85JU4uyHq0Ea9g748ZapSGB
+	hq9fw6RJbtbxoavet4wtCKOgLMHnkdGAYUsHONKJ6CaAoIYJQ81aUTdnRBUJSSTTXlfqxpGfT0b
+	3YdwhN8fTpNnGvkI3x91Ex8rn
+X-Google-Smtp-Source: AGHT+IGh9IE7imcdH3O8AsrnNV5dQ13WBR36cIaiMVuHG/0MuHPKcPAAI66x/OVcX8PpJHWDuO34HQ==
+X-Received: by 2002:a05:6122:926:b0:530:533c:1f6d with SMTP id 71dfb90a1353d-530e48d2947mr3035897e0c.11.1749216104774;
+        Fri, 06 Jun 2025 06:21:44 -0700 (PDT)
+Received: from mail-vs1-f53.google.com (mail-vs1-f53.google.com. [209.85.217.53])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-530e63e4170sm1082274e0c.27.2025.06.06.06.21.44
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Jun 2025 06:05:09 -0700 (PDT)
-Received: by mail-ot1-f42.google.com with SMTP id 46e09a7af769-7306482f958so1324643a34.0;
-        Fri, 06 Jun 2025 06:05:08 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCW8ntkU3G26yamwe2NBmXgIa833ehiPgTbLoBs1RWiwwE+MiNGUfCOZ4VMjiC2YLfcNS5OdAh13Kytr@vger.kernel.org, AJvYcCXYYj90O+N+UX20WyUVoyp/FOiBCkNpEmL30vKk9trY6sQgJHQRQwwuLfsFh1vkWkTLQzpj5C2Au/XsJBvEKGpSf+I=@vger.kernel.org, AJvYcCXcNqWrSS+4bQL64D2KlHSJ82xOaev2asyNqiF0mrti/s+/1KoJmb6PaTS2SA1O8H2RY47kaOVAgmCM9Wvt@vger.kernel.org, AJvYcCXutMri7ZeS02so72sx8ILBdBLus7GqczGoC7QzjnM/0yf+wMuseU+v8ycQnAsLs2cUw+XIZCFTUnI5@vger.kernel.org
-X-Received: by 2002:a05:6830:6617:b0:72b:9506:8db6 with SMTP id
- 46e09a7af769-73888dba453mr1953425a34.6.1749215108231; Fri, 06 Jun 2025
- 06:05:08 -0700 (PDT)
+        Fri, 06 Jun 2025 06:21:44 -0700 (PDT)
+Received: by mail-vs1-f53.google.com with SMTP id ada2fe7eead31-4e58a9bb8fcso636298137.2;
+        Fri, 06 Jun 2025 06:21:44 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU/j72tkcMoZHrbHRNajahiCydA02yBab4ZlljtZh9AcR3mv8w/KpUQLcJ0a8hhJJ9qYvznjK953UqN@vger.kernel.org, AJvYcCV3BB8neHyXyl/eK51uyR+m4dF3+l78rlA9HjfWHUrkC+LkrjEpnBblgIt8LTlI1Dv5frj8mLdy3mXh/nao92KvkGc=@vger.kernel.org, AJvYcCW4aPvN4UKjqHzsnP3Nt8WhfNJzS36nMYowawg/n1U2xc4HO4KfsrlCDrcgLuePCgOs+9o3D46FQBbvJkMd@vger.kernel.org, AJvYcCWK37T4By7gLgr27cTBDLr3trp9CATgoNHaRrCrtraITmd33afVPI55P64o2CSghh54QQoi/uWmDDkC@vger.kernel.org
+X-Received: by 2002:a05:6102:1486:b0:4e4:8362:dce9 with SMTP id
+ ada2fe7eead31-4e7729ad87cmr2873795137.9.1749216104213; Fri, 06 Jun 2025
+ 06:21:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250530143135.366417-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20250530143135.366417-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20250530143135.366417-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20250530143135.366417-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20250530143135.366417-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20250530143135.366417-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
 From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Fri, 6 Jun 2025 15:04:56 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdW8yP8Ja90YqjmAAUfwc17WnsX4kLhca_UOSMtcx-J7uA@mail.gmail.com>
-X-Gm-Features: AX0GCFtMgG-6x_z__UisiUo_L1woOb8v1c-Obt5jD9EezPXLPFEEMdGVNQ-j4ok
-Message-ID: <CAMuHMdW8yP8Ja90YqjmAAUfwc17WnsX4kLhca_UOSMtcx-J7uA@mail.gmail.com>
-Subject: Re: [PATCH 1/6] dt-bindings: i2c: renesas,riic: Move ref for
- i2c-controller.yaml to the end
+Date: Fri, 6 Jun 2025 15:21:31 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXO1fOODiDA4vQBT=+LKRjT5ZoeewdyPSDoTeeoqUVTSA@mail.gmail.com>
+X-Gm-Features: AX0GCFtvhT3pJFghdGRenMhq10cIBWx14-LLPjr4W6t770WjmYutVYh9IEnSwY0
+Message-ID: <CAMuHMdXO1fOODiDA4vQBT=+LKRjT5ZoeewdyPSDoTeeoqUVTSA@mail.gmail.com>
+Subject: Re: [PATCH 2/6] dt-bindings: i2c: renesas,riic: Document RZ/T2H support
 To: Prabhakar <prabhakar.csengg@gmail.com>
 Cc: Chris Brandt <chris.brandt@renesas.com>, Andi Shyti <andi.shyti@kernel.org>, 
 	Andy Shevchenko <andy@kernel.org>, Rob Herring <robh@kernel.org>, 
@@ -92,16 +91,100 @@ Cc: Chris Brandt <chris.brandt@renesas.com>, Andi Shyti <andi.shyti@kernel.org>,
 	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 Content-Type: text/plain; charset="UTF-8"
 
+Hi Prabhakar,
+
 On Fri, 30 May 2025 at 16:31, Prabhakar <prabhakar.csengg@gmail.com> wrote:
 > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 >
-> In preparation for adding more validation checks, move the `$ref` for
-> 'i2c-controller.yaml' to the end of the file. Also, relocate the
-> conditional check for 'resets' into the 'allOf' block.
+> Document support for the I2C Bus Interface (RIIC) found on the Renesas
+> RZ/T2H (R9A09G077) SoC. The RIIC IP on this SoC is similar to that on
+> the RZ/V2H(P) SoC but supports fewer interrupts, lacks FM+ support and
+> does not require resets. Due to these differences, add a new compatible
+> string `renesas,riic-r9a09g077` for the RZ/T2H SoC.
+>
+> Unlike earlier SoCs that use eight distinct interrupts, the RZ/T2H uses
+> only four, including a combined error/event interrupt. Update the binding
+> schema to reflect this interrupt layout and skip the `resets` property
+> check, as it is not required on these SoCs.
 >
 > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Thanks for your patch!
+
+> --- a/Documentation/devicetree/bindings/i2c/renesas,riic.yaml
+> +++ b/Documentation/devicetree/bindings/i2c/renesas,riic.yaml
+> @@ -29,32 +29,46 @@ properties:
+>                - renesas,riic-r9a09g056   # RZ/V2N
+>            - const: renesas,riic-r9a09g057   # RZ/V2H(P)
+>
+> -      - const: renesas,riic-r9a09g057   # RZ/V2H(P)
+> +      - enum:
+> +          - renesas,riic-r9a09g057   # RZ/V2H(P)
+> +          - renesas,riic-r9a09g077   # RZ/T2H
+>
+>    reg:
+>      maxItems: 1
+>
+>    interrupts:
+> -    items:
+> -      - description: Transmit End Interrupt
+> -      - description: Receive Data Full Interrupt
+> -      - description: Transmit Data Empty Interrupt
+> -      - description: Stop Condition Detection Interrupt
+> -      - description: Start Condition Detection Interrupt
+> -      - description: NACK Reception Interrupt
+> -      - description: Arbitration-Lost Interrupt
+> -      - description: Timeout Interrupt
+> +    oneOf:
+> +      - items:
+> +          - description: Transmit End Interrupt
+> +          - description: Receive Data Full Interrupt
+> +          - description: Transmit Data Empty Interrupt
+> +          - description: Stop Condition Detection Interrupt
+> +          - description: Start Condition Detection Interrupt
+> +          - description: NACK Reception Interrupt
+> +          - description: Arbitration-Lost Interrupt
+> +          - description: Timeout Interrupt
+> +      - items:
+> +          - description: Transmit End Interrupt
+> +          - description: Receive Data Full Interrupt
+> +          - description: Transmit Data Empty Interrupt
+> +          - description: Transmit error or event Interrupt
+
+Nit: the documentation calls it "Transfer error or event generation".
+
+>
+>    interrupt-names:
+> -    items:
+> -      - const: tei
+> -      - const: ri
+> -      - const: ti
+> -      - const: spi
+> -      - const: sti
+> -      - const: naki
+> -      - const: ali
+> -      - const: tmoi
+> +    oneOf:
+> +      - items:
+> +          - const: tei
+> +          - const: ri
+> +          - const: ti
+> +          - const: spi
+> +          - const: sti
+> +          - const: naki
+> +          - const: ali
+> +          - const: tmoi
+> +      - items:
+> +          - const: tei
+> +          - const: ri
+> +          - const: ti
+
+Given you have a new set of names, perhaps "rxi" and "txi",
+to match the documentation?
+
+> +          - const: eei
+
+Perhaps use the order from the documentation: eei, rxi, txi, tei?
 
 Gr{oetje,eeting}s,
 
