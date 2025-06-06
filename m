@@ -1,84 +1,84 @@
-Return-Path: <linux-i2c+bounces-11265-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11266-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A5C7AD031C
-	for <lists+linux-i2c@lfdr.de>; Fri,  6 Jun 2025 15:24:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 23D9AAD0326
+	for <lists+linux-i2c@lfdr.de>; Fri,  6 Jun 2025 15:26:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EC7AB17AC1C
-	for <lists+linux-i2c@lfdr.de>; Fri,  6 Jun 2025 13:24:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D1E9817B053
+	for <lists+linux-i2c@lfdr.de>; Fri,  6 Jun 2025 13:26:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8D03288C37;
-	Fri,  6 Jun 2025 13:24:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2421E288C36;
+	Fri,  6 Jun 2025 13:26:01 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mail-vs1-f54.google.com (mail-vs1-f54.google.com [209.85.217.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C8BC28852E;
-	Fri,  6 Jun 2025 13:23:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FC9828852E;
+	Fri,  6 Jun 2025 13:25:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749216240; cv=none; b=VPiMgmn6Ofw7Ug8fuiFSrHya2G6RjleDvQRGxFogiJtg0ketJHy8q6710CvP8/CIy9xNxXiMf0mcnVDliKKplYwf0SHvrn51PJiW4c6iMZOD/tmfbwYpXHHzsyEbhThl2PzUv9UJsYYFDmnUgTnO4mnTHxaJzwT1etPXFgT9Wo4=
+	t=1749216361; cv=none; b=lTxXdOjyLz6oeucgUOP6FZ2wFog9vgQW/MzRAHDouO7uYWoe1MokzIf1sWO/+ou3rZ/a5FpFZOSWO17P7v0uSidB1c/FYHBly5Zk4sxfCcby4myhTBdOG7uOTLmUZnV3ZPNLWz61xsMINaagQ75Mw67pqzr0oJvjRPrvaAkpgAw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749216240; c=relaxed/simple;
-	bh=ODzVjULCU7LA5AwD99W9he//DtffyhQ9WeBhknElp8I=;
+	s=arc-20240116; t=1749216361; c=relaxed/simple;
+	bh=HlmQyiD7lRAJAjekPuStEFPuTq66ZgP31O0JnrgtbHk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CJd8SDf0k8oXFV0fJy1nFdfBuyhFdGxvxidyMVcvY7XDBPCKQMNPs2uFXGApCDc0mHFLLyKTwWKxvLn7lTR95HxRSNO1XJBMGCviSPdiM2GQX2Du6ejdrlSaJUDttVdMhbZGz3Y4VREXvKe48vUv334zzwHwITEGcyvVt2toJFo=
+	 To:Cc:Content-Type; b=gPSYP+X1LtU0ggFd1SN7UNdCl3o1OISxDTV6uGPfjo+xs4YmNOyAvjlE33X0bbVKdGjs4fvezFIRiOmghPaqT865pktvmMXdTERkWqcuCvZtLHvUnHg37EfejNPsphljgykd6weEQT8WNl8RPrnN2METwTyWw4zJLxNGchTaf7Q=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f54.google.com with SMTP id ada2fe7eead31-4e45ebe7ac1so451611137.2;
-        Fri, 06 Jun 2025 06:23:59 -0700 (PDT)
+Received: by mail-vs1-f54.google.com with SMTP id ada2fe7eead31-4e7561d3466so656710137.0;
+        Fri, 06 Jun 2025 06:25:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749216237; x=1749821037;
+        d=1e100.net; s=20230601; t=1749216357; x=1749821157;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=mp5mCaEdHKFmEnLbLz+m6JFQFDxSV2BJAh/7PrIe5RY=;
-        b=jc+nexL360YBPZzkGL2lV8VWC/Q8BFpT9N4eKMVWDszFJrkvFmKYIDEK0QrFtiNRHv
-         aPmTcfci7/tRfYnV/MnI75xiWUEBPjGnf+RSAh4KdwouQSfM3nrYNzEICxodgFVRG7TC
-         B3e3kJBbPjCNHmpy7Dj5GYwhEokFI4mtkrTsXh8Z5I5hKCweDdkWjgsxkdIbEl2Z4Ul/
-         6Yu1v8IB9+WDTf+ZKiU5efmdCZFG8PA/5N60eBn1OTL0BHB1aug0ewiaRiBOHUDsuYwc
-         5EcfMFFVI8i97hDZPJH9LVYWgQ4dVy6041I55grKr7P8kBIcK45Qn67YgeyXRLtflXI3
-         750g==
-X-Forwarded-Encrypted: i=1; AJvYcCVQklKoegDMYwbOFJIV2xJ298vgAYMh8AToInFNhfnbiX/nCHbLodSKvF+MHkEvMOEI4c6rNdrjua7E@vger.kernel.org, AJvYcCWJP3Kq9wTrp8IACv2TBXflgeKWw3MD/r9fYiAGH7rhDzTJDWN4dyDFwXzLOSRgZbW4om/ZBicGMLDBWrI9XJcT6TU=@vger.kernel.org, AJvYcCWTeafZTyjtpWfhvfPEym/7Tg1K9oXqGRjy2VF7BQF+GpviSsa7mT+uwc009l8UHQZjJ8ldGFlthWYVPfWf@vger.kernel.org, AJvYcCXGdH2xr0G/JcCeOqBwiDYUFVhSc9MEM9MKLa1dAz45JJxuiBiWG9FTBgANS1eKyZ5UfasOpg8+X5Kp@vger.kernel.org
-X-Gm-Message-State: AOJu0YzBP+69pdr2OQ3WwOqwa9gNyenexB1Aj0/hqdbAU8wP8n6oEh4G
-	9kah30Ktk9id7d8BfKMjl1Eb2vaQ5Vcx0FUkotpO035AQ79uF2ilW19TSJzvUGhL
-X-Gm-Gg: ASbGnct1BUNNxHAJjxOTqOQaxjbjUMkvWUzTOQGg1E2K01iu68ZyIbPS5TlzuNj0YT5
-	x+qPk4qcmPQ5PhApqgS1gSUCd+4WFwxlAWDH94gIcuxF5Hr/fp+6DjhyqQ5IvWtTtCrLzNwXhBy
-	Xs5aoVQkwTh4TqjrAKXS/UzmbEhvChZ3w/0Vk923LfrJzqDW2v8bCOtH3Z5/PtXXjDFZqGgm5KR
-	7Iv/xtjkpMUWkurEEcEImTKGyRmd14fizcz+dN4N3RYiJwqDjNerWmp3TKHvVrkVtz20KM52Hxr
-	Jl872zrO22uzxMEf4QSbeyP+B5df2Spl2K3a879AbnfQe27bOGY86SzfwRteSfzhBbXjAXX6vbJ
-	C1iTmkp1XKNo3kR0SxX6JhVVR4H9hiN++hqM=
-X-Google-Smtp-Source: AGHT+IHRUA+s4LhE0rQQMXTB8bxlu6SiKH0fWfYoPKkOqmyfNKC2GKnlf7ZkrcTPc2U4P/8hXYExyg==
-X-Received: by 2002:a05:6102:e14:b0:4e5:9cf0:4eb6 with SMTP id ada2fe7eead31-4e772887fc2mr2641089137.5.1749216236842;
-        Fri, 06 Jun 2025 06:23:56 -0700 (PDT)
-Received: from mail-vs1-f54.google.com (mail-vs1-f54.google.com. [209.85.217.54])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-87ec4dc0c21sm312759241.5.2025.06.06.06.23.56
+        bh=PA1efIKwevEKJ6PmR6nxG1RXXlI/tsd7nqF/WhwHFDg=;
+        b=tD6YljsItJKd8CVbwoH143qI3rHaAWQoJTJbsi0eiirVMkrFB6dp8LIPvAuv7KvmYp
+         oG4Z7nasdEMSJ9yPq2t9jTDEPJPSTOz8s28ws8Xj37/V0cJs390gVPC1+nsnAmD0MWRa
+         mulVLhh6KJYGrqUpqPJcOz05oGDwPwXDsUk3cpgK8f99gM3chUkqLuBcasyx2ywKfMB0
+         eMv2laJ1zaCKDgSV1wX/RaEp84ELKm5TpI+UoALoc9i7sUTRvGW5/dEOZ8NVKZX40uTr
+         kc0ce/jVPi18EF/Z7ClXduYydpfuVe95KG4Gf8jUQC77pga+uR5DVtc4D1HEG9ZIY2dB
+         laBQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW+bLWIxq3+JyvTa5WIfkTjJrm14dP8OUAj9jfzqGNp8M5r46FcwVkhdNnB/ITzyF4q6K3AsXLE9kdLmuVRBvEH/I8=@vger.kernel.org, AJvYcCW22m1FK2DqvHvk4HDIkvNOjC7kurot9QyZpwHRGG1ffrY+b8Z5DJ9o0LPZOtGPYximN/ehUS9xfjMP@vger.kernel.org, AJvYcCWVcSbXKXPfbK0ltsFof75ft1w8VTsLy26BU3qnBycIXu4uGZvvB9BK74rfQZXtYV78e1JepV93A5as4keG@vger.kernel.org, AJvYcCWfhhKnZjP6kvMenjSt4sP+Doq2gudXBOsxb6WQeigt4QxMOjzGE8By/5CzoBOcsVoK/EKqJDP+JIzW@vger.kernel.org
+X-Gm-Message-State: AOJu0YwmlzaJmvmS2749JnYLQSPI2GzYPCUAOsZh2v6PdyAfQfSkPZnX
+	ADJzk939X8AFwDZHIvM2M9DJLcGNCa8nm7bFhMww/dY74VcMHTwWg9tnoDK3qC6z
+X-Gm-Gg: ASbGncv3BTJfC7vD+xJat5i3frMeLzHycvvn/UCkxETQPZnq3SVyji43PNicNrixDWs
+	eaVV0W4cBrCfLBT8NjXJYbi39RG3hdZAFb3R3UhDwoWOu9A8n8ck22OsNgiKf7zW5HHbRVVyJ7G
+	dVSq+LCoH8PP2GQbdurAUzsp7nAlzUfXzSM+Se3ujvCIieXckDKEqFBr6Pr3WFWjyyScLVS3al6
+	KkHQhXUIyQbs6IRNPU6C+VlT1rcf2VySvTwXmtBya0QXJOt8+aq23hKFKm4uIxbn/KMXF985HYc
+	TKKdH9mk9FLE0zNhK/0wkvhiAtFHPWcErEVoENC7rS9b4a+OzPpAiocFoC7y/YPUug9mWJOfz2q
+	KVfkLlWcg1PUYLamG4NzdJ8qK
+X-Google-Smtp-Source: AGHT+IF/qQBp9p1aqHwZklw6BFWt3YtdokV535zi0/OBCD5JhqoJw7lKmSjbCHAaRH2Le0omLv/Y5w==
+X-Received: by 2002:a05:6102:41a7:b0:4e6:ddd0:96ea with SMTP id ada2fe7eead31-4e7728badc8mr2617904137.10.1749216357589;
+        Fri, 06 Jun 2025 06:25:57 -0700 (PDT)
+Received: from mail-ua1-f51.google.com (mail-ua1-f51.google.com. [209.85.222.51])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-4e7737d37c2sm1149780137.5.2025.06.06.06.25.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Jun 2025 06:23:56 -0700 (PDT)
-Received: by mail-vs1-f54.google.com with SMTP id ada2fe7eead31-4e58ef9cb69so635017137.1;
-        Fri, 06 Jun 2025 06:23:56 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUFZNlsL7bn8xSAt3Fr1TlgiTLvdr2YD607TR2wlgHIyll3wgcSF7+4uhPbd3ozAgGRUIDP9ZOBjwbI@vger.kernel.org, AJvYcCVC5knTn0qwZLZI8VdGKqgpI8wTWzfHppTvxmCfIsVqyIChHY2H1fMiZEBvcj4ihHfotbEaIvde8jWiw5Em@vger.kernel.org, AJvYcCVN7JYP07AspQGBSS0AekaxS+3pK0Ub+XaV0iuX+TRFEmVB0KNDDAOUMjOgtX7HcO0fi4yA8zh5Yo4A@vger.kernel.org, AJvYcCWLw/eGGWw4irGKCdjHwKgUFjPpk/8GU/N7b2jphz6O2ZfVT7mk98TA0rg4AbKEP/nUTgw2p89CCg7hRQC2fPGF7Po=@vger.kernel.org
-X-Received: by 2002:a05:6102:149f:b0:4c1:9780:3830 with SMTP id
- ada2fe7eead31-4e772a0b67amr2750672137.23.1749216236152; Fri, 06 Jun 2025
- 06:23:56 -0700 (PDT)
+        Fri, 06 Jun 2025 06:25:57 -0700 (PDT)
+Received: by mail-ua1-f51.google.com with SMTP id a1e0cc1a2514c-86f9c719d63so572387241.1;
+        Fri, 06 Jun 2025 06:25:57 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWEbUD2Gavn4iUuipM99X4WKbXhm4HV2smXLUY9JDvikEGA+K1UBqnu1S1gS8vz67xYya7DNqenZfQAZ3cd@vger.kernel.org, AJvYcCWTHUjJxU/HruAC+4AkqYJ0m2M3a/BAJpIPf1cHpYhTjq42RV15js0S9LXInB8tuGaSZbs5V99K3bR6@vger.kernel.org, AJvYcCWkwXWJYuUWjN2yD4qcakNotrYjXpfjnTiO+zI8iJ2Q+p+6ZWDpWWjI4MmGihfWibLCbKoLKmGlY7Xa@vger.kernel.org, AJvYcCXUrGFhmwSNABqA5c03+pLUtTF45LTpPPBMUpLGNVmuUHBsyal3z3U1EqqEHhcsq8DPjFNmEAtLuzhbHWqPf/Ai6Ss=@vger.kernel.org
+X-Received: by 2002:a05:6102:534f:b0:4e5:a567:8e57 with SMTP id
+ ada2fe7eead31-4e772a087cbmr3025305137.24.1749216357192; Fri, 06 Jun 2025
+ 06:25:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250530143135.366417-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20250530143135.366417-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20250530143135.366417-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20250530143135.366417-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20250530143135.366417-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20250530143135.366417-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
 From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Fri, 6 Jun 2025 15:23:43 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVmzU6_3Na==q02jEb-mJmkA6oT1g+xP2RUw9UC1wEx9w@mail.gmail.com>
-X-Gm-Features: AX0GCFvn0KOWXwFEAW2t_z0vkiPVJ2lZPCcUTJH01Ivefj35RTpeaQ5i6J8a6R0
-Message-ID: <CAMuHMdVmzU6_3Na==q02jEb-mJmkA6oT1g+xP2RUw9UC1wEx9w@mail.gmail.com>
-Subject: Re: [PATCH 5/6] i2c: riic: Move generic compatible string to end of array
+Date: Fri, 6 Jun 2025 15:25:45 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWeBa2fzSKL1Q9jgr3NgoDuQZsGnZbu42cnEoEJSoiNEQ@mail.gmail.com>
+X-Gm-Features: AX0GCFtfDLFR8_lgMUMxpakZL3MpfYTfvPNdY5fs0NEbOi2ivKeG8bfrE6iA-XI
+Message-ID: <CAMuHMdWeBa2fzSKL1Q9jgr3NgoDuQZsGnZbu42cnEoEJSoiNEQ@mail.gmail.com>
+Subject: Re: [PATCH 4/6] i2c: riic: Pass IRQ desc array as part of OF data
 To: Prabhakar <prabhakar.csengg@gmail.com>
 Cc: Chris Brandt <chris.brandt@renesas.com>, Andi Shyti <andi.shyti@kernel.org>, 
 	Andy Shevchenko <andy@kernel.org>, Rob Herring <robh@kernel.org>, 
@@ -91,19 +91,70 @@ Cc: Chris Brandt <chris.brandt@renesas.com>, Andi Shyti <andi.shyti@kernel.org>,
 	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 Content-Type: text/plain; charset="UTF-8"
 
+Hi Prabhakar,
+
 On Fri, 30 May 2025 at 16:31, Prabhakar <prabhakar.csengg@gmail.com> wrote:
 > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 >
-> Reorder the entry in `riic_i2c_dt_ids` to place the generic compatible
-> string `renesas,riic-rz` at the end of the array, following the
-> convention used in other Renesas drivers.
+> In preparation for adding support for Renesas RZ/T2H and RZ/N2H SoCs,
+> which feature a combined error interrupt instead of individual error
+> interrupts per condition, update the driver to support configurable IRQ
+> layouts via OF data.
 >
-> Also, drop the unnecessary comma after the sentinel entry, as it is
-> not needed.
+> Introduce a new `irqs` field and `num_irqs` count in `riic_of_data` to
+> allow future SoCs to provide a custom IRQ layout. This patch is a
+> non-functional change for existing SoCs and maintains compatibility with
+> the current `riic_irqs` array.
 >
 > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+>  drivers/i2c/busses/i2c-riic.c | 22 ++++++++++++++++------
+>  1 file changed, 16 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/i2c/busses/i2c-riic.c b/drivers/i2c/busses/i2c-riic.c
+> index 23375f7fe3ad..4950b790cfe7 100644
+> --- a/drivers/i2c/busses/i2c-riic.c
+> +++ b/drivers/i2c/busses/i2c-riic.c
+> @@ -102,6 +102,8 @@ enum riic_reg_list {
+>
+>  struct riic_of_data {
+>         const u8 *regs;
+> +       const struct riic_irq_desc *irqs;
+> +       u8 num_irqs;
+>         bool fast_mode_plus;
+>  };
+>
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> @@ -607,10 +611,14 @@ static const u8 riic_rz_a_regs[RIIC_REG_END] = {
+>  static const struct riic_of_data riic_rz_a_info = {
+>         .regs = riic_rz_a_regs,
+>         .fast_mode_plus = true,
+> +       .irqs = riic_irqs,
+> +       .num_irqs = ARRAY_SIZE(riic_irqs),
+
+Nit: Perhaps initialize the members in the order of declaration?
+
+>  };
+>
+>  static const struct riic_of_data riic_rz_a1h_info = {
+>         .regs = riic_rz_a_regs,
+> +       .irqs = riic_irqs,
+> +       .num_irqs = ARRAY_SIZE(riic_irqs),
+>  };
+>
+>  static const u8 riic_rz_v2h_regs[RIIC_REG_END] = {
+> @@ -631,6 +639,8 @@ static const u8 riic_rz_v2h_regs[RIIC_REG_END] = {
+>  static const struct riic_of_data riic_rz_v2h_info = {
+>         .regs = riic_rz_v2h_regs,
+>         .fast_mode_plus = true,
+> +       .irqs = riic_irqs,
+> +       .num_irqs = ARRAY_SIZE(riic_irqs),
+
+Likewise.
+
+>  };
+>
+>  static int riic_i2c_suspend(struct device *dev)
 
 Gr{oetje,eeting}s,
 
