@@ -1,107 +1,142 @@
-Return-Path: <linux-i2c+bounces-11274-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11275-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A248AD0DA5
-	for <lists+linux-i2c@lfdr.de>; Sat,  7 Jun 2025 15:26:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 73FFFAD1025
+	for <lists+linux-i2c@lfdr.de>; Sat,  7 Jun 2025 23:43:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D65C5172DFC
-	for <lists+linux-i2c@lfdr.de>; Sat,  7 Jun 2025 13:26:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3B8EA16CDA9
+	for <lists+linux-i2c@lfdr.de>; Sat,  7 Jun 2025 21:43:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DA40221276;
-	Sat,  7 Jun 2025 13:26:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6859720E70E;
+	Sat,  7 Jun 2025 21:43:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mattcorallo.com header.i=@mattcorallo.com header.b="eHfgdyQw";
-	dkim=pass (2048-bit key) header.d=clients.mail.as397444.net header.i=@clients.mail.as397444.net header.b="eV8vOwAp"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qemd9i48"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.as397444.net (mail.as397444.net [69.59.18.99])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFE5EBA45;
-	Sat,  7 Jun 2025 13:25:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.59.18.99
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2F521C84B6;
+	Sat,  7 Jun 2025 21:42:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749302761; cv=none; b=q4gp1RBdb7O+hHi1c5/n0160cSYYqE0P3fW0C6cy+iFpiBCb69EZidFCoZzOLawPZS+NSb4m90Vxn2RsewchuvRGperNU3yOoe83J9cupUe9lPi+5Lyp7OesECQwJzcjChtweyCxivUyTwvJtL4V0O63sFd+MdzUzFZcLGX/yI0=
+	t=1749332581; cv=none; b=rpca5RI5a5xxjOH23NnUY8Dx7nKWnETlnRk18Fv3/kwEccuo5HMdyUVgXx5Kce+dTcypBvNb1cC9vrrKRzezzbB1+zA8pSU1yOe58Rgu7Isy9ewINWeYNvbE9z6dIX/Qn0OHYtl6O8CKOvuSMc7pe1PeKKGlCuMd0DwnZDeEZtA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749302761; c=relaxed/simple;
-	bh=UitASiqBN/c/urT0jP3co3I9rOl9L4ZY3chvtLrHywY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KphpFi2sU9uHM5jYusIRziE2mSctxXp3WMmJJyIUZJLlbuYJCPt6XJ05sFQJZxkFgwGB/Vm/vKkRb1zMD2CArpWmQ433tcu3xehqZbfzbv7pcUjm34ueb2j9DWpwj+ipJ0mMFET08n/EPEb7oZt9s+J5qYcoXzSrmW08GmZA2rI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mattcorallo.com; spf=pass smtp.mailfrom=mattcorallo.com; dkim=pass (2048-bit key) header.d=mattcorallo.com header.i=@mattcorallo.com header.b=eHfgdyQw; dkim=pass (2048-bit key) header.d=clients.mail.as397444.net header.i=@clients.mail.as397444.net header.b=eV8vOwAp; arc=none smtp.client-ip=69.59.18.99
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mattcorallo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mattcorallo.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=mattcorallo.com; s=1749301262; h=In-Reply-To:From:References:Cc:To:Subject:
-	From:Subject:To:Cc:Reply-To; bh=Mo557fFHlBiVyrfE6W5QUmAfTVNMfKYKS1f5xqw5kyU=;
-	b=eHfgdyQwfDUZRbI0K2+6dXexRE4+YhhMfWUhARobvB3d/NEZ1TJ1k6qKyRiwlGML2zOn90meIll
-	4yQCDa7Ed6u43iGuibCzeTDkwPUCL/iy4IjFlxExFWG0x4F/0sWMbNnXWPps9I7URbZIMtbIXdufR
-	OI1PtXAwAtwFLuVEZT6vCZm2fEFHMXd71Xo6eqOtN6SPPTc3sMcUypjl1n5IXosRmYRNrXgP+k72W
-	nOY9aixh4eC8JSsUTyUR4kFTX9sU7c7DIugD323VCNcQYtt+tQuJLZKVZ3CjzasEl0rGMvBB2KC9D
-	YjosxdWpnAmmwRUVkVwIkNErCoX1tnJ9emWA==;
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=clients.mail.as397444.net; s=1749301265; h=In-Reply-To:From:References:Cc:
-	To:Subject:From:Subject:To:Cc:Reply-To;
-	bh=Mo557fFHlBiVyrfE6W5QUmAfTVNMfKYKS1f5xqw5kyU=; b=eV8vOwApfatu70dhWKt1c814wd
-	iT+0pJcG8SK+Qvx2Jh2g0E0TY4xhq5bUndwU7PwwlshmXcTOhqpwBEpOU+VWZdF9tkNiev8pDiaL5
-	bZJspCjHK2gS9lMKAiglfrISvXe7N5L25PBsHV43TbATQ+nB8BqbFUzBGXY70hWGN2uY3OwAuY5BC
-	huQ/qkVWbV9M+Z9VbZZMilcja0hqWDfKhvs9AOCYbEpI07cX3uLZu9fO4b1sNZSZ6AS01RzxkBgYR
-	ydjE72p8tbvnPjLDS3PtcHuQ3/Y+nGFulgEgAg0dM9E7afT5lAGhRGi5oxh6EwuwtHciFN/L9uhkw
-	0CrCEF5A==;
-X-DKIM-Note: Keys used to sign are likely public at
-X-DKIM-Note: https://as397444.net/dkim/mattcorallo.com and
-X-DKIM-Note: https://as397444.net/dkim/clients.mail.as397444.net
-X-DKIM-Note: For more info, see https://as397444.net/dkim/
-Received: by mail.as397444.net with esmtpsa (TLS1.3) (Exim)
-	(envelope-from <yalbrymrb@mattcorallo.com>)
-	id 1uNtYQ-000KmJ-1I;
-	Sat, 07 Jun 2025 13:25:46 +0000
-Message-ID: <695ebdae-7292-4a83-8aff-763da184921e@mattcorallo.com>
-Date: Sat, 7 Jun 2025 09:25:44 -0400
+	s=arc-20240116; t=1749332581; c=relaxed/simple;
+	bh=gm4fasS9vdQQbKuCZtoPAMG4B6dKjldt1nwRY4/n4nw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=PSsAy4YW9EEbVJzcgXT7EIilg5QCBbnp6u+HDa+x5itHPldrVjdd6OTRlpx7YUBp94x/HukOvmE47PbIWKahNnli4TDeul+pvh3thFC7/q+CHMEnLF2xLw9VuF6xa9hPd0NQWvYHRTE2f8v6wCuwFhL+iEVhg/iVOhknKf3Uw84=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Qemd9i48; arc=none smtp.client-ip=209.85.128.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-710e344bbf9so29562147b3.2;
+        Sat, 07 Jun 2025 14:42:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1749332578; x=1749937378; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=YjscHMC+1NsZwBWXAeWQleUywfW88cG3lx1fz7LMCSU=;
+        b=Qemd9i48lPyVPkU7oJZ6SbaFVjMsnNNLzxvjxeqrb477FA8FPIM0P4z/B84bC766O7
+         8xQxRw2ac8JH0pkHHIlgctZSbyMRp6RKmhZlQw7nCNrDNmEVPqNoUFoaymcSLbMfHMZE
+         7+umecH4Pb7T6QgtaUd/oNS9v0udlTCmaGaAK+B2Y25AoqoAwy26RC2QvNcSM3RdGlsw
+         UOOFb0tnIAga6WD/IGTK1kTvj2ACNu/A71SFk/kmYWCs6HV8QFmK5k8VII8chrBlssoC
+         UwTza8qZwVaNaalWgcwhbzUxXOAIE9J6j4BNEovKjohgmkjo5sKw4jTMtUoM8c04inQt
+         8axA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749332578; x=1749937378;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YjscHMC+1NsZwBWXAeWQleUywfW88cG3lx1fz7LMCSU=;
+        b=oCUAPW5YYm2/3T0FPq+E8LrMsuj6Nfl5nDgpHtc68vDbO1XfN4xrdHhGx6R5sI9B0o
+         hskB6aIBcasUSytVjOqxc1LA8oqGY0f+CuNwq5z/o4g3Grk/WSGr1+TqYkki5UfT4g5P
+         hCJnx8I2/hLrtvy3kYNC8/ljrvl/U5HnAxbmDf70/JOM/nPQlYSOSQusdL0DZCdv3rBu
+         +cVqiEoR7QMQRCP/ed+AD2XZj+RCjmXdgmKN8i9BWo0SvyoTzmpJrMFoTdORNsqz41X7
+         KhG0f/yiJhK80rOfbe0EdzXyhkpLVcKILXwxkTGF7Ld+TH00QqmgkKhu7sgm52zvu5iN
+         kq3A==
+X-Forwarded-Encrypted: i=1; AJvYcCXVU7stdrgMCmho4MAYaM2sJxAptPYLD3FjxbvwgRtV5OPgfOiKU9xOAxk3LwZxayaA9JcdedBaUVg=@vger.kernel.org, AJvYcCXw74g8BpfAvjlrNYe9DTKQ3kLtASM3iObf51mOBJ5Mcg0B8l9Bi5dlPMc7zfHNzrP6VnIxRSQyGIJpYP6P@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzjccz9Qe/D0MWTCvHUl/y8ohVh9CykXD/rnN6Ms1waOF7Avm1C
+	FpEahlWfalNpWoLCO7l5Hi7dV4MfF21NC3vXIRPAkswq1zJ3B+/AZ1f+
+X-Gm-Gg: ASbGncuA0FnOt5MjlNimZ28g7GVlPZSrg4rheLlIxIvd5JBdSdjvRH4lQFrDzNBjAb5
+	kVyLpdmzKtUWrk5WGndWA0kC2t2Mks01fQ0Z7XHZS0M5F+R4XMM0Rw5/di2z8HzpOvKO/VdUsdB
+	Sfy+wChnNRY2eCDoU0zXp00ea3IpK8bFgT1DgwjVULCcLEIP1jSu2Cdxnx4Bg0WLdKVLUCrfb0H
+	zwrycmYf5yMjUxNll0NVmURgcBDg7sHD1LjT8S/SoigtCkqqhqPFn+PeDsACy4OJTkTiJPMsrzU
+	n6ZkP7mWQVlYRzzRuKTcdIQ+mTWQhwXdQ8nFhivrgKKD8bohyXxBR/Ssp/rMITvYrw==
+X-Google-Smtp-Source: AGHT+IFi7sCc6zUWOl2n8ocwxXau8vfpIhvgXEPkIJZ0ahc2fKnvKNbUQDVVfPk5ZO4jM0FFXS0NtA==
+X-Received: by 2002:a05:690c:7088:b0:70f:8883:eb1a with SMTP id 00721157ae682-710f763609amr114840637b3.6.1749332578501;
+        Sat, 07 Jun 2025 14:42:58 -0700 (PDT)
+Received: from trojai4.cs.purdue.edu ([128.210.0.165])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-710f9a1255bsm7116987b3.103.2025.06.07.14.42.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 07 Jun 2025 14:42:58 -0700 (PDT)
+From: Alex Guo <alexguo1023@gmail.com>
+To: kblaiech@nvidia.com,
+	asmaa@nvidia.com
+Cc: andi.shyti@kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Alex Guo <alexguo1023@gmail.com>
+Subject: [PATCH] i2c: mlxbf: Fix out-of-bounds bug in mlxbf_i2c_smbus_xfer()
+Date: Sat,  7 Jun 2025 17:42:55 -0400
+Message-Id: <20250607214255.2579865-1-alexguo1023@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: PMBus memory overflow
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: Guenter Roeck <linux@roeck-us.net>,
- Wolfram Sang <wsa+renesas@sang-engineering.com>,
- linux-hwmon@vger.kernel.org, Linux I2C <linux-i2c@vger.kernel.org>,
- security@kernel.org
-References: <eb5796e8-de76-4e91-9192-65b9af7a4d49@roeck-us.net>
- <284466fd-39e8-419e-8af5-41dbabb788af@roeck-us.net>
- <d5abeb59-8286-425c-9f78-cd60b0e26ada@mattcorallo.com>
- <00baca6f-8046-46ae-a68c-525472562be7@roeck-us.net>
- <aAtEydwUfVcE0XeA@shikoro>
- <3a9ab7bf-6761-4a14-983e-e6bb288ce58a@mattcorallo.com>
- <e0e789b3-24c2-4ea3-9c79-fa815d801d83@roeck-us.net>
- <bc9a14b5-8b10-436f-a791-28df245465e6@mattcorallo.com>
- <4e198aa1-527b-4ad8-abc5-e7408296bfbd@roeck-us.net>
- <03da7997-74f4-4435-a6c5-6aa5aea2f6d7@mattcorallo.com>
- <2025060749-attendant-trout-d2c8@gregkh>
-Content-Language: en-US
-From: Matt Corallo <yalbrymrb@mattcorallo.com>
-In-Reply-To: <2025060749-attendant-trout-d2c8@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+The data->block[0] variable comes from user. Without proper check,
+the variable may be very large to cause an out-of-bounds bug.
 
+Fix this bug by checking the value of data->block[0] first.
 
-On 6/7/25 4:19 AM, Greg KH wrote:
-> On Fri, Jun 06, 2025 at 04:57:37PM -0400, Matt Corallo wrote:
->> Adding security@kernel.org cause probably they should make sure this gets fixed.
-> 
-> That's not how security@k.o works, sorry.  As this is already public, no
-> need for security@k.o to get involved at all, the normal development
-> process happens here now.
-> 
-> So, submit a patch and people will be glad to review it!
+Similar commit:
+1. commit 39244cc7548 ("i2c: ismt: Fix an out-of-bounds bug in
+ismt_access()")
+2. commit 92fbb6d1296 ("i2c: xgene-slimpro: Fix out-of-bounds
+bug in xgene_slimpro_i2c_xfer()")
 
-Thanks, figured I'd ask. Sadly there is a patch that folks seem to be okay with to fix a buffer 
-overflow but its just sitting.
+Signed-off-by: Alex Guo <alexguo1023@gmail.com>
+---
+ drivers/i2c/busses/i2c-mlxbf.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Matt
+diff --git a/drivers/i2c/busses/i2c-mlxbf.c b/drivers/i2c/busses/i2c-mlxbf.c
+index 8345f7e6385d..73fe8914f3f1 100644
+--- a/drivers/i2c/busses/i2c-mlxbf.c
++++ b/drivers/i2c/busses/i2c-mlxbf.c
+@@ -2071,6 +2071,8 @@ static s32 mlxbf_i2c_smbus_xfer(struct i2c_adapter *adap, u16 addr,
+ 		break;
+ 
+ 	case I2C_SMBUS_I2C_BLOCK_DATA:
++		if (data->block[0] < 1 || data->block[0] > I2C_SMBUS_BLOCK_MAX)
++			return -EINVAL;
+ 		byte_cnt = data->block[0];
+ 		mlxbf_i2c_smbus_i2c_block_func(&request, &command, data->block,
+ 					       &byte_cnt, read, pec);
+@@ -2079,6 +2081,8 @@ static s32 mlxbf_i2c_smbus_xfer(struct i2c_adapter *adap, u16 addr,
+ 		break;
+ 
+ 	case I2C_SMBUS_BLOCK_DATA:
++		if (data->block[0] < 1 || data->block[0] > I2C_SMBUS_BLOCK_MAX)
++			return -EINVAL;
+ 		byte_cnt = read ? I2C_SMBUS_BLOCK_MAX : data->block[0];
+ 		mlxbf_i2c_smbus_block_func(&request, &command, data->block,
+ 					   &byte_cnt, read, pec);
+@@ -2094,6 +2098,8 @@ static s32 mlxbf_i2c_smbus_xfer(struct i2c_adapter *adap, u16 addr,
+ 		break;
+ 
+ 	case I2C_FUNC_SMBUS_BLOCK_PROC_CALL:
++		if (data->block[0] < 1 || data->block[0] > I2C_SMBUS_BLOCK_MAX)
++			return -EINVAL;
+ 		byte_cnt = data->block[0];
+ 		mlxbf_i2c_smbus_blk_process_call_func(&request, &command,
+ 						      data->block, &byte_cnt,
+-- 
+2.34.1
+
 
