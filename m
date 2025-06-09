@@ -1,141 +1,216 @@
-Return-Path: <linux-i2c+bounces-11306-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11307-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4BA3BAD236C
-	for <lists+linux-i2c@lfdr.de>; Mon,  9 Jun 2025 18:10:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 40601AD23C7
+	for <lists+linux-i2c@lfdr.de>; Mon,  9 Jun 2025 18:25:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4E6EE7A1675
-	for <lists+linux-i2c@lfdr.de>; Mon,  9 Jun 2025 16:08:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2C6247A1541
+	for <lists+linux-i2c@lfdr.de>; Mon,  9 Jun 2025 16:24:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E5C821883F;
-	Mon,  9 Jun 2025 16:09:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6ECA21ABDD;
+	Mon,  9 Jun 2025 16:25:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oej+R9SF"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C9jKQzZH"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE84021578D;
-	Mon,  9 Jun 2025 16:09:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA02921A455;
+	Mon,  9 Jun 2025 16:25:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749485399; cv=none; b=ZdoLx5jErG976ke0KLIQltoCS8hPYW8MWNjFztxo4mbIthAs4+mOHHQ1CFxjRwbaPxtNGLhXgm+UtasHm3C2lakx/bgxhaDz/2WOgzoUGYwq7haxXj8StaZNErJT+qKHDmVr33KODEh330hox2ucoVKhlMRP+X0lDmOwF0eyQTs=
+	t=1749486322; cv=none; b=ROp7IOTM/G8knjl3Ke6tkMOxCxXznTAJZdNOszinciN9wAafsztySqxnwl3+1MlwAvB6O4CU6H6mCR5qqBPJaAacmt7H/s9OUIjdXP7eiw8/vYtrfiVxrhV8J629wVxYk1w5Xgsw3qfGJ039OAZRF/4XlI4PbEe57PB9FiMnI6I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749485399; c=relaxed/simple;
-	bh=kmFmCzVsy/gyj97Pr6VaI8EqizWU2cS57ZLTXgVpEss=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qkXfKERzvVZciRrKFO4ma4SvlXVhMwZvaT+4/+gdb3L77ul76DZyYyrNM7NcmGH6wqz36LkWHVBSVg6HRJqpzlNN2Z9VYL5AgfUy2aBOlEpdg3s00DW90Z4C8H8GQrh0FQbgg3/NentuaiDX/DTNBwhzwVLLzW/SH1DP8NL7ZiM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oej+R9SF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD1A6C4CEEB;
-	Mon,  9 Jun 2025 16:09:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749485398;
-	bh=kmFmCzVsy/gyj97Pr6VaI8EqizWU2cS57ZLTXgVpEss=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=oej+R9SFWkXPJUvsFtD4/DgLhl32kMK6KHcSRy6d2eX3940/USEvuVl6jPIjTezS5
-	 oAES2mM/uK8dDB3Ebb5MxzMeGTzWKbhZgoHP1qRjpNx7wAa8PrmhzLi3KHbYU1gcYL
-	 ds73qkFepgvRzh4pEo0BR66RzcJQI2vjyuCUyDtBQeKn3s6A3apqCfSD10INhVYRns
-	 SuoYzPK7AJdFbYtEzAVTSydSx0mco46BX4MgD6ccn5L+J2ocSPPzeiXOS1CdRJrd1w
-	 nUbebwwDDlzyT9r/Fi0+6gEgdvuh210uVp4lKwtDvS0Cg1WGMINyHGNaYsRuRcqEUT
-	 EYatDTACot52g==
-Date: Mon, 9 Jun 2025 17:09:53 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Kartik Rajput <kkartik@nvidia.com>
-Cc: akhilrajeev@nvidia.com, andi.shyti@kernel.org, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org, thierry.reding@gmail.com,
-	jonathanh@nvidia.com, ldewangan@nvidia.com, digetx@gmail.com,
-	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/5] dt-bindings: i2c: nvidia,tegra20-i2c: Document
- Tegra264 I2C
-Message-ID: <20250609-sizzle-shush-b2eb1443b3f7@spud>
-References: <20250609093420.3050641-1-kkartik@nvidia.com>
- <20250609093420.3050641-2-kkartik@nvidia.com>
+	s=arc-20240116; t=1749486322; c=relaxed/simple;
+	bh=ewBoIicoU2rPiyvMAvO0aqL5uC6Y/7DiQIIPhethG48=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=lsGWgnQn7QF8GGCoURghCWd4wobNGG1gEeLrZPCls4D96ZZDyQp0WRZ7WcxCM4WZEVn/Zj/tnd15emYH5ldZZksbbCZkFC5Sd2mpsqqlidN3OjT4hfIuVd7d3nrUea+0q8heaIgDLAx8RDpsSFgXKisCojGW/cUQPuuqWFgT5vY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C9jKQzZH; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-451d7b50815so38875965e9.2;
+        Mon, 09 Jun 2025 09:25:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1749486319; x=1750091119; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tLHMSY+1NpQuNIW8ZbZ+DH4o1fIGIXqUmCd7r5Cy4Y8=;
+        b=C9jKQzZHESxzRlSk2ZYMrok7ynsLZiWWRcinMRaL/aGPQvMtv2rG9igGt3EX3dC9ey
+         /IiKKdDAIEHrK+wB0GJHbrlpfKEAjo8Bime+81M5KLaRHjU6FnppS/OoNtSgQqVj1z0N
+         R6be8BEwa/cHT9AvbvunYVgDy5jg3zgqJIL8xUgEST6b0Fj2fahKMzqufvCs3B+jAKFj
+         eZ1cnQd5qePGV9oyo0AmprytIklh2V54l8tRmRPRW1pkoPN6ZMHGoAx+rBwF04dBrtbO
+         4eOCY+DhBhUgAoi0U+bq+KptYWFUfGFE07YkCGHZ0DCH3ywM9b8Q0letnxDnMLdxzwkR
+         UwYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749486319; x=1750091119;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tLHMSY+1NpQuNIW8ZbZ+DH4o1fIGIXqUmCd7r5Cy4Y8=;
+        b=AMGBnn8pHVZXvHM6D4VV8kluJWRdzw/FTQmHweRGzcIeE69UuGNWPi1zaZNY/BQaJG
+         R2PZa1qYacBh+Z1P2EI6SFxIkQnAp1Y0or8necjSyP3MwFLnulQaJY4OW9kFJdkQA0sR
+         T0iGC1Q0f5bHyJg0aAPyeBATAcXag1uGg24M7y7MuYP3Ks/VjqMvJGNUCMb2PdFu1A3a
+         UswrVlVoSL++v1bCHWLBt2Zh6/1rIvk/L4Ft8ThUTptSofRlb2t27oXMEzf6ixp0CLSf
+         fqGZH8aK5aHCHWz3NH7ltGyE3ei0SPd0NtPrx3j3mk8sgwOMyJ/nQxNfZoPDWEliK/Sx
+         AfAQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUMvhzZJ7OGZzgAZQc5Pt7GZHoLVAajwbHi7GolkOkxoEI1ql0piUluQl5Mf8ndkUFaND8jV2JvjDvSTdQ75u/Ty6I=@vger.kernel.org, AJvYcCUXavCC911hhqUBS9XfdrJucWlO8ojGwUR02SZdWxEMHfQFeNZCvitk7/t3+M2B2HlD9UiQi0IJDNg0@vger.kernel.org, AJvYcCUqS/GhmYc93io2AVRTKaBplir3f7HIqi82kiQw8qXdn/dV+03UAXVjlqFabp8yBllvYc+fUwjC9UKN3lAD@vger.kernel.org, AJvYcCVVzHtpx2ejJj5pzMFtbdXRvH6RLpol9PRhx+fmfJs2jdmPOa0eDCEt+mGNtqRqdQiJA2iHOBpaoGAW@vger.kernel.org
+X-Gm-Message-State: AOJu0YwmgXjH7yfzktNiP5QZVEHBGDw8bGt8AxIccDjxRm/i1lZWs0N3
+	j23GRa/dmIZaHxl4Iostvy1NpUkbDdAhKtPXRoTg4Tp+6MfUcIbSjjfOzihexg5I/5p3hTIsuOv
+	p0arpgekiKsSUuZi7UR0uAVolknPTWsV9wusvczU=
+X-Gm-Gg: ASbGncsm4Pp0Nogjo5R5UToNZDyYbIOvEfjYT0Q884dvYYo5DCyx0TVAo0K2pGVT3ll
+	3aJq28TM6k5RCKtNFgPYjfz4OtEH8ZvFxzuC7jpptbQxHlpn6ydGio1FBhIArXPiT5LtbZRpAVQ
+	+4Rl+PT5ojuKPZVItgc1I9/4kpdMezscivXbJYS9kayec8q8hEStFwkvWW5uAgkYMO
+X-Google-Smtp-Source: AGHT+IEEbZ3PXC2oHrXVHH4I0F4HXHOqQzdudJSfeMWMLuxG2evM3fVi6W4ih8RZKbZ8KuKXQw6lqSF9zPNUDZGNFI8=
+X-Received: by 2002:a05:600c:4686:b0:444:c28f:e81a with SMTP id
+ 5b1f17b1804b1-45201423593mr115761115e9.27.1749486318890; Mon, 09 Jun 2025
+ 09:25:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="4x5fXavticha1vvc"
-Content-Disposition: inline
-In-Reply-To: <20250609093420.3050641-2-kkartik@nvidia.com>
-
-
---4x5fXavticha1vvc
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20250530143135.366417-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20250530143135.366417-3-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAMuHMdXO1fOODiDA4vQBT=+LKRjT5ZoeewdyPSDoTeeoqUVTSA@mail.gmail.com>
+In-Reply-To: <CAMuHMdXO1fOODiDA4vQBT=+LKRjT5ZoeewdyPSDoTeeoqUVTSA@mail.gmail.com>
+From: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date: Mon, 9 Jun 2025 17:24:53 +0100
+X-Gm-Features: AX0GCFvjk7pK_HYwdTAM_eJeLHbzN785oYdsDzmaDOiVC_DAci0e231PKJv9lJA
+Message-ID: <CA+V-a8t3rjKya9BwLfUiLvJtfPLavV9+MxstYTrFpxyNtkvzZA@mail.gmail.com>
+Subject: Re: [PATCH 2/6] dt-bindings: i2c: renesas,riic: Document RZ/T2H support
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Chris Brandt <chris.brandt@renesas.com>, Andi Shyti <andi.shyti@kernel.org>, 
+	Andy Shevchenko <andy@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Magnus Damm <magnus.damm@gmail.com>, Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+	linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Biju Das <biju.das.jz@bp.renesas.com>, 
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jun 09, 2025 at 03:04:16PM +0530, Kartik Rajput wrote:
-> iTegra264 has 17 generic I2C controllers, two of which are in always-on
-> partition of the SoC. In addition to the features supported by Tegra194
-> it also supports a SW mutex register to allow sharing the same I2C
-> instance across multiple firmware.
->=20
-> Document compatible string "nvidia,tegra264-i2c" for Tegra264 I2C.
->=20
-> Signed-off-by: Kartik Rajput <kkartik@nvidia.com>
+Hi Geert,
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Thank you for the review.
 
-> ---
-> v2 -> v3:
-> 	* Add constraints for "nvidia,tegra264-i2c".
-> v1 -> v2:
-> 	* Fixed typos.
-> ---
->  .../devicetree/bindings/i2c/nvidia,tegra20-i2c.yaml        | 7 +++++++
->  1 file changed, 7 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/i2c/nvidia,tegra20-i2c.yam=
-l b/Documentation/devicetree/bindings/i2c/nvidia,tegra20-i2c.yaml
-> index 6b6f6762d122..f0693b872cb6 100644
-> --- a/Documentation/devicetree/bindings/i2c/nvidia,tegra20-i2c.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/nvidia,tegra20-i2c.yaml
-> @@ -80,6 +80,12 @@ properties:
->            support for 64 KiB transactions whereas earlier chips supporte=
-d no
->            more than 4 KiB per transactions.
->          const: nvidia,tegra194-i2c
-> +      - description:
-> +          Tegra264 has 17 generic I2C controllers, two of which are in t=
-he AON
-> +          (always-on) partition of the SoC. In addition to the features =
-=66rom
-> +          Tegra194, a SW mutex register is added to support use of the s=
-ame I2C
-> +          instance across multiple firmwares.
-> +        const: nvidia,tegra264-i2c
-> =20
->    reg:
->      maxItems: 1
-> @@ -186,6 +192,7 @@ allOf:
->              contains:
->                enum:
->                  - nvidia,tegra194-i2c
-> +                - nvidia,tegra264-i2c
->      then:
->        required:
->          - resets
-> --=20
-> 2.43.0
->=20
+On Fri, Jun 6, 2025 at 2:21=E2=80=AFPM Geert Uytterhoeven <geert@linux-m68k=
+.org> wrote:
+>
+> Hi Prabhakar,
+>
+> On Fri, 30 May 2025 at 16:31, Prabhakar <prabhakar.csengg@gmail.com> wrot=
+e:
+> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> >
+> > Document support for the I2C Bus Interface (RIIC) found on the Renesas
+> > RZ/T2H (R9A09G077) SoC. The RIIC IP on this SoC is similar to that on
+> > the RZ/V2H(P) SoC but supports fewer interrupts, lacks FM+ support and
+> > does not require resets. Due to these differences, add a new compatible
+> > string `renesas,riic-r9a09g077` for the RZ/T2H SoC.
+> >
+> > Unlike earlier SoCs that use eight distinct interrupts, the RZ/T2H uses
+> > only four, including a combined error/event interrupt. Update the bindi=
+ng
+> > schema to reflect this interrupt layout and skip the `resets` property
+> > check, as it is not required on these SoCs.
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>
+> Thanks for your patch!
+>
+> > --- a/Documentation/devicetree/bindings/i2c/renesas,riic.yaml
+> > +++ b/Documentation/devicetree/bindings/i2c/renesas,riic.yaml
+> > @@ -29,32 +29,46 @@ properties:
+> >                - renesas,riic-r9a09g056   # RZ/V2N
+> >            - const: renesas,riic-r9a09g057   # RZ/V2H(P)
+> >
+> > -      - const: renesas,riic-r9a09g057   # RZ/V2H(P)
+> > +      - enum:
+> > +          - renesas,riic-r9a09g057   # RZ/V2H(P)
+> > +          - renesas,riic-r9a09g077   # RZ/T2H
+> >
+> >    reg:
+> >      maxItems: 1
+> >
+> >    interrupts:
+> > -    items:
+> > -      - description: Transmit End Interrupt
+> > -      - description: Receive Data Full Interrupt
+> > -      - description: Transmit Data Empty Interrupt
+> > -      - description: Stop Condition Detection Interrupt
+> > -      - description: Start Condition Detection Interrupt
+> > -      - description: NACK Reception Interrupt
+> > -      - description: Arbitration-Lost Interrupt
+> > -      - description: Timeout Interrupt
+> > +    oneOf:
+> > +      - items:
+> > +          - description: Transmit End Interrupt
+> > +          - description: Receive Data Full Interrupt
+> > +          - description: Transmit Data Empty Interrupt
+> > +          - description: Stop Condition Detection Interrupt
+> > +          - description: Start Condition Detection Interrupt
+> > +          - description: NACK Reception Interrupt
+> > +          - description: Arbitration-Lost Interrupt
+> > +          - description: Timeout Interrupt
+> > +      - items:
+> > +          - description: Transmit End Interrupt
+> > +          - description: Receive Data Full Interrupt
+> > +          - description: Transmit Data Empty Interrupt
+> > +          - description: Transmit error or event Interrupt
+>
+> Nit: the documentation calls it "Transfer error or event generation".
+>
+Agreed I will update it to `Transmit Error Or Event Generation`.
 
---4x5fXavticha1vvc
-Content-Type: application/pgp-signature; name="signature.asc"
+> >
+> >    interrupt-names:
+> > -    items:
+> > -      - const: tei
+> > -      - const: ri
+> > -      - const: ti
+> > -      - const: spi
+> > -      - const: sti
+> > -      - const: naki
+> > -      - const: ali
+> > -      - const: tmoi
+> > +    oneOf:
+> > +      - items:
+> > +          - const: tei
+> > +          - const: ri
+> > +          - const: ti
+> > +          - const: spi
+> > +          - const: sti
+> > +          - const: naki
+> > +          - const: ali
+> > +          - const: tmoi
+> > +      - items:
+> > +          - const: tei
+> > +          - const: ri
+> > +          - const: ti
+>
+> Given you have a new set of names, perhaps "rxi" and "txi",
+> to match the documentation?
+>
+Ok.
 
------BEGIN PGP SIGNATURE-----
+> > +          - const: eei
+>
+> Perhaps use the order from the documentation: eei, rxi, txi, tei?
+>
+Agreed, I will update it as mentioned above,
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaEcHUQAKCRB4tDGHoIJi
-0mdCAP4iLXTNnbOYBpoSgowvw8EqxS5ptJogfQWY80AoHT4X0QEA/nKxuUPaDW0O
-VU5NdknzzO4hkP54Ep+tJSTUt98rPgc=
-=Ba+U
------END PGP SIGNATURE-----
+- items:
+- const: eei
+- const: rxi
+- const: txi
+- const: tei
 
---4x5fXavticha1vvc--
+Cheers,
+Prabhakar
 
