@@ -1,57 +1,85 @@
-Return-Path: <linux-i2c+bounces-11277-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11278-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 443FFAD1359
-	for <lists+linux-i2c@lfdr.de>; Sun,  8 Jun 2025 18:33:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB260AD1862
+	for <lists+linux-i2c@lfdr.de>; Mon,  9 Jun 2025 07:38:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4FD733AB898
-	for <lists+linux-i2c@lfdr.de>; Sun,  8 Jun 2025 16:33:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 81012168A6A
+	for <lists+linux-i2c@lfdr.de>; Mon,  9 Jun 2025 05:38:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 472AB19004A;
-	Sun,  8 Jun 2025 16:33:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3374827F74E;
+	Mon,  9 Jun 2025 05:38:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b="djhHOUoy"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qr+ubNrO"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx.denx.de (mx.denx.de [89.58.32.78])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAD0716132F;
-	Sun,  8 Jun 2025 16:33:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.58.32.78
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B17F17BD3;
+	Mon,  9 Jun 2025 05:38:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749400413; cv=none; b=ZLOv09pqsU7zxKEb9BGIak7+hM6Gsps9suWQBhujUZk/DX1qz8bH+aPTtznKNWf22LUalIO7YXwM/ierfpC3g2DgE2f89QyxazKticSMJWrrfIUjD5BRzz75iK4vVk1J4EEm2gtfbON1FIBq7kLqPIbXKmGqHG4fQFmEtBmRhvM=
+	t=1749447504; cv=none; b=aSRG5R0TMI0vxCX4zYU0tkDiclV9lWK+1DaX3/HakDTj+Ah1Lhycj+hyd/L9UkWNPxiS4wwbphxE/oBmX6aFGAygQwXHryL2Yc0o45M/ju0l519yZJOk8uz52vrW0HQOJlstTNTVGqo0TXiSK3f6F5TpMxJxQhDfc90sxqjfe4I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749400413; c=relaxed/simple;
-	bh=5UaJKy+PK+BeyZzfXGi92iOZ13ufZqJEChURi7S104E=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=TnrcsuWNbmNfl83kDYU5zbEEbq+1gzVoF0/oLZpKRxNAlqRW5lAQ4pgfUcRIdI1TUD0gunvSqwqW2jg/vHmESfKRoG9S0Swa98YD8y144EKHX13HRxO1kyef8+jGnmDE3XRTmOrZmwh+DD8pDV5KxWQnQxNxje5AfEzBtNc7sP8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de; spf=pass smtp.mailfrom=denx.de; dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b=djhHOUoy; arc=none smtp.client-ip=89.58.32.78
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=denx.de
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 5A25E10397298;
-	Sun,  8 Jun 2025 18:33:21 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de; s=mx-20241105;
-	t=1749400402; h=from:subject:date:message-id:to:cc:mime-version:
-	 content-transfer-encoding; bh=q9L8aiejltW49BwuW1MY7Fse2bm2uhwAe8TBfe1zjr4=;
-	b=djhHOUoylnit2guL3TJHiiKRS1sBTwO/9E6txnGp/5LCUgz3wSpBs0swERQ/Ib5/pdtZt/
-	uPIHwtZ2Ds/dFaA7+WuWF2uj1pzqVfBMjtZhGyo/4hwlbJhER3X4EOLTa5JVlwJCtjLP+t
-	i3CWS8FgiarfcDo1a2LGKwr7j9fHvYPWR5FB+y/8Fkd4dOxwtnIsFbaw+TeZ/p2/gjNlIz
-	PzjCLCCcxbzSu1kK47LkT0pwAqDsSnPJKcZGQMiWfDqBTna4aplciXsTdsAe1gcPCZhfnt
-	wB+l7+4dS/o0QbVkKUtoy4zQ5vIv/f23agzEwkM9tAnU+H4yejlv7BA77/zmpg==
-From: Heiko Schocher <hs@denx.de>
-To: linux-kernel@vger.kernel.org
-Cc: Heiko Schocher <hs@denx.de>,
-	Benjamin Tissoires <bentiss@kernel.org>,
-	Jiri Kosina <jikos@kernel.org>,
-	Rishi Gupta <gupt21@gmail.com>,
-	linux-i2c@vger.kernel.org,
-	linux-input@vger.kernel.org
-Subject: [PATCH] HID: mcp2221: set gpio pin mode
-Date: Sun,  8 Jun 2025 18:33:15 +0200
-Message-Id: <20250608163315.24842-1-hs@denx.de>
-X-Mailer: git-send-email 2.20.1
+	s=arc-20240116; t=1749447504; c=relaxed/simple;
+	bh=E7t4ziTT3wF/689+gwT++HqhjP1/cK2PxAJ+YqFkDgQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=PVEHNHCrdA3cQAcOOpCrecLDtHbIA/YMszKo6njruYDOjW/i5qEDsAm4oZ3F2P33s7GV5vOAyoTrD94ItT6dM6i8jk3PLzTMy2TYgD4X0Nj+TmQGH6MCxXWzY+lw7BZaoLHvwNg10Nx87X8c45PtSQ9TpXt5bGpaNv2q/h+IhrY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Qr+ubNrO; arc=none smtp.client-ip=209.85.210.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-7304efb4b3bso2431314a34.0;
+        Sun, 08 Jun 2025 22:38:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1749447501; x=1750052301; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wECMIUhZX+RAEutiSlsIQW+PxVMgIoUiBXiClAXqQgA=;
+        b=Qr+ubNrOLrFP/PftEWMJN4EUdVxIZB43Mh56iD+7O0/JNt560JAnYzDC+32bmgmvzs
+         n8QDnvlg1Niky+QsMThp5hwXWYai15IOGuEzJKl8M3705Ogu7OOlthHX/DfRgVcl8hRQ
+         RIGfv8srfFQBkSIGIcxmg+wkCNshxEKPD///i+sbMbi3P9XBnNnHlN68Kug1o6didsnG
+         oTQKj7jnzepsPl1FpqVdHqjK9/f83oWqnC0RbUl26l4KN5++se+EqfOP9swyPb/zHO6w
+         p21PAN9kzKzX5CEew6o5tNhElyv6hOV6ccb6EcF8h/f0/uZ9Keb5xeGn+6UZfakHzWnH
+         3eUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749447501; x=1750052301;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wECMIUhZX+RAEutiSlsIQW+PxVMgIoUiBXiClAXqQgA=;
+        b=skES91IqoM+A8l/XQxzD97ERkuRkqM21ZrkBqJDoj5OYpNLqm6Fr4emNdgCSxONhIU
+         TIOZ0pUnG7q8KYYwqQULRq6DQOTJAPmmJyJwE0o9SaORvTTJg7uoXutdrZulzU1J75JY
+         OhOHUQIF2ikM2oOkdfVmyO3M2c5+mUWUSdyGuSauD3RV4yH03M3yf2/YUwm67AZxae4x
+         /PDA1n2O86FTMAxEmifphAuQ7krqcEU133CZNDiZFyzTyBiR+zjZnnr/RU5WJpx90Rw6
+         jCvG6bQofUpjmQGYBFEf2CXbtk9C9K1A2YewmuQYhmaEkAdJs5s1IDc4DgD0by80ekmw
+         4/CA==
+X-Forwarded-Encrypted: i=1; AJvYcCWjtlVbOTfBQia2sz5C09FV/l+eQGiUXCGKTVxU8+g0j9m9D8AR49VHzn18uqFmw0IPz92GNA+lr3cvXBI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywu0khjFwBRO8Z8n/A834BCzHcHFsxv4f6UmQBU3C+rZ1pJucRj
+	6UHtc/n8E0Ip5iHMiepDZxUKhb6uO2rfCQhAAfHseBOIgmmCDEfjzdPCUYlLiwuhCzo=
+X-Gm-Gg: ASbGncsGgJ4wE51plD7fauozJJoRCy4VHOxxXtZMdLLgbuRy1SYLvj0hcjY/Xucy2fN
+	amVGoeHo/R3g7CoUOyRnjp3cvIJaU2Qd+hQ6GTzxswnSCJwbDumY/qt2XvM2I35qX/mCV7XnFG/
+	gzxNGofILvXfauHay0uU+wwY8GJkXX+N9ZfEEi0srpzoNkivL0aN0Ycm4q7Sp0VgidDrgulu2pf
+	OFlODG/t5S8+LgNMJvX1pbY/Ejv3QwLfZUBu7UIJLEv3UL8A/goW3X0rds7tI/4nU0FE942uRkA
+	kd1IDX9yyefr9amn62TNOtk2orDOjvuoJUToCMFtlABJq+dtTBg3uE7QtBt/G4yl
+X-Google-Smtp-Source: AGHT+IHEPMW4QL4R4mIdsXB9cYzCYRxWgcw8Mv10xqxysGpCwOek+8N7wQFeVEF5+DwJeA8kLp1PwA==
+X-Received: by 2002:a17:902:d4cb:b0:234:ba37:87b2 with SMTP id d9443c01a7336-23601cf094amr176200675ad.10.1749447491085;
+        Sun, 08 Jun 2025 22:38:11 -0700 (PDT)
+Received: from pop-os.. ([2401:4900:1c97:ddea:418d:d481:617b:9b03])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b2f5f895274sm4545659a12.68.2025.06.08.22.38.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 08 Jun 2025 22:38:10 -0700 (PDT)
+From: Abhinav Ananthu <abhinav.ogl@gmail.com>
+To: wsa+renesas@sang-engineering.com
+Cc: linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	syzbot+0a36c1fec090c67a9885@syzkaller.appspotmail.com,
+	Abhinav Ananthu <abhinav.ogl@gmail.com>
+Subject: [PATCH] i2c: core: Fix uninit-value in i2c_smbus_xfer_emulated
+Date: Mon,  9 Jun 2025 11:05:08 +0530
+Message-Id: <20250609053507.10628-1-abhinav.ogl@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -59,148 +87,42 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
 
-in case we have GPIOLIB enabled the gpio pins are used
-from the current driver as gpio pins. But may the gpio
-functions of this pins are not enabled in the flash
-of the chip and so gpio access fails.
+BUG: KMSAN: uninit-value in i2c_smbus_xfer_emulated drivers/i2c/i2c-core-smbus.c:481 [inline]
+BUG: KMSAN: uninit-value in __i2c_smbus_xfer+0x23e7/0x2f60
 
-In case CONFIG_IIO is not enabled we can prevent this
-issue of the driver simply by enabling the gpio mode
-for all pins.
+KMSAN reported an uninitialized value access in i2c_smbus_xfer_emulated at
+drivers/i2c/i2c-core-smbus.c:481, triggered during an SMBus transfer via
+i2cdev_ioctl_smbus. The issue occurs because the local buffers msgbuf0 and
+msgbuf1 are not initialized before use, leading to potential undefined
+behavior when their contents are accessed.
 
-Signed-off-by: Heiko Schocher <hs@denx.de>
+Initialize msgbuf0 and msgbuf1 with zeros using memset to ensure all buffer
+contents are defined before they are used in the SMBus transfer. This
+prevents the uninitialized value access reported by KMSAN.
+
+Reported-by: syzbot+0a36c1fec090c67a9885@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=0a36c1fec090c67a9885
+Fixes: 02ddfb981de8 ("KMSAN : Fix uninit-value in i2c_smbus_xfer_emulated")
+Signed-off-by: Abhinav Ananthu <abhinav.ogl@gmail.com>
 ---
+ drivers/i2c/i2c-core-smbus.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
- drivers/hid/hid-mcp2221.c | 97 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 97 insertions(+)
-
-diff --git a/drivers/hid/hid-mcp2221.c b/drivers/hid/hid-mcp2221.c
-index 0f93c22a479f..f693e920dffe 100644
---- a/drivers/hid/hid-mcp2221.c
-+++ b/drivers/hid/hid-mcp2221.c
-@@ -55,6 +55,27 @@ enum {
- 	MCP2221_ALT_F_NOT_GPIOD = 0xEF,
- };
- 
-+/* MCP SRAM read offsets cmd: MCP2221_GET_SRAM_SETTINGS */
-+enum {
-+	MCP2221_SRAM_RD_GP0 = 22,
-+	MCP2221_SRAM_RD_GP1 = 23,
-+	MCP2221_SRAM_RD_GP2 = 24,
-+	MCP2221_SRAM_RD_GP3 = 25,
-+};
-+
-+/* MCP SRAM write offsets cmd: MCP2221_SET_SRAM_SETTINGS */
-+enum {
-+	MCP2221_SRAM_WR_GP_ENA_ALTER = 7,
-+	MCP2221_SRAM_WR_GP0 = 8,
-+	MCP2221_SRAM_WR_GP1 = 9,
-+	MCP2221_SRAM_WR_GP2 = 10,
-+	MCP2221_SRAM_WR_GP3 = 11,
-+};
-+
-+#define MCP2221_SRAM_GP_DESIGN_MASK		0x07
-+#define MCP2221_SRAM_GP_DIRECTION_MASK		0x08
-+#define MCP2221_SRAM_GP_VALUE_MASK		0x10
-+
- /* MCP GPIO direction encoding */
- enum {
- 	MCP2221_DIR_OUT = 0x00,
-@@ -607,6 +628,80 @@ static const struct i2c_algorithm mcp_i2c_algo = {
- };
- 
- #if IS_REACHABLE(CONFIG_GPIOLIB)
-+static int mcp_gpio_read_sram(struct mcp2221 *mcp)
-+{
-+	int ret;
-+
-+	memset(mcp->txbuf, 0, 64);
-+	mcp->txbuf[0] = MCP2221_GET_SRAM_SETTINGS;
-+
-+	mutex_lock(&mcp->lock);
-+	ret = mcp_send_data_req_status(mcp, mcp->txbuf, 64);
-+	mutex_unlock(&mcp->lock);
-+
-+	return ret;
-+}
-+
-+/*
-+ * If CONFIG_IIO is not enabled, check for the gpio pins
-+ * if they are in gpio mode. For the ones which are not
-+ * in gpio mode, set them into gpio mode.
-+ */
-+static int mcp2221_check_gpio_pinfunc(struct mcp2221 *mcp)
-+{
-+	int i;
-+	int needgpiofix = 0;
-+	int ret;
-+
-+	if (IS_ENABLED(CONFIG_IIO))
-+		return 0;
-+
-+	ret = mcp_gpio_read_sram(mcp);
-+	if (ret)
-+		return ret;
-+
-+	for (i = 0; i < MCP_NGPIO; i++) {
-+		if ((mcp->mode[i] & MCP2221_SRAM_GP_DESIGN_MASK) != 0x0) {
-+			dev_warn(&mcp->hdev->dev,
-+				 "GPIO %d not in gpio mode\n", i);
-+			needgpiofix = 1;
-+		}
-+	}
-+
-+	if (!needgpiofix)
-+		return 0;
-+
-+	/*
-+	 * Set all bytes to 0, so Bit 7 is not set. The chip
-+	 * only changes content of a register when bit 7 is set.
-+	 */
-+	memset(mcp->txbuf, 0, 64);
-+	mcp->txbuf[0] = MCP2221_SET_SRAM_SETTINGS;
-+
-+	/*
-+	 * Set bit 7 in MCP2221_SRAM_WR_GP_ENA_ALTER to enable
-+	 * loading of a new set of gpio settings to GP SRAM
-+	 */
-+	mcp->txbuf[MCP2221_SRAM_WR_GP_ENA_ALTER] = 0x80;
-+	for (i = 0; i < MCP_NGPIO; i++) {
-+		if ((mcp->mode[i] & MCP2221_SRAM_GP_DESIGN_MASK) == 0x0) {
-+			/* write current GPIO mode */
-+			mcp->txbuf[MCP2221_SRAM_WR_GP0 + i] = mcp->mode[i];
-+		} else {
-+			/* pin is not in gpio mode, set it to input mode */
-+			mcp->txbuf[MCP2221_SRAM_WR_GP0 + i] = 0x08;
-+			dev_warn(&mcp->hdev->dev,
-+				 "Set GPIO mode for gpio pin %d!\n", i);
-+		}
-+	}
-+
-+	mutex_lock(&mcp->lock);
-+	ret = mcp_send_data_req_status(mcp, mcp->txbuf, 64);
-+	mutex_unlock(&mcp->lock);
-+
-+	return ret;
-+}
-+
- static int mcp_gpio_get(struct gpio_chip *gc,
- 				unsigned int offset)
- {
-@@ -1216,6 +1311,8 @@ static int mcp2221_probe(struct hid_device *hdev,
- 	ret = devm_gpiochip_add_data(&hdev->dev, mcp->gc, mcp);
- 	if (ret)
- 		return ret;
-+
-+	mcp2221_check_gpio_pinfunc(mcp);
- #endif
- 
- #if IS_REACHABLE(CONFIG_IIO)
+diff --git a/drivers/i2c/i2c-core-smbus.c b/drivers/i2c/i2c-core-smbus.c
+index e73afbefe222..a3ee30b72f75 100644
+--- a/drivers/i2c/i2c-core-smbus.c
++++ b/drivers/i2c/i2c-core-smbus.c
+@@ -332,6 +332,8 @@ static s32 i2c_smbus_xfer_emulated(struct i2c_adapter *adapter, u16 addr,
+ 	 */
+ 	unsigned char msgbuf0[I2C_SMBUS_BLOCK_MAX+3];
+ 	unsigned char msgbuf1[I2C_SMBUS_BLOCK_MAX+2];
++	memset(msgbuf0, 0, sizeof(msgbuf0));
++	memset(msgbuf1, 0, sizeof(msgbuf1));
+ 	int nmsgs = read_write == I2C_SMBUS_READ ? 2 : 1;
+ 	u8 partial_pec = 0;
+ 	int status;
 -- 
-2.20.1
+2.34.1
 
-base-commit: 546b1c9e93c2bb8cf5ed24e0be1c86bb089b3253
-branch: abb-mcp2221-v1
 
