@@ -1,219 +1,153 @@
-Return-Path: <linux-i2c+bounces-11345-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11346-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D18A1AD39EF
-	for <lists+linux-i2c@lfdr.de>; Tue, 10 Jun 2025 15:50:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5443CAD3ADA
+	for <lists+linux-i2c@lfdr.de>; Tue, 10 Jun 2025 16:14:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6FB981889373
-	for <lists+linux-i2c@lfdr.de>; Tue, 10 Jun 2025 13:49:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC201179826
+	for <lists+linux-i2c@lfdr.de>; Tue, 10 Jun 2025 14:13:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D97292D3A77;
-	Tue, 10 Jun 2025 13:46:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 534D129B226;
+	Tue, 10 Jun 2025 14:12:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dH8jjE9F"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iDvadfL4"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1736729B8DB;
-	Tue, 10 Jun 2025 13:46:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1A1529B8F5;
+	Tue, 10 Jun 2025 14:12:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749563184; cv=none; b=KVMlp18ia47mCzm1Ip2sjCo1HqE+MPbQrKprddOoNdF0MrNcpaxyMsXk45pJMs8YZsB9qGM6E/ZLwH5JwntrD7FdM5nvVaaE0iOVARhlYM7tWbuAct1JbK67vmB4bM+GWEvwajKRmEGHz6ZGECug2CIoXwTmaDZI64OYK+o62dg=
+	t=1749564754; cv=none; b=nqEu1+15qGZ96gdK+1Bx2YQm3hGMSBHIkK5XXEbsqrFBRA8LPTUNUR3YeY9XaZMDaVNpRbZJzk9Sos39yJgnrvjb5u+F3NsmQT4YvDYwXHPnl9ACxLSRlBjhwANbRBSxhqw3HpZP7rcHMtY1+89yIusoLDjYftcL+0jzUswD/P8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749563184; c=relaxed/simple;
-	bh=onusbAGTeKZDibm8BvV42Zc7VsUIDMtHO+9C2/7TIY4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=CkKQKkc84/BzkOIb5ODp8KlXLYuJgGVJQT0AsOJPoEPNAsZ9rurtPOgFuURzr/2mcvUutcSAcF+iu0nNagXwgTFf38N+WJn4BRezRVEm+/q5sUXZ8O7hq4zoH62A+aCxwu7E66gUj8AFCOags2uxqVdTcuLRs5OEmd34Mcm+To8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dH8jjE9F; arc=none smtp.client-ip=209.85.215.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-b2f62bbb5d6so2769296a12.0;
-        Tue, 10 Jun 2025 06:46:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749563182; x=1750167982; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DRQckTsTT83xbLwigtiX4m5LksrcbOPbtVMh/FhriaY=;
-        b=dH8jjE9FwQTxD7oiMV46IsxwcxbfBqzxtloBEa+m6GPC7y0EYpHEAgKn/F/1ZStLRO
-         UX7Bhoj5Fae0HCthrpVUCfrFDcABnw/xw06RNMbhQjETasoRqcZcn9H+KUdi1ixQ3vaq
-         7uJLlxgG7Yf1x1iI5wP996VZisy0D82qnLZ/m5oXeA2ao4NyDhQ6mBRdIC9bGIfVgUIt
-         GeomClfGmfVG9p5hKODldOkeil4gO9OVVZBZNr9+G50ZW8VfBxe47aRLupktPWXUa9q4
-         kES+5aqIqhXA/OkcrMQQPVRqDCw5pWfl7TjlGzLG3YZ+imKDb5op5+HjrT7BFAyxHMwK
-         gwAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749563182; x=1750167982;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DRQckTsTT83xbLwigtiX4m5LksrcbOPbtVMh/FhriaY=;
-        b=Ig3gCUTOEcG4gqSRtleSoc9gDuM9EMprGf6KIBjJoL59BWjcgKWtQwaxAUlCkg3jip
-         IpU2UyDa/ymPd8LqNGuWBNAeeVvcofGmTNXwB+hZGmFpXzzztdwNOtvjqwpYrki7Sz1+
-         dgWCHoxZBTBBMIM48KDyZZXcl72Fjb5/6xqJy1RIzTptHCdk1ZTnW8J+an9lbbxIzxM2
-         3Fy2XDM1sDyfA7RxuKGm1S5QRvYzIkSo7z4ez0qzrYQVB6xODzC+hNJqa243mUpUCisf
-         3qmMjgWa9QDlOsQPAjFrBPgQftsfQKcPyeyPtd+UBkTHsMvb6oGadeSIsy5PanIKTOn9
-         sYSg==
-X-Forwarded-Encrypted: i=1; AJvYcCUnXp3Ttehq/QMPG06BgHNPfSqPSwY5VQ9rv7c5OOGbPBEa2BPC6Ao8AiOu3lGknba/J4Et05QYPB5t@vger.kernel.org, AJvYcCVG9f85RAsINPgt5BkHI2I2eiJyUWxsMmQy4wvE81ZvnVFiZnanaPWB2e5MfYJtaCnbm3/jgiQ9zXIojKSS@vger.kernel.org, AJvYcCWazmA6qPu/XywT9FwvHXtAJlFNOZWkk/qg2qbB5r/wwaME3zEJYFsQ7zGaML6HU5hEAHZYF+cA4X7d@vger.kernel.org
-X-Gm-Message-State: AOJu0YzMyfKXqBcsWtGKuVVB5NRv02b2MiAI3swpL7sOf0Eb/G1glKjd
-	7AwZw9lyk9U+KxNdeBptKeT4WKSSfkDBdbWuCmkTulQGf0wt9YBul8uv
-X-Gm-Gg: ASbGncsgTtKuMddVriIcJ7noCutRkPTRYxrOXthtghIxF0DIG4Upl9uUdehNuIfjq0d
-	xB96ZIm4KuVAopTOdJZClRvSEjUns80mx7/YwyHGR07C4wAvKOIUCCrPWZBGww58rab1ZzPn30G
-	ExLgD3VBlkfu1cchHr6TiK3czOvfjKzQhSq9jl3coQq5zn6Pp76rxxa3RX5XMQOb7ybaqr627kv
-	dE/EgVAfdEO07nHQd8ewMIlP+ifpBdRva9z8jrmu9J1p+sAnGk+z2nZDAQHrgwsDss/Fk73QlR4
-	GNTz6Cs/G32bzXDZYowjYqzl8pzTjFaKbKK+EH6t/DBilRhrt9AKc6huIEPoWjqU
-X-Google-Smtp-Source: AGHT+IFnBfu22zv3Ouu8/mJ9OqridU9aBWmKTkj+xaTICPJRqJSyMf3R+DvVjf3tmKBM0nKTvRSwLQ==
-X-Received: by 2002:a17:90b:3c84:b0:312:e744:5b76 with SMTP id 98e67ed59e1d1-31347695306mr25071825a91.33.1749563182238;
-        Tue, 10 Jun 2025 06:46:22 -0700 (PDT)
-Received: from [127.0.1.1] ([59.188.211.160])
-        by smtp.googlemail.com with ESMTPSA id 98e67ed59e1d1-31349f32df7sm7288522a91.15.2025.06.10.06.46.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jun 2025 06:46:21 -0700 (PDT)
-From: Nick Chan <towinchenmi@gmail.com>
-Date: Tue, 10 Jun 2025 21:45:28 +0800
-Subject: [PATCH v2 9/9] arm64: dts: apple: t8015: Add I2C nodes
+	s=arc-20240116; t=1749564754; c=relaxed/simple;
+	bh=eMKse3olgDDTdTVEulDHGZT76bFnjfTCsl3tj8Z5nvY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=iIFUMSQ7mGeYiZkKdqhHrmuJlOtiVDOyvAnZ6HwGU1avlEkjcsGxhTp7hGdzgPUrtzjk1Ju6YxYRldLrkcFvl7+/77Wx6wSyoQavCNvYUQc5Mf2nDAI9Q+gPAe08OVIwxMyX7ZgAWPYp/UD/yKlzATdCqhuPYxUqviyLJuDeQOw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iDvadfL4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5397BC4CEED;
+	Tue, 10 Jun 2025 14:12:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749564753;
+	bh=eMKse3olgDDTdTVEulDHGZT76bFnjfTCsl3tj8Z5nvY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=iDvadfL44uEdOn0RtAKvFUzmjA3P8wkt05S4itlgj9uHWgynwMccowZQoFOu++QFD
+	 mcO3mvOL0NAsin3bQOp1h/ZCUlyHQ7oF95a6pd4BXFE848ngnZ/kbV4NzdmmP1wPDf
+	 +yJYT56/8HzKLHsFkoz4bVY/bh1bycU0oA9nM3IQe9O73TQETn9ejg5v9TbCXY7XlL
+	 j/uk/x99ebbbgoC8rj/LqcgfuDB2K4uUCu7+rBgVsN0GTiJWd1HAkRtT8HqrFPZXKN
+	 eyHu8r5vNhJXkO1hgX/cidteEiZ+OJRZGChy0yn/mmeNtajyWF7kIDt6PVFpJ3d8SS
+	 TgTABlY1obp+g==
+Message-ID: <24febda9-6360-459f-82d3-6fba9ed9be83@kernel.org>
+Date: Tue, 10 Jun 2025 07:12:31 -0700
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250610-i2c-no-t2-v2-9-a5a71080fba9@gmail.com>
-References: <20250610-i2c-no-t2-v2-0-a5a71080fba9@gmail.com>
-In-Reply-To: <20250610-i2c-no-t2-v2-0-a5a71080fba9@gmail.com>
-To: Janne Grunau <j@jannau.net>, Alyssa Rosenzweig <alyssa@rosenzweig.io>, 
- Neal Gompa <neal@gompa.dev>, Andi Shyti <andi.shyti@kernel.org>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Sven Peter <sven@kernel.org>
-Cc: asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
- linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Nick Chan <towinchenmi@gmail.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3029; i=towinchenmi@gmail.com;
- h=from:subject:message-id; bh=onusbAGTeKZDibm8BvV42Zc7VsUIDMtHO+9C2/7TIY4=;
- b=owEBbQKS/ZANAwAKAQHKCLemxQgkAcsmYgBoSDcMfQB3E9FUiFPW5MawR4g4G1LbR7F8Nl1PM
- MDN9xnbL2SJAjMEAAEKAB0WIQRLUnh4XJes95w8aIMBygi3psUIJAUCaEg3DAAKCRABygi3psUI
- JKJ6D/4rPbodonMfukKOY2SD9RCuDnOe3XuP5GF8nzTJHzCP92+5tU6SCrGWa5TcqVVJv9mRFoh
- +Ycv00c9BGxiIA+SgwwnvQye5fPMd6X13C8yrvms11oZlXjtx017SagHToOn0PDDa5Xh2l+30zq
- EP0npSyXzbfTfznBR8JBgrOreDdHhYKUMzDmdhkAeBvSx/4iUOrM2R5u1HRB7lXwurw7hXLVIsp
- 7xUbfRN4KC9BOK+iuj1QVWKAUp0Zim52gdpLW+D0F4paR41WZ6fnEG5nmbIMV9V0dHZEfud9o0b
- o0u+4F9hb/Uc/nO7oXP5spiFP/0s+MvNhp/nInshMGqN5ntO2zJ0ug/TIGIJgIA1Vie4jHM70bF
- MUYTbV/WTXvwEFZqwqHdaCDyB8HScYxYZFYfy19G7S5HqkjNtGZZO5mJDSLteuhZ82cywO0RDby
- qgP/MjAr9vo9ZJCzD182C6qK2IA2e8lgfqhCZxEiWccYyMqRT3qcMRJmh3+Loy9Ab2aHRWyvpps
- qxCQszZIMSA1V3kBQbK1VVpJA03oi+kXo+B8ZZTrbKAXX3C68bHqlxkpKm8+CUPRS7r6a6u4p4x
- kPB59aDz6oSUFjE/Ws5z87RkYQulDA90++2JjacdJYB4fD6TeA2XHvOAJt6fyV4qBIxsI6oBR6Y
- 14RtP6csmMrWLpQ==
-X-Developer-Key: i=towinchenmi@gmail.com; a=openpgp;
- fpr=4B5278785C97ACF79C3C688301CA08B7A6C50824
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 2/5] i2c: piix4: Depends on X86
+To: Huacai Chen <chenhuacai@kernel.org>,
+ Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Borislav Petkov <bp@alien8.de>, Jean Delvare <jdelvare@suse.com>,
+ Andi Shyti <andi.shyti@kernel.org>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ Jonathan Corbet <corbet@lwn.net>,
+ Mario Limonciello <mario.limonciello@amd.com>,
+ Yazen Ghannam <yazen.ghannam@amd.com>, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>,
+ "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+ "H . Peter Anvin" <hpa@zytor.com>,
+ Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+ Hans de Goede <hdegoede@redhat.com>,
+ "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+ open list <linux-kernel@vger.kernel.org>,
+ "open list:I2C/SMBUS CONTROLLER DRIVERS FOR PC" <linux-i2c@vger.kernel.org>,
+ "open list:AMD PMC DRIVER" <platform-driver-x86@vger.kernel.org>,
+ Ingo Molnar <mingo@kernel.org>, linux-mips@vger.kernel.org,
+ loongarch@lists.linux.dev
+References: <20250422234830.2840784-1-superm1@kernel.org>
+ <20250422234830.2840784-3-superm1@kernel.org>
+ <CAMuHMdVPQLjOox5sMp34Z5MTwKv2WOpHa=MpZr8hWG22fQKcjw@mail.gmail.com>
+ <CAAhV-H70LXsDYMA7wz4x828rEFoJsNX0=m8F73Ge9=yfpzBpZQ@mail.gmail.com>
+Content-Language: en-US
+From: Mario Limonciello <superm1@kernel.org>
+In-Reply-To: <CAAhV-H70LXsDYMA7wz4x828rEFoJsNX0=m8F73Ge9=yfpzBpZQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Add I2C nodes for Apple A11 SoC.
+On 6/10/2025 2:24 AM, Huacai Chen wrote:
+> On Tue, Jun 10, 2025 at 5:16 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>>
+>> Hi Mario,
+>>
+>> CC mips, loongarch
+>>
+>> On Wed, 23 Apr 2025 at 01:49, Mario Limonciello <superm1@kernel.org> wrote:
+>>> From: Mario Limonciello <mario.limonciello@amd.com>
+>>>
+>>> PIIX4 and compatible controllers are only for X86. As some headers are
+>>> being moved into x86 specific headers PIIX4 won't compile on non-x86.
+>>>
+>>> Suggested-by: Ingo Molnar <mingo@kernel.org>
+>>> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+>>
+>> Thanks for your patch, which is now commit 7e173eb82ae97175
+>> ("i2c: piix4: Make CONFIG_I2C_PIIX4 dependent on CONFIG_X86")
+>> in v6.16-rc1.
+>>
+>>> --- a/drivers/i2c/busses/Kconfig
+>>> +++ b/drivers/i2c/busses/Kconfig
+>>> @@ -200,7 +200,7 @@ config I2C_ISMT
+>>>
+>>>   config I2C_PIIX4
+>>>          tristate "Intel PIIX4 and compatible (ATI/AMD/Serverworks/Broadcom/SMSC)"
+>>> -       depends on PCI && HAS_IOPORT
+>>> +       depends on PCI && HAS_IOPORT && X86
+>>
+>> Are you sure this south-bridge is not used on non-x86 platforms?
+>> It is enabled in several non-x86 defconfigs:
+>>
+>>      arch/loongarch/configs/loongson3_defconfig:CONFIG_I2C_PIIX4=y
+>>      arch/mips/configs/ip27_defconfig:CONFIG_I2C_PIIX4=m
+>>      arch/mips/configs/loongson2k_defconfig:CONFIG_I2C_PIIX4=y
+>>      arch/mips/configs/loongson3_defconfig:CONFIG_I2C_PIIX4=y
+>>
+>> The loongarch and loongson entries are probably bogus, but I wouldn't
+>> be surprised if the SGI Onyx and Origin do use Intel south-bridges.
+> Loongson can use AMD SB700/SB800 south bridges, which have I2C_PIIX4.
 
-Signed-off-by: Nick Chan <towinchenmi@gmail.com>
----
- arch/arm64/boot/dts/apple/t8015.dtsi | 76 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 76 insertions(+)
+Well we could revert this patch, but it's going to be a compile failure 
+because of 624b0d5696a89b138408d385899dd35372db324b and other patches 
+that go on top of that.
 
-diff --git a/arch/arm64/boot/dts/apple/t8015.dtsi b/arch/arm64/boot/dts/apple/t8015.dtsi
-index 12acf8fc8bc6bcde6b11773cadd97e9ee115f510..e002ecee339013194537910db2168c143ab3d00a 100644
---- a/arch/arm64/boot/dts/apple/t8015.dtsi
-+++ b/arch/arm64/boot/dts/apple/t8015.dtsi
-@@ -265,6 +265,62 @@ cpufreq_p: performance-controller@208ea0000 {
- 			#performance-domain-cells = <0>;
- 		};
- 
-+		i2c0: i2c@22e200000 {
-+			compatible = "apple,t8015-i2c", "apple,i2c";
-+			reg = <0x2 0x2e200000 0x0 0x1000>;
-+			clocks = <&clkref>;
-+			interrupt-parent = <&aic>;
-+			interrupts = <AIC_IRQ 304 IRQ_TYPE_LEVEL_HIGH>;
-+			pinctrl-0 = <&i2c0_pins>;
-+			pinctrl-names = "default";
-+			power-domains = <&ps_i2c0>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		i2c1: i2c@22e204000 {
-+			compatible = "apple,t8015-i2c", "apple,i2c";
-+			reg = <0x2 0x2e204000 0x0 0x1000>;
-+			clocks = <&clkref>;
-+			interrupt-parent = <&aic>;
-+			interrupts = <AIC_IRQ 305 IRQ_TYPE_LEVEL_HIGH>;
-+			pinctrl-0 = <&i2c1_pins>;
-+			pinctrl-names = "default";
-+			power-domains = <&ps_i2c1>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		i2c2: i2c@22e208000 {
-+			compatible = "apple,t8015-i2c", "apple,i2c";
-+			reg = <0x2 0x2e208000 0x0 0x1000>;
-+			clocks = <&clkref>;
-+			interrupt-parent = <&aic>;
-+			interrupts = <AIC_IRQ 306 IRQ_TYPE_LEVEL_HIGH>;
-+			pinctrl-0 = <&i2c2_pins>;
-+			pinctrl-names = "default";
-+			power-domains = <&ps_i2c2>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		i2c3: i2c@22e20c000 {
-+			compatible = "apple,t8015-i2c", "apple,i2c";
-+			reg = <0x2 0x2e20c000 0x0 0x1000>;
-+			clocks = <&clkref>;
-+			interrupt-parent = <&aic>;
-+			interrupts = <AIC_IRQ 307 IRQ_TYPE_LEVEL_HIGH>;
-+			pinctrl-0 = <&i2c3_pins>;
-+			pinctrl-names = "default";
-+			power-domains = <&ps_i2c3>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
- 		serial0: serial@22e600000 {
- 			compatible = "apple,s5l-uart";
- 			reg = <0x2 0x2e600000 0x0 0x4000>;
-@@ -321,6 +377,26 @@ pinctrl_ap: pinctrl@233100000 {
- 				     <AIC_IRQ 54 IRQ_TYPE_LEVEL_HIGH>,
- 				     <AIC_IRQ 55 IRQ_TYPE_LEVEL_HIGH>,
- 				     <AIC_IRQ 56 IRQ_TYPE_LEVEL_HIGH>;
-+
-+			i2c0_pins: i2c0-pins {
-+				pinmux = <APPLE_PINMUX(73, 1)>,
-+					 <APPLE_PINMUX(72, 1)>;
-+			};
-+
-+			i2c1_pins: i2c1-pins {
-+				pinmux = <APPLE_PINMUX(182, 1)>,
-+					 <APPLE_PINMUX(181, 1)>;
-+			};
-+
-+			i2c2_pins: i2c2-pins {
-+				pinmux = <APPLE_PINMUX(4, 1)>,
-+					 <APPLE_PINMUX(3, 1)>;
-+			};
-+
-+			i2c3_pins: i2c3-pins {
-+				pinmux = <APPLE_PINMUX(184, 1)>,
-+					 <APPLE_PINMUX(183, 1)>;
-+			};
- 		};
- 
- 		pinctrl_aop: pinctrl@2340f0000 {
+My current leaning is we make a dummy fch.h header for these archs with 
+#defines for 0.
 
--- 
-2.49.0
+Any thoughts?
+
+> 
+> Huacai
+> 
+>>
+>>>          select I2C_SMBUS
+>>>          help
+>>>            If you say yes to this option, support will be included for the Intel
+>>
+>> Gr{oetje,eeting}s,
+>>
+>>                          Geert
+>>
+>> --
+>> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+>>
+>> In personal conversations with technical people, I call myself a hacker. But
+>> when I'm talking to journalists I just say "programmer" or something like that.
+>>                                  -- Linus Torvalds
+>>
 
 
