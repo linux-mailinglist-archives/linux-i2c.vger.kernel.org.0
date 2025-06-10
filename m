@@ -1,152 +1,122 @@
-Return-Path: <linux-i2c+bounces-11318-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11319-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2881AD2CD7
-	for <lists+linux-i2c@lfdr.de>; Tue, 10 Jun 2025 06:45:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4B85AD2F2E
+	for <lists+linux-i2c@lfdr.de>; Tue, 10 Jun 2025 09:50:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D20323A8389
-	for <lists+linux-i2c@lfdr.de>; Tue, 10 Jun 2025 04:45:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D488216C7AC
+	for <lists+linux-i2c@lfdr.de>; Tue, 10 Jun 2025 07:49:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 508CA217657;
-	Tue, 10 Jun 2025 04:45:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A961927FD6B;
+	Tue, 10 Jun 2025 07:49:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TIgBgczs"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KM1KIahb"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACFEA170A23;
-	Tue, 10 Jun 2025 04:45:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EFAC25DCEC;
+	Tue, 10 Jun 2025 07:49:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749530726; cv=none; b=dv5BHcM741yQ8ZIIF0e8MJLOEEJXcAwL4WB3s76X0Okr5BsxcCAp7zEQAUrKuDXfLwUel0ZCpGumpfVvCZQ/svoWMQBOyVOKkSu6bRFpnZgejwUJp6lKGOSDjkIAGmXIHW6jT/imA3PZQQx39ne2+/VntKnmRi+f1Q+avGNatMY=
+	t=1749541781; cv=none; b=hlLANaPiGMLfr/uobalk+c0a83XIjiJgYTdPn99YpkCD5IY323o2KrpXBWihFEPuc1wTMPNXxLMuOCLITdSH8FsVcJCCGd6Z39pNYbI2OaQHuwbIujjC6Mek42A5Lc4qms7cuwwLceV9Y8mLCl+t59bCI5beFpP/7J8q9BQ1K20=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749530726; c=relaxed/simple;
-	bh=yltZ1Vl2x0dJiqzIghjPsKkjp790cirFxMQUzcnSh5Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tSNsvoQfCayczDrYyGZlk9who7JlwBi6BNnpqUckbU+ZXey+33+6DBXXM2JK82+lHeB/AkvNijf98m1BJdRUOvcU97+Ga4SUXHWpa3ISnNzVgcMoha5MxbZWap2Lzz5Ycd0KgFBap8PVTQbKUbKxegWCy3eY2ZdfwfVhFCsa/ZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TIgBgczs; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-234bfe37cccso61144775ad.0;
-        Mon, 09 Jun 2025 21:45:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749530724; x=1750135524; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=r/Et+5TuD3+3/eVjp6CpBE4hmFK8ASCNFdhg+aniT+Y=;
-        b=TIgBgczsAdwE3bz7SlubtzEF9d/yNz5TVsCsz5EGPLYnPhPFaXHwBIncuTJzSta0JN
-         Qa9XwIdOu2s6Ks36jWt7IbW8h0qMp7iBBYmETo2YG1ISyd03wYMgCyScdJ+ezTWPg3fm
-         WacAtFL/z5g411Kh/vkSfRTPfaWbzAKgas4WqudLdR4ETZ7oWUZcMyjxmDXU1QctwbMp
-         +mk1JTmcxvW5liN7LVJz/uXrG20YAjPDWD8kEryuKiacFMtnzDNzcOTsGYHKKCrrYjj9
-         9aRxRuOoQfJBm6lqo3ZQ41u+vVznnHzzVPvWvz7SwtcItHeyMtfyrDQfXleqFSq+O7cB
-         7XUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749530724; x=1750135524;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=r/Et+5TuD3+3/eVjp6CpBE4hmFK8ASCNFdhg+aniT+Y=;
-        b=sgED2s6yUmsxyK8db7m/6rbDwZzRjxagzCuf2tajK6xIogV5KHyPmdYz50vh9+QUD/
-         PvjmFkgFtB0Dips4xtdSgxMW+BlZTIgFZsvRcsdwrBQTaslHWb4t84KddQU6rLa+eHXF
-         L4lf8yPfj2lQ5UW7MoslILmauOo6h8LOe5RpN8pAgGYe2NUGtIOGo68FP2mSKogTn15Z
-         O89Yxah34O9e3PMJ4P3nxMrnZaYUOHNNnOvevfU6/v6lB7WLMDegRrVqy3RKeVFC3orG
-         u1PXkzSbIUVRwlhFKOBwLfHeSYd7Gk+9ZgdSQHc1Q7REGkgROHSiZOLr16EnlA/Ne7l1
-         spBw==
-X-Forwarded-Encrypted: i=1; AJvYcCUCPcFrBmS6z0K4mMGPjm2Cpw9evu3RmNYdgsLmRkhHiqbAxSPyWnoPUg8fWwFFUuVm3hEmWb8n9hxnxkli@vger.kernel.org, AJvYcCXgEPAepYoH/CPsNKidY3to2LNRfwNdZ+XYZy80XcJnypDVj0k3v2ihrHMFQ8s4WX8H/s+bfELW98J/@vger.kernel.org
-X-Gm-Message-State: AOJu0YxC5EE9GeY/ywObpgLWHYcnN5IWZwRzu6VCQhPc4dTljWJNAZtY
-	9zIG2yjh2ytnydaTlOOEYvacQComVVPJMnktkFo5kWGZ0yquy7tBmnVz
-X-Gm-Gg: ASbGncvf9/L1HUgX8nVkCtNe2Zf59NvGMxa19lnaap2rXeKow0FFG/U5WEnI2aAVSOx
-	Mt6C8bY0SwfyRenRCJNke6zNjOZ/NZfv5YpTuKk7AfT9lP/tGRxhQzeetqrRm9ErGRwDvp0oQ64
-	dR1Y3wIS6HApPckP2358M6IrxQpgYoo3880rcvzg+qLI0/hR1qNsZFIP6lJB4bDpANJSnVYhM8O
-	ABmzY3wqbEFEEfwDcFQnpWVpPfoI+PGv8feAD1k+MdDDLSKONLSeBQBLFH5UxrF8oozY1pgnk/a
-	z/+dgfsXrGmU68LD1L53sy3tBPc2zV2wWvQn/LXDe8Z9RuwCxVN1xsyvVMRISWZ7zwTVlnF56T2
-	omk3c/cE6cw==
-X-Google-Smtp-Source: AGHT+IHeRu19sm8U6zfByMrOVx2wCrnbnafwzEKk+Sxwil3JgYJqscTx70zWuYMZYSWgk7wrVdu93w==
-X-Received: by 2002:a17:903:22d0:b0:234:8a4a:adb4 with SMTP id d9443c01a7336-23601d247demr212907365ad.21.1749530723858;
-        Mon, 09 Jun 2025 21:45:23 -0700 (PDT)
-Received: from [192.168.0.119] ([59.188.211.160])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-236034109c4sm62853365ad.210.2025.06.09.21.45.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Jun 2025 21:45:23 -0700 (PDT)
-Message-ID: <81f03b76-abd5-4803-b8cd-679013aed359@gmail.com>
-Date: Tue, 10 Jun 2025 12:45:19 +0800
+	s=arc-20240116; t=1749541781; c=relaxed/simple;
+	bh=Zf8zlM1ikY+x+Aj1YRBI4DnaZ4NqNZdfWKGRPGe8aOI=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=MMkrCcqC4hz+K3zv7Q0cL/FoSmv+CGVcMcl5/veM0MDc/qe7DqnRLVH6g5k11f6XIl1SIQDxFTnASgQ02Cl4EdZe9BiS/Ujslfo5TgKkYzjLLvoMXrFB5zTyIom9CbG6Zrpmrkb5fvx68vGiwgNMawZMP0riRCXmfF2s718MjkQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KM1KIahb; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1749541780; x=1781077780;
+  h=from:to:cc:in-reply-to:references:subject:message-id:
+   date:mime-version:content-transfer-encoding;
+  bh=Zf8zlM1ikY+x+Aj1YRBI4DnaZ4NqNZdfWKGRPGe8aOI=;
+  b=KM1KIahbTLOwS1KuFsdOIh5CIwbw4+1A4Wxy1hkKfSCqcMXi3X0/cwLY
+   pJu1etFwgDm4UNeU9g5MsfR5cokprtHBuH2ZhkRiWn7xkyVT1DBoTbFrz
+   5aNCtfk7qxyHsaxP03+7NBxWa1JItZ7aYc8js139okkHS7XFn8G8KB9CT
+   zQiiHQMidT9hQl6j/axycXKvstp8BySjLg2g1u7CKwC7ka8CE13f/OzFg
+   VRscBTUqWWKe2llZCj2xCV6jo6md+9ril9jAyi5vCXXQjar3x3aPY9SW5
+   vorarPgO+9rT/rrplFubfJkq6EoqirSenJSkGEuvDpukBiOwE6WDIMg8I
+   w==;
+X-CSE-ConnectionGUID: AOtDDZgQRRSKne8PvFNQhQ==
+X-CSE-MsgGUID: 9FihaGAvQBiBEo97XD8fCw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11459"; a="77039694"
+X-IronPort-AV: E=Sophos;i="6.16,224,1744095600"; 
+   d="scan'208";a="77039694"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2025 00:49:38 -0700
+X-CSE-ConnectionGUID: ufZhjqNVQGCbIO00v9qvhw==
+X-CSE-MsgGUID: R8sZ0L7BSHmP28FclTzhsw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,224,1744095600"; 
+   d="scan'208";a="146682211"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.196])
+  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2025 00:49:30 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+ "Rafael J . Wysocki" <rafael@kernel.org>, 
+ Sebastian Reichel <sre@kernel.org>, 
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>, Jiri Kosina <jikos@kernel.org>, 
+ Benjamin Tissoires <bentiss@kernel.org>, 
+ Damien Le Moal <dlemoal@kernel.org>, Niklas Cassel <cassel@kernel.org>, 
+ Andy Shevchenko <andy@kernel.org>, Andi Shyti <andi.shyti@kernel.org>, 
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+ Hans Verkuil <hverkuil@xs4all.nl>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+ Hans de Goede <hansg@kernel.org>
+Cc: dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org, 
+ linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org, 
+ linux-fsdevel@vger.kernel.org, linux-input@vger.kernel.org, 
+ linux-ide@vger.kernel.org, platform-driver-x86@vger.kernel.org, 
+ linux-i2c@vger.kernel.org, linux-usb@vger.kernel.org, 
+ linux-hwmon@vger.kernel.org
+In-Reply-To: <20250609143558.42941-1-hansg@kernel.org>
+References: <20250609143558.42941-1-hansg@kernel.org>
+Subject: Re: [PATCH v2 0/1] MAINTAINERS: .mailmap: Update Hans de Goede's
+ email address
+Message-Id: <174954176287.5583.6841576782802896940.b4-ty@linux.intel.com>
+Date: Tue, 10 Jun 2025 10:49:22 +0300
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/8] I2C dt nodes and bindings for Apple A7-A11 SoCs
-To: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: linux-i2c@vger.kernel.org, asahi@lists.linux.dev,
- Sven Peter <sven@kernel.org>, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, Neal Gompa <neal@gompa.dev>,
- Andi Shyti <andi.shyti@kernel.org>, Janne Grunau <j@jannau.net>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Alyssa Rosenzweig <alyssa@rosenzweig.io>, Conor Dooley
- <conor+dt@kernel.org>, devicetree@vger.kernel.org
-References: <20250609-i2c-no-t2-v1-0-789c4693106f@gmail.com>
- <174950228622.2915605.1412644681389156564.robh@kernel.org>
-Content-Language: en-US
-From: Nick Chan <towinchenmi@gmail.com>
-In-Reply-To: <174950228622.2915605.1412644681389156564.robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13.0
+
+On Mon, 09 Jun 2025 16:35:56 +0200, Hans de Goede wrote:
+
+> I'm moving all my kernel work over to using my kernel.org email address.
+> 
+> The single patch in this series updates .mailmap and all MAINTAINERS
+> entries still using hdegoede@redhat.com.
+> 
+> Since most of my work is pdx86 related I believe it would be best for Ilpo
+> to merge this through the pdx86 tree (preferable through the fixes branch).
+> 
+> [...]
 
 
-Rob Herring (Arm) 於 2025/6/10 凌晨4:53 寫道:
-> On Mon, 09 Jun 2025 22:56:17 +0800, Nick Chan wrote:
->> Hi,
->>
->> This series adds the device tree nodes and bindings for I2C on Apple A7-A11
->> SoCs, since the existing driver appears to be compatible. The drivers for the
->> attached Dialog DA2xxx PMIC will be in a future patch series.
->>
->> Signed-off-by: Nick Chan <towinchenmi@gmail.com>
->> ---
->> Nick Chan (8):
->>       arm64: dts: apple: s5l8960x: Add I2C nodes
->>       arm64: dts: apple: t7000: Add I2C nodes
->>       arm64: dts: apple: t7001: Add I2C nodes
->>       arm64: dts: apple: s800-0-3: Add I2C nodes
->>       arm64: dts: apple: s8001: Add I2C nodes
->>       arm64: dts: apple: t8010: Add I2C nodes
->>       arm64: dts: apple: t8011: Add I2C nodes
->>       arm64: dts: apple: t8015: Add I2C nodes
->>
->>  arch/arm64/boot/dts/apple/s5l8960x.dtsi | 76 +++++++++++++++++++++++++++++++++
->>  arch/arm64/boot/dts/apple/s800-0-3.dtsi | 57 +++++++++++++++++++++++++
->>  arch/arm64/boot/dts/apple/s8001.dtsi    | 76 +++++++++++++++++++++++++++++++++
->>  arch/arm64/boot/dts/apple/t7000.dtsi    | 76 +++++++++++++++++++++++++++++++++
->>  arch/arm64/boot/dts/apple/t7001.dtsi    | 76 +++++++++++++++++++++++++++++++++
->>  arch/arm64/boot/dts/apple/t8010.dtsi    | 76 +++++++++++++++++++++++++++++++++
->>  arch/arm64/boot/dts/apple/t8011.dtsi    | 76 +++++++++++++++++++++++++++++++++
->>  arch/arm64/boot/dts/apple/t8015.dtsi    | 76 +++++++++++++++++++++++++++++++++
->>  8 files changed, 589 insertions(+)
->> ---
->> base-commit: 19272b37aa4f83ca52bdf9c16d5d81bdd1354494
->> change-id: 20250527-i2c-no-t2-2f3589996d14
->>
->> Best regards,
->> --
->> Nick Chan <towinchenmi@gmail.com>
->>
->>
->>
->
-> My bot found new DTB warnings on the .dts files added or changed in this
-> series.
+Thank you for your contribution, it has been applied to my local
+review-ilpo-fixes branch. Note it will show up in the public
+platform-drivers-x86/review-ilpo-fixes branch only once I've pushed my
+local branch there, which might take a while.
 
-forgot to include patch with the actual bindings v2 should fix the issue
+The list of commits applied:
+[1/1] MAINTAINERS: .mailmap: Update Hans de Goede's email address
+      commit: 3fbf25ecf8b7b524b4774b427657d30a24e696ef
 
-[...]
+--
+ i.
 
->
-Nick Chan
 
