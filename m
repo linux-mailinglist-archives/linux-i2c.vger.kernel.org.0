@@ -1,168 +1,142 @@
-Return-Path: <linux-i2c+bounces-11352-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11353-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5BD19AD4244
-	for <lists+linux-i2c@lfdr.de>; Tue, 10 Jun 2025 20:52:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BCC87AD4449
+	for <lists+linux-i2c@lfdr.de>; Tue, 10 Jun 2025 22:58:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 176957A46C8
-	for <lists+linux-i2c@lfdr.de>; Tue, 10 Jun 2025 18:51:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C5AD6165243
+	for <lists+linux-i2c@lfdr.de>; Tue, 10 Jun 2025 20:58:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83C1024A074;
-	Tue, 10 Jun 2025 18:52:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A83D2673B9;
+	Tue, 10 Jun 2025 20:58:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vA7GkvRD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k1fplW04"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E1962494ED;
-	Tue, 10 Jun 2025 18:52:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22AC1264A85;
+	Tue, 10 Jun 2025 20:58:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749581541; cv=none; b=lq0ikA85+tyCceUMgZc3JJcd3plvaQPwyW1Li2bnrXbwnDDN0oVKT08wAqEki7eWSCjCkMB5pkm3G4cKrdzgqBNyJ7dpAKkr1GG0W6x5oyUhQV7f6bWMBjuzOWxQsecYqahtJWLCik0WtGGJETS9JgzwA4ekjFaXtZyakLxjByQ=
+	t=1749589121; cv=none; b=XwulPhYkFa+K58gB7rd6phx9xKDTGz9ewMNR2OwMRFZvUPl5SSzzAKcoC1EKUvgLnZAc/7WvBfZjsTvy53N/32Frtc/RUjnqSinUZwQlqVh0ezwwZUxifGHuhPE5RpsrqHov78lrUbGnBTQ1ocQPQVNxOx2eybsPEFxeSIvgWis=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749581541; c=relaxed/simple;
-	bh=D+SLbgwqbHoCj3oO6CuUATPS7+/ovg9hSc1l4QTqaYI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UUdSZlgNbakGE74uAxvzuEBDUmd8u+DiaE4TIX1z42j7krFDM1NSRH1CnI3pVZclSI+LflsyAQvtEbpqYPx9nEisB4I6DsQG7d01dzNsSrdDGn65scZA+qzhHSZ4DYXSiMyYAITl8UJzudglWI58lx6C3u77iH/8905OI3WU7lk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vA7GkvRD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B038CC4CEED;
-	Tue, 10 Jun 2025 18:52:15 +0000 (UTC)
+	s=arc-20240116; t=1749589121; c=relaxed/simple;
+	bh=qm3uF6HSzJnRnw72+spsb/hFAmy0FfViB4PecXNYNVg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qImX44JLVhpbQpf84Q9Kw1+aEkJXRIW2fD11jxNQo5TG226ZIHeGTBGtfgooWDoTnqCnbpFrLJSlj6eNyZFf3vtfqpjVXsYzBVak05AnT+NoyJM3MzhuSBu/qgjgHGPXSTROtNs4JJRlfYXBOszeRDiFj3DqH9lgpkCtNWLK8GU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k1fplW04; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DB9FC4CEED;
+	Tue, 10 Jun 2025 20:58:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749581540;
-	bh=D+SLbgwqbHoCj3oO6CuUATPS7+/ovg9hSc1l4QTqaYI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=vA7GkvRDeNEkKZ0x5bgHWPa6SW5jph1vEukaxaD/VWMWQ9v8MOTFfBFJILKH7RQ2j
-	 4Eskbu/gmfN+5YecJCn4f/6ZRenm+JRYNbTqWwUHVMt4VWXMzy4Frl+Ddj3M1locN6
-	 myC1gTAqyBgcCWfgpz6nrOERV+fDUBk9T0SOgMq9iNJ+32XL33mxFzeAOABtmM7nMk
-	 AlKb713enWkTQZ8GU0RYGLpbOWIeZxA+Egofn5N/aUtwWZQ1b2OQ8UFZWT+NUp1usr
-	 dGZJxlzGmP8OewvVNvjXQv/BqvB6KjJA0foVAWqZPJW/2HYRxCqMFfcIPMDPA4JzRW
-	 OBD4PW275/DCA==
-Message-ID: <d237b434-1add-4686-95c0-fd167bc9e6c0@kernel.org>
-Date: Tue, 10 Jun 2025 20:52:13 +0200
+	s=k20201202; t=1749589121;
+	bh=qm3uF6HSzJnRnw72+spsb/hFAmy0FfViB4PecXNYNVg=;
+	h=From:To:Cc:Subject:Date:From;
+	b=k1fplW04yy6+qHw/isDiwWRXbz+MBex3RvCws52wxu8s7yojNk1RfUT1OeNpJSSMR
+	 IeMhDzuQC9Yxl52p0ODzdHjbepJyfRjNqnOzfK6KW+wSoyYUyMeoewTxzLAw+yV5wD
+	 DH4g+B7v+ldHkheavFnTz1Pfr+m4LkE3g/jsstlQTbb5zjSWH1GKsL9zgmE3eqiZ03
+	 i8Xk7a+WAy07BQe1kBHBPzDuOgaxlqQF1in8KMnzizkVAWU8Ch7A3PgjoKGXdLcm9x
+	 Va5Ou8s69GjMWDTrE+e4pBWrfah6Dl/TtEYYHYLKgcXEW1ZVwF1pkpzivScatniuQG
+	 hJypUqLSIN18g==
+From: Mario Limonciello <superm1@kernel.org>
+To: Ingo Molnar <mingo@redhat.com>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
+	"H . Peter Anvin" <hpa@zytor.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Jean Delvare <jdelvare@suse.com>,
+	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	linux-kernel@vger.kernel.org (open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
+	linux-i2c@vger.kernel.org (open list:I2C SUBSYSTEM HOST DRIVERS),
+	platform-driver-x86@vger.kernel.org (open list:AMD PMC DRIVER),
+	Hans de Goede <hansg@kernel.org>
+Subject: [PATCH 1/2] Move FCH header to a location accessible by all archs
+Date: Tue, 10 Jun 2025 15:58:16 -0500
+Message-ID: <20250610205817.3912944-1-superm1@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 2/5] i2c: piix4: Depends on X86
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Mario Limonciello <superm1@kernel.org>,
- Huacai Chen <chenhuacai@kernel.org>, Borislav Petkov <bp@alien8.de>,
- Jean Delvare <jdelvare@suse.com>, Andi Shyti <andi.shyti@kernel.org>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- Jonathan Corbet <corbet@lwn.net>,
- Mario Limonciello <mario.limonciello@amd.com>,
- Yazen Ghannam <yazen.ghannam@amd.com>, Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>,
- "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
- "H . Peter Anvin" <hpa@zytor.com>,
- Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
- "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
- open list <linux-kernel@vger.kernel.org>,
- "open list:I2C/SMBUS CONTROLLER DRIVERS FOR PC" <linux-i2c@vger.kernel.org>,
- "open list:AMD PMC DRIVER" <platform-driver-x86@vger.kernel.org>,
- Ingo Molnar <mingo@kernel.org>, linux-mips@vger.kernel.org,
- loongarch@lists.linux.dev
-References: <20250422234830.2840784-1-superm1@kernel.org>
- <20250422234830.2840784-3-superm1@kernel.org>
- <CAMuHMdVPQLjOox5sMp34Z5MTwKv2WOpHa=MpZr8hWG22fQKcjw@mail.gmail.com>
- <CAAhV-H70LXsDYMA7wz4x828rEFoJsNX0=m8F73Ge9=yfpzBpZQ@mail.gmail.com>
- <24febda9-6360-459f-82d3-6fba9ed9be83@kernel.org>
- <30a7f1a6-1e04-4fc5-9bea-e2b5956b28b7@kernel.org>
- <1e06c620-8f8e-4ddf-8356-0782bccd63a2@kernel.org>
- <CAMuHMdXtrJn0i5ehBSq85+gTZ7fmeeQ=r-8fzV4GRFvmgOY1DQ@mail.gmail.com>
-Content-Language: en-US, nl
-From: Hans de Goede <hansg@kernel.org>
-In-Reply-To: <CAMuHMdXtrJn0i5ehBSq85+gTZ7fmeeQ=r-8fzV4GRFvmgOY1DQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Hi Geert,
+From: Mario Limonciello <mario.limonciello@amd.com>
 
-On 10-Jun-25 18:59, Geert Uytterhoeven wrote:
-> Hi Hans,
-> 
-> On Tue, 10 Jun 2025 at 16:55, Hans de Goede <hansg@kernel.org> wrote:
->> On 10-Jun-25 16:53, Hans de Goede wrote:
->>> On 10-Jun-25 16:12, Mario Limonciello wrote:
->>>> On 6/10/2025 2:24 AM, Huacai Chen wrote:
->>>>> On Tue, Jun 10, 2025 at 5:16 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->>>>>> On Wed, 23 Apr 2025 at 01:49, Mario Limonciello <superm1@kernel.org> wrote:
->>>>>>> From: Mario Limonciello <mario.limonciello@amd.com>
->>>>>>>
->>>>>>> PIIX4 and compatible controllers are only for X86. As some headers are
->>>>>>> being moved into x86 specific headers PIIX4 won't compile on non-x86.
->>>>>>>
->>>>>>> Suggested-by: Ingo Molnar <mingo@kernel.org>
->>>>>>> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
->>>>>>
->>>>>> Thanks for your patch, which is now commit 7e173eb82ae97175
->>>>>> ("i2c: piix4: Make CONFIG_I2C_PIIX4 dependent on CONFIG_X86")
->>>>>> in v6.16-rc1.
->>>>>>
->>>>>>> --- a/drivers/i2c/busses/Kconfig
->>>>>>> +++ b/drivers/i2c/busses/Kconfig
->>>>>>> @@ -200,7 +200,7 @@ config I2C_ISMT
->>>>>>>
->>>>>>>   config I2C_PIIX4
->>>>>>>          tristate "Intel PIIX4 and compatible (ATI/AMD/Serverworks/Broadcom/SMSC)"
->>>>>>> -       depends on PCI && HAS_IOPORT
->>>>>>> +       depends on PCI && HAS_IOPORT && X86
->>>>>>
->>>>>> Are you sure this south-bridge is not used on non-x86 platforms?
->>>>>> It is enabled in several non-x86 defconfigs:
->>>>>>
->>>>>>      arch/loongarch/configs/loongson3_defconfig:CONFIG_I2C_PIIX4=y
->>>>>>      arch/mips/configs/ip27_defconfig:CONFIG_I2C_PIIX4=m
->>>>>>      arch/mips/configs/loongson2k_defconfig:CONFIG_I2C_PIIX4=y
->>>>>>      arch/mips/configs/loongson3_defconfig:CONFIG_I2C_PIIX4=y
->>>>>>
->>>>>> The loongarch and loongson entries are probably bogus, but I wouldn't
->>>>>> be surprised if the SGI Onyx and Origin do use Intel south-bridges.
->>>>> Loongson can use AMD SB700/SB800 south bridges, which have I2C_PIIX4.
->>>>
->>>> Well we could revert this patch, but it's going to be a compile failure because of 624b0d5696a89b138408d385899dd35372db324b and other patches that go on top of that.
->>>>
->>>> My current leaning is we make a dummy fch.h header for these archs with #defines for 0.
->>>
->>> Move "fch.h" to include/linux/platform/x86/ so that it is available on all arches
->>> and if necessary ifdef out anything x86 specific in the C-code referencing it ?
->>
->> Correction that should be include/linux/platform_data/x86/
-> 
-> Is that a good location?
+A new header fch.h was created to store registers used by different AMD
+drivers.  This header was included by i2c-piix4 in
+commit 624b0d5696a8 ("i2c: piix4, x86/platform: Move the SB800 PIIX4 FCH
+definitions to <asm/amd/fch.h>"). To prevent compile failures on non-x86
+archs i2c-piix4 was set to only compile on x86 by commit 7e173eb82ae9717
+("i2c: piix4: Make CONFIG_I2C_PIIX4 dependent on CONFIG_X86").
+This was not a good decision because loongarch and mips both actually
+support i2c-piix4 and set it enabled in the defconfig.
 
-It is a location typically used for x86 headers which we want to be
-available when not building on x86 too.
+Move the header to a location accessible by all architectures.
 
-> It is not x86-specific, and I see no platform_data (struct) definitions in
-> arch/x86/include/asm/amd/fch.h?
+Fixes: 624b0d5696a89 ("i2c: piix4, x86/platform: Move the SB800 PIIX4 FCH definitions to <asm/amd/fch.h>")
+Suggested-by: Hans de Goede <hansg@kernel.org>
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+---
+ arch/x86/kernel/cpu/amd.c                                       | 2 +-
+ drivers/i2c/busses/i2c-piix4.c                                  | 2 +-
+ drivers/platform/x86/amd/pmc/pmc-quirks.c                       | 2 +-
+ .../asm/amd/fch.h => include/linux/platform_data/x86/amd-fch.h  | 0
+ 4 files changed, 3 insertions(+), 3 deletions(-)
+ rename arch/x86/include/asm/amd/fch.h => include/linux/platform_data/x86/amd-fch.h (100%)
 
-If it is not x86 specific then maybe just include/linux/amd_fch.h ?
-
-Anyways I don't really give much about the exact name, the essence of
-my suggestion is that we can fix this by moving fch.h to some place
-(and maybe a new name) under include/linux so that the header is also
-available when not building for x86.
-
-Regards,
-
-Hans
-
-
-
-
-
-> 
-> Gr{oetje,eeting}s,
-> 
->                         Geert
-> 
+diff --git a/arch/x86/kernel/cpu/amd.c b/arch/x86/kernel/cpu/amd.c
+index 93da466dfe2cb..9543d5de4e7d6 100644
+--- a/arch/x86/kernel/cpu/amd.c
++++ b/arch/x86/kernel/cpu/amd.c
+@@ -9,7 +9,7 @@
+ #include <linux/sched/clock.h>
+ #include <linux/random.h>
+ #include <linux/topology.h>
+-#include <asm/amd/fch.h>
++#include <linux/platform_data/x86/amd-fch.h>
+ #include <asm/processor.h>
+ #include <asm/apic.h>
+ #include <asm/cacheinfo.h>
+diff --git a/drivers/i2c/busses/i2c-piix4.c b/drivers/i2c/busses/i2c-piix4.c
+index 9d3a4dc2bd60c..ac3bb550303fe 100644
+--- a/drivers/i2c/busses/i2c-piix4.c
++++ b/drivers/i2c/busses/i2c-piix4.c
+@@ -34,7 +34,7 @@
+ #include <linux/dmi.h>
+ #include <linux/acpi.h>
+ #include <linux/io.h>
+-#include <asm/amd/fch.h>
++#include <linux/platform_data/x86/amd-fch.h>
+ 
+ #include "i2c-piix4.h"
+ 
+diff --git a/drivers/platform/x86/amd/pmc/pmc-quirks.c b/drivers/platform/x86/amd/pmc/pmc-quirks.c
+index 5c7c01f66cde0..6648fe0dce537 100644
+--- a/drivers/platform/x86/amd/pmc/pmc-quirks.c
++++ b/drivers/platform/x86/amd/pmc/pmc-quirks.c
+@@ -11,7 +11,7 @@
+ #include <linux/dmi.h>
+ #include <linux/io.h>
+ #include <linux/ioport.h>
+-#include <asm/amd/fch.h>
++#include <linux/platform_data/x86/amd-fch.h>
+ 
+ #include "pmc.h"
+ 
+diff --git a/arch/x86/include/asm/amd/fch.h b/include/linux/platform_data/x86/amd-fch.h
+similarity index 100%
+rename from arch/x86/include/asm/amd/fch.h
+rename to include/linux/platform_data/x86/amd-fch.h
+-- 
+2.43.0
 
 
