@@ -1,140 +1,147 @@
-Return-Path: <linux-i2c+bounces-11326-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11327-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 969ACAD30BB
-	for <lists+linux-i2c@lfdr.de>; Tue, 10 Jun 2025 10:42:19 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F0923AD31A5
+	for <lists+linux-i2c@lfdr.de>; Tue, 10 Jun 2025 11:20:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 89EB17A444C
-	for <lists+linux-i2c@lfdr.de>; Tue, 10 Jun 2025 08:40:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5BB027AA204
+	for <lists+linux-i2c@lfdr.de>; Tue, 10 Jun 2025 09:17:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D031027FD48;
-	Tue, 10 Jun 2025 08:42:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I/xC8ZUW"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6046D28B7C5;
+	Tue, 10 Jun 2025 09:16:48 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f46.google.com (mail-ua1-f46.google.com [209.85.222.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D810E1DD9D3;
-	Tue, 10 Jun 2025 08:42:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67CB228AAE5;
+	Tue, 10 Jun 2025 09:16:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749544930; cv=none; b=iWvJGwZ+A9gZ+PYK9ozJyiF8Vtc3mmOjbcwXjKcyU0kQI1SWhCp+szyneBhSGPgYboCjraNviLBiV5jV5JjY3HGbNesXQ+d9ywiZb34+7Ehal3xJoomSJEJyE5bTWgzd7kpXEb33w4VUHrG/alnGCicqEC37yLkdZaC17zY630Q=
+	t=1749547008; cv=none; b=pj5JlTOAboPXYcocT8KkaQhknfQL0wvA9WusePfBe/CJSafAcPaOMH7iGxX9HRJd0Fe9QXhuv2ImxRFzYSDVYfRNfkQK2Eg3SaaXqlUISM6nKzkvYWW1PucF7Glw3nixoXFy49QxidgsAg+F/gv+enaO6yrqaKlJoTiFWsW6gKo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749544930; c=relaxed/simple;
-	bh=dAlJNlsK6HDm/D1KHUUl3OpVGkaXaRLFMW/O78c4LlY=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=QSWXWy6GOxMlCnsNEVZhVVBYv1FKstX+3gpGaEoCZaId67LLHBvpEUANrLCVCQVU6B1qvtM4+ufQm6L5YeOgP1r0IsMDq7SvTEF8d90Rd6F6OVoaUFd4BOoFxU/A2Xh1lBUhHrBlzE8NgC1GEDsiftsS4IET5evZkOorzTz8u20=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I/xC8ZUW; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1749544929; x=1781080929;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=dAlJNlsK6HDm/D1KHUUl3OpVGkaXaRLFMW/O78c4LlY=;
-  b=I/xC8ZUWpNzwrrwSoX2YNiC9zuK9Mzjk2sel8Duxt1jGxdOdBcB66DOD
-   odY9odY9XfnrCX9u7Fxl4h8uRD5H04He+8Ec7DfHOIQN+M22/zmSaBNF5
-   el//dZgYjAkTLFiidCXQo3gi6OUHIO3T9eanw+SXHZE7fcQEdxgSkDHTH
-   V375MRIuQTTGTQSwGO3SDuIv8uFZe7SqSbNisG9yF/RDA9f+Q3USD+Dqr
-   N8nrbjoj9LrkRCuksSFqmUDV6Xg5m0KhPzLbgapfbTkSOWuxE6QJPvPa2
-   GzMAnDY9g1SXOh0uX/z+XH8lDo0Miw2GGdNfVvKqgx0cV7M27yCARbov6
-   w==;
-X-CSE-ConnectionGUID: RPbpti/KS3+mMRja48HXuw==
-X-CSE-MsgGUID: aKzwq676SFKUMYCtsroEpg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11459"; a="55308750"
-X-IronPort-AV: E=Sophos;i="6.16,224,1744095600"; 
-   d="scan'208";a="55308750"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2025 01:42:08 -0700
-X-CSE-ConnectionGUID: JFC3cMuxS1G3qXqWLPFTug==
-X-CSE-MsgGUID: Zb/qwyA9SGyQcbJThwcLsA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,224,1744095600"; 
-   d="scan'208";a="151643988"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.196])
-  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2025 01:42:03 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Tue, 10 Jun 2025 11:42:00 +0300 (EEST)
-To: Pratap Nirujogi <pratap.nirujogi@amd.com>, andi.shyti@kernel.org
-cc: rdunlap@infradead.org, Hans de Goede <hdegoede@redhat.com>, 
-    sfr@canb.auug.org.au, linux-next@vger.kernel.org, 
-    linux-i2c@vger.kernel.org, platform-driver-x86@vger.kernel.org, 
-    LKML <linux-kernel@vger.kernel.org>, benjamin.chan@amd.com, bin.du@amd.com, 
-    gjorgji.rosikopulos@amd.com, king.li@amd.com, dantony@amd.com
-Subject: Re: [PATCH v4 3/3] platform/x86: Use i2c adapter name to fix build
- errors
-In-Reply-To: <20250609155601.1477055-4-pratap.nirujogi@amd.com>
-Message-ID: <570c7765-b3bc-77cd-dddb-d19e85611114@linux.intel.com>
-References: <20250609155601.1477055-1-pratap.nirujogi@amd.com> <20250609155601.1477055-4-pratap.nirujogi@amd.com>
+	s=arc-20240116; t=1749547008; c=relaxed/simple;
+	bh=T5SuRWpaGQwoZhvlpNpdBYid1/1wMrEkOat2uWnCvtI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AtDyjLkL3MOLRz/FM5VHyT3NVguuzeHnAnxwFlrXmIaebpHDW/V0t7SEvOPZ/zCfz2JPiw6nmJuPFybqlEOGOfDbgcyQcbI7wQYSZrro7pvPXK4Dy76va8Ayq6nKoS/6S5p2nZx9TlgRg9y4DHWNhJ20eMngh6bQbJ907UB6Ku0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ua1-f46.google.com with SMTP id a1e0cc1a2514c-87ee0ba50bcso412056241.3;
+        Tue, 10 Jun 2025 02:16:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749547003; x=1750151803;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aXmJAjCM4QXrI8PFxZnnSaMVzam0rKL8btuAAYmyx5Y=;
+        b=eRDt/QaaLRIp7tFMjcp1IZXr3tmR1DmvK+nyDkVqXa7EmzxSR0BJi3OsbNuxu4rCze
+         ysweErCDDTHyMp2JqOwvcNeCVHXwwoBkkTgcE9pd0WVTP4VSCrN7LWc1mex+Tqu0DGLO
+         qcQu9+z/utaznTdY/qB5iu42rcrpdbc062SDIMIL+WkosgaDA+w0HuDyinoLFr80wDzv
+         Omx/VEl+GPqbVKCPUyGDTdFfpho3IZCy3FL3TLOdqDGfGB1lXLwpkXf69ohGsJgRyYhp
+         xduunpyEJ0mGY1lM0awO2E4MG4cVy2kGnaB3EGs3DFVRmxc+LOgwOO2Ozz6173D+MBRi
+         bi6Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUNM5+WV+a1+vm/vfKu6Hod3uuxHBzm88dMw5hNWpUC8zUsF8LuMB6J7MxHxgAGJMQ/jEKi0TK4qq41dhw9deWHPQHzwQ==@vger.kernel.org, AJvYcCVMjz5vnDhba33d+3eNRU0pXTyCKPvs0LeNzBi7+NU2rDjaGk9QDQqWo4RsUVgPSjTDAN2kH9hnpjL4jQ==@vger.kernel.org, AJvYcCVVxPtcCU3EcjwnNEkd9k+ARrXjQp3k4wr1+WkBM3fqhjU7q8/5ViOCDQnmcu34cBwdtt9mRmFjxQrh@vger.kernel.org, AJvYcCVzO2Nv24xLp18QERRJiRmVMLPN1b9Tr3VODEEdTenUe3ppe95B4e1hQ3E51OdLborUCBOs2HVD1N4fT1l8@vger.kernel.org, AJvYcCXq4Bjh444THwWCoOLJXvkFzH32iA0Y/WgleMmfMy27k4gQCNc8SFxK6vqFH4sqxVFIK5ayo5rJxI8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx6yeocL7quuhwZQVHJsJ6qSuLPwCjfGliXQ52Mx6UmUTOe5sZV
+	iDOPZWGwk5a0BYNyv/8OgmZzbizVZ+WGcY/ES03UxpLdX1H5hov2o38RvJ0mW6Wi
+X-Gm-Gg: ASbGnctlS/EmZsO03xfTR6I7UxrHstdzKFexf4wuGHJjiqZNAiIaXf7aMhVLd97YmzX
+	Z4jRhLOH9hNHQrImLgbEQTqLMAVVrLs+8BXpa+4TmjmbU0fRfqEYV1s9Wh4q/7NScR795tIXf9n
+	b5c5E7INRR/WY0ozD9sHi7jqGY5bVHbKkMsoZrawgM6DwXD6ZgVDp8Vzg4Sc9JjVUKpbRJqNbv3
+	uodA6fVdSeaaBV42N8y9UMi4CUBVPFGILVoLA5uVJ/KxZ6kVuq6s+GoEYg5RYPyaDsS9X5tYjoY
+	OKk6qnsZWvKUOgCpzbJMSTJEK/JMm5Kw8PuznEyaaQqPevOXjf+r69gBUkvo2btVXHnN7tJGhnm
+	lyXE426ryRHQWxTDxRbQY6um9
+X-Google-Smtp-Source: AGHT+IGjk7FFhQmtnDl7IVnNDq0YQrhxvalZUdYjdTl7Yk8yFclJTFNB4/F5T0bLCn44doMUvzDxhQ==
+X-Received: by 2002:a05:6102:5802:b0:4e7:596e:e029 with SMTP id ada2fe7eead31-4e772a30842mr12498831137.20.1749547003114;
+        Tue, 10 Jun 2025 02:16:43 -0700 (PDT)
+Received: from mail-ua1-f44.google.com (mail-ua1-f44.google.com. [209.85.222.44])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-4e77394bd3bsm6139299137.23.2025.06.10.02.16.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Jun 2025 02:16:41 -0700 (PDT)
+Received: by mail-ua1-f44.google.com with SMTP id a1e0cc1a2514c-87ed98a23easo464772241.0;
+        Tue, 10 Jun 2025 02:16:41 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCV0WpwwFPS17YAfEFOydbs32YGAV7Rs/9qBoqIyWDUbz0tdDkIrUOPNIRzn/oelNKdO8Ww5GQCYwLlX@vger.kernel.org, AJvYcCVNtmoGy+hcBquTeKh1Pa3PjJf13gN9gE8k/Tol6ZuK6Ch/DALoYprAdVNT+WUx7DFJD7ULtbqDW7E=@vger.kernel.org, AJvYcCVlwME51ZzgE5fA+l/kS42EuxfYr4O8qqcvSnURO3nm4MT+Z1tGB9+ZiMjB7s+99o3n+vuhrKNagt4r0vnS38EvqI118Q==@vger.kernel.org, AJvYcCWFThk45PPY1ttQmv8ZR0v/TvxO6WlbP6L4yc5AUBz58dSny+Pcs0kd6HK0iqtkVJCL3quiJAE/nG1lMw==@vger.kernel.org, AJvYcCXDmmiGipFbRHY8UybXKCpvUy0eUWJqxXN0tawP767PsqBNY9bUXFZBy0WGJI1dWsMR9qh4WIgmrlX2Ok7m@vger.kernel.org
+X-Received: by 2002:a05:6102:943:b0:4e6:ddd0:9702 with SMTP id
+ ada2fe7eead31-4e7729a3b75mr12821267137.15.1749547001193; Tue, 10 Jun 2025
+ 02:16:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323328-1148617004-1749544828=:949"
-Content-ID: <92a34faa-5ba6-b7d3-0b6a-8f83386c5e09@linux.intel.com>
+References: <20250422234830.2840784-1-superm1@kernel.org> <20250422234830.2840784-3-superm1@kernel.org>
+In-Reply-To: <20250422234830.2840784-3-superm1@kernel.org>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Tue, 10 Jun 2025 11:16:29 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVPQLjOox5sMp34Z5MTwKv2WOpHa=MpZr8hWG22fQKcjw@mail.gmail.com>
+X-Gm-Features: AX0GCFv1stbSgApzqPSScCybuPZoPnTcTv0OURpXKeqUfK7lSULXavQbaabojaE
+Message-ID: <CAMuHMdVPQLjOox5sMp34Z5MTwKv2WOpHa=MpZr8hWG22fQKcjw@mail.gmail.com>
+Subject: Re: [PATCH v5 2/5] i2c: piix4: Depends on X86
+To: Mario Limonciello <superm1@kernel.org>
+Cc: Borislav Petkov <bp@alien8.de>, Jean Delvare <jdelvare@suse.com>, Andi Shyti <andi.shyti@kernel.org>, 
+	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Mario Limonciello <mario.limonciello@amd.com>, 
+	Yazen Ghannam <yazen.ghannam@amd.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>, 
+	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>, Hans de Goede <hdegoede@redhat.com>, 
+	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>, 
+	"open list:I2C/SMBUS CONTROLLER DRIVERS FOR PC" <linux-i2c@vger.kernel.org>, 
+	"open list:AMD PMC DRIVER" <platform-driver-x86@vger.kernel.org>, Ingo Molnar <mingo@kernel.org>, 
+	linux-mips@vger.kernel.org, loongarch@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Hi Mario,
 
---8323328-1148617004-1749544828=:949
-Content-Type: text/plain; CHARSET=ISO-8859-15
-Content-Transfer-Encoding: QUOTED-PRINTABLE
-Content-ID: <0ae36a1b-f8b2-5a24-6972-ccc973c34d05@linux.intel.com>
+CC mips, loongarch
 
-On Mon, 9 Jun 2025, Pratap Nirujogi wrote:
+On Wed, 23 Apr 2025 at 01:49, Mario Limonciello <superm1@kernel.org> wrote:
+> From: Mario Limonciello <mario.limonciello@amd.com>
+>
+> PIIX4 and compatible controllers are only for X86. As some headers are
+> being moved into x86 specific headers PIIX4 won't compile on non-x86.
+>
+> Suggested-by: Ingo Molnar <mingo@kernel.org>
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 
-> Use adapater->name inplace of adapter->owner->name to fix
-> build issues when CONFIG_MODULES is not defined.
->=20
-> Fixes: 90b85567e457 ("platform/x86: Add AMD ISP platform config for OV05C=
-10")
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Link: https://lore.kernel.org/all/04577a46-9add-420c-b181-29bad582026d@in=
-fradead.org
-> Tested-by: Randy Dunlap <rdunlap@infradead.org>
-> Signed-off-by: Pratap Nirujogi <pratap.nirujogi@amd.com>
-> ---
->  drivers/platform/x86/amd/amd_isp4.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/platform/x86/amd/amd_isp4.c b/drivers/platform/x86/a=
-md/amd_isp4.c
-> index 0cc01441bcbb..9f291aeb35f1 100644
-> --- a/drivers/platform/x86/amd/amd_isp4.c
-> +++ b/drivers/platform/x86/amd/amd_isp4.c
-> @@ -11,6 +11,7 @@
->  #include <linux/mutex.h>
->  #include <linux/platform_device.h>
->  #include <linux/property.h>
-> +#include <linux/soc/amd/isp4_misc.h>
->  #include <linux/string.h>
->  #include <linux/types.h>
->  #include <linux/units.h>
-> @@ -151,7 +152,7 @@ MODULE_DEVICE_TABLE(acpi, amdisp_sensor_ids);
-> =20
->  static inline bool is_isp_i2c_adapter(struct i2c_adapter *adap)
->  {
-> -=09return !strcmp(adap->owner->name, "i2c_designware_amdisp");
-> +=09return !strcmp(adap->name, AMDISP_I2C_ADAP_NAME);
->  }
-> =20
->  static void instantiate_isp_i2c_client(struct amdisp_platform *isp4_plat=
-form,
+Thanks for your patch, which is now commit 7e173eb82ae97175
+("i2c: piix4: Make CONFIG_I2C_PIIX4 dependent on CONFIG_X86")
+in v6.16-rc1.
 
-Acked-by: Ilpo J=E4rvinen <ilpo.jarvinen@linux.intel.com>
+> --- a/drivers/i2c/busses/Kconfig
+> +++ b/drivers/i2c/busses/Kconfig
+> @@ -200,7 +200,7 @@ config I2C_ISMT
+>
+>  config I2C_PIIX4
+>         tristate "Intel PIIX4 and compatible (ATI/AMD/Serverworks/Broadcom/SMSC)"
+> -       depends on PCI && HAS_IOPORT
+> +       depends on PCI && HAS_IOPORT && X86
 
-Andi, do you want to take this fix series through i2c tree or do you=20
-prefer me to take them through pdx86 tree?
+Are you sure this south-bridge is not used on non-x86 platforms?
+It is enabled in several non-x86 defconfigs:
 
+    arch/loongarch/configs/loongson3_defconfig:CONFIG_I2C_PIIX4=y
+    arch/mips/configs/ip27_defconfig:CONFIG_I2C_PIIX4=m
+    arch/mips/configs/loongson2k_defconfig:CONFIG_I2C_PIIX4=y
+    arch/mips/configs/loongson3_defconfig:CONFIG_I2C_PIIX4=y
 
---
- i.
---8323328-1148617004-1749544828=:949--
+The loongarch and loongson entries are probably bogus, but I wouldn't
+be surprised if the SGI Onyx and Origin do use Intel south-bridges.
+
+>         select I2C_SMBUS
+>         help
+>           If you say yes to this option, support will be included for the Intel
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
