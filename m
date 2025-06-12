@@ -1,208 +1,135 @@
-Return-Path: <linux-i2c+bounces-11372-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11373-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 686C8AD6FFE
-	for <lists+linux-i2c@lfdr.de>; Thu, 12 Jun 2025 14:17:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E34D0AD70E7
+	for <lists+linux-i2c@lfdr.de>; Thu, 12 Jun 2025 14:56:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DDA9D18956E3
-	for <lists+linux-i2c@lfdr.de>; Thu, 12 Jun 2025 12:17:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AC9601BC6ED3
+	for <lists+linux-i2c@lfdr.de>; Thu, 12 Jun 2025 12:55:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EACF72605;
-	Thu, 12 Jun 2025 12:17:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76903239E9E;
+	Thu, 12 Jun 2025 12:55:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VIJG8GHd"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFC062F4315;
-	Thu, 12 Jun 2025 12:17:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A014B222574;
+	Thu, 12 Jun 2025 12:55:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749730647; cv=none; b=qbyvFOwRv24nEfEyM2Eqazky05f2vVhRF1Up59PNWck+cHidzwOjT6zHHTrwwOX8fPHETLpFHw6MDLLlV7gHvBhrA5GpS2MUzMiguNPDssJOLLFu4voFe2tapUrLFF8La4KxoNLe8eMGTee4Y2x+H/nq0XCkOeorNdszzTdnqlA=
+	t=1749732932; cv=none; b=IWoKlf+FLgsTvUCTdatzJor5+UAwuly6GhuIRkngbuofg5IluJlZUP/O7fWWyNzHkJPZVxl4dhIgYMJyysZchA6xprcEEDsVmKcAp1xy9CPsexLBHXivMjrC0vJSVLWC1YGhMfyREiQinQWHvEtXuev+BVipvLOTbiOhksJle98=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749730647; c=relaxed/simple;
-	bh=BAJPS5CTIsKgTtnWWCS8RNglnAj/Nh9iWChoip6rm+k=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dXfBmn+UUMqj8UKo0vZN7DreF6/GVpXR2UD82VOVujBDaus0ntqFBhFrwicKxdQJijOjSvdHyWi09EtoYKu0kbzt23x9OwPybO0laZ4ZNuH9bBUMqKIpcE88yT1EcJS1ZoVR/Ybe9SVqG4SqsTjHnPj8Vj7r044YMzX0+EzBJxY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-23508d30142so11005825ad.0;
-        Thu, 12 Jun 2025 05:17:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749730645; x=1750335445;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DoJJcCh5MIZf7vzkudV0p31BxyvL75PyGTQMdM/s56k=;
-        b=foOWqDza142eflaLjrts0s1LMUTaonOED3q6utgj+umm7zz/t6fDuUU4M54bHhhHfc
-         t+MQOchNuxCuqtGrAE/kYUhweVZ8dlbSneban3EqKjukSixrURgxMavWqkKaIAoGWsBu
-         Nuz0qhpPRdfHIvD/ULeVsmPIePvgB4ZlETTepidi5eZg8ACFoux3jRtj7Fuf73ZYaazT
-         QwQhb+0huTUy0wBF2pNL7qnMk4YaZIgTsphDqY6w7YXxGCmq0c3HgkpHLt4/3Qf6+VSa
-         kJgKFvYSDBUu+gLApW4jWyE6i5ovxwGFDgW3dnu+wxMcwHnHitrslPg7heMajyRaMq3t
-         Elaw==
-X-Forwarded-Encrypted: i=1; AJvYcCUDNE1kmUuiuuqxXWvZpIh3lpKWuaqBh9G8iPcXnG5n7q7pZo1NQYwUGj64ZgjqPdMtFixoGQXlWR1zEaIff2oTMyQ=@vger.kernel.org, AJvYcCUV26RfxlA1Xvl9eRHAWBwblt18fnbmcbasrGX4Nl0FMBJ1QYkbuUP74HfoklioS28K48tDk41Ay55M@vger.kernel.org, AJvYcCV+vVFytB3p6PRTmApRex8onfDN378GktRY2+925E6ELZgDcY+80mazq0wNDCG2VspHWM2OHyflVs4D@vger.kernel.org, AJvYcCWOvgy6sj+F0M4tGelTp+mWiSfiJqhYFILg1VbRHfPEsKkv6HV7HNJ6MPib9dzp6zAN8/edjpA02bk+n3FZ@vger.kernel.org
-X-Gm-Message-State: AOJu0YxbTzElj2ilka6ZqjSJjRZfI9Iu5t9OnjZHVvGV4NmdVJvgsMpT
-	nVMVukGNKxdOop3Y2RTHKr7oQfzsC56Z22qT664CeMaxaCmMggw3Idt2ZLdbV04x
-X-Gm-Gg: ASbGncsddPF3jcVYiNVAuDa3Ryvd9RRynhuPFUE74+wWxw2oDxuzyUkn0pRYz+0GVp0
-	lo2lA5Ru1zRbG27X36kcTc3Un3unpT41Trh4h0klwf81GhfhBziISbEIgxUXEnjJlAOBccZ6wm8
-	Jam17mYODw4JVqMy+jfu9WHHJYBOF9jxKzEPS5F+qfBE7fvj9MP9DRpWhsl054bCIoV92gQemcl
-	HWN1uS2SiDlLXLHBXwOxQzv0nAjtsYNwj6GmAbcyJQNU7OVk5B1tupVwB4TZQ9HTAROQpch5f2I
-	Cv/5a3QPINf3VvvYZbQXXOeGegZ7OQxFpbSAUHfK02AJtXpcGbUwXqwY8nFXw+SyBOdXNN1OhOg
-	1cEmLaOHmGlNkDVoJs+VCoWz6CTJ4
-X-Google-Smtp-Source: AGHT+IEgFvXq46wHwmacDtJ1o7cDFPAhk1arkDEirrosX113yDofcaYTqcsmzJSga23+U/z6EBclRw==
-X-Received: by 2002:a05:6214:2242:b0:6fa:c617:23f0 with SMTP id 6a1803df08f44-6fb3464b734mr60985826d6.27.1749730633452;
-        Thu, 12 Jun 2025 05:17:13 -0700 (PDT)
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com. [209.85.160.179])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6fb35c87430sm9297716d6.117.2025.06.12.05.17.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Jun 2025 05:17:13 -0700 (PDT)
-Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-4a58ba6c945so17473001cf.2;
-        Thu, 12 Jun 2025 05:17:13 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCX2IA5UD/7N1ZCuJn4LOV89By69nPvhV3aXfXJ6LG5UZvolTlCorhJIebdYdAjKWfIKmDMPVLtefe0r3K3w@vger.kernel.org, AJvYcCX2Rk441ZA9skIyLF3ElRSqi8mNCAwFK4S2sYr6aeJZ23O6G5nmOHyMqZNIK8OXZe9gZIoulkkXzxX+@vger.kernel.org, AJvYcCXTod7Luv3fHYUyh5+6sHDzsmfHU3hOewMb3a/AOcwf1xvYQYAqNN8dNPKHO9XT/rnFx58BpnwJ0lqEzxobv1Kb8V4=@vger.kernel.org, AJvYcCXm4H3WSGHe4btzk6lnwufatp8Erj8YqsmxQsB+IgkLX0E2Sbr+6UFDyadMeZSqTGaVvImQxE5F9Qa0@vger.kernel.org
-X-Received: by 2002:a05:622a:248b:b0:476:b7cf:4d42 with SMTP id
- d75a77b69052e-4a72298b45amr56780671cf.27.1749730621392; Thu, 12 Jun 2025
- 05:17:01 -0700 (PDT)
+	s=arc-20240116; t=1749732932; c=relaxed/simple;
+	bh=dP3SRX/cv37DsGg35U7B1sRrw0buqGQozmHVM2Feb4s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=q3vZQGIClkA2bk64aH/cqRfiqo6cAxlpFRcBcECYDx5OhUxwMTk88hqWyrI+wM6W9FLx4wu/XsyipGJn1DvOSpoRg45hpXkkBekx4QW4I+cGsWzO+/BK0IemIwjCwkM95b68cAemPD/c3wnQ6Vo4QqKuT9QrLsFz7QfXReTqYZc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VIJG8GHd; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1749732931; x=1781268931;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dP3SRX/cv37DsGg35U7B1sRrw0buqGQozmHVM2Feb4s=;
+  b=VIJG8GHdTw8jPikhH9u/u65xA9Sy/i6v19kShLW2Y+Fth+uXYAUf4KJl
+   aovWyl/zkHRxVTMzKCvvQe1Pmoa2TmJQyP+3fvW5sYmdr+TMvbOe1wVJc
+   wGbfLWeKRndQGY+vcR46OVY9d32MxGr690/vC0xjQvtHEnOJ9t0eSOW16
+   B+5wQxWKdveoQhjCuvTMT00STnFQaF/3oZOsNRQQG2u4uu/YxO8femXTT
+   cdbsGp4UFpgPvZW/oMGdEfMH/QUMZsxe9mZ1BtGAqZ/ss/H4k1MtXPjcs
+   hdCpRA9mE8X/2Geg55GSul7e5XY7DEGWR6VpAWhTtdoyRwsv2PMD7Cgw+
+   A==;
+X-CSE-ConnectionGUID: 2LJLMr4gR5OE/j893IcckQ==
+X-CSE-MsgGUID: LMJ7fseEQpa6QLh1Etgj6A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11462"; a="54538205"
+X-IronPort-AV: E=Sophos;i="6.16,230,1744095600"; 
+   d="scan'208";a="54538205"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2025 05:55:30 -0700
+X-CSE-ConnectionGUID: bQREP0MoTt6cbAdraUhGWA==
+X-CSE-MsgGUID: rli+VdjxRTaUK+BP6L+FeQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,230,1744095600"; 
+   d="scan'208";a="184745704"
+Received: from smile.fi.intel.com ([10.237.72.52])
+  by orviesa001.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2025 05:55:25 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1uPhSk-00000005xBk-0X8p;
+	Thu, 12 Jun 2025 15:55:22 +0300
+Date: Thu, 12 Jun 2025 15:55:21 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Andi Shyti <andi.shyti@kernel.org>
+Cc: Akhil R <akhilrajeev@nvidia.com>, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, thierry.reding@gmail.com, jonathanh@nvidia.com,
+	ldewangan@nvidia.com, digetx@gmail.com, p.zabel@pengutronix.de,
+	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 2/3] i2c: tegra: make reset an optional property
+Message-ID: <aErOOSxt0ovCIeSA@smile.fi.intel.com>
+References: <20250603153022.39434-1-akhilrajeev@nvidia.com>
+ <20250603153022.39434-2-akhilrajeev@nvidia.com>
+ <7sncphuidgiz6orsocixgybm2npcsjrdm7gnl3e52vfms2polu@4mmhdtc4zg5x>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250609184114.282732-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20250609184114.282732-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20250609184114.282732-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 12 Jun 2025 14:16:49 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUCYjPP326g9MsnH8p6gM-vy33L4OsFFMGzsZbLbucTUA@mail.gmail.com>
-X-Gm-Features: AX0GCFutJDPpULdILFjEorVuhRUPwxUBTaslsCHyRwchuwR_DqFdheZmmW6F7w0
-Message-ID: <CAMuHMdUCYjPP326g9MsnH8p6gM-vy33L4OsFFMGzsZbLbucTUA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/6] dt-bindings: i2c: renesas,riic: Document RZ/T2H support
-To: Prabhakar <prabhakar.csengg@gmail.com>
-Cc: Chris Brandt <chris.brandt@renesas.com>, Andi Shyti <andi.shyti@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Andy Shevchenko <andy@kernel.org>, Magnus Damm <magnus.damm@gmail.com>, 
-	Wolfram Sang <wsa+renesas@sang-engineering.com>, linux-renesas-soc@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>, 
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>, 
-	Conor Dooley <conor.dooley@microchip.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7sncphuidgiz6orsocixgybm2npcsjrdm7gnl3e52vfms2polu@4mmhdtc4zg5x>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-Hi Prabhakar,
+On Thu, Jun 12, 2025 at 02:57:36AM +0200, Andi Shyti wrote:
 
-On Mon, 9 Jun 2025 at 20:41, Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> Document support for the I2C Bus Interface (RIIC) found on the Renesas
-> RZ/T2H (R9A09G077) SoC. The RIIC IP on this SoC is similar to that on
-> the RZ/V2H(P) SoC but supports fewer interrupts, lacks FM+ support and
-> does not require resets. Due to these differences, add a new compatible
-> string `renesas,riic-r9a09g077` for the RZ/T2H SoC.
->
-> Unlike earlier SoCs that use eight distinct interrupts, the RZ/T2H uses
-> only four, including a combined error/event interrupt. Update the binding
-> schema to reflect this interrupt layout and skip the `resets` property
-> check, as it is not required on these SoCs.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
-> Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
-> v1-> v2:
-> - Listed the interrupts in the order as mentioned in the
->   HW manual.
-> - Renamed the interrupt names to match the HW manual.
-> - Added Acked-by and Reviewed-by tags.
+...
 
-Thanks for the update!
+> > +static int tegra_i2c_master_reset(struct tegra_i2c_dev *i2c_dev)
+> > +{
+> > +	if (!i2c_dev->hw->has_mst_reset)
+> > +		return -EOPNOTSUPP;
+> > +
+> > +	i2c_writel(i2c_dev, 0x1, I2C_MASTER_RESET_CNTRL);
+> > +	udelay(2);
+> > +
+> > +	i2c_writel(i2c_dev, 0x0, I2C_MASTER_RESET_CNTRL);
+> > +	udelay(2);
+> > +
+> > +	return 0;
+> > +}
+> > +
+> >  static int tegra_i2c_init(struct tegra_i2c_dev *i2c_dev)
+> >  {
+> >  	u32 val, clk_divisor, clk_multiplier, tsu_thd, tlow, thigh, non_hs_mode;
+> > @@ -621,8 +641,10 @@ static int tegra_i2c_init(struct tegra_i2c_dev *i2c_dev)
+> >  	 */
+> >  	if (handle)
+> >  		err = acpi_evaluate_object(handle, "_RST", NULL, NULL);
+> > -	else
+> > +	else if (i2c_dev->rst)
+> >  		err = reset_control_reset(i2c_dev->rst);
+> > +	else
+> > +		err = tegra_i2c_master_reset(i2c_dev);
+> 
+> Can you please take a look here? Should the reset happen in ACPI?
 
-> --- a/Documentation/devicetree/bindings/i2c/renesas,riic.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/renesas,riic.yaml
-> @@ -29,32 +29,46 @@ properties:
->                - renesas,riic-r9a09g056   # RZ/V2N
->            - const: renesas,riic-r9a09g057   # RZ/V2H(P)
->
-> -      - const: renesas,riic-r9a09g057   # RZ/V2H(P)
-> +      - enum:
-> +          - renesas,riic-r9a09g057   # RZ/V2H(P)
-> +          - renesas,riic-r9a09g077   # RZ/T2H
->
->    reg:
->      maxItems: 1
->
->    interrupts:
-> -    items:
-> -      - description: Transmit End Interrupt
-> -      - description: Receive Data Full Interrupt
-> -      - description: Transmit Data Empty Interrupt
-> -      - description: Stop Condition Detection Interrupt
-> -      - description: Start Condition Detection Interrupt
-> -      - description: NACK Reception Interrupt
-> -      - description: Arbitration-Lost Interrupt
-> -      - description: Timeout Interrupt
-> +    oneOf:
-> +      - items:
-> +          - description: Transmit End Interrupt
-> +          - description: Receive Data Full Interrupt
-> +          - description: Transmit Data Empty Interrupt
-> +          - description: Stop Condition Detection Interrupt
-> +          - description: Start Condition Detection Interrupt
-> +          - description: NACK Reception Interrupt
-> +          - description: Arbitration-Lost Interrupt
-> +          - description: Timeout Interrupt
-> +      - items:
-> +          - description: Transmit Error Or Event Generation
+This is a good question. Without seeing all the implementations of _RST method
+for the platforms based on this SoC it's hard to say. Ideally the _RST (which
+is called above) must handle it properly, but firmwares have bugs...
 
-s/Transmit/Transfer/
-
-> +          - description: Receive Data Full Interrupt
-> +          - description: Transmit End Interrupt
-> +          - description: Transmit Data Empty Interrupt
-
-The last two don't match the order in the documentation, and the
-order in interrupt-names below.
-
->
->    interrupt-names:
-> -    items:
-> -      - const: tei
-> -      - const: ri
-> -      - const: ti
-> -      - const: spi
-> -      - const: sti
-> -      - const: naki
-> -      - const: ali
-> -      - const: tmoi
-> +    oneOf:
-> +      - items:
-> +          - const: tei
-> +          - const: ri
-> +          - const: ti
-> +          - const: spi
-> +          - const: sti
-> +          - const: naki
-> +          - const: ali
-> +          - const: tmoi
-> +      - items:
-> +          - const: eei
-> +          - const: rxi
-> +          - const: txi
-> +          - const: tei
->
->    clock-frequency:
->      description:
-
-Gr{oetje,eeting}s,
-
-                        Geert
+TL;DR: I think the approach is correct, and if any bug in ACPI will be found,
+the workaround (quirk) needs to be added here later on.
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+With Best Regards,
+Andy Shevchenko
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+
 
