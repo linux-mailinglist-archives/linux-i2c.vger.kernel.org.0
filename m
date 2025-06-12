@@ -1,34 +1,34 @@
-Return-Path: <linux-i2c+bounces-11377-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11378-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74DDBAD71C5
-	for <lists+linux-i2c@lfdr.de>; Thu, 12 Jun 2025 15:26:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8DF20AD71C7
+	for <lists+linux-i2c@lfdr.de>; Thu, 12 Jun 2025 15:26:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 29F3D179FFD
-	for <lists+linux-i2c@lfdr.de>; Thu, 12 Jun 2025 13:26:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4F41B17A3B4
+	for <lists+linux-i2c@lfdr.de>; Thu, 12 Jun 2025 13:26:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17E2924DCE8;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 940AE24DCFD;
 	Thu, 12 Jun 2025 13:25:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="D2PM+DaZ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VrcCS0kC"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B91E23D2B3;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4FDD246BAC;
 	Thu, 12 Jun 2025 13:25:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749734725; cv=none; b=NNgbvXy/h7B65vbETN0XV2ee38g1qDt+xbpFaWxKwpknyAl+1kDBmuvJ/5SMnWpc7r6snpf9mDxDlSRswalc9O/lZWwAVVQDbx2b8cUltEGNhL4Q62EehydxKe8kM64jfTU6dGK4hXHJB0NosRl09MDNAUxURYUny+AL0xoYw+o=
+	t=1749734726; cv=none; b=CeJLpCmBfICZNzblqd06B5XU5kLMa/IwHbdoGl7fUcfgP/qXon47tIBjCC61/SZwPvp/iW7qFr+SpkwUrkSUhOb3i+D2zaiNEE33IJhofmTwsqRXpOZOumAs9B2GxLGxKf1Q99q8x7uy27ImswGaF80nA2JqImDDbvAAWfA/Zw8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749734725; c=relaxed/simple;
-	bh=SIjFkanjeqNj8t7I+yrVNo4R4IqXB7cn0S6I/15UTGQ=;
+	s=arc-20240116; t=1749734726; c=relaxed/simple;
+	bh=FSCdKuBZu83ZlNuhWTKve1fHQ1SiZ+gddU/oetdw40o=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=s+QzWUVSTvB2mmkPo0XWafYc+xpwt0JHUk5OzX+iBlr/7NflY+19S+X1b81+dzYy5bA51IkXiR4A7o6PzL2AITNBTlC+qYN2Bmln5H+6OME0WKxkrBJ2OSacuFzdYE8/qPPsymd0MqCwzHm6NBexmB+VvtHYOb+76ZZg6ef7EZo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=D2PM+DaZ; arc=none smtp.client-ip=198.175.65.15
+	 MIME-Version; b=NVfb+z0h0+myq3KPU6jQucRJzvGWIW/TZFDvFC9BzvV0//bSAZUb1MxrOy08uVE/tl8bwxf6GkXawDD4GWRJXs9YiLQSyFKW01WXXmY7ab2LiKbS0YxmtUDTNRT/tQ9MOFEyN40i9kzs6/8AD0Agr8Pk6aP5cIhkVtGO9fDfMeg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VrcCS0kC; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
@@ -36,28 +36,28 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   t=1749734725; x=1781270725;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=SIjFkanjeqNj8t7I+yrVNo4R4IqXB7cn0S6I/15UTGQ=;
-  b=D2PM+DaZlrhdxbQ7BwQhRYzIU15GGheuQC7QQd6s1xpmc49LvFOoczqI
-   LGjwT6GN6oJqsdCKM07N954zMpJtwfX2eVzUsxgdEJ3VSKTBjAftkotz8
-   1WpVYcXpTNPGb9qyHcQLmWN27nirAHfPydKRMMGBtlzv00ImAKr3kqnx5
-   O3+MNgn7tlYX5mD5uKf4NYeqJaR6DKaoWewBpDVpDuAFG6VmazCGPqC5e
-   gJS5BdG26yITynmvwEH/I/0kCt/UN6MEitSxeGPPHuNpToxJx9RxkZxsq
-   a+1GrxHXb7yKSOAZCiJsQz+ig64m2t2QWz9vszSP4eSyz1+L2S/YI8Wd2
-   A==;
-X-CSE-ConnectionGUID: U52kQp0VRu2tQD0zjcLtkw==
-X-CSE-MsgGUID: xazkSmimR3OgdQ3y6vkWoQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11462"; a="55588424"
+  bh=FSCdKuBZu83ZlNuhWTKve1fHQ1SiZ+gddU/oetdw40o=;
+  b=VrcCS0kC5EF8KSflOK8XUp+OgUn1f6X5gt+nNA71fMcwPjDnR7TiG1ah
+   iJ8jtYCSOaXv0vI4yPSVssmOKEZRD1mj3OT/tJ8dkSZbw352/2xzr0Nfi
+   fnxSoewiHF4Gyy1yT+GrWd7rti8xYdR0z4kH5XoQJv1DQ28KujAMPLQxF
+   UB/GinVjNEmTFXMsoOxhF2ClJ+l3DempdkmEcve+kkQ8WlSHBvG0XKXFK
+   vUzPCbeevsF7YVhHVqBWqq4qtU5op0K7GG5H2Wk1ODvlgG1f9MiIDkSi/
+   FLIEUywvc6BpMR7Wk9mmQGHTUokUF0LChzWyRbI2rwMOu/95HBEirh9g2
+   g==;
+X-CSE-ConnectionGUID: 6V38+ShUSfC7WXlyONJ5uw==
+X-CSE-MsgGUID: SpGITEZ+Qo6oAkkQcbNGZA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11462"; a="55588435"
 X-IronPort-AV: E=Sophos;i="6.16,230,1744095600"; 
-   d="scan'208";a="55588424"
+   d="scan'208";a="55588435"
 Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2025 06:25:12 -0700
-X-CSE-ConnectionGUID: Vu9ebvFORTuEpz3PZ5ZCfA==
-X-CSE-MsgGUID: ZUJFVbr9S9u7L5MWPAY4Sw==
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2025 06:25:17 -0700
+X-CSE-ConnectionGUID: cDplODooQ4K2E+Qd9V06Vg==
+X-CSE-MsgGUID: B15xZwgSRp6R9xmYa2KJcQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,230,1744095600"; 
-   d="scan'208";a="152509211"
+   d="scan'208";a="152509255"
 Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by orviesa004.jf.intel.com with ESMTP; 12 Jun 2025 06:25:06 -0700
+  by orviesa004.jf.intel.com with ESMTP; 12 Jun 2025 06:25:12 -0700
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To: Lucas De Marchi <lucas.demarchi@intel.com>,
 	=?UTF-8?q?Thomas=20Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>,
@@ -75,11 +75,10 @@ Cc: David Airlie <airlied@gmail.com>,
 	"Michael J. Ruhl" <michael.j.ruhl@intel.com>,
 	intel-xe@lists.freedesktop.org,
 	linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Karthik Poosa <karthik.poosa@intel.com>
-Subject: [PATCH v3 3/4] drm/xe/pm: Wire up suspend/resume for I2C controller
-Date: Thu, 12 Jun 2025 16:24:49 +0300
-Message-ID: <20250612132450.3293248-4-heikki.krogerus@linux.intel.com>
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v3 4/4] drm/xe/xe_i2c: Add support for i2c in survivability mode
+Date: Thu, 12 Jun 2025 16:24:50 +0300
+Message-ID: <20250612132450.3293248-5-heikki.krogerus@linux.intel.com>
 X-Mailer: git-send-email 2.47.2
 In-Reply-To: <20250612132450.3293248-1-heikki.krogerus@linux.intel.com>
 References: <20250612132450.3293248-1-heikki.krogerus@linux.intel.com>
@@ -91,155 +90,65 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Raag Jadav <raag.jadav@intel.com>
+From: Riana Tauro <riana.tauro@intel.com>
 
-Wire up suspend/resume handles for I2C controller to match its power
-state with SGUnit.
+Initialize i2c in survivability mode to allow firmware
+update of Add-In Management Controller (AMC) in survivability mode
 
-Signed-off-by: Raag Jadav <raag.jadav@intel.com>
-Reviewed-by: Karthik Poosa <karthik.poosa@intel.com>
+Signed-off-by: Riana Tauro <riana.tauro@intel.com>
+Reviewed-by: Raag Jadav <raag.jadav@intel.com>
 Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 ---
- drivers/gpu/drm/xe/regs/xe_i2c_regs.h |  5 +++++
- drivers/gpu/drm/xe/xe_i2c.c           | 29 +++++++++++++++++++++++++++
- drivers/gpu/drm/xe/xe_i2c.h           |  4 ++++
- drivers/gpu/drm/xe/xe_pm.c            |  9 +++++++++
- 4 files changed, 47 insertions(+)
+ drivers/gpu/drm/xe/xe_survivability_mode.c | 23 ++++++++++++++--------
+ 1 file changed, 15 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/gpu/drm/xe/regs/xe_i2c_regs.h b/drivers/gpu/drm/xe/regs/xe_i2c_regs.h
-index fa7223e6ce9e..27f9935fd8fd 100644
---- a/drivers/gpu/drm/xe/regs/xe_i2c_regs.h
-+++ b/drivers/gpu/drm/xe/regs/xe_i2c_regs.h
-@@ -2,6 +2,8 @@
- #ifndef _XE_I2C_REGS_H_
- #define _XE_I2C_REGS_H_
- 
-+#include <linux/pci_regs.h>
-+
- #include "xe_reg_defs.h"
- #include "xe_regs.h"
- 
-@@ -12,4 +14,7 @@
- #define CLIENT_DISC_COOKIE		XE_REG(SOC_BASE + 0x0164)
- #define CLIENT_DISC_ADDRESS		XE_REG(SOC_BASE + 0x0168)
- 
-+#define I2C_CONFIG_CMD			XE_REG(I2C_CONFIG_SPACE_OFFSET + PCI_COMMAND)
-+#define I2C_CONFIG_PMCSR		XE_REG(I2C_CONFIG_SPACE_OFFSET + 0x84)
-+
- #endif /* _XE_I2C_REGS_H_ */
-diff --git a/drivers/gpu/drm/xe/xe_i2c.c b/drivers/gpu/drm/xe/xe_i2c.c
-index 3d649602ede8..59bdf28717bc 100644
---- a/drivers/gpu/drm/xe/xe_i2c.c
-+++ b/drivers/gpu/drm/xe/xe_i2c.c
-@@ -208,6 +208,31 @@ static const struct regmap_config i2c_regmap_config = {
- 	.fast_io = true,
- };
- 
-+void xe_i2c_pm_suspend(struct xe_device *xe)
-+{
-+	struct xe_mmio *mmio = xe_root_tile_mmio(xe);
-+
-+	if (!xe->i2c || xe->i2c->ep.cookie != XE_I2C_EP_COOKIE_DEVICE)
-+		return;
-+
-+	xe_mmio_rmw32(mmio, I2C_CONFIG_PMCSR, PCI_PM_CTRL_STATE_MASK, PCI_D3hot);
-+	drm_dbg(&xe->drm, "pmcsr: 0x%08x\n", xe_mmio_read32(mmio, I2C_CONFIG_PMCSR));
-+}
-+
-+void xe_i2c_pm_resume(struct xe_device *xe, bool d3cold)
-+{
-+	struct xe_mmio *mmio = xe_root_tile_mmio(xe);
-+
-+	if (!xe->i2c || xe->i2c->ep.cookie != XE_I2C_EP_COOKIE_DEVICE)
-+		return;
-+
-+	if (d3cold)
-+		xe_mmio_rmw32(mmio, I2C_CONFIG_CMD, 0, PCI_COMMAND_MEMORY);
-+
-+	xe_mmio_rmw32(mmio, I2C_CONFIG_PMCSR, PCI_PM_CTRL_STATE_MASK, PCI_D0);
-+	drm_dbg(&xe->drm, "pmcsr: 0x%08x\n", xe_mmio_read32(mmio, I2C_CONFIG_PMCSR));
-+}
-+
- static void xe_i2c_remove(void *data)
- {
- 	struct xe_i2c *i2c = data;
-@@ -240,6 +265,10 @@ int xe_i2c_probe(struct xe_device *xe)
- 	i2c->mmio = xe_root_tile_mmio(xe);
- 	i2c->drm_dev = xe->drm.dev;
- 	i2c->ep = ep;
-+	xe->i2c = i2c;
-+
-+	/* PCI PM isn't aware of this device, bring it up and match it with SGUnit state. */
-+	xe_i2c_pm_resume(xe, true);
- 
- 	regmap = devm_regmap_init(i2c->drm_dev, NULL, i2c, &i2c_regmap_config);
- 	if (IS_ERR(regmap))
-diff --git a/drivers/gpu/drm/xe/xe_i2c.h b/drivers/gpu/drm/xe/xe_i2c.h
-index e88845be61b4..3b1208416bde 100644
---- a/drivers/gpu/drm/xe/xe_i2c.h
-+++ b/drivers/gpu/drm/xe/xe_i2c.h
-@@ -50,9 +50,13 @@ struct xe_i2c {
- #if IS_ENABLED(CONFIG_I2C)
- int xe_i2c_probe(struct xe_device *xe);
- void xe_i2c_irq_handler(struct xe_device *xe, u32 master_ctl);
-+void xe_i2c_pm_suspend(struct xe_device *xe);
-+void xe_i2c_pm_resume(struct xe_device *xe, bool d3cold);
- #else
- static inline int xe_i2c_probe(struct xe_device *xe) { return 0; }
- static inline void xe_i2c_irq_handler(struct xe_device *xe, u32 master_ctl) { }
-+static inline void xe_i2c_pm_suspend(struct xe_device *xe) { }
-+static inline void xe_i2c_pm_resume(struct xe_device *xe, bool d3cold) { }
- #endif
- 
- #endif
-diff --git a/drivers/gpu/drm/xe/xe_pm.c b/drivers/gpu/drm/xe/xe_pm.c
-index 26e95460af87..46471e166b96 100644
---- a/drivers/gpu/drm/xe/xe_pm.c
-+++ b/drivers/gpu/drm/xe/xe_pm.c
-@@ -19,6 +19,7 @@
- #include "xe_ggtt.h"
+diff --git a/drivers/gpu/drm/xe/xe_survivability_mode.c b/drivers/gpu/drm/xe/xe_survivability_mode.c
+index 1f710b3fc599..3800cc855c22 100644
+--- a/drivers/gpu/drm/xe/xe_survivability_mode.c
++++ b/drivers/gpu/drm/xe/xe_survivability_mode.c
+@@ -14,6 +14,7 @@
+ #include "xe_device.h"
  #include "xe_gt.h"
- #include "xe_guc.h"
+ #include "xe_heci_gsc.h"
 +#include "xe_i2c.h"
- #include "xe_irq.h"
- #include "xe_pcode.h"
- #include "xe_pxp.h"
-@@ -146,6 +147,8 @@ int xe_pm_suspend(struct xe_device *xe)
+ #include "xe_mmio.h"
+ #include "xe_pcode_api.h"
+ #include "xe_vsec.h"
+@@ -173,20 +174,26 @@ static int enable_survivability_mode(struct pci_dev *pdev)
+ 	survivability->mode = true;
  
- 	xe_display_pm_suspend_late(xe);
+ 	ret = xe_heci_gsc_init(xe);
+-	if (ret) {
+-		/*
+-		 * But if it fails, device can't enter survivability
+-		 * so move it back for correct error handling
+-		 */
+-		survivability->mode = false;
+-		return ret;
+-	}
++	if (ret)
++		goto err;
  
-+	xe_i2c_pm_suspend(xe);
+ 	xe_vsec_init(xe);
+ 
++	ret = xe_i2c_probe(xe);
++	if (ret)
++		goto err;
 +
- 	drm_dbg(&xe->drm, "Device suspended\n");
+ 	dev_err(dev, "In Survivability Mode\n");
+ 
  	return 0;
- 
-@@ -191,6 +194,8 @@ int xe_pm_resume(struct xe_device *xe)
- 	if (err)
- 		goto err;
- 
-+	xe_i2c_pm_resume(xe, xe->d3cold.allowed);
 +
- 	xe_irq_resume(xe);
++err:
++	/*
++	 * But if it fails, device can't enter survivability
++	 * so move it back for correct error handling
++	 */
++	survivability->mode = false;
++	return ret;
+ }
  
- 	for_each_gt(gt, xe, id)
-@@ -484,6 +489,8 @@ int xe_pm_runtime_suspend(struct xe_device *xe)
- 
- 	xe_display_pm_runtime_suspend_late(xe);
- 
-+	xe_i2c_pm_suspend(xe);
-+
- 	xe_rpm_lockmap_release(xe);
- 	xe_pm_write_callback_task(xe, NULL);
- 	return 0;
-@@ -531,6 +538,8 @@ int xe_pm_runtime_resume(struct xe_device *xe)
- 			goto out;
- 	}
- 
-+	xe_i2c_pm_resume(xe, xe->d3cold.allowed);
-+
- 	xe_irq_resume(xe);
- 
- 	for_each_gt(gt, xe, id)
+ /**
 -- 
 2.47.2
 
