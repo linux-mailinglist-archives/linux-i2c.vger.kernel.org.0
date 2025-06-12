@@ -1,130 +1,208 @@
-Return-Path: <linux-i2c+bounces-11371-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11372-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D5B2AD6EB7
-	for <lists+linux-i2c@lfdr.de>; Thu, 12 Jun 2025 13:14:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 686C8AD6FFE
+	for <lists+linux-i2c@lfdr.de>; Thu, 12 Jun 2025 14:17:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5B74D1895762
-	for <lists+linux-i2c@lfdr.de>; Thu, 12 Jun 2025 11:14:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DDA9D18956E3
+	for <lists+linux-i2c@lfdr.de>; Thu, 12 Jun 2025 12:17:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AB8B239E92;
-	Thu, 12 Jun 2025 11:14:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="RfD52Ozb"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EACF72605;
+	Thu, 12 Jun 2025 12:17:28 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A723236A9F;
-	Thu, 12 Jun 2025 11:14:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFC062F4315;
+	Thu, 12 Jun 2025 12:17:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749726857; cv=none; b=SmNsL4T+niSscPkY5c2fhnnqnY0ra7d8pmYcb5ARyfBM04IZvBuSVmteb9juKmJou+Yv2UzXBAvnN+APrcsV8FzmfMuGwmfwFEtBrg48SPHMFE2yom76NiDBlbd5IzVsmTiHnoxMJYHcWzOHEIWmQjKkAvtFJsYCp1kREfJtvu0=
+	t=1749730647; cv=none; b=qbyvFOwRv24nEfEyM2Eqazky05f2vVhRF1Up59PNWck+cHidzwOjT6zHHTrwwOX8fPHETLpFHw6MDLLlV7gHvBhrA5GpS2MUzMiguNPDssJOLLFu4voFe2tapUrLFF8La4KxoNLe8eMGTee4Y2x+H/nq0XCkOeorNdszzTdnqlA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749726857; c=relaxed/simple;
-	bh=/Yo6O8SI0+IWA2XkJwjWpPVbipozk8mlgRIa5ULwmeI=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=c46ltpr1+pCH7mJvsBaw0mXFWvoyTBrFOmOCk7r0lsATEfsR05wbw8JDRVCCGu6v0iWPZgFYhYog/BKJw4ogClQnmfM/J6VPfiL0HgSF5y+2agcWqIMCpRKCyfFtuRLwddGhy5h9tj6hffkz/wms3ayzSBgNHmteJQSMWHImVF4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=RfD52Ozb; arc=none smtp.client-ip=68.232.154.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1749726856; x=1781262856;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=/Yo6O8SI0+IWA2XkJwjWpPVbipozk8mlgRIa5ULwmeI=;
-  b=RfD52Ozbn9/VtvClwGW8qiUJbMSPx/qiUZzWoKGsggw85khpnAsstdou
-   S1F3jbAFP2LnH62f5os/AZzaTQJydPzcKl8FHr35bsuQMWd3QEl+jiSjX
-   X0QtwX/UXdWrxbVj30h7NYXy79xKCC7K+kiSAekSKWbcInJ94qHmBRUxa
-   M3hS0ef8nirFYhx42zYFrn0eyF7itM4Y1lEkwIeHIup1/JTvj+jRIaRj1
-   cY16GlNX9SxHyc/phtMOr9BE6tug1gx1yja6T3h2Fb7EEDUsCq0I/6tQu
-   iDFZWtzkNjaiiepXiZJHrmNnI4fcA0tKbuvyfyoT/xuPLqZDtgXftTE2Y
-   A==;
-X-CSE-ConnectionGUID: XKX4+bGSRJuOKv/zrTvxRw==
-X-CSE-MsgGUID: K4YPm728TP2LJl8QyeZUiA==
-X-IronPort-AV: E=Sophos;i="6.16,230,1744095600"; 
-   d="scan'208";a="43292364"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 12 Jun 2025 04:14:13 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.44; Thu, 12 Jun 2025 04:14:06 -0700
-Received: from wendy.microchip.com (10.10.85.11) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.44 via Frontend
- Transport; Thu, 12 Jun 2025 04:14:05 -0700
-From: Conor Dooley <conor.dooley@microchip.com>
-To: <linux-i2c@vger.kernel.org>
-CC: Conor Dooley <conor.dooley@microchip.com>, Daire McNamara
-	<daire.mcnamara@microchip.com>, Andi Shyti <andi.shyti@kernel.org>,
-	<linux-kernel@vger.kernel.org>
-Subject: [RESEND PATCH v1] i2c: microchip-core: re-fix fake detections w/ i2cdetect
-Date: Thu, 12 Jun 2025 12:12:49 +0100
-Message-ID: <20250612-jaybird-arrange-53b6200548e9@wendy>
-X-Mailer: git-send-email 2.49.0
+	s=arc-20240116; t=1749730647; c=relaxed/simple;
+	bh=BAJPS5CTIsKgTtnWWCS8RNglnAj/Nh9iWChoip6rm+k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dXfBmn+UUMqj8UKo0vZN7DreF6/GVpXR2UD82VOVujBDaus0ntqFBhFrwicKxdQJijOjSvdHyWi09EtoYKu0kbzt23x9OwPybO0laZ4ZNuH9bBUMqKIpcE88yT1EcJS1ZoVR/Ybe9SVqG4SqsTjHnPj8Vj7r044YMzX0+EzBJxY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-23508d30142so11005825ad.0;
+        Thu, 12 Jun 2025 05:17:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749730645; x=1750335445;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DoJJcCh5MIZf7vzkudV0p31BxyvL75PyGTQMdM/s56k=;
+        b=foOWqDza142eflaLjrts0s1LMUTaonOED3q6utgj+umm7zz/t6fDuUU4M54bHhhHfc
+         t+MQOchNuxCuqtGrAE/kYUhweVZ8dlbSneban3EqKjukSixrURgxMavWqkKaIAoGWsBu
+         Nuz0qhpPRdfHIvD/ULeVsmPIePvgB4ZlETTepidi5eZg8ACFoux3jRtj7Fuf73ZYaazT
+         QwQhb+0huTUy0wBF2pNL7qnMk4YaZIgTsphDqY6w7YXxGCmq0c3HgkpHLt4/3Qf6+VSa
+         kJgKFvYSDBUu+gLApW4jWyE6i5ovxwGFDgW3dnu+wxMcwHnHitrslPg7heMajyRaMq3t
+         Elaw==
+X-Forwarded-Encrypted: i=1; AJvYcCUDNE1kmUuiuuqxXWvZpIh3lpKWuaqBh9G8iPcXnG5n7q7pZo1NQYwUGj64ZgjqPdMtFixoGQXlWR1zEaIff2oTMyQ=@vger.kernel.org, AJvYcCUV26RfxlA1Xvl9eRHAWBwblt18fnbmcbasrGX4Nl0FMBJ1QYkbuUP74HfoklioS28K48tDk41Ay55M@vger.kernel.org, AJvYcCV+vVFytB3p6PRTmApRex8onfDN378GktRY2+925E6ELZgDcY+80mazq0wNDCG2VspHWM2OHyflVs4D@vger.kernel.org, AJvYcCWOvgy6sj+F0M4tGelTp+mWiSfiJqhYFILg1VbRHfPEsKkv6HV7HNJ6MPib9dzp6zAN8/edjpA02bk+n3FZ@vger.kernel.org
+X-Gm-Message-State: AOJu0YxbTzElj2ilka6ZqjSJjRZfI9Iu5t9OnjZHVvGV4NmdVJvgsMpT
+	nVMVukGNKxdOop3Y2RTHKr7oQfzsC56Z22qT664CeMaxaCmMggw3Idt2ZLdbV04x
+X-Gm-Gg: ASbGncsddPF3jcVYiNVAuDa3Ryvd9RRynhuPFUE74+wWxw2oDxuzyUkn0pRYz+0GVp0
+	lo2lA5Ru1zRbG27X36kcTc3Un3unpT41Trh4h0klwf81GhfhBziISbEIgxUXEnjJlAOBccZ6wm8
+	Jam17mYODw4JVqMy+jfu9WHHJYBOF9jxKzEPS5F+qfBE7fvj9MP9DRpWhsl054bCIoV92gQemcl
+	HWN1uS2SiDlLXLHBXwOxQzv0nAjtsYNwj6GmAbcyJQNU7OVk5B1tupVwB4TZQ9HTAROQpch5f2I
+	Cv/5a3QPINf3VvvYZbQXXOeGegZ7OQxFpbSAUHfK02AJtXpcGbUwXqwY8nFXw+SyBOdXNN1OhOg
+	1cEmLaOHmGlNkDVoJs+VCoWz6CTJ4
+X-Google-Smtp-Source: AGHT+IEgFvXq46wHwmacDtJ1o7cDFPAhk1arkDEirrosX113yDofcaYTqcsmzJSga23+U/z6EBclRw==
+X-Received: by 2002:a05:6214:2242:b0:6fa:c617:23f0 with SMTP id 6a1803df08f44-6fb3464b734mr60985826d6.27.1749730633452;
+        Thu, 12 Jun 2025 05:17:13 -0700 (PDT)
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com. [209.85.160.179])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6fb35c87430sm9297716d6.117.2025.06.12.05.17.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Jun 2025 05:17:13 -0700 (PDT)
+Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-4a58ba6c945so17473001cf.2;
+        Thu, 12 Jun 2025 05:17:13 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCX2IA5UD/7N1ZCuJn4LOV89By69nPvhV3aXfXJ6LG5UZvolTlCorhJIebdYdAjKWfIKmDMPVLtefe0r3K3w@vger.kernel.org, AJvYcCX2Rk441ZA9skIyLF3ElRSqi8mNCAwFK4S2sYr6aeJZ23O6G5nmOHyMqZNIK8OXZe9gZIoulkkXzxX+@vger.kernel.org, AJvYcCXTod7Luv3fHYUyh5+6sHDzsmfHU3hOewMb3a/AOcwf1xvYQYAqNN8dNPKHO9XT/rnFx58BpnwJ0lqEzxobv1Kb8V4=@vger.kernel.org, AJvYcCXm4H3WSGHe4btzk6lnwufatp8Erj8YqsmxQsB+IgkLX0E2Sbr+6UFDyadMeZSqTGaVvImQxE5F9Qa0@vger.kernel.org
+X-Received: by 2002:a05:622a:248b:b0:476:b7cf:4d42 with SMTP id
+ d75a77b69052e-4a72298b45amr56780671cf.27.1749730621392; Thu, 12 Jun 2025
+ 05:17:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1850; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=/Yo6O8SI0+IWA2XkJwjWpPVbipozk8mlgRIa5ULwmeI=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDBle24xjb0jsq/crelFha76gy1ro4FSxPRcXX7+cwH5w0qn7 vy/yd5SyMIhxMMiKKbIk3u5rkVr/x2WHc89bmDmsTCBDGLg4BWAiinMZGb4e+pOt9Ull3YFLm286J6 m3fdY+O9sicwnH0rf5KWty2moY/vCblPxvaWrXW8GjOH3JnM2iErN7p+401crMOOLx5u3Nbk4A
-X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+References: <20250609184114.282732-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20250609184114.282732-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20250609184114.282732-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Thu, 12 Jun 2025 14:16:49 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUCYjPP326g9MsnH8p6gM-vy33L4OsFFMGzsZbLbucTUA@mail.gmail.com>
+X-Gm-Features: AX0GCFutJDPpULdILFjEorVuhRUPwxUBTaslsCHyRwchuwR_DqFdheZmmW6F7w0
+Message-ID: <CAMuHMdUCYjPP326g9MsnH8p6gM-vy33L4OsFFMGzsZbLbucTUA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/6] dt-bindings: i2c: renesas,riic: Document RZ/T2H support
+To: Prabhakar <prabhakar.csengg@gmail.com>
+Cc: Chris Brandt <chris.brandt@renesas.com>, Andi Shyti <andi.shyti@kernel.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Andy Shevchenko <andy@kernel.org>, Magnus Damm <magnus.damm@gmail.com>, 
+	Wolfram Sang <wsa+renesas@sang-engineering.com>, linux-renesas-soc@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>, 
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>, 
+	Conor Dooley <conor.dooley@microchip.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Introducing support for smbus re-broke i2cdetect, causing it to detect
-devices at every i2c address, just as it did prior to being fixed in
-commit 49e1f0fd0d4cb ("i2c: microchip-core: fix "ghost" detections").
-This was caused by an oversight, where the new smbus code failed to
-check the return value of mchp_corei2c_xfer(). Check it, and propagate
-any errors.
+Hi Prabhakar,
 
-Fixes: d6ceb40538263 ("i2c: microchip-corei2c: add smbus support")
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
+On Mon, 9 Jun 2025 at 20:41, Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>
+> Document support for the I2C Bus Interface (RIIC) found on the Renesas
+> RZ/T2H (R9A09G077) SoC. The RIIC IP on this SoC is similar to that on
+> the RZ/V2H(P) SoC but supports fewer interrupts, lacks FM+ support and
+> does not require resets. Due to these differences, add a new compatible
+> string `renesas,riic-r9a09g077` for the RZ/T2H SoC.
+>
+> Unlike earlier SoCs that use eight distinct interrupts, the RZ/T2H uses
+> only four, including a combined error/event interrupt. Update the binding
+> schema to reflect this interrupt layout and skip the `resets` property
+> check, as it is not required on these SoCs.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Acked-by: Conor Dooley <conor.dooley@microchip.com>
+> Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+> v1-> v2:
+> - Listed the interrupts in the order as mentioned in the
+>   HW manual.
+> - Renamed the interrupt names to match the HW manual.
+> - Added Acked-by and Reviewed-by tags.
 
-Resending cos I think it attempted a send using my korg address on a
-network where that is not possible.
+Thanks for the update!
 
-CC: Conor Dooley <conor.dooley@microchip.com>
-CC: Daire McNamara <daire.mcnamara@microchip.com>
-CC: Andi Shyti <andi.shyti@kernel.org>
-CC: linux-i2c@vger.kernel.org
-CC: linux-kernel@vger.kernel.org
----
- drivers/i2c/busses/i2c-microchip-corei2c.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+> --- a/Documentation/devicetree/bindings/i2c/renesas,riic.yaml
+> +++ b/Documentation/devicetree/bindings/i2c/renesas,riic.yaml
+> @@ -29,32 +29,46 @@ properties:
+>                - renesas,riic-r9a09g056   # RZ/V2N
+>            - const: renesas,riic-r9a09g057   # RZ/V2H(P)
+>
+> -      - const: renesas,riic-r9a09g057   # RZ/V2H(P)
+> +      - enum:
+> +          - renesas,riic-r9a09g057   # RZ/V2H(P)
+> +          - renesas,riic-r9a09g077   # RZ/T2H
+>
+>    reg:
+>      maxItems: 1
+>
+>    interrupts:
+> -    items:
+> -      - description: Transmit End Interrupt
+> -      - description: Receive Data Full Interrupt
+> -      - description: Transmit Data Empty Interrupt
+> -      - description: Stop Condition Detection Interrupt
+> -      - description: Start Condition Detection Interrupt
+> -      - description: NACK Reception Interrupt
+> -      - description: Arbitration-Lost Interrupt
+> -      - description: Timeout Interrupt
+> +    oneOf:
+> +      - items:
+> +          - description: Transmit End Interrupt
+> +          - description: Receive Data Full Interrupt
+> +          - description: Transmit Data Empty Interrupt
+> +          - description: Stop Condition Detection Interrupt
+> +          - description: Start Condition Detection Interrupt
+> +          - description: NACK Reception Interrupt
+> +          - description: Arbitration-Lost Interrupt
+> +          - description: Timeout Interrupt
+> +      - items:
+> +          - description: Transmit Error Or Event Generation
 
-diff --git a/drivers/i2c/busses/i2c-microchip-corei2c.c b/drivers/i2c/busses/i2c-microchip-corei2c.c
-index 492bf4c34722c..a4611381c4f0b 100644
---- a/drivers/i2c/busses/i2c-microchip-corei2c.c
-+++ b/drivers/i2c/busses/i2c-microchip-corei2c.c
-@@ -435,6 +435,7 @@ static int mchp_corei2c_smbus_xfer(struct i2c_adapter *adap, u16 addr, unsigned
- 	u8 tx_buf[I2C_SMBUS_BLOCK_MAX + 2];
- 	u8 rx_buf[I2C_SMBUS_BLOCK_MAX + 1];
- 	int num_msgs = 1;
-+	int ret;
- 
- 	msgs[CORE_I2C_SMBUS_MSG_WR].addr = addr;
- 	msgs[CORE_I2C_SMBUS_MSG_WR].flags = 0;
-@@ -505,7 +506,10 @@ static int mchp_corei2c_smbus_xfer(struct i2c_adapter *adap, u16 addr, unsigned
- 		return -EOPNOTSUPP;
- 	}
- 
--	mchp_corei2c_xfer(&idev->adapter, msgs, num_msgs);
-+	ret = mchp_corei2c_xfer(&idev->adapter, msgs, num_msgs);
-+	if (ret)
-+		return ret;
-+
- 	if (read_write == I2C_SMBUS_WRITE || size <= I2C_SMBUS_BYTE_DATA)
- 		return 0;
- 
+s/Transmit/Transfer/
+
+> +          - description: Receive Data Full Interrupt
+> +          - description: Transmit End Interrupt
+> +          - description: Transmit Data Empty Interrupt
+
+The last two don't match the order in the documentation, and the
+order in interrupt-names below.
+
+>
+>    interrupt-names:
+> -    items:
+> -      - const: tei
+> -      - const: ri
+> -      - const: ti
+> -      - const: spi
+> -      - const: sti
+> -      - const: naki
+> -      - const: ali
+> -      - const: tmoi
+> +    oneOf:
+> +      - items:
+> +          - const: tei
+> +          - const: ri
+> +          - const: ti
+> +          - const: spi
+> +          - const: sti
+> +          - const: naki
+> +          - const: ali
+> +          - const: tmoi
+> +      - items:
+> +          - const: eei
+> +          - const: rxi
+> +          - const: txi
+> +          - const: tei
+>
+>    clock-frequency:
+>      description:
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.49.0
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
