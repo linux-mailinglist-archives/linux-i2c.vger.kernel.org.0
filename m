@@ -1,193 +1,92 @@
-Return-Path: <linux-i2c+bounces-11406-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11407-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1127AD84E7
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Jun 2025 09:51:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60F22AD88B3
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Jun 2025 12:03:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DBEFF7A79C1
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Jun 2025 07:49:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D3D8B3A6B1E
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Jun 2025 10:03:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA5732E6D1E;
-	Fri, 13 Jun 2025 07:41:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92128291C23;
+	Fri, 13 Jun 2025 10:03:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="F9f3VZTW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MLjZ7RqV"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAEFB2C327C;
-	Fri, 13 Jun 2025 07:41:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.120
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C13A189BB0;
+	Fri, 13 Jun 2025 10:03:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749800468; cv=none; b=i+IIHurxaZOBZQBPyaKAHRyMAKmbn+9jm4PS7SZr3sJkNoePX/j/gjzp7k/JO1JOkrCqYwV29qP8I9ZUimo1xYHhteTiP9kbRFIHAMv5ZISBOBNzL51uC9hdULgzOiMgmzpiT1hu4DUkKNoEmF8KbTUiJNhenwMc1Ayd3CjayBA=
+	t=1749809028; cv=none; b=ca22Zwy1c0ZNFoFbJt3XYM0Aqr0Db2R0s3O3iZuxPp4Hkj3bT4RYvH5imOGSwNDqCwTTpmseq+PUiEianhbLW+XrkvfnsEASNrt5sJuc516NUfVXpmDzs/Vnh4xVGD2OoYdL1mHEZ29/ycU2XRZelKsxshdnDHU1Vrb5Rh+EcQ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749800468; c=relaxed/simple;
-	bh=XTLNLa6cch6vvzm8GPLGQE1EqCmrVS/d67uIjyzKwy0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=pLqXHqb40XE/PN6AfUFiED1CJJJv72xm1gt3anIOxr1jh3HqmG0CtIi61V6c9JYDfRRLSPBflCcLNcqmsqqJZwpkrNPEK28fYXV5BBldsyb+rmc2ZgijZueRfaW030cj6AUtXGeL6LPUbqJb928YGIzYZYYlbMNCPY0svR6DHjo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=F9f3VZTW; arc=none smtp.client-ip=185.125.188.120
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
-Received: from [10.102.99.184] (unknown [10.101.200.229])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id AD9293F796;
-	Fri, 13 Jun 2025 07:40:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1749800456;
-	bh=/s3ULtZuuGEr6lVQB4oZg7nvmbpL3b9XXpwD3nZvvhQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc;
-	b=F9f3VZTW+BB2abEWnbw/0UhmJOusVX9yvI702W5eAfgUhxMLHtNe1pSFFRePvgfTU
-	 JctbEUPLG0lTKMQFmt0HIvDBSlgEB0iVzBWXnkHACFAfVWfk6xsndNVSQZWVJgqqXx
-	 zznYpoO76I0K3F3TeYS8ARiVMRjt+5fRT/uXjwyEsbGFjFlPZQUOg/1EiQWQy1IaJO
-	 tXajDWRz5NdFdiVN5FlDF1dmNfvdel+apW4ee7fZ/tW1gzlYGI6YsAwnf7r2/V2hay
-	 NKXdbVo3zVfa+NOtDcm2XbdMpmOETLGb33oHVfOJUcLDttmOuh5L7G2FF9pqHa7wvL
-	 AglGsZ4c5zF7w==
-From: "Yo-Jung (Leo) Lin" <leo.lin@canonical.com>
-Date: Fri, 13 Jun 2025 15:40:18 +0800
-Subject: [PATCH v2] i2c: i801: Do not instantiate spd5118 under SPD Write
- Disable
+	s=arc-20240116; t=1749809028; c=relaxed/simple;
+	bh=x2z9TNH4CJ6g0WVFqhT43lA+FO1oVwNYxFdJaa2w0Cs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=EeJgWokb+iLRgjczJmcGX9YRv4Ib01W5zFeEWZQhTp+yqOq44e/gtGdJMsCXDdxk2QxycciaTVG3hezea/f4n4Q2UBBPxuhkNEImkZJiP0QrN6d1qyNr1JeE0RIBshV/+utrB3B9ZVmtjJV7nOsOoF9B/b1kdo2Ji/+bQBJe78g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MLjZ7RqV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08479C4CEE3;
+	Fri, 13 Jun 2025 10:03:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749809027;
+	bh=x2z9TNH4CJ6g0WVFqhT43lA+FO1oVwNYxFdJaa2w0Cs=;
+	h=Date:From:To:Cc:Subject:From;
+	b=MLjZ7RqVgpjPdPZk7OokU2ryoPm5L6kAjgyhEi/ItkEcHPbmxBq8VMprHfdOA6BXB
+	 v09aOk1M2A7+t/5cN8i6777Ydf6gx0MqPgoGN/dLikGFYHC9vlV5GulPYJJH7XZsUi
+	 QeBIHYoUXifcl7JLV3KFgy8Z3iOxf1qis0QqCIDXsaMJiWOUnJ6VCwiUgRVxEhAN4g
+	 GXz9d+7M+KRwXNlQf1SXvYAO+9vXmiS9G9IQ2GbSbGPAaNyEZ2ZyYgInYfl4aqoBVv
+	 gw456abo/2KIPGst+pX+Q05d+SnvNskV+fdi/BN5P4LL69gL5pS2/GttNNBj4/Px8s
+	 +KQpTJyMgBiCg==
+Date: Fri, 13 Jun 2025 12:03:42 +0200
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: lkml <linux-kernel@vger.kernel.org>, 
+	linux-i2c <linux-i2c@vger.kernel.org>, Andi Shyti <andi.shyti@kernel.org>
+Subject: [GIT PULL] i2c-host-fixes for v6.16-rc2
+Message-ID: <sihm5iy2rnldcrk3zyh73kp55r7zywvraycgijtihh27yu5uny@zaj4w54t5ywc>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250613-for-upstream-not-instantiate-spd5118-v2-1-cf456ed9b587@canonical.com>
-X-B4-Tracking: v=1; b=H4sIAOHVS2gC/43NQQ6CMBCF4auQrh1DB9pUV97DsKhlkEmkJW0lG
- sLdrSTuXf5v8b5VJIpMSZyrVURaOHHwJfBQCTdafyfgvrTAGlWtUMMQIjznlCPZCXzIwD5l6zP
- bTJDmXklpoNUNoro1rba1KFdzpIFfO3PtSo+ccojvXV3kd/0B5j9gkSDBoNSEfWNO0lyc9cGzs
- 4+jC5Potm37AA1Tz37cAAAA
-To: Jean Delvare <jdelvare@suse.com>, Andi Shyti <andi.shyti@kernel.org>, 
- Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: Guenter Roeck <linux@roeck-us.net>, 
- "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>, 
- linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
- "Yo-Jung Lin (Leo)" <leo.lin@canonical.com>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3612; i=leo.lin@canonical.com;
- h=from:subject:message-id; bh=XTLNLa6cch6vvzm8GPLGQE1EqCmrVS/d67uIjyzKwy0=;
- b=owEBbQKS/ZANAwAKAV8XsZZKKe6GAcsmYgBoS9YEWAAj3LAMRYBS63h3VjqJfn8WIBu8BBxKa
- Zjmxn0R0lGJAjMEAAEKAB0WIQQzqV4kW+yguuqHrw5fF7GWSinuhgUCaEvWBAAKCRBfF7GWSinu
- hrpsD/sFBVStcy3VpX4RuV9znK3vjQ36PWnRk8vq6JVDuX0WnfyqGv4Syydih4VcUequ2JnOtGP
- +yAIk0wzpIXDX+dZppHroZH9JsYf2aUEPmHUfPt4PmmjsUfmQy6deK6BGsXibEiALvjB/cuUu9Y
- iAT/hnZqdrjBPIZSMhSkv61pHGwZiUVnDQbxTAq59wTtxEi7k89GYhTRAybtYShau33xSMzTUNy
- Her/ViU8RB8JDoCB3w6GH+H5GKZoz1Q1UH1HaS6+vK/jAuniB+AJ59Ifooim3dZYWEu4P43RWvt
- AkY5KDAzR0Hj7v30/+8bBMibaRA8yjjHq45O3QQngWjRk4Dw47Z9XHWyOgkrdtHYOz802ib0D+b
- sEWGB4JrKD+CwVkmUgyzc/fSVy3gdF1AOBc0xNRKkTBTPF1dUvRKaxmveb2UqSvg/CgErfypbhU
- 1HUe4emKUSmcsdrn1PdUtSf1V+u0f9M1o0QWYnivhSPqwPNSMc405m25ZU2mqCFgzTQGt7a9k+x
- pnyzKhAljcHa2B/oKYeE4KmWjjskqEwWUeQmgzO7DR/j19nxrboOyuw2TaNH4lS35fKDcnqlzsL
- KTIpyS7M/K1kS2YsXxzdro4knan1buNTozp5l7NfO1JzLPm/HQx7WV3+DErQCB+tGourRjElziS
- SbOqhGRHm7rMF1w==
-X-Developer-Key: i=leo.lin@canonical.com; a=openpgp;
- fpr=33A95E245BECA0BAEA87AF0E5F17B1964A29EE86
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-If SPD Write Disable bit in the SMBus is enabled, writing data to
-addresses from 0x50 to 0x57 is forbidden. This may lead to the
-following issues for spd5118 devices:
+Hi Wolfram,
 
-  1) Writes to the sensor hwmon sysfs attributes will always result
-     in ENXIO.
+I'm just back from a short break (from the mailing lists).
+This week there's a fix for a previous binding conversion to
+yaml.
 
-  2) During system-wide resume, errors may occur during regcache sync,
-     resulting in the following error messages:
+Have a great weekend,
+Andi
 
-     kernel: spd5118 1-0050: failed to write b = 0: -6
-     kernel: spd5118 1-0050: pm: dpm_run_callback(): spd5118_resume [spd5118] returns -6
-     kernel: spd5118 1-0050: pm: failed to resume async: error -6
+The following changes since commit 19272b37aa4f83ca52bdf9c16d5d81bdd1354494:
 
-  3) nvmem won't be usable, because writing to the page selector becomes
-     impossible.
+  Linux 6.16-rc1 (2025-06-08 13:44:43 -0700)
 
-Also, BIOS vendors may choose to set the page to a value != 0 after a board
-reset. This will make the sensor not functional unless its MR11 register
-can be changed, which is impossible due to writes being disabled.
+are available in the Git repository at:
 
-To address these issues, don't instantiate it at all if the SPD Write Disable
-bit is set.
+  git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git tags/i2c-host-fixes-6.16-rc2
 
-Signed-off-by: Yo-Jung Lin (Leo) <leo.lin@canonical.com>
----
-Changes in v2:
-- Fix build failure on some non-x86 archs, by moving __i801_register_spd() out of the CONFIG_X86 && defined CONFIG_DMI region
-- Also fix unused function warning by adding __always_inline.
-- Link to v1: https://lore.kernel.org/r/20250528-for-upstream-not-instantiate-spd5118-v1-1-8216e2d38918@canonical.com
----
- drivers/i2c/busses/i2c-i801.c | 28 +++++++++++++++++++++++-----
- 1 file changed, 23 insertions(+), 5 deletions(-)
+for you to fetch changes up to 903cc7096db22f889d48e2cee8840709ce04fdac:
 
-diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index a7f89946dad41..2a56396d88c29 100644
---- a/drivers/i2c/busses/i2c-i801.c
-+++ b/drivers/i2c/busses/i2c-i801.c
-@@ -978,6 +978,14 @@ static void i801_disable_host_notify(struct i801_priv *priv)
- 	iowrite8(priv->original_slvcmd, SMBSLVCMD(priv));
- }
- 
-+static inline __maybe_unused void __i801_register_spd(struct i801_priv *priv)
-+{
-+	if (priv->original_hstcfg & SMBHSTCFG_SPD_WD)
-+		i2c_register_spd_write_disable(&priv->adapter);
-+	else
-+		i2c_register_spd_write_enable(&priv->adapter);
-+}
-+
- static const struct i2c_algorithm smbus_algorithm = {
- 	.smbus_xfer	= i801_access,
- 	.functionality	= i801_func,
-@@ -1157,6 +1165,19 @@ static void dmi_check_onboard_devices(const struct dmi_header *dm, void *adap)
- 	}
- }
- 
-+#ifdef CONFIG_I2C_I801_MUX
-+static void i801_register_spd(struct i801_priv *priv)
-+{
-+	if (!priv->mux_pdev)
-+		__i801_register_spd(priv);
-+}
-+#else
-+static void i801_register_spd(struct i801_priv *priv)
-+{
-+	__i801_register_spd(priv);
-+}
-+#endif
-+
- /* Register optional targets */
- static void i801_probe_optional_targets(struct i801_priv *priv)
- {
-@@ -1177,10 +1198,7 @@ static void i801_probe_optional_targets(struct i801_priv *priv)
- 		dmi_walk(dmi_check_onboard_devices, &priv->adapter);
- 
- 	/* Instantiate SPD EEPROMs unless the SMBus is multiplexed */
--#ifdef CONFIG_I2C_I801_MUX
--	if (!priv->mux_pdev)
--#endif
--		i2c_register_spd_write_enable(&priv->adapter);
-+	i801_register_spd(priv);
- }
- #else
- static void __init input_apanel_init(void) {}
-@@ -1283,7 +1301,7 @@ static int i801_notifier_call(struct notifier_block *nb, unsigned long action,
- 		return NOTIFY_DONE;
- 
- 	/* Call i2c_register_spd for muxed child segments */
--	i2c_register_spd_write_enable(to_i2c_adapter(dev));
-+	__i801_register_spd(priv);
- 
- 	return NOTIFY_OK;
- }
+  dt-bindings: i2c: nvidia,tegra20-i2c: Specify the required properties (2025-06-12 02:58:49 +0200)
 
----
-base-commit: 0bb71d301869446810a0b13d3da290bd455d7c78
-change-id: 20250526-for-upstream-not-instantiate-spd5118-463225b346a0
+----------------------------------------------------------------
+i2c-host-fixes for v6.16-rc2
 
-Best regards,
--- 
-Yo-Jung (Leo) Lin <leo.lin@canonical.com>
+tegra: fix YAML conversion of device tree bindings
 
+----------------------------------------------------------------
+Akhil R (1):
+      dt-bindings: i2c: nvidia,tegra20-i2c: Specify the required properties
+
+ Documentation/devicetree/bindings/i2c/nvidia,tegra20-i2c.yaml | 24 +++++++++++++++++++++++-
+ 1 file changed, 23 insertions(+), 1 deletion(-)
 
