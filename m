@@ -1,183 +1,193 @@
-Return-Path: <linux-i2c+bounces-11405-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11406-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1047CAD844D
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Jun 2025 09:37:54 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1127AD84E7
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Jun 2025 09:51:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7A1923A922F
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Jun 2025 07:36:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DBEFF7A79C1
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Jun 2025 07:49:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A80E2E6D3F;
-	Fri, 13 Jun 2025 07:35:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA5732E6D1E;
+	Fri, 13 Jun 2025 07:41:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=jannau.net header.i=@jannau.net header.b="B67nTcCn";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="obGdjANf"
+	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="F9f3VZTW"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from fhigh-b8-smtp.messagingengine.com (fhigh-b8-smtp.messagingengine.com [202.12.124.159])
+Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A2C02D6636;
-	Fri, 13 Jun 2025 07:35:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.159
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAEFB2C327C;
+	Fri, 13 Jun 2025 07:41:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.120
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749800103; cv=none; b=gM8r+dj81dzDwcOCpkJIUYJWl78JDcaxuqhCURjdTGbN9W5ro9tBe9zV9WmVVjy1SjlHagOcBIVDzejxxKvJHuLChRZwC5ThT4IG1tSIwBM7SX+Nv96l7fmhYQMsy5CkMXLUdhW60BxmjBJxl24vw3mC9wOLU2e+VyG1W+KkHC4=
+	t=1749800468; cv=none; b=i+IIHurxaZOBZQBPyaKAHRyMAKmbn+9jm4PS7SZr3sJkNoePX/j/gjzp7k/JO1JOkrCqYwV29qP8I9ZUimo1xYHhteTiP9kbRFIHAMv5ZISBOBNzL51uC9hdULgzOiMgmzpiT1hu4DUkKNoEmF8KbTUiJNhenwMc1Ayd3CjayBA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749800103; c=relaxed/simple;
-	bh=fQ+Zm3/XGK+10ZRvK+XFYpZHWx6PqU9jm94xEvpjMQc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MSiQ08osfeOh+qYDxXcAZAtiSQBc+BeUBSmSYbl+MripyxteYMu4tGRFs0UuKgM/Q4bLBC/0PHMqFly9zoo+2hJU+GmMt2n7CbQNG0+ZMnFdtf0RO+RgoxQjm9N27zYLIYUOv+ECdWgQ8xGijOIR9b2eD8KEjxK5tPI8Ob7dcJc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jannau.net; spf=pass smtp.mailfrom=jannau.net; dkim=pass (2048-bit key) header.d=jannau.net header.i=@jannau.net header.b=B67nTcCn; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=obGdjANf; arc=none smtp.client-ip=202.12.124.159
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jannau.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jannau.net
-Received: from phl-compute-07.internal (phl-compute-07.phl.internal [10.202.2.47])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id 78C582540150;
-	Fri, 13 Jun 2025 03:34:59 -0400 (EDT)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-07.internal (MEProxy); Fri, 13 Jun 2025 03:35:00 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jannau.net; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm3; t=1749800099; x=1749886499; bh=heYYdoDlXF
-	OciX8bAT8IXpBAQStR+kpfE0iWQ6XRFa8=; b=B67nTcCnNzwgqqw5e9km6I+xvo
-	aP4x12BY0eqNXQd/5WAzuvx3iqVg+FZbcVKP5FKPEGSxxMuGAH3L/rfj418xIg70
-	/PvX1cbyeDwUVpAcivjtmOGjtx3ml0nmwCKa17nScrb2s5Q527q2h1/y4XBROHia
-	8nvdqwn17kBjrn8qoIQKRvcai0qtqKY6UiU2s0gziN05KRSAFQ4f9o6h6pNVDNwf
-	xVf1VeIBpzeymw1P0k9OGmTImtr8zQJULdyC5yrqJcK6g4oaNCLeMYXfXeMRE0RW
-	RFEC3RnE8yyU3OKG/xjyzlzvwyXSaM02E/VbYozacysEWXVmlLCujDx88tdQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1749800099; x=1749886499; bh=heYYdoDlXFOciX8bAT8IXpBAQStR+kpfE0i
-	WQ6XRFa8=; b=obGdjANf3TY83z9E4pcTsihvUy/NhNuL3IyPMSupSohNWxVy02l
-	DIhu0O7mPdBhG6LALj7QpvkuBLRqxCqUTe/FY4Lgl4LKVkszfBgYA8yw0VMo+P2L
-	IwQnsy9s2JORNu4cgB5/Ez7MBDt83hyhqL/wYquBx1at4LCZ2I+NQNwPDOr9FMkE
-	AyQ0zW/vRNT1xbbp1Z9aPEaYPnF9b5y3tP9zv1nlBYffAsC0pAWd1uHkLY0OEjuz
-	9fsO6TrlrTHGWtQ2xMgouIieOSKT87OUFxo4gbsF49Z8qiAQCflR1cgxccfM+ex0
-	aWWyY/hUGVsazvF765v54qnsr8ZcE2eWA8w==
-X-ME-Sender: <xms:odRLaLh6zoBCwTVNx3mvfgXtLKR5nE8PQpNCvoZQTZ4Yl_CbLvnwdw>
-    <xme:odRLaICswVPjz4ogeEyOqVrKMv3h2K0ju_EfqS7zm4Gl6Uf-UjFh8gN6posrOHBmL
-    iOC5OcwHsAR-lM2c_8>
-X-ME-Received: <xmr:odRLaLHK0aeEIyi6snr3y6ADuhS7i5ZXVIhpnmTkXcZQGxVBcNZK22osXdbJ_qmFKeLZKXiAXT60ogZi27I6ELmpNqrr_diVC9k>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddugddujeefiecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
-    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttdej
-    necuhfhrohhmpeflrghnnhgvucfirhhunhgruhcuoehjsehjrghnnhgruhdrnhgvtheqne
-    cuggftrfgrthhtvghrnhepgfdvffevleegudejfeefheehkeehleehfefgjefffeetudeg
-    tefhuedufeehfeetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
-    hfrhhomhepjhesjhgrnhhnrghurdhnvghtpdhnsggprhgtphhtthhopeefuddpmhhouggv
-    pehsmhhtphhouhhtpdhrtghpthhtohepshhvvghnsehkvghrnhgvlhdrohhrghdprhgtph
-    htthhopegrlhihshhsrgesrhhoshgvnhiifigvihhgrdhiohdprhgtphhtthhopehnvggr
-    lhesghhomhhprgdruggvvhdprhgtphhtthhopehulhhfrdhhrghnshhsohhnsehlihhnrg
-    hrohdrohhrghdprhgtphhtthhopehmthhurhhquhgvthhtvgessggrhihlihgsrhgvrdgt
-    ohhmpdhrtghpthhtohepshgsohihugeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepsh
-    hrihhniheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghnughirdhshhihthhisehk
-    vghrnhgvlhdrohhrghdprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:odRLaIS_fY6doz4TXul-16ldYhjIlpniGV2a8g4n6ltibGDTV-_mOQ>
-    <xmx:odRLaIznjucvvyZgRzf35RgUzJyDfO3OetS3EdETiVvnX76AZ8CLtw>
-    <xmx:odRLaO761ll-OM5SIk4RJpRBEoWwgMAB-KKWrDFl6U7GyN_JjqAY0g>
-    <xmx:odRLaNw8AJBTxtqIaToqpW5WlxojAdlTnU6UprMcyicXZwTH4PyLwQ>
-    <xmx:o9RLaB0Xg6U_mH9QzF5X9ggXCjEz7dkLBSNqyZGrq3Q-npIGYGL9kSgl>
-Feedback-ID: i47b949f6:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 13 Jun 2025 03:34:57 -0400 (EDT)
-Date: Fri, 13 Jun 2025 09:34:55 +0200
-From: Janne Grunau <j@jannau.net>
-To: Sven Peter <sven@kernel.org>
-Cc: Alyssa Rosenzweig <alyssa@rosenzweig.io>, Neal Gompa <neal@gompa.dev>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,	Srinivas Kandagatla <srini@kernel.org>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,	Joerg Roedel <joro@8bytes.org>,
- Will Deacon <will@kernel.org>,	Robin Murphy <robin.murphy@arm.com>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Vinod Koul <vkoul@kernel.org>,
-	Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,	Mark Brown <broonie@kernel.org>,
- Jaroslav Kysela <perex@perex.cz>,	Takashi Iwai <tiwai@suse.com>,
- Arnd Bergmann <arnd@arndb.de>,	asahi@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org,	linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org,	linux-clk@vger.kernel.org,
- linux-i2c@vger.kernel.org,	iommu@lists.linux.dev,
- linux-input@vger.kernel.org,	dmaengine@vger.kernel.org,
- linux-sound@vger.kernel.org
-Subject: Re: [PATCH 00/11] Drop default ARCH_APPLE from Kconfig and use
- defconfig instead
-Message-ID: <20250613073455.GF3141695@robin.jannau.net>
-References: <20250612-apple-kconfig-defconfig-v1-0-0e6f9cb512c1@kernel.org>
+	s=arc-20240116; t=1749800468; c=relaxed/simple;
+	bh=XTLNLa6cch6vvzm8GPLGQE1EqCmrVS/d67uIjyzKwy0=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=pLqXHqb40XE/PN6AfUFiED1CJJJv72xm1gt3anIOxr1jh3HqmG0CtIi61V6c9JYDfRRLSPBflCcLNcqmsqqJZwpkrNPEK28fYXV5BBldsyb+rmc2ZgijZueRfaW030cj6AUtXGeL6LPUbqJb928YGIzYZYYlbMNCPY0svR6DHjo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=F9f3VZTW; arc=none smtp.client-ip=185.125.188.120
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+Received: from [10.102.99.184] (unknown [10.101.200.229])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id AD9293F796;
+	Fri, 13 Jun 2025 07:40:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1749800456;
+	bh=/s3ULtZuuGEr6lVQB4oZg7nvmbpL3b9XXpwD3nZvvhQ=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc;
+	b=F9f3VZTW+BB2abEWnbw/0UhmJOusVX9yvI702W5eAfgUhxMLHtNe1pSFFRePvgfTU
+	 JctbEUPLG0lTKMQFmt0HIvDBSlgEB0iVzBWXnkHACFAfVWfk6xsndNVSQZWVJgqqXx
+	 zznYpoO76I0K3F3TeYS8ARiVMRjt+5fRT/uXjwyEsbGFjFlPZQUOg/1EiQWQy1IaJO
+	 tXajDWRz5NdFdiVN5FlDF1dmNfvdel+apW4ee7fZ/tW1gzlYGI6YsAwnf7r2/V2hay
+	 NKXdbVo3zVfa+NOtDcm2XbdMpmOETLGb33oHVfOJUcLDttmOuh5L7G2FF9pqHa7wvL
+	 AglGsZ4c5zF7w==
+From: "Yo-Jung (Leo) Lin" <leo.lin@canonical.com>
+Date: Fri, 13 Jun 2025 15:40:18 +0800
+Subject: [PATCH v2] i2c: i801: Do not instantiate spd5118 under SPD Write
+ Disable
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250612-apple-kconfig-defconfig-v1-0-0e6f9cb512c1@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250613-for-upstream-not-instantiate-spd5118-v2-1-cf456ed9b587@canonical.com>
+X-B4-Tracking: v=1; b=H4sIAOHVS2gC/43NQQ6CMBCF4auQrh1DB9pUV97DsKhlkEmkJW0lG
+ sLdrSTuXf5v8b5VJIpMSZyrVURaOHHwJfBQCTdafyfgvrTAGlWtUMMQIjznlCPZCXzIwD5l6zP
+ bTJDmXklpoNUNoro1rba1KFdzpIFfO3PtSo+ccojvXV3kd/0B5j9gkSDBoNSEfWNO0lyc9cGzs
+ 4+jC5Potm37AA1Tz37cAAAA
+To: Jean Delvare <jdelvare@suse.com>, Andi Shyti <andi.shyti@kernel.org>, 
+ Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: Guenter Roeck <linux@roeck-us.net>, 
+ "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>, 
+ linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ "Yo-Jung Lin (Leo)" <leo.lin@canonical.com>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3612; i=leo.lin@canonical.com;
+ h=from:subject:message-id; bh=XTLNLa6cch6vvzm8GPLGQE1EqCmrVS/d67uIjyzKwy0=;
+ b=owEBbQKS/ZANAwAKAV8XsZZKKe6GAcsmYgBoS9YEWAAj3LAMRYBS63h3VjqJfn8WIBu8BBxKa
+ Zjmxn0R0lGJAjMEAAEKAB0WIQQzqV4kW+yguuqHrw5fF7GWSinuhgUCaEvWBAAKCRBfF7GWSinu
+ hrpsD/sFBVStcy3VpX4RuV9znK3vjQ36PWnRk8vq6JVDuX0WnfyqGv4Syydih4VcUequ2JnOtGP
+ +yAIk0wzpIXDX+dZppHroZH9JsYf2aUEPmHUfPt4PmmjsUfmQy6deK6BGsXibEiALvjB/cuUu9Y
+ iAT/hnZqdrjBPIZSMhSkv61pHGwZiUVnDQbxTAq59wTtxEi7k89GYhTRAybtYShau33xSMzTUNy
+ Her/ViU8RB8JDoCB3w6GH+H5GKZoz1Q1UH1HaS6+vK/jAuniB+AJ59Ifooim3dZYWEu4P43RWvt
+ AkY5KDAzR0Hj7v30/+8bBMibaRA8yjjHq45O3QQngWjRk4Dw47Z9XHWyOgkrdtHYOz802ib0D+b
+ sEWGB4JrKD+CwVkmUgyzc/fSVy3gdF1AOBc0xNRKkTBTPF1dUvRKaxmveb2UqSvg/CgErfypbhU
+ 1HUe4emKUSmcsdrn1PdUtSf1V+u0f9M1o0QWYnivhSPqwPNSMc405m25ZU2mqCFgzTQGt7a9k+x
+ pnyzKhAljcHa2B/oKYeE4KmWjjskqEwWUeQmgzO7DR/j19nxrboOyuw2TaNH4lS35fKDcnqlzsL
+ KTIpyS7M/K1kS2YsXxzdro4knan1buNTozp5l7NfO1JzLPm/HQx7WV3+DErQCB+tGourRjElziS
+ SbOqhGRHm7rMF1w==
+X-Developer-Key: i=leo.lin@canonical.com; a=openpgp;
+ fpr=33A95E245BECA0BAEA87AF0E5F17B1964A29EE86
 
-Hej,
+If SPD Write Disable bit in the SMBus is enabled, writing data to
+addresses from 0x50 to 0x57 is forbidden. This may lead to the
+following issues for spd5118 devices:
 
-On Thu, Jun 12, 2025 at 09:11:24PM +0000, Sven Peter wrote:
-> 
-> When support for Apple Silicon was originally upstreamed we somehow
-> started using `default ARCH_APPLE` for most drivers. arm64 defconfig
-> also contains ARCH_APPLE=y such that this will turn into `default y`
-> there by default which is neither what we want nor how this is usually
-> done.
+  1) Writes to the sensor hwmon sysfs attributes will always result
+     in ENXIO.
 
-It's not such an uncommon pattern. `git grep 'default ARCH_' --
-'*Kconfig'` has over 250 matches (not counting ARCH_APPLE) and from a
-cursory look not all CONFIG_* look essential for booting.
-I agree that the drivers covered here should not be built-in by default.
-An alternative would be using `default m if ARCH_APPLE` instead but that
-pattern is not common in the kernel. So just moving this to defconfig is
-fine by me.
+  2) During system-wide resume, errors may occur during regcache sync,
+     resulting in the following error messages:
 
-> Let's fix all that by dropping the default everywhere and adding the
-> drivers to defconfig as modules instead of built-ins.
-> None of these patches depend on each other so we can just take them all
-> independently through the respective subsystem trees.
-> 
-> Best,
-> 
-> Sven
-> 
-> Signed-off-by: Sven Peter <sven@kernel.org>
-> ---
-> Sven Peter (11):
->       pmdomain: apple: Drop default ARCH_APPLE in Kconfig
->       soc: apple: Drop default ARCH_APPLE in Kconfig
->       clk: apple-nco: Drop default ARCH_APPLE in Kconfig
->       nvmem: apple: drop default ARCH_APPLE in Kconfig
->       i2c: apple: Drop default ARCH_APPLE in Kconfig
->       cpufreq: apple: drop default ARCH_APPLE in Kconfig
->       iommu/apple-dart: Drop default ARCH_APPLE in Kconfig
->       Input: apple_z2: Drop default ARCH_APPLE in Kconfig
->       dmaengine: apple-admac: Drop default ARCH_APPLE in Kconfig
->       ASoC: apple: mca: Drop default ARCH_APPLE in Kconfig
->       arm64: defconfig: Enable Apple Silicon drivers
-> 
->  arch/arm64/configs/defconfig      | 19 +++++++++++++++++++
->  drivers/clk/Kconfig               |  1 -
->  drivers/cpufreq/Kconfig.arm       |  1 -
->  drivers/dma/Kconfig               |  1 -
->  drivers/i2c/busses/Kconfig        |  1 -
->  drivers/input/touchscreen/Kconfig |  1 -
->  drivers/iommu/Kconfig             |  1 -
->  drivers/nvmem/Kconfig             |  1 -
->  drivers/pmdomain/apple/Kconfig    |  1 -
->  drivers/soc/apple/Kconfig         |  3 ---
->  sound/soc/apple/Kconfig           |  1 -
->  11 files changed, 19 insertions(+), 12 deletions(-)
+     kernel: spd5118 1-0050: failed to write b = 0: -6
+     kernel: spd5118 1-0050: pm: dpm_run_callback(): spd5118_resume [spd5118] returns -6
+     kernel: spd5118 1-0050: pm: failed to resume async: error -6
 
-whole series
+  3) nvmem won't be usable, because writing to the page selector becomes
+     impossible.
 
-Reviewed-by: Janne Grunau <j@jannau.net>
+Also, BIOS vendors may choose to set the page to a value != 0 after a board
+reset. This will make the sensor not functional unless its MR11 register
+can be changed, which is impossible due to writes being disabled.
+
+To address these issues, don't instantiate it at all if the SPD Write Disable
+bit is set.
+
+Signed-off-by: Yo-Jung Lin (Leo) <leo.lin@canonical.com>
+---
+Changes in v2:
+- Fix build failure on some non-x86 archs, by moving __i801_register_spd() out of the CONFIG_X86 && defined CONFIG_DMI region
+- Also fix unused function warning by adding __always_inline.
+- Link to v1: https://lore.kernel.org/r/20250528-for-upstream-not-instantiate-spd5118-v1-1-8216e2d38918@canonical.com
+---
+ drivers/i2c/busses/i2c-i801.c | 28 +++++++++++++++++++++++-----
+ 1 file changed, 23 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+index a7f89946dad41..2a56396d88c29 100644
+--- a/drivers/i2c/busses/i2c-i801.c
++++ b/drivers/i2c/busses/i2c-i801.c
+@@ -978,6 +978,14 @@ static void i801_disable_host_notify(struct i801_priv *priv)
+ 	iowrite8(priv->original_slvcmd, SMBSLVCMD(priv));
+ }
+ 
++static inline __maybe_unused void __i801_register_spd(struct i801_priv *priv)
++{
++	if (priv->original_hstcfg & SMBHSTCFG_SPD_WD)
++		i2c_register_spd_write_disable(&priv->adapter);
++	else
++		i2c_register_spd_write_enable(&priv->adapter);
++}
++
+ static const struct i2c_algorithm smbus_algorithm = {
+ 	.smbus_xfer	= i801_access,
+ 	.functionality	= i801_func,
+@@ -1157,6 +1165,19 @@ static void dmi_check_onboard_devices(const struct dmi_header *dm, void *adap)
+ 	}
+ }
+ 
++#ifdef CONFIG_I2C_I801_MUX
++static void i801_register_spd(struct i801_priv *priv)
++{
++	if (!priv->mux_pdev)
++		__i801_register_spd(priv);
++}
++#else
++static void i801_register_spd(struct i801_priv *priv)
++{
++	__i801_register_spd(priv);
++}
++#endif
++
+ /* Register optional targets */
+ static void i801_probe_optional_targets(struct i801_priv *priv)
+ {
+@@ -1177,10 +1198,7 @@ static void i801_probe_optional_targets(struct i801_priv *priv)
+ 		dmi_walk(dmi_check_onboard_devices, &priv->adapter);
+ 
+ 	/* Instantiate SPD EEPROMs unless the SMBus is multiplexed */
+-#ifdef CONFIG_I2C_I801_MUX
+-	if (!priv->mux_pdev)
+-#endif
+-		i2c_register_spd_write_enable(&priv->adapter);
++	i801_register_spd(priv);
+ }
+ #else
+ static void __init input_apanel_init(void) {}
+@@ -1283,7 +1301,7 @@ static int i801_notifier_call(struct notifier_block *nb, unsigned long action,
+ 		return NOTIFY_DONE;
+ 
+ 	/* Call i2c_register_spd for muxed child segments */
+-	i2c_register_spd_write_enable(to_i2c_adapter(dev));
++	__i801_register_spd(priv);
+ 
+ 	return NOTIFY_OK;
+ }
+
+---
+base-commit: 0bb71d301869446810a0b13d3da290bd455d7c78
+change-id: 20250526-for-upstream-not-instantiate-spd5118-463225b346a0
+
+Best regards,
+-- 
+Yo-Jung (Leo) Lin <leo.lin@canonical.com>
+
 
