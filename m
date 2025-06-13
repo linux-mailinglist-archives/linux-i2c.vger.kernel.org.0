@@ -1,50 +1,50 @@
-Return-Path: <linux-i2c+bounces-11451-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11452-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D837AD8E58
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Jun 2025 16:00:08 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1DCF8AD8E08
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Jun 2025 15:56:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 76BF9189B03B
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Jun 2025 13:56:00 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8B2127ADE82
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Jun 2025 13:54:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C58A02ED876;
-	Fri, 13 Jun 2025 13:49:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CAF92F2C7E;
+	Fri, 13 Jun 2025 13:49:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="iBzEBMAb"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="m084CYze"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB6DE2ECEB4;
-	Fri, 13 Jun 2025 13:49:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31F792ED862;
+	Fri, 13 Jun 2025 13:49:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749822579; cv=none; b=KSZNK/NrOXsa/C8Eo25lJNcrdOki8vzWdJM3Tvy2YuFT+A69TrszxfdjzPNJn32NY+FdYQkS2BGDiANxz47rgktO+KB4qG+3bBlN6X79+eg/n1Pso69D5eXkJDUtAaMT/qgYdxr3mn0HYT5Cg8wA3gUtLE28+oyDf+gBlD1pbq8=
+	t=1749822582; cv=none; b=Qohh/k73/CzLBWqHjdwKd7Evp2F7Aup7GE/nKEYbZgtSkl3kCBNg1rtV3M9OzdLXl8aceifZ/YlMRwLUitlPO5U8fOgPcNNyVPGeqDfDsOGWOgFPEd93lkED8RUrpvaOfxaMLfYvfJwp8bM23Q1PMKhvo+vL5FjcKKkXHHUOiN8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749822579; c=relaxed/simple;
-	bh=bweHQpcuyADe60wO3RsLo2tDdQXcHX+UC5SxdOEjQ/c=;
+	s=arc-20240116; t=1749822582; c=relaxed/simple;
+	bh=znC5okLPyfHTBbhukblBZ2yHVdWBt3hvYU8qyeE3xeI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CftjqvXcr7D3GGXCGJ9Xz3o3F1C9hziheFnSBcPXhhKyTLlVV0B41nXbgbckjhdRJxoOq8aPpkcLGQeuhp022B3c4JVHa7ICZEbzKSrdJgmVN0UuxXY7MMVxToPqh3iY6ICYKmn4Zr2Wxem6Zem44vMcOUpe7owYObqE+ODR5Uk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=iBzEBMAb; arc=none smtp.client-ip=217.70.183.199
+	 MIME-Version; b=JDcafCYVLFgsRmC2DfpdSQWxGcaxu6GW2KNuSak4T3V279c37MW6UVW6NgLUEews/zv9udAISU1Bk3Suv6GZTegJei9UkSa2SNEIt+hg+c8rhFm8T8ktGF9uzA8KH/QO2mPoWygNX0ls9rPcwBEQFMuAsnnFqWbRTcaeMTaq4pk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=m084CYze; arc=none smtp.client-ip=217.70.183.199
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPA id 0CCF7439C1;
-	Fri, 13 Jun 2025 13:49:33 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id 57E0A43980;
+	Fri, 13 Jun 2025 13:49:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1749822575;
+	t=1749822577;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=aNdLtyXG5nsct+BGpfO7GdvEoH8KaGDEw+1wHh8Uf2o=;
-	b=iBzEBMAb2ita4YGdaRNFclpB0wdqTRxEBqz5lbxxFu5Kw11zWG6xV/oUd1IWSgLPYo22xl
-	dhLb22qcuC8CiMqZZKaBEbJQCN/rQ3kYOA2rW47F6ZHA1ymQQ1M7nUPvUh3/YA2Pluo6In
-	z0vJKz00PPfT0ALxWI96DrN3vR/7zNSEaJ3nffalGtYqEz41FR+2CQFG8ZDPgVq3FtVlXs
-	LKzU9/CkpfGcU9oLjJ5ajMdGEXsJYMlv6N91q2ofh2UZJIn0+jz+O9Vnr0w0lBxPAmueFt
-	K/hGutgsmA7QgScxW1BQxsuA6pdX+gUonQPdFSsWJ5L83aMLlolhB7r4XlH8Fg==
+	bh=X4EvTY3RHaR0mXhyFDB+UEmoJh+AoaMeOu/lqI19NLc=;
+	b=m084CYzeQZqQhZ3WMb98BoO59ve+grM1pzGd5aCh2XGkZaO8H3WbSCEp/iWskstN/BZ0Fj
+	9hnkzK/uf/K2+2/r8U+HNfp0gE2Ss4YRWk03qUABQ+2T+f2/VCgRg4ctwAxiUpnqtEW6t7
+	cwfKFyWeUT6sWsUGIGFtin3Zi2MEQxBxjByeroF+XxRPl7i4QDv1KflO8440cWrawWzA+G
+	Cq5gVsRj33AmcKVWcxW5FvT7ZuxUPYYVUv+8TS33NZnFwhut+n7kxZXXl7AS+0h3HHeQZb
+	1zjRZbjRUzzShJLRp/RYOQMbWTCfFZmhfFg1pvtAJ+AfVqbqrdfLUzz7EL1m5g==
 From: Herve Codina <herve.codina@bootlin.com>
 To: Andrew Lunn <andrew@lunn.ch>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -95,9 +95,9 @@ Cc: Wolfram Sang <wsa@kernel.org>,
 	Steen Hegelund <steen.hegelund@microchip.com>,
 	Luca Ceresoli <luca.ceresoli@bootlin.com>,
 	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH v3 20/28] i2c: busses: at91: Add MCHP_LAN966X_PCI dependency
-Date: Fri, 13 Jun 2025 15:48:00 +0200
-Message-ID: <20250613134817.681832-21-herve.codina@bootlin.com>
+Subject: [PATCH v3 21/28] misc: lan966x_pci: Fix dtso nodes ordering
+Date: Fri, 13 Jun 2025 15:48:01 +0200
+Message-ID: <20250613134817.681832-22-herve.codina@bootlin.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250613134817.681832-1-herve.codina@bootlin.com>
 References: <20250613134817.681832-1-herve.codina@bootlin.com>
@@ -114,30 +114,146 @@ X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddugddukeduudcutefuodetggdotef
  hgruhgvrhesphgvnhhguhhtrhhonhhigidruggvpdhrtghpthhtohepkhgvrhhnvghlsehpvghnghhuthhrohhnihigrdguvgdprhgtphhtthhopehfvghsthgvvhgrmhesghhmrghilhdrtghomh
 X-GND-Sasl: herve.codina@bootlin.com
 
-The AT91 I2C driver depends on ARCH_AT91.
+Nodes available in the dtso are not ordered by their unit address.
 
-This I2C controller can be used by the LAN966x PCI device and so
-it needs to be available when the LAN966x PCI device is enabled.
+Fix that re-ordering them according to their unit address.
 
 Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-Acked-by: Andi Shyti <andi.shyti@kernel.org>
 ---
- drivers/i2c/busses/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/misc/lan966x_pci.dtso | 99 +++++++++++++++++------------------
+ 1 file changed, 49 insertions(+), 50 deletions(-)
 
-diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index 48c5ab832009..99dc414e3100 100644
---- a/drivers/i2c/busses/Kconfig
-+++ b/drivers/i2c/busses/Kconfig
-@@ -414,7 +414,7 @@ config I2C_ASPEED
+diff --git a/drivers/misc/lan966x_pci.dtso b/drivers/misc/lan966x_pci.dtso
+index 7b196b0a0eb6..94a967b384f3 100644
+--- a/drivers/misc/lan966x_pci.dtso
++++ b/drivers/misc/lan966x_pci.dtso
+@@ -59,6 +59,50 @@ pci-ep-bus@0 {
+ 				ranges = <0xe2000000 0x00 0x00 0x00 0x2000000
+ 				          0xe0000000 0x01 0x00 0x00 0x1000000>;
  
- config I2C_AT91
- 	tristate "Atmel AT91 I2C Two-Wire interface (TWI)"
--	depends on ARCH_AT91 || COMPILE_TEST
-+	depends on ARCH_AT91 || MCHP_LAN966X_PCI || COMPILE_TEST
- 	help
- 	  This supports the use of the I2C interface on Atmel AT91
- 	  processors.
++				switch: switch@e0000000 {
++					compatible = "microchip,lan966x-switch";
++					reg = <0xe0000000 0x0100000>,
++					      <0xe2000000 0x0800000>;
++					reg-names = "cpu", "gcb";
++
++					interrupt-parent = <&oic>;
++					interrupts = <12 IRQ_TYPE_LEVEL_HIGH>,
++						     <9 IRQ_TYPE_LEVEL_HIGH>;
++					interrupt-names = "xtr", "ana";
++
++					resets = <&reset 0>;
++					reset-names = "switch";
++
++					pinctrl-names = "default";
++					pinctrl-0 = <&tod_pins>;
++
++					ethernet-ports {
++						#address-cells = <1>;
++						#size-cells = <0>;
++
++						port0: port@0 {
++							phy-handle = <&lan966x_phy0>;
++
++							reg = <0>;
++							phy-mode = "gmii";
++							phys = <&serdes 0 CU(0)>;
++						};
++
++						port1: port@1 {
++							phy-handle = <&lan966x_phy1>;
++
++							reg = <1>;
++							phy-mode = "gmii";
++							phys = <&serdes 1 CU(1)>;
++						};
++					};
++				};
++
++				cpu_ctrl: syscon@e00c0000 {
++					compatible = "microchip,lan966x-cpu-syscon", "syscon";
++					reg = <0xe00c0000 0xa8>;
++				};
++
+ 				oic: oic@e00c0120 {
+ 					compatible = "microchip,lan966x-oic";
+ 					#interrupt-cells = <2>;
+@@ -67,11 +111,6 @@ oic: oic@e00c0120 {
+ 					reg = <0xe00c0120 0x190>;
+ 				};
+ 
+-				cpu_ctrl: syscon@e00c0000 {
+-					compatible = "microchip,lan966x-cpu-syscon", "syscon";
+-					reg = <0xe00c0000 0xa8>;
+-				};
+-
+ 				reset: reset@e200400c {
+ 					compatible = "microchip,lan966x-switch-reset";
+ 					reg = <0xe200400c 0x4>, <0xe00c0000 0xa8>;
+@@ -104,14 +143,6 @@ fc0_a_pins: fcb4-i2c-pins {
+ 						pins = "GPIO_9", "GPIO_10";
+ 						function = "fc0_a";
+ 					};
+-
+-				};
+-
+-				serdes: serdes@e202c000 {
+-					compatible = "microchip,lan966x-serdes";
+-					reg = <0xe202c000 0x9c>,
+-					      <0xe2004010 0x4>;
+-					#phy-cells = <2>;
+ 				};
+ 
+ 				mdio1: mdio@e200413c {
+@@ -133,43 +164,11 @@ lan966x_phy1: ethernet-lan966x_phy@2 {
+ 					};
+ 				};
+ 
+-				switch: switch@e0000000 {
+-					compatible = "microchip,lan966x-switch";
+-					reg = <0xe0000000 0x0100000>,
+-					      <0xe2000000 0x0800000>;
+-					reg-names = "cpu", "gcb";
+-
+-					interrupt-parent = <&oic>;
+-					interrupts = <12 IRQ_TYPE_LEVEL_HIGH>,
+-						     <9 IRQ_TYPE_LEVEL_HIGH>;
+-					interrupt-names = "xtr", "ana";
+-
+-					resets = <&reset 0>;
+-					reset-names = "switch";
+-
+-					pinctrl-names = "default";
+-					pinctrl-0 = <&tod_pins>;
+-
+-					ethernet-ports {
+-						#address-cells = <1>;
+-						#size-cells = <0>;
+-
+-						port0: port@0 {
+-							phy-handle = <&lan966x_phy0>;
+-
+-							reg = <0>;
+-							phy-mode = "gmii";
+-							phys = <&serdes 0 CU(0)>;
+-						};
+-
+-						port1: port@1 {
+-							phy-handle = <&lan966x_phy1>;
+-
+-							reg = <1>;
+-							phy-mode = "gmii";
+-							phys = <&serdes 1 CU(1)>;
+-						};
+-					};
++				serdes: serdes@e202c000 {
++					compatible = "microchip,lan966x-serdes";
++					reg = <0xe202c000 0x9c>,
++					      <0xe2004010 0x4>;
++					#phy-cells = <2>;
+ 				};
+ 			};
+ 		};
 -- 
 2.49.0
 
