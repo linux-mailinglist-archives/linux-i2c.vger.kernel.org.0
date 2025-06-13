@@ -1,78 +1,78 @@
-Return-Path: <linux-i2c+bounces-11412-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11413-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA5EAAD8AB6
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Jun 2025 13:40:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD028AD8AB9
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Jun 2025 13:41:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B5448174AB9
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Jun 2025 11:40:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A279116CACF
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Jun 2025 11:41:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D2722E173D;
-	Fri, 13 Jun 2025 11:40:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C45CA2E2EED;
+	Fri, 13 Jun 2025 11:40:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LSnPnqpH"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S5MAmyea"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 947A02DECB1;
-	Fri, 13 Jun 2025 11:40:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC18E2DFA27;
+	Fri, 13 Jun 2025 11:40:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749814833; cv=none; b=kRDXiBSn6FC8xX1lRJRAzZoZq1cFTxE2QsR1pIKyx3tIjfraNq3xRvQV3pcBnWiDPo9jC+KumKayy2xGrb5/UKjCDg163yXB3duHWk6Iw1aPN3awa1pHUopEbvmrHBAwYYpwoCg4tlOdrmjzSCeSmUPOWtTZPkQB3khWMSLM/P0=
+	t=1749814834; cv=none; b=INkEKtIIL787FNEicM4Q79V9jqe1tvpEiguWInJdsza/aUQSghheSGJAV0stpBrOVWDh+CiotjxjEtj4XhKLzlZneRdHIkxiXz8DJ92X+UVf4ob87RQRM49i5hCbc5dV/bLFfJeccwZSD/yPs96hRP4x+snRq/SE1TAnoC2CtoY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749814833; c=relaxed/simple;
-	bh=E5/QJwFnkEDiKFskdYoUT11zuELjhYTmRUwtp9uipRo=;
+	s=arc-20240116; t=1749814834; c=relaxed/simple;
+	bh=M1Uo2Shnsi6a13XBeaJolf3tUHSPInHwR7ojeNNtd3Y=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Q5v7G6T5XE41+Ytx6vNLXNi95BeYepezqIS5rRzf9lm7m+R8YvCOkpgQTHPdCADbaKLXJZOGvdfroc8iWBCExcEat1UYKyJgTA7ni0P20rL+L/LhWMk6TEVCZfRdN8aE/PVRHZBEAHdfQ2bZq0hxKZccDhY0cqzEH+9JidCLv+A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LSnPnqpH; arc=none smtp.client-ip=209.85.221.47
+	 MIME-Version; b=Wfh/ljzZ0ogDPFQHVkbjlmLWCfL3G+cYmKCvM7dHybMgpqud5wjXql7QZp32zhhaPXVQEJpvAKPqF4vHC5CVQczjCPoW17VP3v9dhEKyPgWdP9SBgegx3/bX2gQV9hB6DPdL3ah9eXXW2lUHIDHp3uFkZNieoPJeWSO0oQyhZ9s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S5MAmyea; arc=none smtp.client-ip=209.85.221.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-3a522224582so1151387f8f.3;
-        Fri, 13 Jun 2025 04:40:31 -0700 (PDT)
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-3a4ef2c2ef3so1733931f8f.2;
+        Fri, 13 Jun 2025 04:40:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749814830; x=1750419630; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1749814831; x=1750419631; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Mt/VslxbJKBbGbKK2ghxo72WIHF9Jq0440XXFX31UdI=;
-        b=LSnPnqpHMeDUG2xi7sYr6Xo222xYaYyi3deaniuY2OB7kkqwur74YT3SOsCZkOzqmD
-         KAw0cDPfdetX8n9c/7mO3kRHled41klXPiyRnfInNsltn0ua9/U8oI/sDJEkVf9FwfL3
-         kMs4pasQo2g/KhFOyUIQ5NDPv0dxBwMC22ONThOvFMzCMgoDLcdKrGITuBstdtyNJTvC
-         2gUaoa2CLl5GiIGs5AUSuEq0S6GhPih/rJ/qabtR1Eg/ihKUBfpPujH9xXZl1j+f/prg
-         SK2iJzzhexlFnHSz0pNJgLTh+eemVaNT16mLWEQqACgT+B5EqNk2Ev5qHne9yHIeSjbH
-         v7Gg==
+        bh=66IQ1AHK4USdWNNZyhULIRBVAOsclHhgOFB2bs7+AZc=;
+        b=S5MAmyeanFIPIuAECmFJqbTSkNewRr+pzh1PrQxdaIyz7ZSJJRuQeIYRk/pdGYfi/T
+         m/cQAWGRPKMM48GdJWKV84IyrQ9eESOh8T63XeMAQ8FdRqn3xSoaix0PjzbodC9OvQ8m
+         v1GKgGyTq9AC4VdMKTYGxzGrwjm4Tedn1tXeP1uZwe22Sj3/wJZW/PaOMkn+TxDNUZll
+         AvJI+bTVuhyurACaT9vd4DqWkwguzKJroj+38IzHZeajPlMsUnC91px8nNWZtnamHVb6
+         HXxIOIA5sxvXroLBV4bbRpLkL5N5dgNmKagelhsqmjNoDiufXZMZfbWsg5VTuDms4MI6
+         PKXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749814830; x=1750419630;
+        d=1e100.net; s=20230601; t=1749814831; x=1750419631;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Mt/VslxbJKBbGbKK2ghxo72WIHF9Jq0440XXFX31UdI=;
-        b=PVn6sJzHNb/BzadA/KVsZmSpYLzHgXEnPG9Ly/5v/17wlouKCxI9UYFnDEBdZUxdlv
-         qnUJf9uWWM5OrwJI/cJV+YKu50ukSmWqE4yFLEHGVrqNg1GMPBjSPFsX6NyZMLEpYDS3
-         VtZofy9/DOXa/tDLOibegiYD8M2hQyxpTwn3nnVZqiRU945HgZn+bCaKFuL2u82myOOP
-         MF1/thXai7r4+QZkYLkTJo5mOPtLd8WTNicFKKt5ugv8tQkQ7FaH8rMKsirPfEHalAzq
-         gXqCMj3U6T09DHijqF72Aj3ttpTFhcgjwvv5z5dkymM40b5qJeqctWTBpe0mn7Brrg6g
-         9Gaw==
-X-Forwarded-Encrypted: i=1; AJvYcCV3WO0CAT1fBL/ZxxPc3Ijt/lUK6cAY8p64aAXZqiYzpJGJ/U3F50NAG9w91yT9080CPwWqH0/7v9NwHYtp@vger.kernel.org, AJvYcCVTjrWmyqWlT8Iib3psLlefOhwFO7uNaowUCADj0JZiu3aACQV7D5Nug9IikL/7mNSB86FO0Zfrv6Bc@vger.kernel.org, AJvYcCXu6GKKsOfB/VxzHbIc/f5E3XmVYDKaa61f7iN3Lm0NzORZnAKu5ecF2nDh71rKxrMFu9TOZnz1+f3O@vger.kernel.org
-X-Gm-Message-State: AOJu0YzcrxixNpfGGtA5CJEnQglohTlYVhn9ny3XbVoo24OSNLhROf/l
-	LZc5PVTBFruDS/otIQ782x21x747wJ2IJKKDh8wFRnTnR7wyjZSt2oTR
-X-Gm-Gg: ASbGncu81xtYJ7zd1LeKkDVXHuzVE7UWDEwOtomJkuMEYlIyoD40Fb+57eFRSJ+ezXM
-	mLEW5n5GJ7LU2TH24WyMCdsq1JeUVyAxCFKxyvWhBsoa75smevzZpcglZLCvMhHQe1ixUPg0qEi
-	Yl/Oavf2+w6qV6vURI+HLxPiKVsGZQa9usmQ6UxbaY1qcie0mWC/+JLs0FH72EOlO7kG7U6QxGA
-	XDODY/IgUut0UZrqWlNK5u6fTvlAmkd31YL0GIjNahcP1pJFmW0hhKyJzhPys4Mszp6IvqhBaXV
-	Nf5jnmbGmLjhRygtAJh1alb6xVXXoJj4AL36kudynajFyPjUCwhMWygRZ3GgslgwHRcOziqzitj
-	yore+2KxDSA==
-X-Google-Smtp-Source: AGHT+IGo7U6163a7G6LWby7xykYX4Osxf37h9tnE2Fvkk1JFogBG2eVDSWkcuZX7dZP6vOuseEdIow==
-X-Received: by 2002:a05:6000:4024:b0:3a5:2d42:aa25 with SMTP id ffacd0b85a97d-3a56878040emr1692712f8f.50.1749814829710;
-        Fri, 13 Jun 2025 04:40:29 -0700 (PDT)
+        bh=66IQ1AHK4USdWNNZyhULIRBVAOsclHhgOFB2bs7+AZc=;
+        b=qQqAbwnEnDvyn9XfaYNbxsFvpLZg+/x6zQ+J+Emy969nuI1mEmFaHN/dLrGrptZ/YE
+         O6L9wqX5sChD2HCy0dIO3y6J2nhWA//9JGcyNpISDgRAVK0ZPfKOQ3lSiyLFfNK7tVwL
+         wQafpSlJFTSraul7zbxPLadfvJKmZEmWCxwCHvUqAC1F0hcXXPYAYxk2Xp+Skd7kh+rj
+         3h8oq8wMVJrH3Nvot4AFWJN4FbLQbS7Ji03xgCcB1u2QHYJ+q7JQ2LUXqCBIVWOqC2ik
+         Ywg+piKh95BxUSMggx8iKlLpzTyFUobjxprn43bHlMEGmp1VXoTPAuT/MlMN7puit2Bp
+         P4Lg==
+X-Forwarded-Encrypted: i=1; AJvYcCU7XZW7aI+pfspcJgzo3zMrOEXPyCvY6Ju+X14HImZlBlrlyccdYk2deyCR4SilHD4MSGXmg0MhKEiL@vger.kernel.org, AJvYcCVPT4I9MnOoYKCwIG3Nrbr6Q9Bz1VNE2NGQmQfsmsV/rief/+D/a+7qlQ613VlpvEtCYgWMCW6lKFxmXWT/@vger.kernel.org, AJvYcCXE9EE7Gv9gmuEToVbOIj6Qk8GtzkAi6gHsqYDgzxbhQJMuPp6kl1oLDG3YBquZOGEnL5noZwwVoM0Q@vger.kernel.org
+X-Gm-Message-State: AOJu0YwGqgrX2CZcCkju1Kgj4cyPjsy0L3CkvBefXjZt9BmVrcOxdVcP
+	9EmvemLPiEg8wmsquA0Ac4tx3JG0s6zDZKQoucQQpQTN9yLOnfp4+GQvEbfu9+t0+cY=
+X-Gm-Gg: ASbGncvrqlcRRmuGkNAwRqOWRSQwIv2L0oatThF4eS9RQV3t14CaIS4ZZI30PZB3Edp
+	lWbTOJsdLnShLZg6d1G9oxmnPetCYWojcOJ5ljSuB44ktmVKnkzABfu27dsLZcSXZlclApEvv+t
+	8jhqAht1yjjXsukIemKPFIW22qhinUgB/8G/uJRQcL/ddjqH9kp9i8AXHAO4Uh6GHPpT/+RlBxj
+	GMVChJ8RPgVDcGyw4PW9GMQbcwBS2SWvYzDPgBAVswKceKOOdTVwQquWu5x8WQ7BlsK62VLnfeu
+	/Kyer3/jRBQZGCJIcmvAckicGBFoTYDQLUcbOJvlFTbLh8aGg2d6YVDzDq6aeXyvmgZRC32JkbG
+	zafBoHFBBttsRubpVdKz9
+X-Google-Smtp-Source: AGHT+IGTupXzonTS7yCpiw1e75Xc5HTYVPx6NVErGZpKEp0rS21AtAM7xHoNhFXI8vB7THT+QLjwdg==
+X-Received: by 2002:a05:6000:400e:b0:3a4:f2ed:217e with SMTP id ffacd0b85a97d-3a56876be6fmr2376719f8f.42.1749814830900;
+        Fri, 13 Jun 2025 04:40:30 -0700 (PDT)
 Received: from iku.Home ([2a06:5906:61b:2d00:2c2d:5496:6768:592])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a568a54aeasm2171519f8f.14.2025.06.13.04.40.28
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a568a54aeasm2171519f8f.14.2025.06.13.04.40.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jun 2025 04:40:29 -0700 (PDT)
+        Fri, 13 Jun 2025 04:40:30 -0700 (PDT)
 From: Prabhakar <prabhakar.csengg@gmail.com>
 X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 To: Chris Brandt <chris.brandt@renesas.com>,
@@ -93,9 +93,9 @@ Cc: linux-renesas-soc@vger.kernel.org,
 	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
 	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
 	Conor Dooley <conor.dooley@microchip.com>
-Subject: [PATCH v3 2/6] dt-bindings: i2c: renesas,riic: Document RZ/T2H support
-Date: Fri, 13 Jun 2025 12:38:35 +0100
-Message-ID: <20250613113839.102994-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH v3 3/6] dt-bindings: i2c: renesas,riic: Document RZ/N2H support
+Date: Fri, 13 Jun 2025 12:38:36 +0100
+Message-ID: <20250613113839.102994-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250613113839.102994-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 References: <20250613113839.102994-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
@@ -110,130 +110,33 @@ Content-Transfer-Encoding: 8bit
 From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
 Document support for the I2C Bus Interface (RIIC) found on the Renesas
-RZ/T2H (R9A09G077) SoC. The RIIC IP on this SoC is similar to that on
-the RZ/V2H(P) SoC but supports fewer interrupts, lacks FM+ support and
-does not require resets. Due to these differences, add a new compatible
-string `renesas,riic-r9a09g077` for the RZ/T2H SoC.
-
-Unlike earlier SoCs that use eight distinct interrupts, the RZ/T2H uses
-only four, including a combined error/event interrupt. Update the binding
-schema to reflect this interrupt layout and skip the `resets` property
-check, as it is not required on these SoCs.
+RZ/N2H (R9A09G087) SoC. The RIIC IP on this SoC is identical to that on
+the RZ/T2H SoC so `renesas,riic-r9a09g077` will be used as a fallback
+compatible.
 
 Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 Acked-by: Conor Dooley <conor.dooley@microchip.com>
 Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
-v2->v3:
-- Replaced Transmit Error -> `Transfer Error`
-- Fixed the order of interrupts in the DT binding
-  documentation to match the HW manual.
-
-v1-> v2:
-- Listed the interrupts in the order as mentioned in the
-  HW manual.
-- Renamed the interrupt names to match the HW manual.
-- Added Acked-by and Reviewed-by tags.
----
- .../devicetree/bindings/i2c/renesas,riic.yaml | 71 ++++++++++++++-----
- 1 file changed, 52 insertions(+), 19 deletions(-)
+ Documentation/devicetree/bindings/i2c/renesas,riic.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/Documentation/devicetree/bindings/i2c/renesas,riic.yaml b/Documentation/devicetree/bindings/i2c/renesas,riic.yaml
-index bfcc400655dc..86d79e167547 100644
+index 86d79e167547..6876eade431b 100644
 --- a/Documentation/devicetree/bindings/i2c/renesas,riic.yaml
 +++ b/Documentation/devicetree/bindings/i2c/renesas,riic.yaml
-@@ -29,32 +29,46 @@ properties:
-               - renesas,riic-r9a09g056   # RZ/V2N
-           - const: renesas,riic-r9a09g057   # RZ/V2H(P)
+@@ -33,6 +33,10 @@ properties:
+           - renesas,riic-r9a09g057   # RZ/V2H(P)
+           - renesas,riic-r9a09g077   # RZ/T2H
  
--      - const: renesas,riic-r9a09g057   # RZ/V2H(P)
-+      - enum:
-+          - renesas,riic-r9a09g057   # RZ/V2H(P)
-+          - renesas,riic-r9a09g077   # RZ/T2H
- 
++      - items:
++          - const: renesas,riic-r9a09g087  # RZ/N2H
++          - const: renesas,riic-r9a09g077  # RZ/T2H
++
    reg:
      maxItems: 1
  
-   interrupts:
--    items:
--      - description: Transmit End Interrupt
--      - description: Receive Data Full Interrupt
--      - description: Transmit Data Empty Interrupt
--      - description: Stop Condition Detection Interrupt
--      - description: Start Condition Detection Interrupt
--      - description: NACK Reception Interrupt
--      - description: Arbitration-Lost Interrupt
--      - description: Timeout Interrupt
-+    oneOf:
-+      - items:
-+          - description: Transmit End Interrupt
-+          - description: Receive Data Full Interrupt
-+          - description: Transmit Data Empty Interrupt
-+          - description: Stop Condition Detection Interrupt
-+          - description: Start Condition Detection Interrupt
-+          - description: NACK Reception Interrupt
-+          - description: Arbitration-Lost Interrupt
-+          - description: Timeout Interrupt
-+      - items:
-+          - description: Transfer Error Or Event Generation
-+          - description: Receive Data Full Interrupt
-+          - description: Transmit Data Empty Interrupt
-+          - description: Transmit End Interrupt
- 
-   interrupt-names:
--    items:
--      - const: tei
--      - const: ri
--      - const: ti
--      - const: spi
--      - const: sti
--      - const: naki
--      - const: ali
--      - const: tmoi
-+    oneOf:
-+      - items:
-+          - const: tei
-+          - const: ri
-+          - const: ti
-+          - const: spi
-+          - const: sti
-+          - const: naki
-+          - const: ali
-+          - const: tmoi
-+      - items:
-+          - const: eei
-+          - const: rxi
-+          - const: txi
-+          - const: tei
- 
-   clock-frequency:
-     description:
-@@ -84,6 +98,25 @@ required:
- allOf:
-   - $ref: /schemas/i2c/i2c-controller.yaml#
- 
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: renesas,riic-r9a09g077
-+    then:
-+      properties:
-+        interrupts:
-+          maxItems: 4
-+        interrupt-names:
-+          maxItems: 4
-+        resets: false
-+    else:
-+      properties:
-+        interrupts:
-+          minItems: 8
-+        interrupt-names:
-+          minItems: 8
-+
-   - if:
-       properties:
-         compatible:
 -- 
 2.49.0
 
