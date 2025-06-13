@@ -1,187 +1,186 @@
-Return-Path: <linux-i2c+bounces-11408-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11409-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 711F9AD88EB
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Jun 2025 12:11:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E3E5AD8A07
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Jun 2025 13:10:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6834C188C50B
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Jun 2025 10:11:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3A5D9189E2CE
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Jun 2025 11:10:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A657B2D1F44;
-	Fri, 13 Jun 2025 10:10:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C615D2D5C6F;
+	Fri, 13 Jun 2025 11:09:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cQeWMcQ1"
+	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="h4k+d6V+"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from TYPPR03CU001.outbound.protection.outlook.com (mail-japaneastazon11012037.outbound.protection.outlook.com [52.101.126.37])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49E932C376B;
-	Fri, 13 Jun 2025 10:10:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749809458; cv=none; b=fYyDZE7vOoLhf4rYUiCtRBzZaTnCVYEBn8uFxIRpQXPQghLVvkPFN/IDb0xRp92m22wTnkEDBN0PAmWDwBTVEmahweRDO/ANdWg06/dT3R0W+SCH88ovK7qdYld0D+49D7Gazw8Nj7VJu3aYzboAm256B/bcwPx0i3AsngvHVOo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749809458; c=relaxed/simple;
-	bh=ghZ1LG1KHdiUBK1zj+udIgi2zei5jleAEyjVIVwbSK8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ru0cU9jbVNlkS6Iu93aXp9qsvaI4qJDt0Zb5GfF6n6HV5rsEOaqk9AhcvLwgjqfHre7MwkvX6xUZ0Fyat7wG9alakVKk22myp0zMa3llm4Hg+y/B9j1Tsex/ufZ/K8oOGLnZSRAPFqahlHqO08xHzn7FMZjrEaUPG699gKqDyRY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cQeWMcQ1; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-451ebd3d149so13048125e9.2;
-        Fri, 13 Jun 2025 03:10:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749809454; x=1750414254; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=REfwVy48LjvgCSinXle+QxaU3FrH2CN4u42d5xmEyy8=;
-        b=cQeWMcQ1qpHx2TrrfSDMvA/TrPe1qsJUm6zTDmygnt0X3wNO+EA+6lufmG/Kw313Jz
-         RLQgohYw7A33/fDSJ8QHTS5oPddNmivE31ZXKkKbL0ZLxMj3ULT4ose6ACKLRUFwZnzE
-         oNi15cVyy3vDYGQzbvgNhR3AqYjZOR0uMgDst0jRUnBJXb9TwuoCW6+OYG5UQ6adSaku
-         Vfdx6eGMCg7z0+2zMAxb5zmJ0Z1YBoBTlRZkkFfNfpGlkTq950LcolH81s2DoI91/T/5
-         ljbgLPTf1JiJLzsLIHoWl3OGnyDkdlSIedSuar56saSC9CUi67vilWVRPZ7tvKfyGUHx
-         qtsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749809454; x=1750414254;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=REfwVy48LjvgCSinXle+QxaU3FrH2CN4u42d5xmEyy8=;
-        b=c+9wOvHRoQ0izBK0TRN611MvUAQO0RkorLArMPsUoiueXoS1r4GcUUw7CWP2J5xQto
-         qG7o8V7PDy4+i2oyb+O34t3f3YJhEbpTkTVSzG3mS5TgNjuYZE37plVuUFuHtmqpaXbD
-         iFNrLK2pkMkb+KH7lR8jgI3g9iuYw8NpgBm9ALHrC/QhjefsKrf7FAugP86D9i93R7Hf
-         gnIACmdBtR8L0PT+2scSgplMOJl03ra+vjPKOIGRIJjkxUtUryP92qpk4QgkxjcdNIDU
-         CfXvFUNsvbQ/k0SH73jm5tqB3udKu/61XLPmfAhcZVPBR/FAttkDLQocsz0ky+n9rF1b
-         gS7w==
-X-Forwarded-Encrypted: i=1; AJvYcCU3oXaLGXNijYtKr3m1G0rCz3DMwQ5gxTCrpV491oa6MMYabsZZODtNI3/P/wGvDq3xqekcSW+yMNbR@vger.kernel.org, AJvYcCVtP51CXSFTN6bdfLDLiaSeHqR1MQYKhJCSti3SWOikjj7lsohNX4JcZ7TFxczdd2kVs14lvTGd3SgN3M8sssxhI+M=@vger.kernel.org, AJvYcCWyudvbZyd37xH3H3l+uwBag1ONSj2n4g1bhhFVF9vxejQJafCl9bKJBWy7nsHwdvUZx7gnY18sW5MgFK7t@vger.kernel.org, AJvYcCXM2som8jblq3O4aymFOo5ck1F+AiIFaKZsGkjzHpn/pV96ad5jXOJZlBrUvmAFhe7z6ROWtkiuHMkH@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw78l8EY391/zPwYtK6CC85l82liweClSv0AFu3o0qKgOfQnz2Y
-	ANgnU7NrfadHznZIGe6VETZ2gqwp2f7OpBO68foLrDih16e5KaiYxYi/Iv35fft+ABqokUvMyrx
-	+Lg1DqQrOop4075burJsCn185TIt6G+4=
-X-Gm-Gg: ASbGncuB+n1Iffd44ndCeSwUu76GxtME7ZSwSW4g2BWT70j7WcJl4pA+ixX0vxNhiN4
-	YBHQml2TI2pH3RxbVIfAkMwfBK2NWUegj7f0cefo4WNc/f/YdxRTvYFEi6bydjekRdc7YdlGWqq
-	6vfDymJuFvCUj1whw5VSK1akNzuZplFHADCXFtBCmOsdHoOA==
-X-Google-Smtp-Source: AGHT+IEWDvuz4zH4iWOydIQMgbrpQR3J1s4lhCZk8JE7vwP5jdDaVx6ppbnNqm2UA4NOKPnuTe1bjM/QFqa3jPbgQ4I=
-X-Received: by 2002:a05:6000:1acf:b0:3a4:d0ed:257b with SMTP id
- ffacd0b85a97d-3a56870469emr2315734f8f.22.1749809454252; Fri, 13 Jun 2025
- 03:10:54 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC80B2D5405;
+	Fri, 13 Jun 2025 11:09:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.126.37
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1749812973; cv=fail; b=tWFrQ5XrNzbAu3LfWfwhNpbqRz2ICC3EjMDHvG1LvPZMg0YPe7a8WY0LIBZ2OL/NU8tFPWaOBfU2MbvfswJmy8ttj3/ApVC7YjsfwlWLjWXBOnW+xk51Bt98pt7Zpw5rP2YbgNRBO/rrtEohW8ZeF9LRn4Lftgp/DoDQ4pf69LY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1749812973; c=relaxed/simple;
+	bh=7Fw3wtJ73vv3Qgm/3GkbI4mQR4gPkrDSmIWryYYMxS8=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=QjOuv8ljCvEArZa8+MjPyjuupPNGIY5HUtDg5VSNils0EvYKLzjKKME/nEQnw4yC/WZHHuMLbZLEx2CFPZ6vaqLE/Rk6CgKrpEFOnQm+jVlPwbFHLgysD78zap/BWGjYbmPQqqZVWBqRJNdXQ7lKC02GXvtYx9WJqcynmRZkgZE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=h4k+d6V+; arc=fail smtp.client-ip=52.101.126.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Pfyq41+PUvQ4foxrnDW7G+Cv7P/PVbKDXeNZL5fr3E+Bx97aodZPAA6mO18E1Bbh65Vzh2NHykkOVmryHpwgH88U/Vu9ShtkTTlowXUJZqKWKNVHx/6jCverMET/I6eXs/OU3pPTYTXW9GW6oaS/3aOdI6l6c09AC3Iw4vA06HmshYpR/tjvbpLNdw/4KAp4BCJlfViwi60f7mEyrLkiEoSoBNpOEx+tX6hcrePVB8gDux4c7TpOCUimy5D5SARkyX2vv8quBQqiYHPT42WU44Ji6evUDEz/pzHkxpLIdM3llvYOP3svS6HeOxgteLD9lfzJcSMmwjczWygNvD0F/Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DtMBj33Sx1oAMqINRFAH5h963S3E6ZA3nRC5DmVePTA=;
+ b=FsFGmY9pbNqRuxE4U6YCDk+notS9//yy/OwbAMPa0myiENc2vPI0t0mn18I7LcJfTwIkcY9gFDnVdKLWwaip41t3tch5OaOe1WQJnCOvAcbou/h+5weH9SVOks0I8Y+MnLgQQt1DyY51ia3D4+Ll+/ZX/pmQd3/OgfbaHK6nFp4QVsGlCFs3an4uPbho5TKQKnxOG1CjGsKqvF4RQPDB/9/kVfCzNf9/K1+oHNMTCt7S4QoggmBZjIXps5vrlE2oK/dpW1MHhX5NvgiyHeLqwggar49z/E6kvJGvHSctykZOEU9QcWs1Ja3cfMyWmFYNo5HSqZRytuC8xgP2UfBAuA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DtMBj33Sx1oAMqINRFAH5h963S3E6ZA3nRC5DmVePTA=;
+ b=h4k+d6V+icWoKqoAxKGOM46onww5lRlZsN3AsXB5hvriUWSXqiLt4IVUM4gSbIzomV0rFfCuLF3VgoQYIOaAifj4bK2tZvd5qhgXDoyAbaLGrQico8iHXKqJ3CcsCpBu5RGdaZGjXQp15wiqlH1ZPO+FYe2guOPUZfX+8GWgY4JlzVCb7iwX/QEO9+nNf/gX1lUQLaScfFHJnI68PAXXUVG0gTDb+0M74E1N9oB8S5/wz0p6ZWe9Gtyd8AtEanNvk54sLkCYKNW2mqyBNsK1YNkqu0MbN9ExEYPQuJkeDsjo0z+T/MIFexkNqbgO2UghGN86SJeJ2rin7Z9StKVcew==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SG2PR06MB4802.apcprd06.prod.outlook.com (2603:1096:4:169::8) by
+ TYSPR06MB7344.apcprd06.prod.outlook.com (2603:1096:405:9b::5) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8813.29; Fri, 13 Jun 2025 11:09:26 +0000
+Received: from SG2PR06MB4802.apcprd06.prod.outlook.com
+ ([fe80::685f:929d:f06c:a349]) by SG2PR06MB4802.apcprd06.prod.outlook.com
+ ([fe80::685f:929d:f06c:a349%3]) with mapi id 15.20.8835.018; Fri, 13 Jun 2025
+ 11:09:26 +0000
+From: Yuesong Li <liyuesong@vivo.com>
+To: Dong Aisheng <aisheng.dong@nxp.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	linux-i2c@vger.kernel.org,
+	imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Cc: opensource.kernel@vivo.com,
+	Yuesong Li <liyuesong@vivo.com>
+Subject: [PATCH v1] i2c: lpi2c: convert to use secs_to_jiffies()
+Date: Fri, 13 Jun 2025 19:06:38 +0800
+Message-Id: <20250613110649.3283336-1-liyuesong@vivo.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR01CA0026.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:192::16) To SG2PR06MB4802.apcprd06.prod.outlook.com
+ (2603:1096:4:169::8)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250609184114.282732-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20250609184114.282732-3-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAMuHMdUCYjPP326g9MsnH8p6gM-vy33L4OsFFMGzsZbLbucTUA@mail.gmail.com>
-In-Reply-To: <CAMuHMdUCYjPP326g9MsnH8p6gM-vy33L4OsFFMGzsZbLbucTUA@mail.gmail.com>
-From: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date: Fri, 13 Jun 2025 11:10:28 +0100
-X-Gm-Features: AX0GCFsNZ6GYODXXSo_A5GWSFs0V8tUCqmJPQVQONI8m8dqOA67nkeFpQLYGvN8
-Message-ID: <CA+V-a8sWMFEA5Ub8nGh6jygcQKKVm568nD2zo5HSE2jN1qp4pg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/6] dt-bindings: i2c: renesas,riic: Document RZ/T2H support
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Chris Brandt <chris.brandt@renesas.com>, Andi Shyti <andi.shyti@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Andy Shevchenko <andy@kernel.org>, Magnus Damm <magnus.damm@gmail.com>, 
-	Wolfram Sang <wsa+renesas@sang-engineering.com>, linux-renesas-soc@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>, 
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>, 
-	Conor Dooley <conor.dooley@microchip.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SG2PR06MB4802:EE_|TYSPR06MB7344:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6364c83f-8d0c-4558-b777-08ddaa6ac2aa
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|7416014|52116014|376014|366016|38350700014|921020;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?ZAG5UpNG4jDEhZlYHg7IlulPsEV8PFsySc12eJdKEKed+yAEg711B8YOrq+/?=
+ =?us-ascii?Q?vCfZLC+tdXnAea+OAuIBkUigRONdIaBVniXGa+NkwclnYWdvxPYM90e6Zv6h?=
+ =?us-ascii?Q?P9uLvAPhQ7CSmZnIRQx5IBjX2N4vr9JYjPk4gydtUS82LIm8auwIMaooQlY0?=
+ =?us-ascii?Q?OUrT99x/3e8imIAgCNyTIjAHJ/O9iuZ0vaDjG64837ZeiljpXzpFblgznGdh?=
+ =?us-ascii?Q?/COyR9RLXgbDFMqCeHIsq5zSN7CE0GBZmzNaXEGnEBMA7m292dwotL0x+H5N?=
+ =?us-ascii?Q?1/Uno35R3z+szmgNp+t0qzLqFds8peqv/LRdTNitwwA/cZPw0EevnA9db9k6?=
+ =?us-ascii?Q?zV+cNCH0eliLv4W9wQKYQQtbNzfP2t6IskQgv2K4/qLiTNAW8p2gvA2svWJJ?=
+ =?us-ascii?Q?Sv+ykmlH5r6U2YseDe/SP37PBa52mfM4U5T8UgnJzEgNkIdjAVAHA4LsBpkY?=
+ =?us-ascii?Q?kggT6zGx5/y/NlI6bdDnk/HyuhzUXeQo2E5gYs9ca9jASXICF3J61T01F1P1?=
+ =?us-ascii?Q?WSwm01tMjyDSWrwBfZwmLXnilX9lkap5aaz6BI5h1j2mvvjUHznzBJXXq35g?=
+ =?us-ascii?Q?+rg8F/K40IQRDrxeSpn9t08HGVls4fRoBtE14VjD1lbH5U1U39J99GtmGZPL?=
+ =?us-ascii?Q?j1jYESQsxJpx3HWfB0fJKAxAK3jV+gjEHST5nvcRM8uNTIhsemu9UpHuyyfe?=
+ =?us-ascii?Q?yZsD0AjZKTBFrLatjPHY8lJ6L6wQ0k6O0ys0ZRYpy0VWP5nnIEzR1h4Jt+Xf?=
+ =?us-ascii?Q?yHc4KigA6v/htpk//O6YHYTAWHkRArtKW9Ay/RIaon4psVp2cyjsijrSNHMc?=
+ =?us-ascii?Q?szYYpUNhwvN3vmPDTl3WfopCx4SkaABSInTMJGlY+U8kh5nFX+ur7cxJxw1R?=
+ =?us-ascii?Q?N8jQhICQioeg0sCEBWm9DNabqrDRw131JD8XfJiF6AAIbURC8KWwz4jARdup?=
+ =?us-ascii?Q?0T/Z1TjHfHL/wwamsapnzA8R8T4CoQPD7eiFcdgdr/jDsdsKZVX6d54ItD46?=
+ =?us-ascii?Q?UPRgN4Hft8mbPTmv0tEDo6ZFm3TM2HWcO/qMgK6C2Ga76FLJA+Co7F0ccl/Y?=
+ =?us-ascii?Q?heWfirPTVHORVFujXgW7yRmoRfgSDBeRp5UWD8Qb66r9cVp3V3WfaEruLB1p?=
+ =?us-ascii?Q?6F4jz6MIlGKW0xRP5Qac+INGm3iF8JSDyIlBPJukuAt9rszUUxF7ZNbS4e7/?=
+ =?us-ascii?Q?n/hoKFpF7+FkJPugxLu9mnNcZDyK2T45/N8TtKZlJBvE9Rr7JwYC0h6D27eW?=
+ =?us-ascii?Q?CPCsBd82NBTKB8rH2qEqp4nAx4ZLeBxkUCjfanEP1lTYoGvgq7afrnKUESEJ?=
+ =?us-ascii?Q?N+sz3SMatlFzDjRbZqs4mXmgmd43aW50LDw7T49kbseNbgGYtFn6MFzrlP2/?=
+ =?us-ascii?Q?SyY01dndTdhxraTIXXyRs0n7i3hDrlvzaESkzuYy2QzHjyKILcUJElmpeNhW?=
+ =?us-ascii?Q?TVU0mzZhTHNTvsehUhVfaacsrrdVFvK0SA317kCM1baH6qYSLGqrH52hFTBV?=
+ =?us-ascii?Q?O3DDC6P/5/tnNnI=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB4802.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(52116014)(376014)(366016)(38350700014)(921020);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?VzmykN5X/bhC2rBh00nOTaIIsqx/8pnjO3p2xBiD3lg/BrrqoWcXsywCObD5?=
+ =?us-ascii?Q?hYO5Zh1a4Rs+QP/9sJLwezxM5tbZ1CKoRN4UkHai9Tuulsx361KqwWV8PEyt?=
+ =?us-ascii?Q?D+sy7iCpKpILTHLSmsbN4zdQmSORjKMyeofVyU6ASvOcazJpw2ZPavt3qOXM?=
+ =?us-ascii?Q?ZteKCZ2CqcY8gkYbd+WNGewamiBox/2vUcBTftHZTWVxTday1XKg98gLkKND?=
+ =?us-ascii?Q?8h8KU02/EMbetEBo/7pa2BN4PP5J1NA1hJxpcdyQz47VhhIl8s3Udv1xoqTF?=
+ =?us-ascii?Q?sXDxooGgjBN8MeTcFPbkKshmggBiVGt0J7A4dZLp8kkYOOZXvaZK4IaDvc7Z?=
+ =?us-ascii?Q?LJgK6xnlIy0MfCoOmNiver1ZOV3RVp2D+mcKLLP4yuHCB0TOgGdY1CWnxz+2?=
+ =?us-ascii?Q?s0ErVfDXcNdI+rpEx4iv7ZvGpjkw5iYQL4EruplIaDykY/Sh5+TDn+k2g5yr?=
+ =?us-ascii?Q?7GoNBzfHX0GtCfrAScnq//V5Cn454vKdlb6FQ7BSVgvngUORT+o0jI7FXYf5?=
+ =?us-ascii?Q?cpjSD2Pf5THsefwZQ2T3wuy3pCL8F1QnKfFJoDeJvMpaHAwRj3Fisb5aBPzx?=
+ =?us-ascii?Q?4xs0/jB5He2xzZFoSUkRPhjXU8H+YQf8LE8CCIXZ+dlBi/Q7RCPm+eyKCzvv?=
+ =?us-ascii?Q?r+Lvmn+8vt1GzGnJldb0o0V3I214SR7ZZB+6/8+MQjA01V7yvWJLus65REd/?=
+ =?us-ascii?Q?jrPOh4fS2kbx1zIpaCOXMNJaXighfZifFtGq4pImvWCldtknyHCdUG/tlwna?=
+ =?us-ascii?Q?sjmed2b9RlRjPomScuUcNqyS7PDTcCkjUA5cUcN5muVoX+n7k+cXJRCfZPQT?=
+ =?us-ascii?Q?9aD5KjEr02KE8HmnU/QikRWC0PM31DVRLih3+US0S+duS4MxQiiF/lLQMvMH?=
+ =?us-ascii?Q?iVagUBJj5miVRMbQ05ivIZjWlLP7Wxlc+zREmn0eiDUAgOWHC7FBHYyQcuOJ?=
+ =?us-ascii?Q?oo6ruC5sBloqSN6umoMDCRLmrDGLHOswcIp6eB/IVi6Po6e+ExFwYEPRz3/U?=
+ =?us-ascii?Q?7X11ZV6+Q7DrVpkvMoI5RhBOVoOzDUjZ2BYUCkWiG5Sw4cKoMb4AufjlsJ2M?=
+ =?us-ascii?Q?uArlVNtAuZtp8dXymWzPgiF5498DJKXKJcHZZ1oxRSsfj82YpwNHm+Efx/Pc?=
+ =?us-ascii?Q?QUaEfI34mudt3XQeYlC+K+P6MqB2xTzZ67cRCJNYnE0N8gx5XJbp3gRj2Ygf?=
+ =?us-ascii?Q?GB7RJhcqG8WI3FajEkDr2BfQGFmUoLsqeZzBh3j900+tj4+7DAtI3lIguVpO?=
+ =?us-ascii?Q?IRmK7QE8YbaX9WR81j3zveJExZSkHMkECjS+nIUTSv0kp76Ij24zt52Dy8bU?=
+ =?us-ascii?Q?HjZCeYV5wRxnSzH2iDq0Z3nlY+KAn3mHb6YiumR3mu1tzalonhLz42050Lug?=
+ =?us-ascii?Q?3EnAcY1V/MAWtVlw034JuLo4PawioBf4lxIPCgcs0eD/jZjLuqeRQHW7msdB?=
+ =?us-ascii?Q?D/uKeKBg8BkXUTF+OujaWuQO9+GmWW2AkcJ0VoVO+zuYosxwPblZZASS2e+1?=
+ =?us-ascii?Q?aIY+trU3zejytLiX2JT+TkeER82n90mkI8a/DVnFno8/7J9yMJXa7v73v2U1?=
+ =?us-ascii?Q?t8vlGair+RNrwWCSWwcRR9yhSYeC7CChI546DcDb?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6364c83f-8d0c-4558-b777-08ddaa6ac2aa
+X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB4802.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jun 2025 11:09:26.8306
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: AiI+rKyy9lxoM7ogv6hBLT3psF+PWw2t5DmURJxqcFUmeDUIYiOiFJhTCYfJ6Sg8HhTvaEQbV2oBN4xaRC3C/Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYSPR06MB7344
 
-Hi Geert,
+Since secs_to_jiffies()(commit:b35108a51cf7) has been introduced, we can
+use it to avoid scaling the time to msec.
 
-Thank you for the review.
+Signed-off-by: Yuesong Li <liyuesong@vivo.com>
+---
+ drivers/i2c/busses/i2c-imx-lpi2c.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Thu, Jun 12, 2025 at 1:17=E2=80=AFPM Geert Uytterhoeven <geert@linux-m68=
-k.org> wrote:
->
-> Hi Prabhakar,
->
-> On Mon, 9 Jun 2025 at 20:41, Prabhakar <prabhakar.csengg@gmail.com> wrote=
-:
-> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> >
-> > Document support for the I2C Bus Interface (RIIC) found on the Renesas
-> > RZ/T2H (R9A09G077) SoC. The RIIC IP on this SoC is similar to that on
-> > the RZ/V2H(P) SoC but supports fewer interrupts, lacks FM+ support and
-> > does not require resets. Due to these differences, add a new compatible
-> > string `renesas,riic-r9a09g077` for the RZ/T2H SoC.
-> >
-> > Unlike earlier SoCs that use eight distinct interrupts, the RZ/T2H uses
-> > only four, including a combined error/event interrupt. Update the bindi=
-ng
-> > schema to reflect this interrupt layout and skip the `resets` property
-> > check, as it is not required on these SoCs.
-> >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > Acked-by: Conor Dooley <conor.dooley@microchip.com>
-> > Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> > ---
-> > v1-> v2:
-> > - Listed the interrupts in the order as mentioned in the
-> >   HW manual.
-> > - Renamed the interrupt names to match the HW manual.
-> > - Added Acked-by and Reviewed-by tags.
->
-> Thanks for the update!
->
-> > --- a/Documentation/devicetree/bindings/i2c/renesas,riic.yaml
-> > +++ b/Documentation/devicetree/bindings/i2c/renesas,riic.yaml
-> > @@ -29,32 +29,46 @@ properties:
-> >                - renesas,riic-r9a09g056   # RZ/V2N
-> >            - const: renesas,riic-r9a09g057   # RZ/V2H(P)
-> >
-> > -      - const: renesas,riic-r9a09g057   # RZ/V2H(P)
-> > +      - enum:
-> > +          - renesas,riic-r9a09g057   # RZ/V2H(P)
-> > +          - renesas,riic-r9a09g077   # RZ/T2H
-> >
-> >    reg:
-> >      maxItems: 1
-> >
-> >    interrupts:
-> > -    items:
-> > -      - description: Transmit End Interrupt
-> > -      - description: Receive Data Full Interrupt
-> > -      - description: Transmit Data Empty Interrupt
-> > -      - description: Stop Condition Detection Interrupt
-> > -      - description: Start Condition Detection Interrupt
-> > -      - description: NACK Reception Interrupt
-> > -      - description: Arbitration-Lost Interrupt
-> > -      - description: Timeout Interrupt
-> > +    oneOf:
-> > +      - items:
-> > +          - description: Transmit End Interrupt
-> > +          - description: Receive Data Full Interrupt
-> > +          - description: Transmit Data Empty Interrupt
-> > +          - description: Stop Condition Detection Interrupt
-> > +          - description: Start Condition Detection Interrupt
-> > +          - description: NACK Reception Interrupt
-> > +          - description: Arbitration-Lost Interrupt
-> > +          - description: Timeout Interrupt
-> > +      - items:
-> > +          - description: Transmit Error Or Event Generation
->
-> s/Transmit/Transfer/
->
-Agreed.
+diff --git a/drivers/i2c/busses/i2c-imx-lpi2c.c b/drivers/i2c/busses/i2c-imx-lpi2c.c
+index 342d47e67586..dfdfc23551ab 100644
+--- a/drivers/i2c/busses/i2c-imx-lpi2c.c
++++ b/drivers/i2c/busses/i2c-imx-lpi2c.c
+@@ -563,7 +563,7 @@ static int lpi2c_imx_dma_timeout_calculate(struct lpi2c_imx_struct *lpi2c_imx)
+ 	time += 1;
+ 
+ 	/* Double calculated time */
+-	return msecs_to_jiffies(time * MSEC_PER_SEC);
++	return secs_to_jiffies(time);
+ }
+ 
+ static int lpi2c_imx_alloc_rx_cmd_buf(struct lpi2c_imx_struct *lpi2c_imx)
+-- 
+2.34.1
 
-> > +          - description: Receive Data Full Interrupt
-> > +          - description: Transmit End Interrupt
-> > +          - description: Transmit Data Empty Interrupt
->
-> The last two don't match the order in the documentation, and the
-> order in interrupt-names below.
->
-Ouch, I'll fix that and send a new version.
-
-Cheers,
-Prabhakar
 
