@@ -1,50 +1,50 @@
-Return-Path: <linux-i2c+bounces-11442-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11443-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82C7FAD8DD4
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Jun 2025 15:52:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7EAEBAD8E11
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Jun 2025 15:56:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1A0BB7A5379
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Jun 2025 13:51:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2B5FE1BC4EA8
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Jun 2025 13:53:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C961D2E92D0;
-	Fri, 13 Jun 2025 13:49:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 615532EA474;
+	Fri, 13 Jun 2025 13:49:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="PHllxcB0"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="lHeuyzbG"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA77919C54B;
-	Fri, 13 Jun 2025 13:49:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AF502E889F;
+	Fri, 13 Jun 2025 13:49:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749822555; cv=none; b=aVBOKse6Dr10RWDuQcB6NNpYkkU8CzR+20t7i0UExx4vIxC4M+z6HY6fH3uTFwlPbtTnjb/u+OZYdMwalgUT5z3EOqJ1p9jySY9ksuZd1zIT09zWsHnvzPJuSAdCCV3RCfvmvoPWAdeQJh9yenWwrtAxOlYjRM+QIOXMavp8tWw=
+	t=1749822558; cv=none; b=DwhWpFRuxIjLKP0PQLlY7Na25eUdfsmIZt9dNlYnqBRYI4EXt4yACcJjJh0MdibPKwdHUtyVKu/yNyENd9jIM6+jaSXb54MR74x60USLQ4EssS4TgIl+INsPo1oPSM4KnIRkHwWoU76Z9cOgW+SdlJ4LuXQSy6lObAcLP+xl5WY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749822555; c=relaxed/simple;
-	bh=q75V33+lA4BwW9AaeyyrodDxS+RvJEN4Q01X82YzC34=;
+	s=arc-20240116; t=1749822558; c=relaxed/simple;
+	bh=IhtJf46eylzCLE51Dj72Ej+SvqX8WNDPFZX/b2aVWJY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PqLKukbuC9BFKwi61wSmMgfxtGaj8HGQGL+Esg4xoj+KAQB27AnYDdXlYFmNcEWV2iKb9+HGKE+F6fg+iRnD+l0F2jEoR3PhcSoIhnZ0OfdireAYYRC36FnrsW52XkTdgLqfcyk1k9+QQyhR6jfvpfA9Tok0ncJOCIVB6ZAHBNY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=PHllxcB0; arc=none smtp.client-ip=217.70.183.199
+	 MIME-Version; b=jKPh4Onjrm53ULJntf2h1Fd7wNOOSjhlqg49Ua4hSI69nIhIATqaBAVXm9LqeqzHggMje2zJGtO/wpsZjF9RNStkLX/cEeSiyHHJ+ujOc0k4jsFjQOmHKSAKWQYDPYF+OBBhWMdubUP6AUC8P6OZF0F71/E8bxnYtJVI+d+e1LI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=lHeuyzbG; arc=none smtp.client-ip=217.70.183.199
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPA id 14CF344288;
-	Fri, 13 Jun 2025 13:49:09 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id 42481442A5;
+	Fri, 13 Jun 2025 13:49:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1749822551;
+	t=1749822553;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=YjS4FgumbpMzv9fEu22F5Rks2OfWmnc/lcG4e4ZImik=;
-	b=PHllxcB0wok/L5Muc2Um9HeoTDJGmHvMvHrVVv3lLJe5BL5XKkaIJ5ttmfK27pE+ifENRM
-	9lH+tJpw4tOEsOuO6eh4xFfVLeJVj2gCfizN+1DirJCJ67Oc0u4n2QhHtmzVSxYYZ7rb48
-	8DU0NcwST/xddWDWg54ae6EJEdr/JlkWGvUqDLbtncritg1WKu0azwrJvjyMcuKZayH9WH
-	5TEUK863LhZatYxNVv3LKIB52DuJaNL6TdrmBVYSi8B6Z7Zgn83SiLKBae52EgAEF5NWZv
-	i9bed/g5gpFkYuyYvDW7tXX3VLaUuilXsxH3Zb1VhDbgPoEkWz+wTIGQDnXX9A==
+	bh=72CBHzhUbbuM1IOY+HEenpfQnU443LDQ5XSU4O8peV4=;
+	b=lHeuyzbGJblqjgWJc/2lTdUV5gCIlxg9fk9WcxCgod9ekFUFjz3GdoaRB6J6+8EOv1lPUm
+	YZ2E9BBbE13dBtmH8/g5lqRcKn2VPHHlvAa+5xvEIBVXO5UTkvoShiyRxeGLXoSjA+paRf
+	j374OWKKMoRVrmAng9uqULrkevPj4uvdzisVJUdXsnfcfUwVHyweVw2PAJkJgBxqiPcpwt
+	1dmn5Li6EUW7fSxjxgmoFIWmkhYAiFgXiAJR30rDwKVwRvRonG7MQswp3WY/NTehxJNEJs
+	6QMpsU8MxeQOPzGBk2FWKLlJchoAgQbig6c3Alp5paVccbQwNnRxQ5GoIK2P6w==
 From: Herve Codina <herve.codina@bootlin.com>
 To: Andrew Lunn <andrew@lunn.ch>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -95,9 +95,9 @@ Cc: Wolfram Sang <wsa@kernel.org>,
 	Steen Hegelund <steen.hegelund@microchip.com>,
 	Luca Ceresoli <luca.ceresoli@bootlin.com>,
 	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH v3 11/28] PCI: of: Use fw_devlink_set_device()
-Date: Fri, 13 Jun 2025 15:47:51 +0200
-Message-ID: <20250613134817.681832-12-herve.codina@bootlin.com>
+Subject: [PATCH v3 12/28] driver core: fw_devlink: Tag the fwnode dev member as private
+Date: Fri, 13 Jun 2025 15:47:52 +0200
+Message-ID: <20250613134817.681832-13-herve.codina@bootlin.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250613134817.681832-1-herve.codina@bootlin.com>
 References: <20250613134817.681832-1-herve.codina@bootlin.com>
@@ -114,29 +114,41 @@ X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddugddukeduudcutefuodetggdotef
  ghuvghrsehpvghnghhuthhrohhnihigrdguvgdprhgtphhtthhopehkvghrnhgvlhesphgvnhhguhhtrhhonhhigidruggvpdhrtghpthhtohepfhgvshhtvghvrghmsehgmhgrihhlrdgtohhm
 X-GND-Sasl: herve.codina@bootlin.com
 
-The code set directly fwnode.dev field.
+The dev member in the fwnode structure should be accessed only by the
+fwnode core. The fw_devlink_set_device() helper has been introduced to
+avoid users to set this member directly. All users have been converted
+and use fw_devlink_set_device() to set the field.
 
-Use the dedicated fw_devlink_set_device() helper to perform this
-operation.
+To avoid future abusers who might set the field directly and allow
+sparse to detect them, tag the dev field as a private field.
 
 Signed-off-by: Herve Codina <herve.codina@bootlin.com>
 ---
- drivers/pci/of.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/fwnode.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/pci/of.c b/drivers/pci/of.c
-index 3579265f1198..95baa29d4c2d 100644
---- a/drivers/pci/of.c
-+++ b/drivers/pci/of.c
-@@ -803,7 +803,7 @@ void of_pci_make_host_bridge_node(struct pci_host_bridge *bridge)
- 	 * bus. Avoid any new device creation.
- 	 */
- 	of_node_set_flag(np, OF_POPULATED);
--	np->fwnode.dev = &bridge->dev;
-+	fw_devlink_set_device(&np->fwnode, &bridge->dev);
- 	fwnode_dev_initialized(&np->fwnode, true);
+diff --git a/include/linux/fwnode.h b/include/linux/fwnode.h
+index a1345e274125..5762914fdbf2 100644
+--- a/include/linux/fwnode.h
++++ b/include/linux/fwnode.h
+@@ -54,7 +54,7 @@ struct fwnode_handle {
+ 	const struct fwnode_operations *ops;
  
- 	ret = of_changeset_apply(cset);
+ 	/* The below is used solely by device links, don't use otherwise */
+-	struct device *dev;
++	struct device *__private dev;
+ 	struct list_head suppliers;
+ 	struct list_head consumers;
+ 	u8 flags;
+@@ -234,7 +234,7 @@ bool fw_devlink_is_strict(void);
+ static inline void fw_devlink_set_device(struct fwnode_handle *fwnode,
+ 					 struct device *dev)
+ {
+-	fwnode->dev = dev;
++	ACCESS_PRIVATE(fwnode, dev) = dev;
+ }
+ 
+ #endif
 -- 
 2.49.0
 
