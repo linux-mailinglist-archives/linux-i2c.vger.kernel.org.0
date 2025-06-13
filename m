@@ -1,50 +1,50 @@
-Return-Path: <linux-i2c+bounces-11440-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11441-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B848AD8DFF
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Jun 2025 15:55:47 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D99F8AD8DCF
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Jun 2025 15:52:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AEB341BC49E8
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Jun 2025 13:52:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 721BA7B157D
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Jun 2025 13:51:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3286D2E888F;
-	Fri, 13 Jun 2025 13:49:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F1A42E88BD;
+	Fri, 13 Jun 2025 13:49:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="L+1H2fil"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="RV5XLwfl"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05C0C2E7F10;
-	Fri, 13 Jun 2025 13:49:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 696892E8880;
+	Fri, 13 Jun 2025 13:49:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749822550; cv=none; b=evKTYuz6shPNab2XHyy5+v41J5nALTs7C2O4yeue2vWOS7Aspb5q60MAqo/uM+HwfGXtPyICQdAW0TKIX/d5vGBbf3qYAbPWk9ZQSb+u6/0OAa2BS5peqNck45fnXX6Bfhd9oNTBdfHnAr4yPRSsjV3F+rnX2oymtRDcG3jIUAU=
+	t=1749822553; cv=none; b=N/uoa2qrLECQi2kQ42R0WJ5yRAfq5a0oxla+QhEcGL1lgKkMbSVyOcSNMZ0mFDSsU8Ai5cPInZ7lsJJwrDCnErPdK+PX9sFZZBLnlWgBBvUBNdV1BiEjADT2hBOwWOXQOfqVNDwBltjpxNfiKx0IU58CTrTmKF6NV+o2V+7n2fk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749822550; c=relaxed/simple;
-	bh=ltKxrRZCE3vQwcSOPmH3t0RpW1gJJM9S8Z4PKPrJIXE=;
+	s=arc-20240116; t=1749822553; c=relaxed/simple;
+	bh=XAuPSgZ/0v6OXmcrnIV8xZwxIlUqBxgqFFPfuhF1+co=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fXCzaKgLgpTqzbtIeXc+rR3mZokx3zqFRxFtvB/1VWQq1fb1VLRr+Zh42cTMcP/HvVHzGO31kr5xyXWyO4In4fagsrAPDZ50EUJqI2Denz3PC3Dupv776scs114iR0ru/iJjTvuxba21r+4g1er6QTq5jLeYhAGdeSy3pDF91Pk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=L+1H2fil; arc=none smtp.client-ip=217.70.183.199
+	 MIME-Version; b=CzIjUf4aZ73stWsT5eB8MGPDmDSzdAtee47F3wbX30rsbBWK9LLqws8ptbJwSyDQcBt7X94RX6eiNKSzXdkdqEEVT4qiX7SxdiVmb36wi6OHTJVyLOBkjKsg4ImQYCjbzBgqhgg5xGuUG5Wb0Moz99URJtFMEYojoMdoZQjuVpE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=RV5XLwfl; arc=none smtp.client-ip=217.70.183.199
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPA id 509C1442C8;
-	Fri, 13 Jun 2025 13:49:04 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id ACB434429B;
+	Fri, 13 Jun 2025 13:49:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1749822546;
+	t=1749822549;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Fu3BNSVHKmy04NQ87GhaRbTFlXKz2qXLPyUjazq0Nsw=;
-	b=L+1H2filJSYge25xAuUMzmbFgGKeBLLr1cvIbkhQzPAtorR1yhEqgjE/gOZEcoH2MCl0qS
-	6JwtjLLtfz1UC0j/pDYJzA6qbxTLOVmaIkzW1qD/EkxLpa+FEmnwFbg438eKXhNOj2RFxn
-	Z0gkzu9VbfvGWgT4/3aO662awU+wK5wWzMHxPX7v/OFy7iI9VRtcuPm+k0K9JJYaAD57Vv
-	a9CYNnk65nK3G+B9XQvkQYW1gwYjg6pah+i+dkoi1JtmxNt30liVJWhhGg8THbeEk1OJJY
-	mY65YFLZY1tByl6+S9I9IGXgYX4hxrlwe0bAMt6ALWrM87T2HDODeR/+0tGkCQ==
+	bh=bGj5HXIGlGMQZaKvLbze0Pn2mzo5+WUvyC1TOvLZ/so=;
+	b=RV5XLwfl4YN3CPo61ILIXWjTLLX24SBCk52CWu3xzSrZIgWkxKWCW2VUsUyXzq6dd7aQQO
+	z9OBurcx/LyzzaYDz/JDUxjMaztmhz5nu/0MP02kce7ITftGjRgHMIVHlWGAqc7VhbYkuA
+	mG82P2W6Ml4BblhjAFs1rKHMUfuqTBxEyqCX7lFiSkfYCQ8nTj8SI6q9emfvZJtzXFH+8g
+	/vSHx8YH42tCGIB9ncHc1VCOsQdhIqyPNrYoSmM6m4OZNu3snGrjnuxgUt804MoEq7K1UM
+	Ka5RWNNRXyp4TgCvvF2FoWNo1+NhBBq7amf5Bl7o+0dpkloD1sOEtOJp8A1v4A==
 From: Herve Codina <herve.codina@bootlin.com>
 To: Andrew Lunn <andrew@lunn.ch>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -95,9 +95,9 @@ Cc: Wolfram Sang <wsa@kernel.org>,
 	Steen Hegelund <steen.hegelund@microchip.com>,
 	Luca Ceresoli <luca.ceresoli@bootlin.com>,
 	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH v3 09/28] cxl/test: Use device_set_node()
-Date: Fri, 13 Jun 2025 15:47:49 +0200
-Message-ID: <20250613134817.681832-10-herve.codina@bootlin.com>
+Subject: [PATCH v3 10/28] cxl/test: Use fw_devlink_set_device()
+Date: Fri, 13 Jun 2025 15:47:50 +0200
+Message-ID: <20250613134817.681832-11-herve.codina@bootlin.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250613134817.681832-1-herve.codina@bootlin.com>
 References: <20250613134817.681832-1-herve.codina@bootlin.com>
@@ -114,9 +114,10 @@ X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddugddukeduudcutefuodetggdotef
  ghuvghrsehpvghnghhuthhrohhnihigrdguvgdprhgtphhtthhopehkvghrnhgvlhesphgvnhhguhhtrhhonhhigidruggvpdhrtghpthhtohepfhgvshhtvghvrghmsehgmhgrihhlrdgtohhm
 X-GND-Sasl: herve.codina@bootlin.com
 
-The code set directly dev->fwnode.
+The code set directly fwnode.dev field.
 
-Use the dedicated helper to perform this operation.
+Use the dedicated fw_devlink_set_device() helper to perform this
+operation.
 
 Signed-off-by: Herve Codina <herve.codina@bootlin.com>
 ---
@@ -124,18 +125,18 @@ Signed-off-by: Herve Codina <herve.codina@bootlin.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/tools/testing/cxl/test/cxl.c b/tools/testing/cxl/test/cxl.c
-index 8a5815ca870d..1db7732a70df 100644
+index 1db7732a70df..80e6fb3c9a43 100644
 --- a/tools/testing/cxl/test/cxl.c
 +++ b/tools/testing/cxl/test/cxl.c
-@@ -1046,7 +1046,7 @@ static void mock_companion(struct acpi_device *adev, struct device *dev)
- {
+@@ -1047,7 +1047,7 @@ static void mock_companion(struct acpi_device *adev, struct device *dev)
  	device_initialize(&adev->dev);
  	fwnode_init(&adev->fwnode, NULL);
--	dev->fwnode = &adev->fwnode;
-+	device_set_node(dev, &adev->fwnode);
- 	adev->fwnode.dev = dev;
+ 	device_set_node(dev, &adev->fwnode);
+-	adev->fwnode.dev = dev;
++	fw_devlink_set_device(&adev->fwnode, dev);
  }
  
+ #ifndef SZ_64G
 -- 
 2.49.0
 
