@@ -1,148 +1,104 @@
-Return-Path: <linux-i2c+bounces-11403-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11404-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 379DBAD8388
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Jun 2025 09:02:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D16BFAD8405
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Jun 2025 09:30:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CB5093B6563
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Jun 2025 07:01:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 930423A00D6
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Jun 2025 07:30:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30A2025BEE2;
-	Fri, 13 Jun 2025 07:00:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5936F25B309;
+	Fri, 13 Jun 2025 07:30:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="euIEhjk7"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="AoIaen+J"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCDE825A327;
-	Fri, 13 Jun 2025 07:00:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 283B91EA7E1;
+	Fri, 13 Jun 2025 07:30:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749798045; cv=none; b=VR0NvHsYKnHTn1C2RqhUUF6+y1avWm0aQLNCRE4jVQq/xSLKej3RK9WRdFueEJwuGvCFhV+IfGJoA9N+IcIqPpgjqPXu9m7g6BARbXAO+sSZN8W5EAo2p950+qqIsBR0UWFbYyMFrZf8CgPkIOiJwpUeTncYIbjcObbRNDUIR8Y=
+	t=1749799824; cv=none; b=Kh37x93sY51sdGBPbLafokUE3Bgm5W0VtEKtMyawvQM8M2c0KNfk+uOm95qNsBVgcOlgKWEoWYMlaNXwV5TGTLeiZdIkfG06ZXvJv9ak5uciG22GddtIAQfdiApMzuPJfwa7gQoUd+LBwVxy2ZI26Eu5YyEg6OBM8PmpA0GF3R8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749798045; c=relaxed/simple;
-	bh=Bvj8CtaShUexAfMaH2rcjFAH8uSwrjT3+TlcJ5+aHgs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LtyRWnfyAu6GzgK/2P1RUy3ybrLyTLJg5oJN6cG//Obo+BL/juZzUu+g889v52GP6LbmLJ9TMn3/1+xZey+zR7F0uprXD+0oeqCCsKHAwft/0zBNXCOebAZfUMDAcJTyJMkTfpirgNjyq6fL4W4PwQH3TvFWqi7JoYwVZRy5yTk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=euIEhjk7; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1749798044; x=1781334044;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Bvj8CtaShUexAfMaH2rcjFAH8uSwrjT3+TlcJ5+aHgs=;
-  b=euIEhjk75uNY27/cmPZsIRC4ZAkVHCDWmVu13CNSZAOddjYF3JYCgjTV
-   fxahn/RL8Ew2pA1oDxFLDa+f/nwdfkHgDGh5A5HX8B4nzt503IfIWUtqC
-   nl+BvhbtUxudb+pseT/XFG6EVl6ptSmhlOCxbMSu9hw3fUtiAwaoh3gON
-   Yj/NiP4KTLx9RLzGW3OHPzC0IT8mFrMC6rZPR/ZDoV8ERosdkQezsYTqr
-   iUBoA7fc4fl3JsKZr0wmEUbu3Gla+DdDH5uXDhB/J9xEZKW0uY4ID1ZLn
-   96YMbjEC9YG2TsV6W1a2vBjljFbLrC6Ta8a0hR/b7ZtmUVd1IChUFhvL9
-   A==;
-X-CSE-ConnectionGUID: S1I/r/I2Q0aHD4ZR6NLVlQ==
-X-CSE-MsgGUID: OYObDru+S5KGjsJrP/3wEA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11462"; a="55803189"
-X-IronPort-AV: E=Sophos;i="6.16,233,1744095600"; 
-   d="scan'208";a="55803189"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2025 00:00:43 -0700
-X-CSE-ConnectionGUID: 7//jaAb9Tjqk9OACg5dc1A==
-X-CSE-MsgGUID: u/GJR5lmQHun57KFWNtcEw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,233,1744095600"; 
-   d="scan'208";a="147625757"
-Received: from smile.fi.intel.com ([10.237.72.52])
-  by fmviesa007.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2025 00:00:39 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1uPyOy-00000006AQq-4AUO;
-	Fri, 13 Jun 2025 10:00:36 +0300
-Date: Fri, 13 Jun 2025 10:00:36 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Akhil R <akhilrajeev@nvidia.com>
-Cc: andy.shevchenko@gmail.com, andi.shyti@kernel.org, conor+dt@kernel.org,
-	devicetree@vger.kernel.org, digetx@gmail.com, jonathanh@nvidia.com,
-	krzk+dt@kernel.org, ldewangan@nvidia.com, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-	p.zabel@pengutronix.de, robh@kernel.org, thierry.reding@gmail.com
-Subject: Re: [PATCH v4 2/3] i2c: tegra: make reset an optional property
-Message-ID: <aEvMlKIfcccD_s-O@smile.fi.intel.com>
-References: <aEsf7Ml__JE1ixQX@surfacebook.localdomain>
- <20250613060032.14927-1-akhilrajeev@nvidia.com>
+	s=arc-20240116; t=1749799824; c=relaxed/simple;
+	bh=JaMvdmEB/xNxDbDBv2rfaj0AEG3Hnsd5q0m4mD/t37I=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Kj6TSFUlbLFALlgzYtuUzmQA3wLrNEmipeTat0VVpqKBzz/ZU8/b06kIcIVCVoSmi3K3EeQcpgALkoaWJqKdgqU3NASoM5gCzCvHK2fkkxl+2q+PmLNuUJ8/bYytvSMNlk1ZAh8DHcejEr12GBAXA40ovbXkkv1Feinkx1M7vM8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=AoIaen+J; arc=none smtp.client-ip=217.70.183.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C8D56443E0;
+	Fri, 13 Jun 2025 07:30:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1749799818;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=49gLt15vu4mXbCU+te8YR47e4SuHu/CNyG4+R0GFtfQ=;
+	b=AoIaen+JdHaQhT0muniYwYMTBLi5m28ommnG27txBGyXsFiV8yYOp66M7LgdeTx0JFqx60
+	JHt/BALBmHTrKhpR6dlvnlrSL8dQr4RBrJcbCCkC8RQiJAEhaUk+iYIRMQ2usSQnJ5NoQz
+	gAaFsOtk11Nc1jA+IJdFlmiGj/KDjtdUJahMxlwW7SezkEQd8HnOTdFmFi8yMcHtWhbKZM
+	bEPd0NC9QpqAzqMhCdNzBLZdY7D/iEELhFF5XV1vJO+LrMJXp6yVEjsZDcgqql9c/bDOYx
+	9IsEf4zUcBT+CtcMnk1cADsr4DwFQ8qi1jlMPhjUraOf4ZGNDA4UWD1aBRNlug==
+Date: Fri, 13 Jun 2025 09:30:16 +0200
+From: Herve Codina <herve.codina@bootlin.com>
+To: Ayush Singh <ayush@beagleboard.org>
+Cc: conor+dt@kernel.org, devicetree@vger.kernel.org, krzk+dt@kernel.org,
+ linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+ luca.ceresoli@bootlin.com, robh@kernel.org, thomas.petazzoni@bootlin.com,
+ wsa+renesas@sang-engineering.com
+Subject: Re: [RFC PATCH 0/3] i2c: Introduce i2c bus extensions
+Message-ID: <20250613093016.43230e3b@bootlin.com>
+In-Reply-To: <525877c8-6c64-45b3-b4aa-a52768e59b86@beagleboard.org>
+References: <20250205173918.600037-1-herve.codina@bootlin.com>
+	<525877c8-6c64-45b3-b4aa-a52768e59b86@beagleboard.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250613060032.14927-1-akhilrajeev@nvidia.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddugddujeefhecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfohfogggtgfesthekredtredtjeenucfhrhhomhepjfgvrhhvvgcuvehoughinhgruceohhgvrhhvvgdrtghoughinhgrsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeviefffeegiedtleelieeghfejleeuueevkeevteegffehledtkeegudeigffgvdenucfkphepledtrdekledrudeifedruddvjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeeltddrkeelrdduieefrdduvdejpdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpehhvghrvhgvrdgtohguihhnrgessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepuddtpdhrtghpthhtoheprgihuhhshhessggvrghglhgvsghorghrugdrohhrghdprhgtphhtthhopegtohhnohhrodgutheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggvvhhitggvthhrvggvsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepkhhriihkodgutheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqihdvtgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtp
+ hhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehluhgtrgdrtggvrhgvshholhhisegsohhothhlihhnrdgtohhmpdhrtghpthhtoheprhhosghhsehkvghrnhgvlhdrohhrgh
+X-GND-Sasl: herve.codina@bootlin.com
 
-On Fri, Jun 13, 2025 at 11:30:32AM +0530, Akhil R wrote:
-> On Thu, 12 Jun 2025 21:43:56 +0300, Andy Shevchenko wrote:
+Hi Ayush,
 
-> >> >> >     if (handle)
-> >> >> >             err = acpi_evaluate_object(handle, "_RST", NULL, NULL);
-> >> >> > -   else
-> >> >> > +   else if (i2c_dev->rst)
-> >> >> >             err = reset_control_reset(i2c_dev->rst);
-> >> >> > +   else
-> >> >> > +           err = tegra_i2c_master_reset(i2c_dev);
-> >> >>
-> >> >> Can you please take a look here? Should the reset happen in ACPI?
-> >> >
-> >> > This is a good question. Without seeing all the implementations of _RST method
-> >> > for the platforms based on this SoC it's hard to say. Ideally the _RST (which
-> >> > is called above) must handle it properly, but firmwares have bugs...
-> >> >
-> >> > TL;DR: I think the approach is correct, and if any bug in ACPI will be found,
-> >> > the workaround (quirk) needs to be added here later on.
-> >> 
-> >> As in Thierry's comment, I was in thought of updating the code as below.
-> >> Does it make sense or would it be better keep what it is there now?
-> >> 
-> >> if (handle && acpi_has_method(handle, "_RST"))
-> >> 	err = acpi_evaluate_object(handle, "_RST", NULL, NULL);
-> >> else if (i2c_dev->rst)
-> >> 	err = reset_control_reset(i2c_dev->rst);
-> >> else
-> >> 	err = tegra_i2c_master_reset(i2c_dev);
-> >
-> > This will change current behaviour for the ACPI based platforms that do not
-> > have an _RST method. At bare minumum this has to be elaborated in the commit
-> > message with an explanation why it's not a probnlem.
+On Thu, 12 Jun 2025 13:22:45 +0530
+Ayush Singh <ayush@beagleboard.org> wrote:
+
+> I have tested this patch series for use with pocketbeagle 2 connector 
+> driver [0]. To get a better idea how it looks in real devicetree, see 
+> the base tree [1] and the overlay [2]. Since it also used gpio and pwm 
+> nexus nodes, along with providing pinmux for pins, it can provide a 
+> better picture of how the different pieces (export-symbols, nexus nodes, 
+> etc) look when combined.
+
+Nice. Happy to see that I am no more alone with a system using these
+features.
+
 > 
-> This sequence is hit only at boot and on any error. It should be good to reset
-> the controller internally at least for those cases. We are reconfiguring the I2C
-> anyway after this and hence should not cause any problem.
-> Will add these in the commit message as well.
+> 
+> I also have a question for Herve. Do you already have any working 
+> patches for similar extension for SPI and UART in some private tree?
 
-This is not enough. You should explain the ACPI case. The above is just generic
-wording as I read it. It does not explain 1) if there are ACPI firmwares that
-have no _RST method for this device; 2) why it's not a problem for them to do
-like this and why it was not supported before (with the current code this
-platform will return an error on the method evaluation. Moreover the current
-code is buggy. The acpi_evaluate_object() returns an ACPI error code and not
-Linux one. so, for the such platforms (which I think do not exist, but still)
-the err will have positive code which may be interpreted incorrectly.
+No, I didn't do anything related to SPI nor UART.
 
-So, fix the bug first, then rebase your code based on that change and
-extend the commit message to really elaborate on all of the aspects.
-W/o this done it's no go change.
+On my system, no SPI nor UART are wired to my connector and so, I haven't
+got any needs to implement extension busses for SPI an UART (serial dev bus)
+nor any support for nexus nodes for other kind of components.
 
-
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Best regards,
+Hervé
 
