@@ -1,160 +1,195 @@
-Return-Path: <linux-i2c+bounces-11401-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11402-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC61BAD80DA
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Jun 2025 04:16:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F526AD82DF
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Jun 2025 08:01:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 49B4F17E0F4
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Jun 2025 02:16:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 840071899813
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Jun 2025 06:01:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E75C1EFFA6;
-	Fri, 13 Jun 2025 02:16:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12D97255F3C;
+	Fri, 13 Jun 2025 06:01:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b="KCzhBJrz"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="RCBjGd03"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2081.outbound.protection.outlook.com [40.107.220.81])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84B791DB92E
-	for <linux-i2c@vger.kernel.org>; Fri, 13 Jun 2025 02:16:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.52
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749780971; cv=none; b=ePqR+s4KAorBwHDond9QuYJAHnk6ypRI2AZmmued4XJGr8laxpBhOKdrCAvMYoA4mqotOu1zs2aOIfR31siTHe+YaNdktunyR/cq1FJ5RXjNFviS9YrjYsqho64r2kCt/5prP1WtoGkKNdjOsOqDDztLXh6plTLuPmTXuuKMBCM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749780971; c=relaxed/simple;
-	bh=bq8ZvLLY3sBFobFVReFNoN1iLHim74L7lvCBMNa9U60=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FkgWpeAgssMo0VjtxrPOwq3xaBJsvqRrS62LfW2b1dWdGfcU5poZl16Mph4f+60m7QJ1RQdyQokQtHWOn9oFl5z63t5lOnt6w1lCSLYDiKu+ijPYRCutYIU00txhi++OcMUrf3p0iMWYI3ViRdsDa3EAD3yqS83d00ByT2zw2uc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b=KCzhBJrz; arc=none smtp.client-ip=209.85.219.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
-Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-6fae04a3795so16944146d6.3
-        for <linux-i2c@vger.kernel.org>; Thu, 12 Jun 2025 19:16:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=riscstar-com.20230601.gappssmtp.com; s=20230601; t=1749780967; x=1750385767; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hkp2SwT2RePaCxrYCauyGX41s3IGrIg/X27XfJMOji4=;
-        b=KCzhBJrzuBKajrJZ8jRIIiCPju9sJWppE3KqgUceDOLFz4m4AzNlM1dFDT1vyIEbIm
-         apoUIPOTwGXqfWOzCsaRiUGyFNMZNm3C3rz/jfdE+1vwmVvtAbapfh3mdT/Bs71ERN7S
-         CIVnTi0PUpuxAnlHM5tfXHaxqqzBw68LLUeAJSuxDO1ORDpWhsxqSdTFO5GUNoC3BxIx
-         9QmHoPR0csnoN672QnrhE1IDXsRA/IOp7SUerRhCKk6gsMTp6IBLPY5A323Ul/VDAbfq
-         WSlI+eXK4rkDx4Zc1MBMhcZBnqkM+Irh0WEtqppVk/ZJ6oEkEkPJCViqGbiGXL53q+uW
-         tXBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749780967; x=1750385767;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hkp2SwT2RePaCxrYCauyGX41s3IGrIg/X27XfJMOji4=;
-        b=IYkUyHkTTgOlOfn/rkn+CujeX7pkrDMRWdNGuuV6d66Y3KkZND0gDgDYDZjkSklboW
-         tiuACusAw7lZTYN8uG0abYZio0PVJyBXZ2ZZnlsTWeaGHcTpWH6Tc+OdcY/BH7MjFDtq
-         eLt2AuvtXCgC65hmqPwTO6Cu1d/PaMJj5g6uTdwdGFX6GPx2yrCcTIZuIJPww++pqBX2
-         CyeNhq8/rUQCO448fj0lMVbw7uv4ixycklBisRMMM0L8HyiIn/PZCkc7MQNszcH4+Jez
-         BMg/orV1WeDoqQ7NvAKhR7AvKW+HILVS7iUVsucEhpdVDYQ+ao4FJKjSuNPctC9xNzoG
-         KJVw==
-X-Gm-Message-State: AOJu0YwpPfxz/ekC12P4Y/xNpLvHvMacIGL89IuDGlNSCnhs1vV6f6nW
-	ze1dr80eW7c1OHZ6iwJuNjrG7nGXX2grDk6dtoo/Weoo4Cd1Nw7m811KnYHw64b80ejaaZhRrEQ
-	55poC
-X-Gm-Gg: ASbGncsPeYYdTRhJONQK9ZCB6+MbAuNr34oPuMahEE0+aPdvm+KdGlsquGb8MlExCXS
-	8Yxex6TxzGlHnqDqx97iX89O/0FB8w7/JnH7Kb2ZKT/VEp2OL/BUrGoqvn5H7XAIoaecQDYkgzU
-	SCbOsPIhajqZfWtYfLmIzcYq/N5a1hBluWWo2ZMsa8O4a/zYInlWBgaNguv0abYYpIExGUkfZQa
-	Y+uBOjpdObJnhTIUFSvD9yH4iCzqVVJlu93njkBUPYMTDmIVCLVBTdwhN4Pu2bNkcS6z8ts8HzF
-	ZhKkVc4TVw8yTUa1nabgrFHrSAVgUkm/LXwDYgUw5bD9EW9ypXESgzKCQyRUy4d8ra40TqyKg/M
-	Jox9O0opga19okGwoBAAdbvBhlA==
-X-Google-Smtp-Source: AGHT+IEPrCYVuYaf2snbGSL6nYTSnkJ5v4bgC7WUqyASAClJfsf2Fn+WgQFF908p7KrLOpj+L5tcig==
-X-Received: by 2002:a05:6214:230a:b0:6e8:fbb7:6764 with SMTP id 6a1803df08f44-6fb3e629659mr19306186d6.45.1749780967455;
-        Thu, 12 Jun 2025 19:16:07 -0700 (PDT)
-Received: from [172.22.22.28] (c-73-228-159-35.hsd1.mn.comcast.net. [73.228.159.35])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6fb35c895f2sm16333826d6.116.2025.06.12.19.16.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Jun 2025 19:16:07 -0700 (PDT)
-Message-ID: <d7f7dc4c-5d2a-4f63-9451-5e4d2e53cf1b@riscstar.com>
-Date: Thu, 12 Jun 2025 21:16:05 -0500
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B50422157F;
+	Fri, 13 Jun 2025 06:01:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.81
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1749794461; cv=fail; b=Frk8/YYREV0MF29Eya1xHPmsv6CMvLGbXeYjiciXqN1K5tQwBBHBpEv0nhWRT/9z9AoN6FI5L7hN6sqI5l0PEwpjn+Set5ro4Q8qgL0bcg/XjDt1waL2WAq5dBDgv0jD+PBEhD85tztr6rp3e63h6og9gd6nho7q/VHPanDt/CA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1749794461; c=relaxed/simple;
+	bh=htxtD/lwPvMIN6YC03sfGLStRY8Ct/G69TUjvK45iwY=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=GQigOKrRe8ME6sPWSS0UjFi4+n26gFcul02PiIZB9hFSRmUk28v1G74FH8LY3th2oFR5AjgFuQMw83VAKYrcyTABTU9tW6GiK7Q8/we9YbOEZFLy4KS5KnvnKv28YrWmqATxYN8W2gvJ/i65N2nl0ShgmpiRMkMR0Db0JHV7Azc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=RCBjGd03; arc=fail smtp.client-ip=40.107.220.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=uZnrdY1QRTuSx8rB9vw50YvbUvfm5QZ8HucToPMNvR2U5UjilRqHDZTvWuIgew41B97Q9VU7j21jCqHafWrFGkKM1e2RGC2ka4m3/jmrlP1jUx/bKZDFNVtpfxhaEN3X5Teb0crGhDeAA68RbHKeZm8SLSZhiuPD5pcTrsHdcZv3azVycW/T7/inb/aA0Z34nrHZe2MG8ES5N44uEqSqdTOTGT//YlRJs65KhhcuBOCaIXdLt1uAtYlk6v7xtkCAPN1+i/zdvJWFePm7NrkcNkvOiYN1T74yck1X5w3ApnWsdX4GboTfpb90vbLSjidLSedd/6aHewzlx1Uo3cUncQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=faNQP2fyY+ZkpP9GOuCQJNodHoS2EKDP6N9KBZ2u6vw=;
+ b=YH9YvTlKu7JTpgzURFkaax0M/VdynhRKjheVx5fMJcWwXEUfyELnvbc80NBevyXKd54bUIHyWifpmQ56wq1Vxsaab+nlmrjYtGvtPfKrvMJ7LrZD4XAsLF2kfaKRC0BXJ3wupD0xL/cMvsyqA0r2ToSj/ITlBj/3pq4bqqtT4xNAhq+Ekq3g5g+nfgMucd4htFyGebHPF7hohEvvA8naipVTKdbbFosheBEySkDKXd9eFNEEflBHqU6HQ1hFJpj0jGq7wfdF9uiFnU1ilhUxVsObWI2vWOprddxku6FLrRcgW/e2aLF2uF+7mFBAGGPmmH/tIU4MP1DyQrxwmXw1Kg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=faNQP2fyY+ZkpP9GOuCQJNodHoS2EKDP6N9KBZ2u6vw=;
+ b=RCBjGd03+OWDagS5YufHjLDHNwh5if86+Cuv+U9XPW3+TP9GbQBWAyUry4V3GZUzofSknWpEwGQA9z6edWOX6Um4V7gymUOSAlmHN07XHxsS/3oqHUJj9CvzF3YCl9f4Pwc5MyawenUbUrh2Yjj0MpewvJyhynXFrAgcRAGuIJoHppBv5lZukpfLBUW2KResnY5ud3VkwwnNWNJTan/5jRzeq68HlA0Ky8ylTNluOSnKi0V136vfl1Pj3anl9pVjPSuDiUlbBjxiL79+Hqoqpqo+kkRJxiNS57Zu/ATerOKDFin0xTAa45GQwszQq42/QUH8Ex0OMks6DeB50g+wCA==
+Received: from BYAPR02CA0037.namprd02.prod.outlook.com (2603:10b6:a03:54::14)
+ by SA1PR12MB8988.namprd12.prod.outlook.com (2603:10b6:806:38e::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8792.40; Fri, 13 Jun
+ 2025 06:00:56 +0000
+Received: from SJ1PEPF00001CE3.namprd05.prod.outlook.com
+ (2603:10b6:a03:54:cafe::a4) by BYAPR02CA0037.outlook.office365.com
+ (2603:10b6:a03:54::14) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8835.23 via Frontend Transport; Fri,
+ 13 Jun 2025 06:00:56 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ SJ1PEPF00001CE3.mail.protection.outlook.com (10.167.242.11) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8835.15 via Frontend Transport; Fri, 13 Jun 2025 06:00:56 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 12 Jun
+ 2025 23:00:38 -0700
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail204.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Thu, 12 Jun
+ 2025 23:00:37 -0700
+Received: from BUILDSERVER-IO-L4T.nvidia.com (10.127.8.9) by mail.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server id 15.2.1544.14 via Frontend
+ Transport; Thu, 12 Jun 2025 23:00:33 -0700
+From: Akhil R <akhilrajeev@nvidia.com>
+To: <andy.shevchenko@gmail.com>
+CC: <akhilrajeev@nvidia.com>, <andi.shyti@kernel.org>,
+	<andriy.shevchenko@linux.intel.com>, <conor+dt@kernel.org>,
+	<devicetree@vger.kernel.org>, <digetx@gmail.com>, <jonathanh@nvidia.com>,
+	<krzk+dt@kernel.org>, <ldewangan@nvidia.com>, <linux-i2c@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+	<p.zabel@pengutronix.de>, <robh@kernel.org>, <thierry.reding@gmail.com>
+Subject: Re: [PATCH v4 2/3] i2c: tegra: make reset an optional property
+Date: Fri, 13 Jun 2025 11:30:32 +0530
+Message-ID: <20250613060032.14927-1-akhilrajeev@nvidia.com>
+X-Mailer: git-send-email 2.49.0
+In-Reply-To: <aEsf7Ml__JE1ixQX@surfacebook.localdomain>
+References: <aEsf7Ml__JE1ixQX@surfacebook.localdomain>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] i2c: k1: check for transfer error
-To: Troy Mitchell <troymitchell988@gmail.com>, andi.shyti@kernel.org,
- dlan@gentoo.org
-Cc: linux-i2c@vger.kernel.org, spacemit@lists.linux.dev,
- linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
- Troy Mitchell <troy.mitchell@linux.dev>
-References: <20250612225627.1106735-1-elder@riscstar.com>
- <aEuI9-QWCv6CRUyX@troy-wujie14pro-arch>
-Content-Language: en-US
-From: Alex Elder <elder@riscstar.com>
-In-Reply-To: <aEuI9-QWCv6CRUyX@troy-wujie14pro-arch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NV-OnPremToCloud: AnonymousSubmission
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ1PEPF00001CE3:EE_|SA1PR12MB8988:EE_
+X-MS-Office365-Filtering-Correlation-Id: f88461b3-f033-4358-95e4-08ddaa3fa9d1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|376014|1800799024|82310400026|36860700013;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?/ZMLvhGreXyyLIubvr9c3zqcXHW89d5ptOcJRT7khojxvtOIC1zO6A0ksJiw?=
+ =?us-ascii?Q?PMhfz+JEbuDTmZOZ6oY8X7rMe5UimqGVohN4jHMH2Bxv+f+CIst+WsuYLmL0?=
+ =?us-ascii?Q?Q+MB55Kw8yAKJ8uj7LfYETmHYdmZGJ60Q4qGqIeQihZ7Vc/hCV2AJVPh6eKH?=
+ =?us-ascii?Q?EcwFztnhL/ce8KBDusB0t4c/OYAZFWXLYF7966PN7jUi7cVe4SL/LxlVG4Lr?=
+ =?us-ascii?Q?0Dfak3UAes6e05fRbcPA/Yuj1TizIntfzwzcL5HnAlCz3cqF/FkBHrvxjL9J?=
+ =?us-ascii?Q?r7OnCE09B3vN5EjuoNAnLckSwzISXlpCZYPNrquv1i8gxFjEVybxGTNglxn7?=
+ =?us-ascii?Q?k8JWSwSHMcCmxu06qW84oryBd3ooviRunLRR0GlPyzL8BUSbJihbnniGslms?=
+ =?us-ascii?Q?X4WpAFUPvOBTwKvg+1xKl0HnGRGoZqfZAvVw2ASHG8sEDCbLjrx8VHJJNwaW?=
+ =?us-ascii?Q?2pCHADQDfs6yhb/m6MvtMpVQzMjg1/PyXp7UX9dSlTcYa2Big8LR849t7quZ?=
+ =?us-ascii?Q?kdUqS/G6O2R2Kaq0Wz6eVR6+7zMgZRSGvqpsY7fa3qH9qBFVkiugWyo4rXXs?=
+ =?us-ascii?Q?D0iMwAdBlyC+ogmB7x/Or7FugXVmfcs6wS5OzCgQDo1xrKHzdFUTH2amnc18?=
+ =?us-ascii?Q?dHKx2PMQCyO7RJzhLMdWBMtBJSgsYPqeOHYUXuUogFjbj6QwJW3c2hfr7cqb?=
+ =?us-ascii?Q?XAWjnyzwlEW8GFbC1gLfR9tKIOfTQP7irrWo54GTXbkOJ0mq/t+qMkdjK9Qe?=
+ =?us-ascii?Q?pWcW2DBigOYg+4kiQsd9vUwzqZ11lVl3AOcNuwIRleFuhgaySoaaoHAAAU67?=
+ =?us-ascii?Q?PmT67KyUL91qauI4mmuSmQdvqZH73rhpfznJAY+hchElehh5TgWzeio9r36x?=
+ =?us-ascii?Q?sdrltKGV5nMScVB8VK+bz8c8CzEwCv1BULL7OyZc0oIg2gY/ZTISySvY5KeM?=
+ =?us-ascii?Q?vfpztxVF1IWSNB1WeUXlB/lbPpmVVwL+bsUbnir3VBrY6pzIPDRxhdgeFKM7?=
+ =?us-ascii?Q?KJsM6jrYs54lNMcGM827/FKiZ8sgWy6+JQqsN4wRsdO7n+oWw9xb9OutEtS+?=
+ =?us-ascii?Q?konpk0gtTdKOVQiB4j0AkH1de0C+nffwPDePKuSDXfI/G+MDD7cDsxw4enrP?=
+ =?us-ascii?Q?yhfP7MuktQYa5gMqQZsFK75VdME2wryPtl8cRj6aS13jmTQ/ZIaUEOAS8U+y?=
+ =?us-ascii?Q?oWxrKugwzzCB3sZFewxuSDayz2WTD2aW0MVgRSULE3mm9N7xQ9wDI2KyO3pq?=
+ =?us-ascii?Q?lUgypF30u9BvqnvtZ2rWVulzgb6JFcqQFKmZKJALm/bBYsz0YY6P6pBWJX6s?=
+ =?us-ascii?Q?3IaHF5kSgrmvZYSeDgmMM5lWPeijxBRwLLk3rQ7wtEyWKuN83KURQvdX2bdw?=
+ =?us-ascii?Q?seuSePhJVu057jBgdxqaVtXf0dn1Fpm5p2qazcbXqbuUzAXtywxxV4D1wBcj?=
+ =?us-ascii?Q?r3aGEPc94B2Yd60aCMl/EM8X39WcJYpItzSOTQZW2nv9VeqTU2h+YhXhVko6?=
+ =?us-ascii?Q?x5oYQhCjaPcgpLzE0UYSYpK6ZnOGaQHvpYSg?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(82310400026)(36860700013);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jun 2025 06:00:56.4877
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f88461b3-f033-4358-95e4-08ddaa3fa9d1
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SJ1PEPF00001CE3.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB8988
 
-On 6/12/25 9:12 PM, Troy Mitchell wrote:
-> On Thu, Jun 12, 2025 at 05:56:25PM -0500, Alex Elder wrote:
->> If spacemit_i2c_xfer_msg() times out waiting for a message transfer to
->> complete, or if the hardware reports an error, it returns a negative
->> error code (-ETIMEDOUT, -EAGAIN, -ENXIO. or -EIO).
->>
->> The sole caller of spacemit_i2c_xfer_msg() is spacemit_i2c_xfer(),
->> which is the i2c_algorithm->xfer callback function.  It currently
->> does not save the value returned by spacemit_i2c_xfer_msg().
->>
->> The result is that transfer errors go unreported, and a caller
->> has no indication anything is wrong.
->>
->> When this code was out for review, the return value *was* checked
->> in early versions.  But for some reason, that assignment got dropped
->> between versions 5 and 6 of the series, perhaps related to reworking
->> the code to merge spacemit_i2c_xfer_core() into spacemit_i2c_xfer().
->>
->> Simply assigning the value returned to "ret" fixes the problem.
->>
->> Fixes: 5ea558473fa31 ("i2c: spacemit: add support for SpacemiT K1 SoC")
->> Signed-off-by: Alex Elder <elder@riscstar.com>
->> Reviewed-by: Troy Mitchell <troymitchell988@gmail.com>
->> ---
->> v2: Added Troy's Reviewed-by
-> Hi Alex, you added the changelog, but the subject line
-> doesn't have the "V2" suffix. Is this a mistake?
+On Thu, 12 Jun 2025 21:43:56 +0300, Andy Shevchenko wrote:
 
-Yes it's a mistake.  I contemplated sending an immediate
-"oops, this was v2!!!" but opted to wait until someone
-like you asked about it.
+>> >> >     if (handle)
+>> >> >             err = acpi_evaluate_object(handle, "_RST", NULL, NULL);
+>> >> > -   else
+>> >> > +   else if (i2c_dev->rst)
+>> >> >             err = reset_control_reset(i2c_dev->rst);
+>> >> > +   else
+>> >> > +           err = tegra_i2c_master_reset(i2c_dev);
+>> >>
+>> >> Can you please take a look here? Should the reset happen in ACPI?
+>> >
+>> > This is a good question. Without seeing all the implementations of _RST method
+>> > for the platforms based on this SoC it's hard to say. Ideally the _RST (which
+>> > is called above) must handle it properly, but firmwares have bugs...
+>> >
+>> > TL;DR: I think the approach is correct, and if any bug in ACPI will be found,
+>> > the workaround (quirk) needs to be added here later on.
+>> 
+>> As in Thierry's comment, I was in thought of updating the code as below.
+>> Does it make sense or would it be better keep what it is there now?
+>> 
+>> if (handle && acpi_has_method(handle, "_RST"))
+>> 	err = acpi_evaluate_object(handle, "_RST", NULL, NULL);
+>> else if (i2c_dev->rst)
+>> 	err = reset_control_reset(i2c_dev->rst);
+>> else
+>> 	err = tegra_i2c_master_reset(i2c_dev);
+>
+> This will change current behaviour for the ACPI based platforms that do not
+> have an _RST method. At bare minumum this has to be elaborated in the commit
+> message with an explanation why it's not a probnlem.
+>
 
-This *is* version 2, and I made the updates I describe.
+This sequence is hit only at boot and on any error. It should be good to reset
+the controller internally at least for those cases. We are reconfiguring the I2C
+anyway after this and hence should not cause any problem.
+Will add these in the commit message as well.
 
-					-Alex
-> 
->              - Troy
-> 
->>
->>   drivers/i2c/busses/i2c-k1.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/i2c/busses/i2c-k1.c b/drivers/i2c/busses/i2c-k1.c
->> index 5965b4cf6220e..b68a21fff0b56 100644
->> --- a/drivers/i2c/busses/i2c-k1.c
->> +++ b/drivers/i2c/busses/i2c-k1.c
->> @@ -477,7 +477,7 @@ static int spacemit_i2c_xfer(struct i2c_adapter *adapt, struct i2c_msg *msgs, in
->>   
->>   	ret = spacemit_i2c_wait_bus_idle(i2c);
->>   	if (!ret)
->> -		spacemit_i2c_xfer_msg(i2c);
->> +		ret = spacemit_i2c_xfer_msg(i2c);
->>   	else if (ret < 0)
->>   		dev_dbg(i2c->dev, "i2c transfer error: %d\n", ret);
->>   	else
->>
->> base-commit: 19272b37aa4f83ca52bdf9c16d5d81bdd1354494
->> -- 
->> 2.45.2
->>
+Thanks & Regards,
+Akhil
 
 
