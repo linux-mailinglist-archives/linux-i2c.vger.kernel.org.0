@@ -1,65 +1,65 @@
-Return-Path: <linux-i2c+bounces-11462-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11463-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C720AD9234
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Jun 2025 17:59:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B59ABAD9254
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Jun 2025 18:02:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5B6C6189DC57
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Jun 2025 15:58:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7087A3B9816
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Jun 2025 15:58:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F9F9202C4E;
-	Fri, 13 Jun 2025 15:58:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33151202C21;
+	Fri, 13 Jun 2025 15:58:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Jp7oVDfN"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Pjqt138l"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 614EC1FCFF0;
-	Fri, 13 Jun 2025 15:58:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A9CA1FCCEB;
+	Fri, 13 Jun 2025 15:58:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749830294; cv=none; b=Ha+a4j3MBBpqyC/LBC+al7XIIAHGX3ZE58z44s98kqjCQkyYwMkcyLWsIn9JjctIRfd/YYQVf+YvDTT9GwacBnvCOeidGqe+tw/Ljrf8cqPsi/RNiw8An5oHyZWw7dp2N+Tdc3uvIJlXwZdefT3ntXRlhnKMP0VAR5O2RSu3l+k=
+	t=1749830308; cv=none; b=Tafyq3OuMN1u604hZJeoqtU52fr4HMnD8vfb/bIxp3S+DwTxJFZTWFROuA1iBktev4jjIK1JxDH5DYz0hEWop+jN7jnowJFZZy9xqz99KrUfOrueoEvkERF/jyjpHmcj1D7AyenlaL7yK0Y36+Y+RYQjvROC21mLQ88lLRksauU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749830294; c=relaxed/simple;
-	bh=V9FMKPIwnq1H9P0zOSWLaguOqdABhVFp/9v1hViBzRA=;
+	s=arc-20240116; t=1749830308; c=relaxed/simple;
+	bh=cGUKaP6dgfpeo+RKTZCV94jyFa+uREbM3iubZvhap0M=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CubihK4fjee5B2IuUdAglyVi61uEBy/bZVfWEJO7gkX7KUwYrw431GhJbOHyd9Uc9UaoZQQoOpTJeNBLOLz6NLGl4tvpzMLVTkFr7lb5i4i2PWABfqzgPVP7RRjq1DwUs7TGEE+0+G60ktEzEgWPByQxDqrc50sKUWnO56/U2Qk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Jp7oVDfN; arc=none smtp.client-ip=192.198.163.16
+	 In-Reply-To:Content-Type; b=nndWGyE91EYoCbI9ATMVhf8246wSYZHHELB0Yaw+a9n2IQq5Sk3fo3ZTcyA326Vh0nWHOtrNObLiSBLwriP6xusn81K64A53psiyaWXg+eZc8u1BoIEot+mCCMJIeo1NhJI37tBlfRm+BSdf4objNvxWxtHqsSlOmmz/TqiUbmk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Pjqt138l; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1749830292; x=1781366292;
+  t=1749830307; x=1781366307;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=V9FMKPIwnq1H9P0zOSWLaguOqdABhVFp/9v1hViBzRA=;
-  b=Jp7oVDfNEy3d4G4pfI1R7iyCS7QJO1QsDLVR3BCjCFfPx/TkOompHJqf
-   kpKjForpN517uaV/HwV56eoWXQenafURwRfGO6KkgS3w2EyZYH0q3Zig4
-   JRoj/Xy1D0sqNseTKBjNELfwmfjt+Hd9SOpy1vu8g4TeyVA+P1+ErLguo
-   TrU4TN0/KF1MDASxNkjGc6L8dh/9zYn4y/owGcKvdWjJsBU0Mg9m2JS2i
-   kcORaEjA+vlspD5kekcg6qD5JwIzI/qdK5JDkK4FyhVPooPFP2d60vume
-   VkTYEaW+uxdqN996mJx5HpTXStu6Zdeo5z9VAlSuUm5cD1vAhBupu9sK0
-   A==;
-X-CSE-ConnectionGUID: y6c4nfIITZeN5keSjHN58Q==
-X-CSE-MsgGUID: nj0bEC3YT7CbbQk8d878xQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11463"; a="39661068"
+  bh=cGUKaP6dgfpeo+RKTZCV94jyFa+uREbM3iubZvhap0M=;
+  b=Pjqt138lW+iEvt7Srov9kVIQRHYRKcxlw10kLXShQrH1LXNYZSgaJy0O
+   zq1G5w0Rhow9Nw6JcuX658RGeDvhGwQ2LLUjwfNzbc+fTBNSialJeWsVX
+   3DlwofaQ0l3MKdE4WNVhkXcBv3hEZlD+wQ0nGpDwg5/NqPaC1TUgthSzd
+   QwbcURku9tQOfZOKW/tF+NGDLAzGADKHvOo5zJrWTBazXV6Vbms8qtUC3
+   Z1V/ynBhOHgPcn5R1dlj9G+8XQpgFgq5laswbniDntMCPo1muSBwM2vh7
+   /bACBQ15E6GmcLXhG3p0h1LLS88Erq/OpLB2ArH+IjlAVvovx+BJVt9+a
+   g==;
+X-CSE-ConnectionGUID: 7ZWwf9qzRzCXfKLnJd/DNw==
+X-CSE-MsgGUID: w7bB8LruQm+s6wQLf2wvog==
+X-IronPort-AV: E=McAfee;i="6800,10657,11463"; a="63403165"
 X-IronPort-AV: E=Sophos;i="6.16,234,1744095600"; 
-   d="scan'208";a="39661068"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2025 08:58:11 -0700
-X-CSE-ConnectionGUID: VA2G6141T8+w5h4vLYaebA==
-X-CSE-MsgGUID: ASlK1NJbQtSiVGGS5YDhrA==
+   d="scan'208";a="63403165"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2025 08:58:25 -0700
+X-CSE-ConnectionGUID: ZNpjhcVcQvCbGVVMZUTnnQ==
+X-CSE-MsgGUID: Q3OrfPCuRPKKipwCiTZe7w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,234,1744095600"; 
-   d="scan'208";a="178842660"
+   d="scan'208";a="147743732"
 Received: from iherna2-mobl4.amr.corp.intel.com (HELO [10.125.111.232]) ([10.125.111.232])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2025 08:58:06 -0700
-Message-ID: <f9ca87ab-e565-431a-9866-d56278cf465f@intel.com>
-Date: Fri, 13 Jun 2025 08:58:03 -0700
+  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2025 08:58:19 -0700
+Message-ID: <4fed7722-d0f7-4bde-a06b-a003718651ea@intel.com>
+Date: Fri, 13 Jun 2025 08:58:17 -0700
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -67,7 +67,7 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 09/28] cxl/test: Use device_set_node()
+Subject: Re: [PATCH v3 10/28] cxl/test: Use fw_devlink_set_device()
 To: Herve Codina <herve.codina@bootlin.com>, Andrew Lunn <andrew@lunn.ch>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
  "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
@@ -102,19 +102,20 @@ Cc: Wolfram Sang <wsa@kernel.org>,
  Luca Ceresoli <luca.ceresoli@bootlin.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 References: <20250613134817.681832-1-herve.codina@bootlin.com>
- <20250613134817.681832-10-herve.codina@bootlin.com>
+ <20250613134817.681832-11-herve.codina@bootlin.com>
 Content-Language: en-US
 From: Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20250613134817.681832-10-herve.codina@bootlin.com>
+In-Reply-To: <20250613134817.681832-11-herve.codina@bootlin.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 
 
 On 6/13/25 6:47 AM, Herve Codina wrote:
-> The code set directly dev->fwnode.
+> The code set directly fwnode.dev field.
 > 
-> Use the dedicated helper to perform this operation.
+> Use the dedicated fw_devlink_set_device() helper to perform this
+> operation.
 > 
 > Signed-off-by: Herve Codina <herve.codina@bootlin.com>
 
@@ -124,17 +125,17 @@ Reviewed-by: Dave Jiang <dave.jiang@intel.com>
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
 > diff --git a/tools/testing/cxl/test/cxl.c b/tools/testing/cxl/test/cxl.c
-> index 8a5815ca870d..1db7732a70df 100644
+> index 1db7732a70df..80e6fb3c9a43 100644
 > --- a/tools/testing/cxl/test/cxl.c
 > +++ b/tools/testing/cxl/test/cxl.c
-> @@ -1046,7 +1046,7 @@ static void mock_companion(struct acpi_device *adev, struct device *dev)
->  {
+> @@ -1047,7 +1047,7 @@ static void mock_companion(struct acpi_device *adev, struct device *dev)
 >  	device_initialize(&adev->dev);
 >  	fwnode_init(&adev->fwnode, NULL);
-> -	dev->fwnode = &adev->fwnode;
-> +	device_set_node(dev, &adev->fwnode);
->  	adev->fwnode.dev = dev;
+>  	device_set_node(dev, &adev->fwnode);
+> -	adev->fwnode.dev = dev;
+> +	fw_devlink_set_device(&adev->fwnode, dev);
 >  }
 >  
+>  #ifndef SZ_64G
 
 
