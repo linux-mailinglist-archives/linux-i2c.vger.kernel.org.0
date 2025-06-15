@@ -1,109 +1,124 @@
-Return-Path: <linux-i2c+bounces-11472-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11473-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0B04ADA300
-	for <lists+linux-i2c@lfdr.de>; Sun, 15 Jun 2025 20:37:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6DCFAADA4A6
+	for <lists+linux-i2c@lfdr.de>; Mon, 16 Jun 2025 01:29:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6A1BD3B12A3
-	for <lists+linux-i2c@lfdr.de>; Sun, 15 Jun 2025 18:36:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0C9FA16C4C6
+	for <lists+linux-i2c@lfdr.de>; Sun, 15 Jun 2025 23:29:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6778D269CF1;
-	Sun, 15 Jun 2025 18:37:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFE0127BF79;
+	Sun, 15 Jun 2025 23:29:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="BJFxof5e"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TjbcZWdi"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFF4F261388;
-	Sun, 15 Jun 2025 18:37:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11D8C14F98;
+	Sun, 15 Jun 2025 23:29:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750012623; cv=none; b=hs5DCdyWbEjZDGv2VswIsNRfWy7kPkW/MpHl7hUvzDP+BwmmVBeJ2nOgTJcSJfdSqbP3s8LErRsKnQgxNQB3tA0A6ecODHPej2nEThL+lN6glpfI4CDnmoTZ97C/3dlp4FvG+H8yt5wH7pgjnYTYlbP0FpcD1ByiPYmoyESUMvE=
+	t=1750030142; cv=none; b=fxSIQr9uNGFXnEFLlU/LB8kRtHSt+a1RlKbOjs0ffmPMhRu5NzmFrgVYlzhSL516n5P8ED0N1qzhDhozM9EMIo5kLh6Xe5846fOviYEyNbAfx39qK8/VCwWygySKYxI/DPIMlyCx3U3McZmYlJ4TVdH60uXUdilwsL2G37CfwQo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750012623; c=relaxed/simple;
-	bh=XQMKv+8Ij0F6buYkfRuRLQkC1Su8tTx1szV1QCNicYc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=riuoFKREqfMS3lvTyOcZY0Xkt/YmAgumRrxODPEI/dbxJdTzL/9x5HvoJycDNbwzX/JESVLis7pMnyRUdADDN86zNdo18sYhbGD9Zr2uDuS6PsCryTU6/Hxc9Y0Kqyo1y+KPYKBj3xuuKbgboMwF03NR3Yc2GH/lqNenFU3FB2k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=BJFxof5e; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-ID:Content-Description:In-Reply-To:References;
-	bh=RVAZvd/zLDzaceTSC6FoHp8KiZ3t/hEM3+Zjok0zqoY=; b=BJFxof5eXTLmFGzFh0cuzXi5Sv
-	4OBY5pUBDwl52+UqPOuW6nkC1AcmQQ3uGIdUXbzY7Chp0O2frvaIQ12lPgW84RlRDTgxprWGADhXY
-	0hErHzxqLuytqcNlrh7sY+lEfvw6Om2g93hoTCAxIROVYYnrMf7yzZfo1JK+WYw1gt9aB6N/6SpgD
-	8HVjZGzmatcFwGxEApwXDLREmO+dJm6Q/KTsqs1+Xs6g/3h8MMtvPMFg8x+nKaUUK3ZjBHbV7ApD4
-	jWFiPZ8s+KkYHUVBZubs8CCa5l94uHllXeEno/vPuTLkBIEHFR7dOwG+7Qnp0c8/jkwS5zReFGCri
-	jxO9cFFw==;
-Received: from [50.53.25.54] (helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1uQsE0-00000002jpL-2lkw;
-	Sun, 15 Jun 2025 18:37:00 +0000
-From: Randy Dunlap <rdunlap@infradead.org>
-To: linux-kernel@vger.kernel.org
-Cc: Randy Dunlap <rdunlap@infradead.org>,
-	Arnd Bergmann <arnd@kernel.org>,
-	Niklas Schnelle <schnelle@linux.ibm.com>,
-	Jim Cromie <jim.cromie@gmail.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	linux-i2c@vger.kernel.org
-Subject: [PATCH] i2c: scx200_acb: add depends on HAS_IOPORT
-Date: Sun, 15 Jun 2025 11:36:58 -0700
-Message-ID: <20250615183659.902110-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.49.0
+	s=arc-20240116; t=1750030142; c=relaxed/simple;
+	bh=DWimgH8rMKjuf4vMr5NxaUQb9aQLnmXc2cKfvKmOYjs=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Qy4w12PC47BJwoZtO2wkQDAnZvLgpof2XgtONBapm35za/Xlp/wzgaOPOBhYgHTvb/zsYavZMuTUZelNGAEh5BB84JAJeErr26w3LI67WbkxPitr5Gbn5xgGGnsWFlfem0qGmuNxKUHwtnKoSoDUGizXI4h/NdTVem+s2Z2YnMM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TjbcZWdi; arc=none smtp.client-ip=209.85.128.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-70e64b430daso38456887b3.3;
+        Sun, 15 Jun 2025 16:29:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1750030140; x=1750634940; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=U4L1oIP7Q7C4H/Wk40XbdL60soYz2tCkmxujds9z+l8=;
+        b=TjbcZWdi5DWOdlX8fbljloepGMuJnFNKRgCFBDsS2tID9r1o1HV1+VbT43N3L78u6y
+         cez/pT092W5A8yi6PTtGQyPK4BS37n6ZjUICYN1mKRqVRythwjySyDgm+s3xsxbfEixS
+         Z1XpjHxp+Ro3t06Ht7gSubZKDvTX+QUxzjHW+tIQM9p6kXguN1JVfd8CCAAslWChF+TR
+         G+IQhbM3NtVUb9wiMDDQ9Ub/zowor9ZRWm22UO1mCIPAf6y3/kFDrCnl+sXP1HHNfwPj
+         ww3Hsy4ezm2qpLUCspi69u1ayKyICYmuaUElu90Y0rY3dXRN9EDhtqtABhYYPrZu7hEX
+         tZGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750030140; x=1750634940;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=U4L1oIP7Q7C4H/Wk40XbdL60soYz2tCkmxujds9z+l8=;
+        b=nRubw+cHRKB6sKattnUHMDjlK6R0Z/464DzAEEPsr3y3fWG5/MpE8JbL25xvrpBAm/
+         X/mlRB/ki9Li9u1MyeSWp82MixiPByeRzcwHULNYpDhmDzC9bw30G9i9HD6VehndxJeg
+         M6k4hUqujEu1HAuR4fWIfmEeDoxWmqxWoATqCV4xiGJR3V05Av8IOEvRB6mDOHgatXBS
+         xNKJRmF143mSzjs/7jrkksHjZeblCZz6Thf79K3chJgg70H0GCUEKTZEzRGu2hpgJTcd
+         7fmW+EfPK1i+RmbgzGoZ0+XeVC8SzaICjZW/xvptp5JEcrao2yc/XLnzUliP/GVYp391
+         ecCQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUp2y2oa8ySk0v3ds/ZziJZflG8vqtFRm06k3Ismg/9t4CEFfJcqL4Mt71jNQIGKBGTaLQ1D7uI0ew=@vger.kernel.org, AJvYcCXM154j+U3rEMZfARzR/N/bz8Iy2Pzr8d03konFLDCHF+YVJRsbwwZOIJx2rJXqJa92nEqDwGHct8Yxzjqa@vger.kernel.org
+X-Gm-Message-State: AOJu0YwTNUJ3Uw8I7nOz+JH7nM3i0P9BK/YI8RkWZ3sFFJBrkF2JOHci
+	lTFS946MzJH9lVH27DKpjP4ReBUulQ+/L++PurhbE95K+1UjZN2Dvn4G
+X-Gm-Gg: ASbGnctF7J1tDaqb/qBDxauYCKpD7YbkKGMDw82WqWHRjPZa8vm+Nje6SbUMunCNlge
+	VpupaLRR9OY/hXj/gs9EfPgbKjXbBtbpUgkXgh0vJHz2XrCO4mR4bNgIntrYWvZ7P0MvtdqiSyD
+	tHVCrRzdoNZhL06XpqNBFLat/hnRi0NsNH+ElZRVXE4t4ULGAzqfz99APw3CGNVF91O/DnHlQrD
+	Xr5Pte4J/nyDoIC0lTsp0rlKs+oGcRPx6fHLc3BwejTXZBpNmzwX1Xa5aADvhs+wGjzCJlglwKt
+	xm3UvCtB8/bh3F2qgZxYt3bQ8YklyyyGe/Sf21f/yBo6oQt52azNRSee5IFbC4m9BNqKX+559Iw
+	g
+X-Google-Smtp-Source: AGHT+IEI55Gr516Y+UUPmCbRzJEcva3gfImFqYXM9qu30jqtB/Ym8lYr/p6NbruMNk+/HrEyoc/eOw==
+X-Received: by 2002:a05:690c:4983:b0:70e:16a3:ce75 with SMTP id 00721157ae682-71175235ba6mr104360107b3.0.1750030140039;
+        Sun, 15 Jun 2025 16:29:00 -0700 (PDT)
+Received: from trojai4.cs.purdue.edu ([128.210.0.165])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-71152059c2dsm14946487b3.2.2025.06.15.16.28.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 15 Jun 2025 16:28:59 -0700 (PDT)
+From: Alex Guo <alexguo1023@gmail.com>
+To: jdelvare@suse.com
+Cc: alexguo1023@gmail.com,
+	andi.shyti@kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] i2c: i801: Fix out-of-bounds bug
+Date: Sun, 15 Jun 2025 19:28:57 -0400
+Message-Id: <20250615232857.491602-1-alexguo1023@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The scx200_acb driver uses inb()/outb() without depending on HAS_IOPORT,
-which leads to build errors since kernel v6.13-rc1:
-commit 6f043e757445 ("asm-generic/io.h: Remove I/O port accessors
-for HAS_IOPORT=n")
+The data->block[0] variable comes from user. Without proper check,
+the variable may be very large to cause an out-of-bounds bug.
 
-Add the HAS_IOPORT dependency to prevent the build errors.
+Fix this bug by checking the value of data->block[0] first.
 
-(Found in ARCH=um allmodconfig builds)
+Similar commit:
+1. commit 39244cc7548 ("i2c: ismt: Fix an out-of-bounds bug in
+ismt_access()")
+2. commit 92fbb6d1296 ("i2c: xgene-slimpro: Fix out-of-bounds
+bug in xgene_slimpro_i2c_xfer()")
 
-drivers/i2c/busses/scx200_acb.c: In function ‘scx200_acb_reset’:
-include/asm-generic/io.h:596:15: error: call to ‘_outb’ declared with attribute error: outb() requires CONFIG_HAS_IOPORT
-
-drivers/i2c/busses/scx200_acb.c:224:26: note: in expansion of macro ‘inb’
-include/asm-generic/io.h:542:14: error: call to ‘_inb’ declared with attribute error: inb()) requires CONFIG_HAS_IOPORT
-  224 |                 status = inb(ACBST);
-
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Arnd Bergmann <arnd@kernel.org>
-Cc: Niklas Schnelle <schnelle@linux.ibm.com>
-Cc: Jim Cromie <jim.cromie@gmail.com>
-Cc: Andi Shyti <andi.shyti@kernel.org>
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: linux-i2c@vger.kernel.org
+Signed-off-by: Alex Guo <alexguo1023@gmail.com>
 ---
- drivers/i2c/busses/Kconfig |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/i2c/busses/i2c-i801.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
---- lnx-616-rc1.orig/drivers/i2c/busses/Kconfig
-+++ lnx-616-rc1/drivers/i2c/busses/Kconfig
-@@ -1530,7 +1530,7 @@ config I2C_XGENE_SLIMPRO
+diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+index a7f89946dad4..7503418be39a 100644
+--- a/drivers/i2c/busses/i2c-i801.c
++++ b/drivers/i2c/busses/i2c-i801.c
+@@ -527,6 +527,8 @@ static int i801_block_transaction_by_block(struct i801_priv *priv,
  
- config SCx200_ACB
- 	tristate "Geode ACCESS.bus support"
--	depends on X86_32 && PCI
-+	depends on X86_32 && PCI && HAS_IOPORT
- 	help
- 	  Enable the use of the ACCESS.bus controllers on the Geode SCx200 and
- 	  SC1100 processors and the CS5535 and CS5536 Geode companion devices.
----
-base-commit: 19272b37aa4f83ca52bdf9c16d5d81bdd1354494 # v6.16-rc1
+ 	if (read_write == I2C_SMBUS_WRITE) {
+ 		len = data->block[0];
++		if (len < 1 || len > I2C_SMBUS_BLOCK_MAX)
++			return -EINVAL;
+ 		iowrite8(len, SMBHSTDAT0(priv));
+ 		ioread8(SMBHSTCNT(priv));	/* reset the data buffer index */
+ 		iowrite8_rep(SMBBLKDAT(priv), data->block + 1, len);
+-- 
+2.34.1
+
 
