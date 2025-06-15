@@ -1,126 +1,122 @@
-Return-Path: <linux-i2c+bounces-11470-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11471-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 13451AD9DF0
-	for <lists+linux-i2c@lfdr.de>; Sat, 14 Jun 2025 17:01:00 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D170ADA280
+	for <lists+linux-i2c@lfdr.de>; Sun, 15 Jun 2025 18:01:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2F4DD189D2F9
-	for <lists+linux-i2c@lfdr.de>; Sat, 14 Jun 2025 15:01:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 341DA16E9B3
+	for <lists+linux-i2c@lfdr.de>; Sun, 15 Jun 2025 16:01:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B26122D9EF4;
-	Sat, 14 Jun 2025 15:00:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EAED193077;
+	Sun, 15 Jun 2025 16:01:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="VGBsbGr0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LwMg58Vy"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.smtpout.orange.fr (smtp-24.smtpout.orange.fr [80.12.242.24])
-	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA2BB256C7C;
-	Sat, 14 Jun 2025 15:00:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.24
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D11415383;
+	Sun, 15 Jun 2025 16:01:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749913253; cv=none; b=mbMKSiWtafLwhZi8YWV1Z6ln44twx19llURZQWsT48HjYDY2zsDKydgAxzkf/+kxpMWyCtG86AiFvP0LGgDDjpvEQv6v0DXeKzAJKpxfe1PXXxU6f6E+y1GI7gGj4/wr3dCCjl07ykXPxIg61V2457G6S/F7fNSH4AKPumJgjH8=
+	t=1750003272; cv=none; b=uVGMhMivS3s9GPKe73CUzqjAGWSuyGMWNWM+/NqqsJoNJ1XYqkHj4DZyJ98Z+lhIn65lqbcJRMZeJRSQzQpb4fT5QZSZiTzKdCOj9kxkTw4eKd7Lg3COexQ/Jzw6zRB4QW6wdu+9sPjAME5YyNueZPyC/Jt2FiI8pbjGYSNc38I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749913253; c=relaxed/simple;
-	bh=pRoQVD1k8gddZ6eCyztA1dMVRZv+vLamQe7EhDenJNQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=p9xQPJFvMAderInUF8d8YtTcqBM7bBbexWJYL46JLsZzP1CYcLGVSIFaK1yUkQokWHZAIxS/r8MMYqbDz57fN4mykdgnDDDiwxYqFRzpgp6h/h7goC6adywScoCW2remN/skB1REx2JYPVEVT/T9wWXbs4ekOWuPrrJs7yv8NLI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=VGBsbGr0; arc=none smtp.client-ip=80.12.242.24
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from fedora.home ([IPv6:2a01:cb10:785:b00:8347:f260:7456:7662])
-	by smtp.orange.fr with ESMTPA
-	id QSM3u88XaEYDLQSM3ueZb6; Sat, 14 Jun 2025 16:59:37 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1749913177;
-	bh=xaTlGEEhTijiMyHmtHzEn1Ywdg68fkcpPpcl21gOtVE=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=VGBsbGr0tJUiVEfqjRlS5v/0u8O+rx/22kkMZr9d6QzPzgbY6EcjzYedaCldieame
-	 GlIjc4UvYFP+XH3plGYZcvxL320qAZlnNeX8RNovxA7rpJJukOfPw6BkFQuc5Cq2qX
-	 b2QXGTHBRBCcea+ADxTh3zzzuLNiX3iqS9UWBdsXnyvvb8mTAU0kksSQcyLRaVrPxU
-	 caifhl7X11UKggM6Z9pcbmJGc+MhQQ2E0ph5Wsda0EFDCSETR/tM9UuY0uDAe6Rr00
-	 9RHrftZvI6coO/KNyPiYEtb4WgzHNwwifneqo5y1RhCWylYsYAVNe+Jd58QTTxRrYW
-	 TjUjNFB8P2+gA==
-X-ME-Helo: fedora.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 14 Jun 2025 16:59:37 +0200
-X-ME-IP: 2a01:cb10:785:b00:8347:f260:7456:7662
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To: Aaro Koskinen <aaro.koskinen@iki.fi>,
-	Andreas Kemnade <andreas@kemnade.info>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Roger Quadros <rogerq@kernel.org>,
-	Tony Lindgren <tony@atomide.com>,
-	Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-	Vignesh R <vigneshr@ti.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Jayesh Choudhary <j-choudhary@ti.com>
-Cc: linux-kernel@vger.kernel.org,
-	kernel-janitors@vger.kernel.org,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	linux-omap@vger.kernel.org,
-	linux-i2c@vger.kernel.org
-Subject: [PATCH] i2c: omap: Fix an error handling path in omap_i2c_probe()
-Date: Sat, 14 Jun 2025 16:59:26 +0200
-Message-ID: <998542981b6d2435c057dd8b9fe71743927babab.1749913149.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.49.0
+	s=arc-20240116; t=1750003272; c=relaxed/simple;
+	bh=iei+Rbi1EMsM3VoJTS+GLsvIcopbRLAxDDDRUGZbLlo=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=NsBrS+g7xCb8FJjxlcj6CfyVsxYXRAEowGLFFI9tfgqO1flU6BIF0P6d40/Ju/qdUZimreTyLyVP5cAcT11s4pZWzWeFOFnWxD2EEZv9IJVA2d8/eseZ7/JzkrF2c8i0RB6RWTNblr24/6GEvQsWdT+Mz+dvXYfw43YySkTjl5o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LwMg58Vy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 62194C4CEE3;
+	Sun, 15 Jun 2025 16:01:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750003271;
+	bh=iei+Rbi1EMsM3VoJTS+GLsvIcopbRLAxDDDRUGZbLlo=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=LwMg58VyykYKgijDs9VvqD0l3vO45uUoCAVQHiwY5atNJP4KtA8Uk27Iyt/hj14ZV
+	 yIyBTUp/pQ7pm+K+GkZ7Ok3AAUPWLlbvqacfSbYFdpyyR9yN1ZdzBRP84bNpMZ/xsj
+	 unGOFF4Hi4OH2UdHXT7wZsA92WgurjZgFe8eR4z+BdFnxGN83B3Ox1MQEzvcByKYlq
+	 l1DQ3oP28YUQiTKtjMuPKG2UmWYFvIVLErXutNBAQlvhtnpFFlCsKCsu7lJIlvFH55
+	 hw2WgIKCo5VYHR6J7NU1nQb8ZTgBS2i8zkM+f9myvUGptMGN3/zONLedsVUHFx0ogs
+	 ztzHNSJ8b3D+A==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 52DDFC61CE8;
+	Sun, 15 Jun 2025 16:01:11 +0000 (UTC)
+From: Yang Xiwen via B4 Relay <devnull+forbidden405.outlook.com@kernel.org>
+Date: Mon, 16 Jun 2025 00:01:10 +0800
+Subject: [PATCH] i2c: qup: jump out of the loop in case of timeout
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250616-qca-i2c-v1-1-2a8d37ee0a30@outlook.com>
+X-B4-Tracking: v=1; b=H4sIAEbuTmgC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDM0NT3cLkRN1Mo2TdFBPDpCQzw8REU8tUJaDqgqLUtMwKsEnRsbW1ACh
+ PBhNZAAAA
+To: Andi Shyti <andi.shyti@kernel.org>, 
+ Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+Cc: linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, stable@vger.kernel.org, 
+ Yang Xiwen <forbidden405@outlook.com>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1750003271; l=1276;
+ i=forbidden405@outlook.com; s=20230724; h=from:subject:message-id;
+ bh=7A4MyX2wBo/3swedAnLq8MA5y/hamSq89OQJdzuf1oA=;
+ b=TYce6RfqS10iEeMra5WRsEso/JZvK/1nNmpkB8vrnFU1IEaN1FN/sM8Acao00LTn63aEfJj7x
+ M/7eiwbqmFDAE+0bJ6f3myfi92GEKMeyGL+3pN2T7gKsicrMi3I+wvc
+X-Developer-Key: i=forbidden405@outlook.com; a=ed25519;
+ pk=qOD5jhp891/Xzc+H/PZ8LWVSWE3O/XCQnAg+5vdU2IU=
+X-Endpoint-Received: by B4 Relay for forbidden405@outlook.com/20230724 with
+ auth_id=67
+X-Original-From: Yang Xiwen <forbidden405@outlook.com>
+Reply-To: forbidden405@outlook.com
 
-If an error occurs after calling mux_state_select(), mux_state_deselect()
-should be called as already done in the remove function.
+From: Yang Xiwen <forbidden405@outlook.com>
 
-Fixes: b6ef830c60b6 ("i2c: omap: Add support for setting mux")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Original logic only sets the return value but doesn't jump out of the
+loop if the bus is kept active by a client. This is not expected. A
+malicious or buggy i2c client can hang the kernel in this case and
+should be avoided. This is observed during a long time test with a
+PCA953x GPIO extender.
+
+Fix it by changing the logic to not only sets the return value, but also
+jumps out of the loop and return to the caller with -ETIMEDOUT.
+
+Cc: stable@vger.kernel.org
+Signed-off-by: Yang Xiwen <forbidden405@outlook.com>
 ---
-I'm not 100% sure of the error handling path.
+ drivers/i2c/busses/i2c-qup.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Should pm_runtime_dont_use_autosuspend() be called after the err_disable_pm
-label? (to match the calling order)
-
-Also, should errors from omap_i2c_init() be handled?
----
- drivers/i2c/busses/i2c-omap.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-omap.c b/drivers/i2c/busses/i2c-omap.c
-index 876791d20ed5..5e46dc2cbbd7 100644
---- a/drivers/i2c/busses/i2c-omap.c
-+++ b/drivers/i2c/busses/i2c-omap.c
-@@ -1461,13 +1461,13 @@ omap_i2c_probe(struct platform_device *pdev)
- 		if (IS_ERR(mux_state)) {
- 			r = PTR_ERR(mux_state);
- 			dev_dbg(&pdev->dev, "failed to get I2C mux: %d\n", r);
--			goto err_disable_pm;
-+			goto err_put_pm;
- 		}
- 		omap->mux_state = mux_state;
- 		r = mux_state_select(omap->mux_state);
- 		if (r) {
- 			dev_err(&pdev->dev, "failed to select I2C mux: %d\n", r);
--			goto err_disable_pm;
-+			goto err_put_pm;
- 		}
+diff --git a/drivers/i2c/busses/i2c-qup.c b/drivers/i2c/busses/i2c-qup.c
+index 3a36d682ed57..5b053e51f4c9 100644
+--- a/drivers/i2c/busses/i2c-qup.c
++++ b/drivers/i2c/busses/i2c-qup.c
+@@ -452,8 +452,10 @@ static int qup_i2c_bus_active(struct qup_i2c_dev *qup, int len)
+ 		if (!(status & I2C_STATUS_BUS_ACTIVE))
+ 			break;
+ 
+-		if (time_after(jiffies, timeout))
++		if (time_after(jiffies, timeout)) {
+ 			ret = -ETIMEDOUT;
++			break;
++		}
+ 
+ 		usleep_range(len, len * 2);
  	}
- 
-@@ -1515,6 +1515,9 @@ omap_i2c_probe(struct platform_device *pdev)
- 
- err_unuse_clocks:
- 	omap_i2c_write_reg(omap, OMAP_I2C_CON_REG, 0);
-+	if (omap->mux_state)
-+		mux_state_deselect(omap->mux_state);
-+err_put_pm:
- 	pm_runtime_dont_use_autosuspend(omap->dev);
- 	pm_runtime_put_sync(omap->dev);
- err_disable_pm:
+
+---
+base-commit: 19272b37aa4f83ca52bdf9c16d5d81bdd1354494
+change-id: 20250615-qca-i2c-d41bb61aa59e
+
+Best regards,
 -- 
-2.49.0
+Yang Xiwen <forbidden405@outlook.com>
+
 
 
