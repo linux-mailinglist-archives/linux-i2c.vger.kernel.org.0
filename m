@@ -1,87 +1,85 @@
-Return-Path: <linux-i2c+bounces-11475-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11476-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7CB9AADA4D1
-	for <lists+linux-i2c@lfdr.de>; Mon, 16 Jun 2025 01:49:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E735ADA4D3
+	for <lists+linux-i2c@lfdr.de>; Mon, 16 Jun 2025 01:52:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 883213AF33B
-	for <lists+linux-i2c@lfdr.de>; Sun, 15 Jun 2025 23:49:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0868F168DC2
+	for <lists+linux-i2c@lfdr.de>; Sun, 15 Jun 2025 23:52:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B517263F49;
-	Sun, 15 Jun 2025 23:49:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBB3F1FDE31;
+	Sun, 15 Jun 2025 23:52:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LCOaUztH"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QSLIepdh"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59CB517548;
-	Sun, 15 Jun 2025 23:49:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4135517548;
+	Sun, 15 Jun 2025 23:52:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750031365; cv=none; b=ewskm0b/iGwBN1+xXbv0p5TruluWHga20CWscEJKSirjBek3lJQB/qd1ywD02Ujx5MVrdRdDvHb9eLpwyt80gJ0vroqo4arxOkKZEJGfhLvsYP/Jg/9tf4b0V03FF6iiq3V7AUKKuqfxEGITZ9aDuPXWFdlgn6V2fqKr1vOISR8=
+	t=1750031572; cv=none; b=dZ4YUyOG/pUcCzbtnjrpS8C9pUb/2GoWoApT07Yec5O0sVnHcC0sxMBMakO7GUgbNtAzTwG0/I/F6AUhemqbJq+1Vi3xDd4lgNTbtildPPKcN3DtN/arztlJXKi6ES1kGf5jD++TtqHFPVk6sg5sW2hgQnZ6JXSz5WqYhr84gLE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750031365; c=relaxed/simple;
-	bh=ZR+Ka9Q5bmbaVz87WlLOGojTRue5vQwJT551+M25uYw=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=PwcQnK204ahuBcArvg7RxnHrIuwOvf0VBQY72E/hZUnCNMvbrmoPx9JPAlBT1TvWsy8cpWzmM7AtzDc3s+WBMgXgbY3SJSrS80T2svX3l5CqsAYhMTbPeXkTyXYbG98swRzqaAQhA+fW1ypO/GMT0spLXML4J602rQXEob3ol6k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LCOaUztH; arc=none smtp.client-ip=209.85.128.181
+	s=arc-20240116; t=1750031572; c=relaxed/simple;
+	bh=hkt79L8daEY1ma0Plt8be/QeUMMPMG7I0YUpBQO3eI8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=BOd5iQUrR406F7fjNC47ayTrCDujqIEfTvq1Jh3/X7qOKM1aKmLSFPsjiq3vw9y2RH1KKzS2UxxP61Sh9XkirGAq8RJpw6i9VG2JTFg7Jni6+kZeayY2r6Y8wJ+Zhzot8kFFk1+uiaVvIFfYsYPUyyAI883CWCFad8MUrpUdeS4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QSLIepdh; arc=none smtp.client-ip=209.85.128.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-7086dcab64bso33484047b3.1;
-        Sun, 15 Jun 2025 16:49:24 -0700 (PDT)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-710e344bbf9so33992917b3.2;
+        Sun, 15 Jun 2025 16:52:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750031363; x=1750636163; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1750031570; x=1750636370; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZG9HUyM6bW1tFji2hu6a2hM7CvhozNYb72MSFTw02W4=;
-        b=LCOaUztHpHgVi95XtiYPM9Q9LPwYjVmPXTOSza2hQ5w2B54ts36xijKUh6bR8d5WU/
-         FtWeEzPaleOLjCPpAkVJ4kqCanHTvMeYhPbqApnDY3PVfe2mjhvAik4XJH34lO63O5ZH
-         Bn0Mu2jzPaU9wx0Hv4dlKzWwZmGJR5ccftusz0V0DV22W9vn8tOya2LYyVe6aWNEORlb
-         OTfuOO6s/+iYegmG9U+yBkMY2XoFIG+rYzTllgUOUf5z1Y5M/WPoAlw6xYoHEfy5Kq6D
-         /yCPNe8x3xJRB0VdXrZs4w5OAEuu2QbYqWGwRS+yNrDdmX9uMsZNKidYyq6VcEb1g2td
-         NoaQ==
+        bh=WlU8TcLGy7uqhBDl+TjbseUDj2uCehS6ZFN2Ft+L070=;
+        b=QSLIepdhW6AUxALVHK3D2g1oQFTBX0hVBt92hVy4/B+vAFZFiWPf47g23T97yfBwq0
+         HV8ri0iF/zx17JwgACV5Q2RpVqIUtRmA4T8xQDVQz1rhdAM0J6l3HVVM6uJrhKdbH2uB
+         1v6C/3aJi9UnXZ/ca4esjzG/6xIFf1BzG7RIh4YrIjDnfqvLKjInnRsooLr2iT5Bb1e/
+         KGC04kVwtRNmFpFM6zFhJo8LwSNwc/akPe87gCQXn2QXFZd5T0foppgKDVIGBDH1/erb
+         WFKsVrEWGtwAW7niavBgGJRRLZ28AjzcutczmKvLO+vG5ei3Pc/AwzJvzxmaAEH1e1sv
+         01Lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750031363; x=1750636163;
+        d=1e100.net; s=20230601; t=1750031570; x=1750636370;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ZG9HUyM6bW1tFji2hu6a2hM7CvhozNYb72MSFTw02W4=;
-        b=wtFUwPPuh5W7i+yD3KwFD3djLvBlJMUfI5+VT/E+hB3eIdtLUN+47Q5NUDVi/uZ9DP
-         OoknYqleYisBuspobYUEpg1rC7RqdVCwj3Z1hoGIFF8kqYJhX7vgrNkJXg77hT+7DVRW
-         Yzx/Z2/JL++kh66+5oHx+m3hHJxqV3cXdFjU9t3s1bQHRNDA7MlArgEQtmigSVQ2UziA
-         AHp/FjP/XGyRUo01h60nNRedY22s93m/ahjBrhMNLswbzZQrLe3tDUz4wUGOJ8aVbDcV
-         1Tgo21xgqf2f/sMlHNMFohPc2v/DVh/jPoOECgs81OxZo3cSqvvo1qZKaqk0wIMsHc43
-         +sSQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV+NsplrtmkqzkkrbssCT5zmMQKImDyB7pk307XE99OtvveRlC3BJoq6+MdWkBqbZa4sJk2jk0JRI7e2fZq@vger.kernel.org, AJvYcCXaKoe+kXgNYHkZ3wPp5HFuOcpbpzywHMct6t35SrTwZJQQFbqUIEVwrTqimiDwahtvQhAosfM0+cg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzf+DOBiLBUoy3gRuYvZfIMLoRnl6tRb1r9dqSiFNb9WCicwHH0
-	s2ogRNszqwKjmH9xMjXt+3Q00HHO+xDmPllPVks2Ox8tJSkoUAfWj2kZ
-X-Gm-Gg: ASbGncv2Jn46bWJyznt6UQqDvBSlg8j/C+YJwdEETA7XJYt9wNZO/CUhFj9Ktuf1Lu+
-	N+dbmjJxh1JRnUi5GpQckv0+w2glz6q8NwaBsFBysoVkMp5fK+fKoR8hu/dCPlirlDaAUxK4hyV
-	SjHyqp4uBb+ojm0mAtcKnfJ48YHf2jy4KwAuIA555e+Et4DBRHk9XYakklmhkZk1AeezPjWfYhC
-	eKD4KVwrtwE1+YZXThHUVR3MZ50jGcwdiF/BJoK7JH1N7Yj7S63rJOWAP51hZX2bANmdHWijJEb
-	No0CAx3xjwsA6AChLZ2l7/NweMyBx0do5NkSGw28ehE5B38gi2KXjahvLVmlGGgyyBtlRToBN53
-	X
-X-Google-Smtp-Source: AGHT+IHXglmGtVcHuPiRpWw41+NQ5ucgQ2jLPsoEFv34seFMTXSXLhbF2JBJp5LIoDqgsY2+4f1BPg==
-X-Received: by 2002:a05:690c:7481:b0:70c:a5c2:cef8 with SMTP id 00721157ae682-7117542acd4mr106912707b3.19.1750031363289;
-        Sun, 15 Jun 2025 16:49:23 -0700 (PDT)
+        bh=WlU8TcLGy7uqhBDl+TjbseUDj2uCehS6ZFN2Ft+L070=;
+        b=QHWV5kJVBXLXFR2T8AeWpk1WZ/2ljeSmeSy0Sa6pkuvsVMSO51jHmykqT2XXFOZJp5
+         DH3Pj15to10FGG3rMJhCA26KEnQUKaJyXRGNWIwDPYga9Uovq4AYaAeNFMjvIoqLtmW7
+         20Oyf9OxCTPN2o2aZpm64a6VOwyVUc5iPdvB3wyWIkOwysfmYrjdYrZLsXsYleIWm1w3
+         K0rV1liXBxUacLQ6RQUSh7ml2xTZ/N8/AwBfL1YuBVWIR38yyL/6kUMi9RhKLdtAfMYD
+         xrvIeAXkUGc9MTvygJQo/qrcE9WpLVHq26m0rD7qw12p+VTlJPMXKR7rm3wssaUmY51B
+         nKUA==
+X-Forwarded-Encrypted: i=1; AJvYcCUycirUw9WyDRT/Q4FIMDVqCWQwoR3sGH8hVps8DfGMLySRe6gfNcGsXKWBtMTi0CQMVC1cIlP8LkmHY61M@vger.kernel.org, AJvYcCVuyR+7mZKZE591Qfoa09YYqEG+rQOpOCspHKkw0TKOjcvNA+4jI6SCjiYWMx7D3APinPkSCIl76BM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxbJWOzT3BGAPekfhbn91DvLB+/+HX9qJWNoip9L+AqEHH7QITy
+	FCLPDkMoRvy1anL0WhToQG8yxKYvKA+kKcnYJJZqbrhSgXTR7UmE8MbpxRjZFpc6
+X-Gm-Gg: ASbGncsye6Ko/LZUT/yuY9oOfeyx+LBGo5hK2ePVrHHoAg/ScwXIVObCcZ6W/CCRMLY
+	AyV87fabh8BsOs8xgKFtoDVzXbUAqK5j1BJGPIk3k+sJrdpeC43GZ17oTM7dUoc1jAVUmBKNkM2
+	nQKXOdUe84/y/OUniASCQsRhOdXyTCX9WkTha002Sv9aP02kbktA2j2higUrLSuAkVkKFQdfF2S
+	WhPUer1/FWDpbViD8aRKUwhvVJb7l2Ov3zsw1odTVXQyh3ZuDtHXtVhrKQpjaF4J5hUD1oMux2X
+	dopLVl3EnqPS2CJtZ4AfT88xzj8DW4YTpmptxncBQWMsUdTIRJWtWpNZh471Yif3cXxa/T+8a5O
+	o
+X-Google-Smtp-Source: AGHT+IGAU2ahxG4ILZ9v/Y7EFpVXj7Sn+YnemqaMbjEIhiYVPTXO2lRrFCsRaFNw9Hx4gFRTTNc5AA==
+X-Received: by 2002:a05:690c:4c05:b0:70f:84c8:312e with SMTP id 00721157ae682-7117537b465mr108162817b3.1.1750031570255;
+        Sun, 15 Jun 2025 16:52:50 -0700 (PDT)
 Received: from trojai4.cs.purdue.edu ([128.210.0.165])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-7118ab6aa0esm3416187b3.11.2025.06.15.16.49.22
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-71152792fbfsm15315177b3.65.2025.06.15.16.52.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Jun 2025 16:49:23 -0700 (PDT)
+        Sun, 15 Jun 2025 16:52:50 -0700 (PDT)
 From: Alex Guo <alexguo1023@gmail.com>
-To: conor.dooley@microchip.com
+To: chris.packham@alliedtelesis.co.nz
 Cc: alexguo1023@gmail.com,
-	daire.mcnamara@microchip.com,
 	andi.shyti@kernel.org,
-	linux-riscv@lists.infradead.org,
 	linux-i2c@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH] i2c: busses: Fix out-of-bounds bug in mchp_corei2c_smbus_xfer
-Date: Sun, 15 Jun 2025 19:49:19 -0400
-Message-Id: <20250615234919.525431-1-alexguo1023@gmail.com>
+Subject: [PATCH] i2c: rtl9300: Fix out-of-bounds bug in rtl9300_i2c_smbus_xfer
+Date: Sun, 15 Jun 2025 19:52:48 -0400
+Message-Id: <20250615235248.529019-1-alexguo1023@gmail.com>
 X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
@@ -104,22 +102,24 @@ bug in xgene_slimpro_i2c_xfer()")
 
 Signed-off-by: Alex Guo <alexguo1023@gmail.com>
 ---
- drivers/i2c/busses/i2c-microchip-corei2c.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/i2c/busses/i2c-rtl9300.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/i2c/busses/i2c-microchip-corei2c.c b/drivers/i2c/busses/i2c-microchip-corei2c.c
-index 492bf4c34722..a79d4d327f20 100644
---- a/drivers/i2c/busses/i2c-microchip-corei2c.c
-+++ b/drivers/i2c/busses/i2c-microchip-corei2c.c
-@@ -492,6 +492,8 @@ static int mchp_corei2c_smbus_xfer(struct i2c_adapter *adap, u16 addr, unsigned
- 		if (read_write == I2C_SMBUS_WRITE) {
- 			int data_len;
- 
-+			if (data->block[0] < 1 || data->block[0] > I2C_SMBUS_BLOCK_MAX)
-+				return -EINVAL;
- 			data_len = data->block[0];
- 			msgs[CORE_I2C_SMBUS_MSG_WR].len = data_len + 2;
- 			for (int i = 0; i <= data_len; i++)
+diff --git a/drivers/i2c/busses/i2c-rtl9300.c b/drivers/i2c/busses/i2c-rtl9300.c
+index e064e8a4a1f0..568495720810 100644
+--- a/drivers/i2c/busses/i2c-rtl9300.c
++++ b/drivers/i2c/busses/i2c-rtl9300.c
+@@ -281,6 +281,10 @@ static int rtl9300_i2c_smbus_xfer(struct i2c_adapter *adap, u16 addr, unsigned s
+ 		ret = rtl9300_i2c_reg_addr_set(i2c, command, 1);
+ 		if (ret)
+ 			goto out_unlock;
++		if (data->block[0] < 1 || data->block[0] > I2C_SMBUS_BLOCK_MAX) {
++			ret = -EINVAL;
++			goto out_unlock;
++		}
+ 		ret = rtl9300_i2c_config_xfer(i2c, chan, addr, data->block[0]);
+ 		if (ret)
+ 			goto out_unlock;
 -- 
 2.34.1
 
