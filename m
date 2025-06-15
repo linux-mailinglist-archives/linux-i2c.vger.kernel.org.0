@@ -1,122 +1,109 @@
-Return-Path: <linux-i2c+bounces-11471-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11472-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D170ADA280
-	for <lists+linux-i2c@lfdr.de>; Sun, 15 Jun 2025 18:01:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F0B04ADA300
+	for <lists+linux-i2c@lfdr.de>; Sun, 15 Jun 2025 20:37:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 341DA16E9B3
-	for <lists+linux-i2c@lfdr.de>; Sun, 15 Jun 2025 16:01:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6A1BD3B12A3
+	for <lists+linux-i2c@lfdr.de>; Sun, 15 Jun 2025 18:36:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EAED193077;
-	Sun, 15 Jun 2025 16:01:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6778D269CF1;
+	Sun, 15 Jun 2025 18:37:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LwMg58Vy"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="BJFxof5e"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D11415383;
-	Sun, 15 Jun 2025 16:01:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFF4F261388;
+	Sun, 15 Jun 2025 18:37:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750003272; cv=none; b=uVGMhMivS3s9GPKe73CUzqjAGWSuyGMWNWM+/NqqsJoNJ1XYqkHj4DZyJ98Z+lhIn65lqbcJRMZeJRSQzQpb4fT5QZSZiTzKdCOj9kxkTw4eKd7Lg3COexQ/Jzw6zRB4QW6wdu+9sPjAME5YyNueZPyC/Jt2FiI8pbjGYSNc38I=
+	t=1750012623; cv=none; b=hs5DCdyWbEjZDGv2VswIsNRfWy7kPkW/MpHl7hUvzDP+BwmmVBeJ2nOgTJcSJfdSqbP3s8LErRsKnQgxNQB3tA0A6ecODHPej2nEThL+lN6glpfI4CDnmoTZ97C/3dlp4FvG+H8yt5wH7pgjnYTYlbP0FpcD1ByiPYmoyESUMvE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750003272; c=relaxed/simple;
-	bh=iei+Rbi1EMsM3VoJTS+GLsvIcopbRLAxDDDRUGZbLlo=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=NsBrS+g7xCb8FJjxlcj6CfyVsxYXRAEowGLFFI9tfgqO1flU6BIF0P6d40/Ju/qdUZimreTyLyVP5cAcT11s4pZWzWeFOFnWxD2EEZv9IJVA2d8/eseZ7/JzkrF2c8i0RB6RWTNblr24/6GEvQsWdT+Mz+dvXYfw43YySkTjl5o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LwMg58Vy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 62194C4CEE3;
-	Sun, 15 Jun 2025 16:01:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750003271;
-	bh=iei+Rbi1EMsM3VoJTS+GLsvIcopbRLAxDDDRUGZbLlo=;
-	h=From:Date:Subject:To:Cc:Reply-To:From;
-	b=LwMg58VyykYKgijDs9VvqD0l3vO45uUoCAVQHiwY5atNJP4KtA8Uk27Iyt/hj14ZV
-	 yIyBTUp/pQ7pm+K+GkZ7Ok3AAUPWLlbvqacfSbYFdpyyR9yN1ZdzBRP84bNpMZ/xsj
-	 unGOFF4Hi4OH2UdHXT7wZsA92WgurjZgFe8eR4z+BdFnxGN83B3Ox1MQEzvcByKYlq
-	 l1DQ3oP28YUQiTKtjMuPKG2UmWYFvIVLErXutNBAQlvhtnpFFlCsKCsu7lJIlvFH55
-	 hw2WgIKCo5VYHR6J7NU1nQb8ZTgBS2i8zkM+f9myvUGptMGN3/zONLedsVUHFx0ogs
-	 ztzHNSJ8b3D+A==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 52DDFC61CE8;
-	Sun, 15 Jun 2025 16:01:11 +0000 (UTC)
-From: Yang Xiwen via B4 Relay <devnull+forbidden405.outlook.com@kernel.org>
-Date: Mon, 16 Jun 2025 00:01:10 +0800
-Subject: [PATCH] i2c: qup: jump out of the loop in case of timeout
+	s=arc-20240116; t=1750012623; c=relaxed/simple;
+	bh=XQMKv+8Ij0F6buYkfRuRLQkC1Su8tTx1szV1QCNicYc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=riuoFKREqfMS3lvTyOcZY0Xkt/YmAgumRrxODPEI/dbxJdTzL/9x5HvoJycDNbwzX/JESVLis7pMnyRUdADDN86zNdo18sYhbGD9Zr2uDuS6PsCryTU6/Hxc9Y0Kqyo1y+KPYKBj3xuuKbgboMwF03NR3Yc2GH/lqNenFU3FB2k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=BJFxof5e; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=RVAZvd/zLDzaceTSC6FoHp8KiZ3t/hEM3+Zjok0zqoY=; b=BJFxof5eXTLmFGzFh0cuzXi5Sv
+	4OBY5pUBDwl52+UqPOuW6nkC1AcmQQ3uGIdUXbzY7Chp0O2frvaIQ12lPgW84RlRDTgxprWGADhXY
+	0hErHzxqLuytqcNlrh7sY+lEfvw6Om2g93hoTCAxIROVYYnrMf7yzZfo1JK+WYw1gt9aB6N/6SpgD
+	8HVjZGzmatcFwGxEApwXDLREmO+dJm6Q/KTsqs1+Xs6g/3h8MMtvPMFg8x+nKaUUK3ZjBHbV7ApD4
+	jWFiPZ8s+KkYHUVBZubs8CCa5l94uHllXeEno/vPuTLkBIEHFR7dOwG+7Qnp0c8/jkwS5zReFGCri
+	jxO9cFFw==;
+Received: from [50.53.25.54] (helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1uQsE0-00000002jpL-2lkw;
+	Sun, 15 Jun 2025 18:37:00 +0000
+From: Randy Dunlap <rdunlap@infradead.org>
+To: linux-kernel@vger.kernel.org
+Cc: Randy Dunlap <rdunlap@infradead.org>,
+	Arnd Bergmann <arnd@kernel.org>,
+	Niklas Schnelle <schnelle@linux.ibm.com>,
+	Jim Cromie <jim.cromie@gmail.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	linux-i2c@vger.kernel.org
+Subject: [PATCH] i2c: scx200_acb: add depends on HAS_IOPORT
+Date: Sun, 15 Jun 2025 11:36:58 -0700
+Message-ID: <20250615183659.902110-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250616-qca-i2c-v1-1-2a8d37ee0a30@outlook.com>
-X-B4-Tracking: v=1; b=H4sIAEbuTmgC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDI1MDM0NT3cLkRN1Mo2TdFBPDpCQzw8REU8tUJaDqgqLUtMwKsEnRsbW1ACh
- PBhNZAAAA
-To: Andi Shyti <andi.shyti@kernel.org>, 
- Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-Cc: linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org, 
- linux-kernel@vger.kernel.org, stable@vger.kernel.org, 
- Yang Xiwen <forbidden405@outlook.com>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1750003271; l=1276;
- i=forbidden405@outlook.com; s=20230724; h=from:subject:message-id;
- bh=7A4MyX2wBo/3swedAnLq8MA5y/hamSq89OQJdzuf1oA=;
- b=TYce6RfqS10iEeMra5WRsEso/JZvK/1nNmpkB8vrnFU1IEaN1FN/sM8Acao00LTn63aEfJj7x
- M/7eiwbqmFDAE+0bJ6f3myfi92GEKMeyGL+3pN2T7gKsicrMi3I+wvc
-X-Developer-Key: i=forbidden405@outlook.com; a=ed25519;
- pk=qOD5jhp891/Xzc+H/PZ8LWVSWE3O/XCQnAg+5vdU2IU=
-X-Endpoint-Received: by B4 Relay for forbidden405@outlook.com/20230724 with
- auth_id=67
-X-Original-From: Yang Xiwen <forbidden405@outlook.com>
-Reply-To: forbidden405@outlook.com
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-From: Yang Xiwen <forbidden405@outlook.com>
+The scx200_acb driver uses inb()/outb() without depending on HAS_IOPORT,
+which leads to build errors since kernel v6.13-rc1:
+commit 6f043e757445 ("asm-generic/io.h: Remove I/O port accessors
+for HAS_IOPORT=n")
 
-Original logic only sets the return value but doesn't jump out of the
-loop if the bus is kept active by a client. This is not expected. A
-malicious or buggy i2c client can hang the kernel in this case and
-should be avoided. This is observed during a long time test with a
-PCA953x GPIO extender.
+Add the HAS_IOPORT dependency to prevent the build errors.
 
-Fix it by changing the logic to not only sets the return value, but also
-jumps out of the loop and return to the caller with -ETIMEDOUT.
+(Found in ARCH=um allmodconfig builds)
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Yang Xiwen <forbidden405@outlook.com>
+drivers/i2c/busses/scx200_acb.c: In function ‘scx200_acb_reset’:
+include/asm-generic/io.h:596:15: error: call to ‘_outb’ declared with attribute error: outb() requires CONFIG_HAS_IOPORT
+
+drivers/i2c/busses/scx200_acb.c:224:26: note: in expansion of macro ‘inb’
+include/asm-generic/io.h:542:14: error: call to ‘_inb’ declared with attribute error: inb()) requires CONFIG_HAS_IOPORT
+  224 |                 status = inb(ACBST);
+
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Arnd Bergmann <arnd@kernel.org>
+Cc: Niklas Schnelle <schnelle@linux.ibm.com>
+Cc: Jim Cromie <jim.cromie@gmail.com>
+Cc: Andi Shyti <andi.shyti@kernel.org>
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-i2c@vger.kernel.org
 ---
- drivers/i2c/busses/i2c-qup.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/i2c/busses/Kconfig |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/i2c/busses/i2c-qup.c b/drivers/i2c/busses/i2c-qup.c
-index 3a36d682ed57..5b053e51f4c9 100644
---- a/drivers/i2c/busses/i2c-qup.c
-+++ b/drivers/i2c/busses/i2c-qup.c
-@@ -452,8 +452,10 @@ static int qup_i2c_bus_active(struct qup_i2c_dev *qup, int len)
- 		if (!(status & I2C_STATUS_BUS_ACTIVE))
- 			break;
+--- lnx-616-rc1.orig/drivers/i2c/busses/Kconfig
++++ lnx-616-rc1/drivers/i2c/busses/Kconfig
+@@ -1530,7 +1530,7 @@ config I2C_XGENE_SLIMPRO
  
--		if (time_after(jiffies, timeout))
-+		if (time_after(jiffies, timeout)) {
- 			ret = -ETIMEDOUT;
-+			break;
-+		}
- 
- 		usleep_range(len, len * 2);
- 	}
-
+ config SCx200_ACB
+ 	tristate "Geode ACCESS.bus support"
+-	depends on X86_32 && PCI
++	depends on X86_32 && PCI && HAS_IOPORT
+ 	help
+ 	  Enable the use of the ACCESS.bus controllers on the Geode SCx200 and
+ 	  SC1100 processors and the CS5535 and CS5536 Geode companion devices.
 ---
-base-commit: 19272b37aa4f83ca52bdf9c16d5d81bdd1354494
-change-id: 20250615-qca-i2c-d41bb61aa59e
-
-Best regards,
--- 
-Yang Xiwen <forbidden405@outlook.com>
-
-
+base-commit: 19272b37aa4f83ca52bdf9c16d5d81bdd1354494 # v6.16-rc1
 
