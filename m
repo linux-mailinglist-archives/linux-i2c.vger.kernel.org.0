@@ -1,132 +1,114 @@
-Return-Path: <linux-i2c+bounces-11477-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11478-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF195ADA4DC
-	for <lists+linux-i2c@lfdr.de>; Mon, 16 Jun 2025 02:00:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB65FADA54D
+	for <lists+linux-i2c@lfdr.de>; Mon, 16 Jun 2025 03:00:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 015737A5B31
-	for <lists+linux-i2c@lfdr.de>; Sun, 15 Jun 2025 23:59:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0DCC33A9512
+	for <lists+linux-i2c@lfdr.de>; Mon, 16 Jun 2025 00:59:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 228DA1917F4;
-	Mon, 16 Jun 2025 00:00:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1E8813EFF3;
+	Mon, 16 Jun 2025 01:00:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lY5jMUWJ"
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="z5AiXWx6"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 646911474CC;
-	Mon, 16 Jun 2025 00:00:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 983F11474CC
+	for <linux-i2c@vger.kernel.org>; Mon, 16 Jun 2025 01:00:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750032023; cv=none; b=VpOJA1LFGFh2UO/HZYGGVZiih9Jqll3qVTVzHwETI5HTpB4/Qth2cRdD86JzZSl08U/um64TZaP/rN581Gl43Hasr24IxcJ1zxjZXlq8abqNX/S5lELuUznMt/v9amEzyQQEaPrhHtge8IdwpixWfaqxiNTmgvExz0VZQEX5u0A=
+	t=1750035605; cv=none; b=be9nE48kf6OXwP3L8O10EmlvuTp6zPx7XsWZFALOczcZJQ2WRkIaZAvQfaA+g2OhYzgeg796iofdiJHLLB8slWRQPLOQpiHW6htIeEeDh/TIUKHABngnxOFMJE2EwVTH60GnBMIuecMhPWHCN+cZxzYb5CrdLgJVA9stkQSwga4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750032023; c=relaxed/simple;
-	bh=CFlsrKntB6Zb9gxZeqZjWwo1JbEZh39zK02weOcAlp4=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=nEC8iQyS0KaXtZLv9X3WHhyOHEQQAuIt79hGeyRqH65FBlkXB3aqeD9oNc5M/hAaR4WmCNXweiX3V59hJDJbU2EjWjTDljCo9eHCkwT/IwtZXmFjB4f3uIKsOGIKLsFo44c+NtPMqmJcWFYCrpm7QN68dAFNo6mlhg9Q4RlFbmE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lY5jMUWJ; arc=none smtp.client-ip=209.85.128.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-710bbd7a9e2so30950517b3.0;
-        Sun, 15 Jun 2025 17:00:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750032021; x=1750636821; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=UbpHHR1YWrZ21Q/PNqsadbXIdVEUSMTqTza6iEwDmdQ=;
-        b=lY5jMUWJJcucEY3v3vjBo5PQFiW/eo6qMdIaVJows112i4coVujCKTXAyn1PidY/+b
-         gY5mBDmLZCY3RiQzROgXvRWeEQKjr4+MjKWnP5O+QcXUVTye6OFT3RJwENFgjYpdrmTA
-         0LHW7BuEOagxRysGALUaGULklj8E+lnYmsILfOZDydVWDQH//88wqrcGShnbYFDNYt9A
-         hZhiLWODM14q6soWyC7TrQvlP1zAB0Jv07LyciXSyiKgSiE4Qq2YaqSi80MpKfQ0zqtt
-         P7wOlcc8OiTCXf5owKAjVwrv1S15Bg4xt6PTI+n5xuUlcJQ+pPrB7UuoSd2/irQOPSCs
-         lofg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750032021; x=1750636821;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UbpHHR1YWrZ21Q/PNqsadbXIdVEUSMTqTza6iEwDmdQ=;
-        b=FfKkHqVknmST2Nnce8kw44JzyN3KahXkMukMWFyZU7msB9djwwkRWhbrWjU41aS8iu
-         mwxvukZu7PpOFAA3mb/YaPU1OyCy1AVVF+RLzoLFAbSQdPyd/Me0ze3Rz817Ay3BFxuD
-         UpDHGEXcmiHArgcji4crI1YSjkKh0ealKwk3j7xec88bITJq3tdIE3tC6F+CrvvvCvy+
-         eEYV+THO7VfuDqmSWzBBRY2OkpPBsFfiPuBRYtHfFtsBJKKgoauiENyjM94gZ1ENPSko
-         2wbMHJmOcmlJnMlxWXsAq7oW0bZYKK8U1WrX8ZMsS8e5Tmy5iNR0oJgpN4/RJEfNv/TL
-         K0QA==
-X-Forwarded-Encrypted: i=1; AJvYcCUy6qDCOk48rLyAUYMTHX7tMk1xe4xQyaovrgquyIebmqyzkQCPv9wun/kyyA4QR6rVvyvIMKtUajYjxmF2@vger.kernel.org, AJvYcCWek9nONlegks6TsdrgWCQLeyQV2rQ6cRNUtCaVZgjAlBSF9kgPFHWfDKAWKvjV5JmoXjs1WFgUWec=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywim5kbBy65w+0RiFRQzXe6Mwkc86DRF+U9mxx8XccTfJXczs4p
-	lw6EDg0l4f61/dSNdi5QiEOrhU5Asw90VtPd8SuFHiqLFxLEfvbc58k6
-X-Gm-Gg: ASbGncsqyyG2WwhvK3k/vLbWyD8wFUjwSOHMcv/Umr7J40+QUTN5hFewHOVsoKcJj2E
-	CZViSuYHNkJSlQTzVb4+MeAGyNbr4Lody+wgxi4QOzHjmM1g+CV3+YpLsCrZL+Tg2x6hENKeNrS
-	wWuHQEcKt2yYXLDhkkrA4ty755+rC1ziC/SIM/RffxteCAtSu1QDLsUcToWbs3/loJ30Es6uXWY
-	UUsUSIJcpFYW4HaSna37VrCuR2GD+7JPOPHgvOycssPsgXBvua2IB3F0AFNFffZQs+kb3DWJOt9
-	whlXIpd01+x7RUF3ROnfAO0o5CeFgPnc8zt5PPYn/mqEEiKlAhLb6n+w56G76RkdmCF1EeuneaA
-	F
-X-Google-Smtp-Source: AGHT+IGDXYrPWN+Wr3Z2QDg1C5fs0fvZipdzhoh1Vk3lSCmP/M8jbzJp56ovokdH9P91PUty8NLiOw==
-X-Received: by 2002:a05:690c:906:b0:70e:29d2:fb7b with SMTP id 00721157ae682-71175498c04mr101981967b3.33.1750032021178;
-        Sun, 15 Jun 2025 17:00:21 -0700 (PDT)
-Received: from trojai4.cs.purdue.edu ([128.210.0.165])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-71186a916absm4304957b3.17.2025.06.15.17.00.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Jun 2025 17:00:20 -0700 (PDT)
-From: Alex Guo <alexguo1023@gmail.com>
-To: andi.shyti@kernel.org
-Cc: alexguo1023@gmail.com,
-	maddy@linux.ibm.com,
-	mpe@ellerman.id.au,
-	linux-i2c@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] i2c: powermac: Fix out-of-bounds bug in i2c_powermac_smbus_xfer
-Date: Sun, 15 Jun 2025 20:00:18 -0400
-Message-Id: <20250616000018.545636-1-alexguo1023@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1750035605; c=relaxed/simple;
+	bh=ihETkKqKIG8M9skc5uZtPuobJCFD4/xhLiN5mqVre8o=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=Ht54DLNZt6/w8gzy0pUqFpWhsh8N9g1s/9NI2/pEmN9G0OAcSy+wvWZ0AKpCTanTWm1CFxFkgvW43I/a1Nd9oX8skWNKImNXdCo9nUGC/NQm/1OffvrCkLstiGcCTQthlA5vs8VM6TvVy92A8gp6Ncmc9/XqnzmRQLc6+hNBAAM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=z5AiXWx6; arc=none smtp.client-ip=202.36.163.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 229272C05BD;
+	Mon, 16 Jun 2025 12:59:54 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+	s=mail181024; t=1750035594;
+	bh=ihETkKqKIG8M9skc5uZtPuobJCFD4/xhLiN5mqVre8o=;
+	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+	b=z5AiXWx66NE1ki4I1FHUabRUtrUlIw+chgqGDquaEvdd+OgueW1BUVBVBvqzf3TYS
+	 laLHz0xDyv37vSoL58woTX8WgTvgF4DM4f/YKiTD4TLtvxLWeShircadbi8bvYwyFI
+	 GmQDhmP08zJnx/gK1+WWJqFyu7dPxED1hsTX25gSnX8jB6JDR1PsPGkYLg5BzOdJ8F
+	 rkpOuXNgt9h4Qn5YNEzddf2/QVh0dOiFq+KD3LiKPUjoORyfMjij85/S9Obq5PrQO6
+	 ZYZIC6tojaZKO5VDdeI5hS/jxcPQsD8857/czwKs0CdStsQuyMnBfBmbsUro989F3v
+	 p8J8w+oXEXWFg==
+Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+	id <B684f6c7f0001>; Mon, 16 Jun 2025 12:59:43 +1200
+Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) by
+ svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.14; Mon, 16 Jun 2025 12:59:43 +1200
+Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
+ svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
+ 15.02.1544.014; Mon, 16 Jun 2025 12:59:43 +1200
+From: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To: Alex Guo <alexguo1023@gmail.com>
+CC: "andi.shyti@kernel.org" <andi.shyti@kernel.org>,
+	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] i2c: rtl9300: Fix out-of-bounds bug in
+ rtl9300_i2c_smbus_xfer
+Thread-Topic: [PATCH] i2c: rtl9300: Fix out-of-bounds bug in
+ rtl9300_i2c_smbus_xfer
+Thread-Index: AQHb3lCd+yXRspKshU2u62+trp+jQrQELhcA
+Date: Mon, 16 Jun 2025 00:59:42 +0000
+Message-ID: <e2c361b4-52bc-4ead-bbfc-fc6636b57064@alliedtelesis.co.nz>
+References: <20250615235248.529019-1-alexguo1023@gmail.com>
+In-Reply-To: <20250615235248.529019-1-alexguo1023@gmail.com>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <2F360CFA3D31204FA966B0118EC6C233@alliedtelesis.co.nz>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=F7/0dbhN c=1 sm=1 tr=0 ts=684f6c7f a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10 a=pGLkceISAAAA:8 a=jnnnbLZWfpgPSXHVTWUA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=QH9-EOpvJABdOtv2Ar0o:22
+X-SEG-SpamProfiler-Score: 0
 
-The data->block[0] variable comes from user. Without proper check,
-the variable may be very large to cause an out-of-bounds bug.
-
-Fix this bug by checking the value of data->block[0] first.
-
-Similar commit:
-1. commit 39244cc7548 ("i2c: ismt: Fix an out-of-bounds bug in
-ismt_access()")
-2. commit 92fbb6d1296 ("i2c: xgene-slimpro: Fix out-of-bounds
-bug in xgene_slimpro_i2c_xfer()")
-
-Signed-off-by: Alex Guo <alexguo1023@gmail.com>
----
- drivers/i2c/busses/i2c-powermac.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/i2c/busses/i2c-powermac.c b/drivers/i2c/busses/i2c-powermac.c
-index f99a2cc721a8..3a061b67716a 100644
---- a/drivers/i2c/busses/i2c-powermac.c
-+++ b/drivers/i2c/busses/i2c-powermac.c
-@@ -78,10 +78,14 @@ static s32 i2c_powermac_smbus_xfer(	struct i2c_adapter*	adap,
- 	 * anywhere near a pmac i2c bus anyway ...
- 	 */
-         case I2C_SMBUS_BLOCK_DATA:
-+		if (data->block[0] < 1 || data->block[0] > I2C_SMBUS_BLOCK_MAX)
-+			return -EINVAL;
- 		buf = data->block;
- 		len = data->block[0] + 1;
- 		break;
- 	case I2C_SMBUS_I2C_BLOCK_DATA:
-+		if (data->block[0] < 1 || data->block[0] > I2C_SMBUS_BLOCK_MAX)
-+			return -EINVAL;
- 		buf = &data->block[1];
- 		len = data->block[0];
- 		break;
--- 
-2.34.1
-
+SGkgQWxleCwNCg0KT24gMTYvMDYvMjAyNSAxMTo1MiwgQWxleCBHdW8gd3JvdGU6DQo+IFRoZSBk
+YXRhLT5ibG9ja1swXSB2YXJpYWJsZSBjb21lcyBmcm9tIHVzZXIuIFdpdGhvdXQgcHJvcGVyIGNo
+ZWNrLA0KPiB0aGUgdmFyaWFibGUgbWF5IGJlIHZlcnkgbGFyZ2UgdG8gY2F1c2UgYW4gb3V0LW9m
+LWJvdW5kcyBidWcuDQo+DQo+IEZpeCB0aGlzIGJ1ZyBieSBjaGVja2luZyB0aGUgdmFsdWUgb2Yg
+ZGF0YS0+YmxvY2tbMF0gZmlyc3QuDQo+DQo+IFNpbWlsYXIgY29tbWl0Og0KPiAxLiBjb21taXQg
+MzkyNDRjYzc1NDggKCJpMmM6IGlzbXQ6IEZpeCBhbiBvdXQtb2YtYm91bmRzIGJ1ZyBpbg0KPiBp
+c210X2FjY2VzcygpIikNCj4gMi4gY29tbWl0IDkyZmJiNmQxMjk2ICgiaTJjOiB4Z2VuZS1zbGlt
+cHJvOiBGaXggb3V0LW9mLWJvdW5kcw0KPiBidWcgaW4geGdlbmVfc2xpbXByb19pMmNfeGZlcigp
+IikNCj4NCj4gU2lnbmVkLW9mZi1ieTogQWxleCBHdW8gPGFsZXhndW8xMDIzQGdtYWlsLmNvbT4N
+Cg0KUmV2aWV3ZWQtYnk6IENocmlzIFBhY2toYW0gPGNocmlzLnBhY2toYW1AYWxsaWVkdGVsZXNp
+cy5jby5uej4NClRlc3RlZC1ieTogQ2hyaXMgUGFja2hhbSA8Y2hyaXMucGFja2hhbUBhbGxpZWR0
+ZWxlc2lzLmNvLm56Pg0KDQpUaGFua3MNCg0KPiAtLS0NCj4gICBkcml2ZXJzL2kyYy9idXNzZXMv
+aTJjLXJ0bDkzMDAuYyB8IDQgKysrKw0KPiAgIDEgZmlsZSBjaGFuZ2VkLCA0IGluc2VydGlvbnMo
+KykNCj4NCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvaTJjL2J1c3Nlcy9pMmMtcnRsOTMwMC5jIGIv
+ZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1ydGw5MzAwLmMNCj4gaW5kZXggZTA2NGU4YTRhMWYwLi41
+Njg0OTU3MjA4MTAgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvaTJjL2J1c3Nlcy9pMmMtcnRsOTMw
+MC5jDQo+ICsrKyBiL2RyaXZlcnMvaTJjL2J1c3Nlcy9pMmMtcnRsOTMwMC5jDQo+IEBAIC0yODEs
+NiArMjgxLDEwIEBAIHN0YXRpYyBpbnQgcnRsOTMwMF9pMmNfc21idXNfeGZlcihzdHJ1Y3QgaTJj
+X2FkYXB0ZXIgKmFkYXAsIHUxNiBhZGRyLCB1bnNpZ25lZCBzDQo+ICAgCQlyZXQgPSBydGw5MzAw
+X2kyY19yZWdfYWRkcl9zZXQoaTJjLCBjb21tYW5kLCAxKTsNCj4gICAJCWlmIChyZXQpDQo+ICAg
+CQkJZ290byBvdXRfdW5sb2NrOw0KPiArCQlpZiAoZGF0YS0+YmxvY2tbMF0gPCAxIHx8IGRhdGEt
+PmJsb2NrWzBdID4gSTJDX1NNQlVTX0JMT0NLX01BWCkgew0KPiArCQkJcmV0ID0gLUVJTlZBTDsN
+Cj4gKwkJCWdvdG8gb3V0X3VubG9jazsNCj4gKwkJfQ0KPiAgIAkJcmV0ID0gcnRsOTMwMF9pMmNf
+Y29uZmlnX3hmZXIoaTJjLCBjaGFuLCBhZGRyLCBkYXRhLT5ibG9ja1swXSk7DQo+ICAgCQlpZiAo
+cmV0KQ0KPiAgIAkJCWdvdG8gb3V0X3VubG9jazs=
 
