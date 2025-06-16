@@ -1,153 +1,125 @@
-Return-Path: <linux-i2c+bounces-11481-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11482-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F9AEADAB16
-	for <lists+linux-i2c@lfdr.de>; Mon, 16 Jun 2025 10:49:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC710ADAB43
+	for <lists+linux-i2c@lfdr.de>; Mon, 16 Jun 2025 10:58:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 04A5916C45E
-	for <lists+linux-i2c@lfdr.de>; Mon, 16 Jun 2025 08:49:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 31FB7188AE50
+	for <lists+linux-i2c@lfdr.de>; Mon, 16 Jun 2025 08:58:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A75E426D4C1;
-	Mon, 16 Jun 2025 08:48:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BCB2272E6D;
+	Mon, 16 Jun 2025 08:57:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="OVM6DWUw";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="P6DY0zDJ";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="OVM6DWUw";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="P6DY0zDJ"
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="RMUr56cG"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE6FD211A15
-	for <linux-i2c@vger.kernel.org>; Mon, 16 Jun 2025 08:48:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DD4626D4E7;
+	Mon, 16 Jun 2025 08:57:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750063739; cv=none; b=OgTaOTnB3ik0qevQGqR3eVdTO/cK/UnmJC+RnlLdmnTWlHRsZFnZ/zTPe3YmyEgX3Km6qZVG5wkK5/bWmVwMI6TUybfMOemkK8o9ITYrBER/AzoVj5AGxh4vSlmQu2X6raluKe8vXvucZUsn2X/uCIJxGsSj20cC4+8SVZtruCQ=
+	t=1750064276; cv=none; b=b5afen2SB0OpIBuq1AzVsclWu9nNykbgNbNQCiD+op5HH3d1gVF8PsTLTaQJNnexRcGUUKOPCPx0D2mLkqkjkmJyUHqpktyylMyAz4x7QgDMRb9jL7F1i8ZfkYEDO4HA3qHM4C7cD+/f/kKUd0grCtfucDfVz1IHAqUNUIq+9MY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750063739; c=relaxed/simple;
-	bh=CMHmRMvlIybPgTfplY3MjJdRgM5JMp6XgJ/jU980qkg=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ByRS64XhGWw2WIA54+Hwv45FBy68aq7fuJl+hYPcn5i7H1jkXY7lI03g1IN+kvpWyYtVQ78rd+44kN7u/oUYzAZ5b6RwfpzWISLmjWd5jOAjGaXDI6jV9FpQaw2G3pjkThiSnhT3p/7W/kRfKVcF5EWFdC+8iLjx0XRf7sO7Z/4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=OVM6DWUw; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=P6DY0zDJ; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=OVM6DWUw; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=P6DY0zDJ; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 4788D1F387;
-	Mon, 16 Jun 2025 08:48:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1750063736; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=nHbZRanB9XFp1ak2RIkdbOzwIS6/gWxvY61QFs2vR94=;
-	b=OVM6DWUwW6hjaPYrsfsbVeaoBAcM8kOiyboNeIEMEpFor/yriBwKHvBDcWcC96mA+CXzRA
-	ui7h7Or/vlJr87zml2b4WCE+MnQhNU8bHjLEah52M0qooa0vmvUBE9rjnGij7do/LzsTPA
-	uWmqJlX/ORUZ+M4NE4Gf8pnb0wt7zVQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1750063736;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=nHbZRanB9XFp1ak2RIkdbOzwIS6/gWxvY61QFs2vR94=;
-	b=P6DY0zDJXEd33jVSpsuUyM1abMmOQgHYHYg56AB9JZDzEotyd7AgXuAbFdWZwJHeIIBzeX
-	W1UqgxsfxrQIR0CQ==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1750063736; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=nHbZRanB9XFp1ak2RIkdbOzwIS6/gWxvY61QFs2vR94=;
-	b=OVM6DWUwW6hjaPYrsfsbVeaoBAcM8kOiyboNeIEMEpFor/yriBwKHvBDcWcC96mA+CXzRA
-	ui7h7Or/vlJr87zml2b4WCE+MnQhNU8bHjLEah52M0qooa0vmvUBE9rjnGij7do/LzsTPA
-	uWmqJlX/ORUZ+M4NE4Gf8pnb0wt7zVQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1750063736;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=nHbZRanB9XFp1ak2RIkdbOzwIS6/gWxvY61QFs2vR94=;
-	b=P6DY0zDJXEd33jVSpsuUyM1abMmOQgHYHYg56AB9JZDzEotyd7AgXuAbFdWZwJHeIIBzeX
-	W1UqgxsfxrQIR0CQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 05485139E2;
-	Mon, 16 Jun 2025 08:48:55 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id mI3FOnfaT2i5QAAAD6G6ig
-	(envelope-from <jdelvare@suse.de>); Mon, 16 Jun 2025 08:48:55 +0000
-Date: Mon, 16 Jun 2025 10:48:55 +0200
-From: Jean Delvare <jdelvare@suse.de>
-To: Alex Guo <alexguo1023@gmail.com>
-Cc: andi.shyti@kernel.org, linux-i2c@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: i801: Fix out-of-bounds bug in
- i801_block_transaction _byte_by_byte
-Message-ID: <20250616104855.06859f8e@endymion>
-In-Reply-To: <20250615233306.498536-1-alexguo1023@gmail.com>
-References: <20250615233306.498536-1-alexguo1023@gmail.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.43; x86_64-suse-linux-gnu)
+	s=arc-20240116; t=1750064276; c=relaxed/simple;
+	bh=5s8sDohCKEkle5cF00Pjoe6FoxImIgxI9Ykte4n/HfQ=;
+	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=pAzQM90dhP+KFY1u5V7RAuZ9ou61pjL/ICj9kTVVMiRaIsmK5+D4Xv8Gwwqbx3CnI5tCM0IzjVWLil0SMveXkZq2sWyUaAap7qw8pVAsMIiG+QWJz/wlL9UgGoxPnlYoCJk68NFbS9/rqvdwZzzcIbX/HnEpqL+PK0Rn7nWQ5UM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=RMUr56cG; arc=none smtp.client-ip=185.132.182.106
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55G8nbMS018924;
+	Mon, 16 Jun 2025 10:57:30 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=selector1; bh=hZLfO/aZyhMByPrSvo6tyt
+	gTdrnVnO5xyKlmjUCAvKw=; b=RMUr56cGnt2/RKuJ4spaAqR0emvF93V4UccXgy
+	LMZbSVE+1tjfHj1tM/nNO0xtDGv8ZNjsp5EWl/h7LRsAaEU+dQU7iGVWopOKSTTx
+	SmMxOcsDq5+kooCeQHsQGojp3Ea2kzjQKhVnA+5rvfQ+j9qocvU2AcXgW5uJLqQJ
+	ftcScyP45zUgIiwv3ZyFa+YreFS93Rbd8Af6sguAbUFc0A4765p1UKOM/z6KwyKq
+	WUkjBpIvNRIpAjIrGZRlzYY4ilz+qNGXPX6OFYBBlKD3RNn+s3rM5g2GKUn1srO6
+	C7DbbaN/1GPmPG33jvn4XYGy6AyXTbqXovPbFKJ4tgWp3G/Q==
+Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 4790e1yqwy-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 16 Jun 2025 10:57:30 +0200 (MEST)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 01A4740074;
+	Mon, 16 Jun 2025 10:56:06 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 29F025D40BC;
+	Mon, 16 Jun 2025 10:54:42 +0200 (CEST)
+Received: from localhost (10.252.14.42) by SHFDAG1NODE2.st.com (10.75.129.70)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 16 Jun
+ 2025 10:54:41 +0200
+From: =?utf-8?q?Cl=C3=A9ment_Le_Goffic?= <clement.legoffic@foss.st.com>
+Subject: [PATCH 0/3] Fix STM32 I2C dma operations
+Date: Mon, 16 Jun 2025 10:53:53 +0200
+Message-ID: <20250616-i2c-upstream-v1-0-42d3d5374e65@foss.st.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Flag: NO
-X-Spam-Score: -3.80
-X-Spamd-Result: default: False [-3.80 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-0.999];
-	MIME_GOOD(-0.10)[text/plain];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[];
-	ARC_NA(0.00)[];
-	HAS_ORG_HEADER(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
-	RCVD_TLS_ALL(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo]
-X-Spam-Level: 
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAKLbT2gC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDUyNz3UyjZN3SguKSotTEXN1U0yQzS1MDQ2NTy0QloJaCotS0zAqwcdG
+ xtbUABnEo6l4AAAA=
+X-Change-ID: 20250527-i2c-upstream-e5b69501359a
+To: Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
+        Alain Volmat
+	<alain.volmat@foss.st.com>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        "Maxime
+ Coquelin" <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue
+	<alexandre.torgue@foss.st.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        "M'boumba Cedric
+ Madianga" <cedric.madianga@gmail.com>,
+        Wolfram Sang <wsa@kernel.org>
+CC: Pierre-Yves MORDRET <pierre-yves.mordret@st.com>,
+        <linux-i2c@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <linaro-mm-sig@lists.linaro.org>,
+        =?utf-8?q?Cl=C3=A9ment_Le_Goffic?=
+	<clement.legoffic@foss.st.com>
+X-Mailer: b4 0.15-dev-c25d1
+X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-06-16_03,2025-06-13_01,2025-03-28_01
 
-Hi Alex,
+This patch series aims to fix some issues inside the driver's DMA
+handling.
+It also uses newer I2C DMA API.
 
-On Sun, 15 Jun 2025 19:33:06 -0400, Alex Guo wrote:
-> The data->block[0] variable comes from user. Without proper check,
-> the variable may be very large to cause an out-of-bounds bug.
-> 
-> Fix this bug by checking the value of data->block[0] first.
+Signed-off-by: Clément Le Goffic <clement.legoffic@foss.st.com>
+---
+Clément Le Goffic (3):
+      i2c: stm32: fix the device used for the DMA map
+      i2c: stm32f7: unmap DMA mapped buffer
+      i2c: stm32f7: support i2c_*_dma_safe_msg_buf APIs
 
-The same check is already present in i801_smbus_block_transaction() and
-i801_i2c_block_transaction(), which are the only 2 functions calling
-i801_block_transaction_byte_by_byte(). So the out-of-bounds bug you
-describe does not exist.
+ drivers/i2c/busses/i2c-stm32.c   |  2 +-
+ drivers/i2c/busses/i2c-stm32f7.c | 40 +++++++++++++++++++++++++++++-----------
+ 2 files changed, 30 insertions(+), 12 deletions(-)
+---
+base-commit: e04c78d86a9699d136910cfc0bdcf01087e3267e
+change-id: 20250527-i2c-upstream-e5b69501359a
 
+Best regards,
 -- 
-Jean Delvare
-SUSE L3 Support
+Clément Le Goffic <clement.legoffic@foss.st.com>
+
 
