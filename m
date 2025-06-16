@@ -1,68 +1,68 @@
-Return-Path: <linux-i2c+bounces-11492-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11493-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46E35ADAEC3
-	for <lists+linux-i2c@lfdr.de>; Mon, 16 Jun 2025 13:38:03 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 007C7ADAECC
+	for <lists+linux-i2c@lfdr.de>; Mon, 16 Jun 2025 13:39:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 531E21890484
-	for <lists+linux-i2c@lfdr.de>; Mon, 16 Jun 2025 11:38:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3F70C171DE9
+	for <lists+linux-i2c@lfdr.de>; Mon, 16 Jun 2025 11:39:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57C192DA760;
-	Mon, 16 Jun 2025 11:37:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AD322E2EFF;
+	Mon, 16 Jun 2025 11:39:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Nu6LPlvX"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mKXrRLV+"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78424261570;
-	Mon, 16 Jun 2025 11:37:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EC82261570;
+	Mon, 16 Jun 2025 11:39:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750073875; cv=none; b=YQ7WTXXLylVvyDXYOFC1Im7h3ZdOdWthZPAbI4HMbb4Wg1HFMWDNtCa7J2oG0ethzI9OOAZDeKK6uBY29FBtPjSCmbhv8xI/k/+lowm3eENUitfBEW7Si0uQfd1W0+kVDmT2450tfSMIMnaNlDKkQ5TAeGMFGHiRS5khtfYi0dE=
+	t=1750073942; cv=none; b=gVOx4yiYMnA3oSvVcluS4F82L0vO7hC84PAq9YFjnqmCwhckeIKE2PKC/oFnXjCDojMauvlbTSjjc1uyXfSEHqGUY683W6opidh112WlqAhVXxrZdYwAilTreai+xWiInhJKTieokxZWNF+0FNfus52xchRM4JBExpPpAHAZ9Pg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750073875; c=relaxed/simple;
-	bh=fLvwmw7HfsZKXm1HnRSW1wbqeq9h4sVoqCvM+tJ5kAw=;
+	s=arc-20240116; t=1750073942; c=relaxed/simple;
+	bh=/8TbTg+Rq7g+nI2tGAfe3AOGwuVcjXQE+KjkEaEhDZM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PEH/LZXtt89JOmDll6mST2EkjuQ5l/e7SydLjoddRD2WwMhT0CnonAenQJNoyfG4Z846o6+gybmoxIAXIxFcN8AEQZ5U863oydjBkz0hZn1vckCjlPhxbezCzKGJfAHoA931M/HNduhyAq/oSMCdxWL3TPo1Q8OO71ysQaGa1/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Nu6LPlvX; arc=none smtp.client-ip=198.175.65.14
+	 Content-Type:Content-Disposition:In-Reply-To; b=LuvHeHzzj0ejrM3KW+HOeOoIJ+ySjkppUdM2MK6xkL9Xgyfy7/EnI6Ktq+baz4JR2C7rslUrCk+PrpnaEHKzDepTrhXW3jy6x15yPrje/WuVYjvM62lkyTn7kjlcu5S+m/snTdvme0oPFUTrx+wqTAE4VStuKGq5zGiKmMBx+sw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mKXrRLV+; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750073873; x=1781609873;
+  t=1750073940; x=1781609940;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=fLvwmw7HfsZKXm1HnRSW1wbqeq9h4sVoqCvM+tJ5kAw=;
-  b=Nu6LPlvXdr+NdKqhTcNC/Nax3iN7L6CigZ8DRnhG2DMO9wXLEOW+c+PB
-   VvLDvdL9cAIWhY6WdmJ38NKv0Im5/r+Zzm3DlSaDtfXN5eNyRpiqckzDd
-   Q/+rwNSyDgG8UEjeG0COyCJBUiLgdt8jDStCDc4iUKx/54zOXmh2KbrU0
-   BWtn6ZZ2RMFoJbPekJix9kYT+v3Jn6FtXXL7fhhCKia1QlaT+tFNUpvLh
-   J/chZe3wwhcoOutGNxCHGuDJhjJ+VUQ4tBjp3AZm1avesdUY8duD+yfLM
-   urHbTPquUjdB0J4PUjLNDoqoFeKwfnlJ6m/2CumJW6mcuyoY2sd+AQ3Cj
-   g==;
-X-CSE-ConnectionGUID: w2+ed9x3Sg+D26a0/QKDNg==
-X-CSE-MsgGUID: zljgQdxaSWSkWqTbl15WMQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11465"; a="56015605"
+  bh=/8TbTg+Rq7g+nI2tGAfe3AOGwuVcjXQE+KjkEaEhDZM=;
+  b=mKXrRLV+KxhMIUcPw1VnzwIFVrmfDVUD+k4XzDaf3IbqwEuoUmoRZFJW
+   lKsUFmJKV1CBY32uv//pZrbig3/M3x6/QE00xDgoy4tN8bR8dhTz1Ew3r
+   zpKUaQTxxSV0aJLSQPHLBkCApw19CRA+HlnZk685mkpTsp/WgZrJwNOzv
+   HbW/ovOEuufSMDl0I1x3bcE0zbWsGqb7M37wgaDGDhxE0V6eEnmx5L4xH
+   d2uheBDlqZmvB4Qhf7i0UXpGxQ8esmMNMiyw3l1frKz1ErX93bsUNweb9
+   n/kLYZMxXn86+3lwO90SYcfya8aNiLg+iimtDHHJmFm1isTuHbCtFnNlH
+   A==;
+X-CSE-ConnectionGUID: g0tL27b4TDq9ITwP91KGig==
+X-CSE-MsgGUID: ZpJOSgMwQM6TWJc1E6DzSA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11465"; a="39821618"
 X-IronPort-AV: E=Sophos;i="6.16,241,1744095600"; 
-   d="scan'208";a="56015605"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2025 04:37:52 -0700
-X-CSE-ConnectionGUID: uu/dMdKmTy6C/CMQq8oAyQ==
-X-CSE-MsgGUID: vmFt6vaaS4WB85EZl06xXg==
+   d="scan'208";a="39821618"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2025 04:38:59 -0700
+X-CSE-ConnectionGUID: QHF3MIx1Sbm3cPmZqxp25Q==
+X-CSE-MsgGUID: 2KQYlUUgQY6oxpvI+njcjQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,241,1744095600"; 
-   d="scan'208";a="148347549"
+   d="scan'208";a="149345151"
 Received: from smile.fi.intel.com ([10.237.72.52])
-  by fmviesa007.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2025 04:37:42 -0700
+  by fmviesa009.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2025 04:38:50 -0700
 Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
 	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1uR89j-000000073o4-2D5Z;
-	Mon, 16 Jun 2025 14:37:39 +0300
-Date: Mon, 16 Jun 2025 14:37:39 +0300
+	id 1uR8An-000000073ou-0Cpl;
+	Mon, 16 Jun 2025 14:38:45 +0300
+Date: Mon, 16 Jun 2025 14:38:44 +0300
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Herve Codina <herve.codina@bootlin.com>
 Cc: Andrew Lunn <andrew@lunn.ch>,
@@ -103,10 +103,11 @@ Cc: Andrew Lunn <andrew@lunn.ch>,
 	Steen Hegelund <steen.hegelund@microchip.com>,
 	Luca Ceresoli <luca.ceresoli@bootlin.com>,
 	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v3 08/28] pinctrl: cs42l43: Use fw_devlink_set_device()
-Message-ID: <aFACAwTAyIh2HtNm@smile.fi.intel.com>
+Subject: Re: [PATCH v3 12/28] driver core: fw_devlink: Tag the fwnode dev
+ member as private
+Message-ID: <aFACRPNCxYfZZp9i@smile.fi.intel.com>
 References: <20250613134817.681832-1-herve.codina@bootlin.com>
- <20250613134817.681832-9-herve.codina@bootlin.com>
+ <20250613134817.681832-13-herve.codina@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -115,17 +116,19 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250613134817.681832-9-herve.codina@bootlin.com>
+In-Reply-To: <20250613134817.681832-13-herve.codina@bootlin.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
  krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On Fri, Jun 13, 2025 at 03:47:48PM +0200, Herve Codina wrote:
-> The code set directly fwnode->dev field.
+On Fri, Jun 13, 2025 at 03:47:52PM +0200, Herve Codina wrote:
+> The dev member in the fwnode structure should be accessed only by the
+> fwnode core. The fw_devlink_set_device() helper has been introduced to
+> avoid users to set this member directly. All users have been converted
+> and use fw_devlink_set_device() to set the field.
 > 
-> Use the dedicated fw_devlink_set_device() helper to perform this
-> operation.
+> To avoid future abusers who might set the field directly and allow
+> sparse to detect them, tag the dev field as a private field.
 
-FWIW,
 Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
 -- 
