@@ -1,138 +1,144 @@
-Return-Path: <linux-i2c+bounces-11496-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11497-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52DA3ADB09D
-	for <lists+linux-i2c@lfdr.de>; Mon, 16 Jun 2025 14:51:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2354ADB8E8
+	for <lists+linux-i2c@lfdr.de>; Mon, 16 Jun 2025 20:35:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B5E73A1C96
-	for <lists+linux-i2c@lfdr.de>; Mon, 16 Jun 2025 12:51:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3B0CB188F6B1
+	for <lists+linux-i2c@lfdr.de>; Mon, 16 Jun 2025 18:35:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE55F285CB8;
-	Mon, 16 Jun 2025 12:51:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8772B28982A;
+	Mon, 16 Jun 2025 18:34:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b="EdILSAIZ"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="CkAQbKwL";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="KEsNygaq"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh-b3-smtp.messagingengine.com (fhigh-b3-smtp.messagingengine.com [202.12.124.154])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6A9E285CAC
-	for <linux-i2c@vger.kernel.org>; Mon, 16 Jun 2025 12:51:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66422289372;
+	Mon, 16 Jun 2025 18:34:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750078303; cv=none; b=QBxaN/osGKiMCIauxQMMnjbRcDnMDbR3ZagSKTX1hnXaaXMQDbA7aoBoNduxUD2ZLzwYNo6/QYofH2tL7X39tk5zydYJdTiiroQcl3/tilcxscI30LQWIevVhRwYgWADhF4Ouw16EpI7pA1Hk+DUPZ9xew0idCDl7M50m7SxA0Y=
+	t=1750098899; cv=none; b=EqA8B6AQb71Ri3NDSj9ZfDuWznDA1FWdEcRe6GwgzoFTIino25YPe6k3vFTvKQFV+RmDNvi4s7Kl5nWchPG+AiFfdRU3Ntu9q0WA4vPCcFPS2eRR6wOA0+E4m5s6GcBCa+Eh5br5WwEt6xwRMx8t/SLl2YYkZ532s+f8WeA5TpA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750078303; c=relaxed/simple;
-	bh=9k9Wh/NoYsqbKlKsFE6tFkqP7y1xy/55zKbtVtGtJXE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=dtL5KU5JBkG8lGc0d2oeHjIdAGyI1uZuutXFtAxwJeQhkrLUQfB4XtUBa1gU9qHqRUuRyISMdBUEZeeGd71ZpDJE7o0te9UEwwzkEEx8oxCXOXZt6aKp7nTWROSiiDTXJ6WNy/mKVCfMMlHdkClClRfpq7TMgHdl/THGlnrhWpU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b=EdILSAIZ; arc=none smtp.client-ip=209.85.166.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
-Received: by mail-io1-f52.google.com with SMTP id ca18e2360f4ac-875b52a09d1so95092639f.0
-        for <linux-i2c@vger.kernel.org>; Mon, 16 Jun 2025 05:51:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=riscstar-com.20230601.gappssmtp.com; s=20230601; t=1750078301; x=1750683101; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=S/rRqga4nciTe+40s1lGUJde2Ttgzu3tg/+nM/gCFAE=;
-        b=EdILSAIZjrQDawlMlERPytnM5jrP/lgXhVtRY0XasclPozbLQw8c033FbZxIYn4h8n
-         5hYvZmkHxE8OA3GtOLSO8f0lVZCoVXQ5MCsy3JpZKtJn4cvFsBP/MMeKHB4Y1qkDiMFM
-         87Q8QWi5SuS5DlZZDRHF0Ga9MPW/bFWlAWfzJl1/0j0hnnf5sxZaEBFNml2bBl1zbYRp
-         CTqeZCENc3XTtQw/ctb3Jay7wLVKllLHOBeWPzL40EwdZJvnPcvMgL9mCZUVAz7uYmOi
-         Z8QSlPYNvsFao4aokb8MT+OW4H+fhWl9vQ527iS7mI/z58LhgRs3se9EJjWrTjgb6+7t
-         t8hA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750078301; x=1750683101;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=S/rRqga4nciTe+40s1lGUJde2Ttgzu3tg/+nM/gCFAE=;
-        b=vgu0nuqJ9Qd7qQUIPxhjhquLll97e/3vlRVhI5rHNPA6xn2A0JCxLWNBxZxe+FP8X8
-         xCKNPh9I2EgmQgmqwYaYVvFzyzFbHWl9kRQOaman3euoZuE5cXSERBWATlSA6DWELLEL
-         fE/34OJgGT7zipckowM0464EbN6iaOm7NyPGRhPczbMH3m6y3T9INSLrlugWJl1OMBfC
-         U2Z6O06ibuzfiIrkJuMqmpaKcAaEVD/HcTvEQQcE1t+W4LBlJKq5Xcr5Z9t3KqUK0BHa
-         uCTZwqAmgJw/0tXdEPqOV4n08ke4CTIO9KhBgXsFANFWc8LfyzTgQBs/yIQEVqXhZCU9
-         uAPQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWtUZaf7s4+y0uK+T29AHwHjPlOQv1ZoaoTdLg6ExTkriKI5afRe01GF17pKOI3tH28sJQGjoM2lnQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx/bhtUNDyO8YisjDNXYtQLRTOjT2hCdNQgvB0fNl1fNsfghuyK
-	5ZV3UiyYHPAxzM035o29dFuaoG7KuUDd2gLDY80mONxjgR9Fy4/HSUjhxyUn6QWxBhY=
-X-Gm-Gg: ASbGncuIL4YLgJ6ayYLJ7AHp/IUNzVEoQ4geE5ZJQqPN7xh70t9hxjpcatw8PkBz/K6
-	TW46cd03C6ULFUM/CZ/UHf+uMT0AGauYEgD4S8XRMQ/ou+qQrPHltxs+czCDLW0CEyjtpPKozHx
-	fPaX7AHDsb6xM1kaG9UnRr79x6nVb7Fua4uBUUY0oIi3tkNHlGiiHpZg37Bd6VyKlL3kMYlqOL4
-	3sWYqeCK47aV5gwguqzeCgXIhN2i/uHmtkETmbf0LB5KksQHoJ+2pCjeO/xQo2BxP0NTn6R2oab
-	3fouXMXYD7osqgYg3nXqstFUyx14vsAY0Dbtc65gvgASJzb5/0AujNzA4Btw05Hp0xMftDqywiD
-	R22s71vewtzvnRksRRRenO9noKoirgcM=
-X-Google-Smtp-Source: AGHT+IGBM9IfcIVPXLIx3r77XwCbfXk8tkksQXCR2d/8SBqn06Uhn07s7o49RLoWiyjUv193p5+5QQ==
-X-Received: by 2002:a05:6e02:1529:b0:3dd:cbbb:b731 with SMTP id e9e14a558f8ab-3de07c55b92mr92098655ab.9.1750078300563;
-        Mon, 16 Jun 2025 05:51:40 -0700 (PDT)
-Received: from presto.localdomain (c-73-228-159-35.hsd1.mn.comcast.net. [73.228.159.35])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3de019b442fsm20352865ab.2.2025.06.16.05.51.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Jun 2025 05:51:40 -0700 (PDT)
-From: Alex Elder <elder@riscstar.com>
-To: andi.shyti@kernel.org,
-	dlan@gentoo.org,
-	troymitchell988@gmail.com
-Cc: elder@riscstar.com,
-	linux-i2c@vger.kernel.org,
-	spacemit@lists.linux.dev,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v3] i2c: k1: check for transfer error
-Date: Mon, 16 Jun 2025 07:51:36 -0500
-Message-ID: <20250616125137.1555453-1-elder@riscstar.com>
-X-Mailer: git-send-email 2.45.2
+	s=arc-20240116; t=1750098899; c=relaxed/simple;
+	bh=k3U8hdUVf2mysDGF9j7sGFSXq/NHg1BAR9W4A1e7FBY=;
+	h=MIME-Version:Date:From:To:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=R0yHX9vWn8ZHzu5DVLC7auJIs5n6v+tYJqygR5XTJByStvvaDnO7FZ/y7YTCESq1bC8APlTg+SJwiKpxLXNfBdv3HEs6l8oJ3P7UG2YD+vPm2Kj9Cap8yLkSEmgryOr4kUMy+O7g3tsXeyQKHoi5m727iHxLkqKfmaJ0vsOuWO4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=CkAQbKwL; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=KEsNygaq; arc=none smtp.client-ip=202.12.124.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 337F0254012F;
+	Mon, 16 Jun 2025 14:34:56 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-05.internal (MEProxy); Mon, 16 Jun 2025 14:34:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:content-transfer-encoding:content-type:content-type:date:date
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1750098896;
+	 x=1750185296; bh=qRwibQTbtTFkc/qCHLHPXCkbTuwR1ipXTlm5cdeOUc4=; b=
+	CkAQbKwLRJX2qandCly0sWKOMtf77gN4MgYUuG+OsOzmG9buhoB1zAZUt2ybs+s+
+	WmpvOgS6fN47mDAumZkluDJWBK/0X5X0MWxxxXVGYGEddsSPLnDb4tDzwRPyqEEe
+	1TET4TyLtO+8vp8XiTLBs7hxKkuda37K+lr2eXSvmWrkF5ewuuTW1iQdxwTkdmTk
+	6eXvfnz5QtT1UDMOK+LVbs1kYSHQrteUiv0qfRYwmQD+FUq/jYyvzyxu4CKBn/G7
+	yQkaK3WsuaL9pK8PdvLge8pbRkN1dCtXTgWmBXfDFQp2PJPRo8PNd1aYg+s3DHeI
+	YFB789jS8Qab+ttLYZ/O0w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:content-transfer-encoding:content-type
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
+	:x-me-sender:x-sasl-enc; s=fm1; t=1750098896; x=1750185296; bh=q
+	RwibQTbtTFkc/qCHLHPXCkbTuwR1ipXTlm5cdeOUc4=; b=KEsNygaqVgj7WbCwZ
+	Lkvakt2piIfCMaBt1ZbJrSwo4TK7oIkyX4Uoa9XJkgfm1OQP+3u1brIo11UMHbL1
+	84tfEe8rsX9Q3gIlO4CAxB2hm2py3yaD8D5YdOUIVdpWbaLmFIopaUFhBbzTs/qe
+	kUTiISvnEf5hjsrwF8mFI49VrSwxA4CnQw01e/+H5PaxqtIQa3SQ3iUwbxKtmZeb
+	ZEnrDwtSNoPspZvBlo3k7hGL85lsrP4TdTtDQ+qF7Xb3o8DBwzPsKR0WobtUQwt2
+	foTLiVMGGX7ZCjuRShvV4eFXAxLJSicbiC+3IxzCRFEqsUSxJqv1SwcRh4l1Rs4u
+	q28pA==
+X-ME-Sender: <xms:zmNQaIO0hvU2mt4H2Xvk5AnX0iB1kD8BTIM0kmdEAL52qNH_X7Zt-A>
+    <xme:zmNQaO-pQtuwcQxZUMYxJEK6v4sPWP1MMPZ4mTg4DyfSTda8L3t54rfvrxWL8zo-n
+    VTn7Y50tNPm6fcmkVo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddugddvjeefvdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvkfgjfhfutgfgsehtjeertdertddt
+    necuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrd
+    guvgeqnecuggftrfgrthhtvghrnhephfekledtffefhffghfetteehuefhgfetgefhtdeu
+    feduueeltefghedtjeeifffhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepudel
+    pdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegtrghtrghlihhnrdhmrghrihhnrg
+    hssegrrhhmrdgtohhmpdhrtghpthhtohepuggrvhgvmhesuggrvhgvmhhlohhfthdrnhgv
+    thdprhgtphhtthhopehhvghrsggvrhhtsehgohhnughorhdrrghprghnrgdrohhrghdrrg
+    hupdhrtghpthhtoheprghnughirdhshhihthhisehkvghrnhgvlhdrohhrghdprhgtphht
+    thhopegsrhhoohhnihgvsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehvkhhouhhlse
+    hkvghrnhgvlhdrohhrghdprhgtphhtthhopeifihhllheskhgvrhhnvghlrdhorhhgpdhr
+    tghpthhtoheplhhinhhugidqrghrmhdqkhgvrhhnvghlsehlihhsthhsrdhinhhfrhgrug
+    gvrggurdhorhhgpdhrtghpthhtohepuggrnhhivghlrdhmrggthhhonhesmhhitghrohgt
+    hhhiphdrtghomh
+X-ME-Proxy: <xmx:zmNQaPRswyGdepgzEcq8ZxPpnVu2Wrc6-oOZ7im99CjLcZTGH4eBjA>
+    <xmx:zmNQaAsI7EG80DBY_yZ4XKwGWgi6xUtMqBQBeetDFZIs5zE557ilxQ>
+    <xmx:zmNQaAcTIVEBWFXjvaHxr56Nf0Ub6-2ApA-P1suW0_0LL4_J5QTA6w>
+    <xmx:zmNQaE0AiF_i6R0owGd_wFWswJPr2jjUGwz6T9iv27LgZiCo4HITeQ>
+    <xmx:0GNQaAnKS3ebf6Eh4ZHo3SUihb-d9QthvKL2qiqOPzxP4wLM775-Y9gS>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 87E5E700062; Mon, 16 Jun 2025 14:34:54 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-ThreadId: Tad13d72cbf59a799
+Date: Mon, 16 Jun 2025 20:34:34 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Robert Marko" <robert.marko@sartura.hr>,
+ "Catalin Marinas" <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>,
+ "Olivia Mackall" <olivia@selenic.com>,
+ "Herbert Xu" <herbert@gondor.apana.org.au>,
+ "David S . Miller" <davem@davemloft.net>, "Vinod Koul" <vkoul@kernel.org>,
+ "Andi Shyti" <andi.shyti@kernel.org>, "Mark Brown" <broonie@kernel.org>,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+ "Pengutronix Kernel Team" <kernel@pengutronix.de>, ore@pengutronix.de,
+ luka.perkov@sartura.hr, "Daniel Machon" <daniel.machon@microchip.com>
+Message-Id: <3ba837f8-70bb-4b9e-a9f9-0e71b9e073c4@app.fastmail.com>
+In-Reply-To: <20250613114148.1943267-1-robert.marko@sartura.hr>
+References: <20250613114148.1943267-1-robert.marko@sartura.hr>
+Subject: Re: [PATCH v7 0/6] arm64: lan969x: Add support for Microchip LAN969x SoC
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-If spacemit_i2c_xfer_msg() times out waiting for a message transfer to
-complete, or if the hardware reports an error, it returns a negative
-error code (-ETIMEDOUT, -EAGAIN, -ENXIO. or -EIO).
+On Fri, Jun 13, 2025, at 13:39, Robert Marko wrote:
+> This patch series adds basic support for Microchip LAN969x SoC.
+>
+> It introduces the SoC ARCH symbol itself and allows basic peripheral
+> drivers that are currently marked only for AT91 to be also selected for
+> LAN969x.
+>
+> DTS and further driver will be added in follow-up series.
+>
+> Robert Marko (6):
+>   arm64: lan969x: Add support for Microchip LAN969x SoC
+>   spi: atmel: make it selectable for ARCH_LAN969X
+>   i2c: at91: make it selectable for ARCH_LAN969X
+>   dma: xdmac: make it selectable for ARCH_LAN969X
+>   char: hw_random: atmel: make it selectable for ARCH_LAN969X
+>   crypto: atmel-aes: make it selectable for ARCH_LAN969X
 
-The sole caller of spacemit_i2c_xfer_msg() is spacemit_i2c_xfer(),
-which is the i2c_algorithm->xfer callback function.  It currently
-does not save the value returned by spacemit_i2c_xfer_msg().
+If the drivers on ARCH_LAN969X are largely shared with those on
+ARCH_AT91, should they perhaps depend on a common symbol?
 
-The result is that transfer errors go unreported, and a caller
-has no indication anything is wrong.
+That could be either the existing ARCH_AT91 as we do with LAN966,
+or perhaps ARCH_MICROCHIP, which is already used for riscv/polarfire.
 
-When this code was out for review, the return value *was* checked
-in early versions.  But for some reason, that assignment got dropped
-between versions 5 and 6 of the series, perhaps related to reworking
-the code to merge spacemit_i2c_xfer_core() into spacemit_i2c_xfer().
-
-Simply assigning the value returned to "ret" fixes the problem.
-
-Fixes: 5ea558473fa31 ("i2c: spacemit: add support for SpacemiT K1 SoC")
-Signed-off-by: Alex Elder <elder@riscstar.com>
-Reviewed-by: Troy Mitchell <troymitchell988@gmail.com>
----
-v3: Rebased on v6.16-rc2; included version in message subject
-
- drivers/i2c/busses/i2c-k1.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/i2c/busses/i2c-k1.c b/drivers/i2c/busses/i2c-k1.c
-index 5965b4cf6220e..b68a21fff0b56 100644
---- a/drivers/i2c/busses/i2c-k1.c
-+++ b/drivers/i2c/busses/i2c-k1.c
-@@ -477,7 +477,7 @@ static int spacemit_i2c_xfer(struct i2c_adapter *adapt, struct i2c_msg *msgs, in
- 
- 	ret = spacemit_i2c_wait_bus_idle(i2c);
- 	if (!ret)
--		spacemit_i2c_xfer_msg(i2c);
-+		ret = spacemit_i2c_xfer_msg(i2c);
- 	else if (ret < 0)
- 		dev_dbg(i2c->dev, "i2c transfer error: %d\n", ret);
- 	else
--- 
-2.45.2
-
+    Arnd
 
