@@ -1,139 +1,151 @@
-Return-Path: <linux-i2c+bounces-11479-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11480-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE696ADA8D2
-	for <lists+linux-i2c@lfdr.de>; Mon, 16 Jun 2025 09:04:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E97EADAB0A
+	for <lists+linux-i2c@lfdr.de>; Mon, 16 Jun 2025 10:46:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C8C6E1891F33
-	for <lists+linux-i2c@lfdr.de>; Mon, 16 Jun 2025 07:04:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 81430188FAF6
+	for <lists+linux-i2c@lfdr.de>; Mon, 16 Jun 2025 08:47:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD0E51EEA4D;
-	Mon, 16 Jun 2025 07:04:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 861B51F4617;
+	Mon, 16 Jun 2025 08:46:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="RvuZAWtw"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="GrnSeCNu";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="R0MaR5Qk";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="GrnSeCNu";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="R0MaR5Qk"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C85D142AB0;
-	Mon, 16 Jun 2025 07:04:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEFEF26D4E5
+	for <linux-i2c@vger.kernel.org>; Mon, 16 Jun 2025 08:46:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750057463; cv=none; b=Ik1/5DxckGVQ9duKjld+PXtY3Qj+ogDJCU1F5bEl1xHFi6cy4duB/yVxp0KzJ6TPqYQ/wCTu32iV99k0WZ+OHh3vdR/Psqv6sk+ReBePKzSZ2E4tpwrRgopDgfs8wUbkichozrjSHJLA9OYNnKVUop0Mzgq/k2U2lTiObB2xBMQ=
+	t=1750063609; cv=none; b=kCbGo9+b6JGDk++S51A/MLYLvGFjv0YhT9PItbDPlRgOdeyZOnkkmCslGNmYS8KfWB6IZraJJVzfNVpe+uuZGlYKNeVgceUtHoRPdIQPf3AEfYF92/Uo2a8YyOuzdLTUBSeSug7YwceeUY/yVCIKEmIYeyaVUYE95FlMw7MDDgs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750057463; c=relaxed/simple;
-	bh=nLhGjURpTCk0v2y/8BYqjSMh+AN7in3C1Fv8fLv+X48=;
+	s=arc-20240116; t=1750063609; c=relaxed/simple;
+	bh=ZQ9gcLTBm+aDRkU2fuZuUMzNjXUtXyuUZRtD/+qBp6A=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mjdmd8aUTNAGstWoNDkGNtXhqTPzbajBIH5Ew0bTryfKKT5vw0yEnC7eyopiPaIVaLTS2GWQZRV7RE9IXOU8lLmfqVCOiPvLE8urBEqhy7M1m16br5jthROYBR0sPEzBgSoTwmsoPY8fbQDtxe6Qoe9u5VGPHsILa0TONnX0PkM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=RvuZAWtw; arc=none smtp.client-ip=217.70.183.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C090944358;
-	Mon, 16 Jun 2025 07:04:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1750057451;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 MIME-Version:Content-Type; b=EEvkASYDBvccAihy8+glP2fzySsGo0GGlkh6SM5SlDzPVw1QPA8X8KfbXEjVi/16ix7y+WtkgZNgoMxfCsrFOg23sYlMoVhq8KRlHyJU/pQaHqokSEoIcj6hzNgi92CkCjBjqJcGhf4A0cIelZ+p7ieaJ0JA6ob5hGWX4paEw3M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=GrnSeCNu; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=R0MaR5Qk; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=GrnSeCNu; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=R0MaR5Qk; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id E5E971F38F;
+	Mon, 16 Jun 2025 08:46:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1750063605; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=rQpUEyE2hSL3/anSM+mUj3B/dfO987OTyH9st7Zw9rI=;
-	b=RvuZAWtwncTDYBTmDQAlBIYQ37ITn2LNv8AE9RnE6ibp9xhLMXoG/P+FYoXnQn4WXwPoAU
-	/kMIcIHg7mBPD6KS4fM4TATpCovYXdlJ/S/5tPFqDNgWBxRwyYcORmltrjG6O9PZf37lQB
-	IQmasJyHwwVGFYltHgdTmBdQFOSbPNwi/8qxzvBfE4MxT7JDW0imBcadoL9/jsDUuPzXpw
-	fBtVIp8AFo8XzSXPdRTZcI0QUmtJbiBZNxj1lORjNz3V1ub/LaYlPzQYKTAon4QLlOoMwk
-	PeM3kR9n0FPn0e2zs4hpdyyi9dxvIyrQ9p8iEFKfpxusw0Kmk7p6j5aYgBKFCQ==
-Date: Mon, 16 Jun 2025 09:04:06 +0200
-From: Herve Codina <herve.codina@bootlin.com>
-To: Saravana Kannan <saravanak@google.com>
-Cc: Andrew Lunn <andrew@lunn.ch>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Danilo Krummrich <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>, Sascha
- Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team
- <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, Michael
- Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Andi
- Shyti <andi.shyti@kernel.org>, Wolfram Sang
- <wsa+renesas@sang-engineering.com>, Peter Rosin <peda@axentia.se>, Derek
- Kiernan <derek.kiernan@amd.com>, Dragan Cvetic <dragan.cvetic@amd.com>,
- Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh@kernel.org>, Bjorn Helgaas
- <bhelgaas@google.com>, Mark Brown <broonie@kernel.org>, Len Brown
- <lenb@kernel.org>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Daniel Scally <djrscally@gmail.com>, Heikki Krogerus
- <heikki.krogerus@linux.intel.com>, Sakari Ailus
- <sakari.ailus@linux.intel.com>, Wolfram Sang <wsa@kernel.org>, Geert
- Uytterhoeven <geert+renesas@glider.be>, Davidlohr Bueso
- <dave@stgolabs.net>, Dave Jiang <dave.jiang@intel.com>, Alison Schofield
- <alison.schofield@intel.com>, Vishal Verma <vishal.l.verma@intel.com>, Ira
- Weiny <ira.weiny@intel.com>, Dan Williams <dan.j.williams@intel.com>,
- linux-kernel@vger.kernel.org, imx@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
- linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
- linux-pci@vger.kernel.org, linux-spi@vger.kernel.org,
- linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org, Allan Nielsen
- <allan.nielsen@microchip.com>, Horatiu Vultur
- <horatiu.vultur@microchip.com>, Steen Hegelund
- <steen.hegelund@microchip.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v3 06/28] driver core: fw_devlink: Introduce
- fw_devlink_set_device()
-Message-ID: <20250616090406.32f62ca4@bootlin.com>
-In-Reply-To: <CAGETcx9u-7TJ6_J5HdmDT=7A6Z08P-rUC0n+qnBoBi+ejRc2SQ@mail.gmail.com>
-References: <20250613134817.681832-1-herve.codina@bootlin.com>
-	<20250613134817.681832-7-herve.codina@bootlin.com>
-	<CAGETcx9u-7TJ6_J5HdmDT=7A6Z08P-rUC0n+qnBoBi+ejRc2SQ@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+	bh=V8DdQsnMLs1nvo7yl78JYktCidIs/cIpLkMKiz6CCJs=;
+	b=GrnSeCNuNoAOgeW4hN9aEvIspT8dBk2Y9O+x4kf9scc5hjNTEOGJfTif6JXQJLhG1Posrw
+	hNamLaxQAhTQ5XTisZYs2CLx8PSKLppX6kgE5rUaLMfWDZmB+BsnIRvADZpMsuQz5Mmm5c
+	dNbS5TpR3S4fM7pTfe2dAY1pJxRkp1E=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1750063605;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=V8DdQsnMLs1nvo7yl78JYktCidIs/cIpLkMKiz6CCJs=;
+	b=R0MaR5Qk0I0Fvbst3HqR9Fjk3jiBfC8B12c6cW7HztO50qU3t3ku70EMYMUTBYjYLqWNBw
+	+Lw7pnUV57MxxsCg==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1750063605; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=V8DdQsnMLs1nvo7yl78JYktCidIs/cIpLkMKiz6CCJs=;
+	b=GrnSeCNuNoAOgeW4hN9aEvIspT8dBk2Y9O+x4kf9scc5hjNTEOGJfTif6JXQJLhG1Posrw
+	hNamLaxQAhTQ5XTisZYs2CLx8PSKLppX6kgE5rUaLMfWDZmB+BsnIRvADZpMsuQz5Mmm5c
+	dNbS5TpR3S4fM7pTfe2dAY1pJxRkp1E=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1750063605;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=V8DdQsnMLs1nvo7yl78JYktCidIs/cIpLkMKiz6CCJs=;
+	b=R0MaR5Qk0I0Fvbst3HqR9Fjk3jiBfC8B12c6cW7HztO50qU3t3ku70EMYMUTBYjYLqWNBw
+	+Lw7pnUV57MxxsCg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id A5F84139E2;
+	Mon, 16 Jun 2025 08:46:45 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id HmGGJvXZT2gJQAAAD6G6ig
+	(envelope-from <jdelvare@suse.de>); Mon, 16 Jun 2025 08:46:45 +0000
+Date: Mon, 16 Jun 2025 10:46:44 +0200
+From: Jean Delvare <jdelvare@suse.de>
+To: Alex Guo <alexguo1023@gmail.com>
+Cc: andi.shyti@kernel.org, linux-i2c@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: i801: Fix out-of-bounds bug
+Message-ID: <20250616104644.2066693e@endymion>
+In-Reply-To: <20250615232857.491602-1-alexguo1023@gmail.com>
+References: <20250615232857.491602-1-alexguo1023@gmail.com>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.43; x86_64-suse-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddugddvheelfecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfohfogggtgfesthekredtredtjeenucfhrhhomhepjfgvrhhvvgcuvehoughinhgruceohhgvrhhvvgdrtghoughinhgrsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeviefffeegiedtleelieeghfejleeuueevkeevteegffehledtkeegudeigffgvdenucfkphepledtrdekledrudeifedruddvjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeeltddrkeelrdduieefrdduvdejpdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpehhvghrvhgvrdgtohguihhnrgessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepgeekpdhrtghpthhtohepshgrrhgrvhgrnhgrkhesghhoohhglhgvrdgtohhmpdhrtghpthhtoheprghnughrvgifsehluhhnnhdrtghhpdhrtghpthhtohepghhrvghgkhhhsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtoheprhgrfhgrvghlsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghkrheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhhrgifnhhguhhosehkvghrn
- hgvlhdrohhrghdprhgtphhtthhopehsrdhhrghuvghrsehpvghnghhuthhrohhnihigrdguvgdprhgtphhtthhopehkvghrnhgvlhesphgvnhhguhhtrhhonhhigidruggv
-X-GND-Sasl: herve.codina@bootlin.com
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Flag: NO
+X-Spam-Score: -3.80
+X-Spamd-Result: default: False [-3.80 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-0.999];
+	MIME_GOOD(-0.10)[text/plain];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TO_DN_SOME(0.00)[];
+	ARC_NA(0.00)[];
+	HAS_ORG_HEADER(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
+	RCVD_TLS_ALL(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo]
+X-Spam-Level: 
 
-Hi Saravana,
+Hi Alex,
 
-On Fri, 13 Jun 2025 14:13:49 -0700
-Saravana Kannan <saravanak@google.com> wrote:
-
-> On Fri, Jun 13, 2025 at 6:49 AM Herve Codina <herve.codina@bootlin.com> wrote:
-> >
-> > Setting fwnode->dev is specific to fw_devlink.
-> >
-> > In order to avoid having a direct 'fwnode->dev = dev;' in several
-> > place in the kernel, introduce fw_devlink_set_device() helper to perform
-> > this operation.
-> >  
+On Sun, 15 Jun 2025 19:28:57 -0400, Alex Guo wrote:
+> The data->block[0] variable comes from user. Without proper check,
+> the variable may be very large to cause an out-of-bounds bug.
 > 
-> This should not be set anywhere outside the driver core files. I'll
-> get to reviewing the series, but until then, NACK to this.
-> 
-> Is there a specific patch that explain why we need to set this outside
-> driver core?
+> Fix this bug by checking the value of data->block[0] first.
 
-We need to set it in case of creating device-tree node for PCI.
+This check is already present in i801_smbus_block_transaction(), which
+is the only place where i801_block_transaction_by_block() is being
+called. So the out-of-bounds bug you describe does not exist.
 
-Usually, fwnode are created (based on DT or ACPI) and then, dev are
-created.
-
-In the PCI DT node creation case, device are already created and then, based
-on information already computed by the kernel, DT node are created.
-
-You can see that on patch 11 (dev setting was already upstream and it is
-replace by a call to the helper for PCI host bridge) and on patch 13 (PCI
-device).
-
-Other patches (8, 9 and 10) replace the existing direct setting of the dev
-member by a call to the helper.
-
-Best regards,
-Hervé
+-- 
+Jean Delvare
+SUSE L3 Support
 
