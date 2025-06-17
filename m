@@ -1,110 +1,647 @@
-Return-Path: <linux-i2c+bounces-11501-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11502-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66450ADC87E
-	for <lists+linux-i2c@lfdr.de>; Tue, 17 Jun 2025 12:36:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A37DADC94F
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 Jun 2025 13:28:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C06AF1795EB
-	for <lists+linux-i2c@lfdr.de>; Tue, 17 Jun 2025 10:36:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1601D3AFF00
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 Jun 2025 11:27:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97CAA2BEFF3;
-	Tue, 17 Jun 2025 10:36:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF7CA2DBF5A;
+	Tue, 17 Jun 2025 11:27:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="MI9emjxK"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HUeYjC6I"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9747C293C58
-	for <linux-i2c@vger.kernel.org>; Tue, 17 Jun 2025 10:36:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95BBA5C96;
+	Tue, 17 Jun 2025 11:27:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750156578; cv=none; b=dl/1JT6UKnIsXU3d7bz5eYbWw/r0Ql+jGt1LnZLKD6fFXYDCFzkQVmbaODzBQQyFC+YLNNlDp3X5w5wlOJZY2Iv0XgESpJGVrjC5JTlZyBlDLP2apK8nEwjwrS5NkKFfEKEWlMqV2kuq9DAP/d2AUv1mo0sZ6AF3NcrqrzIl7GY=
+	t=1750159673; cv=none; b=KbuIKv4oPVve8hQkaalMfvjGijbDzDnY5AEknE/FvUEBZLYLoQ124qhf0/+pQ5BVMHzzu+DhmS1riz/OflRdy64kYOw5sUa5SAUdQ76lqlk8qMkvlaZFDpVL0TF/EnPqtkDDeEzdsdcCYPLnfEWVJX1GU4MUIaWfwzFmBX0FQwg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750156578; c=relaxed/simple;
-	bh=FliwTJtvVKtpFJoL19ZDyrHjDwdBZkgsGFSnrPqHsgQ=;
+	s=arc-20240116; t=1750159673; c=relaxed/simple;
+	bh=ruUqN6ft/arA1UJpeej5ZFmbmNVv7kSpek2zyp69t6I=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rUHojnB7+IBJEkcO3DHL526la0kBjMLpYefjKfTALQjqBTTwW4pflQpqjVffgk2n5ulCRX6mkN8fyRzv4Y6GVQfZNHjaI5wr75/7zS8GBZT/R8G/wUkObrCDEvpalikjkySjlevRat8HT4MXs6COM1wxGE6Lt0BKEiXqTX+Ce9g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=MI9emjxK; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=WR+y
-	GA3QOuuCLXDTtWxRTnyvke0vfwA5ofKcR4PEDyQ=; b=MI9emjxK4t5EXmAfEu+y
-	BEtHy3+eVwqUzFX+tmjVHAdAGt8D9yr1ynJlj9nQ1jX5txgm/qixvS10N+wV0TmM
-	pZPne0JY7ftwQEJ8qEanaVswbsoGw2q7K+jsu8UN9b8hwYJcNW0oJwVxCnyppSDO
-	ERAWxKPT3bASG8FnE9LTFxBvaREajUw1C4xInJP0r865c/ytR/nby8Wbp7N2QBzx
-	cYOGm07jS9EPQTkfr1s2gtHb9G+Yr1TiCZvfG1PjAJ4mJacrc/hud6XapLZwSqi6
-	UZIgfu0/Ofea9xd11lAY1VOV9KejMtrBFgUC6LEVT3Dht/9x4lpTzhve1youexlD
-	qA==
-Received: (qmail 1615502 invoked from network); 17 Jun 2025 12:36:13 +0200
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 17 Jun 2025 12:36:13 +0200
-X-UD-Smtp-Session: l3s3148p1@8s/WFMI3oq4gAwDPXy2/ACpZfVCNKldR
-Date: Tue, 17 Jun 2025 12:36:12 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Andi Shyti <andi.shyti@kernel.org>
-Cc: lkml <linux-kernel@vger.kernel.org>,
-	linux-i2c <linux-i2c@vger.kernel.org>
-Subject: Re: [GIT PULL] i2c-host-fixes for v6.16-rc2
-Message-ID: <aFFFHIlDqvbAJKFq@shikoro>
-References: <sihm5iy2rnldcrk3zyh73kp55r7zywvraycgijtihh27yu5uny@zaj4w54t5ywc>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Q+fTYOPBQmMdZDzmJIIIj15ZVYhePmvOUq1R3VQbLCbVFyibU0kzxu6VBLFTcf3a8x2R+NKMnG/z+9IbKftnz9gzuus81/2wZJ54Y0PoBsGHDDuFqZFKnPs9F8mSNOnUzp4T75r6ak8zZISaJWqoyqw39SDCrSOSl7LYkTL+IwI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HUeYjC6I; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1750159672; x=1781695672;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ruUqN6ft/arA1UJpeej5ZFmbmNVv7kSpek2zyp69t6I=;
+  b=HUeYjC6ImNYi8JToz1bjQnhpfENffykCHksmD3dpyHksaXMwoPMOpbLL
+   XKDxc7wUOFz7HQYPYY0PMK05HyrDJDbZMOd/DboHqs5pPhJN066S4MmxI
+   3IHpeKinrOgpPZv7B4c1qupQgiFhaJVix6C95lC6uaeBoj9y85Cs/8msQ
+   yhtNyqybue7ni1biCSd3RrlFlShpQdsiOeIf0EqyzkqFqMNfV85/5WXCu
+   3zvw4n/IeHNZfsI5ID1dA7kwvZkPgkqEoCodcc5s0DtFIqZpKQVC81mEn
+   kq2xLPLpDPrVieHESMNYo31ZX2jHWbF/KxubnyjHdKTKavO5ewCuj4LVh
+   Q==;
+X-CSE-ConnectionGUID: wUWNs3HxR4u/WNOjKl5tGQ==
+X-CSE-MsgGUID: ob1ToZdySSGfgfvRsrlH0w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11465"; a="52467466"
+X-IronPort-AV: E=Sophos;i="6.16,243,1744095600"; 
+   d="scan'208";a="52467466"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2025 04:27:51 -0700
+X-CSE-ConnectionGUID: 71PAEoGbTJaW0q6ROsnRyw==
+X-CSE-MsgGUID: pDuJ6fB4Sm6pi5AD2l8xmw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,243,1744095600"; 
+   d="scan'208";a="153518352"
+Received: from kuha.fi.intel.com ([10.237.72.152])
+  by orviesa003.jf.intel.com with SMTP; 17 Jun 2025 04:27:45 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 17 Jun 2025 14:27:44 +0300
+Date: Tue, 17 Jun 2025 14:27:44 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	"Michael J. Ruhl" <michael.j.ruhl@intel.com>
+Cc: Lucas De Marchi <lucas.demarchi@intel.com>,
+	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
+	Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Jan Dabros <jsd@semihalf.com>, Andi Shyti <andi.shyti@kernel.org>,
+	Raag Jadav <raag.jadav@intel.com>,
+	"Tauro, Riana" <riana.tauro@intel.com>,
+	"Adatrao, Srinivasa" <srinivasa.adatrao@intel.com>,
+	"Michael J. Ruhl" <michael.j.ruhl@intel.com>,
+	intel-xe@lists.freedesktop.org, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/4] drm/xe: Support for I2C attached MCUs
+Message-ID: <aFFRMIvChfQI3dND@kuha.fi.intel.com>
+References: <20250612132450.3293248-1-heikki.krogerus@linux.intel.com>
+ <20250612132450.3293248-3-heikki.krogerus@linux.intel.com>
+ <aFB-y_bObI8LZvzp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="nzUylVGjxIl1ks7N"
-Content-Disposition: inline
-In-Reply-To: <sihm5iy2rnldcrk3zyh73kp55r7zywvraycgijtihh27yu5uny@zaj4w54t5ywc>
-
-
---nzUylVGjxIl1ks7N
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <aFB-y_bObI8LZvzp@intel.com>
 
-Hi Andi,
+Hi Rodrigo,
 
-> I'm just back from a short break (from the mailing lists).
-> This week there's a fix for a previous binding conversion to
-> yaml.
+Thank you for the review.
 
-Thanks, pulled!
+On Mon, Jun 16, 2025 at 04:30:03PM -0400, Rodrigo Vivi wrote:
+> On Thu, Jun 12, 2025 at 04:24:48PM +0300, Heikki Krogerus wrote:
+> > Adding adaption/glue layer where the I2C host adapter
+> > (Synopsys DesignWare I2C adapter) and the I2C clients (the
+> > microcontroller units) are enumerated.
+> > 
+> > The microcontroller units (MCU) that are attached to the GPU
+> > depend on the OEM. The initially supported MCU will be the
+> > Add-In Management Controller (AMC).
+> > 
+> > Originally-by: Michael J. Ruhl <michael.j.ruhl@intel.com>
+> > Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > ---
+> >  drivers/gpu/drm/xe/Kconfig            |   1 +
+> >  drivers/gpu/drm/xe/Makefile           |   1 +
+> >  drivers/gpu/drm/xe/regs/xe_i2c_regs.h |  15 ++
+> >  drivers/gpu/drm/xe/regs/xe_irq_regs.h |   1 +
+> >  drivers/gpu/drm/xe/regs/xe_pmt.h      |   2 +-
+> >  drivers/gpu/drm/xe/regs/xe_regs.h     |   2 +
+> >  drivers/gpu/drm/xe/xe_device.c        |   5 +
+> >  drivers/gpu/drm/xe/xe_device_types.h  |   4 +
+> >  drivers/gpu/drm/xe/xe_i2c.c           | 270 ++++++++++++++++++++++++++
+> >  drivers/gpu/drm/xe/xe_i2c.h           |  58 ++++++
+> >  drivers/gpu/drm/xe/xe_irq.c           |   2 +
+> >  11 files changed, 360 insertions(+), 1 deletion(-)
+> >  create mode 100644 drivers/gpu/drm/xe/regs/xe_i2c_regs.h
+> >  create mode 100644 drivers/gpu/drm/xe/xe_i2c.c
+> >  create mode 100644 drivers/gpu/drm/xe/xe_i2c.h
+> > 
+> > diff --git a/drivers/gpu/drm/xe/Kconfig b/drivers/gpu/drm/xe/Kconfig
+> > index c57f1da0791d..5c162031fc3f 100644
+> > --- a/drivers/gpu/drm/xe/Kconfig
+> > +++ b/drivers/gpu/drm/xe/Kconfig
+> > @@ -44,6 +44,7 @@ config DRM_XE
+> >  	select WANT_DEV_COREDUMP
+> >  	select AUXILIARY_BUS
+> >  	select HMM_MIRROR
+> > +	select REGMAP if I2C
+> >  	help
+> >  	  Experimental driver for Intel Xe series GPUs
+> >  
+> > diff --git a/drivers/gpu/drm/xe/Makefile b/drivers/gpu/drm/xe/Makefile
+> > index f5f5775acdc0..293552fc5aaf 100644
+> > --- a/drivers/gpu/drm/xe/Makefile
+> > +++ b/drivers/gpu/drm/xe/Makefile
+> > @@ -124,6 +124,7 @@ xe-y += xe_bb.o \
+> >  	xe_wait_user_fence.o \
+> >  	xe_wopcm.o
+> >  
+> > +xe-$(CONFIG_I2C)	+= xe_i2c.o
+> >  xe-$(CONFIG_HMM_MIRROR) += xe_hmm.o
+> >  xe-$(CONFIG_DRM_XE_GPUSVM) += xe_svm.o
+> >  
+> > diff --git a/drivers/gpu/drm/xe/regs/xe_i2c_regs.h b/drivers/gpu/drm/xe/regs/xe_i2c_regs.h
+> > new file mode 100644
+> > index 000000000000..fa7223e6ce9e
+> > --- /dev/null
+> > +++ b/drivers/gpu/drm/xe/regs/xe_i2c_regs.h
+> > @@ -0,0 +1,15 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +#ifndef _XE_I2C_REGS_H_
+> > +#define _XE_I2C_REGS_H_
+> > +
+> > +#include "xe_reg_defs.h"
+> > +#include "xe_regs.h"
+> > +
+> > +#define I2C_CONFIG_SPACE_OFFSET		(SOC_BASE + 0xf6000)
+> > +#define I2C_MEM_SPACE_OFFSET		(SOC_BASE + 0xf7400)
+> > +#define I2C_BRIDGE_OFFSET		(SOC_BASE + 0xd9000)
+> > +
+> > +#define CLIENT_DISC_COOKIE		XE_REG(SOC_BASE + 0x0164)
+> > +#define CLIENT_DISC_ADDRESS		XE_REG(SOC_BASE + 0x0168)
+> 
+> Could you please send me some pointers of the spec for this registers
+> so I can help on the review here?
 
-I was swamped by other things last week, so I'll send this for rc3
-instead. Should still be fine. I will also push my naming conversion
-patch then. I assume you would have protested by now if you don't want
-me to push it further ;)
+Done.
 
-All the best and happy hacking,
+> > +
+> > +#endif /* _XE_I2C_REGS_H_ */
+> > diff --git a/drivers/gpu/drm/xe/regs/xe_irq_regs.h b/drivers/gpu/drm/xe/regs/xe_irq_regs.h
+> > index f0ecfcac4003..13635e4331d4 100644
+> > --- a/drivers/gpu/drm/xe/regs/xe_irq_regs.h
+> > +++ b/drivers/gpu/drm/xe/regs/xe_irq_regs.h
+> > @@ -19,6 +19,7 @@
+> >  #define   MASTER_IRQ				REG_BIT(31)
+> >  #define   GU_MISC_IRQ				REG_BIT(29)
+> >  #define   DISPLAY_IRQ				REG_BIT(16)
+> > +#define   I2C_IRQ				REG_BIT(12)
+> >  #define   GT_DW_IRQ(x)				REG_BIT(x)
+> >  
+> >  /*
+> > diff --git a/drivers/gpu/drm/xe/regs/xe_pmt.h b/drivers/gpu/drm/xe/regs/xe_pmt.h
+> > index b0efd9b48d1e..2995d72c3f78 100644
+> > --- a/drivers/gpu/drm/xe/regs/xe_pmt.h
+> > +++ b/drivers/gpu/drm/xe/regs/xe_pmt.h
+> > @@ -5,7 +5,7 @@
+> >  #ifndef _XE_PMT_H_
+> >  #define _XE_PMT_H_
+> >  
+> > -#define SOC_BASE			0x280000
+> > +#include "xe_regs.h"
+> >  
+> >  #define BMG_PMT_BASE_OFFSET		0xDB000
+> >  #define BMG_DISCOVERY_OFFSET		(SOC_BASE + BMG_PMT_BASE_OFFSET)
+> > diff --git a/drivers/gpu/drm/xe/regs/xe_regs.h b/drivers/gpu/drm/xe/regs/xe_regs.h
+> > index 3abb17d2ca33..1926b4044314 100644
+> > --- a/drivers/gpu/drm/xe/regs/xe_regs.h
+> > +++ b/drivers/gpu/drm/xe/regs/xe_regs.h
+> > @@ -7,6 +7,8 @@
+> >  
+> >  #include "regs/xe_reg_defs.h"
+> >  
+> > +#define SOC_BASE				0x280000
+> > +
+> >  #define GU_CNTL_PROTECTED			XE_REG(0x10100C)
+> >  #define   DRIVERINT_FLR_DIS			REG_BIT(31)
+> >  
+> > diff --git a/drivers/gpu/drm/xe/xe_device.c b/drivers/gpu/drm/xe/xe_device.c
+> > index 7e87344943cd..ca098ed532b5 100644
+> > --- a/drivers/gpu/drm/xe/xe_device.c
+> > +++ b/drivers/gpu/drm/xe/xe_device.c
+> > @@ -42,6 +42,7 @@
+> >  #include "xe_guc.h"
+> >  #include "xe_hw_engine_group.h"
+> >  #include "xe_hwmon.h"
+> > +#include "xe_i2c.h"
+> >  #include "xe_irq.h"
+> >  #include "xe_memirq.h"
+> >  #include "xe_mmio.h"
+> > @@ -921,6 +922,10 @@ int xe_device_probe(struct xe_device *xe)
+> >  	if (err)
+> >  		goto err_unregister_display;
+> >  
+> > +	err = xe_i2c_probe(xe);
+> > +	if (err)
+> > +		goto err_unregister_display;
+> > +
+> >  	for_each_gt(gt, xe, id)
+> >  		xe_gt_sanitize_freq(gt);
+> >  
+> > diff --git a/drivers/gpu/drm/xe/xe_device_types.h b/drivers/gpu/drm/xe/xe_device_types.h
+> > index ac27389ccb8b..8f3c5ea58034 100644
+> > --- a/drivers/gpu/drm/xe/xe_device_types.h
+> > +++ b/drivers/gpu/drm/xe/xe_device_types.h
+> > @@ -33,6 +33,7 @@
+> >  struct dram_info;
+> >  struct intel_display;
+> >  struct xe_ggtt;
+> > +struct xe_i2c;
+> >  struct xe_pat_ops;
+> >  struct xe_pxp;
+> >  
+> > @@ -573,6 +574,9 @@ struct xe_device {
+> >  	/** @pmu: performance monitoring unit */
+> >  	struct xe_pmu pmu;
+> >  
+> > +	/** @i2c: I2C host controller */
+> > +	struct xe_i2c *i2c;
+> > +
+> >  	/** @atomic_svm_timeslice_ms: Atomic SVM fault timeslice MS */
+> >  	u32 atomic_svm_timeslice_ms;
+> >  
+> > diff --git a/drivers/gpu/drm/xe/xe_i2c.c b/drivers/gpu/drm/xe/xe_i2c.c
+> > new file mode 100644
+> > index 000000000000..3d649602ede8
+> > --- /dev/null
+> > +++ b/drivers/gpu/drm/xe/xe_i2c.c
+> > @@ -0,0 +1,270 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> 
+> Does it really need to be GPL or could it be MIT?
+> 
+> (If you copied code from other files that are GPL, then it needs
+> to be GPL)
 
-   Wolfram
+Michael, do we need to use GPL here, or is MIT okay?
 
+> > +/*
+> > + * Intel Xe I2C attached Microcontroller Units (MCU)
+> > + *
+> > + * Copyright (C) 2025 Intel Corporation.
+> > + */
+> > +
+> > +#include <linux/array_size.h>
+> > +#include <linux/container_of.h>
+> > +#include <linux/device.h>
+> > +#include <linux/err.h>
+> > +#include <linux/i2c.h>
+> > +#include <linux/ioport.h>
+> > +#include <linux/irq.h>
+> > +#include <linux/irqdomain.h>
+> > +#include <linux/notifier.h>
+> > +#include <linux/pci.h>
+> > +#include <linux/platform_device.h>
+> > +#include <linux/property.h>
+> > +#include <linux/regmap.h>
+> > +#include <linux/sprintf.h>
+> > +#include <linux/string.h>
+> > +#include <linux/types.h>
+> > +#include <linux/workqueue.h>
+> > +
+> > +#include "regs/xe_i2c_regs.h"
+> > +#include "regs/xe_irq_regs.h"
+> > +
+> > +#include "xe_device.h"
+> > +#include "xe_device_types.h"
+> > +#include "xe_i2c.h"
+> > +#include "xe_mmio.h"
+> > +#include "xe_platform_types.h"
+> > +
+> > +/* Synopsys DesignWare I2C Host Adapter */
+> > +static const char adapter_name[] = "i2c_designware";
+> > +
+> > +static const struct property_entry xe_i2c_adapter_properties[] = {
+> > +	PROPERTY_ENTRY_STRING("compatible", "intel,xe-i2c"),
+> > +	PROPERTY_ENTRY_U32("clock-frequency", I2C_MAX_FAST_MODE_PLUS_FREQ),
+> > +	{ }
+> > +};
+> > +
+> > +static inline void xe_i2c_read_endpoint(struct xe_mmio *mmio, void *ep)
+> > +{
+> > +	u32 *val = ep;
+> > +
+> > +	val[0] = xe_mmio_read32(mmio, CLIENT_DISC_COOKIE);
+> > +	val[1] = xe_mmio_read32(mmio, CLIENT_DISC_ADDRESS);
+> > +}
+> > +
+> > +static void xe_i2c_client_work(struct work_struct *work)
+> > +{
+> > +	struct xe_i2c *i2c = container_of(work, struct xe_i2c, work);
+> > +	struct i2c_board_info info = {
+> > +		.type	= "amc",
+> > +		.flags	= I2C_CLIENT_HOST_NOTIFY,
+> > +		.addr	= i2c->ep.addr[1],
+> > +	};
+> > +
+> > +	i2c->client[0] = i2c_new_client_device(i2c->adapter, &info);
+> > +}
+> > +
+> > +static int xe_i2c_notifier(struct notifier_block *nb, unsigned long action, void *data)
+> > +{
+> > +	struct xe_i2c *i2c = container_of(nb, struct xe_i2c, bus_notifier);
+> > +	struct i2c_adapter *adapter = i2c_verify_adapter(data);
+> > +	struct device *dev = data;
+> > +
+> > +	if (action == BUS_NOTIFY_ADD_DEVICE &&
+> > +	    adapter && dev->parent == &i2c->pdev->dev) {
+> > +		i2c->adapter = adapter;
+> > +		schedule_work(&i2c->work);
+> > +		return NOTIFY_OK;
+> > +	}
+> > +
+> > +	return NOTIFY_DONE;
+> > +}
+> > +
+> > +static int xe_i2c_register_adapter(struct xe_i2c *i2c)
+> > +{
+> > +	struct pci_dev *pci = to_pci_dev(i2c->drm_dev);
+> > +	struct platform_device *pdev;
+> > +	struct fwnode_handle *fwnode;
+> > +	int ret;
+> > +
+> > +	fwnode = fwnode_create_software_node(xe_i2c_adapter_properties, NULL);
+> > +	if (!fwnode)
+> > +		return -ENOMEM;
+> > +
+> > +	/*
+> > +	 * Not using platform_device_register_full() here because we don't have
+> > +	 * a handle to the platform_device before it returns. xe_i2c_notifier()
+> > +	 * uses that handle, but it may be called before
+> > +	 * platform_device_register_full() is done.
+> > +	 */
+> > +	pdev = platform_device_alloc(adapter_name, pci_dev_id(pci));
+> > +	if (!pdev) {
+> > +		ret = -ENOMEM;
+> > +		goto err_fwnode_remove;
+> > +	}
+> > +
+> > +	if (i2c->adapter_irq) {
+> > +		struct resource	res = { };
+> > +
+> > +		res.start = i2c->adapter_irq;
+> > +		res.name = "xe_i2c";
+> > +		res.flags = IORESOURCE_IRQ;
+> > +
+> > +		ret = platform_device_add_resources(pdev, &res, 1);
+> > +		if (ret)
+> > +			goto err_pdev_put;
+> > +	}
+> > +
+> > +	pdev->dev.parent = i2c->drm_dev;
+> > +	pdev->dev.fwnode = fwnode;
+> > +	i2c->adapter_node = fwnode;
+> > +	i2c->pdev = pdev;
+> > +
+> > +	ret = platform_device_add(pdev);
+> > +	if (ret)
+> > +		goto err_pdev_put;
+> > +
+> > +	return 0;
+> > +
+> > +err_pdev_put:
+> > +	platform_device_put(pdev);
+> > +err_fwnode_remove:
+> > +	fwnode_remove_software_node(fwnode);
+> > +
+> > +	return ret;
+> > +}
+> > +
+> > +static void xe_i2c_unregister_adapter(struct xe_i2c *i2c)
+> > +{
+> > +	platform_device_unregister(i2c->pdev);
+> > +	fwnode_remove_software_node(i2c->adapter_node);
+> > +}
+> > +
+> > +void xe_i2c_irq_handler(struct xe_device *xe, u32 master_ctl)
+> > +{
+> > +	if (!xe->i2c || !xe->i2c->adapter_irq)
+> > +		return;
+> > +
+> > +	if (master_ctl & I2C_IRQ)
+> > +		generic_handle_irq_safe(xe->i2c->adapter_irq);
+> > +}
+> > +
+> > +static int xe_i2c_irq_map(struct irq_domain *h, unsigned int virq,
+> > +			  irq_hw_number_t hw_irq_num)
+> > +{
+> > +	irq_set_chip_and_handler(virq, &dummy_irq_chip, handle_simple_irq);
+> > +	return 0;
+> > +}
+> > +
+> > +static const struct irq_domain_ops xe_i2c_irq_ops = {
+> > +	.map = xe_i2c_irq_map,
+> > +};
+> > +
+> > +static int xe_i2c_create_irq(struct xe_i2c *i2c)
+> > +{
+> > +	struct irq_domain *domain;
+> > +
+> > +	if (!(i2c->ep.capabilities & XE_I2C_EP_CAP_IRQ))
+> > +		return 0;
+> > +
+> > +	domain = irq_domain_create_linear(dev_fwnode(i2c->drm_dev), 1, &xe_i2c_irq_ops, NULL);
+> > +	if (!domain)
+> > +		return -ENOMEM;
+> > +
+> > +	i2c->adapter_irq = irq_create_mapping(domain, 0);
+> > +	i2c->irqdomain = domain;
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static void xe_i2c_remove_irq(struct xe_i2c *i2c)
+> > +{
+> > +	if (i2c->irqdomain) {
+> > +		irq_dispose_mapping(i2c->adapter_irq);
+> > +		irq_domain_remove(i2c->irqdomain);
+> > +	}
+> > +}
+> > +
+> > +static int xe_i2c_read(void *context, unsigned int reg, unsigned int *val)
+> > +{
+> > +	struct xe_i2c *i2c = context;
+> > +
+> > +	*val = xe_mmio_read32(i2c->mmio, XE_REG(reg + I2C_MEM_SPACE_OFFSET));
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static int xe_i2c_write(void *context, unsigned int reg, unsigned int val)
+> > +{
+> > +	struct xe_i2c *i2c = context;
+> > +
+> > +	xe_mmio_write32(i2c->mmio, XE_REG(reg + I2C_MEM_SPACE_OFFSET), val);
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static const struct regmap_config i2c_regmap_config = {
+> > +	.reg_bits = 32,
+> > +	.val_bits = 32,
+> > +	.reg_read = xe_i2c_read,
+> > +	.reg_write = xe_i2c_write,
+> > +	.fast_io = true,
+> > +};
+> > +
+> > +static void xe_i2c_remove(void *data)
+> > +{
+> > +	struct xe_i2c *i2c = data;
+> > +	int i;
+> > +
+> > +	for (i = 0; i < XE_I2C_MAX_CLIENTS; i++)
+> > +		i2c_unregister_device(i2c->client[i]);
+> > +
+> > +	bus_unregister_notifier(&i2c_bus_type, &i2c->bus_notifier);
+> > +	xe_i2c_unregister_adapter(i2c);
+> > +	xe_i2c_remove_irq(i2c);
+> > +}
+> > +
+> > +int xe_i2c_probe(struct xe_device *xe)
+> 
+> could you please add some /** DOC: Xe i2c ... above
+> and then add some doc to the exported functions?
 
---nzUylVGjxIl1ks7N
-Content-Type: application/pgp-signature; name="signature.asc"
+Sure thing. But just to be clear to everyone, there no are exported
+functions here (global but not exported).
 
------BEGIN PGP SIGNATURE-----
+> > +{
+> > +	struct xe_i2c_endpoint ep;
+> > +	struct regmap *regmap;
+> > +	struct xe_i2c *i2c;
+> > +	int ret;
+> > +
+> > +	xe_i2c_read_endpoint(xe_root_tile_mmio(xe), &ep);
+> > +	if (ep.cookie != XE_I2C_EP_COOKIE_DEVICE)
+> > +		return 0;
+> > +
+> > +	i2c = devm_kzalloc(xe->drm.dev, sizeof(*i2c), GFP_KERNEL);
+> > +	if (!i2c)
+> > +		return -ENOMEM;
+> > +
+> > +	INIT_WORK(&i2c->work, xe_i2c_client_work);
+> > +	i2c->mmio = xe_root_tile_mmio(xe);
+> > +	i2c->drm_dev = xe->drm.dev;
+> > +	i2c->ep = ep;
+> > +
+> > +	regmap = devm_regmap_init(i2c->drm_dev, NULL, i2c, &i2c_regmap_config);
+> > +	if (IS_ERR(regmap))
+> > +		return PTR_ERR(regmap);
+> > +
+> > +	i2c->bus_notifier.notifier_call = xe_i2c_notifier;
+> > +	ret = bus_register_notifier(&i2c_bus_type, &i2c->bus_notifier);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	ret = xe_i2c_create_irq(i2c);
+> > +	if (ret)
+> > +		goto err_unregister_notifier;
+> > +
+> > +	ret = xe_i2c_register_adapter(i2c);
+> > +	if (ret)
+> > +		goto err_remove_irq;
+> > +
+> > +	return devm_add_action_or_reset(i2c->drm_dev, xe_i2c_remove, i2c);
+> > +
+> > +err_remove_irq:
+> > +	xe_i2c_remove_irq(i2c);
+> > +
+> > +err_unregister_notifier:
+> > +	bus_unregister_notifier(&i2c_bus_type, &i2c->bus_notifier);
+> > +
+> > +	return ret;
+> > +}
+> > diff --git a/drivers/gpu/drm/xe/xe_i2c.h b/drivers/gpu/drm/xe/xe_i2c.h
+> > new file mode 100644
+> > index 000000000000..e88845be61b4
+> > --- /dev/null
+> > +++ b/drivers/gpu/drm/xe/xe_i2c.h
+> > @@ -0,0 +1,58 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> 
+> same question here...
+> 
+> > +#ifndef _XE_I2C_H_
+> > +#define _XE_I2C_H_
+> > +
+> > +#include <linux/bits.h>
+> > +#include <linux/notifier.h>
+> > +#include <linux/types.h>
+> > +#include <linux/workqueue.h>
+> > +
+> > +struct device;
+> > +struct fwnode_handle;
+> > +struct i2c_adapter;
+> > +struct i2c_client;
+> > +struct irq_domain;
+> > +struct platform_device;
+> > +struct xe_device;
+> > +struct xe_mmio;
+> > +
+> > +#define XE_I2C_MAX_CLIENTS		3
+> > +
+> > +#define XE_I2C_EP_COOKIE_DEVICE		0xde
+> > +
+> > +/* Endpoint Capabilities */
+> > +#define XE_I2C_EP_CAP_IRQ		BIT(0)
+> > +
+> > +struct xe_i2c_endpoint {
+> > +	u8 cookie;
+> > +	u8 capabilities;
+> > +	u16 addr[XE_I2C_MAX_CLIENTS];
+> > +};
+> > +
+> > +struct xe_i2c {
+> > +	struct fwnode_handle *adapter_node;
+> > +	struct platform_device *pdev;
+> > +	struct i2c_adapter *adapter;
+> > +	struct i2c_client *client[XE_I2C_MAX_CLIENTS];
+> > +
+> > +	struct notifier_block bus_notifier;
+> > +	struct work_struct work;
+> > +
+> > +	struct irq_domain *irqdomain;
+> > +	int adapter_irq;
+> > +
+> > +	struct xe_i2c_endpoint ep;
+> > +	struct device *drm_dev;
+> > +
+> > +	struct xe_mmio *mmio;
+> > +};
+> > +
+> > +#if IS_ENABLED(CONFIG_I2C)
+> > +int xe_i2c_probe(struct xe_device *xe);
+> > +void xe_i2c_irq_handler(struct xe_device *xe, u32 master_ctl);
+> > +#else
+> > +static inline int xe_i2c_probe(struct xe_device *xe) { return 0; }
+> > +static inline void xe_i2c_irq_handler(struct xe_device *xe, u32 master_ctl) { }
+> > +#endif
+> > +
+> > +#endif
+> > diff --git a/drivers/gpu/drm/xe/xe_irq.c b/drivers/gpu/drm/xe/xe_irq.c
+> > index 5362d3174b06..c43e62dc692e 100644
+> > --- a/drivers/gpu/drm/xe/xe_irq.c
+> > +++ b/drivers/gpu/drm/xe/xe_irq.c
+> > @@ -18,6 +18,7 @@
+> >  #include "xe_gt.h"
+> >  #include "xe_guc.h"
+> >  #include "xe_hw_engine.h"
+> > +#include "xe_i2c.h"
+> >  #include "xe_memirq.h"
+> >  #include "xe_mmio.h"
+> >  #include "xe_pxp.h"
+> > @@ -476,6 +477,7 @@ static irqreturn_t dg1_irq_handler(int irq, void *arg)
+> >  			if (xe->info.has_heci_cscfi)
+> >  				xe_heci_csc_irq_handler(xe, master_ctl);
+> >  			xe_display_irq_handler(xe, master_ctl);
+> > +			xe_i2c_irq_handler(xe, master_ctl);
+> >  			gu_misc_iir = gu_misc_irq_ack(xe, master_ctl);
+> >  		}
+> >  	}
+> > -- 
+> > 2.47.2
+> > 
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmhRRRkACgkQFA3kzBSg
-KbZ6kA//VOI24df63N6N4Kfd7HrNRHEHL+k6PMRZkRrnUJ5pN74NR+1l87fgIW6W
-Rj+efML9eoXE5iLOg69G6bS6Q3a39ebeUAmoZUhqZtEyzy2wTpXVjiIGmOZi/JF7
-fctQVl2CqxlTNWAMmoFmqAOCf0Wa+aFWWwKR2CLhbXB7nlQOaNxoNJ/GuD6WzK7h
-RrssMV84wNcHJhj5g9SXaAVdQDssykEnseObhSaDRkslhRIrYmYZ9V1E9I+Eiblj
-4pTU1dicUpiZuKgho4f+iSmLEIoeCAFzXI8CPCE3seqVIWk+nF/Xy9U0V+i5WVfR
-RP1KXgCDIWJFG/mZOoFKnDnEFSgyXG2m4DGj8nvcdGofe+D1CwOjD8oDXXYp4ReU
-uBKoi62fuSv7JqNKeBsd62f+DFmOU/iKqJoCx508V0PWP+cWLkLXzWsShezhxFtP
-nStbuoo+kUnS2zsRwl69eVJHeN4Ea1ibtU5XbIBLSLteNK1WGgbHVxlCGRHwKZsQ
-P5nqRXlIkaaKNiym51JYnUZCGXIBtLUt3j4mgO1nCZON+pf+nnsT4cTMDjjvReP/
-jz2rIJpontO5jXrofWmoIgJdeix5p2sQZP8+JhjCekLtHC6RF8uDkV5tr35n6lAX
-0//5GkRDRv745KFcKPSlPJCsEHc4ai91A7DTSOb4I85PzKmkVac=
-=VUYO
------END PGP SIGNATURE-----
+thanks,
 
---nzUylVGjxIl1ks7N--
+-- 
+heikki
 
