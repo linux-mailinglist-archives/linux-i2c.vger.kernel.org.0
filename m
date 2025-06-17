@@ -1,162 +1,110 @@
-Return-Path: <linux-i2c+bounces-11500-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11501-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E674ADC302
-	for <lists+linux-i2c@lfdr.de>; Tue, 17 Jun 2025 09:15:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66450ADC87E
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 Jun 2025 12:36:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 684CB1890811
-	for <lists+linux-i2c@lfdr.de>; Tue, 17 Jun 2025 07:16:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C06AF1795EB
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 Jun 2025 10:36:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B67828C2D1;
-	Tue, 17 Jun 2025 07:15:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97CAA2BEFF3;
+	Tue, 17 Jun 2025 10:36:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UZ3Oub/c"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="MI9emjxK"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B0BB215F6C;
-	Tue, 17 Jun 2025 07:15:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9747C293C58
+	for <linux-i2c@vger.kernel.org>; Tue, 17 Jun 2025 10:36:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750144540; cv=none; b=Q9KtXxraEDMbcdS90rUvWod7ker+M1vR+4qMCBfvypjRi899xRIzGDMP3ThDhRM0neniUpl4wLiXEEZ+de5D8A1YnrABA04z1TUJ650Hyxumv8BSc89EmWeQNl1hVBJG2S3Ff8pArrTSgMEQKROCNTZKRJBKnFpnp8+p9BAI/Sc=
+	t=1750156578; cv=none; b=dl/1JT6UKnIsXU3d7bz5eYbWw/r0Ql+jGt1LnZLKD6fFXYDCFzkQVmbaODzBQQyFC+YLNNlDp3X5w5wlOJZY2Iv0XgESpJGVrjC5JTlZyBlDLP2apK8nEwjwrS5NkKFfEKEWlMqV2kuq9DAP/d2AUv1mo0sZ6AF3NcrqrzIl7GY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750144540; c=relaxed/simple;
-	bh=pP72oOdMXEcgp4XGBGwY1R6OIGnf8hEZKBDdV1FJyYE=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=Q/Ey2XX/Pr/cD7PP4A/hf6jL6xwrdKr8fxQUx1iGLMzwkjNoXBgnoyoQ+emEtskvaIt90ceGCPgms1dxs/4xHiLFCZXQIj7MqrYAOLl//3DSOK5+UAQHp08Mjjc6XRhHNgm3Y03D/f41DlhHQFNYhmQFHth9TZtnOsnDxEwCjUk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UZ3Oub/c; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD3B9C4CEE3;
-	Tue, 17 Jun 2025 07:15:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750144539;
-	bh=pP72oOdMXEcgp4XGBGwY1R6OIGnf8hEZKBDdV1FJyYE=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=UZ3Oub/cjumcIByh96JpMuQIFG6esR7YzGXh7e0PmDGtVMPvXBeS6yYulnbcgiCPt
-	 Bz2J/gkL4TkwHmT89BIlZVq17rZCaU6aHzKYocx/wn4ZGdCcM5GRR4IxRuK5sBmjOb
-	 3ID2pyPKqFeQPpUtFTvP3H/kWWWFDqgfyUf2QXbjQZHNMY3YGs9dpLXIHVNurxhTux
-	 AJSqUWGci0uOBO8UxJ2bFL3Sibif8zkuACWx3tfSZIQOeuv02HPVj7sfWaZwpu87yv
-	 4sPtsLAphR3PCZ6ZR3mSB2sOH1zkRPtR7jl/FYdeud7YRtvykOD02PATxESBHd2xRB
-	 K3CipQj73r3bQ==
-Message-ID: <2fbc985b-113a-4409-9825-49bdd029e95b@kernel.org>
-Date: Tue, 17 Jun 2025 09:15:33 +0200
+	s=arc-20240116; t=1750156578; c=relaxed/simple;
+	bh=FliwTJtvVKtpFJoL19ZDyrHjDwdBZkgsGFSnrPqHsgQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rUHojnB7+IBJEkcO3DHL526la0kBjMLpYefjKfTALQjqBTTwW4pflQpqjVffgk2n5ulCRX6mkN8fyRzv4Y6GVQfZNHjaI5wr75/7zS8GBZT/R8G/wUkObrCDEvpalikjkySjlevRat8HT4MXs6COM1wxGE6Lt0BKEiXqTX+Ce9g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=MI9emjxK; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=WR+y
+	GA3QOuuCLXDTtWxRTnyvke0vfwA5ofKcR4PEDyQ=; b=MI9emjxK4t5EXmAfEu+y
+	BEtHy3+eVwqUzFX+tmjVHAdAGt8D9yr1ynJlj9nQ1jX5txgm/qixvS10N+wV0TmM
+	pZPne0JY7ftwQEJ8qEanaVswbsoGw2q7K+jsu8UN9b8hwYJcNW0oJwVxCnyppSDO
+	ERAWxKPT3bASG8FnE9LTFxBvaREajUw1C4xInJP0r865c/ytR/nby8Wbp7N2QBzx
+	cYOGm07jS9EPQTkfr1s2gtHb9G+Yr1TiCZvfG1PjAJ4mJacrc/hud6XapLZwSqi6
+	UZIgfu0/Ofea9xd11lAY1VOV9KejMtrBFgUC6LEVT3Dht/9x4lpTzhve1youexlD
+	qA==
+Received: (qmail 1615502 invoked from network); 17 Jun 2025 12:36:13 +0200
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 17 Jun 2025 12:36:13 +0200
+X-UD-Smtp-Session: l3s3148p1@8s/WFMI3oq4gAwDPXy2/ACpZfVCNKldR
+Date: Tue, 17 Jun 2025 12:36:12 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Andi Shyti <andi.shyti@kernel.org>
+Cc: lkml <linux-kernel@vger.kernel.org>,
+	linux-i2c <linux-i2c@vger.kernel.org>
+Subject: Re: [GIT PULL] i2c-host-fixes for v6.16-rc2
+Message-ID: <aFFFHIlDqvbAJKFq@shikoro>
+References: <sihm5iy2rnldcrk3zyh73kp55r7zywvraycgijtihh27yu5uny@zaj4w54t5ywc>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 3/6] dt-bindings: i2c: renesas,riic: Document RZ/N2H
- support
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Prabhakar <prabhakar.csengg@gmail.com>
-Cc: Chris Brandt <chris.brandt@renesas.com>,
- Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Geert Uytterhoeven <geert+renesas@glider.be>,
- Andy Shevchenko <andy@kernel.org>, Magnus Damm <magnus.damm@gmail.com>,
- Wolfram Sang <wsa+renesas@sang-engineering.com>,
- linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- Biju Das <biju.das.jz@bp.renesas.com>,
- Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
- Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
- Conor Dooley <conor.dooley@microchip.com>
-References: <20250613113839.102994-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20250613113839.102994-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20250617-enthusiastic-anaconda-of-tenacity-2f79e2@kuoka>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20250617-enthusiastic-anaconda-of-tenacity-2f79e2@kuoka>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-
-On 17/06/2025 09:13, Krzysztof Kozlowski wrote:
-> On Fri, Jun 13, 2025 at 12:38:36PM GMT, Prabhakar wrote:
->> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->>
->> Document support for the I2C Bus Interface (RIIC) found on the Renesas
->> RZ/N2H (R9A09G087) SoC. The RIIC IP on this SoC is identical to that on
->> the RZ/T2H SoC so `renesas,riic-r9a09g077` will be used as a fallback
->> compatible.
->>
->> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->> Acked-by: Conor Dooley <conor.dooley@microchip.com>
->> Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
->> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
->> ---
->>  Documentation/devicetree/bindings/i2c/renesas,riic.yaml | 4 ++++
->>  1 file changed, 4 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/i2c/renesas,riic.yaml b/Documentation/devicetree/bindings/i2c/renesas,riic.yaml
->> index 86d79e167547..6876eade431b 100644
->> --- a/Documentation/devicetree/bindings/i2c/renesas,riic.yaml
->> +++ b/Documentation/devicetree/bindings/i2c/renesas,riic.yaml
->> @@ -33,6 +33,10 @@ properties:
->>            - renesas,riic-r9a09g057   # RZ/V2H(P)
->>            - renesas,riic-r9a09g077   # RZ/T2H
->>  
->> +      - items:
->> +          - const: renesas,riic-r9a09g087  # RZ/N2H
->> +          - const: renesas,riic-r9a09g077  # RZ/T2H
-> 
-> Where is an entry renesas,riic-r9a09g077 alone? Please add complete
-> bindings, not half-patch and then next time second half.
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="nzUylVGjxIl1ks7N"
+Content-Disposition: inline
+In-Reply-To: <sihm5iy2rnldcrk3zyh73kp55r7zywvraycgijtihh27yu5uny@zaj4w54t5ywc>
 
 
-Ah, sorry, I saw it in patch #2 (the tooling I use jumped straight to
-patch #3 so that's the reason).
+--nzUylVGjxIl1ks7N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Anyway, this should be squashed with #2, because it is trivial and
-entire 4 lines of commit msg plus 3 reviews is really too much for
-something like that. Don't inflate work for us.
+Hi Andi,
 
-Best regards,
-Krzysztof
+> I'm just back from a short break (from the mailing lists).
+> This week there's a fix for a previous binding conversion to
+> yaml.
+
+Thanks, pulled!
+
+I was swamped by other things last week, so I'll send this for rc3
+instead. Should still be fine. I will also push my naming conversion
+patch then. I assume you would have protested by now if you don't want
+me to push it further ;)
+
+All the best and happy hacking,
+
+   Wolfram
+
+
+--nzUylVGjxIl1ks7N
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmhRRRkACgkQFA3kzBSg
+KbZ6kA//VOI24df63N6N4Kfd7HrNRHEHL+k6PMRZkRrnUJ5pN74NR+1l87fgIW6W
+Rj+efML9eoXE5iLOg69G6bS6Q3a39ebeUAmoZUhqZtEyzy2wTpXVjiIGmOZi/JF7
+fctQVl2CqxlTNWAMmoFmqAOCf0Wa+aFWWwKR2CLhbXB7nlQOaNxoNJ/GuD6WzK7h
+RrssMV84wNcHJhj5g9SXaAVdQDssykEnseObhSaDRkslhRIrYmYZ9V1E9I+Eiblj
+4pTU1dicUpiZuKgho4f+iSmLEIoeCAFzXI8CPCE3seqVIWk+nF/Xy9U0V+i5WVfR
+RP1KXgCDIWJFG/mZOoFKnDnEFSgyXG2m4DGj8nvcdGofe+D1CwOjD8oDXXYp4ReU
+uBKoi62fuSv7JqNKeBsd62f+DFmOU/iKqJoCx508V0PWP+cWLkLXzWsShezhxFtP
+nStbuoo+kUnS2zsRwl69eVJHeN4Ea1ibtU5XbIBLSLteNK1WGgbHVxlCGRHwKZsQ
+P5nqRXlIkaaKNiym51JYnUZCGXIBtLUt3j4mgO1nCZON+pf+nnsT4cTMDjjvReP/
+jz2rIJpontO5jXrofWmoIgJdeix5p2sQZP8+JhjCekLtHC6RF8uDkV5tr35n6lAX
+0//5GkRDRv745KFcKPSlPJCsEHc4ai91A7DTSOb4I85PzKmkVac=
+=VUYO
+-----END PGP SIGNATURE-----
+
+--nzUylVGjxIl1ks7N--
 
