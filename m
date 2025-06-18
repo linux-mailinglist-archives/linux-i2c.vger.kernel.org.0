@@ -1,136 +1,193 @@
-Return-Path: <linux-i2c+bounces-11516-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11517-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C229ADED18
-	for <lists+linux-i2c@lfdr.de>; Wed, 18 Jun 2025 14:57:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C73AADF9B4
+	for <lists+linux-i2c@lfdr.de>; Thu, 19 Jun 2025 01:20:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4DB4D16C1E1
-	for <lists+linux-i2c@lfdr.de>; Wed, 18 Jun 2025 12:57:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ADDE63B0100
+	for <lists+linux-i2c@lfdr.de>; Wed, 18 Jun 2025 23:19:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BB902E54BF;
-	Wed, 18 Jun 2025 12:57:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="vooGQp+c"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74BB827FD52;
+	Wed, 18 Jun 2025 23:19:56 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A18F2E3B12
-	for <linux-i2c@vger.kernel.org>; Wed, 18 Jun 2025 12:57:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBE12213E6D;
+	Wed, 18 Jun 2025 23:19:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750251430; cv=none; b=hVbaUPxHfGDO05mceYrIQKVungy/yq6xWOR77WNj8hj1WG9PYZOq10MyCyNdRlNd0NJ/HfjSgjHiiMqYYA3N7tQ3MCnnRnAN2J7oTqiIYzfpKm43kGiOZq9K8iDBw4LooX0FeG1zOWgTg4+Q5+SbwX5SJiClGqL5W0QIM04B00I=
+	t=1750288796; cv=none; b=Bvkikhs7nzUTNkwh8lhfQeiH3McfZP0FDVs5c+BJUNeEuVEL17Ot3k2JwG52wRy8+Csocl/D9o/ln0Q0YG4qACMPW2f9gijJn2XuJJSPVtLaId6UouNpkv5dxJGIuuxaPnHT7Or2R6sAovEnKf722WqXlyE4o26FeKczPjhw98M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750251430; c=relaxed/simple;
-	bh=chU3ZzgX8ixQ80XuNsDpy9w595hkOFK6g+6/L8GwJwM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ep5f+7FGEclyvXxtfIGGFzGMcQ1fRn1KaqIJZjO141Xo441Q5fMK8I5xgyko7VZ1Mwzrz4EBa+YpNuUHCtG2lf0uoP6rdZHt0d+zNKTnWZJIYoij5UcaqlojkGHKsQhWLNYMP84QETLoB27356+LAmGrx49xRIm1R2c3tuVBdIY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=vooGQp+c; arc=none smtp.client-ip=209.85.219.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-e75668006b9so6279705276.3
-        for <linux-i2c@vger.kernel.org>; Wed, 18 Jun 2025 05:57:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1750251427; x=1750856227; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=2X2h53UoNZQhDXBsMhRcUUHtA/t5wbotkmy7UVTkX7E=;
-        b=vooGQp+cXA7Bl9EdDFb5l+L/SbQXuI4V5FZ0RzgjuAXNy2/KAcAyg2o0IWDzripkkE
-         tBcO61mGf6On7hilM9Kk8BA7p/r54kdadUGCT7+RjJWLFtKtD49Ey3xovothllGuoj/4
-         cxXsMsagUqhtNDY9xe3IgmmjXPfqYXJqlV92vCEkihxdk3DWBzTR13Wc9w9peHStJI3V
-         2RGg4jkTHOtGpN/1nexrUJ0QdBXUzSHI/I18yISa6Mx4qaxv6QSZzxrY1VkWUzOfo/r6
-         IL7vbyCJIta0JWgxjWOjrHPMkACNqcs8A1MbsIp1o40U5q2UIjPOipsV3G9Vi/CcrE/r
-         7Gug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750251427; x=1750856227;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2X2h53UoNZQhDXBsMhRcUUHtA/t5wbotkmy7UVTkX7E=;
-        b=C6YGnnaUKkSBTY6eXbx3CtLxPHW5hMuA1tTkZ2rc+KcFIGUPEMd0DfedVZMzcew0DH
-         yafReQis68WEbvtpJbEFvBseaySiCveYkUPL1gZDABPhzRTWuzUV6oUDTA5r5qJvS0Ol
-         0pMSvdWRF5MnY35W1hO3gHb/ner8wxp2lCvRp147u/05tBl5PwV/tgidFxlo1jSN+Rqv
-         U4hGCEOJ9ks9YtC/c/xpuNL7lI8qKUFIZCByN2K4RvP/VbRRv0zNE1tTL6kfgZf0zinS
-         Z+J4i62Bpv7vsxizre59FAKmLnzxZrptsSOXnSFyq0tzxLmszubAYZOZA6chByDDwhbT
-         f1HA==
-X-Forwarded-Encrypted: i=1; AJvYcCUJNELQcKyY3z4+74rQofiTx5cFLR5thHfs0AG1kzb3Ny7bYE95Tvx+nGHBLzYzF/Oz3Ox9LOz5koo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyIXtG3MGn/QvB3zfYX36GY1k6I1pe8pxVSuJFpiFdvh9Qm7PL6
-	2vDOxr0X2Bv71nf4zPWvtHrikQuXW1QuRb5YsCx1KNHSwtO/GRVxRZwOEkU8Tkl9lgDfxFSqhIw
-	J9l5E0/MhCRao6ti3QTgk/7YW2XpmzjWPIEZpgDgKFQ==
-X-Gm-Gg: ASbGncsgFV8lJeq46upFMtnOQ5nPmcpVIHDrC8JpVyPZnWL9A0u7QpBXq8xmsk55NzG
-	s2/FCkWLygowbBhmUWJREQtUrJXdOA8UyB7pb4lC+4pluvruezGgs4cT3iAhzkAoILo0GlLKdVr
-	hUD+GF4j73bCFu168IIldJAe3FXp+QsAUdZan0qb2aPn4=
-X-Google-Smtp-Source: AGHT+IEZlf2SkQ6pDtcOhhdvV3LmUw3iR0H22QpguHg1V4liWBddtmQy97+4HMMAxIbIevgaVnIrB0SHGsEYRyBVYzQ=
-X-Received: by 2002:a05:6902:6303:b0:e82:2b85:ea3a with SMTP id
- 3f1490d57ef6-e822b85ee43mr16723424276.32.1750251426746; Wed, 18 Jun 2025
- 05:57:06 -0700 (PDT)
+	s=arc-20240116; t=1750288796; c=relaxed/simple;
+	bh=rhqkHqpHMwd47r5ajjM1n1LuaTRbXA190PRn1Pxwhrk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:Cc:
+	 In-Reply-To:Content-Type; b=UWEhWNhRNU2FEIXictABWmEvMd4iAgrRJ2Y3uTUFSpZJ9lUrA8Ovl8GC143OJvl43+KHyTGabGysAEaSnFWF9VK4RE76jtXjJLpMlDhfp6s7eD6Yh1Mw4XYXauMdTG3t5ozOi3SYixuGo0V1c+ASM1Vz1SRQa/5e12ipnaPRpG0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
+Received: from [192.168.0.5] (ip5f5af305.dynamic.kabel-deutschland.de [95.90.243.5])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: pmenzel)
+	by mx.molgen.mpg.de (Postfix) with ESMTPSA id EB61D60288261;
+	Thu, 19 Jun 2025 01:18:33 +0200 (CEST)
+Message-ID: <63e740bf-cd0c-4671-9254-6846048b0366@molgen.mpg.de>
+Date: Thu, 19 Jun 2025 01:18:33 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250612-apple-kconfig-defconfig-v1-0-0e6f9cb512c1@kernel.org> <20250612-apple-kconfig-defconfig-v1-1-0e6f9cb512c1@kernel.org>
-In-Reply-To: <20250612-apple-kconfig-defconfig-v1-1-0e6f9cb512c1@kernel.org>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Wed, 18 Jun 2025 14:56:30 +0200
-X-Gm-Features: AX0GCFsnEI_9cu3U9fY7I_D0EnrNerJPcmhYfg39LAqv66uN774UfRLbAU6VCkM
-Message-ID: <CAPDyKFrQ3Uj+coa0WCG00_pyaxu-yEnH26qmS6tevZ_772oZVg@mail.gmail.com>
-Subject: Re: [PATCH 01/11] pmdomain: apple: Drop default ARCH_APPLE in Kconfig
-To: Sven Peter <sven@kernel.org>
-Cc: Janne Grunau <j@jannau.net>, Alyssa Rosenzweig <alyssa@rosenzweig.io>, Neal Gompa <neal@gompa.dev>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Srinivas Kandagatla <srini@kernel.org>, Andi Shyti <andi.shyti@kernel.org>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>, 
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Vinod Koul <vkoul@kernel.org>, 
-	=?UTF-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>, 
-	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, Arnd Bergmann <arnd@arndb.de>, asahi@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, iommu@lists.linux.dev, linux-input@vger.kernel.org, 
-	dmaengine@vger.kernel.org, linux-sound@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] i2c: aspeed: change debug level in irq handler
+To: Jian Zhang <zhangjian.3032@bytedance.com>
+References: <20250618102148.3085214-1-zhangjian.3032@bytedance.com>
+Content-Language: en-US
+From: Paul Menzel <pmenzel@molgen.mpg.de>
+Cc: Ryan Chen <ryan_chen@aspeedtech.com>,
+ Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+ Joel Stanley <joel@jms.id.au>, Andi Shyti <andi.shyti@kernel.org>,
+ Andrew Jeffery <andrew@codeconstruct.com.au>, linux-i2c@vger.kernel.org,
+ openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
+ linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20250618102148.3085214-1-zhangjian.3032@bytedance.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Thu, 12 Jun 2025 at 23:12, Sven Peter <sven@kernel.org> wrote:
->
-> When the first driver for Apple Silicon was upstreamed we accidentally
-> included `default ARCH_APPLE` in its Kconfig which then spread to almost
-> every subsequent driver. As soon as ARCH_APPLE is set to y this will
-> pull in many drivers as built-ins which is not what we want.
-> Thus, drop `default ARCH_APPLE` from Kconfig.
->
-> Signed-off-by: Sven Peter <sven@kernel.org>
-
-Applied for next, thanks!
-
-Kind regards
-Uffe
+Dear Jian,
 
 
+Thank you for the patch.
+
+Am 18.06.25 um 12:21 schrieb Jian Zhang:
+> In interrupt context, using dev_err() can potentially cause latency
+> or affect system responsiveness due to printing to console.
+> 
+> In our scenario, under certain conditions, i2c1 repeatedly printed
+> "irq handled != irq. expected ..." around 20 times within 1 second.
+
+Any idea, why you hit this error at all?
+
+> Each dev_err() log introduced approximately 10ms of blocking time,
+> which delayed the handling of other interrupts — for example, i2c2.
+> 
+> At the time, i2c2 was performing a PMBus firmware upgrade. The
+> target device on i2c2 was time-sensitive, and the upgrade protocol
+> was non-retryable. As a result, the delay caused by frequent error
+> logging led to a timeout and ultimately a failed firmware upgrade.
+> 
+> Frequent error printing in interrupt context can be dangerous,
+> as it introduces latency and interferes with time-critical tasks.
+> This patch changes the log level from dev_err() to dev_dbg() to
+> reduce potential impact.
+
+Thank you for the patch and the problem description. Hiding an error 
+condition behind debug level is also not good, as administrators might 
+miss hardware issues. I do not have a solution. Is there something 
+similar to WARN_ONCE? Maybe the level should be a warning instead of 
+error, because the system is often able to cope with this?
+
+The code is from 2017, so should be well tested actually, shouldn’t it?
+
+> Signed-off-by: Jian Zhang <zhangjian.3032@bytedance.com>
 > ---
->  drivers/pmdomain/apple/Kconfig | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/drivers/pmdomain/apple/Kconfig b/drivers/pmdomain/apple/Kconfig
-> index 12237cbcfaa983083367bad70b1b54ded9ac9824..a8973f8057fba74cd3e8c7d15cd2972081c6697d 100644
-> --- a/drivers/pmdomain/apple/Kconfig
-> +++ b/drivers/pmdomain/apple/Kconfig
-> @@ -9,7 +9,6 @@ config APPLE_PMGR_PWRSTATE
->         select MFD_SYSCON
->         select PM_GENERIC_DOMAINS
->         select RESET_CONTROLLER
-> -       default ARCH_APPLE
->         help
->           The PMGR block in Apple SoCs provides high-level power state
->           controls for SoC devices. This driver manages them through the
->
-> --
-> 2.34.1
->
->
+>   drivers/i2c/busses/i2c-aspeed.c | 18 +++++++++---------
+>   1 file changed, 9 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-aspeed.c
+> index 1550d3d552ae..38e23c826f39 100644
+> --- a/drivers/i2c/busses/i2c-aspeed.c
+> +++ b/drivers/i2c/busses/i2c-aspeed.c
+> @@ -317,7 +317,7 @@ static u32 aspeed_i2c_slave_irq(struct aspeed_i2c_bus *bus, u32 irq_status)
+>   	switch (bus->slave_state) {
+>   	case ASPEED_I2C_SLAVE_READ_REQUESTED:
+>   		if (unlikely(irq_status & ASPEED_I2CD_INTR_TX_ACK))
+> -			dev_err(bus->dev, "Unexpected ACK on read request.\n");
+> +			dev_dbg(bus->dev, "Unexpected ACK on read request.\n");
+>   		bus->slave_state = ASPEED_I2C_SLAVE_READ_PROCESSED;
+>   		i2c_slave_event(slave, I2C_SLAVE_READ_REQUESTED, &value);
+>   		writel(value, bus->base + ASPEED_I2C_BYTE_BUF_REG);
+> @@ -325,7 +325,7 @@ static u32 aspeed_i2c_slave_irq(struct aspeed_i2c_bus *bus, u32 irq_status)
+>   		break;
+>   	case ASPEED_I2C_SLAVE_READ_PROCESSED:
+>   		if (unlikely(!(irq_status & ASPEED_I2CD_INTR_TX_ACK))) {
+> -			dev_err(bus->dev,
+> +			dev_dbg(bus->dev,
+>   				"Expected ACK after processed read.\n");
+>   			break;
+>   		}
+> @@ -354,7 +354,7 @@ static u32 aspeed_i2c_slave_irq(struct aspeed_i2c_bus *bus, u32 irq_status)
+>   		/* Slave was just started. Waiting for the next event. */;
+>   		break;
+>   	default:
+> -		dev_err(bus->dev, "unknown slave_state: %d\n",
+> +		dev_dbg(bus->dev, "unknown slave_state: %d\n",
+>   			bus->slave_state);
+>   		bus->slave_state = ASPEED_I2C_SLAVE_INACTIVE;
+>   		break;
+> @@ -459,7 +459,7 @@ static u32 aspeed_i2c_master_irq(struct aspeed_i2c_bus *bus, u32 irq_status)
+>   
+>   	/* We are in an invalid state; reset bus to a known state. */
+>   	if (!bus->msgs) {
+> -		dev_err(bus->dev, "bus in unknown state. irq_status: 0x%x\n",
+> +		dev_dbg(bus->dev, "bus in unknown state. irq_status: 0x%x\n",
+>   			irq_status);
+>   		bus->cmd_err = -EIO;
+>   		if (bus->master_state != ASPEED_I2C_MASTER_STOP &&
+> @@ -523,7 +523,7 @@ static u32 aspeed_i2c_master_irq(struct aspeed_i2c_bus *bus, u32 irq_status)
+>   			irq_handled |= ASPEED_I2CD_INTR_TX_NAK;
+>   			goto error_and_stop;
+>   		} else if (unlikely(!(irq_status & ASPEED_I2CD_INTR_TX_ACK))) {
+> -			dev_err(bus->dev, "slave failed to ACK TX\n");
+> +			dev_dbg(bus->dev, "slave failed to ACK TX\n");
+>   			goto error_and_stop;
+>   		}
+>   		irq_handled |= ASPEED_I2CD_INTR_TX_ACK;
+> @@ -546,7 +546,7 @@ static u32 aspeed_i2c_master_irq(struct aspeed_i2c_bus *bus, u32 irq_status)
+>   		fallthrough;
+>   	case ASPEED_I2C_MASTER_RX:
+>   		if (unlikely(!(irq_status & ASPEED_I2CD_INTR_RX_DONE))) {
+> -			dev_err(bus->dev, "master failed to RX\n");
+> +			dev_dbg(bus->dev, "master failed to RX\n");
+>   			goto error_and_stop;
+>   		}
+>   		irq_handled |= ASPEED_I2CD_INTR_RX_DONE;
+> @@ -577,7 +577,7 @@ static u32 aspeed_i2c_master_irq(struct aspeed_i2c_bus *bus, u32 irq_status)
+>   		goto out_no_complete;
+>   	case ASPEED_I2C_MASTER_STOP:
+>   		if (unlikely(!(irq_status & ASPEED_I2CD_INTR_NORMAL_STOP))) {
+> -			dev_err(bus->dev,
+> +			dev_dbg(bus->dev,
+>   				"master failed to STOP. irq_status:0x%x\n",
+>   				irq_status);
+>   			bus->cmd_err = -EIO;
+> @@ -589,7 +589,7 @@ static u32 aspeed_i2c_master_irq(struct aspeed_i2c_bus *bus, u32 irq_status)
+>   		bus->master_state = ASPEED_I2C_MASTER_INACTIVE;
+>   		goto out_complete;
+>   	case ASPEED_I2C_MASTER_INACTIVE:
+> -		dev_err(bus->dev,
+> +		dev_dbg(bus->dev,
+>   			"master received interrupt 0x%08x, but is inactive\n",
+>   			irq_status);
+>   		bus->cmd_err = -EIO;
+> @@ -665,7 +665,7 @@ static irqreturn_t aspeed_i2c_bus_irq(int irq, void *dev_id)
+>   
+>   	irq_remaining &= ~irq_handled;
+>   	if (irq_remaining)
+> -		dev_err(bus->dev,
+> +		dev_dbg(bus->dev,
+>   			"irq handled != irq. expected 0x%08x, but was 0x%08x\n",
+>   			irq_received, irq_handled);
+>   
+
+
+Kind regards,
+
+Paul
 
