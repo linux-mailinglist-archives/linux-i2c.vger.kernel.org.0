@@ -1,280 +1,209 @@
-Return-Path: <linux-i2c+bounces-11514-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11515-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8BB5ADE571
-	for <lists+linux-i2c@lfdr.de>; Wed, 18 Jun 2025 10:23:47 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59911ADE8B8
+	for <lists+linux-i2c@lfdr.de>; Wed, 18 Jun 2025 12:25:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3F9DC7A1ECD
-	for <lists+linux-i2c@lfdr.de>; Wed, 18 Jun 2025 08:22:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0D0DE18856AD
+	for <lists+linux-i2c@lfdr.de>; Wed, 18 Jun 2025 10:25:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 393ED27F4CB;
-	Wed, 18 Jun 2025 08:23:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 568472877C4;
+	Wed, 18 Jun 2025 10:21:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="cV6ccwfM"
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="eXdaS/XN"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A48C27EFF9;
-	Wed, 18 Jun 2025 08:23:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55E8B2857D2
+	for <linux-i2c@vger.kernel.org>; Wed, 18 Jun 2025 10:21:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750235010; cv=none; b=AK73U41o0//Sqbc44qADrM1Y7h9cgSyWheA0OqPFlYUNqEra+CZKH1KU4GsZ2L+HiHPnZ+IQhc2vZBvXo0tVga1HSdJWOEFScnE3APCkYkxAoed41ifyMdFsLy/rLO8Di6KkxAKeUDFExAWCQ0iIK+sZcxtUQnLRLEy5L/Hsmz8=
+	t=1750242115; cv=none; b=SzlPE1kjv9U6ZCj+mhkF/VbGDlwJ0A5A+wHob4WDfT0FzBF0aZwjVSb0cNMn0iVxnigocXGJQSxO6h9sL4+aWGuOS8g1sNlsD7XFIqlo+2J3Vc2y3E04w3qFEuREVcKOxjlkY+tRZKYV2/e9x6iBw5G9qyxGvAxZ6CIkegALLu4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750235010; c=relaxed/simple;
-	bh=hgfpYcsEljxEd1bZa0sO5OOQlAVcZKWfL9Eh6kUTjRY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ny3nPUr6KZnmzjPBtKwuMEBoha9NXBADAzdXAot7u62057fpS936iyrR0Nx7p14F+rHOMmjiJcu4ZWSFYK4ARayS21BvVXUb2yB7vFv5WP4iv2FvvnDQC0TovIkLOuaDt+t4CBVfR2AYuV9dJdB8CoX6GPSm+L6tXWTTEDST/qI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=cV6ccwfM; arc=none smtp.client-ip=217.70.183.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPA id BA65844339;
-	Wed, 18 Jun 2025 08:23:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1750235005;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=9eWbuIkx1HJ3sxkyzCu4pbFxB8FyTj9ryw6j6Dn+ZMk=;
-	b=cV6ccwfM2IEVSAzdLuSOS5XZ0XTMjSp0yq5SGgdxrkZuE5yCLxWq/A/BRU+SZOjvKAfqT8
-	nV4B6gqB+kJFltF3yIIZ5Tx0TKv9bo2+LEflxYDrNZNS0ieXIw4/E5C+wzxOZI3I4F370x
-	J+41GwfiSSTg75uFkCO1CYhbF3stGX+MApWoCwr1oyiKYpJM9JWD1tjuReQi7o8YvxZ0VD
-	hhJcPdnJjnL/wC4PjM4N3Yif25iaowPF2bdOOb5rQWlk8HYoWjlodGuFh4NjgtR2Qfi2z/
-	0UYTX2W8xb49ado+LRSk4HRyWN4Ffl90Y9AixkOodWvlk2Fkgn6h0zJpyMEuRw==
-From: Herve Codina <herve.codina@bootlin.com>
-To: Ayush Singh <ayush@beagleboard.org>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	s=arc-20240116; t=1750242115; c=relaxed/simple;
+	bh=C92Qa46CVa8brvsCtjg1pwamo+BKK1QYwIWrn/BFthU=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=mzeoHtL1VwBmDMoWxSojEn4KlV+0k4DxkGXH2vMwAtuFFJvJDsc9XMlo93/uaYswvIcBjEhxf78lOqRdZjMNWnsiye3AnAR/kC+p3wwMDczqGg6KttjP5T6NFVb5p1J71hs6Fl+QCOrN7n7OJdCka3vkyVCS8Zrefjk+mCwAfe8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=eXdaS/XN; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-235d6de331fso83641905ad.3
+        for <linux-i2c@vger.kernel.org>; Wed, 18 Jun 2025 03:21:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1750242112; x=1750846912; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GjmzlSMJGThF/X6xEUPvfYdLDsdkYToZuOGOEJIFwyo=;
+        b=eXdaS/XN40mLPqn+nhSGraoujupa5BPscG1phbo7hFjlboxcZkgL9yfzNckwn1Tnpp
+         lHcsah2xfuy63hvVureamQLVvcgtMevX7Ug6Uw7TtBTinEl3+0rYQlbjE889tcSjn57/
+         OMOyb6JZtRstXV/7mg/R5fq1QF1Q0wkd+hASqOD2As5nK3txIleWMcAmZ0letrDEPI4U
+         e/Zpux0oaGxlOih2guOsLH2MczXhMDlY6InSN67MGVX8YESD1hspSU88VWp2L6VrPAsI
+         GtwNbMxWCMeLxewEq4pRs10CIJLto/RgKzKj0j1DBgInH4M+VW8SMBbrPiV9r9o0FPwA
+         DNUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750242112; x=1750846912;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GjmzlSMJGThF/X6xEUPvfYdLDsdkYToZuOGOEJIFwyo=;
+        b=VlIHdDePEQwCwTKnQrOdB1ascDidqit7lNFskSeTuD4vxCGgA7JnIVjl7jxy6zIrqx
+         I5On37qLiCiXZUrfHkMPfWJTqdLWt/YQMFhq61CAzGvh41m6oLcRLLa9cabzkJ+tvTCx
+         m/SqYyt9kqXRtt4g25sejKwqjxWSn8d/5fZN30cWmPQ6eM60H75p1rIhsWcmJkKpPV+G
+         k7N1wfMqqux/CxUQq9SPOiIJ5F1fJQQE60/EyF49uYd5oLciqHu14vO6UNUvjjbJRp/0
+         F0z06SC2FI5KvwUBQr8qYTvc/jTWuKBl8Ov326ZIkid0dBsEGorLWjFe/zLe9JXfJRmP
+         U1wA==
+X-Forwarded-Encrypted: i=1; AJvYcCVYvixJZiPkT10xNHOB8/FzoVp3jyWcA6ivDhKqJbgOF7/9T5fPUqAh0GOyaHaQMDVZRPVtPcIkj0A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwMD0u0HjqjTG73YVhnQU2UBFnjuL8fJ+9Aphiml4fwLdQHENGA
+	uydc3+EMv/CoCz1U0LSCd4FDze7GThpt/eDaUkqKH6dfqZIOEnpew4OrwZH01GqEvEgNrgwHj4p
+	uFlig
+X-Gm-Gg: ASbGncteESO8FX3L+9OMxEaYTD1WynaJX8FW7u2OKBotJuMVQglsTCTuTIvf1k1mKVI
+	ANGUXnYYyLZ2kq+JV3rKsDABUUFmXAUsrmT0OeSzGZwSPno4rGKGFR2pE/RqxugqsKIg5vMAqd6
+	SV/xenjJxHpDcFXoS9Sk5ixZ1w8r8jM7zpFZwtb19rlBYEx8iCsJKgZc/ErjJtde+JZ39aqZd8v
+	rDsN+IQIG+NGGSJPZEedBwyOtYw3bUFiD+WHfdulgKGfTyT/XxxmePIfEr68QwTXRuIk/Q9n0Nq
+	oIu6WFzpQLKGE9the1r0lsDCQjZ28nPfG/tr0l5xLSO7Wt3u+W4kftBMFpg8bFntX/Y/1PSwK+T
+	e25NZt0o=
+X-Google-Smtp-Source: AGHT+IFazvSPNlbUxR4VYiAlmcTE9A4W+7BMiVTRCRXWqUGSyQF3kdAvM4//0ZOLw44KbimyVMMUYw==
+X-Received: by 2002:a17:902:c946:b0:234:d292:be95 with SMTP id d9443c01a7336-2366b149f20mr223382045ad.42.1750242112586;
+        Wed, 18 Jun 2025 03:21:52 -0700 (PDT)
+Received: from localhost ([106.38.221.150])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2365de781dfsm96547735ad.131.2025.06.18.03.21.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jun 2025 03:21:52 -0700 (PDT)
+From: Jian Zhang <zhangjian.3032@bytedance.com>
+To: Ryan Chen <ryan_chen@aspeedtech.com>,
+	Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+	Joel Stanley <joel@jms.id.au>,
 	Andi Shyti <andi.shyti@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>
-Cc: linux-i2c@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	devicetree-spec@vger.kernel.org,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	Herve Codina <herve.codina@bootlin.com>
-Subject: [PATCH v3 1/1] schemas: i2c: Introduce I2C bus extensions
-Date: Wed, 18 Jun 2025 10:23:12 +0200
-Message-ID: <20250618082313.549140-2-herve.codina@bootlin.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250618082313.549140-1-herve.codina@bootlin.com>
-References: <20250618082313.549140-1-herve.codina@bootlin.com>
+	Andrew Jeffery <andrew@codeconstruct.com.au>,
+	linux-i2c@vger.kernel.org,
+	openbmc@lists.ozlabs.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-aspeed@lists.ozlabs.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] i2c: aspeed: change debug level in irq handler
+Date: Wed, 18 Jun 2025 18:21:48 +0800
+Message-ID: <20250618102148.3085214-1-zhangjian.3032@bytedance.com>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddvgddvudelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefjvghrvhgvucevohguihhnrgcuoehhvghrvhgvrdgtohguihhnrgessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepheffiefgjeeuleeuueffleeufefglefhjefhheeigedukeetieeltddthfffkeffnecukfhppeeltddrkeelrdduieefrdduvdejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepledtrdekledrudeifedruddvjedphhgvlhhopehlohgtrghlhhhoshhtrdhlohgtrghlughomhgrihhnpdhmrghilhhfrhhomhephhgvrhhvvgdrtghoughinhgrsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedufedprhgtphhtthhopegrhihushhhsegsvggrghhlvggsohgrrhgurdhorhhgpdhrtghpthhtohepfihsrgdorhgvnhgvshgrshesshgrnhhgqdgvnhhgihhnvggvrhhinhhgrdgtohhmpdhrtghpthhtoheprghnughirdhshhihthhisehkvghrnhgvlhdrohhrghdprhgtphhtthhopehrohgshheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepkhhriihksehkvghrnhgvlhdrohhrg
- hdprhgtphhtthhopegtohhnohhrodgutheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqihdvtgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopeguvghvihgtvghtrhgvvgesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-GND-Sasl: herve.codina@bootlin.com
 
-An I2C bus can be wired to the connector and allows an add-on board to
-connect additional I2C devices to this bus.
+In interrupt context, using dev_err() can potentially cause latency
+or affect system responsiveness due to printing to console.
 
-Those additional I2C devices could be described as sub-nodes of the I2C
-bus controller node however for hotplug connectors described via device
-tree overlays there is additional level of indirection, which is needed
-to decouple the overlay and the base tree:
+In our scenario, under certain conditions, i2c1 repeatedly printed
+"irq handled != irq. expected ..." around 20 times within 1 second.
+Each dev_err() log introduced approximately 10ms of blocking time,
+which delayed the handling of other interrupts — for example, i2c2.
 
-  --- base device tree ---
+At the time, i2c2 was performing a PMBus firmware upgrade. The
+target device on i2c2 was time-sensitive, and the upgrade protocol
+was non-retryable. As a result, the delay caused by frequent error
+logging led to a timeout and ultimately a failed firmware upgrade.
 
-  i2c1: i2c@abcd0000 {
-      compatible = "xyz,foo";
-      i2c-bus-extension@0 {
-          i2c-bus = <&i2c_ctrl>;
-      };
-      ...
-  };
+Frequent error printing in interrupt context can be dangerous,
+as it introduces latency and interferes with time-critical tasks.
+This patch changes the log level from dev_err() to dev_dbg() to
+reduce potential impact.
 
-  i2c5: i2c@cafe0000 {
-      compatible = "xyz,bar";
-      i2c-bus-extension@0 {
-          i2c-bus = <&i2c_sensors>;
-      };
-      ...
-  };
-
-  connector {
-      i2c_ctrl: i2c-ctrl {
-          i2c-parent = <&i2c1>;
-          #address-cells = <1>;
-          #size-cells = <0>;
-      };
-
-      i2c_sensors: i2c-sensors {
-          i2c-parent = <&i2c5>;
-          #address-cells = <1>;
-          #size-cells = <0>;
-      };
-  };
-
-  --- device tree overlay ---
-
-  ...
-  // This node will overlay on the i2c-ctrl node of the base tree
-  i2c-ctrl {
-      eeprom@50 { compatible = "atmel,24c64"; ... };
-  };
-  ...
-
-  --- resulting device tree ---
-
-  i2c1: i2c@abcd0000 {
-      compatible = "xyz,foo";
-      i2c-bus-extension@0 {
-          i2c-bus = <&i2c_ctrl>;
-      };
-      ...
-  };
-
-  i2c5: i2c@cafe0000 {
-      compatible = "xyz,bar";
-      i2c-bus-extension@0 {
-          i2c-bus = <&i2c_sensors>;
-      };
-      ...
-  };
-
-  connector {
-      i2c_ctrl: i2c-ctrl {
-          i2c-parent = <&i2c1>;
-          #address-cells = <1>;
-          #size-cells = <0>;
-
-          eeprom@50 { compatible = "atmel,24c64"; ... };
-      };
-
-      i2c_sensors: i2c-sensors {
-          i2c-parent = <&i2c5>;
-          #address-cells = <1>;
-          #size-cells = <0>;
-      };
-  };
-
-Here i2c-ctrl (same goes for i2c-sensors) represent the part of I2C bus
-that is on the hot-pluggable add-on. On hot-plugging it will physically
-connect to the I2C adapter on the base board. Let's call the 'i2c-ctrl'
-node an "extension node".
-
-In order to decouple the overlay from the base tree, the I2C adapter
-(i2c@abcd0000) and the extension node (i2c-ctrl) are separate nodes.
-
-The extension node is linked to the I2C bus controller in two ways. The
-first one with the i2c-bus-extension available in I2C controller
-sub-node and the second one with the i2c-parent property available in
-the extension node itself.
-
-The purpose of those two links is to provide the link in both direction
-from the I2C controller to the I2C extension and from the I2C extension
-to the I2C controller.
-
-Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-Reviewed-by: Ayush Singh <ayush@beagleboard.org>
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Signed-off-by: Jian Zhang <zhangjian.3032@bytedance.com>
 ---
- dtschema/schemas/i2c/i2c-controller.yaml | 67 ++++++++++++++++++++++++
- 1 file changed, 67 insertions(+)
+ drivers/i2c/busses/i2c-aspeed.c | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/dtschema/schemas/i2c/i2c-controller.yaml b/dtschema/schemas/i2c/i2c-controller.yaml
-index 8488edd..8ab7fec 100644
---- a/dtschema/schemas/i2c/i2c-controller.yaml
-+++ b/dtschema/schemas/i2c/i2c-controller.yaml
-@@ -30,6 +30,13 @@ properties:
-     minimum: 1
-     maximum: 5000000
+diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-aspeed.c
+index 1550d3d552ae..38e23c826f39 100644
+--- a/drivers/i2c/busses/i2c-aspeed.c
++++ b/drivers/i2c/busses/i2c-aspeed.c
+@@ -317,7 +317,7 @@ static u32 aspeed_i2c_slave_irq(struct aspeed_i2c_bus *bus, u32 irq_status)
+ 	switch (bus->slave_state) {
+ 	case ASPEED_I2C_SLAVE_READ_REQUESTED:
+ 		if (unlikely(irq_status & ASPEED_I2CD_INTR_TX_ACK))
+-			dev_err(bus->dev, "Unexpected ACK on read request.\n");
++			dev_dbg(bus->dev, "Unexpected ACK on read request.\n");
+ 		bus->slave_state = ASPEED_I2C_SLAVE_READ_PROCESSED;
+ 		i2c_slave_event(slave, I2C_SLAVE_READ_REQUESTED, &value);
+ 		writel(value, bus->base + ASPEED_I2C_BYTE_BUF_REG);
+@@ -325,7 +325,7 @@ static u32 aspeed_i2c_slave_irq(struct aspeed_i2c_bus *bus, u32 irq_status)
+ 		break;
+ 	case ASPEED_I2C_SLAVE_READ_PROCESSED:
+ 		if (unlikely(!(irq_status & ASPEED_I2CD_INTR_TX_ACK))) {
+-			dev_err(bus->dev,
++			dev_dbg(bus->dev,
+ 				"Expected ACK after processed read.\n");
+ 			break;
+ 		}
+@@ -354,7 +354,7 @@ static u32 aspeed_i2c_slave_irq(struct aspeed_i2c_bus *bus, u32 irq_status)
+ 		/* Slave was just started. Waiting for the next event. */;
+ 		break;
+ 	default:
+-		dev_err(bus->dev, "unknown slave_state: %d\n",
++		dev_dbg(bus->dev, "unknown slave_state: %d\n",
+ 			bus->slave_state);
+ 		bus->slave_state = ASPEED_I2C_SLAVE_INACTIVE;
+ 		break;
+@@ -459,7 +459,7 @@ static u32 aspeed_i2c_master_irq(struct aspeed_i2c_bus *bus, u32 irq_status)
  
-+  i2c-parent:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description:
-+      In case of an I2C bus extension, reference to the I2C bus controller
-+      this extension is connected to. In other word, reference the I2C bus
-+      controller on the fixed side that drives the bus extension.
-+
-   i2c-scl-falling-time-ns:
-     description:
-       Number of nanoseconds the SCL signal takes to fall; t(f) in the I2C
-@@ -159,6 +166,25 @@ allOf:
-         - i2c-scl-has-clk-low-timeout
+ 	/* We are in an invalid state; reset bus to a known state. */
+ 	if (!bus->msgs) {
+-		dev_err(bus->dev, "bus in unknown state. irq_status: 0x%x\n",
++		dev_dbg(bus->dev, "bus in unknown state. irq_status: 0x%x\n",
+ 			irq_status);
+ 		bus->cmd_err = -EIO;
+ 		if (bus->master_state != ASPEED_I2C_MASTER_STOP &&
+@@ -523,7 +523,7 @@ static u32 aspeed_i2c_master_irq(struct aspeed_i2c_bus *bus, u32 irq_status)
+ 			irq_handled |= ASPEED_I2CD_INTR_TX_NAK;
+ 			goto error_and_stop;
+ 		} else if (unlikely(!(irq_status & ASPEED_I2CD_INTR_TX_ACK))) {
+-			dev_err(bus->dev, "slave failed to ACK TX\n");
++			dev_dbg(bus->dev, "slave failed to ACK TX\n");
+ 			goto error_and_stop;
+ 		}
+ 		irq_handled |= ASPEED_I2CD_INTR_TX_ACK;
+@@ -546,7 +546,7 @@ static u32 aspeed_i2c_master_irq(struct aspeed_i2c_bus *bus, u32 irq_status)
+ 		fallthrough;
+ 	case ASPEED_I2C_MASTER_RX:
+ 		if (unlikely(!(irq_status & ASPEED_I2CD_INTR_RX_DONE))) {
+-			dev_err(bus->dev, "master failed to RX\n");
++			dev_dbg(bus->dev, "master failed to RX\n");
+ 			goto error_and_stop;
+ 		}
+ 		irq_handled |= ASPEED_I2CD_INTR_RX_DONE;
+@@ -577,7 +577,7 @@ static u32 aspeed_i2c_master_irq(struct aspeed_i2c_bus *bus, u32 irq_status)
+ 		goto out_no_complete;
+ 	case ASPEED_I2C_MASTER_STOP:
+ 		if (unlikely(!(irq_status & ASPEED_I2CD_INTR_NORMAL_STOP))) {
+-			dev_err(bus->dev,
++			dev_dbg(bus->dev,
+ 				"master failed to STOP. irq_status:0x%x\n",
+ 				irq_status);
+ 			bus->cmd_err = -EIO;
+@@ -589,7 +589,7 @@ static u32 aspeed_i2c_master_irq(struct aspeed_i2c_bus *bus, u32 irq_status)
+ 		bus->master_state = ASPEED_I2C_MASTER_INACTIVE;
+ 		goto out_complete;
+ 	case ASPEED_I2C_MASTER_INACTIVE:
+-		dev_err(bus->dev,
++		dev_dbg(bus->dev,
+ 			"master received interrupt 0x%08x, but is inactive\n",
+ 			irq_status);
+ 		bus->cmd_err = -EIO;
+@@ -665,7 +665,7 @@ static irqreturn_t aspeed_i2c_bus_irq(int irq, void *dev_id)
  
- patternProperties:
-+  'i2c-bus-extension@[0-9a-f]+$':
-+    type: object
-+    description:
-+      An I2C bus extension connected to an I2C bus. Those extensions allow to
-+      decouple I2C busses when they are wired to connectors.
-+
-+    properties:
-+      reg:
-+        maxItems: 1
-+
-+      i2c-bus:
-+        $ref: /schemas/types.yaml#/definitions/phandle
-+        description:
-+          Reference to the extension bus.
-+
-+    required:
-+      - reg
-+      - i2c-bus
-+
-   '@[0-9a-f]+$':
-     type: object
+ 	irq_remaining &= ~irq_handled;
+ 	if (irq_remaining)
+-		dev_err(bus->dev,
++		dev_dbg(bus->dev,
+ 			"irq handled != irq. expected 0x%08x, but was 0x%08x\n",
+ 			irq_received, irq_handled);
  
-@@ -221,3 +247,44 @@ dependentRequired:
-   i2c-digital-filter-width-ns: [ i2c-digital-filter ]
- 
- additionalProperties: true
-+
-+examples:
-+  # I2C bus extension example involving an I2C bus controller and a connector.
-+  #
-+  #  +--------------+     +-------------+     +-------------+
-+  #  | i2c@abcd0000 |     |  Connector  |     | Addon board |
-+  #  |    (i2c1)    +-----+ (i2c-addon) +-----+ (device@10) |
-+  #  |              |     |             |     |             |
-+  #  +--------------+     +-------------+     +-------------+
-+  #
-+  # The i2c1 I2C bus is wired from a I2C controller to a connector. It is
-+  # identified at connector level as i2c-addon bus.
-+  # An addon board can be connected to this connector and connects a device
-+  # (device@10) to this i2c-addon extension bus.
-+  - |
-+    i2c1: i2c@abcd0000 {
-+        compatible = "xyz,i2c-ctrl";
-+        reg = <0xabcd0000 0x100>;
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        i2c-bus-extension@0 {
-+            reg = <0>;
-+            i2c-bus = <&i2c_addon>;
-+        };
-+    };
-+
-+    connector {
-+        i2c_addon: i2c-addon {
-+            i2c-parent = <&i2c1>;
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+
-+            device@10 {
-+                compatible = "xyz,foo";
-+                reg = <0x10>;
-+            };
-+        };
-+    };
-+
-+...
 -- 
-2.49.0
+2.47.0
 
 
