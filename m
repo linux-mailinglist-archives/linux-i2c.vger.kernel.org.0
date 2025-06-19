@@ -1,242 +1,128 @@
-Return-Path: <linux-i2c+bounces-11519-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11520-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2148FADFC9A
-	for <lists+linux-i2c@lfdr.de>; Thu, 19 Jun 2025 06:48:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 81DBCADFCFC
+	for <lists+linux-i2c@lfdr.de>; Thu, 19 Jun 2025 07:36:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 67F747A2808
-	for <lists+linux-i2c@lfdr.de>; Thu, 19 Jun 2025 04:47:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F1BD517D724
+	for <lists+linux-i2c@lfdr.de>; Thu, 19 Jun 2025 05:36:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B69119F42C;
-	Thu, 19 Jun 2025 04:48:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E6C3242D65;
+	Thu, 19 Jun 2025 05:35:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b="JqDtFM4T"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="AbljeIXg"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx.denx.de (mx.denx.de [89.58.32.78])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2686813EFE3;
-	Thu, 19 Jun 2025 04:48:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.58.32.78
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B49F221FB2
+	for <linux-i2c@vger.kernel.org>; Thu, 19 Jun 2025 05:35:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750308521; cv=none; b=ESrVW7p/fEbTiBQMlYgnGo6TOIBvEtqqpZppV5+KMVb0ClCMGsKNS8SWywjMxEfSij7YOETk7XY3Y1pPpGM+31fnXVqrSk9F2DJOc2G6D8DE9Z+mlBCnQDmICVCAuR8YgmCYAVFMyewQJ8W8MpI65mK+Q5tdG4zEeP4ZQd6wOUs=
+	t=1750311357; cv=none; b=HrOPjVsfHjKkf7i41LLYjgexA7EfNMJED1fZtQ2VfT7D5m7hV5EerPwJa3GU3o86x3XO+MEkbynNCUQvk3viPgNVWdiKhpKr7jABdXSDZ8ROacuWYhT70gdmfvQekwcrEpzOLDT8vurGFO2LXRgx7wUCS6xrzyAHcTr4fLahh9s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750308521; c=relaxed/simple;
-	bh=HQe6kFqMnGfN90tLffrWeZBRc3+Eq0D1MY7dEgvGzJ8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dWPPD1GhFD5b7qt4bNp5C+oI0EMqaIUBt1gW5hCbLCa1t6LcgwhBnxu+pecC/lSuvzQvOk90viXytQIgA9BiXeJywSSbn1jY8Qae+4NIJxLcKyNV7cyJIM8qkdfxEYRXw0Svff45n1X49570TistbGNX3WaZ2plh226rZgAzNL0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de; spf=pass smtp.mailfrom=denx.de; dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b=JqDtFM4T; arc=none smtp.client-ip=89.58.32.78
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=denx.de
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 6839B10244BE3;
-	Thu, 19 Jun 2025 06:41:52 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de; s=mx-20241105;
-	t=1750308113;
-	h=from:reply-to:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:content-language:in-reply-to:references;
-	bh=UUFN8WMuMRa5w96HoPF9UjI+t8hy8L5sn99KTr/bq7k=;
-	b=JqDtFM4TwU8AK2faCKlq59XOjlaV0KHeCPrlluSzgu2SSq570o5mSohAttlhWMUaJeGeLe
-	6ApCTbAqNOAzmm1RfkD9bMN8DHVvbKmsZETU1Y4DHt5M8bM2KSofd3EMjGVDOrqG//+2D0
-	lOoZKoFEWkPpO1OiiHVsLacd5FrBH1Wm/3Lw8bX6ir/9yzlZhmeByI8kYt2RUimE94S3tl
-	/QDo17C5bjc153RotlaDuxZI5/IRt2SdlwxEm1kHR5rN71qvdb3zUTeAwD2M8QJB17SMmY
-	lIqzc9ep1YdXHK9aXb6O+Pe8plPktIdXdaSZHKVFHAQAuM6VJiYbbUXtZOMYUw==
-Message-ID: <04497f71-498a-1d12-5cae-a6e0c4e77dc9@denx.de>
-Date: Thu, 19 Jun 2025 06:42:17 +0200
+	s=arc-20240116; t=1750311357; c=relaxed/simple;
+	bh=3T6kJuyoKBc2nft91aab5hLZW+0/3OZRvkSZlEz+xsA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=d2ymqBuChjksM8nhx2+Fr1Dht01tGXltLNJrGmAz8I/MQnBDdCb/IWNWDxuLRJtkspmfRySey6krJZvN9qcqRUZ3Q3KJGlB2R82I4AdqwRFiKBbVcTqoGHkMxJ3myznYPOEBajKBWUe054d2GhBLj5KaP1iqxhI+LCxLiujFg2M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=AbljeIXg; arc=none smtp.client-ip=209.85.215.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-b26df8f44e6so526482a12.2
+        for <linux-i2c@vger.kernel.org>; Wed, 18 Jun 2025 22:35:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1750311353; x=1750916153; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=MbKgKaSzJXcq3MoycGVCSzlp40V4lZ1OfWmFaWrV5lE=;
+        b=AbljeIXgWzc5HyaqF0LJ6zpYffGY9+wpulok//kNaTbZc6/TkJKAKfbrmMzw8rS/f+
+         haPbdNy/VGgCmafJheFGqvyz7DxHbQxAi/+Ot3I76MYlZv2D48CHQBT+Av6dm7TbY1TE
+         w9ZOnR8rxJkOnB3UidGtNObmm31bntqXMkp+2WZF9cqc8VdQrESEHPPM+O+7qegW1oED
+         to7A9v6pZ8169cDLSIADe7i0rBCa8cjYXWYZDwMskHPiwYly6NhB4oPimrYJJRmI3rAW
+         IJWFhjKFxKzLPibGNhMNTnH2uShn2AlAwSVeDEqQj/po+cpsEeC3VQfJ9R0YAWDegqah
+         xD0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750311353; x=1750916153;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MbKgKaSzJXcq3MoycGVCSzlp40V4lZ1OfWmFaWrV5lE=;
+        b=lSMMx7rF+IfK4U9PG1YQO17hlnlCk6kP+tgVLvd00uGqw2Un0am7XmYTPGzjWpkURS
+         D+XR+a4IKqdRVOFxYUaT3IVZLThYiCyamUG7jTmPGMm1PSq0Gg/SOpmBVZ0yLRPU6lpy
+         kIqL0tD8DRMaz+hCdUCPtNG/AC7uqWLw493OUjVoUKLZIPXTNnKvV1kFbg8NLPPqjd6c
+         lPaDaO1LfWatAufAsCUF0geC/lnAoSW1UpBbW3WkMFcOUNdsehj+NHhDWk+o+A3cn1o/
+         7q/XpoeCpn7jhFR8XFvMH0q5bhSXzWi9gRLn2CW/1cmK0GBDb+MqYFgqyxEimIXdZQq5
+         VqGg==
+X-Forwarded-Encrypted: i=1; AJvYcCUm0alNalvzK630xhct6DKhZhzTeobfIRy5kxZCHFtVuc7bFqvuR4q6lAZs9JXNAMCJ2sYCqwo+52g=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yya2+ptgnayaH3rAUupoDgIagCbN/pxOKGaSmLmJVJEJFpGx6qs
+	6hjdnpvMri0+WLtp76SCZ/iFksMfOkMrmJgUJvPW2aL+I+j0Yd0rarK07am+/2W/DUw=
+X-Gm-Gg: ASbGncuhjYjRJoxwdlAJw67J7NQZj9SGD8ZE1sO13lSRoRXA7/KwkIpMFcL3mT2FcIc
+	XkLmOuPLHTjgnl6Dg+3uMthyQeV7a/Vtx3HKgHcZGWTB1gvtvQuPtAfaS3iYLyqlCNBxh/9A9Tv
+	VLgTmyKbWOtqmIKlPYZfTe4iYX8TH6B6XsPgMpObRoJwyLqu2gyNMb+AZy73x6R4qoKOVtmo2hd
+	5iFBymIL8vF0HHGwJDW2lAfX5EukJMak9HiShQSfIH4gjHk2NTw3NOEdcFU+qmwXb4m4PWspBX1
+	jEKVLtx+Wf8A1AoMI6lqENWYTEY5IqrPOIx0H621GKgUc4RliFom7ZRRo1V4JIO+OkkSa7E+2Q=
+	=
+X-Google-Smtp-Source: AGHT+IF1Brl2Ml/RhPp1ZISh/ybbgy1I/Aosv1oeoYbA3EE1IVQw9sjB8PhoTnTOzWYQtjW2ZHuZqQ==
+X-Received: by 2002:a17:903:32c9:b0:235:a9b:21e7 with SMTP id d9443c01a7336-2366b3df793mr286985355ad.48.1750311353385;
+        Wed, 18 Jun 2025 22:35:53 -0700 (PDT)
+Received: from localhost ([122.172.81.72])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2365d88c0c9sm112008655ad.20.2025.06.18.22.35.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jun 2025 22:35:52 -0700 (PDT)
+Date: Thu, 19 Jun 2025 11:05:50 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Sven Peter <sven@kernel.org>
+Cc: Janne Grunau <j@jannau.net>, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	Neal Gompa <neal@gompa.dev>, Ulf Hansson <ulf.hansson@linaro.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Srinivas Kandagatla <srini@kernel.org>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Vinod Koul <vkoul@kernel.org>,
+	Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>, Arnd Bergmann <arnd@arndb.de>,
+	asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org,
+	iommu@lists.linux.dev, linux-input@vger.kernel.org,
+	dmaengine@vger.kernel.org, linux-sound@vger.kernel.org
+Subject: Re: [PATCH 06/11] cpufreq: apple: drop default ARCH_APPLE in Kconfig
+Message-ID: <20250619053550.hogoo7ic5igvex3c@vireshk-i7>
+References: <20250612-apple-kconfig-defconfig-v1-0-0e6f9cb512c1@kernel.org>
+ <20250612-apple-kconfig-defconfig-v1-6-0e6f9cb512c1@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH] HID: mcp2221: set gpio pin mode
-Content-Language: en-US
-To: linux-kernel@vger.kernel.org
-Cc: Benjamin Tissoires <bentiss@kernel.org>, Jiri Kosina <jikos@kernel.org>,
- Rishi Gupta <gupt21@gmail.com>, linux-i2c@vger.kernel.org,
- linux-input@vger.kernel.org
-References: <20250608163315.24842-1-hs@denx.de>
-Reply-To: hs@denx.de
-From: Heiko Schocher <hs@denx.de>
-In-Reply-To: <20250608163315.24842-1-hs@denx.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250612-apple-kconfig-defconfig-v1-6-0e6f9cb512c1@kernel.org>
 
-Hi all,
-
-On 08.06.25 18:33, Heiko Schocher wrote:
-> in case we have GPIOLIB enabled the gpio pins are used
-> from the current driver as gpio pins. But may the gpio
-> functions of this pins are not enabled in the flash
-> of the chip and so gpio access fails.
+On 12-06-25, 21:11, Sven Peter wrote:
+> When the first driver for Apple Silicon was upstreamed we accidentally
+> included `default ARCH_APPLE` in its Kconfig which then spread to almost
+> every subsequent driver. As soon as ARCH_APPLE is set to y this will
+> pull in many drivers as built-ins which is not what we want.
+> Thus, drop `default ARCH_APPLE` from Kconfig.
 > 
-> In case CONFIG_IIO is not enabled we can prevent this
-> issue of the driver simply by enabling the gpio mode
-> for all pins.
-> 
-> Signed-off-by: Heiko Schocher <hs@denx.de>
+> Signed-off-by: Sven Peter <sven@kernel.org>
 > ---
-> 
->   drivers/hid/hid-mcp2221.c | 97 +++++++++++++++++++++++++++++++++++++++
->   1 file changed, 97 insertions(+)
+>  drivers/cpufreq/Kconfig.arm | 1 -
+>  1 file changed, 1 deletion(-)
 
-Got message from patchwork:
-The following patch (submitted by you) has been updated in Patchwork:
-"""
-  * linux-i2c: HID: mcp2221: set gpio pin mode
-      - http://patchwork.ozlabs.org/project/linux-i2c/patch/20250608163315.24842-1-hs@denx.de/
-      - for: Linux I2C development
-     was: New
-     now: Not Applicable
-"""
-
-May I ask to which tree I should rebase my patch, so I can
-resend? Just rebased my local patch to:
-
-*   fb4d33ab452e - (origin/master, origin/HEAD, master) Merge tag '6.16-rc2-ksmbd-server-fixes' of 
-git://git.samba.org/ksmbd
-
-and it worked without problems.
-
-And while at it, are there any issues with this patch or is it ready for
-picking up?
-
-Thanks!
-
-bye,
-Heiko
-> 
-> diff --git a/drivers/hid/hid-mcp2221.c b/drivers/hid/hid-mcp2221.c
-> index 0f93c22a479f..f693e920dffe 100644
-> --- a/drivers/hid/hid-mcp2221.c
-> +++ b/drivers/hid/hid-mcp2221.c
-> @@ -55,6 +55,27 @@ enum {
->   	MCP2221_ALT_F_NOT_GPIOD = 0xEF,
->   };
->   
-> +/* MCP SRAM read offsets cmd: MCP2221_GET_SRAM_SETTINGS */
-> +enum {
-> +	MCP2221_SRAM_RD_GP0 = 22,
-> +	MCP2221_SRAM_RD_GP1 = 23,
-> +	MCP2221_SRAM_RD_GP2 = 24,
-> +	MCP2221_SRAM_RD_GP3 = 25,
-> +};
-> +
-> +/* MCP SRAM write offsets cmd: MCP2221_SET_SRAM_SETTINGS */
-> +enum {
-> +	MCP2221_SRAM_WR_GP_ENA_ALTER = 7,
-> +	MCP2221_SRAM_WR_GP0 = 8,
-> +	MCP2221_SRAM_WR_GP1 = 9,
-> +	MCP2221_SRAM_WR_GP2 = 10,
-> +	MCP2221_SRAM_WR_GP3 = 11,
-> +};
-> +
-> +#define MCP2221_SRAM_GP_DESIGN_MASK		0x07
-> +#define MCP2221_SRAM_GP_DIRECTION_MASK		0x08
-> +#define MCP2221_SRAM_GP_VALUE_MASK		0x10
-> +
->   /* MCP GPIO direction encoding */
->   enum {
->   	MCP2221_DIR_OUT = 0x00,
-> @@ -607,6 +628,80 @@ static const struct i2c_algorithm mcp_i2c_algo = {
->   };
->   
->   #if IS_REACHABLE(CONFIG_GPIOLIB)
-> +static int mcp_gpio_read_sram(struct mcp2221 *mcp)
-> +{
-> +	int ret;
-> +
-> +	memset(mcp->txbuf, 0, 64);
-> +	mcp->txbuf[0] = MCP2221_GET_SRAM_SETTINGS;
-> +
-> +	mutex_lock(&mcp->lock);
-> +	ret = mcp_send_data_req_status(mcp, mcp->txbuf, 64);
-> +	mutex_unlock(&mcp->lock);
-> +
-> +	return ret;
-> +}
-> +
-> +/*
-> + * If CONFIG_IIO is not enabled, check for the gpio pins
-> + * if they are in gpio mode. For the ones which are not
-> + * in gpio mode, set them into gpio mode.
-> + */
-> +static int mcp2221_check_gpio_pinfunc(struct mcp2221 *mcp)
-> +{
-> +	int i;
-> +	int needgpiofix = 0;
-> +	int ret;
-> +
-> +	if (IS_ENABLED(CONFIG_IIO))
-> +		return 0;
-> +
-> +	ret = mcp_gpio_read_sram(mcp);
-> +	if (ret)
-> +		return ret;
-> +
-> +	for (i = 0; i < MCP_NGPIO; i++) {
-> +		if ((mcp->mode[i] & MCP2221_SRAM_GP_DESIGN_MASK) != 0x0) {
-> +			dev_warn(&mcp->hdev->dev,
-> +				 "GPIO %d not in gpio mode\n", i);
-> +			needgpiofix = 1;
-> +		}
-> +	}
-> +
-> +	if (!needgpiofix)
-> +		return 0;
-> +
-> +	/*
-> +	 * Set all bytes to 0, so Bit 7 is not set. The chip
-> +	 * only changes content of a register when bit 7 is set.
-> +	 */
-> +	memset(mcp->txbuf, 0, 64);
-> +	mcp->txbuf[0] = MCP2221_SET_SRAM_SETTINGS;
-> +
-> +	/*
-> +	 * Set bit 7 in MCP2221_SRAM_WR_GP_ENA_ALTER to enable
-> +	 * loading of a new set of gpio settings to GP SRAM
-> +	 */
-> +	mcp->txbuf[MCP2221_SRAM_WR_GP_ENA_ALTER] = 0x80;
-> +	for (i = 0; i < MCP_NGPIO; i++) {
-> +		if ((mcp->mode[i] & MCP2221_SRAM_GP_DESIGN_MASK) == 0x0) {
-> +			/* write current GPIO mode */
-> +			mcp->txbuf[MCP2221_SRAM_WR_GP0 + i] = mcp->mode[i];
-> +		} else {
-> +			/* pin is not in gpio mode, set it to input mode */
-> +			mcp->txbuf[MCP2221_SRAM_WR_GP0 + i] = 0x08;
-> +			dev_warn(&mcp->hdev->dev,
-> +				 "Set GPIO mode for gpio pin %d!\n", i);
-> +		}
-> +	}
-> +
-> +	mutex_lock(&mcp->lock);
-> +	ret = mcp_send_data_req_status(mcp, mcp->txbuf, 64);
-> +	mutex_unlock(&mcp->lock);
-> +
-> +	return ret;
-> +}
-> +
->   static int mcp_gpio_get(struct gpio_chip *gc,
->   				unsigned int offset)
->   {
-> @@ -1216,6 +1311,8 @@ static int mcp2221_probe(struct hid_device *hdev,
->   	ret = devm_gpiochip_add_data(&hdev->dev, mcp->gc, mcp);
->   	if (ret)
->   		return ret;
-> +
-> +	mcp2221_check_gpio_pinfunc(mcp);
->   #endif
->   
->   #if IS_REACHABLE(CONFIG_IIO)
-> 
+Applied. Thanks.
 
 -- 
-DENX Software Engineering GmbH,      Managing Director: Erika Unter
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-Phone: +49-8142-66989-52   Fax: +49-8142-66989-80   Email: hs@denx.de
+viresh
 
