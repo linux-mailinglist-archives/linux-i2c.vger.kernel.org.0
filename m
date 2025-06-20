@@ -1,99 +1,137 @@
-Return-Path: <linux-i2c+bounces-11540-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11541-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0ACEDAE2021
-	for <lists+linux-i2c@lfdr.de>; Fri, 20 Jun 2025 18:33:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F06EAE2109
+	for <lists+linux-i2c@lfdr.de>; Fri, 20 Jun 2025 19:35:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 999321BC32F7
-	for <lists+linux-i2c@lfdr.de>; Fri, 20 Jun 2025 16:33:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 394CE188E26F
+	for <lists+linux-i2c@lfdr.de>; Fri, 20 Jun 2025 17:35:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C0F42DFA57;
-	Fri, 20 Jun 2025 16:33:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA02B2E3B14;
+	Fri, 20 Jun 2025 17:35:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ws5pvKWu"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EDF6BpMq"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 166F9E56A;
-	Fri, 20 Jun 2025 16:33:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 031B018E20;
+	Fri, 20 Jun 2025 17:35:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750437218; cv=none; b=jiXCV7ySgiR0dMoik9yL7gk1oyHxBXGf1bXz/UHCNNdRP6ZHVNE/zMg6rOw3qfzyT+Eq585RwxXhf+dSFRIGR9OgWt0ZNI4a8UlwjeE8FSaWQAncJpcaI4uMNylpcgfkbLhAez7l+jJar+gvieCyVPFKrY4tOQYm1md/0soGkLA=
+	t=1750440913; cv=none; b=GC/ibMYBmFG/J+9Bl0AiyxXcSKBtPlGffFMya8++tZXn4cTLyIXnCxqahFS7RwK3w/LXEXVPecfkfOQcqQ61LVRct5z3KBekwz1xudorm4MDAves+Wmnmsde2Mw/Lb3jcsEA4W/A2IpUcO9+Pa9KWJwc2b+PPKu3CMUJEIKm2+k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750437218; c=relaxed/simple;
-	bh=KMmUyUrthx1VCXi2f1CfdD7rwl7kJAdZRcWxhQu7GNw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=BweBkLzM68VF/DEtr+2uDsWSZ3JWm8nuXn55a2hJ1O0O05JAiDRswARNqsM8YjgKNtsa74pIy/i/npIZQ48426qWRnnDlbVVWlZ7ttbJchlX8LM0tKcDwS4tqNw8tZmGcWuUAqHn3AU2zaiAtRp5GYo2wKeTX+FBkFutF/ZRrB8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ws5pvKWu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3225FC4CEEF;
-	Fri, 20 Jun 2025 16:33:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750437215;
-	bh=KMmUyUrthx1VCXi2f1CfdD7rwl7kJAdZRcWxhQu7GNw=;
-	h=Date:From:To:Cc:Subject:From;
-	b=Ws5pvKWu35c88ITwEsIlVLziRz3e+7sdhYRyAeFdG+b+vK9aTXq6t337fAPoSwo0E
-	 70nfTB2pPw1RhQcBLTGqfKbEa8eE8r9NWTcKYMC3xzFpfPnupi0Iv/uOBVOuir10fa
-	 9Be/B5XfF16krUbpfNX3tfp1gfLlX5btA1T4yLgu7Lis/SnKsh8b/GRfMF/VArL8Jf
-	 iagFrMX+D12MKZitdemmuztuzXy+lT3w5S0DVDPMfyPyhdHBvrNFQ145OsVurwKVKB
-	 mmIyIe31fudC4ezRTwUpbWtil1cSWgop8rjMyM54YJ+NsTTXUgaVb5Tc6gS3L+vqno
-	 ABzWWVecJHkTQ==
-Date: Fri, 20 Jun 2025 18:33:23 +0200
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: lkml <linux-kernel@vger.kernel.org>, 
-	linux-i2c <linux-i2c@vger.kernel.org>
-Subject: [GIT PULL] i2c-host-fixes for v6.16-rc3
-Message-ID: <rf6vyyocdxdtllhsydpbj5pnaptfjlagsqumblg7ysqby3k44k@mmcwop7nfbqg>
+	s=arc-20240116; t=1750440913; c=relaxed/simple;
+	bh=AgDsktD0a5AkGVgIpm4akmO9rDfL6WCNI0qCVJifB8I=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=LIXQPGG40SnM+4pB3bEw1Ovjo4KDJsZg78GnLblxbHR5nqt8OhdiGEXC84OJgFAJn1K0/NQdesUU0ctHAmFjbuKtWWQOlsU6B7RmFGhYzTZTUrtwZUjPHQra1Ga3WDS6h5WtKAvJA0VJlvRLEkjeqWXmNyRB4/RxmgVD1EPz8vE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EDF6BpMq; arc=none smtp.client-ip=209.85.208.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-60707b740a6so3151135a12.0;
+        Fri, 20 Jun 2025 10:35:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1750440909; x=1751045709; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mg3yw4vaCMy+lJRKgBJCUBFDQZaT3XMALMfqYzvwLVc=;
+        b=EDF6BpMqlRrm8Mg1CmFObIl0veJeWviLXTb91wABwQRzN6M6hfbhb8J7lfE3LDnH48
+         l1B6V0Sx+0CotEQ0o0+feUq4wqA2G/6rJAt+opxweph9+W9f6tMPyZzZxG8I3e7Z5Kud
+         pon8BcR48tsfwFHGgIZoq8MhztL2IJ+GlxbfYEWv3LwahKc6COcQoiIrYeCw7up+urit
+         r63BrnBQ9eY5c3AfTS/T12TbXOuSO3GSQDKE1XPax6x5PciyKE+dFNFP43q5dnIa153S
+         KV3QneAYXHTM3i/Y8N4C1FcPpYCV2/PjlEx6SaSMzY1bl3sxlFNA2hhbRbztoK6wrepc
+         PM8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750440909; x=1751045709;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mg3yw4vaCMy+lJRKgBJCUBFDQZaT3XMALMfqYzvwLVc=;
+        b=kqtBSfmWAAEn9T+VAMOrjdhsmaLL5T+F5Avk1EDkVq5Au9nTJ8YinqMccMU2ZJ2F6a
+         VtdFVJrO5gzJ2DRsSVgx3GYUhU59qgRKYmetws+ccB9ZDyrUEX7DnRJq2wUHHcSWvgIa
+         zFpC1VQYR2H4q3pe1j9P4wh9m8R9/h0wsbeA6kp2utwR1NXCLtIvuvPz+J3lUtkGDb3o
+         2uaxCdctiiP0rQYXFC7HUEqgyjvtCbhn7O/Xg5iOCJi8MOIYUFeirTrZr67v7nH9LOLp
+         eErPuh6GHPMuLZ3akcedf4ofCvX9kaBoKWKyl7xji+yPdPGNPSK9hzoSOh7OiOs8Wffy
+         DQ7Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWLWKf/pcWuLkC9Mn5DcnHXxIJ3ZX8uLsd3fSq776yDvN4bwBc0UQsew3h72xSMTnMmx9artiPv9f8=@vger.kernel.org, AJvYcCXc6q3LADFU26/OcDDCQJszKJPRe+LJJHMuJU4oyLn2gw63ycK9oy4W7yJXvAXfqWzJtFJdBgsxKDnasnM1@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzslz5x/6taFn/tIaH7LBO/PNd8dBmXrOhrd1MMQz3uBAflczeP
+	3TznEQhtFXKQNNqgCDBz1EixHtuA7EnV8UI9/CW4dtTjyyNwB3IUAe8loV+oQQ==
+X-Gm-Gg: ASbGncvivoz1qqvuyKxivk+POTdKuEmVAYeIAm8lK26hMAEeXevJ1a0Gnhx9FajIlbq
+	b3HGqz0vArwRL/28+q5/o/68I6CUor3TeEFNbrjBeKEKCEoo1Q4RPAhY6eBBoC63wxci+L/mBAQ
+	mR8uTYYqIgItAbCJileLbqKLmWs0xn75RiR4DJD68fqc9qehM5dh7yUevFvZ3EaP0dbs4bGBnLD
+	rUtpl7FINNqDEL45R0Caz/G39iodiTZwnBBw98JSv+mlxtE+jHFG0Hli6AoiZRlF2WTf3XjULdp
+	jPcIYhg4urZKobadJDeJJzCPZ2aH4HJjYdcK7yHf/ikBMnfxX2ipnW1fUbZ/UYpiPukoFD/GIg9
+	RZyYV8YjyQxA+/d6rels7K+iPf/QHDU2aBoGrxwXZfA==
+X-Google-Smtp-Source: AGHT+IHST8t81MCtxY4AMugTj8+KZTk5dCvc7no0T46qRYJ/lTm1HFaW77DCtJbEy9i6uLRW2VFUew==
+X-Received: by 2002:a17:907:9816:b0:ad8:9b24:9d16 with SMTP id a640c23a62f3a-ae0579cd970mr352011866b.6.1750440908981;
+        Fri, 20 Jun 2025 10:35:08 -0700 (PDT)
+Received: from masalkhi.. (dynamic-176-003-044-193.176.3.pool.telefonica.de. [176.3.44.193])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-60a1851449asm1698953a12.2.2025.06.20.10.35.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Jun 2025 10:35:08 -0700 (PDT)
+From: Abd-Alrhman Masalkhi <abd.masalkhi@gmail.com>
+To: wsa+renesas@sang-engineering.com,
+	linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [RFC] i2c: Skip i2c_for_each_dev() when detection is not supported
+Date: Fri, 20 Jun 2025 17:31:21 +0000
+Message-ID: <20250620173121.15752-1-abd.masalkhi@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 
-Hi Wolfram,
+While reviewing the I2C core, I noticed that i2c_for_each_dev() is
+invoked in i2c_register_driver() regardless of whether the driver
+actually supports device detection, as follow:
 
-I've collected one fix for rc3. It’s rebased on top of the latest
-patch you merged from my fixes branch, which in turn is based on
-rc2, so there's no tag for it.
+    /* When registration returns, the driver core
+     * will have called probe() for all matching-dbut-unbound devices.
+     */
+    res = driver_register(&driver->driver);
+    if (res)
+        return res;
 
-I still haven't had the chance to read your naming conversion
-series, last week has been quite packed. If you feel it's ready
-to move forward, please go ahead. Otherwise, if you can give me
-one more week, I'll make sure to review it properly.
+    pr_debug("driver [%s] registered\n", driver->driver.name);
 
-Thanks, and wishing you a great weekend,
-Andi
+    i2c_for_each_dev(driver, __process_new_driver);
 
-The following changes since commit d88d96c79919ef615e6055b77cf8e191b214ed3a:
 
-  dt-bindings: i2c: nvidia,tegra20-i2c: Specify the required properties (2025-06-17 20:10:57 +0200)
+However, the first check inside i2c_detect() is:
 
-are available in the Git repository at:
+    if (!driver->detect || !address_list)
+        return 0;
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git tags/i2c-host-fixes-6.16-rc3
+This check happens only after iterating over all registered I2C devices
+via i2c_for_each_dev(). Unless I am missing something, this seems to me
+just wasting processing time for drivers that do not support detection.
 
-for you to fetch changes up to 941af7ffcbf5503867da2319d2b6a7a188c83b1c:
+To avoid this, I propose guarding the call to i2c_for_each_dev() like this:
 
-  i2c: k1: check for transfer error (2025-06-17 23:58:22 +0200)
+    /* When registration returns, the driver core
+     * will have called probe() for all matching-dbut-unbound devices.
+     */
+    res = driver_register(&driver->driver);
+    if (res)
+        return res;
 
-----------------------------------------------------------------
-i2c-host-fixes for v6.16-rc3
+    pr_debug("driver [%s] registered\n", driver->driver.name);
 
-k1: report the proper error in case of i2c transfer error
+    if (driver->detect && driver->address_list)
+        i2c_for_each_dev(driver, __process_new_driver);
 
-----------------------------------------------------------------
-Alex Elder (1):
-      i2c: k1: check for transfer error
+This would ensure that i2c_detect() is only called when there is an
+actual possibility of detection succeeding, making the driver registration
+path more efficient.
 
- drivers/i2c/busses/i2c-k1.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Please let me know if this change makes sense. I would be happy to submit
+a patch.
 
+Best regards,
+Abd-Alrhman Masalkhi
 
