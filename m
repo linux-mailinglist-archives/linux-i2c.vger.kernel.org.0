@@ -1,79 +1,92 @@
-Return-Path: <linux-i2c+bounces-11551-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11552-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F5E3AE31D3
-	for <lists+linux-i2c@lfdr.de>; Sun, 22 Jun 2025 21:55:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 09167AE352A
+	for <lists+linux-i2c@lfdr.de>; Mon, 23 Jun 2025 07:49:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D63B516EBA8
-	for <lists+linux-i2c@lfdr.de>; Sun, 22 Jun 2025 19:55:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3ACA83B13CB
+	for <lists+linux-i2c@lfdr.de>; Mon, 23 Jun 2025 05:49:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB7F21FFC7E;
-	Sun, 22 Jun 2025 19:55:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98D101D54FE;
+	Mon, 23 Jun 2025 05:49:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p/sDK8sj"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="UhL7QmOY"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from abb.hmeau.com (abb.hmeau.com [144.6.53.87])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87BE81FFC53;
-	Sun, 22 Jun 2025 19:55:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A1D642065;
+	Mon, 23 Jun 2025 05:49:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.6.53.87
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750622117; cv=none; b=mxH5opxgz9R+85I4MNZwJ8taLXga4nZX8X1POZ934fOMnKUVmmP8s3YJlqZtujqb5xw6sPqrbfLZFKaGzxjjQo/3fTj1Vq9vIYAEjbatDsQ644Sfsm7DwEwTjXnUSVBKGkQv5Gg1sIgLbGAf8Q87XAV6oy9L1lj48ooxZBJ2974=
+	t=1750657778; cv=none; b=hDUx/8oxey1jXJo+f/ezE6uVc3fOfuGfKAclmY6i/+xCm3F4etxAh/3FrN+uWoUiwfxrMKnfCnsPzrNpP/657+TX82tFCvjjH/CFLUYSc7Cs71e1k+wO9E6zhStR4GoEaxjo7SgXWLrMQGFwi0KjpJLFnhe/wMkzqCrNH6x8NA8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750622117; c=relaxed/simple;
-	bh=8XlmMfjUrdtjzu/JsfZgrKoDOMzAmU/GBBu5oKnfxR4=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=C+SeFBgfRq7vgP7osMyByh9ysXGPVjwN4x8I0zLg+LYl6pbsZ1vsE+BZlDWhdsbFd/hK84byrN5SxKhK6SSVEby1uD4WbzEdHD6lE/oJMdnCiTGQLUQSZN3aipbGA58GGCc78Pz4VDJpAj5CYHGZmjnHmV0RT2bVI/IM86GP4kE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p/sDK8sj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EA7FC4CEF1;
-	Sun, 22 Jun 2025 19:55:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750622117;
-	bh=8XlmMfjUrdtjzu/JsfZgrKoDOMzAmU/GBBu5oKnfxR4=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=p/sDK8sjNBDpREADRKCyDcGvYekI/Db0Huam4KSsn8WMMWzh4EUnRf3bvoK/1zP3P
-	 Fo3jrUOF0cjxgNe1zwUluiFrvpRUu5pfdyggk5CSpplREK/UOgysJVYZJWvKBYNvg7
-	 QPlZodo12iYXtHFy0OG+0FLJkygoAw8ykRW59sbIrs8/u5gcIxDylh7F41vPlFG+2k
-	 q5Ku0s5QTNdBOdAp61B6nxtpOIAZZ/TsMAscxTmRsSNS72TsPP+F4DccXfTYQjDRjH
-	 o5H69liBHNfz1qvNUygEVk7Y7SQXFtSVRcTCbws8uGUibT62eDu1T60GC7qPi6g9sP
-	 /3/q5EOaOyJfw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EACBA39FEB77;
-	Sun, 22 Jun 2025 19:55:45 +0000 (UTC)
-Subject: Re: [PULL REQUEST] i2c-for-6.16-rc3
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <aFgDHBHwY5ElWILx@shikoro>
-References: <aFgDHBHwY5ElWILx@shikoro>
-X-PR-Tracked-List-Id: <linux-i2c.vger.kernel.org>
-X-PR-Tracked-Message-Id: <aFgDHBHwY5ElWILx@shikoro>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.16-rc3
-X-PR-Tracked-Commit-Id: a6c23dac756b9541b33aa3bcd30f464df2879209
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: b67ec639010f7d2ce2b467cef36f3e5e785d8d50
-Message-Id: <175062214454.2132065.39842938111684941.pr-tracker-bot@kernel.org>
-Date: Sun, 22 Jun 2025 19:55:44 +0000
-To: Wolfram Sang <wsa@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>, Andi Shyti <andi.shyti@kernel.org>
+	s=arc-20240116; t=1750657778; c=relaxed/simple;
+	bh=94VgTjMU6PiVQFaYN73bwAfslp6WOu3wpqg2T5I3uNg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=K+yL6WFu4UolW4lKWrnetq2fBvV5OvJ3frRQ2xkDzQyOfWiWuF50FjaFGeH6Apq5kR/TCe//MVYyXzRybm4QqeiwT+psCkDvuo085Og2Lw7+6BtGhYsmf+HWn5c+pLwqbyzmxFq57D/BY+KBkr4dgm+9OCAg5tlLjmOPkn4qsRc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=UhL7QmOY; arc=none smtp.client-ip=144.6.53.87
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
+	s=formenos; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=Gc8ST05/lU4vkA1b2+jaw3Ej+aipM8BwFYTtBem1TFQ=; b=UhL7QmOY09cYp0raNZkdvXbms0
+	GMOKiPj+ZfCfhAhtkyR2fk0uMDxy3w+2aZIkBdsMECrog9d2vW5V2SYTaGmS0fPuovWnsJApzV5SG
+	9vaMKVrfSIjJNMEyMq6eUzdSNAXPmBIlKzEVj6H79ZZJpyvIKFWZAru/hIW5FzTt+a8HOCZHitbSq
+	tLnUBgzYJ8NS8RLxoWkWAowUDEYmNHlitYnpd8Q7QpGwgJRA5MfBiwKfWHdRyUbOKD7F8A4qvYTdZ
+	IYNPdzP0JtLo2rkBkkkx2cvFp7CAdUoDjeVSFYLt2sA82oLZVlx2pfHMIf37eK1G1aLvdHkQZO7Vh
+	6L8R5ZCQ==;
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
+	id 1uTZnn-000CoY-2v;
+	Mon, 23 Jun 2025 13:49:05 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Mon, 23 Jun 2025 13:49:04 +0800
+Date: Mon, 23 Jun 2025 13:49:04 +0800
+From: Herbert Xu <herbert@gondor.apana.org.au>
+To: Robert Marko <robert.marko@sartura.hr>
+Cc: catalin.marinas@arm.com, will@kernel.org, olivia@selenic.com,
+	davem@davemloft.net, vkoul@kernel.org, andi.shyti@kernel.org,
+	broonie@kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+	dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-spi@vger.kernel.org, kernel@pengutronix.de,
+	ore@pengutronix.de, luka.perkov@sartura.hr, arnd@arndb.de,
+	daniel.machon@microchip.com
+Subject: Re: [PATCH v7 6/6] crypto: atmel-aes: make it selectable for
+ ARCH_LAN969X
+Message-ID: <aFjq0EO0Uj3MGcqU@gondor.apana.org.au>
+References: <20250613114148.1943267-1-robert.marko@sartura.hr>
+ <20250613114148.1943267-7-robert.marko@sartura.hr>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250613114148.1943267-7-robert.marko@sartura.hr>
 
-The pull request you sent on Sun, 22 Jun 2025 15:20:28 +0200:
+On Fri, Jun 13, 2025 at 01:39:41PM +0200, Robert Marko wrote:
+> LAN969x uses the same crypto engine, make it selectable for ARCH_LAN969X.
+> 
+> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+> ---
+>  drivers/crypto/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.16-rc3
+Acked-by: Herbert Xu <herbert@gondor.apana.org.au>
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/b67ec639010f7d2ce2b467cef36f3e5e785d8d50
-
-Thank you!
-
+Cheers,
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
 
