@@ -1,92 +1,131 @@
-Return-Path: <linux-i2c+bounces-11552-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11553-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09167AE352A
-	for <lists+linux-i2c@lfdr.de>; Mon, 23 Jun 2025 07:49:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8DAA1AE3DF8
+	for <lists+linux-i2c@lfdr.de>; Mon, 23 Jun 2025 13:33:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3ACA83B13CB
-	for <lists+linux-i2c@lfdr.de>; Mon, 23 Jun 2025 05:49:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B8DC03B2F05
+	for <lists+linux-i2c@lfdr.de>; Mon, 23 Jun 2025 11:33:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98D101D54FE;
-	Mon, 23 Jun 2025 05:49:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="UhL7QmOY"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CBE123E359;
+	Mon, 23 Jun 2025 11:33:20 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from abb.hmeau.com (abb.hmeau.com [144.6.53.87])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A1D642065;
-	Mon, 23 Jun 2025 05:49:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.6.53.87
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30E151E3DCD;
+	Mon, 23 Jun 2025 11:33:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750657778; cv=none; b=hDUx/8oxey1jXJo+f/ezE6uVc3fOfuGfKAclmY6i/+xCm3F4etxAh/3FrN+uWoUiwfxrMKnfCnsPzrNpP/657+TX82tFCvjjH/CFLUYSc7Cs71e1k+wO9E6zhStR4GoEaxjo7SgXWLrMQGFwi0KjpJLFnhe/wMkzqCrNH6x8NA8=
+	t=1750678400; cv=none; b=sSHr0DKaQMSvCrvbZGX+vJK+LCTaygozefEdCKXn+A90+EI59W7Q6y/JIrzftDfoxOzB9oeP8RWP27/Y53CthpIXjnBTH4CZbFOnfz99LPi5GBEBknYWyJcCh0DbmT8cOqRWly7ocXYY1gX8LkTvq37qWzR0MspdiPzEfocuSyM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750657778; c=relaxed/simple;
-	bh=94VgTjMU6PiVQFaYN73bwAfslp6WOu3wpqg2T5I3uNg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=K+yL6WFu4UolW4lKWrnetq2fBvV5OvJ3frRQ2xkDzQyOfWiWuF50FjaFGeH6Apq5kR/TCe//MVYyXzRybm4QqeiwT+psCkDvuo085Og2Lw7+6BtGhYsmf+HWn5c+pLwqbyzmxFq57D/BY+KBkr4dgm+9OCAg5tlLjmOPkn4qsRc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=UhL7QmOY; arc=none smtp.client-ip=144.6.53.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
-	s=formenos; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=Gc8ST05/lU4vkA1b2+jaw3Ej+aipM8BwFYTtBem1TFQ=; b=UhL7QmOY09cYp0raNZkdvXbms0
-	GMOKiPj+ZfCfhAhtkyR2fk0uMDxy3w+2aZIkBdsMECrog9d2vW5V2SYTaGmS0fPuovWnsJApzV5SG
-	9vaMKVrfSIjJNMEyMq6eUzdSNAXPmBIlKzEVj6H79ZZJpyvIKFWZAru/hIW5FzTt+a8HOCZHitbSq
-	tLnUBgzYJ8NS8RLxoWkWAowUDEYmNHlitYnpd8Q7QpGwgJRA5MfBiwKfWHdRyUbOKD7F8A4qvYTdZ
-	IYNPdzP0JtLo2rkBkkkx2cvFp7CAdUoDjeVSFYLt2sA82oLZVlx2pfHMIf37eK1G1aLvdHkQZO7Vh
-	6L8R5ZCQ==;
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
-	id 1uTZnn-000CoY-2v;
-	Mon, 23 Jun 2025 13:49:05 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Mon, 23 Jun 2025 13:49:04 +0800
-Date: Mon, 23 Jun 2025 13:49:04 +0800
-From: Herbert Xu <herbert@gondor.apana.org.au>
-To: Robert Marko <robert.marko@sartura.hr>
-Cc: catalin.marinas@arm.com, will@kernel.org, olivia@selenic.com,
-	davem@davemloft.net, vkoul@kernel.org, andi.shyti@kernel.org,
-	broonie@kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-	dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-spi@vger.kernel.org, kernel@pengutronix.de,
-	ore@pengutronix.de, luka.perkov@sartura.hr, arnd@arndb.de,
-	daniel.machon@microchip.com
-Subject: Re: [PATCH v7 6/6] crypto: atmel-aes: make it selectable for
- ARCH_LAN969X
-Message-ID: <aFjq0EO0Uj3MGcqU@gondor.apana.org.au>
-References: <20250613114148.1943267-1-robert.marko@sartura.hr>
- <20250613114148.1943267-7-robert.marko@sartura.hr>
+	s=arc-20240116; t=1750678400; c=relaxed/simple;
+	bh=4Byfl6XKyk9PR8pgbpDrhICsoDtDHYLEMWWU/ZfABpQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WFFOAX5sBw7ZitT8FFS/rxyQmfgqjM001vTetZnawD+2toYhsyJT/ek0jnS5NWN7d9NRb8uZSkeufffqT0KIypWoJXlJbtqZseeEFRRYe8ZAwccECwkVOnshmYSmLu+AMpHM4sNPlrxsMhAKR7dSrOaLMQpT3uJXGS46o4pOeGw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 43268113E;
+	Mon, 23 Jun 2025 04:32:58 -0700 (PDT)
+Received: from [10.57.29.116] (unknown [10.57.29.116])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3092E3F66E;
+	Mon, 23 Jun 2025 04:33:12 -0700 (PDT)
+Message-ID: <9f80f7c4-01a3-4a03-94dc-2a19136707f8@arm.com>
+Date: Mon, 23 Jun 2025 12:33:03 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250613114148.1943267-7-robert.marko@sartura.hr>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 11/11] arm64: defconfig: Enable Apple Silicon drivers
+To: Sven Peter <sven@kernel.org>
+Cc: asahi@lists.linux.dev, Stephen Boyd <sboyd@kernel.org>,
+ Alyssa Rosenzweig <alyssa@rosenzweig.io>, Janne Grunau <j@jannau.net>,
+ linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+ Srinivas Kandagatla <srini@kernel.org>, linux-kernel@vger.kernel.org,
+ Viresh Kumar <viresh.kumar@linaro.org>, Neal Gompa <neal@gompa.dev>,
+ linux-clk@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+ linux-i2c@vger.kernel.org, Takashi Iwai <tiwai@suse.com>,
+ Liam Girdwood <lgirdwood@gmail.com>, =?UTF-8?Q?Martin_Povi=C5=A1er?=
+ <povik+lin@cutebit.org>, Joerg Roedel <joro@8bytes.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
+ Mark Brown <broonie@kernel.org>, iommu@lists.linux.dev,
+ linux-input@vger.kernel.org, dmaengine@vger.kernel.org,
+ linux-sound@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+ Ulf Hansson <ulf.hansson@linaro.org>,
+ Michael Turquette <mturquette@baylibre.com>,
+ Andi Shyti <andi.shyti@kernel.org>, Will Deacon <will@kernel.org>
+References: <20250612-apple-kconfig-defconfig-v1-0-0e6f9cb512c1@kernel.org>
+ <20250612-apple-kconfig-defconfig-v1-11-0e6f9cb512c1@kernel.org>
+ <2e022f4e-4c87-4da1-9d02-f7a3ae7c5798@arm.com>
+ <d5a616f3-67a3-4504-904e-6cec503ab157@kernel.org>
+From: Robin Murphy <robin.murphy@arm.com>
+Content-Language: en-GB
+In-Reply-To: <d5a616f3-67a3-4504-904e-6cec503ab157@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Fri, Jun 13, 2025 at 01:39:41PM +0200, Robert Marko wrote:
-> LAN969x uses the same crypto engine, make it selectable for ARCH_LAN969X.
+On 2025-06-21 5:01 pm, Sven Peter wrote:
+> On 13.06.25 18:50, Robin Murphy wrote:
+>> On 2025-06-12 10:11 pm, Sven Peter wrote:
+>>> Enable drivers for hardware present on Apple Silicon machines.
+>>> The power domain and interrupt driver should be built-it since these are
+>>> critical for the system to boot, the rest can be build as modules.
+>>
+>> Nit: I'd be tempted to put this patch first, just in case anyone 
+>> bisecting with "make defconfig" in their process lands in the middle 
+>> and suddenly loses some drivers (although arguably them going from 
+>> "=y" to "=m" could still be a surprise, but at least a bit less so).
 > 
-> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
-> ---
->  drivers/crypto/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Ah, that's a good point that I hadn't even thought about.
+> Now that most of these have already been merged into different trees 
+> that ship has sailed though.
 
-Acked-by: Herbert Xu <herbert@gondor.apana.org.au>
+Yeah, like I say it's only minor and rather contrived anyway. Not a big 
+worry.
 
-Cheers,
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+>> [...]
+>>> @@ -1504,6 +1520,7 @@ CONFIG_ARCH_TEGRA_194_SOC=y
+>>>   CONFIG_ARCH_TEGRA_234_SOC=y
+>>>   CONFIG_TI_PRUSS=m
+>>>   CONFIG_OWL_PM_DOMAINS=y
+>>> +CONFIG_APPLE_PMGR_PWRSTATE=y
+>>
+>> If this is critical for any Apple platform to work then it would 
+>> probably make sense to explicitly select it from ARCH_APPLE, as is 
+>> done for APPLE_AIC...
+> 
+> 
+> Documentation/kbuild/kconfig-language.rst:
+> 
+>    select should be used with care. select will force a symbol to a value
+>    without visiting the dependencies. By abusing select you are able to
+>    select a symbol FOO even if FOO depends on BAR that is not set. In
+>    general use select only for non-visible symbols (no prompts anywhere)
+>    and for symbols with no dependencies. That will limit the usefulness
+>    but on the other hand avoid the illegal configurations all over.
+> 
+> 
+> That's probably fine for APPLE_AIC which only depends on ARM64 (and 
+> ARCH_APPLE) which is guaranteed to be set when ARCH_APPLE is set anyway.
+> APPLE_PMGR_PWRSTATE also has an additional dependency on PM so it should 
+> probably remain in defconfig and not use select.
+
+Sorry if the implication wasn't clear, but I did mean "select it" in the 
+sense of "select it and all of its necessary dependencies in a manner 
+that works correctly". The same argument applies all the way down - if a 
+!PM config will not be able to boot on ARCH_APPLE platforms due to 
+forcibly deselecting APPLE_PMGR_PWRSTATE, then there is little point in 
+permitting that combination. Which of course the user would already have 
+to disable at least ARCH_MXC, ARCH_ROCKCHIP, ARCH_TEGRA and 
+ARCH_VEXPRESS to achieve in the first place ;)
+
+Thanks,
+Robin.
 
