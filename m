@@ -1,333 +1,208 @@
-Return-Path: <linux-i2c+bounces-11583-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11584-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F002AE8058
-	for <lists+linux-i2c@lfdr.de>; Wed, 25 Jun 2025 12:56:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F268AE84C0
+	for <lists+linux-i2c@lfdr.de>; Wed, 25 Jun 2025 15:32:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C45963B6B87
-	for <lists+linux-i2c@lfdr.de>; Wed, 25 Jun 2025 10:55:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E62EF188A40F
+	for <lists+linux-i2c@lfdr.de>; Wed, 25 Jun 2025 13:28:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9EF92D1F40;
-	Wed, 25 Jun 2025 10:54:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8552C2609FA;
+	Wed, 25 Jun 2025 13:27:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KuvgTef4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mZQOAj3o"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E2882D2389;
-	Wed, 25 Jun 2025 10:54:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D73225E453;
+	Wed, 25 Jun 2025 13:27:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750848878; cv=none; b=tQ9P5I9SnWGeNp2GAaejB+mTMf/X3VxA9ZuUUKFXXk1xyYIjfghvOsZs/5bL34B7FCdtIuGtoe7SHJbE0X1sMIm5lDKX4bRx2ysY8IvpVyv0SBkDFCxTFhBIp7icDdD4CzwIAScfzkUA7zMwN3O/BTslKlc6bkH/P+25uBRl0zI=
+	t=1750858075; cv=none; b=jd37D0EkSPb6z+L0QZb3U3NUtLay2NiVAkupjoZ1MSNhf8/ZC7Zb9bdhvL117N8+E2fv4XBFU6D0Bp1qcP5/drut7ym5dD5JsSkwSUcdttjpdyW0ZyNt2sdhmJkwkud+A7Pepqs6HcuU4+ZZnuFKUZ/LTjvxHLCCuVW3QZjCBcg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750848878; c=relaxed/simple;
-	bh=1pw+uqroMWF349QulkbaV2L+xoGUQiIDrgQhwjrbgLU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=S6DVZ1tgLPatQ9bmvdRHVOAsyUykXc9I/29LzoUHWA7lPG4crMqXQNupyOHxTlB8SWzMaTQcOpYlaCEEmpueJMb2dcN42x6ssmnHZgh+dxrxhRG3uMF4BG1iWZx2NqX4tTCY9lPR4qBaWIC5DIalE+gXul/qy1xit94LRZLNyE8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KuvgTef4; arc=none smtp.client-ip=209.85.219.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-e7311e66a8eso5606420276.2;
-        Wed, 25 Jun 2025 03:54:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750848875; x=1751453675; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cilMFj2BlrrsofpUWF0eRD8610fy8kvLozLNgBSSemY=;
-        b=KuvgTef4Sem4pyBuzeuGbV+ddyxuQOWsDiMlUbXu0HUcQdy7OG+B9YuRDLn0pcH8bf
-         J+OQE+Jqsgkp4UQOD7xVN1eUFqMDQgu/ta1Cjr1vhdtZ5oli3CXf11+OLSM+bSYFTNoI
-         4hUAMLRHVYWHKWjyjzuF67esK7aq75b3hOXYwnIftGlTC/ATj01nUoOhCXHRRClcXzuj
-         oIKzAWLmoWA3E/R6Aju9NE6WpyzVtBi26Zw4l6QvCw+CTGFxCksyEJlbF+/YZ98ljJ7w
-         VR+fXv0nYXJqkFptBOcpSygc+ObtkqDPt2cHZlnmAZPVPNJK4jIsHOulO5xRuJExsXRi
-         qvKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750848875; x=1751453675;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cilMFj2BlrrsofpUWF0eRD8610fy8kvLozLNgBSSemY=;
-        b=mrKDqHIVdVkR1FkbLM3+r3YyEsLzm7t0WcIzq3YQUiro34Pcwtc8kjTcYhQm5Wv/Sl
-         uQtrhadkf4Qtf/ZX34S2htkniE4tBBFUZQJTbFjMY8usovId7t3BKRETvG7gh5ztPKPN
-         LcF+yMcLzrnljCT0+MBCgyOPGNUocLhc5IP5SvQRwbhECW3/33QjAYJ3Ozi070zKP3KX
-         z+Z6YvOVY4pFdgZknvbrp+43qBrYRlTgIbt/B2npj7vGSEO/lrMfBHBEEWBLy1fjVIce
-         wk0YdTg49Q0UCavfRDHGInp1G0jqXfMB0spnUbWD2CktMNCfMXsLuJpPM5MAZ/J0EK1K
-         w7cQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVBHJ85O+xBvW6pu0EaTOOu0LeuVZuJHtrOeNu43R2eXKhQnl8RG2db+rrS0csM71NAmoDyi6/Qg+Nv@vger.kernel.org, AJvYcCVBvi1OEgetd9M/VsgcBBYVrZNCJYomCOc2QnJJiyJEoy7lbhB00wt83R/MY8xCfhkn2lxJfeSZm9k=@vger.kernel.org, AJvYcCVKsHjuf3Z8ZzdqV/EW2npVJGbn2Cnmd9JaNhmksHM0cpz4jN2lScn2Y0kJA0JWmlP/quJtz6vGCrp4BfN6xEw=@vger.kernel.org, AJvYcCWdSu82R3PJ0L1TAPIaYqKeHI2DG/8D+Jh81jCgB07grxXzA6JdzZT80aoRZmDUq/XJaSWSQlgBHHmh@vger.kernel.org, AJvYcCX1cUepK3vR5s+CCUTk1H8hQHO2ffqh9eBOAiLGO2D94K1YJn9pKEOTPUUtUyWTAmXhL/Q3yQGXzFcH/YQ=@vger.kernel.org, AJvYcCXc6fPhNXDlCgYaHuq+5xWuOLH8GEHT0D5xHZZlkbMY0J8oMfIhKRXS/Sz2UbN4YGB7hsXWknGVtm1GMA==@vger.kernel.org, AJvYcCXfjJnLQCos9DuPaQY/YUAHQaACR2hDK8lG8X8TQopkmXaFBWcLKUTb/nGPw7XjQCvWI90Jek5exmnn@vger.kernel.org, AJvYcCXhlGAlMvYy6+r9lSEqT0gNNqw0wYGidkJv6qE5CtMxOS9uTSE8JTrv1NT9kTEAtFxNfq/PXVZv@vger.kernel.org, AJvYcCXihyNHvvrBHw59ROpM7XLn3/0YGIiBng8igjW4NHONyaiTbo02vN4Wo0C7iTMY3/WPMU/jI8PxImWk2wXD@vger.kernel.org
-X-Gm-Message-State: AOJu0YxWrtGAwjcIWGMqVnCysk3Twd6Ljgq0dudpCSmfE31rfyTKL8R/
-	TIq2EMKnNP0PHieep4ERASw7d+nxQ5weHau86YWTTFXVxktV/jixkEo0fMciPy50j0zGjHiPvrU
-	waFrG2IaUXznyPMj4A9SLD0AWM8FaSBs=
-X-Gm-Gg: ASbGncvkLqNfuPrPaDIoquE4xF72u35Cjqtvwwx01zHy8p3wiprykwkOKUbLRpeU0GE
-	x5eFoEFx5Qf0Q/YnHJUaQXC8c/+Ktsb9EnnBQJsyGnfOsOVUcrxbbypbAfIH1/Gdz4R09t7a7cc
-	0Zo+Hoi9/uFz1jwTHI2Bk4utfbv2njMkgWWUQ+U2mu7uauHjehnZN39orJ0S5qruKJoXw4ZkmAA
-	XDh8A==
-X-Google-Smtp-Source: AGHT+IEu+R//w0LIcJJxZLM8KxbNtqpVsxRk+v2CqE6RW+SjfC+UBYI6SfhQaDEj74VCCVaHizUOSlRb/0YomJcnvOo=
-X-Received: by 2002:a05:690c:6384:b0:709:197d:5d3c with SMTP id
- 00721157ae682-71406cd24f9mr36191427b3.11.1750848875500; Wed, 25 Jun 2025
- 03:54:35 -0700 (PDT)
+	s=arc-20240116; t=1750858075; c=relaxed/simple;
+	bh=nuIeo5FTKFdWM1fm277yaTHa/pCCj2j+dkJIKD2mheU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=b6HMvKt7Sq9NvQBf0JDEewnJvczk6Hj7uXYvA433RULjkhSyWsRSkMjTjTuaPYXcJ01e6jM48w5UUpCAfo5eFDII26jtPibuCbQvjh4C9Ir9c6UJy9cJBSHzkMjYq1y9QVzKvpQOEZcnNr+u5OKyPfEWtSvTbmXpRhWFpE/T8mE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mZQOAj3o; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99F5BC4CEEA;
+	Wed, 25 Jun 2025 13:27:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750858074;
+	bh=nuIeo5FTKFdWM1fm277yaTHa/pCCj2j+dkJIKD2mheU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=mZQOAj3otxX1nkIhoBzKt9Ac2zb+T5lGjmPTimP2eiBXTvl97KF8ZqdcF0xBy99xH
+	 xb+i8fwYLW3WyHhJ77OGG7LF8dox6twR0tbBjr8S3Hk3JiZHB3WXr4XfghQc7PQPvu
+	 er4ysdpdlCcbx8oFLijH1rLsZ9I+FKlvIMCQo+P9gCHaOqfC+hmL+JZBDMHm7tlY2g
+	 p1SZpArR9V0v3HbE0Cw0W2Sw7ZftzXEfYWrDyWK20VTwkiXMZxnhPKfJxwjFtb5BOy
+	 R5NSHNpYIPzhM/S3tNlyhJkPhfsB0UPex+1oLAmUAW8dIVHs7P9iIOkjWh0E+LtzAF
+	 pwYFquLYGSstA==
+Date: Wed, 25 Jun 2025 14:27:51 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Conor Dooley <conor.dooley@microchip.com>
+Cc: linux-i2c@vger.kernel.org,
+	Daire McNamara <daire.mcnamara@microchip.com>,
+	Andi Shyti <andi.shyti@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [RESEND PATCH v1] i2c: microchip-core: re-fix fake detections w/
+ i2cdetect
+Message-ID: <20250625-irate-cursive-fa0de9009012@spud>
+References: <20250612-jaybird-arrange-53b6200548e9@wendy>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250612140041.GF381401@google.com> <CAOoeyxVvZiD18qbGd5oUnqLNETKw50fJBjJO3vR50kon_a5_kA@mail.gmail.com>
- <20250612152313.GP381401@google.com> <CAOoeyxV-E_HQOBu0Pzfy0b0yJ2qbrW_C8pATCTWE4+PXqvHL6g@mail.gmail.com>
- <20250613131133.GR381401@google.com> <CAOoeyxXftk9QX_REgeQhuXSc9rEguzXkKVKDQdawU=NzGbo9oA@mail.gmail.com>
- <20250619115345.GL587864@google.com> <CAOoeyxXSTeypv2qQjcK1cSPtjch=gJGYzqoMsLQ-LJZ8Kwgd=w@mail.gmail.com>
- <20250619152814.GK795775@google.com> <CAOoeyxU7eQneBuxbBqepta29q_OHPzrkN4SKmj6RX72L3Euw5A@mail.gmail.com>
- <20250625090133.GP795775@google.com>
-In-Reply-To: <20250625090133.GP795775@google.com>
-From: Ming Yu <a0282524688@gmail.com>
-Date: Wed, 25 Jun 2025 18:54:20 +0800
-X-Gm-Features: Ac12FXyG2HoWaId__CawR23MZ8rb9Qa6uz_UMfhCNFjrCMpzymOvuItjHHgDfoE
-Message-ID: <CAOoeyxWoxC-n3JjjFe8Ruq_VydXk=jev=mopKfL5B7gsaSg=Ag@mail.gmail.com>
-Subject: Re: [PATCH v12 1/7] mfd: Add core driver for Nuvoton NCT6694
-To: Lee Jones <lee@kernel.org>
-Cc: linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org, 
-	mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org, 
-	Ming Yu <tmyu0@nuvoton.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="OwH4AkRF5o3PjhHF"
+Content-Disposition: inline
+In-Reply-To: <20250612-jaybird-arrange-53b6200548e9@wendy>
+
+
+--OwH4AkRF5o3PjhHF
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Dear Greg and Lee,
+On Thu, Jun 12, 2025 at 12:12:49PM +0100, Conor Dooley wrote:
+> Introducing support for smbus re-broke i2cdetect, causing it to detect
+> devices at every i2c address, just as it did prior to being fixed in
+> commit 49e1f0fd0d4cb ("i2c: microchip-core: fix "ghost" detections").
+> This was caused by an oversight, where the new smbus code failed to
+> check the return value of mchp_corei2c_xfer(). Check it, and propagate
+> any errors.
+>=20
+> Fixes: d6ceb40538263 ("i2c: microchip-corei2c: add smbus support")
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>=20
+> Resending cos I think it attempted a send using my korg address on a
+> network where that is not possible.
 
-Thank you for your comments.
-I've reviewed your suggestions, but would appreciate your feedback on
-a few remaining points.
+Seemingly this patch has exposed an issue that causes a hang that was
+not noticed previously:
+# cd /sys/bus/iio/devices/iio\:device0
+# cat *
+VDDREG_IBUS_1
+0
+[   92.178899] ------------[ cut here ]------------
+[   92.178921] WARNING: CPU: 0 PID: 291 at kernel/workqueue.c:2496 __queue_=
+delayed_work+0xb4/0xbe
+[   92.178981] Modules linked in: pac1934 industrialio autofs4
+[   92.179024] CPU: 0 UID: 0 PID: 291 Comm: cat Not tainted 6.12.22 #1
+[   92.179045] Hardware name: Microchip PolarFire-SoC Icicle Kit (DT)
+[   92.179055] epc : __queue_delayed_work+0xb4/0xbe
+[   92.179081]  ra : mod_delayed_work_on+0x4a/0xa6
+[   92.179107] epc : ffffffff8002b2f0 ra : ffffffff8002b3ba sp : ffffffc600=
+863b70
+[   92.179122]  gp : ffffffff812d6068 tp : ffffffe5a5bc24c0 t0 : 0000000000=
+000000
+[   92.179136]  t1 : 000000000000ff00 t2 : ffffffff80c01210 s0 : ffffffc600=
+863b90
+[   92.179150]  s1 : ffffffe5a2aa7568 a0 : 0000000000000040 a1 : ffffffe5a2=
+054000
+[   92.179164]  a2 : ffffffe5a2aa7568 a3 : 0000000000003a98 a4 : 0000000000=
+000000
+[   92.179178]  a5 : ffffffff8002b1fa a6 : 0000000000000000 a7 : 0000000000=
+000000
+[   92.179191]  s2 : 0000000000000040 s3 : ffffffe5a2054000 s4 : 0000000000=
+003a98
+[   92.179205]  s5 : 0000000000000000 s6 : ffffffc600863c5c s7 : ffffffc600=
+863c58
+[   92.179219]  s8 : 0000000000400cc0 s9 : fffffffffffff000 s10: 000000007f=
+fff000
+[   92.179233]  s11: ffffffe5a2806128 t3 : 0000000000ff0000 t4 : 0000000000=
+000000
+[   92.179247]  t5 : 0000000000000000 t6 : 0000000000000000
+[   92.179258] status: 0000000200000100 badaddr: 0000000000000000 cause: 00=
+00000000000003
+[   92.179273] [<ffffffff8002b2f0>] __queue_delayed_work+0xb4/0xbe
+[   92.179302] [<ffffffff8002b3ba>] mod_delayed_work_on+0x4a/0xa6
+[   92.179331] [<ffffffff01375980>] pac1934_read_raw+0xba/0x1fc [pac1934]
+[   92.179392] [<ffffffff0134942e>] iio_read_channel_info+0xae/0xc4 [indust=
+rialio]
+[   92.179704] [<ffffffff80442fde>] dev_attr_show+0x14/0x46
+[   92.179748] [<ffffffff8020ca3e>] sysfs_kf_seq_show+0x6c/0xe2
+[   92.179788] [<ffffffff8020b15c>] kernfs_seq_show+0x18/0x20
+[   92.179814] [<ffffffff801bc1ca>] seq_read_iter+0xd0/0x328
+[   92.179844] [<ffffffff8020b634>] kernfs_fop_read_iter+0xfa/0x15c
+[   92.179871] [<ffffffff8018e128>] vfs_read+0x1aa/0x25a
+[   92.179895] [<ffffffff8018e998>] ksys_read+0x5a/0xcc
+[   92.179915] [<ffffffff8018ea1e>] __riscv_sys_read+0x14/0x1c
+[   92.179936] [<ffffffff807662f8>] do_trap_ecall_u+0x1ac/0x1d8
+[   92.179981] [<ffffffff8076e3ba>] handle_exception+0x146/0x152
+[   92.180018] ---[ end trace 0000000000000000 ]---
+(The issue was detected on an internal 6.12 based branch, but the
+content there is identical to what's in mainline + this patch).
 
-Lee Jones <lee@kernel.org> =E6=96=BC 2025=E5=B9=B46=E6=9C=8825=E6=97=A5 =E9=
-=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=885:01=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> On Fri, 20 Jun 2025, Ming Yu wrote:
->
-> > Lee Jones <lee@kernel.org> =E6=96=BC 2025=E5=B9=B46=E6=9C=8819=E6=97=A5=
- =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=8811:28=E5=AF=AB=E9=81=93=EF=BC=9A
-> > >
-> > > On Thu, 19 Jun 2025, Ming Yu wrote:
-> > >
-> > > > Lee Jones <lee@kernel.org> =E6=96=BC 2025=E5=B9=B46=E6=9C=8819=E6=
-=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=887:53=E5=AF=AB=E9=81=93=EF=BC=9A
-> > > > >
-> > > > > On Fri, 13 Jun 2025, Ming Yu wrote:
-> > > > >
-> > > > > > Lee Jones <lee@kernel.org> =E6=96=BC 2025=E5=B9=B46=E6=9C=8813=
-=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=889:11=E5=AF=AB=E9=81=93=EF=BC=
-=9A
-> > > > > > >
-> > > > > > > On Fri, 13 Jun 2025, Ming Yu wrote:
-> > > > > > >
-> > > > > > > > Lee Jones <lee@kernel.org> =E6=96=BC 2025=E5=B9=B46=E6=9C=
-=8812=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=8811:23=E5=AF=AB=E9=81=93=
-=EF=BC=9A
-> > > > > > > > >
-> > > > > > > > > On Thu, 12 Jun 2025, Ming Yu wrote:
-> > > > > > > > >
-> > > > > > > > > > Dear Lee,
-> > > > > > > > > >
-> > > > > > > > > > Thank you for reviewing,
-> > > > > > > > > >
-> > > > > > > > > > Lee Jones <lee@kernel.org> =E6=96=BC 2025=E5=B9=B46=E6=
-=9C=8812=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=8810:00=E5=AF=AB=E9=81=
-=93=EF=BC=9A
-> > > > > > > > > > >
-> > > > > > > > > > ...
-> > > > > > > > > > > > +static const struct mfd_cell nct6694_devs[] =3D {
-> > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0,=
- 0),
-> > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0,=
- 1),
-> > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0,=
- 2),
-> > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0,=
- 3),
-> > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0,=
- 4),
-> > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0,=
- 5),
-> > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0,=
- 6),
-> > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0,=
- 7),
-> > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0,=
- 8),
-> > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0,=
- 9),
-> > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0,=
- 10),
-> > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0,=
- 11),
-> > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0,=
- 12),
-> > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0,=
- 13),
-> > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0,=
- 14),
-> > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0,=
- 15),
-> > > > > > > > > > > > +
-> > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, =
-0),
-> > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, =
-1),
-> > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, =
-2),
-> > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, =
-3),
-> > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, =
-4),
-> > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, =
-5),
-> > > > > > > > > > >
-> > > > > > > > > > > Why have we gone back to this silly numbering scheme?
-> > > > > > > > > > >
-> > > > > > > > > > > What happened to using IDA in the child driver?
-> > > > > > > > > > >
-> > > > > > > > > >
-> > > > > > > > > > In a previous version, I tried to maintain a static IDA=
- in each
-> > > > > > > > > > sub-driver. However, I didn=E2=80=99t consider the case=
- where multiple NCT6694
-> > > > > > > > > > devices are bound to the same driver =E2=80=94 in that =
-case, the IDs are not
-> > > > > > > > > > fixed and become unusable for my purpose.
-> > > > > > > > >
-> > > > > > > > > Not sure I understand.
-> > > > > > > > >
-> > > > > > > >
-> > > > > > > > As far as I know, if I maintain the IDA in the sub-drivers =
-and use
-> > > > > > > > multiple MFD_CELL_NAME("nct6694-gpio") entries in the MFD, =
-the first
-> > > > > > > > NCT6694 device bound to the GPIO driver will receive IDs 0~=
-15.
-> > > > > > > > However, when a second NCT6694 device is connected to the s=
-ystem, it
-> > > > > > > > will receive IDs 16~31.
-> > > > > > > > Because of this behavior, I switched back to using platform=
-_device->id.
-> > > > > > >
-> > > > > > > Each of the devices will probe once.
-> > > > > > >
-> > > > > > > The first one will be given 0, the second will be given 1, et=
-c.
-> > > > > > >
-> > > > > > > Why would you give multiple IDs to a single device bound to a=
- driver?
-> > > > > > >
-> > > > > >
-> > > > > > The device exposes multiple peripherals =E2=80=94 16 GPIO contr=
-ollers, 6 I2C
-> > > > > > adapters, 2 CAN FD controllers, and 2 watchdog timers. Each per=
-ipheral
-> > > > > > is independently addressable, has its own register region, and =
-can
-> > > > > > operate in isolation. The IDs are used to distinguish between t=
-hese
-> > > > > > instances.
-> > > > > > For example, the GPIO driver will be probed 16 times, allocatin=
-g 16
-> > > > > > separate gpio_chip instances to control 8 GPIO lines each.
-> > > > > >
-> > > > > > If another device binds to this driver, it is expected to expos=
-e
-> > > > > > peripherals with the same structure and behavior.
-> > > > >
-> > > > > I still don't see why having a per-device IDA wouldn't render eac=
-h
-> > > > > probed device with its own ID.  Just as you have above.
-> > > > >
-> > > >
-> > > > For example, when the MFD driver and the I2C sub-driver are loaded,
-> > > > connecting the first NCT6694 USB device to the system results in 6
-> > > > nct6694-i2c platform devices being created and bound to the
-> > > > i2c-nct6694 driver. These devices receive IDs 0 through 5 via the I=
-DA.
-> > > >
-> > > > However, when a second NCT6694 USB device is connected, its
-> > > > corresponding nct6694-i2c platform devices receive IDs 6 through 11=
- =E2=80=94
-> > > > instead of 0 through 5 as I originally expected.
-> > > >
-> > > > If I've misunderstood something, please feel free to correct me. Th=
-ank you!
-> > >
-> > > In the code above you register 6 I2C devices.  Each device will be
-> > > assigned a platform ID 0 through 5. The .probe() function in the I2C
-> > > driver will be executed 6 times.  In each of those calls to .probe(),
-> > > instead of pre-allocating a contiguous assignment of IDs here, you
-> > > should be able to use IDA in .probe() to allocate those same device I=
-Ds
-> > > 0 through 5.
-> > >
-> > > What am I missing here?
-> > >
-> >
-> > You're absolutely right in the scenario where a single NCT6694 device
-> > is present. However, I=E2=80=99m wondering how we should handle the cas=
-e where
-> > a second or even third NCT6694 device is bound to the same MFD driver.
-> > In that situation, the sub-drivers using a static IDA will continue
-> > allocating increasing IDs, rather than restarting from 0 for each
-> > device. How should this be handled?
->
-> I'd like to see the implementation of this before advising.
->
-> In such a case, I assume there would be a differentiating factor between
-> the two (or three) devices.  You would then use that to decide which IDA
-> would need to be incremented.
->
-> However, Greg is correct.  Hard-coding look-ups for userspace to use
-> sounds like a terrible idea.
->
+Obviously adding the check for an error here doesn't cause there to be
+problems with a transfer, only actually report problems that have
+occurred. I have not yet been able to reproduce this on my setup, but
+the reporter saw the issues going away when they disabled hardware smbus
+support and used software emulation instead.
 
-I understand.
-Do you think it would be better to pass the index via platform_data
-and use PLATFORM_DEVID_AUTO together with mfd_add_hotplug_devices()
-instead?
-For example:
-struct nct6694_platform_data {
-    int index;
-};
+I don't know if this has any bearing on applying the patch, but I wanted
+to mention it for reasons that should be apparent. I'm looking into the
+issue still and hope to figure out what's going wrong.
 
-static struct nct6694_platform_data i2c_data[] =3D {
-    { .index =3D 0 }, { .index =3D 1 }, { .index =3D 2 }, { .index =3D 3 },=
- {
-.index =3D 4 }, { .index =3D 5 },
-};
+Cheers,
+Conor.
 
-static const struct mfd_cell nct6694_devs[] =3D {
-    MFD_CELL_BASIC("nct6694-i2c", NULL, &i2c_data[0], sizeof(struct
-nct6694_platform_data), 0),
-    MFD_CELL_BASIC("nct6694-i2c", NULL, &i2c_data[1], sizeof(struct
-nct6694_platform_data), 0),
-    MFD_CELL_BASIC("nct6694-i2c", NULL, &i2c_data[2], sizeof(struct
-nct6694_platform_data), 0),
-    MFD_CELL_BASIC("nct6694-i2c", NULL, &i2c_data[3], sizeof(struct
-nct6694_platform_data), 0),
-    MFD_CELL_BASIC("nct6694-i2c", NULL, &i2c_data[4], sizeof(struct
-nct6694_platform_data), 0),
-    MFD_CELL_BASIC("nct6694-i2c", NULL, &i2c_data[5], sizeof(struct
-nct6694_platform_data), 0),
-};
-...
-mfd_add_hotplug_devices(dev, nct6694_devs, ARRAY_SIZE(nct6694_devs));
-...
+>=20
+> CC: Conor Dooley <conor.dooley@microchip.com>
+> CC: Daire McNamara <daire.mcnamara@microchip.com>
+> CC: Andi Shyti <andi.shyti@kernel.org>
+> CC: linux-i2c@vger.kernel.org
+> CC: linux-kernel@vger.kernel.org
+> ---
+>  drivers/i2c/busses/i2c-microchip-corei2c.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/i2c/busses/i2c-microchip-corei2c.c b/drivers/i2c/bus=
+ses/i2c-microchip-corei2c.c
+> index 492bf4c34722c..a4611381c4f0b 100644
+> --- a/drivers/i2c/busses/i2c-microchip-corei2c.c
+> +++ b/drivers/i2c/busses/i2c-microchip-corei2c.c
+> @@ -435,6 +435,7 @@ static int mchp_corei2c_smbus_xfer(struct i2c_adapter=
+ *adap, u16 addr, unsigned
+>  	u8 tx_buf[I2C_SMBUS_BLOCK_MAX + 2];
+>  	u8 rx_buf[I2C_SMBUS_BLOCK_MAX + 1];
+>  	int num_msgs =3D 1;
+> +	int ret;
+> =20
+>  	msgs[CORE_I2C_SMBUS_MSG_WR].addr =3D addr;
+>  	msgs[CORE_I2C_SMBUS_MSG_WR].flags =3D 0;
+> @@ -505,7 +506,10 @@ static int mchp_corei2c_smbus_xfer(struct i2c_adapte=
+r *adap, u16 addr, unsigned
+>  		return -EOPNOTSUPP;
+>  	}
+> =20
+> -	mchp_corei2c_xfer(&idev->adapter, msgs, num_msgs);
+> +	ret =3D mchp_corei2c_xfer(&idev->adapter, msgs, num_msgs);
+> +	if (ret)
+> +		return ret;
+> +
+>  	if (read_write =3D=3D I2C_SMBUS_WRITE || size <=3D I2C_SMBUS_BYTE_DATA)
+>  		return 0;
+> =20
+> --=20
+> 2.49.0
+>=20
 
-Thank you again for your support.
+--OwH4AkRF5o3PjhHF
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
-Best regards,
-Ming
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaFv5VwAKCRB4tDGHoIJi
+0g30AQCU22r84j3D16J5ZdcdjugND92z28I5yMbCnW88Nyg5AQEA96TQIqQOSelb
+gfZWsWujZCPOYz1VPrO7i3nZzmEPfww=
+=qtS6
+-----END PGP SIGNATURE-----
+
+--OwH4AkRF5o3PjhHF--
 
