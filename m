@@ -1,59 +1,54 @@
-Return-Path: <linux-i2c+bounces-11591-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11592-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E1D1AE8FA3
-	for <lists+linux-i2c@lfdr.de>; Wed, 25 Jun 2025 22:43:47 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1DE6AE8FB4
+	for <lists+linux-i2c@lfdr.de>; Wed, 25 Jun 2025 22:52:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DFF3C3B8E2B
-	for <lists+linux-i2c@lfdr.de>; Wed, 25 Jun 2025 20:43:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C25C01C279C6
+	for <lists+linux-i2c@lfdr.de>; Wed, 25 Jun 2025 20:52:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BCF32DCBEC;
-	Wed, 25 Jun 2025 20:43:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEFC61F9A89;
+	Wed, 25 Jun 2025 20:52:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WKNaIsye"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Uu2UTdeQ"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 537BF20E031;
-	Wed, 25 Jun 2025 20:43:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 709463074AD
+	for <linux-i2c@vger.kernel.org>; Wed, 25 Jun 2025 20:52:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750884221; cv=none; b=KYQiBBX6n5Gg4HHhvHHE7lc9hsZY9Rf/OvRZxUcd22+AZq21l4UYCFayGhslKPkaLfyt+ocjbOb28lq6Oig9ivrT6cEv/tPNH34hZphEnmvhM1YQsCvW43TlED2N0qU/uNnXl+D7hHJjm+OJpwouNd52c4LelDKQGRi//ULIdlE=
+	t=1750884738; cv=none; b=UcX0kDgzGpW34lDFyGsjvciYbVOyR0leqIDD8yoMtktNb/wDwHT6aNDmn9B5FMtQKKwimg/Unwnx/K+laFnY8to6rmTSO0vZL8ZVLKP36G9EF3c4YlgSQo9aONixloGfB5Ldl3qIWHzJRxPEawZ3AE4T1luKWqekcYSqalWYddw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750884221; c=relaxed/simple;
-	bh=Rmz67o9XCjNjggKR0sYTYAf42AfBsHBAtQO+D5/ooAU=;
+	s=arc-20240116; t=1750884738; c=relaxed/simple;
+	bh=iZPqMvB2zneJDmvBI45Ig3RsbT1rlNWuQCY3rXzmXGY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fqLN9PN2EY4C3bc1k+ccJDe6tPKUoiJLbhuhZtk3fe13UvJZIbmLWnaao2YDIWaSFBCJwYLzDhrUzPTrrMHdKnCJDFMZalHkMEorXXVQksq5B02eBc4vVLFAhP9kJt2PT1+S00lAkQyIXfFyR5H85+2n82gsF3k73hD/W3l/Fh4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WKNaIsye; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42AB8C4CEEA;
-	Wed, 25 Jun 2025 20:43:38 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=NHPzVBwKGBjHjNc4H2GxsYa7bBr/uC5x1S1nd9teVoYsvdtVBQYqMlMYoQMjLb4Tu1oxGLL8JH/uV7oYxILFMkP5MH5gp0heMRHt1Zl3wAqWe7iOhBxd1pVQRLnWW75m9eMOsxTY7XY64XC4S9cUignPbBSKAnAkz2uUK8E+kx4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Uu2UTdeQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C960BC4CEEA;
+	Wed, 25 Jun 2025 20:52:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750884220;
-	bh=Rmz67o9XCjNjggKR0sYTYAf42AfBsHBAtQO+D5/ooAU=;
+	s=k20201202; t=1750884738;
+	bh=iZPqMvB2zneJDmvBI45Ig3RsbT1rlNWuQCY3rXzmXGY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WKNaIsye7g8Rg3qVVbuy2Lk5kWIddPlp9RSWtHLoIoZM0aT0NMFPWTb9E4jueZxMr
-	 T2Dpq++mzgkhWNxKX7VS5VzdMTaN/FKR7CgYHHbpCQgJ8v/sVQ4a3XKzrUWjfExafm
-	 PCMsJ70wD/o+qHdYujGiK5WB7MvT/EJdRsSME4dgxldcmuGoPf7Kv3HpE8jMT7GQRW
-	 hxvG8PJh7avy0zPYxweVD9qL/KK/keR7GuXoSosvye75e6Cbm92HVSEXBf3l8dhxyu
-	 b+Qxroxc6Mc3vpWcT19fEy9ntSvzPJamySh874XFmCStND03I2dqNIV972IZRZbfzt
-	 7I2P4Ppfq5cAQ==
-Date: Wed, 25 Jun 2025 22:43:35 +0200
+	b=Uu2UTdeQhu3fVegWsE7qXG0JKuGtLE88Oa9y6j0ujje3ZPQDRsv/LhQ+gHWYtE4jX
+	 g+mT0dnSmIA3ObgHoVnxi0gQSch8FO7zaCVB0kJAwLMp7s2dRBt6vmmh2FjB65/Fi2
+	 oz2LpHyuXug2Htp1rpxti8K436X7ESqHr0Qhm8QcEKJJTRjNVBLU+og01yukzgGmIE
+	 7FzH0Fz9/5qBh+VXP48B48EMoj4643NvIatc0Qa9MLjMsQE/+XiMnMUhKGmEc0nnWm
+	 xT3Gh0WzhwRLLKLVlpmn2uhnrX9nAWIViO5ujoBLCzUUjioZGJJwGZoEBJ9zzeaYTE
+	 2q1Cfo07XyWxg==
+Date: Wed, 25 Jun 2025 22:52:10 +0200
 From: Andi Shyti <andi.shyti@kernel.org>
-To: Lukasz Kucharczyk <lukasz.kucharczyk@leica-geosystems.com>
-Cc: Oleksij Rempel <o.rempel@pengutronix.de>, 
-	stefan.eichenberger@toradex.com, Pengutronix Kernel Team <kernel@pengutronix.de>, 
-	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	Fabio Estevam <festevam@gmail.com>, "open list:FREESCALE IMX I2C DRIVER" <linux-i2c@vger.kernel.org>, 
-	"open list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" <imx@lists.linux.dev>, 
-	"moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" <linux-arm-kernel@lists.infradead.org>, open list <linux-kernel@vger.kernel.org>, 
-	bsp-development.geo@leica-geosystems.com, customers.leicageo@pengutronix.de
-Subject: Re: [PATCH] i2c: imx: fix emulated smbus block read
-Message-ID: <mp3b6yjebdqgkatx5wnezmhmdbmhhkdyddy3yr24ryla36ozmr@4wyb2y3zura5>
-References: <20250520122252.1475403-1-lukasz.kucharczyk@leica-geosystems.com>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-i2c@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>, 
+	Nikita Zhandarovich <n.zhandarovich@fintech.ru>
+Subject: Re: [PATCH] i2c: robotfuzz-osif: disable zero-length read messages
+Message-ID: <5qiim3xi75fb5j7m7hc5slwekunomccpotsz7nynhpqfii3ooi@ves6pcinfb5l>
+References: <20250522064234.3721-2-wsa+renesas@sang-engineering.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -62,33 +57,21 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250520122252.1475403-1-lukasz.kucharczyk@leica-geosystems.com>
+In-Reply-To: <20250522064234.3721-2-wsa+renesas@sang-engineering.com>
 
-Hi Lukasz,
+Hi Wolfram,
 
-On Tue, May 20, 2025 at 02:22:52PM +0200, Lukasz Kucharczyk wrote:
-> Acknowledge the byte count submitted by the target.
-> When I2C_SMBUS_BLOCK_DATA read operation is executed by
-> i2c_smbus_xfer_emulated(), the length of the second (read) message is set
-> to 1. Length of the block is supposed to be obtained from the target by the
-> underlying bus driver.
-> The i2c_imx_isr_read() function should emit the acknowledge on i2c bus
-> after reading the first byte (i.e., byte count) while processing such
-> message (as defined in Section 6.5.7 of System Management Bus
-> Specification [1]). Without this acknowledge, the target does not submit
-> subsequent bytes and the controller only reads 0xff's.
+On Thu, May 22, 2025 at 08:42:35AM +0200, Wolfram Sang wrote:
+> This driver passes the length of an i2c_msg directly to
+> usb_control_msg(). If the message is now a read and of length 0, it
+> violates the USB protocol and a warning will be printed. Enable the
+> I2C_AQ_NO_ZERO_LEN_READ quirk for this adapter thus forbidding 0-length
+> read messages altogether.
 > 
-> In addition, store the length of block data obtained from the target in
-> the buffer provided by i2c_smbus_xfer_emulated() - otherwise the first
-> byte of actual data is erroneously interpreted as length of the data
-> block.
-> 
-> [1] https://smbus.org/specs/SMBus_3_3_20240512.pdf
-> 
-> Fixes: 5f5c2d4579ca ("i2c: imx: prevent rescheduling in non dma mode")
-> Signed-off-by: Lukasz Kucharczyk <lukasz.kucharczyk@leica-geosystems.com>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-merged to i2c/i2c-host-fixes.
+sorry for the delay, together with the tiny usb fixe, merged in
+i2c/i2c-host-next.
 
 Thanks,
 Andi
