@@ -1,88 +1,143 @@
-Return-Path: <linux-i2c+bounces-11601-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11602-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABF56AE9755
-	for <lists+linux-i2c@lfdr.de>; Thu, 26 Jun 2025 09:58:58 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78DD4AE98AF
+	for <lists+linux-i2c@lfdr.de>; Thu, 26 Jun 2025 10:42:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4A0A73BDECE
-	for <lists+linux-i2c@lfdr.de>; Thu, 26 Jun 2025 07:58:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A55BF1C40831
+	for <lists+linux-i2c@lfdr.de>; Thu, 26 Jun 2025 08:41:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0B392571DD;
-	Thu, 26 Jun 2025 07:58:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8F42295534;
+	Thu, 26 Jun 2025 08:41:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b="MCQAiFkE"
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="yAcNns/e"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB5DB256C73;
-	Thu, 26 Jun 2025 07:58:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.194.8.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB93727EFE9;
+	Thu, 26 Jun 2025 08:40:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.207.212.93
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750924733; cv=none; b=KzpTsec7JsP6HadeVC141jhSX9/mOACnrwFjnYmZgvbxVvjDYNdkWGJoiC4kYi4C6ow3axQrWXDC9zeQU5wv7zT7JkXeJcaM1hkPUZYo9SFEjx62ZQg9kfTzGzl8n4TN9520kSQTGbN5oNDYMQ51D6oKlgVl6xnO7YUgy/jg3qQ=
+	t=1750927261; cv=none; b=ptwkpzzOrWEdR/85pFJWOBEb5pceUZacWi3/OzzIY+EKXFnkrUm27QWgq14XfHgGpcMNuUYUol8oNe6uFgO1tP9WCP6H0NYdjoc0YQqb7uJxfW9fHfiOQbaPZ93MD5dzeAuA+TPJ0BpHJ00lFyDeGzRKXEe1VNt4Jx3qu57F/C4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750924733; c=relaxed/simple;
-	bh=6aY0I+S15EJku5uKlHhCDBcxF7xdmNRSztzOKO7k46I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qIIlf93Bs8mLEAjIO+J8K2WcBXNbd4FsTpR9+1b3yLRXs5jYTJMAXNdgiz0cJ1qDZNkSocrjYQS1f+P4RJ4p4yYxRXOjXrv/Rg9L3P1VUPaXvbbxJpsXvZ/jYa2snJy2XaLH8YE0a8bmzxBDWJ1PaSTkLoiAkz3dA/g3sZC2eig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it; spf=pass smtp.mailfrom=dolcini.it; dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b=MCQAiFkE; arc=none smtp.client-ip=217.194.8.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dolcini.it
-Received: from francesco-nb (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
-	by mail11.truemail.it (Postfix) with ESMTPA id BE4D41F8BC;
-	Thu, 26 Jun 2025 09:58:41 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dolcini.it;
-	s=default; t=1750924722;
-	bh=dyiFPqDtFrSQdqxYLEQlpBfXMXYJcQrLo+YRsrs7Dww=; h=From:To:Subject;
-	b=MCQAiFkEd1aMh3AbCF5YmuzB7I392mwNbcwuMLYzTVwrNUWjpy14Ggx/QX8zPU+mK
-	 dHqO09a79r+Xj7G7xLVcFATosAXYjW6bjQ+v23oWK3FCY5KOl2mxUziUIyCoCJwru5
-	 3TK9nhKLaqAF10z9SVDx9RBh4eOFpFJuE+LfOHXHmE1keVQX66adloUle2vk8nJqsL
-	 SdsUMn21RHDDnSUWJfZScXDuti/fRMx6dRLor3hv5YT2ZnTc5vmMO9qF3V3eVIXX8Q
-	 FTtEwcxN7RuKS4lIR4Z81jg1C8s/8Zl3kW4lfgZIaPSe5BcUbw0naOgBjkF+Zg/BHU
-	 Zlb0Apcubz21w==
-Date: Thu, 26 Jun 2025 09:58:37 +0200
-From: Francesco Dolcini <francesco@dolcini.it>
-To: Dong Aisheng <aisheng.dong@nxp.com>, Andi Shyti <andi.shyti@kernel.org>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>
-Cc: Francesco Dolcini <francesco.dolcini@toradex.com>,
-	linux-i2c@vger.kernel.org, imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 0/2] i2c: lpi2c: implement master_xfer_atomic callback
-Message-ID: <20250626075837.GA9216@francesco-nb>
-References: <20250523082931.23170-1-francesco@dolcini.it>
+	s=arc-20240116; t=1750927261; c=relaxed/simple;
+	bh=X7liYNZKtZ/SRtsmqGvcVDdn/3KBB20klOip54vWi7o=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ooL2ovO7ROg587eoC2+ixR5PuWm9rOWmg1oFvoJGdl6m5ri1ifo4+7DEkcxF1Gzr5jXXAL83GuKV9sdC90K7Y+IoA96FgGMhvqPyRyvSb853qHZoXwpmbG3ZuXZtg2w+xxOPmTASQofg5XneS+CCvb0B78E/+7bsqYBivuVrHYE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=yAcNns/e; arc=none smtp.client-ip=91.207.212.93
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55Q8PD5s026846;
+	Thu, 26 Jun 2025 10:40:40 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=selector1; bh=
+	5xLXEiPmIkFsOWq2iScRt7BhDQ5CLO6wEMeeYC9tPQw=; b=yAcNns/eKTBEPfvF
+	brtge3KBWhvYe/uSk9spqaox79wdlAKfckfm1jprWhwvaHBI4BvhcuI2HlePQNDJ
+	MeoSMRdIO4uGXT1H04TjELdVKe6z6lpj9irdpw6upp7KzjGEC7pE6O9J8KhUty+R
+	VDPvYz/mRhaSOpyH4RJFCS3qLhPYvWusBwhhp03g92LtBsFkdLahsO25v9bnduVm
+	CDPbcT9Rvmrqj4R4DDu0ic4LkIRYqimc2G+M6gEGCstRZMM3+e0Uc1CQSA32di49
+	oADO1A0KfMQa2MMwO+jL1+SEHSY8ZSgI8ExKTt9rOqwj3CklBCDmGVq/xpNp5Y6x
+	5ERS9g==
+Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 47dhvbwe8f-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 26 Jun 2025 10:40:40 +0200 (MEST)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 24FE640047;
+	Thu, 26 Jun 2025 10:39:11 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 9EADBB22D16;
+	Thu, 26 Jun 2025 10:37:51 +0200 (CEST)
+Received: from gnbcxd0016.gnb.st.com (10.130.77.119) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Thu, 26 Jun
+ 2025 10:37:50 +0200
+Date: Thu, 26 Jun 2025 10:37:44 +0200
+From: Alain Volmat <alain.volmat@foss.st.com>
+To: =?iso-8859-1?Q?Cl=E9ment?= Le Goffic <clement.legoffic@foss.st.com>
+CC: Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
+        Andi Shyti
+	<andi.shyti@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Sumit Semwal
+	<sumit.semwal@linaro.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?=
+	<christian.koenig@amd.com>,
+        M'boumba Cedric Madianga
+	<cedric.madianga@gmail.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        "Pierre-Yves
+ MORDRET" <pierre-yves.mordret@st.com>,
+        <linux-i2c@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <linaro-mm-sig@lists.linaro.org>
+Subject: Re: [PATCH 1/3] i2c: stm32: fix the device used for the DMA map
+Message-ID: <20250626083744.GA348766@gnbcxd0016.gnb.st.com>
+References: <20250616-i2c-upstream-v1-0-42d3d5374e65@foss.st.com>
+ <20250616-i2c-upstream-v1-1-42d3d5374e65@foss.st.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Disposition: inline
-In-Reply-To: <20250523082931.23170-1-francesco@dolcini.it>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250616-i2c-upstream-v1-1-42d3d5374e65@foss.st.com>
+X-Disclaimer: ce message est personnel / this message is private
+X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
+ definitions=2025-06-26_04,2025-06-25_01,2025-03-28_01
 
-Hello,
+Hi Clément,
 
-On Fri, May 23, 2025 at 10:29:29AM +0200, Francesco Dolcini wrote:
-> From: Francesco Dolcini <francesco.dolcini@toradex.com>
+On Mon, Jun 16, 2025 at 10:53:54AM +0200, Clément Le Goffic wrote:
+> If the DMA mapping failed, it produced an error log with the wrong
+> device name:
+> "stm32-dma3 40400000.dma-controller: rejecting DMA map of vmalloc memory"
+> Fix this issue by replacing the dev with the I2C dev.
+
+Indeed, nice catch ! Thanks a lot !
+
 > 
-> This series adds atomic operations support to the imx-lpi2c driver and split
-> the previous v3 patch into two separate patches.
+> Fixes: bb8822cbbc53 ("i2c: i2c-stm32: Add generic DMA API")
+> Signed-off-by: Clément Le Goffic <clement.legoffic@foss.st.com>
+> ---
+>  drivers/i2c/busses/i2c-stm32.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> The first patch replaces the open-coded polling loops with readl_poll_timeout.
-> This improves readability and consistency, and prepares the code for
-> integration of the second patch, while maintaining the same functionality.
+> diff --git a/drivers/i2c/busses/i2c-stm32.c b/drivers/i2c/busses/i2c-stm32.c
+> index 157c64e27d0b..5e0b31aed774 100644
+> --- a/drivers/i2c/busses/i2c-stm32.c
+> +++ b/drivers/i2c/busses/i2c-stm32.c
+> @@ -118,7 +118,7 @@ int stm32_i2c_prep_dma_xfer(struct device *dev, struct stm32_i2c_dma *dma,
+>  	dma->dma_len = len;
+>  	chan_dev = dma->chan_using->device->dev;
+>  
+> -	dma->dma_buf = dma_map_single(chan_dev, buf, dma->dma_len,
+> +	dma->dma_buf = dma_map_single(dev, buf, dma->dma_len,
+>  				      dma->dma_data_dir);
+>  	if (dma_mapping_error(chan_dev, dma->dma_buf)) {
+>  		dev_err(dev, "DMA mapping failed\n");
 > 
-> The second patch implements the .master_xfer_atomic() callback, enabling
-> support for atomic I2C transfers.
+> -- 
+> 2.43.0
+>
 
-Just a gentle ping to not forget about this.
+Acked-by: Alain Volmat <alain.volmat@foss.st.com>
 
-Francesco
-
+Regards,
+Alain
 
