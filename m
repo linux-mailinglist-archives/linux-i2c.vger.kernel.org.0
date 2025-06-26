@@ -1,59 +1,57 @@
-Return-Path: <linux-i2c+bounces-11626-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11627-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51AC4AEA86F
-	for <lists+linux-i2c@lfdr.de>; Thu, 26 Jun 2025 22:52:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1F3FAEA87A
+	for <lists+linux-i2c@lfdr.de>; Thu, 26 Jun 2025 22:55:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7BB4D17B506
-	for <lists+linux-i2c@lfdr.de>; Thu, 26 Jun 2025 20:52:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AA32D1C44078
+	for <lists+linux-i2c@lfdr.de>; Thu, 26 Jun 2025 20:55:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41675231C9F;
-	Thu, 26 Jun 2025 20:51:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D500D238145;
+	Thu, 26 Jun 2025 20:55:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iSSvfBC9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HBjC28nN"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E74681DFFD;
-	Thu, 26 Jun 2025 20:51:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FEA0202996;
+	Thu, 26 Jun 2025 20:55:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750971115; cv=none; b=Hn6SYd1Hy+yhRSkCnVGtBlAavthKJB+qqar3FQOuS3i6dfVs4vWlDmxIyPbHBQu3+CFmz86SbQtCOqmT9PFRzd0whgPYqVcvuFTWsddIB+KNyl1uvT86raNe7AjO8ZlRA7EUstfWXmq7nwbW/cFXVARBN6B8jeqAVUq2gV83SAc=
+	t=1750971323; cv=none; b=hEXr7WUjnvUcqt4dhRaOiUdT58fMhSuRePQjaJ/ETiLGy29Gq8O9cHwFLPDMQLbCTqLuWOf78X08DnxcAOn/v39JU017KADwcABC8VeeGzifgBOovbRuxmv1aCSxs1Ndmc668tehOptNt6Yyr4/AzxtNuYt6neijmq0ij9sufP0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750971115; c=relaxed/simple;
-	bh=eqA2MDwSknSbDQOIuB7k3A6WzHxYtW+T7/XzARm/jTw=;
+	s=arc-20240116; t=1750971323; c=relaxed/simple;
+	bh=hLlzonJAvNms9VG34BSVk9UF0cfYYAcLzKIDWMr15GY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CLC8B+WX7A4wSTPOiTixECgnwV4jWCP5Xc+FSvmDyE902umZFB+lJ4xtKG/tCkyimu2QPJ/6hegSbuXi8GT45S+mVeOoc9TW54Xpnqn7l9ctkZKjU88fe/x5duz1dfngiFpA3vI3r6Bdc1U5FUwoZn5FEZ7mv0r0/+ooYcoPVUA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iSSvfBC9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F489C4CEEB;
-	Thu, 26 Jun 2025 20:51:53 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=oxbOWJbx4wxwNrQ3MxurccvM0XS+3Kl4avD4l9quLIlWC04QVuBpo5gPH7PkW74wwW5XfFKLR5O9/6fXZo/NDLBmsWr5LjdFJNHPu2/sowv2po3cGcwMdFkt12X64XsYHyzf9C1F0DtOJsbCV/+Y3twzQqb97xo7OzOYRyeq2xk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HBjC28nN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E2BDC4CEEB;
+	Thu, 26 Jun 2025 20:55:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750971114;
-	bh=eqA2MDwSknSbDQOIuB7k3A6WzHxYtW+T7/XzARm/jTw=;
+	s=k20201202; t=1750971323;
+	bh=hLlzonJAvNms9VG34BSVk9UF0cfYYAcLzKIDWMr15GY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=iSSvfBC9EKp0AR7MOxASWcrhwGo9pKP9Pnr3l2lVOeuCtZjmDRYUZrQHeHaONa7jp
-	 OOUlJcNZsGEbP8pGw+yf6zDpTfkJ6Auf8A9QFGWcMf3CHuaMeS5ztYyM+pTAktUyAE
-	 M1LMa6FiyUf52MTiCe9v0ERuG2NZ+2DgEeZQXafzhElTreAYA3u4Vuue0hOJoghCJX
-	 qmOlxT9LF1cnDIZIhUX5sDLFWo/k/XJxu2UNzpToyNuV0aUOVzGOVKMfH0J9kgxFae
-	 OlRr+FRGwDBTkLCej3TNrKmJ6I3KqLZd6blXgOBEs+7im8472P/25eX7OyVtMpcrmt
-	 264o5/fPPix2w==
-Date: Thu, 26 Jun 2025 22:51:49 +0200
+	b=HBjC28nNB+FQqzQqdq3y1XK41BqrcL25ES1u4oYjPVI7GTgB9BhF3Lq7KWZLOwt4g
+	 TqCtGs3icQjmKKYk5VxgNmY1X+W34f4Jx4x96dB2ZDdP2dlMkRyLH6jfy0ZSdzTQh2
+	 pjZGkdA5yul1P5FHh2b21af1hqz5fZRb21TaMnq8+g3cmsR9ehUpoJZS4V8k2rl5gO
+	 IJ2JQEvx2gOni2azjZVh+zrdSpxC3yNGiI79jCtlpD4aEhL7QX1ItVkcXOSH1GIpFD
+	 HxjYYOXV67WTcpQtf5+h9s/JPGDUOQwc/56IAhn0KKcr5YY3eca40aIOS01WLkhlsS
+	 rX8eBRwoyqqzw==
+Date: Thu, 26 Jun 2025 22:55:17 +0200
 From: Andi Shyti <andi.shyti@kernel.org>
-To: Frank Li <Frank.Li@nxp.com>
-Cc: Vladimir Zapolskiy <vz@mleia.com>, 
-	Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Animesh Agarwal <animeshagarwal28@gmail.com>, 
-	"moderated list:ARM/LPC32XX SOC SUPPORT" <linux-arm-kernel@lists.infradead.org>, 
-	"open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>, 
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>, imx@lists.linux.dev
-Subject: Re: [PATCH 1/1] dt-bindings: i2c: nxp,pnx-i2c: allow clocks property
-Message-ID: <ggailkhwrjvsy6tbh7xvv6epl6ompiwwwomkn2vkp52l77tb6i@xga6nyejlbqc>
-References: <20250624200444.2514331-1-Frank.Li@nxp.com>
+To: long.yunjian@zte.com.cn
+Cc: pierre-yves.mordret@foss.st.com, alain.volmat@foss.st.com, 
+	mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com, linux-i2c@vger.kernel.org, 
+	linux-stm32@st-md-mailman.stormreply.com, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, mou.yi@zte.com.cn, xu.lifeng1@zte.com.cn, 
+	ouyang.maochun@zte.com.cn, fang.yumeng@zte.com.cn
+Subject: Re: PATCH] i2c: stm32f7: Use str_on_off() helper
+Message-ID: <tfj32n5ex5ss4lj52oglc6rnj5bvwxhgabcc5xe4w2nreehgsv@j2dh3bcsov5q>
+References: <20250623203144007kQF7E1Bhy5PJl-Ph3u3Ou@zte.com.cn>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -62,15 +60,16 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250624200444.2514331-1-Frank.Li@nxp.com>
+In-Reply-To: <20250623203144007kQF7E1Bhy5PJl-Ph3u3Ou@zte.com.cn>
 
-Hi Frank,
+Hi Yumeng,
 
-On Tue, Jun 24, 2025 at 04:04:43PM -0400, Frank Li wrote:
-> Allow clocks property to fix below CHECK_DTB warnings:
->   arch/arm/boot/dts/nxp/lpc/lpc3250-ea3250.dtb: i2c@300 (nxp,pnx-i2c): Unevaluated properties are not allowed ('clocks' was unexpected)
+On Mon, Jun 23, 2025 at 08:31:44PM +0800, long.yunjian@zte.com.cn wrote:
+> From: Yumeng Fang <fang.yumeng@zte.com.cn>
 > 
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> Remove hard-coded strings by using the str_on_off() helper.
+> 
+> Signed-off-by: Yumeng Fang <fang.yumeng@zte.com.cn>
 
 merged to i2c/i2c-host.
 
