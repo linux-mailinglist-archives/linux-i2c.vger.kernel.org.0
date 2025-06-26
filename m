@@ -1,78 +1,78 @@
-Return-Path: <linux-i2c+bounces-11620-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11621-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D9E9AEA4C0
-	for <lists+linux-i2c@lfdr.de>; Thu, 26 Jun 2025 19:53:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8297AAEA4C7
+	for <lists+linux-i2c@lfdr.de>; Thu, 26 Jun 2025 19:55:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 65E534A5BB7
-	for <lists+linux-i2c@lfdr.de>; Thu, 26 Jun 2025 17:53:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B1A1F17E0F2
+	for <lists+linux-i2c@lfdr.de>; Thu, 26 Jun 2025 17:55:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 354112ECE88;
-	Thu, 26 Jun 2025 17:53:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0E7F2ECE8D;
+	Thu, 26 Jun 2025 17:55:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fYe+84dF"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ADAAlFvd"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4725D2ECD3B;
-	Thu, 26 Jun 2025 17:53:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE8EA4A33;
+	Thu, 26 Jun 2025 17:55:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750960404; cv=none; b=dN8/kw7vyWEM13aoyKyYm4S5r9Z4vCfXFvaio8bf2uzj3D7FyGSK522B7C3wATBPL6SwtxutzNuS5G7jyRgW0+jM0XBkqmEzy/4lWsWTwzsrHX3inGNg4IZTPh4n9ZlKjh/ZObLR1RJ+JNtUKkFq9xGr/rnehfrAH4cjmc9qig8=
+	t=1750960530; cv=none; b=U41dJbek1k3CTzSpjJ4HNrxTmAreTS2cI1W8osAweKIzJ9eyiZGygSsyvOrIZWmkpffumN0NonZHQ3eL07zS8sUTkrKCpjDIq1w1y13Bz/CCKDJ/jE+kzZO2BYHsgyUdUMgV4tKm24ti19W9CDpkL4S/kqtT/2s0F6iyuDUEkJU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750960404; c=relaxed/simple;
-	bh=NQGCH21Cr3TGgbGw7hzS5ZmYtxDnvykL1nv8YPps/uw=;
+	s=arc-20240116; t=1750960530; c=relaxed/simple;
+	bh=Is4pl56zzII6m8npRKkdjZoguWllIfYhpTW2lmD+PAA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ymd4IUzQuqGiIq4NMDlqOrGWzkSyF1suHcYQbNHgyF/DR2aAvElhFup+ci+aYs7YM6FiPOzgQk4cWfYHDGVTI55th6fkK/KY/hq701wHHTUwhwq7bo0prB7uEQM0mCjcPrP5WRK78Hrc6goou7XqneAu3GaD5kfzJPaoMHP0p2g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fYe+84dF; arc=none smtp.client-ip=209.85.128.43
+	 MIME-Version; b=unyOuW3//kCNetWHW7NC990I2Tw+Db/gQTT5MdtTe+DuJKNqJ1TE1yaB8jBcjXIXvKK+vDkTVZpO4h4Y36CNBdlL7KM3/BoEndFw4bE9IsDLfEvJdhtdY4Po0SNTznsIzcyhYgteQMQawWNmZ7Y/RWvByKb74BJek9qj5Ts6U+M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ADAAlFvd; arc=none smtp.client-ip=209.85.128.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4538bc1cffdso7745955e9.0;
-        Thu, 26 Jun 2025 10:53:22 -0700 (PDT)
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-450ce3a2dd5so9937135e9.3;
+        Thu, 26 Jun 2025 10:55:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750960400; x=1751565200; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1750960527; x=1751565327; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ORxdFmBgJBVNfDZeWld7nnhWsBM7PFaTDPy5u2ssuGg=;
-        b=fYe+84dFwY25M1qxXAkhqq4Fqw7kfDpuCtbcjX9TFs/ENW7u5VC2ISqvFhXbAnCq6T
-         WkEO2tRAJy/criqEpcWfu5P/2Rt78O1YhvFjN1DfsZfYkO2m6NrNXJw4YO3xUjyFpgra
-         ep+HBdWsWI9C4Zq51mJzt/WYBiKRrICSquGcu3lOVliSxy2pVAWHkr0hBC6HfDXcxKES
-         G+BWDG4UdCkJASbsCcibwnD9ohP47S1VJ9SixD5YTvnCa1PYmMV0a0RRDCfCa7KO2ose
-         +ilyD9lAtRgPNvKZkusovu3xPwtMj3ZTfs5Qod7D53isgyV9sBj1rrFm01l8ptKiofWf
-         ZrWA==
+        bh=RIDI78zT6DRLAysPKVHAZFjsgIf6iaU9mJj8Cm/tcZE=;
+        b=ADAAlFvdbepKDvMJ+B6CBHj9jzRYErFPHoyBo3qro5RQpce+VsGsdgVMMleJZs0eV6
+         mcxucvx6Q9I5nlXStUwzTrnXQL5k6pobsmSx3wBrOX5EShgec98H/vQtNn+mhZF49L93
+         Gx7VcMk8GRXfxv631tmqUWZZ0avk1aWlFHJJiVYnTdGfq3ewxaTvhj90njeUU57uDEtO
+         BK176HPfWMAkYZeZIzokRBdk+R1oeRHcd4jMSIIqNUAKnc1VUDq+Sne9FbUJ+TwZ/xlN
+         iJcL1Hgwc99ZSAzsdC5aINJ61FnsPGEBvdUT9CKajfJblWRJ8UYMKfs5w945xTKumiYB
+         KWWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750960400; x=1751565200;
+        d=1e100.net; s=20230601; t=1750960527; x=1751565327;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=ORxdFmBgJBVNfDZeWld7nnhWsBM7PFaTDPy5u2ssuGg=;
-        b=CJD6fnPlVeQKxnLwMiwNW2BqR4JeY2vZVSFEWtdZ4f97pUDzCTxxmbS1c+9xl85CWN
-         NBt7X5PBVzIjDnQToSJzaEA7Ni249gSYu0I0JOY6gWQK1b7J6YoWMwkMUIOO0VP9EQxI
-         OiW01QKqnNb2gBy1vSW1qVUt9sJrs7Bkm8HB9aEbtoW4cLpZ2cV4lcVd4BwshQ9/7K5A
-         DWjhZt9UYjpSdxcg2LeLF4WSvMm7mKAgwGg4KHhpg4ubg4vE4UOQJDf7IpPBWCcshzU7
-         N3ATU+4++4aZekZpXqkHANyw/Bz8sT5TrYCIqOZsFJNUKYxISLbCDkjSg55x7ilCOquv
-         BLkg==
-X-Forwarded-Encrypted: i=1; AJvYcCWA0PmeFMzGhCI8e0YsPL+l4VqKZA7yXNuE/99mPbs0gabaJdth/YKrPFIXWRB9NvETQXYRU/1NIX45e9NYphU=@vger.kernel.org, AJvYcCWEIi7COrmclFgvzHkRVY6hLJ0k7Ewy0HvKqRdGekiXQUkJ0T4xLaYkHkiPB5naYBbUND2+BigOJimvHT7G@vger.kernel.org, AJvYcCXfYCXIUp2xN2OGPlmW0kRe0uh40vT9WfOuz9mcA9CyWw0JzCYt09ylVSWr233VMHFwzwzGyRklDeU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yym+5ksAVQa0WGEvwR2cJD/HnErlm+Wt3pCF/BhJOaZZc4HtchJ
-	TR9oFwajwwDf61opGcYM7GjvEl5gWfxeAGkhYcJ9RcDB/JLxlvCcvshW
-X-Gm-Gg: ASbGncvmchU4AAjnm/TNnzyvEaNP7F8/F4Zr3mSHi8F6cG+FRLeCuIWGLvMSaT1n7Ya
-	ftiDIsfumKOmrMf0zYwGEkdx7P3HmF0alPj5N1flDuo0zYXUbMpQYRszyRdJz4rKf2NyILcg0JQ
-	JAiuxF5cDnCk8v3tH6LuhwC+3hF7WcjGfvLmfc3uYw31Sbb9UFSw7RczWXmG5Fpi6uNgLX/YosI
-	+LMQ1ZzFZPhxc0QmqknGakskCwqL5NHG+jk1Em4WbLFNCU1rZ2iF53dob7HEdSRO4PSE2MvQ/nj
-	ncy0qBGw+yGCXFearYtZtV6yITvUt8VGF5aciG0605KK0CbhT1BhqLOrEHRvDAlkm2qiXkK+5dv
-	nWh7pr7aEvh+25+YOUn4Da8lqer92tZOrs3Ya
-X-Google-Smtp-Source: AGHT+IEmOlq90hh0Tao5zeGkk5g+LoHlubiwo3zM4KNNDyLJweA8fdHr5wHeWASnKc06/3KhQ4do+A==
-X-Received: by 2002:a05:600c:4f12:b0:450:c20d:64c3 with SMTP id 5b1f17b1804b1-4538ee835a4mr2612385e9.18.1750960400346;
-        Thu, 26 Jun 2025 10:53:20 -0700 (PDT)
+        bh=RIDI78zT6DRLAysPKVHAZFjsgIf6iaU9mJj8Cm/tcZE=;
+        b=V35889sTSv45TcND3O6OOKaMQUSvufR3P/7IUXYQ7ouSDvGpmJC+KgeXUBdFI2pd88
+         eD1kQOzM6FJEjsYEbYLVL9UogLZhS3fuQHWdYlfCiQkx4FBL98eYn0FTrwsMYIdAI73w
+         JYYm7GevtVLFB7w3zuiDHjVcY5BlobP45PjPxeQoXY45hRi0fHKdK/DRhcAIoRyDL0M1
+         llhw8Gn6UJoZNFq5xnvS7BHElHQuteMtUNg0NpswS5jRxirjR7jZElaZmKIvwCt769iz
+         e+lGfJMm3qtTADfsyDdgE8kyry/PF4BBiRdKWWOic9MRJUpvqBLePh/dkpyrlpBq9Qev
+         J9aw==
+X-Forwarded-Encrypted: i=1; AJvYcCVXM8rINlpWLmRtOVw5dUwbZa/ykGAhaNG1s01+iIGyb11rxJogFw90ju21mnI+SfESNlhs41PR3zj3j12P@vger.kernel.org, AJvYcCWoea385DyLfgzVIVfTR6Vs50d3NtJkdkgU/yxJjm7NnUahEM+eG++L4sOF+LqqkIX5tQ/AUY7b0kX+Ol4MgMA=@vger.kernel.org, AJvYcCXB520DAB5YHnwKRQ4Qu9lNr60c/k6twNy/tkTfWc7R1zz24XSNpmiyFhwDQGyr4gS8UKdkAXmYquw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YySJBtDGNnsvZb4/2MFwXPw21lYJw1blCK8fnEIcjXbj5e7YVOS
+	ryqaREDmejw0CX4drCknwpkR2JtlLRVGo6JSMSunpIED6+iBaLcd+t8K
+X-Gm-Gg: ASbGncu8zHLqqBpsJ8Zrkxt8M2nhwOSZqpdHtC0A1EOzGEV2xWl+Ceb4mhMae7Ef2u4
+	Gnesi1vKwwFINL7VV2jGXXeYLK9FYBAXEetwqzl4Dtem5XI0b59N749DMlJALlYtutTNDv0kDlx
+	AaRuyjvQRCvsOIT6zBuiPSu6U0r/mjpivl52yyipfx26NgK13e7jVjwsZibTtmMkV0JZzeUBKfo
+	sJ6F508cgVUHjrakBfMf93+/kYYgurueDPI20EwXKsh6tAnVs9XXAMxG0YzwrAhmkmmV29sU+Ym
+	2fo/0B2sL4I+kLr7jHaN5ovTvGWnpu0Ua0K5717OJtsLZ5UuUR2moAIXjODE2rKDdV8BIoFwaf+
+	Z+07U+wmqxr+23d2i4qghLGfMESZm2bxdSjDnnX2bdWvyGzI=
+X-Google-Smtp-Source: AGHT+IEeKzojehoFo40SoZr9b7MARsdE7+Lp7wM9/muxivPRyuPVFMClAKht6pT/YY7xBqPqPC3GIg==
+X-Received: by 2002:a05:6000:280d:b0:3a5:27ba:479c with SMTP id ffacd0b85a97d-3a8fe5b1478mr318595f8f.43.1750960527188;
+        Thu, 26 Jun 2025 10:55:27 -0700 (PDT)
 Received: from igor-korotin-Precision-Tower-3620.airspan.com ([188.39.32.4])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a892e6280bsm487731f8f.94.2025.06.26.10.53.19
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a892e52c23sm496813f8f.52.2025.06.26.10.55.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jun 2025 10:53:19 -0700 (PDT)
+        Thu, 26 Jun 2025 10:55:26 -0700 (PDT)
 Sender: Igor Korotin <igorkor.3vium@gmail.com>
 From: Igor Korotin <igor.korotin.linux@gmail.com>
 To: Miguel Ojeda <ojeda@kernel.org>,
@@ -96,9 +96,9 @@ Cc: Boqun Feng <boqun.feng@gmail.com>,
 	linux-kernel@vger.kernel.org,
 	rust-for-linux@vger.kernel.org,
 	linux-i2c@vger.kernel.org
-Subject: [PATCH v1 2/4] samples: rust: add Rust I2C sample driver
-Date: Thu, 26 Jun 2025 18:51:17 +0100
-Message-ID: <20250626175117.906567-1-igor.korotin.linux@gmail.com>
+Subject: [PATCH v1 3/4] rust: i2c: ACPI ID-table support for I2C abstractions
+Date: Thu, 26 Jun 2025 18:53:24 +0100
+Message-ID: <20250626175324.908172-1-igor.korotin.linux@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250626174623.904917-1-igor.korotin.linux@gmail.com>
 References: <20250626174623.904917-1-igor.korotin.linux@gmail.com>
@@ -110,131 +110,97 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a new `rust_driver_i2c` sample, showing how to bind an I2C client
-in Rust via legacy I2C-ID or OF compatible tables.
+Populate driver.acpi_match_table from T::ACPI_ID_TABLE (defaults to None).
 
+Depends-on: <20250620152425.285683-1-igor.korotin.linux@gmail.com>
 Signed-off-by: Igor Korotin <igor.korotin.linux@gmail.com>
 ---
- MAINTAINERS                     |  1 +
- samples/rust/Kconfig            | 11 ++++++
- samples/rust/Makefile           |  1 +
- samples/rust/rust_driver_i2c.rs | 61 +++++++++++++++++++++++++++++++++
- 4 files changed, 74 insertions(+)
- create mode 100644 samples/rust/rust_driver_i2c.rs
+ rust/kernel/i2c.rs | 27 +++++++++++++++++++++++++--
+ 1 file changed, 25 insertions(+), 2 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 2b7a24586c19..a64570dda05e 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11364,6 +11364,7 @@ F:	include/uapi/linux/i2c-*.h
- F:	include/uapi/linux/i2c.h
- F:	rust/helpers/i2c.c
- F:	rust/kernel/i2c.rs
-+F:	samples/rust/rust_driver_i2c.rs
+diff --git a/rust/kernel/i2c.rs b/rust/kernel/i2c.rs
+index 051f4f2bd38a..c242f1d3921f 100644
+--- a/rust/kernel/i2c.rs
++++ b/rust/kernel/i2c.rs
+@@ -4,7 +4,7 @@
  
- I2C SUBSYSTEM HOST DRIVERS
- M:	Andi Shyti <andi.shyti@kernel.org>
-diff --git a/samples/rust/Kconfig b/samples/rust/Kconfig
-index 7f7371a004ee..55aeb12cd7f7 100644
---- a/samples/rust/Kconfig
-+++ b/samples/rust/Kconfig
-@@ -62,6 +62,17 @@ config SAMPLE_RUST_DMA
+ // I2C Driver abstractions.
+ use crate::{
+-    container_of, device,
++    acpi, container_of, device,
+     device_id::RawDeviceId,
+     driver,
+     error::*,
+@@ -96,6 +96,11 @@ unsafe fn register(
+             None => core::ptr::null(),
+         };
  
- 	  If unsure, say N.
++        let acpi_table = match T::ACPI_ID_TABLE {
++            Some(table) => table.as_ptr(),
++            None => core::ptr::null(),
++        };
++
+         // SAFETY: It's safe to set the fields of `struct i2c_client` on initialization.
+         unsafe {
+             (*pdrv.get()).driver.name = name.as_char_ptr();
+@@ -104,6 +109,7 @@ unsafe fn register(
+             (*pdrv.get()).shutdown = Some(Self::shutdown_callback);
+             (*pdrv.get()).id_table = i2c_table;
+             (*pdrv.get()).driver.of_match_table = of_table;
++            (*pdrv.get()).driver.acpi_match_table = acpi_table;
+         }
  
-+config SAMPLE_RUST_DRIVER_I2C
-+	tristate "I2C Driver"
-+	depends on I2C
-+	help
-+	  This option builds the Rust I2C driver sample.
+         // SAFETY: `pdrv` is guaranteed to be a valid `RegType`.
+@@ -187,6 +193,10 @@ impl<T: Driver + 'static> driver::Adapter for Adapter<T> {
+     fn of_id_table() -> Option<of::IdTable<Self::IdInfo>> {
+         T::OF_ID_TABLE
+     }
 +
-+	  To compile this as a module, choose M here:
-+	  the module will be called rust_driver_i2c.
-+
-+	  If unsure, say N.
-+
- config SAMPLE_RUST_DRIVER_PCI
- 	tristate "PCI Driver"
- 	depends on PCI
-diff --git a/samples/rust/Makefile b/samples/rust/Makefile
-index bd2faad63b4f..141d8f078248 100644
---- a/samples/rust/Makefile
-+++ b/samples/rust/Makefile
-@@ -5,6 +5,7 @@ obj-$(CONFIG_SAMPLE_RUST_MINIMAL)		+= rust_minimal.o
- obj-$(CONFIG_SAMPLE_RUST_MISC_DEVICE)		+= rust_misc_device.o
- obj-$(CONFIG_SAMPLE_RUST_PRINT)			+= rust_print.o
- obj-$(CONFIG_SAMPLE_RUST_DMA)			+= rust_dma.o
-+obj-$(CONFIG_SAMPLE_RUST_DRIVER_I2C)		+= rust_driver_i2c.o
- obj-$(CONFIG_SAMPLE_RUST_DRIVER_PCI)		+= rust_driver_pci.o
- obj-$(CONFIG_SAMPLE_RUST_DRIVER_PLATFORM)	+= rust_driver_platform.o
- obj-$(CONFIG_SAMPLE_RUST_DRIVER_FAUX)		+= rust_driver_faux.o
-diff --git a/samples/rust/rust_driver_i2c.rs b/samples/rust/rust_driver_i2c.rs
-new file mode 100644
-index 000000000000..7c5def930fe0
---- /dev/null
-+++ b/samples/rust/rust_driver_i2c.rs
-@@ -0,0 +1,61 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+//! Rust I2C driver sample.
-+
-+use kernel::{c_str, device::Core, i2c, of, prelude::*, types::ARef};
-+
-+struct SampleDriver {
-+    pdev: ARef<i2c::Device>,
-+}
-+
-+kernel::i2c_device_table! {
-+    I2C_TABLE,
-+    MODULE_I2C_TABLE,
-+    <SampleDriver as i2c::Driver>::IdInfo,
-+    [(i2c::DeviceId::new(b"rust_driver_i2c"), 0)]
-+}
-+
-+kernel::of_device_table! {
-+    OF_TABLE,
-+    MODULE_OF_TABLE,
-+    <SampleDriver as i2c::Driver>::IdInfo,
-+    [(of::DeviceId::new(c_str!("test,rust_driver_i2c")), 0)]
-+}
-+
-+impl i2c::Driver for SampleDriver {
-+    type IdInfo = u32;
-+
-+    const I2C_ID_TABLE: Option<i2c::IdTable<Self::IdInfo>> = Some(&I2C_TABLE);
-+    const OF_ID_TABLE: Option<of::IdTable<Self::IdInfo>> = Some(&OF_TABLE);
-+
-+    fn probe(pdev: &i2c::Device<Core>, info: Option<&Self::IdInfo>) -> Result<Pin<KBox<Self>>> {
-+        let dev = pdev.as_ref();
-+
-+        dev_dbg!(dev, "Probe Rust I2C driver sample.\n");
-+
-+        if let Some(info) = info {
-+            dev_info!(dev, "Probed with info: '{}'.\n", info);
-+        }
-+
-+        let drvdata = KBox::new(Self { pdev: pdev.into() }, GFP_KERNEL)?;
-+
-+        Ok(drvdata.into())
++    fn acpi_id_table() -> Option<acpi::IdTable<Self::IdInfo>> {
++        T::ACPI_ID_TABLE
 +    }
-+    fn shutdown(pdev: &i2c::Device<Core>) {
-+        dev_dbg!(pdev.as_ref(), "Shutdown Rust I2C driver sample.\n");
-+    }
-+}
+ }
+ 
+ /// Declares a kernel module that exposes a single i2c driver.
+@@ -216,10 +226,19 @@ macro_rules! module_i2c_driver {
+ /// # Example
+ ///
+ ///```
+-/// # use kernel::{bindings, c_str, device::Core, i2c, of};
++/// # use kernel::{acpi, bindings, c_str, device::Core, i2c, of};
+ ///
+ /// struct MyDriver;
+ ///
++/// kernel::acpi_device_table!(
++///     ACPI_TABLE,
++///     MODULE_ACPI_TABLE,
++///     <MyDriver as i2c::Driver>::IdInfo,
++///     [
++///         (acpi::DeviceId::new(b"TST0001"), ())
++///     ]
++/// );
++///
+ /// kernel::i2c_device_table!(
+ ///     I2C_TABLE,
+ ///     MODULE_I2C_TABLE,
+@@ -242,6 +261,7 @@ macro_rules! module_i2c_driver {
+ ///     type IdInfo = ();
+ ///     const I2C_ID_TABLE: Option<i2c::IdTable<Self::IdInfo>> = Some(&I2C_TABLE);
+ ///     const OF_ID_TABLE: Option<of::IdTable<Self::IdInfo>> = Some(&OF_TABLE);
++///     const ACPI_ID_TABLE: Option<acpi::IdTable<Self::IdInfo>> = Some(&ACPI_TABLE);
+ ///
+ ///     fn probe(
+ ///         _pdev: &i2c::Device<Core>,
+@@ -269,6 +289,9 @@ pub trait Driver: Send {
+     /// The table of OF device ids supported by the driver.
+     const OF_ID_TABLE: Option<of::IdTable<Self::IdInfo>> = None;
+ 
++    /// The table of ACPI device ids supported by the driver.
++    const ACPI_ID_TABLE: Option<acpi::IdTable<Self::IdInfo>> = None;
 +
-+impl Drop for SampleDriver {
-+    fn drop(&mut self) {
-+        dev_dbg!(self.pdev.as_ref(), "Remove Rust I2C driver sample.\n");
-+    }
-+}
-+
-+kernel::module_i2c_driver! {
-+    type: SampleDriver,
-+    name: "rust_driver_i2c",
-+    authors: ["Igor Korotin"],
-+    description: "Rust I2C driver",
-+    license: "GPL v2",
-+}
+     /// I2C driver probe.
+     ///
+     /// Called when a new i2c device is added or discovered.
 -- 
 2.43.0
 
