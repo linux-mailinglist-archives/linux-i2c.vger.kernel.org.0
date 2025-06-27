@@ -1,91 +1,171 @@
-Return-Path: <linux-i2c+bounces-11634-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11635-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9AED8AEAF78
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 Jun 2025 09:00:26 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53546AEB027
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Jun 2025 09:33:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 087594A7885
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 Jun 2025 07:00:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DFA007A324F
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Jun 2025 07:32:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9407021CFEF;
-	Fri, 27 Jun 2025 07:00:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47A5B21ABDC;
+	Fri, 27 Jun 2025 07:33:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=8bytes.org header.i=@8bytes.org header.b="Stm5HhYk"
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="JciHfeKa"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.8bytes.org (mail.8bytes.org [85.214.250.239])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84DBB215783;
-	Fri, 27 Jun 2025 07:00:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.214.250.239
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751007611; cv=none; b=uOSV/2BnbiZKjswA6lRMzidA5JLpk5qSzhTly+W4Qp1vrk3eGWy9pe17jrUX6I3JOesdkcNJxO1cYpBCc3GkRlTWbJseZsmX7pjY0SyeSqq5RICvjF+EhUg51TssQlwelwbFIf9tQ22Z4JenrfgYWUOcGtI08Ov6m0JsOc+GIbc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751007611; c=relaxed/simple;
-	bh=bDYAcTGKsVDb6IWccLRj1xVKwNT7RPiW70T7zFFjHYA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=THgSGpctvL6ukRo3I4O+gjd2IqYz5/c6rw7GmaTcY71vp7SbVr38ZYSU252G+wuvyKmzMt2255qbZ+XprKF/hknnxGjBF1gCpeYtbftuIVNxHCM0HEeg8rwPfeX5WMour8999utUEWkiVJu0Oab4uKXeXkPKI8tAGALWlSwQGgM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=8bytes.org; spf=pass smtp.mailfrom=8bytes.org; dkim=pass (2048-bit key) header.d=8bytes.org header.i=@8bytes.org header.b=Stm5HhYk; arc=none smtp.client-ip=85.214.250.239
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=8bytes.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=8bytes.org
-Received: from 8bytes.org (p4ffe03ae.dip0.t-ipconnect.de [79.254.3.174])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.8bytes.org (Postfix) with ESMTPSA id 382824EF92;
-	Fri, 27 Jun 2025 09:00:08 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
-	s=default; t=1751007608;
-	bh=bDYAcTGKsVDb6IWccLRj1xVKwNT7RPiW70T7zFFjHYA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Stm5HhYkUu3h6SLUQiusZ3SjfNQAz1CfbfJUUJZ2Oj0lu3dfUOi42iU3ElQW57su2
-	 SQnGE9nJsxg4OuuM0Tj1trCZ7J23KRbeipebbfLsdGQcHeV00lmUvs1eOuDCz0ff5X
-	 yKXJZkDuxx7+I9hJOBlDlaKVR6EH5WAAch7bvuTLJIcWWICusFh48YSqOFLgjtqy0k
-	 tmPO3UDurTb0UUOpN+m7w1TfNJvAA1zT4y9A8qeICYGzybB9nlSGMsnZ3W6xMWljwf
-	 dfyt3ELUTaiTvKOH1p8OzjzVvV2FLT3pnKhhgYmcEWBE4JczYMRuX/7GETCdX+PZ7E
-	 0vW4syJXZl9yg==
-Date: Fri, 27 Jun 2025 09:00:07 +0200
-From: Joerg Roedel <joro@8bytes.org>
-To: Sven Peter <sven@kernel.org>
-Cc: Janne Grunau <j@jannau.net>, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-	Neal Gompa <neal@gompa.dev>, Ulf Hansson <ulf.hansson@linaro.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Srinivas Kandagatla <srini@kernel.org>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Vinod Koul <vkoul@kernel.org>,
-	Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>, Arnd Bergmann <arnd@arndb.de>,
-	asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org,
-	iommu@lists.linux.dev, linux-input@vger.kernel.org,
-	dmaengine@vger.kernel.org, linux-sound@vger.kernel.org
-Subject: Re: [PATCH 07/11] iommu/apple-dart: Drop default ARCH_APPLE in
- Kconfig
-Message-ID: <aF5Bdx-vmQeufdpk@8bytes.org>
-References: <20250612-apple-kconfig-defconfig-v1-0-0e6f9cb512c1@kernel.org>
- <20250612-apple-kconfig-defconfig-v1-7-0e6f9cb512c1@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48A463C2F;
+	Fri, 27 Jun 2025 07:33:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1751009622; cv=none; b=M2L96mG9IxbtDvYfv2tOKtki0gKab1wwb9UaYu2LkbBqXV5vlUHpJ5mP/Pg2SxdC82w2Z5asL0QvOC706hQWQHbF61KZTS6Wyut3/9zqlnkDxOstPHUxwGU2fY12gxnOOlE6Zp1j+cgz+03EErIW4LFZFCKSsB/qpNl2RaZ/f3A=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1751009622; c=relaxed/simple;
+	bh=qar+YM6XTszYLM/wb/kz1CEveLAhfKbgBVNFhbZ4MkY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=kog0f4WAvI/JABhU4mhukS0iUwfq43I+VRJN7gH1YB2bSOHCaRFW9SSbJGwrrAspB5kLoNU4TJWl326OQZKOZDbsiE6NBCXur6LkcRE0OR5qaVryfizazxWdN36y88kI+Da/GhfF9r7h76Oi3uko5Xt4LbrSXkEdWLQIwaNQX7Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=JciHfeKa; arc=none smtp.client-ip=185.132.182.106
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55R2c6Rv030383;
+	Fri, 27 Jun 2025 09:33:14 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=selector1; bh=
+	1Q285Yr3y+87stzQw+zewu692BZK8q52Hv1ctiichRc=; b=JciHfeKa47Iu6sv9
+	VamsVMjg7X+3xY77tw1LBPC1uO0q239nBfbj9K2yYucT7DBEvknjB4ki34TlgIQM
+	kT9l3BL9rSYIVPSOYQuuwFHPM8NLr0Sul81CP9YJTAxGEogTs5EQpBj/SeNjaoxn
+	0uikTuHhBtYBklAU2vdyVdbr+IO3IxqUdINDgEtk1pxPdad87hoI9LFPtfSjBfwE
+	uF4Yt94SE6OrzVJCx4Cn7OhQ/rcndL1sD1V79C0aCep5vlzfCb6dLLYyAsxutFaP
+	W6aiOrLrzFTkaXNSUxw0RaatwVKHUpU21YKkwrxYPXwC/bd5b73z7Eag1onrHItW
+	+GOw8A==
+Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 47dm33tthg-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 27 Jun 2025 09:33:14 +0200 (MEST)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 282D540044;
+	Fri, 27 Jun 2025 09:31:50 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 9DDC1BCF079;
+	Fri, 27 Jun 2025 09:30:47 +0200 (CEST)
+Received: from [10.48.86.185] (10.48.86.185) by SHFDAG1NODE2.st.com
+ (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Fri, 27 Jun
+ 2025 09:30:46 +0200
+Message-ID: <9bb4ab7d-afe2-4508-a18e-12cb1485a5a0@foss.st.com>
+Date: Fri, 27 Jun 2025 09:30:46 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250612-apple-kconfig-defconfig-v1-7-0e6f9cb512c1@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/3] i2c: stm32: fix the device used for the DMA map
+To: Alain Volmat <alain.volmat@foss.st.com>
+CC: Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
+        Andi Shyti
+	<andi.shyti@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Sumit Semwal
+	<sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?=
+	<christian.koenig@amd.com>,
+        M'boumba Cedric Madianga
+	<cedric.madianga@gmail.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        "Pierre-Yves
+ MORDRET" <pierre-yves.mordret@st.com>,
+        <linux-i2c@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <linaro-mm-sig@lists.linaro.org>
+References: <20250616-i2c-upstream-v1-0-42d3d5374e65@foss.st.com>
+ <20250616-i2c-upstream-v1-1-42d3d5374e65@foss.st.com>
+ <20250626083744.GA348766@gnbcxd0016.gnb.st.com>
+ <20250626084356.GB348766@gnbcxd0016.gnb.st.com>
+Content-Language: en-US
+From: Clement LE GOFFIC <clement.legoffic@foss.st.com>
+In-Reply-To: <20250626084356.GB348766@gnbcxd0016.gnb.st.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
+ definitions=2025-06-27_02,2025-06-26_05,2025-03-28_01
 
-On Thu, Jun 12, 2025 at 09:11:31PM +0000, Sven Peter wrote:
->  drivers/iommu/Kconfig | 1 -
->  1 file changed, 1 deletion(-)
+On 6/26/25 10:43, Alain Volmat wrote:
+> Hi Clément,
+> 
+> Oups, I was too fast.
+> 
+> there might be another place to correct in the driver, dma_unmap_single
+> within the error handling of the function stm32_i2c_prep_dma_xfer.
+> 
+>     err:
+>              dma_unmap_single(chan_dev, dma->dma_buf, dma->dma_len,
+>                               dma->dma_data_dir);
+> 
+> Could you also correct this one as well ?
+> 
+> Alain
 
-Applied, thanks Sven.
+Hi Alain,
+
+Oh yes you're right, I'll send a v2
+
+Best regard,
+Clément
+> 
+> 
+> On Thu, Jun 26, 2025 at 10:37:51AM +0200, Alain Volmat wrote:
+>> Hi Clément,
+>>
+>> On Mon, Jun 16, 2025 at 10:53:54AM +0200, Clément Le Goffic wrote:
+>>> If the DMA mapping failed, it produced an error log with the wrong
+>>> device name:
+>>> "stm32-dma3 40400000.dma-controller: rejecting DMA map of vmalloc memory"
+>>> Fix this issue by replacing the dev with the I2C dev.
+>>
+>> Indeed, nice catch ! Thanks a lot !
+>>
+>>>
+>>> Fixes: bb8822cbbc53 ("i2c: i2c-stm32: Add generic DMA API")
+>>> Signed-off-by: Clément Le Goffic <clement.legoffic@foss.st.com>
+>>> ---
+>>>   drivers/i2c/busses/i2c-stm32.c | 2 +-
+>>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/i2c/busses/i2c-stm32.c b/drivers/i2c/busses/i2c-stm32.c
+>>> index 157c64e27d0b..5e0b31aed774 100644
+>>> --- a/drivers/i2c/busses/i2c-stm32.c
+>>> +++ b/drivers/i2c/busses/i2c-stm32.c
+>>> @@ -118,7 +118,7 @@ int stm32_i2c_prep_dma_xfer(struct device *dev, struct stm32_i2c_dma *dma,
+>>>   	dma->dma_len = len;
+>>>   	chan_dev = dma->chan_using->device->dev;
+>>>   
+>>> -	dma->dma_buf = dma_map_single(chan_dev, buf, dma->dma_len,
+>>> +	dma->dma_buf = dma_map_single(dev, buf, dma->dma_len,
+>>>   				      dma->dma_data_dir);
+>>>   	if (dma_mapping_error(chan_dev, dma->dma_buf)) {
+>>>   		dev_err(dev, "DMA mapping failed\n");
+>>>
+>>> -- 
+>>> 2.43.0
+>>>
+>>
+>> Acked-by: Alain Volmat <alain.volmat@foss.st.com>
+>>
+>> Regards,
+>> Alain
+
 
