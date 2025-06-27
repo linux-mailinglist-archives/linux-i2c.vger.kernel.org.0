@@ -1,270 +1,104 @@
-Return-Path: <linux-i2c+bounces-11636-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11637-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 662ACAEB1C9
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 Jun 2025 10:57:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 35D98AEB3B2
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Jun 2025 12:03:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 65FF53AF6D5
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 Jun 2025 08:56:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 42EA4568259
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Jun 2025 10:03:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 601352737F1;
-	Fri, 27 Jun 2025 08:57:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD479294A1A;
+	Fri, 27 Jun 2025 10:03:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BTCeoC9A"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="eOhNzCOf"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EE96272E71;
-	Fri, 27 Jun 2025 08:56:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 932D62AD22
+	for <linux-i2c@vger.kernel.org>; Fri, 27 Jun 2025 10:03:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751014620; cv=none; b=YT1yBJNlvYr+2cgZcrIL9Wr0LHgKmHJ3rVLNOXyhseLK4qrXF0K38rlORi6NtzCakGWxZjod8HSd+CZCs4sfTfyGYJzZPsBKt2IgUtGWdFeoQfUssrjYhZTSKQwtQBxeTbK9OKj41YBrgD8nUEjt0ykVXtsYxjck6KdUYP1K1L0=
+	t=1751018633; cv=none; b=QGyBXERW7m2MnjuYJqXJ39oMtmFXUU8/FnjhGtHQT5wRL1yWerSxcs6BA5EcdnbtPVP9T9rkCYMcHHyuNMrajc5t3kU5Uln0zwxb++B2aKrxznOZWb9hX5fLQMnmyy7fm43Er/lxDn3mi/WhbZAUod+7AAxAG4gbQPfdsK5lVnc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751014620; c=relaxed/simple;
-	bh=pA4wEdMhzhMjD2JQqiDWCLEuHRKldKMncnSAa8oDMek=;
+	s=arc-20240116; t=1751018633; c=relaxed/simple;
+	bh=T2nOxSJO+3aD6pj2YVFHst7Rt/ootjE2VC1St3irjHs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jsx3FkFpcgUKjCzUSeFJa6dph8YQyvaNYeT3LyIcKgxVSgicXf0lKhXCmYHPR37ax7b2VbjyByK322GoI80CsS2TS2bIi1wSimODt7TVZl3p9R+9dPNCmdhr/bml3lFMfmaLNlWUUwxF8XhK8F9kdbWV4fCVvaI+7Yyre7kLyRQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BTCeoC9A; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751014619; x=1782550619;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=pA4wEdMhzhMjD2JQqiDWCLEuHRKldKMncnSAa8oDMek=;
-  b=BTCeoC9AA0aTSncYB9Tb0ezPYP3VGtcn0ezbnVr5lv6e7xSVzPsTMz3G
-   B0v8j+nqbBtrDfy7raWUAT5WJlHOi5CjDiIgzg88ZZ7mLjfPHJS5GCNDX
-   DurOUL08vcFWvvrvNPoBd5Ol6xXWjVWxeaIuPBD73b4kPWsf1pOxuFmrJ
-   zJ/KVL2TXJTuvMyhWVeAoKwRvmXbbGw7ngtzbJw+kZfnX/oKmUvevwOxD
-   pUlSCEOpIoEXFwAUUkYuQ4kiJHOWM1QZfJDaI19ML8ei8Vg8/lcXueKZg
-   Tkq0dsySyWdjwHhXCW0Lome/NUAO6s1b1Rcv3rOIEJHtp/O7nqVGqBKTp
-   A==;
-X-CSE-ConnectionGUID: R7PXNu6LS223BOXCeyBLtA==
-X-CSE-MsgGUID: E6tJeZR2Qd2EucXDAxSPnQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11476"; a="40944474"
-X-IronPort-AV: E=Sophos;i="6.16,270,1744095600"; 
-   d="scan'208";a="40944474"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2025 01:56:58 -0700
-X-CSE-ConnectionGUID: r6ozipmBRMi+gfnWVHw4ug==
-X-CSE-MsgGUID: xrsX3PpvQ4qbui3ltnduZw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,270,1744095600"; 
-   d="scan'208";a="176431920"
-Received: from kuha.fi.intel.com ([10.237.72.152])
-  by fmviesa002.fm.intel.com with SMTP; 27 Jun 2025 01:56:52 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 27 Jun 2025 11:56:51 +0300
-Date: Fri, 27 Jun 2025 11:56:51 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Lucas De Marchi <lucas.demarchi@intel.com>,
-	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Jan Dabros <jsd@semihalf.com>, Andi Shyti <andi.shyti@kernel.org>,
-	Raag Jadav <raag.jadav@intel.com>,
-	"Tauro, Riana" <riana.tauro@intel.com>,
-	"Adatrao, Srinivasa" <srinivasa.adatrao@intel.com>,
-	"Michael J. Ruhl" <michael.j.ruhl@intel.com>,
-	intel-xe@lists.freedesktop.org, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 2/4] drm/xe: Support for I2C attached MCUs
-Message-ID: <aF5c02pfI_3FirXD@kuha.fi.intel.com>
-References: <20250626135610.299943-1-heikki.krogerus@linux.intel.com>
- <20250626135610.299943-3-heikki.krogerus@linux.intel.com>
- <aF1XTr2y1EmkRT_8@smile.fi.intel.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=jwP7JuvmhGqUpVZIZjDbRAJDOo83zYjJDC3uyp0pAv/5bvUhvNU7hde7LHM5ig7lZVOY+ibogVXxmMqyHb8x/fqez/l2L1q6pd2ehASVPAhUssGYmj4gLE7lW1VtMCufeOxAkGGXX55IwsVJiH0Bs1RUh9UJCE1jtaOXOfEpKNY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=eOhNzCOf; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=M/uP
+	gWCmGezyUxogkSTfZ1uXa9HK2g1Qg3jFyj9fYWs=; b=eOhNzCOf69+AlE8rUm9s
+	e/AhcLLd3Q37NxyZkq5GzVtcSY6cDHPupe3OPNkMgosyrVUYkwfTFCYzMeIWevWF
+	We9br/ydGdAAchJ0QyxpCE21UTgMn7pYitTsEOIuwj/pXubtk+eezYX/8vdPmlXC
+	AOrl9rFfRRpShJ6N+6yE1i3bsm8EVUfThBoQkmh9wHamDEC9TEoUFYyFeBEiu2Ch
+	GXwqrcTsBnfs7H7TF0a4jRqdT/ay0kG0QhVLiCmEk12L99hxUKah1bTbmcj9cBnZ
+	NTSIGrjFNghagmKPgwG4y65WxTytPvFGU3JqOk1eue9LdnVvJy5z2HpPOQ8yCM+2
+	xg==
+Received: (qmail 1416444 invoked from network); 27 Jun 2025 12:03:40 +0200
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 27 Jun 2025 12:03:40 +0200
+X-UD-Smtp-Session: l3s3148p1@9nzfyoo4dLogAwDPXzuUAOCQSK0rM+sw
+Date: Fri, 27 Jun 2025 12:03:40 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Andi Shyti <andi.shyti@kernel.org>
+Cc: lkml <linux-kernel@vger.kernel.org>,
+	linux-i2c <linux-i2c@vger.kernel.org>,
+	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>
+Subject: Re: [GIT PULL] i2c-host-fixes for v6.16-rc4
+Message-ID: <aF5sfAwym8XpVhYc@shikoro>
+References: <7rnodnh6pww34mtj2rj4t5dnaj6gnngink3xkx2ijm73cyawlm@qtrv6kkhkjxp>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="UcD/j3BeGuKAUrsq"
+Content-Disposition: inline
+In-Reply-To: <7rnodnh6pww34mtj2rj4t5dnaj6gnngink3xkx2ijm73cyawlm@qtrv6kkhkjxp>
+
+
+--UcD/j3BeGuKAUrsq
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aF1XTr2y1EmkRT_8@smile.fi.intel.com>
 
-Thanks for the review Andy.
+Hi Andi,
 
-On Thu, Jun 26, 2025 at 05:21:02PM +0300, Andy Shevchenko wrote:
-> On Thu, Jun 26, 2025 at 04:56:07PM +0300, Heikki Krogerus wrote:
-> > Adding adaption/glue layer where the I2C host adapter
-> > (Synopsys DesignWare I2C adapter) and the I2C clients (the
-> > microcontroller units) are enumerated.
-> > 
-> > The microcontroller units (MCU) that are attached to the GPU
-> > depend on the OEM. The initially supported MCU will be the
-> > Add-In Management Controller (AMC).
-> 
-> ...
-> 
-> > +static int xe_i2c_register_adapter(struct xe_i2c *i2c)
-> > +{
-> > +	struct pci_dev *pci = to_pci_dev(i2c->drm_dev);
-> > +	struct platform_device *pdev;
-> > +	struct fwnode_handle *fwnode;
-> > +	int ret;
-> > +
-> > +	fwnode = fwnode_create_software_node(xe_i2c_adapter_properties, NULL);
-> > +	if (!fwnode)
-> > +		return -ENOMEM;
-> > +
-> > +	/*
-> > +	 * Not using platform_device_register_full() here because we don't have
-> > +	 * a handle to the platform_device before it returns. xe_i2c_notifier()
-> > +	 * uses that handle, but it may be called before
-> > +	 * platform_device_register_full() is done.
-> > +	 */
-> > +	pdev = platform_device_alloc(adapter_name, pci_dev_id(pci));
-> > +	if (!pdev) {
-> > +		ret = -ENOMEM;
-> > +		goto err_fwnode_remove;
-> > +	}
-> > +
-> > +	if (i2c->adapter_irq) {
-> 
-> > +		struct resource	res = { };
-> > +
-> > +		res.start = i2c->adapter_irq;
-> > +		res.name = "xe_i2c";
-> > +		res.flags = IORESOURCE_IRQ;
-> 
-> 
-> 		struct resource	res;
-> 
-> 		res = DEFINE_RES_IRQ_NAMED(i2c->adapter_irq, "xe_i2c");
+> Thank you and I wish you a great weekend,
 
-I have to check what happened during the internal review round,
-because I used that originally. But If there's no real reason not to
-continue with it, then yes, I'll use it of course.
+Thank you, pulled!
 
-> > +		ret = platform_device_add_resources(pdev, &res, 1);
-> > +		if (ret)
-> > +			goto err_pdev_put;
-> > +	}
-> > +
-> > +	pdev->dev.parent = i2c->drm_dev;
-> > +	pdev->dev.fwnode = fwnode;
-> > +	i2c->adapter_node = fwnode;
-> > +	i2c->pdev = pdev;
-> > +
-> > +	ret = platform_device_add(pdev);
-> > +	if (ret)
-> > +		goto err_pdev_put;
-> > +
-> > +	return 0;
-> > +
-> > +err_pdev_put:
-> > +	platform_device_put(pdev);
-> > +err_fwnode_remove:
-> > +	fwnode_remove_software_node(fwnode);
-> > +
-> > +	return ret;
-> > +}
-> 
-> ...
-> 
-> > +static int xe_i2c_irq_map(struct irq_domain *h, unsigned int virq,
-> > +			  irq_hw_number_t hw_irq_num)
-> > +{
-> > +	irq_set_chip_and_handler(virq, &dummy_irq_chip, handle_simple_irq);
-> 
-> Wondering if you need to setup a custom lockdep class here.
-> 
-> > +	return 0;
-> > +}
-> 
-> ...
-> 
-> > +static void xe_i2c_remove_irq(struct xe_i2c *i2c)
-> > +{
-> > +	if (i2c->irqdomain) {
-> 
-> 	if (!i2c->irqdomain)
-> 		return;
-> 
-> > +		irq_dispose_mapping(i2c->adapter_irq);
-> > +		irq_domain_remove(i2c->irqdomain);
-> > +	}
-> > +}
-> 
-> ...
-> 
-> > +static void xe_i2c_remove(void *data)
-> > +{
-> > +	struct xe_i2c *i2c = data;
-> > +	int i;
-> 
-> unsigned?
-> 
-> > +	for (i = 0; i < XE_I2C_MAX_CLIENTS; i++)
-> > +		i2c_unregister_device(i2c->client[i]);
-> > +
-> > +	bus_unregister_notifier(&i2c_bus_type, &i2c->bus_notifier);
-> > +	xe_i2c_unregister_adapter(i2c);
-> > +	xe_i2c_remove_irq(i2c);
-> > +}
-> 
-> ...
-> 
-> > +int xe_i2c_probe(struct xe_device *xe)
-> > +{
-> > +	struct xe_i2c_endpoint ep;
-> > +	struct regmap *regmap;
-> > +	struct xe_i2c *i2c;
-> > +	int ret;
-> > +
-> > +	xe_i2c_read_endpoint(xe_root_tile_mmio(xe), &ep);
-> > +	if (ep.cookie != XE_I2C_EP_COOKIE_DEVICE)
-> > +		return 0;
-> > +
-> > +	i2c = devm_kzalloc(xe->drm.dev, sizeof(*i2c), GFP_KERNEL);
-> > +	if (!i2c)
-> > +		return -ENOMEM;
-> > +
-> > +	INIT_WORK(&i2c->work, xe_i2c_client_work);
-> > +	i2c->mmio = xe_root_tile_mmio(xe);
-> > +	i2c->drm_dev = xe->drm.dev;
-> > +	i2c->ep = ep;
-> 
-> > +	regmap = devm_regmap_init(i2c->drm_dev, NULL, i2c, &i2c_regmap_config);
-> 
-> Use of i2c->drm_dev makes harder to maintain and understand the code.
-> Managed resources should be carefully attached to the correct device,
-> otherwise it's inevitable object lifetime related issues.
-> 
-> With
-> 
-> 	struct device *dev = xe->drm.dev;
-> 
-> and using local dev, it becomes easier to get and avoid such subtle mistakes.
+All the best,
 
-I have to disagree with you on this one. Local dev pointers create
-problems because of the assumption that there is only a single device
-in the function to deal with (especially if they are named "dev"),
-which is almost never the case - this function is no exception.
+   Wolfram
 
-But I'll add the local variable as you requested - I'll just name it
-carefully.
 
-This kinda related but off topic. IMO in cases like this the regmap
-should be assigned to the child device that is being created instead
-of the parent device. That is currently prevented by the current
-regmap API - the device has to be fully registered before the regmap
-can be assigned (and I'm not referring to the resource managed devm_*
-API), but I'm not convinced that it has to be like that. The problem
-is that the parent device may have multiple child devices that each
-need a dedicated regmag. So just as a note to self: check if we can
-improve the regmap API.
+--UcD/j3BeGuKAUrsq
+Content-Type: application/pgp-signature; name="signature.asc"
 
-cheers,
+-----BEGIN PGP SIGNATURE-----
 
--- 
-heikki
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmhebHgACgkQFA3kzBSg
+KbaiTw//VRVPWv7uC6dSdMvt5AYBZnsE4/xc264PdqYk3cMbV5HyNLgjNAz2WoDp
+M62xktsQj2BK8j4ADvMOttuXm+drhDL7rCACtnnvc0tMyqROEw3lLeQ61MmApH3A
+bWJqFr2SHYlzRsH3kWXCe/6Lx6yxnRPpSUA7ky53SKZj9JZnUfPsuLloiKKri6GG
+nrLUa7J2tgDn+Yp3FdJoVofi1gfd9Y92yRRJ93UGO9ci5sNmivXoQQrD6Idcx0VL
+70i6lfLsBrUhjvDDME6viA3FwBV46KtmZCramFctt42Su/2SgWXioLLq0j1kvggN
+wmn8K3Ph23T3Gt+OIpvwhJl+hGjhtvhXQxKji7m4MhAzJDmgKuPtzNyMr2gMFMRe
+hvE0pIism9+V/AUVIBaXdlRhHPNm3rsVE26egkAbU9ZrRbkZyuqH+UHG39lyLLf3
+SyBjV9QV/ZBN+DCcjuBZI95DaLFUIujBdnKfM2AqaBxzJeJI5fA/jAIovzOdEuSp
+/PEbuD0vrQPhLjeOlBMCQz/a+fbBDEjLO7c12fPkLp7YC3vKRDkkK3ayOJA4b/DH
+8t3rLP2c/MwpbVl+3Sjy1GVtf1ZYH7BdWtOf03bHMrHINzGlBsAY4khk9zlLAO/7
+/bzb+Dg3Vr4D0kBMWqnIX/nPseEE6BCsHFiL5d6L5f51EYJjto0=
+=8ZWW
+-----END PGP SIGNATURE-----
+
+--UcD/j3BeGuKAUrsq--
 
