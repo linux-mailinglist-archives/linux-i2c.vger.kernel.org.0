@@ -1,47 +1,47 @@
-Return-Path: <linux-i2c+bounces-11673-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11674-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45F34AEBCB3
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 Jun 2025 17:58:48 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C6A96AEBD26
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Jun 2025 18:25:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0971B188C109
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 Jun 2025 15:59:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 65D4156300F
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Jun 2025 16:24:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FB362E9ECD;
-	Fri, 27 Jun 2025 15:58:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EB9F2EA482;
+	Fri, 27 Jun 2025 16:22:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b4tJ94JZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q9+kRI24"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2963819E990;
-	Fri, 27 Jun 2025 15:58:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1F5E2D3EE8;
+	Fri, 27 Jun 2025 16:22:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751039919; cv=none; b=bR9chPMaORbaIfQnOBSduck6sEDrjc5b6Vjdb0mXWFtcgQaj+9mvp6Lv8cTMv9q6qcj+Eb82xNsumsGSvn1dP9bosnFe5mBYrDu7OXaHvaCJLSpcU4PEYni3rgoODNvxI9sBnkhZAEgTOxM20JAQu9NSdcgVqKDC8ILRGxymOgA=
+	t=1751041367; cv=none; b=nv++dJlmLK3Z/+crg1Ye0k0wCz9mkR6xgN43sRYRipplAdMGnVkNV2oNRNQZTf99gxwzeSTZUdtU+kA+5eP7PsPux+6f4ygU4VIJNecIlETRZsoNIcjjksqRUJis+DZL+qKjnNhUpkblJWAro8TSUH7phmOHJ5Nl+xMgfSQdZvE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751039919; c=relaxed/simple;
-	bh=tBv0zN4w3fBWkY/nFOn0k+IhVxh6OQEYPfuuw9vKCvk=;
+	s=arc-20240116; t=1751041367; c=relaxed/simple;
+	bh=S4rQXSxYy7l30Jex5dOyQNVkfrqjgNBFJChd03NJJd4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jfiq9Wl2ge9Vvl0GWciZkfrZXqScZ6GVoCwn9lxxARBLQfVGwjv/C+rjGj183umfD84M0ykVcv904w5kHF6kMdnc1IXNyaPrhZFrvXB1snWQSI1Pm2Oaa8DM0JKGqXh/hbc1KT2oqYVQjcm8VKfB41D7bjDWZzZ1pZMiham4WgI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b4tJ94JZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D7B3C4CEE3;
-	Fri, 27 Jun 2025 15:58:38 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Nt/A/6TCDTZSTUeRThDAgS5pkheb6/eeWrJCEyzTxOqTRqNJYNrdvnmgIWSDXq0prj9YF/sL3kmUIZwoht9JKDgrIISvK07oi8AQhqirwSVbw7eE8YF6nNzZoHTJd1i/9CK1h1odOEJQP1uMqVPWS4V2iW6rxfjjyD8ORB7swlY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q9+kRI24; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D3C2C4CEE3;
+	Fri, 27 Jun 2025 16:22:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751039918;
-	bh=tBv0zN4w3fBWkY/nFOn0k+IhVxh6OQEYPfuuw9vKCvk=;
+	s=k20201202; t=1751041366;
+	bh=S4rQXSxYy7l30Jex5dOyQNVkfrqjgNBFJChd03NJJd4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=b4tJ94JZTjGfbHmZDMM8bIuOky0BWZylZfr+Z7v8HXEL7evqfsEWw1BgYoEYnFfpX
-	 SdKj4hkTwOEnNMp6O4y/hMVwX+Tk/9SY3kG6RNby6zDETioc5MDSawDH9+LcaRgrsG
-	 Pz3RCeX3aRYkjYStdMtyjYME4zWrNpS+iykXmBun6VP+XXrF6ivxSzv5WeRN87gV/M
-	 HLSMkb13vj/LZuOP9gKQN4koUKfveUcJGZoe0jAWfkjC9sE+Y1rfFm+XLyHfVaaSV5
-	 SQAYvDPy3PQkLshJCnEyhDpwGRkyX80rd1xx5d7Iwju+Cm+YcCtjz9Kx4UzxQ1xIYx
-	 RCWGTryFzxJ0Q==
-Date: Fri, 27 Jun 2025 10:58:37 -0500
+	b=Q9+kRI24E/sv8i/YQJ0N921DtCB+0kcRk3H1pQUMNQtT02K02PjfsySme4B8GniwI
+	 9dRRJgnIYjYIcYjcs5Tb6obHmqh8Twkaf0TCIOBrTfj53TmQdFrvAxOP+wruzM3Ril
+	 JCTW0cM7wsH4IW+Zw3XsSKRN7zxXgWdw8fzZVfaBSHnAOFcYr4+qCebHHiZca51pkr
+	 3BUYtnmUuDrHiFYPlicYhuFNogDvoLoyaU3CKheMqkHeHJarNuPc7Ks6Whuzf7UE8A
+	 TZW+lJ9Gtdsw5sd9/k4NKCLKh0F893QUDS6oOqMbIefzWUsXHa7lfFZkbD8l+/snV+
+	 iZPTmjg/hmAvQ==
+Date: Fri, 27 Jun 2025 11:22:45 -0500
 From: Rob Herring <robh@kernel.org>
 To: Herve Codina <herve.codina@bootlin.com>
 Cc: Andrew Lunn <andrew@lunn.ch>,
@@ -83,9 +83,11 @@ Cc: Andrew Lunn <andrew@lunn.ch>,
 	Steen Hegelund <steen.hegelund@microchip.com>,
 	Luca Ceresoli <luca.ceresoli@bootlin.com>,
 	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v3 00/28] lan966x pci device: Add support for SFPs
-Message-ID: <20250627155837.GC3234475-robh@kernel.org>
+Subject: Re: [PATCH v3 18/28] of: property: Allow fw_devlink device-tree on
+ x86 when PCI device-tree node creation is enabled
+Message-ID: <20250627162245.GA3513535-robh@kernel.org>
 References: <20250613134817.681832-1-herve.codina@bootlin.com>
+ <20250613134817.681832-19-herve.codina@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -94,81 +96,83 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250613134817.681832-1-herve.codina@bootlin.com>
+In-Reply-To: <20250613134817.681832-19-herve.codina@bootlin.com>
 
-On Fri, Jun 13, 2025 at 03:47:40PM +0200, Herve Codina wrote:
-> Hi,
+On Fri, Jun 13, 2025 at 03:47:58PM +0200, Herve Codina wrote:
+> PCI drivers can use a device-tree overlay to describe the hardware
+> available on the PCI board. This is the case, for instance, of the
+> LAN966x PCI device driver.
 > 
-> This series add support for SFPs ports available on the LAN966x PCI
-> device. In order to have the SFPs supported, additional devices are
-> needed such as clock controller and I2C.
+> Adding some more nodes in the device-tree overlay adds some more
+> consumer/supplier relationship between devices instantiated from this
+> overlay.
 > 
-> As a reminder, the LAN966x PCI device driver use a device-tree overlay
-> to describe devices available on the PCI board. Adding support for SFPs
-> ports consists in adding more devices in the already existing
-> device-tree overlay.
+> Those fw_node consumer/supplier relationships are handled by fw_devlink
+> and are created based on the device-tree parsing done by the
+> of_fwnode_add_links() function.
 > 
-> With those devices added, the device-tree overlay is more complex and
-> some consumer/supplier relationship are needed in order to remove
-> devices in correct order when the LAN966x PCI driver is removed.
+> Those consumer/supplier links are needed in order to ensure a correct PM
+> runtime management and a correct removal order between devices.
 > 
-> Those links are typically provided by fw_devlink and we faced some
-> issues with fw_devlink and overlays.
+> For instance, without those links a supplier can be removed before its
+> consumers is removed leading to all kind of issue if this consumer still
+> want the use the already removed supplier.
 > 
-> This series gives the big picture related to the SFPs support from
-> fixing issues to adding new devices. Of course, it can be split if
-> needed.
+> The support for the usage of an overlay from a PCI driver has been added
+> on x86 systems in commit 1f340724419ed ("PCI: of: Create device tree PCI
+> host bridge node").
 > 
-> The first part of the series (patch 1, 2 and 3) fixes fw_devlink when it
-> is used with overlay. Patches 1 and 3 were previously sent by Saravana
-> [0]. I just rebased them on top of v6.15-rc1 and added patch 2 in order
-> to take into account feedback received on the series sent by Saravana.
+> In the past, support for fw_devlink on x86 had been tried but this
+> support has been removed in commit 4a48b66b3f52 ("of: property: Disable
+> fw_devlink DT support for X86"). Indeed, this support was breaking some
+> x86 systems such as OLPC system and the regression was reported in [0].
 > 
-> Those modification were not sufficient in our case and so, on top of
-> that, patch 4 and 5 fix some more issues related to fw_devlink.
+> Instead of disabling this support for all x86 system, a first approach
+> would be to use a finer grain and disable this support only for the
+> possible problematic subset of x86 systems (at least OLPC and CE4100).
 > 
-> Patches 6 to 12 introduce and use fw_devlink_set_device() in already
-> existing code.
+> This first approach could still leads to issues. Indeed, the list of
+> possible problematic system and the way to identify them using Kconfig
+> symbols is not well defined and so some system can be missed leading to
+> kernel regressions on those missing systems.
 > 
-> Patches 13 and 14 are related also to fw_devlink but specific to PCI and
-> the device-tree nodes created during enumeration.
+> Use an other way and enable the support on x86 system only when this
+> support is needed by some specific feature. The usage of a device-tree
+> overlay by a PCI driver and thus the creation of PCI device-tree nodes
+> is a feature that needs it.
 > 
-> Patches 15, 15 and 17 are related fw_devlink too but specific to I2C
-> muxes. Patches purpose is to correctly set a link between an adapter
-> supplier and its consumer. Indeed, an i2c mux adapter's parent is not
-> the i2c mux supplier but the adapter the i2c mux is connected to. Adding
-> a new link between the adapter supplier involved when i2c muxes are used
-> avoid a freeze observed during device removal.
+> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> Link: https://lore.kernel.org/lkml/3c1f2473-92ad-bfc4-258e-a5a08ad73dd0@web.de/ [0]
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/of/property.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Patch 18 adds support for fw_delink on x86. fw_devlink is needed to have
-> the consumer/supplier relationship between devices in order to ensure a
-> correct device removal order. Adding fw_devlink support for x86 has been
-> tried in the past but was reverted [1] because it broke some systems.
-> Instead of enabling fw_devlink on *all* x86 system or on *all* x86
-> system except on those where it leads to issue, enable it only on system
-> where it is needed.
-> 
-> Patches 19 and 20 allow to build clock and i2c controller used by the
-> LAN966x PCI device when the LAN966x PCI device is enabled.
-> 
-> Patches 21 to 25 are specific to the LAN966x. They touch the current
-> dtso, split it in dtsi/dtso files, rename the dtso and improve the
-> driver to allow easier support for other boards.
-> 
-> The next patch (patch 26) update the LAN966x device-tree overlay itself
-> to have the SPF ports and devices they depends on described.
-> 
-> The last two patches (patches 27 and 28) sort the existing drivers in
-> the needed driver list available in the Kconfig help and add new drivers
-> in this list keep the list up to date with the devices described in the
-> device-tree overlay.
-> 
-> Once again, this series gives the big picture and can be split if
-> needed. Let me know.
+> diff --git a/drivers/of/property.c b/drivers/of/property.c
+> index c1feb631e383..8b5cfee696e2 100644
+> --- a/drivers/of/property.c
+> +++ b/drivers/of/property.c
+> @@ -1605,7 +1605,7 @@ static int of_fwnode_add_links(struct fwnode_handle *fwnode)
+>  	const struct property *p;
+>  	struct device_node *con_np = to_of_node(fwnode);
+>  
+> -	if (IS_ENABLED(CONFIG_X86))
+> +	if (IS_ENABLED(CONFIG_X86) && !IS_ENABLED(CONFIG_PCI_DYNAMIC_OF_NODES))
 
-Please suggest how you think this should get merged? There's 8 
-maintainer trees involved here. Some parts can be merged independently? 
-We need to spread over 2 cycles? Greg just takes it all?
+I really want CONFIG_PCI_DYNAMIC_OF_NODES to go away at some point, not 
+add more users. 
+
+I think this should instead check for specific platforms not with 
+kconfig symbols but DT properties. For ce4100, you can just check the 
+root compatible string. For OLPC, there isn't a root compatible (in the 
+DT I have). You could check for /architecture == OLPC instead. There's 
+some virtualization guests using DT now too. I would think their DT's 
+are simple enough to avoid any fw_devlink issues. 
+
+Alternatively, we could perhaps make x86 fw_devlink default off and then 
+enable it only when you create nodes. Maybe it has to be restricted a 
+sub tree of the DT to avoid any later interactions if devices are 
+unbound and rebound. Not a fully fleshed out idea...
 
 Rob
 
