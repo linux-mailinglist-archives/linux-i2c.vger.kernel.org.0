@@ -1,47 +1,47 @@
-Return-Path: <linux-i2c+bounces-11672-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11673-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66615AEBC85
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 Jun 2025 17:54:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45F34AEBCB3
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Jun 2025 17:58:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2F6CB6A42C8
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 Jun 2025 15:52:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0971B188C109
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Jun 2025 15:59:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91ACD2EACF6;
-	Fri, 27 Jun 2025 15:52:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FB362E9ECD;
+	Fri, 27 Jun 2025 15:58:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pyPdnJ7Q"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b4tJ94JZ"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A5152EA14C;
-	Fri, 27 Jun 2025 15:52:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2963819E990;
+	Fri, 27 Jun 2025 15:58:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751039522; cv=none; b=LEw7Nl1HIzJZGatY7RH84Lx86NIdHR+BQFd18S2OJq5IxqiIl2XFYmEfHGHDJachz8frR5dS2JqLNvVPtp27gSQcY16fvWPp+71ZQNPdms5jOGKiXPrhIfcDjl+NVThwjlmRhEgY2NsFB4KCfmtaZlpBByKmE75wGgD3ZFJJV7M=
+	t=1751039919; cv=none; b=bR9chPMaORbaIfQnOBSduck6sEDrjc5b6Vjdb0mXWFtcgQaj+9mvp6Lv8cTMv9q6qcj+Eb82xNsumsGSvn1dP9bosnFe5mBYrDu7OXaHvaCJLSpcU4PEYni3rgoODNvxI9sBnkhZAEgTOxM20JAQu9NSdcgVqKDC8ILRGxymOgA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751039522; c=relaxed/simple;
-	bh=f0UYA/EuZoGSHsVhZD3Fus+HSK9WipcpF5RxkV+BP5o=;
+	s=arc-20240116; t=1751039919; c=relaxed/simple;
+	bh=tBv0zN4w3fBWkY/nFOn0k+IhVxh6OQEYPfuuw9vKCvk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TGV7y1jQ45g4SXi1xJX7Ki495PudN3emL0VPxvAyvWaOzY5/KK5XiUr++9Ccp4AHluPh7dUAN9kA0ie1Q5HkWuzKi+sBhguyJQxwBK5DIkBlkyUL/ol5BI6D79XMNwvJbGOD4C2meXk3Zp1nM+FkGYN2IWi6WvehwGexpsRQTA8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pyPdnJ7Q; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B088C4CEED;
-	Fri, 27 Jun 2025 15:52:01 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=jfiq9Wl2ge9Vvl0GWciZkfrZXqScZ6GVoCwn9lxxARBLQfVGwjv/C+rjGj183umfD84M0ykVcv904w5kHF6kMdnc1IXNyaPrhZFrvXB1snWQSI1Pm2Oaa8DM0JKGqXh/hbc1KT2oqYVQjcm8VKfB41D7bjDWZzZ1pZMiham4WgI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b4tJ94JZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D7B3C4CEE3;
+	Fri, 27 Jun 2025 15:58:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751039521;
-	bh=f0UYA/EuZoGSHsVhZD3Fus+HSK9WipcpF5RxkV+BP5o=;
+	s=k20201202; t=1751039918;
+	bh=tBv0zN4w3fBWkY/nFOn0k+IhVxh6OQEYPfuuw9vKCvk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pyPdnJ7Q7HuuIiKgrWaMDcrBwxGTZiscgxJc6vl+XrICm0G79l/w04xJOgIgSsiT4
-	 nyJKeqIT4LG/SdOrP9BThyVFe+sK/VvM3jidhmIf4FL5wNqqTU5vXGLNIqJcAXv1fB
-	 qKTpyLWg6gUYFK9zYNPKm3MeePbH4VzwGEN7jkKanOyl7pqQcVspMU/YR0KWDgEe+y
-	 Zv5XPVN4hnsL9/6Codf3WfenmJLS/Wop+OvwNF2usYFuIMsbN5lfU8nIT0Fa6ZEQ9G
-	 1eaaz5yVdyekzbuVGyJ58FdAsHP1VfbszTS+QL47CPNvx+4zmaedL/KBAtCkPkCxRv
-	 NsSgI1XvWhPIA==
-Date: Fri, 27 Jun 2025 10:52:00 -0500
+	b=b4tJ94JZTjGfbHmZDMM8bIuOky0BWZylZfr+Z7v8HXEL7evqfsEWw1BgYoEYnFfpX
+	 SdKj4hkTwOEnNMp6O4y/hMVwX+Tk/9SY3kG6RNby6zDETioc5MDSawDH9+LcaRgrsG
+	 Pz3RCeX3aRYkjYStdMtyjYME4zWrNpS+iykXmBun6VP+XXrF6ivxSzv5WeRN87gV/M
+	 HLSMkb13vj/LZuOP9gKQN4koUKfveUcJGZoe0jAWfkjC9sE+Y1rfFm+XLyHfVaaSV5
+	 SQAYvDPy3PQkLshJCnEyhDpwGRkyX80rd1xx5d7Iwju+Cm+YcCtjz9Kx4UzxQ1xIYx
+	 RCWGTryFzxJ0Q==
+Date: Fri, 27 Jun 2025 10:58:37 -0500
 From: Rob Herring <robh@kernel.org>
 To: Herve Codina <herve.codina@bootlin.com>
 Cc: Andrew Lunn <andrew@lunn.ch>,
@@ -83,11 +83,9 @@ Cc: Andrew Lunn <andrew@lunn.ch>,
 	Steen Hegelund <steen.hegelund@microchip.com>,
 	Luca Ceresoli <luca.ceresoli@bootlin.com>,
 	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v3 05/28] bus: simple-pm-bus: Populate child nodes at
- probe
-Message-ID: <20250627155200.GB3234475-robh@kernel.org>
+Subject: Re: [PATCH v3 00/28] lan966x pci device: Add support for SFPs
+Message-ID: <20250627155837.GC3234475-robh@kernel.org>
 References: <20250613134817.681832-1-herve.codina@bootlin.com>
- <20250613134817.681832-6-herve.codina@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -96,46 +94,81 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250613134817.681832-6-herve.codina@bootlin.com>
+In-Reply-To: <20250613134817.681832-1-herve.codina@bootlin.com>
 
-On Fri, Jun 13, 2025 at 03:47:45PM +0200, Herve Codina wrote:
-> The simple-pm-bus driver handles several simple busses. When it is used
-> with busses other than a compatible "simple-pm-bus", it doesn't populate
-> its child devices during its probe.
+On Fri, Jun 13, 2025 at 03:47:40PM +0200, Herve Codina wrote:
+> Hi,
 > 
-> This confuses fw_devlink and results in wrong or missing devlinks.
+> This series add support for SFPs ports available on the LAN966x PCI
+> device. In order to have the SFPs supported, additional devices are
+> needed such as clock controller and I2C.
 > 
-> Once a driver is bound to a device and the probe() has been called,
-> device_links_driver_bound() is called.
+> As a reminder, the LAN966x PCI device driver use a device-tree overlay
+> to describe devices available on the PCI board. Adding support for SFPs
+> ports consists in adding more devices in the already existing
+> device-tree overlay.
 > 
-> This function performs operation based on the following assumption:
->     If a child firmware node of the bound device is not added as a
->     device, it will never be added.
+> With those devices added, the device-tree overlay is more complex and
+> some consumer/supplier relationship are needed in order to remove
+> devices in correct order when the LAN966x PCI driver is removed.
 > 
-> Among operations done on fw_devlinks of those "never be added" devices,
-> device_links_driver_bound() changes their supplier.
+> Those links are typically provided by fw_devlink and we faced some
+> issues with fw_devlink and overlays.
 > 
-> With devices attached to a simple-bus compatible device, this change
-> leads to wrong devlinks where supplier of devices points to the device
-> parent (i.e. simple-bus compatible device) instead of the device itself
-> (i.e. simple-bus child).
+> This series gives the big picture related to the SFPs support from
+> fixing issues to adding new devices. Of course, it can be split if
+> needed.
 > 
-> When the device attached to the simple-bus is removed, because devlinks
-> are not correct, its consumers are not removed first.
+> The first part of the series (patch 1, 2 and 3) fixes fw_devlink when it
+> is used with overlay. Patches 1 and 3 were previously sent by Saravana
+> [0]. I just rebased them on top of v6.15-rc1 and added patch 2 in order
+> to take into account feedback received on the series sent by Saravana.
 > 
-> In order to have correct devlinks created, make the simple-pm-bus driver
-> compliant with the devlink assumption and create its child devices
-> during its probe.
+> Those modification were not sufficient in our case and so, on top of
+> that, patch 4 and 5 fix some more issues related to fw_devlink.
+> 
+> Patches 6 to 12 introduce and use fw_devlink_set_device() in already
+> existing code.
+> 
+> Patches 13 and 14 are related also to fw_devlink but specific to PCI and
+> the device-tree nodes created during enumeration.
+> 
+> Patches 15, 15 and 17 are related fw_devlink too but specific to I2C
+> muxes. Patches purpose is to correctly set a link between an adapter
+> supplier and its consumer. Indeed, an i2c mux adapter's parent is not
+> the i2c mux supplier but the adapter the i2c mux is connected to. Adding
+> a new link between the adapter supplier involved when i2c muxes are used
+> avoid a freeze observed during device removal.
+> 
+> Patch 18 adds support for fw_delink on x86. fw_devlink is needed to have
+> the consumer/supplier relationship between devices in order to ensure a
+> correct device removal order. Adding fw_devlink support for x86 has been
+> tried in the past but was reverted [1] because it broke some systems.
+> Instead of enabling fw_devlink on *all* x86 system or on *all* x86
+> system except on those where it leads to issue, enable it only on system
+> where it is needed.
+> 
+> Patches 19 and 20 allow to build clock and i2c controller used by the
+> LAN966x PCI device when the LAN966x PCI device is enabled.
+> 
+> Patches 21 to 25 are specific to the LAN966x. They touch the current
+> dtso, split it in dtsi/dtso files, rename the dtso and improve the
+> driver to allow easier support for other boards.
+> 
+> The next patch (patch 26) update the LAN966x device-tree overlay itself
+> to have the SPF ports and devices they depends on described.
+> 
+> The last two patches (patches 27 and 28) sort the existing drivers in
+> the needed driver list available in the Kconfig help and add new drivers
+> in this list keep the list up to date with the devices described in the
+> device-tree overlay.
+> 
+> Once again, this series gives the big picture and can be split if
+> needed. Let me know.
 
-IIRC, skipping child nodes was because there were problems with 
-letting the driver handle 'simple-bus'. How does this avoid that now?
-
-The root of_platform_populate() that created the simple-bus device that 
-gets us to the probe here will continue descending into child nodes. 
-Meanwhile, the probe here is also descending into those same child 
-nodes. Best case, that's just redundant. Worst case, won't you still 
-have the same problem if the first of_platform_populate() creates the 
-devices first?
+Please suggest how you think this should get merged? There's 8 
+maintainer trees involved here. Some parts can be merged independently? 
+We need to spread over 2 cycles? Greg just takes it all?
 
 Rob
 
