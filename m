@@ -1,231 +1,215 @@
-Return-Path: <linux-i2c+bounces-11681-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11682-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43F9DAEC7A2
-	for <lists+linux-i2c@lfdr.de>; Sat, 28 Jun 2025 16:29:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D28F5AEC86B
+	for <lists+linux-i2c@lfdr.de>; Sat, 28 Jun 2025 17:58:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7629E3B2033
-	for <lists+linux-i2c@lfdr.de>; Sat, 28 Jun 2025 14:29:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id ACFB6189E23F
+	for <lists+linux-i2c@lfdr.de>; Sat, 28 Jun 2025 15:58:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36CC623CEE5;
-	Sat, 28 Jun 2025 14:29:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E297821C9E1;
+	Sat, 28 Jun 2025 15:58:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="L9tuIMTD"
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="nvrNKrtL"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from OS8PR02CU002.outbound.protection.outlook.com (mail-japanwestazolkn19012062.outbound.protection.outlook.com [52.103.66.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A9BD21E0AF;
-	Sat, 28 Jun 2025 14:29:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751120970; cv=none; b=guj+I5rf/SN3r+Ga6asbWYJmBkFq0AySKIMWm14q0UOGDhDDfx9x0ZhhqEoScWk6hgH12CwSwGBtuUVx7PEaBz/PTJ6nedhauva8MycfjxLvoOycPHyglJz918Z/ogDQgbZn/PaNjd/vFjBUxZB1WrgE6fvgOeFAVLYSFm8PiV0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751120970; c=relaxed/simple;
-	bh=Fu4HeiN9Z/6hpzjj5g1RcA20CJsi7vFlMJq+ppBrBic=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uzgz5e1cWKdqWuZyi5uYH/JaO3gzQ6cjO7tuC2KIb/sCeWcq2W3ubQ/KgBD0Cz6GrxhntcOdMNkf1F4tnQ+yem0M+TcVq8t3H5RwKh9KqFhczonM8WH6vgldRq7ztKQ4fVCmBMLBH1aVeZEkzKsL5QOSCuQFpv+2GR0Y4GjbSLo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=L9tuIMTD; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751120969; x=1782656969;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Fu4HeiN9Z/6hpzjj5g1RcA20CJsi7vFlMJq+ppBrBic=;
-  b=L9tuIMTDf/0DXeDjti5T2bdcQS7l+U8n6efoIGD/QZLzi07Rl0Rt2GmC
-   u3MlEiO9Mg2VP85HQAtqOavSfubDlvd292cypWa8ZyBKP/y2zkgcpY8UJ
-   RoSKmgjCp361clzF5bRpL//H26uKsMu3gR5btjuJegWcDDxBl4BqEjOYe
-   cLMjpoKL2kEUD954zVUGmA3XhQA5qUNdkFykVkJb3QpC/kM9u1pSxWV5F
-   vOaW9ih5XujVXhg0lHngLIS1IoS/omdNFscEsr9b7R3bjGb3QvGALxf7q
-   yb3HkfRBNlaIFjURmXmVdX8Q5HMfATC/aSClNZG1R63KXZMrAn/PrU8QA
-   Q==;
-X-CSE-ConnectionGUID: MhYjaPfoR0y3OW3OSHyZgw==
-X-CSE-MsgGUID: 6EdsqvOSQ0ePpB9VRq3FSw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11478"; a="64466445"
-X-IronPort-AV: E=Sophos;i="6.16,273,1744095600"; 
-   d="scan'208";a="64466445"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2025 07:29:28 -0700
-X-CSE-ConnectionGUID: SscpZRYsR1enevzvXNn7Aw==
-X-CSE-MsgGUID: gWofCdI1RxCNt16FhVRTJQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,273,1744095600"; 
-   d="scan'208";a="152433815"
-Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 28 Jun 2025 07:29:25 -0700
-Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uVWYV-000X6v-0g;
-	Sat, 28 Jun 2025 14:29:23 +0000
-Date: Sat, 28 Jun 2025 22:28:45 +0800
-From: kernel test robot <lkp@intel.com>
-To: Conor Dooley <conor@kernel.org>, linux-i2c@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, conor@kernel.org,
-	Conor Dooley <conor.dooley@microchip.com>,
-	Daire McNamara <daire.mcnamara@microchip.com>,
-	Andi Shyti <andi.shyti@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] i2c: microchip-core: re-fix fake detections w/
- i2cdetect
-Message-ID: <202506282209.FXWbPIPz-lkp@intel.com>
-References: <20250626-unusable-excess-da94ebc218e8@spud>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4AD3207A0B;
+	Sat, 28 Jun 2025 15:58:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.66.62
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1751126295; cv=fail; b=tm66iZWWD0C3pqCO8bHjA6tPpcpQCVCnPXKTQdq00pwE4esIj21eH5gCm25sy9crWCnPp893eaR4KsWhJp8drmATDPGLmXvrNk3qfGJOa2bjOpnE2nKR+5rLV18t8jKUUD8dYXiEPHd2og46sOZUBXKpIkrgkm6wZnYkF3J90Oo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1751126295; c=relaxed/simple;
+	bh=9ojJVXgXwXX13yiwkJ0wFpqVLzzNL0hxA4V0v5LF1LA=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=kboEwjNREHsx4myYlZl0z1tZIR/qzp2FpLqKx9Aa8p+l57BRiE+h09ltc5bh6X3GpB3onEXeBO83XMJnXchpCCLvR1E16J7P3Ho3JGkINQii7HjeCFXu0PcA0RG8TooHu1iPyub5RCpfyZVQDXOBNdbTb7Yuz5M8563LNUDsixo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=nvrNKrtL; arc=fail smtp.client-ip=52.103.66.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=nrV9PxH2rkScmvxPE1uoLWLRZet+Ki9MEljopoxb6fcXtmib2CXPS+hUksz9S6zh5txVaPtD0TkE65spiSCPdi5qsQfOF73JDWxFXQl7NgHkGQgrcN7zG3KXdwz3VGYNu133kaQtYvPNNKVqMyAcKZvexy6+HlKxrNDF3gXTDhG1YZ5hEyMRFQ/dTKakkDu7CFn2DutI0IQaFMzae8ayAQ72dEs027zNCeD9ssACBkqJOUmGcav1QWtYB4ifJsNbPcMHhnRd9v3RFC3Ze2Jubg9ipTELS5zU+TC1OvTLWTVMVh/ccnQxjTyRIV7Gxm527C5uf6BW1+WXNaQZ2fHkgg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZR98UxKGB3eT9lq7tLbz3RXXVQ4x4yy1e4H8ilnSbKY=;
+ b=nPf7T/9XnTPl0BFEnZ0T55Je7HRt3Xpd2aMgGhc79jckqg0h9wM/gRnb61FLKVdwdVoQoH431dL5hqdbM3XUVgpCplhp+dKsOxHuhKhwtA4vmjnpAWdABVZFZmKIk9Eotb1VwpDR9Bp/eDm3nQXVSoSXMQUpQVSpUL1S089NgnAiJmDez0z2anMyN41SlLlEL1KvnHYVLxRF1QyUItYd8unJdj9u6GsP9Gvs0gNQwVK0WNRAZfkeOPuRJqS9JKf10plo9b+13fkEsXjmYD/jC5ulm+CNYFdJNoFADfztjq7NL5rjCaQ4SG4A9Ny5QpQEXPn4E+PXzLkIMT+HLa61ug==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZR98UxKGB3eT9lq7tLbz3RXXVQ4x4yy1e4H8ilnSbKY=;
+ b=nvrNKrtLUH6BgbiSdfjKE3q3Rfet7NRcC7PI94Tq75Jc2U4Zu2mODDm2UUeQltxFtm9aQTL35aJ34aRdpC0u8GPJpPbyvAZ4GUXb4+uIBmH3aidhG5op85H5y5ntaaC7tp63AyQXrVFmPPQRlih+c7v6Z02loKUWReMMHuIV70STnn8m+mL5GrYY6IQ8QRM+sHqDq1P2cSsJgSATXHsxPh5C58q0AfyasW6eTqHsYu58+wcVJYnaxDiYnIXRWR+33GViiEEYpnEHKKYE4p1lu8IkxDJVd6vz/munTp7x2uKlLZM5k2xXIPk4WCVtZvBORrwHEW4Aa5YRLXiKQ2YroA==
+Received: from SEYPR02MB5557.apcprd02.prod.outlook.com (2603:1096:101:52::6)
+ by SI2PR02MB5708.apcprd02.prod.outlook.com (2603:1096:4:1af::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8880.18; Sat, 28 Jun
+ 2025 15:58:10 +0000
+Received: from SEYPR02MB5557.apcprd02.prod.outlook.com
+ ([fe80::cb39:3489:a58d:107f]) by SEYPR02MB5557.apcprd02.prod.outlook.com
+ ([fe80::cb39:3489:a58d:107f%4]) with mapi id 15.20.8880.021; Sat, 28 Jun 2025
+ 15:58:09 +0000
+Message-ID:
+ <SEYPR02MB55575E3DE3A107D36F5393AD9644A@SEYPR02MB5557.apcprd02.prod.outlook.com>
+Date: Sat, 28 Jun 2025 23:58:03 +0800
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] i2c: qup: jump out of the loop in case of timeout
+To: Andi Shyti <andi.shyti@kernel.org>,
+ Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+Cc: linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
+ linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20250616-qca-i2c-v1-1-2a8d37ee0a30@outlook.com>
+Content-Language: en-US
+From: Yang Xiwen <forbidden405@outlook.com>
+In-Reply-To: <20250616-qca-i2c-v1-1-2a8d37ee0a30@outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SI2PR02CA0050.apcprd02.prod.outlook.com
+ (2603:1096:4:196::11) To SEYPR02MB5557.apcprd02.prod.outlook.com
+ (2603:1096:101:52::6)
+X-Microsoft-Original-Message-ID:
+ <54c4875a-f145-4bb4-9611-5ed04a1080d8@outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250626-unusable-excess-da94ebc218e8@spud>
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEYPR02MB5557:EE_|SI2PR02MB5708:EE_
+X-MS-Office365-Filtering-Correlation-Id: b66ee650-6fd1-4b45-557d-08ddb65c9362
+X-MS-Exchange-SLBlob-MailProps:
+	ScCmN3RHayH/GTHkQcP6OwNM4X+kH+hnT1Icpwuvgovv9RuadKNVlh7jsOBRXGSqEV78Py/PnYl0DknQ5Jy9f+03/ljdgCkBdzKBhsLe9uCSFlHaf2I5uhPGqDM19Gtsa+P493YBS3RJcwGarI/7ld32FmI7kD8SP3dWjyN0dDw9YXLkGrefbqq5V6JbZnU+N4qJomykx83GZ1panD3HtAymKhF/2NXJgd/VvXw//XY4RPxYX6w1UwBt2Qv/RT/spfEMc0WOYcbRBS1+/cG0k+GGFOAr041Mv+700uaRHnpOACpt3KcYDHjeoN4r1wrjy64a7D0lJlUckzMywClXEfSlBr+haAebKsgafWfKiU0gDNknOHsG2EfbXhUI8fUqbNeq4ImWIWwAs1YpPGJN6mazk7rvdS6kj0e2TpV1id9lAxOYzlJHpzBbctuF6iJ9vuR+15gNtzwEVXmkATswPodt6vNAQ4WKOqh1OkVdPjJXTk4QEUJ/IvbBQ2WECeJIQkcV3tbFylxXZ46ZKBo1qiUpnBSRSf6f/nUPFdJ+GiTapafdkvRnHQ5Lw2tRXq1Xz5rXi9YR/2p3+QOFFebRgnwS8L0g3aYV/OabWRsJLq91Wbm+ojq6LER1aPIe8YYymEwOG3hl13p2PiKDIdhOPlao9C4Tt7hUzWm/Z5WGMyAMTKteD4pY16XOOeEbF8IohexZBgj2xparuWX2iesYctxgILGLnqHoD6uaglgYiE8=
+X-Microsoft-Antispam:
+	BCL:0;ARA:14566002|8060799009|5072599009|461199028|6090799003|19110799006|15080799009|41001999006|39105399003|3412199025|440099028|40105399003;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?M3luWjArUnBOSDBrQ3ZGeFFOR1R6RmJ0UHlBVTFwd2k4dG9KcHdYWk1EZUkv?=
+ =?utf-8?B?S1MrVmVPYVRHY3dTSnFrNGtWdElYWmlQYVhJZnJTcmx5NXBNWDdyaEZyVGxT?=
+ =?utf-8?B?d1FEdkJUOXlOeDBxTDBEOStkVjcyZUpzUCtPalc0Z04rWUVZQ2tpMDRteDlP?=
+ =?utf-8?B?M0ViSHg5N2pSZmRyTnpiWEpBcUhscmJicWNkeUs4a1BNYlVnLytmSWM4VmI5?=
+ =?utf-8?B?V3dERHFDeEwrZHZFOStaRHo1K1JKdG92NDVRVVlHcEJpSkJUT0YzdEp6ZnUx?=
+ =?utf-8?B?SFNkNDBZRm0xSllub1JZdDFaTm5DaFAyQVBFQkRJN1B3UHlhOUVLYzJDUXZM?=
+ =?utf-8?B?RjN0TEQ0RFFXb1JxblIrYWR0MjY5MWVRUTRjTVByWENBTXBjSmp3dG52UlNK?=
+ =?utf-8?B?Y2E5dUpWN0RyR09ZRnpUQzg4S0VBQ2QwNVB5LzF0ciszTmk4azRhY1lDNFg1?=
+ =?utf-8?B?RlZaTTJ5bkdkWlNmN3hNQVdoMVl0eFk0U2dhSGRWVlU3dXRYdUJxZkREWjQ0?=
+ =?utf-8?B?L2xLOEhWa20vS3c1bEZkNGlMN0pXL0pmOS9HUXlVcG5LOHFjRjdoY2ltSm1Z?=
+ =?utf-8?B?UjlSZlpNWFFMMjZ2YjU5VCs3ZXB0OUNDd1BEcE85V1hIYVA1Y1dtb3libGNR?=
+ =?utf-8?B?bUVFcTA5eXpibWliUld0R1hVSW1pbklPMHh6Ky9oS2RRalVmaUYyWGE3ejJW?=
+ =?utf-8?B?TjJqdXhaV0lJQmUxV1hqb1Rsd0VSMFdYYjN0RHFsSTMvcXZGWDl2Y2FONU5l?=
+ =?utf-8?B?YXNFOThzSUhaUUxKNkpVd2w1WGxzNzlXQzlqVWhIVGZtNlYrVTZvbG5XdVF1?=
+ =?utf-8?B?Q2h2cjlZQnQ1RzlrSW84UWRaOE13cll3UFo0aFBnelM2YVdHRkJNZFZYdnI3?=
+ =?utf-8?B?cVBJR2gvVGFQWUo5a2VNRHQzbWJwV0lUaE9JaFB1WFJhcVhUOG1jLzhtYjJI?=
+ =?utf-8?B?Z0s4T2h2eTJZbUpVQXFNSTJEMisrM0pTLzlMN3RvNDNhMXBCNFViSVVoVmhS?=
+ =?utf-8?B?MGhRREpSQ0NreXErV1hsbTNqa3ZmV2VZQkErRHdTSVBENnBqd2kydG00YnJl?=
+ =?utf-8?B?c05DZ045Y1pmMENmUWNaeHZ0ajFFQ0xOQ0JCTGtJNTYwRThRVi9HVTFjWGVU?=
+ =?utf-8?B?bTVUbW5KeFlSRlJnSCtIYVpOWjE3VlpJTmtDcWVHNkd2dnJFcGtMNHlxTlFB?=
+ =?utf-8?B?bUxjaC93TjFyNk91djFFYURIV1J3YUdBc0lRT0JhbjdqeHFnSzh4K3RLNmJu?=
+ =?utf-8?B?eUxhNjR6YzhEZ2Q1U3hnL285Wi9QWHVCN1hpWnhNUis4dDY0VFBweTRpMlBn?=
+ =?utf-8?B?b1U4Wm11WVhhaFBkL2lSWEE3Qmk3VHBjSWlsQmx4dlFKUWVaZVk4VUZCdWxW?=
+ =?utf-8?B?MEx2N2ZlajlwekxDbFNvZkp3bVAxYWNPNmVaaTJXVXgxMDQ3Q3ZXOWRJamhN?=
+ =?utf-8?B?TTlHeFlKMUcxZlNQWnN0WUpEc2grc0p3RzhGbDFUaG1FNUpPZzVSSzNiTzho?=
+ =?utf-8?B?WXc0Z1lyVjFKRDc0S2ZtVHlScER0VUhhUE9aTitleklDTlZGdGEyakdGWWhm?=
+ =?utf-8?B?ckcrVEpJQjk5VldYdkpWQXFYWXBtVGo0T0lvOENnamFWbXpqeDFPbDlrU3k5?=
+ =?utf-8?B?NXVQNmdudVVleHY2Q2dUS25PR3dlZ3c9PQ==?=
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?S1M2UVo5UlZ0K2xMSzIvblQxTUN1Vkt4TWc4bzBWZDVWNnEvRU9lVWRpS215?=
+ =?utf-8?B?WXUxNkllcnlhQUZxQzlHRzNHMGJhTGtTSk9VbUZFYmtpWHY1VjlOS0dEOVZj?=
+ =?utf-8?B?UTh3ZTE3U1J4RTJObGpmcXpoZExhY0pidkJPMDF0RzE1VXdrZFNoVEZCeHpR?=
+ =?utf-8?B?NmRHZ0x2SWNCblNBMFV3TjRjSVkybWUySElwWXFLZ1VETU1QRThMMm1BTTdL?=
+ =?utf-8?B?dU1BT0lZRE8yZzYvU0c3S09oUWVWcXFZMCtTUUhsSnlJOFczdHdrNmNQVVQ5?=
+ =?utf-8?B?K0NyVWFxeGM4RDRGaGVxVkduQ0NHdmFOZnlTemFvUDd2S1ZFTUN2N3NMcDBM?=
+ =?utf-8?B?LzNYc0ZsOS8vckVhMktkazBZa29pWmtMT0E2TFNkTVk5V052L1REUzFhT0Vv?=
+ =?utf-8?B?bFl6cktEOTdDM25uQUFyeXJFczZaMUhPdURUdDhtWDMvb0cwTlliUmd5YldD?=
+ =?utf-8?B?UFlvNW9Dczk2NmxFM1lLNTl4cFVkZWZmclBweXU3Syt3eXFDZ0w0Q1AybXdn?=
+ =?utf-8?B?RldpR0twYXF2ZjI0NWVkMkRmajAvYjNnWUw1eWl6djRtSjRybzlEdytFbHpk?=
+ =?utf-8?B?R0FyMFcyNkhoTHlQd3A1aU1LeWF1ZVdBRHNBTUUyMkgySFJhcGM0RHU2aTdY?=
+ =?utf-8?B?aEpsejJ6ZUNZVVB0VEpBSkdmcEhlSUZYcklyZHhtWDl1dGxkRHUyNk1iOUdi?=
+ =?utf-8?B?bUNJVTExZFBtVEdIZzBiUHdrVlg4MHdpRUg3dHdaMlhtRS9FRGEvVzVKL1Yx?=
+ =?utf-8?B?NkNPOVBZYmlJQkVOYUZBb2llS1RZVHpyVEJsdFZDV2xqRERPb0ozOFdwcXFu?=
+ =?utf-8?B?SnZWVzVwd05WYy9rWEFoTnVldS93YVFOaHBFVDgxZ2Q5VVk3YUc4anI5ZDlY?=
+ =?utf-8?B?Wi9yOEk4aWlKNjJpb2xjZW9RbGdncDVGbVcyUzlhUEFJckRhU2JURmh0Yjdv?=
+ =?utf-8?B?VnZUaWY3a1dNVDd5T2lIZmNoelNqZ3dzQks5TUh1Y1RjSmJudTNHNE9KeGx6?=
+ =?utf-8?B?TWJmWC9aMyt2d2IySUVYWDVvcHpxNnAyUjZmMlBoNm9Qa2swZzZNdkZvakVT?=
+ =?utf-8?B?L05kalBKemZuRWpmQmhCNXNXUFpJaTFzM0pvbmw1b2FESWQ5cEFKME1ZVXJp?=
+ =?utf-8?B?SU0wcFdrdWMyVm1kanpJZmk3R3JQcEZUb0M3dThVbUoveCtWNkY1TGR3bEVi?=
+ =?utf-8?B?NkdTbVF4R1pldTFzQ0tuNVhaQVZoYnk4RThBNGxNcnNZZ2lyK0JJVDByYmFE?=
+ =?utf-8?B?RzUxRUNuNjVWMktwOGxPMVQxek9YQzYvUmVXZndZcHhrTG81TmN5ZllSUkJP?=
+ =?utf-8?B?dzhGMTNDUTRzOGs5RmlnREZIZndlM2llelB5WHV0eE90aVMxTndqa0Vvc2xP?=
+ =?utf-8?B?MW8rQktsaEhQWkRZb0xZWWtjd2RRc3dBaVFQSmdDaXZjcmVyb3AySUdBV21W?=
+ =?utf-8?B?MGpIVkwxcngvZXA4Zzl5dXkvSGJmaUlUZmFwdDJLQms5bHlPVzlPeVVqMFVF?=
+ =?utf-8?B?ZVJTZFNGaFRsUnY2QmppVGZKd1gyYzRIbWQwdXMxV2hBSEpkUzh5a0lnMzhM?=
+ =?utf-8?B?TmhJNVZoK3F5czdkZldEbU9pVjUyRTdDbHd1MWpSdVMzWEVPUmNPSUZ1TWxZ?=
+ =?utf-8?B?QkhmajFmSER5czFsN1lIVVZyRit4c0Z0UW1haWJZVC9uemYrRGt6RFdIVkt6?=
+ =?utf-8?B?RWZJVFlTS1RUT0N5cW9yQUczQUtIb21aMENDeXArdFBqMHo4T3BhTDVhNEVE?=
+ =?utf-8?Q?VsAB4+q5qhVcrjPLgPW2oyOpCUI0RTbYrCzayVf?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b66ee650-6fd1-4b45-557d-08ddb65c9362
+X-MS-Exchange-CrossTenant-AuthSource: SEYPR02MB5557.apcprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jun 2025 15:58:08.8846
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+	00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR02MB5708
 
-Hi Conor,
+On 6/16/2025 12:01 AM, Yang Xiwen via B4 Relay wrote:
+> From: Yang Xiwen <forbidden405@outlook.com>
+>
+> Original logic only sets the return value but doesn't jump out of the
+> loop if the bus is kept active by a client. This is not expected. A
+> malicious or buggy i2c client can hang the kernel in this case and
+> should be avoided. This is observed during a long time test with a
+> PCA953x GPIO extender.
+>
+> Fix it by changing the logic to not only sets the return value, but also
+> jumps out of the loop and return to the caller with -ETIMEDOUT.
+>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Yang Xiwen <forbidden405@outlook.com>
+> ---
+>   drivers/i2c/busses/i2c-qup.c | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/i2c/busses/i2c-qup.c b/drivers/i2c/busses/i2c-qup.c
+> index 3a36d682ed57..5b053e51f4c9 100644
+> --- a/drivers/i2c/busses/i2c-qup.c
+> +++ b/drivers/i2c/busses/i2c-qup.c
+> @@ -452,8 +452,10 @@ static int qup_i2c_bus_active(struct qup_i2c_dev *qup, int len)
+>   		if (!(status & I2C_STATUS_BUS_ACTIVE))
+>   			break;
+>   
+> -		if (time_after(jiffies, timeout))
+> +		if (time_after(jiffies, timeout)) {
+>   			ret = -ETIMEDOUT;
+> +			break;
+> +		}
+>   
+>   		usleep_range(len, len * 2);
+>   	}
+>
+> ---
+> base-commit: 19272b37aa4f83ca52bdf9c16d5d81bdd1354494
+> change-id: 20250615-qca-i2c-d41bb61aa59e
+>
+> Best regards,
 
-kernel test robot noticed the following build warnings:
+Ping for review. The original logic error is very clear. This patch is 
+also very small and can be reviewed in a short time.
 
-[auto build test WARNING on andi-shyti/i2c/i2c-host]
-[also build test WARNING on linus/master v6.16-rc3 next-20250627]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Conor-Dooley/i2c-microchip-core-re-fix-fake-detections-w-i2cdetect/20250627-001626
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
-patch link:    https://lore.kernel.org/r/20250626-unusable-excess-da94ebc218e8%40spud
-patch subject: [PATCH v2] i2c: microchip-core: re-fix fake detections w/ i2cdetect
-config: riscv-randconfig-002-20250628 (https://download.01.org/0day-ci/archive/20250628/202506282209.FXWbPIPz-lkp@intel.com/config)
-compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250628/202506282209.FXWbPIPz-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506282209.FXWbPIPz-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/i2c/busses/i2c-microchip-corei2c.c:510:6: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-           if (ret < 0)
-               ^~~
-   drivers/i2c/busses/i2c-microchip-corei2c.c:438:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
-   1 warning generated.
-
-
-vim +/ret +510 drivers/i2c/busses/i2c-microchip-corei2c.c
-
-   428	
-   429	static int mchp_corei2c_smbus_xfer(struct i2c_adapter *adap, u16 addr, unsigned short flags,
-   430					   char read_write, u8 command,
-   431					   int size, union i2c_smbus_data *data)
-   432	{
-   433		struct i2c_msg msgs[2];
-   434		struct mchp_corei2c_dev *idev = i2c_get_adapdata(adap);
-   435		u8 tx_buf[I2C_SMBUS_BLOCK_MAX + 2];
-   436		u8 rx_buf[I2C_SMBUS_BLOCK_MAX + 1];
-   437		int num_msgs = 1;
-   438		int ret;
-   439	
-   440		msgs[CORE_I2C_SMBUS_MSG_WR].addr = addr;
-   441		msgs[CORE_I2C_SMBUS_MSG_WR].flags = 0;
-   442	
-   443		if (read_write == I2C_SMBUS_READ && size <= I2C_SMBUS_BYTE)
-   444			msgs[CORE_I2C_SMBUS_MSG_WR].flags = I2C_M_RD;
-   445	
-   446		if (read_write == I2C_SMBUS_WRITE && size <= I2C_SMBUS_WORD_DATA)
-   447			msgs[CORE_I2C_SMBUS_MSG_WR].len = size;
-   448	
-   449		if (read_write == I2C_SMBUS_WRITE && size > I2C_SMBUS_BYTE) {
-   450			msgs[CORE_I2C_SMBUS_MSG_WR].buf = tx_buf;
-   451			msgs[CORE_I2C_SMBUS_MSG_WR].buf[0] = command;
-   452		}
-   453	
-   454		if (read_write == I2C_SMBUS_READ && size >= I2C_SMBUS_BYTE_DATA) {
-   455			msgs[CORE_I2C_SMBUS_MSG_WR].buf = tx_buf;
-   456			msgs[CORE_I2C_SMBUS_MSG_WR].buf[0] = command;
-   457			msgs[CORE_I2C_SMBUS_MSG_RD].addr = addr;
-   458			msgs[CORE_I2C_SMBUS_MSG_RD].flags = I2C_M_RD;
-   459			num_msgs = 2;
-   460		}
-   461	
-   462		if (read_write == I2C_SMBUS_READ && size > I2C_SMBUS_QUICK)
-   463			msgs[CORE_I2C_SMBUS_MSG_WR].len = 1;
-   464	
-   465		switch (size) {
-   466		case I2C_SMBUS_QUICK:
-   467			msgs[CORE_I2C_SMBUS_MSG_WR].buf = NULL;
-   468			return 0;
-   469		case I2C_SMBUS_BYTE:
-   470			if (read_write == I2C_SMBUS_WRITE)
-   471				msgs[CORE_I2C_SMBUS_MSG_WR].buf = &command;
-   472			else
-   473				msgs[CORE_I2C_SMBUS_MSG_WR].buf = &data->byte;
-   474			break;
-   475		case I2C_SMBUS_BYTE_DATA:
-   476			if (read_write == I2C_SMBUS_WRITE) {
-   477				msgs[CORE_I2C_SMBUS_MSG_WR].buf[1] = data->byte;
-   478			} else {
-   479				msgs[CORE_I2C_SMBUS_MSG_RD].len = size - 1;
-   480				msgs[CORE_I2C_SMBUS_MSG_RD].buf = &data->byte;
-   481			}
-   482			break;
-   483		case I2C_SMBUS_WORD_DATA:
-   484			if (read_write == I2C_SMBUS_WRITE) {
-   485				msgs[CORE_I2C_SMBUS_MSG_WR].buf[1] = data->word & 0xFF;
-   486				msgs[CORE_I2C_SMBUS_MSG_WR].buf[2] = (data->word >> 8) & 0xFF;
-   487			} else {
-   488				msgs[CORE_I2C_SMBUS_MSG_RD].len = size - 1;
-   489				msgs[CORE_I2C_SMBUS_MSG_RD].buf = rx_buf;
-   490			}
-   491			break;
-   492		case I2C_SMBUS_BLOCK_DATA:
-   493			if (read_write == I2C_SMBUS_WRITE) {
-   494				int data_len;
-   495	
-   496				data_len = data->block[0];
-   497				msgs[CORE_I2C_SMBUS_MSG_WR].len = data_len + 2;
-   498				for (int i = 0; i <= data_len; i++)
-   499					msgs[CORE_I2C_SMBUS_MSG_WR].buf[i + 1] = data->block[i];
-   500			} else {
-   501				msgs[CORE_I2C_SMBUS_MSG_RD].len = I2C_SMBUS_BLOCK_MAX + 1;
-   502				msgs[CORE_I2C_SMBUS_MSG_RD].buf = rx_buf;
-   503			}
-   504			break;
-   505		default:
-   506			return -EOPNOTSUPP;
-   507		}
-   508	
-   509		mchp_corei2c_xfer(&idev->adapter, msgs, num_msgs);
- > 510		if (ret < 0)
-   511			return ret;
-   512	
-   513		if (read_write == I2C_SMBUS_WRITE || size <= I2C_SMBUS_BYTE_DATA)
-   514			return 0;
-   515	
-   516		switch (size) {
-   517		case I2C_SMBUS_WORD_DATA:
-   518			data->word = (rx_buf[0] | (rx_buf[1] << 8));
-   519			break;
-   520		case I2C_SMBUS_BLOCK_DATA:
-   521			if (rx_buf[0] > I2C_SMBUS_BLOCK_MAX)
-   522				rx_buf[0] = I2C_SMBUS_BLOCK_MAX;
-   523			/* As per protocol first member of block is size of the block. */
-   524			for (int i = 0; i <= rx_buf[0]; i++)
-   525				data->block[i] = rx_buf[i];
-   526			break;
-   527		}
-   528	
-   529		return 0;
-   530	}
-   531	
+If it insists on waiting for the bit to clear, it should not return 
+-ETIMEDOUT then.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Regards,
+Yang Xiwen
+
 
