@@ -1,113 +1,133 @@
-Return-Path: <linux-i2c+bounces-11687-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11688-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20F45AED55C
-	for <lists+linux-i2c@lfdr.de>; Mon, 30 Jun 2025 09:14:44 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96D76AED5A8
+	for <lists+linux-i2c@lfdr.de>; Mon, 30 Jun 2025 09:31:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6BE3B166A4D
-	for <lists+linux-i2c@lfdr.de>; Mon, 30 Jun 2025 07:14:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 593747A9AD7
+	for <lists+linux-i2c@lfdr.de>; Mon, 30 Jun 2025 07:29:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3552F2192E5;
-	Mon, 30 Jun 2025 07:14:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 927C7220F36;
+	Mon, 30 Jun 2025 07:30:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=zohomail.com header.i=safinaskar@zohomail.com header.b="XO2CmYYn"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MXlmBR6u"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from sender4-pp-o95.zoho.com (sender4-pp-o95.zoho.com [136.143.188.95])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 650243987D;
-	Mon, 30 Jun 2025 07:14:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.95
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751267678; cv=pass; b=VZLNiLgY7171z6kwCQria3Uo3YMUTJLSRVRmGjeNyOTAdfP+bDfsCuqYWxt2wC3ARO78dCS62puP/5fJ7OcPo6CLzy/lfKlS6kNgwlMNGL9SrrQRA+hAPVJ44F9BcHsoG+arfKk3CLbZNzQZEUJIaMH1P9cj7/hPSRYYINElnkM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751267678; c=relaxed/simple;
-	bh=Ny+909tFnzeBGP+zVu17ZybQEydTkcpvwzzTGjNzvpk=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 MIME-Version:Content-Type; b=h1i8/vpl7Y6TOUz7nQm0HS9+r43Nr8BMlnrePIKSJvZszVl/JwI/xw0BhalJazrReJNwg+Q+94zemzbySxUJ4bIS/EQ8aojfEMwRzwZ1P2Xx2FADOq7tDa8A0+HpT6t0V7RNfgmiGY3vstNW/cUOcZQVS1rMa7XDdkQWSf1y+Mg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=zohomail.com; spf=pass smtp.mailfrom=zohomail.com; dkim=pass (1024-bit key) header.d=zohomail.com header.i=safinaskar@zohomail.com header.b=XO2CmYYn; arc=pass smtp.client-ip=136.143.188.95
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=zohomail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zohomail.com
-ARC-Seal: i=1; a=rsa-sha256; t=1751267657; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=G5kRKX+NlfiiNYF/RvR2HJ+o0BbZ6T42vBjuNjXkSGbpWoqcvOkMcjsiZPRlaUIztuMjkxzC5SKJJGWhLiswQ/N0IaJUnOFiAtlBXBJgFX9Jk3zQG3SQm5TFU2Eh3/ZMJw2c5y7kV3O8K09YPaqH4O0/huO7B6ogZonAiVMEnAQ=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1751267657; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=4g9b3rt0LEwBpyUQi7Y/ERedSAXvJddMYEJ9iWhZZck=; 
-	b=fKgrTIfETgbN2vPrVjoieXYPDA0o/h4QL54s29T8GZgZfEdqt9NCV5I8gShoyweHPN92kkzDYZI8Xh5Z0mcq/GZ0yZ2A23yEx5CfHZtA9rcEBM3hFcHLm/wDp2v3AgbnfN7MkD9Z/aKFwgQZf6P9jNRo5Do3Xbn4xCm5q3sL6yU=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=zohomail.com;
-	spf=pass  smtp.mailfrom=safinaskar@zohomail.com;
-	dmarc=pass header.from=<safinaskar@zohomail.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1751267657;
-	s=zm2022; d=zohomail.com; i=safinaskar@zohomail.com;
-	h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Feedback-ID:Message-Id:Reply-To;
-	bh=4g9b3rt0LEwBpyUQi7Y/ERedSAXvJddMYEJ9iWhZZck=;
-	b=XO2CmYYnpaNTIT8v0DM5tDTwqchQJz63wd5dtSdXi6fRlPyPqXt1OJDzi+yL9k0f
-	IuY/A9lmXKMCzfJyy/Q60h71BI22k+AiDP9b3U8wr4YwAmRaz/YfFTRrfpaLx9o6UQb
-	2YyxWAFIBDItpYFmjA4SiN3q05Sh/qHZ2af4zEuo=
-Received: from mail.zoho.com by mx.zohomail.com
-	with SMTP id 1751267656272638.7175982375178; Mon, 30 Jun 2025 00:14:16 -0700 (PDT)
-Received: from  [212.73.77.104] by mail.zoho.com
-	with HTTP;Mon, 30 Jun 2025 00:14:16 -0700 (PDT)
-Date: Mon, 30 Jun 2025 11:14:16 +0400
-From: Askar Safin <safinaskar@zohomail.com>
-To: "Mario Limonciello" <superm1@kernel.org>
-Cc: "Linux i2c" <linux-i2c@vger.kernel.org>,
-	"linux-acpi" <linux-acpi@vger.kernel.org>,
-	"regressions" <regressions@lists.linux.dev>,
-	"DellClientKernel" <Dell.Client.Kernel@dell.com>,
-	"linux-gpio" <linux-gpio@vger.kernel.org>,
-	"Raul E Rangel" <rrangel@chromium.org>,
-	"Benjamin Tissoires" <benjamin.tissoires@redhat.com>,
-	"Dmitry Torokhov" <dmitry.torokhov@gmail.com>,
-	"Bartosz Golaszewski" <bartosz.golaszewski@linaro.org>,
-	"Werner Sembach" <wse@tuxedocomputers.com>,
-	"Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
-Message-ID: <197bfafc23e.e6344936595425.1881540896161671378@zohomail.com>
-In-Reply-To: <6f42c722-cfa5-416d-8b63-730ad88e6b9d@kernel.org>
-References: <197ae95ffd8.dc819e60457077.7692120488609091556@zohomail.com>
- <5d7ee2bc-6595-46f1-8c8f-0c439f033407@kernel.org>
- <197af82e9e7.10ca643e5467232.6943045931834955890@zohomail.com> <6f42c722-cfa5-416d-8b63-730ad88e6b9d@kernel.org>
-Subject: Re: [REGRESSION][BISECTED] Dell Precision 7780 wakes up on its own
- from suspend
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C76341BD9CE;
+	Mon, 30 Jun 2025 07:30:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1751268630; cv=none; b=DD8tx7+LUVKPCGpKvDittLLnslRg6oEA3r7wrGsDBknKarzRNWwX5gx3Bbb/pl+aJlSn2wQn2OjeaRJtMN8umNhJjtG75V+hs5foP2pnFOvuXlpL/3INmYGS+VAO9nfJWcCLwJ1Fy/8uZ/ji5iM/PIz7YeLSHBSSrGIOTJnzd8Y=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1751268630; c=relaxed/simple;
+	bh=UDxbpQ15IxVf+2wTqZbQJ3fTPgg8IaZ8MiQmaAHvyqc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XOTJYU47iQJQcK+vpCezGsYLHr1Yk/sEu4ItUW0Zm5YEvF5VAGqv+ouDOYRSq2fmgWCPVgP6AKHoyZ5Etca1SpBiiheg3qcr9MeaRlqJWISHLlju/xj2wZ/RDRzO3OgBzuBxzMOnZG3FholZL3a8QYQKYNy2ERE4yID10nRWD+Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MXlmBR6u; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1751268629; x=1782804629;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=UDxbpQ15IxVf+2wTqZbQJ3fTPgg8IaZ8MiQmaAHvyqc=;
+  b=MXlmBR6urTT4oeEQMa6q+0NP3vUEJ55iaPEspAolBO53Ix57QXZnlnb3
+   hchwFNzLiSijzlW14zcHNNh3icTTsGZOl/EnsqNNfeIswXeoyqCbnWiM3
+   Qr/ShRQMS8yb+C/s+XNSJuNlpSaE0RT8JBxpj6npKJMR6iLFQBGdW1wcv
+   9UxbqnrvoaTBkNr9/tYPZuOOBSHxklLxf20A08IOzACra4f6LhSz6fO5D
+   GxGFm1EuIyDcgRofgZvxNNQjFol6tWf3O7LuWwtCra5IGow+l5GTJJ+jp
+   xaA9wHRIghOsZkYIby5W4HbaETzUc41QmB8G6I+yRtihYEXMy91kSqjKk
+   A==;
+X-CSE-ConnectionGUID: 6OCl2JetSqernA1uaT9FZA==
+X-CSE-MsgGUID: 7zBsP5J+QUu169/NgGcEUg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11479"; a="71053033"
+X-IronPort-AV: E=Sophos;i="6.16,277,1744095600"; 
+   d="scan'208";a="71053033"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2025 00:30:28 -0700
+X-CSE-ConnectionGUID: kx5SBltdRq+aJvVD5fhRnQ==
+X-CSE-MsgGUID: pr28x6e/Q8q298J8osKVhA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,277,1744095600"; 
+   d="scan'208";a="153479666"
+Received: from smile.fi.intel.com ([10.237.72.52])
+  by fmviesa006.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2025 00:30:23 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1uW8y3-0000000BEf9-2j4t;
+	Mon, 30 Jun 2025 10:30:19 +0300
+Date: Mon, 30 Jun 2025 10:30:19 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Rodrigo Vivi <rodrigo.vivi@intel.com>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Lucas De Marchi <lucas.demarchi@intel.com>,
+	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
+	Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Jan Dabros <jsd@semihalf.com>, Andi Shyti <andi.shyti@kernel.org>,
+	Raag Jadav <raag.jadav@intel.com>,
+	"Tauro, Riana" <riana.tauro@intel.com>,
+	"Adatrao, Srinivasa" <srinivasa.adatrao@intel.com>,
+	"Michael J. Ruhl" <michael.j.ruhl@intel.com>,
+	intel-xe@lists.freedesktop.org, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 1/4] i2c: designware: Add quirk for Intel Xe
+Message-ID: <aGI9C6MR8qhe0MHR@smile.fi.intel.com>
+References: <20250627135314.873972-1-heikki.krogerus@linux.intel.com>
+ <20250627135314.873972-2-heikki.krogerus@linux.intel.com>
+ <aF6nEOVhLURyf616@smile.fi.intel.com>
+ <aF8N0dYk_WAJjvVu@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-Importance: Medium
-User-Agent: Zoho Mail
-X-Mailer: Zoho Mail
-Feedback-ID: rr08011227d2834feaa81ae7a61d8469c300002f53f71d2a8c9c14bafd63bc721216f32cb3d939ae981de558:zu080112274d7945573b527403042c24c100003ce6475868fd94ceabf382ee747bde5b10245760e856ceda14:rf0801122bbe182296f0d2f8051a9483d70000aac597d692a69bceb28f8074c107afd614e0604984148a79d0703fa681:ZohoMail
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aF8N0dYk_WAJjvVu@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
- ---- On Fri, 27 Jun 2025 07:58:15 +0400  Mario Limonciello <superm1@kernel.org> wrote ---
- > That's odd.  It should be made when the PMC core driver binds.  Maybe
- > others will know what's missing here.
+On Fri, Jun 27, 2025 at 05:32:01PM -0400, Rodrigo Vivi wrote:
+> On Fri, Jun 27, 2025 at 05:13:36PM +0300, Andy Shevchenko wrote:
+> > On Fri, Jun 27, 2025 at 04:53:11PM +0300, Heikki Krogerus wrote:
 
-Command "grep -r -E -I last_hw_sleep ." in culpit kernel (1796f808e4bb2c074824d)
-shows nothing. (This is somewhere around 6.1).
+...
 
-So, culpit commit is too old.
+> > >  static int dw_i2c_plat_probe(struct platform_device *pdev)
+> > >  {
+> > > +	u32 flags = (uintptr_t)device_get_match_data(&pdev->dev);
+> > 
+> > > -	dev->flags = (uintptr_t)device_get_match_data(device);
+> > >  	if (device_property_present(device, "wx,i2c-snps-model"))
+> > > -		dev->flags = MODEL_WANGXUN_SP | ACCESS_POLLING;
+> > > +		flags = MODEL_WANGXUN_SP | ACCESS_POLLING;
+> > >  
+> > >  	dev->dev = device;
+> > >  	dev->irq = irq;
+> > > +	dev->flags = flags;
+> > 
+> > Maybe I'm missing something, but why do we need these (above) changes?
+> 
+> in between, it is introduced a new one:
+> flags |= ACCESS_POLLING;
+> 
+> So, the initialization moved up, before the ACCESS_POLLING, and
+> it let the assignment to the last, along with the group.
 
-If you want, I can retest this thing on current master and on current master with
-revert 1796f808e4bb2c074824d.
+I still don't get. The cited code is complete equivalent.
 
- > I see in your bad config interrupt 14 is waking the system.  In the good
- > config interrupt 8 is waking it.
- >
- > What is in /proc/interrupts?
+-- 
+With Best Regards,
+Andy Shevchenko
 
-/proc/interrupts from culpit kernel: https://paste.debian.net/1382819/
-
---
-Askar Safin
-https://types.pl/@safinaskar
 
 
