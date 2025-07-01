@@ -1,47 +1,47 @@
-Return-Path: <linux-i2c+bounces-11744-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11745-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3709AEFFDF
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Jul 2025 18:32:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B233AEFFE6
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Jul 2025 18:32:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E2A41173DD8
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Jul 2025 16:32:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EA325178FC5
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Jul 2025 16:32:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9A50279791;
-	Tue,  1 Jul 2025 16:31:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7250276058;
+	Tue,  1 Jul 2025 16:32:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a9XIuGEp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uqFMmRMr"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A46E72BAF4;
-	Tue,  1 Jul 2025 16:31:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FA311F428F;
+	Tue,  1 Jul 2025 16:32:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751387510; cv=none; b=GgoKz+ZqaQly5EJQAvWYCTS+J01I3nXo8/cipgbIoEAkOvlt29uGZdKpKVtT49xKibZSPljqvLJ273wyt6Z1vhVcFvfxubykt/mWtuOFClPvdhcTgumwMB4V/gud+DwXwoBf+zmnYX5zn9nDwKlbj5akC+CI+/lhXKTua6hWICc=
+	t=1751387552; cv=none; b=d/ElODCbYJjGRVB2ldVH/WqvQvut2VOG76x1KASYZZrhno6ZAUKVT2PPQhdXRw7eZRF1gtgp0tgHrNkAaBpkQ8aYU+rkM2x60dyTatoZfJBvYiGlq0dTJS4nZ8wg6s4QIfLfishxLBATyjKB1WVcr89DjIALpxVP9kvZ77qAu/w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751387510; c=relaxed/simple;
-	bh=xyBmcnhbzF75bFtyZHhh19c+VqGZGqbSTS7OxTVcXrY=;
+	s=arc-20240116; t=1751387552; c=relaxed/simple;
+	bh=yY8157hjb4vrAMHnghGfwO7Y+f3XeiGwvIscnnt6e+s=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LfItU7GHJuz397sS1lK6Zqj81X1zp4xgR2j5pnb5xZ6D2fGEtKti5J6HOtopSG06YL2X1bFA7zOKAknviN6ADOx3zW4IdoK4v0G9knoYnYUJqvOFUezRO/mtBUn7GPZ7claOAkW4NRdSy2+w1ovefhLaG2PECvqg5RjY7pdjRIw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a9XIuGEp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB134C4CEEB;
-	Tue,  1 Jul 2025 16:31:47 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=kpeSNm4fWMutN/HzbjruJ6o0EtkkcJuYMNc94BZdZ4aY+53AOegL2336f/gW8T7CN1MTpztO8j3VXZUKqBZfSt54m7IbVZEFpDTW8EdnvO3MH8fXdN1oRmAF9pp2T9+r4N06Rq5mQrri8FdzJXLuXvzdo1gGDv7WCGFq8EMfpbs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uqFMmRMr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74F2EC4CEEF;
+	Tue,  1 Jul 2025 16:32:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751387509;
-	bh=xyBmcnhbzF75bFtyZHhh19c+VqGZGqbSTS7OxTVcXrY=;
+	s=k20201202; t=1751387552;
+	bh=yY8157hjb4vrAMHnghGfwO7Y+f3XeiGwvIscnnt6e+s=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=a9XIuGEpA8WarzU2BPZ0jcruYfynWh8aYTN+UYKBg5ZCzAxFvq/ee4ec3V4XKVTCt
-	 +MqShV4DqE/7Tuwsy2pjATFse4dARBGUjjOVipE7pe47K9HwY4JdH6cRT6BjD6rrzQ
-	 +2vTK4jhDJbJaX1rjoxwY8OqnkBMUCpZFDNmb2FeNQSkEKFAcMXKtzTB4PTSZq19C6
-	 cvlUUq1W/Ik4rIxQzRkFRDXvWbVYN0SYFGyeIP1m2QWoHfnujs92UnzXePYdzLvhnT
-	 2DKIbZLYHQUH48cf0Uil2IYIHP+j8fLHObZNzcRFnURIojwelBiyo20hFoaiVfJrYv
-	 xk3Upnaz+MyDA==
-Date: Tue, 1 Jul 2025 18:31:43 +0200
+	b=uqFMmRMrIizrNOGH2fB1eaIMDlUhGC7FiaC/70V4QaOdSD89FPdlLYXcxOPDIcAFd
+	 uCaBuWxE5JyHmDuAFTknPvT7nI5Fo/80xn0v95o7TRElwbEK4QLyWxsoYarzO6lqjr
+	 oCwH/cuqgeNip76TAfCqGKclrRJs524FMIyF4vD53+CPvj+CM/+9AUReVtpkIg7/+C
+	 7ppRv2HggSE8R68Dn57qQCc4LpdHhkImMTrzTpB9s5tu8A6UG7F/GznadlPLBcPKT0
+	 43E8iJf/S2oWSGY2ME6F55VzkCGGcmGAElUYNxx3PnWyUnCUSdKSlhrcrRJGslkwlo
+	 MkvyEy+bnq+oA==
+Date: Tue, 1 Jul 2025 18:32:27 +0200
 From: Andi Shyti <andi.shyti@kernel.org>
 To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 Cc: Lucas De Marchi <lucas.demarchi@intel.com>, 
@@ -52,11 +52,10 @@ Cc: Lucas De Marchi <lucas.demarchi@intel.com>,
 	"Tauro, Riana" <riana.tauro@intel.com>, "Adatrao, Srinivasa" <srinivasa.adatrao@intel.com>, 
 	"Michael J. Ruhl" <michael.j.ruhl@intel.com>, intel-xe@lists.freedesktop.org, linux-i2c@vger.kernel.org, 
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 1/5] i2c: designware: Use polling by default when
- there is no irq resource
-Message-ID: <c77xrjlv5cc6mfjqeu5jhusqwzd6ga5w5ipijohmncaxuvd4bf@bgty5kororry>
+Subject: Re: [PATCH v6 2/5] i2c: designware: Add quirk for Intel Xe
+Message-ID: <fv437o3j3j3durqvdtvd5fjgfdhbzsnfv4r34xptxahctbzhq6@kvy3zoiowrnp>
 References: <20250701122252.2590230-1-heikki.krogerus@linux.intel.com>
- <20250701122252.2590230-2-heikki.krogerus@linux.intel.com>
+ <20250701122252.2590230-3-heikki.krogerus@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -65,20 +64,15 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250701122252.2590230-2-heikki.krogerus@linux.intel.com>
+In-Reply-To: <20250701122252.2590230-3-heikki.krogerus@linux.intel.com>
 
 Hi Heikki,
 
-On Tue, Jul 01, 2025 at 03:22:48PM +0300, Heikki Krogerus wrote:
-> The irq resource itself can be used as a generic way to
-> determine when polling is needed.
+On Tue, Jul 01, 2025 at 03:22:49PM +0300, Heikki Krogerus wrote:
+> The regmap is coming from the parent also in case of Xe
+> GPUs. Reusing the Wangxun quirk for that.
 > 
-> This not only removes the need for special additional device
-> properties that would soon be needed when the platform may
-> or may not have the irq, but it also removes the need to
-> check the platform in the first place in order to determine
-> is polling needed or not.
-> 
+> Originally-by: Michael J. Ruhl <michael.j.ruhl@intel.com>
 > Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
