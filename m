@@ -1,135 +1,150 @@
-Return-Path: <linux-i2c+bounces-11736-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11737-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C7DBAEFB28
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Jul 2025 15:50:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id AA04FAEFC87
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Jul 2025 16:32:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6BF903B60AE
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Jul 2025 13:50:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AC7FB3A5CDF
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Jul 2025 14:30:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A84892749CF;
-	Tue,  1 Jul 2025 13:50:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E3AB275110;
+	Tue,  1 Jul 2025 14:31:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="am5HClE2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HUSGVF3c"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDB06242D9B;
-	Tue,  1 Jul 2025 13:50:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50DE32727E2
+	for <linux-i2c@vger.kernel.org>; Tue,  1 Jul 2025 14:31:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751377823; cv=none; b=E5gIZtwaAtItw/eyTHDqZPuG2pDOGkjVW78xF8nCPrM/UzWsH8K0mxvRX+RqxV7jIhDzWN1AadFFYBxJS5ry5hGLNPzJEsZbTwFO66qtialsdaMUiIbforQI8CJltTSPFmExnfP61dOeW+iahi22BPtYKNd7jYN/Xz8w3JHTlRs=
+	t=1751380268; cv=none; b=EHWjVrEFYsqDieMHMFQTq5PEqLNmif6fZ4TVChNnMLGuydj4oNyLlmUJ/hmLHbk52FxGJiFnIkv4vVfsIl6l+C2XTc4wAaVZeKhI3YMRU6txymgl2OyMZkKvRfRh75qNTuL0Wy67a6dqYC4ngovlIMJpmsN+Uyx61/qdaWWhb30=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751377823; c=relaxed/simple;
-	bh=RFvF9KCP9IGby3aofIlAsOtLhVx+o/OGg9eljFscdY8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JfAgz2VwdFE5ZaPoQ3LN3OrngdbRimcrRFxBCeSx4jhnR/le0VmJ6dLehRovYV0Up6q0yWaknB/PRSEC2AWvmcFvV8qxyXeWB2rTzw7U3V/vZLZlEDPqj2GJygjBXNQU+WZJ2qHUjegzTlY47hBOpoBLCXAgk1FL5Q9tXbeGERc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=am5HClE2; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751377822; x=1782913822;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=RFvF9KCP9IGby3aofIlAsOtLhVx+o/OGg9eljFscdY8=;
-  b=am5HClE2CGri4t7Gbckko4xs/Ia1FFWaQBUaI6IVFzOxY/w3bvp7njR4
-   89aL2sUdRXYVxtAPSzdE0zX/ZNqZk7V8mv2jSMN1yH0Qi3xyKpG1tyfoH
-   /7u75I7PvGC6WH4NuLJXaNaHxuQwScXBT/jVjyhMxDs1GbnzcqwKoZsBz
-   H5bdMefFTr51ZREXGXbbxYAQRLlXqkHnNe7zDoWfyAXfqECZfjn3GhlzY
-   wl7qhgapkqHXXBAsUuZIy3bhkVBeWUgAest1qticlu3XC9FqhrrIqH24P
-   rPtHEjHXpopvMzd/epOwbsHMTsEtlEinc+fRPlFDhb3dJJsglD/yisjEM
-   Q==;
-X-CSE-ConnectionGUID: acZKFMktQpeRYp6FjxzeGw==
-X-CSE-MsgGUID: KpkVs5aqTASIdJViiFaSDg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11481"; a="53580113"
-X-IronPort-AV: E=Sophos;i="6.16,279,1744095600"; 
-   d="scan'208";a="53580113"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2025 06:50:21 -0700
-X-CSE-ConnectionGUID: WK+qwPOzTcaVSaXuAyLtSQ==
-X-CSE-MsgGUID: h5jLGJhYQ3SqfnGfjSzXIQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,279,1744095600"; 
-   d="scan'208";a="153187653"
-Received: from smile.fi.intel.com ([10.237.72.52])
-  by orviesa010.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2025 06:50:18 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1uWbNG-0000000Bby5-05AH;
-	Tue, 01 Jul 2025 16:50:14 +0300
-Date: Tue, 1 Jul 2025 16:50:13 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: Lucas De Marchi <lucas.demarchi@intel.com>,
-	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Jan Dabros <jsd@semihalf.com>, Andi Shyti <andi.shyti@kernel.org>,
-	Raag Jadav <raag.jadav@intel.com>,
-	"Tauro, Riana" <riana.tauro@intel.com>,
-	"Adatrao, Srinivasa" <srinivasa.adatrao@intel.com>,
-	"Michael J. Ruhl" <michael.j.ruhl@intel.com>,
-	intel-xe@lists.freedesktop.org, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 1/5] i2c: designware: Use polling by default when
- there is no irq resource
-Message-ID: <aGPnlWbWn8NyTNFM@smile.fi.intel.com>
-References: <20250701122252.2590230-1-heikki.krogerus@linux.intel.com>
- <20250701122252.2590230-2-heikki.krogerus@linux.intel.com>
- <aGPXwll6Hh2cZfnp@smile.fi.intel.com>
- <aGParHQ3GSdAA8rL@kuha.fi.intel.com>
+	s=arc-20240116; t=1751380268; c=relaxed/simple;
+	bh=Sv1H6PUpb4IqYgnKgzS/L6omvxuge3KVkbdPhNY0VgE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lXB4xmX/YzJHwloaAEv4BtxQPYwdct/HRyxHPOP/3IbGxp7mkboMNPt2k7Lmo0mLsoYKAgo6cS59lKsfmjLvytTKrsXgpRf1W/gtx427qLC1Fb0LMStDJ4zxxBZGk+uHWA/Gip+PqoIBk7eaOqPrPaMQB4HiVoU2wdGSqOk0meE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HUSGVF3c; arc=none smtp.client-ip=209.85.221.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-3a6f2c6715fso3657223f8f.1
+        for <linux-i2c@vger.kernel.org>; Tue, 01 Jul 2025 07:31:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1751380264; x=1751985064; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FJt/iCFlHtHvm0tunoe1SeVyQ5dRWwQtcraJS/9eZQs=;
+        b=HUSGVF3cIu4pwbhsLWxGZ63SJzzQBkwl5itxGWon2NvBvlbBix16uzwc8VE9Q6ItLG
+         faYVXH9OJVPJ7jzzRTWOfGc3XSPHfkRiQn2MqYq2EMw1bDZ4j1svKGCqSG1CffVYjMLB
+         GkAA6JZZLPnWQTw/DkJn+aJo3erwq+6Oi37+j+ci9DqEjcW0Ju3YH569cbPd71QgRWr3
+         QXTdqKqQKjZmWnxVsModjlHFiymHZNV4+XP6VluyD9OVu6wqx4CDinn4oE/ei3YTuMYQ
+         tHAArId+nq+m32cwtLB3L54eNeE3GHnPgoW1nahGNwyKG5tf6K32Rd6AwRoE28KQoVZK
+         QQqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751380264; x=1751985064;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FJt/iCFlHtHvm0tunoe1SeVyQ5dRWwQtcraJS/9eZQs=;
+        b=dpo5yDbk+rzdxbWqFTAglm6LvPY3PzSAa8P/+T6q0+ORrSrxIV0hYHifRMQkIGSjqc
+         h4JqqfO5DKbiclm0Y/paJHnqJ6VMvYayeVfzeUkBEkzFqcl1pjzpmtsBMoz1el7o4OJ2
+         iP7DFjw97tBqRD0yRF8rmYJl3Qz68Gclf/lcq+KvtFhFP+T0NwwLkkzzmG1Lg/r6gToL
+         OhG9eUS9+LxMALflA/nC6Ay0Ed4Y4MEF2FqPf/UK7iHhFw/xP6ikY/IhCzoapwszdD5y
+         VSGPfjtAtlF/4p6E5YQGZ13M69JjhGOTE+BYLlK+2BkXbZqpKG+msI0i7kCoY/NWh+oe
+         JPRA==
+X-Forwarded-Encrypted: i=1; AJvYcCVny093jMFMtiNdasWTZ/5cA4nv5y+w3u4yKyY9+FP+cgjpBQ2F5Hg/9sSUPewKbXiRpfgOa2pkGlY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwAmnSZaC9jcYEGpncO01RcTWBRbajavISl0dKC90qJtxrbmhIw
+	8o/DHYnPcslQnzK7W2PR/JFGIY+W6hfAVZiZa6mOjsq3oa9CKEbemeEH
+X-Gm-Gg: ASbGncu559CmWOu9Iyyv4NptbLd+Dqt5/s6VHzjsh4ooIiOSH/dqueOqwYYefjxJTVm
+	vqMv8/fDjSZqFQ7SBZ6aEyhbb4u1pJJHKRNrXQGQgc+C1ZadeZdzlWsmvKIPLN6/qJnEU/26y9g
+	Cz25JF2faBrYq5GpUSjskF339RPoWke+7pYXpt3zv8vG/xUnQSV+6FRP2AV8aySQ7U52YIXUSGl
+	DChodgFVCNHPGznOxgBny+X1jle+vcM7xK8s+UHWdqJ+YvcG1v4/O+IFoLR+ngu4xwJRcKZl3OJ
+	WYbZOpqeNb4J/C094xmcj3H9NZXwYmwP/i/KCCHQVzql9FcoMzpvEL2fv6/Pa20wFRJFBPheOMa
+	VEnmuYTMeyqD6ru91RJ5+LUhYl3RFaKSe3n9y5VJH
+X-Google-Smtp-Source: AGHT+IEZS7S8EWkgefrNq+a7SvUOFNg/150nU5tgIGCLA5ADTG5CNSjaFnIyjqAU8VGkGrEcY94hlA==
+X-Received: by 2002:a05:6000:1804:b0:3a4:f379:65b6 with SMTP id ffacd0b85a97d-3a8fe79bb4bmr11815710f8f.46.1751380261915;
+        Tue, 01 Jul 2025 07:31:01 -0700 (PDT)
+Received: from [192.168.255.3] (253-8-142-46.pool.kielnet.net. [46.142.8.253])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a892e5966csm13526266f8f.72.2025.07.01.07.31.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Jul 2025 07:31:01 -0700 (PDT)
+Message-ID: <123042be-63dc-46bf-b781-6da022a8f4c5@gmail.com>
+Date: Tue, 1 Jul 2025 16:31:00 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aGParHQ3GSdAA8rL@kuha.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/3] dt-bindings: i2c: realtek,rtl9301-i2c: extend for
+ RTL9310 support
+Content-Language: en-GB
+To: Krzysztof Kozlowski <krzk@kernel.org>, linux-i2c@vger.kernel.org
+Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>,
+ Markus Stockhausen <markus.stockhausen@gmx.de>
+References: <20250701091737.3430-1-jelonek.jonas@gmail.com>
+ <20250701091737.3430-4-jelonek.jonas@gmail.com>
+ <d123375e-48ec-43f1-bc5a-1256c2f377ec@kernel.org>
+ <ad8d7f0b-1c25-4a1b-89db-6631d918f9a1@gmail.com>
+ <b3e58bf1-d51b-481c-892c-4115bd106ed9@kernel.org>
+From: Jonas Jelonek <jelonek.jonas@gmail.com>
+In-Reply-To: <b3e58bf1-d51b-481c-892c-4115bd106ed9@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Jul 01, 2025 at 03:55:08PM +0300, Heikki Krogerus wrote:
-> On Tue, Jul 01, 2025 at 03:42:42PM +0300, Andy Shevchenko wrote:
-> > On Tue, Jul 01, 2025 at 03:22:48PM +0300, Heikki Krogerus wrote:
 
-...
 
-> > > +	u32 flags = (uintptr_t)device_get_match_data(&pdev->dev);
-> > 
-> > > +	irq = platform_get_irq_optional(pdev, 0);
-> > > +	if (irq == -ENXIO)
-> > > +		flags |= ACCESS_POLLING;
-> > > +	else if (irq < 0)
-> > >  		return irq;
-> > 
-> > >  	if (device_property_present(device, "wx,i2c-snps-model"))
-> > > +		flags = MODEL_WANGXUN_SP | ACCESS_POLLING;
-> > 
-> > Now I'm a bit puzzled why do we need to add this flag explicitly here?
-> > Does Wnagxun provides an IRQ and chooses at the same time to poll?
-> > Shouldn't this patch rather fix that?
-> 
-> No. I do not want to touch the behavior here. The flags were
-> overwritten and continue to be overwritten.
-> 
-> I will propose an improvement for that together with some other
-> modifications to this file later, but those are out side the scope of
-> this series.
+On 01.07.2025 15:17, Krzysztof Kozlowski wrote:
+> You have some very odd wrapping of emails.
 
-Sure.
+Sorry for that, I'm not used to this workflow and obviously haven't configured
+my editor properly. I'm working on that.
 
--- 
-With Best Regards,
-Andy Shevchenko
+> Anyway, you keep mentioning in multiple places rtl9311-9313, so that's
+> confusing. If you mention them, I would expect compatibles. They cannot
+> use rtl9310 compatible alone.
+>
+> I don't mind skipping them, but then just don't mention any sort of
+> treatment for other devices. You add this and only this hardware, if you
+> do not want to follow the make-binding-complete principle (see writing
+> bindings).
+>
 
+I think I got. I'll adjust this in v2.
+>>>> +  scl-num:
+>>> No, you do not get own instance IDs.
+>> Is that meant for the wording/naming of the property and/or its
+>> description or for the general idea of this property?
+> You do not get such property. We don't accept it, it's generic rule.
+> Nowhere in the kernel... unless this is a standard, generic property
+> (there is no vendor prefix), but I could not find it. If it is standard
+> property, where is it defined in dtschema or common bindings?
+>
+> I don't get the need for this property and description does not help, so
+> just drop it.
+
+Ok, I missed that this is seen as a generic rule then. Sorry for that.
+
+For the purpose:
+RTL9310 changed the register layout compared to RTL9300. Activating
+the SCL line is done by setting bit 12 for master 1 and bit 13 for master 2
+in a global register which is located before the master-specific registers.
+Thus, the driver needs to know which master (1 or 2) it is currently doing
+something for. That is what this property is intended to be used, naming
+to-be-discussed.
+
+Alternatively, this could be derived from the reg property if that is
+fail-safe enough. The value of the reg property has to match anyway
+to make the whole driver work properly.
+
+>
+> Best regards,
+> Krzysztof
 
 
