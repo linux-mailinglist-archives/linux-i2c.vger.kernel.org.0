@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-11722-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11723-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 665AFAEF6A0
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Jul 2025 13:34:09 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 018DBAEF6A9
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Jul 2025 13:35:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 426F73B5BE6
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Jul 2025 11:33:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D508F7A3AA4
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Jul 2025 11:34:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 796FD257AF2;
-	Tue,  1 Jul 2025 11:34:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 304A325B1CE;
+	Tue,  1 Jul 2025 11:35:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RWyHPD3H"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DwMOi4Fl"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 361EC257AD3
-	for <linux-i2c@vger.kernel.org>; Tue,  1 Jul 2025 11:34:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E478523E35E
+	for <linux-i2c@vger.kernel.org>; Tue,  1 Jul 2025 11:35:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751369644; cv=none; b=b11Gu4BLgM6TT0ifkiGA+AorxnQLF/YIMB2D6yHufmAhNuT2cV+fnkaFnuwZEcFS4+3XJt0Ut3FmoM1Q6hF8qtGVxDfROkiXiODZBXLBV8qdLwjeUtTAYQFd3FzHgt0BMRFXTczbWc8O7oFNXGjQ385ClwPV5aFFPAmCTzWlTF4=
+	t=1751369722; cv=none; b=YeR2rg9jwqD00uNgFK94U/X1umLiwa5UpGaEoGCRnkyp1fw7B54xVRPJJuDndEJf06PdApv6YPlJxp4q9pFaV0VrQNcJSJaghbo9V58a3bpE3rVuK2wJQCs8QUjL6x3leUFvjqX3Ds1OhMAIaBxxzY5MLxiPDV9Uft8a7zcwf28=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751369644; c=relaxed/simple;
-	bh=B8q30/aMa0UOCmfry3AnEhA8Gicg3reWxl8csr6S6jY=;
+	s=arc-20240116; t=1751369722; c=relaxed/simple;
+	bh=LojrfOg+A5hj1ap0M3MCgFjJbFBYSjkVAnKPf4P1mrQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FijxXARo0S2jItaKEJkY1LZB0yluaX+nSFrA0r9gdoPd98eMtdnGhYv0RdY/f0cReE5CyolPRcvUx7JIEULNq7xdwNkzXxgTWJwc2qevXTg+rM36130OMOJWD21W4aDqA9GW7+ELocSBkRU7JuVOEcXsY5k33FMdCgX2bH45QQU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RWyHPD3H; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB811C4CEEB;
-	Tue,  1 Jul 2025 11:34:01 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=bmEVKVeHp8ED7otnwMUS206b9djshw8AYL7wwHZDiSnfRjgUYUCt/tmYBEghGklmGN2/w0LfzyXsRzkBAGYThq5wUq5A9PBW4cFMVV1RVs0HDXHVxrFjZW4YFalJ8DJKPSaN8YxI8yuofUAOA0zxe5drS0ivfpltHL1vYRn7i2U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DwMOi4Fl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F8BFC4CEEB;
+	Tue,  1 Jul 2025 11:35:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751369643;
-	bh=B8q30/aMa0UOCmfry3AnEhA8Gicg3reWxl8csr6S6jY=;
+	s=k20201202; t=1751369721;
+	bh=LojrfOg+A5hj1ap0M3MCgFjJbFBYSjkVAnKPf4P1mrQ=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=RWyHPD3HV4AGxk2qHzbF5FeX3NSrQ+S6zO+3RGIKrctSiII+H4cNz3mWbGjrXnXAG
-	 GEvSYmln5RmSURuPCwM03dUzABtTUxSF3rvYDPpUspILMxEegeyPkmQm8+XG6NbyhF
-	 rk1sZ7BzE0y/TSRaARBYEQBZcC+a+83Vxga8TOYo6E05XUcrAF0i+UBwKW2e9aPR6l
-	 ECowo+d7nH0bKx0aYhgsie2LwpYz76qh3hMvbRIV4yg1/SngoaFYl26f9Ke9eQobV5
-	 BptINK78osCf8dVtM4LflF7TCqw/XlrDUX7n42qE7AE80nNJsYQtGS5MXa2Wo4kVDY
-	 bpi+tXeSkkj/A==
-Message-ID: <d123375e-48ec-43f1-bc5a-1256c2f377ec@kernel.org>
-Date: Tue, 1 Jul 2025 13:33:59 +0200
+	b=DwMOi4FlnF8m75RLZlpm2D9WfosM9i/gG9DwTp91Bfk47m5HsHwE0tSwxZ9EB7XlD
+	 heyqdMKpUMb4JDUi66QF7rvmfpXg1nUI1XPWPhJhy6KCbjQ2DAphUS/sEbitG/Ve5z
+	 bDpHGV8BVZ0YxPyTmE0m8cWVEm9DHHzfJZdfsV1+tu/obNFLTU+pVdV7/b5dUeow8d
+	 7ZfW0qxye8a9C5Yj5zY7caCngLg2HFPiaosRXUFCTsLr+CYcqUCbIQtYB8VwoFtVFc
+	 q37Y5jBBPCJs2qkhuKu1c8ChRonfkixmNMHj8Z/M4lEpucmT4m7Lf6mCIJ+L8ytyhd
+	 iYPASYcSkEjCA==
+Message-ID: <40654033-68be-4c80-b3a7-9567c4677138@kernel.org>
+Date: Tue, 1 Jul 2025 13:35:17 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -108,93 +108,12 @@ Content-Transfer-Encoding: 7bit
 
 On 01/07/2025 11:17, Jonas Jelonek wrote:
 > This extends the dt-bindings for the I2C driver for RTL9300 to account
-
-Please do not use "This commit/patch/change", but imperative mood. See
-longer explanation here:
-https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
-
 > for the added support for RTL9310 series.
-> 
-> A new property is added to explicitly set the SCL num/hardware instance
-> of the controller that is used. In contrast to RTL9300 the driver needs
-> to know that explicitly for RTL9310 because the SCL selection is now in
-> a global register instead of a master-specific register.
-> 
-> The regex for child-node address is adjusted to account for the fact
-> that RTL9310 supports 12 instead of 8 SDA lines.
-> 
-> A single generic compatible "realtek,rtl9310-i2c" is added. To best
-> knowledge, all existing SoCs of RTL9310 series (RTL9311, RTL9312,
-> RTL9313) have equal I2C capabilities thus don't need special treatment.
 
+There is no driver here in the patch, so message should not reference it
+at all. Describe the hardware instead.
 
-You always need specific front compatible (and fallback if applicable).
-
-
-
-> However, in the unlikely case of future differences with specific
-> SoCs within this series, more can be added as needed.
-> 
-> Signed-off-by: Jonas Jelonek <jelonek.jonas@gmail.com>
-> ---
->  .../bindings/i2c/realtek,rtl9301-i2c.yaml     | 33 ++++++++++++++++---
->  1 file changed, 29 insertions(+), 4 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/i2c/realtek,rtl9301-i2c.yaml b/Documentation/devicetree/bindings/i2c/realtek,rtl9301-i2c.yaml
-> index eddfd329c67b..3b32da3de2af 100644
-> --- a/Documentation/devicetree/bindings/i2c/realtek,rtl9301-i2c.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/realtek,rtl9301-i2c.yaml
-> @@ -10,9 +10,11 @@ maintainers:
->    - Chris Packham <chris.packham@alliedtelesis.co.nz>
->  
->  description:
-> -  The RTL9300 SoC has two I2C controllers. Each of these has an SCL line (which
-> -  if not-used for SCL can be a GPIO). There are 8 common SDA lines that can be
-> -  assigned to either I2C controller.
-> +  The RTL9300 SoCs have two I2C controllers. Each of these has an SCL line
-> +  (which if not-used for SCL can be a GPIO). There are 8 common SDA lines
-> +  that can be assigned to either I2C controller.
-> +  The RTL9310 SoCs have equal capabilities but support 12 common SDA lines
-> +  which can be assigned to either I2C controller.
->  
->  properties:
->    compatible:
-> @@ -24,6 +26,7 @@ properties:
->                - realtek,rtl9303-i2c
->            - const: realtek,rtl9301-i2c
->        - const: realtek,rtl9301-i2c
-> +      - const: realtek,rtl9310-i2c
->  
->    reg:
->      description: Register offset and size this I2C controller.
-> @@ -34,8 +37,18 @@ properties:
->    "#size-cells":
->      const: 0
->  
-> +  scl-num:
-
-
-No, you do not get own instance IDs.
-
-<form letter>
-Please use scripts/get_maintainers.pl to get a list of necessary people
-and lists to CC. It might happen, that command when run on an older
-kernel, gives you outdated entries. Therefore please be sure you base
-your patches on recent Linux kernel.
-
-Tools like b4 or scripts/get_maintainer.pl provide you proper list of
-people, so fix your workflow. Tools might also fail if you work on some
-ancient tree (don't, instead use mainline) or work on fork of kernel
-(don't, instead use mainline). Just use b4 and everything should be
-fine, although remember about `b4 prep --auto-to-cc` if you added new
-patches to the patchset.
-
-You missed at least devicetree list (maybe more), so this won't be
-tested by automated tooling. Performing review on untested code might be
-a waste of time.
-
-Please kindly resend and include all necessary To/Cc entries.
-</form letter>
+Also, bindings come before the user (see submitting patches in DT dir).
 
 Best regards,
 Krzysztof
