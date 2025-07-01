@@ -1,112 +1,136 @@
-Return-Path: <linux-i2c+bounces-11717-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11718-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9A99AEEFF9
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Jul 2025 09:45:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 140A6AEF308
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Jul 2025 11:18:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A810F1BC5676
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Jul 2025 07:46:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D4D733A2BFF
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Jul 2025 09:17:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 467A325D1E6;
-	Tue,  1 Jul 2025 07:45:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD95A260585;
+	Tue,  1 Jul 2025 09:17:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DRxzGbs2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lVp7/pJK"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30A4436B;
-	Tue,  1 Jul 2025 07:45:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2DFB25D212
+	for <linux-i2c@vger.kernel.org>; Tue,  1 Jul 2025 09:17:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751355946; cv=none; b=G2/2Ph9Eq264oGKR+zlgKFylhzZx43K7ZnsaD+8l05OgjlOXcFPgNTsCwZIEMecKFdhCz0pLOFAdUX+x7Y2Y3q4KDDn0zrIiigx0RshbnVFe+ul6/Pq9rJ1DxhMDvC+YdBrvXLv4qngrQtBXZeqGay/jJrmtPCRr6ZI2R+SgWzc=
+	t=1751361465; cv=none; b=jTSNeSJCXq9cvdLupQtmBbkYQM1/s0sJdJLzgu6M68kbOOSGupqMjXuDnUyNh0oMCFLL7LOkGx23u9oKyaPmKLXVW1uLs/zhYlhLDuMoaBNws0s38rooNkMDDeePxvnnJQz3dN+KxSdtSol7ObGo9xH7Mq4fPJoLUORaFsIiUqA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751355946; c=relaxed/simple;
-	bh=WaOTPXDOyXamFIF5gpJvhYL4L6gdolAygZ+SPRNtOgc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sSq9EChEWb/ON3J9fzPJp4Ufw5v71tXdV6giJpE+gfYpO8OBd/Ky2/coU23PLmz5opLzcZAeYIR73wxrAM5N3cyLJJTYXNgn3IgL8zf6Bw2SpFdTptlmykHZob4hatTK/JrdNszdUKji8/M/FgYrGBC2gJf2Zu+QyCnHLO1klwg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DRxzGbs2; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751355945; x=1782891945;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WaOTPXDOyXamFIF5gpJvhYL4L6gdolAygZ+SPRNtOgc=;
-  b=DRxzGbs2qbhNeltcqmpaMi7H3kOdFvXxXVYVqixZBMDAflG+JvW4hWAi
-   Ev/rva4ey+7KNJ7iOaaggqHJpCsN4kby1GHKsz6yDzTQXqT1R5rJqI1MG
-   x+fGoneDeKE+t3LOjKQvBwYyDem8iRRgL9ah/ohB4M0gmoNrSOguXtx9n
-   Obs0uKM123K4qq/CC3zYaiT9ScyKZPOw7xHhl+RfLsscRWb/uU83Qnzan
-   E9jJ/I0ijqEiH4YqmrI0CYaCGT2fPe2PaHfaYWhG+ZpVQ/Fd852lwBDBD
-   8oZB/YONN6gnb7XAuyCOvEY9dTWNDjUzDIZAzFmlRtuJ59+F6pRLkyLbn
-   Q==;
-X-CSE-ConnectionGUID: FVBcygGkQJK0PnclmVZtyA==
-X-CSE-MsgGUID: l3vuwHwcT/WZtSLXYkcZBA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11480"; a="53469623"
-X-IronPort-AV: E=Sophos;i="6.16,279,1744095600"; 
-   d="scan'208";a="53469623"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2025 00:45:43 -0700
-X-CSE-ConnectionGUID: Zpkqcd5iTdm04AVh9hqdyg==
-X-CSE-MsgGUID: 8cqIeScNSdiGEsZ+NLaUjA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,279,1744095600"; 
-   d="scan'208";a="153083489"
-Received: from kuha.fi.intel.com ([10.237.72.152])
-  by orviesa010.jf.intel.com with SMTP; 01 Jul 2025 00:45:38 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 01 Jul 2025 10:45:36 +0300
-Date: Tue, 1 Jul 2025 10:45:36 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Andi Shyti <andi.shyti@kernel.org>
-Cc: Lucas De Marchi <lucas.demarchi@intel.com>,
-	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Jan Dabros <jsd@semihalf.com>, Raag Jadav <raag.jadav@intel.com>,
-	"Tauro, Riana" <riana.tauro@intel.com>,
-	"Adatrao, Srinivasa" <srinivasa.adatrao@intel.com>,
-	"Michael J. Ruhl" <michael.j.ruhl@intel.com>,
-	intel-xe@lists.freedesktop.org, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 1/4] i2c: designware: Add quirk for Intel Xe
-Message-ID: <aGOSIB_H70IAWH3g@kuha.fi.intel.com>
-References: <20250627135314.873972-1-heikki.krogerus@linux.intel.com>
- <20250627135314.873972-2-heikki.krogerus@linux.intel.com>
- <gljpd4foldjwairaca7ip2qqpdl7ipto77wsqwhbfamv6kdd3v@2doqwso7ccx3>
+	s=arc-20240116; t=1751361465; c=relaxed/simple;
+	bh=6U36zINUzmOxNBffIUjvcjKv9EITUO4o89Le3auZYIw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tKkElawBIQjWX1szueRop5Mi+d3P2x5Dz0UD1HmX1/OKZucW3quInkYBy60Nddkkw2SMTgCRxH2whEBjSLt86EORYgqVEWfmk++e5v1bqNJJe6E2tZppWO1Y7CsBAnaUq3H+FmUHepJeF7khf2z6fBKf0dvuSKhNrgExHPOBD2s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lVp7/pJK; arc=none smtp.client-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-3a6e8b1fa37so2631600f8f.2
+        for <linux-i2c@vger.kernel.org>; Tue, 01 Jul 2025 02:17:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1751361462; x=1751966262; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qONQUtWdCk5Z5EGIxTW/habYUKP2LgiBrpl9cN24tO4=;
+        b=lVp7/pJKgcu+Yr8Q6s/LwoUp9kS73C3ZCZZEemNV+O7OPi8leNWElTYDFmhwvutUkv
+         CDy5UVJR+XvieJoZ7yzeXBeaMmZOkN+lMFnfiJtv3v7wyArzXb6QqAlOJCxx1KBn5Kvr
+         pZE0bG3VpfzmuXRN+Rp9RUEciFu7Wq4m3A1Tjt3UfvEcbCIvBzXnDc9fPu2h9ukrepQ5
+         LLMecE71Ui1plYsoj7ecEfbYD71PVi4yvnAW68tcPKvqNTPc3QdC70QKHiLvL+EiuT5H
+         Txd0/cGymEI+nTlsZk1r0hSXt/nhyMiPrX3CitNsOLGMCc/AmzOgq1MuRF7wD7CJNhyM
+         zd4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751361462; x=1751966262;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qONQUtWdCk5Z5EGIxTW/habYUKP2LgiBrpl9cN24tO4=;
+        b=PGB4UTouwqqa7YG8znCU1SVyYM9sajOJroJG12FZthzSLN2mMBUqeouRaTeXsowWGH
+         FVG+2Hlut5Xzjl4dPlPGUewj3zY8Dzoc4CXuQbDb40GMO538L0fCBpuBYUgma72Lrob5
+         +JMTypZt97BH1omt+UgWr2jzZWSDHYaZaK5qE56mNf2SA+l/tdPFfQblkSszimU80N1C
+         moztoalu7DyN9HRLb+ARKFMePzB22Ox6ly3qx8KIXdBmOT1PHG4wqoEw0xEtIokf5gvt
+         idnJnMfOOc2+Qoa8CoTsmZ8xlsEzZNn8QNSTWtZWabMLAUcO2QYJW/YJMgeQ6a7+/5Ww
+         yc+A==
+X-Gm-Message-State: AOJu0YwThBXZTR45S+Lg9NWM+MBAB8p7eGWvbMRSZZjaRXyx5EcTkkYS
+	ZIoCEH+KbKhin2Yv6fhRm2WFZ6YlEx7LPVd2oA/RJQ8euYwBjShLYh6iy2TqXQ==
+X-Gm-Gg: ASbGncuZBQnlEqXpnlNOeiSJFgAvYmfY3ME/WiOqwzmprU0pKgfQg5p+XmBYBSIB9Ae
+	YGZDd3XF73OESP+A9I6ummidSU/Ago0k4Iy3P2n/HcWlPIpxH4nHuCPfoFtP9MZA9z1mZBUfw1W
+	kh1O12nQAiseVcfNwYWJPrzU64vVb+R47VDnTnO5IglhgdciDSU9nHNNbaLYlpiOH5zTW7V7dWW
+	7shFySGnvK3bVo/nf9WOAHcgT5vvW0K+vvtpSxIWSTCs8gDCXzl2labBaFrq1lpBrDLQ6HYbBNR
+	dlmgbQGYxUSpz71EWAvPe4XGgfbVYmuLgyJXDQA+w0R6XPqrgyFn+fsZg9tEMsI6nX6jtvtn35N
+	6DROTsNooRIFaS2ZAjSpwXoDvMbk=
+X-Google-Smtp-Source: AGHT+IFKd97xfBLI3Au52q5dKAKyVfScswz5PK2CqswNQ2Sgj5UIyMe0vXNRXBMtFdBncMeKmXqmUQ==
+X-Received: by 2002:a5d:64e3:0:b0:3a4:f52f:d4a3 with SMTP id ffacd0b85a97d-3a8fed705ffmr15933232f8f.28.1751361461720;
+        Tue, 01 Jul 2025 02:17:41 -0700 (PDT)
+Received: from builder.. (253-8-142-46.pool.kielnet.net. [46.142.8.253])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a892e5979dsm12624379f8f.75.2025.07.01.02.17.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Jul 2025 02:17:41 -0700 (PDT)
+From: Jonas Jelonek <jelonek.jonas@gmail.com>
+To: linux-i2c@vger.kernel.org
+Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>,
+	Markus Stockhausen <markus.stockhausen@gmx.de>,
+	Jonas Jelonek <jelonek.jonas@gmail.com>
+Subject: [PATCH 0/3] i2c: rework and extend RTL9300 I2C driver
+Date: Tue,  1 Jul 2025 09:17:34 +0000
+Message-ID: <20250701091737.3430-1-jelonek.jonas@gmail.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <gljpd4foldjwairaca7ip2qqpdl7ipto77wsqwhbfamv6kdd3v@2doqwso7ccx3>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jun 30, 2025 at 08:28:12PM +0200, Andi Shyti wrote:
-> Hi Heikki,
-> 
-> On Fri, Jun 27, 2025 at 04:53:11PM +0300, Heikki Krogerus wrote:
-> > The regmap is coming from the parent also in case of Xe
-> > GPUs. Reusing the Wangxun quirk for that.
-> 
-> What I don't like, though, is that there is no mention of the
-> change in the probe in the commit log.
-> 
-> Besides, are these changes related? Can we have them split in two
-> different patches? I guess this would also make Andy's point
-> about the extra churn.
+This patch series reworks the current implementation of the driver for
+I2C controller integrated into RTL9300 SoCs to simplify support
+extension, and adds support for the RTL9310 series.
+Goal of this is to have RTL9310 support upstream in a proper
+implementation to be able to drop downstream versions of this driver.
 
-I think you are right about splitting the patch. I'll do just that.
-Thanks for the review Andi.
+The first commit reworks the driver to use more of the regmap API.
+Instead of using macros, all registers are defined as reg_field and most
+operations on these registers are performed using regmap_field and the
+corresponding API. This allows to add support for further chips quite
+easily by providing the correct registers and driver data. Moreover, it
+avoids to add new macros and a lot of chip-specific function for every
+additional chip support.
+
+The second commit makes use of this by adding support for the RTL9310
+series, providing the slightly different register layout and a few
+specifics. This also introduces a new device tree property 'scl-num' to
+explicitly specify the hardware instance in the device tree. This is
+needed because RTL9310 does SCL selection/activation in a global
+register. In contrast, on RTL9300 this is done in a master-specific
+register and thus is already handled by the reg_base of the controller.
+At this point I'm still open to any suggestions if and how this could be
+done better to avoid a new dt property.
+Both has been tested successfully on RTL9302B-based Zyxel XGS1210-12
+and RTL9313-based Netgear MS510TXM.
+
+The third commit adds proper documentation to the device tree bindings
+for the RTL9310 support.
+
+Compile-tested with Linux, run-tested as backport in OpenWrt on the
+aforementioned devices.
+
+In case I messed something up, please give a hint and I'll fix it.
+
+Jonas Jelonek (3):
+  i2c: rework RTL9300 I2C controller driver
+  i2c: add RTL9310 support to RTL9300 I2C controller driver
+  dt-bindings: i2c: realtek,rtl9301-i2c: extend for RTL9310 support
+
+ .../bindings/i2c/realtek,rtl9301-i2c.yaml     |  33 ++-
+ drivers/i2c/busses/i2c-rtl9300.c              | 227 +++++++++++++-----
+ 2 files changed, 190 insertions(+), 70 deletions(-)
 
 -- 
-heikki
+2.48.1
+
 
