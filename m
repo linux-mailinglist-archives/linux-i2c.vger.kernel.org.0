@@ -1,61 +1,55 @@
-Return-Path: <linux-i2c+bounces-11745-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11746-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B233AEFFE6
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Jul 2025 18:32:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1BA9AAF0004
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Jul 2025 18:38:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EA325178FC5
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Jul 2025 16:32:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4CC1D522CC4
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Jul 2025 16:38:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7250276058;
-	Tue,  1 Jul 2025 16:32:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC884279791;
+	Tue,  1 Jul 2025 16:38:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uqFMmRMr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L2uH7cHf"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FA311F428F;
-	Tue,  1 Jul 2025 16:32:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7771E1A8401;
+	Tue,  1 Jul 2025 16:38:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751387552; cv=none; b=d/ElODCbYJjGRVB2ldVH/WqvQvut2VOG76x1KASYZZrhno6ZAUKVT2PPQhdXRw7eZRF1gtgp0tgHrNkAaBpkQ8aYU+rkM2x60dyTatoZfJBvYiGlq0dTJS4nZ8wg6s4QIfLfishxLBATyjKB1WVcr89DjIALpxVP9kvZ77qAu/w=
+	t=1751387920; cv=none; b=pHL70MeVrmkGdTtMcn8s1CwFvqvduNcwyTju2tt7N5aaFS/0a6eaWH4orXOhatFg7ZXJwC/vnXWxBHkxqCU4V/Tvdc/uKNBjpS93gqz6yp8CQ9fhwdv2pZS9sgb71tCwkHK8hj43sSIhMeLI/MMwzeQetJMtv/LhPqD/7+KBcpU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751387552; c=relaxed/simple;
-	bh=yY8157hjb4vrAMHnghGfwO7Y+f3XeiGwvIscnnt6e+s=;
+	s=arc-20240116; t=1751387920; c=relaxed/simple;
+	bh=4z/Fq5xO7/oOY0pBWsyMxZ96iISrUCQepYFM3hvTOvk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kpeSNm4fWMutN/HzbjruJ6o0EtkkcJuYMNc94BZdZ4aY+53AOegL2336f/gW8T7CN1MTpztO8j3VXZUKqBZfSt54m7IbVZEFpDTW8EdnvO3MH8fXdN1oRmAF9pp2T9+r4N06Rq5mQrri8FdzJXLuXvzdo1gGDv7WCGFq8EMfpbs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uqFMmRMr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74F2EC4CEEF;
-	Tue,  1 Jul 2025 16:32:31 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=H2xgi0xMV3lPZgpNqCNO7y0YQF/1CxeJGn1Gw3c6iNDWN8LWtretd+p8XXxrCuonzCOQpauY9FXg1ldTxHpUtrK0ZCoAsqk3t/QQpsNdbK8tQVfeIGTelghgDVT0IFkHww8edWlPUYlqVuIArb0jWhoxcY2grkVwy/kFqhgYTM0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L2uH7cHf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6589DC4CEEB;
+	Tue,  1 Jul 2025 16:38:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751387552;
-	bh=yY8157hjb4vrAMHnghGfwO7Y+f3XeiGwvIscnnt6e+s=;
+	s=k20201202; t=1751387920;
+	bh=4z/Fq5xO7/oOY0pBWsyMxZ96iISrUCQepYFM3hvTOvk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uqFMmRMrIizrNOGH2fB1eaIMDlUhGC7FiaC/70V4QaOdSD89FPdlLYXcxOPDIcAFd
-	 uCaBuWxE5JyHmDuAFTknPvT7nI5Fo/80xn0v95o7TRElwbEK4QLyWxsoYarzO6lqjr
-	 oCwH/cuqgeNip76TAfCqGKclrRJs524FMIyF4vD53+CPvj+CM/+9AUReVtpkIg7/+C
-	 7ppRv2HggSE8R68Dn57qQCc4LpdHhkImMTrzTpB9s5tu8A6UG7F/GznadlPLBcPKT0
-	 43E8iJf/S2oWSGY2ME6F55VzkCGGcmGAElUYNxx3PnWyUnCUSdKSlhrcrRJGslkwlo
-	 MkvyEy+bnq+oA==
-Date: Tue, 1 Jul 2025 18:32:27 +0200
+	b=L2uH7cHfMSvl8HSTyLXtxMZv1E+ph/Ji+EOfme4NeNcxublBKDdz0nNePf6LwfMRb
+	 FBNDVks/DTKoPktmwdkmTSturMwjc5zueJiCLkpvcGvI6uLgx40ir5oc+ev9sVZ5cO
+	 8TNrv9FgARg+4LnK7owfHwgxNEpwNKrvqi5bbZvVdv1+bmuPQuqVAuW0QT8NeoVkSo
+	 ry80q4+/CcbLhDrNh2LfvUKKzir9YwYIEcAvqGDaN7kB0q/zHOzYqG4H1f+J9WFC3J
+	 yoIC9o1z9802RuGDWg1LNF8b4F7RgZUTLTgC2eOW4LeY9vak22FF+wEuVFa5JoA8ag
+	 nsXBoE2AEYAUg==
+Date: Tue, 1 Jul 2025 18:38:35 +0200
 From: Andi Shyti <andi.shyti@kernel.org>
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: Lucas De Marchi <lucas.demarchi@intel.com>, 
-	Thomas =?utf-8?Q?Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
-	Jarkko Nikula <jarkko.nikula@linux.intel.com>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-	Mika Westerberg <mika.westerberg@linux.intel.com>, Jan Dabros <jsd@semihalf.com>, Raag Jadav <raag.jadav@intel.com>, 
-	"Tauro, Riana" <riana.tauro@intel.com>, "Adatrao, Srinivasa" <srinivasa.adatrao@intel.com>, 
-	"Michael J. Ruhl" <michael.j.ruhl@intel.com>, intel-xe@lists.freedesktop.org, linux-i2c@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 2/5] i2c: designware: Add quirk for Intel Xe
-Message-ID: <fv437o3j3j3durqvdtvd5fjgfdhbzsnfv4r34xptxahctbzhq6@kvy3zoiowrnp>
-References: <20250701122252.2590230-1-heikki.krogerus@linux.intel.com>
- <20250701122252.2590230-3-heikki.krogerus@linux.intel.com>
+To: Conor Dooley <conor@kernel.org>
+Cc: linux-i2c@vger.kernel.org, Conor Dooley <conor.dooley@microchip.com>, 
+	Daire McNamara <daire.mcnamara@microchip.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] i2c: microchip-core: re-fix fake detections w/
+ i2cdetect
+Message-ID: <qmuqhle6z5xc7kz5c3ofqstb4couphqy57ff5w2lsupcdye7mq@rtkdzztxcx6z>
+References: <20250630-shopper-proven-500f4075e7d6@spud>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -64,18 +58,24 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250701122252.2590230-3-heikki.krogerus@linux.intel.com>
+In-Reply-To: <20250630-shopper-proven-500f4075e7d6@spud>
 
-Hi Heikki,
+Hi Conor,
 
-On Tue, Jul 01, 2025 at 03:22:49PM +0300, Heikki Krogerus wrote:
-> The regmap is coming from the parent also in case of Xe
-> GPUs. Reusing the Wangxun quirk for that.
+On Mon, Jun 30, 2025 at 04:18:17PM +0100, Conor Dooley wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
 > 
-> Originally-by: Michael J. Ruhl <michael.j.ruhl@intel.com>
-> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Introducing support for smbus re-broke i2cdetect, causing it to detect
+> devices at every i2c address, just as it did prior to being fixed in
+> commit 49e1f0fd0d4cb ("i2c: microchip-core: fix "ghost" detections").
+> This was caused by an oversight, where the new smbus code failed to
+> check the return value of mchp_corei2c_xfer(). Check it, and propagate
+> any errors.
+> 
+> Fixes: d6ceb40538263 ("i2c: microchip-corei2c: add smbus support")
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 
-Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
+merged to i2c/i2c-host-fixes.
 
 Thanks,
 Andi
