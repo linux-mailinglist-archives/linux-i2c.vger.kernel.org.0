@@ -1,176 +1,141 @@
-Return-Path: <linux-i2c+bounces-11749-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11750-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1F73AF0257
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Jul 2025 19:57:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1382AF0465
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Jul 2025 22:14:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0C5F01C06DC2
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Jul 2025 17:58:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E311A1C05496
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Jul 2025 20:14:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16026280A51;
-	Tue,  1 Jul 2025 17:57:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 024EA283FCC;
+	Tue,  1 Jul 2025 20:14:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iUsIsFLR"
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=markus.stockhausen@gmx.de header.b="kon2QaFn"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2792B3596B;
-	Tue,  1 Jul 2025 17:57:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FD1423B60B
+	for <linux-i2c@vger.kernel.org>; Tue,  1 Jul 2025 20:14:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751392662; cv=none; b=hieCgyydzGkjwPcD8uxGP22c05kiSoDYcvzKBR+6BnA9VJ2goKSQYjkhigzd7raXHIG9mOR96HX5cuMNKinC0oQTYft0fmBHTpnsSV7JCKmllFA4T+NNhCKDTBhys5KNXsSUSzxzUv2Ai2FNGushiQuXS/dKee+d+84raoi61/Q=
+	t=1751400864; cv=none; b=BJx/LrTzRDY0H0GU7c79Hxj9YCFJ9Hl9/AwXqyMu8R5biWoSUH+0BM+JKSCFDJfCIu4hzQ5F5W3O0if0qqfzlMC2xrDz9LZ5w5MK1paCgaTfFMAl6PY5eTQKBd67X9vnpP2ChVg8xcDrhgZ/HZe7gezli6uF2t4We5NcExQrh8A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751392662; c=relaxed/simple;
-	bh=Xcj3t8dS0FcmInmyKWAR0WJhIMN9tZ31T0nM7EtTJpo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CSXhZya4XURCXoKlKZ2QVG4sUG50x0Ww+OmXOfg7ZBKh8r6EG6kZklDtTW0FsRJNa4Cjk8TcBCwVmpOIDs9KM8w8bAmezXKn7pyvCN0UIdsUlm95N1H2EWBkHWLVdhNg6t51QM/bQfDB6ftINs+mThT6dPW7nHogvlT5g81PwLE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iUsIsFLR; arc=none smtp.client-ip=209.85.218.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-ae360b6249fso750356066b.1;
-        Tue, 01 Jul 2025 10:57:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751392659; x=1751997459; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pXjfR544OdpbJ9besQg+JvGQxJKjojQewq85hiTyzvw=;
-        b=iUsIsFLRo0peJdxeIvjPC8w2Xj21cg7MZDINLIla+fLfS+v6bxkabM0H5Q0Osishi6
-         UUZ0SIUnGa3fiaE92Kz9bd1QGsNVTiEUW7FC0cJAcQn8H2dWljRcmYm342h5SyAc7WYD
-         KqWdMNgAui9YjsBXz8kWTWXfusZPEsmVJ5W9YOuhJgjNMxn7LBHvK9uwRhHF2HBdkREW
-         JyaWKNDQFmkjUI1gVZGrzA0IRQP8ikXGo0yg/a2ayPKPWvncq08QgBIqPIhK2Vu3qLtd
-         iCvF63w9b454hh9W3pn+da87v1Icl0ZsNiR8NFKteNWoXUJAjGwMih5M48U+TeoxYK20
-         GaDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751392659; x=1751997459;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pXjfR544OdpbJ9besQg+JvGQxJKjojQewq85hiTyzvw=;
-        b=sVQ6LM1uKdTcWsRpvmMhCSfsZwekWzdzyAEGqF8nx/+e43poG2GrBssYpijs4DPwMB
-         QUNakoVVkmn225dhJ2Ah/fFMmeClmzouSEQzrdd1M2NfgHh4z4wniTIb26uWp7HYNR80
-         ypL/jFPrpSJBTaX4+QSggho1PaEY6+PhbjvGuDan5G+d0fG8sUrkV40y3sNQujk6p2LG
-         gLAELKO8H4/wwTSkqtFVN9qjeazgpAza5eA6DHLeS0JDX8JkVgZYLR3eu1KOMdf4BXWN
-         aqK4V1f01Ywyx4jzW6BmXAgYQAc11bgj79buSnm5gZ3SXEEJo+AxxZTRyo1R7amZYLWL
-         yTiw==
-X-Forwarded-Encrypted: i=1; AJvYcCUVy8txv5hM/+hSuI/nBkFn6sciUTOqmrIza6Z4MATGQRkWFZPHh6W7PFNMx62aS6WlENBSrOqzIqeG@vger.kernel.org, AJvYcCUYh/3YBv1eIHq8DRInHDBLAEmFMrOHWEueom13cLFsHpUWSBNjlr7B6a+L6qKXgil2tFStF96/ruPB@vger.kernel.org, AJvYcCUl/4+2LXagdrLUZ4u7f72e6Lw4rnyfO5dvFXvIj5SJV6GO9v66Gmgj5XJCgwld5BaBtigVz4Exz5csvw==@vger.kernel.org, AJvYcCVFajyBuFXmkHXMd12duyPWRVtLNot+iVJQ2/IPuCb0uJa6gCxkp4Xkk/ft5W0fJT69wnudFVsmiKLEeL8=@vger.kernel.org, AJvYcCVMM3qVPM93ghaLpM94wGg5djBKPtTjyghvV1y+wLFBTHwzMfa0QcrZJ3IT7iPcOPzh6XbhrlcJ@vger.kernel.org, AJvYcCVt3PauObtJgxRsytfRrfMRFYs7meOcw+YLXThV5ovyMad35OjbXCTm19HPF2x6XwLMSTY31TeHUin2@vger.kernel.org, AJvYcCWB9zAKg780CCcyghYnGyjDgwjPFyRtwiyVNldF8EJZDybh2g6wAI3sXIXtCCbbxCEM2rc5gx0I9QGd@vger.kernel.org, AJvYcCWTNg+wfy1z8mCD/919h9pxLk1WnuRvq7nQEHVTb+YIQlxIIMMcSaDFEScU+TWli8hRxmyvjL1rnjwj@vger.kernel.org, AJvYcCWTpf8edLOE12O7ljWgLR1PoBD5Q7pOH8XFMSO+qt2/9teyviBV2fMzn7mGHCIuU9DGKvZV4APecTn7DKhO@vger.kernel.org, AJvYcCWzLpehFBsFncirw4f3Yls10idYvrVYh6PTlarY
- FrlhboAOP9dq940VxmBDv6HlojJ4MnjRJgaw/EojpYg=@vger.kernel.org, AJvYcCX8hXB5mHBGjXE9tjVKBh1TE5C+51yE8VZwpkR2qotdZT0wmSKs2VYLJPSkhtwd3yf5cHdR46Uw8GncsOVa@vger.kernel.org, AJvYcCXDRYSqXJ9Ezu1RLo/SwxjSTIOa/G647ySbDPIqsfabcfI1xpy/1byYgi/ax+deLZwvzjkQxVtJO/8=@vger.kernel.org, AJvYcCXHNeWhtB4b5p5dsm0EflF1uQSI0DCPqiqflvwdZpVNDEoUPUnTeenoQg43EbD3X1JkuCC8J6x9j15Cq04v3L6T4yQ=@vger.kernel.org, AJvYcCXQAeJiMLfoDPN1XJ/5u6UnekWspCCP8LCUjucfOzv6fQofiveJmpcQjqKQVxTofwCIlK2J1vnSUX3y@vger.kernel.org, AJvYcCXrE5T3PSv+5HSh8qBMPdanjt4Q+ZYuWu0sb91nyrb0Nc90DWuATXDPnaGVQL53Hf582iw30kTfkbPqLQ==@vger.kernel.org, AJvYcCXrP5dOej6d3xvPVaf+mLWcS6a71IXhslX1x9UZphNsd6XgtvfbDD5VmpKc16cnh6EgdR7JjSx6YfxCpg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy7MPPdXThqK15+abUr6j6KjvMcKc59g+Qv1fDXLHKI7HAX/iUd
-	y++Eq+5rPUGBreX7Jh1RwPNwHTEc+XB0b29HZJbs5/hVVzXp8FYlul82NNbM3MO4aM2ph4eWdXx
-	m50Vhz7xoDL74S+Ri/CTZZaS7IFVIswI=
-X-Gm-Gg: ASbGnctGtb3rAmJjJkxzrhubY3ksEybJjyB+5oLMHM8qciye+1xs+zPjo2zIb48G12U
-	PxQAG7NjFxDPU5bzK7Q3RFur/3s00DJBgthiyETtX3VTvj4o+HYi5OFKE+hDXqdACYbnOXOHVl+
-	hj7YhjckPnuLlO204B0V1gG7mAj5AhXebUfjMnqmXLjHM=
-X-Google-Smtp-Source: AGHT+IFi2mQZLuvuKUJ5Vmbx2bMFhgEtTB1rODdhMnUJkkTAqMfdBOcO66FNReafO5ChqP0c8B6r5Lro21q2uCkd3k4=
-X-Received: by 2002:a17:907:1c18:b0:ae0:4410:47e3 with SMTP id
- a640c23a62f3a-ae3501a58a6mr1915225466b.51.1751392659068; Tue, 01 Jul 2025
- 10:57:39 -0700 (PDT)
+	s=arc-20240116; t=1751400864; c=relaxed/simple;
+	bh=E44vz52bygok5XjTMIUNBlKZvOqQO16UokfoLAlVR7s=;
+	h=From:To:Cc:References:In-Reply-To:Subject:Date:Message-ID:
+	 MIME-Version:Content-Type; b=guY85Ul5p6L+Thb52gihfGLnn9KfOxlBixH29Zwj0tPoTCFjrO9ORkxKkcQjX+1qu8RUpb9vQI2cfqA0hl5URvhBxdKWeiGihHYEZMmZRnL6bqTEjnSS4lk/te0hm/ugg3mNSGNWdJyJ3tyl2ohLfUyQSzQtwojB1++3Dvll0R8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=markus.stockhausen@gmx.de header.b=kon2QaFn; arc=none smtp.client-ip=212.227.17.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1751400849; x=1752005649;
+	i=markus.stockhausen@gmx.de;
+	bh=GrusLsT57+IiwW3mXGsIdXcyFAaRZzzBzidWklkLX9g=;
+	h=X-UI-Sender-Class:From:To:Cc:References:In-Reply-To:Subject:Date:
+	 Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=kon2QaFnsGsO/OW4jfy5Gcd8XkrklngMqEn1t7X0gGMZLjnu/zr3lMfq+8YMuhEz
+	 DhFVyCmjizQYdzFdlj9yvzRlIVJEGQ6aJ0bJAUWUPS0C7OPGROlC7cHlLU23coZLp
+	 L8khp3DkzOGblGf70UrroNYjv6+4N+flcQK3BUfM2Pl+asNpIOg07NzSfX/qP9Mc5
+	 0U+FruKd05cWBng//3/UtBsRKM5Fk9pSjhD3bg1XiDy/zW9nb4lxMH1HJR1+W3lFN
+	 nD7GjppZGaWLBVMfRfXAjBJjHyDCMXJyeWCKbzjsfc3fqas6j43+lsy7wfNKMiOdv
+	 MYXd7BM7pULvGCff0Q==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from colnote55 ([94.31.70.55]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mnpnm-1v4Rh43nfW-00hT5X; Tue, 01
+ Jul 2025 22:14:09 +0200
+From: <markus.stockhausen@gmx.de>
+To: "'Jonas Jelonek'" <jelonek.jonas@gmail.com>,
+	<linux-i2c@vger.kernel.org>
+Cc: "'Chris Packham'" <chris.packham@alliedtelesis.co.nz>
+References: <20250701091737.3430-1-jelonek.jonas@gmail.com> <20250701091737.3430-3-jelonek.jonas@gmail.com>
+In-Reply-To: <20250701091737.3430-3-jelonek.jonas@gmail.com>
+Subject: AW: [PATCH 2/3] i2c: add RTL9310 support to RTL9300 I2C controller driver
+Date: Tue, 1 Jul 2025 22:14:06 +0200
+Message-ID: <1adc01dbeac4$b3d482e0$1b7d88a0$@gmx.de>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <pnd7c0s6ji2.fsf@axis.com> <ylr7cuxldwb24ccenen4khtyddzq3owgzzfblbohkdxb7p7eeo@qpuddn6wrz3x>
-In-Reply-To: <ylr7cuxldwb24ccenen4khtyddzq3owgzzfblbohkdxb7p7eeo@qpuddn6wrz3x>
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Tue, 1 Jul 2025 20:57:02 +0300
-X-Gm-Features: Ac12FXyruF9twzstORuqQqTbcXFq7Oy0k32bhmiSfPFWKw8o7JRMkyPmwEAJIYk
-Message-ID: <CAHp75Ve=Zas8=6YKoPeTRrvjCaTyyRAyJG1gBLripqZgQpfg7g@mail.gmail.com>
-Subject: Re: [PATCH] Remove error prints for devm_add_action_or_reset()
-To: =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <ukleinek@kernel.org>
-Cc: Waqar Hameed <waqar.hameed@axis.com>, Vignesh Raghavendra <vigneshr@ti.com>, 
-	Julien Panis <jpanis@baylibre.com>, William Breathitt Gray <wbg@kernel.org>, 
-	Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, Peter Rosin <peda@axentia.se>, 
-	Jonathan Cameron <jic23@kernel.org>, David Lechner <dlechner@baylibre.com>, 
-	=?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>, 
-	Andy Shevchenko <andy@kernel.org>, Cosmin Tanislav <cosmin.tanislav@analog.com>, 
-	Lars-Peter Clausen <lars@metafoo.de>, Michael Hennerich <Michael.Hennerich@analog.com>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	Matteo Martelli <matteomartelli3@gmail.com>, Heiko Stuebner <heiko@sntech.de>, 
-	Francesco Dolcini <francesco@dolcini.it>, 
-	=?UTF-8?Q?Jo=C3=A3o_Paulo_Gon=C3=A7alves?= <jpaulo.silvagoncalves@gmail.com>, 
-	Hugo Villeneuve <hvilleneuve@dimonoff.com>, Subhajit Ghosh <subhajit.ghosh@tweaklogic.com>, 
-	Mudit Sharma <muditsharma.info@gmail.com>, Gerald Loacker <gerald.loacker@wolfvision.net>, 
-	Song Qiang <songqiang1304521@gmail.com>, Crt Mori <cmo@melexis.com>, 
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Ulf Hansson <ulf.hansson@linaro.org>, 
-	Karol Gugala <kgugala@antmicro.com>, Mateusz Holenko <mholenko@antmicro.com>, 
-	Gabriel Somlo <gsomlo@gmail.com>, Joel Stanley <joel@jms.id.au>, 
-	Claudiu Manoil <claudiu.manoil@nxp.com>, Vladimir Oltean <vladimir.oltean@nxp.com>, 
-	Wei Fang <wei.fang@nxp.com>, Clark Wang <xiaoning.wang@nxp.com>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>, 
-	Krzysztof Kozlowski <krzk@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
-	Sebastian Reichel <sre@kernel.org>, Neil Armstrong <neil.armstrong@linaro.org>, 
-	Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>, 
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>, Han Xu <han.xu@nxp.com>, 
-	Haibo Chen <haibo.chen@nxp.com>, Yogesh Gaur <yogeshgaur.83@gmail.com>, 
-	Mark Brown <broonie@kernel.org>, Avri Altman <avri.altman@wdc.com>, 
-	Bart Van Assche <bvanassche@acm.org>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
-	"Martin K. Petersen" <martin.petersen@oracle.com>, 
-	Souradeep Chowdhury <quic_schowdhu@quicinc.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Liam Girdwood <lgirdwood@gmail.com>, Peter Ujfalusi <peter.ujfalusi@linux.intel.com>, 
-	Bard Liao <yung-chuan.liao@linux.intel.com>, 
-	Ranjani Sridharan <ranjani.sridharan@linux.intel.com>, Daniel Baluta <daniel.baluta@nxp.com>, 
-	Kai Vehmanen <kai.vehmanen@linux.intel.com>, 
-	Pierre-Louis Bossart <pierre-louis.bossart@linux.dev>, Jaroslav Kysela <perex@perex.cz>, 
-	Takashi Iwai <tiwai@suse.com>, Shawn Guo <shawnguo@kernel.org>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
-	Fabio Estevam <festevam@gmail.com>, kernel@axis.com, linux-iio@vger.kernel.org, 
-	linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
-	linux-rockchip@lists.infradead.org, linux-input@vger.kernel.org, 
-	linux-mmc@vger.kernel.org, imx@lists.linux.dev, netdev@vger.kernel.org, 
-	linux-phy@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-pwm@vger.kernel.org, 
-	linux-amlogic@lists.infradead.org, linux-spi@vger.kernel.org, 
-	linux-scsi@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	linux-usb@vger.kernel.org, sound-open-firmware@alsa-project.org, 
-	linux-sound@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain;
+	charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: de
+Thread-Index: AQHZ/URKehGc6KSMpNWKrYi5TFWNAQJwUm6ttA4KwCA=
+X-Provags-ID: V03:K1:WPPNE1TaldybfKGBxVO9GGVLYtPavfkGt0aD5mibOrf7H+dGYNU
+ RWmfyGbgg3f91Wx2TIYTyq7N2teHiHIqiffC9ds/U6Iq4rRsp3Ac+ZR/c91TFEdkCfFSQCg
+ zZeQloc3Tr4EP+Yz7Va/O/AxnFTKU8uea8l6C9469W6asrAUDrRzeq3CRZO9qv7NNj52+yu
+ v2wWrIbEAm3vbji32udyg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:bC9zvmMw+sU=;ODrusdPguPuBBaSiUzbTkzzfoJk
+ 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
 
-On Tue, Jul 1, 2025 at 8:44=E2=80=AFPM Uwe Kleine-K=C3=B6nig <ukleinek@kern=
-el.org> wrote:
-> On Tue, Jul 01, 2025 at 05:03:33PM +0200, Waqar Hameed wrote:
+Hi Jonas,
 
-...
+> +	ret = device_property_read_u8(dev, "scl-num", &i2c->scl_num);
+> +	if (ret || (i2c->scl_num != 0 && i2c->scl_num != 1))
+> +		i2c->scl_num = 0;
+> +
 
-> With that
->
->         ret =3D devm_add_action_or_reset(dev, meson_pwm_s4_put_clk,
->                                        meson->channels[i].clk);
->         if (ret)
->                 return dev_err_probe(dev, ret,
->                                      "Failed to add clk_put action\n");
->
-> from drivers/pwm/pwm-meson.c is optimized to
->
->         ret =3D devm_add_action_or_reset(dev, meson_pwm_s4_put_clk,
->                                        meson->channels[i].clk);
->         if (ret)
->                 return ret;
->
-> .
->
-> I would prefer this approach, because a) there is no need to drop all
-> dev_err_probe()s after devm_add_action_or_reset() and b) the
-> dev_err_probe()s could stay for consistency in the error paths of a
-> driver.
+if (ret || i2c->scl_num != 1)
+    i2c->scl_num = 0;
 
-Why do we need a dev_err_probe() after devm_add_action*()? I would
-expect that the original call (if needed) can spit out a message.
+should be enough.
 
+Markus
 
---=20
-With Best Regards,
-Andy Shevchenko
 
