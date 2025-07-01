@@ -1,116 +1,141 @@
-Return-Path: <linux-i2c+bounces-11731-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11732-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65B45AEF8AF
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Jul 2025 14:35:22 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C3EA6AEF910
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Jul 2025 14:45:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DD4304A80F3
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Jul 2025 12:35:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 65D207A50C2
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Jul 2025 12:44:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 247E62741D0;
-	Tue,  1 Jul 2025 12:34:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFB141531D5;
+	Tue,  1 Jul 2025 12:45:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="masvGR71"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K8RJxvPX"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 528E7273818
-	for <linux-i2c@vger.kernel.org>; Tue,  1 Jul 2025 12:34:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8017F271A84;
+	Tue,  1 Jul 2025 12:45:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751373296; cv=none; b=N1gTJH8bu0ogEOENELEUNuv0jh30XNHDtISTjr9uxSqtuvyIvfTsJr9VMptPRt5vwbng+YwD2UBvZMrQWf2iORljFK+pZj83k/p0OOg6dNH5zXUppIwMSn4MM02g+2faYvL2WRrMW5BDlSBW/xS184ALQUYph4RkogSxafbnvS8=
+	t=1751373929; cv=none; b=Mk8neV8VSaLK/ukkkSVolrffmt61mkdtwIK65bs+AfIYBeVLUc4ZM0PozK+j3OlfNyMH6Ai1VzEKWhWJw78mr0mnL+o38x50QlyYH2cfmb29h5bW/z/iqQzEyaGvIh+cKECKovGlDVaWipSFjDIp9cnVmhqqNv9vWDbhLU3st1E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751373296; c=relaxed/simple;
-	bh=wNImbEu52gPdTxM6sZIEeOKycZUbsl83aNcybF4Zqgw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ImLVOHkNtK3w9WidPDWgo6/uObsVYGYiyVO7FAaCHVYznlz5iEA/oGIVW2ywnB/TlHB8iIkoO1iqdIoSiZ5WSJTI67odhJA6YLpkKw2QRJWIru2UhuKbzeVFwmybNQ6C5VFoKawJhI7bL7wKTGcIx4eCOIbml3zQQtHV23HJAMk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=masvGR71; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-453634d8609so39654735e9.3
-        for <linux-i2c@vger.kernel.org>; Tue, 01 Jul 2025 05:34:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751373293; x=1751978093; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wNImbEu52gPdTxM6sZIEeOKycZUbsl83aNcybF4Zqgw=;
-        b=masvGR71j6+9tFv3+wA1kC56GDF8I6ZK0AH8fg/zVBR7ZlgzKGd0f+rg7bH6h80Qba
-         msqisxH9Xr8hyOcwCaPbKjrBoPn1UMH6U3bTBur7jeVWkEIzU00t67O5HjkVjHiYbrQc
-         rMWhjfwrriyI0KkWdHbNuTrcpUyByS3Ou3u1FyzOwYvwU4TpuMjCXhkUEaQQIu9mGw2C
-         7PidnwaQJk7oU0tA8myNTH5nP1aluOgTWwGmQMgQkLxYQHtpcufKnBFZQP9fu2w8yaiR
-         0nZgFF0ZLLQ9DvRqsX9Uvq2Qb/0mQJkOcH3Hx7VuAbAPoH/cABlFiHGIjHw+Z75JN2C+
-         UcAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751373293; x=1751978093;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wNImbEu52gPdTxM6sZIEeOKycZUbsl83aNcybF4Zqgw=;
-        b=eP6DaFDMM0PRbpx8o9ZoZv+eXE6ZRSPVIC9/f7ScyRAo3nsGAHNTItIFEBzCfFIKvB
-         nIjrDQhKeD1VyVvwKu+h2yQ5DinAC7dR8UTWiNk0gug4jHpXL5wP5ItKfceFrqq+KFGD
-         yV+7SIBrpqCmLQexXilaBC1NKszjJrd+czZpxLQ2BU6jBPGL81/ATaWI8rvP2cEYKfV/
-         6kFN6Ndbg7h1X22VBe4Nr6qawGpt7vJul3u2nnsmptccuRtIz5zpZnrWj4Nasp69ibg4
-         XzZLL147pvN0REa0UBndECjrgnbNpyRo3PMIkIW6jIWHa7RUyUg64aNJkVjt/uxRpMny
-         GhWw==
-X-Forwarded-Encrypted: i=1; AJvYcCUz7ZV9V9XcxeDrFkWjhVuniKPn5y+Md+oH1d36DGn9R6z1HL9N8bbImpNzfcQ0tyO8x2UxwdwbNwM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxkRkD7vD6/90hj/bsHtfASj5X4W9vPCj2ZJKzyBY4CQCZ7/rfb
-	I1TrlZ24OATstMCMxFB7VK/5sWbPxFYA8v13sIKNKR6Z2r4urPxToFOS
-X-Gm-Gg: ASbGncsduHojlNsPfc5OZqaJY2xbXUw+RlpC1u2uwSYIzoUJZvBOxIDw3r6DzLE3Rdy
-	KCFd6XAJSgiJAa6MJVWO2tXMPlxCZNHxgMt4bHinCcJSmZL9YpTGY4d0XCfbgrX01CXMzwb5zn0
-	v2n+ApzcshnlyHaalBPsaFTloafANOor3guVV32UFbzr9OJ3U286W89i+JFnlCvp3/qCCiYoBOX
-	0b+gSHUkMphw+7g/yqR8wwBMRY3Igmg4Xb0STQTxke9u7PtNGhmQSGxtb4wCACt8xUUikVDKAZg
-	Pc9rW/U+MAAHUm93sYubvI3aU55g9SYn9+rknarRCjIDaHBUyIo/FgINuZZgPfoZrLjpkhyOCrC
-	+XAvzGhgTWOQAVXQPzOypdLEuMb1uGPUurAa5V2D5xUY2JbVgsfY=
-X-Google-Smtp-Source: AGHT+IGbJKNsEDev9AFvmAPHKcq931n72swL24FYoKtFqqjasVCkCrV+Hh4tRIKWtm3qbYhcPJoLng==
-X-Received: by 2002:a05:600c:1d9f:b0:441:d43d:4f68 with SMTP id 5b1f17b1804b1-4538ee8c2acmr196973565e9.15.1751373293223;
-        Tue, 01 Jul 2025 05:34:53 -0700 (PDT)
-Received: from [192.168.255.3] (253-8-142-46.pool.kielnet.net. [46.142.8.253])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a892e5979dsm13098633f8f.75.2025.07.01.05.34.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Jul 2025 05:34:52 -0700 (PDT)
-Message-ID: <b1d63a7c-e01e-4c1e-8923-2f2044ee3e21@gmail.com>
-Date: Tue, 1 Jul 2025 14:34:52 +0200
+	s=arc-20240116; t=1751373929; c=relaxed/simple;
+	bh=8/zmwOwLzAK8T5B+sPvRSllq5AcW9W6+UmpHBMo9FYs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PWFXaDZd2LHngUQMzBeJWj+S8PFjapCnezlw1KLEkdo90jYUDY48sXRAt6fv66uDg3JQXxjL//xQ6kBMUPP8haJ0l7VZbKzOXZznSQlHcS/TBKrGG1LTZr9ItpmMdWkFNESgyBuZw4z2LiDTvgkIA/YcexCAUgNB++TOr4xgpIo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=K8RJxvPX; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1751373928; x=1782909928;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8/zmwOwLzAK8T5B+sPvRSllq5AcW9W6+UmpHBMo9FYs=;
+  b=K8RJxvPX2JohmcIt9T1J8LWnhOiapViIHHYsZ3A9qp0VlFzpUEj70NQN
+   V2VXPz+Mx8zw9PUJBDpwgPZRiKUJp76hHanFCL9dLLDVRXZIIDe5Pgysy
+   2pHWK18kEB58cEFT4xU1rhC4DPB95Bapvf+SfLXrFel180hHRAbIDYD+3
+   JsjE2ig2YZ5LfYKYXvsoOBuv3jh8VhmQZT7s1j4yNRQ0s6xm3y5MT+g0B
+   Em45wWeotWz+GDKPQOXa8EbSUNF7G9iSNJ9r2B9EzL9Hv4y46GiPK7lBn
+   RUN3VWCVJXEe4Chtg0LhRvAKQ/NM8z4tr+zGb0SesZlqZPNtmtQqHTzyT
+   A==;
+X-CSE-ConnectionGUID: tL1shH8XSdqL0VxSpSZXqQ==
+X-CSE-MsgGUID: gmKBxg3vRomHzT8Lgl/uWg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11481"; a="53507891"
+X-IronPort-AV: E=Sophos;i="6.16,279,1744095600"; 
+   d="scan'208";a="53507891"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2025 05:42:53 -0700
+X-CSE-ConnectionGUID: x8FgYkrQQW+gNYN4KhhCRQ==
+X-CSE-MsgGUID: RBqvSRXiRSufYiZGGa2lHg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,279,1744095600"; 
+   d="scan'208";a="184698685"
+Received: from smile.fi.intel.com ([10.237.72.52])
+  by fmviesa001.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2025 05:42:46 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1uWaJu-0000000Bb8V-47cV;
+	Tue, 01 Jul 2025 15:42:42 +0300
+Date: Tue, 1 Jul 2025 15:42:42 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: Lucas De Marchi <lucas.demarchi@intel.com>,
+	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Jan Dabros <jsd@semihalf.com>, Andi Shyti <andi.shyti@kernel.org>,
+	Raag Jadav <raag.jadav@intel.com>,
+	"Tauro, Riana" <riana.tauro@intel.com>,
+	"Adatrao, Srinivasa" <srinivasa.adatrao@intel.com>,
+	"Michael J. Ruhl" <michael.j.ruhl@intel.com>,
+	intel-xe@lists.freedesktop.org, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 1/5] i2c: designware: Use polling by default when
+ there is no irq resource
+Message-ID: <aGPXwll6Hh2cZfnp@smile.fi.intel.com>
+References: <20250701122252.2590230-1-heikki.krogerus@linux.intel.com>
+ <20250701122252.2590230-2-heikki.krogerus@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] dt-bindings: i2c: realtek,rtl9301-i2c: extend for
- RTL9310 support
-Content-Language: en-GB
-To: Krzysztof Kozlowski <krzk@kernel.org>, linux-i2c@vger.kernel.org
-Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>,
- Markus Stockhausen <markus.stockhausen@gmx.de>
-References: <20250701091737.3430-1-jelonek.jonas@gmail.com>
- <20250701091737.3430-4-jelonek.jonas@gmail.com>
- <40654033-68be-4c80-b3a7-9567c4677138@kernel.org>
-From: Jonas Jelonek <jelonek.jonas@gmail.com>
-In-Reply-To: <40654033-68be-4c80-b3a7-9567c4677138@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250701122252.2590230-2-heikki.krogerus@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
+
+On Tue, Jul 01, 2025 at 03:22:48PM +0300, Heikki Krogerus wrote:
+> The irq resource itself can be used as a generic way to
+> determine when polling is needed.
+> 
+> This not only removes the need for special additional device
+> properties that would soon be needed when the platform may
+> or may not have the irq, but it also removes the need to
+> check the platform in the first place in order to determine
+> is polling needed or not.
+
+> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> ---
+> Hi guys,
+> 
+> I found the thread with Jarkko's comments from my archives. He wanted
+> the local flags variable to be added because he wants the order of the
+> calls to remain as it is now - the device is allocated only after the
+> irq is checked.
+
+Yes, thanks.
+
+...
+
+> +	u32 flags = (uintptr_t)device_get_match_data(&pdev->dev);
+
+> +	irq = platform_get_irq_optional(pdev, 0);
+> +	if (irq == -ENXIO)
+> +		flags |= ACCESS_POLLING;
+> +	else if (irq < 0)
+>  		return irq;
+
+>  	if (device_property_present(device, "wx,i2c-snps-model"))
+> +		flags = MODEL_WANGXUN_SP | ACCESS_POLLING;
+
+Now I'm a bit puzzled why do we need to add this flag explicitly here?
+Does Wnagxun provides an IRQ and chooses at the same time to poll?
+Shouldn't this patch rather fix that?
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-
-On 01.07.2025 13:35, Krzysztof Kozlowski wrote:
-> On 01/07/2025 11:17, Jonas Jelonek wrote:
->> This extends the dt-bindings for the I2C driver for RTL9300 to account
->> for the added support for RTL9310 series.
-> There is no driver here in the patch, so message should not reference it
-> at all. Describe the hardware instead.
->
-> Also, bindings come before the user (see submitting patches in DT dir).
->
-> Best regards,
-> Krzysztof
-I'll fix this too in v2.
-
-Best regards,
-Jonas
 
