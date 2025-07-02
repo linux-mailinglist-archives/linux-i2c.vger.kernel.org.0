@@ -1,198 +1,158 @@
-Return-Path: <linux-i2c+bounces-11755-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11756-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8A98AF0C05
-	for <lists+linux-i2c@lfdr.de>; Wed,  2 Jul 2025 08:55:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D74AAF0CAB
+	for <lists+linux-i2c@lfdr.de>; Wed,  2 Jul 2025 09:35:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 818871C038A3
-	for <lists+linux-i2c@lfdr.de>; Wed,  2 Jul 2025 06:55:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2435E4E0A67
+	for <lists+linux-i2c@lfdr.de>; Wed,  2 Jul 2025 07:35:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC22622688C;
-	Wed,  2 Jul 2025 06:54:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82C932236E8;
+	Wed,  2 Jul 2025 07:35:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HgEzaVEs"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F8C+sd9d"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A4E21D7E41;
-	Wed,  2 Jul 2025 06:54:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A86C1D514E
+	for <linux-i2c@vger.kernel.org>; Wed,  2 Jul 2025 07:35:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751439291; cv=none; b=BjfMjfHkxNG/5DvAGvzbZLvTEKzn+u8ddSmrXTImXjzHopwtvDy6llJmAGdu4eIH0dxlIcqNsl95Hp+PRawPWXTt1DpfcdYajuXsdD3ghRf84pAbjE2Pff8auxKLO4l0zbLwvMpOAJt7U7yU0/RQuojBpyseFN3KVKl2WHyjAe4=
+	t=1751441704; cv=none; b=hDlQ0EiB7KqBitdkkN0Qqb4D5/SZVfTl48oa/+2Pr8KV35zVDq5wUfj4r9kGs2Zm6gVIcPXv8zJEM7gBscB8KjRHLKfjWBDVWGEPhBhTwK/2FmFLPWVjj58jgfPOxK6rTzPhRwL7guwE6G0LKh5+3yJLJySlf/pibK11gTyb4nU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751439291; c=relaxed/simple;
-	bh=OygOYEPels4czGsYfayew2rB/2MBUfzsc+sH9m4SBq0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KBBfrUnx9JuUhGVeZWDW8VRQY/VuyV4KM9C+G391oK4/4pwqIrx2j17CoRcnQJYc08TNW90QrZBH4tqaQBI++It2Z9EJTitBWsUQ4tyicMLDtWpnF5+OsFd52mAjMDBcD7SfqGX+famczpUpXpY8NOsxKq2m2qGgos+KJ4lyheQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HgEzaVEs; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DADDC4CEEE;
-	Wed,  2 Jul 2025 06:54:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751439290;
-	bh=OygOYEPels4czGsYfayew2rB/2MBUfzsc+sH9m4SBq0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HgEzaVEsk//JdYC+Qyn/5EKrQUtKGk9503aAH2+MGID4BNeVQ532beH+YUPat8bTE
-	 ksassL7x58UVM8H2z1YiCwar+F03MKvsVVnuzRRKynO2HQG/FWdGtT9efkSLGsT2I7
-	 Ms+P4pZHTOL3Vi5wMI5yX6frOXuS33VSRWuaxiWcuK7ssHBQAM1VMY79ox/M3t/Kkg
-	 MpzSll7uEgbWqbwWs12mIdTWwhhed0E7KABMg9q7RSCMgBIviaW2okigJHox485Vzp
-	 +NGA4KhTUCCW4PB5nkG0t/tcwwrvz8+nBPF7c5fUeC9tKEKmXUIejMhEFiSWJ7w1Sq
-	 ROwcsDKchkEaA==
-Date: Wed, 2 Jul 2025 08:54:48 +0200
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
-To: Jonathan Cameron <jic23@kernel.org>
-Cc: Waqar Hameed <waqar.hameed@axis.com>, 
-	Vignesh Raghavendra <vigneshr@ti.com>, Julien Panis <jpanis@baylibre.com>, 
-	William Breathitt Gray <wbg@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, 
-	Bartosz Golaszewski <brgl@bgdev.pl>, Peter Rosin <peda@axentia.se>, 
-	David Lechner <dlechner@baylibre.com>, Nuno =?utf-8?B?U8Oh?= <nuno.sa@analog.com>, 
-	Andy Shevchenko <andy@kernel.org>, Cosmin Tanislav <cosmin.tanislav@analog.com>, 
-	Lars-Peter Clausen <lars@metafoo.de>, Michael Hennerich <Michael.Hennerich@analog.com>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Matteo Martelli <matteomartelli3@gmail.com>, 
-	Heiko Stuebner <heiko@sntech.de>, Francesco Dolcini <francesco@dolcini.it>, 
-	=?utf-8?Q?Jo=C3=A3o_Paulo_Gon=C3=A7alves?= <jpaulo.silvagoncalves@gmail.com>, Hugo Villeneuve <hvilleneuve@dimonoff.com>, 
-	Subhajit Ghosh <subhajit.ghosh@tweaklogic.com>, Mudit Sharma <muditsharma.info@gmail.com>, 
-	Gerald Loacker <gerald.loacker@wolfvision.net>, Song Qiang <songqiang1304521@gmail.com>, 
-	Crt Mori <cmo@melexis.com>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
-	Ulf Hansson <ulf.hansson@linaro.org>, Karol Gugala <kgugala@antmicro.com>, 
-	Mateusz Holenko <mholenko@antmicro.com>, Gabriel Somlo <gsomlo@gmail.com>, Joel Stanley <joel@jms.id.au>, 
-	Claudiu Manoil <claudiu.manoil@nxp.com>, Vladimir Oltean <vladimir.oltean@nxp.com>, 
-	Wei Fang <wei.fang@nxp.com>, Clark Wang <xiaoning.wang@nxp.com>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Vinod Koul <vkoul@kernel.org>, 
-	Kishon Vijay Abraham I <kishon@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>, 
-	Alim Akhtar <alim.akhtar@samsung.com>, Sebastian Reichel <sre@kernel.org>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, Kevin Hilman <khilman@baylibre.com>, 
-	Jerome Brunet <jbrunet@baylibre.com>, Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
-	Han Xu <han.xu@nxp.com>, Haibo Chen <haibo.chen@nxp.com>, 
-	Yogesh Gaur <yogeshgaur.83@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	Avri Altman <avri.altman@wdc.com>, Bart Van Assche <bvanassche@acm.org>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, "Martin K. Petersen" <martin.petersen@oracle.com>, 
-	Souradeep Chowdhury <quic_schowdhu@quicinc.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Liam Girdwood <lgirdwood@gmail.com>, Peter Ujfalusi <peter.ujfalusi@linux.intel.com>, 
-	Bard Liao <yung-chuan.liao@linux.intel.com>, Ranjani Sridharan <ranjani.sridharan@linux.intel.com>, 
-	Daniel Baluta <daniel.baluta@nxp.com>, Kai Vehmanen <kai.vehmanen@linux.intel.com>, 
-	Pierre-Louis Bossart <pierre-louis.bossart@linux.dev>, Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
-	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, kernel@axis.com, 
-	linux-iio@vger.kernel.org, linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-mediatek@lists.infradead.org, linux-rockchip@lists.infradead.org, linux-input@vger.kernel.org, 
-	linux-mmc@vger.kernel.org, imx@lists.linux.dev, netdev@vger.kernel.org, 
-	linux-phy@lists.infradead.org, linux-samsung-soc@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-pwm@vger.kernel.org, linux-amlogic@lists.infradead.org, linux-spi@vger.kernel.org, 
-	linux-scsi@vger.kernel.org, linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org, 
-	sound-open-firmware@alsa-project.org, linux-sound@vger.kernel.org
-Subject: Re: [PATCH] Remove error prints for devm_add_action_or_reset()
-Message-ID: <jeajjewfbg5qo736imozpghnpxln2pux74aegtqsi57qsbpug2@opndel6zc3m3>
-References: <pnd7c0s6ji2.fsf@axis.com>
- <ylr7cuxldwb24ccenen4khtyddzq3owgzzfblbohkdxb7p7eeo@qpuddn6wrz3x>
- <20250701185519.1410e831@jic23-huawei>
+	s=arc-20240116; t=1751441704; c=relaxed/simple;
+	bh=eQ9+3uQo04qOS3R/m434PAZKlA3lc2m+RaZuXRO/GVU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=E6BwswNxfo3X7IK5JOcBDbQ2OJGFTOCcmLE2crqNxiGC0bWkkP/7rIi8OLHALbeEtCFgRluCWQfCa7O2/4fQfuCvUVqdoOnGXi5ERbKFFPkz8UFhY7tysf9+25fK9ODx2UtXZtwDxqvTYyj/eNK9OYrxYX8s+Ql0fYwg8POmMjI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F8C+sd9d; arc=none smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-3a6e2d85705so3557552f8f.0
+        for <linux-i2c@vger.kernel.org>; Wed, 02 Jul 2025 00:35:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1751441701; x=1752046501; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eQ9+3uQo04qOS3R/m434PAZKlA3lc2m+RaZuXRO/GVU=;
+        b=F8C+sd9dtOBezE+k3YdozUH/M6TikbhrwalFoQlH53dvouzkHY2qfGBUTWle3RfZ2u
+         6lh0AXeBROfqMlb7ETNflA2F4wGXNSeY998kp++TBU/7cGA4jn3LYX/WPSEdMC9a1+tx
+         xbaOKgcTCTi6zxOY6McuNLwTvAas4g4YSf4y+Sb/b+njK+EPvWBWQ90EGW5aaUjRKQvL
+         2lJpmRvL89NkIjge9d4UZX0cMDoZn+fwZITkAdX+fQ+I7lrc8XOovd1YfI+VQt4zujUw
+         /byJqRuuCPMuNp+qvNJxRjRpIZvDUzGmXm7wV8J6Mbvsmn1ydSS5AUqc+sUYfk1OzEDQ
+         UXjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751441701; x=1752046501;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eQ9+3uQo04qOS3R/m434PAZKlA3lc2m+RaZuXRO/GVU=;
+        b=c/qZLxkKVQhh1S7BzvHVfQATmBMFIwcm7udQ9hoV4jmc1txAZLwrcnMrcS4cJRQjh5
+         LUGhVkbQ2sxbBaxnwP4y/e5tBRNACISYjEWOlIfcbUwz0neu9a71jBNVJNsIykxf7PKl
+         DJvGePrqZarrAkdWFW4UIexLiIrp+BgzRxaeolGMmLBTN4qSBmLpIJ4Sp+8GFV9Aryqd
+         xrJG3y0zEOkS/WTzngGLzSQwE80Tua8IwGJvGXFqdAfuuVZD/JDyJNynMqS6zyCsgXx1
+         sFF345m6I8S0MFddhxOVpi0e2tXV+1HpjLDruHMoY1leEKSSe0UyMYutMpv4ml8pF+oC
+         MLNQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXS1Qk+OCZ/jeZ+P16MEdZfvvW4uiunasaO8Gfcldhh1HMvfKOJWaFfrfI1mQ3rbtOeNkt0NWJp3TY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwYQaaRvEYseH6L7NrSIQYxNj4T1S9sIHp4iv3I2zNJUVNTZjEZ
+	rE7ofhWU/MKJSa5L6cN+jnbgitkZ9/dO28sahP5I9eyiZiK+AH+5DcXmqC5VlMyu
+X-Gm-Gg: ASbGncspUHBT4MEDZxw1ELOqflPyipShQyqqsNW4TP0H+UWwnFKRM0pAG9FmMuCOLgq
+	arz+Ylf8YXctHOz4rjxOETr4lPRL+CWfvXVSULg5/spz+kj3KoXCPOcib1sgkzNavcp6n7vdDwC
+	XS3n2IRbabXNUViFE4loD9tKgYZquBgpMKs+p72wxaCzP3MzOk9li961lyyjygY6YXF0xmbAD+D
+	Pull56vM/YE+PUg4WNgo9cMKb5YFUzYYB0o7AHfOno61wg/hN+QI/zTKMI0C/uv9xlQZqK0QvMy
+	uqNaQGCOr970A9cA2ct7Rga22Dw9oNAwMAyEigqAE8oT+CK6/JnPIp3xSq54HiZPn+Z8q/h4N8f
+	8TOnq6tzq+jiIKpueDC6e+UZg5pTfgMedIiY=
+X-Google-Smtp-Source: AGHT+IFmExrR8jhcYzoDDQyHZedjY2xIrNKiXMsT7gJuTOQ9Rn0Kg9EoaI1WVfHsGGP7e7z1q016uw==
+X-Received: by 2002:a05:6000:5c5:b0:3a8:3105:1d49 with SMTP id ffacd0b85a97d-3b200b4677emr977107f8f.45.1751441700581;
+        Wed, 02 Jul 2025 00:35:00 -0700 (PDT)
+Received: from [192.168.44.44] (24-10-142-46.pool.kielnet.net. [46.142.10.24])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4538233c05csm219984575e9.5.2025.07.02.00.34.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Jul 2025 00:35:00 -0700 (PDT)
+Message-ID: <3b357cd4-017e-43d9-a662-4f26fb9b8d68@gmail.com>
+Date: Wed, 2 Jul 2025 09:34:59 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="yoqxembgtzssn7jy"
-Content-Disposition: inline
-In-Reply-To: <20250701185519.1410e831@jic23-huawei>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/3] dt-bindings: i2c: realtek,rtl9301-i2c: extend for
+ RTL9310 support
+Content-Language: en-GB
+To: Krzysztof Kozlowski <krzk@kernel.org>, linux-i2c@vger.kernel.org
+Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>,
+ Markus Stockhausen <markus.stockhausen@gmx.de>
+References: <20250701091737.3430-1-jelonek.jonas@gmail.com>
+ <20250701091737.3430-4-jelonek.jonas@gmail.com>
+ <d123375e-48ec-43f1-bc5a-1256c2f377ec@kernel.org>
+ <ad8d7f0b-1c25-4a1b-89db-6631d918f9a1@gmail.com>
+ <b3e58bf1-d51b-481c-892c-4115bd106ed9@kernel.org>
+ <123042be-63dc-46bf-b781-6da022a8f4c5@gmail.com>
+ <8d671dcc-bcc2-4b1d-9063-f7d69d52d29d@kernel.org>
+From: Jonas Jelonek <jelonek.jonas@gmail.com>
+In-Reply-To: <8d671dcc-bcc2-4b1d-9063-f7d69d52d29d@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
+Hi Krzysztof,
 
---yoqxembgtzssn7jy
-Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH] Remove error prints for devm_add_action_or_reset()
-MIME-Version: 1.0
+thanks for taking the time to deal with this.
 
-Hello Jonathan,
+On 02.07.2025 08:11, Krzysztof Kozlowski wrote:
+> On 01/07/2025 16:31, Jonas Jelonek wrote:
+>> For the purpose:
+>> RTL9310 changed the register layout compared to RTL9300. Activating
+>> the SCL line is done by setting bit 12 for master 1 and bit 13 for master 2
+>> in a global register which is located before the master-specific registers.
+>> Thus, the driver needs to know which master (1 or 2) it is currently doing
+>> something for. That is what this property is intended to be used, naming
+>> to-be-discussed.
+> There is no global register space here and no syscon, so I don't
+> understand how can you access it, especially when they are located
+> BEFORE your address space.
 
-On Tue, Jul 01, 2025 at 06:55:19PM +0100, Jonathan Cameron wrote:
-> On Tue, 1 Jul 2025 19:44:17 +0200
-> Uwe Kleine-K=F6nig <ukleinek@kernel.org> wrote:
->=20
-> > On Tue, Jul 01, 2025 at 05:03:33PM +0200, Waqar Hameed wrote:
-> > >  drivers/pwm/pwm-meson.c                          | 3 +-- =20
-> >=20
-> > Looking at this driver I tried the following:
->=20
-> I'm not sure what we actually want here.
->=20
-> My thought when suggesting removing instances of this
-> particular combination wasn't saving on code size, but rather just
-> general removal of pointless code that was getting cut and
-> paste into new drivers and wasting a tiny bit of review bandwidth.
-> I'd consider it bad practice to have patterns like
->=20
-> void *something =3D kmalloc();
-> if  (!something)
-> 	return dev_err_probe(dev, -ENOMEM, ..);
->=20
-> and my assumption was people would take a similar view with
-> devm_add_action_or_reset().
->
-> It is a bit nuanced to have some cases where we think prints
-> are reasonable and others where they aren't so I get your
-> point about consistency.
+Probably this explanation is still missing some background and 'global'
+was misleading here. The I2C controllers are part of Realtek switchcore.
+This is defined as a syscon in DTS and the I2C controller has to be
+defined as a child-node of it. (see 
+https://elixir.bootlin.com/linux/v6.15.1/source/arch/mips/boot/dts/realtek/rtl930x.dtsi#L45-L72)
+The driver takes its regmap from this syscon node as the I2C registers
+are within that switchcore address space.
 
-The problem I see is that there are two classes of functions: a) Those
-that require an error message and b) those that don't. Class b) consists
-of the functions that can only return success or -ENOMEM and the
-functions that emit an error message themselves. (And another problem I
-see is that for the latter the error message is usually non-optimal
-because the function doesn't know the all details of the request. See my
-reply to Andy for more details about that rant.)
+Address layout in RTL9310 is (addresses relative to parent syscon node):
+0x1004 - 0x100b    I2C 'global' registers
+0x100c - 0x1023    I2C master 1 registers
+0x1024 - 0x103b    I2C master 2 registers
 
-IMHO what takes away the review bandwidth is that the reviewer has to
-check which class the failing function is part of. If this effort
-results in more driver authors not adding an error message after
-devm_add_action_or_reset() that's nice, but in two months I have
-forgotten the details of this discussion and I have to recheck if
-devm_add_action_or_reset() is part of a) or b) and so the burden is
-still on me.
+The driver has to access both the registers for the master that it is
+configuring AND the 'global' ones (for SCL + SDA activation).
 
-So to give my answer on your question "What do we actually want here?":
-Please let us get rid of the need to care for a) or b).
+For upstream RTL9300 it's similar with the difference of having SCL
+selection in the master-specific registers and the register layout
+having the order:
+- I2C master 1 registers
+- I2C 'global' register
+- I2C master 2 registers
 
-> The code size reduction is nice so I'd not be against it as an extra
-> if the reduction across a kernel builds is significant and enough
-> people want to keep these non printing prints.
+> Best regards,
+> Krzysztof
 
-To complete implementing my wish all API functions would need to stop to
-emit an error message. Unfortunately that isn't without downsides
-because the result is that there are more error strings and so the
-kernel size is increased. So you have to weight if you prefer individual
-error messages and easier review/maintenance at the cost of a bigger
-binary size and more dev_err_probe() calls in drivers eating vertical
-space in your editor.
+Just an idea to discuss regarding the DT compatibles:
+I was proposed out of this conversation to use something like
+'i2c-otto-mango' ('otto' being the codename for their platform,
+'mango' being the codename for the RTL9310 series). Based on, that
+technically(!) it doesn't make sense to distinguish between the
+variants of the series.
 
-I know on which side I am, but I bet we won't find agreement about that
-in the kernel community ...
+Has this any chance of acceptance, even when I do not mention
+specific SoC variants anywhere in my patchset?
 
-Best regards
-Uwe
-
---yoqxembgtzssn7jy
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmhk17UACgkQj4D7WH0S
-/k4YcQgAlm1BDi3/P3JcN5b6Y1UamZV/S9cGOikezq/kf1GhqDBu8DxrVjTBFjOf
-OJoBgw/566zxq5agBq8EUgc7GrJBwe7BhieAXUGmYQI0pBg1Zdhgyj42kXhx7B9R
-u2j6XXXrEWa1Sw58sbK3g8bLeDEo9/kIem6g0Yk6NZX2WibbNU6Bw6UuV3yVwVaX
-TH4uFzMJ5wVvnwJDz2HCuxCLQ9NO25UL0U3DdZWIPI9oeuodG3U3MVNJWMJ5OuXc
-e+Yo5MhzsrnrMpj4nWPaicdD25qLOdVCySFDim72U4oI24wsmtlQBiJmDuNoldf/
-kbQM9dmwp48V3mVs7SFSmrt/TD4bFw==
-=6zPO
------END PGP SIGNATURE-----
-
---yoqxembgtzssn7jy--
+Best regards,
+Jonas
 
