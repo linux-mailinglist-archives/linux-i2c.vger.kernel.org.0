@@ -1,208 +1,171 @@
-Return-Path: <linux-i2c+bounces-11760-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11761-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7EBACAF10EC
-	for <lists+linux-i2c@lfdr.de>; Wed,  2 Jul 2025 11:58:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A5BAAF1351
+	for <lists+linux-i2c@lfdr.de>; Wed,  2 Jul 2025 13:09:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B02C447DEE
-	for <lists+linux-i2c@lfdr.de>; Wed,  2 Jul 2025 09:58:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9F7CE1676CC
+	for <lists+linux-i2c@lfdr.de>; Wed,  2 Jul 2025 11:08:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81B3A24BC09;
-	Wed,  2 Jul 2025 09:58:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F78B2620D5;
+	Wed,  2 Jul 2025 11:07:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b="TE/+6YQJ"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBC9F23816C;
-	Wed,  2 Jul 2025 09:58:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 946B123A9AC
+	for <linux-i2c@vger.kernel.org>; Wed,  2 Jul 2025 11:07:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751450318; cv=none; b=rvj7JB1YJBp49RF0a2pAoCmSsj/N4LPN8xmXKv9WCgEFzS9XYz5KNrQv8zyXci6qsVpmHUarVfndexxe4XEIY5uK1/fJqvXfivG7cO33xFwj9VkM/PY7ivIBoxEGUJL30ds3wdJQXwLCiCzGsMDwrFJDYAxzSY2RxPKn9185fCg=
+	t=1751454458; cv=none; b=PW1GWHgpwyZlfIVFErwYa3YHYr6bUO1Sev9BTfgKaCxCmeFG2sxTZ4mxEBF5TKw3KKLxmfLKQtpjbO6oh4sCG5Uc0li4jds183xUhPwxQeHw+FvhFhJtWz07JUyZcW+kjtlz9QgLOaJNdPP8E9wb3xXurEGTP7wLXIKU0NRAqSE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751450318; c=relaxed/simple;
-	bh=ac1WHXY9uU6sg9VG9LlQUm/TQKiiff0h5oFc/3+SBzY=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=D1o5FWMQg66xzNOBz0Px8/T9GIoyqwDXuFCMmW5HS6VoLme9tUfqt3x1dgIbpPhF8tmangdHgyES6Uy87w/C6qLLiPxAGGH+qPbWonAXVjZZHDXxu3EaHHbHBQWvZ9y8345y/6hx5JBHjjecvQAPWEgegBbZn1OrLDzc98PQgxQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.31])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4bXFdQ6LTjz6L55h;
-	Wed,  2 Jul 2025 17:55:38 +0800 (CST)
-Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
-	by mail.maildlp.com (Postfix) with ESMTPS id B5DAB1404FD;
-	Wed,  2 Jul 2025 17:58:31 +0800 (CST)
-Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
- (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Wed, 2 Jul
- 2025 11:58:28 +0200
-Date: Wed, 2 Jul 2025 10:58:26 +0100
-From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To: Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>
-CC: Jonathan Cameron <jic23@kernel.org>, Waqar Hameed <waqar.hameed@axis.com>,
-	Vignesh Raghavendra <vigneshr@ti.com>, "Julien Panis" <jpanis@baylibre.com>,
-	William Breathitt Gray <wbg@kernel.org>, "Linus Walleij"
-	<linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, Peter Rosin
-	<peda@axentia.se>, David Lechner <dlechner@baylibre.com>, Nuno
- =?ISO-8859-1?Q?S=E1?= <nuno.sa@analog.com>, Andy Shevchenko
-	<andy@kernel.org>, Cosmin Tanislav <cosmin.tanislav@analog.com>, "Lars-Peter
- Clausen" <lars@metafoo.de>, Michael Hennerich <Michael.Hennerich@analog.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>, Matteo Martelli
-	<matteomartelli3@gmail.com>, Heiko Stuebner <heiko@sntech.de>, Francesco
- Dolcini <francesco@dolcini.it>, =?ISO-8859-1?Q?Jo=E3o?= Paulo
- =?ISO-8859-1?Q?Gon=E7alves?= <jpaulo.silvagoncalves@gmail.com>, Hugo
- Villeneuve <hvilleneuve@dimonoff.com>, Subhajit Ghosh
-	<subhajit.ghosh@tweaklogic.com>, Mudit Sharma <muditsharma.info@gmail.com>,
-	Gerald Loacker <gerald.loacker@wolfvision.net>, Song Qiang
-	<songqiang1304521@gmail.com>, Crt Mori <cmo@melexis.com>, Dmitry Torokhov
-	<dmitry.torokhov@gmail.com>, Ulf Hansson <ulf.hansson@linaro.org>, Karol
- Gugala <kgugala@antmicro.com>, Mateusz Holenko <mholenko@antmicro.com>,
-	Gabriel Somlo <gsomlo@gmail.com>, Joel Stanley <joel@jms.id.au>, Claudiu
- Manoil <claudiu.manoil@nxp.com>, Vladimir Oltean <vladimir.oltean@nxp.com>,
-	Wei Fang <wei.fang@nxp.com>, Clark Wang <xiaoning.wang@nxp.com>, Andrew Lunn
-	<andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>, Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I
-	<kishon@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>, Alim Akhtar
-	<alim.akhtar@samsung.com>, Sebastian Reichel <sre@kernel.org>, "Neil
- Armstrong" <neil.armstrong@linaro.org>, Kevin Hilman <khilman@baylibre.com>,
-	Jerome Brunet <jbrunet@baylibre.com>, Martin Blumenstingl
-	<martin.blumenstingl@googlemail.com>, Han Xu <han.xu@nxp.com>, Haibo Chen
-	<haibo.chen@nxp.com>, Yogesh Gaur <yogeshgaur.83@gmail.com>, Mark Brown
-	<broonie@kernel.org>, Avri Altman <avri.altman@wdc.com>, Bart Van Assche
-	<bvanassche@acm.org>, "James E.J. Bottomley"
-	<James.Bottomley@hansenpartnership.com>, "Martin K. Petersen"
-	<martin.petersen@oracle.com>, Souradeep Chowdhury
-	<quic_schowdhu@quicinc.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Liam Girdwood <lgirdwood@gmail.com>, "Peter Ujfalusi"
-	<peter.ujfalusi@linux.intel.com>, Bard Liao
-	<yung-chuan.liao@linux.intel.com>, Ranjani Sridharan
-	<ranjani.sridharan@linux.intel.com>, Daniel Baluta <daniel.baluta@nxp.com>,
-	Kai Vehmanen <kai.vehmanen@linux.intel.com>, Pierre-Louis Bossart
-	<pierre-louis.bossart@linux.dev>, Jaroslav Kysela <perex@perex.cz>, "Takashi
- Iwai" <tiwai@suse.com>, Shawn Guo <shawnguo@kernel.org>, Sascha Hauer
-	<s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>, <kernel@axis.com>,
-	<linux-iio@vger.kernel.org>, <linux-omap@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-	<linux-i2c@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-mediatek@lists.infradead.org>, <linux-rockchip@lists.infradead.org>,
-	<linux-input@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
-	<imx@lists.linux.dev>, <netdev@vger.kernel.org>,
-	<linux-phy@lists.infradead.org>, <linux-samsung-soc@vger.kernel.org>,
-	<linux-pm@vger.kernel.org>, <linux-pwm@vger.kernel.org>,
-	<linux-amlogic@lists.infradead.org>, <linux-spi@vger.kernel.org>,
-	<linux-scsi@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-	<linux-usb@vger.kernel.org>, <sound-open-firmware@alsa-project.org>,
-	<linux-sound@vger.kernel.org>, "Joe Perches" <joe@perches.com>, Andy
- Whitcroft <apw@canonical.com>, "Dwaipayan Ray" <dwaipayanray1@gmail.com>,
-	Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: Re: [PATCH] Remove error prints for devm_add_action_or_reset()
-Message-ID: <20250702105826.0000315e@huawei.com>
-In-Reply-To: <jeajjewfbg5qo736imozpghnpxln2pux74aegtqsi57qsbpug2@opndel6zc3m3>
-References: <pnd7c0s6ji2.fsf@axis.com>
-	<ylr7cuxldwb24ccenen4khtyddzq3owgzzfblbohkdxb7p7eeo@qpuddn6wrz3x>
-	<20250701185519.1410e831@jic23-huawei>
-	<jeajjewfbg5qo736imozpghnpxln2pux74aegtqsi57qsbpug2@opndel6zc3m3>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
+	s=arc-20240116; t=1751454458; c=relaxed/simple;
+	bh=FcDWilOaDWcVuzP7mVz9zoKRX0Rnc7UAViC1O23BGxo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AsFcLT0UgsGMSLW6zGEn3WnciMNNuyKwtI1F2gyhXuR03mltB6qiPAe8DkSGTVdXQNy1Gua4xNQxwS058nbif5fqulfL8ti7nmATP5MMzx+Vq1wnhRV1OGqX59IIU9pUvjDYvvZM/dealhgWJ3srUEeNMljpfCTBAFGmGTV9eGM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr; spf=pass smtp.mailfrom=sartura.hr; dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b=TE/+6YQJ; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sartura.hr
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-608acb0a27fso6906692a12.0
+        for <linux-i2c@vger.kernel.org>; Wed, 02 Jul 2025 04:07:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sartura.hr; s=sartura; t=1751454455; x=1752059255; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rPV93Zxqd5A5yWh1+OQ3kXQBktcCdNYnO7HGfnoF97w=;
+        b=TE/+6YQJkkVhWbLqOJTGUEwxumYYTd2YCaBEDnC0z1GqaUKBjKQrUCEDYQWHj2fdqd
+         JkWVg60p3kgxDoVk2X9bpJSf0TU92JPjT3n+oUuisHxEt7x5dm7DuR5uyDR+3/mjXwH0
+         yP07bjEIZ7IN/9HlMbcsXJf3WaLOSAIg06Zx1wgEieqVVvtrZ3T6s0tMs2Jn3NjuyZMk
+         b6t0PS9kP69uY8Ff2vaTkHoNOBrU+GhwKXbrdH0L3Qt06R274X5rdg43GMoaXr4oG0Ni
+         mTWJ2OtRu7oAhWLxwWvB9CQ0TekDyXYrKiXMUyVHy1EJUWlnY/j51lyxN6Vxk6ZhKMiW
+         NqOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751454455; x=1752059255;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rPV93Zxqd5A5yWh1+OQ3kXQBktcCdNYnO7HGfnoF97w=;
+        b=PCQPcww9gQUoCRRNE15ijtCPL58uxRK0nB/nBQ0QV8kqmNPPaplAHUIbqPTt0/WNdM
+         +Iw5UfyPLDZkwjs5q6bZ6UskUfvjk0Jx5paR2nQCJmjGsl/NaIhgPNTpFnSOpmCFCtWa
+         KGlPaszohy0FJZAcTglJ+bLnBek1KGZYfpMKPSJwOrCRLHTsP9UjWFM2ZXwW7f4to6ZT
+         dlgaowFBJfxiwy/bHpuZkUm8ca8atP+CK2o0SuD3gyPcX4l53G/sKm3XYQJ6And61g+A
+         DTkBr0J+5N1uI+mbwJLyhvKvB9UxZA8dfQReoZKrleAITiKu3rZu2stDzVSk50pq1AOI
+         36aQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWXz1/tPG9LbX/WW1WrJhJ1+6PRKBRBOHJoF6T4NIDariM21WUIas8YBxXTF7M89nDp2pJeHt+rJVU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzHfcBL84IWJVPMyg1dEylkcaoOgIM4dInnX2g6gqTftAtYUHdh
+	5rg5wcmOrpEsg/tJD0c7oOAsXwm8mAmjs7v37csj6crM4SS4tgobqjtRVamgKDUk2G4cSC3DAE0
+	xXd4F+wAyfGMmn8xpllKpZQQMZJZXiriJHaBfsSCxdw==
+X-Gm-Gg: ASbGncsfPrLlFClO6BiqPH+cnzsRmBWTSs0/05B2tt7MHt6KE9vqGxWp3zYAo5TvZkQ
+	qqLjOcdK5Rbh544oQV+uceeSl73sOXJeSwAkgd14EKEc+hJzUleQY7oNwrnEeg6yqV8DZiEdixz
+	BRKG3yncjK+tuWfZR0gd//Qpg/n6Oiootw1kgk/KDsq1M6
+X-Google-Smtp-Source: AGHT+IHeGpjjGYCSscOTPbZ6xb8rb5MXGznl/2SBz7yoEFM7auQsCbFTVHuUlPyoGrfnlhoMTudLPILywpv+/3CBf3c=
+X-Received: by 2002:a17:906:c358:b0:ade:470b:d5ac with SMTP id
+ a640c23a62f3a-ae3c2c7d588mr194441366b.56.1751454454694; Wed, 02 Jul 2025
+ 04:07:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="ISO-8859-1"
+References: <20250613114148.1943267-1-robert.marko@sartura.hr>
+ <3ba837f8-70bb-4b9e-a9f9-0e71b9e073c4@app.fastmail.com> <CA+HBbNFd5hCKqUZY25Sws-o-0QALLue-JROyze_9biyuZZv4mg@mail.gmail.com>
+ <3e522dcc-3b68-4137-bd3a-dcc2c889dbd3@app.fastmail.com>
+In-Reply-To: <3e522dcc-3b68-4137-bd3a-dcc2c889dbd3@app.fastmail.com>
+From: Robert Marko <robert.marko@sartura.hr>
+Date: Wed, 2 Jul 2025 13:07:23 +0200
+X-Gm-Features: Ac12FXxa3OU2rP7QnwGpqKyk1qKa-0zp1Qh_CY94xN7qIB9S3-V2AaGGog_Qezo
+Message-ID: <CA+HBbNF6zfy=D=+34HXBPdzsfHo6aDbhcJa7Tf7YitYedK1a6A@mail.gmail.com>
+Subject: Re: [PATCH v7 0/6] arm64: lan969x: Add support for Microchip LAN969x SoC
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Olivia Mackall <olivia@selenic.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	"David S . Miller" <davem@davemloft.net>, Vinod Koul <vkoul@kernel.org>, 
+	Andi Shyti <andi.shyti@kernel.org>, Mark Brown <broonie@kernel.org>, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, ore@pengutronix.de, luka.perkov@sartura.hr, 
+	Daniel Machon <daniel.machon@microchip.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: lhrpeml100003.china.huawei.com (7.191.160.210) To
- frapeml500008.china.huawei.com (7.182.85.71)
 
-On Wed, 2 Jul 2025 08:54:48 +0200
-Uwe Kleine-K=F6nig <ukleinek@kernel.org> wrote:
-
-> Hello Jonathan,
->=20
-> On Tue, Jul 01, 2025 at 06:55:19PM +0100, Jonathan Cameron wrote:
-> > On Tue, 1 Jul 2025 19:44:17 +0200
-> > Uwe Kleine-K=F6nig <ukleinek@kernel.org> wrote:
-> >  =20
-> > > On Tue, Jul 01, 2025 at 05:03:33PM +0200, Waqar Hameed wrote: =20
-> > > >  drivers/pwm/pwm-meson.c                          | 3 +--   =20
-> > >=20
-> > > Looking at this driver I tried the following: =20
-> >=20
-> > I'm not sure what we actually want here.
-> >=20
-> > My thought when suggesting removing instances of this
-> > particular combination wasn't saving on code size, but rather just
-> > general removal of pointless code that was getting cut and
-> > paste into new drivers and wasting a tiny bit of review bandwidth.
-> > I'd consider it bad practice to have patterns like
-> >=20
-> > void *something =3D kmalloc();
-> > if  (!something)
-> > 	return dev_err_probe(dev, -ENOMEM, ..);
-> >=20
-> > and my assumption was people would take a similar view with
-> > devm_add_action_or_reset().
+On Mon, Jun 30, 2025 at 3:54=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrote=
+:
+>
+> On Mon, Jun 30, 2025, at 15:21, Robert Marko wrote:
+> > On Mon, Jun 16, 2025 at 8:34=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> w=
+rote:
+> >> On Fri, Jun 13, 2025, at 13:39, Robert Marko wrote:
+> >>
+> >> If the drivers on ARCH_LAN969X are largely shared with those on
+> >> ARCH_AT91, should they perhaps depend on a common symbol?
+> >>
+> >> That could be either the existing ARCH_AT91 as we do with LAN966,
+> >> or perhaps ARCH_MICROCHIP, which is already used for riscv/polarfire.
 > >
-> > It is a bit nuanced to have some cases where we think prints
-> > are reasonable and others where they aren't so I get your
-> > point about consistency. =20
->=20
-> The problem I see is that there are two classes of functions: a) Those
-> that require an error message and b) those that don't. Class b) consists
-> of the functions that can only return success or -ENOMEM and the
-> functions that emit an error message themselves. (And another problem I
-> see is that for the latter the error message is usually non-optimal
-> because the function doesn't know the all details of the request. See my
-> reply to Andy for more details about that rant.)
->=20
-> IMHO what takes away the review bandwidth is that the reviewer has to
-> check which class the failing function is part of. If this effort
-> results in more driver authors not adding an error message after
-> devm_add_action_or_reset() that's nice, but in two months I have
-> forgotten the details of this discussion and I have to recheck if
-> devm_add_action_or_reset() is part of a) or b) and so the burden is
-> still on me.
+> > Hi Arnd, I thought about this, but I am not sure whether its worth it
+> > since we need LAN969x arch anyway for other drivers that currently
+> > depend on LAN966x or SparX-5 but will be extended for LAN969x (I have
+> > this already queued locally but need this to land first).
+>
+> I think in that case we would want one symbol for all of the above.
+> We have a couple of cases where there multiple SoC product families
+> get handled by a shared config symbol to make life easier for the
+> kernel:
+>
+> - ARCH_IMX contains multiple chip families that are now owned
+>   by NXP but that have a complex history with acquisitions and
+>   product families that mix-and-match IP blocks, similar to
+>   Microchip
+>
+> - ARCH_EXYNOS contains chips from Samsung, Google, Tesla and Axis
+>   that all share a lot of components because they are all based on
+>   Samsung designs
+>
+> - ARCH_BCM contains several chip families that all started out
+>   in Broadcom but actually share very few common components.
+>
+> On the other hand, we have TI with its davinci, omap, omap2
+> keystone2 and k3 platforms, or Marvell with orion, mvebu,
+> pxa, mmp, octeon, octeontx, thunderx and thunderx2 platforms
+> that overlap to varying degrees but use separate Kconfig symbols.
+>
+> Since you already have an ARCH_MICROCHIP used by one of the
+> microchip platforms, the simplest approach seems to me to
+> include at91, lan969x, lan966x and sparx-5 under that as well.
+> You could just select that symbol from each of the four
+> and then change any driver that is used by more than one of
+> these families to use 'depends on ARCH_MICROCHIP' instead of
+> listing them individually.
 
-Maybe this is a job for checkpatch, at least for the common cases.
+Ok, I get the idea, I will rework the series to pivot to ARCH_MICROCHIP.
 
-There is already a check for kmalloc etc.
-https://elixir.bootlin.com/linux/v6.16-rc4/source/scripts/checkpatch.pl#L64=
-42
+Regards,
+Robert
 
-+CC Joe (who wrote the allocation functions test years ago) and other check=
-patch
-folk.
-
-
->=20
-> So to give my answer on your question "What do we actually want here?":
-> Please let us get rid of the need to care for a) or b).
->=20
-> > The code size reduction is nice so I'd not be against it as an extra
-> > if the reduction across a kernel builds is significant and enough
-> > people want to keep these non printing prints. =20
->=20
-> To complete implementing my wish all API functions would need to stop to
-> emit an error message. Unfortunately that isn't without downsides
-> because the result is that there are more error strings and so the
-> kernel size is increased. So you have to weight if you prefer individual
-> error messages and easier review/maintenance at the cost of a bigger
-> binary size and more dev_err_probe() calls in drivers eating vertical
-> space in your editor.
->=20
-> I know on which side I am, but I bet we won't find agreement about that
-> in the kernel community ...
+>
+> I assume the mips based PIC32 and VCOREIII (ocelot/jaguar)
+> are distant enough that they wouldn't share any drivers with
+> the other families any more, but they could be put into that
+> as well if that helps.
+>
+>      Arnd
 
 
->=20
-> Best regards
-> Uwe
->=20
 
+--=20
+Robert Marko
+Staff Embedded Linux Engineer
+Sartura d.d.
+Lendavska ulica 16a
+10000 Zagreb, Croatia
+Email: robert.marko@sartura.hr
+Web: www.sartura.hr
 
