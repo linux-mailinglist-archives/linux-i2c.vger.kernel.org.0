@@ -1,223 +1,530 @@
-Return-Path: <linux-i2c+bounces-11793-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11794-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD9B7AF6465
-	for <lists+linux-i2c@lfdr.de>; Wed,  2 Jul 2025 23:52:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E8F4AF64F4
+	for <lists+linux-i2c@lfdr.de>; Thu,  3 Jul 2025 00:16:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4AF547A2616
-	for <lists+linux-i2c@lfdr.de>; Wed,  2 Jul 2025 21:51:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5F11E1C458B7
+	for <lists+linux-i2c@lfdr.de>; Wed,  2 Jul 2025 22:16:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A71F23F40C;
-	Wed,  2 Jul 2025 21:52:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD8A1246BD7;
+	Wed,  2 Jul 2025 22:16:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="D/fohDwe"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N2h2uJ9p"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B98A62DE704;
-	Wed,  2 Jul 2025 21:52:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.19
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751493169; cv=fail; b=JkFwrmRJXxmI4AMZE+R91kQ7AsJq5wQmf8k0poQb++W/L2zabLkR+MlUiQjvaIiKcSk29+Z/2yYV9dHXUmj+7OEKzs9UPmKYxkM40aVl5YtpFixxb5VlxQdUssRVw/r46azrEQZi/yZ3OcRlBXevEGZ5BvefZX0uTAlIGobqORc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751493169; c=relaxed/simple;
-	bh=UIIC6hlwXgEeW1cfqUIZckL1EyPUt23gEIJ/EFIR7HE=;
-	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=JpDUuIfTZKEMDxjVQF9cyDQK0Zv+ufxSwSQlrLaiqMqdiHzWHEwLIXWgA1+zcDUTEXeXssCCooGf4fDl8TyPXMSvFsua5Bnfgi5dL/ExlmDT00A9XK24yEMS4276MhWQDVolAlXNuvS65+wuk6ogJKajN5MZO4sbfuyYS8PEpNw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=D/fohDwe; arc=fail smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751493167; x=1783029167;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=UIIC6hlwXgEeW1cfqUIZckL1EyPUt23gEIJ/EFIR7HE=;
-  b=D/fohDweJvMThD700SNAEdz0sb3IqRFElJbWVOJ4Q6eEcxw3nuxA+U9j
-   UnNK+hbHP9exebpJZrtZ1eAdA8dte+sDrLM6odAY/xk/EcJ/zbu6CD0Sz
-   xpNwib7N7ZGtsWWRjvrsVvu/bFaHFD46ZLu7iWOVYRIxspXsHKoBIGiZ4
-   wBY6oYC5k7t31InJa2QQAKYS1PB8KLknF5u+56tI9ES4HnPy7qPL7HcXC
-   RltyqTW7ovIucfNcwsK/1mgc/7cNgGmgAwx3XaJPfd5FtEhO1Z+GVTZkz
-   2VtC9LWO2ewfv4QqA3A2uPwuWTaF6cZmNl0WAgYFGaGCY9Oolw/zbT9VM
-   w==;
-X-CSE-ConnectionGUID: +qAZP0/RQfWidSSzDCgsMA==
-X-CSE-MsgGUID: lUwg39QgSK+z3XjN5UB9MQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11482"; a="53679980"
-X-IronPort-AV: E=Sophos;i="6.16,282,1744095600"; 
-   d="scan'208";a="53679980"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2025 14:52:47 -0700
-X-CSE-ConnectionGUID: QpsU2+tiTueewTBf40E+Gg==
-X-CSE-MsgGUID: gYwBjZ1qS4KpeZaxo8CyjA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,282,1744095600"; 
-   d="scan'208";a="158230381"
-Received: from orsmsx902.amr.corp.intel.com ([10.22.229.24])
-  by fmviesa003.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2025 14:52:46 -0700
-Received: from ORSMSX903.amr.corp.intel.com (10.22.229.25) by
- ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.25; Wed, 2 Jul 2025 14:52:46 -0700
-Received: from ORSEDG901.ED.cps.intel.com (10.7.248.11) by
- ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.25 via Frontend Transport; Wed, 2 Jul 2025 14:52:46 -0700
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (40.107.101.55)
- by edgegateway.intel.com (134.134.137.111) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.25; Wed, 2 Jul 2025 14:52:45 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=cXs+0rHRWmP0Z8jyUQCKKax8ImdlbDRVT8JF661tmTSiidrMUZIu2nW/8IbTvc0rcZ28QgtfUcHBVoPXs+wZunxQkz/FWqSVRC2064LjreDhNf1HJJkjI37cMpLizK8FxpQ1QRjfflbRCZrFyQm6VGKrdGIb1bdQa+DnLBJ9xDmRAr0UBdEtbEBjivlXYX9o9rzBIwZRL3JInGQVTBt4i0rZmqaLZvbz4CD/VKHdvYDjA++Mzmu40eTUZoRLLM2HnmDZwRo/hGP3aw1ZIdCRs0M9gOffkZf+8R2c9sxmckDVNcQah4vv77r795y5WW5HrOwQBPBJZ2Une4we7xpGIA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kCsBBgNTb38VM7q2+1GRjmFpSoY4TDYwsqjq0l4llME=;
- b=qeXuvC3kWBclnt7yJbO7u/ed0/VyBk7EhwYKWTwWOtD3zb9XgO2T5LLs/dK1BHgZjH1eZj/YOPfEa2u6MKXsE1Ke81Dq1PlnFcY0gmGZ0tJH81PyinA6w2+GgZcMVKWb771enNFP06VsWy6/CZTZo0CpnZ/4SbS/0sJrmWYuLiHph9QiKfS2CX5uBlfut3MErYu7ZXsqUqW42GJ3nfJWPyJ2Ab2wv8pXAO1/bvlSRfEMl21z6KZ+UczFk1nnF/2meq3B7su4O1xcAoOPMFbFR9+EQ6nTtaAsNzUtNOZCebNryGeD8AO3Bw0YVhLaxQBisKuvW9EiKtQVGRIjGvbFew==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SA1PR11MB8427.namprd11.prod.outlook.com (2603:10b6:806:373::19)
- by PH7PR11MB6380.namprd11.prod.outlook.com (2603:10b6:510:1f8::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8901.19; Wed, 2 Jul
- 2025 21:52:16 +0000
-Received: from SA1PR11MB8427.namprd11.prod.outlook.com
- ([fe80::b156:b61b:d462:b781]) by SA1PR11MB8427.namprd11.prod.outlook.com
- ([fe80::b156:b61b:d462:b781%5]) with mapi id 15.20.8880.021; Wed, 2 Jul 2025
- 21:52:16 +0000
-Date: Wed, 2 Jul 2025 17:52:09 -0400
-From: Rodrigo Vivi <rodrigo.vivi@intel.com>
-To: Andi Shyti <andi.shyti@kernel.org>
-CC: Heikki Krogerus <heikki.krogerus@linux.intel.com>, Lucas De Marchi
-	<lucas.demarchi@intel.com>, Thomas =?iso-8859-1?Q?Hellstr=F6m?=
-	<thomas.hellstrom@linux.intel.com>, Jarkko Nikula
-	<jarkko.nikula@linux.intel.com>, David Airlie <airlied@gmail.com>, "Simona
- Vetter" <simona@ffwll.ch>, Andy Shevchenko
-	<andriy.shevchenko@linux.intel.com>, Mika Westerberg
-	<mika.westerberg@linux.intel.com>, Jan Dabros <jsd@semihalf.com>, Raag Jadav
-	<raag.jadav@intel.com>, "Tauro, Riana" <riana.tauro@intel.com>, "Adatrao,
- Srinivasa" <srinivasa.adatrao@intel.com>, "Michael J. Ruhl"
-	<michael.j.ruhl@intel.com>, <intel-xe@lists.freedesktop.org>,
-	<linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v6 0/5] drm/xe: i2c support
-Message-ID: <aGWqCfpcYUla6T2e@intel.com>
-References: <20250701122252.2590230-1-heikki.krogerus@linux.intel.com>
- <s7kfne6budueamqqbshbrrtql6awrp7mvfhqlkrvtyhqjqsech@qemfad4phmlj>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <s7kfne6budueamqqbshbrrtql6awrp7mvfhqlkrvtyhqjqsech@qemfad4phmlj>
-X-ClientProxiedBy: SJ0PR03CA0081.namprd03.prod.outlook.com
- (2603:10b6:a03:331::26) To SA1PR11MB8427.namprd11.prod.outlook.com
- (2603:10b6:806:373::19)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 214872DE718;
+	Wed,  2 Jul 2025 22:16:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1751494569; cv=none; b=SbInJvID34Tss37xEN/TstXcMZE2AKW7l6EKVNjFhtocFryYmu+my5g6clRFKCRnL/DkxzcW6aH4N0riml3QQvbATIr4QKSBX9SZ6RC0+CIJbv71P6Vs3qZ6TTGnYTym/UZqR2qNu8EK+pddKO/QKpC3a5t4dG/wD1H48MDgz+c=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1751494569; c=relaxed/simple;
+	bh=5lizU1qMKUV6S+gaqmTFXzfHzt4Ze8nyfGVhP06tJo0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IT8gegTZwY0QGn3bSCgXo55riR8DFvrScxBmOfbtVv1RFjj0SuN5MsjnNy/BRaeXEG2T+L4uyJo24ziPIn2jdVvkQJkA8Pwsq5AFFiL255s6v8fY0ABUyTCHeVOw+p0toymxuDw5TykKjIMxK5rTuc/ubsO2ge/BwhmmTcbfA5c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N2h2uJ9p; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-23602481460so76306085ad.0;
+        Wed, 02 Jul 2025 15:16:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1751494566; x=1752099366; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ukcKYtTICZOFWx70YWfw/Y20DGGfiPP24nM2GfmRoZo=;
+        b=N2h2uJ9p7QIsHqfU1lus+aVqIfIJnMlOt8bjeaS6YYtc3KNby+15qWkOrT8yjwvsZX
+         ef7YY+Y2esadcJG9kI29ss4UzJ7L7tSY/s0NJ9IAafaGr3HdVOfTAZfQtQ3EEzFNGpRI
+         C7W7Dgn9jiewx2ggmrjZRgb6Lno4nDpvyqQegy3/nF97b5fcxRXTjLT83wRPIQjW8ev4
+         EY/0exO0+T/PSklirqn2MaDcJSOjAf8l3jom8x7vpSWLCHA1o7e7l3jqDdH3hfGFmC5J
+         3x9HHNLLxc2GhXELHGf2cDAPhciE/RWBsxDoGXrlaUFYi9KV7RijJBOmiYU4zRNxiCPL
+         1HTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751494566; x=1752099366;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ukcKYtTICZOFWx70YWfw/Y20DGGfiPP24nM2GfmRoZo=;
+        b=mnB7ne/Bvv7odWARpbtnxz8sdxfQCeHmx2cPnBpl3NZcCUUtVHpjDAn8XRjQg1KjI0
+         z/UGTPv1I+8rPghfvBXmErazoaYzXciORCUL/jaFDh1YOSrBNw5n9yyElMIJt2+oXBnt
+         Nna8CxXdMK+qGocmTQd3vb1VjdSTu5SDi/HYkiiv1ljJjI3hfxr+uMx7jwKQRDCqzSHc
+         BZISKmFXcsgSrnXPaqYKGGPRsX8/pcd6erz5fWfqIT5X9mo/zgwdvOw8rgNeI6ZelgUM
+         Fx+asS3we+FZhPtwsfvPSC/9EM3q/vpPLrCoMwr0zsNr3GmsBnkrInPAEYP2HNM71jIF
+         WBWQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU3dMNJ/FRZ9sag8mQBQOVtxWDO0iV084OVb47MgX49NTdlgm2JMdaGcKcpIhwdMAwn84sNqAAUfJ60@vger.kernel.org, AJvYcCUCehqxlWvd4sFLeOWFpbvAjpN3/WA+d/U9vIUHGbTlo0eWbGlw30qhj4Rv69RxWpXDwJchijysq00=@vger.kernel.org, AJvYcCUCwMGD1AO+8UrLcUfjoj+4drLf8zNSnEYBbVJL1Q+OFegmWQqm633O/UM8si2TnAyFwAc6Un4EP/E2@vger.kernel.org, AJvYcCUzTMmY0Hc7XL7A2QgvE1QvuBgZkMHQXbhtIDhselpkIeV6KTnFQRiTNB6OK1znPt+B2KtAxAGsx9lzPTvyu3s=@vger.kernel.org, AJvYcCVMDQaZaJjossS3dCA095U44G18l9z9A8Hjy2vsyBHctNI5hs46AeONGKIlXbjEICKMcx22Hm3cLrDazQ==@vger.kernel.org, AJvYcCVTNSgtgzjWJtN7GKE1uw3jEP4qDi/rk6ydn0vfSjnZHu7aVtJuV93cIH6hlGtMEZDTpQ447ssJJL1tUM4=@vger.kernel.org, AJvYcCVaNwEcsM5RwmkNyFoEsA4ueejODl3k2WqvoH0EmaiQbwR/UgNOMAUjBr4XV8pErmvFgJ+KhuGQ+dgT@vger.kernel.org, AJvYcCXXbG6Y4Pf98e4WmeLn9rgNYirHyqRyFJqghD9B32a9PisNMMBfz8Qu8kMr9TaG9JdU+NrgOF/vJAnq1tWF@vger.kernel.org, AJvYcCXdvD6yaoH5LmtBGifFaFGW5OQ2Gj76t+FIHLfv02zT4jcxFX73riFkNAbn7PH6oJQkGoKq5bhN@vger.kernel.org
+X-Gm-Message-State: AOJu0YwBbMrTB35b5F9bLTiChgd40hkcbrF7hlX+LxRXyYOh8U4/ZlZE
+	wXCjyqCh5ZtaLRFmB888eQRDwUz4ctmC1aNhhyfrvVbvBM30JwyXTfmrnUZKwA==
+X-Gm-Gg: ASbGnctAKAdHYTuOSzAVUti5kavXJwaCsHphVcBnM+7Ia5S27hiraF5uQSxDVwbEC8R
+	3RDLbckCvgkgnmB/PbyEeE1w7TF5JBkPVIPBhm7vJejOgeokxjuQMvN/iYg3HLk9dOiLj7KI8sx
+	uCeii8qeUGD8uaFyc3C6gMbzi1aszCXaIHZQgYinQiZm/sQCPIBA35Xas0BrXljcU1YHLY4f6pH
+	JwzmjL5b7+q68Jf48sdBWDuxA+K+Ofam4H0lqm5QvDMUc2uwTXxhyHZQBDBoje00fn37q4ttic4
+	Afk+n3XwECq5Y85q7zM7/C4qhAhe6yhFweuwDLmR8AteUAXhA3kwoLX1L8PHoVT6KmxbI7/Rd3e
+	WIktr27MyNA==
+X-Google-Smtp-Source: AGHT+IGQQtBYcyEpvl/DseiXOIUHuIfjHcKG+v891eBtTvMsoPWqjyLqnGXI8Byjt9M+YLgs+AiC9g==
+X-Received: by 2002:a17:903:2343:b0:234:914b:3841 with SMTP id d9443c01a7336-23c7a28cb75mr6322875ad.39.1751494566291;
+        Wed, 02 Jul 2025 15:16:06 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23acb3ad405sm135345575ad.150.2025.07.02.15.16.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Jul 2025 15:16:05 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Wed, 2 Jul 2025 15:16:04 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: a0282524688@gmail.com
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org,
+	brgl@bgdev.pl, andi.shyti@kernel.org, mkl@pengutronix.de,
+	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, wim@linux-watchdog.org, jdelvare@suse.com,
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-can@vger.kernel.org, netdev@vger.kernel.org,
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v13 5/7] watchdog: Add Nuvoton NCT6694 WDT support
+Message-ID: <3242fc11-4b9c-4883-ae52-4db3d9e25709@roeck-us.net>
+References: <20250627102730.71222-1-a0282524688@gmail.com>
+ <20250627102730.71222-6-a0282524688@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA1PR11MB8427:EE_|PH7PR11MB6380:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4a9b6111-1532-4b34-b39f-08ddb9b2b5c0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|7416014|376014;
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?k+HiPtSnECcFPEALDTPyBvUeIa2oMHlXe9IwVe8nyNMk/zVGE8IVvjt4gGHs?=
- =?us-ascii?Q?rCl73UAekVP3SCYirfDHeqOTbgrTRn/RVdJWhOqC84aqkTfhTN4rGZLwmhkD?=
- =?us-ascii?Q?K30gl9DvUoRD694i+Ei5UUNXNn2k5A0Dc592dKY7IRvBYHWznpzpqAglo0d/?=
- =?us-ascii?Q?4LKPwh7Gb/SC7rVWSSO9LTtx24WRRiNPKRnimetkEiA7FJI9pOkuO7fotGDb?=
- =?us-ascii?Q?HmtZ4puUdVGyZiLjW5NCPFFc8YeFBhkZHHlXA/UbBhFyF9253z6IhdU5VhZC?=
- =?us-ascii?Q?TAxwf2gQfH2r78dVGQ+bimLBYU4P02X7jfFS8HaFMQTUaVKDhYDddgY8zEb/?=
- =?us-ascii?Q?ZT4OZMJrUZhcrwdwgZ6NBJjIW/pYTALaB1R6IAAzfqGLYkcKal7fwgWsoIYf?=
- =?us-ascii?Q?OY3JPyxNPFqbVYb3+eE9hIJdviNz/ERvobdPZi3vmc2IdHjVmst5r7EltM1z?=
- =?us-ascii?Q?FM0aDiNGmZ+jFAKk3K8HrVhJOtimXm6X7862sOxoqX/Jv8ffpQa/m8rNkyTm?=
- =?us-ascii?Q?Sz1J1R5CsdyKNNp5CO5Mimwi43GqsunmfHGgDzEWdm+8XdPTE/KZH4bMwwOD?=
- =?us-ascii?Q?mKl1g5IHKLKqpGMWfAJ/YDK4utU8duTAJCyaHLCSpvg7f5/aHT1vLVJFklaH?=
- =?us-ascii?Q?M7C2SS5rBDY4iBcer87SkLZdTXGUF8E5vLZt3xXiC0XwPASXF7KY59KpG5hU?=
- =?us-ascii?Q?KDSZuXk0UtfQ2A1q6kSGXTMf3gGhitTl6K+30TfG5Pe+WyPyO+XLs5ZJAaaC?=
- =?us-ascii?Q?lf1HCE19vzswM+awOOf2lmvQMBL2CgsqGWDpfrmEEZuKTwuf6BiKhvE1qjQI?=
- =?us-ascii?Q?t+TQGKypUQtadCQBShFzGM/IRxfKK3r59ZI4aJ41LVi2d3001RrV9RxJlmHG?=
- =?us-ascii?Q?P24CwlG2gQtymbh27cnZhmGQ+Kvxd1gZSVZSJ0u1wPZ/diwkR/iNvXs740Ry?=
- =?us-ascii?Q?eiaa/Bbg9YfFjcvDZAzjFg4WtHPZMKtjQm4RZ9zEOaltIEx1OOKozaqE5l4W?=
- =?us-ascii?Q?dDM+TXGhYkntuf8vSKfhHFdsPkUn0pcuZc64j+BbTaf43eLBxFHQqNmXqapA?=
- =?us-ascii?Q?fzU/J3UFrbO6ZG2/OLev6jCyEoAPFmEkSZQ88fxd7TqvYBkvnpQElok307J3?=
- =?us-ascii?Q?TqVLH8L8hK5ElinDH8qqGoJmMZEX5WfA3cZ2pVZbAUK4YeXzTX52DS4/FzPu?=
- =?us-ascii?Q?X0oD0D4Zckga2QFSV0U0mA4/AdcUVLG20UFTwClYFREX6ad1m+dnp+doTPJc?=
- =?us-ascii?Q?cGvsIbUBQCJd617b/muDF2u75Sp3yyfyDs4ve1P8QpANpZyYO6jCJMrLqsny?=
- =?us-ascii?Q?Ije0l6dKRiBFZafavEx/7Ck+hITzd9PYuzGkceMAjrNA2w8ksDb3uqozkGEv?=
- =?us-ascii?Q?am6SVUz8jrjlPp/yrs7p56frZVMhcHUF4+TaDgMlMV4N3b0Ult+Z8J7175Mg?=
- =?us-ascii?Q?+LRRBI+tbbw=3D?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB8427.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?E11nRBAb3faFiUN7YC84NVs7MJkOhU8NFv0GxW5hV4vbuhOxyXRI26f0biVh?=
- =?us-ascii?Q?GrmGcRoeV4xJTlwIv9fwTx61PCGGvy7D2zm/JynD8BqEJA+wCGCY3bSyZISe?=
- =?us-ascii?Q?ZQmnFMnv9JqNxURbRE4zp/useo08tap+BqKZ/y5eCqCb/qb5rUUs0X1ggwPr?=
- =?us-ascii?Q?cJWQQ9I4ARFUo/grnyx+MbI77sARc9v/GjWpevOSgrbFKcSM6skHyQ4EzDeK?=
- =?us-ascii?Q?kVXHfQwLefAM7MwdW9ijpJodnEnmZt64I+Qs1rdVU7Vxbj1H+qls6JpTcP5r?=
- =?us-ascii?Q?NoVNkxGQ18l2m4k5jFI0ryFY/+ILSSsUSzDqqzmSyn4Zvf/bBLUjmuC8iNO7?=
- =?us-ascii?Q?0kiHUfN2tqqcJPCMfDRDs7mC/CDo1oaIA+sl0DFEkBihq/7MnrvBTSbgKg/3?=
- =?us-ascii?Q?Zjs6ni+RA7LIeB4j4YkOQKTLF4h9VClQxK3TFnasLGHpHmMMs2rnFslRghd5?=
- =?us-ascii?Q?rVnB28glcS7Pnts2SxdB2ogwNXIhFIAk4wr4kLQdoLXtP6BAPW4IWODhTR8u?=
- =?us-ascii?Q?0Zh2uYb+duOXsAtN9iCHrryOMEgvgyEM9fiU/0zFRYWVvHPGCzB7LMrF1X4F?=
- =?us-ascii?Q?qTQP0wttbxch0DmA/jy3BhRxCol3SjYdduVWPT8XEfQI+jnerKHByo7af19O?=
- =?us-ascii?Q?LToDjM055Ao3u+ZTc+VY+4WxqZFWhAx04+tvWlDtArW09TQulyksKoFDgYSn?=
- =?us-ascii?Q?I1P2cT67ZaVJYIVMdqiR4lonPseBCRZn24JScJzGot6rsfWkN8d15zpyzIs8?=
- =?us-ascii?Q?qcrLa5tazfnsFuDHPPu5d+y3NykHD6FvGu9iGmeSU8wJ5VMiG7ocgQKNd3xt?=
- =?us-ascii?Q?YKMBqVi6KI96fZ8WxPFUF6i4LYcShZRST9DQz6EGGE+dLcZBFQnANSFsEQP8?=
- =?us-ascii?Q?xiwV8c3iRiOrPjt530UiB157g/OHM/lZA2cRymwO+IcuLxwhbQM8xKch+8vr?=
- =?us-ascii?Q?54i7iRdfQXsY/thQbntpcvTIJz7I+kUf3SSs2LoymhrqMrtN6rON/VEvU9Qm?=
- =?us-ascii?Q?6zX1QrDOjQalqNhFiOfPnB4OffoRCMgo5ulcGxbvmvJ40lM5qkuVWwMpIryt?=
- =?us-ascii?Q?O10tS98fuQYHbM6YEnBPx4RdU3BRPQlHqPvqQxjXXoAxwbH8z99nibmiB3ll?=
- =?us-ascii?Q?1O5tAaYsZptqGstnvnE8unUiBSQpl7n4t7bSoAJk+aSfEtBjW18/AGys/cQr?=
- =?us-ascii?Q?jb7ShXP7X3AVj4zQOJeamhUSSL2Y2mgZ/siVQwbanBHG/FZnWD7MtJb8BZ8e?=
- =?us-ascii?Q?TNkP9h0KV0QRO2ywX35hsid7BGc1gzaiFD+xozWrT+KvFzLY3IduSYF8xN6/?=
- =?us-ascii?Q?dNoZsKK0stiX2iGnRag5iJMAB4WqSpzgFm2IohbSh1IZTSO7TxAo6bN5y+Le?=
- =?us-ascii?Q?oaUWDaf1HwcbG7qcG1C/sjU7tgcWIvasEwkm7K5Rt1WptRjDD27hFP4R6oCb?=
- =?us-ascii?Q?qXBkK7IBgmXglVYV8q7zLqR475hHRI5PBMw2T8t2NgcLNxx6HGMoCgEHmuoU?=
- =?us-ascii?Q?8fuS1AV0sbKiGINY277iQnK8ib4mmLbh9wkvYYSql+mVCsAWc1doPnaGpJH2?=
- =?us-ascii?Q?CP4HLZiXoOH23lWkbKz34947Xc33BpqhvU13SSE2I0ACJKw8BHw6oG/IoRID?=
- =?us-ascii?Q?1w=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4a9b6111-1532-4b34-b39f-08ddb9b2b5c0
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB8427.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jul 2025 21:52:16.3330
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: xWfitFytvoFjj7o9X9w6aRa4oZkzGQE3xKVrlz2D6mi56N/d4nhxp4x0cO6uN59cGs1oCldgscBcQaOH4oReQQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB6380
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250627102730.71222-6-a0282524688@gmail.com>
 
-On Wed, Jul 02, 2025 at 07:18:50PM +0200, Andi Shyti wrote:
-> Hi Heikki,
+On Fri, Jun 27, 2025 at 06:27:28PM +0800, a0282524688@gmail.com wrote:
+> From: Ming Yu <a0282524688@gmail.com>
 > 
-> > Heikki Krogerus (3):
-> >   i2c: designware: Use polling by default when there is no irq resource
-> >   i2c: designware: Add quirk for Intel Xe
+> This driver supports Watchdog timer functionality for NCT6694 MFD
+> device based on USB interface.
 > 
-> I think you could have kept Jarkko's ack here. Up to you.
-> 
-> Anyone against me taking the two above already?
+> Signed-off-by: Ming Yu <a0282524688@gmail.com>
 
-I was thinking about keeping Jarkko's ack and get all merged at
-once in drm-xe-next.
+Acked-by: Guenter Roeck <linux@roeck-us.net>
 
-But first we need the SPDX headers in .c files fixed...
-
+> ---
+> Changes since version 12:
+> - Implement IDA in MFD driver to handle per-device IDs
+> - Use same email address in the signaturei
 > 
-> Andi
+> Changes since version 11:
+> - Use platform_device's id to replace IDA
 > 
-> >   drm/xe: Support for I2C attached MCUs
-> > 
-> > Raag Jadav (1):
-> >   drm/xe/pm: Wire up suspend/resume for I2C controller
-> > 
-> > Riana Tauro (1):
-> >   drm/xe/xe_i2c: Add support for i2c in survivability mode
+> Changes since version 10:
+> - Implement IDA to allocate id
+> - Add module parameters to configure WDT's timeout and pretimeout value
+> 
+> Changes since version 9:
+> 
+> Changes since version 8:
+> - Modify the signed-off-by with my work address
+> 
+> Changes since version 7:
+> - Add error handling for devm_mutex_init()
+> 
+> Changes since version 6:
+> - Fix warning
+> 
+> Changes since version 5:
+> - Modify the module name and the driver name consistently
+> 
+> Changes since version 4:
+> - Modify arguments in read/write function to a pointer to cmd_header
+> - Modify all callers that call the read/write function
+> 
+> Changes since version 3:
+> - Modify array buffer to structure
+> - Fix defines and comments
+> - Modify mutex_init() to devm_mutex_init()
+> - Drop watchdog_init_timeout()
+> 
+> Changes since version 2:
+> - Add MODULE_ALIAS()
+> - Modify the pretimeout validation procedure
+> 
+> Changes since version 1:
+> - Add each driver's command structure
+> - Fix platform driver registration
+> - Fix warnings
+> - Drop unnecessary logs
+> - Modify start() function to setup device
+> 
+>  MAINTAINERS                    |   1 +
+>  drivers/watchdog/Kconfig       |  11 ++
+>  drivers/watchdog/Makefile      |   1 +
+>  drivers/watchdog/nct6694_wdt.c | 307 +++++++++++++++++++++++++++++++++
+>  4 files changed, 320 insertions(+)
+>  create mode 100644 drivers/watchdog/nct6694_wdt.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index ce276999625e..7c3edac315b4 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -17796,6 +17796,7 @@ F:	drivers/gpio/gpio-nct6694.c
+>  F:	drivers/i2c/busses/i2c-nct6694.c
+>  F:	drivers/mfd/nct6694.c
+>  F:	drivers/net/can/usb/nct6694_canfd.c
+> +F:	drivers/watchdog/nct6694_wdt.c
+>  F:	include/linux/mfd/nct6694.h
+>  
+>  NUVOTON NCT7201 IIO DRIVER
+> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+> index 0c25b2ed44eb..05008d937e40 100644
+> --- a/drivers/watchdog/Kconfig
+> +++ b/drivers/watchdog/Kconfig
+> @@ -760,6 +760,17 @@ config MAX77620_WATCHDOG
+>  	  MAX77620 chips. To compile this driver as a module,
+>  	  choose M here: the module will be called max77620_wdt.
+>  
+> +config NCT6694_WATCHDOG
+> +	tristate "Nuvoton NCT6694 watchdog support"
+> +	depends on MFD_NCT6694
+> +	select WATCHDOG_CORE
+> +	help
+> +	  Say Y here to support Nuvoton NCT6694 watchdog timer
+> +	  functionality.
+> +
+> +	  This driver can also be built as a module. If so, the module
+> +	  will be called nct6694_wdt.
+> +
+>  config IMX2_WDT
+>  	tristate "IMX2+ Watchdog"
+>  	depends on ARCH_MXC || ARCH_LAYERSCAPE || COMPILE_TEST
+> diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
+> index bbd4d62d2cc3..b680e4d3c1bc 100644
+> --- a/drivers/watchdog/Makefile
+> +++ b/drivers/watchdog/Makefile
+> @@ -235,6 +235,7 @@ obj-$(CONFIG_WM831X_WATCHDOG) += wm831x_wdt.o
+>  obj-$(CONFIG_WM8350_WATCHDOG) += wm8350_wdt.o
+>  obj-$(CONFIG_MAX63XX_WATCHDOG) += max63xx_wdt.o
+>  obj-$(CONFIG_MAX77620_WATCHDOG) += max77620_wdt.o
+> +obj-$(CONFIG_NCT6694_WATCHDOG) += nct6694_wdt.o
+>  obj-$(CONFIG_ZIIRAVE_WATCHDOG) += ziirave_wdt.o
+>  obj-$(CONFIG_SOFT_WATCHDOG) += softdog.o
+>  obj-$(CONFIG_MENF21BMC_WATCHDOG) += menf21bmc_wdt.o
+> diff --git a/drivers/watchdog/nct6694_wdt.c b/drivers/watchdog/nct6694_wdt.c
+> new file mode 100644
+> index 000000000000..bc3689bd4b6b
+> --- /dev/null
+> +++ b/drivers/watchdog/nct6694_wdt.c
+> @@ -0,0 +1,307 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Nuvoton NCT6694 WDT driver based on USB interface.
+> + *
+> + * Copyright (C) 2025 Nuvoton Technology Corp.
+> + */
+> +
+> +#include <linux/idr.h>
+> +#include <linux/kernel.h>
+> +#include <linux/mfd/nct6694.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/slab.h>
+> +#include <linux/watchdog.h>
+> +
+> +#define DEVICE_NAME "nct6694-wdt"
+> +
+> +#define NCT6694_DEFAULT_TIMEOUT		10
+> +#define NCT6694_DEFAULT_PRETIMEOUT	0
+> +
+> +#define NCT6694_WDT_MAX_DEVS		2
+> +
+> +/*
+> + * USB command module type for NCT6694 WDT controller.
+> + * This defines the module type used for communication with the NCT6694
+> + * WDT controller over the USB interface.
+> + */
+> +#define NCT6694_WDT_MOD			0x07
+> +
+> +/* Command 00h - WDT Setup */
+> +#define NCT6694_WDT_SETUP		0x00
+> +#define NCT6694_WDT_SETUP_SEL(idx)	(idx ? 0x01 : 0x00)
+> +
+> +/* Command 01h - WDT Command */
+> +#define NCT6694_WDT_COMMAND		0x01
+> +#define NCT6694_WDT_COMMAND_SEL(idx)	(idx ? 0x01 : 0x00)
+> +
+> +static unsigned int timeout[NCT6694_WDT_MAX_DEVS] = {
+> +	[0 ... (NCT6694_WDT_MAX_DEVS - 1)] = NCT6694_DEFAULT_TIMEOUT
+> +};
+> +module_param_array(timeout, int, NULL, 0644);
+> +MODULE_PARM_DESC(timeout, "Watchdog timeout in seconds");
+> +
+> +static unsigned int pretimeout[NCT6694_WDT_MAX_DEVS] = {
+> +	[0 ... (NCT6694_WDT_MAX_DEVS - 1)] = NCT6694_DEFAULT_PRETIMEOUT
+> +};
+> +module_param_array(pretimeout, int, NULL, 0644);
+> +MODULE_PARM_DESC(pretimeout, "Watchdog pre-timeout in seconds");
+> +
+> +static bool nowayout = WATCHDOG_NOWAYOUT;
+> +module_param(nowayout, bool, 0);
+> +MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
+> +			   __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
+> +
+> +enum {
+> +	NCT6694_ACTION_NONE = 0,
+> +	NCT6694_ACTION_SIRQ,
+> +	NCT6694_ACTION_GPO,
+> +};
+> +
+> +struct __packed nct6694_wdt_setup {
+> +	__le32 pretimeout;
+> +	__le32 timeout;
+> +	u8 owner;
+> +	u8 scratch;
+> +	u8 control;
+> +	u8 status;
+> +	__le32 countdown;
+> +};
+> +
+> +struct __packed nct6694_wdt_cmd {
+> +	__le32 wdt_cmd;
+> +	__le32 reserved;
+> +};
+> +
+> +union __packed nct6694_wdt_msg {
+> +	struct nct6694_wdt_setup setup;
+> +	struct nct6694_wdt_cmd cmd;
+> +};
+> +
+> +struct nct6694_wdt_data {
+> +	struct watchdog_device wdev;
+> +	struct device *dev;
+> +	struct nct6694 *nct6694;
+> +	union nct6694_wdt_msg *msg;
+> +	unsigned char wdev_idx;
+> +};
+> +
+> +static int nct6694_wdt_setting(struct watchdog_device *wdev,
+> +			       u32 timeout_val, u8 timeout_act,
+> +			       u32 pretimeout_val, u8 pretimeout_act)
+> +{
+> +	struct nct6694_wdt_data *data = watchdog_get_drvdata(wdev);
+> +	struct nct6694_wdt_setup *setup = &data->msg->setup;
+> +	const struct nct6694_cmd_header cmd_hd = {
+> +		.mod = NCT6694_WDT_MOD,
+> +		.cmd = NCT6694_WDT_SETUP,
+> +		.sel = NCT6694_WDT_SETUP_SEL(data->wdev_idx),
+> +		.len = cpu_to_le16(sizeof(*setup))
+> +	};
+> +	unsigned int timeout_fmt, pretimeout_fmt;
+> +
+> +	if (pretimeout_val == 0)
+> +		pretimeout_act = NCT6694_ACTION_NONE;
+> +
+> +	timeout_fmt = (timeout_val * 1000) | (timeout_act << 24);
+> +	pretimeout_fmt = (pretimeout_val * 1000) | (pretimeout_act << 24);
+> +
+> +	memset(setup, 0, sizeof(*setup));
+> +	setup->timeout = cpu_to_le32(timeout_fmt);
+> +	setup->pretimeout = cpu_to_le32(pretimeout_fmt);
+> +
+> +	return nct6694_write_msg(data->nct6694, &cmd_hd, setup);
+> +}
+> +
+> +static int nct6694_wdt_start(struct watchdog_device *wdev)
+> +{
+> +	struct nct6694_wdt_data *data = watchdog_get_drvdata(wdev);
+> +	int ret;
+> +
+> +	ret = nct6694_wdt_setting(wdev, wdev->timeout, NCT6694_ACTION_GPO,
+> +				  wdev->pretimeout, NCT6694_ACTION_GPO);
+> +	if (ret)
+> +		return ret;
+> +
+> +	dev_dbg(data->dev, "Setting WDT(%d): timeout = %d, pretimeout = %d\n",
+> +		data->wdev_idx, wdev->timeout, wdev->pretimeout);
+> +
+> +	return ret;
+> +}
+> +
+> +static int nct6694_wdt_stop(struct watchdog_device *wdev)
+> +{
+> +	struct nct6694_wdt_data *data = watchdog_get_drvdata(wdev);
+> +	struct nct6694_wdt_cmd *cmd = &data->msg->cmd;
+> +	const struct nct6694_cmd_header cmd_hd = {
+> +		.mod = NCT6694_WDT_MOD,
+> +		.cmd = NCT6694_WDT_COMMAND,
+> +		.sel = NCT6694_WDT_COMMAND_SEL(data->wdev_idx),
+> +		.len = cpu_to_le16(sizeof(*cmd))
+> +	};
+> +
+> +	memcpy(&cmd->wdt_cmd, "WDTC", 4);
+> +	cmd->reserved = 0;
+> +
+> +	return nct6694_write_msg(data->nct6694, &cmd_hd, cmd);
+> +}
+> +
+> +static int nct6694_wdt_ping(struct watchdog_device *wdev)
+> +{
+> +	struct nct6694_wdt_data *data = watchdog_get_drvdata(wdev);
+> +	struct nct6694_wdt_cmd *cmd = &data->msg->cmd;
+> +	const struct nct6694_cmd_header cmd_hd = {
+> +		.mod = NCT6694_WDT_MOD,
+> +		.cmd = NCT6694_WDT_COMMAND,
+> +		.sel = NCT6694_WDT_COMMAND_SEL(data->wdev_idx),
+> +		.len = cpu_to_le16(sizeof(*cmd))
+> +	};
+> +
+> +	memcpy(&cmd->wdt_cmd, "WDTS", 4);
+> +	cmd->reserved = 0;
+> +
+> +	return nct6694_write_msg(data->nct6694, &cmd_hd, cmd);
+> +}
+> +
+> +static int nct6694_wdt_set_timeout(struct watchdog_device *wdev,
+> +				   unsigned int new_timeout)
+> +{
+> +	int ret;
+> +
+> +	ret = nct6694_wdt_setting(wdev, new_timeout, NCT6694_ACTION_GPO,
+> +				  wdev->pretimeout, NCT6694_ACTION_GPO);
+> +	if (ret)
+> +		return ret;
+> +
+> +	wdev->timeout = new_timeout;
+> +
+> +	return 0;
+> +}
+> +
+> +static int nct6694_wdt_set_pretimeout(struct watchdog_device *wdev,
+> +				      unsigned int new_pretimeout)
+> +{
+> +	int ret;
+> +
+> +	ret = nct6694_wdt_setting(wdev, wdev->timeout, NCT6694_ACTION_GPO,
+> +				  new_pretimeout, NCT6694_ACTION_GPO);
+> +	if (ret)
+> +		return ret;
+> +
+> +	wdev->pretimeout = new_pretimeout;
+> +
+> +	return 0;
+> +}
+> +
+> +static unsigned int nct6694_wdt_get_time(struct watchdog_device *wdev)
+> +{
+> +	struct nct6694_wdt_data *data = watchdog_get_drvdata(wdev);
+> +	struct nct6694_wdt_setup *setup = &data->msg->setup;
+> +	const struct nct6694_cmd_header cmd_hd = {
+> +		.mod = NCT6694_WDT_MOD,
+> +		.cmd = NCT6694_WDT_SETUP,
+> +		.sel = NCT6694_WDT_SETUP_SEL(data->wdev_idx),
+> +		.len = cpu_to_le16(sizeof(*setup))
+> +	};
+> +	unsigned int timeleft_ms;
+> +	int ret;
+> +
+> +	ret = nct6694_read_msg(data->nct6694, &cmd_hd, setup);
+> +	if (ret)
+> +		return 0;
+> +
+> +	timeleft_ms = le32_to_cpu(setup->countdown);
+> +
+> +	return timeleft_ms / 1000;
+> +}
+> +
+> +static const struct watchdog_info nct6694_wdt_info = {
+> +	.options = WDIOF_SETTIMEOUT	|
+> +		   WDIOF_KEEPALIVEPING	|
+> +		   WDIOF_MAGICCLOSE	|
+> +		   WDIOF_PRETIMEOUT,
+> +	.identity = DEVICE_NAME,
+> +};
+> +
+> +static const struct watchdog_ops nct6694_wdt_ops = {
+> +	.owner = THIS_MODULE,
+> +	.start = nct6694_wdt_start,
+> +	.stop = nct6694_wdt_stop,
+> +	.set_timeout = nct6694_wdt_set_timeout,
+> +	.set_pretimeout = nct6694_wdt_set_pretimeout,
+> +	.get_timeleft = nct6694_wdt_get_time,
+> +	.ping = nct6694_wdt_ping,
+> +};
+> +
+> +static void nct6694_wdt_ida_free(void *d)
+> +{
+> +	struct nct6694_wdt_data *data = d;
+> +	struct nct6694 *nct6694 = data->nct6694;
+> +
+> +	ida_free(&nct6694->wdt_ida, data->wdev_idx);
+> +}
+> +
+> +static int nct6694_wdt_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct nct6694 *nct6694 = dev_get_drvdata(dev->parent);
+> +	struct nct6694_wdt_data *data;
+> +	struct watchdog_device *wdev;
+> +	int ret;
+> +
+> +	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+> +	if (!data)
+> +		return -ENOMEM;
+> +
+> +	data->msg = devm_kzalloc(dev, sizeof(union nct6694_wdt_msg),
+> +				 GFP_KERNEL);
+> +	if (!data->msg)
+> +		return -ENOMEM;
+> +
+> +	data->dev = dev;
+> +	data->nct6694 = nct6694;
+> +
+> +	ret = ida_alloc(&nct6694->wdt_ida, GFP_KERNEL);
+> +	if (ret < 0)
+> +		return ret;
+> +	data->wdev_idx = ret;
+> +
+> +	ret = devm_add_action_or_reset(dev, nct6694_wdt_ida_free, data);
+> +	if (ret)
+> +		return ret;
+> +
+> +	wdev = &data->wdev;
+> +	wdev->info = &nct6694_wdt_info;
+> +	wdev->ops = &nct6694_wdt_ops;
+> +	wdev->timeout = timeout[data->wdev_idx];
+> +	wdev->pretimeout = pretimeout[data->wdev_idx];
+> +	if (timeout[data->wdev_idx] < pretimeout[data->wdev_idx]) {
+> +		dev_warn(data->dev, "pretimeout < timeout. Setting to zero\n");
+> +		wdev->pretimeout = 0;
+> +	}
+> +
+> +	wdev->min_timeout = 1;
+> +	wdev->max_timeout = 255;
+> +
+> +	platform_set_drvdata(pdev, data);
+> +
+> +	watchdog_set_drvdata(&data->wdev, data);
+> +	watchdog_set_nowayout(&data->wdev, nowayout);
+> +	watchdog_stop_on_reboot(&data->wdev);
+> +
+> +	return devm_watchdog_register_device(dev, &data->wdev);
+> +}
+> +
+> +static struct platform_driver nct6694_wdt_driver = {
+> +	.driver = {
+> +		.name	= DEVICE_NAME,
+> +	},
+> +	.probe		= nct6694_wdt_probe,
+> +};
+> +
+> +module_platform_driver(nct6694_wdt_driver);
+> +
+> +MODULE_DESCRIPTION("USB-WDT driver for NCT6694");
+> +MODULE_AUTHOR("Ming Yu <tmyu0@nuvoton.com>");
+> +MODULE_LICENSE("GPL");
+> +MODULE_ALIAS("platform:nct6694-wdt");
+> -- 
+> 2.34.1
+> 
 
