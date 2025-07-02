@@ -1,205 +1,235 @@
-Return-Path: <linux-i2c+bounces-11757-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11758-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B094AF0D1F
-	for <lists+linux-i2c@lfdr.de>; Wed,  2 Jul 2025 09:49:51 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9235AF0D3D
+	for <lists+linux-i2c@lfdr.de>; Wed,  2 Jul 2025 09:54:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CC9DC162E76
-	for <lists+linux-i2c@lfdr.de>; Wed,  2 Jul 2025 07:49:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3C8921C2356C
+	for <lists+linux-i2c@lfdr.de>; Wed,  2 Jul 2025 07:54:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B1B723184A;
-	Wed,  2 Jul 2025 07:49:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77C28231C9C;
+	Wed,  2 Jul 2025 07:54:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TRZ5IeWH"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WFmlGPHc"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF85321CC40
-	for <linux-i2c@vger.kernel.org>; Wed,  2 Jul 2025 07:49:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CFF1200BA1;
+	Wed,  2 Jul 2025 07:54:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751442575; cv=none; b=ubxsHXlmJLtl7KGaCFZ+YHvf0OaY1jpnr24WEkoTfJbevFLD0e50g4bDgIU713TT4SPNVlyc1kdUO/Y9nASj6+1r7sjx4tG9t7RXd4qvFJN1ZtIg7aq1B6JsAEriFEGLdIxJ0cnODKoxkGWPkjkdIYRXc9mzoe3a0LdILGMjGS0=
+	t=1751442862; cv=none; b=dB1c7XXXCXgl0UerEa1O3+p3bKMCDMvJNXZRSYqH/Ct4sAz1jYnPW2YdC01FYVxtJI3/1tfYRLqweQQl+vIM1nvK44xG9Hhi2s7Z7rtScjOQRVMj/gH4pA3aC1+1Ak/f4Z78EvUZE6O/kVxvZ32bS+pgga/rW9vFyWb0DAMh4+I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751442575; c=relaxed/simple;
-	bh=t53c92tc4QWn7xk0hzEkYIVhGDJ6zpW5fwcjSg16GSI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gK74G4AzhCm489Mcnqlv0KZezYwveKSPA3UaDtemzL/nWUEsOlM3FhHFzenbjfUpHGNCES/+DKnRxKboQm5zQSnA0ZwNy/6dyfXdWvfHZcrvSJRdq1EChDdGKc6eYIIvvJtTvrqejozGN2z4x1zFkH51uhFZeYsKCCs87GC8fcY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TRZ5IeWH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DBA0C4CEED;
-	Wed,  2 Jul 2025 07:49:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751442574;
-	bh=t53c92tc4QWn7xk0hzEkYIVhGDJ6zpW5fwcjSg16GSI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=TRZ5IeWHHWLAIr6BNQBLVvc3dTip7qhLRHkhVH28092Vw284GU2qPrgeSq46lEodq
-	 DgKONe8kV5vkOmfnXrFngajwQY+wmYWaC42CfSDRV1jmS/3BXjYZT0g3hjXo5CLMUS
-	 CzM/cScqMZR+ylxarvZxJEyD5dw2gZhRcBNCzn1zgWdLLRtTvur5AvFYX5DRtss7Gt
-	 B5hqufqWt8Xlco8YJrXn9bH9bWUEHCmtVT4Oc8WOZsSkevvqJbNFJGcRnyI2XNCG0q
-	 3Vw0BHd53zQC8hSkm+KpBvJbHVJQ18zXj2wDYsXgBF/SMAd0JlXUQIxlmCPgX4yH/l
-	 RrjZQkhYC8Pkw==
-Message-ID: <07cd4e2c-0419-4877-9a2a-d66f8dbe4279@kernel.org>
-Date: Wed, 2 Jul 2025 09:49:30 +0200
+	s=arc-20240116; t=1751442862; c=relaxed/simple;
+	bh=rUwUc12CwDq37/2slGik7dRlGZeOaTXSpDsb9W6K1i0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=seWro7qJbYup7GFHmBryUyfZyi21bjRG0TQ+CZ8891D2I9JMrh4nutDvxHDeSGNPrMSsQ+CmWda+BZKloUyPnBbpVUY8UdreAnrSj0KlCxoUkF7kJAqGUyO4dxrMY1LcI5h8kwPyXtaNGAJqyDGt8Uci5l6yvS078UflmaX12Ik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WFmlGPHc; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1751442861; x=1782978861;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=rUwUc12CwDq37/2slGik7dRlGZeOaTXSpDsb9W6K1i0=;
+  b=WFmlGPHcxwX2SUVmyW4anhqDN0rNuxfRwK7E9iwtDHAcNG7n7mt90SIG
+   mK78cNLxHgzP3jnCF5zBRVkB5QsRJEhrlhQmctWpLYDy9hcKUJP6osqIO
+   ITXwPhqMBGIlBPD2tkZ/cmVS0tyfS6Wjljwn5b5AqfAW4+OULwBzvS6Ia
+   VNXeQvB+I9uTDKycbHdAlqDbmLW72LHH0o8b0E1KLE3EpPwUTagjbcNkJ
+   sD5Z8b8zH7l+nmdMuJGYuhw04CIvNLIjNCFTwTpaY5NQuObmC41d0/3rr
+   aJEMHOiMdpkSl/NH+LB91PDo5gtbLJgp6Ar6+xQVimIwHzbUkEPsv6fmh
+   w==;
+X-CSE-ConnectionGUID: erfliI1MQcScn6KMnows+g==
+X-CSE-MsgGUID: 824dVOprSDmNoKTkDgl55Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11481"; a="64326060"
+X-IronPort-AV: E=Sophos;i="6.16,281,1744095600"; 
+   d="scan'208";a="64326060"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2025 00:54:18 -0700
+X-CSE-ConnectionGUID: 98SccRJrQ5yvJqszW1ShBA==
+X-CSE-MsgGUID: 52dATgF7Sy6tK3S06PLKug==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,281,1744095600"; 
+   d="scan'208";a="153636445"
+Received: from smile.fi.intel.com ([10.237.72.52])
+  by fmviesa007.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2025 00:53:58 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
+	(envelope-from <andriy.shevchenko@intel.com>)
+	id 1uWsHv-0000000BrCM-1jUQ;
+	Wed, 02 Jul 2025 10:53:51 +0300
+Date: Wed, 2 Jul 2025 10:53:50 +0300
+From: Andy Shevchenko <andriy.shevchenko@intel.com>
+To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>
+Cc: Andy Shevchenko <andy.shevchenko@gmail.com>,
+	Waqar Hameed <waqar.hameed@axis.com>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Julien Panis <jpanis@baylibre.com>,
+	William Breathitt Gray <wbg@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>, Peter Rosin <peda@axentia.se>,
+	Jonathan Cameron <jic23@kernel.org>,
+	David Lechner <dlechner@baylibre.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Cosmin Tanislav <cosmin.tanislav@analog.com>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Matteo Martelli <matteomartelli3@gmail.com>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Francesco Dolcini <francesco@dolcini.it>,
+	=?iso-8859-1?Q?Jo=E3o_Paulo_Gon=E7alves?= <jpaulo.silvagoncalves@gmail.com>,
+	Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+	Subhajit Ghosh <subhajit.ghosh@tweaklogic.com>,
+	Mudit Sharma <muditsharma.info@gmail.com>,
+	Gerald Loacker <gerald.loacker@wolfvision.net>,
+	Song Qiang <songqiang1304521@gmail.com>, Crt Mori <cmo@melexis.com>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Karol Gugala <kgugala@antmicro.com>,
+	Mateusz Holenko <mholenko@antmicro.com>,
+	Gabriel Somlo <gsomlo@gmail.com>, Joel Stanley <joel@jms.id.au>,
+	Claudiu Manoil <claudiu.manoil@nxp.com>,
+	Vladimir Oltean <vladimir.oltean@nxp.com>,
+	Wei Fang <wei.fang@nxp.com>, Clark Wang <xiaoning.wang@nxp.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Vinod Koul <vkoul@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Sebastian Reichel <sre@kernel.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Jerome Brunet <jbrunet@baylibre.com>,
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+	Han Xu <han.xu@nxp.com>, Haibo Chen <haibo.chen@nxp.com>,
+	Yogesh Gaur <yogeshgaur.83@gmail.com>,
+	Mark Brown <broonie@kernel.org>, Avri Altman <avri.altman@wdc.com>,
+	Bart Van Assche <bvanassche@acm.org>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+	Bard Liao <yung-chuan.liao@linux.intel.com>,
+	Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+	Daniel Baluta <daniel.baluta@nxp.com>,
+	Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+	Pierre-Louis Bossart <pierre-louis.bossart@linux.dev>,
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>, kernel@axis.com,
+	linux-iio@vger.kernel.org, linux-omap@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
+	linux-rockchip@lists.infradead.org, linux-input@vger.kernel.org,
+	linux-mmc@vger.kernel.org, imx@lists.linux.dev,
+	netdev@vger.kernel.org, linux-phy@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-pwm@vger.kernel.org, linux-amlogic@lists.infradead.org,
+	linux-spi@vger.kernel.org, linux-scsi@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+	sound-open-firmware@alsa-project.org, linux-sound@vger.kernel.org
+Subject: Re: [PATCH] Remove error prints for devm_add_action_or_reset()
+Message-ID: <aGTljgePpiPJq2xj@smile.fi.intel.com>
+References: <pnd7c0s6ji2.fsf@axis.com>
+ <ylr7cuxldwb24ccenen4khtyddzq3owgzzfblbohkdxb7p7eeo@qpuddn6wrz3x>
+ <CAHp75Ve=Zas8=6YKoPeTRrvjCaTyyRAyJG1gBLripqZgQpfg7g@mail.gmail.com>
+ <zxtyk4vly2salnoy3lng2ni7pzu3wg6qnmucadnclfigrd2m2m@i6xcrmvh34r5>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] dt-bindings: i2c: realtek,rtl9301-i2c: extend for
- RTL9310 support
-To: Jonas Jelonek <jelonek.jonas@gmail.com>, linux-i2c@vger.kernel.org
-Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>,
- Markus Stockhausen <markus.stockhausen@gmx.de>
-References: <20250701091737.3430-1-jelonek.jonas@gmail.com>
- <20250701091737.3430-4-jelonek.jonas@gmail.com>
- <d123375e-48ec-43f1-bc5a-1256c2f377ec@kernel.org>
- <ad8d7f0b-1c25-4a1b-89db-6631d918f9a1@gmail.com>
- <b3e58bf1-d51b-481c-892c-4115bd106ed9@kernel.org>
- <123042be-63dc-46bf-b781-6da022a8f4c5@gmail.com>
- <8d671dcc-bcc2-4b1d-9063-f7d69d52d29d@kernel.org>
- <3b357cd4-017e-43d9-a662-4f26fb9b8d68@gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <3b357cd4-017e-43d9-a662-4f26fb9b8d68@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <zxtyk4vly2salnoy3lng2ni7pzu3wg6qnmucadnclfigrd2m2m@i6xcrmvh34r5>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On 02/07/2025 09:34, Jonas Jelonek wrote:
-> Hi Krzysztof,
+On Wed, Jul 02, 2025 at 08:10:28AM +0200, Uwe Kleine-König wrote:
+> On Tue, Jul 01, 2025 at 08:57:02PM +0300, Andy Shevchenko wrote:
+> > On Tue, Jul 1, 2025 at 8:44 PM Uwe Kleine-König <ukleinek@kernel.org> wrote:
+> > > On Tue, Jul 01, 2025 at 05:03:33PM +0200, Waqar Hameed wrote:
+
+...
+
+> > > With that
+> > >
+> > >         ret = devm_add_action_or_reset(dev, meson_pwm_s4_put_clk,
+> > >                                        meson->channels[i].clk);
+> > >         if (ret)
+> > >                 return dev_err_probe(dev, ret,
+> > >                                      "Failed to add clk_put action\n");
+> > >
+> > > from drivers/pwm/pwm-meson.c is optimized to
+> > >
+> > >         ret = devm_add_action_or_reset(dev, meson_pwm_s4_put_clk,
+> > >                                        meson->channels[i].clk);
+> > >         if (ret)
+> > >                 return ret;
+> > >
+> > > .
+> > >
+> > > I would prefer this approach, because a) there is no need to drop all
+> > > dev_err_probe()s after devm_add_action_or_reset() and b) the
+> > > dev_err_probe()s could stay for consistency in the error paths of a
+> > > driver.
+> > 
+> > Why do we need a dev_err_probe() after devm_add_action*()? I would
+> > expect that the original call (if needed) can spit out a message.
 > 
-> thanks for taking the time to deal with this.
-> 
-> On 02.07.2025 08:11, Krzysztof Kozlowski wrote:
->> On 01/07/2025 16:31, Jonas Jelonek wrote:
->>> For the purpose:
->>> RTL9310 changed the register layout compared to RTL9300. Activating
->>> the SCL line is done by setting bit 12 for master 1 and bit 13 for master 2
->>> in a global register which is located before the master-specific registers.
->>> Thus, the driver needs to know which master (1 or 2) it is currently doing
->>> something for. That is what this property is intended to be used, naming
->>> to-be-discussed.
->> There is no global register space here and no syscon, so I don't
->> understand how can you access it, especially when they are located
->> BEFORE your address space.
-> 
-> Probably this explanation is still missing some background and 'global'
-> was misleading here. The I2C controllers are part of Realtek switchcore.
-> This is defined as a syscon in DTS and the I2C controller has to be
-> defined as a child-node of it. (see 
-> https://elixir.bootlin.com/linux/v6.15.1/source/arch/mips/boot/dts/realtek/rtl930x.dtsi#L45-L72)
-> The driver takes its regmap from this syscon node as the I2C registers
-> are within that switchcore address space.
-> 
-> Address layout in RTL9310 is (addresses relative to parent syscon node):
-> 0x1004 - 0x100b    I2C 'global' registers
-> 0x100c - 0x1023    I2C master 1 registers
-> 0x1024 - 0x103b    I2C master 2 registers
-> 
-> The driver has to access both the registers for the master that it is
-> configuring AND the 'global' ones (for SCL + SDA activation).
-> 
-> For upstream RTL9300 it's similar with the difference of having SCL
-> selection in the master-specific registers and the register layout
-> having the order:
-> - I2C master 1 registers
-> - I2C 'global' register
-> - I2C master 2 registers
+> I'm not a big fan of API functions that emit an error message.
 
-I think I will keep bookmark this talk because this is perfect example
-of writing bindings rule: they supposed to be complete.
+We do have that in devm_ioremap*() family. Just saying...
 
-If people sent complete bindings, they would see that you are now in
-tricky spot and this maybe has to be redone to standard approach - I2C
-is not a child of syscon block, but separate device. When it is a
-separate device we solve it (plenty of examples) with phandle to syscon
-with offset or value argument.
+> In general the caller knows better what went wrong (here:
+> devm_add_action_or_reset() doesn't know this to be about the clk_put
+> action), so the error message can be more expressive.
 
-But no! Some incomplete hardware description was sent, stuffing
-everything into syscon and claiming that everything is child of syscon,
-and now you are stuck with this:
+I'm not sure I was clear about my suggestion. What I argued is something like
+this
 
-system controller
-        |
-        |
-   i2c-controller-for-multiple-SDA
-           |
-           |
-       i2c-controllers-for-each-SDA
+devm_foo_alloc()
+{
+	ret = foo_alloc();
+	if (ret)
+		return dev_err_probe();
 
-This is not only just confusing but maybe even not correct.
+	return devm_add_action_or_reset();
+}
 
-I understand that either i2c controller can take any SCL line. If so,
-that could be a pinctrl, but again this is child of that device, so
-pinctrl to parent would be odd.
+foo_alloc() in my example is left untouched.
 
-Vendor (not generic) property seems the only solution, but then this
-should not be part of the existing binding or you should clearly narrow
-this per variant. It was made very clear that rtl9301-family has only
-one SCL per controller and you cannot choose.
+> Also in general an API function doesn't know if a failure is fatal or if
+> the consumer handles the failure just well and if the call is part of a
+> driver's .probe() so it's unclear if dev_err_probe() can/should be used.
+> (I admit that the last two probably don't apply to
+> devm_add_action_or_reset() but that's not a good enough reason to
+> make this function special. Every special case is a maintanance burden.)
 
-> 
->> Best regards,
->> Krzysztof
-> 
-> Just an idea to discuss regarding the DT compatibles:
-> I was proposed out of this conversation to use something like
-> 'i2c-otto-mango' ('otto' being the codename for their platform,
-> 'mango' being the codename for the RTL9310 series). Based on, that
-> technically(!) it doesn't make sense to distinguish between the
-> variants of the series.
+devm_*() are only supposed to be called in the probe phase. So using
+dev_err_probe() there (implementations) is natural thing to do, if required.
+And see above, we have such cases already.
 
-I don't understand what does it refer to, but anyway, soc compatibles
-are the only preferred way.
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-Best regards,
-Krzysztof
 
