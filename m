@@ -1,65 +1,80 @@
-Return-Path: <linux-i2c+bounces-11804-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11805-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6605BAF6E82
-	for <lists+linux-i2c@lfdr.de>; Thu,  3 Jul 2025 11:24:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8A21AF7211
+	for <lists+linux-i2c@lfdr.de>; Thu,  3 Jul 2025 13:26:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 188FD1649D9
-	for <lists+linux-i2c@lfdr.de>; Thu,  3 Jul 2025 09:24:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E61BB1890B8C
+	for <lists+linux-i2c@lfdr.de>; Thu,  3 Jul 2025 11:26:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C932C2D6619;
-	Thu,  3 Jul 2025 09:23:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A88F82E2F09;
+	Thu,  3 Jul 2025 11:26:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="plTe8ttn"
+	dkim=pass (2048-bit key) header.d=beagleboard-org.20230601.gappssmtp.com header.i=@beagleboard-org.20230601.gappssmtp.com header.b="0CVa7UyZ"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 061EE221F1E;
-	Thu,  3 Jul 2025 09:23:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 027832E03FF
+	for <linux-i2c@vger.kernel.org>; Thu,  3 Jul 2025 11:26:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751534639; cv=none; b=B8WuWp/m5GUOQIo4Qtkb+3D2y3Ch+FSrh5DgS3MFUd4CULQUaqrb6HcQo7WScFJvngW+cxtDC4S1P8W238O78qu0UqsS3764gr1G0BtN7s6FntLF+h/LH0efuRqGVfTTF5w/wjgZw6NUsoLGIYAutv3aOwO5jGumsl422t/NFXU=
+	t=1751541988; cv=none; b=kuqILiWMW60HK/ZJ0r4B7q2/fLeUOtTr5EUy33rpHHMObAGMl69RKSX3MrlgwJUw9KC/I6IbKYmx5PqvrMQSe9+Fw/MEjiHgQyf/Ehb/EvAW8W0gIJV8/cJSBSCiLhrQ4h21q8OmZ3L+9T9gFMu3LZ5/2KeQCazX+Ek5dFd48WU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751534639; c=relaxed/simple;
-	bh=yz+VXBl7zBZmljtkWVQF/zfdlI5B+BW7GJtbNl8TSUY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=B/0Zjl0jCeP7dRmgZAvKVQ0slhWgKOyyH7vRnBglydmaFTCUUoxeZroaChxj8m8xk8dJ6eXAXcGYQvyoYqyfXBy0P+NafbetSELnuOx515g8uVswb40VGlFiR+z7+GL86JS5azo3ycoY+dwx82iNuyxkEFaU2nlLrHKIb7U5p2c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=plTe8ttn; arc=none smtp.client-ip=185.132.182.106
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5637OLbU018922;
-	Thu, 3 Jul 2025 11:23:26 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=selector1; bh=
-	mi/np96huTpzemlSEPT47ivnNTAhi9p9kP4BY7V5Dek=; b=plTe8ttnU3beSTHr
-	Oq7OU+9mH5o57+1TikvjDuCxgr+8f1FVkcIWT777l+P3VM4cp8lHkPxMN97FoDWN
-	mumYZ3vLNIuCYKoKyPLLg76qriKwwVLUwkI+A46tjtUp5O59pbaHeI8N57ElxEpX
-	8o9rkdDBtRsz+hx+jfaloob+i+rhesP5mWMdeIjjiiO9ZbOSBx3E3MuZaSeViRy2
-	XD7kze4NlfLXeahkYLkR/+Qp4ZTN3lkkLIAwxgMdgfsXEMKqKx2n1vuFppXsIOaE
-	rlkBHxVlTYS5w7dlwoSLudMlie04jdTbTfTfScCtCg3DGxNw6mZoEsdhE3I569ge
-	vwrbuw==
-Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 47j5tmf6ec-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 03 Jul 2025 11:23:26 +0200 (MEST)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 27B8440059;
-	Thu,  3 Jul 2025 11:22:03 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 92F68AF65C7;
-	Thu,  3 Jul 2025 11:21:01 +0200 (CEST)
-Received: from [10.48.86.185] (10.48.86.185) by SHFDAG1NODE2.st.com
- (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Thu, 3 Jul
- 2025 11:21:00 +0200
-Message-ID: <313d1cc7-eff9-47c7-940f-4ef9e92bccd0@foss.st.com>
-Date: Thu, 3 Jul 2025 11:21:00 +0200
+	s=arc-20240116; t=1751541988; c=relaxed/simple;
+	bh=/2Un6UMtA1yBlRnnUxa6QqBYiOfpXfnouZCpUeeYD2I=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TL/q2oA/eXc7pmBqjsmdrqUqCsRVI1ZDXO8Jos/UgjPGWNDzZ/jOfOz7MVOhSdjHR0pTd2+cWJjQVyTZEf7I+cH8yG16alc5o0tmN+DwOQqtqWC37GXC5d6rVcvITQn/fcvtUiYErHKwww0Iz3kSgmHUJm8N7GueDvq4t45nSjg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=beagleboard.org; spf=fail smtp.mailfrom=beagleboard.org; dkim=pass (2048-bit key) header.d=beagleboard-org.20230601.gappssmtp.com header.i=@beagleboard-org.20230601.gappssmtp.com header.b=0CVa7UyZ; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=beagleboard.org
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=beagleboard.org
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-234d366e5f2so80021955ad.1
+        for <linux-i2c@vger.kernel.org>; Thu, 03 Jul 2025 04:26:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=beagleboard-org.20230601.gappssmtp.com; s=20230601; t=1751541986; x=1752146786; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=99R4ldK+hAGTpWZZR4+eV3lD7rynPJ3jnvDwzipGUic=;
+        b=0CVa7UyZTM5WVZ0UtC6ZJq9ZSN6EzowwDwzwLaKSuCMkkjVPQSQeTaeSIz0RakkLpZ
+         U3DH9nn7TzEYb1Y24XSipNo5TZ05KectjxjxW9yCIfprPEGilZQb4HyptDWUl8QK9cXz
+         xoG+GaHSW2S7fflIFu0SSFh7V77Kgw7xAbV2FzkvfEioW9PZGLVPdxhgHSL6CSG1MUOC
+         RTMFzsChzCCSJwkrtpV+3yKFaDmXeI6YRj5J8xgcp+Q0Lbuddm+k2ZTJQQmSdmdQqgcn
+         5fCo3uBcRcpaqmK+MDEVNWYTo7haBO/zHv2ZoEsrDUzKlf8eg0e1tSbC5psvA9zMVECb
+         u6nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751541986; x=1752146786;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=99R4ldK+hAGTpWZZR4+eV3lD7rynPJ3jnvDwzipGUic=;
+        b=PRxcopEAout8EULCaU+ca8a/jJq6Gd2U6i+q1VhHmpfdKrUOx9uprS7FaakjTU9VlA
+         ggKM2TFv8F60BLZ6VVJxPsI9Ldb4pqYk/oLD68XtaOJ+HAOFS0KmfeFiplqJNI3paIua
+         cJU/qCGk+AJyQo/QG12iEZ0j0qWHufFHHMs5Sed1NVQCgII2TpwI2/nM+EUormAEqJlg
+         BsB8551FEXLxDYEG9n7YdW5StMzKjBH41z0zI0mbWHzIGYk6lFNCFlsCYHEhc/8fdZri
+         Ace5XVQh/c7s0eTOyhoI0mSE9qdclLsg7rxWITw4dt7Lm13DcobSa1IuP9OFiq1cuIyl
+         5+Rw==
+X-Forwarded-Encrypted: i=1; AJvYcCWk8eflBOB0CsTVKIMqrGn6nZtnGvWXwVq4FSnXOy5Tcg0aD1aJJuIvvSCOyzEdV5D7WfEdAQLJy5c=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwEsPV9HiikA7HjQrcXLI2MFHr9+7bBUwMok8nRpp/QguKsLPNS
+	+r82ILoCJmSJotxiKRBiEIcKppmQ75qinELT+HiSpxcRPxS/KdfO+UldOPLNglyGfg==
+X-Gm-Gg: ASbGncu1SDyLDxyNT1s3SbAtj/DiA2+89A5uN7C3moB0NiG9Fh3Dfl4E3BG38aUCPzj
+	pzlyyrYKy3NxKVs5xjFCV3ZQlmXqNo62MIu4Imnan65Z7wivU8F/R9QZkMH1TA20R/waV6fDgbq
+	YYDguO1xJ0IGFh9nwWI9P1aI3ENSKKJo3KIZss0UXt4T/mpjwUrq8BWEoPPXj9FmLha23+RG9fP
+	YvX7wQarOLWbX4W2ogqdcgm8ILJO53fyp/N17dcCipDiTjyBQbEOCZSlz1x9yNfO2DjZDTy6Uni
+	2lomgTqvGUusV1MVfPKWbAF07wbrwAWX0M7CDKnWqpSOynHxv6Z5bX+oxuP0Aw9pJq77whM1+9e
+	A2q53soMKeUHwefXvqhV8W/JtppVDQRWQYc9hLwU=
+X-Google-Smtp-Source: AGHT+IGCAeqObZBcWQGkNr3+fCaNXerR2C6EX3Fc/6zbX8CgA4LYxU6srF98+K4BVoRiNrujQXM/7Q==
+X-Received: by 2002:a17:902:e549:b0:235:ea0d:ae10 with SMTP id d9443c01a7336-23c6e500777mr131002785ad.12.1751541986171;
+        Thu, 03 Jul 2025 04:26:26 -0700 (PDT)
+Received: from ?IPV6:2401:4900:8898:f649:249d:54ef:66f6:5638? ([2401:4900:8898:f649:249d:54ef:66f6:5638])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23acb39c0a0sm151392315ad.122.2025.07.03.04.26.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Jul 2025 04:26:25 -0700 (PDT)
+Message-ID: <8859d983-f4ff-498b-bb0b-eb84206ad969@beagleboard.org>
+Date: Thu, 3 Jul 2025 16:56:20 +0530
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -67,54 +82,82 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 3/3] i2c: stm32f7: support i2c_*_dma_safe_msg_buf APIs
-To: Andi Shyti <andi.shyti@kernel.org>
-CC: Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
-        Alain Volmat
-	<alain.volmat@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Sumit Semwal
-	<sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?=
-	<christian.koenig@amd.com>,
-        M'boumba Cedric Madianga
-	<cedric.madianga@gmail.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        "Pierre-Yves
- MORDRET" <pierre-yves.mordret@st.com>,
-        <linux-i2c@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <linaro-mm-sig@lists.linaro.org>
-References: <20250630-i2c-upstream-v3-0-7a23ab26683a@foss.st.com>
- <20250630-i2c-upstream-v3-3-7a23ab26683a@foss.st.com>
- <4lqsyuabfwnclt2pbxmgqz5zpd6zm5y6q5djiwopuq5eelz7ui@fgep3x24ur3e>
+Subject: Re: [RFC PATCH 0/3] i2c: Introduce i2c bus extensions
+To: Herve Codina <herve.codina@bootlin.com>
+Cc: conor+dt@kernel.org, devicetree@vger.kernel.org, krzk+dt@kernel.org,
+ linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+ luca.ceresoli@bootlin.com, robh@kernel.org, thomas.petazzoni@bootlin.com,
+ wsa+renesas@sang-engineering.com
+References: <20250205173918.600037-1-herve.codina@bootlin.com>
+ <525877c8-6c64-45b3-b4aa-a52768e59b86@beagleboard.org>
+ <20250613093016.43230e3b@bootlin.com>
 Content-Language: en-US
-From: Clement LE GOFFIC <clement.legoffic@foss.st.com>
-In-Reply-To: <4lqsyuabfwnclt2pbxmgqz5zpd6zm5y6q5djiwopuq5eelz7ui@fgep3x24ur3e>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+From: Ayush Singh <ayush@beagleboard.org>
+In-Reply-To: <20250613093016.43230e3b@bootlin.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
- definitions=2025-07-03_02,2025-07-02_04,2025-03-28_01
 
-Hi Andy,
+On 6/13/25 13:00, Herve Codina wrote:
 
-On 7/2/25 19:15, Andi Shyti wrote:
-> Hi Clement,
-> 
-> On Mon, Jun 30, 2025 at 02:55:15PM +0200, Clément Le Goffic wrote:
->> Use the i2c-core-base APIs to allocate a DMA safe buffer when needed.
-> 
-> same here, I don't understand anything... you could have written
-> "do some coding" and it would have been the same :-)
+> Hi Ayush,
+>
+> On Thu, 12 Jun 2025 13:22:45 +0530
+> Ayush Singh <ayush@beagleboard.org> wrote:
+>
+>> I have tested this patch series for use with pocketbeagle 2 connector
+>> driver [0]. To get a better idea how it looks in real devicetree, see
+>> the base tree [1] and the overlay [2]. Since it also used gpio and pwm
+>> nexus nodes, along with providing pinmux for pins, it can provide a
+>> better picture of how the different pieces (export-symbols, nexus nodes,
+>> etc) look when combined.
+> Nice. Happy to see that I am no more alone with a system using these
+> features.
+>
+>>
+>> I also have a question for Herve. Do you already have any working
+>> patches for similar extension for SPI and UART in some private tree?
+> No, I didn't do anything related to SPI nor UART.
+>
+> On my system, no SPI nor UART are wired to my connector and so, I haven't
+> got any needs to implement extension busses for SPI an UART (serial dev bus)
+> nor any support for nexus nodes for other kind of components.
+>
+> Best regards,
+> Hervé
 
-Ok I'll try to be more precise here also.
 
-Best regards,
-Clément
+I have added SPI bus extension to my kernel tree [0]. Now, the techlab 
+cape (other than mikrobus port) works using export-symbols + i2c and spi 
+bus extension + eeprom auto detection.
+
+
+Here is a list of everything currently working on the tree:
+
+1. EEPROM based auto-detection.
+
+2. SPI
+
+3. I2C
+
+4. PWM
+
+5. GPIO
+
+
+Missing:
+
+1. UART (Don't have a cape that has something using the UART yet. Maybe 
+need to experiment with MikroBUS).
+
+
+Not quite sure what else to do to move things forward.
+
+
+Best Regards,
+
+Ayush Singh
+
+
+[0]: https://github.com/Ayush1325/linux/tree/beagle-cape-v1
+
 
