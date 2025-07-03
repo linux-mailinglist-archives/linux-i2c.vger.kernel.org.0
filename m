@@ -1,143 +1,147 @@
-Return-Path: <linux-i2c+bounces-11800-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11801-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A11D4AF6C7E
-	for <lists+linux-i2c@lfdr.de>; Thu,  3 Jul 2025 10:11:32 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 63412AF6CF1
+	for <lists+linux-i2c@lfdr.de>; Thu,  3 Jul 2025 10:31:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E2FFA7AE599
-	for <lists+linux-i2c@lfdr.de>; Thu,  3 Jul 2025 08:10:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B7AB97AC55B
+	for <lists+linux-i2c@lfdr.de>; Thu,  3 Jul 2025 08:30:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5805E2C3258;
-	Thu,  3 Jul 2025 08:11:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="GSWLBGNi"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19CEE2D0C72;
+	Thu,  3 Jul 2025 08:31:41 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B1422C15B8;
-	Thu,  3 Jul 2025 08:11:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EA442DE6E8
+	for <linux-i2c@vger.kernel.org>; Thu,  3 Jul 2025 08:31:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751530267; cv=none; b=cCPnA8O/0zBAV5ruXRrXqklXzEWYUDXAALS7me6XPTVGNvVpt9MonJ1dOfZTMFEODtUTRFQfrHOLC5h4YC8R4QdLb3XghVj08a3iIT710K29dD/O4m5hVdf9iSeWx16BFFOr+VKb/lFZ143jB6ll7VwBRyqoOytM5t+0TLtXPAI=
+	t=1751531500; cv=none; b=gAD8CsMAtx7G1e61BsONg2bYkjEsb04oEIDQgQnJ72j4BMj1xvp+FpSx/+giuSGJ1drYais2+II1zGKVO/KmX4riWJRGgyB0HSRs4Ym6peh90AjNqNh/WWqRIq9MHcO9JNRW+lT0jCVYMo60/C6eh6+cMlkWOgqYxBnSANSRh+A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751530267; c=relaxed/simple;
-	bh=VJxDMDcvuNiGqPzWy8ueJi3tfdG9/R3VPQDmQXZ2D0A=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=c8RMIpB6RaWOomHDQ0Rwo/NuF2mY8Chyfs9xwp5x9f/oc229ntqJoR0oUinzJ52xFLIUhXDLe046B0ongJXs+2x0FMIdZEmQVBdqxZytu/P8IPBXWVlFq7gt7uL1nlEZHYUye7IylFgZBVxkd1dyp3H2YpZHajzihY625DAPS7Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=GSWLBGNi; arc=none smtp.client-ip=217.70.183.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 436CD44386;
-	Thu,  3 Jul 2025 08:10:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1751530262;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=LAI1mLd80Uu/qyT+cT0jcdFKQzyXKg/JSwW4hvNefdw=;
-	b=GSWLBGNiFskz3pPr5ysMh8m1slrvPREt+nJA5jB3928KCzs35bf7DaMYR36LU0hmj+ZrFe
-	F9+odOPUcBJU3EBWmgMatI+v7VS3qWTCAUmbU0wfbiqk1cGk0ZtBucHP+YzTk/Brygtscm
-	foQqGflkGwK79xENMpRHwxR/Utj3dBgU8mUgxW/OhixYGpR4Aw7cH3zK+8Ap4ry0sXwAms
-	JC17SVHo+z0ed5KiUmRefW0pNYnBbfO9kWUimNasF9qSxKQ/cIkxJBvExaQLj/XSqoHJbv
-	HOYtjqyBNzGSyGAQGPqEdRc+f+dwPc7oHl426XP5m+Kd1R3AepOl02VFEl83Mw==
-Date: Thu, 3 Jul 2025 10:10:58 +0200
-From: Herve Codina <herve.codina@bootlin.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Andrew Lunn <andrew@lunn.ch>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, Shawn Guo
- <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix
- Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>, Wolfram Sang
- <wsa+renesas@sang-engineering.com>, Peter Rosin <peda@axentia.se>, Derek
- Kiernan <derek.kiernan@amd.com>, Dragan Cvetic <dragan.cvetic@amd.com>,
- Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh@kernel.org>, Saravana
- Kannan <saravanak@google.com>, Bjorn Helgaas <bhelgaas@google.com>, Mark
- Brown <broonie@kernel.org>, Len Brown <lenb@kernel.org>, Andy Shevchenko
- <andriy.shevchenko@linux.intel.com>, Daniel Scally <djrscally@gmail.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>, Sakari Ailus
- <sakari.ailus@linux.intel.com>, Wolfram Sang <wsa@kernel.org>, Geert
- Uytterhoeven <geert+renesas@glider.be>, Davidlohr Bueso
- <dave@stgolabs.net>, Dave Jiang <dave.jiang@intel.com>, Alison Schofield
- <alison.schofield@intel.com>, Vishal Verma <vishal.l.verma@intel.com>, Ira
- Weiny <ira.weiny@intel.com>, Dan Williams <dan.j.williams@intel.com>,
- linux-kernel@vger.kernel.org, imx@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
- linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
- linux-pci@vger.kernel.org, linux-spi@vger.kernel.org,
- linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org, Allan Nielsen
- <allan.nielsen@microchip.com>, Horatiu Vultur
- <horatiu.vultur@microchip.com>, Steen Hegelund
- <steen.hegelund@microchip.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v3 02/28] driver core: Rename get_dev_from_fwnode()
- wrapper to get_device_from_fwnode()
-Message-ID: <20250703101058.225e296f@bootlin.com>
-In-Reply-To: <CAJZ5v0iaqT5VY3=UCkTGQKjE7thEPmsSqsrEw9ntWEpZ6bNR3A@mail.gmail.com>
-References: <20250613134817.681832-1-herve.codina@bootlin.com>
-	<20250613134817.681832-3-herve.codina@bootlin.com>
-	<CAJZ5v0iaqT5VY3=UCkTGQKjE7thEPmsSqsrEw9ntWEpZ6bNR3A@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+	s=arc-20240116; t=1751531500; c=relaxed/simple;
+	bh=/7pQrBULX82eRAQiAoBVqcEsotF1YuJcYS3E+/6Oc5s=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=mIDtL1v7mayQCB8AWrfIW+WPGDbCh9BMxOcy4OYv17aN8uwgq5868mdnuBDrpcOGc3tF1QSI6d3QdoPhUJ5nAHybLuzXdOs/0CvXaeliFZwfOaJenVf3l53MWoNkcY7VGf2W77oX58yPMIcrt6iFDN04iWBZ1OoYZdBx+0zgiG0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1uXFLq-0004el-KC; Thu, 03 Jul 2025 10:31:26 +0200
+Received: from lupine.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::4e] helo=lupine)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1uXFLp-006ZQf-2V;
+	Thu, 03 Jul 2025 10:31:25 +0200
+Received: from pza by lupine with local (Exim 4.96)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1uXFLp-0002j4-2E;
+	Thu, 03 Jul 2025 10:31:25 +0200
+Message-ID: <14af238d2106544147dfb1c7824787d6d54f1885.camel@pengutronix.de>
+Subject: Re: [PATCH v5 1/3] i2c: tegra: Fix reset error handling with ACPI
+From: Philipp Zabel <p.zabel@pengutronix.de>
+To: Akhil R <akhilrajeev@nvidia.com>, andriy.shevchenko@linux.intel.com
+Cc: andi.shyti@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org, 
+ digetx@gmail.com, jonathanh@nvidia.com, krzk+dt@kernel.org,
+ ldewangan@nvidia.com,  linux-i2c@vger.kernel.org,
+ linux-kernel@vger.kernel.org,  linux-tegra@vger.kernel.org,
+ robh@kernel.org, thierry.reding@gmail.com
+Date: Thu, 03 Jul 2025 10:31:25 +0200
+In-Reply-To: <20250702171036.1892-1-akhilrajeev@nvidia.com>
+References: <aGVMr87HLrYGEw98@smile.fi.intel.com>
+	 <20250702171036.1892-1-akhilrajeev@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4-2 
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduleejiecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfohfogggtgfesthekredtredtjeenucfhrhhomhepjfgvrhhvvgcuvehoughinhgruceohhgvrhhvvgdrtghoughinhgrsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpedvhfeljedtfedtjeevffegtddutdeghfettdduhfeuhfdttdffieeuiefgvdfhvdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppedvrgdtudemvgdtrgemvdekheemsgelkedtmegvgedttgemiegtgeefmegshegssgemrgegvdeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegvtdgrmedvkeehmegsleektdemvgegtdgtmeeitgegfeemsgehsggsmegrgedvkedphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomhephhgvrhhvvgdrtghoughinhgrsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeegkedprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghnughrvgifsehluhhnnhdrtghhpdhrtghpthhtohepghhrvghgkhhhsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpt
- hhtohepuggrkhhrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehshhgrfihnghhuoheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshdrhhgruhgvrhesphgvnhhguhhtrhhonhhigidruggvpdhrtghpthhtohepkhgvrhhnvghlsehpvghnghhuthhrohhnihigrdguvgdprhgtphhtthhopehfvghsthgvvhgrmhesghhmrghilhdrtghomh
-X-GND-Sasl: herve.codina@bootlin.com
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 
-On Wed, 2 Jul 2025 20:17:15 +0200
-"Rafael J. Wysocki" <rafael@kernel.org> wrote:
+Hi Akhil,
 
-> On Fri, Jun 13, 2025 at 3:48 PM Herve Codina <herve.codina@bootlin.com> wrote:
-> >
-> > get_dev_from_fwnode() calls get_device() and so it acquires a reference
-> > on the device returned.
-> >
-> > In order to be more obvious that this wrapper is a get_device() variant,
-> > rename it to get_device_from_fwnode().
-> >
-> > Suggested-by: Mark Brown <broonie@kernel.org>
-> > Link: https://lore.kernel.org/lkml/CAGETcx97QjnjVR8Z5g0ndLHpK96hLd4aYSV=iEkKPNbNOccYmA@mail.gmail.com/
-> > Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-> > Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > Reviewed-by: Saravana Kannan <saravanak@google.com>
-> > Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-> > ---
-> >  drivers/base/core.c | 14 +++++++-------
-> >  1 file changed, 7 insertions(+), 7 deletions(-)
-> >
+On Mi, 2025-07-02 at 22:40 +0530, Akhil R wrote:
+> On Wed, 2 Jul 2025 18:13:51 +0300, Andy Shevchenko wrote:
+> > > > +static int tegra_i2c_reset(struct tegra_i2c_dev *i2c_dev)
+> > > > +{
+> > > > +	acpi_handle handle =3D ACPI_HANDLE(i2c_dev->dev);
+> > > > +	int err;
+> > > > +
+> > > > +	if (handle) {
+> > > > +		err =3D acpi_evaluate_object(handle, "_RST", NULL, NULL);
+> > > > +		if (ACPI_FAILURE(err))
+> > > > +			return -EIO;
+> > > > +
+> > > > +		return 0;
+> > > > +	}
+> > > > +
+> > > > +	return reset_control_reset(i2c_dev->rst);
+> > >=20
+> > > It's better to be written other way around:
+> > >=20
+> > > 	acpi_handle handle;
+> > > 	int err;
+> > >=20
+> > > 	handle =3D ACPI_HANDLE(i2c_dev->dev);
+> > > 	if (!handle)
+> > > 		return reset_control_reset(i2c_dev->rst);
+> > >=20
+> > > 	err =3D acpi_evaluate_object(handle, "_RST", NULL, NULL);
+> > > 	if (ACPI_FAILURE(err))
+> > > 		return -EIO;
+> > >=20
+> > > 	return 0;
+> > >=20
+> > > > +}
+> > >=20
+> > > Other than that, LGTM,
+> > >=20
+> > > Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> >=20
+> > Actually I have to withdraw the tag. The above function is repetition o=
+f
+> > the device_reset() / device_reset_optional(). Please use that instead.
+>=20
+> I did check that. But device_reset_optional() returns '0' if reset is
+> not available or when the reset succeeds. Then there is no option to
+> conditionally trigger the internal reset when the reset is not available.
+>=20
+> Other option was to do the internal reset unconditionally. But then the
+> devices that do not have an internal reset will have to skip the reset
+> silently if the reset property is absent in the device tree (or _RST
+> method is absent in the ACPI table).
+>=20
+> Though device_reset() returns error when reset is absent, it looks to
+> be not so straight-forward to detect from the return value that if there
+> is an actual error during reset or if the reset is absent.
 
-...
+device_reset() should return -ENOENT if the reset is absent (as opposed
+to present but somehow broken). If there is any code path where this
+isn't the case, we should probably fix this.
 
-> 
-> There are patches in flight that add new users of get_dev_from_fwnode(), see
-> 
-> https://lore.kernel.org/linux-pm/20250701114733.636510-1-ulf.hansson@linaro.org/T/#mc45a73769821cc520c35d8eb92d4bac75412bb7c
+In the ACPI case, -ENOENT is returned by __device_reset() if the "_RST"
+method is not found.
 
-Thanks for pointing out.
+In the OF case, -ENOENT is returned by __of_reset_control_get() if the
+requested id can't be found in a "reset-names" property, or if
+of_parse_phandle_with_args() returns -ENOENT for the "resets" (or
+"reset-gpios") property - that is, when this property doesn't exist or
+the entry indicated by the reset id is empty.
 
-I will monitor the series you pointed out.
 
-Once it is applied, I will update my modifications but I will probably send other
-iterations in the meantime in order to move forward on the other topic without
-waiting for the Ulf's series.
-
-In my other iterations I will point the dependency in patches impacted i.e
-patches 2 and 3.
-
-Best regards,
-Hervé
+regards
+Philipp
 
