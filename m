@@ -1,163 +1,190 @@
-Return-Path: <linux-i2c+bounces-11805-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11806-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8A21AF7211
-	for <lists+linux-i2c@lfdr.de>; Thu,  3 Jul 2025 13:26:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2961AF721F
+	for <lists+linux-i2c@lfdr.de>; Thu,  3 Jul 2025 13:28:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E61BB1890B8C
-	for <lists+linux-i2c@lfdr.de>; Thu,  3 Jul 2025 11:26:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 513204E0CB9
+	for <lists+linux-i2c@lfdr.de>; Thu,  3 Jul 2025 11:27:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A88F82E2F09;
-	Thu,  3 Jul 2025 11:26:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 391F52E2F0C;
+	Thu,  3 Jul 2025 11:27:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=beagleboard-org.20230601.gappssmtp.com header.i=@beagleboard-org.20230601.gappssmtp.com header.b="0CVa7UyZ"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="l5K7sn4a"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 027832E03FF
-	for <linux-i2c@vger.kernel.org>; Thu,  3 Jul 2025 11:26:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C7A52E2EFD
+	for <linux-i2c@vger.kernel.org>; Thu,  3 Jul 2025 11:27:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751541988; cv=none; b=kuqILiWMW60HK/ZJ0r4B7q2/fLeUOtTr5EUy33rpHHMObAGMl69RKSX3MrlgwJUw9KC/I6IbKYmx5PqvrMQSe9+Fw/MEjiHgQyf/Ehb/EvAW8W0gIJV8/cJSBSCiLhrQ4h21q8OmZ3L+9T9gFMu3LZ5/2KeQCazX+Ek5dFd48WU=
+	t=1751542069; cv=none; b=fccMPqtVEm7Wklw3pjuzonT3Nb2aiZRdrIrP5zm0KXT887aTItmKZASpsf+e6S8+a1CqLIJI/ze+Hq61+gGjOJaICQqurxYtICBidymvC77RYEEVpkQh/FQZV0Y44ALgUdG4CyaCC62VBmw9N1nKZt2ohbCogDdewXEOWv1uaug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751541988; c=relaxed/simple;
-	bh=/2Un6UMtA1yBlRnnUxa6QqBYiOfpXfnouZCpUeeYD2I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TL/q2oA/eXc7pmBqjsmdrqUqCsRVI1ZDXO8Jos/UgjPGWNDzZ/jOfOz7MVOhSdjHR0pTd2+cWJjQVyTZEf7I+cH8yG16alc5o0tmN+DwOQqtqWC37GXC5d6rVcvITQn/fcvtUiYErHKwww0Iz3kSgmHUJm8N7GueDvq4t45nSjg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=beagleboard.org; spf=fail smtp.mailfrom=beagleboard.org; dkim=pass (2048-bit key) header.d=beagleboard-org.20230601.gappssmtp.com header.i=@beagleboard-org.20230601.gappssmtp.com header.b=0CVa7UyZ; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=beagleboard.org
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=beagleboard.org
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-234d366e5f2so80021955ad.1
-        for <linux-i2c@vger.kernel.org>; Thu, 03 Jul 2025 04:26:26 -0700 (PDT)
+	s=arc-20240116; t=1751542069; c=relaxed/simple;
+	bh=UlZ75WOORNs4rZE+VlImTZa7mmm9FlJ031wXRJuG6f8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QFBL1e6JPpp1OSkf1PWSUuWy/vrziYuemZKkq0cMRrHRcZO6DISs0BgyWIDYDBQ2Csk1FIXAhS7Dn4f3Wf6EhdEni/KY+p+CyGDZj84EQkP1HOfuKaxR/KHdD+ruBWEdknjbVc7mKS4Ycr51r02YqMBrSENfADXDOcDpmTHEaSw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=l5K7sn4a; arc=none smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-ae36dc91dc7so926584666b.2
+        for <linux-i2c@vger.kernel.org>; Thu, 03 Jul 2025 04:27:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=beagleboard-org.20230601.gappssmtp.com; s=20230601; t=1751541986; x=1752146786; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=99R4ldK+hAGTpWZZR4+eV3lD7rynPJ3jnvDwzipGUic=;
-        b=0CVa7UyZTM5WVZ0UtC6ZJq9ZSN6EzowwDwzwLaKSuCMkkjVPQSQeTaeSIz0RakkLpZ
-         U3DH9nn7TzEYb1Y24XSipNo5TZ05KectjxjxW9yCIfprPEGilZQb4HyptDWUl8QK9cXz
-         xoG+GaHSW2S7fflIFu0SSFh7V77Kgw7xAbV2FzkvfEioW9PZGLVPdxhgHSL6CSG1MUOC
-         RTMFzsChzCCSJwkrtpV+3yKFaDmXeI6YRj5J8xgcp+Q0Lbuddm+k2ZTJQQmSdmdQqgcn
-         5fCo3uBcRcpaqmK+MDEVNWYTo7haBO/zHv2ZoEsrDUzKlf8eg0e1tSbC5psvA9zMVECb
-         u6nw==
+        d=tuxon.dev; s=google; t=1751542064; x=1752146864; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=a6PMMz69qo04D/YT8nX2dE04S7ELr0QnXwz/uN4j+eI=;
+        b=l5K7sn4an49hXSu3he2pRlapXvTrBiKvj+FIVPQKXU0QKgqq1ZePud52ttkBScRteZ
+         KXf07vm94x6m/BCztn7+b1NfXByAPNtaOF4WgW5PRybd5ZcHmex4Qgt9l4IwyUsdlDQp
+         fwrS0yw5nXaNTPLpAayTRgR3ARnJxCT3ug7Jtj3/o1ygmMbAMt1cub+cJjOjfZtVFKLA
+         AeQxIDhtiB6JitMDJmtj8b24mgQ6rHhLiyCKZtE4/9ZRKv4yIc9UK9zd2d3MgYY4WYIH
+         RANXc/agfr78NopjZLE6iJZab7To9BS5wWfsMRK/k66/NLaCdnY4/rrqvUrIfU8JHFHV
+         odJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751541986; x=1752146786;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=99R4ldK+hAGTpWZZR4+eV3lD7rynPJ3jnvDwzipGUic=;
-        b=PRxcopEAout8EULCaU+ca8a/jJq6Gd2U6i+q1VhHmpfdKrUOx9uprS7FaakjTU9VlA
-         ggKM2TFv8F60BLZ6VVJxPsI9Ldb4pqYk/oLD68XtaOJ+HAOFS0KmfeFiplqJNI3paIua
-         cJU/qCGk+AJyQo/QG12iEZ0j0qWHufFHHMs5Sed1NVQCgII2TpwI2/nM+EUormAEqJlg
-         BsB8551FEXLxDYEG9n7YdW5StMzKjBH41z0zI0mbWHzIGYk6lFNCFlsCYHEhc/8fdZri
-         Ace5XVQh/c7s0eTOyhoI0mSE9qdclLsg7rxWITw4dt7Lm13DcobSa1IuP9OFiq1cuIyl
-         5+Rw==
-X-Forwarded-Encrypted: i=1; AJvYcCWk8eflBOB0CsTVKIMqrGn6nZtnGvWXwVq4FSnXOy5Tcg0aD1aJJuIvvSCOyzEdV5D7WfEdAQLJy5c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwEsPV9HiikA7HjQrcXLI2MFHr9+7bBUwMok8nRpp/QguKsLPNS
-	+r82ILoCJmSJotxiKRBiEIcKppmQ75qinELT+HiSpxcRPxS/KdfO+UldOPLNglyGfg==
-X-Gm-Gg: ASbGncu1SDyLDxyNT1s3SbAtj/DiA2+89A5uN7C3moB0NiG9Fh3Dfl4E3BG38aUCPzj
-	pzlyyrYKy3NxKVs5xjFCV3ZQlmXqNo62MIu4Imnan65Z7wivU8F/R9QZkMH1TA20R/waV6fDgbq
-	YYDguO1xJ0IGFh9nwWI9P1aI3ENSKKJo3KIZss0UXt4T/mpjwUrq8BWEoPPXj9FmLha23+RG9fP
-	YvX7wQarOLWbX4W2ogqdcgm8ILJO53fyp/N17dcCipDiTjyBQbEOCZSlz1x9yNfO2DjZDTy6Uni
-	2lomgTqvGUusV1MVfPKWbAF07wbrwAWX0M7CDKnWqpSOynHxv6Z5bX+oxuP0Aw9pJq77whM1+9e
-	A2q53soMKeUHwefXvqhV8W/JtppVDQRWQYc9hLwU=
-X-Google-Smtp-Source: AGHT+IGCAeqObZBcWQGkNr3+fCaNXerR2C6EX3Fc/6zbX8CgA4LYxU6srF98+K4BVoRiNrujQXM/7Q==
-X-Received: by 2002:a17:902:e549:b0:235:ea0d:ae10 with SMTP id d9443c01a7336-23c6e500777mr131002785ad.12.1751541986171;
-        Thu, 03 Jul 2025 04:26:26 -0700 (PDT)
-Received: from ?IPV6:2401:4900:8898:f649:249d:54ef:66f6:5638? ([2401:4900:8898:f649:249d:54ef:66f6:5638])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23acb39c0a0sm151392315ad.122.2025.07.03.04.26.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Jul 2025 04:26:25 -0700 (PDT)
-Message-ID: <8859d983-f4ff-498b-bb0b-eb84206ad969@beagleboard.org>
-Date: Thu, 3 Jul 2025 16:56:20 +0530
+        d=1e100.net; s=20230601; t=1751542064; x=1752146864;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=a6PMMz69qo04D/YT8nX2dE04S7ELr0QnXwz/uN4j+eI=;
+        b=FMBql6lfsKKdsZDtCGoiL7MJ7tDjLAloqgZaT2DpxDft0qWSfUMibDH3uR7MvveXnD
+         0zRUfgyDA3jIHhB6luzY90s6+6gzz15qXbxTG/TvxaQ9kAdTQjuIyUQta9qIksWwXndP
+         lz1XV/co75boUIYNEtW3SRmhcyE+J+Nkre50HrEgDaUGwkMFZEMJWUwbjbUCYKgBYV55
+         K0juAkI6HyapYOZRvujXeGjBG9iwnT9n+iAwdVIvgvv89E00iWfqxQONt3dqp4Q4Uodd
+         ivcG/2sgKwbXCG6MPaMqrHZZJHXQa5sS03S2vnuhL+qNLUHIqJ+06I87QxDv/dv2YGHx
+         rtQg==
+X-Forwarded-Encrypted: i=1; AJvYcCVLTL6rj3P19KY90PK2hHDOLVEQr9hmpo0zuXsZFGmiFVKRvxd8ANUvi1W13Go/6L2977YXVwxFo4o=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yws6I0YUDceurcKtQexBjNX9YZEVSQQwdnsGzBVkTYxAjR1uDc9
+	3ouVY87k5BnLAxnX9YLT0FdR1BuprDKOsbD0+Kd4X/rLZVKqHoqf3S+X8ylYYZ0mfjg=
+X-Gm-Gg: ASbGncsQnwoJmGy5WOXuY75ki94wtoxU/UPeiZGoOknDSGTokxk9VL7vYELNBVUhewc
+	E8Oz5ush3ilejbb8Kfa816sJiZIrq+2X27mMo0tntT4qaBsjOTRyE0oLGLXPcoo9bXY85+AZWAU
+	9KgZ7NRKB/pdNMK+ZnYPBYvKih8+/IN/5OsHguSNHySkgezawyw937aPovbVUlVy3Hvw8vYO2t1
+	mjhuT+rGdtQBVA9/F5w5RlxJzbEvAzages4c0nscbLD4reqsIy9O2ZBqHrUu0/ZznAZ5XZnIsZa
+	HrOP1d5YVspHMCOIYmaoBLXi3ae4k5mfjZ++hQ1lNR/SJA6U33lxowFjOe3r/G2CplfqMDNesFL
+	5rpigNtEjMlB+5vo=
+X-Google-Smtp-Source: AGHT+IGodommfjTvSu9SmK2+f27lr5klD7Mc1oDRjQm+BoxfNtWb86krYFjqI4yPBXvjQSq606lSUA==
+X-Received: by 2002:a17:907:2d94:b0:ae3:6744:3661 with SMTP id a640c23a62f3a-ae3c2da6359mr600970466b.44.1751542064239;
+        Thu, 03 Jul 2025 04:27:44 -0700 (PDT)
+Received: from claudiu-X670E-Pro-RS.. ([82.78.167.83])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae35365a75fsm1247016966b.67.2025.07.03.04.27.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Jul 2025 04:27:43 -0700 (PDT)
+From: Claudiu <claudiu.beznea@tuxon.dev>
+X-Google-Original-From: Claudiu <claudiu.beznea.uj@bp.renesas.com>
+To: linux@armlinux.org.uk,
+	gregkh@linuxfoundation.org,
+	david.m.ertman@intel.com,
+	ira.weiny@intel.com,
+	leon@kernel.org,
+	rafael@kernel.org,
+	dakr@kernel.org,
+	len.brown@intel.com,
+	pavel@kernel.org,
+	andersson@kernel.org,
+	mturquette@baylibre.com,
+	sboyd@kernel.org,
+	maarten.lankhorst@linux.intel.com,
+	mripard@kernel.org,
+	tzimmermann@suse.de,
+	airlied@gmail.com,
+	simona@ffwll.ch,
+	wsa+renesas@sang-engineering.com,
+	ulf.hansson@linaro.org,
+	mathieu.poirier@linaro.org,
+	vkoul@kernel.org,
+	yung-chuan.liao@linux.intel.com,
+	pierre-louis.bossart@linux.dev,
+	broonie@kernel.org,
+	robh@kernel.org,
+	jirislaby@kernel.org,
+	saravanak@google.com,
+	jic23@kernel.org,
+	dmitry.torokhov@gmail.com
+Cc: claudiu.beznea@tuxon.dev,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-mmc@vger.kernel.org,
+	linux-remoteproc@vger.kernel.org,
+	linux-sound@vger.kernel.org,
+	linux-spi@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	bhelgaas@google.com,
+	geert@linux-m68k.org,
+	linux-iio@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	fabrizio.castro.jz@renesas.com,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Subject: [PATCH v5 0/3] PM: domains: Detach on device_unbind_cleanup()
+Date: Thu,  3 Jul 2025 14:27:05 +0300
+Message-ID: <20250703112708.1621607-1-claudiu.beznea.uj@bp.renesas.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 0/3] i2c: Introduce i2c bus extensions
-To: Herve Codina <herve.codina@bootlin.com>
-Cc: conor+dt@kernel.org, devicetree@vger.kernel.org, krzk+dt@kernel.org,
- linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
- luca.ceresoli@bootlin.com, robh@kernel.org, thomas.petazzoni@bootlin.com,
- wsa+renesas@sang-engineering.com
-References: <20250205173918.600037-1-herve.codina@bootlin.com>
- <525877c8-6c64-45b3-b4aa-a52768e59b86@beagleboard.org>
- <20250613093016.43230e3b@bootlin.com>
-Content-Language: en-US
-From: Ayush Singh <ayush@beagleboard.org>
-In-Reply-To: <20250613093016.43230e3b@bootlin.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 6/13/25 13:00, Herve Codina wrote:
+From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
-> Hi Ayush,
->
-> On Thu, 12 Jun 2025 13:22:45 +0530
-> Ayush Singh <ayush@beagleboard.org> wrote:
->
->> I have tested this patch series for use with pocketbeagle 2 connector
->> driver [0]. To get a better idea how it looks in real devicetree, see
->> the base tree [1] and the overlay [2]. Since it also used gpio and pwm
->> nexus nodes, along with providing pinmux for pins, it can provide a
->> better picture of how the different pieces (export-symbols, nexus nodes,
->> etc) look when combined.
-> Nice. Happy to see that I am no more alone with a system using these
-> features.
->
->>
->> I also have a question for Herve. Do you already have any working
->> patches for similar extension for SPI and UART in some private tree?
-> No, I didn't do anything related to SPI nor UART.
->
-> On my system, no SPI nor UART are wired to my connector and so, I haven't
-> got any needs to implement extension busses for SPI an UART (serial dev bus)
-> nor any support for nexus nodes for other kind of components.
->
-> Best regards,
-> Hervé
+Hi,
 
+Series drops the dev_pm_domain_detach() from platform bus remove and
+adds it in device_unbind_cleanup() to avoid runtime resumming the device
+after it was detached from its PM domain.
 
-I have added SPI bus extension to my kernel tree [0]. Now, the techlab 
-cape (other than mikrobus port) works using export-symbols + i2c and spi 
-bus extension + eeprom auto detection.
+Please provide your feedback.
+
+Thank you,
+Claudiu
+
+Changes in v5:
+- added PD_FLAG_ATTACH_POWER_ON, PD_FLAG_DETACH_POWER_OFF;
+  due to this a new patch was introduced
+  "PM: domains: Add flags to specify power on attach/detach"
+
+Changes in v4:
+- added a flag in dev_pm_info that is saved in dev_pm_domain_attach()
+  and used in device_unbind_cleanup()
+
+Changes in v3:
+- add devm_pm_domain_attach()
+
+Changes in v2:
+- dropped the devres group open/close approach and use
+  devm_pm_domain_attach()
+- adjusted patch description to reflect the new approach
 
 
-Here is a list of everything currently working on the tree:
+Claudiu Beznea (3):
+  PM: domains: Add flags to specify power on attach/detach
+  PM: domains: Detach on device_unbind_cleanup()
+  driver core: platform: Drop dev_pm_domain_detach() call
 
-1. EEPROM based auto-detection.
+ drivers/amba/bus.c                       |  4 ++--
+ drivers/base/auxiliary.c                 |  2 +-
+ drivers/base/dd.c                        |  2 ++
+ drivers/base/platform.c                  |  9 +++------
+ drivers/base/power/common.c              |  9 ++++++---
+ drivers/clk/qcom/apcs-sdx55.c            |  2 +-
+ drivers/gpu/drm/display/drm_dp_aux_bus.c |  2 +-
+ drivers/i2c/i2c-core-base.c              |  2 +-
+ drivers/mmc/core/sdio_bus.c              |  2 +-
+ drivers/rpmsg/rpmsg_core.c               |  2 +-
+ drivers/soundwire/bus_type.c             |  2 +-
+ drivers/spi/spi.c                        |  2 +-
+ drivers/tty/serdev/core.c                |  2 +-
+ include/linux/pm.h                       |  1 +
+ include/linux/pm_domain.h                | 10 ++++++++--
+ 15 files changed, 31 insertions(+), 22 deletions(-)
 
-2. SPI
-
-3. I2C
-
-4. PWM
-
-5. GPIO
-
-
-Missing:
-
-1. UART (Don't have a cape that has something using the UART yet. Maybe 
-need to experiment with MikroBUS).
-
-
-Not quite sure what else to do to move things forward.
-
-
-Best Regards,
-
-Ayush Singh
-
-
-[0]: https://github.com/Ayush1325/linux/tree/beagle-cape-v1
+-- 
+2.43.0
 
 
