@@ -1,47 +1,47 @@
-Return-Path: <linux-i2c+bounces-11841-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11842-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9261CAF9B61
-	for <lists+linux-i2c@lfdr.de>; Fri,  4 Jul 2025 21:54:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 100F8AF9B64
+	for <lists+linux-i2c@lfdr.de>; Fri,  4 Jul 2025 21:59:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F0D135A686D
-	for <lists+linux-i2c@lfdr.de>; Fri,  4 Jul 2025 19:54:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6D73A16543B
+	for <lists+linux-i2c@lfdr.de>; Fri,  4 Jul 2025 19:59:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25219207E03;
-	Fri,  4 Jul 2025 19:54:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 466D921638A;
+	Fri,  4 Jul 2025 19:59:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NNV3r66o"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KvbmNusF"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D107F20ED;
-	Fri,  4 Jul 2025 19:54:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F04F9126C02;
+	Fri,  4 Jul 2025 19:59:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751658883; cv=none; b=OJFNAkfEgIO+/CvAQhw53xnRA5EZD092UU4w7WnkBre1lsn+O7H0PhdF9g2anmybAAkJkO4NvLmmzRpWctO5rbLshrWV5tfzBNCg3j/zTMMx6mJAQwGsMdvSqbk+Aefsf80hKoZyY0m4Z0MeF5/wxsHfMwYtVBsXd0Q+JVX3DDE=
+	t=1751659146; cv=none; b=pl31h0kUFBFNqKwkDTVcSvpZjhLyeQEW1H0RlFK3c45+q8JIgpLIqnj6rqqRAgVkHCRr9mpomRfR8hTjYx2Nfe7lVBOofiaY1txAalsfHv5BrCsq5XBgtkCcEp3WAbzLAXotZHubecFUE/jldiBf7jAp3GINUBgMA8lLicFJoEg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751658883; c=relaxed/simple;
-	bh=s7U7qyBLUL5BDR4GTAY51LdYayf6TDmHVnDdpE1qlJU=;
+	s=arc-20240116; t=1751659146; c=relaxed/simple;
+	bh=dKbJAI3BHAMAbf0xVL9PLg4+u56Z1g0q7w16b+ioMtM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QgplrHTwWciaU4phMVcjoQmwbgblVJouIbrQ8xsWSfbtQDW21jWPTu2FtF2Iw0EPINwGqH9m4y85Z1+trJZHx6WLjv+/te2qqH9fMHBvVygKG9WhyhpHXAPbeiolpvzrHzz8pk/bBTt+D3rBEZswGvDJ5xYqHpGxPw6B32dwpCo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NNV3r66o; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D2ACC4CEE3;
-	Fri,  4 Jul 2025 19:54:38 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=LRd9PL0f4Qiu+TsET/F4CPRsMoOZY4s+/lMAa3gkrdatJeQaCNDstKc36JXdVapvWPbOQ6L6aKun51nl8/4Phrpb2klm4kfojO5xeJLlOVj7oIBh/dhVUxYDx+c/8/13Q+w9ETJIV0LQk+g4WxklScioLtHXIFjZEuUHxA8RulA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KvbmNusF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E97DC4CEEF;
+	Fri,  4 Jul 2025 19:59:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751658883;
-	bh=s7U7qyBLUL5BDR4GTAY51LdYayf6TDmHVnDdpE1qlJU=;
+	s=k20201202; t=1751659145;
+	bh=dKbJAI3BHAMAbf0xVL9PLg4+u56Z1g0q7w16b+ioMtM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NNV3r66oF3swXeOHxfSifBKL6RwPgAVBfzFoj9HFE67v5sg1Z8a1Ac0SXshLhLV1f
-	 3B6qORGtSxNXwc01JBc6MOrwiC9kDdArXEw2uC0xhW8YqVdkOz81QOBZ2XJnZN+PAv
-	 KE6OvEtrmUYzsgFpvLaLgVRezDOA7NzuQ0fOFUnzqHS8U3XrUlKT/khuR3RgEq56nK
-	 CCNkVCf8uOVJF9zfT4C8/DTLsHkhEjZ7cij3mubuvv96LE/cgMbUkejb1E0qI+MwMa
-	 6vWkWSH+gwdScBaM40kZDU7RF0LrTo3nfu3AcZjJxofMNPjXLZhNIXtXv69ohexNhv
-	 9pwz4L04ekoPw==
-Date: Fri, 4 Jul 2025 21:54:36 +0200
+	b=KvbmNusFPr0qIlRvM0gxygYR+hT7oSBSmMrtwr5/3A8vGj8aSEuPFyqEuDCaoyBmu
+	 Pz/SOthle/bJ4zFc/fdGs5jsboBvAwxuTIZeh4uVeTCAMLslqtLEUun2LRdat3nNKl
+	 fSZqR4tgwk4W9wreq2BOozkvoEwI2LzMnrXgvQKkxO9Xj3ciJ+nf3TQMioZB7T/xuq
+	 2TYk34skpd1coA42nr8Lk6eyMOeRphhz2PPCZ66dBktE78jsIxnNGPnPvmDTA5Qpm7
+	 xDmBjPQZu+vZGm5BZs1oaFeSqXY+OSErdFhWJFlFEXt+SxnUXY1Z7Daofks80jpUU5
+	 Vn+MyPUw3TElg==
+Date: Fri, 4 Jul 2025 21:58:59 +0200
 From: Danilo Krummrich <dakr@kernel.org>
 To: Igor Korotin <igor.korotin.linux@gmail.com>
 Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
@@ -59,11 +59,11 @@ Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
 	Xiangfei Ding <dingxiangfei2009@gmail.com>,
 	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
 	linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v2 2/4] rust: i2c: add manual I2C device creation
- abstractions
-Message-ID: <aGgxfNh-sgkJls_h@cassiopeiae>
+Subject: Re: [PATCH v2 4/4] samples: rust: add Rust manual I2C device
+ creation sample
+Message-ID: <aGgyg5SEHU7-G70W@cassiopeiae>
 References: <20250704153332.1193214-1-igor.korotin.linux@gmail.com>
- <20250704153912.1197034-1-igor.korotin.linux@gmail.com>
+ <20250704154345.1198721-1-igor.korotin.linux@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -72,39 +72,33 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250704153912.1197034-1-igor.korotin.linux@gmail.com>
+In-Reply-To: <20250704154345.1198721-1-igor.korotin.linux@gmail.com>
 
-On Fri, Jul 04, 2025 at 04:39:12PM +0100, Igor Korotin wrote:
-> -pub struct Device<Ctx: device::DeviceContext = device::Normal>(
-> +pub struct Device<Ctx: device::DeviceContext = device::Normal, State: DeviceState = state::Borrowed>(
->      Opaque<bindings::i2c_client>,
->      PhantomData<Ctx>,
-> +    PhantomData<State>,
->  );
+On Fri, Jul 04, 2025 at 04:43:41PM +0100, Igor Korotin wrote:
+> +struct SampleDriver {
+> +    _owned: i2c::DeviceOwned<Core>,
+> +}
+> +
+> +const BOARD_INFO: i2c::I2cBoardInfo = i2c::I2cBoardInfo::new(c_str!("rust_driver_i2c"), 0x30);
+> +
+> +impl kernel::Module for SampleDriver {
+> +    fn init(_module: &'static ThisModule) -> Result<Self> {
+> +        pr_debug!("Probe Rust I2C device sample.\n");
+> +
+> +        let adapter = i2c::I2cAdapterRef::get(0).ok_or(EINVAL)?;
+> +
+> +        let device = i2c::DeviceOwned::<Core>::new(&adapter, &BOARD_INFO).ok_or(EINVAL)?;
 
-I see what you're doing here, but I think you're thinking this way too
-complicated.
+This can't be device::Core, since the scope of device is not limited to I2C bus
+callback. Also, device::Core dereferences to device::Bound, and device is also
+not limited to scope where it can be guaranteed that the device is actually
+bound.
 
-I recommend not to reuse the Device type to register a new I2C client device,
-it's adding too much complexity without any real value.
+It could be device::Normal, but as mentioned in the other thread, you're
+thinking this too complicated. You really want t simple i2c::Registration type,
+just like auxiliary::Registration. Please take a look at that instead.
 
-You also don't want the DeviceContext types for a device registration, since the
-registration will never have any other DeviceContext than device::Normal (see
-also my comment on the sample module).
-
-DeviceContext types are only useful for &Device (i.e. references) given out for
-a specific scope, such as probe(), remove(), etc.
-
-The only thing you really want to do is to register a new I2C client device, get
-a i2c::Registration instance and call i2c_unregister_device() when the
-i2c::Registration is dropped.
-
-This is exactly the same use-case as we have in the auxiliary bus. I highly
-recommend looking at what auxiliary::Registration does [1].
-
-Also note that if you want a reference to the device in the i2c::Registration,
-you can also add a i2c::Registration::device() method that returns an
-&i2c::Device, which through into() you can obtain an ARef<i2c::Device> from.
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/rust/kernel/auxiliary.rs?h=v6.16-rc4#n299
+> +        Ok(Self { _owned: device })
+> +    }
+> +}
 
