@@ -1,115 +1,118 @@
-Return-Path: <linux-i2c+bounces-11847-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11848-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D825AF9EF6
-	for <lists+linux-i2c@lfdr.de>; Sat,  5 Jul 2025 10:00:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53B6EAF9EF8
+	for <lists+linux-i2c@lfdr.de>; Sat,  5 Jul 2025 10:01:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A7659563C65
-	for <lists+linux-i2c@lfdr.de>; Sat,  5 Jul 2025 08:00:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B0F0E4A0B8E
+	for <lists+linux-i2c@lfdr.de>; Sat,  5 Jul 2025 08:01:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCF08283FD6;
-	Sat,  5 Jul 2025 07:59:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 906AD1F561D;
+	Sat,  5 Jul 2025 08:01:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="OkbVjjqG"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="svByA4ek"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.smtpout.orange.fr (smtp-80.smtpout.orange.fr [80.12.242.80])
+Received: from smtp.smtpout.orange.fr (smtp-73.smtpout.orange.fr [80.12.242.73])
 	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17DD328B4E0
-	for <linux-i2c@vger.kernel.org>; Sat,  5 Jul 2025 07:59:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.80
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C453523AD;
+	Sat,  5 Jul 2025 08:00:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751702361; cv=none; b=oeIhGHNqEd/MwKTmXi2F2YW6vsZGL8t+O0U/7wj5/PeoWFjSiRXZ3AWEfbfW5TWUxhuCIcD6erG7meVyx78jCN+MtHSUuzC8kEgDG8wrmw8pz0FfxovtlQYXs0uqddsMIry9FpGS5wtWMCwBXIxYWjKGyjN5h+bjU88FFmVsAw8=
+	t=1751702460; cv=none; b=EtIClJOfPn+wlLOKoLT2LtRkD/uAqf7E7CqH2RX1Glt0D0UvxIdsgNnHGrJ3ykyX369e32jxIqkXN+rtSiRmB16+kPTdOmmxlVtJi3AbU+77XtWVi0Ukp2gdryLZePPI9Kj3gFGy1yJ3mycFKDN0wYoSQkE8yny/VLSmb4bpirI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751702361; c=relaxed/simple;
-	bh=RubWeoGD7YmfAjBkG9mnREmRf9RsDJcz+ZcKpddWwKE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MxPzUWIFgx5ZH/11IBB8ywxyXvToeJ63oZdfuMK1HEIKKEAtSTBVQvpEIFced3uWIJCxzrT1nYDigY3c32cP0srsWpVg1r8I/7HFQT7fXfynQZwJui0tdf92w9AiJj8Ym0AJslhQ6Y/BwjkcpJsV+eGEkwvZv/PgOf8TivZIh8I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=OkbVjjqG; arc=none smtp.client-ip=80.12.242.80
+	s=arc-20240116; t=1751702460; c=relaxed/simple;
+	bh=nLXnE4ckhXW7r2TvzPlYVYNvU8slkEEja4KfJAhIrDg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RTrR7/00VtLQrvRzWU/fbGnY9tr2yj0n4C+Jzf7yfT4D6dXJFchFKP4+WQXuxZWxiGk9YjKUb9/ZPUNMBNIOjWq9WBy1Hod6ivRCuxcgikHpkjPQvBEwHk8PsTui+NJrRhf9pwBnM9GSEG4ZtOa2HaBvWyNkO8tzvVDEBPiJQ3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=svByA4ek; arc=none smtp.client-ip=80.12.242.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from fedora.home ([IPv6:2a01:cb10:785:b00:8347:f260:7456:7662])
+Received: from [IPV6:2a01:cb10:785:b00:8347:f260:7456:7662]
+ ([IPv6:2a01:cb10:785:b00:8347:f260:7456:7662])
 	by smtp.orange.fr with ESMTPA
-	id XxmRuIndJIhD3XxmouGNfJ; Sat, 05 Jul 2025 09:58:15 +0200
+	id XxoKupp8kLcVHXxoKunRfA; Sat, 05 Jul 2025 09:59:50 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1751702295;
-	bh=Gh+K9CUjRI08vkOxjKoTjZXj+DSeFO94gLVQU5XQqQU=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=OkbVjjqG19/dFr73A0TxfxrRKajx2MBtWxK7Jw7jCXI0cPVIhNWTwc36UfnTfuJWM
-	 8B1dwmIjQeJYZObqgUqrj+jbtdt4WfMxWwRPOz4lPupKr6+a2x6fedZz1P6/ehEBzP
-	 7KcYCX731nWY/qOmEG7ql4esHvTVTvsKYnqu37VXnXm+dfuP4KfeZO6FSNaMb8NtNn
-	 znkwPjpQZkAXazQMnDVovKoUQSVV68xxKKAoSiRmx1kjE/8lGwZUGkpNv7UBt/qcnB
-	 T7C0CtW4G0fh6yBHZZ4NH2HFpmr5jzpoY3ggqoHuYQPxHonv1Hakko7grDgp6T6Xvr
-	 gwmkfb7l6Lmow==
-X-ME-Helo: fedora.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 05 Jul 2025 09:58:15 +0200
+	s=t20230301; t=1751702390;
+	bh=VQ6hcra26V8uGbk7azLpB97C+ND9ORSpi7q1ylZ6L8o=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=svByA4ekc595xEi710+oiG+RSnomMhfBV2xbtnmT+gHC9lEfMk52wRfoClab7j0mN
+	 9e7xEpeGqybiKxI5Oy5rmNZ1GamSTl5IBjO0pf0+EoVndNgk82AmMOMb62QjWVDWAu
+	 0KLXgNHV8CJjJ1puFmH3/jxjirToYIb0FyBUS2+yXVNGAF/WYH7iTNLdL8Ey1ETurg
+	 tASO8oc05WkXdLqt23tnIxOXmMgea82K4KYwqCXbZl2r99LycqVKLSTyw3D6LMktQa
+	 c/UZeaZLnGtiJvwcANo57YQIX5Pj7M9U6HBZ19FWZAzuqu1TonlVoh6+j2C8BAZmrQ
+	 lr6zg7/rzP6fQ==
+X-ME-Helo: [IPV6:2a01:cb10:785:b00:8347:f260:7456:7662]
+X-ME-Auth: bWFyaW9uLmphaWxsZXRAd2FuYWRvby5mcg==
+X-ME-Date: Sat, 05 Jul 2025 09:59:50 +0200
 X-ME-IP: 2a01:cb10:785:b00:8347:f260:7456:7662
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To: vigneshr@ti.com,
-	aaro.koskinen@iki.fi,
-	andreas@kemnade.info,
-	khilman@baylibre.com,
-	rogerq@kernel.org,
-	tony@atomide.com,
-	jmkrzyszt@gmail.com,
-	andi.shyti@kernel.org,
-	miaoqinglang@huawei.com,
-	grygorii.strashko@ti.com,
-	wsa@kernel.org
-Cc: linux-omap@vger.kernel.org,
-	linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	kernel-janitors@vger.kernel.org,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH 2/2] i2c: omap: Fix an error handling path in omap_i2c_probe()
-Date: Sat,  5 Jul 2025 09:57:38 +0200
-Message-ID: <af8a9b62996bebbaaa7c02986aa2a8325ef11596.1751701715.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.50.0
-In-Reply-To: <cover.1751701715.git.christophe.jaillet@wanadoo.fr>
-References: <cover.1751701715.git.christophe.jaillet@wanadoo.fr>
+Message-ID: <068ce076-f317-4646-99d0-c500feb02450@wanadoo.fr>
+Date: Sat, 5 Jul 2025 09:59:47 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] i2c: omap: Fix an error handling path in omap_i2c_probe()
+To: Andi Shyti <andi.shyti@kernel.org>
+Cc: Aaro Koskinen <aaro.koskinen@iki.fi>,
+ Andreas Kemnade <andreas@kemnade.info>, Kevin Hilman <khilman@baylibre.com>,
+ Roger Quadros <rogerq@kernel.org>, Tony Lindgren <tony@atomide.com>,
+ Janusz Krzysztofik <jmkrzyszt@gmail.com>, Vignesh R <vigneshr@ti.com>,
+ Jayesh Choudhary <j-choudhary@ti.com>, linux-kernel@vger.kernel.org,
+ kernel-janitors@vger.kernel.org, linux-omap@vger.kernel.org,
+ linux-i2c@vger.kernel.org
+References: <998542981b6d2435c057dd8b9fe71743927babab.1749913149.git.christophe.jaillet@wanadoo.fr>
+ <vhhxtsspywvuzkfgbn52hysghd6tdxhk32wv3wcnlqwhskto3f@h2bbhek3s4s3>
+Content-Language: en-US, fr-FR
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <vhhxtsspywvuzkfgbn52hysghd6tdxhk32wv3wcnlqwhskto3f@h2bbhek3s4s3>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-If an error occurs after pm_runtime_use_autosuspend(), a corresponding
-pm_runtime_dont_use_autosuspend() should be called.
+Le 26/06/2025 à 00:10, Andi Shyti a écrit :
+> Hi Christophe,
+> 
+> On Sat, Jun 14, 2025 at 04:59:26PM +0200, Christophe JAILLET wrote:
+>> If an error occurs after calling mux_state_select(), mux_state_deselect()
+>> should be called as already done in the remove function.
+>>
+>> Fixes: b6ef830c60b6 ("i2c: omap: Add support for setting mux")
+>> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> 
+> merged to i2c/i2c-host-fixes. Thanks!
+> 
+>> ---
+>> I'm not 100% sure of the error handling path.
+>>
+>> Should pm_runtime_dont_use_autosuspend() be called after the err_disable_pm
+>> label? (to match the calling order)
+> 
+> Yes, I think you are right here.
+> 
+>> Also, should errors from omap_i2c_init() be handled?
+> 
+> Yes, if it fails it should be handled.
+> 
+> Thanks for the two reports. Do you have time to fix them or
+> can I go ahead and do it?
 
-In case of error in pm_runtime_resume_and_get(), it is not the case because
-the error handling path is wrongly ordered.
-Fix it.
+I've sent a patch for each issue.
 
-Fixes: 780f62974125 ("i2c: omap: fix reference leak when pm_runtime_get_sync fails")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-Compile tested only.
----
- drivers/i2c/busses/i2c-omap.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Feel free to take the lead if not correct. As said in the cover letter, 
+I'm not completely confident with them.
 
-diff --git a/drivers/i2c/busses/i2c-omap.c b/drivers/i2c/busses/i2c-omap.c
-index 485313d872e5..ef1193e0e62d 100644
---- a/drivers/i2c/busses/i2c-omap.c
-+++ b/drivers/i2c/busses/i2c-omap.c
-@@ -1523,9 +1523,9 @@ omap_i2c_probe(struct platform_device *pdev)
- 	if (omap->mux_state)
- 		mux_state_deselect(omap->mux_state);
- err_put_pm:
--	pm_runtime_dont_use_autosuspend(omap->dev);
- 	pm_runtime_put_sync(omap->dev);
- err_disable_pm:
-+	pm_runtime_dont_use_autosuspend(omap->dev);
- 	pm_runtime_disable(&pdev->dev);
- 
- 	return r;
--- 
-2.50.0
+CJ
+
+> 
+> Thanks,
+> Andi
+> 
+> 
 
 
