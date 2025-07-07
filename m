@@ -1,105 +1,137 @@
-Return-Path: <linux-i2c+bounces-11852-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11853-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2FA15AFADE1
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Jul 2025 09:59:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D53CAFAFFA
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Jul 2025 11:41:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 34208188816E
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Jul 2025 07:59:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7ED0A4A178E
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Jul 2025 09:41:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4C9D279DD7;
-	Mon,  7 Jul 2025 07:59:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="R83mDWxd"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2B5E25A322;
+	Mon,  7 Jul 2025 09:40:47 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from fw2.prolan.hu (fw2.prolan.hu [193.68.50.107])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 449EB19B3EC;
-	Mon,  7 Jul 2025 07:59:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.68.50.107
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 636FA291C11;
+	Mon,  7 Jul 2025 09:40:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751875167; cv=none; b=AWhHIqcEuRn6dnd5HGjpcpRoMD/ID9nIZpBMuVBY3XVTZx83dkgUmLuKaDBp55k3NYNC8eKphndA0Kvko434YkfiuXcVb1ehRiZeh8MI0fu6PfwfEp2ObRghtlDoQWwgENmaLlln9hlTd+Z0d0GdNElm2yxMIvYObUbwCgnW0yQ=
+	t=1751881247; cv=none; b=gMORhATFN9o7GjKyk1YI4hyOmwEsVvcZvdnBwzjs0MS+t+/GOkgI9/iwZ0z8B5OyeWaJ+9ma21BNgPGr4VDsQdihLQjrc30kIH3SfkNKxObYCtIGv67MHSXPPUwImv59XVLksEJqYQ9U1QEUUDMBorNkOse18gD5+t7Vn3tzsuk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751875167; c=relaxed/simple;
-	bh=z1aw+j5vhtSH5hM2pv6uTLlW1Ip05M+wekbXCATVdro=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=LjuEEBvj6uxRTDpI2dI/Oh2+mRL7nP+f/dXVAwlIah09WaklzDSjfBd9IPM9GhBL5AKUPpD7pUGQNDCkrR5J55bae8k3kq4Py0pct1J3C76du9/G0M1trF0MDRJO2QbnSVSH2sBqb+cg9KOJGW8jv+BBsVDBJQl58Rwhh59TGiE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=R83mDWxd; arc=none smtp.client-ip=193.68.50.107
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=prolan.hu
-Received: from proxmox-mailgw.intranet.prolan.hu (localhost.localdomain [127.0.0.1])
-	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id 39B99A052C;
-	Mon,  7 Jul 2025 09:59:15 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prolan.hu; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:from:from:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=mail; bh=z8xdzKW5rNMmIpxVldjp
-	zEbs1g+0AxJYKg5PiusbGL8=; b=R83mDWxdCRvxyEooSaTLrR1SaRLQIjEBSws5
-	Ffnj70xK1TqrExqtHqrC6+POUYpkzajjww4psJmL8JG20jw9+RkeG6LD1eq7ayrr
-	agS8/17xD19AHPw4l5KxPM6vZmpmYKuFkJgKk2UfvPmqpdq7Jt0EiS3EboCOqjw4
-	PYuKMtHEdW99qSIdS+z3CKemb5FAS8OPLBfnUuKnmQXEn9f38ti97KEsw7wShp8C
-	tF8k43GqFinf58W93a0xTPMK+DG5xvtMevswupjWyprbYn33HFBNH9ZeNgbKJw/8
-	96AYDgCfb0FFmzvK+eRWSVcgP/vdgfbKeSb1bekzh0m4AsS6xSKVELLAIVrR8ezi
-	nC1aQ+5YWGjllAD20jkJX413u1PUJSwyAoCpt33+M2ZhR6+/ZgaJaY2mfspP63g+
-	osK4c443D7YRGoZLhoOzjVCzIX4VREWHY2veV1YUdfhNEyQY09trj5P1Xj3g1ds+
-	Su01mIM4+n4dEpY5P0DoTVU4NZmh9Yc5QEF6eUUCZvIuttNq4GbUZzXA08jEUMC8
-	Bs7hkNmR03qmkTIGRa6RwRS2JxjAXGRnBOD/Trx7/1zYRG7Od6UN/uK4EeNgtdqF
-	w/hTx7MXFzmgMpN1mXMqSPtfv96o1aSQ2kcpOyMCiwDQEhw7JPPFIqVbIK6J2Osj
-	j1iGiBk=
-Message-ID: <86ccaef5-e55c-4c97-b7c2-6c65d4f6dcda@prolan.hu>
-Date: Mon, 7 Jul 2025 09:59:14 +0200
+	s=arc-20240116; t=1751881247; c=relaxed/simple;
+	bh=+YR0CoQ2SiHvd94vawkeyE41xtcRe+pTyxh1plOS2GY=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Qzlp0Qo6gidB/oQ9APgJtT1JyD52muo0tQWazF5ncjUFyAuuP2GfCa/aZCF+3O1B1hZ9vyKGB93M4iP/OmZh3JZJ49RuK56Rw4QUggMhOmQKkxrnjnIwBXEK77cHAw7Ehni6xxJ8vHTwPMK11zR1Zgei9MOGAUlB9TWAEi/JuvI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.31])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4bbK3549Hcz6L5L1;
+	Mon,  7 Jul 2025 17:40:01 +0800 (CST)
+Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
+	by mail.maildlp.com (Postfix) with ESMTPS id 4D0C31402A5;
+	Mon,  7 Jul 2025 17:40:43 +0800 (CST)
+Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
+ (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Mon, 7 Jul
+ 2025 11:40:42 +0200
+Date: Mon, 7 Jul 2025 10:40:41 +0100
+From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To: Qianfeng Rong <rongqianfeng@vivo.com>
+CC: Patrice Chotard <patrice.chotard@foss.st.com>, Andi Shyti
+	<andi.shyti@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<opensource.kernel@vivo.com>
+Subject: Re: [PATCH v2] i2c: busses: Use min() to improve code
+Message-ID: <20250707104041.00006171@huawei.com>
+In-Reply-To: <20250705114436.579070-1-rongqianfeng@vivo.com>
+References: <20250705114436.579070-1-rongqianfeng@vivo.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4] i2c: qcom-geni: Add support for GPI DMA
-To: Bjorn Andersson <bjorn.andersson@linaro.org>, Vinod Koul
-	<vkoul@kernel.org>
-CC: Wolfram Sang <wsa@kernel.org>, <linux-arm-msm@vger.kernel.org>, Andy Gross
-	<agross@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>, Douglas Anderson
-	<dianders@chromium.org>, Matthias Kaehlcke <mka@chromium.org>,
-	<linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20211019060158.1482722-1-vkoul@kernel.org>
- <YYAUfy2ary7ZJfK+@ripper>
-Content-Language: en-US
-From: =?UTF-8?B?Q3PDs2vDoXMgQmVuY2U=?= <csokas.bence@prolan.hu>
-In-Reply-To: <YYAUfy2ary7ZJfK+@ripper>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset="US-ASCII"
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: sinope.intranet.prolan.hu (10.254.0.237) To
- ATLAS.intranet.prolan.hu (10.254.0.229)
-X-EsetResult: clean, is OK
-X-EsetId: 37303A296767155E65746A
+X-ClientProxiedBy: lhrpeml500003.china.huawei.com (7.191.162.67) To
+ frapeml500008.china.huawei.com (7.182.85.71)
 
-Hi,
+On Sat,  5 Jul 2025 19:44:35 +0800
+Qianfeng Rong <rongqianfeng@vivo.com> wrote:
 
-On 2021. 11. 01. 17:23, Bjorn Andersson wrote:
->> +	if (ret < 0)
->> +		goto err_tx;
->> +
->> +	gi2c->rx_c = dma_request_chan(gi2c->se.dev, "rx");
->> +	ret = dev_err_probe(gi2c->se.dev, IS_ERR(gi2c->rx_c), "Failed to get rx DMA ch\n");
->> +	if (ret < 0)
->> +		goto err_rx;
->> +
->> +	dev_dbg(gi2c->se.dev, "Grabbed GPI dma channels\n");
->> +	return 0;
->> +
->> +err_rx:
->> +	dma_release_channel(gi2c->tx_c);
+> Use min() to reduce the code and improve its readability.
 > 
-> Is there a reason why there's no devm_dma_request_chan()?
+> The type of the max parameter in the st_i2c_rd_fill_tx_fifo()
+> was changed from int to u32, because the max parameter passed
+> in is always greater than 0.
+> 
+> Signed-off-by: Qianfeng Rong <rongqianfeng@vivo.com>
+> Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
+Drive by review...
 
-Just a heads-up: now there is, in dma/next! It was added in commit 
-08bf1663c21a.
+I'd add Wolfram as +CC at least.  May well pick it off the list
+of course.
 
-Bence
+
+> ---
+>  drivers/i2c/busses/i2c-st.c | 12 +++---------
+>  1 file changed, 3 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-st.c b/drivers/i2c/busses/i2c-st.c
+> index 750fff3d2389..285d8a05ab36 100644
+> --- a/drivers/i2c/busses/i2c-st.c
+> +++ b/drivers/i2c/busses/i2c-st.c
+> @@ -422,10 +422,7 @@ static void st_i2c_wr_fill_tx_fifo(struct st_i2c_dev *i2c_dev)
+>  	tx_fstat = readl_relaxed(i2c_dev->base + SSC_TX_FSTAT);
+>  	tx_fstat &= SSC_TX_FSTAT_STATUS;
+>  
+> -	if (c->count < (SSC_TXFIFO_SIZE - tx_fstat))
+> -		i = c->count;
+> -	else
+> -		i = SSC_TXFIFO_SIZE - tx_fstat;
+> +	i = min(c->count, SSC_TXFIFO_SIZE - tx_fstat);
+
+Add 
+#include <linux/minmax.h>
+
+
+Given it is now one statement perhaps cleaner toput it
+as the loop initializer 
+
+	for (i = min(c->count, SSC_TXFIFO_SIZE - tx_fstat);
+	     i > 0; i--, c->count--, c->buf++)
+
+>  
+>  	for (; i > 0; i--, c->count--, c->buf++)
+>  		st_i2c_write_tx_fifo(i2c_dev, *c->buf);
+> @@ -439,7 +436,7 @@ static void st_i2c_wr_fill_tx_fifo(struct st_i2c_dev *i2c_dev)
+>   * This functions fills the Tx FIFO with fixed pattern when
+>   * in read mode to trigger clock.
+>   */
+> -static void st_i2c_rd_fill_tx_fifo(struct st_i2c_dev *i2c_dev, int max)
+> +static void st_i2c_rd_fill_tx_fifo(struct st_i2c_dev *i2c_dev, u32 max)
+>  {
+>  	struct st_i2c_client *c = &i2c_dev->client;
+>  	u32 tx_fstat, sta;
+> @@ -452,10 +449,7 @@ static void st_i2c_rd_fill_tx_fifo(struct st_i2c_dev *i2c_dev, int max)
+>  	tx_fstat = readl_relaxed(i2c_dev->base + SSC_TX_FSTAT);
+>  	tx_fstat &= SSC_TX_FSTAT_STATUS;
+>  
+> -	if (max < (SSC_TXFIFO_SIZE - tx_fstat))
+> -		i = max;
+> -	else
+> -		i = SSC_TXFIFO_SIZE - tx_fstat;
+> +	i = min(max, SSC_TXFIFO_SIZE - tx_fstat);
+>  
+>  	for (; i > 0; i--, c->xfered++)
+Same here.
+
+>  		st_i2c_write_tx_fifo(i2c_dev, 0xff);
 
 
