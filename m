@@ -1,156 +1,254 @@
-Return-Path: <linux-i2c+bounces-11856-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11857-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC034AFB0EC
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Jul 2025 12:15:15 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17CBCAFB13E
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Jul 2025 12:31:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0F5A23AC26E
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Jul 2025 10:14:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0FC257A7DC3
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Jul 2025 10:29:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 632702957C0;
-	Mon,  7 Jul 2025 10:15:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC8C2212F98;
+	Mon,  7 Jul 2025 10:31:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="qa/jqMjN"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Km4awH4v"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 647D12951D5;
-	Mon,  7 Jul 2025 10:15:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA2B319D880;
+	Mon,  7 Jul 2025 10:31:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751883311; cv=none; b=cYPJZqLbP/pwYdIT+6Z24W/by6fWL6mfkpjPx6HR9SSM/AD/zWqMi2l+wZ9+9gSzZoqXB9NhpUgbt1zLsUXtGy6UOledKcUQbWl2fpWkoFw0fvv0BGyyigv0+BwnyTugWtnaZAEvx0nCWzIBCgFNoIvlnOMd6plt8JpzdiL5JQ8=
+	t=1751884272; cv=none; b=uDErl+QAqBQikKIATBUuiIBvWi9gHJwt6JnNzm0DM7bLpWgXW5z9H51CSG/ujoPxgg6fbtusi0U3fYa2+Obl5huIm24cBRC5O4hjJ4pYKhyVz9pKNF1L2D5qzDAn9SK6KNQHClfhYjolWOZlVwDbse+v4b7X7g9ZGSZXd5FRZMc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751883311; c=relaxed/simple;
-	bh=TY+GufCIhj+ESoRt9HbVyO0sazKQmatr0VcMVgxJc48=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZEGIRx2C8/iYz0TZkO9JccHkoLbhbnulzyX/f5O9SInaFcaSx+F35Jwsf7+xGynfj5nGPIBhOe/p6VH2tj6k+JYOtRrWRVI1rNUyam+bGtu0JpDRudfSOFzD1Eka0ejODiA3s1aSFEq0XTWTXu3yByMsvsTWlQ6xYlZVnIZhJfA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=qa/jqMjN; arc=none smtp.client-ip=185.132.182.106
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5676FZb1022788;
-	Mon, 7 Jul 2025 12:14:36 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=selector1; bh=
-	M+uhJcJDTeJCAUeixIicqUqHNPuuMmXwRPR3UP1fAmM=; b=qa/jqMjNzLnoNdla
-	J8gS5RL+QKKO2XkLCjN1Dd1OFZalOvLdthzFGzbzKNCrkE5b+Ck8ShWM9wT3Hcgk
-	fyKnJggAL2QWHo/tQpb4DWqE+1O6KxhnJZJPllEqH/KtQ54t6G7qdb3HinT2xvYK
-	7cm/3L2Dhe84flz9gvspRWEVXDcz5AJLAVa4it5nqaU1zsjuk9FoC+WN47Pzt8H/
-	q76kIXGyHHPxiBYBSbCQvnl2aXetkDNUnMcp/K6iqGshBxLlfgAMIZxxEP1fWexI
-	rTOlSIEGxIUVt1DhjqJLUUbVPbjejAuyPa+egSUHsCKJVyHQGleIjiG5qTqBXGr9
-	4dKz0g==
-Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 47psfm84re-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 07 Jul 2025 12:14:36 +0200 (MEST)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id E636440056;
-	Mon,  7 Jul 2025 12:13:11 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 6C7BEAC4AF2;
-	Mon,  7 Jul 2025 12:12:18 +0200 (CEST)
-Received: from gnbcxd0016.gnb.st.com (10.130.77.119) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 7 Jul
- 2025 12:12:17 +0200
-Date: Mon, 7 Jul 2025 12:12:11 +0200
-From: Alain Volmat <alain.volmat@foss.st.com>
-To: =?iso-8859-1?Q?Cl=E9ment?= Le Goffic <clement.legoffic@foss.st.com>
-CC: Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
-        Andi Shyti
-	<andi.shyti@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Sumit Semwal
-	<sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?=
-	<christian.koenig@amd.com>,
-        M'boumba Cedric Madianga
-	<cedric.madianga@gmail.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        "Pierre-Yves
- MORDRET" <pierre-yves.mordret@st.com>,
-        <linux-i2c@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <linaro-mm-sig@lists.linaro.org>
-Subject: Re: [PATCH v4 0/3] Fix STM32 I2C dma operations
-Message-ID: <20250707101211.GA984919@gnbcxd0016.gnb.st.com>
-References: <20250704-i2c-upstream-v4-0-84a095a2c728@foss.st.com>
+	s=arc-20240116; t=1751884272; c=relaxed/simple;
+	bh=3Uq6vAhMpflLvoZvet6S/WypbZukt/NCqmERYTe7GZ0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Z6qhX4QdD6UmOg1IFZfySID0ATrBqY9b409UXmhK53Df40aRCa2uhdXwEOAh2WR3GzYNBOqYgt5bJm38SRS7+e3a2qzJKSzJlq1tQsK+c31zkxdh76tuEcoGwW/QvLXoLPTKxAh/rrt7ULnzchYfkMezOg1Sya5VAfVbgxCLrH8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Km4awH4v; arc=none smtp.client-ip=209.85.221.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-3a4fd1ba177so1996919f8f.0;
+        Mon, 07 Jul 2025 03:31:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1751884268; x=1752489068; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=48ejRLL6cllL8JfuQoxN2XzqvfOsBKqKosBq40xObfw=;
+        b=Km4awH4vVKmZeT+RLGGyN0dhPEYy68+7Hl0fH9pM0o7cj3COMeQoYziwrx4xTaX3r2
+         wsvAri7ZP5fFrlPeTYF/7MgmI2D15SCXqWLxvqGoXdhWp3HU/X26jynqov1Sj30GwGjT
+         V71vck8faDZ9gkVbpTl9ep0Em6XYywjXpdZ7CC0umALcnEfLIyQc4vUYu5ZARwJ9UdYZ
+         zWO8ERXGxPissrNSh1Bhl0tL9oy5110ZNOv88qWTtjMkNYL+I/OAPQDeuR2j2IWJTDmu
+         i4gsIIJVLQLL4p74PPc09HG72rxnv9vxv+AcfuQ1fvqYtYDqUBb/X1gGdSheJ/Zs2f2y
+         6edQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751884268; x=1752489068;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=48ejRLL6cllL8JfuQoxN2XzqvfOsBKqKosBq40xObfw=;
+        b=PeQUlYGcWLMFYRGfjYl+RXE+jxpTBNBSf1QHwyoExqyY19qtPYck3ssh2eeemq4pf9
+         QE0UNZbzC+tr21XvM7Xiilr+DVLMitanyKouO4csr7tanNnRj9ykJuRrjbs75JERp/x4
+         ZWekLkCEWq9c1XLDiKvKUZajcAKLCFWlSVzCh7Wnd/9XyS8caFw+Wrqflr2IXua8/WnG
+         72NnaVvHA0nZyWx2Hccv+C62pyLbZYcV1iSUZv8QxeOK36OdzHgadYLnAvGqhrzz6HNw
+         O+UFUTNLCCYF16UloN9JVhBDcG6bE1hTEUUO8KRABmJpA4/4eGkprFw+bD/uAFbKLT4V
+         5oVw==
+X-Forwarded-Encrypted: i=1; AJvYcCVjHELZZsfvlXmtQu5j333beIzOLsCSyFjVAIuLVnmD4r0FkkPUeGtOj9TZbYl5xgcJkJVBk2tGsN0m/kUV@vger.kernel.org, AJvYcCVvoQbjGaso86IkWsbdOpU8w7z6Grgrgk8wUEmCTHzudKreQItXfG/l4uw/qK4odIfebzLPlJLtUX8lUVFC/OU=@vger.kernel.org, AJvYcCW5A8sUBKn4tE9ewlJ+A5ur4J7pRWFepW00Th8GAFC5ufINrCKQppnq8oemJaKmz3kbpsCH6ngUcQ4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyALrvX+uHEEibRG37urW2SJsEK/0xMwgIuu7aGuR278l63UipA
+	qDen+O2ubBfoYnwOimQuKyk/9PDmfH2QwtWSocIOkQoOxVhOz2RDcGXa
+X-Gm-Gg: ASbGncuHf4L9uKCUfU4AfH0E4T2V89IdYzIZ5TE9LXJ3wjThW4x6a2ezhlq8TfycJJ2
+	tz23laWsno3iKPNAENH0Neh73H+jOmj8GDmh1d7zhDHlYwKRqfhVAOJU4mrFzQ0qhadvFhyeWct
+	iEEYD6h4Oto/HZCTN4dpzqWvRnVJ6JjMh+L0VOOYNXHZu19kHzu1hFtJqG1hGW1d1eiwIarT0iL
+	K8NH6jPoPH6QWOp/2ZK24MjZM59cecOwSkgQGYXmbKxqOxSW5VkmedHu4QroVJ6TNTGZKBrRc4O
+	4NUZLvMIRAEIMsKHxbpqUzfu0+bpXvnsv5wRRykjmFds5WpzzFw88KRP0Jh9UsrePexGLCjBw/4
+	8IvY=
+X-Google-Smtp-Source: AGHT+IE5iUocervxUlFgxw5ZIHH63vQaJUrtXe6NqB2ZTDLKRXTN+r1OVJzPD1ifFj6+6JT2PM2tag==
+X-Received: by 2002:a05:6000:4a0a:b0:3a4:da0e:517a with SMTP id ffacd0b85a97d-3b495589716mr11377736f8f.23.1751884267669;
+        Mon, 07 Jul 2025 03:31:07 -0700 (PDT)
+Received: from [10.38.1.85] ([188.39.32.4])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-454b188df09sm106090805e9.37.2025.07.07.03.31.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Jul 2025 03:31:07 -0700 (PDT)
+Message-ID: <0ae92ad8-810f-4c10-a442-c403755cbab7@gmail.com>
+Date: Mon, 7 Jul 2025 11:28:50 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/4] rust: i2c: add basic I2C device and driver
+ abstractions
+To: Danilo Krummrich <dakr@kernel.org>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
+ Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+ =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>,
+ Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>,
+ Asahi Lina <lina+kernel@asahilina.net>,
+ Wedson Almeida Filho <wedsonaf@gmail.com>, Alex Hung <alex.hung@amd.com>,
+ Tamir Duberstein <tamird@gmail.com>,
+ Xiangfei Ding <dingxiangfei2009@gmail.com>, linux-kernel@vger.kernel.org,
+ rust-for-linux@vger.kernel.org, linux-i2c@vger.kernel.org
+References: <20250704153332.1193214-1-igor.korotin.linux@gmail.com>
+ <20250704153657.1195687-1-igor.korotin.linux@gmail.com>
+ <aGg2qkyrKBIPiSeE@cassiopeiae>
+Content-Language: en-US
+From: Igor Korotin <igor.korotin.linux@gmail.com>
+In-Reply-To: <aGg2qkyrKBIPiSeE@cassiopeiae>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250704-i2c-upstream-v4-0-84a095a2c728@foss.st.com>
-X-Disclaimer: ce message est personnel / this message is private
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
- definitions=2025-07-07_02,2025-07-07_01,2025-03-28_01
 
-Hi Clément,
 
-On Fri, Jul 04, 2025 at 10:39:13AM +0200, Clément Le Goffic wrote:
-> This patch series aims to fix some issues inside the driver's DMA
-> handling.
-> It also uses newer I2C DMA API.
-> 
-> Signed-off-by: Clément Le Goffic <clement.legoffic@foss.st.com>
-> ---
-> Changes in v4:
-> - Patch[1]: Remove all `chan_dev` variable occurrencies
-> - Patch[2]:
->     - Refine commit message
->     - Use the dma_callback to factorize the code
-> - Patch[3]: Refine commit message
-> - Link to v3: https://lore.kernel.org/r/20250630-i2c-upstream-v3-0-7a23ab26683a@foss.st.com
-> 
-> Changes in v3:
-> - Add Alain Volmat's "Acked-by" on patch 1 and 2
-> - Link to v2: https://lore.kernel.org/r/20250627-i2c-upstream-v2-0-8c14523481dc@foss.st.com
-> 
-> Changes in v2:
-> - Fix the dev used in dma_unmap also in the error path of
->   `stm32_i2c_prep_dma_xfer`
-> - Add a dma_unmap_single also in the ITs error handler
-> - Add Alain Volmat's "Acked-by" on patch 3
-> - Link to v1: https://lore.kernel.org/r/20250616-i2c-upstream-v1-0-42d3d5374e65@foss.st.com
-> 
-> ---
-> Clément Le Goffic (3):
->       i2c: stm32: fix the device used for the DMA map
->       i2c: stm32f7: unmap DMA mapped buffer
->       i2c: stm32f7: support i2c_*_dma_safe_msg_buf APIs
-> 
->  drivers/i2c/busses/i2c-stm32.c   |  8 +++---
->  drivers/i2c/busses/i2c-stm32f7.c | 56 +++++++++++++++++++++-------------------
->  2 files changed, 33 insertions(+), 31 deletions(-)
-> ---
 
-Thanks for this new version of the serie.
-This all looks good to me. My Acked-by are already set since v3 so
-nothing more from me.
-
-Regards,
-Alain
-
-> base-commit: d0b3b7b22dfa1f4b515fd3a295b3fd958f9e81af
-> change-id: 20250527-i2c-upstream-e5b69501359a
+On 7/4/25 21:16, Danilo Krummrich wrote:
+> On Fri, Jul 04, 2025 at 04:36:57PM +0100, Igor Korotin wrote:
+>> Implement the core abstractions needed for I2C drivers, including:
+>>
+>> * `i2c::Driver` â€” the trait drivers must implement, including `probe`
+>>
+>> * `i2c::Device` â€” a safe wrapper around `struct i2c_client`
+>>
+>> * `i2c::Adapter` â€” implements `driver::RegistrationOps` to hook into the
+>>   generic `driver::Registration` machinery
+>>
+>> * `i2c::DeviceId` â€” a `RawDeviceId` implementation for I2C device IDs
+>>
+>> Signed-off-by: Igor Korotin <igor.korotin.linux@gmail.com>
+>> ---
+>>  MAINTAINERS                     |   2 +
+>>  rust/bindings/bindings_helper.h |   1 +
+>>  rust/helpers/helpers.c          |   1 +
+>>  rust/helpers/i2c.c              |  15 ++
+>>  rust/kernel/i2c.rs              | 391 ++++++++++++++++++++++++++++++++
+>>  rust/kernel/lib.rs              |   2 +
+>>  6 files changed, 412 insertions(+)
+>>  create mode 100644 rust/helpers/i2c.c
+>>  create mode 100644 rust/kernel/i2c.rs
+>>
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index 7f8ddeec3b17..688a0ff23e69 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -11363,6 +11363,8 @@ F:	include/linux/i2c-smbus.h
+>>  F:	include/linux/i2c.h
+>>  F:	include/uapi/linux/i2c-*.h
+>>  F:	include/uapi/linux/i2c.h
+>> +F:	rust/helpers/i2c.c
+>> +F:	rust/kernel/i2c.rs
 > 
-> Best regards,
-> --  
-> Clément Le Goffic <clement.legoffic@foss.st.com>
+> Is this agreed with the maintainer?
 > 
+> There are multiple possible options, for instance:
+> 
+>   1) Maintain the Rust abstractions as part of the existing MAINTAINERS entry.
+>      Optionally, the author can be added as another maintainer or reviewer.
+> 
+>   2) Add a separate MAINTAINERS entry; patches still go through the same
+>      subsystem tree.
+> 
+>   3) Add a separate MAINTAINERS entry; patches don't go through the subsystem
+>      tree (e.g. because the subsystem maintainers don't want to deal with it).
+> 
+> I usually recommend (1), which is what is proposes here, but that's of course up
+> to you and the I2C maintainer.
+> 
+> @Wolfram: In case there's no agreement yet, what's your preference of
+> maintainership for this?
+> 
+
+Oh, that makes sense - I didnâ€™t realize I needed the current
+maintainerâ€™s sign-off to add new files under their MAINTAINERS entry.
+
+As for being added as a reviewer or co-maintainer, Iâ€™m not yet confident
+in my Rust skills. Iâ€™m learning Rust from scratch and, given my
+extensive C-kernel background, I thought Iâ€™d start by contributing
+something useful to the Rust side.
+
+>> +    }
+>> +
+>> +    extern "C" fn shutdown_callback(pdev: *mut bindings::i2c_client) {
+>> +        let pdev = unsafe { &*pdev.cast::<Device<device::Core>>() };
+>> +
+>> +        T::shutdown(pdev);
+>> +    }
+>> +
+>> +    /// The [`i2c::IdTable`] of the corresponding driver.
+>> +    fn i2c_id_table() -> Option<IdTable<<Self as driver::Adapter>::IdInfo>> {
+>> +        T::I2C_ID_TABLE
+>> +    }
+>> +
+>> +    /// Returns the driver's private data from the matching entry in the [`i2c::IdTable`], if any.
+>> +    ///
+>> +    /// If this returns `None`, it means there is no match with an entry in the [`i2c::IdTable`].
+>> +    fn i2c_id_info(dev: &Device) -> Option<&'static <Self as driver::Adapter>::IdInfo> {
+>> +        let table = Self::i2c_id_table()?;
+>> +
+>> +        // SAFETY:
+>> +        // - `table` has static lifetime, hence it's valid for read,
+>> +        // - `dev` is guaranteed to be valid while it's alive, and so is `pdev.as_ref().as_raw()`.
+>> +        let raw_id = unsafe { bindings::i2c_match_id(table.as_ptr(), dev.as_raw()) };
+>> +
+>> +        if raw_id.is_null() {
+>> +            None
+>> +        } else {
+>> +            // SAFETY: `DeviceId` is a `#[repr(transparent)` wrapper of `struct i2c_device_id` and
+> 
+> Nit: Missing ']', probably a copy-paste mistake from other busses.
+> 
+> 
+> Yes? :)
+> 
+
+Yes, a lot of the code in this patch series is copy-paste of other
+chunks of the existing Rust code because these parts are not part of
+generic device/driver code.
+
+I've made the same in ACPI patch series. I have already asked in that
+patch series, if I need explicitly
+mention that in the code or commit messages, I'm happy to do that.
+
+>
+> Just a note, this won't be needed in the future, I have patches in the
+queue
+> that let you use generic accessors from the generic Device type. [1]
+>
+> [1] https://lore.kernel.org/lkml/20250621195118.124245-3-dakr@kernel.org/
+>
+
+>
+> Just a heads-up, this trait will be split up. [2]
+>
+> [2]
+https://lore.kernel.org/lkml/20250704041003.734033-2-fujita.tomonori@gmail.com/
+>
+
+>
+> Better use from_result() here.
+>
+
+>
+> I like to do that as well, but I usually get asked to use drop()
+instead, let's
+> do that here as well. :)
+>
+
+> 
+> For now I think you have to ensure that I2C is built-in.
+> 
+
+Noted. Thanks for the review.
+
+Best Regards
+Igor
+
+
 
