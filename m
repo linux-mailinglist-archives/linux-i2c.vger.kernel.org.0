@@ -1,136 +1,141 @@
-Return-Path: <linux-i2c+bounces-11900-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11901-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30A55B0047B
-	for <lists+linux-i2c@lfdr.de>; Thu, 10 Jul 2025 15:59:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7DB05B004C4
+	for <lists+linux-i2c@lfdr.de>; Thu, 10 Jul 2025 16:11:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 561B1B45A3E
-	for <lists+linux-i2c@lfdr.de>; Thu, 10 Jul 2025 13:55:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 181BA64311E
+	for <lists+linux-i2c@lfdr.de>; Thu, 10 Jul 2025 14:07:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7177D275B14;
-	Thu, 10 Jul 2025 13:53:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA19986359;
+	Thu, 10 Jul 2025 14:07:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dprSP3bJ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OOezLADa"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B32E2741D5;
-	Thu, 10 Jul 2025 13:53:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E40A5270552;
+	Thu, 10 Jul 2025 14:07:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752155592; cv=none; b=Bt2+BgxjBD98gWWiEfsDYmp/UDlItrqCi5V3NXTasMSuW2zNAfIs/jumSHXzIJ266WpQ47Ta4BWic1fpmyabWzVw7DVvkBS2VncvyEy5LTWMzsLKQ82z3u9FZ+quh4J6mDMiNaRumUJ4hYXSzt/kreMSuzBFBnl1Ksjo2AQUKZ8=
+	t=1752156438; cv=none; b=qKDBExODVQaq87EhgPRjjBdkX7cMNt83/K10jXzD+5BrZFFATEIWKvyh0uOrtfmlwrnsh37zQSTSSkT8DF+ZGMZ+7redUu8IBM4p1anpc/wNN9B7VmrbUUAfKqRj2fpv0NNr0wFYmiRJNT21twpyEYxGzXQXzvUTIB1xeJ5g0Sc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752155592; c=relaxed/simple;
-	bh=U9guwqJci8NP6a0yfqpBMd5Vn2SbFy+CrvHcPob9HAg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DUXwoGto4RO1q0V5ylBgF3OiE7UUe1YQqjIFhLMVWvpZ9k3J8MhCcnTjvIitZulRQkwpCSyjXyz6YQfgZ1bcrhEfawomwBG8t/+cNeGIKBeah8YufnvvBVJ7COMEjFcq4ygVV2hDIEeXJ4dF2HC1de07ITeGXgGAm0C/LLvnFcg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dprSP3bJ; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1752155591; x=1783691591;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=U9guwqJci8NP6a0yfqpBMd5Vn2SbFy+CrvHcPob9HAg=;
-  b=dprSP3bJgcHsWfIGPLN4PT5bKRxJpkg3oA5SOOk5p4CoTcwJXxK1HSWI
-   Xi+NrZOxlDifx/8khontUX2O08g9z9fnRRdjxVvvFnPamiT3gYzA8dmDb
-   GhWHtdBGnCyZC0BuZk64M1j9bSeaTqCxeRA/iylzaXKRJ1va6rZSeSDWh
-   s0e60r/h12LXxK9Em3EaM+PQHJdBE+Vv+j6+dvugTOHsZxrYiqTHRcRrw
-   pVV1R9ZVmZVjAKdQUET1t5UBiXfIZQcxs4prC+Dl+hZwHzot7P7tC26FU
-   p6pWvwmOWzMlIGqOpV2PcO8o8WUbiy2kVSR8u7yTvza7X2bKdSlpjYZ1G
-   g==;
-X-CSE-ConnectionGUID: 4/qqkiL0QyKdPr7R48KKcg==
-X-CSE-MsgGUID: DSFARMWqRCm2YpKoFT5jLw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11490"; a="58243504"
-X-IronPort-AV: E=Sophos;i="6.16,300,1744095600"; 
-   d="scan'208";a="58243504"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2025 06:53:09 -0700
-X-CSE-ConnectionGUID: 3G5UpA1+RWGAI3qLJGBvRw==
-X-CSE-MsgGUID: 5LPmWD7vQ06paQ6dFGhjXQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,300,1744095600"; 
-   d="scan'208";a="193300156"
-Received: from smile.fi.intel.com ([10.237.72.52])
-  by orviesa001.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2025 06:53:05 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1uZrhu-0000000EDXo-0n5v;
-	Thu, 10 Jul 2025 16:53:02 +0300
-Date: Thu, 10 Jul 2025 16:53:01 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Akhil R <akhilrajeev@nvidia.com>
-Cc: andi.shyti@kernel.org, digetx@gmail.com, jonathanh@nvidia.com,
-	ldewangan@nvidia.com, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-	p.zabel@pengutronix.de, thierry.reding@gmail.com,
-	conor+dt@kernel.org, devicetree@vger.kernel.org, krzk+dt@kernel.org,
-	robh@kernel.org
-Subject: Re: [PATCH v6 2/3] i2c: tegra: Use internal reset when reset
- property is not available
-Message-ID: <aG_FvfN6xXuULolK@smile.fi.intel.com>
-References: <20250710131206.2316-1-akhilrajeev@nvidia.com>
- <20250710131206.2316-3-akhilrajeev@nvidia.com>
+	s=arc-20240116; t=1752156438; c=relaxed/simple;
+	bh=YpUIlnVX18vUrhXKaq83Q1Cvx4LaW7PKMg/2Q6O/gQw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DFCe/Q1sgmC0OM/hhjU/MOO4ba+rOg3f0fFNoBNk1BWgi/cokch9E3/WWOJilRimA4ttejf81QeCi9QRl9f4FzUIId3kRc2pV5w2kbML6GuImg8pZB/ebRm8P50c00whtvjy7BTNcfP6PIxBHb0Ew59bWi/AzhRs1nlp4y0ZRKQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OOezLADa; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-3a5257748e1so832367f8f.2;
+        Thu, 10 Jul 2025 07:07:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1752156435; x=1752761235; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VkH5D2yTeKtqsP3Kkn65OGOaWxvX3yQ9gDnCFmnTyDk=;
+        b=OOezLADaHA0eZ+utNqqHfzPqkGsARUOmmN/kDWfJa36GEF4EJmke3bH62Vs3TJ54m2
+         8xTi9rlnFWvAzo9T1Xt/+0+fZfBJxHKhSbKeRz/mxUFqs+j8KTjWOFjwJeH11VIdYXhg
+         IF0/ayxNyDjQw0l4rOEeXJwK+6yNWlZayj2qXt9DQDRlinQFCi1tU4pCALwKvKU5c+os
+         VRda1z2HChSl1FSD+rB4UQ6JlBHL2pgtX2xMjiPDl1wTnCCUbDv5VT2IWdL9XC6zE8JL
+         Bz236vEnfrsEu0C5wHBH8+5seo+JzirNFITyuXQvSjFnFzKix4q3PS88FZ7QFkmqoEGv
+         f/Yg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752156435; x=1752761235;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VkH5D2yTeKtqsP3Kkn65OGOaWxvX3yQ9gDnCFmnTyDk=;
+        b=l0FXazlf3mBxmoLy7emkCOh83IpOEEefm5/B5/ac0wx34dOaWR/Qd8Ub22Zacj0WtX
+         JXtDXKKCueF27rs6ZPGCLyhv0iAVRqNLuldMV5+IziRP0Mal9xMDu2Rxbou65vnw6wBA
+         cK615bLkGUKMUR3p+m/oKCudTODry283cJbywUGaW8rG9SJUDc+nwXk7qL+4Cqzt6SAI
+         mlzz0rlWUfRWR5+D4L31cJApTtaiRpC6Eu9U/nG450VW7XJ/6/NvXBw9hWyZ1BfbUlsZ
+         +6bpVPmbpYbfl6UupyT39cigHkVy6x1tdB5B6n/Zw2nbwdxJI4X9pgzYpxbM4H/iocxR
+         Kp3Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUxsiehJya71LfC5O2RnH3JzOBTM0bsda5Qv9S+u/QjeKHVAnkwFI2UR85j1n8+NHQJnv9kIvK/wU7NSkcI@vger.kernel.org, AJvYcCVCdKSJ7lmXjCBYrZQfxzQaPIWZEqUTJBgW3/xkZMX8jQKnpfYyBMYcPzjOoxpq41k7yghc70sOF+lo8fxKNRM=@vger.kernel.org, AJvYcCW9AJZSCilt6bjg2+0mhDv/q67bXhibo1YhzwbLhXWxwi8cYA4gkFKD9P/czbwx18Gl9YbsYeGoSFo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyoY4fMEKoT3kpnQ8j0nPWt+OVwZj9q7DJs6pP88e+xU6fCS4bV
+	VJlkf7wxCixxaYv87Rhueo6mKt2Tshd7FgNztPmNmbBNOVuYVj6+ykldZQ+mxg==
+X-Gm-Gg: ASbGncsYqKJHeqW9rSYAQVsuIf5KT3Xa67OVu3QjhhrZWmJfapqabOBT369mwoFjlqo
+	682u+cchveP1NxmFAIzfCs+Ewjc3247eHpx98NcpHgvNvGluysR99NVuHU2bgjRDqg1vLRmUh4l
+	0Cuj5dgEr60/UcbaVlzFMEtp2O/BSRJCiXIvCp8skOtKsJXNdRAg31ILV3y3q9h0o6Tnm+5D6tb
+	F7s6Wl6yrqNE9sIqRNieHR21C6X06yZmbLfZnx9Q+RQ92EeWsfwrs2DG0VhHxlT1js7+qHMzkjI
+	KTftdf7zb1v28v2l1OajJQr4IzVgUX6w7gC+rCVG5i0xvG1SUesf0KeJhQUQK7YQhsvx8dQ=
+X-Google-Smtp-Source: AGHT+IGjez2SNgNCYmZ0Jlw10C2JNG4uevbVN0NcIHGZ15GkF2ZzKz+TF7OSoxW+cLofnGQdfvtbUQ==
+X-Received: by 2002:adf:a394:0:b0:3a4:c8c1:aed8 with SMTP id ffacd0b85a97d-3b5e86c4f5dmr2108836f8f.39.1752156434760;
+        Thu, 10 Jul 2025 07:07:14 -0700 (PDT)
+Received: from [10.38.1.85] ([188.39.32.4])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-454d50fa9b4sm61706965e9.27.2025.07.10.07.07.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Jul 2025 07:07:14 -0700 (PDT)
+Message-ID: <dd850b46-1e9f-4812-a356-41ae6fd0ce59@gmail.com>
+Date: Thu, 10 Jul 2025 15:04:59 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250710131206.2316-3-akhilrajeev@nvidia.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/4] rust: i2c: add basic I2C device and driver
+ abstractions
+To: Danilo Krummrich <dakr@kernel.org>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
+ Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+ =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>,
+ Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>,
+ Asahi Lina <lina+kernel@asahilina.net>,
+ Wedson Almeida Filho <wedsonaf@gmail.com>, Alex Hung <alex.hung@amd.com>,
+ Tamir Duberstein <tamird@gmail.com>,
+ Xiangfei Ding <dingxiangfei2009@gmail.com>, linux-kernel@vger.kernel.org,
+ rust-for-linux@vger.kernel.org, linux-i2c@vger.kernel.org
+References: <20250704153332.1193214-1-igor.korotin.linux@gmail.com>
+ <20250704153657.1195687-1-igor.korotin.linux@gmail.com>
+ <aGg2qkyrKBIPiSeE@cassiopeiae>
+Content-Language: en-US
+From: Igor Korotin <igor.korotin.linux@gmail.com>
+In-Reply-To: <aGg2qkyrKBIPiSeE@cassiopeiae>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Jul 10, 2025 at 06:42:05PM +0530, Akhil R wrote:
-> For controllers that has an internal software reset, make the reset
-> property optional. This provides and option to use I2C in systems
-> that choose to restrict reset control from Linux or not to implement
-> the ACPI _RST method.
+
+
+On 7/4/25 21:16, Danilo Krummrich wrote:
+>> +
+>> +        0
+>> +    }
+>> +
+>> +    extern "C" fn remove_callback(pdev: *mut bindings::i2c_client) {
+>> +        // SAFETY: `pdev` is a valid pointer to a `struct i2c_client`.
+>> +        let ptr = unsafe { bindings::i2c_get_clientdata(pdev) }.cast();
+>> +
+>> +        // SAFETY: `remove_callback` is only ever called after a successful call to
+>> +        // `probe_callback`, hence it's guaranteed that `ptr` points to a valid and initialized
+>> +        // `KBox<T>` pointer created through `KBox::into_foreign`.
+>> +        let _ = unsafe { KBox::<T>::from_foreign(ptr) };
 > 
-> Internal reset was not required when the reset control was mandatory.
-> But on platforms where the resets are outside the control of Linux,
-> this had to be implemented by just returning success from BPMP or with
-> an empty _RST method in the ACPI table, basically ignoring the reset.
+> I like to do that as well, but I usually get asked to use drop() instead, let's
+> do that here as well. :)
 > 
-> While the internal reset is not identical to the hard reset of the
-> controller, this will reset all the internal state of the controller
-> including FIFOs. This may slightly alter the behaviour in systems
-> which were ignoring the reset but it should not cause any functional
-> difference since all the required I2C registers are configured after
-> this reset, just as in boot. Considering that this sequence is hit
-> during the boot or during the I2C recovery path from an error, the
-> internal reset provides a better alternative than just ignoring the
-> reset.
 
-...
+Danilo, could you, please, explain this one a little bit more? I see the
+same pattern for all the implemented subsystems so far: auxiliary,
+platform, pci.
+If this pattern for these subsystems is to be changed, then I'm fine.
+Otherwise I'm not sure I understand the difference between these 3 and
+I2C Adapter abstraction
 
-I would perhaps expand the comment here to explain ENOENT check and what do we
-do in this case. (Note, no rewriting of the existing, just adding a paragraph)
+Thanks
+Igor
 
-	*
-	* In case ... we compare with -ENOENT ...
-	* ...
-	*/
-
->  	err = device_reset(i2c_dev->dev);
-> +	if (err == -ENOENT)
-> +		err = tegra_i2c_master_reset(i2c_dev);
-
->  	WARN_ON_ONCE(err);
-
-Other that that, LGTM,
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
--- 
-With Best Regards,
-Andy Shevchenko
 
 
 
