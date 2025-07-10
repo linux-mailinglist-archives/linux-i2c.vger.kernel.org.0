@@ -1,55 +1,79 @@
-Return-Path: <linux-i2c+bounces-11905-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11906-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E57B9B00D58
-	for <lists+linux-i2c@lfdr.de>; Thu, 10 Jul 2025 22:42:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94421B00D62
+	for <lists+linux-i2c@lfdr.de>; Thu, 10 Jul 2025 22:50:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4FB0E7A7BDD
-	for <lists+linux-i2c@lfdr.de>; Thu, 10 Jul 2025 20:41:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 58C613BDC29
+	for <lists+linux-i2c@lfdr.de>; Thu, 10 Jul 2025 20:49:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D2D928B7EE;
-	Thu, 10 Jul 2025 20:42:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 160392FD59F;
+	Thu, 10 Jul 2025 20:49:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ckmPXk/D"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h6fyEEN4"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56B208F5B;
-	Thu, 10 Jul 2025 20:42:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B003728C5D7;
+	Thu, 10 Jul 2025 20:49:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752180152; cv=none; b=Y62Bav+ziyvAIhZGy7gRToJ2mGWIsyiZZbuRrdWZIoj51JDgKcwP+SPZ4Gr99XHF1gU6+v3szCHcAlw35+8igw9zeNVAHJVy1idaQSvbH1bfBzHYqgrxlXnAMx7ggMDruto+ynG7hmQVyRK71Tpu9c0Ev+7S5GfAaOJ1KPHvM+0=
+	t=1752180594; cv=none; b=UZwyqbfmL+gy1wcHAlYxPnllWm+ZOl8JHX7La8oMonQh/fKxEi/aEhoJYSLdgJBOa//6FP9ZOnZouMZFUAGJ4/k1gMCqu3rR58I4gZEsPSslPemunAN/qS6+FYkiFdPINGq1/N9txCAz6RPCalgs5scaEtDn8EXctIE4u4H1c+g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752180152; c=relaxed/simple;
-	bh=BpIBt7eblRXITiqTHVrVf1FbQ5odVkzWjqspIqG0ueA=;
+	s=arc-20240116; t=1752180594; c=relaxed/simple;
+	bh=R7alaaCPHt1AUC5EDQMaWx/LazeRtOK9h/LtGYLubzc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HmNDu3WKC9JMCOjXPkWgtrIn5VNqYg4JsOGjiVfKBKRk5SJeuCE6MkOo5NvisOFrKNsT66Afz+AQpOVK25ra9lZqLkR/+oPO+n2I6vVjoQtxxnugGyZ5eGsav70Vxj/JduU3fnxnpZlzQY0xAHcb/TWbKADNAdaA2Ah9oslZQKw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ckmPXk/D; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45A1EC4CEE3;
-	Thu, 10 Jul 2025 20:42:30 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=nWhSvfjZe2LrvpM3In6r2w5oMcKpJPPuwcAeOuouTN58eTMwDIVvjDz3Nlctgctj9gWARXzyCtVDHbSs51F25Zu1SqnyXzNQaD7yPhuh3MqPkEVIi0ODkwQBbl5WHjB64QQImJMHStm416QGv3Xr5pi0R3+NCPnl4xITfd9n9Rg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h6fyEEN4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2068FC4CEF4;
+	Thu, 10 Jul 2025 20:49:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752180151;
-	bh=BpIBt7eblRXITiqTHVrVf1FbQ5odVkzWjqspIqG0ueA=;
+	s=k20201202; t=1752180594;
+	bh=R7alaaCPHt1AUC5EDQMaWx/LazeRtOK9h/LtGYLubzc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ckmPXk/DBZJ+DmlX/iLC83i64AisYBuNzUN5NyBK6Torw2sewABKTz9+EasOwkJf1
-	 wCrCX8uuyd2EC+2CHW4Nycitegtj7ffSe3JVjfsBnHTccoPgKSmjXCrW1OyDWI6iPy
-	 23uTX7yB2uitsfKsgpVn65ZD/lzuyn1sWptqIL6IPtirLkU+iAexRGzHWaVFSZUrav
-	 mH4YAp5WN29YGdTDag1qpl9b6mHJmOaPnG4oVO8dPn7YyVLrexSwxhIo0p9rRysQrL
-	 BtTaDintTWpA9s1ejOt8/CDqkfLUQuyMo7Qy1aFJY+UNjcAbrNmSSPpw5V1FBJ8IWc
-	 8cg3QkSxuJGmQ==
-Date: Thu, 10 Jul 2025 22:42:26 +0200
+	b=h6fyEEN4OVF3X4z4T6olPNkDshuKXL14P1ZPQgpydfMFcwR9gfB/GOgMD4XCHMsaT
+	 imvTz7KUSeoR1/jaC3kgG9uR9g+XUykWN4fqfF0+nqa4G5qvdeRbBc9MnFG6JPwpxC
+	 ox4Ky8S7mPhrBIne33gDYoUD0T/ERZI7PD7fw9WWgjzVEj37q6CWRlQMB9b2NLWezl
+	 pJUcn55+qsWr3Y3mSb6HfxYvVxDKlTeiX2xva/VTcEnydxdor+JtVDcKnaLMw8YBlC
+	 yvnIRSbvTfsVnfz3DHpgDKlZWNaOUzIt2YJhwLMQOWTEF/SJIDs2dY6X2jqzlqJK3p
+	 Bvxnwb3KGLDBg==
+Date: Thu, 10 Jul 2025 22:49:49 +0200
 From: Andi Shyti <andi.shyti@kernel.org>
-To: Qianfeng Rong <rongqianfeng@vivo.com>
-Cc: wsa+renesas@sang-engineering.com, Jonathan.Cameron@huawei.com, 
-	Patrice Chotard <patrice.chotard@foss.st.com>, linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] i2c: busses: Use min() to improve code
-Message-ID: <tinhpctintv5okjfdzljg4q6tnfmmcsohywy4oqxxaqzmti3r7@3otlpzbypemz>
-References: <20250709042347.550993-1-rongqianfeng@vivo.com>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: Elie Morisse <syniurge@gmail.com>, 
+	Shyam Sundar S K <shyam-sundar.s-k@amd.com>, Codrin Ciubotariu <codrin.ciubotariu@microchip.com>, 
+	Nicolas Ferre <nicolas.ferre@microchip.com>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>, Michal Simek <michal.simek@amd.com>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>, Jarkko Nikula <jarkko.nikula@linux.intel.com>, 
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Mika Westerberg <mika.westerberg@linux.intel.com>, 
+	Jan Dabros <jsd@semihalf.com>, Jean Delvare <jdelvare@suse.com>, 
+	Dong Aisheng <aisheng.dong@nxp.com>, Shawn Guo <shawnguo@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
+	Fabio Estevam <festevam@gmail.com>, Oleksij Rempel <o.rempel@pengutronix.de>, 
+	Gregory CLEMENT <gregory.clement@bootlin.com>, Ajay Gupta <ajayg@nvidia.com>, 
+	Aaro Koskinen <aaro.koskinen@iki.fi>, Andreas Kemnade <andreas@kemnade.info>, 
+	Kevin Hilman <khilman@baylibre.com>, Roger Quadros <rogerq@kernel.org>, 
+	Tony Lindgren <tony@atomide.com>, Janusz Krzysztofik <jmkrzyszt@gmail.com>, 
+	Vignesh R <vigneshr@ti.com>, Loic Poulain <loic.poulain@oss.qualcomm.com>, 
+	Robert Foss <rfoss@kernel.org>, Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>, 
+	Viken Dadhaniya <quic_vdadhani@quicinc.com>, Chris Brandt <chris.brandt@renesas.com>, 
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, Orson Zhai <orsonzhai@gmail.com>, 
+	Baolin Wang <baolin.wang@linux.alibaba.com>, Chunyan Zhang <zhang.lyra@gmail.com>, 
+	Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>, Alain Volmat <alain.volmat@foss.st.com>, 
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev, linux-omap@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+	linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH 23/80] i2c: Remove redundant pm_runtime_mark_last_busy()
+ calls
+Message-ID: <sj24iciugqjrof6672tvlnxjfvgperdliftfa47cquyfe6g22c@s5e7twdtjhsj>
+References: <20250704075225.3212486-1-sakari.ailus@linux.intel.com>
+ <20250704075415.3218608-1-sakari.ailus@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -58,33 +82,19 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250709042347.550993-1-rongqianfeng@vivo.com>
+In-Reply-To: <20250704075415.3218608-1-sakari.ailus@linux.intel.com>
 
-Hi Qianfeng,
+Hi Sakari,
 
-On Wed, Jul 09, 2025 at 12:23:46PM +0800, Qianfeng Rong wrote:
-> Use min() to reduce the code and improve its readability.
+On Fri, Jul 04, 2025 at 10:54:15AM +0300, Sakari Ailus wrote:
+> pm_runtime_put_autosuspend(), pm_runtime_put_sync_autosuspend(),
+> pm_runtime_autosuspend() and pm_request_autosuspend() now include a call
+> to pm_runtime_mark_last_busy(). Remove the now-reduntant explicit call to
+> pm_runtime_mark_last_busy().
 > 
-> The type of the max parameter in the st_i2c_rd_fill_tx_fifo()
-> was changed from int to u32, because the max parameter passed
-> in is always greater than 0.
-> 
-> Signed-off-by: Qianfeng Rong <rongqianfeng@vivo.com>
-> Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
-> Suggested-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 
-The 'Suggested-by' tag implies that the patch was suggested by
-Jonathan, which is not the case here. Jonathan reviewed the patch
-and proposed improvements, but the patch itself comes from you.
-
-For this reason, I will remove the 'Suggested-by' tag. If
-Jonathan wants to add his Acked-by or Reviewed-by, I will gladly
-include it.
-
-Thanks, Jonathan, for the helpful reviews, and thanks to Qianfeng
-for promptly following up on the feedback.
-
-Merged to i2c/i2c-host.
+Acked-by: Andi Shyti <andi.shyti@kernel.org>
 
 Thanks,
 Andi
