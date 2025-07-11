@@ -1,103 +1,90 @@
-Return-Path: <linux-i2c+bounces-11913-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11914-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B7DBB020E7
-	for <lists+linux-i2c@lfdr.de>; Fri, 11 Jul 2025 17:52:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B098B020FE
+	for <lists+linux-i2c@lfdr.de>; Fri, 11 Jul 2025 17:59:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 32F1D3A0545
-	for <lists+linux-i2c@lfdr.de>; Fri, 11 Jul 2025 15:52:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 86CDF4A7435
+	for <lists+linux-i2c@lfdr.de>; Fri, 11 Jul 2025 15:59:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D82D92ED16F;
-	Fri, 11 Jul 2025 15:52:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB8CE2EE28E;
+	Fri, 11 Jul 2025 15:59:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QvaFoo7r"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MBqfEIH8"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FADE2ED165;
-	Fri, 11 Jul 2025 15:52:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C4E72E763B;
+	Fri, 11 Jul 2025 15:59:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752249145; cv=none; b=kJAJTSRIbPEcgXR5gOAC6BiQ7lzhVQ8xctL2y523BJfqtq2zK0MYgjpOvIiw2fVc2BpWhLyUDYT51SpmqqUvuEH9+fb9/th/cTuSdocuyMA/npnGhtp6c7xKUrdpGTkXVSqRp+kXoPN8qLDBUhFKIZ7l2mOiDMgJJrCmDM5c/MA=
+	t=1752249579; cv=none; b=uQb+pXj8joJhlus/cpZyCXbVyy4yZiJoahFPOWf7+uq6Q2yw/Ih8mtRN8MiFO7qBabAfVuGIEgel0DVVof832Tuq65vECaALCWldxfUcm2xfXE+3aPmP16M2+sqEcg+RXo78b/uK7CLc+PFX0Fgw/qXiCllTOWVv/T7u2E8hg0U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752249145; c=relaxed/simple;
-	bh=RlRu9uSQ5zj2jECSvP1viuoOh9bQsYZgl0JQUp5qUqg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=dRhR8oIcVDMMjihxcEMl45ITV1Av0adQg2Fm40bNW93kRCFRzzt66DJadJwh/a1s9fiUXn20Bkd1IptRwLKDQISh6QgCBo/1ZcuvyxeSOWjQTbVIFQaMXPcHgxvKk3bXJ4eDtRqK8KvB3jIqENVBP+Zz22Z6ScQrXU1l5vqt1xw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QvaFoo7r; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 183F2C4CEED;
-	Fri, 11 Jul 2025 15:52:23 +0000 (UTC)
+	s=arc-20240116; t=1752249579; c=relaxed/simple;
+	bh=J/74gCWCb/fJuIw7/PGqtuWPe+wLtBGrToknQ/QYwTo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=O7dXt4a4+Zt02eaDeY3f9oxhOWIgAHYhjZEWSiv0txDTTsTrb+idfhOuMLwwCCeg74f3RzkTMCOcvasm7RuWn5mM67lgZRSrjCUOI0NiNpn0ykxxFfejZUaxtpuyEWApHfbvaSj5IhjhKKQifjfIjdV95Wnrjd/A1WZBOl8XsPs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MBqfEIH8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72C68C4CEED;
+	Fri, 11 Jul 2025 15:59:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752249145;
-	bh=RlRu9uSQ5zj2jECSvP1viuoOh9bQsYZgl0JQUp5qUqg=;
-	h=Date:From:To:Cc:Subject:From;
-	b=QvaFoo7rAkkA3KEP35rGoBYRRehyJTctH9VSALdwdESmE+7DZe3OCH7tbIvrCX5yP
-	 4Wj1M4SIsiW8/E87SkUV+VBDL+c2HaFnrUb9j8YjsnjZm5Vv778G7naIbQT0zuJ3lj
-	 cEqkH6t4KzIjJc8sMGzD0gtYXZODGHDmIh/ElFhpwb75HNIfpXO9R350OaMVKTKpVM
-	 4UerWfU6vF7do0kwLlFph8d1GNtgGb9thPnT8CMjVLECB4fY6nTQReGBISc9mRqJGi
-	 reGL4NR2RRGxYaKu1G36hcu4gdipu/n1P/2wWjS8KVutmyLrw5pLGn+IdXsbiwh4PZ
-	 OnxrTRSywje4g==
-Date: Fri, 11 Jul 2025 17:52:20 +0200
+	s=k20201202; t=1752249579;
+	bh=J/74gCWCb/fJuIw7/PGqtuWPe+wLtBGrToknQ/QYwTo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=MBqfEIH8IwfxJFLK7PjScX0mNBkSFYMlhgBJRavsH1/3f2gnaO39+XVemJIJFrDu0
+	 wj0I2zRspvmo8qrzKyhWEGjczhasCSQeunoikcsOyFrIae7zB6Mr/iVS9sZI+bZsv1
+	 n87FZhymxfQdOFogPYZB3z2CvI468A7Vb8GYEsNlusqaYq2zCgmZFgU8veaw6nSfaP
+	 5iD+F0C0YzVquq6/TAYEhMZTHJAqDpBzkTPYC/COnyXaDauBeGXbngDXKoqK0YjfNc
+	 Mrpgn/KoJqhqDDTfAXBw8Usv6FDNSFnmXhWX1IxVCl6T36v5iZr8Ldl+gQfNoOKQss
+	 4aclURnsSZUfA==
+Date: Fri, 11 Jul 2025 17:59:35 +0200
 From: Andi Shyti <andi.shyti@kernel.org>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: lkml <linux-kernel@vger.kernel.org>, 
-	linux-i2c <linux-i2c@vger.kernel.org>, Andi Shyti <andi.shyti@kernel.org>
-Subject: [GIT PULL] i2c-host-fixes for v6.16-rc6
-Message-ID: <7zjrabdfofykjclb7pv7agfua4mvwepahc2hicis34frpr3ap2@kkbsms4a5c5z>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Akhil R <akhilrajeev@nvidia.com>, digetx@gmail.com, 
+	jonathanh@nvidia.com, ldewangan@nvidia.com, linux-i2c@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org, p.zabel@pengutronix.de, 
+	thierry.reding@gmail.com, conor+dt@kernel.org, devicetree@vger.kernel.org, 
+	krzk+dt@kernel.org, robh@kernel.org
+Subject: Re: [PATCH v6 1/3] i2c: tegra: Fix reset error handling with ACPI
+Message-ID: <wuggyfzqeljlinbcanvlu7pxq5orjdg37az3trbrxdiufk5byi@jbkeihqkozkv>
+References: <20250710131206.2316-1-akhilrajeev@nvidia.com>
+ <20250710131206.2316-2-akhilrajeev@nvidia.com>
+ <aG_FJZQjNbV-OnGc@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <aG_FJZQjNbV-OnGc@smile.fi.intel.com>
 
-Hi Wolfram,
+Hi Akhil,
 
-Here is this week's pull request. One more fix from Akhil arrived
-a bit too late, so I left it out for now.
+On Thu, Jul 10, 2025 at 04:50:29PM +0300, Andy Shevchenko wrote:
+> On Thu, Jul 10, 2025 at 06:42:04PM +0530, Akhil R wrote:
+> > The acpi_evaluate_object() returns an ACPI error code and not
+> > Linux one. For the some platforms the err will have positive code
+> > which may be interpreted incorrectly. Use device_reset for reset
+> 
+> device_reset()
 
-Have a great weekend,
+no need to resend, I can fix it.
+
 Andi
 
-The following changes since commit d7b8f8e20813f0179d8ef519541a3527e7661d3a:
-
-  Linux 6.16-rc5 (2025-07-06 14:10:26 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git tags/i2c-host-fixes-6.16-rc6
-
-for you to fetch changes up to 6aae87fe7f180cd93a74466cdb6cf2aa9bb28798:
-
-  i2c: stm32f7: unmap DMA mapped buffer (2025-07-10 11:58:33 +0200)
-
-----------------------------------------------------------------
-i2c-host-fixes for v6.16-rc6
-
-omap: add missing error check and fix PM disable in probe error
-path.
-
-stm32: unmap DMA buffer on transfer failure and use correct
-device when mapping and unmapping during transfers.
-
-----------------------------------------------------------------
-Christophe JAILLET (2):
-      i2c: omap: Handle omap_i2c_init() errors in omap_i2c_probe()
-      i2c: omap: Fix an error handling path in omap_i2c_probe()
-
-Clément Le Goffic (2):
-      i2c: stm32: fix the device used for the DMA map
-      i2c: stm32f7: unmap DMA mapped buffer
-
- drivers/i2c/busses/i2c-omap.c    |  7 +++++--
- drivers/i2c/busses/i2c-stm32.c   |  8 +++-----
- drivers/i2c/busses/i2c-stm32f7.c | 24 +++++++++---------------
- 3 files changed, 17 insertions(+), 22 deletions(-)
+> > control which handles it correctly.
+> 
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> 
+> -- 
+> With Best Regards,
+> Andy Shevchenko
+> 
+> 
 
