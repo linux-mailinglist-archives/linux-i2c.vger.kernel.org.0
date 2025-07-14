@@ -1,57 +1,56 @@
-Return-Path: <linux-i2c+bounces-11936-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11937-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00496B04851
-	for <lists+linux-i2c@lfdr.de>; Mon, 14 Jul 2025 22:19:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 12BADB0493D
+	for <lists+linux-i2c@lfdr.de>; Mon, 14 Jul 2025 23:21:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 80E8B4A5520
-	for <lists+linux-i2c@lfdr.de>; Mon, 14 Jul 2025 20:19:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 63CCC1A66E5F
+	for <lists+linux-i2c@lfdr.de>; Mon, 14 Jul 2025 21:21:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43FE822FF37;
-	Mon, 14 Jul 2025 20:19:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2D5223D2AC;
+	Mon, 14 Jul 2025 21:21:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c1AcJyKf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dFlPe2bt"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA11417A2EB;
-	Mon, 14 Jul 2025 20:19:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AF671D9A70;
+	Mon, 14 Jul 2025 21:21:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752524349; cv=none; b=K8pwz5bpId/Y3WD3IqvcceryviE9htTx+czpyF/Vtqw/eZELqc1LLJC2YNHY4jNf2wrWfKLkyvkUxrTfmmU3KRtISK1HwilWFl2xrzAWCUxhZ2/B6KwXWCpYH87qw2Eu3GGq7rp56hrBKTG0IbWMQmkIN9ulKvtIRX+5fDBe2bA=
+	t=1752528077; cv=none; b=pSOeOXTYvdjPwJ3/hqOMrQ9EcnJEuIDe0Eop/bTu321DdzRw9P/bNIbsG531/LUEcs+8Esxx7z/TbV+QI6diS0OYe13wOPZWANUCrfnB3w2F6F089qDm2SKXTXqWzXUD8n89svTykicaIHCzAWQlYIYJI3VnCELtBLChaULKGGM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752524349; c=relaxed/simple;
-	bh=7bJfXVAhNRnVzDM7xUbPcaTe/6YZcIdGFerGICjVRco=;
+	s=arc-20240116; t=1752528077; c=relaxed/simple;
+	bh=8i9rJxA3NTaQEbRzQ81+/17HPGqBh7Tb+twsR+6q+sU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LhTDihBN/fufiXpu65uWPV2J15GrahJ55MalEEUVEIgils8In/y1nlIEapyX4azsNmt40e2bteQ2I4rpL2woFprOv7liFmk79CTg805LRR6vySOIH5Ywv0RMcEujiw8B1qjJipcuuWSEwFBeA+qrZ105IMsoL07Rg490lXf7ZKg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c1AcJyKf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61184C4CEED;
-	Mon, 14 Jul 2025 20:19:07 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=dhOCU1OyunHpJYyed7kjdB/lCd2dAvqE9Q7eFS1i+k50Vwba2Z/JNTlytTX+mmrabY2UNYRrzxFjP+M5MaQaO+8uM84gmfuOlYqzS3mC5Gwfap86Om5oBcAe8t18OQVX/aHkh7a0ZbTfHBGhn1B53gPN4q/recO3IDxQCyWv2Xw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dFlPe2bt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5053CC4CEED;
+	Mon, 14 Jul 2025 21:21:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752524348;
-	bh=7bJfXVAhNRnVzDM7xUbPcaTe/6YZcIdGFerGICjVRco=;
+	s=k20201202; t=1752528077;
+	bh=8i9rJxA3NTaQEbRzQ81+/17HPGqBh7Tb+twsR+6q+sU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=c1AcJyKfZwI3rEwGrXwsM2UiVBkBgFFyrz6w6qOvkx1BXwD1NPSZ+Gj/cGvCxL8hn
-	 /ouGqxN/jWX5w5CM7YPK7Hv1rCrnztH29yPGeBBTbcZHzrJV2lwKHgLfKkCSmveApz
-	 VkCXuYnW3pMOkYOplDU46goYl3w7r9Xb2EH8p5qqGr1ohERPb4nRq3hAYmWD2g8Inn
-	 v4JUEHLHSa4z7BKUkSX2mmFJ5Imk+27dxDuGY9MFjpUqn7HyoycJVAd8aRlZl2gOoL
-	 i19gOkeXf12/tkhZ82M/gMPv87uJcfxP9TP3geCBbY39Ft9C31FrtcXe8j+x5KGZNa
-	 KLbez3gIBE3hA==
-Date: Mon, 14 Jul 2025 22:19:03 +0200
+	b=dFlPe2btAxB4HQ8bDa+1MlmVEJaMXOKFKUBY0Em8ZddsAuQqiMQY1fM3603j6lf7J
+	 3zc8I4Wfpc1096wwVo7m7h3QiEuidnS6lKaPkX1dWzttfK1TjlU+Ny282A9rg9uSri
+	 aK503u9wu/IGrVylrLHoHif1M9o6/1nsC76K4op6uKeOThwuVlXsJkXkEbfGZezmDe
+	 uexXbzHmHbZlsJvGBcqiEgFUqRfGVHubB9EbekpcOPXqpMqr+FJ4suFoX71eykKtZS
+	 KTqwd4mET+V1MUvSxuphz6Io7DhBuajeZGp19byJpNiabpX4Jbjw9AsAQpDA7qZIKk
+	 zvYjBXJu7dC+g==
+Date: Mon, 14 Jul 2025 23:21:12 +0200
 From: Andi Shyti <andi.shyti@kernel.org>
-To: Akhil R <akhilrajeev@nvidia.com>
-Cc: andriy.shevchenko@linux.intel.com, digetx@gmail.com, 
-	jonathanh@nvidia.com, ldewangan@nvidia.com, linux-i2c@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org, p.zabel@pengutronix.de, 
-	thierry.reding@gmail.com, conor+dt@kernel.org, devicetree@vger.kernel.org, 
-	krzk+dt@kernel.org, robh@kernel.org
-Subject: Re: [PATCH v6 0/3] i2c: tegra: Improve reset and DMA operations
-Message-ID: <23rb6h5dumcgwrjclos6lax7udhlgyr56eym3jxcuuy5tmczaf@jyhwo6b56rkk>
-References: <20250710131206.2316-1-akhilrajeev@nvidia.com>
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: "Chen, Jian Jun" <jian.jun.chen@intel.com>, 
+	Vincent Guittot <vincent.guittot@linaro.org>, linux-i2c@vger.kernel.org, virtualization@lists.linux.dev, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: virtio: Avoid hang by using interruptible
+ completion wait
+Message-ID: <n26mc4qkgm452stvcsp3kf3hu7lbqsme2wnqaqclsxrmppqenb@4ofu6juzjusn>
+References: <b8944e9cab8eb959d888ae80add6f2a686159ba2.1751541962.git.viresh.kumar@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -60,21 +59,20 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250710131206.2316-1-akhilrajeev@nvidia.com>
+In-Reply-To: <b8944e9cab8eb959d888ae80add6f2a686159ba2.1751541962.git.viresh.kumar@linaro.org>
 
-Hi Akhil,
+Hi Viresh,
 
-with the changes we agreed afterwards...
+On Thu, Jul 03, 2025 at 05:01:02PM +0530, Viresh Kumar wrote:
+> The current implementation uses wait_for_completion(), which can cause
+> the caller to hang indefinitely if the transfer never completes.
+> 
+> Switch to wait_for_completion_interruptible() so that the operation can
+> be interrupted by signals.
+> 
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-> Akhil R (3):
->   i2c: tegra: Fix reset error handling with ACPI
-
-... merged to i2c/i2c-host-fixes
-
->   i2c: tegra: Use internal reset when reset property is not available
->   i2c: tegra: Remove dma_sync_*() calls
-
-mergedt to i2c/i2c-host-next.
+merged to i2c/i2c-host-fixes.
 
 Thanks,
 Andi
