@@ -1,134 +1,123 @@
-Return-Path: <linux-i2c+bounces-11955-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11956-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15277B08BC5
-	for <lists+linux-i2c@lfdr.de>; Thu, 17 Jul 2025 13:30:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6675EB09804
+	for <lists+linux-i2c@lfdr.de>; Fri, 18 Jul 2025 01:32:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 34DD917BEDE
-	for <lists+linux-i2c@lfdr.de>; Thu, 17 Jul 2025 11:30:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9A78F1897E0E
+	for <lists+linux-i2c@lfdr.de>; Thu, 17 Jul 2025 23:32:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1FE2299A9C;
-	Thu, 17 Jul 2025 11:30:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B34252571B8;
+	Thu, 17 Jul 2025 23:29:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ShNKWOyi"
+	dkim=pass (1024-bit key) header.d=zohomail.com header.i=safinaskar@zohomail.com header.b="RieZBhPI"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lf1-f65.google.com (mail-lf1-f65.google.com [209.85.167.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sender4-pp-o95.zoho.com (sender4-pp-o95.zoho.com [136.143.188.95])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 139D9275855
-	for <linux-i2c@vger.kernel.org>; Thu, 17 Jul 2025 11:30:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.65
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752751826; cv=none; b=XTrhDpMPh+AKHergUxH+iOj7QlSqi/cpdbZoOQiIv6w+rXocUdIYRwVftScIVY96mTdDnvCLBx43IWr86EOjif1YbZwIFm2IHndt3ReyPYx/S+6cD9vgGD4R5dg3bvMOQf79Ha2Dn1IwFR+McCCvOT12L7ZfSCqojsHDmhtbVg4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752751826; c=relaxed/simple;
-	bh=dmEgoqhZn+YcF6b5gM1EloXtrRIoPqW3Rc2/1Ieuwrw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lrIR/Fo83KzDFnc0A5U03ZuTjbD6qe3gspbV4Rj5wOGFAXG2Mcgz5Tewswbw7TtzIoVqQkCd93OZlgqU+JNEHrowNDtofKfPQSOwAP6jsEDU/KWY8x2UZn4ZX04nY7g/YmpT5cZqNpD2CxWaAVbB2eqrioi2XLaMAU3J2SvHQJ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ShNKWOyi; arc=none smtp.client-ip=209.85.167.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f65.google.com with SMTP id 2adb3069b0e04-55502821bd2so1053761e87.2
-        for <linux-i2c@vger.kernel.org>; Thu, 17 Jul 2025 04:30:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752751822; x=1753356622; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=6tfnIpnrDFLqgXhLPTYnDrGo7b7raLlVtze3OnlPStk=;
-        b=ShNKWOyiso6r8HN1DNVBbajNSVXDPS3yqyNiCPvkLAcbkof9aQp50cjKQbJ3zAlBMh
-         uBEE4eKw4eum7jxuzLuh0fJplVoqr7YJoJt1Tnkss4SxieDFYY/4cT7m2M8JWkHfOCqX
-         WUUBSspBpt6BGC+Mi65pU8Hu7rO6eMpIJ7soGT1oE3sX3ZDiubb3npllRPRUE/+7kPgx
-         MMd/PFUpxhrHdVQRzEYofcUE3OOZCpUWrL4JBSQa/HTH3zfMksM2ILzYAf87XMJe3HNR
-         ny859ntAzw+JDLjptNVpZ7TjI5DI3WdJfpMahS9OTaZiy4oJ9lx0Ps2lk8yb5CSkDBFM
-         zM0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752751822; x=1753356622;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6tfnIpnrDFLqgXhLPTYnDrGo7b7raLlVtze3OnlPStk=;
-        b=QKCx7x1c0LfmaYl/oo5xzgwWRRbDu1EYF5nx8uhQOfYkdcr6abA7tzbqFy1Uarmo3Z
-         ttDDVgNEyWX0yzEPX3nrS4bj+MVHDl4YllI6ZIP/Sbsq47peu35AKknUXqNTeWNp65Gs
-         nefpNZaeZKapNuBWy33FND8P2TZGOF5fIcqFn9UpeWhahjvUl2tT/cFd9MEFoR6JVyop
-         VVvyNcCHq/4ZItpeRyWipCQ+oDf05KQAxJDjxV7gLIiMqJQjKrH8VF9Pt+8kaAGIMxg8
-         Ng/g4IDK16bznQUes084GmftOsSkVzZKe5lw74xK20JuKVrj69xi7Ef2ZqqKsUrC8mAO
-         Jozw==
-X-Gm-Message-State: AOJu0YxjMpbHcl6mle6f5RQ/xCrOl6QxcwgWMdk2QnCtgWOkpkNEvDu1
-	vAzC0m9pTzTkKqlQbWnX8AfEx05FuqIV/1egE7XDAFf5XWCasIqYIe5FbfklmvYm
-X-Gm-Gg: ASbGncvAe2GZ5+eBAhAp6HAqpySPqSH9VOI/WZ8EKyu02WT8DUDO6xbwKwUubBeJr3C
-	X1whjpOsZ1zQTOHSlvwnrclM3dptv7I/GIUqNj/tnx2orFeU/ViIBkEsHF2a3/6naUPKMtdkMkF
-	mlLB36nVcAyONTge8TpIUIEKxindmfDGwgya+0IhbHvhUG0UP0P+hQ3V64O/tEr0wWCdwvJiXvK
-	TOTrbxBIZfVuvPpCsZvOjC5i1VullkVrQdRaB8qBWrPTN1p2hUo4sjBi7AOBdnbWtrC2fza6v7S
-	ztbbet5C0JxmgeHNZWhVNEOXffGi+rLKREwB6dUhn5w2oQ62mMMXWvP9s2u7VdM0KwVWwwsIvYR
-	7Fh8gR1usE4QyrLyN
-X-Google-Smtp-Source: AGHT+IFt/G7LufmDCFugy9jju4YA2beUngntjcFZoLyCWAzwxqrF76HeW9rTJqu60KFxCc5/Zvy9dA==
-X-Received: by 2002:a05:6512:230a:b0:553:2f78:d7f9 with SMTP id 2adb3069b0e04-55a23edd1d7mr1811233e87.9.1752751821710;
-        Thu, 17 Jul 2025 04:30:21 -0700 (PDT)
-Received: from localhost ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5593c9d315dsm3011989e87.110.2025.07.17.04.30.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Jul 2025 04:30:21 -0700 (PDT)
-From: Torben Nielsen <t8927095@gmail.com>
-X-Google-Original-From: Torben Nielsen <torben.nielsen@prevas.dk>
-To: linux-i2c@vger.kernel.org,
-	manikanta.guntupalli@amd.com
-Cc: Torben Nielsen <torben.nielsen@prevas.dk>
-Subject: [PATCH] i2c:cadence: Handle atomic transfer quirk at probe
-Date: Thu, 17 Jul 2025 13:30:07 +0200
-Message-ID: <20250717113006.4129012-2-torben.nielsen@prevas.dk>
-X-Mailer: git-send-email 2.43.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D63C6248871;
+	Thu, 17 Jul 2025 23:29:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.95
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1752794975; cv=pass; b=Csi32MWoUArxgPtHe0CuXsBQwn62YOFVsDWAkInLTkjJjcn7MG2oJsk2OLOqI5SJi0usr21OUnE4P1pLJjWa5m1nsxCeQQFVmRhoG+KNVNk19wZX4KTLHDkFYugRhSwxKcLiEC3NlLAsrIIgEtNNDmtpwks8ruAwIES+rSHA+Ag=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1752794975; c=relaxed/simple;
+	bh=DZeq33iotwCplBbfY3UTeCCqP46RQE37PvRc1oKQ7qQ=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 MIME-Version:Content-Type; b=nYIrLvnPVWZxgXOOTsqSB1cT2gNvMn5L6U81ixUg0Xp21vmD/9qGiEP3bpzVIbBZBILSi5st3gSa7t2UkBt9LjItHOS8Y3hFXAf29zrdiUaufXkk43BYSuoyAMvkgevNQNHg1McHTqhfixl1Kn8W8qeDKj2MRVQY4Ae6Qj+f5a8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=zohomail.com; spf=pass smtp.mailfrom=zohomail.com; dkim=pass (1024-bit key) header.d=zohomail.com header.i=safinaskar@zohomail.com header.b=RieZBhPI; arc=pass smtp.client-ip=136.143.188.95
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=zohomail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zohomail.com
+ARC-Seal: i=1; a=rsa-sha256; t=1752794955; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=JjYm2+Vru3Bt9pf3BOrBxJynRVSEUBdOCAQnnpAWsSnjYYNOIkazOBSZGxJwhT14lMRfgHp82+zaeaVEmgIUPL0es/VpchR9Ju3bl90g52hiRgFntgDOeiM85OKkuqn9l3mzD/u6DbBiiPm/NE9a+M+5M/1kjOZT370tE0cbVRo=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1752794955; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=HvDZdUpV5WbDrzd2FyycIgzTMOBOo9H31V9aeiCTf80=; 
+	b=koVAbV3H94UWScHq09qZcdPhwQ6rH2iDO3JmKNfHKW8FkOHPRxETJCs3m+YRi/NfHow0sDEkKRV+0hZXb/Z9mJIT5SB6tvuqJlZEpmhyzZTp20CvPmLCO6NuOsIXBWmDpH2IoBcZ1lM5w5f8iwst9eWCx/xI0ucSe44O4L4mlUw=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=zohomail.com;
+	spf=pass  smtp.mailfrom=safinaskar@zohomail.com;
+	dmarc=pass header.from=<safinaskar@zohomail.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1752794955;
+	s=zm2022; d=zohomail.com; i=safinaskar@zohomail.com;
+	h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Feedback-ID:Message-Id:Reply-To;
+	bh=HvDZdUpV5WbDrzd2FyycIgzTMOBOo9H31V9aeiCTf80=;
+	b=RieZBhPI8VL4XUpV5nir++qsXTVGcHTfHWBegxJkfeLiA6x0Z4mbOq0v27BbuvlK
+	+tU4/DkhImC73x50zn8sAsHK8zZUGyuRled5qDXC6OGnmWGrJOByl99vK+Ag5XffENm
+	zW2BYnqPj6bGKoKqV08MgA19pRKPx6nWmq8ZEtXU=
+Received: from mail.zoho.com by mx.zohomail.com
+	with SMTP id 1752794953927271.55135502634243; Thu, 17 Jul 2025 16:29:13 -0700 (PDT)
+Received: from  [212.73.77.104] by mail.zoho.com
+	with HTTP;Thu, 17 Jul 2025 16:29:13 -0700 (PDT)
+Date: Fri, 18 Jul 2025 03:29:13 +0400
+From: Askar Safin <safinaskar@zohomail.com>
+To: "Mario Limonciello" <superm1@kernel.org>,
+	"Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
+Cc: "Linux i2c" <linux-i2c@vger.kernel.org>,
+	"linux-acpi" <linux-acpi@vger.kernel.org>,
+	"regressions" <regressions@lists.linux.dev>,
+	"DellClientKernel" <Dell.Client.Kernel@dell.com>,
+	"linux-gpio" <linux-gpio@vger.kernel.org>,
+	"Raul E Rangel" <rrangel@chromium.org>,
+	"Benjamin Tissoires" <benjamin.tissoires@redhat.com>,
+	"Dmitry Torokhov" <dmitry.torokhov@gmail.com>,
+	"Bartosz Golaszewski" <bartosz.golaszewski@linaro.org>,
+	"Werner Sembach" <wse@tuxedocomputers.com>
+Message-ID: <1981ab878bb.122f8227039020.1935112937005363340@zohomail.com>
+In-Reply-To: <9eac81e6-b4ee-4210-84ac-cbf7bf811130@kernel.org>
+References: <197ae95ffd8.dc819e60457077.7692120488609091556@zohomail.com>
+ <5d7ee2bc-6595-46f1-8c8f-0c439f033407@kernel.org>
+ <197af82e9e7.10ca643e5467232.6943045931834955890@zohomail.com>
+ <6f42c722-cfa5-416d-8b63-730ad88e6b9d@kernel.org>
+ <197bfafc23e.e6344936595425.1881540896161671378@zohomail.com> <9eac81e6-b4ee-4210-84ac-cbf7bf811130@kernel.org>
+Subject: Re: [REGRESSION][BISECTED] Dell Precision 7780 wakes up on its own
+ from suspend
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+Importance: Medium
+User-Agent: Zoho Mail
+X-Mailer: Zoho Mail
+Feedback-ID: rr080112271604c982856de098a59a030c00009f9271007d987a22c3c9d3e5e8ee71808d862f55175c6be342:zu080112273a964176b8858c250f6f14be00002c05b71f5f33ff50b4e23d9d0cdd11ef16eb04e7b7610fc334:rf0801122b800401834c36798dbafd4fbc00000e4fdcce44309af734e6aa92eacc2dd282ab10c9dfc454f7869db8e666:ZohoMail
 
-Since we know already at driver probing if atomic transfer is not
-working on the specific hardware version we are using, it is better to
-not populate the handler instead of offering a function that is known to
-fail.
+ ---- On Mon, 30 Jun 2025 22:40:28 +0400  Mario Limonciello <superm1@kernel.org> wrote --- 
+ > Looks like your interrupt 14 is ACPI device INTC1085:00.
+ > 
+ > Some quick searches this seems to be an Intel GPIO controller.
+ > 
+ > Andy,
+ > 
+ > Any ideas how to debug next?
 
-The current behaviour caused a failure to power off when using a PMIC
-connected via I2C to a ZynQ 7000 processor using a Cadence controller
-with broken hold bit.
+So what?
 
-This patch fixes the issue.
+I will repeat: similar bugs were already fixed here:
 
-Signed-off-by: Torben Nielsen <torben.nielsen@prevas.dk>
----
- drivers/i2c/busses/i2c-cadence.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=782eea0c89f7d071d6b56ecfa1b8b0c81164b9be
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a69982c37cd0586e6832268155349301b87f2e35
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4cb786180dfb5258ff3111181b5e4ecb1d4a297b
 
-diff --git a/drivers/i2c/busses/i2c-cadence.c b/drivers/i2c/busses/i2c-cadence.c
-index 697d095afbe4..68ae60a09aa6 100644
---- a/drivers/i2c/busses/i2c-cadence.c
-+++ b/drivers/i2c/busses/i2c-cadence.c
-@@ -1230,7 +1230,7 @@ static int cdns_unreg_slave(struct i2c_client *slave)
- }
- #endif
- 
--static const struct i2c_algorithm cdns_i2c_algo = {
-+static struct i2c_algorithm cdns_i2c_algo = {
- 	.xfer = cdns_i2c_master_xfer,
- 	.xfer_atomic = cdns_i2c_master_xfer_atomic,
- 	.functionality = cdns_i2c_func,
-@@ -1511,6 +1511,9 @@ static int cdns_i2c_probe(struct platform_device *pdev)
- 		id->quirks = data->quirks;
- 	}
- 
-+	if (id->quirks & CDNS_I2C_BROKEN_HOLD_BIT)
-+		cdns_i2c_algo.master_xfer_atomic = NULL;
-+
- 	id->rinfo.pinctrl = devm_pinctrl_get(&pdev->dev);
- 	if (IS_ERR(id->rinfo.pinctrl)) {
- 		int err = PTR_ERR(id->rinfo.pinctrl);
+So we just need to add similar patch. I. e. something similar to this:
 
-base-commit: e2291551827fe5d2d3758c435c191d32b6d1350e
--- 
-2.43.0
++		.matches = {
++			DMI_MATCH(DMI_BOARD_NAME, "NL5xRU"),
++		},
++		.driver_data = &(struct acpi_gpiolib_dmi_quirk) {
++			.ignore_wake = "ELAN0415:00@9",
++		},
+
+Remaining question: how should I get these strings on my system? "NL5xRU" and "ELAN0415:00@9"?
+--
+Askar Safin
+https://types.pl/@safinaskar
 
 
