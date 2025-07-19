@@ -1,79 +1,79 @@
-Return-Path: <linux-i2c+bounces-11972-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11973-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B545B0B015
-	for <lists+linux-i2c@lfdr.de>; Sat, 19 Jul 2025 14:58:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 561F2B0B018
+	for <lists+linux-i2c@lfdr.de>; Sat, 19 Jul 2025 14:58:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1635C1AA2188
-	for <lists+linux-i2c@lfdr.de>; Sat, 19 Jul 2025 12:58:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E9D5F3A7150
+	for <lists+linux-i2c@lfdr.de>; Sat, 19 Jul 2025 12:58:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0B232882AC;
-	Sat, 19 Jul 2025 12:56:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAEA828850C;
+	Sat, 19 Jul 2025 12:56:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="irmb/a12"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fqWjKtZx"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C9802877CD;
-	Sat, 19 Jul 2025 12:56:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09B692882B0;
+	Sat, 19 Jul 2025 12:56:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752929797; cv=none; b=lp398t9agPWUI77jtWxISSNE7gCr0phPKDNJ+WNRK3BipFzMUSJ5GSfRLb2Esh6nebbLClBrifAekfyzN9/vOoHU9x9xc5HA3KNsfoI3LUE5jiGwOvVk0R/c1utPn0KZe4FzOCk/QEhssRjBiTxwc7318xx16G+IVvJW4BkA41M=
+	t=1752929799; cv=none; b=f8f5t4G1CO81mWBmrCTOWJrFuLMXjZiz81m+TmWRmLHZmaHOXoaaUItWuIL49x41CTjQ1vRz2PRCvrZ5D8VtaoG3wzQv+Pfe+oJ1C1AoJ12lFZj31eTeGzJxM1A9qwp3Q7apbaztPFYfcfGbYAP9DqiZahDJf7/2jRFfZeNGkR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752929797; c=relaxed/simple;
-	bh=dkV+IUmKiqaEhbhd2NYNtijiIlnYC+Jc7DPZEhWfRW8=;
+	s=arc-20240116; t=1752929799; c=relaxed/simple;
+	bh=Vs+D1OyyPsCiKsDufhO8BO5KJnYHW8HEaou5C1Rmdyk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oXd7ShLwlM401oWP+bWYqonkvY7lJjMWrGcg3FP9011SxnxdiyjdekK6Hp27v/NdIWnV/LwN3w7Wdb0wJGrdX+pn1g4DzmWFe2vFcb7nSYuREib9Jd246afySmwukATri4r2UoGMR4BTUOWjj464Fv3RzTK8YCZ2ZDEseZHIKT8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=irmb/a12; arc=none smtp.client-ip=209.85.128.50
+	 MIME-Version; b=dyWd1vTNIur5bJqDkKVJLonwaJl57J0F2lbNtM4ZPkuHbAiKvhLZn68UuZ1VwakZRLdk35fANbjCfUc4v1Dff7GCIVgGjqbrjLb091JqkTuXbHKzT8DyNceTtf4Ixk5MrlRBFCApBh8ugiAI++YVcvZAlaGhuZ8aGhpH/PMQ+b4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fqWjKtZx; arc=none smtp.client-ip=209.85.128.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4561607166aso22579085e9.2;
-        Sat, 19 Jul 2025 05:56:35 -0700 (PDT)
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4561a4a8bf2so31716965e9.1;
+        Sat, 19 Jul 2025 05:56:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752929794; x=1753534594; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1752929796; x=1753534596; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ZxF16l3zt8tY8sRNrzE5FLjqAdbnZlfk++/RmClHsQk=;
-        b=irmb/a12Lvv7kqsCqiO5ym75O6Yb/b5JK1igWwSPbc9haEdxUKw7Hw0c4gEFih43tL
-         26vpJ+CMzKePONJIv/XXNmfi2JaP1k2RsUmhtXpcFzKxcoT7xJxxAdI65SxFqOTCBi4i
-         sh39jv62lbXo0mr7z2HQM8w6jwJF7PvLc6un2ydyq3giGk9sVLF3FnV4nCkpXlJezL6o
-         Jx83hVt7yJKmvcTgBSIqbzO2AB/ixSu8nQqz7lyuwrHP1i9RxNZcHBUaDdiXteGi/N/x
-         r75uCMuX3HxUD2SVDCqN+PzIPohqRJErFJjioZreSzeoGPNxpikpT+39vTkZ4loNfZZS
-         Uy6w==
+        bh=mKfLEG6+ipDQ095wwf+Yj6O/rN6WeuJI3tKiO7F5vfc=;
+        b=fqWjKtZxwFIeARdiMOPFM+eundO26TmItw1vXgevgLDhdgJYI35++TDIRoh29QNKuc
+         PnYnT/HiQCmVNdLNnmaFxAuYrwPLzGPyjVlaEFFHHJG9JXlvYUqaymI4KhyUF/f9UCcs
+         7YuplYSp0mK+0qWxVc1tTc/H8/rOECE7MlJzxxDrO2MgH0Ixn7Kr8NBJ2Pt4EFe2Qd40
+         5jssZ0zpUpJkeozBI0kun15jLL2pXM4BbYq7zPzrvBZnRy/l5kp0UCdHD7pzp/UtkwQI
+         SV98KMELSLChi3De2IlB/m3Rcw6I+68avPr4EYWglKmvOLKNFkYA/qkYSfr2xRRano73
+         UpIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752929794; x=1753534594;
+        d=1e100.net; s=20230601; t=1752929796; x=1753534596;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ZxF16l3zt8tY8sRNrzE5FLjqAdbnZlfk++/RmClHsQk=;
-        b=BodJe5oBroC7bjiz5iziu4WuiWMB7eUSs1i5HkVc+Bcg3i+CCOpiFzd2H5AmBsWdQC
-         JXqm96dYS2EkfCJJW67qFylkuHJbW6ztbzwhFbsA0ETLYE2OhU1mUDelF50c9Dqe0Orp
-         WavpfGTX08v/nN5K9f8lbTguM0mr/3zU7qI7SIItzDZk8JzEYqJVsmFB9zLlHgw3cowe
-         0tDNfKeu6U8VbCX2mbDZj6T+TR6OMa8fuPdwk38XW8ofzwfu4OYTCwB6BE4DvOBbBsJo
-         B919H5pGNskGreZeNLkqwFx5P+Q7qK15OYNJCLLdVnlrWRegXuAgopPyVAk12/PrLygY
-         33FA==
-X-Forwarded-Encrypted: i=1; AJvYcCUa3KwLpuVV0iSwZwNibKHWAl3krfO9uIA2AL+DbLGe/AKPb2f69S/7CZkQY1hy3mVWZYmp+xoWCy6w@vger.kernel.org, AJvYcCVStbYYZiDumhbHZ6uexAK+akBfNC68/YgS9yR9uux6dWFIYBGqlAsYLoR+f0npu8lbSUNp8B06Qb66OA/F@vger.kernel.org, AJvYcCWHD8ELeWXav3WfC/3T9ybZCGxd4wV0WZDWBSqj36ZlGvfJBRML3ZuX9p9wLADjrAAtVLcAT7aV0dGG@vger.kernel.org
-X-Gm-Message-State: AOJu0YzHxvR+UQpgxlVd+MSJLYOYQsOZrJGWwYsr9XT4MD08gcvD8g6v
-	sa7WsLnyPgLx/NGukc1MGUcPPp5G5SeYTHu/P6ME7elk1dG8gAgS2gHk
-X-Gm-Gg: ASbGncs4Xm77pVI4GQ109pe6kF6znPtnAtz+TvXppLPpqASx5UJ5wMYmEMgEZfnGXUs
-	QsfMptGhls9tE719+fXx3mS0kXz8yTDOdeZTNX6wtBW6jIxZXGwuCbON1kOtBECANZoW5xkR67x
-	yvnghuJ66kJS0qVuHdhptf/hsJA34+g7LhTonCK/TPqDaiwWzNtCrkS4f+XKSiGXUs36VcmbujI
-	+A0yWPOp3//cJlSJM2HXkhRH2icInI0lBGxEWWEC6Mv/pieQdeu9g56dgD50fjjGv4SL/V16aXU
-	fAEMBT42yk6Rp7tBu9Sj3ecumdhDEz0AgIB7WcEElgpFRHsoZ9ORqwSjRBX18adiytOerR1AwbO
-	Juj3wswpTf8yoPNguzxlGNFtQpZ3rd4lXnLamyUt9ShfyJuR47wkif5Is70BGjWDUc4PbUJKxWU
-	6V
-X-Google-Smtp-Source: AGHT+IErHyd8wFBnJDF+WNgRh9G5CvxgmcOoZYRsh1TvapWmYxtxbpcLIUSOUNS+UJ/rCtM4NIuATw==
-X-Received: by 2002:a05:600c:310d:b0:456:13b6:4b18 with SMTP id 5b1f17b1804b1-4562e2a59a6mr156638375e9.31.1752929794405;
-        Sat, 19 Jul 2025 05:56:34 -0700 (PDT)
+        bh=mKfLEG6+ipDQ095wwf+Yj6O/rN6WeuJI3tKiO7F5vfc=;
+        b=fn8frRKiNDE8WW1znUspwzGZwdufLQ4e+cdDDbBYRH4QJVR+NHHz5WavianLMgG0UZ
+         fJvFRK4q+dpFwpklSUfXx2coJNVbgiNVbTFmtdbGt8wCa6YvutIwjM3t6fA6GaX/SkrO
+         xo3hM4wrzGmRMvGFFmJu6fcVtt4uloHbopEHCQ83se2UJAUc3oeCZQgXn5elkJs1sZlD
+         JcfLqwI4LmxTdhAXjbzA/8pQtKugdu7YacObLnJlu7bYdka7A3qOckH6925ulUMXVXQI
+         tXMrWK50F2rdNNpRaP9fe67Tqg/3/CPmVZuivfMawKxO2VtGTirgoFEUi1B0ZmWEjmU9
+         ALJA==
+X-Forwarded-Encrypted: i=1; AJvYcCVtbfIgY3IOwFy1wN18tHV0pYrhFeuAVREK+YFbI+t7zAkB/fp9LlhUV3htfqF7fFbRnapyfkbtedEm@vger.kernel.org, AJvYcCXg4A46c+4wrLO2xGz4Yv13LnlPCVdo3whma+GL8McfNTILl7VOfLJe1FQSzn1kis2Db5MNxrqA576e@vger.kernel.org, AJvYcCXyXM+Y3fH4cs6jpHs8EFmp4pZRnYQLWuujmJh6MfppHdnjg3kpmRAsJUeT/ohGBdkvdVf9CzGPOWSn0xIX@vger.kernel.org
+X-Gm-Message-State: AOJu0YzmhGXvT5jzWp4CP/wGh6X90SHlBuefJEXE1QY9eItLNUKu9sup
+	b4677tV9MInS54XXOu/J6jx9bPf2zhVLijd54jzzaGQOOVKWa6m7TR/D
+X-Gm-Gg: ASbGnctllnHdf4exlo2rcXOQT54NBE+sC974Q7yavgyx1rkA4jdWFPjATxw2NlVkNDA
+	ZzKfS2CSFMtBnrgOzpV3Z2drEe1XR/jNFe/i1XDTNO8+I5fYfXFypZlbr2z+sLjjJtsEiZ4tL04
+	R++8H/40X4opgVMFcTZHSWh4LcvPXxHsEbgczn3daJ7Si5mqZ8IaNpJjnW5phm2JKpHWz2nprL3
+	yjB6GXMs9V0ja5y2ctciPrCOG5aeTIdqTATVCgTafwjw2VF1rwqYJSOOKnzc/yb4EDvRySBNTD0
+	G9nlPywi8CS09G4mdpcNkUvxtexC2RJOLa5N4q+VhhdUR0i3enc5sjpEaZ7763N0LsgLthrAYGE
+	6GHSykBJmsI5xfkcKvcdqtBsiu+zYf9H7+O3YHH0qS7pXy1aSu1Ct8EPqUFxpGQgjLRyerNgNJl
+	gl
+X-Google-Smtp-Source: AGHT+IHuF11ip4L2zFfEUMigRC8dkjkuBq7ULx5s8kWGHzrhWElZjxldUDaslThQi3g96GCZtgJjdg==
+X-Received: by 2002:a05:600c:4f85:b0:456:43d:1198 with SMTP id 5b1f17b1804b1-4562e3801ddmr128008475e9.32.1752929796210;
+        Sat, 19 Jul 2025 05:56:36 -0700 (PDT)
 Received: from Ansuel-XPS24 (host-212-171-170-230.retail.telecomitalia.it. [212.171.170.230])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4562e81ccb4sm106688005e9.17.2025.07.19.05.56.32
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4562e81ccb4sm106688005e9.17.2025.07.19.05.56.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Jul 2025 05:56:34 -0700 (PDT)
+        Sat, 19 Jul 2025 05:56:35 -0700 (PDT)
 From: Christian Marangi <ansuelsmth@gmail.com>
 To: Stefan Roese <sr@denx.de>,
 	Andi Shyti <andi.shyti@kernel.org>,
@@ -88,9 +88,9 @@ To: Stefan Roese <sr@denx.de>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-mediatek@lists.infradead.org
 Cc: Christian Marangi <ansuelsmth@gmail.com>
-Subject: [PATCH 3/5] dt-bindings: i2c: mt7621: Document an7581 compatible
-Date: Sat, 19 Jul 2025 14:56:13 +0200
-Message-ID: <20250719125617.8886-4-ansuelsmth@gmail.com>
+Subject: [PATCH 4/5] i2c: mt7621: limit SCL_STRETCH only to Mediatek SoC
+Date: Sat, 19 Jul 2025 14:56:14 +0200
+Message-ID: <20250719125617.8886-5-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.50.0
 In-Reply-To: <20250719125617.8886-1-ansuelsmth@gmail.com>
 References: <20250719125617.8886-1-ansuelsmth@gmail.com>
@@ -102,49 +102,52 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Airoha SoC implement the same Mediatek logic for I2C bus with the only
-difference of not having a dedicated reset line to reset it.
+The same I2C driver is also used for Airoha SoC with the only difference
+that the i2c_reset should not enable SCL_STRETCH for Airoha SoC.
 
-Add a dedicated compatible for the Airoha AN7581 SoC and reject the
-unsupported property.
+Introduce a new compatible for Airoha and limit the SCL_STRETCH only to
+mediatek SoC.
 
 Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 ---
- .../bindings/i2c/mediatek,mt7621-i2c.yaml          | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
+ drivers/i2c/busses/i2c-mt7621.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/i2c/mediatek,mt7621-i2c.yaml b/Documentation/devicetree/bindings/i2c/mediatek,mt7621-i2c.yaml
-index 118ec00fc190..38118007b601 100644
---- a/Documentation/devicetree/bindings/i2c/mediatek,mt7621-i2c.yaml
-+++ b/Documentation/devicetree/bindings/i2c/mediatek,mt7621-i2c.yaml
-@@ -14,7 +14,9 @@ allOf:
+diff --git a/drivers/i2c/busses/i2c-mt7621.c b/drivers/i2c/busses/i2c-mt7621.c
+index 58c3da92cea3..b4dc1fb269a6 100644
+--- a/drivers/i2c/busses/i2c-mt7621.c
++++ b/drivers/i2c/busses/i2c-mt7621.c
+@@ -88,6 +88,7 @@ static int mtk_i2c_wait_idle(struct mtk_i2c *i2c, bool atomic)
  
- properties:
-   compatible:
--    const: mediatek,mt7621-i2c
-+    enum:
-+      - mediatek,mt7621-i2c
-+      - airoha,an7581-i2c
+ static void mtk_i2c_reset(struct mtk_i2c *i2c)
+ {
++	u32 reg;
+ 	int ret;
  
-   reg:
-     maxItems: 1
-@@ -38,6 +40,16 @@ required:
-   - "#address-cells"
-   - "#size-cells"
- 
-+if:
-+  properties:
-+    compatible:
-+      contains:
-+        const: airoha,an7581-i2c
-+then:
-+  properties:
-+    resets: false
-+    reset-names: false
+ 	ret = device_reset(i2c->adap.dev.parent);
+@@ -98,8 +99,12 @@ static void mtk_i2c_reset(struct mtk_i2c *i2c)
+ 	 * Don't set SM0CTL0_ODRAIN as its bit meaning is inverted. To
+ 	 * configure open-drain mode, this bit needs to be cleared.
+ 	 */
+-	iowrite32(((i2c->clk_div << 16) & SM0CTL0_CLK_DIV_MASK) | SM0CTL0_EN |
+-		  SM0CTL0_SCL_STRETCH, i2c->base + REG_SM0CTL0_REG);
++	reg = ((i2c->clk_div << 16) & SM0CTL0_CLK_DIV_MASK) | SM0CTL0_EN;
++	/* Set SCL_STRETCH only for Mediatek SoC */
++	if (device_is_compatible(i2c->dev, "mediatek,mt7621-i2c"))
++		reg |= SM0CTL0_SCL_STRETCH;
 +
- unevaluatedProperties: false
++	iowrite32(reg, i2c->base + REG_SM0CTL0_REG);
+ 	iowrite32(0, i2c->base + REG_SM0CFG2_REG);
+ 	/* Clear any pending interrupt */
+ 	iowrite32(1, i2c->base + REG_PINTEN_REG);
+@@ -276,6 +281,7 @@ static const struct i2c_algorithm mtk_i2c_algo = {
  
- examples:
+ static const struct of_device_id i2c_mtk_dt_ids[] = {
+ 	{ .compatible = "mediatek,mt7621-i2c" },
++	{ .compatible = "airoha,an7581-i2c" },
+ 	{ /* sentinel */ }
+ };
+ 
 -- 
 2.50.0
 
