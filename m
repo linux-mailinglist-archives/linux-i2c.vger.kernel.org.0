@@ -1,115 +1,164 @@
-Return-Path: <linux-i2c+bounces-11978-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11979-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 754E8B0B799
-	for <lists+linux-i2c@lfdr.de>; Sun, 20 Jul 2025 20:20:09 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B093B0B814
+	for <lists+linux-i2c@lfdr.de>; Sun, 20 Jul 2025 21:51:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DBF383BB778
-	for <lists+linux-i2c@lfdr.de>; Sun, 20 Jul 2025 18:19:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D5C0C7A850A
+	for <lists+linux-i2c@lfdr.de>; Sun, 20 Jul 2025 19:50:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4555E21D3EC;
-	Sun, 20 Jul 2025 18:20:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0E50221720;
+	Sun, 20 Jul 2025 19:51:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="GplWQXR2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RA6Sy04t"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CFB516419
-	for <linux-i2c@vger.kernel.org>; Sun, 20 Jul 2025 18:19:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6D22204866;
+	Sun, 20 Jul 2025 19:51:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753035604; cv=none; b=WrS0tgu86IJnCToMtKsmJPa6Zis4HxM78EBT48EsJAukBVO/U5ObZNuS2RMVzlGhtSuDvcpxU2zUsEk/4SqXRmevHsHQxq6jrIHbp68wTpkPZQ3xa8WmSEFEz3tO0cmvLP4nHW/kArw4bXw1vRmuS1Q+38UL2IY+Z5yws8YJoa8=
+	t=1753041090; cv=none; b=kqfCVM/vR1rS/ijfCPCjmNaflwcE2E20xkX2t3OwvJ/jlSJUQXlFxgxxv8JlpgBdsFeAC47+4XZVSCDYROfsLPjqLHBZnw3nToftjju7EdeP2e9EdjrBY02daEuiE1kF/GecNFiFxlasOzAOkFmgBkNF5tuU4oVMT1iZ4KhgasI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753035604; c=relaxed/simple;
-	bh=yjGTJxq+gQ00cd7jkVrOljdwuphwD27W3KkaboY2G5Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=axk1zV1GqeVcm43ZjHRdO7uUCMlBxVy+ZYelb1UKSGUB4WiqjCaPZq2bk+JnULL7+BcOZce/XDz4aHuvEbMlG9vdpS+w2q36mA3DiuxkEs6eeYY0kmsW2Ylt1/wRn6wib9q2xQC8VfLuHGOStw2CIkju6d7RTYL5wWr0cNajL2o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=GplWQXR2; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=1yCp
-	2oCgThbpfPI/eN++G8tzrbPhCesb5/tj6oULTZg=; b=GplWQXR2Dt6q5zKzJBqx
-	DZqYtV6eK+8CIEMGF8HuvdAszAhfdl725AWleUSNdUhZhNl/Pf8VVvrCppsFY1D2
-	a2tOw4PhEM48BLzNE3DKu5C8ly+N7kdHyV+EgmUwukfwG5Q9sc6d5onh48/Y6z8g
-	+FY+CQGXXYYWW7ftPBMoYz37qA4U9jvpmRmEztPgDJteiIz1gQ+Pr+xKfC4oOPEN
-	DiXMtPVnoMMIi2CWf4awR6X8Rp+nmZmNiGo1KfQ48uYcfSs07blagtd0XEayHB0U
-	2vh3VMeC+dc1bqRfvPA8QsM9tAdLmTSDIsSWuBi6NL4gF/9D8FKyolVjjE0Bh72N
-	+g==
-Received: (qmail 611277 invoked from network); 20 Jul 2025 20:19:50 +0200
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 20 Jul 2025 20:19:50 +0200
-X-UD-Smtp-Session: l3s3148p1@wjupZ2A6Iu0ujnti
-Date: Sun, 20 Jul 2025 20:19:50 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Andi Shyti <andi.shyti@kernel.org>
-Cc: lkml <linux-kernel@vger.kernel.org>,
-	linux-i2c <linux-i2c@vger.kernel.org>
-Subject: Re: [GIT PULL] i2c-host-fixes for v6.16-rc7
-Message-ID: <aH0zRiDe75dAPHkk@shikoro>
-References: <2lbfr4r4icozrhnh5vgitzc6dylnxvh7x6fkdytacsy3oncsfe@7usj2u6nbk45>
+	s=arc-20240116; t=1753041090; c=relaxed/simple;
+	bh=qOsIxA97IITUd+yl9dvmO+aUvms8OxRzYVHcfojfXdg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XecEa4O9YRWmZJY6yLPydzYxOSoxwqtDPmBczfx0gbFrTSdcHlNzV/ivIQwzIP8Pktq163JG8gMT9hnSmB5IpjNPj6KE/YAcyuTf3eIjKLT1Akc1pXhX4vBIiZvgDQLdxDQizQUREkWFIFHIGJi7nO9Ox5yGIJWNWGaK80MyN+k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RA6Sy04t; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4561514c7f0so38153925e9.0;
+        Sun, 20 Jul 2025 12:51:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1753041087; x=1753645887; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ORKaYSW+0DS70Ut8rRvu8xLUy32VpcjZ83O5mq3akq0=;
+        b=RA6Sy04t2V1nIA+WWuMVwXfGQa04zXZuWCxEdFn9dVc85BGennGzQfVv312IYb/HBw
+         6ytCPUak2wFw1dfNxlxAaoy2pHPz//o/vp53aXi5LWp8UW7PkauHaZuVcfSMmn4NA3By
+         /1czBjq/wSx1kMZl/4D9cWX7o0ADf+mlEwkGJlSF8G0n3BWtwemLx0w4RYojBZ2pAsgj
+         VhwUs74IX+N5BLN3/25CSBlyHf7pC0vBMbLYw1TPuMaVxX+dsEwPfDpyZfCdzXJR/BWM
+         t2XTRnQHdTptzS93XHHln2+7mMA+9+NZWGFIJcCEu+qjBTSYLMLObcI9fqHQ1FSywyFO
+         edLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753041087; x=1753645887;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ORKaYSW+0DS70Ut8rRvu8xLUy32VpcjZ83O5mq3akq0=;
+        b=sh7sn4GyPdCS4CJg/8rrTXvIj6uTWc0nLCIokSOmby64e0KiZPmNV50UY5/jZ6UMcC
+         s/4WsS0pIJBEOk6s9+zEuxM7R9Z+W6uyOLp1oyDTJVx+vkmYqi+6JEQLa78X1uQkzm0Y
+         pq8FCtGKgzyAK0s/NkglYgSW1+BCWqzdRtIqMAEO/BrB7b/ip9j4lAYb0jtkff02fmhZ
+         3rzgXsUQ5UhogRF9hXcEBA84hsxMx9plKa4UbTrbeIAjNsJcnri/zngb7t2OO4zFlPtd
+         0K31h2OSEf9CEDA7Tzv9+bUBQ5kxdf9ufdsOj4CNcaqc4RqmpLzG86w3z0JF9/Y8h/2d
+         BOWg==
+X-Forwarded-Encrypted: i=1; AJvYcCUyH2X5zfZuYTPMcKzgtlsz/gfxAI4n1gtHLLhwJKj/P0yYFJCDvqfA5bTBl6/mSAQKax+0UvGHhxav@vger.kernel.org, AJvYcCWkcSmCgJ1WwbjOb8fEBtr68pLzLFG2yX35OWKl4ZyTSkCD7F49WzRmHxFsnZrhzXHvaY9J/HezQKQ6G3T/@vger.kernel.org
+X-Gm-Message-State: AOJu0YxRYnYtDhAYiH/pSEfty0WAfIwuu9q2/mmO3tUbNbsKfniQthy2
+	FgYtCq691DTozDjApfuNTO+coKVBYn/73av5PMnGdhODGHUDDN/eSkRsdcWgdQ==
+X-Gm-Gg: ASbGncsfQVAKwqYhEG5hZJDcgq61bQgPtjZzi9vg3CWHHqZg0hFNcYqzwaVn+LHKUlI
+	dSbceotwd/ZoZoi8PQpn8M3FbYIeNNHpnA1TiIxdD5FRj01Exms+L9JrPcysPgxlH9WWigVJ/1t
+	iHq7/5FsPek0YrWnYfxfw3C+2Y9XUvoPtj8yFLS1IRIgf2o+WzjXh3INicQpY+ByvS/8UnXmRfw
+	iG/Oy1Uz5kR6jztVM0LFHb6pb1AtmLKVBTs/MKbaeH2PKlhauYH5DUmJKyXG5n5DSYQ4wCNS0/5
+	UAB849Nwoq4VpOGowj8kICjKbSTkwugOkRtfGWNdYcTgwve2DJt7443Xx/yiWl3c5tYBTuQl5Yv
+	CMSt04o3XOiKg0o1lrQaNXP7NiNKcrs56pvAFRAfDuj8m+jY9Pl/BcRha5NAnZK3y5Uc77fcHO3
+	MqEK/iAQGIoe7LRk+8
+X-Google-Smtp-Source: AGHT+IHbROicXgIbFXt4H2trn3TgwRdZgCpt1/XSB+sTWjHrdlpcqHOi+10wzwuYUbnTNKUUz76ycQ==
+X-Received: by 2002:a05:6000:4211:b0:3b5:e714:9770 with SMTP id ffacd0b85a97d-3b60e4c8eb5mr13096381f8f.14.1753041086716;
+        Sun, 20 Jul 2025 12:51:26 -0700 (PDT)
+Received: from ?IPV6:2001:9e8:f12d:7332:185c:3e5:d93f:669? ([2001:9e8:f12d:7332:185c:3e5:d93f:669])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4562e7f2d4fsm143228585e9.4.2025.07.20.12.51.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 20 Jul 2025 12:51:26 -0700 (PDT)
+Message-ID: <0a2a0fa6-ee82-40be-b62d-847a4ef04626@gmail.com>
+Date: Sun, 20 Jul 2025 21:51:25 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="FWCJlpabTez3TVVl"
-Content-Disposition: inline
-In-Reply-To: <2lbfr4r4icozrhnh5vgitzc6dylnxvh7x6fkdytacsy3oncsfe@7usj2u6nbk45>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/3] dt-bindings: i2c: realtek,rtl9301-i2c: extend for
+ RTL9310 support
+Content-Language: en-GB
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: linux-i2c@vger.kernel.org,
+ Chris Packham <chris.packham@alliedtelesis.co.nz>,
+ Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Markus Stockhausen <markus.stockhausen@gmx.de>
+References: <20250712194255.7022-1-jelonek.jonas@gmail.com>
+ <20250712194255.7022-3-jelonek.jonas@gmail.com>
+ <20250714-magnificent-powerful-nuthatch-afcc01@krzk-bin>
+From: Jonas Jelonek <jelonek.jonas@gmail.com>
+In-Reply-To: <20250714-magnificent-powerful-nuthatch-afcc01@krzk-bin>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+Hi Krzysztof,
 
 
---FWCJlpabTez3TVVl
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On 14.07.2025 08:00, Krzysztof Kozlowski wrote:
+> On Sat, Jul 12, 2025 at 07:42:54PM +0000, Jonas Jelonek wrote:
+>>  properties:
+>>    compatible:
+>> @@ -23,7 +25,14 @@ properties:
+>>                - realtek,rtl9302c-i2c
+>>                - realtek,rtl9303-i2c
+>>            - const: realtek,rtl9301-i2c
+>> +      - items:
+>> +          - enum:
+>> +              - realtek,rtl9311-i2c
+>> +              - realtek,rtl9312-i2c
+>> +              - realtek,rtl9313-i2c
+>> +          - const: realtek,rtl9310-i2c
+>>        - const: realtek,rtl9301-i2c
+>> +      - const: realtek,rtl9310-i2c
+> So these two are just enum.
 
-Hi Andi,
+Could you be more precise on that please? Sadly, I don't get what you're trying
+to tell me.
+>> +    minimum: 1
+>> +    maximum: 2
+>> +
+>>  patternProperties:
+>> -  '^i2c@[0-7]$':
+>> +  '^i2c@([0-9]|1[0-1])$':
+>>      $ref: /schemas/i2c/i2c-controller.yaml
+>>      unevaluatedProperties: false
+>>  
+> As mentioned last time, missing constraints.
+>
+> How did you solve this:
+>
+> "you should clearly narrow this per variant"?
+>
+> See example schema. It has EXACTLY this case.
+>
+> https://elixir.bootlin.com/linux/v5.19/source/Documentation/devicetree/bindings/example-schema.yaml#L212
+>
+> You also need to narrow the number of children.
 
-> in this pull request you have included also the previous week's
-> patches. Everything is rebased on top of rc6.
+I missed that from your previous review by mistake, sorry for that.
 
-Sorry, not pulled. Maybe they slipped through the cracks, but I wrote
-two mails *not* to send me a rebased branch but an incrementally updated
-one [1] [2]. Rebasing public trees pulled in by someone else lead to a
-number of problems e.g. original mail of thread [2].
+I managed to narrow it per variant whether 'realtek,mst-id' is required or not.
+But I'm not really able to do the same for the different regex patterns or the
+number of children. Although I'm trying to follow various examples,
+dt_binding_check just fails not taking the regex patterns into account.
 
-So, I just sent last weeks PR to Linus. If that is in rc7, then you can
-rebase the missing patches from here to rc7. Because that one I haven't
-pulled yet.
+Since you have a lot of expertise on that and I obviously fail to find
+documentation that helps me to do that properly, could you give me some hints
+on how that has to look? I'd really appreciate this.
 
-Makes sense?
+>
+> Best regards,
+> Krzysztof
+>
 
-Happy hacking,
-
-   Wolfram
-
-[1] https://lore.kernel.org/r/aHSsSwLcSzJr5knE@shikoro
-[2] https://lore.kernel.org/r/aHYK9RWJ7GqTzvY2@shikoro
-
---FWCJlpabTez3TVVl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmh9M0YACgkQFA3kzBSg
-Kbbg1RAArQ6i2RDrRBwarc3ChnSDmegBDy+R6LzyIiMTta/dqPT3Jq4v/HGKkXaQ
-DuYXRzuIv9rJNkiu8f+cR6y1dF749dVTs6Lp3uXv+iNFnH8XTSu6AkTNF+oG6LLn
-iaxRMzQlVcgugz+55S05W8FSsId1hPKWpcqgPhw9BWhDw4n4Nsw+pgag3sZE4esw
-+HyL9kclmIs8+0R7o+kayhnQB4YPKdXzLbKdrKjd51Cer6tLxBucspoL5MpU/Nv6
-hp2gXwzFEzc/bvO+PtRnGkoQ8yTHkdwD8HLTwnCuY4u+jQeAMSizyucmCmuQ73MF
-WTG4Ldwkmtd3PStUxOODvFxojQ5xKsRiTRSIprRtn5kEz8U/hhZQhEIAgU8pOwYl
-vi6nlXPtIMssLoH0+nVP/vCCZZMFqf7sG5W9+8F4gVEaZ+I4xdWRRuCcHqrEaD5r
-LkyVg7Yj36kNMH1NeACmFO7VenHkEX31QAeW/dgqUrd0chkjtZ4VPbO2FFExcKLS
-j3/kDbJ+njsfesZTyQQlwilhee2NPQ0qlzNymQuIE3xp3e+dCHbMu5wenZQXupFn
-WXEZQPpYhTIcfGLF9ZovCbdzctRGTE5RS04kcN+a5rxYgCZdiTmM8VW/FUEKy5Hg
-s7YeXugsKU/eU1zqHV2mPYQruXXGbxpKhCw9YcpwxaIitzvVAoc=
-=u35t
------END PGP SIGNATURE-----
-
---FWCJlpabTez3TVVl--
 
