@@ -1,78 +1,78 @@
-Return-Path: <linux-i2c+bounces-11984-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11985-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2630DB0CA3E
-	for <lists+linux-i2c@lfdr.de>; Mon, 21 Jul 2025 20:07:47 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99C26B0CA41
+	for <lists+linux-i2c@lfdr.de>; Mon, 21 Jul 2025 20:07:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 48BBD3BAF99
-	for <lists+linux-i2c@lfdr.de>; Mon, 21 Jul 2025 18:07:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2F8541AA8034
+	for <lists+linux-i2c@lfdr.de>; Mon, 21 Jul 2025 18:08:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 994982E2659;
-	Mon, 21 Jul 2025 18:07:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 787FC2E2EFF;
+	Mon, 21 Jul 2025 18:07:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OsiS3+hE"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MggNcTuD"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D9432E041F;
-	Mon, 21 Jul 2025 18:07:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CC1B2E265D;
+	Mon, 21 Jul 2025 18:07:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753121251; cv=none; b=Y/Aw6ZOndNDsF3E/zgi81amOvpOhWIALxPy9DtLorJgAAprr2jCwnHOzF9PSeKGYxdr/4JkiqqYRx8D85l+8wckWs0S5E9jV+KqYrnt3hqXyHJ3wKHp3/pcs8nM3XNwqZg0iNZiXJTu7GA5RkI98ke7xfPqcvY7ZC/09LSKy88c=
+	t=1753121253; cv=none; b=mVy16JuNViY3iErtUoR8wy/qk93oOv1VMLBUwONewPrzVgkMHQOJ/QGFeLNFLPdqLu4mbJi/ce/ODTzCt8o/V46X+k+u3SVQcCDLr/DKZi/ZMclfaaWdlsu7kRdlhOXrYXQX0EMOlg3x3YwDWDmtjrj6QsSqtAmAZzrrg1In5Lw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753121251; c=relaxed/simple;
-	bh=m5Tye1okCu95gDaX9otALibtu1rA5BK/+GhVYodIZCg=;
+	s=arc-20240116; t=1753121253; c=relaxed/simple;
+	bh=gCTLtnVEWTLUGy/YqhtrwDKE2ztfQikmDUvErDItnQ0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LpxCzcS6w8WE6509SN7r9sP+JZJJJ0hvafeml9+R+RsGPIVOcSC/P0+QI+Y2ejg08kX1UWAqMQfUFfVS2DiSoqzrALSAxLoAMQHsNl0lVSPpx5f1gseRrHx57HxrhuK7S19PN8hYWWKBSTUYy2K7taj0Vk4CCXCnvIlGgfOx1R8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OsiS3+hE; arc=none smtp.client-ip=209.85.221.48
+	 MIME-Version; b=jnlM4Ar7O2MVS3K6VK1Gafgno/RSk7Y83mxN5GKzXATHwUf1TVNbiC6O0jZvXPwhuAksw9llIHSGVmxAAmbG9N8meBK/ZjUBmmIpAZmBL47xOc+mSKow0as+NmfBketNwLD9Pu7S2FMRyYjNehsAA4zIa0dH3lNDGWhJ0IL+oBc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MggNcTuD; arc=none smtp.client-ip=209.85.128.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-3b5e6bfb427so2600355f8f.2;
-        Mon, 21 Jul 2025 11:07:29 -0700 (PDT)
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4537edf2c3cso48923795e9.3;
+        Mon, 21 Jul 2025 11:07:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753121248; x=1753726048; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1753121250; x=1753726050; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=J2w7YNdeV3UKe4gbJgUahKR4SR/Wo2xZsY+ZJfiRzrE=;
-        b=OsiS3+hE8LZTOsAVWE1r7FbJPm0jwoMJ9qP3mBdUANh9b/8QfRv0+b9ByANH0qoiSR
-         Eg0qxscvCzI21sWJI2OLcCJewlSofF/5IajflP6nT8b8lqG/qyxl1TahjkgXEeYaVFw9
-         TRBnBEucisZni1ofmb1K/ZFWaHCiFH+90W9vmDyV844+1UHar8c8xZR6NLCPqLpzmSLE
-         SQ3wimp5nWVLft0A8pcSic2ECJGoA8FdyOYMEpGzjVsYdM+oeG0qlDmetyakM3jHMIOB
-         5/BRMrTZzQfEF4V0ppHz1IkHDlZOy1eh+srBchADaDuRvpRBXZ28lLFTBOa9ulO2B3Dh
-         Fu2g==
+        bh=G45LkEjjfWLu5Gg4t0c9h2G9tyU2GytQmU3UOMJ0qRU=;
+        b=MggNcTuDF+Z0Xvhx6L7cGGZhuBvnNJXGT9GYx4FDzqnkQ2ORmM0D0EGged46tXM4zW
+         vtakvWSUN2FyfjLmxDi9SLmCjsCsM8FNF75WUnv7hU4x3PS6EENQsL5QmuISMpGgb+Io
+         qlvhBv8dJwM4RN+0POwQwZO7RfRia4CBhOymecYA0xlN42N2KyfPwlhD8ACTzOqowbii
+         0BLjBgOakxGeZLeiR8d3fycMghvxiLV3mC+EzXrYEH2PQNwFnVv+v6RMdFeEXF1xyzZ8
+         TJ5cx9UUgwlCip1ELhxZG5IXv7UUdeKhCRHeG4qxSuZkvfgdidFQEMRI0KcYpsZDeu2f
+         Z+Vg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753121248; x=1753726048;
+        d=1e100.net; s=20230601; t=1753121250; x=1753726050;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=J2w7YNdeV3UKe4gbJgUahKR4SR/Wo2xZsY+ZJfiRzrE=;
-        b=K9U+dmEVJA2nlXJsPtBeVyTY+o8kesMWx4zGOMI0XrfRv0oOZuGlW3HqKlyrThxiFL
-         IcXuhMjxgm7g7lUL8AsDZgdUxcTH/mnk46g6gcxuoMqBpWZPkxnPJ/E+Eatg8mRtu8qs
-         3/owfjpjkrPKa8DIq/Gj9T6BADl/Xaj9BBJx7GvsHRX5BVeZgjftZ0QtOYrID/8zXU0+
-         kD+pM5QMn2aaFQg3H575evOEKuJVZw0sjNjDjBOvk0BVAXHxxtuzUrxssMVCGTwzJIYC
-         HPREx3m/IX8fWdSh0V4B7zXXU1uS1/X1i2U3ac1D1hiEVwR7nAv/joBCT+Krz9LGqtHy
-         RbqQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV6SIh66n6LKtWzMNXvyi4XjGskQXxUPjdl5VxX1SB4LK6HX8Wf8ATPUMzXFg8YVrbj17KclAO7iKVv@vger.kernel.org, AJvYcCXK/iGAbF/WCHMFN3xQk8wmbKXJfezprHHoOP3IgH9FmGyGbNR80t2UWYO/VsZoVWwo19gNuFZGzx/UOHQR@vger.kernel.org, AJvYcCXz6SDQODZ3UxwX03/Ug1CWSEK2nDLoTAwDFKMV8PKpm0eV+Y3ZP3kiUDemymW8YXDeJyiEXvs+ttTU@vger.kernel.org
-X-Gm-Message-State: AOJu0YyacRTT1tQ9fm0Mp86E7D6QlYscPtgQK1FrpbZd6zroF8aUAI0K
-	M58J+1hQxMTevgzpdGFhFBQEub+2UsxeHtMr49ghJMBgfkVbWV8TuNnS
-X-Gm-Gg: ASbGncsKRfUOePlsVB9eVkYbRI0HFaw67gWlBkISTZPkpNi4psbzo3xMn3Jx7oNhVl9
-	IDM+bS9eKJQUgsaNR3fvriHvia8r2eCst3BQZW0Gb/ElneBogfO7RFGIk7VOPcWQG8JIujJlXfD
-	H1w6X0n50+J/DlLg+Bv7U4Q+3tLkpRKG7ACFSCiDqBi5N8uNLWSOylffsCXbi/uuFvY4er5i0lc
-	KxdJFIzA8ilSeJXznU9iTyQE5wfOeu2gQFZE/vidHdZyfpM4MEjcV/x4DHHvHsVLtKWzHqlqUWM
-	57fPmUmaPxRllxN2Bef0e5MeXZfLuu6Wq6N4AyF4QczsvnI9+HTezGk5cn+rlII3XbgjOi9ZHP1
-	LWa8BgiEALGKs95LKrNbP5iM=
-X-Google-Smtp-Source: AGHT+IGYHvoIqXYmG9yQPodcuC8yICZXTkPFoNGcxMbPnfnBTzexQFmzBmrG3T3lmTwxSiAjYQZz+g==
-X-Received: by 2002:a5d:5c02:0:b0:3a4:dc32:6cbc with SMTP id ffacd0b85a97d-3b61b0f2f8dmr10615647f8f.20.1753121247732;
-        Mon, 21 Jul 2025 11:07:27 -0700 (PDT)
+        bh=G45LkEjjfWLu5Gg4t0c9h2G9tyU2GytQmU3UOMJ0qRU=;
+        b=UQ+wiAtuaYVfGngGxCqgEPXd50RXIXDD99ULy0QiZ3YGKihQDfig1wjc9FoooR/w6D
+         hijkyqtugpAsTBR6vSnNSYXnB07em6HsJLAP8D6u4V8DzYXQiGZRE9y6MGm8fs9/4wlW
+         u1xvL2Qtp/TirLfISJurDAyToKt2HtJPbWvcwtJl+jg5swj2u2Gn8bHPKPMn9m+L/P3g
+         xJjKYw/IbT2cmtUR2Eb0KjLT9vt9jmAtiJ/iqhmXPOqhqA3geTv/hI/gv94JTtMVLWtu
+         rvadtZWT87MLD+2RP4N/It52Jg7hWvpl32976lqrUiGUsWg60MW52/H44kHNHDVi6RX/
+         fvvg==
+X-Forwarded-Encrypted: i=1; AJvYcCU6ZdyapKLx6Km2iDGXnwepLxkvsasuIOIEdKfjdL/KkfBr+GAKkg7bPnn4OnEhHRTdu3QCs2fff/QH@vger.kernel.org, AJvYcCU8l6oT0slRApA/fWT53SEJu1BVGcETmr/5y0PxrvWrqTaNc6PV0vpjmlcAy9M9R2TWGgr/MuNpjJ60@vger.kernel.org, AJvYcCUTj+TF4dcu7tlLR0d0a6lovVf7zPlEV8F/k95Fw9gBNH/sykTzRGCi4bNp1Csw/vTd1lLAZfwUDWrAWhuc@vger.kernel.org
+X-Gm-Message-State: AOJu0YyhQ+iM0zUdopjxHoNB2s1unZHJkznnEJzNsNxJxYLMsIfZDeme
+	hcz9Gnp65kYv1Nj/c7uyLYn98X0+G+C6d9vDh3Ar5DyPkrCJDyrEbeLK
+X-Gm-Gg: ASbGncukDIROuCm1h/gnZmWZau+a/KJcHi/8nzr6JtZOAtmVtags+VmUf+iORVgHDvw
+	wqUti1d01SBUslm1qNFp2hhdfaT6stJfyfsJvCJJgHGp4I0pgUkP0MG+7AIA6bwhU1IjeWB7F86
+	ItQLjBYgpfobdlEuqo5olTvXW8ncsGKlNHptJYc2CNbQASOfAvbBI6VJpFQuRfeDS8DIdIvkRqI
+	52gyXqRyVtl2yxKidRQPLYqooPYlFuAtA38+4YKE4KdWu2GVjeP1awUE4JYMYuYTa2G0Xsih6jG
+	3WbAoRvp6lIaXstFSkW47b5+lK6LxxRyKvRI6bY/SyuToJ1Bu2ZYdky34510U87luCYYs6rnFqB
+	BluHb8/o+FWwYjS8iY6rnqto=
+X-Google-Smtp-Source: AGHT+IEaJ9IKclVWpAiI/LNl2Pqjf/7hnj98qH2PFtCovmBuGGl9+iOZcDYxw7D2OIArZ9QiG9oQOg==
+X-Received: by 2002:a05:600c:a00d:b0:43d:4686:5cfb with SMTP id 5b1f17b1804b1-4563ab1fe93mr127073725e9.27.1753121249509;
+        Mon, 21 Jul 2025 11:07:29 -0700 (PDT)
 Received: from Ansuel-XPS24 ([109.52.136.49])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3b61ca25443sm11183370f8f.9.2025.07.21.11.07.26
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3b61ca25443sm11183370f8f.9.2025.07.21.11.07.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Jul 2025 11:07:27 -0700 (PDT)
+        Mon, 21 Jul 2025 11:07:29 -0700 (PDT)
 From: Christian Marangi <ansuelsmth@gmail.com>
 To: Stefan Roese <sr@denx.de>,
 	Andi Shyti <andi.shyti@kernel.org>,
@@ -87,9 +87,9 @@ To: Stefan Roese <sr@denx.de>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-mediatek@lists.infradead.org
 Cc: Christian Marangi <ansuelsmth@gmail.com>
-Subject: [PATCH v2 1/5] i2c: mt7621: rework cmd/wait OPs to support atomic afer variant
-Date: Mon, 21 Jul 2025 20:05:52 +0200
-Message-ID: <20250721180710.2116-2-ansuelsmth@gmail.com>
+Subject: [PATCH v2 2/5] i2c: mt7621: clear pending interrupt on i2c reset
+Date: Mon, 21 Jul 2025 20:05:53 +0200
+Message-ID: <20250721180710.2116-3-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.50.0
 In-Reply-To: <20250721180710.2116-1-ansuelsmth@gmail.com>
 References: <20250721180710.2116-1-ansuelsmth@gmail.com>
@@ -101,169 +101,27 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-It was reported the need for atomic operation on some Airoha SoC that
-makes use of I2C bus. Rework the cmd/wait OPs to suppor the xfer_atomic
-variant. To support this it's mainlin needed to do the readl poll in
-atomic context.
+On resetting the i2c bus, clear any pending interrupt to have a more
+consistent state on the next operation.
 
 Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 ---
- drivers/i2c/busses/i2c-mt7621.c | 59 ++++++++++++++++++++++-----------
- 1 file changed, 40 insertions(+), 19 deletions(-)
+ drivers/i2c/busses/i2c-mt7621.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/drivers/i2c/busses/i2c-mt7621.c b/drivers/i2c/busses/i2c-mt7621.c
-index 2103f21f9ddd..c0e13f9af3e5 100644
+index c0e13f9af3e5..58c3da92cea3 100644
 --- a/drivers/i2c/busses/i2c-mt7621.c
 +++ b/drivers/i2c/busses/i2c-mt7621.c
-@@ -67,14 +67,19 @@ struct mtk_i2c {
- 	struct clk *clk;
- };
- 
--static int mtk_i2c_wait_idle(struct mtk_i2c *i2c)
-+static int mtk_i2c_wait_idle(struct mtk_i2c *i2c, bool atomic)
- {
- 	int ret;
- 	u32 val;
- 
--	ret = readl_relaxed_poll_timeout(i2c->base + REG_SM0CTL1_REG,
--					 val, !(val & SM0CTL1_TRI),
--					 10, TIMEOUT_MS * 1000);
-+	if (atomic)
-+		ret = readl_relaxed_poll_timeout_atomic(i2c->base + REG_SM0CTL1_REG,
-+							val, !(val & SM0CTL1_TRI),
-+							10, TIMEOUT_MS * 1000);
-+	else
-+		ret = readl_relaxed_poll_timeout(i2c->base + REG_SM0CTL1_REG,
-+						 val, !(val & SM0CTL1_TRI),
-+						 10, TIMEOUT_MS * 1000);
- 	if (ret)
- 		dev_dbg(i2c->dev, "idle err(%d)\n", ret);
- 
-@@ -117,27 +122,28 @@ static int mtk_i2c_check_ack(struct mtk_i2c *i2c, u32 expected)
- 	return ((ack & ack_expected) == ack_expected) ? 0 : -ENXIO;
+@@ -101,6 +101,8 @@ static void mtk_i2c_reset(struct mtk_i2c *i2c)
+ 	iowrite32(((i2c->clk_div << 16) & SM0CTL0_CLK_DIV_MASK) | SM0CTL0_EN |
+ 		  SM0CTL0_SCL_STRETCH, i2c->base + REG_SM0CTL0_REG);
+ 	iowrite32(0, i2c->base + REG_SM0CFG2_REG);
++	/* Clear any pending interrupt */
++	iowrite32(1, i2c->base + REG_PINTEN_REG);
  }
  
--static int mtk_i2c_start(struct mtk_i2c *i2c)
-+static int mtk_i2c_start(struct mtk_i2c *i2c, bool atomic)
- {
- 	iowrite32(SM0CTL1_START | SM0CTL1_TRI, i2c->base + REG_SM0CTL1_REG);
--	return mtk_i2c_wait_idle(i2c);
-+	return mtk_i2c_wait_idle(i2c, atomic);
- }
- 
--static int mtk_i2c_stop(struct mtk_i2c *i2c)
-+static int mtk_i2c_stop(struct mtk_i2c *i2c, bool atomic)
- {
- 	iowrite32(SM0CTL1_STOP | SM0CTL1_TRI, i2c->base + REG_SM0CTL1_REG);
--	return mtk_i2c_wait_idle(i2c);
-+	return mtk_i2c_wait_idle(i2c, atomic);
- }
- 
--static int mtk_i2c_cmd(struct mtk_i2c *i2c, u32 cmd, int page_len)
-+static int mtk_i2c_cmd(struct mtk_i2c *i2c, u32 cmd, int page_len,
-+		       bool atomic)
- {
- 	iowrite32(cmd | SM0CTL1_TRI | SM0CTL1_PGLEN(page_len),
- 		  i2c->base + REG_SM0CTL1_REG);
--	return mtk_i2c_wait_idle(i2c);
-+	return mtk_i2c_wait_idle(i2c, atomic);
- }
- 
--static int mtk_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
--			int num)
-+static int mtk_i2c_xfer_common(struct i2c_adapter *adap, struct i2c_msg *msgs,
-+			       int num, bool atomic)
- {
- 	struct mtk_i2c *i2c;
- 	struct i2c_msg *pmsg;
-@@ -152,12 +158,12 @@ static int mtk_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
- 		pmsg = &msgs[i];
- 
- 		/* wait hardware idle */
--		ret = mtk_i2c_wait_idle(i2c);
-+		ret = mtk_i2c_wait_idle(i2c, atomic);
- 		if (ret)
- 			goto err_timeout;
- 
- 		/* start sequence */
--		ret = mtk_i2c_start(i2c);
-+		ret = mtk_i2c_start(i2c, atomic);
- 		if (ret)
- 			goto err_timeout;
- 
-@@ -169,14 +175,16 @@ static int mtk_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
- 			if (pmsg->flags & I2C_M_RD)
- 				addr |= 1;
- 			iowrite32(addr, i2c->base + REG_SM0D0_REG);
--			ret = mtk_i2c_cmd(i2c, SM0CTL1_WRITE, 2);
-+			ret = mtk_i2c_cmd(i2c, SM0CTL1_WRITE, 2,
-+					  atomic);
- 			if (ret)
- 				goto err_timeout;
- 		} else {
- 			/* 7 bits address */
- 			addr = i2c_8bit_addr_from_msg(pmsg);
- 			iowrite32(addr, i2c->base + REG_SM0D0_REG);
--			ret = mtk_i2c_cmd(i2c, SM0CTL1_WRITE, 1);
-+			ret = mtk_i2c_cmd(i2c, SM0CTL1_WRITE, 1,
-+					  atomic);
- 			if (ret)
- 				goto err_timeout;
- 		}
-@@ -202,7 +210,7 @@ static int mtk_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
- 				cmd = SM0CTL1_WRITE;
- 			}
- 
--			ret = mtk_i2c_cmd(i2c, cmd, page_len);
-+			ret = mtk_i2c_cmd(i2c, cmd, page_len, atomic);
- 			if (ret)
- 				goto err_timeout;
- 
-@@ -222,7 +230,7 @@ static int mtk_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
- 		}
- 	}
- 
--	ret = mtk_i2c_stop(i2c);
-+	ret = mtk_i2c_stop(i2c, atomic);
- 	if (ret)
- 		goto err_timeout;
- 
-@@ -230,7 +238,7 @@ static int mtk_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
- 	return i;
- 
- err_ack:
--	ret = mtk_i2c_stop(i2c);
-+	ret = mtk_i2c_stop(i2c, atomic);
- 	if (ret)
- 		goto err_timeout;
- 	return -ENXIO;
-@@ -241,6 +249,18 @@ static int mtk_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
- 	return ret;
- }
- 
-+static int mtk_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
-+			int num)
-+{
-+	return mtk_i2c_xfer_common(adap, msgs, num, false);
-+}
-+
-+static int mtk_i2c_xfer_atomic(struct i2c_adapter *adap,
-+			       struct i2c_msg *msgs, int num)
-+{
-+	return mtk_i2c_xfer_common(adap, msgs, num, true);
-+}
-+
- static u32 mtk_i2c_func(struct i2c_adapter *a)
- {
- 	return I2C_FUNC_I2C | I2C_FUNC_SMBUS_EMUL | I2C_FUNC_PROTOCOL_MANGLING;
-@@ -248,6 +268,7 @@ static u32 mtk_i2c_func(struct i2c_adapter *a)
- 
- static const struct i2c_algorithm mtk_i2c_algo = {
- 	.xfer = mtk_i2c_xfer,
-+	.xfer_atomic = mtk_i2c_xfer_atomic,
- 	.functionality = mtk_i2c_func,
- };
- 
+ static void mtk_i2c_dump_reg(struct mtk_i2c *i2c)
 -- 
 2.50.0
 
