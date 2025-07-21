@@ -1,78 +1,78 @@
-Return-Path: <linux-i2c+bounces-11986-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11987-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 601A0B0CA43
-	for <lists+linux-i2c@lfdr.de>; Mon, 21 Jul 2025 20:08:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C392B0CA46
+	for <lists+linux-i2c@lfdr.de>; Mon, 21 Jul 2025 20:08:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 89B33542E86
-	for <lists+linux-i2c@lfdr.de>; Mon, 21 Jul 2025 18:08:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6E4E81AA817E
+	for <lists+linux-i2c@lfdr.de>; Mon, 21 Jul 2025 18:08:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B38E2E338B;
-	Mon, 21 Jul 2025 18:07:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3AA12E3AF6;
+	Mon, 21 Jul 2025 18:07:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i2W4kIKC"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZP6hkT4I"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41B082E2EE8;
-	Mon, 21 Jul 2025 18:07:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1455D2E3385;
+	Mon, 21 Jul 2025 18:07:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753121254; cv=none; b=a9oxrZvR/V20rX2frfAy9AEWUXaJaOUKr46kXQCrxX/epA5FejJbn9wRFSHZsIoFPuJvlIIzwZmgWNqd6ZAy4VyogIMIyyvVP2VELdGrRtaBPCTZJhCnk7aNLlUTMy7GZ3AGZH5pglIBj/TJdAZCkkxt2yOfV0YqxZ9yYNHNEfI=
+	t=1753121256; cv=none; b=tve/RttCuy6RGQUCmJs5U1qOauVNOT6lrrBjvHnzpqyUDX7dvA0071pGZ2WBxnSf31BHUF3dsB4YrqzTrS/gzlshzlCK4+Kul62CYFEcNHYK62FUdj97kB8XVBqB17tSXqIMtnJ2bzWwgK1T2AEbc8eABtx+HvoOOuX9RU7swXM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753121254; c=relaxed/simple;
-	bh=BSuIwfO/sLgzwibvy1RfgHreC06I7Shn1XmjuLDFRyA=;
+	s=arc-20240116; t=1753121256; c=relaxed/simple;
+	bh=Vs+D1OyyPsCiKsDufhO8BO5KJnYHW8HEaou5C1Rmdyk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FaFSWk5FVYKrPUXQQyBh+wvfu/GjZnA1z8vdoG4X2yh+kMcjQEJv7w2SffAcpUJUPcrh1dn8Sz+6iVbnRymTxwQpU7WnojwAjCxk/n6S9HHflJAeNRyY69PZCO6rcgQHaTQusyijabjNn3fliapywVpKGnmc3Y9YyxeER0azEGk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i2W4kIKC; arc=none smtp.client-ip=209.85.221.50
+	 MIME-Version; b=Lznw2LXrl52t6wbB9duI8Rs0pEQkWYwzDGPSjNPLMUcwaah4rQKih0K9gOD5Pnij7+gUOnNVQmlcD4WkvBQ6HMQM87yC12V+PZ6e4n993k4thrN4Qhr2S4o8Wn20bln9U4AC7iLWrsVGxzVeX8ItwCYeAwRj3YrRr4XEG7+2l5o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZP6hkT4I; arc=none smtp.client-ip=209.85.221.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-3a6e2d85705so2350591f8f.0;
-        Mon, 21 Jul 2025 11:07:32 -0700 (PDT)
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-3a536ecbf6fso2725979f8f.2;
+        Mon, 21 Jul 2025 11:07:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753121251; x=1753726051; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1753121253; x=1753726053; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Ic0V3M7sRH2Zp1RRAt0YlGJ6GUFWs58JzWsEOf9cIOU=;
-        b=i2W4kIKCqK6MatCRfI/g9Wevmrb1kbsQE7wDbbnB+9eXnHBy7iB3SoyS5A1ZttCWVn
-         wYGQdJhtUV4K6MS6PX7k3YCIykfxC+2erBZmw0GfH2Z58iBwdj/0VlA34EQzBbODHq+r
-         BZfeuMur7k4pzsDZYxpZeIyaqv5RZykSon5gZt+3I8yw58AVFMt9wy1avuPv6LIKfQf4
-         TKCp6x+khq5En6stK040mOzzUEwoaUdmtTp4LyyKp0K07bcoB1SogdLDghp0Vl4RD91B
-         E8HBROAkvL3zSzzQt70cEOhIoYxTleZ/cfBYg0tf17Xuwz+30+tJkuzG8zxtNG/TLU4R
-         ZNVQ==
+        bh=mKfLEG6+ipDQ095wwf+Yj6O/rN6WeuJI3tKiO7F5vfc=;
+        b=ZP6hkT4I00sM6T21XhzQ15rNItXsS9mTWpY/s+ohIBHyGC3Cupgph3NZHgkX6urMbL
+         PHgNo4yacg5gRNoxwapVb8hiahMLb/hYU5q+8VSStPTHPXcY9jpWe2zF5Brn11nVO8O9
+         LTqs9dB//AKRwlNV7UBimLhyg1ESStIJrfZ2xJShOzYWFD/V65bOMhed01ZYQMsv94gl
+         Xb7oKIrhrr5LbXt3ETME21IbLtULNAfvbmM++LROO57ljQ9UKpMQrca+pFvL3msgGoRX
+         7g7DHIdVcGKNXn2Q+yVQh+It2w91Lb9AABwKjKR9gU1TxRkaVY+AaxrnEvOLxsqKpYNN
+         JJRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753121251; x=1753726051;
+        d=1e100.net; s=20230601; t=1753121253; x=1753726053;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Ic0V3M7sRH2Zp1RRAt0YlGJ6GUFWs58JzWsEOf9cIOU=;
-        b=VqQL0ZO6mJhAVKAwZIyK+59bo1dVRl39MoY/oOJPro+8eWvDvfzOGSHkWgcWS45BCR
-         BzNhgu2VPQmPdDETOrPYXsniGEoP//zrPch0YCB8G9kZJHJo+SOSojW+XcMazD2cfrRw
-         4Ex8QSUNb1Z0bIj2m+oOO/N7Kunc2pB3MociSLxbXNgeujv5ZjwEwzZH9JRxZB1LSFz3
-         ZWWw27V+0czuOfQKVkSQ4zzUsJiAFULuxFHQCltZzO7oCE8KdQe6YsC6lBPHluV58Giq
-         PkON9d9l43OdqteMxp1WTqEFTcXb9/+R2ZYLQbLwhv46TB2lb5zuCzwQmH7sTMhPHos+
-         NPnw==
-X-Forwarded-Encrypted: i=1; AJvYcCU9LJFGfeSBn5iWNlyghMnbY83oWfvLC5U3aA/8hwPjZ418SMKR6n6n7nRLInebZgqEwKDwEgNNEqog@vger.kernel.org, AJvYcCX8s67eiYtoMm7gQQNhFtOjOVOVPzLB3wgdPhStA4EzjQ9Clt+SDBZFQCjzPLCr6F95pla73aQnu+PX@vger.kernel.org, AJvYcCXpfqoDqKhABw8c6OYJxQdHrOx7eW6eiAyVfx2DM5ZNWA8KDIzYrrYhq6CE97s2MzmWD2F8fxOQWsPiIB4v@vger.kernel.org
-X-Gm-Message-State: AOJu0YxqGTJ9kmHHNfKWsm51YYgsWlySS7I1OWVgGwVWtiJM0eYEfLNH
-	pBkKgdJJXT+oW/O3Vg/u7HSKfFfbfGbhlkvTMwUfjQgzfwRt9Hp3gSwQ
-X-Gm-Gg: ASbGncvaBz4/M+sblyLx1ZKnlyCQu7riaBcwSMp6lmJrxK7Dpx/Xh10GhsXvVSGwuoI
-	wb7ntNL6rg8n0sIRLoXfxpfSALCMMv7uWAEo8fcTy6gdS5REBlxBO9a+SC+FQQfmMwpSDMucKrX
-	H7TDBrxoeFuoVvOs0M2qkdKBZWl53foSgCH70OTsfkqmZcEBh4ObB7zioI8kLpWwsc+cevswq9+
-	VXtSMdD2vWMmweXHLiovGXV8h//iJuI4+qGek+DfwhsqvTNlLtZD17fWwI1eMryUsORc4InXcLH
-	fS5SrrhJbW8N+TpWatnIza/4e6is/TJkzXRJYIUanus3xH3Nwy4MFbBPxLDRT60ewmQjeKKKNpQ
-	WF2SJrGXUlxA5926MzisJ7BY=
-X-Google-Smtp-Source: AGHT+IEztSiq1VvfDAe7vlwj5FXCH2q3wnt65o36wdrhDBUN+Og6tmvcBZ2eJisaFxgmoXC6DUiqQg==
-X-Received: by 2002:a05:6000:2310:b0:3b5:e7f4:74ee with SMTP id ffacd0b85a97d-3b60dd6a8f8mr18711660f8f.16.1753121251425;
-        Mon, 21 Jul 2025 11:07:31 -0700 (PDT)
+        bh=mKfLEG6+ipDQ095wwf+Yj6O/rN6WeuJI3tKiO7F5vfc=;
+        b=hdVIp9z9C0JlfI2c3zpXJNaYwtm2p+QOqt1XqOgz5icaHxkl69jSPFRr5MqZDQxcfA
+         EsqGOW40nHZbtkzNq0eoqtoEdQ8qs8SFtbGDC0k5TPwmjfRQbfgUyfR/ljveFKoOm7qb
+         6hR9pVyCrKEjH4yXJ5dAKLhdBb0acvpQ+NygbKwmIWRIB+hathW3ff4YJBVPoLh80fbh
+         xbrUTOyVLFbu4bTqTdg4LpcClWGqnAWWGwo3a2IDeF/9QBfcIKAKbQ6fPFxmr0wNeIO2
+         gVPovTQQMwqrp0pgEWGiehzvXeQjnp6I4oqSQR2gzJHIS4CsZnczMhzsD4NURFhXZ+yT
+         FI/A==
+X-Forwarded-Encrypted: i=1; AJvYcCVAFsug4f9vBZNHqvAp48mquiua2iCMntUtqkdsRx+GSwRtsEwx2N7QSTy18Uu+K2wxFhxl+MnYI4dJ@vger.kernel.org, AJvYcCVtqcwqyE0A1+1GyN/tJV9hcy6ttJDonoSHgUkEftACCdSTucmC+IKlLF4mqm9E6hsSIaHYda8/7pou8UJh@vger.kernel.org, AJvYcCWIJwhXOhANxNx+vMhPuH28jl5G0Qbd9oeqF1Fld9bVdGMsKuh3gnPJyW7Mm6ZFP3wsc10/UylbHaAw@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy/bp6mt91iudPW6kpvbN4d//5BYpeu5mzEklh+QSsGnliDgOjh
+	3oH15MfJsGLAc8Y48+/eZHCzztqMx2KmSqtcykgF3Tv3vrXG1hF0jopX
+X-Gm-Gg: ASbGncsg66XHmH21+8ZEMcHzkz0iMOSwtk5AHEHQ7tUpC22elAWfySM1JV4z+2KNylv
+	dT95Qb0tjrTS8RILgFK5YUkp6xQhmpBc9JJ9ngBWU949Ck4bkjnuH9wOGiP4GXao/ejNzPutt+k
+	3aobMHSTibcuEsLsGlKE+ywvVZky0KuOWv4V+y7SFcIMhiq49kgGlq2AcmGZmh5urvceC/04s1l
+	ap8KZOT6zab3OyhBo4KmkXCpI5G8ftwm3G+vL5Ru0A/ygZtekqYlUBjymzYZ3/QXyv27wFHJTrK
+	qPU3gEoyGLA50zPvKZwEB3BjPpDixmxb+kElEA/m3seA/E3YJYFqMaUQiHCSTfc8hVMzN6ISLFt
+	A0R8R6Eyd0Fc/LzQJTLli2kI=
+X-Google-Smtp-Source: AGHT+IHmyUfextSJYKW/B0dJOold2dMrY42j43HF9l7jc9Jyi1JVLeAGi+6sfKg2IAK8W5YemEeGfQ==
+X-Received: by 2002:a05:6000:2a0a:b0:3b6:18be:3fbc with SMTP id ffacd0b85a97d-3b618be3fe5mr7634132f8f.2.1753121253150;
+        Mon, 21 Jul 2025 11:07:33 -0700 (PDT)
 Received: from Ansuel-XPS24 ([109.52.136.49])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3b61ca25443sm11183370f8f.9.2025.07.21.11.07.29
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3b61ca25443sm11183370f8f.9.2025.07.21.11.07.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Jul 2025 11:07:31 -0700 (PDT)
+        Mon, 21 Jul 2025 11:07:32 -0700 (PDT)
 From: Christian Marangi <ansuelsmth@gmail.com>
 To: Stefan Roese <sr@denx.de>,
 	Andi Shyti <andi.shyti@kernel.org>,
@@ -87,9 +87,9 @@ To: Stefan Roese <sr@denx.de>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-mediatek@lists.infradead.org
 Cc: Christian Marangi <ansuelsmth@gmail.com>
-Subject: [PATCH v2 3/5] dt-bindings: i2c: mt7621: Document an7581 compatible
-Date: Mon, 21 Jul 2025 20:05:54 +0200
-Message-ID: <20250721180710.2116-4-ansuelsmth@gmail.com>
+Subject: [PATCH v2 4/5] i2c: mt7621: limit SCL_STRETCH only to Mediatek SoC
+Date: Mon, 21 Jul 2025 20:05:55 +0200
+Message-ID: <20250721180710.2116-5-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.50.0
 In-Reply-To: <20250721180710.2116-1-ansuelsmth@gmail.com>
 References: <20250721180710.2116-1-ansuelsmth@gmail.com>
@@ -101,49 +101,52 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Airoha SoC implement the same Mediatek logic for I2C bus with the only
-difference of not having a dedicated reset line to reset it.
+The same I2C driver is also used for Airoha SoC with the only difference
+that the i2c_reset should not enable SCL_STRETCH for Airoha SoC.
 
-Add a dedicated compatible for the Airoha AN7581 SoC and reject the
-unsupported property.
+Introduce a new compatible for Airoha and limit the SCL_STRETCH only to
+mediatek SoC.
 
 Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 ---
- .../bindings/i2c/mediatek,mt7621-i2c.yaml          | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
+ drivers/i2c/busses/i2c-mt7621.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/i2c/mediatek,mt7621-i2c.yaml b/Documentation/devicetree/bindings/i2c/mediatek,mt7621-i2c.yaml
-index 118ec00fc190..8223fbc74f14 100644
---- a/Documentation/devicetree/bindings/i2c/mediatek,mt7621-i2c.yaml
-+++ b/Documentation/devicetree/bindings/i2c/mediatek,mt7621-i2c.yaml
-@@ -14,7 +14,9 @@ allOf:
+diff --git a/drivers/i2c/busses/i2c-mt7621.c b/drivers/i2c/busses/i2c-mt7621.c
+index 58c3da92cea3..b4dc1fb269a6 100644
+--- a/drivers/i2c/busses/i2c-mt7621.c
++++ b/drivers/i2c/busses/i2c-mt7621.c
+@@ -88,6 +88,7 @@ static int mtk_i2c_wait_idle(struct mtk_i2c *i2c, bool atomic)
  
- properties:
-   compatible:
--    const: mediatek,mt7621-i2c
-+    enum:
-+      - airoha,an7581-i2c
-+      - mediatek,mt7621-i2c
+ static void mtk_i2c_reset(struct mtk_i2c *i2c)
+ {
++	u32 reg;
+ 	int ret;
  
-   reg:
-     maxItems: 1
-@@ -38,6 +40,16 @@ required:
-   - "#address-cells"
-   - "#size-cells"
- 
-+if:
-+  properties:
-+    compatible:
-+      contains:
-+        const: airoha,an7581-i2c
-+then:
-+  properties:
-+    resets: false
-+    reset-names: false
+ 	ret = device_reset(i2c->adap.dev.parent);
+@@ -98,8 +99,12 @@ static void mtk_i2c_reset(struct mtk_i2c *i2c)
+ 	 * Don't set SM0CTL0_ODRAIN as its bit meaning is inverted. To
+ 	 * configure open-drain mode, this bit needs to be cleared.
+ 	 */
+-	iowrite32(((i2c->clk_div << 16) & SM0CTL0_CLK_DIV_MASK) | SM0CTL0_EN |
+-		  SM0CTL0_SCL_STRETCH, i2c->base + REG_SM0CTL0_REG);
++	reg = ((i2c->clk_div << 16) & SM0CTL0_CLK_DIV_MASK) | SM0CTL0_EN;
++	/* Set SCL_STRETCH only for Mediatek SoC */
++	if (device_is_compatible(i2c->dev, "mediatek,mt7621-i2c"))
++		reg |= SM0CTL0_SCL_STRETCH;
 +
- unevaluatedProperties: false
++	iowrite32(reg, i2c->base + REG_SM0CTL0_REG);
+ 	iowrite32(0, i2c->base + REG_SM0CFG2_REG);
+ 	/* Clear any pending interrupt */
+ 	iowrite32(1, i2c->base + REG_PINTEN_REG);
+@@ -276,6 +281,7 @@ static const struct i2c_algorithm mtk_i2c_algo = {
  
- examples:
+ static const struct of_device_id i2c_mtk_dt_ids[] = {
+ 	{ .compatible = "mediatek,mt7621-i2c" },
++	{ .compatible = "airoha,an7581-i2c" },
+ 	{ /* sentinel */ }
+ };
+ 
 -- 
 2.50.0
 
