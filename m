@@ -1,95 +1,97 @@
-Return-Path: <linux-i2c+bounces-12008-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12009-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E16A8B0F24C
-	for <lists+linux-i2c@lfdr.de>; Wed, 23 Jul 2025 14:30:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3ECAAB0F468
+	for <lists+linux-i2c@lfdr.de>; Wed, 23 Jul 2025 15:47:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1C968583CF2
-	for <lists+linux-i2c@lfdr.de>; Wed, 23 Jul 2025 12:31:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 529F23AB41B
+	for <lists+linux-i2c@lfdr.de>; Wed, 23 Jul 2025 13:47:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69C0E2E7BC4;
-	Wed, 23 Jul 2025 12:29:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48B222E88A7;
+	Wed, 23 Jul 2025 13:47:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BDKXNKuS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q0tkOPL1"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15D082E6126;
-	Wed, 23 Jul 2025 12:29:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F303F2E8885;
+	Wed, 23 Jul 2025 13:47:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753273786; cv=none; b=Osw5x5p+4APDDu4D3U2r+/CPosy5Yx+tahfGqkt5eRuoGPgyieZFIFKJjwAZGfzHJIeFsBaogR5hdM3XP0sIP7i3wIwU2wj2tAp5X8OzhirfBugZGRl//WUvqWhzSdIcz7I1p1elJtM4AXzce5YS60tn+PO3pp2TdB2vFoXxL34=
+	t=1753278439; cv=none; b=RAtmdS5MrSqZNeVVsLJ6rw2hL6CVKkYOCyF3rOqks8xsmP8kEh6l1eLwcvnd38j/bs2zviSPqQZAPqSKKD7vUbMJinarAj6Gl4hf8EcKL78v2KBzonHQ9DX12T36S3swc1ZhT3g6kLHLshxKPzj1C9vGjqAcRLVjDbZa59AaA14=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753273786; c=relaxed/simple;
-	bh=a4fvJoudeLBpuYC8iOBx3Lt7u9y0axaehN+8SLluXMA=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=QXShBuD/t6pFaaLW7VJH4/hmQqqtjlFqRQT+nw03u0xX7flcZ4qwWwtiv6qjYTa02GtflrMGZOh8MnwnYTDbHWbcG9lYTHp39VXfZEohg2RE+zcqYcsllN5qKnvW8z/+5ZpKdBV0yESU/fF4rhouYJx1ymyRnFvymyGxLsvliog=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BDKXNKuS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38281C4CEF5;
-	Wed, 23 Jul 2025 12:29:38 +0000 (UTC)
+	s=arc-20240116; t=1753278439; c=relaxed/simple;
+	bh=mDf9hGRa+hZOj+1JrXcwZtqq2caWcW+UkVVFTPkikUE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VJ9I6eFBQABo+4PguuFlJeCgI+TdHq7RLbEKGssMKzS+v3SSkvyDEcfyxuduaC61WAJPITTtqd+3dJebO12Z4w+1NLo/iGzIg53UO4laZeTyApzO0GS62Ss9Dbe2Faq0SkUJoeDzBaMs9D9+hh5K7DXdsWhi33XUjGEJk4xJioY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=q0tkOPL1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F62EC4CEE7;
+	Wed, 23 Jul 2025 13:47:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753273785;
-	bh=a4fvJoudeLBpuYC8iOBx3Lt7u9y0axaehN+8SLluXMA=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=BDKXNKuSudGsrwbCFls9lMNbGe3HBVy+R7d3MLycJRWLcWzEYfLnDvyNU4MU3RsPF
-	 u+7zPxhRMfOwKd3kfj0WAxcE/L83lYJdVGnlC0Wjd8Xo36b4655zobf8MnN2FVrGRU
-	 y+QPZkGGY4QhCmFw+kXE8EdlZiejwd9llsKKPYujKHcc2IF1v8+2TFMtjgLDvAXCIX
-	 ydcw72rxfEv/KkLLbGN3Usc8tvgaCOikFKvx+2UZgHJ1MNlAg1QdLDqyDezPrJDsKy
-	 hj/Lzvj7apcBLQiy3IxV9yvl+IQMHp0QwDyOWbuPYNPgDC8CVglq+jim+tneF415cw
-	 oSWGV//JX1m+A==
-From: Vinod Koul <vkoul@kernel.org>
-To: linux@armlinux.org.uk, nicolas.ferre@microchip.com, 
- alexandre.belloni@bootlin.com, claudiu.beznea@tuxon.dev, 
- catalin.marinas@arm.com, will@kernel.org, olivia@selenic.com, 
- herbert@gondor.apana.org.au, davem@davemloft.net, andi.shyti@kernel.org, 
- lee@kernel.org, broonie@kernel.org, gregkh@linuxfoundation.org, 
- jirislaby@kernel.org, arnd@kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org, 
- dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org, 
- linux-spi@vger.kernel.org, linux-serial@vger.kernel.org, 
- o.rempel@pengutronix.de, daniel.machon@microchip.com, 
- Robert Marko <robert.marko@sartura.hr>
-Cc: luka.perkov@sartura.hr
-In-Reply-To: <20250702183856.1727275-1-robert.marko@sartura.hr>
-References: <20250702183856.1727275-1-robert.marko@sartura.hr>
-Subject: Re: (subset) [PATCH v8 00/10] arm64: lan969x: Add support for
- Microchip LAN969x SoC
-Message-Id: <175327377884.189941.15214972441246653208.b4-ty@kernel.org>
-Date: Wed, 23 Jul 2025 17:59:38 +0530
+	s=k20201202; t=1753278437;
+	bh=mDf9hGRa+hZOj+1JrXcwZtqq2caWcW+UkVVFTPkikUE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=q0tkOPL1ASB54sO5jqP7x9+WdFZC59SO7sY4RYhnU5AOW06Ba11S8nQQgcq/qvy4K
+	 tjCVdaZHfYr/pr6eLE8g4wP20uUvKGTwjop/mcO/8AXyGkuJPZZQr9czN5VblY+3XI
+	 pVPrVn27a7B+PCMPPmV1dDk2XopBsMfwzV6lyjQInjWCLgjDbC+PiQA5oG9oyqnKXy
+	 jV1U2nW78n2WeNNLtScDG+Qos/tnaEFoYK4TAZY/mmmGmmHu9kf6KYQRIu+mIRIpsM
+	 zfmU5Bvr/rW1PGGADs+SVjUydWW3De9gkmOZNLGZBqcqkFabZXtbFv64FMAOihOOlv
+	 10o65FCTGsWng==
+Date: Wed, 23 Jul 2025 08:47:16 -0500
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Jonas Karlman <jonas@kwiboo.se>
+Cc: linux-arm-kernel@lists.infradead.org, Yao Zi <ziyao@disroot.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-kernel@vger.kernel.org,
+	Chukun Pan <amadeus@jmu.edu.cn>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
+	Heiko Stuebner <heiko@sntech.de>,
+	linux-rockchip@lists.infradead.org,
+	Andi Shyti <andi.shyti@kernel.org>
+Subject: Re: [PATCH v2 2/5] dt-bindings: i2c: i2c-rk3x: Allow use of a
+ power-domain
+Message-ID: <175327843600.2144777.12217048091920354736.robh@kernel.org>
+References: <20250723085654.2273324-1-jonas@kwiboo.se>
+ <20250723085654.2273324-3-jonas@kwiboo.se>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250723085654.2273324-3-jonas@kwiboo.se>
 
 
-On Wed, 02 Jul 2025 20:35:58 +0200, Robert Marko wrote:
-> This patch series adds basic support for Microchip LAN969x SoC.
+On Wed, 23 Jul 2025 08:56:44 +0000, Jonas Karlman wrote:
+> The I2C controllers in most Rockchip SoCs are part of power domains that
+> are always powered on, i.e. PD_BUS or PD_PMU. These always powered
+> on power domains have typically not been described in the device tree.
 > 
-> It introduces the SoC ARCH symbol itself under the ARCH_MICROCHIP symbol
-> which allows to avoid the need to change dependencies of the drivers that
-> are shared for Microchip SoC-s in the future.
+> Because these power domains have been left out of the device tree there
+> has not been any real need to properly describe the I2C controllers
+> power domain.
 > 
-> DTS and further driver will be added in follow-up series.
+> On RK3528 the I2C controllers are spread out among the described
+> PD_RKVENC, PD_VO and PD_VPU power domains. However, one I2C controller
+> belong to an undescribed always powered on power domain.
 > 
-> [...]
+> Add support to describe an optional power-domains for the I2C
+> controllers in Rockchip SoCs.
+> 
+> Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
+> ---
+> v2: Update commit message
+> ---
+>  Documentation/devicetree/bindings/i2c/i2c-rk3x.yaml | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
 
-Applied, thanks!
-
-[08/10] dma: xdmac: make it selectable for ARCH_MICROCHIP
-        commit: e56982021f5303b2523ac247e3c79b063459d012
-
-Best regards,
--- 
-~Vinod
-
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 
 
