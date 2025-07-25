@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-12033-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12034-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 28BCBB118A0
-	for <lists+linux-i2c@lfdr.de>; Fri, 25 Jul 2025 08:47:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93792B118A6
+	for <lists+linux-i2c@lfdr.de>; Fri, 25 Jul 2025 08:48:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 33F4F1CC6B61
-	for <lists+linux-i2c@lfdr.de>; Fri, 25 Jul 2025 06:47:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 60DF73BD887
+	for <lists+linux-i2c@lfdr.de>; Fri, 25 Jul 2025 06:48:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 162EE289833;
-	Fri, 25 Jul 2025 06:47:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B645B28A712;
+	Fri, 25 Jul 2025 06:48:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aEqz8C27"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T08xpa5e"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFEB828937A;
-	Fri, 25 Jul 2025 06:47:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AD761DED4A;
+	Fri, 25 Jul 2025 06:48:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753426032; cv=none; b=svCoYb+Cgw0yUudJFMPr/wfEvmQaorddHLd9H/xNRQdwWfuvgkU/Kk5LMtdenduZP2EpBQgGmQgGQkfWOOFFbiCGOmp1KzrAEFeu33puYVlTV4rK+0m04lHjQoTXljEMPc5aBKdR0AlZ6Wh0vrq8rBIV1BJ7dtt+UWiB9PmlzDY=
+	t=1753426116; cv=none; b=nmLkQXeIXJPshfhU8csITGT8xt+NrBX1iMeRjmec4TqJ83TFrApPOEsJVvs1rDIJFIS4fkQxei9ZxQVOT3shoMC5qYjQbIeqm9QSznXI2L+GqZT9pSwkq/NtYLyRxqlMSTyroUh79cze7yI7I5fanhiIsrlsSHYHr1D4PJXSAMg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753426032; c=relaxed/simple;
-	bh=VwXWIYN+uV8R/BhkN+JfhJ19YQ2JJoM6KZNVHrHfh14=;
+	s=arc-20240116; t=1753426116; c=relaxed/simple;
+	bh=lZXXy7Xqod/ctUPKOXgUXwhbmc85tctUCisy7a/nmM8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=det/dbXY38mnNf/7YsKm9bt3wABIDVgHBfC2tOZT5DLk7jDzikEC/b7lXeWAUMn8hiNJmvGx0Ua1bj4rrAkdAxX/D2etlLKYnCtS4D9U2y5n4cKu9vtdgvhwXYpr0lodkDgS8UI2b+k1hFp63mU0GkAHVuWeZem2BhJYJD6++yc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aEqz8C27; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE325C4CEE7;
-	Fri, 25 Jul 2025 06:47:08 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=LjUdyti/ObzZMErKJxAyWabdd9mgoSfNFUQKG9KLxZCCOnXQTEBrWLAnKrZuOMOQr+tazUEEYd2iTsuvsM1+HCQ43aN3tByYtz+bB0paDDL5dIq1IAEw+fWhWe0bIc7VPyxYYRG8cvYXLqn4s1cnZZr39axR1rP59kuAfD7krHA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T08xpa5e; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CD8FC4CEE7;
+	Fri, 25 Jul 2025 06:48:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753426032;
-	bh=VwXWIYN+uV8R/BhkN+JfhJ19YQ2JJoM6KZNVHrHfh14=;
+	s=k20201202; t=1753426116;
+	bh=lZXXy7Xqod/ctUPKOXgUXwhbmc85tctUCisy7a/nmM8=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=aEqz8C27HVxuVGjtxct5liAUVwTFfKBHvQgVdT0lnwJGSlaMv4yyHtaQ6EzhY8T4D
-	 S7bitdnERQqC1kZ93RI/euQ8Xum9h95j+jzx9zCyw8nQIIZSUQE2h0OHXO6Eo7CcSE
-	 si3ifmWV9jh8/Z7x/N5TEIWt3chIzcSuwm9vtiDoH8rpU3TJu4hNjqiEPYwpOnC5+k
-	 vPBdWJE9gzpVD04/+ImftpYE28OLKI2armpAjMNwbJPH+BUVri8l/GVvv2Ks2f8huS
-	 KTxOR5aM26M0kibQ8I82DW4yTpurZucVCZnbgibkYBHh5MFBrACaWGsjuOWGLwBrY6
-	 NTPfRcUxFp8OA==
-Message-ID: <1a6f4194-de77-4dca-b2e8-2b51a106d770@kernel.org>
-Date: Fri, 25 Jul 2025 08:47:06 +0200
+	b=T08xpa5eQDBaQWN5jNMKA5gBz1orTUVIzb9P+bkczrFTg/Wgf/b8medot63Foz9DG
+	 Xcu/DCP+dBTmvGkt7b6/GDJKc9/x2zGSqaNNL/l7tVXjYDloDwgv0tZE/WpANvnXZf
+	 V/8zLFu+uCr87jVd548C0RpYhGjwTfY0Oz8EJFy7DG+Yzjm5HqhEpstx99i5CqKIWq
+	 C6OY/n3DTuwy0S8Jg5BPR62io/vpcywQ9LlTV6NCMLthCtMx25HNndFtWoVuFQwOy4
+	 z3AAC7mxMzl+f05AIHXBkKt4GMQB2xCnutRXrI73ZXYvfM3hQiVB4SiFxzkLlt6V8H
+	 PFFxwcS8s8aaA==
+Message-ID: <696774c5-db1c-4fcc-a5f6-139dc22ead87@kernel.org>
+Date: Fri, 25 Jul 2025 08:48:30 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V3 1/3] dt-binding: Add register-settings binding
+Subject: Re: [PATCH V3 0/3] Introduce a generic register settings dt-binding
 To: Rajesh Gumasta <rgumasta@nvidia.com>, krzk+dt@kernel.org,
  robh@kernel.org, conor+dt@kernel.org, andi.shyti@kernel.org,
  ulf.hansson@linaro.org, thierry.reding@gmail.com, jonathanh@nvidia.com,
@@ -59,7 +59,6 @@ Cc: devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
  linux-i2c@vger.kernel.org, linux-mmc@vger.kernel.org, andersson@kernel.org,
  sjg@chromium.org, nm@ti.com
 References: <20250725052225.23510-1-rgumasta@nvidia.com>
- <20250725052225.23510-2-rgumasta@nvidia.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -105,28 +104,28 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250725052225.23510-2-rgumasta@nvidia.com>
+In-Reply-To: <20250725052225.23510-1-rgumasta@nvidia.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 25/07/2025 07:22, Rajesh Gumasta wrote:
-> +description: |
-> +  Register Settings provides a generic way to specify register configurations
-> +  for any hardware controllers. Settings are specified under a "reg-settings"
-> +  sub-node under the controller device tree node. It allows defining both
-> +  default and operating mode specific register settings in the device tree.
-> +
-> +properties:
-> +  reg-settings:
-> +    type: object
-> +    description: |
-> +      Container node for register settings configurations. Each child node
-> +      represents a specific configuration mode or operating condition.
-> +
-> +    additionalProperties:
-> +      type: object
+> 4. The I2C bindings are known to fail the binding checks if the fix for
+>    the I2C schema is not applied [1].
+> 5. The file i2c-controller-common.yaml is added as a place-holder for
+>    defining the 'reg-settings' nodes for I2C controllers. However, this
+>    is very much a place-holder for demostration purposes. Ideally, these
+>    nodes would be part of the main I2C schema.
+> 
+> Changes in V3:
+> - Renamed as 'generic register settings' as opposed to 'Tegra register
+>   config settings'.
+> - Dropped all the associated code to focus on the DT bindings for now.
+> - Added a 'register-settings.yaml' as a top level binding.
+> - Made I2C register-setting timing properties generic I2C properties.
 
-I don't understand what does this binding bring. It is empty.
+
+Where are lore links to previous discussions? There is no v2 nor v1 in
+inbox.
 
 Best regards,
 Krzysztof
