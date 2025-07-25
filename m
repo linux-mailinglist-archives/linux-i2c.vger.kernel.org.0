@@ -1,43 +1,43 @@
-Return-Path: <linux-i2c+bounces-12031-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12032-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4DE1EB117EE
-	for <lists+linux-i2c@lfdr.de>; Fri, 25 Jul 2025 07:23:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id EC6E3B117F1
+	for <lists+linux-i2c@lfdr.de>; Fri, 25 Jul 2025 07:23:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2079DAA7C79
-	for <lists+linux-i2c@lfdr.de>; Fri, 25 Jul 2025 05:23:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C12DBAA7DB5
+	for <lists+linux-i2c@lfdr.de>; Fri, 25 Jul 2025 05:23:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F4199241696;
-	Fri, 25 Jul 2025 05:23:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FC5B242D9B;
+	Fri, 25 Jul 2025 05:23:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="hIZ/9qUM"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="FLsOUbgQ"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2051.outbound.protection.outlook.com [40.107.92.51])
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2060.outbound.protection.outlook.com [40.107.236.60])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E0C74A08;
-	Fri, 25 Jul 2025 05:23:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCFEF4A08;
+	Fri, 25 Jul 2025 05:23:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.60
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753421019; cv=fail; b=jy7KuxnmHVgmJ1gQ/Pd0EboUZDmcH6EQNFRNNjGJHoRHr48FXGo2rP1u3nMS3HDfNfz91fEYu1sl/T3U55kJHI631tnIi0oNUssEq5H+XOs7Hx549nfLEvSfodwP0Yq1TIU37rmOB5TmmTUOfjggsIySrENrqSFnB7bzP6hhOAw=
+	t=1753421024; cv=fail; b=eoDrlYKc2Knyewtd/YVxrikYWdRs8ZDtZXNTJLd06d5TzvR+B8YXzh/feG1RV6vqAJ89gU7c0jdrZAs4TBieMdXyunEBN5FnvEtnlgVm+W2kfa2wNPKKlXSSow5N/jsZ2hZy7wMYeZJ2O306WWu6VuD7ZP5eS6B8KeHjqAuEe1Y=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753421019; c=relaxed/simple;
-	bh=F82Qfdv4mEsu0jP9Ei1ORQlnY1pMpT0x2sVNcBvamlY=;
+	s=arc-20240116; t=1753421024; c=relaxed/simple;
+	bh=he3mzG+fui5J5Dl2QH0JZrYx1508gDHZK1JUQAxhXKU=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Q8RIzWO4THgiRZvtXerMDD7zWF68m6i3Lpve5BaGoTAPzbErciQGAk00R0thOZlRzJM/5lXCTY3OVuebTY0UEVBWuXS7zXZkYVn6edVYfqNVSMaHtJePan4w48+Fdq/1XaSx+47z3LogJKYOSh5QjxJhsUO7DD3RgL7GGnF8HGI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=hIZ/9qUM; arc=fail smtp.client-ip=40.107.92.51
+	 MIME-Version:Content-Type; b=s/85o6zJcnzl1TtQy6kw656BQl65rSmvOkCBYjZZdRM0eojmgzWbN/2/N6Ry9UJH/6M12yPXFsE5Se7+bYSDFkvH7VyzsDbTBVNGkzz0NIEonkrwRMVLouksODbehjEJwUa9xt0rX83r3GSBoOTzbymSxn5wzApu1m0zi53tezs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=FLsOUbgQ; arc=fail smtp.client-ip=40.107.236.60
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=nszd6xODeUsD+12cyNzco82dE0YlZoFZUVU0p1Cj5hD6twsgfk76MtMDaR+yUG1+telIDndAOeH1OaN8knfBhIHg4XxjEnXekooPeEqHCbsWfCyIZgCSIAHOzDnJpXwlo5IXwGPQtX2zeLYSPjc+9T7M1zJHYBLNdpS50zf8zmeyIquNjK2V2DOUmxoHS5u2M6U1z/5jW/jon+lnyWJlLS4ZAjC603Cn7Lr/9LxhGBimNaRbLzellbDoHyUgWx6xpzOdbttnmn1fOWnxwsVFgnT/1vGtBEGM2TBWoQPgClurOARrIbt/8fk0LPOKk4mlCZaaXz/ig3Vei+mzaG3W1g==
+ b=kFGZgCwJk9x/NXVlBEZUSkxKrwj1uucGL+lLq8guNs9i0MlwXO1VVfT5LyK8Z0WFwtlzEsHoN08JMNwcnRgow8Vx5Z0QoxTL7iWDecyVO7rktXsXISI70b8bFUJHavlYi3C17z3YXATrMdezl1D4NFX3hUkp4Jn3tZ1RPg2kJlCvtENOWc+07nBnn05QUVBTm/BKQiD9uWHqe36J2F/O1BUa+Uf3oQwX05iGja85kKaWPCdhMsFxUgRAoYDV+qVaUBFJetfP5oI1vbZCdq77KjoHghL9l+VuSEFxHZ07MquZLMjc2Uc2UV14tj1L+YtnkriSdcmqfWA/3w4w+Av+4g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=K9E7T6PClm6aTUyaQvoBD70Hi9oOF/F6fenm7YCpTus=;
- b=YwVaqVZuwrncRKqJFJgQEJ7Uwkb3Ti4GcICP9IGOiuJT9Sp15WdHgXcIIcpUGn4hA3YfrIVDgrmPQ55TjXJY139DVp3g6+gCcaH6IrXfGop8h5bOVP9bv8NVN5xdCSo5Hs8NScGYgdFUPPdduSYj7eMOeoThUhK6CMKErmSFz17+bBeUmixIDXiqb6NkRpUGS1myf359A6Vxh+GbP4OxNObPipWwtFydg3s3bUliljMuE2NkkLsmyq+N9sMx/ZYXFIbhaX3axCL7H/FhqbfnTUSyF8aXkwct2WIYvM+lmrye+nj6pc6kAYBcmEuO8TDxFLjksCSXAZ//cnYIsKRAYA==
+ bh=OxTNebHMn6VVdFIcQFPWxUqRy3U3opi/ruGdzDEk4JQ=;
+ b=rzpqIVCKtbyssIGtsnldts99MzoTe4CiLHL+9rSTvv6cp4sGxSi6p7SxyG5ecFe5wXL/I2lIFDAPkcnGLK0lci4C42fPRFHTvqpQvjQjgLrsa7B8AHrSs4WPbG54tgNi0eSMK+OzSnN80jL1GewdAtZ/0xySmUWOKxnrJIq35f+19sR6IekZIAnGFPGxEq73AOYNaFuWZfYh11onu2Kc7UotWT0SXyvFy/r0TVXM4iSxbOepeZ6abF0YRjHi+78Jx6YKwcuCMF2vsk5EJ6XyIgnP329dh2k/xiLbssSdUnkgICLD7MNtJ2kXxQCRsirC83395QdgqU+VE2MLokPHgg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  216.228.117.160) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
@@ -45,18 +45,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=K9E7T6PClm6aTUyaQvoBD70Hi9oOF/F6fenm7YCpTus=;
- b=hIZ/9qUMKk/55V/eQjI2B/WTTPKYBMvc3iHBJtMjAFTPNE1sQHSpZxfWMaH9XzmU4hQYrDjaCxUjU7CcFz4pkmQQhUMGMIkld/Yq8V0mEDxAhk53bR9PytvrSO1+qspV5rnXa2d3rKI/1VWoGIZfWha1BWrD7pE0flY5RuoZ7w0oHwpMGEBbkK8B7M/c227pHCAz/IPtxXoERcuiErfNSRAz8ia/67QU/a5tmgyjXxCVesX+lUFNp4x6Pvkg5RIHCtZMjOekUJ7jsYW6O8N1FQywLioH1LxmudCLc5h9AM2X0gWSzDWppA8Wk0vQs1EjxTzRNZYEpanITkGt+LAJPQ==
-Received: from MN2PR19CA0026.namprd19.prod.outlook.com (2603:10b6:208:178::39)
- by PH8PR12MB7278.namprd12.prod.outlook.com (2603:10b6:510:222::7) with
+ bh=OxTNebHMn6VVdFIcQFPWxUqRy3U3opi/ruGdzDEk4JQ=;
+ b=FLsOUbgQKYzIDUjHDsdabFuQInVOFo4vIyGjkIDreSlLe+8Rul5cd90wUZZ3Yb/vFM5msJTyRfLQsFdcYMI+FhMnVzxaMafVG7GnD2XKmzYBVQ0YCD0qp51GjIrUemW1gVkJxfpdeI+OBSAuOWa6JLtMWJZl4U4aRmkFmsUDkvbEh7Uydc8SSZGucyDe1ofIMVddzE5f2Ayjv9w3gzo7rxUbNiMAHhwX1SW5fc7gayBlePLg2CxouDaDpxR3dx9rz+Kl9LNJLoiD/Zt2ErPkLJ09PLparppgce4DGcSmfHFICHfRRT/IdGOm93C90HQfQoMGXT9jlgMLV/V+4iZXMA==
+Received: from MN2PR19CA0025.namprd19.prod.outlook.com (2603:10b6:208:178::38)
+ by PH0PR12MB7472.namprd12.prod.outlook.com (2603:10b6:510:1e9::9) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8943.30; Fri, 25 Jul
- 2025 05:23:32 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8964.21; Fri, 25 Jul
+ 2025 05:23:37 +0000
 Received: from MN1PEPF0000ECD9.namprd02.prod.outlook.com
- (2603:10b6:208:178:cafe::5d) by MN2PR19CA0026.outlook.office365.com
- (2603:10b6:208:178::39) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8964.22 via Frontend Transport; Fri,
- 25 Jul 2025 05:23:32 +0000
+ (2603:10b6:208:178:cafe::fa) by MN2PR19CA0025.outlook.office365.com
+ (2603:10b6:208:178::38) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8964.23 via Frontend Transport; Fri,
+ 25 Jul 2025 05:23:37 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
@@ -66,18 +66,18 @@ Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
 Received: from mail.nvidia.com (216.228.117.160) by
  MN1PEPF0000ECD9.mail.protection.outlook.com (10.167.242.138) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8964.20 via Frontend Transport; Fri, 25 Jul 2025 05:23:31 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ 15.20.8964.20 via Frontend Transport; Fri, 25 Jul 2025 05:23:36 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
  (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Thu, 24 Jul
- 2025 22:23:16 -0700
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ 2025 22:23:21 -0700
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail203.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Thu, 24 Jul
- 2025 22:23:16 -0700
+ 2025 22:23:21 -0700
 Received: from BUILDSERVER-IO-L4T.nvidia.com (10.127.8.9) by mail.nvidia.com
  (10.129.68.9) with Microsoft SMTP Server id 15.2.1544.14 via Frontend
- Transport; Thu, 24 Jul 2025 22:23:12 -0700
+ Transport; Thu, 24 Jul 2025 22:23:17 -0700
 From: Rajesh Gumasta <rgumasta@nvidia.com>
 To: <krzk+dt@kernel.org>, <robh@kernel.org>, <conor+dt@kernel.org>,
 	<andi.shyti@kernel.org>, <ulf.hansson@linaro.org>,
@@ -86,9 +86,9 @@ CC: <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
 	<linux-i2c@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
 	<andersson@kernel.org>, <sjg@chromium.org>, <nm@ti.com>, Rajesh Gumasta
 	<rgumasta@nvidia.com>
-Subject: [PATCH V3 2/3] dt-binding: i2c: nvidia,tegra20-i2c: Add register-setting support
-Date: Fri, 25 Jul 2025 10:52:24 +0530
-Message-ID: <20250725052225.23510-3-rgumasta@nvidia.com>
+Subject: [PATCH V3 3/3] dt-binding: mmc: tegra: Add register-setting support
+Date: Fri, 25 Jul 2025 10:52:25 +0530
+Message-ID: <20250725052225.23510-4-rgumasta@nvidia.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20250725052225.23510-1-rgumasta@nvidia.com>
 References: <20250725052225.23510-1-rgumasta@nvidia.com>
@@ -104,232 +104,168 @@ Content-Type: text/plain
 X-NV-OnPremToCloud: AnonymousSubmission
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN1PEPF0000ECD9:EE_|PH8PR12MB7278:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1d2b68e1-b1a1-418a-2484-08ddcb3b656c
+X-MS-TrafficTypeDiagnostic: MN1PEPF0000ECD9:EE_|PH0PR12MB7472:EE_
+X-MS-Office365-Filtering-Correlation-Id: 34c07602-fc65-41db-98be-08ddcb3b685b
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|36860700013|7416014|82310400026|1800799024|13003099007;
+	BCL:0;ARA:13230040|36860700013|376014|7416014|1800799024|82310400026;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?1ufzpLm1tIzSkYUU8pov6Dqg61icOQhbm51joCmGTeIJSxtzOei2EM3kouGl?=
- =?us-ascii?Q?mRXhMkz8JsvNQC4/F5a0dRmRtwLN0XfO3abftMMbL2V9WWCyZuCYsrzmHTrw?=
- =?us-ascii?Q?aUsALkUiDKV5zNvo9gv5s09PuleSOSPMyz9UCxCf2zrXfrWNtqqx3QCa3BMb?=
- =?us-ascii?Q?3P6+m0Brs5MeBQSE/Qhcg+4+8RTsmJnL2cIy6ecyt9QRxJ53THuiZw7pYCpb?=
- =?us-ascii?Q?6UUgL8lyZB4MOhqjr0F3iYc2jxOePrQUBM9FensMtx+X6p0tdlCB4JIpFTDe?=
- =?us-ascii?Q?z6jepq5IUrARXI77+SXgpw4KO1roP6mVEBUNTLZzfW+UEIZ5bo6Kn13ACTwT?=
- =?us-ascii?Q?Nm4J7MWdu9LaWGyI0on3y8W4kYfvtXwIytS3AB0nq1CqJdIsymLPF3+1hGKg?=
- =?us-ascii?Q?RVm1HHl8VKPv/SiOWJLLy4l8KhuG7PdVnUIgMNgbNzV+cvgxfvnXKxSPPAjx?=
- =?us-ascii?Q?Ee/CvRvHfNqB9ZdmLScwRe3BYxHXadx+LA/52HmuAiqS+weWvw0J3lCvEbY3?=
- =?us-ascii?Q?6UC5RP74fTjojupdjLEOOgotQml/6xWgqwu5v2XLJNf7kdo9VWqk2SNGIy/Y?=
- =?us-ascii?Q?5wk55uXO1mYpNVzAhmPmVi5vWY9v7vKGC3gyA+007NF1l8KBHI+LauooaGZm?=
- =?us-ascii?Q?LhmheLkVT38zCnSs3EVK071SZuAcEw+dlWgiOvMGQxD8VLPMv9iq7+YbK+YX?=
- =?us-ascii?Q?9hknA9pwmkquTZ4kvw754jbYP8q7OZ6ByDUhWpGrKHSgBlUcee2NoeJD6EEC?=
- =?us-ascii?Q?Ae+s8q3WUAF390GgFOZ+1bnGtNIegV+iSZLeW5bZLeDo95Qis22jWzGAAD4v?=
- =?us-ascii?Q?9aBSkP1491QR0kXIz4hHNoArdQPK+ew4MWUXI/kp3JjPr4mAuNfyStHKhDy1?=
- =?us-ascii?Q?wijuhNZQLe/xWj07FVR3P8a667J6HClle3ak0Klf+1AC4eJH0CVagoKntA8a?=
- =?us-ascii?Q?BbE3Mgk3A9jJcwa6fMOrhZLV1spZJaQL4+/vA9Lt8K++5wm7KCPZ1ADuYz7K?=
- =?us-ascii?Q?lYbtCs3bqXI6N5e5ySXXe5GwFmwK2/sEa/CW3C9ySY9y9UebdMHpoD2sjR9h?=
- =?us-ascii?Q?++Wd4Nw9RDl9C+U3hZ3uEA9LiMB4BrtgeDg3tBopH1kmugJa3rnwE8CTJk0a?=
- =?us-ascii?Q?bczUAt529sWvE/2A8uuThKV6o89y3URoiBELIRmomOhSb1WMfTlyc7br33lI?=
- =?us-ascii?Q?RtXKTfSJmkPUIluNJqavAUCck0PBAEBTc3m7aT/8DAvelcNhOHCZXIIdmCsc?=
- =?us-ascii?Q?R6eoe3DHat+yS3GoUSymL2bwlH0ToQc4CqH7feYoiBCKKt309eEYaOmr7vwz?=
- =?us-ascii?Q?kK2h2Ywzgd3cWnWw/KJ2stf/iqIVa3d52BBDNj13oTUsG3aZb5S15jxRvJYC?=
- =?us-ascii?Q?zej4Nhq90TcDF/J9HGQvgQHcF80WrjtmL0ZI1YNwmJHR40ZRDzHTjIU5fdnb?=
- =?us-ascii?Q?O512ZfEF5IK6b3xxTr4iBEdQlj/fjtr1YtudOymfV+sgzluXovimDz64NLFa?=
- =?us-ascii?Q?HGOjc7tHepHDvbAV4CLPLQvGkxHP2s541jHj?=
+	=?us-ascii?Q?dy2bR/2RcKb4KWNmkUgjmR1XglnCS6KpLLQ4mV8dGbP3yTh4v/I3O+lGALPU?=
+ =?us-ascii?Q?R4LNydvzDUvSYquCQtd2OXmGSU4CFn7T+j0Mechwh6jQ0GojHpD9RznKT1XM?=
+ =?us-ascii?Q?3uj17YqWVW+KED5ZQLP4Mi2pgF45YP6dCfNCNsQVBALl3EIk6iLwyumDWuzL?=
+ =?us-ascii?Q?pES38fUlzktEOHWHL6cd2M+PrLW2HASjk/9ZaVM9d0JeW/4HBh0Sj+MWJTAy?=
+ =?us-ascii?Q?t56XgRTsgVQ+3Xokb2DZSNAy5G0QiBoA3WVYW95JNyQKQ6ngO8vfGbCjndHd?=
+ =?us-ascii?Q?JCATucdw1x0sS2bxHkAubQTINKaTITrp+NktDj8FMiNX8dZf3foOuuFmnYsY?=
+ =?us-ascii?Q?0LhyHkDB9Ri1l2YPTZTQxXpoW2W7uHsCGxQAaEhbShV6o3qLSKLkpsIPCPRc?=
+ =?us-ascii?Q?dceGw6U0vQmver5tNUPD6sVmtaEZfS6k07Pv6fvjIwhbp+XPNqUFRgtXHW8m?=
+ =?us-ascii?Q?sb64l//YZARcnsezLFRYKkW2EtA3jSul29lGHVH1WEExMdLM39JsDkObEceR?=
+ =?us-ascii?Q?rTzXFT5i97if0p80JDonnSgmLCXzf3LXVt7i4sp/G54GuNthtmzQjqbCkmyx?=
+ =?us-ascii?Q?ErM8dRQvnpKOvZqFcLzBxnYTbYqOoEEEUvR5P8gEyQP1lwf8xydDepExnYbE?=
+ =?us-ascii?Q?+G3l614dOpHAOBOXLrBSH+LMpPQdCLR4zpCGXNycca5rVnssm6h2HJ516T+P?=
+ =?us-ascii?Q?6Rc/GfJAd67DNbHKiRLRKLSYD8JvlxqCEPHqKkJVimf4YGGB3ss9Im33hoex?=
+ =?us-ascii?Q?nOvWSe+M7r+8iHHx+avcBobbxmpCGzZaaB0OO62ShL/FBoPxblN1OaGv5EGv?=
+ =?us-ascii?Q?mU7jbpXa5RtfrLj95y4Zviy2IlaBD1ZkytI2Yqadq/pPsbIsx1MfimauQepf?=
+ =?us-ascii?Q?LLSPClzX8UCBXuHnWR5OQWeZJ3Mx7Bn9VqaBJDKVL2HIWtl++TSsSVO9KLNS?=
+ =?us-ascii?Q?EXJGJ9wN/cTIBXbWpvPWaqFx0wZRYDYt/8iUMdw8vzxn2Mpfm4dLZgZAL/7/?=
+ =?us-ascii?Q?xKjIZN+C5avGZL8VXLDQ4AidhjwLxjhqZn9scx3aOGKYohJuOTbUDhEHQskf?=
+ =?us-ascii?Q?dctnvXQc+QzVl4zP/S3/pP8e+b/ppHkJ53lfj2asHpVRQJEDkceYd7SITgyc?=
+ =?us-ascii?Q?xbJbTigzGbjQqtC6lbn5ZxQvqjq+DC9DnAWY3KPCwKEG5YaR5ol5gMg2PjHN?=
+ =?us-ascii?Q?MO8s0cNqK8akecPyJw43GT9OaGw4vYSymUf+xvFAooi0iGX3NgCVUYfhJbTV?=
+ =?us-ascii?Q?ugLYVPpjN7LCBcYgMbsIXrJjKl0rCEmw0L4t/rmiyqwosYlHjIaLxt18wk9E?=
+ =?us-ascii?Q?10sH7tzybGr4hYTro2d59ZSaoWCvJEhP15d15va1SV0cKfGUbQCwYaVIERls?=
+ =?us-ascii?Q?RhyySyk+oKmfcil+irJvbHxGwWHseMo6vIie9HjkJhEaXUqqwc8e6X2LPwDB?=
+ =?us-ascii?Q?5gs8SwLOKAlGE4TZoOHLex0GjCoDfCoFC+bhp7bWYsgyk86FPet6OwS9M806?=
+ =?us-ascii?Q?VRq13i0bpuMbti6nl9ueznaYZrb7zcC/pVCK?=
 X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(376014)(36860700013)(7416014)(82310400026)(1800799024)(13003099007);DIR:OUT;SFP:1101;
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(36860700013)(376014)(7416014)(1800799024)(82310400026);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jul 2025 05:23:31.9770
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jul 2025 05:23:36.8722
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1d2b68e1-b1a1-418a-2484-08ddcb3b656c
+X-MS-Exchange-CrossTenant-Network-Message-Id: 34c07602-fc65-41db-98be-08ddcb3b685b
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
 X-MS-Exchange-CrossTenant-AuthSource:
 	MN1PEPF0000ECD9.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7278
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB7472
 
-Add register setting support for the NVIDIA Tegra20 I2C controllers. An
-i2c-controller-common.yaml binding document has been added a top-level
-binding document so that all I2C controllers can use this binding. This
-new binding document defines some generic register setting properties
-for I2C and some standard I2C operating modes that the register settings
-need to be programmed for. This new binding document is used by the
-NVIDIA Tegra20 I2C binding to enable the use of the 'reg-settings'
-binding for this device.
+Add register setting support for the NVIDIA Tegra20 MMC controllers. The
+top-level 'reg-settings' node and child nodes for each MMC operating mode
+supported are defined in the mmc-controller-common.yaml binding. The
+NVIDIA specific register setting property is defined in the
+nvidia,tegra20-sdhci.yaml.
 
 Signed-off-by: Rajesh Gumasta <rgumasta@nvidia.com>
 ---
- .../bindings/i2c/i2c-controller-common.yaml   | 73 +++++++++++++++++++
- .../bindings/i2c/nvidia,tegra20-i2c.yaml      | 64 +++++++++++++++-
- 2 files changed, 134 insertions(+), 3 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/i2c/i2c-controller-common.yaml
+ .../bindings/mmc/mmc-controller-common.yaml   | 24 ++++++++++
+ .../bindings/mmc/nvidia,tegra20-sdhci.yaml    | 48 +++++++++++++++++++
+ 2 files changed, 72 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/i2c/i2c-controller-common.yaml b/Documentation/devicetree/bindings/i2c/i2c-controller-common.yaml
-new file mode 100644
-index 000000000000..3b5b75d4b98a
---- /dev/null
-+++ b/Documentation/devicetree/bindings/i2c/i2c-controller-common.yaml
-@@ -0,0 +1,73 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/i2c/i2c-controller-common.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: I2C Controller Common Properties
-+
-+maintainers:
-+  - Thierry Reding <thierry.reding@gmail.com>
-+  - Krishna Yarlagadda <kyarlagadda@nvidia.com>
-+  - Rajesh Gumasta <rgumasta@nvidia.com>
-+  - Jon Hunter <jonathanh@nvidia.com>
-+
-+description:
-+  These properties are common to multiple I2C controllers.
-+
-+definitions:
-+  reg-settings:
-+    properties:
-+      scl-low-period-cycles:
-+        $ref: /schemas/types.yaml#/definitions/uint8
-+        description: Low period of the SCL clock in parent clock cycles.
-+      scl-high-period-cycles:
-+        $ref: /schemas/types.yaml#/definitions/uint8
-+        description: High period of the SCL clock in parent clock cycles.
-+      bus-free-time-cycles:
-+        $ref: /schemas/types.yaml#/definitions/uint8
-+        description: Bus free time between STOP and START conditions in parent
-+          clock cycles.
-+      start-setup-time-cycles:
-+        $ref: /schemas/types.yaml#/definitions/uint8
-+        description: Set-up time for START condition in parent clock cycles.
-+      stop-setup-time-cycles:
-+        $ref: /schemas/types.yaml#/definitions/uint8
-+        description: Set-up time for STOP condition in parent clock cycles.
-+      start-hold-time-cycles:
-+        $ref: /schemas/types.yaml#/definitions/uint8
-+        description: Hold time for STOP condition in parent clock cycles.
-+
-+properties:
+diff --git a/Documentation/devicetree/bindings/mmc/mmc-controller-common.yaml b/Documentation/devicetree/bindings/mmc/mmc-controller-common.yaml
+index 9a7235439759..0bdebc6454d8 100644
+--- a/Documentation/devicetree/bindings/mmc/mmc-controller-common.yaml
++++ b/Documentation/devicetree/bindings/mmc/mmc-controller-common.yaml
+@@ -308,6 +308,30 @@ properties:
+       sequence. To successfully detect an (e)MMC/SD/SDIO card, that
+       power sequence must be maintained while initializing the card.
+ 
 +  reg-settings:
 +    $ref: /schemas/regset/register-settings.yaml
 +
 +    properties:
-+      default-setting:
++      default-settings:
 +        type: object
-+        $ref: "#/definitions/reg-settings"
 +        description:
-+          Default register settings.
++          Default MMC register settings.
 +
-+      fast:
++      sdr50:
 +        type: object
-+        $ref: "#/definitions/reg-settings"
 +        description:
-+          Register settings for I2C fast operating mode.
++          Register settings for MMC sdr50 operating mode.
 +
-+      fastplus:
++      sdr104:
 +        type: object
-+        $ref: "#/definitions/reg-settings"
 +        description:
-+          Register settings for I2C fastplus operating mode.
++          Register settings for MMC sdr104 operating mode.
 +
-+      standard:
++      hs200:
 +        type: object
-+        $ref: "#/definitions/reg-settings"
 +        description:
-+          Register settings for I2C standard operating mode.
++          Register settings for MMC hs200 operating mode.
 +
-+allOf:
-+  - $ref: /schemas/i2c/i2c-controller.yaml
+ patternProperties:
+   "^.*@[0-9]+$":
+     type: object
+diff --git a/Documentation/devicetree/bindings/mmc/nvidia,tegra20-sdhci.yaml b/Documentation/devicetree/bindings/mmc/nvidia,tegra20-sdhci.yaml
+index 72987f0326a1..a78b2bd92b18 100644
+--- a/Documentation/devicetree/bindings/mmc/nvidia,tegra20-sdhci.yaml
++++ b/Documentation/devicetree/bindings/mmc/nvidia,tegra20-sdhci.yaml
+@@ -17,6 +17,15 @@ description: |
+   This file documents differences between the core properties described by
+   mmc-controller.yaml and the properties for the Tegra SDHCI controller.
+ 
++definitions:
++  reg-settings:
++    properties:
++      nvidia,num-tuning-iterations:
++        description: The number of tuning iterations to be used by tuning circuit.
++        $ref: /schemas/types.yaml#/definitions/uint8
++        minimum: 0
++        maximum: 4
 +
-+additionalProperties: true
-diff --git a/Documentation/devicetree/bindings/i2c/nvidia,tegra20-i2c.yaml b/Documentation/devicetree/bindings/i2c/nvidia,tegra20-i2c.yaml
-index 6b6f6762d122..695ce5ada7d5 100644
---- a/Documentation/devicetree/bindings/i2c/nvidia,tegra20-i2c.yaml
-+++ b/Documentation/devicetree/bindings/i2c/nvidia,tegra20-i2c.yaml
-@@ -119,6 +119,28 @@ properties:
-       - const: rx
-       - const: tx
+ properties:
+   compatible:
+     oneOf:
+@@ -177,6 +186,27 @@ properties:
+       operates at a 1.8 V fixed I/O voltage.
+     $ref: /schemas/types.yaml#/definitions/flag
  
 +  reg-settings:
-+    $ref: /schemas/i2c/i2c-controller-common.yaml#/properties/reg-settings
++    $ref: /schemas/mmc/mmc-controller-common.yaml#/properties/reg-settings
 +
 +    properties:
-+      default-setting:
-+        $ref: /schemas/i2c/i2c-controller-common.yaml#/definitions/reg-settings
++      default-settings:
++        $ref: "#/definitions/reg-settings"
 +        unevaluatedProperties: false
 +
-+      fast:
-+        $ref: /schemas/i2c/i2c-controller-common.yaml#/definitions/reg-settings
++      sdr50:
++        $ref: "#/definitions/reg-settings"
 +        unevaluatedProperties: false
 +
-+      fastplus:
-+        $ref: /schemas/i2c/i2c-controller-common.yaml#/definitions/reg-settings
++      sdr104:
++        $ref: "#/definitions/reg-settings"
 +        unevaluatedProperties: false
 +
-+      standard:
-+        $ref: /schemas/i2c/i2c-controller-common.yaml#/definitions/reg-settings
++      hs200:
++        $ref: "#/definitions/reg-settings"
 +        unevaluatedProperties: false
-+
 +    unevaluatedProperties: false
 +
  required:
    - compatible
    - reg
-@@ -127,7 +149,7 @@ required:
-   - clock-names
- 
- allOf:
--  - $ref: /schemas/i2c/i2c-controller.yaml
-+  - $ref: /schemas/i2c/i2c-controller-common.yaml
-   - if:
-       properties:
-         compatible:
-@@ -206,6 +228,42 @@ examples:
-         dmas = <&apbdma 16>, <&apbdma 16>;
-         dma-names = "rx", "tx";
- 
--        #address-cells = <1>;
--        #size-cells = <0>;
-+        i2c-bus {
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+        };
+@@ -310,4 +340,22 @@ examples:
+                           <&tegra_car TEGRA210_CLK_PLL_C4>;
+         assigned-clock-parents = <&tegra_car TEGRA210_CLK_PLL_C4_OUT0>;
+         assigned-clock-rates = <200000000>, <1000000000>, <1000000000>;
 +
 +        reg-settings {
-+            default-setting {
-+                scl-high-period-cycles = /bits/ 8 <3>;
-+                scl-low-period-cycles = /bits/ 8 <8>;
++            default-settings {
++                nvidia,num-tuning-iterations = /bits/ 8 <0>;
 +            };
 +
-+            fast {
-+                scl-high-period-cycles = /bits/ 8 <2>;
-+                scl-low-period-cycles = /bits/ 8 <2>;
-+                bus-free-time-cycles = /bits/ 8 <2>;
-+                stop-setup-time-cycles = /bits/ 8 <2>;
-+                start-hold-time-cycles = /bits/ 8 <2>;
-+                start-setup-time-cycles = /bits/ 8 <2>;
++            sdr50 {
++                nvidia,num-tuning-iterations = /bits/ 8 <4>;
 +            };
 +
-+            fastplus {
-+                scl-high-period-cycles = /bits/ 8 <2>;
-+                scl-low-period-cycles = /bits/ 8 <2>;
-+                bus-free-time-cycles = /bits/ 8 <2>;
-+                stop-setup-time-cycles = /bits/ 8 <2>;
-+                start-hold-time-cycles = /bits/ 8 <2>;
-+                start-setup-time-cycles = /bits/ 8 <2>;
++            sdr104 {
++                nvidia,num-tuning-iterations = /bits/ 8 <2>;
 +            };
 +
-+            standard {
-+                scl-high-period-cycles = /bits/ 8 <7>;
-+                scl-low-period-cycles = /bits/ 8 <8>;
-+                bus-free-time-cycles = /bits/ 8 <8>;
-+                stop-setup-time-cycles = /bits/ 8 <8>;
-+                start-hold-time-cycles = /bits/ 8 <8>;
-+                start-setup-time-cycles = /bits/ 8 <8>;
++            hs200 {
++                nvidia,num-tuning-iterations = /bits/ 8 <2>;
 +            };
 +        };
      };
