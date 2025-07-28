@@ -1,60 +1,61 @@
-Return-Path: <linux-i2c+bounces-12051-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12052-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AAC76B136E0
-	for <lists+linux-i2c@lfdr.de>; Mon, 28 Jul 2025 10:41:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2DB04B1370D
+	for <lists+linux-i2c@lfdr.de>; Mon, 28 Jul 2025 10:55:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8DD211891583
-	for <lists+linux-i2c@lfdr.de>; Mon, 28 Jul 2025 08:41:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6A28F188E1AA
+	for <lists+linux-i2c@lfdr.de>; Mon, 28 Jul 2025 08:55:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31D3422539D;
-	Mon, 28 Jul 2025 08:41:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D27D22D9F7;
+	Mon, 28 Jul 2025 08:55:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="OcORWQrx"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="LyM5hlQI"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18C2B2E3715
-	for <linux-i2c@vger.kernel.org>; Mon, 28 Jul 2025 08:41:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2424D3398B
+	for <linux-i2c@vger.kernel.org>; Mon, 28 Jul 2025 08:55:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753692088; cv=none; b=An6M8A9Vf7yqo1trJMZCum2OG75IIxiMO5NcgPjTUB52fp250q/8ML3l8YKE+dtwhswWqmX5v7BEf2IU4uiXUb4Fm0sTMoffmw2+wqxW6ZCZ3IxydMSGwEFHTxaLPSTXLMIyPlo80vGfvvyIqxxGkZvWmUwz2qmmuzGwzOW+/4E=
+	t=1753692918; cv=none; b=Phrk7chToMU9zOtllNmOjfxjURG2GHFYsmU4lwiCO3m+yruB/5xIcBaxTB/+vPioyTgRbZDLmTpP448f5ScVlmAWB3POGwL1pRfHgoL3UElYJdNbarF48K3QsRiKRsQAcDPuIaveXpMAcTC3bDfE7V364TzKtjPEY2emRThTYp4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753692088; c=relaxed/simple;
-	bh=3Cv2BT8R+EEws7rcG/Tl9Yzn1snM3PolFSa8A6j6LmE=;
+	s=arc-20240116; t=1753692918; c=relaxed/simple;
+	bh=gnCHQZ1z+8JJt8cCbafcvsbEAy5AmOf/papLmhtzlvc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AuoqNj+1P/ce5beFQdRS/0jLUL8bkLaiaMcfS9jPxexYXerI5jBnakrxyWciiU+E09gLGWnNCRihLhMXGn2m67Q5g1y+3T+LAYQNU3f2a5+jw7lBSZjMkZnaBVF9SOFSv8gkTAUgLcR6VZ3auH8/axqcel6bnrWx1QnZ03dKpps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=OcORWQrx; arc=none smtp.client-ip=194.117.254.33
+	 Content-Type:Content-Disposition:In-Reply-To; b=AxZ+xEklfGmy0pOeLUD19yYrG6J4y7qGxrN79eFA7IMwHwNj48LvKefdmU5dOn37k4lNbNAIrnw6ZlzWziK7/GGax2apQJdLpnYxS1ea2w31LOdzcEoqZ0d7PdSaRUVqeTendf8/rpx6tOdPpeGPk5tjiDRPJfRZKSmH3wqFP84=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=LyM5hlQI; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=3Cv2
-	BT8R+EEws7rcG/Tl9Yzn1snM3PolFSa8A6j6LmE=; b=OcORWQrxuRzF2kzmWa6N
-	o+F7v+GGhM3gKB7VXjqUCW7uJmKS+fWNPrka/PRfBVUp9bLorivk3WVTlIb09FL7
-	qRMEG5s+8bSEvB2UZeyZkKkpJdflZrnJRF7i2yNqlHhqm1Ycn68JvPV3AsbR5jY8
-	LnA2xfSC4DVry2hRDD/XZtPrmMCoa4hW6BtS31TAAQI4azdU2e86+CzF1aC1ZgSG
-	cjcnjXsx9fN/EAICSSwm5DMXwftHxb31yt85X0ma+s4+DZFHQmNGBjYqbA7i4BdF
-	4CQ/tReGtOfkzGfPRJAAmlfF/sNJ2h2upelnITvdZCChhpCQvIU/O248sbH8QHUU
-	SQ==
-Received: (qmail 3370429 invoked from network); 28 Jul 2025 10:41:24 +0200
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 28 Jul 2025 10:41:24 +0200
-X-UD-Smtp-Session: l3s3148p1@f0GyQfk6PIwgAwDPXyC3AG0QzsW8mHdp
-Date: Mon, 28 Jul 2025 10:41:23 +0200
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=UAQU
+	jGuxUG1E1fe0gubyQ/yevPLFRNpllTNyC2US9Fo=; b=LyM5hlQIgEw39YvSI5xY
+	oio5Iim46ONy+cV4DpCGcUEzbMyu9hPdhTeLudF1PDQ9ihcKeBpHd+cIrVspfzbJ
+	aVlhbSPDrUJ3Yl9wAWKXrxnfEwtnr2qWuwKDoNmixbXoYIiV+2Rej2c331u0PVnG
+	SJfGiCo8V1A1A00vCnYkD2DCLMHrg1x604NKKSdSO+roApHyJbDO9YwtI4jTv0rw
+	S3B+A5ZayX5WDRJzeTgqACIKRqQYDgxoLPV3cIrjRXzoyjyU1ZEiCrVvf5q1nVqO
+	w+N4SFTXLd8N+yfvC5WOeqnMuFGtRQ1yFu3sOnCA2dayuprR8h+EHRaJoxMPu91b
+	xQ==
+Received: (qmail 3374383 invoked from network); 28 Jul 2025 10:55:14 +0200
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 28 Jul 2025 10:55:14 +0200
+X-UD-Smtp-Session: l3s3148p1@WXsrc/k6xL4gAwDPXyC3AG0QzsW8mHdp
+Date: Mon, 28 Jul 2025 10:55:13 +0200
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Hans de Goede <hansg@kernel.org>
-Cc: Wolfram Sang <wsa@kernel.org>, Andy Shevchenko <andy@kernel.org>,
-	linux-i2c@vger.kernel.org,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] i2c: core: Fix double-free of fwnode in
- i2c_unregister_device()
-Message-ID: <aIc3swA0sndwkdML@shikoro>
-References: <20250719180104.66939-1-hansg@kernel.org>
+To: Manikanta Guntupalli <manikanta.guntupalli@amd.com>
+Cc: git@amd.com, michal.simek@amd.com, peda@axentia.se,
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+	radhey.shyam.pandey@amd.com, srinivas.goud@amd.com,
+	shubhrajyoti.datta@amd.com, manikantaguntupalli09@gmail.com,
+	Jonathan Stroud <jonathan.stroud@amd.com>
+Subject: Re: [PATCH 1/1] PCA9541: Increase I2C bus arbitration timeout
+Message-ID: <aIc68UkzN_l0gZ_D@shikoro>
+References: <20250711124503.3390451-1-manikanta.guntupalli@amd.com>
+ <20250711124503.3390451-2-manikanta.guntupalli@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -62,55 +63,67 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="I6leaFbbHY6qHaU5"
+	protocol="application/pgp-signature"; boundary="OhhEuFFUUn3RXVrr"
 Content-Disposition: inline
-In-Reply-To: <20250719180104.66939-1-hansg@kernel.org>
+In-Reply-To: <20250711124503.3390451-2-manikanta.guntupalli@amd.com>
 
 
---I6leaFbbHY6qHaU5
+--OhhEuFFUUn3RXVrr
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Jul 19, 2025 at 08:01:04PM +0200, Hans de Goede wrote:
-> Before commit df6d7277e552 ("i2c: core: Do not dereference fwnode in stru=
-ct
-> device"), i2c_unregister_device() only called fwnode_handle_put() on
-> of_node-s in the form of calling of_node_put(client->dev.of_node).
->=20
-> But after this commit the i2c_client's fwnode now unconditionally gets
-> fwnode_handle_put() on it.
->=20
-> When the i2c_client has no primary (ACPI / OF) fwnode but it does have
-> a software fwnode, the software-node will be the primary node and
-> fwnode_handle_put() will put() it.
->=20
-> But for the software fwnode device_remove_software_node() will also put()
-> it leading to a double free:
->=20
+Hi,
 
-Applied to for-next, thanks!
+thanks for your patch.
+
+>  /* arbitration timeouts, in jiffies */
+> -#define ARB_TIMEOUT	(HZ / 8)	/* 125 ms until forcing bus ownership */
+> -#define ARB2_TIMEOUT	(HZ / 4)	/* 250 ms until acquisition failure */
+> +#define ARB_TIMEOUT	(HZ)		/* 1 s until forcing bus ownership */
+> +#define ARB2_TIMEOUT	(2 * HZ)	/* 2 s until acquisition failure */
+
+Can't we use the timeout value of the parent struct i2c_adapter? This is
+by default HZ and can be set by userspace via IOCTL depending on the
+actual use case. So, we would use (pseudo-code, probably):
+
+254         unsigned long timeout =3D jiffies + 2 * client->adapter->timeou=
+t;
+255                 /* give up after this time */
+256=20
+257         data->arb_timeout =3D jiffies + client->adapter->timeout;
+
+?
 
 
---I6leaFbbHY6qHaU5
+> +			dev_info(&client->dev, "I2C Bus Arbiter timeout, forcing take bus\n");
+
+'dev_warn' for both?
+
+Happy hacking,
+
+   Wolfram
+
+
+--OhhEuFFUUn3RXVrr
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmiHN7MACgkQFA3kzBSg
-KbaXTg//VGhn7FWnsV7e/DVjLyT2R/foepKZHvgC/S8rdl6cwdsPuv7fEK20iNHh
-2MWFAcTxrIvOzJ9RBobikChUKE42JHG+dt+m2sHjjkf9EHXHSlsf47MXS93O+dCG
-ZTwcTqXdQXFMN9PkD1rXTCI13s12RIqTHgt4aTD4FuKptO9upW7UpqSHfIal/RfL
-v5PjMzSIqpNRoIHUOrhB8Dy+KN7+iDr/yQRm7RZ7oEQcYLyMPjssgP6qreg+IyA0
-btcAe73WBgq/DJzg6wGzvQf/zEUBDi84ZZB0wa5a69W0PaEVF5Uy+G+oniJgvkNs
-XZcT/W7BQO6kD6OxeQd74lufK9cNsJ37GRj3Vg0ngUcbV1fopiGEO+xCA81xRRep
-A5/K8SeC4yD2qhHLZT0pP3LvC+v5ezPqozGc/83hTY7XqfWh0Bg64jZ8LYw+p5zI
-+vQDYzZ3xeMIVRcH/cq2D5YQMlc0I+TuLrmHBQ6wNNdvVgHmNra0NT6UTMeNJ25N
-2Yv5TQKbwdkdUT9qFlaCB+KAuNN7vwoTmKKea/hiOKoVLBO/6HKi8pjC9tX4ziDT
-DEDHPUJC7xbzkIVpEaGETHc5KtEYEQD7MrsVNN+rnXG4WWRUu3E0SqYuq52IU4O+
-X0+Vv5Cs38EG+Cd/EiynJ/TINUOvRMFV4b6uiJ3RZlCof/FI3+o=
-=31ya
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmiHOvEACgkQFA3kzBSg
+KbatTQ/+L8h4Vly4HssKkyPlR1LNMN/n6UYsi/FxKfSW6hD56m+7BQ+rhrOfr6So
++xItBoITdU9ps2srR58symHHsv24qIqNmp7UiDTOClqISFXY4cjsbU0KeLPCuwPx
+fU3/MkgKp/lrYPfAb7r/PU5Ya76xQx8jufM8L2w+2vxHLDFoHZIvQxFXo9ScTJTd
+3h/lpnOBAVOvx++l8L5seqOZ/2KiJmijPjOVfXdkNFDDh3mafXQKXn1D0r9v/Tsp
+ZONfCqVJYNsfYC5VjXby4owsYJYMHp1DvBQ4hFqhAWxFzIMa13j67eSBgN6EEf9u
+CK/w+gqvZfgGHnFfpLggUAOME9xe8CGFy/iCojIxe8dR24uyYgLV+5pwzGKpOouX
+yIZoq2IzAcuSn7TWY5L+QAdmROpv4KoRpxNDIqvY5G9tCmPrsdC6hCERQVXGIBxh
+LzANQh4iYrjOywQrD3ODGLZw7rtlZsDiUQeJOntANYkj/OH4I0iCOLQWDtkFCA3Q
+vBH0PmtOZy9Wditv8D9dCJNr9asDK+RMQFegcR0nTW1h8D3uqIOrWJeU9hYz/GjU
+a9Tj5ZLBpc4xGedzF1BdISApZWp6oN2MhvW+z1s8DU8lZInp0ewYO8MDFt3HBtIc
+4+WD4qlcBtuvpSvuQNP+LQTVuQ/5YNyzjpACfSsXoxIqu+F4gcI=
+=Oc/c
 -----END PGP SIGNATURE-----
 
---I6leaFbbHY6qHaU5--
+--OhhEuFFUUn3RXVrr--
 
