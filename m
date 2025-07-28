@@ -1,57 +1,59 @@
-Return-Path: <linux-i2c+bounces-12053-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12054-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9EECEB1371C
-	for <lists+linux-i2c@lfdr.de>; Mon, 28 Jul 2025 10:59:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B595B138FF
+	for <lists+linux-i2c@lfdr.de>; Mon, 28 Jul 2025 12:31:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 647F318872DD
-	for <lists+linux-i2c@lfdr.de>; Mon, 28 Jul 2025 08:59:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CA1C4174248
+	for <lists+linux-i2c@lfdr.de>; Mon, 28 Jul 2025 10:31:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 548A7231826;
-	Mon, 28 Jul 2025 08:59:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA52721B199;
+	Mon, 28 Jul 2025 10:31:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="iNeeMEJk"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="jyQuzSfB"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47B2B22D79F
-	for <linux-i2c@vger.kernel.org>; Mon, 28 Jul 2025 08:59:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F88D28FD
+	for <linux-i2c@vger.kernel.org>; Mon, 28 Jul 2025 10:31:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753693165; cv=none; b=lYN6iRKir1XHwDLUlo3bRFKKETFQDQAU4UI3icl+/fQwHiUN5iotGhYXps+pA86FKW8OmFjuZr3G0lwBl31+d3BcxResul3ObP+52pMiQeVnKGf8E5i/cDFRktXuMc9luVutoka4lmm5JC1X571iYG5LCpoH7wlL+3hBNs520eQ=
+	t=1753698708; cv=none; b=gHnXm++5EvU8M2VdSCIAogMJIypR3ryXNTna5pk7tLwtfkz4LNlM06CYlXPb1Jzmq9G4hKgcehtjUT7/iovD/M2xv2eFX7UgC9lJhXuOEbppSAFSfHpBhT2rUNSJG8cAof0kphmlZ/3vs2l7AwPAUF5OWY9zz8JCh+gqIu4i6m4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753693165; c=relaxed/simple;
-	bh=xLg5wrRv3uIutSp8GiAgUsSA5JkF9P6KCUXkTQXZfb8=;
+	s=arc-20240116; t=1753698708; c=relaxed/simple;
+	bh=cc5wL9C6sVJ0p18vU5oQI/666swL81L7ti9UR40UUaw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fSX3QrOT0EBJDOjHI88gwrfzBVf+p0fjEsFkrWEUly5mPYY1U2EbL+KZpCrRY75TmWdi8hXf7P0xOjziagBMosl0/uNN+4/J6yONMcLYUd/gUPldcImKhH3gw8m3w8Q5A8qnvxoxLYGL9+ZARC+pu8Vcl7s0tQ+697VvlYu+7oc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=iNeeMEJk; arc=none smtp.client-ip=194.117.254.33
+	 Content-Type:Content-Disposition:In-Reply-To; b=sn5evlEBIXFqm1T+hiFJhE7zSBqDUDaRJuF1Y3BHs3C6e0ZKGA1aKziuvoPpY2EG9bhdiBQhzeLyax1TukvGxlgn592BeCbkmnRESWIc0GevpVipQjPZC0HqkQARCj1BiwUfw0pnT4q6dPSDQ85wpZOS355emM3dGqSx4nfyTlI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=jyQuzSfB; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=xLg5
-	wrRv3uIutSp8GiAgUsSA5JkF9P6KCUXkTQXZfb8=; b=iNeeMEJkla4iJ0QliodP
-	FsN0aXW+MDhR6bNeu8HvrzA/SIzqKOZf3T1OYthK+hjS7ynKZeHqdnaiUG1xk61Y
-	AnJoIGa/ERimtCGhcNd9+/sJ09TlV5/17f5svTYgN0ubFpHUmky/F1IDhMNdCbJd
-	unzvrP1aYy5OswFj6S+q9lRX2u3KjbHndGFMxl4AaSe355/aOcVseRThPmkTi+Gu
-	mYAhaz1zAk4ZKxgBPWikjaRnOXlFKYz526DLAQjm5jjBt9vCAVTcrvPYGLv6KmI0
-	R28XWVjbGm3YmbSQZpZikjI6+ssMbROathYr9DsNLXiTrbCzrIZwDtfCTbzXCPLZ
-	Hg==
-Received: (qmail 3375602 invoked from network); 28 Jul 2025 10:59:21 +0200
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 28 Jul 2025 10:59:21 +0200
-X-UD-Smtp-Session: l3s3148p1@B5nogfk6yq8gAwDPXyC3AG0QzsW8mHdp
-Date: Mon, 28 Jul 2025 10:59:20 +0200
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=cc5w
+	L9C6sVJ0p18vU5oQI/666swL81L7ti9UR40UUaw=; b=jyQuzSfBQVbZMNDQyTjn
+	4hHRXQUvSeJhdWJt1EWWJbHa4DQ3+0nhrzOklXQs03YIS/87MlZq5SIeZ2P0JTMN
+	9Pv5bZ21qv7xyniyfnjhiUgm9dR8k789C57vQXNphyNAh9+2noWCKkStU5mmVLzX
+	1OUEu+rigWcmCfnqi6EczCeLzo+oyminr1dP7p7gZ7hxqhkrBERmPbqJVBrBoOZQ
+	0E1UvWdEQ2I2A9ZRD0wCBxcXTuq0hKFp9Ua3qkiPRPR3c0dkZzk6AVhH1XN8QZ4r
+	XRHUD44hyosSy40i4YYPQDsOKmTsgYr08Bn9jF8QuUulCzqPfXrmANVLmULcAJ9j
+	ow==
+Received: (qmail 3402892 invoked from network); 28 Jul 2025 12:31:41 +0200
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 28 Jul 2025 12:31:41 +0200
+X-UD-Smtp-Session: l3s3148p1@pTsezPo63m5tKPLn
+Date: Mon, 28 Jul 2025 12:31:40 +0200
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: "fangzhong.zhou" <myth5@myth5.com>
-Cc: westeri@kernel.org, linux-i2c@vger.kernel.org,
-	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: Force DLL0945 touchpad i2c freq to 100khz
-Message-ID: <aIc76DpLL28RLimy@shikoro>
-References: <20250620052832.26614-1-myth5@myth5.com>
+To: Wojciech Siudy <wojciech.siudy@nokia.com>
+Cc: linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+	peda@axentia.se, andi.shyti@kernel.org, mariusz.madej@nokia.com
+Subject: Re: [PATCH v6 RESEND 1/2] i2c: muxes: pca954x: Use reset controller
+ only
+Message-ID: <aIdRjB2fIa09m29A@shikoro>
+References: <20250603124721.449739-1-wojciech.siudy@nokia.com>
+ <20250603124721.449739-2-wojciech.siudy@nokia.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -59,41 +61,45 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="DItPbqVh5hfarFP+"
+	protocol="application/pgp-signature"; boundary="Px5MLaBzWfo1OMoy"
 Content-Disposition: inline
-In-Reply-To: <20250620052832.26614-1-myth5@myth5.com>
+In-Reply-To: <20250603124721.449739-2-wojciech.siudy@nokia.com>
 
 
---DItPbqVh5hfarFP+
+--Px5MLaBzWfo1OMoy
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jun 20, 2025 at 01:28:31PM +0800, fangzhong.zhou wrote:
-> Signed-off-by: fangzhong.zhou <myth5@myth5.com>
+On Tue, Jun 03, 2025 at 02:47:20PM +0200, Wojciech Siudy wrote:
+> Fallback to legacy reset-gpios is no more needed, because the framework
+> can use reset-gpios properity now as well.
+>=20
+> Signed-off-by: Wojciech Siudy <wojciech.siudy@nokia.com>
 
-Please add a commit message indicating on which laptop you encountered
-the issue, what happened before and after the fix.
+Nice cleanup. But I can't apply the patch on top of 6.16-rc7. Against
+which kernel was this developed?
 
 
---DItPbqVh5hfarFP+
+--Px5MLaBzWfo1OMoy
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmiHO+gACgkQFA3kzBSg
-KbYKOw//T0ofs9q6ex9h3NBazj6e/ikGF5HaJd0aeotWVtADV8ehIgFG66qIKJd3
-gmIpmPm6W1zS4XZ1Za0SqvM0/zGA6Uy/pU+IZDayKOjv8Xsm6qK1WbPfAwSXJyme
-fo+6BZfV+8l56aJjjyNEgtxfBXnHt3Skq394yLj2Vivgsg+BNAsLfuMJkjXU+QhR
-Q/TSG2+2zSmpCc1wZqNz3Q9I4JLraHLpUOBbvHOug9M82vgN3FJn09t/Cao/CWgh
-X4dmsPAfC2QZ6c7knVWAqZvDKqgUPplriexYE3mMJ/n9FBP04LEfgQQCLmLYJqND
-AYdgWOo2B86461Hkrq1PaIDIdA6K2Zls/PDCPcruS7zZKzCEg3DWUCjUP2DIeA4d
-j4+x/cEiTL3NalduJDmX2VHLVPsFsh18X59c40TmjepaEeCGdxNM4bbd/OmTYWlo
-dT6V9psur3tPyEXmVkonpRp+78DL5Y6iwmjC72awIXcKJIBnQc8+ca9c0j7SmmL4
-BFv1oSC146fj6ZjzwrAobJ6bGy+93cNN+mADf1vcL8zm7SbLzsZ8Drrpdk+0QleJ
-bbQXic8PEu2qcetwsOfzBIiu13B8fT82RKxq1GGpkR0RJ+TgNBZx5pCWgznUXwjy
-K3dZhhevjF0Nuuq8mdIt5xDIhtMI/WXIiUlPfTIYJk0+iFAT8rY=
-=iGLu
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmiHUYgACgkQFA3kzBSg
+KbbDShAAotckOep4ATsmDNtdp1aqOwzcuPPPmKAkhHKijixotGTJ+TPRaF8/zW4f
+L6uKrdj9nBAmJIui+++VyJhsH+ARCtTCpxHfX2ezQANIbT2oqa7GAucDJaopTMiM
+9WBwDLEhVa5I3dhULAQesA6k63lchjWhfABiWm8nu8s6MAGE7k41AEHGA/wSbSd1
+Wz5+C3FyN6o3OjjnwnmGUbsAxfW4yezP3Cwa2R5lviTtYIU0pd1S6ZQXodWY2rf+
+5ELxg4sUD9zKZX39FusM+BmeFXH1/g+wugPltMqJEIQczZHb/Ow0FR58REFG8zMh
+ypnRlZcaqBU62UlFWRbOE6ABSPgDUwgFtfKEa0NVTPLR0td64hINSltVHa+UxJyn
+vQGltbA0ZBZ2UUSGZbI3eSogBn3DEjcAS5jlYStsvHRCQ2VgRBvyi/4XwO1eoS4k
++8vtSUEdBUVMuYpHPhWkM7ArZPT6wHK5/35JOEbbewpn865QZwX07kfBTFki36sN
+daAUwRcuXyzG4izGDlyhm1WO1NQ78y56mEHDooCGWppKHb/pxDACPXKixchkEzZO
+BKl1PJBZVQ55mVPZJl3pFQbd0Jg0ZZbUgrEoqUaUoeieCnNCmyNq8/J0lwj+g5Xv
+3VcXBAteCmSKGpqdWmfXgA3PlC8yPimadQK1zF45bm2oQawzwd4=
+=OWtI
 -----END PGP SIGNATURE-----
 
---DItPbqVh5hfarFP+--
+--Px5MLaBzWfo1OMoy--
 
