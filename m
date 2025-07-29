@@ -1,156 +1,149 @@
-Return-Path: <linux-i2c+bounces-12066-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12067-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3335DB14B46
-	for <lists+linux-i2c@lfdr.de>; Tue, 29 Jul 2025 11:28:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E6DB5B14B78
+	for <lists+linux-i2c@lfdr.de>; Tue, 29 Jul 2025 11:40:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5CCD817CCD2
-	for <lists+linux-i2c@lfdr.de>; Tue, 29 Jul 2025 09:28:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DD5DD16EC53
+	for <lists+linux-i2c@lfdr.de>; Tue, 29 Jul 2025 09:39:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0287328725C;
-	Tue, 29 Jul 2025 09:28:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61DB52882AB;
+	Tue, 29 Jul 2025 09:39:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mBVfHBQ6"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Clurev6N"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8D1E286D7C;
-	Tue, 29 Jul 2025 09:28:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45EEF287518;
+	Tue, 29 Jul 2025 09:39:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753781330; cv=none; b=W2fabst4qKWtTD9UpUiuuNTkFh566/Hf8/hGljkkVTeKS5ywMxHaHaG/A24aZ+fgZoehmwcRKOdIwYKCqrUB8bOmIHabla6j4jgvkWzfSwl+ff7K/DPlqDYX2kcdguLA5wbNdx+8TwgRrBer3PL5IymydU8q2cJYl77eatqUEI4=
+	t=1753781946; cv=none; b=gniVFywboexBA/oHG1ZppjtTuSszPKUwD42kYkilnUG9me8Ph+yJKsLQ13eZJR6lAOa3LZz4CfwqZ7s0Uif1B4vzwiieLgQFNNfyg5AKo/UfOCv7Te8JJNozVMeUUTc57EN8Am0/7XFLX5L1H3oHheNo4W7qkxpTOe6/xm1XG7w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753781330; c=relaxed/simple;
-	bh=CMqZsJW/c6Uzt84ItOkAAWWmg9MXF0clQbidcO5PnDQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nbbv9G9CB5ezRIAO/nYJxQ3bYTeLN48AoFkG183j94OhGGEbZwsI8aj3FWxYwyCVlCQSuyDxJ8S7QNz/D108OVl/KPamXMpl2FlWer5f6OtbfoFqMUa7LXhNYlwU915NJ0oGFzWRL950kOEqrPpsre6+Ig7Ytn4tXI3KAxOflhQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mBVfHBQ6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA904C4CEEF;
-	Tue, 29 Jul 2025 09:28:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753781330;
-	bh=CMqZsJW/c6Uzt84ItOkAAWWmg9MXF0clQbidcO5PnDQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=mBVfHBQ61xY2a2SewgbGtBxal41VOrGa781znRGJRJKYBiR3dvbiLFMTEPh/c11gM
-	 vTW1N0m5jEgD8NvA3legX/7VQqudzpv+7gbBf+4gAG9nc2hLdpAYzIOA5mrFVbaLKn
-	 TfhH2jlCgBsDtrkWV7+eIL5qidIO5uXfgpJR/WuMAT2bbk/4piGz0V83fUQQuoxDta
-	 DdY/fmDXVUkRMn9cd5NCG9YHpATAxVPk6WxQEex436n5TuIBgUDTBVndDOavhvx/6M
-	 fiBJm0O/pWh5e1ZMretdHENCctSpA69Hbvn1JosPnd3ohq0Grd6o61uObrgQFNg4b7
-	 s83FSol7RTJNg==
-Message-ID: <a6268cd4-4a7e-498e-9787-bec959bb1475@kernel.org>
-Date: Tue, 29 Jul 2025 11:28:43 +0200
+	s=arc-20240116; t=1753781946; c=relaxed/simple;
+	bh=6mJ0tinGIWuX9vzpnywv9jn5YAwMPCKDvqgCsfTONzQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bqx3EtlWnr/JhD/wr5Vw/NlOKo8eAbf2BoyO7BJi/ZikczDhT5aiClGOoBTeAQ0oOC58REM6qhGt19JgDBlgWXaG4OItSBsL7PFtYI1Dz6yk6jZTJmkKJaPu8tB+Q4b6UNFQzqC7X4YsPEWnSl/ynyRL31Wc4m3ivSiqki3ccuU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Clurev6N; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1753781943; x=1785317943;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6mJ0tinGIWuX9vzpnywv9jn5YAwMPCKDvqgCsfTONzQ=;
+  b=Clurev6N9TIIh+qhlyBOmHPfsxF2Z0ej4glab/t33HNapwDfXfSAanf+
+   BZbgPXmtFrNexL3NiCLCgfDvVViqvY3aIg3EYe8ejPOxixZ6M8Ai70/Ch
+   4Z14Xt779QInTp1tyeErakhfSH3Bu8GFAh5VHMUsRXM1mSIFavIImXnam
+   IkFRoE46bP8q8wHMniNfVOaHML0YnUPDNKppdiA/lvssvNVUOnJSfL2/j
+   cl1d71tIhQuNCPiruXnKZYJb/wSK3YXUpQX8xaQmwDRZfmVPoxMNQ7WPE
+   5SCLVl3hDAUJEGElB3TkvlKLvIL5vQkGYBkgJjE76QbdefHwDazB9jrqH
+   w==;
+X-CSE-ConnectionGUID: WKBovr8PQPeRC1a547jKig==
+X-CSE-MsgGUID: cVuA5Ig9TV6Tsu10lVjWmw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11505"; a="55253501"
+X-IronPort-AV: E=Sophos;i="6.16,348,1744095600"; 
+   d="scan'208";a="55253501"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2025 02:39:02 -0700
+X-CSE-ConnectionGUID: j+ObINSRRxaWjdkgOpWOWA==
+X-CSE-MsgGUID: 94cCGuZvQu2NCZ2KC6S4bg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,348,1744095600"; 
+   d="scan'208";a="199797228"
+Received: from lkp-server01.sh.intel.com (HELO 160750d4a34c) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 29 Jul 2025 02:39:00 -0700
+Received: from kbuild by 160750d4a34c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uggnS-0001AN-1n;
+	Tue, 29 Jul 2025 09:38:58 +0000
+Date: Tue, 29 Jul 2025 17:38:46 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Darshan R." <rathod.darshan.0896@gmail.com>, jdelvare@suse.com,
+	andi.shyti@kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	"Darshan R." <rathod.darshan.0896@gmail.com>
+Subject: Re: [PATCH] i2c: sis96x: Refactor for readability and style
+ improvements
+Message-ID: <202507291702.7DUZcvW4-lkp@intel.com>
+References: <20250728131418.9424-1-rathod.darshan.0896@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V3 1/3] dt-binding: Add register-settings binding
-To: Jon Hunter <jonathanh@nvidia.com>, Rajesh Gumasta <rgumasta@nvidia.com>,
- krzk+dt@kernel.org, robh@kernel.org, conor+dt@kernel.org,
- andi.shyti@kernel.org, ulf.hansson@linaro.org, thierry.reding@gmail.com,
- kyarlagadda@nvidia.com
-Cc: devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
- linux-i2c@vger.kernel.org, linux-mmc@vger.kernel.org, andersson@kernel.org,
- sjg@chromium.org, nm@ti.com
-References: <20250725052225.23510-1-rgumasta@nvidia.com>
- <20250725052225.23510-2-rgumasta@nvidia.com>
- <1a6f4194-de77-4dca-b2e8-2b51a106d770@kernel.org>
- <dc4ed9fd-2da1-4d9b-b8f1-446ea0697385@nvidia.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <dc4ed9fd-2da1-4d9b-b8f1-446ea0697385@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250728131418.9424-1-rathod.darshan.0896@gmail.com>
 
-On 29/07/2025 11:15, Jon Hunter wrote:
-> 
-> On 25/07/2025 07:47, Krzysztof Kozlowski wrote:
->> On 25/07/2025 07:22, Rajesh Gumasta wrote:
->>> +description: |
->>> +  Register Settings provides a generic way to specify register configurations
->>> +  for any hardware controllers. Settings are specified under a "reg-settings"
->>> +  sub-node under the controller device tree node. It allows defining both
->>> +  default and operating mode specific register settings in the device tree.
->>> +
->>> +properties:
->>> +  reg-settings:
->>> +    type: object
->>> +    description: |
->>> +      Container node for register settings configurations. Each child node
->>> +      represents a specific configuration mode or operating condition.
->>> +
->>> +    additionalProperties:
->>> +      type: object
->>
->> I don't understand what does this binding bring. It is empty.
-> 
-> 
-> Yes this is very much similar to the pinctrl.yaml that defines a 
-> top-level object that can then be used by different devices and those 
+Hi Darshan,
 
-No, it is not similar. pinctrl.yaml defines common properties and common
-schema for class of devices - pin controllers.
+kernel test robot noticed the following build warnings:
 
-There is nothing common here, nothing defined except that you have
-unspecified children nodes.
+[auto build test WARNING on andi-shyti/i2c/i2c-host]
+[also build test WARNING on linus/master v6.16 next-20250729]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> devices can then define the properties they need. So the examples for 
-> I2C and MMC really demonstrate how this would be used in the subsequent 
-> patches. Obviously we are open to any ideas on how if there are better 
-> or preferred ways to do this.
+url:    https://github.com/intel-lab-lkp/linux/commits/Darshan-R/i2c-sis96x-Refactor-for-readability-and-style-improvements/20250728-213139
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
+patch link:    https://lore.kernel.org/r/20250728131418.9424-1-rathod.darshan.0896%40gmail.com
+patch subject: [PATCH] i2c: sis96x: Refactor for readability and style improvements
+config: i386-randconfig-r071-20250729 (https://download.01.org/0day-ci/archive/20250729/202507291702.7DUZcvW4-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
 
-I don't see this part addressing comments from Rob - you need more users
-of this. Adding fake (empty, no-op) common schema is not solving it.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507291702.7DUZcvW4-lkp@intel.com/
 
-Best regards,
-Krzysztof
+smatch warnings:
+drivers/i2c/busses/i2c-sis96x.c:94 sis96x_transaction() warn: inconsistent indenting
+
+vim +94 drivers/i2c/busses/i2c-sis96x.c
+
+^1da177e4c3f41 Linus Torvalds 2005-04-16   75  
+^1da177e4c3f41 Linus Torvalds 2005-04-16   76  /* Execute a SMBus transaction.
+^1da177e4c3f41 Linus Torvalds 2005-04-16   77     int size is from SIS96x_QUICK to SIS96x_BLOCK_DATA
+^1da177e4c3f41 Linus Torvalds 2005-04-16   78   */
+^1da177e4c3f41 Linus Torvalds 2005-04-16   79  static int sis96x_transaction(int size)
+^1da177e4c3f41 Linus Torvalds 2005-04-16   80  {
+^1da177e4c3f41 Linus Torvalds 2005-04-16   81  	int temp;
+^1da177e4c3f41 Linus Torvalds 2005-04-16   82  	int result = 0;
+^1da177e4c3f41 Linus Torvalds 2005-04-16   83  	int timeout = 0;
+^1da177e4c3f41 Linus Torvalds 2005-04-16   84  
+^1da177e4c3f41 Linus Torvalds 2005-04-16   85  	dev_dbg(&sis96x_adapter.dev, "SMBus transaction %d\n", size);
+^1da177e4c3f41 Linus Torvalds 2005-04-16   86  
+^1da177e4c3f41 Linus Torvalds 2005-04-16   87  	/* Make sure the SMBus host is ready to start transmitting */
+1f3ce966edb415 Darshan R      2025-07-28   88  	temp = sis96x_read(SMB_CNT);
+^1da177e4c3f41 Linus Torvalds 2005-04-16   89  
+1f3ce966edb415 Darshan R      2025-07-28   90  	if ((temp & 0x03) != 0x00) {
+1f3ce966edb415 Darshan R      2025-07-28   91  		dev_dbg(&sis96x_adapter.dev, "SMBus busy (0x%02x). Resetting...\n", temp);
+^1da177e4c3f41 Linus Torvalds 2005-04-16   92  
+^1da177e4c3f41 Linus Torvalds 2005-04-16   93  	/* kill the transaction */
+^1da177e4c3f41 Linus Torvalds 2005-04-16  @94  	sis96x_write(SMB_HOST_CNT, 0x20);
+^1da177e4c3f41 Linus Torvalds 2005-04-16   95  
+^1da177e4c3f41 Linus Torvalds 2005-04-16   96  	/* check it again */
+1f3ce966edb415 Darshan R      2025-07-28   97  	temp = sis96x_read(SMB_CNT);
+1f3ce966edb415 Darshan R      2025-07-28   98  
+1f3ce966edb415 Darshan R      2025-07-28   99  	if ((temp & 0x03) != 0x00) {
+^1da177e4c3f41 Linus Torvalds 2005-04-16  100  		dev_dbg(&sis96x_adapter.dev, "Failed (0x%02x)\n", temp);
+97140342e69d47 David Brownell 2008-07-14  101  		return -EBUSY;
+^1da177e4c3f41 Linus Torvalds 2005-04-16  102  	} else {
+^1da177e4c3f41 Linus Torvalds 2005-04-16  103  		dev_dbg(&sis96x_adapter.dev, "Successful\n");
+^1da177e4c3f41 Linus Torvalds 2005-04-16  104  	}
+^1da177e4c3f41 Linus Torvalds 2005-04-16  105  }
+^1da177e4c3f41 Linus Torvalds 2005-04-16  106  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
