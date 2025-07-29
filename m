@@ -1,149 +1,242 @@
-Return-Path: <linux-i2c+bounces-12067-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12068-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6DB5B14B78
-	for <lists+linux-i2c@lfdr.de>; Tue, 29 Jul 2025 11:40:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E637B14C3E
+	for <lists+linux-i2c@lfdr.de>; Tue, 29 Jul 2025 12:35:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DD5DD16EC53
-	for <lists+linux-i2c@lfdr.de>; Tue, 29 Jul 2025 09:39:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 52C975455FA
+	for <lists+linux-i2c@lfdr.de>; Tue, 29 Jul 2025 10:35:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61DB52882AB;
-	Tue, 29 Jul 2025 09:39:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E70B270EA3;
+	Tue, 29 Jul 2025 10:35:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Clurev6N"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ewkJ1iIo"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45EEF287518;
-	Tue, 29 Jul 2025 09:39:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5549E2222A0;
+	Tue, 29 Jul 2025 10:35:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753781946; cv=none; b=gniVFywboexBA/oHG1ZppjtTuSszPKUwD42kYkilnUG9me8Ph+yJKsLQ13eZJR6lAOa3LZz4CfwqZ7s0Uif1B4vzwiieLgQFNNfyg5AKo/UfOCv7Te8JJNozVMeUUTc57EN8Am0/7XFLX5L1H3oHheNo4W7qkxpTOe6/xm1XG7w=
+	t=1753785308; cv=none; b=lMAN2CkV+ojNsXqGwwZZVUOapKLw/zU5zHv4oUrCMZv6eEcOdlmwVp0XPDaRinAV6kMvCBBE0AbXDb7seQ+2vAe59EGtCtGkH5BYx3VHOo/ftS8AdsLAf7OGR0BJ6VVy6Bw8jEfTsrZNi3BHm1ZL3tLAHnI1HkHoj2cN/FhFEVg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753781946; c=relaxed/simple;
-	bh=6mJ0tinGIWuX9vzpnywv9jn5YAwMPCKDvqgCsfTONzQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bqx3EtlWnr/JhD/wr5Vw/NlOKo8eAbf2BoyO7BJi/ZikczDhT5aiClGOoBTeAQ0oOC58REM6qhGt19JgDBlgWXaG4OItSBsL7PFtYI1Dz6yk6jZTJmkKJaPu8tB+Q4b6UNFQzqC7X4YsPEWnSl/ynyRL31Wc4m3ivSiqki3ccuU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Clurev6N; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753781943; x=1785317943;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6mJ0tinGIWuX9vzpnywv9jn5YAwMPCKDvqgCsfTONzQ=;
-  b=Clurev6N9TIIh+qhlyBOmHPfsxF2Z0ej4glab/t33HNapwDfXfSAanf+
-   BZbgPXmtFrNexL3NiCLCgfDvVViqvY3aIg3EYe8ejPOxixZ6M8Ai70/Ch
-   4Z14Xt779QInTp1tyeErakhfSH3Bu8GFAh5VHMUsRXM1mSIFavIImXnam
-   IkFRoE46bP8q8wHMniNfVOaHML0YnUPDNKppdiA/lvssvNVUOnJSfL2/j
-   cl1d71tIhQuNCPiruXnKZYJb/wSK3YXUpQX8xaQmwDRZfmVPoxMNQ7WPE
-   5SCLVl3hDAUJEGElB3TkvlKLvIL5vQkGYBkgJjE76QbdefHwDazB9jrqH
-   w==;
-X-CSE-ConnectionGUID: WKBovr8PQPeRC1a547jKig==
-X-CSE-MsgGUID: cVuA5Ig9TV6Tsu10lVjWmw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11505"; a="55253501"
-X-IronPort-AV: E=Sophos;i="6.16,348,1744095600"; 
-   d="scan'208";a="55253501"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2025 02:39:02 -0700
-X-CSE-ConnectionGUID: j+ObINSRRxaWjdkgOpWOWA==
-X-CSE-MsgGUID: 94cCGuZvQu2NCZ2KC6S4bg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,348,1744095600"; 
-   d="scan'208";a="199797228"
-Received: from lkp-server01.sh.intel.com (HELO 160750d4a34c) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 29 Jul 2025 02:39:00 -0700
-Received: from kbuild by 160750d4a34c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uggnS-0001AN-1n;
-	Tue, 29 Jul 2025 09:38:58 +0000
-Date: Tue, 29 Jul 2025 17:38:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Darshan R." <rathod.darshan.0896@gmail.com>, jdelvare@suse.com,
-	andi.shyti@kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, linux-i2c@vger.kernel.org,
+	s=arc-20240116; t=1753785308; c=relaxed/simple;
+	bh=maqiodVoglk/yB6AFlvImWGUrIOSmKcUxjZYK1+1lmc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UaQKAs7tGSfVa4aDmVZp4H6sHAJOJfgrp9MYp0t4UVtk80ainiyNn7GWbpDZwIRQMYLaiaSqrTl9ATnzB9cRfTJPBH4hMcSlFJOxvv2QgaVh/0KPnYsHoAMfHjL5xNyTbQM5yS2yB6z2PNdq3fXqPztKAS1DRK5R06Y+z98nDjk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ewkJ1iIo; arc=none smtp.client-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-31ecd40352fso1938403a91.2;
+        Tue, 29 Jul 2025 03:35:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1753785306; x=1754390106; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=iJNqwM4dovBm0FVo4bLX7E3wVC0H5ZiuzMt4Ugoc/zE=;
+        b=ewkJ1iIowJglstJ1zEhr8TZGdBhBGSEgMrrISIAu2ZDrxvqsxYlxlkP+l6BVtDKbDG
+         W0JuERjzABKIzH8HqpO4Chza0dyAxsDYyIYZJsB8nD8D8DRqvQmCSEDIn5yP1oKqOYxw
+         5j/2gPYtDr7neOeK2o2LGKsaQ4orkV+MQXK2mpDJRSgjlsS5wXiYpy83DbNBL7VFOjR5
+         g9BnJFEZr8rSlu6css2NgLCnnp3xFakkKvsX0WmQb5LNIooLmrefyzgUorvJz602ZyzS
+         AYi6mDn9kvLWikc98XNyoOHXsJnPwl5CH1CTLheEqHaVjctRD2Lrdmbe+e67MTdsN3Vz
+         W6PQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753785306; x=1754390106;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iJNqwM4dovBm0FVo4bLX7E3wVC0H5ZiuzMt4Ugoc/zE=;
+        b=uZjtJKZT9RYC4kpaKxKORP44sRekTDclxPu4nCb1+Csl4NqTrHUFLvveB+qHkWqCDS
+         AYsKOv71QjWnbjCy1eR4TissGBeX0kD6vXd7nBcZO2s2BVKxBzPsGlNxE4vbPuhyrTjh
+         9FLRts3Y/mYbHvVha5wG2REw7BSuXHc/udywevW+nTpF3S3HYZVu9zKkVqFVfxoJqpyG
+         pZFR7x/U6m7pRu1vZNgN9Fj2bzDl7VlN7D7eJCcd6g+v4CzFCxYgyYvvlT5k2hQLed1n
+         Psf3601udhBXRlSGYCfl3TWi1z3LeMuG9zjfHrnfC/1NeoDUGxjIKgIugtk8b7Jn0ojo
+         y3yA==
+X-Forwarded-Encrypted: i=1; AJvYcCVB/JwV1LHO3JH+GVucwTvgGbIlADH1VMUKokIVHTmQvXRpu0mNcKg/QzPjeHQyxU9mC9sBAhDHYeMKhOE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyFVwtII4qqOCk+NZgI/gAK7Gt8RuinW418muUyZKBbVesxV6/W
+	B/TXpLhXB5otbGANz4WTwt5QLBAT4ZrGCUcj0KB5ceeeNR8zviqXve4B
+X-Gm-Gg: ASbGnctgcLKb0HpjBeBtv0ew0ygQwWeqJasCV7fEKj9SoZ+VNaKoHHgm5dg9U7xNFTp
+	Dgf6oB90wqoWbK0pnzEztvt+w9swXXCNV/kThnF5cnIYyo5x9vERyIVTIGUuXKoq1J8HjSE9o8Q
+	WPHDG8OzKkTMTZ5zZKL6AHmm3gY+oWy7QFdqrfO7Jv+yUgUrP6s+AlRi75NeGe9/DWwToEqRAEv
+	sRNz79ZbdJlSmNBao93niQi+Gvih/9RAb3Fume9KUDfHSv++mAScnMwB+sK3ukJuKxuIccwH38W
+	Z5nlsr0UeRdGuRiVP6HfHr78S+R2r+NMma2dv10JXtVxWrArCxxGCsWhjfTZdiEXVgtYR3EOqfx
+	vOyX4h5IiTUzJJNPZE3n3Ts4OTYc0rrxebM8ZWUrNZMnuPhBYfsQQ+2X8BKcaRhjbEt4W7BcvWj
+	w6VfrQcQ==
+X-Google-Smtp-Source: AGHT+IE9dD7XwuR66hU9u4aNrC+7FImtUo6B40EfgpXdpz4aasOoI0VHqNy4nyjfu6o3YfMwrA9j3g==
+X-Received: by 2002:a17:90b:2b8b:b0:314:2892:b1e0 with SMTP id 98e67ed59e1d1-31e77a1a327mr18241108a91.34.1753785306362;
+        Tue, 29 Jul 2025 03:35:06 -0700 (PDT)
+Received: from SIQOL-WIN-0002-DARSHAN.localdomain ([122.162.223.145])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b3f7f67b3b0sm6818046a12.44.2025.07.29.03.35.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Jul 2025 03:35:06 -0700 (PDT)
+From: "Darshan R." <rathod.darshan.0896@gmail.com>
+To: Jean Delvare <jdelvare@suse.com>,
+	Andi Shyti <andi.shyti@kernel.org>
+Cc: linux-i2c@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	"Darshan R." <rathod.darshan.0896@gmail.com>
-Subject: Re: [PATCH] i2c: sis96x: Refactor for readability and style
- improvements
-Message-ID: <202507291702.7DUZcvW4-lkp@intel.com>
-References: <20250728131418.9424-1-rathod.darshan.0896@gmail.com>
+Subject: [PATCH] [PATCH v2] i2c: sis96x: Refactor for readability and style improvements
+Date: Tue, 29 Jul 2025 10:27:44 +0000
+Message-ID: <20250729102744.3176-1-rathod.darshan.0896@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250728131418.9424-1-rathod.darshan.0896@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Darshan,
+This commit introduces several minor, non-functional code quality
+improvements to the SiS96x I2C bus driver. The primary goal is to
+enhance code clarity and align better with standard kernel coding
+practices.
 
-kernel test robot noticed the following build warnings:
+Key changes include:
+*   **Separating assignments from conditionals:** Break out `read` operations
+    (e.g., `sis96x_read()`) from `if` statement conditions, making the
+    control flow more explicit and easier to follow. This avoids
+    common pitfalls of assignment within conditional expressions.
+*   **Whitespace and alignment fixes:** Adjust parameter alignment in
+    function definitions and remove extraneous trailing whitespace,
+    improving visual consistency and adherence to kernel coding style.
 
-[auto build test WARNING on andi-shyti/i2c/i2c-host]
-[also build test WARNING on linus/master v6.16 next-20250729]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+These changes are purely refactoring-oriented and have no functional
+impact on the driver's operation.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Darshan-R/i2c-sis96x-Refactor-for-readability-and-style-improvements/20250728-213139
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
-patch link:    https://lore.kernel.org/r/20250728131418.9424-1-rathod.darshan.0896%40gmail.com
-patch subject: [PATCH] i2c: sis96x: Refactor for readability and style improvements
-config: i386-randconfig-r071-20250729 (https://download.01.org/0day-ci/archive/20250729/202507291702.7DUZcvW4-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+Signed-off-by: Darshan R. <rathod.darshan.0896@gmail.com>
+---
+v2:
+ - Fixed inconsistent indenting warning from smatch as reported by
+   the kernel test robot.
+---
+ drivers/i2c/busses/i2c-sis96x.c | 35 +++++++++++++++++++--------------
+ 1 file changed, 20 insertions(+), 15 deletions(-)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507291702.7DUZcvW4-lkp@intel.com/
-
-smatch warnings:
-drivers/i2c/busses/i2c-sis96x.c:94 sis96x_transaction() warn: inconsistent indenting
-
-vim +94 drivers/i2c/busses/i2c-sis96x.c
-
-^1da177e4c3f41 Linus Torvalds 2005-04-16   75  
-^1da177e4c3f41 Linus Torvalds 2005-04-16   76  /* Execute a SMBus transaction.
-^1da177e4c3f41 Linus Torvalds 2005-04-16   77     int size is from SIS96x_QUICK to SIS96x_BLOCK_DATA
-^1da177e4c3f41 Linus Torvalds 2005-04-16   78   */
-^1da177e4c3f41 Linus Torvalds 2005-04-16   79  static int sis96x_transaction(int size)
-^1da177e4c3f41 Linus Torvalds 2005-04-16   80  {
-^1da177e4c3f41 Linus Torvalds 2005-04-16   81  	int temp;
-^1da177e4c3f41 Linus Torvalds 2005-04-16   82  	int result = 0;
-^1da177e4c3f41 Linus Torvalds 2005-04-16   83  	int timeout = 0;
-^1da177e4c3f41 Linus Torvalds 2005-04-16   84  
-^1da177e4c3f41 Linus Torvalds 2005-04-16   85  	dev_dbg(&sis96x_adapter.dev, "SMBus transaction %d\n", size);
-^1da177e4c3f41 Linus Torvalds 2005-04-16   86  
-^1da177e4c3f41 Linus Torvalds 2005-04-16   87  	/* Make sure the SMBus host is ready to start transmitting */
-1f3ce966edb415 Darshan R      2025-07-28   88  	temp = sis96x_read(SMB_CNT);
-^1da177e4c3f41 Linus Torvalds 2005-04-16   89  
-1f3ce966edb415 Darshan R      2025-07-28   90  	if ((temp & 0x03) != 0x00) {
-1f3ce966edb415 Darshan R      2025-07-28   91  		dev_dbg(&sis96x_adapter.dev, "SMBus busy (0x%02x). Resetting...\n", temp);
-^1da177e4c3f41 Linus Torvalds 2005-04-16   92  
-^1da177e4c3f41 Linus Torvalds 2005-04-16   93  	/* kill the transaction */
-^1da177e4c3f41 Linus Torvalds 2005-04-16  @94  	sis96x_write(SMB_HOST_CNT, 0x20);
-^1da177e4c3f41 Linus Torvalds 2005-04-16   95  
-^1da177e4c3f41 Linus Torvalds 2005-04-16   96  	/* check it again */
-1f3ce966edb415 Darshan R      2025-07-28   97  	temp = sis96x_read(SMB_CNT);
-1f3ce966edb415 Darshan R      2025-07-28   98  
-1f3ce966edb415 Darshan R      2025-07-28   99  	if ((temp & 0x03) != 0x00) {
-^1da177e4c3f41 Linus Torvalds 2005-04-16  100  		dev_dbg(&sis96x_adapter.dev, "Failed (0x%02x)\n", temp);
-97140342e69d47 David Brownell 2008-07-14  101  		return -EBUSY;
-^1da177e4c3f41 Linus Torvalds 2005-04-16  102  	} else {
-^1da177e4c3f41 Linus Torvalds 2005-04-16  103  		dev_dbg(&sis96x_adapter.dev, "Successful\n");
-^1da177e4c3f41 Linus Torvalds 2005-04-16  104  	}
-^1da177e4c3f41 Linus Torvalds 2005-04-16  105  }
-^1da177e4c3f41 Linus Torvalds 2005-04-16  106  
-
+diff --git a/drivers/i2c/busses/i2c-sis96x.c b/drivers/i2c/busses/i2c-sis96x.c
+index 77529dda6fcd..f5005679e799 100644
+--- a/drivers/i2c/busses/i2c-sis96x.c
++++ b/drivers/i2c/busses/i2c-sis96x.c
+@@ -11,7 +11,7 @@
+ 
+     This module relies on quirk_sis_96x_smbus (drivers/pci/quirks.c)
+     for just about every machine for which users have reported.
+-    If this module isn't detecting your 96x south bridge, have a 
++    If this module isn't detecting your 96x south bridge, have a
+     look there.
+ 
+     We assume there can only be one SiS96x with one SMBus interface.
+@@ -65,12 +65,12 @@ static u16 sis96x_smbus_base;
+ 
+ static inline u8 sis96x_read(u8 reg)
+ {
+-	return inb(sis96x_smbus_base + reg) ;
++	return inb(sis96x_smbus_base + reg);
+ }
+ 
+ static inline void sis96x_write(u8 reg, u8 data)
+ {
+-	outb(data, sis96x_smbus_base + reg) ;
++	outb(data, sis96x_smbus_base + reg);
+ }
+ 
+ /* Execute a SMBus transaction.
+@@ -85,16 +85,18 @@ static int sis96x_transaction(int size)
+ 	dev_dbg(&sis96x_adapter.dev, "SMBus transaction %d\n", size);
+ 
+ 	/* Make sure the SMBus host is ready to start transmitting */
+-	if (((temp = sis96x_read(SMB_CNT)) & 0x03) != 0x00) {
++	temp = sis96x_read(SMB_CNT);
+ 
+-		dev_dbg(&sis96x_adapter.dev, "SMBus busy (0x%02x). "
+-			"Resetting...\n", temp);
++	if ((temp & 0x03) != 0x00) {
++		dev_dbg(&sis96x_adapter.dev, "SMBus busy (0x%02x). Resetting...\n", temp);
+ 
+ 		/* kill the transaction */
+ 		sis96x_write(SMB_HOST_CNT, 0x20);
+ 
+ 		/* check it again */
+-		if (((temp = sis96x_read(SMB_CNT)) & 0x03) != 0x00) {
++		temp = sis96x_read(SMB_CNT);
++
++		if ((temp & 0x03) != 0x00) {
+ 			dev_dbg(&sis96x_adapter.dev, "Failed (0x%02x)\n", temp);
+ 			return -EBUSY;
+ 		} else {
+@@ -138,7 +140,9 @@ static int sis96x_transaction(int size)
+ 
+ 	/* Finish up by resetting the bus */
+ 	sis96x_write(SMB_STS, temp);
+-	if ((temp = sis96x_read(SMB_STS))) {
++
++	temp = sis96x_read(SMB_STS);
++	if (temp) {
+ 		dev_dbg(&sis96x_adapter.dev, "Failed reset at "
+ 			"end of transaction! (0x%02x)\n", temp);
+ 	}
+@@ -147,9 +151,9 @@ static int sis96x_transaction(int size)
+ }
+ 
+ /* Return negative errno on error. */
+-static s32 sis96x_access(struct i2c_adapter * adap, u16 addr,
++static s32 sis96x_access(struct i2c_adapter *adap, u16 addr,
+ 			 unsigned short flags, char read_write,
+-			 u8 command, int size, union i2c_smbus_data * data)
++			 u8 command, int size, union i2c_smbus_data *data)
+ {
+ 	int status;
+ 
+@@ -182,7 +186,7 @@ static s32 sis96x_access(struct i2c_adapter * adap, u16 addr,
+ 			sis96x_write(SMB_BYTE, data->word & 0xff);
+ 			sis96x_write(SMB_BYTE + 1, (data->word & 0xff00) >> 8);
+ 		}
+-		size = (size == I2C_SMBUS_PROC_CALL ? 
++		size = (size == I2C_SMBUS_PROC_CALL ?
+ 			SIS96x_PROC_CALL : SIS96x_WORD_DATA);
+ 		break;
+ 
+@@ -196,7 +200,7 @@ static s32 sis96x_access(struct i2c_adapter * adap, u16 addr,
+ 		return status;
+ 
+ 	if ((size != SIS96x_PROC_CALL) &&
+-		((read_write == I2C_SMBUS_WRITE) || (size == SIS96x_QUICK)))
++	   ((read_write == I2C_SMBUS_WRITE) || (size == SIS96x_QUICK)))
+ 		return 0;
+ 
+ 	switch (size) {
+@@ -240,7 +244,7 @@ static const struct pci_device_id sis96x_ids[] = {
+ MODULE_DEVICE_TABLE (pci, sis96x_ids);
+ 
+ static int sis96x_probe(struct pci_dev *dev,
+-				const struct pci_device_id *id)
++			const struct pci_device_id *id)
+ {
+ 	u16 ww = 0;
+ 	int retval;
+@@ -263,7 +267,7 @@ static int sis96x_probe(struct pci_dev *dev,
+ 		return -EINVAL;
+ 	}
+ 	dev_info(&dev->dev, "SiS96x SMBus base address: 0x%04x\n",
+-			sis96x_smbus_base);
++		 sis96x_smbus_base);
+ 
+ 	retval = acpi_check_resource_conflict(&dev->resource[SIS96x_BAR]);
+ 	if (retval)
+@@ -286,7 +290,8 @@ static int sis96x_probe(struct pci_dev *dev,
+ 	snprintf(sis96x_adapter.name, sizeof(sis96x_adapter.name),
+ 		"SiS96x SMBus adapter at 0x%04x", sis96x_smbus_base);
+ 
+-	if ((retval = i2c_add_adapter(&sis96x_adapter))) {
++	retval = i2c_add_adapter(&sis96x_adapter);
++	if (retval) {
+ 		dev_err(&dev->dev, "Couldn't register adapter!\n");
+ 		release_region(sis96x_smbus_base, SMB_IOSIZE);
+ 		sis96x_smbus_base = 0;
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.43.0
+
 
