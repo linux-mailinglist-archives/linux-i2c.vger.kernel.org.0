@@ -1,242 +1,193 @@
-Return-Path: <linux-i2c+bounces-12068-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12069-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E637B14C3E
-	for <lists+linux-i2c@lfdr.de>; Tue, 29 Jul 2025 12:35:14 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D4F7B14F06
+	for <lists+linux-i2c@lfdr.de>; Tue, 29 Jul 2025 16:05:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 52C975455FA
-	for <lists+linux-i2c@lfdr.de>; Tue, 29 Jul 2025 10:35:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4F73918874EC
+	for <lists+linux-i2c@lfdr.de>; Tue, 29 Jul 2025 14:06:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E70B270EA3;
-	Tue, 29 Jul 2025 10:35:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63B611C5F06;
+	Tue, 29 Jul 2025 14:05:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ewkJ1iIo"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RyL2F7/H"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5549E2222A0;
-	Tue, 29 Jul 2025 10:35:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 856C512B94;
+	Tue, 29 Jul 2025 14:05:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753785308; cv=none; b=lMAN2CkV+ojNsXqGwwZZVUOapKLw/zU5zHv4oUrCMZv6eEcOdlmwVp0XPDaRinAV6kMvCBBE0AbXDb7seQ+2vAe59EGtCtGkH5BYx3VHOo/ftS8AdsLAf7OGR0BJ6VVy6Bw8jEfTsrZNi3BHm1ZL3tLAHnI1HkHoj2cN/FhFEVg=
+	t=1753797947; cv=none; b=FD+1+bx8AwoFETq5koLsiHL1IaahuNFcP+k6SgFoRKdQOmEMP24yK5UBfLOZt9JsZr3E7FCaoXdu9aR7tamOZqBOQFGlMmd4Bu79QAXSHPqBqqAnSZxsEGl5MiFGT1se89+fYtjoe/wG8RTuGJbffMgig0qTpOw0kGsNb0SxkFo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753785308; c=relaxed/simple;
-	bh=maqiodVoglk/yB6AFlvImWGUrIOSmKcUxjZYK1+1lmc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UaQKAs7tGSfVa4aDmVZp4H6sHAJOJfgrp9MYp0t4UVtk80ainiyNn7GWbpDZwIRQMYLaiaSqrTl9ATnzB9cRfTJPBH4hMcSlFJOxvv2QgaVh/0KPnYsHoAMfHjL5xNyTbQM5yS2yB6z2PNdq3fXqPztKAS1DRK5R06Y+z98nDjk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ewkJ1iIo; arc=none smtp.client-ip=209.85.216.42
+	s=arc-20240116; t=1753797947; c=relaxed/simple;
+	bh=kNhX9nMatP8g/CbICaKUoCj+mAKxEZssu+yPTV2mYxk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ixwVZfRu2CEyp4LoiTUX+7PQiolP8qCuJydDTGJCKJCwiDmXEd/IV9hWbXkbiWmEOjfl8VCRlNdBiJniwApX3TCN4FshlHvxLO5KcEdYog3X6ibH0aJQyFRQde1OG0cct2EGDFZQGv15f8DfMSCG+WrHzXPPyFPKgMqLFnK9NTQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RyL2F7/H; arc=none smtp.client-ip=209.85.221.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-31ecd40352fso1938403a91.2;
-        Tue, 29 Jul 2025 03:35:07 -0700 (PDT)
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-3b78127c5d1so1876373f8f.3;
+        Tue, 29 Jul 2025 07:05:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753785306; x=1754390106; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=iJNqwM4dovBm0FVo4bLX7E3wVC0H5ZiuzMt4Ugoc/zE=;
-        b=ewkJ1iIowJglstJ1zEhr8TZGdBhBGSEgMrrISIAu2ZDrxvqsxYlxlkP+l6BVtDKbDG
-         W0JuERjzABKIzH8HqpO4Chza0dyAxsDYyIYZJsB8nD8D8DRqvQmCSEDIn5yP1oKqOYxw
-         5j/2gPYtDr7neOeK2o2LGKsaQ4orkV+MQXK2mpDJRSgjlsS5wXiYpy83DbNBL7VFOjR5
-         g9BnJFEZr8rSlu6css2NgLCnnp3xFakkKvsX0WmQb5LNIooLmrefyzgUorvJz602ZyzS
-         AYi6mDn9kvLWikc98XNyoOHXsJnPwl5CH1CTLheEqHaVjctRD2Lrdmbe+e67MTdsN3Vz
-         W6PQ==
+        d=gmail.com; s=20230601; t=1753797943; x=1754402743; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Rprcdj1nFAqXfdxmxGkMV6IQ2YBvlkL6JUKhxwsP4ag=;
+        b=RyL2F7/HqDvkhEHPO7GBPiFxTTuwutWIx57RvEpWE83UXQQfwe/uobH5vf+3hIwsnK
+         dOqQd/0yj/k7lp549ZEoCqMDds93A8bV3Eh6iDx0z0ASs4nXY2CNR54OtYgEShyZB6lG
+         hbqclcvnzVSs1MTlBJLi5crXkrYRBJrK4U434ZSfCm+VZPdqBGUGKTt4HtKVBnEWVzyg
+         3Uv/7GGKkk7N3rIc++JG6x+hTlMAUdTSWO1SwZnyNMPU0dydVHEgX0hDrzcNE0pL0+gh
+         O+cXMBiQEsook7r47yvQvfTUYgPr3QUO2WYZBfe2W9el06deqB4nWRbmf+z6chpXQjyb
+         5Drg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753785306; x=1754390106;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iJNqwM4dovBm0FVo4bLX7E3wVC0H5ZiuzMt4Ugoc/zE=;
-        b=uZjtJKZT9RYC4kpaKxKORP44sRekTDclxPu4nCb1+Csl4NqTrHUFLvveB+qHkWqCDS
-         AYsKOv71QjWnbjCy1eR4TissGBeX0kD6vXd7nBcZO2s2BVKxBzPsGlNxE4vbPuhyrTjh
-         9FLRts3Y/mYbHvVha5wG2REw7BSuXHc/udywevW+nTpF3S3HYZVu9zKkVqFVfxoJqpyG
-         pZFR7x/U6m7pRu1vZNgN9Fj2bzDl7VlN7D7eJCcd6g+v4CzFCxYgyYvvlT5k2hQLed1n
-         Psf3601udhBXRlSGYCfl3TWi1z3LeMuG9zjfHrnfC/1NeoDUGxjIKgIugtk8b7Jn0ojo
-         y3yA==
-X-Forwarded-Encrypted: i=1; AJvYcCVB/JwV1LHO3JH+GVucwTvgGbIlADH1VMUKokIVHTmQvXRpu0mNcKg/QzPjeHQyxU9mC9sBAhDHYeMKhOE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyFVwtII4qqOCk+NZgI/gAK7Gt8RuinW418muUyZKBbVesxV6/W
-	B/TXpLhXB5otbGANz4WTwt5QLBAT4ZrGCUcj0KB5ceeeNR8zviqXve4B
-X-Gm-Gg: ASbGnctgcLKb0HpjBeBtv0ew0ygQwWeqJasCV7fEKj9SoZ+VNaKoHHgm5dg9U7xNFTp
-	Dgf6oB90wqoWbK0pnzEztvt+w9swXXCNV/kThnF5cnIYyo5x9vERyIVTIGUuXKoq1J8HjSE9o8Q
-	WPHDG8OzKkTMTZ5zZKL6AHmm3gY+oWy7QFdqrfO7Jv+yUgUrP6s+AlRi75NeGe9/DWwToEqRAEv
-	sRNz79ZbdJlSmNBao93niQi+Gvih/9RAb3Fume9KUDfHSv++mAScnMwB+sK3ukJuKxuIccwH38W
-	Z5nlsr0UeRdGuRiVP6HfHr78S+R2r+NMma2dv10JXtVxWrArCxxGCsWhjfTZdiEXVgtYR3EOqfx
-	vOyX4h5IiTUzJJNPZE3n3Ts4OTYc0rrxebM8ZWUrNZMnuPhBYfsQQ+2X8BKcaRhjbEt4W7BcvWj
-	w6VfrQcQ==
-X-Google-Smtp-Source: AGHT+IE9dD7XwuR66hU9u4aNrC+7FImtUo6B40EfgpXdpz4aasOoI0VHqNy4nyjfu6o3YfMwrA9j3g==
-X-Received: by 2002:a17:90b:2b8b:b0:314:2892:b1e0 with SMTP id 98e67ed59e1d1-31e77a1a327mr18241108a91.34.1753785306362;
-        Tue, 29 Jul 2025 03:35:06 -0700 (PDT)
-Received: from SIQOL-WIN-0002-DARSHAN.localdomain ([122.162.223.145])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b3f7f67b3b0sm6818046a12.44.2025.07.29.03.35.04
+        d=1e100.net; s=20230601; t=1753797943; x=1754402743;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Rprcdj1nFAqXfdxmxGkMV6IQ2YBvlkL6JUKhxwsP4ag=;
+        b=C1WJOo3vtHJ4NRT0hU3J8KZrI2JNZ1AhlHIbYlHyDvxVM4ZR23S1bbUXqx7AF3ucMQ
+         cMpLMKtYmSrE5JO1iRbTz4IeVT/birl+NXiVeYi04PEARqNRyyoRRFqcdQgip8HWqdmy
+         7EOKky9Y2f4txN8aZPFJbyF/3DuMo8oZ6akEkX38cvWZd9bh13+y3PeE0M3gVY11+fQe
+         2zp2WTrNLjAkinBs46LBLbutUUVOp9GzfIewLfF668sWMqSk5OuoqEfHYssZHY5RmV6H
+         rf6/H3ClAfx7YGe1GThdW5qCD7lle85pRVSZgH8GZs7vM83Uh57NLGg7m6QDppLfFQa8
+         V1pg==
+X-Forwarded-Encrypted: i=1; AJvYcCUOmArNd2fdzKMgtXvQq3efgpozrbHTH8HTorC/8kPqHPPGAzR4amn7jay8BwPY24bug09V4irLD/of@vger.kernel.org, AJvYcCUTjbpK/jJhiawTm4V5k2UiW1cMu2DUfG8G0rFEDI2zuCVULuDD3HBz3JSKcpl+iz4jaAeKFjji/khV@vger.kernel.org, AJvYcCWYPU0frEtHsY1j2LeHm3I0SQLMdHK9pJDT6ygCtVxxligL4fg0qHpsslHlwdpnf0fAD+e7oElhvUUy@vger.kernel.org, AJvYcCWoT1ofLu3n7vNaBN3WDsykBFyXnBBApcDcZhhFAfuGopqtKXhYxUCww+aEtbdjU6ZhbkRvt1BIF2y222g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwwYHZfdg8eldy4aOZFMZtxD1DMrQj35eZTsqCw/lauoJi5xEH9
+	kLCOcQSMM7IBuQEKkMHrx2unmf/f8SKrWrGZblEL1AHFEXG6NVcP0JAi
+X-Gm-Gg: ASbGncvOOykzPY9T9vVBqAXWXrCCaJ8ljo9KarfQJs6eUTfEYqhuQ8iozKGhWfrsoP8
+	+Ft8Z65M+WI6zJsaT19daCNkGR6gKD1UbdfrYj+q/YyKk/riscgsWEV+ToZvA9rmL2gGfIp3H92
+	inTxfLCeKAzt62I63AD/p94KE96Yhwo6DsWkjGXSGS0YbFzRI1TaaPI5nDjHgJ+elO7fu/+Y4Jv
+	ghScmR21QcZJrXcDgODFnHGMo0LwiHVhjbrAKP5OtFbYReAMC91mevwuzm5O+tfwDphzMBEqwJq
+	QuZkj5foQ6F2v48wYUrJNw2OruPE2DHXkxBLN4gsajWSXsHlU7vrOHYnNWO9dJzqWg3+4gs2+n3
+	79pSSd7jf6nmZJapzemonsn4rCe57Uo02hj6FQ1ZxFSywjusqUxsyufOFN755FnGDdO4eMGHeU2
+	UF679/UHGz
+X-Google-Smtp-Source: AGHT+IFZaUQwrxBlhVbnkLnmd8kchOhU8OOpW0F01eP0B+ajXj5NJu3Ugnkm2hEXTQpWoTAzFJ9BtA==
+X-Received: by 2002:a05:6000:1a8f:b0:3b7:907d:41c with SMTP id ffacd0b85a97d-3b7907d0696mr2189740f8f.35.1753797942493;
+        Tue, 29 Jul 2025 07:05:42 -0700 (PDT)
+Received: from orome (p200300e41f4e9b00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f4e:9b00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-458705377dasm200207535e9.4.2025.07.29.07.05.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Jul 2025 03:35:06 -0700 (PDT)
-From: "Darshan R." <rathod.darshan.0896@gmail.com>
-To: Jean Delvare <jdelvare@suse.com>,
-	Andi Shyti <andi.shyti@kernel.org>
-Cc: linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	"Darshan R." <rathod.darshan.0896@gmail.com>
-Subject: [PATCH] [PATCH v2] i2c: sis96x: Refactor for readability and style improvements
-Date: Tue, 29 Jul 2025 10:27:44 +0000
-Message-ID: <20250729102744.3176-1-rathod.darshan.0896@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        Tue, 29 Jul 2025 07:05:41 -0700 (PDT)
+Date: Tue, 29 Jul 2025 16:05:39 +0200
+From: Thierry Reding <thierry.reding@gmail.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Jon Hunter <jonathanh@nvidia.com>, 
+	Rajesh Gumasta <rgumasta@nvidia.com>, krzk+dt@kernel.org, robh@kernel.org, conor+dt@kernel.org, 
+	andi.shyti@kernel.org, ulf.hansson@linaro.org, kyarlagadda@nvidia.com, 
+	devicetree@vger.kernel.org, linux-tegra@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	linux-mmc@vger.kernel.org, andersson@kernel.org, sjg@chromium.org, nm@ti.com
+Subject: Re: [PATCH V3 1/3] dt-binding: Add register-settings binding
+Message-ID: <33wpprxurmuorivfp4crcyzjgkrnpb6t5oewhg6adw7uhyib32@7foqh5v6ujdv>
+References: <20250725052225.23510-1-rgumasta@nvidia.com>
+ <20250725052225.23510-2-rgumasta@nvidia.com>
+ <1a6f4194-de77-4dca-b2e8-2b51a106d770@kernel.org>
+ <dc4ed9fd-2da1-4d9b-b8f1-446ea0697385@nvidia.com>
+ <a6268cd4-4a7e-498e-9787-bec959bb1475@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="ed2rfe7qzgwvgvkr"
+Content-Disposition: inline
+In-Reply-To: <a6268cd4-4a7e-498e-9787-bec959bb1475@kernel.org>
 
-This commit introduces several minor, non-functional code quality
-improvements to the SiS96x I2C bus driver. The primary goal is to
-enhance code clarity and align better with standard kernel coding
-practices.
 
-Key changes include:
-*   **Separating assignments from conditionals:** Break out `read` operations
-    (e.g., `sis96x_read()`) from `if` statement conditions, making the
-    control flow more explicit and easier to follow. This avoids
-    common pitfalls of assignment within conditional expressions.
-*   **Whitespace and alignment fixes:** Adjust parameter alignment in
-    function definitions and remove extraneous trailing whitespace,
-    improving visual consistency and adherence to kernel coding style.
+--ed2rfe7qzgwvgvkr
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH V3 1/3] dt-binding: Add register-settings binding
+MIME-Version: 1.0
 
-These changes are purely refactoring-oriented and have no functional
-impact on the driver's operation.
+On Tue, Jul 29, 2025 at 11:28:43AM +0200, Krzysztof Kozlowski wrote:
+> On 29/07/2025 11:15, Jon Hunter wrote:
+> >=20
+> > On 25/07/2025 07:47, Krzysztof Kozlowski wrote:
+> >> On 25/07/2025 07:22, Rajesh Gumasta wrote:
+> >>> +description: |
+> >>> +  Register Settings provides a generic way to specify register confi=
+gurations
+> >>> +  for any hardware controllers. Settings are specified under a "reg-=
+settings"
+> >>> +  sub-node under the controller device tree node. It allows defining=
+ both
+> >>> +  default and operating mode specific register settings in the devic=
+e tree.
+> >>> +
+> >>> +properties:
+> >>> +  reg-settings:
+> >>> +    type: object
+> >>> +    description: |
+> >>> +      Container node for register settings configurations. Each chil=
+d node
+> >>> +      represents a specific configuration mode or operating conditio=
+n.
+> >>> +
+> >>> +    additionalProperties:
+> >>> +      type: object
+> >>
+> >> I don't understand what does this binding bring. It is empty.
+> >=20
+> >=20
+> > Yes this is very much similar to the pinctrl.yaml that defines a=20
+> > top-level object that can then be used by different devices and those=
+=20
+>=20
+> No, it is not similar. pinctrl.yaml defines common properties and common
+> schema for class of devices - pin controllers.
+>=20
+> There is nothing common here, nothing defined except that you have
+> unspecified children nodes.
 
-Signed-off-by: Darshan R. <rathod.darshan.0896@gmail.com>
----
-v2:
- - Fixed inconsistent indenting warning from smatch as reported by
-   the kernel test robot.
----
- drivers/i2c/busses/i2c-sis96x.c | 35 +++++++++++++++++++--------------
- 1 file changed, 20 insertions(+), 15 deletions(-)
+This is supposed to be very generic and it needs to be by its nature.
 
-diff --git a/drivers/i2c/busses/i2c-sis96x.c b/drivers/i2c/busses/i2c-sis96x.c
-index 77529dda6fcd..f5005679e799 100644
---- a/drivers/i2c/busses/i2c-sis96x.c
-+++ b/drivers/i2c/busses/i2c-sis96x.c
-@@ -11,7 +11,7 @@
- 
-     This module relies on quirk_sis_96x_smbus (drivers/pci/quirks.c)
-     for just about every machine for which users have reported.
--    If this module isn't detecting your 96x south bridge, have a 
-+    If this module isn't detecting your 96x south bridge, have a
-     look there.
- 
-     We assume there can only be one SiS96x with one SMBus interface.
-@@ -65,12 +65,12 @@ static u16 sis96x_smbus_base;
- 
- static inline u8 sis96x_read(u8 reg)
- {
--	return inb(sis96x_smbus_base + reg) ;
-+	return inb(sis96x_smbus_base + reg);
- }
- 
- static inline void sis96x_write(u8 reg, u8 data)
- {
--	outb(data, sis96x_smbus_base + reg) ;
-+	outb(data, sis96x_smbus_base + reg);
- }
- 
- /* Execute a SMBus transaction.
-@@ -85,16 +85,18 @@ static int sis96x_transaction(int size)
- 	dev_dbg(&sis96x_adapter.dev, "SMBus transaction %d\n", size);
- 
- 	/* Make sure the SMBus host is ready to start transmitting */
--	if (((temp = sis96x_read(SMB_CNT)) & 0x03) != 0x00) {
-+	temp = sis96x_read(SMB_CNT);
- 
--		dev_dbg(&sis96x_adapter.dev, "SMBus busy (0x%02x). "
--			"Resetting...\n", temp);
-+	if ((temp & 0x03) != 0x00) {
-+		dev_dbg(&sis96x_adapter.dev, "SMBus busy (0x%02x). Resetting...\n", temp);
- 
- 		/* kill the transaction */
- 		sis96x_write(SMB_HOST_CNT, 0x20);
- 
- 		/* check it again */
--		if (((temp = sis96x_read(SMB_CNT)) & 0x03) != 0x00) {
-+		temp = sis96x_read(SMB_CNT);
-+
-+		if ((temp & 0x03) != 0x00) {
- 			dev_dbg(&sis96x_adapter.dev, "Failed (0x%02x)\n", temp);
- 			return -EBUSY;
- 		} else {
-@@ -138,7 +140,9 @@ static int sis96x_transaction(int size)
- 
- 	/* Finish up by resetting the bus */
- 	sis96x_write(SMB_STS, temp);
--	if ((temp = sis96x_read(SMB_STS))) {
-+
-+	temp = sis96x_read(SMB_STS);
-+	if (temp) {
- 		dev_dbg(&sis96x_adapter.dev, "Failed reset at "
- 			"end of transaction! (0x%02x)\n", temp);
- 	}
-@@ -147,9 +151,9 @@ static int sis96x_transaction(int size)
- }
- 
- /* Return negative errno on error. */
--static s32 sis96x_access(struct i2c_adapter * adap, u16 addr,
-+static s32 sis96x_access(struct i2c_adapter *adap, u16 addr,
- 			 unsigned short flags, char read_write,
--			 u8 command, int size, union i2c_smbus_data * data)
-+			 u8 command, int size, union i2c_smbus_data *data)
- {
- 	int status;
- 
-@@ -182,7 +186,7 @@ static s32 sis96x_access(struct i2c_adapter * adap, u16 addr,
- 			sis96x_write(SMB_BYTE, data->word & 0xff);
- 			sis96x_write(SMB_BYTE + 1, (data->word & 0xff00) >> 8);
- 		}
--		size = (size == I2C_SMBUS_PROC_CALL ? 
-+		size = (size == I2C_SMBUS_PROC_CALL ?
- 			SIS96x_PROC_CALL : SIS96x_WORD_DATA);
- 		break;
- 
-@@ -196,7 +200,7 @@ static s32 sis96x_access(struct i2c_adapter * adap, u16 addr,
- 		return status;
- 
- 	if ((size != SIS96x_PROC_CALL) &&
--		((read_write == I2C_SMBUS_WRITE) || (size == SIS96x_QUICK)))
-+	   ((read_write == I2C_SMBUS_WRITE) || (size == SIS96x_QUICK)))
- 		return 0;
- 
- 	switch (size) {
-@@ -240,7 +244,7 @@ static const struct pci_device_id sis96x_ids[] = {
- MODULE_DEVICE_TABLE (pci, sis96x_ids);
- 
- static int sis96x_probe(struct pci_dev *dev,
--				const struct pci_device_id *id)
-+			const struct pci_device_id *id)
- {
- 	u16 ww = 0;
- 	int retval;
-@@ -263,7 +267,7 @@ static int sis96x_probe(struct pci_dev *dev,
- 		return -EINVAL;
- 	}
- 	dev_info(&dev->dev, "SiS96x SMBus base address: 0x%04x\n",
--			sis96x_smbus_base);
-+		 sis96x_smbus_base);
- 
- 	retval = acpi_check_resource_conflict(&dev->resource[SIS96x_BAR]);
- 	if (retval)
-@@ -286,7 +290,8 @@ static int sis96x_probe(struct pci_dev *dev,
- 	snprintf(sis96x_adapter.name, sizeof(sis96x_adapter.name),
- 		"SiS96x SMBus adapter at 0x%04x", sis96x_smbus_base);
- 
--	if ((retval = i2c_add_adapter(&sis96x_adapter))) {
-+	retval = i2c_add_adapter(&sis96x_adapter);
-+	if (retval) {
- 		dev_err(&dev->dev, "Couldn't register adapter!\n");
- 		release_region(sis96x_smbus_base, SMB_IOSIZE);
- 		sis96x_smbus_base = 0;
--- 
-2.43.0
+> > devices can then define the properties they need. So the examples for=
+=20
+> > I2C and MMC really demonstrate how this would be used in the subsequent=
+=20
+> > patches. Obviously we are open to any ideas on how if there are better=
+=20
+> > or preferred ways to do this.
+>=20
+> I don't see this part addressing comments from Rob - you need more users
+> of this. Adding fake (empty, no-op) common schema is not solving it.
 
+Bjorn, Simon and Nishanth are Cc'ed on this series since they expressed
+interest in this kind of functionality, so I expect that we'll see other
+users of this eventually.
+
+However, we do have to get the ball rolling and propose something that
+we think can work for a number of cases, so that's what this is.
+
+Thierry
+
+--ed2rfe7qzgwvgvkr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmiI1S8ACgkQ3SOs138+
+s6FRUQ/9HORCi3QODo+X7pa+WYsYlZ4zhuhvsmDsbJ1x3dcsqHz6YrlvSurSgn6T
+1mmDUYaA+QnkOpyIBsQ76zMyqoxwX8TD3ogtAZGjZX8ZjXmtQMRD5XnTjG7UhA3t
+K0jfAZzCMmp/s/+2DtFreHPUS3a2/BkgD92EG49HItgTW88H/e1FW5CQkH9ur/Wd
+Uu27xy7U5YmaNRS0sYra/B58UPJ3mMHJ1lqjjSOQUlfn9rbjFTyXFuLPVLBOkBag
+y5+DoKASAdHON67N2gXZl3qeDdvE9+vyUmsuphZwm0Fp5ekW3nPrTx7jXFHehLbd
+7vBNf80oRV9+QuUUaKWbCvrZelk537jvzEanBzVK8QE73QVJGT4Bxr33StW7Pans
+24YOfLjfhbN9S2NCxqarCZ72LJUManEREX4dY6+N+tnszuj1DOV4KmXjX1XSXp5m
+cR3W7StSdSNkMO7n43MMqu++bn1bkv1jCwE1/HC9eSKIbiGNbPv7/3kERzIlb/cl
+zrI3pefPk5sDcheI/A1FzSA/7RDoi4iSY73+ur+jAvJCPqF3juwVE4AJnNKnaI/j
+/HIn0Su0wiKjaXuYuCM4k8KxZsJyAj1p3bj46K3Tiu1ALrLPOWIaPZHcsd8q2HAb
+FbYs8TwIPYxzSklfYhVSguF7faO23hhXRku4wg28M6vfLQhEsRA=
+=gNJZ
+-----END PGP SIGNATURE-----
+
+--ed2rfe7qzgwvgvkr--
 
