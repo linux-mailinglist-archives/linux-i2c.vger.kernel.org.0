@@ -1,65 +1,65 @@
-Return-Path: <linux-i2c+bounces-12086-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12087-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8B98B16192
-	for <lists+linux-i2c@lfdr.de>; Wed, 30 Jul 2025 15:31:50 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE8B7B1619C
+	for <lists+linux-i2c@lfdr.de>; Wed, 30 Jul 2025 15:34:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0AAA617CB65
-	for <lists+linux-i2c@lfdr.de>; Wed, 30 Jul 2025 13:31:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B645A7A4D1D
+	for <lists+linux-i2c@lfdr.de>; Wed, 30 Jul 2025 13:33:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40D47298987;
-	Wed, 30 Jul 2025 13:31:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81FD72D3EE0;
+	Wed, 30 Jul 2025 13:34:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DgiGaKK6"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XrspX88k"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 588592905;
-	Wed, 30 Jul 2025 13:31:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D23AD2D375D;
+	Wed, 30 Jul 2025 13:34:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753882305; cv=none; b=NCGSq8yB4XXLfmm6A2rDTi8GQzZogxQFrpM4VEnwkIrK2vkXEnxNRoJ5X+LwvJYR02+StSVz6wZaxhVEGaeqdHuQ4zHDzQCQeUq6Ki5gIP2u9RZZYsFvK69k2e6Rz+aUTxj6oAXwSCu7Z7ALQRq2C9gnuLOxq3yd0MeF8zjnTMg=
+	t=1753882470; cv=none; b=qLrBQ95cvdwQbJGspbnArTlTQfWXru1dXw8LexkPNlCESXsbhlgfXDBDNa/JqonsYKPs4LWB7VEBh5GXvskwezzLP/IQBkIuDQ8Ggwa1WiOMKZx/jdNkiI5EREGaFJ+lTSZq0YZGoZGvINL6yPNDkYT+sfzYBHmUG6WVsMaeMYw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753882305; c=relaxed/simple;
-	bh=32UX8JXuUGyGSGlifVuoyArglRHWLRbygc+imo84SQg=;
+	s=arc-20240116; t=1753882470; c=relaxed/simple;
+	bh=MG+BKYbIMINkVluK+N+beHrXIhRtKeLgcqbEkaRnyHU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CDMI/A92yvkYjS3eKzpsZaNIZXTKDuBiIZLedw8ohi2TDWT7/E23UHnep/6CcEoLDJmc6goG2gSFtjEtVSYiNNFS0br2Kyf+9pg8i58BottSlm0urmeWL3TYCb65eN6UsiDWXRGhGKFhsXJ7q4P7zbO1KYeMGLXB+bCg3oa7r5A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DgiGaKK6; arc=none smtp.client-ip=198.175.65.11
+	 In-Reply-To:Content-Type; b=UhlwWXugv5gpyl7OzNoCMhZRV+yBhpWp5IX0UYfln8vgylUcjhLr8sKTQP5GV/4gQT3y8vndJBwPyOY9XuOi6lRhCAGF0iWaRK5VkoXPUbmuhYZzcoc5iEdi8KJoU1/19kTC05mZ+HHiVdl+nTnJdoEvshmtXeqpUJhMecBp5pM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XrspX88k; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753882303; x=1785418303;
+  t=1753882469; x=1785418469;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=32UX8JXuUGyGSGlifVuoyArglRHWLRbygc+imo84SQg=;
-  b=DgiGaKK6/0KhowpR1belonkDvHZqckLihGUP0ebuNqUz43MIuZEh9oYN
-   u60rGEeOPaFkQFHEKFIqmSlPvuLXrq0YX/k6XASs6x6d1jNdGUJ5j/Taz
-   ZLuS12+TM7xVkqCzBTMMDkJIZgYz9ggCmA7X7VdEeI1EAJFPPktKl46bn
-   Df3xqtXjSwgRges7aHJuJU63X6Of4v2/PF8Zx66ebqYHnM2s0P07OPklx
-   7Sxz0z1H6s//IZt+NB7s3cMUmeNizxx0fuh3X8IIICtJBjlvmMXiMnhSa
-   dPI71W8F+X6IK5xhrm3T+7jaDXKw8qrcBjV8T/ksPtnYBD9g38LQS/AIA
-   Q==;
-X-CSE-ConnectionGUID: Hul0MLgFS5WOZV/sILjeVw==
-X-CSE-MsgGUID: Nu0kgvoiRw6+HJxIEUpWcA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11507"; a="66456381"
+  bh=MG+BKYbIMINkVluK+N+beHrXIhRtKeLgcqbEkaRnyHU=;
+  b=XrspX88kH9jjSJY9SENi8OLutMrwZisO4JXLSEc6EsKyYYmcQUiNpNU3
+   cmdONlbky5CGYeM+nALcS5972JWQOpBUgG8IOiVcGreaBNnd/40oB0mRs
+   UD0UALxVi7viumhZPXBsrZrHu4+IuM5/N0uG5go27FpPkfIRxiine+Ss3
+   cE2abZZMiFbiAjKwA/5XNp+s0oswvZsBcCAxR8IHnjhmOToY4wH8O/5tf
+   9HEC6pHdq/OrEss/llh8oI6VEe+I9HmhrrhGZVNolEmcVxaWTzPYTm9kq
+   t9msqVMagbuVJj5214LHlZCUQpcGVp+8UTH0wMN+MjQRmEbjF61ciynCw
+   w==;
+X-CSE-ConnectionGUID: G5W0vlG+TbWvrHfz+9+gzg==
+X-CSE-MsgGUID: jXQa0JgGR1uW5/8whPdsRg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11507"; a="66456721"
 X-IronPort-AV: E=Sophos;i="6.16,350,1744095600"; 
-   d="scan'208";a="66456381"
+   d="scan'208";a="66456721"
 Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2025 06:31:42 -0700
-X-CSE-ConnectionGUID: YF3g1y/YTa++KBmWWPqVEQ==
-X-CSE-MsgGUID: 7Mfwb/ISSX6lQMw44wQECQ==
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2025 06:34:28 -0700
+X-CSE-ConnectionGUID: PM++2oJnR1S9e4zE5drCyA==
+X-CSE-MsgGUID: inK3wZKoSs+eAjyStpkIMw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,350,1744095600"; 
-   d="scan'208";a="167240932"
+   d="scan'208";a="167241363"
 Received: from mylly.fi.intel.com (HELO [10.237.72.51]) ([10.237.72.51])
-  by fmviesa005.fm.intel.com with ESMTP; 30 Jul 2025 06:31:40 -0700
-Message-ID: <97091c58-b893-46cd-aae9-18b04bd2ae58@linux.intel.com>
-Date: Wed, 30 Jul 2025 16:31:39 +0300
+  by fmviesa005.fm.intel.com with ESMTP; 30 Jul 2025 06:32:21 -0700
+Message-ID: <262e1907-5b11-40ca-8fdb-852c38244cdc@linux.intel.com>
+Date: Wed, 30 Jul 2025 16:32:21 +0300
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -67,8 +67,8 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] i2c: designware: Fix clock issue when PM is
- disabled
+Subject: Re: [PATCH v2 2/2] i2c: designware: Add disabling clocks when probe
+ fails
 To: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
  Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
  Mika Westerberg <mika.westerberg@linux.intel.com>,
@@ -76,53 +76,39 @@ To: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
 Cc: Kohei Ito <ito.kohei@socionext.com>, linux-i2c@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20250724042211.2160339-1-hayashi.kunihiko@socionext.com>
- <20250724042211.2160339-2-hayashi.kunihiko@socionext.com>
+ <20250724042211.2160339-3-hayashi.kunihiko@socionext.com>
 Content-Language: en-US
 From: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-In-Reply-To: <20250724042211.2160339-2-hayashi.kunihiko@socionext.com>
+In-Reply-To: <20250724042211.2160339-3-hayashi.kunihiko@socionext.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 Hi
 
 On 7/24/25 7:22 AM, Kunihiko Hayashi wrote:
-> When removing the driver, enable the clocks once by calling
-> pm_runtime_get_sync(), and call pm_runtime_put_sync() to disable
-> the clocks.
+> After an error occurs during probing state, dw_i2c_plat_pm_cleanup() is
+> called. However, this function doesn't disable clocks and the clock-enable
+> count keeps increasing. Should disable these clocks explicitly.
 > 
-> If CONFIG_PM=y, clocks for this controller are disabled when it's in
-> the idle state. So the clocks are properly disabled when the driver
-> exits.
-> 
-> Othewise, the clocks are always enabled and the PM functions have
-> no effect. Therefore, the driver exits without disabling the clocks.
-> 
->      # cat /sys/kernel/debug/clk/clk-pclk/clk_enable_count
->      18
->      # echo 1214a000.i2c > /sys/bus/platform/drivers/i2c_designware/bind
->      # cat /sys/kernel/debug/clk/clk-pclk/clk_enable_count
->      20
->      # echo 1214a000.i2c > /sys/bus/platform/drivers/i2c_designware/unbind
->      # cat /sys/kernel/debug/clk/clk-pclk/clk_enable_count
->      20
-> 
-> To ensure that the clocks can be disabled correctly even without
-> CONFIG_PM=y, should add the following fixes:
-> 
-> - Replace with pm_runtime_put_noidle(), which only decrements the runtime
->    PM usage count.
-> - Call i2c_dw_prepare_clk(false) to explicitly disable the clocks.
-> 
-> Fixes: 7272194ed391f ("i2c-designware: add minimal support for runtime PM")
 > Co-developed-by: Kohei Ito <ito.kohei@socionext.com>
 > Signed-off-by: Kohei Ito <ito.kohei@socionext.com>
 > Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 > ---
->   drivers/i2c/busses/i2c-designware-platdrv.c | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
+>   drivers/i2c/busses/i2c-designware-platdrv.c | 1 +
+>   1 file changed, 1 insertion(+)
 > 
-Good catch!
+> diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
+> index edaebfb165f9..f6424dcfdff6 100644
+> --- a/drivers/i2c/busses/i2c-designware-platdrv.c
+> +++ b/drivers/i2c/busses/i2c-designware-platdrv.c
+> @@ -308,6 +308,7 @@ static int dw_i2c_plat_probe(struct platform_device *pdev)
+>   
+>   exit_probe:
+>   	dw_i2c_plat_pm_cleanup(dev);
+> +	i2c_dw_prepare_clk(dev, false);
+>   exit_reset:
+>   	reset_control_assert(dev->rst);
+>   	return ret;
 
-Tested-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
 Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
 
