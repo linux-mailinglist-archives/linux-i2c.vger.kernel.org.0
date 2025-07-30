@@ -1,49 +1,49 @@
-Return-Path: <linux-i2c+bounces-12078-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12079-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32642B15BE6
-	for <lists+linux-i2c@lfdr.de>; Wed, 30 Jul 2025 11:36:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF370B15BF3
+	for <lists+linux-i2c@lfdr.de>; Wed, 30 Jul 2025 11:36:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8D16318C2291
-	for <lists+linux-i2c@lfdr.de>; Wed, 30 Jul 2025 09:36:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5EA553A6C90
+	for <lists+linux-i2c@lfdr.de>; Wed, 30 Jul 2025 09:35:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D896D292B2C;
-	Wed, 30 Jul 2025 09:35:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBD4D292B3E;
+	Wed, 30 Jul 2025 09:35:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gUey1day"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="noqZGFAg"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7272A269806;
-	Wed, 30 Jul 2025 09:35:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 743F726D4F9;
+	Wed, 30 Jul 2025 09:35:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753868139; cv=none; b=I+lmfC4eNcVKms/sGXVlyRnnXbaV+AyKLof1FmZSHu+zfLW/d4bM+AEvmjiAnj1viNfcPLT+EqxCczhDGWrLYTY4CX0c1GixRLEwH8ptBWLPHFo+onuyptjnEKTNM9vTXTusPOAAubWeJFf20/2BNEfvj4r3lr5ofjjFzUPr4X8=
+	t=1753868155; cv=none; b=nJdxWS5SHD4oTs4+93vgSAgfTCP0UQgeyoBCbxlq2j9enHy8mriFL2+Yu1cHdrNXKDpP8RJ78g80v1yait61JbziVCRa1NJtqX2lYwgTH8EGbZvuoPheKEvpD8JCaTaT6P1SQw6zBCcLMUk9KZdRB4b2u5dD5I4OKREFjgfE8V4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753868139; c=relaxed/simple;
-	bh=gPmFOCUj56gB0mgUUsKxqdENITaoV8SNoAcVzVDUVXQ=;
+	s=arc-20240116; t=1753868155; c=relaxed/simple;
+	bh=N00UN43mM8ni3MxsfDldCEpbhEFJB1eKWpki3YYPYWs=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=VHUr5TjMlA8fwkCUt6WW0K6k+QsCsjeio5BkpZ8uSumJvogzdb/G3qiDmfDuNRxO4+MWkzgdajFjy4YvNWFEMekuymlANWsJHf/CGPWyxTpsUZptF+IHJz2LcjNvQLXvUteJrsMeXtTkAHdkuJVwk9S1+98p39ZuELoCKHE4+Mg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gUey1day; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B07B0C4CEF6;
-	Wed, 30 Jul 2025 09:35:21 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=CkBJkGlrR14QpkASWSYxGAAwqUWc2sG5efmIDG3l94Kkme5X5BZrvph5I80bK06wWFbhjLltZvfBfpPQ5nNl/DAhq++8i+YheDWjBOybZ8rzktoQCW3WyKozr5im6i+BD9N00+bycixhhbC680zmLHSwxPO0O6juyxNM6EWW488=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=noqZGFAg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CE23C4CEF5;
+	Wed, 30 Jul 2025 09:35:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753868137;
-	bh=gPmFOCUj56gB0mgUUsKxqdENITaoV8SNoAcVzVDUVXQ=;
+	s=k20201202; t=1753868155;
+	bh=N00UN43mM8ni3MxsfDldCEpbhEFJB1eKWpki3YYPYWs=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=gUey1daysHX4CjFYuMEGjnbmPolvDXae9NnSIwYiFjcedOZLw+Z1H91EszY3i9Bc+
-	 RQb/4FH768f4vRWIXstiydvBg+lsjMHIYvVN+AQ0Luf2kvzaT/+ifGBQ7GjMRHFqct
-	 tLb1O8mFe9RIBntuWpGyZY+EnmBlnKZdEPAXnHzfDreCdthUu7eGCtl3xQ1/l1Kxe5
-	 AYTdZjvbTKquJpRVroXwWZ5ko5AHCLbaAde97Nidc33PwK9Cmfdm7LwL1SMxNmoOhU
-	 UCe10rrtQlM4Jt4MzH4+scSeEZXRR7w5bPsNNJosKHQPaDrtTYSR9/fDH1RhxNM6ij
-	 rZmNU67Z9qVvw==
+	b=noqZGFAgIK4mo6I1FeATvcM2ik9vQma41t4JUvtFkKPX2Zyetn8mtfxVbZd45yE/l
+	 U1Y7mJtuU7SJ7CnstPsB9K/3qhjUv1e7CgSaHl0J3j/ea3QCIEAkIqNTLELSBwDe8I
+	 skZfM0x2hjLgrbULs/BH/jFJJPXLUcH/woib6J09xkCPOzz4f3nW4fUwsJqGElA1rN
+	 C7eOoveWThhAUrn9GaIC+eUJQKFKxUe8xiu3UMeUP8xalqL+GLbOclrk1AaQgpePos
+	 AeZ3QIghSLLNWwhAzXVCWOcVbFBTZ5AqTwazkUJgoNOyvosM2ZHoaMGIraYa5LXHU2
+	 S5rwqKIyuCchA==
 From: Konrad Dybcio <konradybcio@kernel.org>
-Date: Wed, 30 Jul 2025 11:33:31 +0200
-Subject: [PATCH RFC 4/6] i2c: qcom-geni: Hint GENI protocol ID to GPI DMA
+Date: Wed, 30 Jul 2025 11:33:32 +0200
+Subject: [PATCH RFC 5/6] spi: geni-qcom: Hint GENI protocol ID to GPI DMA
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -52,7 +52,7 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250730-topic-dma_genise_cookie-v1-4-b505c1238f9f@oss.qualcomm.com>
+Message-Id: <20250730-topic-dma_genise_cookie-v1-5-b505c1238f9f@oss.qualcomm.com>
 References: <20250730-topic-dma_genise_cookie-v1-0-b505c1238f9f@oss.qualcomm.com>
 In-Reply-To: <20250730-topic-dma_genise_cookie-v1-0-b505c1238f9f@oss.qualcomm.com>
 To: Vinod Koul <vkoul@kernel.org>, Sven Peter <sven@kernel.org>, 
@@ -113,11 +113,11 @@ Cc: Marijn Suijten <marijn.suijten@somainline.org>,
  linux-sound@vger.kernel.org, linux-i2c@vger.kernel.org, 
  linux-spi@vger.kernel.org, Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1753868049; l=1290;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1753868049; l=1173;
  i=konrad.dybcio@oss.qualcomm.com; s=20230215; h=from:subject:message-id;
- bh=I3VYNNnaYUUJT+yNxJu2LDKZ0p5QFLebL1fPwM6iQcU=;
- b=r8aKTBYPiwfltdkmnV7Jw0zxdzT1E+Hq8RSvGglxlhd/28VcOh7CqbzzK2Fs5vifRSyZ6bAiZ
- 4ZgyjRNT4cvDIvkGt7EnjNhvpWuKR/4k4cVpRwSghCBSCh7hc6aFGyn
+ bh=3qGrKkb0vUuJZdQ+qYHRcWxsslKGyEP5yydY522z8YA=;
+ b=aICFJMG7AM48jTVVIFcvL8HDUChGXUjvlcmEfMfL9VNkZkzvMxo+3E1Pz4CGquWLPcm5h3n8G
+ X5nW37uxlajC9Yv3uV+k462eLSjMMB00KSWeicS1u5fh7SmWNRlnhIs
 X-Developer-Key: i=konrad.dybcio@oss.qualcomm.com; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 
@@ -129,29 +129,29 @@ tree.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 ---
- drivers/i2c/busses/i2c-qcom-geni.c | 4 ++--
+ drivers/spi/spi-geni-qcom.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
-index ff2289b52c84ccf9ef786c2618bd869453c5f611..4c702ee728d6cc9282688bc278bd401f3de3266a 100644
---- a/drivers/i2c/busses/i2c-qcom-geni.c
-+++ b/drivers/i2c/busses/i2c-qcom-geni.c
-@@ -754,14 +754,14 @@ static int setup_gpi_dma(struct geni_i2c_dev *gi2c)
+diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
+index 768d7482102adec9b7178077724dc3976a2760c8..0ea157ac06e12012e1a36218bf3a4058a9db6048 100644
+--- a/drivers/spi/spi-geni-qcom.c
++++ b/drivers/spi/spi-geni-qcom.c
+@@ -623,14 +623,14 @@ static int spi_geni_grab_gpi_chan(struct spi_geni_master *mas)
+ {
  	int ret;
  
- 	geni_se_select_mode(&gi2c->se, GENI_GPI_DMA);
--	gi2c->tx_c = dma_request_chan(gi2c->se.dev, "tx");
-+	gi2c->tx_c = dma_request_chan_w_data(gi2c->se.dev, "tx", (void *)GENI_SE_I2C);
- 	if (IS_ERR(gi2c->tx_c)) {
- 		ret = dev_err_probe(gi2c->se.dev, PTR_ERR(gi2c->tx_c),
+-	mas->tx = dma_request_chan(mas->dev, "tx");
++	mas->tx = dma_request_chan_w_data(mas->dev, "tx", (void *)GENI_SE_SPI);
+ 	if (IS_ERR(mas->tx)) {
+ 		ret = dev_err_probe(mas->dev, PTR_ERR(mas->tx),
  				    "Failed to get tx DMA ch\n");
  		goto err_tx;
  	}
  
--	gi2c->rx_c = dma_request_chan(gi2c->se.dev, "rx");
-+	gi2c->rx_c = dma_request_chan_w_data(gi2c->se.dev, "rx", (void *)GENI_SE_I2C);
- 	if (IS_ERR(gi2c->rx_c)) {
- 		ret = dev_err_probe(gi2c->se.dev, PTR_ERR(gi2c->rx_c),
+-	mas->rx = dma_request_chan(mas->dev, "rx");
++	mas->rx = dma_request_chan_w_data(mas->dev, "rx", (void *)GENI_SE_SPI);
+ 	if (IS_ERR(mas->rx)) {
+ 		ret = dev_err_probe(mas->dev, PTR_ERR(mas->rx),
  				    "Failed to get rx DMA ch\n");
 
 -- 
