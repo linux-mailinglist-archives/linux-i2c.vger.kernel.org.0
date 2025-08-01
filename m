@@ -1,143 +1,103 @@
-Return-Path: <linux-i2c+bounces-12104-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12105-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF17BB17FB5
-	for <lists+linux-i2c@lfdr.de>; Fri,  1 Aug 2025 11:57:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B13A8B180FA
+	for <lists+linux-i2c@lfdr.de>; Fri,  1 Aug 2025 13:21:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A62823B7E16
-	for <lists+linux-i2c@lfdr.de>; Fri,  1 Aug 2025 09:57:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E1FBB163DC9
+	for <lists+linux-i2c@lfdr.de>; Fri,  1 Aug 2025 11:21:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D64B523535C;
-	Fri,  1 Aug 2025 09:56:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 995B523D28C;
+	Fri,  1 Aug 2025 11:21:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HkzbNeDI"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="L0fWltIj"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3A1022FF2E;
-	Fri,  1 Aug 2025 09:56:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC3F0221FCA
+	for <linux-i2c@vger.kernel.org>; Fri,  1 Aug 2025 11:21:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754042212; cv=none; b=XsJjUPmz8PD01qkg6+d1UzJQrnbCCvhtwakPyU7Tum1LpjzzgxKMm9ovFfZlcoaNf0AHkxJEZ1wN448pBuyT8G90eazJXmueFUQhj+3xZGBObW+EPOeILi34QgV8qrNTN6zwYJo3eTbLSTQV6BBBNPesKF8hEA3YjIV5w6f9dDA=
+	t=1754047282; cv=none; b=YFo4Hs4DOZwdW0KIKpdumaZz93ZSIcRWNGE8nx7iBin7MWzerqPKHEA14+KLLrZ78w8fpmobnn0RRg2tb20Q2l7h3a67w8n5X1IPlYhh5dbCxYK9QkjTzLlfCAVorlakuCvgY2137AuZaLp1PnK481n8Ngq2DkYoBEwaioBEGbU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754042212; c=relaxed/simple;
-	bh=Cti1oyJPdDn3oJT5A9VlLm4mV7CVgPDS1tW1vmqK8IQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Zi7+BkbJmjxylg5UHNvl8s2T0H+1OMshxkSyFywhpjyP5vTmjPr2FGEhWYqXTXpNrxxl9Gh6EzmO5qWsrlzO1TbMUcSs/oUE6hEmSw2H95HTPqXguR5cFOiAF6yNgE9P1QRwG+BPaSUm5VyJL5So1CFgcZ84waVGQTBKXiNtXgA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HkzbNeDI; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-3b7848df30cso1731673f8f.0;
-        Fri, 01 Aug 2025 02:56:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754042209; x=1754647009; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gUcfhAUTnpvKTqgTj6oeDN+sY7M5EapKEDlksciuL7M=;
-        b=HkzbNeDI68GMM+dteAvpyP4Pt77BTKzjr1tqGA0gOHpCvjiDZJUM9Nrofv1j6maizc
-         atmj6lzuygkGPqdDAKAgzdNQ5Kl2bBPY5mSTbKY7a6HiY0+CDzUYdNAJ9TxiHyLMaDLa
-         H8AyPiFhciD8avk8Szt0S7JgUbTNMEOgRUvwsO/OrnNZW9Cu84p7cG1AZttjvN1qh6gZ
-         3KUt2wXJuNq39x/QhQtPF1KUtSJddmkSqtxRiiQ3uWVtmOcYW1GYXQ2lGbJNBFPBe8kb
-         IrDwvsK8rRPmNZAaA91YEZbZXVVmDsu43D8VoV/aypi8faeYIFScZYehFQ0/2va3w/xw
-         ZBsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754042209; x=1754647009;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gUcfhAUTnpvKTqgTj6oeDN+sY7M5EapKEDlksciuL7M=;
-        b=M5sCCR0Y0Ms+QTDBst3/gHHcSQjcmtNlzuNLhHRE4q4afA93hDljVlMhTl6iubxuTZ
-         3sEjlNuZrhRVn6VnYNEKsFI8MD+SHDLmQqRMGp50gi6SMvt/9mHeSkOq5MG7xAAwfwor
-         azE6S12Qx0Hj/U0R2mu5eGp7LribAJWEw9lZsmAAwJRkI376s0/wuURmiNsg+5iIgIhF
-         NlU/1rvjxkTpZ+PBpr7wKp0REHFrgM7DNfzJZhTzjwYm/npLXwn02/afIAn7uYE4Okz0
-         hM9BDssuF4+592n2LXvuhWJkdhDy3TQhrt6TXVECVyDbh5o32K5yZv2Z6hh4LlteLv3y
-         foFA==
-X-Forwarded-Encrypted: i=1; AJvYcCUj5EDGXP2Vc7U2WrRqMjVYqD9M75gpWEiPrpJOYlusJoA/mu+f/iwShCYYaSnmTNcTW1Kr7b9Fya+a@vger.kernel.org, AJvYcCWoVKH5ePhl4Imrs1wqrbbLvbOrlQF/tvA6/l517B8ETR2YrtTmIsqFZHMYBm+W+syF2/AXDAby6DKAyHjE@vger.kernel.org, AJvYcCWwALMp4fhsc8X8J59407zDZxexLxhKPZU7UcbM9NItUo4fLFHEy4wedVYmec6uYIfarTpskUgQQEEEtLQ=@vger.kernel.org, AJvYcCXnVYdKVv0PN2BgIwNRvpVLQ5PFYmkfwDZhUbop3KxASHcFOjjuNJR6JdVVlzExbdZeyGNgKRKKOVIX@vger.kernel.org
-X-Gm-Message-State: AOJu0YzvxbFDi3Zwq+RrRjgT4LKEc0J+2GVSaSVLGI/7H6JhbJEf8XhV
-	pGjuJ8gzVdMKFlH1GUKzCCK+P+9gDUMpwKyo9FGvDYAQwHwZI0T7HlIM+iEcsw==
-X-Gm-Gg: ASbGncuowgTyzbqHaGVY+ZoAHhngGxQlHZm10pCF6oZleu/JGQr9OtJXT4AMLPB8tpE
-	XdzK2XLGM6i39iXVrJCVcRfdaCjwbK9rbc9RqLD6QxyvIhDYKf0pj7frPpGBe+kD8lSfMthB2XK
-	VVMg9PHsb5AD/PxnUtTBtZ1pBhLg/y7dlPw/iQw+BsvmiZ4MdzdpGBGevehLR+7bmrd2nhAF+6g
-	uRkRP/lXO8aZ5JojqaV/tfHmofbiTyMJPUgdzU+IrvCVJKtLVDlsmMUAauySDuLFSBd2qEbFcAl
-	1GIvrJYLOrg1MorJaKMCMhRIDkSByGtJAR3+uVpTOEbjLHaH/W3jRCWYltVPFWaG+hWzwgYARqY
-	LYRQUQYI9OESVbq+U7gUkckumqnwTCl88pYu7ELYr0dcUKNoFwc+8tA6tt3f5N8iTORBvefte82
-	Cw2Mp4p1z2
-X-Google-Smtp-Source: AGHT+IESS8Q6ekv5in9XSQWjL/IRFTfWRGHGp8d8bTmHI54KBNDbsIed1g40lasqifFJWKmOJ1Ph3w==
-X-Received: by 2002:a05:6000:2dc2:b0:3a5:8977:e0f8 with SMTP id ffacd0b85a97d-3b79d4d8b4cmr4688148f8f.19.1754042208882;
-        Fri, 01 Aug 2025 02:56:48 -0700 (PDT)
-Received: from orome (p200300e41f4e9b00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f4e:9b00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b79c4a2f03sm5215667f8f.72.2025.08.01.02.56.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Aug 2025 02:56:47 -0700 (PDT)
-Date: Fri, 1 Aug 2025 11:56:45 +0200
-From: Thierry Reding <thierry.reding@gmail.com>
-To: Akhil R <akhilrajeev@nvidia.com>
-Cc: andi.shyti@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org, 
-	digetx@gmail.com, jonathanh@nvidia.com, krzk+dt@kernel.org, 
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org, 
-	ldewangan@nvidia.com, robh@kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: i2c: nvidia,tegra20-i2c: Add Tegra256
- I2C compatible
-Message-ID: <imaclsvs7szgj66pgc6lqdr6ouosj2i2kddugqyfssxb5nk6cx@rpiov7cjpceh>
-References: <20250731091122.53921-1-akhilrajeev@nvidia.com>
- <20250731091122.53921-2-akhilrajeev@nvidia.com>
+	s=arc-20240116; t=1754047282; c=relaxed/simple;
+	bh=8JQsiVWTM3ruJ2jFKdGrmV8VbBNegx7F5yFOdazGfKQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dme/bM4Hqi5h8SAvxYn2PvTN51ZWwL9PLbk8+FYK1S7zqBjNPz+e+0MDPuVRNP26H+5SmXqanOUqI99GjQd/uZ7V1ZRevQbbXfS0B2YyrKFPKlkYE7gtOPzi1O4K89J/UcgJNxvIsF7MqAShPYPIKATcnc863tPArAURZdigD/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=L0fWltIj; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1754047279;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TkK4LWOcguxSSKDlgoUZDb5ZXpOEItT6YyrOmMD6H70=;
+	b=L0fWltIjFHlGyaZMNJ7ifm6mhkaSEzMu+iUYQpeA4Mwk6KVo5yWbIMSou69ksBaC+RYPXd
+	xkIZdFSSBg71uVZpXSfcgBrWwFE1TDuyI/d9BajVDIK3oOwuvB/YqqEib6+xmiynGiMbKe
+	7eIpj03pKZYhYOMJvNKoOVfgqSHfPJc=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-578-Dfo5LgvDPfKPJDVYzXvpxA-1; Fri,
+ 01 Aug 2025 07:17:22 -0400
+X-MC-Unique: Dfo5LgvDPfKPJDVYzXvpxA-1
+X-Mimecast-MFC-AGG-ID: Dfo5LgvDPfKPJDVYzXvpxA_1754047040
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3F7B21800350;
+	Fri,  1 Aug 2025 11:17:20 +0000 (UTC)
+Received: from [10.44.32.226] (unknown [10.44.32.226])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 1732C1955E89;
+	Fri,  1 Aug 2025 11:17:16 +0000 (UTC)
+Message-ID: <9af427df-ad31-46c8-8796-3d7ab55ee9d1@redhat.com>
+Date: Fri, 1 Aug 2025 13:17:15 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="6g62m6f6zdf6dccq"
-Content-Disposition: inline
-In-Reply-To: <20250731091122.53921-2-akhilrajeev@nvidia.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] dpll: Make ZL3073X invisible
+To: Geert Uytterhoeven <geert+renesas@glider.be>,
+ Prathosh Satish <Prathosh.Satish@microchip.com>,
+ Jiri Pirko <jiri@resnulli.us>, Jakub Kicinski <kuba@kernel.org>,
+ Conor Dooley <conor.dooley@microchip.com>
+Cc: netdev@vger.kernel.org, linux-spi@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <97804163aeb262f0e0706d00c29d9bb751844454.1753874405.git.geert+renesas@glider.be>
+Content-Language: en-US
+From: Ivan Vecera <ivecera@redhat.com>
+In-Reply-To: <97804163aeb262f0e0706d00c29d9bb751844454.1753874405.git.geert+renesas@glider.be>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-
---6g62m6f6zdf6dccq
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH 1/2] dt-bindings: i2c: nvidia,tegra20-i2c: Add Tegra256
- I2C compatible
-MIME-Version: 1.0
-
-On Thu, Jul 31, 2025 at 02:41:21PM +0530, Akhil R wrote:
-> Add compatible for Tegra256 I2C controllers. Tegra256 consists of
-> 8 generic Tegra I2C controllers similar to previous generations.
-> The parent clock frequency is different in these controllers and
-> hence the timing parameter values are different from the previous
-> ones.
->=20
-> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+On 30. 07. 25 1:23 odp., Geert Uytterhoeven wrote:
+> Currently, the user is always asked about the Microchip Azurite
+> DPLL/PTP/SyncE core driver, even when I2C and SPI are disabled, and thus
+> the driver cannot be used at all.
+> 
+> Fix this by making the Kconfig symbol for the core driver invisible
+> (unless compile-testing), and selecting it by the bus glue sub-drivers.
+> Drop the modular defaults, as drivers should not default to enabled.
+> 
+> Fixes: 2df8e64e01c10a4b ("dpll: Add basic Microchip ZL3073x support")
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 > ---
->  .../devicetree/bindings/i2c/nvidia,tegra20-i2c.yaml         | 6 ++++++
->  1 file changed, 6 insertions(+)
+>   drivers/dpll/zl3073x/Kconfig | 10 +++++-----
+>   1 file changed, 5 insertions(+), 5 deletions(-)
 
-Acked-by: Thierry Reding <treding@nvidia.com>
+Please use 'PATCH net'... otherwise:
 
---6g62m6f6zdf6dccq
-Content-Type: application/pgp-signature; name="signature.asc"
+Reviewed by: Ivan Vecera <ivecera@redhat.com>
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmiMj10ACgkQ3SOs138+
-s6HtTQ/9HaWSIxAA8LCEXff6aSKteZRo5d3hRSr2YTli6EeF4gxkZjWEwEctY6OE
-aMm9til0hTIblUGmnpx+WBH3BCNtoylIgR9fIu3Ke9MPLRimnmXOaL4fS7cYr6tR
-bSupfihw4M4p4GVv5fYOyYWFVJq76/vFPmk+GK0F7vWPXGLP2wH38lg5uU8mr27t
-U4oEkVbzyQf55sV6j1JWyChrom15bzTuF0D5tiK61c2FapWOHr0n1Fl+RA6+j8a9
-r9+ROz+cLaX9W/D7yAzcZSbyvjMtrt22Ggo642oHA3LOYL/deReTPjjKyd/AcwV1
-HbN3kTbH2if8n8lmMjMm5WXK+qrmMZU+y678zplNeznYLYtfoj5d0Ko8u8sd5MwI
-O0ZMaewxFlmFyOx4+o/8uCbcQPqbUdl/4LTonSqEPvORlI5wjwXy07dQQSHjP3la
-U6WPyMYZ4PIytLFJ4SAoTu/C55Q+yeg20Rj7jsDwoJ/GBKJT46k1zLbUnUHREiv1
-Z9wBgIKkydS6idIb1qwdyHHGHviCnRWzepPd1nitMXxaYwCaU2oJ6dYD6ji8i8vw
-3AAIX5SfwE8U+M6LJO3/7YxXKdloW35+Ic3iPUQVAnlGR9BPGrlkgMGHdSkBLecj
-TqObmHS/99uUwj9ZHAZuXXdcnyBmqPHjlfCqAwWLsmJav/CAjE0=
-=Vwdq
------END PGP SIGNATURE-----
-
---6g62m6f6zdf6dccq--
 
