@@ -1,179 +1,133 @@
-Return-Path: <linux-i2c+bounces-12142-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12143-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BEC33B19E1F
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Aug 2025 11:02:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C71EEB19EA7
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Aug 2025 11:18:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7A2803A3407
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Aug 2025 09:02:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E296917953E
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Aug 2025 09:18:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A574923BD13;
-	Mon,  4 Aug 2025 09:02:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E6D023497B;
+	Mon,  4 Aug 2025 09:17:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iV1oOM2m"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="TSq/rR8l"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B596517D346;
-	Mon,  4 Aug 2025 09:02:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58E66245038
+	for <linux-i2c@vger.kernel.org>; Mon,  4 Aug 2025 09:17:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754298142; cv=none; b=Tda1I6KGpWoUnmaAx3KildiUIGDyMHKPkbLGhAOB3wcK6Ftk/WZMZPrfbtbt84DUZ425XtRrUG0Ddg4UU54xs+Bd/BeeHyIzj8RCqqqDcIvKFPRp+GQFCIlqP7xmE/A2VYWmGcub/Q0G6Wrk1wNBDTSOjEBpuJoh41Q/Lc+d6OY=
+	t=1754299074; cv=none; b=DUHV1RvPvo9ZvStXvyiZFXmt/LaSdHbcAcHJpDiFPipDzLjlVT/KKH77FOfKMASZThJ3gqSvdhV997fFm78WSFotQWXIPWP50xvABmBHP/E2hOrrtGWFYRfE6596FN7mSwTYqw2t9k2gdgQ0RDGyvcCRwpllQdH/6qDUIkjlv6s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754298142; c=relaxed/simple;
-	bh=pBkKwyaysTI2tNSOJlV8HJWUyiE4eecoZ3LwUDB9goE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OFCRt1JMnU0dKFmGZ1jEhxTyd0Nr7PpDpIbeUAzKb+/3tx+50UMxuhFJvlkDzEvZKLA4eo3yO6BQ5nWoQRIPYT1rkNlfztmgWVtRoxLltUt7ToOOepm7n11ipBKapg2HKQb80IkcGAGWJYjbY57ZbeNZeBht4AIHbWDRMZ9yXUA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iV1oOM2m; arc=none smtp.client-ip=209.85.218.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-af96524c5a9so121995166b.1;
-        Mon, 04 Aug 2025 02:02:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754298139; x=1754902939; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KMarMyQx0dw4VTpe/KpEJ2eJd5u+1X9ZMvVB5mW57UY=;
-        b=iV1oOM2mUDgI4PSrN4Os59QlqmZEn4+u5yP+fZyAC8vYNq21fgMgFDZr8570XINyrT
-         BU7jKETxdkJTMeZJzY5cNY1yOa/TJAUPCV9CsV8zFP6pC5nRF1HB1NOUudwCDhzAZEwl
-         k2gFIJYnoDiO88BQxCdkosL/6kQpM3oKKKuoQMzU4qMR29/d2HeIIEAmIsvNgMxRxrQR
-         mUm+anUvwhMpxRbkHHDrnn7R9aXJrtLGciJ6UWmCrYPoj0D8P7ZxfOR3VoBFjymCSXag
-         0YDU7oG91jAwtJgEjr/HqR6+jRVXWnbvJSIFH02jRJ694sRi7ZfwT4DTsY+nS/phSDZE
-         O3Hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754298139; x=1754902939;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KMarMyQx0dw4VTpe/KpEJ2eJd5u+1X9ZMvVB5mW57UY=;
-        b=qayZlquZ2tfUFwpjG/76Vkf+vLbh3pdJaakeWUom1Ar5AWCkGopifjmZsP/O5ZyUVI
-         uYxiDVwb5GHhAh9qOyl/7NYh1/YK0vU4lqqqUliQG63g6SgOVYbzIj8Rl1ujEYT9XRN4
-         YxTQkyRrTvna26lI6WMB2tc22yOSQwp9koZNklGEKeGCjXmUYUcGttNLXOEMwQaFLJpl
-         bnOOBgKkr+cn6i1nHgRnF4Jjr1m/kacStEgILd7aNEOYwbWZue6l6vkGPNrIWhhzwxI1
-         wzLxuXYP+OXZ+0mfr9hjpsxzNcaNlVqOMitd1RanjkI18cViwFOkGGS6bPFO+jAFurwb
-         Ooiw==
-X-Forwarded-Encrypted: i=1; AJvYcCUgpiGuL4KWuGSq7pUqm5JqKwk4INCb9gAKyvpVGZZ5IXNVkz25has0fntHFx88PucLJXieXn+kWPCbhg5+@vger.kernel.org, AJvYcCWUdfewBirtcnMEBPan1jRMmm4Pw6Nuep2AXZATosZJpPL2o7mN9L1MAiEiEHSko+alNkhOE3OY2Wjf@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxd2fYfN8Td4ifwrMbbpNWyLVETU+tJo3zm7C4OyF5I+rAtfjUf
-	UFw9HDm0f3zoHSi9AgE9SAbBhpWDeo/uV3tdJGVNODT2OAdAD/sEdn7o517LeQ==
-X-Gm-Gg: ASbGncswPSXKBT0QPYDUWuyID2S2K2HqcxImnoEk7Cozg2b0knV0Oiz1EjPqE48sLQB
-	OrCY2ScfY0Ysdf/6tdFKYDA/M1FFuR7Ll+kZuY3aWyS3IqyAaVoI8SNfd44lTy15yBiNdyzC1tl
-	Yxmzq29bjHkB+pJcHtLfIcKvwtOSYDxE/LYezgXkY2o4yELgeEobMeid8ob1bPztJw57Jev+K3v
-	Qpdt2TQ1030ht2pmnxV9yWMz92x2YQJH8uw+jU7l93OivGEjGMGYtn32L6k4LELSjMU6dLjWXGg
-	WbuEpUf8PGCzdvCSJSTYFKNGt9zD4iv8idWx10SneeU8kGU7ijp+YqTTNagnrexbQa0NvB5742N
-	u02K8GJtRji8UHNtloT+D0Y4yL2UxedBVKe1ziZ9iLvGSJK9/glwmYtG0M6YSOfaqCcMSaXyqNX
-	U8+CgIQf8JdbkHSi/kRPIdSQ==
-X-Google-Smtp-Source: AGHT+IEpUQUYLFv1wDK6DW5cCKG+ayi+mhCPSNVKGBiR3YM5k3cHeZOIyab9J1PQqbnKwsdKUlYHgA==
-X-Received: by 2002:a17:907:7f90:b0:ade:8720:70a0 with SMTP id a640c23a62f3a-af94001cb4cmr939119366b.20.1754298138717;
-        Mon, 04 Aug 2025 02:02:18 -0700 (PDT)
-Received: from ?IPV6:2001:9e8:f109:3c32:c90f:30eb:29c2:ee3a? ([2001:9e8:f109:3c32:c90f:30eb:29c2:ee3a])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af96e2bf721sm93853266b.52.2025.08.04.02.02.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Aug 2025 02:02:18 -0700 (PDT)
-Message-ID: <1f1a4185-0995-4bee-a45b-2e9d329cc90f@gmail.com>
-Date: Mon, 4 Aug 2025 11:02:17 +0200
+	s=arc-20240116; t=1754299074; c=relaxed/simple;
+	bh=IzNHPYdI73ZzUeDw+fqUQqQoSqogdsgdeLV26SJWKNk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mOV1cMOhoJAPAAV9nogofRYWVP8qtVWORd1nbrHaTrpSWcQejhEP9fI7c6CSZFi+RDHp7CIhVublKNHT4pChW6gKb3MBNtOkjy7qlXKAujACbF3rrve6pFnZoEgnugkOW3ZpBXv0YprIYw0XfVHuOT7HotunU6SHjncojokGbac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=TSq/rR8l; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=IzNH
+	PYdI73ZzUeDw+fqUQqQoSqogdsgdeLV26SJWKNk=; b=TSq/rR8lMOHRWUGfOTnS
+	fV2aUjGo4FRjajE692PPeIOthLiyaCgXdQMoZyyC18SSJV5svkyybVWmwQ97Cia3
+	o7gu9u68QdRQ/78lj+89/7fyG5BmQAsfcAhSEHoJ9AR7nFlqVQ8O96w4bXGAHP6A
+	UBLhSO91ut4vgpy7f1gsAP2V8L8rimFcsZexWV2CoycBknO5hX2DSlKYfjlwRFdR
+	48WSlZWJmLiKmLcJPB8VO1rcujqgEjAeFtmo+T1Dxj0faNMtpdRK620cVBB6o6sA
+	wTKVLRgsR4pUsstY5T+Q1u6txLpzWcbfbgnyBNMhm4urXMeESEGj6KsExIvJruKz
+	DA==
+Received: (qmail 1872277 invoked from network); 4 Aug 2025 11:17:47 +0200
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 4 Aug 2025 11:17:47 +0200
+X-UD-Smtp-Session: l3s3148p1@kI3AlIY7LJQujnuw
+Date: Mon, 4 Aug 2025 11:17:47 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Sven Eckelmann <sven@narfation.org>
+Cc: chris.packham@alliedtelesis.co.nz, Alex Guo <alexguo1023@gmail.com>,
+	andi.shyti@kernel.org, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: rtl9300: Fix out-of-bounds bug in
+ rtl9300_i2c_smbus_xfer
+Message-ID: <aJB6u1WoNjiE-tZz@shikoro>
+References: <20250615235248.529019-1-alexguo1023@gmail.com>
+ <4670491.LvFx2qVVIh@ripper>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 0/3] i2c: rework and extend RTL9300 I2C driver
-Content-Language: en-GB
-To: linux-i2c@vger.kernel.org,
- Chris Packham <chris.packham@alliedtelesis.co.nz>,
- Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc: Markus Stockhausen <markus.stockhausen@gmx.de>,
- Conor Dooley <conor+dt@kernel.org>, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org, Sven Eckelmann <sven@narfation.org>
-References: <20250729075145.2972-1-jelonek.jonas@gmail.com>
-From: Jonas Jelonek <jelonek.jonas@gmail.com>
-In-Reply-To: <20250729075145.2972-1-jelonek.jonas@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="aWRsTPaHeXaj3TkJ"
+Content-Disposition: inline
+In-Reply-To: <4670491.LvFx2qVVIh@ripper>
 
-Hi all,
 
-On 29.07.2025 09:51, Jonas Jelonek wrote:
-> This patch series reworks the current implementation of the driver for
-> I2C controller integrated into RTL9300 SoCs to simplify support
-> extension, and adds support for the RTL9310 series.
-> Goal of this is to have RTL9310 support upstream in a proper
-> implementation to be able to drop downstream versions of this driver.
->
-> The first patch reworks the driver to use more of the regmap API.
-> Instead of using macros, all registers are defined as reg_field and
-> operations on these registers are performed using regmap_field and the
-> corresponding API. This simplifies adding support for further chip
-> families and avoids potential redundant code by just providing
-> chip-specific functions for every chip family.
->
-> The second patch extends the existing dt-bindings of RTL9300 for RTL9310
-> support.
->
-> The third patch makes use of previous changes by adding support for the
-> RTL9310 series, providing the correct register definitions and a few
-> specifics. This also uses a new vendor dt-property which was added by
-> the second patch to properly manage the I2C controllers. Having this
-> property is necessary to properly describe the hardware and allow the
-> driver to correctly work with the I2C controllers.
->
-> Both has been tested successfully on RTL9302B-based Zyxel XGS1210-12
-> and RTL9313-based Netgear MS510TXM.
->
-> Compile-tested with Linux, run-tested as backport in OpenWrt on the
-> aforementioned devices.
->
-> --
-> Changelog
->
-> v4: - fixed an incorrect check for number of channels which was already
->       present in original code
->
-> v3: - narrowed vendor property per variant to be required only
->       for RTL9310
->     - narrowed usable child-node i2c addresses per variant
->     - no changes to driver patches
->
-> v2: - Patch 1:
->         - adjusted commit message
->         - retained Tested-By and Reviewed-By from Chris Packham
->     - Patch 2:
->         - simplified check as suggested by Markus Stockhausen
->         - fixed commit message
->     - Patch 3 (all requested by Krzysztof):
->         - use vendor property instead of generic
->         - add front compatibles to make binding complete
->         - fix commit message
->     - reordered patches, dt-bindings patch now comes before its 'user'
->     - properly add device-tree list and relevant maintainers to To/Cc
->
-> --
->
-> Jonas Jelonek (3):
->   i2c: rework RTL9300 I2C controller driver
->   dt-bindings: i2c: realtek,rtl9301-i2c: extend for RTL9310 support
->   i2c: add RTL9310 support to RTL9300 I2C controller driver
->
->  .../bindings/i2c/realtek,rtl9301-i2c.yaml     |  58 ++++-
->  drivers/i2c/busses/i2c-rtl9300.c              | 231 +++++++++++++-----
->  2 files changed, 218 insertions(+), 71 deletions(-)
->
+--aWRsTPaHeXaj3TkJ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-If accepted, this should be merged AFTER the recent patchset from Sven [1].
+On Mon, Aug 04, 2025 at 10:18:53AM +0200, Sven Eckelmann wrote:
+> On Monday, 16 June 2025 01:52:48 CEST Alex Guo wrote:
+> > The data->block[0] variable comes from user. Without proper check,
+> > the variable may be very large to cause an out-of-bounds bug.
+> >=20
+> > Fix this bug by checking the value of data->block[0] first.
+> >=20
+> > Similar commit:
+> > 1. commit 39244cc7548 ("i2c: ismt: Fix an out-of-bounds bug in
+> > ismt_access()")
+> > 2. commit 92fbb6d1296 ("i2c: xgene-slimpro: Fix out-of-bounds
+> > bug in xgene_slimpro_i2c_xfer()")
+> [...]
+>=20
+> Please correct me but it looks like this fix was not yet applied to the t=
+ree.=20
+> But Chris Packham pointed out that this conflicts with my fixes for SMBUS/
+> SMBUS_I2C.
+>=20
+> I would like to add my patchset on top of this (to avoid problems with st=
+able=20
+> submission) and add the Fixes: and Cc: stable@vger.kernel.org.
+>=20
+> I hope it is ok for you when I would pick this up. I would resubmit the f=
+ixes=20
+> patchset this evening (GMT+2).
+>=20
+> You can preview it at=20
+> https://git.open-mesh.org/linux-merge.git/log/?h=3Db4/i2c-rtl9300-multi-b=
+yte
 
-I'll rebase this on top of [1], fix outstanding issues and probably propose some
-more cleanup in the next version (because I'm not satisfied with how the code is
-currently structured).
+Yes, we can do that. In general, it doesn't make sense to add this check
+when the ultimate goal is to support SMBus v3 which doesn't need the
+check anymore. But if it is blocking further development, we can apply
+this. The check will be removed when SMBus v3 support comes in.
 
-Best regards,
-Jonas
 
-[1] https://lore.kernel.org/linux-i2c/20250803-i2c-rtl9300-multi-byte-v2-0-9b7b759fe2b6@narfation.org/
+--aWRsTPaHeXaj3TkJ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmiQercACgkQFA3kzBSg
+KbYDBQ/7B4fiaRmvGDN5pEU7nLeehM/NGNtwbWW8b4ayoEhsUDzsj/ba4b2xG2nN
+ZoMgnJrXV8sKhnsci9bbpPXf0UXNlOHI4BhsERrdloKao8yOkJ/Z4eJiR/wAL7gz
+sAm0HkaMMiW3Yvq3AuOjA5OaOZbLOXZwpLjqJu5xhAi0QjRBUna5VTGc3Pt3gZAl
+wAhmHybaStdoak2nKEJtF5HWHX6pEMYxZZ6avSYDTUDc8UBDKQpOk4Lq5z93d5Np
+zT4Ig+VdL/AkFQrcNWfuzt/lPGz6AuOSPpjlZuK1I8mEc/uw8zNluknrsjz8UJ2l
+jQTdY8UdfpOXW0jjnRyfjxuMT2/VpR2cx4xp8GRqtEjXB5msmousw0ZnaURMx6l3
+Q2O7LcqODGLH3eYNXZpL8HQDy+cpeBkD+pa5oD/KHIglhTOZ3oLYwwKZ5/i6lfMM
+2aWQZ0TVYWM3nOM6QTw9N4XMvyQ7mPpSKpkI7FCU9B+pG0H6RbmQiteVgeTySNl7
+NWokKykY8g8fwQh5204PzlcURY6X3jOXKiAnJ9Q9RArHsDmaxlkHFn0Co7FKjrJm
+Jf59AUqSS32U5rsVlLb0MFxFbJA92zhVc55ifYyP8NDrOEz6FIaazSYROj/FMUYn
+qmRmE5PDnjWxAPWPXbmBLwRjDgdSkgfCxSoBmcngmKq+vUOfs9g=
+=kan7
+-----END PGP SIGNATURE-----
+
+--aWRsTPaHeXaj3TkJ--
 
