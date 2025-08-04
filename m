@@ -1,133 +1,171 @@
-Return-Path: <linux-i2c+bounces-12143-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12144-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C71EEB19EA7
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Aug 2025 11:18:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C52EB1A966
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Aug 2025 21:18:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E296917953E
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Aug 2025 09:18:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3A60C623251
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Aug 2025 19:18:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E6D023497B;
-	Mon,  4 Aug 2025 09:17:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 183D2238C08;
+	Mon,  4 Aug 2025 19:18:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="TSq/rR8l"
+	dkim=pass (1024-bit key) header.d=narfation.org header.i=@narfation.org header.b="e+kXtpvR"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from dvalin.narfation.org (dvalin.narfation.org [213.160.73.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58E66245038
-	for <linux-i2c@vger.kernel.org>; Mon,  4 Aug 2025 09:17:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 661F91C84A2;
+	Mon,  4 Aug 2025 19:17:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.160.73.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754299074; cv=none; b=DUHV1RvPvo9ZvStXvyiZFXmt/LaSdHbcAcHJpDiFPipDzLjlVT/KKH77FOfKMASZThJ3gqSvdhV997fFm78WSFotQWXIPWP50xvABmBHP/E2hOrrtGWFYRfE6596FN7mSwTYqw2t9k2gdgQ0RDGyvcCRwpllQdH/6qDUIkjlv6s=
+	t=1754335081; cv=none; b=JC+0hA0DT0yNBRhA7xH3u3MK+YbCZ+kEFUg8aoMJDfuuE5w89urJ/r21Kz8rQoP/aE00uPs2ux2uK7LpaxpfWqUUUedDjUC69kZS9KMF3HbLiG+G0zm5btlpHfO5IydLURAHfJWw3NADUWWkTs3w8H8TAkMIybSjBqfBUj7rmg4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754299074; c=relaxed/simple;
-	bh=IzNHPYdI73ZzUeDw+fqUQqQoSqogdsgdeLV26SJWKNk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mOV1cMOhoJAPAAV9nogofRYWVP8qtVWORd1nbrHaTrpSWcQejhEP9fI7c6CSZFi+RDHp7CIhVublKNHT4pChW6gKb3MBNtOkjy7qlXKAujACbF3rrve6pFnZoEgnugkOW3ZpBXv0YprIYw0XfVHuOT7HotunU6SHjncojokGbac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=TSq/rR8l; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=IzNH
-	PYdI73ZzUeDw+fqUQqQoSqogdsgdeLV26SJWKNk=; b=TSq/rR8lMOHRWUGfOTnS
-	fV2aUjGo4FRjajE692PPeIOthLiyaCgXdQMoZyyC18SSJV5svkyybVWmwQ97Cia3
-	o7gu9u68QdRQ/78lj+89/7fyG5BmQAsfcAhSEHoJ9AR7nFlqVQ8O96w4bXGAHP6A
-	UBLhSO91ut4vgpy7f1gsAP2V8L8rimFcsZexWV2CoycBknO5hX2DSlKYfjlwRFdR
-	48WSlZWJmLiKmLcJPB8VO1rcujqgEjAeFtmo+T1Dxj0faNMtpdRK620cVBB6o6sA
-	wTKVLRgsR4pUsstY5T+Q1u6txLpzWcbfbgnyBNMhm4urXMeESEGj6KsExIvJruKz
-	DA==
-Received: (qmail 1872277 invoked from network); 4 Aug 2025 11:17:47 +0200
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 4 Aug 2025 11:17:47 +0200
-X-UD-Smtp-Session: l3s3148p1@kI3AlIY7LJQujnuw
-Date: Mon, 4 Aug 2025 11:17:47 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Sven Eckelmann <sven@narfation.org>
-Cc: chris.packham@alliedtelesis.co.nz, Alex Guo <alexguo1023@gmail.com>,
-	andi.shyti@kernel.org, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: rtl9300: Fix out-of-bounds bug in
- rtl9300_i2c_smbus_xfer
-Message-ID: <aJB6u1WoNjiE-tZz@shikoro>
-References: <20250615235248.529019-1-alexguo1023@gmail.com>
- <4670491.LvFx2qVVIh@ripper>
+	s=arc-20240116; t=1754335081; c=relaxed/simple;
+	bh=uwyBiqBNOuTA7ZJGpkmjA4i/Cn2gcwOadBggd5429/U=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=gPdsd+Fp3q0vkpSj+leX4EXP43cY21XBnhKWtlUBoo9Ub5gm3HJjr9TvQ2VSrlq0PA6od7OfatgxbkNeCjOn/E88rQGrzPjYavtRvwIoIn9RPJvkhuX04vOdVlumZ3MZOv/Z8lYMXxkBtFBJRq4eEpSXs04LBfTi+iup4zE3EgM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=narfation.org; spf=pass smtp.mailfrom=narfation.org; dkim=pass (1024-bit key) header.d=narfation.org header.i=@narfation.org header.b=e+kXtpvR; arc=none smtp.client-ip=213.160.73.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=narfation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=narfation.org
+Received: from sven-desktop.home.narfation.org (unknown [IPv6:2a00:1ca0:1d86:99fc::8c24])
+	by dvalin.narfation.org (Postfix) with UTF8SMTPSA id 638172034F;
+	Mon,  4 Aug 2025 19:17:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=narfation.org;
+	s=20121; t=1754335070;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=wnREMRvpLhIesXnDUqDjrA5KGeQuNSzhw1y7oCnnJyA=;
+	b=e+kXtpvRsZH+fN1+0peJ49Ngkttzhq//aVlD4gUCXo3r0GaU0r65BOhAdY6wM1IWeSgLIA
+	m+Kt6JMoM4X4p/4+GKY42wW9gjnszEmhh9KgFwlAfaIahzByGhxfT+RvJwyy2r4ZhxCFGM
+	4k1Ik4C40xiOm7jukFOhobultu4EMfo=
+From: Sven Eckelmann <sven@narfation.org>
+Subject: [PATCH v3 0/5] i2c: rtl9300: Fix multi-byte I2C operations
+Date: Mon, 04 Aug 2025 21:16:59 +0200
+Message-Id: <20250804-i2c-rtl9300-multi-byte-v3-0-e20607e1b28c@narfation.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="aWRsTPaHeXaj3TkJ"
-Content-Disposition: inline
-In-Reply-To: <4670491.LvFx2qVVIh@ripper>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIACsHkWgC/4XOwQ6CMAyA4VcxOztTSmCbJ9/DeNiggyUIZpuLh
+ PDuDk7GxHj8m/RrFxbIOwrsfFiYp+SCm8Yc5fHAml6PHXHX5mYIWIEE5A4b7uOgSgB+fw7RcTN
+ H4tRqXVgDUmDD8vLDk3WvHb7ecvcuxMnP+51UbNO/ZCo48MrWUhCAkoSXUXurY/7wNPmObWzCT
+ 6r8SWGmlBFGVMoSmvqbWtf1DTSh2BALAQAA
+X-Change-ID: 20250802-i2c-rtl9300-multi-byte-edaa1fb0872c
+To: Chris Packham <chris.packham@alliedtelesis.co.nz>, 
+ Andi Shyti <andi.shyti@kernel.org>
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Jonas Jelonek <jelonek.jonas@gmail.com>, 
+ Harshal Gohel <hg@simonwunderlich.de>, 
+ Simon Wunderlich <sw@simonwunderlich.de>, 
+ Sven Eckelmann <sven@narfation.org>, Alex Guo <alexguo1023@gmail.com>, 
+ stable@vger.kernel.org
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4212; i=sven@narfation.org;
+ h=from:subject:message-id; bh=uwyBiqBNOuTA7ZJGpkmjA4i/Cn2gcwOadBggd5429/U=;
+ b=owGbwMvMwCXmy1+ufVnk62nG02pJDBkT2cMKzL4yX7rps2hmXVt7/PudX5Z6qDBqWTemLlp/r
+ vFHsMTijlIWBjEuBlkxRZY9V/LPb2Z/K/952sejMHNYmUCGMHBxCsBEjN8wMvzjU46NMHqSfiz5
+ RNukmk0Hvt5Zd/yobUzP1fr2kN0rCpYw/PdNrX4ivmjdhd3L5Q0eP1lh/0+ke+mdM5Ir31tIHfG
+ cfpQXAA==
+X-Developer-Key: i=sven@narfation.org; a=openpgp;
+ fpr=522D7163831C73A635D12FE5EC371482956781AF
 
+During the integration of the RTL8239 POE chip + its frontend MCU, it was
+noticed that multi-byte operations were basically broken in the current
+driver.
 
---aWRsTPaHeXaj3TkJ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Tests using SMBus Block Writes showed that the data (after the Wr + Ack
+marker) was mixed up on the wire. At first glance, it looked like an
+endianness problem. But for transfers were the number of count + data bytes
+was not divisible by 4, the last bytes were not looking like an endianness
+problem because they were were in the wrong order but not for example 0 -
+which would be the case for an endianness problem with 32 bit registers. At
+the end, it turned out to be a the way how i2c_write tried to add the bytes
+to the send registers.
 
-On Mon, Aug 04, 2025 at 10:18:53AM +0200, Sven Eckelmann wrote:
-> On Monday, 16 June 2025 01:52:48 CEST Alex Guo wrote:
-> > The data->block[0] variable comes from user. Without proper check,
-> > the variable may be very large to cause an out-of-bounds bug.
-> >=20
-> > Fix this bug by checking the value of data->block[0] first.
-> >=20
-> > Similar commit:
-> > 1. commit 39244cc7548 ("i2c: ismt: Fix an out-of-bounds bug in
-> > ismt_access()")
-> > 2. commit 92fbb6d1296 ("i2c: xgene-slimpro: Fix out-of-bounds
-> > bug in xgene_slimpro_i2c_xfer()")
-> [...]
->=20
-> Please correct me but it looks like this fix was not yet applied to the t=
-ree.=20
-> But Chris Packham pointed out that this conflicts with my fixes for SMBUS/
-> SMBUS_I2C.
->=20
-> I would like to add my patchset on top of this (to avoid problems with st=
-able=20
-> submission) and add the Fixes: and Cc: stable@vger.kernel.org.
->=20
-> I hope it is ok for you when I would pick this up. I would resubmit the f=
-ixes=20
-> patchset this evening (GMT+2).
->=20
-> You can preview it at=20
-> https://git.open-mesh.org/linux-merge.git/log/?h=3Db4/i2c-rtl9300-multi-b=
-yte
+Each 32 bit register was used similar to a shift register - shifting the
+various bytes up the register while the next one is added to the least
+significant byte. But the I2C controller expects the first byte of the
+tranmission in the least significant byte of the first register. And the
+last byte (assuming it is a 16 byte transfer) in the most significant byte
+of the fourth register.
 
-Yes, we can do that. In general, it doesn't make sense to add this check
-when the ultimate goal is to support SMBus v3 which doesn't need the
-check anymore. But if it is blocking further development, we can apply
-this. The check will be removed when SMBus v3 support comes in.
+While doing these tests, it was also observed that the count byte was
+missing from the SMBus Block Writes. The driver just removed them from the
+data->block (from the I2C subsystem). But the I2C controller DOES NOT
+automatically add this byte - for example by using the configured
+transmission length.
 
+The RTL8239 MCU is not actually an SMBus compliant device. Instead, it
+expects I2C Block Reads + I2C Block Writes. But according to the already
+identified bugs in the driver, it was clear that the I2C controller can
+simply be modified to not send the count byte for I2C_SMBUS_I2C_BLOCK_DATA.
+The receive part, just needs to write the content of the receive buffer to
+the correct position in data->block.
 
---aWRsTPaHeXaj3TkJ
-Content-Type: application/pgp-signature; name="signature.asc"
+While the on-wire formwat was now correct, reads were still not possible
+against the MCU (for the RTL8239 POE chip). It was always timing out
+because the 2ms were not enough for sending the read request and then
+receiving the 12 byte answer.
 
------BEGIN PGP SIGNATURE-----
+These changes were originally submitted to OpenWrt. But there are plans to
+migrate OpenWrt to the upstream Linux driver. As result, the pull request
+was stopped and the changes were redone against this driver.
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmiQercACgkQFA3kzBSg
-KbYDBQ/7B4fiaRmvGDN5pEU7nLeehM/NGNtwbWW8b4ayoEhsUDzsj/ba4b2xG2nN
-ZoMgnJrXV8sKhnsci9bbpPXf0UXNlOHI4BhsERrdloKao8yOkJ/Z4eJiR/wAL7gz
-sAm0HkaMMiW3Yvq3AuOjA5OaOZbLOXZwpLjqJu5xhAi0QjRBUna5VTGc3Pt3gZAl
-wAhmHybaStdoak2nKEJtF5HWHX6pEMYxZZ6avSYDTUDc8UBDKQpOk4Lq5z93d5Np
-zT4Ig+VdL/AkFQrcNWfuzt/lPGz6AuOSPpjlZuK1I8mEc/uw8zNluknrsjz8UJ2l
-jQTdY8UdfpOXW0jjnRyfjxuMT2/VpR2cx4xp8GRqtEjXB5msmousw0ZnaURMx6l3
-Q2O7LcqODGLH3eYNXZpL8HQDy+cpeBkD+pa5oD/KHIglhTOZ3oLYwwKZ5/i6lfMM
-2aWQZ0TVYWM3nOM6QTw9N4XMvyQ7mPpSKpkI7FCU9B+pG0H6RbmQiteVgeTySNl7
-NWokKykY8g8fwQh5204PzlcURY6X3jOXKiAnJ9Q9RArHsDmaxlkHFn0Co7FKjrJm
-Jf59AUqSS32U5rsVlLb0MFxFbJA92zhVc55ifYyP8NDrOEz6FIaazSYROj/FMUYn
-qmRmE5PDnjWxAPWPXbmBLwRjDgdSkgfCxSoBmcngmKq+vUOfs9g=
-=kan7
------END PGP SIGNATURE-----
+For reasons of transparency: The work on I2C_SMBUS_I2C_BLOCK_DATA support
+for the RTL8239-MCU was done on RTL931xx. All problem were therefore
+detected with the patches from Jonas Jelonek [1] and not the vanilla Linux
+driver. But looking through the code, it seems like these are NOT
+regressions introduced by the RTL931x patchset.
 
---aWRsTPaHeXaj3TkJ--
+I've picked up Alex Guo's patch [2] to reduce conflicts between pending
+fixes.
+
+[1] https://patchwork.ozlabs.org/project/linux-i2c/cover/20250727114800.3046-1-jelonek.jonas@gmail.com/
+[2] https://lore.kernel.org/r/20250615235248.529019-1-alexguo1023@gmail.com
+
+Signed-off-by: Sven Eckelmann <sven@narfation.org>
+---
+Changes in v3:
+- integrated patch
+  https://lore.kernel.org/r/20250615235248.529019-1-alexguo1023@gmail.com
+  to avoid conflicts in the I2C_SMBUS_BLOCK_DATA code
+- added Fixes and stable@vger.kernel.org to Alex Guo's patch
+- added Chris Packham's Reviewed-by/Acked-by
+- Link to v2: https://lore.kernel.org/r/20250803-i2c-rtl9300-multi-byte-v2-0-9b7b759fe2b6@narfation.org
+
+Changes in v2:
+- add the missing transfer width and read length increase for the SMBus
+  Write/Read
+- Link to v1: https://lore.kernel.org/r/20250802-i2c-rtl9300-multi-byte-v1-0-5f687e0098e2@narfation.org
+
+---
+Alex Guo (1):
+      i2c: rtl9300: Fix out-of-bounds bug in rtl9300_i2c_smbus_xfer
+
+Harshal Gohel (2):
+      i2c: rtl9300: Fix multi-byte I2C write
+      i2c: rtl9300: Implement I2C block read and write
+
+Sven Eckelmann (2):
+      i2c: rtl9300: Increase timeout for transfer polling
+      i2c: rtl9300: Add missing count byte for SMBus Block Ops
+
+ drivers/i2c/busses/i2c-rtl9300.c | 51 ++++++++++++++++++++++++++++++++++------
+ 1 file changed, 44 insertions(+), 7 deletions(-)
+---
+base-commit: 0ae982df67760cd08affa935c0fe86c8a9311797
+change-id: 20250802-i2c-rtl9300-multi-byte-edaa1fb0872c
+
+Best regards,
+-- 
+Sven Eckelmann <sven@narfation.org>
+
 
