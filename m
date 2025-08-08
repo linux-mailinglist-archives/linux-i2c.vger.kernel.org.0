@@ -1,191 +1,175 @@
-Return-Path: <linux-i2c+bounces-12162-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12163-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1849CB1ECD2
-	for <lists+linux-i2c@lfdr.de>; Fri,  8 Aug 2025 18:08:09 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56049B1EDF3
+	for <lists+linux-i2c@lfdr.de>; Fri,  8 Aug 2025 19:42:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DD59F1C21A67
-	for <lists+linux-i2c@lfdr.de>; Fri,  8 Aug 2025 16:08:27 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3E35B4E37AE
+	for <lists+linux-i2c@lfdr.de>; Fri,  8 Aug 2025 17:42:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7E3428640F;
-	Fri,  8 Aug 2025 16:08:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1A2E27F728;
+	Fri,  8 Aug 2025 17:41:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="kM6QnpNW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G1vf0W7v"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEB7379CD;
-	Fri,  8 Aug 2025 16:07:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 532841C861E;
+	Fri,  8 Aug 2025 17:41:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754669280; cv=none; b=LuxN+AGblMQ93cGjyZZKAu9IkJEIdUNOJSuRHDa+P6ktsorPTCaORD18oV9gfWnecXgwJWjoC8cqeMnbio3g3iLsg8+fxdQg6xGvGdUTN3Tv25Xu7wKOdNzPSd3CV/TNvhFxCSDj+gAT3255ioXi59PCRYdYu45H5T6IxjeHFqw=
+	t=1754674913; cv=none; b=eMXqMcNVdeunIJOx1uE5/rX2b3+AU8Gh0lryZqzqTdFgKQJP85J9i9P3ICsyaHDFw1g5bMtaO8RmaTA2KwcAZjVGEigs58vLL5uwMbzSPVTC6qmUAIPgqMR5KdgvZLC1e+Y+730XQoDzcSQHvS+v5Wxm2Z2Grl7i1f2cGkYNsJQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754669280; c=relaxed/simple;
-	bh=X1HyUdIzzadSIJ9P6pejrZwtipW8T00o1QaRFEHmHyg=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mYmzGSPDAGywr1Kuzru51ZYLmQyjj9WH8Ne/4pnEPKOE+M/opCwnNHTD4HzMd5h30lnhQzfntOD2nEPhf69SuLDR2mhT8Oc/iDeKMryq4ESB5ol121Ww0bNCfUZooMEiahHzDSyk7nbxAx6C5gyU9GgCVePU2UxrvI+AsXYve1s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=kM6QnpNW; arc=none smtp.client-ip=217.70.183.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id CDB4D44380;
-	Fri,  8 Aug 2025 16:07:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1754669270;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=CwxuZRcIL0K9SXTSDkik9eTSLuO290wVxQgkHReMc0A=;
-	b=kM6QnpNW/9J2Cb6+CuPw3sr+2Gg4t1/dVq2HzxRh4V6pfC+ri+0XrXJbkmtCuHEn3C4vPP
-	zN4XeJFZ3jxsPlD+5yA0h13XBjGWONvhyhQMa3RU/+sQ7g0Vku4lQ4ExZZQkmiXR4oxLQ6
-	eUh2R6UMOjDcVoOUYlRCBioDweQAeDhTt0f52U8y9U2yj/KcKsFosrs50Jv3vwPOiFRJAF
-	rhz1Z1IDTKfNO1uQPDsPCMPvZbcX/+GV0UFVHLynD9Z0CP7LcYk/+faUdtaGQe7n1ew8Bl
-	bWElCHXfhVAMDOcv9q8XvJYMwCTuqi2VktmwxbzyQmDhMAIxf+2vMqQi0ySXkA==
-Date: Fri, 8 Aug 2025 18:07:46 +0200
-From: Luca Ceresoli <luca.ceresoli@bootlin.com>
-To: Rob Herring <robh@kernel.org>, Wolfram Sang
- <wsa+renesas@sang-engineering.com>
-Cc: Herve Codina <herve.codina@bootlin.com>, Ayush Singh
- <ayush@beagleboard.org>, Andi Shyti <andi.shyti@kernel.org>, Krzysztof
- Kozlowski <krzk@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
- linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, devicetree-spec@vger.kernel.org, Thomas
- Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v3 1/1] schemas: i2c: Introduce I2C bus extensions
-Message-ID: <20250808180746.6fa6a6f9@booty>
-In-Reply-To: <CAL_JsqJ=jmXVwjtNCjRpUKj02dnJEz4GHMX2wMRaWw=M+sZQ0w@mail.gmail.com>
-References: <20250618082313.549140-1-herve.codina@bootlin.com>
- <20250618082313.549140-2-herve.codina@bootlin.com>
- <CAL_JsqJ=jmXVwjtNCjRpUKj02dnJEz4GHMX2wMRaWw=M+sZQ0w@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-redhat-linux-gnu)
+	s=arc-20240116; t=1754674913; c=relaxed/simple;
+	bh=GqM4uijE/cryD8lWClhsosZUeGz28VWZUOgODuiBkFk=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=YlD/kQtMlpo0FzX8EVRONGXKpoDVjNQ2dko6e1XpCfUuJ9yFRNajNr50NCoJSHEmRSNpvThupux1uqVsY0RiqvP0UscvD5TPamHD8wQ87mTqxkQFUgm4hfkOn79ZYejj2jG2S440YNb8LspHM2c6lPAWgJdq75l46x69x0dwTaA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G1vf0W7v; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 862A2C4CEF0;
+	Fri,  8 Aug 2025 17:41:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1754674912;
+	bh=GqM4uijE/cryD8lWClhsosZUeGz28VWZUOgODuiBkFk=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=G1vf0W7v6sguhmymEimUd9BSuk+sn6ofzjXnU02YJl7oV9cnwtiwTXl64qc8MrOvx
+	 3sESbLZVy+pAL5waDn+6pZ+8kdLBhQ+uMp0Ejc+MGoiNsbyyvBqgiE7/iViN8cA0I3
+	 RGOvGLdqOANQccTl/OM++XUB3sTkAoTjUz17qPLwpa7jomSRSTeXnrPodziwgGs36V
+	 2rZs3ZKOvMMRfGW8HRpQoogMhDKxWVQuOvT0M+/Sll5mwjbIMo5flWgsjMZX3ZfdFn
+	 tMT0lKpSLnlwG+IdFj4OPJfC2dmq+K7RscLao6YqBYI460JIfNyQrpV//I0nIIcXN6
+	 hCJYcB2SFL4SA==
+From: Sasha Levin <sashal@kernel.org>
+To: patches@lists.linux.dev,
+	stable@vger.kernel.org
+Cc: "fangzhong.zhou" <myth5@myth5.com>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Sasha Levin <sashal@kernel.org>,
+	westeri@kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-acpi@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.16-5.10] i2c: Force DLL0945 touchpad i2c freq to 100khz
+Date: Fri,  8 Aug 2025 13:41:43 -0400
+Message-Id: <20250808174146.1272242-3-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250808174146.1272242-1-sashal@kernel.org>
+References: <20250808174146.1272242-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduvdegvdehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtqhertdertdejnecuhfhrohhmpefnuhgtrgcuvegvrhgvshholhhiuceolhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhephfekieegtefhgeelieehhefgtdekffevgfegvdeggeelkeehjeetteethfevudfgnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpsghoohhtlhhinhdrtghomhenucfkphepjeekrddvuddvrddvjedrudduheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeejkedrvdduvddrvdejrdduudehpdhhvghlohepsghoohhthidpmhgrihhlfhhrohhmpehluhgtrgdrtggvrhgvshholhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeduvddprhgtphhtthhopehrohgshheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepfihsrgdorhgvnhgvshgrshesshgrnhhgqdgvnhhgihhnvggvrhhinhhgrdgtohhmpdhrtghpthhtohephhgvrhhvvgdrtghoughinhgrsegsohhothhlihhnrdgtohhmpdhrtghpthhtoheprgihuhhshhessggvrghglhgvsghorghrugdro
- hhrghdprhgtphhtthhopegrnhguihdrshhhhihtiheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepkhhriihksehkvghrnhgvlhdrohhrghdprhgtphhtthhopegtohhnohhrodgutheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqihdvtgesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-GND-Sasl: luca.ceresoli@bootlin.com
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.16
+Content-Transfer-Encoding: 8bit
 
-Hello Rob, Wolfram,
+From: "fangzhong.zhou" <myth5@myth5.com>
 
-[this e-mail is co-written with Herv=C3=A9]
+[ Upstream commit 0b7c9528facdb5a73ad78fea86d2e95a6c48dbc4 ]
 
-Rob, Wolfram: this e-mail mentions DT description together with
-implementation ideas, but both of your opinions are very relevant here.
+This patch fixes an issue where the touchpad cursor movement becomes
+slow on the Dell Precision 5560. Force the touchpad freq to 100khz
+as a workaround.
 
-On Fri, 1 Aug 2025 13:09:54 -0500
-Rob Herring <robh@kernel.org> wrote:
+Tested on Dell Precision 5560 with 6.14 to 6.14.6. Cursor movement
+is now smooth and responsive.
 
-> On Wed, Jun 18, 2025 at 3:23=E2=80=AFAM Herve Codina <herve.codina@bootli=
-n.com> wrote:
-> >
-> > An I2C bus can be wired to the connector and allows an add-on board to
-> > connect additional I2C devices to this bus.
-> >
-> > Those additional I2C devices could be described as sub-nodes of the I2C
-> > bus controller node however for hotplug connectors described via device
-> > tree overlays there is additional level of indirection, which is needed
-> > to decouple the overlay and the base tree:
-> >
-> >   --- base device tree ---
-> >
-> >   i2c1: i2c@abcd0000 {
-> >       compatible =3D "xyz,foo";
-> >       i2c-bus-extension@0 { =20
->=20
-> This is at I2C bus address 0? No. You are mixing 2 different address
-> spaces. Don't do that.
->=20
-> You could solve this with just a property in the parent. If there's
-> more than 1, then it's just multiple phandles. However I don't think
-> you need this at all. You can just search the DT for 'i2c-parent' and
-> find phandles that match the i2c controller node. But why does the
-> controller driver need to know about connectors? Shouldn't the
-> connector driver drive this and tell the controller there's more
-> devices?
+Signed-off-by: fangzhong.zhou <myth5@myth5.com>
+[wsa: kept sorting and removed unnecessary parts from commit msg]
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
 
-These were the concerns you had raised last April [0], so let's continue
-from there and Herv=C3=A9's follow-up.
+LLM Generated explanations, may be completely bogus:
 
-Herv=C3=A9's position was that a double-reference is more effective as every
-interested party (the i2c adapter and the i2c extension node) have an
-explicit description of the connected party/parties. Besides, this looks
-consistent with the bidirectional links in remote-endpoints, which has
-similarities.
+**Backport Status: YES**
 
-OTOH I agree a single-direction link (i2c extension node to i2c
-adapter) should work, in principle. However there are issues, mainly in
-how an adapter finds out about the extensions when it is probed after
-them.
+This commit should be backported to stable kernel trees for the
+following reasons:
 
-Your proposal of searching the whole tree involves a lot of searches in
-a potentially large tree, even though I don't expect it to happen often
-at least for the use cases I'm aware of.
+## Analysis Supporting Backport:
 
-But, more important, Herv=C3=A9 pointed out an "i2c-parent" property is
-already used for different purposes (i2c muxes). We could choose
-another string but that would be fragile too.
+### 1. **Fixes a Real User-Visible Bug**
+The commit fixes a specific hardware malfunction where the touchpad
+cursor movement becomes slow on Dell Precision 5560 laptops. This is a
+concrete usability issue that affects end users' ability to use their
+hardware properly.
 
+### 2. **Minimal and Contained Change**
+The change is extremely minimal - it only adds a single line `{
+"DLL0945", 0 },` to an existing array
+`i2c_acpi_force_100khz_device_ids[]`. This is a purely additive change
+that:
+- Doesn't modify any existing logic
+- Only affects devices with the specific ACPI ID "DLL0945"
+- Cannot cause regressions on other hardware
 
-One idea is to unambiguously mark i2c bus extension nodes with a
-compatible string:
+### 3. **Follows Established Pattern**
+The code shows this is a well-established pattern for hardware quirks:
+- The `i2c_acpi_force_100khz_device_ids[]` array already exists with the
+  same purpose
+- A nearly identical fix was just added for ELAN06FA touchpad (commit
+  bfd74cd1fbc0)
+- Similar quirk arrays exist for forcing 400KHz
+  (i2c_acpi_force_400khz_device_ids)
+- Previous similar fixes have been marked for stable (e.g., commit
+  7574c0db2e68 for Silead touchscreens included `Cc: stable@kernel.org`)
 
-  connector {
-      i2c_ctrl: i2c-ctrl {
-          compatible =3D "i2c-bus-extension"; // <-----
-          i2c-parent =3D <&i2c1>;
-          #address-cells =3D <1>;
-          #size-cells =3D <0>;
-      };
-  };
+### 4. **Hardware-Specific Workaround**
+This is a hardware-specific workaround that:
+- Only triggers for Dell devices with the DLL0945 touchpad
+- Forces I2C bus speed to 100KHz to work around a hardware/firmware
+  issue
+- Has been tested on the affected hardware (Dell Precision 5560 with
+  kernels 6.14 to 6.14.6)
 
-And then implementing a device driver for the i2c bus extension.
+### 5. **No Architecture Changes**
+The commit:
+- Uses existing infrastructure (the quirk array mechanism)
+- Doesn't introduce new features
+- Doesn't change any APIs or interfaces
+- Simply adds one more device ID to an existing workaround list
 
-This would allow to ensure extensions are probed after their adapter
-(thanks to probe deferral) and at that point can register themselves at
-the adapter. In other words the device driver core would provide the
-synchronization between adapter, bus extension, and devices on the bus
-extension.
+### 6. **Low Risk of Regression**
+The change has minimal regression risk because:
+- It only affects devices with the specific ACPI ID
+- The mechanism is already proven with other devices
+- The fix is isolated to I2C bus speed negotiation for one specific
+  touchpad model
+- If the device ID doesn't match, the code path is never executed
 
+### 7. **Consistent with Stable Kernel Rules**
+This fix aligns perfectly with stable kernel criteria:
+- Fixes a real bug that bothers users (slow touchpad cursor)
+- Is obviously correct and tested
+- Is small (1 line addition)
+- Doesn't add new features
+- Fixes only one specific issue
 
-A different option is to only have the "i2c-parent" phandle in the
-extension node and nothing else in DT (no bidirectional link, no
-compatible string), without any full-tree searches.
+The commit follows the exact same pattern as previous touchpad I2C
+frequency quirks that have been successfully backported to stable
+kernels, making it a clear candidate for stable tree inclusion.
 
-On the implementation side, the connector driver when probing would
-register the extension nodes at the I2C core, which would maintain a
-list of extension nodes. This is important when the connector probes
-first. Then when any adapter probes the core would iterate over the
-list to check whether the newly-probed adapter is pointed to by one of
-the registered bus extensions, and then start populating the devices on
-the matching bus extension(s).
+ drivers/i2c/i2c-core-acpi.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-A lot of care would have to be put in the disconnection path and while
-removing any bus extension from the global list, which could race with
-the I2C core using the list itself. The drive core wouldn't do it for
-us for free.
+diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
+index d2499f302b50..f43067f6797e 100644
+--- a/drivers/i2c/i2c-core-acpi.c
++++ b/drivers/i2c/i2c-core-acpi.c
+@@ -370,6 +370,7 @@ static const struct acpi_device_id i2c_acpi_force_100khz_device_ids[] = {
+ 	 * the device works without issues on Windows at what is expected to be
+ 	 * a 400KHz frequency. The root cause of the issue is not known.
+ 	 */
++	{ "DLL0945", 0 },
+ 	{ "ELAN06FA", 0 },
+ 	{}
+ };
+-- 
+2.39.5
 
-
-Rob, Wolfram, what are your opinions about these options, and which is
-worth pursuing? Do you have better proposals?
-
-[0] https://lore.kernel.org/all/20250402102123.30391c27@bootlin.com/
-
-Luca
-
---=20
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
 
