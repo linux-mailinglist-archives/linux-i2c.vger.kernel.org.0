@@ -1,175 +1,121 @@
-Return-Path: <linux-i2c+bounces-12163-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12164-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56049B1EDF3
-	for <lists+linux-i2c@lfdr.de>; Fri,  8 Aug 2025 19:42:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A1B1B1EE02
+	for <lists+linux-i2c@lfdr.de>; Fri,  8 Aug 2025 19:46:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3E35B4E37AE
-	for <lists+linux-i2c@lfdr.de>; Fri,  8 Aug 2025 17:42:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A1B8116B640
+	for <lists+linux-i2c@lfdr.de>; Fri,  8 Aug 2025 17:46:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1A2E27F728;
-	Fri,  8 Aug 2025 17:41:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 585921E1E19;
+	Fri,  8 Aug 2025 17:45:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G1vf0W7v"
+	dkim=pass (1024-bit key) header.d=narfation.org header.i=@narfation.org header.b="P2izBx7a"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from dvalin.narfation.org (dvalin.narfation.org [213.160.73.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 532841C861E;
-	Fri,  8 Aug 2025 17:41:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D541110F1;
+	Fri,  8 Aug 2025 17:45:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.160.73.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754674913; cv=none; b=eMXqMcNVdeunIJOx1uE5/rX2b3+AU8Gh0lryZqzqTdFgKQJP85J9i9P3ICsyaHDFw1g5bMtaO8RmaTA2KwcAZjVGEigs58vLL5uwMbzSPVTC6qmUAIPgqMR5KdgvZLC1e+Y+730XQoDzcSQHvS+v5Wxm2Z2Grl7i1f2cGkYNsJQ=
+	t=1754675156; cv=none; b=f7yld/fwcc+UhoT5BbLAhGy6ufeHhc73UN6DADhbmSfKcfzp0YwerLVlA2uAUo5CR0JcCIAAqlYetVfy7cmmPF8mzcYPbROYLcYY3bkQyxdI/O7xnOWqcMEm6z7FFBF4FyQifstmM8H2HbNaYid454Bk5fT/DWc6aHvlSzNuYdo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754674913; c=relaxed/simple;
-	bh=GqM4uijE/cryD8lWClhsosZUeGz28VWZUOgODuiBkFk=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=YlD/kQtMlpo0FzX8EVRONGXKpoDVjNQ2dko6e1XpCfUuJ9yFRNajNr50NCoJSHEmRSNpvThupux1uqVsY0RiqvP0UscvD5TPamHD8wQ87mTqxkQFUgm4hfkOn79ZYejj2jG2S440YNb8LspHM2c6lPAWgJdq75l46x69x0dwTaA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G1vf0W7v; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 862A2C4CEF0;
-	Fri,  8 Aug 2025 17:41:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754674912;
-	bh=GqM4uijE/cryD8lWClhsosZUeGz28VWZUOgODuiBkFk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=G1vf0W7v6sguhmymEimUd9BSuk+sn6ofzjXnU02YJl7oV9cnwtiwTXl64qc8MrOvx
-	 3sESbLZVy+pAL5waDn+6pZ+8kdLBhQ+uMp0Ejc+MGoiNsbyyvBqgiE7/iViN8cA0I3
-	 RGOvGLdqOANQccTl/OM++XUB3sTkAoTjUz17qPLwpa7jomSRSTeXnrPodziwgGs36V
-	 2rZs3ZKOvMMRfGW8HRpQoogMhDKxWVQuOvT0M+/Sll5mwjbIMo5flWgsjMZX3ZfdFn
-	 tMT0lKpSLnlwG+IdFj4OPJfC2dmq+K7RscLao6YqBYI460JIfNyQrpV//I0nIIcXN6
-	 hCJYcB2SFL4SA==
-From: Sasha Levin <sashal@kernel.org>
-To: patches@lists.linux.dev,
-	stable@vger.kernel.org
-Cc: "fangzhong.zhou" <myth5@myth5.com>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Sasha Levin <sashal@kernel.org>,
-	westeri@kernel.org,
-	linux-i2c@vger.kernel.org,
-	linux-acpi@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.16-5.10] i2c: Force DLL0945 touchpad i2c freq to 100khz
-Date: Fri,  8 Aug 2025 13:41:43 -0400
-Message-Id: <20250808174146.1272242-3-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250808174146.1272242-1-sashal@kernel.org>
-References: <20250808174146.1272242-1-sashal@kernel.org>
+	s=arc-20240116; t=1754675156; c=relaxed/simple;
+	bh=cMPX83TXW5WS1B/djWZ1BWLuRX2sVxKhO971mWW3Bbc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=QSTbH4ykN7Bj0Ik0PHNwqbXQc6Q+/T+ygc6PSsr3f/dQXqWr5xSUo3WKKDMxtK3TYDk3O5uxV0Ty0YBgUIc7V8yMlKJJIRW6xigFdpMrJ6LLwC7+wzTK69f+QDQ28aE92yTpRfrADOWhSSlYfAnl42GyuA5CMxneq+ieNN0Ulr0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=narfation.org; spf=pass smtp.mailfrom=narfation.org; dkim=pass (1024-bit key) header.d=narfation.org header.i=@narfation.org header.b=P2izBx7a; arc=none smtp.client-ip=213.160.73.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=narfation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=narfation.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=narfation.org;
+	s=20121; t=1754675145;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=fpm+EefCxsK9ltMIu4skM6GdnS0CE2R/LNLTBMAwR+8=;
+	b=P2izBx7a6ckvP7R/lUPQJzhhq9+t2zVzBAI6BrFG/Ysh4FecA58vIyvKAYaWw9b4GEwyMd
+	2nLUt2kwdNAOntXzq6LCjDeZVPBQv5UYiIPxFfU3gIymSLy7iIc3FItFhiwHsDNFizGpZL
+	2nA9I426y1rtUbKmifX/URbO3d/2YvU=
+From: Sven Eckelmann <sven@narfation.org>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: chris.packham@alliedtelesis.co.nz, Alex Guo <alexguo1023@gmail.com>,
+ andi.shyti@kernel.org, linux-i2c@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject:
+ Re: [PATCH] i2c: rtl9300: Fix out-of-bounds bug in rtl9300_i2c_smbus_xfer
+Date: Fri, 08 Aug 2025 19:45:39 +0200
+Message-ID: <10749199.nUPlyArG6x@sven-desktop>
+In-Reply-To: <aJB6u1WoNjiE-tZz@shikoro>
+References:
+ <20250615235248.529019-1-alexguo1023@gmail.com> <4670491.LvFx2qVVIh@ripper>
+ <aJB6u1WoNjiE-tZz@shikoro>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.16
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="nextPart2364835.iZASKD2KPV";
+ micalg="pgp-sha512"; protocol="application/pgp-signature"
 
-From: "fangzhong.zhou" <myth5@myth5.com>
+--nextPart2364835.iZASKD2KPV
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"; protected-headers="v1"
+From: Sven Eckelmann <sven@narfation.org>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Date: Fri, 08 Aug 2025 19:45:39 +0200
+Message-ID: <10749199.nUPlyArG6x@sven-desktop>
+In-Reply-To: <aJB6u1WoNjiE-tZz@shikoro>
+MIME-Version: 1.0
 
-[ Upstream commit 0b7c9528facdb5a73ad78fea86d2e95a6c48dbc4 ]
+On Monday, 4 August 2025 11:17:47 CEST Wolfram Sang wrote:
+> Yes, we can do that. In general, it doesn't make sense to add this check
+> when the ultimate goal is to support SMBus v3 which doesn't need the
+> check anymore. But if it is blocking further development, we can apply
+> this. The check will be removed when SMBus v3 support comes in.
 
-This patch fixes an issue where the touchpad cursor movement becomes
-slow on the Dell Precision 5560. Force the touchpad freq to 100khz
-as a workaround.
+Yes, when I2C_SMBUS_BLOCK_MAX becomes >= 255 bytes, such a check would not 
+be necessary. But this driver is already in Linux 6.13 - and in this version, 
+I2C_SMBUS_BLOCK_MAX is just 32 bytes. So, just from the code perspective, it 
+would be interesting for Linux stable to get this fixed in longterm kernel 
+6.15 (and also the most recent Linux 6.16.y).
 
-Tested on Dell Precision 5560 with 6.14 to 6.14.6. Cursor movement
-is now smooth and responsive.
+If you want to have an argument against this patch then it would be the the 
+hardware limitation of this i2c host controller. It only allows to transfer up 
+to 16 bytes. But then you could also argue that there might be variants which 
+will not have this limitation anymore. And Jonas is already trying to make the 
+driver more flexible [1] - the future will only show whether this will ever be 
+a relevant check (before I2C_SMBUS_BLOCK_MAX is large enough to make this 
+check obsolete).
 
-Signed-off-by: fangzhong.zhou <myth5@myth5.com>
-[wsa: kept sorting and removed unnecessary parts from commit msg]
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
+Btw. I've already picked it up in my patchset [2] to avoid conflicts with this 
+patch. And since they (2-4) fix broken functionality in Linux 6.13, this patch 
+becomes a requirement for backporting those fixes to the stable kernels.
 
-LLM Generated explanations, may be completely bogus:
+Kind regards,
+	Sven
 
-**Backport Status: YES**
+[1] https://lore.kernel.org/r/20250729075145.2972-1-jelonek.jonas@gmail.com
+[2] https://lore.kernel.org/r/20250804-i2c-rtl9300-multi-byte-v3-0-e20607e1b28c@narfation.org
+--nextPart2364835.iZASKD2KPV
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part.
+Content-Transfer-Encoding: 7Bit
 
-This commit should be backported to stable kernel trees for the
-following reasons:
+-----BEGIN PGP SIGNATURE-----
 
-## Analysis Supporting Backport:
+iHUEABYKAB0WIQS81G/PswftH/OW8cVND3cr0xT1ywUCaJY3wwAKCRBND3cr0xT1
+y93kAPwNyB6o77zkG3AMKPTc4CK5HZntt58sAq5BoD7c205gSAEAxbybkLWRb6n9
+29KQvlkpHYwO0+DMtzCL8HSeI5g7qg4=
+=XPxz
+-----END PGP SIGNATURE-----
 
-### 1. **Fixes a Real User-Visible Bug**
-The commit fixes a specific hardware malfunction where the touchpad
-cursor movement becomes slow on Dell Precision 5560 laptops. This is a
-concrete usability issue that affects end users' ability to use their
-hardware properly.
+--nextPart2364835.iZASKD2KPV--
 
-### 2. **Minimal and Contained Change**
-The change is extremely minimal - it only adds a single line `{
-"DLL0945", 0 },` to an existing array
-`i2c_acpi_force_100khz_device_ids[]`. This is a purely additive change
-that:
-- Doesn't modify any existing logic
-- Only affects devices with the specific ACPI ID "DLL0945"
-- Cannot cause regressions on other hardware
 
-### 3. **Follows Established Pattern**
-The code shows this is a well-established pattern for hardware quirks:
-- The `i2c_acpi_force_100khz_device_ids[]` array already exists with the
-  same purpose
-- A nearly identical fix was just added for ELAN06FA touchpad (commit
-  bfd74cd1fbc0)
-- Similar quirk arrays exist for forcing 400KHz
-  (i2c_acpi_force_400khz_device_ids)
-- Previous similar fixes have been marked for stable (e.g., commit
-  7574c0db2e68 for Silead touchscreens included `Cc: stable@kernel.org`)
-
-### 4. **Hardware-Specific Workaround**
-This is a hardware-specific workaround that:
-- Only triggers for Dell devices with the DLL0945 touchpad
-- Forces I2C bus speed to 100KHz to work around a hardware/firmware
-  issue
-- Has been tested on the affected hardware (Dell Precision 5560 with
-  kernels 6.14 to 6.14.6)
-
-### 5. **No Architecture Changes**
-The commit:
-- Uses existing infrastructure (the quirk array mechanism)
-- Doesn't introduce new features
-- Doesn't change any APIs or interfaces
-- Simply adds one more device ID to an existing workaround list
-
-### 6. **Low Risk of Regression**
-The change has minimal regression risk because:
-- It only affects devices with the specific ACPI ID
-- The mechanism is already proven with other devices
-- The fix is isolated to I2C bus speed negotiation for one specific
-  touchpad model
-- If the device ID doesn't match, the code path is never executed
-
-### 7. **Consistent with Stable Kernel Rules**
-This fix aligns perfectly with stable kernel criteria:
-- Fixes a real bug that bothers users (slow touchpad cursor)
-- Is obviously correct and tested
-- Is small (1 line addition)
-- Doesn't add new features
-- Fixes only one specific issue
-
-The commit follows the exact same pattern as previous touchpad I2C
-frequency quirks that have been successfully backported to stable
-kernels, making it a clear candidate for stable tree inclusion.
-
- drivers/i2c/i2c-core-acpi.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
-index d2499f302b50..f43067f6797e 100644
---- a/drivers/i2c/i2c-core-acpi.c
-+++ b/drivers/i2c/i2c-core-acpi.c
-@@ -370,6 +370,7 @@ static const struct acpi_device_id i2c_acpi_force_100khz_device_ids[] = {
- 	 * the device works without issues on Windows at what is expected to be
- 	 * a 400KHz frequency. The root cause of the issue is not known.
- 	 */
-+	{ "DLL0945", 0 },
- 	{ "ELAN06FA", 0 },
- 	{}
- };
--- 
-2.39.5
 
 
