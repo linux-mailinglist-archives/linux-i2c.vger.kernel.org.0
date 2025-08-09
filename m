@@ -1,118 +1,127 @@
-Return-Path: <linux-i2c+bounces-12178-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12179-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5DF9B1F518
-	for <lists+linux-i2c@lfdr.de>; Sat,  9 Aug 2025 17:05:47 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D23BB1F536
+	for <lists+linux-i2c@lfdr.de>; Sat,  9 Aug 2025 17:30:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D9AFE56369A
-	for <lists+linux-i2c@lfdr.de>; Sat,  9 Aug 2025 15:05:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8E592560DB4
+	for <lists+linux-i2c@lfdr.de>; Sat,  9 Aug 2025 15:30:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 535CE2868A1;
-	Sat,  9 Aug 2025 15:05:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7CE82BE7A6;
+	Sat,  9 Aug 2025 15:30:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="naulVuZo"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Xp8IVI8k"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AD031E515;
-	Sat,  9 Aug 2025 15:05:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 333F618A921;
+	Sat,  9 Aug 2025 15:30:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754751942; cv=none; b=tfY4yPMbqezs32oT4JFzvjZBsjyLxdyNPaWmJOhwuUl+QvjSx4jfe16a9V2RLzkXgkLlrttj1YPvB5nFmZIMIWbaFzyX5HkgszOKXPkU62GrAhYKwZy6t8eXQ8Oe9SKdtahvr8wEU1oUOiQ+bmIpg2hWDqStrH+W4FgnJcQARDc=
+	t=1754753447; cv=none; b=E13qaRzca8ENW+eazneIXpHzSgM/WeYXBdArXxBaynEx8ZlErvdvKyGrXtCZQ7HiH98bCo1+WDSuCwKRhEe+7zaBiBk0o7WOf7mQEwfE10fyh9MEnjg3Wc2fjLfzexT1DaF7Ig2pCMGyXYC/YENJ91/KfqSQi85RkbBLszQSokI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754751942; c=relaxed/simple;
-	bh=YGHBFhz3+GKcr2f9b2Z/DcjT1BGMj9gGWjvqGBrttds=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nsjQlXvLbYQpIMfp4VFeB+RkGP5X2B4vYcjVRkOh8il5VU+yNEOWBCOxnl8iCt45YOkgStKNvJ8mAlK7RzG+cCyF1erWgBUDyvlZ0zUIe0/6p4p/TbuSqP188fX9HTgBwC/XeoUi15ug7tlyLMnGVyXU/w4XJX9LOEdL71waSh0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=naulVuZo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DB81C4CEE7;
-	Sat,  9 Aug 2025 15:05:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754751941;
-	bh=YGHBFhz3+GKcr2f9b2Z/DcjT1BGMj9gGWjvqGBrttds=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=naulVuZodL6L5DgRIoZ6/XCfY42TdIcBRVNxoZIezsCrBNVZDzrxM0LfVppeejrZU
-	 ajxdK9g26OKWjTb/CLW7oSxZo9gg1sJB4uBDO54yv6lXvdlSRGJbWam0vm3a6OrLWL
-	 6kiblEcqwOaAQLB54iajyepvTKcAXRCAun7cEH0G4VuEWDlRFPme6FJWW2Is1i0Msu
-	 UZjcZpJZ3qQI0dhQg8AgQ3n+RntCZEERwBl4SjFAC1iXSzd7VujurQyUzBq6L2EdDo
-	 ajzI/bofjfForXvV1JHv2Mb7utf+mXVpxeKOc+l69Mf+6akPq7JQ+qMnO9gDk2GJpk
-	 3gIHl3rY/wHnw==
-Message-ID: <5b550b88-229e-427b-bdfa-d0e156d18330@kernel.org>
-Date: Sat, 9 Aug 2025 17:05:37 +0200
+	s=arc-20240116; t=1754753447; c=relaxed/simple;
+	bh=f+HK2VJeFXZ66mzCW414RG/x+xWx9dy0RDZzXGAwlCY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kQZ9igpQSblQUwo7q6bn2WLhi+TczXW868H8ZYK3nJc0/D6Hi35TEnwxGtteypb3oDKchITQRnP6Lw0PCWaECaEwOf3H9cnR3ZHVGS9HP2akt+Av0WViYErF/zmVLznRCM7rCdq+xtNSkH1UKmuo5i92IIhB0P3gOtgazAZQrFw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Xp8IVI8k; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1754753447; x=1786289447;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=f+HK2VJeFXZ66mzCW414RG/x+xWx9dy0RDZzXGAwlCY=;
+  b=Xp8IVI8kFWQP7J3c4RV+XReMqPeIA1kD7B8mwvIcloqrRBosMMFV52X4
+   1hQBaJJDUiYnDBZsszkK6fSlH09bNiBQ9GDKa3ZVzwncrZvwvG57PwOFU
+   bbMja3nS9SaHY7ZsuRFodiRONoru9N78+ttRjUIjE1Q2TU7OlX5rPBp5P
+   hxYBsvs1VjqppluNFAogN5X0jMwigmvQTOvnoBazXqStnRFCRXXUCL09i
+   SZQCyf5iAUUCk31TAL+iFx06tuXIi5a2bpWnqJtbnXGFK53STK0wgHI1P
+   +gOmrLJw/F2ik4mDdyiotRA+h7sAYV7ZyJPveQNgqZNweurkCZp1O+nkv
+   w==;
+X-CSE-ConnectionGUID: yalgLBwlQl6mW3eORrtPdg==
+X-CSE-MsgGUID: EoiINM3iTUinuE193CRo5Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11516"; a="60705363"
+X-IronPort-AV: E=Sophos;i="6.17,278,1747724400"; 
+   d="scan'208";a="60705363"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2025 08:30:46 -0700
+X-CSE-ConnectionGUID: c2puHhK8QJmT48DZsOS8mw==
+X-CSE-MsgGUID: AoMsAoP3SJ+p0V26BtRxXg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,278,1747724400"; 
+   d="scan'208";a="165965915"
+Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
+  by fmviesa008.fm.intel.com with ESMTP; 09 Aug 2025 08:30:43 -0700
+Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uklWq-0004sC-1a;
+	Sat, 09 Aug 2025 15:30:40 +0000
+Date: Sat, 9 Aug 2025 23:29:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Hans de Goede <hansg@kernel.org>,
+	Israel Cepeda <israel.a.cepeda.lopez@intel.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Wolfram Sang <wsa-dev@sang-engineering.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Linus Walleij <linus.walleij@linaro.org>
+Cc: oe-kbuild-all@lists.linux.dev, Hans de Goede <hansg@kernel.org>,
+	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
+	Richard Hughes <rhughes@redhat.com>, linux-i2c@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-gpio@vger.kernel.org
+Subject: Re: [PATCH 1/3] usb: misc: Add Intel USBIO bridge driver
+Message-ID: <202508092329.U0OxBRAh-lkp@intel.com>
+References: <20250809102326.6032-2-hansg@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] usb: misc: Add Intel USBIO bridge driver
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Israel Cepeda <israel.a.cepeda.lopez@intel.com>,
- Sakari Ailus <sakari.ailus@linux.intel.com>, Wolfram Sang <wsa@kernel.org>,
- Andi Shyti <andi.shyti@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
- Linus Walleij <linus.walleij@linaro.org>,
- Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
- Richard Hughes <rhughes@redhat.com>, linux-i2c@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-gpio@vger.kernel.org
-References: <20250809102326.6032-1-hansg@kernel.org>
- <20250809102326.6032-2-hansg@kernel.org> <2025080947-stoke-movie-ee4d@gregkh>
-From: Hans de Goede <hansg@kernel.org>
-Content-Language: en-US, nl
-In-Reply-To: <2025080947-stoke-movie-ee4d@gregkh>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250809102326.6032-2-hansg@kernel.org>
 
-Hi Greg,
+Hi Hans,
 
-On 9-Aug-25 4:28 PM, Greg Kroah-Hartman wrote:
-> On Sat, Aug 09, 2025 at 12:23:24PM +0200, Hans de Goede wrote:
->> +struct usbio_protver {
->> +	uint8_t ver;
-> 
-> Nit, but you do this everywhere.  Kernel types are "u8", not "uint8_t",
-> that's a userspace C type.  Please use the correct ones when writing
-> kernel code.
+kernel test robot noticed the following build warnings:
 
-Ack and also ack for the mission endianness on
-the bigger word sizes.
+[auto build test WARNING on usb/usb-testing]
+[also build test WARNING on usb/usb-next usb/usb-linus brgl/gpio/for-next andi-shyti/i2c/i2c-host linus/master v6.16 next-20250808]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I'll fix this all for the next version.
+url:    https://github.com/intel-lab-lkp/linux/commits/Hans-de-Goede/usb-misc-Add-Intel-USBIO-bridge-driver/20250809-182506
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20250809102326.6032-2-hansg%40kernel.org
+patch subject: [PATCH 1/3] usb: misc: Add Intel USBIO bridge driver
+config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20250809/202508092329.U0OxBRAh-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14+deb12u1) 12.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250809/202508092329.U0OxBRAh-lkp@intel.com/reproduce)
 
->> +} __packed;
->> +
->> +struct usbio_fwver {
->> +	uint8_t major;
->> +	uint8_t minor;
->> +	uint16_t patch;
->> +	uint16_t build;
-> 
-> What is the endian of these u16 variables?
-> 
->> +/* USBIO Packet Header */
->> +struct usbio_packet_header {
->> +	uint8_t type;
->> +	uint8_t cmd;
->> +	uint8_t flags;
-> 
-> Are these crossing the user/kernel boundry?  I think so (same with
-> above), and so shouldn't they use the proper types (__u8)?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508092329.U0OxBRAh-lkp@intel.com/
 
-No these only cross the kernel <-> hw boundary. This is not
-uapi. I'll switch all these (everywhere in this driver) to plain
-u8 / __le16 / __le32 for the next version and use 
-le16_to_cpu, etc. to access the bigger word sizes.
+All warnings (new ones prefixed by >>):
 
-Regards,
+>> Warning: drivers/usb/misc/usbio.c:132 struct member 'nr_gpio_banks' not described in 'usbio_device'
+>> Warning: drivers/usb/misc/usbio.c:132 struct member 'gpios' not described in 'usbio_device'
+>> Warning: drivers/usb/misc/usbio.c:132 struct member 'nr_i2c_buses' not described in 'usbio_device'
+>> Warning: drivers/usb/misc/usbio.c:132 struct member 'i2cs' not described in 'usbio_device'
+>> Warning: drivers/usb/misc/usbio.c:132 struct member 'nr_spi_buses' not described in 'usbio_device'
+>> Warning: drivers/usb/misc/usbio.c:132 struct member 'spis' not described in 'usbio_device'
 
-Hans
-
-
-
-
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
