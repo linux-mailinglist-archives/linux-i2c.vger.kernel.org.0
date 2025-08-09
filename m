@@ -1,76 +1,78 @@
-Return-Path: <linux-i2c+bounces-12181-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12182-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CBB1CB1F6F6
-	for <lists+linux-i2c@lfdr.de>; Sun, 10 Aug 2025 00:07:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 16997B1F6F8
+	for <lists+linux-i2c@lfdr.de>; Sun, 10 Aug 2025 00:07:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 65BC7189C9B6
-	for <lists+linux-i2c@lfdr.de>; Sat,  9 Aug 2025 22:07:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8FB8E17E3D3
+	for <lists+linux-i2c@lfdr.de>; Sat,  9 Aug 2025 22:07:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15A4A279DAF;
-	Sat,  9 Aug 2025 22:07:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B3B727E04B;
+	Sat,  9 Aug 2025 22:07:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iEVKh0bW"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y5OESgns"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 114B2239E80;
-	Sat,  9 Aug 2025 22:07:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E95722571DD;
+	Sat,  9 Aug 2025 22:07:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754777245; cv=none; b=ZXuL/WDannGkJJokDiQFnwaseegW3SDgXgIWAto3kvin9MUoGhSzknIYvhadz/usxaRQaJ51isJOLy/lyx27mQAFCHgZp1dXj2OTe9pqSLQ0e5ZLICk8Sqxgg6dFlqroxASdgIgeurCpb6mHKj8hv2TNM+ni3xWYEiRaGR+WdH4=
+	t=1754777247; cv=none; b=p/0BK6j9nN9/aFtv2KYpxb8ZSbz2aOn185xGNPUjwlOQfzAHdyp0hKAXeFwLXEgiORc3ZGfEPucHLSP+5pQg4q+4KMLS8Ij6si5Umzv2F+TNeI1gffX1OkbDEQNyH96kmJnQ0PyK+gP4DsAMen27rbgZkerN2besVcMFgJ4ktPA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754777245; c=relaxed/simple;
-	bh=4EzJwQuBIFM4raNBxPJN0k1uknAHAN8Ud0aTfpRATdM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=D1GasHSfSRuZfucIKYmoWxwKt+xswzDa6ehJLYRLkggfIj3IenFSVGzP47Z08g0a3bcaIu2vvoaoHPhdUeGkeH8nUUEPRpOgQNXN0kHf0RZ7qpUOwcrYsuDxv50JtqUsvW366TlImtBWEq4NKHDmoi53p0klCjsHcj1l1MAxBdU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iEVKh0bW; arc=none smtp.client-ip=209.85.221.44
+	s=arc-20240116; t=1754777247; c=relaxed/simple;
+	bh=9077jS45ov66K1on9LG5qwdx/TQaMaYyQO8CFFXWBRw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=A+d3YwGmatzZ79ywN2ypfjdR9YxHblnvJuizuZ89rkJTx8GqL2ab1Vq0FMhUHQ8tlw4teewEM0ldUQ10AbgGAjEe5MLmMx4Wi6yvDupRaO6hFQ0yeTMZVI09OHS1OfZnWFqW9hwbSo1mOKeYtnEEksXezxIwI5XXEUACKyRGb3E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y5OESgns; arc=none smtp.client-ip=209.85.221.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-3b786421e36so1705338f8f.3;
-        Sat, 09 Aug 2025 15:07:23 -0700 (PDT)
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-3b8db5e9b35so1804042f8f.1;
+        Sat, 09 Aug 2025 15:07:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754777242; x=1755382042; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ON51mp/PIZKw7yNbH39krxKEwgXvkrApaUAVnb4qDrs=;
-        b=iEVKh0bWkPtct/rXPF09vw2CH7aSy6B6sc+E0HM23S2n9jNEbm+f34Tf65W0r6F9c1
-         8/FCMeFGulMzsX/1IJ6ps3OFZrvjOyRIdkId8I9f21rJNtPVbFAGjQrh7ze6Oul7WGiv
-         hmyYvvWNqRVPaadvg3/cxbLoVPYbSfdTeflQz7N0qo10GJrSIpTfZyL2gEHVrRsD6sZw
-         cFuEyMQlwsRrvxsyzlJC+lhB9jruw+Lrks126e7k1xlJmfh0RBIOGgA4mGcWFSLd/jD8
-         B3dOWEX1lEe/cXz7KIzAdOWk+s4++1H2bYz4+dsBfebDkW+ppwjzjKt24FflJYzpcGy8
-         ICog==
+        d=gmail.com; s=20230601; t=1754777243; x=1755382043; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZW/BweFq6h6BGzIKunT0lkLtWiTc0YxNDDXp0NkQeVY=;
+        b=Y5OESgns9LehQ8SzRWqv/vfVn6QCvBWEkRlUzlmeY0blgRG3gwoW1CR1MboSFaEAyJ
+         whDhZrF+r5PTgTmFV9RsR/Cms2bf1aiUOxWKeppfp0Ftdye8UykUQfLiGZkhK/R4NUOr
+         8qdmdDPT5TcXGQkY5Y97VaF0sMGYOEzZbSe9PL++86YFnBWjLaquj5b0ALu399jowbsY
+         rmkV3nXfp/swQuAC88pQsQr0iZDA94jd3jCxQ8fo+pOEx968OB4+VDmnmspBssswO25M
+         bYe4h8yb6z0riTYLY+A+y/Ueer6hbFaUkNpJqP3+vGOiDrT84rQNbtg3KcUM9koFi6/f
+         SblA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754777242; x=1755382042;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ON51mp/PIZKw7yNbH39krxKEwgXvkrApaUAVnb4qDrs=;
-        b=SQjOpD0geGbxue2+GAMxSqV1ERwzmsziOopkzhcqhA7N/lul305BU/EiK2lfmo0JNN
-         UzaxN0MU07CCLmZEEzeR3F/S3ziCXjkUFQ948Rjnv14gpLvBpY2tGwVNmvCEDIzjrOCC
-         AQCgfRoSdy5rPm9rr6Qj72562OttSllOFKpErphIyptpefqWtBQDBBZmB6mwDlZvqjIo
-         2ZvNhzsWuyzdRPCooLaxLc2EH6MiCeJXdLdUJL+L7aAywejoReIFAh4lpsmSs199Z3Sa
-         MybMT85emMdW+Fq2qz7cRE6rb6ZVhPwUKoK7C+i0BAYZDKG+CY2wFPybP7bI9eAMrn5o
-         qlBg==
-X-Forwarded-Encrypted: i=1; AJvYcCUiZkCwz/26q/1hDGYFsU2/s1hGsRm2bCvMRvnVF7AZ9dD9UhKIjyaR43+xzU2T6VqIrx2RejL4f40S@vger.kernel.org, AJvYcCVp6ClNXBcbHbjeTlJbpFoCkxrPH+QGXYHyXp8Npifn3WF/5bAwO8Y1NyzayRYmJJVD1JqJo90bPTzsJ012@vger.kernel.org
-X-Gm-Message-State: AOJu0YyjNyuQQFWWzx6iehOoxC+nsNd2S5e6B+gRyLZq6KXwbLCTJVEr
-	37mQfsd7aGB7WyCxel7pEzo7YK0qIZHCuu2QPrG3xhsf3L7nZW6MghtUbvFffg==
-X-Gm-Gg: ASbGnctapZhvrHRSdJUZFsRnGjlpge7r7g6Hlq1653oOowd542QrqHOUH6mlbZeg0Th
-	3JBvLYqnc9mgvJ9hFR4gP6kkszMww9geE016WFP73boq/Worpv6LWNPOFAWYqFmndX4Q5qtdfp6
-	JLjpXgivLcUqtOiqYm2ZC6zyF4gP7V771ICFJlYTBYWrO+fxn3b/wEcTveL9svD4txwpuzkxTyO
-	jqaK8rNUM1PdOyHnOXi2IlgrlmM3jDFRpsL4TVuXo4Dl/l6k4WJsukGX0pIe+giu9Niqk51Q/fh
-	F7wlVCspuOvff7f0WubIqAuwr0bnDKJw4laJgyPXF5y3t3VfBnBqYV/4l0uZjJkBmIp2E5BJSpJ
-	zaBJWBbpwxmWWCA++RtPpUWyArHi9J2d5WhAB2N5ZYovadTrH8x6z
-X-Google-Smtp-Source: AGHT+IHpixIBUdkRkSToWyKVB/tbX1BCbXUF6/OprNCLLAnNCeqB+CaznTHWMurcVG7SR9P/g3Xruw==
-X-Received: by 2002:a05:6000:178d:b0:3b7:931d:379a with SMTP id ffacd0b85a97d-3b900b576b0mr5156985f8f.58.1754777242110;
-        Sat, 09 Aug 2025 15:07:22 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1754777243; x=1755382043;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZW/BweFq6h6BGzIKunT0lkLtWiTc0YxNDDXp0NkQeVY=;
+        b=DNxMipSF6o++kSvn8DoHwk9WECK40kLlRUAYiKyZRYsCXEsr0Fw7kXPFP5amDZFuu3
+         hljHqINP2oPUekKlFYYltoecaP548tIpY2I8NmhDvDzM02lvGLa51YcvJGNEIXgzz3oz
+         OcitybvWx90w+2hD2SymR0+XixZ/ZDdO1Zsii/j/QkPgl/7HnaSzXbpo4ThDDtvMgJZl
+         iyWdNfuqO4lDWJhx77KGncX1Z/fKJTex5oj8l1xtMwZJGfW2OcyYr02Xi0BmlHQW7f24
+         3p79YKrI5DkU8F/6KGKPxRRAOScmFpq2rS4tRFcnkyPRn/y9cvPcICIj2k/8r6PDTZls
+         znSg==
+X-Forwarded-Encrypted: i=1; AJvYcCUbp5ObuTsguZZi4Lnjqs9ZxjNKqA2KdK39UoxUy6E0ugHy2USHwePkUmlhEIQOos2uhANynsRul2RZ@vger.kernel.org, AJvYcCXlDlCX3YFBOiWIVsyLgvVdJSTd53EDXa7qZ68XW4/8X4/R9WUuBZ5auCNNygx5vpjWuEjXZfa3AH3DcPZS@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywb0WC1SUT+m84uCvpvuJrZ9cz5Z8pKdbLT6f0/+MM35EZgjtv2
+	qQS75EMzBKaT9U8DMXy6XcZ9/nHFEg9EqdTnKDZyc9IAq+GtE+mtrw4m
+X-Gm-Gg: ASbGncvJF1161o1OOEbfjDuO224wodLvWwAquayh9gCqAxPcA2aJPzvx2yPWOj1YZJN
+	dUR1Vfabf7Uaocgdn5w5jyrt3LEKhwnRzmHHgun/XyWOpSkAb3a+GJMYBQiIFDlOyJCMTfEGhn4
+	F2SVlUt60FaTO5DNUjOLJJNAjaajHGhreXPkCYhUOameO1HtNPQ/tgvss+HbUzo095LZHpkiNR2
+	ozm0Ytza8uqYzkH0eu9e4cY9OYPTvSoaypWvUrrRpp90kauz29QhSooKXFop2eb6Edrg8asfKsD
+	b/byLFXp1llD4RTurW5Hmw9anSGH7hRYMikVtE1pBKAFA/qLzEGpFf4HbLHROjeQG3RHq4ozUXL
+	la2mbQBs+DyuTna1RdvmQWnYFR1gIqHEA/G9zZV+MaFqmf3tC8WwJ
+X-Google-Smtp-Source: AGHT+IFCbKO35GJqBIPL/KrGvVKIi81pzj8Hw2/WXDV+/tzXuUd1/uyBWepxvsNclAFVYbO+YdvamQ==
+X-Received: by 2002:a05:6000:2501:b0:3b8:f2f2:e417 with SMTP id ffacd0b85a97d-3b900b56f7bmr6215960f8f.51.1754777243037;
+        Sat, 09 Aug 2025 15:07:23 -0700 (PDT)
 Received: from builder.. (188-9-142-46.pool.kielnet.net. [46.142.9.188])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-459c58ed0ecsm145592185e9.4.2025.08.09.15.07.21
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-459c58ed0ecsm145592185e9.4.2025.08.09.15.07.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 09 Aug 2025 15:07:21 -0700 (PDT)
+        Sat, 09 Aug 2025 15:07:22 -0700 (PDT)
 From: Jonas Jelonek <jelonek.jonas@gmail.com>
 To: Chris Packham <chris.packham@alliedtelesis.co.nz>,
 	Andi Shyti <andi.shyti@kernel.org>,
@@ -84,10 +86,12 @@ Cc: linux-i2c@vger.kernel.org,
 	Sven Eckelmann <sven@narfation.org>,
 	Harshal Gohel <hg@simonwunderlich.de>,
 	Jonas Jelonek <jelonek.jonas@gmail.com>
-Subject: [PATCH v5 00/11] i2c: rework and extend RTL9300 I2C driver
-Date: Sat,  9 Aug 2025 22:07:01 +0000
-Message-ID: <20250809220713.1038947-1-jelonek.jonas@gmail.com>
+Subject: [PATCH v5 01/11] i2c: rtl9300: use regmap fields and API for registers
+Date: Sat,  9 Aug 2025 22:07:02 +0000
+Message-ID: <20250809220713.1038947-2-jelonek.jonas@gmail.com>
 X-Mailer: git-send-email 2.48.1
+In-Reply-To: <20250809220713.1038947-1-jelonek.jonas@gmail.com>
+References: <20250809220713.1038947-1-jelonek.jonas@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -96,93 +100,353 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patch series reworks the current implementation of the driver for
-I2C controller integrated into RTL9300 SoCs to have better overall code
-simplify support extension, and adds support for the RTL9310 series.
-Goal of this is to have RTL9310 support upstream in a proper
-implementation to be able to drop downstream versions of this driver.
+Adapt the RTL9300 I2C controller driver to use more of the regmap
+API, especially make use of reg_field and regmap_field instead of macros
+to represent registers. Most register operations are performed through
+regmap_field_* API then.
 
-The first patch changes the driver to use more of the regmap API.
-Instead of using macros, all registers are defined as reg_field and
-operations on these registers are performed using regmap_field and the
-corresponding API. This simplifies adding support for further chip
-families and avoids potential redundant code by just providing
-chip-specific functions for every chip family.
+Handle SCL selection using separate chip-specific functions since this
+is already known to differ between the Realtek SoC families in such a
+way that this cannot be properly handled using just a different
+reg_field.
 
-Further patches add some checks to fix issues based on incorrect passed
-values, remove SMBus Quick support (not actually supported by hardware)
-and reorder some operations to be at a proper location.
+This makes it easier to add support for newer generations or to handle
+differences between specific revisions within a series. Just by
+defining a separate driver data structure with the corresponding
+register field definitions and linking it to a new compatible.
 
-The last patch and penultimate patch add support for RTL9310 series to
-the driver and adjust the dt-bindings accordingly.
+Reviewed-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+Tested-by: Chris Packham <chris.packham@alliedtelesis.co.nz> # On RTL9302c
+Signed-off-by: Jonas Jelonek <jelonek.jonas@gmail.com>
+---
+ drivers/i2c/busses/i2c-rtl9300.c | 192 ++++++++++++++++++++-----------
+ 1 file changed, 124 insertions(+), 68 deletions(-)
 
-Simple operations have been tested successfully on RTL9302B-based Zyxel
-XGS1210-12 and RTL9313-based Netgear MS510TXM, with simple SFP EEPROM
-read. Other operations need testing from people with devices available.
-
-Compile-tested with Linux, run-tested as backport in OpenWrt on the
-aforementioned devices.
-
-I splitted the changes to my best knowledge, to simplify review. If
-suggested, I might combine some of them for final merge.
-
---
-Changelog
-
-v5: - added more patches to fix further issues/do further cleanup
-        - remove SMBus Quick support (not supported by hardware)
-        - move setting SCL frequency to config_io
-        - only set read message format (RD_MODE) once on probing
-        - add check to avoid len = 0 being allowed as length
-    - adjusted cover letter
-
-v4: - fixed an incorrect check for number of channels which was already
-      present in original code
-
-v3: - narrowed vendor property per variant to be required only
-      for RTL9310
-    - narrowed usable child-node i2c addresses per variant
-    - no changes to driver patches
-
-v2: - Patch 1:
-        - adjusted commit message
-        - retained Tested-By and Reviewed-By from Chris Packham
-    - Patch 2:
-        - simplified check as suggested by Markus Stockhausen
-        - fixed commit message
-    - Patch 3 (all requested by Krzysztof):
-        - use vendor property instead of generic
-        - add front compatibles to make binding complete
-        - fix commit message
-    - reordered patches, dt-bindings patch now comes before its 'user'
-    - properly add device-tree list and relevant maintainers to To/Cc
-
---
-
-Jonas Jelonek (11):
-  i2c: rtl9300: use regmap fields and API for registers
-  i2c: rtl9300: fix channel number bound check
-  dt-bindings: i2c: realtek,rtl9301-i2c: fix wording and typos
-  i2c: rtl9300: rename internal sda_pin to sda_num
-  i2c: rtl9300: check if xfer length is valid
-  i2c: rtl9300: remove SMBus Quick operation support
-  i2c: rtl9300: move setting SCL frequency to config_io
-  i2c: rtl9300: do not set read mode on every transfer
-  i2c: rtl9300: separate xfer configuration and execution
-  dt-bindings: i2c: realtek,rtl9301-i2c: extend for RTL9310 support
-  i2c: rtl9300: add support for RTL9310 I2C controller
-
- .../bindings/i2c/realtek,rtl9301-i2c.yaml     |  45 +-
- drivers/i2c/busses/i2c-rtl9300.c              | 477 +++++++++++-------
- 2 files changed, 321 insertions(+), 201 deletions(-)
-
-
-base-commit: 7e161a991ea71e6ec526abc8f40c6852ebe3d946
-prerequisite-patch-id: 603f6da5f9ccbf40aa1e8247144e2413f676ef24
-prerequisite-patch-id: 4328bb2802794cbd46f4952a22cbc73e022d0c12
-prerequisite-patch-id: 90d8673eb6c9444937ea335ae8a934414e0a9ecd
-prerequisite-patch-id: de876ceafb623d95a41af42b3e3dae7538023e33
-prerequisite-patch-id: ecc2a415352d9ed09975b06b97b750b5182f4147
+diff --git a/drivers/i2c/busses/i2c-rtl9300.c b/drivers/i2c/busses/i2c-rtl9300.c
+index 2ccc139ffbf6..e6eb6a32fde2 100644
+--- a/drivers/i2c/busses/i2c-rtl9300.c
++++ b/drivers/i2c/busses/i2c-rtl9300.c
+@@ -23,94 +23,114 @@ struct rtl9300_i2c_chan {
+ 	u8 sda_pin;
+ };
+ 
++enum rtl9300_i2c_reg_scope {
++	REG_SCOPE_GLOBAL,
++	REG_SCOPE_MASTER,
++};
++
++struct rtl9300_i2c_reg_field {
++	struct reg_field field;
++	enum rtl9300_i2c_reg_scope scope;
++};
++
++enum rtl9300_i2c_reg_fields {
++	F_DATA_WIDTH = 0,
++	F_DEV_ADDR,
++	F_I2C_FAIL,
++	F_I2C_TRIG,
++	F_MEM_ADDR,
++	F_MEM_ADDR_WIDTH,
++	F_RD_MODE,
++	F_RWOP,
++	F_SCL_FREQ,
++	F_SCL_SEL,
++	F_SDA_OUT_SEL,
++	F_SDA_SEL,
++
++	/* keep last */
++	F_NUM_FIELDS
++};
++
++struct rtl9300_i2c_drv_data {
++	struct rtl9300_i2c_reg_field field_desc[F_NUM_FIELDS];
++	int (*select_scl)(struct rtl9300_i2c *i2c, u8 scl);
++	u32 data_reg;
++	u8 max_nchan;
++};
++
+ #define RTL9300_I2C_MUX_NCHAN	8
+ 
+ struct rtl9300_i2c {
+ 	struct regmap *regmap;
+ 	struct device *dev;
+ 	struct rtl9300_i2c_chan chans[RTL9300_I2C_MUX_NCHAN];
++	struct regmap_field *fields[F_NUM_FIELDS];
+ 	u32 reg_base;
++	u32 data_reg;
+ 	u8 sda_pin;
+ 	struct mutex lock;
+ };
+ 
+ #define RTL9300_I2C_MST_CTRL1				0x0
+-#define  RTL9300_I2C_MST_CTRL1_MEM_ADDR_OFS		8
+-#define  RTL9300_I2C_MST_CTRL1_MEM_ADDR_MASK		GENMASK(31, 8)
+-#define  RTL9300_I2C_MST_CTRL1_SDA_OUT_SEL_OFS		4
+-#define  RTL9300_I2C_MST_CTRL1_SDA_OUT_SEL_MASK		GENMASK(6, 4)
+-#define  RTL9300_I2C_MST_CTRL1_GPIO_SCL_SEL		BIT(3)
+-#define  RTL9300_I2C_MST_CTRL1_RWOP			BIT(2)
+-#define  RTL9300_I2C_MST_CTRL1_I2C_FAIL			BIT(1)
+-#define  RTL9300_I2C_MST_CTRL1_I2C_TRIG			BIT(0)
+ #define RTL9300_I2C_MST_CTRL2				0x4
+-#define  RTL9300_I2C_MST_CTRL2_RD_MODE			BIT(15)
+-#define  RTL9300_I2C_MST_CTRL2_DEV_ADDR_OFS		8
+-#define  RTL9300_I2C_MST_CTRL2_DEV_ADDR_MASK		GENMASK(14, 8)
+-#define  RTL9300_I2C_MST_CTRL2_DATA_WIDTH_OFS		4
+-#define  RTL9300_I2C_MST_CTRL2_DATA_WIDTH_MASK		GENMASK(7, 4)
+-#define  RTL9300_I2C_MST_CTRL2_MEM_ADDR_WIDTH_OFS	2
+-#define  RTL9300_I2C_MST_CTRL2_MEM_ADDR_WIDTH_MASK	GENMASK(3, 2)
+-#define  RTL9300_I2C_MST_CTRL2_SCL_FREQ_OFS		0
+-#define  RTL9300_I2C_MST_CTRL2_SCL_FREQ_MASK		GENMASK(1, 0)
+ #define RTL9300_I2C_MST_DATA_WORD0			0x8
+ #define RTL9300_I2C_MST_DATA_WORD1			0xc
+ #define RTL9300_I2C_MST_DATA_WORD2			0x10
+ #define RTL9300_I2C_MST_DATA_WORD3			0x14
+-
+ #define RTL9300_I2C_MST_GLB_CTRL			0x384
+ 
+ static int rtl9300_i2c_reg_addr_set(struct rtl9300_i2c *i2c, u32 reg, u16 len)
+ {
+-	u32 val, mask;
+ 	int ret;
+ 
+-	val = len << RTL9300_I2C_MST_CTRL2_MEM_ADDR_WIDTH_OFS;
+-	mask = RTL9300_I2C_MST_CTRL2_MEM_ADDR_WIDTH_MASK;
+-
+-	ret = regmap_update_bits(i2c->regmap, i2c->reg_base + RTL9300_I2C_MST_CTRL2, mask, val);
++	ret = regmap_field_write(i2c->fields[F_MEM_ADDR_WIDTH], len);
+ 	if (ret)
+ 		return ret;
+ 
+-	val = reg << RTL9300_I2C_MST_CTRL1_MEM_ADDR_OFS;
+-	mask = RTL9300_I2C_MST_CTRL1_MEM_ADDR_MASK;
++	return regmap_field_write(i2c->fields[F_MEM_ADDR], reg);
++}
+ 
+-	return regmap_update_bits(i2c->regmap, i2c->reg_base + RTL9300_I2C_MST_CTRL1, mask, val);
++static int rtl9300_i2c_select_scl(struct rtl9300_i2c *i2c, u8 scl)
++{
++	return regmap_field_write(i2c->fields[F_SCL_SEL], 1);
+ }
+ 
+ static int rtl9300_i2c_config_io(struct rtl9300_i2c *i2c, u8 sda_pin)
+ {
++	struct rtl9300_i2c_drv_data *drv_data;
+ 	int ret;
+-	u32 val, mask;
+ 
+-	ret = regmap_update_bits(i2c->regmap, RTL9300_I2C_MST_GLB_CTRL, BIT(sda_pin), BIT(sda_pin));
++	drv_data = (struct rtl9300_i2c_drv_data *)device_get_match_data(i2c->dev);
++
++	ret = regmap_field_update_bits(i2c->fields[F_SDA_SEL], BIT(sda_pin), BIT(sda_pin));
+ 	if (ret)
+ 		return ret;
+ 
+-	val = (sda_pin << RTL9300_I2C_MST_CTRL1_SDA_OUT_SEL_OFS) |
+-		RTL9300_I2C_MST_CTRL1_GPIO_SCL_SEL;
+-	mask = RTL9300_I2C_MST_CTRL1_SDA_OUT_SEL_MASK | RTL9300_I2C_MST_CTRL1_GPIO_SCL_SEL;
++	ret = regmap_field_write(i2c->fields[F_SDA_OUT_SEL], sda_pin);
++	if (ret)
++		return ret;
+ 
+-	return regmap_update_bits(i2c->regmap, i2c->reg_base + RTL9300_I2C_MST_CTRL1, mask, val);
++	return drv_data->select_scl(i2c, 0);
+ }
+ 
+ static int rtl9300_i2c_config_xfer(struct rtl9300_i2c *i2c, struct rtl9300_i2c_chan *chan,
+ 				   u16 addr, u16 len)
+ {
+-	u32 val, mask;
+-
+-	val = chan->bus_freq << RTL9300_I2C_MST_CTRL2_SCL_FREQ_OFS;
+-	mask = RTL9300_I2C_MST_CTRL2_SCL_FREQ_MASK;
++	int ret;
+ 
+-	val |= addr << RTL9300_I2C_MST_CTRL2_DEV_ADDR_OFS;
+-	mask |= RTL9300_I2C_MST_CTRL2_DEV_ADDR_MASK;
++	ret = regmap_field_write(i2c->fields[F_SCL_FREQ], chan->bus_freq);
++	if (ret)
++		return ret;
+ 
+-	val |= ((len - 1) & 0xf) << RTL9300_I2C_MST_CTRL2_DATA_WIDTH_OFS;
+-	mask |= RTL9300_I2C_MST_CTRL2_DATA_WIDTH_MASK;
++	ret = regmap_field_write(i2c->fields[F_DEV_ADDR], addr);
++	if (ret)
++		return ret;
+ 
+-	mask |= RTL9300_I2C_MST_CTRL2_RD_MODE;
++	ret = regmap_field_write(i2c->fields[F_DATA_WIDTH], (len - 1) & 0xf);
++	if (ret)
++		return ret;
+ 
+-	return regmap_update_bits(i2c->regmap, i2c->reg_base + RTL9300_I2C_MST_CTRL2, mask, val);
++	return regmap_field_write(i2c->fields[F_RD_MODE], 0);
+ }
+ 
+ static int rtl9300_i2c_read(struct rtl9300_i2c *i2c, u8 *buf, int len)
+@@ -121,8 +141,7 @@ static int rtl9300_i2c_read(struct rtl9300_i2c *i2c, u8 *buf, int len)
+ 	if (len > 16)
+ 		return -EIO;
+ 
+-	ret = regmap_bulk_read(i2c->regmap, i2c->reg_base + RTL9300_I2C_MST_DATA_WORD0,
+-			       vals, ARRAY_SIZE(vals));
++	ret = regmap_bulk_read(i2c->regmap, i2c->data_reg, vals, ARRAY_SIZE(vals));
+ 	if (ret)
+ 		return ret;
+ 
+@@ -149,52 +168,49 @@ static int rtl9300_i2c_write(struct rtl9300_i2c *i2c, u8 *buf, int len)
+ 		vals[reg] |= buf[i] << shift;
+ 	}
+ 
+-	return regmap_bulk_write(i2c->regmap, i2c->reg_base + RTL9300_I2C_MST_DATA_WORD0,
+-				vals, ARRAY_SIZE(vals));
++	return regmap_bulk_write(i2c->regmap, i2c->data_reg, vals, ARRAY_SIZE(vals));
+ }
+ 
+ static int rtl9300_i2c_writel(struct rtl9300_i2c *i2c, u32 data)
+ {
+-	return regmap_write(i2c->regmap, i2c->reg_base + RTL9300_I2C_MST_DATA_WORD0, data);
++	return regmap_write(i2c->regmap, i2c->data_reg, data);
+ }
+ 
+ static int rtl9300_i2c_execute_xfer(struct rtl9300_i2c *i2c, char read_write,
+ 				    int size, union i2c_smbus_data *data, int len)
+ {
+-	u32 val, mask;
++	u32 val;
+ 	int ret;
+ 
+-	val = read_write == I2C_SMBUS_WRITE ? RTL9300_I2C_MST_CTRL1_RWOP : 0;
+-	mask = RTL9300_I2C_MST_CTRL1_RWOP;
+-
+-	val |= RTL9300_I2C_MST_CTRL1_I2C_TRIG;
+-	mask |= RTL9300_I2C_MST_CTRL1_I2C_TRIG;
++	ret = regmap_field_write(i2c->fields[F_RWOP], read_write == I2C_SMBUS_WRITE);
++	if (ret)
++		return ret;
+ 
+-	ret = regmap_update_bits(i2c->regmap, i2c->reg_base + RTL9300_I2C_MST_CTRL1, mask, val);
++	ret = regmap_field_write(i2c->fields[F_I2C_TRIG], 1);
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = regmap_read_poll_timeout(i2c->regmap, i2c->reg_base + RTL9300_I2C_MST_CTRL1,
+-				       val, !(val & RTL9300_I2C_MST_CTRL1_I2C_TRIG), 100, 100000);
++	ret = regmap_field_read_poll_timeout(i2c->fields[F_I2C_TRIG], val, !val, 100, 100000);
+ 	if (ret)
+ 		return ret;
+ 
+-	if (val & RTL9300_I2C_MST_CTRL1_I2C_FAIL)
++	ret = regmap_field_read(i2c->fields[F_I2C_FAIL], &val);
++	if (ret)
++		return ret;
++	if (val)
+ 		return -EIO;
+ 
+ 	if (read_write == I2C_SMBUS_READ) {
+ 		switch (size) {
+ 		case I2C_SMBUS_BYTE:
+ 		case I2C_SMBUS_BYTE_DATA:
+-			ret = regmap_read(i2c->regmap,
+-					  i2c->reg_base + RTL9300_I2C_MST_DATA_WORD0, &val);
++			ret = regmap_read(i2c->regmap, i2c->data_reg, &val);
+ 			if (ret)
+ 				return ret;
+ 			data->byte = val & 0xff;
+ 			break;
+ 		case I2C_SMBUS_WORD_DATA:
+-			ret = regmap_read(i2c->regmap,
+-					  i2c->reg_base + RTL9300_I2C_MST_DATA_WORD0, &val);
++			ret = regmap_read(i2c->regmap, i2c->data_reg, &val);
+ 			if (ret)
+ 				return ret;
+ 			data->word = val & 0xffff;
+@@ -362,9 +378,11 @@ static int rtl9300_i2c_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+ 	struct rtl9300_i2c *i2c;
++	struct fwnode_handle *child;
++	struct rtl9300_i2c_drv_data *drv_data;
++	struct reg_field fields[F_NUM_FIELDS];
+ 	u32 clock_freq, sda_pin;
+ 	int ret, i = 0;
+-	struct fwnode_handle *child;
+ 
+ 	i2c = devm_kzalloc(dev, sizeof(*i2c), GFP_KERNEL);
+ 	if (!i2c)
+@@ -383,9 +401,22 @@ static int rtl9300_i2c_probe(struct platform_device *pdev)
+ 
+ 	platform_set_drvdata(pdev, i2c);
+ 
+-	if (device_get_child_node_count(dev) >= RTL9300_I2C_MUX_NCHAN)
++	drv_data = (struct rtl9300_i2c_drv_data *)device_get_match_data(i2c->dev);
++	if (device_get_child_node_count(dev) >= drv_data->max_nchan)
+ 		return dev_err_probe(dev, -EINVAL, "Too many channels\n");
+ 
++	i2c->data_reg = i2c->reg_base + drv_data->data_reg;
++	for (i = 0; i < F_NUM_FIELDS; i++) {
++		fields[i] = drv_data->field_desc[i].field;
++		if (drv_data->field_desc[i].scope == REG_SCOPE_MASTER)
++			fields[i].reg += i2c->reg_base;
++	}
++	ret = devm_regmap_field_bulk_alloc(dev, i2c->regmap, i2c->fields,
++					   fields, F_NUM_FIELDS);
++	if (ret)
++		return ret;
++
++	i = 0;
+ 	device_for_each_child_node(dev, child) {
+ 		struct rtl9300_i2c_chan *chan = &i2c->chans[i];
+ 		struct i2c_adapter *adap = &chan->adap;
+@@ -402,7 +433,6 @@ static int rtl9300_i2c_probe(struct platform_device *pdev)
+ 		case I2C_MAX_STANDARD_MODE_FREQ:
+ 			chan->bus_freq = RTL9300_I2C_STD_FREQ;
+ 			break;
+-
+ 		case I2C_MAX_FAST_MODE_FREQ:
+ 			chan->bus_freq = RTL9300_I2C_FAST_FREQ;
+ 			break;
+@@ -434,11 +464,37 @@ static int rtl9300_i2c_probe(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
++#define GLB_REG_FIELD(reg, msb, lsb)    \
++	{ .field = REG_FIELD(reg, msb, lsb), .scope = REG_SCOPE_GLOBAL }
++#define MST_REG_FIELD(reg, msb, lsb)    \
++	{ .field = REG_FIELD(reg, msb, lsb), .scope = REG_SCOPE_MASTER }
++
++static const struct rtl9300_i2c_drv_data rtl9300_i2c_drv_data = {
++	.field_desc = {
++		[F_MEM_ADDR]		= MST_REG_FIELD(RTL9300_I2C_MST_CTRL1, 8, 31),
++		[F_SDA_OUT_SEL]		= MST_REG_FIELD(RTL9300_I2C_MST_CTRL1, 4, 6),
++		[F_SCL_SEL]		= MST_REG_FIELD(RTL9300_I2C_MST_CTRL1, 3, 3),
++		[F_RWOP]		= MST_REG_FIELD(RTL9300_I2C_MST_CTRL1, 2, 2),
++		[F_I2C_FAIL]		= MST_REG_FIELD(RTL9300_I2C_MST_CTRL1, 1, 1),
++		[F_I2C_TRIG]		= MST_REG_FIELD(RTL9300_I2C_MST_CTRL1, 0, 0),
++		[F_RD_MODE]		= MST_REG_FIELD(RTL9300_I2C_MST_CTRL2, 15, 15),
++		[F_DEV_ADDR]		= MST_REG_FIELD(RTL9300_I2C_MST_CTRL2, 8, 14),
++		[F_DATA_WIDTH]		= MST_REG_FIELD(RTL9300_I2C_MST_CTRL2, 4, 7),
++		[F_MEM_ADDR_WIDTH]	= MST_REG_FIELD(RTL9300_I2C_MST_CTRL2, 2, 3),
++		[F_SCL_FREQ]		= MST_REG_FIELD(RTL9300_I2C_MST_CTRL2, 0, 1),
++		[F_SDA_SEL]		= GLB_REG_FIELD(RTL9300_I2C_MST_GLB_CTRL, 0, 7),
++	},
++	.select_scl = rtl9300_i2c_select_scl,
++	.data_reg = RTL9300_I2C_MST_DATA_WORD0,
++	.max_nchan = RTL9300_I2C_MUX_NCHAN,
++};
++
++
+ static const struct of_device_id i2c_rtl9300_dt_ids[] = {
+-	{ .compatible = "realtek,rtl9301-i2c" },
+-	{ .compatible = "realtek,rtl9302b-i2c" },
+-	{ .compatible = "realtek,rtl9302c-i2c" },
+-	{ .compatible = "realtek,rtl9303-i2c" },
++	{ .compatible = "realtek,rtl9301-i2c", .data = (void *) &rtl9300_i2c_drv_data },
++	{ .compatible = "realtek,rtl9302b-i2c", .data = (void *) &rtl9300_i2c_drv_data },
++	{ .compatible = "realtek,rtl9302c-i2c", .data = (void *) &rtl9300_i2c_drv_data },
++	{ .compatible = "realtek,rtl9303-i2c", .data = (void *) &rtl9300_i2c_drv_data },
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(of, i2c_rtl9300_dt_ids);
 -- 
 2.48.1
 
