@@ -1,110 +1,115 @@
-Return-Path: <linux-i2c+bounces-12172-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12173-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2609EB1F385
-	for <lists+linux-i2c@lfdr.de>; Sat,  9 Aug 2025 11:16:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 70AEAB1F41A
+	for <lists+linux-i2c@lfdr.de>; Sat,  9 Aug 2025 12:23:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C10CE721B26
-	for <lists+linux-i2c@lfdr.de>; Sat,  9 Aug 2025 09:16:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0DFCA721D8A
+	for <lists+linux-i2c@lfdr.de>; Sat,  9 Aug 2025 10:23:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80408224AFA;
-	Sat,  9 Aug 2025 09:16:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A04DB261595;
+	Sat,  9 Aug 2025 10:23:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="lKPVquKm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O1I2bt4O"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EB0719D065
-	for <linux-i2c@vger.kernel.org>; Sat,  9 Aug 2025 09:16:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 586BB227BB9;
+	Sat,  9 Aug 2025 10:23:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754730982; cv=none; b=fiJJLSdLAX7QiuOWlUx5+y9S+2t/ueRpr3xOkvtViaXxmezI//6/1CbcJ98c4T37NjQDsKMoVWfS4cCxOT7d0zzUb4c+bV/A+YOZmD67p32OxHlyuEKR0F2KFC1N86ZpUw3nr3V7Wd9ydZ+AKZGO0Z26ah0tqYWIH/PEh9rShiM=
+	t=1754735019; cv=none; b=s3fvAritmD2gQwPr/yHW6jqIl7rc6aPVmazuO6Ox4UepjFO+BXc7e3A9N/0UEaviUuJC/6rCevYxlDCUXRcZesrELYcbRZnTJEiGkAjBqO5tFpVYXA0HdRThcx4gMnxpTyR82OAFqGvVFmB8y2EBpMD82BsbHaEaHV71T//Dp14=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754730982; c=relaxed/simple;
-	bh=+niwY8GWPEm0R6Qq5ZIAxq7zT+yGOlTKB6t04XHz6sc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OiFile5W+Nwp65fHkC+ekodjdlHqACMbgiliB2arfjmfSKqDDqNVqnZFanfp2wvyYp6W/r2CISgQdckPLmek+LY1eKPK0PWTV30dOTd7mgb954oSIc9AW8I5CM1V5u/Vn1ohJFzitchN4d8HqhwC6kAdU/8WX+/vzNBGznon4tY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=lKPVquKm; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=+niw
-	Y8GWPEm0R6Qq5ZIAxq7zT+yGOlTKB6t04XHz6sc=; b=lKPVquKma3b9YasbqQu6
-	vAea5Zoanx9Xn7Lb7qn6bCVRM0BKV529J+p39lpxNF0ACQ+BlQlBKplFKlollr37
-	57Lvaq3kXG+IJ/wyVCI5Oc8Bo+7p+KCdG+ilqR16tlfilcxY80OE89l0anIwngYT
-	Vrzg1s7upWNlXc1d5OOsRKFpkFmLjzpckZoTViYynt27h3jW5lKgmWljknUu9xJK
-	/xMIRqc1e8endsd8AfCspIEr4L2m1Nm03N+gBxD4144h5V0cJeOz8aa2Y9BjoUTf
-	usl7c0U3Ny+7akkqhd6bBAHzLvAZygoxH8bqCJStouQsPDtlOl5Z1cHUdyVyB4vK
-	0A==
-Received: (qmail 2032441 invoked from network); 9 Aug 2025 11:09:32 +0200
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 9 Aug 2025 11:09:32 +0200
-X-UD-Smtp-Session: l3s3148p1@ZnFkDOs70L5tKDNO
-Date: Sat, 9 Aug 2025 11:09:30 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Sven Eckelmann <sven@narfation.org>
-Cc: chris.packham@alliedtelesis.co.nz, Alex Guo <alexguo1023@gmail.com>,
-	andi.shyti@kernel.org, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: rtl9300: Fix out-of-bounds bug in
- rtl9300_i2c_smbus_xfer
-Message-ID: <aJcQSpYeWYHr9fm5@shikoro>
-References: <20250615235248.529019-1-alexguo1023@gmail.com>
- <4670491.LvFx2qVVIh@ripper>
- <aJB6u1WoNjiE-tZz@shikoro>
- <10749199.nUPlyArG6x@sven-desktop>
+	s=arc-20240116; t=1754735019; c=relaxed/simple;
+	bh=/Cza+XwEEYSu1v2kYcWi4arWgCVPqIJudOZevf/Kd2A=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=O2qq7ZiCIav590OUCUOq1J6BFyqgSN3Oqh30tdxCspiQwumt5FOiBNZlsz3s3HZUWCFKgmbTvGgdio2ZIK8Udm2LlwcHGT6WimpDa1G5g/OsC5ciVe2v+aJbuYPm8Gvq3pRZfTZDkq6TPXW7IXDqf1QkhunqXIsYO0KTST69Oig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O1I2bt4O; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D1A7C4CEE7;
+	Sat,  9 Aug 2025 10:23:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1754735016;
+	bh=/Cza+XwEEYSu1v2kYcWi4arWgCVPqIJudOZevf/Kd2A=;
+	h=From:To:Cc:Subject:Date:From;
+	b=O1I2bt4ObbabNQFxaet24m4YNNmjlmYkI1LSSXzQafp2VOEk3DVnUypctjswMfqmn
+	 LW9HBVoPW5/15nqhqD9XbPgo6R0Rgzc+y4XIFEQjW+3c63H3LojgxC2AWmaeqwGuwH
+	 37QA81pEDDYu41yslA9hPm6je02YCT4fRPInile3A8KdrcuYMH9Dg85nMCnaMtH4Qu
+	 REPlsCo8jXQ9PLmBZaKhFHZV5JNlLDGmsaohbGtUKfFTi749YuDPKbri2F+8Zer9RT
+	 LpSGI7b4NPL7qwVkeCdHpn5IMLfR6XRZxC36n4IyU+TUqZ0T6bWMkMxUyV9dIiQ5pR
+	 HcjI1dMfZpBOg==
+From: Hans de Goede <hansg@kernel.org>
+To: Israel Cepeda <israel.a.cepeda.lopez@intel.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Wolfram Sang <wsa@kernel.org>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Linus Walleij <linus.walleij@linaro.org>
+Cc: Hans de Goede <hansg@kernel.org>,
+	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
+	Richard Hughes <rhughes@redhat.com>,
+	linux-i2c@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	linux-gpio@vger.kernel.org
+Subject: [PATCH 0/3] usb/gpio/i2c: Add Intel USBIO USB IO-expander drivers
+Date: Sat,  9 Aug 2025 12:23:23 +0200
+Message-ID: <20250809102326.6032-1-hansg@kernel.org>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="Ccho4Pm/OoTM8z1G"
-Content-Disposition: inline
-In-Reply-To: <10749199.nUPlyArG6x@sven-desktop>
+Content-Transfer-Encoding: 8bit
+
+Hi All,
+
+This patch series adds support for the Intel USBIO USB IO-expander used by
+the MIPI cameras on various new (Meteor Lake and later) Intel laptops.
+
+The first patch adds an USB bridge driver which registers auxbus children
+for the GPIO and I2C functions of the USBIO chip.
+
+The second and third patch add a GPIO resp. an I2C driver for the
+auxbus children using the IO functions exported by the USB bridge driver.
+
+The second and third patch depend on the IO functions exported by
+the first patch. So to merge this we will need either an immutable tag on
+the USB tree, or all 3 patches can be merged through the USB tree with
+acks from the GPIO and I2C subsystem maintainers.
+
+Regards,
+
+Hans
 
 
---Ccho4Pm/OoTM8z1G
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Israel Cepeda (3):
+  usb: misc: Add Intel USBIO bridge driver
+  gpio: Add Intel USBIO GPIO driver
+  i2c: Add Intel USBIO I2C driver
 
+ MAINTAINERS                    |   9 +
+ drivers/gpio/Kconfig           |  11 +
+ drivers/gpio/Makefile          |   1 +
+ drivers/gpio/gpio-usbio.c      | 258 ++++++++++++
+ drivers/i2c/busses/Kconfig     |  11 +
+ drivers/i2c/busses/Makefile    |   1 +
+ drivers/i2c/busses/i2c-usbio.c | 344 ++++++++++++++++
+ drivers/usb/misc/Kconfig       |  14 +
+ drivers/usb/misc/Makefile      |   1 +
+ drivers/usb/misc/usbio.c       | 693 +++++++++++++++++++++++++++++++++
+ include/linux/usb/usbio.h      | 168 ++++++++
+ 11 files changed, 1511 insertions(+)
+ create mode 100644 drivers/gpio/gpio-usbio.c
+ create mode 100644 drivers/i2c/busses/i2c-usbio.c
+ create mode 100644 drivers/usb/misc/usbio.c
+ create mode 100644 include/linux/usb/usbio.h
 
-> Btw. I've already picked it up in my patchset [2] to avoid conflicts with=
- this=20
-> patch. And since they (2-4) fix broken functionality in Linux 6.13, this =
-patch=20
-> becomes a requirement for backporting those fixes to the stable kernels.
+-- 
+2.49.0
 
-Thanks for the heads up. As I already said, in your case we can surely
-include this patch.
-
-
-
---Ccho4Pm/OoTM8z1G
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmiXEEcACgkQFA3kzBSg
-Kbamww//eXpn+bOOXHSCQzjHme6SUyCKDDQK9RwcdrG9XXkB1fqRkBxP20I0cPHq
-F3u8fkyNR51qZolJnRo/nAUMUyl9RtqLxxCr1yYK266fg+gaWkRR+qbCeHYWU58P
-Izvfhua6cLcy0fJPUIHdt0IwjYw2A2IZqY/oB7w1/mOJ9vBetRD7ol4SLQf3zFwa
-TW362kio+Tn4uVTpN4B52r+7UjP2jKawPPtnNnohD39MU3IOaPjBzJW84DcYxw/H
-7E7AzWN4SGVebc0Y2CFP5fN820kORr6qWujXaS9+nKJ9ErZkxC2Zo0/b3X57OgI/
-+4o+qwrQVzoPs/QAvkaMV9fIcbf6ZErrjq6W+aTanRayO5awJ5I9IW3agFiIYdEO
-vNEYhqWjeYKIp9eHvYi5BgqNeUyCqyo0XkiTm4PaL2TPAOHhJ5ia7/31S9i2VdmT
-IHY5GYcgQVCvqktksKJKd69VBrWp6PtJB3/gLB0NRJ6U07PFBAhMg58OtkT4uaiD
-PpFFVzXBm2Wj9MM+34+PbkxKuuiU/QuWdaZCB3ga/ZGCiJn1nH+aaCWEWAsTZt92
-62YDeWi0XRdY8iF++tM7e0BpdfczsXvS/JLt9BKZvC0c1x1GnvJQ1OSI+9jc0S+J
-uuf4M/d/QepDfczf6JOLF2dtpWMSPzTgUzFO2DXD56DYUKC2RGo=
-=+Jon
------END PGP SIGNATURE-----
-
---Ccho4Pm/OoTM8z1G--
 
