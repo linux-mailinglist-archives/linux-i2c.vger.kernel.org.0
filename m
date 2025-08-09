@@ -1,127 +1,123 @@
-Return-Path: <linux-i2c+bounces-12179-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12180-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D23BB1F536
-	for <lists+linux-i2c@lfdr.de>; Sat,  9 Aug 2025 17:30:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF522B1F5AA
+	for <lists+linux-i2c@lfdr.de>; Sat,  9 Aug 2025 19:35:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8E592560DB4
-	for <lists+linux-i2c@lfdr.de>; Sat,  9 Aug 2025 15:30:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 79B4362463F
+	for <lists+linux-i2c@lfdr.de>; Sat,  9 Aug 2025 17:35:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7CE82BE7A6;
-	Sat,  9 Aug 2025 15:30:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 379412BEFFD;
+	Sat,  9 Aug 2025 17:35:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Xp8IVI8k"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="UpdC7Emb"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 333F618A921;
-	Sat,  9 Aug 2025 15:30:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A68B26FDB2
+	for <linux-i2c@vger.kernel.org>; Sat,  9 Aug 2025 17:34:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754753447; cv=none; b=E13qaRzca8ENW+eazneIXpHzSgM/WeYXBdArXxBaynEx8ZlErvdvKyGrXtCZQ7HiH98bCo1+WDSuCwKRhEe+7zaBiBk0o7WOf7mQEwfE10fyh9MEnjg3Wc2fjLfzexT1DaF7Ig2pCMGyXYC/YENJ91/KfqSQi85RkbBLszQSokI=
+	t=1754760905; cv=none; b=cM7asYv96AKwAi5HbJnhW0QrcO/o/GeS9HolhfBhBAH2eWRY+YxhlXaMi6HwX6DHPnYESWlJ28oEkBUU8wGmD5V+b3fzzOjWft8hSE1bxvvfnPucwZfbwlbdXJ80H0ZjX5M60EY7nPAPn06gPJlFLc6mZAKf5sHGA8FTT/czhIE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754753447; c=relaxed/simple;
-	bh=f+HK2VJeFXZ66mzCW414RG/x+xWx9dy0RDZzXGAwlCY=;
+	s=arc-20240116; t=1754760905; c=relaxed/simple;
+	bh=GaiXKFj06EKzWM3cwTRt4zPflhb4z5ZAlRARKzBicFA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kQZ9igpQSblQUwo7q6bn2WLhi+TczXW868H8ZYK3nJc0/D6Hi35TEnwxGtteypb3oDKchITQRnP6Lw0PCWaECaEwOf3H9cnR3ZHVGS9HP2akt+Av0WViYErF/zmVLznRCM7rCdq+xtNSkH1UKmuo5i92IIhB0P3gOtgazAZQrFw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Xp8IVI8k; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1754753447; x=1786289447;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=f+HK2VJeFXZ66mzCW414RG/x+xWx9dy0RDZzXGAwlCY=;
-  b=Xp8IVI8kFWQP7J3c4RV+XReMqPeIA1kD7B8mwvIcloqrRBosMMFV52X4
-   1hQBaJJDUiYnDBZsszkK6fSlH09bNiBQ9GDKa3ZVzwncrZvwvG57PwOFU
-   bbMja3nS9SaHY7ZsuRFodiRONoru9N78+ttRjUIjE1Q2TU7OlX5rPBp5P
-   hxYBsvs1VjqppluNFAogN5X0jMwigmvQTOvnoBazXqStnRFCRXXUCL09i
-   SZQCyf5iAUUCk31TAL+iFx06tuXIi5a2bpWnqJtbnXGFK53STK0wgHI1P
-   +gOmrLJw/F2ik4mDdyiotRA+h7sAYV7ZyJPveQNgqZNweurkCZp1O+nkv
-   w==;
-X-CSE-ConnectionGUID: yalgLBwlQl6mW3eORrtPdg==
-X-CSE-MsgGUID: EoiINM3iTUinuE193CRo5Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11516"; a="60705363"
-X-IronPort-AV: E=Sophos;i="6.17,278,1747724400"; 
-   d="scan'208";a="60705363"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2025 08:30:46 -0700
-X-CSE-ConnectionGUID: c2puHhK8QJmT48DZsOS8mw==
-X-CSE-MsgGUID: AoMsAoP3SJ+p0V26BtRxXg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,278,1747724400"; 
-   d="scan'208";a="165965915"
-Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by fmviesa008.fm.intel.com with ESMTP; 09 Aug 2025 08:30:43 -0700
-Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uklWq-0004sC-1a;
-	Sat, 09 Aug 2025 15:30:40 +0000
-Date: Sat, 9 Aug 2025 23:29:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: Hans de Goede <hansg@kernel.org>,
-	Israel Cepeda <israel.a.cepeda.lopez@intel.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Wolfram Sang <wsa-dev@sang-engineering.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Linus Walleij <linus.walleij@linaro.org>
-Cc: oe-kbuild-all@lists.linux.dev, Hans de Goede <hansg@kernel.org>,
-	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
-	Richard Hughes <rhughes@redhat.com>, linux-i2c@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-gpio@vger.kernel.org
-Subject: Re: [PATCH 1/3] usb: misc: Add Intel USBIO bridge driver
-Message-ID: <202508092329.U0OxBRAh-lkp@intel.com>
-References: <20250809102326.6032-2-hansg@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=rEyv7N3pVKmPV4dtRB3Ru+SBWrMksn5EfC/8i0YXvoA12ebIplkhcorxYCsptWlE4bsamAKJru3Dg0BFe+TNYfnbB2bZSoAm4FTvPk4VPJYjRDEM6gUuhD50AukKn4BP7rC0BqLs63VeSqWd1DIPSy+yTsg1+F3UiePEfEqRsNs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=UpdC7Emb; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=Jy4R
+	CQzC4CWh7/PrWweAqu8kFz7W0uIQuS9di8xCb2c=; b=UpdC7Embea6HoDCi1ZBL
+	XjXLFw5WqgPgwVRhN2T2nNUj6GO1vfeSruEAJOH2C3gGhDrka/4Swsf8G0J5KP6u
+	5Xt3wuWcDwZXvJVfaJpm5p7VN+Zrtmym2EcW+0WSfzow+6lY3EWdhmPGHwIMnu+b
+	ODqI1Fv7GxBccakzlQ2H0S9tUA5S52paifgH+ZJ3Ljwn8UdQIS96R/n3zwEcGfQZ
+	vv7Z//X3eL6OX5CEdp5Rz2fZPmds/uJrFenYQd9BH38eSu98BHANdUAAQGl89hbr
+	rQg69JG796EHDEqwy7fWIHeTwxOY1XfgiaGGLBaPjQ/WwlzxrWvH1ywSwZtqIRaX
+	TQ==
+Received: (qmail 2148172 invoked from network); 9 Aug 2025 19:34:56 +0200
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 9 Aug 2025 19:34:56 +0200
+X-UD-Smtp-Session: l3s3148p1@GcHUG/I7iONtKDNQ
+Date: Sat, 9 Aug 2025 19:34:54 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Sven Eckelmann <sven@narfation.org>
+Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>,
+	Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Jonas Jelonek <jelonek.jonas@gmail.com>,
+	Harshal Gohel <hg@simonwunderlich.de>,
+	Simon Wunderlich <sw@simonwunderlich.de>,
+	Alex Guo <alexguo1023@gmail.com>, stable@vger.kernel.org
+Subject: Re: [PATCH i2c-host-fixes v4 1/5] i2c: rtl9300: Fix out-of-bounds
+ bug in rtl9300_i2c_smbus_xfer
+Message-ID: <aJeGvoSYS5Raqxyk@shikoro>
+References: <20250809-i2c-rtl9300-multi-byte-v4-0-d71dd5eb6121@narfation.org>
+ <20250809-i2c-rtl9300-multi-byte-v4-1-d71dd5eb6121@narfation.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="LLfJenckN6oSwQa8"
+Content-Disposition: inline
+In-Reply-To: <20250809-i2c-rtl9300-multi-byte-v4-1-d71dd5eb6121@narfation.org>
+
+
+--LLfJenckN6oSwQa8
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250809102326.6032-2-hansg@kernel.org>
+Content-Transfer-Encoding: quoted-printable
 
-Hi Hans,
+On Sat, Aug 09, 2025 at 08:40:54AM +0200, Sven Eckelmann wrote:
+> From: Alex Guo <alexguo1023@gmail.com>
+>=20
+> The data->block[0] variable comes from user. Without proper check,
+> the variable may be very large to cause an out-of-bounds bug.
+>=20
+> Fix this bug by checking the value of data->block[0] first.
+>=20
+> 1. commit 39244cc75482 ("i2c: ismt: Fix an out-of-bounds bug in
+>    ismt_access()")
+> 2. commit 92fbb6d1296f ("i2c: xgene-slimpro: Fix out-of-bounds bug in
+>    xgene_slimpro_i2c_xfer()")
+>=20
+> Cc: <stable@vger.kernel.org>
+> Fixes: c366be720235 ("i2c: Add driver for the RTL9300 I2C controller")
+> Signed-off-by: Alex Guo <alexguo1023@gmail.com>
+> Reviewed-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> Tested-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> Signed-off-by: Sven Eckelmann <sven@narfation.org>
 
-kernel test robot noticed the following build warnings:
+Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-[auto build test WARNING on usb/usb-testing]
-[also build test WARNING on usb/usb-next usb/usb-linus brgl/gpio/for-next andi-shyti/i2c/i2c-host linus/master v6.16 next-20250808]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Hans-de-Goede/usb-misc-Add-Intel-USBIO-bridge-driver/20250809-182506
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20250809102326.6032-2-hansg%40kernel.org
-patch subject: [PATCH 1/3] usb: misc: Add Intel USBIO bridge driver
-config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20250809/202508092329.U0OxBRAh-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14+deb12u1) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250809/202508092329.U0OxBRAh-lkp@intel.com/reproduce)
+--LLfJenckN6oSwQa8
+Content-Type: application/pgp-signature; name="signature.asc"
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508092329.U0OxBRAh-lkp@intel.com/
+-----BEGIN PGP SIGNATURE-----
 
-All warnings (new ones prefixed by >>):
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmiXhrsACgkQFA3kzBSg
+KbYsxg//c6JAqXX7UQ3nihMt2s+4Z5AfdahtyhF0v3L4ccT+YtXGxFP3JNftpeec
+HBT9s3t+0V6Y4kI8sVOZ49xw4D4UxAJqDijOSn927S/j4geEBd8DOV+hwnn8cSzs
+JiclnehZ5Uhu7WcsTYWx49QmrpFbWCr5X5OaGH7PR2ObAfDfSly1GEIdrPNFASig
+gIViZmSvLmcttuq4cDwX32KU0xbFwq3y8pJ7szSv/TbCTyAh0tHAanuVoLBHSkVt
+sUhMoAGh2JPXKloC4tdvpzS4xedw90nz8d5W2kG71NusCsmEpQMWmk5A622GH1GR
+fTS7Tr+j9++i4xxVFl5ybf3k5F120mWqCPlZJdRd5aF5/2aFL1Aks+KzwlPVRuB0
+2I8bsppQ6CVwYz9WqiYuFMvlR/cCmBnTgANSrfXIIOf1UKYiUSdkbYYR/RxBwrRa
+AjlxyxT0FpBSXFtnG0vd01iQxOhWCx6WmLAkGanCVPT9Mw/R5b3XbFk4OnCV2c7U
+R8JFC7bP/2j+TIK+az6rUZ5+P+uPGQH/hwIpHHdTkzKz/kWe1wyJEM3jDnF7ot9h
+xWnxSh25bkV3X2XuclD/OszsVQiIeKK6THDcaNMH5QOonE/Zq581nmkxAN0T5rNK
+HdMcUfw7LNDCxLauP7Y2cW6a/I7dAHe/bjgaBQYpds+li6+GMdU=
+=19xn
+-----END PGP SIGNATURE-----
 
->> Warning: drivers/usb/misc/usbio.c:132 struct member 'nr_gpio_banks' not described in 'usbio_device'
->> Warning: drivers/usb/misc/usbio.c:132 struct member 'gpios' not described in 'usbio_device'
->> Warning: drivers/usb/misc/usbio.c:132 struct member 'nr_i2c_buses' not described in 'usbio_device'
->> Warning: drivers/usb/misc/usbio.c:132 struct member 'i2cs' not described in 'usbio_device'
->> Warning: drivers/usb/misc/usbio.c:132 struct member 'nr_spi_buses' not described in 'usbio_device'
->> Warning: drivers/usb/misc/usbio.c:132 struct member 'spis' not described in 'usbio_device'
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--LLfJenckN6oSwQa8--
 
