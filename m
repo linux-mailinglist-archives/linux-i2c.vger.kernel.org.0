@@ -1,212 +1,180 @@
-Return-Path: <linux-i2c+bounces-12165-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12166-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9A48B1EFEE
-	for <lists+linux-i2c@lfdr.de>; Fri,  8 Aug 2025 22:51:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 64B40B1F294
+	for <lists+linux-i2c@lfdr.de>; Sat,  9 Aug 2025 08:42:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AF3131C27DF5
-	for <lists+linux-i2c@lfdr.de>; Fri,  8 Aug 2025 20:52:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 06CD31AA6734
+	for <lists+linux-i2c@lfdr.de>; Sat,  9 Aug 2025 06:42:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E219238D49;
-	Fri,  8 Aug 2025 20:51:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18B0325487C;
+	Sat,  9 Aug 2025 06:42:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QBKeL+SY"
+	dkim=pass (1024-bit key) header.d=narfation.org header.i=@narfation.org header.b="xg2YsxeL"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from dvalin.narfation.org (dvalin.narfation.org [213.160.73.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2AC922A7E9;
-	Fri,  8 Aug 2025 20:51:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DEDA3C17;
+	Sat,  9 Aug 2025 06:42:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.160.73.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754686301; cv=none; b=SLDrCuhZ1sbD3wJNHA1+rLwqnOe29SMLwLUhWktRtEJy9ocxH++aD2sepDe5DNULaXIXKvaq0YRUeu/WmOLuJbXyU7T7B+njsVQ2ZQlNudheq+GmVYwu5b/QhiXznV9AhoVa9YaZYs79cdBoFz+C4zlzlzUbA1v+cDb4vBzLJsg=
+	t=1754721723; cv=none; b=QOz5/gsQPn8S5jL9fQCt3OkzDDkViyNdnmTV3ZkYlcgrT7coDp/vXZlr46QLVlskm3HmCDhmd+9skzXqsM1cwByayCEqpgp9Me7B1JQsqjkAMqSdCsQZracrpPaZHNQacaupN+ZxFOfHVYsuLjTxZ+XDXLD1HZGfyBz9k5lM4lw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754686301; c=relaxed/simple;
-	bh=4c7dcO8cBD9ikUvxoVP8jATQy3ONCOqQNTHYEuyQBdM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=E8MZjJrXltjmCATUInNeU26SibSI0+q4tvOTWoX7dpBz2NFbuxYb5XIxEoDxb029L/rzvnaNBZ3WjhIzw5TTSmvDo7eogyl9yLdbl+BtodhxKW85Mu8TXCIxsq8si2KSDwtYPtfEtrXCNRuQQ3bn6gJ8mE3K7SkFOXIbBKSvUZo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QBKeL+SY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B722C4CEED;
-	Fri,  8 Aug 2025 20:51:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754686301;
-	bh=4c7dcO8cBD9ikUvxoVP8jATQy3ONCOqQNTHYEuyQBdM=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=QBKeL+SYcyEzKbbmBSU8UI8p/fIkhmUUjyV0ltEVrmhRNTCnGbX4zICtQx9RHJ8le
-	 FdIy1QH8Hvm7vP2i+gBSjJJLuFG/ApPppzWaBfhK4mu0AakIYYonLilAmBxao0pRbW
-	 toFGjGu7RKKSRjntZntsdrQYPu3QniGr7YOd44klA0ugoTT6rFk76dxOF1Cbc0GGg5
-	 i1e4/94Z683Voo62ISDXcvvf8B0zCcOYprU7SA7w4tZMBaVjGZzRd6/dXEd1wl31GQ
-	 7gJ68jGMOJoaxqKVuyUZqxicIN4OS27nKHrNm4i3BS0z+RXpzKOH131Q+RnABBGsCD
-	 ErdSwQxvYkD6g==
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-ae0bde4d5c9so485981966b.3;
-        Fri, 08 Aug 2025 13:51:41 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUVirRp3+FH5+7Ipy7Vi9uGdsFTkoeiZ7PhpX+b4qN3N8ms6Kg9rgVmFsutSVM6SBePUMwNM9pt8MSk+8RQjIs=@vger.kernel.org, AJvYcCUdXV7FwS0Kfr3qATG5rXVE2ZcgeOCIe2tfKSAmeV+SzF2H/m+zAUBSOO5I10MVsN6Q/6PM+DbgA7wTJQ==@vger.kernel.org, AJvYcCVDVxhHlSGp9Jl6YhYiw85/APKV1S3UuRTxDH9PTX1u8Ue1wMzjpeckt+ks0zjxaFJ4X0QO+fpjaHWr@vger.kernel.org, AJvYcCWeSDWKJoTw1paaS1b9/w712o6Tbh5MA0bbtEuQLbg/LzdJux6v/7noixZH4U0NFaS//5QcDxqNA/P1QGvH@vger.kernel.org
-X-Gm-Message-State: AOJu0YyK+qHDme28Vm/TUfQ3tWFrYoX1dgbfZik1J2JpJPznKky0pUDR
-	jnWOE5IcEFEc60LkEje5zG4mtcSBeOrnUJ+IGUyVKA+KPhp6ZE/9Y10vg+Fm5Co6i8S/iZD8U1B
-	eMXv29OyMCy5BlHI9qCIOss+yZAl4Ug==
-X-Google-Smtp-Source: AGHT+IHQrJOpK4XiBNspBEI4oq5Xzca+wGsnB52qjjmM0BV3Gl1mLQdv12KkSYu/KBIFOkihP1JJ+EasJRhG0Q8Mn4g=
-X-Received: by 2002:a17:907:7f90:b0:af1:8be4:768 with SMTP id
- a640c23a62f3a-af9c6342033mr407595666b.5.1754686299856; Fri, 08 Aug 2025
- 13:51:39 -0700 (PDT)
+	s=arc-20240116; t=1754721723; c=relaxed/simple;
+	bh=w0bAJq5+bavDrPNAcZYjfd9NL/kT4jBqERkwWyppw40=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=bM8J3XIe2TShYWNQdVJtjpBH3vNtrCbWlNiHnh2r4j1+FTS5GXVGnDEEPOJ+fM/zuJgl/zQ2/l4uMQvwwE6B3KlZwoiyVeTyNxItgstQHjIvp/aL6FR5cYlzVpHaYC3TuZO5Q+0dD4Fh/E5lsekNWW59lKh/Y0Cerj1QcdeC1Nk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=narfation.org; spf=pass smtp.mailfrom=narfation.org; dkim=pass (1024-bit key) header.d=narfation.org header.i=@narfation.org header.b=xg2YsxeL; arc=none smtp.client-ip=213.160.73.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=narfation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=narfation.org
+Received: from sven-desktop.home.narfation.org (unknown [IPv6:2a00:1ca0:1d86:99fc::8c24])
+	by dvalin.narfation.org (Postfix) with UTF8SMTPSA id 74ADC1FDC2;
+	Sat,  9 Aug 2025 06:41:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=narfation.org;
+	s=20121; t=1754721718;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=anUgaJrif1hKwagIinlhUBG3/VFhPvsbRt5mMq8WGrQ=;
+	b=xg2YsxeLkiyR9RHO2cc1BeoM8nrYT5ce8RrRNtFT626nSEh+MhG5MlB0B04AklAeDTIo2g
+	AQLcEDZ9TMDtWIu9BUqjuXlBi4MFCR/bWkv4jQCoS+IAc6BOQ2x16PrD6Ax5h3AepACiJA
+	UtCoO3iiisyZC+5WI3HnLxIR/hVj1X0=
+From: Sven Eckelmann <sven@narfation.org>
+Subject: [PATCH i2c-host-fixes v4 0/5] i2c: rtl9300: Fix multi-byte I2C
+ operations
+Date: Sat, 09 Aug 2025 08:40:53 +0200
+Message-Id: <20250809-i2c-rtl9300-multi-byte-v4-0-d71dd5eb6121@narfation.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250618082313.549140-1-herve.codina@bootlin.com>
- <20250618082313.549140-2-herve.codina@bootlin.com> <CAL_JsqJ=jmXVwjtNCjRpUKj02dnJEz4GHMX2wMRaWw=M+sZQ0w@mail.gmail.com>
- <20250808180746.6fa6a6f9@booty>
-In-Reply-To: <20250808180746.6fa6a6f9@booty>
-From: Rob Herring <robh@kernel.org>
-Date: Fri, 8 Aug 2025 15:51:27 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqLxsfpaaCvV3AcniMYxAYVir7ddL4umCNY3u-ggVTiZcg@mail.gmail.com>
-X-Gm-Features: Ac12FXyhc30cIfb-qG-xW4VJNYGcYBf6hXqiZhkdeEr39aHdgFnYaIY8y6lXS78
-Message-ID: <CAL_JsqLxsfpaaCvV3AcniMYxAYVir7ddL4umCNY3u-ggVTiZcg@mail.gmail.com>
-Subject: Re: [PATCH v3 1/1] schemas: i2c: Introduce I2C bus extensions
-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	Herve Codina <herve.codina@bootlin.com>, Ayush Singh <ayush@beagleboard.org>, 
-	Andi Shyti <andi.shyti@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, devicetree-spec@vger.kernel.org, 
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAHXtlmgC/4XOzQ6CMAzA8VchOztTyseGJ9/DeNiggyUIZkwiI
+ by7gxMxEo//Jv21MxvIWRrYJZqZo9EOtu9CpKeIlY3qauK2Cs0QMAMJyC2W3Pm2SAD449V6y/X
+ kiVOlVGw0SIElC8tPR8a+N/h2D93Ywfdu2u6M8Tr9S44xB56ZXAoCKCThtVPOKB8+PPeuZis74
+ p5KDikMVKGFFllhCHX+i0r2VHpIJYEihBwExRpl+U0ty/IBAX/PdlYBAAA=
+X-Change-ID: 20250802-i2c-rtl9300-multi-byte-edaa1fb0872c
+To: Chris Packham <chris.packham@alliedtelesis.co.nz>, 
+ Andi Shyti <andi.shyti@kernel.org>
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Jonas Jelonek <jelonek.jonas@gmail.com>, 
+ Harshal Gohel <hg@simonwunderlich.de>, 
+ Simon Wunderlich <sw@simonwunderlich.de>, 
+ Sven Eckelmann <sven@narfation.org>, Alex Guo <alexguo1023@gmail.com>, 
+ stable@vger.kernel.org
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4707; i=sven@narfation.org;
+ h=from:subject:message-id; bh=w0bAJq5+bavDrPNAcZYjfd9NL/kT4jBqERkwWyppw40=;
+ b=owGbwMvMwCXmy1+ufVnk62nG02pJDBnT3m44rWfjcfKQT9VE26BAK+Y+k8zXkiFXWCQr+k5KR
+ 51Yc8C+o4SFQYyLQVZMkWXPlfzzm9nfyn+e9vEozBxWJpAhDFycAjCRPfYMPx4obQmVUnkpVvZU
+ pnl2s3S6uLfU0o4fT17Oya9dxFyWzsiwRNBcunKP1R8d00nbWTquhi04zXRqosF3XatTkxlX/zT
+ lBwA=
+X-Developer-Key: i=sven@narfation.org; a=openpgp;
+ fpr=522D7163831C73A635D12FE5EC371482956781AF
 
-On Fri, Aug 8, 2025 at 11:08=E2=80=AFAM Luca Ceresoli <luca.ceresoli@bootli=
-n.com> wrote:
->
-> Hello Rob, Wolfram,
->
-> [this e-mail is co-written with Herv=C3=A9]
->
-> Rob, Wolfram: this e-mail mentions DT description together with
-> implementation ideas, but both of your opinions are very relevant here.
->
-> On Fri, 1 Aug 2025 13:09:54 -0500
-> Rob Herring <robh@kernel.org> wrote:
->
-> > On Wed, Jun 18, 2025 at 3:23=E2=80=AFAM Herve Codina <herve.codina@boot=
-lin.com> wrote:
-> > >
-> > > An I2C bus can be wired to the connector and allows an add-on board t=
-o
-> > > connect additional I2C devices to this bus.
-> > >
-> > > Those additional I2C devices could be described as sub-nodes of the I=
-2C
-> > > bus controller node however for hotplug connectors described via devi=
-ce
-> > > tree overlays there is additional level of indirection, which is need=
-ed
-> > > to decouple the overlay and the base tree:
-> > >
-> > >   --- base device tree ---
-> > >
-> > >   i2c1: i2c@abcd0000 {
-> > >       compatible =3D "xyz,foo";
-> > >       i2c-bus-extension@0 {
-> >
-> > This is at I2C bus address 0? No. You are mixing 2 different address
-> > spaces. Don't do that.
-> >
-> > You could solve this with just a property in the parent. If there's
-> > more than 1, then it's just multiple phandles. However I don't think
-> > you need this at all. You can just search the DT for 'i2c-parent' and
-> > find phandles that match the i2c controller node. But why does the
-> > controller driver need to know about connectors? Shouldn't the
-> > connector driver drive this and tell the controller there's more
-> > devices?
->
-> These were the concerns you had raised last April [0], so let's continue
-> from there and Herv=C3=A9's follow-up.
->
-> Herv=C3=A9's position was that a double-reference is more effective as ev=
-ery
-> interested party (the i2c adapter and the i2c extension node) have an
-> explicit description of the connected party/parties. Besides, this looks
-> consistent with the bidirectional links in remote-endpoints, which has
-> similarities.
+During the integration of the RTL8239 POE chip + its frontend MCU, it was
+noticed that multi-byte operations were basically broken in the current
+driver.
 
-In a complex graph, you need to be able to walk from any node to
-another node. I don't think that applies here.
+Tests using SMBus Block Writes showed that the data (after the Wr maker +
+Ack) was mixed up on the wire. At first glance, it looked like an
+endianness problem. But for transfers where the number of count + data
+bytes was not divisible by 4, the last bytes were not looking like an
+endianness problem because they were in the wrong order but not for example
+0 - which would be the case for an endianness problem with 32 bit
+registers. At the end, it turned out to be the way how i2c_write tried to
+add the bytes to the send registers.
 
-> OTOH I agree a single-direction link (i2c extension node to i2c
-> adapter) should work, in principle. However there are issues, mainly in
-> how an adapter finds out about the extensions when it is probed after
-> them.
+Each 32 bit register was used similar to a shift register - shifting the
+various bytes up the register while the next one is added to the least
+significant byte. But the I2C controller expects the first byte of the
+transmission in the least significant byte of the first register. And the
+last byte (assuming it is a 16 byte transfer) is expected in the most
+significant byte of the fourth register.
 
-We've had other cases such as i2c-parent and ddc-i2c-bus for years.
-Wouldn't those have the same issue? Maybe they do and just ignored it.
-If so, too late to change their DT and the kernel has to solve the
-problems there anyways...
+While doing these tests, it was also observed that the count byte was
+missing from the SMBus Block Writes. The driver just removed them from the
+data->block (from the I2C subsystem). But the I2C controller DOES NOT
+automatically add this byte - for example by using the configured
+transmission length.
 
-> Your proposal of searching the whole tree involves a lot of searches in
-> a potentially large tree, even though I don't expect it to happen often
-> at least for the use cases I'm aware of.
+The RTL8239 MCU is not actually an SMBus compliant device. Instead, it
+expects I2C Block Reads + I2C Block Writes. But according to the already
+identified bugs in the driver, it was clear that the I2C controller can
+simply be modified to not send the count byte for I2C_SMBUS_I2C_BLOCK_DATA.
+The receive part just needs to write the content of the receive buffer to
+the correct position in data->block.
 
-Right. And the need to do that entirely depends on the I2C core
-needing to scan the whole tree. Surely that's not actually the case.
-How does adding a device by overlay (as a direct child) work? If the
-I2C core just scans the child nodes again, don't we just need to
-change it to scan somewhere else? Seems like that would be simple
-enough change.
+While the on-wire format was now correct, reads were still not possible
+against the MCU (for the RTL8239 POE chip). It was always timing out
+because the 2ms were not enough for sending the read request and then
+receiving the 12 byte answer.
 
-> But, more important, Herv=C3=A9 pointed out an "i2c-parent" property is
-> already used for different purposes (i2c muxes). We could choose
-> another string but that would be fragile too.
+These changes were originally submitted to OpenWrt. But there are plans to
+migrate OpenWrt to the upstream Linux driver. As a result, the pull request
+was stopped and the changes were redone against this driver.
 
-It's the same purpose. Linking an i2c bus to somewhere else in the
-tree. I don't see why a connector/overlay is special here.
+For reasons of transparency: The work on I2C_SMBUS_I2C_BLOCK_DATA support
+for the RTL8239-MCU was done on RTL931xx. All problems were therefore
+detected with the patches from Jonas Jelonek [1] and not the vanilla Linux
+driver. But looking through the code, it seems like these are NOT
+regressions introduced by the RTL931x patchset.
 
-> One idea is to unambiguously mark i2c bus extension nodes with a
-> compatible string:
->
->   connector {
->       i2c_ctrl: i2c-ctrl {
->           compatible =3D "i2c-bus-extension"; // <-----
->           i2c-parent =3D <&i2c1>;
->           #address-cells =3D <1>;
->           #size-cells =3D <0>;
->       };
->   };
->
-> And then implementing a device driver for the i2c bus extension.
+I've picked up Alex Guo's patch [2] to reduce conflicts between pending
+fixes.
 
-I generally will never argue against adding a compatible...
+[1] https://patchwork.ozlabs.org/project/linux-i2c/cover/20250727114800.3046-1-jelonek.jonas@gmail.com/
+[2] https://lore.kernel.org/r/20250615235248.529019-1-alexguo1023@gmail.com
 
-> This would allow to ensure extensions are probed after their adapter
-> (thanks to probe deferral) and at that point can register themselves at
-> the adapter. In other words the device driver core would provide the
-> synchronization between adapter, bus extension, and devices on the bus
-> extension.
+Signed-off-by: Sven Eckelmann <sven@narfation.org>
+---
+Changes in v4:
+- Provide only "write" examples for "i2c: rtl9300: Fix multi-byte I2C write"
+- drop the second initialization of vals in rtl9300_i2c_write() directly in
+  the "Fix multi-byte I2C write" fix
+- indicate in target branch for each patch in PATCH prefix
+- minor commit message cleanups
+- Link to v3: https://lore.kernel.org/r/20250804-i2c-rtl9300-multi-byte-v3-0-e20607e1b28c@narfation.org
 
-Can't the parent (the connector node) driver do the same thing and
-defer if any i2c-parent phandles drivers aren't probed?
+Changes in v3:
+- integrated patch
+  https://lore.kernel.org/r/20250615235248.529019-1-alexguo1023@gmail.com
+  to avoid conflicts in the I2C_SMBUS_BLOCK_DATA code
+- added Fixes and stable@vger.kernel.org to Alex Guo's patch
+- added Chris Packham's Reviewed-by/Acked-by
+- Link to v2: https://lore.kernel.org/r/20250803-i2c-rtl9300-multi-byte-v2-0-9b7b759fe2b6@narfation.org
 
-> A different option is to only have the "i2c-parent" phandle in the
-> extension node and nothing else in DT (no bidirectional link, no
-> compatible string), without any full-tree searches.
->
-> On the implementation side, the connector driver when probing would
-> register the extension nodes at the I2C core, which would maintain a
-> list of extension nodes. This is important when the connector probes
-> first. Then when any adapter probes the core would iterate over the
-> list to check whether the newly-probed adapter is pointed to by one of
-> the registered bus extensions, and then start populating the devices on
-> the matching bus extension(s).
->
-> A lot of care would have to be put in the disconnection path and while
-> removing any bus extension from the global list, which could race with
-> the I2C core using the list itself. The drive core wouldn't do it for
-> us for free.
+Changes in v2:
+- add the missing transfer width and read length increase for the SMBus
+  Write/Read
+- Link to v1: https://lore.kernel.org/r/20250802-i2c-rtl9300-multi-byte-v1-0-5f687e0098e2@narfation.org
 
-I'll defer to Wolfram on I2C core implementation...
+---
+Alex Guo (1):
+      [i2c-host-fixes] i2c: rtl9300: Fix out-of-bounds bug in rtl9300_i2c_smbus_xfer
 
+Harshal Gohel (2):
+      [i2c-host-fixes] i2c: rtl9300: Fix multi-byte I2C write
+      [i2c-host] i2c: rtl9300: Implement I2C block read and write
 
-Rob
+Sven Eckelmann (2):
+      [i2c-host-fixes] i2c: rtl9300: Increase timeout for transfer polling
+      [i2c-host-fixes] i2c: rtl9300: Add missing count byte for SMBus Block Ops
+
+ drivers/i2c/busses/i2c-rtl9300.c | 50 +++++++++++++++++++++++++++++++++-------
+ 1 file changed, 42 insertions(+), 8 deletions(-)
+---
+base-commit: 09eaa2a604ed1bfda7e6fb10488127ce8fdc8048
+change-id: 20250802-i2c-rtl9300-multi-byte-edaa1fb0872c
+
+Best regards,
+-- 
+Sven Eckelmann <sven@narfation.org>
+
 
