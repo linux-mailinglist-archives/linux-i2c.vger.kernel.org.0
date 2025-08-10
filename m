@@ -1,109 +1,121 @@
-Return-Path: <linux-i2c+bounces-12195-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12196-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 038A7B1F87A
-	for <lists+linux-i2c@lfdr.de>; Sun, 10 Aug 2025 07:51:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA055B1F88C
+	for <lists+linux-i2c@lfdr.de>; Sun, 10 Aug 2025 07:59:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 52A4B4E02F6
-	for <lists+linux-i2c@lfdr.de>; Sun, 10 Aug 2025 05:51:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 85E893B8D88
+	for <lists+linux-i2c@lfdr.de>; Sun, 10 Aug 2025 05:59:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 218251DA60F;
-	Sun, 10 Aug 2025 05:51:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B86091E834B;
+	Sun, 10 Aug 2025 05:59:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="AubHkPDn"
+	dkim=pass (1024-bit key) header.d=narfation.org header.i=@narfation.org header.b="OXJ0mmdV"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from dvalin.narfation.org (dvalin.narfation.org [213.160.73.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C2692E36FF
-	for <linux-i2c@vger.kernel.org>; Sun, 10 Aug 2025 05:51:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BBE01917F4;
+	Sun, 10 Aug 2025 05:59:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.160.73.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754805080; cv=none; b=s9jS6FUmo8yGS63JzVOQvRxQAGR8OKi84hlycnngisIUgWJNHMQ7dmD4+2wM/ylAauRUYFf3WZW+1/YYJPSM5fnlhhzmug+aDfpzkqgL4VEbpnDlxhZr10L74wiVIE69HGAH4nJO8A8FfKPxQI1djvmtLS3HU+7S/AxWKQPs+cI=
+	t=1754805579; cv=none; b=kcviRJQ/zsf+HV1/eU0hIdwTNy9E7HLJxopT0Oxv0oxdXLqqI+aJ3DldK1WXoJQ22j7CNWJg3iCkGvYt1Dx2O6CgR7p+/9uvJf5v6mVum71lmI8CP7nSvyskfOzBejTNSMXmNRjhJiyHiAY4PvtWfz3Qmnv1eLsGgQTcsgF8l9Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754805080; c=relaxed/simple;
-	bh=PsIhHcUGqCpR2twnjpTepbyzUafG9wt938cONenw7QY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DCUZQXZ9Pr3soAmMJm1WDx/qwZTqMiYm9P45SsXRciOiGNx+wiz3KUjbl5NI0FE02JamIfqePv6QKf/vbOOYQErNvTKZ8hawFpWVq7IACsjGZ/mPybnr0+SrIVPytWrzYzKQ6yWsKDQN9+gv7nuhl3mBYEwzl/mbf3e461rUU88=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=AubHkPDn; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=PsIh
-	HcUGqCpR2twnjpTepbyzUafG9wt938cONenw7QY=; b=AubHkPDnRl82RGHyKO0F
-	7OlEi2gLoZToW6IzsTQ8DjZmaSgZqWQDYSHcRApXIZzY4/IMXMr7wlGsCeYOwHJ4
-	q1q0GzrrLESeUK3isoyUeINvBboFkF2/KvnBYmdeweBRHAzZRdLdj2c+X9ftXHbM
-	IYIaGs+ebZ62L957LVpNHtaav7+/oT1km3xwB2zamFDRrJT6ULOxZt7vhKxBzzeT
-	6BWUCHCYrOY8HDk1TM6VTBFVfCbzBDlMHy1j3Vy1xGqFZpdVYJvw7SRpEvq7lpOa
-	q3RNpO+YED3vmj4okvAiZHC2oe5igxRbbBt1BPwCH/9UT8xzfVqwzIx46XpecFyd
-	yA==
-Received: (qmail 2320593 invoked from network); 10 Aug 2025 07:51:13 +0200
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 10 Aug 2025 07:51:13 +0200
-X-UD-Smtp-Session: l3s3148p1@m0QIZfw7eq9tKDGm
-Date: Sun, 10 Aug 2025 07:51:12 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Jonas Jelonek <jelonek.jonas@gmail.com>
-Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>,
-	Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-i2c@vger.kernel.org,
-	Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Markus Stockhausen <markus.stockhausen@gmx.de>,
-	Sven Eckelmann <sven@narfation.org>,
-	Harshal Gohel <hg@simonwunderlich.de>
-Subject: Re: [PATCH v5 05/11] i2c: rtl9300: check if xfer length is valid
-Message-ID: <aJgzUFOzxxdNDrQa@shikoro>
-References: <20250809220713.1038947-1-jelonek.jonas@gmail.com>
- <20250809220713.1038947-6-jelonek.jonas@gmail.com>
+	s=arc-20240116; t=1754805579; c=relaxed/simple;
+	bh=7Qx0aH0iyxa+rSkF9K4dAk+7RXmuAkfQ9B1v/Q/39+Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=hbT2TUr4tibDJpbYDyHYbab5SqOVSimXhKS0OQYgNwjSFdMvLJDlhWKWwhmsyMcWMY1O1lR/iGMDXSffn8VF8IyqOPf6kWws/MPl6vGYJxdH/FHVyAuspHyaTS3rLDY63tWBm6HoL026ZmPyHyPDZapxC+nwdwdmxf74Gv8aatQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=narfation.org; spf=pass smtp.mailfrom=narfation.org; dkim=pass (1024-bit key) header.d=narfation.org header.i=@narfation.org header.b=OXJ0mmdV; arc=none smtp.client-ip=213.160.73.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=narfation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=narfation.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=narfation.org;
+	s=20121; t=1754805569;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=BiZfMUBcEhN7heVDKvBNsEFOQ6zMhPZ0MtxsMkfDrqc=;
+	b=OXJ0mmdV4Lww4HcHdY5eMw0CQHNLLs7pFiaCRn3KP/BGEQ1XD4k5OqMf9L6mwyfKkwh3+j
+	tELPM0Z6Ka7H+gm/JDpYVaHyIyl6JETHacRfMcg0w9yhgy8WGgtwvKuuDPJdEOF+sjR30X
+	vMq3q8Ei0GXiuUvgWx4chZDcqBMcprk=
+From: Sven Eckelmann <sven@narfation.org>
+To: Chris Packham <chris.packham@alliedtelesis.co.nz>,
+ Andi Shyti <andi.shyti@kernel.org>, Jonas Jelonek <jelonek.jonas@gmail.com>
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Harshal Gohel <hg@simonwunderlich.de>,
+ Simon Wunderlich <sw@simonwunderlich.de>
+Subject:
+ Re: [PATCH i2c-host v4 5/5] i2c: rtl9300: Implement I2C block read and write
+Date: Sun, 10 Aug 2025 07:59:25 +0200
+Message-ID: <6183140.lOV4Wx5bFT@sven-desktop>
+In-Reply-To: <4e192acc-3364-4318-b31b-120a37af6a2f@gmail.com>
+References:
+ <20250809-i2c-rtl9300-multi-byte-v4-0-d71dd5eb6121@narfation.org>
+ <20250809-i2c-rtl9300-multi-byte-v4-5-d71dd5eb6121@narfation.org>
+ <4e192acc-3364-4318-b31b-120a37af6a2f@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="5PQiOrpP1mtSoLHQ"
-Content-Disposition: inline
-In-Reply-To: <20250809220713.1038947-6-jelonek.jonas@gmail.com>
+Content-Type: multipart/signed; boundary="nextPart5032344.31r3eYUQgx";
+ micalg="pgp-sha512"; protocol="application/pgp-signature"
 
+--nextPart5032344.31r3eYUQgx
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"; protected-headers="v1"
+From: Sven Eckelmann <sven@narfation.org>
+Date: Sun, 10 Aug 2025 07:59:25 +0200
+Message-ID: <6183140.lOV4Wx5bFT@sven-desktop>
+In-Reply-To: <4e192acc-3364-4318-b31b-120a37af6a2f@gmail.com>
+MIME-Version: 1.0
 
---5PQiOrpP1mtSoLHQ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Sunday, 10 August 2025 00:11:20 CEST Jonas Jelonek wrote:
+> Hi Sven,
+> 
+> On 09.08.2025 08:40, Sven Eckelmann wrote:
+> > @@ -314,6 +343,7 @@ static u32 rtl9300_i2c_func(struct i2c_adapter *a)
+> >  {
+> >  	return I2C_FUNC_SMBUS_QUICK | I2C_FUNC_SMBUS_BYTE |
+> >  	       I2C_FUNC_SMBUS_BYTE_DATA | I2C_FUNC_SMBUS_WORD_DATA |
+> > +	       I2C_FUNC_SMBUS_READ_I2C_BLOCK | 
+I2C_FUNC_SMBUS_WRITE_I2C_BLOCK |
+> >  	       I2C_FUNC_SMBUS_BLOCK_DATA;
+> >  }
+> >  
+> 
+> Is there a specific reason you explicitly use I2C_FUNC_SMBUS_READ_I2C_BLOCK 
+and
+> *_WRITE_* instead of I2C_FUNC_SMBUS_I2C_BLOCK ?
 
-On Sat, Aug 09, 2025 at 10:07:06PM +0000, Jonas Jelonek wrote:
-> Add an explicit check for the xfer length to 'rtl9300_i2c_config_xfer'
-> to make sure a length < 1 or > 16 isn't accepted. While there shouldn't
-> be a length > 16 because this is specified in the i2c_adapter_quirks, a
-> length of 0 may be passed.
+To be honest, I've just adopted this from the original version of the patch 
+and didn't spend a second on thinking about a potential simplification.
 
-There is another quirk for this: I2C_AQ_NO_ZERO_LEN
+So yes, thank you for pointing it out. I will integrate it in the patchset and 
+most likely send out a new version addressing all the comments (until then)  
+at ~8 pm (GMT+2). The preview can be found at 
+https://git.open-mesh.org/linux-merge.git/log/?h=b4/i2c-rtl9300-multi-byte
 
-With that, you shouldn't need the code here.
-
---5PQiOrpP1mtSoLHQ
+Kind regards,
+	Sven
+--nextPart5032344.31r3eYUQgx
 Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part.
+Content-Transfer-Encoding: 7Bit
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmiYM00ACgkQFA3kzBSg
-KbZNOBAAjfKExe28v6S9oT90jl8uJ/C7in/49H/tVl+c7ElM5fo9WCQ0pskGqeGv
-o/OHyYK1GoqtE7rDE7Ir7hUZNUOF2xgnbEmod2Fyy3n7qAbuj1APKNR5rJ0IBRho
-NuRdUWlp4lraiEqiosrVFo0U++6NPGLPCPuQzePdqY110Hqp7s6AdIEyn8y5Vdak
-xlLB8hpk/gCj58FoaHbpsyOf/eszsBUpxXGLx9tuua8h9Xh9h6esBdtHysdQ9pea
-eARSNfWuGrSYyQraPcGBs7vekF0emM+SbCIAOb+l+16Z056xARvpY3qGFAxBuWDS
-4/0F65vldBhkHtcH67jYmvz+tMlY1VGjVZp8S36Fc5FmjSyfFI1mokExYW5drTgZ
-alW9Ndto6zMQwACbRuilArtWwsftdp+yjnuvyJLe7A8RBWVnElbGE5IjoNlpdf2C
-ki08xszUhxPMupAOzgFeSUGH83Dawu2o35vQU1ZI0sm9pxBfcwzqiKD2YyHrVgt+
-SqyFErzzFrFy4yIau7EncQChEtKCAOljmtp+iIEieKQ8+lf2/M9LzFeINRl11855
-vsyEZZ1RyG8oiBOGYVrdlMHmc9V7RtOQ2vewwbCanydHTrILpL0cURnDOkBbLO1/
-uVm7Z52M3Fjcs5mL5+VDB/4YwFJTOjbdClvg/pAi/dnQTUPf+GA=
-=lymY
+iHUEABYKAB0WIQS81G/PswftH/OW8cVND3cr0xT1ywUCaJg1PQAKCRBND3cr0xT1
+y5DsAQCumkrIwE2Io9F2kHajV4qlRgfoRnvCKsTCAjxfh8QteQD+INFPPzelib70
+8f77Ybza+r9l2LDA4xTqsyEPV5U9CQ4=
+=nIM4
 -----END PGP SIGNATURE-----
 
---5PQiOrpP1mtSoLHQ--
+--nextPart5032344.31r3eYUQgx--
+
+
+
 
