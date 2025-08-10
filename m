@@ -1,81 +1,81 @@
-Return-Path: <linux-i2c+bounces-12202-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12203-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60FE1B1F979
-	for <lists+linux-i2c@lfdr.de>; Sun, 10 Aug 2025 11:22:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A2B1B1F97C
+	for <lists+linux-i2c@lfdr.de>; Sun, 10 Aug 2025 11:32:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 187383B6CCD
-	for <lists+linux-i2c@lfdr.de>; Sun, 10 Aug 2025 09:22:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4DD941899AA9
+	for <lists+linux-i2c@lfdr.de>; Sun, 10 Aug 2025 09:32:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65214233714;
-	Sun, 10 Aug 2025 09:22:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F6DB23B610;
+	Sun, 10 Aug 2025 09:31:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XDJzLvtX"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L0ZXXLbq"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 818CE1C8621;
-	Sun, 10 Aug 2025 09:22:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65D6F198E9B;
+	Sun, 10 Aug 2025 09:31:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754817768; cv=none; b=gA3o/INazfF+V5g94DuVOtwtQJ9niwRzUtq2PpPm6Xl7ompdOuQmlDq39dN0D1RKptTKnvdvL+NndMDSy9QoZF2F/fOdVRm8aES7X8Ty/3IdDT3d1Ksz+9E63elAlMzuinnog3gaU5sFJ9dIFZJbO4zbN/JdqFOs6+1/8ojLdTQ=
+	t=1754818318; cv=none; b=gk6KJc7uaGfVm2/R2sO4qabeo3drzvqRrff57jEvUSXWTuGLYR1ktHI90w49YAOecA1zhNjfrSCWDEHU8ozkCmXBNjTUDcRij6+Z0h0uuXcgLlUO92KSU+tOEvY3ER92NN6f9ojNYAoX3umBl7F1MVJUP4t4mdvdem0EftwBxwI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754817768; c=relaxed/simple;
-	bh=1wCBol2O8mCxhZYnzE/TjVifPhyYtuP1PIz7eFMcYmo=;
+	s=arc-20240116; t=1754818318; c=relaxed/simple;
+	bh=h2G8SsP6afRXPyGZBJmneXv9Eavg+d3o0Ug+i1innPo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bMJLP+g32KMCRtZRmwEuir9mPdi82yxoA2mHj1xOpMpyNBu6c3meQ0fj3UU4Yo9N2EnVOmxKSqzlKjGdSuv/5ZAQyOnUbEUcm0VjrLojPhbxfC3roqtu78UWhKqD8ogHzR+lL6btP8ztoYaDpc0QyvukKeNnwTsrS9JrmTSEMR0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XDJzLvtX; arc=none smtp.client-ip=209.85.128.42
+	 In-Reply-To:Content-Type; b=lh/rcOdBodJHMpzQc9Ap0Iu0u6MfP4eVErHfF78sxX+atmNfs+Gv80zKNGfC6+hbkzpK6kMGjwU78EGW6Sgfij3MgJQGqkxmhZ8Avj4hpOXMB2obgInlJeiV5GtOK/Czcv+OzWaEJ6ja4aJIlzBKiuGRbMLuxhJ5eCNu+yvTD9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=L0ZXXLbq; arc=none smtp.client-ip=209.85.128.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-459ddada9b1so32540665e9.0;
-        Sun, 10 Aug 2025 02:22:46 -0700 (PDT)
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-459fdc391c6so8377885e9.3;
+        Sun, 10 Aug 2025 02:31:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754817765; x=1755422565; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1754818315; x=1755423115; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=TXDyunAubycIInM6unQPXngBeY7Dg0vrHzz+EdQslnk=;
-        b=XDJzLvtXA8sFmRWeoUHq9bbpto8wbug9f2TLUEaVnPeZS10LYAYFEdTML80/wDSkNq
-         gybWceWhWGiPnSCp6Qw9Z0dKzV/GsplysfF9dn4UTfvnZLRI/A5AbEpB/fjVBuXzEUod
-         dzRTzOCHK4ES78IVmEAVdFoV+pYqxjNp8KKFEJJIUJcb2x10F1t43uD3zkI4TwNA2y5m
-         zEz/2I7rc0lSeWBbES1EqZtBkow7PoyuaSReAfAUoQxhX/bzrezrNxjYJqkp1h5XX2uS
-         VH3nOOP1Hw3xdXqxelTnlX1uR0BXVkTQ/dFJO4b2W19SwWQIedlFMam+PtM8O9wMR41k
-         TB8g==
+        bh=u14rtgFwEgrE0ibL98Zaja2s4eUTO1/wcJduf4UrEx4=;
+        b=L0ZXXLbqUNgTIJgcFHlO4N5S3+qNhxrUzNZew9N2V4P5wLebSXDvpnWCNoMrIvwOG6
+         z3R7O0Dh0gVbgWScueKVpyrqZg+P9qWTVLuGXRuI3IL/El5ATP926lxNxYreBgRhDwW9
+         8ARrx7yvCPlAMW+rTe2OqXBSYwDBLN6h4Z0k5tis8qL+LVhUgyX9WNRDg8g50Tm7CjeZ
+         1Kb7YjVKArhQjHjZrAyNEB4gNGpA0DAyT6i28U4a8c3Ee32hDWFZ4aPf7U3LuEfkGsQ+
+         WbRZoZXSI1Av905CPlcDOeIcW8h8rVULtNr+gn4zbDu5UTNdiEvK94Wia600NQTu+3eZ
+         W+Hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754817765; x=1755422565;
+        d=1e100.net; s=20230601; t=1754818315; x=1755423115;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TXDyunAubycIInM6unQPXngBeY7Dg0vrHzz+EdQslnk=;
-        b=FofMZU3uI1bDNGnbyHDQRBdK80u4cfMshEt9/YYUTYUVvFVy/ylOtdsDoV7rgnW0nZ
-         cQAd62Yd1TSeo7UWxjQTTezdLBIJHhZJSCENoYv17CrW1Eh/ePkjIkKjw4qc3f+isUtp
-         zF7MqubjHz0jnVeIXNuuBlXFQg0gXG+m4VCU4N7Et7/mKr2z8aw6T7GI2Rzw1jGzZVYQ
-         J5GrjpaFWPL5yrhAUv30jots84sPfQcgxaAtMCoFb0C8ii4GlYcwH8Mwv03iQc1BnOeq
-         YkAi8L2dM3FdoHJhwxN0oOIA5Vo7GQUNZ8b5HxZEYrvQZ1ge6Jy29UWo0DBWUPfG1Otc
-         uQVw==
-X-Forwarded-Encrypted: i=1; AJvYcCUjzj2dEnhuGJVYgMq4CciUU52mUYToK1pRz112cseJiO+R75WnWU8uQ0Jv02ZeiDnmlbAqt7bak784fpMm@vger.kernel.org, AJvYcCXWzZ9Dy/O1WTJILCgOXoKw+wHSNP/rwz7/rWWaAKzUMdoOm+VSxxN1PH2+TGi3PCiZguydpzLUdLlC@vger.kernel.org, AJvYcCXYPZPxyuuvLV6GGbBtFWiJYPRhYUKE//Yb3AW8+IvXS4I8pq0/FYKyYqaNLK1SmT3rEcouDd6WkdtO@vger.kernel.org
-X-Gm-Message-State: AOJu0YyzsSBQ0qJkCgvqCZXUbUbE+vd1fHW5GFjXf7KTl4wZThpQEGuW
-	gScz2PPTG+HbbAhSAIhU5l7ljU0D27+IuHOxKH45XwSpaEwh2xUjRxbCR/6XrQ==
-X-Gm-Gg: ASbGncv+QEmdeEE4K9ndEjHML6cUsVMAgYJxEBN6xGvpFdEBhiFH3pYvBUt7Gd1y8Ig
-	9wbjrDvH/OW6Nx+Xr6pK+vh0JXOfDqwcZx4DQjcYroEMfxLZFOZxGh2i022j/VV0McM2RvNBte0
-	rPCjx/JRGQUEC4xWY9Ktk+ybFDlxPNiVbwITJT0tjStBeZG2Oc1aeyIE3lFFWDKC8BH8fWSLBGx
-	ONi4HrjfIDgll+XSLXblFvCyVAhy/WqEi00OYg6pfdG7XEhxr4VqTheG2otqlMKzlTcVpRMU3JU
-	60m2ZrZVSNNGQTofRS3GAPsSqX4YC0qHua7HJ16nm6eeQGOWC0JxWEaktOt7Ztd3mAxDKVibjHx
-	aUuqYRL7DCy9aCt3QApLUbCHBm2F8Efv2F/4bgPW4cLrHTaWCPIep7li/xvDysa2+lhOgdbih43
-	uWunwAISWDC1x2IdrAlyd3kg==
-X-Google-Smtp-Source: AGHT+IFl0LaO/9tJI3DF6BKyFuzagfY9yzYK+bQykoA7A9SISVYdNrgwyb1jIwx2T/hYfyhy3qMw8Q==
-X-Received: by 2002:a05:600c:4e91:b0:453:6ca:16b1 with SMTP id 5b1f17b1804b1-459f4f144e5mr74723585e9.26.1754817764520;
-        Sun, 10 Aug 2025 02:22:44 -0700 (PDT)
+        bh=u14rtgFwEgrE0ibL98Zaja2s4eUTO1/wcJduf4UrEx4=;
+        b=c4OS4HR1K0I8VYydHV7eFkRAe5MaUmXsrzXDRvQejLyTmeAPasy4svWPqcY1TDWk+w
+         ZR/i++1jHSss3TjI6LHJXgl94kHqR2oBtcgih4/2jUwcTCUV8CpQSxdMyGNz1eZn99WJ
+         Up78+q9LRvx6T1fS82hS7o0Lo9EzPecNyGFkbuYrO52aCXThKbrudNGDpZyr6cbrp/su
+         avBBJYQdvoouvvLF/c2Y9SigcnheF/bYcli5EzGTbFm/UCTgTTL/bOSQzXYEmEl620yC
+         I5muHznGhew1tcPx2uJliqIbdzYrotgdn9f/UX08E7Nqm88OA9eeSv/1TAR9wsiD184i
+         3GNQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVMOznNfbKCbmN6GrxCIqcfUKuOxGmRnVNTZteGJHhmA42slgwW3wzDJv8p8r3kc3P+/8Hxft8zxGct@vger.kernel.org, AJvYcCVmBzm6N+JK6gAc/TbdB1E9zKadQq1q6hkBicAf3LYFoF1LF8qm7h5Xz4VoL5sFjD/shCNm7GpMCtdmedUy@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz0TeqR0w8TsdIsF8aRNvUa268X2cItXXTFTzqT+PpKGuLws7iJ
+	h3Vfa7QFSskmYreud/auV3D+9mIe8hk+crC0gGxCGQeW9HvcCd80xXsb
+X-Gm-Gg: ASbGncvgDCRe1EAeolrvAWzluFvO4kEEoKI+BmUCQoydnWJ9svkOgaIULSonceziYsO
+	gUKI40bi2355yuyf6ETu12+/5mw42X0g17fk/sIubJewVSf5rBioj5U1A8VWL0DBF7WdGHr5r0u
+	tXmsf1d96A+jAeYqCH/U+LjStoQGT0IgeGvWszrabk8ec4amPwH5tcyJ0yjNT1fFxDCYh+qmZn/
+	+3DTkXigRC/crrFTaG0i6BcjevcUWQGY4ORgefkQ61aPfCT+gBqihGd0Q0eWiBl/StNvtzWp990
+	Kab9vixB5XjC1nYz3sy8GTm6WHzyTtIx5oCCftLQC33r7oK8sNII9DSMapRMcQ6zdjx0pxyvj+q
+	YGOwk5pgHVCdP8cx79Mr3ND49deHmY0yW0GyYKAljxS647FEJ4W2ZCBtxK3jWWQ47kOKb1jfgyU
+	PIPYv4zrAcFzdX7d4bOMxm4w==
+X-Google-Smtp-Source: AGHT+IHPsiQ1NQMEW9rc47kReawceS6bb/ad9/yp1s1myFrHWpSe48jc86Bnood9Avsd0+OeaLA3ew==
+X-Received: by 2002:a05:6000:24c3:b0:3b8:d4c5:686f with SMTP id ffacd0b85a97d-3b900b83c71mr7889832f8f.39.1754818314638;
+        Sun, 10 Aug 2025 02:31:54 -0700 (PDT)
 Received: from ?IPV6:2001:9e8:f12c:bb32:3d75:9109:b5a7:a261? ([2001:9e8:f12c:bb32:3d75:9109:b5a7:a261])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-459e585430csm206445415e9.11.2025.08.10.02.22.43
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b79c4a2187sm37918483f8f.70.2025.08.10.02.31.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 10 Aug 2025 02:22:44 -0700 (PDT)
-Message-ID: <72f9bef0-5f4d-4eef-b853-9d3f6be07004@gmail.com>
-Date: Sun, 10 Aug 2025 11:22:43 +0200
+        Sun, 10 Aug 2025 02:31:54 -0700 (PDT)
+Message-ID: <d01e5498-b2b0-473b-b8e7-339825c45043@gmail.com>
+Date: Sun, 10 Aug 2025 11:31:53 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -83,73 +83,68 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 05/11] i2c: rtl9300: check if xfer length is valid
+Subject: Re: [PATCH v5 06/11] i2c: rtl9300: remove SMBus Quick operation
+ support
 Content-Language: en-GB
 To: Sven Eckelmann <sven@narfation.org>,
- Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>,
+ Chris Packham <chris.packham@alliedtelesis.co.nz>,
  Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-i2c@vger.kernel.org,
- Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, Markus Stockhausen
- <markus.stockhausen@gmx.de>, Harshal Gohel <hg@simonwunderlich.de>
+ Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc: linux-i2c@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Markus Stockhausen <markus.stockhausen@gmx.de>,
+ Harshal Gohel <hg@simonwunderlich.de>
 References: <20250809220713.1038947-1-jelonek.jonas@gmail.com>
- <20250809220713.1038947-6-jelonek.jonas@gmail.com> <aJgzUFOzxxdNDrQa@shikoro>
- <10704304.nUPlyArG6x@sven-desktop>
+ <20250809220713.1038947-7-jelonek.jonas@gmail.com>
+ <3644932.iIbC2pHGDl@sven-desktop>
 From: Jonas Jelonek <jelonek.jonas@gmail.com>
-In-Reply-To: <10704304.nUPlyArG6x@sven-desktop>
+In-Reply-To: <3644932.iIbC2pHGDl@sven-desktop>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 
-On 10.08.2025 09:01, Sven Eckelmann wrote:
-> On Sunday, 10 August 2025 07:51:12 CEST Wolfram Sang wrote:
->> On Sat, Aug 09, 2025 at 10:07:06PM +0000, Jonas Jelonek wrote:
->>> Add an explicit check for the xfer length to 'rtl9300_i2c_config_xfer'
->>> to make sure a length < 1 or > 16 isn't accepted. While there shouldn't
->>> be a length > 16 because this is specified in the i2c_adapter_quirks, a
->>> length of 0 may be passed.
->> There is another quirk for this: I2C_AQ_NO_ZERO_LEN
+
+On 10.08.2025 09:13, Sven Eckelmann wrote:
+> On Sunday, 10 August 2025 00:07:07 CEST Jonas Jelonek wrote:
+> [...]
+>> The current implementation of SMBus Quick operation passes a length of
+>> 0 (which is actually invalid). Before the fix of a bug in a previous
+>> commit, this led to a read operation of 16 bytes from any register (the
+>> one of a former transaction or any other value.
 >>
->> With that, you shouldn't need the code here.
-> I am a little bit lost here. Let us assume that i2c_smbus_write_byte_data() is 
-> called - for example by an in-kernel driver. We would then have following call 
-> chain:
+>> Although there are currently no reports of actual issues this caused.
+>> However, as an example, i2cdetect by default uses Quick Write operation
+>> to probe the bus and this may already write anything to some register
+>> of a device, causing unintended behaviour. This could be the cause of a
+>> recent brick of one of my DAC cables where there was a checksum mismatch
+>> of the EEPROM after having run 'i2cdetect -l' before.
+> [...]
 >
-> * i2c_smbus_write_byte_data
-> * i2c_smbus_xfer
-> * __i2c_smbus_xfer
-> * adapter->algo->smbus_xfer (aka rtl9300_i2c_smbus_xfer)
->
-> But the quirk is only checked in i2c_check_for_quirks - and then on 
-> `struct i2c_msg` and not `union i2c_smbus_data`. And this is only called by 
-> __i2c_transfer (which is called by i2c_transfer, i2c_smbus_xfer_emulated, 
-> ...). But on first glance, it didn't look like it will be called when using 
-> i2c_smbus_write_byte_data - unless __i2c_smbus_xfer fails and must fall back 
-> to i2c_smbus_xfer_emulated. I most likely missed something when doing a quick 
-> check of the source code. Maybe you can point it out.
+> Nice find. I've actually observed odd behavior after/during probing and 
+> attributed it only to the other problems (especially the low timeout + missing 
+> check) we found and never did a deep dive to figure out what happened on the 
+> bus during the probe. Possible that this could be related.
 
-Thanks Sven.
-I came to the same conclusion for now. The mentioned quirk doesn't seem to
-prevent this for smbus_xfer. However, it doesn't harm to add it. This probably
-applies to the existing quirks too, that they are not checked for.
+Haven't actually described my issue in detail in the commit message (may add
+this in the next version) but it perfectly makes sense. Quick operation in the
+driver passed a length of 0 to config_xfer. Internally, this leads to a value of
+0xf in the DATA_WIDTH register meaning 16 bytes to be read/written because
+of:
 
-So I think this check is necessary. It also ensures that [1] is kept in its purpose
-more or less. To prevent any invalid length passed from everywhere. The
-implementation of Quick in this driver is also problematic because it passes a
-length of 0 internally. Thus, the next patch actually removes that completely.
+(len - 1) & 0xf
 
-> And I might have to point out that I am currently not next to the actual HW to 
-> check if my statement that adapter->algo->smbus_xfer == rtl9300_i2c_smbus_xfer 
-> is really true.
+The register value obviously was assumed to be 0 by the hardware and data
+was completely zeroed too. Then it did a 16-byte write of that. Unfortunately,
+the EEPROM of my DAC isn't write-protected so it was written to the EEPROM
+causing checksum error on next boot (was able to fix that though).
 
-It's true, yes. See [2].
+> Reviewed-by: Sven Eckelmann <sven@narfation.org>
+
+Thanks!
 
 > Kind regards,
 > 	Sven
 
-Best regards,
+Best,
 Jonas
-
-[1] https://lore.kernel.org/linux-i2c/20250809-i2c-rtl9300-multi-byte-v4-1-d71dd5eb6121@narfation.org/
 
