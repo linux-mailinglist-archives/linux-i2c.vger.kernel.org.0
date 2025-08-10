@@ -1,45 +1,46 @@
-Return-Path: <linux-i2c+bounces-12207-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12205-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16C0CB1FACD
-	for <lists+linux-i2c@lfdr.de>; Sun, 10 Aug 2025 17:38:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF710B1FAC7
+	for <lists+linux-i2c@lfdr.de>; Sun, 10 Aug 2025 17:38:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D9742176EDA
-	for <lists+linux-i2c@lfdr.de>; Sun, 10 Aug 2025 15:38:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C1A1F189739D
+	for <lists+linux-i2c@lfdr.de>; Sun, 10 Aug 2025 15:39:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00F3126FDA6;
-	Sun, 10 Aug 2025 15:38:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EFB526E16C;
+	Sun, 10 Aug 2025 15:38:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lucaweiss.eu header.i=@lucaweiss.eu header.b="4wz9D/i4"
+	dkim=pass (1024-bit key) header.d=lucaweiss.eu header.i=@lucaweiss.eu header.b="WchrqbDX"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from ahti.lucaweiss.eu (ahti.lucaweiss.eu [128.199.32.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1C5122B5A3;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1B661C6FE5;
 	Sun, 10 Aug 2025 15:38:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=128.199.32.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754840317; cv=none; b=aGyYyNqDp3lSrg0aSyRHyso+hcZL8V4r5Rono/JhCFRDkbFp+BeO/MRcrp8UG32BRDz3b5BVBeg+p78V/ORWru0MFLBQ12H7ICM44PKEwIf9UdgSeaR2CQZVCnQLwnxdsJDmmFqIUx3CncpTFgzdN6bIbxLSRmRZDAdvSrHrD/Q=
+	t=1754840317; cv=none; b=nnhpMYUQ2MRBGCRD3OyhZreGCTIuhrvPiTlerfxu4Kxw39HfkaecL0fMiOe1afr9r1BGWHw2UnEcJqSsIC/Wo8V9aCWrupbzs8ertdZDs4iv3PIzaZasu1RA6AWYZ7bXgVvPpjFHPOOYWQilEnAW4WjRcAhaUTn0XBxZXvH+0mc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1754840317; c=relaxed/simple;
-	bh=0w2upDoGggcJae7L66CrnE7FOlXMPKWHXk7ekvtYE0k=;
+	bh=zLFTjE8QnKZwWG/D1SAu/9ASzpx5Bt+Yj/0b2vUINAk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=csjSAN0TH35m8rVZjAkc1klxcMiiOc2trhcCJNxWMEi5uGQihMlK++XecXqxwvDWqKToXCwPUx43BySC6onxbhyBcDzUT6ylixxUiYv2DpAVaIy701fpqaBQH9W6eKVuPCE8cs979HNynK3QgWH2JeXIFumovXHudAHtPt/pm/U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=lucaweiss.eu; spf=pass smtp.mailfrom=lucaweiss.eu; dkim=pass (1024-bit key) header.d=lucaweiss.eu header.i=@lucaweiss.eu header.b=4wz9D/i4; arc=none smtp.client-ip=128.199.32.197
+	 In-Reply-To:To:Cc; b=bNc2gAfY9AN9eZbF8mdZByTz9fQibqtxvw7P71YKz49cPYwLbh9KwOe8lbxxYEZ4lomqQPLr/09tbZj+J8+oJTgUTdG7fEVW/x/gDuOUPk9vDc7X/EhmJQWAvmjHVJjzdc3KAWloZwYxmRKQJI456q96tllUOifY46bnmNWlZg4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=lucaweiss.eu; spf=pass smtp.mailfrom=lucaweiss.eu; dkim=pass (1024-bit key) header.d=lucaweiss.eu header.i=@lucaweiss.eu header.b=WchrqbDX; arc=none smtp.client-ip=128.199.32.197
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=lucaweiss.eu
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lucaweiss.eu
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lucaweiss.eu; s=s1;
-	t=1754840307; bh=0w2upDoGggcJae7L66CrnE7FOlXMPKWHXk7ekvtYE0k=;
+	t=1754840307; bh=zLFTjE8QnKZwWG/D1SAu/9ASzpx5Bt+Yj/0b2vUINAk=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=4wz9D/i4uaE95AptfD1hCbqPhBXhE02mFoz6uDyOHSua8LQH2TuNJhaJKzPdiYoH6
-	 /fcWZw6z3eaKsia2PkNCr9s8pPCFf7xHOxWgJWkJU+P/iF0UZuhl2ueHB03ncbBAJ5
-	 CLYLoS+xzMU3X+ioE5zU4m/ZHSx1rSk3uqEF3TOI=
+	b=WchrqbDXk4cupywSwIxDh2Oq8k3tHaEYWZR6EW3lZwlDhWLEJi6p8iwU1acFh4Q2h
+	 ZvPZphkTa5kiTvzHTnN1jxf/STwQEYHS4v8ta7InR7lTub2N+UcDDe9cTIAk/FbBGD
+	 qfoT3qULRl13SEenxKYlfef6j8+l4Gqrr732j/u4=
 From: Luca Weiss <luca@lucaweiss.eu>
-Date: Sun, 10 Aug 2025 17:37:56 +0200
-Subject: [PATCH 5/7] arm64: dts: qcom: msm8953: Add CCI nodes
+Date: Sun, 10 Aug 2025 17:37:57 +0200
+Subject: [PATCH 6/7] arm64: dts: qcom: sdm632-fairphone-fp3: Add camera
+ fixed regulators
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -48,7 +49,7 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250810-msm8953-cci-v1-5-e83f104cabfc@lucaweiss.eu>
+Message-Id: <20250810-msm8953-cci-v1-6-e83f104cabfc@lucaweiss.eu>
 References: <20250810-msm8953-cci-v1-0-e83f104cabfc@lucaweiss.eu>
 In-Reply-To: <20250810-msm8953-cci-v1-0-e83f104cabfc@lucaweiss.eu>
 To: Loic Poulain <loic.poulain@oss.qualcomm.com>, 
@@ -61,105 +62,77 @@ Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Luca Weiss <luca@lucaweiss.eu>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2216; i=luca@lucaweiss.eu;
- h=from:subject:message-id; bh=0w2upDoGggcJae7L66CrnE7FOlXMPKWHXk7ekvtYE0k=;
- b=owEBbQKS/ZANAwAKAXLYQ7idTddWAcsmYgBomLzu6xZE6y3pBnt77q/Cz2AcegvT5AuBuNULS
- cPHcMYf4j6JAjMEAAEKAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCaJi87gAKCRBy2EO4nU3X
- VhgpEADJQQdouO3FAT0QsuNkgOwImzoili8ZtbbqJTCsmcoC+gIrusl9JxCeNaE9iA1CwyI8qkI
- vigxiiOVbATVtjGQ52UQtmGD1EOn5KwQ18gUjOIZhg67rP+kFEtbgKkzMBWeMTHEhogLlFbTagW
- v0w0GOWIAd4Hdffw1czMGddVKZLetadR0iFkafzKUWhI7xqWs29/kCka1rFUgfVHYAy+NaGsdgH
- Qra/XK6oMb3y0U974zjUn4+GxWxUF5EepQzmitRoHdzEp5k8OzbcFU/sOsh+al6DzrSWgvVyQ88
- Ba1dZzLqW2QQa8FmbjC/lD0Z1bOXrJ9Ta/QFxaFq1/eW/HU+wSFIfjjuHCkwoFawfm5/cW8xtWN
- G5CorEUVsin7Bu/N9EWWaha7/2DMKa/lnORPpNLBucWrOj/LxdDi2SPNIFeHFzkg2zCy6ZTkwnn
- TBrFjgT6iodbTVpRTtaBZLQtKqKaMOs7RgzaaJDivh1/j6liQ9L5/QzvKTquY1i2eCuYLdTMjCQ
- 0yLFpa8wKAjwTpX/Pg47+8Xe3a5vCvSgBuF1ieIGlXwx7/dgs17fwHfte1ZxN5jn/KOz1sir/MD
- aDny3MTzinNfU6iMvQANqjBj+E2+M97s/WSugxPVclBp81qlGO8rrM0JbDlMRoueRrb8Cq5R8eB
- WZdbWcQS34S5VYw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1700; i=luca@lucaweiss.eu;
+ h=from:subject:message-id; bh=zLFTjE8QnKZwWG/D1SAu/9ASzpx5Bt+Yj/0b2vUINAk=;
+ b=owEBbQKS/ZANAwAKAXLYQ7idTddWAcsmYgBomLzvLPHz7E03g+c7KQ1BFlZFMfkrWpPWaWwXO
+ 9FEZVty13qJAjMEAAEKAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCaJi87wAKCRBy2EO4nU3X
+ VnD8EACPNWNvvNbQXDAwWhbLYp5kxvW3WuUCc/MuWCUcYhJtSrXifD6bHG47PG3UJFoeNJXEC9X
+ JNUEIhgbwhNM2IFAT8084VmbVwalyibF93BjF2/VHZ6Nvnh4KhyHoRVB6r30WHYsF0ay5SwgGLx
+ m34SGfu6vVywzBQIeWwf71xlY2HKeF8eGrX/x8EHyrdbMGBOSSc5WemYKJljXxKcxhR8MUXSAkB
+ fmvgDeifr3jgwNzvVFTSR1MXfaAMbJveGj9hv8Z/rR+XOeTP0k6JCjivcXymXW5sh5RDgU6cU4i
+ e8u3yN8nfnUhgS29aoF4VjpI1wl2/NsLdZIIzK9BWYuK25miOaDvBw/MAygwU0yzL/Y7c421KNM
+ wSqc2KU6xqOVvlEdfQgta384FF7v33JfxUvpkJo8Nyj+zQQldxhjaWqKZBsTq7vxIWKlYVdV2bi
+ JptpMb3m/3T/1hVDVy1vxfiHTaJ4NYtvPRM/Ah8s8kUWXN6W7gJSj82mekTBLzjW2rIL0Ddcjvw
+ b8m2aBwsb/qejyNvbPoj6eb9WiHj933WcZEOjbkG49WOMFcjOp7CUl1B1D2XjK2BBcrOaVLdhIl
+ vM5Tm+noY3/zsrhWOVDAv9PsCfENimHApHioE3fKt3XBVlRu6vxqwk+Mctyiissa6VixBzCc5W5
+ +6Os9BU4gEHx/QA==
 X-Developer-Key: i=luca@lucaweiss.eu; a=openpgp;
  fpr=BD04DA24C971B8D587B2B8D7FAF69CF6CD2D02CD
 
-Add the nodes for the camera I2C bus on the MSM8953 SoC.
+Add the definitions for a few fixed regulators found on the Fairphone 3.
 
 Signed-off-by: Luca Weiss <luca@lucaweiss.eu>
 ---
- arch/arm64/boot/dts/qcom/msm8953.dtsi | 57 +++++++++++++++++++++++++++++++++++
- 1 file changed, 57 insertions(+)
+ arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts | 36 +++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8953.dtsi b/arch/arm64/boot/dts/qcom/msm8953.dtsi
-index c8a1a91f033320645395e5aa216c0112746a9a8e..e10949db58e343c6913f6922acb764972a3d381d 100644
---- a/arch/arm64/boot/dts/qcom/msm8953.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8953.dtsi
-@@ -699,6 +699,20 @@ spi_6_sleep: spi-6-sleep-state {
- 				bias-disable;
- 			};
- 
-+			cci0_default: cci0-default-state {
-+				pins = "gpio29", "gpio30";
-+				function = "cci_i2c";
-+				drive-strength = <2>;
-+				bias-disable;
-+			};
-+
-+			cci1_default: cci1-default-state {
-+				pins = "gpio31", "gpio32";
-+				function = "cci_i2c";
-+				drive-strength = <2>;
-+				bias-disable;
-+			};
-+
- 			wcnss_pin_a: wcnss-active-state {
- 				wcss-wlan2-pins {
- 					pins = "gpio76";
-@@ -1114,6 +1128,49 @@ mdss_dsi1_phy: phy@1a96400 {
- 			};
+diff --git a/arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts b/arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts
+index 55a45b528bd3f1bf9b6fe7882753338b43c62271..557925a6627665614caefed65d86a42c1e55ab8d 100644
+--- a/arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts
++++ b/arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts
+@@ -36,6 +36,42 @@ key-volume-up {
  		};
+ 	};
  
-+		cci: cci@1b0c000 {
-+			compatible = "qcom,msm8953-cci";
-+			reg = <0x1b0c000 0x4000>;
++	vreg_cam_af_2p85: regulator-cam-af-2p85 {
++		compatible = "regulator-fixed";
++		regulator-name = "cam_af_2p85";
++		regulator-min-microvolt = <2850000>;
++		regulator-max-microvolt = <2850000>;
 +
-+			interrupts = <GIC_SPI 50 IRQ_TYPE_EDGE_RISING>;
++		gpio = <&tlmm 128 GPIO_ACTIVE_HIGH>;
++		enable-active-high;
 +
-+			clocks = <&gcc GCC_CAMSS_TOP_AHB_CLK>,
-+				 <&gcc GCC_CAMSS_CCI_AHB_CLK>,
-+				 <&gcc GCC_CAMSS_CCI_CLK>,
-+				 <&gcc GCC_CAMSS_AHB_CLK>;
-+			clock-names = "camss_top_ahb",
-+				      "cci_ahb",
-+				      "cci",
-+				      "camss_ahb";
++		vin-supply = <&vph_pwr>;
++	};
 +
-+			assigned-clocks = <&gcc GCC_CAMSS_CCI_AHB_CLK>,
-+					  <&gcc GCC_CAMSS_CCI_CLK>;
-+			assigned-clock-rates = <80000000>,
-+					       <19200000>;
++	vreg_cam_io_1p8: regulator-cam-io-1p8 {
++		compatible = "regulator-fixed";
++		regulator-name = "cam_io_1p8";
++		regulator-min-microvolt = <1800000>;
++		regulator-max-microvolt = <1800000>;
 +
-+			pinctrl-0 = <&cci0_default &cci1_default>;
-+			pinctrl-names = "default";
++		gpio = <&tlmm 130 GPIO_ACTIVE_HIGH>;
++		enable-active-high;
 +
-+			#address-cells = <1>;
-+			#size-cells = <0>;
++		vin-supply = <&vph_pwr>;
++	};
 +
-+			status = "disabled";
++	vreg_cam2_dig_1p2: regulator-cam2-dig-1p2 {
++		compatible = "regulator-fixed";
++		regulator-name = "cam2_dig_1p2";
++		regulator-min-microvolt = <1200000>;
++		regulator-max-microvolt = <1200000>;
 +
-+			cci_i2c0: i2c-bus@0 {
-+				reg = <0>;
-+				clock-frequency = <400000>;
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+			};
++		gpio = <&tlmm 46 GPIO_ACTIVE_HIGH>;
++		enable-active-high;
 +
-+			cci_i2c1: i2c-bus@1 {
-+				reg = <1>;
-+				clock-frequency = <400000>;
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+			};
-+		};
++		vin-supply = <&vph_pwr>;
++	};
 +
- 		gpu: gpu@1c00000 {
- 			compatible = "qcom,adreno-506.0", "qcom,adreno";
- 			reg = <0x01c00000 0x40000>;
+ 	/* Dummy regulator until PMI632 has LCDB VSP/VSN support */
+ 	lcdb_dummy: regulator-lcdb-dummy {
+ 		compatible = "regulator-fixed";
 
 -- 
 2.50.1
