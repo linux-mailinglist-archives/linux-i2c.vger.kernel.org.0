@@ -1,68 +1,68 @@
-Return-Path: <linux-i2c+bounces-12252-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12253-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C0FEB21667
-	for <lists+linux-i2c@lfdr.de>; Mon, 11 Aug 2025 22:27:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C2D6B21682
+	for <lists+linux-i2c@lfdr.de>; Mon, 11 Aug 2025 22:32:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 875A316B6E7
-	for <lists+linux-i2c@lfdr.de>; Mon, 11 Aug 2025 20:26:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3CD541A22F2D
+	for <lists+linux-i2c@lfdr.de>; Mon, 11 Aug 2025 20:32:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EAD02DAFA1;
-	Mon, 11 Aug 2025 20:26:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0203D2DA75A;
+	Mon, 11 Aug 2025 20:31:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NSO6Kccn"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OsnITh2E"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B42E227AC3D;
-	Mon, 11 Aug 2025 20:26:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B28A2139CE;
+	Mon, 11 Aug 2025 20:31:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754944001; cv=none; b=gD9iKz9n5qL8qad+OzFU4+6Of/Poyt20kcxKb9H2JxqjzjkWKNoEbrGdrgAQGNkSoRgBVGTBck3+M+8fcp4hvPU1HWYr8Ur/uDfnRifPEveQU0UOSVx98B6nJJOo6ifUk1wMGt0rtc78DFtpDppETwbSKSUBasghntRqiqYe8Us=
+	t=1754944293; cv=none; b=f9WXyk00/y53ZNqSW/OR6X3txtKodzB1z/otWR3GfQglaLZINT0khJOmIYW6GoMQtADdhUBIL1WqoyUdm7PQwRHcgoe59IXw0zUyuQO49jkHjMQsdzUtrPkHJwiEQglp/O2fubapZgsF33t6kXSpshfDin78euGXXBdsL2glBvw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754944001; c=relaxed/simple;
-	bh=fWqfsa10BRT77DGve7cJQjkBsC6AQOTHMUr98zqAhwY=;
+	s=arc-20240116; t=1754944293; c=relaxed/simple;
+	bh=WAVSplizknoBUN8PWM1qGthGcY9wzNFmieVn3H5fMP0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Cg+yN4n45DBCacrvONtRMEUYRDDGQUUA6c/s9FS8MZFM6aad5YWhyNPLHDHJe6IqyzGV5b6DERp+wzZY3zTnkVli6MU0k0HPmhJgzOAy1PiT/Lstz8FTdE8gvwV2y3os55NXVnmpIYNZbbCKU4ZRFWHuIsgm5t7GYb67kdRCIas=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NSO6Kccn; arc=none smtp.client-ip=198.175.65.15
+	 Content-Type:Content-Disposition:In-Reply-To; b=T0WiEI+jmjhg8zwUTBFQA2j8Kv3w1CGWUtU6iHG5eIymGkfXIEtudmtKuZkrP6Qp0hR2JbTSmxyVpRvCt/+2Scq/C7/CGOP8QoGL+i9fYhZOwbgpcnvpHjaO1nQg55iH4Sw7jeCgqiPz48cU2zrHA6LV344jL5fc+PMdEhe/N7U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OsnITh2E; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1754944000; x=1786480000;
+  t=1754944293; x=1786480293;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=fWqfsa10BRT77DGve7cJQjkBsC6AQOTHMUr98zqAhwY=;
-  b=NSO6Kccnp9lhCS4lN5qFdOxJquE6xqGSjqsJ0Es1X4vhNImSxQxmRClT
-   5Zsx1ztSyiIawLUVM2RB18flWbwgStNerMb9AmgTlofMy6A1wFbMdurIh
-   GQqNlYF4m66hRjtRpyajEqo+c8+73bOhLGnKKtjr59u0u3gYjrha5E6/0
-   wNd1JudHpvXwWPj/84Uk/zQ1FGtkQSd9OeHPsadZaSSdWcEmwiPRa/YUw
-   74wUYOQz9yfTLU7CjFrvdMphe2+DhTBMiDk4Z5R2dsPzKLdjh5s38KXt9
-   lvRZM9jRLNfG3UxVL6En0WjEUXtyqHZAlIRMCvAVeKNL9mmjRQR1OvyKs
+  bh=WAVSplizknoBUN8PWM1qGthGcY9wzNFmieVn3H5fMP0=;
+  b=OsnITh2E0T2DgCVT/NjBiWhfGHRbkq0xIn3zuoeODO0lMz1JC7adi90w
+   xFcX0thARYr/krpQXFm+cLuKkaDhD02Rh6tDPBVP7YBbqC67P0zO9k2Mz
+   81z0vzyIlOTUwV77XZy9nvayuLzWrkCDSWYeKNHnTzrAzd28UKPtx09WF
+   A1I4BXZw98akrGIQX0iMk38CnlwBOdXQuIebaInM6v3GkQOJScyOQHX5/
+   afsQWEJ1y38iwl9fQlSuPPNxDX4V5sDEmIzVPVP4RyqGEZiCMVfqplH81
+   RPNX0wl2oe9f/GLTI5V4piKZRiwTutvjqkQQQ2GkOQpOou4yfZ9rH2m3O
    Q==;
-X-CSE-ConnectionGUID: aruFB+rJSmGmOiSnU7O61A==
-X-CSE-MsgGUID: xjvmTqu3R4qqgBZPYHn7qQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11518"; a="60833035"
+X-CSE-ConnectionGUID: lH2QPxT8SMWvXqNmK2UCvw==
+X-CSE-MsgGUID: mS9Wlj7BS0aGzK/kkl4tsg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11518"; a="57353668"
 X-IronPort-AV: E=Sophos;i="6.17,284,1747724400"; 
-   d="scan'208";a="60833035"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2025 13:26:39 -0700
-X-CSE-ConnectionGUID: P2sUgeGjSViYIrl0MnncvQ==
-X-CSE-MsgGUID: zhjH1eHDRpG+WAqlVuOE3w==
+   d="scan'208";a="57353668"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2025 13:31:32 -0700
+X-CSE-ConnectionGUID: HY3ftl14RnWPgtKSiQRgoA==
+X-CSE-MsgGUID: hkJYL8CmRfelQVDTPhceDw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.17,284,1747724400"; 
-   d="scan'208";a="189682515"
+   d="scan'208";a="170452077"
 Received: from smile.fi.intel.com ([10.237.72.52])
-  by fmviesa002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2025 13:26:35 -0700
+  by orviesa004.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2025 13:31:28 -0700
 Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
 	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1ulZ6F-000000056eI-3lk1;
-	Mon, 11 Aug 2025 23:26:31 +0300
-Date: Mon, 11 Aug 2025 23:26:31 +0300
+	id 1ulZAy-000000056h0-1aOL;
+	Mon, 11 Aug 2025 23:31:24 +0300
+Date: Mon, 11 Aug 2025 23:31:24 +0300
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Gabor Juhos <j4g8y7@gmail.com>
 Cc: Wolfram Sang <wsa@kernel.org>,
@@ -74,11 +74,11 @@ Cc: Wolfram Sang <wsa@kernel.org>,
 	Linus Walleij <linus.walleij@linaro.org>, linux-i2c@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
 	Imre Kaloz <kaloz@openwrt.org>, stable@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] i2c: pxa: prevent calling of the generic recovery
- init code
-Message-ID: <aJpR96Kkj12BwW-M@smile.fi.intel.com>
+Subject: Re: [PATCH v2 3/3] i2c: pxa: handle 'Early Bus Busy' condition on
+ Armada 3700
+Message-ID: <aJpTHKbLbTz-Z3bo@smile.fi.intel.com>
 References: <20250811-i2c-pxa-fix-i2c-communication-v2-0-ca42ea818dc9@gmail.com>
- <20250811-i2c-pxa-fix-i2c-communication-v2-2-ca42ea818dc9@gmail.com>
+ <20250811-i2c-pxa-fix-i2c-communication-v2-3-ca42ea818dc9@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -87,111 +87,111 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250811-i2c-pxa-fix-i2c-communication-v2-2-ca42ea818dc9@gmail.com>
+In-Reply-To: <20250811-i2c-pxa-fix-i2c-communication-v2-3-ca42ea818dc9@gmail.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
  krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On Mon, Aug 11, 2025 at 09:49:56PM +0200, Gabor Juhos wrote:
-> The I2C communication is completely broken on the Armada 3700 platform
-> since commit 0b01392c18b9 ("i2c: pxa: move to generic GPIO recovery").
+On Mon, Aug 11, 2025 at 09:49:57PM +0200, Gabor Juhos wrote:
+> Under some circumstances I2C recovery fails on Armada 3700. At least
+> on the Methode uDPU board, removing and replugging an SFP module fails
+> often, like this:
 > 
-> For example, on the Methode uDPU board, probing of the two onboard
-> temperature sensors fails ...
-> 
->   [    7.271713] i2c i2c-0: using pinctrl states for GPIO recovery
->   [    7.277503] i2c i2c-0:  PXA I2C adapter
->   [    7.282199] i2c i2c-1: using pinctrl states for GPIO recovery
->   [    7.288241] i2c i2c-1:  PXA I2C adapter
->   [    7.292947] sfp sfp-eth1: Host maximum power 3.0W
->   [    7.299614] sfp sfp-eth0: Host maximum power 3.0W
->   [    7.308178] lm75 1-0048: supply vs not found, using dummy regulator
->   [   32.489631] lm75 1-0048: probe with driver lm75 failed with error -121
->   [   32.496833] lm75 1-0049: supply vs not found, using dummy regulator
->   [   82.890614] lm75 1-0049: probe with driver lm75 failed with error -121
-> 
-> ... and accessing the plugged-in SFP modules also does not work:
-> 
->   [  511.298537] sfp sfp-eth1: please wait, module slow to respond
->   [  536.488530] sfp sfp-eth0: please wait, module slow to respond
+>   [   36.953127] sfp sfp-eth1: module removed
+>   [   38.468549] i2c i2c-1: i2c_pxa: timeout waiting for bus free
+>   [   38.486960] sfp sfp-eth1: module MENTECHOPTO      POS22-LDCC-KR    rev 1.0  sn MNC208U90009     dc 200828
+>   [   38.496867] mvneta d0040000.ethernet eth1: unsupported SFP module: no common interface modes
+>   [   38.521448] hwmon hwmon2: temp1_input not attached to any thermal zone
+>   [   39.249196] sfp sfp-eth1: module removed
 >   ...
->   [ 1065.688536] sfp sfp-eth1: failed to read EEPROM: -EREMOTEIO
->   [ 1090.888532] sfp sfp-eth0: failed to read EEPROM: -EREMOTEIO
-> 
-> After a discussion [1], there was an attempt to fix the problem by
-> reverting the offending change by commit 7b211c767121 ("Revert "i2c:
-> pxa: move to generic GPIO recovery""), but that only helped to fix
-> the issue in the 6.1.y stable tree. The reason behind the partial succes
-> is that there was another change in commit 20cb3fce4d60 ("i2c: Set i2c
-> pinctrl recovery info from it's device pinctrl") in the 6.3-rc1 cycle
-> which broke things further.
-> 
-> The cause of the problem is the same in case of both offending commits
-> mentioned above. Namely, the I2C core code changes the pinctrl state to
-> GPIO while running the recovery initialization code. Although the PXA
-> specific initialization also does this, but the key difference is that
-> it happens before the conrtoller is getting enabled in i2c_pxa_reset(),
-> whereas in the case of the generic initialization it happens after that.
-> 
-> To resolve the problem, provide an empty init_recovery() callback
-> function thus preventing the I2C core to call the generic recovery
-> initialization code.
-> 
-> As the result this change restores the original behaviour, which in
-> turn makes the I2C communication to work again as it can be seen from
-> the following log:
-> 
->   [    7.305277] i2c i2c-0:  PXA I2C adapter
->   [    7.310198] i2c i2c-1:  PXA I2C adapter
->   [    7.315012] sfp sfp-eth1: Host maximum power 3.0W
->   [    7.324061] lm75 1-0048: supply vs not found, using dummy regulator
->   [    7.331738] sfp sfp-eth0: Host maximum power 3.0W
->   [    7.337000] hwmon hwmon0: temp1_input not attached to any thermal zone
->   [    7.343593] lm75 1-0048: hwmon0: sensor 'tmp75c'
->   [    7.348526] lm75 1-0049: supply vs not found, using dummy regulator
->   [    7.356858] hwmon hwmon1: temp1_input not attached to any thermal zone
->   [    7.363463] lm75 1-0049: hwmon1: sensor 'tmp75c'
+>   [  292.568799] sfp sfp-eth1: please wait, module slow to respond
 >   ...
->   [    7.730315] sfp sfp-eth1: module Mikrotik         S-RJ01           rev 1.0  sn 61B103C55C58     dc 201022
->   [    7.840318] sfp sfp-eth0: module MENTECHOPTO      POS22-LDCC-KR    rev 1.0  sn MNC208U90009     dc 200828
->   [    7.850083] mvneta d0030000.ethernet eth0: unsupported SFP module: no common interface modes
->   [    7.990335] hwmon hwmon2: temp1_input not attached to any thermal zone
-
-TBH this sounds to me like trying to hack the solution and as you pointed out
-the problem is in pinctrl state changes. I think it may affect not only I2C case.
-
-And I didn't get how recovery code affects the initialisation (enumeration). Do we
-set pin control state back and forth during probe? May be this is a root cause?
+>   [  625.208814] sfp sfp-eth1: failed to read EEPROM: -EREMOTEIO
+> 
+> Note that the 'unsupported SFP module' messages are not relevant. The
+> module is used only for testing the I2C recovery funcionality, because
+> the error can be triggered easily with this specific one.
+> 
+> Enabling debug in the i2c-pxa driver reveals the following:
+> 
+>   [   82.034678] sfp sfp-eth1: module removed
+>   [   90.008654] i2c i2c-1: slave_0x50 error: timeout with active message
+>   [   90.015112] i2c i2c-1: msg_num: 2 msg_idx: 0 msg_ptr: 0
+>   [   90.020464] i2c i2c-1: IBMR: 00000003 IDBR: 000000a0 ICR: 000007e0 ISR: 00000802
+>   [   90.027906] i2c i2c-1: log:
+>   [   90.030787]
+> 
+> This continues until the retries are exhausted ...
+> 
+>   [  110.192489] i2c i2c-1: slave_0x50 error: exhausted retries
+>   [  110.198012] i2c i2c-1: msg_num: 2 msg_idx: 0 msg_ptr: 0
+>   [  110.203323] i2c i2c-1: IBMR: 00000003 IDBR: 000000a0 ICR: 000007e0 ISR: 00000802
+>   [  110.210810] i2c i2c-1: log:
+>   [  110.213633]
+> 
+> ... then the whole sequence starts again ...
+> 
+>   [  115.368641] i2c i2c-1: slave_0x50 error: timeout with active message
+> 
+> ... while finally the SFP core gives up:
+> 
+>   [  671.975258] sfp sfp-eth1: failed to read EEPROM: -EREMOTEIO
+> 
+> When we analyze the log, it can be seen that bit 1 and 11 is set in the
+> ISR (Interface Status Register). Bit 1 indicates the ACK/NACK status, but
+> the purpose of bit 11 is not documented in the driver code unfortunately.
+> 
+> The 'Functional Specification' document of the Armada 3700 SoCs family
+> however says that this bit indicates an 'Early Bus Busy' condition. The
+> document also notes that whenever this bit is set, it is not possible to
+> initiate a transaction on the I2C bus. The observed behaviour corresponds
+> to this statement.
+> 
+> Unfortunately, I2C recovery does not help as it never runs in this
+> special case. Although the driver checks the busyness of the bus at
+> several places, but since it does not consider the A3700 specific bit
+> in these checks it can't determine the actual status of the bus correctly
+> which results in the errors above.
+> 
+> In order to fix the problem, add a new member to struct 'i2c_pxa' to
+> store a controller specific bitmask containing the bits indicating the
+> busy status, and use that in the code while checking the actual status
+> of the bus. This ensures that the correct status can be determined on
+> the Armada 3700 based devices without causing functional changes on
+> devices based on other SoCs.
+> 
+> With the change applied, the driver detects the busy condition, and runs
+> the recovery process:
+> 
+>   [  742.617312] i2c i2c-1: state:i2c_pxa_wait_bus_not_busy:449: ISR=00000802, ICR=000007e0, IBMR=03
+>   [  742.626099] i2c i2c-1: i2c_pxa: timeout waiting for bus free
+>   [  742.631933] i2c i2c-1: recovery: resetting controller, ISR=0x00000802
+>   [  742.638421] i2c i2c-1: recovery: IBMR 0x00000003 ISR 0x00000000
+> 
+> This clears the EBB bit in the ISR register, so it makes it possible to
+> initiate transactions on the I2C bus again.
+> 
+> After this patch, the SFP module used for testing can be removed and
+> replugged numerous times without causing the error described at the
+> beginning. Previously, the error happened after a few such attempts.
+> 
+> The patch has been tested also with the following kernel versions:
+> 5.10.237, 5.15.182, 6.1.138, 6.6.90, 6.12.28, 6.14.6. It improves
+> recoverabilty on all of them.
 
 ...
 
-> [1] https://lore.kernel.org/r/20230926160255.330417-1-robert.marko@sartura.hr
-> 
+> Note: the patch is included in this series for completeness however
+> it can be applied independently from the preceding patches. On kernels
+> 6.3+, it restores I2C functionality even in itself because it recovers
+> the controller from the bad state described in the previous patch.
 
-Can you make this a Link tag?
-Link: $URL #1
-
-> Cc: stable@vger.kernel.org # 6.3+
-> Fixes: 20cb3fce4d60 ("i2c: Set i2c pinctrl recovery info from it's device pinctrl")
-> Signed-off-by: Gabor Juhos <j4g8y7@gmail.com>
-> Signed-off-by: Imre Kaloz <kaloz@openwrt.org>
+Sounds to me like this one should be applied first independently on the
+discussion / conclusion on the patch 1.
 
 ...
 
->  static int i2c_pxa_init_recovery(struct pxa_i2c *i2c)
->  {
->  	struct i2c_bus_recovery_info *bri = &i2c->recovery;
-
->  		return 0;
->  	}
->  
-> +	bri->init_recovery = i2c_pxa_init_recovery_cb;
-
-This is unfortunate. I would keep the naming schema consistent, i.e. rename
-existing function and use its original name for the new callback.
-
->  	bri->prepare_recovery = i2c_pxa_prepare_recovery;
->  	bri->unprepare_recovery = i2c_pxa_unprepare_recovery;
->  	bri->recover_bus = i2c_generic_scl_recovery;
+Code wise it looks reasonable to me, but I haven't reviewed it properly
+and wouldn't probably have a time, that's why no tags.
 
 -- 
 With Best Regards,
