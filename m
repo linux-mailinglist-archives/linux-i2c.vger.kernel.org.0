@@ -1,201 +1,378 @@
-Return-Path: <linux-i2c+bounces-12253-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12254-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C2D6B21682
-	for <lists+linux-i2c@lfdr.de>; Mon, 11 Aug 2025 22:32:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AAEB4B237C8
+	for <lists+linux-i2c@lfdr.de>; Tue, 12 Aug 2025 21:15:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3CD541A22F2D
-	for <lists+linux-i2c@lfdr.de>; Mon, 11 Aug 2025 20:32:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 602FA6E59F3
+	for <lists+linux-i2c@lfdr.de>; Tue, 12 Aug 2025 19:15:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0203D2DA75A;
-	Mon, 11 Aug 2025 20:31:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OsnITh2E"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2CEE260583;
+	Tue, 12 Aug 2025 19:15:42 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from relay.hostedemail.com (smtprelay0013.hostedemail.com [216.40.44.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B28A2139CE;
-	Mon, 11 Aug 2025 20:31:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D5BB1F429C;
+	Tue, 12 Aug 2025 19:15:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754944293; cv=none; b=f9WXyk00/y53ZNqSW/OR6X3txtKodzB1z/otWR3GfQglaLZINT0khJOmIYW6GoMQtADdhUBIL1WqoyUdm7PQwRHcgoe59IXw0zUyuQO49jkHjMQsdzUtrPkHJwiEQglp/O2fubapZgsF33t6kXSpshfDin78euGXXBdsL2glBvw=
+	t=1755026142; cv=none; b=F69Iq5GBvKpQmuN/6LJLFRD+FJX5+Z5Uszv+YGTul3zu8rFCukig1HA8GXCqauAbsYzsksW7kVWLRvfzvy43dkffPpv26K4FFV/RepIakhGE+WXTg6hjmhVHPw8rFQQhrOgyHvbtuKbBRYNMClOF7tplRNX8jF1jgA0owIsA4xY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754944293; c=relaxed/simple;
-	bh=WAVSplizknoBUN8PWM1qGthGcY9wzNFmieVn3H5fMP0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=T0WiEI+jmjhg8zwUTBFQA2j8Kv3w1CGWUtU6iHG5eIymGkfXIEtudmtKuZkrP6Qp0hR2JbTSmxyVpRvCt/+2Scq/C7/CGOP8QoGL+i9fYhZOwbgpcnvpHjaO1nQg55iH4Sw7jeCgqiPz48cU2zrHA6LV344jL5fc+PMdEhe/N7U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OsnITh2E; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1754944293; x=1786480293;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WAVSplizknoBUN8PWM1qGthGcY9wzNFmieVn3H5fMP0=;
-  b=OsnITh2E0T2DgCVT/NjBiWhfGHRbkq0xIn3zuoeODO0lMz1JC7adi90w
-   xFcX0thARYr/krpQXFm+cLuKkaDhD02Rh6tDPBVP7YBbqC67P0zO9k2Mz
-   81z0vzyIlOTUwV77XZy9nvayuLzWrkCDSWYeKNHnTzrAzd28UKPtx09WF
-   A1I4BXZw98akrGIQX0iMk38CnlwBOdXQuIebaInM6v3GkQOJScyOQHX5/
-   afsQWEJ1y38iwl9fQlSuPPNxDX4V5sDEmIzVPVP4RyqGEZiCMVfqplH81
-   RPNX0wl2oe9f/GLTI5V4piKZRiwTutvjqkQQQ2GkOQpOou4yfZ9rH2m3O
-   Q==;
-X-CSE-ConnectionGUID: lH2QPxT8SMWvXqNmK2UCvw==
-X-CSE-MsgGUID: mS9Wlj7BS0aGzK/kkl4tsg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11518"; a="57353668"
-X-IronPort-AV: E=Sophos;i="6.17,284,1747724400"; 
-   d="scan'208";a="57353668"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2025 13:31:32 -0700
-X-CSE-ConnectionGUID: HY3ftl14RnWPgtKSiQRgoA==
-X-CSE-MsgGUID: hkJYL8CmRfelQVDTPhceDw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,284,1747724400"; 
-   d="scan'208";a="170452077"
-Received: from smile.fi.intel.com ([10.237.72.52])
-  by orviesa004.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2025 13:31:28 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1ulZAy-000000056h0-1aOL;
-	Mon, 11 Aug 2025 23:31:24 +0300
-Date: Mon, 11 Aug 2025 23:31:24 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Gabor Juhos <j4g8y7@gmail.com>
-Cc: Wolfram Sang <wsa@kernel.org>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Russell King <rmk+kernel@armlinux.org.uk>,
-	Andrew Lunn <andrew@lunn.ch>, Hanna Hawa <hhhawa@amazon.com>,
-	Robert Marko <robert.marko@sartura.hr>,
-	Linus Walleij <linus.walleij@linaro.org>, linux-i2c@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Imre Kaloz <kaloz@openwrt.org>, stable@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] i2c: pxa: handle 'Early Bus Busy' condition on
- Armada 3700
-Message-ID: <aJpTHKbLbTz-Z3bo@smile.fi.intel.com>
-References: <20250811-i2c-pxa-fix-i2c-communication-v2-0-ca42ea818dc9@gmail.com>
- <20250811-i2c-pxa-fix-i2c-communication-v2-3-ca42ea818dc9@gmail.com>
+	s=arc-20240116; t=1755026142; c=relaxed/simple;
+	bh=zjQ4QyyjPyJnsHkbXRZq/81hEBfSo+z5S3jf8UJzDL0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ROPY260ZzyOsa8t0t+CuEgDccfoForD5rG2vjb/+GuohYSkRolhhRjnGRDeju5gR57Ri5aPjr/5uk+r5A2DbQn0WVD6c2Wy/rgjq9t4mPMFnL/+X0ZNssoq1K/eQYeodj5DnC/pziKLUDmRtbI27sQ2Yy2oJqEDjQVJs01bo5F0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf06.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay02.hostedemail.com (Postfix) with ESMTP id 07DCB135DB9;
+	Tue, 12 Aug 2025 19:15:29 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf06.hostedemail.com (Postfix) with ESMTPA id BA79C20017;
+	Tue, 12 Aug 2025 19:15:27 +0000 (UTC)
+Date: Tue, 12 Aug 2025 15:16:13 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Mohammad Gomaa <midomaxgomaa@gmail.com>
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, kenalba@google.com,
+ hbarnor@chromium.org, rayxu@google.com
+Subject: Re: [PATCH WIP] i2c: add tracepoints to aid debugging in
+ i2c-core-base
+Message-ID: <20250812151613.437e3fe8@gandalf.local.home>
+In-Reply-To: <20250806-refactor-add-i2c-tracepoints-v1-1-d1d39bd6fb57@gmail.com>
+References: <20250806-refactor-add-i2c-tracepoints-v1-1-d1d39bd6fb57@gmail.com>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250811-i2c-pxa-fix-i2c-communication-v2-3-ca42ea818dc9@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Stat-Signature: 789kn6izd6ny47db4kyxobf6nersdq1j
+X-Rspamd-Server: rspamout05
+X-Rspamd-Queue-Id: BA79C20017
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1/nW8qEcwhOC5ykhkpUTvbEoWZSAZ3+WKU=
+X-HE-Tag: 1755026127-361825
+X-HE-Meta: U2FsdGVkX1/mJKqzqqtX0y+mAW0ekKMqv6yXJpgRZPWnFlCBamGFat86x+NR05YLVJI8jCZ71dT4PZsL3AqVdQ4blXYdQYBVtXBSn3XPtcJjhfX5qNqMLa5cq9sxrGpiP4R21TdtFl4EyamW56bMWeWFSVn78Y4jMSbrT0p0IhPwzEVRvP8lT4agunREpj2zjbIiNQHbCoxcZZKGq4XYUDG+b+LH7GGTGO690qoLLkkV/ly3EQN6WHtFY63mdFgvQtambF7NuZQVQLsPyNVH4XUvWlRJ82PZKMk2W4bfrqhAwinUxvKn4p3IZw8TrUd3J1aLoMMyilpPlxZgwIAL98eWgAtssCGP
 
-On Mon, Aug 11, 2025 at 09:49:57PM +0200, Gabor Juhos wrote:
-> Under some circumstances I2C recovery fails on Armada 3700. At least
-> on the Methode uDPU board, removing and replugging an SFP module fails
-> often, like this:
-> 
->   [   36.953127] sfp sfp-eth1: module removed
->   [   38.468549] i2c i2c-1: i2c_pxa: timeout waiting for bus free
->   [   38.486960] sfp sfp-eth1: module MENTECHOPTO      POS22-LDCC-KR    rev 1.0  sn MNC208U90009     dc 200828
->   [   38.496867] mvneta d0040000.ethernet eth1: unsupported SFP module: no common interface modes
->   [   38.521448] hwmon hwmon2: temp1_input not attached to any thermal zone
->   [   39.249196] sfp sfp-eth1: module removed
->   ...
->   [  292.568799] sfp sfp-eth1: please wait, module slow to respond
->   ...
->   [  625.208814] sfp sfp-eth1: failed to read EEPROM: -EREMOTEIO
-> 
-> Note that the 'unsupported SFP module' messages are not relevant. The
-> module is used only for testing the I2C recovery funcionality, because
-> the error can be triggered easily with this specific one.
-> 
-> Enabling debug in the i2c-pxa driver reveals the following:
-> 
->   [   82.034678] sfp sfp-eth1: module removed
->   [   90.008654] i2c i2c-1: slave_0x50 error: timeout with active message
->   [   90.015112] i2c i2c-1: msg_num: 2 msg_idx: 0 msg_ptr: 0
->   [   90.020464] i2c i2c-1: IBMR: 00000003 IDBR: 000000a0 ICR: 000007e0 ISR: 00000802
->   [   90.027906] i2c i2c-1: log:
->   [   90.030787]
-> 
-> This continues until the retries are exhausted ...
-> 
->   [  110.192489] i2c i2c-1: slave_0x50 error: exhausted retries
->   [  110.198012] i2c i2c-1: msg_num: 2 msg_idx: 0 msg_ptr: 0
->   [  110.203323] i2c i2c-1: IBMR: 00000003 IDBR: 000000a0 ICR: 000007e0 ISR: 00000802
->   [  110.210810] i2c i2c-1: log:
->   [  110.213633]
-> 
-> ... then the whole sequence starts again ...
-> 
->   [  115.368641] i2c i2c-1: slave_0x50 error: timeout with active message
-> 
-> ... while finally the SFP core gives up:
-> 
->   [  671.975258] sfp sfp-eth1: failed to read EEPROM: -EREMOTEIO
-> 
-> When we analyze the log, it can be seen that bit 1 and 11 is set in the
-> ISR (Interface Status Register). Bit 1 indicates the ACK/NACK status, but
-> the purpose of bit 11 is not documented in the driver code unfortunately.
-> 
-> The 'Functional Specification' document of the Armada 3700 SoCs family
-> however says that this bit indicates an 'Early Bus Busy' condition. The
-> document also notes that whenever this bit is set, it is not possible to
-> initiate a transaction on the I2C bus. The observed behaviour corresponds
-> to this statement.
-> 
-> Unfortunately, I2C recovery does not help as it never runs in this
-> special case. Although the driver checks the busyness of the bus at
-> several places, but since it does not consider the A3700 specific bit
-> in these checks it can't determine the actual status of the bus correctly
-> which results in the errors above.
-> 
-> In order to fix the problem, add a new member to struct 'i2c_pxa' to
-> store a controller specific bitmask containing the bits indicating the
-> busy status, and use that in the code while checking the actual status
-> of the bus. This ensures that the correct status can be determined on
-> the Armada 3700 based devices without causing functional changes on
-> devices based on other SoCs.
-> 
-> With the change applied, the driver detects the busy condition, and runs
-> the recovery process:
-> 
->   [  742.617312] i2c i2c-1: state:i2c_pxa_wait_bus_not_busy:449: ISR=00000802, ICR=000007e0, IBMR=03
->   [  742.626099] i2c i2c-1: i2c_pxa: timeout waiting for bus free
->   [  742.631933] i2c i2c-1: recovery: resetting controller, ISR=0x00000802
->   [  742.638421] i2c i2c-1: recovery: IBMR 0x00000003 ISR 0x00000000
-> 
-> This clears the EBB bit in the ISR register, so it makes it possible to
-> initiate transactions on the I2C bus again.
-> 
-> After this patch, the SFP module used for testing can be removed and
-> replugged numerous times without causing the error described at the
-> beginning. Previously, the error happened after a few such attempts.
-> 
-> The patch has been tested also with the following kernel versions:
-> 5.10.237, 5.15.182, 6.1.138, 6.6.90, 6.12.28, 6.14.6. It improves
-> recoverabilty on all of them.
+On Wed, 06 Aug 2025 12:14:32 +0300
+Mohammad Gomaa <midomaxgomaa@gmail.com> wrote:
 
-...
+> @@ -509,38 +511,54 @@ static int i2c_device_probe(struct device *dev)
+>  			/* Keep adapter active when Host Notify is
+> required */ pm_runtime_get_sync(&client->adapter->dev);
+>  			irq = i2c_smbus_host_notify_to_irq(client);
+> +			reason = "IRQ 0: could not get irq from Host
+> Notify"; } else if (is_of_node(fwnode)) {
+>  			irq = fwnode_irq_get_byname(fwnode, "irq");
+>  			if (irq == -EINVAL || irq == -ENODATA)
+>  				irq = fwnode_irq_get(fwnode, 0);
+> +			reason = "IRQ 0: could not get irq from OF";
 
-> Note: the patch is included in this series for completeness however
-> it can be applied independently from the preceding patches. On kernels
-> 6.3+, it restores I2C functionality even in itself because it recovers
-> the controller from the bad state described in the previous patch.
+Instead of using strings, can't you use enums?
 
-Sounds to me like this one should be applied first independently on the
-discussion / conclusion on the patch 1.
+>  		} else if (is_acpi_device_node(fwnode)) {
+>  			bool wake_capable;
+>  
+>  			irq = i2c_acpi_get_irq(client, &wake_capable);
+>  			if (irq > 0 && wake_capable)
+>  				client->flags |= I2C_CLIENT_WAKE;
+> +			reason = "IRQ 0: could not get irq from ACPI";
+>  		}
+>  		if (irq == -EPROBE_DEFER) {
+>  			status = dev_err_probe(dev, irq, "can't get
+> irq\n");
+> +			reason = "IRQ 0: could not get IRQ due to
+> EPROBE_DEFER"; goto put_sync_adapter;
+>  		}
+>  
+> -		if (irq < 0)
+> +		if (irq < 0) {
+> +			trace_i2c_device_probe_debug(dev, reason);
+>  			irq = 0;
+> +		}
+>  
+>  		client->irq = irq;
+>  	}
+>  
+>  	driver = to_i2c_driver(dev->driver);
+>  
+> +	has_id_table = driver->id_table;
+> +	has_acpi_match = acpi_driver_match_device(dev, dev->driver);
+> +	has_of_match = i2c_of_match_device(dev->driver->of_match_table,
+> client); +
+> +	if (!has_id_table)
+> +		trace_i2c_device_probe_debug(dev, "no I2C ID table");
+> +	if (!has_acpi_match)
+> +		trace_i2c_device_probe_debug(dev, "ACPI ID table
+> mismatch");
+> +	if (!has_of_match)
+> +		trace_i2c_device_probe_debug(dev, "OF ID table
+> mismatch"); +
+>  	/*
+>  	 * An I2C ID table is not mandatory, if and only if, a suitable
+> OF
+>  	 * or ACPI ID table is supplied for the probing device.
+>  	 */
+> -	if (!driver->id_table &&
+> -	    !acpi_driver_match_device(dev, dev->driver) &&
+> -	    !i2c_of_match_device(dev->driver->of_match_table, client)) {
+> +	if (!has_id_table && !has_acpi_match && !has_of_match) {
+>  		status = -ENODEV;
+> +		reason = "no I2C ID table and no ACPI/OF match";
+>  		goto put_sync_adapter;
+>  	}
+>  
+> @@ -550,47 +568,60 @@ static int i2c_device_probe(struct device *dev)
+>  		wakeirq = fwnode_irq_get_byname(fwnode, "wakeup");
+>  		if (wakeirq == -EPROBE_DEFER) {
+>  			status = dev_err_probe(dev, wakeirq, "can't get
+> wakeirq\n");
+> +			reason = "get wake IRQ due to EPROBE_DEFER";
+>  			goto put_sync_adapter;
+>  		}
+>  
+>  		device_init_wakeup(&client->dev, true);
+>  
+> -		if (wakeirq > 0 && wakeirq != client->irq)
+> +		if (wakeirq > 0 && wakeirq != client->irq) {
+>  			status = dev_pm_set_dedicated_wake_irq(dev,
+> wakeirq);
+> -		else if (client->irq > 0)
+> +			reason = "failed to set dedicated wakeup IRQ";
+> +		} else if (client->irq > 0) {
+>  			status = dev_pm_set_wake_irq(dev, client->irq);
+> -		else
+> +			reason = "failed to set wakeup IRQ";
+> +		} else {
+>  			status = 0;
+> +			reason = "no IRQ";
+> +		}
+>  
+> -		if (status)
+> +		if (status) {
+>  			dev_warn(&client->dev, "failed to set up wakeup
+> irq\n");
+> +			trace_i2c_device_probe_debug(&client->dev,
+> reason);
+> +		}
+>  	}
+>  
+>  	dev_dbg(dev, "probe\n");
+>  
+>  	status = of_clk_set_defaults(to_of_node(fwnode), false);
+> -	if (status < 0)
+> +	if (status < 0) {
+> +		reason = "set default clocks";
+>  		goto err_clear_wakeup_irq;
+> -
+> +	}
+>  	do_power_on = !i2c_acpi_waive_d0_probe(dev);
+>  	status = dev_pm_domain_attach(&client->dev, do_power_on ?
+> PD_FLAG_ATTACH_POWER_ON : 0);
+> -	if (status)
+> +	if (status) {
+> +		reason = "attach PM domain";
+>  		goto err_clear_wakeup_irq;
+> -
+> +	}
+>  	client->devres_group_id = devres_open_group(&client->dev, NULL,
+>  						    GFP_KERNEL);
+>  	if (!client->devres_group_id) {
+>  		status = -ENOMEM;
+> +		reason = "open devres group";
+>  		goto err_detach_pm_domain;
+>  	}
+>  
+>  	client->debugfs = debugfs_create_dir(dev_name(&client->dev),
+>  					     client->adapter->debugfs);
+>  
+> -	if (driver->probe)
+> +	if (driver->probe) {
+>  		status = driver->probe(client);
+> -	else
+> +		reason = "specific driver probe failed";
+> +	} else {
+>  		status = -EINVAL;
+> +		reason = "no probe defined";
+> +	}
+>  
+>  	/*
+>  	 * Note that we are not closing the devres group opened above so
+> @@ -617,6 +648,8 @@ static int i2c_device_probe(struct device *dev)
+>  	if (client->flags & I2C_CLIENT_HOST_NOTIFY)
+>  		pm_runtime_put_sync(&client->adapter->dev);
+>  
+> +	trace_i2c_device_probe_failed(&client->dev, status, reason);
+> +
+>  	return status;
+>  }
+>  
+> diff --git a/include/trace/events/i2c.h b/include/trace/events/i2c.h
+> index
+> 142a23c6593c611de9abc2a89a146b95550b23cd..1a08800dcdd760e2a5a40b76c4a244e1b4ef3b1e
+> 100644 --- a/include/trace/events/i2c.h +++ b/include/trace/events/i2c.h
+> @@ -16,6 +16,29 @@
+>  /*
+>   * drivers/i2c/i2c-core-base.c
+>   */
+> +TRACE_EVENT(i2c_device_probe_debug,
+> +	    TP_PROTO(struct device *dev, const char *message),
+> +	    TP_ARGS(dev, message),
+> +	    TP_STRUCT__entry(__string(devname, dev_name(dev))
+> __string(message, message)),
+> +	    TP_fast_assign(__assign_str(devname);
+> __assign_str(message);),
+> +	    TP_printk("device=%s: %s", __get_str(devname),
+> __get_str(message)) +);
+> +
+> +TRACE_EVENT(i2c_device_probe_failed,
+> +	    TP_PROTO(struct device *dev, int status, const char *reason),
+> +	    TP_ARGS(dev, status, reason),
+> +	    TP_STRUCT__entry(__string(dev_name, dev_name(dev))
+> +			     __field(int, status)
+> +			     __string(reason, reason)),
+> +	    TP_fast_assign(__assign_str(dev_name);
+> +		__entry->status = status;
+> +		__assign_str(reason);),
+> +	    TP_printk("failed to probe %s: %d (%s)",
+> +		      __get_str(dev_name),
+> +		      __entry->status,
+> +		      __get_str(reason))
+> +);
 
-...
+Note, TRACE_EVENT() macros have their own space formatting, as they are not
+normal macros and instead are to emulate code. That is, TP_STRUCT__entry is
+supposed to look like a structure, and the TP_fast_assign should look like
+a function. The above should look like:
 
-Code wise it looks reasonable to me, but I haven't reviewed it properly
-and wouldn't probably have a time, that's why no tags.
 
--- 
-With Best Regards,
-Andy Shevchenko
+TRACE_EVENT(i2c_device_probe_debug,
 
+	TP_PROTO(struct device *dev, const char *message),
+
+	TP_ARGS(dev, message),
+
+	TP_STRUCT__entry(
+		__string(	devname,	dev_name(dev)	)
+		__string(	message,	message		)
+	),
+
+	TP_fast_assign(
+		__assign_str(devname);
+		__assign_str(message);
+	),
+
+	TP_printk("device=%s: %s", __get_str(devname), __get_str(message))
+);
+
+TRACE_EVENT(i2c_device_probe_failed,
+
+	TP_PROTO(struct device *dev, int status, const char *reason),
+
+	TP_ARGS(dev, status, reason),
+
+	TP_STRUCT__entry(
+		__string(	dev_name,	dev_name(dev)	)
+		__field(	int,		status		)
+		__string(	reason,		reason)
+	),
+
+	TP_fast_assign(
+		__assign_str(dev_name);
+		__entry->status = status;
+		__assign_str(reason);
+	),
+
+	TP_printk("failed to probe %s: %d (%s)",
+		  __get_str(dev_name),
+		  __entry->status,
+		  __get_str(reason))
+);
+
+See the difference. It's much easier to read. You can look at the other
+files in include/trace/events/*.h for reference.
+
+Instead of passing in a string for "reason" (and waste time and ring buffer
+size for a string) use enums and __print_symbolic()
+
+#define I2C_TRACE_REASON						\
+	EM(HOST_NOTIFY,	"IRQ 0: could not get irq from Host
+Notify")	\
+	EM(FROM_OF,	"IRQ 0: could not get irq from OF")
+	\
+	EM(FROM_ACPI,	"IRQ 0: could not get irq from ACPI")
+	\
+	[..]
+\
+	EMe(NO_PROBE,	"no probe defined")
+
+#undef EM
+#undef EMe
+#define EM(a,b)	 I2C_TRACE_REASON_##a,
+#define EMe(a,b) I2C_TRACE_REASON_##a
+
+enum {
+	I2C_TRACE_REASON
+};
+
+In the trace/events/i2c.h file:
+
+#undef EM
+#undef EMe
+#define EM(a,b)		TRACE_DEFINE_ENUM(I2C_TRACE_REASON_##a);
+#define EMe(a,b)	TRACE_DEFINE_ENUM(I2C_TRACE_REASON_##a);
+
+I2C_TRACE_REASON
+
+#undef EM
+#undef EMe
+#define EM(a,b)		{ I2C_TRACE_REASON_##a, b },
+#define EMe(a,b)	{ I2C_TRACE_REASON_##a, b }
+
+And in the TRACE_EVENT() macro:
+
+	TP_PROTO(struct device *dev, int status, int reason),
+
+	TP_ARGS(dev, status, reason),
+
+	[..]
+		__field(	int,	reason		)
+	[..]
+		__entry->reason = reason;
+	[..]
+
+	TP_printk("device=%s: %s", __get_str(devname),
+		  __print_symbolic(reason, I2C_TRACE_REASON) )
+
+And it should work nicely both in the kernel and in user space, and not
+have the overhead of copying strings during execution.
+
+Maybe this is overkill because it's just for debugging and you shouldn't
+have many of these events. But I wanted to at least educate you on the use
+of these macros in case you have other areas to do this with.
+
+-- Steve
+
+
+> +
+>  extern int i2c_transfer_trace_reg(void);
+>  extern void i2c_transfer_trace_unreg(void);
+>  
+> 
+> ---
+> base-commit: 7e161a991ea71e6ec526abc8f40c6852ebe3d946
+> change-id: 20250806-refactor-add-i2c-tracepoints-b6e2b92d4cd9
+> 
+> Best regards,
 
 
