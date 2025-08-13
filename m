@@ -1,80 +1,80 @@
-Return-Path: <linux-i2c+bounces-12262-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12263-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CCB83B2471F
-	for <lists+linux-i2c@lfdr.de>; Wed, 13 Aug 2025 12:24:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FE32B2477E
+	for <lists+linux-i2c@lfdr.de>; Wed, 13 Aug 2025 12:38:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D245E173CFD
-	for <lists+linux-i2c@lfdr.de>; Wed, 13 Aug 2025 10:24:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 72245684F3C
+	for <lists+linux-i2c@lfdr.de>; Wed, 13 Aug 2025 10:37:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B78E2F1FDF;
-	Wed, 13 Aug 2025 10:24:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9342C2F6597;
+	Wed, 13 Aug 2025 10:36:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A2uKbA6R"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FyapTp3l"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C857221277;
-	Wed, 13 Aug 2025 10:24:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61E6F2F658A;
+	Wed, 13 Aug 2025 10:36:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755080667; cv=none; b=D/dub9ZEOogcfTosoyn+qP/8uZGWd7zcq4it0exL22s83+YxILjiXyNTiGoicPCEdLgg2J80NY6l4paTjyvMTUSKxEQF0evLfN9GQyiTan949UoVoV+h2smpZW6n8H7RoZIc5caJ4z4xhqW/NeCfrV0wv8XQZw5r8ju706fB6XY=
+	t=1755081410; cv=none; b=Y32yWlVD1wRX7xcllLQaM+YAco512g72op4GLPI/2xoDnX+ZG0RiCEwJk/ikJ3LM+T3r2aR+AMaRP8brTOW707cHFCQLr4he3VZJUxsQ4nTKLQHhjYfCmBNd+dMU81MwXpqXCkE0OvcoHflQu5Gti9XiDk61IXw4tGr895N+clQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755080667; c=relaxed/simple;
-	bh=FJ/VBakO+nFumVlvWzR7mU1CQJoygXVl0eaOsOqiRMk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=H7qOgYPLjGWc/2Sq6vhFsWXIRRW/JszKjf+KTJ0HDuVnElbJ1cKUkb5CE8fMPLnilx+kZ0cFO5WMvEseVbKB50tlPJ+1xR78nhOBHFSsOc8h8ckGUY90XKKQIuU84FMIq2/v5A1knklQ5tr0VcxOHQ4WODw7dUQ14t+xwClMHuc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A2uKbA6R; arc=none smtp.client-ip=209.85.221.44
+	s=arc-20240116; t=1755081410; c=relaxed/simple;
+	bh=vvi2IOEQ7Mqyn9jRBUDqaUkk3JMkwu31s9PZlTL2hII=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=H/A4V79rhDTaNvns52ML+yCdDx7yKRhDtFu9iFYNr1JLdOEAy8HYUM/HoClFHxfqJ/US3NPTbM4Wrz/nQQtOPSDcGeVU1iJeakbMpVTAAwQ6NGQseBpBe7HXmTUWM4LRO5MMMelAfFELYdfkPdNDDqtOt5+G7hiZuVghbkxG19g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FyapTp3l; arc=none smtp.client-ip=209.85.128.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-3b783d851e6so5462371f8f.0;
-        Wed, 13 Aug 2025 03:24:25 -0700 (PDT)
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-459e20ec1d9so62232645e9.3;
+        Wed, 13 Aug 2025 03:36:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755080664; x=1755685464; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hBvMcb9A/AFLPKQ8t4bKDq8tGZPD9sVSSm5Hx/aM1sg=;
-        b=A2uKbA6RD1A+E4P5pytMYN3Mkpj6t+co1bk/7AtNTOnAE3+ee0+1tFOfvRNYAuxDpw
-         m2QwPYt3nosLeRV3BVzkgnUGshbSHQh+KDkLo4r5l6NjpJbDQALOeogn6q3TrBvMSNWH
-         b6rLiMy8m3TJT20mOq/TxgEz1AYGvk5wBafPP8PhnAYJ2xfSJCCDXS+M/8NBuTWF8kIH
-         EoouizoWS+i42TTSL7GisvInTD0IYVdLBabn4oKNxK/YszAlQuOQSznl8o405+K1TmIP
-         INqa+JbcEhx7yTS3RSyV1GcMfqr5Ejp9VFIM6xURSbNs1BZPXj9eS/Ra4BOpOw/MzN63
-         PZRg==
+        d=gmail.com; s=20230601; t=1755081407; x=1755686207; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=oQ3oRqQ+8vYvglVmqAsoCg5Z9YqosZmgqcxx5cVr1YU=;
+        b=FyapTp3lI11sUmTGqWFL3owxyOVn4k8oRZoihZKaR8cBCjmfAgR0+1xh+9mW76Ej+6
+         tD0QCesoBaI2q2rc0VE70dBduzHiV5BR1n2Du+ZonC2I6f6N+d/MJv5ElSCPZBU6UQZc
+         R/HARHiteC7QpEmXut92QWjBJg52Jwz3s5aZAqfdFCtjGiNNI2K9NMoBuGHSWeTQsSm3
+         IOUtiNTo+MuJtRKTxffjJKl3N909gPAjP9pdL8yflBbHc0POB3U6SkIloY82TpxAoKE0
+         Vpe7u16oXrFF9rdaFSOMcOQnJmSdjp1XxFs48cjhjSw/ZNCLwOzKvLYHJ2g736P+nqfd
+         AerA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755080664; x=1755685464;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1755081407; x=1755686207;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hBvMcb9A/AFLPKQ8t4bKDq8tGZPD9sVSSm5Hx/aM1sg=;
-        b=pkE3s7Q385FX/7tmvDPKRGW886VtQoxpnPDnjnp88z0I9nf7RiN0X7LQYTrEwnVG/A
-         gjuNVtG0NsgiRGIuGmpYoZ4JZExPkMAJQTMJyP87V2zyJC487Sw3P8s2fJxzyLaZnKRk
-         wQM3kGPIZRnx+0QmflCoF2yM4jY4iXe8h+rS17L08c4QkwkQnZrdY/yeNL1kyJbgNwuw
-         k5Erx6nedwhLGSQt8MQ8cZ0/A5HrW8xxIOsV5fikwkTdE/9PJc2Q3ooZCmJT9p60z7zr
-         kJoBTSmHZdhe41lVtDRfyRt3hvLiDzZZ4/iE1o40njYm0MZ9LLLQLVXfKKi1Z9tlYUTr
-         Crdw==
-X-Forwarded-Encrypted: i=1; AJvYcCUaT9/Th0AywJ2xsBgY8NzUY+rz8bHeX71u6DqeW8Q3gdWdW6c58rIXtlwvoPwapEE9PfASWjVg@vger.kernel.org, AJvYcCVUVyav7a+pW9vnMOVE0Sw6wqJffX2lE056VeLQcAqOEMd0Om+EPgQbSlD1Mp1guSFzs2Cc+2ayYOZuMm0C@vger.kernel.org, AJvYcCXQMAHILqgkvj4iznvp4vu3lvI77elMQ4MvUqSftUuQzCqon2mMxlzf/jdzLCWB5iesRGkUm7suNUc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyucP2to++QGEHAfKiMEd0tkizxMiDgkscYFU187Rs9DwGjjmBO
-	PtFiVeL6znxf/1r7BYhn9jOq9mY9CYGpRXaqzdSYU1npXxKq869b5fCW
-X-Gm-Gg: ASbGnctiDtTcx6UcEE6WV1pw9RJI4/zdLsdDVCG8ocIoYEqf1NGeL+j981U2AfNPugR
-	dhKOmQeGOkKTVnZD5W6gK0TExlCdAC5n6pJj0CIkUiB23gig8md99v2XLFO1VTqOB5NtRfHAt9U
-	MeldGETt7Ah5HRtZSXnKBrax/vpEKko7nikIXd3ZAja0f5DzGN9/tgoaK5lkAjalZ8PH50UdxUO
-	2QbJMQbKmo6Vtr02uqIlmNFyiN4r+VdKNNswwHi5Zi+n692DtObEO4p7kV8Ih4QhRTsEjVVRsh2
-	U9gXtgfETjSo+Sby7WZoSLPej0KzVQyRTu48pr8jriFI9jAbDfEJ981yel2bvsrH6JajuaB1BA9
-	qBckAuN9bzGOCcuZ3YC1I0+8PDN75ugCqWqwTSBbNIYw+oEYuPbAPxduyH542JEU=
-X-Google-Smtp-Source: AGHT+IEJHjTQQo8npkV7yU/QWSo8+r2RnFWIg51TLG4KaWGQtT16a4oEJjJRn79a5sY1UbdD0pjCsw==
-X-Received: by 2002:a05:6000:2006:b0:3b7:8880:184a with SMTP id ffacd0b85a97d-3b917f42040mr1913827f8f.54.1755080663628;
-        Wed, 13 Aug 2025 03:24:23 -0700 (PDT)
+        bh=oQ3oRqQ+8vYvglVmqAsoCg5Z9YqosZmgqcxx5cVr1YU=;
+        b=BmYa2fgvdaD+/5d9VC8oahmLUh5aI60yTLF3ePrisbgqjgPxaI3jZtCuPSLJyUISDN
+         E9jSbwKNPS5wGfBzkGbTLk3kyHyrILBwEiDmjgNULgxe287C9UOlvhrcq2m9lKHzx7wt
+         kZxJbTS1hFrXeRl+FZETRJ6g5ueujzpiVGRtm5YkJCsTrZcfX12XNlfT54kIqX79skS5
+         DsoCmHYxa6okZtw0mznC7+IO1TwWhY8zBOl4phO91oelXiPHl+TlgFf44581ctKCUn7F
+         IgB8/uXp32PopzDWild5GJhAo1npRSitJay2oT09V29jLmthENayHOe2/cC8qJEtQ83Q
+         a9ag==
+X-Forwarded-Encrypted: i=1; AJvYcCW7WidE+svvlaglqXbY6N3N9TMPf1+mY+0fcVpSKjIHDDJErP/8001bb9XZDf+IijVEyKpmlf+U@vger.kernel.org, AJvYcCXYmdR5SjEHL3wKqb0QZrcz37H+D2SbCOKQv77EmF1Nyne5YldciFazIzvuf1OIRce+ELszrHQaRrY=@vger.kernel.org, AJvYcCXgOe6F5GXIBVRyy3oKNAje+SM4rSesJrpIVFy7DLeAzyMbIe5/FsItTDeveAx89YUA4yzYl8vtyJfQBJvE@vger.kernel.org
+X-Gm-Message-State: AOJu0YzzSQNDrdSQ9XiQguYJN2jiltN+sn3tvYYw8h3cMuJ53eq7Dc2f
+	cyBU6SDaaFGR5AuQA4sSFciuvqtIVMcHNyqpLbghSYuPHBL2/2NtNi8g
+X-Gm-Gg: ASbGncuZUMyXdXpQSFNaI+6SKcpFpvdZQLae+BwO6oneLDlBANehXhm7k+KXvNzz0yt
+	zWRK5el9Lnhg1kVmtL4T/QiX7aZPnBTEfDmFCK1Kk7m88leTM/7NdA7cxo78ZepofHbKJfpVE6h
+	voWc5wCrzVLMIW7OP73ZyDWO6cmcsfyb0QgPy/gzdxY7+cRnojDvvR0G6UqRkiMcJJDEEDWL7ge
+	wS+7p/iF9Muc6nlRR1oWEaC5hcwXsJ0KvLy+uhyH4PK0wQYXsctFdgzMG+6lxTiHQueRY0XIBVT
+	VMKlAilBU+fxRQGWBtas+giYyR89wh0NtMoSrav2p06qMn9U+ATzWF8g7aEuHGXP6p/FbqNsFMb
+	kXDFOjydRMRpFocaoAcLyXH8gERdvlpyjBsEZSdxThv7QA+zOwthdfMyPg4UdWQU=
+X-Google-Smtp-Source: AGHT+IE8WeKKOgBp5vzp5Q2PpKaxjTyK+WTuLbyXBXngT5e/LuA9NlvZe1k5fxp4u22Kge47Qc9xEQ==
+X-Received: by 2002:a05:600c:3b09:b0:456:a1b:e906 with SMTP id 5b1f17b1804b1-45a16614befmr18524185e9.33.1755081406323;
+        Wed, 13 Aug 2025 03:36:46 -0700 (PDT)
 Received: from [192.168.20.170] (5D59A51C.catv.pool.telekom.hu. [93.89.165.28])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b79c3bf93dsm47351880f8f.27.2025.08.13.03.24.22
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45a16de5f27sm25743625e9.13.2025.08.13.03.36.44
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Aug 2025 03:24:23 -0700 (PDT)
-Message-ID: <27cc9ae5-1c13-4ec9-ab10-ae95d6339116@gmail.com>
-Date: Wed, 13 Aug 2025 12:24:22 +0200
+        Wed, 13 Aug 2025 03:36:45 -0700 (PDT)
+Message-ID: <8cb62eb9-9137-44b4-86f6-82f69813e83f@gmail.com>
+Date: Wed, 13 Aug 2025 12:36:45 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -82,8 +82,9 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/3] i2c: add init_recovery() callback
-Content-Language: hu
+From: Gabor Juhos <j4g8y7@gmail.com>
+Subject: Re: [PATCH v2 2/3] i2c: pxa: prevent calling of the generic recovery
+ init code
 To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc: Wolfram Sang <wsa@kernel.org>,
  Wolfram Sang <wsa+renesas@sang-engineering.com>,
@@ -94,85 +95,136 @@ Cc: Wolfram Sang <wsa@kernel.org>,
  linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
  Imre Kaloz <kaloz@openwrt.org>, stable@vger.kernel.org
 References: <20250811-i2c-pxa-fix-i2c-communication-v2-0-ca42ea818dc9@gmail.com>
- <20250811-i2c-pxa-fix-i2c-communication-v2-1-ca42ea818dc9@gmail.com>
- <aJpP5eABTYnQRV82@smile.fi.intel.com>
-From: Gabor Juhos <j4g8y7@gmail.com>
-In-Reply-To: <aJpP5eABTYnQRV82@smile.fi.intel.com>
+ <20250811-i2c-pxa-fix-i2c-communication-v2-2-ca42ea818dc9@gmail.com>
+ <aJpR96Kkj12BwW-M@smile.fi.intel.com>
+Content-Language: hu
+In-Reply-To: <aJpR96Kkj12BwW-M@smile.fi.intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-2025. 08. 11. 22:17 keltezéssel, Andy Shevchenko írta:
-> On Mon, Aug 11, 2025 at 09:49:55PM +0200, Gabor Juhos wrote:
->> Add a new init_recovery() callback to struct 'i2c_bus_recovery_info'
->> and modify the i2c_init_recovery() function to call that if specified
->> instead of the generic i2c_gpio_init_recovery() function.
+2025. 08. 11. 22:26 keltezéssel, Andy Shevchenko írta:
+> On Mon, Aug 11, 2025 at 09:49:56PM +0200, Gabor Juhos wrote:
+>> The I2C communication is completely broken on the Armada 3700 platform
+>> since commit 0b01392c18b9 ("i2c: pxa: move to generic GPIO recovery").
 >>
->> This allows controller drivers to skip calling the generic code by
->> implementing a dummy callback function, or alternatively to run a
->> fine tuned custom implementation.
+>> For example, on the Methode uDPU board, probing of the two onboard
+>> temperature sensors fails ...
 >>
->> This is needed for the 'i2c-pxa' driver in order to be able to fix
->> a long standing bug for which the fix will be implemented in a
+>>   [    7.271713] i2c i2c-0: using pinctrl states for GPIO recovery
+>>   [    7.277503] i2c i2c-0:  PXA I2C adapter
+>>   [    7.282199] i2c i2c-1: using pinctrl states for GPIO recovery
+>>   [    7.288241] i2c i2c-1:  PXA I2C adapter
+>>   [    7.292947] sfp sfp-eth1: Host maximum power 3.0W
+>>   [    7.299614] sfp sfp-eth0: Host maximum power 3.0W
+>>   [    7.308178] lm75 1-0048: supply vs not found, using dummy regulator
+>>   [   32.489631] lm75 1-0048: probe with driver lm75 failed with error -121
+>>   [   32.496833] lm75 1-0049: supply vs not found, using dummy regulator
+>>   [   82.890614] lm75 1-0049: probe with driver lm75 failed with error -121
+>>
+>> ... and accessing the plugged-in SFP modules also does not work:
+>>
+>>   [  511.298537] sfp sfp-eth1: please wait, module slow to respond
+>>   [  536.488530] sfp sfp-eth0: please wait, module slow to respond
+>>   ...
+>>   [ 1065.688536] sfp sfp-eth1: failed to read EEPROM: -EREMOTEIO
+>>   [ 1090.888532] sfp sfp-eth0: failed to read EEPROM: -EREMOTEIO
+>>
+>> After a discussion [1], there was an attempt to fix the problem by
+>> reverting the offending change by commit 7b211c767121 ("Revert "i2c:
+>> pxa: move to generic GPIO recovery""), but that only helped to fix
+>> the issue in the 6.1.y stable tree. The reason behind the partial succes
+>> is that there was another change in commit 20cb3fce4d60 ("i2c: Set i2c
+>> pinctrl recovery info from it's device pinctrl") in the 6.3-rc1 cycle
+>> which broke things further.
+>>
+>> The cause of the problem is the same in case of both offending commits
+>> mentioned above. Namely, the I2C core code changes the pinctrl state to
+>> GPIO while running the recovery initialization code. Although the PXA
+>> specific initialization also does this, but the key difference is that
+>> it happens before the conrtoller is getting enabled in i2c_pxa_reset(),
+>> whereas in the case of the generic initialization it happens after that.
+>>
+>> To resolve the problem, provide an empty init_recovery() callback
+>> function thus preventing the I2C core to call the generic recovery
+>> initialization code.
+>>
+>> As the result this change restores the original behaviour, which in
+>> turn makes the I2C communication to work again as it can be seen from
+>> the following log:
+>>
+>>   [    7.305277] i2c i2c-0:  PXA I2C adapter
+>>   [    7.310198] i2c i2c-1:  PXA I2C adapter
+>>   [    7.315012] sfp sfp-eth1: Host maximum power 3.0W
+>>   [    7.324061] lm75 1-0048: supply vs not found, using dummy regulator
+>>   [    7.331738] sfp sfp-eth0: Host maximum power 3.0W
+>>   [    7.337000] hwmon hwmon0: temp1_input not attached to any thermal zone
+>>   [    7.343593] lm75 1-0048: hwmon0: sensor 'tmp75c'
+>>   [    7.348526] lm75 1-0049: supply vs not found, using dummy regulator
+>>   [    7.356858] hwmon hwmon1: temp1_input not attached to any thermal zone
+>>   [    7.363463] lm75 1-0049: hwmon1: sensor 'tmp75c'
+>>   ...
+>>   [    7.730315] sfp sfp-eth1: module Mikrotik         S-RJ01           rev 1.0  sn 61B103C55C58     dc 201022
+>>   [    7.840318] sfp sfp-eth0: module MENTECHOPTO      POS22-LDCC-KR    rev 1.0  sn MNC208U90009     dc 200828
+>>   [    7.850083] mvneta d0030000.ethernet eth0: unsupported SFP module: no common interface modes
+>>   [    7.990335] hwmon hwmon2: temp1_input not attached to any thermal zone
 > 
->> followup patch.
+> TBH this sounds to me like trying to hack the solution and as you pointed out
+> the problem is in pinctrl state changes. I think it may affect not only I2C case.
+
+It is not an error in the pinctrl code. I have checked and even fixed a few bugs
+in that.
+
+> And I didn't get how recovery code affects the initialisation (enumeration).
+
+Without the fix, it is not possible to initiate a transaction on the bus, which
+in turn prevents enumeration.
+
+
+> Do we set pin control state back and forth during probe? May be this is a root cause?
+
+Yes, basically. The state gets changed back and forth twice. Once in driver
+probe before the controller gets initialized, then once again in
+i2c_gpio_init_generic_recovery(). The problem is caused by the second state
+change as it runs after the controller gets enabled which confuses the hardware.
+
+> ...
 > 
-> "...next change."
+>> [1] https://lore.kernel.org/r/20230926160255.330417-1-robert.marko@sartura.hr
+>>
+> 
+> Can you make this a Link tag?
+> Link: $URL #1
 
-Ok.
+Sure, I can change that.
 
+>> Cc: stable@vger.kernel.org # 6.3+
+>> Fixes: 20cb3fce4d60 ("i2c: Set i2c pinctrl recovery info from it's device pinctrl")
+>> Signed-off-by: Gabor Juhos <j4g8y7@gmail.com>
+>> Signed-off-by: Imre Kaloz <kaloz@openwrt.org>
 > 
 > ...
 > 
-> The first traditional question is why the generic recovery is not working.
+>>  static int i2c_pxa_init_recovery(struct pxa_i2c *i2c)
+>>  {
+>>  	struct i2c_bus_recovery_info *bri = &i2c->recovery;
+> 
+>>  		return 0;
+>>  	}
+>>  
+>> +	bri->init_recovery = i2c_pxa_init_recovery_cb;
+> 
+> This is unfortunate. I would keep the naming schema consistent, i.e. rename
+> existing function and use its original name for the new callback.
 
-
-The details are in the driver specific patches. Should I write it all down here too?
+I agree, but since the change is targeted also to stable kernels, I wanted to
+keep the change as minimal as possible.
 
 > 
-> ...
-> 
->> -	if (i2c_gpio_init_recovery(adap) == -EPROBE_DEFER)
->> +	if (bri->init_recovery) {
->> +		ret = bri->init_recovery(adap);
->> +		if (ret)
->> +			return ret;
-> 
->> +	} else if (i2c_gpio_init_recovery(adap) == -EPROBE_DEFER) {
->>  		return -EPROBE_DEFER;
->> +	}
-> 
-> If the above stays, I think we would drop the last and always have
-> init_recovery to be assigned.
+>>  	bri->prepare_recovery = i2c_pxa_prepare_recovery;
+>>  	bri->unprepare_recovery = i2c_pxa_unprepare_recovery;
+>>  	bri->recover_bus = i2c_generic_scl_recovery;
 > 
 
-In that case we would have something like this:
-
-    if (!bri->init_recovery)
-        bri->init_recovery = i2c_gpio_init_recovery;
-
-    ret = bri->init_recovery(adap);
-    if (ret)
-        return ret;
-
-Since the callback is used only once, and within the same fuction where it is
-assigned, I don't really see the advantage of the assignment. Although it
-definitely looks cleaner as far as error handling is concerned.
-
-Originally, I have used the following solution:
-
-    if (bri->init_recovery)
-        ret = bri->init_recovery(adap);
-    else
-        ret = i2c_gpio_init_recovery(adap);
-
-    if (ret)
-        return ret;
-
-However the existing code ignores errors from i2c_gpio_init_recovery() except
-EPROBE_DEFER, so I changed this to the code proposed in the patch in order to
-keep the existing behaviour.
-
-Regards,
+Reards,
 Gabor
-
 
