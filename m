@@ -1,62 +1,63 @@
-Return-Path: <linux-i2c+bounces-12273-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12274-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78C94B24D53
-	for <lists+linux-i2c@lfdr.de>; Wed, 13 Aug 2025 17:28:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 642BFB24D77
+	for <lists+linux-i2c@lfdr.de>; Wed, 13 Aug 2025 17:33:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5FE613A539D
-	for <lists+linux-i2c@lfdr.de>; Wed, 13 Aug 2025 15:23:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CB7ED2A74BA
+	for <lists+linux-i2c@lfdr.de>; Wed, 13 Aug 2025 15:29:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0835C22FE0F;
-	Wed, 13 Aug 2025 15:23:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81C7F23D7EC;
+	Wed, 13 Aug 2025 15:28:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="ueO7nrZ2"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="iD/vDSU9"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3FCD22DA1F;
-	Wed, 13 Aug 2025 15:23:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBAE823BCE2;
+	Wed, 13 Aug 2025 15:28:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755098602; cv=none; b=mpZdpn6guj/olDUO05KvPA3r7r5kGVAs/nJYggNUtc48Dh9P/1MTDRhi9BAAqDwKaj8N8xjD43/KUN2RdJM5saActr0EJVK5XQfcc5gwWVfv/l5aHZZsYv8gNz0kqCYSyvnqgyIdoVYHjaqi5NdehiTVZg7+pyBMf+uNwmgEEIs=
+	t=1755098927; cv=none; b=IHzQkhPUn/XfUH6LzQGLCQn/GrlV6SRQeTShrABIUn58regT2J57Cn6RxX/EAJ1qYHnzyQQzL1KypCqMdZxYcLbk6ZW4+4eWn6xU8BLlKDEwsOLxWVEUZo8r4IVr9MHynMou0l7PiAGg/XB6J+IPG+pLdrTaW6og1xXls+e6S+M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755098602; c=relaxed/simple;
-	bh=1W/jBAvKti3QVwNodsrbkeO+Jug6BJyCRaos5hCVLKY=;
+	s=arc-20240116; t=1755098927; c=relaxed/simple;
+	bh=d4tIsS38EDYbVPrOHCTVdpAJiejvoXsr6isPmsDzQaA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QPmrPpjXG14KerhKTZcWk3PNDYusQNXZiev2vQtre70AH3a1jdJJ5J1iQj+GRSM1336l9+jY77nOOKIV9xRicHjQWbGvBIHDY5P0ZvrUcdvA0KGrlzvkdNR/U3zM65HJ3Ako3C8S9p/M1sRECjefCkoa6SWrZeQWRs985RU9zV0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=ueO7nrZ2; arc=none smtp.client-ip=78.32.30.218
+	 Content-Type:Content-Disposition:In-Reply-To; b=qQRT7ty6UolrHErdgeTnGkirB3wCy/Djio4skGOij6CsjTbREpYppok48uldJ47feepzv54wX8RT7ySLuH3K5huD+540LW6phKTeXODhuAOwdE1MD2Vsk3d2qVGHGFdhGy87WETw9jy/B63U6Np1Q47JJGtQMOYTUB2aAYc63jw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=iD/vDSU9; arc=none smtp.client-ip=78.32.30.218
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
 	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=JBcqfJDDEAhoW2q4sP2fhRolkVFvahCE6bvX49j/3VE=; b=ueO7nrZ228+3Tvd9WzNQKL1z0D
-	QzQ0zAtn5PQKi4jxkXd8wNQyy7s6D9P4MVsy92WbkTEy2tISUR4BPodvO9rLPM58DZiDSMxuSL192
-	VIXIx0iAUFheAdZ5JRH2jlygHMd/W8/kqzebo7ziTsphlx+V6TGgU0IHlL8bvwkB3PI5uzM8wB6Ar
-	HY9Rw+Z7i+Jj3qSB8lhBnhQlrYugLHzVC6y/pGOD1CIa3bI4C524tXX/zMPzPOb6l6Uzx9uWr4o0/
-	HoBmm9Y7KTl1gAzUSNFgG7McMmQiVAG020uIdhyr1q2Voy/aNUnsvHDEQ4W05X8lAZ7h1n1szOUBa
-	YkMvxD0w==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:46702)
+	bh=99/b1Zz+WjCB1f6WwTNHvQByBXsYpqmstCtToqVhvHk=; b=iD/vDSU9sI7iSXH2vti3YhW/l7
+	WBPlbuoCL0mDmgYtM3Nfy/FT8JngWib2nu/AXoE4dwnSrJbvJDFFh5F0f+3jTcX2b8rg4Zs0olMJ9
+	vq0ycg35wvXZZUAV8lJSs/ElrsVBCH6zzjy290B3/xxTgq2wghkkqv7OPCj27HG/Nbr8JkKqvCLk2
+	sPp/oy/7DWQNTGO8F0xf9daAfQBDD5norhMHYNHlSHMtOpQ1y0qluWuKXzlJ4fHlNuQV9VJ11WFy0
+	HSpYqY3f+mJnalam52JvTJ0k7Wd5+SqqXGzgG70Z7TMb7C0e2M0JTIDhQl7JBya50FYGPgphn5HLu
+	SN8TCSLQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56374)
 	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <linux@armlinux.org.uk>)
-	id 1umDJk-0006vX-1U;
-	Wed, 13 Aug 2025 16:23:08 +0100
+	id 1umDOz-0006w9-15;
+	Wed, 13 Aug 2025 16:28:33 +0100
 Received: from linux by shell.armlinux.org.uk with local (Exim 4.96)
 	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1umDJg-0005rb-1m;
-	Wed, 13 Aug 2025 16:23:04 +0100
-Date: Wed, 13 Aug 2025 16:23:04 +0100
+	id 1umDOx-0005rk-0D;
+	Wed, 13 Aug 2025 16:28:31 +0100
+Date: Wed, 13 Aug 2025 16:28:30 +0100
 From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Gabor Juhos <j4g8y7@gmail.com>, Wolfram Sang <wsa@kernel.org>,
+To: Gabor Juhos <j4g8y7@gmail.com>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Wolfram Sang <wsa@kernel.org>,
 	Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	Andi Shyti <andi.shyti@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
 	Hanna Hawa <hhhawa@amazon.com>,
@@ -64,60 +65,90 @@ Cc: Gabor Juhos <j4g8y7@gmail.com>, Wolfram Sang <wsa@kernel.org>,
 	Linus Walleij <linus.walleij@linaro.org>, linux-i2c@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
 	Imre Kaloz <kaloz@openwrt.org>, stable@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] i2c: add init_recovery() callback
-Message-ID: <aJyt2I1w6VYo1PPD@shell.armlinux.org.uk>
+Subject: Re: [PATCH v2 2/3] i2c: pxa: prevent calling of the generic recovery
+ init code
+Message-ID: <aJyvHnLS-A3F2gN7@shell.armlinux.org.uk>
 References: <20250811-i2c-pxa-fix-i2c-communication-v2-0-ca42ea818dc9@gmail.com>
- <20250811-i2c-pxa-fix-i2c-communication-v2-1-ca42ea818dc9@gmail.com>
- <aJpP5eABTYnQRV82@smile.fi.intel.com>
+ <20250811-i2c-pxa-fix-i2c-communication-v2-2-ca42ea818dc9@gmail.com>
+ <aJpR96Kkj12BwW-M@smile.fi.intel.com>
+ <8cb62eb9-9137-44b4-86f6-82f69813e83f@gmail.com>
+ <aJyOu_GUlDPuJXO5@smile.fi.intel.com>
+ <0bfcb570-dab3-4038-a1aa-8bc7fe2feee8@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <aJpP5eABTYnQRV82@smile.fi.intel.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <0bfcb570-dab3-4038-a1aa-8bc7fe2feee8@gmail.com>
 Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
-On Mon, Aug 11, 2025 at 11:17:41PM +0300, Andy Shevchenko wrote:
-> On Mon, Aug 11, 2025 at 09:49:55PM +0200, Gabor Juhos wrote:
-> > Add a new init_recovery() callback to struct 'i2c_bus_recovery_info'
-> > and modify the i2c_init_recovery() function to call that if specified
-> > instead of the generic i2c_gpio_init_recovery() function.
+On Wed, Aug 13, 2025 at 05:17:28PM +0200, Gabor Juhos wrote:
+> 2025. 08. 13. 15:10 keltezéssel, Andy Shevchenko írta:
+> > On Wed, Aug 13, 2025 at 12:36:45PM +0200, Gabor Juhos wrote:
+> >> 2025. 08. 11. 22:26 keltezéssel, Andy Shevchenko írta:
+> >>> On Mon, Aug 11, 2025 at 09:49:56PM +0200, Gabor Juhos wrote:
 > > 
-> > This allows controller drivers to skip calling the generic code by
-> > implementing a dummy callback function, or alternatively to run a
-> > fine tuned custom implementation.
+> > ...
 > > 
-> > This is needed for the 'i2c-pxa' driver in order to be able to fix
-> > a long standing bug for which the fix will be implemented in a
+> >>> TBH this sounds to me like trying to hack the solution and as you pointed out
+> >>> the problem is in pinctrl state changes. I think it may affect not only I2C case.
+> >>
+> >> It is not an error in the pinctrl code. I have checked and even fixed a few bugs
+> >> in that.
+> >>
+> >>> And I didn't get how recovery code affects the initialisation (enumeration).
+> >>
+> >> Without the fix, it is not possible to initiate a transaction on the bus, which
+> >> in turn prevents enumeration.
+> > 
+> > But why? As you said below the first pin control state is changed during the
+> > probe, which is fine, and the culprit one happens on the recovery.
 > 
-> > followup patch.
+> Erm, no. Both happens during probe, before the I2C core tries to enumerate the
+> devices on the bus.
 > 
-> "...next change."
+> > Why is recovery involved in probe? This is quite confusing...
+> Let me try to explain it differently. Here is the simplified call chain:
 > 
-> ...
+>   i2c_pxa_probe()
+>      ...
+>      i2c_pxa_init_recovery()
+>         pinctrl_select_state()                  <- selects GPIO state
+>         pinctrl_select_state()                  <- selects default (I2C) state
+>      ...
+>      i2c_add_numbered_adapter()
+>          i2c_register_adapter()
+>              ...
+>              i2c_init_recovery()
+>                  i2c_gpio_init_recovery()
+>                      i2c_gpio_init_generic_recovery()
+>                          pinctrl_select_state() <- selects GPIO state***
+>                          ...
+>                          pinctrl_select_state() <- selects default (I2C) state
+>              ...
+>              bus_for_each_drv()
+>                  __process_new_adapter()
+>                      i2c_do_add_adapter()
+>                          i2c_detect()           <- enumerates the devices
 > 
-> The first traditional question is why the generic recovery is not working.
+> The culprit is the first pinctrl_select_state() call in
+> i2c_gpio_init_generic_recovery() marked with '***'.
+> 
+> That call causes the controller to go stuck, which makes it impossible to
+> transfer anything on the bus.
 
-I opposed the conversion of my recovery code to generic recovery when
-it was first mooted for this driver, and was over-ruled. Lo and behold,
-as I predicted, generic recovery fails with i2c-pxa. I now don't
-remember the details, but there has been a regression reported...
+Probably because when GPIO state is selected, the I2C bus pins end up
+being set low, which the I2C controller sees, so it thinks there's
+another device communicating on the bus. I could be wrong, as I
+don't have the hardware to hand to research the issue again.
 
-Given that I was over-ruled, I am not minded to go back and try and
-find either the previous discussion (google can be exceedingly
-difficult now to find such history) nor to try and work it out again
-(I've other things, including meetings today.)
-
-Nevertheless, all I now remember is that generic recovery breaks
-i2c-pxa, whereas my recovery works.
-
-If I had to guess, I suspect it's something to do with how careful I
-was to ensure a glitchless transition between i2c mode and GPIO mode
-on the pinmux, and the generic recovery probably isn't as careful, but
-I could be wrong there.
+I have a vague memory that the GPIO state must _always_ reflect the
+actual pin state before switching to it to avoid glitches and avoid
+inadvertently changing the I2C controller state.
 
 -- 
 RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
