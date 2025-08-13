@@ -1,156 +1,154 @@
-Return-Path: <linux-i2c+bounces-12274-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12275-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 642BFB24D77
-	for <lists+linux-i2c@lfdr.de>; Wed, 13 Aug 2025 17:33:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1FFE0B25277
+	for <lists+linux-i2c@lfdr.de>; Wed, 13 Aug 2025 19:51:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CB7ED2A74BA
-	for <lists+linux-i2c@lfdr.de>; Wed, 13 Aug 2025 15:29:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 904EA3AC144
+	for <lists+linux-i2c@lfdr.de>; Wed, 13 Aug 2025 17:47:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81C7F23D7EC;
-	Wed, 13 Aug 2025 15:28:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85E9C1F428F;
+	Wed, 13 Aug 2025 17:47:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="iD/vDSU9"
+	dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b="DGEZO60c"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBAE823BCE2;
-	Wed, 13 Aug 2025 15:28:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE5D463CB
+	for <linux-i2c@vger.kernel.org>; Wed, 13 Aug 2025 17:47:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755098927; cv=none; b=IHzQkhPUn/XfUH6LzQGLCQn/GrlV6SRQeTShrABIUn58regT2J57Cn6RxX/EAJ1qYHnzyQQzL1KypCqMdZxYcLbk6ZW4+4eWn6xU8BLlKDEwsOLxWVEUZo8r4IVr9MHynMou0l7PiAGg/XB6J+IPG+pLdrTaW6og1xXls+e6S+M=
+	t=1755107254; cv=none; b=dugsEetS8rKwbwNqXcipYeROsTeM3XEfCZwY/GvmEPAS3pQcUFGxGFKi2q5QJ1gc6ZHOHa0ajzzpoh4HGv8NMWuJnUR6WFoVZQCP7OZRjetMBcCZtFwWA8nqLhW1nKAWVzLaXQoh7ccZ/e1b3actVvRmPF4RCeSj3001G8+0C9k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755098927; c=relaxed/simple;
-	bh=d4tIsS38EDYbVPrOHCTVdpAJiejvoXsr6isPmsDzQaA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qQRT7ty6UolrHErdgeTnGkirB3wCy/Djio4skGOij6CsjTbREpYppok48uldJ47feepzv54wX8RT7ySLuH3K5huD+540LW6phKTeXODhuAOwdE1MD2Vsk3d2qVGHGFdhGy87WETw9jy/B63U6Np1Q47JJGtQMOYTUB2aAYc63jw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=iD/vDSU9; arc=none smtp.client-ip=78.32.30.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=99/b1Zz+WjCB1f6WwTNHvQByBXsYpqmstCtToqVhvHk=; b=iD/vDSU9sI7iSXH2vti3YhW/l7
-	WBPlbuoCL0mDmgYtM3Nfy/FT8JngWib2nu/AXoE4dwnSrJbvJDFFh5F0f+3jTcX2b8rg4Zs0olMJ9
-	vq0ycg35wvXZZUAV8lJSs/ElrsVBCH6zzjy290B3/xxTgq2wghkkqv7OPCj27HG/Nbr8JkKqvCLk2
-	sPp/oy/7DWQNTGO8F0xf9daAfQBDD5norhMHYNHlSHMtOpQ1y0qluWuKXzlJ4fHlNuQV9VJ11WFy0
-	HSpYqY3f+mJnalam52JvTJ0k7Wd5+SqqXGzgG70Z7TMb7C0e2M0JTIDhQl7JBya50FYGPgphn5HLu
-	SN8TCSLQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56374)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1umDOz-0006w9-15;
-	Wed, 13 Aug 2025 16:28:33 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.96)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1umDOx-0005rk-0D;
-	Wed, 13 Aug 2025 16:28:31 +0100
-Date: Wed, 13 Aug 2025 16:28:30 +0100
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: Gabor Juhos <j4g8y7@gmail.com>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Wolfram Sang <wsa@kernel.org>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Andi Shyti <andi.shyti@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-	Hanna Hawa <hhhawa@amazon.com>,
-	Robert Marko <robert.marko@sartura.hr>,
-	Linus Walleij <linus.walleij@linaro.org>, linux-i2c@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Imre Kaloz <kaloz@openwrt.org>, stable@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] i2c: pxa: prevent calling of the generic recovery
- init code
-Message-ID: <aJyvHnLS-A3F2gN7@shell.armlinux.org.uk>
-References: <20250811-i2c-pxa-fix-i2c-communication-v2-0-ca42ea818dc9@gmail.com>
- <20250811-i2c-pxa-fix-i2c-communication-v2-2-ca42ea818dc9@gmail.com>
- <aJpR96Kkj12BwW-M@smile.fi.intel.com>
- <8cb62eb9-9137-44b4-86f6-82f69813e83f@gmail.com>
- <aJyOu_GUlDPuJXO5@smile.fi.intel.com>
- <0bfcb570-dab3-4038-a1aa-8bc7fe2feee8@gmail.com>
+	s=arc-20240116; t=1755107254; c=relaxed/simple;
+	bh=uW7fKb8DACG3fG/pvNEYkjNw8PF/bwmqPTIzgomZ1Ro=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ElHlvGuZCP0aXEynIQj8H52i6IQLzftqZ187tvtvxFZ4qtbKI+h/3fOCQcTkNDrVP4FLGm91QdUsvhaF9xD/g6REYo9sPaczImAc86JyZgelWFbDCS+O0Hf4DpySlUQGMstfuEY+Mt8la2A1nwc0Ddj2hrGWrGyNdxvGto/Vy2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr; spf=pass smtp.mailfrom=sartura.hr; dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b=DGEZO60c; arc=none smtp.client-ip=209.85.222.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sartura.hr
+Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-7e8702fd3b2so8413885a.0
+        for <linux-i2c@vger.kernel.org>; Wed, 13 Aug 2025 10:47:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sartura.hr; s=sartura; t=1755107252; x=1755712052; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=SBsfJFWg1o3SQZ+JkXCo0QRsi2YIFRfM5g31219RL4A=;
+        b=DGEZO60c72VqZbdWB6I6y8y6lTjSfLZwsJnsYRYEV7fl+Gsr/ZBU7br/TQFk/w9X6v
+         +iBWwlYtk7rF0GTbQkXqAEDrSgQkxXKHwBW5qh4ROpWzsmUeko8U51uNGXeIkLtD6+XC
+         fgFJAz4uLS9ehXPuOiJNgP75dkuJWubS+9CKgM48wjARSOhokFybSNGiR0z+KaDR8r3c
+         /U69fjPjm5xcVN3gvnc6PrthD6P3dUTmyBbbYO2FJCxvsN4dHD1K7iuHfRuR+qVV8zsE
+         G1IW+SZY4tC3RVqJIxyownzDP+iskyC7nKFz24m1I+u9NX3N5NymSqAfSL6qVVH26Lyi
+         E09g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755107252; x=1755712052;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SBsfJFWg1o3SQZ+JkXCo0QRsi2YIFRfM5g31219RL4A=;
+        b=lbN/ETesXC87YRKWz7l804LLifpq+nCfQWyYerUTCjqWc9sI/adECCOE0OCb3EiWqr
+         yY+efRSpt92I/GSSJ74mkri/Z7wfCN3RRG6CQnoN/wiR6a2i5aCuoG5S6QZ3ZKyhk9dv
+         8wgbdyQkAHxdczrfmioyAuZTFyzrlcIThXAOxa8LI2GAb+TFo4oebwXfLlF0HW2yqFQt
+         I2x6DAYvIyHAz1K8ZsO+VT2oTnH/ID/Za7hy2t8cgflX0tMzuKjdwao6lgswKncuT7s9
+         ecF7/yfVzBdR5XK7VkcC2jCMdVwAl43TdbZyfPtjKg7WhfwtlBF3LruJyLWwRdioVmca
+         9jbg==
+X-Forwarded-Encrypted: i=1; AJvYcCUqEFbGoMXxuyR1H8b8ZVjXxY0aA+O9xYyHwrTmiKkuhG5NMehQlePiqPrXJHxSK7tYGASj9wxvIXk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw1qHAItOEHV3Ef/jE+pUmZVKJ71r/W8fL/bLGgB2nJSURoXni/
+	VJ/51SlzPLG5WBhsjqRAk33FkruesOfvwbWRtpqalxm2/5ulywb2Q25NMomXmkEaAas=
+X-Gm-Gg: ASbGncsOncAOijKlrxsJZKNwEsLpGSdC8+TetHetYG4MRwIOmElEXwRNEL9RVJGieKm
+	OlNjPbTfA4ejHi4MS+DBjnttpDwlz/dujS5AXub++2BW2gecy0VF/BxKJ2ZhIdN9iYNG75CNHNO
+	v02nZ1bIwLet5if+D4upg0sqdKY3kuZkUW8ErLtefQY54WDqhJzJwsczMh1cIAFUwQVBYt8seKB
+	N0qnDEEQRjKnSV0wmFNRcXYRGeqd9xJ5iGCG6R2GfY+Z1brVcsLMZ6GoOQ6th6I+935dEpJ8q8p
+	RqAk+u574rZhxjO/bXiiiFrZlg/+IN/GJ8QJIRLAQYund9UJ17vmXccrF/FkxMqGRe9q4ljpKTW
+	lPK13Jk9n1X2/bzoJXly0F+lvjofX/iOVniqWmVqigQ==
+X-Google-Smtp-Source: AGHT+IEB/95DXkKwomIf9ip6/yfm146L3qIifjKU7bl9DaOBgZQZz5rMpVm/bhHv87pLjMhka3uuqw==
+X-Received: by 2002:a05:620a:a102:b0:7e8:434f:ffa7 with SMTP id af79cd13be357-7e8704761a0mr24882585a.52.1755107251577;
+        Wed, 13 Aug 2025 10:47:31 -0700 (PDT)
+Received: from fedora (d-zg2-251.globalnet.hr. [213.149.37.251])
+        by smtp.googlemail.com with ESMTPSA id af79cd13be357-7e7fa87e7d0sm1627122385a.82.2025.08.13.10.47.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Aug 2025 10:47:31 -0700 (PDT)
+From: Robert Marko <robert.marko@sartura.hr>
+To: linux@armlinux.org.uk,
+	nicolas.ferre@microchip.com,
+	alexandre.belloni@bootlin.com,
+	claudiu.beznea@tuxon.dev,
+	catalin.marinas@arm.com,
+	will@kernel.org,
+	olivia@selenic.com,
+	herbert@gondor.apana.org.au,
+	davem@davemloft.net,
+	andi.shyti@kernel.org,
+	lee@kernel.org,
+	broonie@kernel.org,
+	gregkh@linuxfoundation.org,
+	jirislaby@kernel.org,
+	arnd@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-crypto@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-spi@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	o.rempel@pengutronix.de,
+	daniel.machon@microchip.com
+Cc: luka.perkov@sartura.hr,
+	Robert Marko <robert.marko@sartura.hr>
+Subject: [PATCH v9 0/9] arm64: lan969x: Add support for Microchip LAN969x SoC
+Date: Wed, 13 Aug 2025 19:44:36 +0200
+Message-ID: <20250813174720.540015-1-robert.marko@sartura.hr>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <0bfcb570-dab3-4038-a1aa-8bc7fe2feee8@gmail.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
-On Wed, Aug 13, 2025 at 05:17:28PM +0200, Gabor Juhos wrote:
-> 2025. 08. 13. 15:10 keltezéssel, Andy Shevchenko írta:
-> > On Wed, Aug 13, 2025 at 12:36:45PM +0200, Gabor Juhos wrote:
-> >> 2025. 08. 11. 22:26 keltezéssel, Andy Shevchenko írta:
-> >>> On Mon, Aug 11, 2025 at 09:49:56PM +0200, Gabor Juhos wrote:
-> > 
-> > ...
-> > 
-> >>> TBH this sounds to me like trying to hack the solution and as you pointed out
-> >>> the problem is in pinctrl state changes. I think it may affect not only I2C case.
-> >>
-> >> It is not an error in the pinctrl code. I have checked and even fixed a few bugs
-> >> in that.
-> >>
-> >>> And I didn't get how recovery code affects the initialisation (enumeration).
-> >>
-> >> Without the fix, it is not possible to initiate a transaction on the bus, which
-> >> in turn prevents enumeration.
-> > 
-> > But why? As you said below the first pin control state is changed during the
-> > probe, which is fine, and the culprit one happens on the recovery.
-> 
-> Erm, no. Both happens during probe, before the I2C core tries to enumerate the
-> devices on the bus.
-> 
-> > Why is recovery involved in probe? This is quite confusing...
-> Let me try to explain it differently. Here is the simplified call chain:
-> 
->   i2c_pxa_probe()
->      ...
->      i2c_pxa_init_recovery()
->         pinctrl_select_state()                  <- selects GPIO state
->         pinctrl_select_state()                  <- selects default (I2C) state
->      ...
->      i2c_add_numbered_adapter()
->          i2c_register_adapter()
->              ...
->              i2c_init_recovery()
->                  i2c_gpio_init_recovery()
->                      i2c_gpio_init_generic_recovery()
->                          pinctrl_select_state() <- selects GPIO state***
->                          ...
->                          pinctrl_select_state() <- selects default (I2C) state
->              ...
->              bus_for_each_drv()
->                  __process_new_adapter()
->                      i2c_do_add_adapter()
->                          i2c_detect()           <- enumerates the devices
-> 
-> The culprit is the first pinctrl_select_state() call in
-> i2c_gpio_init_generic_recovery() marked with '***'.
-> 
-> That call causes the controller to go stuck, which makes it impossible to
-> transfer anything on the bus.
+This patch series adds basic support for Microchip LAN969x SoC.
 
-Probably because when GPIO state is selected, the I2C bus pins end up
-being set low, which the I2C controller sees, so it thinks there's
-another device communicating on the bus. I could be wrong, as I
-don't have the hardware to hand to research the issue again.
+It introduces the SoC ARCH symbol itself under the ARCH_MICROCHIP symbol
+which allows to avoid the need to change dependencies of the drivers that
+are shared for Microchip SoC-s in the future.
 
-I have a vague memory that the GPIO state must _always_ reflect the
-actual pin state before switching to it to avoid glitches and avoid
-inadvertently changing the I2C controller state.
+DTS and further driver will be added in follow-up series.
+
+Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+---
+Changes in v9:
+* Make ARCH_MICROCHIP hidden symbol that is selected by SparX-5 and LAN969x
+directly, this avoids breaking existing configs with ARCH_SPARX5
+
+Changes in v8:
+* Move to using ARCH_MICROCHIP as suggested by Arnd
+* Dropped any review tags due to changes
+
+Robert Marko (9):
+  arm64: Add config for Microchip SoC platforms
+  ARM: at91: select ARCH_MICROCHIP
+  arm64: lan969x: Add support for Microchip LAN969x SoC
+  mfd: at91-usart: Make it selectable for ARCH_MICROCHIP
+  tty: serial: atmel: make it selectable for ARCH_MICROCHIP
+  spi: atmel: make it selectable for ARCH_MICROCHIP
+  i2c: at91: make it selectable for ARCH_MICROCHIP
+  char: hw_random: atmel: make it selectable for ARCH_MICROCHIP
+  crypto: atmel-aes: make it selectable for ARCH_MICROCHIP
+
+ arch/arm/mach-at91/Kconfig     |  4 +++
+ arch/arm64/Kconfig.platforms   | 51 ++++++++++++++++++++++++----------
+ drivers/char/hw_random/Kconfig |  2 +-
+ drivers/crypto/Kconfig         |  2 +-
+ drivers/i2c/busses/Kconfig     |  2 +-
+ drivers/mfd/Kconfig            |  2 +-
+ drivers/spi/Kconfig            |  2 +-
+ drivers/tty/serial/Kconfig     |  2 +-
+ 8 files changed, 47 insertions(+), 20 deletions(-)
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+2.50.1
+
 
