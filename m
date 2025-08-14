@@ -1,237 +1,246 @@
-Return-Path: <linux-i2c+bounces-12287-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12288-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC661B25CFA
-	for <lists+linux-i2c@lfdr.de>; Thu, 14 Aug 2025 09:21:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 602ECB25F56
+	for <lists+linux-i2c@lfdr.de>; Thu, 14 Aug 2025 10:44:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 24337588758
-	for <lists+linux-i2c@lfdr.de>; Thu, 14 Aug 2025 07:20:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC2645C51BD
+	for <lists+linux-i2c@lfdr.de>; Thu, 14 Aug 2025 08:42:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C5BE25C80F;
-	Thu, 14 Aug 2025 07:20:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CSAuDPq8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE0F82E9EDC;
+	Thu, 14 Aug 2025 08:42:06 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from TWMBX01.aspeed.com (mail.aspeedtech.com [211.20.114.72])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7458F2594B4;
-	Thu, 14 Aug 2025 07:20:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAC522E9EAD;
+	Thu, 14 Aug 2025 08:42:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.20.114.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755156026; cv=none; b=E0wtPl3amgLt1LDBWWH1kI5Go796/oGfuwfyIcX9jkcoN6f/8JEUHas4b1WuYQFRZplDcTM818iAliEcdIQd3PrGuQqGM/uYtHXYIv+8l5SS0sJY9qGsejLCzHUCDRPR49YhmX4BUpvqsGbvgTvhY/Z1RMyBme0iH4s+k4U2Z84=
+	t=1755160926; cv=none; b=EbAtxxsds4hS9UzRdMIKjM3aSz4eTmoEFhYPuSG1rTxsh8Oy7Oexrm7DD74FBbGSwNA0b4sEePac9uvFJT6xoh4pg0Wsj4/rq//JHAnvGv7rMaUCA7tiCdizm2MqX1DTRtfsAWIWXkyAwbBw9UOg+YfUisz/WmKpeNG2wvpKf30=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755156026; c=relaxed/simple;
-	bh=pZXmrg8MiW7C8Uhr5fkDtKZ2nKQCR+iwqNestQ30eeA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OOphZZIZVFfLxQRMDOtW3j6Mkq+AvA3xdkyvHQN/mOuHhETzZB6o9/v8nYLLGz2XXB2MIXotZYMPC51IlyJeUfR63cbhac3d2kEPi/r253hU/0Kk3zWSvgAcfJyU91MiweHtKWbdf8nygFeqiM1Vka2ABnZjYEsVhQCMsmCmjZA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CSAuDPq8; arc=none smtp.client-ip=209.85.208.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-6188b733bbaso1183614a12.3;
-        Thu, 14 Aug 2025 00:20:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755156023; x=1755760823; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=D/NHbSr4di9+LOvyh5vB0HjJ5xqdtdZYOflf+Cm7gPY=;
-        b=CSAuDPq87ARVz31M1+mxhyNjRjUmRQLn6y69MRc0l8PVdwTGPTIWrLRNI0TjCCfMAe
-         KOHUIRMI08SPTY55KM4FSrBeX6Thxyian0Fs+gVmtsT8znNK+P5P/NyJmHWgZyjSxYEh
-         f89AJia+ZqKYBGjZGiiOxOHHP9JKtucvU9iEztjgCEBeX9kDu0gcLQ0RQVebsonoFr7r
-         yc0GviR//xNWRprszQBakjDtSQpAI/juTHSQd6pmwwucUQyQ5gdzxZVxcNLD5ZCGAi1+
-         FMoHSmZJHGDFkBE328jYyFwnOxMfboBJ5S+1HTCPUhWYEIJ3zKu2OzVzVTLcvWKbd2yQ
-         OHQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755156023; x=1755760823;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=D/NHbSr4di9+LOvyh5vB0HjJ5xqdtdZYOflf+Cm7gPY=;
-        b=K/1r5gbTUKIMNEaZvRp+6xX5ZBU6P+gIEqe1aa7w1utBzgTJV6+msdHY5TVTxGGICM
-         Yy+SG17BAKndfMRU2lWTpFual92FIRgSs5T+8E1k87QDTFx+h7YZFbrVLOgg364/5SDZ
-         UftKeRC5JA1KE7UwwA3stot1lK5uqAMFqqK3P24V21g1I7DnLxz7P/iRSdK12W+7XAzV
-         on0Ve/sE7qGhKBel9Dna57OM/Hp4FozYHq1i+jYVzWujS55YZAeAQPR1sgDAomtlLJs1
-         nCXaEsrJ5ItItcTQiof9L1k7JcNNS8VPp8n5omuU7rAtBVt7Sf0htXYPuIeTeMPxJOcq
-         H/XA==
-X-Forwarded-Encrypted: i=1; AJvYcCXUUqLbIz0CdtbPvxaCzFnUYWsKUdmN2KSsvC2X4F6SsOWrX0u2n7u4OfGSJvncrnq1XYXwrtOwBj/8ViE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy+w2T8GW1TuVaBMreOLkdXtyne8evLBiDFOCZxXaxHOimkxsCk
-	BG2QPfdxYnJ9KfApJkqdcBCd9NfZnEYfL0rWF7LZLwd6M/Kl8s/l0X9qnzDaog==
-X-Gm-Gg: ASbGncsKEgl4H4nBB5f9wvcKIYbc0CzjD/hUcRu98B4BCFZAmoSLu2YYEpqyv8GKyWp
-	3NaRwStf6DWYLBVm1MEOvU9yhlUWezUF5OFtGNWVat3LcUOcfIi8mx3/KZldilhg6lQ48Lf3GVY
-	/F5CMxzUCFssZGyRGXjhnY6JzAzcEnX+w0gNMsTwa8EU0uSNvkAkHVD4QB7Ps3O04U4LxYfKNNw
-	rzcHcMmF0WjDrZInPV6HFDuKBCXnx1gMvMe3sIk5ZKA64OnlPH069h6KAFTZ/alr0VSIC4F5Q1o
-	c6y5b1iEQH8zlxQEkRScX05I5EOTk9LClsQqjdNupRpwBatbzyvtvR/jdDHwrMyqutWbTw97YX/
-	fPPQYOLSjrnOx1D/wrrokf6RuoxVxLOhqxof+yDiar/Wwqi6QKglFSw9YRkTI6328wiqSNBIpn5
-	dWyatWfNMufoZP+GpqWqvOig==
-X-Google-Smtp-Source: AGHT+IHXdusFcYQak4vlZ2g0XYjuaEkrrLAfEahhybzhZ561jawqXJBDs50NQGVWVrnMbl6yAeYtfg==
-X-Received: by 2002:a17:907:3f14:b0:af9:e1f0:cd33 with SMTP id a640c23a62f3a-afcb93942b7mr176473066b.2.1755156022407;
-        Thu, 14 Aug 2025 00:20:22 -0700 (PDT)
-Received: from ?IPV6:2001:9e8:f104:d732:d942:d18e:4382:4b17? ([2001:9e8:f104:d732:d942:d18e:4382:4b17])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af91a0763d8sm2564446066b.2.2025.08.14.00.20.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Aug 2025 00:20:21 -0700 (PDT)
-Message-ID: <0bbc671b-e96c-4089-8540-65d89fa5aa81@gmail.com>
-Date: Thu, 14 Aug 2025 09:20:20 +0200
+	s=arc-20240116; t=1755160926; c=relaxed/simple;
+	bh=YhsAIdq8Y8iDw47j1o4TlLjaeLzgZ/kgdDYuH9v3qFA=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=YPjW/cAEfY1cZi9M6UCCv+06ZUBFT3GLdzwbcoXDpD0foWDboc7da0hqSsFzNeIKFy0xOvEIkVmZpArRl7HlFhWi0lEZIQom2A2RQjgj25ao6B29nOzNEWrE98OgFnnb9v3/ZlVYo4vla/HLPLWx9MSqZIfxfm+x+8zDgj5xJmw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; arc=none smtp.client-ip=211.20.114.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
+Received: from TWMBX01.aspeed.com (192.168.0.62) by TWMBX01.aspeed.com
+ (192.168.0.62) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.10; Thu, 14 Aug
+ 2025 16:41:56 +0800
+Received: from twmbx02.aspeed.com (192.168.10.13) by TWMBX01.aspeed.com
+ (192.168.0.62) with Microsoft SMTP Server id 15.2.1748.10 via Frontend
+ Transport; Thu, 14 Aug 2025 16:41:56 +0800
+From: Ryan Chen <ryan_chen@aspeedtech.com>
+To: <ryan_chen@aspeedtech.com>, <benh@kernel.crashing.org>, <joel@jms.id.au>,
+	<andi.shyti@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
+	<conor+dt@kernel.org>, <andrew@codeconstruct.com.au>,
+	<p.zabel@pengutronix.de>, <andriy.shevchenko@linux.intel.com>,
+	<naresh.solanki@9elements.com>, <linux-i2c@vger.kernel.org>,
+	<openbmc@lists.ozlabs.org>, <devicetree@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-aspeed@lists.ozlabs.org>,
+	<linux-kernel@vger.kernel.org>
+Subject: [PATCH v17 0/3] Add ASPEED AST2600 I2C controller driver
+Date: Thu, 14 Aug 2025 16:41:53 +0800
+Message-ID: <20250814084156.1650432-1-ryan_chen@aspeedtech.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH i2c-host v5 5/5] i2c: rtl9300: Implement I2C block read
- and write
-Content-Language: en-GB
-To: Sven Eckelmann <sven@narfation.org>,
- Chris Packham <chris.packham@alliedtelesis.co.nz>,
- Andi Shyti <andi.shyti@kernel.org>
-Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
- Harshal Gohel <hg@simonwunderlich.de>,
- Simon Wunderlich <sw@simonwunderlich.de>
-References: <20250810-i2c-rtl9300-multi-byte-v5-0-cd9dca0db722@narfation.org>
- <20250810-i2c-rtl9300-multi-byte-v5-5-cd9dca0db722@narfation.org>
-From: Jonas Jelonek <jelonek.jonas@gmail.com>
-In-Reply-To: <20250810-i2c-rtl9300-multi-byte-v5-5-cd9dca0db722@narfation.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-Hi,
+This series add AST2600 i2c new register set driver. The i2c driver is
+new register set that have new clock divider option for more flexiable
+generation. And also have separate i2c controller and target register
+set for control, patch #2 is i2c controller driver only, patch #3 is add
+i2c target mode driver.
 
-tested this as far as I've been able too with simple reads and I2C block read
-on several RTL93xx devices. No issues and block read is working for me, so
-the whole series is getting from me:
+The legacy register layout is mix controller/target register control
+together. The following is add more detail description about new register
+layout. And new feature set add for register.
 
-Reviewed-by: Jonas Jelonek <jelonek.jonas@gmail.com>
-Tested-by: Jonas Jelonek <jelonek.jonas@gmail.com>
+v17:
+- move i2c new mode register and feature into driver commit message.
+- aspeed,i2c.yaml
+ - remove multi-master properties.
+ - use aspeed,transfer-mode properties for aspeed,enable-byte/enable-dma.
+-i2c-ast2600.c
+ - rename dma_safe_buf to controller_dma_safe_buf.
+ - fix ast2600_i2c_recover_bus return overflow warnings.
+ - add ast2600_i2c_target_packet_buff_irq unhandle case.
+ - add parameter "cmd" in ast2600_i2c_setup_dma_rx,
+   ast2600_i2c_setup_buff_rx, ast2600_i2c_setup_byte_rx
+ - use reset_control_deassert replace
+   devm_reset_control_get_shared_deasserted.
+ - useaspeed,transfer-mode properties for transfer mode setting.
+ - change compatible = "aspeed,ast2600-i2cv2" to "aspeed,ast2600-i2c-bus".
 
-Hopefully we can proceed soon with our efforts in this driver :)
+v16:
+- aspeed,i2c.yaml: add aspeed,enable-byte properties for force byte mode.
+- i2c-ast2600.c
+ - change include asm/unaligned.h to linux/unaligned.h.
+ - add reset timeout councter when slave active timeout.
+ - modify issue i2c_recovery_bus before slave re-enable.
+ - add aspeed,enable-byte properties.
 
-Best,
-Jonas
+v15:
+- i2c-ast2600.c
+ - add include unaligned.h
+ - rename all master -> controller, slave -> target.
+ - keep multi-master to align property.
+ - remove no used element in ast2600_i2c_bus.
 
-On 10.08.2025 20:05, Sven Eckelmann wrote:
-> From: Harshal Gohel <hg@simonwunderlich.de>
->
-> It was noticed that the original implementation of SMBus Block Write in the
-> driver was actually an I2C Block Write. Both differ only in the Count byte
-> before the actual data:
->
->   S Addr Wr [A] Comm [A] Count [A] Data [A] Data [A] ... [A] Data [A] P
->
-> The I2C Block Write is just skipping this Count byte and starts directly
-> with the data:
->
->   S Addr Wr [A] Comm [A] Data [A] Data [A] ... [A] Data [A] P
->
-> The I2C controller of RTL93xx doesn't handle this Count byte special and it
-> is simply another one of (16 possible) data bytes. Adding support for the
-> I2C Block Write therefore only requires skipping the count byte (0) in
-> data->block.
->
-> It is similar for reads. The SMBUS Block read is having a Count byte before
-> the data:
->
->   S Addr Wr [A] Comm [A]
->             Sr Addr Rd [A] [Count] A [Data] A [Data] A ... A [Data] NA P
->
-> And the I2C Block Read is directly starting with the actual data:
->
->   S Addr Wr [A] Comm [A]
->             Sr Addr Rd [A] [Data] A [Data] A ... A [Data] NA P
->
-> The I2C controller is also not handling this byte in a special way. It
-> simply provides every byte after the Rd marker + Ack as part of the 16 byte
-> receive buffer (registers). The content of this buffer just has to be
-> copied to the right position in the receive data->block.
->
-> Signed-off-by: Harshal Gohel <hg@simonwunderlich.de>
-> Co-developed-by: Sven Eckelmann <sven@narfation.org>
-> Signed-off-by: Sven Eckelmann <sven@narfation.org>
-> Reviewed-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> Tested-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> ---
->  drivers/i2c/busses/i2c-rtl9300.c | 37 +++++++++++++++++++++++++++++++++----
->  1 file changed, 33 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/i2c/busses/i2c-rtl9300.c b/drivers/i2c/busses/i2c-rtl9300.c
-> index cfafe089102aa208dde37096d5105d4140278ca9..4b215f9a24e6aeb8ff078cfc03a54c7bd9a60c38 100644
-> --- a/drivers/i2c/busses/i2c-rtl9300.c
-> +++ b/drivers/i2c/busses/i2c-rtl9300.c
-> @@ -183,22 +183,32 @@ static int rtl9300_i2c_execute_xfer(struct rtl9300_i2c *i2c, char read_write,
->  		return -EIO;
->  
->  	if (read_write == I2C_SMBUS_READ) {
-> -		if (size == I2C_SMBUS_BYTE || size == I2C_SMBUS_BYTE_DATA) {
-> +		switch (size) {
-> +		case I2C_SMBUS_BYTE:
-> +		case I2C_SMBUS_BYTE_DATA:
->  			ret = regmap_read(i2c->regmap,
->  					  i2c->reg_base + RTL9300_I2C_MST_DATA_WORD0, &val);
->  			if (ret)
->  				return ret;
->  			data->byte = val & 0xff;
-> -		} else if (size == I2C_SMBUS_WORD_DATA) {
-> +			break;
-> +		case I2C_SMBUS_WORD_DATA:
->  			ret = regmap_read(i2c->regmap,
->  					  i2c->reg_base + RTL9300_I2C_MST_DATA_WORD0, &val);
->  			if (ret)
->  				return ret;
->  			data->word = val & 0xffff;
-> -		} else {
-> +			break;
-> +		case I2C_SMBUS_I2C_BLOCK_DATA:
-> +			ret = rtl9300_i2c_read(i2c, &data->block[1], len);
-> +			if (ret)
-> +				return ret;
-> +			break;
-> +		default:
->  			ret = rtl9300_i2c_read(i2c, &data->block[0], len);
->  			if (ret)
->  				return ret;
-> +			break;
->  		}
->  	}
->  
-> @@ -296,6 +306,25 @@ static int rtl9300_i2c_smbus_xfer(struct i2c_adapter *adap, u16 addr, unsigned s
->  		len = data->block[0] + 1;
->  		break;
->  
-> +	case I2C_SMBUS_I2C_BLOCK_DATA:
-> +		ret = rtl9300_i2c_reg_addr_set(i2c, command, 1);
-> +		if (ret)
-> +			goto out_unlock;
-> +		if (data->block[0] < 1 || data->block[0] > I2C_SMBUS_BLOCK_MAX) {
-> +			ret = -EINVAL;
-> +			goto out_unlock;
-> +		}
-> +		ret = rtl9300_i2c_config_xfer(i2c, chan, addr, data->block[0]);
-> +		if (ret)
-> +			goto out_unlock;
-> +		if (read_write == I2C_SMBUS_WRITE) {
-> +			ret = rtl9300_i2c_write(i2c, &data->block[1], data->block[0]);
-> +			if (ret)
-> +				goto out_unlock;
-> +		}
-> +		len = data->block[0];
-> +		break;
-> +
->  	default:
->  		dev_err(&adap->dev, "Unsupported transaction %d\n", size);
->  		ret = -EOPNOTSUPP;
-> @@ -314,7 +343,7 @@ static u32 rtl9300_i2c_func(struct i2c_adapter *a)
->  {
->  	return I2C_FUNC_SMBUS_QUICK | I2C_FUNC_SMBUS_BYTE |
->  	       I2C_FUNC_SMBUS_BYTE_DATA | I2C_FUNC_SMBUS_WORD_DATA |
-> -	       I2C_FUNC_SMBUS_BLOCK_DATA;
-> +	       I2C_FUNC_SMBUS_BLOCK_DATA | I2C_FUNC_SMBUS_I2C_BLOCK;
->  }
->  
->  static const struct i2c_algorithm rtl9300_i2c_algo = {
->
+v14:
+- aspeed,i2c.yaml
+ - v13 change people reviewed-by tag, v14 fixed to original people tag,
+   modify to Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+ - struct ast2600_i2c_bus layout optimal.
+ - ast2600_select_i2c_clock refine.
+ - ast2600_i2c_recover_bus overridden fix.
+ - dma_mapping_error() returned error code shadowed modify.
+ - buffer register in a 4-byte aligned simplified
+ - remove smbus alert
+
+v13:
+ - separate i2c master and slave driver to be two patchs.
+ - modify include header list, add bits.h include. remove of*.h
+ - modify (((x) >> 24) & GENMASK(5, 0)) to (((x) & GENMASK(29, 24)) >> 24)
+ - modify ast2600_select_i2c_clock function implement.
+ - modify ast2600_i2c_recover_bus function u32 claim to
+   u32 state = readl(i2c_bus->reg_base + AST2600_I2CC_STS_AND_BUFF);
+
+v12:
+- aspeed,i2c.yaml
+ - add Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+- i2c-ast2600.c
+ - update include by alphabetical order
+ - make just a one TAB and put the last two lines on the single one
+ - remove no used timing_table structre
+ - remove enum explicit assinment
+ - rewritten to avoid this and using loop in ast2600_select_i2c_clock
+ - use GENMASK for most 0xffff
+ - remove too many parentheses
+ - use str_read_write replace read write string
+ - remove redundant blank line after ast2600_i2c_bus_of_table
+ - fix wrong multi-line style of the comment
+ - use macro for i2c standard speeds
+ - remove useless noise dev_info
+
+v11:
+- aspeed,i2c.yaml
+ - no change, the same with v10.
+- i2c-ast2600.c
+ - modify alert_enable from int -> boolean.
+ - modify dbg string recovery -> recover.
+ - remove no need to init 0.
+ - remove new line after break.
+ - remove unneeded empty line.
+ - modify dma_alloc_coherent to dmam_alloc_coherent
+ - modify probe nomem return dev_err_probe
+ - modify i2c_add_adapter to devm_i2c_adapter
+ - modify checkpatch: Alignment should match open parenthesis
+ - modify checkpatch: braces {} should be used on all arms of this statement
+ - modify checkpatch: Unbalanced braces around else statement
+
+v10:
+- aspeed,i2c.yaml
+ - move unevaluatedProperties after allOf.
+ - remove extra one blank line.
+- i2c-ast2600.c
+ - no change, the same with v8.
+
+v9:
+- aspeed,i2c.yaml
+ - backoff to v7.
+  - no fix typo in maintainer's name and email. this would be another patch.
+  - no remove address-cells, size-cells, this would be another patch.
+ - use aspeed,enable-dma property instead of aspeed,xfer-mode selection.
+ - fix allOf and else false properties for aspeed,ast2600-i2cv2.
+- i2c-ast2600.c
+ - no change, the same with v8
+
+v8:
+- aspeed,i2c.yaml
+ - modify commit message.
+ - Fix typo in maintainer's name and email.
+ - remove address-cells, size-cells.
+- i2c-ast2600.c
+ - move "i2c timeout counter" comment description before property_read.
+ - remove redundant code "return ret" in probe end.
+
+v7:
+- aspeed,i2c.yaml
+ - Update ASPEED I2C maintainers email.
+ - use aspeed,enable-dma property instead of aspeed,xfer-mode selection.
+ - fix allOf and else false properties for aspeed,ast2600-i2cv2.
+- i2c-ast2600.c
+ - remove aspeed,xfer-mode instead of aspeed,enable-dma mode. buffer mode
+   is default.
+ - remove aspeed,timeout instead of i2c-scl-clk-low-timeout-us for
+   timeout setting.
+
+v6:
+- remove aspeed,i2cv2.yaml, merge to aspeed,i2c.yaml -add support for
+  i2cv2 properites.
+- i2c-ast2600.c
+ - fix ast2600_i2c_remove ordering.
+ - remove ast2600_i2c_probe goto labels, and add dev_err_probe -remove
+   redundant deb_dbg debug message.
+ - rename gr_regmap -> global_regs
+
+v5:
+- remove ast2600-i2c-global.yaml, i2c-ast2600-global.c.
+- i2c-ast2600.c
+ - remove legacy clock divide, all go for new clock divide.
+ - remove duplicated read isr.
+ - remove no used driver match
+ - fix probe return for each labels return.
+ - global use mfd driver, driver use phandle to regmap read/write.
+- rename aspeed,i2c-ast2600.yaml to aspeed,i2cv2.yaml -remove bus-frequency.
+- add required aspeed,gr
+- add timeout, byte-mode, buff-mode properites.
+
+v4:
+- fix i2c-ast2600.c driver buffer mode use single buffer conflit in
+  master slave mode both enable.
+- fix kmemleak issue when use dma mode.
+- fix typo aspeed,i2c-ast2600.yaml compatible is "aspeed,ast2600-i2c"
+- fix typo aspeed,i2c-ast2600.ymal to aspeed,i2c-ast2600.yaml
+
+v3:
+- fix i2c global clock divide default value.
+- remove i2c slave no used dev_dbg info.
+
+v2:
+- add i2c global ymal file commit.
+- rename file name from new to ast2600.
+  aspeed-i2c-new-global.c -> i2c-ast2600-global.c
+  aspeed-i2c-new-global.h -> i2c-ast2600-global.h
+  i2c-new-aspeed.c -> i2c-ast2600.c
+- rename all driver function name to ast2600.
+
+Ryan Chen (3):
+  dt-bindings: i2c: aspeed,i2c.yaml: add transfer-mode and global-regs
+    properties and update example
+  i2c: ast2600: Add controller driver for new register layout
+  i2c: ast2600: Add target mode support
+
+ .../devicetree/bindings/i2c/aspeed,i2c.yaml   |   39 +
+ drivers/i2c/busses/Kconfig                    |   23 +-
+ drivers/i2c/busses/Makefile                   |    1 +
+ drivers/i2c/busses/i2c-ast2600.c              | 1598 +++++++++++++++++
+ 4 files changed, 1653 insertions(+), 8 deletions(-)
+ create mode 100644 drivers/i2c/busses/i2c-ast2600.c
+
+-- 
+2.34.1
 
 
