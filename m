@@ -1,133 +1,134 @@
-Return-Path: <linux-i2c+bounces-12307-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12308-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0C4EB27B16
-	for <lists+linux-i2c@lfdr.de>; Fri, 15 Aug 2025 10:33:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 57991B27E9B
+	for <lists+linux-i2c@lfdr.de>; Fri, 15 Aug 2025 12:47:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CC48C188FA67
-	for <lists+linux-i2c@lfdr.de>; Fri, 15 Aug 2025 08:31:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id ADF821BC2C14
+	for <lists+linux-i2c@lfdr.de>; Fri, 15 Aug 2025 10:45:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 726B0155CBD;
-	Fri, 15 Aug 2025 08:31:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 331192FF646;
+	Fri, 15 Aug 2025 10:44:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="NWzdE3iX"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="nyECjAGZ"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 361D114EC62
-	for <linux-i2c@vger.kernel.org>; Fri, 15 Aug 2025 08:31:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 169F52FD7CB
+	for <linux-i2c@vger.kernel.org>; Fri, 15 Aug 2025 10:44:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755246695; cv=none; b=kWjOj0Dacb4+c1DaW4ouN9JQ2956e5o5GyYvljd8NvW5wxe6LnM7HeW3bAEg7XvbOwKRArk92cmmofaEf2OaE+MRteW0/O8no5PAWsDgXYksjVYAbloLYZ55xMOsGKtvRNtj05JcYoqJD8e35TSBEXTIOe57Um9wDBBZGiJXaug=
+	t=1755254682; cv=none; b=fKbghbs0R6AKG660YAsKMHXUp6kM87tPk1QCgg+NufskUrkC0b9Pe06Tg48GCeUro+1mOui3y1JTt0ANw0gOLNQS2fgDrZ7tHu0R8tq0hnc9Ig9QnWKO0MZu8Ht9vkYOOrMu45gVazbOnSvxqEMMmL8fOeWIBEyQKqbTjEDa4zk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755246695; c=relaxed/simple;
-	bh=F7TgtDIVeJHmJbdmhVsLQz8ZXqh8PmvpMqqRRdkM3Hc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YBDulH5of78351CrZHgWqvhOJk7Fbn2t8tP7GebwyPwMxqDj+N2C63q4ati4VXmy8r1oEP9MH3NTJPajNwbOCZWm9Nni33eAxO3uYgd18ytrw5w8zSTU7EpDnEkDtkh3j/UO+hRuunFlhfLCK9+dZQX3MKJuJbO7UZ0Hi/+6K8I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=NWzdE3iX; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=hr2q
-	1UFu4n5c+NUsYTOIsmm+4qw3eig0S8Zk3qsF2Qo=; b=NWzdE3iXg9eNG8b5vB41
-	E/wcyWSlko7QcPzDFSSQ2kUn2lUfw7i1xfOmpe501mGG6ylioIqQTvM4nMNUspFh
-	9AplZT9ZCBTfvs1AU1Ww6FZmeD/sxciigvdwVHb0PyzCnZLQetnvV5pwEVer74HO
-	rC+c9UgIqJ+FYCTWon4Auyw1kiFHQ0pB23QWj2cbK66FBChyHLuzZLA1pe+a7yae
-	K59Iy4YY26YWdJEGHJfQxZR6kZ0N01UaepbWBTJkYq9Fr2ySglOchyi3kekGB0aF
-	teC7y+iWkyhlaRvxdnGhJXpk/L+6FSdwgPZsumv5wPhIxtV+ZLLr+cH25E4dhtNF
-	EA==
-Received: (qmail 1330456 invoked from network); 15 Aug 2025 10:31:22 +0200
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 15 Aug 2025 10:31:22 +0200
-X-UD-Smtp-Session: l3s3148p1@TOH1NmM8Rs9tKLK5
-Date: Fri, 15 Aug 2025 10:31:20 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Luca Weiss <luca@lucaweiss.eu>
-Cc: Loic Poulain <loic.poulain@oss.qualcomm.com>,
-	Robert Foss <rfoss@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/7] i2c: qcom-cci: Add msm8953 compatible
-Message-ID: <aJ7wWDejA0KDarIE@shikoro>
-References: <20250810-msm8953-cci-v1-0-e83f104cabfc@lucaweiss.eu>
- <20250810-msm8953-cci-v1-2-e83f104cabfc@lucaweiss.eu>
- <aJnefpETGJm_cuRY@shikoro>
- <f956eccec6b8ae2737b1e758b8357051@lucaweiss.eu>
+	s=arc-20240116; t=1755254682; c=relaxed/simple;
+	bh=8LA+2kJNuPIw2fJF/HLy1WPGQ4k/QzgOM/5kdp6JFgo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JV+rFwdSfnBNVDtzQla17Lwy9qTpVq+D7GYUtPu4d22WzIPQb2u8O52XI7lPRc5zLH+BV0VQMudQKkSRo3rB1sldqMT9ckZoA2Nidlv3F1vsEKcoohdP4XBb19cyCHM0MeOzWbFtHzOz99PeA5+vcZ8ku47Qf2sOy6YpZzdLKs0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=nyECjAGZ; arc=none smtp.client-ip=209.85.221.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-3b916fda762so1369867f8f.0
+        for <linux-i2c@vger.kernel.org>; Fri, 15 Aug 2025 03:44:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1755254678; x=1755859478; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9VXN7dyuqMDF593piqzOKDuFJ2+OEcBzrRSpDmpGS7k=;
+        b=nyECjAGZCoVzy/0AtH4YgMEvaxuJO8Zc4U/+dRSM6fRvVrTO5mByLq3BECjG1/3jmD
+         P8I/OtI5JjlQlvjz/gk6OzXP1wavt74YzBA+/gVlUrl+QnenkZpyWOB2Hj+yGckb0IJV
+         MV8HpfbN3gRpIRUU4SnSxinVNq3kdnyJTrYOjlOZXHjPa5x/IL26oRKnAv7hRi6OSbg4
+         DHRHftdfVRZIeg69irsGzY7x2E0LqS1aUQzVEa28o8WF34XgtdGSKp7SOs1QQ+EIyz42
+         rzACdYyhOfM+G8XjvWd7eU/Vpl95SDoG9QnMhGPW/irzSg6vnYj/rpa4cucCPnePxwGi
+         09uQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755254678; x=1755859478;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9VXN7dyuqMDF593piqzOKDuFJ2+OEcBzrRSpDmpGS7k=;
+        b=OqCnnXJGLB5d5uFgcPm8XKnhYAyCLvEnqnDgzgP+bB7fH4vbwiSqmxU+7Hs4sqtxGE
+         1t96e2EDYuyRXNWjfTftvhAA2APjmVifWsruhq0Abw/0Gn3BTlZhLieEzpk87Xg0qx8E
+         T3YB4FIXIbVX7QODNXLXCHPIKzgAro9Lq+vgoBCmlARXe8R7SVlHqBy8OSP7PO9SkozA
+         H6upca7+zzuP2GHZ9TCGnLFamsfc9i8pnvY3D8lOzvg4R+bN2ZcPQ+I+U9xaIhDtSqlQ
+         Sj9d5nT7apE+SjDmMcB87NecyBmQVMxBW5jALAX37D54UVtJK7Jx9OLg7sKjc6y3urfc
+         eCug==
+X-Gm-Message-State: AOJu0YxZiFZeKIeMiEW34nUHTdX4Xpp5B8YC+9k18+aaDQq/U+3JPpLl
+	5t5VlLrVbHlptEd7pZFxRbbCXpQ/PLw0ugAIdFdhYMPCkLQQjAEzmXB1eXjb6Thy0Cg=
+X-Gm-Gg: ASbGncuW2z12y1GmPzjQhoeG+E/VhSua/KeIynXEz6hhNJm+GKE8N8DEzxYaC2Sz1cy
+	vvanCfeE4Qe5asPRcfIQjtFBXmpEmen0wrHSasHh8e7cgraeBzSXckTDsLhPj10pWZs3OBJvUeY
+	LX67ZkdaWtHKKSeL+E9Jdipy1NAAilGfIH/7s4bOdt1Kkl+KmmQoCQfiJ908fnumDWWHGvrBHNi
+	tPCxNwF5YFvrBdsg+EjU62ujL+GAtIleI6ofLXfyA25Wv8xWikNe1p5BK51WAXqrNdah3excW3y
+	+Os8tTWCOQ+nT/7EP6t38kJZ6GUwKt8W7dVUS5CpNvzPHmf6EXnaYrX/g7S33K8Smj5t0c1iOZb
+	ZNDDcHLCQPdrrlHYeCTI5P2aUft7l7tmHsj1k5rvbWL7YosbKfvqlG3sW59HlEfQ=
+X-Google-Smtp-Source: AGHT+IG800cLWLqatWasBLVAd1JmHq64uktJOwC1nVkGq12rIf4uwmr3k1nR0sv0K30TYAXp61UV2Q==
+X-Received: by 2002:a5d:5f8e:0:b0:3ba:cfe3:ad98 with SMTP id ffacd0b85a97d-3bb4a1f88ccmr1707195f8f.4.1755254678411;
+        Fri, 15 Aug 2025 03:44:38 -0700 (PDT)
+Received: from [192.168.0.35] (188-141-3-146.dynamic.upc.ie. [188.141.3.146])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3bb676c9b27sm1443907f8f.44.2025.08.15.03.44.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 Aug 2025 03:44:37 -0700 (PDT)
+Message-ID: <75df9709-5778-4a71-bb55-1151c6c657dd@linaro.org>
+Date: Fri, 15 Aug 2025 11:44:35 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="TQXPwgYOVAqGLFm1"
-Content-Disposition: inline
-In-Reply-To: <f956eccec6b8ae2737b1e758b8357051@lucaweiss.eu>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/3] dt-bindings: i2c: qcom-cci: Document sa8775p
+ compatible
+To: Wenmeng Liu <quic_wenmliu@quicinc.com>,
+ Loic Poulain <loic.poulain@oss.qualcomm.com>, Robert Foss
+ <rfoss@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konradybcio@kernel.org>, vladimir.zapolskiy@linaro.org,
+ todor.too@gmail.com
+Cc: linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-media@vger.kernel.org
+References: <20250815-rb8_camera-v2-0-6806242913ed@quicinc.com>
+ <20250815-rb8_camera-v2-1-6806242913ed@quicinc.com>
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Content-Language: en-US
+In-Reply-To: <20250815-rb8_camera-v2-1-6806242913ed@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-
---TQXPwgYOVAqGLFm1
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi Luca,
-
-> I'm also not sure what these parameters depend on, if it's CCI HW version,
-> or
-> something else. So naming it after the SoC should be a safer bet. Also the
-> msm8974-cci was only named 'v1.5' because it's an inbetween mix of the v1
-> and
-> v2 that were already upstream so arguably that one shouldn't have been
-> called
-> v1.5 in the first place either.
->=20
-> Let me know what you think. Maybe also someone from Qualcomm/Linaro can j=
-ump
-> in and share their thoughts, if someone knows more what these params depe=
-nd
-> on.
-
-Thanks for the heads up. I agree that it needs someone from Qualcomm for
-definite answers. But if nobody chimes in, your patch is good as is from
-my side.
-
-Acked-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-
-Thanks,
-
-   Wolfram
-
-
---TQXPwgYOVAqGLFm1
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmie8FUACgkQFA3kzBSg
-KbbvTQ/9ElCikIoyrJsjc7KJ2KX/PRWCsQmCcW6yAyFK/XmNcw4I7XspRIHrTJ6K
-h80bO5zcB0ki4bTyFxIKcDgVF6txxg2/x4nXm9bQW+sbb+RtuHo28EeodxakO44a
-YqbACbIZ+KQj0dGWp8PB0iaSeTJnxdhhgmx03UU3nMDs/C09EXSQS8xyjgRlcWI6
-nrWSfxhKBxkYpii91HNrv4QPZx+slvJKN0vGIWcjMopXvEfn42fkQ52K94aRH4Dz
-u0HE90AGKjOITswJunyt4grA8hPzXiGZC+fgenrC/a5kJUarrjGJb72BX27dKOa1
-CNAucY/bPhlaWWI4ZEh2e0M1FRVLXWfZPBgX3MX98aGZEdWJO0DGK/2d332d3NYS
-KFp1g1SR23x0Z2lLbFBmtpCMusMVSYslirF/4nESLCiQV804Y7jUd0koMbI7rQuf
-54mHAGpZTouQHBx1ITYquBu9VFfxWneLU78hN+Ja29eGe2tRiOzmPWkXso+h/E0i
-JB5KZ87W0L6tvbCCHbvz3pO95zeS4E5q82XHYITqTJSrjgmNWuFQyRtnc3XW3Pj5
-qQ1i74WTPu3CJRhHBgOZJeE1bDc/dcWS0ZlDhJxL4h3dI62432o1kPYaCLqEMTjx
-J11Wj3/4i54MbuCRi9cTqStmWUYJM8f5NiEQYfbDEhKfqWTnOGs=
-=9FHa
------END PGP SIGNATURE-----
-
---TQXPwgYOVAqGLFm1--
+On 15/08/2025 08:07, Wenmeng Liu wrote:
+> Add the sa8775p CCI device string compatible.
+> 
+> Signed-off-by: Wenmeng Liu <quic_wenmliu@quicinc.com>
+> ---
+>   Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
+> index 73144473b9b24e574bfc6bd7d8908f2f3895e087..54441a638da2b7feb44741264810d7a0de319858 100644
+> --- a/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
+> +++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
+> @@ -25,6 +25,7 @@ properties:
+>   
+>         - items:
+>             - enum:
+> +              - qcom,sa8775p-cci
+>                 - qcom,sc7280-cci
+>                 - qcom,sc8280xp-cci
+>                 - qcom,sdm670-cci
+> @@ -223,6 +224,7 @@ allOf:
+>           compatible:
+>             contains:
+>               enum:
+> +              - qcom,sa8775p-cci
+>                 - qcom,sm8550-cci
+>                 - qcom,sm8650-cci
+>                 - qcom,x1e80100-cci
+> 
+Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 
