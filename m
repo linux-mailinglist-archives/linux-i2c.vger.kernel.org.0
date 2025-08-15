@@ -1,134 +1,162 @@
-Return-Path: <linux-i2c+bounces-12308-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12309-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 57991B27E9B
-	for <lists+linux-i2c@lfdr.de>; Fri, 15 Aug 2025 12:47:08 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1BE16B27F1E
+	for <lists+linux-i2c@lfdr.de>; Fri, 15 Aug 2025 13:23:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ADF821BC2C14
-	for <lists+linux-i2c@lfdr.de>; Fri, 15 Aug 2025 10:45:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 34C1EB6689C
+	for <lists+linux-i2c@lfdr.de>; Fri, 15 Aug 2025 11:21:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 331192FF646;
-	Fri, 15 Aug 2025 10:44:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 219A3286881;
+	Fri, 15 Aug 2025 11:23:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="nyECjAGZ"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Wf7M3Oz0"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 169F52FD7CB
-	for <linux-i2c@vger.kernel.org>; Fri, 15 Aug 2025 10:44:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7829D21422B
+	for <linux-i2c@vger.kernel.org>; Fri, 15 Aug 2025 11:23:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755254682; cv=none; b=fKbghbs0R6AKG660YAsKMHXUp6kM87tPk1QCgg+NufskUrkC0b9Pe06Tg48GCeUro+1mOui3y1JTt0ANw0gOLNQS2fgDrZ7tHu0R8tq0hnc9Ig9QnWKO0MZu8Ht9vkYOOrMu45gVazbOnSvxqEMMmL8fOeWIBEyQKqbTjEDa4zk=
+	t=1755256992; cv=none; b=bGjIX1GUiwHVR6VTUHv1Xf2Wg0t7mnDygT4CBWUcjVxE3JCarK9acatA0GSr4L/f9L4B0AWsFaYPDIKtTjK9UpTZuUQA8UVPr34Vn9nj0RrKE+0pG7ASJMjIMG+Y7cbdCrlwc8Ts1juNC+c2k2vM/pFM7u7603KadtPgxTIgTHU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755254682; c=relaxed/simple;
-	bh=8LA+2kJNuPIw2fJF/HLy1WPGQ4k/QzgOM/5kdp6JFgo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JV+rFwdSfnBNVDtzQla17Lwy9qTpVq+D7GYUtPu4d22WzIPQb2u8O52XI7lPRc5zLH+BV0VQMudQKkSRo3rB1sldqMT9ckZoA2Nidlv3F1vsEKcoohdP4XBb19cyCHM0MeOzWbFtHzOz99PeA5+vcZ8ku47Qf2sOy6YpZzdLKs0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=nyECjAGZ; arc=none smtp.client-ip=209.85.221.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-3b916fda762so1369867f8f.0
-        for <linux-i2c@vger.kernel.org>; Fri, 15 Aug 2025 03:44:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1755254678; x=1755859478; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9VXN7dyuqMDF593piqzOKDuFJ2+OEcBzrRSpDmpGS7k=;
-        b=nyECjAGZCoVzy/0AtH4YgMEvaxuJO8Zc4U/+dRSM6fRvVrTO5mByLq3BECjG1/3jmD
-         P8I/OtI5JjlQlvjz/gk6OzXP1wavt74YzBA+/gVlUrl+QnenkZpyWOB2Hj+yGckb0IJV
-         MV8HpfbN3gRpIRUU4SnSxinVNq3kdnyJTrYOjlOZXHjPa5x/IL26oRKnAv7hRi6OSbg4
-         DHRHftdfVRZIeg69irsGzY7x2E0LqS1aUQzVEa28o8WF34XgtdGSKp7SOs1QQ+EIyz42
-         rzACdYyhOfM+G8XjvWd7eU/Vpl95SDoG9QnMhGPW/irzSg6vnYj/rpa4cucCPnePxwGi
-         09uQ==
+	s=arc-20240116; t=1755256992; c=relaxed/simple;
+	bh=Y4b9RHGk5FuTwKgZo6QSS7Z99ahbeLWA4mpKEy8knmU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=sumZqqEbGbucmelrkW7KnsOK0FAzzvXk3RGmE0tp7JRxhfgc+jkr4WXbdlBADAPcEmnaKfzyQVdA7bjHIxXt1THd0HthjJo6HqvdY0OFx80CC7FpmHDXRGEy28TeiJDSUvFPdt+oifweqFKg7e/54IkAVD+bUH7fipgfoEK+JpI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Wf7M3Oz0; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57F9ln8O027122
+	for <linux-i2c@vger.kernel.org>; Fri, 15 Aug 2025 11:23:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	Y4b9RHGk5FuTwKgZo6QSS7Z99ahbeLWA4mpKEy8knmU=; b=Wf7M3Oz01B4Q6QOQ
+	zFZCh+sT2n9qM1t8rRLAybgFUzqaNVCrnOkoCoSoHXCUADUPZrhxHjkfioLJgPEB
+	sWfWLjoYAuaqsOJCS6ClZ/iP0Y5yiRPlFmlzR/Fwla5D2xBSli3ENXZtsO8ryu07
+	Z075qCeXgr0owQiEMdjIT4wI/HAl1VCpfJ0KxxEnYHMXDiycf9QkrRyWxsqRllTc
+	5cFpg1C2JOz3myYcxeuHSosBcAh4NGiKJw7NDRemdFvPb0NXv2pb96eWwOj5dY5M
+	uvFrOR6Z7UQ/v9CIzkcB8AdWD9krK2H1m3IFcLZGbJ0acDeAoWSKpitnAhxmiZ6e
+	MW0vwA==
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48gr9ryjt9-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-i2c@vger.kernel.org>; Fri, 15 Aug 2025 11:23:10 +0000 (GMT)
+Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-88432e62d01so242541839f.3
+        for <linux-i2c@vger.kernel.org>; Fri, 15 Aug 2025 04:23:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755254678; x=1755859478;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9VXN7dyuqMDF593piqzOKDuFJ2+OEcBzrRSpDmpGS7k=;
-        b=OqCnnXJGLB5d5uFgcPm8XKnhYAyCLvEnqnDgzgP+bB7fH4vbwiSqmxU+7Hs4sqtxGE
-         1t96e2EDYuyRXNWjfTftvhAA2APjmVifWsruhq0Abw/0Gn3BTlZhLieEzpk87Xg0qx8E
-         T3YB4FIXIbVX7QODNXLXCHPIKzgAro9Lq+vgoBCmlARXe8R7SVlHqBy8OSP7PO9SkozA
-         H6upca7+zzuP2GHZ9TCGnLFamsfc9i8pnvY3D8lOzvg4R+bN2ZcPQ+I+U9xaIhDtSqlQ
-         Sj9d5nT7apE+SjDmMcB87NecyBmQVMxBW5jALAX37D54UVtJK7Jx9OLg7sKjc6y3urfc
-         eCug==
-X-Gm-Message-State: AOJu0YxZiFZeKIeMiEW34nUHTdX4Xpp5B8YC+9k18+aaDQq/U+3JPpLl
-	5t5VlLrVbHlptEd7pZFxRbbCXpQ/PLw0ugAIdFdhYMPCkLQQjAEzmXB1eXjb6Thy0Cg=
-X-Gm-Gg: ASbGncuW2z12y1GmPzjQhoeG+E/VhSua/KeIynXEz6hhNJm+GKE8N8DEzxYaC2Sz1cy
-	vvanCfeE4Qe5asPRcfIQjtFBXmpEmen0wrHSasHh8e7cgraeBzSXckTDsLhPj10pWZs3OBJvUeY
-	LX67ZkdaWtHKKSeL+E9Jdipy1NAAilGfIH/7s4bOdt1Kkl+KmmQoCQfiJ908fnumDWWHGvrBHNi
-	tPCxNwF5YFvrBdsg+EjU62ujL+GAtIleI6ofLXfyA25Wv8xWikNe1p5BK51WAXqrNdah3excW3y
-	+Os8tTWCOQ+nT/7EP6t38kJZ6GUwKt8W7dVUS5CpNvzPHmf6EXnaYrX/g7S33K8Smj5t0c1iOZb
-	ZNDDcHLCQPdrrlHYeCTI5P2aUft7l7tmHsj1k5rvbWL7YosbKfvqlG3sW59HlEfQ=
-X-Google-Smtp-Source: AGHT+IG800cLWLqatWasBLVAd1JmHq64uktJOwC1nVkGq12rIf4uwmr3k1nR0sv0K30TYAXp61UV2Q==
-X-Received: by 2002:a5d:5f8e:0:b0:3ba:cfe3:ad98 with SMTP id ffacd0b85a97d-3bb4a1f88ccmr1707195f8f.4.1755254678411;
-        Fri, 15 Aug 2025 03:44:38 -0700 (PDT)
-Received: from [192.168.0.35] (188-141-3-146.dynamic.upc.ie. [188.141.3.146])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3bb676c9b27sm1443907f8f.44.2025.08.15.03.44.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Aug 2025 03:44:37 -0700 (PDT)
-Message-ID: <75df9709-5778-4a71-bb55-1151c6c657dd@linaro.org>
-Date: Fri, 15 Aug 2025 11:44:35 +0100
+        d=1e100.net; s=20230601; t=1755256990; x=1755861790;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Y4b9RHGk5FuTwKgZo6QSS7Z99ahbeLWA4mpKEy8knmU=;
+        b=PH4J15wQYGF3bygEI4rQccYIOJX2+yjsgR7mTYJn7+DhnnetGuWSsm8UOZHgdv/Owz
+         JByidkmMgFEO/X6B60TzOAUW+S8gd7IwL4165ADRoUxL49eBVXjIzKTB5+8sosXnxVRV
+         FPcF78U5W+FOlqYHBFFfSj1UCrFASby3GDvtf3eEAqE0sBriMI3mCIVmZG+BbO4tjcFh
+         /iGgSY+dLp1E+J0vOsmQsCjbTCUwE5Eb3lP5jEAJdScSEg34/WEMeqrW1HLUx8jDIADb
+         ACBBKS620rk9X/7LtvPamK56kTclkyfo6obU5ybqeu92fpo/LpJ4BRqaGKvooOHNnplH
+         NW+Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUBNZPxBxv7W3b5I7TihWolGKWdE8QB+a/vGCZvZAS8c2VkPlc4vjtTJaDREQDlj/W8/mXyZbjWrI8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwZcaZA5QdqyDOMRCo5jlzXid8kTUjSPTkMl3NddzifqZ40pu3F
+	VYh9q3zsYjzYW13FxqdataZxXp/SDH7yDz2Nc05jcSvdQI4nyOc7N6O25cBkYbWSiYC/hKwX9y3
+	ekWwYuRjQc/i5Hff0sdXcuLVbNKJBwnaRDJ2uA/6ITdbKQwuIOojo+RbWiKjSFTPwmmEX/VXCy8
+	ezU8y5gfDEVCn/r7HpJxGQUGUbx8mLjiSBDBHOsg==
+X-Gm-Gg: ASbGnctwOStRF+XzYsNdXfrBUcLhATuYsFcLkTmkbd3tS6w2jwsofF6ojCo9VvcH+gT
+	2+NHBhaCyEHb7T1YceRt6Li/7BPuKG38gmno7t6j4VOjhNJu3Lqc+GRYwWxW6qzQyLq17eHGL6v
+	mfYjH6qouZSso5zTMTHh1JgQ==
+X-Received: by 2002:a05:6602:4f86:b0:86c:f3aa:8199 with SMTP id ca18e2360f4ac-8843e495e01mr325662739f.11.1755256989744;
+        Fri, 15 Aug 2025 04:23:09 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGZ+ruMJ4du6+6g0nP8YZAkSswv8epp8ueh0uj+5gCKOxs0IVlgGmW3dr6Fkri8yCflGk2TEH9pfq2BhwVZoJI=
+X-Received: by 2002:a05:6602:4f86:b0:86c:f3aa:8199 with SMTP id
+ ca18e2360f4ac-8843e495e01mr325659939f.11.1755256989397; Fri, 15 Aug 2025
+ 04:23:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/3] dt-bindings: i2c: qcom-cci: Document sa8775p
- compatible
-To: Wenmeng Liu <quic_wenmliu@quicinc.com>,
- Loic Poulain <loic.poulain@oss.qualcomm.com>, Robert Foss
- <rfoss@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>, vladimir.zapolskiy@linaro.org,
- todor.too@gmail.com
-Cc: linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-media@vger.kernel.org
-References: <20250815-rb8_camera-v2-0-6806242913ed@quicinc.com>
- <20250815-rb8_camera-v2-1-6806242913ed@quicinc.com>
-From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Content-Language: en-US
-In-Reply-To: <20250815-rb8_camera-v2-1-6806242913ed@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20250810-msm8953-cci-v1-0-e83f104cabfc@lucaweiss.eu>
+ <20250810-msm8953-cci-v1-2-e83f104cabfc@lucaweiss.eu> <aJnefpETGJm_cuRY@shikoro>
+ <f956eccec6b8ae2737b1e758b8357051@lucaweiss.eu> <aJ7wWDejA0KDarIE@shikoro>
+In-Reply-To: <aJ7wWDejA0KDarIE@shikoro>
+From: Loic Poulain <loic.poulain@oss.qualcomm.com>
+Date: Fri, 15 Aug 2025 13:22:57 +0200
+X-Gm-Features: Ac12FXyHLyjoE0VR2tgvZT9ZWKQ9V1qYGFU3UagVhwtyFYiZHmsAWnzbmBeXE0Q
+Message-ID: <CAFEp6-3pZAt9557us4ihM3-ifrUVkYx+LneuORVafYQGeVyiVA@mail.gmail.com>
+Subject: Re: [PATCH 2/7] i2c: qcom-cci: Add msm8953 compatible
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Luca Weiss <luca@lucaweiss.eu>
+Cc: Robert Foss <rfoss@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODEzMDA5NCBTYWx0ZWRfX/kwHwfkBrwp/
+ dykjEjO8ojoYFM5nbrpUozGU1Ph0igqfBUyRnLkTwxYnFKnNh8bd2ycBhahaDR//QzBXM3eBSzb
+ eTxWD/7u07GIa21ipntDNuhQwbcCYqoGjnMx7U/fpEVvLdJkh/9F9iluWTayLKwLrZLW2WF9c41
+ EEItwLU8TKXBxiOxNnyJRDRYFl3UGCeI/MWTr4uaxXS1kn8QzO2+vO5b8MgVPbF9ynN7t5ueHGg
+ x/lr7Z/C6GLgwE6SPFT/D23RxDVjzMKFy6tbioHQnZ/ysPdUdqqzwdNMETTOrxewP8eqVqPp0kZ
+ Vt8V3cshqrxzx3XVQn/Evu1F0fRFMX/rkBQ42LdMvNLMkelMNa5pT3sul5lrv2u012U3YYhiGJS
+ teMvRCki
+X-Authority-Analysis: v=2.4 cv=NIrV+16g c=1 sm=1 tr=0 ts=689f189e cx=c_pps
+ a=7F85Ct0dzgNClt63SJIU8Q==:117 a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10
+ a=LDBv8-xUAAAA:8 a=EUspDBNiAAAA:8 a=y0T5QYlTslmZlUxBBQIA:9 a=QEXdDO2ut3YA:10
+ a=LKR0efx6xuerLj5D82wC:22 a=DZeXCJrVpAJBw65Qk4Ds:22
+X-Proofpoint-ORIG-GUID: 3FfaOpAwwaYx5NGKeL17h5BQmC-SNo0s
+X-Proofpoint-GUID: 3FfaOpAwwaYx5NGKeL17h5BQmC-SNo0s
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-08-15_04,2025-08-14_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 clxscore=1015 impostorscore=0 adultscore=0 suspectscore=0
+ spamscore=0 malwarescore=0 phishscore=0 bulkscore=0 classifier=typeunknown
+ authscore=0 authtc= authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2507300000 definitions=main-2508130094
 
-On 15/08/2025 08:07, Wenmeng Liu wrote:
-> Add the sa8775p CCI device string compatible.
-> 
-> Signed-off-by: Wenmeng Liu <quic_wenmliu@quicinc.com>
-> ---
->   Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
-> index 73144473b9b24e574bfc6bd7d8908f2f3895e087..54441a638da2b7feb44741264810d7a0de319858 100644
-> --- a/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
-> @@ -25,6 +25,7 @@ properties:
->   
->         - items:
->             - enum:
-> +              - qcom,sa8775p-cci
->                 - qcom,sc7280-cci
->                 - qcom,sc8280xp-cci
->                 - qcom,sdm670-cci
-> @@ -223,6 +224,7 @@ allOf:
->           compatible:
->             contains:
->               enum:
-> +              - qcom,sa8775p-cci
->                 - qcom,sm8550-cci
->                 - qcom,sm8650-cci
->                 - qcom,x1e80100-cci
-> 
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+On Fri, Aug 15, 2025 at 10:31=E2=80=AFAM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+>
+> Hi Luca,
+>
+> > I'm also not sure what these parameters depend on, if it's CCI HW versi=
+on,
+> > or
+> > something else. So naming it after the SoC should be a safer bet. Also =
+the
+> > msm8974-cci was only named 'v1.5' because it's an inbetween mix of the =
+v1
+> > and
+> > v2 that were already upstream so arguably that one shouldn't have been
+> > called
+> > v1.5 in the first place either.
+
+That's correct, this is a local version, not matching HW IP version.
+The config depends both on the HW version and the CCI core clock.
+As our timings are statically configured we should also ensure that
+the CCI clock is correct...
+
+> >
+> > Let me know what you think. Maybe also someone from Qualcomm/Linaro can=
+ jump
+> > in and share their thoughts, if someone knows more what these params de=
+pend
+> > on.
+
+That's fair enough.
+
+Reviewed-by: Loic Poulain <loic.poulain@oss.qualcomm.com>
 
