@@ -1,63 +1,79 @@
-Return-Path: <linux-i2c+bounces-12305-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12306-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0168AB27A59
-	for <lists+linux-i2c@lfdr.de>; Fri, 15 Aug 2025 09:49:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2BEB5B27B04
+	for <lists+linux-i2c@lfdr.de>; Fri, 15 Aug 2025 10:30:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2700A602B79
-	for <lists+linux-i2c@lfdr.de>; Fri, 15 Aug 2025 07:49:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 59D1A5C8319
+	for <lists+linux-i2c@lfdr.de>; Fri, 15 Aug 2025 08:30:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 461D529ACC4;
-	Fri, 15 Aug 2025 07:49:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6670B2C0F97;
+	Fri, 15 Aug 2025 08:30:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="jNjXbNhN"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="foXLnOzp"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BA0727C84E;
-	Fri, 15 Aug 2025 07:48:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24A9E24BBEB
+	for <linux-i2c@vger.kernel.org>; Fri, 15 Aug 2025 08:30:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755244141; cv=none; b=YvRbhOnUbMBunSgsRm+EwfKuR/qm0dwWWZt8VVnY2bDqTRsz0auj+JFAVROR6hXq1ZZ+oW+GZIq6aWZqYXGSuCffxOf8ugUApq6cQ7uVV+flcm0N2rI4Xu+hKUFEks7m1vnQqMAP2moiOvEtNH8X+HUDCbY+dyYxzOAJDBZ9yGo=
+	t=1755246609; cv=none; b=n72gstjMCw7gRdvVgKUR0zJTIdqozkhGeUN9kFSHtcwgZlACmt/fvXZrXh187LTZwM27SzRKFTdQOM1OHx7IiL0UuNVlUIVjvkQqAs4E5L0t47DnsWej8qyR2v23BHGtTRb1u55hU9TigM9g/L2uV/UeK5+RoEvv8XWzZJa4FNY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755244141; c=relaxed/simple;
-	bh=WIGdqRGQkWuU02CDA2Z3jWQgZCJG7VSTqROPS5CuPdY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=mmdMwkkRIpJZVK2L1RT5AA6hQ/j58heEpV7oto5159yj0bvpV68HxooYLTbWvfeOyVzT1AHv02guUke9Umi337SB6+Wklz7KxZtZusUGvgHem5sCauXMAntL5RHCwM5xHPDPzjMO97PD0+MbvdTY/HTCpwD6a9XonC8H8fc1bnU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=jNjXbNhN; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57EJfRgO029021;
-	Fri, 15 Aug 2025 07:48:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	wKYUjr/LKHOkrvdAdUEteiYS5Dm6BMUylPEMQFqc8Ms=; b=jNjXbNhNojDchO88
-	JWP6kxVgQG1vB8UwgYUra42Bfxj2YKXh/zgKPTsL9BIgXKGgCjBkUBEWdIUpNIJn
-	Uc7wRy37XXR6DpvrdAkU6g4pSsss9HBIwxnwmi6WKXyl48yP9F8ZNYsqAdUjpegd
-	Pz+9YBfjYAwzTQyHWkLNuFROooyUU2FYcIET3sNS8fEbYWQu4/BdK5TlDwzYv+Rg
-	D5fHpWS5pwazhk6bB5D5v3540+PK0aUCwTGPAKvDmGeLzy1zMoJYYRHpaAS2194w
-	zW5a98LTCKPYRp1YFZeztIVVZLXhl3C1s3zxLRgbqd7y98DTC3fCYhYIu7NcEKqZ
-	ti4Skw==
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48g9qa1dkj-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 15 Aug 2025 07:48:54 +0000 (GMT)
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-	by NALASPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 57F7msSF024346
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 15 Aug 2025 07:48:54 GMT
-Received: from [10.253.75.233] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.10; Fri, 15 Aug
- 2025 00:48:49 -0700
-Message-ID: <3cbd4a43-22ea-4d84-a556-67d8e7e573bd@quicinc.com>
-Date: Fri, 15 Aug 2025 15:48:47 +0800
+	s=arc-20240116; t=1755246609; c=relaxed/simple;
+	bh=xK2/sQuboR8RxHlU5a6vsg5CxWE9FmGx9avjyrBFlPE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=G5Z4tqauUUL89tpbeRHKdP+9G442VAgImXN6u0wNVuQL1syXGGkk1g+mG8AYApNPgKQQO6UnG1lGPpNkaYfoxwE0JAE1/t46V2fqFtTV427CI8IeJaUGNYvljR9ZfG6psBklxdBnMOmTEmcHOZft+CwtnrXwASWJg2wqNtRk9ew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=foXLnOzp; arc=none smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-3b9e4148134so905226f8f.2
+        for <linux-i2c@vger.kernel.org>; Fri, 15 Aug 2025 01:30:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1755246605; x=1755851405; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JajMyuBKXy9ESCn/BlvUni/IIWDRCCaEiDEiH+zh/Bk=;
+        b=foXLnOzp5tk9bQ/OXCjRaaamM0k8ViSbD6hx9aGAV+quZ0I3RsQz2Mcsgactk9BC8d
+         YBsEmWvTd+bh8MaGNkFZbxQxenT3Xs9NE9UXmXcQj0pNsQb3Xq9WEQpwSdncDWz8Dqn5
+         Um8faARY2IMJENiUjcpBBvKaGXcuJYiPpOzxoGDeRkwQqeb8xkWWJYYK//7oy+slB3cl
+         fHMkaR6Yy0HMeL5CY2P8o+I4sNnpNuvRHw4D1z/mzAAL7f2Wo2Xhka9J4Idfx6x64iD0
+         UUSeS9pkr5j2R3fNXv5t2tpSHr21f82FcIUNxcHDc6x6o1EX2UF3iTJ9xQO7VfdOpUDI
+         QPNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755246605; x=1755851405;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JajMyuBKXy9ESCn/BlvUni/IIWDRCCaEiDEiH+zh/Bk=;
+        b=BigD0S/pHate/kWVWRhzAxGhNidwBU2o/3HpCHOsu/AIjCFdvNk0ebyvpBKhoGnyTo
+         v8wRx5/pZDdOzkBcY+1Hl+i4ct90oabwonPwf6uqoydGnjqHJKrcQRlKDiUkneHxOF8G
+         U0hH2fszCLTcaGQ4KKhEliqPemGjJloQG+evWlx/QIhb0d/dbQG5yIXxhBbE5uGdfFpV
+         w1TgKhqJqb+RVvixFbVb9KrmwdwZ3KiFDEHWsuNZZstYyOWW4GHly+yuJSnAtXJhUeZC
+         5FqOeAmD3nojt5EPR0Jr5xD0kZOpMhGcbrtKS4x8KDPQfyRqFk5B6LdreE3zLfmy4DCw
+         D+hQ==
+X-Gm-Message-State: AOJu0YwOTQcP0/r4jtp6Pez4iGB2cUTmsQG6ZfHJZH9NHpPckCT6cwwY
+	GKNyNTaTgryZGAdshLCWSqzrc2F5kXVxHCx2zBzv0xZFXyGdHZU9zknJfI7el5QvNUo=
+X-Gm-Gg: ASbGncsmSMcttarMgb9ixLL+8SLPSuy4gfAIy5JzIoVucvA36Ybnrwm+ynuVp4XdtOn
+	H8669Y+8wyezuXhj7LQFcoE4usIo3ZbddKpFOeygA5LwU2HfFtEoxWDRcv2cJPaBz+19SeA/oGK
+	1oS/FfkFOWpDKit6a49R3MP+kliZ6U/LwA2FTLVYoNor3Xjcl/w2CMHC3WWfD7jC35u6py1MW9n
+	GeMnB4Y/92dQLaqjDnSzBHgYPqD9fD1SFUUDgSDMcenCkckcJfvDTN5TtoloxitvQTo6UGf3ijr
+	b8ahO32PS1XzSjDM9N/L83s1lnRDjSEKcG7TTveai0pKtwA5QhrmXf8p+iyxG+D5p+iy2mIXrgx
+	kHEribFpTNaPaLBcwadlzeURPAiY9bsvvjih6D6Fa8Ba+pIsqS8E6XnYShN1eUT8=
+X-Google-Smtp-Source: AGHT+IH6BHDtxDki2/fJTwfcRFDg2YRitQJxCzC/GAWvq48MmAeyra1tafJyjDtDGVdg3mMlF+gFGw==
+X-Received: by 2002:a05:6000:26d0:b0:3b7:89c2:463c with SMTP id ffacd0b85a97d-3bb68734babmr758441f8f.29.1755246605489;
+        Fri, 15 Aug 2025 01:30:05 -0700 (PDT)
+Received: from [192.168.0.35] (188-141-3-146.dynamic.upc.ie. [188.141.3.146])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3bb653f657fsm1098135f8f.29.2025.08.15.01.30.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 Aug 2025 01:30:04 -0700 (PDT)
+Message-ID: <3caf5615-a813-42a0-b77a-695f250ea01d@linaro.org>
+Date: Fri, 15 Aug 2025 09:30:03 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -65,106 +81,161 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/3] Add CCI and imx577 sensor support for lemans evk
-To: Loic Poulain <loic.poulain@oss.qualcomm.com>,
-        Robert Foss
-	<rfoss@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
-        Rob Herring
-	<robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
-	<conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio
-	<konradybcio@kernel.org>, <bryan.odonoghue@linaro.org>,
-        <vladimir.zapolskiy@linaro.org>, <todor.too@gmail.com>
-CC: <linux-i2c@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-media@vger.kernel.org>
+Subject: Re: [PATCH v2 3/3] arm64: dts: qcom: lemans-evk-camera: Add DT
+ overlay
+To: Wenmeng Liu <quic_wenmliu@quicinc.com>,
+ Loic Poulain <loic.poulain@oss.qualcomm.com>, Robert Foss
+ <rfoss@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konradybcio@kernel.org>, vladimir.zapolskiy@linaro.org,
+ todor.too@gmail.com
+Cc: linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-media@vger.kernel.org
 References: <20250815-rb8_camera-v2-0-6806242913ed@quicinc.com>
+ <20250815-rb8_camera-v2-3-6806242913ed@quicinc.com>
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 Content-Language: en-US
-From: Wenmeng Liu <quic_wenmliu@quicinc.com>
-In-Reply-To: <20250815-rb8_camera-v2-0-6806242913ed@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+In-Reply-To: <20250815-rb8_camera-v2-3-6806242913ed@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Authority-Analysis: v=2.4 cv=CNMqXQrD c=1 sm=1 tr=0 ts=689ee666 cx=c_pps
- a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
- a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10 a=VwQbUJbxAAAA:8
- a=COk6AnOGAAAA:8 a=MCSpsR8RhAqmYnD9AtEA:9 a=QEXdDO2ut3YA:10
- a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-GUID: jF__pgEJcsqc_ioTgyEMfVsuzb4p0Tdl
-X-Proofpoint-ORIG-GUID: jF__pgEJcsqc_ioTgyEMfVsuzb4p0Tdl
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODEyMDE2NCBTYWx0ZWRfX0410l3kmKEkL
- O7EuWp8RqEZ+edN+hh2R0hDMh7emzE7QqYUQGzkgKME/5iNXjfxLwyIJQivLe6uVtWeZwyEUI87
- 4hPJV7KYtyuFMvK2WYHr1q89wvRIEDmsUd9cDROIU17bviiT4ozHZxmzQf5McRzyxdDMzZW7szS
- WHeQnGvuFte9jN0qU3n7+muP3yLCisZ2ueor50a+rhHzNDvJwkrC98PC67Ksh41QtvmVTpm80Ks
- TqfMfabRzBJG4t/zBD9O6ET8p1L5YWHH29EvuAtq/1cZnGmmXKfXe3yQ9KW3yWAMBFWC/kbq1TP
- Y5RP2dVx7/N3P9TcuicMyC7SRcooRPSWPeKdbqASBbW9y9268fLhWE44cAXLlgDnB7oSoAFmYre
- SXiJMbl9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-08-15_02,2025-08-14_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 adultscore=0 phishscore=0 bulkscore=0 clxscore=1015
- malwarescore=0 impostorscore=0 priorityscore=1501 suspectscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2508120164
 
-
-
-On 2025/8/15 15:07, Wenmeng Liu wrote:
-> This series adds cci definition and imx577 sensor enablement
-> via cci1 on lemans evk.
-> 
-> An example media-ctl pipeline for the imx577 is:
-> 
-> media-ctl -d /dev/media0 --reset
-> media-ctl -d /dev/media0 -V '"imx577 0-001a":0[fmt:SRGGB10/4056x3040 field:none]'
-> media-ctl -d /dev/media0 -V '"msm_csiphy1":0[fmt:SRGGB10/4056x3040]'
-> media-ctl -d /dev/media0 -V '"msm_csid0":0[fmt:SRGGB10/4056x3040]'
-> media-ctl -d /dev/media0 -V '"msm_vfe0_rdi0":0[fmt:SRGGB10/4056x3040]'
-> media-ctl -d /dev/media0 -l '"msm_csiphy1":1->"msm_csid0":0[1]'
-> media-ctl -d /dev/media0 -l '"msm_csid0":1->"msm_vfe0_rdi0":0[1]'
-> 
-> yavta -B capture-mplane  -n 5 -f SRGGB10P -s 4056x3040 -F /dev/video0 --capture=5
-> 
-> Changes in V2:
-> - Remove the patch that adds PHY supply documentation in the sa8775p CAMSS
->    bindings. This change should be submitted together with the sa8775p bindings patch.
-> - Fix the string ordering in the DTS file.
-> - Remove the source clock from the CCI node.
-> - Move the sensor enable configuration from lemans-evk.dts to lemans-evk-camera.dtso.
-> - Remove the definitions for CCI and regulators that are not enabled.
-> - Link to v1:
->    https://lore.kernel.org/all/20250514-rb8_camera-v1-0-bf4a39e304e9@quicinc.com/
+On 15/08/2025 08:07, Wenmeng Liu wrote:
+> Enable IMX577 via CCI1 on Lemans EVK.
 > 
 > Signed-off-by: Wenmeng Liu <quic_wenmliu@quicinc.com>
 > ---
-> Wenmeng Liu (3):
->        dt-bindings: i2c: qcom-cci: Document sa8775p compatible
->        arm64: dts: qcom: sa8775p: Add CCI definitions
->        arm64: dts: qcom: lemans-evk-camera: Add DT overlay
+>   arch/arm64/boot/dts/qcom/Makefile               |   4 +
+>   arch/arm64/boot/dts/qcom/lemans-evk-camera.dtso | 105 ++++++++++++++++++++++++
+>   2 files changed, 109 insertions(+)
 > 
->   .../devicetree/bindings/i2c/qcom,i2c-cci.yaml      |   2 +
->   arch/arm64/boot/dts/qcom/Makefile                  |   4 +
->   arch/arm64/boot/dts/qcom/lemans-evk-camera.dtso    | 105 ++++++++
->   arch/arm64/boot/dts/qcom/lemans.dtsi               | 268 +++++++++++++++++++++
->   4 files changed, 379 insertions(+)
-> ---
-> base-commit: f0d48d68b1e7323d253068c5d4f7b470c5e927de
-> change-id: 20250815-rb8_camera-877517c45388
+> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+> index 94a84770b0802a9dc0c56ce6c59eea20967a5d89..7efd113143013c6e9d211597a4c2defd44497c83 100644
+> --- a/arch/arm64/boot/dts/qcom/Makefile
+> +++ b/arch/arm64/boot/dts/qcom/Makefile
+> @@ -30,6 +30,10 @@ dtb-$(CONFIG_ARCH_QCOM)	+= ipq9574-rdp449.dtb
+>   dtb-$(CONFIG_ARCH_QCOM)	+= ipq9574-rdp453.dtb
+>   dtb-$(CONFIG_ARCH_QCOM)	+= ipq9574-rdp454.dtb
+>   dtb-$(CONFIG_ARCH_QCOM)	+= lemans-evk.dtb
+> +
+> +lemans-evk-camera-dtbs	:= lemans-evk.dtb lemans-evk-camera.dtbo
+> +
+> +dtb-$(CONFIG_ARCH_QCOM) += lemans-evk-camera.dtb
+>   dtb-$(CONFIG_ARCH_QCOM)	+= msm8216-samsung-fortuna3g.dtb
+>   dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-acer-a1-724.dtb
+>   dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-alcatel-idol347.dtb
+> diff --git a/arch/arm64/boot/dts/qcom/lemans-evk-camera.dtso b/arch/arm64/boot/dts/qcom/lemans-evk-camera.dtso
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..4600d5441cce4507734b2fdcdbffc1ad7c67c32d
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/lemans-evk-camera.dtso
+> @@ -0,0 +1,105 @@
+> +// SPDX-License-Identifier: BSD-3-Clause
+> +/*
+> + * Copyright (c) 2024-2025 Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
+> +
+> +/*
+> + * Camera Sensor overlay on top of leman evk core kit.
+> + */
+> +
+> +/dts-v1/;
+> +/plugin/;
+> +
+> +#include <dt-bindings/clock/qcom,sa8775p-camcc.h>
+> +#include <dt-bindings/gpio/gpio.h>
+> +
+> +&{/} {
+> +	vreg_cam1_1p8: vreg_cam1_1p8 {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "vreg_cam1_1p8";
+> +		startup-delay-us = <10000>;
+> +		enable-active-high;
+> +		gpio = <&pmm8654au_0_gpios 8 GPIO_ACTIVE_HIGH>;
+> +	};
+> +};
+> +
+> +&camcc {
+> +	status = "okay";
+> +};
+> +
+> +&camss {
+> +	vdda-pll-supply = <&vreg_l1c>;
+> +	vdda-phy-supply = <&vreg_l4a>;
+> +
+> +	status = "okay";
+> +
+> +	ports {
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +
+> +		port@1 {
+> +			reg = <1>;
+> +
+> +			csiphy1_ep: endpoint {
+> +				clock-lanes = <7>;
+> +				data-lanes = <0 1 2 3>;
+> +				remote-endpoint = <&imx577_ep1>;
+> +			};
+> +		};
+> +	};
+> +};
+> +
+> +&cci1 {
+> +	pinctrl-0 = <&cci1_0_default>;
+> +	pinctrl-1 = <&cci1_0_sleep>;
+> +
+> +	status = "okay";
+> +};
+> +
+> +&cci1_i2c0 {
+> +	#address-cells = <1>;
+> +	#size-cells = <0>;
+> +
+> +	camera@1a {
+> +		compatible = "sony,imx577";
+> +		reg = <0x1a>;
+> +
+> +		reset-gpios = <&tlmm 133 GPIO_ACTIVE_LOW>;
+> +		pinctrl-0 = <&cam1_default>;
+> +		pinctrl-names = "default";
+> +
+> +		clocks = <&camcc CAM_CC_MCLK1_CLK>;
+> +		assigned-clocks = <&camcc CAM_CC_MCLK1_CLK>;
+> +		assigned-clock-rates = <24000000>;
+> +
+> +		dovdd-supply = <&vreg_s4a>;
+> +		avdd-supply = <&vreg_cam1_1p8>;
+> +
+> +		port {
+> +			imx577_ep1: endpoint {
+> +				clock-lanes = <7>;
+> +				link-frequencies = /bits/ 64 <600000000>;
+> +				data-lanes = <0 1 2 3>;
+> +				remote-endpoint = <&csiphy1_ep>;
+> +			};
+> +		};
+> +	};
+> +};
+> +
+> +&tlmm {
+> +	cam1_default: cam1-default-state {
+> +		mclk-pins {
+> +			pins = "gpio73";
+> +			function = "cam_mclk";
+> +			drive-strength = <2>;
+> +			bias-disable;
+> +		};
+> +
+> +		rst-pins {
+> +			pins = "gpio133";
+> +			function = "gpio";
+> +			drive-strength = <2>;
+> +			bias-disable;
+> +		};
+> +	};
+> +};
 > 
-> Best regards,
-
-Lack of dependence:
-This patch series depends on patch series:
-https://lore.kernel.org/linux-arm-msm/20250814101615.1102795-1-quic_vikramsa@quicinc.com/
-
-
-Thanks
-Wenmeng
+Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 
