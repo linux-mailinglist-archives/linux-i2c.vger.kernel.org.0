@@ -1,399 +1,158 @@
-Return-Path: <linux-i2c+bounces-12311-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12312-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77B90B28004
-	for <lists+linux-i2c@lfdr.de>; Fri, 15 Aug 2025 14:34:09 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA0C9B28BA1
+	for <lists+linux-i2c@lfdr.de>; Sat, 16 Aug 2025 09:55:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 57CD25A86AC
-	for <lists+linux-i2c@lfdr.de>; Fri, 15 Aug 2025 12:33:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E079A7A466A
+	for <lists+linux-i2c@lfdr.de>; Sat, 16 Aug 2025 07:53:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CEB63009ED;
-	Fri, 15 Aug 2025 12:33:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCDB122E3E9;
+	Sat, 16 Aug 2025 07:55:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="f1rZ0V57"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="mqo1r5js"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90DDC1BE871
-	for <linux-i2c@vger.kernel.org>; Fri, 15 Aug 2025 12:33:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AA8E4C98;
+	Sat, 16 Aug 2025 07:55:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755261229; cv=none; b=uhhMOTNhRqKUqKiupqz5uE5L/kMEFn4SFuCYRyHzgzwl7pdSKkYH1Dqse5Dl246t+XM4FYzmtUmnDm4IjG0xDTUsc5Bbg2tEhLzknkWnDlvpZSA2hp5oe2bqO7sL8TaQujAn1wj9NtjKJMneINI+22jK4Y+STghz7bF4TpqG4gs=
+	t=1755330909; cv=none; b=OM/wtHmqsQ0WecTVKh7VOG2PPhAfbtZ6xR7Y2CEv4Ufo6u5AyQFjmqaB6l1aJhme7OdlcydBt852aeOxDqY7pclmlPS5K3lN5IsSGJUlfdTzR6SdzEqOiztsB7biFSm9/UVS1heggmcUeW3AJZPC1SEqi3Q0KJC3QOulAUfGhCw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755261229; c=relaxed/simple;
-	bh=46GZGOaqakgBkUIdadnRnKYQ/NO/VAndrSXtVLNFpSk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WSPKVKgaF+UaEBBiW/CEY1bgdomCfeZjpqz1oPaYnQglDyIYgoO/1r0bOQLVOm5Jvag/Lx4qHvVJ2FB2a3KWBV1dogWwIVOyrMOlpOlYDtP5MomWHy7wYuCLsG92RMYdrDgqnFdsOHfiZXqqu50zinQAKugl3jLpvRYsub9K7VE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=f1rZ0V57; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-3b9e414ef53so1682992f8f.2
-        for <linux-i2c@vger.kernel.org>; Fri, 15 Aug 2025 05:33:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1755261225; x=1755866025; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=c4A6yVHZqPsXST9r3W7CAib+iVrxdX7RAjsL0wZeyH4=;
-        b=f1rZ0V57+TIOzRl+L7hjdQgjiwEnFqQYSREIf2eS3ejsvm54OR+Dp4sx7RLdILUvtf
-         TYFsbovILVOsw9Ckn7jgUq6vPM9ZImFuBPgTjlUe4Rt6BMCfMltKAUALa85YyR7bGQq3
-         noT2Zgd0o4XDlHQ5iI2j2kOEnwGJB/QAHSKtqj683Dk/AxZ5Q2d4FjU4galn3Qp5Emwy
-         kRdAXblil4WRQXkFm+PULZ+8TDKj4GjK8PvWaRBjkNoHIwWSlIRoZH0m51AbkSjH3KjS
-         q+PL5i9pjlBcg+gZhmCErvJLjM9KHZz5dBlbYrWnV77gunFIDzYQZsccBZYmipjyeobw
-         9+Tw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755261225; x=1755866025;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=c4A6yVHZqPsXST9r3W7CAib+iVrxdX7RAjsL0wZeyH4=;
-        b=oxFwTqOMd961mzbJUKZxwVo3wMZZ4t+++DtnIIiq9hr+jm24VtaKuORBZZiUdBBYfO
-         9eD84BplBkB8f3+rTBjlZC6JN6qo0nWg3FkuAxIfV4VyjEA4SGF/qcZxb1YLMMZ4WWi0
-         4kT5cn6AlLtEdhSt7mp+I+4+67TxiiDhYEtM5l+9xZvOMbRuFs5PSGs9rrplF0/MRldx
-         oTuSTQv0BWpHhp2jDs5+LbWoA9VPiTiBb+LaXZFtpMbajHnu47c8cqXghzZZj9VAOkeU
-         1/UClcapxtmnfDsiS8RnYtYpU5lpH0nX+va3MOB5LmTsuDqqxnxNgunWaCyDXe6/BzBY
-         PVuA==
-X-Gm-Message-State: AOJu0YyoCzFp8W4YUCm6YRwL2ou2wEuJIt0I6ah5ZdWSdY1huJqKABqp
-	QekIq3cityLQrVAHbhcrimA4V1h3o3L8jfojRO/4ou8FWSRl1Zpg6WJlTlvZfHWne0Q=
-X-Gm-Gg: ASbGncv9eOWzcgibreQsd3sPq6TfMinXB5yE1XrRmNP3jvcl8e0Bt1sIhPODleqbfEZ
-	RXqRbQOzDtHrraIyJ1N3uYQF/OGGqTNycFGfnY0D40mPYDX1ZXb9PmfP35ztKaJ+ERvfxtkJ73I
-	NhqSevAs4Z9fFlHii09UhfNEanQCESBu5UHPNXa0x+seTBHC5sfIxk0Vgkj03JWNIWJn4XTCxLS
-	Hv8VzLT190UbMOqyymbwKYsJroXTTHr+cEA8MEPPdA2aC7Jj8ZY9pULtai4bMugjlR9bBwjcMBu
-	2y3xoO9aUAwwm9MiQPznRCc/nQHSZlerIo50e3RGwoIUbSxQINBkawQScav7niAHZTTBYUXQin7
-	vSo9TgD+E8Oog0jPusGPHhKfPEQnHpkvDZtuoaW8yKeo9rRDqapHtlEF4nnWZREQ=
-X-Google-Smtp-Source: AGHT+IGBHiSfundG87accVUinkZKsE5MNwQTue7kqgOTCUA2ZmveVegoDTKu8lejFp3C7EeolwybYQ==
-X-Received: by 2002:a05:6000:2003:b0:3b5:e084:283b with SMTP id ffacd0b85a97d-3bb67007615mr1525536f8f.17.1755261224898;
-        Fri, 15 Aug 2025 05:33:44 -0700 (PDT)
-Received: from [192.168.0.35] (188-141-3-146.dynamic.upc.ie. [188.141.3.146])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3bb7f02578dsm1736472f8f.62.2025.08.15.05.33.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Aug 2025 05:33:44 -0700 (PDT)
-Message-ID: <074b6da4-ea61-453a-a398-608cf7750251@linaro.org>
-Date: Fri, 15 Aug 2025 13:33:43 +0100
+	s=arc-20240116; t=1755330909; c=relaxed/simple;
+	bh=srsqYMdPTwRmVbD7Pe2YVDmuQrEFDzbatacOFDUivio=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Z9k8EQrdfaNN+rd7swdEsXhC/isCBJG09duPhW1QmFyzKeFrR88IABz6W7G5zc3GoCRTLNAYJ31aXgXzTs+us4He5ySc2zUrz2pOnPH6YC44I8rK38V7s3fv7jWY/bWpPSoc3nGLtEJohF7koNUpL6cGWhOrzXGV0yW7yQLAuLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=mqo1r5js; arc=none smtp.client-ip=210.61.82.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+X-UUID: 4a9f71bc7a7611f0b33aeb1e7f16c2b6-20250816
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=fnw6L/2KwNT+tgpsNYiO/B84S45uSAGUvD6nwPyE38I=;
+	b=mqo1r5jszh+4Hf5VKTpsE/MowD0eF0vXlI1HJUGI40AYjoSOcsg/9AWcVHFI7m+8+PatYqofmCfj7PUFrYAsO0iymu6n87lJxnx75WarW33ZV893xy8U4vw4MHTmYrfECEKUuD9nZQramx0dUGGjdE1oiz5GVuP8dEWz93NsUr4=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.3,REQID:743bb7ab-2bd3-4f55-a823-9d920a2c3502,IP:0,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+	elease,TS:0
+X-CID-META: VersionHash:f1326cf,CLOUDID:d3338944-18c5-4075-a135-4c0afe29f9d6,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:-5,Content:0|15|50,EDM:-3,IP:
+	nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,L
+	ES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 4a9f71bc7a7611f0b33aeb1e7f16c2b6-20250816
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
+	(envelope-from <leilk.liu@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 406166382; Sat, 16 Aug 2025 15:54:52 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ MTKMBS14N1.mediatek.inc (172.21.101.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.39; Sat, 16 Aug 2025 15:54:50 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1258.39 via Frontend Transport; Sat, 16 Aug 2025 15:54:49 +0800
+From: Leilk Liu <leilk.liu@mediatek.com>
+To: Andi Shyti <andi.shyti@kernel.org>, Matthias Brugger
+	<matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>
+CC: Qii Wang <qii.wang@mediatek.com>, Wolfram Sang <wsa@kernel.org>, Liguo
+ Zhang <liguo.zhang@mediatek.com>, <linux-i2c@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-mediatek@lists.infradead.org>,
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>, Leilk.Liu
+	<leilk.liu@mediatek.com>
+Subject: [PATCH] i2c: mediatek: fix potential incorrect use of I2C_MASTER_WRRD
+Date: Sat, 16 Aug 2025 15:53:54 +0800
+Message-ID: <20250816075434.31780-1-leilk.liu@mediatek.com>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/3] arm64: dts: qcom: sa8775p: Add CCI definitions
-To: Wenmeng Liu <quic_wenmliu@quicinc.com>,
- Loic Poulain <loic.poulain@oss.qualcomm.com>, Robert Foss
- <rfoss@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>, vladimir.zapolskiy@linaro.org,
- todor.too@gmail.com
-Cc: linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-media@vger.kernel.org
-References: <20250815-rb8_camera-v2-0-6806242913ed@quicinc.com>
- <20250815-rb8_camera-v2-2-6806242913ed@quicinc.com>
-From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Content-Language: en-US
-In-Reply-To: <20250815-rb8_camera-v2-2-6806242913ed@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-MTK: N
 
-On 15/08/2025 08:07, Wenmeng Liu wrote:
-> Qualcomm SA8775P SoC contains 4 Camera Control Interface controllers.
-> 
-> Signed-off-by: Wenmeng Liu <quic_wenmliu@quicinc.com>
-> ---
->   arch/arm64/boot/dts/qcom/lemans.dtsi | 268 +++++++++++++++++++++++++++++++++++
->   1 file changed, 268 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/lemans.dtsi b/arch/arm64/boot/dts/qcom/lemans.dtsi
-> index 67d1e293861970e9ddfc0df1bb674aeffb6bee6f..ba2715eee4fbf705b790a46c3b09eb20007b32b5 100644
-> --- a/arch/arm64/boot/dts/qcom/lemans.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/lemans.dtsi
-> @@ -4358,6 +4358,162 @@ videocc: clock-controller@abf0000 {
->   			#power-domain-cells = <1>;
->   		};
->   
-> +		cci0: cci@ac13000 {
-> +			compatible = "qcom,sa8775p-cci", "qcom,msm8996-cci";
-> +			reg = <0x0 0x0ac13000 0x0 0x1000>;
-> +
-> +			interrupts = <GIC_SPI 460 IRQ_TYPE_EDGE_RISING>;
-> +
-> +			power-domains = <&camcc CAM_CC_TITAN_TOP_GDSC>;
-> +
-> +			clocks = <&camcc CAM_CC_CAMNOC_AXI_CLK>,
-> +				 <&camcc CAM_CC_CPAS_AHB_CLK>,
-> +				 <&camcc CAM_CC_CCI_0_CLK>;
-> +			clock-names = "camnoc_axi",
-> +				      "cpas_ahb",
-> +				      "cci";
-> +
-> +			pinctrl-0 = <&cci0_0_default &cci0_1_default>;
-> +			pinctrl-1 = <&cci0_0_sleep &cci0_1_sleep>;
-> +			pinctrl-names = "default", "sleep";
-> +
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +
-> +			status = "disabled";
-> +
-> +			cci0_i2c0: i2c-bus@0 {
-> +				reg = <0>;
-> +				clock-frequency = <1000000>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +			};
-> +
-> +			cci0_i2c1: i2c-bus@1 {
-> +				reg = <1>;
-> +				clock-frequency = <1000000>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +			};
-> +		};
-> +
-> +		cci1: cci@ac14000 {
-> +			compatible = "qcom,sa8775p-cci", "qcom,msm8996-cci";
-> +			reg = <0x0 0x0ac14000 0x0 0x1000>;
-> +
-> +			interrupts = <GIC_SPI 271 IRQ_TYPE_EDGE_RISING>;
-> +
-> +			power-domains = <&camcc CAM_CC_TITAN_TOP_GDSC>;
-> +
-> +			clocks = <&camcc CAM_CC_CAMNOC_AXI_CLK>,
-> +				 <&camcc CAM_CC_CPAS_AHB_CLK>,
-> +				 <&camcc CAM_CC_CCI_1_CLK>;
-> +			clock-names = "camnoc_axi",
-> +				      "cpas_ahb",
-> +				      "cci";
-> +
-> +			pinctrl-0 = <&cci1_0_default &cci1_1_default>;
-> +			pinctrl-1 = <&cci1_0_sleep &cci1_1_sleep>;
-> +			pinctrl-names = "default", "sleep";
-> +
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +
-> +			status = "disabled";
-> +
-> +			cci1_i2c0: i2c-bus@0 {
-> +				reg = <0>;
-> +				clock-frequency = <1000000>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +			};
-> +
-> +			cci1_i2c1: i2c-bus@1 {
-> +				reg = <1>;
-> +				clock-frequency = <1000000>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +			};
-> +		};
-> +
-> +		cci2: cci@ac15000 {
-> +			compatible = "qcom,sa8775p-cci", "qcom,msm8996-cci";
-> +			reg = <0x0 0x0ac15000 0x0 0x1000>;
-> +
-> +			interrupts = <GIC_SPI 651 IRQ_TYPE_EDGE_RISING>;
-> +
-> +			power-domains = <&camcc CAM_CC_TITAN_TOP_GDSC>;
-> +
-> +			clocks = <&camcc CAM_CC_CAMNOC_AXI_CLK>,
-> +				 <&camcc CAM_CC_CPAS_AHB_CLK>,
-> +				 <&camcc CAM_CC_CCI_2_CLK>;
-> +			clock-names = "camnoc_axi",
-> +				      "cpas_ahb",
-> +				      "cci";
-> +
-> +			pinctrl-0 = <&cci2_0_default &cci2_1_default>;
-> +			pinctrl-1 = <&cci2_0_sleep &cci2_1_sleep>;
-> +			pinctrl-names = "default", "sleep";
-> +
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +
-> +			status = "disabled";
-> +
-> +			cci2_i2c0: i2c-bus@0 {
-> +				reg = <0>;
-> +				clock-frequency = <1000000>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +			};
-> +
-> +			cci2_i2c1: i2c-bus@1 {
-> +				reg = <1>;
-> +				clock-frequency = <1000000>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +			};
-> +		};
-> +
-> +		cci3: cci@ac16000 {
-> +			compatible = "qcom,sa8775p-cci", "qcom,msm8996-cci";
-> +			reg = <0x0 0x0ac16000 0x0 0x1000>;
-> +
-> +			interrupts = <GIC_SPI 771 IRQ_TYPE_EDGE_RISING>;
-> +
-> +			power-domains = <&camcc CAM_CC_TITAN_TOP_GDSC>;
-> +
-> +			clocks = <&camcc CAM_CC_CAMNOC_AXI_CLK>,
-> +				 <&camcc CAM_CC_CPAS_AHB_CLK>,
-> +				 <&camcc CAM_CC_CCI_3_CLK>;
-> +			clock-names = "camnoc_axi",
-> +				      "cpas_ahb",
-> +				      "cci";
-> +
-> +			pinctrl-0 = <&cci3_0_default &cci3_1_default>;
-> +			pinctrl-1 = <&cci3_0_sleep &cci3_1_sleep>;
-> +			pinctrl-names = "default", "sleep";
-> +
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +
-> +			status = "disabled";
-> +
-> +			cci3_i2c0: i2c-bus@0 {
-> +				reg = <0>;
-> +				clock-frequency = <1000000>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +			};
-> +
-> +			cci3_i2c1: i2c-bus@1 {
-> +				reg = <1>;
-> +				clock-frequency = <1000000>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +			};
-> +		};
-> +
->   		camss: isp@ac78000 {
->   			compatible = "qcom,sa8775p-camss";
->   
-> @@ -5189,6 +5345,118 @@ tlmm: pinctrl@f000000 {
->   			gpio-ranges = <&tlmm 0 0 149>;
->   			wakeup-parent = <&pdc>;
->   
-> +			cci0_0_default: cci0-0-default-state {
-> +				pins = "gpio60", "gpio61";
-> +				function = "cci_i2c";
-> +				drive-strength = <2>;
-> +				bias-pull-up = <2200>;
-> +			};
-> +
-> +			cci0_0_sleep: cci0-0-sleep-state {
-> +				pins = "gpio60", "gpio61";
-> +				function = "cci_i2c";
-> +				drive-strength = <2>;
-> +				bias-pull-down;
-> +			};
-> +
-> +			cci0_1_default: cci0-1-default-state {
-> +				pins = "gpio52", "gpio53";
-> +				function = "cci_i2c";
-> +				drive-strength = <2>;
-> +				bias-pull-up = <2200>;
-> +			};
-> +
-> +			cci0_1_sleep: cci0-1-sleep-state {
-> +				pins = "gpio52", "gpio53";
-> +				function = "cci_i2c";
-> +				drive-strength = <2>;
-> +				bias-pull-down;
-> +			};
-> +
-> +			cci1_0_default: cci1-0-default-state {
-> +				pins = "gpio62", "gpio63";
-> +				function = "cci_i2c";
-> +				drive-strength = <2>;
-> +				bias-pull-up = <2200>;
-> +			};
-> +
-> +			cci1_0_sleep: cci1-0-sleep-state {
-> +				pins = "gpio62", "gpio63";
-> +				function = "cci_i2c";
-> +				drive-strength = <2>;
-> +				bias-pull-down;
-> +			};
-> +
-> +			cci1_1_default: cci1-1-default-state {
-> +				pins = "gpio54", "gpio55";
-> +				function = "cci_i2c";
-> +				drive-strength = <2>;
-> +				bias-pull-up = <2200>;
-> +			};
-> +
-> +			cci1_1_sleep: cci1-1-sleep-state {
-> +				pins = "gpio54", "gpio55";
-> +				function = "cci_i2c";
-> +				drive-strength = <2>;
-> +				bias-pull-down;
-> +			};
-> +
-> +			cci2_0_default: cci2-0-default-state {
-> +				pins = "gpio64", "gpio65";
-> +				function = "cci_i2c";
-> +				drive-strength = <2>;
-> +				bias-pull-up = <2200>;
-> +			};
-> +
-> +			cci2_0_sleep: cci2-0-sleep-state {
-> +				pins = "gpio64", "gpio65";
-> +				function = "cci_i2c";
-> +				drive-strength = <2>;
-> +				bias-pull-down;
-> +			};
-> +
-> +			cci2_1_default: cci2-1-default-state {
-> +				pins = "gpio56", "gpio57";
-> +				function = "cci_i2c";
-> +				drive-strength = <2>;
-> +				bias-pull-up = <2200>;
-> +			};
-> +
-> +			cci2_1_sleep: cci2-1-sleep-state {
-> +				pins = "gpio56", "gpio57";
-> +				function = "cci_i2c";
-> +				drive-strength = <2>;
-> +				bias-pull-down;
-> +			};
-> +
-> +			cci3_0_default: cci3-0-default-state {
-> +				pins = "gpio66", "gpio67";
-> +				function = "cci_i2c";
-> +				drive-strength = <2>;
-> +				bias-pull-up = <2200>;
-> +			};
-> +
-> +			cci3_0_sleep: cci3-0-sleep-state {
-> +				pins = "gpio66", "gpio67";
-> +				function = "cci_i2c";
-> +				drive-strength = <2>;
-> +				bias-pull-down;
-> +			};
-> +
-> +			cci3_1_default: cci3-1-default-state {
-> +				pins = "gpio58", "gpio59";
-> +				function = "cci_i2c";
-> +				drive-strength = <2>;
-> +				bias-pull-up = <2200>;
-> +			};
-> +
-> +			cci3_1_sleep: cci3-1-sleep-state {
-> +				pins = "gpio58", "gpio59";
-> +				function = "cci_i2c";
-> +				drive-strength = <2>;
-> +				bias-pull-down;
-> +			};
-> +
->   			qup_i2c0_default: qup-i2c0-state {
->   				pins = "gpio20", "gpio21";
->   				function = "qup0_se0";
-> 
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+From: "Leilk.Liu" <leilk.liu@mediatek.com>
+
+The old IC does not support the I2C_MASTER_WRRD (write-then-read)
+function, but the current code’s handling of i2c->auto_restart may
+potentially lead to entering the I2C_MASTER_WRRD software flow,
+resulting in unexpected bugs.
+
+Instead of repurposing the auto_restart flag, add a separate flag
+to signal I2C_MASTER_WRRD operations.
+
+Also fix handling of msgs. If the operation (i2c->op) is
+I2C_MASTER_WRRD, then the msgs pointer is incremented by 2.
+For all other operations, msgs is simply incremented by 1.
+
+Fixes: 173b77e8d8fe ("i2c: mediatek: add i2c first write then read optimization")
+
+Signed-off-by: Leilk.Liu <leilk.liu@mediatek.com>
+---
+ drivers/i2c/busses/i2c-mt65xx.c | 17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-mt65xx.c b/drivers/i2c/busses/i2c-mt65xx.c
+index ab456c3717db..dee40704825c 100644
+--- a/drivers/i2c/busses/i2c-mt65xx.c
++++ b/drivers/i2c/busses/i2c-mt65xx.c
+@@ -1243,6 +1243,7 @@ static int mtk_i2c_transfer(struct i2c_adapter *adap,
+ {
+ 	int ret;
+ 	int left_num = num;
++	bool write_then_read_en = false;
+ 	struct mtk_i2c *i2c = i2c_get_adapdata(adap);
+ 
+ 	ret = clk_bulk_enable(I2C_MT65XX_CLK_MAX, i2c->clocks);
+@@ -1256,6 +1257,7 @@ static int mtk_i2c_transfer(struct i2c_adapter *adap,
+ 		if (!(msgs[0].flags & I2C_M_RD) && (msgs[1].flags & I2C_M_RD) &&
+ 		    msgs[0].addr == msgs[1].addr) {
+ 			i2c->auto_restart = 0;
++			write_then_read_en = true;
+ 		}
+ 	}
+ 
+@@ -1280,12 +1282,10 @@ static int mtk_i2c_transfer(struct i2c_adapter *adap,
+ 		else
+ 			i2c->op = I2C_MASTER_WR;
+ 
+-		if (!i2c->auto_restart) {
+-			if (num > 1) {
+-				/* combined two messages into one transaction */
+-				i2c->op = I2C_MASTER_WRRD;
+-				left_num--;
+-			}
++		if (write_then_read_en) {
++			/* combined two messages into one transaction */
++			i2c->op = I2C_MASTER_WRRD;
++			left_num--;
+ 		}
+ 
+ 		/* always use DMA mode. */
+@@ -1293,7 +1293,10 @@ static int mtk_i2c_transfer(struct i2c_adapter *adap,
+ 		if (ret < 0)
+ 			goto err_exit;
+ 
+-		msgs++;
++		if (i2c->op == I2C_MASTER_WRRD)
++			msgs += 2;
++		else
++			msgs++;
+ 	}
+ 	/* the return value is number of executed messages */
+ 	ret = num;
+-- 
+2.46.0
+
 
