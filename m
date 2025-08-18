@@ -1,185 +1,169 @@
-Return-Path: <linux-i2c+bounces-12321-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12322-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D2E1B29AB4
-	for <lists+linux-i2c@lfdr.de>; Mon, 18 Aug 2025 09:19:58 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 98219B29DA7
+	for <lists+linux-i2c@lfdr.de>; Mon, 18 Aug 2025 11:25:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D06AC2050B3
-	for <lists+linux-i2c@lfdr.de>; Mon, 18 Aug 2025 07:19:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 135787A3E91
+	for <lists+linux-i2c@lfdr.de>; Mon, 18 Aug 2025 09:23:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35385271445;
-	Mon, 18 Aug 2025 07:19:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9000230DEB9;
+	Mon, 18 Aug 2025 09:24:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="zn7wyT7z"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="EVsTDAzn"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2055.outbound.protection.outlook.com [40.107.223.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 202E338DF9
-	for <linux-i2c@vger.kernel.org>; Mon, 18 Aug 2025 07:19:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755501589; cv=none; b=ga++JSRfbhBsmuzhZHfUkDWM00/UMy7HCFTxbpm8n8jQqfEU/J99uLVvs1P8KOdNe6t/1wlCyWLYCBs2RPIj/HmIO7I2o6y3qlvCRLAZ9mcxTAtLosx1/q0H4ktd5OkH7Lny0/uTfVe8z6n+pQz7h7UJK9WmsOHQK9fS4LVLF2E=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755501589; c=relaxed/simple;
-	bh=FQTwmlOpSlpiDox1C07+RYr3g+cTRJXiQ5qNfxI4FSg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=HUbygOYkC3Tb1qquoLGPZLZyDBSnaQNzVbGwklANdaIaOw+s/V8WtpGACAAxTREPeBol1V8IT5LuEiRJpYebJhzzcuISRDcjfgfOhDVEYlQ/Q+mufctX8PtV1E4BoqnZZqThmkjL63zeYyJsczbn639n6GBSbS/5dNLq//dMlsQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=zn7wyT7z; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-45a1b00a65fso18254945e9.0
-        for <linux-i2c@vger.kernel.org>; Mon, 18 Aug 2025 00:19:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1755501585; x=1756106385; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3zFG+ph3piKAY7MCJLonbSvB1EXUkHi8G1gdERzBPH0=;
-        b=zn7wyT7z5/PlPg5kAea3rYkRNKt98AB+Tb0R4VI/cLKBsF5HrEF7w4IBmq8M+eYi7q
-         A6qPBcEGkQQbom3TC21DdE3EfEI676YlC9TvPsU/mAdD1VOpEl/WuzZtK+Ln833tDWeB
-         CEH9T0Mv5p6h9z+X4S2UBWIksUR79i/NVkNYCXlCLJWW9JsdHps9LtsUSOEcUOcoxK5P
-         aen3fqyvPutlHyId58Axk1HpitAAG6rRcLteufyYoeXmt9d2NHlGnQ8lW00RxZxiQk4E
-         wV/Gz7MYTi2raFkN4iKXBHfJOuyGRep3NkwP+VDpO+sQAApiukB6r1U75fnxfROQ5BYI
-         x+rw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755501585; x=1756106385;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3zFG+ph3piKAY7MCJLonbSvB1EXUkHi8G1gdERzBPH0=;
-        b=C8o5XA+YGWLdyltzDQj3wHXNzpsbHQLAxF4HaV1o+Im6kLrR8/tW0AzmdADSITFab2
-         RDdeXV182c0QBho3GrubhJHKHbNpvaz5jPXwJep7HD25Med7SHCZYw4gVIpSJqLHLjVB
-         yQotfgfbixAutoWcwwr1IUFtPkldcxgAKwe58FhUUa50z0ci+DN4rIBLQOe8gtkf1geb
-         7iiP+NRl9HTkqbjHWPBhQr0hnyorWq/TyGIaeT+tCMlY37fZcg4XfFv4lr/rSMEgLtBa
-         90F1K1dHP1tEwTlKGSE1ghsUbJ6+CmsL6pzzhB8UffNArJH4MjogJAy5kX8yLqAz2b/U
-         88kg==
-X-Forwarded-Encrypted: i=1; AJvYcCVqZ+0nL1vH2FCnP8m7tHt3vOcqpxM8BPnrWlG+PsquoqFoRfGCz9xM8uPU8dLbK/Zu7ODLDulYxCo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx3lKZifQc5livTzkYSDbwNWzG8TRS35qzjsgMeYL9UW/DCbYmI
-	sUpQgpJXSjd/2/a9oVmob7fzH/XJyBIMDGf/jDjEpBN7wq/dXQSzAC02AWuv5WTuuoc=
-X-Gm-Gg: ASbGncv+xCFyWqKW8NjrTHYKZlSKJOKFMqRLiKO4PqXVTuL9sHIJkKHOv726SE+jDhj
-	UV+tSpP7NSRNNdDDbe7N7OW0Voinq1Zg8PrqbNeXdpTaOp/GNeE5nyIptthR2kgntY9kKEdqDWW
-	eRArTwsX7iKmJNonp7oPgdFfuQ78vZc86IcR0tJWk+bprWgW4lvnwbCazojc7rwRQiueg04RC6Y
-	NVFiLD0VN3Sh9vcJTuEPQuVoCRePpPTC6oLTQ/fEeGIcsaCjXWcUhjuQCYWzrk7phXd6RulAPT9
-	Y5U8cExUeEIberEwQPds1KsfQ9OyMf6DKItHAt4+RD38Qra98l2CLcc+/X1XVWHORzqi5iPoGz6
-	feQJhwAxf8CfpiTYiupk++yEMA0aWe1LZdfJySg==
-X-Google-Smtp-Source: AGHT+IHM4h5TvUroAVFtgE7l1uKXONfdURffdRsQdfk8r4Doc4NPI78w6r1cZehK5yFOkTP2w9cGBA==
-X-Received: by 2002:a05:600c:3594:b0:453:66f:b96e with SMTP id 5b1f17b1804b1-45a218095camr84039995e9.11.1755501585402;
-        Mon, 18 Aug 2025 00:19:45 -0700 (PDT)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-45a209c25a1sm131087915e9.22.2025.08.18.00.19.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Aug 2025 00:19:44 -0700 (PDT)
-Date: Mon, 18 Aug 2025 10:19:41 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: oe-kbuild@lists.linux.dev, Mohammad Gomaa <midomaxgomaa@gmail.com>,
-	Wolfram Sang <wsa-dev@sang-engineering.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lkp@intel.com, oe-kbuild-all@lists.linux.dev, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	kenalba@google.com, hbarnor@chromium.org, rayxu@google.com,
-	Mohammad Gomaa <midomaxgomaa@gmail.com>
-Subject: Re: [PATCH WIP v2] i2c: add tracepoints to aid debugging in
- i2c-core-base
-Message-ID: <202508181525.GKAXMVYv-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCEE32D7D42;
+	Mon, 18 Aug 2025 09:24:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.55
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1755509084; cv=fail; b=o3oyCnJUCOMgmDzhhjsCb92kWBdppb/XExKBFC01FwtgsmQ5rX51PeDUEJkpNawuwPW2kQqJCVOOXB6OMF5zG2gDYFJ7bWE9H3XFkQI+d5vzhrfq1ulHDl2oad7uFRp5kGNWmI+iRjq4QRZeQgtKvks7bBHFiFDqnHA6qSV0Kh0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1755509084; c=relaxed/simple;
+	bh=shAc2J8VQ2CZkWjKf+Lnx2b+4M6L6xX7As5dOIafRAk=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=SR29VYoin25vkBKqmDPAIN9PP00bQOi+ww6V/CKPdsoIA3v3/8+LKGYd4SUj1kQdgBD3ehbXuZ3NcI1tk0CqkI73gOSI0vydvOcHZ0IYul+1ChXdh5Ofm4hsoI2xmhoJC2c4Jud4RXkXh/3fOMkJxsLZ66hHGEfafiUxZLTsjLM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=EVsTDAzn; arc=fail smtp.client-ip=40.107.223.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=WTcfEPnh37Y3/SbQCHwsUUhbhELlnEHWPXCoM5VeW5ulyfAebwL3vPKre+bRkX5/wkLCQWKXGB2ZrKaMiDA3Bb7ZyXQWpBl9VniN/F8GxCNdUPMLOFUsfM39iVminPlwAJy9qfWEaXjHOruC+mOkdMr9dhXNc/eT2rkKKEaYrlbqdIT21tiAG8nLnpobfnXquoZufFMDoDMgSBpQoUoQoDUNZyCZ8AxVvd1G++X1t6KQtaa5nG8f8FmoMwHldo9i9jiipHrAm+e7/mxKm+axdDMhUGVz93ntvFPhMQvRbyCi6w8BovqHi8pzOfP1O/09+x/lSoMPDPeO9W2wVgRvyQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6c4HisKqYs6ZjICdz9qnCzDWK/qjy18wIn6b+0V2/LE=;
+ b=PPyE72sYGiUm5yxZy/9XVefqU8XT1xb33FS6Pxe52qU9V35WK+SSCTNlc2rmj4ePFnCazTrqnYgRg7embuzAil0qAa2bq+aadaeBsqc3GaR1Ql5SEKIPYEm1Xq3lEMxKDjFd7WVONoo+2RKqiR/Txk6g/l5Fyd6w5eUABS/2dk7GmDFAdkocJgoTkPqwUjREJwIkrOQeM7iyueM5XfhlKXvJwY5m3sc/bdm7OicV/KdHowy+Pob9s4n/Qudh9j+ZEoQiPDk+RXgSyjhc6gfQR6XfyquOB8mOUitenJc80KZYnOdp4QMyiHyit+wvrimDwlvtaGB5BA27m/3E4b/AKw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6c4HisKqYs6ZjICdz9qnCzDWK/qjy18wIn6b+0V2/LE=;
+ b=EVsTDAznh5SKaWwptm1hYJTP8X+kgvOluZS1A0awYXsJyZ9vug4oWF64Y6KCkGCKiE35v9DzSw+7qkUS8DdT3QKujPpmBFB9Wz4AgI0AkDeo/2+uw5t6kdtAJtgyTBtOiYRDiVI0kC5J+NIEuWB7UBb09WgT1GFQtIonLD3cR+Yipw7SM/bPHfXQ3VEsR1MgssjMShFdQPNO67eOBZJUR2F3AQ/kpZW6Ts3yHVTD8oMdg3+FO+pa6oKSY1+S02rzKDjzQj+idlexRPoPZwHkEUhEpkafoH0IcM/+DSyMdwLPURfu7g3sLl5cxpVCNRiZheN0JpuRUDKz3gv+g6CfkA==
+Received: from MW4PR04CA0238.namprd04.prod.outlook.com (2603:10b6:303:87::33)
+ by DS0PR12MB8527.namprd12.prod.outlook.com (2603:10b6:8:161::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9031.24; Mon, 18 Aug
+ 2025 09:24:39 +0000
+Received: from CO1PEPF000042AA.namprd03.prod.outlook.com
+ (2603:10b6:303:87:cafe::f0) by MW4PR04CA0238.outlook.office365.com
+ (2603:10b6:303:87::33) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9031.19 via Frontend Transport; Mon,
+ 18 Aug 2025 09:24:38 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ CO1PEPF000042AA.mail.protection.outlook.com (10.167.243.39) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9052.8 via Frontend Transport; Mon, 18 Aug 2025 09:24:38 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Mon, 18 Aug
+ 2025 02:24:28 -0700
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail203.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Mon, 18 Aug
+ 2025 02:24:27 -0700
+Received: from kkartik-desktop.nvidia.com (10.127.8.13) by mail.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server id 15.2.1544.14 via Frontend
+ Transport; Mon, 18 Aug 2025 02:24:23 -0700
+From: Kartik Rajput <kkartik@nvidia.com>
+To: <akhilrajeev@nvidia.com>, <andi.shyti@kernel.org>, <robh@kernel.org>,
+	<krzk+dt@kernel.org>, <conor+dt@kernel.org>, <thierry.reding@gmail.com>,
+	<jonathanh@nvidia.com>, <ldewangan@nvidia.com>, <digetx@gmail.com>,
+	<linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC: <kkartik@nvidia.com>
+Subject: [PATCH v4 0/5] Add I2C support for Tegra264
+Date: Mon, 18 Aug 2025 14:54:06 +0530
+Message-ID: <20250818092412.444755-1-kkartik@nvidia.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250817-refactor-add-i2c-tracepoints-v2-1-c0bad299e02e@gmail.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PEPF000042AA:EE_|DS0PR12MB8527:EE_
+X-MS-Office365-Filtering-Correlation-Id: 88d66247-e9f9-4b37-b93f-08ddde390e23
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|36860700013|376014|82310400026|1800799024|921020;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?fkrdZ0uvWWUE/t/AjVlmnHMf0uK6k9OpuYQ7zMhHbUP5Qmc55gQUELlVn0zs?=
+ =?us-ascii?Q?IWbENoQs5gZW6jZtk1g6698CR2oTkxRZsugJvQYwLO7QJqsaVyBxlV3kHe3x?=
+ =?us-ascii?Q?Cf3ESw0x06JlpgGtjNuc1yI848USOVHDpTlCFXw9OkP7ltJcCqNKqKxd4T78?=
+ =?us-ascii?Q?Ku6ayH1DR7Vv2GSEZ3P/n+2JbHgOKRS0peHgMM4LrXNKzgmNyr2BnuaYFpTe?=
+ =?us-ascii?Q?3sxa8YhM98F2rdOqkTH1e3im9ygg3tp0ts9wDh/w799F54QTZTJQ9GEVXLrz?=
+ =?us-ascii?Q?6zFTRs2/ypYck5Jfh9ja65mV0mc0cfAGxVSw3JtrC36kZ4VxxZRpgwnhj1Zb?=
+ =?us-ascii?Q?vmhkeS8cwpcTIUw3DEytkqsSqKc/iQ4hqLNa9WKsR6HiYHgxhSH7DOSADa9q?=
+ =?us-ascii?Q?5v9FXj9XIxzfGspQCjQUvy0mqVANqNpA+f2Lh2uRsZrl6pzFmr6VVsX/wS7N?=
+ =?us-ascii?Q?xv7q3aKFoDBAt8S9bDLUkcXKpGGY8RDxrDKRK/xwa61569zHelyIPYlwEnIh?=
+ =?us-ascii?Q?Hp+bYLpF1ZiJRafvqUkA6t67cDPHHw7pG5szgO6Tsv8e168pLLoa1k24ZSFK?=
+ =?us-ascii?Q?lFIi3r6lvo9pX8mb8ORDH7hNeNUY/qH1hjjvJoGb/KyqEP7V8K03SeeqrnWn?=
+ =?us-ascii?Q?lj4fW5LURgD7BA4R+0ytHDlB+1tnQ7PvggON4nikTOnjTrmFfV1hIrNCkiMh?=
+ =?us-ascii?Q?6kQCN1WnlTdXDMIEEp4h0YnswKivdsFc7WQhTot10Afho0akGVuADksg51OS?=
+ =?us-ascii?Q?OKsmvHbej7b3j0LRSrj2jw0qnUGgIHc81J0UO8zBQ9XllhfR8s2xd/42VudT?=
+ =?us-ascii?Q?Z4QfyLnLbvI2+Duf2x6Ttx0+X0NvQi2n47pegrasFjvA8+Gucq1uOEP8fJt2?=
+ =?us-ascii?Q?ujGnWikWmH6uZk5o4DdkhacgRpjUofpOWw5ueZiPxwGKQiGKQVrhr/TBM1PB?=
+ =?us-ascii?Q?2xOQDrNNeSG7ttWCAOEmt3ocHQ9eSFib7kxppNZWoSNI5cTQnLTbGiM1DOAU?=
+ =?us-ascii?Q?qwF0YChs9/MhIuuPYNrKOpy4QodZ5TmYmP3934NWXzj2TdEBBqluZmxChYrU?=
+ =?us-ascii?Q?qL3Ozwfd1BkOVxFoqDHrh3I1ffMdZq947hnAULLn9cTk/t64e7Q8s7SoZnJF?=
+ =?us-ascii?Q?6P0ZArtJIn9foEflwNdN+y0iO1LINSW+G07LguZYNEKg+EE4Bawl0hkRJysK?=
+ =?us-ascii?Q?f9KL24HEghnZLFNm/yOnMSYdvI4n7O9Pymks/jjIFMyt2y4g8J3VNsfrG9WN?=
+ =?us-ascii?Q?+hzKAZjLwtdmuSNP8cawb5k3HV8J8jh1aeYuJKgMJFWUtDgPCXlpXD0mAEiB?=
+ =?us-ascii?Q?n90xDAoSHZWpmKqBhA3VbzNY3s3VGGYKQyBYWyokbSGqQ/f7CMxT51ihCyzb?=
+ =?us-ascii?Q?ufUrxF28u6fFr8aAMZbXIOcxIYOap18OgfEWUhpZug2xT58lSZKhy/P2z3Fq?=
+ =?us-ascii?Q?bIOIoJw168QeT07I8kmxcfUA96LVdc4G19dZagllwl4oMgDVKrCheb56Vf+v?=
+ =?us-ascii?Q?Fi5B1qaCZHKSWD/GhtsoL2DTfASUiVdeKFm0H2+s2RDx+uA5rRHLb0bh6A?=
+ =?us-ascii?Q?=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(7416014)(36860700013)(376014)(82310400026)(1800799024)(921020);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Aug 2025 09:24:38.7261
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 88d66247-e9f9-4b37-b93f-08ddde390e23
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CO1PEPF000042AA.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8527
 
-Hi Mohammad,
+Following series of patches add support for Tegra264 and High Speed (HS)
+Mode in i2c-tegra.c driver.
 
-kernel test robot noticed the following build warnings:
+Akhil R (2):
+  i2c: tegra: Add HS mode support
+  i2c: tegra: Add Tegra264 support
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mohammad-Gomaa/i2c-add-tracepoints-to-aid-debugging-in-i2c-core-base/20250817-155936
-base:   7e161a991ea71e6ec526abc8f40c6852ebe3d946
-patch link:    https://lore.kernel.org/r/20250817-refactor-add-i2c-tracepoints-v2-1-c0bad299e02e%40gmail.com
-patch subject: [PATCH WIP v2] i2c: add tracepoints to aid debugging in i2c-core-base
-config: x86_64-randconfig-161-20250818 (https://download.01.org/0day-ci/archive/20250818/202508181525.GKAXMVYv-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14+deb12u1) 12.2.0
+Kartik Rajput (3):
+  dt-bindings: i2c: nvidia,tegra20-i2c: Document Tegra264 I2C
+  i2c: tegra: Do not configure DMA if not supported
+  i2c: tegra: Add support for SW mutex register
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-| Closes: https://lore.kernel.org/r/202508181525.GKAXMVYv-lkp@intel.com/
-
-smatch warnings:
-drivers/i2c/i2c-core-base.c:535 i2c_device_probe() error: uninitialized symbol 'err_reason'.
-
-vim +/err_reason +535 drivers/i2c/i2c-core-base.c
-
-f37dd80ac2a67e4 drivers/i2c/i2c-core.c      David Brownell           2007-02-13  491  static int i2c_device_probe(struct device *dev)
-^1da177e4c3f415 drivers/i2c/i2c-core.c      Linus Torvalds           2005-04-16  492  {
-5763a474c887d4a drivers/i2c/i2c-core-base.c Andy Shevchenko          2025-04-16  493  	struct fwnode_handle	*fwnode = dev_fwnode(dev);
-51298d1257b9f0a drivers/i2c/i2c-core.c      Jean Delvare             2009-09-18  494  	struct i2c_client	*client = i2c_verify_client(dev);
-51298d1257b9f0a drivers/i2c/i2c-core.c      Jean Delvare             2009-09-18  495  	struct i2c_driver	*driver;
-79ece9b292af6b0 drivers/i2c/i2c-core-base.c Ricardo Ribalda          2022-11-14  496  	bool do_power_on;
-50c3304a5e1e521 drivers/i2c/i2c-core.c      Hans Verkuil             2008-03-12  497  	int status;
-dc94c3bf033524a drivers/i2c/i2c-core-base.c Mohammad Gomaa           2025-08-17  498  	int err_reason;
-dc94c3bf033524a drivers/i2c/i2c-core-base.c Mohammad Gomaa           2025-08-17  499  	bool has_id_table, has_acpi_match, has_of_match;
-7b4fbc50fabb810 drivers/i2c/i2c-core.c      David Brownell           2007-05-01  500  
-51298d1257b9f0a drivers/i2c/i2c-core.c      Jean Delvare             2009-09-18  501  	if (!client)
-51298d1257b9f0a drivers/i2c/i2c-core.c      Jean Delvare             2009-09-18  502  		return 0;
-51298d1257b9f0a drivers/i2c/i2c-core.c      Jean Delvare             2009-09-18  503  
-6e76cb7dfd34a2e drivers/i2c/i2c-core-base.c Charles Keepax           2019-06-27  504  	client->irq = client->init_irq;
-6e76cb7dfd34a2e drivers/i2c/i2c-core-base.c Charles Keepax           2019-06-27  505  
-0c2a34937f7e4c4 drivers/i2c/i2c-core-base.c Wolfram Sang             2020-06-30  506  	if (!client->irq) {
-845c877009cf014 drivers/i2c/i2c-core.c      Mika Westerberg          2015-05-06  507  		int irq = -ENOENT;
-845c877009cf014 drivers/i2c/i2c-core.c      Mika Westerberg          2015-05-06  508  
-331c34255293cd0 drivers/i2c/i2c-core.c      Dmitry Torokhov          2017-01-04  509  		if (client->flags & I2C_CLIENT_HOST_NOTIFY) {
-331c34255293cd0 drivers/i2c/i2c-core.c      Dmitry Torokhov          2017-01-04  510  			dev_dbg(dev, "Using Host Notify IRQ\n");
-72bfcee11cf8950 drivers/i2c/i2c-core-base.c Jarkko Nikula            2019-04-30  511  			/* Keep adapter active when Host Notify is required */
-72bfcee11cf8950 drivers/i2c/i2c-core-base.c Jarkko Nikula            2019-04-30  512  			pm_runtime_get_sync(&client->adapter->dev);
-331c34255293cd0 drivers/i2c/i2c-core.c      Dmitry Torokhov          2017-01-04  513  			irq = i2c_smbus_host_notify_to_irq(client);
-dc94c3bf033524a drivers/i2c/i2c-core-base.c Mohammad Gomaa           2025-08-17  514  			err_reason = I2C_TRACE_REASON_HOST_NOTIFY;
-5763a474c887d4a drivers/i2c/i2c-core-base.c Andy Shevchenko          2025-04-16  515  		} else if (is_of_node(fwnode)) {
-5d9424b00b577b6 drivers/i2c/i2c-core-base.c Andy Shevchenko          2025-04-16  516  			irq = fwnode_irq_get_byname(fwnode, "irq");
-3fffd1283927342 drivers/i2c/i2c-core.c      Dmitry Torokhov          2015-08-17  517  			if (irq == -EINVAL || irq == -ENODATA)
-5d9424b00b577b6 drivers/i2c/i2c-core-base.c Andy Shevchenko          2025-04-16  518  				irq = fwnode_irq_get(fwnode, 0);
-dc94c3bf033524a drivers/i2c/i2c-core-base.c Mohammad Gomaa           2025-08-17  519  			err_reason = I2C_TRACE_REASON_FROM_OF;
-5763a474c887d4a drivers/i2c/i2c-core-base.c Andy Shevchenko          2025-04-16  520  		} else if (is_acpi_device_node(fwnode)) {
-b38f2d5d9615cf9 drivers/i2c/i2c-core-base.c Raul E Rangel            2022-09-29  521  			bool wake_capable;
-b38f2d5d9615cf9 drivers/i2c/i2c-core-base.c Raul E Rangel            2022-09-29  522  
-b38f2d5d9615cf9 drivers/i2c/i2c-core-base.c Raul E Rangel            2022-09-29  523  			irq = i2c_acpi_get_irq(client, &wake_capable);
-b38f2d5d9615cf9 drivers/i2c/i2c-core-base.c Raul E Rangel            2022-09-29  524  			if (irq > 0 && wake_capable)
-b38f2d5d9615cf9 drivers/i2c/i2c-core-base.c Raul E Rangel            2022-09-29  525  				client->flags |= I2C_CLIENT_WAKE;
-dc94c3bf033524a drivers/i2c/i2c-core-base.c Mohammad Gomaa           2025-08-17  526  			err_reason = I2C_TRACE_REASON_FROM_ACPI;
-3fffd1283927342 drivers/i2c/i2c-core.c      Dmitry Torokhov          2015-08-17  527  		}
-
-err_reason not set on else { path.
-
-3c3dd56f760da05 drivers/i2c/i2c-core-base.c Alain Volmat             2020-04-30  528  		if (irq == -EPROBE_DEFER) {
-5c52473b4496b35 drivers/i2c/i2c-core-base.c Xu Yang                  2025-05-07  529  			status = dev_err_probe(dev, irq, "can't get irq\n");
-dc94c3bf033524a drivers/i2c/i2c-core-base.c Mohammad Gomaa           2025-08-17  530  			err_reason = I2C_TRACE_REASON_EPROBE_DEFER_IRQ;
-3c3dd56f760da05 drivers/i2c/i2c-core-base.c Alain Volmat             2020-04-30  531  			goto put_sync_adapter;
-3c3dd56f760da05 drivers/i2c/i2c-core-base.c Alain Volmat             2020-04-30  532  		}
-331c34255293cd0 drivers/i2c/i2c-core.c      Dmitry Torokhov          2017-01-04  533  
-dc94c3bf033524a drivers/i2c/i2c-core-base.c Mohammad Gomaa           2025-08-17  534  		if (irq < 0) {
-dc94c3bf033524a drivers/i2c/i2c-core-base.c Mohammad Gomaa           2025-08-17 @535  			trace_i2c_device_probe_debug(dev, err_reason);
-                                                                                                                                          ^^^^^^^^^^
-
-6f34be7400c68d3 drivers/i2c/i2c-core.c      Geert Uytterhoeven       2014-11-17  536  			irq = 0;
-dc94c3bf033524a drivers/i2c/i2c-core-base.c Mohammad Gomaa           2025-08-17  537  		}
-2fd36c55264926e drivers/i2c/i2c-core.c      Laurent Pinchart         2014-10-30  538  
-2fd36c55264926e drivers/i2c/i2c-core.c      Laurent Pinchart         2014-10-30  539  		client->irq = irq;
-2fd36c55264926e drivers/i2c/i2c-core.c      Laurent Pinchart         2014-10-30  540  	}
-2fd36c55264926e drivers/i2c/i2c-core.c      Laurent Pinchart         2014-10-30  541  
-0c2a34937f7e4c4 drivers/i2c/i2c-core-base.c Wolfram Sang             2020-06-30  542  	driver = to_i2c_driver(dev->driver);
-0c2a34937f7e4c4 drivers/i2c/i2c-core-base.c Wolfram Sang             2020-06-30  543  
-dc94c3bf033524a drivers/i2c/i2c-core-base.c Mohammad Gomaa           2025-08-17  544  	has_id_table = driver->id_table;
+ .../bindings/i2c/nvidia,tegra20-i2c.yaml      |   7 +
+ drivers/i2c/busses/i2c-tegra.c                | 153 ++++++++++++++++++
+ 2 files changed, 160 insertions(+)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.43.0
 
 
