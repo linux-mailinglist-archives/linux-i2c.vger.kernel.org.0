@@ -1,122 +1,170 @@
-Return-Path: <linux-i2c+bounces-12316-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12317-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8BFCB2977E
-	for <lists+linux-i2c@lfdr.de>; Mon, 18 Aug 2025 05:53:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C1A9B2982D
+	for <lists+linux-i2c@lfdr.de>; Mon, 18 Aug 2025 06:34:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 41F1A19676B8
-	for <lists+linux-i2c@lfdr.de>; Mon, 18 Aug 2025 03:53:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 294C6201737
+	for <lists+linux-i2c@lfdr.de>; Mon, 18 Aug 2025 04:34:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BDA1245031;
-	Mon, 18 Aug 2025 03:53:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10AD925C818;
+	Mon, 18 Aug 2025 04:34:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="WJ5KLW19"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="XNO5cbWw"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2081.outbound.protection.outlook.com [40.107.223.81])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D89920322
-	for <linux-i2c@vger.kernel.org>; Mon, 18 Aug 2025 03:53:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755489205; cv=none; b=LHZ3E9WnLfNnE0fDJndSmVowBJnQIA/7SFwEjB+Nw85DDILgrrYjBQBPA70I371bk7nzy0b3fEbHbGbU0h9zS7ByQbSRp0WeAc72hQQhO1x+Jg8ggtNFIC9qpRb8PQ15qseojp5mE3AgsQ18AxeFSrG1uLtNy2EjqRw0NYtx3c4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755489205; c=relaxed/simple;
-	bh=72HjhGwzLL0PbZTSkv6wDk9duccZmIns+xeA/qk65fA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kQK8s3LsXZc3COiqo8DwQx1eJewwzVJ2igZqMyDoW0g8iZ1znvD/BODqLVLqa2DNHsaGjZupdzsxicyDLkh0VWZNSte5eBdwQibFE0xM4usA5Nk0X6qDLXWShhXQFdS/t4fPHRe+oM+FMBt9ibD3BQDvGDmMb5FxmCaRL4soUDU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=WJ5KLW19; arc=none smtp.client-ip=209.85.208.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-333f9160c2dso28092551fa.2
-        for <linux-i2c@vger.kernel.org>; Sun, 17 Aug 2025 20:53:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1755489201; x=1756094001; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=72HjhGwzLL0PbZTSkv6wDk9duccZmIns+xeA/qk65fA=;
-        b=WJ5KLW197/8G2neR+DlUCExP4EYRUC5hmB3WAneNnsobQca60wIt0hJFm+wfN5HssC
-         NWqwJh9MogpgWsivGgHJyZjDoxKPoPiNYFDvVDls/mg+rxkE2LweIzVfgrw+GxvDNLaz
-         VXGxUaOZ96A4hx44fk/mdnWFodcjLv7D6wiGA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755489201; x=1756094001;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=72HjhGwzLL0PbZTSkv6wDk9duccZmIns+xeA/qk65fA=;
-        b=Ij1tPM5WRFmgrr/6YCNk6KlGWGo5QXMUizTOtOfNQvaofMWVlaXR1J2AtMJMYC0C/4
-         Gk3UNGpUizEvc7Ilvu/4qcDKKypWYgQS4vJ0WIuKv0RNwCuyoqyOBFa+ZKF8vjVNqhbl
-         zOwKxBS0JSiuUmQdTGIP3/0iWQeHOk5U3NWOsiZ5Iz1v9yKXC0O4Bli8U5Fn4HtpxvZi
-         VGkm2Hqh5ykBkI2JmlYqixx9aDQg2+XaQf1TZi/fzUVS2j9hef7y9pQBX15oopx7lLrQ
-         lWhq7lxfanI5C4bF4/mjz/Lkud7GOVsYLuV4883/pTjwl2zVu0zGyz6kIGpAnDjhInxO
-         0DOA==
-X-Forwarded-Encrypted: i=1; AJvYcCWLVxCtA8R+I3kkmFSYHljdaiLUXgPqGi/EL5biJlGsdyVKITknk3yv7tozxaAQSBTU8rwsioR4ad4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyilnPzoZCogaZjbm1+jiROffUawtv3/fyFcMnbSirbQwKNxttX
-	7QRp6NjtT3uiVxv5yGQ/Toy2A4x71X7g1wmTrJypThwzeWbPxySGpiqVauDJ5QnHUC5zlN4/FbW
-	/vEY9QSewDyRLxqBEdvaRNXpyX9b0uZuJ/53qFp3e
-X-Gm-Gg: ASbGncvhFXbmHDvPmgk/37etvJxmHAqRE9VEEJ3ZwlKwXxmBwbfM4TsWNUhj8OoWZcr
-	GX59s02hFGAFwlpE1yHlVs+lg+BM8bQC3fsIY9d0zfWjTsulpZEEhD6MeNDc1RXaPWM7dX8HvuV
-	J7XgWIczl3n2eWWK+mF1YGNUIpUPdQ2BA3FIgMdZe3HKxieqNH4bvgSGg2Cwy5E6Z4VdmSBC4m4
-	n2U4/K6uXJwIHDP42M/kT7nuKCGBFKgjwU=
-X-Google-Smtp-Source: AGHT+IFPS+3sb9CZbTWfnTjbDa0k7A4z8cLwROgvhlDgLeCCeIOup1wcDfmt4xXnfNBN2Bv5bh02EwambURnN0B3nkM=
-X-Received: by 2002:a2e:b8d1:0:b0:32b:6bae:e3fe with SMTP id
- 38308e7fff4ca-3340982d970mr29405411fa.9.1755489201494; Sun, 17 Aug 2025
- 20:53:21 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F3201990C7;
+	Mon, 18 Aug 2025 04:34:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.81
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1755491655; cv=fail; b=rC1i8+YWtCZjdhLuUmpUty96G3c7gsS5wxQGItlwgtEgHMllc/46EcKwilsJcWPyO2sLQSsP7AGft9zPhkcHw1lYdnU9qZL+EvG3TzurNqH3P+tgYe8KXyC+lLCc/NZOyW8vpS5K2bOY1oqA6brpNtRN1fmW1zSoJ7m/HuF/i0M=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1755491655; c=relaxed/simple;
+	bh=9F59vh9OLtYBtox5fDOjKRp3fPkcb5WR7g03y/Cc88o=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=PNLGG6kt09NXQt0nEC/gLuV25DCifJaFrGXWvGx/cTgwGBtnI7//+2PaVCCQZmGuzF9VVUjqkT+9tE+zN+BM93zEw0o2NVVTOsXPl613WMU7v7ow60o5FFGEbhBUZ8wqScS3CYA8e0qQTC8Lq3XsXBBUiysbAIA20Yx90EU9uT0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=XNO5cbWw; arc=fail smtp.client-ip=40.107.223.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=xL4WWj8xOvrPZoB1Dk1P6e5LHTLxqUEV+/lq6iT2Pr99iYe5Gv66SY1R/Pws5mxUxMgtQ3PDvvDTmEU5mzxnqTu3gbBitHVZhh2sWqUNneJFOBjVEbXW7SSHy5N7xyTtisYghEzMnXA09TwhEKN4lFd1gG6iyzYUWx+AvvijOAv0gT5XP3jvpoWHC0IjDVp8K0MDcic0cVt/jHIbl5Bnemffo7BQdxsoUXnNdTOAIAcR+mvn7wHlLiMwTH+RfSyVyWdWKQWsFZ9bjV2BJoLU7s0zt4KEigj4zZ4DpTkVpuPmpQCX9zT58l4TFNjefxoFMOQD6gMq8K5mTEjFfMmgyA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/p00vz/Hp5FIhtw1BA5FKl3+WLVBZOJgauSW13qyfkY=;
+ b=n7UdB4PZ+M+xTPbuvxiKhAAlC8C7JohWf7NFOE7LffCv7xDELY6blBFbgoaSKGYMyjPG1eRCNbXJRtOFbOrZdWTK66F2SL3z+4YdciNBl3xjSnA3WJ5/v6M9bA3919xCGCxl4FIyunR43w6R1ahDWW1btme+9zX16UgTlfybVpFbV10laTz+Jo/YHXeaS9+JmlcpjMXmHybGR6g7Oj7RxMvFFIZMxAIb5f404qyxhYD9FP5A+MlJ6w2vAtc/vSPAd4VyWNbmCfe/QoqQw1uGi/bqQ0z6ez/7EqerzOlVYh2legUVYOxg4E/KRjJMRPNZqlq5KQ+hBp9N08kwpns6LQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/p00vz/Hp5FIhtw1BA5FKl3+WLVBZOJgauSW13qyfkY=;
+ b=XNO5cbWwEJH0f1zXwHWxUH2ylgqchM8Hyb3p6XHLqy08R9ws2voKK32F8bTn0tHOPwZzdQgWmRw1d1AausAZimhyOw3Z/NyPP8B3PL0wbz9AFy1Eo5p7i0rQrm07vjqDTfphr85a+gJXODFi+fUW6Uzv3TZFVceA5FrZhEmIhMmRJ9eXcvUgia/AV2ofHwuIL2h/uoPn1ebkdxgI1d/FXwA1ra2R1hd/iNp6Ott3AMSlGzltWd5F6vdwIOaLuIasbQdEvKCOk6h0JmMYBE4ssFCScsAAD91eTXycYhpun8cvhjBGJBcaiDT2dW+pf3+ICmfH7Y6YXkJW0eHZZkrG3Q==
+Received: from BYAPR05CA0040.namprd05.prod.outlook.com (2603:10b6:a03:74::17)
+ by BN7PPF0FD1DEA27.namprd12.prod.outlook.com (2603:10b6:40f:fc02::6c8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9031.24; Mon, 18 Aug
+ 2025 04:34:08 +0000
+Received: from SJ1PEPF000023D1.namprd02.prod.outlook.com
+ (2603:10b6:a03:74:cafe::84) by BYAPR05CA0040.outlook.office365.com
+ (2603:10b6:a03:74::17) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9052.12 via Frontend Transport; Mon,
+ 18 Aug 2025 04:34:07 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ SJ1PEPF000023D1.mail.protection.outlook.com (10.167.244.7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9052.8 via Frontend Transport; Mon, 18 Aug 2025 04:34:07 +0000
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Sun, 17 Aug
+ 2025 21:33:57 -0700
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail205.nvidia.com
+ (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Sun, 17 Aug
+ 2025 21:33:56 -0700
+Received: from BUILDSERVER-IO-L4T.nvidia.com (10.127.8.9) by mail.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server id 15.2.1544.14 via Frontend
+ Transport; Sun, 17 Aug 2025 21:33:52 -0700
+From: Akhil R <akhilrajeev@nvidia.com>
+To: <andi.shyti@kernel.org>, <conor+dt@kernel.org>,
+	<devicetree@vger.kernel.org>, <digetx@gmail.com>, <jonathanh@nvidia.com>,
+	<krzk+dt@kernel.org>, <linux-i2c@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-tegra@vger.kernel.org>
+CC: <akhilrajeev@nvidia.com>, <ldewangan@nvidia.com>, <robh@kernel.org>,
+	<thierry.reding@gmail.com>
+Subject: [PATCH RESEND 0/2] i2c: tegra: Add Tegra256 I2C controller support
+Date: Mon, 18 Aug 2025 10:03:43 +0530
+Message-ID: <20250818043345.65899-1-akhilrajeev@nvidia.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250816075434.31780-1-leilk.liu@mediatek.com>
-In-Reply-To: <20250816075434.31780-1-leilk.liu@mediatek.com>
-From: Chen-Yu Tsai <wenst@chromium.org>
-Date: Mon, 18 Aug 2025 11:53:10 +0800
-X-Gm-Features: Ac12FXzbC3a5fYlt94iOei7CP2T8RPhSU-BFGXIPrEu4iVpFb5TXKRGwyAlG1lg
-Message-ID: <CAGXv+5F8ABGTRdUrf0j68cLiHZHSEFjwDOBtfTZBTOWt9APVVQ@mail.gmail.com>
-Subject: Re: [PATCH] i2c: mediatek: fix potential incorrect use of I2C_MASTER_WRRD
-To: Leilk Liu <leilk.liu@mediatek.com>
-Cc: Andi Shyti <andi.shyti@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Qii Wang <qii.wang@mediatek.com>, 
-	Wolfram Sang <wsa@kernel.org>, Liguo Zhang <liguo.zhang@mediatek.com>, linux-i2c@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-mediatek@lists.infradead.org, 
-	Project_Global_Chrome_Upstream_Group@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-NVConfidentiality: public
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ1PEPF000023D1:EE_|BN7PPF0FD1DEA27:EE_
+X-MS-Office365-Filtering-Correlation-Id: 04cf1285-1297-446e-c36d-08ddde10783a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|82310400026|36860700013|7416014|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?Tm+4qWcILaUjbLJAE0dl5X4AAmET3ExQUWO5mAm7Z7z7g0umod1xb5Ij/iH+?=
+ =?us-ascii?Q?tTaSW818lS+a1FtnKo6Hln89YlI3VFqXszp9bjz40TYpxllkG4EOwJrJZuf4?=
+ =?us-ascii?Q?7WKc4VdmBO2lD86QM7wPeH3pueV0XgL85U81tJH6GX9i3JDFnDavdt1bJ7Ke?=
+ =?us-ascii?Q?Ei9pONdqUkN/CZwGAEaVYf1Vs2+1mEsCjqO+Nd8dTZWbsk1eYgN2V5a//2h2?=
+ =?us-ascii?Q?A3RdUQa+y34pVngrwI+E6tadPbM1laVIl1IVPWl9VbiTKuOG2h9sYIXk2t2J?=
+ =?us-ascii?Q?R47GPRub+KUghZ9QIqb3Eu1NDoOXc7EIqZlVPOkEVz7b8W6SsttpExawN5yu?=
+ =?us-ascii?Q?UCoNSaZo62ms+fshaGtEhvRKl18pCn8VpNcwAq5iXZpj6ZYnYJEqqiN2fmKl?=
+ =?us-ascii?Q?9UJw4qWivEsNWbfd0MYjGEdPVOJCUG/z/ywcd+I9VcjnRjYxUZXsAkyXW/JE?=
+ =?us-ascii?Q?hMSy/Q/uyH/aBlsrfQ4crE52p7g+phVkdtn/l+uRR99AMJf6KozHtClObl3L?=
+ =?us-ascii?Q?fY2jW9fgN5kkD2YXd8r22mB2eMEzR5xaZjeI4HDS6zXuy7oLK1IVRo0HaDEM?=
+ =?us-ascii?Q?0NHhdgEqqVv3s3Rkq9z0/GXclJ61NzN0Cq23kjNIYckYA5cnm6YhbOOHgzyU?=
+ =?us-ascii?Q?nWRmPAr7SmuXVKkgZvFpEgLpmjPxwjskJTCTNRd34GWvfWJieudl5hjuhhe/?=
+ =?us-ascii?Q?tIY7T6XgECxdIlcQeZzLzj+YB26jNDT1Cs1W8pZtMlWveRDXQM+9jZpmvxLD?=
+ =?us-ascii?Q?FMRuzWxXrm9nlEMiDt2RZ3j9wHIN2XQdhxL9D4iNao4fjDCIlezn5+lq4+VA?=
+ =?us-ascii?Q?uX8p5Wect8/mmeU4gmxeajf4BbCnWI/0y3DPeM6yQdlcq/UAF9WYAkYby2U/?=
+ =?us-ascii?Q?jSQw/X40MNnMV1x469yB+uSFXYqvsRK8/ZRABC0dQCzgyd0LQRag0eAYbYPw?=
+ =?us-ascii?Q?Mz7B4nk8XcIHdNepJ1lWnkfpEgWGggZ9i8h21pcuoBBaS/7i5tLmCuziiXlU?=
+ =?us-ascii?Q?wARDsrZGz8FLZApUKvmZr8UteX4mYkyKDXNAH7iUms01xnj/1bZ3cH3P/2f3?=
+ =?us-ascii?Q?h2Hpq4O50Cr+JfFn0laLBeyteOXBFyRdEPpAvvYDPFFfvd+IFr7Cop9Ytb5f?=
+ =?us-ascii?Q?EoaxjyCW5o1gIhIZkofan1iC0WgdG8FdRfMmrKsYVjATOqopgt9UKz0GQgcT?=
+ =?us-ascii?Q?gCzZwa4d9i1G0LDMunFhSq2/dwkBYg8yACNZCAMKDip3EFb7L0NqLe1CB1nX?=
+ =?us-ascii?Q?Rq+d4dhjKqazEzynff62g6YsFG0QDym2CDzhIw9JgvWgxend1IlEL8LBRqFl?=
+ =?us-ascii?Q?9yBscikW55yYWRQCudFkdVvTuOeeR0SQYbhsrux6pzJAHMqxGheMXzfahLyy?=
+ =?us-ascii?Q?3+gmCFKEdM8N1/9TXcU57uKVb2xehvAgcqRTwCpPEyhBma/xCQMmgChmnaHU?=
+ =?us-ascii?Q?CXeAsPw3e8lVfB4AR4isCJCfoLgjTHUCQSIFiJiol4ey3XYFxrpfdhz5pQw9?=
+ =?us-ascii?Q?bkvtJ4kCvnkReNcjaMmAuYdR94CmgqIob1B8?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(82310400026)(36860700013)(7416014)(376014);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Aug 2025 04:34:07.3822
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 04cf1285-1297-446e-c36d-08ddde10783a
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SJ1PEPF000023D1.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PPF0FD1DEA27
 
-On Sat, Aug 16, 2025 at 3:55=E2=80=AFPM Leilk Liu <leilk.liu@mediatek.com> =
-wrote:
->
-> From: "Leilk.Liu" <leilk.liu@mediatek.com>
->
-> The old IC does not support the I2C_MASTER_WRRD (write-then-read)
-> function, but the current code=E2=80=99s handling of i2c->auto_restart ma=
-y
-> potentially lead to entering the I2C_MASTER_WRRD software flow,
-> resulting in unexpected bugs.
->
-> Instead of repurposing the auto_restart flag, add a separate flag
-> to signal I2C_MASTER_WRRD operations.
->
-> Also fix handling of msgs. If the operation (i2c->op) is
-> I2C_MASTER_WRRD, then the msgs pointer is incremented by 2.
-> For all other operations, msgs is simply incremented by 1.
->
-> Fixes: 173b77e8d8fe ("i2c: mediatek: add i2c first write then read optimi=
-zation")
->
-> Signed-off-by: Leilk.Liu <leilk.liu@mediatek.com>
+This series adds support for Tegra256 I2C controllers to the Tegra I2C driver.
 
-This was
+Tegra256 consists of 8 generic I2C controllers similar to previous Tegra generations,
+but with a different parent clock frequency requiring adjusted timing parameters.
 
-Suggested-by: Chen-Yu Tsai <wenst@chromium.org>
+The changes add the "nvidia,tegra256-i2c" compatible string to device tree bindings
+and implement the corresponding hardware feature structure with appropriate timing
+parameters and clock divisors.
 
-internally because the code looked funny.
+Akhil R (2):
+  dt-bindings: i2c: nvidia,tegra20-i2c: Add Tegra256 I2C
+  i2c: tegra: Add Tegra256 support
 
-Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+ .../bindings/i2c/nvidia,tegra20-i2c.yaml      |  6 +++++
+ drivers/i2c/busses/i2c-tegra.c                | 26 +++++++++++++++++++
+ 2 files changed, 32 insertions(+)
+
+-- 
+2.50.1
+
 
