@@ -1,195 +1,185 @@
-Return-Path: <linux-i2c+bounces-12320-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12321-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8CF8B299D1
-	for <lists+linux-i2c@lfdr.de>; Mon, 18 Aug 2025 08:38:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D2E1B29AB4
+	for <lists+linux-i2c@lfdr.de>; Mon, 18 Aug 2025 09:19:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 41DC07A9210
-	for <lists+linux-i2c@lfdr.de>; Mon, 18 Aug 2025 06:36:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D06AC2050B3
+	for <lists+linux-i2c@lfdr.de>; Mon, 18 Aug 2025 07:19:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BED97275878;
-	Mon, 18 Aug 2025 06:38:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35385271445;
+	Mon, 18 Aug 2025 07:19:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="m+evjM0C"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="zn7wyT7z"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from TYDPR03CU002.outbound.protection.outlook.com (mail-japaneastazon11013010.outbound.protection.outlook.com [52.101.127.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A78901E1A33;
-	Mon, 18 Aug 2025 06:38:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.127.10
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755499086; cv=fail; b=JLE7XlcmymgIFBaJlaxQiQKAzhq1OGdw0hcWAiv0vWY/6QbTmqRnpkaTmjH8s4PyQ1BkGmlIFNQ/fP95JA2n8fkuzRS1VJNJ6ViRmxwsp54zkBJQZnzqVyq+z0sUtt7QFr1kh0YmTunSsnUGL0QE1W2X4R0Cwldjxaxzza1fl+I=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755499086; c=relaxed/simple;
-	bh=sYCiBLhGwA1/uAQR4NC//2VYlxDYe8ChHrNzFUMYfDw=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=LL0Yhj3fvUb3BIwOnuGm8hl7GOkEaXMgqymqtawCqYd8p1fXv0dRmvIq6d35caaa+BWQCd7EkKWz5styyU/LiVM6XAvXuX++CagauANnOhuq7Uyio8Sql7PpXG9PFREGWPf3ZIqZnXPDycBsKh86OUpUtS9B/Bp6f9SgcGVcnq4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=m+evjM0C; arc=fail smtp.client-ip=52.101.127.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=oZVqZG8MpSOPsCsPNg5ttGdwCD3/MhgwBc9DiKzBCY7Dom0Bnvi8fxy6VKwaM0taN4V+gw5c70NZk9mTYcmdWA0yKnEFYzadBkoPyPrUg1XJgXpI/jdUGX8JDpl52b7Dhbnh3WZUC1wzPRRfYGM8JgprFbJ9sNm68gwc8OYsuGZHNZ7/f3jkVPd8sY3oXBMEf85xhUGjMnx5cKiffP5lYShcohmunhN/HuURuhlQEoD31Dor7Or25kweq+JxtB3wD38Zliu75IWgbTAxIrjMM+l5vNiCNF80dvJ86PFlNe0WdO6hRTWsPpMMYd0gRNEwsSYVBdaSLZwDF9PqxkwOrw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Atf+UOMkqOjy2v2JNrYzTieLnQlLfEjp9A4oM3xzEJI=;
- b=Z262pbydsyf5cDwTTaftZv3kVArhTvaE5KHgkz7iyf8yhxcR6SQqja9InxMy9vpGNf5nADh6rek35guvZ6af1V5KlOFpyX1XmHMn0Jdtxi01Kffdzg0FURuF7ZCsfiR4IhaVFmrb1UCJqO6bcJZehdYOk64tk5HZqgHbEFmtDW8j7puUtBA2Ak9Lw+WS6NFv4CzN/t37GQMDmQRQ6bd15tsx+1c1SGuP+Tsa8Eb7g5bpE+DlFONqya4T1tDQnnhGIGzjLCrcj74iXxSkY6z0t+nuG4rcjZfCh9IBZihwCIiEhLNTmShrOxNE1FQWNS4gx01B2uXUAhtZvXNa0WTlug==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Atf+UOMkqOjy2v2JNrYzTieLnQlLfEjp9A4oM3xzEJI=;
- b=m+evjM0C+qAJO/8aKTzx//CjmzRtXgdMjm8B2Zu5X0ECV2DxTY4LvLDNbcT5V7SWGyJQDgeAzJAw5sVQa7Yb0Xp1p0mvDvZ1zXBY9L7gw6axYDb6teiY04EDjUbYbc/WQDQ4Rk11eC1VSirfyidu9Vuk3lp5LRnz0vu1+P8aYN1huxH09Z5jG/baBiR5O8HaxlFttM8GVmaMDiqBPA5+tEXTj5ojenv0ZLmhTpVYHqMfGgUfVb2VrDyYhPT21rKdsqDk/+te2mvlDJVNC+wv1+uvf4paCuOX1ZM5WfD/gIpkFIxZ1QYhPvg+UtKHC2SYHkWEw/UrWHR8ISjs/0nsfA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from KL1PR06MB6020.apcprd06.prod.outlook.com (2603:1096:820:d8::5)
- by SEZPR06MB6690.apcprd06.prod.outlook.com (2603:1096:101:17b::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9031.24; Mon, 18 Aug
- 2025 06:37:58 +0000
-Received: from KL1PR06MB6020.apcprd06.prod.outlook.com
- ([fe80::4ec9:a94d:c986:2ceb]) by KL1PR06MB6020.apcprd06.prod.outlook.com
- ([fe80::4ec9:a94d:c986:2ceb%5]) with mapi id 15.20.9031.023; Mon, 18 Aug 2025
- 06:37:58 +0000
-From: Xichao Zhao <zhao.xichao@vivo.com>
-To: andi.shyti@kernel.org
-Cc: linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Xichao Zhao <zhao.xichao@vivo.com>
-Subject: [PATCH] i2c: algo: bit: use str_plural() to simplify the code
-Date: Mon, 18 Aug 2025 14:37:48 +0800
-Message-Id: <20250818063748.446466-1-zhao.xichao@vivo.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR01CA0027.apcprd01.prod.exchangelabs.com
- (2603:1096:4:192::7) To KL1PR06MB6020.apcprd06.prod.outlook.com
- (2603:1096:820:d8::5)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 202E338DF9
+	for <linux-i2c@vger.kernel.org>; Mon, 18 Aug 2025 07:19:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1755501589; cv=none; b=ga++JSRfbhBsmuzhZHfUkDWM00/UMy7HCFTxbpm8n8jQqfEU/J99uLVvs1P8KOdNe6t/1wlCyWLYCBs2RPIj/HmIO7I2o6y3qlvCRLAZ9mcxTAtLosx1/q0H4ktd5OkH7Lny0/uTfVe8z6n+pQz7h7UJK9WmsOHQK9fS4LVLF2E=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1755501589; c=relaxed/simple;
+	bh=FQTwmlOpSlpiDox1C07+RYr3g+cTRJXiQ5qNfxI4FSg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=HUbygOYkC3Tb1qquoLGPZLZyDBSnaQNzVbGwklANdaIaOw+s/V8WtpGACAAxTREPeBol1V8IT5LuEiRJpYebJhzzcuISRDcjfgfOhDVEYlQ/Q+mufctX8PtV1E4BoqnZZqThmkjL63zeYyJsczbn639n6GBSbS/5dNLq//dMlsQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=zn7wyT7z; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-45a1b00a65fso18254945e9.0
+        for <linux-i2c@vger.kernel.org>; Mon, 18 Aug 2025 00:19:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1755501585; x=1756106385; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3zFG+ph3piKAY7MCJLonbSvB1EXUkHi8G1gdERzBPH0=;
+        b=zn7wyT7z5/PlPg5kAea3rYkRNKt98AB+Tb0R4VI/cLKBsF5HrEF7w4IBmq8M+eYi7q
+         A6qPBcEGkQQbom3TC21DdE3EfEI676YlC9TvPsU/mAdD1VOpEl/WuzZtK+Ln833tDWeB
+         CEH9T0Mv5p6h9z+X4S2UBWIksUR79i/NVkNYCXlCLJWW9JsdHps9LtsUSOEcUOcoxK5P
+         aen3fqyvPutlHyId58Axk1HpitAAG6rRcLteufyYoeXmt9d2NHlGnQ8lW00RxZxiQk4E
+         wV/Gz7MYTi2raFkN4iKXBHfJOuyGRep3NkwP+VDpO+sQAApiukB6r1U75fnxfROQ5BYI
+         x+rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755501585; x=1756106385;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3zFG+ph3piKAY7MCJLonbSvB1EXUkHi8G1gdERzBPH0=;
+        b=C8o5XA+YGWLdyltzDQj3wHXNzpsbHQLAxF4HaV1o+Im6kLrR8/tW0AzmdADSITFab2
+         RDdeXV182c0QBho3GrubhJHKHbNpvaz5jPXwJep7HD25Med7SHCZYw4gVIpSJqLHLjVB
+         yQotfgfbixAutoWcwwr1IUFtPkldcxgAKwe58FhUUa50z0ci+DN4rIBLQOe8gtkf1geb
+         7iiP+NRl9HTkqbjHWPBhQr0hnyorWq/TyGIaeT+tCMlY37fZcg4XfFv4lr/rSMEgLtBa
+         90F1K1dHP1tEwTlKGSE1ghsUbJ6+CmsL6pzzhB8UffNArJH4MjogJAy5kX8yLqAz2b/U
+         88kg==
+X-Forwarded-Encrypted: i=1; AJvYcCVqZ+0nL1vH2FCnP8m7tHt3vOcqpxM8BPnrWlG+PsquoqFoRfGCz9xM8uPU8dLbK/Zu7ODLDulYxCo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx3lKZifQc5livTzkYSDbwNWzG8TRS35qzjsgMeYL9UW/DCbYmI
+	sUpQgpJXSjd/2/a9oVmob7fzH/XJyBIMDGf/jDjEpBN7wq/dXQSzAC02AWuv5WTuuoc=
+X-Gm-Gg: ASbGncv+xCFyWqKW8NjrTHYKZlSKJOKFMqRLiKO4PqXVTuL9sHIJkKHOv726SE+jDhj
+	UV+tSpP7NSRNNdDDbe7N7OW0Voinq1Zg8PrqbNeXdpTaOp/GNeE5nyIptthR2kgntY9kKEdqDWW
+	eRArTwsX7iKmJNonp7oPgdFfuQ78vZc86IcR0tJWk+bprWgW4lvnwbCazojc7rwRQiueg04RC6Y
+	NVFiLD0VN3Sh9vcJTuEPQuVoCRePpPTC6oLTQ/fEeGIcsaCjXWcUhjuQCYWzrk7phXd6RulAPT9
+	Y5U8cExUeEIberEwQPds1KsfQ9OyMf6DKItHAt4+RD38Qra98l2CLcc+/X1XVWHORzqi5iPoGz6
+	feQJhwAxf8CfpiTYiupk++yEMA0aWe1LZdfJySg==
+X-Google-Smtp-Source: AGHT+IHM4h5TvUroAVFtgE7l1uKXONfdURffdRsQdfk8r4Doc4NPI78w6r1cZehK5yFOkTP2w9cGBA==
+X-Received: by 2002:a05:600c:3594:b0:453:66f:b96e with SMTP id 5b1f17b1804b1-45a218095camr84039995e9.11.1755501585402;
+        Mon, 18 Aug 2025 00:19:45 -0700 (PDT)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-45a209c25a1sm131087915e9.22.2025.08.18.00.19.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Aug 2025 00:19:44 -0700 (PDT)
+Date: Mon, 18 Aug 2025 10:19:41 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: oe-kbuild@lists.linux.dev, Mohammad Gomaa <midomaxgomaa@gmail.com>,
+	Wolfram Sang <wsa-dev@sang-engineering.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lkp@intel.com, oe-kbuild-all@lists.linux.dev, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	kenalba@google.com, hbarnor@chromium.org, rayxu@google.com,
+	Mohammad Gomaa <midomaxgomaa@gmail.com>
+Subject: Re: [PATCH WIP v2] i2c: add tracepoints to aid debugging in
+ i2c-core-base
+Message-ID: <202508181525.GKAXMVYv-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: KL1PR06MB6020:EE_|SEZPR06MB6690:EE_
-X-MS-Office365-Filtering-Correlation-Id: 071abcf0-602d-4b2e-0635-08ddde21c543
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|52116014|366016|1800799024|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?1mnBVvuEC+wb0ytnbIWKi4faY44zte5U8VBmOtGbq/sFBpaftkGRzbX5bhjj?=
- =?us-ascii?Q?ZIO+V+lvjHEhbl6fzjFndvLp8h41UTmVYrQ58RM9GNuZRejMv14bRxXcM25s?=
- =?us-ascii?Q?WqengiDZAxRbJ6xGrCIgLZplZ7wAhaUoFxZ0Y1W6J5TNRBhQKZQnJIVxcwjR?=
- =?us-ascii?Q?+W3FQlUAKqh9FM2xNkXoHdZwUdcdBw2dFAcRbL0QZVSLs0K35qMOW4Dpx09o?=
- =?us-ascii?Q?7LsVLGkz8Vax6KkL5xgd2X3C7JpNuDXsbBUS+goW9n1F1UkLh/DB4xT5nIfG?=
- =?us-ascii?Q?RyI25h1r8NH9LDoHMgtmziMlitBVnIkFbsCdJKmGJj0YTfAkIQgwekxE5Rqk?=
- =?us-ascii?Q?deh0/Ge6AuTIy7U1YKPJ1d3SBN/hCLItZkqroXDq4iTzG66gIEbFrWu6+k4i?=
- =?us-ascii?Q?EZ4AQKOk7LxoBKVZ8d4uewN5K4zhT2jQnGMt38ZILN84OsZ1EAbQMG+tyrKO?=
- =?us-ascii?Q?Xh7Cs/78bC5NXI9UPXGlynin1WC2Qbvw1bZ705WyM6HTj1W6SweD836Gkzuo?=
- =?us-ascii?Q?7VSTBaQkKpAZz4z2jDaLPG+lnwH2wZxA92KYllw8paOPy6KEwdKTK77i4YYu?=
- =?us-ascii?Q?tatnbSVUtu6yEuHonqbELt2Y1jNehdvo/IyjV9x8ZZvqXuEbr2yGx2Xe/yw6?=
- =?us-ascii?Q?1owBj1w+5Vj/lbAPQmhlyWZmRW8NUujtpOg9gt6K8Zm7yCnVfFAOWUQGdeOr?=
- =?us-ascii?Q?uf5TE88qoEhc1A2i5ul5mLoaGz09eo5fnE7KAVeN1hKJguf/bQCml4uJqDVm?=
- =?us-ascii?Q?QQUN+Oe8WgRIkw6/gJO2CLJ07ILT+74QNxlAvHxIv5I3DmWqbdDjxH9Plwje?=
- =?us-ascii?Q?xtJF2ll75dyrUbWfJOXs6yhb+rU4CuPY353IBaiOP7k5CljtyQsKwRw15sOo?=
- =?us-ascii?Q?WOvFEoYhKn1la8NenYWlfgdYops9EbVKh7DNny49WD4TRWH1ehx6zR4tyi8f?=
- =?us-ascii?Q?XrY2UYll7hzbsUxxr0TTgrS/ezlvW7uuDolVZGYEsRcq8PviQJtHs040gNjf?=
- =?us-ascii?Q?T0nZ6vaml2JHTYL+XFYAyv2BlJWDAAu+Xei0YmiPARQbWlB9225mMG2hkMVQ?=
- =?us-ascii?Q?r0zmB/CmpXQ9bXBG3HlTQ7bq57gkttjD69HaY6eHr37IwPWd5rho0IpK8hU+?=
- =?us-ascii?Q?YPH9dH1ks3qp9M4vBbejDi+phRdHsheuC2erQFmYefvFKAWoIG7A59vB4y6c?=
- =?us-ascii?Q?8WjAqTIy+7BvUicZVgRuVvLEqOjCwpwK8Ia2GpADx3wDCY5aiRm7+8CUGrpM?=
- =?us-ascii?Q?QCp2kIXr9+FzBBmie+HvCrpzYEx5ScjSuEAtHfCJ2GCuAvTp6Z2FpAIn79Aq?=
- =?us-ascii?Q?Jdtb6C+r1ABlcJty4nAuXgVR1eroTgZLjlhU1LwfSXY6XGevGozL4rkh9Mc4?=
- =?us-ascii?Q?pzAH5MN+YRLCTCl0rr9MdIZ+JX7GhpuET7Ra3I4W0c7W6/kPO6KsZyK6lm1F?=
- =?us-ascii?Q?VB7N8CuHQH1i5MEbfP4+T02QYC/6aoLGJBH8QLXH8Jp3et1QNVoRG/Rd/Fkw?=
- =?us-ascii?Q?wO9TPp5JM/ybDy0=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:KL1PR06MB6020.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(52116014)(366016)(1800799024)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?6dvqtD/FP+Y7XgTQbUaLEjI9+iURoqn5ahisQBkG3PAifL6GC9vzHmvjP3SH?=
- =?us-ascii?Q?N0jtN2hlfqDF5w6qg1n0Yikq2OwEgG6ZZF6mdT6atgLBvZNXxATEeagUfC4E?=
- =?us-ascii?Q?ktx9WhSYrXRMFWyV1zmU+SyfBcp/KIWtmZbL4T7mrWtr9rC74BOZMU6IP5lY?=
- =?us-ascii?Q?pOvlr2778ZQS9iYDd6wqQyEBk5CVWr2IWeYDTdtCnsqoqDeYKgF8b/GFNT8A?=
- =?us-ascii?Q?RI3DMgFVphqh7bt6tDwndVDG6GJJ+p10dtEnXz+Vslxzn19NFCJzgkLt3Cih?=
- =?us-ascii?Q?PsFZXkwcAf8PVnhoIMyWbhnSW0xfb5uYGOWOtMifdguFF4EF/xFilLrrvBg2?=
- =?us-ascii?Q?z356nhrF6ZHsJrdVv6t9W8BdZR6JIlrjrpIowr0F21PKLo2YZjPVFRE5hHAM?=
- =?us-ascii?Q?7Y/sjJt5KV+zF/S2P8bIpWD9/saOSeuaafGhZwzJIc+l+snjJ7hGTtTNG6Y5?=
- =?us-ascii?Q?bjYGBymaGm+pO/s5gtRwNdmzk3X9H4uJrJhJW3CqeO73OSiELFsSRR+BCgVF?=
- =?us-ascii?Q?7xPmEBj/JPgx2BuRRT88GMZ2nk7Yeg9qATJIYRm9X6HS4EkENSN3wCwkW42o?=
- =?us-ascii?Q?sXsPS09rCLTZkg9XfPC++liLiPFe9XfEDhnVg/aCK1DZ1/n6yrE981U9glch?=
- =?us-ascii?Q?MLY6DdSdIXf47vXJ7piCEZK86Xxurw+PwJSMEaruM9JwrTAsH0GmW2HdyM6X?=
- =?us-ascii?Q?d24o99T1CLBv0+k+A5/3HxGdFgU3ULzLSBself/tUpUALaAQzk1EECQAT+eF?=
- =?us-ascii?Q?1D8Z22hjYmtJDiw/yrV7jv2eaaMgwG3+I+6tUF1V8jLM98kyM7gnhnl5/ErI?=
- =?us-ascii?Q?ZlVh8Mop9kPwwur6zk22W7p5GFVX/iA8XmAY7n/ywejB/EJDa1E8faKRKzsB?=
- =?us-ascii?Q?+EUZN74bVm7/ln7LA9/ECj+1bC1MaCx/6CyDi9zCt/1uVpo2hKYmmtZrfRck?=
- =?us-ascii?Q?q+v/rQPf7Bxq2RWMJVsZYDwbdMF97z0ylWFKt08RscV9QX/RX6qsY1AgmTNA?=
- =?us-ascii?Q?wxmpHnjd3IuDqyEyargHjUdC/sWDfT32363mqIzD7xWrFHbO9z000ZOdw1x9?=
- =?us-ascii?Q?7rCFYvOUKYCXEkYEjziK+jdr+uTtaiu6Tu3DwuMtpngQNCxOi/kZ4yiEN5vM?=
- =?us-ascii?Q?eIfpTsNtxB6PfjulNGqotN4qim19wbdeXrexeoIm7jFe1+d51wmhCre9H3qB?=
- =?us-ascii?Q?Tm/5pYOPVicjUWlTBhrl6i8SIgJeu0Qgj3sUiaxOQuwvqzDWdPYLdpZtT5Ic?=
- =?us-ascii?Q?jE5sMKEFW8kmEnPgMShy0jMXQ38YFGcAFMNfn+OK5Eaca6u8/lOEpCEnEVbo?=
- =?us-ascii?Q?aLxY+hNhoFShdFFFCw22cubJY19qHVw2FAzTvqsqIcmNA/3nz6Jgt2WRrbQm?=
- =?us-ascii?Q?5czwNBrZmgWKNnx5VW+Kqp4KkFa6VI7+F0AYcoOUNE6jbdS16NAP/4VPvT8r?=
- =?us-ascii?Q?dLopC9bakENfnqog86nGCjSgP1UJaa8FiQvtBuiQTZbdmBL19O0t+dkHP+XE?=
- =?us-ascii?Q?YjafoXVyhbSBVXYydWE0ZOkVPQTyYnLwtKw+enAb9rmFt4Ow5tzl70G8KcCv?=
- =?us-ascii?Q?Myu0EnF+EQdj0IrJaet69DFLXjC9czVRsWt1rKXY?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 071abcf0-602d-4b2e-0635-08ddde21c543
-X-MS-Exchange-CrossTenant-AuthSource: KL1PR06MB6020.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Aug 2025 06:37:58.3626
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: dGNo6nQujtvu0koex03nzEbXN3aZrvBU8andjJCmeQ1O81ZCi7Gj74VnuYbRwW90bpWU8366pwPfDDxyihhFtg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR06MB6690
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250817-refactor-add-i2c-tracepoints-v2-1-c0bad299e02e@gmail.com>
 
-Use the string choice helper function str_plural() to simplify the code.
+Hi Mohammad,
 
-Signed-off-by: Xichao Zhao <zhao.xichao@vivo.com>
----
- drivers/i2c/algos/i2c-algo-bit.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+kernel test robot noticed the following build warnings:
 
-diff --git a/drivers/i2c/algos/i2c-algo-bit.c b/drivers/i2c/algos/i2c-algo-bit.c
-index 6544d27e4419..d1d9a6c1a1e2 100644
---- a/drivers/i2c/algos/i2c-algo-bit.c
-+++ b/drivers/i2c/algos/i2c-algo-bit.c
-@@ -13,6 +13,7 @@
- #include <linux/delay.h>
- #include <linux/errno.h>
- #include <linux/sched.h>
-+#include <linux/string_choices.h>
- #include <linux/i2c.h>
- #include <linux/i2c-algo-bit.h>
- 
-@@ -562,7 +563,7 @@ static int bit_xfer(struct i2c_adapter *i2c_adap,
- 			ret = readbytes(i2c_adap, pmsg);
- 			if (ret >= 1)
- 				bit_dbg(2, &i2c_adap->dev, "read %d byte%s\n",
--					ret, ret == 1 ? "" : "s");
-+					ret, str_plural(ret));
- 			if (ret < pmsg->len) {
- 				if (ret >= 0)
- 					ret = -EIO;
-@@ -573,7 +574,7 @@ static int bit_xfer(struct i2c_adapter *i2c_adap,
- 			ret = sendbytes(i2c_adap, pmsg);
- 			if (ret >= 1)
- 				bit_dbg(2, &i2c_adap->dev, "wrote %d byte%s\n",
--					ret, ret == 1 ? "" : "s");
-+					ret, str_plural(ret));
- 			if (ret < pmsg->len) {
- 				if (ret >= 0)
- 					ret = -EIO;
+url:    https://github.com/intel-lab-lkp/linux/commits/Mohammad-Gomaa/i2c-add-tracepoints-to-aid-debugging-in-i2c-core-base/20250817-155936
+base:   7e161a991ea71e6ec526abc8f40c6852ebe3d946
+patch link:    https://lore.kernel.org/r/20250817-refactor-add-i2c-tracepoints-v2-1-c0bad299e02e%40gmail.com
+patch subject: [PATCH WIP v2] i2c: add tracepoints to aid debugging in i2c-core-base
+config: x86_64-randconfig-161-20250818 (https://download.01.org/0day-ci/archive/20250818/202508181525.GKAXMVYv-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14+deb12u1) 12.2.0
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+| Closes: https://lore.kernel.org/r/202508181525.GKAXMVYv-lkp@intel.com/
+
+smatch warnings:
+drivers/i2c/i2c-core-base.c:535 i2c_device_probe() error: uninitialized symbol 'err_reason'.
+
+vim +/err_reason +535 drivers/i2c/i2c-core-base.c
+
+f37dd80ac2a67e4 drivers/i2c/i2c-core.c      David Brownell           2007-02-13  491  static int i2c_device_probe(struct device *dev)
+^1da177e4c3f415 drivers/i2c/i2c-core.c      Linus Torvalds           2005-04-16  492  {
+5763a474c887d4a drivers/i2c/i2c-core-base.c Andy Shevchenko          2025-04-16  493  	struct fwnode_handle	*fwnode = dev_fwnode(dev);
+51298d1257b9f0a drivers/i2c/i2c-core.c      Jean Delvare             2009-09-18  494  	struct i2c_client	*client = i2c_verify_client(dev);
+51298d1257b9f0a drivers/i2c/i2c-core.c      Jean Delvare             2009-09-18  495  	struct i2c_driver	*driver;
+79ece9b292af6b0 drivers/i2c/i2c-core-base.c Ricardo Ribalda          2022-11-14  496  	bool do_power_on;
+50c3304a5e1e521 drivers/i2c/i2c-core.c      Hans Verkuil             2008-03-12  497  	int status;
+dc94c3bf033524a drivers/i2c/i2c-core-base.c Mohammad Gomaa           2025-08-17  498  	int err_reason;
+dc94c3bf033524a drivers/i2c/i2c-core-base.c Mohammad Gomaa           2025-08-17  499  	bool has_id_table, has_acpi_match, has_of_match;
+7b4fbc50fabb810 drivers/i2c/i2c-core.c      David Brownell           2007-05-01  500  
+51298d1257b9f0a drivers/i2c/i2c-core.c      Jean Delvare             2009-09-18  501  	if (!client)
+51298d1257b9f0a drivers/i2c/i2c-core.c      Jean Delvare             2009-09-18  502  		return 0;
+51298d1257b9f0a drivers/i2c/i2c-core.c      Jean Delvare             2009-09-18  503  
+6e76cb7dfd34a2e drivers/i2c/i2c-core-base.c Charles Keepax           2019-06-27  504  	client->irq = client->init_irq;
+6e76cb7dfd34a2e drivers/i2c/i2c-core-base.c Charles Keepax           2019-06-27  505  
+0c2a34937f7e4c4 drivers/i2c/i2c-core-base.c Wolfram Sang             2020-06-30  506  	if (!client->irq) {
+845c877009cf014 drivers/i2c/i2c-core.c      Mika Westerberg          2015-05-06  507  		int irq = -ENOENT;
+845c877009cf014 drivers/i2c/i2c-core.c      Mika Westerberg          2015-05-06  508  
+331c34255293cd0 drivers/i2c/i2c-core.c      Dmitry Torokhov          2017-01-04  509  		if (client->flags & I2C_CLIENT_HOST_NOTIFY) {
+331c34255293cd0 drivers/i2c/i2c-core.c      Dmitry Torokhov          2017-01-04  510  			dev_dbg(dev, "Using Host Notify IRQ\n");
+72bfcee11cf8950 drivers/i2c/i2c-core-base.c Jarkko Nikula            2019-04-30  511  			/* Keep adapter active when Host Notify is required */
+72bfcee11cf8950 drivers/i2c/i2c-core-base.c Jarkko Nikula            2019-04-30  512  			pm_runtime_get_sync(&client->adapter->dev);
+331c34255293cd0 drivers/i2c/i2c-core.c      Dmitry Torokhov          2017-01-04  513  			irq = i2c_smbus_host_notify_to_irq(client);
+dc94c3bf033524a drivers/i2c/i2c-core-base.c Mohammad Gomaa           2025-08-17  514  			err_reason = I2C_TRACE_REASON_HOST_NOTIFY;
+5763a474c887d4a drivers/i2c/i2c-core-base.c Andy Shevchenko          2025-04-16  515  		} else if (is_of_node(fwnode)) {
+5d9424b00b577b6 drivers/i2c/i2c-core-base.c Andy Shevchenko          2025-04-16  516  			irq = fwnode_irq_get_byname(fwnode, "irq");
+3fffd1283927342 drivers/i2c/i2c-core.c      Dmitry Torokhov          2015-08-17  517  			if (irq == -EINVAL || irq == -ENODATA)
+5d9424b00b577b6 drivers/i2c/i2c-core-base.c Andy Shevchenko          2025-04-16  518  				irq = fwnode_irq_get(fwnode, 0);
+dc94c3bf033524a drivers/i2c/i2c-core-base.c Mohammad Gomaa           2025-08-17  519  			err_reason = I2C_TRACE_REASON_FROM_OF;
+5763a474c887d4a drivers/i2c/i2c-core-base.c Andy Shevchenko          2025-04-16  520  		} else if (is_acpi_device_node(fwnode)) {
+b38f2d5d9615cf9 drivers/i2c/i2c-core-base.c Raul E Rangel            2022-09-29  521  			bool wake_capable;
+b38f2d5d9615cf9 drivers/i2c/i2c-core-base.c Raul E Rangel            2022-09-29  522  
+b38f2d5d9615cf9 drivers/i2c/i2c-core-base.c Raul E Rangel            2022-09-29  523  			irq = i2c_acpi_get_irq(client, &wake_capable);
+b38f2d5d9615cf9 drivers/i2c/i2c-core-base.c Raul E Rangel            2022-09-29  524  			if (irq > 0 && wake_capable)
+b38f2d5d9615cf9 drivers/i2c/i2c-core-base.c Raul E Rangel            2022-09-29  525  				client->flags |= I2C_CLIENT_WAKE;
+dc94c3bf033524a drivers/i2c/i2c-core-base.c Mohammad Gomaa           2025-08-17  526  			err_reason = I2C_TRACE_REASON_FROM_ACPI;
+3fffd1283927342 drivers/i2c/i2c-core.c      Dmitry Torokhov          2015-08-17  527  		}
+
+err_reason not set on else { path.
+
+3c3dd56f760da05 drivers/i2c/i2c-core-base.c Alain Volmat             2020-04-30  528  		if (irq == -EPROBE_DEFER) {
+5c52473b4496b35 drivers/i2c/i2c-core-base.c Xu Yang                  2025-05-07  529  			status = dev_err_probe(dev, irq, "can't get irq\n");
+dc94c3bf033524a drivers/i2c/i2c-core-base.c Mohammad Gomaa           2025-08-17  530  			err_reason = I2C_TRACE_REASON_EPROBE_DEFER_IRQ;
+3c3dd56f760da05 drivers/i2c/i2c-core-base.c Alain Volmat             2020-04-30  531  			goto put_sync_adapter;
+3c3dd56f760da05 drivers/i2c/i2c-core-base.c Alain Volmat             2020-04-30  532  		}
+331c34255293cd0 drivers/i2c/i2c-core.c      Dmitry Torokhov          2017-01-04  533  
+dc94c3bf033524a drivers/i2c/i2c-core-base.c Mohammad Gomaa           2025-08-17  534  		if (irq < 0) {
+dc94c3bf033524a drivers/i2c/i2c-core-base.c Mohammad Gomaa           2025-08-17 @535  			trace_i2c_device_probe_debug(dev, err_reason);
+                                                                                                                                          ^^^^^^^^^^
+
+6f34be7400c68d3 drivers/i2c/i2c-core.c      Geert Uytterhoeven       2014-11-17  536  			irq = 0;
+dc94c3bf033524a drivers/i2c/i2c-core-base.c Mohammad Gomaa           2025-08-17  537  		}
+2fd36c55264926e drivers/i2c/i2c-core.c      Laurent Pinchart         2014-10-30  538  
+2fd36c55264926e drivers/i2c/i2c-core.c      Laurent Pinchart         2014-10-30  539  		client->irq = irq;
+2fd36c55264926e drivers/i2c/i2c-core.c      Laurent Pinchart         2014-10-30  540  	}
+2fd36c55264926e drivers/i2c/i2c-core.c      Laurent Pinchart         2014-10-30  541  
+0c2a34937f7e4c4 drivers/i2c/i2c-core-base.c Wolfram Sang             2020-06-30  542  	driver = to_i2c_driver(dev->driver);
+0c2a34937f7e4c4 drivers/i2c/i2c-core-base.c Wolfram Sang             2020-06-30  543  
+dc94c3bf033524a drivers/i2c/i2c-core-base.c Mohammad Gomaa           2025-08-17  544  	has_id_table = driver->id_table;
+
 -- 
-2.34.1
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
 
