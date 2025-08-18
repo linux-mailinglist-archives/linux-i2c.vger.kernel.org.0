@@ -1,47 +1,47 @@
-Return-Path: <linux-i2c+bounces-12330-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12331-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2DB8FB2ACF0
-	for <lists+linux-i2c@lfdr.de>; Mon, 18 Aug 2025 17:40:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91ECFB2AD61
+	for <lists+linux-i2c@lfdr.de>; Mon, 18 Aug 2025 17:53:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1315118A6098
-	for <lists+linux-i2c@lfdr.de>; Mon, 18 Aug 2025 15:37:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 18BB8565B84
+	for <lists+linux-i2c@lfdr.de>; Mon, 18 Aug 2025 15:51:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06FB1271449;
-	Mon, 18 Aug 2025 15:37:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24A4933473A;
+	Mon, 18 Aug 2025 15:51:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e/jeC3FS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VSiNvhzk"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A825725FA13;
-	Mon, 18 Aug 2025 15:37:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C854231E119;
+	Mon, 18 Aug 2025 15:51:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755531427; cv=none; b=rC2S/c3K52YOom0SOZKKm5vaqQZlKXqPMst0P4jLSG58FOAOHqnZiwxzFX0oY4bMPJcBgZBlUdLSjBPSKRRHlpHKNa32w/6n4qtuqgHvrMv2aEFtO4In/a6URlf62nzFJO0j/sdMWEwGeTlTJ1ziR41vSRxL/pw1pwTqIffgsEw=
+	t=1755532264; cv=none; b=MPPCM1x0SWtu+pFAI5167MjzRnE15FHP+ReH71wAwrytY3+sEg5V/5NutT3BA8LnkjeqKEF00rjvoR9nAxI5nk8KdRhhyNIHXDazT1KejYla8b1jDLP3lqtmo4hGSsRiOqV9XAS4cr4NwA1CUTyRMjrLhUge3xAUt4PyBDHCH0o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755531427; c=relaxed/simple;
-	bh=h2jMzXsrdLhcRVYsIHxcAZjoHTNjv1iL4iICT9J8AbI=;
+	s=arc-20240116; t=1755532264; c=relaxed/simple;
+	bh=r0yvrAIAXkXKJt14/95ZaNgQUPwCBY8YO4aKifN9lhk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TUrH0tLiOb28NXDCRXCcoa/3dtQ40CyiQr/GlxLQUpcQoKSC/WTd3JRoWz2OQ25hIcMscKaghnNUF9yLeooFJrj+07UpwONfjbIJa55obcs9q2HWv+ePXEIPixGRyhQ7tYT/uJ5D4SHrwmFDM1G+iZW2ZjxYUPQ2h5RBDl+2X1w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e/jeC3FS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F2B7C4CEF1;
-	Mon, 18 Aug 2025 15:37:07 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=kiiUa56yhW+90p6NG7KZjKxENmYT+eisXD6sd7L4zN/wOZP1lyAkuJYmASLUhgctow7hhmB8kYR89ZwZR8UwhVlwLCyF/+sTSYBV60U31Uql0yrrBAjXKJr+LeRllH132FM02gzi8yxPgr6gSXM+eGhcfa5tyhMwWFGjJiI/WxI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VSiNvhzk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 744F0C4CEEB;
+	Mon, 18 Aug 2025 15:51:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755531427;
-	bh=h2jMzXsrdLhcRVYsIHxcAZjoHTNjv1iL4iICT9J8AbI=;
+	s=k20201202; t=1755532264;
+	bh=r0yvrAIAXkXKJt14/95ZaNgQUPwCBY8YO4aKifN9lhk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=e/jeC3FSqUYoEbLprmY8nBJBik/VMnt8fS4ljlO/zMI9wds2uCVADNTy+mvgKA48W
-	 MeG12AgqiQVyQsQ0EJ2Ksk8sE5o/J3+apMckImO6t3eNyikHoYsTYxWJUn2EytOr0B
-	 MPmHLiLYmNp7zipF12yRDEWmfLp9uDFgKrK+7yASi2MAb3aRfRUV/XsE9e2bJklikL
-	 +70IRtD2rnyHhg07fmu70SMoEhZ4kuqfo33p4uOFa8fUCtkenANREsGyN0oTG5Jr6R
-	 Pc+DaRtxVAMlGZrS9DMS/XKxSa9lZqsAdc8ouqYfaqhoFTavBaU3grOCtay1P4abIM
-	 RV7NaICgEgGAg==
-Date: Mon, 18 Aug 2025 10:37:06 -0500
+	b=VSiNvhzkqt0xqOWA/qUE5I8bsWGAB7vxvG5ef9otr2GZUiRn+2WLLbjzC2StcldWv
+	 Lcy7Efri0ZTxF6NJWBnMtOTu/3zhBb80CdR6KX5lAZ19uLEGY7+RAvcEIfgDTLuEUl
+	 jsvwGFmxZGaECOwxZ5e9hGg4bhtciWK3lhQTCekNc0ZxQmLVu1Z1Rdhyybj7c4WI26
+	 OXZQROnhEKBmelrPhM75MvFfh+J7pdRd9skmis55oRvI3LeTQB9gE48uyzm2EV+ZOl
+	 d2WtuOWtGbBlw/jqijHHbt/gxHRGaqEPS5vlMzmCxoL6OW2BAl97eHlF8Fr0sMCzfL
+	 8Yu1OD3u3Bgiw==
+Date: Mon, 18 Aug 2025 10:51:03 -0500
 From: Rob Herring <robh@kernel.org>
 To: Luca Weiss <luca@lucaweiss.eu>
 Cc: Loic Poulain <loic.poulain@oss.qualcomm.com>,
@@ -54,11 +54,11 @@ Cc: Loic Poulain <loic.poulain@oss.qualcomm.com>,
 	~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
 	linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
 	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/7] dt-bindings: i2c: qcom-cci: Document msm8953
- compatible
-Message-ID: <20250818153706.GA1238481-robh@kernel.org>
+Subject: Re: [PATCH 3/7] dt-bindings: eeprom: at24: Add compatible for
+ Belling BL24S64
+Message-ID: <20250818155103.GA1272375-robh@kernel.org>
 References: <20250810-msm8953-cci-v1-0-e83f104cabfc@lucaweiss.eu>
- <20250810-msm8953-cci-v1-1-e83f104cabfc@lucaweiss.eu>
+ <20250810-msm8953-cci-v1-3-e83f104cabfc@lucaweiss.eu>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -67,39 +67,34 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250810-msm8953-cci-v1-1-e83f104cabfc@lucaweiss.eu>
+In-Reply-To: <20250810-msm8953-cci-v1-3-e83f104cabfc@lucaweiss.eu>
 
-On Sun, Aug 10, 2025 at 05:37:52PM +0200, Luca Weiss wrote:
-> Add the msm8953 CCI device string compatible.
+On Sun, Aug 10, 2025 at 05:37:54PM +0200, Luca Weiss wrote:
+> Add the compatible for an 64Kb EEPROM from Belling.
+
+It is generally not required to add a compatible here assuming 
+"atmel,24c64" is enough to identify the specific device (i.e. read the 
+device's ID registers). If it is not sufficient, then some details here 
+about why would be useful.
+
 > 
 > Signed-off-by: Luca Weiss <luca@lucaweiss.eu>
 > ---
->  Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml | 2 ++
->  1 file changed, 2 insertions(+)
+>  Documentation/devicetree/bindings/eeprom/at24.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
-> index 73144473b9b24e574bfc6bd7d8908f2f3895e087..be6cebc4ee054d3100e5c4c676f1a0c4fd8d2e1e 100644
-> --- a/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
-> @@ -15,6 +15,7 @@ properties:
->      oneOf:
->        - enum:
->            - qcom,msm8226-cci
-> +          - qcom,msm8953-cci
->            - qcom,msm8974-cci
->            - qcom,msm8996-cci
->  
-> @@ -128,6 +129,7 @@ allOf:
->                  enum:
->                    - qcom,msm8916-cci
->  
-> +            - const: qcom,msm8953-cci
-
-This should be added to the enum above.
-
->              - const: qcom,msm8996-cci
->      then:
->        properties:
+> diff --git a/Documentation/devicetree/bindings/eeprom/at24.yaml b/Documentation/devicetree/bindings/eeprom/at24.yaml
+> index 0ac68646c077790c67c424d0f9157d6ec9b9e331..1e88861674ac8525335edec1b214675c8efa3ffe 100644
+> --- a/Documentation/devicetree/bindings/eeprom/at24.yaml
+> +++ b/Documentation/devicetree/bindings/eeprom/at24.yaml
+> @@ -131,6 +131,7 @@ properties:
+>            - const: atmel,24c32
+>        - items:
+>            - enum:
+> +              - belling,bl24s64
+>                - onnn,n24s64b
+>                - puya,p24c64f
+>            - const: atmel,24c64
 > 
 > -- 
 > 2.50.1
