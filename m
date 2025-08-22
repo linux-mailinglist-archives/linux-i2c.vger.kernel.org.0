@@ -1,158 +1,101 @@
-Return-Path: <linux-i2c+bounces-12378-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12379-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B94DB312B8
-	for <lists+linux-i2c@lfdr.de>; Fri, 22 Aug 2025 11:18:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B19E1B313AB
+	for <lists+linux-i2c@lfdr.de>; Fri, 22 Aug 2025 11:43:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8131916D118
-	for <lists+linux-i2c@lfdr.de>; Fri, 22 Aug 2025 09:18:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 581F01D23067
+	for <lists+linux-i2c@lfdr.de>; Fri, 22 Aug 2025 09:39:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBFED27E1B1;
-	Fri, 22 Aug 2025 09:18:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81BAA2F4A13;
+	Fri, 22 Aug 2025 09:32:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ktd8aYKR"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="NDpts+Ow"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from abb.hmeau.com (abb.hmeau.com [180.181.231.80])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 137A6393DEB;
-	Fri, 22 Aug 2025 09:18:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBDEC2F4A06;
+	Fri, 22 Aug 2025 09:32:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=180.181.231.80
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755854329; cv=none; b=PG+oUmGb8d5wlySgDYTxaNkd3bX60LyzPR9xMpunv74MiL5yN1nRuZKjNtVoF4dwMDgkQewUZDbxqbpDyBrzT5wExbqT5fuQ8h6I5pV+IlxDxVKzJb7hF3UDaH6I7DrWC+4aZd48JWNaqHN+1hobc6cunttIBvVCLaZXsow2GJQ=
+	t=1755855161; cv=none; b=nRIEj5WNMYVW28pEhCaGWaV/yzqyx5ivnTNQ/Bqyz7oq9qeO6geISngLqZTJ9dwOMsW/fmhnXn1u5XlTcKsl3DSsWF+81/iIU7dlB8xvx0gD0JdJZh9arJP4dcdmTSkJoSYAQh+qhJfrT9ZrO4m5e/t9x2ohVT9oS2TsvXDx3EM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755854329; c=relaxed/simple;
-	bh=NIpdp9OekrpNp2rZ9GhVB50+eI8Oq4q6tR5dIvGbyC0=;
+	s=arc-20240116; t=1755855161; c=relaxed/simple;
+	bh=RiagEh0Bk+y3updUtKIZi6iOs63EGBVmarkyFpIMF2Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QmBBgYNGBGZe48w9y/tpSYf7sFX+BACqnI+k1tGBK3pdTRLEIzj5froE6Zsz85kLNUcKBfIHo/sxcQPinHtEtMvpNBXvhJ2W9QwVsuNOVxBTTZ/925TmUbZgLIVdcZjfdBJKHKraTpWjSn1vcFd0z0fWwCrYX4pBh0f9t21uiTM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ktd8aYKR; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755854328; x=1787390328;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=NIpdp9OekrpNp2rZ9GhVB50+eI8Oq4q6tR5dIvGbyC0=;
-  b=ktd8aYKRdF5/notCIcB6op6npcINQeU0sUFlgI4pGwi21hSBpGBREmbD
-   rtr81IMl2D0BKcRVY8WULB40611mfuNnqpu+eZ2hHPFoJ8YTLSMB3950k
-   7KNDqsAHy6yMhP8+AMXVkw+LmMuNKbyvmAc/Fs9eaUM6Mmp1PX5XeZ9LN
-   3LN6GbDa4hgw37KtjJmM+lWyEYGFWHyzlJMbQ4Z2ZJrG8Boa9IJPrgiVy
-   Heo7ZPxBGy1fWybHLZnDtRcMi3Re07MQn0MCo9VtCh1ueP+bNeIAfvtic
-   yATQduJEIneaCQBsY6ZG7az45YnbD27eqdbJ5nggqFE2YdI56V7Rt4WQL
-   w==;
-X-CSE-ConnectionGUID: /8nkCjQnT4iMuoYNXfvCRQ==
-X-CSE-MsgGUID: AfxArNyvROC0qyvpcDni4Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11529"; a="57873208"
-X-IronPort-AV: E=Sophos;i="6.17,309,1747724400"; 
-   d="scan'208";a="57873208"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2025 02:18:47 -0700
-X-CSE-ConnectionGUID: X7egEtyZT8u9a8G7uqgYgA==
-X-CSE-MsgGUID: V9GZmD+iTZGgwEth1N6OpA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,309,1747724400"; 
-   d="scan'208";a="169489568"
-Received: from smile.fi.intel.com ([10.237.72.52])
-  by fmviesa010.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2025 02:18:45 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1upNv1-00000007TWV-0Mrd;
-	Fri, 22 Aug 2025 12:18:43 +0300
-Date: Fri, 22 Aug 2025 12:18:42 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Jisheng Zhang <jszhang@kernel.org>
-Cc: Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Jan Dabros <jsd@semihalf.com>, Andi Shyti <andi.shyti@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH 1/2] i2c: designware: Avoid taking clk_prepare mutex in
- PM callbacks
-Message-ID: <aKg18p9Zf9hoZHPY@smile.fi.intel.com>
-References: <20250820153125.22002-1-jszhang@kernel.org>
- <20250820153125.22002-2-jszhang@kernel.org>
- <aKXyVvFOvpsaAEAB@smile.fi.intel.com>
- <aKX4xEYE29JC_g14@xhacker>
- <7198221a-1f12-49cf-9d35-7498ae7389cd@linux.intel.com>
- <aKcYw0Az1fYfNbBr@smile.fi.intel.com>
- <aKdKOa1jFXDHK8uI@xhacker>
+	 Content-Type:Content-Disposition:In-Reply-To; b=dZa08m6fwk0vsRE2p74G0EWkze6dPDMkGXr0+GiB89t9O+5FP5anmRJvzY3VJslIOqm/iqsu4f8D8f0gGeJFenMTofXY8zY87VMwokLVlclcHdCSqAM0tQwADTLZp99HAtSNU3kn0ktOBJg01xylaHU5w988NrtvvNepCpZa/hI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=NDpts+Ow; arc=none smtp.client-ip=180.181.231.80
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
+	s=formenos; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=ROyhNrncK658haLq5ZO1KaSMWsOIBPy61dygEVqQzjI=; b=NDpts+OwAboF+KyuG/H4pnt6oh
+	iuRtXo9XDXGe+OfbggYWMcs5wqkvX7DD7WGxp6I4TyR8HYrz78DZtyap5jsHK/NQcKx5shh9HNNaA
+	XssYw/DTXB8s1cz7OY3R9SC00qM0/s4pECmSmdhnJmVxvo9qlcPjnGWuIYc30RWH2BUyVduIBcakO
+	PiKfZWkwnt5A50tFwKlRPpETvsD6V2VQMXPzxwsa0BswpvonV13JBONP+0ZND15ZgZnu54y1omZA0
+	3X8LLGhsu29+d71RPg/fscTk4hlYh0wgvzpw1VH4IUPNPSrloZ7yxd76dY1wOvvKto+kPpGpJjKdA
+	1vd6DHTQ==;
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
+	id 1upNsW-00GN2t-1r;
+	Fri, 22 Aug 2025 17:32:05 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 22 Aug 2025 17:32:04 +0800
+Date: Fri, 22 Aug 2025 17:32:04 +0800
+From: Herbert Xu <herbert@gondor.apana.org.au>
+To: Robert Marko <robert.marko@sartura.hr>
+Cc: linux@armlinux.org.uk, nicolas.ferre@microchip.com,
+	alexandre.belloni@bootlin.com, claudiu.beznea@tuxon.dev,
+	catalin.marinas@arm.com, will@kernel.org, olivia@selenic.com,
+	davem@davemloft.net, andi.shyti@kernel.org, lee@kernel.org,
+	broonie@kernel.org, gregkh@linuxfoundation.org,
+	jirislaby@kernel.org, arnd@kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-crypto@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
+	o.rempel@pengutronix.de, daniel.machon@microchip.com,
+	luka.perkov@sartura.hr
+Subject: Re: [PATCH v9 9/9] crypto: atmel-aes: make it selectable for
+ ARCH_MICROCHIP
+Message-ID: <aKg5FKzlF_AABz9Q@gondor.apana.org.au>
+References: <20250813174720.540015-1-robert.marko@sartura.hr>
+ <20250813174720.540015-10-robert.marko@sartura.hr>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aKdKOa1jFXDHK8uI@xhacker>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+In-Reply-To: <20250813174720.540015-10-robert.marko@sartura.hr>
 
-On Fri, Aug 22, 2025 at 12:32:57AM +0800, Jisheng Zhang wrote:
-> On Thu, Aug 21, 2025 at 04:01:55PM +0300, Andy Shevchenko wrote:
-> > On Thu, Aug 21, 2025 at 03:45:43PM +0300, Jarkko Nikula wrote:
-> > > On 8/20/25 7:33 PM, Jisheng Zhang wrote:
-> > > > On Wed, Aug 20, 2025 at 07:05:42PM +0300, Andy Shevchenko wrote:
-> > > > > On Wed, Aug 20, 2025 at 11:31:24PM +0800, Jisheng Zhang wrote:
-> > > > > > This is unsafe, as the runtime PM callbacks are called from the PM
-> > > > > > workqueue, so this may deadlock when handling an i2c attached clock,
-> > > > > > which may already hold the clk_prepare mutex from another context.
-> > > > > 
-> > > > > Can you be more specific? What is the actual issue in practice?
-> > > > > Do you have traces and lockdep warnings?
-> > > > 
-> > > > Assume we use i2c designware to control any i2c based clks, e.g the
-> > > > clk-si5351.c driver. In its .clk_prepare, we'll get the prepare_lock
-> > > > mutex, then we call i2c adapter to operate the regs, to runtime resume
-> > > > the i2c adapter, we call clk_prepare_enable() which will try to get
-> > > > the prepare_lock mutex again.
-> > > > 
-> > > I'd also like to see the issue here. I'm blind to see what's the relation
-> > > between the clocks managed by the clk-si5351.c and clocks to the
-> > > i2c-designware IP.
+On Wed, Aug 13, 2025 at 07:44:45PM +0200, Robert Marko wrote:
+> LAN969x uses the Atmel crypto, so make it selectable for ARCH_MICROCHIP to
+> avoid needing to update depends in future if other Microchip SoC-s use it
+> as well.
 > 
-> The key here is: all clks in the system share the same prepare_lock
-> mutex, so the global prepare_lock mutex is locked by clk-si5351
-> .prepare(), then in this exact .prepare(), the i2c-designware's runtime
-> resume will try to lock the same prepare_lock again due to
-> clk_prepare_enable()
-> can you plz check clk_prepare_lock() in drivers/clk/clk.c?
+> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+> ---
+> Changes in v8:
+> * Use ARCH_MICROCHIP for depends as its now selected by both ARM and ARM64
+> Microchip SoC-s
 > 
-> And if we take a look at other i2c adapters' drivers, we'll see
-> some of them have ever met this issue and already fixed it, such
-> as 
-> 
-> i2c-exynos5, by commit 10ff4c5239a1 ("i2c: exynos5: Fix possible ABBA
-> deadlock by keeping I2C clock prepared")
-> 
-> i2c-imx, by commit d9a22d713acb ("i2c: imx: avoid taking clk_prepare
-> mutex in PM callbacks")
+>  drivers/crypto/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Why is this an I²C driver problem?
+Acked-by: Herbert Xu <herbert@gondor.apana.org.au>
 
-> > I believe they try to make an example when clk-si5351 is the provider of
-> > the clock to I²C host controller (DesignWare).
-> 
-> Nope, the example case is using i2c host controller to operate the clk-si5351
-
-Okay, so that chip is controlled over I²C, but how their clocks even related to
-the I²C host controller clock?! I am sorry, I am lost here.
-
-> > But I'm still not sure about the issues here... Without (even simulated with
-> > specific delay injections) lockdep warnings it would be rather theoretical.
-> 
-> No, it happened in real world.
-
-Can you provide the asked traces and lockdep warnigns and/or other stuff to see
-what's going on there?
-
+Thanks,
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
 
