@@ -1,116 +1,177 @@
-Return-Path: <linux-i2c+bounces-12381-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12382-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9F3AB317AC
-	for <lists+linux-i2c@lfdr.de>; Fri, 22 Aug 2025 14:24:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4964B319AB
+	for <lists+linux-i2c@lfdr.de>; Fri, 22 Aug 2025 15:34:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 80013B66C7A
-	for <lists+linux-i2c@lfdr.de>; Fri, 22 Aug 2025 12:23:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A52C0586458
+	for <lists+linux-i2c@lfdr.de>; Fri, 22 Aug 2025 13:30:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBBC2393DD3;
-	Fri, 22 Aug 2025 12:24:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E0ED2FFDDA;
+	Fri, 22 Aug 2025 13:29:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VhdXkx9+"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="CoN1EBNR"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A71892765ED;
-	Fri, 22 Aug 2025 12:24:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CF0B24CEE8;
+	Fri, 22 Aug 2025 13:29:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755865478; cv=none; b=XQrzueMMwk/doWUsZ9yam8OG2EadHGi5TdiQa2Wi0+SBuSqROUFpU8d9dyp63Yd2OYpba35M+hLOZgOB3ewk4DoHNmy3EC9LhCXPLNMbHsXfFCdRp1rL4IKpgE6HsCsEBsU4mzWemIs2TARXyaAJS6f4wR5Xuco7eUyXQ0u7/y0=
+	t=1755869399; cv=none; b=ZiesLgchjYKxvoquf4mqZf8PUvPeMJKjKzY7//ATSiyXzbAOA/OT53oLJnTAIA6MYDuhqgkBROtT4FMeAraU6ir6+yCxnyilpcNVze9tl/MbiEgQKjvYWSPyla07rptESg4yRMRJjwI20qw/6vUT99JLKGS8ELO3APJX4CIEfvo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755865478; c=relaxed/simple;
-	bh=tQ0rGBwSIgf406O7Tk4ojsslaN/E9jMzCbSFx4XmZDk=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=AK/Stv89w4KNd1LtiqY948PBI9j34BX3F5oIjx8nS0Fw7zuHwuiaSqLe+F/O8JQYR88cKz+lRmiUb/9v75CqakxWAD3JYu9C+SYKb7QBEvXyk1n/HQZnOjqayXWzNH9CYuWdIeiSsevlwf1XkXfeUMauXa8vLo6RpNWT2Mn9yUc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VhdXkx9+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87C48C4CEED;
-	Fri, 22 Aug 2025 12:24:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755865475;
-	bh=tQ0rGBwSIgf406O7Tk4ojsslaN/E9jMzCbSFx4XmZDk=;
-	h=Date:From:To:Cc:Subject:From;
-	b=VhdXkx9+pm0D1pxUcZ1AEhgH5ox8qPyYX0qKoiER7mcGMeVwZOVmS2C3cZCmELh+s
-	 jcTJfUDRPVjZaZuEVlpBwMurQAdCdnpKqnUUzF+wMLGRHhJgJLn7fSg/YajFjLk8y2
-	 8jVaCk6bjCSM3iIHsgI/9m+V8Te8vYllKTE62N6KKzmei087Z3FTlHUPzoZIdK2/Wd
-	 ychdMdP319ZZ8nwURME5iWwMLINu117o0un64gumBqpotmuwL3TQWaLLna1C+cMyG+
-	 KBy19IuHwVHsitIM3TWSVBD4z+rnrvirsbz31lEnX+NN2t3EJDjwIOGNlLttLN10mQ
-	 pwZbIkw19dBxA==
-Date: Fri, 22 Aug 2025 11:24:30 -0100
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: lkml <linux-kernel@vger.kernel.org>, 
-	linux-i2c <linux-i2c@vger.kernel.org>, Andi Shyti <andi.shyti@kernel.org>
-Subject: [GIT PULL] i2c-host-fixes for v6.17-rc3
-Message-ID: <hw4vxalm4vifwdgt5stle53eierogvrslxsyckwbfd3inkjzu6@74qfsxp47vtl>
+	s=arc-20240116; t=1755869399; c=relaxed/simple;
+	bh=JmipXnXVqs0bo7rBOQEowa8CcQd7VSNge6eEHRVSm0g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=YodWyMcBOyypHUwvI2maHuKicbj8Xta83Ipzbes5sE6gSf6aNxxC+zVKZeWpGpg2OZQ1Xxo0aoCpZGIlCxlCR+wKlL5vOh9Vb6AHGSpeIe+CCbEU9pI9d8BpaRKPKP8AiUER1VF665o+2fGoarwdWlVl2KhgIJ1wkTDgv31Pl70=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=CoN1EBNR; arc=none smtp.client-ip=68.232.153.233
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1755869398; x=1787405398;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=JmipXnXVqs0bo7rBOQEowa8CcQd7VSNge6eEHRVSm0g=;
+  b=CoN1EBNRuApjOIBGwSTCqkl0wNtrGw5KGLH8BQQhSyf7HzfoA13gq6Bq
+   3qvKZR4tJAl0/24VteAr6ZVutVUDi62aYUiOfD/MmRnfA8yqGTX7IKPrx
+   LXXZoVMra8Rc4papdCtciEOdx1RpfOGvgQdgfyty3LCfnexTlyX6ZT5Uv
+   d67Z3HJDSNRHU96bl/lhDyYocJ2QzrPVQCNstHiXo0+X9o13UWBiUUKpT
+   SnVPiqinPAPWD0c8ibXWjuu2eAsUf38ykGjmIRz4+abD3RTcIH1pZloxr
+   NWiQITEk+GyYO0gylzJL91Je+MZ/hb1MkjMcLZdDJL+2SCApMnqdsY8Ok
+   Q==;
+X-CSE-ConnectionGUID: dttGCdfnRrSwT0WQldL3yA==
+X-CSE-MsgGUID: AeSCvjSPQYS0LsPuRv0RiQ==
+X-IronPort-AV: E=Sophos;i="6.17,309,1747724400"; 
+   d="scan'208";a="276925274"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 22 Aug 2025 06:29:56 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.44; Fri, 22 Aug 2025 06:29:25 -0700
+Received: from [10.159.245.205] (10.10.85.11) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.44 via Frontend
+ Transport; Fri, 22 Aug 2025 06:29:21 -0700
+Message-ID: <76b1062f-a4e3-4392-9549-86d63616a5ca@microchip.com>
+Date: Fri, 22 Aug 2025 15:29:21 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 1/9] arm64: Add config for Microchip SoC platforms
+To: Robert Marko <robert.marko@sartura.hr>, <linux@armlinux.org.uk>,
+	<alexandre.belloni@bootlin.com>, <claudiu.beznea@tuxon.dev>,
+	<catalin.marinas@arm.com>, <will@kernel.org>, <olivia@selenic.com>,
+	<herbert@gondor.apana.org.au>, <davem@davemloft.net>,
+	<andi.shyti@kernel.org>, <lee@kernel.org>, <broonie@kernel.org>,
+	<gregkh@linuxfoundation.org>, <jirislaby@kernel.org>, <arnd@kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+	<linux-crypto@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+	<linux-spi@vger.kernel.org>, <linux-serial@vger.kernel.org>,
+	<o.rempel@pengutronix.de>, <daniel.machon@microchip.com>
+CC: <luka.perkov@sartura.hr>
+References: <20250813174720.540015-1-robert.marko@sartura.hr>
+ <20250813174720.540015-2-robert.marko@sartura.hr>
+From: Nicolas Ferre <nicolas.ferre@microchip.com>
+Content-Language: en-US, fr
+Organization: microchip
+In-Reply-To: <20250813174720.540015-2-robert.marko@sartura.hr>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Wolfram,
+On 13/08/2025 at 19:44, Robert Marko wrote:
+> Currently, Microchip SparX-5 SoC is supported and it has its own symbol.
+> 
+> However, this means that new Microchip platforms that share drivers need
+> to constantly keep updating depends on various drivers.
+> 
+> So, to try and reduce this lets add ARCH_MICROCHIP symbol that drivers
+> could instead depend on.
+> 
+> LAN969x is being worked on and it will be added under ARCH_MICROCHIP.
+> 
+> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
 
-Here is the pull request for this week. A big part comes from
-the rtl9300 controller, which has gone through several rounds
-and finally made it in. One last patch completes the work from
-Sven, but that already went into i2c/i2c-host.
+Ok, according to the compromise that we discussed during v8 that's fine 
+with me:
+Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
 
-With summer ending, I hope the rhythm will soon return to the
-normal pace.
+Thanks Robert! Regards,
+   Nicolas
 
-I wish you a great weekend, and the same to everyone flying
-back home.
+> ---
+> Changes in v9:
+> * Make ARCH_MICROCHIP hidden symbol that is selected by SparX-5 directly,
+> this avoids breaking existing configs with ARCH_SPARX5
+> 
+>   arch/arm64/Kconfig.platforms | 36 ++++++++++++++++++++++--------------
+>   1 file changed, 22 insertions(+), 14 deletions(-)
+> 
+> diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
+> index a88f5ad9328c..bfea380100a6 100644
+> --- a/arch/arm64/Kconfig.platforms
+> +++ b/arch/arm64/Kconfig.platforms
+> @@ -131,20 +131,6 @@ config ARCH_EXYNOS
+>          help
+>            This enables support for ARMv8 based Samsung Exynos SoC family.
+> 
+> -config ARCH_SPARX5
+> -       bool "Microchip Sparx5 SoC family"
+> -       select PINCTRL
+> -       select DW_APB_TIMER_OF
+> -       help
+> -         This enables support for the Microchip Sparx5 ARMv8-based
+> -         SoC family of TSN-capable gigabit switches.
+> -
+> -         The SparX-5 Ethernet switch family provides a rich set of
+> -         switching features such as advanced TCAM-based VLAN and QoS
+> -         processing enabling delivery of differentiated services, and
+> -         security through TCAM-based frame processing using versatile
+> -         content aware processor (VCAP).
+> -
+>   config ARCH_K3
+>          bool "Texas Instruments Inc. K3 multicore SoC architecture"
+>          select SOC_TI
+> @@ -186,6 +172,28 @@ config ARCH_MESON
+>            This enables support for the arm64 based Amlogic SoCs
+>            such as the s905, S905X/D, S912, A113X/D or S905X/D2
+> 
+> +menu "Microchip SoC support"
+> +
+> +config ARCH_MICROCHIP
+> +       bool
+> +
+> +config ARCH_SPARX5
+> +       bool "Microchip Sparx5 SoC family"
+> +       select PINCTRL
+> +       select DW_APB_TIMER_OF
+> +       select ARCH_MICROCHIP
+> +       help
+> +         This enables support for the Microchip Sparx5 ARMv8-based
+> +         SoC family of TSN-capable gigabit switches.
+> +
+> +         The SparX-5 Ethernet switch family provides a rich set of
+> +         switching features such as advanced TCAM-based VLAN and QoS
+> +         processing enabling delivery of differentiated services, and
+> +         security through TCAM-based frame processing using versatile
+> +         content aware processor (VCAP).
+> +
+> +endmenu
+> +
+>   config ARCH_MMP
+>          bool "Marvell MMP SoC Family"
+>          select PINCTRL
+> --
+> 2.50.1
+> 
 
-Andi
-
-The following changes since commit c17b750b3ad9f45f2b6f7e6f7f4679844244f0b9:
-
-  Linux 6.17-rc2 (2025-08-17 15:22:10 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git tags/i2c-host-fixes-6.17-rc3
-
-for you to fetch changes up to 82b350dd8185ce790e61555c436f90b6501af23c:
-
-  i2c: rtl9300: Add missing count byte for SMBus Block Ops (2025-08-19 20:21:03 -0100)
-
-----------------------------------------------------------------
-i2c-host-fixes for v6.17-rc3
-
-i2c-host-fixes for v6.17-rc3
-
-- hisi: update maintainership
-- rtl9300: fix several issues in xfer
-  - check message length boundaries
-  - correct multi-byte value composition on write
-  - increase polling timeout
-  - fix block transfer protocol
-
-----------------------------------------------------------------
-Alex Guo (1):
-      i2c: rtl9300: Fix out-of-bounds bug in rtl9300_i2c_smbus_xfer
-
-Devyn Liu (1):
-      MAINTAINERS: i2c: Update i2c_hisi entry
-
-Harshal Gohel (1):
-      i2c: rtl9300: Fix multi-byte I2C write
-
-Sven Eckelmann (2):
-      i2c: rtl9300: Increase timeout for transfer polling
-      i2c: rtl9300: Add missing count byte for SMBus Block Ops
-
- MAINTAINERS                      |  2 +-
- drivers/i2c/busses/i2c-rtl9300.c | 20 ++++++++++++--------
- 2 files changed, 13 insertions(+), 9 deletions(-)
 
