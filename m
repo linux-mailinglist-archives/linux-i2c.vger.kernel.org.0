@@ -1,78 +1,78 @@
-Return-Path: <linux-i2c+bounces-12402-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12403-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87550B32F9A
-	for <lists+linux-i2c@lfdr.de>; Sun, 24 Aug 2025 13:38:33 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8330CB32F90
+	for <lists+linux-i2c@lfdr.de>; Sun, 24 Aug 2025 13:36:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 671C41B65147
-	for <lists+linux-i2c@lfdr.de>; Sun, 24 Aug 2025 11:37:01 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0930C7B0C52
+	for <lists+linux-i2c@lfdr.de>; Sun, 24 Aug 2025 11:35:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58DDD2DE6E3;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7749D2DE6FB;
 	Sun, 24 Aug 2025 11:34:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gZzduMEi"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KYPpcCWZ"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 564512DAFA9;
-	Sun, 24 Aug 2025 11:34:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A2952DAFB1;
+	Sun, 24 Aug 2025 11:34:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756035282; cv=none; b=oJVJNAhTcqCnyRaXZMCBRHRUtkUot7wDLBLZfmN3mO7R1lyBC1sq2l6SeWVkO8xhj3K1mYWRdfAxt44rZVFgV+JVXzJ+SOcpg2LBDV0tGEIi4BqmaFr2qXcXgPHXskDuDmTsTOy6TTcW7IttlyWbGzZULmKVVGauiqULJIGlNKA=
+	t=1756035282; cv=none; b=U9+S12cIhgTO4bBSLeAQVKCVP8HBzi4oxN3bRAW16QruFizmmLpONyk30lY+FiRQgliqeoKuxfUxEZ4BDwxNJZppYWCBPlBLMGbR+Is0yuL1bqiHWofyb/R9WKZBxYAelNLYOJDZr2J3w6HyZ5OcvbwtqwSi5N1W5P5/KX6EU5g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1756035282; c=relaxed/simple;
-	bh=EfrOytfcbQeQJZZreuoZDcC87F2iv+7pZRcAuuZIEPY=;
+	bh=C8jprGhvwgNFwqx9JXIf4GUQj2+9HFsGRgb2FpChXxM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=J/KwpOI65o+QzVdXzXTvpAtU5M5ylBgGN98YlTJzkngFVKa5ubbiQw7HVhrf6dKptrs3ygDW22ILRCgRTTxHAwEc9TQTp8Ce3UWhiG0kOSNhXwGZv1fFC0ehFw51YyHof5rdmmSx35ffMSM0Pprd/pILvQJxUq87XB7wic86iso=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gZzduMEi; arc=none smtp.client-ip=209.85.128.43
+	 MIME-Version; b=EvrgWGeqJEtdghWQ1yM04QV7otqepNb1y2BWN4Mqj3iZCjHuhw7VY+m//MxPhjTU2xUNayi/NJ8H0WDD9xdNDJmdbayJFyHg+MgK2aiW8Ntu26suePP92gzjO7Qg6nUzF2wwx2GtXnEvugGtTVtp7kdLJtCZ4GT2lR3/cqFCvBY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KYPpcCWZ; arc=none smtp.client-ip=209.85.221.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-45a1b065d58so29436275e9.1;
-        Sun, 24 Aug 2025 04:34:39 -0700 (PDT)
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-3c68ac7e238so878990f8f.1;
+        Sun, 24 Aug 2025 04:34:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20230601; t=1756035278; x=1756640078; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=VRyI/FYoRek6yvet85HPVtC+4+M4ibWnCCCn/CkLLEI=;
-        b=gZzduMEitlkt8haJVS1O162vFIqMM1r9i4CRxbdyG90jce8WwtCDPmnhLZyrA65WZS
-         sEgYwM2gd2E/qi93UypQPLv/NiRXpffxuQYbUes6424AUaJvtXTRNS0wO3mJnTt1ifv3
-         krq37qSBMAyGunDtWweyaIQlkCemmBX62glJQPkK0Yv69djqwxtDptIFatnTNabpg2P3
-         IAy0e27kh7KdaBp41uZLNJVAmVtJd9tM1gJYL8+wg838OoZNosJr1ahWAk41mdA6bfCf
-         YkZzPebcYX0s63CEBV6erlrePv/12dApjENfi1mG6zA7lex20XPrrwFUGMJ/AN9Wl1m0
-         2ikg==
+        bh=zeZs0XJJdh2SbqJW5bpVt1AZYdGyUD1UAVS4r4zgBDM=;
+        b=KYPpcCWZVQB6hlqqFY+fFXQ3AMmDoXlzan7Kw5vuMhgbsO7k5sXmmhl74lScKrODCJ
+         QnTTpRwxCIa/eFGUorbTiM7kA9I8fqeTJD90jQwWxOc3K/38fq29PLxSLWEe80Kd3mOK
+         xZwyC68+/+xfKSYrF+qJ29+us6hW62FCX41jbpHeGBWjJKclV/wUnIWHkOkzaVXXhL8P
+         iorVv7TVz7fFKv+Xa22TTt3KQa9WRkWGUSp0yDKtZ1IfggRTVeurDu/SkikZb2LbQakT
+         Ob6WJn0pmk22mUbpA2rLLj1z5O2pkfdTh0keO6be4tUS6Fi9uPVJ2sUDUmaiESKeQnkF
+         J79A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20230601; t=1756035278; x=1756640078;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=VRyI/FYoRek6yvet85HPVtC+4+M4ibWnCCCn/CkLLEI=;
-        b=R6BAKBMqpznVZHq6oZsriOmv/NOf/jVRHtdo/c1Lb5gi90Hs4VcyrMVQPITjfhpoP9
-         Q6rcKiHZ86E37cJPP/6Z3eU746QPTLvwdWEJbd6rNbxScuLxVu63MXxqiOEw4mokXbeF
-         2dBkWaz5YOvn7m2X4RwoFMAwy3rlT98ICK91TzU41qdGRLd6d9NPT9ChHae39rGHRb/J
-         fxU2ezDiFhLW5mXasGq2rVY7HuE3dDmcn8fvigxOCFwW1fC389MnDRScviahgzLCV/lj
-         axIYJ55yiDElzTO7f/J+SKZ0vFF/2AyUMsncn/kGmWEBYmkbcZU9iUGgRDy/ePNeqmz3
-         8vGw==
-X-Forwarded-Encrypted: i=1; AJvYcCVe40nuPxhYEpv8v6Y4biGZ+tjTc/yQmTrPCl9m1C6yQnzu0K7GV+pM319SOBGsBW8Nj3IGYsw9ztN4YhkA@vger.kernel.org, AJvYcCXDs5gBvTJxfn7o+/SvxBObF9G3GygR876Sj0jKf6fQ1czpTHPCDWe/VRZ4VFgXHyYStwAGfDbYtCNu@vger.kernel.org
-X-Gm-Message-State: AOJu0YxBClqIt5ZPoaCEnfw+4XFWfW9T4Sq6LqySpy0xMRdqpmqdUBa3
-	kZMVwxDiU7hCV+eueGwnR7qlK8X0aEf7XOghqki2+1dyq1ppdQzXcYLL
-X-Gm-Gg: ASbGncvL18CP/97m6CtHwMiTUULKncu0P/VcGcIJIaWCGRzpVQBJcnFs42Pw6ILtLTx
-	sNO+mUQBzn4nO0+otgvuGQ8tSGAyK9xqarzS2/ynkgYf21aT/7EwfTbeN+RmL+s2+gtVtD+GcA8
-	mmy6g8BA+5ZmdiyOUyzFZq9RNRqBgLSIlpoUj0Vyxz1kV68fLnMNxJfIgrcn8kDJDcNgf21PEvs
-	aHiEW2ZZ/VdOdQ1QyAukK1hHIqx/sgh2UmxIkveC//DSNab6aAjj9PBD/lRkHdNx1G9sa+3v/OP
-	mPiG9MzM5UZdsBzqv1wAa2CifysBxCl4lgvxEo+/rg+As2iqJkDLEJa0o/rJwmcAjq2Q2mzMz4C
-	4Iw4og4k8h52JhrPJunitaMminlv6bjRYv/eTVmqNu5p8wmd6j97oMVc=
-X-Google-Smtp-Source: AGHT+IEIxK407BN/nRZ47kkeNtQIUEKEBZTDjo32BZ50MJRc8XdZoKJKX3cAQ7qj5VwtcSvGH/BJPw==
-X-Received: by 2002:a05:600c:3b8e:b0:459:d780:3604 with SMTP id 5b1f17b1804b1-45b5723940bmr46755675e9.3.1756035277711;
-        Sun, 24 Aug 2025 04:34:37 -0700 (PDT)
+        bh=zeZs0XJJdh2SbqJW5bpVt1AZYdGyUD1UAVS4r4zgBDM=;
+        b=SIImXPdx2QiK6qyi/4ibW9UJ0/hpRPtS1B2oyAUQHRZTOxIFgfqSmCKtz5I7M/HavJ
+         4tvSSaHkPy4kXxVE6pDAoJsmErEgHN3hKDwXwV3QTCIOOudRdOE2DqX/8xn+WvMDKPf5
+         MyKpLHSLxUL+yy2MXWXgFXwO8IZ8gT/S8HnbR13lL/6hbNq+HaKNvXgShjxYGTWlfZqt
+         TFtJd25buRKzY2dxJ2e00GRPkUgPjaTSx//p5IJAS4IT7AhiMoIvCtNMRX8l+4k80Mj6
+         WdO7rhsWQTNGKdxY99NMJlhe3TCmB8nAAN2CPJtObQ/aqMrNv05ckdgb8AZmxMMQis6D
+         ghSQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVT0JZeqVJ6I8WaoCKxMZTLxHMzYE2zE5Jnj+Q8UBXHqoKT/KAigXwGhmSU0rsbtIFe+wLXUCJcrzLBrLGW@vger.kernel.org, AJvYcCXWMl5pfJX5owQyba2VnkWzjxJ7eU3ZmQSDD+BoMLq9//1grE9arQjbZzf72ffScHsuimM3LWBkpQcV@vger.kernel.org
+X-Gm-Message-State: AOJu0YzV3DDlrb6NfZsufiwzaOoZSWjuyaWf2ACpTz1bBpO7G9WhnxSg
+	VA5Ls5NKMuXo3XKA1qfcDAjo9qmSIQ2QgRB2CQZtQmwiRWcUByDMfk9F
+X-Gm-Gg: ASbGnctGXbZcY6zfOqH2X2njEZ5wzN6NJAD4CugD6r20e9qFbm13KJta2T4WtPRbWN7
+	XVEETPjtRQoIEoVspCq0+xKSvi5KgDS4MrXtfWPVLg2z1vpy1tP7/MBGyBXJW44ZObNa57aPaQD
+	0RIsnk0/Gi0XjPNoznR6ymeGfvf89W27blA/+gEGCrA81yjSojNehWlepWJFFDtqrINQq1CYF2G
+	85nCwg2/58iwG4IMk/2ZW4K5r8cMCrKdrkfe2/T+YvWcyNq67bTuRgPtE/DtkgDyQHADK0R65mM
+	3XTIMKZ6D4Fejtd8pohD8+5G7JuO+x6hLSPtfWfMa6z/q50H0Zg/zRAp9/pQI4ECpiIPCUHW+HM
+	B0GlMoQiJLqTiCC/MaRCGBsxeJ1qjNfVuuRwsSKIan9daCEcW0KebWas=
+X-Google-Smtp-Source: AGHT+IFaNZBlLfDzFG6fpMxFZLJa6/ZW1p2M73HbTSPFER9nKnVrqHAhuR0HjpOvPDiVLUZv8W2G9A==
+X-Received: by 2002:a05:600c:3b18:b0:459:db5a:b0b9 with SMTP id 5b1f17b1804b1-45b517cfb8cmr67775305e9.28.1756035278454;
+        Sun, 24 Aug 2025 04:34:38 -0700 (PDT)
 Received: from builder.. (197-10-142-46.pool.kielnet.net. [46.142.10.197])
         by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45b5757453fsm66470895e9.14.2025.08.24.04.34.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Aug 2025 04:34:37 -0700 (PDT)
+        Sun, 24 Aug 2025 04:34:38 -0700 (PDT)
 From: Jonas Jelonek <jelonek.jonas@gmail.com>
 To: Chris Packham <chris.packham@alliedtelesis.co.nz>,
 	Andi Shyti <andi.shyti@kernel.org>,
@@ -87,9 +87,9 @@ Cc: linux-i2c@vger.kernel.org,
 	Harshal Gohel <hg@simonwunderlich.de>,
 	Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	Jonas Jelonek <jelonek.jonas@gmail.com>
-Subject: [PATCH v6 10/12] i2c: rtl9300: use scoped guard instead of explicit lock/unlock
-Date: Sun, 24 Aug 2025 11:33:46 +0000
-Message-ID: <20250824113348.263475-11-jelonek.jonas@gmail.com>
+Subject: [PATCH v6 11/12] dt-bindings: i2c: realtek,rtl9301-i2c: extend for RTL9310 support
+Date: Sun, 24 Aug 2025 11:33:47 +0000
+Message-ID: <20250824113348.263475-12-jelonek.jonas@gmail.com>
 X-Mailer: git-send-email 2.48.1
 In-Reply-To: <20250824113348.263475-1-jelonek.jonas@gmail.com>
 References: <20250824113348.263475-1-jelonek.jonas@gmail.com>
@@ -101,68 +101,95 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Use the scoped guard infrastructure which unlocks a mutex automatically
-when the guard goes out of scope, instead of explicity lock/unlock. This
-simplifies the code and control flow in rtl9300_i2c_smbus_xfer and
-removes the need of using goto in error cases to unlock before
-returning.
+Adjust the regex for child-node address to account for the fact that
+RTL9310 supports 12 instead of only 8 SDA lines. Also, narrow this per
+variant.
+
+Add a vendor-specific property to explicitly specify the SCL line number
+of the defined I2C controller/master. This is required, in particular
+for RTL9310, to operate on the correct SCL for each controller. Require
+this property to be specified for RTL9310.
+
+Add compatibles for known SoC variants RTL9311, RTL9312 and RTL9313.
 
 Signed-off-by: Jonas Jelonek <jelonek.jonas@gmail.com>
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 ---
- drivers/i2c/busses/i2c-rtl9300.c | 18 +++++++-----------
- 1 file changed, 7 insertions(+), 11 deletions(-)
+ .../bindings/i2c/realtek,rtl9301-i2c.yaml     | 39 ++++++++++++++++++-
+ 1 file changed, 37 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-rtl9300.c b/drivers/i2c/busses/i2c-rtl9300.c
-index fb3ebbd46a18..c67463228604 100644
---- a/drivers/i2c/busses/i2c-rtl9300.c
-+++ b/drivers/i2c/busses/i2c-rtl9300.c
-@@ -72,6 +72,8 @@ struct rtl9300_i2c {
- 	struct mutex lock;
- };
+diff --git a/Documentation/devicetree/bindings/i2c/realtek,rtl9301-i2c.yaml b/Documentation/devicetree/bindings/i2c/realtek,rtl9301-i2c.yaml
+index 274e2ab8b612..17ce39c19ab1 100644
+--- a/Documentation/devicetree/bindings/i2c/realtek,rtl9301-i2c.yaml
++++ b/Documentation/devicetree/bindings/i2c/realtek,rtl9301-i2c.yaml
+@@ -13,6 +13,8 @@ description:
+   RTL9300 SoCs have two I2C controllers. Each of these has an SCL line (which
+   if not-used for SCL can be a GPIO). There are 8 common SDA lines that can be
+   assigned to either I2C controller.
++  RTL9310 SoCs have equal capabilities but support 12 common SDA lines which
++  can be assigned to either I2C controller.
  
-+DEFINE_GUARD(rtl9300_i2c, struct rtl9300_i2c *, mutex_lock(&_T->lock), mutex_unlock(&_T->lock))
+ properties:
+   compatible:
+@@ -23,7 +25,15 @@ properties:
+               - realtek,rtl9302c-i2c
+               - realtek,rtl9303-i2c
+           - const: realtek,rtl9301-i2c
+-      - const: realtek,rtl9301-i2c
++      - items:
++          - enum:
++              - realtek,rtl9311-i2c
++              - realtek,rtl9312-i2c
++              - realtek,rtl9313-i2c
++          - const: realtek,rtl9310-i2c
++      - enum:
++          - realtek,rtl9301-i2c
++          - realtek,rtl9310-i2c
+ 
+   reg:
+     items:
+@@ -35,8 +45,14 @@ properties:
+   "#size-cells":
+     const: 0
+ 
++  realtek,scl:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description:
++      The SCL line number of this I2C controller.
++    enum: [ 0, 1 ]
 +
- enum rtl9300_i2c_xfer_type {
- 	RTL9300_I2C_XFER_BYTE,
- 	RTL9300_I2C_XFER_WORD,
-@@ -283,11 +285,11 @@ static int rtl9300_i2c_smbus_xfer(struct i2c_adapter *adap, u16 addr, unsigned s
- 	if (addr > 0x7f)
- 		return -EINVAL;
+ patternProperties:
+-  '^i2c@[0-7]$':
++  '^i2c@[0-9ab]$':
+     $ref: /schemas/i2c/i2c-controller.yaml
+     unevaluatedProperties: false
  
--	mutex_lock(&i2c->lock);
-+	guard(rtl9300_i2c)(i2c);
+@@ -48,6 +64,25 @@ patternProperties:
+     required:
+       - reg
  
- 	ret = rtl9300_i2c_config_chan(i2c, chan);
- 	if (ret)
--		goto out_unlock;
-+		return ret;
- 
- 	xfer.dev_addr = addr & 0x7f;
- 	xfer.write = (read_write == I2C_SMBUS_WRITE);
-@@ -324,20 +326,14 @@ static int rtl9300_i2c_smbus_xfer(struct i2c_adapter *adap, u16 addr, unsigned s
- 		break;
- 	default:
- 		dev_err(&adap->dev, "Unsupported transaction %d\n", size);
--		ret = -EOPNOTSUPP;
--		goto out_unlock;
-+		return -EOPNOTSUPP;
- 	}
- 
- 	ret = rtl9300_i2c_prepare_xfer(i2c, &xfer);
- 	if (ret)
--		goto out_unlock;
--
--	ret = rtl9300_i2c_do_xfer(i2c, &xfer);
--
--out_unlock:
--	mutex_unlock(&i2c->lock);
-+		return ret;
- 
--	return ret;
-+	return rtl9300_i2c_do_xfer(i2c, &xfer);
- }
- 
- static u32 rtl9300_i2c_func(struct i2c_adapter *a)
++
++allOf:
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: realtek,rtl9310-i2c
++    then:
++      required:
++        - realtek,scl
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: realtek,rtl9301-i2c
++    then:
++      patternProperties:
++        '^i2c@[89ab]$': false
++
+ required:
+   - compatible
+   - reg
 -- 
 2.48.1
 
