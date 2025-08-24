@@ -1,78 +1,78 @@
-Return-Path: <linux-i2c+bounces-12393-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12394-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 820A7B32F86
-	for <lists+linux-i2c@lfdr.de>; Sun, 24 Aug 2025 13:36:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C7CBB32F8E
+	for <lists+linux-i2c@lfdr.de>; Sun, 24 Aug 2025 13:36:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 04744188058F
-	for <lists+linux-i2c@lfdr.de>; Sun, 24 Aug 2025 11:35:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8E817188BB0C
+	for <lists+linux-i2c@lfdr.de>; Sun, 24 Aug 2025 11:35:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD9092D6E7E;
-	Sun, 24 Aug 2025 11:34:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5304B2D7804;
+	Sun, 24 Aug 2025 11:34:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l7qc+e2Z"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KiekYStG"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADBDA2B2D7;
-	Sun, 24 Aug 2025 11:34:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BF9E1DC198;
+	Sun, 24 Aug 2025 11:34:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756035274; cv=none; b=JzEHadhunPXJWSFnHHKHRt7by0E0FGIBC+OWc54Y9shNvPs8rPevWx0mJs6zkrpnGPiP8ovWcAKmSrvdUdMWATvzSl0tWy6bOKQ1ZYoCzmgRfP6si4bH8JHksYJRgg5vMz3QUzp+EqkpKJXeQlIxNuQUrn34WOjEmzOM6KrJsR8=
+	t=1756035275; cv=none; b=bc/SExm3qcBfBVb8dHS9Sz9WJtvk7jqSIRWq7fNGPV/ciE53CzrwjsBM83sAcMXNaxTVjpR04pwL9k84/+kg86EMMm1HDeM8DmsPFVgBgHyQEP5jnonLn7ZvHqsWUI3eMj1DHieID19ScIC9FBC/2a5dtlGpJbKJf8HtUUipNTs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756035274; c=relaxed/simple;
-	bh=Y4VrVsctznpA3d6zQ5f7c9ZAHxYHXmHRz3iJoJmb+MU=;
+	s=arc-20240116; t=1756035275; c=relaxed/simple;
+	bh=M/j3jg6iSNlGkf6wyCuJOna6CpDQLgph69HL/obvbno=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VszsLRt6fuVYcCXQA8UDiTcygyq3NUkw6zWD80z8WmOkQpkuSWT4NIBPvlW40EFNGsXgKyA1kpkbhQ/LPVDIAidQcicbJa4xUzD7VHoPQJoFRHBz/uldRAzegwzKWsw2GSFUpFiQtta7BGUFwwb/Jl+ZWDFrNdaZkVg/DFUDzGY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l7qc+e2Z; arc=none smtp.client-ip=209.85.128.45
+	 MIME-Version; b=XHbqP6obBcr5zKxUMG4Z2pV/tZEV4ejLSpFqjJAi26CMqp+TGeo6NNTGwjDHtqoBUPoIrtp89rzrCAW/blV+rxJoWoSwlkQpf1vvjEcSNTjCscfj27UaYOvKFpqNtZ/MqfIK3pxUzEuJp8ydHO3IcG4EZAEQGykGhPZ39tcU5x4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KiekYStG; arc=none smtp.client-ip=209.85.128.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-45a1b0c82eeso29266915e9.3;
-        Sun, 24 Aug 2025 04:34:32 -0700 (PDT)
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-45b4d89217aso17512975e9.2;
+        Sun, 24 Aug 2025 04:34:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756035271; x=1756640071; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1756035272; x=1756640072; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=KfOYpGHEdfYkC71vUp6gZRWfFSWO3whbK1R7EckfiZQ=;
-        b=l7qc+e2Ze/J1Pg3ZMId9UNWUco0lgigQVJ36Wq+7QN+wkFeyBNzRFs4M/ao0FxtCOX
-         yFUut4mD6vh/Pm1MbO3yhyw3/5de33LSK1rvHlIwQPJz3M453EvgXI/qOolm+UBCgC5U
-         7OrBYvoGBhP9SMY7kWxlUAxrHRndWdcbZMnC/g0lqDgn/oU4N3+e/4ZvLm578DlZoELU
-         aFzuFmOXhkQG5QlRYj0gJ9TSXEzwzDJGLxHwh9jnTcKsrxP+4GGD7DkiJCt9uDNi85pf
-         j0ttXEBfH1lH/WW4ig1BAxTd9yuJpDciJm7bzRU456r7RrfPjB9wfD7e8Kd0YDei+Cwo
-         QtEA==
+        bh=qQv5kNpDRuyJXRv/R9Pqr7iIwNZy1Lxb15S6N4mI6JI=;
+        b=KiekYStGTxVav4+cXTEphUC/iXoXFGfrrFoubsdk6FxKNrPVoJWjm45koiiDAc4rK/
+         kVq10WNJgF6cr2a03B/EmFEA69vn6r+KakCNK0nvFrMMb5LY8sx7EZXONnYRtE7LSwbW
+         aE2YI+HutoIcKY0DjPjRUvC5j2q9zoI6o9MWk5xgkjNjXgSZTXSn5ejHwXuIr4vi7RG/
+         Pj4zVkrvQze3c5fCk6RMVteH68RKi5OcFv5qiiFPI4/KyoTXJLZuNLUtOleizQxSRZ2M
+         cQjWcnZ4arC4Ut8NY/PBtFJ+fWQrT50XegK0wzAsuDI41vVIJtF6BMS+wFfF0P+U4Bv9
+         Q7ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756035271; x=1756640071;
+        d=1e100.net; s=20230601; t=1756035272; x=1756640072;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=KfOYpGHEdfYkC71vUp6gZRWfFSWO3whbK1R7EckfiZQ=;
-        b=Row3ayKxnaZ4qDpgYvEmH07WIsY62HujesqQjPE651KtzGILbG9dX+/Zrtu4A8akCR
-         Nw2pSeKGvvrRhWJRz5slLT79gwJo53ryRtA+SegQHUVR2/4VOGVKHjj/eZGkr9rNWyoY
-         KTHInFdZB4TCuLEAj1DH5Dx0H/V8C4g/Rxe/Nu55mFy/ylMoAL0vazB7iXgYrKoEFxpX
-         uL+MVaswDpIoZgTFI85amkPUPG3CJUJOOOu9bzQ2UFcjtrfYtfPJExzu31BrwlSmJGF/
-         PLse9z9uwfGXdfXZWTKBdmobkCCfZxhji1/xUnnGwpEcGoY3YbS/Bkd2ciyyLsMwF7XM
-         ED4A==
-X-Forwarded-Encrypted: i=1; AJvYcCUP4QD0TsglfFC2fMdthJ0TXhfMkGQxWGt1L5N/ArEoCkGmISaME+nw86MXt7osPw948s3ILCuKDiv5mUn5@vger.kernel.org, AJvYcCWpj6NVzTcRkG2MsOGqBlBP5X8aZJ1nTiwQkk6CDQIbz//TzWISDUBhKgwaV6w70E9elRqazjer@vger.kernel.org, AJvYcCXD3TKxdFIqQ1o0Am1n65q+mHr093Pgcj6I0PhnY2zBF/lsrbEferBFw8WP2GK9NGN2lw7VJ3oyDiap@vger.kernel.org
-X-Gm-Message-State: AOJu0YxwCHt4y5Nf+mk2RvZ6Aat/8pwYOS+5kbZUyZuBm+6fRcdHDtm+
-	RYpdCjsga4AuU7B2N1akckpTXtoQlaSTVN9+PGGUAO57FrmASSfs+eTX
-X-Gm-Gg: ASbGncthrtnHO/E7cLBfypVlYPZlI9XdXHMo53A3OEKyv26l9w3WhvzdL/PAEhiOghT
-	K/P9rRI2O5z5yfNSa1ExwgSg+RrV4D5s1chsUIrj3XSjFoVQBSOpFt812hLypMktBSLdmVACz5W
-	B2ePXOELlGQb+5al9d2Q5UtFDE/lr7RgnhL25ol/g+ZNOT0DKPLma8NU/VwETBj56fMrQ/BT0kD
-	jtFmhiGtdg5xqqFPfuWCNEWeoxsivmciDZnOsZ3wGZBaXbgPDHNZYqSoiZpWnQlpCm5UTzBfSOH
-	7xSmJ1JTtURHSEilDYduhFfKTftYr5kt/jUhdDVzk+JYjVJ1X/F8675PKrOAM3gyq7jzt1gARZw
-	LuE/LrI7wAauTPCRmiTzAO+RzK8BpGxGEBHJOSHAuThgAQKMDU3Rr6JM=
-X-Google-Smtp-Source: AGHT+IHVLi35AXLVhZybVFL7JSkg4+AiuIcyS1PuReQfFInSNhBjxd4y6dfYrb2AkQqRDX+qiiwFwA==
-X-Received: by 2002:a05:600c:c48e:b0:45b:5f3d:aa3d with SMTP id 5b1f17b1804b1-45b5f6bde93mr4564625e9.21.1756035270752;
-        Sun, 24 Aug 2025 04:34:30 -0700 (PDT)
+        bh=qQv5kNpDRuyJXRv/R9Pqr7iIwNZy1Lxb15S6N4mI6JI=;
+        b=B5oLBE6KPnOlSVyV0hGNvgLJ4tREcf8wb5rpbx4kwEEMyHR4AKD7vlBAwbz4c6yLBp
+         63wDr/e0ub7WSfKR7zVtz03hWoKla0uKld3Gvtyw9+zRWl59v3500P9tekTawwlhzFDG
+         SC/iu6fBg6D9yyiNSjx+fuAaBn7TwqQ0dhj7ETitoYBsR/o77j5huqB5xhiUlR3mc/1l
+         oSBWmIh83A6j17+FuxkG/pOmJPwI7QleZy2XcBaoKtqzsI6rpNc302tTELpBfBqsHWUq
+         /OF3yTCGjIOdSEWucbccIlZQNqh0l/Fhtur6AG7s93Q0DH7r+ANcRo0yjnJlZDxRTmzf
+         wfIA==
+X-Forwarded-Encrypted: i=1; AJvYcCUuX/lUkt+alAvqz6lgn51vqalMbMM9SZUFF0xLUKE3s/c4kvvJYt8VbbGmnduYqtF+0s/JKcDEzKIU8p4h@vger.kernel.org, AJvYcCWBtbgHXMcryfMT/lYsj0ntSYJDWfin9yczCQQKlCvzGrBcmFUEqogFICSA/RJGkur6ljLweFUF@vger.kernel.org, AJvYcCWWaGMPCUZ3+BJXNR79d8o5ypOvviLvCbLmGzoew0aEftRqxGAgpGQvtCj7Tjd3vtCXeMAJDL2z4jPW@vger.kernel.org
+X-Gm-Message-State: AOJu0YwKc1cyu6JTMO0G5t2+UIOL9+6ppW5a+oyazf51Ir6YRS3/hTd3
+	RwYA/OpG33lBfWpn2R7CKGsXndGaSh3WemijfT22CyD+2FLOFb5fjXlu
+X-Gm-Gg: ASbGncs6Vw/W3zJlrVD/BWvWK7AzuI+Hh3BuEpeOg+2jnJSApPdDHoVX+AsHnulBBw5
+	Wads7ngRJeHyB1D79Q5Bn4qFPFC73O8RYovZtuW8HwuqJHg9hlHGNNFXNg/VDSsPJJkVDntanuu
+	j/Jyklp5oQmbx+xFKA24HCvQdmu3J92foCLUe6bZqFbbX3+vXktXF3Z8DjszG7at/aR5PBAsy3j
+	24oR+5MLEXMwzCZfbDtzedRgwMLnxZZCsgUH+Pr0JqKLijCLkhJ1jF/4iT+jU7QrebShgDPZQ/g
+	y57HWAVPXJmox+avfgDW7O0QYOmIanrmw1vpCavEUfcqabupPB3DgpdrxSH/C9ItlWfrfZW77y+
+	TWretUv+TCzk8sA1gmVEz/MNeyuab29pUj1hJqUFEIdMq2L7lqwCGrKU=
+X-Google-Smtp-Source: AGHT+IEou+mkIjKMMneneCupHg/VUQE5pHLMfdEnWTGUjiK7lFROxhFimii6vBYaul2mMqZx+SZLxQ==
+X-Received: by 2002:a05:600c:46c5:b0:458:a7fa:211d with SMTP id 5b1f17b1804b1-45b517e95a3mr65342325e9.29.1756035271563;
+        Sun, 24 Aug 2025 04:34:31 -0700 (PDT)
 Received: from builder.. (197-10-142-46.pool.kielnet.net. [46.142.10.197])
         by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45b5757453fsm66470895e9.14.2025.08.24.04.34.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Aug 2025 04:34:30 -0700 (PDT)
+        Sun, 24 Aug 2025 04:34:31 -0700 (PDT)
 From: Jonas Jelonek <jelonek.jonas@gmail.com>
 To: Chris Packham <chris.packham@alliedtelesis.co.nz>,
 	Andi Shyti <andi.shyti@kernel.org>,
@@ -88,9 +88,9 @@ Cc: linux-i2c@vger.kernel.org,
 	Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	Jonas Jelonek <jelonek.jonas@gmail.com>,
 	stable@vger.kernel.org
-Subject: [PATCH v6 01/12] i2c: rtl9300: fix channel number bound check
-Date: Sun, 24 Aug 2025 11:33:37 +0000
-Message-ID: <20250824113348.263475-2-jelonek.jonas@gmail.com>
+Subject: [PATCH v6 02/12] i2c: rtl9300: ensure data length is within supported range
+Date: Sun, 24 Aug 2025 11:33:38 +0000
+Message-ID: <20250824113348.263475-3-jelonek.jonas@gmail.com>
 X-Mailer: git-send-email 2.48.1
 In-Reply-To: <20250824113348.263475-1-jelonek.jonas@gmail.com>
 References: <20250824113348.263475-1-jelonek.jonas@gmail.com>
@@ -102,41 +102,62 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Fix the current check for number of channels (child nodes in the device
-tree). Before, this was:
+Add an explicit check for the xfer length to 'rtl9300_i2c_config_xfer'
+to ensure the data length isn't within the supported range. In
+particular a data length of 0 is not supported by the hardware and
+causes unintended or destructive behaviour.
 
-if (device_get_child_node_count(dev) >= RTL9300_I2C_MUX_NCHAN)
+This limitation becomes obvious when looking at the register
+documentation [1]. 4 bits are reserved for DATA_WIDTH and the value
+of these 4 bits is used as N + 1, allowing a data length range of
+1 <= len <= 16.
 
-RTL9300_I2C_MUX_NCHAN gives the maximum number of channels so checking
-with '>=' isn't correct because it doesn't allow the last channel
-number. Thus, fix it to:
+Affected by this is the SMBus Quick Operation which works with a data
+length of 0. Passing 0 as the length causes an underflow of the value
+due to:
 
-if (device_get_child_node_count(dev) > RTL9300_I2C_MUX_NCHAN)
+(len - 1) & 0xf
 
-Issue occured on a TP-Link TL-ST1008F v2.0 device (8 SFP+ ports) and fix
-is tested there.
+and effectively specifying a transfer length of 16 via the registers.
+This causes a 16-byte write operation instead of a Quick Write. For
+example, on SFP modules without write-protected EEPROM this soft-bricks
+them by overwriting some initial bytes.
+
+For completeness, also add a quirk for the zero length.
+
+[1] https://svanheule.net/realtek/longan/register/i2c_mst1_ctrl2
 
 Fixes: c366be720235 ("i2c: Add driver for the RTL9300 I2C controller")
 Cc: <stable@vger.kernel.org> # v6.13+
 Signed-off-by: Jonas Jelonek <jelonek.jonas@gmail.com>
 Tested-by: Sven Eckelmann <sven@narfation.org>
 ---
- drivers/i2c/busses/i2c-rtl9300.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/i2c/busses/i2c-rtl9300.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/i2c/busses/i2c-rtl9300.c b/drivers/i2c/busses/i2c-rtl9300.c
-index 4b215f9a24e6..19c367703eaf 100644
+index 19c367703eaf..ebd4a85e1bde 100644
 --- a/drivers/i2c/busses/i2c-rtl9300.c
 +++ b/drivers/i2c/busses/i2c-rtl9300.c
-@@ -382,7 +382,7 @@ static int rtl9300_i2c_probe(struct platform_device *pdev)
+@@ -99,6 +99,9 @@ static int rtl9300_i2c_config_xfer(struct rtl9300_i2c *i2c, struct rtl9300_i2c_c
+ {
+ 	u32 val, mask;
  
- 	platform_set_drvdata(pdev, i2c);
++	if (len < 1 || len > 16)
++		return -EINVAL;
++
+ 	val = chan->bus_freq << RTL9300_I2C_MST_CTRL2_SCL_FREQ_OFS;
+ 	mask = RTL9300_I2C_MST_CTRL2_SCL_FREQ_MASK;
  
--	if (device_get_child_node_count(dev) >= RTL9300_I2C_MUX_NCHAN)
-+	if (device_get_child_node_count(dev) > RTL9300_I2C_MUX_NCHAN)
- 		return dev_err_probe(dev, -EINVAL, "Too many channels\n");
+@@ -352,7 +355,7 @@ static const struct i2c_algorithm rtl9300_i2c_algo = {
+ };
  
- 	device_for_each_child_node(dev, child) {
+ static struct i2c_adapter_quirks rtl9300_i2c_quirks = {
+-	.flags		= I2C_AQ_NO_CLK_STRETCH,
++	.flags		= I2C_AQ_NO_CLK_STRETCH | I2C_AQ_NO_ZERO_LEN,
+ 	.max_read_len	= 16,
+ 	.max_write_len	= 16,
+ };
 -- 
 2.48.1
 
