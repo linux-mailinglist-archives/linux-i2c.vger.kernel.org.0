@@ -1,126 +1,133 @@
-Return-Path: <linux-i2c+bounces-12410-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12411-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC621B3338B
-	for <lists+linux-i2c@lfdr.de>; Mon, 25 Aug 2025 03:30:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59ED6B33472
+	for <lists+linux-i2c@lfdr.de>; Mon, 25 Aug 2025 05:14:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 81F8E4E1027
-	for <lists+linux-i2c@lfdr.de>; Mon, 25 Aug 2025 01:30:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 105AA3B8417
+	for <lists+linux-i2c@lfdr.de>; Mon, 25 Aug 2025 03:14:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 284D71400C;
-	Mon, 25 Aug 2025 01:30:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55D3223A9B3;
+	Mon, 25 Aug 2025 03:14:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=iitb.ac.in header.i=@iitb.ac.in header.b="VXvJnu5u"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OrawLOzm"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp1.iitb.ac.in (smtpd9.iitb.ac.in [103.21.126.64])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B4B5632
-	for <linux-i2c@vger.kernel.org>; Mon, 25 Aug 2025 01:30:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.21.126.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEC50188580
+	for <linux-i2c@vger.kernel.org>; Mon, 25 Aug 2025 03:14:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756085451; cv=none; b=MtHb7eub/hHLy7+JH54AUxgImtUJ0CLK8C+wnZTY+ZuI0DGdptszf+j9iJQsoLSy6OjGMVWrFWQWoyptFh2N9jgWIh5fvNnnzsfaTshpQ6FOZKTWRF1qLeoBEsTLgrQM5sgJpuKoP/wKciEra8seHlgpRWdSwqycBYIp25W3YSU=
+	t=1756091686; cv=none; b=pye74RnhUGAu91iZlNzwx+oS6nBeNBGiTLFfZ1oLufhqPY0btEqfSfc4WiG6CJoHGNbqt4L8POgSdd7sThRu6nBrYBjKiUHSikVbef9Es9UxoyB5hInvMrgC2Ihw9cQNPd2dri9Z7aAxVQVpo49+zzXtWkJ86urRGqO17Es8BNY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756085451; c=relaxed/simple;
-	bh=2kwfTXoobLmapxlniSHHmwRO8M1wNd741QK0rAlsvjk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IpeFHVnd753BAdBdCwi/NG+nzGCb3FsW6mqukmM4x50a1MddU6pRyrYqVYnoaxnTsxEIEw0rGbTXOE5xeNl6J3RURwwzCL1w0FqmVVGkGdy/RS2DXnWAelXiY5CcgLrUQTrqViATKLQP7Xi6sWhanBJ35+tqAvYzJSc4/fOtU9o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ee.iitb.ac.in; spf=pass smtp.mailfrom=ee.iitb.ac.in; dkim=pass (1024-bit key) header.d=iitb.ac.in header.i=@iitb.ac.in header.b=VXvJnu5u; arc=none smtp.client-ip=103.21.126.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ee.iitb.ac.in
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ee.iitb.ac.in
-Received: from ldns1.iitb.ac.in (ldns1.iitb.ac.in [10.200.12.1])
-	by smtp1.iitb.ac.in (Postfix) with SMTP id A4B70104C1E0
-	for <linux-i2c@vger.kernel.org>; Mon, 25 Aug 2025 07:00:35 +0530 (IST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.iitb.ac.in A4B70104C1E0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=iitb.ac.in; s=mail;
-	t=1756085435; bh=2kwfTXoobLmapxlniSHHmwRO8M1wNd741QK0rAlsvjk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VXvJnu5uu8dlPsEICREGUzUEcFKYpqM3ULN/F5LSB7tLkqLG6DJR2jfx6+ubMcbm2
-	 +FxMPGXFYXGjWncqFlY7UEZ9cX+vY1NWBiY9zy1RQa1u/KHRD0plHRZCVoDcI/BL3q
-	 TowmpJmStxkJToD9ZILlgyAOWGkIJgOYGRfldFow=
-Received: (qmail 11765 invoked by uid 510); 25 Aug 2025 07:00:35 +0530
-X-Qmail-Scanner-Diagnostics: from 10.200.1.25 by ldns1 (envelope-from <akhilesh@ee.iitb.ac.in>, uid 501) with qmail-scanner-2.11
- spamassassin: 3.4.1. mhr: 1.0. {clamdscan: 0.101.4/26439} 
- Clear:RC:1(10.200.1.25):SA:0(0.0/7.0):. Processed in 2.148082 secs; 25 Aug 2025 07:00:35 +0530
-X-Spam-Level: 
-X-Spam-Pyzor: Reported 0 times.
-X-Envelope-From: akhilesh@ee.iitb.ac.in
-X-Qmail-Scanner-Mime-Attachments: |
-X-Qmail-Scanner-Zip-Files: |
-Received: from unknown (HELO ldns1.iitb.ac.in) (10.200.1.25)
-  by ldns1.iitb.ac.in with SMTP; 25 Aug 2025 07:00:33 +0530
-Received: from bhairav.ee.iitb.ac.in (bhairav.ee.iitb.ac.in [10.107.1.1])
-	by ldns1.iitb.ac.in (Postfix) with ESMTP id 06354360036;
-	Mon, 25 Aug 2025 07:00:33 +0530 (IST)
-Received: from bhairav-test.ee.iitb.ac.in (bhairav.ee.iitb.ac.in [10.107.1.1])
-	(Authenticated sender: akhilesh)
-	by bhairav.ee.iitb.ac.in (Postfix) with ESMTPSA id D9DDD1E81387;
-	Mon, 25 Aug 2025 07:00:32 +0530 (IST)
-Date: Mon, 25 Aug 2025 07:00:28 +0530
-From: Akhilesh Patil <akhilesh@ee.iitb.ac.in>
-To: I Viswanath <viswanathiyyappan@gmail.com>
-Cc: peda@axentia.se, wsa+renesas@sang-engineering.com,
-	linux-i2c@vger.kernel.org, skhan@linuxfoundation.org,
-	linux-kernel-mentees@lists.linux.dev
-Subject: Re: [PATCH] i2c: i2c-mux: Simplify boolean assignment in
- i2c_mux_alloc
-Message-ID: <aKu8tBBOWqltEstx@bhairav-test.ee.iitb.ac.in>
-References: <20250824181416.4316-1-viswanathiyyappan@gmail.com>
+	s=arc-20240116; t=1756091686; c=relaxed/simple;
+	bh=7ispcaVyIRZ5/+9jltafMh3K9aVRjMx0ix02kFpxxYM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ry6qniIrp3FcknPuk+CMK+YIZJb41hifqrs42AS3ZTzXs/jd/zy/EIY0nr3Y7Drt+P9yAVYXgMhWjn0R2QIE84xWHMzlu8I+NDmfzq6QAa7DUwIKNcgR9kcLgkJl7iLaHcRO9Af+O5Cxirtdr/ftuUYXhbhk00mN7yTyHBDo+gw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OrawLOzm; arc=none smtp.client-ip=209.85.216.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-3253f2a7679so2308099a91.2
+        for <linux-i2c@vger.kernel.org>; Sun, 24 Aug 2025 20:14:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1756091684; x=1756696484; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fbDkfYYEsVLJhNP0a8Qpsz+hz60XktfWQT+eId+bxvc=;
+        b=OrawLOzmF1V/59Ti1Mmmp0uKu/s+PIT78bGm1tzEj/qZN0Y6ZgQ43eycJUA9SXyAZR
+         YLJi0iSHdkmkMRcp51/kIvX92jfk66IBzKafWRLw+Z+f+efMGpp69Ewy2D7bl/hXN9Iy
+         2RZiUQjqsAv9Sk/ap2e/9iHOlPJzC+PZO2pNpxx+MukpS3nJS8ghdGpsTE6ldR07s5QE
+         44Iy8ofMHDuOqwfA9RQkB1yvQ3thLn8hPQaXoBpbcKsY6hQM1g3jBMJlpD+IQ2r0Phre
+         RG1r8GanMySNuHLD+aA56/gO+nwokY4QC2iB7ra0tYgPfj0fUTtubp3AlH2cG8R9rskr
+         Xjng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756091684; x=1756696484;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fbDkfYYEsVLJhNP0a8Qpsz+hz60XktfWQT+eId+bxvc=;
+        b=ajmdo4cgWUqnpFztHWmpi4SaOJRblGfo8bOCxCth7cnNI0pI3K0J3isX/6BQBpb4Ll
+         4BBmvhAPXnyCqKwndYOkaRihZ86quEdUuwgkxLebY3PIipiytnpskemam3afuBNUzs8H
+         aaQrVWd7gu6QHt2SYewdMh2urRlsFtMeFoIIJ9ZZ755FC20ZL5HuWZitrxhjUftgf5vx
+         4LJbvqzLt/nMUP8/YDj4Fib+Nul+Yhw4ux2pXSOlz5pJr0iBJL1kPOHVlvTW/oIq+aNL
+         4hSkVJ1+Ca12Q0vlqmI3AYaYGlTtHDFmUf7Cp53dWwZIZ9QCDJTrUtWXCNE/Wnl41Wn2
+         7FjA==
+X-Forwarded-Encrypted: i=1; AJvYcCXt5E0J72ZIgHZQYglbSZzmhh6NGtG/v1UJFJhxT+RCE0AZaHxLiZoYF6dJXrJcuhhOT1CInt/Ic2c=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxl6KJhrIi814IF7Jx+T3z55pzb1ieozc7zjLhP4FNvcuJFhyGZ
+	wtRUT8AsgYQeS03rYYSioeyhow8GwfkDZwnE7JwQq9AvpUbbA3EXpNdFp4eZKD0nwQg=
+X-Gm-Gg: ASbGncvKmsmsZhqvFLG0MNaTtKluQMYM6zSTAMG/nTOvp0SsTt0fRHqkCzvCPxIgvRw
+	WoM13p3cljZfjDwp9Tk/1zvMj22ZbxBr/rs9z0RbMbDKy9O5XlpaLDDdyeMHCJYht2oEStgWUtA
+	FXUMDioF3T1Xt1lRgUqCiqPZhetQRX+JGeOQkcBzUIRRWYaLuYoY5WCMHN3tGentvEgSJFaN6Dk
+	dArkFUfxgovZnxWft7Aeb7pcugoRobE3rZfA59pdeVcbPTAoldPMKxQjmsxtdYxWjGIq1RSsPRN
+	8262i6YHExPx8E6tYpZrcLOYk5wPyIvJJMaXibpgEQYhYmheqbaIT2gtFvay7PHkX5tozBNfBcx
+	mdl3qzvVA2eSQDpMIcL74p3EOj/28p8ERQg8=
+X-Google-Smtp-Source: AGHT+IGj1na0x2IMhWwnhwZtx6tPkKNpoFJ4Sadg4K9MqcpgWZjrlDL27dkztBwCKtrKl6GJR1OSgw==
+X-Received: by 2002:a17:902:ef06:b0:242:9be2:f67a with SMTP id d9443c01a7336-2462ee0bec3mr148071585ad.11.1756091683819;
+        Sun, 24 Aug 2025 20:14:43 -0700 (PDT)
+Received: from linux ([223.181.105.16])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3254aa4fc14sm5693904a91.18.2025.08.24.20.14.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Aug 2025 20:14:43 -0700 (PDT)
+From: I Viswanath <viswanathiyyappan@gmail.com>
+To: akhilesh@ee.iitb.ac.in
+Cc: peda@axentia.se,
+	wsa+renesas@sang-engineering.com,
+	linux-i2c@vger.kernel.org,
+	skhan@linuxfoundation.org,
+	linux-kernel-mentees@lists.linux.dev,
+	I Viswanath <viswanathiyyappan@gmail.com>
+Subject: [PATCH v2] i2c: i2c-mux: Simplify boolean assignment in i2c_mux_alloc
+Date: Mon, 25 Aug 2025 08:44:30 +0530
+Message-ID: <20250825031430.3001-1-viswanathiyyappan@gmail.com>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <aKu8tBBOWqltEstx@bhairav-test.ee.iitb.ac.in>
+References: <aKu8tBBOWqltEstx@bhairav-test.ee.iitb.ac.in>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250824181416.4316-1-viswanathiyyappan@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Sun, Aug 24, 2025 at 11:44:16PM +0530, I Viswanath wrote:
-> Refactor boolean field assignments of the form `if (a) b = true` to `b = a`
-> in i2c_mux_alloc
-> 
-> Signed-off-by: I Viswanath <viswanathiyyappan@gmail.com>
-> ---
->  drivers/i2c/i2c-mux.c | 9 +++------
->  1 file changed, 3 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/i2c/i2c-mux.c b/drivers/i2c/i2c-mux.c
-> index 4d8690981a55..abf63758856b 100644
-> --- a/drivers/i2c/i2c-mux.c
-> +++ b/drivers/i2c/i2c-mux.c
-> @@ -241,12 +241,9 @@ struct i2c_mux_core *i2c_mux_alloc(struct i2c_adapter *parent,
->  
->  	muxc->parent = parent;
->  	muxc->dev = dev;
-> -	if (flags & I2C_MUX_LOCKED)
-> -		muxc->mux_locked = true;
-> -	if (flags & I2C_MUX_ARBITRATOR)
-> -		muxc->arbitrator = true;
-> -	if (flags & I2C_MUX_GATE)
-> -		muxc->gate = true;
-> +	muxc->mux_locked = flags & I2C_MUX_LOCKED;
-> +	muxc->arbitrator = flags & I2C_MUX_ARBITRATOR;
-> +	muxc->gate = flags & I2C_MUX_GATE;
+Refactor boolean field assignments of the form `if (a) b = true` to `b = a`
+in i2c_mux_alloc
 
-Although it looks correct after checking that  mux_locked, arbitrator
-and gate are 1 bit bitfields. I think below with more explicitm, would be nice. 
+Signed-off-by: I Viswanath <viswanathiyyappan@gmail.com>
+---
+v2:
+- Converted the assigned expressions to 1 bit values before assignment to make
+the bitfield assignment more explict according to Akhilesh Patil's suggestion.
 
-muxc->mux_locked = !!(flags & I2C_MUX_LOCKED);
-muxc->arbitrator = !!(flags & I2C_MUX_ARBITRATOR);
-muxc->gate = !!(flags & I2C_MUX_GATE);
+ drivers/i2c/i2c-mux.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
-Regards,
-Akhilesh
+diff --git a/drivers/i2c/i2c-mux.c b/drivers/i2c/i2c-mux.c
+index 4d8690981a55..d59644e50f14 100644
+--- a/drivers/i2c/i2c-mux.c
++++ b/drivers/i2c/i2c-mux.c
+@@ -241,12 +241,9 @@ struct i2c_mux_core *i2c_mux_alloc(struct i2c_adapter *parent,
+ 
+ 	muxc->parent = parent;
+ 	muxc->dev = dev;
+-	if (flags & I2C_MUX_LOCKED)
+-		muxc->mux_locked = true;
+-	if (flags & I2C_MUX_ARBITRATOR)
+-		muxc->arbitrator = true;
+-	if (flags & I2C_MUX_GATE)
+-		muxc->gate = true;
++	muxc->mux_locked = !!(flags & I2C_MUX_LOCKED);
++	muxc->arbitrator = !!(flags & I2C_MUX_ARBITRATOR);
++	muxc->gate = !!(flags & I2C_MUX_GATE);
+ 	muxc->select = select;
+ 	muxc->deselect = deselect;
+ 	muxc->max_adapters = max_adapters;
+-- 
+2.50.1
 
->  	muxc->select = select;
->  	muxc->deselect = deselect;
->  	muxc->max_adapters = max_adapters;
-> -- 
-> 2.50.1
-> 
-> 
 
