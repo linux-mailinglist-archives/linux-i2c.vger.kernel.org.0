@@ -1,134 +1,132 @@
-Return-Path: <linux-i2c+bounces-12433-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12434-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C253EB3681A
-	for <lists+linux-i2c@lfdr.de>; Tue, 26 Aug 2025 16:13:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4179B372B8
+	for <lists+linux-i2c@lfdr.de>; Tue, 26 Aug 2025 20:57:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AB5731C413BE
-	for <lists+linux-i2c@lfdr.de>; Tue, 26 Aug 2025 14:06:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8CEDD1BA0254
+	for <lists+linux-i2c@lfdr.de>; Tue, 26 Aug 2025 18:58:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 909993568F6;
-	Tue, 26 Aug 2025 14:03:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BCFC371E88;
+	Tue, 26 Aug 2025 18:57:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="LG8WFeHg"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="oVUJ2hCu"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1E1335335B
-	for <linux-i2c@vger.kernel.org>; Tue, 26 Aug 2025 14:03:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91DE723BF96;
+	Tue, 26 Aug 2025 18:57:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756217037; cv=none; b=PdPEhETWu6D1iWE44ofpQ8UCblDETIi6z2dvPn76S2LJfiP/c1kYUjaXUP4U7yaGR6Q4qYkJm6lwKagaYcV8I3MtBlEh2zotRYyLHZWezFUA5gjPUPrBtDD8p8iHpLcvQXUJ+kbOoCHpSUoBKL6Rn4n1qNS0laGKk+oI4HoA5UU=
+	t=1756234658; cv=none; b=VW+ZWTv2gGgnQ4RLMEHd6veCUuwiEoG+79DwAcszqq2GHF9yH3xUgLY3pytEzrc5LdAJGM7DKUd3HjJaY0wonqudabypCcMyw/NTkb6LNGnoPEJZHGVA8awpk5LwdjgtPj4XONjrA7L6qFzFpEcdTVHc9NCcMu8VdiJyILXeQwo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756217037; c=relaxed/simple;
-	bh=vmiGt2oLOAQ2EkJCMQq5eKKZ2YXVoazQmkjqPo7+1v4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RBHdBRbH35Ib+nw0y4cYodcKA2K48adz40gX5g7G5AiyIW9JqiQcwY1nW6ZZeHUNmzvdU7zAlhvaqGCUPST/PtKhdB2HMcWh+YMr3SG80j/mEE39Z/NCfYzDivO2VkcKTJ33OwaUM9TqFJ+TXyuYIdkPq32xNX8nApBC5yJPmYQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=LG8WFeHg; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=Hsxc
-	dOmDTitwBV/EN/G/esK9+ojaaBogHKD6Pzvdqss=; b=LG8WFeHgduxVVdY1NzBg
-	gL+xEAx4GOoJo1gcSq7y731UQFstFAPmfaEnNlMUdynChh8Hga+nAxQLDax8OiIj
-	SYlvPa2jtcHxKTi0hkcFN9aVJE42Cg+0MMEo+IbfnRrgNzc32HMB0LYK1N2+Jv+N
-	v/exCgTgiMbWDKVdq5fHZPqB9m3AmT+cWjOEk1y1946p97Ijj6Rsh7QE+xLk4Usf
-	uM27vRYSkE/CnaseIX42ZlG3j0MlJeha90GKggx5klDKIaptTRw4zjmqO0BLgxmP
-	yebIkqXCdj9mDlC/WGgsD2jwKjqj5xNq1HzMN57KL7FXje5YwqGPA6keLJW7w++j
-	oQ==
-Received: (qmail 293092 invoked from network); 26 Aug 2025 16:03:45 +0200
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 26 Aug 2025 16:03:45 +0200
-X-UD-Smtp-Session: l3s3148p1@ggr2I0U9bssgAwDPXw2iAG43AYdOknD3
-Date: Tue, 26 Aug 2025 16:03:45 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Rob Herring <robh@kernel.org>
-Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Herve Codina <herve.codina@bootlin.com>,
-	Ayush Singh <ayush@beagleboard.org>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-i2c@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	devicetree-spec@vger.kernel.org,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v3 1/1] schemas: i2c: Introduce I2C bus extensions
-Message-ID: <aK2-we94b-x2fgW_@shikoro>
-References: <20250618082313.549140-1-herve.codina@bootlin.com>
- <20250618082313.549140-2-herve.codina@bootlin.com>
- <CAL_JsqJ=jmXVwjtNCjRpUKj02dnJEz4GHMX2wMRaWw=M+sZQ0w@mail.gmail.com>
- <20250808180746.6fa6a6f9@booty>
- <CAL_JsqLxsfpaaCvV3AcniMYxAYVir7ddL4umCNY3u-ggVTiZcg@mail.gmail.com>
+	s=arc-20240116; t=1756234658; c=relaxed/simple;
+	bh=lN7Svp23WxXjpNEd84aTWJWKmt2lAtB6NiKqX8EzItQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Mk5fXMK20QSyM3m+YKTVDiits7nErWXK7tv+gJW7L0FNvTBg2RhGMy5KiSdbi++Oo1Y1FKIVHNOiCrqvqNNqniiKXyj+SKSRnK/Ccn+yhH9U5Aye//hj2KlGZekTLW9cLH0q8Biktr0liEf2OSHIaV7j8dUQ/eDh0KhFiS0lhj8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=oVUJ2hCu; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57QFcE9w000535;
+	Tue, 26 Aug 2025 18:57:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=qcppdkim1; bh=v+T8q1W6eZw3pI8dVhJfZiZIyh0d6oP9Trr
+	aMi7wJYA=; b=oVUJ2hCuNB7GpCjXWxI2ZhXc6GxdOrL+GBJLMwNA9wQFJFnNiMB
+	LMArg0dUKg0e3PUJOzfvkbzCeFN1WJmtefu+DYJeMsMWJDkgbSTidrv11pJsNfXW
+	+Kd9chhVwGCK7fjquOz5cjzPe90Gr1UoNkWkwEsZMzA5iMtSf4kEkxxr+hMbQyCX
+	jhYEMgpLlQK8Rp/3XJcAkn8PTa1WwsH4I+BIpiT/hjKOprKqVfpYlDTgNScGDKhf
+	Lz41dnxTtjK8t3EFZADWZaFr6000EnFw9i3v1FYi2x86RP4xCDIvmC08zqqHE7M0
+	xyzH8uewOg1XrW2pw3sip++zdGkljauZIyQ==
+Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48q5xfj254-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 26 Aug 2025 18:57:35 +0000 (GMT)
+Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+	by APBLRPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTP id 57QIvWkT015113;
+	Tue, 26 Aug 2025 18:57:32 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 48q6qngy0t-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 26 Aug 2025 18:57:32 +0000
+Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 57QIvVpR015105;
+	Tue, 26 Aug 2025 18:57:31 GMT
+Received: from hu-maiyas-hyd.qualcomm.com (hu-msavaliy-hyd.qualcomm.com [10.213.110.207])
+	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 57QIvVSa015097
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 26 Aug 2025 18:57:31 +0000
+Received: by hu-maiyas-hyd.qualcomm.com (Postfix, from userid 429934)
+	id B1FC123431; Wed, 27 Aug 2025 00:27:30 +0530 (+0530)
+From: Mukesh Kumar Savaliya <mukesh.savaliya@oss.qualcomm.com>
+To: linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
+Cc: viken.dadhaniya@oss.qualcomm.com,
+        Mukesh Kumar Savaliya <mukesh.savaliya@oss.qualcomm.com>
+Subject: [PATCH] MAINTAINERS: Update email address for Qualcomm's I2C GENI maintainers
+Date: Wed, 27 Aug 2025 00:27:18 +0530
+Message-Id: <20250826185718.467474-1-mukesh.savaliya@oss.qualcomm.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="TljrWgeWi1hzBORA"
-Content-Disposition: inline
-In-Reply-To: <CAL_JsqLxsfpaaCvV3AcniMYxAYVir7ddL4umCNY3u-ggVTiZcg@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODIzMDAzMyBTYWx0ZWRfX1X3AEayjQO2/
+ MNXbG5jPFcX0YERozMJL4UhjH6M31h1TQhTznpqaglab6E1hflIq8cMznwhhvYYs5ENCjUcJjZu
+ +di/PJ6j6tMHhcOn4iWjooY5wJD9wXQZLGn5/7QWN7G1osvSyKQiJCA+4TVFpm/x1aikjoSEeX6
+ RZQCTtVpi6SW7hRHrTzdLvv4dyQJ9jVAon4DBOPXhVP0/rvhHVeNrk1mqxXZX77cwlh7jJ9PScz
+ qc3PwmoPw4rbQ6yaxRyvefU6lk38oabkDqdzXY+Yu7BtmsKN0J8vg0GhTl8S9rhIZmwv86sul4T
+ HIe1KBUxoUOgh/kNYGWZl+f7s4SIrc2nTYGTfOC/pIqQdlBGfKTYej8ZBxwizImy/9+52g0paxX
+ RoiOStsQ
+X-Proofpoint-GUID: DERzTSS-HfpVM2YfTH0WdAsbc1e2h32-
+X-Authority-Analysis: v=2.4 cv=MutS63ae c=1 sm=1 tr=0 ts=68ae039f cx=c_pps
+ a=Ou0eQOY4+eZoSc0qltEV5Q==:117 a=Ou0eQOY4+eZoSc0qltEV5Q==:17
+ a=2OwXVqhp2XgA:10 a=EUspDBNiAAAA:8 a=COk6AnOGAAAA:8 a=VwQbUJbxAAAA:8
+ a=4VVcHpUFlTeZ-k0x__MA:9 a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-ORIG-GUID: DERzTSS-HfpVM2YfTH0WdAsbc1e2h32-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-08-26_02,2025-08-26_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 impostorscore=0 adultscore=0 spamscore=0 malwarescore=0
+ suspectscore=0 clxscore=1011 bulkscore=0 priorityscore=1501
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2508230033
 
+Update email address to @oss.qualcomm.com for both the maintainers
+from qualcomm, Viken dadhani and Mukesh Kumar Savaliya.
 
---TljrWgeWi1hzBORA
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Mukesh Kumar Savaliya <mukesh.savaliya@oss.qualcomm.com>
+---
+ MAINTAINERS | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Hi,
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 9106a1351d22..ec86e31e5fb6 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -20851,8 +20851,8 @@ S:	Supported
+ F:	drivers/dma/qcom/hidma*
+ 
+ QUALCOMM I2C QCOM GENI DRIVER
+-M:	Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+-M:	Viken Dadhaniya <quic_vdadhani@quicinc.com>
++M:	Mukesh Kumar Savaliya <mukesh.savaliya@oss.qualcomm.com>
++M:	Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>
+ L:	linux-i2c@vger.kernel.org
+ L:	linux-arm-msm@vger.kernel.org
+ S:	Maintained
+-- 
+2.25.1
 
-> > A different option is to only have the "i2c-parent" phandle in the
-> > extension node and nothing else in DT (no bidirectional link, no
-> > compatible string), without any full-tree searches.
-> >
-> > On the implementation side, the connector driver when probing would
-> > register the extension nodes at the I2C core, which would maintain a
-> > list of extension nodes. This is important when the connector probes
-> > first. Then when any adapter probes the core would iterate over the
-> > list to check whether the newly-probed adapter is pointed to by one of
-> > the registered bus extensions, and then start populating the devices on
-> > the matching bus extension(s).
-> >
-> > A lot of care would have to be put in the disconnection path and while
-> > removing any bus extension from the global list, which could race with
-> > the I2C core using the list itself. The drive core wouldn't do it for
-> > us for free.
->=20
-> I'll defer to Wolfram on I2C core implementation...
-
-One input already before we dive into the unconference. I don't want to
-maintain the above solution, i.e. handling lists with sublte race issues
-which could be (and should be IMO) handled by the driver core anyhow.
-
-See you soon, may the A/V-setup be with us,
-
-   Wolfram
-
-
---TljrWgeWi1hzBORA
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmitvr0ACgkQFA3kzBSg
-KbY+kBAArEuWI/gI2tH728hajgwE6SaBTsw2N1wDmZ/n/Rqgppd8KoLNWQgbp+YR
-6Q5M2URiRfvo7N+7aqH5cZBw5b301nYpfROzIQ1WOzqG7gIMiHeJItXzpBh/8Xo4
-7fpYuysJnq1HoCgagKiVeskZYLFhp0F9MsoDwt50i6xdh33OnGgCTKMWo1588tYj
-JSYo+dtMoemChXpFUpmwkUTpH/3rxgNiCIzbc+Yj7FgpWeRm5yRb54v6IMnVv1Fq
-MWWOVhSYfH2AVAegI4kbclyt7Um5Mu2GzGSHzNtIj7wO8SEJd9yonjCVDIL/sOg4
-1JYAxPBsJuI/hqfcwO7ZFg2WRNtfmyyt4Er6kW2MxJKbDOYcLK30xteRzBb6+aEM
-QW3Putx7tsDsuPMKPkc1M8o1wY8Ingv2nIZS570XvmriEJxYKb8iIAYzeECdLdIf
-lW3xt6l7RAIaCCoDetXK3jTxgGFRNCUVPTOmEHb2OFUms3sca2xE+KHe97UQcMg8
-T83bO+nK30a9d8t9xfkIkvsPuXwCcXd9RdPA3LdciDxyHhtp/HGCMCsku2y0kEhJ
-xXj2TlYHdZtLVVjR+rSkn4QJRzHKhVej/+/9dD4tfyA1KTwBSw8SBxyPJ/aE1Pqt
-JSQoJv5md1SOHBFJpOfmGqxIhc/ry+kkQ0xMc2LlCCQzNSJN/hE=
-=Xz3E
------END PGP SIGNATURE-----
-
---TljrWgeWi1hzBORA--
 
