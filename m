@@ -1,159 +1,162 @@
-Return-Path: <linux-i2c+bounces-12444-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12445-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D2C51B37F87
-	for <lists+linux-i2c@lfdr.de>; Wed, 27 Aug 2025 12:11:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9A71B3812C
+	for <lists+linux-i2c@lfdr.de>; Wed, 27 Aug 2025 13:36:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 03E6C1B26AA0
-	for <lists+linux-i2c@lfdr.de>; Wed, 27 Aug 2025 10:11:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 94CA75E6D97
+	for <lists+linux-i2c@lfdr.de>; Wed, 27 Aug 2025 11:36:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 391E934A30B;
-	Wed, 27 Aug 2025 10:10:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 759752D12F3;
+	Wed, 27 Aug 2025 11:36:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="qwkqNK0C"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xt1zNUAF"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24D21346A07
-	for <linux-i2c@vger.kernel.org>; Wed, 27 Aug 2025 10:10:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C2122E228D
+	for <linux-i2c@vger.kernel.org>; Wed, 27 Aug 2025 11:36:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756289451; cv=none; b=lxPDBbzT7v9I+NVtcAD5yvq0/2ZCiAwVbepJlPTckqsqiTysg/c4UR6kHQBvHSTVTEG32qLsOTqRd+U8nvX87atdP7GPeMHCV4wGUfvePYy/Ag25IfMiBLJP6mhhnCWI7CGLUVUCIw0odwUUJffpmZ7UMfvvtplmG2qZauOBAAM=
+	t=1756294575; cv=none; b=hZg7Xd9Obg/NyyXqqq4ZUkeoxUgYkHMIFg2coNwHHoh5DaGDnpTNvzbByaMHCWIabxzdK/eKaRJVtmEMtB36E2oD99HuHxoTOZUxgUyhIF/pA4pp9kl1bd+oJgetla7KtJ95Ry7t37v9iOG/mDFyUQE5HkjvTEIA5qe8Y+sm0Wc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756289451; c=relaxed/simple;
-	bh=b5ipVQxirQj5gbkgpSFwLTpHWhEQ1wqtWZ0y9AiGGTs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=eGWLh72hr5ixOprWltO3Wx/kR1FlaaXe+DaZ2MtuMWmEIzKevH3upuy3d23KP2pqxP3omwCvAvn20708NqoGLjVeYvO3oM92cRfv4nrfBcyisaS1/oAJUUdzuixOMsi3ZD9Gl4Gk0XV+L+b2JXbJ0CgJmCyxNOtXerT6odCcpNg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=qwkqNK0C; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-45a1b004a31so50593395e9.0
-        for <linux-i2c@vger.kernel.org>; Wed, 27 Aug 2025 03:10:48 -0700 (PDT)
+	s=arc-20240116; t=1756294575; c=relaxed/simple;
+	bh=FT0s8kw41lh7XLh9ZK8YaBa3GcL4odZjd7FSA7DbHoU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kVTzpY4dDhx6haG22ytsJMxCQuHffiZ4sTWqj2CabwaLk9VVAv1Ium30tWDJ6UJFH+KLwZwANuZwQAWL4iNkz80dzJrSakYnVNxQl0t7Q2dHEV0hVmB04MpsZd/FOW2j0rI+LAvxFNbHYiysCy6WeMMdEfV/WsbtXaLoovQjPAQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=xt1zNUAF; arc=none smtp.client-ip=209.85.219.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-e96d65194c1so2122084276.1
+        for <linux-i2c@vger.kernel.org>; Wed, 27 Aug 2025 04:36:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1756289447; x=1756894247; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=TixQBgvEKkMQhE5xKVPB13TcCphpl84uFDbTL0vLvUw=;
-        b=qwkqNK0CGVHu5LJ6HmobzJPrLwyDepRPvHxGHEz+vZcNXz1ns4diuGwvwOAuGQuHLo
-         V2B16wMdj6owhnmv8X/n2pWX4ro5fUfdNlzD8wmwR9+oO2Rpz9l6tXXFw/CD4SUY3N0c
-         qeroIlNTUeWZklENJzTObL4izmjBkEc8SnBkCtMJTSPG+NkNp38DiyhXCgkbXOqKW9KI
-         G/6HvSOtYoXZPkMT0Zt2d7P2YFi6tj8P/JCxGsHb//yQhtPTD9adY46UJaBjLLoZMf71
-         pTpH62eMCYQa5TdA+E3SFWdYWtr+bWROI7gezktWL32VdN5qZdmlPB+nToYg7U3oYJlB
-         rj8w==
+        d=linaro.org; s=google; t=1756294572; x=1756899372; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=9VG5xrATL8X/GcTcsX9nEHVjaVO8K7/6h5aarOYWFk8=;
+        b=xt1zNUAFt+yDYkeiKcczQqR5vkn+9dPPTcLsrn1IxuFCfSfQSxjAD0EyL8IpgOTHE5
+         BFx0B+q/4M8F4dY2lR4AbRWaQl20H2UQMN0xpLU10uK9wGRnXXiHWZJLrxO1K5TONCu8
+         ofiI2PW09MSt1Wl3Zxg2ZETUGn0u2S7Js81qzJYjMfH52LBMHW3c8kpHfcNr0C2htiRK
+         MoVsQv4YaAvyWJ1suLKAuUa/0Q5LON/Kw5NeqTsTZ/XNPOYx6z+KcVnQt3/ZxCcHGp46
+         Ely5/Xg7tz3EJ+3mEVoaD8A0u6EWJ5xofwPTFy9pRylAjxJ7pz1nJ7KNfUAud+I2XtLR
+         XeOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756289447; x=1756894247;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1756294572; x=1756899372;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=TixQBgvEKkMQhE5xKVPB13TcCphpl84uFDbTL0vLvUw=;
-        b=JvrJlpoQVWuS8RuQ3m7qlOU5oR0nf+LH/cbAaiNwbRyYB4xzUQMkQK9tkgPvdDtWed
-         dZ951pAHWeOcaEtJOcjeoCSiehY+dh+r/851+Xc3QzeODWpV1X8JWbXiQf4mqBjwK6qv
-         Zj6+RHNJMb35L6L9gyDfcx8XP7vgnL5DnSgLDZVSahRYMj2mBb9dbf8bImxDb4c3ycUg
-         BRGAr57B91O8npjAlxS1FZWB3pAxAehslOpSOmWitiBAW1FJSKn0hYdYFPbLSt4IDHP8
-         L6QK5Bt4HyassQAvEdNyW23PZfOMra5nAIOjJ5Nd4IxYYd7kIrfc/KcgVvK5yhwKn0yn
-         OK5A==
-X-Forwarded-Encrypted: i=1; AJvYcCVDXqpivc8hmMo0LscsVQ/OGRVfV1zuoRr3in9op7eQR79Na+e+0GNO2xsBm/lexLpkksf8Qum0DU8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyNKk7jWFOmJam/BrDvQDvJazPFNZggintqns+dBL41wmxTyyYS
-	NUHj5U75NtNokd/4yHd+J7vWAM4np1P7Qdby8YeFzi9j9HkjOMBbzpXHb4j4lXoMXO4=
-X-Gm-Gg: ASbGncvJbiqIb759UAuVhxOul9FwWEwWdFwOorpR31EOZMxg/yGXAgw+lgEZLp5G74U
-	LiSawx8ERG6r4Rv/izFmS4GL0KOQZFz7yhcjAHgCq5vo+WJzadWHpBgi4Xg2POYnMDrTF6gpGs5
-	p/Hrk3ftURJN9RV36AiXWe//aCngr9Fh21yPe87KJvVrBTJvd0CVGemcAwHqcwOiRKqFkHja4iV
-	dEa7B7ZWndf4Ub7jEONazO5C/wVJZIgDQL0TMFTOOdkXbnLoiKNiREXV4saNTgopxf2QrPmDq52
-	vcs9QrCNxPtaM9RfJPRoxZ8EigB71ZPPIKHoVRZgHt/Qndii6CCqHZyaEXW8mV4DB8Svu3wp/U0
-	m9G2ICyeA5J6iabsW0eeaIGxUjKsoK6q787pUu19eNgLyBGSOytllwRV8FEvcgKsKWsiIesDw9U
-	lCYh6oD/aVTNJH4mGk
-X-Google-Smtp-Source: AGHT+IETY/no0Ga/lWTRqVqc1LC0xGTolfQ/830wBvuN1CYFKv7YIKqdD72VfxqDZ91vijfk3xVUFA==
-X-Received: by 2002:a05:600c:4f09:b0:45b:6163:c031 with SMTP id 5b1f17b1804b1-45b627826c3mr94650675e9.24.1756289447382;
-        Wed, 27 Aug 2025 03:10:47 -0700 (PDT)
-Received: from claudiu-TUXEDO-InfinityBook-Pro-AMD-Gen9.. ([2a02:2f04:6103:4200:a5a4:15e6:5b6a:a96])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45b6f2ebc62sm24589465e9.24.2025.08.27.03.10.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Aug 2025 03:10:46 -0700 (PDT)
-From: Claudiu <claudiu.beznea@tuxon.dev>
-X-Google-Original-From: Claudiu <claudiu.beznea.uj@bp.renesas.com>
-To: wsa+renesas@sang-engineering.com,
-	ulf.hansson@linaro.org,
-	rafael@kernel.org
-Cc: claudiu.beznea@tuxon.dev,
-	linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Subject: [PATCH] i2c: core: Drop dev_pm_domain_detach() call
-Date: Wed, 27 Aug 2025 13:10:42 +0300
-Message-ID: <20250827101042.927030-1-claudiu.beznea.uj@bp.renesas.com>
-X-Mailer: git-send-email 2.43.0
+        bh=9VG5xrATL8X/GcTcsX9nEHVjaVO8K7/6h5aarOYWFk8=;
+        b=mQd96iXyZemOc977W0SLrXciCSAtgBo3DUMCVT5oXMzAGYIJnMwlMQdcHtFaPm5yEb
+         Pq36aldIpXswr7iNftn797AF82hM6see0YMKdU8TZxt0aVUDj6gDivMD0lTzN4dfaZnw
+         qDzBf3WcoOMf8hQt1mTz4Z12TqH8sn/LGRCQUR5kTNL/iTVjbGwnX0jBixO+1FG6bg39
+         qD4jOCrcyKmC95MoWcA5G55c2SN9OECy6mRt4e1s+EfVwYWk+s0jwIk5xdlwiJuWHaI8
+         bOLrVWCW8LG7kRyd12jhcRvBgzuW/zo0yQ0TKqY1BXwkdSUcEp/OhA/jJFhTxaj29wY0
+         eyxQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVvBypVbbc7iW9RNjy4KtfWBl42yQIxxVlOU9y4cdiO7gaYksJUmWbyU1YduXzxNeDh2GyV/dVdClU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyPOkONNJNdbJK2f53aMO3gNh/QaeQdVdSjtw82YcVz9N6l0Edw
+	l3goc/4kh74w5hfK5rLjiTkxpfqPi7TPw/GgN3j7ipA1AI/lA4+z+vO8IHo8k+bYoHRoOzYFkBl
+	AfWFVuN7BSmx7p/fZ1TV0s5ZUY7IEIoxvwqD1YiT9aA==
+X-Gm-Gg: ASbGncv+PJr7tgxuhtopZXJbvgpcYNwcS64feAr/uf+DWk0OGBUJZ3FhuNnPD8it0b/
+	PaAZBIJTV6sjH4JIzRE3V6AnSmnQS1z/OYWHRx1zfm6Gv0uOtYshkqelwIa0V7vIogUYEWR419O
+	lychhz2DabVaZklyC8hrsHHMC4tt/mHtnipm7+W/YjVNX/P2G2bRAq93V5bjnIhoCo0vENNRXnA
+	fOZaqI=
+X-Google-Smtp-Source: AGHT+IHKFPj5se1K7TYn6o3xFEaQCORUTR5JU3Zz8jDmN5IorKGz4Sl4irmTDH6t99CaaG/n52EPWeLeIcLYaaef9zY=
+X-Received: by 2002:a05:690c:3808:b0:720:79a:b0c4 with SMTP id
+ 00721157ae682-720079ab737mr138986057b3.17.1756294572360; Wed, 27 Aug 2025
+ 04:36:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250827101042.927030-1-claudiu.beznea.uj@bp.renesas.com>
+In-Reply-To: <20250827101042.927030-1-claudiu.beznea.uj@bp.renesas.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Wed, 27 Aug 2025 13:35:36 +0200
+X-Gm-Features: Ac12FXzduobe0L7ACBcxkpyV4d-PlCOk6ENFZ0k5sNARMGhUMtFGdjUDbeEXDao
+Message-ID: <CAPDyKFoY0v9Eq=YqECytfs4Tb8aaqJ+gKmEarqZ7EpHjYzigvQ@mail.gmail.com>
+Subject: Re: [PATCH] i2c: core: Drop dev_pm_domain_detach() call
+To: Claudiu <claudiu.beznea@tuxon.dev>
+Cc: wsa+renesas@sang-engineering.com, rafael@kernel.org, 
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 
-From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+On Wed, 27 Aug 2025 at 12:10, Claudiu <claudiu.beznea@tuxon.dev> wrote:
+>
+> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>
+> Starting with commit f99508074e78 ("PM: domains: Detach on
+> device_unbind_cleanup()"), there is no longer a need to call
+> dev_pm_domain_detach() in the bus remove function. The
+> device_unbind_cleanup() function now handles this to avoid
+> invoking devres cleanup handlers while the PM domain is
+> powered off, which could otherwise lead to failures as
+> described in the above-mentioned commit.
+>
+> Drop the explicit dev_pm_domain_detach() call and rely instead
+> on the flags passed to dev_pm_domain_attach() to power off the
+> domain.
+>
+> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
-Starting with commit f99508074e78 ("PM: domains: Detach on
-device_unbind_cleanup()"), there is no longer a need to call
-dev_pm_domain_detach() in the bus remove function. The
-device_unbind_cleanup() function now handles this to avoid
-invoking devres cleanup handlers while the PM domain is
-powered off, which could otherwise lead to failures as
-described in the above-mentioned commit.
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-Drop the explicit dev_pm_domain_detach() call and rely instead
-on the flags passed to dev_pm_domain_attach() to power off the
-domain.
+Kind regards
+Uffe
 
-Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
----
- drivers/i2c/i2c-core-base.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index ecca8c006b02..ae7e9c8b65a6 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -573,7 +573,8 @@ static int i2c_device_probe(struct device *dev)
- 		goto err_clear_wakeup_irq;
- 
- 	do_power_on = !i2c_acpi_waive_d0_probe(dev);
--	status = dev_pm_domain_attach(&client->dev, do_power_on ? PD_FLAG_ATTACH_POWER_ON : 0);
-+	status = dev_pm_domain_attach(&client->dev, PD_FLAG_DETACH_POWER_OFF |
-+				      (do_power_on ? PD_FLAG_ATTACH_POWER_ON : 0));
- 	if (status)
- 		goto err_clear_wakeup_irq;
- 
-@@ -581,7 +582,7 @@ static int i2c_device_probe(struct device *dev)
- 						    GFP_KERNEL);
- 	if (!client->devres_group_id) {
- 		status = -ENOMEM;
--		goto err_detach_pm_domain;
-+		goto err_clear_wakeup_irq;
- 	}
- 
- 	client->debugfs = debugfs_create_dir(dev_name(&client->dev),
-@@ -608,8 +609,6 @@ static int i2c_device_probe(struct device *dev)
- err_release_driver_resources:
- 	debugfs_remove_recursive(client->debugfs);
- 	devres_release_group(&client->dev, client->devres_group_id);
--err_detach_pm_domain:
--	dev_pm_domain_detach(&client->dev, do_power_on);
- err_clear_wakeup_irq:
- 	dev_pm_clear_wake_irq(&client->dev);
- 	device_init_wakeup(&client->dev, false);
-@@ -636,8 +635,6 @@ static void i2c_device_remove(struct device *dev)
- 
- 	devres_release_group(&client->dev, client->devres_group_id);
- 
--	dev_pm_domain_detach(&client->dev, true);
--
- 	dev_pm_clear_wake_irq(&client->dev);
- 	device_init_wakeup(&client->dev, false);
- 
--- 
-2.43.0
-
+> ---
+>  drivers/i2c/i2c-core-base.c | 9 +++------
+>  1 file changed, 3 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+> index ecca8c006b02..ae7e9c8b65a6 100644
+> --- a/drivers/i2c/i2c-core-base.c
+> +++ b/drivers/i2c/i2c-core-base.c
+> @@ -573,7 +573,8 @@ static int i2c_device_probe(struct device *dev)
+>                 goto err_clear_wakeup_irq;
+>
+>         do_power_on = !i2c_acpi_waive_d0_probe(dev);
+> -       status = dev_pm_domain_attach(&client->dev, do_power_on ? PD_FLAG_ATTACH_POWER_ON : 0);
+> +       status = dev_pm_domain_attach(&client->dev, PD_FLAG_DETACH_POWER_OFF |
+> +                                     (do_power_on ? PD_FLAG_ATTACH_POWER_ON : 0));
+>         if (status)
+>                 goto err_clear_wakeup_irq;
+>
+> @@ -581,7 +582,7 @@ static int i2c_device_probe(struct device *dev)
+>                                                     GFP_KERNEL);
+>         if (!client->devres_group_id) {
+>                 status = -ENOMEM;
+> -               goto err_detach_pm_domain;
+> +               goto err_clear_wakeup_irq;
+>         }
+>
+>         client->debugfs = debugfs_create_dir(dev_name(&client->dev),
+> @@ -608,8 +609,6 @@ static int i2c_device_probe(struct device *dev)
+>  err_release_driver_resources:
+>         debugfs_remove_recursive(client->debugfs);
+>         devres_release_group(&client->dev, client->devres_group_id);
+> -err_detach_pm_domain:
+> -       dev_pm_domain_detach(&client->dev, do_power_on);
+>  err_clear_wakeup_irq:
+>         dev_pm_clear_wake_irq(&client->dev);
+>         device_init_wakeup(&client->dev, false);
+> @@ -636,8 +635,6 @@ static void i2c_device_remove(struct device *dev)
+>
+>         devres_release_group(&client->dev, client->devres_group_id);
+>
+> -       dev_pm_domain_detach(&client->dev, true);
+> -
+>         dev_pm_clear_wake_irq(&client->dev);
+>         device_init_wakeup(&client->dev, false);
+>
+> --
+> 2.43.0
+>
 
