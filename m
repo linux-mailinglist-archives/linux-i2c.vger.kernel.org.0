@@ -1,71 +1,71 @@
-Return-Path: <linux-i2c+bounces-12472-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12473-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DCE2DB3A097
-	for <lists+linux-i2c@lfdr.de>; Thu, 28 Aug 2025 16:14:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA186B3A044
+	for <lists+linux-i2c@lfdr.de>; Thu, 28 Aug 2025 16:11:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7BA4316AEEF
-	for <lists+linux-i2c@lfdr.de>; Thu, 28 Aug 2025 14:10:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 67894189DE95
+	for <lists+linux-i2c@lfdr.de>; Thu, 28 Aug 2025 14:10:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A75A13375B2;
-	Thu, 28 Aug 2025 14:02:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A047338F4D;
+	Thu, 28 Aug 2025 14:02:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=jannau.net header.i=@jannau.net header.b="VaHDj0PY";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="C+edsKmm"
+	dkim=pass (2048-bit key) header.d=jannau.net header.i=@jannau.net header.b="QSfGsLBu";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Fliw0l3x"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from flow-a7-smtp.messagingengine.com (flow-a7-smtp.messagingengine.com [103.168.172.142])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9464D335BAE;
-	Thu, 28 Aug 2025 14:02:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40C5C3375C3;
+	Thu, 28 Aug 2025 14:02:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.142
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756389744; cv=none; b=VT/cKjaXvoeM5qyeGPl1FNYR9NLVavlownDNLLq+szCh7r0IWWFB1lWanCGCmnefxniLi15UKXBseTKHn8xne21e0k2W0vOAMPX0RoNPq5C7iqDn9oyRh87WbQZs1hW+51AtAiBLPEJFKC3ofnbDWko8Gbdret8PkOg+X0+uSMU=
+	t=1756389746; cv=none; b=Qm6Sx7Nq94UOTsEyJmPGr0wsMF6rYMuzBn5FMb60vPDd3e6MZfDKesRCMhsIKnFC1/kj1yPd19IXDmXZd1zfaz1EpYsuSUjTYTwn+WjnLGX+9GYxlihkx9tzYuHsPpOCPHzYtWLp/V0UqKwCeWajHHg+rkzH/5e7M0wvq2JEgAk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756389744; c=relaxed/simple;
-	bh=Jb83KxX2H7kR1o63dY79EQbQmU6FMtXfENWdCwzKWS4=;
+	s=arc-20240116; t=1756389746; c=relaxed/simple;
+	bh=Mho2OjViGa90r2gQMrmzE7gYFPoJqXSER+dRg1JxY98=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=VPtTeebTjdNBSPT7Itujw80eETPSXuKODZEkNaAEXCOKlDYNREGhFJ/zHqgQdIET1B8DHY0F+i7r9FNWE42D25L/+6bErZyc1XL9kbDgz1M+qUV3AehfR/RZsFqODdZVMPGJMmAjrpK6rVUP7oogalOsxmgan6+qNznlqHfFosc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jannau.net; spf=pass smtp.mailfrom=jannau.net; dkim=pass (2048-bit key) header.d=jannau.net header.i=@jannau.net header.b=VaHDj0PY; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=C+edsKmm; arc=none smtp.client-ip=103.168.172.142
+	 In-Reply-To:To:Cc; b=V6d6o2G1fT4iZ4oh2YIHnyn/mNPZmtdYDdxDVf40P6g73M2UDS4Vji9weancnM4OnEC4wEW2hAFqCnYr/GB4s3ZLZsnvihEWhI9RfA6A8ZqYAOeyeQo+auEIC+N0+NOL3IP4r56OXRBU/WTBOBYTa5fgNwTlgNI3P2fP9X2C5T0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jannau.net; spf=pass smtp.mailfrom=jannau.net; dkim=pass (2048-bit key) header.d=jannau.net header.i=@jannau.net header.b=QSfGsLBu; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Fliw0l3x; arc=none smtp.client-ip=103.168.172.142
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jannau.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jannau.net
-Received: from phl-compute-12.internal (phl-compute-12.internal [10.202.2.52])
-	by mailflow.phl.internal (Postfix) with ESMTP id B45EF1380DBE;
-	Thu, 28 Aug 2025 10:02:21 -0400 (EDT)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-12.internal (MEProxy); Thu, 28 Aug 2025 10:02:21 -0400
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailflow.phl.internal (Postfix) with ESMTP id 54F7A1380DAE;
+	Thu, 28 Aug 2025 10:02:24 -0400 (EDT)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-05.internal (MEProxy); Thu, 28 Aug 2025 10:02:24 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jannau.net; h=cc
 	:cc:content-transfer-encoding:content-type:content-type:date
 	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1756389741;
-	 x=1756396941; bh=d1uuzbyK+TBo4FKAGVpnZlWXc03joPgRcgcWkt54xQI=; b=
-	VaHDj0PY+V+AsDh4qD25M+zhsGKWgtfDZDmedCbfP+EkCQywzgXWlXCSEVOZqjhv
-	7UZDu6/4yqx3KWACwKGn5LTqKnxsBWoIjiIALvisrCm7/zS4GdUOU9F8QOqhZqr4
-	52CERp0d39AmPJd9FDDN+AW75JzwtwpCvLw7mean4SYOlIFpXQVoUOPNBMh+jdEz
-	D79ERgCHoJ1EgTJ2F9+G6aSnPOGIuNisCxV4zoA260iNJLDc+uc23w/RLNiTUPAe
-	z2w8u8vZlTDOVQmyocuG6YW2KzUxtme3qVyz/azJd5mOmMaYtl2mh5bXR7hSIARr
-	+RDkwh75QL1OIv6ORBFu3Q==
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1756389744;
+	 x=1756396944; bh=M2iMoMuWKPileIoEWnr4HEQnopXO/M4SnWfH9o37EXQ=; b=
+	QSfGsLBuIU0Ijiytjx3wkb7VeSHz6D9gp/eXBqB8EQFItQq9jBNJc3OSYab6o4eP
+	uum6CtK5joRGiXx09nzSMeub5NOQeJVriHMRxDFswX3VCwi3D5tbsyE4uWmgovr7
+	ENyPJTZNIXXVcgyOaC/S7UFKImcdUuMjx7THqDOAxA+Us5WyrP0xFnroCDjZIQdo
+	b6K6/meSm/RdkShe7o2+OD+JOhBF+iaI2tpOyBWQ+W+GE8O2LE051sJpLsmjrHlA
+	3IaoBkYTCwQFBvu5OTUIH0sj4/u3BNm5vNAiFYVG19Rvu5+24zNPjfT2uR9mhQz/
+	53uUqcPYMjXKdnro8cMFRQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1756389741; x=
-	1756396941; bh=d1uuzbyK+TBo4FKAGVpnZlWXc03joPgRcgcWkt54xQI=; b=C
-	+edsKmmgQpUUdgiXz5LRMt0w28yLVSrI7MsZIsPtNCituhTpwZWvWREvhgEUux8E
-	UBUPU/V3A+VmSYDz/LJL2HcEQPGPbJn85jPh9iULAwQ9ptIoydbVftX5jaoxNChL
-	pGf2VdxOMZu4rsUsCRI7dK4JTkGvJpAJiPVD4IgksWwaBzebhFRxXEdNyu/l5vew
-	P0GAwEdjQcjBQf4I7zxFIuQygK9qSFWSxstrpmyON8c1VbcceKab4h0+EwHlrTgx
-	VtIUyVBue5/yaokYBcyDn2mVXwQyuw65vK2hiNQ8nvdPBlqYAsqTumRJxGestZ0l
-	cIHYxhton2o+jvcED5jaQ==
-X-ME-Sender: <xms:bWGwaJOjUfAt2gPyXzDYH-QgJmwJCaGGpCEF_YS9LWfnNJUTQi4o_g>
-    <xme:bWGwaKzDA0OMFWaVfRJCxHerCzhhNRw1vEilx6gOfrXXtVKMukX1cJvIXBs5IMyW2
-    dJRufB8zrpTOT8c5E0>
-X-ME-Received: <xmr:bWGwaC9T6uH96i2PXR13lLZfcIcmo8wmeaNpImOLE4UvHEniBDl75tdgju-d8XMrtL141uNjsLM1QkKRUb-Yt8MTLM8hd_X1i4qFRg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddukeduvddvucetufdoteggodetrf
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1756389744; x=
+	1756396944; bh=M2iMoMuWKPileIoEWnr4HEQnopXO/M4SnWfH9o37EXQ=; b=F
+	liw0l3x0GjEXVzr/v6xwru66+fQ7ipcA1zLttyYz5azNN82VUXgA4xC7zda8a65l
+	PMbVrd0g/DTqhEz/sCwwMNXemM1y3GFU7pV/8SxsIBHnTFX6dclnLsgfQhd0iQUk
+	MVmADzF49AWXN7Sngi0w/VpDGaVHlh+N8kCkOEY6Up7NtLAJvxP3D+QTApb+Zdxe
+	wH8xIr/jORCvFTY04fRuQLM8DyeoZapFoAaHo6KEkAX1QGSd9sI8ZYjRx0jz8Son
+	Gkfb0ishZtY+zrhOWjvdHODsVPBkuQyUCujnVsoVo4scEUd1iZ+pLEWFGl1NPIa1
+	dU0KM8p0L1Js84n6oSjrw==
+X-ME-Sender: <xms:b2GwaBPZV6Yc6pBfAdDN0cmpg0l5f7ko9k40kqUUN8oL5_w0wR9a3g>
+    <xme:b2GwaCyLualUVJnbIuDlF6oXEDaaG0wBen9t6j3Us4W14MFLqkS98Nsa6u20Lj5Gd
+    utHylo7Eyaqqx3kFH4>
+X-ME-Received: <xmr:b2GwaK9EjdieurpMQ7Wmqf2qywY08wNg8E9lHqcn6ccyFlXiFnRRYyRmsLYL4AY_HBaXzOpCEAXpZ0Sen2hHd491Nl6mkT8ehaPfjg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddukeduvdduucetufdoteggodetrf
     dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
     rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
     gurhephfffufggtgfgkfhfjgfvvefosehtjeertdertdejnecuhfhrohhmpeflrghnnhgv
@@ -81,17 +81,17 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddukeduvddvucetufdote
     gvthhtvghnihhssehophgvnhgsshgurdhorhhgpdhrtghpthhtohepkhgsuhhstghhsehk
     vghrnhgvlhdrohhrghdprhgtphhtthhopehsrghgihesghhrihhmsggvrhhgrdhmvgdprh
     gtphhtthhopehlihhnuhigqdhivdgtsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:bWGwaMwXMChxee1x41cVZmcENyVrdN8cxsZouPfGzoov0QyiO-HTAw>
-    <xmx:bWGwaHGFJ459KgUjWGFOoXpHCZ4kv4lQ07dAIJ1f4VXkCYekMANtJA>
-    <xmx:bWGwaCnKTsBNdTFXQdp_hlUWzUIJOXQtsQOpCfMJzEJ8eJq_-3nYqw>
-    <xmx:bWGwaDRt5Z0bkvGLPlUQu2b9W3E7SszPvHJLDA8J1WqUm92N57d-Xg>
-    <xmx:bWGwaOEpaf--yyX6ZMRIBcyqRqWVh9eTLzAZ62ilQKNakq-L_QMdUoRG>
+X-ME-Proxy: <xmx:b2GwaEzriTIp3F1os66OJrt_tmMEP-GWzFtpzGz_Sp7SUIornbZX6g>
+    <xmx:b2GwaPGSa6Q9v_O9EN_Kp8yyl95dXVwjzZlv5hWI_qZQIJBj27CF_Q>
+    <xmx:b2GwaKmJadH7Uc0y6Pv8wWEZ8ZB3X33_8rNETMzyrUti8g50FY4_6w>
+    <xmx:b2GwaLT2VXivlqD2b5AuBMyrQD8uWBUvLUblmuwFS5rNf-7kmQLCCQ>
+    <xmx:cGGwaKzoZAfVYTbHEpqjHi_tdyuKIH9HoEvcYZgyVF19dgUPuOqsw5ln>
 Feedback-ID: i47b949f6:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 28 Aug 2025 10:02:19 -0400 (EDT)
+ 28 Aug 2025 10:02:22 -0400 (EDT)
 From: Janne Grunau <j@jannau.net>
-Date: Thu, 28 Aug 2025 16:01:33 +0200
-Subject: [PATCH 14/37] nvme-apple: Add "apple,t8103-nvme-ans2" as
+Date: Thu, 28 Aug 2025 16:01:34 +0200
+Subject: [PATCH 15/37] dt-bindings: nvme: apple: Add apple,t6020-nvme-ans2
  compatible
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
@@ -101,7 +101,7 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250828-dt-apple-t6020-v1-14-507ba4c4b98e@jannau.net>
+Message-Id: <20250828-dt-apple-t6020-v1-15-507ba4c4b98e@jannau.net>
 References: <20250828-dt-apple-t6020-v1-0-507ba4c4b98e@jannau.net>
 In-Reply-To: <20250828-dt-apple-t6020-v1-0-507ba4c4b98e@jannau.net>
 To: Sven Peter <sven@kernel.org>, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
@@ -147,12 +147,13 @@ Cc: asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
  linux-sound@vger.kernel.org, linux-spi@vger.kernel.org, 
  linux-nvme@lists.infradead.org, Janne Grunau <j@jannau.net>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=987; i=j@jannau.net; s=yk2024;
- h=from:subject:message-id; bh=Jb83KxX2H7kR1o63dY79EQbQmU6FMtXfENWdCwzKWS4=;
- b=owGbwMvMwCW2UNrmdq9+ahrjabUkhowNiZadqXLVW/17dYSM90/iZHgq4LH/1RnpqsA7RybLB
- Ckm/ursKGVhEONikBVTZEnSftnBsLpGMab2QRjMHFYmkCEMXJwCMBHO8wx/RW5UOcq4h897Z+b1
- dkFcZmbHiZmFYQxWMamLXq4qmr1On+G/0/STT/xviR66ueGsrL7KNjXWPxf99SodOUPr7JdPniH
- IDwA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2340; i=j@jannau.net;
+ s=yk2024; h=from:subject:message-id;
+ bh=Mho2OjViGa90r2gQMrmzE7gYFPoJqXSER+dRg1JxY98=;
+ b=owGbwMvMwCW2UNrmdq9+ahrjabUkhowNiZbrnNL3iDV2fQ+esWT7nmcBUw095etWSjBKOKvEy
+ X/Y4n6jo5SFQYyLQVZMkSVJ+2UHw+oaxZjaB2Ewc1iZQIYwcHEKwERWz2H4Xzl14+/9pjvt/k1q
+ ZXt7/ZGs8ulfvOsUZgV1mZ2cWS2RsJ7hf+nn2CReFpZJezcv3q38aDmv0gnxc7/8NvhoLfh9kPm
+ vARsA
 X-Developer-Key: i=j@jannau.net; a=openpgp;
  fpr=8B336A6BE4E5695E89B8532B81E806F586338419
 
@@ -161,25 +162,74 @@ lists with the generic compatible "apple,nvme-ans2" anymore [1]. Add
 "apple,t8103-nvme-ans2" as fallback compatible as it is the SoC the
 driver and bindings were written for.
 
+Invert the condition for the 2 or 3 power-domains check to allow using
+"apple,t8103-nvme-ans2" as base compatible.
+
+"apple,t6020-nvme-ans2" on Apple M2 Pro/Max/Ultra SoCs is compatible
+with "apple,t8103-nvme-ans2" so add its per-SoC compatible.
+
 [1]: https://lore.kernel.org/asahi/12ab93b7-1fc2-4ce0-926e-c8141cfe81bf@kernel.org/
 
 Signed-off-by: Janne Grunau <j@jannau.net>
 ---
- drivers/nvme/host/apple.c | 1 +
- 1 file changed, 1 insertion(+)
+ .../devicetree/bindings/nvme/apple,nvme-ans.yaml   | 29 +++++++++++++---------
+ 1 file changed, 17 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/nvme/host/apple.c b/drivers/nvme/host/apple.c
-index 1286c31320e630cb012009d6b962526e0553869f..1f57a7a20715cb2370f1e72872c2e08bde44bbc8 100644
---- a/drivers/nvme/host/apple.c
-+++ b/drivers/nvme/host/apple.c
-@@ -1626,6 +1626,7 @@ static DEFINE_SIMPLE_DEV_PM_OPS(apple_nvme_pm_ops, apple_nvme_suspend,
- 				apple_nvme_resume);
+diff --git a/Documentation/devicetree/bindings/nvme/apple,nvme-ans.yaml b/Documentation/devicetree/bindings/nvme/apple,nvme-ans.yaml
+index fc6555724e1858e8a16f6750302ff0ad9c4e5b88..fedfacbca93714d988310f53a0a4c951d9342a61 100644
+--- a/Documentation/devicetree/bindings/nvme/apple,nvme-ans.yaml
++++ b/Documentation/devicetree/bindings/nvme/apple,nvme-ans.yaml
+@@ -11,12 +11,17 @@ maintainers:
  
- static const struct of_device_id apple_nvme_of_match[] = {
-+	{ .compatible = "apple,t8103-nvme-ans2" },
- 	{ .compatible = "apple,nvme-ans2" },
- 	{},
- };
+ properties:
+   compatible:
+-    items:
+-      - enum:
+-          - apple,t8103-nvme-ans2
+-          - apple,t8112-nvme-ans2
+-          - apple,t6000-nvme-ans2
+-      - const: apple,nvme-ans2
++    oneOf:
++      - items:
++          - const: apple,t6020-nvme-ans2
++          - const: apple,t8103-nvme-ans2
++      - items:
++          - enum:
++              # Do not add additional SoC to this list.
++              - apple,t8103-nvme-ans2
++              - apple,t8112-nvme-ans2
++              - apple,t6000-nvme-ans2
++          - const: apple,nvme-ans2
+ 
+   reg:
+     items:
+@@ -67,20 +72,20 @@ if:
+     compatible:
+       contains:
+         enum:
+-          - apple,t8103-nvme-ans2
+-          - apple,t8112-nvme-ans2
++          - apple,t6000-nvme-ans2
++          - apple,t6020-nvme-ans2
+ then:
+   properties:
+     power-domains:
+-      maxItems: 2
++      minItems: 3
+     power-domain-names:
+-      maxItems: 2
++      minItems: 3
+ else:
+   properties:
+     power-domains:
+-      minItems: 3
++      maxItems: 2
+     power-domain-names:
+-      minItems: 3
++      maxItems: 2
+ 
+ required:
+   - compatible
 
 -- 
 2.51.0
