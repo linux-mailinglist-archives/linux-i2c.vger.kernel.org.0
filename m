@@ -1,77 +1,77 @@
-Return-Path: <linux-i2c+bounces-12481-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12482-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05C84B3A11E
-	for <lists+linux-i2c@lfdr.de>; Thu, 28 Aug 2025 16:20:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A194AB3A12F
+	for <lists+linux-i2c@lfdr.de>; Thu, 28 Aug 2025 16:20:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 67E84580976
-	for <lists+linux-i2c@lfdr.de>; Thu, 28 Aug 2025 14:14:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C51DF16CCCB
+	for <lists+linux-i2c@lfdr.de>; Thu, 28 Aug 2025 14:14:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3FC835334A;
-	Thu, 28 Aug 2025 14:02:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6854A3570B6;
+	Thu, 28 Aug 2025 14:02:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=jannau.net header.i=@jannau.net header.b="gfanxDxb";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="VYP4sxqC"
+	dkim=pass (2048-bit key) header.d=jannau.net header.i=@jannau.net header.b="XVx2JXVs";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="M9B1JpB0"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from flow-a7-smtp.messagingengine.com (flow-a7-smtp.messagingengine.com [103.168.172.142])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8521B345752;
-	Thu, 28 Aug 2025 14:02:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 326D93148B6;
+	Thu, 28 Aug 2025 14:02:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.142
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756389768; cv=none; b=MjFqK8pSu60lc6Q0q+iU7R+VKrtXad/3c5BKC4C5NH2dL0W7hXe4MKlEmJetmO7CDfGLvELjAg83bkLDc4UfGxnpTGk/vXcphVwYwZtHKanqL28d9Zve2Qh+0Sa47Ht4cgiku6/F/S305YA24HBL104k3WMU6Lectgf0wWZPjkM=
+	t=1756389771; cv=none; b=M01TmQBxf5WL1kgDZVQRa3lLtlYocqz9c/G1WoBHOZeV0ps+W4dw97n0x1aVTIK4KV14nQNK6kVIMGQ2EspMHHPIvBk3jAidkNrfexIGDIInVJfD/ElFs9z4PfXoj1KjbfYn/WrP12ccm2OqtOh611ZiCgzBvQVtqgXI12OVpZo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756389768; c=relaxed/simple;
-	bh=YGKS3mKYAcISaOfskU3sqPmhhvCKjQCzRxdtP/EUPQs=;
+	s=arc-20240116; t=1756389771; c=relaxed/simple;
+	bh=ykPAcrH7nH5stpCWnGizSLioWRUE/N+dbccnuhE6jU4=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=BgXYK4nbiGNth2Cmq79czSMOcLMqPd2A63cqK0pkpdmReFgWjgdxXDhI+VJ20sQWOxt3YjrLVxe0SrNOi8b8qtZqQw7kO+coy/MKx9xl/ZEPNpNF7l4lkpijy6wb6uhGiQa+QPR+NBTq+ZMu4vlBBJKfnC1KN9FQOORMfIhkQXU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jannau.net; spf=pass smtp.mailfrom=jannau.net; dkim=pass (2048-bit key) header.d=jannau.net header.i=@jannau.net header.b=gfanxDxb; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=VYP4sxqC; arc=none smtp.client-ip=103.168.172.142
+	 In-Reply-To:To:Cc; b=YWIhSeMt8t1DSxY9M4ZVeWSkYNwwHoS+6aBM4MjH7cvfq2erqArOfIgdSygve5KTFTQwtkP+n8yGgu3+QnxCxSIAlYT5LdOt4PEsmoJ9EQ3DVeLA1DuShmxMil6p1cDYEVSsIruxwMBMFxr7s3UBcMRDpHep4L8m3j2bfk4bASs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jannau.net; spf=pass smtp.mailfrom=jannau.net; dkim=pass (2048-bit key) header.d=jannau.net header.i=@jannau.net header.b=XVx2JXVs; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=M9B1JpB0; arc=none smtp.client-ip=103.168.172.142
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jannau.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jannau.net
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailflow.phl.internal (Postfix) with ESMTP id 97B141380DE2;
-	Thu, 28 Aug 2025 10:02:45 -0400 (EDT)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-04.internal (MEProxy); Thu, 28 Aug 2025 10:02:45 -0400
+Received: from phl-compute-03.internal (phl-compute-03.internal [10.202.2.43])
+	by mailflow.phl.internal (Postfix) with ESMTP id 7B5D61380DDF;
+	Thu, 28 Aug 2025 10:02:48 -0400 (EDT)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-03.internal (MEProxy); Thu, 28 Aug 2025 10:02:48 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jannau.net; h=cc
 	:cc:content-transfer-encoding:content-type:content-type:date
 	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1756389765;
-	 x=1756396965; bh=Z6xTizaTsfsqo/Q+BqnHLLOa8m9i73v69vmCPcWcOHg=; b=
-	gfanxDxbNSSSkcTbnYAh5g+KxbaeNfYi3Jf45YOxQvFAipXzk8w5FD1rL1Ou3exo
-	no0F7HC+YIOQOCouEZ9ueQfBtxU0kC2lHEr0iFbWbb9jEVAjriox5q1hf8Mjky14
-	a6dcCutjbIX4gxV/EmIU/DmevQowo+V0fvyLjWPR/qxB3h+EV87scGan3yFuWDhm
-	j0PRqKxcTjudG3N4jusYh2EFACRxg6Z0/vALFgwPfsdZw2eMt8scDqa4TLcDoHZW
-	lf1q3J/wLIT/jMV+KOlJdqO1GZIYPrazPQDSD/fIN0xe3YULIRQuPUWVbSh+RJMY
-	rK0Rl7A2WI++aI0tAcYKog==
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1756389768;
+	 x=1756396968; bh=Du2NKwG5kjMYapHOMS4ErXJWLOLHI7y0mRPWnckCGRc=; b=
+	XVx2JXVslCNQrTUX6rMoc1H7c2pxiOBr/8LPm6wIqOKxdCv+QHmPBNgrMYh95Z5U
+	K4cBQMGovl4oSnILs6zNdv5tK3jFUXDTRrIhe1g50zbzNxszK7wNkq5ob4HPAnY0
+	b03g0A22gjONulPBYxXi806CEXZsIMiX8zs16Avq9/r2J1C+AwPNGDNVeemRDJv8
+	2jssWp87a4zz506RU4OrbroPa/RDkd8KboIjDADAUmkZ72wVRfVvubQNwnWDUuzj
+	Z/pirRclbwhBbqe34B3wuMiAWJIWSUvYGKxhAjupElveZ2tT1KkAwQldPzsGqXf5
+	ZlySZzbaf0UzDQF2uHnWLg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1756389765; x=
-	1756396965; bh=Z6xTizaTsfsqo/Q+BqnHLLOa8m9i73v69vmCPcWcOHg=; b=V
-	YP4sxqCzKdgcpu6R35LlEX6J1mUpm+JYod8gu9W9W8jmtDaEcwbcqVkKC73So7H3
-	NC8/aDHAD5DD39Pj6XJlhsCUT8sIrdRQUPxPZqANjv+Yh6JOJlaz8sjvIiovKIb4
-	v/19zHIsXX+Xh3n0iiHo0OOf0LM+zSlQ+qpjSt/N5BQPeTJkLIMZa8Lqo887Ita6
-	6Uzg3DP9SEHzYQEya2Kkk3MQrLtcsQ4G3dvhF2Hqsl0d7DV8r7KWvkLzjNfOuDdl
-	Tz1a1J+D7S3D0dBgLxWnLiD9fEvUvJeXxcdG561owosFluXGprUBaVP7OxbsxCaV
-	wmO80EFSJVZX2sHXbmXIQ==
-X-ME-Sender: <xms:hGGwaBgV9PRsXn23RaJCQasQokyczLwLyRHANeLhRJm3MicyQtoSjQ>
-    <xme:hGGwaE2XxyoMqymDnQjV5ORnawSVh09A7cPbJyce3rV1AGIDV27PYbyxJo_6-TrvX
-    T28wMugfH1ELc0bR9s>
-X-ME-Received: <xmr:hGGwaLwU2jaO7rFsjlP11hSTqVPRClY1yYdsi23z7O_0MbTMpOY5hT227WnfkQY6MyC_Nmmu8wCFMQM_wzf2Or3z5k-qhnvDiSB80A>
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1756389768; x=
+	1756396968; bh=Du2NKwG5kjMYapHOMS4ErXJWLOLHI7y0mRPWnckCGRc=; b=M
+	9B1JpB0tfJ1T56e1NRwnWbkXUmlcBKGZH4+xdITs4w/cImWR8iyg1Xmg3j0zUZPB
+	WtePFO9bBaV3rgBB1hGDt9vWt6pydPsdKDmDXmisO4Yor5Ag8CxaR2D+sJniNSkv
+	zy5ukD/RxczA06gBH8B+9e4juyaAX/dwFF7hXwB9GFpXixdyrH5OXdM9RjhFQb3E
+	UNJphIXK2geZIbuV0Hh8BtuMJRHW9l8m4rnhvOU9Ik7N0k0whKdr9ayV5nqtJvBA
+	BfkTPjvnnySiRGEUpk6HKrVXukWHPsl2bXUg4rCovGCgiYq0jQ812KW6A4R89Ioa
+	RnueoScCE5BsvW+88LKTw==
+X-ME-Sender: <xms:h2GwaAQ4MbLkyoZi9f0lO1GdMb4vPLLSekvjTpZ_jMfO2C3JRdoKlw>
+    <xme:h2GwaMl9v4ShPl11JvqRTZXyWLi-vxJOl8dSwRxIpKJoZNR4hRjMrFR2hwsOUoJCl
+    sODnC-bFXg7nKKLTis>
+X-ME-Received: <xmr:h2GwaIifykCToSnYn8qw43gKpf837ce99C2vu6T8dDmnGnJYDI57fN1D7X2kcNIpbqm9SB4V3UDbwW4OS1sBmqNFpqWGBtNeh8Lbjg>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddukeduvddvucetufdoteggodetrf
     dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
     rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
     gurhephfffufggtgfgkfhfjgfvvefosehtjeertdertdejnecuhfhrohhmpeflrghnnhgv
     ucfirhhunhgruhcuoehjsehjrghnnhgruhdrnhgvtheqnecuggftrfgrthhtvghrnhepve
     ekkefgjeettdduueejgeeuteduffefteejudegieevuedvieffteeljeelgfeknecuffho
-    mhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrh
+    mhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedvnecurfgrrh
     grmhepmhgrihhlfhhrohhmpehjsehjrghnnhgruhdrnhgvthdpnhgspghrtghpthhtohep
     ieegpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehlihhnuhigqdhgphhiohesvh
     hgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehjohhhrghnnhgvshesshhiphhs
@@ -81,17 +81,18 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddukeduvddvucetufdote
     gvthhtvghnihhssehophgvnhgsshgurdhorhhgpdhrtghpthhtohepkhgsuhhstghhsehk
     vghrnhgvlhdrohhrghdprhgtphhtthhopehsrghgihesghhrihhmsggvrhhgrdhmvgdprh
     gtphhtthhopehlihhnuhigqdhivdgtsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:hGGwaNUuJm642dubAzVbeoBpZ5yne4m8wyfmEThDgQZw6SXq5dOHoQ>
-    <xmx:hGGwaEZq7Xqw7kDM_xO72DgZmvMhXdIAS49w4FfoJfsqfCiJc2yIKg>
-    <xmx:hGGwaNqWhAalsWH8bYAmItm9zp4IEpel8eDQwTNSHf2F4gGRJdRtZQ>
-    <xmx:hGGwaJGa4AkbyF-dpHwK6ADvpraqNzUeH0ljUcXaQqKS5o8lfDSRmg>
-    <xmx:hWGwaCnpAXOD3at92TU-jGaaHs-DTJ5yyb0lbNfH-jigymArRw8iT0Ii>
+X-ME-Proxy: <xmx:h2GwaLGPVKIKQkx1jsX_5SRtkyw-LqoFRPZ39xXJjyOfF4C0uZLVGA>
+    <xmx:h2GwaPJPgnCkyL21NymVJSXi1zUPu5YO6XiN2reFMTUfH4B929XGZA>
+    <xmx:h2GwaBbp0j-Jas6AvKviCk3p9Fp_oS9ioMRcivi0SphoQqvxs362cg>
+    <xmx:h2GwaB2Ga6XeWUNvtrJOZKcxFnC9d_x1pKdMHpavHztJBv9iZtWjog>
+    <xmx:iGGwaG5Xw12NZGk-ViJ0x2NWqhdr93bxXtmPBuMfv4b-L4KcIh0EKMi->
 Feedback-ID: i47b949f6:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 28 Aug 2025 10:02:43 -0400 (EDT)
+ 28 Aug 2025 10:02:46 -0400 (EDT)
 From: Janne Grunau <j@jannau.net>
-Date: Thu, 28 Aug 2025 16:01:42 +0200
-Subject: [PATCH 23/37] watchdog: apple: Add "apple,t8103-wdt" compatible
+Date: Thu, 28 Aug 2025 16:01:43 +0200
+Subject: [PATCH 24/37] dt-bindings: watchdog: apple,wdt: Add t6020-wdt
+ compatible
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -100,7 +101,7 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250828-dt-apple-t6020-v1-23-507ba4c4b98e@jannau.net>
+Message-Id: <20250828-dt-apple-t6020-v1-24-507ba4c4b98e@jannau.net>
 References: <20250828-dt-apple-t6020-v1-0-507ba4c4b98e@jannau.net>
 In-Reply-To: <20250828-dt-apple-t6020-v1-0-507ba4c4b98e@jannau.net>
 To: Sven Peter <sven@kernel.org>, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
@@ -146,13 +147,13 @@ Cc: asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
  linux-sound@vger.kernel.org, linux-spi@vger.kernel.org, 
  linux-nvme@lists.infradead.org, Janne Grunau <j@jannau.net>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1013; i=j@jannau.net;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1897; i=j@jannau.net;
  s=yk2024; h=from:subject:message-id;
- bh=YGKS3mKYAcISaOfskU3sqPmhhvCKjQCzRxdtP/EUPQs=;
- b=owGbwMvMwCW2UNrmdq9+ahrjabUkhowNiVYbBQ/1vRKK1L60aPbbkMgubr7GzfsiKiwfBPxds
- aKqKmBXRykLgxgXg6yYIkuS9ssOhtU1ijG1D8Jg5rAygQxh4OIUgIlEpjIyPLov6Cn4/FveKrNl
- WUwKQnc1Nt/uVIpM8I/YbZ7wz/HZXIb/YSdThHqvF8362a7x3UA2bv61A0vvqRz8HTXb+OBxGxk
- WPgA=
+ bh=ykPAcrH7nH5stpCWnGizSLioWRUE/N+dbccnuhE6jU4=;
+ b=owGbwMvMwCW2UNrmdq9+ahrjabUkhowNiVa3tMJLl0+1OZ/j/LDzZME5F7n/Z841PWcWM3LT4
+ n25aL5tRykLgxgXg6yYIkuS9ssOhtU1ijG1D8Jg5rAygQxh4OIUgIlM4GD4Z1Giqb1S+v2NDXJH
+ yy8dMMtfFTrdOlH5nbfDbo4iyb6wRIb/Pt7bcg+f5JNyXn+xYMH10DC7+B9tZq83XNolrtTw1us
+ 6GwA=
 X-Developer-Key: i=j@jannau.net; a=openpgp;
  fpr=8B336A6BE4E5695E89B8532B81E806F586338419
 
@@ -161,25 +162,54 @@ lists with the generic compatible "apple,wdt" anymore [1]. Use
 "apple,t8103-wdt" as base compatible as it is the SoC the driver and
 bindings were written for.
 
+The block on the Apple M2 Pro/Max/Ultra SoCs is compatible with the
+existing driver so add its per-SoC compatible.
+
 [1]: https://lore.kernel.org/asahi/12ab93b7-1fc2-4ce0-926e-c8141cfe81bf@kernel.org/
 
 Signed-off-by: Janne Grunau <j@jannau.net>
 ---
- drivers/watchdog/apple_wdt.c | 1 +
- 1 file changed, 1 insertion(+)
+ .../devicetree/bindings/watchdog/apple,wdt.yaml    | 27 +++++++++++++---------
+ 1 file changed, 16 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/watchdog/apple_wdt.c b/drivers/watchdog/apple_wdt.c
-index 66a158f67a712bbed394d660071e02140e66c2e5..6b9b0f9b05cedfd7fc5d0d79ba19ab356dc2a080 100644
---- a/drivers/watchdog/apple_wdt.c
-+++ b/drivers/watchdog/apple_wdt.c
-@@ -218,6 +218,7 @@ static int apple_wdt_suspend(struct device *dev)
- static DEFINE_SIMPLE_DEV_PM_OPS(apple_wdt_pm_ops, apple_wdt_suspend, apple_wdt_resume);
+diff --git a/Documentation/devicetree/bindings/watchdog/apple,wdt.yaml b/Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
+index 310832fa8c2803d463148954ed30795b11d97cb2..05602678c070d764331795f6df91abbc55eb0f2a 100644
+--- a/Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
++++ b/Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
+@@ -14,17 +14,22 @@ allOf:
  
- static const struct of_device_id apple_wdt_of_match[] = {
-+	{ .compatible = "apple,t8103-wdt" },
- 	{ .compatible = "apple,wdt" },
- 	{},
- };
+ properties:
+   compatible:
+-    items:
+-      - enum:
+-          - apple,s5l8960x-wdt
+-          - apple,t7000-wdt
+-          - apple,s8000-wdt
+-          - apple,t8010-wdt
+-          - apple,t8015-wdt
+-          - apple,t8103-wdt
+-          - apple,t8112-wdt
+-          - apple,t6000-wdt
+-      - const: apple,wdt
++    oneOf:
++      - items:
++          - const: apple,t6020-wdt
++          - const: apple,t8103-wdt
++      - items:
++          - enum:
++              # Do not add additional SoC to this list.
++              - apple,s5l8960x-wdt
++              - apple,t7000-wdt
++              - apple,s8000-wdt
++              - apple,t8010-wdt
++              - apple,t8015-wdt
++              - apple,t8103-wdt
++              - apple,t8112-wdt
++              - apple,t6000-wdt
++          - const: apple,wdt
+ 
+   reg:
+     maxItems: 1
 
 -- 
 2.51.0
