@@ -1,358 +1,169 @@
-Return-Path: <linux-i2c+bounces-12451-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12452-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F8A6B38A51
-	for <lists+linux-i2c@lfdr.de>; Wed, 27 Aug 2025 21:40:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B405B39379
+	for <lists+linux-i2c@lfdr.de>; Thu, 28 Aug 2025 08:00:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 85A337AA737
-	for <lists+linux-i2c@lfdr.de>; Wed, 27 Aug 2025 19:38:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EA976173E99
+	for <lists+linux-i2c@lfdr.de>; Thu, 28 Aug 2025 06:00:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73AEE2EC561;
-	Wed, 27 Aug 2025 19:39:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD0512777F7;
+	Thu, 28 Aug 2025 05:59:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b="eP94gNjW"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="d5j0cjjO"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2054.outbound.protection.outlook.com [40.107.92.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07BE9279798;
-	Wed, 27 Aug 2025 19:39:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E68EB4A02;
+	Thu, 28 Aug 2025 05:59:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.54
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756323592; cv=pass; b=GpZAxpblnidsq5dOEBav/NcC+XXYn+zwqbPvXoS4d5voaay5vdGqrDMC79Hg6tyln+8C1qLfJGL6x65CiH0gtCzEBCHfJp84QLdVokdGPzawWKnEw/fisXHslpzH2WqQ7u0+alMyhHH7S0e1VtmtoZrGzaxNMA7crp17c/xAh2E=
+	t=1756360798; cv=fail; b=tJ0Ix7IxIzbhoI3PARtIWX2AcMWMmNGIlN8lK/UXNWXmIKsSIb4pR6QGdxvPaIbectJywM1Yr5ChotQkflyuwSsN37x16oo3BXrMNWnGJbAQNGbsCxNAg/P7mSm9qy63J+cOPNqfN16968yUyWzE/gSrq7qzwOESCQXBzzxxlGg=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756323592; c=relaxed/simple;
-	bh=bhJGLOzcqCXeL1f+PbZNg5CJwwNVYLKvEfjnOQw8x/k=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=Y4yYLPFSIoKI0hwM44yb/TsU3BDGGFShVzUd/hVq1Pe3H97qACnyYtaicpPz3OyOuuSvi5CzJsovC34FeUznKdFX6SZWqodiyaLeEY0nS1veXz3P1unZbD80CoxIaNfq/FWSGw4G4K1lKwyBZg44F4zw0Lgq7mBjhLyexSKfOJA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b=eP94gNjW; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1756323554; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=BjVD3vQBXkxIog1obtJpk2QOGYeHCPsjVUJte3k4LAS02jN43Roe30qKzepkZ4RXwiI0xBQ1I/znxSGEOeCQQMqX1qSf/4Ic8kVOzhpya+ebjd8GMFjJXaP8VzamxgLNcoyua9fhed+CPrKVMv8tB25uE0J7nLZV8TqplA8oXPw=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1756323554; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=oVevfbBofNCl0bqpIo8jxzoWwPB9gpvBbBKAzwe387U=; 
-	b=MY/Lf+z/wq0h3uXZoGjYoor4FB7dT5ESlIgVTO/BMDf6GP5CGSHxMnOaJ2Y/goJ2/TfKZx1uuSV68N5pT8npxA2tnm1yQDdTNmPeSu7E0OwfuypM8s4oqwhkYjxTnMn3MwY4KGLcxFmYAcBuwde78P2HaaxPQ1ki+r6tQkqUl+4=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=daniel.almeida@collabora.com;
-	dmarc=pass header.from=<daniel.almeida@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1756323554;
-	s=zohomail; d=collabora.com; i=daniel.almeida@collabora.com;
-	h=Content-Type:Mime-Version:Subject:Subject:From:From:In-Reply-To:Date:Date:Cc:Cc:Content-Transfer-Encoding:Message-Id:Message-Id:References:To:To:Reply-To;
-	bh=oVevfbBofNCl0bqpIo8jxzoWwPB9gpvBbBKAzwe387U=;
-	b=eP94gNjWEqCTxRQXHUgUmhlX+3ghHUyLM6L+BPVzEehb11shXPJP70sW5QSKeFmu
-	seoEeCftFG2tJ0qPpo5T6l9VJsn4MexCJfEPNvyFIKlx6Irli6/bF7U/EMcEtO+2eBr
-	8pqlIEo4c3iNhBv4SPu8kcq52+oLZ1sr/S9lKVdI=
-Received: by mx.zohomail.com with SMTPS id 1756323544718753.0565349742627;
-	Wed, 27 Aug 2025 12:39:04 -0700 (PDT)
-Content-Type: text/plain;
-	charset=us-ascii
+	s=arc-20240116; t=1756360798; c=relaxed/simple;
+	bh=BZYgaRrhVj/VGnS1DeLiJ0e0LG2LNT0X8pA+082f5K8=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Z/eszMgu6QWm+MYUoUmoRbB1BM/EpCTLPUEHYGI7jCjHvopupRxz5wmpjoADvLryQZrivkooTS8Jc4rM/tWoDSZ7dz0i55LOnBBSfW1AVUqFgp6R96VI08LI9SjOUKRF/YubN8c2tVT1zGC9AjYsSMWrm75JLdW7MG6Prj/6fSc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=d5j0cjjO; arc=fail smtp.client-ip=40.107.92.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=rh/Q9EHg7k8uBO0ArGsxBf7i8rVL9KxlDB0bfYepzx2Am08iqub0WjS1Xz3M0acf4lbJEaxzMtPpKUuyyBPS3WpfhPVlJXmX117033IMHCyFEZHRnxl7ehspGFCw5kqYiYdX+zEB9dvY7GqhlxgtgXjhMJzTmNWxGyx7AnvCBhsulvm+rVG5KurtU5XQTeGaThlxQFvV4cY1RS6x56fBmCP3VjpGQzdortNU+JzqrDIzXXSe0ErxeNHFVz9ZF8AuSSXbB4nttcMiFHlLu+K6OZsCAJFVbyTk9L6chE/BymWqTT0SYGrBOSu+ciRTcBBUQJGpJ9eKmNkNaHeE1XiurQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UtoKqKQjFjVouSFg1+p8zHKYxI7/tNM7n0/w37BQRMk=;
+ b=uGUtfj+L2D7GGGGV3mSSe/DVTwxsm+IAbmKuci3iKnH//rS9xIr5xHjX2kPRT63kLSm49jTrfzB0USncoMR02S+UfDvN9vR6cimX5KyaqavpyQCcknLtMuiOeoU3YjShWm2GkHvKo3mPowIYFezby6+RVzAaXI4q8/ygiFpnTavEBxbl7p4jwXLpnpPkYRzhlYsdGKE+453tgiUWo7xqRoY1LUwdQ21MoKHp7yPuYp5ybQHWh+erEmNq2y51wwy0GRIxsmNysntlH8i1UyvlLz7RHyIrHD9AmUSAFrpog7cIj7RyHmnabxXVF9tij434zSjKj7eBoaN3nt4OaCJcRg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.233) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UtoKqKQjFjVouSFg1+p8zHKYxI7/tNM7n0/w37BQRMk=;
+ b=d5j0cjjOJATAkFzzuxPHVN2bC0fDfF79hm52nLChdUEaM/pU3JG+qWh7lZOZ3fKEsKBuuTY4VFOVmiFXfRtF0yrQv8vU4/OikL+8cahQYut32n+ri5TjXuq8kxnr/YMSbxv5cxMoQ2/PqX35IyYsLxNPkskQvFU5V/8az2Z9JLevdBjM5fp+xhCccWM1dUOjE8tZHXheLqCHTlwst7y9zbo0p58il29O/BXZsvIh72qqO75XiDxJBy0S6eyooSh4hkkiMhTUyVfV2NsK4zMYn8cBWuzrVMTFf7bkH0fwhoRsq/oSMf7vaAVt0rX82fxkhSSv/E1MDdmQPnoW7bOn1w==
+Received: from SJ0PR03CA0004.namprd03.prod.outlook.com (2603:10b6:a03:33a::9)
+ by MW3PR12MB4426.namprd12.prod.outlook.com (2603:10b6:303:58::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9052.21; Thu, 28 Aug
+ 2025 05:59:52 +0000
+Received: from SJ5PEPF000001CD.namprd05.prod.outlook.com
+ (2603:10b6:a03:33a:cafe::ae) by SJ0PR03CA0004.outlook.office365.com
+ (2603:10b6:a03:33a::9) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9073.14 via Frontend Transport; Thu,
+ 28 Aug 2025 05:59:51 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.233) by
+ SJ5PEPF000001CD.mail.protection.outlook.com (10.167.242.42) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9073.11 via Frontend Transport; Thu, 28 Aug 2025 05:59:51 +0000
+Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
+ (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Wed, 27 Aug
+ 2025 22:59:41 -0700
+Received: from drhqmail201.nvidia.com (10.126.190.180) by
+ drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.14; Wed, 27 Aug 2025 22:59:40 -0700
+Received: from kkartik-desktop.nvidia.com (10.127.8.13) by mail.nvidia.com
+ (10.126.190.180) with Microsoft SMTP Server id 15.2.1544.14 via Frontend
+ Transport; Wed, 27 Aug 2025 22:59:36 -0700
+From: Kartik Rajput <kkartik@nvidia.com>
+To: <akhilrajeev@nvidia.com>, <andi.shyti@kernel.org>, <robh@kernel.org>,
+	<krzk+dt@kernel.org>, <conor+dt@kernel.org>, <thierry.reding@gmail.com>,
+	<jonathanh@nvidia.com>, <ldewangan@nvidia.com>, <digetx@gmail.com>,
+	<linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC: <kkartik@nvidia.com>
+Subject: [PATCH v6 0/5] Add I2C support for Tegra264
+Date: Thu, 28 Aug 2025 11:29:28 +0530
+Message-ID: <20250828055933.496548-1-kkartik@nvidia.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.700.81\))
-Subject: Re: [PATCH v4 3/3] samples: rust: add Rust I2C sample driver
-From: Daniel Almeida <daniel.almeida@collabora.com>
-In-Reply-To: <20250820152347.1815097-1-igor.korotin.linux@gmail.com>
-Date: Wed, 27 Aug 2025 16:38:46 -0300
-Cc: Miguel Ojeda <ojeda@kernel.org>,
- Alex Gaynor <alex.gaynor@gmail.com>,
- Wolfram Sang <wsa+renesas@sang-engineering.com>,
- Boqun Feng <boqun.feng@gmail.com>,
- Gary Guo <gary@garyguo.net>,
- =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Benno Lossin <lossin@kernel.org>,
- Andreas Hindborg <a.hindborg@kernel.org>,
- Alice Ryhl <aliceryhl@google.com>,
- Trevor Gross <tmgross@umich.edu>,
- Danilo Krummrich <dakr@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Viresh Kumar <viresh.kumar@linaro.org>,
- Asahi Lina <lina+kernel@asahilina.net>,
- Wedson Almeida Filho <wedsonaf@gmail.com>,
- Alex Hung <alex.hung@amd.com>,
- Tamir Duberstein <tamird@gmail.com>,
- Xiangfei Ding <dingxiangfei2009@gmail.com>,
- linux-kernel@vger.kernel.org,
- rust-for-linux@vger.kernel.org,
- linux-i2c@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <C5AFA553-6EB1-453E-B396-DD19139E7228@collabora.com>
-References: <20250820151427.1812482-1-igor.korotin.linux@gmail.com>
- <20250820152347.1815097-1-igor.korotin.linux@gmail.com>
-To: Igor Korotin <igor.korotin.linux@gmail.com>
-X-Mailer: Apple Mail (2.3826.700.81)
-X-ZohoMailClient: External
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ5PEPF000001CD:EE_|MW3PR12MB4426:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9ceebfbd-04fa-4bf1-e13b-08dde5f81aa0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|36860700013|82310400026|376014|7416014|921020;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?0gOgUnS3RGJ3+BEde5ecVYLzOdItgf9MR6qG6y/qIXGKy8tKcXTAg49KxfeA?=
+ =?us-ascii?Q?FPiOdopIzp6Y6HDloMh0dldOwe1MMVUZO6/7CzLR08huGvPy9Axi62yz1Psf?=
+ =?us-ascii?Q?minVKcqfN4Zy5d3APGPw2eiGJHLJoMY1V2kX+vzo5f5wxt0QU6uoTlmMf702?=
+ =?us-ascii?Q?TuPSrogKKQIBHr6zkC1bdFbAFVEv2ZMResCm1G0w3PBMAZtm5bRgmsUTzoEU?=
+ =?us-ascii?Q?LpenT0loBZ4M/rNrrJRsDon3WQ1gCzzgu6ziDLCN+nZnb8JKHu+kX+zHpXEu?=
+ =?us-ascii?Q?bHWRbCoWRpfyKBlinais1Pm4VbnKc8PdBdO1tz0YFT3XqruczwQuJnwVCiy9?=
+ =?us-ascii?Q?kXjEWkHSm4N0q6pp48nx6PwRJAOUy73GWc+J1f1RiX7UBdCxDaVkLyedW/rB?=
+ =?us-ascii?Q?lwym3obDO1Ndpf6hDB+H7AfZAv/ibTP1n2mx6VfKKRGIjHkWzXTqUGYPG8BG?=
+ =?us-ascii?Q?erurc0ytQDPf51dc37mr5NGZitX7CokKcsYBFMT+g+DiqnjK2yIVE7D5MUpU?=
+ =?us-ascii?Q?s7HF8olyvNzSvT3BKGeSfdtwgLq038p1uUt5hHaSXmO/VHIcce2q8HQhQUGy?=
+ =?us-ascii?Q?6qKjNJX/+AR3Wzm9JcXX6zOcV0uPawvnMXzt38s/gxKfc9+M5zjBE8r00yyT?=
+ =?us-ascii?Q?mir9rKfvBmRponr411vmEZblNcIv8QKaCvFAWaGMX85Tw7UNMJ8USm+BODtE?=
+ =?us-ascii?Q?zdpdX9j402TUOWJtqfiP4PrUArMBB/Oy4pTDgEA1diN25ezQaccj1VazMdDl?=
+ =?us-ascii?Q?if5vN15h9nj8EY6U6uKDa4ZkGZP4LpnI7syX3MGNak7U5DlCs01rZGSi4Qwl?=
+ =?us-ascii?Q?i7jVDcR55KvRs9/YHNAvUe3+yd8WN86VOLqGDV2VMtrcsx3jB6L2p5n16M8K?=
+ =?us-ascii?Q?Hx78XIthzmW3lUsGVWlSXgUDm++rY+I+qh4M7LtWhJLfwY2POLerwjY/nb0p?=
+ =?us-ascii?Q?l7fsrarljeMcOqUolJ42y/hFkRARRqMry3y2LEYH5e5aS+dJhRxsHd/UH4sd?=
+ =?us-ascii?Q?57157RwWT24zU4w48mYxE8yE7Lyoqeze9YLD+RPInvy2tvRBqhmhJkPtgdue?=
+ =?us-ascii?Q?tJVMT9VeVNoqzeL6vQZ21krlvUsqQpLRgOuudEXGGmE95wfiaPk2GzUvyZ0z?=
+ =?us-ascii?Q?JrtGJ71du3Z2Kel5aeTWQ8/D30NKsIfgPnVJKPLu7Mzb7Vegz+RKtUlNAjkE?=
+ =?us-ascii?Q?K6TJk2dked8LFMSs7h/PjfWJx1pF8rbTOccdougiR7a8CwRL8Dsq7Ouw5yKu?=
+ =?us-ascii?Q?HUlQVC0yqZrPprWL9h1QOuUOLK/EdVLs9pL78qlBME4ZwkwjBlnHYV/CfKWi?=
+ =?us-ascii?Q?aL75nvOuNyaPiPXeE0ytqTLU1Tddp6EUAzHog6w+Nub/22DcEtVzYutUDT+i?=
+ =?us-ascii?Q?mVRKIPDKk1H57in81bNbfNmMGrrA1msDCWdkkbl87mXDPCSWvsTdTrta+W+4?=
+ =?us-ascii?Q?dVIqknpRj3hyF5ioP/nhgMdMTaDZ7C9DRWFtFtyl2Fmn54m54xDBNDzJ6hqa?=
+ =?us-ascii?Q?2cofKiK0UFrQ6H/4gH2NKBeJQoaFpj02AcECskEg9EDEUBvJv4xc5Q4auw?=
+ =?us-ascii?Q?=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(36860700013)(82310400026)(376014)(7416014)(921020);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Aug 2025 05:59:51.4579
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9ceebfbd-04fa-4bf1-e13b-08dde5f81aa0
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SJ5PEPF000001CD.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4426
 
-Hi Igor,
+Following series of patches add support for Tegra264 and High Speed (HS)
+Mode in i2c-tegra.c driver.
 
-> On 20 Aug 2025, at 12:23, Igor Korotin <igor.korotin.linux@gmail.com> =
-wrote:
->=20
-> Add a new `rust_driver_i2c` sample, showing how to create a new
-> i2c client using `i2c::Registration` and bind a driver to it
-> via legacy I2C-ID table.
->=20
-> Signed-off-by: Igor Korotin <igor.korotin.linux@gmail.com>
-> ---
-> MAINTAINERS                     |   1 +
-> samples/rust/Kconfig            |  11 +++
-> samples/rust/Makefile           |   1 +
-> samples/rust/rust_driver_i2c.rs | 128 ++++++++++++++++++++++++++++++++
-> 4 files changed, 141 insertions(+)
-> create mode 100644 samples/rust/rust_driver_i2c.rs
->=20
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index c44c7ac317b1..2654a7ea0c80 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -11523,6 +11523,7 @@ R: Daniel Almeida =
-<daniel.almeida@collabora.com>
-> L: rust-for-linux@vger.kernel.org
-> S: Maintained
-> F: rust/kernel/i2c.rs
-> +F: samples/rust/rust_driver_i2c.rs
->=20
-> I2C SUBSYSTEM HOST DRIVERS
-> M: Andi Shyti <andi.shyti@kernel.org>
-> diff --git a/samples/rust/Kconfig b/samples/rust/Kconfig
-> index 7f7371a004ee..28dae070b365 100644
-> --- a/samples/rust/Kconfig
-> +++ b/samples/rust/Kconfig
-> @@ -62,6 +62,17 @@ config SAMPLE_RUST_DMA
->=20
->  If unsure, say N.
->=20
-> +config SAMPLE_RUST_DRIVER_I2C
-> + tristate "I2C Driver"
-> + depends on I2C=3Dy
-> + help
-> +  This option builds the Rust I2C driver sample.
-> +
-> +  To compile this as a module, choose M here:
-> +  the module will be called rust_driver_i2c.
-> +
-> +  If unsure, say N.
-> +
-> config SAMPLE_RUST_DRIVER_PCI
-> tristate "PCI Driver"
-> depends on PCI
-> diff --git a/samples/rust/Makefile b/samples/rust/Makefile
-> index bd2faad63b4f..141d8f078248 100644
-> --- a/samples/rust/Makefile
-> +++ b/samples/rust/Makefile
-> @@ -5,6 +5,7 @@ obj-$(CONFIG_SAMPLE_RUST_MINIMAL) +=3D rust_minimal.o
-> obj-$(CONFIG_SAMPLE_RUST_MISC_DEVICE) +=3D rust_misc_device.o
-> obj-$(CONFIG_SAMPLE_RUST_PRINT) +=3D rust_print.o
-> obj-$(CONFIG_SAMPLE_RUST_DMA) +=3D rust_dma.o
-> +obj-$(CONFIG_SAMPLE_RUST_DRIVER_I2C) +=3D rust_driver_i2c.o
-> obj-$(CONFIG_SAMPLE_RUST_DRIVER_PCI) +=3D rust_driver_pci.o
-> obj-$(CONFIG_SAMPLE_RUST_DRIVER_PLATFORM) +=3D rust_driver_platform.o
-> obj-$(CONFIG_SAMPLE_RUST_DRIVER_FAUX) +=3D rust_driver_faux.o
-> diff --git a/samples/rust/rust_driver_i2c.rs =
-b/samples/rust/rust_driver_i2c.rs
-> new file mode 100644
-> index 000000000000..6dfc299d5aea
-> --- /dev/null
-> +++ b/samples/rust/rust_driver_i2c.rs
-> @@ -0,0 +1,128 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +//! Rust I2C driver sample.
-> +//!
-> +//! This module shows how to:
-> +//!
-> +//! 1. Manually create an `i2c_client` at address =
-`SAMPLE_I2C_CLIENT_ADDR`
-> +//!    on the adapter with index `SAMPLE_I2C_ADAPTER_INDEX`.
+Akhil R (2):
+  i2c: tegra: Add HS mode support
+  i2c: tegra: Add Tegra264 support
 
-Blank here.
+Kartik Rajput (3):
+  dt-bindings: i2c: nvidia,tegra20-i2c: Document Tegra264 I2C
+  i2c: tegra: Do not configure DMA if not supported
+  i2c: tegra: Add support for SW mutex register
 
-> +//! 2. Register a matching Rust-based I2C driver for that client.
-> +//!
-> +//! # Requirements
-> +//!
-> +//! - The target system must expose an I2C adapter at index
-> +//!   `SAMPLE_I2C_ADAPTER_INDEX`.
+ .../bindings/i2c/nvidia,tegra20-i2c.yaml      |   7 +
+ drivers/i2c/busses/i2c-tegra.c                | 164 ++++++++++++++++++
+ 2 files changed, 171 insertions(+)
 
-Blank here
-
-> +//! - To emulate an adapter for testing, you can load the
-> +//!   `i2c-stub` kernel module with an option `chip_addr`
-> +//!   For example for this sample driver to emulate an I2C device =
-with
-> +//!   an address 0x30 you can use:
-> +//!      `modprobe i2c-stub chip_addr=3D0x30`
-> +//!
-> +
-> +use kernel::{
-> +    acpi, c_str,
-> +    device::{Core, Normal},
-> +    i2c, of,
-> +    prelude::*,
-> +    types::ARef,
-> +};
-> +
-> +const SAMPLE_I2C_CLIENT_ADDR: u16 =3D 0x30;
-> +const SAMPLE_I2C_ADAPTER_INDEX: i32 =3D 0;
-> +const BOARD_INFO: i2c::I2cBoardInfo =3D
-> +    i2c::I2cBoardInfo::new(c_str!("rust_driver_i2c"), =
-SAMPLE_I2C_CLIENT_ADDR);
-> +
-> +struct SampleDriver {
-> +    pdev: ARef<i2c::I2cClient>,
-
-FYI: the pdev nomenclature is still here.
-
-> +}
-> +
-> +kernel::acpi_device_table! {
-> +    ACPI_TABLE,
-> +    MODULE_ACPI_TABLE,
-> +    <SampleDriver as i2c::Driver>::IdInfo,
-> +    [(acpi::DeviceId::new(c_str!("LNUXBEEF")), 0)]
-> +}
-> +
-> +kernel::i2c_device_table! {
-> +    I2C_TABLE,
-> +    MODULE_I2C_TABLE,
-> +    <SampleDriver as i2c::Driver>::IdInfo,
-> +    [(i2c::DeviceId::new(c_str!("rust_driver_i2c")), 0)]
-> +}
-> +
-> +kernel::of_device_table! {
-> +    OF_TABLE,
-> +    MODULE_OF_TABLE,
-> +    <SampleDriver as i2c::Driver>::IdInfo,
-> +    [(of::DeviceId::new(c_str!("test,rust_driver_i2c")), 0)]
-> +}
-> +
-> +impl i2c::Driver for SampleDriver {
-> +    type IdInfo =3D u32;
-> +
-> +    const ACPI_ID_TABLE: Option<acpi::IdTable<Self::IdInfo>> =3D =
-Some(&ACPI_TABLE);
-> +    const I2C_ID_TABLE: Option<i2c::IdTable<Self::IdInfo>> =3D =
-Some(&I2C_TABLE);
-> +    const OF_ID_TABLE: Option<of::IdTable<Self::IdInfo>> =3D =
-Some(&OF_TABLE);
-> +
-> +    fn probe(pdev: &i2c::I2cClient<Core>, info: =
-Option<&Self::IdInfo>) -> Result<Pin<KBox<Self>>> {
-> +        let dev =3D pdev.as_ref();
-> +
-> +        dev_dbg!(dev, "Probe Rust I2C driver sample.\n");
-> +
-> +        if let Some(info) =3D info {
-> +            dev_info!(dev, "Probed with info: '{}'.\n", info);
-> +        }
-> +
-> +        let drvdata =3D KBox::new(Self { pdev: pdev.into() }, =
-GFP_KERNEL)?;
-> +
-> +        Ok(drvdata.into())
-> +    }
-> +
-> +    fn shutdown(pdev: &i2c::I2cClient<Core>) {
-> +        dev_dbg!(pdev.as_ref(), "Shutdown Rust I2C driver =
-sample.\n");
-
-This should probably be dev_info!()
-
-I know that in general people want drivers to be quiet but:
-
-a) this a sample driver that is probably the only way to test the =
-abstractions
-for the time being, so we must know whether probe() and shudown() are =
-working
-by inspecting these traces.
-
-b) Unless something changed recently, there is no way to get dev_dbg() =
-to print
-in Rust for now, as there is no support for dynamic debug. Andrew was =
-working
-on it recently [0], but I don't think the patch was accepted yet.
-
-> +    }
-> +}
-> +
-> +impl Drop for SampleDriver {
-> +    fn drop(&mut self) {
-> +        dev_dbg!(self.pdev.as_ref(), "Remove Rust I2C driver =
-sample.\n");
-> +    }
-> +}
-> +
-> +// NOTE: The code below is expanded macro module_i2c_driver. It is =
-not used here
-> +//       because we need to manually create an I2C client in =
-`init()`. The macro
-> +//       hides `init()`, so to demo client creation on adapter =
-SAMPLE_I2C_ADAPTER_INDEX
-> +//       we expand it by hand.
-> +type Ops<T> =3D kernel::i2c::Adapter<T>;
-
-I am not sure I understand. How is a type alias related to =
-module_i2c_driver at
-all?
-
-Do all drivers need to introduce the alias above?
-
-> +
-> +#[pin_data]
-> +struct DriverModule {
-> +    #[pin]
-> +    _driver: kernel::driver::Registration<Ops<SampleDriver>>,
-> +    _reg: i2c::Registration,
-> +}
-
-I was expecting this to be ARef of something, most likely I2cClient?
-
-This is where my knowledge of i2c drivers start to fall short, but =
-others will
-probably chime in :)
-
-> +
-> +impl kernel::InPlaceModule for DriverModule {
-> +    fn init(
-> +        module: &'static kernel::ThisModule,
-> +    ) -> impl ::pin_init::PinInit<Self, kernel::error::Error> {
-> +        kernel::try_pin_init!(Self {
-> +            _reg <- {
-> +                let adapter =3D =
-i2c::I2cAdapter::<Normal>::get(SAMPLE_I2C_ADAPTER_INDEX)?;
-> +
-> +                i2c::Registration::new(adapter, &BOARD_INFO)
-> +            },
-> +            _driver <- kernel::driver::Registration::new(
-> +                 <Self as kernel::ModuleMetadata>::NAME, module
-> +            ),
-> +        })
-> +    }
-> +}
-> +
-> +kernel::prelude::module! {
-> +    type: DriverModule,
-> +    name: "rust_driver_i2c",
-> +    authors: ["Igor Korotin"],
-> +    description: "Rust I2C driver",
-> +    license: "GPL v2",
-> +}
-> --=20
-> 2.43.0
->=20
->=20
-
-[0]: =
-https://lore.kernel.org/rust-for-linux/20250611202952.1670168-1-andrewjbal=
-lance@gmail.com/
+-- 
+2.43.0
 
 
