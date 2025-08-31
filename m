@@ -1,76 +1,76 @@
-Return-Path: <linux-i2c+bounces-12522-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12523-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2F24B3D1DB
-	for <lists+linux-i2c@lfdr.de>; Sun, 31 Aug 2025 12:05:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C141AB3D1DE
+	for <lists+linux-i2c@lfdr.de>; Sun, 31 Aug 2025 12:05:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A88853B2E22
-	for <lists+linux-i2c@lfdr.de>; Sun, 31 Aug 2025 10:05:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7F64F17CC55
+	for <lists+linux-i2c@lfdr.de>; Sun, 31 Aug 2025 10:05:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5E112550DD;
-	Sun, 31 Aug 2025 10:05:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68738256C84;
+	Sun, 31 Aug 2025 10:05:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aB3pBqWz"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HFbFYvEb"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8618324E4C4;
-	Sun, 31 Aug 2025 10:05:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CCE625333F;
+	Sun, 31 Aug 2025 10:05:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756634724; cv=none; b=jVsTAqxjKLcZ017IkLtaY8ew96CoFrVXesaiI+UuwjicCFTyRWWpMT4v5W3hk0d5GF8BJAtry5yIDYYHGC/Qm7gOrcErHFixZCNuKXyt3sGuzYx4vRasIq+yaHdSQKEVWoJuCWrDUaofJ9sjpJY8KjFZ6kRUFrlSPgEazWmZcfs=
+	t=1756634725; cv=none; b=KJWN1iGS84jrHgfr0msZ1mFj1uHITa7C67aIoKjrt0KgRu0pDoHy6GOyt42IlADdSWcP1Yp4UOUc82BAAc75BLEWHTxhINIw6VZCvZlOA3wL/jlF/pzGbvUVpys61eQOEl29iAk8BgNAKPS616EeSVvz2wS7SAeHmuSYtF38K/c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756634724; c=relaxed/simple;
-	bh=2FU7jBaL5l0F7FcLIVYyLqFdd43eJjmVXTGQeNPVYEU=;
+	s=arc-20240116; t=1756634725; c=relaxed/simple;
+	bh=c0/Sv0HbkGOwQACB9q6lcyzn2W0r+1nlzG1a9H7dUlo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=OPuSXjeZxczld+oCNJLm2V51mcC0Nrmv2R5THol/6EOU+Pln8UIdrtW1KYCSOwABWSag4J19OzHl7FCmOj5NCxiRJQl7V6KpDjnfJBYSevEwDyw4iOHOaM0L7e5BaXcIR3vi2SILk9JjklgwSx1L69y1Q3KBiMZhxFIscJ9bg7U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aB3pBqWz; arc=none smtp.client-ip=209.85.128.46
+	 MIME-Version; b=AgFWfg8R7Bp7IVz1CqwSdudsKmmrMbBb6luW+OSk/b7qceSq8kw1TTvJJ0IkVp6McP6Gd5oqzhLAqZursypYwH6aP4LD1YqWkxEukyEcGw8vsETmJuIVjGKEn6MGeTNTTWnHpmXtAO6i3B/q94DusqWdrCPlZw1vNsJtUmdd3EU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HFbFYvEb; arc=none smtp.client-ip=209.85.128.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-45b84367affso11463085e9.3;
-        Sun, 31 Aug 2025 03:05:22 -0700 (PDT)
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-45b89147cfbso4263245e9.3;
+        Sun, 31 Aug 2025 03:05:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756634721; x=1757239521; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1756634722; x=1757239522; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=W12vvSGCow+ngePVEZ+KVEnYiYSPCEptwt7U5jJOCgo=;
-        b=aB3pBqWzTEnoJU7y3bdm392hkid/J7A/lArz5+OJ6+UXQWYs3FufJkQuIA4F4JO5B+
-         XGi+lQi55S8KeHK5PCtz6MB8jUYjAIPJWC8vbG68FxEH8JVlYLgi/krUwLbP+y67a2qk
-         GxbpjtUJUN1snZRgmWJi5ZP9J5r+g2YTj29diVhLd0htQQoMsAaidmy1z9HUACNm9sHL
-         aM6FrPfgrzKClSqtSyxg4ie3yenPyvW3pnG/idZM6ep+B8HGP/ghj75aYWSZ5O8VE9at
-         vkz4NooIjASGT7nKeUSgxKLMYrRt5LO+kPMHDkh3bzTWm9fKd1d+mS3ApsRl6wYRecsX
-         3XHg==
+        bh=I83+DpOGB8BLeWuxSsvCnBXK47razkPCuWBaTDf4aQE=;
+        b=HFbFYvEbSGNO1cZHfBTUOwU67fAsnn6cbYNvIMq87JISuB4zhRdTJsIQbFk/Xw8AlP
+         aPw5CCF4fCX8hiaJcEB+HGc8eO4FV/hbJRs3QvUL+Ce1VhnsXkaYKweG0YAAcJD0dtTG
+         Lzb/7CirnU/SckU98Hj1/sWiqaZuZURt+gX6OY50rkY2rqvO9Opm1yAWlVWmtnHgETLu
+         cQdLR4230cLJLdXoTDBeSFwdFZhEBkIOvioKhRUovtTD7VX0fsg9/plJZpjDLZkmxsu+
+         ynujdnxyMD1Ii8Jje4JknQgoNpANnZgKfCZVErFrYt+jh02+v1pvnfB/CrNvTbqqwHNC
+         sMEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756634721; x=1757239521;
+        d=1e100.net; s=20230601; t=1756634722; x=1757239522;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=W12vvSGCow+ngePVEZ+KVEnYiYSPCEptwt7U5jJOCgo=;
-        b=RhHj1HX8QBInnve2h99xOORcuJ7L2n0sU8/Aun1PruPSJwkUnippUgve+9LyJ4qWMy
-         O+vPeLx30HxpSK9WrmNvMWmbUGU2KFR2ri2xAdMh/XXVt1OIH/7fQlsiZl8CA6VRFaF8
-         /poZnZ3FgCisl5BpBlEohRskMDKQqISTb23WcKu3AAHhlM8GOROuJ7HaRiDTdjoXdNeg
-         SdEBDQmF7XAxh57PwHgu9SMEPMCZsXThZhKgihtOZ8RQEckqlSuo0ynZxlO149VRmodE
-         tRuRFPcvrm8gctYT3oNGEojqZasIYLE1BnBTL47PjyJzQ+2d4tmV0vfgkDGkrT6ehx3r
-         yINg==
-X-Forwarded-Encrypted: i=1; AJvYcCU3WFhJ1Y5I7vzs28QdwHtB17+d9f2WbufYmCS/puQNh3rGXk8DrBnoBtl0RQd+lgLSALTk4uwukVT3@vger.kernel.org, AJvYcCVM4fE9hc2Y2z7pEmOhIOpxsxR9k550A4/6BmAfv/4Y2n3QCkQFrfyyM9AyJVNn+kmpU7vKxfGW@vger.kernel.org, AJvYcCWOIekxS7ZXNb8SPrDa7UVNf7j+ULvgvxu+TYSJiCI/q7GiwZWtz9Yd02WIQ9R8yIjMPxN7Db8Oasgjcw2/@vger.kernel.org
-X-Gm-Message-State: AOJu0YyOJlAuVCOB4mNfV9vdZp0RxkMAvEHnYvekj3BUsb2rUaL5R76I
-	iDxAFxW82ZPeM8eaztZhE2E6f/xHhXL4559WGtak75za1M2GWA4KlPiqDJF8UA==
-X-Gm-Gg: ASbGncsORDFseVf49WnotRYYWagY5wDx5hrIzs73PTuVcyDc4LB4QSz0zJmOqX/heQr
-	HA9UsRGYCTEr49FJBhAI63UifPwf2fJGhmVbWNOsvbCN9lNfGKEzaRGI8VFqE1Hme5otWt507LC
-	1r+AhXx2oPaY23AAOq41OY+05rfW4XhX0qzUe7eZBsloW3Nq+UWnYS0LF140qVnorfqoA8LS6nO
-	0AntETAA37vbP9oUicBgqrYA7HSsX06Cy5MluufFldK0ZaUc/pkIPHZQTbdhQp4ttqa2DdIkbtw
-	/82gSucTOZ+AdfCF9xGWAYsb2AaeTwjBpIbuWcLz0sPpcty40yXaKB/gMiUVXKFq8sCzq2JypfN
-	VvoMY7LqlYztB6cFfjNcuUMLaTQea2wxxmCdf6tHYFDJPmUNpXZjG/tXO4gu5+jk=
-X-Google-Smtp-Source: AGHT+IFkWnyvylZ2juEpqteyJqOwih5EpHzSQ+mIV9sjGoVUu4+5hFmvjDcz3l9qFan61AE9CskVNw==
-X-Received: by 2002:a05:600c:4f0a:b0:45b:8a20:5437 with SMTP id 5b1f17b1804b1-45b8a2055e2mr14437765e9.31.1756634720443;
-        Sun, 31 Aug 2025 03:05:20 -0700 (PDT)
+        bh=I83+DpOGB8BLeWuxSsvCnBXK47razkPCuWBaTDf4aQE=;
+        b=VCtzbOvBJqg69MNt33y5uliIYg5OrS6Z1wZTVA1YxwE5wwvJBH+EBPBOCE998TUPwZ
+         kyI39fAlKXmBZLLmXwDjJfdTFyHjiju/B0xZjwyMDSBB+a5GluU2VN1GzwUeo2PjVV5b
+         tJXtE5+uOJl/WX7jBcneyInYig2Oq7DL7gQ2A8I2L82tUlegnYpKYVv+SIviTDcxrlZW
+         JZ3hbw35d0Hv6KENJDI/g4fcgXNk5Ms9l/EFcEw4Bq34pzkSeyXRMLea1OZ13gHd97UZ
+         c9eTbLZRUd3DWcnlN8FEs+phycsbOmJc6Y1EN6HbDisU4R68gzuWQCSx46ioqIJExhdS
+         cl3w==
+X-Forwarded-Encrypted: i=1; AJvYcCX7u5dbet7M/FoTqKSGW63JDfo8BVjuty0+P66RLmfEeGLiT9xpW6kxiGXof0kzr/IKk0eCYGIc5UR4jcR6@vger.kernel.org, AJvYcCXIMehmxubBNwQHacGIaSNPatR4jq9mDiUKTGt1pqWJIa4rciGTNmG/TDzLqNUh8viMdUUgpwph7RWi@vger.kernel.org, AJvYcCXgYFK7rN7f+4hFztekVhXomXZN/V0lQQIFOpHUTjVSKtWklT+CW2RtUpoBs7teIZfSzn4SncLd@vger.kernel.org
+X-Gm-Message-State: AOJu0YwZ2IhsQad5YwcPwc5dWW2jUzgUxabXCXHjLpq0AjrOAD7V4Hfm
+	pnI7l8UiAaB3EJ0r2m+u0uSJQAnpK0FzSgcW/LVF9Iz9ys7q1zhzgzh+
+X-Gm-Gg: ASbGnctq8oIpY7SfLKeTIS2VQjDusDv4/YU5kuYwP85x4Ka+gfHXEsZ3mw2VrT0VKOd
+	Kc2Ye+90StVDRw7Etgp4pNkXeSNeRk7WvZR9+A7V6uCTU3bT/Rtsh3Q7N7tFXmgLVqlVy8UWttS
+	lY4WvyFOs8kH10T1cT7mrYXkJU51qWazwc9QmcfRqyOLNEudpTejf2qMWe4fwIPoDiiLjnuJSA3
+	AiSdbz3TR8geaFSq/5uH9csaGv/kuHrpjYR88ATuLeNilqjggoVn0bqLbwMnswk7uIn9MdpefuG
+	aSs1kpIOHvmBRAaTQgak/3N5tg2tnaCuONSx4lTAWGowG1xlqqK8zdT5wyaYoh7SKou4uzX/Bir
+	IQTCYGoplVvv8YhPAvN42G/8XD1GMF/AOlqAayVaEEi8Q4mG0AjOI
+X-Google-Smtp-Source: AGHT+IEibhSWnWE1MjJC3R8FtcJ7xPHK79tg4sHdHyBpZriX1kYAe8F7wgBhmcL8NFLqOUEO3nh6vA==
+X-Received: by 2002:a05:600c:478f:b0:45b:86e1:61e3 with SMTP id 5b1f17b1804b1-45b86e16457mr22690895e9.31.1756634721394;
+        Sun, 31 Aug 2025 03:05:21 -0700 (PDT)
 Received: from builder.. (39-10-142-46.pool.kielnet.net. [46.142.10.39])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45b7e68c83asm117505565e9.20.2025.08.31.03.05.19
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45b7e68c83asm117505565e9.20.2025.08.31.03.05.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Sun, 31 Aug 2025 03:05:20 -0700 (PDT)
 From: Jonas Jelonek <jelonek.jonas@gmail.com>
@@ -88,9 +88,9 @@ Cc: linux-i2c@vger.kernel.org,
 	Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	Jonas Jelonek <jelonek.jonas@gmail.com>,
 	stable@vger.kernel.org
-Subject: [PATCH v7 02/12] i2c: rtl9300: ensure data length is within supported range
-Date: Sun, 31 Aug 2025 10:04:47 +0000
-Message-ID: <20250831100457.3114-3-jelonek.jonas@gmail.com>
+Subject: [PATCH v7 03/12] i2c: rtl9300: remove broken SMBus Quick operation support
+Date: Sun, 31 Aug 2025 10:04:48 +0000
+Message-ID: <20250831100457.3114-4-jelonek.jonas@gmail.com>
 X-Mailer: git-send-email 2.48.1
 In-Reply-To: <20250831100457.3114-1-jelonek.jonas@gmail.com>
 References: <20250831100457.3114-1-jelonek.jonas@gmail.com>
@@ -102,30 +102,36 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add an explicit check for the xfer length to 'rtl9300_i2c_config_xfer'
-to ensure the data length isn't within the supported range. In
-particular a data length of 0 is not supported by the hardware and
-causes unintended or destructive behaviour.
+Remove the SMBus Quick operation from this driver because it is not
+natively supported by the hardware and is wrongly implemented in the
+driver.
 
-This limitation becomes obvious when looking at the register
-documentation [1]. 4 bits are reserved for DATA_WIDTH and the value
-of these 4 bits is used as N + 1, allowing a data length range of
-1 <= len <= 16.
+The I2C controllers in Realtek RTL9300 and RTL9310 are SMBus-compliant
+but there doesn't seem to be native support for the SMBus Quick
+operation. It is not explicitly mentioned in the documentation but
+looking at the registers which configure an SMBus transaction, one can
+see that the data length cannot be set to 0. This suggests that the
+hardware doesn't allow any SMBus message without data bytes (except for
+those it does on it's own, see SMBus Block Read).
 
-Affected by this is the SMBus Quick Operation which works with a data
-length of 0. Passing 0 as the length causes an underflow of the value
-due to:
+The current implementation of SMBus Quick operation passes a length of
+0 (which is actually invalid). Before the fix of a bug in a previous
+commit, this led to a read operation of 16 bytes from any register (the
+one of a former transaction or any other value.
 
-(len - 1) & 0xf
+This caused issues like soft-bricked SFP modules after a simple probe
+with i2cdetect which uses Quick by default. Running this with SFP
+modules whose EEPROM isn't write-protected, some of the initial bytes
+are overwritten because a 16-byte write operation is executed instead of
+a Quick Write. (This temporarily soft-bricked one of my DAC cables.)
 
-and effectively specifying a transfer length of 16 via the registers.
-This causes a 16-byte write operation instead of a Quick Write. For
-example, on SFP modules without write-protected EEPROM this soft-bricks
-them by overwriting some initial bytes.
-
-For completeness, also add a quirk for the zero length.
-
-[1] https://svanheule.net/realtek/longan/register/i2c_mst1_ctrl2
+Because SMBus Quick operation is obviously not supported on these
+controllers (because a length of 0 cannot be set, even when no register
+address is set), remove that instead of claiming there is support. There
+also shouldn't be any kind of emulated 'Quick' which just does another
+kind of operation in the background. Otherwise, specific issues occur
+in case of a 'Quick' Write which actually writes unknown data to an
+unknown register.
 
 Fixes: c366be720235 ("i2c: Add driver for the RTL9300 I2C controller")
 Cc: <stable@vger.kernel.org> # v6.13+
@@ -135,32 +141,42 @@ Reviewed-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
 Tested-by: Chris Packham <chris.packham@alliedtelesis.co.nz> # On RTL9302C based board
 Tested-by: Markus Stockhausen <markus.stockhausen@gmx.de>
 ---
- drivers/i2c/busses/i2c-rtl9300.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/i2c/busses/i2c-rtl9300.c | 15 +++------------
+ 1 file changed, 3 insertions(+), 12 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-rtl9300.c b/drivers/i2c/busses/i2c-rtl9300.c
-index 19c367703eaf..ebd4a85e1bde 100644
+index ebd4a85e1bde..9e6232075137 100644
 --- a/drivers/i2c/busses/i2c-rtl9300.c
 +++ b/drivers/i2c/busses/i2c-rtl9300.c
-@@ -99,6 +99,9 @@ static int rtl9300_i2c_config_xfer(struct rtl9300_i2c *i2c, struct rtl9300_i2c_c
+@@ -235,15 +235,6 @@ static int rtl9300_i2c_smbus_xfer(struct i2c_adapter *adap, u16 addr, unsigned s
+ 	}
+ 
+ 	switch (size) {
+-	case I2C_SMBUS_QUICK:
+-		ret = rtl9300_i2c_config_xfer(i2c, chan, addr, 0);
+-		if (ret)
+-			goto out_unlock;
+-		ret = rtl9300_i2c_reg_addr_set(i2c, 0, 0);
+-		if (ret)
+-			goto out_unlock;
+-		break;
+-
+ 	case I2C_SMBUS_BYTE:
+ 		if (read_write == I2C_SMBUS_WRITE) {
+ 			ret = rtl9300_i2c_config_xfer(i2c, chan, addr, 0);
+@@ -344,9 +335,9 @@ static int rtl9300_i2c_smbus_xfer(struct i2c_adapter *adap, u16 addr, unsigned s
+ 
+ static u32 rtl9300_i2c_func(struct i2c_adapter *a)
  {
- 	u32 val, mask;
+-	return I2C_FUNC_SMBUS_QUICK | I2C_FUNC_SMBUS_BYTE |
+-	       I2C_FUNC_SMBUS_BYTE_DATA | I2C_FUNC_SMBUS_WORD_DATA |
+-	       I2C_FUNC_SMBUS_BLOCK_DATA | I2C_FUNC_SMBUS_I2C_BLOCK;
++	return I2C_FUNC_SMBUS_BYTE | I2C_FUNC_SMBUS_BYTE_DATA |
++	       I2C_FUNC_SMBUS_WORD_DATA | I2C_FUNC_SMBUS_BLOCK_DATA |
++	       I2C_FUNC_SMBUS_I2C_BLOCK;
+ }
  
-+	if (len < 1 || len > 16)
-+		return -EINVAL;
-+
- 	val = chan->bus_freq << RTL9300_I2C_MST_CTRL2_SCL_FREQ_OFS;
- 	mask = RTL9300_I2C_MST_CTRL2_SCL_FREQ_MASK;
- 
-@@ -352,7 +355,7 @@ static const struct i2c_algorithm rtl9300_i2c_algo = {
- };
- 
- static struct i2c_adapter_quirks rtl9300_i2c_quirks = {
--	.flags		= I2C_AQ_NO_CLK_STRETCH,
-+	.flags		= I2C_AQ_NO_CLK_STRETCH | I2C_AQ_NO_ZERO_LEN,
- 	.max_read_len	= 16,
- 	.max_write_len	= 16,
- };
+ static const struct i2c_algorithm rtl9300_i2c_algo = {
 -- 
 2.48.1
 
