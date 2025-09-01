@@ -1,130 +1,127 @@
-Return-Path: <linux-i2c+bounces-12545-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12546-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E57E2B3EB77
-	for <lists+linux-i2c@lfdr.de>; Mon,  1 Sep 2025 17:51:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4BF44B3EC47
+	for <lists+linux-i2c@lfdr.de>; Mon,  1 Sep 2025 18:37:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 68CB73B8D5F
-	for <lists+linux-i2c@lfdr.de>; Mon,  1 Sep 2025 15:45:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CB0891A88001
+	for <lists+linux-i2c@lfdr.de>; Mon,  1 Sep 2025 16:37:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49387199BC;
-	Mon,  1 Sep 2025 15:45:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D7233064BB;
+	Mon,  1 Sep 2025 16:36:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QBG6Gal+"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BjjtUWwy"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E4F919EED3;
-	Mon,  1 Sep 2025 15:45:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A70763064AF;
+	Mon,  1 Sep 2025 16:36:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756741539; cv=none; b=jiJr+4HE+LsKOy6RkLjBIzI4YiguyXyKW2CqaQL9dC3rNOcn+luRTXv1NfZVLQj4fEOJIauFcuV74CUSL5NDpc0YyUU7nJEKD4+1crjLnAINQeUyo6A6vdbAUOd8H6JGESZujjhokgk+7lfuxJbfIbKaO5QS8mfygU9YkV7Z0T0=
+	t=1756744612; cv=none; b=ZzsyeIk022EJUYWFOM4RLJBOuvi8JhYcg+8qKk1DnxBzPTMREDje5Rz+gWb8+cRKNd10gXGOVukjt1s5O/SrAwTU1pBhoI9MYy/frL7i8wbhsq2KFpaFNNR6g60hU6HQgdRPyc+zLumnCPk9pJCIbfqQCAquCN27S7hRUsb6sJU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756741539; c=relaxed/simple;
-	bh=zxaxdww8toDhus2z2vp/yYJXW2OksJavlXEQDZZP3JI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=j2uA7HICkHONI1G+6M49JnbJNzgAKNCvNlph45XQgfFeiEVUbCTfk8vcDj651iud70ZvfFU+UR8iqhBJSOzZG3vmEeqLOAdhyFP8KGrMsIQc6DQAADDHe9dEPQnBmADkchICBP4/YsyjYPjylOF08NWDxkV5YknBPIdDepCxMws=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QBG6Gal+; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756741538; x=1788277538;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=zxaxdww8toDhus2z2vp/yYJXW2OksJavlXEQDZZP3JI=;
-  b=QBG6Gal+WbVfxpp9I4S1nQaOdhhjHA/vlfdHlaNK10QFelGEecGtlSab
-   mW9EQ6gGjX6SB3XMh/Fp2/0AcuuRXkFv7bBdOMdYjpXs4GXLqtgUL5SPf
-   S3sv+UkpdyhFOJ80sjxEsv1uVEIzZsCps6DRoFEjh7BtMIgzyn008N6QN
-   jYWF3g6FdevYIMqebrqlCDqicyXusePxXICHcVHN8vwkvGdIP3eowTlmT
-   c6qOw95IKZOpJZciIGLv6AgoUSyi1NKD11ncQvJUJYwcCx108vH0oPxrN
-   PgNRVWAMjPHmQqGEsWJ3415RI/5MLlc0DZGBvSOKIZPauIaO1yjE9QZmm
-   g==;
-X-CSE-ConnectionGUID: SmtdwcGeTBGDPgmIKVLQnA==
-X-CSE-MsgGUID: lJ1sBseqQLykJjSOy8G3VA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11540"; a="70433353"
-X-IronPort-AV: E=Sophos;i="6.18,225,1751266800"; 
-   d="scan'208";a="70433353"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2025 08:45:37 -0700
-X-CSE-ConnectionGUID: L5oquOi4RzSHvuGPIcM5QQ==
-X-CSE-MsgGUID: meWZh0FPSAi3ZPDUVfbplQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,225,1751266800"; 
-   d="scan'208";a="170917036"
-Received: from smile.fi.intel.com ([10.237.72.52])
-  by orviesa007.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2025 08:45:33 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1ut6io-0000000AScj-2OEy;
-	Mon, 01 Sep 2025 18:45:30 +0300
-Date: Mon, 1 Sep 2025 18:45:30 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Gabor Juhos <j4g8y7@gmail.com>
-Cc: Wolfram Sang <wsa@kernel.org>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Russell King <rmk+kernel@armlinux.org.uk>,
-	Andrew Lunn <andrew@lunn.ch>, Hanna Hawa <hhhawa@amazon.com>,
-	Robert Marko <robert.marko@sartura.hr>,
-	Linus Walleij <linus.walleij@linaro.org>, linux-i2c@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org, Imre Kaloz <kaloz@openwrt.org>
-Subject: Re: [PATCH v3 0/2] i2c: pxa: fix I2C communication on Armada 3700
-Message-ID: <aLW_mqrhnRIsW-pc@smile.fi.intel.com>
-References: <20250827-i2c-pxa-fix-i2c-communication-v3-0-052c9b1966a2@gmail.com>
- <aLVmKrxEzYgbMUQU@smile.fi.intel.com>
- <3d3c9d5a-d3a4-4c94-8199-a5870474aa23@gmail.com>
+	s=arc-20240116; t=1756744612; c=relaxed/simple;
+	bh=zaXmFjo7kjsLo8szfZKhyM3I0AVew3MYvbBzY6VYu0w=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=SAspfpl85/BZ2+TEVEMfS4zehI3KJHg7q0psDcGdzolsrGQ9T32MpMj/mZvvqChJ1fPaGNjvnPo62ukpKdJRcPeLXIiLvaByQ+Z45FEhlPVolh5IAAMuuuKRDd1ZvmZQD9M6JytYn2yS1F9e/Bvgqee3M9QaJPC1XVJ+XodubYc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BjjtUWwy; arc=none smtp.client-ip=209.85.219.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-71a7108d992so7164106d6.3;
+        Mon, 01 Sep 2025 09:36:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1756744609; x=1757349409; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PrKcqq4TZY5082V4jwIS/kUCd1JM3B3pXkEVST586bc=;
+        b=BjjtUWwygybKRBWRnzMcVd1bxYxxV2ba77qGFv6sEY9dxvw2xzl6A7bZv2U502yUsx
+         mpwk6VyRYGlKvgoDvHwpl2BIBnsTikmDacZ7CgeEVpLhMWFiWFSBodvVPU2rz17TSWKE
+         GH8wcQeGhC2XMLZ4Xd8qsaZMOFqhl8On2nNRZXwqCOk4xlI+w8xaXCum1m6EMB04Un3l
+         V2YT3mZiLebOyHsG8F4ERgtxmK+cwVNrbvnK4t17/kccwKvfO01pc+iKYQleYc7njcq8
+         sYS4aFD3/UIqnMlL2TUZqLhiTHp8f/3TzXAJcXtuS3MUCH6cpvxd7hY8TulcoV6EZ+L0
+         fBXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756744609; x=1757349409;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PrKcqq4TZY5082V4jwIS/kUCd1JM3B3pXkEVST586bc=;
+        b=rdU9bZ8SNfF/9EXPGfjEqr8bgCSBIov+yogA7vcV793S0b+G4GjyvGYTcbl8hyZZDd
+         jn23u3J7EnnLj5MvV1d+OAMlwT7sCR/OL5xdMoDLLnhfkEVhz1wdyMFPuH4e0ODtmGbk
+         lJMXhiqJ/SgH8JmHC37q0ErzTvMEjIk8spn0DNEcF1opIp+5shADhGjoHV8jMw52oU9c
+         Y+M5HzmvzN7cvPpc7aVmm1/VPe8jA370M5QiYZZJZrHgzA16JO5DU8Baoy50l2fr7d7W
+         qBY6SyIlOkYWs4iaZ9hWs3OOAl4nCv9XoW7CxT7YtLOPFOPrgyYwO2SHTxZ2gkSHrmIq
+         2YLQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVMZkdehgqkeAQpYZCEWVtFjA6TeH97O4KwpJvaD+kj7gfdRHUoaz8sTVzN4A9zDn7NUVrh/7rVqKli@vger.kernel.org, AJvYcCWZfevUCCbqmsbZKSUWtAIOFn2KKlogg6ZZiPO7HZlzcorMMK4lU/dkdYuQ+wAVAkAEV4qSryBSqzSDC/Pv@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw+ObCWkJ7T0dQz44SFVgjZE2inE5E5K+ymcyvZOjtpAOs26RHT
+	Y208V6D26DztUX3wisbikVF9AmG3K2w2ZPhn4tBCmlGjTtZVCXYRPhvp
+X-Gm-Gg: ASbGnctZJB6NP5XCEbKYG5N9yfh+yxaD9Y7Q01RCv3mCKiRsh9y6sexX0+h5vL1wQdY
+	TeXbgbpsBsqdPiwu9xtSz4NLMvfnRmkE9OVShnHkqnlCTufsvmTEky0fWLiX8IE1S6F8rU1e8KV
+	vqP8nUrcoh32SFOGAVYRJ6CB+hy92ZAxfIsVjiveYNW1gLu8RnzahfRYdKWRJgSCMhhU049iOOz
+	MQd9OSeeMvKdFl90PkmdJfB11Cxu3l5wrO5hXG+R6gm2b2T3RKm+vbzuoFh1Dijp3/4TcAnnB3a
+	mRjkeeirlRRRLXAh4sgTebG3ocR+ESgVC/qdFM37Vp1127ClVIncV/hzLk0298bcsjcn40SpfVs
+	89FV/bw49aP2YORd4emNIZLTiW+bo2x+9vy5IvGvGoTNV1uQHwgC5MV63DdaPQB06kTiWrcq+IG
+	UjwZY=
+X-Google-Smtp-Source: AGHT+IHf3CL5OzMbAfIuCkb3j9PHfLlHpvX2/6r9BGRu+dFGei6Wp9zn80Gs1bX1kCikT+7+HZ/hIg==
+X-Received: by 2002:a05:6214:230d:b0:70d:e984:ba54 with SMTP id 6a1803df08f44-70fac912d73mr96771656d6.58.1756744609386;
+        Mon, 01 Sep 2025 09:36:49 -0700 (PDT)
+Received: from localhost (modemcable197.17-162-184.mc.videotron.ca. [184.162.17.197])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-70fb28b93a4sm42394916d6.66.2025.09.01.09.36.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Sep 2025 09:36:48 -0700 (PDT)
+From: =?UTF-8?q?Jean-Fran=C3=A7ois=20Lessard?= <jefflessard3@gmail.com>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Daniel Scally <djrscally@gmail.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>
+Cc: linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-acpi@vger.kernel.org
+Subject: [PATCH v3 0/2] device property: Add scoped fwnode child node iterators
+Date: Mon,  1 Sep 2025 12:36:43 -0400
+Message-ID: <20250901163648.82034-1-jefflessard3@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <3d3c9d5a-d3a4-4c94-8199-a5870474aa23@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On Mon, Sep 01, 2025 at 05:24:51PM +0200, Gabor Juhos wrote:
-> 2025. 09. 01. 11:23 keltezÈssel, Andy Shevchenko Ìrta:
-> > On Wed, Aug 27, 2025 at 07:13:57PM +0200, Gabor Juhos wrote:
+This series adds scoped versions of fwnode iterator macros and converts
+existing manual implementation to use them.
 
-...
+The first patch adds the infrastructure macros following existing patterns
+for scoped iterators in the kernel. The second patch demonstrates their
+usage by converting existing manual __free() usage in i2c-core-slave.c.
 
-> >>   - remove Imre's tag from the cover letter, and replace his SoB tag to
-> >>     Reviewed-by in the individual patches
-> > 
-> > Note, this can be automated with `b4`.
-> > 
-> > 	# Start a new branch of the same base
-> > 	git checkout -b v3 ...
-> > 	# Apply last version from the mailing list
-> > 	b4 am $MESSAGE_ID_OF_v2
-> > 	# Do actual development of v3
-> > 	...
-> 
-> As far as I know it can be used only to collect tags offered publicly on the
-> mailing lists. I can even use 'b4 trailers --update' for that on an existing b4
-> tracked branch.
-> 
-> However, the current case is a bit different. I have replaced Imre's tag
-> manually according to our previous discussion [1].
+Changes in v3:
+- Split into separate patches as requested
+- Infrastructure addition in patch 1/2
+- Usage example in patch 2/2
 
-Right, but technically it can be done via `b4`. I thought you have done that
-manually. Seems I misinterpreted things.
+Changes in v2:
+- replace manual __free(fwnode_handle) of i2c-core-slave.c with
+  fwnode_for_each_child_node_scoped
 
-> [1] https://lore.kernel.org/all/aJyM3N9T4xI4Xo1G@smile.fi.intel.com/
+Jean-Fran√ßois Lessard (2):
+  device property: Add scoped fwnode child node iterators
+  i2c: core: Use fwnode_for_each_child_node_scoped()
+
+ drivers/i2c/i2c-core-slave.c |  3 +--
+ include/linux/property.h     | 14 ++++++++++++++
+ 2 files changed, 15 insertions(+), 2 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.43.0
 
 
