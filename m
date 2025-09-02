@@ -1,104 +1,108 @@
-Return-Path: <linux-i2c+bounces-12555-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12556-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8DC5B3F821
-	for <lists+linux-i2c@lfdr.de>; Tue,  2 Sep 2025 10:19:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D4ABB3FAF3
+	for <lists+linux-i2c@lfdr.de>; Tue,  2 Sep 2025 11:45:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4A2717B2FA4
-	for <lists+linux-i2c@lfdr.de>; Tue,  2 Sep 2025 08:15:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 04C5B3A7FB8
+	for <lists+linux-i2c@lfdr.de>; Tue,  2 Sep 2025 09:45:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98E942E8DF1;
-	Tue,  2 Sep 2025 08:15:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3160F2EC0A0;
+	Tue,  2 Sep 2025 09:45:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GO+VfbRq"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YJIP64kK"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 127D7261B9E;
-	Tue,  2 Sep 2025 08:15:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4388F26E161;
+	Tue,  2 Sep 2025 09:44:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756800956; cv=none; b=DyXjs0YzZGHBr9mzPVWRC+Y1DiRH+ngaisVFtUuyfIG6qzovXa/O8ZlwxlMJ3e2n0YIwkAJo2iR0E5URXP/f+wgVX5hNWlZZFvAFpcAcUYr9gdr/Q7VWDYP1HdrvQAuU+J6YYDBAmuySkxhfW6uRGfjab4XLNhu/Np/N5z84ER0=
+	t=1756806300; cv=none; b=g0fIMc1MjEU3UVSWAZRRtZ+nKMiphnvK9WubEMgYK2SHI8uy3mpXuKCkgIJpTQVfBiSZa1Oip7uZhebFEMkX2UG/b1sgktjUgNdlTOrVPTixv8szbbBdD3PT5kaGMZPTkaasXUq85kncymneGP2WJyW/QOMJb7oQCLRw2SNv6Vg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756800956; c=relaxed/simple;
-	bh=MJXowf2wgR3zMSaL6vAUZvkiL3FLEXndHtAwni/LPaY=;
+	s=arc-20240116; t=1756806300; c=relaxed/simple;
+	bh=W3FhchwMGrBfGEBPQg497OJio42fh4lj/DiZs9ubwL4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IGnnGqlW8A1WpJBVeOi+SVQ20jMlULH365sAc32zTicXrNhkP9tgb0ecqP8Brrb6SYRHICL2fgyc6fbwHMg774HRKXZDPJ01VwF36oE11W96cSPdIspOLv/Hee0MbCfVFafzz6XzV+l7q/+phmBjT3TwBlDD0TOOkbyWcEFsElo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GO+VfbRq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6306C4CEF8;
-	Tue,  2 Sep 2025 08:15:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756800955;
-	bh=MJXowf2wgR3zMSaL6vAUZvkiL3FLEXndHtAwni/LPaY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GO+VfbRqg9SyCpITfXxDVWS3AFB1Ybu4vslt2juwYAohgQOzzG8IaPTu8RmDqqZG/
-	 /FKExk28TQnHfpxBiGTDwXKUZ8zIiCqUZbc+s50zgq/EMkTikSHjWNfbNXBWaLur5i
-	 TeMui4hHvkRuq9eSR2x1Q0x9+zSIfSiZeyewZFLzi6Bho0kA9HM30lNg95iP8+Ekwz
-	 3atLbvNO+V4KWyks9qP1dbcaa05IGlXBz4c4E6a2Lq71ss1mgtFH0btcGtJ7UamhLZ
-	 lDyHvwgkZMhZG+S6m3cbBvo+dEZEi6KH3ucKLyBIRRaPri0A8NMBtYOKw74GER2oZy
-	 lwLEValqyxfIQ==
-Date: Tue, 2 Sep 2025 10:15:52 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Janne Grunau <j@jannau.net>
-Cc: Sven Peter <sven@kernel.org>, Alyssa Rosenzweig <alyssa@rosenzweig.io>, 
-	Neal Gompa <neal@gompa.dev>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Hector Martin <marcan@marcan.st>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Viresh Kumar <viresh.kumar@linaro.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>, 
-	Robin Murphy <robin.murphy@arm.com>, Linus Walleij <linus.walleij@linaro.org>, 
-	Mark Kettenis <kettenis@openbsd.org>, Andi Shyti <andi.shyti@kernel.org>, 
-	Jassi Brar <jassisinghbrar@gmail.com>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Sasha Finkelstein <fnkl.kernel@gmail.com>, Marcel Holtmann <marcel@holtmann.org>, 
-	Luiz Augusto von Dentz <luiz.dentz@gmail.com>, Johannes Berg <johannes@sipsolutions.net>, 
-	van Spriel <arend@broadcom.com>, Lee Jones <lee@kernel.org>, 
-	Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, Stephen Boyd <sboyd@kernel.org>, 
-	Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>, 
-	Michael Turquette <mturquette@baylibre.com>, Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>, 
-	Vinod Koul <vkoul@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
-	Mark Brown <broonie@kernel.org>, Marc Zyngier <maz@kernel.org>, 
-	Ulf Hansson <ulf.hansson@linaro.org>, Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>, 
-	Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>, 
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, asahi@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, iommu@lists.linux.dev, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, dri-devel@lists.freedesktop.org, linux-bluetooth@vger.kernel.org, 
-	linux-wireless@vger.kernel.org, linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org, 
-	linux-clk@vger.kernel.org, dmaengine@vger.kernel.org, linux-sound@vger.kernel.org, 
-	linux-spi@vger.kernel.org, linux-nvme@lists.infradead.org
-Subject: Re: [PATCH 00/37] arm64: Add initial device trees for Apple M2
- Pro/Max/Ultra devices
-Message-ID: <20250902-robin-of-optimal-performance-eeb9c4@kuoka>
-References: <20250828-dt-apple-t6020-v1-0-507ba4c4b98e@jannau.net>
+	 Content-Type:Content-Disposition:In-Reply-To; b=WCBhUF9u2R+0zzL8UAkVADN2dUy2XNJ3jPEYgLAnAOUnZ9mmK1BRbLYbyP/8zk68oUiwiafl/1MwWDh+Zh4292mpHvW40W6tfWI5IMDqsXoSOeJZI0oTG5rvEhL+GrQ7XNoA2VM4FZPxatmTrgwMEKwHR68+g9aWrLx/02A8Z3M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YJIP64kK; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1756806298; x=1788342298;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=W3FhchwMGrBfGEBPQg497OJio42fh4lj/DiZs9ubwL4=;
+  b=YJIP64kKq41lDg57J4fxeAEEVYhknke5hV3Ih/aedFJBVNFNowQ2UzsB
+   3+LwYACMTm8/HjwSyhXzNQwN/m9PpxON/hQR6qOhgAUfHQV1JZRpYXko2
+   WP2sPZsUk0IuKeUNjbP6wFWZ2Kjxm8qbgmw9ajByGfVwYBATF9G4uzwCA
+   4FIHPs6EQ3YVivlF0Uc+ZuFfpkIqyJIkOunHDKpwf9SkkpBhDfZqWcnPl
+   Gpken8oZnN/51OaMISLsHlE2D2kSqQPN2IExX4lp4+jeCad8UiyOfAN3N
+   iEKUmAI0fzXtbM7Rd99ExdF4PN9qQepS1fCve8uhxjiELqe0eYrGaQnS3
+   w==;
+X-CSE-ConnectionGUID: Go8HfspfR/WbpXSOwPl61A==
+X-CSE-MsgGUID: U+4cDd33Q4uie7RaCzAJaA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="62901143"
+X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
+   d="scan'208";a="62901143"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2025 02:44:58 -0700
+X-CSE-ConnectionGUID: 2dLfsjlCQwOF6IwFbzr5PQ==
+X-CSE-MsgGUID: iEVQHMTuSB+kEOHecW3R1A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,230,1751266800"; 
+   d="scan'208";a="171594293"
+Received: from smile.fi.intel.com ([10.237.72.52])
+  by fmviesa008.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2025 02:44:55 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1utNZM-0000000AerL-1nLN;
+	Tue, 02 Sep 2025 12:44:52 +0300
+Date: Tue, 2 Sep 2025 12:44:52 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: =?iso-8859-1?Q?Jean-Fran=E7ois?= Lessard <jefflessard3@gmail.com>
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Daniel Scally <djrscally@gmail.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] i2c: core: Use fwnode_for_each_child_node_scoped()
+Message-ID: <aLa8lGxHvCd6nreg@smile.fi.intel.com>
+References: <20250901163648.82034-1-jefflessard3@gmail.com>
+ <20250901163648.82034-3-jefflessard3@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20250828-dt-apple-t6020-v1-0-507ba4c4b98e@jannau.net>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250901163648.82034-3-jefflessard3@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On Thu, Aug 28, 2025 at 04:01:19PM +0200, Janne Grunau wrote:
-> This series adds device trees for Apple's M2 Pro, Max and Ultra based
-> devices. The M2 Pro (t6020), M2 Max (t6021) and M2 Ultra (t6022) SoCs
-> follow design of the t600x family so copy the structure of SoC *.dtsi
-> files.
+On Mon, Sep 01, 2025 at 12:36:45PM -0400, Jean-François Lessard wrote:
+> Replace the manual __free(fwnode_handle) iterator declaration with the
+> new scoped iterator macro for cleaner, less error-prone code.
 > 
+> This eliminates the need for explicit iterator variable declaration with
+> the cleanup attribute, making the code more consistent with other scoped
+> iterator usage patterns in the kernel.
 
-37 patches, 9-15 separate subsystems. That's really not how you are
-suppose to upstream things. Please split this per subsystem. Few
-bindings without drivers could be together, though.
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Best regards,
-Krzysztof
 
 
