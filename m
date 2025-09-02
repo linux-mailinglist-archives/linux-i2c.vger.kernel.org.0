@@ -1,96 +1,95 @@
-Return-Path: <linux-i2c+bounces-12560-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12561-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B6B6B40B34
-	for <lists+linux-i2c@lfdr.de>; Tue,  2 Sep 2025 18:54:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 338C5B40B46
+	for <lists+linux-i2c@lfdr.de>; Tue,  2 Sep 2025 18:56:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E57233B07E8
-	for <lists+linux-i2c@lfdr.de>; Tue,  2 Sep 2025 16:54:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C93121A808BD
+	for <lists+linux-i2c@lfdr.de>; Tue,  2 Sep 2025 16:57:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D212733EAF3;
-	Tue,  2 Sep 2025 16:54:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90C6E338F53;
+	Tue,  2 Sep 2025 16:56:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DUWXTRxV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jGOJOvCh"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D5F1314B9A;
-	Tue,  2 Sep 2025 16:54:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3C0631B131;
+	Tue,  2 Sep 2025 16:56:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756832076; cv=none; b=nPY53T2ZYi2ODHuRUTH7K2xcz/zBqEOcKjrhdrXwa2H7dzPqsaZoGyTyn7U6lbxL2EGI1B/T4kuzwYDqLY1EGfU7eMAfSAIf5xHfY+K30llhpjm6z3IgkDnsdRAepg0A9WQBS0MH1oDN9zSHATwMStbf84z9AhYu/v/5aMmQrII=
+	t=1756832191; cv=none; b=FkWcNlSDt49RtmZVul1wdX1IdVTa+3OQmozhhodb4SVvXEXPyaz2In01ypVxF1yF+UXX0HU8Ww39cn5VIUDiJs+a1xQWdPqN6//59rXe8/z0YsyNnvBhC84mWxghV1kJIoNcpwCCfrlLRQ7UiTzPaYAZcBcd0LTvdKpJ4uT4DPI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756832076; c=relaxed/simple;
-	bh=guzP02KmT9+LPpIUdkrPHuphKMqdYx1IWJMSk1qSlnU=;
+	s=arc-20240116; t=1756832191; c=relaxed/simple;
+	bh=XZhOST3in1Xh8ve1QrJxOqFAH9pi0OKKxLTZu+yY+Q0=;
 	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=NQsiLvh6QsPEvTA2GU9lvpjRCE+1oCnQO93pEwofUsvKvvh9XMeNHuI251aI2W01xMZySN7y6GCC3WA7rvjFT/glJ9fYm0u3zAyn7wKA1HsYdTAzSSVRetOMPTSdjOKSpxliVs7ur7U0c8CiDgq89eaqP+fCa6PmNN4GJrL5TcA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DUWXTRxV; arc=none smtp.client-ip=209.85.219.47
+	 MIME-Version:Content-Type; b=Mz+dJZH3DroCB/lWEKKPK3XpC7r1Ge6IiT7LxI0PQI4gFbSUO0w7dUutAqt9VGQ/WD9d+rlp/7/aXJ1a9lmYt4rNAW7PEKOBLfEKuYhiDdPsEuukuu7kzNgDsOgseLHxmYeNrrLgyJpQStK5f3eTghExJcyPaRgo0ZcqNNuK1BE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jGOJOvCh; arc=none smtp.client-ip=209.85.160.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-7209bd264f0so760036d6.1;
-        Tue, 02 Sep 2025 09:54:34 -0700 (PDT)
+Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-4b109c59dc9so67819611cf.3;
+        Tue, 02 Sep 2025 09:56:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756832074; x=1757436874; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1756832189; x=1757436989; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:references
          :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=EnjBvFOmyr3GnC7myEsg56KC3/4DgBJKDXj/Ea4iER8=;
-        b=DUWXTRxVYj3rHI8C/AMGU8vFY5BWspAeb5VNK7Op98OKB3CoWa/T4lVTeEWVhkvj1r
-         NHLE/Bntjyupzfe0ARrzJq8+yq76H2vWCCwSEJnhX8U5kgAsyvdtfbYXKWS/JdMjKt/p
-         4THIAt1va8YeT7A9hi4RrlZwJ8r09DLiVzusUSf4/HTKrM5a6xjYUG1ZDGu5BAOrolBb
-         HtRvC0u69aT/7o4WH6Ka5kxtrXaNVll+8dE9lP8HBoZvQaOxoG9Qfab2E5COFlNBP3m5
-         oISTAY6G/Rjflc90ks4xQcOgMcM4il5wbuxbqJefTRuI/dnbmBLHnqtPK2TN03i+j785
-         ZO4A==
+        bh=XZhOST3in1Xh8ve1QrJxOqFAH9pi0OKKxLTZu+yY+Q0=;
+        b=jGOJOvChzDRp6jagAoMqRYagnu/RywuYGjYiCIs9orfBeoxwgrm9VGfqmIFKeZXRmN
+         is9Q6WSjhUR24Mc8JtZcis9M/i5G6kDfdtkKffgwjn8nL4wVdmUFrYBrFEk4bWwI3zli
+         8Zozgs1bbe01/zzmvda3DkaeAC0CGgPc3iPJ1hnf3ZoaXdOZnfoG03Z4l/xh4IwkHQAF
+         VBoz5M82lU9jARSRbFNk1m+uRuXF0sWEhB435sd53yoQJ6p9Kg69dg+SKvZTFTlehRTj
+         7+29QRQdBcx7qB6LOOslIdsiaW/C/TB5aTseRY7kGqHBZRr+TBK2uH2IDF1Pc+KDN7Wq
+         /3Ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756832074; x=1757436874;
+        d=1e100.net; s=20230601; t=1756832189; x=1757436989;
         h=content-transfer-encoding:mime-version:message-id:references
          :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=EnjBvFOmyr3GnC7myEsg56KC3/4DgBJKDXj/Ea4iER8=;
-        b=Jy8hFsu1Q1NPhUyES06XLzZbs9Cih5+bhFgmN5wOy2FXkYzz7xIlOIrhUs/6x3bm73
-         LgmCeJpp5TsqtRHCEPJNNt/G5P8Ol//ozM0kBB+bHZs34auQIeLE1kCQoRRZdQGb7ZeO
-         Duv7g6FhnK1ktTAdMCYvXYda8eIJDHut3JtlZWCQi4EYbJkvHvC4m6az1t9OD9BvLjiy
-         fuuSM9k/hCnDJ9peKF+JiIHqsXbdMOpIaKLtnUYKKDwWU6D+t7WtxtDx35de8alqDM8t
-         h8lJSO5WfzgcZbYOVpcWW3pp+uFG2is3tdPnkriN5TD0YmTnozV44Xh5Wi0A1Rw36y3e
-         RIDw==
-X-Forwarded-Encrypted: i=1; AJvYcCUb4Jg0eTnkA7CKfAHllXTSk0SW+gUZ3xus2eBzbehwwU2rC44wKtFvkL+PJaK6zNMl/qhyldRtS2xoB+x7@vger.kernel.org, AJvYcCUfZmvfkY1nVCKA09sIU47l849tx+o+N2tCwBhaNRTlaQ9+JEMrejaNJvRBbYdbiG4Q12FP54It9GKP@vger.kernel.org, AJvYcCVMj8hQ8OUfJjDmg6PfjN/TiMouX8L4KJvH7Z83DTCFaht+LPWjh5rdTHwXuam8S/IcyYYuRUH9TPht@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzxg/IpHppY5l5O7grKr4pZdbtMnAYzQsxydYq3opvWX2kZDKqH
-	SY+29+PCGzINXF9hUz1XeW3ry9O5rV91HYP8+JWmNLX1bVS0VpceEFy7iQysXvr4
-X-Gm-Gg: ASbGncsJz0vEs7PWgwW+MOTJdbCAnE/EuWfhw3pwz/QPblJ7kRQwlJ9i6rPXCx0R02i
-	4QMaClqtyLVc016A5UQpLncOKJ1WvZXPS/yf47EYChd+xPXgfj7Xn090jBonBrTEwWlDGxDLi9X
-	Bh9fV+adKgAAS0qr8cXkvl7m3U0rifHA59uRPc4ExVzK03ybMWva9j1ToRX7nDYe/WOEhQdWw9S
-	4FG9SYRhaCfywxvhFVTQ/3U7UdxtHRQTRK7PpRvb6zq0tHElz/niB4PyjB1YnRnNCzpH/qvH8Fo
-	uXl9Hlyj/sDMdqwuzBzIOEUfZvdeBhdw0chx4gMLzj0gzNZ6DqjAyX6zOsv044PwDU0OEXTpJvL
-	z2DXfUYHQ8PWg04f9STb1Lrrrc4SmRCfC6XJ20pEjK1F0yOJo9yj1vw45A+NoqpxRicsorHPK/K
-	eBFCxNLc5YAkAHeIDj
-X-Google-Smtp-Source: AGHT+IH55B2aKx3wQTamTWxHTlb0gd/ma4su7Ftwp1+lPNXFKFcPxuK7jT9nE2oxNM6Ls0cVwortyg==
-X-Received: by 2002:ad4:54c5:0:b0:71b:b093:c6f9 with SMTP id 6a1803df08f44-71bb093e022mr58679796d6.6.1756832073674;
-        Tue, 02 Sep 2025 09:54:33 -0700 (PDT)
+        bh=XZhOST3in1Xh8ve1QrJxOqFAH9pi0OKKxLTZu+yY+Q0=;
+        b=lH/e5HICYEkEdQpXqYmW05vJJhKk2Zl03qBgrVF3grBYwijmKa8KpJj/20w7KmXDfP
+         d3Xtrh1Npj92ylOKu7BmXO6ZqKlUw8F0lsEUDu0B37fHvZ5BuycC542RmqQ84BmbBwhy
+         HoWamVi7tybXe6JvZUlb/kNA3kfK38nhirj266994M+irRTGmks6q6a4xZ5YfsKWHnTH
+         LruPeFd8KqadyXgmDzUTXewMwGeNjopGGMgVHZbmW+f/oDf3EAZL//z834QPnrVoD2dT
+         ZQ1kuktv2Yg/i4zoyRI/vKGTWDABugIP275KTVkB1278ZImpM2F25AO9dZb0LPaGzuru
+         P+EQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVJtgsXNUHuvWvXmeAlfJenyI06SEw7abmmROQR31CLkxse1nyY6QArSjTrSmJnHmX1DsMvI7ndek9r@vger.kernel.org, AJvYcCVTYsR9bg0kQ3rNMVIYRZIK5RH35Qqm0TlE6uphkNZMIah4fFrTM/W0Q59RjESAO8WfRYEzX6ZWiFIKdPpd@vger.kernel.org, AJvYcCX1xxjFAgu2dy4tnkBVShsIKP5BeH0BZXKHciyqFLrdfOXbh8wbjc2pyUU0NgY+6b4Iss+rwvjEmjh1@vger.kernel.org
+X-Gm-Message-State: AOJu0YyANjOs+2+LKjXil76I+arg57pB0jfvgMy6UaK1mpWUqjA6h7ct
+	i+zNtMWZy7jkxOe7h/WFYP/Kewkp++0xqmtyPZq+wq82TVDmpZP6tFzkU+piXJtz
+X-Gm-Gg: ASbGncva+6zUXDDXlMvuqa0627b3JAXhmopVoppwHPiDgccj5LrowxZnrpWqeEom+dN
+	9BM0WhLGT2YN0XIW9ZakaPMjjcX4zu1QAcxI85vHG9khiZOOqmGF0WHiWFJDGFUoF1IFwemyitP
+	CGx6rQxllwd7OAkYjRpsUKV0LY7JlXW4gTwz+LZ9bXalpJOZAJftRcARTvG4DWMUhjIR3vMD/UM
+	v87IfToQ3MhIUan7vk93LfD6dSZtAwXHwByaO7sAOCZCBvBwpivqypDrJlJ2qmyMf6He3rqPy4q
+	rjFLQ+dafix83V/6KZRSkPHZk4iMQIjeRG6PxDC5RUbf2Fj6QyCUxkA3ez9InjKkEu/brCKwfsQ
+	YIb0PfgcR4o9flCrObWqVm0Psw+/jfCx9107+VLmCGzSAAh80XtxPVeIvIg0eLwUmS5LrBhd8Ml
+	rtPxL2NQ==
+X-Google-Smtp-Source: AGHT+IH454t1AZPaP8m+LXjREsgeHmzav/1L3lvMSqVzetI6UcC5vxu8zTEuLQ4bG13xXnbRUnZQGg==
+X-Received: by 2002:a05:622a:d4:b0:4b3:e973:272f with SMTP id d75a77b69052e-4b3e9732bd7mr13178961cf.5.1756832188688;
+        Tue, 02 Sep 2025 09:56:28 -0700 (PDT)
 Received: from ehlo.thunderbird.net (modemcable197.17-162-184.mc.videotron.ca. [184.162.17.197])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-720b59b067bsm14243176d6.59.2025.09.02.09.54.32
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4b3462c7676sm14790891cf.33.2025.09.02.09.56.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Sep 2025 09:54:33 -0700 (PDT)
-Date: Tue, 02 Sep 2025 12:54:30 -0400
+        Tue, 02 Sep 2025 09:56:28 -0700 (PDT)
+Date: Tue, 02 Sep 2025 12:56:25 -0400
 From: =?ISO-8859-1?Q?Jean-Fran=E7ois_Lessard?= <jefflessard3@gmail.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC: Danilo Krummrich <dakr@kernel.org>,
- Wolfram Sang <wsa+renesas@sang-engineering.com>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC: Wolfram Sang <wsa+renesas@sang-engineering.com>,
  Daniel Scally <djrscally@gmail.com>,
  Heikki Krogerus <heikki.krogerus@linux.intel.com>,
  Sakari Ailus <sakari.ailus@linux.intel.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>, linux-i2c@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v3_1/2=5D_device_property=3A_A?=
- =?US-ASCII?Q?dd_scoped_fwnode_child_node_iterators?=
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
+ linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-acpi@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] i2c: core: Use fwnode_for_each_child_node_scoped()
 User-Agent: Thunderbird for Android
-In-Reply-To: <2025090203-epiphany-antsy-bf45@gregkh>
-References: <20250901163648.82034-1-jefflessard3@gmail.com> <20250901163648.82034-2-jefflessard3@gmail.com> <9ed3743b-4f86-42d3-94e0-8a720526dce4@kernel.org> <85D46ECF-B4A6-4C78-A4DD-0785FE58B2A3@gmail.com> <2025090203-epiphany-antsy-bf45@gregkh>
-Message-ID: <90211F66-7E6D-4C37-8452-EE88B1F94F53@gmail.com>
+In-Reply-To: <aLa8lGxHvCd6nreg@smile.fi.intel.com>
+References: <20250901163648.82034-1-jefflessard3@gmail.com> <20250901163648.82034-3-jefflessard3@gmail.com> <aLa8lGxHvCd6nreg@smile.fi.intel.com>
+Message-ID: <AB7B668E-107D-43E6-A9F7-57F5F9FADD2A@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -101,93 +100,21 @@ Content-Type: text/plain;
  charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-Le 2 septembre 2025 00 h 50 min 08 s HAE, Greg Kroah-Hartman <gregkh@linuxf=
-oundation=2Eorg> a =C3=A9crit=C2=A0:
->On Mon, Sep 01, 2025 at 02:16:35PM -0400, Jean-Fran=C3=A7ois Lessard wrot=
+Le 2 septembre 2025 05 h 44 min 52 s HAE, Andy Shevchenko <andriy=2Eshevche=
+nko@linux=2Eintel=2Ecom> a =C3=A9crit=C2=A0:
+>On Mon, Sep 01, 2025 at 12:36:45PM -0400, Jean-Fran=C3=A7ois Lessard wrot=
 e:
->> Le 1 septembre 2025 13 h 48 min 14 s HAE, Danilo Krummrich <dakr@kernel=
-=2Eorg> a =C3=A9crit=C2=A0:
->> >On 9/1/25 6:36 PM, Jean-Fran=C3=A7ois Lessard wrote:
->> >> Add scoped versions of fwnode child node iterators that automaticall=
-y
->> >> handle reference counting cleanup using the __free() attribute:
->> >>=20
->> >> - fwnode_for_each_child_node_scoped()
->> >> - fwnode_for_each_named_child_node_scoped()
->> >> - fwnode_for_each_available_child_node_scoped()
->> >>=20
->> >> These macros follow the same pattern as existing scoped iterators in=
- the
->> >> kernel, ensuring fwnode references are automatically released when t=
-he
->> >> iterator variable goes out of scope=2E This prevents resource leaks =
-and
->> >> eliminates the need for manual cleanup in error paths=2E
->> >>=20
->> >> The implementation mirrors the non-scoped variants but uses
->> >> __free(fwnode_handle) for automatic resource management, providing a
->> >> safer and more convenient interface for drivers iterating over firmw=
-are
->> >> node children=2E
->> >>=20
->> >> Signed-off-by: Jean-Fran=C3=A7ois Lessard <jefflessard3@gmail=2Ecom>
->> >
->> >Thanks for adding a user and splitting it up (Andy was a bit faster th=
-an me :)=2E
->> >
+>> Replace the manual __free(fwnode_handle) iterator declaration with the
+>> new scoped iterator macro for cleaner, less error-prone code=2E
 >>=20
->> Very welcome! Thanks for reviewing=2E
->>=20
->> >> diff --git a/include/linux/property=2Eh b/include/linux/property=2Eh
->> >> index 82f0cb3ab=2E=2E279c244db 100644
->> >> --- a/include/linux/property=2Eh
->> >> +++ b/include/linux/property=2Eh
->> >> @@ -176,6 +176,20 @@ struct fwnode_handle *fwnode_get_next_available=
-_child_node(
->> >>   	for (child =3D fwnode_get_next_available_child_node(fwnode, NULL)=
-; child;\
->> >>   	     child =3D fwnode_get_next_available_child_node(fwnode, child=
-))
->> >>   +#define fwnode_for_each_child_node_scoped(fwnode, child)		\
->> >> +	for (struct fwnode_handle *child __free(fwnode_handle) =3D	\
->> >> +		fwnode_get_next_child_node(fwnode, NULL);		\
->> >> +	     child; child =3D fwnode_get_next_child_node(fwnode, child))
->> >> +
->> >> +#define fwnode_for_each_named_child_node_scoped(fwnode, child, name=
-)	\
->> >> +	fwnode_for_each_child_node_scoped(fwnode, child)		\
->> >> +		for_each_if(fwnode_name_eq(child, name))
->> >
->> >IIRC, your first patch mentioned that your driver series would only us=
-e
->> >fwnode_for_each_available_child_node_scoped()=2E
->>=20
->> You are correct=2E Next version of TM16XX driver patch series will use
->> fwnode_for_each_available_child_node_scoped()
->>=20
->> >
->> >And this series adds a user for fwnode_for_each_child_node_scoped(); d=
-o you also have a user for fwnode_for_each_named_child_node_scoped()?
->>=20
->> No, I haven't found an existing user that requires the scoped version=
-=2E The only
->> usage I found of the non-scoped fwnode_for_each_named_child_node() is i=
-n=20
->> drivers/base/property=2Ec in fwnode_get_named_child_node_count(), which=
- doesn't
->> need to put the fwnode=2E
->>=20
->> I included it for consistency since the header defines all three non-sc=
-oped
->> variants, but I understand the "no dead code" policy concern=2E
->>=20
->> Would you prefer I drop the fwnode_for_each_named_child_node_scoped()=
-=20
->> variant and submit a v4 with only the two variants that have real users=
-?
+>> This eliminates the need for explicit iterator variable declaration wit=
+h
+>> the cleanup attribute, making the code more consistent with other scope=
+d
+>> iterator usage patterns in the kernel=2E
 >
->Yes please=2E
+>Reviewed-by: Andy Shevchenko <andriy=2Eshevchenko@linux=2Eintel=2Ecom>
+>
 
-Understood=2E I will do so=2E
-
+Acknowledged with thanks=2E Will add this tag in the next submission=2E
 
