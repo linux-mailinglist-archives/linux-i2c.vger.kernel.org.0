@@ -1,143 +1,189 @@
-Return-Path: <linux-i2c+bounces-12587-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12588-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6498DB4262C
-	for <lists+linux-i2c@lfdr.de>; Wed,  3 Sep 2025 18:03:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A094B42728
+	for <lists+linux-i2c@lfdr.de>; Wed,  3 Sep 2025 18:44:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F4A97C1230
-	for <lists+linux-i2c@lfdr.de>; Wed,  3 Sep 2025 16:02:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 01ADE3BAC5C
+	for <lists+linux-i2c@lfdr.de>; Wed,  3 Sep 2025 16:44:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3592E2BE64F;
-	Wed,  3 Sep 2025 16:02:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0EC5307AFC;
+	Wed,  3 Sep 2025 16:44:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="paMOUG4f"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EiuUavT9"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 707AB2BD587
-	for <linux-i2c@vger.kernel.org>; Wed,  3 Sep 2025 16:02:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA868303C88;
+	Wed,  3 Sep 2025 16:44:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756915329; cv=none; b=KjH3cskbFiMRsYVxSoshs2/IfaCEElO30KdlfYQdXPv5xS8bZLbbQsZ9m+814toQiUBn9PznXsCsapDipkyMiBTmdLt1kR6R6l/ECCMGQMZzDk2f1g+dV4dKQS2cQAuRQNraACBz8UoanPlmnUPEjTyaNgbEXEYBBxYX7ThhgD4=
+	t=1756917842; cv=none; b=BCgPG6yr4j1WzG8A5bG2D+Ljm8++rrR3HxdiN6S38F2jGAamm7FVGjN16S4wbKhVngFhaQGeOe6dAHxmJMZ1Y+L3xkOpe2WVz+EDVDFxMTKkMrETimdtpOqM5NekSDieZPuD6vbNnwgNLQoJImfUtP5oOx1oRzVAgE2TrWlyfL4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756915329; c=relaxed/simple;
-	bh=duCAr7CO/N1Ze4ijxMI+nhb3sedWh7XRQtNULBNw7Yc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=J+EHAwok0Tq8fuFNWZAIgx5WBpRydPDlRjEQGmky344QYVkHh3vt6FJ7k/VMaahfFXp5DVDelvJQZbZZkD2OEyU33NjHkAj8EuvwdnglqxBYbh19CVoWOhpZFZXYI5rtjgmj6GMZApf6bJNFUvFGGWtxiHr9X40xUSheif4O0RM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=paMOUG4f; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 583DxKOf029641
-	for <linux-i2c@vger.kernel.org>; Wed, 3 Sep 2025 16:02:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	ufkKfMtF2sFaOT1A75ow461HdClQcHWGVHzSfn9/S2w=; b=paMOUG4f4olZvDlC
-	gma5g/I5WSNuYq6qS1l+Xt6+llYCURDMNeeKgTlridcomHF2zBXLevGozYUQ6HdP
-	8Zyl2KaS1A2nShuiQGZcOjMzi3Y7JEU3y3yjqAvl8vMvAxLxVU25QWGajl2viDag
-	nUh+NH31cs1QvoiV0hQAo2DMIp5LcEtZ9OqCSzpLk6kYCfrSd8T5yrPD8oAaMroa
-	uf5OTH2qi8QLRjthJJPE7W/XASU8xBxDzAqzWNoo2r5jPxzs0JD+1VNt1tzJJhi2
-	VshNLVDDR3CD3+AaHAX96YNNYnpYh2SFdiEyKokd4j2HVom68+vlgNj9L1nYqdrT
-	o3cf6A==
-Received: from mail-vs1-f69.google.com (mail-vs1-f69.google.com [209.85.217.69])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48urw04bp7-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-i2c@vger.kernel.org>; Wed, 03 Sep 2025 16:02:06 +0000 (GMT)
-Received: by mail-vs1-f69.google.com with SMTP id ada2fe7eead31-52b7541b2d3so8367137.0
-        for <linux-i2c@vger.kernel.org>; Wed, 03 Sep 2025 09:02:06 -0700 (PDT)
+	s=arc-20240116; t=1756917842; c=relaxed/simple;
+	bh=ZEpEo0HqQ+7TROEllZ65s3PKRSyeUgAHYsJL0nuS9SQ=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=gxtS7tSWp04zQcqVgjf4wCJKeKqAcvzArD+xTL8UqwjTMfPvYdyv7N+Cv9EVOmXLeuLpEkXdB2zncVIfMj3UG/jZEus6UacMk23jxCKrvy8tie5rKt5ticlOTTcTzsMP0hs/59dK1RCDQJkgiEDO5Z5trXD80oQiIG3yXu+qbSk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EiuUavT9; arc=none smtp.client-ip=209.85.222.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-805a1931a15so14294585a.1;
+        Wed, 03 Sep 2025 09:44:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1756917840; x=1757522640; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=CPFA+L4AzTHvY63w8wb2OR/q6TIxMx2RwJU0a3Nq7Dc=;
+        b=EiuUavT96aY0+s1zso1+uYSRj0dXoHkIJPDeUZKbQgvY18/qX+C078D8U03UKctNWV
+         GY9PuQpSbf114o2XKTNbPLRk4nVNH2+hbdWRA/lkK3OA4d1iXqMPyLdxXVg8kWhvUyJ2
+         pAbYTqLXtgjYuvvlilQYkTEPbl1/4hzT2sYY/RHdE9mwYE7+IgwUZwENoeoX10aQDxS/
+         VDagvTlPDrsc4noLqfaUM8B1OYOkdeowWkjvG+BN7+g4yILJPytmST2CwNofSH9WNPSz
+         2q58KJ8R6j/+VL/ed4tOwGIKzMlU/7Wnx89Sth+56ZpTAtjrvAHRw/ieeLajGIVa/31P
+         /KEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756915325; x=1757520125;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ufkKfMtF2sFaOT1A75ow461HdClQcHWGVHzSfn9/S2w=;
-        b=lYCZ/+BE4Bz5XjXO+Gz3RU4aFUuHuTRw3k5gXMC4mnY3LtH6uw6wXWPKzYKdd9KOIs
-         HTOxvFrm9DcOSI53bNE/O/jhkhv6+m2hC9SxYtKLwjcPKt8tqxR98ZDUUPmeO1tWk+ro
-         s+4gPpjpFB9MQgv3gY5Kxq5LzffL1doUzyxMYPdJCbfzwwl4f8kE7V+UN5k2CX3RnzZE
-         QfpvRIdY02cafg7wJ3vkPMUI1tA9rVtH/LlFQkExmM/NO0I3WMXUwCICcVlTjn7l4CeW
-         KPjNrNtePFAppfbU+dSfY+NS4RVp3a5UPVg34ErmCN6kDYpLtxc+ZCuSiydC4BYYqT8f
-         RMtw==
-X-Forwarded-Encrypted: i=1; AJvYcCUnIVF+dx8FkrvgD0ZSDPOFmC9P8mQSQFTaqgkMVci9qDcLiLlMmgUV9jTjg7DJhvBHtWSr6EZWPng=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyYFskZfZ8m4r1ogjV/rJ6W9ntOiRPixyqLMnocXxi7yJ8ewC8l
-	z3xDcpGNLlZUOsjcZxGSHOT14xcr267JBvREriQbMJvNoG8ojn7Z93fI7kL5Pl4u90tNvF8I3Fw
-	nssOKjf1tRw0UtPjJDgmlUeD1umxhPLozaqU50o8uyFg8MpaGGY1324Qr0r/ShpE=
-X-Gm-Gg: ASbGnct7PkmRxnhTIdu0GQBMuxs+eZrt3oVjUzY/m1b4y4yyTLdo6h3xPO0uvBwTTIw
-	VdIg0iGRIH7p2Dtu4f7mxA0w37V4GPhaTZ+HMFbU9U7LnkoDfWPUZFabBZVpJlLmpcQJsEI+BQP
-	MTn8e4xkUCxQq/JNwnDfEB060nXVWMW5Fd+WzqiAi0huoOUqFA5wp6BFIRMWY3uuMxL4wcS4nJE
-	VcWV+LPJj6D6VzFOn4FhaTMGPKCPfuI/dM1bsS2dzHP6Iw5GR+pguyezPe50y7xIpmE3/9LtWm1
-	TEQ1xnnoc9JAr4vtwwW5RODHz9w35YeAd+t46h+Um9OSfFBL21zJDOa1K4TOrEBdE85OMR6aifS
-	/5cciH0VnU3FRVT3eS4uxEQ==
-X-Received: by 2002:a05:6122:2015:b0:544:91a8:a8c9 with SMTP id 71dfb90a1353d-5449592885fmr2297753e0c.3.1756915323594;
-        Wed, 03 Sep 2025 09:02:03 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFNOwCrprQOUcxuZaV/B20qgOB8K6FfIsDK3UCpWlIJhUbywwkcF3iym3uiTsjk25+FxGpDqA==
-X-Received: by 2002:a05:6122:2015:b0:544:91a8:a8c9 with SMTP id 71dfb90a1353d-5449592885fmr2297638e0c.3.1756915322699;
-        Wed, 03 Sep 2025 09:02:02 -0700 (PDT)
-Received: from [192.168.149.223] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-61cfc1c7dfesm12285170a12.7.2025.09.03.09.02.00
+        d=1e100.net; s=20230601; t=1756917840; x=1757522640;
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CPFA+L4AzTHvY63w8wb2OR/q6TIxMx2RwJU0a3Nq7Dc=;
+        b=YosXo3+wFOAhDSh6cF6XiHSkiCUFVgVdjbFL4JB6LiMpZpQ/xfpncKGuVwBk864Kg1
+         6sspPY9bZ6lshOPJJug5KDn9i/ub9alN0f2kqjfbSsYrSJmSREzfx15dmN9puPO52Mw6
+         WvjdG0aknWr4D+QeWlxYpLLLQgtjnkDHJvB2r94Tlc+7HTktVlDvKCRE9x2nurjXqAIw
+         GOa2P4FZUvcisP6ox9Q/bp2OqD3rcCSrnowrwKUSoPoXwQaSBFDyUG6SYvVoqqMpD0dX
+         eeN6na+B53MduyCqeGhiuhHOzA4RQLO/ioxi+E0dVzepNrUOfG9lEUecENCscAsqrOMS
+         WT0g==
+X-Forwarded-Encrypted: i=1; AJvYcCW8eTUh0Ms1Q+5RWcHYYVwa1cQaepE3ZT3R4xpPtZf57nKiQBLf9r4tVCQw7AcKdSVZaEi2i6/LpcX7@vger.kernel.org, AJvYcCWWfYg8ow97tjtwBPkYuoDTnoTGj8zQQXsRzxCSU4JlxjF3ouCs9NA935N9Bxu7sOrtnS6fqK3bF3BPP3Lm@vger.kernel.org, AJvYcCXUulx1XfvAxpY6E2mF1Dm3YuyJFd7/xNRswSecZgzG7/77hIovH0UQUzgmfMmtQV63xILrBEpWrQNC@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzw0IO0exV5+ZxWrznX8jNj2/5aXWKu1otBfkotGulQhJl2So/R
+	TH8KqkgBDpPHSuRRCQi/MrGBNaHpCnS4Djwjq8AsuYBILLTv4fHf4l2i/fccFzcX
+X-Gm-Gg: ASbGncszcrnX80Una1W10lJJwQGg9unUHHA8GGd18Iz2FDxgTo3F3gpVCWLWBDTRT3S
+	Ce9MZhgQZezg091C94JrBGHJYBmacm/5h4Zbjv5xXOdDf5BO2k3Co2km/bVHRO3WGO0uXNbkw08
+	xX79M78yS9WyBoILojTQY89tEp0wWA8yYcdNoTV4NxUnnky9MIjKAyiNILUO5m+uA7IZevtFFeA
+	sQm/3uNimYipOFb+qHHpSgfq3IL0bacJPaHl9Plm20IdutGzLzPGQi/uwcJIEwixx18kYRdEsji
+	/7ZVmyIOH59OZZSzbTiuJ7wMcAPp4495INg6kElnqNhPrC5cXiZaiY/4VBA7dz+5Swve2zkbps/
+	jIAT4F5zNbMCWXjvpjUOOS216nE5LPytyZ/ItlMCtsE8arr1cP7Wduuq0Ibl5GDULnhVCgvUHxn
+	E70Tus9Q==
+X-Google-Smtp-Source: AGHT+IHckZcXoO7/1/111Zg60YwNmiw3Ew6cMklTHyBH+w/ECAe0Nt0q8YEQ6Zs+U9xpoUMuXP9NBg==
+X-Received: by 2002:a05:620a:a514:b0:7ff:f2ea:d378 with SMTP id af79cd13be357-7fff2ead728mr1498046285a.55.1756917839586;
+        Wed, 03 Sep 2025 09:43:59 -0700 (PDT)
+Received: from ehlo.thunderbird.net (modemcable197.17-162-184.mc.videotron.ca. [184.162.17.197])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-80aa6e497a7sm133468985a.17.2025.09.03.09.43.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Sep 2025 09:02:01 -0700 (PDT)
-Message-ID: <ca2b6089-54f8-459e-8cc0-accf802026e2@oss.qualcomm.com>
-Date: Wed, 3 Sep 2025 18:01:59 +0200
+        Wed, 03 Sep 2025 09:43:59 -0700 (PDT)
+Date: Wed, 03 Sep 2025 12:43:56 -0400
+From: =?ISO-8859-1?Q?Jean-Fran=E7ois_Lessard?= <jefflessard3@gmail.com>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+CC: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Daniel Scally <djrscally@gmail.com>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
+ linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-acpi@vger.kernel.org
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v4_1/2=5D_device_property=3A_A?=
+ =?US-ASCII?Q?dd_scoped_fwnode_child_node_iterators?=
+User-Agent: Thunderbird for Android
+In-Reply-To: <aLhAKJBUNQVH1Vmf@kekkonen.localdomain>
+References: <20250902190443.3252-1-jefflessard3@gmail.com> <20250902190443.3252-2-jefflessard3@gmail.com> <aLhAKJBUNQVH1Vmf@kekkonen.localdomain>
+Message-ID: <C883B982-5984-4714-B322-BB8205B47D6E@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] arm64: dts: qcom: ipq5424: add i2c nodes
-To: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>, andersson@kernel.org,
-        konradybcio@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
-        conor+dt@kernel.org, quic_msavaliy@quicinc.com,
-        quic_vdadhani@quicinc.com, andi.shyti@kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
-Cc: quic_srichara@quicinc.com, quic_varada@quicinc.com,
-        kathiravan.thirumoorthy@oss.qualcomm.com
-References: <20250903080948.3898671-1-quic_mmanikan@quicinc.com>
- <20250903080948.3898671-3-quic_mmanikan@quicinc.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20250903080948.3898671-3-quic_mmanikan@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: R3U5pvT_bmCBKCyaby8jQs8wMhmu0DxG
-X-Proofpoint-ORIG-GUID: R3U5pvT_bmCBKCyaby8jQs8wMhmu0DxG
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODMwMDAyNyBTYWx0ZWRfX+IwxqLEj9yy6
- 6ZQGX4DgEYzjuaXDGDIrTr2xpiSsXoBCMZ+CKLCmuIt7WQmgyEkWda5hA3rDVOzPNBYY2CcyYII
- +1miDTxLZ2rNb9e6ZQVcjnSviEoVrEcAwkpqIiyYku4QxTXeQx/Yn7GYOf9NkjFfATTn7QDG41I
- B8Z3a14os5zlhgomQEubGiVup3grBJdFaGo6vhy9FhaSRLkpWW+rM36jg+WdC0dqTb7A1Z0BDKB
- 1l8cPddP0y5zfk0n2s5HQJysnTmmEvmTYfLmhk/gaiCcb/aFLypyRWAdI1MJ+585Axq7TR+z22d
- KmH/22l7yjj6O1a4ql35zo72CFgVdb+3KhSrnuzpzgBJVOL1xIM+sILyuXf66KsN6hzl/rqHa/r
- LPTP8Dgz
-X-Authority-Analysis: v=2.4 cv=NrDRc9dJ c=1 sm=1 tr=0 ts=68b8667e cx=c_pps
- a=5HAIKLe1ejAbszaTRHs9Ug==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=COk6AnOGAAAA:8 a=EUspDBNiAAAA:8
- a=v5yAd65IgAm86a0TdQQA:9 a=QEXdDO2ut3YA:10 a=gYDTvv6II1OnSo0itH1n:22
- a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-09-03_08,2025-08-28_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 suspectscore=0 malwarescore=0 priorityscore=1501 phishscore=0
- impostorscore=0 spamscore=0 bulkscore=0 adultscore=0 classifier=typeunknown
- authscore=0 authtc= authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2507300000 definitions=main-2508300027
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On 9/3/25 10:09 AM, Manikanta Mylavarapu wrote:
-> Serial engines 2 and 3 on the IPQ5424 support I2C. The I2C instance
-> operates on serial engine 2, designated as i2c0, and on serial engine 3,
-> designated as i2c1. Add both the i2c0 and i2c1 nodes.
-> 
-> Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
-> ---
+Hi Sakari,
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Le 3 septembre 2025 09 h 18 min 32 s HAE, Sakari Ailus <sakari=2Eailus@lin=
+ux=2Eintel=2Ecom> a =C3=A9crit=C2=A0:
+>Hi Jean-Fran=C3=A7ois,
+>
+>On Tue, Sep 02, 2025 at 03:04:39PM -0400, Jean-Fran=C3=A7ois Lessard wrot=
+e:
+>> Add scoped versions of fwnode child node iterators that automatically
+>> handle reference counting cleanup using the __free() attribute:
+>>=20
+>> - fwnode_for_each_child_node_scoped()
+>> - fwnode_for_each_available_child_node_scoped()
+>>=20
+>> These macros follow the same pattern as existing scoped iterators in th=
+e
+>> kernel, ensuring fwnode references are automatically released when the
+>> iterator variable goes out of scope=2E This prevents resource leaks and
+>> eliminates the need for manual cleanup in error paths=2E
+>>=20
+>> The implementation mirrors the non-scoped variants but uses
+>> __free(fwnode_handle) for automatic resource management, providing a
+>> safer and more convenient interface for drivers iterating over firmware
+>> node children=2E
+>>=20
+>> Signed-off-by: Jean-Fran=C3=A7ois Lessard <jefflessard3@gmail=2Ecom>
+>> ---
+>>=20
+>> Notes:
+>>     checkpatch reports false positives that are intentionally ignored:
+>>     MACRO_ARG_REUSE, MACRO_ARG_PRECEDENCE
+>>     This is a standard iterator pattern following kernel conventions=2E
+>>=20
+>>  include/linux/property=2Eh | 10 ++++++++++
+>>  1 file changed, 10 insertions(+)
+>>=20
+>> diff --git a/include/linux/property=2Eh b/include/linux/property=2Eh
+>> index 82f0cb3ab=2E=2E862e20813 100644
+>> --- a/include/linux/property=2Eh
+>> +++ b/include/linux/property=2Eh
+>> @@ -176,6 +176,16 @@ struct fwnode_handle *fwnode_get_next_available_ch=
+ild_node(
+>>  	for (child =3D fwnode_get_next_available_child_node(fwnode, NULL); ch=
+ild;\
+>>  	     child =3D fwnode_get_next_available_child_node(fwnode, child))
+>> =20
+>> +#define fwnode_for_each_child_node_scoped(fwnode, child)		\
+>> +	for (struct fwnode_handle *child __free(fwnode_handle) =3D	\
+>> +		fwnode_get_next_child_node(fwnode, NULL);		\
+>> +	     child; child =3D fwnode_get_next_child_node(fwnode, child))
+>> +
+>> +#define fwnode_for_each_available_child_node_scoped(fwnode, child)	\
+>> +	for (struct fwnode_handle *child __free(fwnode_handle) =3D	\
+>> +		fwnode_get_next_available_child_node(fwnode, NULL);	\
+>> +	     child; child =3D fwnode_get_next_available_child_node(fwnode, ch=
+ild))
+>> +
+>
+>Do we really need the available variant?
+>
+>Please see
+><URL:https://lore=2Ekernel=2Eorg/linux-acpi/Zwj12J5bTNUEnxA0@kekkonen=2El=
+ocaldomain/>=2E
+>
+>I'll post a patch to remove fwnode_get_next_available_child_node(), too=
+=2E
+>
 
-Konrad
+Thanks for the link to the discussion=2E
+
+I see you're planning to remove fwnode_get_next_available_child_node()=20
+entirely=2E In that context, adding a scoped version doesn't make sense=2E
+
+For my driver use case, I can handle the status checking manually if=20
+the _available_ variant is being deprecated=2E
+
+Should I drop the _available_ variant and submit v5 with only=20
+fwnode_for_each_child_node_scoped()?
+
+>>  struct fwnode_handle *device_get_next_child_node(const struct device *=
+dev,
+>>  						 struct fwnode_handle *child);
+>> =20
+>
+
 
