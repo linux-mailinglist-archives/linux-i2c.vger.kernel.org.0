@@ -1,131 +1,95 @@
-Return-Path: <linux-i2c+bounces-12592-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12593-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5C66B427BA
-	for <lists+linux-i2c@lfdr.de>; Wed,  3 Sep 2025 19:15:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C16AFB427DF
+	for <lists+linux-i2c@lfdr.de>; Wed,  3 Sep 2025 19:22:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 738783B5370
-	for <lists+linux-i2c@lfdr.de>; Wed,  3 Sep 2025 17:15:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D80EA3A5832
+	for <lists+linux-i2c@lfdr.de>; Wed,  3 Sep 2025 17:22:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB26A28725A;
-	Wed,  3 Sep 2025 17:15:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7475A30C353;
+	Wed,  3 Sep 2025 17:22:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="NkSbxP55"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cky2BVTe"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11156242925
-	for <linux-i2c@vger.kernel.org>; Wed,  3 Sep 2025 17:15:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D0E229DB99;
+	Wed,  3 Sep 2025 17:22:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756919731; cv=none; b=FR+b/PwLTbIu8fe1jlI5TDM5r/fWPex7ZX/dTYKAkCS2kEsOHpBUH6e7YVUUFMK0Z8K/JGTsjqqPB2Krn147cG5i5gP0f46q/zuSAitdysbRO4eg63shn6LNm0N0bpVkC4sLt6y8drAM0NlScH4rPsrghPd/WG6QLiPuhUK5na8=
+	t=1756920154; cv=none; b=kr/CYAfrWdP8XJcO3KXBOw/aX79vRdftfarkae6S6pb96acXW6rZJ3O/9etUC1Qc0v1zpqRNlOckPAh9fFaGqyb5d0NCoswxmJllMoSE6kZlzcdYFqRlu77SUGovixkEoLj5ttaPF2nRTFBodMU8ccs2eboaexDTGhRUMFu9vX8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756919731; c=relaxed/simple;
-	bh=jZUDx1Mx2eH40Dx2kMrnVR0J5IZIorEjpObTIAfvjDw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=omeDq60J63xMrzzuiiksZ2lyP6N8WTgzq5sTIU+fKmmkB740/XURNC5kflZQNjbHVdpt/3uVUJZqa0eBsOnauQtJ63dEw9Y0B/7xUGXMBuVyoVM98gUVLNvbvjVGWN3aTFPt4OtCgjraIRyL2MAH/h4zqnifd1xVdlmGhRAbyYQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=NkSbxP55; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=78O4
-	dHWxeY4/54KjN6f8Acl6SIpWxsx4E4dnQG9eWXI=; b=NkSbxP55flzuHp/ecStL
-	LIgl8x0F4bWQXeT5/YQ3ovJNl4iWzZcrMflOy8YtFqhnfsfHINDL/r7VO82D8S4B
-	grhJ0U1FFzpVuJS4devnYCjYrW5y5LZC5LrhyOnBBySoUUXwm0V64LbM8cRZmR+B
-	j+Gkyskdrz4Kr+vFL492bihQQcojluhUTDswlU5gwTxv2qeeB7US0K18i55qnKV7
-	1FKuxY8WXon26Udh7GPBdj6dJ+oV7q8KQVSoasJ2QRSAjA+UlYlw6ASMPF1f7RV/
-	fGN/JNYbmwR9HYTA7kZrgWZ/cdDcFlkMbhxqG0g/+8pZC4fC/cJO8T2xSqNkIZHA
-	Qg==
-Received: (qmail 3373530 invoked from network); 3 Sep 2025 19:15:26 +0200
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 3 Sep 2025 19:15:26 +0200
-X-UD-Smtp-Session: l3s3148p1@H9wowOg9GC9tKPO7
-Date: Wed, 3 Sep 2025 19:15:25 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Andi Shyti <andi.shyti@kernel.org>
-Cc: Cezar Chiru <chiru.cezar.89@gmail.com>, peda@axentia.se,
-	jdelvare@suse.com, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: Main i2c-*.c files and algos/ subdirectory : Fix
- errors and warnings generated by checkpatch
-Message-ID: <aLh3rVYItYZ3CYpq@shikoro>
-References: <20250830093016.160753-1-chiru.cezar.89@gmail.com>
- <fkiu64vdlndg5lvuaktao2vmvmn5al7xcpksrjmxrr4ldz5ssn@dolroldcknpd>
+	s=arc-20240116; t=1756920154; c=relaxed/simple;
+	bh=38qRBcVLemJuIO3Zcx8DVpVL1QoFDMKDswFRU8GkwHs=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
+	 References:In-Reply-To; b=WhlBYIYhrFzAcafaniueA1lEr7+oLe+GEL3qJLJ+DgBLrKJUkKRbFpIWZvrJOHdz/f5e+XZwovNChddLiZQymyAoZiNODOcLMb9ki5GUmLVB0hj+EFIxqHiODD6U+0Gcu32ToH8osxegkGOFwZWoXlr6oRND605pAaZIlaFhfPw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cky2BVTe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37C9FC4CEE7;
+	Wed,  3 Sep 2025 17:22:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756920153;
+	bh=38qRBcVLemJuIO3Zcx8DVpVL1QoFDMKDswFRU8GkwHs=;
+	h=Date:Subject:Cc:To:From:References:In-Reply-To:From;
+	b=Cky2BVTe8KD9vzLnUdMoMsD0y6FBMaEFOv9TN8sIYqX8BGaUBMpcUERzgyOidn3kN
+	 HMul+OwyW8dXvDH0OBNIC+sOp6h1yg2VnO8Mc8DIT+Myl2bAcSz8Q59hEhuAu8pSbs
+	 mfkqD0D2QTViQaVnvI47lCOryEM9JCjusn7w3gp5n9BQ2O5p7OIZboZkym4XaFOvPq
+	 UgcXa3woQKwVYZkkVKNLuenq8kX0Ylkc7BXfhbG23pBo5ZxKlHC/kVaQHNgrNNfBRa
+	 5BJpoSTp4eUNTlzRZRWNL3Bvz43M/4Ma4uW0akVd8JRUtgszdDpyn9YyibAgTbiNtt
+	 7NybjNz9KNfhQ==
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="8rdk36Ry1vinCQMD"
-Content-Disposition: inline
-In-Reply-To: <fkiu64vdlndg5lvuaktao2vmvmn5al7xcpksrjmxrr4ldz5ssn@dolroldcknpd>
-
-
---8rdk36Ry1vinCQMD
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 03 Sep 2025 19:22:29 +0200
+Message-Id: <DCJC7Q9MZEM3.34FU7BXXZ7UGF@kernel.org>
+Subject: Re: [PATCH v4 1/2] device property: Add scoped fwnode child node
+ iterators
+Cc: =?utf-8?q?Jean-Fran=C3=A7ois_Lessard?= <jefflessard3@gmail.com>,
+ "Wolfram Sang" <wsa+renesas@sang-engineering.com>, "Andy Shevchenko"
+ <andriy.shevchenko@linux.intel.com>, "Daniel Scally" <djrscally@gmail.com>,
+ "Heikki Krogerus" <heikki.krogerus@linux.intel.com>, "Greg Kroah-Hartman"
+ <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ "Javier Carrasco" <javier.carrasco.cruz@gmail.com>,
+ <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-acpi@vger.kernel.org>
+To: "Sakari Ailus" <sakari.ailus@linux.intel.com>
+From: "Danilo Krummrich" <dakr@kernel.org>
+References: <20250902190443.3252-1-jefflessard3@gmail.com>
+ <20250902190443.3252-2-jefflessard3@gmail.com>
+ <aLhAKJBUNQVH1Vmf@kekkonen.localdomain>
+In-Reply-To: <aLhAKJBUNQVH1Vmf@kekkonen.localdomain>
 
-On Wed, Sep 03, 2025 at 06:56:12PM +0200, Andi Shyti wrote:
-> Hi Cezar,
->=20
-> On Sat, Aug 30, 2025 at 12:30:15PM +0300, Cezar Chiru wrote:
-> > Fixed some coding style errors and warnings plus some minor changes
-> > in code as reported by checkpatch script. The busses/ and muxes/
-> > subfolders will be dealt with another commit. Main changes were done
-> > to comments, defines of 'if' statement, swapping 'unsigned' with
-> > 'unsigned int' and other minor changes.
-> >=20
-> > Signed-off-by: Cezar Chiru <chiru.cezar.89@gmail.com>
-> > ---
-> >  drivers/i2c/Kconfig              |  2 +-
-> >  drivers/i2c/algos/i2c-algo-bit.c | 29 +++++++++------
-> >  drivers/i2c/algos/i2c-algo-pca.c | 25 +++++++++----
-> >  drivers/i2c/algos/i2c-algo-pcf.c | 61 ++++++++++++++++++++++----------
-> >  drivers/i2c/algos/i2c-algo-pcf.h | 10 +++---
-> >  drivers/i2c/i2c-boardinfo.c      |  2 +-
-> >  drivers/i2c/i2c-core-base.c      | 59 +++++++++++++++++++-----------
-> >  drivers/i2c/i2c-dev.c            | 47 ++++++++++++++----------
-> >  drivers/i2c/i2c-mux.c            |  1 +
-> >  drivers/i2c/i2c-slave-eeprom.c   |  2 +-
-> >  drivers/i2c/i2c-smbus.c          |  2 +-
-> >  drivers/i2c/i2c-stub.c           | 29 +++++++--------
-> >  12 files changed, 170 insertions(+), 99 deletions(-)
->=20
-> first of all, thanks for your patch, but I can't accept it.
-> Please split your patch in several smaller patches with single
-> changes.
->=20
-> Granularity is very important for reviews and git blame.
+(Cc: Javier)
 
-Same comment as previous patch: describe testing please
+On Wed Sep 3, 2025 at 3:18 PM CEST, Sakari Ailus wrote:
+> Do we really need the available variant?
+>
+> Please see
+> <URL:https://lore.kernel.org/linux-acpi/Zwj12J5bTNUEnxA0@kekkonen.localdo=
+main/>.
+>
+> I'll post a patch to remove fwnode_get_next_available_child_node(), too.
 
+Either I'm missing something substantial or the link does indeed not provid=
+e an
+obvious justification of why you want to send a patch to remove
+fwnode_get_next_available_child_node().
 
---8rdk36Ry1vinCQMD
-Content-Type: application/pgp-signature; name="signature.asc"
+Do you mean to say that all fwnode backends always return true for
+device_is_available() and hence the fwnode API should not make this distinc=
+tion?
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmi4d60ACgkQFA3kzBSg
-KbYXHg/9GBXdVMFSHY1j6XfTKPGqNfmPBwuaje7q67ae9chO9Ib22fC3p6NyQTke
-WTCL3DqRtAWhy96xZ2uq7Qgh8PnzOWRRO6Ea3tQvRLojJufFLt8v8oj2qRFdM9vq
-dbPwp5nreFu/KvegEhrbNywkpGAdzxDYILa2Q4QVqLPFY1n8LPH18V+E2rIdRcnq
-QrcSpj6UloeV4QT0zfdnPa8LTAGOk8NHQN3LsP/qFLUGRLebZTKmgcFRrRtetmwN
-CBiaOYimobaqEP8gqo+PzL+UKI0AIYWRpYIOSOplPELdhXDY2uDHM8TxzhSPR+bK
-XgzwrFUxE64cWEgjuSRezpmir7KIa+YY2PN0a6HADLqAo0AKuuy0toT1a3eQuB9V
-o6kj3czOC8Vrlw0yhVFqT5nut9Wi+2DYsZRriik4jGV8a3gjAPMfUF1pMnV1QCNm
-uIfwSrKXaVTt0JL51RSrcgnRuI7FR6QDmbYy2KmF1qWbHqKHACwerpMNAW+pHey5
-ekhXPN0vmXllDYfsHb4vHXTQa6sUg67Mth6a850LUiAZ6dM2oUooABLnuQ0zQYBG
-eZ6pRnsERjh3bpOt4NGxWssFNJCSqiqChJpXjb1kr6okJfJxFHJe2QgWQT9Jc3pP
-iPL7H4rsRa+XCyVr/tpGveCUKmD2chKBOCTu6dtBIqcbJQj+li8=
-=rNMb
------END PGP SIGNATURE-----
-
---8rdk36Ry1vinCQMD--
+I.e. are you referring to the fact that of_fwnode_get_next_child_node() alw=
+ays
+calls of_get_next_available_child() and swnode has no device_is_available()
+callback and hence is always available? What about ACPI?
 
