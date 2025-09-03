@@ -1,90 +1,110 @@
-Return-Path: <linux-i2c+bounces-12590-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12591-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB86CB42768
-	for <lists+linux-i2c@lfdr.de>; Wed,  3 Sep 2025 18:58:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F3A08B427B5
+	for <lists+linux-i2c@lfdr.de>; Wed,  3 Sep 2025 19:14:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4E8A41BC3BC9
-	for <lists+linux-i2c@lfdr.de>; Wed,  3 Sep 2025 16:58:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 914475E4228
+	for <lists+linux-i2c@lfdr.de>; Wed,  3 Sep 2025 17:14:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C78130ACEC;
-	Wed,  3 Sep 2025 16:57:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD8B630DED9;
+	Wed,  3 Sep 2025 17:14:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fkiDYVWJ"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="Lz4Oim2r"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E027B24A06D
-	for <linux-i2c@vger.kernel.org>; Wed,  3 Sep 2025 16:57:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F25262D8DA6
+	for <linux-i2c@vger.kernel.org>; Wed,  3 Sep 2025 17:14:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756918679; cv=none; b=oxjmQlpz+/9OT9eihVm8vZR5IET88w8DogtbqP/Nna/jy1NjKxepcQEzTflJ/FGMW+FeTRXnOdlKqjOiL0hABZHKckWYlECbOWOtOLYMJOinv6MSl3XYjMSeYhONpnWrVfYR+i/9/Yb/5bSV7roZV1NoSaK1PeaAqRE53RR6Ha4=
+	t=1756919683; cv=none; b=iVBjTxcztcWc8yPejq7auir45XbkyMZoOOQz6rDGxndrbjZ7x0s+a0N1S7Q7wHmOkDOrmM9RjKd4QaQPGAryqtWfmrVopDpUVobymJe3Ei/fWQ5qSQnR/YwgX1rNtMMZX9n728tel8ILRiqLsDy6BM5bwzL4oJMFA4tlTd5E24w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756918679; c=relaxed/simple;
-	bh=sT1fntO+lgTH2MuOm1ai/0QjmfXUwiSAkTKPKql+35s=;
+	s=arc-20240116; t=1756919683; c=relaxed/simple;
+	bh=aZDp5PaO7PWWHVd+gvu9ye6LQb1+tjmQKWGza1VkC+8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=i8598SFj8/aPcdHq3RcI65G8GpV91gKFvxJfNN7sLCrCBiNUwKv0TGZcjSLZcy0yG0VCNB3ZHWLaEM+elzSfDmkLnFs/FKQtVkKLo2wzBIVSmQ3AjcPxaU8tAPqvkdmD2tAGVZWNxmeIrYZWAUDjM8uSmw9qGllhnaws7yDoOho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fkiDYVWJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AAE6C4CEE7;
-	Wed,  3 Sep 2025 16:57:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756918678;
-	bh=sT1fntO+lgTH2MuOm1ai/0QjmfXUwiSAkTKPKql+35s=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fkiDYVWJMlalBbwpPTtrg2BzYh37M3zyed+mHFUezXAWgUguhY2dyBexzDT4YiF4Y
-	 7NKu4dEffTqKEDspcgZ3/JtzaBNsyV0Axe7k0iusHr0eVmj3ecpY2Sb7lcY8MOE+Ae
-	 R/FO03TdqwTG0wOnWnUVfMDRcWPyt0GzrukDUb0xbOEWkYthxFFZGhybBirLo59BTs
-	 PQcl0fYHTAucq75KRXaBm4v2zy/swfujJkJye2YVozoUnOvUrqw0xdzDBkrAkY4KJo
-	 wJ8Cm9BGp60gM74MpDAwzisbE8r06Hw33V+Y59GisS+ZtmVkhiFYvpDX/HtwgiopGB
-	 FXxG1ff5iLRgg==
-Date: Wed, 3 Sep 2025 18:57:53 +0200
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Cezar Chiru <chiru.cezar.89@gmail.com>
-Cc: wsa+renesas@sang-engineering.com, linux-i2c@vger.kernel.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=W0ZuxVm8iliuqURFzd+8JiVM3j+jSCgFjIYMAFjd6G+rAp5/qN3dKzoWs3xhHnppfmMJ2SDnnCxOQG6NJmFz5H1K0Bkr4/GpwkrS/w2362dKERaqJpoz1dr6aMF9qbSi1qf0fxdps7sGwmVxvvvBsKAXHXoaVDOzXIXsIiPS9Pk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=Lz4Oim2r; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=aZDp
+	5PaO7PWWHVd+gvu9ye6LQb1+tjmQKWGza1VkC+8=; b=Lz4Oim2r6/wOiGdJ4DlQ
+	mtbmEwiulRUPJSjP1WinTOYDAVgkmlYJQA9WxIUqGN3u8hjFKoShVOsu2DLBo1+K
+	8yhVBvWZNltENPogcbmMBwNHNAT6Me8UyljDcI50ySJyHgsOB9d7scyeD0GDFcXn
+	b7exYb2FwqvhUDXFKeRzZm1S/Y16NSUqdfDhDZ04qvbNb8T3U+jeeR0oi1oAs8RH
+	tya9Bu5XBvAUJuzOeuu1iatu/mnvJCJwP8F8Fid/So14UqX0gxiFltudi4OJfFPU
+	SCt7YK5PiOmi50buWF6MwAl2BsojXqmKhEMbZsEBxD6uyUro01KVSZzuF1BKXQSr
+	Og==
+Received: (qmail 3373249 invoked from network); 3 Sep 2025 19:14:33 +0200
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 3 Sep 2025 19:14:33 +0200
+X-UD-Smtp-Session: l3s3148p1@JU0Kveg9qDhtKPO7
+Date: Wed, 3 Sep 2025 19:14:32 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Andi Shyti <andi.shyti@kernel.org>
+Cc: Cezar Chiru <chiru.cezar.89@gmail.com>, linux-i2c@vger.kernel.org
 Subject: Re: [PATCH] Fix checkpatch.pl warnings and errors in i2c driver
  directory and subdirectories
-Message-ID: <6nghwioi3tym5kpmstjdm3aosgouuein2fn2kwv6safyaf5ras@jozx5jepvryh>
+Message-ID: <aLh3eP0meVk0hcCX@shikoro>
 References: <20250829142831.208511-1-chiru.cezar.89@gmail.com>
+ <6nghwioi3tym5kpmstjdm3aosgouuein2fn2kwv6safyaf5ras@jozx5jepvryh>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="XJi04a3UGGhhmTVd"
+Content-Disposition: inline
+In-Reply-To: <6nghwioi3tym5kpmstjdm3aosgouuein2fn2kwv6safyaf5ras@jozx5jepvryh>
+
+
+--XJi04a3UGGhhmTVd
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250829142831.208511-1-chiru.cezar.89@gmail.com>
+Content-Transfer-Encoding: quoted-printable
 
-Hi Cezar,
+On Wed, Sep 03, 2025 at 06:57:53PM +0200, Andi Shyti wrote:
+> Hi Cezar,
+>=20
+> On Fri, Aug 29, 2025 at 05:28:31PM +0300, Cezar Chiru wrote:
+> > Fix warnings and errors that were generated by checkpatch.pl script
+> > on several files of the i2c driver. Some false positives were left
+> > into place. Also /i2c/busses/ and /i2c/muxes/ folders have not been
+> > checked. The patch would have been too long.
+>=20
+> please, make sure to run checkpatch before sending checkpatch
+> fixes.
 
-On Fri, Aug 29, 2025 at 05:28:31PM +0300, Cezar Chiru wrote:
-> Fix warnings and errors that were generated by checkpatch.pl script
-> on several files of the i2c driver. Some false positives were left
-> into place. Also /i2c/busses/ and /i2c/muxes/ folders have not been
-> checked. The patch would have been too long.
+Even more, please describe how you tested the patches or otherwise
+verified correctness.
 
-please, make sure to run checkpatch before sending checkpatch
-fixes.
 
-Thanks,
-Andi
+--XJi04a3UGGhhmTVd
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> ---
->  drivers/i2c/Kconfig              |  2 +-
->  drivers/i2c/algos/i2c-algo-bit.c | 29 +++++++++------
->  drivers/i2c/algos/i2c-algo-pca.c | 25 +++++++++----
->  drivers/i2c/algos/i2c-algo-pcf.c | 61 +++++++++++++++++++++----------
->  drivers/i2c/algos/i2c-algo-pcf.h | 10 ++---
->  drivers/i2c/i2c-boardinfo.c      |  2 +-
->  drivers/i2c/i2c-core-base.c      | 63 ++++++++++++++++++++------------
->  drivers/i2c/i2c-dev.c            | 47 +++++++++++++++---------
->  drivers/i2c/i2c-mux.c            |  1 +
->  drivers/i2c/i2c-slave-eeprom.c   |  4 +-
->  drivers/i2c/i2c-smbus.c          |  2 +-
->  drivers/i2c/i2c-stub.c           | 29 ++++++++-------
->  12 files changed, 173 insertions(+), 102 deletions(-)
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmi4d3QACgkQFA3kzBSg
+KbbCPQ/9FDtPQ2kJ6v+cH57M1QlWJTUUNyJqPFrFNAs564SbVDoRqNGqVQbj/ivn
+8T+p2RuyiEbU35AEJwysjlN9v7QB30iLxRSca7YWrMT8aFx0t4caK5sDgONGZ/ay
+DdKZYIatQdKEJn02uKbctbvNoV3AMydDodaVHOO2ar1TANp2jY7QE4c4MZ/V/PTy
+/2IFy2i9PBUWmrEcuahpwdy4RoOB/Drphnbq9gao3bNqAMY9pJC2BfCOD2ChFZ3/
+P6GBEZo9WLZoyz62Az3fD8D/cBiUooZWZzhPrCtLybfwCwO3HpPrFSiVaqSJfw/k
+ZYpWvGIeaZqBWQRc3H+Nhfx4Zp+teTC3WrqlsgrfDa9lJH3C3UtLbd1Pct/IUFB/
+FobIVEIL1Ad4ziBhdUDvjcrtBzZz2mGdijBHtFb+ChvL2Z2MqV2QMIv3txGv+N4P
+rrq6kiyMJ6GgqH9/OVfQjwA0sWCt7OHYH1esabNZYKZR57oFOv2fC/frKAAnf+w4
+O760BWAg09hcqYQ+nd86gSU9Vs2OfaPdQQXEMZnC1W3N49zTET0+a6VPPlVCs1by
+xCipmZdgovYKFmWWec8JOspRzoY9utpROXD6BlOnw7qz03cyM5WGes7zDoqyUXh5
+30Yh7KIicl7ezvVsaG66XeGOcxA1qxAD3gqO8EurlbfCgvLI/SY=
+=zPX0
+-----END PGP SIGNATURE-----
+
+--XJi04a3UGGhhmTVd--
 
