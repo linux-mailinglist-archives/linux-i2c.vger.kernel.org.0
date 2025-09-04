@@ -1,112 +1,84 @@
-Return-Path: <linux-i2c+bounces-12648-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12649-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5A5CB43FF1
-	for <lists+linux-i2c@lfdr.de>; Thu,  4 Sep 2025 17:04:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C1CFB4426A
+	for <lists+linux-i2c@lfdr.de>; Thu,  4 Sep 2025 18:14:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 800FC1C832A7
-	for <lists+linux-i2c@lfdr.de>; Thu,  4 Sep 2025 15:05:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F2381A038ED
+	for <lists+linux-i2c@lfdr.de>; Thu,  4 Sep 2025 16:14:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 338D3305043;
-	Thu,  4 Sep 2025 15:04:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AED72F3C0C;
+	Thu,  4 Sep 2025 16:14:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ViJ8659i"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CtnaQX91"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B17A2FC02F;
-	Thu,  4 Sep 2025 15:04:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D4532F1FD8;
+	Thu,  4 Sep 2025 16:14:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756998277; cv=none; b=jxWMxwxcJ8jWnmBvjRGa1KejNy9fvwOu1g98Xd2GEcWx4SQoPCWvn8Wg0DiFecg+a2bf6z2FuMGJOi8gqiwQwdmxoBI4JKjnmYy54893cY1oaE2ikQKDlAP9k/huAZv9g4qW4b2V2Dpc93+EBPmIGdZfedV31CPUKXLexoQzBT0=
+	t=1757002476; cv=none; b=TjpTkGoEL8nP8cHq2hJpwbXuRyErhlq0XtolGV4yGh/sHaN5hHIRrmnc7BOHafi33cnXmmag8l2f/7JWrxi+krVf0hXIUBtq2/ZoK4P+e2WlYCGKfvumphzSG21RpJ+UDZajVSy0KiMf4TzufNOXToFt3jGWPXy2QK0tS7jMkzM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756998277; c=relaxed/simple;
-	bh=I60lvMaA2fy/7Bwto+aKufKK5YR4Y6CMkO0b6UF3Kpo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UVE5rYeJFyz/95lUFaoCjdmLeHb2bp+0tHtOAYUksAysVrwRgvHqEGztNMQKTFWeoC5bjPu7rvoVOiAS1IZxk1ex+tXFzeH8yRQf0sAZjfkPv1NkjXagCLFHqsmMvL5WUiKshJlxfa7bC3Tg4SJFb9yw/GpJj7xe0PEjwBYT+q4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ViJ8659i; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756998276; x=1788534276;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=I60lvMaA2fy/7Bwto+aKufKK5YR4Y6CMkO0b6UF3Kpo=;
-  b=ViJ8659iqGQwznlnaBHSjcqaZmIISXaYs48AdPO7qn+DUkiUQ/x7fxOR
-   HkvpLQfn3yXXoim6LxuVF8e3DPFx0yLW9dcjpX7FvzMbZcj7l1nZyEnvX
-   ni1zwCKi+BcRtW//otk1PFUYMlhYtxt2nXa9gShM/twBU3HpHJMhY3E8d
-   2vyp0O/wBEkxgcfd8VvFF4YTz7cIE1DKVJSu18fYvuHjAnJVRJ9XCCvu2
-   EPN1xG5h4xY8DhJHrLGUk0oirNFZ86QLrxjgqezxxMD7CJCS8vKi3CUBo
-   qoC2gxjNrfgKpCV7tqgKDheuAWwXnrXYfq8ut5cJ5sLSh91jZcgetuCGj
-   w==;
-X-CSE-ConnectionGUID: VdqUBzhCRCWK8ErdEYQBrw==
-X-CSE-MsgGUID: Pcd2ekoqQYKgJpgY4mv7VQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11543"; a="70716113"
-X-IronPort-AV: E=Sophos;i="6.18,238,1751266800"; 
-   d="scan'208";a="70716113"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2025 08:04:35 -0700
-X-CSE-ConnectionGUID: 4TSUZqpdSAWYg155vGUb7w==
-X-CSE-MsgGUID: E5HNrEcjROGgprxU/fnauA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,238,1751266800"; 
-   d="scan'208";a="176262860"
-Received: from smile.fi.intel.com ([10.237.72.52])
-  by fmviesa005.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2025 08:04:32 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1uuBVl-0000000BIoM-3pOK;
-	Thu, 04 Sep 2025 18:04:29 +0300
-Date: Thu, 4 Sep 2025 18:04:29 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: =?iso-8859-1?Q?Beno=EEt?= Monin <benoit.monin@bootlin.com>
-Cc: Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Jan Dabros <jsd@semihalf.com>, Andi Shyti <andi.shyti@kernel.org>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
-	Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] i2c: designware: use dev_err_probe() when probing
- platform device
-Message-ID: <aLmqfQm2w3y1MM_2@smile.fi.intel.com>
-References: <20250904-i2c-dw-dev-err-probe-v2-0-e59da34815fa@bootlin.com>
- <20250904-i2c-dw-dev-err-probe-v2-2-e59da34815fa@bootlin.com>
+	s=arc-20240116; t=1757002476; c=relaxed/simple;
+	bh=Nc22WOHnx23uoyvBPLboSQ4H5Xk+n08JTo2ZpvR8CDc=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:From:Subject:Cc:
+	 References:In-Reply-To; b=Sr0ItO1j9JFte9zE90OHSYxsOC1CGHeOt+HqyJVjT7VWD8SxJMHSZKcst//3QX6LNi3F9txGnQ0KG/8kGIlID8kBL9gLSkk4lKgzkEJbi/m+UXGNpiKu8JtKe+6I5FO6jn5JZpz1BYjC0Xp/EmW+hZI+kQOf8b6/4rm+NkDALMw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CtnaQX91; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B8FFC4CEF6;
+	Thu,  4 Sep 2025 16:14:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757002475;
+	bh=Nc22WOHnx23uoyvBPLboSQ4H5Xk+n08JTo2ZpvR8CDc=;
+	h=Date:To:From:Subject:Cc:References:In-Reply-To:From;
+	b=CtnaQX91CBxaqcLbHzHoXDg1+Mit302FyXwOGwSZ/7XFMkCgDzyPMLrxuWopx7Cqf
+	 LgSKs9vegeJhXi06GHs9Qp6Ty70eho8LtQrC3cr68I3ldpJ+9z0AotBZ3cJral84hu
+	 whY0ppIv9cXx10tSoUWlgS9PwkG9786I4m5VRFNFM/fHJxijaVZ9Pz3JM2+0/nTqew
+	 mczAmNf5UF9W8p4DfFZ8WUTfmWUJrrxh+SNar9htf0HumhfMYGHuahAkeXRQP/bLB9
+	 Em2OgubLpsRtDt/25K5ECSdtKLtAz0eM2DOScVUIiOTLCzdV30rksiDN4iYNlg79TV
+	 ZIFMiJnjrJ1Uw==
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250904-i2c-dw-dev-err-probe-v2-2-e59da34815fa@bootlin.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 04 Sep 2025 18:14:31 +0200
+Message-Id: <DCK5E8KIEV7M.25EFO2EE7JS9V@kernel.org>
+To: "Sakari Ailus" <sakari.ailus@linux.intel.com>
+From: "Danilo Krummrich" <dakr@kernel.org>
+Subject: Re: [PATCH v4 1/2] device property: Add scoped fwnode child node
+ iterators
+Cc: =?utf-8?q?Jean-Fran=C3=A7ois_Lessard?= <jefflessard3@gmail.com>,
+ "Wolfram Sang" <wsa+renesas@sang-engineering.com>, "Andy Shevchenko"
+ <andriy.shevchenko@linux.intel.com>, "Daniel Scally" <djrscally@gmail.com>,
+ "Heikki Krogerus" <heikki.krogerus@linux.intel.com>, "Greg Kroah-Hartman"
+ <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ "Javier Carrasco" <javier.carrasco.cruz@gmail.com>,
+ <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-acpi@vger.kernel.org>
+References: <20250902190443.3252-1-jefflessard3@gmail.com>
+ <20250902190443.3252-2-jefflessard3@gmail.com>
+ <aLhAKJBUNQVH1Vmf@kekkonen.localdomain>
+ <DCJC7Q9MZEM3.34FU7BXXZ7UGF@kernel.org>
+ <aLkqE9c9w9m4Axsp@kekkonen.localdomain>
+ <DCJTOIQ4Q0Z5.Q2UE5AQU1X35@kernel.org>
+ <aLlDJETaWTjiSP0L@kekkonen.localdomain>
+ <DCJVYUINZ7KM.7RCV9P9KHTVM@kernel.org>
+ <aLl-ABtFi2R9Wc1a@kekkonen.localdomain>
+In-Reply-To: <aLl-ABtFi2R9Wc1a@kekkonen.localdomain>
 
-On Thu, Sep 04, 2025 at 04:31:07PM +0200, Benoît Monin wrote:
-> Add calls to dev_err_probe() on error paths that can return
-> -EPROBE_DEFER when probing platform device. Namely when requesting the
-> reset controller, when probing for lock support and when requesting the
-> clocks.
-> 
-> PCI device probing already use dev_err_probe().
+On Thu Sep 4, 2025 at 1:54 PM CEST, Sakari Ailus wrote:
+> If you're concerned of the use on ACPI platforms, none of the drivers usi=
+ng
+> the two available variants list any ACPI IDs, signifying they're not used
+> on ACPI systems -- I don't think they ever have been.
 
-Makes sense by at least two aspects:
-1) less log spamming for deferred probes;
-2) easier to debug an issue (I assume it's your case).
-
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Great -- sounds reasonable then.
 
