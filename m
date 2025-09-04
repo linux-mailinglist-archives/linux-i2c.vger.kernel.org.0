@@ -1,157 +1,124 @@
-Return-Path: <linux-i2c+bounces-12608-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12609-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66FC2B4346C
-	for <lists+linux-i2c@lfdr.de>; Thu,  4 Sep 2025 09:43:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF0B7B434E9
+	for <lists+linux-i2c@lfdr.de>; Thu,  4 Sep 2025 10:05:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 26BB53A8454
-	for <lists+linux-i2c@lfdr.de>; Thu,  4 Sep 2025 07:43:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 69A1E1BC2E81
+	for <lists+linux-i2c@lfdr.de>; Thu,  4 Sep 2025 08:05:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7D6A2BD015;
-	Thu,  4 Sep 2025 07:43:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 218052BE02A;
+	Thu,  4 Sep 2025 08:04:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K/LkFyzu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UV3daTcO"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCBB629DB6A;
-	Thu,  4 Sep 2025 07:43:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB1A02882B2;
+	Thu,  4 Sep 2025 08:04:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756971821; cv=none; b=Unds5MjXWrjGpg1RccKUYilF/JEES+2vvRXRhArV0ttz00c6nvd50KuTX7ptzqYlSZHWoNP7FBBj5RPaqTiDsuJQINconihFbX4MKGZ8VaUm0bs8+UtOzVjOWLp5ZsJ5YkQ3daeeW26sihzhBF5WIj+vgCRb+0vmvzP78RD2Hqs=
+	t=1756973096; cv=none; b=aL7KcvXNwS89Du5FhT90aTyn6ee5g/b52nP+3l2xJHaFdK32k4eOPltEwX8v6rOCDlgrE4tyfkiZmM1fxW5wB8v902uWaNM2FNItJYdyDGuGFg6AbeeK3s1XOvrdo+eWaXQN+ayS1JQ/2EA/QOff9yqc+qvS0KfVsB9R5HvXyRU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756971821; c=relaxed/simple;
-	bh=MQUy/5kwPhxwrpneE0J7WzbNFUSZsEuhXb7b/wWwcsw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pn4LHvZ+rWtwNRCOweHsw0Mw93oMEKHmfhhX+rHY0nH0I2nxUbqjeFsl6A0K3XfcVzWGMXQJloWhW3AHE+AdlogE3MnK9BbVWPsKEFfUGXpcnv9HrZkH1PGyTD3hQrrgO793KfAHE8wTJoSWvAn5h+Ue/PCrIUTDzUSku8jllu8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=K/LkFyzu; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756971820; x=1788507820;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MQUy/5kwPhxwrpneE0J7WzbNFUSZsEuhXb7b/wWwcsw=;
-  b=K/LkFyzu0VYB1yxBQPgeUyPoDUzLvxWTbcEZUufjQGmtYbF/EUTdk3yY
-   VtYTltl5JRvNxMqX2H9aIz9NICjfMdKsMQExv4WGhblROM1LEEGZ7z/Bp
-   cCP0WVSvMyqqV0fd7cJGkQJmaj9aYMGwEHYdjnTUmbJwpBkxehIFFF6Iy
-   G6VpQmcS0e9jRrBH1o/fQWPRn+sUgLSlzhjMpMGZ1nmQ/rWetj/Slkwsl
-   3+w3VQXHOw34bvDymzRuHMNab4j0Ynfx2/X7xBO3zIXar9jEXqOSkrEHQ
-   9RAIL+/IpSdvxkn94CP+XroaJe7dZWtibW670bEfTugilFq4mWSyv6XHR
-   A==;
-X-CSE-ConnectionGUID: l1v1xOCGRT69T5Eo/JwZxA==
-X-CSE-MsgGUID: wf7H9QcpTVi4EJY7dbWjOw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11542"; a="59447611"
-X-IronPort-AV: E=Sophos;i="6.18,237,1751266800"; 
-   d="scan'208";a="59447611"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2025 00:43:38 -0700
-X-CSE-ConnectionGUID: MDqRiLCcRImrFS4/8bEl2A==
-X-CSE-MsgGUID: I62CBDfrR0KfoqwB1KiLEg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,237,1751266800"; 
-   d="scan'208";a="171073969"
-Received: from agladkov-desk.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.244.92])
-  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2025 00:43:36 -0700
-Received: from kekkonen.localdomain (localhost [IPv6:::1])
-	by kekkonen.fi.intel.com (Postfix) with SMTP id D38CB11FCC7;
-	Thu, 04 Sep 2025 10:43:32 +0300 (EEST)
-Date: Thu, 4 Sep 2025 10:43:32 +0300
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: Danilo Krummrich <dakr@kernel.org>
-Cc: =?iso-8859-1?Q?Jean-Fran=E7ois?= Lessard <jefflessard3@gmail.com>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Daniel Scally <djrscally@gmail.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Javier Carrasco <javier.carrasco.cruz@gmail.com>,
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-acpi@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] device property: Add scoped fwnode child node
- iterators
-Message-ID: <aLlDJETaWTjiSP0L@kekkonen.localdomain>
-References: <20250902190443.3252-1-jefflessard3@gmail.com>
- <20250902190443.3252-2-jefflessard3@gmail.com>
- <aLhAKJBUNQVH1Vmf@kekkonen.localdomain>
- <DCJC7Q9MZEM3.34FU7BXXZ7UGF@kernel.org>
- <aLkqE9c9w9m4Axsp@kekkonen.localdomain>
- <DCJTOIQ4Q0Z5.Q2UE5AQU1X35@kernel.org>
+	s=arc-20240116; t=1756973096; c=relaxed/simple;
+	bh=TCmU3EI9jxWadailuOfA0n0BlrZdIhAt3+9SPCCdzUI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pyXRuNaONgg+Ad8dCW2B5mInOzjkWJFf3+o2VeBCdmEhcWMCRFAVUMXoQbU8eaqCzRwKf9P9E6XCvk+d6w2T/LyxgfGGk3UkKsXN0wLkJ2xe6MUDwkqqFQfeC1QvUWiPcz3LoDD/YCTK5hPvZJ5Z+ajHPC+gK4LCh3SyTTe5w2k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UV3daTcO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5F97C4CEF0;
+	Thu,  4 Sep 2025 08:04:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756973096;
+	bh=TCmU3EI9jxWadailuOfA0n0BlrZdIhAt3+9SPCCdzUI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=UV3daTcO49651LPgFl4Ym3WNTH4bD0/uV+6O/x88njQWChtUAHe53fYktXioWt8Jz
+	 VWfSl7Wi2dWcui2dqa0gZqgEDbiCN7j2ohGhz7hBgK0Jq8J4sBCJ5FVCCkpLVr/1PN
+	 ajDvURY6LBa4sExKeIs6ubkiuSHTUugRQjYXuASV2S6k4Y5xa3gkcLJsnb+AGF1ZBx
+	 +I6vJWF5bf3gDnVoPtkfLULKUYQ90mmBdkrQXprigzcgoPurHt7Z8RCV3o6t6efPm1
+	 KJCw1AQa5tij4jqgJSlnhrIgn2Hc5dWmB5VAQAa+QksX9srPVatgE32mABjL5uu+X+
+	 tQo4C+rXyfJQw==
+Message-ID: <5643d3e6-a034-4e2a-babd-d82fb3d58e9d@kernel.org>
+Date: Thu, 4 Sep 2025 10:04:50 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DCJTOIQ4Q0Z5.Q2UE5AQU1X35@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] dt-bindings: i2c: exynos5: add exynosautov920-hsi2c
+ compatible
+To: Faraz Ata <faraz.ata@samsung.com>, andi.shyti@kernel.org,
+ robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ alim.akhtar@samsung.com
+Cc: linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, rosa.pila@samsung.com,
+ pritam.sutar@samsung.com, dev.tailor@samsung.com
+References: <CGME20250904071941epcas5p1ffa00f3f1cb69f7a10d08c1e96174cf1@epcas5p1.samsung.com>
+ <20250904072844.358759-1-faraz.ata@samsung.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20250904072844.358759-1-faraz.ata@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Danilo,
-
-On Thu, Sep 04, 2025 at 09:03:44AM +0200, Danilo Krummrich wrote:
-> On Thu Sep 4, 2025 at 7:56 AM CEST, Sakari Ailus wrote:
-> > Hi Danilo,
-> >
-> > On Wed, Sep 03, 2025 at 07:22:29PM +0200, Danilo Krummrich wrote:
-> >> (Cc: Javier)
-> >> 
-> >> On Wed Sep 3, 2025 at 3:18 PM CEST, Sakari Ailus wrote:
-> >> > Do we really need the available variant?
-> >> >
-> >> > Please see
-> >> > <URL:https://lore.kernel.org/linux-acpi/Zwj12J5bTNUEnxA0@kekkonen.localdomain/>.
-> >> >
-> >> > I'll post a patch to remove fwnode_get_next_available_child_node(), too.
-> >> 
-> >> Either I'm missing something substantial or the link does indeed not provide an
-> >> obvious justification of why you want to send a patch to remove
-> >> fwnode_get_next_available_child_node().
-> >> 
-> >> Do you mean to say that all fwnode backends always return true for
-> >> device_is_available() and hence the fwnode API should not make this distinction?
-> >> 
-> >> I.e. are you referring to the fact that of_fwnode_get_next_child_node() always
-> >> calls of_get_next_available_child() and swnode has no device_is_available()
-> >> callback and hence is always available? What about ACPI?
-> >
-> > On ACPI there's no such concept on ACPI data nodes so all data nodes are
-> > considered to be available. So effectively the fwnode_*available*() is
-> > always the same as the variant without _available().
+On 04/09/2025 09:28, Faraz Ata wrote:
+> Add "samsung,exynosautov920-hsi2c" dedicated compatible for
+> HSI2C found in ExynosAutov920 SoC.
 > 
-> What about acpi_fwnode_device_is_available()? Is it guaranteed to always
-> evaluate to true?
+> Signed-off-by: Faraz Ata <faraz.ata@samsung.com>
+> ---
 
-acpi_fwnode_device_is_available() is different as it works on ACPI device
-nodes having availability information.
+Where is any user of it? I looked on lore and found nothing.
 
-> 
-> If so, to you plan to remove device_is_available() from struct
-> fwnode_operations and fixup all users of fwnode_get_next_available_child_node()
-> and fwnode_for_each_available_child_node() as well?
-
-The device_is_available() callback needs to stay; it has valid uses
-elsewhere.
-
-Technically it is possible that fwnode_*child_node() functions could return
-device nodes that aren't available, but it is unlikely any caller would
-want to enumerate device nodes this way. Even so, I think it'd be the best
-to add an explicit availability check on ACPI side as well so only
-available nodes would be returned.
-
-The fact that none of the drivers using the two available variants acting
-on child nodes had ACPI ID table suggests that the use of the variants was
-motivated solely to use a function named similarly to the OF version.
-
--- 
-Kind regards,
-
-Sakari Ailus
+Best regards,
+Krzysztof
 
