@@ -1,88 +1,81 @@
-Return-Path: <linux-i2c+bounces-12642-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12643-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3AB33B43F93
-	for <lists+linux-i2c@lfdr.de>; Thu,  4 Sep 2025 16:50:49 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 119C7B43F99
+	for <lists+linux-i2c@lfdr.de>; Thu,  4 Sep 2025 16:51:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ED4B956848E
-	for <lists+linux-i2c@lfdr.de>; Thu,  4 Sep 2025 14:50:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 425447B55DC
+	for <lists+linux-i2c@lfdr.de>; Thu,  4 Sep 2025 14:49:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08CCF308F25;
-	Thu,  4 Sep 2025 14:50:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E0E53002DF;
+	Thu,  4 Sep 2025 14:51:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="nWBjnhvg"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Ad3dPfKy"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F3551F03DE
-	for <linux-i2c@vger.kernel.org>; Thu,  4 Sep 2025 14:50:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2ECE2147EF
+	for <linux-i2c@vger.kernel.org>; Thu,  4 Sep 2025 14:51:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756997419; cv=none; b=hfcnVHOG1lai3hwyhiKRW30KZvyDnD0qprfBlYRYBbzCUfpBrX3yMgud7i13ZLcVQB1c5iEnXWqWWOTpP9SxUqkHfLMxNkE4E3YBULzmkzGQjv1nhWlUUPP/76uhd3Wuve6qfKS/jy0jx49MaqRv6Mw0+wrMEx3xn3pew0EO5xI=
+	t=1756997466; cv=none; b=Kvw9nAeSl2PRN6VWrYsGnldfaGabrlSYQ0h9VDFUCuVSMPIc3UUeBfTx/gwi3Zd076A5WSyuX7TraJjB6BLQ5M79EyucTg6387lLi+CWs2jR85VHL+uZG0E98WIPOYBsRf6SvAtJwRGiLd8XCZIX7KFYf4Z2gLo/i/xyr/JvGaE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756997419; c=relaxed/simple;
-	bh=alMbirdT3CCc6D7G4e583oLfyh6D9HJKmtifjlFhTOk=;
+	s=arc-20240116; t=1756997466; c=relaxed/simple;
+	bh=mFi8f12a1bnt/zRkKSTt0ZafY90Bf2dQ+K7+kVMIlZU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Og3p+PjaMfhKuUlCeRN3mu2U6L0+C5uobC8sAWN8ZcT6xtdEnhbePT9E2YOGOKVvyZhgsp7XlglDubVFH/mrsRB4Iqdna17X0WB7wh+M+3kKSVvn7+w9ZED89UJOr2NgL34X9BkkK21UPRXc8bDmOtmjoilUIIXh0V9Ozf4I8gQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=nWBjnhvg; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5849XBsD014013
-	for <linux-i2c@vger.kernel.org>; Thu, 4 Sep 2025 14:50:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	vEN3DVQPWnQ3YmNmi0dGVFvSE5AeHGCdQkQ8yWp6IEM=; b=nWBjnhvgBAlcyJEd
-	8K6sQ67Jt1vV0mUBXuWNZB+AydZGmLwO7+mQn/QTdhJEmnNJuR8YBYCSvkHnhBuZ
-	iDiuP60TvAkucuIN4zMJ/SqcgtBVS6qUZxVuk+s3d+YxKKcCov7Hrfjxu3V7F9US
-	fBSVit+0cQzXoXHUBmuCosYJUyzi74tuK7wTIY2xFGsJ+CZIbq+4AsTrze4WRt7L
-	xI8xGXNZbUYTX9Jzq64Mi8g7k84jVxUVyXdDiM1V9qzyr+Sawp1oiu9dANZ3CrrH
-	xYMS9RrjcGUCXSS8jvCMAQ0/dt/CyIlh2VbcpsH2J+xFhdBMUi8NG5GW/fPHTXhc
-	oRx9VA==
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com [209.85.160.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48uscv807w-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-i2c@vger.kernel.org>; Thu, 04 Sep 2025 14:50:15 +0000 (GMT)
-Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-4b3387c826eso4211411cf.2
-        for <linux-i2c@vger.kernel.org>; Thu, 04 Sep 2025 07:50:15 -0700 (PDT)
+	 In-Reply-To:Content-Type; b=r0B7pW4W96BZ894Xq/6BKkkWIqarsCmdTK+jqPCU21spTip0r4PMYJjAxMBzC2dgppCG8xUNVBPZzXgegvXMSGfUcuKz48OwgLYoJ0/Bhj349OW4/+C2sYdK4GXoRkuls5qJNL1BJHgi90ZhHxAnb9zNtNI19dot44lU7k4AYaI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Ad3dPfKy; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-45cb5492350so7778475e9.1
+        for <linux-i2c@vger.kernel.org>; Thu, 04 Sep 2025 07:51:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1756997463; x=1757602263; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Mm3xj885WkKRhuZyxbu5LG7P0HRA9OEYlHlAJLxX4fs=;
+        b=Ad3dPfKyqQ41DNzpxCzTtiMqbCSl25zh8K3r9RAroQg2QQrjzCjBN4N9qJx3v/wYai
+         /ruy2l9highlRFVPcgahoFE5JESgCnn8zuycfQLoOeJs351O+TOF5b51MK5Dxto0S5Am
+         4zV6h0dxkqnYcKVl9S2u0eoT76fkV1OYkmSeLJVDeUR8PaYApYbfh4hmS3sNHbS+x7EL
+         6yFjJHsw+Rm7q3awBX3LjAFWhk2OXlDWRDKpha4K51QzO8x1Bi0VN1TG0/VQV4WbeRCm
+         zZuxWnhcY2f1J4rPnK1eJis6Su1WNG7vO8Rf4uUrX/d5xNDBvsNW20anGC9kXtdsn5xx
+         NYFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756997407; x=1757602207;
-        h=content-transfer-encoding:in-reply-to:from:content-language
+        d=1e100.net; s=20230601; t=1756997463; x=1757602263;
+        h=content-transfer-encoding:in-reply-to:content-language:from
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vEN3DVQPWnQ3YmNmi0dGVFvSE5AeHGCdQkQ8yWp6IEM=;
-        b=vSM4Gz1JAJBMuGO5DN9JqtXVIIVReu3vmquaZWFTLfHOsKT+DiQl8gH1dGsZfYgFjm
-         74iInzLGXa+KjQp7Zv7f3k+MU9PQJhbejMoa0Q/qEoGKDCgVoP1PlB/OPuescSLl42+I
-         Q115Fw2fqkv8q8BKLfyh7u2Fa4Kno8f8Bv31tdBWO0aISSfB1D1cdrbMte2KOiLkSe6H
-         OzargUhZnCfcVKMAPQiD2Tj2dmoHKJ4mJb7t7qQiGhEHaSFmkTgQLD0D8HlcH6hMSw4k
-         vYnm/l0c4Osc4Vpe4K3zAmTo/nJIdMJjZc/eacchqX0a3uFlOU9Iv1Uz9BcIA5l5ZdZL
-         1OZw==
-X-Forwarded-Encrypted: i=1; AJvYcCWD1ZvTI+HWd8X45BBZ4rT5t7h9aDhFqE8bCySTBlq5x5Rsm+g3wsIqcVnVP3ghwaMQVvlMUOeiYpM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQ4qg7H9Ue0hCEEOAvDbEZOqB0GLAw0h62EbXOIhv0HJ52EJZ0
-	z+RMiOr6w7k2Z4WG5spqJf74iNlwL7BZ+XEn+SF1L4fqnRkxdu4wG93OWhhmgEbVdVenQUDWdJ4
-	TtMIGuMYoXkyYmCIzXOIaAlPfM86yRJqR/pzU/FiVIgXs4UTPBZFQ5nlVaWPwCoE=
-X-Gm-Gg: ASbGncsReJvSAiA7yFfO7bVhadqCgAR0LkJEQGL4k2Gvb06TcmAnPPiAPIQ305U939R
-	motnVdZQ5Px6oZ66h7kuJkZUuboCOcWxp+E8uasicZTFiSw7lDXCz/eEcmu0pxyCDr4o7RTqv/h
-	fqt2Bxg/y4++TqvYMF4zcWtjoXV0KGeUC3tKhDyk2vBxFzx4MQe63HvJguwX70DdJ5MEfQPf+Fk
-	WHg9cy+bM186v2adztrgaSz07b+8kAuhAky0XLzeBFHahuystYbrthduW4syzt67d3jtcXOwNFM
-	/cCVuUHmfVbwaHyRHl1/xy9ZpgrMTHEPgkPSRSj7DHa0lJbSC5OMh9pj3KEBOkkyk/zeywoEDMl
-	njo2rAWNMzhBaf9Qy9JLmXw==
-X-Received: by 2002:a05:622a:314:b0:4b2:9c61:4925 with SMTP id d75a77b69052e-4b313f6f611mr170378141cf.11.1756997406640;
-        Thu, 04 Sep 2025 07:50:06 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IH6TDGPjmSsCamHewOM2+IFNcFZnByXwpc+6NwBdpVl4gFaguUqKR2wdfL7cEbd1fWAsWZrWw==
-X-Received: by 2002:a05:622a:314:b0:4b2:9c61:4925 with SMTP id d75a77b69052e-4b313f6f611mr170377791cf.11.1756997405872;
-        Thu, 04 Sep 2025 07:50:05 -0700 (PDT)
-Received: from [192.168.149.223] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b046cd5c274sm375616366b.98.2025.09.04.07.50.03
+        bh=Mm3xj885WkKRhuZyxbu5LG7P0HRA9OEYlHlAJLxX4fs=;
+        b=NQh23a4ovP+kThhMGfUYyBN3mfiK/oZi3otFINbeYwWa80cXc+xw5i/YgwJvz0N+xu
+         66deMf3tVkE/9i3/hUyvawELmTll/8qpTPtKiPMdR3XuJl/vwtZiaovN4+O2FdoAf/5r
+         PCqz+xlVuhrnBIcj4lHThDYV+UsuSyUv7KALanM4mmjHHzIATi0KYiK6/NZdpTEcNaEs
+         zb52ki+fmBPGV+Uf8Ho91gH2U28NL6NzYQxDEFXWqQyz0xQJtYjSG4DtRU+6ArXQPpnE
+         qLwEXfMR6TTantnjIK+LABnLUTPVG9a5k39o7EX0wm3Iq8+kLaOE9W8Fzfn15gBtZ2AA
+         lBQQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWzmKxlnEzf6mmbErSBgMvZlhXq0LiCKw2PFDkseEPJpQ5+e8VidAM+VMV7hfw+thRVa9pNrRUVR98=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyVYzdhqVNaKPod+azY8fWI3Z7xXFfKumFgkt9K5Sa1UGQGJtex
+	R2fcZzKK0ZK4afaQzz1f6zorQZQkpDf4ZvLXHVscHfalWG01ChBgQdVKlkkgKeca21w=
+X-Gm-Gg: ASbGncsuGWZkXrLbNHM1l1r3pq0gXqSCsrhcxG2Sg2je2p6xp3CzGNEoNh4v1UowmwX
+	C6tsHyLKpC+1Za4X35L2O3VOO4muTQOvGm6oTMDtZ85i/unx0jZsfP93D8Plo/PWMNKsaqLsNir
+	blN7QNy19ZufZQZWqS0UKZhEUYChweA4yuQV3d3NHG3LhE4KlsWsx3eFLFiSjyklY7+8YT3kcjW
+	oMiozGCg4kWzf3eG84JtN1tCeN/ZWr3b14ZN1ENOkTLoJsmA2S+qADNUPjPdYS/glmy56P96jZI
+	nL/x41toL+LvB5GokGb8Pdtz+AfYIt8dTfkDGmmF/O9kAR3kNyioQ40668DQYkP5RJXJIvpRdfz
+	Fqp0Gw1j/iw1DgqnxgC1C57Fhw1yoWNnHNSU04eqsykppj2Ydr7d6945iojZ/CNb2ifbITEKTI3
+	84I0/8TotmpnQQZFs53u8ryRUsqQS92A==
+X-Google-Smtp-Source: AGHT+IGkh7sZxoYPIJSgoKIuQWnB6gAGim5zG62ByEZJnBJdkEVQMXHIGjBKP7FG3mVW3hDjXTcWGg==
+X-Received: by 2002:a05:600c:a04:b0:45b:8504:3002 with SMTP id 5b1f17b1804b1-45b8554eb18mr173687245e9.10.1756997462953;
+        Thu, 04 Sep 2025 07:51:02 -0700 (PDT)
+Received: from [192.168.0.19] (188-141-3-146.dynamic.upc.ie. [188.141.3.146])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45dcfc414f4sm22307435e9.0.2025.09.04.07.51.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Sep 2025 07:50:05 -0700 (PDT)
-Message-ID: <6501e5b4-9939-4dac-991c-7a2033cfb506@oss.qualcomm.com>
-Date: Thu, 4 Sep 2025 16:50:02 +0200
+        Thu, 04 Sep 2025 07:51:02 -0700 (PDT)
+Message-ID: <6607f82a-e0d0-421c-a87a-fe67442c1c80@linaro.org>
+Date: Thu, 4 Sep 2025 15:50:59 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -90,101 +83,50 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/5] i2c: qcom-cci: Add OPP table support and enforce
- FAST_PLUS requirements
+Subject: Re: [PATCH 2/5] dt-bindings: i2c: qcom-cci: Allow operating-points-v2
 To: Konrad Dybcio <konradybcio@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Loic Poulain <loic.poulain@oss.qualcomm.com>,
-        Robert Foss
- <rfoss@kernel.org>, Andi Shyti <andi.shyti@kernel.org>
+ Bjorn Andersson <andersson@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Loic Poulain <loic.poulain@oss.qualcomm.com>,
+ Robert Foss <rfoss@kernel.org>, Andi Shyti <andi.shyti@kernel.org>
 Cc: Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
+ linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+ Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 References: <20250904-topic-cci_updates-v1-0-d38559692703@oss.qualcomm.com>
- <20250904-topic-cci_updates-v1-4-d38559692703@oss.qualcomm.com>
+ <20250904-topic-cci_updates-v1-2-d38559692703@oss.qualcomm.com>
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20250904-topic-cci_updates-v1-4-d38559692703@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20250904-topic-cci_updates-v1-2-d38559692703@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODMwMDAzMSBTYWx0ZWRfX4J8aGVlvFoZj
- ++I7KBN8CrNn3fDJbv5U3koVMa0ybgP6NGhQPljSCFRU5k8P/qomATBSOtZJrhAVGGZG4Bw4te0
- 2vKpa73JhKOy6kHMdN0ZYi8SVS3R+BnXeGtMQg1MyVEyVfAkerRCI9dnLV8NsoAS5Y6yDXmFUPi
- nSp3WO8gfrJdBxKrH6G2KcVlS9o4I9DlYiGVNZFmj++diSPdQUOTnPW0fNzgOpVbClcNKFrjltO
- /kyNK9mFFnF7Pf+pOe/plR4IjTHrNwizaadctqmKkbtbNgjy7WGxmvpEXwMZmyV5fCy7Rlxw65T
- GJmh95d9y3ncPAIz8i7QApkMeZdwwnvOpu31ibZy44X2njDm8wdmT9u7XQxwMJb8C37SGTCpaLW
- IKB/FyQR
-X-Authority-Analysis: v=2.4 cv=A8xsP7WG c=1 sm=1 tr=0 ts=68b9a727 cx=c_pps
- a=JbAStetqSzwMeJznSMzCyw==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=EUspDBNiAAAA:8 a=scFqH3SFngUqC7XewS8A:9
- a=QEXdDO2ut3YA:10 a=uxP6HrT_eTzRwkO_Te1X:22
-X-Proofpoint-ORIG-GUID: 8wRJ_ZVd4Vt8B5FKulUMGdV7eK2yrklR
-X-Proofpoint-GUID: 8wRJ_ZVd4Vt8B5FKulUMGdV7eK2yrklR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-09-04_05,2025-09-04_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 spamscore=0 impostorscore=0 bulkscore=0 clxscore=1015
- suspectscore=0 malwarescore=0 priorityscore=1501 phishscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2508300031
 
-On 9/4/25 4:31 PM, Konrad Dybcio wrote:
+On 04/09/2025 15:31, Konrad Dybcio wrote:
 > From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 > 
-> The CCI clock has voltage requirements, which need to be described
-> through an OPP table.
+> An OPP table is necessary to express combined voltage and frequency
+> requirements for the CCI hw block.
 > 
-> The 1 MHz FAST_PLUS mode requires the CCI core clock runs at 37,5 MHz
-> (which is a value common across all SoCs), since it's not possible to
-> reach the required timings with the default 19.2 MHz rate.
-> 
-> Address both issues by introducing an OPP table and using it to vote
-> for the faster rate.
+> Allow passing one, without requiring its presence.
 > 
 > Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 > ---
->  drivers/i2c/busses/i2c-qcom-cci.c | 33 +++++++++++++++++++++++++++++++++
->  1 file changed, 33 insertions(+)
+>   Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml | 2 ++
+>   1 file changed, 2 insertions(+)
 > 
-> diff --git a/drivers/i2c/busses/i2c-qcom-cci.c b/drivers/i2c/busses/i2c-qcom-cci.c
-> index 74fedfdec3ae4e034ec4d946179e963c783b5923..d6192e2a5e3bc4d908cba594d1910a41f3a41e9c 100644
-> --- a/drivers/i2c/busses/i2c-qcom-cci.c
-> +++ b/drivers/i2c/busses/i2c-qcom-cci.c
-> @@ -10,6 +10,7 @@
->  #include <linux/module.h>
->  #include <linux/of.h>
->  #include <linux/platform_device.h>
-> +#include <linux/pm_opp.h>
->  #include <linux/pm_runtime.h>
->  
->  #define CCI_HW_VERSION				0x0
-> @@ -121,6 +122,7 @@ struct cci_data {
->  	struct i2c_adapter_quirks quirks;
->  	u16 queue_size[NUM_QUEUES];
->  	struct hw_params params[3];
-> +	bool fast_mode_plus_supported;
->  };
->  
->  struct cci {
-> @@ -466,9 +468,22 @@ static const struct i2c_algorithm cci_algo = {
->  	.functionality = cci_func,
->  };
->  
-> +static unsigned long cci_desired_clk_rate(struct cci *cci)
-> +{
-> +	if (cci->data->fast_mode_plus_supported)
-> +		return 37500000ULL;
+> diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
+> index 73144473b9b24e574bfc6bd7d8908f2f3895e087..1bb9a70661a944c1bdc01d336475952221450dba 100644
+> --- a/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
+> +++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
+> @@ -54,6 +54,8 @@ properties:
+>     interrupts:
+>       maxItems: 1
+>   
+> +  operating-points-v2: true
 > +
-> +	return 19200000ULL;
-
-Well this is embarrassing
-
-ULL -> UL
-
-Konrad
+>     power-domains:
+>       maxItems: 1
+>   
+> 
+Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 
