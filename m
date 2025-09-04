@@ -1,49 +1,49 @@
-Return-Path: <linux-i2c+bounces-12633-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12635-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60BDBB43EDC
-	for <lists+linux-i2c@lfdr.de>; Thu,  4 Sep 2025 16:33:58 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F172B43EE3
+	for <lists+linux-i2c@lfdr.de>; Thu,  4 Sep 2025 16:34:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2724B163C8D
-	for <lists+linux-i2c@lfdr.de>; Thu,  4 Sep 2025 14:33:58 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3F1B24E5C05
+	for <lists+linux-i2c@lfdr.de>; Thu,  4 Sep 2025 14:34:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32D4230CD9A;
-	Thu,  4 Sep 2025 14:31:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF994314B97;
+	Thu,  4 Sep 2025 14:31:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hJkMUK+9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jXbp4Xix"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF2B530CD87;
-	Thu,  4 Sep 2025 14:31:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 857EA31352F;
+	Thu,  4 Sep 2025 14:31:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756996292; cv=none; b=KAILQF7CVqZZm3+mf9SbEeaTC5qSzw8QUDoISPEutYmNoiAzpMcL3Y8tMORofCDk95VzTwz+UkkweOLSLs+dLfScz19CwWeP/1GhEAMLpoDEdio+F4jmdTN6viT43AFttCJKo1XnSJ+b01tiEQBm46op00uU3AWa1bjD51f07nU=
+	t=1756996296; cv=none; b=s6H397hupkicHUD+xYHQIfPAAY7ESXcym1YNTnyLv7TuLIYSd5+dWQg5hX0r3EfBX8vl0UBn1mVAVAa9D5iRrJ0ZNHPW4ig5JA/LcLiHgQZyieKE/sNZP17BU0LONqQp6YcMmTZjaXtY+68T6QKvs5jsGbjeyIg8yH4D28m8VIY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756996292; c=relaxed/simple;
-	bh=iksx8PUQfiuwmD8CdUdvoNW6nuYCyEtsAWPXEBR+z8I=;
+	s=arc-20240116; t=1756996296; c=relaxed/simple;
+	bh=ISIb2YxiCXzHSDHlaC2Prm4WI22Bzfj830rd9uxgk5M=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=J4Kd5GxTZmwuGkpi9a9hPEAW1PAwjOcZFhKugmVI/wcWadESf0AJveEXqiH1LVFCBWrJS5lZEFlP3wPRoqPPiI4sHo0sVmoQS7iVAJOIvApyuGxemR1aVrWGkb9qrV/hd60tuvyQoZiJNIVmnJ3AngNG5dwvzncVM02yF72DtLE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hJkMUK+9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6A46C4CEF1;
-	Thu,  4 Sep 2025 14:31:28 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=OstAgQUdGhvAQNT089kbZa/R8zM1jkxGn6KXLwlpf16wBxlvXdV4WI4CscgwoMxKMGWb3x1g7AxNZbLTxXeJ7itxa6fffJ/FkTi9VbxHwtcVToeSpxkc+TfUTTe7TGvb/T90kwJXAk3zVgtIPkc+3MaMkx8/HFyGiyISoCZLDEg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jXbp4Xix; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD378C4CEF0;
+	Thu,  4 Sep 2025 14:31:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756996292;
-	bh=iksx8PUQfiuwmD8CdUdvoNW6nuYCyEtsAWPXEBR+z8I=;
+	s=k20201202; t=1756996296;
+	bh=ISIb2YxiCXzHSDHlaC2Prm4WI22Bzfj830rd9uxgk5M=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=hJkMUK+9GMJnl0bSlsXtF+rt7p26ZrWXxRJltCYUBGfmovUm06w88q5XLNBpCihH8
-	 o/KnOQqpcT0vLdPl/Frmp3FEN013iQ+VMsUiwmWl9pQY6TOoMSja62PfkByzqnFFnN
-	 PKqMuJ9T8cthii85/A8mPX0JQ5+tGIYwWOki39lrkD46dtefZGdUOABpvcFMrwaz+O
-	 DaBM2zRgraQVRdyynIzY/f1gFDI3ZPUoyvjIBrXTb65ow4M8IC1CraFsdvxFc6tN01
-	 vXwdv3PulCFKe2lk/Z6Cs0a820YoDag7VlPsTYrn3Z+Aaer0+0fvQd1uYTkX1/MA2N
-	 mucytd3LwjZRA==
+	b=jXbp4XixaqUdEcHeYRV6P/gLicEScPkDcNtLmQrPJBZ72LsGha8hs3PSIsRibdgSJ
+	 5SaczWW7C9ctOvAg25N7VCy7VeOyeJj478C8R43C1zJm9ur0P4MZZ2mN0+TTELfzAj
+	 PWYTnKVKYbtU9+bq8dZqiAO1VWzpp19h9Fz2XVi2fkr2no10ZqKgqwroF+lIZpkiH1
+	 zJr0LOodB7MJmDXxzoikw0162gNV0yTBh6JbKQdMQb3X6/3U+x890T5IDwS8j53RMI
+	 Nzu7bKVkRm9xyr2aY3tUIVXToNNOGCUSjQFhXQpbkmFTYHetpJ18zrfSL+0AKg0T5A
+	 QYHzUNNvgESOg==
 From: Konrad Dybcio <konradybcio@kernel.org>
-Date: Thu, 04 Sep 2025 16:31:20 +0200
-Subject: [PATCH 1/5] arm64: dts: qcom: sc8280xp: Fix CCI3 interrupt
+Date: Thu, 04 Sep 2025 16:31:21 +0200
+Subject: [PATCH 2/5] dt-bindings: i2c: qcom-cci: Allow operating-points-v2
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -52,7 +52,7 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250904-topic-cci_updates-v1-1-d38559692703@oss.qualcomm.com>
+Message-Id: <20250904-topic-cci_updates-v1-2-d38559692703@oss.qualcomm.com>
 References: <20250904-topic-cci_updates-v1-0-d38559692703@oss.qualcomm.com>
 In-Reply-To: <20250904-topic-cci_updates-v1-0-d38559692703@oss.qualcomm.com>
 To: Bjorn Andersson <andersson@kernel.org>, 
@@ -67,40 +67,39 @@ Cc: Marijn Suijten <marijn.suijten@somainline.org>,
  linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org, 
  Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1756996284; l=1021;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1756996284; l=837;
  i=konrad.dybcio@oss.qualcomm.com; s=20230215; h=from:subject:message-id;
- bh=n6oILZSJgSYg8kPWee79+SwLLdbG2n116e+YMKfn3+g=;
- b=ePjBofrdxpcTUHpZ01kswVQ7eurRMb8hHvDzjkCHQFfN0exoZlq2ybDXX3wtLMIhJKZ5uXjmB
- luSR+UCFSlJBO5snutg5G2pMWoyT2qsPPFxcBQ/iagqJZ1G6X/zQR+0
+ bh=H2KC20VDboBzuOfuUjQ10i65xbtF9likBztKG+8DrYs=;
+ b=RgdO/lnfLGoZ2UruWKA/spa9WBpxdoK0cYZzJGFkaDL8M9rDRD91rqXI/X4LLvYOBSKAuxmHG
+ 3ShuY0rcZR5Ds/BW5igoGilsqIeQOutIzXBG5cHvdzlU9EdyaxmT6xI
 X-Developer-Key: i=konrad.dybcio@oss.qualcomm.com; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 
 From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 
-This was evidently wrong, as exemplified by the core failing to reset
-at probe (which would be completed by the IRQ firing).
+An OPP table is necessary to express combined voltage and frequency
+requirements for the CCI hw block.
 
-Fix it.
+Allow passing one, without requiring its presence.
 
-Fixes: 7cfa2e758bf4 ("arm64: dts: qcom: sc8280xp: camss: Add CCI definitions")
 Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 ---
- arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-index 225233a37a4fd9f3d65735915c0338a993a322d1..18b5cb441f955f7a91204376e05536b203f3e28b 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-@@ -4292,7 +4292,7 @@ cci3: cci@ac4d000 {
- 			compatible = "qcom,sc8280xp-cci", "qcom,msm8996-cci";
- 			reg = <0 0x0ac4d000 0 0x1000>;
+diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
+index 73144473b9b24e574bfc6bd7d8908f2f3895e087..1bb9a70661a944c1bdc01d336475952221450dba 100644
+--- a/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
++++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
+@@ -54,6 +54,8 @@ properties:
+   interrupts:
+     maxItems: 1
  
--			interrupts = <GIC_SPI 650 IRQ_TYPE_EDGE_RISING>;
-+			interrupts = <GIC_SPI 771 IRQ_TYPE_EDGE_RISING>;
++  operating-points-v2: true
++
+   power-domains:
+     maxItems: 1
  
- 			clocks = <&camcc CAMCC_CAMNOC_AXI_CLK>,
- 				 <&camcc CAMCC_SLOW_AHB_CLK_SRC>,
 
 -- 
 2.51.0
