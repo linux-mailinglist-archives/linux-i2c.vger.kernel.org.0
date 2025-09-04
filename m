@@ -1,110 +1,139 @@
-Return-Path: <linux-i2c+bounces-12615-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12616-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D8EC1B437C6
-	for <lists+linux-i2c@lfdr.de>; Thu,  4 Sep 2025 12:00:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A8C27B4380E
+	for <lists+linux-i2c@lfdr.de>; Thu,  4 Sep 2025 12:11:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 153B33ACAA5
-	for <lists+linux-i2c@lfdr.de>; Thu,  4 Sep 2025 10:00:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1194A486328
+	for <lists+linux-i2c@lfdr.de>; Thu,  4 Sep 2025 10:10:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B628A2F90CC;
-	Thu,  4 Sep 2025 10:00:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 424E72FCC16;
+	Thu,  4 Sep 2025 10:09:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="G82B4FQQ"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="TKdel1x1"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F38FB2F616C;
-	Thu,  4 Sep 2025 09:59:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2F982FC877
+	for <linux-i2c@vger.kernel.org>; Thu,  4 Sep 2025 10:09:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756980001; cv=none; b=tqna3UIhVXQQT/PRzPAIRQebtJGjnxADbC+yQCNErve/oi7CW46MophPq19kAKRw6EiJCK4+6g7kqEqGAO+df+utd8F4H7DKaPyvPVbeiy9Vxy9fxvQ9X87JZuxKRNkvoXGP1oNk1X7rrwEYnuaTS6uvAa7OebJ8cT7kTmzig9w=
+	t=1756980576; cv=none; b=eKhnLkT22dQUWSjjbspCsaSEQrrbq8c/Qeee59uwFdULeLtOBZtnFMr4kXh4m2jf7verRHhZAcwFqcF+6ckltSLyL/JaoaOzAgYd+VcRaBgoERNjlTJksMHOm+nyoDk9iyWIGSaKTQRDWApJe828QlLPUNxnv71xqcthQE9GLfI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756980001; c=relaxed/simple;
-	bh=mi+9YZfREfl8bO0SgMMuARpKTRd8R4HxdIYJ2cUBdG8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ovgd/Ma81G28hUtwYIxV9lCbCWTVcKoY1/R5iZrOEMCr0qYW+yAqXZ9pcX6vnmptthfCfFVwyNb0NvmMpDw/JODRuEqxbOb4mjS52cptYHJwBdQhr5wUQI+8oMZ87W3vg/Ie4Y7kS5dzuwopzlFYuQAmAJ2U7IvImbTqRVXEow8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=G82B4FQQ; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756980001; x=1788516001;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mi+9YZfREfl8bO0SgMMuARpKTRd8R4HxdIYJ2cUBdG8=;
-  b=G82B4FQQTCvgovhR5S7GI6SYMjndTr668S73HQxhaAlls68uaOh3ROKS
-   eru0B1Wpc22LY/mqxCzyJfE6C7BUiMqLHXD+PukFb5lSVXs8nProtiL6v
-   B7/jxv0uw+Y5KUk0nPbCO1Osx8+jagjGWOzRCPgLngELfznssAO7v1nIm
-   q3iAFlPWM8ZHYlfZKMPe3fWVc8dhAC8ttOI6+slog6GIrvUXwjCQv5lTI
-   0fapKG47xujWVonEiichJNXrIA3HhRdZ2SOx8y/sQQKWPM5RV5/IElBsW
-   XrHGTN9YJWeMfZ9usTbTRoDDUV/tzxR9d/j3st8CIJ9gkIVeKrX6CYEaR
-   g==;
-X-CSE-ConnectionGUID: N7FBLycMQ3GxeDUekRxjOg==
-X-CSE-MsgGUID: rcqe6eU6TICt5c9Ud8tk4w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="59230285"
-X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="59230285"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2025 03:00:00 -0700
-X-CSE-ConnectionGUID: RM5IJwZ1Ql+otGJ4bKKJjQ==
-X-CSE-MsgGUID: uuZKpFSCQJO8Q9v49ca8fw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,238,1751266800"; 
-   d="scan'208";a="202696450"
-Received: from smile.fi.intel.com ([10.237.72.52])
-  by orviesa002.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2025 02:59:56 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1uu6ky-0000000BEeS-4A78;
-	Thu, 04 Sep 2025 12:59:52 +0300
-Date: Thu, 4 Sep 2025 12:59:52 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: =?iso-8859-1?Q?Jean-Fran=E7ois?= Lessard <jefflessard3@gmail.com>,
-	Daniel Scally <djrscally@gmail.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org
-Subject: Re: [PATCH v4 0/2] device property: Add scoped fwnode child node
- iterators
-Message-ID: <aLljGIcjAjQhC2uS@smile.fi.intel.com>
-References: <20250902190443.3252-1-jefflessard3@gmail.com>
- <aLgY1z-MvQbDBx2_@smile.fi.intel.com>
- <aLlgpUlHp7t8P4dQ@shikoro>
+	s=arc-20240116; t=1756980576; c=relaxed/simple;
+	bh=Z98sXNyNxBFjNP43LUOxz/hSd9EZq/hjQKXFmNZmhcE=;
+	h=From:To:Cc:In-Reply-To:Subject:Date:Message-ID:MIME-Version:
+	 Content-Type:References; b=cWP0LK+L2bpSoG54HdjZqAcJeHzgu2W46AXnuf626alnV+7W1cGaZcqWGIW5423ik2s38W/dquqmk6tqKGMhIiUvy4KVd4iqGlOSiN/4f87jMHl3gq+d50Y67vAvGSHGbCKVZql/+EKi/+9ZTE+eFnLeQVz2daQiESvuMXxLdH4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=TKdel1x1; arc=none smtp.client-ip=203.254.224.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
+	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20250904100931epoutp02de6560a837961b39a15a60d140428603~iDIU8OCfE2817628176epoutp02C
+	for <linux-i2c@vger.kernel.org>; Thu,  4 Sep 2025 10:09:31 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20250904100931epoutp02de6560a837961b39a15a60d140428603~iDIU8OCfE2817628176epoutp02C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1756980571;
+	bh=NNCOKsku3jGQZIW1rjPQqO4AY7LjBwEb5L1n61T6Nys=;
+	h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+	b=TKdel1x1yl5ccpn7yLkSFUxqKvDArpwhaUI0O5tQwYpnuKS1xqd5QncgYmKJ64WJi
+	 fd5+Ug/oGuxgcFxw1Xa6r1Ap3GowITAOZ8gdvfAk7dALvWetvR3lJCzbz3+p0NcMeF
+	 Y5STV2TB+FF6iwW+rhXN8bUAx2PZhFv0P4le8NtE=
+Received: from epsnrtp03.localdomain (unknown [182.195.42.155]) by
+	epcas5p2.samsung.com (KnoxPortal) with ESMTPS id
+	20250904100930epcas5p2c91a6734fdedf9d2765cc8288c91234c~iDIUcNZEF0566805668epcas5p2W;
+	Thu,  4 Sep 2025 10:09:30 +0000 (GMT)
+Received: from epcas5p4.samsung.com (unknown [182.195.38.90]) by
+	epsnrtp03.localdomain (Postfix) with ESMTP id 4cHZvs3Nxbz3hhT3; Thu,  4 Sep
+	2025 10:09:29 +0000 (GMT)
+Received: from epsmtip1.samsung.com (unknown [182.195.34.30]) by
+	epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
+	20250904100928epcas5p3b02d748847905e62c897bc576b7ef948~iDISWDEAh0328503285epcas5p3x;
+	Thu,  4 Sep 2025 10:09:28 +0000 (GMT)
+Received: from INBRO002756 (unknown [107.122.3.168]) by epsmtip1.samsung.com
+	(KnoxPortal) with ESMTPA id
+	20250904100926epsmtip1f3e09235bbd83a12c3fd0c487201e546~iDIQuo_AL1187611876epsmtip1M;
+	Thu,  4 Sep 2025 10:09:26 +0000 (GMT)
+From: "Alim Akhtar" <alim.akhtar@samsung.com>
+To: "'Faraz Ata'" <faraz.ata@samsung.com>, <andi.shyti@kernel.org>,
+	<robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>
+Cc: <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-samsung-soc@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <rosa.pila@samsung.com>,
+	<pritam.sutar@samsung.com>, <dev.tailor@samsung.com>
+In-Reply-To: <20250904072844.358759-1-faraz.ata@samsung.com>
+Subject: RE: [PATCH] dt-bindings: i2c: exynos5: add exynosautov920-hsi2c
+ compatible
+Date: Thu, 4 Sep 2025 15:39:25 +0530
+Message-ID: <435b01dc1d83$ff8bde30$fea39a90$@samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aLlgpUlHp7t8P4dQ@shikoro>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQMyl6jZ32DHOO134xOI05SqoiCOxQG1dU1GscgrbFA=
+Content-Language: en-us
+X-CMS-MailID: 20250904100928epcas5p3b02d748847905e62c897bc576b7ef948
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+cpgsPolicy: CPGSC10-542,Y
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20250904071941epcas5p1ffa00f3f1cb69f7a10d08c1e96174cf1
+References: <CGME20250904071941epcas5p1ffa00f3f1cb69f7a10d08c1e96174cf1@epcas5p1.samsung.com>
+	<20250904072844.358759-1-faraz.ata@samsung.com>
 
-On Thu, Sep 04, 2025 at 11:49:25AM +0200, Wolfram Sang wrote:
-> 
-> > It might be good to have an immutable branch for me from i2c core.
-> > Wolfram, can you provide a such if no objections?
-> 
-> Sure thing, I can do that. But there is still discussion on patch 1, so
-> I will wait for an outcome there.
+Hi Faraz,
 
-But it seems that the discussion can be implemented in a followup?
-I think we are not in hurry anyway, so let see if it settles down soon.
-
--- 
-With Best Regards,
-Andy Shevchenko
+> -----Original Message-----
+> From: Faraz Ata <faraz.ata=40samsung.com>
+> Sent: Thursday, September 4, 2025 12:59 PM
+> To: andi.shyti=40kernel.org; robh=40kernel.org; krzk+dt=40kernel.org;
+> conor+dt=40kernel.org; alim.akhtar=40samsung.com
+> Cc: linux-i2c=40vger.kernel.org; devicetree=40vger.kernel.org; linux-arm-
+> kernel=40lists.infradead.org; linux-samsung-soc=40vger.kernel.org; linux-
+> kernel=40vger.kernel.org; rosa.pila=40samsung.com;
+> pritam.sutar=40samsung.com; dev.tailor=40samsung.com;
+> faraz.ata=40samsung.com
+> Subject: =5BPATCH=5D dt-bindings: i2c: exynos5: add exynosautov920-hsi2c
+> compatible
+>=20
+> Add =22samsung,exynosautov920-hsi2c=22 dedicated compatible for HSI2C fou=
+nd
+> in ExynosAutov920 SoC.
+>=20
+This is not complete; any new compatible should be complemented with driver=
+ changes
+(User of the compatible) followed by dts change.
+Always send a complete set, also mentioning how the patch was tested.
+Best is to get patches reviewed internally before sending to community.
+=20
+> Signed-off-by: Faraz Ata <faraz.ata=40samsung.com>
+> ---
+>  Documentation/devicetree/bindings/i2c/i2c-exynos5.yaml =7C 1 +
+>  1 file changed, 1 insertion(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/i2c/i2c-exynos5.yaml
+> b/Documentation/devicetree/bindings/i2c/i2c-exynos5.yaml
+> index 7ae8c7b1d006..207b95e392e5 100644
+> --- a/Documentation/devicetree/bindings/i2c/i2c-exynos5.yaml
+> +++ b/Documentation/devicetree/bindings/i2c/i2c-exynos5.yaml
+> =40=40 -38,6 +38,7 =40=40 properties:
+>                - google,gs101-hsi2c
+>                - samsung,exynos2200-hsi2c
+>                - samsung,exynos850-hsi2c
+> +              - samsung,exynosautov920-hsi2c
+>            - const: samsung,exynosautov9-hsi2c
+>        - const: samsung,exynos5-hsi2c    =23 Exynos5250 and Exynos5420
+>          deprecated: true
+> --
+> 2.34.1
 
 
 
