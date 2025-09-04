@@ -1,81 +1,82 @@
-Return-Path: <linux-i2c+bounces-12627-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12629-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CDE28B43E0C
-	for <lists+linux-i2c@lfdr.de>; Thu,  4 Sep 2025 16:07:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4BB25B43E18
+	for <lists+linux-i2c@lfdr.de>; Thu,  4 Sep 2025 16:07:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5BEFC188BF78
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EFAB117EEEF
 	for <lists+linux-i2c@lfdr.de>; Thu,  4 Sep 2025 14:07:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22542306D26;
-	Thu,  4 Sep 2025 14:07:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9787E3081C2;
+	Thu,  4 Sep 2025 14:07:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RxQvHPqh"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FVEvPs9w"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60994163;
-	Thu,  4 Sep 2025 14:07:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60FC5307481;
+	Thu,  4 Sep 2025 14:07:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756994836; cv=none; b=BAMAaFn8O3XZB8TRksjluyrLU1TykylBlLfGTGxgi/JZKpx22g0h0A+U0XR7IHsdMFprx7i0k1GhOz/Orz7dZQjEHS75rZ//06wuWI9cOdNeJLRj3yhV8r4Dt8mfV7EPYOp6tku9PL+Zm3LELm/Gg+Ik8o0xh0x2a8mP4KxiFFs=
+	t=1756994839; cv=none; b=bm1/ZbajYH1KM/O16HpgFB90onohSNrYyNbPfU7sjbO44Ed90V3DkZmX6xj2KRb9VWPx4a+nrhceeELK7Be1NfxiTiUOhnkqBLA2mUQuq8Vt/cUaJkoSwaMJkwA52j4qlg9Zks8C90lW6UiFVRdM3AQvJVK3MIO0Eq43R15c0+M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756994836; c=relaxed/simple;
-	bh=ly5NeSE539nxeXkPhgKBaDj4r7GvtHEHx5sOROseuOI=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=PHCSh+INEJmny63Pvnbafsq9ENngCtQpabpg51j/ob91IfOTouiekX6NRMCKKdbmswg87zkzgynZ5xIQVhXyHLWdLGuj8DOZZoz1EjEirbx+Pp/LgwpwZPI8H6iGDNES78DJLwauXhU7WeVBmHz7IsaastgRvcSkqvk4MiRHMy8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RxQvHPqh; arc=none smtp.client-ip=209.85.222.180
+	s=arc-20240116; t=1756994839; c=relaxed/simple;
+	bh=FWfkf2K/As/HY295WWG/h7wnSFwEcmpa3ryJTLAMao0=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=AOWI2fX8stJd+iwU4tY33MFZ6BPir/W/grQbIMKYetPHW9cP3THHYFeAUdwFl4N0wqPOKaTgIpfRS9N+AOOhyXOt+hekwDL9iregTlQj04xIQ2/ClILeOKuhqACk3z5OtuqalLxMgIRLX0tTosF+14MUmNZNxoV3PZ/4tumxs0o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FVEvPs9w; arc=none smtp.client-ip=209.85.160.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f180.google.com with SMTP id af79cd13be357-7f74b42ec59so72341585a.2;
-        Thu, 04 Sep 2025 07:07:15 -0700 (PDT)
+Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-4b3d3f6360cso12084191cf.0;
+        Thu, 04 Sep 2025 07:07:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756994834; x=1757599634; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=eihtZU8OHYKgtMximmIrUFJ856exD8VD53vOuodUiTU=;
-        b=RxQvHPqhaUWfVgs2fdW7u9hdu5II8asXVgiIRylLJM6dvzxNSXfsTe1cvKmOxC4uYU
-         IkDZWEP0p+i9rcCGfezhN1/ab/MwbnKiLnomvPmGS1r1j+aMi0Pt8SDTupKzCVmthlCG
-         arAjcegwBMjVRIYagmbvGSsZIun8kiraDJSX8rI5Bq+0XIHqM8Z/CgcxiaH7Z/dMLE8H
-         kVRAPKngtbrgiNPr9y1WZVqZxqm+ipnIyGDg57pYa3f/uwcYw+7fx0WvADFK8aaUSyz0
-         wf+4SYDGIr4+PUp+y1opU+bukJi1ueeTY4bTtFWciZKYApME0D32IZJ3iHoHwy7pTGi2
-         Ynsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756994834; x=1757599634;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20230601; t=1756994835; x=1757599635; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=eihtZU8OHYKgtMximmIrUFJ856exD8VD53vOuodUiTU=;
-        b=m5rgGBScYV8lB+TXwnRJYHiy/y5+BaMACKPRSpZzsjteWd0Q/gDyVt9JD7SVFKD/yV
-         HUn/S1f0U9XnADb2laIwzI7WP4Bh9Cwy63Z09SijUYSuAzJSfI10deKWkByEguAtM6tD
-         hLcFYoGaLYVwBSn2uV/ctlbf6cv/KF7ywySIYMwWLIOc/2MqgI43jpMfokflcQWSKjjq
-         8AQQQNHtJTWpJiMERXenHU11RRS84CMCKDKYq24pwcImW8tiOO8rR24SLXsBol3zJeRH
-         5uRcKJ0yqlthp8UcOfURjaiZ9goY+PR8po1Fixx7ko/LQthiy0Mj55XeKs4oglIkMKND
-         dB7w==
-X-Forwarded-Encrypted: i=1; AJvYcCUrtBnBs/AjofAQ57hIhI7POM1yjpWLPGKphlkY84Mi7Gq/DV5T46GoImtIxBPAe5UsKjutnXA7SQdv@vger.kernel.org, AJvYcCUuxrx2LXFrFY5LTzH9HGXEjR6AzaN4x1ABmmWCb0kv/nktUDe+yRb2e9RkrE0WSHc4D0z5Sgxvwbr+0O8K@vger.kernel.org, AJvYcCWS4X4zD2JUksCfnTUyDSdupI/cAyM26tfttYTIEwwYLUBr/W52o9pWVQrFthRXMTEegmyVl7T9fM0J@vger.kernel.org, AJvYcCXVFqaxqUCBHH3l+P5dUI31VRCaqzFb2zqLLOnavwqnohbtc6sv2nu5yDa4pZRckqzDw+32gniEU0Cq@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyim9HJUKlBfugFFvoxBFbyXMAHulYIcA6eug3t13mU6P6NjXWK
-	rlSgzNOIEFyhjxo5dZhWPoyFeJZwu8gnSxYgGfQf6ci0cDnlhn+f3Uv5u3uFYAl5
-X-Gm-Gg: ASbGncv0/XEGQbFsPjMFOjKuOz99jgGfX0GUND9s9GwV23Xg5U8ERaZ++3ekksrFQcm
-	9cEFWkn6EOKhGt/jJQJyAWcRYF+BWm7PgWwFJ/PvzE60nyeT5mevL3renNUppZyQ/SV6q9KVzPU
-	YlxHszNeon4v1NLo899JtrmVJeT81S0FmHVOxL88MOtrWtGv9m9/Rvh52o8r+sHfpbctv45gJdP
-	ia2iWGeRP/PpIb4j815+NUCeuA/1SQQc8lcqorD6r9DKhp2HfxvR+7UrYRiwsBIBx2We96dA477
-	vJehWHP7uISXsA2DQRGHf4taWC3qo6TQKCiGAWNDJ81GsYup4SGlGAc3QvKMYw2L/O6QUfDzITy
-	4XiqCC1EEodOphkWqKEdzJDNUiPu0
-X-Google-Smtp-Source: AGHT+IFAmc0wnCtcOEvRgXDrQ6IUkfol6ZeLbzKo/Il17bCwAzz4m4TitxyZWAzjU/KhfhX5q02NmA==
-X-Received: by 2002:a05:620a:394f:b0:806:522a:25ae with SMTP id af79cd13be357-806522a2b71mr1163297885a.36.1756994833844;
-        Thu, 04 Sep 2025 07:07:13 -0700 (PDT)
+        bh=pEWsfe2YY56Y0NYA602LXIe3dsPA7RKn4VfScJVc2bs=;
+        b=FVEvPs9waBgD9fk9PmdNhNdIX5QO6FBvg1PAk/P9+5h23M/6ZVc+0KDZAvRo4ldhWb
+         IxmbW4ljcYdeZW0PDyhHYFKuxZXyeGpgCmyHeGrPQ/I3WDbQygBdziBs5BaMkBeFwiaP
+         5gvQOsRfhahZosnX2NDf/Xkb315f8ajMtAPWIIytIm5ADIMlMNrbf1AOEe4518wPs4hr
+         nRh6puv1BSePZ1d2zAWMujkiXk3HP7yGqNKXS3LAQrgunXwxIHS15zoaJ9Xe5Gx+OjWP
+         8b1pYxVsLjLXWca2mXLZ8KWoGkX20rtDPsLZJlPUutkVRl30mAu6wOCQ4B0wL/ryAIJp
+         0TtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756994835; x=1757599635;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pEWsfe2YY56Y0NYA602LXIe3dsPA7RKn4VfScJVc2bs=;
+        b=pJN9Uh0RouATgIhR4F0/a1r9u+FglQAYhVj9NWTqENFt/6KMSsF2D6XPC+s8jOPSBf
+         +lRILnl3AYB1eILFGzEwGDf4MDhLMk5cOMS7GxjCLtHBjeq8DIfC9EjVjUZDe6YHR8Jt
+         nRerRiV6WbsMeuPNmNu2+t97aKrcZ1JoTfRCQW5QJunleEMUKUlatVDtiv1E/Xm/do0I
+         gbur9RQKoUmckMFuERHB6BYxFm6unkd60MtsQIO5FBE4sHOJEwKDuKsZYnO6CtfCtNU/
+         syhRrf5qVc/mcye8YA/DwECTcMXK+RXhzSdttjw3c+Shx64pO8sww39B5nKrgqpAqZz/
+         gUFA==
+X-Forwarded-Encrypted: i=1; AJvYcCVY0Ca6B+q+nVTlrEkmgUzQxG5tW8X1CbyrNvhoka8uOLc8/jKhymxOJsKd4S5BVvEn9iU8wh2PPF3e@vger.kernel.org, AJvYcCVqkIvSOIiwbZfwVrux9BDqxt5aA230dIvKL66hVOtvA/kqeJq1gW+PIdGAjwHT/t6L4snK4E0ZS4AN@vger.kernel.org, AJvYcCWPWPH+4MoGh/T7OT3xQHlykehYeLGIbXMZYPDsDh4KtOYc6JsD9iJt5Dm3uwhWoeFfwEXmPzXrn1ov1xw2@vger.kernel.org, AJvYcCWy2FltFEl8/LwTq1O2As8zM4OkzFYHKlYkzhS2V2dqivpGYJmTZUl9TN0lNqZC9bclKTIOnoslzLKE@vger.kernel.org
+X-Gm-Message-State: AOJu0YzoymxlsmKkUYE5Ou5dX2qj3lAbjh2kYlDNmYj3uSWnWmaDVbiN
+	zUWeZWS2yg0qs+o8LL7CHZ/QNRq/GnAGi7dUL1x05Rwjl9ADb8n+kFz/roOJ2vcw
+X-Gm-Gg: ASbGncubOVi3rEjpPo2BBbivJksXbrAJS+BdgG+joygSvZtv42s2Xps+dPxhXOq0d8U
+	MDhBqbXqqTDI9P3sS3AzXQ06mDZk6vUw1OLvbsCFPk49t5uG72JEb2w5HRn7eOQKtxW0JUOqPws
+	bhXnHVtuTRY6Z/r6ni6j9Dw3mRR+UZkkiIdJsJOs8kHQrQn/WNzwCoHgQBeEWOpaeVPf5TkdAOe
+	Hfz+4eLt8oPCqIYQYGpoNBaDLOzM6LmVUmeraiS8a+w1UZHlwqheN3s5nqdbKvslYMtkV+Kihnd
+	KSdgeOkxECp3IIclI+nmT5EZUwaY3O6sAPq/dpxfP/AtudjwQUupu/kGQHOdE9IHO60bkA7MPUx
+	FlkcnHrjlukUJLu8eHG2qadqHdi7Gp8Diwq62v+4=
+X-Google-Smtp-Source: AGHT+IFSn3RGIh9Vo9ZpAm8JD24yupRBSRlNS1hxRaXiIPj2Z064y2yu8lRKzq97ApwGEYc9lzPw1A==
+X-Received: by 2002:a05:622a:28d:b0:4b5:e175:eadb with SMTP id d75a77b69052e-4b5e175ee17mr13666051cf.57.1756994834553;
+        Thu, 04 Sep 2025 07:07:14 -0700 (PDT)
 Received: from [127.0.0.1] ([74.249.85.194])
         by smtp.gmail.com with ESMTPSA id af79cd13be357-80bdedfeaedsm212280285a.70.2025.09.04.07.07.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Sep 2025 07:07:13 -0700 (PDT)
+        Thu, 04 Sep 2025 07:07:14 -0700 (PDT)
 From: Denzeel Oliva <wachiturroxd150@gmail.com>
-Subject: [PATCH v3 0/4] Add PERIC0/1 support for Exynos 990 and hsi2c
- compatible
-Date: Thu, 04 Sep 2025 14:07:10 +0000
-Message-Id: <20250904-perics-usi-v3-0-3ea109705cb6@gmail.com>
+Date: Thu, 04 Sep 2025 14:07:11 +0000
+Subject: [PATCH v3 1/4] dt-bindings: clock: exynos990: Add PERIC0 and
+ PERIC1 clock units
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -84,10 +85,9 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAA6duWgC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyjHUUlJIzE
- vPSU3UzU4B8JSMDI1MDC2ND3QKg+uRi3dLiTF1DI0tTYyPDVFPT5CQloIaCotS0zAqwYdGxtbU
- ANmCpbFwAAAA=
-X-Change-ID: 20250831-perics-usi-1295321e55cb
+Message-Id: <20250904-perics-usi-v3-1-3ea109705cb6@gmail.com>
+References: <20250904-perics-usi-v3-0-3ea109705cb6@gmail.com>
+In-Reply-To: <20250904-perics-usi-v3-0-3ea109705cb6@gmail.com>
 To: Krzysztof Kozlowski <krzk@kernel.org>, 
  Sylwester Nawrocki <s.nawrocki@samsung.com>, 
  Chanwoo Choi <cw00.choi@samsung.com>, Alim Akhtar <alim.akhtar@samsung.com>, 
@@ -100,53 +100,256 @@ To: Krzysztof Kozlowski <krzk@kernel.org>,
 Cc: linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org, 
  devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
  linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org, 
- Denzeel Oliva <wachiturroxd150@gmail.com>, 
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+ Denzeel Oliva <wachiturroxd150@gmail.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1756994833; l=1287;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1756994833; l=9680;
  i=wachiturroxd150@gmail.com; s=20250831; h=from:subject:message-id;
- bh=ly5NeSE539nxeXkPhgKBaDj4r7GvtHEHx5sOROseuOI=;
- b=x5fRiKxuNl7/HyAUuv2TiCNfWDovKgGZuKvCrCwKms3j7fN31H08qUfze44YgZlEusYLZ0AnJ
- RgL9/06hOEIBF6BxPXba4/LTG3kFYYYN4WKqsB2MOZ/NMszO+WUFfjB
+ bh=FWfkf2K/As/HY295WWG/h7wnSFwEcmpa3ryJTLAMao0=;
+ b=gE/El9JO4DhQ8WfqRu+Cst8I2FxPHHt0V/SY5EhIK4V6kGjue5i9Q9DVKdEqhHPiUkJTyTjxD
+ h33A/t2LiKtDb1522f3bO4FjSfRr4OONOskoL+a2TrdCmTAEGngPFSf
 X-Developer-Key: i=wachiturroxd150@gmail.com; a=ed25519;
  pk=3fZmF8+BzoNPhZuzL19/BkBXzCDwLBPlLqQYILU0U5k=
 
-Hi,
-
-This patch series enables the PERIC0/1 (Peripheral Connectivity)
-and compatible hsi2c for Exynos990:
-
-- PERIC0/1 feeds HSI2C, SPI and UART
-
-Changes in v2:
-- Remove other unnecessary patches not related to mainline style
-
-Changes in v3:
-- Fix compatible string ordering in bindings (alphabetical)
-- Reorder device tree nodes by address as requested
-
-Denzeel Oliva
+Add clock management unit bindings for PERIC0 and PERIC1 blocks
+which provide clocks for USI, I2C and UART peripherals.
 
 Signed-off-by: Denzeel Oliva <wachiturroxd150@gmail.com>
 ---
-Denzeel Oliva (4):
-      dt-bindings: clock: exynos990: Add PERIC0 and PERIC1 clock units
-      dt-bindings: i2c: exynos5: Add exynos990-hsi2c compatible
-      clk: samsung: exynos990: Add PERIC0 and PERIC1 clock support
-      arm64: dts: exynos990: Enable PERIC0 and PERIC1 clock controllers
+ .../bindings/clock/samsung,exynos990-clock.yaml    |  24 +++
+ include/dt-bindings/clock/samsung,exynos990.h      | 176 +++++++++++++++++++++
+ 2 files changed, 200 insertions(+)
 
- .../bindings/clock/samsung,exynos990-clock.yaml    |   24 +
- .../devicetree/bindings/i2c/i2c-exynos5.yaml       |    1 +
- arch/arm64/boot/dts/exynos/exynos990.dtsi          |   22 +
- drivers/clk/samsung/clk-exynos990.c                | 1152 ++++++++++++++++++++
- include/dt-bindings/clock/samsung,exynos990.h      |  176 +++
- 5 files changed, 1375 insertions(+)
----
-base-commit: 1b15d1010a693feaf99fe3e08271cfc72be0f9f2
-change-id: 20250831-perics-usi-1295321e55cb
+diff --git a/Documentation/devicetree/bindings/clock/samsung,exynos990-clock.yaml b/Documentation/devicetree/bindings/clock/samsung,exynos990-clock.yaml
+index c15cc1752b026231d8d9c3c07bdab201016b6078..5cd2d80b8ed667af2b44e3686aacbe3de31e3e2d 100644
+--- a/Documentation/devicetree/bindings/clock/samsung,exynos990-clock.yaml
++++ b/Documentation/devicetree/bindings/clock/samsung,exynos990-clock.yaml
+@@ -30,6 +30,8 @@ description: |
+ properties:
+   compatible:
+     enum:
++      - samsung,exynos990-cmu-peric1
++      - samsung,exynos990-cmu-peric0
+       - samsung,exynos990-cmu-hsi0
+       - samsung,exynos990-cmu-peris
+       - samsung,exynos990-cmu-top
+@@ -56,6 +58,28 @@ required:
+   - reg
+ 
+ allOf:
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - samsung,exynos990-cmu-peric1
++              - samsung,exynos990-cmu-peric0
++
++    then:
++      properties:
++        clocks:
++          items:
++            - description: External reference clock (26 MHz)
++            - description: Connectivity Peripheral 0/1 bus clock (from CMU_TOP)
++            - description: Connectivity Peripheral 0/1 IP clock (from CMU_TOP)
++
++        clock-names:
++          items:
++            - const: oscclk
++            - const: bus
++            - const: ip
++
+   - if:
+       properties:
+         compatible:
+diff --git a/include/dt-bindings/clock/samsung,exynos990.h b/include/dt-bindings/clock/samsung,exynos990.h
+index c60f15503d5b18b11ca9bdce86466512dc933901..47540307cb52ead9c8f82a99957cdb2f1b0633e8 100644
+--- a/include/dt-bindings/clock/samsung,exynos990.h
++++ b/include/dt-bindings/clock/samsung,exynos990.h
+@@ -238,6 +238,182 @@
+ #define CLK_GOUT_HSI0_XIU_D_HSI0_ACLK			22
+ #define CLK_GOUT_HSI0_LHS_ACEL_D_HSI0_CLK		23
+ 
++/* CMU_PERIC0 */
++#define CLK_MOUT_PERIC0_BUS_USER		1
++#define CLK_MOUT_PERIC0_UART_DBG		2
++#define CLK_MOUT_PERIC0_USI00_USI_USER		3
++#define CLK_MOUT_PERIC0_USI01_USI_USER		4
++#define CLK_MOUT_PERIC0_USI02_USI_USER		5
++#define CLK_MOUT_PERIC0_USI03_USI_USER		6
++#define CLK_MOUT_PERIC0_USI04_USI_USER		7
++#define CLK_MOUT_PERIC0_USI05_USI_USER		8
++#define CLK_MOUT_PERIC0_USI13_USI_USER		9
++#define CLK_MOUT_PERIC0_USI14_USI_USER		10
++#define CLK_MOUT_PERIC0_USI15_USI_USER		11
++#define CLK_MOUT_PERIC0_USI_I2C_USER		12
++#define CLK_DOUT_PERIC0_UART_DBG		13
++#define CLK_DOUT_PERIC0_USI00_USI		14
++#define CLK_DOUT_PERIC0_USI01_USI		15
++#define CLK_DOUT_PERIC0_USI02_USI		16
++#define CLK_DOUT_PERIC0_USI03_USI		17
++#define CLK_DOUT_PERIC0_USI04_USI		18
++#define CLK_DOUT_PERIC0_USI05_USI		19
++#define CLK_DOUT_PERIC0_USI13_USI		20
++#define CLK_DOUT_PERIC0_USI14_USI		21
++#define CLK_DOUT_PERIC0_USI15_USI		22
++#define CLK_DOUT_PERIC0_USI_I2C			23
++#define CLK_GOUT_PERIC0_CMU_PCLK		24
++#define CLK_GOUT_PERIC0_OSCCLK_CLK		25
++#define CLK_GOUT_PERIC0_D_TZPC_PCLK		26
++#define CLK_GOUT_PERIC0_GPIO_PCLK		27
++#define CLK_GOUT_PERIC0_LHM_AXI_P_CLK		28
++#define CLK_GOUT_PERIC0_TOP0_IPCLK_10		29
++#define CLK_GOUT_PERIC0_TOP0_IPCLK_11		30
++#define CLK_GOUT_PERIC0_TOP0_IPCLK_12		31
++#define CLK_GOUT_PERIC0_TOP0_IPCLK_13		32
++#define CLK_GOUT_PERIC0_TOP0_IPCLK_14		33
++#define CLK_GOUT_PERIC0_TOP0_IPCLK_15		34
++#define CLK_GOUT_PERIC0_TOP0_IPCLK_4		35
++#define CLK_GOUT_PERIC0_TOP0_IPCLK_5		36
++#define CLK_GOUT_PERIC0_TOP0_IPCLK_6		37
++#define CLK_GOUT_PERIC0_TOP0_IPCLK_7		38
++#define CLK_GOUT_PERIC0_TOP0_IPCLK_8		39
++#define CLK_GOUT_PERIC0_TOP0_IPCLK_9		40
++#define CLK_GOUT_PERIC0_TOP0_PCLK_10		41
++#define CLK_GOUT_PERIC0_TOP0_PCLK_11		42
++#define CLK_GOUT_PERIC0_TOP0_PCLK_12		43
++#define CLK_GOUT_PERIC0_TOP0_PCLK_13		44
++#define CLK_GOUT_PERIC0_TOP0_PCLK_14		45
++#define CLK_GOUT_PERIC0_TOP0_PCLK_15		46
++#define CLK_GOUT_PERIC0_TOP0_PCLK_4		47
++#define CLK_GOUT_PERIC0_TOP0_PCLK_5		48
++#define CLK_GOUT_PERIC0_TOP0_PCLK_6		49
++#define CLK_GOUT_PERIC0_TOP0_PCLK_7		50
++#define CLK_GOUT_PERIC0_TOP0_PCLK_8		51
++#define CLK_GOUT_PERIC0_TOP0_PCLK_9		52
++#define CLK_GOUT_PERIC0_TOP1_IPCLK_0		53
++#define CLK_GOUT_PERIC0_TOP1_IPCLK_3		54
++#define CLK_GOUT_PERIC0_TOP1_IPCLK_4		55
++#define CLK_GOUT_PERIC0_TOP1_IPCLK_5		56
++#define CLK_GOUT_PERIC0_TOP1_IPCLK_6		57
++#define CLK_GOUT_PERIC0_TOP1_IPCLK_7		58
++#define CLK_GOUT_PERIC0_TOP1_IPCLK_8		59
++#define CLK_GOUT_PERIC0_TOP1_PCLK_0		60
++#define CLK_GOUT_PERIC0_TOP1_PCLK_15		61
++#define CLK_GOUT_PERIC0_TOP1_PCLK_3		62
++#define CLK_GOUT_PERIC0_TOP1_PCLK_4		63
++#define CLK_GOUT_PERIC0_TOP1_PCLK_5		64
++#define CLK_GOUT_PERIC0_TOP1_PCLK_6		65
++#define CLK_GOUT_PERIC0_TOP1_PCLK_7		66
++#define CLK_GOUT_PERIC0_TOP1_PCLK_8		67
++#define CLK_GOUT_PERIC0_BUSP_CLK		68
++#define CLK_GOUT_PERIC0_UART_DBG_CLK		69
++#define CLK_GOUT_PERIC0_USI00_USI_CLK		70
++#define CLK_GOUT_PERIC0_USI01_USI_CLK		71
++#define CLK_GOUT_PERIC0_USI02_USI_CLK		72
++#define CLK_GOUT_PERIC0_USI03_USI_CLK		73
++#define CLK_GOUT_PERIC0_USI04_USI_CLK		74
++#define CLK_GOUT_PERIC0_USI05_USI_CLK		75
++#define CLK_GOUT_PERIC0_USI13_USI_CLK		76
++#define CLK_GOUT_PERIC0_USI14_USI_CLK		77
++#define CLK_GOUT_PERIC0_USI15_USI_CLK		78
++#define CLK_GOUT_PERIC0_USI_I2C_CLK		79
++#define CLK_GOUT_PERIC0_SYSREG_PCLK		80
++
++/* CMU_PERIC1 */
++#define CLK_MOUT_PERIC1_BUS_USER		1
++#define CLK_MOUT_PERIC1_UART_BT_USER		2
++#define CLK_MOUT_PERIC1_USI06_USI_USER		3
++#define CLK_MOUT_PERIC1_USI07_USI_USER		4
++#define CLK_MOUT_PERIC1_USI08_USI_USER		5
++#define CLK_MOUT_PERIC1_USI09_USI_USER		6
++#define CLK_MOUT_PERIC1_USI10_USI_USER		7
++#define CLK_MOUT_PERIC1_USI11_USI_USER		8
++#define CLK_MOUT_PERIC1_USI12_USI_USER		9
++#define CLK_MOUT_PERIC1_USI18_USI_USER		10
++#define CLK_MOUT_PERIC1_USI16_USI_USER		11
++#define CLK_MOUT_PERIC1_USI17_USI_USER		12
++#define CLK_MOUT_PERIC1_USI_I2C_USER            13
++#define CLK_DOUT_PERIC1_UART_BT			14
++#define CLK_DOUT_PERIC1_USI06_USI		15
++#define CLK_DOUT_PERIC1_USI07_USI		16
++#define CLK_DOUT_PERIC1_USI08_USI		17
++#define CLK_DOUT_PERIC1_USI18_USI		18
++#define CLK_DOUT_PERIC1_USI12_USI		19
++#define CLK_DOUT_PERIC1_USI09_USI		20
++#define CLK_DOUT_PERIC1_USI10_USI		21
++#define CLK_DOUT_PERIC1_USI11_USI		22
++#define CLK_DOUT_PERIC1_USI16_USI		23
++#define CLK_DOUT_PERIC1_USI17_USI		24
++#define CLK_DOUT_PERIC1_USI_I2C			25
++#define CLK_GOUT_PERIC1_CMU_PCLK		26
++#define CLK_GOUT_PERIC1_UART_BT_CLK		27
++#define CLK_GOUT_PERIC1_USI12_USI_CLK		28
++#define CLK_GOUT_PERIC1_USI18_USI_CLK		29
++#define CLK_GOUT_PERIC1_D_TZPC_PCLK		30
++#define CLK_GOUT_PERIC1_GPIO_PCLK		31
++#define CLK_GOUT_PERIC1_LHM_AXI_P_CSIS_CLK	32
++#define CLK_GOUT_PERIC1_LHM_AXI_P_CLK		33
++#define CLK_GOUT_PERIC1_TOP0_IPCLK_10		34
++#define CLK_GOUT_PERIC1_TOP0_IPCLK_11		35
++#define CLK_GOUT_PERIC1_TOP0_IPCLK_12		36
++#define CLK_GOUT_PERIC1_TOP0_IPCLK_13		37
++#define CLK_GOUT_PERIC1_TOP0_IPCLK_14		38
++#define CLK_GOUT_PERIC1_TOP0_IPCLK_15		39
++#define CLK_GOUT_PERIC1_TOP0_IPCLK_4		40
++#define CLK_GOUT_PERIC1_TOP0_PCLK_10		41
++#define CLK_GOUT_PERIC1_TOP0_PCLK_11		42
++#define CLK_GOUT_PERIC1_TOP0_PCLK_12		43
++#define CLK_GOUT_PERIC1_TOP0_PCLK_13		44
++#define CLK_GOUT_PERIC1_TOP0_PCLK_14		45
++#define CLK_GOUT_PERIC1_TOP0_PCLK_15		46
++#define CLK_GOUT_PERIC1_TOP0_PCLK_4		47
++#define CLK_GOUT_PERIC1_TOP1_IPCLK_0		48
++#define CLK_GOUT_PERIC1_TOP1_IPCLK_1		49
++#define CLK_GOUT_PERIC1_TOP1_IPCLK_10		50
++#define CLK_GOUT_PERIC1_TOP1_IPCLK_12		51
++#define CLK_GOUT_PERIC1_TOP1_IPCLK_13		52
++#define CLK_GOUT_PERIC1_TOP1_IPCLK_14		53
++#define CLK_GOUT_PERIC1_TOP1_IPCLK_15		54
++#define CLK_GOUT_PERIC1_TOP1_IPCLK_2		55
++#define CLK_GOUT_PERIC1_TOP1_IPCLK_3		56
++#define CLK_GOUT_PERIC1_TOP1_IPCLK_4		57
++#define CLK_GOUT_PERIC1_TOP1_IPCLK_5		58
++#define CLK_GOUT_PERIC1_TOP1_IPCLK_6		59
++#define CLK_GOUT_PERIC1_TOP1_IPCLK_7		60
++#define CLK_GOUT_PERIC1_TOP1_IPCLK_9		61
++#define CLK_GOUT_PERIC1_TOP1_PCLK_0		62
++#define CLK_GOUT_PERIC1_TOP1_PCLK_1		63
++#define CLK_GOUT_PERIC1_TOP1_PCLK_10		64
++#define CLK_GOUT_PERIC1_TOP1_PCLK_12		65
++#define CLK_GOUT_PERIC1_TOP1_PCLK_13		66
++#define CLK_GOUT_PERIC1_TOP1_PCLK_14		67
++#define CLK_GOUT_PERIC1_TOP1_PCLK_15		68
++#define CLK_GOUT_PERIC1_TOP1_PCLK_2		69
++#define CLK_GOUT_PERIC1_TOP1_PCLK_3		70
++#define CLK_GOUT_PERIC1_TOP1_PCLK_4		71
++#define CLK_GOUT_PERIC1_TOP1_PCLK_5		72
++#define CLK_GOUT_PERIC1_TOP1_PCLK_6		73
++#define CLK_GOUT_PERIC1_TOP1_PCLK_7		74
++#define CLK_GOUT_PERIC1_TOP1_PCLK_9		75
++#define CLK_GOUT_PERIC1_BUSP_CLK		76
++#define CLK_GOUT_PERIC1_OSCCLK_CLK		77
++#define CLK_GOUT_PERIC1_USI06_USI_CLK		78
++#define CLK_GOUT_PERIC1_USI07_USI_CLK		79
++#define CLK_GOUT_PERIC1_USI08_USI_CLK		80
++#define CLK_GOUT_PERIC1_USI09_USI_CLK		81
++#define CLK_GOUT_PERIC1_USI10_USI_CLK		82
++#define CLK_GOUT_PERIC1_USI11_USI_CLK		83
++#define CLK_GOUT_PERIC1_USI16_USI_CLK		84
++#define CLK_GOUT_PERIC1_USI17_USI_CLK		85
++#define CLK_GOUT_PERIC1_USI_I2C_CLK		86
++#define CLK_GOUT_PERIC1_SYSREG_PCLK		87
++#define CLK_GOUT_PERIC1_USI16_I3C_PCLK		88
++#define CLK_GOUT_PERIC1_USI16_I3C_SCLK		89
++#define CLK_GOUT_PERIC1_USI17_I3C_PCLK		90
++#define CLK_GOUT_PERIC1_USI17_I3C_SCLK		91
++#define CLK_GOUT_PERIC1_XIU_P_ACLK		92
++
+ /* CMU_PERIS */
+ #define CLK_MOUT_PERIS_BUS_USER			1
+ #define CLK_MOUT_PERIS_CLK_PERIS_GIC		2
 
-Best regards,
 -- 
-Denzeel Oliva <wachiturroxd150@gmail.com>
+2.50.1
 
 
