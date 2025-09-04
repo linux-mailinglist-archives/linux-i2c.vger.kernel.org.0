@@ -1,81 +1,81 @@
-Return-Path: <linux-i2c+bounces-12645-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12646-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8CFDDB43FB9
-	for <lists+linux-i2c@lfdr.de>; Thu,  4 Sep 2025 16:55:23 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61464B43FBE
+	for <lists+linux-i2c@lfdr.de>; Thu,  4 Sep 2025 16:56:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 484E97C104B
-	for <lists+linux-i2c@lfdr.de>; Thu,  4 Sep 2025 14:55:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E52007B8B1A
+	for <lists+linux-i2c@lfdr.de>; Thu,  4 Sep 2025 14:55:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 744D93043DC;
-	Thu,  4 Sep 2025 14:55:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D4DA304BDA;
+	Thu,  4 Sep 2025 14:56:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lxf00XAy"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="KEjJOXZh"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E4493002DF
-	for <linux-i2c@vger.kernel.org>; Thu,  4 Sep 2025 14:55:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B72C1302CC8
+	for <linux-i2c@vger.kernel.org>; Thu,  4 Sep 2025 14:56:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756997718; cv=none; b=H340bJugtbJ5E9OiPQ/OH/OLed+nR2gtfVUQP4fRiYihoGrbOxN6nh08EZUFf77LoJKHa34hId3FoIw+Sfyibn1nFXuHiSxpi2I5supBv5BqfgNS3oObyxuZ6bx7RB8YiF6jd9GO4aLYMlRNpIaqD7Tdamz7fdfM5eLA6AP6agI=
+	t=1756997801; cv=none; b=TkrKhhayLD5JSc+VBsbQYZcQGhExBovmpFO82yNFts3081EsIjl4FztUquklokiH6S08jcY0RHfryRX7BEP/HVun10h9UiiasiyJ1d9ESc2nfkDRVHPviTgTEkmmaSgy2VFde12ngZnNwVN1B0cYg4e9wINfeyAuHbDZwawOo68=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756997718; c=relaxed/simple;
-	bh=Vu50VlHWhfu3eDefeWuGH5QtkTImEmYPu7LJliPOI3U=;
+	s=arc-20240116; t=1756997801; c=relaxed/simple;
+	bh=ZgJ9kzqD0PMG1LADlO6mUBMdemIt/OfOhX0BVt61tn0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ktjzE0ZKNxw2pv99nJb9gjfh02acFLqn8hmfkLdx89sfcRg6be/795/2PQJwcPtUR9XOiNSX5Z59AwV3/RsqlrsII8ESvLXOCKaeNmR0XIZ+01U+4WgGf+C7NfF0dJxv1yq025I/l6xodATwqHMi4daplHuGNQuL5LocVly3WCc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=lxf00XAy; arc=none smtp.client-ip=209.85.128.43
+	 In-Reply-To:Content-Type; b=uY+Bun1/gbQKEuP1cQeuYffA6j6JqyAMkNDWVEXUspD8a/qr5Y9I1mLOkQNmMSOm5su1t8YQTm+g/56h3Mu6JciJ5Mv2SvKMlionV4le17thq8YAIYWsk8AwNFvJWEOA/90Jj52wcqmv8zWG6ZVMqmgxDrq6+SGMFk9DUuK++po=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=KEjJOXZh; arc=none smtp.client-ip=209.85.128.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-45b79ec2fbeso8353175e9.3
-        for <linux-i2c@vger.kernel.org>; Thu, 04 Sep 2025 07:55:15 -0700 (PDT)
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-45cb5e5e71eso7190195e9.2
+        for <linux-i2c@vger.kernel.org>; Thu, 04 Sep 2025 07:56:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1756997714; x=1757602514; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1756997798; x=1757602598; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:content-language:from
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=OlzbqxHWks8OMO9kY1WhKs2DQhBZN9bk1DhejlkzldE=;
-        b=lxf00XAydxGfWNl8D/4mSxyB8n64OsVedzdwNgjBDsNO8Rr/3ZFKdY17p1PGoZPnVC
-         XdErfDpi/c/FXzIn2B1MfjBytn7rupAyj3idtanPlxnzOYqeCpOoSL9rfAnwdQZ6+AyQ
-         y7Qc/dDeKT2Q6oMJf1bHXJ2P6X+5pcw29TLGtFziN++A/IhlpP2R/LxkoeTO9qczknTI
-         1HG6T2nn7NDY5Rxl9LerMHxdoldKIwlonPpuXL4+e3qlnxYeWhjWKTaQLljAyIYF7IeN
-         H2VI8rHDtv8I0cjfb0g50EEJOKkAA9FaLBc1UvsocB1pp+eTwkValJWGSvFMuyJf4jMC
-         lG1g==
+        bh=mAvtMvbpag1P1t5n4MNNRTUhp+vNJydkntuVQmj0g54=;
+        b=KEjJOXZhtJGHKiCVFnIlIfcaaIajagQ0K1BXsGM2b1adrLGdadq/8bkXNdulXEZOoX
+         9YjEnwk2JwYei8kMbu4D8mt4wdZoMV1IbkVziZgJo4rWl4vtp3WidtgQL2NNbBlJLnJu
+         H10Z0PMsuBvUxcJKVYQP5xt9/IxYdH3IxI/fUqnrV61aCjvi/OIRozT8rYhyVG6saVEN
+         XlXUsDyVFManETZ7Q4vxnj0dWGORDoTvQKL9Akfiewnw/yG+HTQTEQms4XmPzIRqdodR
+         /wBnJkGa4MYhll8V0V1qmcxVUKKob24zalmQG8ixgFTlYCQm80q05xKvQ1LxlXVDAFpU
+         N0EA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756997714; x=1757602514;
+        d=1e100.net; s=20230601; t=1756997798; x=1757602598;
         h=content-transfer-encoding:in-reply-to:content-language:from
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OlzbqxHWks8OMO9kY1WhKs2DQhBZN9bk1DhejlkzldE=;
-        b=GEXnO5gUtvMHapgoXw6teLu6JJ373dOqiGqV7DS1eB/6H1F5MKob1uFMJ1D7MtWYIb
-         vYxj2Lw4LWCQVf6Grlwx3oErmH3ZJGD4TSg1tkyUXY4sl+ig+c0OO/qgHpOMYwPdLcFd
-         Bg59Qmd5iv8mfnnbL6tp2OzYiKDcznnyTEa6yeb9rJKBhDYBiqOgK48ZCp9woK/+zbeT
-         PPCUNICVFUQmtvxmqhuhbW2DCwNkmVc2fNsHNLNFxYWWNUD+nrUZiyP7LlEoXiLRBQgK
-         iih6dHmgybAWnJppa31lu1y0Y1MsPvj9AF07Qr0sNtJx/gWUvHsZX0LP1EOSgiqGcVJ9
-         fhJw==
-X-Forwarded-Encrypted: i=1; AJvYcCU7jpGJr270HW7Qxnw04w8cC4YpQaUj66T2SufmyghaJSf0QS17FWLtQaffKllVpSYY/uA891eo6Aw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzNdBI7GIKSiVVjhaUNN9kpPxiH1673O3ozln/5aEEnTwqWIU4o
-	KMi6tgyko9Y6Z3jpIaI+6XSATC4yWeYsjIQffJHFIMBXf6c1speAHKOlpejbOjov9Uc=
-X-Gm-Gg: ASbGncvQ0CDa6V6j7oToxq+uK4135f0gC7wagwsDPhSc3xr5Q8jFEP9cHuwk7E8q4EF
-	jigjLyits208BWYlhU9MkjHupfBbPwSDuZNUNjxfkHvmIE57CaJgitoGoP8EE562mrKQw5EGAfD
-	8p6TEFYEjvOz6JdIE2k2Lh7HXub3PciYcfYQwdzSsWsdSydzTbEurkdu6aAuz5P7e0mhWLiB765
-	k3waZNeRXPBaKk0QTDTDooVQxTB0SAjtWaBnF9goqyPLvDXeAipPjxlXsRgtBfTYvPMGxmMG7xc
-	W9jqwXnfpoYk6JlKui7/+YCnJwz+DFd+vxTKYtgd5s+iGinYB7XlYRgDvX9fe5vnqfXgLjjaJxc
-	PWg0ev2+a7qTolEgg1jPatv0wMtfPbNzmfacrdfVuuuOTc/RYsRTNxjxjAUitppFZiwAT1ZFQIU
-	7wssj7bO9E87sd6CNER7u8Moxbb6es+g==
-X-Google-Smtp-Source: AGHT+IEixMJCnnfMVOoArT0KYVH589lpzYoFEz4huosDWAyl6UjmSw3YUn36sGdFNnJEB8MI8ecY0g==
-X-Received: by 2002:a05:600c:4513:b0:456:1a69:94fa with SMTP id 5b1f17b1804b1-45b8554eb6amr152243325e9.13.1756997713622;
-        Thu, 04 Sep 2025 07:55:13 -0700 (PDT)
+        bh=mAvtMvbpag1P1t5n4MNNRTUhp+vNJydkntuVQmj0g54=;
+        b=SAaOGp0nk0bjMqxiMYZvzFz/B8J+yAUluxWq6cqTkgtpFHz/zOq/ISZq1+b1lJzKDg
+         VZ1VBlg1tnGW6fW8F4EkuYlj9nVjMIbWALu8v6a2Bp1ebXmVDW/OmH4JDtmgwKvreJhJ
+         0nlTPlk7xByVT0symg0vicUa1Xcxv/ljMG50K0JB87/axWp+E7K2SpfkgrjmYSRpwwUh
+         m0yVV1d6tJAxTyqtxQawzz1mDgw2+dh0yp9u7+hCNL5nOO3R6q11q9ZNLYmN5FiksxA4
+         W0PMSJlyUtnl69WHIwxIqmU6lw174jxnoQJUhQdVpC6tPyjbvzk7HXt2h/ptsu2LFwyC
+         r7bg==
+X-Forwarded-Encrypted: i=1; AJvYcCVcG40MbYy5FvWaFXC43YOrdEeHgC9s+/WRUPe22EMS35SEyBWR+mrVseV0lLNrJQzJ48plvo9DO0w=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzv9Ea+PMdXqtE3cRY3aPP/DAUdQJKq5ydiL1BixzFPqRp4B/SB
+	pJQe98gOUtKapr2FNUtk2NNne0TWYODN+cmpdMQ8d6EL1bMPPgVLGr4wVYcpQv23JCc=
+X-Gm-Gg: ASbGncuSfpKQCuJTX+gSv3GxFUsOgo9BzcwZrfwLhDw4hd8XZPCiPe0qTeMcPx2UCYc
+	LZOzsjYyu3m6r9DSap0sw7lcHgrHaThFCHBMFvzXQVfrF5LRVRHw/2aR6JpqK87Oa7mL05vBW06
+	XT0WOB6vcYIlYMnDWM6WCHng+tJAzQYW+MXCxD6cQduyv0pvAE12DKV73VmhizrOx9nusCijusd
+	sDNWZeX7aewIRK71sHrwQYxZ3MeSqwmUK8uLqe5OtH2WruToBvbphpcCs0R6rB562gt4mbRKQ80
+	V7XgkwjHj8wOsYpic1id5M0uDH5662VtLvVsz0eUX/oQ3WD9SORDWrYXBA4Hhkrbive+cQE8WT+
+	GWXGyuJJw2yL1WpX4fGvgCWxcqDJ+nYtpXXnzoRYFLrr9Fw4IOTerREkyVH5cAIGVaZntkRjSRI
+	gYIT3GUyo7Yn6K1+Jo5W0=
+X-Google-Smtp-Source: AGHT+IHsQzqLy0ydpxrwsgY1FqsNJlfNwe1T2aG2lvDjkIzbpWCbYkB2877CRZ3PURf2lYrkGFbnLw==
+X-Received: by 2002:a05:600c:c4b8:b0:45d:d403:332a with SMTP id 5b1f17b1804b1-45dd53df7e4mr5247225e9.32.1756997797960;
+        Thu, 04 Sep 2025 07:56:37 -0700 (PDT)
 Received: from [192.168.0.19] (188-141-3-146.dynamic.upc.ie. [188.141.3.146])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45b7e898b99sm287110985e9.19.2025.09.04.07.55.10
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45dd3aadbcesm15507775e9.17.2025.09.04.07.56.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Sep 2025 07:55:13 -0700 (PDT)
-Message-ID: <b7d81122-6da4-405e-a370-c621131ff90a@linaro.org>
-Date: Thu, 4 Sep 2025 15:55:09 +0100
+        Thu, 04 Sep 2025 07:56:37 -0700 (PDT)
+Message-ID: <548b3a0d-01c0-46c3-aad0-a820447f86dc@linaro.org>
+Date: Thu, 4 Sep 2025 15:56:33 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -83,8 +83,8 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/5] i2c: qcom-cci: Add OPP table support and enforce
- FAST_PLUS requirements
+Subject: Re: [PATCH 5/5] arm64: dts: qcom: sc8280xp: Add OPP table for CCI
+ hosts
 To: Konrad Dybcio <konradybcio@kernel.org>,
  Bjorn Andersson <andersson@kernel.org>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
@@ -95,122 +95,79 @@ Cc: Marijn Suijten <marijn.suijten@somainline.org>,
  linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
  Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 References: <20250904-topic-cci_updates-v1-0-d38559692703@oss.qualcomm.com>
- <20250904-topic-cci_updates-v1-4-d38559692703@oss.qualcomm.com>
+ <20250904-topic-cci_updates-v1-5-d38559692703@oss.qualcomm.com>
 From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 Content-Language: en-US
-In-Reply-To: <20250904-topic-cci_updates-v1-4-d38559692703@oss.qualcomm.com>
+In-Reply-To: <20250904-topic-cci_updates-v1-5-d38559692703@oss.qualcomm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 04/09/2025 15:31, Konrad Dybcio wrote:
 > From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 > 
-> The CCI clock has voltage requirements, which need to be described
-> through an OPP table.
+> The CCI hosts have both frequency and voltage requirements (which
+> happen to be common across instances on a given SoC, at least so far).
 > 
-> The 1 MHz FAST_PLUS mode requires the CCI core clock runs at 37,5 MHz
-> (which is a value common across all SoCs), since it's not possible to
-> reach the required timings with the default 19.2 MHz rate.
-> 
-> Address both issues by introducing an OPP table and using it to vote
-> for the faster rate.
+> Express them by introducing an OPP table and linking it to the hosts.
 > 
 > Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 > ---
->   drivers/i2c/busses/i2c-qcom-cci.c | 33 +++++++++++++++++++++++++++++++++
->   1 file changed, 33 insertions(+)
+>   arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 14 ++++++++++++++
+>   1 file changed, 14 insertions(+)
 > 
-> diff --git a/drivers/i2c/busses/i2c-qcom-cci.c b/drivers/i2c/busses/i2c-qcom-cci.c
-> index 74fedfdec3ae4e034ec4d946179e963c783b5923..d6192e2a5e3bc4d908cba594d1910a41f3a41e9c 100644
-> --- a/drivers/i2c/busses/i2c-qcom-cci.c
-> +++ b/drivers/i2c/busses/i2c-qcom-cci.c
-> @@ -10,6 +10,7 @@
->   #include <linux/module.h>
->   #include <linux/of.h>
->   #include <linux/platform_device.h>
-> +#include <linux/pm_opp.h>
->   #include <linux/pm_runtime.h>
+> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> index 18b5cb441f955f7a91204376e05536b203f3e28b..c396186317d49f411d7162771a358563329a02a4 100644
+> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> @@ -391,6 +391,15 @@ memory@80000000 {
+>   		reg = <0x0 0x80000000 0x0 0x0>;
+>   	};
 >   
->   #define CCI_HW_VERSION				0x0
-> @@ -121,6 +122,7 @@ struct cci_data {
->   	struct i2c_adapter_quirks quirks;
->   	u16 queue_size[NUM_QUEUES];
->   	struct hw_params params[3];
-> +	bool fast_mode_plus_supported;
-
-that is a very long name for a flag
-
->   };
->   
->   struct cci {
-> @@ -466,9 +468,22 @@ static const struct i2c_algorithm cci_algo = {
->   	.functionality = cci_func,
->   };
->   
-> +static unsigned long cci_desired_clk_rate(struct cci *cci)
-> +{
-> +	if (cci->data->fast_mode_plus_supported)
-> +		return 37500000ULL;
+> +	cci_opp_table: opp-table-cci {
+> +		compatible = "operating-points-v2";
 > +
-> +	return 19200000ULL;
-
-what's 32 bits between friends ?
-
-> +}
+> +		opp-37500000 {
+> +			opp-hz = /bits/ 64 <37500000>;
+> +			required-opps = <&rpmhpd_opp_low_svs>;
+> +		};
+> +	};
 > +
->   static int __maybe_unused cci_suspend_runtime(struct device *dev)
->   {
->   	struct cci *cci = dev_get_drvdata(dev);
-> +	int ret;
+>   	cpu0_opp_table: opp-table-cpu0 {
+>   		compatible = "operating-points-v2";
+>   		opp-shared;
+> @@ -4181,6 +4190,7 @@ cci0: cci@ac4a000 {
+>   				      "cpas_ahb",
+>   				      "cci";
+>   
+> +			operating-points-v2 = <&cci_opp_table>;
+>   			power-domains = <&camcc TITAN_TOP_GDSC>;
+>   
+>   			pinctrl-0 = <&cci0_default>;
+> @@ -4222,6 +4232,7 @@ cci1: cci@ac4b000 {
+>   				      "cpas_ahb",
+>   				      "cci";
+>   
+> +			operating-points-v2 = <&cci_opp_table>;
+>   			power-domains = <&camcc TITAN_TOP_GDSC>;
+>   
+>   			pinctrl-0 = <&cci1_default>;
+> @@ -4262,6 +4273,8 @@ cci2: cci@ac4c000 {
+>   				      "slow_ahb_src",
+>   				      "cpas_ahb",
+>   				      "cci";
 > +
-> +	ret = dev_pm_opp_set_rate(dev, 0);
-> +	if (ret)
-> +		return ret;
+> +			operating-points-v2 = <&cci_opp_table>;
+>   			power-domains = <&camcc TITAN_TOP_GDSC>;
 >   
->   	clk_bulk_disable_unprepare(cci->nclocks, cci->clocks);
+>   			pinctrl-0 = <&cci2_default>;
+> @@ -4303,6 +4316,7 @@ cci3: cci@ac4d000 {
+>   				      "cpas_ahb",
+>   				      "cci";
 >   
-> @@ -484,6 +499,10 @@ static int __maybe_unused cci_resume_runtime(struct device *dev)
->   	if (ret)
->   		return ret;
+> +			operating-points-v2 = <&cci_opp_table>;
+>   			power-domains = <&camcc TITAN_TOP_GDSC>;
 >   
-> +	ret = dev_pm_opp_set_rate(dev, cci_desired_clk_rate(cci));
-> +	if (ret)
-> +		return ret;
-> +
->   	cci_init(cci);
->   
->   	return 0;
-> @@ -588,6 +607,19 @@ static int cci_probe(struct platform_device *pdev)
->   	if (ret < 0)
->   		return ret;
->   
-> +	ret = devm_pm_opp_set_clkname(dev, "cci");
-> +	if (ret)
-> +		return ret;
-> +
-> +	/* OPP table is optional */
-> +	ret = devm_pm_opp_of_add_table(dev);
-> +	if (ret && ret != -ENODEV)
-> +		return dev_err_probe(dev, ret, "invalid OPP table in device tree\n");
-> +
-> +	ret = dev_pm_opp_set_rate(dev, cci_desired_clk_rate(cci));
-> +	if (ret)
-> +		return ret;
-> +
->   	/* Interrupt */
->   
->   	ret = platform_get_irq(pdev, 0);
-> @@ -775,6 +807,7 @@ static const struct cci_data cci_v2_data = {
->   		.trdhld = 3,
->   		.tsp = 3
->   	},
-> +	.fast_mode_plus_supported = true,
->   };
->   
->   static const struct of_device_id cci_dt_match[] = {
+>   			pinctrl-0 = <&cci3_default>;
 > 
-
-LGTM
-
 Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 
