@@ -1,79 +1,79 @@
-Return-Path: <linux-i2c+bounces-12603-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12604-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2AB77B42F2F
-	for <lists+linux-i2c@lfdr.de>; Thu,  4 Sep 2025 03:53:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2809B42F36
+	for <lists+linux-i2c@lfdr.de>; Thu,  4 Sep 2025 03:53:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4FF461BC79C7
-	for <lists+linux-i2c@lfdr.de>; Thu,  4 Sep 2025 01:53:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F58E7C262A
+	for <lists+linux-i2c@lfdr.de>; Thu,  4 Sep 2025 01:53:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3A0623D294;
-	Thu,  4 Sep 2025 01:51:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C18C31EDA0B;
+	Thu,  4 Sep 2025 01:51:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eD/pvF6K"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JbWlcnWC"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF7EC2367BF;
-	Thu,  4 Sep 2025 01:51:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4B9E1EA7CB;
+	Thu,  4 Sep 2025 01:51:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756950689; cv=none; b=SBxZVo1maCqIgYUa0RgTKGei8YqqnnL1mRfmdSKrqfMe2y65n5T/EwRtLYKvClCl/nBQCKvFCcNzv2iHL2B+sDT72TfKqGSBKAKOqFG+n/5XXro/yliZ04rJ66aYGA7JPZvtO+v90g0vst+pFaO6Gdhryt5VJC5npj62MJe4HIY=
+	t=1756950693; cv=none; b=JHT7JHN/9URQFzvsh3xA7OrBbwRoHhdVpg3LU0479xSJNiGjm+eKfweCSNsDOBh6VxiHErWrf7MOkPkHUz0XhLlvhp8GuaqZSXRLNAS4KmyD9hvTo1eweFKsEinVi6NO5RdrW9hWlfuyFteYE5feY7cSuWipp8KUxOHiTC/tzGc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756950689; c=relaxed/simple;
-	bh=BcdbO04+6XlX06T3x3N5ak9Umf/0mTwibjGYRx4+cZI=;
+	s=arc-20240116; t=1756950693; c=relaxed/simple;
+	bh=490XaeJOSXOPOipAwlaja6D50/cNV+4mssGhLZMnMJo=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=OA+CwU9fpFpzQwLeFQKhYQb0mrSQTuZ33gtIu9e5FxYV2KqgiHrGVzELFcgL2CShCJAkyiJVMm6aXT0Nc9EZckijhxcwm9qEA8e3USOV397UoWDelWrhPAPoEU4qI8hNauQ7CjaKS0kOh7gw9DBHsuQRJ4dHcc6vkx4hXor8aXc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eD/pvF6K; arc=none smtp.client-ip=209.85.215.170
+	 MIME-Version; b=K4rsBw4NQqTlELfyS+lZapSIEm/MVPw7r0zBdFHo50Gbr5dPJvRkpghvQO98ybHNkKjRAj0vIw0CXdj9jn/bI4xrtJUJjY6Rp9kQSTp1xTD/O/tDzu+DSoYc7iGNkmxpq76VEpRBDo88TE1VEMy3lYq4DtII2++AHMha9Rw5Q5c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JbWlcnWC; arc=none smtp.client-ip=209.85.216.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-b49cf21320aso543496a12.1;
-        Wed, 03 Sep 2025 18:51:26 -0700 (PDT)
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-3297a168470so429498a91.3;
+        Wed, 03 Sep 2025 18:51:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756950686; x=1757555486; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1756950691; x=1757555491; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bKwsSmqa4n2KxosM4t23OoTGRweStl/nH9+WGWRW/Hk=;
-        b=eD/pvF6KPIDRk3g/Xt3DJP/WirMYjbKW77LBWhx2cUiSTB3Um4IJYEW8zo8Z9i7fb7
-         J+6uK1DOSHfmbBTyR4w6UIPNKsKgr3prdC34neKF2Cy6xm5fp6jZD9BD2qZfAw4bAyrA
-         BaaSLHeGxuUXnW7B1O48LMCsofnQsmFhaQp4xNR6NMN3V4Tdg5rs3xYQNjtcjP7gzPM3
-         sW5RMsMNjDb65MSWjr7Xgl0p/Lfd0Y7jaBUcTMwNKzp43LOKj5848juwgo/6QjgHGTzM
-         FJdmkC/jehovk792teYFIU8O9f+fc9s4VDr8HJGoXu3upzCmJcTkD/0BiEepuQ8qnS9a
-         e1bw==
+        bh=GgDT8yas3IcACX8dpF1Z+jTHl5S85Xg0OLjTZ81TkYA=;
+        b=JbWlcnWCLZGG5b2wC9blY3/pvPEPhQF6OlBjd781i2EUnieNLpU5T08vu/buyc1nwb
+         y2vcuY7A1szPjxKDu/zPJpO9mhwXM2E5jmFUcNHp9Eh9Fgc+uIkwkJlJskXUc6Y6PmDH
+         O48u1U9F7j8WJccvvm6x0R/2oh29O5qkReqHvJ/ZtbNPL9ovl+WXmb/jfOOCgxTB5Zo0
+         hXWX1EkhGUMxp9ZyUW/+mfpr7ZErZ6avWOFCh1I3sRVLvhaNXnxE8CHeAGN0wMI2fV7w
+         G8/6/yfQvdS12ka8tCE/SZ71LbRwzf/XRGScVKkq9cLTxTn1YgDdOSRg/H25HSDRjTw5
+         NQkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756950686; x=1757555486;
+        d=1e100.net; s=20230601; t=1756950691; x=1757555491;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=bKwsSmqa4n2KxosM4t23OoTGRweStl/nH9+WGWRW/Hk=;
-        b=X8xhO0bHHjNambhFwfzU82HfM7jHhh3ISjh99NyZnUaSzHdnrQxsgEGkAXFkV35tXP
-         9++lh8m09Q5HbinBqfclindc079ikZxsmgkxULlE+PQ1mTDfl4LtwDitHRzhpPH53FCw
-         d5q9gvIib514JjAtkxl3KaODc1o1hW+OTqVR8QYffeSR+CfmSLX9suJreNrLCTk112Ch
-         dFy+fQ3AxFfuEFICvhJVlHttwqEImQMfrXc9+7IxhfoQTFmNyHDOCUF2t1p/h4ESuaYe
-         OTjWiDm+1ILrRg7fIpWkwE2PRG/ZL4ncBccbi/I1RAIhCCa35iaTyFaAyP34In+/iyBY
-         Rc/g==
-X-Forwarded-Encrypted: i=1; AJvYcCVDszBDTzNrqtMVhau3j6GX5BIlLJcScfNa0YDEiY8/xaqeCwDepVyf1nT8ILeHvCT7krT+3pr5ikVON5YZAuM=@vger.kernel.org, AJvYcCVGA4YJZdSUq6T+witULF1ZVSY2lo1M23wdXjmt3X50Mp230u52NoyM4SGuV0WqsVWw/LdesQK9@vger.kernel.org, AJvYcCVYZieVBUh/JvsRxyGlxP+0mDYjhfpJxjBEwQeDfpvKSKyO6XLR7rCFO7wxw3Oo8pLb82vWnrYkG38=@vger.kernel.org, AJvYcCW7L5B+Y9QpYkmJbNEAi55PDGMkIl+vD6lEXfxJK7ILMht7X4XdZWfxcXAMOQlaOb2a0Xgzoc8yiD1h@vger.kernel.org, AJvYcCWBQuWWlBOwjcPWvoXTO14Joxua4m6ZODS/vU8DWWOHSYODOHcPx1di2ZcLapUciED3T3Iov75bbL1M7w==@vger.kernel.org, AJvYcCX52yc4XbiUBXFVKfZWa5X3xDWV2MEu4MQ/jySGEkzinJ39ON+D2o2d/uxO65IqgFrb0reX6jRcWKE4@vger.kernel.org, AJvYcCXFAWE6sbiy4hV8TwVrFrVWjx4DwJTFEL1WM3M608+74swpB5pWgjG5xFoaHj8HDKqT9I0Pvq7NQ2gI@vger.kernel.org, AJvYcCXmZjpuLxbNTuTLglD4YYb0YYwTaN3hGHSUbJDd6Y1IPycBY6zskbSlBQRwEtci9Dp+09DVNYC6vx7qTZc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzgmaSLD095prVYsJn49tWRdlv+v3RFvRBJqmdJCTWfpCiq/AW/
-	vWz/ASRuayKwaDWUuue9MM94tnnNhhzkaxgjuTnotEgNmaAKd/IMeqlc65kctg==
-X-Gm-Gg: ASbGncudEh6UdaCMx/gYb6nGE0P78rIKEaXksfSYxG4UIwCmSY4vYnF0C6KwIwkuhxS
-	0XGksenloZ9VHXfLFrBF7w5fCsngXayShY9wSSvSQX0Dai7W5TeFv95/EA4D3iaxSE2AoVQ4qSC
-	xi5orivlH47fh0uLGe1Dooyhp2SezJE3k87Gk4mvrxYqg6iQrVAENQMVoX+vkwKgsjcLqF+cuQG
-	coHNyRNMMgAaSt1H3AwFDmFf3oR9QsjFbaUwPJ5Px48YG3mBYUeIM/WFXQE3xCCVCLE75IlzFpF
-	7TVjcLxIWjZGRmzf0ci1KNQLRPvHh9xIlHeVQ+1mcoRfL3O7MDpdiQUk2xlQsilJu5mPSo8OAcG
-	WeTpWQoQHdfzncrZ61MdrqAR4LC8ct6coPJUShB3yObhJCHPkzFdrzwtPGJ4MajZ0/zvqv1gK2N
-	PK
-X-Google-Smtp-Source: AGHT+IFhHeNJKF9+COHe/erspToY0BlAs+T50Bb12aaWSDITaI6LHwVn96bbThyY9nTW8UZtTFqecA==
-X-Received: by 2002:a17:90b:184e:b0:32b:65e6:ec49 with SMTP id 98e67ed59e1d1-32b65e6f367mr3973679a91.7.1756950685994;
-        Wed, 03 Sep 2025 18:51:25 -0700 (PDT)
+        bh=GgDT8yas3IcACX8dpF1Z+jTHl5S85Xg0OLjTZ81TkYA=;
+        b=XDld8QGdPABiuUXaOLFVimYOqrZgabi9vaRYVf9x0jDER7hR1arbGWz2Al5fYnwXPx
+         xVZ10wvcFTlqPx3X4FrX0k7hJKNzB93dmkJUjPGei9uEW0tgz3/7JJ0sYYLqNVpTPOx3
+         k9E7dVrGUzsSjQbbB0D90s+s9AMyct9BctYHtghAwSTCAUriiD1TuRuOrIVjQUYJ91wp
+         j2RUweLlFJOwGIfEdpJHYKekiPZj0jH30unSj9YmPFUOVvAfyoJaw8vVRJuRz+IRDpnr
+         n1N9Lm+fErLNUMsRru8heg2iuPaUN4DGlrOx+IVKpqK9HXY067pXXjfdKptqW1jbZ+Wt
+         nk/A==
+X-Forwarded-Encrypted: i=1; AJvYcCUAaASiEX7uXdBB491rDXFh6SkQ3TSlWZs9ijOH8rpOSG0j+JllUwfnINGTnp29DIgpHWpiFOxtr/qSYw==@vger.kernel.org, AJvYcCV6elvXDhzKk7nU+jeUBPTaSAx2WYMPVtMVpb1YXOUmetXj4wbI0N5r2Xtj7ZFdGYfBCl60R3ogYN6QJ5A=@vger.kernel.org, AJvYcCV71gG74k4tYyHe7BBfotp+WRZSsW2M58kjFTFQZrGKY2SEsidMH8bqYeJxEqPqH83yTUCN9DLt@vger.kernel.org, AJvYcCVGxOIJTBLTlS3ijjvbAN5tOiWXJrq4XVDEJlJyoETtG7dPsU/fkOA9szv92CivF2Yo6fsxUkForvGf@vger.kernel.org, AJvYcCVU2RzMtPj4/R/Zff+vnxrPh/wouhnTscJ+YzkaHhgbHDiB/UIoZvUsvrXJMpX7gg8DAvezIM6WNos=@vger.kernel.org, AJvYcCW7DyT3LrI8Q/g3zUWoIjMyeCWCN7Cl5oUkbE+q/0GuFr/PbVjo/QuJfVPjNS4xUFshTHBq8AL1eSue@vger.kernel.org, AJvYcCXlPLUHBminz6HDvETzd7lqDLPUbtw1stCOXfeVDbni9qhjeKjqoNpxPgHSghYyi/kdMGTHUfGsJdHb@vger.kernel.org, AJvYcCXnaQlJMf2f8kOhqr0RcM3okWZBrAkbIYlHFKDosioZdO9Sq4TLavPRzqv3tPcfNP8cepqblh+aFojmnna9hrY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yztm0iSxqakXbPjuX5N25YVugeZUmYEAfFf4dWnSR1MdrEoA4Qh
+	X2hgqjqvD1KwTKg6N6Tv0nONCWftBwHwUiquYXfmYCmPcz4bL5BPIdBk
+X-Gm-Gg: ASbGncuguNgr9wEol79+hAb6kj778uSO4Q6PJils04ffuH8AvqtWWxhqwCet2vtFY+g
+	mtk6qD87T0z34UCg7Ou5yN5XgISQEXoYzJ/vR2QN95ARa+QKw6tAyzvZ3waZNxbF5koDho/HaOQ
+	4WlLqxnUkhPbs0J4VatZihEQ/IKVztB7lIHIVmabdyWULirjJRLDckOIILHq0n3O0CgjCCu61uz
+	Qp08uoN666FktSH+mn7WOZzfTFfahh9iuQnaAa1p0/sqQu6Aj08GAnyuxsIhvLISKSk2h2jIyWk
+	Z7zC+ymozlNpX1o8SjIhTc9gacY7Z+W/ao/GcX3nREG9abW8lCSX9XB9IaseEzLgnFEVURznwGy
+	0Rt12bXGUt1TuOcMHNyJnrOW2TrFkkNuncOVgq9aBm408XZX6hn+CD8aYU9Zuxco3vMpOReHl9L
+	1am68+NUHA7GE=
+X-Google-Smtp-Source: AGHT+IHHGAsQymzfwZbqXSo9KeT0ANvCpXtZV/5yXUahATQNdz4R9tIeTKD8XgEjSyeUKrwTYEAohA==
+X-Received: by 2002:a17:90b:1d03:b0:320:fda8:fabe with SMTP id 98e67ed59e1d1-328156ba3b0mr19428738a91.22.1756950690388;
+        Wed, 03 Sep 2025 18:51:30 -0700 (PDT)
 Received: from hcdev-d520mt2.. (60-250-196-139.hinet-ip.hinet.net. [60.250.196.139])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-329dcc0af56sm7080205a91.24.2025.09.03.18.51.21
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-329dcc0af56sm7080205a91.24.2025.09.03.18.51.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Sep 2025 18:51:25 -0700 (PDT)
+        Wed, 03 Sep 2025 18:51:29 -0700 (PDT)
 From: a0282524688@gmail.com
 To: tmyu0@nuvoton.com,
 	lee@kernel.org,
@@ -101,9 +101,9 @@ Cc: linux-kernel@vger.kernel.org,
 	linux-rtc@vger.kernel.org,
 	linux-usb@vger.kernel.org,
 	Ming Yu <a0282524688@gmail.com>
-Subject: [PATCH RESEND v14 6/7] hwmon: Add Nuvoton NCT6694 HWMON support
-Date: Thu,  4 Sep 2025 09:50:47 +0800
-Message-Id: <20250904015048.1801451-7-a0282524688@gmail.com>
+Subject: [PATCH RESEND v14 7/7] rtc: Add Nuvoton NCT6694 RTC support
+Date: Thu,  4 Sep 2025 09:50:48 +0800
+Message-Id: <20250904015048.1801451-8-a0282524688@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250904015048.1801451-1-a0282524688@gmail.com>
 References: <20250904015048.1801451-1-a0282524688@gmail.com>
@@ -117,10 +117,10 @@ Content-Transfer-Encoding: 8bit
 
 From: Ming Yu <a0282524688@gmail.com>
 
-This driver supports Hardware monitor functionality for NCT6694 MFD
-device based on USB interface.
+This driver supports RTC functionality for NCT6694 MFD device
+based on USB interface.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 Signed-off-by: Ming Yu <a0282524688@gmail.com>
 ---
 Changes since version 13:
@@ -129,20 +129,20 @@ Changes since version 12:
 - Use same email address in the signature
 
 Changes since version 11:
-- Fix the typo in the header
 
 Changes since version 10:
 
 Changes since version 9:
+- Add devm_add_action_or_reset() to dispose irq mapping
 
 Changes since version 8:
 - Modify the signed-off-by with my work address
+- Add irq_dispose_mapping() in the error handling path and in the remove
+  function
 
 Changes since version 7:
-- Add error handling for devm_mutex_init()
 
 Changes since version 6:
-- Fix temp_hyst's data type to signed variable
 
 Changes since version 5:
 - Modify the module name and the driver name consistently
@@ -150,1033 +150,378 @@ Changes since version 5:
 Changes since version 4:
 - Modify arguments in read/write function to a pointer to cmd_header
 - Modify all callers that call the read/write function
-- Fix warngings
 
 Changes since version 3:
 - Modify array buffer to structure
 - Fix defines and comments
-- Modify mutex_init() to devm_mutex_init()
-- Modify the division method to DIV_ROUND_CLOSEST()
+- Drop private mutex and use rtc core lock
+- Modify device_set_wakeup_capable() to device_init_wakeup()
 
 Changes since version 2:
 - Add MODULE_ALIAS()
-- Fix warnings
 
 Changes since version 1:
 - Add each driver's command structure
 - Fix platform driver registration
-- Add voltage sensors functionality
-- Add temperature sensors functionality
+- Drop unnecessary logs
 - Fix overwrite error return values
-- Add write value limitation for each write() function
+- Modify to use dev_err_probe API
 
- MAINTAINERS                   |   1 +
- drivers/hwmon/Kconfig         |  10 +
- drivers/hwmon/Makefile        |   1 +
- drivers/hwmon/nct6694-hwmon.c | 949 ++++++++++++++++++++++++++++++++++
- 4 files changed, 961 insertions(+)
- create mode 100644 drivers/hwmon/nct6694-hwmon.c
+ MAINTAINERS               |   1 +
+ drivers/rtc/Kconfig       |  10 ++
+ drivers/rtc/Makefile      |   1 +
+ drivers/rtc/rtc-nct6694.c | 297 ++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 309 insertions(+)
+ create mode 100644 drivers/rtc/rtc-nct6694.c
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 4639d5933c5e..bbacc9d48a83 100644
+index bbacc9d48a83..442f24a408a6 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -18086,6 +18086,7 @@ NUVOTON NCT6694 MFD DRIVER
- M:	Ming Yu <tmyu0@nuvoton.com>
- S:	Supported
- F:	drivers/gpio/gpio-nct6694.c
-+F:	drivers/hwmon/nct6694-hwmon.c
+@@ -18090,6 +18090,7 @@ F:	drivers/hwmon/nct6694-hwmon.c
  F:	drivers/i2c/busses/i2c-nct6694.c
  F:	drivers/mfd/nct6694.c
  F:	drivers/net/can/usb/nct6694_canfd.c
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 9d28fcf7cd2a..19f660d9a0c5 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -1698,6 +1698,16 @@ config SENSORS_NCT6683
- 	  This driver can also be built as a module. If so, the module
- 	  will be called nct6683.
++F:	drivers/rtc/rtc-nct6694.c
+ F:	drivers/watchdog/nct6694_wdt.c
+ F:	include/linux/mfd/nct6694.h
  
-+config SENSORS_NCT6694
-+	tristate "Nuvoton NCT6694 Hardware Monitor support"
+diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+index 64f6e9756aff..4a8dc8d0a4b7 100644
+--- a/drivers/rtc/Kconfig
++++ b/drivers/rtc/Kconfig
+@@ -416,6 +416,16 @@ config RTC_DRV_NCT3018Y
+ 	   This driver can also be built as a module, if so, the module will be
+ 	   called "rtc-nct3018y".
+ 
++config RTC_DRV_NCT6694
++	tristate "Nuvoton NCT6694 RTC support"
 +	depends on MFD_NCT6694
 +	help
-+	  Say Y here to support Nuvoton NCT6694 hardware monitoring
-+	  functionality.
++	  If you say yes to this option, support will be included for Nuvoton
++	  NCT6694, a USB device to RTC.
 +
-+	  This driver can also be built as a module. If so, the module
-+	  will be called nct6694-hwmon.
++	  This driver can also be built as a module. If so, the module will
++	  be called rtc-nct6694.
 +
- config SENSORS_NCT6775_CORE
- 	tristate
- 	select REGMAP
-diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-index cd8bc4752b4d..9bce91611dc3 100644
---- a/drivers/hwmon/Makefile
-+++ b/drivers/hwmon/Makefile
-@@ -174,6 +174,7 @@ obj-$(CONFIG_SENSORS_MLXREG_FAN) += mlxreg-fan.o
- obj-$(CONFIG_SENSORS_MENF21BMC_HWMON) += menf21bmc_hwmon.o
- obj-$(CONFIG_SENSORS_MR75203)	+= mr75203.o
- obj-$(CONFIG_SENSORS_NCT6683)	+= nct6683.o
-+obj-$(CONFIG_SENSORS_NCT6694)	+= nct6694-hwmon.o
- obj-$(CONFIG_SENSORS_NCT6775_CORE) += nct6775-core.o
- nct6775-objs			:= nct6775-platform.o
- obj-$(CONFIG_SENSORS_NCT6775)	+= nct6775.o
-diff --git a/drivers/hwmon/nct6694-hwmon.c b/drivers/hwmon/nct6694-hwmon.c
+ config RTC_DRV_RK808
+ 	tristate "Rockchip RK805/RK808/RK809/RK817/RK818 RTC"
+ 	depends on MFD_RK8XX
+diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
+index 789bddfea99d..610a9ee5fd33 100644
+--- a/drivers/rtc/Makefile
++++ b/drivers/rtc/Makefile
+@@ -119,6 +119,7 @@ obj-$(CONFIG_RTC_DRV_MXC)	+= rtc-mxc.o
+ obj-$(CONFIG_RTC_DRV_MXC_V2)	+= rtc-mxc_v2.o
+ obj-$(CONFIG_RTC_DRV_GAMECUBE)	+= rtc-gamecube.o
+ obj-$(CONFIG_RTC_DRV_NCT3018Y)	+= rtc-nct3018y.o
++obj-$(CONFIG_RTC_DRV_NCT6694)	+= rtc-nct6694.o
+ obj-$(CONFIG_RTC_DRV_NTXEC)	+= rtc-ntxec.o
+ obj-$(CONFIG_RTC_DRV_OMAP)	+= rtc-omap.o
+ obj-$(CONFIG_RTC_DRV_OPAL)	+= rtc-opal.o
+diff --git a/drivers/rtc/rtc-nct6694.c b/drivers/rtc/rtc-nct6694.c
 new file mode 100644
-index 000000000000..6dcf22ca5018
+index 000000000000..35401a0d9cf5
 --- /dev/null
-+++ b/drivers/hwmon/nct6694-hwmon.c
-@@ -0,0 +1,949 @@
++++ b/drivers/rtc/rtc-nct6694.c
+@@ -0,0 +1,297 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Nuvoton NCT6694 HWMON driver based on USB interface.
++ * Nuvoton NCT6694 RTC driver based on USB interface.
 + *
 + * Copyright (C) 2025 Nuvoton Technology Corp.
 + */
 +
-+#include <linux/bits.h>
-+#include <linux/bitfield.h>
-+#include <linux/hwmon.h>
++#include <linux/bcd.h>
++#include <linux/irqdomain.h>
 +#include <linux/kernel.h>
-+#include <linux/mfd/core.h>
 +#include <linux/mfd/nct6694.h>
 +#include <linux/module.h>
 +#include <linux/platform_device.h>
++#include <linux/rtc.h>
 +#include <linux/slab.h>
 +
 +/*
-+ * USB command module type for NCT6694 report channel
++ * USB command module type for NCT6694 RTC controller.
 + * This defines the module type used for communication with the NCT6694
-+ * report channel over the USB interface.
++ * RTC controller over the USB interface.
 + */
-+#define NCT6694_RPT_MOD			0xFF
++#define NCT6694_RTC_MOD		0x08
 +
-+/* Report channel */
-+/*
-+ * The report channel is used to report the status of the hardware monitor
-+ * devices, such as voltage, temperature, fan speed, and PWM.
-+ */
-+#define NCT6694_VIN_IDX(x)		(0x00 + (x))
-+#define NCT6694_TIN_IDX(x)			\
-+	({ typeof(x) (_x) = (x);		\
-+	 ((_x) < 10) ? (0x10 + ((_x) * 2)) :	\
-+	 (0x30 + (((_x) - 10) * 2)); })
-+#define NCT6694_FIN_IDX(x)		(0x50 + ((x) * 2))
-+#define NCT6694_PWM_IDX(x)		(0x70 + (x))
-+#define NCT6694_VIN_STS(x)		(0x68 + (x))
-+#define NCT6694_TIN_STS(x)		(0x6A + (x))
-+#define NCT6694_FIN_STS(x)		(0x6E + (x))
++/* Command 00h - RTC Time */
++#define NCT6694_RTC_TIME	0x0000
++#define NCT6694_RTC_TIME_SEL	0x00
 +
-+/*
-+ * USB command module type for NCT6694 HWMON controller.
-+ * This defines the module type used for communication with the NCT6694
-+ * HWMON controller over the USB interface.
-+ */
-+#define NCT6694_HWMON_MOD		0x00
++/* Command 01h - RTC Alarm */
++#define NCT6694_RTC_ALARM	0x01
++#define NCT6694_RTC_ALARM_SEL	0x00
 +
-+/* Command 00h - Hardware Monitor Control */
-+#define NCT6694_HWMON_CONTROL		0x00
-+#define NCT6694_HWMON_CONTROL_SEL	0x00
++/* Command 02h - RTC Status */
++#define NCT6694_RTC_STATUS	0x02
++#define NCT6694_RTC_STATUS_SEL	0x00
 +
-+/* Command 02h - Alarm Control */
-+#define NCT6694_HWMON_ALARM		0x02
-+#define NCT6694_HWMON_ALARM_SEL		0x00
++#define NCT6694_RTC_IRQ_INT_EN	BIT(0)	/* Transmit a USB INT-in when RTC alarm */
++#define NCT6694_RTC_IRQ_GPO_EN	BIT(5)	/* Trigger a GPO Low Pulse when RTC alarm */
 +
-+/*
-+ * USB command module type for NCT6694 PWM controller.
-+ * This defines the module type used for communication with the NCT6694
-+ * PWM controller over the USB interface.
-+ */
-+#define NCT6694_PWM_MOD			0x01
++#define NCT6694_RTC_IRQ_EN	(NCT6694_RTC_IRQ_INT_EN | NCT6694_RTC_IRQ_GPO_EN)
++#define NCT6694_RTC_IRQ_STS	BIT(0)	/* Write 1 clear IRQ status */
 +
-+/* PWM Command - Manual Control */
-+#define NCT6694_PWM_CONTROL		0x01
-+#define NCT6694_PWM_CONTROL_SEL		0x00
-+
-+#define NCT6694_FREQ_FROM_REG(reg)	((reg) * 25000 / 255)
-+#define NCT6694_FREQ_TO_REG(val)	\
-+	(DIV_ROUND_CLOSEST(clamp_val((val), 100, 25000) * 255, 25000))
-+
-+#define NCT6694_LSB_REG_MASK		GENMASK(7, 5)
-+#define NCT6694_TIN_HYST_MASK		GENMASK(7, 5)
-+
-+enum nct6694_hwmon_temp_mode {
-+	NCT6694_HWMON_TWOTIME_IRQ = 0,
-+	NCT6694_HWMON_ONETIME_IRQ,
-+	NCT6694_HWMON_REALTIME_IRQ,
-+	NCT6694_HWMON_COMPARE_IRQ,
++struct __packed nct6694_rtc_time {
++	u8 sec;
++	u8 min;
++	u8 hour;
++	u8 week;
++	u8 day;
++	u8 month;
++	u8 year;
 +};
 +
-+struct __packed nct6694_hwmon_control {
-+	u8 vin_en[2];
-+	u8 tin_en[2];
-+	u8 fin_en[2];
-+	u8 pwm_en[2];
-+	u8 reserved1[40];
-+	u8 pwm_freq[10];
-+	u8 reserved2[6];
++struct __packed nct6694_rtc_alarm {
++	u8 sec;
++	u8 min;
++	u8 hour;
++	u8 alarm_en;
++	u8 alarm_pend;
 +};
 +
-+struct __packed nct6694_hwmon_alarm {
-+	u8 smi_ctrl;
-+	u8 reserved1[15];
-+	struct {
-+		u8 hl;
-+		u8 ll;
-+	} vin_limit[16];
-+	struct {
-+		u8 hyst;
-+		s8 hl;
-+	} tin_cfg[32];
-+	__be16 fin_ll[10];
-+	u8 reserved2[4];
++struct __packed nct6694_rtc_status {
++	u8 irq_en;
++	u8 irq_pend;
 +};
 +
-+struct __packed nct6694_pwm_control {
-+	u8 mal_en[2];
-+	u8 mal_val[10];
-+	u8 reserved[12];
++union __packed nct6694_rtc_msg {
++	struct nct6694_rtc_time time;
++	struct nct6694_rtc_alarm alarm;
++	struct nct6694_rtc_status sts;
 +};
 +
-+union __packed nct6694_hwmon_rpt {
-+	u8 vin;
-+	struct {
-+		u8 msb;
-+		u8 lsb;
-+	} tin;
-+	__be16 fin;
-+	u8 pwm;
-+	u8 status;
-+};
-+
-+union __packed nct6694_hwmon_msg {
-+	struct nct6694_hwmon_alarm hwmon_alarm;
-+	struct nct6694_pwm_control pwm_ctrl;
-+};
-+
-+struct nct6694_hwmon_data {
++struct nct6694_rtc_data {
 +	struct nct6694 *nct6694;
-+	struct mutex lock;
-+	struct nct6694_hwmon_control hwmon_en;
-+	union nct6694_hwmon_rpt *rpt;
-+	union nct6694_hwmon_msg *msg;
++	struct rtc_device *rtc;
++	union nct6694_rtc_msg *msg;
++	int irq;
 +};
 +
-+static inline long in_from_reg(u8 reg)
++static int nct6694_rtc_read_time(struct device *dev, struct rtc_time *tm)
 +{
-+	return reg * 16;
-+}
-+
-+static inline u8 in_to_reg(long val)
-+{
-+	return DIV_ROUND_CLOSEST(val, 16);
-+}
-+
-+static inline long temp_from_reg(s8 reg)
-+{
-+	return reg * 1000;
-+}
-+
-+static inline s8 temp_to_reg(long val)
-+{
-+	return DIV_ROUND_CLOSEST(val, 1000);
-+}
-+
-+#define NCT6694_HWMON_IN_CONFIG (HWMON_I_INPUT | HWMON_I_ENABLE |	\
-+				 HWMON_I_MAX | HWMON_I_MIN |		\
-+				 HWMON_I_ALARM)
-+#define NCT6694_HWMON_TEMP_CONFIG (HWMON_T_INPUT | HWMON_T_ENABLE |	\
-+				   HWMON_T_MAX | HWMON_T_MAX_HYST |	\
-+				   HWMON_T_MAX_ALARM)
-+#define NCT6694_HWMON_FAN_CONFIG (HWMON_F_INPUT | HWMON_F_ENABLE |	\
-+				  HWMON_F_MIN | HWMON_F_MIN_ALARM)
-+#define NCT6694_HWMON_PWM_CONFIG (HWMON_PWM_INPUT | HWMON_PWM_ENABLE |	\
-+				  HWMON_PWM_FREQ)
-+static const struct hwmon_channel_info *nct6694_info[] = {
-+	HWMON_CHANNEL_INFO(in,
-+			   NCT6694_HWMON_IN_CONFIG,	/* VIN0 */
-+			   NCT6694_HWMON_IN_CONFIG,	/* VIN1 */
-+			   NCT6694_HWMON_IN_CONFIG,	/* VIN2 */
-+			   NCT6694_HWMON_IN_CONFIG,	/* VIN3 */
-+			   NCT6694_HWMON_IN_CONFIG,	/* VIN5 */
-+			   NCT6694_HWMON_IN_CONFIG,	/* VIN6 */
-+			   NCT6694_HWMON_IN_CONFIG,	/* VIN7 */
-+			   NCT6694_HWMON_IN_CONFIG,	/* VIN14 */
-+			   NCT6694_HWMON_IN_CONFIG,	/* VIN15 */
-+			   NCT6694_HWMON_IN_CONFIG,	/* VIN16 */
-+			   NCT6694_HWMON_IN_CONFIG,	/* VBAT */
-+			   NCT6694_HWMON_IN_CONFIG,	/* VSB */
-+			   NCT6694_HWMON_IN_CONFIG,	/* AVSB */
-+			   NCT6694_HWMON_IN_CONFIG,	/* VCC */
-+			   NCT6694_HWMON_IN_CONFIG,	/* VHIF */
-+			   NCT6694_HWMON_IN_CONFIG),	/* VTT */
-+
-+	HWMON_CHANNEL_INFO(temp,
-+			   NCT6694_HWMON_TEMP_CONFIG,	/* THR1 */
-+			   NCT6694_HWMON_TEMP_CONFIG,	/* THR2 */
-+			   NCT6694_HWMON_TEMP_CONFIG,	/* THR14 */
-+			   NCT6694_HWMON_TEMP_CONFIG,	/* THR15 */
-+			   NCT6694_HWMON_TEMP_CONFIG,	/* THR16 */
-+			   NCT6694_HWMON_TEMP_CONFIG,	/* TDP0 */
-+			   NCT6694_HWMON_TEMP_CONFIG,	/* TDP1 */
-+			   NCT6694_HWMON_TEMP_CONFIG,	/* TDP2 */
-+			   NCT6694_HWMON_TEMP_CONFIG,	/* TDP3 */
-+			   NCT6694_HWMON_TEMP_CONFIG,	/* TDP4 */
-+			   NCT6694_HWMON_TEMP_CONFIG,	/* DTIN0 */
-+			   NCT6694_HWMON_TEMP_CONFIG,	/* DTIN1 */
-+			   NCT6694_HWMON_TEMP_CONFIG,	/* DTIN2 */
-+			   NCT6694_HWMON_TEMP_CONFIG,	/* DTIN3 */
-+			   NCT6694_HWMON_TEMP_CONFIG,	/* DTIN4 */
-+			   NCT6694_HWMON_TEMP_CONFIG,	/* DTIN5 */
-+			   NCT6694_HWMON_TEMP_CONFIG,	/* DTIN6 */
-+			   NCT6694_HWMON_TEMP_CONFIG,	/* DTIN7 */
-+			   NCT6694_HWMON_TEMP_CONFIG,	/* DTIN8 */
-+			   NCT6694_HWMON_TEMP_CONFIG,	/* DTIN9 */
-+			   NCT6694_HWMON_TEMP_CONFIG,	/* DTIN10 */
-+			   NCT6694_HWMON_TEMP_CONFIG,	/* DTIN11 */
-+			   NCT6694_HWMON_TEMP_CONFIG,	/* DTIN12 */
-+			   NCT6694_HWMON_TEMP_CONFIG,	/* DTIN13 */
-+			   NCT6694_HWMON_TEMP_CONFIG,	/* DTIN14 */
-+			   NCT6694_HWMON_TEMP_CONFIG),	/* DTIN15 */
-+
-+	HWMON_CHANNEL_INFO(fan,
-+			   NCT6694_HWMON_FAN_CONFIG,	/* FIN0 */
-+			   NCT6694_HWMON_FAN_CONFIG,	/* FIN1 */
-+			   NCT6694_HWMON_FAN_CONFIG,	/* FIN2 */
-+			   NCT6694_HWMON_FAN_CONFIG,	/* FIN3 */
-+			   NCT6694_HWMON_FAN_CONFIG,	/* FIN4 */
-+			   NCT6694_HWMON_FAN_CONFIG,	/* FIN5 */
-+			   NCT6694_HWMON_FAN_CONFIG,	/* FIN6 */
-+			   NCT6694_HWMON_FAN_CONFIG,	/* FIN7 */
-+			   NCT6694_HWMON_FAN_CONFIG,	/* FIN8 */
-+			   NCT6694_HWMON_FAN_CONFIG),	/* FIN9 */
-+
-+	HWMON_CHANNEL_INFO(pwm,
-+			   NCT6694_HWMON_PWM_CONFIG,	/* PWM0 */
-+			   NCT6694_HWMON_PWM_CONFIG,	/* PWM1 */
-+			   NCT6694_HWMON_PWM_CONFIG,	/* PWM2 */
-+			   NCT6694_HWMON_PWM_CONFIG,	/* PWM3 */
-+			   NCT6694_HWMON_PWM_CONFIG,	/* PWM4 */
-+			   NCT6694_HWMON_PWM_CONFIG,	/* PWM5 */
-+			   NCT6694_HWMON_PWM_CONFIG,	/* PWM6 */
-+			   NCT6694_HWMON_PWM_CONFIG,	/* PWM7 */
-+			   NCT6694_HWMON_PWM_CONFIG,	/* PWM8 */
-+			   NCT6694_HWMON_PWM_CONFIG),	/* PWM9 */
-+	NULL
-+};
-+
-+static int nct6694_in_read(struct device *dev, u32 attr, int channel,
-+			   long *val)
-+{
-+	struct nct6694_hwmon_data *data = dev_get_drvdata(dev);
-+	struct nct6694_cmd_header cmd_hd;
-+	unsigned char vin_en;
-+	int ret;
-+
-+	guard(mutex)(&data->lock);
-+
-+	switch (attr) {
-+	case hwmon_in_enable:
-+		vin_en = data->hwmon_en.vin_en[(channel / 8)];
-+		*val = !!(vin_en & BIT(channel % 8));
-+
-+		return 0;
-+	case hwmon_in_input:
-+		cmd_hd = (struct nct6694_cmd_header) {
-+			.mod = NCT6694_RPT_MOD,
-+			.offset = cpu_to_le16(NCT6694_VIN_IDX(channel)),
-+			.len = cpu_to_le16(sizeof(data->rpt->vin))
-+		};
-+		ret = nct6694_read_msg(data->nct6694, &cmd_hd,
-+				       &data->rpt->vin);
-+		if (ret)
-+			return ret;
-+
-+		*val = in_from_reg(data->rpt->vin);
-+
-+		return 0;
-+	case hwmon_in_max:
-+		cmd_hd = (struct nct6694_cmd_header) {
-+			.mod = NCT6694_HWMON_MOD,
-+			.cmd = NCT6694_HWMON_ALARM,
-+			.sel = NCT6694_HWMON_ALARM_SEL,
-+			.len = cpu_to_le16(sizeof(data->msg->hwmon_alarm))
-+		};
-+		ret = nct6694_read_msg(data->nct6694, &cmd_hd,
-+				       &data->msg->hwmon_alarm);
-+		if (ret)
-+			return ret;
-+
-+		*val = in_from_reg(data->msg->hwmon_alarm.vin_limit[channel].hl);
-+
-+		return 0;
-+	case hwmon_in_min:
-+		cmd_hd = (struct nct6694_cmd_header) {
-+			.mod = NCT6694_HWMON_MOD,
-+			.cmd = NCT6694_HWMON_ALARM,
-+			.sel = NCT6694_HWMON_ALARM_SEL,
-+			.len = cpu_to_le16(sizeof(data->msg->hwmon_alarm))
-+		};
-+		ret = nct6694_read_msg(data->nct6694, &cmd_hd,
-+				       &data->msg->hwmon_alarm);
-+		if (ret)
-+			return ret;
-+
-+		*val = in_from_reg(data->msg->hwmon_alarm.vin_limit[channel].ll);
-+
-+		return 0;
-+	case hwmon_in_alarm:
-+		cmd_hd = (struct nct6694_cmd_header) {
-+			.mod = NCT6694_RPT_MOD,
-+			.offset = cpu_to_le16(NCT6694_VIN_STS(channel / 8)),
-+			.len = cpu_to_le16(sizeof(data->rpt->status))
-+		};
-+		ret = nct6694_read_msg(data->nct6694, &cmd_hd,
-+				       &data->rpt->status);
-+		if (ret)
-+			return ret;
-+
-+		*val = !!(data->rpt->status & BIT(channel % 8));
-+
-+		return 0;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static int nct6694_temp_read(struct device *dev, u32 attr, int channel,
-+			     long *val)
-+{
-+	struct nct6694_hwmon_data *data = dev_get_drvdata(dev);
-+	struct nct6694_cmd_header cmd_hd;
-+	unsigned char temp_en, temp_hyst;
-+	signed char temp_max;
-+	int ret, temp_raw;
-+
-+	guard(mutex)(&data->lock);
-+
-+	switch (attr) {
-+	case hwmon_temp_enable:
-+		temp_en = data->hwmon_en.tin_en[channel / 8];
-+		*val = !!(temp_en & BIT(channel % 8));
-+
-+		return 0;
-+	case hwmon_temp_input:
-+		cmd_hd = (struct nct6694_cmd_header) {
-+			.mod = NCT6694_RPT_MOD,
-+			.offset = cpu_to_le16(NCT6694_TIN_IDX(channel)),
-+			.len = cpu_to_le16(sizeof(data->rpt->tin))
-+		};
-+		ret = nct6694_read_msg(data->nct6694, &cmd_hd,
-+				       &data->rpt->tin);
-+		if (ret)
-+			return ret;
-+
-+		temp_raw = data->rpt->tin.msb << 3;
-+		temp_raw |= FIELD_GET(NCT6694_LSB_REG_MASK, data->rpt->tin.lsb);
-+
-+		/* Real temperature(milli degrees Celsius) = temp_raw * 1000 * 0.125 */
-+		*val = sign_extend32(temp_raw, 10) * 125;
-+
-+		return 0;
-+	case hwmon_temp_max:
-+		cmd_hd = (struct nct6694_cmd_header) {
-+			.mod = NCT6694_HWMON_MOD,
-+			.cmd = NCT6694_HWMON_ALARM,
-+			.sel = NCT6694_HWMON_ALARM_SEL,
-+			.len = cpu_to_le16(sizeof(data->msg->hwmon_alarm))
-+		};
-+		ret = nct6694_read_msg(data->nct6694, &cmd_hd,
-+				       &data->msg->hwmon_alarm);
-+		if (ret)
-+			return ret;
-+
-+		*val = temp_from_reg(data->msg->hwmon_alarm.tin_cfg[channel].hl);
-+
-+		return 0;
-+	case hwmon_temp_max_hyst:
-+		cmd_hd = (struct nct6694_cmd_header) {
-+			.mod = NCT6694_HWMON_MOD,
-+			.cmd = NCT6694_HWMON_ALARM,
-+			.sel = NCT6694_HWMON_ALARM_SEL,
-+			.len = cpu_to_le16(sizeof(data->msg->hwmon_alarm))
-+		};
-+		ret = nct6694_read_msg(data->nct6694, &cmd_hd,
-+				       &data->msg->hwmon_alarm);
-+		if (ret)
-+			return ret;
-+
-+		temp_max = data->msg->hwmon_alarm.tin_cfg[channel].hl;
-+		temp_hyst = FIELD_GET(NCT6694_TIN_HYST_MASK,
-+				      data->msg->hwmon_alarm.tin_cfg[channel].hyst);
-+		*val = temp_from_reg(temp_max - temp_hyst);
-+
-+		return 0;
-+	case hwmon_temp_max_alarm:
-+		cmd_hd = (struct nct6694_cmd_header) {
-+			.mod = NCT6694_RPT_MOD,
-+			.offset = cpu_to_le16(NCT6694_TIN_STS(channel / 8)),
-+			.len = cpu_to_le16(sizeof(data->rpt->status))
-+		};
-+		ret = nct6694_read_msg(data->nct6694, &cmd_hd,
-+				       &data->rpt->status);
-+		if (ret)
-+			return ret;
-+
-+		*val = !!(data->rpt->status & BIT(channel % 8));
-+
-+		return 0;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static int nct6694_fan_read(struct device *dev, u32 attr, int channel,
-+			    long *val)
-+{
-+	struct nct6694_hwmon_data *data = dev_get_drvdata(dev);
-+	struct nct6694_cmd_header cmd_hd;
-+	unsigned char fanin_en;
-+	int ret;
-+
-+	guard(mutex)(&data->lock);
-+
-+	switch (attr) {
-+	case hwmon_fan_enable:
-+		fanin_en = data->hwmon_en.fin_en[channel / 8];
-+		*val = !!(fanin_en & BIT(channel % 8));
-+
-+		return 0;
-+	case hwmon_fan_input:
-+		cmd_hd = (struct nct6694_cmd_header) {
-+			.mod = NCT6694_RPT_MOD,
-+			.offset = cpu_to_le16(NCT6694_FIN_IDX(channel)),
-+			.len = cpu_to_le16(sizeof(data->rpt->fin))
-+		};
-+		ret = nct6694_read_msg(data->nct6694, &cmd_hd,
-+				       &data->rpt->fin);
-+		if (ret)
-+			return ret;
-+
-+		*val = be16_to_cpu(data->rpt->fin);
-+
-+		return 0;
-+	case hwmon_fan_min:
-+		cmd_hd = (struct nct6694_cmd_header) {
-+			.mod = NCT6694_HWMON_MOD,
-+			.cmd = NCT6694_HWMON_ALARM,
-+			.sel = NCT6694_HWMON_ALARM_SEL,
-+			.len = cpu_to_le16(sizeof(data->msg->hwmon_alarm))
-+		};
-+		ret = nct6694_read_msg(data->nct6694, &cmd_hd,
-+				       &data->msg->hwmon_alarm);
-+		if (ret)
-+			return ret;
-+
-+		*val = be16_to_cpu(data->msg->hwmon_alarm.fin_ll[channel]);
-+
-+		return 0;
-+	case hwmon_fan_min_alarm:
-+		cmd_hd = (struct nct6694_cmd_header) {
-+			.mod = NCT6694_RPT_MOD,
-+			.offset = cpu_to_le16(NCT6694_FIN_STS(channel / 8)),
-+			.len = cpu_to_le16(sizeof(data->rpt->status))
-+		};
-+		ret = nct6694_read_msg(data->nct6694, &cmd_hd,
-+				       &data->rpt->status);
-+		if (ret)
-+			return ret;
-+
-+		*val = !!(data->rpt->status & BIT(channel % 8));
-+
-+		return 0;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static int nct6694_pwm_read(struct device *dev, u32 attr, int channel,
-+			    long *val)
-+{
-+	struct nct6694_hwmon_data *data = dev_get_drvdata(dev);
-+	struct nct6694_cmd_header cmd_hd;
-+	unsigned char pwm_en;
-+	int ret;
-+
-+	guard(mutex)(&data->lock);
-+
-+	switch (attr) {
-+	case hwmon_pwm_enable:
-+		pwm_en = data->hwmon_en.pwm_en[channel / 8];
-+		*val = !!(pwm_en & BIT(channel % 8));
-+
-+		return 0;
-+	case hwmon_pwm_input:
-+		cmd_hd = (struct nct6694_cmd_header) {
-+			.mod = NCT6694_RPT_MOD,
-+			.offset = cpu_to_le16(NCT6694_PWM_IDX(channel)),
-+			.len = cpu_to_le16(sizeof(data->rpt->pwm))
-+		};
-+		ret = nct6694_read_msg(data->nct6694, &cmd_hd,
-+				       &data->rpt->pwm);
-+		if (ret)
-+			return ret;
-+
-+		*val = data->rpt->pwm;
-+
-+		return 0;
-+	case hwmon_pwm_freq:
-+		*val = NCT6694_FREQ_FROM_REG(data->hwmon_en.pwm_freq[channel]);
-+
-+		return 0;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static int nct6694_in_write(struct device *dev, u32 attr, int channel,
-+			    long val)
-+{
-+	struct nct6694_hwmon_data *data = dev_get_drvdata(dev);
-+	struct nct6694_cmd_header cmd_hd;
-+	int ret;
-+
-+	guard(mutex)(&data->lock);
-+
-+	switch (attr) {
-+	case hwmon_in_enable:
-+		if (val == 0)
-+			data->hwmon_en.vin_en[channel / 8] &= ~BIT(channel % 8);
-+		else if (val == 1)
-+			data->hwmon_en.vin_en[channel / 8] |= BIT(channel % 8);
-+		else
-+			return -EINVAL;
-+
-+		cmd_hd = (struct nct6694_cmd_header) {
-+			.mod = NCT6694_HWMON_MOD,
-+			.cmd = NCT6694_HWMON_CONTROL,
-+			.sel = NCT6694_HWMON_CONTROL_SEL,
-+			.len = cpu_to_le16(sizeof(data->hwmon_en))
-+		};
-+
-+		return nct6694_write_msg(data->nct6694, &cmd_hd,
-+					 &data->hwmon_en);
-+	case hwmon_in_max:
-+		cmd_hd = (struct nct6694_cmd_header) {
-+			.mod = NCT6694_HWMON_MOD,
-+			.cmd = NCT6694_HWMON_ALARM,
-+			.sel = NCT6694_HWMON_ALARM_SEL,
-+			.len = cpu_to_le16(sizeof(data->msg->hwmon_alarm))
-+		};
-+		ret = nct6694_read_msg(data->nct6694, &cmd_hd,
-+				       &data->msg->hwmon_alarm);
-+		if (ret)
-+			return ret;
-+
-+		val = clamp_val(val, 0, 2032);
-+		data->msg->hwmon_alarm.vin_limit[channel].hl = in_to_reg(val);
-+
-+		return nct6694_write_msg(data->nct6694, &cmd_hd,
-+					 &data->msg->hwmon_alarm);
-+	case hwmon_in_min:
-+		cmd_hd = (struct nct6694_cmd_header) {
-+			.mod = NCT6694_HWMON_MOD,
-+			.cmd = NCT6694_HWMON_ALARM,
-+			.sel = NCT6694_HWMON_ALARM_SEL,
-+			.len = cpu_to_le16(sizeof(data->msg->hwmon_alarm))
-+		};
-+		ret = nct6694_read_msg(data->nct6694, &cmd_hd,
-+				       &data->msg->hwmon_alarm);
-+		if (ret)
-+			return ret;
-+
-+		val = clamp_val(val, 0, 2032);
-+		data->msg->hwmon_alarm.vin_limit[channel].ll = in_to_reg(val);
-+
-+		return nct6694_write_msg(data->nct6694, &cmd_hd,
-+					 &data->msg->hwmon_alarm);
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static int nct6694_temp_write(struct device *dev, u32 attr, int channel,
-+			      long val)
-+{
-+	struct nct6694_hwmon_data *data = dev_get_drvdata(dev);
-+	struct nct6694_cmd_header cmd_hd;
-+	unsigned char temp_hyst;
-+	signed char temp_max;
-+	int ret;
-+
-+	guard(mutex)(&data->lock);
-+
-+	switch (attr) {
-+	case hwmon_temp_enable:
-+		if (val == 0)
-+			data->hwmon_en.tin_en[channel / 8] &= ~BIT(channel % 8);
-+		else if (val == 1)
-+			data->hwmon_en.tin_en[channel / 8] |= BIT(channel % 8);
-+		else
-+			return -EINVAL;
-+
-+		cmd_hd = (struct nct6694_cmd_header) {
-+			.mod = NCT6694_HWMON_MOD,
-+			.cmd = NCT6694_HWMON_CONTROL,
-+			.sel = NCT6694_HWMON_CONTROL_SEL,
-+			.len = cpu_to_le16(sizeof(data->hwmon_en))
-+		};
-+
-+		return nct6694_write_msg(data->nct6694, &cmd_hd,
-+					 &data->hwmon_en);
-+	case hwmon_temp_max:
-+		cmd_hd = (struct nct6694_cmd_header) {
-+			.mod = NCT6694_HWMON_MOD,
-+			.cmd = NCT6694_HWMON_ALARM,
-+			.sel = NCT6694_HWMON_ALARM_SEL,
-+			.len = cpu_to_le16(sizeof(data->msg->hwmon_alarm))
-+		};
-+		ret = nct6694_read_msg(data->nct6694, &cmd_hd,
-+				       &data->msg->hwmon_alarm);
-+		if (ret)
-+			return ret;
-+
-+		val = clamp_val(val, -127000, 127000);
-+		data->msg->hwmon_alarm.tin_cfg[channel].hl = temp_to_reg(val);
-+
-+		return nct6694_write_msg(data->nct6694, &cmd_hd,
-+					 &data->msg->hwmon_alarm);
-+	case hwmon_temp_max_hyst:
-+		cmd_hd = (struct nct6694_cmd_header) {
-+			.mod = NCT6694_HWMON_MOD,
-+			.cmd = NCT6694_HWMON_ALARM,
-+			.sel = NCT6694_HWMON_ALARM_SEL,
-+			.len = cpu_to_le16(sizeof(data->msg->hwmon_alarm))
-+		};
-+		ret = nct6694_read_msg(data->nct6694, &cmd_hd,
-+				       &data->msg->hwmon_alarm);
-+
-+		val = clamp_val(val, -127000, 127000);
-+		temp_max = data->msg->hwmon_alarm.tin_cfg[channel].hl;
-+		temp_hyst = temp_max - temp_to_reg(val);
-+		temp_hyst = clamp_val(temp_hyst, 0, 7);
-+		data->msg->hwmon_alarm.tin_cfg[channel].hyst =
-+			(data->msg->hwmon_alarm.tin_cfg[channel].hyst & ~NCT6694_TIN_HYST_MASK) |
-+			FIELD_PREP(NCT6694_TIN_HYST_MASK, temp_hyst);
-+
-+		return nct6694_write_msg(data->nct6694, &cmd_hd,
-+					 &data->msg->hwmon_alarm);
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static int nct6694_fan_write(struct device *dev, u32 attr, int channel,
-+			     long val)
-+{
-+	struct nct6694_hwmon_data *data = dev_get_drvdata(dev);
-+	struct nct6694_cmd_header cmd_hd;
-+	int ret;
-+
-+	guard(mutex)(&data->lock);
-+
-+	switch (attr) {
-+	case hwmon_fan_enable:
-+		if (val == 0)
-+			data->hwmon_en.fin_en[channel / 8] &= ~BIT(channel % 8);
-+		else if (val == 1)
-+			data->hwmon_en.fin_en[channel / 8] |= BIT(channel % 8);
-+		else
-+			return -EINVAL;
-+
-+		cmd_hd = (struct nct6694_cmd_header) {
-+			.mod = NCT6694_HWMON_MOD,
-+			.cmd = NCT6694_HWMON_CONTROL,
-+			.sel = NCT6694_HWMON_CONTROL_SEL,
-+			.len = cpu_to_le16(sizeof(data->hwmon_en))
-+		};
-+
-+		return nct6694_write_msg(data->nct6694, &cmd_hd,
-+					 &data->hwmon_en);
-+	case hwmon_fan_min:
-+		cmd_hd = (struct nct6694_cmd_header) {
-+			.mod = NCT6694_HWMON_MOD,
-+			.cmd = NCT6694_HWMON_ALARM,
-+			.sel = NCT6694_HWMON_ALARM_SEL,
-+			.len = cpu_to_le16(sizeof(data->msg->hwmon_alarm))
-+		};
-+		ret = nct6694_read_msg(data->nct6694, &cmd_hd,
-+				       &data->msg->hwmon_alarm);
-+		if (ret)
-+			return ret;
-+
-+		val = clamp_val(val, 1, 65535);
-+		data->msg->hwmon_alarm.fin_ll[channel] = cpu_to_be16(val);
-+
-+		return nct6694_write_msg(data->nct6694, &cmd_hd,
-+					 &data->msg->hwmon_alarm);
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static int nct6694_pwm_write(struct device *dev, u32 attr, int channel,
-+			     long val)
-+{
-+	struct nct6694_hwmon_data *data = dev_get_drvdata(dev);
-+	struct nct6694_cmd_header cmd_hd;
-+	int ret;
-+
-+	guard(mutex)(&data->lock);
-+
-+	switch (attr) {
-+	case hwmon_pwm_enable:
-+		if (val == 0)
-+			data->hwmon_en.pwm_en[channel / 8] &= ~BIT(channel % 8);
-+		else if (val == 1)
-+			data->hwmon_en.pwm_en[channel / 8] |= BIT(channel % 8);
-+		else
-+			return -EINVAL;
-+
-+		cmd_hd = (struct nct6694_cmd_header) {
-+			.mod = NCT6694_HWMON_MOD,
-+			.cmd = NCT6694_HWMON_CONTROL,
-+			.sel = NCT6694_HWMON_CONTROL_SEL,
-+			.len = cpu_to_le16(sizeof(data->hwmon_en))
-+		};
-+
-+		return nct6694_write_msg(data->nct6694, &cmd_hd,
-+					 &data->hwmon_en);
-+	case hwmon_pwm_input:
-+		if (val < 0 || val > 255)
-+			return -EINVAL;
-+
-+		cmd_hd = (struct nct6694_cmd_header) {
-+			.mod = NCT6694_PWM_MOD,
-+			.cmd = NCT6694_PWM_CONTROL,
-+			.sel = NCT6694_PWM_CONTROL_SEL,
-+			.len = cpu_to_le16(sizeof(data->msg->pwm_ctrl))
-+		};
-+
-+		ret = nct6694_read_msg(data->nct6694, &cmd_hd,
-+				       &data->msg->pwm_ctrl);
-+		if (ret)
-+			return ret;
-+
-+		data->msg->pwm_ctrl.mal_val[channel] = val;
-+
-+		return nct6694_write_msg(data->nct6694, &cmd_hd,
-+					 &data->msg->pwm_ctrl);
-+	case hwmon_pwm_freq:
-+		cmd_hd = (struct nct6694_cmd_header) {
-+			.mod = NCT6694_HWMON_MOD,
-+			.cmd = NCT6694_HWMON_CONTROL,
-+			.sel = NCT6694_HWMON_CONTROL_SEL,
-+			.len = cpu_to_le16(sizeof(data->hwmon_en))
-+		};
-+
-+		data->hwmon_en.pwm_freq[channel] = NCT6694_FREQ_TO_REG(val);
-+
-+		return nct6694_write_msg(data->nct6694, &cmd_hd,
-+					 &data->hwmon_en);
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static int nct6694_read(struct device *dev, enum hwmon_sensor_types type,
-+			u32 attr, int channel, long *val)
-+{
-+	switch (type) {
-+	case hwmon_in:
-+		/* in mV */
-+		return nct6694_in_read(dev, attr, channel, val);
-+	case hwmon_temp:
-+		/* in mC */
-+		return nct6694_temp_read(dev, attr, channel, val);
-+	case hwmon_fan:
-+		/* in RPM */
-+		return nct6694_fan_read(dev, attr, channel, val);
-+	case hwmon_pwm:
-+		/* in value 0~255 */
-+		return nct6694_pwm_read(dev, attr, channel, val);
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static int nct6694_write(struct device *dev, enum hwmon_sensor_types type,
-+			 u32 attr, int channel, long val)
-+{
-+	switch (type) {
-+	case hwmon_in:
-+		return nct6694_in_write(dev, attr, channel, val);
-+	case hwmon_temp:
-+		return nct6694_temp_write(dev, attr, channel, val);
-+	case hwmon_fan:
-+		return nct6694_fan_write(dev, attr, channel, val);
-+	case hwmon_pwm:
-+		return nct6694_pwm_write(dev, attr, channel, val);
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static umode_t nct6694_is_visible(const void *data,
-+				  enum hwmon_sensor_types type,
-+				  u32 attr, int channel)
-+{
-+	switch (type) {
-+	case hwmon_in:
-+		switch (attr) {
-+		case hwmon_in_enable:
-+		case hwmon_in_max:
-+		case hwmon_in_min:
-+			return 0644;
-+		case hwmon_in_alarm:
-+		case hwmon_in_input:
-+			return 0444;
-+		default:
-+			return 0;
-+		}
-+	case hwmon_temp:
-+		switch (attr) {
-+		case hwmon_temp_enable:
-+		case hwmon_temp_max:
-+		case hwmon_temp_max_hyst:
-+			return 0644;
-+		case hwmon_temp_input:
-+		case hwmon_temp_max_alarm:
-+			return 0444;
-+		default:
-+			return 0;
-+		}
-+	case hwmon_fan:
-+		switch (attr) {
-+		case hwmon_fan_enable:
-+		case hwmon_fan_min:
-+			return 0644;
-+		case hwmon_fan_input:
-+		case hwmon_fan_min_alarm:
-+			return 0444;
-+		default:
-+			return 0;
-+		}
-+	case hwmon_pwm:
-+		switch (attr) {
-+		case hwmon_pwm_enable:
-+		case hwmon_pwm_freq:
-+		case hwmon_pwm_input:
-+			return 0644;
-+		default:
-+			return 0;
-+		}
-+	default:
-+		return 0;
-+	}
-+}
-+
-+static const struct hwmon_ops nct6694_hwmon_ops = {
-+	.is_visible = nct6694_is_visible,
-+	.read = nct6694_read,
-+	.write = nct6694_write,
-+};
-+
-+static const struct hwmon_chip_info nct6694_chip_info = {
-+	.ops = &nct6694_hwmon_ops,
-+	.info = nct6694_info,
-+};
-+
-+static int nct6694_hwmon_init(struct nct6694_hwmon_data *data)
-+{
-+	struct nct6694_cmd_header cmd_hd = {
-+		.mod = NCT6694_HWMON_MOD,
-+		.cmd = NCT6694_HWMON_CONTROL,
-+		.sel = NCT6694_HWMON_CONTROL_SEL,
-+		.len = cpu_to_le16(sizeof(data->hwmon_en))
++	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
++	struct nct6694_rtc_time *time = &data->msg->time;
++	static const struct nct6694_cmd_header cmd_hd = {
++		.mod = NCT6694_RTC_MOD,
++		.cmd = NCT6694_RTC_TIME,
++		.sel = NCT6694_RTC_TIME_SEL,
++		.len = cpu_to_le16(sizeof(*time))
 +	};
 +	int ret;
 +
-+	/*
-+	 * Record each Hardware Monitor Channel enable status
-+	 * and PWM frequency register
-+	 */
-+	ret = nct6694_read_msg(data->nct6694, &cmd_hd,
-+			       &data->hwmon_en);
++	ret = nct6694_read_msg(data->nct6694, &cmd_hd, time);
 +	if (ret)
 +		return ret;
 +
-+	cmd_hd = (struct nct6694_cmd_header) {
-+		.mod = NCT6694_HWMON_MOD,
-+		.cmd = NCT6694_HWMON_ALARM,
-+		.sel = NCT6694_HWMON_ALARM_SEL,
-+		.len = cpu_to_le16(sizeof(data->msg->hwmon_alarm))
-+	};
++	tm->tm_sec = bcd2bin(time->sec);		/* tm_sec expect 0 ~ 59 */
++	tm->tm_min = bcd2bin(time->min);		/* tm_min expect 0 ~ 59 */
++	tm->tm_hour = bcd2bin(time->hour);		/* tm_hour expect 0 ~ 23 */
++	tm->tm_wday = bcd2bin(time->week) - 1;		/* tm_wday expect 0 ~ 6 */
++	tm->tm_mday = bcd2bin(time->day);		/* tm_mday expect 1 ~ 31 */
++	tm->tm_mon = bcd2bin(time->month) - 1;		/* tm_month expect 0 ~ 11 */
++	tm->tm_year = bcd2bin(time->year) + 100;	/* tm_year expect since 1900 */
 +
-+	/* Select hwmon device alarm mode */
-+	ret = nct6694_read_msg(data->nct6694, &cmd_hd,
-+			       &data->msg->hwmon_alarm);
-+	if (ret)
-+		return ret;
-+
-+	data->msg->hwmon_alarm.smi_ctrl = NCT6694_HWMON_REALTIME_IRQ;
-+
-+	return nct6694_write_msg(data->nct6694, &cmd_hd,
-+				 &data->msg->hwmon_alarm);
++	return ret;
 +}
 +
-+static int nct6694_hwmon_probe(struct platform_device *pdev)
++static int nct6694_rtc_set_time(struct device *dev, struct rtc_time *tm)
 +{
-+	struct nct6694_hwmon_data *data;
++	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
++	struct nct6694_rtc_time *time = &data->msg->time;
++	static const struct nct6694_cmd_header cmd_hd = {
++		.mod = NCT6694_RTC_MOD,
++		.cmd = NCT6694_RTC_TIME,
++		.sel = NCT6694_RTC_TIME_SEL,
++		.len = cpu_to_le16(sizeof(*time))
++	};
++
++	time->sec = bin2bcd(tm->tm_sec);
++	time->min = bin2bcd(tm->tm_min);
++	time->hour = bin2bcd(tm->tm_hour);
++	time->week = bin2bcd(tm->tm_wday + 1);
++	time->day = bin2bcd(tm->tm_mday);
++	time->month = bin2bcd(tm->tm_mon + 1);
++	time->year = bin2bcd(tm->tm_year - 100);
++
++	return nct6694_write_msg(data->nct6694, &cmd_hd, time);
++}
++
++static int nct6694_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alrm)
++{
++	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
++	struct nct6694_rtc_alarm *alarm = &data->msg->alarm;
++	static const struct nct6694_cmd_header cmd_hd = {
++		.mod = NCT6694_RTC_MOD,
++		.cmd = NCT6694_RTC_ALARM,
++		.sel = NCT6694_RTC_ALARM_SEL,
++		.len = cpu_to_le16(sizeof(*alarm))
++	};
++	int ret;
++
++	ret = nct6694_read_msg(data->nct6694, &cmd_hd, alarm);
++	if (ret)
++		return ret;
++
++	alrm->time.tm_sec = bcd2bin(alarm->sec);
++	alrm->time.tm_min = bcd2bin(alarm->min);
++	alrm->time.tm_hour = bcd2bin(alarm->hour);
++	alrm->enabled = alarm->alarm_en;
++	alrm->pending = alarm->alarm_pend;
++
++	return ret;
++}
++
++static int nct6694_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
++{
++	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
++	struct nct6694_rtc_alarm *alarm = &data->msg->alarm;
++	static const struct nct6694_cmd_header cmd_hd = {
++		.mod = NCT6694_RTC_MOD,
++		.cmd = NCT6694_RTC_ALARM,
++		.sel = NCT6694_RTC_ALARM_SEL,
++		.len = cpu_to_le16(sizeof(*alarm))
++	};
++
++	alarm->sec = bin2bcd(alrm->time.tm_sec);
++	alarm->min = bin2bcd(alrm->time.tm_min);
++	alarm->hour = bin2bcd(alrm->time.tm_hour);
++	alarm->alarm_en = alrm->enabled ? NCT6694_RTC_IRQ_EN : 0;
++	alarm->alarm_pend = 0;
++
++	return nct6694_write_msg(data->nct6694, &cmd_hd, alarm);
++}
++
++static int nct6694_rtc_alarm_irq_enable(struct device *dev, unsigned int enabled)
++{
++	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
++	struct nct6694_rtc_status *sts = &data->msg->sts;
++	static const struct nct6694_cmd_header cmd_hd = {
++		.mod = NCT6694_RTC_MOD,
++		.cmd = NCT6694_RTC_STATUS,
++		.sel = NCT6694_RTC_STATUS_SEL,
++		.len = cpu_to_le16(sizeof(*sts))
++	};
++
++	if (enabled)
++		sts->irq_en |= NCT6694_RTC_IRQ_EN;
++	else
++		sts->irq_en &= ~NCT6694_RTC_IRQ_EN;
++
++	sts->irq_pend = 0;
++
++	return nct6694_write_msg(data->nct6694, &cmd_hd, sts);
++}
++
++static const struct rtc_class_ops nct6694_rtc_ops = {
++	.read_time = nct6694_rtc_read_time,
++	.set_time = nct6694_rtc_set_time,
++	.read_alarm = nct6694_rtc_read_alarm,
++	.set_alarm = nct6694_rtc_set_alarm,
++	.alarm_irq_enable = nct6694_rtc_alarm_irq_enable,
++};
++
++static irqreturn_t nct6694_irq(int irq, void *dev_id)
++{
++	struct nct6694_rtc_data *data = dev_id;
++	struct nct6694_rtc_status *sts = &data->msg->sts;
++	static const struct nct6694_cmd_header cmd_hd = {
++		.mod = NCT6694_RTC_MOD,
++		.cmd = NCT6694_RTC_STATUS,
++		.sel = NCT6694_RTC_STATUS_SEL,
++		.len = cpu_to_le16(sizeof(*sts))
++	};
++	int ret;
++
++	rtc_lock(data->rtc);
++
++	sts->irq_en = NCT6694_RTC_IRQ_EN;
++	sts->irq_pend = NCT6694_RTC_IRQ_STS;
++	ret = nct6694_write_msg(data->nct6694, &cmd_hd, sts);
++	if (ret) {
++		rtc_unlock(data->rtc);
++		return IRQ_NONE;
++	}
++
++	rtc_update_irq(data->rtc, 1, RTC_IRQF | RTC_AF);
++
++	rtc_unlock(data->rtc);
++
++	return IRQ_HANDLED;
++}
++
++static void nct6694_irq_dispose_mapping(void *d)
++{
++	struct nct6694_rtc_data *data = d;
++
++	irq_dispose_mapping(data->irq);
++}
++
++static int nct6694_rtc_probe(struct platform_device *pdev)
++{
++	struct nct6694_rtc_data *data;
 +	struct nct6694 *nct6694 = dev_get_drvdata(pdev->dev.parent);
-+	struct device *hwmon_dev;
 +	int ret;
 +
 +	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
 +	if (!data)
 +		return -ENOMEM;
 +
-+	data->rpt = devm_kzalloc(&pdev->dev, sizeof(union nct6694_hwmon_rpt),
-+				 GFP_KERNEL);
-+	if (!data->rpt)
-+		return -ENOMEM;
-+
-+	data->msg = devm_kzalloc(&pdev->dev, sizeof(union nct6694_hwmon_msg),
++	data->msg = devm_kzalloc(&pdev->dev, sizeof(union nct6694_rtc_msg),
 +				 GFP_KERNEL);
 +	if (!data->msg)
 +		return -ENOMEM;
 +
++	data->irq = irq_create_mapping(nct6694->domain, NCT6694_IRQ_RTC);
++	if (!data->irq)
++		return -EINVAL;
++
++	ret = devm_add_action_or_reset(&pdev->dev, nct6694_irq_dispose_mapping,
++				       data);
++	if (ret)
++		return ret;
++
++	ret = devm_device_init_wakeup(&pdev->dev);
++	if (ret)
++		return dev_err_probe(&pdev->dev, ret, "Failed to init wakeup\n");
++
++	data->rtc = devm_rtc_allocate_device(&pdev->dev);
++	if (IS_ERR(data->rtc))
++		return PTR_ERR(data->rtc);
++
 +	data->nct6694 = nct6694;
-+	ret = devm_mutex_init(&pdev->dev, &data->lock);
-+	if (ret)
-+		return ret;
++	data->rtc->ops = &nct6694_rtc_ops;
++	data->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
++	data->rtc->range_max = RTC_TIMESTAMP_END_2099;
 +
-+	ret = nct6694_hwmon_init(data);
-+	if (ret)
-+		return ret;
++	platform_set_drvdata(pdev, data);
 +
-+	/* Register hwmon device to HWMON framework */
-+	hwmon_dev = devm_hwmon_device_register_with_info(&pdev->dev,
-+							 "nct6694", data,
-+							 &nct6694_chip_info,
-+							 NULL);
-+	return PTR_ERR_OR_ZERO(hwmon_dev);
++	ret = devm_request_threaded_irq(&pdev->dev, data->irq, NULL,
++					nct6694_irq, IRQF_ONESHOT,
++					"rtc-nct6694", data);
++	if (ret < 0)
++		return dev_err_probe(&pdev->dev, ret, "Failed to request irq\n");
++
++	return devm_rtc_register_device(data->rtc);
 +}
 +
-+static struct platform_driver nct6694_hwmon_driver = {
++static struct platform_driver nct6694_rtc_driver = {
 +	.driver = {
-+		.name	= "nct6694-hwmon",
++		.name	= "nct6694-rtc",
 +	},
-+	.probe		= nct6694_hwmon_probe,
++	.probe		= nct6694_rtc_probe,
 +};
 +
-+module_platform_driver(nct6694_hwmon_driver);
++module_platform_driver(nct6694_rtc_driver);
 +
-+MODULE_DESCRIPTION("USB-HWMON driver for NCT6694");
++MODULE_DESCRIPTION("USB-RTC driver for NCT6694");
 +MODULE_AUTHOR("Ming Yu <tmyu0@nuvoton.com>");
 +MODULE_LICENSE("GPL");
-+MODULE_ALIAS("platform:nct6694-hwmon");
++MODULE_ALIAS("platform:nct6694-rtc");
 -- 
 2.34.1
 
