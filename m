@@ -1,49 +1,49 @@
-Return-Path: <linux-i2c+bounces-12635-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12637-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F172B43EE3
-	for <lists+linux-i2c@lfdr.de>; Thu,  4 Sep 2025 16:34:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 16F4FB43EFB
+	for <lists+linux-i2c@lfdr.de>; Thu,  4 Sep 2025 16:36:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3F1B24E5C05
-	for <lists+linux-i2c@lfdr.de>; Thu,  4 Sep 2025 14:34:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5E14A3A2791
+	for <lists+linux-i2c@lfdr.de>; Thu,  4 Sep 2025 14:34:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF994314B97;
-	Thu,  4 Sep 2025 14:31:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5779332A800;
+	Thu,  4 Sep 2025 14:31:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jXbp4Xix"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q1YwK/tA"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 857EA31352F;
-	Thu,  4 Sep 2025 14:31:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08FAD320CA0;
+	Thu,  4 Sep 2025 14:31:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756996296; cv=none; b=s6H397hupkicHUD+xYHQIfPAAY7ESXcym1YNTnyLv7TuLIYSd5+dWQg5hX0r3EfBX8vl0UBn1mVAVAa9D5iRrJ0ZNHPW4ig5JA/LcLiHgQZyieKE/sNZP17BU0LONqQp6YcMmTZjaXtY+68T6QKvs5jsGbjeyIg8yH4D28m8VIY=
+	t=1756996300; cv=none; b=rxQ5O93Vn3YxUcXDCtZuuvi3i2Yhukptd+ankDM+NiZ0TbwpJDQt26z9M0FcRFiIMbr8u+0Qyn8CMabOmI4UsoU2OXJQM9GDdLVCXOWnIqRN3QyKQjwlbLym9wSCcHzqDtNKytQ32Y2xui+HSY29pjtA9JbfPlOo0wP9mnVvQLs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756996296; c=relaxed/simple;
-	bh=ISIb2YxiCXzHSDHlaC2Prm4WI22Bzfj830rd9uxgk5M=;
+	s=arc-20240116; t=1756996300; c=relaxed/simple;
+	bh=W3FRmWKbxHyNCOUd1Ra/+kxcH/HvrKsMg+junB/0Om4=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=OstAgQUdGhvAQNT089kbZa/R8zM1jkxGn6KXLwlpf16wBxlvXdV4WI4CscgwoMxKMGWb3x1g7AxNZbLTxXeJ7itxa6fffJ/FkTi9VbxHwtcVToeSpxkc+TfUTTe7TGvb/T90kwJXAk3zVgtIPkc+3MaMkx8/HFyGiyISoCZLDEg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jXbp4Xix; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD378C4CEF0;
-	Thu,  4 Sep 2025 14:31:32 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=pIoQBF3JUoWw5gdRie/LYO2I0+oioa0b9ADPPkWBgwHVjlRG7FgsM9yEUbTdp6hwjwZZfWSdjVxqW/y8B2QCRNVUs9DP/pEqGqYKSjLlzyjZ7eWJz1xRz2tYwwcR+1vhUQfHdF13tK/3XD1mHCtk1CsD2DcKl6F+PGLhkU/akdM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q1YwK/tA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B5B1C4CEF7;
+	Thu,  4 Sep 2025 14:31:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756996296;
-	bh=ISIb2YxiCXzHSDHlaC2Prm4WI22Bzfj830rd9uxgk5M=;
+	s=k20201202; t=1756996299;
+	bh=W3FRmWKbxHyNCOUd1Ra/+kxcH/HvrKsMg+junB/0Om4=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=jXbp4XixaqUdEcHeYRV6P/gLicEScPkDcNtLmQrPJBZ72LsGha8hs3PSIsRibdgSJ
-	 5SaczWW7C9ctOvAg25N7VCy7VeOyeJj478C8R43C1zJm9ur0P4MZZ2mN0+TTELfzAj
-	 PWYTnKVKYbtU9+bq8dZqiAO1VWzpp19h9Fz2XVi2fkr2no10ZqKgqwroF+lIZpkiH1
-	 zJr0LOodB7MJmDXxzoikw0162gNV0yTBh6JbKQdMQb3X6/3U+x890T5IDwS8j53RMI
-	 Nzu7bKVkRm9xyr2aY3tUIVXToNNOGCUSjQFhXQpbkmFTYHetpJ18zrfSL+0AKg0T5A
-	 QYHzUNNvgESOg==
+	b=Q1YwK/tAI88YuMOWlAWjfNW8vHMWlsnrvxoo8jEIZldic1uaIbdadBfHEpsvyL1Hk
+	 822H3UZbyZ5WBv+SDpZ6fEaP6XcJ3OCeZe61Eyp0RbMzH0bUgknTnoi5XSBpBVIuR3
+	 nydwRmt63tLs1nFSeCRg3ytwmGBjTHgDTI7dXyvSN3U3Xix29yGXYaDO/Qk1hzCokU
+	 f39INelvMuCL0RcOdz/OIDD94awvCkwqOdv11gNnCszLu+3B6UiLpqGN7qOBzvFqIm
+	 tJRzJGIgygK4LMjjcUMKmFeThgY9GztHXfwRAJI+Cztl0rDSUnfHWtxtTTkjmd2d6p
+	 9x4spEnOYPKPg==
 From: Konrad Dybcio <konradybcio@kernel.org>
-Date: Thu, 04 Sep 2025 16:31:21 +0200
-Subject: [PATCH 2/5] dt-bindings: i2c: qcom-cci: Allow operating-points-v2
+Date: Thu, 04 Sep 2025 16:31:22 +0200
+Subject: [PATCH 3/5] i2c: qcom-cci: Drop single-line wrappers
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -52,7 +52,7 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250904-topic-cci_updates-v1-2-d38559692703@oss.qualcomm.com>
+Message-Id: <20250904-topic-cci_updates-v1-3-d38559692703@oss.qualcomm.com>
 References: <20250904-topic-cci_updates-v1-0-d38559692703@oss.qualcomm.com>
 In-Reply-To: <20250904-topic-cci_updates-v1-0-d38559692703@oss.qualcomm.com>
 To: Bjorn Andersson <andersson@kernel.org>, 
@@ -67,39 +67,83 @@ Cc: Marijn Suijten <marijn.suijten@somainline.org>,
  linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org, 
  Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1756996284; l=837;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1756996284; l=1950;
  i=konrad.dybcio@oss.qualcomm.com; s=20230215; h=from:subject:message-id;
- bh=H2KC20VDboBzuOfuUjQ10i65xbtF9likBztKG+8DrYs=;
- b=RgdO/lnfLGoZ2UruWKA/spa9WBpxdoK0cYZzJGFkaDL8M9rDRD91rqXI/X4LLvYOBSKAuxmHG
- 3ShuY0rcZR5Ds/BW5igoGilsqIeQOutIzXBG5cHvdzlU9EdyaxmT6xI
+ bh=WftzdXiZKmnGP1b2v0Y7K87fxqhQ28Y81WkkVpsPg+Q=;
+ b=fUGSJ3BylEq92lSIcEo1k0bSIPUy6oBmacbpkpw61NhbnUTv3X+oxbt8hmwWDgiHk7q0xKgqB
+ jOC775FI8wBCQGAdCnpaBsmTSDKK2N2RqxiNsqbV4iQM3aB0/6VU6t7
 X-Developer-Key: i=konrad.dybcio@oss.qualcomm.com; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 
 From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 
-An OPP table is necessary to express combined voltage and frequency
-requirements for the CCI hw block.
-
-Allow passing one, without requiring its presence.
+The CCI clock en/disable functions simply call bulk_ops, remove them.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 ---
- Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/i2c/busses/i2c-qcom-cci.c | 20 ++++++--------------
+ 1 file changed, 6 insertions(+), 14 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
-index 73144473b9b24e574bfc6bd7d8908f2f3895e087..1bb9a70661a944c1bdc01d336475952221450dba 100644
---- a/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
-+++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
-@@ -54,6 +54,8 @@ properties:
-   interrupts:
-     maxItems: 1
+diff --git a/drivers/i2c/busses/i2c-qcom-cci.c b/drivers/i2c/busses/i2c-qcom-cci.c
+index a3afa11a71a10dbb720ee9acb566991fe55b98a0..74fedfdec3ae4e034ec4d946179e963c783b5923 100644
+--- a/drivers/i2c/busses/i2c-qcom-cci.c
++++ b/drivers/i2c/busses/i2c-qcom-cci.c
+@@ -466,21 +466,12 @@ static const struct i2c_algorithm cci_algo = {
+ 	.functionality = cci_func,
+ };
  
-+  operating-points-v2: true
+-static int cci_enable_clocks(struct cci *cci)
+-{
+-	return clk_bulk_prepare_enable(cci->nclocks, cci->clocks);
+-}
+-
+-static void cci_disable_clocks(struct cci *cci)
+-{
+-	clk_bulk_disable_unprepare(cci->nclocks, cci->clocks);
+-}
+-
+ static int __maybe_unused cci_suspend_runtime(struct device *dev)
+ {
+ 	struct cci *cci = dev_get_drvdata(dev);
+ 
+-	cci_disable_clocks(cci);
++	clk_bulk_disable_unprepare(cci->nclocks, cci->clocks);
 +
-   power-domains:
-     maxItems: 1
+ 	return 0;
+ }
  
+@@ -489,11 +480,12 @@ static int __maybe_unused cci_resume_runtime(struct device *dev)
+ 	struct cci *cci = dev_get_drvdata(dev);
+ 	int ret;
+ 
+-	ret = cci_enable_clocks(cci);
++	ret = clk_bulk_prepare_enable(cci->nclocks, cci->clocks);
+ 	if (ret)
+ 		return ret;
+ 
+ 	cci_init(cci);
++
+ 	return 0;
+ }
+ 
+@@ -592,7 +584,7 @@ static int cci_probe(struct platform_device *pdev)
+ 		return dev_err_probe(dev, -EINVAL, "not enough clocks in DT\n");
+ 	cci->nclocks = ret;
+ 
+-	ret = cci_enable_clocks(cci);
++	ret = clk_bulk_prepare_enable(cci->nclocks, cci->clocks);
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -651,7 +643,7 @@ static int cci_probe(struct platform_device *pdev)
+ error:
+ 	disable_irq(cci->irq);
+ disable_clocks:
+-	cci_disable_clocks(cci);
++	clk_bulk_disable_unprepare(cci->nclocks, cci->clocks);
+ 
+ 	return ret;
+ }
 
 -- 
 2.51.0
