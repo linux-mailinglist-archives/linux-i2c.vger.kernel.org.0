@@ -1,166 +1,197 @@
-Return-Path: <linux-i2c+bounces-12610-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12611-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C533EB43647
-	for <lists+linux-i2c@lfdr.de>; Thu,  4 Sep 2025 10:51:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA676B43669
+	for <lists+linux-i2c@lfdr.de>; Thu,  4 Sep 2025 10:59:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7A45816C501
-	for <lists+linux-i2c@lfdr.de>; Thu,  4 Sep 2025 08:51:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A40967C2001
+	for <lists+linux-i2c@lfdr.de>; Thu,  4 Sep 2025 08:59:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69D502C376B;
-	Thu,  4 Sep 2025 08:51:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74C892D1F44;
+	Thu,  4 Sep 2025 08:59:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IN2kFZOM"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="QxzxqLn3"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D1992264B1;
-	Thu,  4 Sep 2025 08:51:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1018A2D061E;
+	Thu,  4 Sep 2025 08:59:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756975880; cv=none; b=fSMZ5cDHUmKXTf6GILur4zsFV9jgo569RctIbtYvozdp65O1Zybjgt7NIZqztkzX6YG7mJatFOpWubbIHxpRBY2vifHYtEWySpGY55vWHZGmYlwxWkLarO2KjVDja2JiFQ+8r/XvcySQxmE9hQoVKfzlVW0K/FFqd+jLEN7LsTU=
+	t=1756976387; cv=none; b=NRswE/uhk8lkGQsIbx//UPeY5FvDiDr9h/gMiCcidb/9xyodg3IzAfh8NQ6HR5C5GzRjeaXZJVJh7bVrpCTdzplzgGwDaKE7rPjPX7dxW8WlFFwL2sg1pu/uwGGGuABKXn5CeYTT4pWalqciIIHElkBmfzE0uimA4/QYOJmTav8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756975880; c=relaxed/simple;
-	bh=PQ+4876oOXTcBYbq5bbLoCjRmC8bWyaKpjk4sRZttUg=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=fCIK1TNruSS3L12jMj4IeCswRRli6dtssTEft1WjVqhSy01xpgk2LbSD3HI/qZ9RLp/xlj/oY8US5A8S6IFFJU2AneHDuZxVXTWDgW3GJ9iB2moBlZ45WJfbCqviZjNNDYSLLuc4mJiejV0uBpL6cm8PUhe+7/mLJii38nVimiw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IN2kFZOM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7ED8BC4CEF1;
-	Thu,  4 Sep 2025 08:51:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756975879;
-	bh=PQ+4876oOXTcBYbq5bbLoCjRmC8bWyaKpjk4sRZttUg=;
-	h=Date:Subject:Cc:To:From:References:In-Reply-To:From;
-	b=IN2kFZOMaNxCYS2JbmOzXeMKh2bJWPcUgI4zQKqOPDCyU9Q9QA7qvcdj0ZHL/QONK
-	 sXgv0/xfyNghYGq5L+FfFaPmB/DOUxZodFp99va39BldCKERIZFshn72l5U+p8Ucy1
-	 8WeZTnKqtGvyjVVNwuMeC+R3SLUb66hwOWCWrwgYorCknxTd4B4zW4vFBEex922vr2
-	 lvJjzC7zFCW0R4YjHhCVHNRlaJfDlJfX2HDMztbS65R9yAUO/NCoANC1DEuQpt+kqb
-	 WCS6CtFfPtFDTSJ06vIDSFscZD7zsfhAMxuK5P3onxR9MSyxobVeQldyegu3jJ5rXk
-	 4DkdGXWUU39nQ==
+	s=arc-20240116; t=1756976387; c=relaxed/simple;
+	bh=ga7tmV4L0ISGRZ0jJ6UfxKx8Es4klai04+hvgsgpbIg=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=uPLbGZwHvRoXI0RUHMX4d7ILZt6VnCWLSYllLyUssrb18Hp9i+JmGS/gpiwgThDqgY9WJ0tqWzp1tFMvR/COqbrWZAWH+i0KyC931KrCmeZArrp/rIjbx2SN19fafJNH1KUjED0U2/YqEFwKIsJFSNCFEW4VVbz/TXou+MW26Qw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=QxzxqLn3; arc=none smtp.client-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 322E01A0984;
+	Thu,  4 Sep 2025 08:59:42 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 026D8606BB;
+	Thu,  4 Sep 2025 08:59:42 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 0200D1C22A241;
+	Thu,  4 Sep 2025 10:59:32 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1756976381; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=5oXliwhksVRoXJFSBUuq81uC4pWKGDKz3WEBub+fLxc=;
+	b=QxzxqLn3jynq+8kdugI9MMK7psIjpv7iUv3DCmfxgo0jldRXoE6p5Hj3FFYwLs/bei5ijZ
+	f3ubzOTOtWHHH2qdxWZqyl1qbxWt95aqa7+a2eXtDjJWtk8Id9/mnQCl9bcMMuWK/anNJZ
+	4UBhN3EQkwVpMHfL3EsNl71W2rK3wQAqsasvg8C6PP4xNI6MaEkEFRMP57WWOin373VEQF
+	4eUP+N6UQZf91yELZEdMQzDJ/Vgt1K28yJYrFs3WUNkXZHalbL2unaN7BugXfUC0kzy08e
+	Vlz1PiiuNFQy/cx20hNTYiF1RCnEKr+kv+Maq50v3Q2QV2x2xDcMQzWbWHoWqg==
+From: =?utf-8?q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>
+Date: Thu, 04 Sep 2025 10:59:24 +0200
+Subject: [PATCH] i2c: designware: use dev_err_probe when probing platform
+ device
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 04 Sep 2025 10:51:15 +0200
-Message-Id: <DCJVYUINZ7KM.7RCV9P9KHTVM@kernel.org>
-Subject: Re: [PATCH v4 1/2] device property: Add scoped fwnode child node
- iterators
-Cc: =?utf-8?q?Jean-Fran=C3=A7ois_Lessard?= <jefflessard3@gmail.com>,
- "Wolfram Sang" <wsa+renesas@sang-engineering.com>, "Andy Shevchenko"
- <andriy.shevchenko@linux.intel.com>, "Daniel Scally" <djrscally@gmail.com>,
- "Heikki Krogerus" <heikki.krogerus@linux.intel.com>, "Greg Kroah-Hartman"
- <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- "Javier Carrasco" <javier.carrasco.cruz@gmail.com>,
- <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-acpi@vger.kernel.org>
-To: "Sakari Ailus" <sakari.ailus@linux.intel.com>
-From: "Danilo Krummrich" <dakr@kernel.org>
-References: <20250902190443.3252-1-jefflessard3@gmail.com>
- <20250902190443.3252-2-jefflessard3@gmail.com>
- <aLhAKJBUNQVH1Vmf@kekkonen.localdomain>
- <DCJC7Q9MZEM3.34FU7BXXZ7UGF@kernel.org>
- <aLkqE9c9w9m4Axsp@kekkonen.localdomain>
- <DCJTOIQ4Q0Z5.Q2UE5AQU1X35@kernel.org>
- <aLlDJETaWTjiSP0L@kekkonen.localdomain>
-In-Reply-To: <aLlDJETaWTjiSP0L@kekkonen.localdomain>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20250904-i2c-dw-dev-err-probe-v1-1-acca6ffd122e@bootlin.com>
+X-B4-Tracking: v=1; b=H4sIAOtUuWgC/x3MwQpAQBCH8VfRnE0xKLyKHNj9L3NBs4WSd7c5/
+ g7f91CEKSL12UOGU6PuW0KZZ+TWaVvA6pNJCmmKVoRVHPuLPU6GGR+2z2BMoZsdKoTaUUoPQ9D
+ 73w7j+35s2pkSZgAAAA==
+X-Change-ID: 20250822-i2c-dw-dev-err-probe-eaf9bce3ef4c
+To: Jarkko Nikula <jarkko.nikula@linux.intel.com>, 
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+ Mika Westerberg <mika.westerberg@linux.intel.com>, 
+ Jan Dabros <jsd@semihalf.com>, Andi Shyti <andi.shyti@kernel.org>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
+ Tawfik Bayouk <tawfik.bayouk@mobileye.com>, linux-i2c@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>
+X-Mailer: b4 0.14.2
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Thu Sep 4, 2025 at 9:43 AM CEST, Sakari Ailus wrote:
-> Hi Danilo,
->
-> On Thu, Sep 04, 2025 at 09:03:44AM +0200, Danilo Krummrich wrote:
->> On Thu Sep 4, 2025 at 7:56 AM CEST, Sakari Ailus wrote:
->> > Hi Danilo,
->> >
->> > On Wed, Sep 03, 2025 at 07:22:29PM +0200, Danilo Krummrich wrote:
->> >> (Cc: Javier)
->> >>=20
->> >> On Wed Sep 3, 2025 at 3:18 PM CEST, Sakari Ailus wrote:
->> >> > Do we really need the available variant?
->> >> >
->> >> > Please see
->> >> > <URL:https://lore.kernel.org/linux-acpi/Zwj12J5bTNUEnxA0@kekkonen.l=
-ocaldomain/>.
->> >> >
->> >> > I'll post a patch to remove fwnode_get_next_available_child_node(),=
- too.
->> >>=20
->> >> Either I'm missing something substantial or the link does indeed not =
-provide an
->> >> obvious justification of why you want to send a patch to remove
->> >> fwnode_get_next_available_child_node().
->> >>=20
->> >> Do you mean to say that all fwnode backends always return true for
->> >> device_is_available() and hence the fwnode API should not make this d=
-istinction?
->> >>=20
->> >> I.e. are you referring to the fact that of_fwnode_get_next_child_node=
-() always
->> >> calls of_get_next_available_child() and swnode has no device_is_avail=
-able()
->> >> callback and hence is always available? What about ACPI?
->> >
->> > On ACPI there's no such concept on ACPI data nodes so all data nodes a=
-re
->> > considered to be available. So effectively the fwnode_*available*() is
->> > always the same as the variant without _available().
->>=20
->> What about acpi_fwnode_device_is_available()? Is it guaranteed to always
->> evaluate to true?
->
-> acpi_fwnode_device_is_available() is different as it works on ACPI device
-> nodes having availability information.
+Add calls to dev_err_probe on error paths that can return -EPROBE_DEFER
+when probing platform device. Namely when requesting the reset controller,
+when probing for lock support and when requesting the clocks.
 
-Well, it works on both data and device nodes, so considering data nodes onl=
-y
-isn't enough, no?
+In i2c_dw_probe_master and i2c_dw_probe_slave, called by the platform
+probe from i2c_dw_probe, replace the call to dev_err by dev_err_probe
+when failing to acquire the IRQ.
 
-So, we can't just say fwnode_get_next_available_child_node() and
-fwnode_get_next_child_node() can be used interchangeably.
+PCI device probing already use dev_err_probe.
 
->> If so, to you plan to remove device_is_available() from struct
->> fwnode_operations and fixup all users of fwnode_get_next_available_child=
-_node()
->> and fwnode_for_each_available_child_node() as well?
->
-> The device_is_available() callback needs to stay; it has valid uses
-> elsewhere.
->
-> Technically it is possible that fwnode_*child_node() functions could retu=
-rn
-> device nodes that aren't available, but it is unlikely any caller would
-> want to enumerate device nodes this way. Even so, I think it'd be the bes=
-t
-> to add an explicit availability check on ACPI side as well so only
-> available nodes would be returned.
+Signed-off-by: Benoît Monin <benoit.monin@bootlin.com>
+---
+I recently spend some time debugging a case where the i2c controller
+never showed up. In the end it was caused by a missing reset controller
+due to a typo in the device tree.
 
-Fair enough, but that's an entirely different rationale than the one you ga=
-ve
-above. I.e. "all iterators should only ever provide available ones" vs. the
-"they're all available anyways" argument above.
+While this has nothing to do with the i2c designware driver, not having
+any hint about why the device stays in deferred probe state does not
+help.
 
-(Quote: "So effectively the fwnode_*available*() is always the same as the
- variant without _available().")
+The patch add dev_err_probe in the error paths that can return
+-EPROBE_DEFER to aid in debugging such case.
+---
+ drivers/i2c/busses/i2c-designware-master.c  |  9 ++++-----
+ drivers/i2c/busses/i2c-designware-platdrv.c | 11 ++++++-----
+ drivers/i2c/busses/i2c-designware-slave.c   |  9 ++++-----
+ 3 files changed, 14 insertions(+), 15 deletions(-)
 
-I see quite some drivers using fwnode_for_each_child_node() without any
-availability check. However, they may just rely on implementation details, =
-such
-as knowing it's an OF node or ACPI data node, etc.
+diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
+index cbd88ffa561010ff2d29086836d9119da5b8885c..c7a72c28786c2b59a249a768d43a7954119bc018 100644
+--- a/drivers/i2c/busses/i2c-designware-master.c
++++ b/drivers/i2c/busses/i2c-designware-master.c
+@@ -1068,11 +1068,10 @@ int i2c_dw_probe_master(struct dw_i2c_dev *dev)
+ 	if (!(dev->flags & ACCESS_POLLING)) {
+ 		ret = devm_request_irq(dev->dev, dev->irq, i2c_dw_isr,
+ 				       irq_flags, dev_name(dev->dev), dev);
+-		if (ret) {
+-			dev_err(dev->dev, "failure requesting irq %i: %d\n",
+-				dev->irq, ret);
+-			return ret;
+-		}
++		if (ret)
++			return dev_err_probe(dev->dev, ret,
++					     "failure requesting irq %i: %d\n",
++					     dev->irq, ret);
+ 	}
+ 
+ 	ret = i2c_dw_init_recovery_info(dev);
+diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
+index a35e4c64a1d46f43aa2d37c0d20fbbd4bc1ff600..07efe4b529e29b52b9e4e439c4b154b467a24fda 100644
+--- a/drivers/i2c/busses/i2c-designware-platdrv.c
++++ b/drivers/i2c/busses/i2c-designware-platdrv.c
+@@ -238,7 +238,7 @@ static int dw_i2c_plat_probe(struct platform_device *pdev)
+ 
+ 	dev->rst = devm_reset_control_get_optional_exclusive(device, NULL);
+ 	if (IS_ERR(dev->rst))
+-		return PTR_ERR(dev->rst);
++		return dev_err_probe(device, PTR_ERR(dev->rst), "failed to acquire reset\n");
+ 
+ 	reset_control_deassert(dev->rst);
+ 
+@@ -247,21 +247,22 @@ static int dw_i2c_plat_probe(struct platform_device *pdev)
+ 		goto exit_reset;
+ 
+ 	ret = i2c_dw_probe_lock_support(dev);
+-	if (ret)
++	if (ret) {
++		ret = dev_err_probe(device, ret, "failed to probe lock support\n");
+ 		goto exit_reset;
+-
++	}
+ 	i2c_dw_configure(dev);
+ 
+ 	/* Optional interface clock */
+ 	dev->pclk = devm_clk_get_optional(device, "pclk");
+ 	if (IS_ERR(dev->pclk)) {
+-		ret = PTR_ERR(dev->pclk);
++		ret = dev_err_probe(device, PTR_ERR(dev->pclk), "failed to acquire pclk\n");
+ 		goto exit_reset;
+ 	}
+ 
+ 	dev->clk = devm_clk_get_optional(device, NULL);
+ 	if (IS_ERR(dev->clk)) {
+-		ret = PTR_ERR(dev->clk);
++		ret = dev_err_probe(device, PTR_ERR(dev->clk), "failed to acquire clock\n");
+ 		goto exit_reset;
+ 	}
+ 
+diff --git a/drivers/i2c/busses/i2c-designware-slave.c b/drivers/i2c/busses/i2c-designware-slave.c
+index b936a240db0a9308f005148cdf4c4f9fd512be05..6eb16b7d75a6d059c7abcead609258f9d514d012 100644
+--- a/drivers/i2c/busses/i2c-designware-slave.c
++++ b/drivers/i2c/busses/i2c-designware-slave.c
+@@ -266,11 +266,10 @@ int i2c_dw_probe_slave(struct dw_i2c_dev *dev)
+ 
+ 	ret = devm_request_irq(dev->dev, dev->irq, i2c_dw_isr_slave,
+ 			       IRQF_SHARED, dev_name(dev->dev), dev);
+-	if (ret) {
+-		dev_err(dev->dev, "failure requesting IRQ %i: %d\n",
+-			dev->irq, ret);
+-		return ret;
+-	}
++	if (ret)
++		return dev_err_probe(dev->dev, ret,
++				     "failure requesting IRQ %i: %d\n",
++				     dev->irq, ret);
+ 
+ 	ret = i2c_add_numbered_adapter(adap);
+ 	if (ret)
 
-So, before you remove fwnode_get_next_available_child_node(), do you plan t=
-o
-change the semantics of the get_next_child_node() callback accordingly,
-including adding the availability check on the ACPI side?
+---
+base-commit: b320789d6883cc00ac78ce83bccbfe7ed58afcf0
+change-id: 20250822-i2c-dw-dev-err-probe-eaf9bce3ef4c
 
-How do we ensure there are no existing drivers relying on iterating also
-unavailble nodes? Above you say it's unlikely anyone actually wants this, b=
-ut
-are we sure?
+Best regards,
+-- 
+Benoît Monin, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
 
