@@ -1,170 +1,212 @@
-Return-Path: <linux-i2c+bounces-12594-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12595-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5507B42D20
-	for <lists+linux-i2c@lfdr.de>; Thu,  4 Sep 2025 00:59:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A68F6B42E30
+	for <lists+linux-i2c@lfdr.de>; Thu,  4 Sep 2025 02:27:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 954C43B3AB1
-	for <lists+linux-i2c@lfdr.de>; Wed,  3 Sep 2025 22:59:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6892E169214
+	for <lists+linux-i2c@lfdr.de>; Thu,  4 Sep 2025 00:27:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D59AE2EFDBA;
-	Wed,  3 Sep 2025 22:59:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0734C1885A5;
+	Thu,  4 Sep 2025 00:27:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BySSq+sV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kAGcaOUs"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F25B1D88A4;
-	Wed,  3 Sep 2025 22:59:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEE7E155333;
+	Thu,  4 Sep 2025 00:27:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756940365; cv=none; b=hkewLEJajMeYQzuO1sSsxcUq8+mnJb03yNrY0o3aPlhqSXATsKxJ1tf2Fs0AoAgnMSQgfkJlTEKPa/gbSHZtpgjlp/mBzZ76gkayWYEXVYu9smvTt6lO7qJ3xsZ9OKnkG17zDqbAmGn5j7EgkgDYY0nu3LSGylJwllSetNWpfMw=
+	t=1756945674; cv=none; b=Ag0Qnxzl4uAltp9FoPmLJfF1078bpDfbrAHRG2rOb9eGFo12NCj6e0n/AqWL6P0CgpB5pdfW50zMqdDJDHY8HxrI9CdEPQq7nbfoJMdAijhJEtijWLFqlWQK5IOwU3MVBdn0x2YSHxFnzRAWCQud50mCwkI0ecaxHw0ScuTqVnw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756940365; c=relaxed/simple;
-	bh=zAZE2E5bn9s5utD0mvDXNU3x1IycGc7eg/BFJEIzRDE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=u6B2uzt3ZZrLeW/Zw6r3xRUlyU0wNV33+ZZEHuSbPY/gVmvvIqltUzy8JEKmy72qlyT7b9tt3eofQVfqV8Zfp/YIwRpGjJK7tFI9UBWqwQQF+K7/W1p3gaGh0z7dp26RwaeEAWBuY8MLrwoHzPi+pPNWyZ8iRWbidWh/jxfc1fg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BySSq+sV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E91AC4CEE7;
-	Wed,  3 Sep 2025 22:59:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756940365;
-	bh=zAZE2E5bn9s5utD0mvDXNU3x1IycGc7eg/BFJEIzRDE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BySSq+sVdzxn2IOx35RmUn963piXTAT31hvCzQBe2t2zJlhSCVsNlFk/iHKl4vHPH
-	 Gp5DCyewN7pcTZCAtj9tdxlG8iWTbj5HlGviIqeG9J1ZJM4IivgEoMhUQxTn+O0CVS
-	 KNBkeIZ5SsAwPRfDCVXPYosOBcwuoPel48TvlvtCwkq5tI72bYBvyiPbImOnLZPwed
-	 WeE/55OVS5qwZiyfz2v0tZ7lET/7r/pMFwwe21Qbe3BIL4WcfGBHziakuc6W8rC2v/
-	 fvVgMT3mIjQCVHdx9Dbkwk4ZB32NVaoEuDAs08a0cBqMBywUEHiF2r+4949ROVdEo0
-	 Gt2aRlBDZZV5A==
-Date: Thu, 4 Sep 2025 00:59:20 +0200
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Jonas Jelonek <jelonek.jonas@gmail.com>
-Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	linux-i2c@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Markus Stockhausen <markus.stockhausen@gmx.de>, 
-	Sven Eckelmann <sven@narfation.org>, Harshal Gohel <hg@simonwunderlich.de>, 
-	Wolfram Sang <wsa+renesas@sang-engineering.com>, stable@vger.kernel.org
-Subject: Re: [PATCH v7 03/12] i2c: rtl9300: remove broken SMBus Quick
- operation support
-Message-ID: <cfdleondrrpfyfts423cwdcsb5mmqovej5hwke7ndghzlnwci7@d6i7ltgoxbee>
-References: <20250831100457.3114-1-jelonek.jonas@gmail.com>
- <20250831100457.3114-4-jelonek.jonas@gmail.com>
+	s=arc-20240116; t=1756945674; c=relaxed/simple;
+	bh=HsqYZPmKUfnfEy5pJIqGEBIdC9fSx4mpiDsjwB9nzeg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=jW3cyWUDfSlw5UmKmxdunvDs47RzpnJYt3DHCpIx0TXilkxukNbayu7gBQE08sk2WJ3GMhGGTG1dmAdY2Z7qhavCeVuga1SJjSptV+edU7FmCFl7BwOrCfg0LIOmpUuX5M1ZfM3T/9RWBPqWw/m17lSNueOh+ZaZSpGEN9R50k4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kAGcaOUs; arc=none smtp.client-ip=209.85.128.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-71d6051aeafso5517627b3.2;
+        Wed, 03 Sep 2025 17:27:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1756945672; x=1757550472; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ml206XCNIcvpuvAckP+1DV8optDPltV+v0NnGapirRc=;
+        b=kAGcaOUs1LmVDTZ04FwZK5WuMfTFryNU7g8yQpih31CqOOt5ZbsoWAxIC/iz4u2U1d
+         5EDQz+uRzr+8g+DeWd1foYkj9Lllxp8sMLJoNeYzr8UQ9x6EHl7LOuMMuG5uQuf85/k8
+         G42YG5uzxqDz8Ef4NJbN4WAE0rXhXD6KkgM3WZo7gBEUma4WCfVKG6k4eRGNgk78LO4p
+         Px1yCPRPtpbO+9YkqmIZhY/SMnKdlNMpKeW934gKpTb8VubvKA2ZsVywnhIQEeGxOAM8
+         +TdJWxVxDgruJKBxIuxmKlsXT2Q2+88jm6rN4/+2VDR1zosp2wLziDFS+kdo41eTygj9
+         KPXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756945672; x=1757550472;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Ml206XCNIcvpuvAckP+1DV8optDPltV+v0NnGapirRc=;
+        b=hoZwfi3xOy5u1tkSYxix/xgCken3aO28cJMMAJERlTYL0y0UxT2Su84SoTWKkhP46J
+         LYLvjPZ+oj012qPOrEeZ0g8MIwO9K4d/Bwno1x8Uro8PAJAsqhiqPCWQjAmK7vGOKrCv
+         H6NFsbtSmGrHDGyVc/gPeRr//AFhNHjkVjhASfyOGU/CCB/PCkM2DWPDQ0aYqE5cRYdI
+         ovJCZqUDxoBp0I0gnWxeIMZ1XMZpuzFeb43+VrGdvyU6nFxReM0F3w9mgtDkNWBgPyRh
+         p8FfhPJ39vQVh4IsVTzAkTV7QBlFgN1mjLPTJn0RKldt+M3F5WvBxVfGjLL/YAK/Vb44
+         rDng==
+X-Forwarded-Encrypted: i=1; AJvYcCVJTZ3Pr7Ol1CUbtNuKRgwmfkNnfgcbhPEdSWnQSrL2VMJM7uMmIO8Xzm22zmEdOw6bTh2u3RDCEmo=@vger.kernel.org, AJvYcCXEumWOzZhnIAKULH1Id2Zs/mkR29QAJ0OTBx0nMNLtpmov64MVzDgZx0Afbatf5Vf8TmBB2CW02A/UgE8x@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJBks/drSI02ZNwJnzKBNp+a0sHneMKv4HCLEf3qe5GvzHNJxN
+	dzGiPjRNA67ZNgPfX4JLJQJ0NA68GI4xa0hnqwHl75Ef8rW7sBmJnl76ZTx3tF8vLc3aTkLf+6J
+	mv5spUifoGaUwx6zE2iz8WuLux78z3UE=
+X-Gm-Gg: ASbGnctMBEuVc0cZLH3i1LYxZ6aAqRVq+oZE+savUSLArkWu7b+XpYlJPEVK5DLFB8x
+	AHl5vzeQYPxiyZHm5747qq/VDhsJ+ch/u1e79kevYwhZLcycZsmLV+iZOwR5rYj/l5eojC6RsaA
+	k+ocK6HM4+NhsEP//bMbqJ1ExcgER4lDuY03KJbv/K2P5pmHYKLgPq/dMBTDbAwjDVy7zPNaEwR
+	KnNsCUcq7NMnOCh7L0=
+X-Google-Smtp-Source: AGHT+IH6DUKWjCXGPiYug/JG+/9e2lkvIkBUeTwn8hI+YRqHtlM4OO5GBQX6J+aj15L7ZaPooLVDy8khn9UDN+pJuE4=
+X-Received: by 2002:a05:690c:61c6:b0:721:6667:60a0 with SMTP id
+ 00721157ae682-722764acdd2mr174326297b3.31.1756945671557; Wed, 03 Sep 2025
+ 17:27:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250831100457.3114-4-jelonek.jonas@gmail.com>
+References: <20250830093016.160753-1-chiru.cezar.89@gmail.com>
+ <fkiu64vdlndg5lvuaktao2vmvmn5al7xcpksrjmxrr4ldz5ssn@dolroldcknpd>
+ <aLh3rVYItYZ3CYpq@shikoro> <CANvS2vUf=kOdGKTcy8XWz2aO2uHTf7TkF-EQSedMSYE863oFcA@mail.gmail.com>
+In-Reply-To: <CANvS2vUf=kOdGKTcy8XWz2aO2uHTf7TkF-EQSedMSYE863oFcA@mail.gmail.com>
+From: Cezar Chiru <chiru.cezar.89@gmail.com>
+Date: Thu, 4 Sep 2025 03:28:08 +0300
+X-Gm-Features: Ac12FXwtTqNM7OPJjrfjTPka0QBs0JDOJ-fPD4jUyyUPEWIq4FIKQBU4UG9maAg
+Message-ID: <CANvS2vWNrib9TXenDjUemCfJjU14LVJcq42GW7XZ11=6egWPRQ@mail.gmail.com>
+Subject: Re: [PATCH] i2c: Main i2c-*.c files and algos/ subdirectory : Fix
+ errors and warnings generated by checkpatch
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>, Andi Shyti <andi.shyti@kernel.org>
+Cc: peda@axentia.se, jdelvare@suse.com, linux-i2c@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Jonas,
+Hello Andi, Wolfram,
 
-On Sun, Aug 31, 2025 at 10:04:48AM +0000, Jonas Jelonek wrote:
-> Remove the SMBus Quick operation from this driver because it is not
-> natively supported by the hardware and is wrongly implemented in the
-> driver.
-> 
-> The I2C controllers in Realtek RTL9300 and RTL9310 are SMBus-compliant
-> but there doesn't seem to be native support for the SMBus Quick
-> operation. It is not explicitly mentioned in the documentation but
-> looking at the registers which configure an SMBus transaction, one can
-> see that the data length cannot be set to 0. This suggests that the
-> hardware doesn't allow any SMBus message without data bytes (except for
-> those it does on it's own, see SMBus Block Read).
-> 
-> The current implementation of SMBus Quick operation passes a length of
-> 0 (which is actually invalid). Before the fix of a bug in a previous
-> commit, this led to a read operation of 16 bytes from any register (the
-> one of a former transaction or any other value.
-> 
-> This caused issues like soft-bricked SFP modules after a simple probe
-> with i2cdetect which uses Quick by default. Running this with SFP
-> modules whose EEPROM isn't write-protected, some of the initial bytes
-> are overwritten because a 16-byte write operation is executed instead of
-> a Quick Write. (This temporarily soft-bricked one of my DAC cables.)
-> 
-> Because SMBus Quick operation is obviously not supported on these
-> controllers (because a length of 0 cannot be set, even when no register
-> address is set), remove that instead of claiming there is support. There
-> also shouldn't be any kind of emulated 'Quick' which just does another
-> kind of operation in the background. Otherwise, specific issues occur
-> in case of a 'Quick' Write which actually writes unknown data to an
-> unknown register.
-> 
-> Fixes: c366be720235 ("i2c: Add driver for the RTL9300 I2C controller")
-> Cc: <stable@vger.kernel.org> # v6.13+
-> Signed-off-by: Jonas Jelonek <jelonek.jonas@gmail.com>
-> Tested-by: Sven Eckelmann <sven@narfation.org>
-> Reviewed-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> Tested-by: Chris Packham <chris.packham@alliedtelesis.co.nz> # On RTL9302C based board
-> Tested-by: Markus Stockhausen <markus.stockhausen@gmx.de>
+Resending email to entire receipients in plain text mode from Gmail
+client with linux-i2c@vger.kernel.org and linux-kernel@vger.kernel.org
+who rejected the email as being not plain mode. I thought maybe you
+didn't receive it. sorry if I sent twice..
 
-Applied from 1-3 to i2c/i2c-host-fixes.
+I am new to submitting linux kernel patches. The first patch i
+submitted "[PATCH] Fix checkpatch.pl warnings and errors in i2c driver
+directory and subdirectories" was wrong and also missed
+signed--off--by git signature. Some change i made originally broke the
+build . I rushed and sent it before I built the kernel and modules.
+rookie mistake.
+But on the second patch I submitted, I built the kernel and modules
+after i made the changes and fixed the build errors. I activated all
+i2c external modules and built in modules in the .config under Device
+Drivers---> I2C in the menuconfig. But didn't tested the kernel on my
+linux laptop and didn't loaded all the external modules to see if they
+generate dmesg errors.
+I plan to resubmit and break down changes from 1 commit to several
+commits(patches) as Andi suggested. I will create a commit in git
+explaining how the patches apply (their order) and this patch can be
+disregarded. And along with it i will  send 1 patch for each i2c file
+i submit changes for. Also after I commit locally on git the final
+version of the commits I will create a build with everything under
+Device Drivers---> I2C menuconfig . Upon success I will locally test
+the build on my laptop. load manually all external i2c modules and
+make sure there aren't any dmesg errors and modules are loaded
+successfully. Other than that I don't own any I2C hardware device that
+I could test with my laptop.
+Wolfram, Andi, if you have other ideas on how i could test the i2c
+functionality to make sure i don't break anything with my changes
+please let me know.
+ I am a newbie to linux kernel development and want to take it slow
+with small changes in the beginning and then possibly to grow this in
+a full time Linux Kernel Developer career.
+I will be back to you with next patches by Sunday night. Sorry for the
+long email but I wanted you to know the whole process I did to submit
+the patches.
 
-But...
+Best regards,
+Cezar Chiru
 
-> ---
->  drivers/i2c/busses/i2c-rtl9300.c | 15 +++------------
->  1 file changed, 3 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-rtl9300.c b/drivers/i2c/busses/i2c-rtl9300.c
-> index ebd4a85e1bde..9e6232075137 100644
-> --- a/drivers/i2c/busses/i2c-rtl9300.c
-> +++ b/drivers/i2c/busses/i2c-rtl9300.c
-> @@ -235,15 +235,6 @@ static int rtl9300_i2c_smbus_xfer(struct i2c_adapter *adap, u16 addr, unsigned s
->  	}
->  
->  	switch (size) {
-> -	case I2C_SMBUS_QUICK:
-> -		ret = rtl9300_i2c_config_xfer(i2c, chan, addr, 0);
-> -		if (ret)
-> -			goto out_unlock;
-> -		ret = rtl9300_i2c_reg_addr_set(i2c, 0, 0);
-> -		if (ret)
-> -			goto out_unlock;
-> -		break;
-> -
->  	case I2C_SMBUS_BYTE:
->  		if (read_write == I2C_SMBUS_WRITE) {
->  			ret = rtl9300_i2c_config_xfer(i2c, chan, addr, 0);
-> @@ -344,9 +335,9 @@ static int rtl9300_i2c_smbus_xfer(struct i2c_adapter *adap, u16 addr, unsigned s
->  
->  static u32 rtl9300_i2c_func(struct i2c_adapter *a)
->  {
-> -	return I2C_FUNC_SMBUS_QUICK | I2C_FUNC_SMBUS_BYTE |
-> -	       I2C_FUNC_SMBUS_BYTE_DATA | I2C_FUNC_SMBUS_WORD_DATA |
-> -	       I2C_FUNC_SMBUS_BLOCK_DATA | I2C_FUNC_SMBUS_I2C_BLOCK;
-> +	return I2C_FUNC_SMBUS_BYTE | I2C_FUNC_SMBUS_BYTE_DATA |
-> +	       I2C_FUNC_SMBUS_WORD_DATA | I2C_FUNC_SMBUS_BLOCK_DATA |
-> +	       I2C_FUNC_SMBUS_I2C_BLOCK;
 
-this was creating a conflict with:
-
-5090e2b3808e ("i2c: rtl9300: Implement I2C block read and write")
-
-In the sense that I don't have this change in the fixes path, but
-I have it in the non-fixes. For now, until Wolfram pulls the
-fixes, I removed the patch and I will add it back next week to
-avoid conflicts in the -next branch.
-
-Next week I will apply the rest of the patches in the series, as
-well.
-
-Thanks,
-Andi
-
->  }
->  
->  static const struct i2c_algorithm rtl9300_i2c_algo = {
-> -- 
-> 2.48.1
-> 
+On Wed, Sep 3, 2025 at 10:25=E2=80=AFPM Cezar Chiru <chiru.cezar.89@gmail.c=
+om> wrote:
+>
+> Hello Andi, Wolfram,
+>
+> I am new to submitting linux kernel patches. The first patch i submitted =
+"[PATCH] Fix checkpatch.pl warnings and errors in i2c driver directory and =
+subdirectories" was wrong and also missed signed--off--by git signature. So=
+me change i made originally broke the build . I rushed and sent it before I=
+ built the kernel and modules. rookie mistake.
+> But on the second patch I submitted, I built the kernel and modules after=
+ i made the changes and fixed the build errors. I activated all i2c externa=
+l modules and built in modules in the .config under Device Drivers---> I2C =
+in the menuconfig. But didn't tested the kernel on my linux laptop and didn=
+'t loaded all the external modules to see if they generate dmesg errors.
+> I plan to resubmit and break down changes from 1 commit to several commit=
+s(patches) as Andi suggested. I will create a commit in git explaining how =
+the patches apply (their order) and this patch can be disregarded. And alon=
+g with it i will  send 1 patch for each i2c file i submit changes for. Also=
+ after I commit locally on git the final version of the commits I will crea=
+te a build with everything under Device Drivers---> I2C menuconfig . Upon s=
+uccess I will locally test the build on my laptop. load manually all extern=
+al i2c modules and make sure there aren't any dmesg errors and modules are =
+loaded successfully. Other than that I don't own any I2C hardware device th=
+at I could test with my laptop.
+> Wolfram, Andi, if you have other ideas on how i could test the i2c functi=
+onality to make sure i don't break anything with my changes please let me k=
+now.
+>  I am a newbie to linux kernel development and want to take it slow with =
+small changes in the beginning and then possibly to grow this in a full tim=
+e Linux Kernel Developer career.
+>
+> Best regards,
+> Cezar Chiru
+>
+> On Wed, Sep 3, 2025 at 8:15=E2=80=AFPM Wolfram Sang <wsa+renesas@sang-eng=
+ineering.com> wrote:
+>>
+>> On Wed, Sep 03, 2025 at 06:56:12PM +0200, Andi Shyti wrote:
+>> > Hi Cezar,
+>> >
+>> > On Sat, Aug 30, 2025 at 12:30:15PM +0300, Cezar Chiru wrote:
+>> > > Fixed some coding style errors and warnings plus some minor changes
+>> > > in code as reported by checkpatch script. The busses/ and muxes/
+>> > > subfolders will be dealt with another commit. Main changes were done
+>> > > to comments, defines of 'if' statement, swapping 'unsigned' with
+>> > > 'unsigned int' and other minor changes.
+>> > >
+>> > > Signed-off-by: Cezar Chiru <chiru.cezar.89@gmail.com>
+>> > > ---
+>> > >  drivers/i2c/Kconfig              |  2 +-
+>> > >  drivers/i2c/algos/i2c-algo-bit.c | 29 +++++++++------
+>> > >  drivers/i2c/algos/i2c-algo-pca.c | 25 +++++++++----
+>> > >  drivers/i2c/algos/i2c-algo-pcf.c | 61 ++++++++++++++++++++++-------=
+---
+>> > >  drivers/i2c/algos/i2c-algo-pcf.h | 10 +++---
+>> > >  drivers/i2c/i2c-boardinfo.c      |  2 +-
+>> > >  drivers/i2c/i2c-core-base.c      | 59 +++++++++++++++++++----------=
+-
+>> > >  drivers/i2c/i2c-dev.c            | 47 ++++++++++++++----------
+>> > >  drivers/i2c/i2c-mux.c            |  1 +
+>> > >  drivers/i2c/i2c-slave-eeprom.c   |  2 +-
+>> > >  drivers/i2c/i2c-smbus.c          |  2 +-
+>> > >  drivers/i2c/i2c-stub.c           | 29 +++++++--------
+>> > >  12 files changed, 170 insertions(+), 99 deletions(-)
+>> >
+>> > first of all, thanks for your patch, but I can't accept it.
+>> > Please split your patch in several smaller patches with single
+>> > changes.
+>> >
+>> > Granularity is very important for reviews and git blame.
+>>
+>> Same comment as previous patch: describe testing please
+>>
 
