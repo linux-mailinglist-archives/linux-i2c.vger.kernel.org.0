@@ -1,121 +1,162 @@
-Return-Path: <linux-i2c+bounces-12701-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12702-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0737B46A1F
-	for <lists+linux-i2c@lfdr.de>; Sat,  6 Sep 2025 10:20:47 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77FFDB46A23
+	for <lists+linux-i2c@lfdr.de>; Sat,  6 Sep 2025 10:27:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B616E5A763C
-	for <lists+linux-i2c@lfdr.de>; Sat,  6 Sep 2025 08:20:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5068F1BC508A
+	for <lists+linux-i2c@lfdr.de>; Sat,  6 Sep 2025 08:27:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 742572C327D;
-	Sat,  6 Sep 2025 08:20:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A01C62C2346;
+	Sat,  6 Sep 2025 08:27:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="YFehdbp/"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="qNVXZvC0"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF31A2BEC34
-	for <linux-i2c@vger.kernel.org>; Sat,  6 Sep 2025 08:20:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEC611F8733;
+	Sat,  6 Sep 2025 08:27:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757146830; cv=none; b=AvGI6I/4Ag/zHck/C4fHJcGk1wmpZTSpWJ0Qlm6G488ylixdtiXPiwySX5ONGCJ1l3rSzJ5A7sSuG9DNl9YSZlj8x67LGkZ1qtfy2gTmHY+9K0UCch24LKX/NwiJ4rQ72GjAHs8/FK3N0Qz9i7545A7qpiExY66qKzix0TBn8+8=
+	t=1757147246; cv=none; b=hzhAOvOJGXwwupsF4uyrO8jhrUZUHp3+p9soRIFri3KCXkHfkQ/FV6f9/IA2jvpwTdtxffnQx0IEeWZALI3BOfo3mRlszBGE+ksQ9Im5+5zXoYIbinxBNuJrocuL4/vUgD+t7bB/2xi5lhsCWkt6VSXbmu2S6X4u91+5oAnDhcY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757146830; c=relaxed/simple;
-	bh=G9IVH57h32BJAEAE8Lr6RwZVyPBE2zPVU84jCkiQOPI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ANeYkmIstl6gQEbbHTW7rzHlMSwKMsHcEA2t7/Wq1V6zFYXqs8xj/BbNQdJA4Om0w5PJ4bi4Gb9aMFJUfAmcBV1BNWgoSygMyZOBHsFzGp5ltcYGLzrmg36ti9E+Jw+2EM7j3scYZ8ToGWwo14VZES/NwomxwviWvXQsOn62+PA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=YFehdbp/; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=6gFK
-	6y3NZ8AVy3nrwn6m27UvowW1B4LV1gpidyd94qY=; b=YFehdbp//mrfKSqV0Xp3
-	nvU03PkQIF+p/YXXXr5yQtgUGvmm6D5wvoQYt8N4+DMZbcS3Drj3QcNt91caibMF
-	kBF/efBWBax1sCJKH2IYx2czvv4KRbGd6bnKXWGpvhuJjHbVF6hVYkSXBUtCQIC8
-	VFZl/CLZi/4aV7qGOLH65rrUcuBoz+3VWGCmUkJ0gREcfzRk4OHE/bHAgBseb2t2
-	yTXlB8aLRid0S7/vtDWbblFDV0N1rxZBogoabhkymEPEwurKyjKPBbZfs687KPwW
-	m2YnJGGKCY3X1YMDp6ICbYp+a1ZAZx1Oftjv+kttUFD+eyATWfBu/6FoQXt311XV
-	YA==
-Received: (qmail 122139 invoked from network); 6 Sep 2025 10:20:24 +0200
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 6 Sep 2025 10:20:24 +0200
-X-UD-Smtp-Session: l3s3148p1@TelMoB0+5sYgAwDPXxPDAOCjMSL5jkIv
-Date: Sat, 6 Sep 2025 10:20:16 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Andi Shyti <andi.shyti@kernel.org>
-Cc: lkml <linux-kernel@vger.kernel.org>,
-	linux-i2c <linux-i2c@vger.kernel.org>
-Subject: Re: [GIT PULL] i2c-host-fixes for v6.17-rc5
-Message-ID: <aLvuwAy6ofUUycGr@shikoro>
-References: <wrui7mvzr6r6qmzh3y24zehmv3yx3geth3b7llsn6sqdlt26gv@5tpp7hr2266p>
+	s=arc-20240116; t=1757147246; c=relaxed/simple;
+	bh=4rnBUnpe1ZWJMNFH4xcCasuu0zccA/nk5Ebl74pkTc4=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=nAVIEfO9atREM7Aj120Zk3jk+QdHKiX1fuudl0NmBNTKcXOTye8FUBv8TE92JaJfD2E/Kd5lsIyZ5YhbyKAYe89umtAASvOOywg57MWiZz0QKkcWFCv3KGEkMUVwUdd8L2JBbpMMqHgaYUw3TtxIzEd8QPcFgCutaKRKE5RlvwA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=qNVXZvC0; arc=none smtp.client-ip=210.61.82.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+X-UUID: 49f796aa8afb11f0b33aeb1e7f16c2b6-20250906
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=fmDWsVkai/q4C56ASj6lcem4C4j2R2eauit2Llq4efY=;
+	b=qNVXZvC05+n+ENbmO7iJj2TCfzlLDLclUMA98jAN7EIgo/AxMPRMow4jl/Xjw2AEBoBAdBRxrdrOuCzPUHAXNL+uxaRUxeRyANnyBTZOQOWyvFjSoxXYIwNc8cX3WxtQUpCw19qjO4mQQODenC7kcEq6khvpGebdOkYMdbcWiRA=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.3,REQID:22949bc1-d572-451e-b0f0-b190d0fdc248,IP:0,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+	elease,TS:0
+X-CID-META: VersionHash:f1326cf,CLOUDID:ffc401f8-ebfe-43c9-88c9-80cb93f22ca4,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:-5,Content:0|15|50,EDM:-3,IP:
+	nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,L
+	ES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 49f796aa8afb11f0b33aeb1e7f16c2b6-20250906
+Received: from mtkmbs14n2.mediatek.inc [(172.21.101.76)] by mailgw02.mediatek.com
+	(envelope-from <leilk.liu@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 1774036271; Sat, 06 Sep 2025 16:27:13 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.39; Sat, 6 Sep 2025 16:27:11 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1258.39 via Frontend Transport; Sat, 6 Sep 2025 16:27:10 +0800
+From: Leilk Liu <leilk.liu@mediatek.com>
+To: Andi Shyti <andi.shyti@kernel.org>, Matthias Brugger
+	<matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>
+CC: Qii Wang <qii.wang@mediatek.com>, Wolfram Sang <wsa@kernel.org>, "Liguo
+ Zhang" <liguo.zhang@mediatek.com>, <linux-i2c@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-mediatek@lists.infradead.org>,
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>, Leilk.Liu
+	<leilk.liu@mediatek.com>, Chen-Yu Tsai <wenst@chromium.org>
+Subject: [PATCH v2] i2c: mediatek: fix potential incorrect use of I2C_MASTER_WRRD
+Date: Sat, 6 Sep 2025 16:24:06 +0800
+Message-ID: <20250906082652.16864-1-leilk.liu@mediatek.com>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="dgMXdDcvQOzJdnGm"
-Content-Disposition: inline
-In-Reply-To: <wrui7mvzr6r6qmzh3y24zehmv3yx3geth3b7llsn6sqdlt26gv@5tpp7hr2266p>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-MTK: N
 
+From: "Leilk.Liu" <leilk.liu@mediatek.com>
 
---dgMXdDcvQOzJdnGm
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The old IC does not support the I2C_MASTER_WRRD (write-then-read)
+function, but the current code’s handling of i2c->auto_restart may
+potentially lead to entering the I2C_MASTER_WRRD software flow,
+resulting in unexpected bugs.
 
-On Sat, Sep 06, 2025 at 03:18:24AM +0200, Andi Shyti wrote:
-> Hi Wolfram,
->=20
-> Here is this week's pull request: four patches affecting two
-> drivers, i801 and rtl9300. The rtl9300 patches are a
-> prerequisite for others that will be merged into i2c-host.
->=20
-> Have a good weekend,
-> Andi
->=20
-> The following changes since commit b320789d6883cc00ac78ce83bccbfe7ed58afc=
-f0:
->=20
->   Linux 6.17-rc4 (2025-08-31 15:33:07 -0700)
->=20
-> are available in the Git repository at:
->=20
->   git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git tags=
-/i2c-host-fixes-6.17-rc5
->=20
-> for you to fetch changes up to ede965fd555ac2536cf651893a998dbfd8e57b86:
->=20
->   i2c: rtl9300: remove broken SMBus Quick operation support (2025-09-04 0=
-0:31:34 +0200)
+Instead of repurposing the auto_restart flag, add a separate flag
+to signal I2C_MASTER_WRRD operations.
 
-Thanks, pulled!
+Also fix handling of msgs. If the operation (i2c->op) is
+I2C_MASTER_WRRD, then the msgs pointer is incremented by 2.
+For all other operations, msgs is simply incremented by 1.
 
+Fixes: b2ed11e224a2 ("I2C: mediatek: Add driver for MediaTek MT8173 I2C controller")
+Signed-off-by: Leilk.Liu <leilk.liu@mediatek.com>
+Suggested-by: Chen-Yu Tsai <wenst@chromium.org>
+Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+---
+Changes in v2:
+ - modify the commit which introduce this issue.
+---
+ drivers/i2c/busses/i2c-mt65xx.c | 17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
 
---dgMXdDcvQOzJdnGm
-Content-Type: application/pgp-signature; name="signature.asc"
+diff --git a/drivers/i2c/busses/i2c-mt65xx.c b/drivers/i2c/busses/i2c-mt65xx.c
+index ab456c3717db..dee40704825c 100644
+--- a/drivers/i2c/busses/i2c-mt65xx.c
++++ b/drivers/i2c/busses/i2c-mt65xx.c
+@@ -1243,6 +1243,7 @@ static int mtk_i2c_transfer(struct i2c_adapter *adap,
+ {
+ 	int ret;
+ 	int left_num = num;
++	bool write_then_read_en = false;
+ 	struct mtk_i2c *i2c = i2c_get_adapdata(adap);
+ 
+ 	ret = clk_bulk_enable(I2C_MT65XX_CLK_MAX, i2c->clocks);
+@@ -1256,6 +1257,7 @@ static int mtk_i2c_transfer(struct i2c_adapter *adap,
+ 		if (!(msgs[0].flags & I2C_M_RD) && (msgs[1].flags & I2C_M_RD) &&
+ 		    msgs[0].addr == msgs[1].addr) {
+ 			i2c->auto_restart = 0;
++			write_then_read_en = true;
+ 		}
+ 	}
+ 
+@@ -1280,12 +1282,10 @@ static int mtk_i2c_transfer(struct i2c_adapter *adap,
+ 		else
+ 			i2c->op = I2C_MASTER_WR;
+ 
+-		if (!i2c->auto_restart) {
+-			if (num > 1) {
+-				/* combined two messages into one transaction */
+-				i2c->op = I2C_MASTER_WRRD;
+-				left_num--;
+-			}
++		if (write_then_read_en) {
++			/* combined two messages into one transaction */
++			i2c->op = I2C_MASTER_WRRD;
++			left_num--;
+ 		}
+ 
+ 		/* always use DMA mode. */
+@@ -1293,7 +1293,10 @@ static int mtk_i2c_transfer(struct i2c_adapter *adap,
+ 		if (ret < 0)
+ 			goto err_exit;
+ 
+-		msgs++;
++		if (i2c->op == I2C_MASTER_WRRD)
++			msgs += 2;
++		else
++			msgs++;
+ 	}
+ 	/* the return value is number of executed messages */
+ 	ret = num;
+-- 
+2.46.0
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmi77sAACgkQFA3kzBSg
-KbamRw//b6GGisble5A0rqukB5MQiVeTdmeOH+APsTZ8Uhlzg+GEqRza9TKItg2o
-DTGnhjPXp94viTgO4rA7kYey+Bc20b7iHfgs6yEPQZ10IWAW5H0SYK5ikKQE5fZZ
-WyTCKhrl3mUfCzA8QlHKQFfqD9TKeYWYVrcxLQGxOwCEQucnk3imXcITL7849no6
-lP0EGyZ/QbIvu4KIJlkhVvS8gUDbncHmtWh7MDPwUfhXEFCrN2FdeUIIwJvs71jg
-cGmZgOOABjZ1nErmf6N6CPqFEcpKcNa1xK3EipFWTbsrozBBHx7tRneuVkZx955r
-a/+H4ZodkAL1yYw7vcSBTuPfC1T8v43KZLa/OTOoBWualW2sErarBv3ruldwTqB+
-Owna7cGUXndtdJSJSpdT9kJ4MV8eK+5UsIQu4ARmyHz9PhOF4qVERgMdRghEWyGh
-L9Njbo0h/vOebT2+/jSASG4HQDrBCrIAIh3B0aLatnKFHWcW4dghqfO4j8D1EkjY
-DxCvWF51KYNnRE6IC98StzAIGMkVIWXOi8Kj1//hkRL31Iu3uavgWxyVMwvtoVmn
-VoxEY2CEwP/RRTxrF/3+aYYyEwTx8Cck8FSP7RidzPnozgKOkurvX0WNVQa5TEw8
-Xz2MA6UnIOF+Q0JeDn3MIEDIsHJsLOVUHSKE+Meza8/QfAVCklg=
-=2qk3
------END PGP SIGNATURE-----
-
---dgMXdDcvQOzJdnGm--
 
