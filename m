@@ -1,122 +1,152 @@
-Return-Path: <linux-i2c+bounces-12711-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12712-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB6D1B47A03
-	for <lists+linux-i2c@lfdr.de>; Sun,  7 Sep 2025 11:14:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA3C1B47A8F
+	for <lists+linux-i2c@lfdr.de>; Sun,  7 Sep 2025 12:57:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 66EF92025DD
-	for <lists+linux-i2c@lfdr.de>; Sun,  7 Sep 2025 09:14:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 949DE17C723
+	for <lists+linux-i2c@lfdr.de>; Sun,  7 Sep 2025 10:57:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F47B2222D0;
-	Sun,  7 Sep 2025 09:14:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 859F325B1D2;
+	Sun,  7 Sep 2025 10:57:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lVJ+pxA8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IE0EmkfQ"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89BF822157F
-	for <linux-i2c@vger.kernel.org>; Sun,  7 Sep 2025 09:14:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 429C922C339;
+	Sun,  7 Sep 2025 10:57:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757236451; cv=none; b=KXKoKKvR39z44v/mycpQHZ2YmNDSsp4Dby6eUZKmZfFD0Kol6zxo3kEFYL4FJA5y5dkl2PFadBAOqqsGUngHNAFSDgrkxCQHP4kRjM0uHde8aTp9DeA0vJ4KQoGyB0q6lNV+4fGBhMUcOunyY+pKHtOoQSMSxfxgbkR9z1U1jv4=
+	t=1757242628; cv=none; b=QFgAasZ5Vor/YjUlBBQ0cfFaLWCGnI8RBRBxrNWdNwIOgSkBbG49AhQKH6kY/AslYlxrrOMytboin4/gn+IDGsMVg3TmwFn+mdNjWQRB6dS5w7nm4EJ7p4YSzlDom/UxF3+jJw5CH4vkdLJQc/Rcto9p+KqXoQnaCF8fF5yqVBo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757236451; c=relaxed/simple;
-	bh=nTtz/T80B1LFaBzGfFaobq1k9YIb/4LmaRP6eS9C8A8=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=CdpyrzWB1QFqXk7EcerOzEDHTHNEHPlrqJ0px7Ay+UKywe5eXyltzD42SMi/6tkJYmAxe+e6qLh3Z4LrYslpO31q9d8dJ6l9X6/dfi5nDw3j8OXybLVTLMrxlLxrYktS+LDmMqoWYY1g0xpD9PNRHBSGQPuztiwR4sgo+f9Se4U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=lVJ+pxA8; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-45de5a7a080so48295e9.2
-        for <linux-i2c@vger.kernel.org>; Sun, 07 Sep 2025 02:14:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1757236448; x=1757841248; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JCLQAsYpR6U6YXx5WXyyNz/et5qkwEIQ90qwDmcTRHU=;
-        b=lVJ+pxA8WdsapeRIjC97ax0YT6KggfLwHY9NlqpaSJbTiyPfFs2m/jbADXLXjiDza/
-         iNQD25YkPwErRPW0iQJxrSaHY24CBMNxhMzYeocADPNS/Qjk/P7ifWLB2U2KDALEMyUc
-         zzq0e7b5pdPgByPMjE/fqcp/sAjpqRv0BrO3uzJWjSdzCES1V38iCPGC/+6t5ZNLtE0z
-         tSw6cP8rEOmAlg5k2173Mn7jHJEAVCqjHQEp6UJKjcBn7fp4gkMreE2D2ThMR9lGGRVW
-         ro8IMP9Akul404Zo06eyOgBea8vYFrwAY4Zw2ZN0pPQ7KNmEBUrKcWrZCJuqeT3AU0d7
-         HgTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757236448; x=1757841248;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JCLQAsYpR6U6YXx5WXyyNz/et5qkwEIQ90qwDmcTRHU=;
-        b=usGrw4kEkV6rtVRqhtwEukNr2IajUF5p+983TmEmYLktkEOrfWuUV+1Mj8hdqQApTA
-         AhMp+/WEeDaHPSMpLqaXnAWSHtvntkaYIMaJKGllRUxcSX+N3u+eWVnG2ZSyj/uJ6aBg
-         XOTFZK0NCfrz71vC7gFu9KXpN/0rYXJsgKhaOUvayoelLgGBl7oWIEF7qygdN0tYOZZv
-         lq30Tq8lZbKajO4YRivkVOfgR0jyt8tpEfej6kSmuEMH3zIl0lxFLfVQF28M/k8IAE8A
-         3M+JK4q9h+M8WCR3Rl4Q4t+J1tblBlrQKMXv3/NGZxHOuWe9H4HkyykYOc8l3BQ7FYX2
-         T/5A==
-X-Forwarded-Encrypted: i=1; AJvYcCUOwgCYcbr4VBKu7s+xk/s9YO7/yMMrBDTV8huGhkPNz5AxHl7h3/a82Z+77BQdcFtATndxs0cpRCM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyhpqMqtcfXz5PlXGKQ+GnQhN3j/MLiKAUGYMpHsz7fwTBYdhc3
-	oJ2YEaiSbe1zlFZ2HY32y4ECZbIJe27P+/vnaFYkhE3OpsHob7S93vSUYBUnkJaQdjQ=
-X-Gm-Gg: ASbGncvuzYcrrr5E+NuUqpAk2U7UovGjkTm5GZpZUhaFY5nzF1FNRbBjw4VRlyANeBx
-	HjOFKCWJkccCXCoxSSC20whqIY0g5lcsq1iGiNZYvT1t8GZ70wk0r1jmcHyJGnCNfmrwMeB2LnQ
-	SpjU8AQY98nMSrOunQPaB58RqXrmyfiS5GP4RMPGYMt8d7DmZlGk5TOPz1XNNMOlpDFbosnJRIv
-	PbwS1by0t1/hsnOdGFr7YFn+WbxPtrENh58E3RD0Mys2QjPiqojoOG8XROTaaazOwIQBonC8cVT
-	oTVRamNlpS41uz69fuqGrUlgAs5KWcpPcOIVdQCTmkqw9VaoFayHEeA4sqIAvg8aJhAyu8mGnRC
-	rtclvKGB7hQZ11d0Bt86OxCNbmKdv2f5HDVinw3I=
-X-Google-Smtp-Source: AGHT+IG78HXO5H3PNHPON4QM2B7kxOdyJOW/vdjAFNFZeNRnZqCYRuJ044SQo+Ov8yokKCplK6e9pw==
-X-Received: by 2002:a05:600c:6388:b0:45c:b565:11f4 with SMTP id 5b1f17b1804b1-45ddde84ff1mr18221295e9.1.1757236447894;
-        Sun, 07 Sep 2025 02:14:07 -0700 (PDT)
-Received: from [127.0.1.1] ([178.197.219.123])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3e21e4c0e6fsm10918962f8f.17.2025.09.07.02.14.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Sep 2025 02:14:07 -0700 (PDT)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To: Krzysztof Kozlowski <krzk@kernel.org>, 
- Sylwester Nawrocki <s.nawrocki@samsung.com>, 
- Chanwoo Choi <cw00.choi@samsung.com>, Alim Akhtar <alim.akhtar@samsung.com>, 
- Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Igor Belwon <igor.belwon@mentallysanemainliners.org>, 
- Andi Shyti <andi.shyti@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Denzeel Oliva <wachiturroxd150@gmail.com>
-Cc: linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
-In-Reply-To: <20250904-perics-usi-v3-4-3ea109705cb6@gmail.com>
-References: <20250904-perics-usi-v3-0-3ea109705cb6@gmail.com>
- <20250904-perics-usi-v3-4-3ea109705cb6@gmail.com>
-Subject: Re: (subset) [PATCH v3 4/4] arm64: dts: exynos990: Enable PERIC0
- and PERIC1 clock controllers
-Message-Id: <175723644648.30719.8043699953915235210.b4-ty@linaro.org>
-Date: Sun, 07 Sep 2025 11:14:06 +0200
+	s=arc-20240116; t=1757242628; c=relaxed/simple;
+	bh=0bTidbw5nA2a03ZH7VdTr5JoBhXdmwIUfnihBPnQy/M=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=BUUpiCFTAV0fzmoljtIU2QY6+3Y8wWgTy3d+Jwvtsld2LuUWI1d1I+hTcqTx7IoJPv30mBHqMlymGasGDbPJR0VbuiT9kHfIeH5Tl8YofT4tnAfNK+5ntbaLpo28pxYcTV+FGKYJ1ZmZu6eXT/LqNOE+GqeCAgSxD+wJaFF+NhM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IE0EmkfQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 529E9C4CEF0;
+	Sun,  7 Sep 2025 10:57:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757242627;
+	bh=0bTidbw5nA2a03ZH7VdTr5JoBhXdmwIUfnihBPnQy/M=;
+	h=Date:From:To:Cc:Subject:From;
+	b=IE0EmkfQrmvGWQuJ08DPdDPv9pPZ7nF9mAFH+AVMZBnD5Tv/rU7HRWBcb9JOT0Sd6
+	 bpoGAS5tureyccfRaGXd0a0C9II2eXa8011dPsI1sgteIk1sOoy7Z71y0FlsZTyktB
+	 6ygN6+59b6euPKsB22a7wQZqMrs0eI3p2/6p0z0AHcFJUt7lRPbyPZRxuXUa27IyAA
+	 B0DOTIW6NMjRlEUFNkXccID1eQgji61O8Mtb096oXeYdkZrUrz5S/eDPXf6IK4Zf6g
+	 ooDIQeZ3DR3s46GtzleaGVRo2/OCn5a6qPeQhKP27a2Kxn+xG1C0905/qzoHCwCS7T
+	 /UtilIPEpkAQw==
+Date: Sun, 7 Sep 2025 12:57:04 +0200
+From: Wolfram Sang <wsa@kernel.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Andi Shyti <andi.shyti@kernel.org>
+Subject: [PULL REQUEST] i2c-for-6.17-rc5
+Message-ID: <aL1lACUHl9td3dtH@shikoro>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.14.2
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="6Cd4VSEnCDVVGApV"
+Content-Disposition: inline
 
 
-On Thu, 04 Sep 2025 14:07:14 +0000, Denzeel Oliva wrote:
-> Add clock controller nodes for PERIC0 and PERIC1 blocks for USI nodes.
-> 
-> 
+--6Cd4VSEnCDVVGApV
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Applied, thanks!
+The following changes since commit b320789d6883cc00ac78ce83bccbfe7ed58afcf0:
 
-[4/4] arm64: dts: exynos990: Enable PERIC0 and PERIC1 clock controllers
-      https://git.kernel.org/krzk/linux/c/44b0a8e433aaad8aac51593a052f043aeb9a18d1
+  Linux 6.17-rc4 (2025-08-31 15:33:07 -0700)
 
-Best regards,
--- 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+are available in the Git repository at:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.17-rc5
+
+for you to fetch changes up to d035b4baebfc5112b128b66cafd45d2522a9c8f1:
+
+  Merge tag 'i2c-host-fixes-6.17-rc5' of git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux into i2c/for-current (2025-09-06 10:17:35 +0200)
+
+----------------------------------------------------------------
+i2c-for-6.17-rc5
+
+- i801: drop superfluous WDT entry for Birch
+- rtl9300:
+  - fix channel number check in probe
+  - check data length boundaries in xfer
+  - drop broken SMBus quick operation
+
+----------------------------------------------------------------
+Chiasheng Lee (1):
+      i2c: i801: Hide Intel Birch Stream SoC TCO WDT
+
+Jonas Jelonek (3):
+      i2c: rtl9300: fix channel number bound check
+      i2c: rtl9300: ensure data length is within supported range
+      i2c: rtl9300: remove broken SMBus Quick operation support
+
+Wolfram Sang (1):
+      Merge tag 'i2c-host-fixes-6.17-rc5' of git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux into i2c/for-current
+
+
+with much appreciated quality assurance from
+----------------------------------------------------------------
+Chris Packham (6):
+      (Rev.) i2c: rtl9300: remove broken SMBus Quick operation support
+      (Test) i2c: rtl9300: remove broken SMBus Quick operation support
+      (Rev.) i2c: rtl9300: ensure data length is within supported range
+      (Test) i2c: rtl9300: ensure data length is within supported range
+      (Rev.) i2c: rtl9300: fix channel number bound check
+      (Test) i2c: rtl9300: fix channel number bound check
+
+Jarkko Nikula (1):
+      (Rev.) i2c: i801: Hide Intel Birch Stream SoC TCO WDT
+
+Markus Stockhausen (3):
+      (Test) i2c: rtl9300: remove broken SMBus Quick operation support
+      (Test) i2c: rtl9300: ensure data length is within supported range
+      (Test) i2c: rtl9300: fix channel number bound check
+
+Mika Westerberg (1):
+      (Rev.) i2c: i801: Hide Intel Birch Stream SoC TCO WDT
+
+Sven Eckelmann (3):
+      (Test) i2c: rtl9300: remove broken SMBus Quick operation support
+      (Test) i2c: rtl9300: ensure data length is within supported range
+      (Test) i2c: rtl9300: fix channel number bound check
+
+ drivers/i2c/busses/i2c-i801.c    |  2 +-
+ drivers/i2c/busses/i2c-rtl9300.c | 22 ++++++++--------------
+ 2 files changed, 9 insertions(+), 15 deletions(-)
+
+--6Cd4VSEnCDVVGApV
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmi9ZP8ACgkQFA3kzBSg
+KbZ7qBAAmrpi2bptRxtJzobl22uShR5zzlRjg4qUUeaoEq+qkkudXrd8e7wxkDY9
+auM8e7QbhprNSroUKAhkQWEv/g/GCMd57kTJAylCGXKGPCmtT94Ru8z65WuhVfYb
+xz00qrMj5Gws9d9mAeSCFwGUuU0bG3rFGr9SWLuEoq6KN68o/Iq+mvyukTn4BQ5k
+k7NBF58QlbMbxaN7b7MGM8aJ0HFQNFMGH+smmQocRP9HJYiA6yOf2eOM+IZV/Jy4
+XvBcxg5POj31Wne+w8gJPq9k4yUUqHQ6jV/CdukOp+EIEc2IZ69V5gJVN3/24KrY
+pa37KP6BeUSkIOY2kD/pyFf44yUWohh5xrIabzUuUkLej/foz2hAmFa0NVacEItx
+VdlW+nXzUfnE5wM8ElPIS+Zby9NT/w7c53aZ67lCDZwueDtGOI78Do6+prvSZO6N
+OpqurDMu7q/Sk1hQzd2jIv3DKWWws9ieaGGHCcfWoQCIAmDzE+vflVU0yEkm1xk3
+NlQWyzxl48Et0F+Ly3uIBEUu5eDCw27P6tz+pcKBqJw7vxRUDdAZOIr/VrvoXbuM
+CYW8ea/Usjl+7jbU756jQLEoiX4sjwYj+sKnABxLM9T2xILE/AJR1uqLiEeng2n7
+L0xam5E5NyR/9YdZF1iQ1lp0lvUznp5sQo6+2H5gbcGyfGT7X6A=
+=xF4z
+-----END PGP SIGNATURE-----
+
+--6Cd4VSEnCDVVGApV--
 
