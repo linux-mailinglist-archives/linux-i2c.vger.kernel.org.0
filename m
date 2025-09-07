@@ -1,69 +1,79 @@
-Return-Path: <linux-i2c+bounces-12723-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12724-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4918BB47E14
-	for <lists+linux-i2c@lfdr.de>; Sun,  7 Sep 2025 22:20:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 164C8B48036
+	for <lists+linux-i2c@lfdr.de>; Sun,  7 Sep 2025 23:23:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 04D0817D782
-	for <lists+linux-i2c@lfdr.de>; Sun,  7 Sep 2025 20:20:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1547A189A94C
+	for <lists+linux-i2c@lfdr.de>; Sun,  7 Sep 2025 21:23:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DC8D1F4C99;
-	Sun,  7 Sep 2025 20:19:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95D971F3BA2;
+	Sun,  7 Sep 2025 21:23:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="VfiTznfO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bRBIwdhv"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C6D61D5AC6
-	for <linux-i2c@vger.kernel.org>; Sun,  7 Sep 2025 20:19:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50F2A1E25FA;
+	Sun,  7 Sep 2025 21:23:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757276399; cv=none; b=CKttfGVz9GIeot172O/6pPpfUBPCkgihOATueegFzu9efAEVsWLuYAyPzKwKytqDWZ7FkCQ8HihJweoZV+xToEJfijI9AHQsQhAw3C6cTEKezjfeMFEyD1CEVffTus8gfm0k6eU148O6wEw9XlYuW0Z04/EaXZ8/XG791n5Eb10=
+	t=1757280192; cv=none; b=SRwdePSChwPGzWfgJPPg+xfwwyPavwENaDJ7Ef2Myufmyk7wAiZe4fNJwlAEwRLxCR4Lr2/iF5iYmjYa1dSLzym8WdMBG35eNS3WQnyU4mitP1uBlzSo1XA2lXSnZ/mVp7dpObpoehOPtVb7L8BTh2SW13pt7uvteNRDCnCb2hk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757276399; c=relaxed/simple;
-	bh=tbNO7YgL8Ap35tuGWrY12HSrQ97vZE6MU7VTvP2cjA4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bvvuCrIueo6evWO+Du5NLlxv/M+42GtSpik72zN/TbK6dY1l/9gl72+gP6uNvZpQJO+/4vyUYdnhJckpUAo1utZKKrHx6h1+FwNhBok2rZanMhVwCiEdCwEwSAYv0Hsgqj+ygopQOs3jmldtHT5PCy7X3GilywU9dcj7+ZD+jIc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=VfiTznfO; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=tbNO
-	7YgL8Ap35tuGWrY12HSrQ97vZE6MU7VTvP2cjA4=; b=VfiTznfOA1ckkoraiCXo
-	syOJbOCkqA9SV1J3qxWFhUuqFVtbrqT9FdsX4+3CyfpRrTFSw6B4RRRbUZ6KlBMl
-	hHiueYr36mW+WWq4OhKmAZQTG3aSVj8FzmLXEtUD2UvhZfMwdseAQD3yJdwGY/8z
-	Ze6ze6dG3ZMLi7UEbYLNlsrCRQJjL+mtbYoDehi34lWM3Ny2SDP+wwvcckTKyXeO
-	Z/87R8DlJthDpaCNGKXhWrcYqEj4ytqEJthl9VulzCR7X+BZ75bNeX/NR3PTT1do
-	mzrwoaxJmVvFpSQIxUmtpiHSOyXCLd9/imwXq70FWzzMmhKdcQKqlATtMUMGQoYw
-	Yw==
-Received: (qmail 575095 invoked from network); 7 Sep 2025 22:19:55 +0200
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 7 Sep 2025 22:19:55 +0200
-X-UD-Smtp-Session: l3s3148p1@8+VQyzs+XNsujntE
-Date: Sun, 7 Sep 2025 22:19:55 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Degao Lan <landegao@sina.com>
-Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: fix comment typo in i2c.h
-Message-ID: <aL3o6w9pjxhZxcnV@ninjato>
-References: <20250907140111.40925-1-landegao@sina.com>
+	s=arc-20240116; t=1757280192; c=relaxed/simple;
+	bh=/SOCVnxGBJY8NuvaJTnJ40WAY/K8umlLB4OJK2Z9zNg=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=ZeF7dpNRltdM0EjKUr7kZl4iM4I/cyd6N78ETA4dnf5oYTsz3jn/9BJb9nqvUdVJZsouvURzX+uQ4S1oGnyiueidpNUZCv81FctKHAGS48Of3Nt10gCsCJeqYMD8p1E7Lrk9bGL9Q+Uq2BfzGbYDXL+MKMlyjQImX9S2+ttokDo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bRBIwdhv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2733AC4CEF0;
+	Sun,  7 Sep 2025 21:23:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757280192;
+	bh=/SOCVnxGBJY8NuvaJTnJ40WAY/K8umlLB4OJK2Z9zNg=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=bRBIwdhvqA8vMna66AtYO4easlhKLIialMHfLrvTGQQbW1dqx/WCNXJZIpJsrKyL6
+	 Bs4MrYp6WGBXGuvTpbZyMGoZhhfH1n+m9R/PVCaiS36LiTDeZlp99Kk0a45Yo0+clj
+	 04q0Q4CLxH1qhabsRZetROm6KPDK89140Ax94u/jTdJPYglSCJ3z9nZ+59At4a5H+w
+	 hyxJMT6S3fSFe9+mS/6uYIDSjN1zPvbUKAM9xImsDctkn7/tCH7phxdXLN0sgZcWGL
+	 G00iUCr+nmAay0gPDS2VFtJgx0ePAImwX8PqnDkpvWXfO0084gXNyxdgErTBJ9TvJc
+	 lTLR5VQsnCW7g==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 34068383BF69;
+	Sun,  7 Sep 2025 21:23:17 +0000 (UTC)
+Subject: Re: [PULL REQUEST] i2c-for-6.17-rc5
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <aL1lACUHl9td3dtH@shikoro>
+References: <aL1lACUHl9td3dtH@shikoro>
+X-PR-Tracked-List-Id: <linux-i2c.vger.kernel.org>
+X-PR-Tracked-Message-Id: <aL1lACUHl9td3dtH@shikoro>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.17-rc5
+X-PR-Tracked-Commit-Id: d035b4baebfc5112b128b66cafd45d2522a9c8f1
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: bd8f3bff4a5d4a2e7a414b033e5abb3c643c59db
+Message-Id: <175728019584.3128559.12596237122414172914.pr-tracker-bot@kernel.org>
+Date: Sun, 07 Sep 2025 21:23:15 +0000
+To: Wolfram Sang <wsa@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>, Andi Shyti <andi.shyti@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250907140111.40925-1-landegao@sina.com>
 
-On Sun, Sep 07, 2025 at 10:01:11PM +0800, Degao Lan wrote:
-> There is a typo in comment. We should fix this.
+The pull request you sent on Sun, 7 Sep 2025 12:57:04 +0200:
 
-No, 'iff' means 'if and only if'.
+> git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.17-rc5
 
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/bd8f3bff4a5d4a2e7a414b033e5abb3c643c59db
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
