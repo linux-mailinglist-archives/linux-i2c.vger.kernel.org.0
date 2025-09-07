@@ -1,266 +1,176 @@
-Return-Path: <linux-i2c+bounces-12714-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12715-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6CACDB47B2E
-	for <lists+linux-i2c@lfdr.de>; Sun,  7 Sep 2025 14:07:26 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A7355B47B91
+	for <lists+linux-i2c@lfdr.de>; Sun,  7 Sep 2025 15:25:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 52C651898F0F
-	for <lists+linux-i2c@lfdr.de>; Sun,  7 Sep 2025 12:07:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 48A7C17AE55
+	for <lists+linux-i2c@lfdr.de>; Sun,  7 Sep 2025 13:25:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4F0A261585;
-	Sun,  7 Sep 2025 12:07:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBB2D27511A;
+	Sun,  7 Sep 2025 13:25:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ahM7+fKV"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="R6e84JkY"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.web.de (mout.web.de [212.227.15.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1A901C84A6;
-	Sun,  7 Sep 2025 12:07:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05B47189;
+	Sun,  7 Sep 2025 13:25:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757246840; cv=none; b=eA/wnq0flwcOHpAMFoaSCG8ehSpppsWLyRCsK0t4jLWVbWie2tZfmqfLUp1Huigm6pR1w2g+zb8TiCxw9tB5UJVcGhdBmKO5TgeTpRTmAsfCnlNPqI/BjYqmfMsDWVmWMRIKVztMPZzHCoVbWFdpWf7ydoVWhyP699o7SdG2pSs=
+	t=1757251520; cv=none; b=U+lhZu7t2U3+EJ0vcqe6oAa5EdNgDKiNy0elkejel8Pkwpot48DdOSO9NCXCiw0NcKD0hAdI8PlJQ4elofdb65lXENf8G5Ec9aM3qKV5l2t5vYC54leFTU6Ht7vXur58xJiSW0sV+8J6BVCxoOlFiI/bbEBOyXHdvlpIUk5PmWM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757246840; c=relaxed/simple;
-	bh=IeaLlXwPyu2cNAS9zasxAo8Sro4IotddBqINAmWFbUk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HcfKmowSJdgb/5t46G3NbZVObgAl3zOLNu0y6YqHGnucXtZMbszBA4Kufgkt3ZKLtm5hTBB+KVkC3mQ1H3ZLB6nVcTEcQJP7bOXaWNs4xql6zS3kkca+3bOMj7WaYXARQlpiKbgdJnm2kBNElYo+aSE1v0DlemqoAoZR0YuvTq0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ahM7+fKV; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-45de6490e74so868225e9.2;
-        Sun, 07 Sep 2025 05:07:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757246837; x=1757851637; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=msh1ZATcrXJ2GJuH9NWwag9G5icF2zxJPgSWKOuUf/c=;
-        b=ahM7+fKVjWz69RJ2qT4h98dd7p6XW7/fJIe8YYSwERa6kO74LlmO1tPhqbOJ8ZI+kd
-         Q6TbXW/8/tbsJTkkaYOXdaHsbdxV61rNk/jRe4dv3BevXEblBAJI11RlLrMAB2y/eow0
-         z7BXAVL8m79k5/bE3pF2zuS0ErGIQ5bbPbScV2U1vSyrHbK3jiQVRbiWmiw3DdZAXDe8
-         x6cjm89OFjBKj7B/9nSakyu+cVDy7AQW3s6yjXr3srxj3ZNbbtE65di1ZZ7ARIDtHb2s
-         u6iNlAHet58YDY44DlaytSYJlPn+jqhv/Z8jWOlyiskDSxQeDyhKFEPqLmaSXEqeZhcm
-         nZUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757246837; x=1757851637;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=msh1ZATcrXJ2GJuH9NWwag9G5icF2zxJPgSWKOuUf/c=;
-        b=WbZRw2lfbnNNI2OWCzbrPgH4Hfcli472IFfMLndlhNR5EPGBlCwy/V2oBtetgWguf+
-         Wc1+9fUeRM9Cyza7pa5wqEGvQ6EXnXa/unIIOO92HIZyiQkxCFE2y4vRW5NkI6zXtoAh
-         xaTZs6Tv281yTVfTq4kCbG1D+EnHE09/74WX/7iKS2Oa2ygP2q1YvtOsx0zocb0DNF9A
-         sodjFHocv4SqOqsSuB/FdJpqLeQK0btLMK5Xd5IDnhG1R4ggKxC7SvrSQTbPuiMlNWS5
-         43anRf+/qtlKlHW38luvMb0y21AEj1BGBmzYauLX9nz2evSjoP1sCes+SHo/6SjE5yqT
-         NwmA==
-X-Forwarded-Encrypted: i=1; AJvYcCVwv0RGo2AJl8yupd36zyNTE95fvwd28RpO6jnmOy7A42ZZwB72mJBwwRG5aRDM0LUBzrxlw0HII4z1AvI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxKz9v+znHK1fRCO93k2ebEz7Alk3IdZN4Ok86OIWXLGJIIz3Ut
-	B5qQ6//gvmHiqpupu2P2aC/w5+dgdSPM8uuSuz+/tKP2PomaBA32WH3Y
-X-Gm-Gg: ASbGnctlvL+vK2UXnLTMh3R3vISZRPpJABPZ6Zc0DOuaVJP1NrzpdDjlv7W1Pjk5Rbm
-	4COe7tHan9HkM2ofgMhTyncYFGVfBqD8FFdDkU6tEs9d5lXD/TY+cKkPgEBb4bWC2J/PMrd119F
-	l1khCTAdENOX3+ABLXxpGjMGKeDXDKkW1mTGhkNvU1NTr7trNNFY24RtWuH5QaDQqFZk6HdOu6p
-	k40UxxIhfavuBF3cPfNSNg5t0ULrNM+JBLMY9lXlMZAH9cthhkHjrTvzGn3kPlW4BLe8MsaJiRE
-	hQzNaBkyzfVpxVJ8Utvd9CkEKBnUlBt+m84n20U2ZhYiyVkuR+XTn+8+QFTque5kbtg5rYbfNQu
-	nUPjFrMnn6tqAsdq7BjSF0rcxFCg5dyJoYoaLk/oF
-X-Google-Smtp-Source: AGHT+IHtMNLhKqBq98pR0r9VX4J5t8KYLL789/mlm0sOdCDdz84iX6TX23evvfGrlLrOWSwhsQv7DA==
-X-Received: by 2002:a05:600c:a43:b0:45b:81ad:336 with SMTP id 5b1f17b1804b1-45dddea520dmr48320685e9.16.1757246836654;
-        Sun, 07 Sep 2025 05:07:16 -0700 (PDT)
-Received: from hangmanPC.. ([86.124.200.102])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45dd2df4c8dsm131354165e9.15.2025.09.07.05.07.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Sep 2025 05:07:16 -0700 (PDT)
-From: Cezar Chiru <chiru.cezar.89@gmail.com>
-To: andi.shyti@kernel.org
-Cc: linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Cezar Chiru <chiru.cezar.89@gmail.com>
-Subject: [PATCH v2] i2c : algos : i2c-algo-pcf.c : fixed errors shown by checkpatch
-Date: Sun,  7 Sep 2025 15:07:06 +0300
-Message-ID: <20250907120706.44114-1-chiru.cezar.89@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250907114557.15453-1-chiru.cezar.89@gmail.com>
-References: <20250907114557.15453-1-chiru.cezar.89@gmail.com>
+	s=arc-20240116; t=1757251520; c=relaxed/simple;
+	bh=fTBWrmTJnfGOSkkH58kqFeRKK6Ed7AoSn5KO/YdN+Gc=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
+	 In-Reply-To:Content-Type; b=DWzutKUUsXpprNQFKHbe/vgHLK23Rov7kKg5hieLjx+W/1q1kSd+PMo1XD4Z29i9ylHBo65anZi1nzcw7xb2BCE1PzxSlDaGZhlHvR7Y3xvR81v4oGL8GCNDADXD8WFP2YjUKDQbs/ReJCN9RjWxqlInCZCW4ugyQ6Hd2QEdWho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=R6e84JkY; arc=none smtp.client-ip=212.227.15.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1757251506; x=1757856306; i=markus.elfring@web.de;
+	bh=tbBb5GVz7n/mNYrSevI6OrPd7EfNyHuWIkDsBg5vWVA=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
+	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 cc:content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=R6e84JkYyNHmEkk+H+TkKguQK0oiOlOoepgIhxu80HKtwkWhYilBoG/RO0M+FrKu
+	 BuASCKfuiS+TghtQrNr8+Pkz70IEJBBf18u9gn26N+JHEGKvXc4aZUt3xzoOHUA4X
+	 9MsUdpjAoDuVCJ9NBK9Gw8aiPCnNO6Bd3u3n6O9nBh4KkClcQS7dO+XuGx2KBg5vJ
+	 KCL80Zi3Oexsf3HK1Sb5znyXYV98uViFyt8M8rW0rB8lWTTkJlEJ4oNWfd2AMm5TK
+	 S5F+iHg6v6mQmykN94Z+0Urr8OI+xzxQxLQyjfhQzWbPmWAWDMjxVzi9UwMBZomVU
+	 XgASlr70qS2FZk8hZQ==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.29] ([94.31.69.176]) by smtp.web.de (mrweb006
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1Mmymp-1uCJdG25J9-00pfpM; Sun, 07
+ Sep 2025 15:19:37 +0200
+Message-ID: <dcadf502-8c14-46fe-8e2f-222cdec4dae4@web.de>
+Date: Sun, 7 Sep 2025 15:19:20 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+To: Cezar Chiru <chiru.cezar.89@gmail.com>, linux-i2c@vger.kernel.org
+Cc: LKML <linux-kernel@vger.kernel.org>, Andi Shyti <andi.shyti@kernel.org>
+References: <20250907120706.44114-1-chiru.cezar.89@gmail.com>
+Subject: Re: [PATCH v2] i2c : algos : i2c-algo-pcf.c : fixed errors shown by
+ checkpatch
+Content-Language: en-GB, de-DE
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <20250907120706.44114-1-chiru.cezar.89@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:+gOssOwThaimyMVBJF6kwGTiUTq7+XGMwneZCpBz1veeHhvu58i
+ JfJnDil4SN5c1CM7VjtADXan6VrDBkySJcQf3Fv6iUOmU4s6+0OWfGq9Bfd7iZTzQDmryPy
+ Q6l8vzBVpvGUF2ro7bJymLKyBOUCl85yLYM6loOUv8LLnaxl+lyn7RP51sD/GIMGnTzM/r1
+ fK/HsU7z6nysx1523M3ag==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:QTlSBWhCdMk=;EyWnRY/C9IN4HYqpF6KG0ox8xH0
+ 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
 
-Fixed all 18 errors revealed using checkpatch.pl on i2c-algo-pcf.c
-file. Errors fixed were: macros starting with 'if' should be
-enclosed by do - while loop to avoid possible if/else logic defects,
-do not use assignment in if condition, spaces required around '=' ,
-';', '<' and ','.
-Motivation is to fix all errors and warnings i2c-algo-pcf kerenel
-module.
+> Fixed all 18 errors revealed using checkpatch.pl on i2c-algo-pcf.c
+=E2=80=A6
 
-Testing:
-    * built kernel with my changes and I2C_ALGOPCF=m enabled
-    and it built successfully.
-    * installed kernel and external modules generated by build
-    * rebooted and loaded using modprobe i2c-algo-pcf kernel module
-    with param i2c_debug=3 and no message was found related to
-    module in dmesg. But also no error was generated.
+See also:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Do=
+cumentation/process/submitting-patches.rst?h=3Dv6.17-rc4#n81
 
-Checkpatch.pl warnings  on patch: on running checkpatch.pl on this
-patch 7 warnings were raised. Will be fixed on following warnings
-fixes patch.
 
-v2:
-    Fixed build errors generated by missing ; after do - while.
-    Missed to git add latest changes to patch. Build is ok.
+=E2=80=A6
+> Motivation is to fix all errors and warnings i2c-algo-pcf kerenel
+=E2=80=A6
+                                                            kernel?
 
-Signed-off-by: Cezar Chiru <chiru.cezar.89@gmail.com>
----
- drivers/i2c/algos/i2c-algo-pcf.c | 42 +++++++++++++++++++-------------
- 1 file changed, 25 insertions(+), 17 deletions(-)
+=E2=80=A6
+> v2:
+>     Fixed build errors generated by missing ; after do - while.
+>     Missed to git add latest changes to patch. Build is ok.
+>=20
+> Signed-off-by: Cezar Chiru <chiru.cezar.89@gmail.com>
+> ---
+>  drivers/i2c/algos/i2c-algo-pcf.c | 42 +++++++++++++++++++-------------
+=E2=80=A6
 
-diff --git a/drivers/i2c/algos/i2c-algo-pcf.c b/drivers/i2c/algos/i2c-algo-pcf.c
-index fd563e845d4b..f5174f38d777 100644
---- a/drivers/i2c/algos/i2c-algo-pcf.c
-+++ b/drivers/i2c/algos/i2c-algo-pcf.c
-@@ -23,9 +23,10 @@
- #include "i2c-algo-pcf.h"
- 
- 
--#define DEB2(x) if (i2c_debug >= 2) x
--#define DEB3(x) if (i2c_debug >= 3) x /* print several statistical values */
--#define DEBPROTO(x) if (i2c_debug >= 9) x;
-+#define DEB2(x) do { if (i2c_debug >= 2) x; } while (0);
-+#define DEB3(x) do { if (i2c_debug >= 3) x; } while (0);
-+	/* print several statistical values */
-+#define DEBPROTO(x) do { if (i2c_debug >= 9) x; } while (0);
- 	/* debug the protocol by showing transferred bits */
- #define DEF_TIMEOUT 16
- 
-@@ -160,7 +161,8 @@ static int pcf_init_8584 (struct i2c_algo_pcf_data *adap)
- 	 * check to see S1 now used as R/W ctrl -
- 	 * PCF8584 does that when ESO is zero
- 	 */
--	if (((temp = get_pcf(adap, 1)) & 0x7f) != (0)) {
-+	temp = get_pcf(adap, 1);
-+	if ((temp & 0x7f) != (0)) {
- 		DEB2(printk(KERN_ERR "i2c-algo-pcf.o: PCF detection failed -- can't select S0 (0x%02x).\n", temp));
- 		return -ENXIO; /* definitely not PCF8584 */
- 	}
-@@ -168,7 +170,8 @@ static int pcf_init_8584 (struct i2c_algo_pcf_data *adap)
- 	/* load own address in S0, effective address is (own << 1) */
- 	i2c_outb(adap, get_own(adap));
- 	/* check it's really written */
--	if ((temp = i2c_inb(adap)) != get_own(adap)) {
-+	temp = i2c_inb(adap);
-+	if (temp  != get_own(adap)) {
- 		DEB2(printk(KERN_ERR "i2c-algo-pcf.o: PCF detection failed -- can't set S0 (0x%02x).\n", temp));
- 		return -ENXIO;
- 	}
-@@ -176,7 +179,8 @@ static int pcf_init_8584 (struct i2c_algo_pcf_data *adap)
- 	/* S1=0xA0, next byte in S2 */
- 	set_pcf(adap, 1, I2C_PCF_PIN | I2C_PCF_ES1);
- 	/* check to see S2 now selected */
--	if (((temp = get_pcf(adap, 1)) & 0x7f) != I2C_PCF_ES1) {
-+	temp = get_pcf(adap, 1);
-+	if ((temp & 0x7f) != I2C_PCF_ES1) {
- 		DEB2(printk(KERN_ERR "i2c-algo-pcf.o: PCF detection failed -- can't select S2 (0x%02x).\n", temp));
- 		return -ENXIO;
- 	}
-@@ -184,7 +188,8 @@ static int pcf_init_8584 (struct i2c_algo_pcf_data *adap)
- 	/* load clock register S2 */
- 	i2c_outb(adap, get_clock(adap));
- 	/* check it's really written, the only 5 lowest bits does matter */
--	if (((temp = i2c_inb(adap)) & 0x1f) != get_clock(adap)) {
-+	temp = i2c_inb(adap);
-+	if ((temp & 0x1f) != get_clock(adap)) {
- 		DEB2(printk(KERN_ERR "i2c-algo-pcf.o: PCF detection failed -- can't set S2 (0x%02x).\n", temp));
- 		return -ENXIO;
- 	}
-@@ -193,7 +198,8 @@ static int pcf_init_8584 (struct i2c_algo_pcf_data *adap)
- 	set_pcf(adap, 1, I2C_PCF_IDLE);
- 
- 	/* check to see PCF is really idled and we can access status register */
--	if ((temp = get_pcf(adap, 1)) != (I2C_PCF_PIN | I2C_PCF_BB)) {
-+	temp = get_pcf(adap, 1);
-+	if (temp != (I2C_PCF_PIN | I2C_PCF_BB)) {
- 		DEB2(printk(KERN_ERR "i2c-algo-pcf.o: PCF detection failed -- can't select S1` (0x%02x).\n", temp));
- 		return -ENXIO;
- 	}
-@@ -209,7 +215,7 @@ static int pcf_sendbytes(struct i2c_adapter *i2c_adap, const char *buf,
- 	struct i2c_algo_pcf_data *adap = i2c_adap->algo_data;
- 	int wrcount, status, timeout;
- 
--	for (wrcount=0; wrcount<count; ++wrcount) {
-+	for (wrcount = 0; wrcount < count; ++wrcount) {
- 		DEB2(dev_dbg(&i2c_adap->dev, "i2c_write: writing %2.2X\n",
- 				buf[wrcount] & 0xff));
- 		i2c_outb(adap, buf[wrcount]);
-@@ -246,7 +252,8 @@ static int pcf_readbytes(struct i2c_adapter *i2c_adap, char *buf,
- 	/* increment number of bytes to read by one -- read dummy byte */
- 	for (i = 0; i <= count; i++) {
- 
--		if ((wfp = wait_for_pin(adap, &status))) {
-+		wfp = wait_for_pin(adap, &status);
-+		if (wfp) {
- 			if (wfp == -EINTR)
- 				return -EINTR; /* arbitration lost */
- 
-@@ -299,7 +306,7 @@ static int pcf_xfer(struct i2c_adapter *i2c_adap,
- 	struct i2c_algo_pcf_data *adap = i2c_adap->algo_data;
- 	struct i2c_msg *pmsg;
- 	int i;
--	int ret=0, timeout, status;
-+	int ret = 0, timeout, status;
- 
- 	if (adap->xfer_begin)
- 		adap->xfer_begin(adap->data);
-@@ -313,7 +320,7 @@ static int pcf_xfer(struct i2c_adapter *i2c_adap,
- 		goto out;
- 	}
- 
--	for (i = 0;ret >= 0 && i < num; i++) {
-+	for (i = 0; ret >= 0 && i < num; i++) {
- 		pmsg = &msgs[i];
- 
- 		DEB2(printk(KERN_DEBUG "i2c-algo-pcf.o: Doing %s %d bytes to 0x%02x - %d of %d messages\n",
-@@ -358,9 +365,9 @@ static int pcf_xfer(struct i2c_adapter *i2c_adap,
- 
- 			if (ret != pmsg->len) {
- 				DEB2(printk(KERN_DEBUG "i2c-algo-pcf.o: fail: "
--					    "only read %d bytes.\n",ret));
-+					    "only read %d bytes.\n", ret));
- 			} else {
--				DEB2(printk(KERN_DEBUG "i2c-algo-pcf.o: read %d bytes.\n",ret));
-+				DEB2(printk(KERN_DEBUG "i2c-algo-pcf.o: read %d bytes.\n", ret));
- 			}
- 		} else {
- 			ret = pcf_sendbytes(i2c_adap, pmsg->buf, pmsg->len,
-@@ -368,9 +375,9 @@ static int pcf_xfer(struct i2c_adapter *i2c_adap,
- 
- 			if (ret != pmsg->len) {
- 				DEB2(printk(KERN_DEBUG "i2c-algo-pcf.o: fail: "
--					    "only wrote %d bytes.\n",ret));
-+					    "only wrote %d bytes.\n", ret));
- 			} else {
--				DEB2(printk(KERN_DEBUG "i2c-algo-pcf.o: wrote %d bytes.\n",ret));
-+				DEB2(printk(KERN_DEBUG "i2c-algo-pcf.o: wrote %d bytes.\n", ret));
- 			}
- 		}
- 	}
-@@ -406,7 +413,8 @@ int i2c_pcf_add_bus(struct i2c_adapter *adap)
- 	/* register new adapter to i2c module... */
- 	adap->algo = &pcf_algo;
- 
--	if ((rval = pcf_init_8584(pcf_adap)))
-+	rval = pcf_init_8584(pcf_adap);
-+	if (rval)
- 		return rval;
- 
- 	rval = i2c_add_adapter(adap);
--- 
-2.43.0
+* Please move your patch version descriptions behind the marker line.
+  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/=
+Documentation/process/submitting-patches.rst?h=3Dv6.17-rc4#n784
 
+* Will enumerations become more helpful?
+
+
+Regards,
+Markus
 
