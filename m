@@ -1,91 +1,93 @@
-Return-Path: <linux-i2c+bounces-12770-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12771-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED149B48BF0
-	for <lists+linux-i2c@lfdr.de>; Mon,  8 Sep 2025 13:20:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9A37B48CB6
+	for <lists+linux-i2c@lfdr.de>; Mon,  8 Sep 2025 14:00:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 124023A3375
-	for <lists+linux-i2c@lfdr.de>; Mon,  8 Sep 2025 11:19:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A2E793A6721
+	for <lists+linux-i2c@lfdr.de>; Mon,  8 Sep 2025 12:00:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91B9D2FE049;
-	Mon,  8 Sep 2025 11:15:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F17792DE71C;
+	Mon,  8 Sep 2025 12:00:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MVw0q6r5"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mkcxRvRa"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE7A03019AA;
-	Mon,  8 Sep 2025 11:14:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2F2C1EE7B9;
+	Mon,  8 Sep 2025 12:00:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757330100; cv=none; b=m3j05M9XB3YNw3rXa8LeuPukEq/Tic8VjsNZStSRQPULz6tpZ3IdsKrsuIclKVMqBjyrhOr2xiMuPUwjCoRMpxuPPHGvwhCPIOU0LjiEh/5dD+YoeiBlwK3U3CDmSJN5xMpMI5Tl0ATy1QPMjhnR7Y9H/oc+xId9Q7YyBqjLE9U=
+	t=1757332806; cv=none; b=X2ds/69pPnt/TNa3wUdc0tezWnQR/0Az9c86Y302hGUST1YvYW+CMWssZBlOAxm1XCSS0onhd6PJwIgZIWQ1xgWZOdSVlRAFE4OaAMb/U8qDzD1YfS8Rc6JyNychEL8pGTUTFukMpYOX4bheqIseYSf9ksf3SO3AjEv/eLzmg90=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757330100; c=relaxed/simple;
-	bh=TfP6W/TnH/0OzJl7LMSUfZKB4S/i2gT2uKhKlDTtDHs=;
+	s=arc-20240116; t=1757332806; c=relaxed/simple;
+	bh=SzYYI51NtNSDSKgGLENA16UfPn3ddWSPdfcuN10MGgc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DPKwBqu6cCe6Qyz6jMsDomUEVRKEQYjnJGtXjZmzp3+2a7cZu2tVjJmgMlcSU+9UZxLl962VF6Yt0QkWY+41L5boRpDy+HVeMyeCXY48ft6y1sh84A9UAsSLz8J9yypV4bI2As1LA8Ff4g+lgE8vtE7j+xVUjUhZkbzdFvxuI7c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MVw0q6r5; arc=none smtp.client-ip=209.85.218.51
+	 MIME-Version; b=Xxd66CToRTRS2HdqZErBgR2lb0o4TxW8iPevqnNhl3k9HDwE64ClNedoTk09niVLgMpKsx4Bo/mQxe4+0/o/L3MVgfr0vuokF9De7tzMDrf7gEvo2h+5Hx+AgitAnYDcYiij+Q16y7U3m0HqAqJ8kcBpGJ7fX3mTvdnlHo0uy4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mkcxRvRa; arc=none smtp.client-ip=209.85.167.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-b0449b1b56eso618693866b.1;
-        Mon, 08 Sep 2025 04:14:58 -0700 (PDT)
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-55f6f7edf45so4217581e87.2;
+        Mon, 08 Sep 2025 05:00:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757330097; x=1757934897; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1757332803; x=1757937603; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=TBUgKZx8CWWM1fLAgdONFmjWGDp8QxAQMW41bDl4PYE=;
-        b=MVw0q6r5lBjy5pHK4Mb3EA7bAzbFW6IWhtwhCt2l4Bj4iEG2RvRx51Oq8AiVk0ErvF
-         nLE2AhOajv8+sgb7RRda/FUBQEpyF90R5ILIkev4JzUtxAEiYXRdTEcqdHCCIkzJd9rq
-         3Jzf4MVEzBxDiLQpUo/sHSfFNa/L3wapSEG3jMIFzEWWUIxKscRAgbdPFBfQOud/Kf/v
-         qho11XgokfLqZe2ewlGG+6lUwzVlPoJURmDvzu0SXQVav9meDQxOO5qWmYvy3gHAu++T
-         qdJc9N3Y11Apf+M4UhPQLoYCvEIkdcR4RSnqIfFFGgmHLmst8I7QiptKxQoDP7wdfN78
-         Ygcg==
+        bh=oUop7F0bMoj9b9OVpy7vFgynTr3W+ER4wqNAl4R64lE=;
+        b=mkcxRvRauAXa6pLf93XpWWdQ9yoGKs/qXqg7Cz9JuyhdtXqPXBzSMQzyVOl+Twg7Yv
+         +PN97J1PkaW6svGmoEi4rcW124DNyKSJpUXGf471WWFU1gUwjUD8QrGpeD5gRIoYmIhV
+         OLXBS8B3+olWj9EO4eUv5K/aRkSvLZvzkLVfnhfId/glxtIUE+mm9GZU2GlGo0gDWDK8
+         eWuoyypqZD72zyZr2AVT8rhPwOFR/d6tmkIzYIMyHuhp+rJznW2OgHUQ9O9pk2lIBO9y
+         tB1ZG6c6ZWpRLDPBaORD3+1oJ8l+AEDfG3dnkQYQ4zDjRbnAgRwc0yx2OR/u2VtqjLOv
+         7PEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757330097; x=1757934897;
+        d=1e100.net; s=20230601; t=1757332803; x=1757937603;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=TBUgKZx8CWWM1fLAgdONFmjWGDp8QxAQMW41bDl4PYE=;
-        b=aHt/kRruryMl3pJ3msGmNnNbArwYONYuOoegCsvpNGD7Gc9uNp7nnrRK2AstH9A6cK
-         F8GMUuZaJmLabTfjDaqDydpyLBM+OgpG0HaQItedDepvKBulWGUWKJr7CQcxo3vvCpIe
-         uXdvdzMvCM8bTJjzFbFQQSjC/wIRFZHpuZ0LDoY1/34XY2j0+4wS50c2c7eFExcUT43w
-         M1tIsmZ1Ue22ogNZRmxdwZAt8329Gi2TrzU073Jmyc0jCJ7QTeiN/jNXm7om1U6I31Vo
-         ibWiWW55ZK7EJP0pojRZ94Wnep7+rsmsmzyIRfX6a1Yg25cXACWx3CR/FavgQ/tZsL6o
-         TT1A==
-X-Forwarded-Encrypted: i=1; AJvYcCU+FLVHUeHgP9uLYoSoyCku/Ade6P6i88YtT1v/GF324S6gRG287bKUmTt+NRjLOICKECtho+QrdzTTs2E=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yypa9BMzm3lYu4eCUcjAoKDApmvBCe+qvjd1pRaczw7JY1guK8d
-	CFALeZCu47GJaa+pDQu4hqgycZKWZKgEgN+b73kUcH9uAXOTKNhnR0r3
-X-Gm-Gg: ASbGncvaigUmXtst7TPjVpQ2OQGZrtwXpK+MnwjEU1ah3GDW5A2uk+sZyF1s4umRLFm
-	cXNcGsuOebbI8ZnMAc6RVvjd8aH5CqbRNerFdcpTTP/SJWextgq2oWH58RzMAzacK3Sq9fY4JHI
-	dHMmKaJJolvRz5TpYIcs8V7WvG9wnSDBcH4ZrEObImnaJ2cQyiPaK6dEwfGfcOyOqKONw/wgm3g
-	EeyTSS+eFT+O9TyXe4gQwwFVmVgNRMZ/VSl3tPk4LOGnBVxBERvPDsVpcll94DoM1LqKd4+b72o
-	JFlpOHDK7+62B74swMukjthiosCawD6yWUrVdjnz4NlM1JnL5cR8IUM7meuEH2CWw5rcg2xdY+v
-	Lo+ZIt+/il8oQ0+rNetp+NlHsqBsWs7op3EvMPR1O
-X-Google-Smtp-Source: AGHT+IE3JlJNXgpxX8j5r4zjDm5+NI53Htj/P0EpXbcWtw77dZIT/GXtwNLca3686j8M+Jcn8rSTSA==
-X-Received: by 2002:a17:906:6a0c:b0:afe:e7f1:289d with SMTP id a640c23a62f3a-b04b1818f57mr615278166b.62.1757330096936;
-        Mon, 08 Sep 2025 04:14:56 -0700 (PDT)
-Received: from hangmanPC.. ([86.124.200.102])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b0470f11088sm1211333966b.111.2025.09.08.04.14.56
+        bh=oUop7F0bMoj9b9OVpy7vFgynTr3W+ER4wqNAl4R64lE=;
+        b=s74AGyi9bXfPq9HkkQmkdj44tLjVYj5ZlXYVAcEXC0sOJnwZHqd0T9hi9/BVtsa+xc
+         +j6jNbfDRSwrFtwIJVTTtHnUWdYq02drJ06Mr24WcG0N2VNXCSfqoD+0B1a7lIBPLuN6
+         7ciGfAxnjE8HQoTFR/H1nnDr5iVDcy5aGSFJcU0Ec0vVpSJNR9CEdcCuavJsWGGeGZcD
+         QLOLhmFdabZwOfcUBZgAXsHU5NYIaCRkf8R0YABb3chq4uXJOt+0Q7c2vK4mEeHGDRtk
+         DH6NrdeIIPrta07DwLFWHSqagORvfOpyr5XsoNddYRoIuELBbuTCc4FfwKPFM5kz9b+Z
+         lo3g==
+X-Forwarded-Encrypted: i=1; AJvYcCUxuC5QsfgHDodl0t4S5lk1MOvPS+xYcFsUjiCPZzwTNfcMDR2CGd/SxHDrvXNpj/zrHTL3kDUvezE=@vger.kernel.org, AJvYcCVfUtW2z/SIgejcR5Ws6uJQVYG+xIlOzuHOo2nE/l4CNUQUmhNK/VqMUl5iz0JHSU1DYMo+Aq8PWKHDO4lT@vger.kernel.org
+X-Gm-Message-State: AOJu0YyZuo2FRup+2epzDUaf8ci5d3q7L1RaNVSeOeUcPDrfFkIfNmqE
+	6KTpErxqHrQ37Nf05RvCJAP78So7LnCbCWfhnBbsJHHZGgsFqyvwZ6Az
+X-Gm-Gg: ASbGncsU35aY/5HMls6j3votumcrhyysP6DBQW4p7xZv+v3J4T5FFSiu//+j1PDFKxn
+	GAfRePtjDkK6oUqKVsdHgYdfP1+xcBECh98MS+nWTq7TQHxw1+nV1CQ76m6zYqfblQplUzbu5Jl
+	pFAgDBYTuEZpmuAg9L8op2po9HnWNmPqTpzHbbXDveU+UCpg1H4cUKKyOdvSYnzfSSZnMxHCiUp
+	7oOhO90c9rh1iibHLuMveSPGNIYExZOUxQKhE+Y57nNDlnYI3mWmyeFyB4OhHKZnodhwHvaMOtN
+	XRCTgB6dyCvzwFE3OV9OWJ9gDoOMeFK9vlJjfVj6QZ5PX3Hvk/CKQ0qPZBxhzUGCIjeiBI0EkRU
+	JI7OCFI5o/sNuil6VTK6faLvUR2AYrLWr1sgmuMR3rE/v71/L2A==
+X-Google-Smtp-Source: AGHT+IF05PZlzmuS2htCq0a7S4zdiPWvZGgxKc3nDZhxv9mtEDSZXgyXKjQsx5nsb0lppz5ovt7OTg==
+X-Received: by 2002:a05:6512:61c1:20b0:563:d896:2cec with SMTP id 2adb3069b0e04-563d8962f7emr1613711e87.3.1757332802707;
+        Mon, 08 Sep 2025 05:00:02 -0700 (PDT)
+Received: from NB-6746.corp.yadro.com ([88.201.206.77])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5608ad104ccsm3488955e87.113.2025.09.08.05.00.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Sep 2025 04:14:56 -0700 (PDT)
-From: Cezar Chiru <chiru.cezar.89@gmail.com>
-To: andi.shyti@kernel.org,
-	Markus.Elfring@web.de
-Cc: linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Cezar Chiru <chiru.cezar.89@gmail.com>
-Subject: [PATCH 3/3] i2c : PCF8584 : Fixed space required after different operators
-Date: Mon,  8 Sep 2025 14:13:55 +0300
-Message-ID: <20250908111355.79222-4-chiru.cezar.89@gmail.com>
+        Mon, 08 Sep 2025 05:00:02 -0700 (PDT)
+From: Artem Shimko <artyom.shimko@gmail.com>
+To: 
+Cc: Artem Shimko <artyom.shimko@gmail.com>,
+	Elie Morisse <syniurge@gmail.com>,
+	Shyam Sundar S K <shyam-sundar.s-k@amd.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/1] i2c: amd-mp2-pci: Simplify PM code using DEFINE_RUNTIME_DEV_PM_OPS
+Date: Mon,  8 Sep 2025 14:59:36 +0300
+Message-ID: <20250908115942.752356-2-artyom.shimko@gmail.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250908111355.79222-1-chiru.cezar.89@gmail.com>
-References: <adb7d136-eba4-4ed2-b893-4f7c43f8d678@web.de>
- <20250908111355.79222-1-chiru.cezar.89@gmail.com>
+In-Reply-To: <20250908115942.752356-1-artyom.shimko@gmail.com>
+References: <202509070541.ilqlMkml-lkp@intel.com>
+ <20250908115942.752356-1-artyom.shimko@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -94,71 +96,107 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The error was: spaces required around or before or after  '=',
-';', '<' and ',' operators.
-Fixed by adding space(s) around or before or after different
-operators.
+Simplify the power management code by:
+1. Removing the redundant #ifdef CONFIG_PM guards as the
+   DEFINE_RUNTIME_DEV_PM_OPS() macro already handles PM_SLEEP
+   dependencies automatically.
+2. Replacing UNIVERSAL_DEV_PM_OPS with DEFINE_RUNTIME_DEV_PM_OPS()
+   which is more appropriate for runtime power management.
+3. Using pm_sleep_ptr() for the driver's pm_ops to allow the compiler
+   to eliminate unused code when CONFIG_PM_SLEEP is disabled.
 
-Signed-off-by: Cezar Chiru <chiru.cezar.89@gmail.com>
+This change reduces preprocessor conditional complexity and ensures
+better code elimination for non-PM configurations.
+
+Signed-off-by: Artem Shimko <artyom.shimko@gmail.com>
 ---
- drivers/i2c/algos/i2c-algo-pcf.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ drivers/i2c/busses/i2c-amd-mp2-pci.c  | 8 ++------
+ drivers/i2c/busses/i2c-amd-mp2-plat.c | 4 ----
+ drivers/i2c/busses/i2c-amd-mp2.h      | 2 --
+ 3 files changed, 2 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/i2c/algos/i2c-algo-pcf.c b/drivers/i2c/algos/i2c-algo-pcf.c
-index 598bf000bf4a..3439b7387a54 100644
---- a/drivers/i2c/algos/i2c-algo-pcf.c
-+++ b/drivers/i2c/algos/i2c-algo-pcf.c
-@@ -223,7 +223,7 @@ static int pcf_sendbytes(struct i2c_adapter *i2c_adap, const char *buf,
- 	struct i2c_algo_pcf_data *adap = i2c_adap->algo_data;
- 	int wrcount, status, timeout;
+diff --git a/drivers/i2c/busses/i2c-amd-mp2-pci.c b/drivers/i2c/busses/i2c-amd-mp2-pci.c
+index ef7370d3dbea..8f148c4d641f 100644
+--- a/drivers/i2c/busses/i2c-amd-mp2-pci.c
++++ b/drivers/i2c/busses/i2c-amd-mp2-pci.c
+@@ -379,7 +379,6 @@ static void amd_mp2_pci_remove(struct pci_dev *pci_dev)
+ 	amd_mp2_clear_reg(privdata);
+ }
  
--	for (wrcount=0; wrcount<count; ++wrcount) {
-+	for (wrcount = 0; wrcount < count; ++wrcount) {
- 		DEB2(dev_dbg(&i2c_adap->dev, "i2c_write: writing %2.2X\n",
- 				buf[wrcount] & 0xff));
- 		i2c_outb(adap, buf[wrcount]);
-@@ -314,7 +314,7 @@ static int pcf_xfer(struct i2c_adapter *i2c_adap,
- 	struct i2c_algo_pcf_data *adap = i2c_adap->algo_data;
- 	struct i2c_msg *pmsg;
- 	int i;
--	int ret=0, timeout, status;
-+	int ret = 0, timeout, status;
+-#ifdef CONFIG_PM
+ static int amd_mp2_pci_suspend(struct device *dev)
+ {
+ 	struct pci_dev *pci_dev = to_pci_dev(dev);
+@@ -431,9 +430,8 @@ static int amd_mp2_pci_resume(struct device *dev)
+ 	return ret;
+ }
  
- 	if (adap->xfer_begin)
- 		adap->xfer_begin(adap->data);
-@@ -328,7 +328,7 @@ static int pcf_xfer(struct i2c_adapter *i2c_adap,
- 		goto out;
- 	}
+-static UNIVERSAL_DEV_PM_OPS(amd_mp2_pci_pm_ops, amd_mp2_pci_suspend,
++static DEFINE_RUNTIME_DEV_PM_OPS(amd_mp2_pci_pm_ops, amd_mp2_pci_suspend,
+ 			    amd_mp2_pci_resume, NULL);
+-#endif /* CONFIG_PM */
  
--	for (i = 0;ret >= 0 && i < num; i++) {
-+	for (i = 0; ret >= 0 && i < num; i++) {
- 		pmsg = &msgs[i];
+ static const struct pci_device_id amd_mp2_pci_tbl[] = {
+ 	{PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_MP2)},
+@@ -446,11 +444,9 @@ static struct pci_driver amd_mp2_pci_driver = {
+ 	.id_table	= amd_mp2_pci_tbl,
+ 	.probe		= amd_mp2_pci_probe,
+ 	.remove		= amd_mp2_pci_remove,
+-#ifdef CONFIG_PM
+ 	.driver = {
+-		.pm	= &amd_mp2_pci_pm_ops,
++		.pm	= pm_sleep_ptr(&amd_mp2_pci_pm_ops),
+ 	},
+-#endif
+ };
+ module_pci_driver(amd_mp2_pci_driver);
  
- 		DEB2(printk(KERN_DEBUG "i2c-algo-pcf.o: Doing %s %d bytes to 0x%02x - %d of %d messages\n",
-@@ -373,9 +373,9 @@ static int pcf_xfer(struct i2c_adapter *i2c_adap,
+diff --git a/drivers/i2c/busses/i2c-amd-mp2-plat.c b/drivers/i2c/busses/i2c-amd-mp2-plat.c
+index 188e24cc4d35..430d01824a0d 100644
+--- a/drivers/i2c/busses/i2c-amd-mp2-plat.c
++++ b/drivers/i2c/busses/i2c-amd-mp2-plat.c
+@@ -183,7 +183,6 @@ static const struct i2c_algorithm i2c_amd_algorithm = {
+ 	.functionality = i2c_amd_func,
+ };
  
- 			if (ret != pmsg->len) {
- 				DEB2(printk(KERN_DEBUG "i2c-algo-pcf.o: fail: "
--					    "only read %d bytes.\n",ret));
-+					    "only read %d bytes.\n", ret));
- 			} else {
--				DEB2(printk(KERN_DEBUG "i2c-algo-pcf.o: read %d bytes.\n",ret));
-+				DEB2(printk(KERN_DEBUG "i2c-algo-pcf.o: read %d bytes.\n", ret));
- 			}
- 		} else {
- 			ret = pcf_sendbytes(i2c_adap, pmsg->buf, pmsg->len,
-@@ -383,9 +383,9 @@ static int pcf_xfer(struct i2c_adapter *i2c_adap,
+-#ifdef CONFIG_PM
+ static int i2c_amd_suspend(struct amd_i2c_common *i2c_common)
+ {
+ 	struct amd_i2c_dev *i2c_dev = amd_i2c_dev_common(i2c_common);
+@@ -198,7 +197,6 @@ static int i2c_amd_resume(struct amd_i2c_common *i2c_common)
  
- 			if (ret != pmsg->len) {
- 				DEB2(printk(KERN_DEBUG "i2c-algo-pcf.o: fail: "
--					    "only wrote %d bytes.\n",ret));
-+					    "only wrote %d bytes.\n", ret));
- 			} else {
--				DEB2(printk(KERN_DEBUG "i2c-algo-pcf.o: wrote %d bytes.\n",ret));
-+				DEB2(printk(KERN_DEBUG "i2c-algo-pcf.o: wrote %d bytes.\n", ret));
- 			}
- 		}
- 	}
+ 	return i2c_amd_enable_set(i2c_dev, true);
+ }
+-#endif
+ 
+ static const u32 supported_speeds[] = {
+ 	I2C_MAX_HIGH_SPEED_MODE_FREQ,
+@@ -276,10 +274,8 @@ static int i2c_amd_probe(struct platform_device *pdev)
+ 	platform_set_drvdata(pdev, i2c_dev);
+ 
+ 	i2c_dev->common.cmd_completion = &i2c_amd_cmd_completion;
+-#ifdef CONFIG_PM
+ 	i2c_dev->common.suspend = &i2c_amd_suspend;
+ 	i2c_dev->common.resume = &i2c_amd_resume;
+-#endif
+ 
+ 	/* Register the adapter */
+ 	amd_mp2_pm_runtime_get(mp2_dev);
+diff --git a/drivers/i2c/busses/i2c-amd-mp2.h b/drivers/i2c/busses/i2c-amd-mp2.h
+index 018a42de8b1e..40f3cdcc60aa 100644
+--- a/drivers/i2c/busses/i2c-amd-mp2.h
++++ b/drivers/i2c/busses/i2c-amd-mp2.h
+@@ -160,10 +160,8 @@ struct amd_i2c_common {
+ 	enum speed_enum i2c_speed;
+ 	u8 *dma_buf;
+ 	dma_addr_t dma_addr;
+-#ifdef CONFIG_PM
+ 	int (*suspend)(struct amd_i2c_common *i2c_common);
+ 	int (*resume)(struct amd_i2c_common *i2c_common);
+-#endif /* CONFIG_PM */
+ };
+ 
+ /**
 -- 
 2.43.0
 
