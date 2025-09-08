@@ -1,150 +1,147 @@
-Return-Path: <linux-i2c+bounces-12783-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12784-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D307B49689
-	for <lists+linux-i2c@lfdr.de>; Mon,  8 Sep 2025 19:09:01 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD430B497BC
+	for <lists+linux-i2c@lfdr.de>; Mon,  8 Sep 2025 19:59:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EC4641B2833C
-	for <lists+linux-i2c@lfdr.de>; Mon,  8 Sep 2025 17:09:21 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 9E3664E201B
+	for <lists+linux-i2c@lfdr.de>; Mon,  8 Sep 2025 17:59:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C278831196C;
-	Mon,  8 Sep 2025 17:08:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD666313288;
+	Mon,  8 Sep 2025 17:59:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="UPmZWq+M"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R3etAJJK"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.15.3])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE4293101DC;
-	Mon,  8 Sep 2025 17:08:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1A5C23CB;
+	Mon,  8 Sep 2025 17:59:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757351332; cv=none; b=VKjM93xnZqC8zKNwOajZ7pmJ/6gUDyHDpD/oak3g/NNocvd92Q14WkdYLwMPkLbqDUlliUNlTZoqk/TWMdwa/tK0bQdvS56jCm6ft5+HwvStJJHvh1voXH+LX1i6H/Z+njnCE0Gxa+1oB0erYIzZBiTjpl/Vf+ZlcCxSuKI2Flo=
+	t=1757354374; cv=none; b=JbqsrSAi6IFaEe8gB6QivJ/vH5tA723xEcz8VvZmKa94heF4qzpppph5ql1QJeqUpOvFwx5GwjeAACVQYWQvUSO843f2mltqscDfgRSixUo8JNb2HsXgUk7Xaq0M3eNUr5k2Xu31L7sUFf9KHyksyfo1rqXMeyR4O88rgh0wfEs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757351332; c=relaxed/simple;
-	bh=aSHJOGuAmbu4jRG6nN6m9ehXoLMuRO6BKf+oUMsgf0U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OgjiArV3a4F0CbzoLbfOdNUvpO58TqoQMPMaenUlBc4j8lg+uebg/57GrmOKYhqA6SXSqYDQNzLV0998JYBi2foQ1oWTIaQE8fJ/+7SQKXudvYG+zakFu+t8u1cl5Yaaie72tmumM8neSNM+0emnlNtPlpz/VM6b6umRmaRGC38=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=UPmZWq+M; arc=none smtp.client-ip=212.227.15.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1757351322; x=1757956122; i=markus.elfring@web.de;
-	bh=aSHJOGuAmbu4jRG6nN6m9ehXoLMuRO6BKf+oUMsgf0U=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=UPmZWq+M3SzHi3Fdu70tZu1oySmjMZ+MDMCWRx2S0YW6KoQTw+py5U5JnODoRHPL
-	 LFKmWX460LhzLBCoUqPP41Sl5+pOgBvwl6+pUkYRKts/zxTUrLEshO1yv/R2nkPJJ
-	 Lw+XmkvHjaWpGTSnpp7vry6rsXcReOUIvD9CcV9jRt+19u+qYWX54XpxiDRve0SCU
-	 m022F/2J4KkNyo24Zg69uEDvALUf/6bEyOffoqADyK5amnpgU+8wai6bYUZhpXJ4Z
-	 M7DLgZSXyWqyweGorMye+ouh1NhrFfKHuNle+MsCCaweoyEJ3IRYXkHOZwKw4nJm4
-	 uY6jU2rHgBB8fVqMUQ==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.29] ([94.31.92.229]) by smtp.web.de (mrweb006
- [213.165.67.108]) with ESMTPSA (Nemesis) id 1N1d7s-1uTIe20CNc-015H1Q; Mon, 08
- Sep 2025 19:08:42 +0200
-Message-ID: <207f485f-df06-43a6-b91d-8153b8922089@web.de>
-Date: Mon, 8 Sep 2025 19:08:41 +0200
+	s=arc-20240116; t=1757354374; c=relaxed/simple;
+	bh=auqdNvcI/5ojGOwKHNiDaiOc2qLaP8oHdA4Lo6T65LA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=MCrgvmx7ssO/GW5U46KEBKLn2bdAX4x9maJVafS/QtzhtfrIL3QUV/1NP3g4k9YsuY6zoIXPd/94Kvrfr53y0wwb3iqH2V5r/SOhuhNqUZ3YghkRcm4m2bsIKHT1pkc7rTcrG4sLupJip+VoGqM6D2EIxtygEBaxOQmtP5wcmPA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R3etAJJK; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-afcb7322da8so903385766b.0;
+        Mon, 08 Sep 2025 10:59:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1757354371; x=1757959171; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SLWDv0YZNJKrYSg0BC1r02s6XiM2ly0ghL5s6/pQnpA=;
+        b=R3etAJJKdruwC8dvLwYdNsMzh3ZNzpGgzPIYhwjt4I1lhazXg1C5NO6dtxmL+8DR/z
+         CLCAK3uV2/acjqtRkTPg1r6QjJiSAAjv5E8iCSR8fXTupN+KSuKLkWpEZBjPHD+/aWIm
+         pzcPlDOFW2tftzfNNAB4KUlObGhsquuzub6ac5wYF+ACIYI/QGJqMK6RITyhSDYcthSH
+         MmSUqFsxZW0MzQqUe8vGb0Esy22WtkG8r/uZcZtqv4yLKZg+po1d83XYqTSSnXip5tlv
+         ZRTiM0z34bwLj3snnQfS61enGOr8jQUFXorfSTGwfy//O7s0fxLQPPEYXnrtP9yK2AAT
+         73XA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757354371; x=1757959171;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SLWDv0YZNJKrYSg0BC1r02s6XiM2ly0ghL5s6/pQnpA=;
+        b=OljKC7PjolS+yG4HwY/kD+24U9yAdE2RHQoixcnGIJgh7TW9z/I6U5tRIB6+OCb3eH
+         joRXxXB9puutXlu+IVbfRucrtiWvvsiCVZar+TKQ3a4bfQyh4CmrBPem3EXEElarrvut
+         xjeavBpmgNnY+gmFyvi0K2N2Cez/viwLcmBIWrNEA1vioLKMRxtVZdR7K8FMPPGuHlFP
+         LUVXx/FJMmXtpy71ObUajZM1+0Pixa3jrKvMyCyRZyGCnURpmk5FiSpj/kSDXWg4LT5Z
+         NkzOD5pb9iJr0SesJWi582c5V/VPZibBTaV+gvlkPsrHAOgED7PTMV8+FcziG6GRmTVY
+         2CEw==
+X-Forwarded-Encrypted: i=1; AJvYcCUqkMYETsuWjGxA4aKC/fnRfsuYAhlJunuhzdGD7OPL9zww4OXQssS9BXOhTCOV1TsZ9UbA2sLvW+ic9iE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyBhqWh9ue6WQYLsrwnJwxfSCbVRGybKhlZTuTZq4rBfUAQLf6P
+	lk5lqvyRo2wlJgbnKsGBD2WgEvCk8rMF7fehOntfV6r2ZZk7wQmb9dkJ
+X-Gm-Gg: ASbGncsKsFnRITFEf3E2AbnAOuX2Q8J8w33R1UnOpVIt+JPpkUrvnIAMfb5c5s9aFzX
+	cZ/j0T6Gd8kynSQxCZsgDek0Zip90Y6DpLdmaCcFkfR/Lneao6XBHMSBMa5qbJ6HHn6NDusDK+u
+	Nu16nbN9xkGYnIpGOhObO6S8wAgAeWvBpCuQB025VUOqQ4U7dTCd1kt1nrEWs84BLOS+wxMnCMl
+	3CBXnakpcgNW7RXXy2XegXmAxbjhw52N6+aEEyUc9eYRRwvV47oq2+ASFJyiIsba6zJHP/XfhK8
+	/TxV46SxykpDgCtiUNZLojUXNDy+/rgNcZwX+IkZ3mNP4a6bPhQ+i6blCuOcx5A/LnG95U92Vu0
+	yZLs+3UcgxOokXaf8vTuPX0bkyOgt0XFjdNsdh5SS
+X-Google-Smtp-Source: AGHT+IHZ+EsHqCIO23DTq9QLLi7cdpHpCAFRZuSfNbEGEHExvlqvoGGbjwX3ytiiPMuInYDE3VM48g==
+X-Received: by 2002:a17:907:7ea8:b0:b04:10d9:48d4 with SMTP id a640c23a62f3a-b04b1663bb1mr851349566b.35.1757354370956;
+        Mon, 08 Sep 2025 10:59:30 -0700 (PDT)
+Received: from hangmanPC.. ([86.124.200.102])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b041565ca98sm2158185966b.86.2025.09.08.10.59.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Sep 2025 10:59:30 -0700 (PDT)
+From: Cezar Chiru <chiru.cezar.89@gmail.com>
+To: andi.shyti@kernel.org,
+	Markus.Elfring@web.de
+Cc: linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Cezar Chiru <chiru.cezar.89@gmail.com>
+Subject: [PATCH v3 0/3] i2c: PCF8584: Fix errors reported by checkpatch.pl
+Date: Mon,  8 Sep 2025 20:58:59 +0300
+Message-ID: <20250908175902.214066-1-chiru.cezar.89@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <207f485f-df06-43a6-b91d-8153b8922089@web.de>
+References: <207f485f-df06-43a6-b91d-8153b8922089@web.de>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [v2 1/3] i2c: PCF8584: Fix debug macros defines of if statements
-To: Cezar Chiru <chiru.cezar.89@gmail.com>, linux-i2c@vger.kernel.org
-Cc: LKML <linux-kernel@vger.kernel.org>, Andi Shyti <andi.shyti@kernel.org>
-References: <7e155481-b1b7-48db-af64-6a313ade1bbf@web.de>
- <20250908133608.45773-1-chiru.cezar.89@gmail.com>
- <20250908133608.45773-2-chiru.cezar.89@gmail.com>
- <8c23242e-348f-467b-adc1-deae06e7ea09@web.de> <aL75U7i7lyMfaupK@hangmanPC>
-Content-Language: en-GB, de-DE
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <aL75U7i7lyMfaupK@hangmanPC>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:S1MwUj1RJSKbdj2Yd8sZHNZOjq3Q42lZQu5WjmkcKTWVlWgBMS4
- 38p6xjhiNscFOTc8OdCXXLduM1AddVFFIYrhTgawVod3uwOC16Do2uaVsGgCN369KGj5vdD
- QUJT/4NyMmHTuXjCAWNk6L22+0gzrHu3JbEd+AO9WBCXkxTmD5Pl/JMs6blFtbGkD4cDwnM
- FQNt3SqGXkg3JHymewNCA==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:HJfEeRCjBAg=;Kt5cRwtYBJnZ1+JwrTjG9ITxFsO
- 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
- jG+g==
+Content-Transfer-Encoding: 8bit
 
-> Sorry, I didn't understood the first time. I will try my best.
+Hello maintainers,
 
-Would you get further development inspirations from previously published information?
+This patch series fixes 18 errors reported by checkpatch.pl on
+drivers/i2c/algos/i2c-algo-pcf.c file.
 
-Regards,
-Markus
+The series v1->v2->v3 is a response to the discussion on the mailing 
+list with Markus Elfring that had comments on my earlier submisions. First
+he suggested to split my initial submission in a patch series. Then he had
+some valid points on imperative mood usage in commit messages, wrapping
+commit message to 75 columns per line.
+
+Here is a brief summary and Order of patches to be applied:
+
+Patch 1/3: i2c: PCF8584: Fix debug macros defines of if statements
+This patch encloses the debug macro defines of if statements in do-while
+loops.
+
+Patch 2/3: i2c: PCF8584: Fix do not use assignment in if conditional
+This patch takes the assignement from if conditional and moves it by 1 line
+up.
+
+Patch 3/3: i2c: PCF8584: Fix space(s) required before or after different
+           operators
+This patch adds space(s) around, before or after some operators
+
+Testing:
+  *built kernel and modules with I2C_ALGOPCF=m and my 3 patches applied on
+  top.
+  *installed kernel and external modules generated by build on my laptop
+  *rebooted and loaded i2c-algo-pcf.ko with param i2c_debug=2/3/9.
+  *No success message related to i2c_algo_pcf was seen in dmesg but also no
+  errors.
+  *Module loading and unloading successfull.
+  *No PCF8584 Hardware was available.
+ 
+Patches 1 and 3 report 4 and 6 warnings when running checkpatch on them.
+But the warnings will be fixed in a new patchset that addresses fixing
+warnings.
+
+
+Cezar Chiru (3):
+  i2c: PCF8584: Fix debug macros defines of if statements
+  i2c: PCF8584: Fix do not use assignment in if conditional
+  i2c: PCF8584: Fix space(s) required before or after different operators
+
+ drivers/i2c/algos/i2c-algo-pcf.c | 62 ++++++++++++++++++++------------
+ 1 file changed, 39 insertions(+), 23 deletions(-)
+
+-- 
+2.43.0
+
 
