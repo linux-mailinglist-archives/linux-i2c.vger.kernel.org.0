@@ -1,87 +1,56 @@
-Return-Path: <linux-i2c+bounces-12782-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12783-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BAFC7B494DD
-	for <lists+linux-i2c@lfdr.de>; Mon,  8 Sep 2025 18:15:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D307B49689
+	for <lists+linux-i2c@lfdr.de>; Mon,  8 Sep 2025 19:09:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7B89C3B0900
-	for <lists+linux-i2c@lfdr.de>; Mon,  8 Sep 2025 16:15:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EC4641B2833C
+	for <lists+linux-i2c@lfdr.de>; Mon,  8 Sep 2025 17:09:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A20ED22FE11;
-	Mon,  8 Sep 2025 16:15:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C278831196C;
+	Mon,  8 Sep 2025 17:08:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="JWP7pwRJ"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="UPmZWq+M"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mout.web.de (mout.web.de [212.227.15.3])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E13530C341
-	for <linux-i2c@vger.kernel.org>; Mon,  8 Sep 2025 16:15:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE4293101DC;
+	Mon,  8 Sep 2025 17:08:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757348103; cv=none; b=Dt/fJ70TRF7K3RPYQ3y1NZxNElLhtao9rs2tVbcAFmH6pdWAmxEl46EpCo5/Lkt2PUWskp2yWVevlKm37Zm+f5RGibxbmspmYz7O+7x//tXwHO+QILSOBvr0HM9Q10iwSgFgvgn67+AG8YnOpdM7XhAuhrbDbT1nSmSpsnHsnv0=
+	t=1757351332; cv=none; b=VKjM93xnZqC8zKNwOajZ7pmJ/6gUDyHDpD/oak3g/NNocvd92Q14WkdYLwMPkLbqDUlliUNlTZoqk/TWMdwa/tK0bQdvS56jCm6ft5+HwvStJJHvh1voXH+LX1i6H/Z+njnCE0Gxa+1oB0erYIzZBiTjpl/Vf+ZlcCxSuKI2Flo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757348103; c=relaxed/simple;
-	bh=my2J7ZSJKgwOGws1Hzn3zA5jTkV8FObsyOMISQJ3baM=;
+	s=arc-20240116; t=1757351332; c=relaxed/simple;
+	bh=aSHJOGuAmbu4jRG6nN6m9ehXoLMuRO6BKf+oUMsgf0U=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KuEhRhnpuY/fmsuoQ9ujQwUM8ZME6EMQt5jElIV7ank684CPdEH19q2Qrjz6uO4zTGB+k4xRUrQVzY3tfgXHFvZlbOXnV8pWz/9CQOmBeTsm+AJxLwCXLUvkvXjgml2zBy5pBG+9w5oFgB4+mfjOnZlAhPCDkRl1SOOhncP8YAc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=JWP7pwRJ; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58890Df1026682
-	for <linux-i2c@vger.kernel.org>; Mon, 8 Sep 2025 16:14:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	uNUg7SeCQHOb1a3Kr4zUTJOlns3BsZPwl8vdQ/gvp4U=; b=JWP7pwRJqb/4XlNK
-	BSNvvQAQIwgdwBtdYDtuX4xfXMrzCZkoe4s3IuBXiYQ+9P/hGqp9akDdbZ6c9dAL
-	iVyB3EjQJp1Y+Gsxs8Yopt0UTQzUfMlo3jfxNEmoqvgfFjgGScLVHoHMsWjp6Rrf
-	+rs7Eo2/IQhagay0vlyaCMy4JwQTpZRUiHY1oqXq2glG+jG55s2zJ+QUPVpZQF4E
-	NWcB7jKWAwGmcBH+u3gTsUazNdi2+nKGBcmgLxcNMppUfgsr7Gqj6dHX3yfEBQVf
-	fwaCklWz40tP12XQt3qskJTB8hHCbHFnQU80gthIPNLsD7d751jx0ExxPhkIUX1w
-	BM/eBQ==
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com [209.85.160.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 490bws5a8v-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-i2c@vger.kernel.org>; Mon, 08 Sep 2025 16:14:59 +0000 (GMT)
-Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-4b48f648249so17215341cf.3
-        for <linux-i2c@vger.kernel.org>; Mon, 08 Sep 2025 09:14:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757348098; x=1757952898;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uNUg7SeCQHOb1a3Kr4zUTJOlns3BsZPwl8vdQ/gvp4U=;
-        b=efLb8ZBKG0ZxENJ+QvaTlsb1QUpjw3dGReoBCS312gta5jtPBK3EfhNZrK0z2Ivsty
-         nc83fLkOEoQiSW8/EWGRmvOGmhRfzOVwiycaGQU1vIYXGzHIdsEzf3y/PuR7YALmOCn0
-         fAsSMag1n6TQA+Zjy6tQpXXPXWNOcrA1hzsZ5mrqTztTLzusdYH02bqRrBpQFzUgZpJu
-         rubXJz5Tsgvfvuj3Yhg8565959rjejwTZDTDTALH7S55E5PxbG1FJ67o/lu7jGdR19wl
-         oHsfSVH8Ot6YJs1sVIqr/xDewmAoY2RSiA8bA1VOmd6WvfWhzHwfXCVVBfubHHaJ9uN4
-         43OQ==
-X-Gm-Message-State: AOJu0YxNRNsw938imOKfeUfoh12wlW19q5qzYOGrwptmMjDCSGpm/cPV
-	1qIVVjuXEZY+KpQfNSfK6v5WUkYDHKY8wqtlLYkG0sOOuf5G7eVtDZJH0t5S2mrIA3QXRepD1Ek
-	q7hhws4ohlCan6PJB/8SkcMUe5sREIq4Lq7uWpNKWDYd4YLV67teFCJRNXVjWQVw=
-X-Gm-Gg: ASbGncsuccmdky/p8EmCx9HlRirARYMhhWlPmiaNCAw1ZY/1ebrZ8y+HbO6EWr/uAXC
-	tPtYSd/uBmRFxYo8C+e4RPdvMmV3N5LgVj+co1gGRoPEWtu3/NG3wOBj+qGbMGOhOCmkOdE6jqD
-	6HWPEotVlCiJFSjIcSIcDGR08CDE03Prb+dJQ+REwQylcSLRHzv9EfDguo+wHLNbuKtfaz8rNFX
-	fM437znsFT9YQgT5t9ZSH7g8wnABO/OALQr0WyWWCDUksSYvEjaoDPRjn5dgeXQigUB8tcxuOFQ
-	7flQ23jzrYODKz5yJA2zWqPcIU0+Q9/48DcmXe0+LgJ/zCRLJdDr2qolqkvOrdYAVeca2jptaN2
-	tleRWfpImPXAYWMFoLuNDig==
-X-Received: by 2002:a05:622a:1803:b0:4b5:eeb8:9dbd with SMTP id d75a77b69052e-4b5f8389c08mr70178111cf.5.1757348098029;
-        Mon, 08 Sep 2025 09:14:58 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEco+Q/q3RTA++gNO5I3yZ9Bu9pgiKTfiyr/MiXQ9nF5ACsplPzOWYy4LyCZQCEZJJixvAMtA==
-X-Received: by 2002:a05:622a:1803:b0:4b5:eeb8:9dbd with SMTP id d75a77b69052e-4b5f8389c08mr70177621cf.5.1757348097446;
-        Mon, 08 Sep 2025 09:14:57 -0700 (PDT)
-Received: from [192.168.149.223] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b0307435422sm2283685766b.78.2025.09.08.09.14.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Sep 2025 09:14:56 -0700 (PDT)
-Message-ID: <0583a79e-d87a-457c-8416-f3a0b240d63b@oss.qualcomm.com>
-Date: Mon, 8 Sep 2025 18:14:54 +0200
+	 In-Reply-To:Content-Type; b=OgjiArV3a4F0CbzoLbfOdNUvpO58TqoQMPMaenUlBc4j8lg+uebg/57GrmOKYhqA6SXSqYDQNzLV0998JYBi2foQ1oWTIaQE8fJ/+7SQKXudvYG+zakFu+t8u1cl5Yaaie72tmumM8neSNM+0emnlNtPlpz/VM6b6umRmaRGC38=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=UPmZWq+M; arc=none smtp.client-ip=212.227.15.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1757351322; x=1757956122; i=markus.elfring@web.de;
+	bh=aSHJOGuAmbu4jRG6nN6m9ehXoLMuRO6BKf+oUMsgf0U=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=UPmZWq+M3SzHi3Fdu70tZu1oySmjMZ+MDMCWRx2S0YW6KoQTw+py5U5JnODoRHPL
+	 LFKmWX460LhzLBCoUqPP41Sl5+pOgBvwl6+pUkYRKts/zxTUrLEshO1yv/R2nkPJJ
+	 Lw+XmkvHjaWpGTSnpp7vry6rsXcReOUIvD9CcV9jRt+19u+qYWX54XpxiDRve0SCU
+	 m022F/2J4KkNyo24Zg69uEDvALUf/6bEyOffoqADyK5amnpgU+8wai6bYUZhpXJ4Z
+	 M7DLgZSXyWqyweGorMye+ouh1NhrFfKHuNle+MsCCaweoyEJ3IRYXkHOZwKw4nJm4
+	 uY6jU2rHgBB8fVqMUQ==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.29] ([94.31.92.229]) by smtp.web.de (mrweb006
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1N1d7s-1uTIe20CNc-015H1Q; Mon, 08
+ Sep 2025 19:08:42 +0200
+Message-ID: <207f485f-df06-43a6-b91d-8153b8922089@web.de>
+Date: Mon, 8 Sep 2025 19:08:41 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -89,70 +58,93 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/3] arm64: dts: qcom: lemans-evk-camera: Add DT
- overlay
-To: Wenmeng Liu <quic_wenmliu@quicinc.com>,
-        Loic Poulain <loic.poulain@oss.qualcomm.com>,
-        Robert Foss
- <rfoss@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>, bryan.odonoghue@linaro.org,
-        vladimir.zapolskiy@linaro.org, todor.too@gmail.com
-Cc: linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-References: <20250815-rb8_camera-v2-0-6806242913ed@quicinc.com>
- <20250815-rb8_camera-v2-3-6806242913ed@quicinc.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20250815-rb8_camera-v2-3-6806242913ed@quicinc.com>
+Subject: Re: [v2 1/3] i2c: PCF8584: Fix debug macros defines of if statements
+To: Cezar Chiru <chiru.cezar.89@gmail.com>, linux-i2c@vger.kernel.org
+Cc: LKML <linux-kernel@vger.kernel.org>, Andi Shyti <andi.shyti@kernel.org>
+References: <7e155481-b1b7-48db-af64-6a313ade1bbf@web.de>
+ <20250908133608.45773-1-chiru.cezar.89@gmail.com>
+ <20250908133608.45773-2-chiru.cezar.89@gmail.com>
+ <8c23242e-348f-467b-adc1-deae06e7ea09@web.de> <aL75U7i7lyMfaupK@hangmanPC>
+Content-Language: en-GB, de-DE
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <aL75U7i7lyMfaupK@hangmanPC>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Proofpoint-ORIG-GUID: W2hhpplUnVwuezW0gLDXNN9tmGvYMMQ-
-X-Proofpoint-GUID: W2hhpplUnVwuezW0gLDXNN9tmGvYMMQ-
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTA2MDAxOCBTYWx0ZWRfX0KuBNa+QHqUr
- 7Y3aEfhfWg8Xch5TD8/8/6xVBs9QBk43gx7gpqh4DS0iOS7CPEuAw5ghnmt+N1guzPyRNTcCPNC
- hhOmoU7MQCqZ89n72pNFVJ+ufgLHlYdAbbXYVPealJORRFvgfWPiMlFTv6WfG2yRLod6gfUHE8P
- nfJG9cbrf6jOZzUjZ87SCiZGzIWAPuYolJX8PffssEmk/S2sYj/pRVH/uiwzR9ay0/LQ05HylHG
- 19zQrzHVvUTIJX3+th920f4CPI2Yzg8srCFEFMqKxoHBGvh7E+E/7cvMu6YDHM5V6TxV0yBq3Uu
- Xgz1KH4szT6b2cs3FIYAj+1g2Y2re75lt7I3lHxrCdilpJOcQsk7N5hij8PbYJzf7eNJ2Qz0hHc
- Sg8Ne6HT
-X-Authority-Analysis: v=2.4 cv=G4kcE8k5 c=1 sm=1 tr=0 ts=68bf0103 cx=c_pps
- a=JbAStetqSzwMeJznSMzCyw==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=COk6AnOGAAAA:8 a=gJbItJof4LNU2qWXpP8A:9
- a=QEXdDO2ut3YA:10 a=uxP6HrT_eTzRwkO_Te1X:22 a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-09-08_06,2025-09-08_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 phishscore=0 bulkscore=0 suspectscore=0 clxscore=1015
- malwarescore=0 adultscore=0 impostorscore=0 spamscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2509060018
+X-Provags-ID: V03:K1:S1MwUj1RJSKbdj2Yd8sZHNZOjq3Q42lZQu5WjmkcKTWVlWgBMS4
+ 38p6xjhiNscFOTc8OdCXXLduM1AddVFFIYrhTgawVod3uwOC16Do2uaVsGgCN369KGj5vdD
+ QUJT/4NyMmHTuXjCAWNk6L22+0gzrHu3JbEd+AO9WBCXkxTmD5Pl/JMs6blFtbGkD4cDwnM
+ FQNt3SqGXkg3JHymewNCA==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:HJfEeRCjBAg=;Kt5cRwtYBJnZ1+JwrTjG9ITxFsO
+ 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
+ jG+g==
 
-On 8/15/25 9:07 AM, Wenmeng Liu wrote:
-> Enable IMX577 via CCI1 on Lemans EVK.
-> 
-> Signed-off-by: Wenmeng Liu <quic_wenmliu@quicinc.com>
-> ---
+> Sorry, I didn't understood the first time. I will try my best.
 
-[...]
+Would you get further development inspirations from previously published information?
 
-> +/*
-> + * Camera Sensor overlay on top of leman evk core kit.
-
-"LeMans EVK Core Kit", this will also fit in a /* single-line comment */
-
-[...]
-
-> +&camcc {
-> +	status = "okay";
-> +};
-
-It's enabled by default and there's never a good reason to disable it
-
-Konrad
+Regards,
+Markus
 
