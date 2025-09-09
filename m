@@ -1,148 +1,161 @@
-Return-Path: <linux-i2c+bounces-12805-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12806-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D840EB4AADB
-	for <lists+linux-i2c@lfdr.de>; Tue,  9 Sep 2025 12:42:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87201B50080
+	for <lists+linux-i2c@lfdr.de>; Tue,  9 Sep 2025 17:01:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 93EE9346BC7
-	for <lists+linux-i2c@lfdr.de>; Tue,  9 Sep 2025 10:42:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DAC7D1C62C5E
+	for <lists+linux-i2c@lfdr.de>; Tue,  9 Sep 2025 15:01:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A14CC2D1913;
-	Tue,  9 Sep 2025 10:42:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C54C350844;
+	Tue,  9 Sep 2025 15:01:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="McfoQ4gD"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DJPu6eHc"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C14028DB3;
-	Tue,  9 Sep 2025 10:42:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2937721930B
+	for <linux-i2c@vger.kernel.org>; Tue,  9 Sep 2025 15:01:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757414523; cv=none; b=Bb0rZf6MbUEkldHUkcAVm4QTRU2R0mprNfv8/7T8z/WcBEja5iTBBAD7Jzqm9DVrsx+QzD1x/hjqggzxXfapgOZIa3Anz8iaN/AKuhG9sqqgISxVd/et0897K2VFV3uLelZSE+K/bk/32uB+fBFmx3pk2b6eTFRLabsdCrp9720=
+	t=1757430088; cv=none; b=dB2G1L9YZowcTQPldYMH9zD0gaA38sAVvdy2L04XkW+7qYxr0LIAjHIFs+7yjhH8/f0+FKEYMTWth1ba/pLPA8Oy7wUxV5EAUU+SCg7OWei9IHr0RMAVkkLLNBCoPT93I0ZP0iL9iNJBexumtzHFhAqvKMnjM5eP1pSlbMq88FQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757414523; c=relaxed/simple;
-	bh=ZjvOrSWVcVf5YAynr8zKeTMjoU2jc4ng9s5RPK12NbA=;
+	s=arc-20240116; t=1757430088; c=relaxed/simple;
+	bh=PGs7vjYd8rYyzwAYvYDRUyeAJRynaK4QGuGr+OUHhzA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=L/+97Cvnn6ajc6UbrNQn38B93ZtLKybHtFOIUfygi7J/hAoLskua12J4IOYW7BkVcfekMuhaj4WCIic9zuQ4cnGwbwrimR+dBGj071x9+fpdUtRLy+Gkyz7D7XJI1BESytazeO/TK1ka7XD/hNUpJGEGFjpC1bew2PsKqUyyZAM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=McfoQ4gD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 129D3C4CEF4;
-	Tue,  9 Sep 2025 10:42:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757414522;
-	bh=ZjvOrSWVcVf5YAynr8zKeTMjoU2jc4ng9s5RPK12NbA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=McfoQ4gDFpUfqvvhW8JCPU0Bouf+Ecc5S6c8dckZKyY4c93J2zLEBGGPZ9yGoDqKE
-	 vs98zwJ4COzBUGJeEPzWquI0PKQ5nDm8VJGCFjDma0+3b/RVPGPhGijdgYZVnFfD1z
-	 uT8q70OB34x6Hvrpw7bsZzPBYjnsqIuXaN1lUvSdESIusdwOLULICBk5c8riNhB4n6
-	 9ygtRErF5j0YtL6ssCAulrrqcHEHc8tK3aJFfb6ciJHQFWutMTV70Gw/4PgUAc+XEk
-	 c1uDjgXyLOtMeKhALfDs5C1ZgVJ4B++KLdoBpO5loJe5J2zaZJxz6Re5atOi+WIXLK
-	 o9KfNg2k1SBcg==
-Date: Tue, 9 Sep 2025 12:41:57 +0200
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Chen-Yu Tsai <wenst@chromium.org>
-Cc: Leilk Liu <leilk.liu@mediatek.com>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Qii Wang <qii.wang@mediatek.com>, Wolfram Sang <wsa@kernel.org>, 
-	Liguo Zhang <liguo.zhang@mediatek.com>, linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
-	Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH v2] i2c: mediatek: fix potential incorrect use of
- I2C_MASTER_WRRD
-Message-ID: <c3d57np3hns3yoklgkbpc2ivx7jrd5qwz76wcwxhnef3ermdve@3ejfxfwg3acq>
-References: <20250906082652.16864-1-leilk.liu@mediatek.com>
- <zddsit53dwqo27buoxaolgpzvvvd6uvwcyzughv7qfvwg64ces@yrlrur5dkf45>
- <CAGXv+5HZcZ8uVZQbT83QnWd1M6p7fXvKU-0gOfc794BxqOmw1g@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=CGmUtap2OgYOpGUXRD2MCfSCdvD6s3WeiNZjnQiHrD2YAwQZMNX6JT/YqeCutmkG6gGz+xbDM2Uf3nNdwqZJs6LDdxGFqSA7M6XdLuY+VUVZNOKi9EiaG6tl9MzTL22sZVtmdwdBU+doMSoN8pRUluNqOxJK/XDufkZal2LFvE0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DJPu6eHc; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-45de6490e74so21974135e9.2
+        for <linux-i2c@vger.kernel.org>; Tue, 09 Sep 2025 08:01:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1757430084; x=1758034884; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Oo2GzS1BKFjAKT93aaJtCs9JdrjrvpKho+/Kv3PPXfs=;
+        b=DJPu6eHcPc89T+gUJKMvSDjEU1+YyDShz8B3EcEZ0ShWZTjwXr0AEcWj2kk/y3F8r0
+         5tHk/Syd5reGr7wQap1HOZgtgQu2vyHo7LjxDDJPLoKpE+y3ibWGqWNimQB3w9I7BFVi
+         gGSR32cDF+EOsza3l/bhd3woaciGOphwAsLuBcqxW25BGRPjFh/f0x9n3wf5dso3GT91
+         0RKUdLNUThyUYj3T8YzRJ2wdz9Z0lToGj/jbYwMTxj2652jl7qsBWCeuV1NcV+eFhj2a
+         AieNfhP7db8xVLr7G4XhKfFA4lvqzn/pEV2mjsVShT97VsUy4iQeTFpDUmpSl1P0Lj9M
+         +spA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757430084; x=1758034884;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Oo2GzS1BKFjAKT93aaJtCs9JdrjrvpKho+/Kv3PPXfs=;
+        b=l1GQxjvyvIMU71MwaLuVrRjxyOnRxcy58jz9Bk+t3tOv/Tb1C5Yjd00K27VADLSa4u
+         t1GirUHLVoF1/9ioXmaNnWaej7b0lNN/bqvICdFIDKNL0L7Ml0jDkxIvrDTmCXXnSm/E
+         ytGxv+DJWOGkMqIqFazRQuMFU+JXruYTtTMCELr6URM97IG7EDLgU+MhnK64kvJ9Hib/
+         A9BRXOCyhUjAJwCTN2Jr6xDntHX3YeU2kYUSNVqQ80oyQLgjVGolCs/bxo+4ZZJjgDsQ
+         Bm47CWNgd9lSFbutVeWz5OBSHI/+ZlPmSpp5qtjWUEUDxdsptHZ/fOud2PUVsSrGnIQj
+         GuNw==
+X-Forwarded-Encrypted: i=1; AJvYcCXsLFdMc37Eezs1EGa7kNJe6Rtz1IhHA72klbKZOrf7ZVk4ItuED249PsM/1iXSVxWCSuJ1I8FnnmQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwYogvDTtizHcQRo+hFh1NXxp/jl8hGhy99A4BdceaZBbK7/pJk
+	ElaQAwlBdszjz4lA5Al0FYvHbi/j0mmfblSjQ7fH2rea8e2iSaVi+088
+X-Gm-Gg: ASbGncvsFpa+gsHE/3ZWyrDmFznOe3CYOL8DvQPaxx6oMDQ2qo1DtPQ8kyfqSZ6cMFk
+	eM3rlOUrVGud3v2wGoUwh4MhjmjueFvWUvRno9rAJSCC5whO2fA7jNKl1kNyhY9tyne5bEj8Gcc
+	JQkPkXleMtqR/PpRQ3B3UsO4TSBfxpVU1PLHGe2hijPqCAHicaa3DljXOM/gmImgc/ArdapNfAe
+	ZoQVG9ReZnWUTRT9TS0Ac+GWVL/yQKVBhOt3u2TLtovCMHSvWVznZlkW3Pw2Iqc1U/wXxzwdiII
+	LCxQPBEm9wqGisCeQaEASN0uCnvkGMrQpcjjtYZQHITfLOMoHuzpLKC3MAk/8XP914tcZGwGRDM
+	RsfixKLjT3WZQxAqsVIvCHUJbRxTLq2XziUMZdw3qxsgdGTckGi6DLWbYaWwS7bGH0wOInEnWaA
+	WKvrujOuBMFL9UOWSQcjI=
+X-Google-Smtp-Source: AGHT+IErW2TZyqEDQbDkvq+unnrPg8Fy3yPvW1vBfInEWh2VajAX7rKgQG01C3JB6r+lA0fLdV97AA==
+X-Received: by 2002:a05:600c:474a:b0:45b:7d77:b592 with SMTP id 5b1f17b1804b1-45dddea4cccmr117427075e9.12.1757430082541;
+        Tue, 09 Sep 2025 08:01:22 -0700 (PDT)
+Received: from orome (p200300e41f1c4d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:4d00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3e7521bfdc6sm2963648f8f.8.2025.09.09.08.01.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Sep 2025 08:01:20 -0700 (PDT)
+Date: Tue, 9 Sep 2025 17:01:18 +0200
+From: Thierry Reding <thierry.reding@gmail.com>
+To: Andi Shyti <andi.shyti@kernel.org>, 
+	Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: Akhil R <akhilrajeev@nvidia.com>, conor+dt@kernel.org, 
+	devicetree@vger.kernel.org, digetx@gmail.com, jonathanh@nvidia.com, krzk+dt@kernel.org, 
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org, 
+	ldewangan@nvidia.com, robh@kernel.org
+Subject: Re: [PATCH RESEND 0/2] i2c: tegra: Add Tegra256 I2C controller
+ support
+Message-ID: <22ucj42wvcqr5trsv75hbb6uj4y5zhjigs46w7mxtckisodcr5@77pgwttvycpl>
+References: <20250818043345.65899-1-akhilrajeev@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="hbpzp3jncbfi5eid"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAGXv+5HZcZ8uVZQbT83QnWd1M6p7fXvKU-0gOfc794BxqOmw1g@mail.gmail.com>
+In-Reply-To: <20250818043345.65899-1-akhilrajeev@nvidia.com>
 
-On Tue, Sep 09, 2025 at 11:50:15AM +0800, Chen-Yu Tsai wrote:
-> On Tue, Sep 9, 2025 at 6:17 AM Andi Shyti <andi.shyti@kernel.org> wrote:
-> > > diff --git a/drivers/i2c/busses/i2c-mt65xx.c b/drivers/i2c/busses/i2c-mt65xx.c
-> > > index ab456c3717db..dee40704825c 100644
-> > > --- a/drivers/i2c/busses/i2c-mt65xx.c
-> > > +++ b/drivers/i2c/busses/i2c-mt65xx.c
-> > > @@ -1243,6 +1243,7 @@ static int mtk_i2c_transfer(struct i2c_adapter *adap,
-> > >  {
-> > >       int ret;
-> > >       int left_num = num;
-> > > +     bool write_then_read_en = false;
-> > >       struct mtk_i2c *i2c = i2c_get_adapdata(adap);
-> > >
-> > >       ret = clk_bulk_enable(I2C_MT65XX_CLK_MAX, i2c->clocks);
-> > > @@ -1256,6 +1257,7 @@ static int mtk_i2c_transfer(struct i2c_adapter *adap,
-> > >               if (!(msgs[0].flags & I2C_M_RD) && (msgs[1].flags & I2C_M_RD) &&
-> > >                   msgs[0].addr == msgs[1].addr) {
-> > >                       i2c->auto_restart = 0;
-> > > +                     write_then_read_en = true;
-> > >               }
-> > >       }
-> > >
-> > > @@ -1280,12 +1282,10 @@ static int mtk_i2c_transfer(struct i2c_adapter *adap,
-> > >               else
-> > >                       i2c->op = I2C_MASTER_WR;
-> > >
-> > > -             if (!i2c->auto_restart) {
-> > > -                     if (num > 1) {
-> > > -                             /* combined two messages into one transaction */
-> > > -                             i2c->op = I2C_MASTER_WRRD;
-> > > -                             left_num--;
-> > > -                     }
-> > > +             if (write_then_read_en) {
-> > > +                     /* combined two messages into one transaction */
-> > > +                     i2c->op = I2C_MASTER_WRRD;
-> >
-> > i2c doesn't change for the whole loop so that it can be set only
-> > once outside the loop instead of setting it everytime.
-> >
-> > Something like this:
-> >
-> >         if (i2c->op == I2C_MASTER_WRRD)
-> >                 left_num--;
-> >         else if (msgs->flags & I2C_M_RD)
-> >                 ...
-> >         else
-> >
-> > looks cleaner to me and we save the extra flag. Am I missing
-> > anything?
-> 
-> It looks correct to me, though I think it requires a comment explaining
-> that "in the WRRD case there are only two messages that get processed
-> together, and the while loop doesn't actually iterate", and reference
-> the block where the WRRD op is set.
-> 
-> Otherwise someone is going to look at this snippet and think there's
-> some corner case where all messages (# of messages > 2) get handled
-> using the WRRD op.
 
-Agree, indeed I wanted to write it somewhere that a comment would
-have been nice.
+--hbpzp3jncbfi5eid
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH RESEND 0/2] i2c: tegra: Add Tegra256 I2C controller
+ support
+MIME-Version: 1.0
 
-I'd appreciate a comment even with the boolean flag. I think
-boolean flags are often a forced solution and we always need to
-describe their need.
+On Mon, Aug 18, 2025 at 10:03:43AM +0530, Akhil R wrote:
+> This series adds support for Tegra256 I2C controllers to the Tegra I2C dr=
+iver.
+>=20
+> Tegra256 consists of 8 generic I2C controllers similar to previous Tegra =
+generations,
+> but with a different parent clock frequency requiring adjusted timing par=
+ameters.
+>=20
+> The changes add the "nvidia,tegra256-i2c" compatible string to device tre=
+e bindings
+> and implement the corresponding hardware feature structure with appropria=
+te timing
+> parameters and clock divisors.
+>=20
+> Akhil R (2):
+>   dt-bindings: i2c: nvidia,tegra20-i2c: Add Tegra256 I2C
+>   i2c: tegra: Add Tegra256 support
+>=20
+>  .../bindings/i2c/nvidia,tegra20-i2c.yaml      |  6 +++++
+>  drivers/i2c/busses/i2c-tegra.c                | 26 +++++++++++++++++++
+>  2 files changed, 32 insertions(+)
 
-> So maybe it looks cleaner, but it requires more context to understand.
-> Whereas in the original patch, the extra variable sort of gives that
-> context. In this case I prefer the context being more visible, since
-> the original corner case this issue fixes is also from missing context
-> and assumptions.
+Hi Andi, Wolfram,
 
-I think both solutions are clear in a different way. Anyway, I'm
-not very strong on this comment, I just see that from a code
-perspective looks nicer. If you guys insist, then I will let this
-go as it is.
+Do you want me to pick up the DT bindings patch? There's currently no DT
+files that require this, so taking both through the I2C tree is fine,
+but either way works for me.
 
-Andi
+Thanks,
+Thierry
+
+--hbpzp3jncbfi5eid
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmjAQTsACgkQ3SOs138+
+s6EeMBAAsb5QCvjIKGY18l8TqFMoUCTksq+dfSlHJJM+4LVgi4IoEq+FSwEopNk3
+YDSVQuiqvURiv8PV2rptvO966RYxrywgDXUlmpWcQS+9C4EUAhEB9SKHKOWb2tJq
+oL4LdO7NkaaC+AKWADz/WER1hrYFj71kKN9aQXfPmoBVtTCCfMijKpTSjCJ+aoVF
+6vvLvYG/018WLCfU1iB6gUG9rKFFfMDvDEV+Q2WWxbAm0xFn80jJjnTxS36A6eOS
+kzg/w4gcwvMHTIDqt33fjY4XE6dX/e+ttP8sTXFgK9ocNINKY03/MMJ+9n/c31jW
+kaBLwqxiZ0HdEImf5451WyaOKzvjaaFedqvBM5XXIeFDQ+mHXJDdtvwhYDr2d4QU
+py3nWWycW/pduNwqzlgkLJqxPTClmGjbG1xNfMVJk0NZVmobi4mIZyyph7PqkJwq
+2wEE5Kvs2ny+k8ZGaim1ZHiqTvbdYgC1A4UaU87fqx/sYbMF5QQuw0EBsZ5nMZvp
+GsIyitpvblYgXAMq3Ow3SN7IlgpOEMATRUDxkzO3iN/gpLihspvElAEUTYi012Ft
+tlR6O7V5nV8GWuylcF8XuhQEQJNsIhoQVJk4zaMpTwllSXsA7N1w7hey39lQoALv
+B+lCAFcr0SCT2o8UpXVWpOumY54UpQRiZFhk8F9DPHHTv1grZfA=
+=Eq6T
+-----END PGP SIGNATURE-----
+
+--hbpzp3jncbfi5eid--
 
