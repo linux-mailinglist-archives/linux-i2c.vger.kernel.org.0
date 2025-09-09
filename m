@@ -1,104 +1,147 @@
-Return-Path: <linux-i2c+bounces-12796-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12797-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29852B4A4F6
-	for <lists+linux-i2c@lfdr.de>; Tue,  9 Sep 2025 10:18:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 395EFB4A571
+	for <lists+linux-i2c@lfdr.de>; Tue,  9 Sep 2025 10:36:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D9DED16ADAE
-	for <lists+linux-i2c@lfdr.de>; Tue,  9 Sep 2025 08:18:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 526D21893B02
+	for <lists+linux-i2c@lfdr.de>; Tue,  9 Sep 2025 08:36:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBDC023B62C;
-	Tue,  9 Sep 2025 08:18:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC3352522A8;
+	Tue,  9 Sep 2025 08:35:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DtmLEtRP"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="lYFfQQ0e"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 221661E231E;
-	Tue,  9 Sep 2025 08:18:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC91B22157F;
+	Tue,  9 Sep 2025 08:35:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757405906; cv=none; b=JrY0SXpR6UfOs4Qnvc80S5UYD7M8Ms72iAjuD5iwg8BDxPFrgJxd00kQLdVP4xAZ7bRu5lnu9AFQgXWppjigcW271aCvFKyYndJbhpq+5NClQerWS/qoEXEqyDsm4V0RKm+RocanaX5OAD5bzoGBYkx+F99FHjv6pRMisM1MWkM=
+	t=1757406951; cv=none; b=bSuGEMZJ6GlJwcA3VUMIy7VssJrQtrIJC5b7fPdteMm6wZyMiiySw85jusgRVEdGqJrijlXW/BrzdFXoKteqHaJDwTNuOo5PskUpoq241OqYb90FcwIn7CAXfxreVBd4tVAjQD+O+1cP2aYE7NeRvdTNF0snAIJW8xFJ4bCb0XQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757405906; c=relaxed/simple;
-	bh=ShouuRcmlT0Jj95VOKuFkiyHAoxYWLxA00N2sQSS+Mo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=e8q6jpPS7C5oW09hYU6SvqGMKyB3h4wdzGINybt+xJazC12HwnmaaSQmgsZ1TeE3Ac5kdncCU6ELa68EHMvAQaOgHVojFmNhC+pakycR7rj7bA2nJ3dCiV7OFDZeflJwzR1M5yWCwHoABWtcXfVY7zoNozH4/+kWr8Elyeb+rNY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DtmLEtRP; arc=none smtp.client-ip=209.85.128.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-71d6083cc69so51088837b3.2;
-        Tue, 09 Sep 2025 01:18:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757405902; x=1758010702; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ShouuRcmlT0Jj95VOKuFkiyHAoxYWLxA00N2sQSS+Mo=;
-        b=DtmLEtRPkim7oHm340Th3lbcvHFzpYLZqcMIAN+NyG9yfn4dAN7+qb0F/dSUo9IsjV
-         Fpvk9EBEWGg4yUJVGUYJtZ339VDE/JTrqE+WNfx5A6nXHS4R+RpVzxivP9XfyX5/8eEp
-         g7H/HaGyQfzlQ80dFkJDZTFGHmIhbQyEfcA1M7WZ6g7J5cL8s4QUHl/4mRZ5bVTstVSY
-         m+G+hL22OnJ9WvAXCKdNqkM5y3iGxmXNCsoQ8BcSbf5pHXup3+8sIUPrmc5K6l1gQj1v
-         LlGo1zMX0qvcqeQ2zVz62/quUln5M9/ADf8Hq/tWrz42c4e8ccEZe0KCe74HtDVHaX+h
-         i/3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757405902; x=1758010702;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ShouuRcmlT0Jj95VOKuFkiyHAoxYWLxA00N2sQSS+Mo=;
-        b=kzEbi50OQzm/A4kkaKqaghpWsBbEwZz/MEn4VsFe1hbmVwWgIWg+0fEG06yxug8t2u
-         Kso9vuONSIPQSTt7tssIApjdWI4P6GAHWS7o5qfntFQmuQb3szlyFd4EpF5aXLVF/eAP
-         35oVHOtmc/jAoXv4eXMZ8r582u7sVNZiFY3QpKa3+/SdFLVAcwowscdF1IaUT8xzR/WD
-         GTNCwy3w/HiFkHSSOUqrZqoo6d/j2m/bAvETg8Nrp2V4fDixS+HW4n22SWRRa1KbUB1W
-         mkfMtM80CIzRbfTYIPMFxVfk+Rrw/cjk7G7+8azv6FakxCCyXbdBTXNGepExcnejOj+H
-         kf/Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVHAqbP92FSvRUcYJlwQupKOZw21rJ9lRny31ZKOmABbbBS1DQXm1xsHGJKs2/A89xERyzazAiZdGAhQb0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx4/x9ZYtHQ74Gf7oO5mD/rqU8kHb+qtj/LSSWb5JLRj2AWraGB
-	8L9WEJoAfqceY7RP0tHE23VQkqSYCgITkKT3IYUi5b2LQlrOWswaCccqgozRi57uNZ0OsmSGoZr
-	vxUWSMb72d9bNJ/TLESGPBUMgZFDQxtftMLL8
-X-Gm-Gg: ASbGncvLZZo1RLmr9iaTIU+14iMs31Aab9Vh6jsMq8tau3/9QQjltGzgWfKAI4gpL9w
-	jv3oCirU18KkoLBROpRCYrwOqukCTUQSZJAuRDb/yzDs4gN+b6XEXRlol3aWFs7KvwwyfJ3V25H
-	r1l0w+CJSpNtNvXjh5YIj5h94TBZfPYJhN0hZNl7R8pHmC5twlmmg7WoctfGGIwHCvpssgZyZW0
-	X5asGgj
-X-Google-Smtp-Source: AGHT+IHReIMfclxr9I0y6ckmePu5mtLcLqLO2Vmjw0P2wqGPItnJeyqEbpewiMpnxUx4aQA1WTXVRXssL8AJMGERlAk=
-X-Received: by 2002:a05:690c:6187:b0:724:b902:bda5 with SMTP id
- 00721157ae682-727f573dd66mr102083477b3.42.1757405901763; Tue, 09 Sep 2025
- 01:18:21 -0700 (PDT)
+	s=arc-20240116; t=1757406951; c=relaxed/simple;
+	bh=CXgkJ6vcEYUjaoEsiVysUMOuZtwcZBJNVprV2+pEVls=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=WrG83Qhuot1OtQ+KyT76Rnb5zEBeA0leWyUBHpPWTYNZwgwagZ/4Gzjki9Gbr73XQ+pim9W/T4Ilbu/TUYAu8EdxTRU1SJWIR1vxse9zXc3FHANF4l7eIRrCZxzktOf8TfjeoeFN9iClf01wxMs3PwdzVXuYapd3CgZnA54lBlg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=lYFfQQ0e; arc=none smtp.client-ip=68.232.154.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1757406949; x=1788942949;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=CXgkJ6vcEYUjaoEsiVysUMOuZtwcZBJNVprV2+pEVls=;
+  b=lYFfQQ0eYOik+ZNPJYNR53dEizwBJwMaR8aBXcnrDhtIESlu/NTJUgK8
+   soNDonOzblOjqiGnJaXDk3xlbtbydBDdNB94jvcCS7fooSIHaS83QtvH5
+   pZvVNFIS3olsFqhHXbibIVCsc382bQ0tuOaYUgxWsgQrdrsGehbw1xL3x
+   G87EAWKnBa0RetC9fBWwmmlBQ2Q9xH9WPVzcr9Fs9l5lLIiAgnCbMzD2r
+   m0TZGeM2EP3tOctGBZ6y5WsyExTST47WxNg5eaUGD1mOr82BJVQKqO9OR
+   qZvWkmcDkPt65xo6GnabHW3k2OfmCFnLnOazkDraRX888bcS8qvoCpq1J
+   w==;
+X-CSE-ConnectionGUID: ofTAqQfWT8OQ6lC0/N7q+g==
+X-CSE-MsgGUID: xuRAfyugTWW04SVqJa9bTQ==
+X-IronPort-AV: E=Sophos;i="6.18,250,1751266800"; 
+   d="scan'208";a="213640830"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 09 Sep 2025 01:35:42 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.58; Tue, 9 Sep 2025 01:35:17 -0700
+Received: from [10.159.245.205] (10.10.85.11) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.58 via Frontend
+ Transport; Tue, 9 Sep 2025 01:35:13 -0700
+Message-ID: <1e1b3cbe-ee39-4813-8f17-1844fc9d45f7@microchip.com>
+Date: Tue, 9 Sep 2025 10:35:12 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <207f485f-df06-43a6-b91d-8153b8922089@web.de> <20250908175902.214066-1-chiru.cezar.89@gmail.com>
- <20250908175902.214066-4-chiru.cezar.89@gmail.com> <d81c00f2-8b77-4b5d-baf7-afcc7dc5ac9b@web.de>
-In-Reply-To: <d81c00f2-8b77-4b5d-baf7-afcc7dc5ac9b@web.de>
-From: Cezar Chiru <chiru.cezar.89@gmail.com>
-Date: Tue, 9 Sep 2025 11:18:10 +0300
-X-Gm-Features: Ac12FXy3nkmDhCXQf24N3VjXQYXgWCEobcnzvYmoKgVgY2buIgmtan79J4COiKc
-Message-ID: <CANvS2vXUYdB53+uHJps=1FBfBpYhO3C30FVEc3TL7JGQu-zNCA@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] i2c: PCF8584: Fix space(s) required before or
- after different operators
-To: Markus Elfring <Markus.Elfring@web.de>
-Cc: linux-i2c@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
-	Andi Shyti <andi.shyti@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 4/9] mfd: at91-usart: Make it selectable for
+ ARCH_MICROCHIP
+To: Lee Jones <lee@kernel.org>
+CC: Robert Marko <robert.marko@sartura.hr>, <linux@armlinux.org.uk>,
+	<alexandre.belloni@bootlin.com>, <claudiu.beznea@tuxon.dev>,
+	<catalin.marinas@arm.com>, <will@kernel.org>, <olivia@selenic.com>,
+	<herbert@gondor.apana.org.au>, <davem@davemloft.net>,
+	<andi.shyti@kernel.org>, <broonie@kernel.org>, <gregkh@linuxfoundation.org>,
+	<jirislaby@kernel.org>, <arnd@kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+	<linux-crypto@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+	<linux-spi@vger.kernel.org>, <linux-serial@vger.kernel.org>,
+	<o.rempel@pengutronix.de>, <daniel.machon@microchip.com>,
+	<luka.perkov@sartura.hr>
+References: <20250813174720.540015-1-robert.marko@sartura.hr>
+ <20250813174720.540015-5-robert.marko@sartura.hr>
+ <20250902100254.GD2163762@google.com>
+ <769c8dc4-4db6-4d2e-aa2f-f86aa7ccaf78@microchip.com>
+ <20250908141633.GB9224@google.com>
+From: Nicolas Ferre <nicolas.ferre@microchip.com>
+Content-Language: en-US, fr
+Organization: microchip
+In-Reply-To: <20250908141633.GB9224@google.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Markus,
+On 08/09/2025 at 16:16, Lee Jones wrote:
+> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> 
+> On Thu, 04 Sep 2025, Nicolas Ferre wrote:
+> 
+>> On 02/09/2025 at 12:02, Lee Jones wrote:
+>>> On Wed, 13 Aug 2025, Robert Marko wrote:
+>>>
+>>>> LAN969x uses the Atmel USART, so make it selectable for ARCH_MICROCHIP to
+>>>> avoid needing to update depends in future if other Microchip SoC-s use it
+>>>> as well.
+>>>>
+>>>> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+>>>> ---
+>>>>    drivers/mfd/Kconfig | 2 +-
+>>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+>>>> index 425c5fba6cb1..8f11b2df1470 100644
+>>>> --- a/drivers/mfd/Kconfig
+>>>> +++ b/drivers/mfd/Kconfig
+>>>> @@ -138,7 +138,7 @@ config MFD_AAT2870_CORE
+>>>>    config MFD_AT91_USART
+>>>>         tristate "AT91 USART Driver"
+>>>>         select MFD_CORE
+>>>> -     depends on ARCH_AT91 || ARCH_LAN969X || COMPILE_TEST
+>>>> +     depends on ARCH_MICROCHIP || COMPILE_TEST
+>>>>         help
+>>>>           Select this to get support for AT91 USART IP. This is a wrapper
+>>>>           over at91-usart-serial driver and usart-spi-driver. Only one function
+>>>
+>>> Let me know when the deps are in Mainline.
+>>
+>> Hi Lee,
+>>
+>> I have tags from other maintainers, how about you give us your and we make
+> 
+> My?  AB?
 
-Thank you for the time to review my patch series.
+Yep ;-)
 
-> > operators: Require spaces around or before or after '=', ';', '<' and ','.
-> > Add space(s) around or before or after different operators.
->
-> How do you think about to refine such a wording approach another bit?
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/coding-style.rst?h=v6.17-rc5#n274
-> https://elixir.bootlin.com/linux/v6.17-rc5/source/scripts/checkpatch.pl#L5090-L5399
+>> this patch travel through arm-soc like the other ones?
+> 
+> Sure.
+> 
+> Acked-by: Lee Jones <lee@kernel.org>
 
-I will refer to binary and ternary operators instead of listing them. Also I
-will say punctuation signs like: ';' , ','
+Thanks Lee. Queued for at91 PR to arm-soc.
+
+Regards,
+   Nicolas
 
