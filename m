@@ -1,137 +1,121 @@
-Return-Path: <linux-i2c+bounces-12813-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12814-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08C6AB50521
-	for <lists+linux-i2c@lfdr.de>; Tue,  9 Sep 2025 20:23:45 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id D342FB5052B
+	for <lists+linux-i2c@lfdr.de>; Tue,  9 Sep 2025 20:25:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 93AF15E6811
-	for <lists+linux-i2c@lfdr.de>; Tue,  9 Sep 2025 18:23:42 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id BE5FD4E1B37
+	for <lists+linux-i2c@lfdr.de>; Tue,  9 Sep 2025 18:25:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68B3E326D62;
-	Tue,  9 Sep 2025 18:23:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A60A735CEDC;
+	Tue,  9 Sep 2025 18:25:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b="VBLIms0F"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Q7WUnC/Q"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 531A92FC88C;
-	Tue,  9 Sep 2025 18:23:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757442213; cv=pass; b=MQ5Guz9SX1vVD8vN8d0Bz7wQzwQ5B0K9lHL2xdYtE7H/g5zJmBo88NUYSOcyy+Rr1S8rSDS1/hy7HVSngMF2khsKhOEhQsq5LMqm+AFm6Mu6Gt3tQCOc6AueKwYOdcStC7Dl4UoodCvEX+dzffLVR7jIYfG8P6ml5/v+BRvwB/8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757442213; c=relaxed/simple;
-	bh=ubRkoJFbuAK+yS+v4W1ZNa9lC41JmMiyAmj1e7TS7bQ=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=aXJVm6CkNgjQ3Aqu53NHHFrOOw8+IYrXsiXR4CPLnoF1YGgnN72qEEvXGIMHtvvQWEeQ8InTqkfAR0tB4oosZsZanl+4u8jMzIVd7AsXppnQ1/DtTwNUSj6hlHRa8JderALy/z+HOt8mlfnjECRbA5/9bBOhbAIdA5h2qHUozKI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b=VBLIms0F; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1757442183; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=bI40IG7HNevlCHBra3f0TBjpeg1nf2SprMYCxigrt3GtNFX4Drq51/bZfQKkOgsV8CiF23JBR6BvRLhHysGM78awQOOsEU0FQBh8w7KJFfObP46m0Mz1hadxZAm0lezTXBE6SUOnPHx5hpAEAhEWvwpAAuqKk5U3E7KsjQprW8E=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1757442183; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=MRRNEQt8u3ZdYDHCaJT8rczhY+A4PzkMymyQNNuh5Tg=; 
-	b=HPwyUZ/xwN/NCSU5bS1fu1TluQJ8XIfNn9r2lVuZeQDUDDnglxf9Cvse0KKmfpQVXeNJJm8Fuw1MxaUMrY8IFxaR7IQvHGeM95DIh3zer5JmBR1ggqeIcqAgzE6mbQ9+6ZeKxlmZ2yLWSLBrJgJqHTAG2ZH8zdx4AB/ASjUvams=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=daniel.almeida@collabora.com;
-	dmarc=pass header.from=<daniel.almeida@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1757442182;
-	s=zohomail; d=collabora.com; i=daniel.almeida@collabora.com;
-	h=Content-Type:Mime-Version:Subject:Subject:From:From:In-Reply-To:Date:Date:Cc:Cc:Content-Transfer-Encoding:Message-Id:Message-Id:References:To:To:Reply-To;
-	bh=MRRNEQt8u3ZdYDHCaJT8rczhY+A4PzkMymyQNNuh5Tg=;
-	b=VBLIms0FlinvQ4dVLcIWgjPqMfaYGAbxG2k0ecqafoC2Sl8W1LxDHShuKo6KzgXC
-	NqhRpVX390Gr2X1e2nnFy1eEPOTV69fyiSjwxzGhEBHIWLTBIGuUc9SQMEHmQJVbemZ
-	xh2+fIdsXPj4cjdhjpeJ3t5vVgU2JDH48KrbDy6o=
-Received: by mx.zohomail.com with SMTPS id 1757442181262749.6141457442421;
-	Tue, 9 Sep 2025 11:23:01 -0700 (PDT)
-Content-Type: text/plain;
-	charset=utf-8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 720DE35CED4;
+	Tue,  9 Sep 2025 18:25:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1757442327; cv=none; b=S0/b7QAnQPrOkRZi/vmL+mdyp23PMDN41tjY1c7SxtNFvOkIc5TPN4w5jDBoZNx3JCH0YsaqD/xaW0mZGDdXd0sJVWAsv4AWIDFj+1RE0oyVFIovwfxLo2uGFEwFw2ejr0xQeSV5omRYfYAgdIGvu184aVdA3gmj7MrByq/KXNk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1757442327; c=relaxed/simple;
+	bh=jP+QEcU702l7EMgJt/L66MErc+79C+UsveNcHCtgkgk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tBd3RpUhcRg6Q+/ZnDxAx8eibmnjHF1Q/U6ee+jz7gy+bqmeWHA1L8x4fruVreHUBXiz5iZ+pT7a3in5/P+iiNt7r5xduI4IgNPjrONgBpsKdI9vh5R9mjqnzohHhB7/RU/j9pXaH3x49B+Vw/zRPmOLW7Iir0wnW/BSW8yMjOw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Q7WUnC/Q; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1757442325; x=1788978325;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jP+QEcU702l7EMgJt/L66MErc+79C+UsveNcHCtgkgk=;
+  b=Q7WUnC/QMWkxekBzCVOLmB3aYyLNeu5bDbDNaDXdZW0FF6Fp6Pg2SbrE
+   8vl8PPJnv4/Jrd3G6t9FxcOEh0j87RCPIV3ZQWAmcscqrPMDGCB6/sM8s
+   qaYYaA7jS8qIKCscg3yBDc+/DtmiZGSB2/8fvQE4nrEJxU6t5AR/Ea1z7
+   HRY3T28bScLUsynLWQ4QRg0ETj94dgMdFz65qqTFf2h6qrYWk+LU+XNby
+   /byNQB7K/XnqL7oPcwWDn1SjDIYvUEo6uOJgkGGhpJARYmWgb1i2n4v8g
+   das2T6treSh9aDO2/YQq0KOYeOD588NtCkPhSVe4mq+cTnI03N9BD/Cwa
+   A==;
+X-CSE-ConnectionGUID: XX6w4LNGTTSUpitmHHx9kQ==
+X-CSE-MsgGUID: VbxkQ4axRj2L91EI5MMSSA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11548"; a="63569054"
+X-IronPort-AV: E=Sophos;i="6.18,251,1751266800"; 
+   d="scan'208";a="63569054"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2025 11:25:24 -0700
+X-CSE-ConnectionGUID: ABg3IuvfQsWOZJ/S88AArw==
+X-CSE-MsgGUID: aTfHsRBlTh+Cedlmx8R+9g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,251,1751266800"; 
+   d="scan'208";a="173552913"
+Received: from lkp-server01.sh.intel.com (HELO 114d98da2b6c) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 09 Sep 2025 11:25:21 -0700
+Received: from kbuild by 114d98da2b6c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uw31r-0005Al-0r;
+	Tue, 09 Sep 2025 18:25:19 +0000
+Date: Wed, 10 Sep 2025 02:24:20 +0800
+From: kernel test robot <lkp@intel.com>
+To: Denzeel Oliva <wachiturroxd150@gmail.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Sam Protsenko <semen.protsenko@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Andi Shyti <andi.shyti@kernel.org>
+Cc: oe-kbuild-all@lists.linux.dev, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-serial@vger.kernel.org, linux-i2c@vger.kernel.org,
+	Denzeel Oliva <wachiturroxd150@gmail.com>
+Subject: Re: [PATCH v2 6/8] arm64: dts: exynos990: Add UART nodes for PERIC0/1
+Message-ID: <202509100100.bccnVSbn-lkp@intel.com>
+References: <20250907-perics-add-usinodes-v2-6-58f41796d2d3@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.700.81\))
-Subject: Re: [PATCH v4 1/3] rust: i2c: add basic I2C device and driver
- abstractions
-From: Daniel Almeida <daniel.almeida@collabora.com>
-In-Reply-To: <DCOH6SUB5M7K.1K4V1DRAERH1S@kernel.org>
-Date: Tue, 9 Sep 2025 15:22:42 -0300
-Cc: Igor Korotin <igor.korotin.linux@gmail.com>,
- Miguel Ojeda <ojeda@kernel.org>,
- Alex Gaynor <alex.gaynor@gmail.com>,
- Wolfram Sang <wsa+renesas@sang-engineering.com>,
- Boqun Feng <boqun.feng@gmail.com>,
- Gary Guo <gary@garyguo.net>,
- =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Benno Lossin <lossin@kernel.org>,
- Andreas Hindborg <a.hindborg@kernel.org>,
- Alice Ryhl <aliceryhl@google.com>,
- Trevor Gross <tmgross@umich.edu>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Viresh Kumar <viresh.kumar@linaro.org>,
- Asahi Lina <lina+kernel@asahilina.net>,
- Wedson Almeida Filho <wedsonaf@gmail.com>,
- Alex Hung <alex.hung@amd.com>,
- Tamir Duberstein <tamird@gmail.com>,
- Xiangfei Ding <dingxiangfei2009@gmail.com>,
- linux-kernel@vger.kernel.org,
- rust-for-linux@vger.kernel.org,
- linux-i2c@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <F8146F2E-E66B-4F47-816D-40AAFE8B65F7@collabora.com>
-References: <20250820151427.1812482-1-igor.korotin.linux@gmail.com>
- <20250820151913.1814284-1-igor.korotin.linux@gmail.com>
- <CB269793-D165-4D22-95E5-F978C1ECC79E@collabora.com>
- <655ca23c-1fe6-498a-80b8-1b75044d9db3@gmail.com>
- <467F4F57-9452-4B68-931B-4A55A7CBC268@collabora.com>
- <DCOH6SUB5M7K.1K4V1DRAERH1S@kernel.org>
-To: Danilo Krummrich <dakr@kernel.org>
-X-Mailer: Apple Mail (2.3826.700.81)
-X-ZohoMailClient: External
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250907-perics-add-usinodes-v2-6-58f41796d2d3@gmail.com>
 
+Hi Denzeel,
 
+kernel test robot noticed the following build errors:
 
-> On 9 Sep 2025, at 15:19, Danilo Krummrich <dakr@kernel.org> wrote:
->=20
-> On Tue Sep 9, 2025 at 7:53 PM CEST, Daniel Almeida wrote:
->>> On 9 Sep 2025, at 14:19, Igor Korotin <igor.korotin.linux@gmail.com> =
-wrote:
->>> On 8/27/2025 7:37 PM, Daniel Almeida wrote:
->>>>> +    /// Returns the driver's private data from the matching entry =
-in the [`i2c::IdTable`], if any.
->>>>> +    ///
->>>>> +    /// If this returns `None`, it means there is no match with =
-an entry in the [`i2c::IdTable`].
->>>>> +    fn i2c_id_info(dev: &I2cClient) -> Option<&'static <Self as =
-driver::Adapter>::IdInfo> {
->>>> Again, perhaps a private member function? I=E2=80=99m trying to =
-simplify the syntax here.
->>>=20
->>> Can you, please, kindly clarify what do you mean? If a function is =
-not pub/pub(crate),
->>> it is a private function.
->>=20
->> I mean a function that takes &self or &mut self as applicable.
->=20
-> This just turns things around you you have to pass in the Adapter =
-type, which is
-> required by this function. Having the device ID table and ID info =
-accessors on
-> the device structure doesn't really make sense.
->=20
-> The current implementation is also in line with what we do in the =
-driver core
-> code and in other bus implementations, such as PCI.
+[auto build test ERROR on 98ee0e036cfedf543c4728a604fd7870d0000efd]
 
-Ok then, in which case feel free to disregard my previous comment :)
+url:    https://github.com/intel-lab-lkp/linux/commits/Denzeel-Oliva/dt-bindings-soc-samsung-exynos-sysreg-Add-Exynos990-PERIC0-1-compatibles/20250908-061748
+base:   98ee0e036cfedf543c4728a604fd7870d0000efd
+patch link:    https://lore.kernel.org/r/20250907-perics-add-usinodes-v2-6-58f41796d2d3%40gmail.com
+patch subject: [PATCH v2 6/8] arm64: dts: exynos990: Add UART nodes for PERIC0/1
+config: arm64-randconfig-003-20250909 (https://download.01.org/0day-ci/archive/20250910/202509100100.bccnVSbn-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.5.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250910/202509100100.bccnVSbn-lkp@intel.com/reproduce)
 
-=E2=80=94 Daniel=
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509100100.bccnVSbn-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   Error: arch/arm64/boot/dts/exynos/exynos990.dtsi:517.4-5 syntax error
+>> FATAL ERROR: Unable to parse input tree
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
