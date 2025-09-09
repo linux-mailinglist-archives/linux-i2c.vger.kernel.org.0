@@ -1,61 +1,61 @@
-Return-Path: <linux-i2c+bounces-12792-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12793-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A4AFFB4A17E
-	for <lists+linux-i2c@lfdr.de>; Tue,  9 Sep 2025 07:48:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CDE2DB4A182
+	for <lists+linux-i2c@lfdr.de>; Tue,  9 Sep 2025 07:49:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5A04D4E0880
-	for <lists+linux-i2c@lfdr.de>; Tue,  9 Sep 2025 05:48:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F37E61B25BCA
+	for <lists+linux-i2c@lfdr.de>; Tue,  9 Sep 2025 05:49:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A38302FE05F;
-	Tue,  9 Sep 2025 05:48:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 161D62FFDEC;
+	Tue,  9 Sep 2025 05:48:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="f3gFkuDi"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="i/XTbnkH"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8CEB2FE04F;
-	Tue,  9 Sep 2025 05:48:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74E812FF643;
+	Tue,  9 Sep 2025 05:48:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757396915; cv=none; b=cRNv91p78h0UzdRPRqA4EppHtRFNEF1nk/tMimCElh9aY/Oivmj6UsO2F+8WplODFN5DCjxSlFG9D2itT2ifH9CUD1wfvUTYCaEy8jUUpFV7tQCHWCXI7bILgFAKKOI5YDfP/YJkgOkja+P2/m17jqFW1nRqsBnvk94ffeojlHo=
+	t=1757396917; cv=none; b=OI4ZoBTqjAerUtbamVawMssssMxFgBpDTcZ2KhfLzbD2fxIRGaAcIhEun5TdGrAMfqLsGqPGhgS6wgCDHbGUDPLlfCwOFnbrYYbpcOD3hyCIUEdUdhfLFbEaPk3RWfJ98y9owzPgO1DThTtrKAcJkbvAytFXZj9ivm/iVjeeUPo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757396915; c=relaxed/simple;
-	bh=2J7CQf7DMs6bdAmRNfRSs3FGQV6bF5ogSfPOTxxOYc0=;
+	s=arc-20240116; t=1757396917; c=relaxed/simple;
+	bh=bXXO3H0v+v2Raj6fofEU6hD1YV8TSbwylg+XFndiOCw=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=C5rBXV/T0OmIXXXD/tcV5BEDHA4Bt6Jtc+ZbLCtg9rP8A2RT3jNt3X5yh9aJvhI+Q3H+Bhpo53/rJ2S11Vxxww5XukJhiQaU++45m/ABNe9U28hkcKuf83a6RL6i21C2U1kebl7+MWDkBcQ2HAYUbJl+AYBvmjrl5O6IqlBvrUg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=f3gFkuDi; arc=none smtp.client-ip=205.220.180.131
+	 MIME-Version:Content-Type; b=o1Fu1bi0SVf+h3un2VYGR6NvnGKMK9yaZvTgA0b3/CCJZzOveO9E7lGm4b3Xlwtyqs9LNqhPWARCEaOLk9QoLcgEgmHSbPdn0XhA20ATj5ipkoK1m7AOL3clwBuKeeDqAFf7YJ5+wU/qrQnGGVXsuBIUP6feE8QYqpuUntin9Jc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=i/XTbnkH; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5895aRO3014507;
-	Tue, 9 Sep 2025 05:48:30 GMT
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5895aRrU022382;
+	Tue, 9 Sep 2025 05:48:34 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	sznMq80P195Xj811kocWxFa7pSS33CGlaWexbDkZRFU=; b=f3gFkuDijzKDzPAr
-	Xp2PQ4X1qmxC1yrGhL0SrguCfjz/PaYb6qPVQ3nymTHKHSXH7+1khJDQ/NXMDGYS
-	sRLfYTTNQCMMrP1IBGAt/5Qu3nBHh7ncMb3DGxjYIcFTGWLJzsPtQdXfXm6PaN2b
-	dt0g3yAJ3W7A3cu3E636KE4FLrgVoaRSlvzec1YI2nKZgO246NSXI8dUJqDIjbcW
-	i1sHR0T3JsOOUvEqSQmswLVN/Rmtq/ZDNzGC1LEc8k0VdTGV8vhKebLga9sUf+Sb
-	n8KdMG8Wq0v4cxPbJEgSyRPCg3+1h1D9RKD7haaag73qqNlxDbeRzSlnHHgRJihv
-	z8wW4A==
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 490by8y44j-1
+	Dknxw3wNR4wWzoxzNq2cE1MspeyuzkKh6kAvP4rLlIM=; b=i/XTbnkHjOAxhKQD
+	AI31f9JWQN3tiNqSFW34YZ7bE1/rxaB2U9t5zMsZdswaQ9UAWyDoYG8nOZA0PcRO
+	XL4rK/rTzxZ348PaLSutGrwOCYoDTq2eR4uoF3mTJJmis99Msr6iYlCIVGeW3lGo
+	k8wnytbB7KdxIMuaaCzRbR5MkK30u0Uc5Sc+GfAJc+bBgRJP8X+9J0cXNyVCFBzg
+	JPSS4ixW6kS+sTNq42lsEknTfERs/GWQFzyrn1XG0cEjBp2vz7rk/h4fh7aDg5Sz
+	LvJPHHMyxiijKhYc+GdyCC1/4Nhs0cX1ymn2reGh6EQ/vlNkXHqDwZ0LlQVevbb3
+	ws0kTg==
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 490dqfxvtf-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 09 Sep 2025 05:48:30 +0000 (GMT)
+	Tue, 09 Sep 2025 05:48:34 +0000 (GMT)
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 5895mTcD003424
+	by NALASPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 5895mXxS029552
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 9 Sep 2025 05:48:29 GMT
+	Tue, 9 Sep 2025 05:48:33 GMT
 Received: from hu-mmanikan-blr.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1748.24; Mon, 8 Sep 2025 22:48:24 -0700
+ 15.2.1748.24; Mon, 8 Sep 2025 22:48:29 -0700
 From: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
 To: <andersson@kernel.org>, <konradybcio@kernel.org>, <robh@kernel.org>,
         <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
@@ -65,9 +65,9 @@ To: <andersson@kernel.org>, <konradybcio@kernel.org>, <robh@kernel.org>,
         <linux-i2c@vger.kernel.org>
 CC: <quic_varada@quicinc.com>, <quic_srichara@quicinc.com>,
         <kathiravan.thirumoorthy@oss.qualcomm.com>
-Subject: [PATCH v3 1/2] i2c: qcom-geni: add OPP table support
-Date: Tue, 9 Sep 2025 11:18:10 +0530
-Message-ID: <20250909054811.3991901-2-quic_mmanikan@quicinc.com>
+Subject: [PATCH v3 2/2] arm64: dts: qcom: ipq5424: add i2c nodes
+Date: Tue, 9 Sep 2025 11:18:11 +0530
+Message-ID: <20250909054811.3991901-3-quic_mmanikan@quicinc.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250909054811.3991901-1-quic_mmanikan@quicinc.com>
 References: <20250909054811.3991901-1-quic_mmanikan@quicinc.com>
@@ -83,94 +83,86 @@ X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Authority-Analysis: v=2.4 cv=Yv8PR5YX c=1 sm=1 tr=0 ts=68bfbfae cx=c_pps
+X-Proofpoint-ORIG-GUID: -izg1lcFbEVsbomWQv_tZ3tgoNvgt4Td
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTA2MDAzNSBTYWx0ZWRfX3aVm0JAGLQmz
+ dyC3891U3HNQCP1buD+afndJ/oYyktoLgo1XXQhUX4KSMTinGxe/in/Kv462x0zcGKQxgPkieS3
+ XKESMyXbNTDit5mlJ2rRyniDpzgx+/CBWj1gd0xvUTIuu3n+noD1rCfMgAV0oG4IPxT02aw7OJj
+ vwsjUJnojG6R+9VC22gwrLzSTSQ65sX5M/efIFwVORRgNYznLUR7dh2mgW6ImHyiGUaeKnV+ZT4
+ /eTDuq8JJnDKJRaNEi1GlDuTxqpvhQpqEfxa8vM9WhlcIn3j+MVhbH7MoGkb0lGOiukZ5aY3Bjh
+ vIU49XxIvcYTfvp7tPNDtceTVGPjr4tep4S9FVpTMBS5dRs4fAjUTwj4lnFo64KDCTwVsrcE8Qm
+ l1xOCBlK
+X-Proofpoint-GUID: -izg1lcFbEVsbomWQv_tZ3tgoNvgt4Td
+X-Authority-Analysis: v=2.4 cv=N8UpF39B c=1 sm=1 tr=0 ts=68bfbfb2 cx=c_pps
  a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
- a=GEpy-HfZoHoA:10 a=yJojWOMRYYMA:10 a=COk6AnOGAAAA:8 a=PkaDvUb3SntloxbNxXMA:9
- a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-GUID: AKRvUvN2Myop0XvvvoQ7xkklS1OyHtAe
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTA2MDAxOCBTYWx0ZWRfX62P32QdKrF5D
- /LR3GvyTgK1GI3/pApD62ImvexkeLojFFA/6A+moMb+T0v6LEYrmtIgB8uKZMgFahOvhXtDTCpb
- eGxIPu0/C0tYaPGLq57CjlewnHacSmpRl31nhwQzg1Rd4VKGBorkPjC0zkBu7u7LAnXGEsiIDzu
- tjwhPMvWfq9qC+wVuvZnB6ZAyXy+MzzTVZbAjDNuVAXoHa405EhBawReBKcztszN6Xdl+0rxhhD
- jMvWiXcHLisQFTE1T/fmtWFSS9dcMtjRF7TfKsgoqwVOmbCmHtoP6rwF4cmh+cuz7a8bUkSgHJo
- ff/chgjm8MTU+ba1/VGEnE8f3KW7e2RqGokfGjJ+CDlB3jYQm3lcyi1pzfs6gBYvwikjwh+2BM1
- YMzUVF45
-X-Proofpoint-ORIG-GUID: AKRvUvN2Myop0XvvvoQ7xkklS1OyHtAe
+ a=GEpy-HfZoHoA:10 a=yJojWOMRYYMA:10 a=EUspDBNiAAAA:8 a=COk6AnOGAAAA:8
+ a=fvVXwsyH9HWL8OlT880A:9 a=TjNXssC_j7lpFel5tvFf:22
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
  definitions=2025-09-08_06,2025-09-08_02,2025-03-28_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- bulkscore=0 malwarescore=0 suspectscore=0 phishscore=0 clxscore=1015
- spamscore=0 priorityscore=1501 impostorscore=0 adultscore=0
+ adultscore=0 spamscore=0 malwarescore=0 clxscore=1015 bulkscore=0
+ suspectscore=0 priorityscore=1501 impostorscore=0 phishscore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2509060018
+ reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2509060035
 
-Add support for reading and configuring the OPP table in the GENI I2C
-driver. This enables setting the frequency based on device tree data,
-removing dependency on bootloader configuration.
+Serial engines 2 and 3 on the IPQ5424 support I2C. The I2C instance
+operates on serial engine 2, designated as i2c0, and on serial engine 3,
+designated as i2c1. Add both the i2c0 and i2c1 nodes.
 
+Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
 ---
-v3: Fix the format-specifier to correctly display the clock rate and change
-   '&pdev->dev' to 'dev' as per suggestions from Andi Shyti.
- 
-drivers/i2c/busses/i2c-qcom-geni.c | 27 ++++++++++++++++++++++++---
- 1 file changed, 24 insertions(+), 3 deletions(-)
+v3: Pick up R-b tag.
 
-diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
-index ff2289b52c84..380581a3699c 100644
---- a/drivers/i2c/busses/i2c-qcom-geni.c
-+++ b/drivers/i2c/busses/i2c-qcom-geni.c
-@@ -13,6 +13,7 @@
- #include <linux/module.h>
- #include <linux/of.h>
- #include <linux/platform_device.h>
-+#include <linux/pm_opp.h>
- #include <linux/pm_runtime.h>
- #include <linux/soc/qcom/geni-se.h>
- #include <linux/spinlock.h>
-@@ -779,11 +780,13 @@ static int setup_gpi_dma(struct geni_i2c_dev *gi2c)
+ arch/arm64/boot/dts/qcom/ipq5424.dtsi | 28 +++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/qcom/ipq5424.dtsi b/arch/arm64/boot/dts/qcom/ipq5424.dtsi
+index ef2b52f3597d..81a89e425c20 100644
+--- a/arch/arm64/boot/dts/qcom/ipq5424.dtsi
++++ b/arch/arm64/boot/dts/qcom/ipq5424.dtsi
+@@ -173,6 +173,14 @@ memory@80000000 {
+ 		reg = <0x0 0x80000000 0x0 0x0>;
+ 	};
  
- static int geni_i2c_probe(struct platform_device *pdev)
- {
--	struct geni_i2c_dev *gi2c;
-+	const struct geni_i2c_desc *desc = NULL;
- 	u32 proto, tx_depth, fifo_disable;
--	int ret;
- 	struct device *dev = &pdev->dev;
--	const struct geni_i2c_desc *desc = NULL;
-+	unsigned long freq = ULONG_MAX;
-+	struct geni_i2c_dev *gi2c;
-+	struct dev_pm_opp *opp;
-+	int ret;
- 
- 	gi2c = devm_kzalloc(dev, sizeof(*gi2c), GFP_KERNEL);
- 	if (!gi2c)
-@@ -814,6 +817,24 @@ static int geni_i2c_probe(struct platform_device *pdev)
- 		gi2c->clk_freq_out = I2C_MAX_STANDARD_MODE_FREQ;
- 	}
- 
-+	ret = devm_pm_opp_set_clkname(dev, "se");
-+	if (ret)
-+		return ret;
++	i2c_opp_table_64mhz: opp-table-qup64mhz {
++		compatible = "operating-points-v2";
 +
-+	/* OPP table is optional */
-+	ret = devm_pm_opp_of_add_table(dev);
-+	if (!ret) {
-+		opp = dev_pm_opp_find_freq_floor(dev, &freq);
-+		if (IS_ERR(opp))
-+			return dev_err_probe(dev, PTR_ERR(opp), "failed to find the frequency\n");
-+		dev_pm_opp_put(opp);
-+		ret = dev_pm_opp_set_rate(dev, freq);
-+		if (ret)
-+			return dev_err_probe(dev, ret, "failed to set the rate=%lu\n", freq);
-+	} else if (ret && ret != -ENODEV) {
-+		return dev_err_probe(dev, ret, "invalid OPP table in device tree\n");
-+	}
++		opp-64000000 {
++			opp-hz = /bits/ 64 <64000000>;
++		};
++	};
 +
- 	if (has_acpi_companion(dev))
- 		ACPI_COMPANION_SET(&gi2c->adap.dev, ACPI_COMPANION(dev));
+ 	pmu-a55 {
+ 		compatible = "arm,cortex-a55-pmu";
+ 		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_HIGH>;
+@@ -525,6 +533,26 @@ uart1: serial@1a84000 {
+ 				interrupts = <GIC_SPI 340 IRQ_TYPE_LEVEL_HIGH>;
+ 			};
  
++			i2c0: i2c@1a88000 {
++				compatible = "qcom,geni-i2c";
++				reg = <0 0x01a88000 0 0x4000>;
++				clocks = <&gcc GCC_QUPV3_I2C0_CLK>;
++				clock-names = "se";
++				interrupts = <GIC_SPI 341 IRQ_TYPE_LEVEL_HIGH>;
++				operating-points-v2 = <&i2c_opp_table_64mhz>;
++				status = "disabled";
++			};
++
++			i2c1: i2c@1a8c000 {
++				compatible = "qcom,geni-i2c";
++				reg = <0 0x01a8c000 0 0x4000>;
++				clocks = <&gcc GCC_QUPV3_I2C1_CLK>;
++				clock-names = "se";
++				interrupts = <GIC_SPI 342 IRQ_TYPE_LEVEL_HIGH>;
++				operating-points-v2 = <&i2c_opp_table_64mhz>;
++				status = "disabled";
++			};
++
+ 			spi0: spi@1a90000 {
+ 				compatible = "qcom,geni-spi";
+ 				reg = <0 0x01a90000 0 0x4000>;
 -- 
 2.34.1
 
