@@ -1,262 +1,315 @@
-Return-Path: <linux-i2c+bounces-12824-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12825-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5618DB514E2
-	for <lists+linux-i2c@lfdr.de>; Wed, 10 Sep 2025 13:08:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1DFF6B515D3
+	for <lists+linux-i2c@lfdr.de>; Wed, 10 Sep 2025 13:34:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5A30B1C82EDB
-	for <lists+linux-i2c@lfdr.de>; Wed, 10 Sep 2025 11:08:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B9C39563BEC
+	for <lists+linux-i2c@lfdr.de>; Wed, 10 Sep 2025 11:34:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A099031AF32;
-	Wed, 10 Sep 2025 11:07:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3A1F27816B;
+	Wed, 10 Sep 2025 11:34:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="hOqh1HXB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uaG1LPUS"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3085931A06C;
-	Wed, 10 Sep 2025 11:07:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A854023A9AE;
+	Wed, 10 Sep 2025 11:34:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757502429; cv=none; b=NVfof8/tV+h0kd9ah8NB4/Q2S+dwHWfpfnxsy+0u/SQ7PxLAhPlEf3OB3NceiNBVeb0UINV3NLZ2/uqwKixzMBypv5Knk/0U3J+PkqXP2U7JJlGBNZ9k9hInMoBh8BJshO8fq+/jSF3mVlAqJzHPevH3WIlN3tO4wCkpQW8pswQ=
+	t=1757504076; cv=none; b=sKHh2ETs1u8Bvx/9kWfPZ8X9jKkb6ZWRhXB4CeATAVMqzR/9+gfOGQ3N2g5GxLVOtCflH1zYiAOw6rNOpT5lxg9iRbjcclVzEYx6sJsUyVc6PgkhVuu85CPz4gTBD/m1p6q1FLxz7QKNtyYfOjYXs6F/m6d1thhlYKI6sw3LRHc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757502429; c=relaxed/simple;
-	bh=+suaSLm4yJYPG9kV3xvGc+0GubHGu6l0f5JoNC9Gz5k=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=HbTgOku+SIRoFB0dQ64Fa0NQO33NXAnCYJG66IRZmDCpgz5YgsVoKVkrx8EsVn++uvfzY1X72XfY7G3TzNxSTKS9E3xMXFfqrNctLq8/I7qSFrqMjAhuAlX5msLnIi4mCTKR7J2AZjjRAyHXFL9iUH+s3FKpzWtrc/rSBYMx1q4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=qualcomm.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=hOqh1HXB; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58AAFON4031314;
-	Wed, 10 Sep 2025 11:07:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	zOC+e28qEhi3ys02J4XaU8bfLN4a/Y81MtwQs8+gDPA=; b=hOqh1HXBca5YhXDu
-	WLpXk9mIF6exRL51aN4DdIxJLVialJxZA7t29zEVEU6vzaqm68Q5bG4WoLUotZzL
-	cyAkOrGyQfd3h3nOFdQi3ZZ6UWz7SXDG9DE1cKZw9zxNjdcsS+mc2uiN5VMevOvl
-	pS4A0TGjrqP5kpA2lygy+24ZC1YcWSIYqXlYAmsc+vflGLd4rm47n3zfESuYxxWE
-	Ggm6MJueYDfVWB7aa+wGfyDXM2fGnGlke+vZnLQ59ROYf9+yJgPCzsfZ1eLAqq64
-	3/tU54o5IPdfhi1+ik0rVJwp6WAiYJIKRh5GSNSo4xGOxbPNAvBlCHMkVMNKAHDk
-	vfJQ0g==
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 491vc27n7u-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 10 Sep 2025 11:07:03 +0000 (GMT)
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 58AB71Le017789
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 10 Sep 2025 11:07:01 GMT
-Received: from cse-cd01-lnx.ap.qualcomm.com (10.80.80.8) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1748.24; Wed, 10 Sep 2025 04:06:56 -0700
-From: Wenmeng Liu <quic_wenmliu@qualcomm.com>
-Date: Wed, 10 Sep 2025 19:06:23 +0800
-Subject: [PATCH v4 3/3] arm64: dts: qcom: lemans-evk-camera: Add DT overlay
+	s=arc-20240116; t=1757504076; c=relaxed/simple;
+	bh=hZHA1JcWn5VlSgjLR2nnUIPVLLhvKbYHL5YwHsn6OhA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Ibgggx7odHXkbv58zYHkiHYwdh2vDERaZF9jBrr/KHkPHrwlgDt0p6AzKaoU5cCZ7MLe1TcrxVKaupmTfJPzWF8rc5aeH5cqQupIMHfdu2/p+yuEMM0IKF49gvxVdDlDEbh6GvFu+PdgdC3FkaCDcltqxqyWolCu+r/BJ6GBFHM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uaG1LPUS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0838C4CEF0;
+	Wed, 10 Sep 2025 11:34:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757504076;
+	bh=hZHA1JcWn5VlSgjLR2nnUIPVLLhvKbYHL5YwHsn6OhA=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=uaG1LPUS4U/bRFiOxCtRdJbVkQ8jA6qxeXMrOh5Mg6pRSEQSJGRZq/eejhiSaif99
+	 fV+UVDbrt1CxRmLlHPxbILbYW0PV+5S+mdCbY4cJXopFPx9Ri2yMjvR2wNcL4Juxzm
+	 OazM9Esn1wZqmZAnMmfBbtDiMy5buVymIp2gFlJ9Br6EwtD3CvDGvxCFUWBlLMBnfL
+	 D0YWQmIRfs8+ftCNkB690aDV0S/qn9z9n+/6phdDViog7mUhcMOnz+t+u/RHxRX6Vf
+	 PGxImqpID1YjFokyTrgV7BoioWRq8nAiwBP8EkRT6lNXAsQWWMHokUWqyALIQx6vkH
+	 wzQlOydrOc8gg==
+Message-ID: <a77d0593-4001-4315-b8de-22c4b85f213f@kernel.org>
+Date: Wed, 10 Sep 2025 13:34:32 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/3] gpio: Add Intel USBIO GPIO driver
+To: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: Richard Hughes <rhughes@redhat.com>, linux-i2c@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-gpio@vger.kernel.org,
+ Israel Cepeda <israel.a.cepeda.lopez@intel.com>,
+ Sakari Ailus <sakari.ailus@linux.intel.com>, Wolfram Sang <wsa@kernel.org>,
+ Andi Shyti <andi.shyti@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Linus Walleij <linus.walleij@linaro.org>
+References: <20250907175056.47314-1-hansg@kernel.org>
+ <20250907175056.47314-3-hansg@kernel.org>
+ <CAMRc=Mcwez1bebe4KBxh2V23+U3A6Fhz3q_dC1XmnT1DfD2Yig@mail.gmail.com>
+From: Hans de Goede <hansg@kernel.org>
+Content-Language: en-US, nl
+In-Reply-To: <CAMRc=Mcwez1bebe4KBxh2V23+U3A6Fhz3q_dC1XmnT1DfD2Yig@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-ID: <20250910-camss_rb8-v4-3-28f44e1880b8@oss.qualcomm.com>
-References: <20250910-camss_rb8-v4-0-28f44e1880b8@oss.qualcomm.com>
-In-Reply-To: <20250910-camss_rb8-v4-0-28f44e1880b8@oss.qualcomm.com>
-To: Loic Poulain <loic.poulain@oss.qualcomm.com>,
-        Robert Foss
-	<rfoss@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
-        Rob Herring
-	<robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
-	<conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio
-	<konradybcio@kernel.org>, <todor.too@gmail.com>,
-        <bryan.odonoghue@linaro.org>, <vladimir.zapolskiy@linaro.org>
-CC: <linux-i2c@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-media@vger.kernel.org>,
-        Konrad Dybcio
-	<konrad.dybcio@oss.qualcomm.com>,
-        Wenmeng Liu <quic_wenmliu@qualcomm.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1757502403; l=3482;
- i=wenmeng.liu@oss.qualcomm.com; s=20250211; h=from:subject:message-id;
- bh=+suaSLm4yJYPG9kV3xvGc+0GubHGu6l0f5JoNC9Gz5k=;
- b=qPzbdWePstHTedoWKpIUGqe2lldxyObUdVP9nUdy5e6Mi9n2VyKQtBytAyWnjDmznGjZCHZIS
- ZMF08bmzAziDhIfDSnwPNRUwbsz0cIuR9AbQSsiaVCfq+dqQkEp9MPm
-X-Developer-Key: i=wenmeng.liu@oss.qualcomm.com; a=ed25519;
- pk=PTegr3w0f1C9dOSL6CUdJR5+u+X/4vsW7VMfwIMeMXQ=
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Authority-Analysis: v=2.4 cv=FN4bx/os c=1 sm=1 tr=0 ts=68c15bd7 cx=c_pps
- a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
- a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=KKAkSRfTAAAA:8
- a=EUspDBNiAAAA:8 a=n2qAWu9mVDBvzsF7sgIA:9 a=QEXdDO2ut3YA:10
- a=cvBusfyB2V15izCimMoJ:22
-X-Proofpoint-ORIG-GUID: IVlqsYFsOJyEUz0UWYPSHvUeufJpw603
-X-Proofpoint-GUID: IVlqsYFsOJyEUz0UWYPSHvUeufJpw603
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTA4MDA5NCBTYWx0ZWRfX+5dDP/jGU56Z
- 1bapFwnQlbV+2dkeHHww2ruhPz99eF5wQxxnU625g2KOWHEB5SjGo/QgV02BsfN93eqtx1Qo7wt
- Zp7tufpCdAgNzkynnJTnqViyNAorV+95yUyPdlNSChfqY1gvQWZUJpkad/qX4HhNLS1Omcefvqk
- j0u8oM6v190RisO7XpY2wPEvzcsp0mmyy1uxl5WibiNzniooO8nGEK3eMNhtqRxzakvlGDGJViV
- PdZhT8EV2bkjpnbPc6O96FMIZNaqYbpo7WVMh97SCpxSwpWp2m3e8mSva3sjsf+wSSo/2QrDzKv
- C9j76504AlzE++iMqPOysKLP32C7/iJfmEKokTdLcZnz+Enqz57HD8iOqQZynfs+BcC9dnbosmd
- xX85p4sb
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-09-09_03,2025-09-10_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 priorityscore=1501 clxscore=1015 phishscore=0 adultscore=0
- bulkscore=0 impostorscore=0 malwarescore=0 suspectscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2509080094
 
-Enable IMX577 via CCI1 on LeMans EVK Core Kit.
+Hi Bartosz,
 
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Signed-off-by: Wenmeng Liu <quic_wenmliu@qualcomm.com>
----
- arch/arm64/boot/dts/qcom/Makefile               |   4 +
- arch/arm64/boot/dts/qcom/lemans-evk-camera.dtso | 101 ++++++++++++++++++++++++
- 2 files changed, 105 insertions(+)
+Thank you for the review.
 
-diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-index 0a7c308dec365263bbb7aa5f5cd306dbeacfd3f1..b27f60fbd527146027eebd4bb7b1f8a0a82b3af2 100644
---- a/arch/arm64/boot/dts/qcom/Makefile
-+++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -30,6 +30,10 @@ dtb-$(CONFIG_ARCH_QCOM)	+= ipq9574-rdp449.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= ipq9574-rdp453.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= ipq9574-rdp454.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= lemans-evk.dtb
-+
-+lemans-evk-camera-dtbs	:= lemans-evk.dtb lemans-evk-camera.dtbo
-+
-+dtb-$(CONFIG_ARCH_QCOM)	+= lemans-evk-camera.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8216-samsung-fortuna3g.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-acer-a1-724.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-alcatel-idol347.dtb
-diff --git a/arch/arm64/boot/dts/qcom/lemans-evk-camera.dtso b/arch/arm64/boot/dts/qcom/lemans-evk-camera.dtso
-new file mode 100644
-index 0000000000000000000000000000000000000000..629992ced9b13b23505fc20562929a0ed17a9566
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/lemans-evk-camera.dtso
-@@ -0,0 +1,101 @@
-+// SPDX-License-Identifier: BSD-3-Clause
-+/*
-+ * Copyright (c) 2024-2025 Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+
-+/*
-+ * Camera Sensor overlay on top of LeMans EVK Core Kit.
-+ */
-+
-+/dts-v1/;
-+/plugin/;
-+
-+#include <dt-bindings/clock/qcom,sa8775p-camcc.h>
-+#include <dt-bindings/gpio/gpio.h>
-+
-+&{/} {
-+	vreg_cam1_1p8: vreg_cam1_1p8 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vreg_cam1_1p8";
-+		startup-delay-us = <10000>;
-+		enable-active-high;
-+		gpio = <&pmm8654au_0_gpios 8 GPIO_ACTIVE_HIGH>;
-+	};
-+};
-+
-+&camss {
-+	vdda-pll-supply = <&vreg_l1c>;
-+	vdda-phy-supply = <&vreg_l4a>;
-+
-+	status = "okay";
-+
-+	ports {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		port@1 {
-+			reg = <1>;
-+
-+			csiphy1_ep: endpoint {
-+				clock-lanes = <7>;
-+				data-lanes = <0 1 2 3>;
-+				remote-endpoint = <&imx577_ep1>;
-+			};
-+		};
-+	};
-+};
-+
-+&cci1 {
-+	pinctrl-0 = <&cci1_0_default>;
-+	pinctrl-1 = <&cci1_0_sleep>;
-+
-+	status = "okay";
-+};
-+
-+&cci1_i2c0 {
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	camera@1a {
-+		compatible = "sony,imx577";
-+		reg = <0x1a>;
-+
-+		reset-gpios = <&tlmm 133 GPIO_ACTIVE_LOW>;
-+		pinctrl-0 = <&cam1_default>;
-+		pinctrl-names = "default";
-+
-+		clocks = <&camcc CAM_CC_MCLK1_CLK>;
-+		assigned-clocks = <&camcc CAM_CC_MCLK1_CLK>;
-+		assigned-clock-rates = <24000000>;
-+
-+		dovdd-supply = <&vreg_s4a>;
-+		avdd-supply = <&vreg_cam1_1p8>;
-+
-+		port {
-+			imx577_ep1: endpoint {
-+				clock-lanes = <7>;
-+				link-frequencies = /bits/ 64 <600000000>;
-+				data-lanes = <0 1 2 3>;
-+				remote-endpoint = <&csiphy1_ep>;
-+			};
-+		};
-+	};
-+};
-+
-+&tlmm {
-+	cam1_default: cam1-default-state {
-+		mclk-pins {
-+			pins = "gpio73";
-+			function = "cam_mclk";
-+			drive-strength = <2>;
-+			bias-disable;
-+		};
-+
-+		rst-pins {
-+			pins = "gpio133";
-+			function = "gpio";
-+			drive-strength = <2>;
-+			bias-disable;
-+		};
-+	};
-+};
+On 9-Sep-25 11:58 AM, Bartosz Golaszewski wrote:
+> On Sun, 7 Sep 2025 19:50:55 +0200, Hans de Goede <hansg@kernel.org> said:
+>> From: Israel Cepeda <israel.a.cepeda.lopez@intel.com>
+>>
+>> Add a a driver for the GPIO auxbus child device of the Intel USBIO USB
+>> IO-expander used by the MIPI cameras on various new (Meteor Lake and
+>> later) Intel laptops.
+>>
+>> Co-developed-by: Hans de Goede <hansg@kernel.org>
+>> Signed-off-by: Hans de Goede <hansg@kernel.org>
+>> Signed-off-by: Israel Cepeda <israel.a.cepeda.lopez@intel.com>
+>> ---
+>> Changes in v2:
+>> - Add a config_mutex protect usbio_gpio_update_config() calls, which
+>>   read-modify-write banks[x].config, racing with each other
+>> - Adjust usbio_gpio_get() to have an int return value and propagate the
+>>   usbio_control_msg() return value
+>> - Use __le16, __le32 type + cpu_to_le16() and friends for on wire words
+>> - Some small style fixes from Sakari's review
+>> ---
+>>  MAINTAINERS               |   1 +
+>>  drivers/gpio/Kconfig      |  11 ++
+>>  drivers/gpio/Makefile     |   1 +
+>>  drivers/gpio/gpio-usbio.c | 267 ++++++++++++++++++++++++++++++++++++++
+>>  4 files changed, 280 insertions(+)
+>>  create mode 100644 drivers/gpio/gpio-usbio.c
+>>
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index 3410699ad0b2..53694bd91861 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -12699,6 +12699,7 @@ M:	Israel Cepeda <israel.a.cepeda.lopez@intel.com>
+>>  M:	Hans de Goede <hansg@kernel.org>
+>>  R:	Sakari Ailus <sakari.ailus@linux.intel.com>
+>>  S:	Maintained
+>> +F:	drivers/gpio/gpio-usbio.c
+>>  F:	drivers/usb/misc/usbio.c
+>>  F:	include/linux/usb/usbio.h
+>>
+>> diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
+>> index e43abb322fa6..5d3ca3dd2687 100644
+>> --- a/drivers/gpio/Kconfig
+>> +++ b/drivers/gpio/Kconfig
+>> @@ -1448,6 +1448,17 @@ config GPIO_LJCA
+>>  	  This driver can also be built as a module. If so, the module
+>>  	  will be called gpio-ljca.
+>>
+>> +config GPIO_USBIO
+>> +	tristate "Intel USBIO GPIO support"
+>> +	depends on USB_USBIO
+>> +	default USB_USBIO
+>> +	help
+>> +	  Select this option to enable GPIO driver for the INTEL
+>> +	  USBIO driver stack.
+>> +
+>> +	  This driver can also be built as a module. If so, the module
+>> +	  will be called gpio_usbio.
+>> +
+>>  config GPIO_LP3943
+>>  	tristate "TI/National Semiconductor LP3943 GPIO expander"
+>>  	depends on MFD_LP3943
+>> diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
+>> index 379f55e9ed1e..8c55e2d5de42 100644
+>> --- a/drivers/gpio/Makefile
+>> +++ b/drivers/gpio/Makefile
+>> @@ -90,6 +90,7 @@ obj-$(CONFIG_GPIO_JANZ_TTL)		+= gpio-janz-ttl.o
+>>  obj-$(CONFIG_GPIO_KEMPLD)		+= gpio-kempld.o
+>>  obj-$(CONFIG_GPIO_LATCH)		+= gpio-latch.o
+>>  obj-$(CONFIG_GPIO_LJCA) 		+= gpio-ljca.o
+>> +obj-$(CONFIG_GPIO_USBIO) 		+= gpio-usbio.o
+>>  obj-$(CONFIG_GPIO_LOGICVC)		+= gpio-logicvc.o
+>>  obj-$(CONFIG_GPIO_LOONGSON1)		+= gpio-loongson1.o
+>>  obj-$(CONFIG_GPIO_LOONGSON)		+= gpio-loongson.o
+>> diff --git a/drivers/gpio/gpio-usbio.c b/drivers/gpio/gpio-usbio.c
+>> new file mode 100644
+>> index 000000000000..1df32105cf51
+>> --- /dev/null
+>> +++ b/drivers/gpio/gpio-usbio.c
+>> @@ -0,0 +1,267 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Copyright (c) 2025 Intel Corporation.
+>> + * Copyright (c) 2025 Red Hat, Inc.
+>> + */
+>> +
+>> +#include <linux/acpi.h>
+>> +#include <linux/auxiliary_bus.h>
+>> +#include <linux/cleanup.h>
+>> +#include <linux/dev_printk.h>
+>> +#include <linux/device.h>
+>> +#include <linux/gpio/driver.h>
+>> +#include <linux/mutex.h>
+>> +#include <linux/types.h>
+>> +#include <linux/usb/usbio.h>
+>> +
+>> +struct usbio_gpio_bank {
+>> +	u8 config[USBIO_GPIOSPERBANK];
+>> +	u32 bitmap;
+>> +};
+>> +
+>> +struct usbio_gpio {
+>> +	struct mutex config_mutex; /* Protects banks[x].config */
+>> +	struct usbio_gpio_bank banks[USBIO_MAX_GPIOBANKS];
+>> +	struct gpio_chip gc;
+>> +	struct auxiliary_device *adev;
+>> +};
+>> +
+>> +static const struct acpi_device_id usbio_gpio_acpi_hids[] = {
+>> +	{ "INTC1007" }, /* MTL */
+>> +	{ "INTC10B2" }, /* ARL */
+>> +	{ "INTC10B5" }, /* LNL */
+>> +	{ "INTC10E2" }, /* PTL */
+>> +	{ }
+>> +};
+>> +
+>> +static bool usbio_gpio_get_bank_and_pin(struct gpio_chip *gc, unsigned int offset,
+>> +					struct usbio_gpio_bank **bank_ret,
+>> +					unsigned int *pin_ret)
+>> +{
+>> +	struct usbio_gpio *gpio = gpiochip_get_data(gc);
+>> +	struct device *dev = &gpio->adev->dev;
+>> +	struct usbio_gpio_bank *bank;
+>> +	unsigned int pin;
+>> +
+>> +	if (offset >= gc->ngpio)
+>> +		return false;
+>> +
+> 
+> No need for that, GPIO core will make sure this never happens.
 
--- 
-2.34.1
+Ack, will fix for v3. That also allows making this function
+return void further simplyfying things.
+
+>> +	bank = &gpio->banks[offset / USBIO_GPIOSPERBANK];
+>> +	pin = offset % USBIO_GPIOSPERBANK;
+>> +	if (~bank->bitmap & BIT(pin)) {
+>> +		/* The FW bitmap sometimes is invalid, warn and continue */
+>> +		dev_warn_once(dev, FW_BUG "GPIO %u is not in FW pins bitmap\n", offset);
+>> +	}
+>> +
+>> +	*bank_ret = bank;
+>> +	*pin_ret = pin;
+>> +	return true;
+>> +}
+
+...
+
+>> +static int usbio_gpio_direction_output(struct gpio_chip *gc,
+>> +		unsigned int offset, int value)
+>> +{
+>> +	int ret;
+>> +
+>> +	ret = usbio_gpio_update_config(gc, offset, USBIO_GPIO_PINMOD_MASK,
+>> +				       USBIO_GPIO_SET_PINMOD(USBIO_GPIO_PINMOD_OUTPUT));
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	usbio_gpio_set(gc, offset, value);
+>> +	return 0;
+> 
+> return usbio_gpio_set(gc, offset, value);?
+
+Ack, usbio_gpio_set() returned void in v1, hence this
+construct. Will fix for v3.
+
+>> +}
+
+...
+
+>> +static int usbio_gpio_probe(struct auxiliary_device *adev,
+>> +		const struct auxiliary_device_id *adev_id)
+>> +{
+
+...
+
+>> +	auxiliary_set_drvdata(adev, gpio);
+>> +
+>> +	ret = gpiochip_add_data(&gpio->gc, gpio);
+> 
+> Please use the devres variant, you'll be able to drop the remove() callback.
+
+Ack, will fix for v3.
+
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	if (has_acpi_companion(dev))
+>> +		acpi_dev_clear_dependencies(ACPI_COMPANION(dev));
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static void usbio_gpio_remove(struct auxiliary_device *adev)
+>> +{
+>> +	struct usbio_gpio *gpio = auxiliary_get_drvdata(adev);
+>> +
+>> +	gpiochip_remove(&gpio->gc);
+>> +}
+>> +
+>> +static const struct auxiliary_device_id usbio_gpio_id_table[] = {
+>> +	{ "usbio.usbio-gpio" },
+>> +	{ }
+>> +};
+>> +MODULE_DEVICE_TABLE(auxiliary, usbio_gpio_id_table);
+>> +
+>> +static struct auxiliary_driver usbio_gpio_driver = {
+>> +	.name = USBIO_GPIO_CLIENT,
+>> +	.probe = usbio_gpio_probe,
+>> +	.remove = usbio_gpio_remove,
+>> +	.id_table = usbio_gpio_id_table
+>> +};
+>> +module_auxiliary_driver(usbio_gpio_driver);
+>> +
+>> +MODULE_DESCRIPTION("Intel USBIO GPIO driver");
+>> +MODULE_AUTHOR("Israel Cepeda <israel.a.cepeda.lopez@intel.com>");
+>> +MODULE_AUTHOR("Hans de Goede <hansg@kernel.org>");
+>> +MODULE_LICENSE("GPL");
+>> +MODULE_IMPORT_NS("USBIO");
+>> --
+>> 2.51.0
+>>
+>>
+> 
+> Looks good otherwise.
+
+Thank you I'll go and preparare a standalone v3
+(since the other 2 patches have no reviews yet).
+
+As mentioned in the cover-letter it is probably easiest
+if Greg merges the entire series through his usb tree
+once everything has been reviewed.
+
+Once I've send it, can you please ack v3 for merging through
+Greg's USB tree?
+
+Regards,
+
+Hans
+
 
 
