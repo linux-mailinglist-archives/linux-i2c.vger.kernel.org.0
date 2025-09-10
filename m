@@ -1,144 +1,138 @@
-Return-Path: <linux-i2c+bounces-12840-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12841-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32A7AB523A4
-	for <lists+linux-i2c@lfdr.de>; Wed, 10 Sep 2025 23:42:21 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00749B523E3
+	for <lists+linux-i2c@lfdr.de>; Wed, 10 Sep 2025 23:54:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6C3E71C82C5F
-	for <lists+linux-i2c@lfdr.de>; Wed, 10 Sep 2025 21:42:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 94A45562346
+	for <lists+linux-i2c@lfdr.de>; Wed, 10 Sep 2025 21:54:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DFDE31283D;
-	Wed, 10 Sep 2025 21:42:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FB4831076C;
+	Wed, 10 Sep 2025 21:54:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="rfLYVKQq"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="WFnOPSWO"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B14EC30FC03
-	for <linux-i2c@vger.kernel.org>; Wed, 10 Sep 2025 21:42:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A96E530F927
+	for <linux-i2c@vger.kernel.org>; Wed, 10 Sep 2025 21:54:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757540534; cv=none; b=exA88nxQbKg46iZXIhPnbmHlv3MUhBTjGqwZG/oPhwwMwzuXWLQwXIgo3e2Zsp2SE8ZAUQP120PHaIj0PPKd8gejiIMrC6+bR2mXNcOmkF+bN4RG90X9O51PvWZWVH9w+OiCxDos/YtgpUj4x1ncuZu5l4DMaRNs4PEhDbQQv/c=
+	t=1757541282; cv=none; b=evL+Jx934tyiCJdsDwdjDIY1S3c7BH663jNmqwQXL8V/Ju0F3GvScGsEeLb0y3NyU1Z7ZIhLO1IzmMkA9vhYh1+kUB+8jPbWCn0z4+pwGFLhDj5BHNvwzzd8HXQufbFTvzMjRXogEgsoe/xJPS0/MC/YRMNodQE1oFpm/1ISqN0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757540534; c=relaxed/simple;
-	bh=Vtc1GyPAcEF1ugP0+8GLjXhPqu7RmIfd/JlyHRAC5OM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bYjMMrkasBAkzusY7M5FACtGF00EsXE6+v6mo1jsQEzCmBZkeHdxTp+zO1zKAPq3FzJNLUvtZNP7BZSA26ZLJ+nKwafVF9bdxiskBTBD8nLQiD/h8caL9E1lrtghEQNhLMg9HwWLnkEAib9ui6zFmFwSAKQqlORgIxyNLqCLoGc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=rfLYVKQq; arc=none smtp.client-ip=209.85.167.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-560888dc903so3255e87.2
-        for <linux-i2c@vger.kernel.org>; Wed, 10 Sep 2025 14:42:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1757540531; x=1758145331; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VfssQgwNNt3owWOCp8M+EybKjyUjEnQDrgLOR0WxhvM=;
-        b=rfLYVKQqBg3m+PCSqF8Ff3HBjJRMFayIcx+9QL0hYpVq5INVsma87iPG1M9ODDT8kj
-         UWwXVeohdq2HVaXc2IphtiF6sfyrEuu0xzbcvlSS+dunZgJL0eZJ1WFunfJ0Iow0Rt3n
-         P/IvDPb+Kc03Gu7g+Ag6AY5A52g4KunhLmHJAeFaI7e1tlEoyOAF12yVgeox+8XHIwkX
-         FiA1wn8WMDHOtTkb/LZBlVrjX/bV3rqiYWnKwBQ6uZK6OMu/BtZJV1ipjz1Mb0XH4un1
-         +d/dpHmMUw/63FpFIyxmsJOmPCVoC8JRzaRB5Lr1Rxt4sjT8cQgGht9WKvP4x6uqiOMl
-         4Yrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757540531; x=1758145331;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VfssQgwNNt3owWOCp8M+EybKjyUjEnQDrgLOR0WxhvM=;
-        b=cMckilV5gCy2PvrbzeFxbk/UxUhY+6ZMj5wmLo23fEUooP+bkvEv3bY2b/PhMJGqxs
-         fjTRJ+kAJsZ7JgiAz7BRIAkWCcZpS1n1hMrroMd/D9uVgs08KcwfzbHUN3YGEn9XdFxt
-         DcRzLq3guWuM+dNwlOm1FQCfxSuKgHKdspmEQlIdTu/WiMw/1ecpw9hhE+ucdrgyJcn2
-         njKm6m6BksMvieV5g5TqJtQovPS5QLyTpZeSC0iRixnWIFnlOFtwsFQYB7SpmyR1oiOB
-         WIGVEf8MvcDInRVMbKtfI+CTO//FtC4B0Bzp6UiHoD7Cv2f+hf/jHfQl8YkXNCuterU2
-         4Pkg==
-X-Forwarded-Encrypted: i=1; AJvYcCW9JcfXCDnIdbRMYaGNMCmm7DwmAbM92E3KnXoIEH0JgdGpr2g54nDzpQkuAVVF2CtHqJO73dxb1Ks=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx4vQ/WlB7q2rp1SreSU+Ogo1+KoYZ9AEfyaLV9xjs4KO1xRvdY
-	RPAkNfrhC/Dp8Vq9Ds5hlBDGVC8w4/rtGVCSD2N0a6C5kMIcAZOnIDQhkt63PiFFQbCKJlSNgXh
-	K5XIangB7ZN2wWOyOLQE5M0oIzWOsj9bhYS0KyL73zA==
-X-Gm-Gg: ASbGnctPrR85kTq9YOZ0nz1wN5MgNMTKFqTnJkevtHElqtD4IKgVlzaAuq+lxUh32Qu
-	qE/fRf474cBhrITJO1kum79vhVxZRl9ZGaOVAY/os9YqLe4+eKg38GaF80b+vfIuTt2B7SusFJ/
-	KdK5Yvnh4tJJqz9eYRjnzQ3ENygy4TXIStc72twiUWDAkgkQdu/GQB6pAkz8MEpyoI8krpL0ryv
-	nwA+Fo=
-X-Google-Smtp-Source: AGHT+IFutlHIwj2lsj+jDT7k42Zm8eOFBZR4KCwk+hGGTQIBylx/YAPLbGuT5vRdHvQdR6a4Uk4sEKHn5d0jQ+26HUw=
-X-Received: by 2002:a05:651c:20ce:20b0:336:e1d6:8920 with SMTP id
- 38308e7fff4ca-33b537e751dmr45597001fa.31.1757540530806; Wed, 10 Sep 2025
- 14:42:10 -0700 (PDT)
+	s=arc-20240116; t=1757541282; c=relaxed/simple;
+	bh=1HCvhd3VQGy5PvNhZFTJLOJnc634aHZegGeRdIBZzUY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ArqMSI3qze5eH9FYfUGCzyfbnromqwStjUL/Crkll2Ymx5ipkIMN0ERwGZEOsqfe5ObjGwPviyjFTs71pSqfyarLEccbBBORc2sE2kruewoWvug+fn+vsSjDl5E7E9jfrSu2Qmd/5O3NdoVDMDYdy9Q3Nt+Io/WDwXxp5xx4CK4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=WFnOPSWO; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=VeZk
+	NDxYDFAIVO0EYji6v7iRjsKhPDhDyOrk4uRvel0=; b=WFnOPSWOPSKHbU+tl649
+	Q271Ayd8soypdTfKjUP2fQmAvH8Ooofkpp+DFE9tc+AbLH+RZraDKDIaWLYtqtsT
+	QihwFY2yzsLK7CnEgLtxATHTdlzaL5fKv2SIERieMVQ2JmuYkMeeik/GE7yc5YAB
+	GczumHBfYoaIteT3JqSFz3q0zP44xozV9faH5qTavXwSqTjQSqaeafpxzNIjD3Jj
+	3nDpNd7xQTa6aLLJRynEXnhmNMQxdajyvi4m71WYpGLu7htFqFC1FYhcWanol1GU
+	1lvYFbX6SCKL0cXh84GU8I7xXIpf1G+Jrz06vHF+FalLsfrZw+REsjb+vF/DumTu
+	SQ==
+Received: (qmail 750343 invoked from network); 10 Sep 2025 23:54:37 +0200
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 10 Sep 2025 23:54:37 +0200
+X-UD-Smtp-Session: l3s3148p1@03qAd3k+hoEujnuV
+Date: Wed, 10 Sep 2025 23:54:36 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Hans de Goede <hansg@kernel.org>
+Cc: Israel Cepeda <israel.a.cepeda.lopez@intel.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Wolfram Sang <wsa@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Richard Hughes <rhughes@redhat.com>, linux-i2c@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-gpio@vger.kernel.org
+Subject: Re: [PATCH v4 3/3] i2c: Add Intel USBIO I2C driver
+Message-ID: <aMHznOCa_9vtW6_1@shikoro>
+References: <20250910133958.224921-1-hansg@kernel.org>
+ <20250910133958.224921-4-hansg@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250910133958.224921-1-hansg@kernel.org> <20250910133958.224921-3-hansg@kernel.org>
-In-Reply-To: <20250910133958.224921-3-hansg@kernel.org>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Wed, 10 Sep 2025 23:41:59 +0200
-X-Gm-Features: Ac12FXzOvkO2a9fvYJf1s2WB79zSocSiy--29h2HtuNVqHlSwVgZxm9T5NCVWzM
-Message-ID: <CACRpkdaZHfb_FtimCxoLphnvLswpHSEubpztWwEQoW42qHW3Gw@mail.gmail.com>
-Subject: Re: [PATCH v4 2/3] gpio: Add Intel USBIO GPIO driver
-To: Hans de Goede <hansg@kernel.org>
-Cc: Israel Cepeda <israel.a.cepeda.lopez@intel.com>, 
-	Sakari Ailus <sakari.ailus@linux.intel.com>, Wolfram Sang <wsa@kernel.org>, 
-	Andi Shyti <andi.shyti@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Bartosz Golaszewski <brgl@bgdev.pl>, Richard Hughes <rhughes@redhat.com>, linux-i2c@vger.kernel.org, 
-	linux-usb@vger.kernel.org, linux-gpio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="65RaCaNE39VXsE2H"
+Content-Disposition: inline
+In-Reply-To: <20250910133958.224921-4-hansg@kernel.org>
+
+
+--65RaCaNE39VXsE2H
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
 Hi Hans,
 
-thanks for your patch!
+> +out_log:
+> +	dev_dbg(adap->dev.parent, "RD[%d]:%*phN\n", msg->len, msg->len, msg->buf);
 
-On Wed, Sep 10, 2025 at 3:40=E2=80=AFPM Hans de Goede <hansg@kernel.org> wr=
-ote:
+I think this...
 
-> From: Israel Cepeda <israel.a.cepeda.lopez@intel.com>
->
-> Add a a driver for the GPIO auxbus child device of the Intel USBIO USB
-> IO-expander used by the MIPI cameras on various new (Meteor Lake and
-> later) Intel laptops.
->
-> Co-developed-by: Hans de Goede <hansg@kernel.org>
-> Signed-off-by: Hans de Goede <hansg@kernel.org>
-> Signed-off-by: Israel Cepeda <israel.a.cepeda.lopez@intel.com>
-(...)
-
-> --- a/drivers/gpio/Kconfig
-> +++ b/drivers/gpio/Kconfig
-> @@ -1448,6 +1448,17 @@ config GPIO_LJCA
->           This driver can also be built as a module. If so, the module
->           will be called gpio-ljca.
->
-> +config GPIO_USBIO
-> +       tristate "Intel USBIO GPIO support"
-> +       depends on USB_USBIO
-> +       default USB_USBIO
-> +       help
-> +         Select this option to enable GPIO driver for the INTEL
-> +         USBIO driver stack.
 > +
-> +         This driver can also be built as a module. If so, the module
-> +         will be called gpio_usbio.
+> +	return 0;
+> +}
+> +
+> +static int usbio_i2c_write(struct i2c_adapter *adap, struct i2c_msg *msg)
+> +{
+> +	struct usbio_i2c *i2c = i2c_get_adapdata(adap);
+> +	u16 txchunk = i2c->txbuf_len - I2C_RW_OVERHEAD;
+> +	struct usbio_i2c_rw *wbuf = i2c->rwbuf;
+> +	int ret;
+> +
+> +	dev_dbg(adap->dev.parent, "WR[%d]:%*phN\n", msg->len, msg->len, msg->buf);
 
-This is in the wrong submenu (and the GPIO_LJCA is in the
-wrong place too, but that's not your problem...)
+... and this dbg can go. The tracepoints we have should do?
 
-We have:
+> +static u32 usbio_i2c_func(struct i2c_adapter *adap)
+> +{
+> +	return I2C_FUNC_I2C | I2C_FUNC_10BIT_ADDR | I2C_FUNC_SMBUS_EMUL;
+> +}
 
-menu "USB GPIO expanders"
-        depends on USB
+How did you test 10 bit addresses? I have never seen them in the wild?
 
-So put it in this submeny.
+Did you also check SMBUS_QUICK? 'i2cdetect' uses it by default.
 
-Other than that it looks good, so with that change:
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Does the underlying USBIO driver use usb_control_msg? If so, we need to
+disable zero length read messages. See [1] for a reference.
 
-Yours,
-Linus Walleij
+Rest looks good to me!
+
+[1] https://lore.kernel.org/all/20250522064234.3721-2-wsa+renesas@sang-engineering.com/
+
+
+--65RaCaNE39VXsE2H
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmjB85QACgkQFA3kzBSg
+KbaLCA/6A6PtxlNN/+ZxKkBXiwdOerYgaoYdNRoshHS0dhwcNLPaQ2gmTiQg+Zi3
+VM8CGXssak1ZeoyE6F2pY+Y+RrriCucVsr53TSBuBlr8GTFLe/aARDvL0u8C/5P8
+iK71Mc/wqfrOPjDey7LNzuyqQy9MVrTEIWnz52OZc2skF7lqTWM1ROdgIXuYjl2s
+xjiCbIIbJSqAEqVjUwy8sDUjhJhSBKBAtHROp/xCQpk8uykYORctPxaafmRxK39q
+QFDyqIkOkk1HrfsOdCC9IbiGTpes7/rDnW7nrJumSrddnEEKA0wbhUUzvWEtNONk
+xcdbEs97Owj+VlazG5xblFbxF7BFBjqGnLY/vOiZhQmjcBJLJJ3z13WoAjxyTJm6
+Csdn1nA+7NNpALTr/RZyEQN4ssbWhZ0J3Sy0IuE+k/npf30Y/NYP+dmiBs52ZCOF
+fqFdTubyQD1H5swJEJlbDFaoIZDHAegs7WjcXczJ+od9ZGWbvaO/F8jcC0qmf2w8
+fTuiYQZbSrjJZ4Y/vUjdIn2Au7RX02ckvqoUcCmADzcsEgmILELgWvci2UWJv+3Y
+iZ+KZMywwwWzE8aQPPvQFKDhQVkPVOe934mi7lRUwS968riLUremgLCbgm5N0Uz3
+EM9yIoF9bV36crzxe7b4A/Mb2p5QdKQZuEir0/urdN87fhbYJnA=
+=zfEe
+-----END PGP SIGNATURE-----
+
+--65RaCaNE39VXsE2H--
 
