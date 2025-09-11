@@ -1,110 +1,116 @@
-Return-Path: <linux-i2c+bounces-12879-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12880-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9ECDEB535C4
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 Sep 2025 16:38:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF74DB535FB
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 Sep 2025 16:43:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 53A087A880B
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 Sep 2025 14:36:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 77900488304
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 Sep 2025 14:43:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 571E3341662;
-	Thu, 11 Sep 2025 14:37:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 080B4340DBB;
+	Thu, 11 Sep 2025 14:43:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="poEx3AVu"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="k9acTOFS"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8DEB189906;
-	Thu, 11 Sep 2025 14:37:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 028F926A1BE
+	for <linux-i2c@vger.kernel.org>; Thu, 11 Sep 2025 14:43:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757601436; cv=none; b=qR6i1SKnIxD5uUs5lB2wpp95uqRQ275NIrE2Rx4v0lR01yzczfuu3TDDkYujU4yJOWnvpBy/2qChlKTJPLcJYreYoCCq4plgWbCfZARqvKmXDzSD8Uh2d7zBnV/vtsUL6YKNGYp7QJyc6uKvoTIz6bcg3oNnrpWvanhqmXdrNqw=
+	t=1757601792; cv=none; b=p7WlMO4B01yaB/p58BNXXs/BfWD2xzsEMBnE2eBXu/q/EeBkPIoLPTQsccWlCuQZuy8u3okUJrhDjPz5abvaoxBwd04+9ym1GSMyUDP8cNV1oD2Ld/8seXwFEzb/1jay9f9KWKWPKuDSzLGD8akpjfY1buYHB9C5H+XJCJ+TOUA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757601436; c=relaxed/simple;
-	bh=1uq3j5GPcDQePdt4YoD1jR895AQejZTyfOLzC81OMs0=;
+	s=arc-20240116; t=1757601792; c=relaxed/simple;
+	bh=72IiQUsPXoMJq5hAR0wcPhwXrau91fca7fQ408J4nl8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Fq51Y7utL0VCpiVe++8KsTm3IC+hnWh+/LRKMZ7j8/eZp0ai4Le2N9yTt/ydIX4EQ/nuLmB9/xUd4D+n1c3ELxs+HwJ377O0fdJFTKwXInnd/55aQYbKwM7lr/FAwjjtj0PeI0drEzIo/WJrrN419G+CVAh3zFQVlL3JSmVg4qY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=poEx3AVu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C23FBC4CEF0;
-	Thu, 11 Sep 2025 14:37:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757601433;
-	bh=1uq3j5GPcDQePdt4YoD1jR895AQejZTyfOLzC81OMs0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=poEx3AVukISUDuuoOMtMsnSAs1SQT+F2uLTaYOHF4r9RFtr7aE/0aW43XZL0R3mXe
-	 fYEp9v0FUb0LCkuk4SvqQ/PoPO9rVnw1799b0CzgIpc29qR+cglMq/hwhyDqAuYrAI
-	 PzTFASlK5cJKfcsKu5pkQSPAaTNNZv1IOGf+uE+zika+GoMKEfYEwR9YVTDUHBWpkW
-	 V976XgpLzNcasNt6ohIUUvuF44PYCQlxMVImFMuNYYNZvTiamdrynAdzRM4bRvtDxg
-	 l60kqKL25Vu8MAchG+h3z6MvklCdiexV5rdRolRgjM9avaIHoFhJDOqFggIhQv8YcA
-	 jh7okJEY3wgRg==
-Date: Thu, 11 Sep 2025 15:37:06 +0100
-From: Lee Jones <lee@kernel.org>
-To: tmyu0@nuvoton.com, linus.walleij@linaro.org, brgl@bgdev.pl,
-	andi.shyti@kernel.org, mkl@pengutronix.de,
-	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
-	jdelvare@suse.com, alexandre.belloni@bootlin.com,
-	a0282524688@gmail.com
-Cc: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
-	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH RESEND v14 0/7] Add Nuvoton NCT6694 MFD drivers
-Message-ID: <20250911143706.GL9224@google.com>
-References: <20250825092403.3301266-1-a0282524688@gmail.com>
- <175760120875.1552180.9512711135722714327.b4-ty@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=pnq+a4dhhA2uCrPa8268KmGajXMF3Lqr9rwkxnRYCvmHzJimV2iybb34HyesLBQLGAD/WJG6IosTYdYfGMHcpvN/EC3I9fXxUBT4HODX5IzkpohmshgHHb4o/MsAp7RJSiZd75k8pU7KS5XMz5xfD91Wm5MM6DEBCMqrd93LQpw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=k9acTOFS; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=72Ii
+	QUsPXoMJq5hAR0wcPhwXrau91fca7fQ408J4nl8=; b=k9acTOFSwd0N9zSy9Oxs
+	ohOGSYqJFYqgyrRQeZFSo8yiNFv/ropt/BJ4rnrJVibg5WAW2Tpsl2PulHwyccl2
+	EQgCSU1ba+mIuESJds/Ufi6yj9NQO7guUtAt1LE+BIDDU4sqSj48HmSFQaVUEITO
+	Jk4fxUOVG/AhnAbKhv1fvWKV4r8bzHg7YuMqs3P0i0IRq1edyejrx1zIXk7LrN/+
+	5/rT2p5jTECcGD+Cgb+rV6K9McDVxEDI9vM5lsA4koOOS/m4On6lZ/XraYKQEtbj
+	bCqgIiluDBj+E+dljnt/nrdwWmbKPoy9kLeD6Qo8vbXG5nkBJ0dC8QjXm4lTlmH/
+	sw==
+Received: (qmail 1019085 invoked from network); 11 Sep 2025 16:43:01 +0200
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 11 Sep 2025 16:43:01 +0200
+X-UD-Smtp-Session: l3s3148p1@HaDOjYc+zpYujnsE
+Date: Thu, 11 Sep 2025 16:43:00 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Hans de Goede <hansg@kernel.org>
+Cc: Israel Cepeda <israel.a.cepeda.lopez@intel.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Wolfram Sang <wsa@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Richard Hughes <rhughes@redhat.com>, linux-i2c@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-gpio@vger.kernel.org
+Subject: Re: [PATCH v4 3/3] i2c: Add Intel USBIO I2C driver
+Message-ID: <aMLf9Nj3hF4t9rQH@ninjato>
+References: <20250910133958.224921-1-hansg@kernel.org>
+ <20250910133958.224921-4-hansg@kernel.org>
+ <aMHznOCa_9vtW6_1@shikoro>
+ <4e2f79bc-2827-4db9-bb2b-4a330cd14f2d@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="bsepv0u1s7GMfX7n"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <175760120875.1552180.9512711135722714327.b4-ty@kernel.org>
+In-Reply-To: <4e2f79bc-2827-4db9-bb2b-4a330cd14f2d@kernel.org>
 
-On Thu, 11 Sep 2025, Lee Jones wrote:
 
-> On Mon, 25 Aug 2025 17:23:56 +0800, a0282524688@gmail.com wrote:
-> > From: Ming Yu <a0282524688@gmail.com>
-> > 
-> > This patch series introduces support for Nuvoton NCT6694, a peripheral
-> > expander based on USB interface. It models the chip as an MFD driver
-> > (1/7), GPIO driver(2/7), I2C Adapter driver(3/7), CANfd driver(4/7),
-> > WDT driver(5/7), HWMON driver(6/7), and RTC driver(7/7).
-> > 
-> > [...]
-> 
-> Applied, thanks!
-> 
-> [1/7] mfd: Add core driver for Nuvoton NCT6694
->       commit: 8c13787893fde313190b7dc844a24114dcc172a2
-> [2/7] gpio: Add Nuvoton NCT6694 GPIO support
->       (no commit info)
-> [3/7] i2c: Add Nuvoton NCT6694 I2C support
->       (no commit info)
-> [4/7] can: Add Nuvoton NCT6694 CANFD support
->       (no commit info)
-> [5/7] watchdog: Add Nuvoton NCT6694 WDT support
->       (no commit info)
-> [6/7] hwmon: Add Nuvoton NCT6694 HWMON support
->       (no commit info)
-> [7/7] rtc: Add Nuvoton NCT6694 RTC support
->       (no commit info)
+--bsepv0u1s7GMfX7n
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I have no idea what this is about!
 
-Looks like b4 just had some kind of breakdown!
+> > How did you test 10 bit addresses? I have never seen them in the wild?
+>=20
+> I did not test 10 bit addresses. This was there in the original code
+> from Intel.
 
-To be clear, none of these have been applied.
+I suggest to drop it. There is no code handling the I2C_M_TEN flag which
+should be handled if support is advertised.
 
--- 
-Lee Jones [李琼斯]
+> So I'll add I2C_AQ_NO_ZERO_LEN to the quirks.
+
+Ack.
+
+
+--bsepv0u1s7GMfX7n
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmjC3/AACgkQFA3kzBSg
+KbbDUg/9Gk2G4vWSrykXFqKNb8AMMd2P8HsNCzQKlfLni2gtPRwzPgSZqSLCHFDc
+/qM7G7PIxgT5/7qgFfWVR1jK2QGt4XSQoW6Mysl0yZd8l3rAlW4Ukr1lBSL/I0dR
+EcoOHLy/3T2k965QHz55UIRXNiTB6F18g8AihZv7EZTXkrzp4UHks0gf1fQa5Tj5
+P5S8UKQbS6KCyhw/dvCzos3B0cxSRxtV7pIafNI7CMJUaXWS6PVe5rUQEfyLzUbX
+CgYLzHe5zaQAJCJYrrrn76fnEB4NwXWwi3p7i2sAY3w1+3zi84vDgYtk7XqCQnl4
+yyyVSfkgwPqquddPzqCc+FMhgp2CapFdQ8lZnzF4VZ6E8ANzvr4S9Tbk1S+ALEHB
+k0G7D2Y8Qq4vUqhHAvxp32DuWaRCM3KluTYoWPaMxRd/YrM6gfYFAX26PgACYren
+ZmieofajMYD4ZYXQqoeKLywyRVx3MH2QAbiKybVDBXOZXERjmWxAAGju31NkKcAP
+jgxcpKVrPzwmnTKEF/apQ5UrF4Yi7JjvcGlmhJmILnbMiCmE20nJDYqlkgPxKTDI
+xmKWxYX3s9mgJD3PxZo/uxQRVaHfAnLgWQBTaZ6slNksGioi9gU5l1v2UdSlJaqd
+pjxPkWFu+T6VR02IE7qKB64RTA+YsaAZDgtFlVza8WClsSt7N18=
+=BQwX
+-----END PGP SIGNATURE-----
+
+--bsepv0u1s7GMfX7n--
 
