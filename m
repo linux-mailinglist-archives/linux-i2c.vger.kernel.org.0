@@ -1,114 +1,123 @@
-Return-Path: <linux-i2c+bounces-12891-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12892-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C92AB53B6D
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 Sep 2025 20:30:15 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46513B53C3E
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 Sep 2025 21:25:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E125F5A840E
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 Sep 2025 18:30:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 002CC5A664A
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 Sep 2025 19:25:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BF53137C52;
-	Thu, 11 Sep 2025 18:30:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CCE925DB1C;
+	Thu, 11 Sep 2025 19:25:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="Rv9H58Hf"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b="ammDGvnC"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4086A362069
-	for <linux-i2c@vger.kernel.org>; Thu, 11 Sep 2025 18:30:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757615410; cv=none; b=g2BL/dwKWwIRWc4c6+BsnGMrp3OuFFxgYV6oiHE7YANM3ZX79rM7+HOeMBN+Q+LXSrLpdbf5C9gTQJ8hh3hNVOm6Kpi6+J5+KEjjHqlI9Ziqz1LDqV+jiT70Cf5k4dFaov+nICrWL7l0aafy7NRuWQW4Bvs3/dgjS1qkPWPJaGM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757615410; c=relaxed/simple;
-	bh=qqyzymhrB1WgmsAGtEhTv8YTgRRTGgub67m5KOzqo40=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RGHT5dltVpdIUCzswf6cx+/xluNgs0B4lSWTceytyms+If/eADJ8P+ZcW8BZCHg2E0JB+NvdXfa8KDufNevN2d/D405aMNhFnEPWSQSiZecn6GvXIUBBm17LSjcp07LxlZewZa8IrNlNv8yCXEVbQpldoZYb409DAXcjVM0pGX8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=Rv9H58Hf; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=qqyz
-	ymhrB1WgmsAGtEhTv8YTgRRTGgub67m5KOzqo40=; b=Rv9H58HfNoMt0qfiQCfB
-	wBdeTrcG8tmcG7D0TF69nQj4E7b5OAesVvZQrT1nx8q0eKQ2u7SEUqrzFDVdWEw0
-	augv8ns1BjdR8YLV93s2Qv9LyiC1kJlQHsbODj2AX86MqRrXcsYi4qXVi3BKUxrR
-	P3yZJhqb7+cxivgcj5LyVQm1DJqViqugZ0oc0hd3YIwVOkOwM+kzd8qW0XM7dbpi
-	e26H1u6G/h/gCTao+nLY54CQA98xFlLWs0fATskTQwnK0xPuMNqPbBZY3qDaihQt
-	Vp/+Ts5IM4lIrJeFoWcHtiktYo5Co0rC5IoTpS+s3Ff344QDO+jA4eBRkt5ZCOZp
-	4g==
-Received: (qmail 1077486 invoked from network); 11 Sep 2025 20:30:04 +0200
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 11 Sep 2025 20:30:04 +0200
-X-UD-Smtp-Session: l3s3148p1@67XPuYo+8MoujnsE
-Date: Thu, 11 Sep 2025 20:30:02 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Hans de Goede <hansg@kernel.org>
-Cc: Israel Cepeda <israel.a.cepeda.lopez@intel.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Wolfram Sang <wsa@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Richard Hughes <rhughes@redhat.com>, linux-i2c@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-gpio@vger.kernel.org
-Subject: Re: [PATCH v6 3/3] i2c: Add Intel USBIO I2C driver
-Message-ID: <aMMVKsbDIIFzaWdu@ninjato>
-References: <20250911181343.77398-1-hansg@kernel.org>
- <20250911181343.77398-4-hansg@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C5A525CC74;
+	Thu, 11 Sep 2025 19:25:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1757618725; cv=pass; b=Twui++VaVVfUO0yEsA3mprrI/8gPqp9U1LBb/n4AsCAET1n6HpWyzk8vp3e3b3Gs6NaZ7T/13+HmN6EPjGXLgPKDFqf9v8wvmpas18PAILx/3IdjAOYPeM6CyrqW69AsLH+EqmM8GjWc846urcDYAbI8zV6vMvRWZdZd+HLc4J0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1757618725; c=relaxed/simple;
+	bh=vjD8izA5NiSgnX/hGpiBNnf0hK2bHDEPlIgCnvgxk6E=;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Message-Id:References:To; b=HGXGGdUUBK5Ks34bftskORtBypy8dzq02QqNk4Ejr+OcUPu3C5Vwy/MvaRPNcAlpHDP2fj9Q1eIwAKKCWuvcYXkgJMSW7GKMfkH3vRDmNIVDCQAJx+GPYClbpfISibsHUb+W3V3CYlr1cdricXsDhNwXn9tjGwQyODCHEMji8V8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b=ammDGvnC; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1757618691; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=jf0eLKFmmeoxZRQqTkzF/BchS3lmeruPIeolnkQQqo28pMh7jQvjIna9l5lqYHeFGyQwIubasTTaQ3iy98aLHdcL4M1tAerrE5zigSpA/n3GX81pcOuYi4/2DHX9Wvx7mbTMz56hbe8TeW2PZWShSCpHuRpmbf/RGkpZHEqqvOU=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1757618691; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=nuRljL+hbej1PSlFfKE0m1fHSF8CjKkmOAxOOTpu5SY=; 
+	b=OWjoH09+fiAOg/md6e5DvBkds2QUkV0jtBCrgmxy72HrPS5yInpOnHZ38WQrBqwjWDjd0nV6NAdsiycEy1EKiPNZq0tBgqURURf6JP6MRQuPEh/Y9pTFlsbjUc7Pq5w1gVabOiZbyzhM2lZd627y5uJy7iAKrbYt+khG13Z4Wx0=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=daniel.almeida@collabora.com;
+	dmarc=pass header.from=<daniel.almeida@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1757618691;
+	s=zohomail; d=collabora.com; i=daniel.almeida@collabora.com;
+	h=Content-Type:Mime-Version:Subject:Subject:From:From:In-Reply-To:Date:Date:Cc:Cc:Content-Transfer-Encoding:Message-Id:Message-Id:References:To:To:Reply-To;
+	bh=nuRljL+hbej1PSlFfKE0m1fHSF8CjKkmOAxOOTpu5SY=;
+	b=ammDGvnCvAffgdaJTtJTMCDxkMNNOmpQ8hqvXHG19/QgSNBuGt/N4Nwl8IHPn6cJ
+	9eBN4jp7LEwjVVkSLTTvmxJkD9T6H0C4OUIB93pvpyo9DVJSoHuRqKWNhM3hxeCnmAm
+	dszAvr3TJJVBcuqSXjWuoF11f8coBQRp5euFL3uA=
+Received: by mx.zohomail.com with SMTPS id 1757618688708131.44302071453149;
+	Thu, 11 Sep 2025 12:24:48 -0700 (PDT)
+Content-Type: text/plain;
+	charset=utf-8
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="s6NYjgFIiKgUZOTP"
-Content-Disposition: inline
-In-Reply-To: <20250911181343.77398-4-hansg@kernel.org>
-
-
---s6NYjgFIiKgUZOTP
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.700.81\))
+Subject: Re: [PATCH v5 1/3] rust: i2c: add basic I2C device and driver
+ abstractions
+From: Daniel Almeida <daniel.almeida@collabora.com>
+In-Reply-To: <20250911154936.97118-1-igor.korotin.linux@gmail.com>
+Date: Thu, 11 Sep 2025 16:24:30 -0300
+Cc: Miguel Ojeda <ojeda@kernel.org>,
+ Alex Gaynor <alex.gaynor@gmail.com>,
+ Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ Boqun Feng <boqun.feng@gmail.com>,
+ Gary Guo <gary@garyguo.net>,
+ =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ Benno Lossin <lossin@kernel.org>,
+ Andreas Hindborg <a.hindborg@kernel.org>,
+ Alice Ryhl <aliceryhl@google.com>,
+ Trevor Gross <tmgross@umich.edu>,
+ Danilo Krummrich <dakr@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>,
+ Asahi Lina <lina+kernel@asahilina.net>,
+ Wedson Almeida Filho <wedsonaf@gmail.com>,
+ Alex Hung <alex.hung@amd.com>,
+ Tamir Duberstein <tamird@gmail.com>,
+ Xiangfei Ding <dingxiangfei2009@gmail.com>,
+ linux-kernel@vger.kernel.org,
+ rust-for-linux@vger.kernel.org,
+ linux-i2c@vger.kernel.org
 Content-Transfer-Encoding: quoted-printable
+Message-Id: <5BD2518E-6D56-4BD7-8D69-CB437E02AB38@collabora.com>
+References: <20250911154717.96637-1-igor.korotin.linux@gmail.com>
+ <20250911154936.97118-1-igor.korotin.linux@gmail.com>
+To: Igor Korotin <igor.korotin.linux@gmail.com>
+X-Mailer: Apple Mail (2.3826.700.81)
+X-ZohoMailClient: External
 
-On Thu, Sep 11, 2025 at 08:13:43PM +0200, Hans de Goede wrote:
-> From: Israel Cepeda <israel.a.cepeda.lopez@intel.com>
+Hi Igor,
+
+> On 11 Sep 2025, at 12:49, Igor Korotin <igor.korotin.linux@gmail.com> =
+wrote:
 >=20
-> Add a a driver for the I2C auxbus child device of the Intel USBIO USB
-> IO-expander used by the MIPI cameras on various new (Meteor Lake and
-> later) Intel laptops.
+> Implement the core abstractions needed for I2C drivers, including:
 >=20
-> Co-developed-by: Hans de Goede <hansg@kernel.org>
-> Signed-off-by: Hans de Goede <hansg@kernel.org>
-> Signed-off-by: Israel Cepeda <israel.a.cepeda.lopez@intel.com>
+> * `i2c::Driver` =E2=80=94 the trait drivers must implement, including =
+`probe`
+>=20
+> * `i2c::I2cClient` =E2=80=94 a safe wrapper around `struct i2c_client`
+>=20
+> * `i2c::Adapter` =E2=80=94 implements `driver::RegistrationOps` to =
+hook into the
+>  generic `driver::Registration` machinery
+>=20
+> * `i2c::DeviceId` =E2=80=94 a `RawDeviceIdIndex` implementation for =
+I2C device IDs
+>=20
+> Signed-off-by: Igor Korotin <igor.korotin.linux@gmail.com>
 
-Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+I=E2=80=99m a bit swamped for the next 2-3 days, but I will review this =
+soon.
 
+Feel free to ping me otherwise.
 
---s6NYjgFIiKgUZOTP
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmjDFSYACgkQFA3kzBSg
-KbYF8A/6Ap4wEMRywYZXQSVqoX8td4Hv1vpEEUIrP7nOe5s4QU2mwar/94kmLAV+
-xCW4ArXui6YvBaMnMG0xbI+NXvNUiUeVVUTTOWWgN5jHYmMlYuWxx6NzuyqlpUiN
-Rt9Qp4YLehCUQ75FmbYeKsLEb4Pj1HikbImPg6KavL/kSMMDlnejnFzKV7ybLC7L
-6CvzDiAQmkUhGNzjkFJPEJxJxBamSwteOHCDm2Uh5saKMw9CNulqZp+29EnUSInW
-0eN3Kj8mMaoN/hbj0XrofagGTLxVQADLb8BXgnMQVfr11yi4isZdSKpK3bbkp+77
-Ov6ZIJdXfhpV3om+gY/AHak3sX8/KOCg4yAjZFNJL2jA/lwEaznzyYbsE/H6pVSc
-RF6tmN4/TPQoV6/fz4j+jjSpZvguX61WZWpOl/kHKziKvYTy7ytkIHt3HxADlY32
-dx4I/XSsU11rULcLVYJdBtrSoghBf90F+cA25Eqhog3bIgJLajeXzuXdnRaTlhAv
-Nws0lGylCQgsSb2SNCgAUCDO7cNI2oGrhnLsuX7n6/vRFPli88znrwsqjb1R8Y0q
-l022+/f1jBCuAkfhPH7RVeb42110gZEoZJINAt/3GHPhOf83ZRlD9TTuCypTye4b
-9Fu2/gTQaZIEFun8dsdJ9XYzp0q0Wor7IholerEMwZzhzzYcHZE=
-=RJ/p
------END PGP SIGNATURE-----
-
---s6NYjgFIiKgUZOTP--
+=E2=80=94 Daniel=
 
