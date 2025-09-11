@@ -1,46 +1,46 @@
-Return-Path: <linux-i2c+bounces-12894-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12895-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C335B53D2B
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 Sep 2025 22:34:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1DCF0B53D3F
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 Sep 2025 22:46:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CD73B1B22FF1
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 Sep 2025 20:34:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CA3E1AA6348
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 Sep 2025 20:46:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3EB32C21F6;
-	Thu, 11 Sep 2025 20:34:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B85132D1F6B;
+	Thu, 11 Sep 2025 20:46:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CvjyN5vx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BAGg7oco"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58AE7261B71;
-	Thu, 11 Sep 2025 20:34:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 719BD27815B;
+	Thu, 11 Sep 2025 20:46:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757622863; cv=none; b=I1RAYNDyyQ+TgW2IpVsUcS2k7OinL4H6xN+blLzslu4meQIzprBQDxaI21ETCFjepuPhCUrb9mLLhV5zE8/SUCxgN7KR8snWvhQqflQnO/7JKqhuz3M4PMY3ej3RWMhDdr2fAppzuRvg6wexTksmVJzHjZIaRUshakjrBY3gplk=
+	t=1757623593; cv=none; b=A57kENbMfEUxGr2eg0BBBe+8m28G5E4O98bSeTeHgUrvz1Yfbz+SqVHvoCr0SaPn1xyb58pWaoluwHdDUXvhzgKptnGygq7lX3zgsUcmQXGx8eTsK2NAIzfsSIORRyI3PapSLFGJkedepmsWEQwWS7B5FR50NU6tejBvUBOnDwY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757622863; c=relaxed/simple;
-	bh=PwiTUdsdKjtwPrO614rq/+6R+VG37tYxbhPVowLUnyc=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:Subject:Cc:To:
-	 References:In-Reply-To; b=JSgHJszvNE6gb4qc/2jqiOybK2CVdeUZjTy2JEk7kada18CCXZB8EyincBuXU6VveQ86BneYhaL6BEsGEP7eDKBmwReyueMgusVa/KzxZetZKXq5np4EPIATvVumxHyAw07nDA2hkp+/X477OgcAiXC82APlLII9EfEaoYvA5VQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CvjyN5vx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C539C4CEF0;
-	Thu, 11 Sep 2025 20:34:19 +0000 (UTC)
+	s=arc-20240116; t=1757623593; c=relaxed/simple;
+	bh=FDVsLPvFCZn3mFoZlnMxuCM29yOEw+dWElg/JjBhpjE=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:From:Subject:Cc:
+	 References:In-Reply-To; b=TosNw36n9ycUdBSsDuJh3r+3y+2bOHuLeNiQy/7YYgacMpdDGR6N7CcSrs/9kANA8Av/UeqLMiVKOwvzqABJ+0vReifJOrVqqAF7MhxymO5OqLiue2QX31HTUDXjgXlGMRM0XA92aPHDoZ46lKJg1K3WuSFzo1tm9629eL80h+k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BAGg7oco; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FB1EC4CEF0;
+	Thu, 11 Sep 2025 20:46:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757622863;
-	bh=PwiTUdsdKjtwPrO614rq/+6R+VG37tYxbhPVowLUnyc=;
-	h=Date:From:Subject:Cc:To:References:In-Reply-To:From;
-	b=CvjyN5vxeViqPaDQv2IiF+KNe/or8yTABIe5zBmvFsUcfgvmgKIOvO9OEFZeNMYJV
-	 zjR5fnn7mt2dIvbseba9zV0igdXIUlfBKufrhnDpmvB7WXulMdmyBW1CnimrVwODC9
-	 PLZp0g+5NRv6a+xelxbdRu7jYKf93woBjrQ4mcnaBbWS+/kwbvy4lw4vijkUZuNZBe
-	 1oOHnluxF47wWpZV5jjWi2yuWEt9HU+R0uOo5PspzuV6YlInnQawCcJcv8pOAvQRBN
-	 FMHB312KtzQJw8yVhYHpCUJEbAGkaCpqyHw+QfBlRPBk0ogVFm/RBzgXXYhoSzFreH
-	 SYPKLm8tK350g==
+	s=k20201202; t=1757623593;
+	bh=FDVsLPvFCZn3mFoZlnMxuCM29yOEw+dWElg/JjBhpjE=;
+	h=Date:To:From:Subject:Cc:References:In-Reply-To:From;
+	b=BAGg7oco2daxLPPYifOeEcYlXL4bIK4vbyI5LUvmdWP1oE1ZeZlmqcGoOw+tlzZZo
+	 l2EwBYW66pyJIKLAOk4uWbCQSLlOo/xTH577SQcI0PjHghvhYUDrnJKFlyLbY7sS26
+	 L+2+/9UEZB0JXsyzHAvHI385GW9eP/DgFdShJtqkDCS7NRqv6vBmASqq1/6ZCqnsYj
+	 2QdPjXK26P8/RQu99cdbt0l/eqYwAPMwnPaDz/bwlqtNh7Idh7iHnxC44ez0U6Wbcu
+	 6Qnbji0wALUBy9OWpQ6hx2gJpqbCd4H6UtePRUfPzHuFm8IyFOROv0NnprLFDamgSu
+	 xTixZZ3/NoRaw==
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -49,11 +49,11 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 11 Sep 2025 22:34:17 +0200
-Message-Id: <DCQ9AXZ5APKN.1835AK0PVA3S5@kernel.org>
+Date: Thu, 11 Sep 2025 22:46:27 +0200
+Message-Id: <DCQ9K980YX1W.HZIQI6S5MST9@kernel.org>
+To: "Igor Korotin" <igor.korotin.linux@gmail.com>
 From: "Danilo Krummrich" <dakr@kernel.org>
-Subject: Re: [PATCH v5 2/3] rust: i2c: add manual I2C device creation
- abstractions
+Subject: Re: [PATCH v5 3/3] samples: rust: add Rust I2C sample driver
 Cc: "Miguel Ojeda" <ojeda@kernel.org>, "Alex Gaynor"
  <alex.gaynor@gmail.com>, "Wolfram Sang" <wsa+renesas@sang-engineering.com>,
  "Boqun Feng" <boqun.feng@gmail.com>, "Gary Guo" <gary@garyguo.net>,
@@ -66,90 +66,51 @@ Cc: "Miguel Ojeda" <ojeda@kernel.org>, "Alex Gaynor"
  <alex.hung@amd.com>, "Tamir Duberstein" <tamird@gmail.com>, "Xiangfei Ding"
  <dingxiangfei2009@gmail.com>, <linux-kernel@vger.kernel.org>,
  <rust-for-linux@vger.kernel.org>, <linux-i2c@vger.kernel.org>
-To: "Igor Korotin" <igor.korotin.linux@gmail.com>
 References: <20250911154717.96637-1-igor.korotin.linux@gmail.com>
- <20250911155015.97250-1-igor.korotin.linux@gmail.com>
-In-Reply-To: <20250911155015.97250-1-igor.korotin.linux@gmail.com>
+ <20250911155048.97364-1-igor.korotin.linux@gmail.com>
+In-Reply-To: <20250911155048.97364-1-igor.korotin.linux@gmail.com>
 
 On Thu Sep 11, 2025 at 5:50 PM CEST, Igor Korotin wrote:
-> +impl I2cAdapter {
-> +    /// Gets pointer to an `i2c_adapter` by index.
-> +    pub fn get(index: i32) -> Result<ARef<Self>> {
+> +// NOTE: The code below is expanded macro module_i2c_driver. It is not u=
+sed here
+> +//       because we need to manually create an I2C client in `init()`. T=
+he macro
+> +//       hides `init()`, so to demo client creation on adapter SAMPLE_I2=
+C_ADAPTER_INDEX
+> +//       we expand it by hand.
+> +type Ops<T> =3D kernel::i2c::Adapter<T>;
 
-Where do we get this index usually from? OF, ACPI, etc. I assume? I feel li=
-ke it
-could make sense to wrap it into a new type. Even though it is not safety
-relevant it eliminates a source for mistakes.
+Not a huge fan of this type alias, but up to you. :)
 
-> +        // SAFETY: `index` must refer to a valid I2C adapter; the kernel
-> +        // guarantees that `i2c_get_adapter(index)` returns either a val=
-id
-> +        // pointer or NULL. `NonNull::new` guarantees the correct check.
-> +        let adapter =3D NonNull::new(unsafe { bindings::i2c_get_adapter(=
-index) }).ok_or(ENODEV)?;
-> +
-> +        // SAFETY: `adapter` is non-null and points to a live `i2c_adapt=
-er`.
-> +        // `I2cAdapter` is #[repr(transparent)], so this cast is valid.
-> +        Ok(unsafe { (&*adapter.as_ptr().cast::<I2cAdapter<device::Normal=
->>()).into() })
-> +    }
+> +#[pin_data]
+> +struct DriverModule {
+> +    #[pin]
+> +    _driver: kernel::driver::Registration<Ops<SampleDriver>>,
+> +    _reg: i2c::Registration,
 > +}
 > +
-> +impl<Ctx: device::DeviceContext> Drop for I2cAdapter<Ctx> {
-> +    fn drop(&mut self) {
-> +        // SAFETY: This `I2cAdapter` was obtained from `i2c_get_adapter`=
-,
-> +        // and calling `i2c_put_adapter` exactly once will correctly rel=
-ease
-> +        // the reference count in the I2C core. It is safe to call from =
-any context
-> +        unsafe { bindings::i2c_put_adapter(self.as_raw()) }
+> +impl kernel::InPlaceModule for DriverModule {
+> +    fn init(
+> +        module: &'static kernel::ThisModule,
+> +    ) -> impl ::pin_init::PinInit<Self, kernel::error::Error> {
+> +        kernel::try_pin_init!(Self {
+> +            _reg <- {
+> +                let adapter =3D i2c::I2cAdapter::<Normal>::get(SAMPLE_I2=
+C_ADAPTER_INDEX)?;
+
+Just i2c::I2cAdapter::get() is fine.
+
+> +
+> +                i2c::Registration::new(adapter.as_ref(), &BOARD_INFO)
+
+Does i2c_new_client_device() grab a reference count of the adapter? If not,=
+ you
+have to store an ARef<I2cAdapter> within your i2c::Registration as well.
+
+> +            },
+> +            _driver <- kernel::driver::Registration::new(<Self as kernel=
+::ModuleMetadata>::NAME,module,),
+> +        })
 > +    }
 > +}
-
-The Drop implementation is not needed, you only ever give out an
-ARef<I2cAdapter>, but never a "raw" I2cAdapter, which is the correct thing =
-to
-do.
-
-> +
-> +// SAFETY: `I2cAdapter` is a transparent wrapper of a type that doesn't =
-depend on `I2cAdapter`'s generic
-> +// argument.
-> +kernel::impl_device_context_deref!(unsafe { I2cAdapter });
-> +kernel::impl_device_context_into_aref!(I2cAdapter);
-> +
-> +// SAFETY: Instances of `I2cAdapter` are always reference-counted.
-> +unsafe impl crate::types::AlwaysRefCounted for I2cAdapter {
-> +    fn inc_ref(&self) {
-> +        // SAFETY: The existence of a shared reference guarantees that t=
-he refcount is non-zero.
-> +        unsafe { bindings::i2c_get_adapter((*self.as_raw()).nr) };
-
-Please make accessing the nr field a separate inline function, or at least =
-put
-it in a separate unsafe block.
-
-> +    }
-> +
-> +    unsafe fn dec_ref(obj: NonNull<Self>) {
-> +        // SAFETY: The safety requirements guarantee that the refcount i=
-s non-zero.
-> +        unsafe { bindings::i2c_put_adapter(&raw mut (*obj.as_ref().as_ra=
-w())) }
-
-Same here, separate unsafe blocks please.
-
-> +    }
-> +}
-> +
-> +impl<Ctx: device::DeviceContext> AsRef<I2cAdapter<Ctx>> for I2cAdapter<C=
-tx> {
-> +    fn as_ref(&self) -> &I2cAdapter<Ctx> {
-> +        &self
-> +    }
-> +}
-
-This AsRef implementation doesn't seem to do anything?
 
