@@ -1,116 +1,128 @@
-Return-Path: <linux-i2c+bounces-12880-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12881-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF74DB535FB
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 Sep 2025 16:43:18 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2996CB537D7
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 Sep 2025 17:33:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 77900488304
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 Sep 2025 14:43:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1363FB61F8F
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 Sep 2025 15:31:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 080B4340DBB;
-	Thu, 11 Sep 2025 14:43:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C47FD34F471;
+	Thu, 11 Sep 2025 15:32:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="k9acTOFS"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h+wirtxO"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 028F926A1BE
-	for <linux-i2c@vger.kernel.org>; Thu, 11 Sep 2025 14:43:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 041CB2236FD
+	for <linux-i2c@vger.kernel.org>; Thu, 11 Sep 2025 15:32:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757601792; cv=none; b=p7WlMO4B01yaB/p58BNXXs/BfWD2xzsEMBnE2eBXu/q/EeBkPIoLPTQsccWlCuQZuy8u3okUJrhDjPz5abvaoxBwd04+9ym1GSMyUDP8cNV1oD2Ld/8seXwFEzb/1jay9f9KWKWPKuDSzLGD8akpjfY1buYHB9C5H+XJCJ+TOUA=
+	t=1757604772; cv=none; b=Ho1I6mHEj8sj7tTNiaGW0OPgFqvEuJ6HvHEhHLrXfV75h67aDmImx207dssvfzHh9lWXmpN7J1308Dz16dqngzyJVnV8qBsE/s4BJ46Zg/G82x+rTKlnzoChO8jEmdry/SVdTR8/DW97mdkuTkXztMeBonMLvjZIvKrCUEP8BCc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757601792; c=relaxed/simple;
-	bh=72IiQUsPXoMJq5hAR0wcPhwXrau91fca7fQ408J4nl8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pnq+a4dhhA2uCrPa8268KmGajXMF3Lqr9rwkxnRYCvmHzJimV2iybb34HyesLBQLGAD/WJG6IosTYdYfGMHcpvN/EC3I9fXxUBT4HODX5IzkpohmshgHHb4o/MsAp7RJSiZd75k8pU7KS5XMz5xfD91Wm5MM6DEBCMqrd93LQpw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=k9acTOFS; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=72Ii
-	QUsPXoMJq5hAR0wcPhwXrau91fca7fQ408J4nl8=; b=k9acTOFSwd0N9zSy9Oxs
-	ohOGSYqJFYqgyrRQeZFSo8yiNFv/ropt/BJ4rnrJVibg5WAW2Tpsl2PulHwyccl2
-	EQgCSU1ba+mIuESJds/Ufi6yj9NQO7guUtAt1LE+BIDDU4sqSj48HmSFQaVUEITO
-	Jk4fxUOVG/AhnAbKhv1fvWKV4r8bzHg7YuMqs3P0i0IRq1edyejrx1zIXk7LrN/+
-	5/rT2p5jTECcGD+Cgb+rV6K9McDVxEDI9vM5lsA4koOOS/m4On6lZ/XraYKQEtbj
-	bCqgIiluDBj+E+dljnt/nrdwWmbKPoy9kLeD6Qo8vbXG5nkBJ0dC8QjXm4lTlmH/
-	sw==
-Received: (qmail 1019085 invoked from network); 11 Sep 2025 16:43:01 +0200
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 11 Sep 2025 16:43:01 +0200
-X-UD-Smtp-Session: l3s3148p1@HaDOjYc+zpYujnsE
-Date: Thu, 11 Sep 2025 16:43:00 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Hans de Goede <hansg@kernel.org>
-Cc: Israel Cepeda <israel.a.cepeda.lopez@intel.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Wolfram Sang <wsa@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Richard Hughes <rhughes@redhat.com>, linux-i2c@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-gpio@vger.kernel.org
-Subject: Re: [PATCH v4 3/3] i2c: Add Intel USBIO I2C driver
-Message-ID: <aMLf9Nj3hF4t9rQH@ninjato>
-References: <20250910133958.224921-1-hansg@kernel.org>
- <20250910133958.224921-4-hansg@kernel.org>
- <aMHznOCa_9vtW6_1@shikoro>
- <4e2f79bc-2827-4db9-bb2b-4a330cd14f2d@kernel.org>
+	s=arc-20240116; t=1757604772; c=relaxed/simple;
+	bh=9d5INW21jjr6oErj7y4Sti7BG3O8dXxCjtAuIhufDNc=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=sHIuIsXWKrc14ROarOo5tI1DPzZTQyzEBXObHPwxkMsDJsZlqz7B6t5Bmgm6TfTdN1Rx/Jripi72a4/nIUb4SWfTf7H33UY6eco/FkRq7lpv+PlYVpTfXh73pSQ1n+9vUSZsPRLoJVM4wzqX9ZsHTbt0JlQUA9BU2VaHv3lAbeU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h+wirtxO; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-45ed646b656so2825555e9.3
+        for <linux-i2c@vger.kernel.org>; Thu, 11 Sep 2025 08:32:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1757604769; x=1758209569; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3axJvgEbFXgxfwL/zVY/UXD8zhBqiTBNfyhVw2O5KOA=;
+        b=h+wirtxOZcmfcGFV1qt00csoureoSJAWB0UhFy5L2Q3B0L/z0rcYinbD3Nfvd5j4/X
+         oaUU0o1jA4H8hKIO4VE74fM14ZQrcGllHA7ivBwEBqz4K4KYPZW/JQlUCbiAbUu0QJwM
+         qzToOgJOU6eGR8xtOU89nJtF16v1tpGsaAG0A+ToaVjSnDK8/XhhCQGL/UN3ObGMYOm0
+         OHKdOJiACoxgXZqRxHboU3BJoyNo7hx7Rl2UtMTZhB02XaicXy6KzlgJJs6GByibqlzt
+         KwF/ca8R+/K2z6LxvdgVzHgrV4GrhzmnQ0sb3cugO9PzOQON//+6+qoVi6LRYHIvpqXH
+         gNsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757604769; x=1758209569;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3axJvgEbFXgxfwL/zVY/UXD8zhBqiTBNfyhVw2O5KOA=;
+        b=Zn4/GzqMVzrjZOSwlWZbrl5ImnjMnojvtkxe0spC4UW4MYQTWf1xsBjCDXuX9snUEg
+         6i86inB7VW5wFBJ6YZ6hkIHua9r/H8ine6n65baXclXK6gKknpSbrwlO7Gc3mCINqM0Z
+         hEOziM4rBt0nYcUbxuOXQiunkNC2k0X+X51jQv2ddQIxJlmCGKj4TOZ/phHRmhmj1+bo
+         5ASZLdmn6xC5/URSImgQHZ5kC7WvX1IOHKoNlHlAI5D6lZ+pKN0zJ64+JDf2vCB/CplJ
+         o+9EexGiQtAf5R+sumRcKvsyR+hZ5HwkrPdQuxfhZFVfb4LzVCdIVHWi+J0qjppFPnIm
+         w9wg==
+X-Forwarded-Encrypted: i=1; AJvYcCWXFv+z3cWkZCxLS4sOauPV/jHWpTfzzHViUU12Ao6z6sKQxFSsV9fB3dyKBYtrtbFHiGVZ/oSpkLc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwNziJ0FDHEV8rWBpdPV78IIE4FEWYYnMadDy/3BCd1EqwpNiS+
+	QjcANn4heg74aedeHJAofn8s54dPOH1Riq+prBnHe2qLLnkRxyxB7eGL
+X-Gm-Gg: ASbGnctWhg1EF1FHJW/QN5CmGS/bTc1//5gWUvcz+E1pTPl7TQTEcX7FwpanrfVmPSe
+	Qam1mSaZi810bzZ5BruCg1ulzDxqQOVce64rzoJq/ws/TZP72LsR0rSnqKxDpUt0+QaeE3xR7U7
+	AUJZYMSL57rEUdMrMKjCZBrpOmtDVFdO1kjphpRc0qVsjnErJ+m5+pGoRvnn6yb242PxDqkHCN2
+	ILsX3134zkNACOCzoU5EVmdbXYkzeXgGRUfrGd7V459MgMx2tlfq9SBbZKK5LkoYYJFJxKi4mSS
+	lXnOrtwa+vdH55TgR10Eqhjf1bL9jRWTeR2QsK1o65XFn05HLvygsB6rwJyOPyjNIzzj3BebnDo
+	teshcvOjok17PFSts96U1WHxz1j27fli7XZuYZEbqL2P5zryuL1z+n//yj9Loe1RF0nctpgKt7v
+	LQeZFfCzU0iu595a/NtZQTO5Us
+X-Google-Smtp-Source: AGHT+IF3BLIq3kR/6GHqEPtT2eBTcLlyt514cWOzH9fOkQVX2eOkZCeyPsb05zloZHpD/Z4ENo6UCQ==
+X-Received: by 2002:a05:600c:46ca:b0:459:d3ce:2cbd with SMTP id 5b1f17b1804b1-45de072e878mr165182475e9.13.1757604769028;
+        Thu, 11 Sep 2025 08:32:49 -0700 (PDT)
+Received: from localhost (p200300e41f1c4d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:4d00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-45e037c3cbdsm29794125e9.17.2025.09.11.08.32.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Sep 2025 08:32:47 -0700 (PDT)
+From: Thierry Reding <thierry.reding@gmail.com>
+To: akhilrajeev@nvidia.com,
+	andi.shyti@kernel.org,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	thierry.reding@gmail.com,
+	jonathanh@nvidia.com,
+	ldewangan@nvidia.com,
+	digetx@gmail.com,
+	linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-tegra@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Kartik Rajput <kkartik@nvidia.com>
+Subject: Re: (subset) [PATCH v6 0/5] Add I2C support for Tegra264
+Date: Thu, 11 Sep 2025 17:32:39 +0200
+Message-ID: <175760472294.2784204.8145431282909905411.b4-ty@nvidia.com>
+X-Mailer: git-send-email 2.50.0
+In-Reply-To: <20250828055933.496548-1-kkartik@nvidia.com>
+References: <20250828055933.496548-1-kkartik@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="bsepv0u1s7GMfX7n"
-Content-Disposition: inline
-In-Reply-To: <4e2f79bc-2827-4db9-bb2b-4a330cd14f2d@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+
+From: Thierry Reding <treding@nvidia.com>
 
 
---bsepv0u1s7GMfX7n
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Thu, 28 Aug 2025 11:29:28 +0530, Kartik Rajput wrote:
+> Following series of patches add support for Tegra264 and High Speed (HS)
+> Mode in i2c-tegra.c driver.
+> 
+> Akhil R (2):
+>   i2c: tegra: Add HS mode support
+>   i2c: tegra: Add Tegra264 support
+> 
+> [...]
 
+Applied, thanks!
 
-> > How did you test 10 bit addresses? I have never seen them in the wild?
->=20
-> I did not test 10 bit addresses. This was there in the original code
-> from Intel.
+[1/5] dt-bindings: i2c: nvidia,tegra20-i2c: Document Tegra264 I2C
+      commit: 804ebc2bdcc85f30973708835b47ee023a4be003
 
-I suggest to drop it. There is no code handling the I2C_M_TEN flag which
-should be handled if support is advertised.
-
-> So I'll add I2C_AQ_NO_ZERO_LEN to the quirks.
-
-Ack.
-
-
---bsepv0u1s7GMfX7n
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmjC3/AACgkQFA3kzBSg
-KbbDUg/9Gk2G4vWSrykXFqKNb8AMMd2P8HsNCzQKlfLni2gtPRwzPgSZqSLCHFDc
-/qM7G7PIxgT5/7qgFfWVR1jK2QGt4XSQoW6Mysl0yZd8l3rAlW4Ukr1lBSL/I0dR
-EcoOHLy/3T2k965QHz55UIRXNiTB6F18g8AihZv7EZTXkrzp4UHks0gf1fQa5Tj5
-P5S8UKQbS6KCyhw/dvCzos3B0cxSRxtV7pIafNI7CMJUaXWS6PVe5rUQEfyLzUbX
-CgYLzHe5zaQAJCJYrrrn76fnEB4NwXWwi3p7i2sAY3w1+3zi84vDgYtk7XqCQnl4
-yyyVSfkgwPqquddPzqCc+FMhgp2CapFdQ8lZnzF4VZ6E8ANzvr4S9Tbk1S+ALEHB
-k0G7D2Y8Qq4vUqhHAvxp32DuWaRCM3KluTYoWPaMxRd/YrM6gfYFAX26PgACYren
-ZmieofajMYD4ZYXQqoeKLywyRVx3MH2QAbiKybVDBXOZXERjmWxAAGju31NkKcAP
-jgxcpKVrPzwmnTKEF/apQ5UrF4Yi7JjvcGlmhJmILnbMiCmE20nJDYqlkgPxKTDI
-xmKWxYX3s9mgJD3PxZo/uxQRVaHfAnLgWQBTaZ6slNksGioi9gU5l1v2UdSlJaqd
-pjxPkWFu+T6VR02IE7qKB64RTA+YsaAZDgtFlVza8WClsSt7N18=
-=BQwX
------END PGP SIGNATURE-----
-
---bsepv0u1s7GMfX7n--
+Best regards,
+-- 
+Thierry Reding <treding@nvidia.com>
 
