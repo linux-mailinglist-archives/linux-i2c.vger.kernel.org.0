@@ -1,46 +1,46 @@
-Return-Path: <linux-i2c+bounces-12876-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12877-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E484BB5358A
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 Sep 2025 16:34:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E8F1B53595
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 Sep 2025 16:34:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 07DF21CC2D4D
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 Sep 2025 14:34:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6FFDA176944
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 Sep 2025 14:34:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60E18341663;
-	Thu, 11 Sep 2025 14:33:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AC1C342C8E;
+	Thu, 11 Sep 2025 14:33:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e9S5eHE3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HNlN2Sbb"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECE0E340DBE;
-	Thu, 11 Sep 2025 14:33:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D72E7219301;
+	Thu, 11 Sep 2025 14:33:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757601214; cv=none; b=u1700NvgEuRFLmuhVUo7v5nhU6HpDObV5eGenLJ9yO3wQ6OqyOpEDMiBUj7lMmPFNxodwajFzsTfJ02qmXVpo8bR/0otJ57wfYBnEgOHu0r83N49/CypvWvJDBFzLSE5B34DR1OfbsYIV2FksO6QeQGCeIMPo90tvRGCZ6lA+rA=
+	t=1757601219; cv=none; b=XBMiR78BY8QeB9UMwz7HOQtHfpud0px+qhuB83+WLq3hmjPAYpNrUA34GwQOtH9PPlhbyLOcYB1mhFFR6mu2Az6a+trEBBrjalX0/GktALnrgpSbTEpqNnd3l+D2AjLnlXwuIwAWr9vHozstFplQi9u/AUaEE2VOVm5Ov5fvxpc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757601214; c=relaxed/simple;
-	bh=FP9aVxJALnyUuimzNS8mo8smzmfLA1mcpQwmRFMbltE=;
+	s=arc-20240116; t=1757601219; c=relaxed/simple;
+	bh=OUJiGi+94fM5sV3cXCPP5CAqq/OJPC2n5Oez5un9aqc=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=c36T0vW+2iAFlMyDxSrSp9Lz1utkVh/F6KvKx1dVzQNI9PBlyf+6pzPkgaph6sUIB8Tey4A/kDH8uS4SgnWSV0t7YjgFcjLFqn6gN/+GbOEMQc2490OtJftTi5wRxM+/UjZ3onurQm4WBcVrfvtIk0SC2PKakyO9ymwcjcC9dqI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e9S5eHE3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 051C7C4CEF0;
-	Thu, 11 Sep 2025 14:33:28 +0000 (UTC)
+	 MIME-Version:Content-Type; b=D3A5RW9GRjrKg/i3vA5aS7vh/12mIDTLW+Y8ewDslvjtRHQHnkymIMAGOfK4JA7OpugHo5804cao8k2yZLoyjd/MHGTCkoDvsokWQE3mYu4SsCBOCC1ucCMD/j0L1kgBIM/9X/tCPEo5v64rQnBbzWIwxp23fcD6RtVukkQeBb0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HNlN2Sbb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02AC2C4CEF9;
+	Thu, 11 Sep 2025 14:33:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757601213;
-	bh=FP9aVxJALnyUuimzNS8mo8smzmfLA1mcpQwmRFMbltE=;
+	s=k20201202; t=1757601218;
+	bh=OUJiGi+94fM5sV3cXCPP5CAqq/OJPC2n5Oez5un9aqc=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=e9S5eHE3qcSq7dt6emzYHKMTIlVfrvYb2GSCQa9u2bJzAlZB96Uy+Ta21Klw0Y/5E
-	 gUitbr9n0NZltFfGpH6Nx38hOelKjzE+yMehEDJCMGxUnzffFL6Fj/grQ31sSLi28Q
-	 l3yhoZ/eEprN3Xu7xhwY9SNZ9yvMihoOGRI5pC/aNVjdOb6hQFDnRfFvX4PrEE5H5L
-	 ueuUJowAluzOF6k0PSiLEC3KAiYznOdBih/U1lWE2EONefT6e9wyW1s6YrbdMFv2tW
-	 9CFNMvuq2eZynw1s+D8Qwhh4K+xc7keK5oh1p2+E4YDfjgvV32LBCJUK/iW9c87NWm
-	 rlNq1M/sSV5kQ==
+	b=HNlN2SbbDPOYRE/qguGJ3QO6dg+GeXXMXenRHR7nT6YKwB3MB7vGyJtGbkZYYtPA9
+	 ad2K+IGKQZDDl0JPzJLrXbV/R9QWQ44uMNWqKQ2uJ9zP1rUN66zwQBYiUxvLKl1Nax
+	 wqDrUrPbYR3nmRBNpqmPcAYVb8WuzU8OxhUx6e0RggeZR2oPT2yN5phYEg3NW7Zjb+
+	 HKTwyjTs3ilfq2mtWZSqAVcUFdzdbCG1xq/BwtRPigu2+WXkL9mZ/Ms2bcsXqHyoJ7
+	 XsR1BeazIXyvTkUS9WU+HrRzWKB9n5LLlbkQmClXkEl2nC6JuJQ1kEFD+lZI2cPEP5
+	 /ord5gwiNcx+A==
 From: Lee Jones <lee@kernel.org>
 To: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
  brgl@bgdev.pl, andi.shyti@kernel.org, mkl@pengutronix.de, 
@@ -53,11 +53,11 @@ Cc: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
  netdev@vger.kernel.org, linux-watchdog@vger.kernel.org, 
  linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org, 
  linux-usb@vger.kernel.org
-In-Reply-To: <20250825092403.3301266-1-a0282524688@gmail.com>
-References: <20250825092403.3301266-1-a0282524688@gmail.com>
+In-Reply-To: <20250904015048.1801451-1-a0282524688@gmail.com>
+References: <20250904015048.1801451-1-a0282524688@gmail.com>
 Subject: Re: [PATCH RESEND v14 0/7] Add Nuvoton NCT6694 MFD drivers
-Message-Id: <175760120875.1552180.9512711135722714327.b4-ty@kernel.org>
-Date: Thu, 11 Sep 2025 15:33:28 +0100
+Message-Id: <175760121375.1552180.14414071756142571293.b4-ty@kernel.org>
+Date: Thu, 11 Sep 2025 15:33:33 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -68,7 +68,7 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailer: b4 0.15-dev-c81fc
 
-On Mon, 25 Aug 2025 17:23:56 +0800, a0282524688@gmail.com wrote:
+On Thu, 04 Sep 2025 09:50:41 +0800, a0282524688@gmail.com wrote:
 > From: Ming Yu <a0282524688@gmail.com>
 > 
 > This patch series introduces support for Nuvoton NCT6694, a peripheral
