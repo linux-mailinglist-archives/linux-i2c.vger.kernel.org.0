@@ -1,114 +1,137 @@
-Return-Path: <linux-i2c+bounces-12871-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12872-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64C31B533AC
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 Sep 2025 15:26:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7EEE3B533B7
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 Sep 2025 15:29:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 67F2FA821F0
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 Sep 2025 13:26:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 661BBA8848D
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 Sep 2025 13:27:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61C5132ED2E;
-	Thu, 11 Sep 2025 13:25:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15BE4326D57;
+	Thu, 11 Sep 2025 13:27:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="FIfIOjPk"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="tRHrj973"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 345F232CF6C
-	for <linux-i2c@vger.kernel.org>; Thu, 11 Sep 2025 13:25:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BA4D3112D9
+	for <linux-i2c@vger.kernel.org>; Thu, 11 Sep 2025 13:27:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757597116; cv=none; b=pprffLbNFXtWc6hxzTP+8p9RnxVha6yE1gcLu5TjmtykR7Wx1QQ7sQj2Irvp4gbCZz+GlCAfUHloQqexpgvuhhXJck6JgDbCca0Fjd5j3/Fm20bcOL22rhoQQ5etgwVtlL8R5bL0HROngAHtJ5W2FtSo/mV6i8068dHX7naFk9Y=
+	t=1757597244; cv=none; b=I4ktHISRf96F1PNJjsrMtY6ihCHENojEaaSN5HvL1f+tEP6pmCUG29aMhxYgfBhHdVJb82TPTzPpOhhd5WggTkAvEbaF+YA+FGhYN5TZdGwEMP84qWwJh+19VX9RpnKQU1lLIRbJzquLqJw/rYXbw4dB6Jikwvm021QCw4b/qLU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757597116; c=relaxed/simple;
-	bh=tvHtynkzdv1a6/2GIDVhvXbYgP7ctogGxu+SLDsFVek=;
+	s=arc-20240116; t=1757597244; c=relaxed/simple;
+	bh=A7yKxmDExMeHFoZ5DS5kS/O/awUG1znqYvQLffqw0n0=;
 	h=From:In-Reply-To:MIME-Version:References:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uv+5Q4eZc116jQEkccwb3VSizHouYwGdupdbUeyNdq+g40EWuAHf/LvFnQNPbzeea2sL0r83vIXI2kIXJknkMPoxbby31kjFZEYSBFFK8kUebdDClPb815Z3P4l0xr6W7oXER6UO1tFwV/q5Q53kLjDj5mKqEBXsM/rpU677uGU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=FIfIOjPk; arc=none smtp.client-ip=209.85.167.41
+	 To:Cc:Content-Type; b=bsC+ULhSW5HDDVzaw2rw3feNLZVZmH9l1BPipzW7tPnkt8wQtGuQYoeJ19TSa8/oKfHBNiDnT7MKE7ojhkUYzVbnCbvF3tUj2EvA5XNuDuS7YsM6FblOjPgKmhrSKv4wnqn2QKsXaALT4VBTIAT/ygjAFxiEJTj8cwGOiMZszyM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=tRHrj973; arc=none smtp.client-ip=209.85.208.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-55f6b0049fbso792791e87.0
-        for <linux-i2c@vger.kernel.org>; Thu, 11 Sep 2025 06:25:12 -0700 (PDT)
+Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-336c86796c0so5415891fa.2
+        for <linux-i2c@vger.kernel.org>; Thu, 11 Sep 2025 06:27:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1757597111; x=1758201911; darn=vger.kernel.org;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1757597241; x=1758202041; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:references:mime-version:in-reply-to
          :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=sKH9Tq5JpqAq1HnW1xohkQd88Pw1g4E8ukSxiOhM484=;
-        b=FIfIOjPkSwlc6EbFu6WXdlEpy4VWaKnLjZR6H/dP1XwFlkg+C2xUgxtbIOc1g7yz7M
-         GJVAZPqabKe1lAheW1Q+c9zQ2lV18QjU0DIbNJMMk7mVeT9dWXagRHkRqCMbFEAp1L9e
-         ejOYM2V75YUgzrxWHgptill6ER5hots1aOG1mrlrP6UUL9RzTQfRpCBKqQLurGZG5aEa
-         Jo3yGr7g5ANpqubCjx0vo3xFiN7IFMa+jUikcTnIkfgDdqRVjf9yi6RZmP8BvsoDvQol
-         cXlP123VceslaCUvdMGv3JzT2H//oIcQfYpvbh+2O84RpMJeaTtmPhuPkZPOyoCfRglR
-         pnHA==
+        bh=DeUccbeQ/kyM8X+MjI6gjEtxWNHGIttYsHKE4be0R7E=;
+        b=tRHrj973G55r4OyQWIn7hI2+n0BSnUWv57OqmDIfoBhLK1FL40cPaHiE73uh2bV4Wy
+         41aqxqZx+QMhqjklcVLEmqBG38QE/c97qC6X3ptv/mmv/LFMEwNi/Whqzqa3vz1u4hao
+         4OlbtV8G1ULnGjE1QyBEZwQsfDE2xPGPI7g61osmt6ISwibFpglCJB3NU6FxIEZppT+1
+         bQ+/advy5gI6LNRHiW1HYSgo5ydlP2Jxz/Se4H3GihA16QS2f6UbVKQBqLPHp1/F7yMY
+         rpIBF/oUpvwtxyVa3CuyEbqgdbOrXy1x0fzoGn5aC2i8E6nB78qEMB+e9IwttCUzCSFE
+         TFFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757597111; x=1758201911;
+        d=1e100.net; s=20230601; t=1757597241; x=1758202041;
         h=cc:to:subject:message-id:date:references:mime-version:in-reply-to
          :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sKH9Tq5JpqAq1HnW1xohkQd88Pw1g4E8ukSxiOhM484=;
-        b=aZ/AA/zJFL8vAIP14EH2A2oUcCwVUeQc330Wm7WjgWdxPhjmRnpJNSK1wYvMOQQASv
-         GB9n4mkkLRAlEzLJd/votpdQq0rphmnyUCtxXuD6FCXdnaAvyBGS00NIQViggaLuPRG/
-         n+HbLhDIZoVQosEwEItgma8nfJn3YJ7zUmDKMe29iKdhT1pt/NFSVOE60O8LsNTyriev
-         tpOKKIycjmy4vHUjTMIQ/T3YnziHiyaAhoR+gvrZNNjyqC+2aVVEDhjSqGIfZOP4dnxA
-         rHbC/MhJ+TUk2gVcEOfpA1PIiYjGRv2qeyZcdOw+rSzCdzbJ1yV6kh+Hi6J+utt+HV1t
-         ONkQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUnkiaESHWBG6epx3268g7/noRZOZ5TNuoGCNVtxYxjHgTixK8AgtGEo7Pee/tp1i0o9B/E6cKr8No=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywi/4qpuB/lKTAXqFLOkCrTCQMvk9FZq3hZhe5EC3ln7YI4L5y1
-	qxBUl11brK5MsbtvyRrUUyKDkcR6gauIui0VTeKK+qCD0i0SuAI7dl3VUNfqbTXE7BUvT8GQ21Y
-	ujQGjwzPhwQwFASuRY0KLYVQXUSPrUYz2phEnAe4MYg==
-X-Gm-Gg: ASbGncvnArcAb1iCwBjKMTvPQeoAm01WJAfj/rfB+0qoHCbhdRN9AGnfbAvPeXwlBYb
-	MsaSa7nFgyKNRMaaCwH1uQRtMObd4fk4q/LvSpkXhKeEKGFwVI18bsAO+5A5uGgJPzSe2KSEH5Q
-	LlbmLCk3dy8r/cbNyOG8pRZjZ2EI8ueItdxbPZNgqlP/Nn0hAWPbPyVNvLDta3ys2Azg9vAAXLr
-	SzGS4YtVIKLcS5bueIQ4IWBxLwYNXJbCcWSj24=
-X-Google-Smtp-Source: AGHT+IFsA5ZOyU9tpTag4iQY+UEBWc1v4AgFQ6DjU2UnALeCrswvvm+lEztT+M/sSG35UIi0IcRGR77vi6rw6ChMafc=
-X-Received: by 2002:a05:6512:33cd:b0:55f:489d:7bd with SMTP id
- 2adb3069b0e04-5625d28e732mr6154709e87.0.1757597111174; Thu, 11 Sep 2025
- 06:25:11 -0700 (PDT)
+        bh=DeUccbeQ/kyM8X+MjI6gjEtxWNHGIttYsHKE4be0R7E=;
+        b=levdqDSRh9msLT1Q65hO+LcgRsPvKJRz6hqGMcuN/UEM5blzhDMsE35F6DhsF0IAN2
+         LdyFZbXATNDdb4J0Gq1IDPnAQHkq2yRDueEuFS31ZQoC9WV3JHdaUydlYpkJt16BgoPb
+         nu3UT2kZxyh3/GW2nR41JTmcaZFZr0IRpMKxjpn+ntFyo6XgzAsTV2mmO7zpsC1S6ln2
+         fwlDM3EoQOGy84O7LhnrkZV/4oscDuPadDsZt42Z8ZKl4TBPDP1SYyuW2CTiwAPLXNpt
+         23r2TwiICbE5pz9VCt/WsnEIb+oKnIckCZCZP5XAxcwInUPulfKvrZd6Fm53BRex+YlB
+         vfHg==
+X-Forwarded-Encrypted: i=1; AJvYcCWnkq9iYgqwE1huSOiSGg1n2zRD63jkLoYBkbQ1tNAWHraS1IXRCruYKJ2Xp7uaLxbycLT5YLG3yww=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxPBuyFz6DZpBaZ6joakdIDJ1oQYc7J+BbLPTlzZ3Xfm4SLEVVE
+	k01Fn4VfWoUPHrUhz0KxtL94hvQBv5cvJ6cd3R4xVbFgNbNyAljxOhSEqn9cVXiQMHs4WBjV7fx
+	4f15kdnfvfzK9BNK3kpXAoLfSQY5+Z4sgNL1ojP5oc2v2SEDI/720ryQ=
+X-Gm-Gg: ASbGnctlhg8Lh5xEckGDcpFLq0I2cdQ4RII9xKJO2xCxeLtHxtRuuovl/QPNrFPvanU
+	7My9BqUIUjKoYWgEOojcuuadpkUVJ7cAWAtqfQf+BySSLZo+ujSjT729O5/QZCw3hUv/ceWe+ST
+	ndga7mCE62HjcHj2y460xMoRNq7qHbbQmZf1FBPPZHr1PFo7FSZxbqkeDnRejyEohqQ3OEXKX5f
+	gQbzEEtwzxIlSymWUvKpviY4pjvrMOj+6GCwWZCd4SVIkKIBw==
+X-Google-Smtp-Source: AGHT+IGBB6D1hNdnllPGf95Uj3l9EU2JfY7JcduwYvVgx0oChEBeWjvr5yTav4TCpbqAhFjiHyDJdIQ3rvnvP4CkIb8=
+X-Received: by 2002:a05:651c:1117:10b0:336:b4d2:6c4 with SMTP id
+ 38308e7fff4ca-33b520d6d1emr49059301fa.17.1757597241429; Thu, 11 Sep 2025
+ 06:27:21 -0700 (PDT)
 Received: from 969154062570 named unknown by gmailapi.google.com with
- HTTPREST; Thu, 11 Sep 2025 08:25:10 -0500
+ HTTPREST; Thu, 11 Sep 2025 09:27:19 -0400
 Received: from 969154062570 named unknown by gmailapi.google.com with
- HTTPREST; Thu, 11 Sep 2025 08:25:10 -0500
+ HTTPREST; Thu, 11 Sep 2025 09:27:19 -0400
 From: Bartosz Golaszewski <brgl@bgdev.pl>
-In-Reply-To: <20250908-lemans-evk-bu-v4-4-5c319c696a7d@oss.qualcomm.com>
+In-Reply-To: <20250911131832.59335-3-hansg@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250908-lemans-evk-bu-v4-0-5c319c696a7d@oss.qualcomm.com> <20250908-lemans-evk-bu-v4-4-5c319c696a7d@oss.qualcomm.com>
-Date: Thu, 11 Sep 2025 08:25:10 -0500
-X-Gm-Features: Ac12FXyxL1zBhnbmQPIz3eBGCsQd9d-c4NEoyZ66twALqJFT9m4E9c429dd_4HA
-Message-ID: <CAMRc=Mf8P=4vucch0sAtPNZ7DBB0Kw1hgvP1YLgZ5ZRfusFG-w@mail.gmail.com>
-Subject: Re: [PATCH v4 04/14] arm64: dts: qcom: lemans-evk: Add TCA9534 I/O expander
-To: Wasim Nazir <wasim.nazir@oss.qualcomm.com>
-Cc: kernel@oss.qualcomm.com, linux-mmc@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, Nirmesh Kumar Singh <quic_nkumarsi@quicinc.com>, 
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, Ulf Hansson <ulf.hansson@linaro.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
-	Richard Cochran <richardcochran@gmail.com>, Bartosz Golaszewski <brgl@bgdev.pl>
+References: <20250911131832.59335-1-hansg@kernel.org> <20250911131832.59335-3-hansg@kernel.org>
+Date: Thu, 11 Sep 2025 09:27:19 -0400
+X-Gm-Features: Ac12FXwV3WssWXmZ6g0rdQcbcorV7HFa5hX2cT1C7ZyRIRy9qt885Y0faI-jmjQ
+Message-ID: <CAMRc=McKOTWxu=M0S0p0Uyhod-h4mNH9QfsLsycN4vbHJPtgeQ@mail.gmail.com>
+Subject: Re: [PATCH v5 2/3] gpio: Add Intel USBIO GPIO driver
+To: Hans de Goede <hansg@kernel.org>
+Cc: Richard Hughes <rhughes@redhat.com>, linux-i2c@vger.kernel.org, 
+	linux-usb@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	Israel Cepeda <israel.a.cepeda.lopez@intel.com>, 
+	Sakari Ailus <sakari.ailus@linux.intel.com>, Wolfram Sang <wsa@kernel.org>, 
+	Andi Shyti <andi.shyti@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>, Linus Walleij <linus.walleij@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 
-On Mon, 8 Sep 2025 10:19:54 +0200, Wasim Nazir
-<wasim.nazir@oss.qualcomm.com> said:
-> From: Nirmesh Kumar Singh <quic_nkumarsi@quicinc.com>
+On Thu, 11 Sep 2025 15:18:31 +0200, Hans de Goede <hansg@kernel.org> said:
+> From: Israel Cepeda <israel.a.cepeda.lopez@intel.com>
 >
-> Integrate the TCA9534 I/O expander via I2C to provide 8 additional
-> GPIO lines for extended I/O functionality.
+> Add a a driver for the GPIO auxbus child device of the Intel USBIO USB
+> IO-expander used by the MIPI cameras on various new (Meteor Lake and
+> later) Intel laptops.
 >
-> Signed-off-by: Nirmesh Kumar Singh <quic_nkumarsi@quicinc.com>
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-> Signed-off-by: Wasim Nazir <wasim.nazir@oss.qualcomm.com>
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> Co-developed-by: Hans de Goede <hansg@kernel.org>
+> Signed-off-by: Hans de Goede <hansg@kernel.org>
+> Signed-off-by: Israel Cepeda <israel.a.cepeda.lopez@intel.com>
 > ---
->  arch/arm64/boot/dts/qcom/lemans-evk.dts | 32 ++++++++++++++++++++++++++++++++
->  1 file changed, 32 insertions(+)
+> Changes in v5:
+> - Move GPIO_USBIO Kconfig option under 'menu "USB GPIO expanders"'
 >
+> Changes in v4:
+> - Drop include <linux/dev_printk.h>, unneeded auxiliary_set_drvdata()
+>
+> Changes in v3:
+> - Drop (offset >= gc->ngpio) check and make usbio_gpio_get_bank_and_pin()
+>   return void
+> - Propagate usbio_gpio_set() ret val in usbio_gpio_direction_output()
+> - Use devm_gpiochip_add_data() and drop auxiliary_driver remove() callback
+>
+> Changes in v2:
+> - Add a config_mutex protect usbio_gpio_update_config() calls, which
+>   read-modify-write banks[x].config, racing with each other
+> - Adjust usbio_gpio_get() to have an int return value and propagate the
+>   usbio_control_msg() return value
+> - Use __le16, __le32 type + cpu_to_le16() and friends for on wire words
+> - Some small style fixes from Sakari's review
 
-Reviewed-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+If Greg wants to take it:
+
+Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+
+or I can take it once patch 1/3 is in an immutable branch.
+
+I'm fine either way.
+
+Bartosz
 
