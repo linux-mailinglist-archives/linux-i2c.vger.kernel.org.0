@@ -1,149 +1,114 @@
-Return-Path: <linux-i2c+bounces-12870-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12871-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A22DB5337D
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 Sep 2025 15:19:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64C31B533AC
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 Sep 2025 15:26:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3EB2E1CC0FBB
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 Sep 2025 13:20:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 67F2FA821F0
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 Sep 2025 13:26:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9ADE5324B38;
-	Thu, 11 Sep 2025 13:19:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61C5132ED2E;
+	Thu, 11 Sep 2025 13:25:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="c8jmXGwL"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="FIfIOjPk"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBCCC31D722
-	for <linux-i2c@vger.kernel.org>; Thu, 11 Sep 2025 13:19:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 345F232CF6C
+	for <linux-i2c@vger.kernel.org>; Thu, 11 Sep 2025 13:25:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757596772; cv=none; b=Hprj5JLpia1rP0TQDNC0q/rau3XyvGepdcEKr343YMxChRxU/Ev0AoVHFzmFu82JsxlUJIa3z4GRV7uAzsFZ1oRyrAsW+woezt6Ifq95SvVVQwO3tqqayJuTBcC/FFMpAwE/hyrmveXExpfdOCO4B7CoHYRlmrvNQf9GybXApCU=
+	t=1757597116; cv=none; b=pprffLbNFXtWc6hxzTP+8p9RnxVha6yE1gcLu5TjmtykR7Wx1QQ7sQj2Irvp4gbCZz+GlCAfUHloQqexpgvuhhXJck6JgDbCca0Fjd5j3/Fm20bcOL22rhoQQ5etgwVtlL8R5bL0HROngAHtJ5W2FtSo/mV6i8068dHX7naFk9Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757596772; c=relaxed/simple;
-	bh=0bqSOryJEQ/X3+/vSnEr3yI4I9N6P79OuHfoWbsAg2w=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fjXMf/RwmqJdiD0QChuESFIPqKU/qwmmGmDmCxPAqK1veaYTyTKcEFVCSL0IsNuqUQg3Yb/VJXLI2siXfrOq7jxE6hA/N81wgpixSR2K2qgrX0U8tw4XD93Xusms+D00q/J7JwMDS9tjcCQpQxcZuWsLOV7pyzmKxVzGdESMDXw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=c8jmXGwL; arc=none smtp.client-ip=209.85.128.45
+	s=arc-20240116; t=1757597116; c=relaxed/simple;
+	bh=tvHtynkzdv1a6/2GIDVhvXbYgP7ctogGxu+SLDsFVek=;
+	h=From:In-Reply-To:MIME-Version:References:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uv+5Q4eZc116jQEkccwb3VSizHouYwGdupdbUeyNdq+g40EWuAHf/LvFnQNPbzeea2sL0r83vIXI2kIXJknkMPoxbby31kjFZEYSBFFK8kUebdDClPb815Z3P4l0xr6W7oXER6UO1tFwV/q5Q53kLjDj5mKqEBXsM/rpU677uGU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=FIfIOjPk; arc=none smtp.client-ip=209.85.167.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-45df7dc1b98so3920665e9.1
-        for <linux-i2c@vger.kernel.org>; Thu, 11 Sep 2025 06:19:29 -0700 (PDT)
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-55f6b0049fbso792791e87.0
+        for <linux-i2c@vger.kernel.org>; Thu, 11 Sep 2025 06:25:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1757596768; x=1758201568; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RoTjGjEf5o3PoFa4Kwu5lnAnxIVCW5Ws6ti5lef2kWA=;
-        b=c8jmXGwL0xzs8zb1abu5BzxzKey4ymBXTIgFJY6lILtF7HJoSnsCppAwVXMQzT1Rgf
-         q5h+RWO7Js5D5A00RsievlHEpipbAxWilWlz2EwZjwvlmNUzd4fTYgHfLZN1dirubq4T
-         s29hz5+7yMIWoFkZ1ODYKMTvXdzzxP5xZTwMCFEjl2Axguux2v/t/Xaql41wm9e7blvh
-         XyGIWXvWtmP1rHuc3eJ44TF7YT89LLPJy2l/BOiDdrcJBRtpsiDF5gQOLOgUNQ6q2lcT
-         HPTz57/oWzzwG1sAhtm6ZV5mMYVg0Vyk1yFu199Gkkc51wnrc5ZDvwsUI5lAbLruS8wJ
-         luow==
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1757597111; x=1758201911; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:references:mime-version:in-reply-to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=sKH9Tq5JpqAq1HnW1xohkQd88Pw1g4E8ukSxiOhM484=;
+        b=FIfIOjPkSwlc6EbFu6WXdlEpy4VWaKnLjZR6H/dP1XwFlkg+C2xUgxtbIOc1g7yz7M
+         GJVAZPqabKe1lAheW1Q+c9zQ2lV18QjU0DIbNJMMk7mVeT9dWXagRHkRqCMbFEAp1L9e
+         ejOYM2V75YUgzrxWHgptill6ER5hots1aOG1mrlrP6UUL9RzTQfRpCBKqQLurGZG5aEa
+         Jo3yGr7g5ANpqubCjx0vo3xFiN7IFMa+jUikcTnIkfgDdqRVjf9yi6RZmP8BvsoDvQol
+         cXlP123VceslaCUvdMGv3JzT2H//oIcQfYpvbh+2O84RpMJeaTtmPhuPkZPOyoCfRglR
+         pnHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757596768; x=1758201568;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RoTjGjEf5o3PoFa4Kwu5lnAnxIVCW5Ws6ti5lef2kWA=;
-        b=WgCGN51W7fX7OWhkv/1KFzBT++Nz148jGW+HeILNcmNQqNCmW989bYWD19bcbTVBUE
-         ls2wkR6AaudZPbaMBvSy5SEfhUxUwH3tmBkNtsqGZgZWt01g9dk/tQ+Uw2z5paXFatB5
-         +OEXR0Mwau8W/xaVK0cza5uIamqNkqmV73wLKwum26M5KRAt5ExOokQdol7T9sigf2/U
-         SaZKl+TXrEf4kOT6IEv3A9ayq28tfj8vO0JuiNq7Glk/gZnnmxdmYiNrHcCbmQS3WPjn
-         VxqUlJbz573SYxKzxaSUcnAlqSlkpPzgwIbK+HnjJ+bpFudDdX938E34YBPtqVwNS0e5
-         2J2w==
-X-Forwarded-Encrypted: i=1; AJvYcCUxnxXVGNayES5EhAqPjlA5Fq/WUw1jqzm7ueZLBelT2LhuU5PrloQdN45FpsP6Gz7wsI0Jg1B0Euw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywc2+x67l9KDg3sh5v8icKsZagPO6LBp8XtRTGsvBc/61QKPYiz
-	qX2bwDcR1PArcDc2fefJT/cQ+B6jE3ubbDjTstt/0+i3dA6qfAKXS6u7jkRcChLxuA8=
-X-Gm-Gg: ASbGncuSHEIjoev0JxOe8IEUapgIBboB0Sa0LXiDXPNRZFfmvtE9jWnzTDIE6AbXDje
-	MYfrfacuLcwuWJi4KRujbNqwljP+Ne1z4NRyjJ/nZIdGS82063lns+QE3wcdWkJ8HXv2B7pZ9le
-	MT1nJHdh9Xdq1mVVw2pfF/3XJDrExseBEBPeUKoo+1a74na8FM7BOHP7cblVoXo+odGZQaG+4h7
-	gQ3HL8OeN9wAlOZlQPTy4oI3qAKuT4tOFUgHJKD6jRWwH2fqjrFBb2tl8On0w2JOu9y9MXUO+PH
-	WS4XmmeXCtO0LFez4/EQm/Ggju7UliDzPDgsnRbj+sUAnHaHmGy3APwJ6MC6kwzqofmWzePSgwK
-	PFc5UU2f8PJEoAiEErxFExJY=
-X-Google-Smtp-Source: AGHT+IH8nHuk3NSLqjFY2vj/PBH77XKaFOpHdcKlyadMrh/8ELLpleuBiAgM8Qj5GJ3//zqteimh3g==
-X-Received: by 2002:a05:6000:2886:b0:3e2:e079:ab32 with SMTP id ffacd0b85a97d-3e642309dc7mr17268671f8f.7.1757596767963;
-        Thu, 11 Sep 2025 06:19:27 -0700 (PDT)
-Received: from brgl-uxlite.home ([2a01:cb1d:dc:7e00:3e84:ca5d:e1de:73b8])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3e7607870c4sm2483656f8f.22.2025.09.11.06.19.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Sep 2025 06:19:26 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1757597111; x=1758201911;
+        h=cc:to:subject:message-id:date:references:mime-version:in-reply-to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sKH9Tq5JpqAq1HnW1xohkQd88Pw1g4E8ukSxiOhM484=;
+        b=aZ/AA/zJFL8vAIP14EH2A2oUcCwVUeQc330Wm7WjgWdxPhjmRnpJNSK1wYvMOQQASv
+         GB9n4mkkLRAlEzLJd/votpdQq0rphmnyUCtxXuD6FCXdnaAvyBGS00NIQViggaLuPRG/
+         n+HbLhDIZoVQosEwEItgma8nfJn3YJ7zUmDKMe29iKdhT1pt/NFSVOE60O8LsNTyriev
+         tpOKKIycjmy4vHUjTMIQ/T3YnziHiyaAhoR+gvrZNNjyqC+2aVVEDhjSqGIfZOP4dnxA
+         rHbC/MhJ+TUk2gVcEOfpA1PIiYjGRv2qeyZcdOw+rSzCdzbJ1yV6kh+Hi6J+utt+HV1t
+         ONkQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUnkiaESHWBG6epx3268g7/noRZOZ5TNuoGCNVtxYxjHgTixK8AgtGEo7Pee/tp1i0o9B/E6cKr8No=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywi/4qpuB/lKTAXqFLOkCrTCQMvk9FZq3hZhe5EC3ln7YI4L5y1
+	qxBUl11brK5MsbtvyRrUUyKDkcR6gauIui0VTeKK+qCD0i0SuAI7dl3VUNfqbTXE7BUvT8GQ21Y
+	ujQGjwzPhwQwFASuRY0KLYVQXUSPrUYz2phEnAe4MYg==
+X-Gm-Gg: ASbGncvnArcAb1iCwBjKMTvPQeoAm01WJAfj/rfB+0qoHCbhdRN9AGnfbAvPeXwlBYb
+	MsaSa7nFgyKNRMaaCwH1uQRtMObd4fk4q/LvSpkXhKeEKGFwVI18bsAO+5A5uGgJPzSe2KSEH5Q
+	LlbmLCk3dy8r/cbNyOG8pRZjZ2EI8ueItdxbPZNgqlP/Nn0hAWPbPyVNvLDta3ys2Azg9vAAXLr
+	SzGS4YtVIKLcS5bueIQ4IWBxLwYNXJbCcWSj24=
+X-Google-Smtp-Source: AGHT+IFsA5ZOyU9tpTag4iQY+UEBWc1v4AgFQ6DjU2UnALeCrswvvm+lEztT+M/sSG35UIi0IcRGR77vi6rw6ChMafc=
+X-Received: by 2002:a05:6512:33cd:b0:55f:489d:7bd with SMTP id
+ 2adb3069b0e04-5625d28e732mr6154709e87.0.1757597111174; Thu, 11 Sep 2025
+ 06:25:11 -0700 (PDT)
+Received: from 969154062570 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 11 Sep 2025 08:25:10 -0500
+Received: from 969154062570 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 11 Sep 2025 08:25:10 -0500
 From: Bartosz Golaszewski <brgl@bgdev.pl>
-To: Ulf Hansson <ulf.hansson@linaro.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Richard Cochran <richardcochran@gmail.com>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Wasim Nazir <wasim.nazir@oss.qualcomm.com>
-Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	kernel@oss.qualcomm.com,
-	linux-mmc@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-i2c@vger.kernel.org,
-	Monish Chunara <quic_mchunara@quicinc.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
-	Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>,
-	Nirmesh Kumar Singh <quic_nkumarsi@quicinc.com>,
-	Sushrut Shree Trivedi <quic_sushruts@quicinc.com>,
-	Vikash Garodia <quic_vgarodia@quicinc.com>,
-	Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>,
-	Mohd Ayaan Anwar <quic_mohdayaa@quicinc.com>,
-	Mohammad Rafi Shaik <mohammad.rafi.shaik@oss.qualcomm.com>
-Subject: Re: (subset) [PATCH v4 00/14] arm64: dts: qcom: lemans-evk: Extend board support for additional peripherals
-Date: Thu, 11 Sep 2025 15:19:25 +0200
-Message-ID: <175759676089.37240.12221834042390731955.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250908-lemans-evk-bu-v4-0-5c319c696a7d@oss.qualcomm.com>
-References: <20250908-lemans-evk-bu-v4-0-5c319c696a7d@oss.qualcomm.com>
+In-Reply-To: <20250908-lemans-evk-bu-v4-4-5c319c696a7d@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <20250908-lemans-evk-bu-v4-0-5c319c696a7d@oss.qualcomm.com> <20250908-lemans-evk-bu-v4-4-5c319c696a7d@oss.qualcomm.com>
+Date: Thu, 11 Sep 2025 08:25:10 -0500
+X-Gm-Features: Ac12FXyxL1zBhnbmQPIz3eBGCsQd9d-c4NEoyZ66twALqJFT9m4E9c429dd_4HA
+Message-ID: <CAMRc=Mf8P=4vucch0sAtPNZ7DBB0Kw1hgvP1YLgZ5ZRfusFG-w@mail.gmail.com>
+Subject: Re: [PATCH v4 04/14] arm64: dts: qcom: lemans-evk: Add TCA9534 I/O expander
+To: Wasim Nazir <wasim.nazir@oss.qualcomm.com>
+Cc: kernel@oss.qualcomm.com, linux-mmc@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, Nirmesh Kumar Singh <quic_nkumarsi@quicinc.com>, 
+	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, Ulf Hansson <ulf.hansson@linaro.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
+	Richard Cochran <richardcochran@gmail.com>, Bartosz Golaszewski <brgl@bgdev.pl>
+Content-Type: text/plain; charset="UTF-8"
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On Mon, 8 Sep 2025 10:19:54 +0200, Wasim Nazir
+<wasim.nazir@oss.qualcomm.com> said:
+> From: Nirmesh Kumar Singh <quic_nkumarsi@quicinc.com>
+>
+> Integrate the TCA9534 I/O expander via I2C to provide 8 additional
+> GPIO lines for extended I/O functionality.
+>
+> Signed-off-by: Nirmesh Kumar Singh <quic_nkumarsi@quicinc.com>
+> Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+> Signed-off-by: Wasim Nazir <wasim.nazir@oss.qualcomm.com>
+> ---
+>  arch/arm64/boot/dts/qcom/lemans-evk.dts | 32 ++++++++++++++++++++++++++++++++
+>  1 file changed, 32 insertions(+)
+>
 
-
-On Mon, 08 Sep 2025 13:49:50 +0530, Wasim Nazir wrote:
-> This series extend support for additional peripherals on the Qualcomm
-> Lemans EVK board to enhance overall hardware functionality.
-> 
-> It includes:
->   - New peripherals like:
->     - I2C based devices like GPIO I/O expander and EEPROM.
->     - GPI (Generic Peripheral Interface) DMA controllers and QUPv3 controllers
->       for peripheral communication.
->     - PCIe HW with required regulators and PHYs.
->     - Remoteproc subsystems for supported DSPs.
->     - Iris video codec.
->     - First USB controller in device mode.
->     - SD card support on SDHC v5.
->     - Qca8081 2.5G Ethernet PHY.
->   - Audio change [1] to support capture and playback on I2S.
-> 
-> [...]
-
-Applied, thanks!
-
-[05/14] dt-bindings: eeprom: at24: Add compatible for Giantec GT24C256C
-        https://git.kernel.org/brgl/linux/c/c7ec58c39b0252e6635dde55e5c708132ab25cfc
-
-Best regards,
--- 
-Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Reviewed-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
