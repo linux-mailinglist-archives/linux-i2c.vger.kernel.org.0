@@ -1,46 +1,46 @@
-Return-Path: <linux-i2c+bounces-12888-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12889-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F922B53B1F
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 Sep 2025 20:14:00 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C8F4B53B21
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 Sep 2025 20:14:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E8921AA5477
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 Sep 2025 18:13:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0E3AC5647E5
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 Sep 2025 18:14:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DDA43680A3;
-	Thu, 11 Sep 2025 18:13:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B90CA369320;
+	Thu, 11 Sep 2025 18:13:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r/JMWIUu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iyyL1/5w"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 235DC346A19;
-	Thu, 11 Sep 2025 18:13:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7036B1917F1;
+	Thu, 11 Sep 2025 18:13:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757614431; cv=none; b=H4MvHMc73AZwS0CEZ0fPzxlJctGsIPq2dOTwfq06cKhoDXr674YMwqOYP7SXNRi3/jCEGuTbMACZDl5h3YRe3+17uXUl/5yggI4rAfD7hlnCX5MDvf/YUiJIk8KR8OXqf6TYCTlhbfyCv3k1vwbu+nOe9ozszmeqxxr0CM6+swk=
+	t=1757614434; cv=none; b=aXRzSfq3RiOKBihjrBdHRK/bLyhI9H2GDT7MQ6l9tqNZpljh97R/0OGnQbIPqP/8Kzh8e787QL0Qdov+5FE0Zh7G8EPpx0JtkdPWOlqyy/SI5TefTPfy80DvtzWZl/pEyhQOEpY+jX635OdaJDMpu2bTUKyejR+xzk157mb8+Xg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757614431; c=relaxed/simple;
-	bh=V3OUgkDz/Z0dHBYvUuB539CN/1ijOFN7AOkC/lKOD+U=;
+	s=arc-20240116; t=1757614434; c=relaxed/simple;
+	bh=cowhWrPBSLHwkPnVEdpkF5Hebhci4X7iMGQuik8VsHI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WkQNiNWSk5csHe0IRY4l23UFiS+pks4uWLMdOtA4Cv2d+GIZYyTvunK3lBpUl6qQ7VEqA5OmMDaxlEUdJ8H86A488A078s4XlCiJYGiI3YFQa/NrjMkdLQdPZN/9RwSBbKAad5/QDnyI1h0O+45SYiCSGdFgKyIvDMlzJsFUqbM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r/JMWIUu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5796FC4CEF5;
-	Thu, 11 Sep 2025 18:13:48 +0000 (UTC)
+	 MIME-Version; b=Cduvn2RrkPp/XEHpfjtZyj3neMfND9+dZpLiPB4/z88d/MwEvrQyCzpJJxrWNIC2p0CI4vFUmIVRqaoj4G2rNxqfGz2r8pQ4NP59oYy4tjVkGI0wlp0RIGOK2ippu65aKiVKJt1eMOReBQGH3oL4uuWngdI1nKCU2tQxi5C620Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iyyL1/5w; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71AA9C4CEF9;
+	Thu, 11 Sep 2025 18:13:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757614431;
-	bh=V3OUgkDz/Z0dHBYvUuB539CN/1ijOFN7AOkC/lKOD+U=;
+	s=k20201202; t=1757614434;
+	bh=cowhWrPBSLHwkPnVEdpkF5Hebhci4X7iMGQuik8VsHI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=r/JMWIUuCDn+eRidyGpO8QVwwH7o8AZr3s160LuifRA1JqbYPC7RrFJ7aoGuGL+6v
-	 LguhsJOGdo9edv56NHMoTTHsKq429nEyNXdafRK4QZs6x8d7VLiio1nXZr5M7ntY2l
-	 +RrsNrB4OYmrX475ZKTwm8rDwIUgFJ6v7ZUjgMlCiCFkqizvAJ+veR+MQjn/pg4kMh
-	 iK2XKdVZyQA3R1GwVx6IkWpr/8/4gZzuzCZ0IpXpxGKSXq6r0cJ0h9Z8N8O23bRRHb
-	 wwPJlEU3Ld8HcZtHgSjMu1SI4LYXxoqWdHvocM26scrpbRoHAyYf0Ys8cJrMa4jkyr
-	 9FuWvypzzCcpQ==
+	b=iyyL1/5wPB6h2EE/Jj03dZdI9CphuO8PStanUt4ICs8CINLU1pp6W8JN3gISPiJfk
+	 Yiup1dUnYDztF3epxTp9UjVHHysc6DMZyewc/q+xGRQFuRJZsWowX+ZXdJ/SBoYFcv
+	 01PRAh8fZmgYqZNPTLCv0DYDtwgoBlaPLQ6TD2rP5nXaE7ZWkAxCxsux1pWa8hr1yG
+	 MK//QttzbKDpQk6eS+E5cG8aWyZXBKGTa5JB4PuBPY1HD+9iA6fPuS/gt9b0NUaO7p
+	 s8Cpks92eJ1s7b2dXRVOYkKZlSCNZ/q0l0rmehLAPAyFlnh0vSfkLnFYLDCcFkRsPT
+	 lIeCCcuuCjCuw==
 From: Hans de Goede <hansg@kernel.org>
 To: Israel Cepeda <israel.a.cepeda.lopez@intel.com>,
 	Sakari Ailus <sakari.ailus@linux.intel.com>,
@@ -53,10 +53,11 @@ Cc: Hans de Goede <hansg@kernel.org>,
 	Richard Hughes <rhughes@redhat.com>,
 	linux-i2c@vger.kernel.org,
 	linux-usb@vger.kernel.org,
-	linux-gpio@vger.kernel.org
-Subject: [PATCH v6 1/3] usb: misc: Add Intel USBIO bridge driver
-Date: Thu, 11 Sep 2025 20:13:41 +0200
-Message-ID: <20250911181343.77398-2-hansg@kernel.org>
+	linux-gpio@vger.kernel.org,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: [PATCH v6 2/3] gpio: Add Intel USBIO GPIO driver
+Date: Thu, 11 Sep 2025 20:13:42 +0200
+Message-ID: <20250911181343.77398-3-hansg@kernel.org>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20250911181343.77398-1-hansg@kernel.org>
 References: <20250911181343.77398-1-hansg@kernel.org>
@@ -70,1032 +71,342 @@ Content-Transfer-Encoding: 8bit
 
 From: Israel Cepeda <israel.a.cepeda.lopez@intel.com>
 
-Add a driver for the Intel USBIO USB IO-expander used by the MIPI cameras
-on various new (Meteor Lake and later) Intel laptops.
+Add a a driver for the GPIO auxbus child device of the Intel USBIO USB
+IO-expander used by the MIPI cameras on various new (Meteor Lake and
+later) Intel laptops.
 
-This is an USB bridge driver which adds auxbus child devices for the GPIO,
-I2C and SPI functions of the USBIO chip and which exports IO-functions for
-the drivers for the auxbus child devices to communicate with the USBIO
-device's firmware.
-
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 Co-developed-by: Hans de Goede <hansg@kernel.org>
 Signed-off-by: Hans de Goede <hansg@kernel.org>
 Signed-off-by: Israel Cepeda <israel.a.cepeda.lopez@intel.com>
 ---
+Changes in v5:
+- Move GPIO_USBIO Kconfig option under 'menu "USB GPIO expanders"'
+
+Changes in v4:
+- Drop include <linux/dev_printk.h>, unneeded auxiliary_set_drvdata()
+
+Changes in v3:
+- Drop (offset >= gc->ngpio) check and make usbio_gpio_get_bank_and_pin()
+  return void
+- Propagate usbio_gpio_set() ret val in usbio_gpio_direction_output()
+- Use devm_gpiochip_add_data() and drop auxiliary_driver remove() callback
+
 Changes in v2:
-- Split usbio-bridge mutex into ctrl_mutex and bulk_mutex
-- Drop SPI support since this is not used on devices in the field
-- Rework disconnect handling to be more robust
-- Several different revisions need special casing add a quirks mechanism
-  for this
-- Stop using stdint.h (uintX_t) types
+- Add a config_mutex protect usbio_gpio_update_config() calls, which
+  read-modify-write banks[x].config, racing with each other
+- Adjust usbio_gpio_get() to have an int return value and propagate the
+  usbio_control_msg() return value
 - Use __le16, __le32 type + cpu_to_le16() and friends for on wire words
-- Properly check auxiliary_device_add() return value
 - Some small style fixes from Sakari's review
 ---
- MAINTAINERS               |   8 +
- drivers/usb/misc/Kconfig  |  14 +
- drivers/usb/misc/Makefile |   1 +
- drivers/usb/misc/usbio.c  | 749 ++++++++++++++++++++++++++++++++++++++
- include/linux/usb/usbio.h | 177 +++++++++
- 5 files changed, 949 insertions(+)
- create mode 100644 drivers/usb/misc/usbio.c
- create mode 100644 include/linux/usb/usbio.h
+ MAINTAINERS               |   1 +
+ drivers/gpio/Kconfig      |  11 ++
+ drivers/gpio/Makefile     |   1 +
+ drivers/gpio/gpio-usbio.c | 247 ++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 260 insertions(+)
+ create mode 100644 drivers/gpio/gpio-usbio.c
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 42debb2dc76a..72689972d669 100644
+index 72689972d669..8189bd88dd7e 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -12694,6 +12694,14 @@ S:	Maintained
- F:	Documentation/admin-guide/pm/intel_uncore_frequency_scaling.rst
- F:	drivers/platform/x86/intel/uncore-frequency/
+@@ -12699,6 +12699,7 @@ M:	Israel Cepeda <israel.a.cepeda.lopez@intel.com>
+ M:	Hans de Goede <hansg@kernel.org>
+ R:	Sakari Ailus <sakari.ailus@linux.intel.com>
+ S:	Maintained
++F:	drivers/gpio/gpio-usbio.c
+ F:	drivers/usb/misc/usbio.c
+ F:	include/linux/usb/usbio.h
  
-+INTEL USBIO USB I/O EXPANDER DRIVERS
-+M:	Israel Cepeda <israel.a.cepeda.lopez@intel.com>
-+M:	Hans de Goede <hansg@kernel.org>
-+R:	Sakari Ailus <sakari.ailus@linux.intel.com>
-+S:	Maintained
-+F:	drivers/usb/misc/usbio.c
-+F:	include/linux/usb/usbio.h
-+
- INTEL VENDOR SPECIFIC EXTENDED CAPABILITIES DRIVER
- M:	David E. Box <david.e.box@linux.intel.com>
- S:	Supported
-diff --git a/drivers/usb/misc/Kconfig b/drivers/usb/misc/Kconfig
-index 6497c4e81e95..bfe08e15d051 100644
---- a/drivers/usb/misc/Kconfig
-+++ b/drivers/usb/misc/Kconfig
-@@ -178,6 +178,20 @@ config USB_LJCA
- 	  This driver can also be built as a module. If so, the module
- 	  will be called usb-ljca.
+diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
+index d8ac40d0eb6f..efd72c72ad40 100644
+--- a/drivers/gpio/Kconfig
++++ b/drivers/gpio/Kconfig
+@@ -1923,6 +1923,17 @@ config GPIO_MPSSE
+ 	  GPIO driver for FTDI's MPSSE interface. These can do input and
+ 	  output. Each MPSSE provides 16 IO pins.
  
-+config USB_USBIO
-+	tristate "Intel USBIO Bridge support"
-+	depends on USB && ACPI
-+	select AUXILIARY_BUS
++config GPIO_USBIO
++	tristate "Intel USBIO GPIO support"
++	depends on USB_USBIO
++	default USB_USBIO
 +	help
-+	  This adds support for Intel USBIO drivers.
-+	  This enables the USBIO bridge driver module in charge to talk
-+	  to the USB device. Additional drivers such as GPIO_USBIO and
-+	  I2C_USBIO must be enabled in order to use the device's full
-+	  functionality.
++	  Select this option to enable GPIO driver for the INTEL
++	  USBIO driver stack.
 +
 +	  This driver can also be built as a module. If so, the module
-+	  will be called usbio.
++	  will be called gpio_usbio.
 +
- source "drivers/usb/misc/sisusbvga/Kconfig"
+ endmenu
  
- config USB_LD
-diff --git a/drivers/usb/misc/Makefile b/drivers/usb/misc/Makefile
-index 0cd5bc8f52fe..494ab0377f35 100644
---- a/drivers/usb/misc/Makefile
-+++ b/drivers/usb/misc/Makefile
-@@ -12,6 +12,7 @@ obj-$(CONFIG_USB_EMI62)			+= emi62.o
- obj-$(CONFIG_USB_EZUSB_FX2)		+= ezusb.o
- obj-$(CONFIG_APPLE_MFI_FASTCHARGE)	+= apple-mfi-fastcharge.o
- obj-$(CONFIG_USB_LJCA)			+= usb-ljca.o
-+obj-$(CONFIG_USB_USBIO)			+= usbio.o
- obj-$(CONFIG_USB_IDMOUSE)		+= idmouse.o
- obj-$(CONFIG_USB_IOWARRIOR)		+= iowarrior.o
- obj-$(CONFIG_USB_ISIGHTFW)		+= isight_firmware.o
-diff --git a/drivers/usb/misc/usbio.c b/drivers/usb/misc/usbio.c
+ menu "Virtual GPIO drivers"
+diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
+index 379f55e9ed1e..b1593ce92ebe 100644
+--- a/drivers/gpio/Makefile
++++ b/drivers/gpio/Makefile
+@@ -192,6 +192,7 @@ obj-$(CONFIG_GPIO_TS5500)		+= gpio-ts5500.o
+ obj-$(CONFIG_GPIO_TWL4030)		+= gpio-twl4030.o
+ obj-$(CONFIG_GPIO_TWL6040)		+= gpio-twl6040.o
+ obj-$(CONFIG_GPIO_UNIPHIER)		+= gpio-uniphier.o
++obj-$(CONFIG_GPIO_USBIO) 		+= gpio-usbio.o
+ obj-$(CONFIG_GPIO_VF610)		+= gpio-vf610.o
+ obj-$(CONFIG_GPIO_VIPERBOARD)		+= gpio-viperboard.o
+ obj-$(CONFIG_GPIO_VIRTUSER)		+= gpio-virtuser.o
+diff --git a/drivers/gpio/gpio-usbio.c b/drivers/gpio/gpio-usbio.c
 new file mode 100644
-index 000000000000..37644dddf157
+index 000000000000..e13c120824e3
 --- /dev/null
-+++ b/drivers/usb/misc/usbio.c
-@@ -0,0 +1,749 @@
++++ b/drivers/gpio/gpio-usbio.c
+@@ -0,0 +1,247 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Intel USBIO Bridge driver
-+ *
 + * Copyright (c) 2025 Intel Corporation.
 + * Copyright (c) 2025 Red Hat, Inc.
 + */
 +
 +#include <linux/acpi.h>
 +#include <linux/auxiliary_bus.h>
-+#include <linux/byteorder/generic.h>
 +#include <linux/cleanup.h>
-+#include <linux/completion.h>
-+#include <linux/dev_printk.h>
 +#include <linux/device.h>
-+#include <linux/lockdep.h>
++#include <linux/gpio/driver.h>
 +#include <linux/mutex.h>
-+#include <linux/string.h>
 +#include <linux/types.h>
-+#include <linux/usb.h>
 +#include <linux/usb/usbio.h>
 +
-+/*************************************
-+ * USBIO Bridge Protocol Definitions *
-+ *************************************/
-+
-+/* USBIO Control Commands */
-+#define USBIO_CTRLCMD_PROTVER	0
-+#define USBIO_CTRLCMD_FWVER	1
-+#define USBIO_CTRLCMD_HS	2
-+#define USBIO_CTRLCMD_ENUMGPIO	16
-+#define USBIO_CTRLCMD_ENUMI2C	17
-+
-+/* USBIO Packet Flags */
-+#define USBIO_PKTFLAG_ACK	BIT(0)
-+#define USBIO_PKTFLAG_RSP	BIT(1)
-+#define USBIO_PKTFLAG_CMP	BIT(2)
-+#define USBIO_PKTFLAG_ERR	BIT(3)
-+
-+#define USBIO_PKTFLAGS_REQRESP	(USBIO_PKTFLAG_CMP | USBIO_PKTFLAG_ACK)
-+
-+#define USBIO_CTRLXFER_TIMEOUT 0
-+#define USBIO_BULKXFER_TIMEOUT 100
-+
-+struct usbio_protver {
-+	u8 ver;
-+} __packed;
-+
-+struct usbio_fwver {
-+	u8 major;
-+	u8 minor;
-+	__le16 patch;
-+	__le16 build;
-+} __packed;
-+
-+/***********************************
-+ * USBIO Bridge Device Definitions *
-+ ***********************************/
-+
-+/**
-+ * struct usbio_device - the usb device exposing IOs
-+ *
-+ * @dev: the device in the usb interface
-+ * @udev: the detected usb device
-+ * @intf: the usb interface
-+ * @quirks: quirks
-+ * @ctrl_mutex: protects ctrl_buf
-+ * @ctrl_pipe: the control transfer pipe
-+ * @ctrlbuf_len: the size of the control transfer pipe
-+ * @ctrlbuf: the buffer used for control transfers
-+ * @bulk_mutex: protects tx_buf, rx_buf and split bulk-transfers getting interrupted
-+ * @tx_pipe: the bulk out pipe
-+ * @txbuf_len: the size of the bulk out pipe
-+ * @txbuf: the buffer used for bulk out transfers
-+ * @rx_pipe: the bulk in pipe
-+ * @rxbuf_len: the size of the bulk in pipe
-+ * @rxdat_len: the data length at rx buffer
-+ * @rxbuf: the buffer used for bulk in transfers
-+ * @urb: the urb to read bulk pipe
-+ * @done: completion object as request is done
-+ * @cli_list: device's client list
-+ * @nr_gpio_banks: Number of GPIO banks
-+ * @gpios: GPIO bank descriptors
-+ * @nr_gpio_banks: Number of I2C busses
-+ * @gpios: I2C bank descriptors
-+ */
-+struct usbio_device {
-+	struct device *dev;
-+	struct usb_device *udev;
-+	struct usb_interface *intf;
-+	unsigned long quirks;
-+
-+	struct mutex ctrl_mutex;
-+	unsigned int ctrl_pipe;
-+	u16 ctrlbuf_len;
-+	void *ctrlbuf;
-+
-+	struct mutex bulk_mutex;
-+	unsigned int tx_pipe;
-+	u16 txbuf_len;
-+	void *txbuf;
-+
-+	unsigned int rx_pipe;
-+	u16 rxbuf_len;
-+	u16 rxdat_len;
-+	void *rxbuf;
-+	struct urb *urb;
-+
-+	struct completion done;
-+
-+	struct list_head cli_list;
-+
-+	unsigned int nr_gpio_banks;
-+	struct usbio_gpio_bank_desc gpios[USBIO_MAX_GPIOBANKS];
-+
-+	unsigned int nr_i2c_buses;
-+	struct usbio_i2c_bus_desc i2cs[USBIO_MAX_I2CBUSES];
++struct usbio_gpio_bank {
++	u8 config[USBIO_GPIOSPERBANK];
++	u32 bitmap;
 +};
 +
-+/**
-+ * struct usbio_client - represents a usbio client
-+ *
-+ * @auxdev: auxiliary device object
-+ * @mutex: protects @bridge
-+ * @bridge: usbio bridge who service the client
-+ * @link: usbio bridge clients list member
-+ */
-+struct usbio_client {
-+	struct auxiliary_device auxdev;
-+	struct mutex mutex;
-+	struct usbio_device *bridge;
-+	struct list_head link;
-+};
-+
-+#define adev_to_client(adev) container_of_const(adev, struct usbio_client, auxdev)
-+
-+static int usbio_ctrl_msg(struct usbio_device *usbio, u8 type, u8 cmd,
-+			  const void *obuf, u16 obuf_len, void *ibuf, u16 ibuf_len)
-+{
-+	u8 request = USB_TYPE_VENDOR | USB_RECIP_DEVICE;
-+	struct usbio_ctrl_packet *cpkt;
-+	unsigned int pipe;
-+	u16 cpkt_len;
-+	int ret;
-+
-+	lockdep_assert_held(&usbio->ctrl_mutex);
-+
-+	if ((obuf_len > (usbio->ctrlbuf_len - sizeof(*cpkt))) ||
-+	    (ibuf_len > (usbio->ctrlbuf_len - sizeof(*cpkt))))
-+		return -EMSGSIZE;
-+
-+	/* Prepare Control Packet Header */
-+	cpkt = usbio->ctrlbuf;
-+	cpkt->header.type = type;
-+	cpkt->header.cmd = cmd;
-+	if (type == USBIO_PKTTYPE_CTRL || ibuf_len)
-+		cpkt->header.flags = USBIO_PKTFLAGS_REQRESP;
-+	else
-+		cpkt->header.flags = USBIO_PKTFLAG_CMP;
-+	cpkt->len = obuf_len;
-+
-+	/* Copy the data */
-+	memcpy(cpkt->data, obuf, obuf_len);
-+
-+	pipe = usb_sndctrlpipe(usbio->udev, usbio->ctrl_pipe);
-+	cpkt_len = sizeof(*cpkt) + obuf_len;
-+	ret = usb_control_msg(usbio->udev, pipe, 0, request | USB_DIR_OUT, 0, 0,
-+			      cpkt, cpkt_len, USBIO_CTRLXFER_TIMEOUT);
-+	dev_dbg(usbio->dev, "control out %d hdr %*phN data %*phN\n", ret,
-+		(int)sizeof(*cpkt), cpkt, (int)cpkt->len, cpkt->data);
-+
-+	if (ret != cpkt_len) {
-+		dev_err(usbio->dev, "USB control out failed: %d\n", ret);
-+		return (ret < 0) ? ret : -EPROTO;
-+	}
-+
-+	if (!(cpkt->header.flags & USBIO_PKTFLAG_ACK))
-+		return 0;
-+
-+	pipe = usb_rcvctrlpipe(usbio->udev, usbio->ctrl_pipe);
-+	cpkt_len = sizeof(*cpkt) + ibuf_len;
-+	ret = usb_control_msg(usbio->udev, pipe, 0, request | USB_DIR_IN, 0, 0,
-+			      cpkt, cpkt_len, USBIO_CTRLXFER_TIMEOUT);
-+	dev_dbg(usbio->dev, "control in %d hdr %*phN data %*phN\n", ret,
-+		(int)sizeof(*cpkt), cpkt, (int)cpkt->len, cpkt->data);
-+
-+	if (ret < sizeof(*cpkt)) {
-+		dev_err(usbio->dev, "USB control in failed: %d\n", ret);
-+		return (ret < 0) ? ret : -EPROTO;
-+	}
-+
-+	if (cpkt->header.type != type || cpkt->header.cmd != cmd ||
-+	    !(cpkt->header.flags & USBIO_PKTFLAG_RSP)) {
-+		dev_err(usbio->dev, "Unexpected reply type: %u, cmd: %u, flags: %u\n",
-+			cpkt->header.type, cpkt->header.cmd, cpkt->header.flags);
-+		return -EPROTO;
-+	}
-+
-+	if (cpkt->header.flags & USBIO_PKTFLAG_ERR)
-+		return -EREMOTEIO;
-+
-+	if (ibuf_len < cpkt->len)
-+		return -ENOSPC;
-+
-+	memcpy(ibuf, cpkt->data, cpkt->len);
-+
-+	return cpkt->len;
-+}
-+
-+int usbio_control_msg(struct auxiliary_device *adev, u8 type, u8 cmd,
-+		      const void *obuf, u16 obuf_len, void *ibuf, u16 ibuf_len)
-+{
-+	struct usbio_client *client = adev_to_client(adev);
-+	struct usbio_device *usbio;
-+	int ret;
-+
-+	guard(mutex)(&client->mutex);
-+
-+	usbio = client->bridge;
-+	if (!usbio)
-+		return -ENODEV; /* Disconnected */
-+
-+	ret = usb_autopm_get_interface(usbio->intf);
-+	if (ret)
-+		return ret;
-+
-+	mutex_lock(&usbio->ctrl_mutex);
-+
-+	ret = usbio_ctrl_msg(client->bridge, type, cmd, obuf, obuf_len, ibuf, ibuf_len);
-+
-+	mutex_unlock(&usbio->ctrl_mutex);
-+	usb_autopm_put_interface(usbio->intf);
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_NS_GPL(usbio_control_msg, "USBIO");
-+
-+static void usbio_bulk_recv(struct urb *urb)
-+{
-+	struct usbio_bulk_packet *bpkt = urb->transfer_buffer;
-+	struct usbio_device *usbio = urb->context;
-+
-+	if (!urb->status) {
-+		if (bpkt->header.flags & USBIO_PKTFLAG_RSP) {
-+			usbio->rxdat_len = urb->actual_length;
-+			complete(&usbio->done);
-+		}
-+	} else if (urb->status != -ENOENT) {
-+		dev_err(usbio->dev, "Bulk in error %d\n", urb->status);
-+	}
-+
-+	usb_submit_urb(usbio->urb, GFP_ATOMIC);
-+}
-+
-+int usbio_bulk_msg(struct auxiliary_device *adev, u8 type, u8 cmd, bool last,
-+		   const void *obuf, u16 obuf_len, void *ibuf, u16 ibuf_len)
-+{
-+	struct usbio_client *client = adev_to_client(adev);
-+	struct usbio_device *usbio = client->bridge;
-+	struct usbio_bulk_packet *bpkt;
-+	int ret, act = 0;
-+	u16 bpkt_len;
-+
-+	lockdep_assert_held(&client->mutex);
-+	lockdep_assert_held(&usbio->bulk_mutex);
-+
-+	if ((obuf_len > (usbio->txbuf_len - sizeof(*bpkt))) ||
-+	    (ibuf_len > (usbio->txbuf_len - sizeof(*bpkt))))
-+		return -EMSGSIZE;
-+
-+	if (ibuf_len)
-+		reinit_completion(&usbio->done);
-+
-+	/* If no data to send, skip to read */
-+	if (!obuf_len)
-+		goto read;
-+
-+	/* Prepare Bulk Packet Header */
-+	bpkt = usbio->txbuf;
-+	bpkt->header.type = type;
-+	bpkt->header.cmd = cmd;
-+	if (!last)
-+		bpkt->header.flags = 0;
-+	else if (ibuf_len)
-+		bpkt->header.flags = USBIO_PKTFLAGS_REQRESP;
-+	else
-+		bpkt->header.flags = USBIO_PKTFLAG_CMP;
-+	bpkt->len = cpu_to_le16(obuf_len);
-+
-+	/* Copy the data */
-+	memcpy(bpkt->data, obuf, obuf_len);
-+
-+	bpkt_len = sizeof(*bpkt) + obuf_len;
-+	ret = usb_bulk_msg(usbio->udev, usbio->tx_pipe, bpkt, bpkt_len, &act,
-+			   USBIO_BULKXFER_TIMEOUT);
-+	dev_dbg(usbio->dev, "bulk out %d hdr %*phN data %*phN\n", act,
-+		(int)sizeof(*bpkt), bpkt, obuf_len, bpkt->data);
-+
-+	if (ret || act != bpkt_len) {
-+		dev_err(usbio->dev, "Bulk out failed: %d\n", ret);
-+		return ret ?: -EPROTO;
-+	}
-+
-+	if (!(bpkt->header.flags & USBIO_PKTFLAG_ACK))
-+		return obuf_len;
-+
-+read:
-+	ret = wait_for_completion_timeout(&usbio->done, USBIO_BULKXFER_TIMEOUT);
-+	if (ret <= 0) {
-+		dev_err(usbio->dev, "Bulk in wait failed: %d\n", ret);
-+		return ret ?: -ETIMEDOUT;
-+	}
-+
-+	act = usbio->rxdat_len;
-+	bpkt = usbio->rxbuf;
-+	bpkt_len = le16_to_cpu(bpkt->len);
-+	dev_dbg(usbio->dev, "bulk in %d hdr %*phN data %*phN\n", act,
-+		(int)sizeof(*bpkt), bpkt, bpkt_len, bpkt->data);
-+
-+	/*
-+	 * Unsupported bulk commands get only an usbio_packet_header with
-+	 * the error flag set as reply. Return -EPIPE for this case.
-+	 */
-+	if (act == sizeof(struct usbio_packet_header) &&
-+	    (bpkt->header.flags & USBIO_PKTFLAG_ERR))
-+		return -EPIPE;
-+
-+	if (act < sizeof(*bpkt)) {
-+		dev_err(usbio->dev, "Bulk in short read: %d\n", act);
-+		return -EPROTO;
-+	}
-+
-+	if (bpkt->header.type != type || bpkt->header.cmd != cmd ||
-+	    !(bpkt->header.flags & USBIO_PKTFLAG_RSP)) {
-+		dev_err(usbio->dev,
-+			"Unexpected bulk in type 0x%02x cmd 0x%02x flags 0x%02x\n",
-+			bpkt->header.type, bpkt->header.cmd, bpkt->header.flags);
-+		return -EPROTO;
-+	}
-+
-+	if (bpkt->header.flags & USBIO_PKTFLAG_ERR)
-+		return -EREMOTEIO;
-+
-+	if (ibuf_len < bpkt_len)
-+		return -ENOSPC;
-+
-+	memcpy(ibuf, bpkt->data, bpkt_len);
-+
-+	return bpkt_len;
-+}
-+EXPORT_SYMBOL_NS_GPL(usbio_bulk_msg, "USBIO");
-+
-+int usbio_acquire(struct auxiliary_device *adev)
-+{
-+	struct usbio_client *client = adev_to_client(adev);
-+	struct usbio_device *usbio;
-+	int ret;
-+
-+	mutex_lock(&client->mutex);
-+
-+	usbio = client->bridge;
-+	if (!usbio) {
-+		ret = -ENODEV; /* Disconnected */
-+		goto err_unlock;
-+	}
-+
-+	ret = usb_autopm_get_interface(usbio->intf);
-+	if (ret)
-+		goto err_unlock;
-+
-+	mutex_lock(&usbio->bulk_mutex);
-+
-+	/* Leave client locked until release to avoid abba deadlock issues */
-+	return 0;
-+
-+err_unlock:
-+	mutex_unlock(&client->mutex);
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_NS_GPL(usbio_acquire, "USBIO");
-+
-+void usbio_release(struct auxiliary_device *adev)
-+{
-+	struct usbio_client *client = adev_to_client(adev);
-+	struct usbio_device *usbio = client->bridge;
-+
-+	lockdep_assert_held(&client->mutex);
-+
-+	mutex_unlock(&usbio->bulk_mutex);
-+	usb_autopm_put_interface(usbio->intf);
-+	mutex_unlock(&client->mutex);
-+}
-+EXPORT_SYMBOL_NS_GPL(usbio_release, "USBIO");
-+
-+void usbio_get_txrxbuf_len(struct auxiliary_device *adev, u16 *txbuf_len, u16 *rxbuf_len)
-+{
-+	struct usbio_client *client = adev_to_client(adev);
-+	struct usbio_device *usbio;
-+
-+	guard(mutex)(&client->mutex);
-+
-+	usbio = client->bridge;
-+	if (!usbio)
-+		return; /* Disconnected */
-+
-+	*txbuf_len = usbio->txbuf_len;
-+	*rxbuf_len = usbio->rxbuf_len;
-+}
-+EXPORT_SYMBOL_NS_GPL(usbio_get_txrxbuf_len, "USBIO");
-+
-+unsigned long usbio_get_quirks(struct auxiliary_device *adev)
-+{
-+	struct usbio_client *client = adev_to_client(adev);
-+	struct usbio_device *usbio;
-+
-+	guard(mutex)(&client->mutex);
-+
-+	usbio = client->bridge;
-+	if (!usbio)
-+		return 0; /* Disconnected */
-+
-+	return usbio->quirks;
-+}
-+EXPORT_SYMBOL_NS_GPL(usbio_get_quirks, "USBIO");
-+
-+static void usbio_auxdev_release(struct device *dev)
-+{
-+	struct auxiliary_device *adev = to_auxiliary_dev(dev);
-+	struct usbio_client *client = adev_to_client(adev);
-+
-+	mutex_destroy(&client->mutex);
-+	kfree(client);
-+}
-+
-+static int usbio_add_client(struct usbio_device *usbio, char *name, u8 id, void *data)
-+{
-+	struct usbio_client *client;
++struct usbio_gpio {
++	struct mutex config_mutex; /* Protects banks[x].config */
++	struct usbio_gpio_bank banks[USBIO_MAX_GPIOBANKS];
++	struct gpio_chip gc;
 +	struct auxiliary_device *adev;
-+	int ret;
++};
 +
-+	client = kzalloc(sizeof(*client), GFP_KERNEL);
-+	if (!client)
-+		return -ENOMEM;
-+
-+	mutex_init(&client->mutex);
-+	client->bridge = usbio;
-+	adev = &client->auxdev;
-+	adev->name = name;
-+	adev->id = id;
-+
-+	adev->dev.parent = usbio->dev;
-+	adev->dev.platform_data = data;
-+	adev->dev.release = usbio_auxdev_release;
-+
-+	ret = auxiliary_device_init(adev);
-+	if (ret) {
-+		usbio_auxdev_release(&adev->dev);
-+		return ret;
-+	}
-+
-+	ret = auxiliary_device_add(adev);
-+	if (ret) {
-+		auxiliary_device_uninit(adev);
-+		return ret;
-+	}
-+
-+	list_add_tail(&client->link, &usbio->cli_list);
-+
-+	return 0;
-+}
-+
-+static int usbio_enum_gpios(struct usbio_device *usbio)
-+{
-+	struct usbio_gpio_bank_desc *gpio = usbio->gpios;
-+
-+	dev_dbg(usbio->dev, "GPIO Banks: %d\n", usbio->nr_gpio_banks);
-+
-+	for (unsigned int i = 0; i < usbio->nr_gpio_banks; i++)
-+		dev_dbg(usbio->dev, "\tBank%d[%d] map: %#08x\n",
-+			gpio[i].id, gpio[i].pins, gpio[i].bmap);
-+
-+	usbio_add_client(usbio, USBIO_GPIO_CLIENT, 0, gpio);
-+
-+	return 0;
-+}
-+
-+static int usbio_enum_i2cs(struct usbio_device *usbio)
-+{
-+	struct usbio_i2c_bus_desc *i2c = usbio->i2cs;
-+
-+	dev_dbg(usbio->dev, "I2C Busses: %d\n", usbio->nr_i2c_buses);
-+
-+	for (unsigned int i = 0; i < usbio->nr_i2c_buses; i++) {
-+		dev_dbg(usbio->dev, "\tBus%d caps: %#02x\n", i2c[i].id, i2c[i].caps);
-+		usbio_add_client(usbio, USBIO_I2C_CLIENT, i, &i2c[i]);
-+	}
-+
-+	return 0;
-+}
-+
-+static int usbio_suspend(struct usb_interface *intf, pm_message_t msg)
-+{
-+	struct usbio_device *usbio = usb_get_intfdata(intf);
-+
-+	usb_kill_urb(usbio->urb);
-+
-+	return 0;
-+}
-+
-+static int usbio_resume(struct usb_interface *intf)
-+{
-+	struct usbio_device *usbio = usb_get_intfdata(intf);
-+
-+	return usb_submit_urb(usbio->urb, GFP_KERNEL);
-+}
-+
-+static void usbio_disconnect(struct usb_interface *intf)
-+{
-+	struct usbio_device *usbio = usb_get_intfdata(intf);
-+	struct usbio_client *client;
-+
-+	/* Wakeup any clients waiting for a reply */
-+	usbio->rxdat_len = 0;
-+	complete(&usbio->done);
-+
-+	/* Let clients know the bridge is gone */
-+	list_for_each_entry(client, &usbio->cli_list, link) {
-+		mutex_lock(&client->mutex);
-+		client->bridge = NULL;
-+		mutex_unlock(&client->mutex);
-+	}
-+
-+	/* From here on clients will no longer touch struct usbio_device */
-+	usb_kill_urb(usbio->urb);
-+	usb_free_urb(usbio->urb);
-+
-+	list_for_each_entry_reverse(client, &usbio->cli_list, link) {
-+		auxiliary_device_delete(&client->auxdev);
-+		auxiliary_device_uninit(&client->auxdev);
-+	}
-+}
-+
-+static int usbio_probe(struct usb_interface *intf, const struct usb_device_id *id)
-+{
-+	struct usb_device *udev = interface_to_usbdev(intf);
-+	struct usb_endpoint_descriptor *ep_in, *ep_out;
-+	struct device *dev = &intf->dev;
-+	struct usbio_protver protver;
-+	struct usbio_device *usbio;
-+	struct usbio_fwver fwver;
-+	int ret;
-+
-+	usbio = devm_kzalloc(dev, sizeof(*usbio), GFP_KERNEL);
-+	if (!usbio)
-+		return -ENOMEM;
-+
-+	ret = devm_mutex_init(dev, &usbio->ctrl_mutex);
-+	if (ret)
-+		return ret;
-+
-+	ret = devm_mutex_init(dev, &usbio->bulk_mutex);
-+	if (ret)
-+		return ret;
-+
-+	usbio->dev = dev;
-+	usbio->udev = udev;
-+	usbio->intf = intf;
-+	usbio->quirks = id ? id->driver_info : 0;
-+	init_completion(&usbio->done);
-+	INIT_LIST_HEAD(&usbio->cli_list);
-+	usb_set_intfdata(intf, usbio);
-+
-+	usbio->ctrl_pipe = usb_endpoint_num(&udev->ep0.desc);
-+	usbio->ctrlbuf_len = usb_maxpacket(udev, usbio->ctrl_pipe);
-+	usbio->ctrlbuf = devm_kzalloc(dev, usbio->ctrlbuf_len, GFP_KERNEL);
-+	if (!usbio->ctrlbuf)
-+		return -ENOMEM;
-+
-+	/* Find the first bulk-in and bulk-out endpoints */
-+	ret = usb_find_common_endpoints(intf->cur_altsetting, &ep_in, &ep_out,
-+					NULL, NULL);
-+	if (ret) {
-+		dev_err(dev, "Cannot find bulk endpoints: %d\n", ret);
-+		return ret;
-+	}
-+
-+	usbio->tx_pipe = usb_sndbulkpipe(udev, usb_endpoint_num(ep_out));
-+
-+	if (usbio->quirks & USBIO_QUIRK_BULK_MAXP_63)
-+		usbio->txbuf_len = 63;
-+	else
-+		usbio->txbuf_len = usb_endpoint_maxp(ep_out);
-+
-+	usbio->txbuf = devm_kzalloc(dev, usbio->txbuf_len, GFP_KERNEL);
-+	if (!usbio->txbuf)
-+		return -ENOMEM;
-+
-+	usbio->rx_pipe = usb_rcvbulkpipe(udev, usb_endpoint_num(ep_in));
-+
-+	if (usbio->quirks & USBIO_QUIRK_BULK_MAXP_63)
-+		usbio->rxbuf_len = 63;
-+	else
-+		usbio->rxbuf_len = usb_endpoint_maxp(ep_in);
-+
-+	usbio->rxbuf = devm_kzalloc(dev, usbio->rxbuf_len, GFP_KERNEL);
-+	if (!usbio->rxbuf)
-+		return -ENOMEM;
-+
-+	usbio->urb = usb_alloc_urb(0, GFP_KERNEL);
-+	if (!usbio->urb)
-+		return -ENOMEM;
-+
-+	usb_fill_bulk_urb(usbio->urb, udev, usbio->rx_pipe, usbio->rxbuf,
-+			  usbio->rxbuf_len, usbio_bulk_recv, usbio);
-+	ret = usb_submit_urb(usbio->urb, GFP_KERNEL);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "Submitting usb urb\n");
-+
-+	mutex_lock(&usbio->ctrl_mutex);
-+
-+	ret = usbio_ctrl_msg(usbio, USBIO_PKTTYPE_CTRL, USBIO_CTRLCMD_HS, NULL, 0, NULL, 0);
-+	if (ret < 0)
-+		goto err_unlock;
-+
-+	ret = usbio_ctrl_msg(usbio, USBIO_PKTTYPE_CTRL, USBIO_CTRLCMD_PROTVER, NULL, 0,
-+			     &protver, sizeof(protver));
-+	if (ret < 0)
-+		goto err_unlock;
-+
-+	ret = usbio_ctrl_msg(usbio, USBIO_PKTTYPE_CTRL, USBIO_CTRLCMD_FWVER, NULL, 0,
-+			     &fwver, sizeof(fwver));
-+	if (ret < 0)
-+		goto err_unlock;
-+
-+	ret = usbio_ctrl_msg(usbio, USBIO_PKTTYPE_CTRL, USBIO_CTRLCMD_ENUMGPIO, NULL, 0,
-+			     usbio->gpios, sizeof(usbio->gpios));
-+	if (ret < 0 || ret % sizeof(struct usbio_gpio_bank_desc)) {
-+		ret = (ret < 0) ? ret : -EPROTO;
-+		goto err_unlock;
-+	}
-+	usbio->nr_gpio_banks = ret / sizeof(struct usbio_gpio_bank_desc);
-+
-+	ret = usbio_ctrl_msg(usbio, USBIO_PKTTYPE_CTRL, USBIO_CTRLCMD_ENUMI2C, NULL, 0,
-+			     usbio->i2cs, sizeof(usbio->i2cs));
-+	if (ret < 0 || ret % sizeof(struct usbio_i2c_bus_desc)) {
-+		ret = (ret < 0) ? ret : -EPROTO;
-+		goto err_unlock;
-+	}
-+	usbio->nr_i2c_buses = ret / sizeof(struct usbio_i2c_bus_desc);
-+
-+	mutex_unlock(&usbio->ctrl_mutex);
-+
-+	dev_dbg(dev, "ProtVer(BCD): %02x FwVer: %d.%d.%d.%d\n",
-+		protver.ver, fwver.major, fwver.minor,
-+		le16_to_cpu(fwver.patch), le16_to_cpu(fwver.build));
-+
-+	usbio_enum_gpios(usbio);
-+	usbio_enum_i2cs(usbio);
-+
-+	return 0;
-+
-+err_unlock:
-+	mutex_unlock(&usbio->ctrl_mutex);
-+	usb_kill_urb(usbio->urb);
-+	usb_free_urb(usbio->urb);
-+
-+	return ret;
-+}
-+
-+static const struct usb_device_id usbio_table[] = {
-+	{ USB_DEVICE(0x2ac1, 0x20c1),	/* Lattice NX40 */
-+	  .driver_info = USBIO_QUIRK_I2C_MAX_RW_LEN_52 },
-+	{ USB_DEVICE(0x2ac1, 0x20c9),	/* Lattice NX33 */
-+	  .driver_info = USBIO_QUIRK_I2C_NO_INIT_ACK | USBIO_QUIRK_I2C_MAX_RW_LEN_52 |
-+			 USBIO_QUIRK_I2C_ALLOW_400KHZ },
-+	{ USB_DEVICE(0x2ac1, 0x20cb) },	/* Lattice NX33U */
-+	{ USB_DEVICE(0x06cb, 0x0701),	/* Synaptics Sabre */
-+	  .driver_info = USBIO_QUIRK_BULK_MAXP_63 | USBIO_QUIRK_I2C_USE_CHUNK_LEN },
++static const struct acpi_device_id usbio_gpio_acpi_hids[] = {
++	{ "INTC1007" }, /* MTL */
++	{ "INTC10B2" }, /* ARL */
++	{ "INTC10B5" }, /* LNL */
++	{ "INTC10E2" }, /* PTL */
 +	{ }
 +};
-+MODULE_DEVICE_TABLE(usb, usbio_table);
 +
-+static struct usb_driver usbio_driver = {
-+	.name = "usbio-bridge",
-+	.probe = usbio_probe,
-+	.disconnect = usbio_disconnect,
-+	.suspend = usbio_suspend,
-+	.resume = usbio_resume,
-+	.id_table = usbio_table,
-+	.supports_autosuspend = 1,
-+};
-+module_usb_driver(usbio_driver);
-+
-+struct usbio_match_ids_walk_data {
-+	struct acpi_device *adev;
-+	const struct acpi_device_id *hids;
-+	unsigned int id;
-+};
-+
-+static int usbio_match_device_ids(struct acpi_device *adev, void *data)
++static void usbio_gpio_get_bank_and_pin(struct gpio_chip *gc, unsigned int offset,
++					struct usbio_gpio_bank **bank_ret,
++					unsigned int *pin_ret)
 +{
-+	struct usbio_match_ids_walk_data *wd = data;
-+	unsigned int id = 0;
-+	char *uid;
++	struct usbio_gpio *gpio = gpiochip_get_data(gc);
++	struct device *dev = &gpio->adev->dev;
++	struct usbio_gpio_bank *bank;
++	unsigned int pin;
 +
-+	if (acpi_match_device_ids(adev, wd->hids))
-+		return 0;
-+
-+	uid = acpi_device_uid(adev);
-+	if (uid) {
-+		for (int i = 0; i < strlen(uid); i++) {
-+			if (!kstrtouint(&uid[i], 10, &id))
-+				break;
-+		}
++	bank = &gpio->banks[offset / USBIO_GPIOSPERBANK];
++	pin = offset % USBIO_GPIOSPERBANK;
++	if (~bank->bitmap & BIT(pin)) {
++		/* The FW bitmap sometimes is invalid, warn and continue */
++		dev_warn_once(dev, FW_BUG "GPIO %u is not in FW pins bitmap\n", offset);
 +	}
 +
-+	if (!uid || wd->id == id) {
-+		wd->adev = adev;
-+		return 1;
++	*bank_ret = bank;
++	*pin_ret = pin;
++}
++
++static int usbio_gpio_get_direction(struct gpio_chip *gc, unsigned int offset)
++{
++	struct usbio_gpio_bank *bank;
++	unsigned int pin;
++	u8 cfg;
++
++	usbio_gpio_get_bank_and_pin(gc, offset, &bank, &pin);
++
++	cfg = bank->config[pin] & USBIO_GPIO_PINMOD_MASK;
++
++	return (cfg == USBIO_GPIO_PINMOD_OUTPUT) ?
++		GPIO_LINE_DIRECTION_OUT : GPIO_LINE_DIRECTION_IN;
++}
++
++static int usbio_gpio_get(struct gpio_chip *gc, unsigned int offset)
++{
++	struct usbio_gpio *gpio = gpiochip_get_data(gc);
++	struct usbio_gpio_bank *bank;
++	struct usbio_gpio_rw gbuf;
++	unsigned int pin;
++	int ret;
++
++	usbio_gpio_get_bank_and_pin(gc, offset, &bank, &pin);
++
++	gbuf.bankid = offset / USBIO_GPIOSPERBANK;
++	gbuf.pincount  = 1;
++	gbuf.pin = pin;
++
++	ret = usbio_control_msg(gpio->adev, USBIO_PKTTYPE_GPIO, USBIO_GPIOCMD_READ,
++				&gbuf, sizeof(gbuf) - sizeof(gbuf.value),
++				&gbuf, sizeof(gbuf));
++	if (ret != sizeof(gbuf))
++		return (ret < 0) ? ret : -EPROTO;
++
++	return (le32_to_cpu(gbuf.value) >> pin) & 1;
++}
++
++static int usbio_gpio_set(struct gpio_chip *gc, unsigned int offset, int value)
++{
++	struct usbio_gpio *gpio = gpiochip_get_data(gc);
++	struct usbio_gpio_bank *bank;
++	struct usbio_gpio_rw gbuf;
++	unsigned int pin;
++
++	usbio_gpio_get_bank_and_pin(gc, offset, &bank, &pin);
++
++	gbuf.bankid = offset / USBIO_GPIOSPERBANK;
++	gbuf.pincount  = 1;
++	gbuf.pin = pin;
++	gbuf.value = cpu_to_le32(value << pin);
++
++	return usbio_control_msg(gpio->adev, USBIO_PKTTYPE_GPIO, USBIO_GPIOCMD_WRITE,
++				 &gbuf, sizeof(gbuf), NULL, 0);
++}
++
++static int usbio_gpio_update_config(struct gpio_chip *gc, unsigned int offset,
++				    u8 mask, u8 value)
++{
++	struct usbio_gpio *gpio = gpiochip_get_data(gc);
++	struct usbio_gpio_bank *bank;
++	struct usbio_gpio_init gbuf;
++	unsigned int pin;
++
++	usbio_gpio_get_bank_and_pin(gc, offset, &bank, &pin);
++
++	guard(mutex)(&gpio->config_mutex);
++
++	bank->config[pin] &= ~mask;
++	bank->config[pin] |= value;
++
++	gbuf.bankid = offset / USBIO_GPIOSPERBANK;
++	gbuf.config = bank->config[pin];
++	gbuf.pincount  = 1;
++	gbuf.pin = pin;
++
++	return usbio_control_msg(gpio->adev, USBIO_PKTTYPE_GPIO, USBIO_GPIOCMD_INIT,
++				 &gbuf, sizeof(gbuf), NULL, 0);
++}
++
++static int usbio_gpio_direction_input(struct gpio_chip *gc, unsigned int offset)
++{
++	return usbio_gpio_update_config(gc, offset, USBIO_GPIO_PINMOD_MASK,
++					USBIO_GPIO_SET_PINMOD(USBIO_GPIO_PINMOD_INPUT));
++}
++
++static int usbio_gpio_direction_output(struct gpio_chip *gc,
++		unsigned int offset, int value)
++{
++	int ret;
++
++	ret = usbio_gpio_update_config(gc, offset, USBIO_GPIO_PINMOD_MASK,
++				       USBIO_GPIO_SET_PINMOD(USBIO_GPIO_PINMOD_OUTPUT));
++	if (ret)
++		return ret;
++
++	return usbio_gpio_set(gc, offset, value);
++}
++
++static int usbio_gpio_set_config(struct gpio_chip *gc, unsigned int offset,
++		unsigned long config)
++{
++	u8 value;
++
++	switch (pinconf_to_config_param(config)) {
++	case PIN_CONFIG_BIAS_PULL_PIN_DEFAULT:
++		value = USBIO_GPIO_SET_PINCFG(USBIO_GPIO_PINCFG_DEFAULT);
++		break;
++	case PIN_CONFIG_BIAS_PULL_UP:
++		value = USBIO_GPIO_SET_PINCFG(USBIO_GPIO_PINCFG_PULLUP);
++		break;
++	case PIN_CONFIG_BIAS_PULL_DOWN:
++		value = USBIO_GPIO_SET_PINCFG(USBIO_GPIO_PINCFG_PULLDOWN);
++		break;
++	case PIN_CONFIG_DRIVE_PUSH_PULL:
++		value = USBIO_GPIO_SET_PINCFG(USBIO_GPIO_PINCFG_PUSHPULL);
++		break;
++	default:
++		return -ENOTSUPP;
 +	}
++
++	return usbio_gpio_update_config(gc, offset, USBIO_GPIO_PINCFG_MASK, value);
++}
++
++static int usbio_gpio_probe(struct auxiliary_device *adev,
++		const struct auxiliary_device_id *adev_id)
++{
++	struct usbio_gpio_bank_desc *bank_desc;
++	struct device *dev = &adev->dev;
++	struct usbio_gpio *gpio;
++	int bank, ret;
++
++	bank_desc = dev_get_platdata(dev);
++	if (!bank_desc)
++		return -EINVAL;
++
++	gpio = devm_kzalloc(dev, sizeof(*gpio), GFP_KERNEL);
++	if (!gpio)
++		return -ENOMEM;
++
++	ret = devm_mutex_init(dev, &gpio->config_mutex);
++	if (ret)
++		return ret;
++
++	gpio->adev = adev;
++
++	usbio_acpi_bind(gpio->adev, usbio_gpio_acpi_hids);
++
++	for (bank = 0; bank < USBIO_MAX_GPIOBANKS && bank_desc[bank].bmap; bank++)
++		gpio->banks[bank].bitmap = le32_to_cpu(bank_desc[bank].bmap);
++
++	gpio->gc.label = ACPI_COMPANION(dev) ?
++					acpi_dev_name(ACPI_COMPANION(dev)) : dev_name(dev);
++	gpio->gc.parent = dev;
++	gpio->gc.owner = THIS_MODULE;
++	gpio->gc.get_direction = usbio_gpio_get_direction;
++	gpio->gc.direction_input = usbio_gpio_direction_input;
++	gpio->gc.direction_output = usbio_gpio_direction_output;
++	gpio->gc.get = usbio_gpio_get;
++	gpio->gc.set = usbio_gpio_set;
++	gpio->gc.set_config = usbio_gpio_set_config;
++	gpio->gc.base = -1;
++	gpio->gc.ngpio = bank * USBIO_GPIOSPERBANK;
++	gpio->gc.can_sleep = true;
++
++	ret = devm_gpiochip_add_data(dev, &gpio->gc, gpio);
++	if (ret)
++		return ret;
++
++	if (has_acpi_companion(dev))
++		acpi_dev_clear_dependencies(ACPI_COMPANION(dev));
 +
 +	return 0;
 +}
 +
-+void usbio_acpi_bind(struct auxiliary_device *adev, const struct acpi_device_id *hids)
-+{
-+	struct device *dev = &adev->dev;
-+	struct acpi_device *parent;
-+	struct usbio_match_ids_walk_data wd = {
-+		.adev = NULL,
-+		.hids = hids,
-+		.id = adev->id,
-+	};
++static const struct auxiliary_device_id usbio_gpio_id_table[] = {
++	{ "usbio.usbio-gpio" },
++	{ }
++};
++MODULE_DEVICE_TABLE(auxiliary, usbio_gpio_id_table);
 +
-+	parent = ACPI_COMPANION(dev->parent);
-+	if (!parent)
-+		return;
++static struct auxiliary_driver usbio_gpio_driver = {
++	.name = USBIO_GPIO_CLIENT,
++	.probe = usbio_gpio_probe,
++	.id_table = usbio_gpio_id_table
++};
++module_auxiliary_driver(usbio_gpio_driver);
 +
-+	acpi_dev_for_each_child(parent, usbio_match_device_ids, &wd);
-+	if (wd.adev)
-+		ACPI_COMPANION_SET(dev, wd.adev);
-+}
-+EXPORT_SYMBOL_NS_GPL(usbio_acpi_bind, "USBIO");
-+
-+MODULE_DESCRIPTION("Intel USBIO Bridge driver");
++MODULE_DESCRIPTION("Intel USBIO GPIO driver");
 +MODULE_AUTHOR("Israel Cepeda <israel.a.cepeda.lopez@intel.com>");
 +MODULE_AUTHOR("Hans de Goede <hansg@kernel.org>");
 +MODULE_LICENSE("GPL");
-diff --git a/include/linux/usb/usbio.h b/include/linux/usb/usbio.h
-new file mode 100644
-index 000000000000..6c4e7c246d58
---- /dev/null
-+++ b/include/linux/usb/usbio.h
-@@ -0,0 +1,177 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2025 Intel Corporation.
-+ *
-+ */
-+
-+#ifndef _LINUX_USBIO_H_
-+#define _LINUX_USBIO_H_
-+
-+#include <linux/auxiliary_bus.h>
-+#include <linux/byteorder/generic.h>
-+#include <linux/list.h>
-+#include <linux/types.h>
-+
-+/***********************
-+ * USBIO Clients Names *
-+ ***********************/
-+#define USBIO_GPIO_CLIENT		"usbio-gpio"
-+#define USBIO_I2C_CLIENT		"usbio-i2c"
-+
-+/****************
-+ * USBIO quirks *
-+ ****************/
-+#define USBIO_QUIRK_BULK_MAXP_63	BIT(0)  /* Force bulk endpoint maxp to 63 */
-+#define USBIO_QUIRK_I2C_NO_INIT_ACK	BIT(8)  /* Do not ask for ack on I2C init */
-+#define USBIO_QUIRK_I2C_MAX_RW_LEN_52	BIT(9)  /* Set i2c-adapter max r/w len to 52 */
-+#define USBIO_QUIRK_I2C_USE_CHUNK_LEN	BIT(10) /* Send chunk-len for split xfers */
-+#define USBIO_QUIRK_I2C_ALLOW_400KHZ	BIT(11) /* Override desc, allowing 400 KHz */
-+
-+/**************************
-+ * USBIO Type Definitions *
-+ **************************/
-+
-+/* USBIO Packet Type */
-+#define USBIO_PKTTYPE_CTRL		1
-+#define USBIO_PKTTYPE_DBG		2
-+#define USBIO_PKTTYPE_GPIO		3
-+#define USBIO_PKTTYPE_I2C		4
-+
-+/* USBIO Packet Header */
-+struct usbio_packet_header {
-+	u8 type;
-+	u8 cmd;
-+	u8 flags;
-+} __packed;
-+
-+/* USBIO Control Transfer Packet */
-+struct usbio_ctrl_packet {
-+	struct usbio_packet_header header;
-+	u8 len;
-+	u8 data[] __counted_by(len);
-+} __packed;
-+
-+/* USBIO Bulk Transfer Packet */
-+struct usbio_bulk_packet {
-+	struct usbio_packet_header header;
-+	__le16 len;
-+	u8 data[] __counted_by(len);
-+} __packed;
-+
-+/* USBIO GPIO commands */
-+enum usbio_gpio_cmd {
-+	USBIO_GPIOCMD_DEINIT,
-+	USBIO_GPIOCMD_INIT,
-+	USBIO_GPIOCMD_READ,
-+	USBIO_GPIOCMD_WRITE,
-+	USBIO_GPIOCMD_END
-+};
-+
-+/* USBIO GPIO config */
-+enum usbio_gpio_pincfg {
-+	USBIO_GPIO_PINCFG_DEFAULT,
-+	USBIO_GPIO_PINCFG_PULLUP,
-+	USBIO_GPIO_PINCFG_PULLDOWN,
-+	USBIO_GPIO_PINCFG_PUSHPULL
-+};
-+
-+#define USBIO_GPIO_PINCFG_SHIFT		2
-+#define USBIO_GPIO_PINCFG_MASK		(0x3 << USBIO_GPIO_PINCFG_SHIFT)
-+#define USBIO_GPIO_SET_PINCFG(pincfg) \
-+	(((pincfg) << USBIO_GPIO_PINCFG_SHIFT) & USBIO_GPIO_PINCFG_MASK)
-+
-+enum usbio_gpio_pinmode {
-+	USBIO_GPIO_PINMOD_INVAL,
-+	USBIO_GPIO_PINMOD_INPUT,
-+	USBIO_GPIO_PINMOD_OUTPUT,
-+	USBIO_GPIO_PINMOD_MAXVAL
-+};
-+
-+#define USBIO_GPIO_PINMOD_MASK		0x3
-+#define USBIO_GPIO_SET_PINMOD(pin)	(pin & USBIO_GPIO_PINMOD_MASK)
-+
-+/*************************
-+ * USBIO GPIO Controller *
-+ *************************/
-+
-+#define USBIO_MAX_GPIOBANKS		5
-+#define USBIO_GPIOSPERBANK		32
-+
-+struct usbio_gpio_bank_desc {
-+	u8 id;
-+	u8 pins;
-+	__le32 bmap;
-+} __packed;
-+
-+struct usbio_gpio_init {
-+	u8 bankid;
-+	u8 config;
-+	u8 pincount;
-+	u8 pin;
-+} __packed;
-+
-+struct usbio_gpio_rw {
-+	u8 bankid;
-+	u8 pincount;
-+	u8 pin;
-+	__le32 value;
-+} __packed;
-+
-+/* USBIO I2C commands */
-+enum usbio_i2c_cmd {
-+	USBIO_I2CCMD_UNINIT,
-+	USBIO_I2CCMD_INIT,
-+	USBIO_I2CCMD_READ,
-+	USBIO_I2CCMD_WRITE,
-+	USBIO_I2CCMD_END
-+};
-+
-+/************************
-+ * USBIO I2C Controller *
-+ ************************/
-+
-+#define USBIO_MAX_I2CBUSES 5
-+
-+#define USBIO_I2C_BUS_ADDR_CAP_10B	BIT(3) /* 10bit address support */
-+#define USBIO_I2C_BUS_MODE_CAP_MASK	0x3
-+#define USBIO_I2C_BUS_MODE_CAP_SM	0 /* Standard Mode */
-+#define USBIO_I2C_BUS_MODE_CAP_FM	1 /* Fast Mode */
-+#define USBIO_I2C_BUS_MODE_CAP_FMP	2 /* Fast Mode+ */
-+#define USBIO_I2C_BUS_MODE_CAP_HSM	3 /* High-Speed Mode */
-+
-+struct usbio_i2c_bus_desc {
-+	u8 id;
-+	u8 caps;
-+} __packed;
-+
-+struct usbio_i2c_uninit {
-+	u8 busid;
-+	__le16 config;
-+} __packed;
-+
-+struct usbio_i2c_init {
-+	u8 busid;
-+	__le16 config;
-+	__le32 speed;
-+} __packed;
-+
-+struct usbio_i2c_rw {
-+	u8 busid;
-+	__le16 config;
-+	__le16 size;
-+	u8 data[] __counted_by(size);
-+} __packed;
-+
-+int usbio_control_msg(struct auxiliary_device *adev, u8 type, u8 cmd,
-+		      const void *obuf, u16 obuf_len, void *ibuf, u16 ibuf_len);
-+
-+int usbio_bulk_msg(struct auxiliary_device *adev, u8 type, u8 cmd, bool last,
-+		   const void *obuf, u16 obuf_len, void *ibuf, u16 ibuf_len);
-+
-+int usbio_acquire(struct auxiliary_device *adev);
-+void usbio_release(struct auxiliary_device *adev);
-+void usbio_get_txrxbuf_len(struct auxiliary_device *adev, u16 *txbuf_len, u16 *rxbuf_len);
-+unsigned long usbio_get_quirks(struct auxiliary_device *adev);
-+void usbio_acpi_bind(struct auxiliary_device *adev, const struct acpi_device_id *hids);
-+
-+#endif
++MODULE_IMPORT_NS("USBIO");
 -- 
 2.51.0
 
