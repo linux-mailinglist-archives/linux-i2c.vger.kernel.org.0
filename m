@@ -1,63 +1,48 @@
-Return-Path: <linux-i2c+bounces-12898-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12899-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91796B54051
-	for <lists+linux-i2c@lfdr.de>; Fri, 12 Sep 2025 04:23:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 426E6B5430A
+	for <lists+linux-i2c@lfdr.de>; Fri, 12 Sep 2025 08:38:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4D79516F099
-	for <lists+linux-i2c@lfdr.de>; Fri, 12 Sep 2025 02:23:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 72AA41C85C34
+	for <lists+linux-i2c@lfdr.de>; Fri, 12 Sep 2025 06:38:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0E9A1DE3B5;
-	Fri, 12 Sep 2025 02:23:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C865B283FDC;
+	Fri, 12 Sep 2025 06:37:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="TCbYYy1Q"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MkOArNCD"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1478B1D54E3;
-	Fri, 12 Sep 2025 02:23:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E69E265CDD;
+	Fri, 12 Sep 2025 06:37:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757643817; cv=none; b=bwv5oe6FhvsZ9IwJXf4uuWUsJ9wcE1b2K1J4naHmTMTUp73BiFcQuDDjtv9YTwsyXB0YNGcTLauW/+dADmFV2WMl8EzFsyBGS3sbJtFItAXT1w7hxBo6g14kqcBpqEoFTSJ9Lb5du6+ympEUkUbNat2t7Vv9RCqWOoMBSSi+1/g=
+	t=1757659079; cv=none; b=dho6nQ6RIRzLi/fuyDb4gjt4P1/VkZbyuVhG42qy8gF+14G9TFcOOyFnpXnLi9G11h/ojKavUOnNYPdEDZEflHmHeH6JUb8A/IqkFqJuIcOHAhmHxUqJI/8neqJmAo+bXqJbQc0lAM3K3bIa6IZYP9ZAj6A9ibtFR644ARXwWmI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757643817; c=relaxed/simple;
-	bh=Pf4S51ga8IKbyss+FqICpz6u61R+SEHTBjBV91Yi2+k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=QuJCtAxiy6pScXmHiuQsjrwsU0P2EgRgelfXFQxbw9ejhH4g8cQP609NWLWYfdPlx6oF7M4+EisdTIPiy1zCEp4aj8c89pRhPtvSBjOJlUjfevUQT3iRt9LUCBfhYhqbmcRL3aCkDySg2prDlLgOpLNHCzIvVq6wsVzuykUB5OU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=qualcomm.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=TCbYYy1Q; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58BIXGxX005633;
-	Fri, 12 Sep 2025 02:23:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	xQBdHUkUZY+KokUQndZcWU2aTrSuesqymEB00Aeqp1w=; b=TCbYYy1QdU//HWSe
-	SOuB8LoNmExOqea6IHzE6rYypLqdPa5wWjquXW3hvxS7/wEj9JsgrJRJhSwrbvwx
-	p593dsOFqZVzdLPuO1XuXSg7pE5g54i1tp1Sg/hHcv4M5aua71AzFRxT44QrMc+V
-	DIewUi2h4Qis/bUOeVe1pwuDxjTjhTv/He0RJ0SxsDuDxWccr87X7WJCxQumyhho
-	TOHnnzFxbC9sz5u3VRlIJ4kySU12B/5HBerVapO/GIsU0TM10alEmdUf7brlwVSc
-	m5rt5ZAS2hZ35k/myA/74zBTjWItsBHtuh4UwQx6XABDoAL1VbOXK91DeXQbFRfZ
-	1CZOZA==
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 491vc2e09n-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 12 Sep 2025 02:23:31 +0000 (GMT)
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-	by NALASPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 58C2NUAP013525
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 12 Sep 2025 02:23:30 GMT
-Received: from [10.64.69.186] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.24; Thu, 11 Sep
- 2025 19:23:25 -0700
-Message-ID: <39cb76ef-3f51-438d-b740-827a4c70035a@qualcomm.com>
-Date: Fri, 12 Sep 2025 10:23:22 +0800
+	s=arc-20240116; t=1757659079; c=relaxed/simple;
+	bh=FoKfA+Ido5KJFJFtC9Cz3p8xOCs463YOvLfdHV84F2k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Z+48Mp4K9++NqjnOh3znRQlXaWjrAU29ln0/bRGZ2cVOt5VIa1ofjOr/IM0qdblCPoalRk7aJfA+l2ZBKJk5Xyj05qaVPm1ljRri9fWBCgbRJAzn6vvvYG750OoCiOmxo0/JcM80H6mu27DcrQrc/SRM8uD9Ar0Q85Pdrfd8aKI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MkOArNCD; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 647BDC4CEF4;
+	Fri, 12 Sep 2025 06:37:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757659079;
+	bh=FoKfA+Ido5KJFJFtC9Cz3p8xOCs463YOvLfdHV84F2k=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=MkOArNCDNfzMto9SJgAlT1LbW6DrUzhR2Og1Vjjfeu4YpaG4uOkCA0ELSDBCDOGyn
+	 wlzWq24sAELOx8iUeu0ez1jPuKjprH+fVF9lwvegPO149q27ItPoKlXoo12JE2Dqca
+	 oRm5/dkfdXUSHiJCYIp8MnZFRiVrigz6eXotiwSc0zbv9A35MoKHQJO4yN/xpGoa0Y
+	 JUGo0J2O0g550qO/X0dqEG1Ug5RASlGHkasJt7ZHntSl4mQ7hrcWkQYaIM3r/ul4Yg
+	 kIppaAN8Hg8RtTppWTA8vMlguYABqMXtBL5DJQQvmcgMTfmOVLuEz/eFmTmeJhpXdh
+	 Of5GMaKRdneJQ==
+Message-ID: <6feb419e-ee3d-4573-8820-19c70acdb426@kernel.org>
+Date: Fri, 12 Sep 2025 08:37:53 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -65,95 +50,115 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 3/3] arm64: dts: qcom: lemans-evk-camera: Add DT
- overlay
-To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-CC: Loic Poulain <loic.poulain@oss.qualcomm.com>,
-        Robert Foss
-	<rfoss@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
-        Rob Herring
-	<robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
-	<conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio
-	<konradybcio@kernel.org>,
-        <vladimir.zapolskiy@linaro.org>, <todor.too@gmail.com>,
-        <bryan.odonoghue@linaro.org>, <linux-i2c@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-References: <20250911-camss_rb8-v5-0-c078e4e22d91@oss.qualcomm.com>
- <20250911-camss_rb8-v5-3-c078e4e22d91@oss.qualcomm.com>
- <ex5oojf6lqti45joyjxpyi2ev4mjcitw4lz6cszu6lustrby4j@zzigwnu4pbxo>
+Subject: Re: [PATCH v16 1/3] dt-bindings: i2c: aspeed: support for
+ AST2600-i2cv2
+To: Jeremy Kerr <jk@ozlabs.org>, Ryan Chen <ryan_chen@aspeedtech.com>
+Cc: "robh@kernel.org" <robh@kernel.org>,
+ "conor+dt@kernel.org" <conor+dt@kernel.org>,
+ "andriy.shevchenko@linux.intel.com" <andriy.shevchenko@linux.intel.com>,
+ "andi.shyti@kernel.org" <andi.shyti@kernel.org>,
+ "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+ "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+ "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
+ Mo Elbadry <elbadrym@google.com>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "joel@jms.id.au" <joel@jms.id.au>,
+ "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+ "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+ "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+References: <20250224055936.1804279-1-ryan_chen@aspeedtech.com>
+ <OS8PR06MB7541C3B70B15F45F4824772BF2D92@OS8PR06MB7541.apcprd06.prod.outlook.com>
+ <994cb954-f3c4-4a44-800e-9303787c1be9@kernel.org>
+ <SI6PR06MB753542037E1D6BBF5CE8D2E7F2A42@SI6PR06MB7535.apcprd06.prod.outlook.com>
+ <4523caea-3406-4de0-9ab5-424fb7a0a474@kernel.org>
+ <SI6PR06MB7535BAD19B51A381171A0E64F2A42@SI6PR06MB7535.apcprd06.prod.outlook.com>
+ <8e8aa069-af9f-453f-9bd0-e3dc2eab59ab@kernel.org>
+ <OS8PR06MB7541FD8691B43EA33BDC1D22F2A72@OS8PR06MB7541.apcprd06.prod.outlook.com>
+ <99053328-a117-493e-b5f3-00902669c8e7@kernel.org>
+ <44ef5c93448a3625fcfd003b47a516e8ba795b62.camel@ozlabs.org>
+ <f9fc4b59-bdcd-4983-b7c2-0fec94e62176@kernel.org>
+ <52943e49aaea7bb6def5bc51dfd57392b6ae66e4.camel@ozlabs.org>
+ <OS8PR06MB7541BD362CE9FC0AA3CFC46CF209A@OS8PR06MB7541.apcprd06.prod.outlook.com>
+ <3fdee5330d91b5d18a69a311e4df6de874973ced.camel@ozlabs.org>
+ <ecefaed7ed0fe83442021c0bfee0a49111269aad.camel@ozlabs.org>
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
-From: Wenmeng Liu <quic_wenmliu@qualcomm.com>
-In-Reply-To: <ex5oojf6lqti45joyjxpyi2ev4mjcitw4lz6cszu6lustrby4j@zzigwnu4pbxo>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <ecefaed7ed0fe83442021c0bfee0a49111269aad.camel@ozlabs.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Authority-Analysis: v=2.4 cv=FN4bx/os c=1 sm=1 tr=0 ts=68c38423 cx=c_pps
- a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
- a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=KKAkSRfTAAAA:8
- a=EUspDBNiAAAA:8 a=-7q_Gg4UhoZt8uNEcLsA:9 a=QEXdDO2ut3YA:10
- a=cvBusfyB2V15izCimMoJ:22
-X-Proofpoint-ORIG-GUID: RYXSl40THPTmVSrKxIV319V5ZINJ53NR
-X-Proofpoint-GUID: RYXSl40THPTmVSrKxIV319V5ZINJ53NR
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTA4MDA5NCBTYWx0ZWRfX+mv9qFPFo1FY
- OB/F8ENGzGxFwxK8xdzFHRLLntU/ETeJ1InRRGNiAS9TrA9BM3zOu0I9I2ycAlebzaAJB6TqDPo
- 1Ijq1mpt94UzSnsTgYBp1cZkQbygwzd4F+Qpz3BakI+fW25tWfyQWqT5gWadtPEfhS8uGQpyxNU
- WX7AIwQ9LJvfFAjM+XGNTqoFZraOnfxIw7TCLgruo9dNss3eBbd0ry8g3PuGARG4SYixEXs7Nd/
- Wy7e/tzjpq4eIWZ2I0M991db7Yl/2bVN5id+hIGfN2jVz8AMl2JG1nsVynWc8hnV2hEPD0oTEcu
- ry8ZqA7TPiJ7RLIF1NKeZ9ib36q6iURPW/JLfpSHl/Dz5Zcr+hjAxZgoPUeUAf0MpS8zkL9Enz7
- XJ01kzv+
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-09-12_01,2025-09-11_02,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 priorityscore=1501 clxscore=1015 phishscore=0 adultscore=0
- bulkscore=0 impostorscore=0 malwarescore=0 suspectscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2509080094
 
-
-
-On 9/11/2025 8:15 PM, Dmitry Baryshkov wrote:
-> On Thu, Sep 11, 2025 at 07:55:16PM +0800, Wenmeng Liu wrote:
->> Enable IMX577 via CCI1 on LeMans EVK Core Kit.
->>
->> The LeMans EVK board does not include a camera sensor
->> by default, this overlay reflects the possibility of
->> attaching an optional camera sensor.
->> For this reason, the camera sensor configuration is
->> placed in lemans-evk-camera.dtso, rather than
->> modifying the base lemans-evk.dts.
+On 11/09/2025 11:03, Jeremy Kerr wrote:
+> Hi all,
 > 
-> So, is it the only camera configuration that we are going to support?
-> If not, what happens when we get the second sensor or second set of
-> sensors to support?
-You're right, although currently we only plan to support the IMX577 on 
-CCI1.>
->>
->> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
->> Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
->> Signed-off-by: Wenmeng Liu <quic_wenmliu@qualcomm.com>
->> ---
->>   arch/arm64/boot/dts/qcom/Makefile               |  4 +
->>   arch/arm64/boot/dts/qcom/lemans-evk-camera.dtso | 97 +++++++++++++++++++++++++
+> After a bit of a chat with Ryan, some updates on this:
 > 
-> At least the filename should mention that this is imx577.
+>> The question was more: it sounds like you're switching between
+>> *fundamentally different* hardware units with the mux switch - not just
+>> a different register interface for the same peripheral hardware. Is that
+>> the case?
 > 
->>   2 files changed, 101 insertions(+)
-> 
+> Turns out: no. The controller core is the same, but what gets muxed
+> in/out is more of a compatibility interface. This provides an
+> ast2500-like register set to the ast2600 i2c peripheral.
 
-Would lemans-evk-camera-csi1-imx577.dtso be a more appropriate name?
-It more precisely describes the content of the dtso.
 
-Thanks,
-Wenmeng
+If you had two separate bindings, how would you represent it in DTS? Two
+device nodes, right? That's confusing, because there is only one device.
 
+If the device can present or change its programming interface, it is
+still that device, so still one binding for it. And that device driver
+will handle both (or one) programming models.
+
+I remember now the problem we talk about, but I don't get what exactly
+you want to solve/discuss. Anyway any discussion should be about newest
+patch, not something from February, so if you still have concerns please
+raise them at v18 (or whichever version is now).
+
+Best regards,
+Krzysztof
 
