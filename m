@@ -1,109 +1,112 @@
-Return-Path: <linux-i2c+bounces-12935-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12936-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9610BB55942
-	for <lists+linux-i2c@lfdr.de>; Sat, 13 Sep 2025 00:33:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB809B5595D
+	for <lists+linux-i2c@lfdr.de>; Sat, 13 Sep 2025 00:42:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3F3695C3060
-	for <lists+linux-i2c@lfdr.de>; Fri, 12 Sep 2025 22:33:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1B4951C2712E
+	for <lists+linux-i2c@lfdr.de>; Fri, 12 Sep 2025 22:42:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EBF426D4E6;
-	Fri, 12 Sep 2025 22:33:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE361258EC9;
+	Fri, 12 Sep 2025 22:41:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="LXQEQ561"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="Um4WpDQH"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4893F267B89
-	for <linux-i2c@vger.kernel.org>; Fri, 12 Sep 2025 22:33:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE56B19B3EC
+	for <linux-i2c@vger.kernel.org>; Fri, 12 Sep 2025 22:41:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757716418; cv=none; b=DeNxK5PNOKoHV59sItaIa1AyKNRUnzSduZMqSyaGK/YHNWI927daIkSQSPc4eeLMxDRQTD/OnJkIe3ik5bS4AkAcH/TQhXuj773Mpab40CoboDjhKFyBQXnQOGRT3iE0EgEIcqvCCw3YBaHxuYZcUllkmLxxniOZ3anWuXPiDXU=
+	t=1757716915; cv=none; b=ohoP11WLqcgeWa/6eKPOut/pSCRx+TNJS7WvoYcCkwKdUXsbRbgIPABfX0zkchSfBew6q/FNIRp8nM4X1AWViaqkIKSSBA9K8T26s0nyh+743DI5hazh3SbrTbaD43QhWpKbSu5spqnUQeMoIFLupELatMiPpETrBW6ZjYg/5n8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757716418; c=relaxed/simple;
-	bh=XAdtu2bAi4sOTeuz5ngUGzTwS3XsFoaZiTi58qZgMLg=;
+	s=arc-20240116; t=1757716915; c=relaxed/simple;
+	bh=41CPMeB5cMst8rFTr0hIwHXN/45oJmRQ3gqFpa1x3y0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LZrFVG7dbmG69H9Ml3XOGRQNspnejJzYqthI5GIU7KcSChEgzWZ7FbK6oSpfJgidK6O5gwRCwwpv5SnoxWS8fBGgGxlhsmUOQX1kfGO5eeZaJ+qgpI7XvSPwZL7yZJ0HR9RLXvbqaz5k4D2oDttus3ANaDiAB9rEFkbcwUgx41s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=LXQEQ561; arc=none smtp.client-ip=194.117.254.33
+	 Content-Type:Content-Disposition:In-Reply-To; b=GthLg7y/YUOJRyMuC3wbZ0/kUQ3243G0eWcwN/T2tTMDCnLrn9l3PM0O/qplGG4SPpS2Ocy4P8C1hMUQxyKTgKKJtVFlWvu/GmHDKUebPGd3ZSvkVEr4yxLddYheNaog2ymU8pbOpiavigSUYjaskwxvIk4XZrh3+YTB/kyseM0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=Um4WpDQH; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=XAdt
-	u2bAi4sOTeuz5ngUGzTwS3XsFoaZiTi58qZgMLg=; b=LXQEQ561QHjVRWu+sBzr
-	f8/tdS4guI1wa5Lo2FeCX0/NuGobrBNHA/wbMzkEMACgCHMpRLKyGg0b6F8QPZib
-	y46UlqFLeXh+r178P/yISivHdER5VVvSQkREGDuY/h+UdNUcFIzFP5T7jK9SPm5z
-	anRZWhtbYzoTYWpb9XG3+5uJFExpXeH6N2/ZE1JYKyGl/shcy1oFiFPnR5ftug6I
-	uZ7566/21GNhHKNasVVtJF3vYm8gem6ngxJMfdY7Y23olLb7x+lETh/g24WCP1fK
-	kNesdRPB3cNqFL46z5LQWCFVJegPp3dsDAahTmLo4C2AzwrbvTR1OxpcKJHlRoM/
-	bg==
-Received: (qmail 1505294 invoked from network); 13 Sep 2025 00:33:34 +0200
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 13 Sep 2025 00:33:34 +0200
-X-UD-Smtp-Session: l3s3148p1@vvN2PqI+EIQgAQnoAHJ8AC93OVDMgFWg
-Date: Sat, 13 Sep 2025 00:33:33 +0200
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=B7vC
+	Hc3e+Jy8US7hTTy4b9nsVzGf6UZv+0sVA7/a1y0=; b=Um4WpDQHJJyoDGQGUJlI
+	toL1eJ4r/frk7kDy23UEC+FfwIbkQz4MH6fuLgWvXFnQduOCP5AoGVhUs39qkWr3
+	9ylizJqtxlvx0xAlC/TQCGxQ8hsYkxw+hVAf6f6dLucBZTPJdQ6qEJ1wAYsPd89B
+	t1ZkgBrTCdMg5XVpi/QmQz7vjWDanBQ6xeBdnj8Z40H9V03PzIYAOiK1Q1NKWXvi
+	m8+1B6eiVmNMaemuGDOlZEU7TrGi2cyxePRXVPDRhFT0grEQhbQ2gH3hO1q5lmY/
+	uY7NwOdVj651c0bX4GJzSW042wt+udthFxosn9FeRvj/aYA4cD0WuEXRh8H9KbNM
+	CA==
+Received: (qmail 1506839 invoked from network); 13 Sep 2025 00:41:46 +0200
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 13 Sep 2025 00:41:46 +0200
+X-UD-Smtp-Session: l3s3148p1@rqzUW6I+mq0gAQnoAHJ8AC93OVDMgFWg
+Date: Sat, 13 Sep 2025 00:41:46 +0200
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Akhil R <akhilrajeev@nvidia.com>
-Cc: andi.shyti@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org,
-	digetx@gmail.com, jonathanh@nvidia.com, krzk+dt@kernel.org,
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-tegra@vger.kernel.org, ldewangan@nvidia.com, robh@kernel.org,
-	thierry.reding@gmail.com, Thierry Reding <treding@nvidia.com>
-Subject: Re: [PATCH RESEND 2/2] i2c: tegra: Add Tegra256 support
-Message-ID: <aMSfvWpxur6nPVq7@shikoro>
-References: <20250818043345.65899-1-akhilrajeev@nvidia.com>
- <20250818043345.65899-3-akhilrajeev@nvidia.com>
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: linux-media@vger.kernel.org,
+	Loic Poulain <loic.poulain@oss.qualcomm.com>,
+	Robert Foss <rfoss@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Sylwester Nawrocki <s.nawrocki@samsung.com>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Dongchun Zhu <dongchun.zhu@mediatek.com>,
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	Todor Tomov <todor.too@gmail.com>, linux-arm-msm@vger.kernel.org,
+	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org
+Subject: Re: [PATCH v2.1 01/72] dt-bindings: media: Deprecate clock-frequency
+ property for camera sensors
+Message-ID: <aMShqlBgHXHIExDC@shikoro>
+References: <20250812214620.30425-2-laurent.pinchart@ideasonboard.com>
+ <20250813094923.23695-1-laurent.pinchart@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="dM/kChvv04Z/JsdG"
-Content-Disposition: inline
-In-Reply-To: <20250818043345.65899-3-akhilrajeev@nvidia.com>
-
-
---dM/kChvv04Z/JsdG
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20250813094923.23695-1-laurent.pinchart@ideasonboard.com>
 
-On Mon, Aug 18, 2025 at 10:03:45AM +0530, Akhil R wrote:
-> Add compatible and the hardware struct for Tegra256. Tegra256 controllers
-> use a different parent clock. Hence the timing parameters are different
-> from the previous generations to meet the expected frequencies.
->=20
-> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
-> Acked-by: Thierry Reding <treding@nvidia.com>
->=20
+Hi Laurent,
 
-Applied to for-next, thanks!
+On Wed, Aug 13, 2025 at 12:49:23PM +0300, Laurent Pinchart wrote:
+> Usage of the clock-frequency property for camera sensors is discouraged
+> in favour of using assigned-clock-rates (and assigned-clock-parents
+> where needed). Mark the property as deprecated.
+> 
+> Update the examples accordingly. In DT examples where the sensor input
+> clock appears to come from a programmable clock generator, replace
+> clock-frequency by the assigned-clocks and assigned-clock-rates
+> properties. Otherwise, just drop clock-frequency.
+> 
+> Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+> ---
+> Changes since v2:
+> 
+> - Don't remove clocks property in samsung,exynos4212-fimc-is.yaml
+> 
+> Changes since v1:
+> 
+> - Adapt examples in bindings that reference sensors
+> ---
+>  Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml    | 6 ++++--
 
+Can I have this i2c change seperately to avoid dependencies?
 
---dM/kChvv04Z/JsdG
-Content-Type: application/pgp-signature; name="signature.asc"
+Happy hacking,
 
------BEGIN PGP SIGNATURE-----
+   Wolfram
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmjEn70ACgkQFA3kzBSg
-KbYc0A//f4jC0BLjTJDmADL5sJ/whNLEeFuLuiJLOkKTtJhpmvHY0vozOVebiU9O
-TG+d3NOAtu1Twvwnwofuxaqq8JkfsyXShsu4jyha9MX558TfJKW31XRQv1M9vhfU
-odm6SnNCzBNpTuiuu2HAVjR3fikOp8gVzVJuLEH0FINi7fBlcQLsTIaEjZ+ovUax
-YisUg1XD4l6WKzQ0hSxeAZDXfTCPcYw+Y1hVsGBNUhGNzH/C6BvGprm3d4t9vujD
-Zk8j6pja8k7WfJvgXGe69gcArHytqOXZu5FfPOEOvaC8KeZywY3T5aXzgc4KgX8Y
-LbMlUbtcb6FmPcdjycdxSbKnVFxT1AcyrqneCzLQjLtJSPmO8OHEme1JXNnaGOIx
-8ap2wOXBgzZL76OJjQ86Y1Z6YEp2SRTeCSYNL8q1UU8tj+I4CSk8L5rnvpqfVbmd
-qE0y8hH+lO4XHis8l7u1TPx1Ciqd5ChMQzY6eQbkZFcNe1bvhsOKHosPLLM2jArT
-0oRCiSiw6Z9MtZP+F/glyDxFSl/VfPBuDLEYQsbEpjnNAw3IJ8qFXmDh8o2wr1OQ
-8o3/4T3h4xvhIa7zAryS39pDv6YESVBMcAjhSobcT/z+a/gc2SA+Qqur0ahmov3Y
-19wEji9I30+XP9k34A81mpaTv+A0m7O3u4rF1S8OxZJWTqg3U2o=
-=nQ5g
------END PGP SIGNATURE-----
-
---dM/kChvv04Z/JsdG--
 
