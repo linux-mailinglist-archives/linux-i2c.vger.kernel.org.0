@@ -1,113 +1,92 @@
-Return-Path: <linux-i2c+bounces-12903-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12904-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6EF77B545BE
-	for <lists+linux-i2c@lfdr.de>; Fri, 12 Sep 2025 10:43:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4E2EB54630
+	for <lists+linux-i2c@lfdr.de>; Fri, 12 Sep 2025 10:59:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2FF69A05FE4
-	for <lists+linux-i2c@lfdr.de>; Fri, 12 Sep 2025 08:43:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2C1F31C27934
+	for <lists+linux-i2c@lfdr.de>; Fri, 12 Sep 2025 08:59:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD5742D7DCE;
-	Fri, 12 Sep 2025 08:42:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5F7F2737E3;
+	Fri, 12 Sep 2025 08:59:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="ia27wWNQ"
+	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="gQUT9pxh"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 289A92D77F6
-	for <linux-i2c@vger.kernel.org>; Fri, 12 Sep 2025 08:42:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 186311A3142;
+	Fri, 12 Sep 2025 08:59:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.241.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757666564; cv=none; b=tssE37Srvs25CQ/AXiDNob7ud4+2nwhtDFJXZGHTVGEHHWliAc7GIKVYOtg2IEquv1BMHfArUF22PHMCaqb387C6Hy65rTZRId9V1HUSgmHBxufEjqvsdyiZ89kiohDnolUqS+GTaZ7FxPdKIqIxO2n+E5qNeDXZGNCV7xJlqLg=
+	t=1757667545; cv=none; b=pHgiwSsOW935ZhxVSZlMyItx4PUjja4bCQgW46avPn+AAscHwesQcMORXTH3yhHmAA5QwJqMT0wKCdKEbb75yZpvK3N7VTCCPtsHtKgm5DMJ9BGCeiWF0V+4qdrWP36Bg0C3eCP4R+JdTTBOse2xvRAaIESHTyop5L1HrvXEIjw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757666564; c=relaxed/simple;
-	bh=ZjcbsHINbeqRb7tnZxQS5By1Nqquu8qnZzaE5dGbDoY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cpLX8iPfQfuO8ahpX63T8LLHNqSg6bnRrOUPacBfwffZOG/9Bm21LI/jPWqDjq2eltBDj0JDPUD3qx76XearwZ0beI2nwyivsh/OaDs5wxBxKcg9qXzqVWfx7hugAXOxFDtH6ToqshYQEBW+GL8fFWmXOjPK3havhWi1gSsqRBs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=ia27wWNQ; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=Zjcb
-	sHINbeqRb7tnZxQS5By1Nqquu8qnZzaE5dGbDoY=; b=ia27wWNQOh3QkMqv5XnK
-	uMES3STcJ0D8CGSgfSvasloiSxZaimgMZZ5YeJ4ofrffU20XJl90eR2LfYlBD/2j
-	vMljA6FkZSqZzEp19jFzHNkpUaonmUNwmTqmOvqZ/rgxgj7SVLsKzrUdQbuybIAr
-	0AQPaZjNWMxnigwaaqc90vvpFKUrPwMfcdV0MPy0Ou9KPzulBI//cvpluzydm2E3
-	0UgORQsjPvZICGWcf6Vyz5ojDjhfFvkPsfUV0dCYV0AjhiXGlFw7Hh0aiV6Ymlz8
-	Mv0MhkLeEf9C1gQq/LdyTUizKLdQHQRSFUb/2HEiVk41MWlSLuwjmdlGuHxmCijt
-	vQ==
-Received: (qmail 1294164 invoked from network); 12 Sep 2025 10:42:38 +0200
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 12 Sep 2025 10:42:38 +0200
-X-UD-Smtp-Session: l3s3148p1@EtnYopY+Wokujnuf
-Date: Fri, 12 Sep 2025 10:42:38 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Hans de Goede <hansg@kernel.org>
-Cc: Israel Cepeda <israel.a.cepeda.lopez@intel.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Wolfram Sang <wsa@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Richard Hughes <rhughes@redhat.com>, linux-i2c@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-gpio@vger.kernel.org
-Subject: Re: [PATCH v6 3/3] i2c: Add Intel USBIO I2C driver
-Message-ID: <aMPc_jHmlMsVtJKG@ninjato>
-References: <20250911181343.77398-1-hansg@kernel.org>
- <20250911181343.77398-4-hansg@kernel.org>
- <aMMVKsbDIIFzaWdu@ninjato>
- <18011d86-6f9e-4a0d-9514-fcc69cec1fc2@kernel.org>
+	s=arc-20240116; t=1757667545; c=relaxed/simple;
+	bh=efbW/Sfe0OW517ShQC9CjQHOEKr+0UjfF7wcZYdo6R8=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=bHwxYsOvP4QeLqxMrq/Iag8JFdnKSZsXk3vf8FWsf6wJkMlQbOedwhOTMy7z2cSGyrqQ1k9j04iIGh0lbgqTzUt7Ba0hyXclOrHjdf3/CL4VcfG9CbOY4+3pWn0/WiKiX94fHeyrdwBLL/EZzBfjQmkb6iPXhJ41HinGDUCMwQ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=gQUT9pxh; arc=none smtp.client-ip=203.29.241.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=codeconstruct.com.au; s=2022a; t=1757667533;
+	bh=efbW/Sfe0OW517ShQC9CjQHOEKr+0UjfF7wcZYdo6R8=;
+	h=Subject:From:To:Date:In-Reply-To:References;
+	b=gQUT9pxhlZK5toz3qpJBhksN8GlW+u9S0jSBZhnkiD/iqI1/v93UiO6gp/fkoZnEu
+	 BNG+EutVZjFVqSirhIOp9fSYQ62IQ4INHGAyJvkiK9+A1vB/LEavjFnLdNacsgCQ2Z
+	 o6LCVucyWVOHDpGi+qSdfStgOMsE5J7GWUNCuRD/0BUcXLU5sUrMvNKoFp9QUiNLgc
+	 vn3Qbpd4Q51l4mdF4ikc9hTCo0Ye6qznEroVNQNMwlE6uJhmbzZJRRBJ3WgTGzfF/c
+	 zy0yPCrTWAvFjjWyhASWPxKXd3EEk8Y0+aU3hBPJ87ASCBluY6wm4OsxTvCmdxEA/3
+	 5QIYAH+Ufn03g==
+Received: from pecola.lan (unknown [159.196.93.152])
+	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id 0A84664748;
+	Fri, 12 Sep 2025 16:58:48 +0800 (AWST)
+Message-ID: <9d6660f0bf5119cedee824cf764f15838622833a.camel@codeconstruct.com.au>
+Subject: Re: [PATCH v18 1/3] dt-bindings: i2c: aspeed,i2c.yaml: add
+ transfer-mode and global-regs properties and update example
+From: Jeremy Kerr <jk@codeconstruct.com.au>
+To: Ryan Chen <ryan_chen@aspeedtech.com>, benh@kernel.crashing.org, 
+ joel@jms.id.au, andi.shyti@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+  conor+dt@kernel.org, andrew@codeconstruct.com.au, p.zabel@pengutronix.de, 
+ andriy.shevchenko@linux.intel.com, naresh.solanki@9elements.com, 
+ linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org,
+ devicetree@vger.kernel.org,  linux-arm-kernel@lists.infradead.org,
+ linux-aspeed@lists.ozlabs.org,  linux-kernel@vger.kernel.org
+Date: Fri, 12 Sep 2025 16:58:48 +0800
+In-Reply-To: <20250820051832.3605405-2-ryan_chen@aspeedtech.com>
+References: <20250820051832.3605405-1-ryan_chen@aspeedtech.com>
+	 <20250820051832.3605405-2-ryan_chen@aspeedtech.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4-2 
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="xPBYDTKgFZu115vD"
-Content-Disposition: inline
-In-Reply-To: <18011d86-6f9e-4a0d-9514-fcc69cec1fc2@kernel.org>
+
+Hi Ryan,
+
+> And AST2600 i2c controller have two register mode, one is legacy
+> register layout which is mix controller/target register control
+> together, another is new mode which is separate controller/target
+> register control.
+
+OK, but the ast2400 and ast2500 I2C peripherals - which this binding
+also describes - do not have that facility. Given the 2600 is a distinct
+peripheral (as discussed on the v16 series), this would seem to warrant
+a distinct binding.
+
+Should this be split out into an ast2600-specific binding, to reflect
+that it is different hardware? The reference to the global registers and
+transfer modes would then be added only to the ast2600-i2c-bus binding.
+
+Cheers,
 
 
---xPBYDTKgFZu115vD
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-
-> > Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
->=20
-> Thank you.
->=20
-> Is it ok if Greg picks this up together with the rest of
-> the series?
-
-Yes.
-
-
---xPBYDTKgFZu115vD
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmjD3P4ACgkQFA3kzBSg
-KbamZQ//QV4U+zccAUQVYPeurKkz+yc+US8AXSSdz7x40/KRz60fNNThK/RK5MqP
-ZjpwhANaM/ikZ+XKpXpOc9OH2yq96c7fVDiMVkSR1+jaqREkIV8JlshHtndL/o4A
-NIZ+7W0Cxj4wpzR/RqQET1mdxOLyz44GD+rBDZPK6e/5aVfS8rQ8Ckli1et3DS4l
-RNwXXypHCoeea+cT1Ne5gKCQEmKNbF2VLnZCxJp7QIG+k8u+roitSo4GA8U4tXwZ
-FrdZfBpeeUFwUvdnmnbGNlm1Ve7WusCENFS339MYJRvlxzcqyRUWOUT8rTZWMyaL
-1q+s1O4gFyEKrzOO7vpyPqp0xt8A+tymngEQBZn/Gxo8XcCvP5WkiORSFUpZ6uvF
-CWsoQT0upMOHB9j10NC7DDtiR/oxv3v+0Nw3GdvmaGxzfP6Ow0005W0Oi4njRG3Z
-FbxGfa1FYN+Ghx3g+UWaAlaTWahglDCud2TucVAtzyIsMzj1afLV7DI6BPSlLOv9
-jXTbhPwVROOqdRhUvB1vqoYW0Wz5ZCM4wcBYy++ybJUbdlC0maW74sOJhEu6OAUE
-HUPCytcS1vzMxoVexCgl6ADzw/FI+uGHZxXQOb2m3QHo+ghNHqFSp2MKSt0huIIi
-MFfnR+kxWqsUaOFBnzK7CHqk05qMT6/FRRCE7T4ipuaf90uh7DM=
-=5gb1
------END PGP SIGNATURE-----
-
---xPBYDTKgFZu115vD--
+Jeremy
 
