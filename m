@@ -1,143 +1,144 @@
-Return-Path: <linux-i2c+bounces-12955-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12956-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A2087B57B5E
-	for <lists+linux-i2c@lfdr.de>; Mon, 15 Sep 2025 14:42:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A7AB6B5811F
+	for <lists+linux-i2c@lfdr.de>; Mon, 15 Sep 2025 17:45:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8D6EE189C524
-	for <lists+linux-i2c@lfdr.de>; Mon, 15 Sep 2025 12:43:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A428917201B
+	for <lists+linux-i2c@lfdr.de>; Mon, 15 Sep 2025 15:42:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C801C30C37E;
-	Mon, 15 Sep 2025 12:42:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1614121A421;
+	Mon, 15 Sep 2025 15:42:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="pANP/ZnS"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="h/jHeUhD"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0819730B525;
-	Mon, 15 Sep 2025 12:42:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 267D12248A5
+	for <linux-i2c@vger.kernel.org>; Mon, 15 Sep 2025 15:42:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757940135; cv=none; b=IT4hILUY0K/94BnSgaFmx15Mxj0V4Pa2Oxmq8UfsjO7rPr98AjMQA+Mdj5lizbNtHtzqXtWUnuTucI9yIBRUgy6GpmpVouB4F7ARNMCoVyKE8YAKcfZkVio4sjMPtr0afuWdKCOewVk54GlahS7loxN/Wsbi/18dZN6RppUqf3k=
+	t=1757950937; cv=none; b=aCFlB1PmmhAeS29n/2FufBu0mMOtjQq3UYEcssffcbFRCp1FgRwelDGAUOjJt6PZOPpwAtzfIcQu5zIaBaG9CH6qH8lnFxaKT29iXf0ufkRTqVm20wYikaEVsrqdR++pUaB63hxS/4Fn03dqvkfuc4gxfVsnusztO5lDvW+HOHA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757940135; c=relaxed/simple;
-	bh=wabpa/Bn/zIBSd7p273qDFAlQ7rd9ElIYVr2tgBU9nE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=A8cgHes+kNznqBsztvjDICfhwGGIRPU0L3WX4jwjVpG3aXRZcQ+oW6RgQF9oHszu+sfZUwUMZw0pR7F6ZMd1ovP4cJ0LJ3iNho5lxnMdkLWeu/QI6IsZLgSQA8XY5POkWp52pQ5YsDlgnvUNVfsfYyvCPFPiVYjZ0ySHT3OBSPE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=pANP/ZnS; arc=none smtp.client-ip=68.232.153.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1757940132; x=1789476132;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=wabpa/Bn/zIBSd7p273qDFAlQ7rd9ElIYVr2tgBU9nE=;
-  b=pANP/ZnS8DHj4/bcCyYyHr17EUVbO+x5ioirkkOIpBk2qhIh1Hsrj7EW
-   KlEjrlOXxb0gJeH6qUVvHGxFVs3kil2La27LTP1loxXLDC6RUiubqfm8A
-   JzSgZK7ykyFOkHrIYC78zygyUqBm5oDjtoS5q9/Xtu9bJxh1wvXDaRSmQ
-   4NKxV9U4Kt1YGqUfGv8uSrZBzDzrY6m/ckYRAC+os20OfDFxDLwQy12Zd
-   LuP1CezRxIkhWX4rupGJ4bjd/gAF1FhxdDwwTVZxGi+uyeEKbVEA+cYPz
-   GqszM6Z9wEeO/se2hYXKikoONQ/Hb1vdmFaogemwI314hWclkgwTHiXtl
-   g==;
-X-CSE-ConnectionGUID: 1DTnD4bHR5G9Cvo21y5Mrg==
-X-CSE-MsgGUID: Ytig52/fSJiTzZ/2C8AsWQ==
-X-IronPort-AV: E=Sophos;i="6.18,266,1751266800"; 
-   d="scan'208";a="52326574"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 15 Sep 2025 05:42:11 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.58; Mon, 15 Sep 2025 05:42:06 -0700
-Received: from [10.159.245.205] (10.10.85.11) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.58 via Frontend
- Transport; Mon, 15 Sep 2025 05:42:02 -0700
-Message-ID: <22f61953-e63f-4bfd-b129-52224cb0d122@microchip.com>
-Date: Mon, 15 Sep 2025 14:42:01 +0200
+	s=arc-20240116; t=1757950937; c=relaxed/simple;
+	bh=wAegJZA1rBGpf9ihPesOvOwpaJOrAeo03gZV1P9O36E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=j7X870116RnlY2bU71hWRKLWEh4qBkxUQpgXUngycUCAiWzEY6r2HbPtinhmBqWBn3+P9isHlXhdSxliaJciZ6tzLXS8U64K/WVUekfLtz6uN+fmTjcz+yGR6s1Q1VVW2Vch/z+zp5O6pYA4kXI+t8BfAkk4SF/WfaGd4oVOiAk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=h/jHeUhD; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=07Pq
+	Lrf5GfoTYTiH2oEdxMcPAcHc5zaos+vXta9V2Pk=; b=h/jHeUhDIzeeUQdtVPP2
+	2AcNtgxsc8+loG+w5zVQoM6Lg5iJstwGtaQbf+2uCSKX44NyT+bePsNWLR2zGI2f
+	kvLckmOG1vL54EsGEktV7eN8Rmz+Yc0nJ0atL94FRRQ4MCMPMa0YtuFMYbCCggs7
+	ZtjviAyp2sgy7CNjI43H1zBWfAeZ+WKHoTeNsVZ81sQ/cQuunEJuWFR6eJ4fczTE
+	+YaQvZv897MMr3fBrEqR2UIuKndo8zSlBtfWpHDsaKYoEHSGbY8fbXsov9GTL7dl
+	8JKso9YgWOKyZSV9cGLvoeO45ezJr/+xwo6VNamop8bZifuqXokcYoqLSxvSEHa3
+	lg==
+Received: (qmail 2430033 invoked from network); 15 Sep 2025 17:42:07 +0200
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 15 Sep 2025 17:42:07 +0200
+X-UD-Smtp-Session: l3s3148p1@m9SK2Ng+JJYujnt7
+Date: Mon, 15 Sep 2025 17:42:06 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Svyatoslav Ryhel <clamor95@gmail.com>
+Cc: Herve Codina <herve.codina@bootlin.com>,
+	Luca Ceresoli <luca@lucaceresoli.net>,
+	Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Peter Rosin <peda@axentia.se>,
+	=?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+	Jonas =?utf-8?B?U2Nod8O2YmVs?= <jonasschwoebel@yahoo.de>,
+	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 0/2] i2c: muxes: Add GPIO-detected hotplug I2C
+Message-ID: <aMgzzqhXeOi5cn3f@ninjato>
+References: <20250915060141.12540-1-clamor95@gmail.com>
+ <aMf6DLr8pTCP8tKn@shikoro>
+ <CAPVz0n3m9VOV5unVHhU67XQnk4jckA+zyJdCHXu2fFxCSht4JQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 0/9] arm64: lan969x: Add support for Microchip LAN969x
- SoC
-To: Robert Marko <robert.marko@sartura.hr>, <linux@armlinux.org.uk>,
-	<alexandre.belloni@bootlin.com>, <claudiu.beznea@tuxon.dev>,
-	<catalin.marinas@arm.com>, <will@kernel.org>, <olivia@selenic.com>,
-	<herbert@gondor.apana.org.au>, <davem@davemloft.net>,
-	<andi.shyti@kernel.org>, <lee@kernel.org>, <broonie@kernel.org>,
-	<gregkh@linuxfoundation.org>, <jirislaby@kernel.org>, <arnd@kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-	<linux-crypto@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-	<linux-spi@vger.kernel.org>, <linux-serial@vger.kernel.org>,
-	<o.rempel@pengutronix.de>, <daniel.machon@microchip.com>, Conor Dooley
-	<conor@kernel.org>
-CC: <luka.perkov@sartura.hr>
-References: <20250813174720.540015-1-robert.marko@sartura.hr>
-From: Nicolas Ferre <nicolas.ferre@microchip.com>
-Content-Language: en-US, fr
-Organization: microchip
-In-Reply-To: <20250813174720.540015-1-robert.marko@sartura.hr>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="y7lnKnCf/CROzhIH"
+Content-Disposition: inline
+In-Reply-To: <CAPVz0n3m9VOV5unVHhU67XQnk4jckA+zyJdCHXu2fFxCSht4JQ@mail.gmail.com>
 
-On 13/08/2025 at 19:44, Robert Marko wrote:
-> This patch series adds basic support for Microchip LAN969x SoC.
-> 
-> It introduces the SoC ARCH symbol itself under the ARCH_MICROCHIP symbol
-> which allows to avoid the need to change dependencies of the drivers that
-> are shared for Microchip SoC-s in the future.
-> 
-> DTS and further driver will be added in follow-up series.
-> 
-> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
 
-In linux-next for a few days and pull requests sent to arm-soc.
+--y7lnKnCf/CROzhIH
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks Robert and all that reviewed.
-Best regards,
-   Nicolas
+On Mon, Sep 15, 2025 at 02:53:23PM +0300, Svyatoslav Ryhel wrote:
+> =D0=BF=D0=BD, 15 =D0=B2=D0=B5=D1=80. 2025=E2=80=AF=D1=80. =D0=BE 14:35 Wo=
+lfram Sang
+> <wsa+renesas@sang-engineering.com> =D0=BF=D0=B8=D1=88=D0=B5:
+> >
+> > On Mon, Sep 15, 2025 at 09:01:36AM +0300, Svyatoslav Ryhel wrote:
+> > > Implement driver for hot-plugged I2C busses, where some devices on
+> > > a bus are hot-pluggable and their presence is indicated by GPIO line.
+> > > This feature is used by the ASUS Transformers family, by the  Microso=
+ft
+> > > Surface RT/2 and maybe more.
+> > >
+> > > ASUS Transformers expose i2c line via proprietary 40 pin plug and wire
+> > > that line through optional dock accessory. Devices in the dock are
+> > > connected to this i2c line and docks presence is detected by a dedict=
+ed
+> > > GPIO.
+> > >
+> > > Micha=C5=82 Miros=C5=82aw (1):
+> > >   i2c: muxes: Add GPIO-detected hotplug I2C
+> > >
+> > > Svyatoslav Ryhel (1):
+> > >   dt-bindings: i2c: Document GPIO detected hot-plugged I2C bus
+> > >
+> > >  .../bindings/i2c/i2c-hotplug-gpio.yaml        |  65 +++++
+> > >  drivers/i2c/muxes/Kconfig                     |  11 +
+> > >  drivers/i2c/muxes/Makefile                    |   1 +
+> > >  drivers/i2c/muxes/i2c-hotplug-gpio.c          | 263 ++++++++++++++++=
+++
+> > >  4 files changed, 340 insertions(+)
+> > >  create mode 100644 Documentation/devicetree/bindings/i2c/i2c-hotplug=
+-gpio.yaml
+> > >  create mode 100644 drivers/i2c/muxes/i2c-hotplug-gpio.c
+> >
+> > Adding Herve and Luca to CC because they want to achieve the same with
+> > their I2C bus extensions, no?
 
-> ---
-> Changes in v9:
-> * Make ARCH_MICROCHIP hidden symbol that is selected by SparX-5 and LAN969x
-> directly, this avoids breaking existing configs with ARCH_SPARX5
-> 
-> Changes in v8:
-> * Move to using ARCH_MICROCHIP as suggested by Arnd
-> * Dropped any review tags due to changes
-> 
-> Robert Marko (9):
->    arm64: Add config for Microchip SoC platforms
->    ARM: at91: select ARCH_MICROCHIP
->    arm64: lan969x: Add support for Microchip LAN969x SoC
->    mfd: at91-usart: Make it selectable for ARCH_MICROCHIP
->    tty: serial: atmel: make it selectable for ARCH_MICROCHIP
->    spi: atmel: make it selectable for ARCH_MICROCHIP
->    i2c: at91: make it selectable for ARCH_MICROCHIP
->    char: hw_random: atmel: make it selectable for ARCH_MICROCHIP
->    crypto: atmel-aes: make it selectable for ARCH_MICROCHIP
-> 
->   arch/arm/mach-at91/Kconfig     |  4 +++
->   arch/arm64/Kconfig.platforms   | 51 ++++++++++++++++++++++++----------
->   drivers/char/hw_random/Kconfig |  2 +-
->   drivers/crypto/Kconfig         |  2 +-
->   drivers/i2c/busses/Kconfig     |  2 +-
->   drivers/mfd/Kconfig            |  2 +-
->   drivers/spi/Kconfig            |  2 +-
->   drivers/tty/serial/Kconfig     |  2 +-
->   8 files changed, 47 insertions(+), 20 deletions(-)
-> 
-> --
-> 2.50.1
-> 
+Sorry, a misunderstanding: the question was for Herve and Luca. I wanted
+to ask for a comment from them if this is the same problem (which I
+think it is). The question was not meant for you.
 
+
+--y7lnKnCf/CROzhIH
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmjIM8oACgkQFA3kzBSg
+KbY7VRAAqIqk146NdOyLM5+7CMwn/ggMNteGKa5xt3tt2QsDfL2XTg3BIFB9iVL6
+zvhYiOKNyrGS+tukC6rZgWVLBgiSsU7SvJ26z9+R/zBXHc5RiueyMefG3qS1slYf
+jPSkJg25qRSQ4oHjOwfGVh0UIyrpV/hBuJCX2GKjz9YtqTvK41gP7TIxA1ZJ1G62
+Itzi4wWnwDm3gyNYAYEmfD1XpvGSQrte1/sUN895MsP8mxQ8X+fs1MdggFuZOLFl
+dKkk4KPoAL27lU0OHRbczReXoBzElbNcYFMuSGZVl3HXyRaWWrwOf9pNQV5HqAxF
+Rha0xXz9JcVmVEavNVoUzGXBP8FfKGIhcIBaTvAHNcDzTnKrfn81TrDvF+uVIkxW
+WcKCHjBB72JK6meyBLpnNZkGTXdqqTZMvd3jdtX/Dc+hLiL5WSAD61SBjkR6jb+D
+qgO1Im8vuD8+qM6eZm8Cbr0nkW6OMh0/0yrOklJbjsNU5rwvUJsZMMD6wVsjNg1y
+MqvwAQ5cxMmzHLok6ZdyYDDrDUb4mqOspRrU0WOurUPOue3WIPVC7yw3d4EkFAIL
+x3JfecCVHlHe8uCf1nfnDEjqH31hnsphYjXCozL4y7iJmrKNozEJ6Usm4KQqNAVz
+CMOsFPuAov3+C9g8WVZtrZWDJpi/4VJ3n7NgNU80hFhawvc0a8I=
+=oovh
+-----END PGP SIGNATURE-----
+
+--y7lnKnCf/CROzhIH--
 
