@@ -1,207 +1,271 @@
-Return-Path: <linux-i2c+bounces-12959-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-12961-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E9D0B59015
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Sep 2025 10:11:51 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69372B59405
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 Sep 2025 12:47:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CBEE3481A4F
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Sep 2025 08:11:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2115416443B
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 Sep 2025 10:47:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1E3628134C;
-	Tue, 16 Sep 2025 08:11:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80D0B29C343;
+	Tue, 16 Sep 2025 10:47:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FyE619/e"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Q9XWoNn2"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB2DF28643D
-	for <linux-i2c@vger.kernel.org>; Tue, 16 Sep 2025 08:11:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A74E1280325
+	for <linux-i2c@vger.kernel.org>; Tue, 16 Sep 2025 10:47:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758010293; cv=none; b=fS++a9yXxYfggAoW2jD3gRMDTV9bjFNJLeehzFBgHPXQ7hNfeJ66eiacOx3Eqy+JY3humFZQFM9znLwcatBysy9/62uFYM5HekR0iFLjkIxUh+jo1P1HyNpCzAG7r+E6/SYGxzoWraw9Xg2lSEW/yJERs4mxyH1LgaDIMeoDLKM=
+	t=1758019627; cv=none; b=fMqtTyd1RLyc9ZuM/sH2dKkh+I6OCZ86KllenFgaB25dDquzcRFULZtiEAfLcZvBTY8Bk3PKqQ+e41qMS/9HvnIuV5bOl4QYtROV8nJy+vee/+hnncZknwSV6ZjdA6RODBNBlolbRupyX9zYyV7Zaqiyv5JyqvNlY0+wHEnYnmw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758010293; c=relaxed/simple;
-	bh=HyfOs7rbrqIWkqNzUpNMAaZLN/rofAij+yVLXi5+pCc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=p/SKW7rQVQPXdSFObaBDT8bbjFgZkb9zDmJKxsOrbH1/IKuwj1iXm3cnIpo3ESLFRGngs4lrjU+/22y0RWeTllyLQ9H8QLBPpqsP2OS4zbRz/VHHp97M/tTdFFnm93ki18vzsiKMSSeKRygu7Ijf8BtRY0I3lLbkFCSAtHhTddI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FyE619/e; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-45b9c35bc0aso45204125e9.2
-        for <linux-i2c@vger.kernel.org>; Tue, 16 Sep 2025 01:11:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758010290; x=1758615090; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gZZORlflm4LecF9/7KAxcGVbVXdKEFLgc7zSGL4QiDQ=;
-        b=FyE619/ekNoM2cBJJesnCrJFqk1gzaO5s+3bZDrODZx1VANC213nn/EDNtF4Q4/9cJ
-         saHAMyFT0wKV2dTG8J35qDVfvLfXEGYaWvVsISBaMU+nrPAnSnQyrj5ISGdnYRNEToEq
-         mBJYioqwU2I+AGfrsDBVqNVv/lxSQJIhhcd8Ec2LJ0AVHxNzCiORbeYoZg6dnOEi6B9L
-         VaUEE/gOYehHAhcs28VdzD5g6t0uZqGcz0EdRaCks5ME8V770gOemiQzUoFPV1a9YYej
-         DfvgcQoeXrIBEYM4uhnLQ6R6LNG0gmIdxQK6wCk3Gr60QdxAWqETNt4rpLOuiTisatuz
-         Qtzw==
+	s=arc-20240116; t=1758019627; c=relaxed/simple;
+	bh=1mI9ppTa+alHrPD8MYXRGEIzIpbRXrOmPpVue9Aa508=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=QLrgfQjcgxkoeQ4hroLG1zQxsR1LqwYPs4vZpJM5IMVQN0svYI0jNSAGCbWHx3xlExTGEaDkRsdSwmqRi+FbnEP+UrMd28iUCDyBlvqnJBXUuSGWUMC90kgqWQpAElEXaR/DdLtyB4DGe66QdjP6xmj495phua628eZeLl+mmmo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Q9XWoNn2; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58GA6A6K004961
+	for <linux-i2c@vger.kernel.org>; Tue, 16 Sep 2025 10:47:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=k+LD0lfDicHs3z0SKSGb6Y
+	rFHfIbrIvaBcdAM/oP0EE=; b=Q9XWoNn2Clg1BECWteCsjA9Fo6+cLaOJ67qqzR
+	dV/Yw2dxtMC4WS37OIp/bCig7378ag75I/0iBrvsI6f2Jl/YVzOCod5pGWazCfJ6
+	DvUnvWg+cm0dAg+KAiFk3xnPpDjwZTf3KrzbEhhguXi1vXRrJSc2Fv2sUMq2qu4C
+	NV6s4oqrdYK5RlWoKpLBEjvmINgw0TbkEWU4aJPQCDwUcM2LjqfRWKb3Rl0GsXYC
+	EVTaFMkF+/Zl0KR9+lQFR1Vkt76c5OVNdPRQJ/sAHnUjWIh9BjGpKlih/kHAlnUJ
+	Hy6CvpMgFoq9H4EeJNfSq6QEM4Xnd4MqKRT/9oV75FLfunUA==
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4950u58gay-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-i2c@vger.kernel.org>; Tue, 16 Sep 2025 10:47:04 +0000 (GMT)
+Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-24ced7cfa07so56182035ad.1
+        for <linux-i2c@vger.kernel.org>; Tue, 16 Sep 2025 03:47:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758010290; x=1758615090;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gZZORlflm4LecF9/7KAxcGVbVXdKEFLgc7zSGL4QiDQ=;
-        b=sPXlwMxznTrKH8x6mGc2KV2Ph3AdqgVmkaOthyztjRZ3lpSL4ks2PzHvddnujGN2l8
-         AVMNsIgKsweJN+EfOF2xlvpZ53YV5A/yzetdTp9X3hZE9Ap7JJiNYiqTC2ci6bQCz2QY
-         Q+1nGkxM4J9kc9pPwC1DSSQH6stX+5XvNBcHAe3hg81WVwvBnSY+rYPO1RCKnnWYwrZ1
-         PKnvM/RJGYUHTDh5KeaBvI7c6DPGqZVbrsnFh7DkIYGk5Xdq1ppWhcf0fJxiNYxS65CT
-         ru5x5jOz3Xwx6m1A63RAk/TvVAHeGrSDeB7ZBjsNiuvLAUfyq8ZQyHMxW4/nkKD+8Gl1
-         CbLw==
-X-Forwarded-Encrypted: i=1; AJvYcCVCMCYVcHaDsnoIB/rSyT/nfCtI5fxhm6tr+SwEgPU5tqUM0NNOzu2I7IQEVSo1t13mwAhmrxrlMxk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwJz2gCN0cm4K6JOQ9r//VYvrw5NgAHn4+wltiw4aynUxqVR8jK
-	bxTAyZzu3VTx4RJARWGwsyNcSk1FUSjBURV+NNwFjuotcTsj/+ZZKL8pSua6EgnTkxsrpiGl+bI
-	guVsrISfDGzXOSoBpJMrR5nlAz+IX/HU=
-X-Gm-Gg: ASbGncvCllzOyt+OvlBljI2tflcxU4qcmrRrrKVzNI6n323608sl4n6u9i+iiUjXzKC
-	JdrN3akTgqgGFmEorOICvHWicWEMDQISjhlIFht9uFhMythmF7xhiuv1Fc2YjhSGVuabHOySNSV
-	5TEO9hacBdQiWrJ0NG0mAsMmZIe2gPhEdXP3IzkL6JPU4wBDsGlT1vEZec8fa7udRdScCWoSkhM
-	E9hp4Iy
-X-Google-Smtp-Source: AGHT+IFqLEMM72PchwIu85GLmuVTTpcOHaMo1tyv7F4Po+jfn8jzAhB3sLa3AaeijxW03w2RP5MM6waIv1XXZtoBSHE=
-X-Received: by 2002:a5d:5886:0:b0:3e6:116a:8fdf with SMTP id
- ffacd0b85a97d-3e7658bcb87mr14615901f8f.13.1758010289683; Tue, 16 Sep 2025
- 01:11:29 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1758019624; x=1758624424;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=k+LD0lfDicHs3z0SKSGb6YrFHfIbrIvaBcdAM/oP0EE=;
+        b=s1MBReduicRHmYj9icSXSkmP1ChtVe7ewjeBduTzNybXfJDb5IBWLUmWa/qLzrY6yx
+         AwCreI4T9RM3NLbQEcEaJHMNPH59qTW1DXhxuLJaQzNomBORBeCBg9P59fli4B1FRbmE
+         QoMfe4U4jZ+9JIlndwUYXRsRcv/zQ3uIpwieU7/5wWwRZZTNLzlv6xLPA1Q35+Zi+a50
+         mRt7oF3VUJF6snSK2OTuAfrNqywmaO2yZM8yiW4McjNdHqDa0n9lNcPxwmeF0Qd4adE8
+         TVCRpySunZ5gn4bUkI9soFOaTR7W9UwYhFQHxLGbakSzCDA5M7xkvCfsIObajWl9YjjO
+         iMTA==
+X-Forwarded-Encrypted: i=1; AJvYcCWhDlr6+qW6FGaY0H69sXyPLuenkJGv0wN+buxmP4XYEAMBILUGhwdV/yBCQUqM3F8MWf/uLXW2ZUY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwEFqqDiF9YDnqLg6UfZzfl/xzzxp7ZSWyyl6R1Ute8zmcuiM2/
+	D8B8hpitwi7Gm7MMpWCDamJgsbDf5vfSAVaXcPo5/bNmeYtb20uNgsYUI88A9kWmUBakwtlkE2m
+	gXfw72WcEcrp7+RHPL3ZVUIa1eXbp6Y6FZUVe0gDtmqTmP4EA4o9wnSy4XQFquU0=
+X-Gm-Gg: ASbGncuuY+ATrrluQ9zEMh2W7mToXswx/QV0CVe1em04QNOK20g4RLli9Xc4VQwlDTx
+	YToNdPVdFsvrhLKjEP7z5D6ft57GxEJhj2daT/gNfZGtR48+6GcnbWjAh/fFMfWw2oDdr4Pg7wk
+	rj8ueeRXwAEoaaGc0P9bv8Cx7PZZxBn4J0maEKMzQnGm7ddZ96SZCTyuO+Cl+grJBIBl9emk/77
+	tXfWbKv2XCK3k9D7X2fDO/CKivBUvwTn7+DwYfoUeWzV/BflQQS+MckJX4hbJeCCweZiwFOPInd
+	WbzNXTIAm2tVQCazkGvr/isQ8WxcWr5Nz3m205FTEQYTM/t7yG/fzvqG36k/F1IKAoSY
+X-Received: by 2002:a17:902:cf10:b0:266:f01a:98d5 with SMTP id d9443c01a7336-266f01a9b37mr87189985ad.57.1758019623766;
+        Tue, 16 Sep 2025 03:47:03 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFd/ah4dRhxyJBnbbxfbJnqOEDhCK+vtcEnddej+JXs/E1YTJglxqY6A1uv8NoQtF7AGesKgw==
+X-Received: by 2002:a17:902:cf10:b0:266:f01a:98d5 with SMTP id d9443c01a7336-266f01a9b37mr87189535ad.57.1758019623269;
+        Tue, 16 Sep 2025 03:47:03 -0700 (PDT)
+Received: from hu-wasimn-hyd.qualcomm.com ([202.46.22.19])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-267b2246d32sm33122355ad.143.2025.09.16.03.46.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Sep 2025 03:47:02 -0700 (PDT)
+From: Wasim Nazir <wasim.nazir@oss.qualcomm.com>
+Subject: [PATCH v5 00/10] arm64: dts: qcom: lemans-evk: Extend board
+ support for additional peripherals
+Date: Tue, 16 Sep 2025 16:16:48 +0530
+Message-Id: <20250916-lemans-evk-bu-v5-0-53d7d206669d@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250915060141.12540-1-clamor95@gmail.com> <aMf6DLr8pTCP8tKn@shikoro>
- <CAPVz0n3m9VOV5unVHhU67XQnk4jckA+zyJdCHXu2fFxCSht4JQ@mail.gmail.com>
- <aMgzzqhXeOi5cn3f@ninjato> <20250916081955.2826c6a8@bootlin.com> <ffa2a954-d161-45f1-a83f-509148be3b6f@lucaceresoli.net>
-In-Reply-To: <ffa2a954-d161-45f1-a83f-509148be3b6f@lucaceresoli.net>
-From: Svyatoslav Ryhel <clamor95@gmail.com>
-Date: Tue, 16 Sep 2025 11:11:18 +0300
-X-Gm-Features: AS18NWCT5GhXoRK8bMJ59n5EJHC15a_WloTpuyCeHJD_J5GBYxnxIFrz9tOt418
-Message-ID: <CAPVz0n1aPWZhmCAft_58-eVaynhxWJRodEzuLE8aqWqqGQHR=w@mail.gmail.com>
-Subject: Re: [PATCH v1 0/2] i2c: muxes: Add GPIO-detected hotplug I2C
-To: Luca Ceresoli <luca@lucaceresoli.net>
-Cc: Herve Codina <herve.codina@bootlin.com>, 
-	Wolfram Sang <wsa+renesas@sang-engineering.com>, Andi Shyti <andi.shyti@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Peter Rosin <peda@axentia.se>, =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>, 
-	=?UTF-8?Q?Jonas_Schw=C3=B6bel?= <jonasschwoebel@yahoo.de>, 
-	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, luca.ceresoli@bootlin.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIABhAyWgC/3XPSwrCMBCA4atI1qbk0dTUlfcQF0k6tcE+tLFBK
+ b270yIoRTcD/8B8MCMJ0HsIZL8ZSQ/RB9+1GGq7Ia4y7RmoL7CJYEIxzVNaQ2PaQCFeqB0oOMa
+ Vg5RpBgRvrj2U/rF4xxN25cO9658LH/m8fUsiW0mRU0aR4RmwQjpQhy6E5DaY2nVNk+AgMxjFB
+ 8mZXCMCEVsaqbkttTXiDyK/kfVPUSKirTXG8VIo0H+Q9BvRayRFRDnJc5flmdkVP5Bpml71hwn
+ ggAEAAA==
+X-Change-ID: 20250814-lemans-evk-bu-ec015ce4080e
+To: Ulf Hansson <ulf.hansson@linaro.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: kernel@oss.qualcomm.com, linux-mmc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, netdev@vger.kernel.org,
+        linux-i2c@vger.kernel.org, Monish Chunara <quic_mchunara@quicinc.com>,
+        Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+        Wasim Nazir <wasim.nazir@oss.qualcomm.com>,
+        Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>,
+        Nirmesh Kumar Singh <quic_nkumarsi@quicinc.com>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Sushrut Shree Trivedi <quic_sushruts@quicinc.com>,
+        Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>,
+        Mohd Ayaan Anwar <quic_mohdayaa@quicinc.com>,
+        Vikash Garodia <vikash.garodia@oss.qualcomm.com>
+X-Mailer: b4 0.15-dev-e44bb
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1758019616; l=4914;
+ i=wasim.nazir@oss.qualcomm.com; s=20250807; h=from:subject:message-id;
+ bh=1mI9ppTa+alHrPD8MYXRGEIzIpbRXrOmPpVue9Aa508=;
+ b=SaRI+OQmMd3thxlP9vYKNdZw7W7qiuyLpzxw8uSxYM/n491tcIj81KrlCFhIdxQqKhVMpBj+B
+ MGqY8U+u50TDJrTRb5ojGS5VnOZH4v+dYHOxfAiP0bl1knzVoFTmFXY
+X-Developer-Key: i=wasim.nazir@oss.qualcomm.com; a=ed25519;
+ pk=4ymqwKogZUOQnbcvSUHyO19kcEVTLEk3Qc4u795hiZM=
+X-Proofpoint-GUID: NTDlZxxiT5BxdD7JMc8uttZkOUqlhIxB
+X-Proofpoint-ORIG-GUID: NTDlZxxiT5BxdD7JMc8uttZkOUqlhIxB
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTEzMDAzMSBTYWx0ZWRfX70LM72PadzP5
+ u//Hjy6rCm53CA44iBnxMqxPJIfJrR97YmYjDXX4wp9pJgd7wRftkfCK2RL/TNtnMC4VvHrgyRK
+ l4eawYszATUmOpHk4C+LTyBu1kGyv3Gj83kPzZnYvnmUvO1WfhL9VpzyJ5dP7f6TRS1ThGhN6im
+ HuybsjHC7TVQFXM3Mj+5jFbp8g+3pr1AIDKlAImZwS70+/OxTx+J/TXXl8x5muOJ2dDei5h47lh
+ nQ9WeaN0CcNQd4ViHxIKsT1IYhNAtn4YYawOatbQul9a0Yxtx9X+oLHb5GzBL7QjPE08SlkKW+X
+ 9CiNNxZH0UM3XN6wiz5apoXGoYbi13HRkHGwQwqLhgAKYb64L5DP7sJUAiuo+ylSnWjbjDXH4tT
+ fE8AjvR7
+X-Authority-Analysis: v=2.4 cv=JvzxrN4C c=1 sm=1 tr=0 ts=68c94028 cx=c_pps
+ a=cmESyDAEBpBGqyK7t0alAg==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
+ a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8
+ a=UzDb-niT3-dnCAiDllkA:9 a=QEXdDO2ut3YA:10 a=1OuFwYUASf3TG4hYMiVC:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-09-16_02,2025-09-12_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 phishscore=0 suspectscore=0 clxscore=1015 impostorscore=0
+ spamscore=0 adultscore=0 malwarescore=0 bulkscore=0 classifier=typeunknown
+ authscore=0 authtc= authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2507300000 definitions=main-2509130031
 
-=D0=B2=D1=82, 16 =D0=B2=D0=B5=D1=80. 2025=E2=80=AF=D1=80. =D0=BE 10:50 Luca=
- Ceresoli <luca@lucaceresoli.net> =D0=BF=D0=B8=D1=88=D0=B5:
->
-> Hello,
->
-> thanks Wolfram for pulling Herv=C3=A9 and me in.
->
-> +Cc my Bootlin e-mail address
->
-> Il 16/09/25 08:19, Herve Codina ha scritto:
-> > Hi Wolfram,
-> >
-> > On Mon, 15 Sep 2025 17:42:06 +0200
-> > Wolfram Sang <wsa+renesas@sang-engineering.com> wrote:
-> >
-> >> On Mon, Sep 15, 2025 at 02:53:23PM +0300, Svyatoslav Ryhel wrote:
-> >>> =D0=BF=D0=BD, 15 =D0=B2=D0=B5=D1=80. 2025=E2=80=AF=D1=80. =D0=BE 14:3=
-5 Wolfram Sang
-> >>> <wsa+renesas@sang-engineering.com> =D0=BF=D0=B8=D1=88=D0=B5:
-> >>>>
-> >>>> On Mon, Sep 15, 2025 at 09:01:36AM +0300, Svyatoslav Ryhel wrote:
-> >>>>> Implement driver for hot-plugged I2C busses, where some devices on
-> >>>>> a bus are hot-pluggable and their presence is indicated by GPIO lin=
-e.
-> >>>>> This feature is used by the ASUS Transformers family, by the  Micro=
-soft
-> >>>>> Surface RT/2 and maybe more.
-> >>>>>
-> >>>>> ASUS Transformers expose i2c line via proprietary 40 pin plug and w=
-ire
-> >>>>> that line through optional dock accessory. Devices in the dock are
-> >>>>> connected to this i2c line and docks presence is detected by a dedi=
-cted
-> >>>>> GPIO.
-> >>>>>
-> >>>>> Micha=C5=82 Miros=C5=82aw (1):
-> >>>>>   i2c: muxes: Add GPIO-detected hotplug I2C
-> >>>>>
-> >>>>> Svyatoslav Ryhel (1):
-> >>>>>   dt-bindings: i2c: Document GPIO detected hot-plugged I2C bus
-> >>>>>
-> >>>>>  .../bindings/i2c/i2c-hotplug-gpio.yaml        |  65 +++++
-> >>>>>  drivers/i2c/muxes/Kconfig                     |  11 +
-> >>>>>  drivers/i2c/muxes/Makefile                    |   1 +
-> >>>>>  drivers/i2c/muxes/i2c-hotplug-gpio.c          | 263 ++++++++++++++=
-++++
-> >>>>>  4 files changed, 340 insertions(+)
-> >>>>>  create mode 100644 Documentation/devicetree/bindings/i2c/i2c-hotpl=
-ug-gpio.yaml
-> >>>>>  create mode 100644 drivers/i2c/muxes/i2c-hotplug-gpio.c
-> >>>>
-> >>>> Adding Herve and Luca to CC because they want to achieve the same wi=
-th
-> >>>> their I2C bus extensions, no?
-> >>
-> >> Sorry, a misunderstanding: the question was for Herve and Luca. I want=
-ed
-> >> to ask for a comment from them if this is the same problem (which I
-> >> think it is). The question was not meant for you.
-> >>
-> >
-> > Indeed, we try to handle the same use case.
-> >
-> > The i2c-hotplug-gpio.c driver handles only an connector with an I2C bus=
-.
-> >
-> > On our side, we try to have something more generic that can handle more
-> > than one I2C and some other busses and resources (gpio, pwm, ...) wired
-> > to a connector.
-> >
-> > To move this i2c-hotplug-gpio to our proposal direction, this should be=
-come
-> > a connector driver with a i2c bus extension and an addon DT describing =
-the
-> > i2c devices available on the addon board.
-> >
-> > The connector driver should monitor the gpio and apply the addon DT whe=
-n it
-> > detects the addon plugged.
-> >
-> > Also, I am waiting for conclusions in the export symbols discussion [1]=
- to
-> > re-spin the i2c bus extension series.
->
-> I just have one question to add to what Herv=C3=A9 wrote.
->
-> I guess in the big picture you have a device tree where all
-> hot-pluggable I2C devices are always described, but they won't probe
-> until i2c_hotplug_activate() adds an adapter for them. Is my
-> understanding correct?
->
+This series extend support for additional peripherals on the Qualcomm
+Lemans EVK board to enhance overall hardware functionality.
 
-Yes, your understanding is correct, i2c_hotplug creates a i2c mux from
-parent with a set of always described devices by GPIO signal.
+It includes:
+  - New peripherals like:
+    - I2C based devices like GPIO I/O expander and EEPROM.
+    - GPI (Generic Peripheral Interface) DMA controllers and QUPv3 controllers
+      for peripheral communication.
+    - PCIe HW with required regulators and PHYs.
+    - Remoteproc subsystems for supported DSPs.
+    - Iris video codec.
+    - First USB controller in device mode.
+    - SD card support on SDHC v5.
+    - Qca8081 2.5G Ethernet PHY.
 
-> If correct, this implies you can connect only one type of dock. Multple
-> dock models with different peripherals cannot be supported.
->
+Dependency:
+  - The ethernet PHY QCA8081 depends on CONFIG_QCA808X_PHY, without
+    which ethernet will not work.
 
-This configuration is used for ASUS Transformers and they don't have
-multiple docks, only one accessory is used and it is not swappable
-even between models by design, not even talking about different
-generations. SO configuration used by Transformers can be described
-just as title says "GPIO-detected hotplug I2C" devices are fixed just
-can be detached, but never swapped.
+---
+Changes in v5:
+- Dropping these changes from the series, as they are already part of
+  linux-next:
+  - Audio change [1]
+  - MMC dt-bindings change 01/14 (v4)
+  - EEPROM dt-bindings change 05/14 (v4)
+- Change bias to 'pull-up' for PCIe 'perst-pins' - Konrad.
+- Link to v4: [2]
 
-> Best regards,
-> Luca
->
+[1] https://lore.kernel.org/linux-arm-msm/20250822131902.1848802-1-mohammad.rafi.shaik@oss.qualcomm.com/
+[2] https://lore.kernel.org/r/20250908-lemans-evk-bu-v4-0-5c319c696a7d@oss.qualcomm.com
+
+Changes in v4:
+- Move 'bus-width' property of SDHC to Board DT and also keep the width
+  to 4 bits - Dmitry/Konrad.
+- Update commit text of eeprom bindings to describe the reason for the
+  change 05/14 (v3) - Dmitry.
+- Bring all tags from v3.
+- Link to v3: https://lore.kernel.org/r/20250904-lemans-evk-bu-v3-0-8bbaac1f25e8@oss.qualcomm.com
+
+Changes in v3:
+- Re-order QUP patch 05/13 (v2) to not break i2c node enablement in patch
+  03/13 (v2) - Dmitry.
+- Update commit text for QUP patch to highlight which all clients each
+  QUP is accessing.
+- Add dedicated compatible for Giantec EEPROM, because usage of generic
+  compatible "atmel,24c256" alone is not advised.
+- Update commit text for EEPROM patch 04/13 (v2) to emphasize on EEPROM
+  enablement - Konrad.
+- Put 'reg' property after 'compatible' in Expander - Konrad.
+- Put 'pinctrl-names' after 'pinctrl-n' in PCIe - Konrad.
+- SDHC:
+    - Update interconnect nodes with ICC_TAG macro - Konrad.
+    - Put new lines for each entry in interrupt-names, clock-names,
+      interconnect-names - Konrad.
+    - Put bias properties below drive-strength for consistency in
+      sdc-default-state - Konrad.
+    - Move 'bus-width' property to SOC DT - Konrad.
+    - Move 'no-mmc' and 'no-sdio' properties to board DT - Dmitry/Konrad.
+- Add 'Reviewed-by' tag from Konrad [3] on Audio patch 13/13 (v2),
+  although the commit text is changed now.
+- Link to v2: [4]
+
+[3] https://lore.kernel.org/linux-arm-msm/b4b6678b-46dd-4f57-9c26-ff0e4108bf79@oss.qualcomm.com/
+[4] https://lore.kernel.org/r/20250903-lemans-evk-bu-v2-0-bfa381bf8ba2@oss.qualcomm.com
+
+Changes in v2:
+- Split the patch 3/5 in v1 into separate patch per author - Bjorn.
+- Use generic node names for expander - Krzysztof.
+- Change video firmware to 16MB comapatible - Dmitry.
+- SDHC:
+    - Arrange SDHCI-compatible alphanumerically - Dmitry.
+    - Move OPP table and power-domains to lemans.dtsi as these are
+      part of SoC.
+    - Move bus-width to board file - Dmitry.
+    - Change 'states' property to array in vreg_sdc and also re-arrange
+      the other properties.
+- Remove the redundant snps,ps-speed property from the ethernet node as
+  the MAC is actually relying on PCS auto-negotiation to set its speed
+  (via ethqos_configure_sgmii called as part of mac_link_up).
+- Refine commit text for audio patch - Bjorn.
+- Link to v1: https://lore.kernel.org/r/20250826-lemans-evk-bu-v1-0-08016e0d3ce5@oss.qualcomm.com
+
+---
+Krishna Kurapati (1):
+      arm64: dts: qcom: lemans-evk: Enable first USB controller in device mode
+
+Mohd Ayaan Anwar (1):
+      arm64: dts: qcom: lemans-evk: Enable 2.5G Ethernet interface
+
+Monish Chunara (3):
+      arm64: dts: qcom: lemans: Add SDHC controller and SDC pin configuration
+      arm64: dts: qcom: lemans-evk: Add EEPROM and nvmem layout
+      arm64: dts: qcom: lemans-evk: Enable SDHCI for SD Card
+
+Nirmesh Kumar Singh (1):
+      arm64: dts: qcom: lemans-evk: Add TCA9534 I/O expander
+
+Sushrut Shree Trivedi (1):
+      arm64: dts: qcom: lemans-evk: Enable PCIe support
+
+Vikash Garodia (1):
+      arm64: dts: qcom: lemans-evk: Enable Iris video codec support
+
+Viken Dadhaniya (1):
+      arm64: dts: qcom: lemans-evk: Enable GPI DMA and QUPv3 controllers
+
+Wasim Nazir (1):
+      arm64: dts: qcom: lemans-evk: Enable remoteproc subsystems
+
+ arch/arm64/boot/dts/qcom/lemans-evk.dts | 365 ++++++++++++++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/lemans.dtsi    |  92 ++++++++
+ 2 files changed, 457 insertions(+)
+---
+base-commit: c3067c2c38316c3ef013636c93daa285ee6aaa2e
+change-id: 20250814-lemans-evk-bu-ec015ce4080e
+
+Best regards,
+--  
+Wasim Nazir <wasim.nazir@oss.qualcomm.com>
+
 
