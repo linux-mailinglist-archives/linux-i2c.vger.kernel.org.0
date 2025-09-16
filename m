@@ -1,69 +1,77 @@
-Return-Path: <linux-i2c+bounces-13000-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13001-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4138FB59EA0
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Sep 2025 19:01:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3EDDEB59EAA
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 Sep 2025 19:02:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0F7E1461BA6
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Sep 2025 17:00:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AFB391C03317
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 Sep 2025 17:01:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C9B93294F5;
-	Tue, 16 Sep 2025 16:58:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE12232D5A6;
+	Tue, 16 Sep 2025 16:58:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iNfloWg+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ufGW4ipa"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CF833294E8;
-	Tue, 16 Sep 2025 16:58:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DAB1329517;
+	Tue, 16 Sep 2025 16:58:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758041915; cv=none; b=r2+jpjNrXECXOQtShMumCjbaEZZMXBFhpDXuZe1WTGNy5K96XckHgzFnzTdsdns00fDvVIyM3D3t4X0I1byOK9Gii4icwElpuc50NwsesLfemi5gZqPHRm/pM6BFq4AQOgxDdGWh9G6BAMD22ntiMuMIOfhniG7EsRWd6Lc6RkI=
+	t=1758041919; cv=none; b=DUXq8vthkEBxBGZPYTU3tHm+myshRgQN8K0CgXJZt6I+UbVgTCCbLgRxSmuhET2b6g1ohxjhPviWXSjxNytzxN3fIkaN4fVsrW2junZKcVkMgDumAphRZ1CPLX/6+9r7K3X3lL8d2ytlPUYNKG5b2KG+xi3moIuLDoCUuvmu0jY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758041915; c=relaxed/simple;
-	bh=D3qvIg6ko2yKinLTtLMypu7l8kYVGM9TPZja3TTO2pY=;
+	s=arc-20240116; t=1758041919; c=relaxed/simple;
+	bh=cN2ZRIwpPuuTuFydKsuswQytPt7ZVYZueiDnIohjvxg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=jWc7j+csKtpQm/inuEwvRgHQdMO5GnqzipV78H3xMnv34MJ3wFD39SFdmMbrsVtmTBmkE69jTGDy4kSB/K1Eh+pEIU5IgdUpCT/hc8V9wq9JAuPOJ4cRtp9y7NuV0yFFWm8TDOphM6k+74UD2zRNUcUAoQj5GkuRH9oJOuhovkA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iNfloWg+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FC4FC4CEFD;
-	Tue, 16 Sep 2025 16:58:33 +0000 (UTC)
+	 MIME-Version:Content-Type; b=Zia4YqMQgCEV9MFnkqQFQMpYvuZpLaDNbOwiXJmgItyd9Sz/Sgt/SBrqvYFAjJWoI+j7t61cdevfwmXyE+plCgzQFyq90dRQWFkHNCRdblWSrsKtgw5YoSoAEvbnUXft/vr8XRfOWXBGg1PUXae2Y6ggn2xbvmkGIjmzhE4eYgw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ufGW4ipa; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B765AC4CEF7;
+	Tue, 16 Sep 2025 16:58:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758041914;
-	bh=D3qvIg6ko2yKinLTtLMypu7l8kYVGM9TPZja3TTO2pY=;
+	s=k20201202; t=1758041919;
+	bh=cN2ZRIwpPuuTuFydKsuswQytPt7ZVYZueiDnIohjvxg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=iNfloWg+RYVsWVVUekTMIF7SiaatayhzqVsocVe2bBlFAtCHkJVS6b5eRCX6NhaPE
-	 fakx5iD9ewvQI2s/cwIpuNxDO2C+e+TJ3YAQimnOOaHiAnWSZzBOFIup0SrF4Fd1qm
-	 h+P6GV8YjwhS9mfPXaYD0gAtLqVUBFlf4+nX8YVv//zQAm3/iNXMl/7q/p5lV2rId+
-	 UU+x1b1b90QDosYsKb0Ff+b5k3TRLUohBEqr/XTsDeDKQ2ImqbWgwQ7n780sSyh8fv
-	 1SvXu/HVTCfILKAqE2b2txlgRoZezxvLIZ2j52GagqR+LPsoCVV0cSpYPNDD8iIt1B
-	 tchFKDp78eyfg==
+	b=ufGW4ipaBuqkZumNSbHozdOrPtbsJc8gOophMG/yqg6lu3A61SeJaSBfuxc/Rfoqz
+	 7HlzyPzelhOESnR9HvCdsZNEJSi0JGD8fNAsXzEEQIFoRTSAwhZcdWAv9sfxBiHIa+
+	 QsQOlGSghSU+nZNF2/mgsoKRKupQOzyAmoiHjNrT2lu9yNP/GsbWi/27oN/DI1AAfl
+	 zhkF9YltDSNt97izaa1CNRYiHmiKhHSE3sYTraXEXL+suTLKc3XHHn/EbzUMw00Lcm
+	 wpZyb0qfI6x5YGMxPsO/qMDVtdIuHtZCvSyscPc5RJV+CeIM+h3vbjB92oM0yZBh+Z
+	 f+0pQYAh9+jHA==
 From: Bjorn Andersson <andersson@kernel.org>
-To: Loic Poulain <loic.poulain@oss.qualcomm.com>,
-	Robert Foss <rfoss@kernel.org>,
-	Andi Shyti <andi.shyti@kernel.org>,
+To: Ulf Hansson <ulf.hansson@linaro.org>,
 	Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
 	Konrad Dybcio <konradybcio@kernel.org>,
-	bryan.odonoghue@linaro.org,
-	Wenmeng Liu <quic_wenmliu@quicinc.com>
-Cc: linux-i2c@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org,
+	Richard Cochran <richardcochran@gmail.com>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Wasim Nazir <wasim.nazir@oss.qualcomm.com>
+Cc: kernel@oss.qualcomm.com,
+	linux-mmc@vger.kernel.org,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux-media@vger.kernel.org,
-	Wenmeng Liu <quic_wenmliu@qualcomm.com>,
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Subject: Re: (subset) [PATCH v6 0/3] Add CCI and imx577 sensor support for LeMans EVK
-Date: Tue, 16 Sep 2025 11:58:17 -0500
-Message-ID: <175804189857.3983789.14525162950764666455.b4-ty@kernel.org>
+	linux-arm-msm@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	Monish Chunara <quic_mchunara@quicinc.com>,
+	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+	Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>,
+	Nirmesh Kumar Singh <quic_nkumarsi@quicinc.com>,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	Sushrut Shree Trivedi <quic_sushruts@quicinc.com>,
+	Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>,
+	Mohd Ayaan Anwar <quic_mohdayaa@quicinc.com>,
+	Vikash Garodia <vikash.garodia@oss.qualcomm.com>
+Subject: Re: [PATCH v5 00/10] arm64: dts: qcom: lemans-evk: Extend board support for additional peripherals
+Date: Tue, 16 Sep 2025 11:58:21 -0500
+Message-ID: <175804189844.3983789.17270960228782770722.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20250912-camss_rb8-v6-0-c9a6c3d67392@oss.qualcomm.com>
-References: <20250912-camss_rb8-v6-0-c9a6c3d67392@oss.qualcomm.com>
+In-Reply-To: <20250916-lemans-evk-bu-v5-0-53d7d206669d@oss.qualcomm.com>
+References: <20250916-lemans-evk-bu-v5-0-53d7d206669d@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -74,28 +82,46 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 
-On Fri, 12 Sep 2025 23:19:24 +0800, Wenmeng Liu wrote:
-> This series adds cci definition and imx577 sensor enablement
-> via cci1 on LeMans EVK.
+On Tue, 16 Sep 2025 16:16:48 +0530, Wasim Nazir wrote:
+> This series extend support for additional peripherals on the Qualcomm
+> Lemans EVK board to enhance overall hardware functionality.
 > 
-> An example media-ctl pipeline for the imx577 is:
-> 
-> media-ctl -d /dev/media0 --reset
-> media-ctl -d /dev/media0 -V '"imx577 0-001a":0[fmt:SRGGB10/4056x3040 field:none]'
-> media-ctl -d /dev/media0 -V '"msm_csiphy1":0[fmt:SRGGB10/4056x3040]'
-> media-ctl -d /dev/media0 -V '"msm_csid0":0[fmt:SRGGB10/4056x3040]'
-> media-ctl -d /dev/media0 -V '"msm_vfe0_rdi0":0[fmt:SRGGB10/4056x3040]'
-> media-ctl -d /dev/media0 -l '"msm_csiphy1":1->"msm_csid0":0[1]'
-> media-ctl -d /dev/media0 -l '"msm_csid0":1->"msm_vfe0_rdi0":0[1]'
+> It includes:
+>   - New peripherals like:
+>     - I2C based devices like GPIO I/O expander and EEPROM.
+>     - GPI (Generic Peripheral Interface) DMA controllers and QUPv3 controllers
+>       for peripheral communication.
+>     - PCIe HW with required regulators and PHYs.
+>     - Remoteproc subsystems for supported DSPs.
+>     - Iris video codec.
+>     - First USB controller in device mode.
+>     - SD card support on SDHC v5.
+>     - Qca8081 2.5G Ethernet PHY.
 > 
 > [...]
 
 Applied, thanks!
 
-[2/3] arm64: dts: qcom: sa8775p: Add CCI definitions
-      commit: 3964a91e552880c356ec4d3f09eed927f48e9c66
-[3/3] arm64: dts: qcom: lemans-evk-camera: Add DT overlay
-      commit: b68fc45910d4eb1b3bb7e160282fba5a4bdd8409
+[01/10] arm64: dts: qcom: lemans: Add SDHC controller and SDC pin configuration
+        commit: dfdbe4bf6ff386d96c1dc8c7407201d882fc4113
+[02/10] arm64: dts: qcom: lemans-evk: Enable GPI DMA and QUPv3 controllers
+        commit: 5bc646aa0c7a444d4e81d8e3cae4baf463e1a018
+[03/10] arm64: dts: qcom: lemans-evk: Add TCA9534 I/O expander
+        commit: 6ae6381f871803246e9f655537999f163656de33
+[04/10] arm64: dts: qcom: lemans-evk: Add EEPROM and nvmem layout
+        commit: 81618ba3fe33017be5e1fce99891abd220a775b8
+[05/10] arm64: dts: qcom: lemans-evk: Enable PCIe support
+        commit: 94d7d37f6ac34bd683a93fbf1013736616fc3677
+[06/10] arm64: dts: qcom: lemans-evk: Enable remoteproc subsystems
+        commit: cac44c46970adb4553bab5c5aa528462a5fe98d0
+[07/10] arm64: dts: qcom: lemans-evk: Enable Iris video codec support
+        commit: fd32b5d586ac650ce1c6f58535ec79cd2632be09
+[08/10] arm64: dts: qcom: lemans-evk: Enable first USB controller in device mode
+        commit: 7bd68ef80661a9436120702e1300b56904fdd022
+[09/10] arm64: dts: qcom: lemans-evk: Enable SDHCI for SD Card
+        commit: c3f107b514c357cbc08ae70a69700222e7d1192d
+[10/10] arm64: dts: qcom: lemans-evk: Enable 2.5G Ethernet interface
+        commit: 71ee90ed1756724d62cb55873555e006372792c7
 
 Best regards,
 -- 
