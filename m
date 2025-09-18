@@ -1,104 +1,102 @@
-Return-Path: <linux-i2c+bounces-13049-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13050-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DBCA0B852F7
-	for <lists+linux-i2c@lfdr.de>; Thu, 18 Sep 2025 16:22:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CE53B85342
+	for <lists+linux-i2c@lfdr.de>; Thu, 18 Sep 2025 16:25:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3C996188D1C5
-	for <lists+linux-i2c@lfdr.de>; Thu, 18 Sep 2025 14:18:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8930F563242
+	for <lists+linux-i2c@lfdr.de>; Thu, 18 Sep 2025 14:20:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BE5830C36A;
-	Thu, 18 Sep 2025 14:09:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B45B030CB2F;
+	Thu, 18 Sep 2025 14:11:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="q2FT7Qf+";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="fDqZ3PaI";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="DHa8u24B";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="qpMdlBzM"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="v5hv4va1";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="a4rDMygv";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="v5hv4va1";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="a4rDMygv"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F4572236E0
-	for <linux-i2c@vger.kernel.org>; Thu, 18 Sep 2025 14:09:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4602C2E54A8
+	for <linux-i2c@vger.kernel.org>; Thu, 18 Sep 2025 14:11:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758204563; cv=none; b=tKjyUPGMXFshuv6VWHtjpG1TsikbvQClCWAw4IrevhE6+fLFWc5WhK9hsB1+TErMNWva5fcGMdSi+hCim5NHmzKLmvmOc0KLOYo+up7PhR0w3zqUBGX2ZcORPPZoLrN41TiUIMjLdMAWHSAA2HYIKDKMNSmAHN5pYh9rt56LnAI=
+	t=1758204667; cv=none; b=qfjDEy2k2Z07w+VQpiubGJyumI/F7+NGrV78PhxY/ih+nhMZ9h7INC4pCBc4CbzltbeME2JQmOBGn+vR0AuT5jYXrm080VeXgnpnC/4dDZ3LeqOnSEZ3DEiZXtNXlsgjAuGYcsdDA92ohPH7zWC8Z4BRv7GGqXnnqpC6nSYyV5U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758204563; c=relaxed/simple;
-	bh=WKxtgsVolj+ocCEl6HwJ/VS0q+CbeRKNYiWszIJ/o+Y=;
+	s=arc-20240116; t=1758204667; c=relaxed/simple;
+	bh=QCWvkPTMWCVdtLZpvsKm9jtli3Ila+jCu4wln1UubCI=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=nKQYHZKrhNsaXgXAPEEsPeLFe6CDdmKKYwIMGfdYmniBWFZ3ZIjGi9D/0VLCuFOCGGfeVLlIR7Kq2D2k2nziiuKhakr5BmixSjL0V6t7Vu4IxvVji/lYaD44vvb52dqeDdSgOguxWl6zT0GRBdVOe4aLXF8nYgu6GOgy/pVDv8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=q2FT7Qf+; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=fDqZ3PaI; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=DHa8u24B; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=qpMdlBzM; arc=none smtp.client-ip=195.135.223.130
+	 MIME-Version:Content-Type; b=UT2DKEjmvuqNZ6gbL/doGhUdyZWCzP2RQcBfMxtyRfoOeWDZWYHIxyksvKWAMpArj1Fsu/sx9IemmFXq0IVfXOnBHSbxpqzCy30UmWARiHL/ZtB3prHuziBYjr6BjOsYBql/z9s5mkDkoCPDy9/CUTPso8DHaLW36DVzRtfOsQU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=v5hv4va1; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=a4rDMygv; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=v5hv4va1; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=a4rDMygv; arc=none smtp.client-ip=195.135.223.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 4BA3C3368A;
-	Thu, 18 Sep 2025 14:09:17 +0000 (UTC)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 489F11F793;
+	Thu, 18 Sep 2025 14:11:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1758204558; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1758204663; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=PEhA07AHa1hKV8UYSTCJB7AJqn3bdV5WgUkcSVMxN0w=;
-	b=q2FT7Qf+nUE06ZaFVXRPUXxHbHX3Vjf+vukhLm334EQivCrV3mRcBcLxsFIwCdxcHsdtqu
-	vOOKXqI2XtGhei/giAlipUuNn4fTpnwNDyp0SP7nRJS3j/ZRIchuJn+FnsDgAoxy6GGMYH
-	0K7Dyc/q99k0epqWrk9Vpxe/gJgo1Xs=
+	bh=7NdJHBgJcYEwgTosWj0DRUatmEeQu09RfggA2/O+dP0=;
+	b=v5hv4va1s6dbaSTs+LmrwwaU+k/1x7BMhX9G50u/rkeeMurYOiS/3mdp30JAfK2keZMj/K
+	AJBOM4L8+05f/Fe4LbGGdLM6DtE3xNRSGIXOu43Ep1s5hCu8Qpl24mSjpSYyw7CXB64549
+	JSRtH3v9CVk3nMHh1E5ayUk7Yv3UpoE=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1758204558;
+	s=susede2_ed25519; t=1758204663;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=PEhA07AHa1hKV8UYSTCJB7AJqn3bdV5WgUkcSVMxN0w=;
-	b=fDqZ3PaIJExP3HPXXuJQnAI0ChpeF5gYXapZ3kw57PpHtdr6TeWRHKAY/x3M7jq59ECq24
-	SO7gLzXvyTYQLHDQ==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=DHa8u24B;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=qpMdlBzM
+	bh=7NdJHBgJcYEwgTosWj0DRUatmEeQu09RfggA2/O+dP0=;
+	b=a4rDMygvPiVH8Q6TxyoEFU4co9xH9v5Mmmfjn3edpBS0Zzo1h9Jx8Tz8xSNP0BHgUVt+qb
+	cDbrCoMaCVKzfPCQ==
+Authentication-Results: smtp-out2.suse.de;
+	none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1758204557; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1758204663; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=PEhA07AHa1hKV8UYSTCJB7AJqn3bdV5WgUkcSVMxN0w=;
-	b=DHa8u24BwGef5E1CkELLF7REhZryUurEjnXDW9GCLC66TMYNm6elW6ddwxPdmWrI07mD57
-	4eWY1nsYukKoSgNhML3pjue4bJls+JIxzAjZapop1PbP+EeuonTgF8yFm8wj7PN3Wj/XG7
-	obam5pXAphjkOMJjLgDH+ySfdiKDLEE=
+	bh=7NdJHBgJcYEwgTosWj0DRUatmEeQu09RfggA2/O+dP0=;
+	b=v5hv4va1s6dbaSTs+LmrwwaU+k/1x7BMhX9G50u/rkeeMurYOiS/3mdp30JAfK2keZMj/K
+	AJBOM4L8+05f/Fe4LbGGdLM6DtE3xNRSGIXOu43Ep1s5hCu8Qpl24mSjpSYyw7CXB64549
+	JSRtH3v9CVk3nMHh1E5ayUk7Yv3UpoE=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1758204557;
+	s=susede2_ed25519; t=1758204663;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=PEhA07AHa1hKV8UYSTCJB7AJqn3bdV5WgUkcSVMxN0w=;
-	b=qpMdlBzMM3Ut65dbCRI9q3NFZpR5fVC77t44BeiS3+FfS2SjP7tHz9lWFkm71UhPxKeRvf
-	7ODY4CRRYIX3HEAA==
+	bh=7NdJHBgJcYEwgTosWj0DRUatmEeQu09RfggA2/O+dP0=;
+	b=a4rDMygvPiVH8Q6TxyoEFU4co9xH9v5Mmmfjn3edpBS0Zzo1h9Jx8Tz8xSNP0BHgUVt+qb
+	cDbrCoMaCVKzfPCQ==
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id F3E5613A51;
-	Thu, 18 Sep 2025 14:09:16 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 031F113A51;
+	Thu, 18 Sep 2025 14:11:02 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id GOiZOYwSzGjTPgAAD6G6ig
-	(envelope-from <jdelvare@suse.de>); Thu, 18 Sep 2025 14:09:16 +0000
-Date: Thu, 18 Sep 2025 16:09:14 +0200
+	id SgdlOvYSzGiPPwAAD6G6ig
+	(envelope-from <jdelvare@suse.de>); Thu, 18 Sep 2025 14:11:02 +0000
+Date: Thu, 18 Sep 2025 16:10:54 +0200
 From: Jean Delvare <jdelvare@suse.de>
 To: Linux I2C <linux-i2c@vger.kernel.org>
 Cc: Jarkko Nikula <jarkko.nikula@linux.intel.com>, Andy Shevchenko
  <andriy.shevchenko@linux.intel.com>, Mika Westerberg
  <mika.westerberg@linux.intel.com>, Jan Dabros <jsd@semihalf.com>, Andi
  Shyti <andi.shyti@kernel.org>
-Subject: [PATCH 1/3] i2c: designware: Use msgs[0] to validate the slave
- address
-Message-ID: <20250918160914.47514d3b@endymion>
+Subject: [PATCH 2/3] i2c: designware: Extend check for mixed slave addresses
+Message-ID: <20250918161054.7d650d2c@endymion>
 In-Reply-To: <20250918160341.39b66013@endymion>
 References: <20250918160341.39b66013@endymion>
 Organization: SUSE Linux
@@ -112,85 +110,100 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 X-Spam-Level: 
-X-Spam-Flag: NO
-X-Rspamd-Queue-Id: 4BA3C3368A
-X-Rspamd-Action: no action
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spamd-Result: default: False [-4.01 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
+X-Spamd-Result: default: False [-3.80 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
 	NEURAL_HAM_LONG(-1.00)[-1.000];
 	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-0.999];
 	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	DNSWL_BLOCKED(0.00)[2a07:de40:b281:104:10:150:64:97:from];
 	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	HAS_ORG_HEADER(0.00)[];
-	ARC_NA(0.00)[];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
 	MIME_TRACE(0.00)[0:+];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	HAS_ORG_HEADER(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ARC_NA(0.00)[];
 	RCVD_TLS_ALL(0.00)[];
 	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_EQ_ENVFROM(0.00)[];
+	TO_DN_ALL(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	RCPT_COUNT_FIVE(0.00)[6];
-	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
 	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,suse.de:dkim,suse.de:email];
-	TO_DN_ALL(0.00)[];
-	DKIM_TRACE(0.00)[suse.de:+]
-X-Spam-Score: -4.01
+	RCVD_COUNT_TWO(0.00)[2];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:email,imap1.dmz-prg2.suse.org:helo]
+X-Spam-Flag: NO
+X-Spam-Score: -3.80
 
-Function i2c_dw_xfer_init() makes use of dev->msg_write_idx to index
-into the array of messages. The purpose is to program the controller
-with the slave address.
+The i2c-designware driver only supports transfers where all messages
+use the same slave address. This condition is currently tested in
+i2c_dw_xfer_msg(), with 2 limitations:
+* The code only checks the address value, not the 10-bit address
+  flag, so it could miss an address change.
+* For the AMD Navi GPU devices, the driver uses a dedicated function
+  instead of i2c_dw_xfer_msg(), so the check is not performed.
 
-However, this driver only supports transfers where all messages have
-the same address. Therefore checking the first message leads to the
-same result, without depending on dev->msg_write_idx having been
-initialized elsewhere before.
-
-This function was always called with dev->msg_write_idx == 0 anyway,
-so this does not change anything, only makes the intentions clearer
-and the code more simple.
+Move the check to the common code path, and add the 10-bit address
+flag comparison, to catch and report early if a given transfer is not
+supported.
 
 Signed-off-by: Jean Delvare <jdelvare@suse.de>
 ---
- drivers/i2c/busses/i2c-designware-master.c |    6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/i2c/busses/i2c-designware-master.c |   28 ++++++++++++++--------------
+ 1 file changed, 14 insertions(+), 14 deletions(-)
 
 --- linux-6.16.orig/drivers/i2c/busses/i2c-designware-master.c
 +++ linux-6.16/drivers/i2c/busses/i2c-designware-master.c
-@@ -254,7 +254,7 @@ static void i2c_dw_xfer_init(struct dw_i
- 	__i2c_dw_disable(dev);
+@@ -429,7 +429,6 @@ i2c_dw_xfer_msg(struct dw_i2c_dev *dev)
+ 	struct i2c_msg *msgs = dev->msgs;
+ 	u32 intr_mask;
+ 	int tx_limit, rx_limit;
+-	u32 addr = msgs[dev->msg_write_idx].addr;
+ 	u32 buf_len = dev->tx_buf_len;
+ 	u8 *buf = dev->tx_buf;
+ 	bool need_restart = false;
+@@ -440,18 +439,6 @@ i2c_dw_xfer_msg(struct dw_i2c_dev *dev)
+ 	for (; dev->msg_write_idx < dev->msgs_num; dev->msg_write_idx++) {
+ 		u32 flags = msgs[dev->msg_write_idx].flags;
  
- 	/* If the slave address is ten bit address, enable 10BITADDR */
--	if (msgs[dev->msg_write_idx].flags & I2C_M_TEN) {
-+	if (msgs[0].flags & I2C_M_TEN) {
- 		ic_con = DW_IC_CON_10BITADDR_MASTER;
- 		/*
- 		 * If I2C_DYNAMIC_TAR_UPDATE is set, the 10-bit addressing
-@@ -272,8 +272,7 @@ static void i2c_dw_xfer_init(struct dw_i
- 	 * Set the slave (target) address and enable 10-bit addressing mode
- 	 * if applicable.
- 	 */
--	regmap_write(dev->map, DW_IC_TAR,
--		     msgs[dev->msg_write_idx].addr | ic_tar);
-+	regmap_write(dev->map, DW_IC_TAR, msgs[0].addr | ic_tar);
+-		/*
+-		 * If target address has changed, we need to
+-		 * reprogram the target address in the I2C
+-		 * adapter when we are done with this transfer.
+-		 */
+-		if (msgs[dev->msg_write_idx].addr != addr) {
+-			dev_err(dev->dev,
+-				"%s: invalid target address\n", __func__);
+-			dev->msg_err = -EINVAL;
+-			break;
+-		}
+-
+ 		if (!(dev->status & STATUS_WRITE_IN_PROGRESS)) {
+ 			/* new i2c_msg */
+ 			buf = msgs[dev->msg_write_idx].buf;
+@@ -806,10 +793,23 @@ static int
+ i2c_dw_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
+ {
+ 	struct dw_i2c_dev *dev = i2c_get_adapdata(adap);
+-	int ret;
++	int ret, i;
  
- 	/* Enforce disabled interrupts (due to HW issues) */
- 	__i2c_dw_write_intr_mask(dev, 0);
-@@ -363,7 +362,6 @@ static int amd_i2c_dw_xfer_quirk(struct
+ 	dev_dbg(dev->dev, "%s: msgs: %d\n", __func__, num);
  
- 	dev->msgs = msgs;
- 	dev->msgs_num = num_msgs;
--	dev->msg_write_idx = 0;
- 	i2c_dw_xfer_init(dev);
++	/*
++	 * This driver only supports I2C transfers where all the messages
++	 * use the same address.
++	 */
++	for (i = 1; i < num; i++) {
++		if (msgs[i].addr != msgs[0].addr ||
++		    (msgs[i].flags & I2C_M_TEN) != (msgs[0].flags & I2C_M_TEN)) {
++			dev_err(dev->dev,
++				"Mixed slave addresses not supported\n");
++			return -EOPNOTSUPP;
++		}
++	}
++
+ 	pm_runtime_get_sync(dev->dev);
  
- 	/* Initiate messages read/write transaction */
+ 	switch (dev->flags & MODEL_MASK) {
 
 -- 
 Jean Delvare
