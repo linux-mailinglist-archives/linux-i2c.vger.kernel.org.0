@@ -1,216 +1,239 @@
-Return-Path: <linux-i2c+bounces-13053-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13054-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC791B86388
-	for <lists+linux-i2c@lfdr.de>; Thu, 18 Sep 2025 19:33:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14509B866D5
+	for <lists+linux-i2c@lfdr.de>; Thu, 18 Sep 2025 20:35:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E0F7356582F
-	for <lists+linux-i2c@lfdr.de>; Thu, 18 Sep 2025 17:33:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B52924870D7
+	for <lists+linux-i2c@lfdr.de>; Thu, 18 Sep 2025 18:35:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A21C725A2DD;
-	Thu, 18 Sep 2025 17:33:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65B072BE647;
+	Thu, 18 Sep 2025 18:35:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="GHwWPYt3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MQMvyfT+"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from DM5PR21CU001.outbound.protection.outlook.com (mail-centralusazon11011039.outbound.protection.outlook.com [52.101.62.39])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECACC261B8D;
-	Thu, 18 Sep 2025 17:33:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.62.39
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758216829; cv=fail; b=f8JdIZlRdc3V+DNDFBdSSpMkboGGy62bAFGbkiGBQCfEyvrlJgJrCv/czgP9NWRLmQNXFKtXzfhwjKpu6W4tfLfdEkJd6NHxnS+qW0/qyaEqrJ6WLnVcry3SfyB+0DE4C2BQGzknBnM3nk+ncCcQy5xe3nZrZN4zH9dszJrbyCU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758216829; c=relaxed/simple;
-	bh=wpkwwH9tn8tMXm1tJCi9eJCFHdFv564w/jY/zPPhZvk=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=EOpdfyo2tX3+vBBjBuB6Pd3s7l+q9OPihelmNzRyQtdsjja5P06cFREMtJy/ZhI01tTQMBZiBS1AxXGOR4N29tZt/r+vpKlkc+NCiARNaRWJA9R5LiH9sbDSNVjWa+dvXefand2Vb9QrN1Pqn0f9N3C55Blv+3BXYq3HAg/W9Ss=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=GHwWPYt3; arc=fail smtp.client-ip=52.101.62.39
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=PAnQ8urkze1dioAOukJwV6s/ce8TEyXz30IXSm8DzW61l1698XZReUh0xOIY0BuaSNaAIpuIg5YNXNh1RtCSqvQ7DM/n6nxOHnzE4xtFnG0MN5hO7zzm7kTAtpoRZfGSJ2b02Ttk/2IH/hAkzwGQgEef9vMCF1TBluuaHT/hbUhapI/qF6NblRAFWKdm0tN7d94gCjRiU3mxlf1M6l4mT79ia0ccB5BZ4CJWbFagT1X1EYCh8sr+Dep73SshJm78sJh4sadn+SAqDlOya9A+X6ToHKct9dACWH5VlR56TBkeJMuHbboXn5msMrWHldXS3X0AkT0Cdt7k6xSlZOok+A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5GWyYd3EJ3wFxkhMJX5+fS6O9SSSPamSWHBEERZ8NIc=;
- b=PcUD5uN+z8q6viJksPQZ0P/QODEOxeT2OVv/BLuZapRdhx2s2NO1PqBCJ1Xjb/TSTgnd3d1FgjRW8L/n/36ZwzL/bhQ9kGq7p6CJmAtOzGNvUOYb+IXgm3JS3IhAe0RZyDPv2xsSfP5LG43souWoGNRrO5bbOzhUyB52mcsfZQq8SXJm/NQuHFHtEw7z+8APLMQ46D/nzHqURuQlKRIKlgn41Ld9Vxu7182B3V3gPPfYupT1+IrEgd6bjltiF6wSurA54rR/XakH2vf+CxP2U3+v07QV7l1BNqXT68bnfFzrrHNcbEtVqGvjHuhLy0MFUcLLu0G9VyaZIBrQWtyxDg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5GWyYd3EJ3wFxkhMJX5+fS6O9SSSPamSWHBEERZ8NIc=;
- b=GHwWPYt31EDNpTicQ5KqAkrikoXXsNCTM04uo3Ik7K4IBomKw7ct3Sf/uq33o8sAU2laUPdeAtR07eB8+gwMLWhH9sd4Y5z7eLuB/MCsgtp2AO+Fei5YbheXsLlNdHbWpyM6BLlHAk/HSQwdh6vUtN0171wdRJdVzYUHGL/0E/zgNlFy3H9xqCns8nmJRx17z2henVc1iN/E2ZYLT1Z61mdhJ/g5yWd7GMUMIE4AlpD/CcEpx+sSUpzXg0TyVa+0UhPu7osR4INA447bOZFSArJyEAuHwf6tIQP9s5R8rB4KVW8P1IP3QD+9xBW/hrtf2xp5ypAHld41PesWeDqQ3Q==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from SJ2PR12MB8784.namprd12.prod.outlook.com (2603:10b6:a03:4d0::11)
- by IA0PR12MB8278.namprd12.prod.outlook.com (2603:10b6:208:3dc::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9137.14; Thu, 18 Sep
- 2025 17:33:43 +0000
-Received: from SJ2PR12MB8784.namprd12.prod.outlook.com
- ([fe80::1660:3173:eef6:6cd9]) by SJ2PR12MB8784.namprd12.prod.outlook.com
- ([fe80::1660:3173:eef6:6cd9%5]) with mapi id 15.20.9137.012; Thu, 18 Sep 2025
- 17:33:43 +0000
-Message-ID: <a85af39b-166a-4eff-a6c1-4721e7374c73@nvidia.com>
-Date: Thu, 18 Sep 2025 18:33:37 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 2/4] i2c: tegra: Add HS mode support
-To: Akhil R <akhilrajeev@nvidia.com>
-Cc: andi.shyti@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org,
- digetx@gmail.com, kkartik@nvidia.com, krzk+dt@kernel.org,
- ldewangan@nvidia.com, linux-i2c@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org, robh@kernel.org,
- smangipudi@nvidia.com, thierry.reding@gmail.com
-References: <e5c06b4e-3edc-4977-bbcc-2035cf11811e@nvidia.com>
- <20250918171247.72087-1-akhilrajeev@nvidia.com>
-From: Jon Hunter <jonathanh@nvidia.com>
-Content-Language: en-US
-In-Reply-To: <20250918171247.72087-1-akhilrajeev@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P265CA0098.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:2bc::15) To SJ2PR12MB8784.namprd12.prod.outlook.com
- (2603:10b6:a03:4d0::11)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CC9234BA47
+	for <linux-i2c@vger.kernel.org>; Thu, 18 Sep 2025 18:35:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758220532; cv=none; b=YErr8D91Y5b/RBK/r0L6ce3EU+O22ib+QtoyAz/MOp9d/GMbozOzSEvcLOXce+j/ka1m6FKM1lnvVk4VflIYM4ImX6PZVWf1+tJRMC+D0L7cbZHJPt6WEJxsK5JVc4PYUnG2SfN6Hij6lhx+xW9sNnMddxCuXPbij1U/yL9VL+4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758220532; c=relaxed/simple;
+	bh=7JWrZqhhxtwxsKzUS484cYA9BE4S3MG4+Hm4TzvixgE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=TIkp4nBKWjIGRidFBABpf5sn9eqWR24HogLUOmSNhO1Ykym0/rPTloHR6jKhJTDhMxSwBKDUCz6bFSw+i6FQbOUrCri16lIi/VAr4Qvpzlk2+Fa4oBuR9fl//b8uz4d5d4EYV2lT2cLRr0bK4OF1aoAwnLSw9wDkIklZ5sHK1PQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MQMvyfT+; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-b2350899a40so123015166b.3
+        for <linux-i2c@vger.kernel.org>; Thu, 18 Sep 2025 11:35:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1758220529; x=1758825329; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9DF8mdGy7rQ30a9eWz48AP7z4kPvyfSZCRABtJwRlC0=;
+        b=MQMvyfT+31xh4GtjqMt6G0oQ4ieG03Yk0cpxXjIjDvGJMKGZMBbbLVPxdW7CSIqHSa
+         Ti/I3Wo9KvSoXCQLxKvYr2HsKFdd4tyCFAJ56N6p6FTYjqOwyCV5FF6Ofpf2jhdXHCbS
+         gXWSghAewwgM6v34qLIRwCycGspdyrDlXWEONuSiiIVCLnRa+h+160ZXSh43cgJggUXy
+         1YwaOS5d9nf43A0e3gvjp6VXkoIkIZ5klNja3Hos/Kq+CROhxiiQezRidbE/M907dT3L
+         qCMlwl1nAoNJ4W/cQiJswbsT7VW6wPOffpwxFh4HVZfxjt30QjHSErSrVxufrsoK/d+1
+         v55A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758220529; x=1758825329;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9DF8mdGy7rQ30a9eWz48AP7z4kPvyfSZCRABtJwRlC0=;
+        b=Xp7r4A9Tpo92yJ+eELwqBfYxN1Bk7IAkv88PpRDPRaEoCRWYafb2wQM93cgow5bdWU
+         AreWk3+OqUWqhDY7x1+XZwq3vlLGHlmo4DXdP3+sq6/Np+F6wQW0JAQVkl+j+xYr3GvH
+         8GQWcgFPIUurcwUb80RX4MSpOmjATEQt+nj4vn3CTDIcvfMQDF4MKbPJ+onKWE6FajEs
+         YD8Za49BmKWqQSUP74Q2vCXaB5DRzpxJcAiW5AyAabRfnpP35EWnNe/KZTwR1VpAwgTF
+         e9Mw88vANP1DwVdyu6vDtogyKPBZvzZf/7RSLHsDXcwCA8jr/pfVdLfWYDX431hbWbWK
+         iDjQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXJ3bbeL/U35EML7SsosnN8FYg0L9uU5E/3RhNOnTOzIlLo4kZwXZSvZPRZJR0R6QeOfRzjHfA5g8k=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyjdJtojPc6rcQUiFY/7zeBenZeiSY/aVHKZML8CiiKG3a3VQHA
+	kRe2CqAWxoOwHh3F7li8RMdeOX+Ar+o+IDaSpF96twUfO1rIM1rSdc0j
+X-Gm-Gg: ASbGnct729+Sufm4cwcuziK8hI85/HBBvcvFnacpT0pUXiR1StwIzFrTbGce51/ffJe
+	Kid1lRx7wA2q5cSzZfP1JwxT3wXHSnjC/mwhQLY72/xIda0uUBKGs0dCuBso0JmD2iYP8IhkeZn
+	j2r6dtNcw4U28VBsEFYijaWwDFWAnl1S70J10M2Me0vaAjbtJwJRLfN1dAnCxdMkgVAFvKXj/B0
+	g7MVlFhYsrAEuY0ABi9vRU7tBR+/KXHpahKdXd43J1JfTe6wNQORifb62sGIMoZWNHHyh+gK1vs
+	ffpdhRl37X2huPvE2CIRngxGeOCDGeJiz6G9qwKfeMf+Mp3nt0wjNhP7AS2Jw5w/ywl36xKSkAz
+	090gYBiF/ebAIWUJlfw6ltcKpriM2ZFZcc7OdHWs=
+X-Google-Smtp-Source: AGHT+IG+2F9Tdqn75yCUehgh0hWjS/B3B6NaTXRMxweuRMKUwCI/DRvlIaiDT/f+5WUUCMePXP8wBQ==
+X-Received: by 2002:a17:907:728f:b0:b04:9468:4a21 with SMTP id a640c23a62f3a-b24ee6ef486mr25159666b.14.1758220528565;
+        Thu, 18 Sep 2025 11:35:28 -0700 (PDT)
+Received: from localhost ([212.73.77.104])
+        by smtp.gmail.com with UTF8SMTPSA id a640c23a62f3a-b1fcfe88d97sm245887466b.58.2025.09.18.11.35.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 Sep 2025 11:35:28 -0700 (PDT)
+From: Askar Safin <safinaskar@gmail.com>
+To: andriy.shevchenko@linux.intel.com
+Cc: Dell.Client.Kernel@dell.com,
+	bartosz.golaszewski@linaro.org,
+	benjamin.tissoires@redhat.com,
+	dmitry.torokhov@gmail.com,
+	linux-acpi@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	regressions@lists.linux.dev,
+	rrangel@chromium.org,
+	safinaskar@zohomail.com,
+	superm1@kernel.org,
+	wse@tuxedocomputers.com
+Subject: Re: [REGRESSION][BISECTED] Dell Precision 7780 wakes up on its own from suspend
+Date: Thu, 18 Sep 2025 21:33:36 +0300
+Message-ID: <20250918183336.5633-1-safinaskar@gmail.com>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <aKyDB7h7cUBOLbiJ@smile.fi.intel.com>
+References: <aKyDB7h7cUBOLbiJ@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ2PR12MB8784:EE_|IA0PR12MB8278:EE_
-X-MS-Office365-Filtering-Correlation-Id: a7eea8cb-96c8-4bd1-0510-08ddf6d9834c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|7416014|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?UHY4akpvZ24za1hhV1JFTUhzbTBxeVYwQTlRZDVZVWRwTkNlbVdkdjRPOU5B?=
- =?utf-8?B?bVNDVVhCVmZyY2ZpRXZ4ZkRxV3N4Ry9Id0hCbEtFRUN2a1daNXhTUGxLOXEx?=
- =?utf-8?B?cExzbWlmQlZaVXU0SmY3aWhwTjloMy9iZjhBWjBrMDlaWlc1UjI3R3FENDNC?=
- =?utf-8?B?U21nczhzMGM0R1AvWlgwdEZlRk9aUlovL1lQRkJLazhzUjhnTmFtQXlSV2pE?=
- =?utf-8?B?VUN3WmtqQlNEcUFQbTcrRTlKdDBaWitVbWVOUitycHVjR2VIbTRFQUNaNm1V?=
- =?utf-8?B?czMrdFM1TFZBbzJaQTlBWXdYYTFodWg0R0RBVmZ4ckRrSTRLakNHcUZpdUpP?=
- =?utf-8?B?UmpMWjBrQStHdkhmZ0twTGhSYUJ6VXBUYmQ3WStvZTVsZVBYOUJiU0RvMTVN?=
- =?utf-8?B?T0dYbFpOc2NMWHRta2VseW5ITXlLQUVXQ214c1FHTVE5Ti9MYmtDREo2U3Js?=
- =?utf-8?B?TzJnZFdXVm9qam01NWZIS2YraWNGTXZKcFBRQjhOME1kM3gxa3ZnUE9JQml1?=
- =?utf-8?B?ZFRCTkcvdkd0SkM5aC9UWkRlRU9TU1dQdnVjVVJhOUJsZzZLbXFVbmNZTDVa?=
- =?utf-8?B?UUs1RXV2VERUNUFMeXliV2Z2dDdEWGFDeFcrNEJMYUpsTnZmWWl4OXYzWHdt?=
- =?utf-8?B?TG1seXhwZHc0RnVRTXd0alRLa0hhR29ybHpqZ0lCZ3YxMGdaTzBpSDdnWUJG?=
- =?utf-8?B?QTJKeFlka0RZV3M4ck11YmV0QmVQak1oRmhKZEdXR0xSalA1SUVJNDN1dzVJ?=
- =?utf-8?B?c3lObFZoZXRYSThTcWg2am1heU11Q3dhQlZXSisvZ3dETERYcG9Bc1NmUGcy?=
- =?utf-8?B?VkthR3k2NzdhTzhaMXlidTE5MGRxSS9CeEpuNzBLNU9EV01sYkkwVUV4b2Ey?=
- =?utf-8?B?Slc3QTlvS05yMGgvZkRWaWpWZWVLZ2xDeDBOU2JQbXJrR2NlTzIzVVZKODVS?=
- =?utf-8?B?ZDd2aUdIQWgvQ09UZFdYTFhMZlVTcTliRmxwaW9sODVPbGxiaU1ZZW5LaUdh?=
- =?utf-8?B?THFDUzB3OThaT1dJQmVSNkVCVFBIYWZqOGZWSVBZMTBWajU5ZVhmU3g5WkVV?=
- =?utf-8?B?NVBKSWJvVVN1cnZkWXhraXlJSWZlcUlCcFRQdTA1Q3EwamNYbjNIK1AzMld0?=
- =?utf-8?B?ODg0elc1NjV4aHJyeFBMOHp2T0NWdDErbmRDU3FMYlBZWHRnMHlNdEZSeWRm?=
- =?utf-8?B?Tlp3K1FvSlJKSUVrVFc4RU5DaE9jZjlwTW0rSTJTMnZUV1dlQzd0dHEwQ0Ri?=
- =?utf-8?B?MnZEVzg0QTZnZ1VJc1pjUEJ6SWtXRy9tOXl1UUcyNGtYVFQvM2J4VkNyc0dJ?=
- =?utf-8?B?RitpZUNXZWtaQm1NS2lrVWVPc3BSVFNjdmNMSFFEK2lKbm1jeGhVdHJtQng5?=
- =?utf-8?B?YnBqeVdMdVh0WHVqQVR4R3RqUlQrR2xFMjZSeGpKTlpTQWtMa2cxakNCdGo4?=
- =?utf-8?B?UTYwWFdZMENhUzN2ajlIVjN2WWY1WWtrcHZuVS9OTWdCaDAzb0Z1blRQM1h6?=
- =?utf-8?B?bU5EWWh5S0NzNHNOOVgvK25MbkRXQi9pMlpiTllmWEdiK1FQTWhKSEZFeU9x?=
- =?utf-8?B?akVaNWhHdHREbnI4TEdKc3YzbmFtRkpOSXhZTnlTbHFLekpHMXlsQWs1dE8x?=
- =?utf-8?B?MU41RU9QM3JYaDVBVFgrSXpxdkE3YWlUWS81TFRWalI2clkxQVlYcVZGREg4?=
- =?utf-8?B?SDcxR2pZbjhYaDdWcklqWmV2UHlUblNMR2hPSGtwN1Q2OGZRN2dqUWtKUHZQ?=
- =?utf-8?B?cGIwUVpOQ1R2anovU21XQ1RNMCtyUFcvVGJpZCttUTg4S3pjYmYyN1hXM2Nw?=
- =?utf-8?B?SU53cHFjTHhYTlZldkRGSXZiNWw1UTBoakVBbGpCRUxOcnhtZmJJSHh6Mmox?=
- =?utf-8?B?VVFZcWZTTE5tMXlyTFhveUIraXJGdmJKTkdYMTJ3cDZpSUFTUXBMZ2J2eGtu?=
- =?utf-8?Q?uLjNsvY7Zpk=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR12MB8784.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?RUJIMlBiaTVxU3JZVS9IU203NDRNVWZ0MXRwbHFTVVcva0FQbjJCeEZ1SlFU?=
- =?utf-8?B?SmZVYWFLREdWUlFUUysyZmx4dm1TM3J0NEUyRDNTNHVFSTZJUXp3UHQ3cWdm?=
- =?utf-8?B?NG0wMXI3cEl4dHZGMEt3TjBDaVBTRVljK3FmLzBjaWZpaU42cmJCclE3b1Ny?=
- =?utf-8?B?UnNFeHlYT0xuQWwwM1dLNDM1SzJOdWI5NHJWSzhiWEVjc3MyZlF2V0kwR1RN?=
- =?utf-8?B?cVEyV3B6UnlDYkF4Y1JZdENORklabjUyMWg1ZE96Rmk3VFJ1YWRWMkxhK000?=
- =?utf-8?B?STROZ01JVm9LVWZBVUNWejQ5aENEbWZPZVcvTHJQN0x4ZE81RXRRQ0VycGFB?=
- =?utf-8?B?b29jMGZ0QmJMNnZkdFJFZXVlQUJUeG12UkdmSGpQbTBTTXNKeXJtSlhxYmF6?=
- =?utf-8?B?VlZQNkZYb3NQNEdVcTcwR2xRaHdCZDBiTWQ3cDVBVWd0MGNLQlhDZDNDVG50?=
- =?utf-8?B?QU5nRVlUY1V6WGVKemFrYWJxbnVERk1yYmpGK3ZLTGtDVU1kbnMyb2VVWWJ1?=
- =?utf-8?B?bE11WmZCQkhsZGxseTFPL29KbXA4RjBueS9ieGF0Y3lWL1prTDlXQkpUdjZh?=
- =?utf-8?B?MW9Oc2xEQ3B1UkFDV3k1WWZEV0krTStLTjlOVDlrK0xISU9ERWR0STJ5cHlr?=
- =?utf-8?B?TUowblhGS0dHeHUzLzgvdHh5cXZwdHUxVkZ4OWNlK2RUMXlMZmZOalpNaVpy?=
- =?utf-8?B?SUNFcDRIWHhvTWExTFE4akFOeW9UNVVKQi9nZDFYQ1NqMVNMNXdTQnI0bTBH?=
- =?utf-8?B?VkI4aitSVUtQQXBNUlM0anI0Wlc5T3IyYXlzdTllYUFBMGNqMWpxNTNGYWNI?=
- =?utf-8?B?cWcySHJSQWxFQ1JEdStGcXI2WXhEVnh2NlZEY2QyK1g5dHlTbDY3V0w2QlFI?=
- =?utf-8?B?bmZSR1E4eWtMOHVnTjdmVGpLM1RqQnA4cXZIVEtVUlBVY3NxMW1kSjJHempy?=
- =?utf-8?B?L0ZON01RK0VnUzBYWVNXSk9ZYzNyZ0U5VmhMYi9HZzhtZjRhRU5tSzBMMDVD?=
- =?utf-8?B?L3E3d0RUY2JHcjZBUDg4SitPZUNGamtTTzJkZUtHaWZwcWdEeGo2Q09OSnc5?=
- =?utf-8?B?dHovbFN1b1lGZjc0R2hWRXVjSUdjZDB4S1N0UmxjVVc4Nk81S2F1cW04Vmpm?=
- =?utf-8?B?dXcwMk5FRnZ3cHk1Wm0xQStuNHFZbkRSa2dYNHdoU2sveFhTckx5NW1ZMm9j?=
- =?utf-8?B?RTUydjY0YzNtVTBFWUgrdHZabnc1RWN4Vy9PcWc2d2FDMW84VGIvU3AvNTdo?=
- =?utf-8?B?UVNZWWxkUHQ1dHZvMzFMZ0xzaG5CMWRaRUgzclprNHVrL0dPblZpeHlWM3N6?=
- =?utf-8?B?L3ppSEhtbDRpb3pJQkxvWnRYZTVvaU1la0Rub3gvTTY1QWNGc1pCajAxV2Jt?=
- =?utf-8?B?TGo0QVdJSHdEVXpNUlFCSGZGZ2Q2T2sramVxb0Y1V2pSSHF0NmEzOUNUc2pp?=
- =?utf-8?B?RnE4Y1hweFpWQkl6YTd6aWJVYUowMTBGdEk5UFZ6NzhUcWNya2RNdTlWR0JP?=
- =?utf-8?B?a3Rsc255bWpVd1lqbTgzemRXbHBWY3BxVkZPd3hJbjBxa25xaHNSOFpGRHZw?=
- =?utf-8?B?VGN5eEx1SS9qcS84TC9DTHM4N1pPeGV2Sm01QUppUFN1YXVUL2dRWEpyc0Uz?=
- =?utf-8?B?aFFpcWpwRWRNOXBIKzd1WkFicUI3ZkVJTzBoZ3Noa2V0bjRYb0Y4SVdqeW9y?=
- =?utf-8?B?bTBGc1dCSHAxdFdOWGV6SFRQRHJDd2JQR1RPeENiL0hrUG1mc2lEcm5saDY0?=
- =?utf-8?B?QzRzQS8zajVHbFp1cTNkVGJrOSsxejI5a29XdEtjbTk0cHFmMGdYbVRMV3px?=
- =?utf-8?B?eGFJNGtqK1NWNE9vcUlHU2xVOE1WeStURXZMU1h4QmhXdTQ1emxDaW9sMmpx?=
- =?utf-8?B?RGJQQ3dDRGpaMTgvd3pXZHZEZHpzMnZhV0pvcms5UkZvTXZKK0Y0S1ZWREdq?=
- =?utf-8?B?dGdzbkNsRFNkOXlmbkV1dGN5Uk5MREoyaCt4TWVENWV2VUZRZG4vblY1U0Vk?=
- =?utf-8?B?N0RnQ1pjUk1iVUErNnJRZ0ZXZVYwclZieUJsalVIeXRKaFhDWUZReTNJS1VV?=
- =?utf-8?B?ZUFnRjBaNEJaRWxKaXNNNWUxbllBYkJZU2RnNUlPL0dGVzhvR25sWXpXUnVE?=
- =?utf-8?B?eFRUM0hueUZxdGdBc01qRk9ZMWJQa3ZmR1hKSUJpMzA1RitudTljd0RhWWhR?=
- =?utf-8?B?VUE9PQ==?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a7eea8cb-96c8-4bd1-0510-08ddf6d9834c
-X-MS-Exchange-CrossTenant-AuthSource: SJ2PR12MB8784.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Sep 2025 17:33:43.2722
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: UnN6AJRzirISbnlPuc1x+7rN7k+FUKQXv4vN4818R495sNNAB5D0K9wXt9SJ5+5PE7I9WQfCYBSnNaIt9sn/VA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB8278
+Content-Transfer-Encoding: 8bit
+
+Andy Shevchenko:
+> In other words we need to enable debug of the pin control subsystem and see
+> what it will print in dmesg.
+
+You mean I should enable CONFIG_DEBUG_PINCTRL? Okay, I did this.
+
+So, today I tested everything on fresh kernel, 6.17.0-rc6, without any
+patches.
+
+My config is: https://zerobin.net/?ebecc538f6caa22b#88c2k08G8+cZoMjgU9N/WYy28qQjyBW+/H78ygujZxY=
+It was generated from Debian config using localmodconfig.
+I added few tweaks, in particular I enabled CONFIG_DEBUG_PINCTRL.
+
+# cat /proc/cmdline 
+BOOT_IMAGE=/@rootfs/boot/vmlinuz-6.17.0-rc6 root=UUID=015793d4-ad51-4da7-844b-fcc3bcb13a0b ro rootflags=subvol=@rootfs log_buf_len=4M ignore_loglevel
+
+I run this script:
+https://zerobin.net/?327f3aa3ef7ce845#Ycu017J9YbRga8uGaCKRzsH7J/lB8D4RudpwTll5lbo=
+
+This script runs "rtcwake -s 6 -m mem" multiple times. Sometimes my laptop wakes on timer (because of rtcwake),
+and sometimes it wakes up too early on its own (and this is a bug).
+
+My script did suspend 7 times:
+
+# dmesg | grep s2idle
+[  117.934504] PM: suspend entry (s2idle)
+[  127.141741] PM: suspend entry (s2idle)
+[  131.299554] PM: suspend entry (s2idle)
+[  140.034802] PM: suspend entry (s2idle)
+[  144.592260] PM: suspend entry (s2idle)
+[  154.038621] PM: suspend entry (s2idle)
+[  163.034299] PM: suspend entry (s2idle)
+
+Out of them my laptop woke up on timer 4 times and on its own (i. e. due to bug) 3 times:
+
+# dmesg | grep 'woke up'
+[  126.087936] will-wake: attempt 0: woke up in time
+[  130.248820] will-wake: attempt 1: woke up early
+[  138.988770] will-wake: attempt 2: woke up in time
+[  143.545973] will-wake: attempt 3: woke up early
+[  152.993654] will-wake: attempt 4: woke up in time
+[  161.988956] will-wake: attempt 5: woke up in time
+[  166.329080] will-wake: attempt 6: woke up early
+
+Here is full output of "dmesg --level=debug+":
+https://zerobin.net/?f704a2d56603f4ec#SRrzc2mt2FNNqcltx/ULmtLZRdRH9frdgoODU03AXwE=
+
+/proc/interrupts:
+https://zerobin.net/?b7ba5047ca84ab29#TjMUjkAdhpIuKbnvPpuYyNWa/ilA/ciGKwwSbx6KRFc=
+
+# head -n 1000 /sys/class/dmi/id/*
+==> /sys/class/dmi/id/bios_date <==
+07/15/2025
+
+==> /sys/class/dmi/id/bios_release <==
+1.23
+
+==> /sys/class/dmi/id/bios_vendor <==
+Dell Inc.
+
+==> /sys/class/dmi/id/bios_version <==
+1.23.6
+
+==> /sys/class/dmi/id/board_asset_tag <==
 
 
-On 18/09/2025 18:12, Akhil R wrote:
+==> /sys/class/dmi/id/board_name <==
+0C6JVW
 
-...
+==> /sys/class/dmi/id/board_serial <==
+/JNLHW44/VNCMV0046P029A/
 
->> OK, I see now. So we need to program the normal timings first and then
->> we are re-using the variables to then program the HS timings. And
->> because of that we cannot setup the HS timing values in the existing
->> case statement?
->>
->>> So, I am not sure if moving this section to the switch block will add
->>> any benefit. We might end up making it more complicated that it is now.
->>
->> Yes that's true. It was really this else part that caught my eye ...
->>
->>    } else if (t->bus_freq_hz > I2C_MAX_FAST_MODE_PLUS_FREQ) {
->>     	t->bus_freq_hz = I2C_MAX_FAST_MODE_PLUS_FREQ;
->>    }
->>
->> It feels like at least this part should be handled as part of the case
->> statement.
-> 
-> Yes. That makes sense. If you agree, we can remove the else part because
-> we weren't doing this before when HS mode support was not there. It is not
-> directly related to the HS mode support as well. We can add this at a later
-> point in a separate patch if found required.
+==> /sys/class/dmi/id/board_vendor <==
+Dell Inc.
 
-Hmmm ... I am not sure because then we could potentially program the 
-packet header incorrectly later on. May be that will never happen? 
-However, I think it would be better to not make any assumptions here and 
-make the code as robust as possible.
+==> /sys/class/dmi/id/board_version <==
+A00
 
-Jon
+==> /sys/class/dmi/id/chassis_asset_tag <==
+
+
+==> /sys/class/dmi/id/chassis_serial <==
+JNLHW44
+
+==> /sys/class/dmi/id/chassis_type <==
+10
+
+==> /sys/class/dmi/id/chassis_vendor <==
+Dell Inc.
+
+==> /sys/class/dmi/id/chassis_version <==
+
+
+==> /sys/class/dmi/id/ec_firmware_release <==
+1.18
+
+==> /sys/class/dmi/id/modalias <==
+dmi:bvnDellInc.:bvr1.23.6:bd07/15/2025:br1.23:efr1.18:svnDellInc.:pnPrecision7780:pvr:rvnDellInc.:rn0C6JVW:rvrA00:cvnDellInc.:ct10:cvr:sku0C42:
+
+==> /sys/class/dmi/id/power <==
+head: error reading '/sys/class/dmi/id/power': Is a directory
+
+==> /sys/class/dmi/id/product_family <==
+Precision
+
+==> /sys/class/dmi/id/product_name <==
+Precision 7780
+
+==> /sys/class/dmi/id/product_serial <==
+JNLHW44
+
+==> /sys/class/dmi/id/product_sku <==
+0C42
+
+==> /sys/class/dmi/id/product_uuid <==
+4c4c4544-004e-4c10-8048-cac04f573434
+
+==> /sys/class/dmi/id/product_version <==
+
+
+==> /sys/class/dmi/id/subsystem <==
+head: error reading '/sys/class/dmi/id/subsystem': Is a directory
+
+==> /sys/class/dmi/id/sys_vendor <==
+Dell Inc.
+
+==> /sys/class/dmi/id/uevent <==
+MODALIAS=dmi:bvnDellInc.:bvr1.23.6:bd07/15/2025:br1.23:efr1.18:svnDellInc.:pnPrecision7780:pvr:rvnDellInc.:rn0C6JVW:rvrA00:cvnDellInc.:ct10:cvr:sku0C42:
+
+
+Output of dmidecode:
+https://zerobin.net/?e7783ba3bd93c895#EAVgKSZQrn0aGC6t9a/RKeZpp1/9TAYlDhHMh2lcpfQ=
 
 -- 
-nvpublic
-
+Askar Safin
 
