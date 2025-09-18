@@ -1,47 +1,47 @@
-Return-Path: <linux-i2c+bounces-13039-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13040-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 653AFB8276E
-	for <lists+linux-i2c@lfdr.de>; Thu, 18 Sep 2025 03:05:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D134AB827AD
+	for <lists+linux-i2c@lfdr.de>; Thu, 18 Sep 2025 03:14:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AE6841C24ADA
-	for <lists+linux-i2c@lfdr.de>; Thu, 18 Sep 2025 01:05:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2A4E11885EA1
+	for <lists+linux-i2c@lfdr.de>; Thu, 18 Sep 2025 01:15:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB1E319E967;
-	Thu, 18 Sep 2025 01:05:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AAA9212552;
+	Thu, 18 Sep 2025 01:14:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eSErDIGe"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="updpbwuO"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 422E719E7F7;
-	Thu, 18 Sep 2025 01:05:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B306202F65;
+	Thu, 18 Sep 2025 01:14:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758157509; cv=none; b=Yh2v3lPccHRBu7lfpZ6/9GD6io4vMkoOWxSahE3fy95m1LYZG7op53W0TrvAN62gBu84Xvv3AF7hxGpSh8daDo6RE0aq4DUrcqcyXDwLn5tfDWIBP5fW/dI2LU5FcUMHCDRw24jHjb7+JlYqPQntdkKra32C/dDPJdcG87G2vbQ=
+	t=1758158072; cv=none; b=Q3my1kS07nfDB40/kKbsPi7kk/ZvBfZMl6fGDo/TIAMoj8Fz5HfoII0Z3NvIR5YppJNGiqnc430wl7wn53yBb7/TcSud74S4/Rwyj2R4wO6ua3ouGYjUSA3lWumj6/kEemMVA4gFqrx7qG8qRDb+lk/5MkYnXEZOjWNIPkfYnWs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758157509; c=relaxed/simple;
+	s=arc-20240116; t=1758158072; c=relaxed/simple;
 	bh=JrMhoFMUm4eDs2XlhAAG60oxkhmBAuKi4btin6G7ttw=;
 	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=rGOf6nem8HHJLVAnu9Wl5eBIbiq6wzfqG8uq7AcvhbIY0KUPtHf02Z31+WOZTJhGz03BF+N4ZPBhNsg+6MVO/kG8fNjA9K5vCgrqfyVhKKDwMlcvKq5PYjiFH7iscypxhGGVf4jfKaH6Tr/z5nuCBi+lDwah1lqDf0tB5dRGb80=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eSErDIGe; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 443F9C4CEF9;
-	Thu, 18 Sep 2025 01:04:34 +0000 (UTC)
+	 Message-Id:Subject; b=MnWUvLHnO8gZrU8IBQ+NXuM+oZlCkFNRb7rA+Yazu41HMIZ7KHQsNnAGlISefGBe0C5f95CfJfAzi0K3iZ9JLuF1ZWmkxunqnFzJ6nSIenzzGu9JoIxEsH01WqcU4xKCvNe0EFsx6g4ueyx+6AycE2Ej0sLfCp0tWVqTg+k9pvM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=updpbwuO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74DBEC4CEF5;
+	Thu, 18 Sep 2025 01:14:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758157508;
+	s=k20201202; t=1758158071;
 	bh=JrMhoFMUm4eDs2XlhAAG60oxkhmBAuKi4btin6G7ttw=;
 	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
-	b=eSErDIGe+LEGHn5z6DX00lQG9eE8GPgsoEj9wqa/njQdnj/tXZcubE/8vwK8uClpE
-	 tEjSI+nNQDXQCLSO0Xch/harNhbA7J/1JunlPusv/e4iouFBj0K2OpgWUK19VuT4bS
-	 wogKahP5RU6QFEzd6JVxRVwwOGXWTxOyhmwrgXnJvIuOVMCIPbaKWMUTv7IWDr1rO/
-	 ZeLoZpEdlvbfPjjozhEeumupeW+6obs8QHaLjKJCG5k2R6XI/iuxmT5iqaM3HZmdJO
-	 tK3FN7MJTvRcHL9sJfiscafjPDWDM0VVfsVNREfk0BQcLXAQeWoNGVCdz08++Z4lxO
-	 lfPURdXO3UFKA==
-Date: Wed, 17 Sep 2025 20:04:32 -0500
+	b=updpbwuOEG9t2j65Vt9QliZImdpYdZOoJRaIXosjZDpumU9qf2RqZirNNKw/J0Tyy
+	 CC075u+8HMo4JjzHHee6Mm6z7u2qQZiMRbZ51OWCiOPV5NZMxc8c7Uojln9WHbxtzY
+	 a34Y/xIcHCqGLaqQU0bJaSuUErSFSOnWCfZFJp4V0MDX6JLuPtJ7cVf2UWnfziH+T9
+	 1SL5rOeoeNSx0+8OJ2992o9viBLw/jxS3bcUqSH+6/O0vkprm7hKWb5RxCiC48rMZZ
+	 RDaunA0hcMuDQ1A0c6/9HUlzqs6QYOku9nfdjJPx4NgXfnxHaNgazJ5A7N8Yo55GcK
+	 kFP8VPzhScswg==
+Date: Wed, 17 Sep 2025 20:14:30 -0500
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
