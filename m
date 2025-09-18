@@ -1,239 +1,141 @@
-Return-Path: <linux-i2c+bounces-13054-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13055-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14509B866D5
-	for <lists+linux-i2c@lfdr.de>; Thu, 18 Sep 2025 20:35:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F9F5B86965
+	for <lists+linux-i2c@lfdr.de>; Thu, 18 Sep 2025 20:53:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B52924870D7
-	for <lists+linux-i2c@lfdr.de>; Thu, 18 Sep 2025 18:35:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6313F17A4D6
+	for <lists+linux-i2c@lfdr.de>; Thu, 18 Sep 2025 18:53:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65B072BE647;
-	Thu, 18 Sep 2025 18:35:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F9442D9484;
+	Thu, 18 Sep 2025 18:51:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MQMvyfT+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NaXnqum4"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CC9234BA47
-	for <linux-i2c@vger.kernel.org>; Thu, 18 Sep 2025 18:35:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC53A28DB54
+	for <linux-i2c@vger.kernel.org>; Thu, 18 Sep 2025 18:51:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758220532; cv=none; b=YErr8D91Y5b/RBK/r0L6ce3EU+O22ib+QtoyAz/MOp9d/GMbozOzSEvcLOXce+j/ka1m6FKM1lnvVk4VflIYM4ImX6PZVWf1+tJRMC+D0L7cbZHJPt6WEJxsK5JVc4PYUnG2SfN6Hij6lhx+xW9sNnMddxCuXPbij1U/yL9VL+4=
+	t=1758221462; cv=none; b=lcQtogkeZ8gjUTHrzRbBtccDcW0QchszwAfFCQARMXjtmj9u6iCYxLdXH6B60mMbPqEUJMh23qM11XI2gSfdRK78TD8Mp1Krbtl0k3beUiLruKIG2zRrkLIELvLSGp/YS7rNDD6sYhtI5070OV6em2UaHmxP4qWToXdXghrqXo4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758220532; c=relaxed/simple;
-	bh=7JWrZqhhxtwxsKzUS484cYA9BE4S3MG4+Hm4TzvixgE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TIkp4nBKWjIGRidFBABpf5sn9eqWR24HogLUOmSNhO1Ykym0/rPTloHR6jKhJTDhMxSwBKDUCz6bFSw+i6FQbOUrCri16lIi/VAr4Qvpzlk2+Fa4oBuR9fl//b8uz4d5d4EYV2lT2cLRr0bK4OF1aoAwnLSw9wDkIklZ5sHK1PQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MQMvyfT+; arc=none smtp.client-ip=209.85.218.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-b2350899a40so123015166b.3
-        for <linux-i2c@vger.kernel.org>; Thu, 18 Sep 2025 11:35:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758220529; x=1758825329; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9DF8mdGy7rQ30a9eWz48AP7z4kPvyfSZCRABtJwRlC0=;
-        b=MQMvyfT+31xh4GtjqMt6G0oQ4ieG03Yk0cpxXjIjDvGJMKGZMBbbLVPxdW7CSIqHSa
-         Ti/I3Wo9KvSoXCQLxKvYr2HsKFdd4tyCFAJ56N6p6FTYjqOwyCV5FF6Ofpf2jhdXHCbS
-         gXWSghAewwgM6v34qLIRwCycGspdyrDlXWEONuSiiIVCLnRa+h+160ZXSh43cgJggUXy
-         1YwaOS5d9nf43A0e3gvjp6VXkoIkIZ5klNja3Hos/Kq+CROhxiiQezRidbE/M907dT3L
-         qCMlwl1nAoNJ4W/cQiJswbsT7VW6wPOffpwxFh4HVZfxjt30QjHSErSrVxufrsoK/d+1
-         v55A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758220529; x=1758825329;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9DF8mdGy7rQ30a9eWz48AP7z4kPvyfSZCRABtJwRlC0=;
-        b=Xp7r4A9Tpo92yJ+eELwqBfYxN1Bk7IAkv88PpRDPRaEoCRWYafb2wQM93cgow5bdWU
-         AreWk3+OqUWqhDY7x1+XZwq3vlLGHlmo4DXdP3+sq6/Np+F6wQW0JAQVkl+j+xYr3GvH
-         8GQWcgFPIUurcwUb80RX4MSpOmjATEQt+nj4vn3CTDIcvfMQDF4MKbPJ+onKWE6FajEs
-         YD8Za49BmKWqQSUP74Q2vCXaB5DRzpxJcAiW5AyAabRfnpP35EWnNe/KZTwR1VpAwgTF
-         e9Mw88vANP1DwVdyu6vDtogyKPBZvzZf/7RSLHsDXcwCA8jr/pfVdLfWYDX431hbWbWK
-         iDjQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXJ3bbeL/U35EML7SsosnN8FYg0L9uU5E/3RhNOnTOzIlLo4kZwXZSvZPRZJR0R6QeOfRzjHfA5g8k=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyjdJtojPc6rcQUiFY/7zeBenZeiSY/aVHKZML8CiiKG3a3VQHA
-	kRe2CqAWxoOwHh3F7li8RMdeOX+Ar+o+IDaSpF96twUfO1rIM1rSdc0j
-X-Gm-Gg: ASbGnct729+Sufm4cwcuziK8hI85/HBBvcvFnacpT0pUXiR1StwIzFrTbGce51/ffJe
-	Kid1lRx7wA2q5cSzZfP1JwxT3wXHSnjC/mwhQLY72/xIda0uUBKGs0dCuBso0JmD2iYP8IhkeZn
-	j2r6dtNcw4U28VBsEFYijaWwDFWAnl1S70J10M2Me0vaAjbtJwJRLfN1dAnCxdMkgVAFvKXj/B0
-	g7MVlFhYsrAEuY0ABi9vRU7tBR+/KXHpahKdXd43J1JfTe6wNQORifb62sGIMoZWNHHyh+gK1vs
-	ffpdhRl37X2huPvE2CIRngxGeOCDGeJiz6G9qwKfeMf+Mp3nt0wjNhP7AS2Jw5w/ywl36xKSkAz
-	090gYBiF/ebAIWUJlfw6ltcKpriM2ZFZcc7OdHWs=
-X-Google-Smtp-Source: AGHT+IG+2F9Tdqn75yCUehgh0hWjS/B3B6NaTXRMxweuRMKUwCI/DRvlIaiDT/f+5WUUCMePXP8wBQ==
-X-Received: by 2002:a17:907:728f:b0:b04:9468:4a21 with SMTP id a640c23a62f3a-b24ee6ef486mr25159666b.14.1758220528565;
-        Thu, 18 Sep 2025 11:35:28 -0700 (PDT)
-Received: from localhost ([212.73.77.104])
-        by smtp.gmail.com with UTF8SMTPSA id a640c23a62f3a-b1fcfe88d97sm245887466b.58.2025.09.18.11.35.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Sep 2025 11:35:28 -0700 (PDT)
-From: Askar Safin <safinaskar@gmail.com>
-To: andriy.shevchenko@linux.intel.com
-Cc: Dell.Client.Kernel@dell.com,
-	bartosz.golaszewski@linaro.org,
-	benjamin.tissoires@redhat.com,
-	dmitry.torokhov@gmail.com,
-	linux-acpi@vger.kernel.org,
-	linux-gpio@vger.kernel.org,
-	linux-i2c@vger.kernel.org,
-	regressions@lists.linux.dev,
-	rrangel@chromium.org,
-	safinaskar@zohomail.com,
-	superm1@kernel.org,
-	wse@tuxedocomputers.com
-Subject: Re: [REGRESSION][BISECTED] Dell Precision 7780 wakes up on its own from suspend
-Date: Thu, 18 Sep 2025 21:33:36 +0300
-Message-ID: <20250918183336.5633-1-safinaskar@gmail.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <aKyDB7h7cUBOLbiJ@smile.fi.intel.com>
-References: <aKyDB7h7cUBOLbiJ@smile.fi.intel.com>
+	s=arc-20240116; t=1758221462; c=relaxed/simple;
+	bh=U9qVovcPz2T5ZvS7gFaHrgw4GHywgZtBD8sZ0cSnEM4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=C1MTKIWiIHfDw4kwlBLqrhm9bWbkX2k/wVomDYP7aCd5oJMvuWyeHKVRpOyOa1WkmR9TH+c3bDaT1/U7vh9MxQf3Sj5SpSzTYbXhhzfcopRkA5Ql6RuL3Orp2KhPCcT8+7Vsmb9ReqR0ifd/GZqmn/l9B7AtB+LS7WUVsxP0lWQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NaXnqum4; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1758221461; x=1789757461;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=U9qVovcPz2T5ZvS7gFaHrgw4GHywgZtBD8sZ0cSnEM4=;
+  b=NaXnqum4xLScYWf5NcSqq1+p+mzUPDkTye1uSpi1kU2acIJrKGNGWoQH
+   iFdEs/XBc+0iy6Ej1rXs7LdM+IRRkZN7ggKXmm57JIjCGvf7YAbse4dhZ
+   kUUdjpJSj0Veel9fw8kUhEEI0cYe0whfDdBUZtC3j0OfKFhxe9Or1UwBu
+   ZHOFElG1uIbrDZI3PCTJcXoifXOsOOM5zAw8hvOdL2QdWV5y04Md+ISyD
+   AooIbywmlMzDr3SivXUsKXeqADYSyax1JhXK8J1tTqvgCGFrrNbgfjgwi
+   UEkJLsGg9uKgc9bsHXzgGBSeb3BfVM+RPHBYs3SKkHXgnNu9G+qScGcMm
+   w==;
+X-CSE-ConnectionGUID: VVpJE8EOTWOplwoHP3gpNA==
+X-CSE-MsgGUID: EqeMVKLTQxmSj0HxRD3fPw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11557"; a="64384761"
+X-IronPort-AV: E=Sophos;i="6.18,275,1751266800"; 
+   d="scan'208";a="64384761"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2025 11:51:00 -0700
+X-CSE-ConnectionGUID: SLv/r2o7RDauk+7R/PSMgA==
+X-CSE-MsgGUID: llhBE3ikRkOtSEBKHT0pEQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,275,1751266800"; 
+   d="scan'208";a="176071317"
+Received: from smile.fi.intel.com ([10.237.72.51])
+  by fmviesa009.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2025 11:50:58 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1uzJia-00000004ATp-14Tp;
+	Thu, 18 Sep 2025 21:50:56 +0300
+Date: Thu, 18 Sep 2025 21:50:55 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Jean Delvare <jdelvare@suse.de>
+Cc: Linux I2C <linux-i2c@vger.kernel.org>,
+	Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Jan Dabros <jsd@semihalf.com>, Andi Shyti <andi.shyti@kernel.org>
+Subject: Re: [PATCH 3/3] i2c: designware: Turn models back to enumerated
+ values
+Message-ID: <aMxUjzuDnLKRkHva@smile.fi.intel.com>
+References: <20250918160341.39b66013@endymion>
+ <20250918161301.5405b709@endymion>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250918161301.5405b709@endymion>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-Andy Shevchenko:
-> In other words we need to enable debug of the pin control subsystem and see
-> what it will print in dmesg.
+On Thu, Sep 18, 2025 at 04:13:01PM +0200, Jean Delvare wrote:
+> There are 4 flag bits reserved to store the device model. All
+> accesses to this information is properly masked with MODEL_MASK to
+> extract only these bits and compare them with a given model value.
+> 
+> However the model definitions isn't an enumeration as you would
+> expect. Instead each model uses a separate flag, meaning that the
+> reserved space is already exhausted with the 4 models which have been
+> defined so far.
+> 
+> The error seems to originate from commit a5df4c14b9a9 ("i2c:
+> designware: Switch header to use BIT() and GENMASK()") where:
+> 
+> define MODEL_MSCC_OCELOT      0x00000100
+> define MODEL_BAIKAL_BT1       0x00000200
+> 
+> was erroneously converted to:
 
-You mean I should enable CONFIG_DEBUG_PINCTRL? Okay, I did this.
+I don't think "erroneously" is correct word here. The code before that commit
+as you mentioned starts with a bit set, rather than from 0. I would argue that
+the intention was to use a bitmask instead of plain number.
 
-So, today I tested everything on fresh kernel, 6.17.0-rc6, without any
-patches.
+> define MODEL_MSCC_OCELOT      BIT(8)
+> define MODEL_BAIKAL_BT1       BIT(9)
+> 
+> While numerically equivalent, conceptually it wasn't, and it caused
+> the models added later to get bit-based definitions instead of
+> continuing with the next enumerated value (0x00000300).
+> 
+> Turn back these definitions to enumerated values to clear the
+> confusion, avoid future mistakes, and free some space for more models
+> to be supported in the future.
 
-My config is: https://zerobin.net/?ebecc538f6caa22b#88c2k08G8+cZoMjgU9N/WYy28qQjyBW+/H78ygujZxY=
-It was generated from Debian config using localmodconfig.
-I added few tweaks, in particular I enabled CONFIG_DEBUG_PINCTRL.
+...
 
-# cat /proc/cmdline 
-BOOT_IMAGE=/@rootfs/boot/vmlinuz-6.17.0-rc6 root=UUID=015793d4-ad51-4da7-844b-fcc3bcb13a0b ro rootflags=subvol=@rootfs log_buf_len=4M ignore_loglevel
+> -#define MODEL_MSCC_OCELOT			BIT(8)
+> -#define MODEL_BAIKAL_BT1			BIT(9)
+> -#define MODEL_AMD_NAVI_GPU			BIT(10)
+> -#define MODEL_WANGXUN_SP			BIT(11)
+> +#define MODEL_MSCC_OCELOT			(1 << 8)
+> +#define MODEL_BAIKAL_BT1			(2 << 8)
+> +#define MODEL_AMD_NAVI_GPU			(3 << 8)
+> +#define MODEL_WANGXUN_SP			(4 << 8)
+>  #define MODEL_MASK				GENMASK(11, 8)
 
-I run this script:
-https://zerobin.net/?327f3aa3ef7ce845#Ycu017J9YbRga8uGaCKRzsH7J/lB8D4RudpwTll5lbo=
-
-This script runs "rtcwake -s 6 -m mem" multiple times. Sometimes my laptop wakes on timer (because of rtcwake),
-and sometimes it wakes up too early on its own (and this is a bug).
-
-My script did suspend 7 times:
-
-# dmesg | grep s2idle
-[  117.934504] PM: suspend entry (s2idle)
-[  127.141741] PM: suspend entry (s2idle)
-[  131.299554] PM: suspend entry (s2idle)
-[  140.034802] PM: suspend entry (s2idle)
-[  144.592260] PM: suspend entry (s2idle)
-[  154.038621] PM: suspend entry (s2idle)
-[  163.034299] PM: suspend entry (s2idle)
-
-Out of them my laptop woke up on timer 4 times and on its own (i. e. due to bug) 3 times:
-
-# dmesg | grep 'woke up'
-[  126.087936] will-wake: attempt 0: woke up in time
-[  130.248820] will-wake: attempt 1: woke up early
-[  138.988770] will-wake: attempt 2: woke up in time
-[  143.545973] will-wake: attempt 3: woke up early
-[  152.993654] will-wake: attempt 4: woke up in time
-[  161.988956] will-wake: attempt 5: woke up in time
-[  166.329080] will-wake: attempt 6: woke up early
-
-Here is full output of "dmesg --level=debug+":
-https://zerobin.net/?f704a2d56603f4ec#SRrzc2mt2FNNqcltx/ULmtLZRdRH9frdgoODU03AXwE=
-
-/proc/interrupts:
-https://zerobin.net/?b7ba5047ca84ab29#TjMUjkAdhpIuKbnvPpuYyNWa/ilA/ciGKwwSbx6KRFc=
-
-# head -n 1000 /sys/class/dmi/id/*
-==> /sys/class/dmi/id/bios_date <==
-07/15/2025
-
-==> /sys/class/dmi/id/bios_release <==
-1.23
-
-==> /sys/class/dmi/id/bios_vendor <==
-Dell Inc.
-
-==> /sys/class/dmi/id/bios_version <==
-1.23.6
-
-==> /sys/class/dmi/id/board_asset_tag <==
-
-
-==> /sys/class/dmi/id/board_name <==
-0C6JVW
-
-==> /sys/class/dmi/id/board_serial <==
-/JNLHW44/VNCMV0046P029A/
-
-==> /sys/class/dmi/id/board_vendor <==
-Dell Inc.
-
-==> /sys/class/dmi/id/board_version <==
-A00
-
-==> /sys/class/dmi/id/chassis_asset_tag <==
-
-
-==> /sys/class/dmi/id/chassis_serial <==
-JNLHW44
-
-==> /sys/class/dmi/id/chassis_type <==
-10
-
-==> /sys/class/dmi/id/chassis_vendor <==
-Dell Inc.
-
-==> /sys/class/dmi/id/chassis_version <==
-
-
-==> /sys/class/dmi/id/ec_firmware_release <==
-1.18
-
-==> /sys/class/dmi/id/modalias <==
-dmi:bvnDellInc.:bvr1.23.6:bd07/15/2025:br1.23:efr1.18:svnDellInc.:pnPrecision7780:pvr:rvnDellInc.:rn0C6JVW:rvrA00:cvnDellInc.:ct10:cvr:sku0C42:
-
-==> /sys/class/dmi/id/power <==
-head: error reading '/sys/class/dmi/id/power': Is a directory
-
-==> /sys/class/dmi/id/product_family <==
-Precision
-
-==> /sys/class/dmi/id/product_name <==
-Precision 7780
-
-==> /sys/class/dmi/id/product_serial <==
-JNLHW44
-
-==> /sys/class/dmi/id/product_sku <==
-0C42
-
-==> /sys/class/dmi/id/product_uuid <==
-4c4c4544-004e-4c10-8048-cac04f573434
-
-==> /sys/class/dmi/id/product_version <==
-
-
-==> /sys/class/dmi/id/subsystem <==
-head: error reading '/sys/class/dmi/id/subsystem': Is a directory
-
-==> /sys/class/dmi/id/sys_vendor <==
-Dell Inc.
-
-==> /sys/class/dmi/id/uevent <==
-MODALIAS=dmi:bvnDellInc.:bvr1.23.6:bd07/15/2025:br1.23:efr1.18:svnDellInc.:pnPrecision7780:pvr:rvnDellInc.:rn0C6JVW:rvrA00:cvnDellInc.:ct10:cvr:sku0C42:
-
-
-Output of dmidecode:
-https://zerobin.net/?e7783ba3bd93c895#EAVgKSZQrn0aGC6t9a/RKeZpp1/9TAYlDhHMh2lcpfQ=
+Taking above into consideration, why can't we start them from 0?
 
 -- 
-Askar Safin
+With Best Regards,
+Andy Shevchenko
+
+
 
