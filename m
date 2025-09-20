@@ -1,120 +1,97 @@
-Return-Path: <linux-i2c+bounces-13060-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13061-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6BB5B8B3FB
-	for <lists+linux-i2c@lfdr.de>; Fri, 19 Sep 2025 22:53:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6DAC9B8CB79
+	for <lists+linux-i2c@lfdr.de>; Sat, 20 Sep 2025 17:31:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B689E18995C4
-	for <lists+linux-i2c@lfdr.de>; Fri, 19 Sep 2025 20:54:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 91FE21BC2A40
+	for <lists+linux-i2c@lfdr.de>; Sat, 20 Sep 2025 15:31:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9046C2C2ACE;
-	Fri, 19 Sep 2025 20:53:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8F6920FAA4;
+	Sat, 20 Sep 2025 15:31:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cADIhg/4"
+	dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b="iWqtrSbk"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sendmail.purelymail.com (sendmail.purelymail.com [34.202.193.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4610B223702;
-	Fri, 19 Sep 2025 20:53:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A80812AEF5
+	for <linux-i2c@vger.kernel.org>; Sat, 20 Sep 2025 15:31:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=34.202.193.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758315211; cv=none; b=r+hTWC/RdE1Gd7uQzr8iMWTfkPdL3X+neewC38kYHjtbBTO/RpHLufE3hNAJa92IF69lpA6BYVMUu7J+9MwXviNLO8V2XgDTqykGH5/iDpykrNXwhlwqslsivGxc0FWhpcQ0XVTyj6KSD8sjLYkeO55dRanStCeJNieHIZtWbj4=
+	t=1758382285; cv=none; b=jpFH/JdnkuBL8UU3jeLS3Dh1Xg0ba92497I85KZ+W5eK6qDcQXE/G/tCRDoxvn7zTvId8hGDZL/tVvBxPjUgGc4ZEcjRhBxtFUSktwDaBfM+SBF8Dhtmm9Cg26/II4G74qK5z/c9Ww84Ea9HMEkIRvPipA9H/5Rt2udMj9OwwxA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758315211; c=relaxed/simple;
-	bh=E1ZV+UNqR3veyxuHfX6mAzdM+m+4EnKUxmuyWi+TK24=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PU3XD/sYXcCTZG69Lq73A4a8zUJjKBRrAtEtCA7ui4vE02E2hv43rqBqU+ihqyWsY7RTT1qBLCN0LHCS4jN9aPqg9Bvtt4say2rmbKMInTk+UDOZx8P5iGcN437BoNo/QBTPOm7SgWyvTnURFQbMzYpP49AJ7tbXaQup0Q3vcKc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cADIhg/4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97ABEC4CEF0;
-	Fri, 19 Sep 2025 20:53:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758315210;
-	bh=E1ZV+UNqR3veyxuHfX6mAzdM+m+4EnKUxmuyWi+TK24=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=cADIhg/49suBO/uC2IsFh0Z7L+funFZc48pMScM7SuZh2dhesxomGab/EsnPO8bdD
-	 BeF+aZ1x7wBm0wJcNgRvxBhY+NZIzza1GoorjrVhGAnu0KMJU8BsAQTn7ZnrZ8cy/v
-	 k2nEtYObhwAaQKGRaorlKhok+oho/mDNS94ZwHXxz3NqaOQv76rzs2SThvkFERpMSD
-	 agfFoSpllXKFRxQBQ5PmodugBYh6s0bt/MmWq0QpygbEpo+3JczH8bcI0ASmFpVxk8
-	 R2li5Bcz9H3VLWwBtpbG2PRrkEbZGjHH0SJa2xd1wasFzPTmaDC+Mvw8qZWv/QYP0y
-	 Fwj2Hwaj1icUw==
-Date: Fri, 19 Sep 2025 15:53:29 -0500
-From: Rob Herring <robh@kernel.org>
-To: Jeremy Kerr <jk@codeconstruct.com.au>
-Cc: Ryan Chen <ryan_chen@aspeedtech.com>,
-	"benh@kernel.crashing.org" <benh@kernel.crashing.org>,
-	"joel@jms.id.au" <joel@jms.id.au>,
-	"andi.shyti@kernel.org" <andi.shyti@kernel.org>,
-	"krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-	"conor+dt@kernel.org" <conor+dt@kernel.org>,
-	"andrew@codeconstruct.com.au" <andrew@codeconstruct.com.au>,
-	"p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-	"andriy.shevchenko@linux.intel.com" <andriy.shevchenko@linux.intel.com>,
-	"naresh.solanki@9elements.com" <naresh.solanki@9elements.com>,
-	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-	"openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v18 1/3] dt-bindings: i2c: aspeed,i2c.yaml: add
- transfer-mode and global-regs properties and update example
-Message-ID: <20250919205329.GA2192084-robh@kernel.org>
-References: <20250820051832.3605405-1-ryan_chen@aspeedtech.com>
- <20250820051832.3605405-2-ryan_chen@aspeedtech.com>
- <9d6660f0bf5119cedee824cf764f15838622833a.camel@codeconstruct.com.au>
- <OS8PR06MB7541C0D6696FC754D944D45EF208A@OS8PR06MB7541.apcprd06.prod.outlook.com>
- <03abda47219b8b0b476a3740c7ed2acc4b2b16dc.camel@codeconstruct.com.au>
+	s=arc-20240116; t=1758382285; c=relaxed/simple;
+	bh=hSg3c2ZghTZizAbYqX13nbRSTVnHbltJh3jiavgkq80=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=OZkaXdnxd+5HADi5UVu22jPQKT7ckEYgDaJSqlytl0EZ+in//kvK9DTESz9w9IT0yzuSsnDYYd0PsmfMB/gsc4iK0zzZxlB0ml1yF3YbJ1UtrZQsN9z9cIm5tBvGQDzSA0R8872P4DmgvAALPDtOrSx6ku/h3AksWyUn0g395z0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mentallysanemainliners.org; spf=pass smtp.mailfrom=mentallysanemainliners.org; dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b=iWqtrSbk; arc=none smtp.client-ip=34.202.193.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mentallysanemainliners.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mentallysanemainliners.org
+Authentication-Results: purelymail.com; auth=pass
+DKIM-Signature: a=rsa-sha256; b=iWqtrSbkxBi/JLRtP+iV4RQ3k1a/tesuTQDMgAOYaJrV4z4Alue0kRIlCXG9+d0c7mYoZjRyokZC22Hggfu2+b6LpUspt8EsOPd0y42DuKze8KnMR2qsqUXog8/vBIDorYRSGpMhhkzrylMEnZFo8XMajFm4DXKrdI8Gvhw40NCJpOAClQuewkde8tKwYx+5CPhtWn7VLhRtgiGa2pcmcfDUwpPA/HPCQNkI0yX4WgetJ6Kekc3bFTlHJePlollL72koMZLnIU3bi1RNKs6xTQm77+g+4MTi19Y8AgflsVqnDRUe5byyQ7OWccIXe0Aa+TVbQyjfEvY3fDB14PL3eQ==; s=purelymail1; d=purelymail.com; v=1; bh=hSg3c2ZghTZizAbYqX13nbRSTVnHbltJh3jiavgkq80=; h=Feedback-ID:Received:From:Subject:Date:To;
+Feedback-ID: 68247:10037:null:purelymail
+X-Pm-Original-To: linux-i2c@vger.kernel.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1935225507;
+          (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+          Sat, 20 Sep 2025 15:31:09 +0000 (UTC)
+From: Igor Belwon <igor.belwon@mentallysanemainliners.org>
+Subject: [PATCH 0/2] i2c: Add support for MT6878 I2C controllers
+Date: Sat, 20 Sep 2025 17:31:02 +0200
+Message-Id: <20250920-mt6878-i2c-bringup-v1-0-d1527ffd3cd7@mentallysanemainliners.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <03abda47219b8b0b476a3740c7ed2acc4b2b16dc.camel@codeconstruct.com.au>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIALfIzmgC/x3MQQ5AMBBA0avIrE1SDVWuIhZa05qFkhaRiLtrL
+ N/i/wcSRaYEffFApIsTbyGjKguwyxQ8Ic/ZIIVsRCcFrofSrUaWFk3k4M8dVS3mWlvjlDKQwz2
+ S4/ufDuP7fnRUnrZkAAAA
+X-Change-ID: 20250920-mt6878-i2c-bringup-640d48cbf66b
+To: Qii Wang <qii.wang@mediatek.com>, Andi Shyti <andi.shyti@kernel.org>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Matthias Brugger <matthias.bgg@gmail.com>, 
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: ~postmarketos/upstreaming@lists.sr.ht, linux-i2c@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
+ Igor Belwon <igor.belwon@mentallysanemainliners.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1758382267; l=759;
+ i=igor.belwon@mentallysanemainliners.org; s=20250908;
+ h=from:subject:message-id; bh=hSg3c2ZghTZizAbYqX13nbRSTVnHbltJh3jiavgkq80=;
+ b=ZmmuUVQP60SFRzeKx5oSct4QOEoDeLeYJIF9FKk4TQgtZPtWpkWxvMFN31WjyU6lbr31VyM1G
+ uWVbihpePQ5BA6j/daH/+17Zn4BAr2LzmQymhbXdmJlbCFgEvwgwFTG
+X-Developer-Key: i=igor.belwon@mentallysanemainliners.org; a=ed25519;
+ pk=t9Kz6B3jEwJD7YAKcp8XftfEz7SUSlGbrsfFlbrrFwA=
 
-On Mon, Sep 15, 2025 at 11:41:31AM +0800, Jeremy Kerr wrote:
-> Hi Ryan,
-> 
-> > > OK, but the ast2400 and ast2500 I2C peripherals - which this binding also
-> > > describes - do not have that facility. Given the 2600 is a distinct peripheral (as
-> > > discussed on the v16 series), this would seem to warrant a distinct binding.
-> > > 
-> > > Should this be split out into an ast2600-specific binding, to reflect that it is
-> > > different hardware? The reference to the global registers and transfer modes
-> > > would then be added only to the ast2600-i2c-bus binding.
-> > 
-> > I agree it would be cleaner to split out a new binding file specifically for AST2600,
-> > for example: `aspeed,ast2600-i2c.yaml`
-> > But also I think `aspeed,i2cv2.yaml` more better name, that compatible will 
-> > support next generation such like AST2700 .....
-> 
-> The ship may have already sailed on that one, as you already have the
-> existing compatible string describing existing hardware.
-> 
-> I would assume that the compatible string should be fixed for an
-> instance of the specific hardware, but the DT maintainers may be able to
-> provide some input/precedence on changing an existing binding, if
-> necessary.
-> 
-> If this does get changed, I would expect that you would need a
-> corresponding update in the old driver too.
-> 
-> Or, another option may be to keep the current generation ("v2 core with
-> compat registers") as-is (ie., at ast2600-i2c-bus), and introduce a new
-> string for the next - where the primary hardware change might be the
-> removal of compat registers, but it's still new hardware
+Hi all,
 
-About the only place we use version numbers (without regret) is when the 
-version can be traced back to the actual verilog. This is typically only 
-IP targeted to FPGAs. The reality in SoCs is h/w designers can't help 
-themselves to not change things. In reality, there are almost always 
-some changes.
+This patchest adds support for the i2c units found in the MediaTek 
+MT6878 SoC. These units use the new v3 register offset scheme 
+(differing only in OFFSET_SLAVE_ADDR).
 
-Rob
+Signed-off-by: Igor Belwon <igor.belwon@mentallysanemainliners.org>
+---
+Igor Belwon (2):
+      dt-bindings: i2c: i2c-mt65xx: Document MediaTek MT6878 I2C
+      i2c: mediatek: add support for MT6878 SoC
+
+ Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml |  1 +
+ drivers/i2c/busses/i2c-mt65xx.c                       | 14 ++++++++++++++
+ 2 files changed, 15 insertions(+)
+---
+base-commit: 846bd2225ec3cfa8be046655e02b9457ed41973e
+change-id: 20250920-mt6878-i2c-bringup-640d48cbf66b
+
+Best regards,
+-- 
+Igor Belwon <igor.belwon@mentallysanemainliners.org>
+
 
