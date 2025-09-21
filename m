@@ -1,113 +1,76 @@
-Return-Path: <linux-i2c+bounces-13065-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13066-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3892EB8CDD1
-	for <lists+linux-i2c@lfdr.de>; Sat, 20 Sep 2025 19:23:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 544A1B8DEE4
+	for <lists+linux-i2c@lfdr.de>; Sun, 21 Sep 2025 18:11:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 93E821B21D5A
-	for <lists+linux-i2c@lfdr.de>; Sat, 20 Sep 2025 17:23:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 17CA8189D431
+	for <lists+linux-i2c@lfdr.de>; Sun, 21 Sep 2025 16:12:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EFAB30ACFA;
-	Sat, 20 Sep 2025 17:23:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B1B5271443;
+	Sun, 21 Sep 2025 16:08:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b="ba5PtmFj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TZO+l66m"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from sendmail.purelymail.com (sendmail.purelymail.com [34.202.193.197])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D0F42FFF89
-	for <linux-i2c@vger.kernel.org>; Sat, 20 Sep 2025 17:23:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=34.202.193.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7883E211A09;
+	Sun, 21 Sep 2025 16:08:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758389005; cv=none; b=ihNWZc3s384yZxYOPh4AOWtSv/QCfK3WqrMC1ohR3PT6+U8H60d+tC0pOEi4bYFSS3q9BIql+3mmZH5yc5TOvwWQPWatzLnUnFjwmQiy1TMI+hW++JF5wHDw9IMmRmUdSVimQ/LFLLlyqlgGVfJmvI+IWJfiy45sqQTLFiLd7ZE=
+	t=1758470915; cv=none; b=TUR4mQ25/crnJCRFRxYThsb+kw+DRuOscwQm6m34iaGdWZP05Ta/k0RpAfLrzw91Moe3PuEexV6GKJFB2FcmbRqpEkMgNqGCnq7kMcsdjLqYGDOqyKgCqWfe5Fg9X9ktsDQKGxzlxlC1IPNUQCOVaAbPSmGW+VtBPFyojqpftok=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758389005; c=relaxed/simple;
-	bh=6/Bi9HXJdwmtXopWk4wjqbKq9IfI+RP10q7/G7trKjE=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=iMMTZVhq6xMBIYU/8aj2lAhnYggDXHgSUUZ4Q04pPaFJrTcS3pzqMrH90nAvEKbR0P1l2dkLjMLWXRLFtqkH/dXiAdB7F2MOv/mrTeFOntC7EOiZtPGJsD+vxO/ZAmmu5206tveMDQnCI5VkmUX66upV0IcHYMDsVTIZCVxpG6U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mentallysanemainliners.org; spf=pass smtp.mailfrom=mentallysanemainliners.org; dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b=ba5PtmFj; arc=none smtp.client-ip=34.202.193.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mentallysanemainliners.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mentallysanemainliners.org
-Authentication-Results: purelymail.com; auth=pass
-DKIM-Signature: a=rsa-sha256; b=ba5PtmFjowsIaHfACEh+0dU237szl4KEjgtN+AEHH5yNE4yl8t6kGqtsqa0LpXSvC3Eo4uGU7y68CtTs9Oic7MoZHr8ByUS+46tQknWuPP9clbP37TKBhw76hpfxuVI752/+YXC8Ll1/qZYu7OqhayQVWQT9NCEaMAEVnjJ9PgiQGxbjKROBFBE5MvuvUklmQJRkWMjmhxXDVnXw+VvWkKmd9czttkTFKIgRphvTP+1LZIcgDOz5NqLdjmNv/V39qXrf3CV/heebpvs329wnoji6AY1HcmxTEJg5FmDRS4nML6WJVlL1+X2/dXItwFYJiGPAjnpjRshcbyXqPbQlrw==; s=purelymail1; d=purelymail.com; v=1; bh=6/Bi9HXJdwmtXopWk4wjqbKq9IfI+RP10q7/G7trKjE=; h=Feedback-ID:Received:From:Date:Subject:To;
-Feedback-ID: 68247:10037:null:purelymail
-X-Pm-Original-To: linux-i2c@vger.kernel.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1392048781;
-          (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
-          Sat, 20 Sep 2025 17:23:04 +0000 (UTC)
-From: Igor Belwon <igor.belwon@mentallysanemainliners.org>
-Date: Sat, 20 Sep 2025 19:22:52 +0200
-Subject: [PATCH v2] dt-bindings: i2c: i2c-mt65xx: Document MediaTek MT6878
- I2C
+	s=arc-20240116; t=1758470915; c=relaxed/simple;
+	bh=bjgVhndVUFUWDh9Kli3/1k8OQLzpscDz8f8evH9FF0I=;
+	h=Content-Type:MIME-Version:In-Reply-To:References:Subject:From:Cc:
+	 To:Date:Message-ID; b=SUBbS1jSwfyriM91Lz5Wzgg24GvQD0V5daITiu14nox10ibNV/2TRlr4ncBG/UEnAqH9XSEGMJR1AfNqV1+esyrqR7IIjAagFGmsC3EzYK5xmduuRQFU5kFePf/eNPl3MuW6jWDadsDAI4tumV0hdZzW8I5ICvDf+XlH023yrZU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TZO+l66m; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEED8C4CEE7;
+	Sun, 21 Sep 2025 16:08:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758470915;
+	bh=bjgVhndVUFUWDh9Kli3/1k8OQLzpscDz8f8evH9FF0I=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+	b=TZO+l66md5y3YCmXc+ANR/7ZQQnj+9xH3xUYAKm16jr1VgmO7nbmA17BrgK/cp/1I
+	 ErAp9eU0l0ULWifGJSR8G6K31HdIhbPHRzPZCzoYVkURF0xm+t9Lp0IEZSKtUhv5To
+	 NZu/9IYg7jMI23EOHyqP+9Yf1aKiJVOzv4il1R+7W1e64H8azKP5cKmPz00VBgcjHS
+	 PM9ECn8MePHnkI7w4wRHfNxe5xMJ2h3rKfz6GeQ9giQ6ATo5gVf/vbqE+0BUftKaap
+	 6gENrL80OHsZU6jBLMOv2yTsyFq8PwSbbvOqjz6w5EsEXkHMQfXyVbT4c+pXfINbKa
+	 C6DAc9QudVGqg==
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250920-mt6878-i2c-bringup-v2-1-70a951f10be9@mentallysanemainliners.org>
-X-B4-Tracking: v=1; b=H4sIAOvizmgC/32NQQ6CMBBFr0K6dkypUNCV9zAsSjuFSaCQKRIJ4
- e5WDuDyveS/v4uITBjFI9sF40qRppBAXTJhexM6BHKJhZKqlHclYVx0XdVAykLLFLr3DLqQrqh
- t67VuRRrOjJ4+Z/TVJO4pLhNv58ea/+zf3JqDBJeXqvLe3ayrniOGxQzDFk3A0VAYKCDH68Sda
- I7j+AIbBwCnxQAAAA==
-X-Change-ID: 20250920-mt6878-i2c-bringup-640d48cbf66b
-To: Qii Wang <qii.wang@mediatek.com>, Andi Shyti <andi.shyti@kernel.org>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Matthias Brugger <matthias.bgg@gmail.com>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: ~postmarketos/upstreaming@lists.sr.ht, linux-i2c@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
- Igor Belwon <igor.belwon@mentallysanemainliners.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1758388982; l=1428;
- i=igor.belwon@mentallysanemainliners.org; s=20250908;
- h=from:subject:message-id; bh=6/Bi9HXJdwmtXopWk4wjqbKq9IfI+RP10q7/G7trKjE=;
- b=vNonu+OGzG1QGA4lfkYdNlJVPkanBGWOsfd/gZnlyCoNtSvnYDZ3hMHmvgtL3a7KF4FMHt+Yt
- 4v5m6V101nbBX7mQEFH98yis37DhzMY9NfRonqE8E/C5RphlUkKgbJK
-X-Developer-Key: i=igor.belwon@mentallysanemainliners.org; a=ed25519;
- pk=t9Kz6B3jEwJD7YAKcp8XftfEz7SUSlGbrsfFlbrrFwA=
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20250828-dt-apple-t6020-v1-25-507ba4c4b98e@jannau.net>
+References: <20250828-dt-apple-t6020-v1-0-507ba4c4b98e@jannau.net> <20250828-dt-apple-t6020-v1-25-507ba4c4b98e@jannau.net>
+Subject: Re: [PATCH 25/37] clk: clk-apple-nco: Add "apple,t8103-nco" compatible
+From: Stephen Boyd <sboyd@kernel.org>
+Cc: asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, iommu@lists.linux.dev, linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, dri-devel@lists.freedesktop.org, linux-bluetooth@vger.kernel.org, linux-wireless@vger.kernel.org, linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org, linux-clk@vger.kernel.org, dmaengine@vger.kernel.org, linux-sound@vger.kernel.org, linux-spi@vger.kernel.org, linux-nvme@lists.infradead.org, Janne Grunau <j@jannau.net>
+To: Alyssa Rosenzweig <alyssa@rosenzweig.io>, Andi Shyti <andi.shyti@kernel.org>, Christoph Hellwig <hch@lst.de>, Conor Dooley <conor+dt@kernel.org>, David Airlie <airlied@gmail.com>, Guenter Roeck <linux@roeck-us.net>, Hector Martin <marcan@marcan.st>, Janne Grunau <j@jannau.net>, Jaroslav Kysela <perex@perex.cz>, Jassi Brar <jassisinghbrar@gmail.com>, Jens Axboe <axboe@kernel.dk>, Joerg Roedel <joro@8bytes.org>, Johannes Berg <johannes@sipsolutions.net>, Keith Busch <kbusch@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Lee Jones <lee@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, Linus Walleij <linus.walleij@linaro.org>, Luiz Augusto von Dentz <luiz.dentz@gmail.com>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Marc Zyngier <maz@kernel.org>, Marcel Holtmann <marcel@holtmann.org>, Mark Brown <broonie@kernel.org>, Mark Kettenis <kettenis@openbsd.org>, Martin =?utf-8?q?Povi=C5=A1er?= <povik+lin@cutebit.org>, Maxime Ripard <mripard@kernel.org>, Michael Turquette <
+ mturquette@baylibre.com>, Neal Gompa <neal@gompa.dev>, Rafael J. Wysocki <rafael@kernel.org>, Rob Herring <robh@kernel.org>, Robin Murphy <robin.murphy@arm.com>, Sagi Grimberg <sagi@grimberg.me>, Sasha Finkelstein <fnkl.kernel@gmail.com>, Simona Vetter <simona@ffwll.ch>, Sven Peter <sven@kernel.org>, Takashi Iwai <tiwai@suse.com>, Thomas Gleixner <tglx@linutronix.de>, Thomas Zimmermann <tzimmermann@suse.de>, Ulf Hansson <ulf.hansson@linaro.org>, Uwe =?utf-8?q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, Vinod Koul <vkoul@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, Will Deacon <will@kernel.org>, Wim Van Sebroeck <wim@linux-watchdog.org>, van Spriel <arend@broadcom.com>
+Date: Sun, 21 Sep 2025 09:08:33 -0700
+Message-ID: <175847091343.4354.2623772725149192827@lazor>
+User-Agent: alot/0.11
 
-Document the I2C controllers found in the MediaTek MT6878 SoC, by adding
-a new compatible string for the controllers. Their design is compatible
-with the design from the MediaTek MT8188 SoC.
+Quoting Janne Grunau (2025-08-28 07:01:44)
+> After discussion with the devicetree maintainers we agreed to not extend
+> lists with the generic compatible "apple,nco" anymore [1]. Use
+> "apple,t8103-nco" as base compatible as it is the SoC the driver and
+> bindings were written for.
+>=20
+> [1]: https://lore.kernel.org/asahi/12ab93b7-1fc2-4ce0-926e-c8141cfe81bf@k=
+ernel.org/
+>=20
+> Signed-off-by: Janne Grunau <j@jannau.net>
+> ---
 
-Signed-off-by: Igor Belwon <igor.belwon@mentallysanemainliners.org>
----
-Changes in v2:
-- Removed driver change, made the binding compatible with mt8188
-- Link to v1: https://lore.kernel.org/r/20250920-mt6878-i2c-bringup-v1-0-d1527ffd3cd7@mentallysanemainliners.org
----
- Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml b/Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml
-index 23fe8ff76645e440c19469999ae9a86b7fdabe68..bd6811cbde701ce0fd9baa002aea59d43f8af445 100644
---- a/Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml
-+++ b/Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml
-@@ -50,6 +50,10 @@ properties:
-           - enum:
-               - mediatek,mt6795-i2c
-           - const: mediatek,mt8173-i2c
-+      - items:
-+          - enum:
-+              - mediatek,mt6878-i2c
-+          - const: mediatek,mt8188-i2c
-       - items:
-           - enum:
-               - mediatek,mt6893-i2c
-
----
-base-commit: 846bd2225ec3cfa8be046655e02b9457ed41973e
-change-id: 20250920-mt6878-i2c-bringup-640d48cbf66b
-
-Best regards,
--- 
-Igor Belwon <igor.belwon@mentallysanemainliners.org>
-
+Acked-by: Stephen Boyd <sboyd@kernel.org>
 
