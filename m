@@ -1,80 +1,174 @@
-Return-Path: <linux-i2c+bounces-13067-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13068-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53906B8DF1C
-	for <lists+linux-i2c@lfdr.de>; Sun, 21 Sep 2025 18:12:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 968A9B8F1B0
+	for <lists+linux-i2c@lfdr.de>; Mon, 22 Sep 2025 08:21:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4E4A8189D402
-	for <lists+linux-i2c@lfdr.de>; Sun, 21 Sep 2025 16:12:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 830DA189D8FF
+	for <lists+linux-i2c@lfdr.de>; Mon, 22 Sep 2025 06:22:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5A072773D2;
-	Sun, 21 Sep 2025 16:08:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EBFD23C519;
+	Mon, 22 Sep 2025 06:21:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k9VA4+Ov"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RThwFNDG"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48053275B15;
-	Sun, 21 Sep 2025 16:08:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CCBB235041
+	for <linux-i2c@vger.kernel.org>; Mon, 22 Sep 2025 06:21:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758470923; cv=none; b=XPZUOraAUtJWu+rAcss5RuL8XTCy3wV9Q8EO9bZtfDcZl7Xb+eG9XwyNJaHNlh5D+jvlmvTQWtYWu5NpiuPH0wOS7xyEtWwrwk0w6KlnFVuracks1Ac/qy5kGLzNxCVwv6XYRNY9TrOrEwVhyXDwHO5lR05ygSz2H4To6W6WXik=
+	t=1758522103; cv=none; b=OcS+3H+zf+RNbyWkmL30shABhfYlZCaTawXVPcUB7uV0H7DMMb5CxGAJmMCXmYbTX79cklcW859eg7k/lB/42koW5Zylzr9b0hWCM/tP5yXmu7umF20GahEt+N00a48+eRIP2Jt0S/1Dusfxz6VMmTDXXeXWVu16mHn1IAO0Esw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758470923; c=relaxed/simple;
-	bh=WAbk4PWWXEXWUyECLBWj+jZRHQjNujjT1F6/7IR7Wkc=;
-	h=Content-Type:MIME-Version:In-Reply-To:References:Subject:From:Cc:
-	 To:Date:Message-ID; b=Bw914eV9xNhY0DbIO7dYgnjKMbsASZAsHUNYOahoQlICDghZNAFOPK1SI7NQZtA5qFhtgX0MY3rqlYAFjoPNl6De8l+N1gsBpeMVRc3siWjKtD6Inlm9PDF5M1ih4vaZQrhOLQCY23U8+3eHN/zwKqTUE3oXvCkFzsQQ9j0tGy8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k9VA4+Ov; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F8CDC4CEE7;
-	Sun, 21 Sep 2025 16:08:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758470922;
-	bh=WAbk4PWWXEXWUyECLBWj+jZRHQjNujjT1F6/7IR7Wkc=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=k9VA4+OvtF9WMxvlQ8gfo6xoYVgPhME93HuDeyjVf3VJQKg5L51KazbJGvnQm02j3
-	 GEWkqrPtWUqFxr15WM4BpVIZ9dGHMDnsux1aleg52r5KyYv+LHxTGl3b169Cwpso2A
-	 yUbcEIYwho2ZjYgeMp0c05LtDAyQHhYgWuVOQykRCV8P/ZAO0A2xrsHUFcZ1ZYVztd
-	 hVuGVTIdguTJgiGej5woK5cjYGCQTRMU+ddYcO0s3teIMgUWENJJnMWoMVmgI+Xo//
-	 WXIz1Ll5H7P+4YaCUMRhwXoBllRaGg+2qQdNCRdAyyrY7rJGZ0a5/DxMDhjkybdc75
-	 H1Hi9m6Bn3eAQ==
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1758522103; c=relaxed/simple;
+	bh=zFtLVcaN8AVG5mTTYVcmEefIdazqWW51ehPhjn82GYg=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=nNG1843EKe/QMRRzp+zqm6xkNMaf+cEWSoXGJaVH0rB7Ll+JJgx3mPkK0uRtQQNqV69DZXqrAre8D1XV6yrPe4o+P2biTBE6RZ5l5kJ6H2EXOcuqfeOY63W5ke3VzApLSYuMzwK99W6+1QMroUnwYqjYS2BeVeTT6+JZIa/FdCA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RThwFNDG; arc=none smtp.client-ip=209.85.208.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-362acd22c78so33419261fa.2
+        for <linux-i2c@vger.kernel.org>; Sun, 21 Sep 2025 23:21:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1758522099; x=1759126899; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=h5lLrTEPfjBEE6+72ClqjipyByMm2X0eEE6L7Qy2HzE=;
+        b=RThwFNDGMbwvG4s6aDTW9uFtAEcMS/mqfx9x7fAnbb92saQ0H3xfWDwYdiE1V8lY6e
+         9IhKmQ1IIn0E8CFHT2XxxTgz1oVe2MAsuap0En4igp++rTf+1YB3Y2wQ7hmd7FP28y5p
+         HrPqX3Z95B7nj4Oee2upPwj6Ee6skQnV/Q3vLaznAdqChmt7OfuNImle3NiPJD8OiYW8
+         5e+3vnjdhRkpgofDkJt4DXGJK3ELRW5te7xQYk1o2XoGwaKp+pbtq4sVUAkx7VCsWX15
+         U1Cx1AfXSIDBslmEYiiWUAOmOloPBCfL4u5vNH0i/2ZzBTD9ZrzH+wnlhSVPfgjN+cxc
+         l4fQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758522099; x=1759126899;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=h5lLrTEPfjBEE6+72ClqjipyByMm2X0eEE6L7Qy2HzE=;
+        b=O9758TXhjLMZRTqU+X5LxWQP2ULBvAc0ptuxLdJ6HNTgNqyJFik46m1WcY5XxB9lwL
+         0d5Hl6mu5bNHV9tDmB3wWOIj1swssObkbhg0AZptwL7ekDPO3pNkzv+kfQALcCBeVAj4
+         yg0Z3cY8VM180qXenQK0KhaufXvrPM2hAngw2+mAubV8XhQbnNgYOBSkSet8P92LjvOY
+         uGtBEAFQs8d7Z0we2Du+zd9m/oJZD+Bp4bcQj2IXRhqMudQof0DNBHPOdk1k1Zr4h4wg
+         adqa9+PViEFxL1NJ0xuWRffB3uSP/nSty0vsvLUdwaX8QgjaqolLbhVOvVEiCRvVmxvR
+         iu0g==
+X-Gm-Message-State: AOJu0YytoSziVgfY+8RXxyaHDsyfkU9x3zhOVNCH951wP3KFYddUcqIv
+	pjdbIWIApWMjB4jGHM+RAJLd8AFUCDmmWPytOQaW7jdyiDPNJKZyDwPr
+X-Gm-Gg: ASbGncvir9Olj7+7W5l4rMWoL1AYujn/G6tBgVG03dNWrxqEHWD0sM0ow9xGK1b+jrq
+	DZoYY8DrGaYNJT7labexu9quloKty84rb7XqYHKGtYhjGHNZSSTegbgVAlLjyPgoxavQGDVwFor
+	3yr5QiWh3lHK1J5aOgHDKrTWgrNOshGrhMJ0Ee8i6gLEBketB3L9SkhL6NHvg0hAKezxmbrda84
+	dsG8iOyp52PmbkQx8Hz82l3ghydw7z4NFxtn9gnD7+J+lcB42U0EIqszDDxXIHnLXbvunYqGc+C
+	Oo9nxP70vsL4VNJOe7jmZJOXB438t+jAt5qUskTEHe5+PRuioreAYHiL+cmEt75Lr/dCQ83D9Uz
+	UhqLqFEvCfB5N19i3IRb9ryAkzCsl2/rh2gxRKGbBUkjXwHXZ2X6LAnAEwc07CsfvbP0=
+X-Google-Smtp-Source: AGHT+IHF5DNe3flJ6FiaAnZ0MCzodBxytK9lAnP/8PhSe4SRX4JUFirBe6Je3qK5XyJdksPNiUzhLw==
+X-Received: by 2002:a05:651c:556:b0:36a:1e4a:a3b9 with SMTP id 38308e7fff4ca-36a1e4aac34mr17785091fa.43.1758522098976;
+        Sun, 21 Sep 2025 23:21:38 -0700 (PDT)
+Received: from [192.168.1.166] (83-233-6-197.cust.bredband2.com. [83.233.6.197])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-361a99e99e6sm26982661fa.56.2025.09.21.23.21.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 21 Sep 2025 23:21:38 -0700 (PDT)
+From: Marcus Folkesson <marcus.folkesson@gmail.com>
+Subject: [PATCH RFC 0/7] I2C Mux per channel bus speed
+Date: Mon, 22 Sep 2025 08:20:55 +0200
+Message-Id: <20250922-i2c-mux-v1-0-28c94a610930@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20250828-dt-apple-t6020-v1-26-507ba4c4b98e@jannau.net>
-References: <20250828-dt-apple-t6020-v1-0-507ba4c4b98e@jannau.net> <20250828-dt-apple-t6020-v1-26-507ba4c4b98e@jannau.net>
-Subject: Re: [PATCH 26/37] dt-bindings: clock: apple,nco: Add t6020-nco compatible
-From: Stephen Boyd <sboyd@kernel.org>
-Cc: asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, iommu@lists.linux.dev, linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, dri-devel@lists.freedesktop.org, linux-bluetooth@vger.kernel.org, linux-wireless@vger.kernel.org, linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org, linux-clk@vger.kernel.org, dmaengine@vger.kernel.org, linux-sound@vger.kernel.org, linux-spi@vger.kernel.org, linux-nvme@lists.infradead.org, Janne Grunau <j@jannau.net>
-To: Alyssa Rosenzweig <alyssa@rosenzweig.io>, Andi Shyti <andi.shyti@kernel.org>, Christoph Hellwig <hch@lst.de>, Conor Dooley <conor+dt@kernel.org>, David Airlie <airlied@gmail.com>, Guenter Roeck <linux@roeck-us.net>, Hector Martin <marcan@marcan.st>, Janne Grunau <j@jannau.net>, Jaroslav Kysela <perex@perex.cz>, Jassi Brar <jassisinghbrar@gmail.com>, Jens Axboe <axboe@kernel.dk>, Joerg Roedel <joro@8bytes.org>, Johannes Berg <johannes@sipsolutions.net>, Keith Busch <kbusch@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Lee Jones <lee@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, Linus Walleij <linus.walleij@linaro.org>, Luiz Augusto von Dentz <luiz.dentz@gmail.com>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Marc Zyngier <maz@kernel.org>, Marcel Holtmann <marcel@holtmann.org>, Mark Brown <broonie@kernel.org>, Mark Kettenis <kettenis@openbsd.org>, Martin =?utf-8?q?Povi=C5=A1er?= <povik+lin@cutebit.org>, Maxime Ripard <mripard@kernel.org>, Michael Turquette <
- mturquette@baylibre.com>, Neal Gompa <neal@gompa.dev>, Rafael J. Wysocki <rafael@kernel.org>, Rob Herring <robh@kernel.org>, Robin Murphy <robin.murphy@arm.com>, Sagi Grimberg <sagi@grimberg.me>, Sasha Finkelstein <fnkl.kernel@gmail.com>, Simona Vetter <simona@ffwll.ch>, Sven Peter <sven@kernel.org>, Takashi Iwai <tiwai@suse.com>, Thomas Gleixner <tglx@linutronix.de>, Thomas Zimmermann <tzimmermann@suse.de>, Ulf Hansson <ulf.hansson@linaro.org>, Uwe =?utf-8?q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, Vinod Koul <vkoul@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, Will Deacon <will@kernel.org>, Wim Van Sebroeck <wim@linux-watchdog.org>, van Spriel <arend@broadcom.com>
-Date: Sun, 21 Sep 2025 09:08:41 -0700
-Message-ID: <175847092150.4354.4054733553683969208@lazor>
-User-Agent: alot/0.11
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAMfq0GgC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDS0Nj3UyjZN3c0grdJAMDM+OUVKPEVJMUJaDqgqLUtMwKsEnRSkFuzkq
+ xtbUAhmqzYl4AAAA=
+X-Change-ID: 20250913-i2c-mux-b0063de2ae4d
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+ Peter Rosin <peda@axentia.se>, 
+ Michael Hennerich <michael.hennerich@analog.com>, 
+ Bartosz Golaszewski <brgl@bgdev.pl>, Andi Shyti <andi.shyti@kernel.org>
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, 
+ Marcus Folkesson <marcus.folkesson@gmail.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2735;
+ i=marcus.folkesson@gmail.com; h=from:subject:message-id;
+ bh=zFtLVcaN8AVG5mTTYVcmEefIdazqWW51ehPhjn82GYg=;
+ b=owEBbQKS/ZANAwAKAYiATm9ZXVIyAcsmYgBo0OrJIlZZ5BbpTRin9vUd3CQ+TLwiZ5wiSDt2E
+ r30mcyo96KJAjMEAAEKAB0WIQQFUaLotmy1TWTBLGWIgE5vWV1SMgUCaNDqyQAKCRCIgE5vWV1S
+ MiE+D/4wpCm8XHYdhhQW/Eo8ZkK3Vdr1X5BvcE16VcIGRV2FLr3/l+XDmI/uY4TIlS4cgGRjHuS
+ okNslUvKkkygOo4BPHMyOniCKYNSD7oXNZc5vM3mQeA9m28FqtTbj/SK3i186jLocWMGUihvYeO
+ 0yBO/vwjr4TNlI1Az7/uGDt8XkjSq9JQ3zQwxyNvHIorC69OKn+9SD2AY1PS/rGv0frcea3NB5p
+ DBpeIpyf7z5tHTvWvb5RObq1alrjyrWfmGy7YJrQMyXCARkjwXLWtPiR896E4w5ssujKKdYNoFd
+ O016DHhA9ocy1jJ4HgEm/5oA94InzRv8srqwHLx+x3r8zpXgiRahYlfhDUDASuO82tTAZunVi2/
+ KBGADBc5YV7xrhomCybSlcFWoSMJFaTVo6/vUEP18RQhJErmC5uzZBa0UrU1MMkVHRXo/MT3MCf
+ lfsBDD6AtcXesXv6qECU2mSGdIofeTE5Eo5claApOaj8JmH0/TTYfmgMiibuPcIVjDDsDesMecH
+ eA0o238/65NuLOBqynNUkjSDf3Eo8QdhvxtayiWrGdS+MP5dZbYRfkMkqVtgVOHbH6fVdFLDGXC
+ nG3TY0ZF/T5pheNMtswoldHL4LYOL9UCsdmk08F1m52KyL7jj+WGL3qMGA96GtSJepMhWaso6JO
+ ryv685KOSmLJrcQ==
+X-Developer-Key: i=marcus.folkesson@gmail.com; a=openpgp;
+ fpr=AB91D46C7E0F6E6FB2AB640EC0FE25D598F6C127
 
-Quoting Janne Grunau (2025-08-28 07:01:45)
-> After discussion with the devicetree maintainers we agreed to not extend
-> lists with the generic compatible "apple,nco" anymore [1]. Use
-> "apple,t8103-nco" as base compatible as it is the SoC the driver and
-> bindings were written for.
->=20
-> The block found on Apple's M2 Pro/Max/Ultra SoCs is compatible with
-> "apple,t8103-nco" so add its per-SoC compatible with the former as
-> fallback used by the existing driver.
->=20
-> [1]: https://lore.kernel.org/asahi/12ab93b7-1fc2-4ce0-926e-c8141cfe81bf@k=
-ernel.org/
->=20
-> Signed-off-by: Janne Grunau <j@jannau.net>
-> ---
+This is an RFC on how to implement a feature to have different bus
+speeds on different channels with an I2C multiplexer/switch.
 
-Acked-by: Stephen Boyd <sboyd@kernel.org>
+The benefit with this approach is that you may group devices after
+the fastest bus speed they can handle.
+A real-world example is that you could have e.g. a display running @400kHz
+and a smart battery running @100kHz using the same I2C controller.
+
+There are many corner cases where this may cause a problem for some
+hardware topologies. I've tried to describe those I could think of
+in the documentation, see Patch #7.
+
+E.g. one risk is that if the mux driver does not disconnect channels
+when Idle, this may cause a higher frequency to "leak" through to
+devices that are supposed to run at lower bus speed.
+This is not only a "problem" for changing bus speed but could also be
+an issue for potential address conflicts.
+
+The implementation is split up into several patches:
+
+Patch #1 Introduce a callback for the i2c controller to set bus speed
+Patch #2 Introduce idle state to the mux core.
+Patch #3 Introduce functionality to adjust bus speed depending on mux
+         channel.
+Patch #4 Set idle state for an example mux driver
+Patch #5 Cleanup i2c-davinci driver a bit to prepare it for set_clk_freq
+Parch #6 Implement set_clk_freq for the i2c-davinci driver
+Parch #7 Update documentation with this feature
+
+[1] https://elixir.bootlin.com/linux/v6.16.7/source/Documentation/i2c/i2c-topology.rst#L240
+[2] https://elixir.bootlin.com/linux/v6.16.7/source/Documentation/i2c/i2c-topology.rst#L298
+[3] https://elixir.bootlin.com/linux/v6.16.7/source/Documentation/i2c/i2c-topology.rst#L322
+
+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+---
+Marcus Folkesson (7):
+      i2c: core: add callback to change bus frequency
+      i2c: mux: add idle_state property to i2c_mux_core
+      i2c: mux: add support for per channel bus frequency
+      i2c: mux: ltc4306: set correct idle_state in i2c_mux_core
+      i2c: davinci: calculate bus freq from Hz instead of kHz
+      i2c: davinci: add support for setting bus frequency
+      docs: i2c: i2c-topology: add section about bus speed
+
+ Documentation/i2c/i2c-topology.rst  | 176 ++++++++++++++++++++++++++++++++++++
+ drivers/i2c/busses/i2c-davinci.c    |  37 ++++++--
+ drivers/i2c/i2c-mux.c               | 127 +++++++++++++++++++++++---
+ drivers/i2c/muxes/i2c-mux-ltc4306.c |   3 +
+ include/linux/i2c-mux.h             |  21 +++++
+ include/linux/i2c.h                 |  13 +++
+ 6 files changed, 357 insertions(+), 20 deletions(-)
+---
+base-commit: 22f20375f5b71f30c0d6896583b93b6e4bba7279
+change-id: 20250913-i2c-mux-b0063de2ae4d
+
+Best regards,
+-- 
+Marcus Folkesson <marcus.folkesson@gmail.com>
+
 
