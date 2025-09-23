@@ -1,53 +1,53 @@
-Return-Path: <linux-i2c+bounces-13104-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13105-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88A25B93BE0
-	for <lists+linux-i2c@lfdr.de>; Tue, 23 Sep 2025 02:46:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 06F19B93BE6
+	for <lists+linux-i2c@lfdr.de>; Tue, 23 Sep 2025 02:48:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 517002E0712
-	for <lists+linux-i2c@lfdr.de>; Tue, 23 Sep 2025 00:46:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BB743480479
+	for <lists+linux-i2c@lfdr.de>; Tue, 23 Sep 2025 00:47:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4822817F4F6;
-	Tue, 23 Sep 2025 00:46:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B7EA169AD2;
+	Tue, 23 Sep 2025 00:47:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b="ggG6wci5"
+	dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b="wM916CfY"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtpbgsg2.qq.com (smtpbgsg2.qq.com [54.254.200.128])
+Received: from smtpbgbr2.qq.com (smtpbgbr2.qq.com [54.207.22.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAADBB640;
-	Tue, 23 Sep 2025 00:46:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.254.200.128
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1211A2BD11;
+	Tue, 23 Sep 2025 00:47:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.207.22.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758588384; cv=none; b=UabjOhGTDOVOb2w2cBqZeaVycoW1OI+8DcHfVFV/5z/1gmiQcYV0aVgwDg9TlbiTxfiSx+IKFYjR8FazmmpYpHocRkr8wOwxpOfkcoqbXsFxOgYT8vnaxH1hdGEoymTUFTT0P1WAE8xSelsANED6bQryzDq2RgUd9ykSMzDDTEE=
+	t=1758588475; cv=none; b=eg8s2t5kwnJPqVQhA7EXlB1AZxmiTJ2Q1RkoTetwoI4Zi2G0Ov3gvaAFHUWCfhAfYjvWRD/1EKgbsLY7ZdmeLRFABbtjpiiP/Mcp//MakQTzXTSKAoPdDbeqFHckNO4zYYImbz9QJpSkvSPXTT5WeOHeDBwm+ffpG2IK86hAC8E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758588384; c=relaxed/simple;
-	bh=SSAG8ZqLLjqmA2/LB8zgFrt5gpqX/Ne2jmmb1/YY5L0=;
+	s=arc-20240116; t=1758588475; c=relaxed/simple;
+	bh=z5AzEguEuCwaqnZyXq1XxQzta0qN2LrUWeZP9U3kmGU=;
 	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VyDv+e2YlhSiU8F5ykHyTvXFV05jV/2P+Ad2sDDYMNUh7OLnuNRwj59yJmxk1qsdyNEUjKFuNFEWaIvjR+ZZJFGE2tsZ08/278affGWaCmvywwNAOOOSR5Mjwul1Sg7d240rIWKs43KmYhf+K8THaxD7MSefQC+x9x+UYSTeM54=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com; spf=none smtp.mailfrom=linux.spacemit.com; dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b=ggG6wci5; arc=none smtp.client-ip=54.254.200.128
+	 Content-Type:Content-Disposition:In-Reply-To; b=eLMrwNUL7kPvwrLxvdOmGBRd/OmctbYGOacHmiVi3COo8GpSfNoJsMLMg1NZI0CsBpcEDANBPYU8B24+koab20MUMHsgH7BU9CjKCNdyQRnppPNms94Xsd1y7YKB8jBQRLDvSi3ye2gWvZWa6+nvgANgBzc+Lv7xzsBVg9A5As8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com; spf=none smtp.mailfrom=linux.spacemit.com; dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b=wM916CfY; arc=none smtp.client-ip=54.207.22.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.spacemit.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.spacemit.com;
-	s=mxsw2412; t=1758588284;
-	bh=WsrPFKT04JwF/+NN0X0jvo2IhQv1F3c1l7SfYl9HJAQ=;
+	s=mxsw2412; t=1758588408;
+	bh=vyq768TpcuHCWLWVeWA9tpt7e/09ldUMjTg7yQFYVEk=;
 	h=Date:From:To:Subject:Message-ID:MIME-Version;
-	b=ggG6wci5flHFgvVvYbgZkYiHC2XKJYl9Wrf3J0/DbKDe3Toa/aV+2E5KxyrYf0zuO
-	 VrxoNl7jHQh363U1s01vvZ7m13hOIcnRTLnnY8vAMuD0ObgkISN6f59m3jgGYLs8+5
-	 g3F9jRC/4OFNrD2oDY3s+TeJn3Y/dFz1XQ65xMjU=
-X-QQ-mid: esmtpsz16t1758588276tf8687cc5
-X-QQ-Originating-IP: Fi93deYHvDT9F2DLXXCFuKniautpASWuu4Wvavpt5nA=
+	b=wM916CfY+Dj8foZAOqKPwAO5+c5/L8KzjWHc8xoyTuki6zZPerb2n91MjvpUn546o
+	 8lSX6hIzBU3kGlup9yDps94LSM+vVCxEPdyVsH9VtE+VikqelS7G3neDE8MpBrBoz9
+	 0oaT5Z3fK5BDQD45vH/RmBF7qKeo/l+Z4EgmfyBc=
+X-QQ-mid: zesmtpgz9t1758588400t469a4b4b
+X-QQ-Originating-IP: inQR45J5NRXSrpE8Z+cozC30AKSXeaxWY9PkMpheo7w=
 Received: from = ( [61.145.255.150])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Tue, 23 Sep 2025 08:44:34 +0800 (CST)
+	id ; Tue, 23 Sep 2025 08:46:39 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 3523208988026414668
+X-BIZMAIL-ID: 8785729495860131616
 EX-QQ-RecipientCnt: 9
-Date: Tue, 23 Sep 2025 08:44:34 +0800
+Date: Tue, 23 Sep 2025 08:46:39 +0800
 From: Troy Mitchell <troy.mitchell@linux.spacemit.com>
 To: Troy Mitchell <troy.mitchell@linux.spacemit.com>,
 	Andi Shyti <andi.shyti@kernel.org>, Yixun Lan <dlan@gentoo.org>,
@@ -55,12 +55,12 @@ To: Troy Mitchell <troy.mitchell@linux.spacemit.com>,
 	Troy Mitchell <troymitchell988@gmail.com>,
 	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev
-Subject: Re: [PATCH 2/6] i2c: spacemit: remove stop function to avoid bus
- error
-Message-ID: <B8E4D8DD9B16E81B+aNHtcoS_a4sGChZ7@LT-Guozexi>
+Subject: Re: [PATCH 3/6] i2c: spacemit: disable SDA glitch fix to avoid
+ restart delay
+Message-ID: <BE3EEC385331D80D+aNHt7_J7uUMzkhrq@LT-Guozexi>
 References: <20250827-k1-i2c-atomic-v1-0-e59bea02d680@linux.spacemit.com>
- <20250827-k1-i2c-atomic-v1-2-e59bea02d680@linux.spacemit.com>
- <aNG33WyGENMWI3Wl@aurel32.net>
+ <20250827-k1-i2c-atomic-v1-3-e59bea02d680@linux.spacemit.com>
+ <aNG34K6V-sFhX-g1@aurel32.net>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -69,83 +69,100 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aNG33WyGENMWI3Wl@aurel32.net>
+In-Reply-To: <aNG34K6V-sFhX-g1@aurel32.net>
 X-QQ-SENDSIZE: 520
-Feedback-ID: esmtpsz:linux.spacemit.com:qybglogicsvrsz:qybglogicsvrsz3a-0
-X-QQ-XMAILINFO: MBoHLcWngaPNeg4qUvPHAc3DnZnF12hMCOQ96OqtUywXlIhZ4A+K6hbB
-	HhawCKZLDeDmDp9DFU/dAuAbvyKHCgPLIK0AnIwcg2bDhvngq8h24czjco74QyCh+NF/ISw
-	yGlgOuw0Nd+Fc2dRHJJOJqHm7Jik0D4hKE9PxKs7xuNbQAq4q4TI0rGvDCSohECewUQOL2a
-	+t1vDZ6+X4BTXvUPqw9iAcDe5howEOVMtR1JAJgisKIv72QNK3ku59TljUMRlzc+LciW+rG
-	TYIyzm1703DPwwe88xkCQUgU2Yb5crc89wR56jlKLW79WifJqHal48MZeCD32IMHewdTvbj
-	VzE98VFlsl7KiE2GJ7Zeo3mqYiJdgN1bk0xsGl8Zwn+wOIg1kGHi+TYEFO2O+syuvyQ0owE
-	l1WRCp2IYwvI9wOYpD8PIWzDYuL6zjt7u7XafHIxDjZp2BZux8iQ1eDbjcyHNBi85Esm3FV
-	/0gz3pnk3QU0s1RZ2z+Xb4EYmr84qszTrHPk7rEPZJYVYq0kCr1gWHqOQjeDoLjorQOgvOs
-	kS1PM2wojBSISS1WPPOJ/6HE246HaDkYuJJXiI18EZbQly0SLta65B80kWAk85/ydclhPjr
-	flDDK3IH+22tq4ISDV2MmvdF6qGIAUgiH394btU0TSIuW0BLO6pzrn6hg2Jr1mWMc+L1aAi
-	pNGrw54DKl8lvHyTPlXG9dQ0+CQorUwhmAm21qBTMx+jPhbN9C2WTg/n5H44A4NsVkUqzUb
-	I2sWHCuP6xYiiMJPdCOGg4KftMaMVM+6seMAIsz/59b+q2p50t0LauGiIeO9zK0z9dyb/3f
-	61uOmKoorKAB2j+IeCgKWuEP57+F3K6SgYBXCmmS+wis9QihXqSjZYvJNhwlY+su6mjdAfp
-	qlK6bjaf9I/plipNXppXalyF95Z9eFKzDEGnvPec4ZbDCpqJ/tg/ZHXtuRUIytzfHXpeH3A
-	+lT0iM33eVuhvZ6BIYGsOntAvl4dUt19Rv7dlyZaChMQJwraU3naaO1CFT+bCO87JWcUVsV
-	0L2ZR6b56t6yCTINum2IlAM//upgQUydVqZCvBbTMYVk+iZvoiysteGurf5DI=
-X-QQ-XMRINFO: M/715EihBoGSf6IYSX1iLFg=
+Feedback-ID: zesmtpgz:linux.spacemit.com:qybglogicsvrsz:qybglogicsvrsz3a-0
+X-QQ-XMAILINFO: M8e5kblytUZRkuwONNRPMFZWiXSKVZ8jEzXlNDve2/R8c8+lryDyipY/
+	fawBy8d77XUN2m2uojwhcBk0b4yt58XG+m+WeBzG2eivTxxNVa1dauz2n66LtUWYAVerFPF
+	ui01QA7HVV6AeGyihIGZQSytDAugXwYJuYcYqQ/VedqzpGCSmHNWlfPikkm2lBoj49oa9Oe
+	WTtUSRdf4v/omWnxTG2fQpHA7dOntLLaC3r7+aDU/8Q7nED60y9kh3tAoPyTBKJZ9dW+9xz
+	iobzRfRerkDwEYaJ2U1a+xTxuvAcvG1+Vj6P5Bof05TSpncUOkyOK5vbbdiR4+Mn63u449M
+	c7OS+JhG8nwdJxKYu6BK1l1R07B6/qCdqGM+1G+6LjWoil0CmPIzLXlRUdpiHlYlrdxArJZ
+	w/g1WBkTOoM+77FWtADfgKojmAbMTzrFuBf9YZDXi2hZYxseXmx4dOIa6GXao1YT9iy8Wee
+	SmXyEgwyu/lbmuXNUl0YARVZFuNVMobrKPnncueRWvCfOpdNoELMouMNW8T1SC5739f8H4e
+	9YENgcP9RdOikiSHvWobNIZwO61v/gNare7bEZN6IjLGQHIXWRM+DNwR9fTIIpFPULDETwT
+	n9zVbdRViXEZemjvyxo3q8uMJ6rksqvXMmJmr1lX648HSz7FitTre8IIOuQS6UlOhKNEH2Q
+	QdknSL2xuayV7Sbnvbq/G1cwIU4VDQaDN6ZTarFNcl83PtlVOkSUvueCBMV7ZAdqdWfWqM9
+	qDy2yfRiAEDiNIFLTdSx2sEBwNJUys1klRfTtF8M4yz4mfPhP0wu7HXJF+MDqAD/mQBWT4R
+	4AzJVFQIKJLuh4vM9rhAa8gbfZP4jswZWkYGoHefcJI69sz7ajOl8K3Yoq2oi8D7IvJ3wRD
+	kNcwBX1raB4bEjCZtrXluoODDsktnVnJJ4whYMGzsI1Qugq1ZLKKGkhqS4dCQb5o+iVEgOe
+	4YIYAkbjW1H9Otr/ZIdwRdl9CtgHoPFKA7I06pslaDxZs6hoHEk8OCTsghHeecstVk8wRDf
+	qKe9iXCCPg8j306O9T5F+5XGSk91ANqx3sd29XCPaO9EOWgnIc0ovfif6RzVMpLSYxvEen2
+	QM/Ko7+cB6Q
+X-QQ-XMRINFO: Nq+8W0+stu50PRdwbJxPCL0=
 X-QQ-RECHKSPAM: 0
 
-On Mon, Sep 22, 2025 at 10:55:57PM +0200, Aurelien Jarno wrote:
+On Mon, Sep 22, 2025 at 10:56:00PM +0200, Aurelien Jarno wrote:
 > On 2025-08-27 15:39, Troy Mitchell wrote:
-> > Previously, STOP handling was split into two separate steps:
-> >   1) clear TB/STOP/START/ACK bits
-> >   2) issue STOP by calling spacemit_i2c_stop()
+> > The K1 I2C controller has an SDA glitch fix that introduces a small
+> > delay on restart signals. While this feature can suppress glitches
+> > on SDA when SCL = 0, it also delays the restart signal, which may
+> > cause unexpected behavior in some transfers.
 > > 
-> > This left a small window where the control register was updated
-> > twice, which can confuse the controller. While this race has not
-> > been observed with interrupt-driven transfers, it reliably causes
-> > bus errors in PIO mode.
+> > The glitch itself does not affect normal I2C operation, because
+> > the I2C specification allows SDA to change while SCL is low.
 > > 
-> > Inline the STOP sequence into the IRQ handler and ensure that
-> > control register bits are updated atomically in a single writel().
+> > To ensure correct transmission for every message, we disable the
+> > SDA glitch fix by setting the RCR.SDA_GLITCH_NOFIX bit during
+> > initialization.
+> > 
+> > This guarantees that restarts are issued promptly without
+> > unintended delays.
 > > 
 > > Fixes: 5ea558473fa31 ("i2c: spacemit: add support for SpacemiT K1 SoC")
 > > Signed-off-by: Troy Mitchell <troy.mitchell@linux.spacemit.com>
 > > ---
-> >  drivers/i2c/busses/i2c-k1.c | 28 +++++++++-------------------
-> >  1 file changed, 9 insertions(+), 19 deletions(-)
+> >  drivers/i2c/busses/i2c-k1.c | 11 +++++++++++
+> >  1 file changed, 11 insertions(+)
 > > 
 > > diff --git a/drivers/i2c/busses/i2c-k1.c b/drivers/i2c/busses/i2c-k1.c
-> > index ee08811f4087c8e709d25dd314854ed643cc5a47..d342752030d077953adf84a2886211de96e843c4 100644
+> > index d342752030d077953adf84a2886211de96e843c4..c1656b78f1681729ccc2ebca6e290259d14889d9 100644
 > > --- a/drivers/i2c/busses/i2c-k1.c
 > > +++ b/drivers/i2c/busses/i2c-k1.c
-> > @@ -429,14 +415,18 @@ static irqreturn_t spacemit_i2c_irq_handler(int irq, void *devid)
-> >  	}
+> > @@ -14,6 +14,7 @@
+> >  #define SPACEMIT_ICR		 0x0		/* Control register */
+> >  #define SPACEMIT_ISR		 0x4		/* Status register */
+> >  #define SPACEMIT_IDBR		 0xc		/* Data buffer register */
+> > +#define SPACEMIT_IRCR		 0x18		/* Reset cycle counter */
+> >  #define SPACEMIT_IBMR		 0x1c		/* Bus monitor register */
 > >  
-> >  	if (i2c->state != SPACEMIT_STATE_IDLE) {
-> > +		val |= SPACEMIT_CR_TB;
-> > +		if (i2c->is_pio)
-> > +			val |= SPACEMIT_CR_ALDIE;
+> >  /* SPACEMIT_ICR register fields */
+> > @@ -76,6 +77,8 @@
+> >  					SPACEMIT_SR_GCAD | SPACEMIT_SR_IRF | SPACEMIT_SR_ITE | \
+> >  					SPACEMIT_SR_ALD)
+> >  
+> > +#define SPACEMIT_RCR_SDA_GLITCH_NOFIX		BIT(7)		/* bypass the SDA glitch fix */
 > > +
 > 
-> This needs to be moved to the last patch introducing PIO support.
-Nice catch!
-I'll fix it and send v2 today.
+> The datasheet seems to use FIX_BYPASS instead of NOFIX, but maybe you 
+> have chosen the later because it's shorter.
+Yes, it is shorter so I chosen that one.
+
 > 
-> >  		if (spacemit_i2c_is_last_msg(i2c)) {
-> >  			/* trigger next byte with stop */
-> > -			spacemit_i2c_stop(i2c);
-> > -		} else {
-> > -			/* trigger next byte */
-> > -			val |= SPACEMIT_CR_ALDIE | SPACEMIT_CR_TB;
-> > -			writel(val, i2c->base + SPACEMIT_ICR);
-> > +			val |= SPACEMIT_CR_STOP;
-> > +
-> > +			if (i2c->read)
-> > +				val |= SPACEMIT_CR_ACKNAK;
-> >  		}
-> > +		writel(val, i2c->base + SPACEMIT_ICR);
-> >  	}
+> >  /* SPACEMIT_IBMR register fields */
+> >  #define SPACEMIT_BMR_SDA         BIT(0)		/* SDA line level */
+> >  #define SPACEMIT_BMR_SCL         BIT(1)		/* SCL line level */
+> > @@ -237,6 +240,14 @@ static void spacemit_i2c_init(struct spacemit_i2c_dev *i2c)
+> >  	val |= SPACEMIT_CR_MSDE | SPACEMIT_CR_MSDIE;
 > >  
-> >  err_out:
+> >  	writel(val, i2c->base + SPACEMIT_ICR);
+> > +
+> > +	/*
+> > +	 * The glitch fix in the K1 I2C controller introduces a delay
+> > +	 * on restart signals, so we disable the fix here.
+> > +	 */
+> > +	val = readl(i2c->base + SPACEMIT_IRCR);
+> > +	val |= SPACEMIT_RCR_SDA_GLITCH_NOFIX;
+> > +	writel(val, i2c->base + SPACEMIT_IRCR);
+> >  }
+> >  
+> >  static inline void
 > 
-> Otherwise sounds good.
+> I trust you on the waveform captures, with that:
+Tnx!
+                - Troy
+> 
+> Reviewed-by: Aurelien Jarno <aurelien@aurel32.net>
 > 
 > -- 
 > Aurelien Jarno                          GPG: 4096R/1DDD8C9B
