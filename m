@@ -1,74 +1,90 @@
-Return-Path: <linux-i2c+bounces-13115-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13116-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1A34B96016
-	for <lists+linux-i2c@lfdr.de>; Tue, 23 Sep 2025 15:26:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F29F0B962D8
+	for <lists+linux-i2c@lfdr.de>; Tue, 23 Sep 2025 16:18:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 838882E1690
-	for <lists+linux-i2c@lfdr.de>; Tue, 23 Sep 2025 13:26:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1AC091892AF6
+	for <lists+linux-i2c@lfdr.de>; Tue, 23 Sep 2025 14:19:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5F89326D60;
-	Tue, 23 Sep 2025 13:26:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D36DC21B9CD;
+	Tue, 23 Sep 2025 14:18:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NON6Twrs"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="m61MBV/s"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D77013AD05;
-	Tue, 23 Sep 2025 13:26:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0FBA155A4E
+	for <linux-i2c@vger.kernel.org>; Tue, 23 Sep 2025 14:18:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758633975; cv=none; b=CdwCm5FIYWFIbGW4EcrQIkG5bGgUpWYGYVRq5wCRQnFEK+hijXJIpFG1xRRsHy9sTGzRCKBF8hzZr4q4p/+oYyAUMnzCnoy8jUe8l13Kuc112EQIvFDCoQZtukRaX5TpbSe2Mu01yP4ntIvmCV5WIQL8E9tJjgIIkIwj4syYQDY=
+	t=1758637117; cv=none; b=A1t3xQDg/rMbHt13ZPAA+NRYjTDYS1awt6C8VDv9j4OfcdKu0BuFjQIPGjoFIYrSk+imcvClEGMOv+zqvYGnLSvxgIYssPObLw9oyiiXCy1yjyg+s80a3ewNmMlmnLTdQO5h9bT0iUiNRtFdiscL6sfVpQ92fVR+Fv7LTYaqBpY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758633975; c=relaxed/simple;
-	bh=Z+CV1XJ0rwLmbrW4LMQf/wuUBUu/s+7mV8q+jAIDfEY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tida3J+nDVe1//3hgq2mUTY+4KXwjMhuvqi8H5uaVrNF7T+ue6j0MyMzBAR4sKHagJHmP+RbeXPJME7/KQ80MMBaRQNlnLR7TCOzBZkRSQVLcriVgDMqodpkMFSiAzpetONwNFafRxUSG0+EHzhm2RuIz7DajaJF5F6sWdQodv4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NON6Twrs; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758633973; x=1790169973;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Z+CV1XJ0rwLmbrW4LMQf/wuUBUu/s+7mV8q+jAIDfEY=;
-  b=NON6TwrsNiOC3U3nQV20x8OUTJNjzpXMhx3O5Kae3L/RF7mCQQbfbtxW
-   M30JSHe/YcL2kZ3wl0IxUdwLMWTYXhrDKAZT1ovFa1YHGBhEq2ov1ZW/l
-   7nfjcIjBMuMVkQ9wqlvjbMfew9kPk+B5XCuZXRF9n9qb43TQJThEsJ55z
-   Si51OB7n9yF3ssH+h0ntzU1ppOezNffeUVxalGDIVN/bRS9o0cRYkA6gh
-   DqgUOv1azmk6sDYGDGLpLQ2RsLKRWt2ousysgLCkqCs2RjwzhEgKT9rKi
-   5oVn7jgg9LSJdDXRZ3hhc0vcDSJ5vbhY1LUKl5nHrUvO5Z5gILzCtm9vM
-   A==;
-X-CSE-ConnectionGUID: HUOzoEFIT2W4XBLMxgc3Cg==
-X-CSE-MsgGUID: O/avfCDxQq2HaJx7yFuPNA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11561"; a="48480737"
-X-IronPort-AV: E=Sophos;i="6.18,288,1751266800"; 
-   d="scan'208";a="48480737"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2025 06:26:13 -0700
-X-CSE-ConnectionGUID: j30tIlVbRaq1rUibIQZVNA==
-X-CSE-MsgGUID: Jmlse9t5TW64i4gE9DMFCw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,288,1751266800"; 
-   d="scan'208";a="181149946"
-Received: from mylly.fi.intel.com (HELO mylly.fi.intel.com.) ([10.237.72.151])
-  by fmviesa005.fm.intel.com with ESMTP; 23 Sep 2025 06:26:10 -0700
-From: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-To: Andi Shyti <andi.shyti@kernel.org>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Jan Dabros <jsd@semihalf.com>,
+	s=arc-20240116; t=1758637117; c=relaxed/simple;
+	bh=dGetF1qRy9QXK0P3a8VW8pHQYytO1lsKqc29yOoYSyU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tff/7+lDGEx9ubsJkLZWpbXfde60TUwA9Zx5nClriLETOkWfasq9tKbvHPZUeiUwmHZXwiD+VAnNy0aUtI1QREJSKR8xjBJFV5i91/QXA/NJoIW7VmK1J1YFTOr9/VtO66r/qjlI1H8fGUjqGu4vE5pAGTaP9lIQKmjPGbq4yag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=m61MBV/s; arc=none smtp.client-ip=209.85.221.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-3f99ac9acc4so2297553f8f.3
+        for <linux-i2c@vger.kernel.org>; Tue, 23 Sep 2025 07:18:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1758637114; x=1759241914; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NFG4tL8lqUh/sVKHN37qHfPMPVZ9QDTBTj4893Vci9I=;
+        b=m61MBV/sTq4KrEQzQepc+JQRslZuNMRlDMsyd+DpfKD+ctGsIKwf67kMXHF6AcuHIx
+         BS20phdd5i5QJtk8933lRym78Gho+0qBAc1dPIa5C7swHwGbsqgxdf/G1yd6azoLo2IC
+         0gSK8fHPPYO/ath+2+tCnL5e1DiPtOJ7p3s8sqBcoF4O2S+DcXNT+YRnF1gEucCsQ0lk
+         PGPFjVWwB1LPkRRiVrptyzwDliYVcDl3/4l7ResTdcXdDC32YI8kqKoa3zFOoqwW7BFK
+         dvzwyF8Igf6H4rmaygLN4+sNvg4LovAcAeQM2YnrmN5lpwywpKE0xfARbD1iufLwW8eJ
+         5AIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758637114; x=1759241914;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NFG4tL8lqUh/sVKHN37qHfPMPVZ9QDTBTj4893Vci9I=;
+        b=c0uNLPuC/IpkOGGquGTzfrlsYhms9XZBAYIDE4eNK2ne1hFRFLbnmyLd1z+02LxhKS
+         ZmXrrg+8Ax7tY24ITjYOOQY1m21cojGhBO/w+D43E3aUOgI9aSpiGIQtgGbpO8iBosc0
+         hVba1xm24V4/ZiqcOUjZPH5DsjrcSp0G4jpISAq+qDYglnyNWPzE7E6J5R5GvPwY1ZmK
+         p02BXxXfq4YGUAcnao3R3rTHPDHsuCR8o0MiYqH6AM8ic2c9uo9z2z6Wi7RH7+T5p9Qn
+         G72PXICDPz7o8OqVD1QTfd/AIDu8De0sIBbDU6SA+RIVoI3u+8V05C0PmEENkpms4Hel
+         AIPg==
+X-Forwarded-Encrypted: i=1; AJvYcCXJejEzQxMVHHTBeLHtbnFmLygYvw45NAVjhLrkDRfKwMtR08E3K1cKRBM6CxtxkmU6+UJu35Ql3Qk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwggCzb2tsuObqA1xUMWs7Cm77kAk4P4F/Id0oFkFBFNYfsLpHB
+	OrAk/mvO2/Fn/mc9dlKBo1f62/DSXvCvVyix4YZ7D92NaMfVveWaUi4XbsPIyjDB0eo=
+X-Gm-Gg: ASbGncs1d5flG2DEx9CfLdAqEHCNCBe1YFwvSCOvncyBodSlOv3Im24HRXXbGPzAdLB
+	PAZN0M4FlxsLI9yDtEAwNcgg522wf4DPbXo5fjlY3zCpfVb6MILdFGvQMGjyVjZ9agPLzwcwdai
+	XptVIC8VW2gWAALWFrAOPUxoK0L78asR13M/EHpE1zzRPTkE1aaZuaDMvYRuATXSmq3CUyrMHaM
+	/szohUavM1XhlnGRGBW42dB71XWIkUJDZqoKTQh5q/suxIK9AzaISnE3Fga/cnAMBa9Gmbr2H//
+	gmyMWPtw33wfAFG1cZLs7CueV7cZCkeDZdUbxRa9UyhwLNpRe9SiXPhENs6GVbwRWmu2KwlvCUG
+	GkGV7LRxYcMBWdEYc4HOL7Kgb0eNzRa0cf7l5t6TdoLc+NK7RpbxP
+X-Google-Smtp-Source: AGHT+IF4vqcfWEYZtZ/S8nA08HR0jyyV0IaZblTvH4YW512bTSjwjlBru1lEZAr3DAhQSemddQNZLw==
+X-Received: by 2002:a05:6000:1866:b0:3ee:b126:6b6 with SMTP id ffacd0b85a97d-405ca76faa0mr2014826f8f.34.1758637114129;
+        Tue, 23 Sep 2025 07:18:34 -0700 (PDT)
+Received: from claudiu-X670E-Pro-RS.. ([82.78.167.153])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3ee141e9cf7sm23617713f8f.12.2025.09.23.07.18.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Sep 2025 07:18:33 -0700 (PDT)
+From: Claudiu <claudiu.beznea@tuxon.dev>
+X-Google-Original-From: Claudiu <claudiu.beznea.uj@bp.renesas.com>
+To: chris.brandt@renesas.com,
+	andi.shyti@kernel.org,
+	wsa@kernel.org
+Cc: claudiu.beznea@tuxon.dev,
+	linux-renesas-soc@vger.kernel.org,
 	linux-i2c@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Subject: [PATCH] MAINTAINERS: Remove myself as Synopsys DesignWare I2C maintainer
-Date: Tue, 23 Sep 2025 16:26:03 +0300
-Message-ID: <20250923132603.50202-1-jarkko.nikula@linux.intel.com>
-X-Mailer: git-send-email 2.47.3
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Subject: [PATCH] i2c: riic: Allow setting frequencies lower than 50KHz
+Date: Tue, 23 Sep 2025 17:18:26 +0300
+Message-ID: <20250923141826.3765925-1-claudiu.beznea.uj@bp.renesas.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -77,28 +93,33 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-My address is going to bounce soon and I won't have access to the
-Synopsys datasheets so I'm going step down being a maintainer for this
-driver.
+From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
-Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+The MR1.CKS field is 3 bits wide and all the possible values (from 0 to
+7) are valid. This is true for all the SoCs currently integrated in
+upstream Linux. Take into account CKS=7 which allows setting bus
+frequencies lower than 50KHz. This may be useful at least for debugging.
+
+Fixes: d982d6651419 ("i2c: riic: remove clock and frequency restrictions")
+Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 ---
- MAINTAINERS | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/i2c/busses/i2c-riic.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 520fb4e379a3..b9fc91b4ce4f 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -24486,7 +24486,6 @@ F:	Documentation/devicetree/bindings/media/snps,dw-hdmi-rx.yaml
- F:	drivers/media/platform/synopsys/hdmirx/*
+diff --git a/drivers/i2c/busses/i2c-riic.c b/drivers/i2c/busses/i2c-riic.c
+index 9c164a4b9bb9..b0ee9ac45a97 100644
+--- a/drivers/i2c/busses/i2c-riic.c
++++ b/drivers/i2c/busses/i2c-riic.c
+@@ -386,7 +386,7 @@ static int riic_init_hw(struct riic_dev *riic)
+ 	 */
+ 	total_ticks = DIV_ROUND_UP(rate, t->bus_freq_hz ?: 1);
  
- SYNOPSYS DESIGNWARE I2C DRIVER
--M:	Jarkko Nikula <jarkko.nikula@linux.intel.com>
- R:	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
- R:	Mika Westerberg <mika.westerberg@linux.intel.com>
- R:	Jan Dabros <jsd@semihalf.com>
+-	for (cks = 0; cks < 7; cks++) {
++	for (cks = 0; cks <= 7; cks++) {
+ 		/*
+ 		 * 60% low time must be less than BRL + 2 + 1
+ 		 * BRL max register value is 0x1F.
 -- 
-2.47.3
+2.43.0
 
 
