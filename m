@@ -1,193 +1,233 @@
-Return-Path: <linux-i2c+bounces-13127-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13128-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56504B9781A
-	for <lists+linux-i2c@lfdr.de>; Tue, 23 Sep 2025 22:37:24 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id C68C8B984A2
+	for <lists+linux-i2c@lfdr.de>; Wed, 24 Sep 2025 07:32:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6C4461B2056E
-	for <lists+linux-i2c@lfdr.de>; Tue, 23 Sep 2025 20:37:46 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C8F054E1F80
+	for <lists+linux-i2c@lfdr.de>; Wed, 24 Sep 2025 05:31:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0D3130AAD0;
-	Tue, 23 Sep 2025 20:37:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F67621B9CD;
+	Wed, 24 Sep 2025 05:31:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dybI6Wp2"
+	dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b="Hh0KHlW0"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from TYDPR03CU002.outbound.protection.outlook.com (mail-japaneastazon11023143.outbound.protection.outlook.com [52.101.127.143])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C54C12F3626
-	for <linux-i2c@vger.kernel.org>; Tue, 23 Sep 2025 20:37:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758659837; cv=none; b=FOy+slnJuMtyo5uOFPHBrMkmORjFYWC/lV/681sE38IItBsQmdFLTBpO7z75trUnLUjfDReaaUQBng97lcnoGpkO3dY+ga3Tt/ScH049AqMNHpPkdEfoWR8V+rA7bFXgXPm2ZIvHYmDpsCkQIwyGe2+o2zEeHil68lkfULEOSQ8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758659837; c=relaxed/simple;
-	bh=1viEaWfVyp3fkGNWYKwrh6oVsyqNSfzkKujQIb0ZQOI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bPtwLZTfZBfnBt/t3xRADnnATDKBvvasHpZDPABo+opjWmtWy6zOhAao9Jrs4IMNi7U18R2DoaqhLYJq57DtbzlcVxnZ06kFPq8fKHJEvdgZu6G7LQlxKJT82eh6dMneXq4jq5K+zHbh0cCGlNVrnC1jKPkRCwLpzJY+WCwP7Wk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dybI6Wp2; arc=none smtp.client-ip=209.85.208.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-36639c30bb7so38642391fa.3
-        for <linux-i2c@vger.kernel.org>; Tue, 23 Sep 2025 13:37:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758659834; x=1759264634; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=sdlu20rBCmLHD/cmCz6jZNQZ7hsZ/+Qk91a/GIE2IBQ=;
-        b=dybI6Wp2RS41hnDZQeXfibfRRux5Dh0ds8yEsf0A/zKQxeXelQggkfMcSvmxU6bl8m
-         bmPdzeHaAG/Dz3NMA1Q3oLQ8UK5IoBEbfrysFqM3ouP9oSWCfA5Nj5JT8PNc8EvLMNY9
-         IuwVuju4jFPDBYYemDGI6zv10l92YvZEoUxez8yVyBaHBgX0r3uFMxVI07JyYKfrthNE
-         4cZl59GumcqNWzFL8rwi9njOWeKuQpiFNxBsnczqOteFfwrHHU49xKmJuV04WZlF0WSX
-         JpTnneabA0HiIzE3kegsx//XEd7AGmRSwM7aNjg2jPk5OZeMeCNYi5twiUxQT0PHXVpO
-         hgNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758659834; x=1759264634;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sdlu20rBCmLHD/cmCz6jZNQZ7hsZ/+Qk91a/GIE2IBQ=;
-        b=gqhIm5CrQEpTFW4yQt0Q/OJXhEdnhgegaTmM1bLHq7eH5CVthw8kcI+JYyst5fmR2n
-         DDvW0jRIm1BaBxAqohJBq+I+RzFBk++i13TawjIYZEBAPfkTCjHvK/bZm8rF2YEizBxZ
-         WEaneDKUyRyseATciaCKnzkDFNtdKyWC/AtS9mKumSd9XaEqmJ/F9VLZhZ5OIpbcspGZ
-         RJfIp9dolUTaLgZk6mV1eg5mfCyeZtTLEEDOGAbZ8uiVk7btsOxbvO+B4pZRCxlAqH9j
-         uE36+K5crB2eG/yu0nUmNWGqLa+YPLb3dyoHyO1t/1q8lq+rAah8MnhFRD/+X44j0Jvw
-         qo5w==
-X-Forwarded-Encrypted: i=1; AJvYcCUG2KwksQdteY8LpwiHJiZReqJk5DGY26eBdeoEg0QxEpSmX3JoX844Z9ilztmg9JqpdblBDqdEe7E=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwykhaSmafIHWyW9kLqOsMBkCxFGygXGiz8ZCiN8w/i2LltuBgd
-	x0IXTwQRkcceimolye8uxdg3GZrc86pTODNSVz27NdmBW54n3OugE0JPnbDtcw==
-X-Gm-Gg: ASbGncvDXOH3zkbVCV37sDoTH+IO4gHRrX8etY6M8xuzm7FcOPMnkQxf5XQXtBu2WBx
-	95mmCGBIjXEDF4Zzh10Ol+l/05hlzR2RWLuKHOqL2mmu1mYJzBmmkjvBzkmw5/TMumEHUvtzFlK
-	KxaG4Iqw9nfzdyjyVNqCxCYOQ/RRhCjIsTJqBpulQnhvJn7HtmVR+26t9wJLACHyfas4MMfbdY1
-	49BeJ/713EOcDsTl7d/HZBYFwkzjKmrKinY8w0yEIxcUZ50NCB3x4TrcolhqwFnDE/hrnTGYH2Y
-	eFgXsvDGs72Qm1g7umkvgng6bcS0/hgq258x2YHO82rptXOisli+MsE3stSfzrFHt+GOaFJ1AMA
-	FJac4vidmJPQqsSe2X05gmB0CDyqg4N3I0KUUjqfGw/Q8nOcig7BhiJybW5c=
-X-Google-Smtp-Source: AGHT+IFuA8I9VNhcD2Q41OOz3JJ/4CvcKHsvlANmcOu/VUqlfohOjCTLqnQUny7hlksdlQImrup3GA==
-X-Received: by 2002:a05:651c:4395:10b0:338:735:8a79 with SMTP id 38308e7fff4ca-36d150a49ecmr11764551fa.1.1758659833515;
-        Tue, 23 Sep 2025 13:37:13 -0700 (PDT)
-Received: from gmail.com (83-233-6-197.cust.bredband2.com. [83.233.6.197])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-36c7a76d202sm10325501fa.19.2025.09.23.13.37.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Sep 2025 13:37:12 -0700 (PDT)
-Date: Tue, 23 Sep 2025 22:37:10 +0200
-From: Marcus Folkesson <marcus.folkesson@gmail.com>
-To: Peter Rosin <peda@axentia.se>
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Michael Hennerich <michael.hennerich@analog.com>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH RFC 0/7] I2C Mux per channel bus speed
-Message-ID: <aNME9gWzazXTWtzw@gmail.com>
-References: <20250922-i2c-mux-v1-0-28c94a610930@gmail.com>
- <0186ebba-958b-8076-3706-1edc75b6c6d3@axentia.se>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12CA217D2;
+	Wed, 24 Sep 2025 05:31:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.127.143
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758691912; cv=fail; b=bQXBovcHEDxtaN5iPqqHD7JhhFJBCi1sGyogzAWVJn85/5aIIL3Qnv001kndlKrNet8Vwyd5pO3lLRe76sTEnHiJdVEaPNaXRvZyFsK553oU2RoO/eAXDpv6FyTcQqnDOMHCpaBcKI2CImRHUpckP/H7zkQkkoJAws+rykUIY0M=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758691912; c=relaxed/simple;
+	bh=Mo6OJDQ8THxzPM7pJetQZ6M7lkoCOKhFvfCms0/XEro=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=oc+wujlNepfCxG4zvElNkv23DYucaMilIovnPVhdKjLleZylw7nwCeIQYLOuVbPWOZGt1NeZuln7yq7cUA4f5lvfOVsqX5n5vxujWiD4MT2mhXWNqukxr3GIS6fraIbO+3wHOII2OgGMp9y4pbNwRxFPLWuHtXhen8aRLs9k2oU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b=Hh0KHlW0; arc=fail smtp.client-ip=52.101.127.143
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Ly8E23sy6eL4KSTX/Nlwp05O9P0WgyjDqzKoAdHCEb030b86jvyT8UaTIHuVmw0MPKHvBsHh4Mg1mZD7uZYoHvVL2yaacp3BY5X8c0W+ilO43MMUmgTIssn6V+JO1mMHtxZ6RS8NDnrCXgQbR2O3Ki+y88Vbhhd/rthuw3minE6uAtGmTSMwy5EcBABpeXeVyK5REmoh3zy4gIbkI+WiU0QVZHB8rBBMtT7TFfDNcGfOggV0bpjnShnHsqgyc0uJeBdg9UgbnTOzudqzxrf3DlKY4n3tMYmxv+H5umduDJeWrLkFmN7f/aEcP+IIFgCFgmkL845fd4BUxg14SCb1CQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Mo6OJDQ8THxzPM7pJetQZ6M7lkoCOKhFvfCms0/XEro=;
+ b=tqgdNnWrXlg+pWgS1QRm6XjBfFSLhKSEimQQwBiWr9ckVt8JtM12S3Oe1t0L6tI6hcaKov6SWdlEB+0hjZFbQYMq66+5QYsAfWDNGxTWSUaQdpkIte5SI5lVVZyR2d/eklbLPJ7ieTNU5MaEXvcK8JIySzfSZflRN0id9kmtj0YK6v+DLLNn8dJMlh4BTZ+oZSLLvg0fjxSsXV7YfD9eemH9qfWCkZRwKklehnTENYOz+xADFnTicWCG7HEfhmWG3b2nrT+DOWMVSUK6H9JJp8w7Eg81Mezh3G/CDiZr9E4AIXBNo6X3vgc03JP23WjQiShmMSM0BzLTz2teAan7Bg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
+ header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Mo6OJDQ8THxzPM7pJetQZ6M7lkoCOKhFvfCms0/XEro=;
+ b=Hh0KHlW0qQiktxmq60iF5rvyEGji2es33L+mwYYkMGHb5v4MI43BM4Wslssye6yVTbwC+Mzro/nxRYMlflNS5WR5i5R0gBvTctSLrD/bJpqtRUq9G1/iIaDl+GJF8UAu8+uB5wLmY+tRqDIm24/wf2mNiH0W0s4Wneciw1y1HwQPeqT0kXqj9PIUE1lv7Jj1T7CRwUe6YnZ/F8xeCzEYb1y+d+eDxYL1vDfPSF7UJx+PxOBrKM6Ua8qWrTA0l63bFkMX37GDtDUmiEZQe5dndEnKAfXRhuAmV1JsmeD1WeckNGI3jkrq//2jUQV7f3eIqbQjYSowYYaHm8ccuG9wRw==
+Received: from OS8PR06MB7541.apcprd06.prod.outlook.com (2603:1096:604:2b1::11)
+ by TYZPR06MB7333.apcprd06.prod.outlook.com (2603:1096:405:a7::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9137.19; Wed, 24 Sep
+ 2025 05:31:47 +0000
+Received: from OS8PR06MB7541.apcprd06.prod.outlook.com
+ ([fe80::9f51:f68d:b2db:da11]) by OS8PR06MB7541.apcprd06.prod.outlook.com
+ ([fe80::9f51:f68d:b2db:da11%6]) with mapi id 15.20.9160.008; Wed, 24 Sep 2025
+ 05:31:47 +0000
+From: Ryan Chen <ryan_chen@aspeedtech.com>
+To: Rob Herring <robh@kernel.org>, Jeremy Kerr <jk@codeconstruct.com.au>
+CC: "benh@kernel.crashing.org" <benh@kernel.crashing.org>, "joel@jms.id.au"
+	<joel@jms.id.au>, "andi.shyti@kernel.org" <andi.shyti@kernel.org>,
+	"krzk+dt@kernel.org" <krzk+dt@kernel.org>, "conor+dt@kernel.org"
+	<conor+dt@kernel.org>, "andrew@codeconstruct.com.au"
+	<andrew@codeconstruct.com.au>, "p.zabel@pengutronix.de"
+	<p.zabel@pengutronix.de>, "andriy.shevchenko@linux.intel.com"
+	<andriy.shevchenko@linux.intel.com>, "naresh.solanki@9elements.com"
+	<naresh.solanki@9elements.com>, "linux-i2c@vger.kernel.org"
+	<linux-i2c@vger.kernel.org>, "openbmc@lists.ozlabs.org"
+	<openbmc@lists.ozlabs.org>, "devicetree@vger.kernel.org"
+	<devicetree@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "linux-aspeed@lists.ozlabs.org"
+	<linux-aspeed@lists.ozlabs.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v18 1/3] dt-bindings: i2c: aspeed,i2c.yaml: add
+ transfer-mode and global-regs properties and update example
+Thread-Topic: [PATCH v18 1/3] dt-bindings: i2c: aspeed,i2c.yaml: add
+ transfer-mode and global-regs properties and update example
+Thread-Index: AQHcEZHhMUfthzzCFUyK1ToM2tNFA7SPY8MAgAAHMMCABFcpgIAHaaeAgAbZk/A=
+Date: Wed, 24 Sep 2025 05:31:47 +0000
+Message-ID:
+ <OS8PR06MB75416F7F1B5DBC95A5E87FD1F21CA@OS8PR06MB7541.apcprd06.prod.outlook.com>
+References: <20250820051832.3605405-1-ryan_chen@aspeedtech.com>
+ <20250820051832.3605405-2-ryan_chen@aspeedtech.com>
+ <9d6660f0bf5119cedee824cf764f15838622833a.camel@codeconstruct.com.au>
+ <OS8PR06MB7541C0D6696FC754D944D45EF208A@OS8PR06MB7541.apcprd06.prod.outlook.com>
+ <03abda47219b8b0b476a3740c7ed2acc4b2b16dc.camel@codeconstruct.com.au>
+ <20250919205329.GA2192084-robh@kernel.org>
+In-Reply-To: <20250919205329.GA2192084-robh@kernel.org>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=aspeedtech.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: OS8PR06MB7541:EE_|TYZPR06MB7333:EE_
+x-ms-office365-filtering-correlation-id: 198b6514-6822-4ae4-d6ae-08ddfb2ba7e3
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|366016|1800799024|7416014|376014|38070700021;
+x-microsoft-antispam-message-info:
+ =?us-ascii?Q?gGwe+k7WZqAhLrTp+xwG1MpL3kXet1e6xXzPDcRoTi9e7CUakfWXL4rIeYAD?=
+ =?us-ascii?Q?oCzktORHuWYfp05mUXV+o6JN+pSqELGYLX6iTYHBQltVe7zf5GvIkbhYaWQw?=
+ =?us-ascii?Q?/yHdpBIMyUsyKL1DYVHNFA1QwMZFlqWuCNrCq/fB/5bSA+8Vot7jLha7iWfH?=
+ =?us-ascii?Q?Vj7nDC5K0AA3F89EWnF8FIvHSiuNfbLoGThGw7dksp20H09OTJlFyw/1zBxq?=
+ =?us-ascii?Q?WVf6DebIoiMyWn10AEX3TNenoQQ+GJNoMnibsqqBH3fhvoVshG+H1zD/YCFQ?=
+ =?us-ascii?Q?3I3tB5n9t3yWSfvZdP/VBpsu4+2LWBlP2HISLK9yhXWVNrjNAV9Eg8Ok/lv8?=
+ =?us-ascii?Q?fCaoQVQfja1mInAPIdki8ojE1yW0gSe4bYOQor2VcqhyMH4nTlS7ZS39bcVD?=
+ =?us-ascii?Q?2wa6CVjvIL+MPlWY3N45W8mVoSlI8kVAOuG6MSpGhqUqjrR8gfkiYZwLfI+r?=
+ =?us-ascii?Q?Qf1FqGj6D9ZvRfwY4VCSEwpszbvW1slxZOR7r7NoFFOpmsdWBE2CqlAOV5nF?=
+ =?us-ascii?Q?ATTu/tfx3iJKsD6qcoyCe01RPCsDkkJThzL3PzwRoAaReBw9qHMQO+folC5n?=
+ =?us-ascii?Q?w61MRXMrBrgcF9cE0MnLT7f1IK/Qjsgs8kSPMdzg14KzZvSSqgAmZNFiAk5H?=
+ =?us-ascii?Q?wigkp5DVs9vRWBMpj1d5NA1HhWjKdhcmNkSBvs6xSw15uU4DjfRZ12qjBWOZ?=
+ =?us-ascii?Q?h9ywusEktzGUOhBBtRMGskOUF0JCwDXquJpq6AAwFUUACNiwnLVp+/L9poN+?=
+ =?us-ascii?Q?CVvkl0lEPlqey0lzsnx4XgbEy5ENQedTFgZ1YoRKBJVtHzBkgczkoTJig7Cj?=
+ =?us-ascii?Q?IEr5lGTnN+OCE8alr856Ex7nKKrm3hhfg5kkHPCzqwbFxgNdIcU6nTd+w7zF?=
+ =?us-ascii?Q?Vxu778T/p0izNPzI6BLdnzVamOr/GT0PQOO+U5OqoM1hlq0ghSo3G434Bcj3?=
+ =?us-ascii?Q?FvXBIAMbib62VvIsoUJyET8S/rWBaXd5INhHHG6+jnL5ven8oPRNyi/SEz9j?=
+ =?us-ascii?Q?j90JfkfklSGrNZ9YU0p5a2fK44QO7Y+ty87kgjMwjwN4pvudidFmvUsfIShO?=
+ =?us-ascii?Q?hpscdfXwdPm5maKwMd7+TA+Rh+++oJ0YyPbztQs8pvKbfHSYFvBNNjgo6huT?=
+ =?us-ascii?Q?yO9MnWuuuT1kudEJgP5PeVAXn7L4gItsviCduP87NP//hcER4THxVM83rmus?=
+ =?us-ascii?Q?YFrsEIvjl9Y9ZEU8WWqOb/+h2VO6n31pNtyhOLlC7GEaAeBMvnLlSTnJpZE7?=
+ =?us-ascii?Q?WiUuh6AHXqJkvKXWx/DkACYXiWhGxGNn0K+1L8Zr+arRIts/eS/WrBOleluy?=
+ =?us-ascii?Q?JX0a6WAj6hpnY4SyS9igMk2Hb/t5Q129c7yIOYLeo/ABX6wFTPrCeht6CHZP?=
+ =?us-ascii?Q?WIFXiwbIrU1w+asLKsvlucfKCNHLHQ3UY+M3/tCuawb0mW7VKWP9c4QJJyKU?=
+ =?us-ascii?Q?1aPj6i7wZbU9bQg/87Nv0qJXDapjlL1lf6Yc3r0fAgPI93uX/JMUqwHJrHZ0?=
+ =?us-ascii?Q?oMHs5NN2FavdVxc=3D?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS8PR06MB7541.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014)(38070700021);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?PdEOQZTGHrZInMyR1k2S5PZfcw5rXQ6VZxWB+2nnkU0ANBmY/7LdfwUZ/uRF?=
+ =?us-ascii?Q?7FAQgeUzMo8mDG4rUfnvU4UGqDqLRq9VuGkbrfxBugzrnXd2k8b0jxF3w7pp?=
+ =?us-ascii?Q?HKaAW89RppRXUorQVaePu+jQo8u0hqqqEC751eJJfiSIZrcVpDuBxja43osL?=
+ =?us-ascii?Q?o3wHCVtqvdqUohIyZT7JdNVZdL0i1HjJxizxFgNtqhAiFYeouT/ZjGr9XXK4?=
+ =?us-ascii?Q?sLdF6mBGjpFTThUPzeygqH8potTFg3ChiwdTNReFpRIGf+wxDDL50hZXXpBd?=
+ =?us-ascii?Q?Z+RxaffMSrnwry2cYmawat9Lqu5V02BGhkPkOEgaC3apmteBW07Qiy4qlw7q?=
+ =?us-ascii?Q?JgEsBvs7vSUPPYNYFJ3nZ1PwGC0ITsbb6yNbg8mTK7gAQoVZziUgMnn+RDXv?=
+ =?us-ascii?Q?ogz8butsCqdCjj0sVJhE3B5i1TFTVRulwqY4bqwta5/1Za5Brtfl6Hsj2YrH?=
+ =?us-ascii?Q?lfl8ZPBrOaq1iVFkIyIahOixDVDD63wyxuqRtr15kF8WBTZl4IS+BASjVGxk?=
+ =?us-ascii?Q?zA5bzSYMx2t65dfaF4dJYVntqTPXRECyKWACjcKZ0zvEiQOEQG8RYlYpNB+w?=
+ =?us-ascii?Q?euBugrXmo5usq4qs8dmhEGLFH1fL29PX5VGvVwW1OIsizjnGx5vMbLDiH9IM?=
+ =?us-ascii?Q?TlGFH+QSzry17d+ig3EfIOU3k+7AvT7Mq7in9Pylx2KsOKI3MeAbK/YhqzAb?=
+ =?us-ascii?Q?qQMX8hVOFnJY8utaZjKdIXYuUVZaF08zjQUbHhKsT2NUHJGPkmnvsTP6dj0U?=
+ =?us-ascii?Q?QiGiW1Uwp9ZR4aFOIThrnC+UE51h/PGIYprP7+dbbd2AmR4oJDCvWhfmW++w?=
+ =?us-ascii?Q?pRBAdxhpHpOqUe++axXEOMJE4xV/ydJwLxlH7UrvnZntvM7EU5c2po7nF3mA?=
+ =?us-ascii?Q?Uv48QN6uNACeDsVFEIBmzpWRXNWFOqsCbOjTvNclUgXX6nKtevI2TnG49S1H?=
+ =?us-ascii?Q?iTyiAlBZCum6dD+fumNLBeYwOZFcn7bXHaMUf4MrcvR2iGBtMXlsrhid20EY?=
+ =?us-ascii?Q?3Ht7QcjAaVNGqMoZ8roMnqMb/xVVcvF5KhL/2S1KbjCFKf7isooCWqoKxR2o?=
+ =?us-ascii?Q?MvKoXuPY70pOvIRnL825mw9kc0lP5Cw5nbhoI941BwCNPMg8EfUdXfhuSzKA?=
+ =?us-ascii?Q?xtCToRD0uV9p7WrN0x8uW7kTKTCKsESg5jgXByCsF6kzjoCrDHwMxv5414tI?=
+ =?us-ascii?Q?MYoCaUDkyhZjkaETeEMez1Cy8Ryt4Bt8tXUbH70Ga747LO81od+w22G4CrAu?=
+ =?us-ascii?Q?C8PZswbXluwgOV5ZslBOoav7P4MYj9S109AoYuuK4YHFr3WlZTyy0ZONsNJo?=
+ =?us-ascii?Q?RAznvNLpOyQjp3eiZJosay6zqChcma1VYj04nvz1BxAAgWBjKF9+JrhR2wlZ?=
+ =?us-ascii?Q?GT6t3LdHCeHSGx1rPzxIeXptb6Fd78qOlSi0rnZsBj2wqoADBitZncYzJaQz?=
+ =?us-ascii?Q?xHpKuATE1gNdQ+c1Z7f9iYpc3ZyJy4x64aLjVLSiCD4UBuCNVpa1oxmY7zmD?=
+ =?us-ascii?Q?0tx+JefQMDgYD0+KYdeSW4wtAL9ZE04ZgXwmPBgH5PvAym5b/XM7Ujz4d+98?=
+ =?us-ascii?Q?YR9Dyq2uNkUGjox2uLFBVJq2klLfKffruafx5/Di?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="otWbKmgQiAM7SsCc"
-Content-Disposition: inline
-In-Reply-To: <0186ebba-958b-8076-3706-1edc75b6c6d3@axentia.se>
+X-OriginatorOrg: aspeedtech.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: OS8PR06MB7541.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 198b6514-6822-4ae4-d6ae-08ddfb2ba7e3
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Sep 2025 05:31:47.4946
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: eYx0BiHC/13TGvbOe+Gy3FbaMV/dFwOBOSJqgpZdi3hY36XmAaSusVnOwJeaxDdjMtwv8DEtJkTWs/NDcOIZdBvgQy6fi+NtPWqEv3uhFGg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB7333
 
-
---otWbKmgQiAM7SsCc
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-
-Hi Peter,
-
-Thanks for your input!
-
-On Tue, Sep 23, 2025 at 05:10:16PM +0200, Peter Rosin wrote:
-> Hi!
+> Subject: Re: [PATCH v18 1/3] dt-bindings: i2c: aspeed,i2c.yaml: add
+> transfer-mode and global-regs properties and update example
 >=20
-> 2025-09-22 at 08:20, Marcus Folkesson wrote:
-> > This is an RFC on how to implement a feature to have different bus
-> > speeds on different channels with an I2C multiplexer/switch.
-> >=20
-
-[...]
-
-> > Patch #1 Introduce a callback for the i2c controller to set bus speed
-> > Patch #2 Introduce idle state to the mux core.
-> > Patch #3 Introduce functionality to adjust bus speed depending on mux
-> >          channel.
-> > Patch #4 Set idle state for an example mux driver
-> > Patch #5 Cleanup i2c-davinci driver a bit to prepare it for set_clk_freq
-> > Parch #6 Implement set_clk_freq for the i2c-davinci driver
-> > Parch #7 Update documentation with this feature
-> It seems excessive to add idle_state to struct i2c_mux_core for the sole
-> purpose of providing a warning in case the idle state runs on lower speed.
-> Especially so since the default idle behavior is so dependent on the mux.
+> On Mon, Sep 15, 2025 at 11:41:31AM +0800, Jeremy Kerr wrote:
+> > Hi Ryan,
+> >
+> > > > OK, but the ast2400 and ast2500 I2C peripherals - which this
+> > > > binding also describes - do not have that facility. Given the 2600
+> > > > is a distinct peripheral (as discussed on the v16 series), this wou=
+ld seem
+> to warrant a distinct binding.
+> > > >
+> > > > Should this be split out into an ast2600-specific binding, to
+> > > > reflect that it is different hardware? The reference to the global
+> > > > registers and transfer modes would then be added only to the
+> ast2600-i2c-bus binding.
+> > >
+> > > I agree it would be cleaner to split out a new binding file
+> > > specifically for AST2600, for example: `aspeed,ast2600-i2c.yaml` But
+> > > also I think `aspeed,i2cv2.yaml` more better name, that compatible
+> > > will support next generation such like AST2700 .....
+> >
+> > The ship may have already sailed on that one, as you already have the
+> > existing compatible string describing existing hardware.
+> >
+> > I would assume that the compatible string should be fixed for an
+> > instance of the specific hardware, but the DT maintainers may be able
+> > to provide some input/precedence on changing an existing binding, if
+> > necessary.
+> >
+> > If this does get changed, I would expect that you would need a
+> > corresponding update in the old driver too.
+> >
+> > Or, another option may be to keep the current generation ("v2 core
+> > with compat registers") as-is (ie., at ast2600-i2c-bus), and introduce
+> > a new string for the next - where the primary hardware change might be
+> > the removal of compat registers, but it's still new hardware
 >=20
-> E.g. the idle state is completely opaque to the driver of the pinctrl mux.
-> It simply has no way of knowing what the idle pinctrl state actually mean=
-s,
-> and can therefore not report back a valid idle state to the i2c-mux core.
+> About the only place we use version numbers (without regret) is when the
+> version can be traced back to the actual verilog. This is typically only =
+IP
+> targeted to FPGAs. The reality in SoCs is h/w designers can't help themse=
+lves to
+> not change things. In reality, there are almost always some changes.
 >=20
-> The general purpose mux is also problematic. There is currently no API
-> for the gpmux to dig out the idle state from the mux subsystem. That
-> can be fixed, of course, but the mux susbsystem might also grow a way
-> to change the idle state at runtime. Or some other consumer of the "mux
-> control" used by the I2C gpmux might set it to a new state without the
-> I2C gpmux having a chance to prevent it (or even know about it).
->=20
-> You can have a gpio mux that only muxes SDA while SCL is always forwarded
-> to all children. That might not be healthy for devices not expecting
-> overly high frequencies on the SCL pin. It's probably safe, but who knows?
->=20
-> The above are examples that make the warning inexact.
->=20
-> I'd prefer to just kill this idle state hand-holding from the code and
-> rely on documentation of the rules instead. Whoever sets this up must
-> understand I2C anyway; there are plenty of foot guns, so avoiding this
-> particular one (in a half-baked way) is no big help, methinks.
->=20
-> This has the added benefit of not muddying the waters for the idle state
-> defines owned by the mux subsystem.
+> Rob
 
-I pretty much buy everything you say here.=20
+Thanks, I think I will work on new yaml aspeed,ast2600-i2c.yaml for ast2600=
+ i2c driver.
+That support global regs, transfer-mode properties.
+Then will add ast2700-i2c.yaml for ast2700 i2c.
 
-I later saw that, as you pointed out, e.g. pca954x let you set the idle
-state at runtime which would have increased the complexity a bit.
-
-So, I think it is better to do as you suggest; remove idle_state and
-keep the rules in the documentation.
-
->=20
-> Cheers,
-> Peter
-
-Best regards,
-Marcus Folkesson
-
---otWbKmgQiAM7SsCc
-Content-Type: application/pgp-signature; name=signature.asc
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEEBVGi6LZstU1kwSxliIBOb1ldUjIFAmjTBO8ACgkQiIBOb1ld
-UjIwfA//Rz23XygcpF0dwlGWKA/FBtIORJthioBHmNmVWREax7GLJ/h8ziRohWL3
-kTW9O/vVbYdJe3LhvBazB9KL2JjRh1A0p5ijLiuI0Gw6WYy9sqroZV7SzmP3P8WE
-PzLR41O9IVVEVvBcWSmh/0Rcm+cYAeLwZ2F1O4yiplpiP+Id7f378pCPPxaFtN2g
-Ea9J0o09LccZC4nERdvrI9QUrfxxiPUBF71+VMrX/Wlc1gUI6JsmGgqpIiz97kiC
-IibpcKgNocQgA7YWCbL16EvFkX4k+HF2L7UQqGtijV0OSNxFtsC2woavw2qJFBjl
-IZtS8aLXdx9DevdcUuYXscf6mwGVFZQDNahDS2KGknsHj3DMvEFO9AMEcIb7995j
-j6SPF6l9/23SqC5mYxQ8t2PSnbgTvfZN8HqycI8oiV0y4QHNrJ1dK6S/BaHcInRw
-C4IKNyMZGclPFreGDD7JdxRu/XgQb3ZfJi156LEfuMSMXQkUPCLWbGjT6DOcy+Pw
-tHAiEr50HWxVwpt/TUfualMNd2ldXQQDTW7Iyz2tTlQn78BZU/Ku37YXKg9vPe2r
-wURBzM/VUk+ToGhH4lI14vqTVlOFi1keu6dnae7Bb7yAf9W372JnVhwwNiU3HXbf
-FXnOTa4MlQjThE+eerYrSTnDu0bViq4w8wsg9hlSXp7w0+A+4Ec=
-=av5T
------END PGP SIGNATURE-----
-
---otWbKmgQiAM7SsCc--
+Ryan.
 
