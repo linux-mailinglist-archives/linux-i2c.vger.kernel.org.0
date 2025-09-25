@@ -1,86 +1,125 @@
-Return-Path: <linux-i2c+bounces-13188-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13189-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 191CABA1AF2
-	for <lists+linux-i2c@lfdr.de>; Thu, 25 Sep 2025 23:50:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3857EBA1E2C
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Sep 2025 00:49:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D617D16CC28
-	for <lists+linux-i2c@lfdr.de>; Thu, 25 Sep 2025 21:50:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E825F3B7B04
+	for <lists+linux-i2c@lfdr.de>; Thu, 25 Sep 2025 22:49:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C80FF25CC4D;
-	Thu, 25 Sep 2025 21:50:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B2B32EA141;
+	Thu, 25 Sep 2025 22:48:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="K4rKGIUZ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="YaNMYfh9"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E2DD3FC2
-	for <linux-i2c@vger.kernel.org>; Thu, 25 Sep 2025 21:50:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E4DB272E67
+	for <linux-i2c@vger.kernel.org>; Thu, 25 Sep 2025 22:48:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758837038; cv=none; b=NAy8xWRgKyWuxZPQKsOwPYtbnw7enpkWBOL67DCDzZoFbAE8n3+MZB/9RQzLUhn9bMWocIMRutvwvHpMiyKDUZVnvRwBblGJ/hTYIAg4cqe/ekwy/U4jT5kHqFMIO8i4NkmELSYBFj4+wKoGHu8Hni49/fFAm3WNDu+u41DpqJs=
+	t=1758840536; cv=none; b=I7m9Vwm/MNHmZdJ48u2ajXWVn29s9hZzzfbqsPcVXZwToBdPEiIj485Jq83V4VCX9f83EXR688X8SFVALQMsBjAWmrCFHjdtnXSVUtZ8hXf7RRVWvl63mhshRf9auWdBLTGFlhILEK4EDzxcwYAlot7rBlD8WIIM2o23BQ6uiuk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758837038; c=relaxed/simple;
-	bh=HR7hwetkz0c1EUFPcN8G6uamvejgsOJWri6jDhJgftw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EYQRFmhLheoTakBW1jx70MyTqbb5FhVcKfBT1bW5x1mQaxz+3Qwq1Q5S/+jfiZfa7GuM6zBRpgaVnW5V85gzibiBl8J3RsDhjl6pFybLHL6LEW6GAnRRXotinSSiq4Nv8W/i8hvFmFQxphtlmkjeUj3RIP+vp0RPZ1uJTPU7DJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=K4rKGIUZ; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=Ai2u
-	ZshFLzPCn4qE1mOlvZEOK2ArYuQo3ep7ThaPWcY=; b=K4rKGIUZEBre9RgdW2Y2
-	c+/PC+w9UKQ5bPz1xSY2SfGsQCOLqa6TTkVf5LB3wmLlHDxWT8nK6mmlxsKKmouG
-	JusFHRCS6dWfwdKtsTC66jM0JaN0QRAe67emZigp2WSucV0oNQfZccjiPtjpu517
-	kkHLdX0vs+53rGjouUOQumR+o2kzJW6hsGqlPYDLPjlDZ7DY1j92iKyt3qahZTja
-	qEOYYFg0U/5f3kF6lcS4I8CUfye/5BRo0N+GVkimYQfeTCuePlrRNG7HM0JA+etD
-	1VtrSjsBez7nNSbQzqHvbedP1f9aPmHeyIpAiysOuQLl2Z1wBGZrFABINjORQXAL
-	4w==
-Received: (qmail 2024078 invoked from network); 25 Sep 2025 23:50:34 +0200
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 25 Sep 2025 23:50:34 +0200
-X-UD-Smtp-Session: l3s3148p1@TMKiKKc/BtYujntx
-Date: Thu, 25 Sep 2025 23:50:33 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Troy Mitchell <troy.mitchell@linux.spacemit.com>
-Cc: Andi Shyti <andi.shyti@kernel.org>, Yixun Lan <dlan@gentoo.org>,
-	Alex Elder <elder@riscstar.com>,
-	Troy Mitchell <troymitchell988@gmail.com>,
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev,
-	Aurelien Jarno <aurelien@aurel32.net>
-Subject: Re: [PATCH v2 0/6] i2c: spacemit: fix and introduce pio
-Message-ID: <aNW5KfIg-_4-Et1S@shikoro>
-References: <20250925-k1-i2c-atomic-v2-0-46dc13311cda@linux.spacemit.com>
+	s=arc-20240116; t=1758840536; c=relaxed/simple;
+	bh=NPoSZR2uMPPLcNwoBCjehSgGxL+8Q5GL+E8w6bU+oR4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Unetm5HkmdtxR89kU6xO4npI/w5xL09Vg7p4SEQd9OD8akn+tBC2skCxt3F3eN8QTj3E9A6yEfmYSLs/KhmTN4SXgnuWxQG3GDBeHC8brMgzKX6mMXILsL0+SLo6KhrrPij+GdV8Er8UBBiLL+A/FcT8b73p8vZI+7uGZVqEXME=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=YaNMYfh9; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-46d25f99d5aso19049645e9.0
+        for <linux-i2c@vger.kernel.org>; Thu, 25 Sep 2025 15:48:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1758840533; x=1759445333; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wLb9XJxJIEh9OtipwMXHNHPZ896o6SjHxUKCh9EYw7k=;
+        b=YaNMYfh9fqK9HN3QU/N2iNMVP8FpYd53MCQFigHlvl/utETbSQiU3dqCqtd1kfY6md
+         MmIubzfgeDZ4OQiqeO682+3J3lPs+UkxFpj9SCm8aMGikuMH08+ThT+zCuQe74wCZbYf
+         OT1PwHLuYjg4caKWS4Wjgm2BP3MvjLUAt8F9K7k9Y2ZnT/fj8itm9txBH20ZOoPe4fWA
+         7mh5QxkPpEuupV4tI0DWs6aHcLQyv+xuom0gRm5xlurOSRRo2RQFc2jg2jcl+UmGcWdS
+         E2ZCV1JXwW0ot5vLTIPYRwHJuAFSIJanayB3jpgFXiqP7uZNBSxkw5m2bNpVbVjPEL4R
+         pVTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758840533; x=1759445333;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wLb9XJxJIEh9OtipwMXHNHPZ896o6SjHxUKCh9EYw7k=;
+        b=jy/Jr/OwxO0/WvA8Z15f/skTkfUSH3g1aPgUDSS9tD/QFajLySOXh0+BHo2O8A3MGc
+         q0VUIhUaNBma9mfH303wV0lqToqUotp3lkHZzCphQqZsBwa9PSxylQ8grCjrUE9uAxRZ
+         og0SPF4VMu/QRgFJUlfNJ1rJc0QvtrGMmkTf2/YCjeen9HDTyt3JvZBAqwmF+RJgxW8i
+         ztms0LEQ7XSytqJt+PPhW5a7yKqfwy9R4JdM698SWKOkZ4MtRxpcJmwpat1Bm6jFiq4Q
+         PMVRRtoNsEsBoGWL7r3DsKZUa0M5565mFUN0GFVJm1qYakQlxoFS29X8HciDxc5ozQ1C
+         xBSw==
+X-Gm-Message-State: AOJu0Yz5VneHDT8Ok2cUSD2zxX7RTGCR+mmO3uYSSGI5eoBAUZmF7FLg
+	oFnLikD8rS3+B6Cd7ibZFOg/aj/KUnhUIX1DuT3RWXqSsQDZbx4E46hXRJcE/g8k3M8=
+X-Gm-Gg: ASbGncunVVxK1MJD2h6h01z8j4BMr8NkuyvIaUx24vC9KkghNYCg8ChNHM8cJ1jy7UV
+	TIpqkWhgx6zYQGXZQD4zAObfhhTcdyMX31KCG/89xr91HLf487ztx6jP+0YwGH413KH4KVsY51Q
+	QgBDnlpVpB0Pme+HFDiMz69CR310nO/tVV0FDYd+azh5/Mom58dar6GG/25I48AVkB/4ymDGEVV
+	OnQSRxqBp+Ia7mvCnP63JCfsjJds0OxZ0DvDqSKhhvqgFBwyHfvKaMDpC7FUWE482lZm1NbvTOV
+	KHzaqZgdinXySMLIJKOrIy4oxVmp8ym7TsCfxiPQ9yY1esJNLBe/H69TcTa4qF5XwYQNVIRqubX
+	HJJl/Kv7eYi9EBUx33mYQqrScSuZvyIuvYljzctSh9ubfiuylXC53gQtCMrbtfeu2jltq2L3E8w
+	3gcFwIerGF1l1V6W73seKB
+X-Google-Smtp-Source: AGHT+IHo30/UsDkSnmo85GJxkcE0F22GujIahDdLXdZqAmy+vOn+OIAP8XqbpMnu9c/OCkswPoykwg==
+X-Received: by 2002:a05:6000:220b:b0:3ea:6680:8fb9 with SMTP id ffacd0b85a97d-40f5f60d329mr4047618f8f.3.1758840532964;
+        Thu, 25 Sep 2025 15:48:52 -0700 (PDT)
+Received: from [192.168.0.19] (188-141-3-146.dynamic.upc.ie. [188.141.3.146])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-40fb9e1b665sm4475800f8f.27.2025.09.25.15.48.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 Sep 2025 15:48:52 -0700 (PDT)
+Message-ID: <30f9292e-e6d3-4fd0-8d1c-f10317ca7751@linaro.org>
+Date: Thu, 25 Sep 2025 23:48:50 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250925-k1-i2c-atomic-v2-0-46dc13311cda@linux.spacemit.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/6] media: qcom: camss: Add Kaanapali support
+To: Jingyi Wang <jingyi.wang@oss.qualcomm.com>,
+ Loic Poulain <loic.poulain@oss.qualcomm.com>, Robert Foss
+ <rfoss@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Bryan O'Donoghue <bod@kernel.org>,
+ Todor Tomov <todor.too@gmail.com>,
+ Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Hangxiang Ma <hangxiang.ma@oss.qualcomm.com>
+Cc: linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-media@vger.kernel.org, aiqun.yu@oss.qualcomm.com,
+ tingwei.zhang@oss.qualcomm.com, trilok.soni@oss.qualcomm.com,
+ yijie.yang@oss.qualcomm.com, Atiya Kailany <atiya.kailany@oss.qualcomm.com>
+References: <20250924-knp-cam-v1-0-b72d6deea054@oss.qualcomm.com>
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Content-Language: en-US
+In-Reply-To: <20250924-knp-cam-v1-0-b72d6deea054@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, Sep 25, 2025 at 10:02:24AM +0800, Troy Mitchell wrote:
-> Previously, there were a few latent issues in the I2C driver.
+On 25/09/2025 01:02, Jingyi Wang wrote:
+> Add support for the RDI only CAMSS camera driver on Kaanapali. Enabling
+> RDI path involves adding the support for a set of CSIPHY, CSID and TFE
+> modules, with each TFE having multiple RDI ports.
 > 
-> These did not manifest under interrupt mode, but they were
-> still present and could be triggered when running in PIO mode.
+> Kaanapali camera sub system provides
 > 
-> This series addresses those issues and adds support for PIO
-> mode transfers.
+> - 3 x VFE, 5 RDI per VFE
+> - 2 x VFE Lite, 4 RDI per VFE Lite
+> - 3 x CSID
+> - 2 x CSID Lite
+> - 6 x CSI PHY
 > 
-> Signed-off-by: Troy Mitchell <troy.mitchell@linux.spacemit.com>
+> Signed-off-by: Jingyi Wang <jingyi.wang@oss.qualcomm.com>
+How has this series been tested ?
 
-Applied patches 1-5 to for-mergewindow, thanks!
-
-Waiting for a possible review for patch 6.
-
-Troy, maybe you want to add yourself as a maintainer for this driver?
-
+---
+bod
 
