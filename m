@@ -1,104 +1,112 @@
-Return-Path: <linux-i2c+bounces-13173-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13174-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7CBE9BA1545
-	for <lists+linux-i2c@lfdr.de>; Thu, 25 Sep 2025 22:12:21 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C58BBA15DF
+	for <lists+linux-i2c@lfdr.de>; Thu, 25 Sep 2025 22:34:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BA08F1C239EA
-	for <lists+linux-i2c@lfdr.de>; Thu, 25 Sep 2025 20:12:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 006107AF119
+	for <lists+linux-i2c@lfdr.de>; Thu, 25 Sep 2025 20:32:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6914A31D739;
-	Thu, 25 Sep 2025 20:12:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C726C2F5306;
+	Thu, 25 Sep 2025 20:34:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=aurel32.net header.i=@aurel32.net header.b="sFD9E9MP"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="E7SIPsmE"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from hall.aurel32.net (hall.aurel32.net [195.154.113.88])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C8A926CE33;
-	Thu, 25 Sep 2025 20:12:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.154.113.88
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10695314B73
+	for <linux-i2c@vger.kernel.org>; Thu, 25 Sep 2025 20:34:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758831130; cv=none; b=SiUZv28GWaEr8nK++9DDbtUDdysZIfZGM9dmfOiwOKXsBduGTEnt7sxT1rM4D9mI9d1uW6lVBckK9XfoTzQzjKddr4TzAiEAmir2L1j5/0UnRYfu5vSzIpDBT9CA9PR+9N/BT48bIJ5/oxS83x8qe/6TgOL2Ub1DH/gACMWphiA=
+	t=1758832454; cv=none; b=BJmQfGO/0My45nFzfV1PSQlXERiGI3l14twqIciZeAtDU1hz/q0NsLELe0uojYVRzOhT0sQ/ZtSnPaBnjhMUA+SQEHFEEk9rVSjyEoPrtVh0ProJ/umtzUBeDavXT3JPvIusiK1cFb2CFSpCtQGpm2HOODVpFY75Horth0me4Fw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758831130; c=relaxed/simple;
-	bh=d+lsLcUzOu2XEl+MNvOGLdNwB3NBh9LpotafXD22ILk=;
+	s=arc-20240116; t=1758832454; c=relaxed/simple;
+	bh=znLnFJtLC+oBFDusVWzj97PWoNvRxO9zLc0a5hiIE9E=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XECbNDM2ngXzWlQ2wh1PGaFlTccyUjUan0FoyEhsUuoa8akPWPW5zstwV/Eb9NEULnTuRfBOJbh7yoSNh3c82BxfjkXVZRhYYozLDvMvV+yytBx2XOQqfXzOCro3bbbU6gFM0SX394BOxAL/s9ITvAnnjkubseILZghRJak30ag=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=aurel32.net; spf=pass smtp.mailfrom=aurel32.net; dkim=pass (2048-bit key) header.d=aurel32.net header.i=@aurel32.net header.b=sFD9E9MP; arc=none smtp.client-ip=195.154.113.88
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=aurel32.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aurel32.net
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=aurel32.net
-	; s=202004.hall; h=In-Reply-To:Content-Type:MIME-Version:References:
-	Message-ID:Subject:Cc:To:From:Date:Content-Transfer-Encoding:From:Reply-To:
-	Subject:Content-ID:Content-Description:X-Debbugs-Cc;
-	bh=ORkT1a+9XuyN/XSBDila+ea6DXmpE9sH45Swm+wsPeM=; b=sFD9E9MPW0oWpYAj82rWjeTeOZ
-	j4iGgDrOm8OtQS/UHGVeHbt7e0VArYve8K/G3XFrjL2VRNzk1e59myuwiWNyGPt6AWBPN6oTUgCdt
-	eOkG82vzvneyIJYU2gl6vWV02z8GyFVHmD7DbEK74RF/EhO7464gGU34+EuENSVuDVI1avnemy4Vo
-	r1XeOF18d0yefscjgoD9pCdYYoG7NGJJoXFfa/7fAIyHUJ6ytyQoOBHbWe3K8Y/4XJgJwNe9CNPib
-	cOHYAvvi3Ijv8wQPnbjtnfOCaCebuNjxOFMqyW+yTQMGBdVmF2E/l9qedJ0ETJf4QvadQhLAGzcIT
-	VAu4OYRQ==;
-Received: from [2a01:e34:ec5d:a741:1ee1:92ff:feb4:5ec0] (helo=ohm.rr44.fr)
-	by hall.aurel32.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <aurelien@aurel32.net>)
-	id 1v1sJZ-00F7Tf-3B;
-	Thu, 25 Sep 2025 22:11:42 +0200
-Date: Thu, 25 Sep 2025 22:11:41 +0200
-From: Aurelien Jarno <aurelien@aurel32.net>
-To: Troy Mitchell <troy.mitchell@linux.spacemit.com>
-Cc: Andi Shyti <andi.shyti@kernel.org>, Yixun Lan <dlan@gentoo.org>,
-	Alex Elder <elder@riscstar.com>,
-	Troy Mitchell <troymitchell988@gmail.com>,
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev
-Subject: Re: [PATCH v2 2/6] i2c: spacemit: remove stop function to avoid bus
- error
-Message-ID: <aNWh_dfyfCsqZ8av@aurel32.net>
-Mail-Followup-To: Troy Mitchell <troy.mitchell@linux.spacemit.com>,
-	Andi Shyti <andi.shyti@kernel.org>, Yixun Lan <dlan@gentoo.org>,
-	Alex Elder <elder@riscstar.com>,
-	Troy Mitchell <troymitchell988@gmail.com>,
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev
-References: <20250925-k1-i2c-atomic-v2-0-46dc13311cda@linux.spacemit.com>
- <20250925-k1-i2c-atomic-v2-2-46dc13311cda@linux.spacemit.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=QY0dOVtu5bsDwxM9iLQwoQWf8O1/xgsTf8YCHP06bjJyoHmLQqJg9lqsWuVnJEb4ThYFDayKhhFO+/fK/CGfV66I+tfmeTVdVjrcuzRD73aNTvHK22ZoJIuPlCigNtwUIgMWd3hvyLuxN7MdXfMI+D1K5kWAKEvYSUFhck/UMp8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=E7SIPsmE; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=znLn
+	FJtLC+oBFDusVWzj97PWoNvRxO9zLc0a5hiIE9E=; b=E7SIPsmEgeKSHSnxBJny
+	B1OevX2s4nHbHv08p7jv1riBBbLlN0QuyxzNSzMDvVdjeaLzuRfLzmCDq9/hTs5J
+	pXxJsG2QHROCiJMxIVM+joDYftRpxKJ/y+9aYRMm74OZBs1Bt6gABQyN98YdBcd/
+	wEKMQA422EmDMxJL6cUaA5s3aKXPCv8Jzd/tStkzDZHNxltB0bDRwdktNStX8l9I
+	qECx0bvUsxiXax0sEswEM4gLvdV+GremkaY+3nPezjWXCUDEOheD98PQh1l15p8s
+	0o+ukxSldfrK6A3Fimj+0gVGLVQNcw/E+KTs5XjuMexDiaXd1gc6vMM4Vs+2cRcr
+	XA==
+Received: (qmail 2009427 invoked from network); 25 Sep 2025 22:34:00 +0200
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 25 Sep 2025 22:34:00 +0200
+X-UD-Smtp-Session: l3s3148p1@hGPUFqY/jIAujntx
+Date: Thu, 25 Sep 2025 22:34:00 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Rengarajan S <rengarajan.s@microchip.com>
+Cc: tharunkumar.pasumarthi@microchip.com,
+	kumaravel.thiagarajan@microchip.com, UNGLinuxDriver@microchip.com,
+	andi.shyti@kernel.org, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND v1 i2c-master] i2c: mchp-pci1xxxx: PCIe Hot reset
+ disable support for Rev C0+ devices
+Message-ID: <aNWnOOg5KY_8K1DO@shikoro>
+References: <20250925140049.14454-1-rengarajan.s@microchip.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="eCTXuL0ZtUxVITRA"
+Content-Disposition: inline
+In-Reply-To: <20250925140049.14454-1-rengarajan.s@microchip.com>
+
+
+--eCTXuL0ZtUxVITRA
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250925-k1-i2c-atomic-v2-2-46dc13311cda@linux.spacemit.com>
-User-Agent: Mutt/2.2.13 (2024-03-09)
+Content-Transfer-Encoding: quoted-printable
 
-On 2025-09-25 10:02, Troy Mitchell wrote:
-> Previously, STOP handling was split into two separate steps:
->   1) clear TB/STOP/START/ACK bits
->   2) issue STOP by calling spacemit_i2c_stop()
-> 
-> This left a small window where the control register was updated
-> twice, which can confuse the controller. While this race has not
-> been observed with interrupt-driven transfers, it reliably causes
-> bus errors in PIO mode.
-> 
-> Inline the STOP sequence into the IRQ handler and ensure that
-> control register bits are updated atomically in a single writel().
-> 
-> Fixes: 5ea558473fa31 ("i2c: spacemit: add support for SpacemiT K1 SoC")
-> Signed-off-by: Troy Mitchell <troy.mitchell@linux.spacemit.com>
-> ---
->  drivers/i2c/busses/i2c-k1.c | 26 +++++++-------------------
->  1 file changed, 7 insertions(+), 19 deletions(-)
+On Thu, Sep 25, 2025 at 07:30:48PM +0530, Rengarajan S wrote:
+> Systems that issue PCIe hot reset requests during a suspend/resume
+> cycle cause PCI1XXXX device revisions prior to C0 to get its SMBUS
+> controller registers reset to hardware default values. This results
+> in device inaccessibility and I2C read/write failure. Starting with
+> Revision C0, support was added in the device hardware (via the Hot
+> Reset Disable Bit) to allow resetting only the PCIe interface and its
+> associated logic, but preserving the SMBUS registers during a hot
+> reset. This patch enables the hot reset disable feature during suspend/
+> resume for C0 and later revisions of the device.
+>=20
+> Signed-off-by: Rengarajan S <rengarajan.s@microchip.com>
 
-Reviewed-by: Aurelien Jarno <aurelien@aurel32.net>
+Tharun? Kumaravel? Do you have time to look at these patches?
 
--- 
-Aurelien Jarno                          GPG: 4096R/1DDD8C9B
-aurelien@aurel32.net                     http://aurel32.net
+
+--eCTXuL0ZtUxVITRA
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmjVpzQACgkQFA3kzBSg
+KbYg6Q/9G4o1ez2b5CeSRkBiQ9oef/21n6+5/hizIs3nfCohSeEfkHpahk54LPfY
+N2ZDOABDO3m2QH2nQrGc/vVy77uP9E9FSvS1r24ag1SbDGZwGXsshmEYr6WFvdYQ
+Ozo+ZgWd3TyR7StvRvU3Qlgef+Ia9WnwtV0N1eqfpFDoE73HuAR2QN/n6El/GNKv
+GDSFbW/p6/dJ6zGx9i+C7I5Z316W4nxaePk4BVl6OsSAta3/wjdAxToiApGMBNuW
+cRVXCYhXv0BpvNaqhjBD1TZfslLMSzS8uWr3r/Yf0iDIvY2UdOAYQkDYqT9LuRJ+
+p2UlYxLXT9P0p7vcLBQ6Pb3xwzGGV4k2STHsIooZlbsVEss8iuIwJeBTZDpwIew+
+Cr0apuuoohgjhJEKyxVD/9kAy7/SPJ4YEHYJrZBmOcCRUQr2ETc6H7Usjv0uGo8D
+i2ss4jIsWtYn2X5Jxjy0zV8TqQFL/V4igcXJlBKpSie0/qGkN4GWX2ErSivLu3Cg
+DRACFs12cGUTcScfDivp9vl1wR9G6akMlJb0pccU4thommz/IAM0oBrq9aCr3afJ
+GadY1Prd1mVmIvyomR+LqMGmMKyn63XVKbkwTUD3y33pB+fT4yt6US+GPnbAE3xU
+Z1BccCKmM/OQRP0Z65sKx4MakIFkie0p6Ff1MnmWPIGh9BioOPo=
+=loOF
+-----END PGP SIGNATURE-----
+
+--eCTXuL0ZtUxVITRA--
 
