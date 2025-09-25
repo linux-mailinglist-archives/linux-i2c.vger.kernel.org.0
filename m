@@ -1,65 +1,65 @@
-Return-Path: <linux-i2c+bounces-13182-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13183-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B114BA1899
-	for <lists+linux-i2c@lfdr.de>; Thu, 25 Sep 2025 23:31:12 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40664BA1A2F
+	for <lists+linux-i2c@lfdr.de>; Thu, 25 Sep 2025 23:44:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5EFE0189AE4D
-	for <lists+linux-i2c@lfdr.de>; Thu, 25 Sep 2025 21:31:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 16DA53AD603
+	for <lists+linux-i2c@lfdr.de>; Thu, 25 Sep 2025 21:43:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A99B9286D64;
-	Thu, 25 Sep 2025 21:31:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD7B3321F32;
+	Thu, 25 Sep 2025 21:35:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="OWZc22Ex"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="UPaig0Z4"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6C1E22A7F1
-	for <linux-i2c@vger.kernel.org>; Thu, 25 Sep 2025 21:31:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA27732142E
+	for <linux-i2c@vger.kernel.org>; Thu, 25 Sep 2025 21:35:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758835865; cv=none; b=fO3STMZkycSprK0l2MfWczHqMEKiDWfRf/vTD7dfNz97b6Yp/xRmMg3gaYlwNItLHwTS8rvNYeep6fVc04xWqEIWllGwd8+erwrgcFqiT9jkvjwIX5YymGFB6Rjawd1oCWC8eLsMPUhryy/LQiv2eiGyuYDCLa8VCJAjID/e11g=
+	t=1758836117; cv=none; b=R0DXsrhCQAM2em4jUP6j59aZektgbYRQ3m2QLflQxPEmiGDQrCF9EaMy2dizrfZH2yddUolxZCoExAidyk682MYTSpP/Y+3ViuaCS1KusPgJsxH6sCXKFv/QPRdBgo7yofCzZdWtcNALbY8g8CuoH+T4zukwn6wNhuc1nzKVRDw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758835865; c=relaxed/simple;
-	bh=WVdsQxbe9UaWBdOhX36alN9UVBCyGgEWHyRT2Dfx5Rc=;
+	s=arc-20240116; t=1758836117; c=relaxed/simple;
+	bh=XFFZkzvAD8QYdCwQk9vx+tzdFd+s5u7iPwhCFbisNgQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CyME4nOlnd5DDS9vziou45m6zv2iTpVJgN7CCfC5s0GnaK8hQ3hoEKEitdwI1J6sqQy4Fambx5iL2Y8IY6Xii6/3x8jj+fLDYr0aZPnGKLtzu8TIHP2CCtj13FoLmcD3GNTEn9KH0CP3HTaBqIfxg8KJZ8ERui5lDyE4fwLL69Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=OWZc22Ex; arc=none smtp.client-ip=194.117.254.33
+	 Content-Type:Content-Disposition:In-Reply-To; b=iqJ2yluuTd7naT2lNWzS3ttXadM3Q5hHc7PXy+WkJdFtvsByYO/bhmd1meF6ZbsKlT1G/UDu92MBHz+ZdMhweRJ+eRQPEx27FRNzAoVfRNTL41RGGcjlQOurvRkAD9zxCo4RzCSLdoQWhdU1wnwrxotpE3tnsFbIpzXisjHbFCE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=UPaig0Z4; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=WVds
-	Qxbe9UaWBdOhX36alN9UVBCyGgEWHyRT2Dfx5Rc=; b=OWZc22Ex68AItBuuCtfp
-	B7LRxLrwBQ0lXFnw7ln64p7t+p84Mdzvskt7PYGL18tQ9CQ7VByocuKQL1sPjyol
-	nJxK0z6FebAuYy8Vi1QL9lT306JaopSt3/YAUa1TVcfg7YyZC8DRlQRfoG+ld76v
-	tY2mIebDY0gmmTVfpoU4ViI1AQaW8CMrClrG4ou92w1hTZeLIxlWq6zmeLS+PcQK
-	equEgh1Y+gHBkqnYMBXJUPJWdD0wXRyuZ+2d+i7OL78llzeE1yLPtBKTaozazK+w
-	W4Fl1mcJZCjpEs4ewBIxooOcNa3Y1pfx+qzal+dT6Q4npHlTggXu1J50noiVnkBe
-	JA==
-Received: (qmail 2020059 invoked from network); 25 Sep 2025 23:30:59 +0200
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 25 Sep 2025 23:30:59 +0200
-X-UD-Smtp-Session: l3s3148p1@+Kdg4qY/yIwujntx
-Date: Thu, 25 Sep 2025 23:30:54 +0200
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=7yL/
+	bOzH5mMb9e7gtd/JTSCmRguD3ASp510ZjiuAn2c=; b=UPaig0Z4uXv3Kgyjd0NQ
+	uz9xo8YJJnYFdBCeQdH2DJBO10ayTgZYaEv0+8TNLqMJrFOmaciYlraFlh2gvJtQ
+	SjQYgaiGHUZzk06s5BFn/AFciwSM1sHmK/IvnHWMQK8RxJPJaLqXvovBW75j/XAW
+	jJuWv4IZnCCmu4LfAP21aS8P3IVxNGVZrwnQ+IyNBieiHm0LHOtSlvdIwj3DTBLy
+	o0MBMnRGY3+O9lx1/lfqDxXDEXK0hkPqUxm7v9YLnX5bqzMfG6ntW1vxKjp7EpnZ
+	x7nYZJ1g/veMcT2Xp0BWPNuGnCAu1Ck2DWEUfWsRrkihg2n/otqnz2Qu29dCTPEP
+	kA==
+Received: (qmail 2021161 invoked from network); 25 Sep 2025 23:35:12 +0200
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 25 Sep 2025 23:35:12 +0200
+X-UD-Smtp-Session: l3s3148p1@nXqv8aY/Suoujntx
+Date: Thu, 25 Sep 2025 23:35:12 +0200
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Jonas Jelonek <jelonek.jonas@gmail.com>
-Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>,
-	Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-i2c@vger.kernel.org,
-	Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Markus Stockhausen <markus.stockhausen@gmx.de>,
-	Sven Eckelmann <sven@narfation.org>,
-	Harshal Gohel <hg@simonwunderlich.de>
-Subject: Re: [PATCH v7 04/12] i2c: rtl9300: use regmap fields and API for
- registers
-Message-ID: <aNW0jiJQHcS-FKwr@shikoro>
-References: <20250831100457.3114-1-jelonek.jonas@gmail.com>
- <20250831100457.3114-5-jelonek.jonas@gmail.com>
+To: =?utf-8?Q?Beno=C3=AEt?= Monin <benoit.monin@bootlin.com>
+Cc: Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Jan Dabros <jsd@semihalf.com>, Andi Shyti <andi.shyti@kernel.org>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] i2c: designware: convert to dev_err_probe() on
+ request IRQ error
+Message-ID: <aNW1kP-jJquffypg@shikoro>
+References: <20250904-i2c-dw-dev-err-probe-v2-0-e59da34815fa@bootlin.com>
+ <20250904-i2c-dw-dev-err-probe-v2-1-e59da34815fa@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -67,62 +67,55 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="dO3d+mpa6id457GE"
+	protocol="application/pgp-signature"; boundary="RvBl/JEy3PTd/KX1"
 Content-Disposition: inline
-In-Reply-To: <20250831100457.3114-5-jelonek.jonas@gmail.com>
+In-Reply-To: <20250904-i2c-dw-dev-err-probe-v2-1-e59da34815fa@bootlin.com>
 
 
---dO3d+mpa6id457GE
-Content-Type: text/plain; charset=us-ascii
+--RvBl/JEy3PTd/KX1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Aug 31, 2025 at 10:04:49AM +0000, Jonas Jelonek wrote:
-> Adapt the RTL9300 I2C controller driver to use more of the regmap
-> API, especially make use of reg_field and regmap_field instead of macros
-> to represent registers. Most register operations are performed through
-> regmap_field_* API then.
+On Thu, Sep 04, 2025 at 04:31:06PM +0200, Beno=C3=AEt Monin wrote:
+> Simplify the error handling of devm_request_irq() in
+> i2c_dw_probe_master() and i2c_dw_probe_slave() by converting to:
 >=20
-> Handle SCL selection using separate chip-specific functions since this
-> is already known to differ between the Realtek SoC families in such a
-> way that this cannot be properly handled using just a different
-> reg_field.
+>     return dev_err_probe();
 >=20
-> This makes it easier to add support for newer generations or to handle
-> differences between specific revisions within a series. Just by
-> defining a separate driver data structure with the corresponding
-> register field definitions and linking it to a new compatible.
+> instead of calling:
 >=20
-> Signed-off-by: Jonas Jelonek <jelonek.jonas@gmail.com>
-> Tested-by: Sven Eckelmann <sven@narfation.org>
-> Reviewed-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> Tested-by: Chris Packham <chris.packham@alliedtelesis.co.nz> # On RTL9302=
-C based board
-> Tested-by: Markus Stockhausen <markus.stockhausen@gmx.de>
+>     dev_err();
+>     return ret;
+>=20
+> This also handle deferred probe error without spamming the log.
+>=20
+> Signed-off-by: Beno=C3=AEt Monin <benoit.monin@bootlin.com>
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
 
-I wanted to apply the rest of this series but applying fails. Can you
-kindly rebase it to 6.17-rc5 or later?
+Applied to for-next, thanks!
 
 
---dO3d+mpa6id457GE
+--RvBl/JEy3PTd/KX1
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmjVtIsACgkQFA3kzBSg
-KbZvPBAAjZht/3VKrr4/tynzLvBBiMBfM8zK9TbUBhgrXy1CdKyo57dpemzgqizW
-7peUZ+jzGWa6UwbL0DsPMunGFeurssFQ8ZmJ4PTrkw8ZheizlsMBSRO8Wgl9QTkr
-xcDjRiJn81SAO4A07ZIZVcgwslR61wM9KUvgAJL31PMIdIZyMZK0LBqB5EU/34XG
-ZMkUsFSinNyz9fTQEcO50Afpbj5YfxWp1ARR2KuE8Hj3Wa8R6PSwnUojYdjEIUiA
-xP0sAUC1LMIE1M4CO5HKry4zevMStVEzfnrpSm/wuemoOZvuFkWoHS70DV1hfeo+
-eJ7ZsDO7bbrbdSFmTEX4bNcaya1rHM6ESd2rbnPhYhBaERbJi6/Wy4VbVAAf9SUF
-unA3xsSO72p1mzKvG9Sx2M3BCWLOk388upRHIgPCL2Cm5NEX365sUk3srmGrWmBc
-JKX2odxg42Dz4IrfStryigaK6n3jMw/iPeAJxTDfdUFA6Wjj2r4aZhqNicpBPjby
-3BdWKhk37jHebwpfOVbSAMuqzsqHSSWbeIUxVVXfryNioOPN9LAN2CF6cUzsi1ir
-TakGsrUE5lw1YHxCsbKAk/5j/+1Upay3vrIULKXX6BPXDqjDz+JUmIgPax2rxdxi
-brEw4ziIzzSQjTrj+krz202jWYOdGdxOeHD2fW+uwZ4e8ZPCkHc=
-=lj8t
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmjVtZAACgkQFA3kzBSg
+Kbaglw//S9siA9TQMPD4lumWc5KDVsnqJDU3n6zBjzINdXUZ221bkn/SHuNJqxz2
+ur3KEUu55X59M9c7uMnxdiNP6jR/cU9Ox2Bom2K6Qaq7fUuCHeaAInOGF0YZ6SVJ
+Ehk0PI2qEvrDYK+nz9Hc4XtVCZ15VYS16hLSJ6LZXgk1gpSfPbhiauO6b+OXn3w0
+/7YYeTChM4NwVjheU12NLf7A2E3+6+kZiU0dZkA6+znxLdpN1tx0pFlbrGeVQUe4
+SSDGbXepcRSNTrfbpxEQys8d5Es3Imjq0EUVAzJMZ9EzsJ0xnUo5Sf0U3ahOxW4i
+j26eXsRjdJJwo+hrRSpJj0zJoP/ot8Hb58MjiCralYDal7x5o+BM31UkooVKdJwN
+oyyJigUy2hpvQSY+V1RUW8CW22BwGvAXThD0m6/uUS+rmJ/XgSc7PwM5Hc9gvIsy
+ZdSGqT8kIbk6a7Ius0s1Rov+OFNIP9f6C2GdWjW24FKPwzevJ4ksaH599mSK5XLl
+wptTrwaT8B7PvDJVfTTs4+8RaYyn2zSxSeIUlLT/R7sVRJoXYAXLRyGu0EK9wKc/
+duTWvUv3EvenV4u+QxU4TMgvG2pIHSBQ9CrIg4t3+BALqbPGDNSBatwXCRbqu0mg
+6dQAvDZwXrrlNTHMGX36iwkXH+049fS00cNbAIe9jfoS0Ak+P/k=
+=F8Ct
 -----END PGP SIGNATURE-----
 
---dO3d+mpa6id457GE--
+--RvBl/JEy3PTd/KX1--
 
