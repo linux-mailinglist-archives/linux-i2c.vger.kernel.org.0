@@ -1,155 +1,146 @@
-Return-Path: <linux-i2c+bounces-13171-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13172-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D615BA010B
-	for <lists+linux-i2c@lfdr.de>; Thu, 25 Sep 2025 16:47:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ABF36BA133A
+	for <lists+linux-i2c@lfdr.de>; Thu, 25 Sep 2025 21:33:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3DCE6321A35
-	for <lists+linux-i2c@lfdr.de>; Thu, 25 Sep 2025 14:47:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 663D83AC0C5
+	for <lists+linux-i2c@lfdr.de>; Thu, 25 Sep 2025 19:33:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E95112E0935;
-	Thu, 25 Sep 2025 14:47:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9ECDE31D384;
+	Thu, 25 Sep 2025 19:33:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e5noPqRD"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="n6pMUdgg"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50ECE2E0925
-	for <linux-i2c@vger.kernel.org>; Thu, 25 Sep 2025 14:47:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFE5631BCB4
+	for <linux-i2c@vger.kernel.org>; Thu, 25 Sep 2025 19:33:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758811655; cv=none; b=O+97iH60PRiupVBQlf2/gJ5rf/6LbYwlaXFq0jpuLi6+H88Ab6a6YhbRF1GH6USayjPbhJwZxg2Ssx/zcIWCuiIycWv7Q7kd8xfxInmNHCl4KsguDtH4eT6dVKarPh42lklZzTTf0qsbdNqwzHz5RT4EhMwSqXJd7Tqg9HIfWqI=
+	t=1758828786; cv=none; b=louguRWJ9TVLZlmlExGbIzB+7uGS+vYwZEjMMoZX06+jfm5ykPbS3a2L5zLgYkD3uImEUTBUwk7GVWqMJnyQjMpOeWcE1S5/X/4oEdqM9d4gzxIW4v4rD8WHxuJ8JKfPMTRhrynVfUrsRDFzIkioVLfcTmgm8zuy0tNsZTHWmIU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758811655; c=relaxed/simple;
-	bh=NPHmdmr9WXxx2j5cqelWY2NBJ/Qv0Fo41Tyr4O1RDIY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nqvr6DK+R7oRzv29kPekZMHA8cu+Z1LdvnrWw6siIpTYty8H7h+wDRp9gNsWNiaPMxKchMT2YvGallkRGjl6JTh7oFfDY0tSHmIT+SsCdEAwSHtrR7Su01WWc0DZrZj8guS+TF+DR1xU6kVkXARE9YoW7lp+UqLMrLuU+CTXDb8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e5noPqRD; arc=none smtp.client-ip=209.85.215.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-b523fb676efso1079483a12.3
-        for <linux-i2c@vger.kernel.org>; Thu, 25 Sep 2025 07:47:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758811653; x=1759416453; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=1oHUYWoSsgwp/73d4+uKBbB5Hy3Q2zhhkDL+XK7R24I=;
-        b=e5noPqRDFHDO3GrzpmwQhurQ60a6uYquIPbtKt/Mbczqvsx51L4jrCipFB3XBYtq4h
-         gLW6MWYv/9vadziPmBw9Lyer5P2YXGeKP34OiNZZ75jpUqRY6mVQHgs4L6tyMabMlsy+
-         4oh8lEYNiP5QDd6dNrBiCOMSR3gJw24MzhW2srsC8j1eB+6lUHRgzayBL6fhGwNRa1ED
-         e9ININisklE8pe3d/kzraKGvsV3oRTGxvoAmAoJ5crLvDQqN2Fh9m8VcWndYwUlaT9uD
-         VjjMTyfl86aDLHsaxNYWGsgmUWD2d9pI/EksrIFT5kdeg97jevRPQPTrbWerYWGvu5Fv
-         xUhA==
+	s=arc-20240116; t=1758828786; c=relaxed/simple;
+	bh=TnBEnMqj9PcBFYUsBVb09AJzYDc97RSDWF7EDvNsZr4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ou4QN1D/niLt/ydS0aYpiynQ5Yb84F4JLV6mpUOZh146Bp1bP0g4F+rTeKIbyqQkGJOqo+Kr22hWW8CpGo4aZ8PVljCs35YSarY18LTQGRJef915o5mYZUyF30Dpt+5zxH+6NZkr67ZJKOWn2TF3IauIQHPqIWESHflFxxu3mVk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=n6pMUdgg; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58PIPqLE024171
+	for <linux-i2c@vger.kernel.org>; Thu, 25 Sep 2025 19:33:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	TnBEnMqj9PcBFYUsBVb09AJzYDc97RSDWF7EDvNsZr4=; b=n6pMUdgg7o1HOrgY
+	EhGqoBKaP6P2x8Bf+fJ0BEpsE9y7I9q+ZUsYD9Upeuz+1qp3rab4zpH6l0DAbCoH
+	pGmpyB/yuXh5Jd47KllaZk53mhlUdOuw4ydqth+gkoXHHIgTQdrDzi47c8soowfa
+	etPQT3hvO3eavu8XhEpS77QWY3YVZlzSSvKI5qX3j+4mO+/NU+gMsgj6Y1XEXw4U
+	WhDf1QgSRAOXGbm3uHmYMh9PSrAWdsA0Uhd4Y8u0pC/419B4xZOj0S2e7LND0PPA
+	QK9hgYURCbFTagVrzz0yEQN4QwrN+JkNtFJaoRotH10ta5A2cVZdvP8VY2o0fkb7
+	T7EO9Q==
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49db0qr54m-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-i2c@vger.kernel.org>; Thu, 25 Sep 2025 19:33:04 +0000 (GMT)
+Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-42594e15f1bso20371625ab.0
+        for <linux-i2c@vger.kernel.org>; Thu, 25 Sep 2025 12:33:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758811653; x=1759416453;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1oHUYWoSsgwp/73d4+uKBbB5Hy3Q2zhhkDL+XK7R24I=;
-        b=O9T+b7LruVF0U9RRBnOsmdGKeGoLVkWU+EjhGVkFvUx4DW7zpIxO13y+h4jD1lcAeZ
-         RrFAGe2ajIcwyqp4sjB+5WHBqgJg6vnadFYnMEKLbI01+yugqrFZDFpTmnV0Da0cDckn
-         IeA/NLMuk8OP6VrlJN4NJoMHNpG4CDths3OOl1v0WbriqAQZjgj+6feo8PP0CR+KrqsW
-         d1S/MqQbGV/AVtQ5eov/WrED9FxIJ69YdWNAdXkYGHTX3LcbLptICvhfmG5FgAYIFhnE
-         qA5OREHLr/CvJcPnX7bFIqckcE2DygNmZ14cTkV8C7vQakHyKpjz62PFfsHH3N2/+7br
-         nlAg==
-X-Forwarded-Encrypted: i=1; AJvYcCVAjUXZTizBdNbpKCKDp5SD5Hc7R5KY54FRC+bgvul/1Ri2DW55FzmOdlTSBdi0oj3S0agCYuHXoDc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxrI8ibxlnW3sPTPyj+bpKCnb+wZEWde/ktM5beW9ezHZgqi/XD
-	E1WoiwD/fgXlmOqGrubvOHgzCfHJx4IZEYyTDGKFcGgl6FoTs2qEoagP
-X-Gm-Gg: ASbGnct6GlDg9WbMboQPldQ4mYOEvMfUR43c/yEZw9zXYz6w9f6cxsEUWgjqdYxK+gk
-	lV+hW9+OUCT6IC50U3JnZkyJ2X5MEZ2xSv/6HIaUW8KC7SQzE3VVbt92avdKwqPB9B/HY3JSmq6
-	81H6BrwsELo+GqLPXljuUuHD9XRIpQ/RbfB5AsKEyrZqHXPxD6Zhaau8DTJo0QsG31TLEgBkANN
-	Pabw/gM3oqNDD0R23FvhzD+X3qPRSgkVVJgyiOsXtAmjm0tgHSLdQPO0M3ZGtzA/rYAVR6nQru/
-	uHlkfqfVjU2JC9NSI2PGF8xUHJPNJbfqLo2VRxsUNoFD5ZILxjw0FGPc3vOyyGnL7KZyTzfj/I7
-	QFfe3JW/d2GgEQpxY52sWuv0h
-X-Google-Smtp-Source: AGHT+IFhsrm6W1qDEFArC6COve7CvO+nybyERmn6hMVXloLi66XB6XJ+N/inLkG65WOI3SwGkOjeGA==
-X-Received: by 2002:a17:903:3bc4:b0:25c:abb3:9bae with SMTP id d9443c01a7336-27ed4a474ffmr39028155ad.48.1758811653400;
-        Thu, 25 Sep 2025 07:47:33 -0700 (PDT)
-Received: from lgs.. ([2408:8418:1100:9530:90e2:695d:8bcf:653c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-27ed69be13fsm26358495ad.119.2025.09.25.07.47.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Sep 2025 07:47:32 -0700 (PDT)
-From: Guangshuo Li <lgs201920130244@gmail.com>
-To: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
-	Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>,
-	Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Wolfram Sang <wsa@kernel.org>,
-	linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Guangshuo Li <lgs201920130244@gmail.com>,
-	stable@vger.kernel.org
-Subject: [PATCH] i2c: microchip: pci1xxxx: bound-check SMBus block read length
-Date: Thu, 25 Sep 2025 22:47:12 +0800
-Message-ID: <20250925144712.1930205-1-lgs201920130244@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        d=1e100.net; s=20230601; t=1758828783; x=1759433583;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TnBEnMqj9PcBFYUsBVb09AJzYDc97RSDWF7EDvNsZr4=;
+        b=IQ7yt4F4XNxsql6wOvMB2hi/WJql5T4S6FXdP0cug3PfheszVl42xO9fy1ljQaO21Q
+         i700Po33sL5AfOCCgJlAr3VIrfcr0Ah7BxESWxC+mRWT/E/0lyVlNunEZ2xyfLCMKDkv
+         NK0H8TUhCxWaQ8tssrD8wNbSzpMcMP1mHmXX2CWEhCrk0ljXdFURaN3ki6J9Kpnw+EPf
+         fHDm+2MbeIYmH3bCKvE12BQzEAptnjH+iUwwTVR+vgzFpTUU4DyQ+loYRSsXWj1REen2
+         H+NWq2oW+Zu77l7LGIZLJwXRF78bhpYdH5/edOybZJWuF9Gm0qZuqdKl/l8S/ECZOwuf
+         rDVQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV5kL5GgSoyKC8HvEIbz/z3ExB+U3KWSqVG4dGAhJFgaowwZ8BjLjLaR6u5nRKUCMtK15aiBjyoV10=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzNCgQnqn1bYlx6rqugzoFlZ0AwmDKLNTh3pTNeT+wxGFVEhdFF
+	tf2SpjvQ6TJ5OoGFN6OEEdH0vQfLIet6KwEuvVsIQHUUEspNL3Hjland9t5dTvoPCqMgqYqeUkG
+	SRrSgOL8lq8B6+HGcnokIo3KN+iD54WlI82lbuUWPgT2Gou9V5nNfAZGZaL81MutGrM2wuJvCKt
+	DDtySq1J6cuVGB8gQjXMl9cVF3Pi1pr5ZFrzTGfQ==
+X-Gm-Gg: ASbGncsEU1o3rkBUfv5ePtxqg/x+JD2clOxzumbknVN0EftoWpxE1LLJTIT86HJ9hQl
+	KmhLSOlcXbKUGXQXuZGwYV4RNvwKKS40wlFXGzX1FSRTdMfqs2+IyJWMuVSd18dPzbqTBEVvDdh
+	B1pDHFJMbyqiSicTK/Dca7mA5K31j8IJwDn8dAHb3BSdbEYwHx/ifg4J5q0/i1HkQkNBmWxCJko
+	4AZIyG2
+X-Received: by 2002:a05:6e02:471c:b0:425:70b9:243c with SMTP id e9e14a558f8ab-425955e5344mr62881325ab.14.1758828783020;
+        Thu, 25 Sep 2025 12:33:03 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGM8FpReApr0CA3Q3i/iHZMzcvXpITYuK0dqKpybMbm53VSYRwCkGk4q3clx06ZAwPs9BfYLZtd0oAmaJMnlD0=
+X-Received: by 2002:a05:6e02:471c:b0:425:70b9:243c with SMTP id
+ e9e14a558f8ab-425955e5344mr62880955ab.14.1758828782638; Thu, 25 Sep 2025
+ 12:33:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250924-knp-cam-v1-0-b72d6deea054@oss.qualcomm.com> <20250924-knp-cam-v1-1-b72d6deea054@oss.qualcomm.com>
+In-Reply-To: <20250924-knp-cam-v1-1-b72d6deea054@oss.qualcomm.com>
+From: Loic Poulain <loic.poulain@oss.qualcomm.com>
+Date: Thu, 25 Sep 2025 21:32:51 +0200
+X-Gm-Features: AS18NWBmOViIv5jdU4dSvUosy08SUKDUBUh2nCRDhTzk4mlZzt1vwqBX05hLiQM
+Message-ID: <CAFEp6-38buo3WafiiXUEUs8n-=SKgacMD44gGAd1pnEDAsizCQ@mail.gmail.com>
+Subject: Re: [PATCH 1/6] dt-bindings: i2c: qcom-cci: Document Kaanapali compatible
+To: Jingyi Wang <jingyi.wang@oss.qualcomm.com>
+Cc: Robert Foss <rfoss@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        "Bryan O'Donoghue" <bod@kernel.org>, Todor Tomov <todor.too@gmail.com>,
+        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hangxiang Ma <hangxiang.ma@oss.qualcomm.com>,
+        "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
+        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, aiqun.yu@oss.qualcomm.com,
+        tingwei.zhang@oss.qualcomm.com, trilok.soni@oss.qualcomm.com,
+        yijie.yang@oss.qualcomm.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-ORIG-GUID: A7h0e8vZe2uENjak7NHosex73W9vstGb
+X-Authority-Analysis: v=2.4 cv=bJ0b4f+Z c=1 sm=1 tr=0 ts=68d598f0 cx=c_pps
+ a=vy3nvQW9C2dqy/lMnN3IYg==:117 a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10
+ a=EUspDBNiAAAA:8 a=i1QE4n8HBj4RHUU_w4AA:9 a=QEXdDO2ut3YA:10
+ a=mHQ74H5e8mo-RpSg_uaF:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTI1MDE3MSBTYWx0ZWRfX7p2db9nw+gc/
+ G/q3xtieWFn9bM6Uu5tl5QWCwwquES4mknoKYtaNLbXQOU9lcdevqv5GMIq3hfVbVnJOuA2itRS
+ BQWgXf1FxmzedklNK1pgOOC0bSoXm8EjA3ghPfHQoAJ1aAmLFRfDBENkZ6BEH3CbpfEr3pgXaBZ
+ wVD1oDbg5O8APR3zp5uitg06lPBs7jCOyDUddTfyLjH4HFLU8wRoTDM5KFwcFCp71/UTv6y5qh6
+ dNskzgfaeKTdmqky584IfFFJ1ixVttN5CDG8G14S9rIUr5Qs/KxOzAd9DTEL9cvAfo3Vydmp95m
+ nT86U61pjoB7wDXy5w1xVDa7Mr/av/zsaT3z5dO0OYus3uDVHF4LU/cjJToQqV4FG7w+S2f7qfL
+ 834W6gqM3/5CjM0cV+UYH4cut3CMWQ==
+X-Proofpoint-GUID: A7h0e8vZe2uENjak7NHosex73W9vstGb
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-09-25_01,2025-09-25_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ lowpriorityscore=0 adultscore=0 impostorscore=0 suspectscore=0 clxscore=1015
+ priorityscore=1501 malwarescore=0 bulkscore=0 phishscore=0 spamscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2509150000 definitions=main-2509250171
 
-The SMBus block read path trusts the device-provided count byte and
-copies that many bytes from the master buffer:
+On Thu, Sep 25, 2025 at 2:02=E2=80=AFAM Jingyi Wang
+<jingyi.wang@oss.qualcomm.com> wrote:
+>
+> From: Hangxiang Ma <hangxiang.ma@oss.qualcomm.com>
+>
+> Add Kaanapali compatible consistent with CAMSS CCI interfaces. The list
+> of clocks for Kaanapali requires its own compat string and definition.
+> This changes the minimum number of `clocks` and `clock-names`.
+>
+> - const: cam_top_ahb
+> - const: cci
 
-    buf[0] = readb(p3);
-    read_count = buf[0];
-    memcpy_fromio(&buf[1], p3 + 1, read_count);
-
-Without validating 'read_count', a malicious or misbehaving device can
-cause an out-of-bounds write to the caller's buffer and may also trigger
-out-of-range MMIO reads beyond the controller's buffer window.
-
-SMBus Block Read returns up to 32 data bytes as per the kernel
-documentation, so clamp the length to [1, I2C_SMBUS_BLOCK_MAX], verify
-the caller's buffer has at least 'read_count + 1' bytes available, and
-defensively ensure it does not exceed the controller buffer. Also break
-out of the chunking loop after a successful SMBus read.
-
-Return -EPROTO for invalid counts and -EMSGSIZE when the provided buffer
-is too small.
-
-Fixes: 361693697249 ("i2c: microchip: pci1xxxx: Add driver for I2C host controller in multifunction endpoint of pci1xxxx switch")
-Cc: stable@vger.kernel.org
-Signed-off-by: Guangshuo Li <lgs201920130244@gmail.com>
----
- drivers/i2c/busses/i2c-mchp-pci1xxxx.c | 17 ++++++++++++++++-
- 1 file changed, 16 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/i2c/busses/i2c-mchp-pci1xxxx.c b/drivers/i2c/busses/i2c-mchp-pci1xxxx.c
-index 5ef136c3ecb1..2307c8ec2dc7 100644
---- a/drivers/i2c/busses/i2c-mchp-pci1xxxx.c
-+++ b/drivers/i2c/busses/i2c-mchp-pci1xxxx.c
-@@ -880,7 +880,22 @@ static int pci1xxxx_i2c_read(struct pci1xxxx_i2c *i2c, u8 slaveaddr,
- 		}
- 
- 		if (i2c->flags & I2C_FLAGS_SMB_BLK_READ) {
--			buf[0] = readb(p3);
-+			u8 cnt = readb(p3);
-+
-+			if (!cnt || cnt > I2C_SMBUS_BLOCK_MAX) {
-+				retval = -EPROTO;
-+				goto cleanup;
-+			}
-+			if (cnt > total_len - 1) {
-+				retval = -EMSGSIZE;
-+				goto cleanup;
-+			}
-+			if (cnt > (SMBUS_BUF_MAX_SIZE - 1)) {
-+				retval = -EOVERFLOW;
-+				goto cleanup;
-+			}
-+
-+			buf[0] = cnt;
- 			read_count = buf[0];
- 			memcpy_fromio(&buf[1], p3 + 1, read_count);
- 		} else {
--- 
-2.43.0
-
+The recently introduced qcom,qcm2290-cci has the same definition with
+two clocks, ahb, and cci.
 
