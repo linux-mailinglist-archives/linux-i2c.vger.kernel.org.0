@@ -1,96 +1,128 @@
-Return-Path: <linux-i2c+bounces-13181-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13182-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56520BA1754
-	for <lists+linux-i2c@lfdr.de>; Thu, 25 Sep 2025 23:07:07 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B114BA1899
+	for <lists+linux-i2c@lfdr.de>; Thu, 25 Sep 2025 23:31:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4C7B85624EB
-	for <lists+linux-i2c@lfdr.de>; Thu, 25 Sep 2025 21:07:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5EFE0189AE4D
+	for <lists+linux-i2c@lfdr.de>; Thu, 25 Sep 2025 21:31:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1F992765D3;
-	Thu, 25 Sep 2025 21:06:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A99B9286D64;
+	Thu, 25 Sep 2025 21:31:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="ZaOfW0Ta"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="OWZc22Ex"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F08831FEC6
-	for <linux-i2c@vger.kernel.org>; Thu, 25 Sep 2025 21:06:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6C1E22A7F1
+	for <linux-i2c@vger.kernel.org>; Thu, 25 Sep 2025 21:31:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758834410; cv=none; b=MpbZkxe5JSVcUpV07JuFZz/Qv1Jw6xx3LZ6XijuL6nQW2LhvTw1zLor4juhhwj29LNQrB9uyhhMvo5xFpZbM8vFmFBwFuhxc3x/ubpNUvDksLiLLJrbssetIWEIzCCHA9+rRkz0XE345oH153BlqErD78JdXOIXLU5hWnohtbsk=
+	t=1758835865; cv=none; b=fO3STMZkycSprK0l2MfWczHqMEKiDWfRf/vTD7dfNz97b6Yp/xRmMg3gaYlwNItLHwTS8rvNYeep6fVc04xWqEIWllGwd8+erwrgcFqiT9jkvjwIX5YymGFB6Rjawd1oCWC8eLsMPUhryy/LQiv2eiGyuYDCLa8VCJAjID/e11g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758834410; c=relaxed/simple;
-	bh=+xWhWdVvAZoEipNtEoemr66/tT2SxUAtULhyc9gRmFY=;
+	s=arc-20240116; t=1758835865; c=relaxed/simple;
+	bh=WVdsQxbe9UaWBdOhX36alN9UVBCyGgEWHyRT2Dfx5Rc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=W3U0mBs2Nbwb5NCHUS6k9Uq0ciV9ab47vc3Gmb9aiyl/Qx0u2x6Q1wU/zL6hA6mTvkIi0MM2IRqO5//23SUeHdNP6Kxoaxs4QRfGSECg1OweqUWfdWwcGqzQPCexpBaCH7SesIjG+/Qr1L8B0G3xuafvbPyhFYVV/IhfiSeEl9U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=ZaOfW0Ta; arc=none smtp.client-ip=194.117.254.33
+	 Content-Type:Content-Disposition:In-Reply-To; b=CyME4nOlnd5DDS9vziou45m6zv2iTpVJgN7CCfC5s0GnaK8hQ3hoEKEitdwI1J6sqQy4Fambx5iL2Y8IY6Xii6/3x8jj+fLDYr0aZPnGKLtzu8TIHP2CCtj13FoLmcD3GNTEn9KH0CP3HTaBqIfxg8KJZ8ERui5lDyE4fwLL69Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=OWZc22Ex; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:content-transfer-encoding
-	:in-reply-to; s=k1; bh=xPHMj71ylaA/Pst6CfYJPDLa58yFoMZJIXza1Geua
-	0w=; b=ZaOfW0TajNUTRaQQdd2bpuhhw8JNGjznHVqn9Y+v090V/IwPPai/3t4Ej
-	tHfhqHd1oCLVIGFkRLX/lMOoAJR0aUtfjeI2Q4kbWgLER/+XB+Vdv2cBtQr3R7m3
-	lu88er7bZ1KKVlEq/tIXSBlfLjSMODSYBR2DXxQlDFyB/4lt4CBZhduc+8AshyCM
-	gn/+Z7FsTwYQmg4+usYXG2pNJSM/sMNwLbpNHTc1JVhg6UjVSP+rAMqUrZ9BC/PJ
-	xJPfEWXnCi2n5aDZQkRuaADDQyHlauOOIvgtV0sNH8Hio2v1GLeQoFV3u61fmdNF
-	VtXtIk0gP3BL6v8RnNcy9v5xE7JQw==
-Received: (qmail 2015546 invoked from network); 25 Sep 2025 23:06:46 +0200
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 25 Sep 2025 23:06:46 +0200
-X-UD-Smtp-Session: l3s3148p1@LY3Fi6Y/esgujntx
-Date: Thu, 25 Sep 2025 23:06:42 +0200
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=WVds
+	Qxbe9UaWBdOhX36alN9UVBCyGgEWHyRT2Dfx5Rc=; b=OWZc22Ex68AItBuuCtfp
+	B7LRxLrwBQ0lXFnw7ln64p7t+p84Mdzvskt7PYGL18tQ9CQ7VByocuKQL1sPjyol
+	nJxK0z6FebAuYy8Vi1QL9lT306JaopSt3/YAUa1TVcfg7YyZC8DRlQRfoG+ld76v
+	tY2mIebDY0gmmTVfpoU4ViI1AQaW8CMrClrG4ou92w1hTZeLIxlWq6zmeLS+PcQK
+	equEgh1Y+gHBkqnYMBXJUPJWdD0wXRyuZ+2d+i7OL78llzeE1yLPtBKTaozazK+w
+	W4Fl1mcJZCjpEs4ewBIxooOcNa3Y1pfx+qzal+dT6Q4npHlTggXu1J50noiVnkBe
+	JA==
+Received: (qmail 2020059 invoked from network); 25 Sep 2025 23:30:59 +0200
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 25 Sep 2025 23:30:59 +0200
+X-UD-Smtp-Session: l3s3148p1@+Kdg4qY/yIwujntx
+Date: Thu, 25 Sep 2025 23:30:54 +0200
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Leilk Liu <leilk.liu@mediatek.com>
-Cc: Andi Shyti <andi.shyti@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Qii Wang <qii.wang@mediatek.com>, Wolfram Sang <wsa@kernel.org>,
-	Liguo Zhang <liguo.zhang@mediatek.com>, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org,
-	Project_Global_Chrome_Upstream_Group@mediatek.com,
-	Chen-Yu Tsai <wenst@chromium.org>
-Subject: Re: [PATCH v2] i2c: mediatek: fix potential incorrect use of
- I2C_MASTER_WRRD
-Message-ID: <aNWu4hC2Yer7c2kG@shikoro>
-References: <20250906082652.16864-1-leilk.liu@mediatek.com>
+To: Jonas Jelonek <jelonek.jonas@gmail.com>
+Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>,
+	Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-i2c@vger.kernel.org,
+	Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Markus Stockhausen <markus.stockhausen@gmx.de>,
+	Sven Eckelmann <sven@narfation.org>,
+	Harshal Gohel <hg@simonwunderlich.de>
+Subject: Re: [PATCH v7 04/12] i2c: rtl9300: use regmap fields and API for
+ registers
+Message-ID: <aNW0jiJQHcS-FKwr@shikoro>
+References: <20250831100457.3114-1-jelonek.jonas@gmail.com>
+ <20250831100457.3114-5-jelonek.jonas@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="dO3d+mpa6id457GE"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250906082652.16864-1-leilk.liu@mediatek.com>
+In-Reply-To: <20250831100457.3114-5-jelonek.jonas@gmail.com>
 
-On Sat, Sep 06, 2025 at 04:24:06PM +0800, Leilk Liu wrote:
-> From: "Leilk.Liu" <leilk.liu@mediatek.com>
-> 
-> The old IC does not support the I2C_MASTER_WRRD (write-then-read)
-> function, but the current code’s handling of i2c->auto_restart may
-> potentially lead to entering the I2C_MASTER_WRRD software flow,
-> resulting in unexpected bugs.
-> 
-> Instead of repurposing the auto_restart flag, add a separate flag
-> to signal I2C_MASTER_WRRD operations.
-> 
-> Also fix handling of msgs. If the operation (i2c->op) is
-> I2C_MASTER_WRRD, then the msgs pointer is incremented by 2.
-> For all other operations, msgs is simply incremented by 1.
-> 
-> Fixes: b2ed11e224a2 ("I2C: mediatek: Add driver for MediaTek MT8173 I2C controller")
-> Signed-off-by: Leilk.Liu <leilk.liu@mediatek.com>
-> Suggested-by: Chen-Yu Tsai <wenst@chromium.org>
-> Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
 
-Applied to for-next, thanks!
+--dO3d+mpa6id457GE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Sun, Aug 31, 2025 at 10:04:49AM +0000, Jonas Jelonek wrote:
+> Adapt the RTL9300 I2C controller driver to use more of the regmap
+> API, especially make use of reg_field and regmap_field instead of macros
+> to represent registers. Most register operations are performed through
+> regmap_field_* API then.
+>=20
+> Handle SCL selection using separate chip-specific functions since this
+> is already known to differ between the Realtek SoC families in such a
+> way that this cannot be properly handled using just a different
+> reg_field.
+>=20
+> This makes it easier to add support for newer generations or to handle
+> differences between specific revisions within a series. Just by
+> defining a separate driver data structure with the corresponding
+> register field definitions and linking it to a new compatible.
+>=20
+> Signed-off-by: Jonas Jelonek <jelonek.jonas@gmail.com>
+> Tested-by: Sven Eckelmann <sven@narfation.org>
+> Reviewed-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> Tested-by: Chris Packham <chris.packham@alliedtelesis.co.nz> # On RTL9302=
+C based board
+> Tested-by: Markus Stockhausen <markus.stockhausen@gmx.de>
+
+I wanted to apply the rest of this series but applying fails. Can you
+kindly rebase it to 6.17-rc5 or later?
+
+
+--dO3d+mpa6id457GE
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmjVtIsACgkQFA3kzBSg
+KbZvPBAAjZht/3VKrr4/tynzLvBBiMBfM8zK9TbUBhgrXy1CdKyo57dpemzgqizW
+7peUZ+jzGWa6UwbL0DsPMunGFeurssFQ8ZmJ4PTrkw8ZheizlsMBSRO8Wgl9QTkr
+xcDjRiJn81SAO4A07ZIZVcgwslR61wM9KUvgAJL31PMIdIZyMZK0LBqB5EU/34XG
+ZMkUsFSinNyz9fTQEcO50Afpbj5YfxWp1ARR2KuE8Hj3Wa8R6PSwnUojYdjEIUiA
+xP0sAUC1LMIE1M4CO5HKry4zevMStVEzfnrpSm/wuemoOZvuFkWoHS70DV1hfeo+
+eJ7ZsDO7bbrbdSFmTEX4bNcaya1rHM6ESd2rbnPhYhBaERbJi6/Wy4VbVAAf9SUF
+unA3xsSO72p1mzKvG9Sx2M3BCWLOk388upRHIgPCL2Cm5NEX365sUk3srmGrWmBc
+JKX2odxg42Dz4IrfStryigaK6n3jMw/iPeAJxTDfdUFA6Wjj2r4aZhqNicpBPjby
+3BdWKhk37jHebwpfOVbSAMuqzsqHSSWbeIUxVVXfryNioOPN9LAN2CF6cUzsi1ir
+TakGsrUE5lw1YHxCsbKAk/5j/+1Upay3vrIULKXX6BPXDqjDz+JUmIgPax2rxdxi
+brEw4ziIzzSQjTrj+krz202jWYOdGdxOeHD2fW+uwZ4e8ZPCkHc=
+=lj8t
+-----END PGP SIGNATURE-----
+
+--dO3d+mpa6id457GE--
 
