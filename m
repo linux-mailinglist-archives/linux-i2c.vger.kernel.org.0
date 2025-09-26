@@ -1,120 +1,122 @@
-Return-Path: <linux-i2c+bounces-13192-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13193-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1B0DBBA22A0
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Sep 2025 03:50:15 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E270BA2911
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Sep 2025 08:47:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 46A4A1C2403E
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Sep 2025 01:50:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5F526561277
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Sep 2025 06:47:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CEDD1B4247;
-	Fri, 26 Sep 2025 01:50:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A36B27F4CE;
+	Fri, 26 Sep 2025 06:47:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b="xfEP0tWP"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="FnIwbFiB"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtpbgbr2.qq.com (smtpbgbr2.qq.com [54.207.22.56])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD859C8FE;
-	Fri, 26 Sep 2025 01:50:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.207.22.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEC0F27E7DF
+	for <linux-i2c@vger.kernel.org>; Fri, 26 Sep 2025 06:47:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758851407; cv=none; b=e93M2+3RMlhTn2T35PVlrtB5xwUnWgmMctTTHcvJ0qlTvB5pnXnpNf0I0wu69tTXQwJwtQB4QMuIIk6iaoDfXxzPv0g3VAROwFpacxLmcLh/HZXKoOdhqHenqQKQ77iiHxxTFR4PyZ2yw4sLm6fUBx32qIYB4+W9Y1NK/CcHhf4=
+	t=1758869261; cv=none; b=GBa9kDdR2xjb1Muw9U9RVeVr27GpKK/i2QM8vOVtEdLlkna0RsiPJpB7zzVrSLerS1VAbPAsZKDv1whCFmfCwU0pSQgEmmm+Iokvvg0U4b5MX2mYKP6DhchxehGB4hDcrwQXc29OFEHDRFWmZH7Q8Jivk17bZT3rEeW/7qyNHEw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758851407; c=relaxed/simple;
-	bh=6EIDKLJ0T64U8JaYB87sh/AYgFFzAStLXb+PhWgo6XU=;
+	s=arc-20240116; t=1758869261; c=relaxed/simple;
+	bh=COunz1JLa1fpmV1AAJupyIS7fAiGMYlnjvCJNA2KWK8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=i/jjpc6wCBLBhewD+YiDZsdIJKYlOsztMwxVKwd+KYvybTtnl1Ymil3PmGsUnM+5oxDg2kbvBWHwnb5h+jh2keb9aFZlmdextPfuo8Wuz1u8I3DnpajAwNaIML2XT0ry1tpxgUJTqwpRRopBX80J5YswxdGOwVNGrXFJrTVoYbE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com; spf=none smtp.mailfrom=linux.spacemit.com; dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b=xfEP0tWP; arc=none smtp.client-ip=54.207.22.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.spacemit.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.spacemit.com;
-	s=mxsw2412; t=1758851246;
-	bh=f9pOdE67HES7VaiKOaqJeSWoyMdjon32UaYW5I7wfMk=;
-	h=Date:From:To:Subject:Message-ID:MIME-Version;
-	b=xfEP0tWPqxSsv+wZERQL+pimB1qwKBdtDvv+TcDGaASGMPZMluqmTSHM8A1WIhzWe
-	 heRtll9kIgtKbi4STFKylQtAaEEyg7VzPKa7eAYXfx7XYsWEmifnN2/aSnlKplVWDF
-	 oC4H1VwRbUjgvxcE3upD28bdWjRes68BMZ80BJBQ=
-X-QQ-mid: esmtpsz19t1758851244t6712949d
-X-QQ-Originating-IP: WYNt+5eiH0pKnAuyyFLmJQkwXQ0+Zpro86iKA3t0UVc=
-Received: from = ( [14.123.253.220])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Fri, 26 Sep 2025 09:47:23 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 817829598830566685
-EX-QQ-RecipientCnt: 11
-Date: Fri, 26 Sep 2025 09:47:22 +0800
-From: Troy Mitchell <troy.mitchell@linux.spacemit.com>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Troy Mitchell <troy.mitchell@linux.spacemit.com>
-Cc: Andi Shyti <andi.shyti@kernel.org>, Yixun Lan <dlan@gentoo.org>,
-	Alex Elder <elder@riscstar.com>,
-	Troy Mitchell <troymitchell988@gmail.com>,
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev,
-	Aurelien Jarno <aurelien@aurel32.net>
-Subject: Re: [PATCH v2 0/6] i2c: spacemit: fix and introduce pio
-Message-ID: <48B175EBF0F1A347+aNXwqlO1mD-7BGtE@kernel.org>
-References: <20250925-k1-i2c-atomic-v2-0-46dc13311cda@linux.spacemit.com>
- <aNW5KfIg-_4-Et1S@shikoro>
+	 Content-Type:Content-Disposition:In-Reply-To; b=s4PvF6vIY7h/TwGJoyYeXgtPE0Rp1dYDUTmsRdgSWVffgxppHblFiVQNu8JyBK15L1LWRoLTftKY49nHADV4SEM3SG6pgNoaYoM7odCCubPuQ7xA3EpnYh57bKiaOK4uL3GRyTm3aTE2zhU9SejNSxc567jzceiv7mXnmU4PSo4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=FnIwbFiB; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=Zg5B
+	R8TR0pwXhS1HMnn+PMtDRUEhr+0FbUE0xjhN2ok=; b=FnIwbFiBtLNXA4GM3Xad
+	/H/dtDIRdZ4Itp/C6UXVxubIduzYAwiR5lmtuy6oZ9KHV78q6c8RG9tmbPfE6ozV
+	LF/FgZfyaggUZ5wW2k0VpvH+M16zCuIYNm7VpIPLbcAfrNXG/0RiHbs0ySJrc9NJ
+	SEhoW8LymZ6tz2eascEXDe5AkLf2+qFYCUmsxXu2sy5/k51pDFOjG5AG/prsd9gB
+	NxFIVdZV8fLev9AN2FWjBd9sI/XwcKoy0XunztJg/nrKKFQ7tGySZhNcPB3HuzDp
+	mqZMVY8VtUSKDbQRBiEiDw0Wd6ozEyjHNK76d637RDORBsgmChaARi9RmmaDV4pZ
+	tA==
+Received: (qmail 2152516 invoked from network); 26 Sep 2025 08:47:31 +0200
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 26 Sep 2025 08:47:31 +0200
+X-UD-Smtp-Session: l3s3148p1@+BPqqK4/0IUgAwDPXwQHAL/S9V79e5yL
+Date: Fri, 26 Sep 2025 08:47:30 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Jonas Jelonek <jelonek.jonas@gmail.com>
+Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>,
+	Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-i2c@vger.kernel.org,
+	Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Markus Stockhausen <markus.stockhausen@gmx.de>,
+	Sven Eckelmann <sven@narfation.org>,
+	Harshal Gohel <hg@simonwunderlich.de>
+Subject: Re: [PATCH v7 04/12] i2c: rtl9300: use regmap fields and API for
+ registers
+Message-ID: <aNY3Ar8bernz4kCI@shikoro>
+References: <20250831100457.3114-1-jelonek.jonas@gmail.com>
+ <20250831100457.3114-5-jelonek.jonas@gmail.com>
+ <aNW0jiJQHcS-FKwr@shikoro>
+ <476cd546-1bde-4ff0-a785-2e6fa21b79d4@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="htY2TmuyroWQDCdS"
+Content-Disposition: inline
+In-Reply-To: <476cd546-1bde-4ff0-a785-2e6fa21b79d4@gmail.com>
+
+
+--htY2TmuyroWQDCdS
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aNW5KfIg-_4-Et1S@shikoro>
-X-QQ-SENDSIZE: 520
-Feedback-ID: esmtpsz:linux.spacemit.com:qybglogicsvrsz:qybglogicsvrsz3a-0
-X-QQ-XMAILINFO: OUC5DGN0mB58BnpMipajIoeGxqThYQSyy4jSZq+zXnU7ySETUPRJ7rRr
-	RN6Izm2Nt7Cnp14wllbMbZ4PVdToTVoPysUyzWK2QpWNcXlmYLB6xSO1sEJG2fkeECptSAK
-	fJqsexHwABot6bJU657ddIMblpp3aJa07r6T8OzttncbXsR1dvILGLe+7s+44wuCXVo5Wu8
-	tn2GHViK/1Rl4kIDely8TG6VZUDnWrD++I3q5vusRs1gMbxtet544Z/y/rfeUV9zyLsuVsF
-	+mQkIjOhhLmjl9IWs3NqBOP55AFoHmbURMUgNniT9beaJrN3xNaC6AXyOZisgqbnp0XTEiy
-	9dugW1iUpbwynfgBztxXTsgejay0MRLSgagg6JGsmJA9M4sFFVnDWX9mP7C2Uftv2NW29u7
-	gL0cenrQ3NK9ksSdinn3zH7PtOt0Hrrhr1xX/w699cEcuXFd29Bqppa8gTGwKvU0GNUIiaZ
-	Sy73UmrUJu5kDyzF9QBo2XksNeBGRvDZWfnC4qnxBIKUt9h9+6vc/8kwqwXX/BhQZnuc9RN
-	h7VAJc8zuBVtdd3I2yhKi8iYwItLTCurG1bCT98rgJIp4ktqc/0+zeYfdtT090B+fmVJYBg
-	FIzM6B/17dB0DSE1x2npGCQyKy3FxI/IDUveZMJmu5V8McVQrgRep6Gy0wnSB9wTeccIsls
-	E4tw4meDRnZweh476O+5r85M0Ug6kd5JFr1HmcAk5x4Ai+ztz7M5Q1SAukQIHcGrIOYEzRC
-	xTsQnAIcb7QVQByUgY3llkss6chRI+QXcGPJG845LZ/oEHarScC/91AxMwhmY7h/aMB0lMV
-	n4pFK4hHn+7jEm1Cq0y36QTAkER+is/b07U/yuOSTDX+9rZDzsywzOMIRT9oc72V3RLQ9PC
-	9iPxDmDNBaD0szR48nAcrb/qpMPgKbYyIWLde9pMV1WRwbXPa9qur0ckFGj2DG3w2zlQi0l
-	r+Pq4HcAVzXaNffBdsKFX2cqyIpWwH/OtpHzluPyEGMvuDcZ3dvhLs117LBVjvmD8Fd29JJ
-	SxwJIk4/q8to42Uh9f
-X-QQ-XMRINFO: NI4Ajvh11aEj8Xl/2s1/T8w=
-X-QQ-RECHKSPAM: 0
+Content-Transfer-Encoding: quoted-printable
 
-Hi Wolfram,
+Hi Jonas,
 
-On Thu, Sep 25, 2025 at 11:50:33PM +0200, Wolfram Sang wrote:
-> On Thu, Sep 25, 2025 at 10:02:24AM +0800, Troy Mitchell wrote:
-> > Previously, there were a few latent issues in the I2C driver.
-> > 
-> > These did not manifest under interrupt mode, but they were
-> > still present and could be triggered when running in PIO mode.
-> > 
-> > This series addresses those issues and adds support for PIO
-> > mode transfers.
-> > 
-> > Signed-off-by: Troy Mitchell <troy.mitchell@linux.spacemit.com>
-> 
-> Applied patches 1-5 to for-mergewindow, thanks!
-Thanks.
-> 
-> Waiting for a possible review for patch 6.
-> 
-> Troy, maybe you want to add yourself as a maintainer for this driver?
-Yeah, I'd be happy to.
-I'll add myself to the MAINTAINERS file ASAP.
+> I just noticed that it seems like an already applied patch got lost [1].
+> This was supposed to be merged to Andi's i2c/i2c-host [2] and actually was
+> there until the first three patches of this series got merged.
+>=20
+> Since I had already issue a few days ago trying to rebase the remaining
+> patches, this might be the cause it also fails for you?
 
-                - Troy
-> 
-> 
+True. This patch somehow got lost and doesn't apply cleanly anymore
+because of patch 3 of this series.
+
+Are open to resend this series, rebased and with the lost patch added?
+
+Thanks for the pointer,
+
+   Wolfram
+
+
+--htY2TmuyroWQDCdS
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmjWNwIACgkQFA3kzBSg
+KbalGA/5AZzQHP/5+gcHsGeveIpB6If9w0fi5dYGUCglTAVLQpRx2xnBp4dOrnbZ
+ZF8OeEPy0VkhY0c0vuMtyEvkLAPt7xT6h4Ed9yZGcNn32axeJQ8Q5m2LAyA8meyl
+rV0NZeGGQ4r3/iRmdsE69Iab4iprmS3gZRDPyv6PkIDsTQK0X+RlCs7wwk6CWXxN
+12wLxEE0VROVXkAj9rQMAdwJFDlo9wnz9Wi20FwrXaSnxhua5dHWIgKXoW8Kj3Mo
+KL0JAn6QE3cNAN2u9Y7bBpH2z2kfaJNgmWz0zYsCnA5sItmven9OiBVfKdgRCGXv
+zTKSQyMQmlI5cMU72uYGRwCVKsMH4IETKyZWZBBn4+we8a+kHGB6SLicCmE8vhlW
++XGt/oSE6TCLZ52IUwAcshWgF3EqepLcVvypjm3/eGycRM7+Lb3NKJQheJIBXJrB
+2VstLTcEl1r3/PQnBM6P4iJ0Gdit92L1PhQ8HNoYR4zBjQA+U1HQfO94r+Cri+ZQ
+ahh8fB+mNM+00PIBCNIxs0tD66STvQBXM09tpJUv9BJv3R9YYnvb4SQjb4Q0QU3A
+/ux0kn5vopQdxlvN6gTGovlE5Is/e7d2/y1yxdPZntk3qBc8UGfym4CheeWgJh/6
+dgSWs/wlnFyrktdUOwvcwDXh6wTC6YZScRLtRCGD5H+OiIWfWhs=
+=c2bU
+-----END PGP SIGNATURE-----
+
+--htY2TmuyroWQDCdS--
 
