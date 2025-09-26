@@ -1,116 +1,109 @@
-Return-Path: <linux-i2c+bounces-13199-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13200-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1EBCABA2E9D
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Sep 2025 10:18:40 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 258D9BA2F6C
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Sep 2025 10:34:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CDB513AF09D
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Sep 2025 08:18:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 60D601BC52F4
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Sep 2025 08:35:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21398296BB4;
-	Fri, 26 Sep 2025 08:18:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4EBA291C1E;
+	Fri, 26 Sep 2025 08:34:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="iChBGkJG"
+	dkim=pass (1024-bit key) header.d=narfation.org header.i=@narfation.org header.b="2TpVmVGJ"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from dvalin.narfation.org (dvalin.narfation.org [213.160.73.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 122FF28D829
-	for <linux-i2c@vger.kernel.org>; Fri, 26 Sep 2025 08:18:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A777028468E;
+	Fri, 26 Sep 2025 08:34:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.160.73.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758874704; cv=none; b=c25O+J/V+EPci/Z8SpwjrYU/oZgJNh19snoJwKKDgrykiHKRVuyZ0yfzUR3XnOJlWvOaiaVm8KGvzeZiuHP5R+YhwCsScEJcN8WCpgwjAcyGPYO8x7LaBNfe68vPhOhuRXYREmrZGUN+vVvihpF/yFKvdXNVcGVgTrbNxm34pS4=
+	t=1758875687; cv=none; b=Ilov3N3QHywmS+h33NLGPaT8xu0UoLBr3YraraqYSe7neiQV1LUmJf8FXPg28oWw50jpL7teA2z8sgpG+u62463SxzRQ0laBnvKWVI3muKiBU4VcXggIDE9Rn1VDL3Aov6TBgiC64AGfWhaATu1t8SJ1wDDAKryo9LZv9glTfUw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758874704; c=relaxed/simple;
-	bh=YaZchDCRgfylKud3pEbWtzlpdTQgWlvYrjoHVIScY60=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NAx3yyEXMF3sCNeD3P9D12nB2DtpKTW/8fquHWbWH9k5TsobiNU30/ISBqq3U+X9JCT5pTesCRdufkz23R5otIpz0YpyJKqu0xSUNBovn31j+jpIiYnK0HZZ5IPXIpI0+56gHzxNXYR26ZAiII7CoEeACqhGLhDYbSdX2AGHXgk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=iChBGkJG; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=YaZc
-	hDCRgfylKud3pEbWtzlpdTQgWlvYrjoHVIScY60=; b=iChBGkJGY5qDLuXXp2On
-	xeNmjPEIV34ZO+dTRwCkyRF8IZfMbPBdEC2C/qt84CMIQUg1sNwKwFf52P92cMsW
-	DkIXSXOZ5MJPlma2U/R4uW3AxzXCiPmo0x1LLpGot9WGP1JVPgbZzZKD+MJZIQga
-	QcZKNgRXHZZAvoX6jseSUngUL/TXbwvm61a/zyLuAmhUqdsoJrjPjtGKs+C5yXXj
-	OaTV/7iawz8HnRetWWkZWkQayLijlLUJPTNaTjCC2Y8urjEMTrHiyVyP0LqEEXx7
-	lAxylYMK4PTQWhJ0hgFM6/Ix9szF0ttLw3HkaoiaHooppVLLqVDTHzKvpuun4D+x
-	Rg==
-Received: (qmail 2179589 invoked from network); 26 Sep 2025 10:18:18 +0200
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 26 Sep 2025 10:18:18 +0200
-X-UD-Smtp-Session: l3s3148p1@ZCme7a8/yMIgAwDPXwQHAL/S9V79e5yL
-Date: Fri, 26 Sep 2025 10:18:18 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+	s=arc-20240116; t=1758875687; c=relaxed/simple;
+	bh=e7bC5dq79R0/pER0WTMpPyYrC1z5CQDbs4cXjxBNCZs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ZCnAEJexSsbpcFGUlyKD9Ghp36/IlQZRjJPHLpBF8EVTWTKlk2wTs+TIdz4C/mv80ptnoX+MVAlrSjCAAfViU9uwhG9856wV2HQhfS/GdKKJ5OZxsIhtvtEiN3j5O+SWMZfs+hyITwJzP3QIW0xOtKB2G9ZLVAHO3VlJIJkH0YE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=narfation.org; spf=pass smtp.mailfrom=narfation.org; dkim=pass (1024-bit key) header.d=narfation.org header.i=@narfation.org header.b=2TpVmVGJ; arc=none smtp.client-ip=213.160.73.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=narfation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=narfation.org
+Received: by dvalin.narfation.org (Postfix) id 174EF1FF81;
+	Fri, 26 Sep 2025 08:34:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=narfation.org;
+	s=20121; t=1758875683;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9XrSAzEucZFOR6gasbmAqA8NKfemBpNqV2GtSG31dZc=;
+	b=2TpVmVGJDnsM/KR2PdQeimUKDYa6pDctXGELfRRFb1d7lhh5UqjIpmTzfrfbDat5mj7Lwm
+	0kWc5o316hcsPL1vyVZDZWnhB1jFwpj63Rdo6ntWJkLyFmRfb9lO21uzLS82RLWY4Hxa8K
+	/conjNbdBlL9y6P3zGA2Pn2GeloTcoI=
+From: Sven Eckelmann <sven@narfation.org>
 To: Jonas Jelonek <jelonek.jonas@gmail.com>
-Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>,
-	Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-i2c@vger.kernel.org,
-	Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Markus Stockhausen <markus.stockhausen@gmx.de>,
-	Sven Eckelmann <sven@narfation.org>,
-	Harshal Gohel <hg@simonwunderlich.de>
-Subject: Re: [PATCH v7 04/12] i2c: rtl9300: use regmap fields and API for
- registers
-Message-ID: <aNZMSsNL6M2GDM5U@shikoro>
-References: <20250831100457.3114-1-jelonek.jonas@gmail.com>
- <20250831100457.3114-5-jelonek.jonas@gmail.com>
- <aNW0jiJQHcS-FKwr@shikoro>
- <476cd546-1bde-4ff0-a785-2e6fa21b79d4@gmail.com>
- <aNY3Ar8bernz4kCI@shikoro>
- <29683d52-8e5a-4217-a32b-c2248319f69a@gmail.com>
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Harshal Gohel <hg@simonwunderlich.de>,
+ Simon Wunderlich <sw@simonwunderlich.de>, Andi Shyti <andi.shyti@kernel.org>,
+ Chris Packham <chris.packham@alliedtelesis.co.nz>,
+ Wolfram Sang <wsa+renesas@sang-engineering.com>
+Subject:
+ Re: [PATCH i2c-host v6] i2c: rtl9300: Implement I2C block read and write
+Date: Fri, 26 Sep 2025 10:34:40 +0200
+Message-ID: <1838669.VLH7GnMWUR@ripper>
+In-Reply-To: <f62668cb-ad01-495e-86c3-82f92fa5ad90@gmail.com>
+References:
+ <20250926-i2c-rtl9300-multi-byte-v6-1-a2d7d8926105@narfation.org>
+ <f62668cb-ad01-495e-86c3-82f92fa5ad90@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="RgFxCkAl9l3kDwPU"
-Content-Disposition: inline
-In-Reply-To: <29683d52-8e5a-4217-a32b-c2248319f69a@gmail.com>
+Content-Type: multipart/signed; boundary="nextPart8626536.NyiUUSuA9g";
+ micalg="pgp-sha512"; protocol="application/pgp-signature"
 
+--nextPart8626536.NyiUUSuA9g
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"; protected-headers="v1"
+From: Sven Eckelmann <sven@narfation.org>
+To: Jonas Jelonek <jelonek.jonas@gmail.com>
+Date: Fri, 26 Sep 2025 10:34:40 +0200
+Message-ID: <1838669.VLH7GnMWUR@ripper>
+In-Reply-To: <f62668cb-ad01-495e-86c3-82f92fa5ad90@gmail.com>
+MIME-Version: 1.0
 
---RgFxCkAl9l3kDwPU
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Friday, 26 September 2025 10:16:19 CEST Jonas Jelonek wrote:
+> Thanks for taking care of this quickly.
+> Maybe we should include another patch here which fixes the committed version
+> of my patch, i.e. removing I2C_FUNC_SMBUS_I2C_BLOCK, with CC to stable. Since
+> the patch was also merged to stable, it is somewhat broken there now.
 
+Yes, sounds good. Will submit it [1] tomorrow after the ~24h dwell time (if no 
+one else requests anything different).
 
-> The lost patch doesn't apply cleanly anymore because my patch 3 was altered
-> in a wrong way while Andi resolved a conflict, which occured because the
-> now-lost patch wasn't in the fixes path. To be accurate, this probably needs
-> another patch also for the stable path.
+Kind regards,
+	Sven
 
-I see. Thank you for doing the work. I wanted to do a pull request
-for-current this week anyhow, so that aligns.
-
-Happy hacking!
-
-
---RgFxCkAl9l3kDwPU
+[1] https://git.open-mesh.org/linux-merge.git/log/?h=b4/i2c-rtl9300-multi-byte
+--nextPart8626536.NyiUUSuA9g
 Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part.
+Content-Transfer-Encoding: 7Bit
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmjWTEYACgkQFA3kzBSg
-KbbcNBAAtACTl+VSEg49vFEPuKXEB30k3Rg9XvyXpQy7ufW3NfVWi0tYsaBiBHdb
-1alEfYkXgoR9cZ/ECBftF0n5o79ifSxuE/G31781IjTMa9GiwTmQfMFctV+BZlz7
-k0wSNIKjLzIfL4AuwzAfg5eMAlhbGwWv/fOpTbuboFH6x3kYG9RI0GfVWzeSP1DP
-KMlsz3LfgyOuRB4aZfVlYFxXy4cD2M0kWVpJ5Qq9ya4B9QFIaKo3JLlUKMnj3W4J
-1SpQQsqX4NpBM2RO0iKtL7gCV8x2Ig2h+xM4P7uJO0dxmnde5Y2vOXFsKHXUZGGQ
-D/P5JdJ49jwMLzOSNIkUDJe73/wnn484pTKodoVgypZ2IC3DnF3zWfMoXPSFqBAs
-yxGUxCstgEC1wFy3mWw7vYkhvDeYDCYvNlnbeQcXjDRTRcHDIudWRHiJUrcsU7QX
-hRGg6A+BPqnIZMlf4gP3olTcJiyMNGukwdga6lUxZ479iZJogVxJzhw59lloP2Xh
-wZcB/RVFgDAgRBll/fF3hFlrj4nB7foXJNUSSvA9yuuybetueg9rhgspWm5c6fe8
-kF2wStR2rGsg1HbygmD0Frt1ClUcpZi/ji/7FS44WEfH29E486pBZ0A6VpbyDjTJ
-heuhAyUHUKhoX2U+WIUwoh52SLeicw4JROmtlQgh+0s3eS7+Z30=
-=ajo9
+iHUEABYKAB0WIQS81G/PswftH/OW8cVND3cr0xT1ywUCaNZQIAAKCRBND3cr0xT1
+y7chAPsF660TksdGuA5+SMesRqo5wB4PizTEzjzF0XszWFKL0gEAzwlFr5aMprGu
+oW0uigo4g8iSv6BEli+p3EcTzZABPgc=
+=o6t8
 -----END PGP SIGNATURE-----
 
---RgFxCkAl9l3kDwPU--
+--nextPart8626536.NyiUUSuA9g--
+
+
+
 
