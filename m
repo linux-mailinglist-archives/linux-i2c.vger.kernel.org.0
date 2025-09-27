@@ -1,124 +1,154 @@
-Return-Path: <linux-i2c+bounces-13241-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13242-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17ACEBA5DA8
-	for <lists+linux-i2c@lfdr.de>; Sat, 27 Sep 2025 12:23:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A822BA5DAE
+	for <lists+linux-i2c@lfdr.de>; Sat, 27 Sep 2025 12:25:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 173554E1C4B
-	for <lists+linux-i2c@lfdr.de>; Sat, 27 Sep 2025 10:23:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A20CF17830F
+	for <lists+linux-i2c@lfdr.de>; Sat, 27 Sep 2025 10:25:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFA992D6605;
-	Sat, 27 Sep 2025 10:23:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E89BE2D9493;
+	Sat, 27 Sep 2025 10:25:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XKAEamp3"
+	dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b="hZIbkHm1"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpbgsg1.qq.com (smtpbgsg1.qq.com [54.254.200.92])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC6D21F91D6
-	for <linux-i2c@vger.kernel.org>; Sat, 27 Sep 2025 10:23:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B84191F91D6;
+	Sat, 27 Sep 2025 10:25:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.254.200.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758968605; cv=none; b=O9YV7HwoXy8A+ucXgvEkA5ACPa0CnOurgCEWNPg5IMzhhCOFb45ddkqJZWSh/L1lxAez+k0a0ZAnO/orSw7hDpzYWM/FMlxLWRTinTlihOhxh34fUm8XMdpauHQsPJkmOYKok8VXfCYvufDAe2je5jFHDEBz3x42J5+kOB6X0FY=
+	t=1758968738; cv=none; b=kPZtnzTPUtSzL94QtoHQfgldv09gEFzu7qDvd5+Ok3MPN1XknWvpLjzR237eJY4SnKTxS6vCF2vpaLNiQKnRxSzYHKUY0Fyrl8SjXwKd8BR6lgewGE2uO/0/Vl0nhj6+1IpPSuQ1ywP/YcuQ8eHJY0EyrIvcZ92Whu4cxmu6Cic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758968605; c=relaxed/simple;
-	bh=hSP0UkVo3smxyzxl5cC2FsaVSah/lhvXDVxNIWdha6g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BlBthk0F8Oy/M2up4VsAU3hcP2bXu2ye/2tCPSaWOnQ2Qc23vDtwMFdEzh4Fh/WBpLsU7BS1FBgxj+joWm/juhW5CwZkjKrScQFfddHlH6TgJ8ik5Nllue5J/SWPsh/9l0EG8fP50U6SA+aS5woySPMMn7V8mBTVyO22FN+nCoM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XKAEamp3; arc=none smtp.client-ip=209.85.221.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-3ee15505cdeso2397920f8f.0
-        for <linux-i2c@vger.kernel.org>; Sat, 27 Sep 2025 03:23:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758968602; x=1759573402; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=in7+4Iwa+nIWx1yXee5icFLUsBp15xu7p/S27zHgbMc=;
-        b=XKAEamp3XY3BMOZ7S0TVDFIrfcKWrfbWIfX26jXckQLGX4qnubucXJAegWgR5mZQhA
-         RnFL4e3+2YxJfbxg88UMhp3CzRR3/l+wLRR1W6W9CkoG7HXUfsi0mY9IRDs58xGiafic
-         6ZHj4ABdeDib1Y0Scj02vk6VcLpHRqpLEsrpji+7OfiUDWGeHb9N70JoVfj7oEmbOaEb
-         pfpguJGVR4n/MC99oHXC4PGtf1Gt6P/b2vdF97l9F3Sv1KQpl2Bb05Z+ReUSyC+v7Bhz
-         RXB94aGpExGjNY0JtQz8tL1XUB5Kc4V5ZpfA/cuVQB7eTdYD176xG28WsVFLJH7vnrrY
-         r+vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758968602; x=1759573402;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=in7+4Iwa+nIWx1yXee5icFLUsBp15xu7p/S27zHgbMc=;
-        b=GQ2gnhwtaUUy9NM8GrrIJKpXFwGDydeOHYyCWvqDPYISTAMwPYq28+v85/5EOOgDEw
-         IT2ug1BT5GQSn93YZqT21ybYPrzn7gAysZ4lDe1QOrEjZhDFYOna19//nrSWUMbDLbYM
-         7B5iprZw/F7IlFhhGn1mwcEueeVVGIWx8VQA8mcygDnUp4lz1K8U3/bsnn59yjsoXdz1
-         9rpJZOaRqGzrw5B2XhaTdyVIievG0BL0dEhnYGLIxVU46uYlSYOD0DBP2xZCqIOmLqjM
-         U4Ss5XqOvqVseQ37hEclu1bDJo8yZDAGRw49MqoXRjYZ/LodcNVjRSOu0Qym+zHk+Ru5
-         IbfQ==
-X-Gm-Message-State: AOJu0Yxv+IG8mgu3XnbWX3EYSrjogyMkt3xSBLgwQYVTEQWQ0nxSAY57
-	bYmYEuQfCJdu7DaP2N4085RcVvipfWMopvtZp13P9RqIrJy2+xZ2JlhV
-X-Gm-Gg: ASbGncu0e2JugaPPTMnyuadEijdm9cLcVULfY1i3zKs2BO2zdlhPmPfzkJNwBuI2+1b
-	pugchl5L9pz3pknvME1QH5VEXM57Tumz7wr7BlEpT3R+k52wXJBTryUg0qm7M+LHgrLztYJgTAW
-	n7u6reyM5/qJYct8kLYU2UsWhMRTLTFuwWImKlSSJteaZ18UYhoFfQhejLl4DL0QzjcMUZ8F2Pv
-	MAKHwaiMzxDHZtuA6oWO6k+Rs06/UHIL9RAi9DNKRig/9qMg28gNIYErsz2i1lppMjhC2/jmhfX
-	qnmN7nRZryjdz3GUttl7gvqBST63DY0Z+xY8WsHfyHlXnuElEa8zVO7uTnDambpGGVvn4nGTvyO
-	iqcQof5/gRrvO0oq67JobouIGevZusVz11B4qrtO+pjIoFEcGr1dUia3OGoAK7cvfZIx+YiseYO
-	SJNCxKZplwumBE6O4EdVGWyXBx8Tp1tlwh
-X-Google-Smtp-Source: AGHT+IGrFnvKHtAi4Y3nWafYrrOqgHxO338Bp1mW+r8fwkoAEnIvgFWt8NrSHcpvK5R1+smnt6PNXA==
-X-Received: by 2002:a05:6000:2210:b0:3fd:271d:e2a5 with SMTP id ffacd0b85a97d-418005f506bmr2379315f8f.11.1758968601943;
-        Sat, 27 Sep 2025 03:23:21 -0700 (PDT)
-Received: from ?IPV6:2001:9e8:f11a:4401:dd3b:2a2c:62a3:2127? ([2001:9e8:f11a:4401:dd3b:2a2c:62a3:2127])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-40fc56f7badsm10291549f8f.29.2025.09.27.03.23.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 27 Sep 2025 03:23:21 -0700 (PDT)
-Message-ID: <3203ee4c-b320-45cf-b63c-49f589909dfb@gmail.com>
-Date: Sat, 27 Sep 2025 12:23:21 +0200
+	s=arc-20240116; t=1758968738; c=relaxed/simple;
+	bh=CNoMXfWgLcGJvfa77hW6zkuKjvN+uN7hAOsHWEF2+1E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ICmPKJe9UYIVtOoRly4FQMw6ioAXq/HCky+f6nK+ZJhLdemdqTakouy6LngwdRcrYOb4CgfHHjp+LlHv1F+5CClbljuVVKJEKFEA8TOOvtXIjf8bnVf+MOJDT/WP9/Zn7qs+jNBDiY6hDgiwNyREN++S5YHLBm/iK1X13zBb694=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com; spf=none smtp.mailfrom=linux.spacemit.com; dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b=hZIbkHm1; arc=none smtp.client-ip=54.254.200.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.spacemit.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.spacemit.com;
+	s=mxsw2412; t=1758968654;
+	bh=8gQ1btfcS9lR4xyhO4eNmmxoMM9MV//3rCHOmLGPOus=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version;
+	b=hZIbkHm10wA9hp7X5Q3PdaFA7mnSA2gAlv2sQC9GwILeCZYty5KPZuqkiuXOSkruv
+	 mJFu1L+VnSV2uMkA6rLp2vOIuRIj11P7pzf3pYLpuICFM6CmFCjSNrP7SRJlp775oN
+	 t3TvaIiNiWY9OkE+24tcPtYSwdep/sPfx+tzsgUA=
+X-QQ-mid: zesmtpip2t1758968646t6adf6663
+X-QQ-Originating-IP: /kIp1FpEbrRs/kHZGWmafReKwU4afgvz1uRmtyEjXAs=
+Received: from = ( [localhost])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Sat, 27 Sep 2025 18:24:05 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 11619624960712165615
+EX-QQ-RecipientCnt: 9
+Date: Sat, 27 Sep 2025 18:24:05 +0800
+From: Troy Mitchell <troy.mitchell@linux.spacemit.com>
+To: Yixun Lan <dlan@gentoo.org>,
+	Troy Mitchell <troy.mitchell@linux.spacemit.com>
+Cc: Andi Shyti <andi.shyti@kernel.org>, Alex Elder <elder@riscstar.com>,
+	Troy Mitchell <troymitchell988@gmail.com>,
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev
+Subject: Re: [PATCH v2 6/6] i2c: spacemit: introduce pio for k1
+Message-ID: <64AD69A1C43D8A13+aNe7RUmS73q-jSBk@troy-wujie14pro-arch>
+References: <20250925-k1-i2c-atomic-v2-0-46dc13311cda@linux.spacemit.com>
+ <20250925-k1-i2c-atomic-v2-6-46dc13311cda@linux.spacemit.com>
+ <20250927014547-GYA1336612@gentoo.org>
+ <7F98284B9618900A+aNdiTKvvbg4G-LwM@troy-wujie14pro-arch>
+ <20250927101648-GYA1338789@gentoo.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH i2c-host v6] i2c: rtl9300: Implement I2C block read and
- write
-Content-Language: en-US
-To: Sven Eckelmann <sven@narfation.org>,
- Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
- Harshal Gohel <hg@simonwunderlich.de>,
- Simon Wunderlich <sw@simonwunderlich.de>, Andi Shyti
- <andi.shyti@kernel.org>, Chris Packham <chris.packham@alliedtelesis.co.nz>
-References: <20250926-i2c-rtl9300-multi-byte-v6-1-a2d7d8926105@narfation.org>
- <1838669.VLH7GnMWUR@ripper> <aNZQnlUML0jIhXIM@shikoro>
- <13214546.O9o76ZdvQC@sven-desktop>
-From: Jonas Jelonek <jelonek.jonas@gmail.com>
-In-Reply-To: <13214546.O9o76ZdvQC@sven-desktop>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250927101648-GYA1338789@gentoo.org>
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpip:linux.spacemit.com:qybglogicsvrsz:qybglogicsvrsz3a-0
+X-QQ-XMAILINFO: NojR6Ao/DkEDWzK408R5Uhp1H+tIhTv87PPDP6mL828IdsNJnBLVf/I1
+	zz4yTnVuKMmB1sWnG2yqMNIDSXhtAkdPlmzt5fJcLc6VlRoMFI61Hi66RDl4KJq9e1Cp+NL
+	dm/ATz/KkYq+r74Kvvf0d2zgaxswyBiOlQvRKNTMlK9TQFqPp/LbjcNMxrTb4UpNfrYEGiB
+	evPqt+SrBBKk2ih69WQoefWMAHfVorp/X8on7/FjcCQyI3QZk1FUO0/E93TfyGnB94au0gy
+	q7itSI3RsvmsbRQp26C6kJmXLfp2/0MlVklYdohZbKv+WmnSZrqQU5dIL8APY4WsKkufxzS
+	eY6g7+jOgjLmw3+laHqFBudppVKId08482oADUPF8udZx+wmUPTMHhhjpvCs64dV+jmdfAC
+	4rC47Wp/Ne+JDYZSVLXnuvPnkcwm14KrTsSJOaKXNdkSD8Xg52CS5ipIwvhzBmvaFEbW8ar
+	SPIF/w30f78e34wgeMnFAKzg2GMlhLQLZyqZD+s7cjnhhEKTUCiKbsd6pxkO6mSf+L9ab+M
+	A4zQ8WXkVdEJCY2T918HFmhtqkTfknIE4ldUG3qMfaMHcA6S95PxEm0BPzzo6iGad4WHa33
+	ruG6h27g85NOsN7Rupni7kxHw3nDAEMXbN11djy5JtNIaFoTQc7doeSD63unhlUEzcXlT18
+	SSy9vH2zB19P07DBg09qprxCAnfxPdd5U2354f3TOfgnBRN4yz3iWZJCDJiJzAF0VgbMDeG
+	jcYYSbZmISudzZEWGBXdnyDMRaz+pqN2dWgKEQ1/OD4rqRfLTzYT9AoKG/spY+EFThTgXfg
+	lXjo1DDt8q9f5Qe9qcorEVLKYj+QtXMV/gAnSjRx6ISvuYGRMcNeOwtZ6s+WewqJhNLuylf
+	jAdTuxgMdJ0pRyfIWOkg2YrWon/U5r6oFhq2QcWFzXIYaBMlixELHM3QjdqTHwC0k+PP3/g
+	0igcT3lY8xw/mmokt3YybYz1IUvEKqtEFXlFDDh87l0LvBeSebFxwkjxr3LXjsjYxftGnHy
+	jav+asMQAA+FYFZVpcQQw5ebjKzD7JX4DCi8caYBhENsbv7TcQ7rqwguD/EErx1XJ6JANiG
+	g==
+X-QQ-XMRINFO: NS+P29fieYNw95Bth2bWPxk=
+X-QQ-RECHKSPAM: 0
 
+On Sat, Sep 27, 2025 at 06:16:48PM +0800, Yixun Lan wrote:
+> Hi Troy,
+> 
+> On 12:04 Sat 27 Sep     , Troy Mitchell wrote:
+> > On Sat, Sep 27, 2025 at 09:45:47AM +0800, Yixun Lan wrote:
+> > > Hi Troy,
+> > > 
+> > > On 10:02 Thu 25 Sep     , Troy Mitchell wrote:
+> > > > This patch introduces I2C PIO functionality for the Spacemit K1 SoC,
+> > > > enabling the use of I2C with interrupts disabled.
+> > > I feel it's more proper to say
+> > > s/with interrupts disabled/in atomic context/
+> > Good point.
+> > 
+> > > 
+> > > I've noticed that K1 I2C controller support three different transmission mode:
+> > >  non-fifo, fifo mode, dma mode
+> > > 
+> > > while you are trying to implement pio support, I'd suggest to think one
+> > > further step in the long run - support more fifo/dma + normal/atomic features,
+> > I understand your concern, but I have reviewed the code structure,
+> > and adding FIFO support would not significantly affect the current PIO implementation.
+> we will see..
+> 
+> > 
+> > > 
+> > > Personally, I'd like to see fifo mode implemented before adding pio
+> > > support, as it will bring quite significant code changes, require heavy
+> > > code review effort. And yes, this will put more demanding work on your side
+> > > and may slow things a bit..
+> > That said, we don’t have any plans to support FIFO at this point,
+> > and PIO functionality is something we need urgently.
+> > So I will continue to push this patch (tomorrow).
+> please do not flush the mailing list and give people some time, I haven't seen 
+> enough reviews coming, please wait for ~one week before sending next version,
+> or make sure you've accumulated enough changes..
+Okay.. I will wait for more review
 
+> 
+> > Thanks for your understanding. For details on the code changes, please see above.
+> > 
+> > In addition, if anyone is interested in adding FIFO support, I’d be happy to help.
+> > 
+> do you want to push the work (support fifo mode) to community?
+Personally, I want.
+Since K3 is going to reuse the upstream driver,
+PIO support has high priority (needed as P1, e.g. for shutdown and reboot).
+FIFO support, is not considered a high priority at this point.
 
-On 27.09.25 11:55, Sven Eckelmann wrote:
-> Understandable, there was a lot going on at the same time for this niche i2c 
-> host driver. Please check the "Order" in 
-> https://lore.kernel.org/r/20250927-i2c-rtl9300-multi-byte-v7-0-c0fd0e78b818@narfation.org
+That's why I want to push PIO ASAP
+Does this make sense?
 
-Sorry for bringing back some confusion but I had to fix one final thing in my patch series.
-The order Sven mentioned is fine but please use v8 of my series [2].
-
-To wrap it up:
-[1] needs to come first
-[2] then this can be merged
-
-> Kind regards,
-> 	Sven
-
-Best regards,
-Jonas Jelonek
-
-[1] https://lore.kernel.org/linux-i2c/20250927-i2c-rtl9300-multi-byte-v7-0-c0fd0e78b818@narfation.org/
-[2] https://lore.kernel.org/linux-i2c/20250927101931.71575-1-jelonek.jonas@gmail.com/
+                - Troy
+> 
+> -- 
+> Yixun Lan (dlan)
+> 
 
