@@ -1,139 +1,176 @@
-Return-Path: <linux-i2c+bounces-13225-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13226-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42A2DBA58DF
-	for <lists+linux-i2c@lfdr.de>; Sat, 27 Sep 2025 06:15:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90D2CBA5D13
+	for <lists+linux-i2c@lfdr.de>; Sat, 27 Sep 2025 11:52:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4C4F67AE39A
-	for <lists+linux-i2c@lfdr.de>; Sat, 27 Sep 2025 04:14:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A8AAE189EE0C
+	for <lists+linux-i2c@lfdr.de>; Sat, 27 Sep 2025 09:53:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F5B3222568;
-	Sat, 27 Sep 2025 04:15:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BBA52D6E5A;
+	Sat, 27 Sep 2025 09:52:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TxH+Ebd/"
+	dkim=pass (1024-bit key) header.d=narfation.org header.i=@narfation.org header.b="bCGqsZlW"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dvalin.narfation.org (dvalin.narfation.org [213.160.73.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6FF018FDAF
-	for <linux-i2c@vger.kernel.org>; Sat, 27 Sep 2025 04:15:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DD334317D;
+	Sat, 27 Sep 2025 09:52:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.160.73.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758946533; cv=none; b=GIqA34vxG7k28Ta5woE4uL5SL43hJLc5j/YG00BQHmufUbzRqKy8nneIbjI1GKpeO3TVjowsBP+o52izgPm+I5BPf4s0gTNH3vUeCHhVYWujQbSoFb4T3pHQy977qt0vgzwebO/ltE+DmbFSdNx4+h6e/eW5EygkyuehEvbQl80=
+	t=1758966753; cv=none; b=S3fsNBzXpfO0e62H+2VvYsahBrW9HiRlecfz8RSPr5G03ZMpiJZ2/GGkxThtD7PEuTvbVRyKSV4vgS1m7dKdEsMUbI/2+Q+ncQRn2/FWltmNqN79DmsxzRYpqsIRLWxQfzihUqf6BSD/MseYw+TzXJgbFEfu4MYUg3wG3Qc12NU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758946533; c=relaxed/simple;
-	bh=1S7qkacQtOJLn4B5dSDEdf4PQhZDBi/JrvSfER614yc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WrD4zd6EPxRj3vwePSpPhnFmLT4X9SzUIwacIShCw2Pln+TK2VCzTfmzBz1ZV+mgivqtrHLOYW/DFBOW9Ml0ixq/5YW/PqL/H7hddAlvvjFx3zT6UGliwON5YW9itSJUkdXw24F423r7QbReIxHtz6XVWn3VawsOkI4K6oyvUP0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TxH+Ebd/; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-46e23a6617dso28759605e9.0
-        for <linux-i2c@vger.kernel.org>; Fri, 26 Sep 2025 21:15:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758946530; x=1759551330; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IQ5MmPkHxZioIeQfPFm5x4+gWD/pC2wMeHLaiRdBbYA=;
-        b=TxH+Ebd/wfXSrcLxUmPbl+DDKzRyM+RLb7nNFfyfwo/vKj9UAThW/A9cK3eFa3fYOa
-         QOKIDwbFlJDk/eaWHe/St26GBFfym6skNoznrbSGr/QG6L9NFIJqbxTHTwrWbNo9HZ1N
-         HGbootu6KcU5YrumDKwMQbGolILgHvkcubwgyo4Rn4Ii9mswUpfbuVnBB4qJ0fhx6ETU
-         DhFSUwmMT/rad8J0OKW4MsLGJGb1YqeaU3oBXzC2emxyHBhBs3rPmFcmk0ZVdNpP1f8r
-         tFPKr/2oUr1NahuGQ4Pwg0aA1vUQq+NSx0vR8mYMmxv8BOw47DSt7tv7RdZmf8XjzYmZ
-         A5CA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758946530; x=1759551330;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IQ5MmPkHxZioIeQfPFm5x4+gWD/pC2wMeHLaiRdBbYA=;
-        b=ffawxWjU/bIcjdY40qFiAnleKSS9ksEqF+sSwb4Yk8u2XdEpDaFdcXOhYetZyRQqDc
-         YN6ZPaHfYxN6vCr65QrfuSP02FMi1QZpIUTHcnl02BFNZe/45tgixVtUhoklSPmUyE0b
-         TGHMjnOy89fc1kr0mOq88+6Ct1riooyHtp/atMbaVBIvVKmHH7hP2DdT4ZzJz0VaoRM+
-         ik/QicL2Gzrqk27PxpZEcsWAZo21DdK266tQiBjoQDP5aCReT531xz4/bUXp9mbQUPq9
-         Ir9nc687seePIvvD5iLOLFDLKColP9vq8pC+fWaWieGgYU3E0U2DCcUjDBhgvy2fcToA
-         /+dQ==
-X-Gm-Message-State: AOJu0Yx7OfRk3rJFwrNxmqKXyEjz5Shlw5kYawEN8PkH6+taMPNgwG6E
-	3t5d4yH/K8Wa1C/YrvHO+FO8Emm/iG6Lfy4EwgADrcyPIj+dDqmXl8Ch
-X-Gm-Gg: ASbGncsqndu6Wb7k0c3741ecZEZsbzLDrDAXoFAvVvFgLUp8pAEpc0b739BGGLZwmQ3
-	otwI1FuoZ8ct+QAqt6iFFsZVccSMKYnGSUoP68dPrf8nnqFmVcxGiMZK0r95wEqOhhKkx3mCFFU
-	NIsSrHokgd6D6eShDt0oX8KT3CT6RhT7h6NlnY4URTvTKhF7Qw1rV1NfNOVACMuune9nqXdti0q
-	50CYCs9YQrODlwlxa6EovEp8bjrhEJG3X9vOOjBZ4CnCkOTZ+RI5IRxIkENz/xhLD9fScPiAKLW
-	co2E+rKaGQneOIlDO0DoYX8psgyF2F94IadKz9LxCxsNGSjCqrtBCtU2xR+eHxaLD+KaNSAH6Mm
-	Xd1/7Hhh5qP6NyhTkoDEGUdRnFVkdNZKK+eqfaoRZ
-X-Google-Smtp-Source: AGHT+IHNltIrUty9L1vjsZ4/Hwqq3Wgf3VB8CTDHf03NWXIxmr7SHAgznCOWO2DvuwbAOd1ynDRO+w==
-X-Received: by 2002:a05:600c:4e8b:b0:46e:38cc:d3e2 with SMTP id 5b1f17b1804b1-46e38ccd4dbmr47800515e9.22.1758946530076;
-        Fri, 26 Sep 2025 21:15:30 -0700 (PDT)
-Received: from hangmanPC.. ([86.124.200.102])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-46e33105e0bsm50386665e9.5.2025.09.26.21.15.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Sep 2025 21:15:29 -0700 (PDT)
-From: Cezar Chiru <chiru.cezar.89@gmail.com>
-To: wsa+renesas@sang-engineering.com,
-	andi.shyti@kernel.org
-Cc: linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Cezar Chiru <chiru.cezar.89@gmail.com>
-Subject: [PATCH v6 3/3] i2c: pcf8584: Fix space(s) required before or after different operators
-Date: Sat, 27 Sep 2025 07:14:00 +0300
-Message-ID: <20250927041400.172949-4-chiru.cezar.89@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250927041400.172949-1-chiru.cezar.89@gmail.com>
-References: <aNbWejNZLYGuNvCI@ninjato>
- <20250927041400.172949-1-chiru.cezar.89@gmail.com>
+	s=arc-20240116; t=1758966753; c=relaxed/simple;
+	bh=P3RlToR2Jg/rNd/jIsGgASFvQPotFqFvtSO067CGp7A=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=bT6m7vUGy90ivbKw6pL+LKfdbFLxCZVpPLfCLdqItQVg2PU2YGwmc+VlwvO3mTrJ6jwSHLRGfCK+hCG/Z7qIUU+4XL+J0Y4v/QNpvdtlM/JLk7+2WQA3ER8CgrQOubEWJ0f4eCDdy8heeDCJ0WiHIfKyfuhlL9QCi4wndAljabM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=narfation.org; spf=pass smtp.mailfrom=narfation.org; dkim=pass (1024-bit key) header.d=narfation.org header.i=@narfation.org header.b=bCGqsZlW; arc=none smtp.client-ip=213.160.73.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=narfation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=narfation.org
+Received: by dvalin.narfation.org (Postfix) id 07B0B2009B;
+	Sat, 27 Sep 2025 09:52:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=narfation.org;
+	s=20121; t=1758966741;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=jgmRc6RcwdBrE4RigkI44U/isMfTaiUIe6zdqae8QXE=;
+	b=bCGqsZlWBiTQI6s34F8iGs+I8i23CZI00fBujQPRUvTihKyiFuUR6DDbxg/2vlu17AmDC/
+	qXPlnxEBkCeHM9NyF2hpteYgnvkgsoaccXWST5Hy5UIxoIEwmJgGU9BJMOBqzsEsKxXLnA
+	pvNhD00Ja9VW/FdzjbHbvSUUsw9nVts=
+From: Sven Eckelmann <sven@narfation.org>
+Subject: [i2c-host PATCH i2c-host-fixes v7 0/2] i2c: rtl9300: Implement I2C
+ block read and write
+Date: Sat, 27 Sep 2025 11:52:15 +0200
+Message-Id: <20250927-i2c-rtl9300-multi-byte-v7-0-c0fd0e78b818@narfation.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAM+z12gC/4XQzWrDMAwH8FcpPs9DVuKvnfYeZQd/yK2hS4bjh
+ ZaSd5/by8JI2PEvpJ+E7myikmlib4c7KzTnKY9DC/rlwMLZDSfiObbMEFCCAeQZAy/1YjsA/vl
+ 9qZn7WyVO0TmRPBiNgbXhr0IpX5/w8aPlc57qWG7PPbN4VP8lZ8GBy6SMJgBrCN8HV5Kr7cLXs
+ ZzYg51xTXW7FDbKeu21tInQqy2qW1P9LtU1ihAUaBIeTdii+jVld6m+UVGLGCV5JVBsUXJFCdi
+ lZKNCtDE4iF7j5q/UL2VR7VKKC+4w6mhalwD5l1qW5QdbvJryNwIAAA==
+X-Change-ID: 20250802-i2c-rtl9300-multi-byte-edaa1fb0872c
+To: Chris Packham <chris.packham@alliedtelesis.co.nz>, 
+ Andi Shyti <andi.shyti@kernel.org>
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Jonas Jelonek <jelonek.jonas@gmail.com>, 
+ Harshal Gohel <hg@simonwunderlich.de>, 
+ Simon Wunderlich <sw@simonwunderlich.de>, 
+ Sven Eckelmann <sven@narfation.org>, stable@vger.kernel.org
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4504; i=sven@narfation.org;
+ h=from:subject:message-id; bh=P3RlToR2Jg/rNd/jIsGgASFvQPotFqFvtSO067CGp7A=;
+ b=owGbwMvMwCXmy1+ufVnk62nG02pJDBnXN19kcllven/LjuXPpv9QtGDdFOhc/u7b/ZYJ62zV4
+ uQ5rVav6ihlYRDjYpAVU2TZcyX//Gb2t/Kfp308CjOHlQlkCAMXpwBMJPAFw/+AlG8fq25tNS6r
+ O8XXLZ5Tos+b8cZhjypHWHvlisdf3kkyMnRkfdqeznPz06XlW6ZFKkrb/hTfZf3gbMIvNpXjcwT
+ nKjEBAA==
+X-Developer-Key: i=sven@narfation.org; a=openpgp;
+ fpr=522D7163831C73A635D12FE5EC371482956781AF
 
-Require spaces around '=', '>' and '<'. Add space(s) around binary
-operators.
-Enforce errors fixing based on checkpatch.pl output on file.
+This patch was already applied [1] but then removed. Instead, only the
+chunk
 
-Signed-off-by: Cezar Chiru <chiru.cezar.89@gmail.com>
+  @@ -314,7 +343,7 @@ static u32 rtl9300_i2c_func(struct i2c_adapter *a)
+   {
+          return I2C_FUNC_SMBUS_QUICK | I2C_FUNC_SMBUS_BYTE |
+                 I2C_FUNC_SMBUS_BYTE_DATA | I2C_FUNC_SMBUS_WORD_DATA |
+  -              I2C_FUNC_SMBUS_BLOCK_DATA;
+  +              I2C_FUNC_SMBUS_BLOCK_DATA | I2C_FUNC_SMBUS_I2C_BLOCK;
+   }
+
+was added as part of a patch which has nothing to do with
+I2C_FUNC_SMBUS_I2C_BLOCK [2] and was never submitted like this [3].
+
+I am therefore resubmitting this patch again with a patch that is removing
+the errornous I2C_FUNC_SMBUS_I2C_BLOCK from i2c-host-fixes.
+
+Order:
+
+* The first patch needs to be applied on top of i2c-host-fixes
+* after i2c-host-fixes (with this patch) is included in the i2c-host branch:
+  - the second patch from this series
+  - The patches 4-12 from Jonas [4] need to be applied on top of it in the
+    i2c-host branch:
+    + https://lore.kernel.org/r/20250831100457.3114-5-jelonek.jonas@gmail.com
+    + https://lore.kernel.org/r/20250831100457.3114-6-jelonek.jonas@gmail.com
+    + https://lore.kernel.org/r/20250831100457.3114-7-jelonek.jonas@gmail.com
+    + https://lore.kernel.org/r/20250831100457.3114-8-jelonek.jonas@gmail.com
+    + https://lore.kernel.org/r/20250831100457.3114-9-jelonek.jonas@gmail.com
+    + https://lore.kernel.org/r/20250831100457.3114-10-jelonek.jonas@gmail.com
+    + https://lore.kernel.org/r/20250831100457.3114-11-jelonek.jonas@gmail.com
+    + https://lore.kernel.org/r/20250831100457.3114-12-jelonek.jonas@gmail.com
+    + https://lore.kernel.org/r/20250831100457.3114-13-jelonek.jonas@gmail.com
+
+[1] https://lore.kernel.org/r/a422shurtl3xrvnh2ieynqq2kw5awqnmall2wjdpozx336m26i@54ekftmkwvrv
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git/commit/?h=i2c/i2c-host&id=ede965fd555ac2536cf651893a998dbfd8e57b86
+[3] https://lore.kernel.org/r/20250831100457.3114-4-jelonek.jonas@gmail.com
+[4] https://lore.kernel.org/r/20250831100457.3114-1-jelonek.jonas@gmail.com
+
+Signed-off-by: Sven Eckelmann <sven@narfation.org>
 ---
- drivers/i2c/algos/i2c-algo-pcf.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Changes in v7:
+- Split into two patches. One for i2c-host-fixes to remove the actually
+  unsupported I2C_FUNC_SMBUS_I2C_BLOCK. The next one is for i2c-host and
+  readds it with the correct code.
+- Link to v6: https://lore.kernel.org/r/20250926-i2c-rtl9300-multi-byte-v6-1-a2d7d8926105@narfation.org
 
-diff --git a/drivers/i2c/algos/i2c-algo-pcf.c b/drivers/i2c/algos/i2c-algo-pcf.c
-index 41a81d37e880..d675d484fe66 100644
---- a/drivers/i2c/algos/i2c-algo-pcf.c
-+++ b/drivers/i2c/algos/i2c-algo-pcf.c
-@@ -183,7 +183,7 @@ static int pcf_sendbytes(struct i2c_adapter *i2c_adap, const char *buf,
- 	struct i2c_algo_pcf_data *adap = i2c_adap->algo_data;
- 	int wrcount, status, timeout;
- 
--	for (wrcount=0; wrcount<count; ++wrcount) {
-+	for (wrcount = 0; wrcount < count; ++wrcount) {
- 		i2c_outb(adap, buf[wrcount]);
- 		timeout = wait_for_pin(adap, &status);
- 		if (timeout) {
-@@ -272,7 +272,7 @@ static int pcf_xfer(struct i2c_adapter *i2c_adap,
- 	struct i2c_algo_pcf_data *adap = i2c_adap->algo_data;
- 	struct i2c_msg *pmsg;
- 	int i;
--	int ret=0, timeout, status;
-+	int ret = 0, timeout, status;
- 
- 	if (adap->xfer_begin)
- 		adap->xfer_begin(adap->data);
-@@ -284,7 +284,7 @@ static int pcf_xfer(struct i2c_adapter *i2c_adap,
- 		goto out;
- 	}
- 
--	for (i = 0;ret >= 0 && i < num; i++) {
-+	for (i = 0; ret >= 0 && i < num; i++) {
- 		pmsg = &msgs[i];
- 
- 		ret = pcf_doAddress(adap, pmsg);
+Changes in v6:
+- drop all fixes patches (which were already applied)
+- drop rtl9300_i2c_func chunk which was incorrectly added by another commit
+  [2] (but was not intended to be in there by the original patch [3]
+- Link to v5: https://lore.kernel.org/r/20250810-i2c-rtl9300-multi-byte-v5-0-cd9dca0db722@narfation.org
+
+Changes in v5:
+- Simplify function/capability registration by using
+  I2C_FUNC_SMBUS_I2C_BLOCK, thanks Jonas Jelonek
+- Link to v4: https://lore.kernel.org/r/20250809-i2c-rtl9300-multi-byte-v4-0-d71dd5eb6121@narfation.org
+
+Changes in v4:
+- Provide only "write" examples for "i2c: rtl9300: Fix multi-byte I2C write"
+- drop the second initialization of vals in rtl9300_i2c_write() directly in
+  the "Fix multi-byte I2C write" fix
+- indicate in target branch for each patch in PATCH prefix
+- minor commit message cleanups
+- Link to v3: https://lore.kernel.org/r/20250804-i2c-rtl9300-multi-byte-v3-0-e20607e1b28c@narfation.org
+
+Changes in v3:
+- integrated patch
+  https://lore.kernel.org/r/20250615235248.529019-1-alexguo1023@gmail.com
+  to avoid conflicts in the I2C_SMBUS_BLOCK_DATA code
+- added Fixes and stable@vger.kernel.org to Alex Guo's patch
+- added Chris Packham's Reviewed-by/Acked-by
+- Link to v2: https://lore.kernel.org/r/20250803-i2c-rtl9300-multi-byte-v2-0-9b7b759fe2b6@narfation.org
+
+Changes in v2:
+- add the missing transfer width and read length increase for the SMBus
+  Write/Read
+- Link to v1: https://lore.kernel.org/r/20250802-i2c-rtl9300-multi-byte-v1-0-5f687e0098e2@narfation.org
+
+---
+Harshal Gohel (1):
+      [i2c-host] i2c: rtl9300: Implement I2C block read and write
+
+Sven Eckelmann (1):
+      [i2c-host-fixes] i2c: rtl9300: Drop unsupported I2C_FUNC_SMBUS_BLOCK_DATA
+
+ drivers/i2c/busses/i2c-rtl9300.c | 35 ++++++++++++++++++++++++++++++++---
+ 1 file changed, 32 insertions(+), 3 deletions(-)
+---
+base-commit: 217f92d91c9faeb6b78bd6205b3585944cbcb433
+change-id: 20250802-i2c-rtl9300-multi-byte-edaa1fb0872c
+
+Best regards,
 -- 
-2.43.0
+Sven Eckelmann <sven@narfation.org>
 
 
