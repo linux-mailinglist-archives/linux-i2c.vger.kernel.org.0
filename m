@@ -1,105 +1,84 @@
-Return-Path: <linux-i2c+bounces-13252-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13253-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D045BA63ED
-	for <lists+linux-i2c@lfdr.de>; Sun, 28 Sep 2025 00:16:23 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91C2EBA6425
+	for <lists+linux-i2c@lfdr.de>; Sun, 28 Sep 2025 00:28:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 64675189DC6D
-	for <lists+linux-i2c@lfdr.de>; Sat, 27 Sep 2025 22:16:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 49EE738086B
+	for <lists+linux-i2c@lfdr.de>; Sat, 27 Sep 2025 22:28:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CC8E1F94A;
-	Sat, 27 Sep 2025 22:16:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21581239085;
+	Sat, 27 Sep 2025 22:28:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="jOYe4lXX"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="jIpGYNmE"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D0C123C50C
-	for <linux-i2c@vger.kernel.org>; Sat, 27 Sep 2025 22:16:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3BB11D7E4A
+	for <linux-i2c@vger.kernel.org>; Sat, 27 Sep 2025 22:28:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759011373; cv=none; b=lP7x1zuyTXebFVk4DPfvLJZOT5sf12a89kiEy2GcgZ6zgK68CkyR9ZAeUEQWJTLlTX/hGF1Cel8jmYdPXyvsJjxCeAZS0cnesYvO1WiqePjy0GtyKJd8djJfdOHvUiGGpSudif5L7N4ZzxMz6cCvN4ZKWAgFtmyZdYlgz+ex504=
+	t=1759012103; cv=none; b=f9YxRpBRIrfRGpmVtADYc1eQBuw6Kb6a4b7J7hOW4c56JojSjzeU83k9GCkQrgUreLYNPgluzkqWHjPFnWAZQ8loeY7QZNl1EvfUqxyK6RZimMU1S3jP0HIN5L5PyxhLAvYpm2mNk+MnbHQM/MeVQVWl39dxh28nHd5jw7x9qr8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759011373; c=relaxed/simple;
-	bh=/FwZvpIv/rpMoG1Ur9psPNhkJQTOiKSKYoyUS+1It7I=;
+	s=arc-20240116; t=1759012103; c=relaxed/simple;
+	bh=5OLTzPxIdYsUVeiOoZUF189rauKtei7+nmPm7dDIojY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pivNfJ2PymLcfb4pfJxgYejU+PgeOD8daWNHGdW0azZiOs7X6O1KuWAMEErn+A0JD0IcEzq6+cbWOqVP8gwOnD42BcwGRH8fiknap3s4j7dNuBhbassG9ehtkjvIMkbZbgsk4af5XiI9sQUUWy3nw2napbTSQwvyXXeFOzEoMCA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=jOYe4lXX; arc=none smtp.client-ip=194.117.254.33
+	 Content-Type:Content-Disposition:In-Reply-To; b=Bx7aAd36bZcPPhcE2Eatm6WSjToE5gWjzNDQLAmwxGF09w5uL/LcHyZtNsUHI4xGSw5R+PdXy2/5bVZsJqBZxyKyp9ccQskwKhnXmtD+TpZgkqCGRdSsKIksiyn//QsKa29JMnWU7I8+K0eSybPAO0Oi5a+qCth6BeMDbU1wNmA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=jIpGYNmE; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=/FwZ
-	vpIv/rpMoG1Ur9psPNhkJQTOiKSKYoyUS+1It7I=; b=jOYe4lXXAxrLEBgN2sKF
-	/wHNGcPb9pQ5aKm42NxlTElmNZQpYRyahju4GnS6KfPSMJp2cunx7q7/ZOkzCH6S
-	Aft5RT8vytsxHen6VDlmZXJLWP8vJZXUZVf4SBH0XUS/9ecEt/uMOnATO+B+a36w
-	9Ba+gQQQ5IoVZJ4XVd5nf8HpcUDKpfgNj2/b00TH0boN9NSPC0e3H7JRMqMRwh+m
-	WigICaRPUvcjOQVQoJ5peb1SlcA7TRrTvr19Ow2cyK0Wa45MB7of4ooqRQnaEmmk
-	fwQSPeEQlhBePQSO2VFq2CU9uipEdMD/XRejjHg1ruzp/vxDPfaYi8vD6SpUFnKS
-	RQ==
-Received: (qmail 2700325 invoked from network); 28 Sep 2025 00:16:07 +0200
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 28 Sep 2025 00:16:07 +0200
-X-UD-Smtp-Session: l3s3148p1@7c+4v88/ZJwujnsw
-Date: Sun, 28 Sep 2025 00:16:07 +0200
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=briJ
+	+qeic7cY6iPJ4hQ23iKjWHUKZaedrPOQzDcbuvM=; b=jIpGYNmEmhKy6dAwDw2x
+	lZhl4atgdndfmdjjy8/8VtkJ3TrSnWiZmGFxnb9dN4yfV7tn0puEq8KJYld+NrAD
+	5vlL8ymHOmS69l7lVXtKNNC//K9onlqgdBMsq0O4oP6kkySY2w5PzfzU94JzqVtf
+	P8VDxiCVD27mbtaJ7MdaxkXacrVDHThoxLfsNiYlYJhQBIksTJ2FN/8lF1zPHb4Q
+	MQz2iSS6Ym7nckR2jeJUd4dohOG7XR5+//uiSa/q44Uejev9v+HEs7Mciocsav41
+	Ptqv1MoHv6I4dc/FP1ZpRxkCvJH1Z+l4g7db3UTFut6Vuj2RxwfXUpX2xfAZqoip
+	/Q==
+Received: (qmail 2702438 invoked from network); 28 Sep 2025 00:28:19 +0200
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 28 Sep 2025 00:28:19 +0200
+X-UD-Smtp-Session: l3s3148p1@9ZdY688/Bowujnsw
+Date: Sun, 28 Sep 2025 00:28:19 +0200
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: linux-i2c@vger.kernel.org,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Jan Dabros <jsd@semihalf.com>,
-	Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Subject: Re: [PATCH] MAINTAINERS: Add me as maintainer of Synopsys DesignWare
- I2C driver
-Message-ID: <aNhiJ7LELptFdS0D@shikoro>
-References: <20250926115057.3752771-1-mika.westerberg@linux.intel.com>
+To: Sven Eckelmann <sven@narfation.org>
+Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>,
+	Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Jonas Jelonek <jelonek.jonas@gmail.com>,
+	Harshal Gohel <hg@simonwunderlich.de>,
+	Simon Wunderlich <sw@simonwunderlich.de>, stable@vger.kernel.org
+Subject: Re: [PATCH i2c-host-fixes i2c-host v7 1/2] i2c: rtl9300: Drop
+ unsupported I2C_FUNC_SMBUS_BLOCK_DATA
+Message-ID: <aNhlAyxlUR27eERC@shikoro>
+References: <20250927-i2c-rtl9300-multi-byte-v7-0-c0fd0e78b818@narfation.org>
+ <20250927-i2c-rtl9300-multi-byte-v7-1-c0fd0e78b818@narfation.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="17QJ0VrO6yRGTDBn"
-Content-Disposition: inline
-In-Reply-To: <20250926115057.3752771-1-mika.westerberg@linux.intel.com>
-
-
---17QJ0VrO6yRGTDBn
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20250927-i2c-rtl9300-multi-byte-v7-1-c0fd0e78b818@narfation.org>
 
-On Fri, Sep 26, 2025 at 01:50:57PM +0200, Mika Westerberg wrote:
-> I volunteered as maintainer of the DesignWare I2C driver, so update my
-> entry from reviewer to maintainer.
->=20
-> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+On Sat, Sep 27, 2025 at 11:52:16AM +0200, Sven Eckelmann wrote:
+> While applying the patch for commit ede965fd555a ("i2c: rtl9300: remove
+> broken SMBus Quick operation support"), a conflict was incorrectly solved
+> by adding the I2C_FUNC_SMBUS_I2C_BLOCK feature flag. But the code to handle
+> I2C_SMBUS_I2C_BLOCK_DATA requests will be added by a separate commit.
+> 
+> Fixes: ede965fd555a ("i2c: rtl9300: remove broken SMBus Quick operation support")
+> Cc: stable@vger.kernel.org # v6.13+
+> Signed-off-by: Sven Eckelmann <sven@narfation.org>
 
-Applied to for-current, thanks!
+Applied to for-current with $subject fixed to match the correct FUNC
+flag, thanks!
 
-
---17QJ0VrO6yRGTDBn
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmjYYicACgkQFA3kzBSg
-KbZ1zRAAp19OE9XV6deMBMeWo1YYjftMnMulbg7yBZup4k8YQMuG5mCXNsUGAZ2V
-X7KFjSQW+n6dJXdZwSlrYKyZUmpitHWefuJkWsyCMEsqLwFrhXHmmuOynRTleBRe
-Jb+4RjSaD7ZmLByZlIUqX7cEd6R8DKRD+tz2rzp7o6PUmcr6SQ7jk+1neq9q+R64
-zMyZzUKLViyBwrkCWMeZAvtzDlwxOtvB/cVGk9N17wv/SrAdvT166V85x3CCugZl
-/7Y/JMgoQUrHpT+s3Y/oHh5mcI8jBLze7RR+jejVbokyjhoYU/b9brC7bxzHkv8x
-+v2SdRrARC9OjzZCxl5UZeWbPV38xE0V0Ril0NQBtSpIIIk3/4l8JP5hfGNUCa7t
-DydiHizMxIhPyB5iRMFinuLWRlFDTnCCA91cpZMGKLckZT/x+9UiFXuFScKq4XGn
-qPkGDQKzcFEWPaAGVMywg+lK26EWdlim7HTpeSSg7qZokwGXIVuGvSbKM2nI45cp
-YOId4sIudTpkjbePXFPv5hMw/ZwVAR9YkydJIGPhkZMiO0TqzpyVT3Oz2gG/nP9o
-47E95ZcEPXzd/tKNOX51ngDMSPzjomUli37AQ+pwlwHd2rXysnniqtJhB8vf9Awc
-VyNZqyYcpeDozFPaTVkDsQZHId6NKjYB+8ouF1HNTYgqXUSTlSI=
-=iMPz
------END PGP SIGNATURE-----
-
---17QJ0VrO6yRGTDBn--
 
