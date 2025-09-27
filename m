@@ -1,146 +1,103 @@
-Return-Path: <linux-i2c+bounces-13247-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13248-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9518BA61A7
-	for <lists+linux-i2c@lfdr.de>; Sat, 27 Sep 2025 18:43:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0EF5BBA6253
+	for <lists+linux-i2c@lfdr.de>; Sat, 27 Sep 2025 20:09:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 911717A1628
-	for <lists+linux-i2c@lfdr.de>; Sat, 27 Sep 2025 16:42:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 576BF4A51C7
+	for <lists+linux-i2c@lfdr.de>; Sat, 27 Sep 2025 18:09:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54A3127703C;
-	Sat, 27 Sep 2025 16:43:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFF9F22D4C8;
+	Sat, 27 Sep 2025 18:08:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YtRyPe0K"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="OrYX9qmF"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70BD4244677
-	for <linux-i2c@vger.kernel.org>; Sat, 27 Sep 2025 16:43:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A482202C30;
+	Sat, 27 Sep 2025 18:08:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758991431; cv=none; b=WzFc4SiSKKyCWal1NJ5hilbViKrdJlPsKXuxvlFPE6P0uGqi8ZZHGBV74Wky8FV2QmG/iRSvZ02wwDtRkMFK42EWpMp3XU3r+HNvPPeeEnK79JaeRJQ69y0QcNUZJVTzQbIrazO/IcJU3RRKVJOEyNLNAo9cr57u+gVOXGR7U9I=
+	t=1758996535; cv=none; b=BxcnRku7KHlazprKJNFGpduzacz3TKSgh+BdrU971gJ1S/ocMO9B/vwequ+LTTdR0g6euXSlIuAbWdDFrM61w5jR/1jJn2xmq92rsd15aIBD30L/JrKC3fxaqWAfhhmGXg8Kyu+Kl/2KXITdyVeyfkgtw27OTEzjz15EqUcnFlU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758991431; c=relaxed/simple;
-	bh=vKpTRRRmpkwvD+RKQ8Vdg4UWvE2ebw01JOfwjsbS5Qs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pKzQnUQPtBCMCdje/dbqc5CRkLDH0GOI79DrMpcG4PO19Nl+DPGUpJXB1s9OJlgaQ46yVtVkCjmToAAl7GAoj+9S4Qfl0ag7Vzlvtuq3jYC6YgETOhPc5LBvyPJTs8Q73uHJLqwhsZ5CANpNDsMeKHUp8f5R/1wti3TvSTCBgys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YtRyPe0K; arc=none smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-414f48bd785so1278592f8f.1
-        for <linux-i2c@vger.kernel.org>; Sat, 27 Sep 2025 09:43:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758991428; x=1759596228; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OOF0Bc+2gNxqDcWN5Q3dw7KfEBLw6JtH3pzFUg7pzQA=;
-        b=YtRyPe0KtIa0kjup/zwBrbRwDVnHi0WaXzFiFg3Xpcv4wPgKFH0wRWujllvtkPNRdz
-         XYtlSv/KbJKF7nb908fZSjIqZAz6KEcXP/XLJf96tITazZooRfdPtIyfQH6QtJqRh9ye
-         CuDsmLQrWBcjZdQhw1N7+JsLNsbd0KZVAGxwNlt9QFEqniMapvCxuOG601Wlq890W3ap
-         EBF7st/PVk0VSgQjCbhA/XQXhhOrWK+n+vtyZibHAj7lQrM6pqpxBreS1hKc33d1wCu/
-         6xeqqB9RzApBQ4FU3cRvinwq950uAvq29uehlLsrocBKWbpWkjbiHAvY5Ei9oOaKAHsm
-         SyXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758991428; x=1759596228;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OOF0Bc+2gNxqDcWN5Q3dw7KfEBLw6JtH3pzFUg7pzQA=;
-        b=jHubI2u8eHA/8fAowCKuJ2yTKWJ09rKxkLnxmb279uPBmCL6npsFR9kKhWTDoOkzNy
-         S56iiHnNO8SmUT42eWujG+rU0j8peGWsRINeFvZoPYJqFzo2kNd5BkqnNSpOlJ2a8aMc
-         aiU9Qmo1U4WBsP1eoQnyLcCk92J5iiwSSS9CTmL7O5Nvo+6qeMp9+mKD3NdMw+TNsv4L
-         Har/zfKtPNzM9HoXQfXLqsMPCR+GssdB7DBUdt9Vb9sZOw0d3t3HvPbB0IFNa/pRKRAY
-         Y7Qdub/pvS2syg8V5fzbodt6hxXtFznpluCJQim/OhV0FK+x79XS/TbUKCpwzf+lQKaQ
-         ajKA==
-X-Forwarded-Encrypted: i=1; AJvYcCUH8MIKUUQj1eQzqsEPWaBFnNCvbZ6m0cf490YkUpuJ4ZaDKKBtnGFcfXyvmuqUBumdoxNlywEZnQA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyyW4EM3VQhYh0s/JfDyIUza+oDXdgtvSFeenPiFI0rpXVoP1je
-	hmiWgfcqh6kwv8+zTFsKtkJkdYHRCECkPqJ27BA08r7NjYD/rKuWqlFC
-X-Gm-Gg: ASbGnctFwWqgjq3GbwA05ZIfyiPg44qFMwdKrKZfMpwU9AclZFsEZXdMd84XyW67+2G
-	G3VcQAm/wipyLqtVoi2JwbIVRK4Q6ns3fw7CyGxZhGK+S8dJk72c1oL9CSflCwpzGX8XrBDoIjr
-	4aI7ex32uKSW6YWutkhuvOwzElhBERZ/rXUfuFWG/oC/JSI7As1ziWgsF2cY69aUGDNTCgejwZL
-	/k1ksyvVC7v68KCmOmBitBVMBYq+N6BUgjLQqWMSfc/Y7BJWBICbdM92c6N7TvIbgSRmBqUrXLX
-	DOD1cpqJjmtZTLPuJSoI6rI14fZ+zcMUha/FUDl8LnWCbmaEiEPVZfsesy1E8E3PEguN4HJcVGs
-	42otPjT08roMIv/+URcKC8DqZDl10HVieexefwEmjVxEG0Pi2Qcys3mPtwxhX2EO8uNAv4rezO+
-	LZxKNkyEHqBjvUGgdtUGsFT+PgWKPBxw==
-X-Google-Smtp-Source: AGHT+IFIv5xrxFaIIFhGL3xlayHFyRiak61vxIYfE2UYyGSdIiQTfaA3TXu6JLuem0D6Pr7aB35E1Q==
-X-Received: by 2002:a05:6000:400b:b0:3f0:4365:1d36 with SMTP id ffacd0b85a97d-40e4354dfddmr11267608f8f.16.1758991427482;
-        Sat, 27 Sep 2025 09:43:47 -0700 (PDT)
-Received: from ?IPV6:2a02:c7c:8b21:7400:a8dc:c580:efa:e675? ([2a02:c7c:8b21:7400:a8dc:c580:efa:e675])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-40fb72fbb27sm11247673f8f.4.2025.09.27.09.43.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 27 Sep 2025 09:43:47 -0700 (PDT)
-Message-ID: <f65c9cc0-318a-4c0a-9d0c-9c1a3d58d2b9@gmail.com>
-Date: Sat, 27 Sep 2025 17:43:43 +0100
+	s=arc-20240116; t=1758996535; c=relaxed/simple;
+	bh=vixz8K/MO+ym+XudyndtGJ2cXBm1/TKTyCV30y6WPU4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UPoM118IRbze1qmGeDca8Fegw1mGvxSa2p9lP7QtN2pfTgUPETxacf1tJqwHilLA/0XJaCim1pW/KJcsLuYMgcuWb9Jq5XxDyQvZBQOlevdFI2xlJFBLTqp+/SjugONK7jwiRh3q1ELrmEo0Gj0opiJfgEQtPKFTawU+uWyXE+g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=OrYX9qmF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3D98C4CEE7;
+	Sat, 27 Sep 2025 18:08:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1758996535;
+	bh=vixz8K/MO+ym+XudyndtGJ2cXBm1/TKTyCV30y6WPU4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=OrYX9qmF2BWNk5RZp0etbC0OAzKbfjaP8pWqx6d65lIoZtIqI5mSMvmuvZo6VPLfW
+	 /k4QJLc1WaQihHcvMYcw7jI45VXcwj+nYMyQTGjlKSvGxvh0N/rQK4u7jhLVF+8Nko
+	 L1L4fFd2PVnsicXj0fiXn16YYHVki2YX35WMeMsk=
+Date: Sat, 27 Sep 2025 20:08:51 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Markus Elfring <Markus.Elfring@web.de>
+Cc: make24@iscas.ac.cn, linux-i2c@vger.kernel.org,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Elie Morisse <syniurge@gmail.com>,
+	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+	Wolfram Sang <wsa@kernel.org>, stable@vger.kernel.org,
+	LKML <linux-kernel@vger.kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH] i2c: fix reference leak in MP2 PCI device
+Message-ID: <2025092741-emerald-exciting-aca3@gregkh>
+References: <20250927105729.19164-1-make24@iscas.ac.cn>
+ <e6703b6c-0ae5-450a-ae3a-1ad899c8f374@web.de>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 2/3] rust: i2c: add manual I2C device creation
- abstractions
-To: Danilo Krummrich <dakr@kernel.org>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
- Wolfram Sang <wsa+renesas@sang-engineering.com>,
- Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
- =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>,
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Viresh Kumar <viresh.kumar@linaro.org>,
- Asahi Lina <lina+kernel@asahilina.net>,
- Wedson Almeida Filho <wedsonaf@gmail.com>, Alex Hung <alex.hung@amd.com>,
- Tamir Duberstein <tamird@gmail.com>,
- Xiangfei Ding <dingxiangfei2009@gmail.com>, linux-kernel@vger.kernel.org,
- rust-for-linux@vger.kernel.org, linux-i2c@vger.kernel.org
-References: <20250911154717.96637-1-igor.korotin.linux@gmail.com>
- <20250911155015.97250-1-igor.korotin.linux@gmail.com>
- <DCQ9AXZ5APKN.1835AK0PVA3S5@kernel.org>
-Content-Language: en-US
-From: Igor Korotin <igor.korotin.linux@gmail.com>
-In-Reply-To: <DCQ9AXZ5APKN.1835AK0PVA3S5@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e6703b6c-0ae5-450a-ae3a-1ad899c8f374@web.de>
 
-Hello Danilo
-
-On 9/11/2025 9:34 PM, Danilo Krummrich wrote:
-> On Thu Sep 11, 2025 at 5:50 PM CEST, Igor Korotin wrote:
->> +impl I2cAdapter {
->> +    /// Gets pointer to an `i2c_adapter` by index.
->> +    pub fn get(index: i32) -> Result<ARef<Self>> {
+On Sat, Sep 27, 2025 at 02:56:49PM +0200, Markus Elfring wrote:
+> > In i2c_amd_probe(), amd_mp2_find_device() utilizes
+> > driver_find_next_device() which internally calls driver_find_device()
+> > to locate the matching device. driver_find_device() increments the
+> > reference count of the found device by calling get_device(), but
+> > amd_mp2_find_device() fails to call put_device() to decrement the
+> > reference count before returning. This results in a reference count
+> > leak of the PCI device each time i2c_amd_probe() is executed, which
+> > may prevent the device from being properly released and cause a memory
+> > leak.
 > 
-> Where do we get this index usually from? OF, ACPI, etc. I assume? I feel like it
-> could make sense to wrap it into a new type. Even though it is not safety
-> relevant it eliminates a source for mistakes.
-
-It usually comes as predefined magic number in a platform driver info.
-I'll define a specific type for this number for clearance.
-
->> +    }
->> +}
->> +
->> +impl<Ctx: device::DeviceContext> AsRef<I2cAdapter<Ctx>> for I2cAdapter<Ctx> {
->> +    fn as_ref(&self) -> &I2cAdapter<Ctx> {
->> +        &self
->> +    }
->> +}
+> How do you think about to increase the application of scope-based resource management?
+> https://elixir.bootlin.com/linux/v6.17-rc7/source/include/linux/device.h#L1180
 > 
-> This AsRef implementation doesn't seem to do anything?
+> Regards,
+> Markus
+> 
 
-I misunderstood the concept of the ARef<T> a little bit and used this 
-as_ref() instead of just getting a reference by &adapter. I'll remove 
-this in the next drop
+Hi,
 
-Thanks for the review. All other comments are noted. I'll address them 
-in the next drop as well
+This is the semi-friendly patch-bot of Greg Kroah-Hartman.
 
-Cheers
-Igor
+Markus, you seem to have sent a nonsensical or otherwise pointless
+review comment to a patch submission on a Linux kernel developer mailing
+list.  I strongly suggest that you not do this anymore.  Please do not
+bother developers who are actively working to produce patches and
+features with comments that, in the end, are a waste of time.
+
+Patch submitter, please ignore Markus's suggestion; you do not need to
+follow it at all.  The person/bot/AI that sent it is being ignored by
+almost all Linux kernel maintainers for having a persistent pattern of
+behavior of producing distracting and pointless commentary, and
+inability to adapt to feedback.  Please feel free to also ignore emails
+from them.
+
+thanks,
+
+greg k-h's patch email bot
 
