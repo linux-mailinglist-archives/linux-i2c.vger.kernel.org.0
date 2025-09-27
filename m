@@ -1,126 +1,109 @@
-Return-Path: <linux-i2c+bounces-13244-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13245-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E2ABBA5E0B
-	for <lists+linux-i2c@lfdr.de>; Sat, 27 Sep 2025 12:56:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DAAC2BA5E11
+	for <lists+linux-i2c@lfdr.de>; Sat, 27 Sep 2025 12:58:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 453282A7342
-	for <lists+linux-i2c@lfdr.de>; Sat, 27 Sep 2025 10:56:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7277B17F7EE
+	for <lists+linux-i2c@lfdr.de>; Sat, 27 Sep 2025 10:58:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43A9C2DC359;
-	Sat, 27 Sep 2025 10:56:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B0422DCF5B;
+	Sat, 27 Sep 2025 10:58:07 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.gentoo.org (woodpecker.gentoo.org [140.211.166.183])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FB5315B971;
-	Sat, 27 Sep 2025 10:56:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=140.211.166.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D5E12DCF46;
+	Sat, 27 Sep 2025 10:58:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758970585; cv=none; b=SD4Nh6t3LGm569WRquf8v8iXDWDfV1i1tPJh7uLLMGdEOvXL8zNrvYGMLq+LR2hL+sv+iV03bOIhM7vpiU1GAtkyeUtymBBRKk225Xo/vujDBnkRf9HtBGQ3o8igSm3PGO7LeixbPwbiOYVQbt7lvkdsMVfWepDqKF7PWa53kqI=
+	t=1758970687; cv=none; b=V/g0xZJ6LcktOzhpIEwFEI2oobjdrTnVIKrm8PbhWCOzVu9nd/GHgIaAPmk6pvUMcp10iMnViBX8Bda4trewucB4PzldgfFX3P4zSMUUb76nc8Xs+N+l1ACfZQmm3veitkG0OYDeX2B7sRfHeoMODeZGxwSkHvT5M9qCKU1CR6A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758970585; c=relaxed/simple;
-	bh=I+ZlfiEFt+StkHEgrb6i6Dck7KEiUvRPWgotHmfoqsM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pTLupytruswxamk9+Ik4a2FGT/Is/Wx64hjPAVOBvxc6iCnR9etsxJ9kr2ahu6j4MKIM+j+wcanSbvIFTmAXZvHS+ZBM+AxWnN+XoqQ2O/FjepMYnZCm6T7WbR1EXuF3DXkxc6Y7bo8XJl1FgUN2wu4Ulq1bqG113mtjN4Vblhk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org; spf=pass smtp.mailfrom=gentoo.org; arc=none smtp.client-ip=140.211.166.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentoo.org
-Received: from localhost (unknown [180.158.240.90])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: dlan)
-	by smtp.gentoo.org (Postfix) with ESMTPSA id 12DB133BEAD;
-	Sat, 27 Sep 2025 10:56:21 +0000 (UTC)
-Date: Sat, 27 Sep 2025 18:56:16 +0800
-From: Yixun Lan <dlan@gentoo.org>
-To: Troy Mitchell <troy.mitchell@linux.spacemit.com>
-Cc: Andi Shyti <andi.shyti@kernel.org>, Alex Elder <elder@riscstar.com>,
-	Troy Mitchell <troymitchell988@gmail.com>,
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev
-Subject: Re: [PATCH v2 6/6] i2c: spacemit: introduce pio for k1
-Message-ID: <20250927105616-GYB1338789@gentoo.org>
-References: <20250925-k1-i2c-atomic-v2-0-46dc13311cda@linux.spacemit.com>
- <20250925-k1-i2c-atomic-v2-6-46dc13311cda@linux.spacemit.com>
+	s=arc-20240116; t=1758970687; c=relaxed/simple;
+	bh=vOeDSRLaO7LLl0fRREVJ+ouvCma7Y6wBZaZyNSSCm4A=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=h2p0m8oQVKPzmFlVsH2YxkT5cWnaIsLhJEu91vevL+O5JaaxpywuysPNReUqgDjetPRQ7wWOmEhrw4nlAvFBsxyl0B9jTA4ZOhf0D5dvBJnJ5Hl/qy3pYK0I+t0zDJ4PIfctq49hDMKUyU9hBokbrbRTU4jMsUUBtWiEH/WSRXs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
+Received: from localhost.localdomain (unknown [202.112.113.212])
+	by APP-01 (Coremail) with SMTP id qwCowACX8KIdw9doaohdBw--.26444S2;
+	Sat, 27 Sep 2025 18:57:51 +0800 (CST)
+From: Ma Ke <make24@iscas.ac.cn>
+To: syniurge@gmail.com,
+	shyam-sundar.s-k@amd.com,
+	andi.shyti@kernel.org,
+	wsa@kernel.org
+Cc: linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	akpm@linux-foundation.org,
+	Ma Ke <make24@iscas.ac.cn>,
+	stable@vger.kernel.org
+Subject: [PATCH] i2c: fix reference leak in MP2 PCI device
+Date: Sat, 27 Sep 2025 18:57:29 +0800
+Message-Id: <20250927105729.19164-1-make24@iscas.ac.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID:qwCowACX8KIdw9doaohdBw--.26444S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Zw17JF1rXr47XrWDGw4UJwb_yoW8GFWDpF
+	WUtFWxAr98GF1vg3WDX3WUZFy3Cw4vvws5WrW7Aw4F9F1rZasYkryktF909w15ArWjyF4a
+	qFW3tayruF1jqFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9G14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+	6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVWxJr
+	0_GcWlnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
+	F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r
+	4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I
+	648v4I1lc7CjxVAaw2AFwI0_Jw0_GFylc2xSY4AK67AK6r4DMxAIw28IcxkI7VAKI48JMx
+	C20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAF
+	wI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20x
+	vE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v2
+	0xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxV
+	W8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbmsjUUUUUU==
+X-CM-SenderInfo: ppdnvj2u6l2u1dvotugofq/
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250925-k1-i2c-atomic-v2-6-46dc13311cda@linux.spacemit.com>
 
-On 10:02 Thu 25 Sep     , Troy Mitchell wrote:
-> This patch introduces I2C PIO functionality for the Spacemit K1 SoC,
-> enabling the use of I2C with interrupts disabled.
-> 
-> Signed-off-by: Troy Mitchell <troy.mitchell@linux.spacemit.com>
-> ---
->  drivers/i2c/busses/i2c-k1.c | 164 +++++++++++++++++++++++++++++++++++++-------
->  1 file changed, 140 insertions(+), 24 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-k1.c b/drivers/i2c/busses/i2c-k1.c
-> index 6b918770e612e098b8ad17418f420d87c94df166..e403eb7d6f329f4fe5c5242f94cc21094dff105c 100644
-> --- a/drivers/i2c/busses/i2c-k1.c
-> +++ b/drivers/i2c/busses/i2c-k1.c
-> @@ -97,6 +97,9 @@
->  
-..
->  static int spacemit_i2c_xfer_msg(struct spacemit_i2c_dev *i2c)
->  {
->  	unsigned long time_left;
-> @@ -310,10 +368,28 @@ static int spacemit_i2c_xfer_msg(struct spacemit_i2c_dev *i2c)
->  
->  		reinit_completion(&i2c->complete);
->  
-> -		spacemit_i2c_start(i2c);
-> +		if (i2c->is_pio) {
-> +			/* We disable the interrupt to avoid unintended spurious triggers. */
-the comment is suspicious, and seems wrong..
-> +			disable_irq(i2c->irq);
-> +
-I guess this doesn't disable interrupt in the hardware layer, it will still
-fire interrupt once enabled, so instead of calling disable_irq(), why not
-dealing with ISR setting of the controller? I mean those "IE bits"(interrupt
-enableing) of ICR REGISTER, disabling them should prevent the interrupt
-triggered?
+In i2c_amd_probe(), amd_mp2_find_device() utilizes
+driver_find_next_device() which internally calls driver_find_device()
+to locate the matching device. driver_find_device() increments the
+reference count of the found device by calling get_device(), but
+amd_mp2_find_device() fails to call put_device() to decrement the
+reference count before returning. This results in a reference count
+leak of the PCI device each time i2c_amd_probe() is executed, which
+may prevent the device from being properly released and cause a memory
+leak.
 
-> +			/*
-> +			 * The K1 I2C controller has a quirk:
-> +			 * when doing PIO transfers, the status register must be cleared
-> +			 * of all other bits before issuing a START.
-> +			 * Failing to do so will prevent the transfer from working properly.
-> +			 */
-> +			spacemit_i2c_clear_int_status(i2c, SPACEMIT_I2C_INT_STATUS_MASK);
-this also doesn't seem correct to me, the irq status bit should be cleared once
-interrupt occur, not dealing it here before sending msg, this seems a
-wrong procedure
+Found by code review.
 
-> +
-> +			spacemit_i2c_start(i2c);
-> +			time_left = spacemit_i2c_wait_pio_xfer(i2c);
-> +
-> +			enable_irq(i2c->irq);
-> +		} else {
-> +			spacemit_i2c_start(i2c);
-> +			time_left = wait_for_completion_timeout(&i2c->complete,
-> +								i2c->adapt.timeout);
-> +		}
->  
-> -		time_left = wait_for_completion_timeout(&i2c->complete,
-> -							i2c->adapt.timeout);
->  		if (!time_left) {
->  			dev_err(i2c->dev, "msg completion timeout\n");
->  			spacemit_i2c_conditionally_reset_bus(i2c);
-> @@ -341,6 +417,9 @@ static bool spacemit_i2c_is_last_msg(struct spacemit_i2c_dev *i2c)
+Cc: stable@vger.kernel.org
+Fixes: 529766e0a011 ("i2c: Add drivers for the AMD PCIe MP2 I2C controller")
+Signed-off-by: Ma Ke <make24@iscas.ac.cn>
+---
+ drivers/i2c/busses/i2c-amd-mp2-pci.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/i2c/busses/i2c-amd-mp2-pci.c b/drivers/i2c/busses/i2c-amd-mp2-pci.c
+index ef7370d3dbea..1f01d3f121ba 100644
+--- a/drivers/i2c/busses/i2c-amd-mp2-pci.c
++++ b/drivers/i2c/busses/i2c-amd-mp2-pci.c
+@@ -464,7 +464,9 @@ struct amd_mp2_dev *amd_mp2_find_device(void)
+ 		return NULL;
+ 
+ 	pci_dev = to_pci_dev(dev);
+-	return (struct amd_mp2_dev *)pci_get_drvdata(pci_dev);
++	mp2_dev = (struct amd_mp2_dev *)pci_get_drvdata(pci_dev);
++	put_device(dev);
++	return mp2_dev;
+ }
+ EXPORT_SYMBOL_GPL(amd_mp2_find_device);
+ 
 -- 
-Yixun Lan (dlan)
+2.17.1
+
 
