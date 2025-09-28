@@ -1,88 +1,105 @@
-Return-Path: <linux-i2c+bounces-13267-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13268-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FB02BA6FC9
-	for <lists+linux-i2c@lfdr.de>; Sun, 28 Sep 2025 13:22:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1AF38BA745B
+	for <lists+linux-i2c@lfdr.de>; Sun, 28 Sep 2025 17:50:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F1AF617C85B
-	for <lists+linux-i2c@lfdr.de>; Sun, 28 Sep 2025 11:22:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 871C81899306
+	for <lists+linux-i2c@lfdr.de>; Sun, 28 Sep 2025 15:50:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B3332DA757;
-	Sun, 28 Sep 2025 11:22:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 898171D9A5F;
+	Sun, 28 Sep 2025 15:50:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="yaFUXg/1"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.gentoo.org (woodpecker.gentoo.org [140.211.166.183])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D2F1225D6;
-	Sun, 28 Sep 2025 11:22:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=140.211.166.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2760480604;
+	Sun, 28 Sep 2025 15:50:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759058547; cv=none; b=aeTY+LeQ1rhSZjcr8fAlLfWLNtPoignt6CBziECV6WGJs0K8GzqAbvjP9dMF62oLFwy3O9B/paxcnnNGS3K+fahWztRLtL1HPCh6YrlWeblRI1kdmmjeJfYxErenwxWzjp0ZynVt/R4sscpfi8pSvk12efFOqM/LQ4kCRfaVNp4=
+	t=1759074611; cv=none; b=egmd2GCdNlQD7bzOaNClE+Ci9BA2kGM9IcfC+fb714Qgf46YmmQLHHpQC37SEXlhPz78UjFETfTGzMZXD3pBEFXI4cgFpdf8tQawToeFu3F6R1qmzNGt60JZUIr6dz8vP1BuRWINVw0v+LPl1EBe+fhQz6HOnS9bnzQpLazVork=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759058547; c=relaxed/simple;
-	bh=Ga7JoScWWQ5hSyoU6g5frSzXdDVHXzOAdi/wiib2Y6w=;
+	s=arc-20240116; t=1759074611; c=relaxed/simple;
+	bh=4ZTOtCw+qu6v/PS9GBSsh8HQ+OZ1h1e3pN5XZ7G4qY8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OO2hv9aI7qCtCwgdNmehF3W21s/H8vjXlJfjvbyrksx04L1m5Dtd7rEhC0NnLPa0R4EGaqS50qSd5moDFKyk4jSCVcY0SFtfmmNF42RM/E8jVw1TQJXFp54ZXmckOAt+dEBlv3f/S2o6S5mk6fB/zcuZUiI4NNUooS+N2oHlpDM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org; spf=pass smtp.mailfrom=gentoo.org; arc=none smtp.client-ip=140.211.166.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentoo.org
-Received: from localhost (unknown [180.158.240.90])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: dlan)
-	by smtp.gentoo.org (Postfix) with ESMTPSA id 0147D3408A2;
-	Sun, 28 Sep 2025 11:22:24 +0000 (UTC)
-Date: Sun, 28 Sep 2025 19:22:20 +0800
-From: Yixun Lan <dlan@gentoo.org>
-To: Troy Mitchell <troy.mitchell@linux.spacemit.com>
-Cc: Andi Shyti <andi.shyti@kernel.org>, Alex Elder <elder@riscstar.com>,
-	Troy Mitchell <troymitchell988@gmail.com>,
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev
-Subject: Re: [PATCH v2 6/6] i2c: spacemit: introduce pio for k1
-Message-ID: <20250928112220-GYC1346428@gentoo.org>
-References: <20250925-k1-i2c-atomic-v2-0-46dc13311cda@linux.spacemit.com>
- <20250925-k1-i2c-atomic-v2-6-46dc13311cda@linux.spacemit.com>
- <20250927105616-GYB1338789@gentoo.org>
- <F076AA5B04CF3445+aNiMlrTNTdI7H4PI@kernel.org>
- <20250928025400-GYB1330052@gentoo.org>
- <11BACC490411452F+aNjtSOiG31hX_hrl@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=tHGVSC65rUoIOwqs/dJPDsZLGyN0Qsr8+Hp5P+TWeMBhYacRIsdEiyrs+3+nKsxWaCQLtuAmJwZDrIvRCNg8LMtGNRSwO5M2t5L4UqQO9EcLF7Uf83jmXau5/nXBYi7rfg04dMliVC9KrjF8ezqtJr2pK/+YcPXDwFy1JhBeSzw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=yaFUXg/1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44B36C4CEF0;
+	Sun, 28 Sep 2025 15:50:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1759074610;
+	bh=4ZTOtCw+qu6v/PS9GBSsh8HQ+OZ1h1e3pN5XZ7G4qY8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=yaFUXg/1iP9j2FHKIlvTC7wyXfpWdP3xLvWzTV5vKKH8JOn5fdLVrdZef0hJ/pPgK
+	 7UOlwxLFhTO0OWuepe/ulhr3bj+51AouX5uWvGOfgS+fv53w/rWFROru7GToVA0Nce
+	 z3M4/82A3QKQJeR+6LlSPG+PSaoFRz74Vk0UyKRk=
+Date: Sun, 28 Sep 2025 17:50:07 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Markus Elfring <Markus.Elfring@web.de>
+Cc: make24@iscas.ac.cn, linux-i2c@vger.kernel.org,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Elie Morisse <syniurge@gmail.com>,
+	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+	Wolfram Sang <wsa@kernel.org>, stable@vger.kernel.org,
+	LKML <linux-kernel@vger.kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v2] i2c: fix reference leak in MP2 PCI device
+Message-ID: <2025092800-occultist-postbox-305f@gregkh>
+References: <20250928071933.1627-1-make24@iscas.ac.cn>
+ <0cfce9e4-b84d-41c8-824d-3e1c53d4b6b2@web.de>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <11BACC490411452F+aNjtSOiG31hX_hrl@kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <0cfce9e4-b84d-41c8-824d-3e1c53d4b6b2@web.de>
 
-Hi Troy,
-
-On 16:09 Sun 28 Sep     , Troy Mitchell wrote:
+On Sun, Sep 28, 2025 at 01:00:13PM +0200, Markus Elfring wrote:
+> > In i2c_amd_probe(), amd_mp2_find_device() utilizes
+> > driver_find_next_device() which internally calls driver_find_device()
+> > to locate the matching device. driver_find_device() increments the
+> > reference count of the found device by calling get_device(), but
+> > amd_mp2_find_device() fails to call put_device() to decrement the
+> > reference count before returning. This results in a reference count
+> > leak of the PCI device each time i2c_amd_probe() is executed, which
+> > may prevent the device from being properly released and cause a memory
+> > leak.
 > 
-..[snip]
-> Okay..maybe I misunderstood before.
-> I'll remove disable/enable the controller IRQ around PIO transfers.
+> Under which circumstances would you become interested to apply an attribute
+> like “__free(put_device)”?
+> https://elixir.bootlin.com/linux/v6.17-rc7/source/include/linux/device.h#L1180
 > 
-> BTW, the K1 I2C patch [1] for ILCR as the SCL clock hasn't gotten
-> any replies in ages. Could you take a look?
-stop complain, you have to understand people are voluntary to review the code..
-and maintainers are busy, unfortunately..
-
-btw, you've ignored v2's review, no response, not addressed in v3
-https://lore.kernel.org/all/20250718-k1-i2c-ilcr-v2-1-b4c68f13dcb1@linux.spacemit.com/
-
-
+> Regards,
+> Markus
 > 
-> Link:
-> https://lore.kernel.org/all/20250814-k1-i2c-ilcr-v3-1-317723e74bcd@linux.spacemit.com/ [1]
-> > 
 
--- 
-Yixun Lan (dlan)
+Hi,
+
+This is the semi-friendly patch-bot of Greg Kroah-Hartman.
+
+Markus, you seem to have sent a nonsensical or otherwise pointless
+review comment to a patch submission on a Linux kernel developer mailing
+list.  I strongly suggest that you not do this anymore.  Please do not
+bother developers who are actively working to produce patches and
+features with comments that, in the end, are a waste of time.
+
+Patch submitter, please ignore Markus's suggestion; you do not need to
+follow it at all.  The person/bot/AI that sent it is being ignored by
+almost all Linux kernel maintainers for having a persistent pattern of
+behavior of producing distracting and pointless commentary, and
+inability to adapt to feedback.  Please feel free to also ignore emails
+from them.
+
+thanks,
+
+greg k-h's patch email bot
 
