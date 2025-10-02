@@ -1,163 +1,130 @@
-Return-Path: <linux-i2c+bounces-13350-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13351-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18BA8BB3D6D
-	for <lists+linux-i2c@lfdr.de>; Thu, 02 Oct 2025 14:04:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5720EBB3EDE
+	for <lists+linux-i2c@lfdr.de>; Thu, 02 Oct 2025 14:46:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C51DE1C5EFF
-	for <lists+linux-i2c@lfdr.de>; Thu,  2 Oct 2025 12:04:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9E01E3ADA66
+	for <lists+linux-i2c@lfdr.de>; Thu,  2 Oct 2025 12:46:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1C6E2F1FCB;
-	Thu,  2 Oct 2025 12:04:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZgHB8bqf"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD032310655;
+	Thu,  2 Oct 2025 12:46:11 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A17902D8360
-	for <linux-i2c@vger.kernel.org>; Thu,  2 Oct 2025 12:04:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFCDB285047;
+	Thu,  2 Oct 2025 12:46:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.84
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759406642; cv=none; b=IfHSHHFF9VAppiAr/MlnXq4tkoYe0hn1s9NWhn/FoRPaLyuWeapm1WXbWuppE9zAVSrXbE/Rz+FcrbA/VE3+SvIpXRjyC/vaf+OwS5tGfMTVXS0tvpyjuCcPC7FzdDLYhmftCkLTTFdws1tvEnr14kt6wCMRYN6s7etU3K5QnUk=
+	t=1759409171; cv=none; b=eziqUksS3CfYnLoJShiiyJAJKxxQbZUganMcpVFPV3LlNpcTTSXDp0ypt3l+M3qRyMF6yK1GzVjIBf+Pl6WhM3SIv2OYXpmBOvcGKM1W4yn2e4ea8Pwfl/ePj4KGix0Uut4bLCr9HbtEPvaNCAUvoz2YxLIQNuikpatmSd0mX9g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759406642; c=relaxed/simple;
-	bh=eyfl8uMaPOiXWpRuBMzBPPbHmUQm/AHFB3HIAkqutyk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=J0f33PJMHj2/UhbceG19Kx0IGKQ1NiBFD55DQ24xs75kP5TUmuSTzfE3WB0oI2OpdYqweowq/M/pIMrujB4kITmEcaY/a9EYEQ/TtGvrohvAV1HSgPzMfWx5BOpnP7zcds5zAtGqyc/7CcdJpjSbPQ5mwEbp0BM8eNUTto3dq7o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZgHB8bqf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 191FEC4CEF4;
-	Thu,  2 Oct 2025 12:04:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759406642;
-	bh=eyfl8uMaPOiXWpRuBMzBPPbHmUQm/AHFB3HIAkqutyk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ZgHB8bqfrxoJWW7m55wl6z9juQwPxQUfJN34eVH78jOITy3A8os5reMfbzBACd57B
-	 0vn8n5CbaRex6ycTYvvxEMnE0qISuuS6+eMcSKNuipo+kXky1FrWKJ84JfSvOaqzHQ
-	 aTcWIAyB/qZr+fSYwd8C2sDGdweqbM7iegDf5jedqGH8QE/tsZfq7mtiHLmgiWfLu0
-	 7z9T49tuthzj81VG+3SxUPa2s8mzTI9pmCC6gO1h5haqBeWXjAWUHW2xru9DC3VA0p
-	 ignt1T3dbCnmxR5ZxIGIKdYow20cT1XLvS/lCLO1DVF4jtp9olXZNOYIY0YqfGA2OY
-	 CDwFMtu9Q2Xuw==
-Message-ID: <41c2ceb0-b78a-4de1-ae19-42617737cfd6@kernel.org>
-Date: Thu, 2 Oct 2025 14:03:59 +0200
+	s=arc-20240116; t=1759409171; c=relaxed/simple;
+	bh=6vCoSI8TiosmG7nf7cJMDZZ4HVDCR/IA5rNM0JedGs0=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=iSIqJ8l+zO11tKCSJrE/ehiSmE3pMPZ6fjV0jfW71eOiYT/Vaz/mpR46mqodD4nnJCPTbhzsLHYKLOXUmC1cQ3pLa5vORhd/NO9Fh1E9qVu874rH4OSCIHWQE59G60lGORa7NLJZfbPQXo3XwTpO9X2IaFLk1pp/zFX6mt4khQk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.84
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
+Received: from localhost.localdomain (unknown [202.112.113.212])
+	by APP-05 (Coremail) with SMTP id zQCowAAXtg_7c95o+hGiCg--.49759S2;
+	Thu, 02 Oct 2025 20:45:57 +0800 (CST)
+From: Ma Ke <make24@iscas.ac.cn>
+To: andi.shyti@kernel.org
+Cc: akpm@linux-foundation.org,
+	linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	make24@iscas.ac.cn,
+	shyam-sundar.s-k@amd.com,
+	stable@vger.kernel.org,
+	syniurge@gmail.com,
+	wsa@kernel.org
+Subject: Re: [PATCH v2] i2c: fix reference leak in MP2 PCI device
+Date: Thu,  2 Oct 2025 20:45:47 +0800
+Message-Id: <20251002124547.1506-1-make24@iscas.ac.cn>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <7cu6uvwjki72rz6zoshfg3vonawikiasxheotmrsowqoalk2jb@7iu7cenha7p5>
+References: <7cu6uvwjki72rz6zoshfg3vonawikiasxheotmrsowqoalk2jb@7iu7cenha7p5>
+X-CM-TRANSID:zQCowAAXtg_7c95o+hGiCg--.49759S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7uryfZryUJryfWry3ZF4DCFg_yoW8Cw17pF
+	Zrta1rArZ8Gr4kXrn8Xw4UZFyfXw40v3yrWrWIyw1Y93Z8ZFWDKry8AFyY9w1Y9rWDAr1I
+	qay7Ja4furyIqa7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9G14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+	6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVWxJr
+	0_GcWlnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
+	F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r
+	4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I
+	648v4I1lc7CjxVAaw2AFwI0_Jw0_GFylc2xSY4AK67AK6ryUMxAIw28IcxkI7VAKI48JMx
+	C20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAF
+	wI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20x
+	vE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v2
+	0xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxV
+	W8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUjNtx3UUUUU==
+X-CM-SenderInfo: ppdnvj2u6l2u1dvotugofq/
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] i2c: usbio: Add ACPI device-id for MTL-CVF devices
-To: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: Israel Cepeda <israel.a.cepeda.lopez@intel.com>,
- Andi Shyti <andi.shyti@kernel.org>,
- Wolfram Sang <wsa+renesas@sang-engineering.com>, linux-i2c@vger.kernel.org
-References: <20251001212310.4813-1-hansg@kernel.org>
- <aN2j7Gg2fqHCbAHi@kekkonen.localdomain>
- <e6b6d0b3-06a9-4fd6-8dff-7bbe94c76744@kernel.org>
- <aN5DYZpX1TbF5aLm@kekkonen.localdomain>
-From: Hans de Goede <hansg@kernel.org>
-Content-Language: en-US, nl
-In-Reply-To: <aN5DYZpX1TbF5aLm@kekkonen.localdomain>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
-Hi,
-
-On 2-Oct-25 11:18 AM, Sakari Ailus wrote:
-> Hi Hans,
+On Thu, 2 Oct 2025 at 07:56, Andi Shyti <andi.shyti@kernel.org> wrote:
+> Hi,
 > 
-> On Thu, Oct 02, 2025 at 10:56:47AM +0200, Hans de Goede wrote:
->> Hi,
->>
->> First of all I messed up the git format-patch command,
->> there is no second patch in this series.
->>
->> (at least not for the i2c subsystem. There is a similar GPIO
->> patch but I send that out separately)
->>
->> On 1-Oct-25 11:58 PM, Sakari Ailus wrote:
->>> Hi Hans,
->>>
->>> On Wed, Oct 01, 2025 at 11:23:10PM +0200, Hans de Goede wrote:
->>>> Add "INTC10D2" ACPI device-id for MTL-CVF devices, like the Dell Latitude
->>>> 7450.
->>>>
->>>> Closes: https://bugzilla.redhat.com/show_bug.cgi?id=2368506
->>>> Signed-off-by: Hans de Goede <hansg@kernel.org>
->>>> ---
->>>> Note this applies on top of the addition of the new i2c-usbio driver which
->>>> is being merged through gregkh/usb.git usb-next
->>>> ---
->>>>  drivers/i2c/busses/i2c-usbio.c | 1 +
->>>>  1 file changed, 1 insertion(+)
->>>>
->>>> diff --git a/drivers/i2c/busses/i2c-usbio.c b/drivers/i2c/busses/i2c-usbio.c
->>>> index d42f9ab6e9a5..e7799abf6787 100644
->>>> --- a/drivers/i2c/busses/i2c-usbio.c
->>>> +++ b/drivers/i2c/busses/i2c-usbio.c
->>>> @@ -27,6 +27,7 @@ static const struct acpi_device_id usbio_i2c_acpi_hids[] = {
->>>>  	{ "INTC1008" }, /* MTL */
->>>>  	{ "INTC10B3" }, /* ARL */
->>>>  	{ "INTC10B6" }, /* LNL */
->>>> +	{ "INTC10D2" }, /* MTL-CVF */
->>>
->>> INTC10D2 is apparently already claimed by the LJCA I²C driver. Do you have
->>> an actual system that uses USBIO and this HID?
->>
->> Yes, see the Closes: tag which points to a bug-report which such a system:
->>
->> https://bugzilla.redhat.com/show_bug.cgi?id=2368506
->>
->> Let me also reply to your other comment here:
->>
->>>> INTC10D2 is apparently already claimed by the LJCA I²C driver. Do you have
->>>> an actual system that uses USBIO and this HID?
->>>
->>> Actually it looks like i2c-ljca.c shouldn't list this HID. The same
->>> probably goes for all 10CF--10D3.
->>
->> I would not be so sure of this, there are at least some Dell systems
->> which use a combination of ljca and Meteor Lake and I believe these
->> do use the "INTC10D2" HID with LJCA for the I2C part and the same
->> goes for the GPIO / SPI parts.. One example of such a system is
->> the Dell Precision 5490.
+> > diff --git a/drivers/i2c/busses/i2c-amd-mp2-pci.c b/drivers/i2c/busses/i2c-amd-mp2-pci.c
+> > index ef7370d3dbea..60edbabc2986 100644
+> > --- a/drivers/i2c/busses/i2c-amd-mp2-pci.c
+> > +++ b/drivers/i2c/busses/i2c-amd-mp2-pci.c
+> > @@ -458,13 +458,16 @@ struct amd_mp2_dev *amd_mp2_find_device(void)
+> >  {
+> >  	struct device *dev;
+> >  	struct pci_dev *pci_dev;
+> > +	struct amd_mp2_dev *mp2_dev;
+> >  
+> >  	dev = driver_find_next_device(&amd_mp2_pci_driver.driver, NULL);
+> >  	if (!dev)
+> >  		return NULL;
+> >  
+> >  	pci_dev = to_pci_dev(dev);
+> > -	return (struct amd_mp2_dev *)pci_get_drvdata(pci_dev);
+> > +	mp2_dev = (struct amd_mp2_dev *)pci_get_drvdata(pci_dev);
+> > +	put_device(dev);
+> > +	return mp2_dev;
 > 
-> LJCA on MTL is supposed to be 1008. Do you have the *SDT so we could verify
-> this?
+> the patch is good, but I don't think you need to declare mp2_dev
+> because to_pci_dev(dev) should work even without hodling the
+> reference of dev.
+Thank you for your feedback. The declaration of the temporary variable
+mp2_dev in the patch may be necessary because we need to save the 
+result of pci_get_drvdata(pci_dev) before calling put_device(dev). If 
+we do not do this and instead call put_device(dev) first before 
+returning pci_get_drvdata(pci_dev), it may lead to the deallocation of
+dev, thereby invalidating pci_dev. Accessing its driver data at this 
+point could potentially trigger a use-after-free error. Therefore, the
+temporary variable ensures that the driver data remains safely 
+accessible even after the reference is released. So perhaps we need to
+retain the declaration of this temporary variable?
 
-I only had this laptop for a short while since it was using LJCA + IVSC
-it was not really an interesting device to hold on to. A Red Hat colleague
-of mine has the laptop now.
-
-I'll inquiry about getting ssh access to it to collect acpidumps
-and also to directly get the used HIDs from sysfs (SSDTs now a days
-are often unreadable because of them dynamically assigning HIDs
-based on BIOS config variables).
-
->> The way these Intel uses these HIDs is really weird they seem to
->> simply mean "I2C" on *a* USBIO expander with this generation CPU.
+Best regards,
+Ma Ke
 > 
-> I can assure you I have nothing to do with this ACPI ID usage scheme. :-)
+> I also have to agree with Markus that something like:
 > 
->>
->> Where there really seems no reason to change the HID for CPU
->> generations, where as it would be a good reason to change the HID
->> if the actual USBIO expander is different ...
+> struct device *dev __free(put_device) = ...; /* it can also be NULL */
 > 
-> That's indeed supposed to be the case. Also the _HID should always reflect
-> the actual device and only _CID should indicate it's compatible with
-> something else. But that BIOS is already out there so there's little that
-> can be done to it anyway. :-\
-
-Ack.
-
-Regards,
-
-Hans
-
+> would work nicer.
+> 
+> Thanks,
+> Andi
+> 
+> >  }
+> >  EXPORT_SYMBOL_GPL(amd_mp2_find_device);
+> >  
+> > -- 
+> > 2.17.1
+> > 
 
 
