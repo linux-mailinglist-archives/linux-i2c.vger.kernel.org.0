@@ -1,100 +1,114 @@
-Return-Path: <linux-i2c+bounces-13385-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13386-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95252BB7EC4
-	for <lists+linux-i2c@lfdr.de>; Fri, 03 Oct 2025 20:50:20 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 143EFBB8C5C
+	for <lists+linux-i2c@lfdr.de>; Sat, 04 Oct 2025 12:09:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5B2314EA7E6
-	for <lists+linux-i2c@lfdr.de>; Fri,  3 Oct 2025 18:50:19 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id EC59E4E2467
+	for <lists+linux-i2c@lfdr.de>; Sat,  4 Oct 2025 10:09:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E6CA2DF128;
-	Fri,  3 Oct 2025 18:50:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACE5D25A642;
+	Sat,  4 Oct 2025 10:09:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qlA2EZ7D"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LCd85I8+"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEBB52DECA3;
-	Fri,  3 Oct 2025 18:50:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 673A02459C9;
+	Sat,  4 Oct 2025 10:09:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759517408; cv=none; b=mK+BD/oSwSjklFoA+pJtjmb7rShho+TpisqVEN2Sbib0ykDFLnL1C4F565eDzQs6XODXrt7uyIFqRo4IqBa6edXdSyTKQ6yVOaWVr7JnmGf5ClorCIc6tPNbs21/zYo+2T39G7VDl0dr7WjUIUVWi+i75ho8Sn+ixFxaHqNMdP0=
+	t=1759572559; cv=none; b=cl9TQgnS4EJ8IaOFarstNK0ODs6e1f1Hg1FtHrtUExzhrF0Wcnv/hsOTYxzkOzvxt4ugsGLwe40rDk1VOe2H43TqbvQnGrbdvEBnWRQ2FW17B/Hicm77z/m1BbVnPHsA8rgK1NN863WXDUovA5ouD/HFRPuxTjz+mg6jRZFsooc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759517408; c=relaxed/simple;
-	bh=BzHCgdnh4u1K9vziVNYN9RLlQWl3aVaEvR81Dj9kN4I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YRiyCYZN2Zu6VY06voetOfkBUAkXu9E/ABEN3kkIKwG83BP+DB2ZoutP2vlfQwar2brjT/bdwesmd3rL+v2Zg+ykH2suZ/0U0ALrnb7lujvpc3lFyQoOQMCogIXSwGNuVgLsaVThq1adgpsyE5lkwFGyljmTGT5BotSS8N5Gcxc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qlA2EZ7D; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA096C4CEF5;
-	Fri,  3 Oct 2025 18:50:07 +0000 (UTC)
+	s=arc-20240116; t=1759572559; c=relaxed/simple;
+	bh=kJrMLg8ADcs9HHAnYcsM/O7g184dxk4/QgAwrLMpD3w=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=kSh46wUUQzMFvOKJItUNH8njYEMxmO8Lb3Pn9aAZz/XfaDThAwoU75zjuram+ZVVO6veP0HebdwklG+90H/p64R3gPiQ54KK2N90ebFgKTb8Ktrs2GDEnpigd0I6KM6xer6KLE53ba1FFoSd7OF6Vd0TYmjTBPQeWOs+w9SUmZI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LCd85I8+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2839EC4CEF1;
+	Sat,  4 Oct 2025 10:09:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759517408;
-	bh=BzHCgdnh4u1K9vziVNYN9RLlQWl3aVaEvR81Dj9kN4I=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qlA2EZ7DMRWKJIi06Yk5nf6ddrH6QhjXENHv7U00iBTVK9rNH9rCHJ14O7wdDLXwy
-	 fC0lR2l4nE2A0vLQEkcZpR23PHNRp8IYJ6PUev4Uvi0MPiRKnvuIIzFl9PxMjNHQRL
-	 vgpfGA1ig0UBreHE5je0IOklxdtySK7NVjyEkoZpEl8kbz+6bZSSso4B/pbLxMVCFy
-	 P/bRShd8eixVb+180h7ImOMmeNj8JbeP6OTpFjD1tlO+TEqPbU5YotHd+xVvqcbFdR
-	 wZIk7OsELSV3/ARIz7bY3mbKQupa7M52vWCtipjySjVrthGqAfwZfPcB2hAQwMUT18
-	 5wZhULFzanFRg==
-Date: Fri, 3 Oct 2025 20:50:04 +0200
+	s=k20201202; t=1759572558;
+	bh=kJrMLg8ADcs9HHAnYcsM/O7g184dxk4/QgAwrLMpD3w=;
+	h=Date:From:To:Cc:Subject:From;
+	b=LCd85I8+bnpL8DVQ2za7uySLFHZCo0MFWbHtZLq5jDR/im4APGYFbqhZ+VE+UJpR8
+	 sa968ExRf7rZcVRqk7Uob4WOA0GTvTS1MvqXe4GN/6AaP1vVSyunOISkQ0EsoNToEg
+	 neiTgII+HXdMPchPYxkfEsN+eRB+QSfFhB93oJ5dUNYepvJyU0bTRVWlo3bZmgxpoB
+	 g2BnhvBHCQiyRM8I88UKcvRcFVxQMboqPI+yVUPyjL4L2hq0dT4b9LBvCO7wnxM8nH
+	 DnwTviBpfi6n+XXoNBAjxNI8rlXmJ987qYRY69EfXG8Bi1SGOHOdsw7y68UgROJPjj
+	 sVE1DofQUji6A==
+Date: Sat, 4 Oct 2025 12:09:14 +0200
 From: Andi Shyti <andi.shyti@kernel.org>
-To: Jyothi Kumar Seerapu <jyothi.seerapu@oss.qualcomm.com>
-Cc: Vinod Koul <vkoul@kernel.org>, 
-	Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>, Viken Dadhaniya <quic_vdadhani@quicinc.com>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>, 
-	linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	linaro-mm-sig@lists.linaro.org, quic_vtanuku@quicinc.com
-Subject: Re: [PATCH v8 2/2] i2c: i2c-qcom-geni: Add Block event interrupt
- support
-Message-ID: <3lgris6k6ewqjdcfmmovygstqrqjx2jidtr3hb3v47gpgadkka@wlua7qpd7ahf>
-References: <20250925120035.2844283-1-jyothi.seerapu@oss.qualcomm.com>
- <20250925120035.2844283-3-jyothi.seerapu@oss.qualcomm.com>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-i2c <linux-i2c@vger.kernel.org>, 
+	lkml <linux-kernel@vger.kernel.org>, Andi Shyti <andi.shyti@kernel.org>
+Subject: [GIT PULL] i2c-host for v6.18, part 2
+Message-ID: <gtymsa6dx67vlus2ostbsxxsixrubzwkqgr5ljqwjlufthlcqi@api2ouzwmmta>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250925120035.2844283-3-jyothi.seerapu@oss.qualcomm.com>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Sep 25, 2025 at 05:30:35PM +0530, Jyothi Kumar Seerapu wrote:
-> From: Jyothi Kumar Seerapu <quic_jseerapu@quicinc.com>
-> 
-> The I2C driver gets an interrupt upon transfer completion.
-> When handling multiple messages in a single transfer, this
-> results in N interrupts for N messages, leading to significant
-> software interrupt latency.
-> 
-> To mitigate this latency, utilize Block Event Interrupt (BEI)
-> mechanism. Enabling BEI instructs the hardware to prevent interrupt
-> generation and BEI is disabled when an interrupt is necessary.
-> 
-> Large I2C transfer can be divided into chunks of messages internally.
-> Interrupts are not expected for the messages for which BEI bit set,
-> only the last message triggers an interrupt, indicating the completion of
-> N messages. This BEI mechanism enhances overall transfer efficiency.
-> 
-> BEI optimizations are currently implemented for I2C write transfers only,
-> as there is no use case for multiple I2C read messages in a single transfer
-> at this time.
-> 
-> Signed-off-by: Jyothi Kumar Seerapu <quic_jseerapu@quicinc.com>
+Hi Wolfram,
 
-Because this series is touching multiple subsystems, I'm going to
-ack it:
+here is the second part of the pull request, containing the work
+from Jonas and Sven on rtl9300.
 
-Acked-by: Andi Shyti <andi.shyti@kernel.org>
+This branch is rebased on top of Linus’ i2c merge commit[*].
 
-We are waiting for someone from DMA to ack it (Vinod or Sinan).
+Thanks again for covering for me. There is plenty of work ahead,
+and I am looking forward to catching up with it.
 
-Thanks,
+I wish you a great weekend,
 Andi
+
+[*] cf8da11679ec ("Merge tag 'i2c-for-6.18-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux")
+
+The following changes since commit cf8da11679ec4e54e2dd3cb147fb310a2230be52:
+
+  Merge tag 'i2c-for-6.18-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux (2025-10-01 15:11:00 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git tags/i2c-host-6.18-pt2
+
+for you to fetch changes up to 1e33137d47105a807262aa17e028374463876f85:
+
+  i2c: rtl9300: add support for RTL9310 I2C controller (2025-10-04 11:43:41 +0200)
+
+----------------------------------------------------------------
+i2c-host for v6.18, part 2
+
+rtl9300 updates:
+ - general cleanups
+ - implemented block read/write support
+ - added RTL9310 support
+
+----------------------------------------------------------------
+Harshal Gohel (1):
+      i2c: rtl9300: Implement I2C block read and write
+
+Jonas Jelonek (9):
+      i2c: rtl9300: use regmap fields and API for registers
+      dt-bindings: i2c: realtek,rtl9301-i2c: fix wording and typos
+      i2c: rtl9300: rename internal sda_pin to sda_num
+      i2c: rtl9300: move setting SCL frequency to config_io
+      i2c: rtl9300: do not set read mode on every transfer
+      i2c: rtl9300: separate xfer configuration and execution
+      i2c: rtl9300: use scoped guard instead of explicit lock/unlock
+      dt-bindings: i2c: realtek,rtl9301-i2c: extend for RTL9310 support
+      i2c: rtl9300: add support for RTL9310 I2C controller
+
+ Documentation/devicetree/bindings/i2c/realtek,rtl9301-i2c.yaml |  45 ++++++++-
+ drivers/i2c/busses/i2c-rtl9300.c                               | 459 +++++++++++++++++++++++++++++++++++++++++++++++++++++++--------------------------------
+ 2 files changed, 329 insertions(+), 175 deletions(-)
 
