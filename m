@@ -1,76 +1,56 @@
-Return-Path: <linux-i2c+bounces-13398-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13400-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8037BC1521
-	for <lists+linux-i2c@lfdr.de>; Tue, 07 Oct 2025 14:11:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id F0AA7BC15F3
+	for <lists+linux-i2c@lfdr.de>; Tue, 07 Oct 2025 14:34:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6105C3C65A1
-	for <lists+linux-i2c@lfdr.de>; Tue,  7 Oct 2025 12:11:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E1A2D188D112
+	for <lists+linux-i2c@lfdr.de>; Tue,  7 Oct 2025 12:34:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DCAB2DE6FB;
-	Tue,  7 Oct 2025 12:11:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33A672DCC17;
+	Tue,  7 Oct 2025 12:34:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="TyuceOus"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="eUqWWGrZ"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx-relay48-hz3.antispameurope.com (mx-relay48-hz3.antispameurope.com [94.100.134.237])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB7EF2DCF61
-	for <linux-i2c@vger.kernel.org>; Tue,  7 Oct 2025 12:11:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=94.100.134.237
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759839068; cv=pass; b=LXxlwEegkX8PQLvPbAEMLz9jhrWGJ2+lYrQa/nXN4ZizDIdQc8jihj9XQRDKWmX53p1HIl8dOmzaWQeYblSnNKqqAXN/qMotl5Yujiu9Jf6q1IAHI2ja/I5SA4Hmtedy3Xd+hrCyctuqc3ntpAq9ZlDEBpMgS261GYgPCLYY4mM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759839068; c=relaxed/simple;
-	bh=k42zL3JTM7BE3x6dKMZ2jKfGQCJubStuzW5boFB9jvU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=MsRlbQDN+vpgJ4HePDATQ38x1uIKEjfDKDkklTDUmLRHa6LIHjAvEdm9l0NMkLA8+/n4UqmPLb6T99iagasAPwI5Le/qApY6PHs7dQFgSDLiZOJUsex/oDIq5x5tD/vkPUaSJhUOsz4g48/LDFPVl6FqYZ0ePoCqlIIaq6LiUtE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=TyuceOus; arc=pass smtp.client-ip=94.100.134.237
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
-ARC-Authentication-Results: i=1; mx-gate48-hz3.hornetsecurity.com 1; spf=pass
- reason=mailfrom (ip=94.100.132.6, headerfrom=ew.tq-group.com)
- smtp.mailfrom=ew.tq-group.com
- smtp.helo=hmail-p-smtp01-out03-hz1.hornetsecurity.com; dmarc=pass
- header.from=ew.tq-group.com orig.disposition=pass
-ARC-Message-Signature: a=rsa-sha256;
- bh=YRNQG6F3jarHI4ENArdLBZZ+Hm3muMDeZmbNRaGdu7g=; c=relaxed/relaxed;
- d=hornetsecurity.com; h=from:to:date:subject:mime-version:; i=1; s=hse1;
- t=1759839006;
- b=mEd7bf+sUptnkJ5pyXJn5jpwwzSw4wFfOdv6P1WhoHkaMdYZ5d2fZHnDZczv2+oOUINC4dzm
- agrbknS0xKKwxwBgmxr3mDss8CVqjEHUES25IKdtjWFXLZGupCZdOz0B99L2ljv32bwyeM4Ix5v
- RI4n+UOK8BX6gU7m+MKTHC60GxdiBnXnnB6a4g8o2/wOxvrC5uGLac0Ec9EbSRbhTw/JResTBql
- TWbPcURVNgsCBohaetdbacyyILfSy4jGdjb42IkVDhn4/bUYfWr5K2eCHSyQNgmf/6I1ST3eMJ3
- Wg0tB3MDu3kx6OkPrHIx1jvSpzLXGR1ky2EZ8fY0S9s/w==
-ARC-Seal: a=rsa-sha256; cv=none; d=hornetsecurity.com; i=1; s=hse1;
- t=1759839006;
- b=fZWGEKSVPi9cg/7lFdGR3rNeLX/admRdE9RWiGqU7pAG+iqCkrVhdIRKD8P7b/R4eArpvfct
- 8vuIfRA9hdsMPTlCHYv4WSeLCpcB24aR/8rwv5Uieyv3Fwsi7Minj+FTJJL/KMAsWX8D11PAOcO
- V/wXMyp5PTvsrBXsNhIFtqJSZfHMjhDHXlJQJOjL1vyYI/xqQZpe99CGArZHPQLuh4nwTNrgDws
- az4daTBtNXBsEY0NDZaITQUD1RZaKOWKnm7hjiXVTMqb0sMSMWx3F0YVO04v+FJbzJowlMllGYH
- 5rqhBvHsVe4cORfnbLAQ448Or+lNxXlLjO6QCSEs9PtcA==
-Received: from he-nlb01-hz1.hornetsecurity.com ([94.100.132.6]) by mx-relay48-hz3.antispameurope.com;
- Tue, 07 Oct 2025 14:10:06 +0200
-Received: from schifferm-ubuntu.tq-net.de (host-82-135-125-110.customer.m-online.net [82.135.125.110])
-	(Authenticated sender: matthias.schiffer@ew.tq-group.com)
-	by hmail-p-smtp01-out03-hz1.hornetsecurity.com (Postfix) with ESMTPSA id 5C7EBCC0E50;
-	Tue,  7 Oct 2025 14:09:57 +0200 (CEST)
-From: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-To: Peter Korsgaard <peter@korsgaard.com>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Andi Shyti <andi.shyti@kernel.org>
-Cc: linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux@ew.tq-group.com,
-	Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-Subject: [PATCH 2/2] i2c: ocores: respect adapter timeout in IRQ mode
-Date: Tue,  7 Oct 2025 14:09:25 +0200
-Message-ID: <9be9d4bef9fd6d0b66534a3731b4bc6b86cc79ab.1759838476.git.matthias.schiffer@ew.tq-group.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <1eb320b6b7d3a12e62785893ea68c4d16aa2560d.1759838476.git.matthias.schiffer@ew.tq-group.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AD4A2D979F;
+	Tue,  7 Oct 2025 12:34:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1759840471; cv=none; b=HdATcyjFJb8u6pWPd1pUEVm9pfHICriNeDkyvOBOm7pPgdR/ui136wi88lZ14DYGhIQJytP7sSEmDVDMUuBpOirkVD94/xJPf3mZqauX1++0iOhiUCydTFiLixblgr/7CZpR/OjKOr9II/lV46Xgaw2uSFxpgGsdV+Haa8LlUaw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1759840471; c=relaxed/simple;
+	bh=Q+x/tyllQSCVP1N45CGsf/4/VXsOzjtdlTK7trEnYDM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BJngu0rBNF3iOk0zegq0FSkIC0Ie7FWOresCCyzWxWaf754pP/Kvu8VASJVJoavFL5OH72FrNBgPHR3qP3O/2302wibcBNBBdFdu7gyzEkH2LOqFDlNeq+t1K9WISa94fOa6f/NWXft5gWDg3BpphebT3h1xdDZjpdEVOm18Cm4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=eUqWWGrZ; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=CeR/nNVfj2ruH5KoFVbRCO4/42mMYrtwrDmRcpDO6cs=; b=eUqWWGrZExXmyV2Ncbg6pOFbXA
+	g14WbrUbS88ZpBPuKEVVoOLVScCaem2C6Jnf91E7C6K6rqaTvz8vhktmm+JeNSpMtPGGS5qsxLTk/
+	D6eFR5thMF66QxW+E9swrITHXkDWjQrweJkA5dHG7/VBbd8PDsf9OOI97Bkp5TXRzBfk=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1v66td-00AMkH-BM; Tue, 07 Oct 2025 14:34:25 +0200
+Date: Tue, 7 Oct 2025 14:34:25 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>,
+	Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux@ew.tq-group.com
+Subject: Re: [PATCH 1/2] i2c: ocores: replace 1ms poll iteration timeout with
+ total transfer timeout
+Message-ID: <7dbefacc-3ce0-47ea-b521-102320f49420@lunn.ch>
 References: <1eb320b6b7d3a12e62785893ea68c4d16aa2560d.1759838476.git.matthias.schiffer@ew.tq-group.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
@@ -78,57 +58,24 @@ List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-cloud-security-sender:matthias.schiffer@ew.tq-group.com
-X-cloud-security-recipient:linux-i2c@vger.kernel.org
-X-cloud-security-crypt: load encryption module
-X-cloud-security-Mailarchiv: E-Mail archived for: matthias.schiffer@ew.tq-group.com
-X-cloud-security-Mailarchivtype:outbound
-X-cloud-security-Virusscan:CLEAN
-X-cloud-security-disclaimer: This E-Mail was scanned by E-Mailservice on mx-relay48-hz3.antispameurope.com with 4cgw1d6HSqz1kKP2P
-X-cloud-security-connect: he-nlb01-hz1.hornetsecurity.com[94.100.132.6], TLS=1, IP=94.100.132.6
-X-cloud-security-Digest:748d84c8fdd2790a6e1d6e662b8d81e2
-X-cloud-security:scantime:2.114
-DKIM-Signature: a=rsa-sha256;
- bh=YRNQG6F3jarHI4ENArdLBZZ+Hm3muMDeZmbNRaGdu7g=; c=relaxed/relaxed;
- d=ew.tq-group.com;
- h=content-type:mime-version:subject:from:to:message-id:date; s=hse1;
- t=1759839006; v=1;
- b=TyuceOusG/REeHmB+RLK37OjnMUd8/nnwqlvAUxS7JEFFqIfrsC4R3yrfZzMmszzEnU6ZMns
- kUqoTV2yKPVnQV+CDUyGF09hwqL2EClUfVVi0r8Hadvq/KeARAEBIl60vR42aT4fX/evSxUCgFi
- Vt7+wha6aaaT6U8Nub8OgCTVd9HKivjTprwnf9CQKvsrQsDnmGKYtpTUTY7fLmxcta2KWu0u1Bc
- H6TGskUK/+ejcPZg7QlqZBpXaswFAcNF9HQtWYfLpRKEe9/N67j5VSg6eryukQTuODh/u82cyEs
- g3m9HZG6VHCJk8xna/yDHaYlSGLlbgXHfFRXNSaVVLc/g==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1eb320b6b7d3a12e62785893ea68c4d16aa2560d.1759838476.git.matthias.schiffer@ew.tq-group.com>
 
-While the timeout field of the i2c_adapter defaults to 1s, it can be
-changed, for example using the I2C_TIMEOUT ioctl. Change the ocores
-driver to use this timeout instead of hardcoding 1s, also making it
-consistent with polling mode.
+On Tue, Oct 07, 2025 at 02:09:24PM +0200, Matthias Schiffer wrote:
+> When a target makes use of clock stretching, a timeout of 1ms may not be
+> enough. One extreme example is the NXP PTN3460 eDP to LVDS bridge, which
+> takes ~320ms to send its ACK after a flash command has been
+> submitted.
+> 
+> Replace the per-iteration timeout of 1ms with limiting the total
+> transfer time to the timeout set in struct i2c_adapter (defaulting to
+> 1s, configurable through the I2C_TIMEOUT ioctl). While we're at it, also
+> add a cpu_relax() to the busy poll loop.
 
-Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
----
- drivers/i2c/busses/i2c-ocores.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+1s is a long time to spin. Maybe it would be better to keep with the
+current spin for 1ms, and then use one of the helpers from iopoll.h to
+do a sleeping wait? Say with 10ms sleeps, up to the 1s maximum?
 
-diff --git a/drivers/i2c/busses/i2c-ocores.c b/drivers/i2c/busses/i2c-ocores.c
-index 1746c8821a149..518e4cf821a7a 100644
---- a/drivers/i2c/busses/i2c-ocores.c
-+++ b/drivers/i2c/busses/i2c-ocores.c
-@@ -380,7 +380,8 @@ static int ocores_xfer_core(struct ocores_i2c *i2c,
- 	} else {
- 		if (wait_event_timeout(i2c->wait,
- 				       (i2c->state == STATE_ERROR) ||
--				       (i2c->state == STATE_DONE), HZ) == 0)
-+				       (i2c->state == STATE_DONE),
-+				       i2c->adap.timeout) == 0)
- 			ret = -ETIMEDOUT;
- 	}
- 	if (ret) {
--- 
-TQ-Systems GmbH | Mühlstraße 2, Gut Delling | 82229 Seefeld, Germany
-Amtsgericht München, HRB 105018
-Geschäftsführer: Detlef Schneider, Rüdiger Stahl, Stefan Schneider
-https://www.tq-group.com/
-
+	Andrew
 
