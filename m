@@ -1,62 +1,55 @@
-Return-Path: <linux-i2c+bounces-13437-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13438-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74498BCA330
-	for <lists+linux-i2c@lfdr.de>; Thu, 09 Oct 2025 18:33:42 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7BD7DBCB12E
+	for <lists+linux-i2c@lfdr.de>; Fri, 10 Oct 2025 00:25:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 347B93AF30C
-	for <lists+linux-i2c@lfdr.de>; Thu,  9 Oct 2025 16:33:41 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 67AA24E1753
+	for <lists+linux-i2c@lfdr.de>; Thu,  9 Oct 2025 22:25:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 036B9220F3E;
-	Thu,  9 Oct 2025 16:33:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B271A286405;
+	Thu,  9 Oct 2025 22:25:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lgFCYhC1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X4yKBXaG"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA1A51A2545;
-	Thu,  9 Oct 2025 16:33:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63CAF285CBC;
+	Thu,  9 Oct 2025 22:25:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760027615; cv=none; b=ICEXx7Z8JuXpH2J0yRUPfyBtP62JJa+pHeWLX97giC+aqFpkbzNsHkretZQW1GdQZPEjaG9p6o1CHuTzj0dSJPKFJ8ruoKu2GlsxbNV91bi5QZw23ASAC93IzV8v1eGAEmsLkLnU9WBAKFdI9/9yEk1jpEBpseuniXBuc9FxJ0M=
+	t=1760048718; cv=none; b=ag469UAjihmruVA8Z//syyUKZ2emUE2b0JpQDH6VT6m0Ea6KgDBEbJ52r3nZuVsMIamL4CvUJT4MlFmwOJfN0thrpqaVzF/OOD50dGZX2xPhhS+seBgWeE+YJzfoiGy97vylV8BLAzVMeNP2GNBRWqFRRveN1Bnv5YU+13isZJ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760027615; c=relaxed/simple;
-	bh=ePE6UwXG4mOskOTOs/+qp+ty/ofJpwv5+43knm9orGQ=;
+	s=arc-20240116; t=1760048718; c=relaxed/simple;
+	bh=83bdko5rwze4WW3bMGBsDUspQQmt7g8T21lnn+Xp8LI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=q4tCrs/E0VczhnsaLR1XRZBayDYb6N6uilZVTw2OxgQnDOFGe1uTpehY33DAPQjNJJB1h7W9OdVRpdPOjufIQ1BSVxL/U9uc1RWxnEzYZi1EVbsaGij5YiU5RxuqBoZnZ/E7zQi/enJLhWyZAw/SJci0q5PMbpLAsduQsG8ivmI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lgFCYhC1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D439CC4CEE7;
-	Thu,  9 Oct 2025 16:33:34 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=XrGhVAcdEWKl2y4HOTr5IkanZqZGsUySQNgh6445x6XEjwFBjFPPjXjhRNUW8sP8mX4u/V6UH+LCk0o2aVMOuH9E+j1cX20Ad/P/XjHzpZTH32Ni3gR9KZIF6Nn/LqBYIgUOFrHh6eqr8Fvan6bHbfkAaHwLxseBxknx6XGH5LI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X4yKBXaG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E595C4CEE7;
+	Thu,  9 Oct 2025 22:25:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760027615;
-	bh=ePE6UwXG4mOskOTOs/+qp+ty/ofJpwv5+43knm9orGQ=;
+	s=k20201202; t=1760048718;
+	bh=83bdko5rwze4WW3bMGBsDUspQQmt7g8T21lnn+Xp8LI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lgFCYhC18OgKWlVAJjrJWpnEuF+LkxylxlEYO8KHpNQoQ/spVHSDdaMCD0Q75JwiE
-	 cBMEKsP9rUIoHGctPJn6GfATdwEWuZ4C0bad03DZ9CNIsIzisI3iy4afdkIM/VXN/8
-	 RmnxO7M1WMsT9tIyyq11gIsr5xlWOQQrq436ofLKd11CXSH1Rhf/yDy9qBG1wMkCgL
-	 Uo1gBNSgeTmEdv3cRvMXxuCdYIgalmRgFBkyVeIGRitz57qhPjWd9gx9sT4uipvFjg
-	 Gxe6mR9d00X3XPolwy2wh/wDALvp0RIY/0BoPctJXRNA0VH0hkgsPKcuM78RBsuqER
-	 iBNcM6HB93sKg==
-Date: Thu, 9 Oct 2025 11:33:33 -0500
-From: Rob Herring <robh@kernel.org>
-To: Jon Hunter <jonathanh@nvidia.com>
-Cc: Chintan Vankar <c-vankar@ti.com>, Rajesh Gumasta <rgumasta@nvidia.com>,
-	krzk+dt@kernel.org, conor+dt@kernel.org, andi.shyti@kernel.org,
-	ulf.hansson@linaro.org, thierry.reding@gmail.com,
-	kyarlagadda@nvidia.com, devicetree@vger.kernel.org,
-	linux-tegra@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-mmc@vger.kernel.org, andersson@kernel.org, sjg@chromium.org,
-	nm@ti.com
-Subject: Re: [PATCH V3 1/3] dt-binding: Add register-settings binding
-Message-ID: <20251009163333.GA2452939-robh@kernel.org>
-References: <20250725052225.23510-1-rgumasta@nvidia.com>
- <20250725052225.23510-2-rgumasta@nvidia.com>
- <0784441c-9859-4418-a4a7-85ffe3ecf860@ti.com>
- <d619df1f-813d-4be5-8d24-295455f956de@nvidia.com>
+	b=X4yKBXaGBjJhWLfIbbtpbYAgAl8hynK+4LNpuLNDWw0smEGhcp5IsgjHYWOd+x7DE
+	 +R1vi+X3L1N94EgkT8t7iqNB/736JQSyntjQF24UwrQfnvc1wSlRW6J7k7r8vpdunq
+	 SoqaEpDg6knL2OJRYL3DwxlUsoS72dmMr0pjO5mlXjVBXQSjQX/8QIlEhQVc0AWAo4
+	 sb36U7Uw5IKT6jS1Jk/sThuOsN6t40dVorZdXLpmIAujDD+GXD/riQbnSo7t5ITNV2
+	 FCeeTZ1wZVPi3+FMVsJ1TsaFzJwjqj9PDmcstIlWx4PXf0NabB3MA6JznZqJrC8BXc
+	 5iltp3MkUMtgQ==
+Date: Fri, 10 Oct 2025 00:25:13 +0200
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>, Andrew Lunn <andrew@lunn.ch>, 
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, linux@ew.tq-group.com
+Subject: Re: [PATCH 1/2] i2c: ocores: replace 1ms poll iteration timeout with
+ total transfer timeout
+Message-ID: <445z46hybgl2mdmhsapiitqccxkkpafqstgksov45sfd5v2c2m@mmiye6kt6itb>
+References: <1eb320b6b7d3a12e62785893ea68c4d16aa2560d.1759838476.git.matthias.schiffer@ew.tq-group.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -65,58 +58,79 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d619df1f-813d-4be5-8d24-295455f956de@nvidia.com>
+In-Reply-To: <1eb320b6b7d3a12e62785893ea68c4d16aa2560d.1759838476.git.matthias.schiffer@ew.tq-group.com>
 
-On Tue, Sep 30, 2025 at 04:01:27PM +0100, Jon Hunter wrote:
-> Hi Chintan,
+Hi Matthias,
+
+On Tue, Oct 07, 2025 at 02:09:24PM +0200, Matthias Schiffer wrote:
+> When a target makes use of clock stretching, a timeout of 1ms may not be
+> enough. One extreme example is the NXP PTN3460 eDP to LVDS bridge, which
+> takes ~320ms to send its ACK after a flash command has been
+> submitted.
+
+besides, the specification doesn't impose any maximum time.
+
+> Replace the per-iteration timeout of 1ms with limiting the total
+> transfer time to the timeout set in struct i2c_adapter (defaulting to
+> 1s, configurable through the I2C_TIMEOUT ioctl). While we're at it, also
+> add a cpu_relax() to the busy poll loop.
 > 
-> On 29/09/2025 05:39, Chintan Vankar wrote:
-> 
-> ...
-> 
-> > Following your series, I would like to bring to your attention that
-> > Texas Instruments SoCs also have a component which requires similar kind
-> > of configuration, named Timesync Router(TSR). It enables the
-> > multiplexing of M inputs to N outputs, where inputs can be selectively
-> > driven based on N output configuration. A detailed explanation of the
-> > TSR and our attempts we tried to implement TSR can be found in following
-> > RFC series:
-> > https://lore.kernel.org/all/20250605063422.3813260-1-c-vankar@ti.com/
-> > https://lore.kernel.org/all/20250205160119.136639-1-c-vankar@ti.com/
 
-I fail to see how that is related to this series. I'm not going to 
-study these 2 implementations and imagine how it could be implemented 
-using this series. If the amount of overlap is just 'reg-settings' node, 
-then that's not really enough. More below.
+...
 
-> > To implement TSR, the relevant registers must be configured via the
-> > device tree. We initially assumed that the device could be handled as a
-> > mux-controller and could be extended in the same subsystem, but it was
-> > ineffective. Having explored both the approaches, we now plan to
-> > implement TSR within misc subsystem, which aligns with the dt-bindings
-> > that you have proposed in this series.
-> > 
-> > The purpose to replying over this series is to inform you that we also
-> > have a component requiring configuration as outlined in this series. Let
-> > us know if you have any suggestions for this.
-> 
-> That's great! Thanks for the feedback.
-> 
-> Rob, Krzysztof, Conor, have you guys had chance to look at this series some
-> more? We are open to re-working it as necessary to address any
-> concerns/comments you have. However, this appears to be stalled at the
-> moment and I am not sure what we should do next to push this forward.
+> @@ -269,17 +269,16 @@ static int ocores_wait(struct ocores_i2c *i2c,
+>  		       int reg, u8 mask, u8 val,
+>  		       const unsigned long timeout)
+>  {
+> -	unsigned long j;
+> -
+> -	j = jiffies + timeout;
 
-I fail to see what is generic here? There's a generic node name, but 
-that has nothing else common. The 2 examples share nothing because it 
-is all bus specific. But then the bus specific stuff is NVIDIA specific. 
-It's the bus specific part that should be generic (to the bus type) IMO. 
+Any reason we don't take "jiffies + i2c->adap.timeout" and avoud
+all the changes below? It also simplifies the parameters list.
 
-A concrete second user would go a long way to help. Anything "common" 
-from one vendor ends up needing something different from the 2nd user. 
-Somehow that 2nd user always shows up a month later... So the rule is 
-generally I want to see 2 users. Yeah, it's hard to get others to pay 
-attention, but that's not really my problem.
+>  	while (1) {
+>  		u8 status = oc_getreg(i2c, reg);
+>  
+>  		if ((status & mask) == val)
+>  			break;
+>  
+> -		if (time_after(jiffies, j))
+> +		if (time_after(jiffies, timeout))
+>  			return -ETIMEDOUT;
+> +
+> +		cpu_relax();
 
-Rob
+Good.
+
+>  	}
+>  	return 0;
+>  }
+
+...
+
+> -	/*
+> -	 * once we are here we expect to get the expected result immediately
+> -	 * so if after 1ms we timeout then something is broken.
+> -	 */
+
+Why have you deleted this comment completely?
+
+> -	err = ocores_wait(i2c, OCI2C_STATUS, mask, 0, msecs_to_jiffies(1));
+> +	err = ocores_wait(i2c, OCI2C_STATUS, mask, 0, timeout);
+>  	if (err)
+> -		dev_warn(i2c->adap.dev.parent,
+> -			 "%s: STATUS timeout, bit 0x%x did not clear in 1ms\n",
+> -			 __func__, mask);
+> +		dev_dbg(i2c->adap.dev.parent,
+> +			"%s: STATUS timeout, bit 0x%x did not clear\n",
+> +			__func__, mask);
+
+Why are you changing from warn to dbg? This change is not
+mentioned in the commit log.
+
+Andi
+
+>  	return err;
+>  }
 
