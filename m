@@ -1,138 +1,104 @@
-Return-Path: <linux-i2c+bounces-13424-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13426-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8AA3BC8473
-	for <lists+linux-i2c@lfdr.de>; Thu, 09 Oct 2025 11:22:12 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 191CDBC84FE
+	for <lists+linux-i2c@lfdr.de>; Thu, 09 Oct 2025 11:30:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 959573533FE
-	for <lists+linux-i2c@lfdr.de>; Thu,  9 Oct 2025 09:22:12 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 07F844ECA17
+	for <lists+linux-i2c@lfdr.de>; Thu,  9 Oct 2025 09:30:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D3BF2D6400;
-	Thu,  9 Oct 2025 09:22:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2DD62D2397;
+	Thu,  9 Oct 2025 09:30:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="iy9PI2Rh"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LqkqlLwN"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx-relay02-hz2.antispameurope.com (mx-relay02-hz2.antispameurope.com [83.246.65.88])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A8EB2D5940
-	for <linux-i2c@vger.kernel.org>; Thu,  9 Oct 2025 09:22:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=83.246.65.88
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760001727; cv=pass; b=MFd7ZEMHzfOVsEr/BBqNdKN0CL2QrKJxvXMncQ4QSmNYho2MuETHEKTNEbAb+D2/cKIqDnTQ6TIqYXMv0fCA+mB6V8qNnP1mQ5wOPYvBIz0m/Io61zJo4KzKx48beTi8WW9BueK4fF+YmEg/atBLqCB6lCZqTHsj/nd8vRRJ4zo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760001727; c=relaxed/simple;
-	bh=vfVoUbsJPxjF9vK6+vSGFd9S12aVkH4YrhnG7Hat7Tw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=IEd20rHTnhGFNSrBfbeYIjS6nt9wnZ1Syr6taqTkweyPc4DNNBAMbXZTFPEKaUD75hxo0l+ST+fRqCM97YUiyweNCCVyz3tkVXIjEJggMra78zaTZMTR1X8Dt22cpu3zlGBej0mFAZtWWAXZiVhYtdmhqTAkNagFhQ0QAL8ufc8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=iy9PI2Rh; arc=pass smtp.client-ip=83.246.65.88
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
-ARC-Authentication-Results: i=1; mx-gate02-hz2.hornetsecurity.com 1; spf=pass
- reason=mailfrom (ip=94.100.132.6, headerfrom=ew.tq-group.com)
- smtp.mailfrom=ew.tq-group.com
- smtp.helo=hmail-p-smtp01-out04-hz1.hornetsecurity.com; dmarc=pass
- header.from=ew.tq-group.com orig.disposition=pass
-ARC-Message-Signature: a=rsa-sha256;
- bh=j2KTnFVX0/Ht3bAv3F0U0EBuYjoq5BsfMsWeElo5MCQ=; c=relaxed/relaxed;
- d=hornetsecurity.com; h=from:to:date:subject:mime-version:; i=1; s=hse1;
- t=1760001651;
- b=NoBgYatppEcN7VGIg0umKV5ENEjkI0wDlWryr0cc/iPu0lsBviJsjyAKwTKmwYje7Zn8t5Ny
- CsQNoVZs1g1ns37R9tV7JnG7yWVxnYK2p6L/LMEJbqy5uwS+n6p3fiKxnNG7tASDZcrOhlJYEAC
- fryOlb1AQ2Liqj+sgAFgGJ4KByzuQTycGSWiCoTkETBJXkScuY9MH14g3JRps+km2fciQmZlZgn
- 8aTVWrkUUZLdK0ELY2l4Qsu8YljxpabhDwQ5qPYxV5Ga0syAA8eR5A9RyyiPpktKa+J41KfDZ4n
- qmcoSmIIaSBepYqqxN5JF4r4J3WWN0aE95Odiv3AtihkA==
-ARC-Seal: a=rsa-sha256; cv=none; d=hornetsecurity.com; i=1; s=hse1;
- t=1760001651;
- b=AsGx6QlNq+elteKXm+OyupASfntxIDvg5NsW2FQzyp0A3ohJ3Z+TOGCvr2Ey1orzDUZYmbZs
- m+zvEk4b8Ous5djrXN78x62JJbdEiXZz7banr/nLgCX37uYnbJO9NI1fO7OpXqRZqwuNqmx1iy0
- ZlRG4XEKOKQQwZgGPf3D94NbEoNZC3vRlnUM2SQOxfaahtL6/HCQdvkWSbEwg/v4tM+oQHESim/
- PfizIAGtxP04su7IUI1kxgsfgIGARPCqBdye3TZi6Xfo2xLhU354hjYBqM6Z9XNAzCOm88S7ru2
- b3iOpMMiB9t+1fVE7NNBlHufpV6D4UIheT90EXmyVKq3A==
-Received: from he-nlb01-hz1.hornetsecurity.com ([94.100.132.6]) by mx-relay02-hz2.antispameurope.com;
- Thu, 09 Oct 2025 11:20:51 +0200
-Received: from schifferm-ubuntu.tq-net.de (host-82-135-125-110.customer.m-online.net [82.135.125.110])
-	(Authenticated sender: matthias.schiffer@ew.tq-group.com)
-	by hmail-p-smtp01-out04-hz1.hornetsecurity.com (Postfix) with ESMTPSA id 1D4642203F0;
-	Thu,  9 Oct 2025 11:20:40 +0200 (CEST)
-From: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-To: Peter Korsgaard <peter@korsgaard.com>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Andi Shyti <andi.shyti@kernel.org>
-Cc: linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux@ew.tq-group.com,
-	Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-Subject: [PATCH v2 2/2] i2c: ocores: respect adapter timeout in IRQ mode
-Date: Thu,  9 Oct 2025 11:19:50 +0200
-Message-ID: <96e4ef171bc710abde215c50dd5dd4fffa98a2b2.1760000254.git.matthias.schiffer@ew.tq-group.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <51a72ceca0154d7be85c3cc67722e7dd0b364a2e.1760000254.git.matthias.schiffer@ew.tq-group.com>
-References: <51a72ceca0154d7be85c3cc67722e7dd0b364a2e.1760000254.git.matthias.schiffer@ew.tq-group.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E95D1862A;
+	Thu,  9 Oct 2025 09:30:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1760002228; cv=none; b=CMN5XsY8Luyqj9gUFDWEuPvkT+zLIoX0Zsu9wPWmu1gJUp8lUvx/coinc9bnndVIqYB8PsOdXuu4XObI6qzBmubXDyxRb9iwUO6FzHpZek2Pn2ebun2edrUm3oVAmcxAdiw0mLWdaJws1JtRFxjelmvW5bBy+SylWXILRXHgrIM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1760002228; c=relaxed/simple;
+	bh=o+H6H9hUXpqnVfpXB6sT7GgCLv8fKIk6uQPEP6nvCwk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ndLmVKDtBvTLtcnHW/TZowhSIgCrWQwKkHApCpa+/qu5jylCfDiNcBK/Oxls6IPzLGbNjj952UGkjkpcg549U06JKd3HX24Tj8V3pbJiXw7K00jHwmSL3Mp2RdQkvxaIFIj24K/iahU1L5pCxC5O0TFKB7V0oEaBdhFeGFYREXk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LqkqlLwN; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1760002226; x=1791538226;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=o+H6H9hUXpqnVfpXB6sT7GgCLv8fKIk6uQPEP6nvCwk=;
+  b=LqkqlLwNf3MXW8MDtUN5UIuryx07UKCvSGRcQ5kLhEPyZrUCwAmV3P5b
+   sPTN+9KDNBCj3ifrYieunzesz3Y07P0ETCKc9WyxJ6DAhzf+5MoJkd1Xi
+   N9U2j8WnAXrs5IVVqXoDPaYBPccUsKmlaYnGbjhW1qtfqcmuRR/qtOg3/
+   Zbh0MncvXHDw7nCFL2Ds3ZfCsGnPqya8hGMvbErMjqgFYKyKTHFQLVmNS
+   K1G+ejLxQ/I/T+i+NqMuow1apeVqO0YvhqxGo/hEIbJ0zhmRtiBQXSRDo
+   NbENLJgABHc3Y5nnAzyKPMBSp6PqRN/miSKzXG7ozkcMyOvbBy8DzRx4o
+   Q==;
+X-CSE-ConnectionGUID: nFb1+ns8S9qpq8GSJwLdEQ==
+X-CSE-MsgGUID: ibNqeQykTT6F9FrQX+uPjA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11576"; a="66060620"
+X-IronPort-AV: E=Sophos;i="6.19,215,1754982000"; 
+   d="scan'208";a="66060620"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2025 02:30:25 -0700
+X-CSE-ConnectionGUID: C6TONWeRQ7mppdyTUW+7gQ==
+X-CSE-MsgGUID: n9aWpSf7QGeb9l5JUVziRg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,215,1754982000"; 
+   d="scan'208";a="185789028"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by orviesa005.jf.intel.com with ESMTP; 09 Oct 2025 02:30:23 -0700
+Received: by black.igk.intel.com (Postfix, from userid 1001)
+	id 78DB195; Thu, 09 Oct 2025 11:30:22 +0200 (CEST)
+Date: Thu, 9 Oct 2025 11:30:22 +0200
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Artem Shimko <a.shimko.dev@gmail.com>
+Cc: p.zabel@pengutronix.de, andi.shyti@kernel.org,
+	andriy.shevchenko@linux.intel.com, jarkko.nikula@linux.intel.com,
+	jsd@semihalf.com, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: designware-platdrv: handle reset control deassert
+ error
+Message-ID: <20251009093022.GH2912318@black.igk.intel.com>
+References: <206e36398db6075bfb0bb0b98295ee7328c5f64f.camel@pengutronix.de>
+ <20251009083703.2038187-1-a.shimko.dev@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-cloud-security-sender:matthias.schiffer@ew.tq-group.com
-X-cloud-security-recipient:linux-i2c@vger.kernel.org
-X-cloud-security-crypt: load encryption module
-X-cloud-security-Mailarchiv: E-Mail archived for: matthias.schiffer@ew.tq-group.com
-X-cloud-security-Mailarchivtype:outbound
-X-cloud-security-Virusscan:CLEAN
-X-cloud-security-disclaimer: This E-Mail was scanned by E-Mailservice on mx-relay02-hz2.antispameurope.com with 4cj49N4YBhz2gY89
-X-cloud-security-connect: he-nlb01-hz1.hornetsecurity.com[94.100.132.6], TLS=1, IP=94.100.132.6
-X-cloud-security-Digest:54112139bb7784269948007813f8417d
-X-cloud-security:scantime:2.393
-DKIM-Signature: a=rsa-sha256;
- bh=j2KTnFVX0/Ht3bAv3F0U0EBuYjoq5BsfMsWeElo5MCQ=; c=relaxed/relaxed;
- d=ew.tq-group.com;
- h=content-type:mime-version:subject:from:to:message-id:date; s=hse1;
- t=1760001650; v=1;
- b=iy9PI2RhUGahqtZyKReKnk2CmjcDJSkLBdlhmdowZrPMfMSMGhpaFPQgtGM1Qgu5A795WcDr
- dSfJ8SpyQrk4JkLwzaRZLHC8Rv0cRYOmBuF1v/AVzVBro15/FTMeCj7vwsef5GTtKIgz+QEmmlk
- I/1OB6H5cMiZIoU3SGKeD3KCNdRZVuNew0xVK3cWpBJ5kHAa7uzBwadBl6i7WcL58OUEextg9aB
- ZbKVDCrlGlSGRNThdM9m3v36AWatsQfZPD5SjSyvphnmmETd8GfJrYODZkEijm2UyXXgOozlOKu
- 5yfIVfP3mesu1uerL+VVp0St+gR97rRZCvxP3GW13ioww==
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20251009083703.2038187-1-a.shimko.dev@gmail.com>
 
-While the timeout field of the i2c_adapter defaults to 1s, it can be
-changed, for example using the I2C_TIMEOUT ioctl. Change the ocores
-driver to use this timeout instead of hardcoding 1s, also making it
-consistent with polling mode.
+Hi,
 
-Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-Acked-by: Peter Korsgaard <peter@korsgaard.com>
----
+On Thu, Oct 09, 2025 at 11:37:03AM +0300, Artem Shimko wrote:
+> Handle the error returned by reset_control_deassert() in the probe
+> function to prevent continuing probe when reset deassertion fails.
+> 
+> Previously, reset_control_deassert() was called without checking its
+> return value, which could lead to probe continuing even when the
+> device reset wasn't properly deasserted.
+> 
+> The fix checks the return value and returns an error with dev_err_probe()
+> if reset deassertion fails, providing better error handling and
+> diagnostics.
+> 
+> Signed-off-by: Artem Shimko <a.shimko.dev@gmail.com>
 
-v2: collect acked-by
+Looks good to me,
 
- drivers/i2c/busses/i2c-ocores.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/i2c/busses/i2c-ocores.c b/drivers/i2c/busses/i2c-ocores.c
-index c4587194d46be..4a8ce167a3d9f 100644
---- a/drivers/i2c/busses/i2c-ocores.c
-+++ b/drivers/i2c/busses/i2c-ocores.c
-@@ -383,7 +383,8 @@ static int ocores_xfer_core(struct ocores_i2c *i2c,
- 	} else {
- 		if (wait_event_timeout(i2c->wait,
- 				       (i2c->state == STATE_ERROR) ||
--				       (i2c->state == STATE_DONE), HZ) == 0)
-+				       (i2c->state == STATE_DONE),
-+				       i2c->adap.timeout) == 0)
- 			ret = -ETIMEDOUT;
- 	}
- 	if (ret) {
--- 
-TQ-Systems GmbH | Mühlstraße 2, Gut Delling | 82229 Seefeld, Germany
-Amtsgericht München, HRB 105018
-Geschäftsführer: Detlef Schneider, Rüdiger Stahl, Stefan Schneider
-https://www.tq-group.com/
-
+Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 
