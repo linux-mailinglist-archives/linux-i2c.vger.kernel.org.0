@@ -1,109 +1,87 @@
-Return-Path: <linux-i2c+bounces-13433-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13434-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A77DEBC8C41
-	for <lists+linux-i2c@lfdr.de>; Thu, 09 Oct 2025 13:23:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 98450BC9405
+	for <lists+linux-i2c@lfdr.de>; Thu, 09 Oct 2025 15:20:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B51573E35AC
-	for <lists+linux-i2c@lfdr.de>; Thu,  9 Oct 2025 11:22:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B1FAE1A61D44
+	for <lists+linux-i2c@lfdr.de>; Thu,  9 Oct 2025 13:21:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CE6C2DF153;
-	Thu,  9 Oct 2025 11:22:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC29E2E764C;
+	Thu,  9 Oct 2025 13:20:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="A+cCwjgP"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="q/G8x5nm"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 283F92C1597
-	for <linux-i2c@vger.kernel.org>; Thu,  9 Oct 2025 11:22:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEB9A134AB;
+	Thu,  9 Oct 2025 13:20:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760008963; cv=none; b=KXXEMsfKQm4pdxJd0qeG0yq1ZM3TsbyejRY0cq9AXFjdI26xSypqcM4qAKZlanfMpD/IzItxGWHDjGd0YqkhEgCSqryjKJ61ojqdpKPuazcc3WdnsbVlTJOVWdE0P4w+acrNy1g806SzyWymjsBVx3ZvsBtC0lrp48nmve8buTA=
+	t=1760016043; cv=none; b=VmkOXwq0omIoCl+YXx7GnVqEX2itCJ3uOik8oK/lxAPYCLhaoDWokcLcJCYrUd8+4s+/Ou5yRORSB5lotEWGEOo5VLudhcptgDqfb4jAKeE7QrfMWmAFKNveTrdQKh7ZqbIIeglnywPznQS9BEMl0aTeRR+WwxhXi8+Lt/+u500=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760008963; c=relaxed/simple;
-	bh=pxxCSE2KZHdFit3VvNcpMbzSxM+yyuyg2i3ud6ulMIA=;
+	s=arc-20240116; t=1760016043; c=relaxed/simple;
+	bh=FlQdNG0dA0OIp1Q2tAisZaotCOS8dFYHInHZXi6W5X0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=irUNtGfAc0xFtx7yck2iawIOivhO5/ugVWFdWPlF0+SwLJ7pyzyOQYB/H/tJIZ2Ru/zb0NvM65S/uTxvvS2ycX1OITPzpFxkSqt6W4vxBtJdUrFqt0h6k9Iynaer+LUZENQwRV11wLzV7A9pbAhVDdSewLsa0sufQfByJfz5s3E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=A+cCwjgP; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=pxxC
-	SE2KZHdFit3VvNcpMbzSxM+yyuyg2i3ud6ulMIA=; b=A+cCwjgP6ISwR696vpu/
-	XRDtUp8Me9cFOlDw69yCMhr/MEGlFl4jrPz5Z/tG2hu8aCzz0ccfqLPJvRpNitDx
-	+74hWrUd5jM/uCBgzDwEo16LkgNo51PndXoaqRKujEEgBzAyQ695xlLR6+jLrB4I
-	q0L5m7mBOxnziDnXlPKS0m24hvUiwPozdCSXxDPozLxAMz0+6V4tS2sdKTN0A98l
-	VZAuuGOfETFvdcNhAfTPnfjNay+OzIOuQtLc1NbNFOUgoxTg4OB4+PB4xnKvnFue
-	FywjllC1219ISTRbbICgx8uP7qae/04zqOaLqNrb0jgUlgtXGwGd3lr+nuMHqj1i
-	uQ==
-Received: (qmail 1055785 invoked from network); 9 Oct 2025 13:22:39 +0200
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 9 Oct 2025 13:22:39 +0200
-X-UD-Smtp-Session: l3s3148p1@AM7JBLhALMYgAwDPXwQHAL/S9V79e5yL
-Date: Thu, 9 Oct 2025 13:22:38 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Kael D'Alcamo <dev@kael-k.io>
-Cc: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Wei Yan <sledge.yanwei@huawei.com>, linux-i2c@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/1] dt-bindings: i2c: hisilicon,hix5hd2-i2c convert
- to DT schema
-Message-ID: <aOea_vod4u9zlFC0@shikoro>
-References: <c2e81faf-4d2c-40e7-bdf0-e0d41fc76d9c@kernel.org>
- <20251008200535.17464-1-dev@kael-k.io>
- <20251008200535.17464-2-dev@kael-k.io>
+	 Content-Type:Content-Disposition:In-Reply-To; b=hv885QTGM9W8NbT7bzHo2wVd3Xji5OCvM5zeTj2L0U5UndikDw8gy9UWOr6v7KySHQ7sfdhTMD/Sfx8d9HNBlPa79UGe5G7Lh8MVi/Z0LKmnk+5q2dh2zaYwgjgf+1XgNWlET54Q+bU5TTOXGdAmCtCcOH7DtN/BSgpn0hkuCiM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=q/G8x5nm; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=aRDi+opmOQQW8sJWvpMrmG918tJ06ixNqU31GpHI2F8=; b=q/G8x5nmTnNF1+7Psu57GAkeQs
+	Z5grC76eqVgaobUJLI75998Mi+mnAJLgrJom3gyh8snkaQCLEN8zHPkwK2vPVzBK5IA+HSGKs+Nu1
+	OJLCmyuMombpal3M7JSwwapdHl6LiQ00VgApmZg8pUttRvjHWLlD1AsD3nQgqUuUSlZ8=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1v6qZQ-00AWzI-FL; Thu, 09 Oct 2025 15:20:36 +0200
+Date: Thu, 9 Oct 2025 15:20:36 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>,
+	Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux@ew.tq-group.com
+Subject: Re: [PATCH v2 1/2] i2c: ocores: increase poll timeout to total
+ transfer timeout
+Message-ID: <60744be2-1a22-4056-bf05-22f64fb8b484@lunn.ch>
+References: <51a72ceca0154d7be85c3cc67722e7dd0b364a2e.1760000254.git.matthias.schiffer@ew.tq-group.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="0LkWXR9DpKWUfQ3k"
-Content-Disposition: inline
-In-Reply-To: <20251008200535.17464-2-dev@kael-k.io>
-
-
---0LkWXR9DpKWUfQ3k
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <51a72ceca0154d7be85c3cc67722e7dd0b364a2e.1760000254.git.matthias.schiffer@ew.tq-group.com>
 
-On Wed, Oct 08, 2025 at 10:04:27PM +0200, Kael D'Alcamo wrote:
-> Convert the Devicetree binding documentation for:
-> * hisilicon,hix5hd2-i2c
-> from plain text to DT binding schema.
->=20
-> Signed-off-by: Kael D'Alcamo <dev@kael-k.io>
+On Thu, Oct 09, 2025 at 11:19:49AM +0200, Matthias Schiffer wrote:
+> When a target makes use of clock stretching, a timeout of 1ms may not be
+> enough. One extreme example is the NXP PTN3460 eDP to LVDS bridge, which
+> takes ~320ms to send its ACK after a flash command has been
+> submitted.
+> 
+> The behavior in the regular case is unchanged, spinning for up to 1ms,
+> but the open-coded poll loop is replaced with read_poll_timeout_atomic()
+> as suggested by Andrew Lunn. In cases where 1ms is not sufficient,
+> read_poll_timeout() is used, allowing a total transfer time up to the
+> timeout set in struct i2c_adapter (defaulting to 1s, configurable through
+> the I2C_TIMEOUT ioctl).
 
-Applied to for-next, thanks!
+Thanks
 
+Did you test with CONFIG_DEBUG_ATOMIC_SLEEP enabled? I don't think it
+is an issue, but the old code could be used in atomic context because
+it never slept.
 
---0LkWXR9DpKWUfQ3k
-Content-Type: application/pgp-signature; name="signature.asc"
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmjnmvoACgkQFA3kzBSg
-KbaGAQ/+LGHz0IRK+R1aHwndw8OQ3TmbrnV1mtBbLNFyYWmQt3tU3Xh6beGeRCa3
-Iem0fxZEnYNss7p9MqjaomoAgcxaCKyvyYO9QacXKtt0rG6nlhMMzCgdFRuGFscq
-F06u/AllC/wMBxNAc3PhEiGOqvGmbNt6g8uEXEaKuOOgBQni7cMsyDkutjx6YjE2
-WCDsGVOi1zRScUM+f85iKtegqdvZrEf3VrpJ4O6spoAIxoW0G/sTSlcICh0Rru1G
-nBTfFsxJ4ItVpl2+q6dufq2ssz1f+FHbCUWCLt4UYfLWaqQo2DXdHXVwleqW4/9q
-JPnvZ7aTJkEjunuIpC9aDpG/Xp6Ilwx9feDrL8FIqjV5+EpvgX+BBsZGdbiJ0A5t
-JKtjtt9vDCOshCaUMwdMulxXiUTmgHp2H1bkFlAIDRCfKNendtyZHpyNvTi5bdXO
-267MSpGx3+qnx5l6XinMOHTaLP92uPtM/waOJ7kwNJi4YYAD1uNPPWhsZ8OWCYl6
-/pxvHDwq7BSwNm20ktuOwXyjTa14x9WlORGFRlJbgm+HsK7b6J289pgePKsoR98r
-ZDK1qSsBbaTO1F3QywJtEO+dBzYN6bYcByaf/pk2PvhwgrK35566CLX/qDyuzewW
-xIXB347KcjiOrSRMHOj//LOzwMAsX2BxGi2nTPSz+ucFQ7nD2vo=
-=euhl
------END PGP SIGNATURE-----
-
---0LkWXR9DpKWUfQ3k--
+    Andrew
 
