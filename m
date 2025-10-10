@@ -1,136 +1,130 @@
-Return-Path: <linux-i2c+bounces-13438-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13439-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7BD7DBCB12E
-	for <lists+linux-i2c@lfdr.de>; Fri, 10 Oct 2025 00:25:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D5F2BCBA92
+	for <lists+linux-i2c@lfdr.de>; Fri, 10 Oct 2025 06:56:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 67AA24E1753
-	for <lists+linux-i2c@lfdr.de>; Thu,  9 Oct 2025 22:25:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8E38D188FF40
+	for <lists+linux-i2c@lfdr.de>; Fri, 10 Oct 2025 04:56:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B271A286405;
-	Thu,  9 Oct 2025 22:25:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DFD423BCED;
+	Fri, 10 Oct 2025 04:56:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X4yKBXaG"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="jJlEjJTp"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63CAF285CBC;
-	Thu,  9 Oct 2025 22:25:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25D1E238D52
+	for <linux-i2c@vger.kernel.org>; Fri, 10 Oct 2025 04:56:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760048718; cv=none; b=ag469UAjihmruVA8Z//syyUKZ2emUE2b0JpQDH6VT6m0Ea6KgDBEbJ52r3nZuVsMIamL4CvUJT4MlFmwOJfN0thrpqaVzF/OOD50dGZX2xPhhS+seBgWeE+YJzfoiGy97vylV8BLAzVMeNP2GNBRWqFRRveN1Bnv5YU+13isZJ0=
+	t=1760072169; cv=none; b=uRCY0uwvj4Mh7j4apVk/5DFKXTj5St2tetYY5U2XA6un5nqu2wBGdPshv47Xc0NBkZkTBXCOXgab18sUQ6A9XllhAZeBg6OV2VqjubQbp8WS3BJnlSnU6VyZuQ1hwoyUk2urD6XZmRrpZW+u3vywnYc+u2PqURhxVsZ+t6KHNM4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760048718; c=relaxed/simple;
-	bh=83bdko5rwze4WW3bMGBsDUspQQmt7g8T21lnn+Xp8LI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XrGhVAcdEWKl2y4HOTr5IkanZqZGsUySQNgh6445x6XEjwFBjFPPjXjhRNUW8sP8mX4u/V6UH+LCk0o2aVMOuH9E+j1cX20Ad/P/XjHzpZTH32Ni3gR9KZIF6Nn/LqBYIgUOFrHh6eqr8Fvan6bHbfkAaHwLxseBxknx6XGH5LI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X4yKBXaG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E595C4CEE7;
-	Thu,  9 Oct 2025 22:25:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760048718;
-	bh=83bdko5rwze4WW3bMGBsDUspQQmt7g8T21lnn+Xp8LI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=X4yKBXaGBjJhWLfIbbtpbYAgAl8hynK+4LNpuLNDWw0smEGhcp5IsgjHYWOd+x7DE
-	 +R1vi+X3L1N94EgkT8t7iqNB/736JQSyntjQF24UwrQfnvc1wSlRW6J7k7r8vpdunq
-	 SoqaEpDg6knL2OJRYL3DwxlUsoS72dmMr0pjO5mlXjVBXQSjQX/8QIlEhQVc0AWAo4
-	 sb36U7Uw5IKT6jS1Jk/sThuOsN6t40dVorZdXLpmIAujDD+GXD/riQbnSo7t5ITNV2
-	 FCeeTZ1wZVPi3+FMVsJ1TsaFzJwjqj9PDmcstIlWx4PXf0NabB3MA6JznZqJrC8BXc
-	 5iltp3MkUMtgQ==
-Date: Fri, 10 Oct 2025 00:25:13 +0200
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>, Andrew Lunn <andrew@lunn.ch>, 
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, linux@ew.tq-group.com
-Subject: Re: [PATCH 1/2] i2c: ocores: replace 1ms poll iteration timeout with
- total transfer timeout
-Message-ID: <445z46hybgl2mdmhsapiitqccxkkpafqstgksov45sfd5v2c2m@mmiye6kt6itb>
-References: <1eb320b6b7d3a12e62785893ea68c4d16aa2560d.1759838476.git.matthias.schiffer@ew.tq-group.com>
+	s=arc-20240116; t=1760072169; c=relaxed/simple;
+	bh=BXQBEg49WGrsvFjprcDLou8kFWrRywhvTMF300kqw/0=;
+	h=From:To:Cc:In-Reply-To:Subject:Date:Message-ID:MIME-Version:
+	 Content-Type:References; b=cWFbUNxSDKuD8tvwEvdb394PtKX3irL465Fr8ZnHKZNI1CDAUmlK1eMFfJBz9yQgklxBa6nk+rBL0x5+4ppRq/rv2R0UCtiLj6ETBeMmSvRNOPIqGz7oT/IuT5mET2uhTlwvJEcd3KHXWOMgDUiVTFO5dOmSvk5MrtwpoEc5lgw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=jJlEjJTp; arc=none smtp.client-ip=203.254.224.24
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
+	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20251010045604epoutp01972ba22cb7dafb28871b05dc4dcafc8b~tCE7XKwt73002330023epoutp01-
+	for <linux-i2c@vger.kernel.org>; Fri, 10 Oct 2025 04:56:04 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20251010045604epoutp01972ba22cb7dafb28871b05dc4dcafc8b~tCE7XKwt73002330023epoutp01-
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1760072164;
+	bh=b96lHOK7OOj9AgDqZ6liSCCMlFccuKNhL36Drok74AE=;
+	h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+	b=jJlEjJTp5sq57ROgGm3SWlApL12iSHqaj1ZbI6qq+WRcptfj+qZv/BkrqBRfmdWoj
+	 WvTgmBaoyC+oOpFea+UpqRBUZ5dFLq/IIGN60LO9y/EgOfWwCdPm8xvpkbMXL622eu
+	 CbOb58rmLk7VrljvIGzseAayWQYJ5d1NehI8HocM=
+Received: from epsnrtp03.localdomain (unknown [182.195.42.155]) by
+	epcas5p1.samsung.com (KnoxPortal) with ESMTPS id
+	20251010045603epcas5p100e8b22da565c8ddedc855e3eee2a63d~tCE639vYj2303523035epcas5p1O;
+	Fri, 10 Oct 2025 04:56:03 +0000 (GMT)
+Received: from epcas5p1.samsung.com (unknown [182.195.38.94]) by
+	epsnrtp03.localdomain (Postfix) with ESMTP id 4cjZFZ2QhXz3hhTD; Fri, 10 Oct
+	2025 04:56:02 +0000 (GMT)
+Received: from epsmtip1.samsung.com (unknown [182.195.34.30]) by
+	epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
+	20251010045601epcas5p29c5dc8d86df33b732d285b1ab7821bfd~tCE5MyevZ0899008990epcas5p2H;
+	Fri, 10 Oct 2025 04:56:01 +0000 (GMT)
+Received: from INBRO000519 (unknown [107.122.1.150]) by epsmtip1.samsung.com
+	(KnoxPortal) with ESMTPA id
+	20251010045559epsmtip1ef22b9497c9caa63d35fb46e3b9ed6e6~tCE3gwKOS3107331073epsmtip1L;
+	Fri, 10 Oct 2025 04:55:59 +0000 (GMT)
+From: "Faraz Ata" <faraz.ata@samsung.com>
+To: "'Krzysztof Kozlowski'" <krzk@kernel.org>, <andi.shyti@kernel.org>,
+	<robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
+	<alim.akhtar@samsung.com>
+Cc: <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-samsung-soc@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <rosa.pila@samsung.com>,
+	<dev.tailor@samsung.com>
+In-Reply-To: <4a03bec1-34e2-444e-acb8-cae72dcbe6c2@kernel.org>
+Subject: RE: [RESEND PATCH 1/2] dt-bindings: i2c: exynos5: add
+ exynosautov920-hsi2c compatible
+Date: Fri, 10 Oct 2025 10:25:50 +0530
+Message-ID: <000001dc39a2$2cf5e570$86e1b050$@samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1eb320b6b7d3a12e62785893ea68c4d16aa2560d.1759838476.git.matthias.schiffer@ew.tq-group.com>
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQHZnjCsweC3oVP5Ejv6M2pHGPEXvgKyFlopAbdTD1i0nLvhcA==
+Content-Language: en-us
+X-CMS-MailID: 20251010045601epcas5p29c5dc8d86df33b732d285b1ab7821bfd
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+cpgsPolicy: CPGSC10-542,Y
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20251009101023epcas5p2de61d08e2d4a180bbcf2f2708d267336
+References: <CGME20251009101023epcas5p2de61d08e2d4a180bbcf2f2708d267336@epcas5p2.samsung.com>
+	<20251009101911.2802433-1-faraz.ata@samsung.com>
+	<4a03bec1-34e2-444e-acb8-cae72dcbe6c2@kernel.org>
 
-Hi Matthias,
+HI Krzysztof
 
-On Tue, Oct 07, 2025 at 02:09:24PM +0200, Matthias Schiffer wrote:
-> When a target makes use of clock stretching, a timeout of 1ms may not be
-> enough. One extreme example is the NXP PTN3460 eDP to LVDS bridge, which
-> takes ~320ms to send its ACK after a flash command has been
-> submitted.
-
-besides, the specification doesn't impose any maximum time.
-
-> Replace the per-iteration timeout of 1ms with limiting the total
-> transfer time to the timeout set in struct i2c_adapter (defaulting to
-> 1s, configurable through the I2C_TIMEOUT ioctl). While we're at it, also
-> add a cpu_relax() to the busy poll loop.
+> -----Original Message-----
+> From: Krzysztof Kozlowski <krzk@kernel.org>
+> Sent: Thursday, October 9, 2025 3:43 PM
+> To: Faraz Ata <faraz.ata@samsung.com>; andi.shyti@kernel.org;
+> robh@kernel.org; krzk+dt@kernel.org; conor+dt@kernel.org;
+> alim.akhtar@samsung.com
+> Cc: linux-i2c@vger.kernel.org; devicetree@vger.kernel.org; linux-arm-
+> kernel@lists.infradead.org; linux-samsung-soc@vger.kernel.org; linux-
+> kernel@vger.kernel.org; rosa.pila@samsung.com; dev.tailor@samsung.com
+> Subject: Re: [RESEND PATCH 1/2] dt-bindings: i2c: exynos5: add
+> exynosautov920-hsi2c compatible
 > 
+> On 09/10/2025 19:19, Faraz Ata wrote:
+> > Add "samsung,exynosautov920-hsi2c" dedicated compatible for HSI2C
+> > found in ExynosAutov920 SoC.
+> >
+> > Signed-off-by: Faraz Ata <faraz.ata@samsung.com>
+> > ---
+> > Note: This patch was previously sent separately. Resending now as part
+> > of a two-patch series to avoid dt-binding check error. No functional
+> > changes from the earlier submission[1]
+> 
+> It's not necessary. You only need to provide lore link to bindings in patch
+> changelog. Read carefully report you received.
+> 
+> Also, do not resend non-fix patches during merge window. It's just noise.
 
-...
+Thanks for your comment
+I will send v2 of dt patch with lore link to binding 
+> 
+> 
+> Best regards,
+> Krzysztof
 
-> @@ -269,17 +269,16 @@ static int ocores_wait(struct ocores_i2c *i2c,
->  		       int reg, u8 mask, u8 val,
->  		       const unsigned long timeout)
->  {
-> -	unsigned long j;
-> -
-> -	j = jiffies + timeout;
-
-Any reason we don't take "jiffies + i2c->adap.timeout" and avoud
-all the changes below? It also simplifies the parameters list.
-
->  	while (1) {
->  		u8 status = oc_getreg(i2c, reg);
->  
->  		if ((status & mask) == val)
->  			break;
->  
-> -		if (time_after(jiffies, j))
-> +		if (time_after(jiffies, timeout))
->  			return -ETIMEDOUT;
-> +
-> +		cpu_relax();
-
-Good.
-
->  	}
->  	return 0;
->  }
-
-...
-
-> -	/*
-> -	 * once we are here we expect to get the expected result immediately
-> -	 * so if after 1ms we timeout then something is broken.
-> -	 */
-
-Why have you deleted this comment completely?
-
-> -	err = ocores_wait(i2c, OCI2C_STATUS, mask, 0, msecs_to_jiffies(1));
-> +	err = ocores_wait(i2c, OCI2C_STATUS, mask, 0, timeout);
->  	if (err)
-> -		dev_warn(i2c->adap.dev.parent,
-> -			 "%s: STATUS timeout, bit 0x%x did not clear in 1ms\n",
-> -			 __func__, mask);
-> +		dev_dbg(i2c->adap.dev.parent,
-> +			"%s: STATUS timeout, bit 0x%x did not clear\n",
-> +			__func__, mask);
-
-Why are you changing from warn to dbg? This change is not
-mentioned in the commit log.
-
-Andi
-
->  	return err;
->  }
 
