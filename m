@@ -1,203 +1,153 @@
-Return-Path: <linux-i2c+bounces-13440-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13441-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30A1CBCC1F8
-	for <lists+linux-i2c@lfdr.de>; Fri, 10 Oct 2025 10:27:00 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2504BCD4C3
+	for <lists+linux-i2c@lfdr.de>; Fri, 10 Oct 2025 15:36:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 02C4D401CCA
-	for <lists+linux-i2c@lfdr.de>; Fri, 10 Oct 2025 08:26:56 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 3804C3545CE
+	for <lists+linux-i2c@lfdr.de>; Fri, 10 Oct 2025 13:36:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4742F25BF1B;
-	Fri, 10 Oct 2025 08:26:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF1912F39C1;
+	Fri, 10 Oct 2025 13:35:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mjxPeAKQ"
+	dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b="jTiLBbkI"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11010070.outbound.protection.outlook.com [52.101.69.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 017E525A623;
-	Fri, 10 Oct 2025 08:26:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760084806; cv=none; b=ca9YvZ2ikcf/+wyRTM5LFIiYNUJ3XCml5yFjdVMaUo+F+UqDWw72tfqH7DZ4kUPMjDhNvWmAcz0cQANOlSsDJt3vKJK+UsQfKVF8uCPTzTnv/3/KAN1gft09nx5RVasxjHy/utjwZYxueojBajXB2cmvygq7o1F7PmR9/kF7ux4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760084806; c=relaxed/simple;
-	bh=kZTjlORNPDtQ5iJrdukH1ySdKZgofEiyLr4PvIYuPTc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ImKSa2Y7i99oBv0S44xZ8q3aFam7AtYFArfLQHxDeDoe/ftNc5GmTRKukRNDk4z05ZOZeEeBPOpECMVuMeVm0E1bB78mXds9q3WOgQIQh5deUA7tWGvzpG+GrK3HisQdAy1kY8RkQLn81wZmKSDM57x6iJHTp8qWYlTieQsO/wQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mjxPeAKQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB6B4C4CEF8;
-	Fri, 10 Oct 2025 08:26:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760084805;
-	bh=kZTjlORNPDtQ5iJrdukH1ySdKZgofEiyLr4PvIYuPTc=;
-	h=Date:From:To:Cc:Subject:From;
-	b=mjxPeAKQ3hnZHYMVpUG3e1h/Y97PfFULAk6ccuSDJlQuhIQlcgtdZ/0CzpTSnJh0m
-	 TYxJK2yAiOLEzNe6XsdVXosbH1lMwLpd7uosh1CERGFFNQIsEqQpxdUB3V+LCVe7lC
-	 3bYbThwDV5WmDiQXkJxQYdPjnEXvPQudayHVrI99M8V+fWdpICCd+gVwQirXgs5mAn
-	 H8DPvEOmZdlMHxaXHlXwmQZq6hZsxnnXcE+l/4Ok7Sctb4z0PGp02F6U8+/7CZ7umv
-	 Kb71HuoK/8+/HJCibQy8n4o/4Za5I5G5RkNlnxroNFwwGV3gqh2ZlRYA6tdIs7noOb
-	 uHcf76FvhQM8Q==
-Date: Fri, 10 Oct 2025 10:26:42 +0200
-From: Wolfram Sang <wsa@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Andi Shyti <andi.shyti@kernel.org>
-Subject: [PULL REQUEST] i2c-for-6.18-rc1-part2
-Message-ID: <aOjDQhhcanB_Vgbh@shikoro>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B02912EE268;
+	Fri, 10 Oct 2025 13:35:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.69.70
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1760103359; cv=fail; b=MU2bM3EtjFh+jQlY0ktzWLEf4tfoNpgKGoifDQ67Iao8ftrUsOIeyRMioWZpBA1h6RuAeUlGiFZrQ+/cpHHvW2t0OjeL+clmKA2PvnsLdib5kNRgwWVb7WhJz9y+CgDGH4i89BmFPTBSFms1eu2JWtZQrwViuNlcrCxj/od86MI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1760103359; c=relaxed/simple;
+	bh=OM/Z/Db4w2vZA4wn/pSiwNdowgqblpIpBYy9aTQN5jU=;
+	h=From:To:CC:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=HoE18MjV50CnEAJ7X1M+cbe02y67JcFJf/WYZfqHaOF15q0Rs2lefPkw+nMbrZe0R6oJqXqPclyW3+GV2uXbcCMThVWUfm26YtL37DLcmQEXhUfxibn1x9yCJOr1zV1bDPG1ax3xppzo3Ngak+vmbwYYiMVMGDRFDPoC+g/fy30=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com; spf=pass smtp.mailfrom=axis.com; dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b=jTiLBbkI; arc=fail smtp.client-ip=52.101.69.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=axis.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=vDJ9Rjy7GoA6dL+Q8Kg0taqx+iZBMZdZNTgfHnx4/3RIOMO5CFu6ASbPLqHWQjZYsatN8RcQElAa8xmuW9S3l1JqVQfgiytS+9UQzrfINMy8pOhBAWJJB19D5vNg1R+p7Dw4QHWd7JQ2TZDAlQZ2QBYndgxISHM8XsK8jWq0oKRkYshDKpuTAQjHja8o3nhA1nrbdEu/CWsIIZ04OU03PnbHf75NrUz78FLS7OjZYKIqpNRNNrnKJJcKFsTP7ECVn/82mJFab6hJJCxjV0JtlDs6Wyf4eWy3ED88nZZJAh399fSS5sUD61/idAu3MXxi/VioOr2E5ldH6IgR+Q5Qcw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OM/Z/Db4w2vZA4wn/pSiwNdowgqblpIpBYy9aTQN5jU=;
+ b=oAP6siXNxXF0AogHDlbTsUyZRDPdHoElewX2ewMSp1ES0PpMRZrmCWlvxwSsEBaDpAnXeiBe6+SlF0/dS7ydoHLF5pHkvtglGZHACIjgSdFcu6WYl7p8HIWv7HUh9oX8dRlaru+3UtMUIUgy+k/0vrlda/pglvBtvTrj5x1rA/9ebRnpLHOsiIZvDt13xO2QzjqIlYdTf8PL2Yo0CG3tnMqg33lv4zJxintX60fuBRLRFLJeGz9InFPBkYmU+96rk0Wdak3b0H8U7bkRHnJidVWUCzbonn2JUXKcnFrYDKeQhr/qq5pDImD4QFxfn7us5LVIw4P9NiYMrsUmxLMg7g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 195.60.68.100) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=axis.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=axis.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axis.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OM/Z/Db4w2vZA4wn/pSiwNdowgqblpIpBYy9aTQN5jU=;
+ b=jTiLBbkInZgWPCFmAjUsHIP6RpLRvyVv+UeIXAqy66lGnkP+oAvXNR8lS2mJucz1Qyim3Z/lT+BynhpZ9jXPq+ymATImOwZxSpaVo8k5J+v64Yvc3bm2Cz1TZV12EbJplSxNJ3N6upEMFGPksXdqjgdTK3fcWlEYygg5UHr6dfQ=
+Received: from DUZPR01CA0048.eurprd01.prod.exchangelabs.com
+ (2603:10a6:10:469::17) by OSKPR02MB11458.eurprd02.prod.outlook.com
+ (2603:10a6:e10:98::9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9203.9; Fri, 10 Oct
+ 2025 13:35:54 +0000
+Received: from DU6PEPF0000B61D.eurprd02.prod.outlook.com
+ (2603:10a6:10:469:cafe::bc) by DUZPR01CA0048.outlook.office365.com
+ (2603:10a6:10:469::17) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9203.10 via Frontend Transport; Fri,
+ 10 Oct 2025 13:36:36 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 195.60.68.100)
+ smtp.mailfrom=axis.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=axis.com;
+Received-SPF: Pass (protection.outlook.com: domain of axis.com designates
+ 195.60.68.100 as permitted sender) receiver=protection.outlook.com;
+ client-ip=195.60.68.100; helo=mail.axis.com; pr=C
+Received: from mail.axis.com (195.60.68.100) by
+ DU6PEPF0000B61D.mail.protection.outlook.com (10.167.8.137) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.9228.7 via Frontend Transport; Fri, 10 Oct 2025 13:35:54 +0000
+Received: from pc52311-2249 (10.4.0.13) by se-mail01w.axis.com (10.20.40.7)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.58; Fri, 10 Oct
+ 2025 15:35:54 +0200
+From: Waqar Hameed <waqar.hameed@axis.com>
+To: Peter Rosin <peda@axentia.se>
+CC: <kernel@axis.com>, <linux-i2c@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] i2c: mux-mule: Remove error print for
+ devm_add_action_or_reset()
+In-Reply-To: <pndh5ymm7te.a.out@axis.com> (Waqar Hameed's message of "Tue, 5
+	Aug 2025 11:33:33 +0200")
+References: <pndh5ymm7te.a.out@axis.com>
+User-Agent: a.out
+Date: Fri, 10 Oct 2025 15:35:53 +0200
+Message-ID: <pndldlij2va.a.out@axis.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="BLbc6UWlg+rUR8Vl"
-Content-Disposition: inline
+Content-Type: text/plain
+X-ClientProxiedBy: se-mail02w.axis.com (10.20.40.8) To se-mail01w.axis.com
+ (10.20.40.7)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU6PEPF0000B61D:EE_|OSKPR02MB11458:EE_
+X-MS-Office365-Filtering-Correlation-Id: ae2e1c39-0b76-4127-c4fe-08de0801f00f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|1800799024|376014|36860700013;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?EFTr9LQnsfLC9RIAYC76QUs3zJFs6XjFTubsb49Nc3ZkePmfCvEJB78Ybxfl?=
+ =?us-ascii?Q?qh+Aus8fSWSBPgeffKAoVdYRtxov5LX3QcRAIc2uR+CVN2ws9vilFt3opS6p?=
+ =?us-ascii?Q?3sR0aml3ZawZ2jEWHQ2iacfjJu93oRcST92xK2ApsidzYAL4OP0Wqms5gWIS?=
+ =?us-ascii?Q?FNHUrKovKImtkEvZq9kHFn6icDYc5BKU+cla3HtudS3zCWzHy9U4+lr6vFmL?=
+ =?us-ascii?Q?pDOxW/HOhbn5kacDmF1Z21N5CWbax/MKtdUjRWR1MNblMqDOZSmqfwifRdqL?=
+ =?us-ascii?Q?OQ/XPAugq2F8Mgl75xF7wP+aKJadtnv4mJjpXwsAik9p/YOWkjwc9j5GsKNX?=
+ =?us-ascii?Q?VqFgpyawrujFJlyJvRzsBxBaM9r41iGI2DyhTJ/oPfLwnAn5XHqnXFx+d7K2?=
+ =?us-ascii?Q?ZVbh9sRXNWzCzWMc3iadMkzsS8rYItWcnzXo4sfozgYJOYtb1Xj53LRz16ua?=
+ =?us-ascii?Q?5XHka1jdiWbgJDr2GSu5TXM/13nd29s5N+DyGUQVRdqpEFqQi9GwHe/wF8sK?=
+ =?us-ascii?Q?Rs1ugdXYOQJ0epNjnySiY4Ymbl2Rwc9ya0/tiTw2doaWbVRiqijEfkp7JRP5?=
+ =?us-ascii?Q?LgTstiBQvA5Q0CA5JiCEYruBU0pcIH4Bj6MZG3BRcp2Z/uh2HqNHydKDXWks?=
+ =?us-ascii?Q?x1Lx49GN2TK8u0SQSEGc45kC4wVHYqH+28DMZd2ViREWP1jsExFqIBL1YoER?=
+ =?us-ascii?Q?fJMTtimBSfExTjFfYlHUL/IUvmcD9BJ0lgADABTdEET02VCpitlv3FlKxWD4?=
+ =?us-ascii?Q?pn7dzd5ojr++bFO1doPINL5S2otafHj4f5DkUDpMYrf0hjcRwDj61DAgZAMn?=
+ =?us-ascii?Q?3SMdwRVi+ZkVMt98JCWC9eVWZMESKrDSF4eKSHTT6w7rBFpdrm1DR9ECZR28?=
+ =?us-ascii?Q?RfqAFmHyzawW0fUtwulGPdGXlR9mHofht0IT5Vy2+gRzXjML2RH/q+6iTVOH?=
+ =?us-ascii?Q?F3ctvA/FmBzoTdXhDIqOdzg0FErgLy2/2DA1bbhod1wmq2x1yzzJG6+qL2dd?=
+ =?us-ascii?Q?SuyX4eVzk+xAmmwW0hf31iIRBlkhrfFx1iXAAk1XBr0NLYHC/FVMRxUr6JF2?=
+ =?us-ascii?Q?FLuV018LvYs7kXZ4F9wOShOscbpJi/rCNMH1qNtl/F8k/K9JL6vsligHeU51?=
+ =?us-ascii?Q?6xjZN1Sg6GWwt/bVVzSckWJiJYvU2ruzrugcmGD12EV4Eh6Q7iYjUQjflkCi?=
+ =?us-ascii?Q?Yx9CjNwhByDpoZaMsL/hLCFazOr8LiA40oE96vRvNyxuDTnf81TAbqZsOdAw?=
+ =?us-ascii?Q?f+cSSTwAnNt/c17fX61guV6bK2PDnEDiznr9mYP32x8GghxDyAP01DQtyrvN?=
+ =?us-ascii?Q?LZCE5GQV+2ZJxvUfKcmSKGpRGst4d+BL8kqOeuBP5SN+3MmrgeLswiWcJVEP?=
+ =?us-ascii?Q?Fh8QaTVG8DVWkrEeggJB/50xdpK4WXHSWjGZi6BwxFSIPVXlO5mk8n8rMfUW?=
+ =?us-ascii?Q?yafe+Pjg0yvsD1fDobsb1AGs+koEroOJNO9qwsz+onFioU4GZI61PyVFCHk4?=
+ =?us-ascii?Q?N+jLd1g4A1/t8i+UTfs8kKDRqN04Prj/BddTT+kiSjJfgGB9PmWMBeFxtybq?=
+ =?us-ascii?Q?Ai0IZOAio+z2nNhNDaQ=3D?=
+X-Forefront-Antispam-Report:
+	CIP:195.60.68.100;CTRY:SE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.axis.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(376014)(36860700013);DIR:OUT;SFP:1101;
+X-OriginatorOrg: axis.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Oct 2025 13:35:54.7567
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ae2e1c39-0b76-4127-c4fe-08de0801f00f
+X-MS-Exchange-CrossTenant-Id: 78703d3c-b907-432f-b066-88f7af9ca3af
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=78703d3c-b907-432f-b066-88f7af9ca3af;Ip=[195.60.68.100];Helo=[mail.axis.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DU6PEPF0000B61D.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSKPR02MB11458
 
+On Tue, Aug 05, 2025 at 11:33 +0200 Waqar Hameed <waqar.hameed@axis.com> wrote:
 
---BLbc6UWlg+rUR8Vl
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> When `devm_add_action_or_reset()` fails, it is due to a failed memory
+> allocation and will thus return `-ENOMEM`. `dev_err_probe()` doesn't do
+> anything when error is `-ENOMEM`. Therefore, remove the useless call to
+> `dev_err_probe()` when `devm_add_action_or_reset()` fails, and just
+> return the value instead.
 
-The following changes since commit cbf33b8e0b360f667b17106c15d9e2aac77a76a1:
-
-  Merge tag 'bpf-fixes' of git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf (2025-10-03 19:38:19 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.18-rc1-part2
-
-for you to fetch changes up to eb4faf6343889fcd7edba3deeae49fc5a06531fd:
-
-  dt-bindings: i2c: hisilicon,hix5hd2: convert to DT schema (2025-10-09 13:20:57 +0200)
-
-----------------------------------------------------------------
-i2c-for-6.18-rc1-part2
-
-- Second part of rtl9300 updates since dependencies are in now
-  - general cleanups, implemented block read/write support, added RTL9310 support
-- DT schema conversion of hix5hd2 binding
-- namespace cleanup for i2c-algo-pca
-- minor simplification for mt65xx
-
-----------------------------------------------------------------
-Byungchul Park (1):
-      i2c: rename wait_for_completion callback to wait_for_completion_cb
-
-Harshal Gohel (1):
-      i2c: rtl9300: Implement I2C block read and write
-
-Jonas Jelonek (9):
-      i2c: rtl9300: use regmap fields and API for registers
-      dt-bindings: i2c: realtek,rtl9301-i2c: fix wording and typos
-      i2c: rtl9300: rename internal sda_pin to sda_num
-      i2c: rtl9300: move setting SCL frequency to config_io
-      i2c: rtl9300: do not set read mode on every transfer
-      i2c: rtl9300: separate xfer configuration and execution
-      i2c: rtl9300: use scoped guard instead of explicit lock/unlock
-      dt-bindings: i2c: realtek,rtl9301-i2c: extend for RTL9310 support
-      i2c: rtl9300: add support for RTL9310 I2C controller
-
-Kael D'Alcamo (1):
-      dt-bindings: i2c: hisilicon,hix5hd2: convert to DT schema
-
-Wolfram Sang (2):
-      Merge tag 'i2c-host-6.18-pt2' of git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux into i2c/for-mergewindow
-      i2c: mt65xx: convert set_speed function to void
-
-
-with much appreciated quality assurance from
-----------------------------------------------------------------
-AngeloGioacchino Del Regno (1):
-      (Rev.) i2c: mt65xx: convert set_speed function to void
-
-Chris Packham (18):
-      (Rev.) i2c: rtl9300: add support for RTL9310 I2C controller
-      (Rev.) dt-bindings: i2c: realtek,rtl9301-i2c: extend for RTL9310 support
-      (Rev.) i2c: rtl9300: use scoped guard instead of explicit lock/unlock
-      (Test) i2c: rtl9300: use scoped guard instead of explicit lock/unlock
-      (Rev.) i2c: rtl9300: separate xfer configuration and execution
-      (Test) i2c: rtl9300: separate xfer configuration and execution
-      (Rev.) i2c: rtl9300: do not set read mode on every transfer
-      (Test) i2c: rtl9300: do not set read mode on every transfer
-      (Rev.) i2c: rtl9300: move setting SCL frequency to config_io
-      (Test) i2c: rtl9300: move setting SCL frequency to config_io
-      (Rev.) i2c: rtl9300: rename internal sda_pin to sda_num
-      (Test) i2c: rtl9300: rename internal sda_pin to sda_num
-      (Rev.) dt-bindings: i2c: realtek,rtl9301-i2c: fix wording and typos
-      (Test) dt-bindings: i2c: realtek,rtl9301-i2c: fix wording and typos
-      (Rev.) i2c: rtl9300: use regmap fields and API for registers
-      (Test) i2c: rtl9300: use regmap fields and API for registers
-      (Rev.) i2c: rtl9300: Implement I2C block read and write
-      (Test) i2c: rtl9300: Implement I2C block read and write
-
-Jonas Jelonek (2):
-      (Rev.) i2c: rtl9300: Implement I2C block read and write
-      (Test) i2c: rtl9300: Implement I2C block read and write
-
-Krzysztof Kozlowski (1):
-      (Rev.) dt-bindings: i2c: hisilicon,hix5hd2: convert to DT schema
-
-Markus Stockhausen (9):
-      (Test) i2c: rtl9300: add support for RTL9310 I2C controller
-      (Test) dt-bindings: i2c: realtek,rtl9301-i2c: extend for RTL9310 support
-      (Test) i2c: rtl9300: use scoped guard instead of explicit lock/unlock
-      (Test) i2c: rtl9300: separate xfer configuration and execution
-      (Test) i2c: rtl9300: do not set read mode on every transfer
-      (Test) i2c: rtl9300: move setting SCL frequency to config_io
-      (Test) i2c: rtl9300: rename internal sda_pin to sda_num
-      (Test) dt-bindings: i2c: realtek,rtl9301-i2c: fix wording and typos
-      (Test) i2c: rtl9300: use regmap fields and API for registers
-
-Rob Herring (Arm) (2):
-      (Rev.) dt-bindings: i2c: realtek,rtl9301-i2c: extend for RTL9310 support
-      (Rev.) dt-bindings: i2c: realtek,rtl9301-i2c: fix wording and typos
-
-Sven Eckelmann (6):
-      (Test) i2c: rtl9300: add support for RTL9310 I2C controller
-      (Test) i2c: rtl9300: separate xfer configuration and execution
-      (Test) i2c: rtl9300: do not set read mode on every transfer
-      (Test) i2c: rtl9300: move setting SCL frequency to config_io
-      (Test) i2c: rtl9300: rename internal sda_pin to sda_num
-      (Test) i2c: rtl9300: use regmap fields and API for registers
-
- .../bindings/i2c/hisilicon,hix5hd2-i2c.yaml        |  51 +++
- .../devicetree/bindings/i2c/i2c-hix5hd2.txt        |  24 --
- .../bindings/i2c/realtek,rtl9301-i2c.yaml          |  45 +-
- drivers/i2c/algos/i2c-algo-pca.c                   |   2 +-
- drivers/i2c/busses/i2c-mt65xx.c                    |  11 +-
- drivers/i2c/busses/i2c-pca-isa.c                   |   2 +-
- drivers/i2c/busses/i2c-pca-platform.c              |   2 +-
- drivers/i2c/busses/i2c-rtl9300.c                   | 459 +++++++++++++--------
- include/linux/i2c-algo-pca.h                       |   2 +-
- 9 files changed, 386 insertions(+), 212 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/i2c/hisilicon,hix5hd2-i2c.yaml
- delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-hix5hd2.txt
-
---BLbc6UWlg+rUR8Vl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmjow0IACgkQFA3kzBSg
-Kba1KBAArLzjrU9OprjmQgyHZ/X4/shMbV07v3G4RxBMDhklDX81QAEK5RlPSQyb
-J0fH9IVxQ9sYS4FTsFSq4+CyLwkXLq3AEXIDY1RPzbSnNj7tbtCRykYxpZt4N7sL
-mGiaDeCYoUOjw9X9rPhRbVGErjOccJZLU+3cMlZ5kc8NT4j5+SM1Lc8GLHZ2dsAU
-2C5gfABjnRTQl+R0wshLBr2Zqus3CP/9K0Y7RXJ1bs8yiWXys/hlHHXMPT5MpeqQ
-KCorkmPKAIq9+EByZGGCioHvzF3UXAp/whLYa1IwJz1j6+vgH2FAMs0c6zF1fIrb
-0QY7vgH3OOzJ9TM1gEcxsmdgfB8VgOdJZNPYv6IE5y0DqneH0rSj17SNjsIHJVp7
-/H5gI9yQ4jzOQvgdyZ0EZlLrP30KvH5AIZszN+9SIw/5MqcxUpWhipTZdNLqQFos
-XKon9KUj7+jKW/b/87aJt96mteugp2aypn/W7PG4gU1qyu2PiDqxoDrtjYfeue9K
-TEdC49VdhnXhR8KcO0ZLfkoyKqjKDfwClDkn3usgCBTTTGxxfxTdon7EUzX7iHYT
-8yfGXj2500D0+PXu3Zkyg4u4CAJox+EVtgCGKypivS1O1quQiDgZVypGyQuNHOXB
-wsmQZQAaMj1UkCZnmWc6q21J5+FG9L27yx+Eq4zouBJTs2dpgWk=
-=W5K+
------END PGP SIGNATURE-----
-
---BLbc6UWlg+rUR8Vl--
+Friendly ping incoming!
 
