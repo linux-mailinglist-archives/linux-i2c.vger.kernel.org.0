@@ -1,76 +1,76 @@
-Return-Path: <linux-i2c+bounces-13448-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13449-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B282BCF121
-	for <lists+linux-i2c@lfdr.de>; Sat, 11 Oct 2025 09:31:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6DC88BCF127
+	for <lists+linux-i2c@lfdr.de>; Sat, 11 Oct 2025 09:31:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DD9FD40392F
-	for <lists+linux-i2c@lfdr.de>; Sat, 11 Oct 2025 07:31:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B952154009A
+	for <lists+linux-i2c@lfdr.de>; Sat, 11 Oct 2025 07:31:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9360122259B;
-	Sat, 11 Oct 2025 07:31:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89DED21CC4B;
+	Sat, 11 Oct 2025 07:31:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="EXXBkzLi"
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="P37NdUa/"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64E1720B21E
-	for <linux-i2c@vger.kernel.org>; Sat, 11 Oct 2025 07:31:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C84ED212564
+	for <linux-i2c@vger.kernel.org>; Sat, 11 Oct 2025 07:31:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760167880; cv=none; b=A42EtT9jHgAO++uR0UWSRdBEJ0wHsX6SK3UuvH0dQKC9SJ7glpnV4lUkRXYodkmkV850Alhl4lriYzlUEno97t+N4127m1LvXfCzsUjZVLze91rAGv5yPpTrTj9shae50my1KVi/S2KtuTndu0tUc4x0rCLk4nsP9Hbn/Didr5Y=
+	t=1760167894; cv=none; b=n961e08jsYWfDfj5AXUmmkSGWRRFj0Ph4Mui1sxtDqIy3bFRqjQt3/ZsndO/4vxA0qkQtxvHLDsYr9PQw7XUzZkpntFYKMzZCktE6MQdbRQHECNfHO7laz9tZUNy5l6fDWNAkEHwoC8YnxHrIOEN8lTQamcFqFV8DkGJBcBos6M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760167880; c=relaxed/simple;
-	bh=kwAxQUlN802lmBDor2RBzQNdUjw7pj1/rC6fhdOuhLw=;
-	h=From:To:Cc:Subject:Date:Message-Id; b=WVzeRLdt7+Hq+b1GCvjUJqVAqOH/ybYiWz9+53xJvK2Ur4mjZxsuDwJRg1YoJn07EyMDmwjlmFMf+aWRSL0JSocT6mvuZ1NH5gvI/ANk1JUBGNuYsnSvxlnrcshYbSOosrd/6harbd8NGnc+autGUxaUPXeprFk06ubq1tV+QFU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=EXXBkzLi; arc=none smtp.client-ip=209.85.216.42
+	s=arc-20240116; t=1760167894; c=relaxed/simple;
+	bh=t10ZSanIx3llENM7HSeecEJVpDcZYb6Uf+MM/xzfZ1E=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=W7CM4DkY7EgV3mxubbI5671sXM4XrPzqCgs+V7qaT5iCWFIt2toQ425EuAkiKD6vfIAY4vLJWl1t1qwXK9sAgxj9gGbRg/NjIRMxPWnRHhYzwyaYAtxOkJq/YVqwcJLDnvMXJpjVp8AiLhpLVg+BfZZ+XUi2ERagRuDicx27Bog=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=P37NdUa/; arc=none smtp.client-ip=209.85.214.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-32eb45ab7a0so2930965a91.0
-        for <linux-i2c@vger.kernel.org>; Sat, 11 Oct 2025 00:31:18 -0700 (PDT)
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-28e7cd34047so22019175ad.2
+        for <linux-i2c@vger.kernel.org>; Sat, 11 Oct 2025 00:31:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1760167877; x=1760772677; darn=vger.kernel.org;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AdMBJd+0NdYJNozjHx6sefiMrrVAOso8TPvp+4QY8d8=;
-        b=EXXBkzLiItCn/8H4/aF5XReRgsH98jIxoNJvDeSrw/gmZIGfkAn92wsKGGjGRbP8dv
-         24U56IQ8OensnyDJQV8lFU6znzlrSOV7EFcV64VfiYYUxQhj0nOJIY7hXE+ReJAoNWMA
-         v8eMhTsZycisKdJMtOmjQ3B45D4DjSPi/xWbH8VC7zg+loxe6KTzIzNcP08iKW47NNWo
-         0PhSPeq/BPlXaOUBlER63jmhE37KpxBzvAvFktoesYwt/rcUVWcXuQYRlJsZKhAquEox
-         2mVcHBvXEmiE3dMVKuHM5yq1lkYJELc334/sNdI1V4qD/RAoXxtifasJk9KNEGcHly2C
-         sTjA==
+        d=bytedance.com; s=google; t=1760167892; x=1760772692; darn=vger.kernel.org;
+        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=5u349rpF9gPPQypTYTXfVoHAsG0CPWqoBlop1wLg5P0=;
+        b=P37NdUa/loubMzF8wZvumPKtHv5RWWdbyrb3aOY1pXoyCEDkf/O0qB7vibivrzKjqh
+         XMxHs5+j3shY1hBRa/4IoeiPpXnrvcv7eQ7WXxHgwFpMhY6Qm2+S6xpbxJ62BCqp9SYx
+         wFIfgKKXzlI9t6OcbrPYgGq3uwyXYdrSK6CFYXDHQ3EO0V/sWEdZ5Cx3bopb8TmCt3gr
+         XEQ/5YCOPrt7iEsTeVgJJEobFgv+on/XnlbbnfJi4HxYC2ucH+eoGK0NoHS8HcnUYzPu
+         Ixg8KiTAWhHHCmXCafYLnFbs169Xso4YRRRKNfi1DbFrfBmI3C8AzlflruMmIcdadqcm
+         NSEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760167877; x=1760772677;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AdMBJd+0NdYJNozjHx6sefiMrrVAOso8TPvp+4QY8d8=;
-        b=FYti8GZzjZA75OiGp+gRvyqrdG5HrC2nzHkC9XbSLrqslO96L0Xe7wePpO9+wogyDz
-         6GmeTNT302S3Jd76lgp1wbo2hIOjJDEdKWk2CZlJNi2bBtIU792C7kGINToYilSlbvAh
-         4TpOf7QjN9huaoKOkTIUzUCNiII2d9yt2aaaXJnj8PwqSGFMd/lwl01IEdKLNgBPB4DR
-         melwA43+dXEGDifcbreLy8a4yarWzv2mLXMbstUB0gd6OhoSXZaecMbGIYUTa1OUGwGm
-         cnq3QzheMw3D/HzvN1togCEvDMUJ8gjcV7U433fn/2uvrtF8lhV96AV4bgKWkDNdAvS7
-         k/FQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWUoUok7/RzjJOoh2pGQkzzQiuvXvZCvwpFtPX/OfPTey86KQAZ7zePiyLvtwsMoIBHlAYvton7dgQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YygljWdCQHd4q7haBT1CcJvWBz3GVZFBMFzWIqkYRqpdbneiBvA
-	tUiWExiV+uOae2Fys/m4UhfQJU15HH8fh9bZaGTYuHHHdaj4hlLPGjplAAYXkUa0p7Y=
-X-Gm-Gg: ASbGnctcvf3nxUJnSvpHqW5z3umM5kgofO0VhfkG+X3m5DQ2cMAacFTZ0k7smMxZOb5
-	DisLeRUs3jtmtTEOXCHxguWO+w0KlAaFzCxWAplTC7B/2LCKB3CGaJHyUTGpHBqkqACw0otuuS3
-	x5uz2ocmVza6qUPvhJ9k/v1KDLv7k097XRL6KbNDmr8Utal5jrSACw+Qcz5ZJA8s/d7QcUXmiv+
-	Bqy0zQXC3/NpW2Sy4FQ/L/1GycANxw+6H6m8L6u33jFMqnySR+mTcVy4ogY8VJMFEfBbAMmvcob
-	JiD0FtO6s5Lrpi+m3pH/VoG/Sz/4tGkcYMpwGhW26uTttBYurmSevm2DdoAUOCZMldAhZcdAMpR
-	Jk3a4Zjnrs9Xvtk8nX1icANedKWdLWxQwU1es/o55nPmhD6hk4k0htJv735Kfl3kXXJvEJyWFPO
-	gao7HSV3c=
-X-Google-Smtp-Source: AGHT+IHloA5eyjZBPMsfpezlHSFF1i9QnIBTBalmJfNg5htGoGlyWbYAhy8txTo6KnppNskqzm7pww==
-X-Received: by 2002:a17:902:f641:b0:27e:edd9:576e with SMTP id d9443c01a7336-290273ef199mr173973045ad.30.1760167877504;
-        Sat, 11 Oct 2025 00:31:17 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1760167892; x=1760772692;
+        h=references:in-reply-to:message-id:date:subject:cc:to:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5u349rpF9gPPQypTYTXfVoHAsG0CPWqoBlop1wLg5P0=;
+        b=D8Nm7G/XPtEiujM3sxp4CJtIhk5WkyFPi3PiKBmnQm63wPgwXFkbndrxGnO4h82Qy6
+         z6WG/DTaqjm4PHOXLh8KQXa0iqI8Q0gzR822sQo/U9Gf4JURTUfU2gP5A9mQO5YzTzMb
+         grPceaTmy0bvG6lE1ixaBYO8xSVsZEn2VFotICc9Iv7oBZbWowIk7WbXV68RqHol9oEt
+         twC43JabchCkgfR1qZf21hO/8uG5HVt6jy4pd+PHhSJBUaQ8nooOyGn/IQGuVyxLkGjq
+         bl0m38fzC4Uc+PPIkz71Dm+iMU72BTDmpRN8RfoX+tasR7S7FMas6u3dEIsF/KcXrE3c
+         qKMQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVtR/FIYQNTiCoRFHa82jL/agOImh2Qml25u+IdA7sOjsFsjVq+2M5bc2oFlY9Jlc/PW4x1nbw1Uk8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyGxk+hPFtKpsC1OTO3kuqHkosA626Zwq+XziX1S4u8gSqfZwct
+	5KSxO4MgDv027Lb5XYtO0XeDlLprgX3QZN8axr0S1SPshcIKNBzbGkS7A2niYtLk+nQ=
+X-Gm-Gg: ASbGnctJZ+RTPBAParsyAa1PZKnmPkRzlmB8RM15Vju57yrRb1j1Lf1Rg0867GFE6JA
+	B/m1LzolEOPGmQfIUw9AJWYvvNEUxt7NYlMEHJZPOMwlOiE/SDKOoFWTr8h/1khXFqWi3P2owMT
+	PbSYTa24ug09Z/7mpg+dVHJ0wUtjFLFQdOZe6KYTYT3FrT0wNzBu2P3ooZFnpFq/2qF92kkK0ng
+	sPzTqvKafJEWNbEhhDUXvnjZ6+SI+i4T7Jb9KUEhjIZfsWViD+VLJvdX//RkUNm43XbqRLkvZiY
+	/wCS9X0xZauRSjis2uvz6SiSEWij9J1Y9jSWxDbgntkmQUpdUrZ/TU6R4RC/DIRKJVwaeeG9Nrd
+	crvk4hsx23IPoq7IgTp1q8n6uvF7ol7eQcwzxpWE+gqEd/Ni2ub2O1ncVYcYkq4fiMMzAtH99ir
+	1urk/YA8s=
+X-Google-Smtp-Source: AGHT+IGK/z3Cbwim35BFhBeNnScGxMkgIhE0uJYbIf9/Fg/K7JQibWEf0vK/ujTiUCQI3LxmFDXXYA==
+X-Received: by 2002:a17:902:ce81:b0:288:ea7a:56b5 with SMTP id d9443c01a7336-2902723b882mr207754975ad.15.1760167891936;
+        Sat, 11 Oct 2025 00:31:31 -0700 (PDT)
 Received: from 5CG3510V44-KVS.bytedance.net ([139.177.225.233])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29034e20f8csm77020515ad.49.2025.10.11.00.31.13
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29034e20f8csm77020515ad.49.2025.10.11.00.31.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Oct 2025 00:31:16 -0700 (PDT)
+        Sat, 11 Oct 2025 00:31:31 -0700 (PDT)
 From: Jinhui Guo <guojinhui.liam@bytedance.com>
 To: mika.westerberg@linux.intel.com,
 	andriy.shevchenko@linux.intel.com,
@@ -79,37 +79,70 @@ To: mika.westerberg@linux.intel.com,
 Cc: guojinhui.liam@bytedance.com,
 	linux-i2c@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 0/1] i2c: designware: Fix SMBUS Master interrupts storms 
-Date: Sat, 11 Oct 2025 15:30:56 +0800
-Message-Id: <20251011073057.2959-1-guojinhui.liam@bytedance.com>
+Subject: [PATCH 1/1] i2c: designware: Disable SMBus interrupts to prevent storms from mis-configured firmware
+Date: Sat, 11 Oct 2025 15:30:57 +0800
+Message-Id: <20251011073057.2959-2-guojinhui.liam@bytedance.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20251011073057.2959-1-guojinhui.liam@bytedance.com>
+References: <20251011073057.2959-1-guojinhui.liam@bytedance.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 
-Hi all,
+When probing the I2C master, disable SMBus interrupts to prevent
+storms caused by broken firmware mis-configuring IC_SMBUS=1; the
+handler never services them and a mis-configured SMBUS Master
+extend-clock timeout can flood the CPU.
 
-We hit interrupt storms on the SMBus master extend-clock timeout IRQ
-because broken firmware left IC_SMBUS=1 while the driver IRQ handler
-never services SMBus events.
-
-Since we cannot disable IC_SMBUS directly, mask its interrupts to
-prevent floods and make the driver more robust.
-
-Thanks,
-Jinhui
-
+Signed-off-by: Jinhui Guo <guojinhui.liam@bytedance.com>
 ---
-Jinhui Guo (1):
-  i2c: designware: Disable SMBus interrupts to prevent storms from
-    mis-configured firmware
-
  drivers/i2c/busses/i2c-designware-core.h   |  1 +
  drivers/i2c/busses/i2c-designware-master.c | 11 +++++++++++
  2 files changed, 12 insertions(+)
 
+diff --git a/drivers/i2c/busses/i2c-designware-core.h b/drivers/i2c/busses/i2c-designware-core.h
+index 347843b4f5dd..d1122ff0a1b7 100644
+--- a/drivers/i2c/busses/i2c-designware-core.h
++++ b/drivers/i2c/busses/i2c-designware-core.h
+@@ -78,6 +78,7 @@
+ #define DW_IC_TX_ABRT_SOURCE			0x80
+ #define DW_IC_ENABLE_STATUS			0x9c
+ #define DW_IC_CLR_RESTART_DET			0xa8
++#define DW_IC_SMBUS_INTR_MASK		0xcc
+ #define DW_IC_COMP_PARAM_1			0xf4
+ #define DW_IC_COMP_VERSION			0xf8
+ #define DW_IC_SDA_HOLD_MIN_VERS			0x3131312A /* "111*" == v1.11* */
+diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
+index c7a72c28786c..eeb60536da32 100644
+--- a/drivers/i2c/busses/i2c-designware-master.c
++++ b/drivers/i2c/busses/i2c-designware-master.c
+@@ -997,6 +997,11 @@ static int i2c_dw_init_recovery_info(struct dw_i2c_dev *dev)
+ 	return 0;
+ }
+ 
++static inline void i2c_dw_disable_smbus_intr(struct dw_i2c_dev *dev)
++{
++	regmap_write(dev->map, DW_IC_SMBUS_INTR_MASK, 0);
++}
++
+ int i2c_dw_probe_master(struct dw_i2c_dev *dev)
+ {
+ 	struct i2c_adapter *adap = &dev->adapter;
+@@ -1063,6 +1068,12 @@ int i2c_dw_probe_master(struct dw_i2c_dev *dev)
+ 		return ret;
+ 
+ 	__i2c_dw_write_intr_mask(dev, 0);
++	/*
++	 * Mask SMBus interrupts to block storms from broken
++	 * firmware that leaves IC_SMBUS=1; the handler never
++	 * services them.
++	 */
++	i2c_dw_disable_smbus_intr(dev);
+ 	i2c_dw_release_lock(dev);
+ 
+ 	if (!(dev->flags & ACCESS_POLLING)) {
 -- 
 2.20.1
 
