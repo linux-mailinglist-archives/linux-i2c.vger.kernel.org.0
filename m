@@ -1,116 +1,122 @@
-Return-Path: <linux-i2c+bounces-13451-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13452-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8C8BBCF3A4
-	for <lists+linux-i2c@lfdr.de>; Sat, 11 Oct 2025 12:33:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D1F0BCF554
+	for <lists+linux-i2c@lfdr.de>; Sat, 11 Oct 2025 14:33:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 7BC8D4E93C7
-	for <lists+linux-i2c@lfdr.de>; Sat, 11 Oct 2025 10:33:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B9FDA3A3C71
+	for <lists+linux-i2c@lfdr.de>; Sat, 11 Oct 2025 12:33:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3004525B2F4;
-	Sat, 11 Oct 2025 10:33:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53A4A2773EA;
+	Sat, 11 Oct 2025 12:33:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="CF+MQd1T"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ihbjUS3f"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6105F25C70D
-	for <linux-i2c@vger.kernel.org>; Sat, 11 Oct 2025 10:33:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 874EB2797B2
+	for <linux-i2c@vger.kernel.org>; Sat, 11 Oct 2025 12:33:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760178816; cv=none; b=W+rLIkE3W2pmhYmLL/ZDj4usoRbnayXB8u2pSMhDAIUyBbOgMNVoqeMG7Eq781ByhDc0co2bHe3NpL8OaUL+A6jcCeE6x3+g0V8XE04Ol1pE+XbcHMISc+wLpuuEjTiNY5swdyk8JdAoEPEoVy6aXqeRMooc8InCyKPpmXleNN8=
+	t=1760185998; cv=none; b=HYEc0AmDbD8mieJrMjNlJR1ST+60xtPsbjwfuKKAYVWMbT3P8s70QrsXGyycinc5IlCk6Fm3IhQoLJVPVUTDxoUV2x5gswThiIqpCmQygJPjbJQ+ryLas7vN5Hj+MUijmcTvjkpGDRwDrtx2Pq+x9Rd5bZHlOS4oe+zeMKPok1g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760178816; c=relaxed/simple;
-	bh=fg1RHWnvUmDjEaE8LFeiOl9ZjRz5QsRWAgF5vPcp7YU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RHm0Wmhm8znXM7bF08svFxmZnUorQmufKrutsFdnJQa26MT4M9achay3vcifUEgf46mZ7TsY6PEQEtQA00z2Xaim0/v0OOUDnMQAbmC2+8QWxofNQJJM9yJmfJUc+Z93lxBA2PAbq2h31bPQkORYX/dAooqUKTAyE3sWTrZzq4Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=CF+MQd1T; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=IzXK
-	iYvrkWAgPpvxSlT4Q9PfKMHpibeOyXlzqdrlK58=; b=CF+MQd1TOlKAmvqdXEGh
-	BZyr+Ep+Yw/atPLlW3M49+fPDKCGBjCaT92JzFKYJJw7tuHMXZ/g2JmZbAHH7d5Q
-	SXfUV53EYg3UpmHC5it7fqmoAO6xzOwDWkKOUYGqTkjC6keM0lJo5e+dWK2KBGYD
-	YZGr4JdhwMVTweJHds0V8HXHhXEcJq6g/uLo0rOAhROqZ/xrFw9FtKpq3yO4HWWq
-	61wrGtr4XexMT4Zw68YhRvawVWHP+yqKPDn6sLXqezcDfE/cj5ipeAwp61BoBEs6
-	gT22KQM28tCs+O9xtk4lfF269gf48fP9O/RAOC+3OU7EJzjdPHobzOOuALHQ/wOn
-	1w==
-Received: (qmail 1793806 invoked from network); 11 Oct 2025 12:33:26 +0200
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 11 Oct 2025 12:33:26 +0200
-X-UD-Smtp-Session: l3s3148p1@xw51kN9Avowujntw
-Date: Sat, 11 Oct 2025 12:33:25 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Cc: Heiner Kallweit <hkallweit1@gmail.com>,
-	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-	Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>,
-	linux-arm-msm <linux-arm-msm@vger.kernel.org>
-Subject: Re: [PATCH] i2c: i2c-boardinfo: Annotate code used in init phase only
-Message-ID: <aOoydT_I7d3khXuh@ninjato>
-References: <8d09aa09-b656-4b69-b01f-3ea40418b7ff@gmail.com>
- <29ec0082-4dd4-4120-acd2-44b35b4b9487@oss.qualcomm.com>
+	s=arc-20240116; t=1760185998; c=relaxed/simple;
+	bh=aNcO3Zq+hsS2PiEH91c4KDEccsdjSLuz5yhz3qgS3Io=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=npDDFfEzF+2Gs4yGiD7dolJEOZL7qy6HIBnkx2C75YmJEFTY7rdudtSKGknjbnc9VYkfbU8wfIyWc44OeAmD4c8Wkr6/Gu/TW1fg0dHnq25QLBS/8wdl/DFYMwo5Na2bBbFZMvzjsBWQ7bQfKeVSIBEG2tLMM4sKaSbLtaIfu5Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ihbjUS3f; arc=none smtp.client-ip=209.85.208.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-6394b4ff908so5685824a12.3
+        for <linux-i2c@vger.kernel.org>; Sat, 11 Oct 2025 05:33:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1760185990; x=1760790790; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=roY7lFd25qLtD5Z/2Zew3Etpjy3Jp+ZltGeQ+K85E/Q=;
+        b=ihbjUS3fwlZIepammBb4hq9mbTBTscjz5xLLzrVLYubdadc+W7EijkmDj3Zo1CWOgc
+         sMpTCK9ReD/H28RkqfL8FdExDapqCMt4oB/wvl0+ovJ4ammfiXS/le4Aj8NIuLMmUcYA
+         D4E8dDl5WnV+g3pCoDEaXUvAhkUlEtTu2RUDtHV/oY/Bna+oCV2XVL05N6pjn85H4wbH
+         KIoZcyZgi9eH5iN/O9lcwc+yRtVcvYA04PAX0VoMIHJ9Hswwh617581nR6bEunvk1WIS
+         xt5UxWvP/b0Wnr/zGfhrKB8nODxr65rQr2PYKeJvM0EVousD+s80rpuoOu/uTkqZ/d5s
+         JOIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760185990; x=1760790790;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=roY7lFd25qLtD5Z/2Zew3Etpjy3Jp+ZltGeQ+K85E/Q=;
+        b=G4tXXi899m52AG9BiC+TJQgeQEpsVPF+KFddqwUC4GFfoDPz1Hj8K0fcSE2xpfR6QI
+         +7N9Lt4K59In7IceS+lmQ1C3C8dSiziaZ7CHRZyCO70qrg6ZJepHQrOCOso4qcfW03om
+         OgbQrtmXygi5ikKj5bdxPkt9n8CgHusQ4cDiQcSsJaY31G709yyCk0Tv5Z4hefq3uNJl
+         KJXRsXkS0gcuIcqFtS7hBplLJguM+Nm9RwHXHkBRpi2R+XobE/EVqzJ174OPOulGgaX5
+         UXp1Nn0y7xZxsWDG7j3BPTlCAS/oV5vfEIKHqaQ/PLf95sOiH7vJuGdmatlRKmbBeOMp
+         64KQ==
+X-Gm-Message-State: AOJu0Yz+RanNRadPeXS/oC88KCMSQCKvcsRm6QPpCS2b4OHTvcp6uj7c
+	ddyq9106W6xKJ4H6i4u36M2spAQAM+TuZCO+Is0fgrneSiSiHK8LSBUD
+X-Gm-Gg: ASbGncsmQhYVcGqk7yzhTz0WbRccSh+xu3BctOn3zueHPGcjnkukFWs5SxWYNOvk1ig
+	rS999TkFgZ+wIJ6kRp20IbafPYsNjSPwSkaxVAUHO+hkZrx4Lj/iwQYtcPCZx1Rh1qNa33BIFht
+	blBYgLeuwz1Eb4lrIo4jAicwa+rWg71ONkWnivz4heWV7wmW9b6gTlETfzFhQMyGDEKOiniksgq
+	QtGUSMwU6zkMHjW00urEGUECbVNJ9XXNjxeq6dKmw7RopJ+iYTlifLt2PUJlDQkJKA9M9c52fVi
+	gHUeBUUBGT0x3TMzufIGtiz6o1kWTtyX79p15U76zvtub3x6K5leXxLmIYSTMu5mVx5eN26m/M7
+	VfuOxKVt/aOBiX1JptLblLrBFiDtOW5suH1o0iSFK1EehHofS1h8AkaFzPLkKA+EcGZGmFJFfBS
+	eQj9mbXEHaHnkUqPJM
+X-Google-Smtp-Source: AGHT+IHgiO5mra16DhJqRKb783PHjAnF9Odte2liv9FlgJK0mal+P51Zcz0bFpRXPeH3FqvARisrtg==
+X-Received: by 2002:a17:907:86a6:b0:b3b:b839:577b with SMTP id a640c23a62f3a-b50a9d59a19mr1638649666b.12.1760185989629;
+        Sat, 11 Oct 2025 05:33:09 -0700 (PDT)
+Received: from DESKTOP-710073H (p4fe03c43.dip0.t-ipconnect.de. [79.224.60.67])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b55d5cad80bsm470651766b.16.2025.10.11.05.33.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Oct 2025 05:33:09 -0700 (PDT)
+From: "Blacktempel (Florian K.)" <florian.blacktempel@gmail.com>
+X-Google-Original-From: "Blacktempel (Florian K.)" <Blacktempel@hotmail.de>
+To: jdelvare@suse.com
+Cc: linux-i2c@vger.kernel.org,
+	"Blacktempel (Florian K.)" <Blacktempel@hotmail.de>
+Subject: [PATCH] i2c: allow ddr5 ram page change with active intel spd write protection
+Date: Sat, 11 Oct 2025 14:31:53 +0200
+Message-ID: <20251011123154.2020-1-Blacktempel@hotmail.de>
+X-Mailer: git-send-email 2.51.0.windows.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="Hffl64dN477NDPMA"
-Content-Disposition: inline
-In-Reply-To: <29ec0082-4dd4-4120-acd2-44b35b4b9487@oss.qualcomm.com>
+Content-Transfer-Encoding: 8bit
 
+SPD of most Intel DDR5 systems is write protected.
+The write protection also includes changing page, via MR11 register, and prevents reading data.
 
---Hffl64dN477NDPMA
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This patch allows page changing with write protection active via a I2C_SMBUS_READ on PROC_CALL.
+That is a, publicly undocumented, Intel specific way to allow page change.
 
-Hi Konrad,
+Link: https://github.com/Blacktempel/RAMSPDToolkit/issues/4
+Link: https://github.com/Blacktempel/RAMSPDToolkit/blob/9b2aeab9b7637be1874520c74c9873e174fe4947/RAMSPDToolkit/SPD/DDR5AccessorBase.cs#L237
+Link: https://github.com/namazso/PawnIO.Modules/pull/19/files#diff-43cf449eaf4b834c447bc85ad039882fbd4fc883be00447908b94eb9cc8a9c36R481
+Signed-off-by: Blacktempel (Florian K.) <Blacktempel@hotmail.de>
+---
+ drivers/i2c/busses/i2c-i801.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Hi, this seems to break booting on Qualcomm X1E80100 Surface Laptop 7
-> (arm64/boot/dts/qcom/x1e80100-microsoft-romulus.dtsi)
->=20
-> gcc-14.2 and clang-20.x
->=20
-> Funnily enough when I build this (albeit on another computer, but also
-> with clang-20.x) and boot another X1E80100-based device (x1-crd.dtsi
-> in the same DT dir), it boots up fine
+diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+index cba992fa6557..9d8eda8b3287 100644
+--- a/drivers/i2c/busses/i2c-i801.c
++++ b/drivers/i2c/busses/i2c-i801.c
+@@ -788,7 +788,7 @@ static int i801_simple_transaction(struct i801_priv *priv, union i2c_smbus_data
+ 		xact = I801_WORD_DATA;
+ 		break;
+ 	case I2C_SMBUS_PROC_CALL:
+-		i801_set_hstadd(priv, addr, I2C_SMBUS_WRITE);
++		i801_set_hstadd(priv, addr, read_write);
+ 		iowrite8(data->word & 0xff, SMBHSTDAT0(priv));
+ 		iowrite8((data->word & 0xff00) >> 8, SMBHSTDAT1(priv));
+ 		iowrite8(hstcmd, SMBHSTCMD(priv));
 
-I reverted the commit now, but please if you can find out more details
-about the boot regression, this would be extremly helpful (maybe
-earlycon helps?).
+base-commit: 0739473694c4878513031006829f1030ec850bc2
+-- 
 
-All the best,
-
-   Wolfram
-
-
---Hffl64dN477NDPMA
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmjqMnEACgkQFA3kzBSg
-Kbaw2Q/+NMYA1vAv5VXCn2cwEops3vP7MMcBcq/8tL1rPCl/BqO54oE/nuoHi885
-HyhW5UaTQfNesDAylGBznyQq9jDTzft2h6k+TJp6YMm27EgHE5ft1oXjpp7ZKXLd
-YZ6cpR2HCmSccg4y5+dkD7sxd6hdH4/mXWnXYd21Hvr+xq+cFOlZDJfgzbqCXyn1
-mfvg4teOjtDbs1YD0n8ixDZPTLS5XWIJF/XCaIotQilXKqLgKU3mBi7gouF9Dp2p
-+lmfMP/oABO1aIX44nMyiXk4gTfS5+NpYBjctBx5q/RluxMmDNX323vy0BZCaXLO
-Icc2UPCQ10/kHRr0ZckHwvCfNl5QehnmPGNCMjVjbP1q16EC7QXFZh08k7HFmC0g
-v67nUvLOOVGvEas2k9XVrKJPM2E8gABYjTXzcMDitfDe6usdR8c5cMDio3SbO+6u
-txI/aQogi7x8jYbYfGyu9H8a6BtS5C48lkZX0B0/tErsdWyhauTCdZkz27bkkosN
-zZSlLVl1FGE4c+xyZrnXaAQr7qfuLQ850kjU5f8XZtn826Y7GKeN2c0yPQEiubx+
-6P1xUKRA5k5FYfg0k2zvFdng2+WQjOYBw2eWwcmWtHIdVSXjy0EXtKopdkkGCOn4
-wh8Qu2aqoMGYj7gKnQMevScBwp7ncAY9K/6AJVY9e5v6kZJFuSY=
-=sWkJ
------END PGP SIGNATURE-----
-
---Hffl64dN477NDPMA--
 
