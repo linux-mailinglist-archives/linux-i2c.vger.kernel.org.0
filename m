@@ -1,36 +1,36 @@
-Return-Path: <linux-i2c+bounces-13460-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13461-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51607BD112A
-	for <lists+linux-i2c@lfdr.de>; Mon, 13 Oct 2025 03:18:47 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF947BD1182
+	for <lists+linux-i2c@lfdr.de>; Mon, 13 Oct 2025 03:29:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 936561894FB4
-	for <lists+linux-i2c@lfdr.de>; Mon, 13 Oct 2025 01:19:10 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 7418C34738E
+	for <lists+linux-i2c@lfdr.de>; Mon, 13 Oct 2025 01:29:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 842C01EDA2B;
-	Mon, 13 Oct 2025 01:18:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 527F8225417;
+	Mon, 13 Oct 2025 01:29:07 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from invmail4.hynix.com (exvmail4.skhynix.com [166.125.252.92])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E48D612B94;
-	Mon, 13 Oct 2025 01:18:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D79934BA2C;
+	Mon, 13 Oct 2025 01:29:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.125.252.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760318322; cv=none; b=Q9aoteCNeoZf8VI+3K2woke2DkGmcDOgt3cNjVwuBnLrr8LAkWaJAKW7LbgTMN8H2JoTdnFr9juD8oAgp1+JUSaAOb09wbQM/7RLNflCg3tBINJV0VXWa4kTIgiOGCeYEAJGvdxILJ1dcqFkdI+Ez0IL6A8jUr9xkgVIdBb5Zy0=
+	t=1760318947; cv=none; b=jHLlFOOvvmbU3tl9Sgd8ZltdJ3279SNotS11xw21knQLp1OYTOF2DhLFWos6WQHVDrplLhP+1itt3dm6E8yek/4cpQAwLZM7v8xTPmCQHacp0k2N//vHBfNZ9NOc3usMLy/qL0WGFwO3OvV5FM63M0GvR5VVIbyEX4XUC9gRPv0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760318322; c=relaxed/simple;
-	bh=NiasNDnL7bI+RWAs1WgZxXifIHYVm8cB4osG/bTqMcU=;
+	s=arc-20240116; t=1760318947; c=relaxed/simple;
+	bh=pF3SfRA5dJFIspkqg6jyyfpkzqFi8q+zCIaQtyNC6+s=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gHSaoesihppeT2n1hGOeCFjJA9l1DOwhA3UjLXJlu+pwTSyXs4yPQnHE3a1UZhPZ/JJ5PDFTTZTXDKlslIGXSVpEETgPHDfUwhkeowRVxx9LnTV21iL3NplYOQ8jZxmGaLwLEFke+g2R8bnxwR4CDEaiehrKqSJRy7yzkM792H0=
+	 Content-Type:Content-Disposition:In-Reply-To; b=Rm/z4HuNUrH2f0B2kqBDUe6r+12cXwaaglrAyQiO6JqXbmVIEu9hpTit23sH9/+JVMk06B+AQAdiYEaKamLaZQoOsLI39pJcUumjQWnyvXSdSysvKjUER/G0OU5VfOVHQTUCIkt0i77CI97gMMPXHittGKqebTc8OF9apttupF4=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com; spf=pass smtp.mailfrom=sk.com; arc=none smtp.client-ip=166.125.252.92
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sk.com
-X-AuditID: a67dfc5b-c45ff70000001609-66-68ec4fde3b26
-Date: Mon, 13 Oct 2025 10:03:21 +0900
+X-AuditID: a67dfc5b-c45ff70000001609-c3-68ec55dc0baf
+Date: Mon, 13 Oct 2025 10:28:55 +0900
 From: Byungchul Park <byungchul@sk.com>
-To: Jonathan Corbet <corbet@lwn.net>
+To: Bagas Sanjaya <bagasdotme@gmail.com>
 Cc: linux-kernel@vger.kernel.org, kernel_team@skhynix.com,
 	torvalds@linux-foundation.org, damien.lemoal@opensource.wdc.com,
 	linux-ide@vger.kernel.org, adilger.kernel@dilger.ca,
@@ -54,7 +54,7 @@ Cc: linux-kernel@vger.kernel.org, kernel_team@skhynix.com,
 	max.byungchul.park@gmail.com, boqun.feng@gmail.com,
 	longman@redhat.com, yunseong.kim@ericsson.com, ysk@kzalloc.com,
 	yeoreum.yun@arm.com, netdev@vger.kernel.org,
-	matthew.brost@intel.com, her0gyugyu@gmail.com,
+	matthew.brost@intel.com, her0gyugyu@gmail.com, corbet@lwn.net,
 	catalin.marinas@arm.com, bp@alien8.de, dave.hansen@linux.intel.com,
 	x86@kernel.org, hpa@zytor.com, luto@kernel.org,
 	sumit.semwal@linaro.org, gustavo@padovan.org,
@@ -91,10 +91,10 @@ Cc: linux-kernel@vger.kernel.org, kernel_team@skhynix.com,
 	rcu@vger.kernel.org, linux-nfs@vger.kernel.org,
 	linux-rt-devel@lists.linux.dev
 Subject: Re: [PATCH v17 28/47] dept: add documentation for dept
-Message-ID: <20251013010321.GA52546@system.software.com>
+Message-ID: <20251013012855.GB52546@system.software.com>
 References: <20251002081247.51255-1-byungchul@sk.com>
  <20251002081247.51255-29-byungchul@sk.com>
- <87ldlssg1b.fsf@trenco.lwn.net>
+ <aN84jKyrE1BumpLj@archie.me>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -103,46 +103,45 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87ldlssg1b.fsf@trenco.lwn.net>
+In-Reply-To: <aN84jKyrE1BumpLj@archie.me>
 User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Sa2xLYRjH8557G7Wjbi+ND+oWwzbiw/NBXOJ2hCAk4hpO7EQb3UjH2Fhi
-	MjVzqy626EzGhtpq6MxmVGbXLLbqZqZmVruobbSJmY6xhTMRvv3yf/75Pc+HhyPVDfRETh99
-	QDJGiwYto6SU/hHX5njXfdJFBGvGQlNiKQX9PzJIGLRUsZBWbyHBfj+RgIttnQxYfRksdFeu
-	BL/3EQ2vgp8QpF90I3DajjPw3lxIQuAuA1nHnTSkZTooePiuhIWWNAsB3hs+CmqzWyj42TYX
-	alqbaPBWm2joa2wjwH7GR4KzeRYkD/YhqCpuJ6Ahz03B85LbNFx/VU9A8JwG3BfO0pAa8CGw
-	+HpZMH0ZoqH6bCkBdRkuGlrO9VBgyrlHQMWdIgKu2/w0DLwtpuH0iTQKkiuCJBRW9rOQ+MWL
-	IGDuoxdHCCcaBhnBfsWOhB8DFiQ8tL5lhSzHQSGpwk8LBbZQIftxNyE4ck8xQoq/kRBamh4z
-	QsDlYoXOxnRCeDPUQQpdBZeQ8Pl9M7V+/FblgkjJoI+VjOELdyl15c5Wan82c9jWueEYMtEp
-	SMFhfj4OfC1lUxA3zJ6rRjmm+Gm4dqCQkZnhZ2CP5zspV8bwU3HPqU0pSMmR/E0NTvVlDndG
-	84uw66UdyaziAWfWlw+zmk9C+HOt+CcfhWsudVIyk3wo9gx1E7KT5DX45hAnxwp+Nu43t5My
-	j+Wn4NIH1YS8C/M+Bb6c2Ir+nDwBP7V5KDPirf9prf9prf+0WYjMRWp9dGyUqDfMD9PFResP
-	h+3eF+VAvz/tRsLPbcWo172xDPEc0o5Q6R591KlpMTYmLqoMYY7UjlFdMHXp1KpIMS5eMu7b
-	aTxokGLKkIajtONV84KHItX8HvGAtFeS9kvGv1OCU0w8hpTT67xosL2D7uppWDp77a5NJx3z
-	NEnqcbdWxJqn561cHlblNoanJ0z9Fv68K/7I69bXmi27paJlCQUvaotylWsUzSXe/MuTR98R
-	DQs8YIiYZDB/WN0b8q48dceVkUtyvjZHLtdsT161In9vZcjMujNPnp6XnnUfrXKyt1zB+JDN
-	wQ4tFaMT54aSxhjxFy7b3xBlAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA02SbUxbZRTHfe7Lc28bO68VtycjfrDuJRJBl+k8cUaXqNkNUXQz2Xxjrt2u
-	tuGlyy3D4WLCWxFxaqlp2dp1MtgKgbJ1BRaRdEEaWbaBDJFRdYV1qQxGkaiwhgLFdsa4Lye/
-	8z///8n5cHhaHWfX8obCIkku1OZrsJJR5mytyBx7Pap/ytWWBdfKehiYn6tm4PhZD4Zq3zEW
-	rp5pRTA+X40gtuikwdy1wsCytY+DuYXfOFjx9yGwD1lp8HSUUfC3N4FhOvAXAls4gqFuqoyB
-	WfcRBI4JJwdTP2yHmfFuFlZCtygYvRNF4I4kKIj0fIpg2Z4H3zS0Y1gcGKShznYVwclwiIZJ
-	b3LY0TeGwN9cjuF3SycNw5FV8PP8LIZLts8xzAwdp+APL4b6cj8LLqcVQUXjWQx2l4+Brhvf
-	cTA0vUTBdbuVglbfazDunmDgiqWBSt6XdJ1bA866CipZJimwtXVTsOBu4aC/8ToD7tL14BwY
-	ZuFms4ODpfAmWKk3Ql/rLQ5CX9kYODMzyG6zITFm/pIRW9rPU6L5p2Usek54kLgYtyJx7nQF
-	LZotyTYQnaXFyvaPxNNXoliMz49g0X+nnhEvNxCxdiBT7HKEOLHywq/cG8+9o3x+v5RvKJbk
-	J1/Yq9QH/GPMgUZ8qDmysxRVsTWI54nwNAmelGuQgmeE9aQ/3olTjIWNJBhcoFOWNGEduf3Z
-	rhqk5GmhKZ18PeG663lIeJH8OOJBKVYJQFxDgbusFioR+bNf+6/+ILl0LMKkmBYySDAxRaV2
-	0kI6aUrwKVkhPEFilpt0ih8WHiM95y9SFqRy3JN23JN2/J+uR3QLSjMUFhdoDfnPZJny9CWF
-	hkNZ+4wFPpT8SPcnS7Xfornh7b1I4JHmfpW+e1qvZrXFppKCXkR4WpOmqq2a1KtV+7UlH0uy
-	8X35YL5k6kXpPKNZo8reLe1VCx9qi6Q8STogyf9NKV6xthS5r+VIl2U245eD0cAjh+/b4jWe
-	em/j6Pe6dFfuznc/CDlWb6jLzlzep9PZSXlr7aPPvt0SfOXwjuwLqzdn9DpHXlLciK17tWkC
-	F9U8MCX4ir2d4qqcPbmzm31HwqNuz+Dtl+UtRp05trVKEX/z8Q7YlgiVNOTKF0+95Qwf5dp0
-	G77QMCa9dlMGLZu0/wCekX8tjQMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Se0xTZxjG853Ldw4N1WNl4VNiiF3IhESxC+o754VptpwlGjRG3dSojRxt
+	lYspysREbcPFimNTlmIojktKkLFGpSioKCmNgkRbLip2g1FuIkTLH1oqWCCjGKP//d7ned4n
+	7x8vTyvc7EJem3JM0qWok5RYxsi8oWVLu7e/1iz3N30LnQY7A0ZbIQueMSOCqfwmDnwTXRyY
+	DAhMfYMYLo0YGDAPFXHg9dSzMFVwBALOVhoumdoQDF8/i2D0Oob2V5PUTBRDQXU4TFRUcfDY
+	0s1AkfMJC5N9Kmj6+yUHV72tLNj+eYDA97SPAuuvQzSU5ZQzUFjcjcE45UOgL3rHQpv9EQuP
+	mh4y0Nfrnhkv5rHgvvACgaHRwsCbcj8DzXl2Cs4O12PIKa+moMHYS8H9a3UU2KydGGpsJhpM
+	k0YMhrceBIHxyxj+9KniVWJ2xxQWrcVWJAbe5yPxtvk/Tsxq+JcTS23Hxaz7XlasqYwRLXdH
+	KNFWdQ6Loy4XJ5bpTbRY3LJV7JoeoMW8zFEs3s72sFvCd8nWJEpJ2nRJF7tuv0xzb9zFHD0f
+	dsJflIn0yDInF4XwRIgjnaWt6COX9DvYIDNCFPE6G2Z1LHxF3O4JOshhwhLSUjPO5SIZTwt1
+	EaT9xsCsMV9YT1zPrLMLcgGIr64EBUMKwYCIK+8G88GYR1oKB2eZFmKIe3qEykX8DEeQK9N8
+	UA4RoonH6cVB/kL4kthrm6lgDxH6Q0hPiRt/uHQBaax0MxeQYP6s1vxZrflTbSmiq5BCm5Ke
+	rNYmxS3TZKRoTyw7kJpsQzP/VnFqcvct9KZtmwMJPFKGyjX1rzQKVp2elpHsQISnlWHyiznD
+	GoU8UZ1xUtKl7tMdT5LSHCiCZ5Th8q/9vyQqhEPqY9IRSToq6T66FB+yUI/iv4l1/Lz3+WKc
+	r1q52bVh400cGZqwrrry6rsHcwM9fHT2zjP31iyKGk+ODhyO+uG3xJxTrvZbe9pr167yDODf
+	O/pdmZl3Vm+3D46N1Pq78CZ9XcJ3BwsSLC0vT1f8NBbZ4di647KlN/59bNaCoUjLH9831/c4
+	U+c2rlj541/quHO7whVKJk2jVsXQujT1/6oVpudrAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA02SbUxTZxTHfe69vffSUHLtSngUh0mNuhGBmWh2si2bn+aNi8ZoFqNmmTfz
+	xjaUYlpXxYWEWtkYvqx0aZFWpULoDNSBpaiM1DR1q0Eo2oFKJtDhqoLQsYzyJhTWsizzy8nv
+	nN/5J+fDYUl5QrKaVWuPiTqtoFHSUkq6631T3sCn46p3JhtWwSOjn4KpeAUFF5vdNFR4aiTw
+	4McmBJGpCgQz8w4SytuXKEhYggzE554wYDUiWPIFEdjCFhLcXiMBky2LNIzd+RuBdThKQ/Wo
+	kYIJ11kE9ucOBkZ/2Q6xSIcElgZfEPB4ehyBK7pIQNT/DYKErRBq61ppmA/dJ6Ha+gDBleFB
+	EkZaktIbHELgu3qKhmfmNhJ6oxnQNzVBQ6f1DA2x8EUC/myhwXnKJ4FLDgsCU30zDbZLHgra
+	f/+JgfDYAgEDNgsBTZ6dEHE9p6DLXEck70tuXc8CR7WJSJYRAqzXOgiYczUy0F0/QIGrbD04
+	Qr0SeHrVzsDC8GZYchZDsOkFA4PfWaltNsTPlJ+n+MbWGwRf/muC5t2X3Yiff2VBfLzBRPLl
+	5mR7Z3yC5E+3HucbusZp/tXUQ5r3TTsp/l4d5qtCeXy7fZDhT9/+jdn93gHpB4dFjdog6go+
+	PCRV+WZ7qKNnFCemHSZUhuozKlEai7ktuPZpQJJiiluPY6HbKMU0txH398+RKVZwb+HO1lmm
+	EklZkruZjcPeP5bFG9xHuOehezkg4wDHb9ai1JKcMyLcc85L/StW4s6a6DKTXC7uXxwlKhGb
+	5Gz8wyKbGqdxb+NIKEanOJNbh/037hJmJLO/lra/lrb/n3YishEp1FpDkaDWbM3XF6pKtOoT
+	+V8UF3lQ8ildpQtVt1C8d3sAcSxSpstUHWMquUQw6EuKAgizpFIhq/p6RCWXHRZKToq64s91
+	X2pEfQBls5QyS7Zjn3hIzh0RjomFonhU1P1nCTZtdRny1e4xXT8y9MRW9RJrMrW33u14PNTd
+	pzj4cYH35Q5DW9Ce2RxOLzDTipx9e3M/c3hItrt4Y9aKPZIN/q41+7e9uTUnbl678EhIK32m
+	adty4ORfm2LpwmT27NkLBuf3gcim46Ur/TUVI4nRn2fOF+Wv+KTh2wtfhWN5fTmGtXczVlUO
+	KSm9SticS+r0wj/gdz/3kAMAAA==
 X-CFilter-Loop: Reflected
 
-On Thu, Oct 02, 2025 at 11:36:16PM -0600, Jonathan Corbet wrote:
-> Byungchul Park <byungchul@sk.com> writes:
-> 
+On Fri, Oct 03, 2025 at 09:44:28AM +0700, Bagas Sanjaya wrote:
+> On Thu, Oct 02, 2025 at 05:12:28PM +0900, Byungchul Park wrote:
 > > This document describes the concept and APIs of dept.
 > >
 > > Signed-off-by: Byungchul Park <byungchul@sk.com>
@@ -153,15 +152,79 @@ On Thu, Oct 02, 2025 at 11:36:16PM -0600, Jonathan Corbet wrote:
 > >  create mode 100644 Documentation/dependency/dept.txt
 > >  create mode 100644 Documentation/dependency/dept_api.txt
 > 
-> As already suggested, this should be in RST; you're already 95% of the
-> way there.  Also, please put it under Documentation/dev-tools; we don't
-> need another top-level directory for this.
+> What about writing dept docs in reST (like the rest of kernel documentation)?
 
-Sure.  I will.  Thanks!
+Sorry for late reply, but sure.  I should and will.  Thank you!
+
+> ---- >8 ----
+> diff --git a/Documentation/dependency/dept.txt b/Documentation/locking/dept.rst
+> similarity index 92%
+> rename from Documentation/dependency/dept.txt
+> rename to Documentation/locking/dept.rst
+> index 5dd358b96734e6..7b90a0d95f0876 100644
+> --- a/Documentation/dependency/dept.txt
+> +++ b/Documentation/locking/dept.rst
+
+However, I'm not sure if dept is about locking.  dept is about general
+waits e.g. wait_for_completion(), wait_event(), and so on, rather than
+just waits involved in typical locking mechanisms e.g. spin lock, mutex,
+and so on.
+
+[snip]
+
+> > +
+> > +   context X            context Y
+> > +
+			     /*
+			      * Acquired A.
+			      */
+> > +                        mutex_lock A
+
+			     /*
+			      * Request something that will be handled
+			      * through e.g. wq, deamon or any its own
+			      * way, and then do 'complete B'.
+			      */
+			     request_xxx_and_complete_B();
+        /*
+	 * The request from
+	 * context Y has been
+	 * done.  So running
+	 * toward 'complete B'.
+	 */
+
+	/*
+	 * Wait for A to be
+	 * released, but will
+	 * never happen.
+	 */
+> > +   mutex_lock A <- DEADLOCK
+			     /*
+			      * Wait for 'complete B' to happen, but
+			      * will never happen.
+			      */
+> > +                        wait_for_complete B <- DEADLOCK
+	/*
+	 * Never reachable.
+	 */
+> > +   complete B
+
+			     /*
+			      * Never reachable.
+			      */
+> > +                        mutex_unlock A
+> > +   mutex_unlock A
+> 
+> Can you explain how DEPT detects deadlock on the second example above (like
+> the first one being described in "How DEPT works" section)?
+
+Sure.  I added the explanation inline above.  Don't hesitate if you have
+any questions.  Thanks.
 
 	Byungchul
 > 
-> Thanks,
+> Confused...
 > 
-> jon
+> --
+> An old man doll... just what I always wanted! - Clara
 
