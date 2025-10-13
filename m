@@ -1,36 +1,36 @@
-Return-Path: <linux-i2c+bounces-13461-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13462-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF947BD1182
-	for <lists+linux-i2c@lfdr.de>; Mon, 13 Oct 2025 03:29:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A069BD11DC
+	for <lists+linux-i2c@lfdr.de>; Mon, 13 Oct 2025 03:52:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 7418C34738E
-	for <lists+linux-i2c@lfdr.de>; Mon, 13 Oct 2025 01:29:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A54933B5A2E
+	for <lists+linux-i2c@lfdr.de>; Mon, 13 Oct 2025 01:52:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 527F8225417;
-	Mon, 13 Oct 2025 01:29:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D1DD26D4DF;
+	Mon, 13 Oct 2025 01:52:02 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from invmail4.hynix.com (exvmail4.skhynix.com [166.125.252.92])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D79934BA2C;
-	Mon, 13 Oct 2025 01:29:01 +0000 (UTC)
+Received: from invmail4.hynix.com (exvmail4.hynix.com [166.125.252.92])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DF9CC8F0;
+	Mon, 13 Oct 2025 01:51:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.125.252.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760318947; cv=none; b=jHLlFOOvvmbU3tl9Sgd8ZltdJ3279SNotS11xw21knQLp1OYTOF2DhLFWos6WQHVDrplLhP+1itt3dm6E8yek/4cpQAwLZM7v8xTPmCQHacp0k2N//vHBfNZ9NOc3usMLy/qL0WGFwO3OvV5FM63M0GvR5VVIbyEX4XUC9gRPv0=
+	t=1760320322; cv=none; b=mwGsGblIRpy9GJjhw8A7h15NCR9BG6psGhRcmt4TTDwyrJSzdPVZK6Ic67NJYOK2i5qqH22rggeFTI0YDgMMAzeMHaiuTJGqo8bRIkd2NCbEd0bsNmw9CSnzB+/Uwhyd2b58PPzvJQ3VLadu9EMHBBFvj9xbqIVmNfGlRTWK1Lc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760318947; c=relaxed/simple;
-	bh=pF3SfRA5dJFIspkqg6jyyfpkzqFi8q+zCIaQtyNC6+s=;
+	s=arc-20240116; t=1760320322; c=relaxed/simple;
+	bh=JLOWSnpx0Jx+4ousG6zxmvmc2gs76d7SbTqSNRPCIXk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Rm/z4HuNUrH2f0B2kqBDUe6r+12cXwaaglrAyQiO6JqXbmVIEu9hpTit23sH9/+JVMk06B+AQAdiYEaKamLaZQoOsLI39pJcUumjQWnyvXSdSysvKjUER/G0OU5VfOVHQTUCIkt0i77CI97gMMPXHittGKqebTc8OF9apttupF4=
+	 Content-Type:Content-Disposition:In-Reply-To; b=cGucXtd10GgY9HiF+9f/By0XIGj+QiCGctEpW74rzBuYtlyGRZc86yEMsWPmk49g4JrJ+CQ8rW/Ew/ju8zPkjjWwrHeVc+wjLX1ZhlXcOz3Ew2B2/fCte7hPzOuDePts1wI/wp8Bt83IsITd6jMtJEkaaO9Cs3jOc7yr5cErrQM=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com; spf=pass smtp.mailfrom=sk.com; arc=none smtp.client-ip=166.125.252.92
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sk.com
-X-AuditID: a67dfc5b-c45ff70000001609-c3-68ec55dc0baf
-Date: Mon, 13 Oct 2025 10:28:55 +0900
+X-AuditID: a67dfc5b-c45ff70000001609-f8-68ec5b3b579e
+Date: Mon, 13 Oct 2025 10:51:49 +0900
 From: Byungchul Park <byungchul@sk.com>
-To: Bagas Sanjaya <bagasdotme@gmail.com>
+To: Mark Brown <broonie@kernel.org>
 Cc: linux-kernel@vger.kernel.org, kernel_team@skhynix.com,
 	torvalds@linux-foundation.org, damien.lemoal@opensource.wdc.com,
 	linux-ide@vger.kernel.org, adilger.kernel@dilger.ca,
@@ -73,14 +73,13 @@ Cc: linux-kernel@vger.kernel.org, kernel_team@skhynix.com,
 	anna@kernel.org, kees@kernel.org, bigeasy@linutronix.de,
 	clrkwllms@kernel.org, mark.rutland@arm.com, ada.coupriediaz@arm.com,
 	kristina.martsenko@arm.com, wangkefeng.wang@huawei.com,
-	broonie@kernel.org, kevin.brodsky@arm.com, dwmw@amazon.co.uk,
-	shakeel.butt@linux.dev, ast@kernel.org, ziy@nvidia.com,
-	yuzhao@google.com, baolin.wang@linux.alibaba.com,
-	usamaarif642@gmail.com, joel.granados@kernel.org,
-	richard.weiyang@gmail.com, geert+renesas@glider.be,
-	tim.c.chen@linux.intel.com, linux@treblig.org,
-	alexander.shishkin@linux.intel.com, lillian@star-ark.net,
-	chenhuacai@kernel.org, francesco@valla.it,
+	kevin.brodsky@arm.com, dwmw@amazon.co.uk, shakeel.butt@linux.dev,
+	ast@kernel.org, ziy@nvidia.com, yuzhao@google.com,
+	baolin.wang@linux.alibaba.com, usamaarif642@gmail.com,
+	joel.granados@kernel.org, richard.weiyang@gmail.com,
+	geert+renesas@glider.be, tim.c.chen@linux.intel.com,
+	linux@treblig.org, alexander.shishkin@linux.intel.com,
+	lillian@star-ark.net, chenhuacai@kernel.org, francesco@valla.it,
 	guoweikang.kernel@gmail.com, link@vivo.com, jpoimboe@kernel.org,
 	masahiroy@kernel.org, brauner@kernel.org,
 	thomas.weissschuh@linutronix.de, oleg@redhat.com, mjguzik@gmail.com,
@@ -90,11 +89,14 @@ Cc: linux-kernel@vger.kernel.org, kernel_team@skhynix.com,
 	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
 	rcu@vger.kernel.org, linux-nfs@vger.kernel.org,
 	linux-rt-devel@lists.linux.dev
-Subject: Re: [PATCH v17 28/47] dept: add documentation for dept
-Message-ID: <20251013012855.GB52546@system.software.com>
+Subject: Re: [PATCH v17 09/47] arm64, dept: add support
+ CONFIG_ARCH_HAS_DEPT_SUPPORT to arm64
+Message-ID: <20251013015149.GC52546@system.software.com>
 References: <20251002081247.51255-1-byungchul@sk.com>
- <20251002081247.51255-29-byungchul@sk.com>
- <aN84jKyrE1BumpLj@archie.me>
+ <20251002081247.51255-10-byungchul@sk.com>
+ <a7f41101-d80a-4cee-ada5-9c591321b1d7@sirena.org.uk>
+ <20251003014641.GF75385@system.software.com>
+ <b69ab7d0-ba5e-4d22-88ef-53e0ebf07869@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -103,128 +105,115 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aN84jKyrE1BumpLj@archie.me>
+In-Reply-To: <b69ab7d0-ba5e-4d22-88ef-53e0ebf07869@sirena.org.uk>
 User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Se0xTZxjG853Ldw4N1WNl4VNiiF3IhESxC+o754VptpwlGjRG3dSojRxt
-	lYspysREbcPFimNTlmIojktKkLFGpSioKCmNgkRbLip2g1FuIkTLH1oqWCCjGKP//d7ned4n
-	7x8vTyvc7EJem3JM0qWok5RYxsi8oWVLu7e/1iz3N30LnQY7A0ZbIQueMSOCqfwmDnwTXRyY
-	DAhMfYMYLo0YGDAPFXHg9dSzMFVwBALOVhoumdoQDF8/i2D0Oob2V5PUTBRDQXU4TFRUcfDY
-	0s1AkfMJC5N9Kmj6+yUHV72tLNj+eYDA97SPAuuvQzSU5ZQzUFjcjcE45UOgL3rHQpv9EQuP
-	mh4y0Nfrnhkv5rHgvvACgaHRwsCbcj8DzXl2Cs4O12PIKa+moMHYS8H9a3UU2KydGGpsJhpM
-	k0YMhrceBIHxyxj+9KniVWJ2xxQWrcVWJAbe5yPxtvk/Tsxq+JcTS23Hxaz7XlasqYwRLXdH
-	KNFWdQ6Loy4XJ5bpTbRY3LJV7JoeoMW8zFEs3s72sFvCd8nWJEpJ2nRJF7tuv0xzb9zFHD0f
-	dsJflIn0yDInF4XwRIgjnaWt6COX9DvYIDNCFPE6G2Z1LHxF3O4JOshhwhLSUjPO5SIZTwt1
-	EaT9xsCsMV9YT1zPrLMLcgGIr64EBUMKwYCIK+8G88GYR1oKB2eZFmKIe3qEykX8DEeQK9N8
-	UA4RoonH6cVB/kL4kthrm6lgDxH6Q0hPiRt/uHQBaax0MxeQYP6s1vxZrflTbSmiq5BCm5Ke
-	rNYmxS3TZKRoTyw7kJpsQzP/VnFqcvct9KZtmwMJPFKGyjX1rzQKVp2elpHsQISnlWHyiznD
-	GoU8UZ1xUtKl7tMdT5LSHCiCZ5Th8q/9vyQqhEPqY9IRSToq6T66FB+yUI/iv4l1/Lz3+WKc
-	r1q52bVh400cGZqwrrry6rsHcwM9fHT2zjP31iyKGk+ODhyO+uG3xJxTrvZbe9pr167yDODf
-	O/pdmZl3Vm+3D46N1Pq78CZ9XcJ3BwsSLC0vT1f8NBbZ4di647KlN/59bNaCoUjLH9831/c4
-	U+c2rlj541/quHO7whVKJk2jVsXQujT1/6oVpudrAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA02SbUxTZxTHfe69vffSUHLtSngUh0mNuhGBmWh2si2bn+aNi8ZoFqNmmTfz
-	xjaUYlpXxYWEWtkYvqx0aZFWpULoDNSBpaiM1DR1q0Eo2oFKJtDhqoLQsYzyJhTWsizzy8nv
-	nN/5J+fDYUl5QrKaVWuPiTqtoFHSUkq6631T3sCn46p3JhtWwSOjn4KpeAUFF5vdNFR4aiTw
-	4McmBJGpCgQz8w4SytuXKEhYggzE554wYDUiWPIFEdjCFhLcXiMBky2LNIzd+RuBdThKQ/Wo
-	kYIJ11kE9ucOBkZ/2Q6xSIcElgZfEPB4ehyBK7pIQNT/DYKErRBq61ppmA/dJ6Ha+gDBleFB
-	EkZaktIbHELgu3qKhmfmNhJ6oxnQNzVBQ6f1DA2x8EUC/myhwXnKJ4FLDgsCU30zDbZLHgra
-	f/+JgfDYAgEDNgsBTZ6dEHE9p6DLXEck70tuXc8CR7WJSJYRAqzXOgiYczUy0F0/QIGrbD04
-	Qr0SeHrVzsDC8GZYchZDsOkFA4PfWaltNsTPlJ+n+MbWGwRf/muC5t2X3Yiff2VBfLzBRPLl
-	5mR7Z3yC5E+3HucbusZp/tXUQ5r3TTsp/l4d5qtCeXy7fZDhT9/+jdn93gHpB4dFjdog6go+
-	PCRV+WZ7qKNnFCemHSZUhuozKlEai7ktuPZpQJJiiluPY6HbKMU0txH398+RKVZwb+HO1lmm
-	EklZkruZjcPeP5bFG9xHuOehezkg4wDHb9ai1JKcMyLcc85L/StW4s6a6DKTXC7uXxwlKhGb
-	5Gz8wyKbGqdxb+NIKEanOJNbh/037hJmJLO/lra/lrb/n3YishEp1FpDkaDWbM3XF6pKtOoT
-	+V8UF3lQ8ildpQtVt1C8d3sAcSxSpstUHWMquUQw6EuKAgizpFIhq/p6RCWXHRZKToq64s91
-	X2pEfQBls5QyS7Zjn3hIzh0RjomFonhU1P1nCTZtdRny1e4xXT8y9MRW9RJrMrW33u14PNTd
-	pzj4cYH35Q5DW9Ce2RxOLzDTipx9e3M/c3hItrt4Y9aKPZIN/q41+7e9uTUnbl678EhIK32m
-	adty4ORfm2LpwmT27NkLBuf3gcim46Ur/TUVI4nRn2fOF+Wv+KTh2wtfhWN5fTmGtXczVlUO
-	KSm9SticS+r0wj/gdz/3kAMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA02SW0hTcRzH+Z/bjqvBaVn9y54mYhdWLXv4QRfqITpRSSA9lKCNPLjltXkp
+	g0Aty8RqLVY5W00jWzqxpmVhg9LsYmiWJidxpl2cS82Yrou3tZNEvX34fS+/38OPJZVt9BJW
+	n5opGFK1ySpGTslH5par18cO69Z0N6ihK+8RBVdqHAy89xciKHgQoGDa9FQGF1+bSHDU5REw
+	1ORDcMmbR4G3eRsE3B4Cpi8mwbXyWgYumdsR1D3tReCy5zPQ6R9lwJbvosFaakJQ5dwVDDJQ
+	kRsBU/0aCNjSwH3OTEF9bp8MnO+aEYx39hPgKB4gwdW9Ekqu9jBQOD2OoPj2XRp6HQEa+vtE
+	GkTjZwSmAV8w5ehiwGOxEtDkHyagxT0mgwtvbAy0TLQQ4LPO0GCeKmSgeroLwVfjOA2lzb2y
+	zWt4x1UH4icnTIhvGh4l+Qn/W4ZvKcf8+VY1/8DilvE2ZxZ//aGX4Mt8fprvHtrIOytPM7zT
+	Z5LxPV0PGf5rW5uMf355ktodtk++IUFI1mcLhtWb9st1w8+2ph/HR6o+fkO56KyyCLEs5tbh
+	z760IhTyB1s9AzKJKS4CB4oGaYkZLhKL4i9S4lAuHL/94aKKkJwlubIwfHOk5o9pPhePp251
+	EhIrOMD5r9y0ZFJyAYQ722vJWWEeflHyiZKY5FZgccZLSEeQXLBohpXGIdwW/OmEmZF4QXDZ
+	o3vPiNnjekNwnztnlhfjx3aRMiLO8l+r5b9Wy79WGyIrkVKfmp2i1SevW6XLSdUfWXUgLcWJ
+	gl9WcWwq9j7ytcc0Io5FqrkKXcOQTklrszNyUhoRZklVqOL8yUGdUpGgzTkqGNLiDVnJQkYj
+	CmMp1SLF2u+HE5RcojZTSBKEdMHwVyXYkCW5KLJKE6Pes9sYGrDENbgOL/si2g5mjix6qb+1
+	feGd4ihrdF+SF3zdnl0VBbUvrafEjl91PTuqj2kil3vslZODZa6zJ6OWNmVfUEfds9hvzPsZ
+	0ywmjnVE168+FPcj651mg/GJe+flMx/Me1vHNGdiXbcr7D0RxfHLDIOio3/LnHBGRWXotJoV
+	pCFD+xupLkPHYQMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Sa0yTZxTHfd47zTrfVdA3EkOsIUYTnRovJ14WjTE+LupM/GA2P2inb2xD
+	KdgqiIkGKN0QF4UmLfMtTIRQkTJhhZl1rIbgRAWRuxChIlopSCteQIJcurcuRr+c/M7z///P
+	cz4cjlTN0As5neGEaDRo9GpGQSn2bjKv2HQwqF1VWq6Ahxl1FIyPZVNQUFnBQLb7Eg2t110I
+	+sezEUxMOUiweMIUzFgbWBib7GUh7G1AYG+zklBRk0HA26pZBkZuvUFgG/AzkD+cQcGo8xcE
+	0qCDheHbOyHUX0tD2BcgoPtdEIHTP0uAv+5nBDP2BLhcXM3AVHMLCfm2VgRXBnwkDFXJYk3D
+	YwTeskwGnuf+SUKH/0voHB9l4J7tPAOhtgICXlYxUJTppaHQYUVgLqlkwF7opsDz5G8W2kam
+	CeizWwlwufdAv3OQgqbcYkLeT3b9sQAc+WZCLkME2H6vJWDSWc7C/ZI+Cpzp8eBo7qDhaZnE
+	wvTAaggXJUGDK8CC76KNguuhFnqrDeEJywUKl1ffILClfYbBFb9VIDz13orwWKmZxJZcub0V
+	HCVxVnUqLm0KMvj9eBeDve+KKNxYLOC85hXYI/lYnHXzEbtv4w+KzUdFvS5FNH79zWGFNnhn
+	R7JZOOV69gqlowuqHBTFCfxaoTkwyEaY4uOFcM4QHWGGXyr09EySEY7mlwhdE14qByk4kr8S
+	K1wNVX4wzeMPCdPXOokIK3kQMlt8dMSk4sNI6GytJv8XvhLuXfJTESb55ULP7LAc4GSWB81y
+	kecofpvgz7IxEY6RP6u7cYfIRUrps7T0WVr6lC5CZDmK1hlSEjU6/bqVpgRtmkF3auWRpEQ3
+	ko/SeWY67y801rGzHvEcUn+h1NaOaFW0JsWUlliPBI5URyvzfhrSqpRHNWmnRWPSIeNJvWiq
+	R7EcpV6g/PaAeFjFH9OcEBNEMVk0flQJLmphOtqyL9aUsrXpReD1j3MPPugrJq5Z58Sp46yY
+	llKzFz/E27/b37X+eKOU/CB0Zvuyf580rrGUakpiPJ6ClwPtF1N72zNvikvtJ2Pchrqzc7o9
+	Umq3MN+2N3D82OVld2tuq3b/s+qIcX9h/AZXxq/DfecHF0m9qu93nauN2xzQPy9r0+5SUyat
+	ZvVy0mjS/Afz91sZkAMAAA==
 X-CFilter-Loop: Reflected
 
-On Fri, Oct 03, 2025 at 09:44:28AM +0700, Bagas Sanjaya wrote:
-> On Thu, Oct 02, 2025 at 05:12:28PM +0900, Byungchul Park wrote:
-> > This document describes the concept and APIs of dept.
-> >
-> > Signed-off-by: Byungchul Park <byungchul@sk.com>
-> > ---
-> >  Documentation/dependency/dept.txt     | 735 ++++++++++++++++++++++++++
-> >  Documentation/dependency/dept_api.txt | 117 ++++
-> >  2 files changed, 852 insertions(+)
-> >  create mode 100644 Documentation/dependency/dept.txt
-> >  create mode 100644 Documentation/dependency/dept_api.txt
+On Fri, Oct 03, 2025 at 12:33:03PM +0100, Mark Brown wrote:
+> On Fri, Oct 03, 2025 at 10:46:41AM +0900, Byungchul Park wrote:
+> > On Thu, Oct 02, 2025 at 12:39:31PM +0100, Mark Brown wrote:
+> > > On Thu, Oct 02, 2025 at 05:12:09PM +0900, Byungchul Park wrote:
+> > > > dept needs to notice every entrance from user to kernel mode to treat
+> > > > every kernel context independently when tracking wait-event dependencies.
+> > > > Roughly, system call and user oriented fault are the cases.
 > 
-> What about writing dept docs in reST (like the rest of kernel documentation)?
-
-Sorry for late reply, but sure.  I should and will.  Thank you!
-
-> ---- >8 ----
-> diff --git a/Documentation/dependency/dept.txt b/Documentation/locking/dept.rst
-> similarity index 92%
-> rename from Documentation/dependency/dept.txt
-> rename to Documentation/locking/dept.rst
-> index 5dd358b96734e6..7b90a0d95f0876 100644
-> --- a/Documentation/dependency/dept.txt
-> +++ b/Documentation/locking/dept.rst
-
-However, I'm not sure if dept is about locking.  dept is about general
-waits e.g. wait_for_completion(), wait_event(), and so on, rather than
-just waits involved in typical locking mechanisms e.g. spin lock, mutex,
-and so on.
-
-[snip]
-
-> > +
-> > +   context X            context Y
-> > +
-			     /*
-			      * Acquired A.
-			      */
-> > +                        mutex_lock A
-
-			     /*
-			      * Request something that will be handled
-			      * through e.g. wq, deamon or any its own
-			      * way, and then do 'complete B'.
-			      */
-			     request_xxx_and_complete_B();
-        /*
-	 * The request from
-	 * context Y has been
-	 * done.  So running
-	 * toward 'complete B'.
-	 */
-
-	/*
-	 * Wait for A to be
-	 * released, but will
-	 * never happen.
-	 */
-> > +   mutex_lock A <- DEADLOCK
-			     /*
-			      * Wait for 'complete B' to happen, but
-			      * will never happen.
-			      */
-> > +                        wait_for_complete B <- DEADLOCK
-	/*
-	 * Never reachable.
-	 */
-> > +   complete B
-
-			     /*
-			      * Never reachable.
-			      */
-> > +                        mutex_unlock A
-> > +   mutex_unlock A
+> > > > Make dept aware of the entrances of arm64 and add support
+> > > > CONFIG_ARCH_HAS_DEPT_SUPPORT to arm64.
 > 
-> Can you explain how DEPT detects deadlock on the second example above (like
-> the first one being described in "How DEPT works" section)?
+> > > The description of what needs to be tracked probably needs some
+> > > tightening up here, it's not clear to me for example why exceptions for
+> > > mops or the vector extensions aren't included here, or what the
+> > > distinction is with error faults like BTI or GCS not being tracked?
+> 
+> > Thanks for the feedback but I'm afraid I don't get you.  Can you explain
+> > in more detail with example?
+> 
+> Your commit log says we need to track every entrance from user mode to
+> kernel mode but the code only adds tracking to syscalls and some memory
+> faults.  The exception types listed above (and some others) also result
+> in entries to the kernel from userspace.
 
-Sure.  I added the explanation inline above.  Don't hesitate if you have
-any questions.  Thanks.
+You're right.  Each kernel mode context needs to be tracked
+independently.  Just for your information, context ID is used for making
+DEPT only track waits and events within each context, preventing
+tracking those across independent contexts to avoid false positives.
+
+Currently, irq, fault, and system calls are covered.  It should be taken
+into account if any other exceptions can include waits and events anyway.
+
+> > JFYI, pairs of wait and its event need to be tracked to see if each
+> > event can be prevented from being reachable by other waits like:
+> 
+> >    context X				context Y
+> > 
+> >    lock L
+> >    ...
+> >    initiate event A context		start toward event A
+> >    ...					...
+> >    wait A // wait for event A and	lock L // wait for unlock L and
+> >           // prevent unlock L		       // prevent event A
+> >    ...					...
+> >    unlock L				unlock L
+> > 					...
+> > 					event A
+> 
+> > I meant things like this need to be tracked.
+> 
+> I don't think that's at all clear from the above context, and the
+> handling for some of the above exception types (eg, the vector
+> extensions) includes taking locks.
+
+A trivial thing to mention, each typical lock pair, lock and unlock, can
+only happen within each independent context, not across different
+contexts.  So the context ID is not necessary for typical locks.
+
+   exception X
+
+   lock A;
+   ...
+   unlock A; // already guarateed to unlock A in the context that lock A
+             // has been acqured in.
+   ...
+   finish exception X and return back to user mode;
+
+But yes, as you concern, we should take into account all the exceptions
+if any can include general waits and events in it, to avoid unnecessary
+false positives.
+
+Thank you!
 
 	Byungchul
-> 
-> Confused...
-> 
-> --
-> An old man doll... just what I always wanted! - Clara
 
