@@ -1,171 +1,293 @@
-Return-Path: <linux-i2c+bounces-13474-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13475-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E2C6BD7919
-	for <lists+linux-i2c@lfdr.de>; Tue, 14 Oct 2025 08:29:04 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id A95C9BD7967
+	for <lists+linux-i2c@lfdr.de>; Tue, 14 Oct 2025 08:39:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 758034E4C00
-	for <lists+linux-i2c@lfdr.de>; Tue, 14 Oct 2025 06:29:02 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E74244E8240
+	for <lists+linux-i2c@lfdr.de>; Tue, 14 Oct 2025 06:39:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B4EF29E110;
-	Tue, 14 Oct 2025 06:29:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=renesas.com header.i=@renesas.com header.b="SPVO3qed"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF2182C3272;
+	Tue, 14 Oct 2025 06:38:52 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from TY3P286CU002.outbound.protection.outlook.com (mail-japaneastazon11010040.outbound.protection.outlook.com [52.101.229.40])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC9942BFC8F
-	for <linux-i2c@vger.kernel.org>; Tue, 14 Oct 2025 06:28:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.229.40
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760423341; cv=fail; b=GntUqE4YDXatx+Re9lJI2nnI4yCvbhRnLcl0S4LaD+MuDGppWFONEfwzycNTsAczzv/XjRbi8y5P1lZV724sGdmafcig+WwsVfJDsDE9MCpUNt0LDGPlw212mtvQr7qmE9r0epo6KFAy71iGc30EP6fhQVBHsCZiVCu/dlFzMpw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760423341; c=relaxed/simple;
-	bh=vg9+gSsspaNTqxqY5E82CYwM320ZVqOrfbCl2PE+mds=;
-	h=Message-ID:From:To:Cc:Subject:Content-Type:Date:MIME-Version; b=nILwFcd9a12qNQ4ImSei2Fz1j5bjh5X/4otoGDYeJlZ/s61iFhO+sSp19yjq7aqLoDmVTcXgGB/z+eldFBSMudEJojcoVG+zYMXKgM9x+tK6BkhmxDflrD9qLk2pb0kBdVRvH8Ldj3FIyglWR6SgjziqmKAuKE06dqWh2PV9gd4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; dkim=pass (1024-bit key) header.d=renesas.com header.i=@renesas.com header.b=SPVO3qed; arc=fail smtp.client-ip=52.101.229.40
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=renesas.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Di2SwVdTVXkFRKypeLDjSgpMZwHRIwYEbyCZvOBf1Xqnf4nQfpF6Wovxs13Bx4xYigRbtNDXde9hue+uCTu/M8eM/FPUws7m0YU8mCXbCeuP7B5PGZa+klgYigL2c+trgvyaHQ8vLKwLkgxIj3wJRGTC6XFYeRr/EHHBslYPZcKET+YhVh3GAk+BQ/QXhPq83NdO0K6EFhSlgWUn/jrmWhhZx7Fy93lsU5q7fsBjE45BStVIYb5VlxL4poN8xWE3VfBv8U0X2JUq/WMI8cUlAosL1VbA4/CyobuX231hWf5hplBjTGOmf8+s99XExdtdd/avQxR0H4q9svNishvRdQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sxd8IXG623z40jZxPlVY8iFElJVAbUe4nCA0LqbJcxs=;
- b=sfPbkhENYxaHYbe4xngP8bJ4YQ4HZIukvVA2r5bsdWPY/VqDyRsYH/oP5XAvW52WDnehsNdJf8wAf6APCuurw3SMOOW76CZpDgqrLTFCpI7NQApMNpV5437p2IGSoYcg9ZiQ5X/cWvHPSL4KgsPOgI+DRhl+jrCZMJPi1b3/AlmybqgmZ9qHXVVOg2LPqZ4CcAc1Rx4M8+zWYJW+ShiFWc5L2WT8+o4UN84r8QIAaNdJ50B4zYSFsfypbiM13lrpEqkwJ7hSqWp+kr05c7eSkK1F90v0DCepTcRdqAeRn8gPFvm4jMP3b3/IS346v8TKM02zGBUNdgGwBeZb3/12xA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sxd8IXG623z40jZxPlVY8iFElJVAbUe4nCA0LqbJcxs=;
- b=SPVO3qedz3x43nwsFa0ZEmkK4G1WbZ8qPV2YmGKdbMLlGRc0X+GsEa+3CcROXIZPEbSD3uo8Hb34gTciwqzzHpaV/f8AnsDRIaZW300zcT3wlXYX3lmpwx2uov+bHJweioqbEFrdE0q/C4ZqvDyF+rtxD1Wz/vb1IJkcOt/Yq3o=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=renesas.com;
-Received: from TYCPR01MB10914.jpnprd01.prod.outlook.com
- (2603:1096:400:3a9::11) by OSCPR01MB12929.jpnprd01.prod.outlook.com
- (2603:1096:604:33f::5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9228.9; Tue, 14 Oct
- 2025 06:28:55 +0000
-Received: from TYCPR01MB10914.jpnprd01.prod.outlook.com
- ([fe80::c568:1028:2fd1:6e11]) by TYCPR01MB10914.jpnprd01.prod.outlook.com
- ([fe80::c568:1028:2fd1:6e11%3]) with mapi id 15.20.9228.005; Tue, 14 Oct 2025
- 06:28:55 +0000
-Message-ID: <87a51um1y1.wl-kuninori.morimoto.gx@renesas.com>
-From: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-To: Wojciech Siudy <wojciech.siudy@nokia.com>, Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: linux-i2c@vger.kernel.org
-Subject: [Bug report]: "i2c: muxes: pca954x: Use reset controller only" makes I2C break
-User-Agent: Wanderlust/2.15.9 Emacs/29.3 Mule/6.0
-Content-Type: text/plain; charset=US-ASCII
-Date: Tue, 14 Oct 2025 06:28:54 +0000
-X-ClientProxiedBy: TYWPR01CA0039.jpnprd01.prod.outlook.com
- (2603:1096:400:17f::14) To TYCPR01MB10914.jpnprd01.prod.outlook.com
- (2603:1096:400:3a9::11)
+Received: from invmail4.hynix.com (exvmail4.hynix.com [166.125.252.92])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E101C2010EE;
+	Tue, 14 Oct 2025 06:38:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.125.252.92
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1760423932; cv=none; b=WNAlLULDCKWPSEza5dePnMCsNPcTxKwGcctrWh8yDaQtShjRNmEc512BFSJ6MCCiekxXDbISm6xBarMKUvI9S4Wd7JD6wzMqip8GISxoQBzpLk/vTzPJqXRHctld2woMVoNF/vFlD1RtsXm6b4j5P0k1leUPVO7mojT+YUwwkIM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1760423932; c=relaxed/simple;
+	bh=WTdEIPVnTjVYFmBVT010VFa83HYwQgS+DTRMlHzMHzE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=I6IU/dR+myfq1GsCZb73Jb2DO9UMNCaZnDFrTgZjF+aBdB0Qy8XsG3LPq9RY5Bd/tdO6IA0i5kTrnewLtndR0ZG2RdC2ZCq49XOKvya32vSM0gtKr8ewKJKRS1P1FMLshof5/KZ5oANr+IOdSk74hwhskM5bi7TXN4WQlYzT8j8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com; spf=pass smtp.mailfrom=sk.com; arc=none smtp.client-ip=166.125.252.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sk.com
+X-AuditID: a67dfc5b-c45ff70000001609-23-68edefefb741
+Date: Tue, 14 Oct 2025 15:38:33 +0900
+From: Byungchul Park <byungchul@sk.com>
+To: NeilBrown <neil@brown.name>
+Cc: linux-kernel@vger.kernel.org, kernel_team@skhynix.com,
+	torvalds@linux-foundation.org, damien.lemoal@opensource.wdc.com,
+	linux-ide@vger.kernel.org, adilger.kernel@dilger.ca,
+	linux-ext4@vger.kernel.org, mingo@redhat.com, peterz@infradead.org,
+	will@kernel.org, tglx@linutronix.de, rostedt@goodmis.org,
+	joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
+	duyuyang@gmail.com, johannes.berg@intel.com, tj@kernel.org,
+	tytso@mit.edu, willy@infradead.org, david@fromorbit.com,
+	amir73il@gmail.com, gregkh@linuxfoundation.org, kernel-team@lge.com,
+	linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
+	minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
+	sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
+	penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
+	ngupta@vflare.org, linux-block@vger.kernel.org,
+	josef@toxicpanda.com, linux-fsdevel@vger.kernel.org, jack@suse.cz,
+	jlayton@kernel.org, dan.j.williams@intel.com, hch@infradead.org,
+	djwong@kernel.org, dri-devel@lists.freedesktop.org,
+	rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
+	hamohammed.sa@gmail.com, harry.yoo@oracle.com,
+	chris.p.wilson@intel.com, gwan-gyeong.mun@intel.com,
+	max.byungchul.park@gmail.com, boqun.feng@gmail.com,
+	longman@redhat.com, yunseong.kim@ericsson.com, ysk@kzalloc.com,
+	yeoreum.yun@arm.com, netdev@vger.kernel.org,
+	matthew.brost@intel.com, her0gyugyu@gmail.com, corbet@lwn.net,
+	catalin.marinas@arm.com, bp@alien8.de, dave.hansen@linux.intel.com,
+	x86@kernel.org, hpa@zytor.com, luto@kernel.org,
+	sumit.semwal@linaro.org, gustavo@padovan.org,
+	christian.koenig@amd.com, andi.shyti@kernel.org, arnd@arndb.de,
+	lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com,
+	rppt@kernel.org, surenb@google.com, mcgrof@kernel.org,
+	petr.pavlu@suse.com, da.gomez@kernel.org, samitolvanen@google.com,
+	paulmck@kernel.org, frederic@kernel.org, neeraj.upadhyay@kernel.org,
+	joelagnelf@nvidia.com, josh@joshtriplett.org, urezki@gmail.com,
+	mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+	qiang.zhang@linux.dev, juri.lelli@redhat.com,
+	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+	bsegall@google.com, mgorman@suse.de, vschneid@redhat.com,
+	chuck.lever@oracle.com, okorniev@redhat.com, Dai.Ngo@oracle.com,
+	tom@talpey.com, trondmy@kernel.org, anna@kernel.org,
+	kees@kernel.org, bigeasy@linutronix.de, clrkwllms@kernel.org,
+	mark.rutland@arm.com, ada.coupriediaz@arm.com,
+	kristina.martsenko@arm.com, wangkefeng.wang@huawei.com,
+	broonie@kernel.org, kevin.brodsky@arm.com, dwmw@amazon.co.uk,
+	shakeel.butt@linux.dev, ast@kernel.org, ziy@nvidia.com,
+	yuzhao@google.com, baolin.wang@linux.alibaba.com,
+	usamaarif642@gmail.com, joel.granados@kernel.org,
+	richard.weiyang@gmail.com, geert+renesas@glider.be,
+	tim.c.chen@linux.intel.com, linux@treblig.org,
+	alexander.shishkin@linux.intel.com, lillian@star-ark.net,
+	chenhuacai@kernel.org, francesco@valla.it,
+	guoweikang.kernel@gmail.com, link@vivo.com, jpoimboe@kernel.org,
+	masahiroy@kernel.org, brauner@kernel.org,
+	thomas.weissschuh@linutronix.de, oleg@redhat.com, mjguzik@gmail.com,
+	andrii@kernel.org, wangfushuai@baidu.com, linux-doc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+	linaro-mm-sig@lists.linaro.org, linux-i2c@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
+	rcu@vger.kernel.org, linux-nfs@vger.kernel.org,
+	linux-rt-devel@lists.linux.dev
+Subject: Re: [PATCH v17 28/47] dept: add documentation for dept
+Message-ID: <20251014063833.GA58074@system.software.com>
+References: <20251002081247.51255-1-byungchul@sk.com>
+ <20251002081247.51255-29-byungchul@sk.com>
+ <175947451487.247319.6809470356431942803@noble.neil.brown.name>
+ <20251013052354.GA75512@system.software.com>
+ <176042183810.1793333.13639772065939276568@noble.neil.brown.name>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYCPR01MB10914:EE_|OSCPR01MB12929:EE_
-X-MS-Office365-Filtering-Correlation-Id: c6f0853d-d45e-434c-0642-08de0aeaf302
-X-LD-Processed: 53d82571-da19-47e4-9cb4-625a166a4a2a,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|52116014|376014|1800799024|366016|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?WIPAXS8ClFAE6gl+sXzTops4aIX8zjtv838ZZ1WMm4ONftrrZpTDM6wW3u4r?=
- =?us-ascii?Q?BCGVCFhFkptzq9Msf34NQXVfLAcFlR6SYiccf9IPeVGJDxLsk1kxXg/bGgSp?=
- =?us-ascii?Q?V9lIZtqf7P3xM3w+RMB5HQR01AhTrSERFd8n/sSUqHRqA3ZdaHOga8sz+fM2?=
- =?us-ascii?Q?t+YCBb1wGb2xICHctZPH+VHR415RaO68s/N8Q1tM0apKbAjX8shF33AdQJI2?=
- =?us-ascii?Q?KrO5XuTGq4mXLtmqYX7+C7NyvmRgqQYiE0UvUgaHBEzyli4nZHwDgbnFryZf?=
- =?us-ascii?Q?ya7F3DjMlBYo1DKFLmF86urW12Ge6hpIyqZNYbzHp0rRnVUbSQNCEu9f1Izb?=
- =?us-ascii?Q?SNG9C9UOp3skmUjY+DS9F/ORh9LowfNhZN14DdUewmTAIk639DbOA3yXnVlQ?=
- =?us-ascii?Q?hkPpV2hpenpXHRMGUqtU0mpmPh4RasJKplCG22aFpYungmm2/JFNNzEjaw5g?=
- =?us-ascii?Q?cesuKBp4ykF6Xn2F0XmPbaIXLA3J2zu/rJGulxKDtxTiSHoByNMrfAI5hQ9H?=
- =?us-ascii?Q?Zo2M3yRIYihf4DbxkIKv/CayFeEH9d1s7ZcANjUbGCfq5y9sHFq6LeH9Kykt?=
- =?us-ascii?Q?1aehuiBlbYSkejM3zTDbqBcYO5ckv7O66y5PhbXvmFLbNYu+NyIOjq9Kp1tl?=
- =?us-ascii?Q?mE8km/8RBASEwx2xIHJ70TttO56oVQ80PcXPRO/oCOCqsCQCi07cg/kM+Hde?=
- =?us-ascii?Q?p6VMnp0RMhnK+BpAaDC5oFP9bNzEdFM2VqjeixFO0Jk+U7eJu9N86Q/00ZJQ?=
- =?us-ascii?Q?RrQ6pU3DkihDP52IerweXvAaYBHSah040ygYmOMrxr47NR5ci7qZneHiZIQ5?=
- =?us-ascii?Q?0tPYDfeDo6ZAM4L+lplcgjoY8wElO1OuH+D6k8Lh38Wgbf3YbOwalI+TRNEs?=
- =?us-ascii?Q?+cWY5mhDBLvIPx70ebLurWJuouDcSnd+EBz4Y5cYY41IrNjDrbkr3c9w/IBe?=
- =?us-ascii?Q?ns1mjJz/ptQY8POpVhWEmWVJy/FX7spN/qpsCGF1GIs5PUC0w5BDKW6dyyeP?=
- =?us-ascii?Q?rXawaBz9WQlmFN5oCsssXZ7xpm7zgW+HnGZKzcudlj0brpNqiDZ8/kZZv1Co?=
- =?us-ascii?Q?hhT3gGotbnQliM2RKBoBEqRBwVicaKb5Gm9aI/YB3Ddg2R1dN64JJZRC0JS9?=
- =?us-ascii?Q?YkONH69ziNN7PowROLL9/dcxX6+2fmn1DzJz8g958XYzDjcqoJN3uIK2hal7?=
- =?us-ascii?Q?OkL/RBVvRTLx0T+aOFzN809xk6JqtUfFp5NtHiihCFmhPPK+j+e68htB/8e0?=
- =?us-ascii?Q?5NM0Xnrn+S5qpNMcgdY3Z4nh5tYvf6r7npommDajA67DZgf5s01w/i0Om4rx?=
- =?us-ascii?Q?JZmK04wnHQ3hg5NkVoYKCXXumFd23ZIkvva0eTApK7471KWIvzkKJLVdPq2W?=
- =?us-ascii?Q?hxBcFbhwhcHug4ae5L8zx9KujPwJdjb4NsnllfvoA65G3i8MXRkKaF8Y7/gT?=
- =?us-ascii?Q?H9B/6avxhuRTpHpXZelf0N9JKFoyvEMOqEmbMN8J7SMfcnIL02H7g8gr+DRW?=
- =?us-ascii?Q?nGHF1osPkVcdHC6hcNXMHcO7lj+Q1J4SFpx5?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYCPR01MB10914.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(52116014)(376014)(1800799024)(366016)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?0JES8/klBQdelgY5zl71Zms7SuR+lxb/bOvZiTLlqvtWENfu/6LiIhj6pbc6?=
- =?us-ascii?Q?QWp7Bg8yJfuODo/AVF7KjMvwfvlqsWbLobYcw0cXcQprLbR8wOcGAyzeJXEN?=
- =?us-ascii?Q?IHD5MKGOTDwUT2h42B/7SQ/d3bXrEW7X6GJtP+tHPh1JoXex9pd2XVI2xyGi?=
- =?us-ascii?Q?AzhPMWrN3AQoapDHd/mHCtIYpfBIo9OIQUM6plby/Ka7Vw8KxRfaQ8cXRAZg?=
- =?us-ascii?Q?h7Qn5pKpl1akokFiA2QJteFyv7ia/n79E6cqQbbACGS+l/6mjOfthwhgqvq3?=
- =?us-ascii?Q?bf24HzCDrwO3oYUh4RhKjpN8yAb8Mlbv3WocxDtPUR6XKnUh+ZnU9CiTCnhC?=
- =?us-ascii?Q?FCrMtmgLCXtBXfRxaKm5eQ8y0SFc2s3WjQidmrDg2KNsKDQf1RI0E9uLFMEs?=
- =?us-ascii?Q?kGBDb3GdojjuB99pe6Xrjlnq5BWy51BcYJzjBZ26HM3B3dKzN4FZzVZHyh/b?=
- =?us-ascii?Q?uTb3Tohh3qrNjTsl+dKz40UGxTHNGwCC0yLIsgjlqwDdgICMoGr6X8ODMAZY?=
- =?us-ascii?Q?pi6p/FZKDfmG2HsMImtBHL99rUrelOsWgAgOrApRNKSw/ZC5qAdbcecsfdAc?=
- =?us-ascii?Q?K9L9juMB9kBLPUcURkSRlV0xezHbfEBzJ4uuXymRps0eqMx24pdj4FYyDrsG?=
- =?us-ascii?Q?xZjXJYFoP9dGWHv5t2XfiAORhx1WoiwsNMFF8Sdn33SahFrSR4s6IKlMhUbD?=
- =?us-ascii?Q?QtBLz6ykj1daOMCvRvxob/y2BfyGJbYwyzpLmE6wMQOL6/xF7yPwWeDyiXaB?=
- =?us-ascii?Q?rmQOHz4OJWuTfy/zE+2dhe8C4ZKOdq6c26suodeNLF40adkwC3JHepYx9vCY?=
- =?us-ascii?Q?Kb8o/jrUV/Cjgje+iXugIhpUQ0vnAOGkQUUOfmuxHhwauw7m8TaCLFj3NXya?=
- =?us-ascii?Q?MU8Q8/slZxW5TRIJh5u2nvDmo/DX0vYuofKb+MdMUM6y6Q/lmvhDFbvdvx0C?=
- =?us-ascii?Q?478NDEbT1tqIlEWZ1nDj2+dVeB3LmP+IzHv2RLvyFqX7gMgCDDCex27h6P6P?=
- =?us-ascii?Q?xQZbDf2NnFZLTFe3jn+3R6mVWXCDFAi1GjO8yg/x9/eGUgFTO1nseE7G1qC+?=
- =?us-ascii?Q?RWhOEqZOKRL8VPoPhc3FY8YKL3so9jlPN2+IR32rR6x340N9tRy3PHbTFXVS?=
- =?us-ascii?Q?Pi/pd7NdfXQIrXXFWpqiBAY0cp0Ql3QJFqB1h/Hp3pTtJRcCdklpyS4H5x9U?=
- =?us-ascii?Q?efRjyonc/ViojzxnkUropPxuniFEdaorDp2IODsuEvqkPYWMk498UPDf+fCB?=
- =?us-ascii?Q?NUdF24pSiXBKs1Wt1hRe8O8hl1LjzgDfQPfOGXO5nfEADrxhpTu6HtVswxUZ?=
- =?us-ascii?Q?MFKH7pY2ILbTy2BianRiVzIv4wwuUn6XBlBNcobIcLj6QVYmfA1qu0Ut9+zt?=
- =?us-ascii?Q?Uo/hG8E+FsGFfVMpTdU6AkNjaErWAOSV49iKnVMsgSlUFEy2lcGbKbUBfQ20?=
- =?us-ascii?Q?EydSnc7CXIERZJdzItsVW6/aPEm2s+xRJbJb2rSJlrvaqo2h81MYcUJa0eB3?=
- =?us-ascii?Q?ReaR0P5Kp8/WrFLHQwZrWX+ynBt7VRsewFkvpqexLYjAojybvHifgO+uGn78?=
- =?us-ascii?Q?4JxYKfG9o86QITI4uU8zA0fGQ5t9ypmbzslkgMUvBkRYFXXirhgn9/bhEKjD?=
- =?us-ascii?Q?AmqOhYwFY0xHUIqP4u4+yJI=3D?=
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c6f0853d-d45e-434c-0642-08de0aeaf302
-X-MS-Exchange-CrossTenant-AuthSource: TYCPR01MB10914.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Oct 2025 06:28:55.0360
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: sjPlhMRxb6BU1jjAFUzubOPL3p6rn0WKPy/9xL9m+e2/sAYK5Re+8aopGe871oFHFVDRg/LC4BGcpmkxTA0r5f3Ex7Cu24p/k787jANE6E3vdKFCx/sc/MLs/j8H4G6I
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSCPR01MB12929
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <176042183810.1793333.13639772065939276568@noble.neil.brown.name>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Brightmail-Tracker: H4sIAAAAAAAAA02SfUxbVRjGPfee+9Fm1WvF7DiMJjVzygJuhmTvovuKRm9MbDDGLZkxs8rN
+	2qwULIwNF5NuYxuyEbCmVMogZQzW0SKlsLlOapCPIim4goMVxnAQZCJ0TRDQAQVblsX993uf
+	J+/zvCc5PK2sZDfwOkOOZDRo9CpWjuXhdVXJkUhYu2VoaTsMHm/FcL7BxUKBp4yBf5bKaTjl
+	XcUQNfs5mHtwm4NVnx9BaZ+Zhun2WQSWsQkWrFPHMdgmyzmY6nwXbi3MIKidWKFgovUMgmjp
+	IbBaggj+dMcmn+MEC3+UXKHh5nyEhW7LWRbCfecpuO9mwX7Cx0BFuRnByeoGFkorPBj6ppcp
+	GCk1U+D0vA+BkgtUrC7mNa4HS/2PFPRUj2AYd9g4WB7bCqv2TPA773Fwp9iC4fvwDQa6RwcZ
+	+L3rNAM/mO7GHnFzjALXuUkaCq7PY/ANb4aq0xcxlFWOsNDi68ZQEJ1D4L82TsE59xUGRl2r
+	DARbAwz0O4MYGu6FKAj4f8Fw43o9A029PfTudLGu6SoluipdSFxaNCPxVEmM2mcitFgTmGHF
+	xfkBVvymN1n02u5wYv5Pw5xo9xwW8zvCjNjkSBKrW6YocXh6h+ip+5pNS9ovfzNd0utyJeNr
+	Oz+Vay8W27ksb/LR5vYOZEIVLxQiGU+EVNLRe5t7xN/5/qILEc9jYSPp9O6Oy6ywiYRCD+g4
+	JwgvksbmIaoQyXlaqE0kIevCmvGMsIv8OuBCcVYIQPqdDWuZSsFKkTOBDx7qT5PusgkcZ1pI
+	IqGVKSreRQuJ5NIKH5dlgprcGrWurT4rvERar3atdRFhXEYu50fRwzufIz87QrgECbbHYm2P
+	xdr+j7Ujug4pdYbcDI1On5qizTPojqZ8npnhQbFfW/vV8sfX0GzwwzYk8Ei1ThFamdEqGU1u
+	dl5GGyI8rUpQbDsWkxTpmrwvJWPmAeNhvZTdhhJ5rFqveH3hSLpSOKjJkQ5JUpZkfORSvGyD
+	CRVtbNlv6mF2vH32iTTZy2amf7a303z35LcH/o1gx2JKkfrVQJBseWcPU+PO21vwpDg+d+HI
+	TrXKmyDLMjz1yWb1exkfFadtP1b01vwrg5fIZM3BnC8GVPdrm02pVbs+G6kPLvu3DSwN/aZw
+	vxFU12xy/v28vmOPpXGfPaeoa2+0T8pV4WytZmsSbczW/Adn3NiEsQMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA02SbUxTZxTHfe7z9N5LQ8214riRRLMaozFBZZnbyTCIH6ZXjUSJk8TEaKN3
+	tuHNtYKiMSkCgzCHpVlbaUUrjmpKFaQV7bCGgWVzDBWY2k2RQQqKgE2Ul/BWbF0W/XLyP7//
+	+eecD4fF8hnJYladdUTUZCkzFLSUSFMSC+KDwRHVWl+DBB7nNxEYGy0hcK7WSUNJfYUEHl6r
+	QdAzVoJgYtqKocgzR2DW0MrA6ORTBua8rQhMHQYMTnc+BW/rQjQMtbxBYOwN0GAezCcQtJ9G
+	YBmwMjDo2wwjPY0SmOt+QcGT8WEE9kCIgkBTMYJZUzpcqHLRMN3+AIPZ+BDBxd5uDC/rwqa7
+	9TkC75VTNPTrb2DoCsyHv8aCNNwz/kDDSMc5Cl7X0WA75ZVApdWAoOBSLQ2mynoCnn9/YaBj
+	aIaCZyYDBTX126HHPkCgTV9Fhe8LT12PBau5gAqXlxQYrzZSMGl3MPDnpWcE7LrlYG3vkkDf
+	FQsDM70JMGfLhtaaFwx0nzESuDbyQJJsRMJEURkRHK4GSijqnKUF53knEqanDEgYrS7AQpE+
+	3LYMB7FQ6DoqVLcN08LU2CNa8I7biPBHFS+Ut8cLHks3IxTe+YfZ8dUe6fqDYoY6V9SsSdov
+	Vf18xsYc9sQfc7fcRTpUuaQURbE89zl/1vsKlyKWJdxy3udJjmCaW8H7/ZM4omO4pfx1999U
+	KZKymLPH8X7z+HtjIbeBv//IiSJaxgHfWVPLRLScM1N8cdvO//gC/l5FgEQ05lbx/tAgFdmF
+	uTj+coiN4CguhX/y3Pw+uohbxjc1/EbpkczyUdryUdryIW1D2IFi1Fm5mUp1xrrV2nRVXpb6
+	2OoD2Zn1KPyT9pMz5bfQaNfmZsSxSBEt84eGVXKJMlebl9mMeBYrYmRfnggj2UFl3nFRk71P
+	k5MhaptRHEsUsbKtaeJ+OXdIeURMF8XDouZ/l2KjFutQ2cUV61y/uivcKYGeNbFJ3wf2vDLn
+	7N7Y79uk/2kfKf4s9VP/tOO2+2uTvR2/1e9NNva5BjatNMlzEnVeotmSoPnE7LtZ2VDtOKna
+	GN3YyS76duj+0vjTE0l76Xmvb32TFv208HHfiV3zE1MHf79bNlWecuDHAd0Xk9/1b9uWtrb/
+	0FEF0aqUCauwRqt8B4xzrPqPAwAA
+X-CFilter-Loop: Reflected
 
+On Tue, Oct 14, 2025 at 05:03:58PM +1100, NeilBrown wrote:
+> On Mon, 13 Oct 2025, Byungchul Park wrote:
+> > On Fri, Oct 03, 2025 at 04:55:14PM +1000, NeilBrown wrote:
+> > > On Thu, 02 Oct 2025, Byungchul Park wrote:
+> > > > This document describes the concept and APIs of dept.
+> > > >
+> > >
+> > > Thanks for the documentation.  I've been trying to understand it.
+> >
+> > You're welcome.  Feel free to ask me if you have any questions.
+> >
+> > > > +How DEPT works
+> > > > +--------------
+> > > > +
+> > > > +Let's take a look how DEPT works with the 1st example in the section
+> > > > +'Limitation of lockdep'.
+> > > > +
+> > > > +   context X    context Y       context Z
+> > > > +
+> > > > +                mutex_lock A
+> > > > +   folio_lock B
+> > > > +                folio_lock B <- DEADLOCK
+> > > > +                                mutex_lock A <- DEADLOCK
+> > > > +                                folio_unlock B
+> > > > +                folio_unlock B
+> > > > +                mutex_unlock A
+> > > > +                                mutex_unlock A
+> > > > +
+> > > > +Adding comments to describe DEPT's view in terms of wait and event:
+> > > > +
+> > > > +   context X    context Y       context Z
+> > > > +
+> > > > +                mutex_lock A
+> > > > +                /* wait for A */
+> > > > +   folio_lock B
+> > > > +   /* wait for A */
+> > > > +   /* start event A context */
+> > > > +
+> > > > +                folio_lock B
+> > > > +                /* wait for B */ <- DEADLOCK
+> > > > +                /* start event B context */
+> > > > +
+> > > > +                                mutex_lock A
+> > > > +                                /* wait for A */ <- DEADLOCK
+> > > > +                                /* start event A context */
+> > > > +
+> > > > +                                folio_unlock B
+> > > > +                                /* event B */
+> > > > +                folio_unlock B
+> > > > +                /* event B */
+> > > > +
+> > > > +                mutex_unlock A
+> > > > +                /* event A */
+> > > > +                                mutex_unlock A
+> > > > +                                /* event A */
+> > > > +
+> > >
+> > > I can't see the value of the above section.
+> > > The first section with no comments is useful as it is easy to see the
+> > > deadlock being investigate.  The section below is useful as it add
+> > > comments to explain how DEPT sees the situation.  But the above section,
+> > > with some but not all of the comments, does seem (to me) to add anything
+> > > useful.
+> >
+> > I just wanted to convert 'locking terms' to 'wait and event terms' by
+> > one step.  However, I can remove the section you pointed out that you
+> > thought was useless.
+> 
+> But it seems you did it in two steps???
+> 
+> If you think the middle section with some but not all of the comments
+> adds value (And maybe it does - maybe I just haven't seen it yet), the
+> please explain what value is being added at each step.
+> 
+> It is currently documented as:
+> 
+>  +Adding comments to describe DEPT's view in terms of wait and event:
+> 
+> then
+> 
+>  +Adding more supplementary comments to describe DEPT's view in detail:
+> 
+> Maybe if you said more DEPT's view so at this point so that when we see
+> the supplementary comments, we can understand how they relate to DEPT's
+> view.
 
-Hi Wojciech, Wolfram
+As you pointed out, I'd better remove the middle part so as to simplify
+it.  It doesn't give much information I also think.
 
-I noticed that this commit breaks Renesas ULCB board Sound which is using I2C.
+> > > > +
+> > > > +   context X    context Y       context Z
+> > > > +
+> > > > +                mutex_lock A
+> > > > +                /* might wait for A */
+> > > > +                /* start to take into account event A's context */
+> > >
+> > > What do you mean precisely by "context".
+> >
+> > That means one of task context, irq context, wq worker context (even
+> > though it can also be considered as task context), or something.
+> 
+> OK, that makes sense.  If you provide this definition for "context"
+> before you use the term, I think that will help the reader.
 
-	690de2902dca98aec96de004428c020ca902f047 (HEAD)
-	("i2c: muxes: pca954x: Use reset controller only")
+Thank you.  I will add it.
 
-Before this patch, sound works correctly, but after this patch, sound cann't
-work.
+> > > If the examples that follow It seems that the "context" for event A
+> > > starts at "mutex lock A" when it (possibly) waits for a mutex and ends
+> > > at "mutex unlock A" - which are both in the same process.  Clearly
+> > > various other events that happen between these two points in the same
+> > > process could be seen as the "context" for event A.
+> > >
+> > > However event B starts in "context X" with "folio_lock B" and ends in
+> > > "context Z" or "context Y" with "folio_unlock B".  Is that right?
+> >
+> > Right.
+> >
+> > > My question then is: how do you decide which, of all the event in all
+> > > the processes in all the system, between the start[S] and the end[E] are
+> > > considered to be part of the "context" of event A.
+> >
+> > DEPT can identify the "context" of event A only *once* the event A is
+> > actually executed, and builds dependencies between the event and the
+> > recorded waits in the "context" of event A since [S].
+> 
+> So a dependency is an ordered set of pairs of "context" and "wait" or
 
-Thank you for your help !!
+I don't get what you were trying to tell here.  FWIW, DEPT focuses on
+*event* contexts and, within each event context, it tracks pairs of
+waits that appears since [S] and the interesting event that identifies
+the event context.
 
-Best regards
----
-Kuninori Morimoto
+> "context" and "event".  "wait"s and "event"s are linked by some abstract
+> identifier for the event (like lockdep's lock classes).
+
+Yeah, kind of.
+
+> How are the contexts abstracted. Is it just "same" or "different"
+
+I don't get this.  Can you explain in more detail?
+
+	Byungchul
+
+> I'll try reading the document again and see how much further I get.
+> 
+> Thanks,
+> NeilBrown
 
