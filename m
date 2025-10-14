@@ -1,186 +1,133 @@
-Return-Path: <linux-i2c+bounces-13470-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13471-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29A35BD6E88
-	for <lists+linux-i2c@lfdr.de>; Tue, 14 Oct 2025 03:05:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D889BD72EF
+	for <lists+linux-i2c@lfdr.de>; Tue, 14 Oct 2025 05:25:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C7A754E4FBD
-	for <lists+linux-i2c@lfdr.de>; Tue, 14 Oct 2025 01:05:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1720A3B98C6
+	for <lists+linux-i2c@lfdr.de>; Tue, 14 Oct 2025 03:25:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 588091D7E5C;
-	Tue, 14 Oct 2025 01:05:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D3292C2372;
+	Tue, 14 Oct 2025 03:25:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lSi7BBDk"
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="E5Mmvgs/"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from canpmsgout05.his.huawei.com (canpmsgout05.his.huawei.com [113.46.200.220])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DA0D18C008;
-	Tue, 14 Oct 2025 01:05:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61F48223DD5;
+	Tue, 14 Oct 2025 03:25:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.220
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760403916; cv=none; b=rk7C9LehJRJUXlen+o7q+N8LJXLzex0jhw5sF3HQJmH3wr/jguMRhEcKbPPnGmjOmlSHrz2ug8BVTsJGrFi9BG9nJn9UcIc2CWPb19NbyLpz7fca5nPd6FxGhw4jV8DnLjBVYYBQzIUVKXY+EFVSIrd4yEg+upJf8qISC+4fbV4=
+	t=1760412349; cv=none; b=TT7y8uU3C3GFOhTx+94SSDOu7v7RWuJtz+xPrXdTjT1tBRpHc6N7FJQvZJ5R+sjwogT6NT9EiAom/biJGBZHQaAD9Jhp3r8z2zvClw4Nn2HAoZFTAqUEfVC0AgQEnPlOBtLrL0l/SqOEKFoKxhFWH+54MdvmwXzbq8gwBy6daOo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760403916; c=relaxed/simple;
-	bh=ndQm4UzYBuDHMgphNA4p9GD5ekR22NioOEjh7/srdSk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=HwUxP5bXFaa0v/yNlRvk7jTLK2fAY257e4nnZncllRt6Ebeca0Vv5C4Rj0ELh0+Z6w+j64Ib8P2c45U+YCM8Ga0lr0X5ztloi7qkV9+yHQF0EXRIiOuPTfhNuKAvJFNCq9eye2uybZmH5Q7EEcl3hT08yCDMFT0UkmY05r7gdMA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lSi7BBDk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8464C4CEE7;
-	Tue, 14 Oct 2025 01:05:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760403915;
-	bh=ndQm4UzYBuDHMgphNA4p9GD5ekR22NioOEjh7/srdSk=;
-	h=From:Date:Subject:To:Cc:From;
-	b=lSi7BBDkBR+JVDEwlbgALi5xW1zE3TZKT8E4jUYUbFJ4Ai5vlPp/D8p+yr6nhw6j2
-	 lsGnLbbLhlArf8yYnfkBP+NTp0s6Va2VjdYFwEpa5qbwFc/p8CwPyW21CjDziZsUcn
-	 QQAz5hHTrZVVrEvapsfd7g02XHTUNu61biccZgtL4kYHg6oNTHr7dLxsdHVycLwPr/
-	 FJ4WYJyax/eymqSfTsPtZsiowR2AO5XZaS+bOyp0MsnEoJzJgW6uxel/nULwX/84j7
-	 O0p7e2o8HsdU/hGUeStpNSM9Oqd3ym5/7dSMAe9ZWrqb/FYGZpEYJXk+TnNTAHBVMV
-	 02+ZCSYDeYgfQ==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Mon, 13 Oct 2025 18:05:03 -0700
-Subject: [PATCH] i2c: designware: Remove i2c_dw_remove_lock_support()
+	s=arc-20240116; t=1760412349; c=relaxed/simple;
+	bh=WP0V2CJdocYRaivc4bHLr/xoIwglU9FsejPno8121SU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=f5PsQfqWlqlN5G6FA3Gux8uDrdG2zxwVfBL4ErGfleu8t6OTXjfn9K5cpvBsJEnkpvM9txlx8r38og8tKk28xTDx0+PiDP5XVPWHwlx2m00CE2OVYV0MD6hqhWtLe5hsPnIwUPIRyYtYbls9SAVO0+QSaOc49AYHqgU8oAgOOeA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=E5Mmvgs/; arc=none smtp.client-ip=113.46.200.220
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=Z313mOEb31FdOTNjEzdrnA3V6QYJWAM6t16ixtdKUYQ=;
+	b=E5Mmvgs/WFzwkG4l4+a5/EsnwOweW9D9xKYzLnoLsbC8qQ/aOeQZqF7551V8c+QQwEeDLAme8
+	Xv/DVHBnjSozUaLItjK54MtRGArGAaL7kMFlJEhO0NW3BX/AfHn8Q8C79yA6rhJN55Rr+uW8F59
+	b4ggsrpa2r0kZCFZSwCZpjk=
+Received: from mail.maildlp.com (unknown [172.19.163.174])
+	by canpmsgout05.his.huawei.com (SkyGuard) with ESMTPS id 4cm02c6Hxrz12LKQ;
+	Tue, 14 Oct 2025 11:24:56 +0800 (CST)
+Received: from dggpemf500016.china.huawei.com (unknown [7.185.36.197])
+	by mail.maildlp.com (Postfix) with ESMTPS id B1A37140158;
+	Tue, 14 Oct 2025 11:25:42 +0800 (CST)
+Received: from [10.174.177.19] (10.174.177.19) by
+ dggpemf500016.china.huawei.com (7.185.36.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Tue, 14 Oct 2025 11:25:41 +0800
+Message-ID: <3b69c4b6-2cbb-4cc3-8bc7-cccb96ad6d8e@huawei.com>
+Date: Tue, 14 Oct 2025 11:25:40 +0800
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251013-dw_i2c_plat_remove-avoid-objtool-no-cfi-warning-v1-1-8cc4842967bf@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAL+h7WgC/x3NQQrDIBBA0auEWXdAbbPpVUqRiY7plNQJGkwh5
- O6VLt/m/wMqF+EK9+GAwk2qaO6wlwHCi/LMKLEbnHGjNfaKcffigl8X2nzhjzZGaioRdXpvqgt
- mxZAEdypZ8oxjcuZmmCgGB726Fk7y/R8fz/P8AQdONQmBAAAA
-X-Change-ID: 20251013-dw_i2c_plat_remove-avoid-objtool-no-cfi-warning-5f2040eaadc2
-To: Mika Westerberg <mika.westerberg@linux.intel.com>, 
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
- Jan Dabros <jsd@semihalf.com>, Andi Shyti <andi.shyti@kernel.org>
-Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Kees Cook <kees@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
- linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3660; i=nathan@kernel.org;
- h=from:subject:message-id; bh=ndQm4UzYBuDHMgphNA4p9GD5ekR22NioOEjh7/srdSk=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDBlvF56ofnGjlX2zyJ676xvNL2a0l/NmBW3Mf7Hy+mntK
- T4vAhg2dpSyMIhxMciKKbJUP1Y9bmg45yzjjVOTYOawMoEMYeDiFICJvMtjZGj2kbBI5FfZPOXx
- wvmeIiouf1/8Wr79nkRsakawf1/9faCKHTMz20w+PNwQsi40YmXgvZxa0dIF3xbnaaXMtHEvjJ7
- MBwA=
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] i2c: dev: Fix field-spanning write in
+ __do_trace_smbus_write()
+To: <wsa+renesas@sang-engineering.com>, <dhowells@redhat.com>,
+	<rostedt@goodmis.org>
+CC: <yuehaibing@huawei.com>, <zhangchangzhong@huawei.com>,
+	<linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>
+References: <20250918113956.169348-1-wangliang74@huawei.com>
+From: Wang Liang <wangliang74@huawei.com>
+In-Reply-To: <20250918113956.169348-1-wangliang74@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
+ dggpemf500016.china.huawei.com (7.185.36.197)
 
-When building certain configurations with CONFIG_FINEIBT=y after
-commit 894af4a1cde6 ("objtool: Validate kCFI calls"), there is a
-warning due to an indirect call in dw_i2c_plat_remove():
 
-  $ cat allno.config
-  CONFIG_ACPI=y
-  CONFIG_CFI=y
-  CONFIG_COMMON_CLK=y
-  CONFIG_CPU_MITIGATIONS=y
-  CONFIG_I2C=y
-  CONFIG_I2C_DESIGNWARE_BAYTRAIL=y
-  CONFIG_I2C_DESIGNWARE_CORE=y
-  CONFIG_I2C_DESIGNWARE_PLATFORM=y
-  CONFIG_IOSF_MBI=y
-  CONFIG_MITIGATION_RETPOLINE=y
-  CONFIG_MODULES=y
-  CONFIG_PCI=y
-  CONFIG_X86_KERNEL_IBT=y
+在 2025/9/18 19:39, Wang Liang 写道:
+> A field-spanning write warning was observed with following output:
+>
+>    ------------[ cut here ]------------
+>    memcpy: detected field-spanning write (size 86) of single field "entry->buf" at ./include/trace/events/smbus.h:60 (size 34)
+>    WARNING: CPU: 1 PID: 2646 at ./include/trace/events/smbus.h:60
+>    CPU: 1 UID: 0 PID: 2646 Comm: syz.0.310 Not tainted 6.17.0-rc5+ #5 PREEMPT(none)
+>    RIP: 0010:do_trace_event_raw_event_smbus_write.constprop.0+0x37a/0x520 include/trace/events/smbus.h:23
+>    Call Trace:
+>     <TASK>
+>     __do_trace_smbus_write include/trace/events/smbus.h:23 [inline]
+>     trace_smbus_write include/trace/events/smbus.h:23 [inline]
+>     __i2c_smbus_xfer.part.0+0x5ce/0x9a0 drivers/i2c/i2c-core-smbus.c:572
+>     __i2c_smbus_xfer+0xa3/0x1a0 drivers/i2c/i2c-core-smbus.c:566
+>     i2c_smbus_xfer drivers/i2c/i2c-core-smbus.c:546 [inline]
+>     i2c_smbus_xfer+0x208/0x3c0 drivers/i2c/i2c-core-smbus.c:536
+>     i2cdev_ioctl_smbus+0x2cd/0x850 drivers/i2c/i2c-dev.c:389
+>     i2cdev_ioctl+0x3bb/0x800 drivers/i2c/i2c-dev.c:478
+>     vfs_ioctl fs/ioctl.c:51 [inline]
+>     __do_sys_ioctl fs/ioctl.c:598 [inline]
+>     __se_sys_ioctl fs/ioctl.c:584 [inline]
+>     __x64_sys_ioctl+0x191/0x210 fs/ioctl.c:584
+>     do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+>     do_syscall_64+0x5d/0x2d0 arch/x86/entry/syscall_64.c:94
+>     entry_SYSCALL_64_after_hwframe+0x76/0x7e
+>     </TASK>
+>
+> Similar to previous commit 57f312b95593 ("i2c: rtl9300: Fix out-of-bounds
+> bug in rtl9300_i2c_smbus_xfer"), the data->block[0] is used for length and
+> it comes from user. Add check for the variable to avoid out-of-bounds bug.
+>
+> Fixes: 8a325997d95d ("i2c: Add message transfer tracepoints for SMBUS [ver #2]")
+> Signed-off-by: Wang Liang <wangliang74@huawei.com>
+> ---
+>   drivers/i2c/i2c-dev.c | 6 ++++++
+>   1 file changed, 6 insertions(+)
+>
+> diff --git a/drivers/i2c/i2c-dev.c b/drivers/i2c/i2c-dev.c
+> index e9577f920286..b00961561134 100644
+> --- a/drivers/i2c/i2c-dev.c
+> +++ b/drivers/i2c/i2c-dev.c
+> @@ -386,6 +386,12 @@ static noinline int i2cdev_ioctl_smbus(struct i2c_client *client,
+>   		if (read_write == I2C_SMBUS_READ)
+>   			temp.block[0] = I2C_SMBUS_BLOCK_MAX;
+>   	}
+> +
+> +	if (temp.block[0] > I2C_SMBUS_BLOCK_MAX) {
+> +		dev_dbg(&client->adapter->dev, "block[0] out of range in ioctl I2C_SMBUS.\n");
+> +		return -EINVAL;
+> +	}
+> +
+>   	res = i2c_smbus_xfer(client->adapter, client->addr, client->flags,
+>   	      read_write, command, size, &temp);
+>   	if (!res && ((size == I2C_SMBUS_PROC_CALL) ||
 
-  $ make -skj"$(nproc)" ARCH=x86_64 LLVM=1 clean allnoconfig vmlinux
-  vmlinux.o: warning: objtool: dw_i2c_plat_remove+0x3c: no-cfi indirect call!
 
-With this configuration, i2c_dw_semaphore_cb_table has the BAYTRAIL
-member and the sentinel (i.e., 2 members), both of which have an
-implicit
-
-  .remove = NULL,
-
-so Clang effectively turns i2c_dw_remove_lock_support(), which is later
-inlined into dw_i2c_plat_remove(), into:
-
-  static void i2c_dw_remove_lock_support(struct dw_i2c_dev *dev)
-  {
-      if (dev->semaphore_idx > 2)
-          (*NULL)(dev):
-  }
-
-which is not necessarily problematic from a logic perspective (as the
-code was not bounds checking semaphore_idx so an out of bounds index
-could already crash) but objtool's new __nocfi indirect call checking
-trips over Clang dropping the kCFI setup from a known NULL indirect
-call.
-
-While it would be possible to fix this by transforming the initial check
-into
-
-  if (dev->semaphore_idx < 0 || dev->semaphore_idx >= ARRAY_SIZE(i2c_dw_semaphore_cb_table))
-
-the remove member is unused after commit 440da737cf8d ("i2c: designware:
-Use PCI PSP driver for communication"), so i2c_dw_remove_lock_support()
-can be removed altogether, as it will never actually do anything.
-
-Closes: https://github.com/ClangBuiltLinux/linux/issues/2133
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/i2c/busses/i2c-designware-core.h    |  1 -
- drivers/i2c/busses/i2c-designware-platdrv.c | 11 -----------
- 2 files changed, 12 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-designware-core.h b/drivers/i2c/busses/i2c-designware-core.h
-index 347843b4f5dd..d50664377c6b 100644
---- a/drivers/i2c/busses/i2c-designware-core.h
-+++ b/drivers/i2c/busses/i2c-designware-core.h
-@@ -330,7 +330,6 @@ struct dw_i2c_dev {
- 
- struct i2c_dw_semaphore_callbacks {
- 	int	(*probe)(struct dw_i2c_dev *dev);
--	void	(*remove)(struct dw_i2c_dev *dev);
- };
- 
- int i2c_dw_init_regmap(struct dw_i2c_dev *dev);
-diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
-index 34d881572351..cff7e03dea7b 100644
---- a/drivers/i2c/busses/i2c-designware-platdrv.c
-+++ b/drivers/i2c/busses/i2c-designware-platdrv.c
-@@ -197,15 +197,6 @@ static int i2c_dw_probe_lock_support(struct dw_i2c_dev *dev)
- 	return 0;
- }
- 
--static void i2c_dw_remove_lock_support(struct dw_i2c_dev *dev)
--{
--	if (dev->semaphore_idx < 0)
--		return;
--
--	if (i2c_dw_semaphore_cb_table[dev->semaphore_idx].remove)
--		i2c_dw_semaphore_cb_table[dev->semaphore_idx].remove(dev);
--}
--
- static int dw_i2c_plat_probe(struct platform_device *pdev)
- {
- 	u32 flags = (uintptr_t)device_get_match_data(&pdev->dev);
-@@ -339,8 +330,6 @@ static void dw_i2c_plat_remove(struct platform_device *pdev)
- 
- 	i2c_dw_prepare_clk(dev, false);
- 
--	i2c_dw_remove_lock_support(dev);
--
- 	reset_control_assert(dev->rst);
- }
- 
-
----
-base-commit: 3a8660878839faadb4f1a6dd72c3179c1df56787
-change-id: 20251013-dw_i2c_plat_remove-avoid-objtool-no-cfi-warning-5f2040eaadc2
-
-Best regards,
---  
-Nathan Chancellor <nathan@kernel.org>
+ping
 
 
