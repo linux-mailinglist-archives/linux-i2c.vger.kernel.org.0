@@ -1,121 +1,106 @@
-Return-Path: <linux-i2c+bounces-13478-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13479-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 150BFBD91F8
-	for <lists+linux-i2c@lfdr.de>; Tue, 14 Oct 2025 13:52:45 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28A57BD9297
+	for <lists+linux-i2c@lfdr.de>; Tue, 14 Oct 2025 13:58:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7FC3718A53BB
-	for <lists+linux-i2c@lfdr.de>; Tue, 14 Oct 2025 11:53:08 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 1F41B4EC53A
+	for <lists+linux-i2c@lfdr.de>; Tue, 14 Oct 2025 11:58:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 192A13101CE;
-	Tue, 14 Oct 2025 11:52:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 842803101CE;
+	Tue, 14 Oct 2025 11:58:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="lHlc4Mk/"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="c1oCzK/G"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCF723101B6
-	for <linux-i2c@vger.kernel.org>; Tue, 14 Oct 2025 11:52:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6943423AB8D
+	for <linux-i2c@vger.kernel.org>; Tue, 14 Oct 2025 11:58:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760442758; cv=none; b=aQ8DzSNvgzJtlNCI4/V7RA40CP2yrNJsbbLNp3Pxs5j6IjMoeKXGwE3A3WRY4Yo9ja+PV3ItLJKIkX/RKGCgEZood3MvFOZE/Ygi/NsMpK9sutaMv8fHzk04nVyYXqEKetb83Ezl1aeerVSYTKANU6t0O0GzdZmEXcxVwIoIQMQ=
+	t=1760443125; cv=none; b=S7iMV5eXgGVKToCZYn4ik7WuNfJG0tkDiQvsM8k1vTFDrzRClVuFVGSjGOyQNn/YnCA0Dj6KmVVgq0xPUuPbww5bboWeXO5vxavmiNHetpbmY6LXqH7TjS60OYiulVnzbWe3zrwVrT1LaY+BO5uO92zvlv5hYyUS6Xep4Y05Ma4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760442758; c=relaxed/simple;
-	bh=x1brUYGY3NW2WQ2EAUXI9/nXmf4kZlLdpbpO/yh7tw4=;
+	s=arc-20240116; t=1760443125; c=relaxed/simple;
+	bh=36MOViaES4h658Zm75bnIITCJIoFwL4VLgRZnUySa7Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oAiafymS3x3La5jECFzz9szU/7fT+fpLf9u6QKDzv+VzFWlrCwDpUeL97AbSlz9X9V879Sex4MrFC7uUfQMp6cQKaCA4saK+yTcKsUOhOssRR/TpyspRH3tA5UCXVgTpwsuw3B0T7tNv/AFn+x8/3ubb2XaSRTxU5SicnH/x7qQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=lHlc4Mk/; arc=none smtp.client-ip=194.117.254.33
+	 Content-Type:Content-Disposition:In-Reply-To; b=SauB7nGi0fb/8/CBzhygwA1symbdq2WP41VEtVf0L3DqXM8Hg+w2TrE1wo1x7sXbQdmeSdEJL6YTVM6xvHWJFo+JVHRB38Tj0D0/l8VWb9C/qqfIWcs3D+igaVoNpSGUgvZX4QmsmPe886yM5xKS196OkrtOU3gv3DR9Uk1h9Dg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=c1oCzK/G; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=vZpO
-	rc8jIqdudWaU55WhDn+MoeYiJWe7gJ48hDY+d1M=; b=lHlc4Mk/T4KsX8seSNJQ
-	vvL90nUOyuUxzJ/sq5J3piw1hVW61or4bFrdau3nnoyj3BFHrxN3871raQO/I1my
-	Bz2hxNc6FqCtd7PgKMnKFKb4zz5l0ZkRZrRwumRqR9BKuI1SJ2ADJNcz2IFKsFdU
-	7nuBCXwtqXb1hDr3WwWQTUQ9u509yeoTAuKhGd6ojJX525GWTZA+l2Y1cCCedxki
-	RoGYmMz1ynzbjCONDddHsTpxmDfBZnv+OBHrb9nSx93bzg7mxVHuiXUmbzunV9v2
-	qfLQ147EJ76zXvWtGcSHT5C/ArHdi6hIp1iJlb+s0EIXecC51hGviWUiT95BVFMO
-	+g==
-Received: (qmail 2951131 invoked from network); 14 Oct 2025 13:52:28 +0200
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 14 Oct 2025 13:52:28 +0200
-X-UD-Smtp-Session: l3s3148p1@0cGqBB1B1OIgAwDPXwQHAL/S9V79e5yL
-Date: Tue, 14 Oct 2025 13:52:28 +0200
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=36MO
+	ViaES4h658Zm75bnIITCJIoFwL4VLgRZnUySa7Y=; b=c1oCzK/GPzFDfQHYCR3h
+	rzeqNWezCex6U5sxnRytOnmSp+vrq8ColnNfL/M1qqQUpSZGb2UG7w6kV6sLnudR
+	7XN64AUlChJyCxnH90BWtVT8u2piuGjooerNRtCqmQOm1p3Xm0nOfXjj1hedxQX2
+	2s40qmrzNudb8CixCCIujjFI1uyvFijw1irO9KLwOeLWONH7VbbC5YGC0eJgPv4i
+	CIVxESD5kyn+Zytod8S7/oYYGgp84FiNzZTlYX338mb1aedsDV0D58Pl/1rymvm8
+	cps1FIfe8qow3j8RE47/Kz2V8uUw8or1Z7z+534dHM4JtkucT7fGF7W4TjDrYUIk
+	3A==
+Received: (qmail 2953262 invoked from network); 14 Oct 2025 13:58:41 +0200
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 14 Oct 2025 13:58:41 +0200
+X-UD-Smtp-Session: l3s3148p1@m4riGh1BIq8gAwDPXwQHAL/S9V79e5yL
+Date: Tue, 14 Oct 2025 13:58:41 +0200
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: Elie Morisse <syniurge@gmail.com>,
-	Shyam Sundar S K <shyam-sundar.s-k@amd.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	Michal Simek <michal.simek@amd.com>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Jan Dabros <jsd@semihalf.com>, Jean Delvare <jdelvare@suse.com>,
-	Dong Aisheng <aisheng.dong@nxp.com>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Oleksij Rempel <o.rempel@pengutronix.de>,
-	Gregory CLEMENT <gregory.clement@bootlin.com>,
-	Ajay Gupta <ajayg@nvidia.com>, Aaro Koskinen <aaro.koskinen@iki.fi>,
-	Andreas Kemnade <andreas@kemnade.info>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Roger Quadros <rogerq@kernel.org>, Tony Lindgren <tony@atomide.com>,
-	Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-	Vignesh R <vigneshr@ti.com>,
-	Loic Poulain <loic.poulain@oss.qualcomm.com>,
-	Robert Foss <rfoss@kernel.org>,
-	Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>,
-	Viken Dadhaniya <quic_vdadhani@quicinc.com>,
-	Chris Brandt <chris.brandt@renesas.com>,
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-	Orson Zhai <orsonzhai@gmail.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Chunyan Zhang <zhang.lyra@gmail.com>,
-	Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
-	Alain Volmat <alain.volmat@foss.st.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev,
-	linux-omap@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com
-Subject: Re: [PATCH 23/80] i2c: Remove redundant pm_runtime_mark_last_busy()
- calls
-Message-ID: <aO45fBIEqFyRq3_k@shikoro>
-References: <20250704075225.3212486-1-sakari.ailus@linux.intel.com>
- <20250704075415.3218608-1-sakari.ailus@linux.intel.com>
+To: Hans de Goede <hansg@kernel.org>
+Cc: Israel Cepeda <israel.a.cepeda.lopez@intel.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH 1/2] i2c: usbio: Add ACPI device-id for MTL-CVF devices
+Message-ID: <aO468ZlawXPNGXlj@shikoro>
+References: <20251001212310.4813-1-hansg@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="j90DF16K+GBPG4+Y"
+Content-Disposition: inline
+In-Reply-To: <20251001212310.4813-1-hansg@kernel.org>
+
+
+--j90DF16K+GBPG4+Y
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250704075415.3218608-1-sakari.ailus@linux.intel.com>
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jul 04, 2025 at 10:54:15AM +0300, Sakari Ailus wrote:
-> pm_runtime_put_autosuspend(), pm_runtime_put_sync_autosuspend(),
-> pm_runtime_autosuspend() and pm_request_autosuspend() now include a call
-> to pm_runtime_mark_last_busy(). Remove the now-reduntant explicit call to
-> pm_runtime_mark_last_busy().
-> 
-> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> Acked-by: Andi Shyti <andi.shyti@kernel.org>
+On Wed, Oct 01, 2025 at 11:23:10PM +0200, Hans de Goede wrote:
+> Add "INTC10D2" ACPI device-id for MTL-CVF devices, like the Dell Latitude
+> 7450.
+>=20
+> Closes: https://bugzilla.redhat.com/show_bug.cgi?id=3D2368506
+> Signed-off-by: Hans de Goede <hansg@kernel.org>
+> Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> Acked-by: Israel Cepeda <israel.a.cepeda.lopez@intel.com>
 
-With the dependencies being upstream now, applied to for-current,
-thanks!
+With dependencies upstream now, applied to for-current, thanks!
 
+
+--j90DF16K+GBPG4+Y
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmjuOu0ACgkQFA3kzBSg
+KbaVSw/+PE/AvHopdzypWgqSXi9of52AMrwEcEi90fqTJABGS53j7FXS1N15B98r
+hal5thSb1dr0moTU1xw4jmIp48govH/UzcjxVozt3yixUENgLJBPQkI8SPGIB5xv
+Qc89D9H55m6I9ZHJYn81K7rPRAozDvvTUgU+8SS5c7mRVhgE0PQFrzf5geTrr1mU
+XgeUDYOApjaV3H8XgmQK+k9ixMarBMcKu54MFYbd3uBt4mjXe7iUf5FMoOQ+Dgax
+W5k3jZN8vJOz8hb3iqAHB0ZKIQGPjBOAdXu+kr7llJ0pZ+slcQrWFl9T1tSsXxKi
+SuoqfDTeTuVV0YvQ1kCj8dhVWbGvMlFBeSowNuyuTOKhB8AczZfC7XiTGWkku6Dk
+t1Rb4P560ntkAM7V6RTEcIsOMJBTJe1zYlZKE5APc7Wt/+5ouAr4INK+Z21f+nT3
+HbJldm5m/Y6bC6kFJIsWMluuIDriINKKI+bp3+kwfqwapkFRDz/KHdZZBpIkEs5R
+E/MlOJp79XFirKqkBAPZeNLTVGCO7vxKYnGGGQCmUo1xoqkck8cZB2MmeY92XJN7
+Y80YLIBO4SlYaaaQPUI8oYePQFjFOmlD3Jo8Tw0O6PqF1miokynWK3cFopcJgbvm
+Pmmiuao0XlQQ1J8KEANKZ+tCaGKjFOAphYUl6dKSo3gz3mOvBcw=
+=EbqR
+-----END PGP SIGNATURE-----
+
+--j90DF16K+GBPG4+Y--
 
