@@ -1,213 +1,109 @@
-Return-Path: <linux-i2c+bounces-13486-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13487-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 785D6BDB833
-	for <lists+linux-i2c@lfdr.de>; Tue, 14 Oct 2025 23:59:04 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A6F0BDBAA2
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 Oct 2025 00:40:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2EA033A64B7
-	for <lists+linux-i2c@lfdr.de>; Tue, 14 Oct 2025 21:59:03 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 64AEF4F734B
+	for <lists+linux-i2c@lfdr.de>; Tue, 14 Oct 2025 22:40:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3E392E8B69;
-	Tue, 14 Oct 2025 21:58:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 405902D12ED;
+	Tue, 14 Oct 2025 22:40:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="axdHhikl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VeOfEO3z"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68DD5DDAB;
-	Tue, 14 Oct 2025 21:58:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED00726FA6E;
+	Tue, 14 Oct 2025 22:40:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760479139; cv=none; b=lFNRQCZCWN3JyQLh3aR+YQOrQ62wWDoVXTc64bKARHOVInQjY3ZGTvUcX/lC4lQG7k1XHwiIA4QVe7Gjl1ARvSKCkl+xQLmoWQdlG5pZuIabS620iaskBBUMn9fYhs3TJ4FQGLHxpSh/CmeaOPcfijq8MdFGcbcEXWgggj5fM9Q=
+	t=1760481601; cv=none; b=YV+/D6FMGJ1pq/VH+E7pa9gM1efGMCGXX764Li1WhzhxRir7X6dTBro4FT3BvJaAoc2GVhYMGbmpNe35SfZu8GvYvfTx1MobJimlNTLSJYUKiBbH/McH6EULtUvTLoH2XFF87qwL082BwkLt66XmVHLgw+d7QnVFK8vUuQfrz80=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760479139; c=relaxed/simple;
-	bh=DoMilDLBZqkhZMH+XUxJ7RZCRLJMja44X/cITu+hjr8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=u9zFBa86SgYzgZHMhcpMMqIxI0AN+NXVTV4zhMZ7xjjwZJHrPTl1FJgsO0hLdC+iTO5XiuY48tmyAxg1k9KwPvuueP7m43mqX6ALHlQfIyqTBk5+QUULRqLdgdEh6QqtghVUiRP0/PIggpNTwnXfVh6lTcwsIvV7JFx01neSHcg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=axdHhikl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A48A5C4CEE7;
-	Tue, 14 Oct 2025 21:58:57 +0000 (UTC)
+	s=arc-20240116; t=1760481601; c=relaxed/simple;
+	bh=HJV7o9IeEuxcVHIHjK/81wR3IFGTE46/eu2K02OIGzo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ax2LS3CNhttuz7dhAdc550Hd+GNRceEQOdcX0x/KxCzdvMpEtj9JTAHP1cqg1NYFfp3pk7aFb4IcOVDO+0uV2JeU4GC2Kq7fjwOYLhizE9iHqTV/cMt8/CXG2jE4fOU2WDaw7pb++23ciNf0UFL2qWN17u/jhUWYdHbENA8rwKA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VeOfEO3z; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A55A6C4CEF1;
+	Tue, 14 Oct 2025 22:39:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760479139;
-	bh=DoMilDLBZqkhZMH+XUxJ7RZCRLJMja44X/cITu+hjr8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=axdHhiklobT1p6TLa9YC2mu5ZSxUEzA2GI06cVtkaJPdN9d39sIp9cbsfYUEJFlYG
-	 DM9+RUxasTM5eW9nT2rUP/OYkFg/Dx5TiDdBYRyNcGlVWbPgApO9SZjsbY/oHMGswA
-	 F7yPvRiTu8TAM4CMnhYBskepmSr1SFLRYDygiwljmBYNA0ylmcnVt2eobQ8IV3x7GL
-	 5FC3XPR56WxSZ1STNUzABc8Xjt1ILtX0BUKQcsypow5aKZoxTxArsNDQ8LNEj76wo1
-	 b9ORkctq4xjD4zTfVQDYp6NV1UkY7x/4oVp2p2+8dtvmkb/lfKekkHfZSYVPXsHpbO
-	 d66qPHY5mNiyQ==
-Message-ID: <3f4ee683-4fdb-4183-8f99-f931f853d9ae@kernel.org>
-Date: Tue, 14 Oct 2025 16:58:56 -0500
+	s=k20201202; t=1760481600;
+	bh=HJV7o9IeEuxcVHIHjK/81wR3IFGTE46/eu2K02OIGzo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VeOfEO3zkLaE/wbHB0d8eBT8oW+M3Pl40vI0bq0aglmQyS1kYaElZ5Xi+Hj2jwWgR
+	 VSkZ9ng+Meczq0a5S/VDZdtTLp7mksu5khgcWjJ8jWA9T9HTTrSFJoErFI6MrUsdCN
+	 XRuP2dPH3v/MIus2WAqbfu9ahKbuSiTwzuXpJCV2GyDoGkKqy1YXOiXvgdxv47tJn4
+	 kDKN4Jqgn7sK8VnrhqXfS+ycDB5fhSjRNud6QraIipeqYF3FtblfUBleEWuGcAA3yw
+	 RMoyhm0mvcnpZ9al1aKiPMQDjF+BQJ9Xayq3QKgcivG1rGUmmZcRCWEs8KwMn8m4Mn
+	 BK4W2/yRbiHXQ==
+Date: Tue, 14 Oct 2025 15:39:55 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: "Mario Limonciello (AMD) (kernel.org)" <superm1@kernel.org>
+Cc: Bjorn Helgaas <helgaas@kernel.org>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Jan Dabros <jsd@semihalf.com>, Andi Shyti <andi.shyti@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] i2c: designware: Remove i2c_dw_remove_lock_support()
+Message-ID: <20251014223955.GB3575477@ax162>
+References: <20251014203305.GA904692@bhelgaas>
+ <3f4ee683-4fdb-4183-8f99-f931f853d9ae@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] i2c: designware: Remove i2c_dw_remove_lock_support()
-To: Bjorn Helgaas <helgaas@kernel.org>, Nathan Chancellor <nathan@kernel.org>
-Cc: Mika Westerberg <mika.westerberg@linux.intel.com>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Jan Dabros <jsd@semihalf.com>, Andi Shyti <andi.shyti@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Kees Cook <kees@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
- linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20251014203305.GA904692@bhelgaas>
-Content-Language: en-US
-From: "Mario Limonciello (AMD) (kernel.org)" <superm1@kernel.org>
-In-Reply-To: <20251014203305.GA904692@bhelgaas>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3f4ee683-4fdb-4183-8f99-f931f853d9ae@kernel.org>
 
+On Tue, Oct 14, 2025 at 04:58:56PM -0500, Mario Limonciello (AMD) (kernel.org) wrote:
+> On 10/14/2025 3:33 PM, Bjorn Helgaas wrote:
+> > I'm totally fine with the patch itself, but I think the commit log
+> > could be trimmed to something like the following with no loss:
+> > 
+> >    Remove struct i2c_dw_semaphore_callbacks.remove() and
+> >    i2c_dw_remove_lock_support().
+> > 
+> >    440da737cf8d ("i2c: designware: Use PCI PSP driver for
+> >    communication") removed the last place that set
+> >    i2c_dw_semaphore_callbacks.remove(), which made
+> >    i2c_dw_remove_lock_support() a no-op.
+> > 
+> >    This has the side effect of avoiding this kCFI warning (see Link):
+> > 
+> >      dw_i2c_plat_remove+0x3c: no-cfi indirect call!
+> > 
+> >    Link: https://lore.kernel.org/r/20251013-dw_i2c_plat_remove-avoid-objtool-no-cfi-warning-v1-1-8cc4842967bf@kernel.org
+> > 
+> > FWIW,
+> > Reviewed-by: Bjorn Helgaas <bhelgaas@google.com>
+> 
+> I echo Bjorn's comments on the lengthy commit message.
+> Code change looks fine.
+> 
+> Reviewed-by: Mario Limonciello (AMD) <superm1@kernel.org>
 
+I have no objections to trimming the commit message if so desired but I
+think the solution (removing unused code) is more tangential to the
+problem (potentially accessing an array out of bounds). I am sometimes
+looking at changes from ten years ago where something was done to avoid
+a problem but the problem was never mentioned in the message but may
+have been elsewhere. Maybe nobody ever needs .remove() again but what if
+new IP comes out that necessitates it and they go to revert this change
+without avoiding this problem? I could try to make the analysis shorter
+if that would help.
 
-On 10/14/2025 3:33 PM, Bjorn Helgaas wrote:
-> [+cc Mario, author of 440da737cf8d ("i2c: designware: Use PCI PSP
-> driver for communication")]
-> 
-> On Mon, Oct 13, 2025 at 06:05:03PM -0700, Nathan Chancellor wrote:
->> When building certain configurations with CONFIG_FINEIBT=y after
->> commit 894af4a1cde6 ("objtool: Validate kCFI calls"), there is a
->> warning due to an indirect call in dw_i2c_plat_remove():
->>
->>    $ cat allno.config
->>    CONFIG_ACPI=y
->>    CONFIG_CFI=y
->>    CONFIG_COMMON_CLK=y
->>    CONFIG_CPU_MITIGATIONS=y
->>    CONFIG_I2C=y
->>    CONFIG_I2C_DESIGNWARE_BAYTRAIL=y
->>    CONFIG_I2C_DESIGNWARE_CORE=y
->>    CONFIG_I2C_DESIGNWARE_PLATFORM=y
->>    CONFIG_IOSF_MBI=y
->>    CONFIG_MITIGATION_RETPOLINE=y
->>    CONFIG_MODULES=y
->>    CONFIG_PCI=y
->>    CONFIG_X86_KERNEL_IBT=y
->>
->>    $ make -skj"$(nproc)" ARCH=x86_64 LLVM=1 clean allnoconfig vmlinux
->>    vmlinux.o: warning: objtool: dw_i2c_plat_remove+0x3c: no-cfi indirect call!
->>
->> With this configuration, i2c_dw_semaphore_cb_table has the BAYTRAIL
->> member and the sentinel (i.e., 2 members), both of which have an
->> implicit
->>
->>    .remove = NULL,
->>
->> so Clang effectively turns i2c_dw_remove_lock_support(), which is later
->> inlined into dw_i2c_plat_remove(), into:
->>
->>    static void i2c_dw_remove_lock_support(struct dw_i2c_dev *dev)
->>    {
->>        if (dev->semaphore_idx > 2)
->>            (*NULL)(dev):
->>    }
->>
->> which is not necessarily problematic from a logic perspective (as the
->> code was not bounds checking semaphore_idx so an out of bounds index
->> could already crash) but objtool's new __nocfi indirect call checking
->> trips over Clang dropping the kCFI setup from a known NULL indirect
->> call.
->>
->> While it would be possible to fix this by transforming the initial check
->> into
->>
->>    if (dev->semaphore_idx < 0 || dev->semaphore_idx >= ARRAY_SIZE(i2c_dw_semaphore_cb_table))
->>
->> the remove member is unused after commit 440da737cf8d ("i2c: designware:
->> Use PCI PSP driver for communication"), so i2c_dw_remove_lock_support()
->> can be removed altogether, as it will never actually do anything.
->>
->> Closes: https://github.com/ClangBuiltLinux/linux/issues/2133
->> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> 
-> I'm totally fine with the patch itself, but I think the commit log
-> could be trimmed to something like the following with no loss:
-> 
->    Remove struct i2c_dw_semaphore_callbacks.remove() and
->    i2c_dw_remove_lock_support().
-> 
->    440da737cf8d ("i2c: designware: Use PCI PSP driver for
->    communication") removed the last place that set
->    i2c_dw_semaphore_callbacks.remove(), which made
->    i2c_dw_remove_lock_support() a no-op.
-> 
->    This has the side effect of avoiding this kCFI warning (see Link):
-> 
->      dw_i2c_plat_remove+0x3c: no-cfi indirect call!
-> 
->    Link: https://lore.kernel.org/r/20251013-dw_i2c_plat_remove-avoid-objtool-no-cfi-warning-v1-1-8cc4842967bf@kernel.org
-> 
-> FWIW,
-> Reviewed-by: Bjorn Helgaas <bhelgaas@google.com>
-
-I echo Bjorn's comments on the lengthy commit message.
-Code change looks fine.
-
-Reviewed-by: Mario Limonciello (AMD) <superm1@kernel.org>
-
-> 
->> ---
->>   drivers/i2c/busses/i2c-designware-core.h    |  1 -
->>   drivers/i2c/busses/i2c-designware-platdrv.c | 11 -----------
->>   2 files changed, 12 deletions(-)
->>
->> diff --git a/drivers/i2c/busses/i2c-designware-core.h b/drivers/i2c/busses/i2c-designware-core.h
->> index 347843b4f5dd..d50664377c6b 100644
->> --- a/drivers/i2c/busses/i2c-designware-core.h
->> +++ b/drivers/i2c/busses/i2c-designware-core.h
->> @@ -330,7 +330,6 @@ struct dw_i2c_dev {
->>   
->>   struct i2c_dw_semaphore_callbacks {
->>   	int	(*probe)(struct dw_i2c_dev *dev);
->> -	void	(*remove)(struct dw_i2c_dev *dev);
->>   };
->>   
->>   int i2c_dw_init_regmap(struct dw_i2c_dev *dev);
->> diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
->> index 34d881572351..cff7e03dea7b 100644
->> --- a/drivers/i2c/busses/i2c-designware-platdrv.c
->> +++ b/drivers/i2c/busses/i2c-designware-platdrv.c
->> @@ -197,15 +197,6 @@ static int i2c_dw_probe_lock_support(struct dw_i2c_dev *dev)
->>   	return 0;
->>   }
->>   
->> -static void i2c_dw_remove_lock_support(struct dw_i2c_dev *dev)
->> -{
->> -	if (dev->semaphore_idx < 0)
->> -		return;
->> -
->> -	if (i2c_dw_semaphore_cb_table[dev->semaphore_idx].remove)
->> -		i2c_dw_semaphore_cb_table[dev->semaphore_idx].remove(dev);
->> -}
->> -
->>   static int dw_i2c_plat_probe(struct platform_device *pdev)
->>   {
->>   	u32 flags = (uintptr_t)device_get_match_data(&pdev->dev);
->> @@ -339,8 +330,6 @@ static void dw_i2c_plat_remove(struct platform_device *pdev)
->>   
->>   	i2c_dw_prepare_clk(dev, false);
->>   
->> -	i2c_dw_remove_lock_support(dev);
->> -
->>   	reset_control_assert(dev->rst);
->>   }
->>   
->>
->> ---
->> base-commit: 3a8660878839faadb4f1a6dd72c3179c1df56787
->> change-id: 20251013-dw_i2c_plat_remove-avoid-objtool-no-cfi-warning-5f2040eaadc2
->>
->> Best regards,
->> --
->> Nathan Chancellor <nathan@kernel.org>
->>
-
+Cheers,
+Nathan
 
