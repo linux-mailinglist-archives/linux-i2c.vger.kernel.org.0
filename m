@@ -1,53 +1,53 @@
-Return-Path: <linux-i2c+bounces-13519-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13520-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E50A5BDD03A
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 Oct 2025 09:28:46 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 81C82BDD043
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 Oct 2025 09:28:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 414C83B5DE8
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 Oct 2025 07:24:55 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 11C5A5057F9
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 Oct 2025 07:25:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 840E031D39A;
-	Wed, 15 Oct 2025 07:19:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 323FE31D731;
+	Wed, 15 Oct 2025 07:19:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="fhajyw10"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="h3R6H0/h"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B8F9318136;
-	Wed, 15 Oct 2025 07:19:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEC5A3191A5
+	for <linux-i2c@vger.kernel.org>; Wed, 15 Oct 2025 07:19:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760512762; cv=none; b=PqmUGOs1Ct2UqvoakX1DWmdFQ8ZajzDvW+1br5V+bH5VZXpAWXtHucSfj4g5EBwEJ23c9E8lOKiWOBmuN47vip/dxLFsmKxHpSJN+5YZ8zyJ31rC1Al/Bt6uNH1afX3CXwqkeJLfOXZlQlA7cZmAlMxeoHpaV3t0vnRhG+bTN9E=
+	t=1760512772; cv=none; b=EcFoEkaRK87EtZfFU7Riu29Wet/Ae+8p+p3yl+jDQEmZfu8FtatEViPC4PsWD7sBeQTGTrGygZGPg2M3mIwxrjcqOEXuSNo/PinB9ecp3N6vUVYVz3AE5uaXYHXDSEG196kuU5tNzSGL2dY0gcsSBqvk/j2yh3vRChVg/goGhAU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760512762; c=relaxed/simple;
-	bh=h27YkAkFmaaO9z5SDi8KAHY7HfIzJmKXF0EeRIM9YYw=;
+	s=arc-20240116; t=1760512772; c=relaxed/simple;
+	bh=gCSAma4Tte2egcK83g3zRKGkv6+1Id19gs9QkGE3d0Y=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kSH0G8wv0w3xUWeHP2OsW6aL+ipnVFVX/6Lua7JZvP4FExmH73N5CFyCRkh08diU/GkmS2EW8u83qbem27iIsBEc6iHyjRkQ5DeLac1TLVGDyKnHbqeUgqPPyM4XiMPSetpyAjntnucg8FmY1IUrYQIHgCBvskRBjsZiof5/3Lk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=fhajyw10; arc=none smtp.client-ip=185.246.84.56
+	 MIME-Version; b=MuVAKyPbW0vNnDlrK7qIoZ5p2eCSiC5E+A7stOfpWnDSG6j8tBNFDv+shQ8OV/a45DtJ9vS9gfk+TiMlh4GNdXy6um6dhtxm/UWMS/mkCJP+NJ2dN9otSDyMJXxVqowrTjhCB2S79k1aXVyAhGDztxsJvuZCoNPPZ8ZV0Tphu18=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=h3R6H0/h; arc=none smtp.client-ip=185.246.84.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id DF8C61A13AA;
-	Wed, 15 Oct 2025 07:19:18 +0000 (UTC)
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 53DE71A13AB
+	for <linux-i2c@vger.kernel.org>; Wed, 15 Oct 2025 07:19:29 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id B5A8D606FA;
-	Wed, 15 Oct 2025 07:19:18 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 3DAAB102F22BF;
-	Wed, 15 Oct 2025 09:19:04 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 20653606F9;
+	Wed, 15 Oct 2025 07:19:29 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 4880E102F22BC;
+	Wed, 15 Oct 2025 09:19:16 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1760512755; h=from:subject:date:message-id:to:cc:mime-version:
+	t=1760512766; h=from:subject:date:message-id:to:cc:mime-version:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=y9DaiWzLiow70LlXauI/CfyUS2lb/2K9p90X1QtJ9vA=;
-	b=fhajyw10Tsn61Sv7TL5x22+7CQ33mJejCurUlOypsJCcHV14kSkX6bwPVi+KHeM0AhaViw
-	z7uIldRHoYTWOHIbeyENHb1hCfNfs3usairLMI4CAABsPAm63e8c2k8uw+agmxHJQjcVMq
-	nqzySsots2KDTbTz5Pd3r+hj2Xdp2gmmPZvnuR5oM3eeQJELZ/jDZBUOGavzxsCTX7XJJV
-	IuPH0cDB8T1t5jeiuLbXW2VQOPOu3G45c4B9GImEOXNkvdktlom4YxcJIPBX/R9SGjQEpS
-	f2wrqYayb37zNeiVPpt0AjBbwcE33FgR+NUwbbvhNkVWtCs3WmdHwX6vdYUFpg==
+	bh=nGT/nZHo+Ajyn0KxTB2yaVizaJRWjEOjHnpXmzyLJys=;
+	b=h3R6H0/hCTY+SRdpVxPFC/fIyeyjuIjnVHoXuhUxiQgNrl6zZ9cEZ6g3MNEmcIkzQrkJUO
+	RAD42jfVi8ceacAGtkzjlg3ANcVfU4ejCmGCA/v3ZTULSa3MPpmKYVydPBGAzieY+VesJR
+	wdexX/RPfPTtS4CKFNdHbZ6KzZfzlebAbcaSd7BIs8bHqWKSwY5AnK71xLsnBH4rOxoBDl
+	elN1Ub18LRvBipc4VvWoLeYvMIIY+onMbYvgHwEjdejuRLKA4SrHK3jAeDXfhQqiahAvRf
+	tE6cP1aN7X2CdP6/GPME0VfYhZJAMqksRSVkTAfy4tMxLZYs9QjZZkEN6aMnmg==
 From: Herve Codina <herve.codina@bootlin.com>
 To: Andrew Lunn <andrew@lunn.ch>,
 	Rob Herring <robh@kernel.org>,
@@ -108,9 +108,9 @@ Cc: Wolfram Sang <wsa@kernel.org>,
 	Steen Hegelund <steen.hegelund@microchip.com>,
 	Luca Ceresoli <luca.ceresoli@bootlin.com>,
 	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH v4 15/29] PCI: of: Remove fwnode_dev_initialized() call for a PCI root bridge node
-Date: Wed, 15 Oct 2025 09:14:02 +0200
-Message-ID: <20251015071420.1173068-16-herve.codina@bootlin.com>
+Subject: [PATCH v4 16/29] i2c: core: Introduce i2c_get_adapter_physdev()
+Date: Wed, 15 Oct 2025 09:14:03 +0200
+Message-ID: <20251015071420.1173068-17-herve.codina@bootlin.com>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20251015071420.1173068-1-herve.codina@bootlin.com>
 References: <20251015071420.1173068-1-herve.codina@bootlin.com>
@@ -123,53 +123,75 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Last-TLS-Session-Version: TLSv1.3
 
-During the instantiation of devices described by a device-tree overlay
-applied on a PCI device, devlink displays the following kind of debug
-messages instead of creating the expected links:
-   'Not linking xxxx - might never become dev'
+The physical device providing an I2C adapter is the device that calls
+i2c_add_adapter() or variants and i2c_del_adapter().
 
-Without those expected links, the device removal order cannot be
-correct.
+Most of the time this physical device is the parent of the adapter
+device.
 
-Those debug traces are printed by fw_devlink_create_devlink(). In our
-use case, they are all printed because the supplier of the link has at
-least one of its ancestor with its fwnode flag FWNODE_FLAG_INITIALIZED
-set.
+Exceptions exist with i2c muxes. Indeed, in case of i2c muxes, the
+parent of the mux adapter device points to the adapter device the mux is
+connected to instead of the physical of this mux adapter.
 
-The culprit ancestor is the PCI root bridge.
-
-The fwnode related to the PCI root bridge is created dynamically by the
-of_pci_make_host_bridge_node() function. During this creation
-fwnode_dev_initialized() is called which set the FWNODE_FLAG_INITIALIZED
-flag.
-
-Calling fwnode_dev_initialized() tells devlink that the device related
-to this node is handled out of the driver core. This is not correct in
-our case. Indeed the device related to this firmware node is handled
-using driver core mechanisms and is fully compliant devlink
-expectations.
-
-Simply remove the fwnode_dev_initialized() call. With that done, the
-devlink debug messages are no more displayed and links that were missing
-are correctly created.
+Introduce i2c_get_adapter_physdev() and a new physdev field in the
+adapter structure in order to ease the adapter physical device
+retrieval.
 
 Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
 ---
- drivers/pci/of.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/i2c/i2c-core-base.c | 16 ++++++++++++++++
+ include/linux/i2c.h         |  3 +++
+ 2 files changed, 19 insertions(+)
 
-diff --git a/drivers/pci/of.c b/drivers/pci/of.c
-index bbbab115d47f..6b45eca63904 100644
---- a/drivers/pci/of.c
-+++ b/drivers/pci/of.c
-@@ -811,7 +811,6 @@ void of_pci_make_host_bridge_node(struct pci_host_bridge *bridge)
- 	 */
- 	of_node_set_flag(np, OF_POPULATED);
- 	fw_devlink_set_device(&np->fwnode, &bridge->dev);
--	fwnode_dev_initialized(&np->fwnode, true);
+diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+index ae7e9c8b65a6..f3254869f842 100644
+--- a/drivers/i2c/i2c-core-base.c
++++ b/drivers/i2c/i2c-core-base.c
+@@ -1919,6 +1919,22 @@ struct i2c_adapter *i2c_get_adapter_by_fwnode(struct fwnode_handle *fwnode)
+ }
+ EXPORT_SYMBOL(i2c_get_adapter_by_fwnode);
  
- 	ret = of_changeset_apply(cset);
- 	if (ret)
++/**
++ * i2c_get_adapter_physdev() - Get the physical device of an adapter
++ * @adapter: the adapter to get the physical device from
++ *
++ * Return:
++ * Look up and return the &struct device corresponding to the device supplying
++ * this @adapter.
++ *
++ * The user must call put_device() once done with the physical device returned.
++ */
++struct device *i2c_get_adapter_physdev(struct i2c_adapter *adapter)
++{
++	return get_device(adapter->physdev ?: adapter->dev.parent);
++}
++EXPORT_SYMBOL(i2c_get_adapter_physdev);
++
+ static void i2c_parse_timing(struct device *dev, char *prop_name, u32 *cur_val_p,
+ 			    u32 def_val, bool use_def)
+ {
+diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+index 20fd41b51d5c..dff04d20cafe 100644
+--- a/include/linux/i2c.h
++++ b/include/linux/i2c.h
+@@ -744,6 +744,7 @@ struct i2c_adapter {
+ 	int timeout;			/* in jiffies */
+ 	int retries;
+ 	struct device dev;		/* the adapter device */
++	struct device *physdev;		/* the physical device */
+ 	unsigned long locked_flags;	/* owned by the I2C core */
+ #define I2C_ALF_IS_SUSPENDED		0
+ #define I2C_ALF_SUSPEND_REPORTED	1
+@@ -911,6 +912,8 @@ struct i2c_adapter *i2c_get_adapter(int nr);
+ void i2c_put_adapter(struct i2c_adapter *adap);
+ unsigned int i2c_adapter_depth(struct i2c_adapter *adapter);
+ 
++struct device *i2c_get_adapter_physdev(struct i2c_adapter *adap);
++
+ void i2c_parse_fw_timings(struct device *dev, struct i2c_timings *t, bool use_defaults);
+ 
+ /* Return the functionality mask */
 -- 
 2.51.0
 
