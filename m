@@ -1,53 +1,53 @@
-Return-Path: <linux-i2c+bounces-13520-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13521-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81C82BDD043
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 Oct 2025 09:28:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 805F9BDD073
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 Oct 2025 09:29:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 11C5A5057F9
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 Oct 2025 07:25:06 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 064844FBCF3
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 Oct 2025 07:25:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 323FE31D731;
-	Wed, 15 Oct 2025 07:19:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCEA331D75B;
+	Wed, 15 Oct 2025 07:19:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="h3R6H0/h"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="sSz51uZY"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEC5A3191A5
-	for <linux-i2c@vger.kernel.org>; Wed, 15 Oct 2025 07:19:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C80793148B4;
+	Wed, 15 Oct 2025 07:19:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760512772; cv=none; b=EcFoEkaRK87EtZfFU7Riu29Wet/Ae+8p+p3yl+jDQEmZfu8FtatEViPC4PsWD7sBeQTGTrGygZGPg2M3mIwxrjcqOEXuSNo/PinB9ecp3N6vUVYVz3AE5uaXYHXDSEG196kuU5tNzSGL2dY0gcsSBqvk/j2yh3vRChVg/goGhAU=
+	t=1760512783; cv=none; b=ITQsgGJPpSwTbnu//IjIECB9NwBC8ZiY+zyTX07tlyArPFyjc6av0QdvLzsCYD82HyXiUxeJRrLiExz/md03dUM2upuBA5yQx00LhZB/ORm4W3g9P02lDt/1pSHAh1YU03I0DIPx5OqxLSdjqCAdZ+ZFMSTMJI/FkzyQHii3CN0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760512772; c=relaxed/simple;
-	bh=gCSAma4Tte2egcK83g3zRKGkv6+1Id19gs9QkGE3d0Y=;
+	s=arc-20240116; t=1760512783; c=relaxed/simple;
+	bh=WiVP5CIuAogI+n24yHeNratXJ+BSfgiH3Ppx6mHRwm4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MuVAKyPbW0vNnDlrK7qIoZ5p2eCSiC5E+A7stOfpWnDSG6j8tBNFDv+shQ8OV/a45DtJ9vS9gfk+TiMlh4GNdXy6um6dhtxm/UWMS/mkCJP+NJ2dN9otSDyMJXxVqowrTjhCB2S79k1aXVyAhGDztxsJvuZCoNPPZ8ZV0Tphu18=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=h3R6H0/h; arc=none smtp.client-ip=185.246.84.56
+	 MIME-Version; b=mYYcvV3cjCRb0zQsiLo6qL5KKnrlHMay/VgyV/PUSK1xxjh/aVYxAV4W3uFK/+bT5SpkGMeTR5R5DXKtoK3r1kANLhYsiwR7mDFPrRA1sQgeiOmP0yLb5cib4bkFlxvriwEMgudU1RaOraA+c2Baxrbbc9LHPBQ7vQnHHOXdtzc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=sSz51uZY; arc=none smtp.client-ip=185.246.84.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 53DE71A13AB
-	for <linux-i2c@vger.kernel.org>; Wed, 15 Oct 2025 07:19:29 +0000 (UTC)
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 8A7751A13AB;
+	Wed, 15 Oct 2025 07:19:40 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 20653606F9;
-	Wed, 15 Oct 2025 07:19:29 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 4880E102F22BC;
-	Wed, 15 Oct 2025 09:19:16 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 5DF38606FA;
+	Wed, 15 Oct 2025 07:19:40 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 32033102F22BB;
+	Wed, 15 Oct 2025 09:19:27 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1760512766; h=from:subject:date:message-id:to:cc:mime-version:
+	t=1760512777; h=from:subject:date:message-id:to:cc:mime-version:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=nGT/nZHo+Ajyn0KxTB2yaVizaJRWjEOjHnpXmzyLJys=;
-	b=h3R6H0/hCTY+SRdpVxPFC/fIyeyjuIjnVHoXuhUxiQgNrl6zZ9cEZ6g3MNEmcIkzQrkJUO
-	RAD42jfVi8ceacAGtkzjlg3ANcVfU4ejCmGCA/v3ZTULSa3MPpmKYVydPBGAzieY+VesJR
-	wdexX/RPfPTtS4CKFNdHbZ6KzZfzlebAbcaSd7BIs8bHqWKSwY5AnK71xLsnBH4rOxoBDl
-	elN1Ub18LRvBipc4VvWoLeYvMIIY+onMbYvgHwEjdejuRLKA4SrHK3jAeDXfhQqiahAvRf
-	tE6cP1aN7X2CdP6/GPME0VfYhZJAMqksRSVkTAfy4tMxLZYs9QjZZkEN6aMnmg==
+	bh=sBSAjYsZ9RxXhZA6quX2BCuJ34oWBVlDutyklbhyEGo=;
+	b=sSz51uZY8B7opuFIIdxB/SpboqpGrFtJ2sLwqcOct8P9AdnyLUJZhQGxp7XgyMfNH/3BHo
+	euO280XnO0BorAB6ZK6GTAkdkjnFgaTKDFgixVYJVBnzB/ETOhqgfiJJLp17Zdzdg9Sl0j
+	KE9wTwlvcBym0q2hz8pkCjobPjsYGB5cMnUf5DaAE3Iw32Xim6AltmwBrydDKBubYChDwW
+	v6FommO1yA/D+xrMRdWOvTAQGqJXekEbT/BnOsunaTO2TsGqGVEA2IToKuG+uJDn7Cf6s8
+	OH4tTrBVgAQEatPNp1lSR0pBFaAB01/CQqgPF4SoOXvJ7fYa2k83KTD+NhqNIA==
 From: Herve Codina <herve.codina@bootlin.com>
 To: Andrew Lunn <andrew@lunn.ch>,
 	Rob Herring <robh@kernel.org>,
@@ -108,9 +108,9 @@ Cc: Wolfram Sang <wsa@kernel.org>,
 	Steen Hegelund <steen.hegelund@microchip.com>,
 	Luca Ceresoli <luca.ceresoli@bootlin.com>,
 	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH v4 16/29] i2c: core: Introduce i2c_get_adapter_physdev()
-Date: Wed, 15 Oct 2025 09:14:03 +0200
-Message-ID: <20251015071420.1173068-17-herve.codina@bootlin.com>
+Subject: [PATCH v4 17/29] i2c: mux: Set adapter physical device
+Date: Wed, 15 Oct 2025 09:14:04 +0200
+Message-ID: <20251015071420.1173068-18-herve.codina@bootlin.com>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20251015071420.1173068-1-herve.codina@bootlin.com>
 References: <20251015071420.1173068-1-herve.codina@bootlin.com>
@@ -123,75 +123,31 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Last-TLS-Session-Version: TLSv1.3
 
-The physical device providing an I2C adapter is the device that calls
-i2c_add_adapter() or variants and i2c_del_adapter().
+For i2c muxes, the parent of the mux adapter device is the adapter
+device the mux is connected to.
 
-Most of the time this physical device is the parent of the adapter
-device.
+This parent is not the physical device related to the mux adapter.
+Indeed, the physical device of the mux adapter is the mux device itself.
 
-Exceptions exist with i2c muxes. Indeed, in case of i2c muxes, the
-parent of the mux adapter device points to the adapter device the mux is
-connected to instead of the physical of this mux adapter.
-
-Introduce i2c_get_adapter_physdev() and a new physdev field in the
-adapter structure in order to ease the adapter physical device
-retrieval.
+Fill the adap.physdev with the mux device.
 
 Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
 ---
- drivers/i2c/i2c-core-base.c | 16 ++++++++++++++++
- include/linux/i2c.h         |  3 +++
- 2 files changed, 19 insertions(+)
+ drivers/i2c/i2c-mux.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index ae7e9c8b65a6..f3254869f842 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -1919,6 +1919,22 @@ struct i2c_adapter *i2c_get_adapter_by_fwnode(struct fwnode_handle *fwnode)
- }
- EXPORT_SYMBOL(i2c_get_adapter_by_fwnode);
- 
-+/**
-+ * i2c_get_adapter_physdev() - Get the physical device of an adapter
-+ * @adapter: the adapter to get the physical device from
-+ *
-+ * Return:
-+ * Look up and return the &struct device corresponding to the device supplying
-+ * this @adapter.
-+ *
-+ * The user must call put_device() once done with the physical device returned.
-+ */
-+struct device *i2c_get_adapter_physdev(struct i2c_adapter *adapter)
-+{
-+	return get_device(adapter->physdev ?: adapter->dev.parent);
-+}
-+EXPORT_SYMBOL(i2c_get_adapter_physdev);
-+
- static void i2c_parse_timing(struct device *dev, char *prop_name, u32 *cur_val_p,
- 			    u32 def_val, bool use_def)
- {
-diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-index 20fd41b51d5c..dff04d20cafe 100644
---- a/include/linux/i2c.h
-+++ b/include/linux/i2c.h
-@@ -744,6 +744,7 @@ struct i2c_adapter {
- 	int timeout;			/* in jiffies */
- 	int retries;
- 	struct device dev;		/* the adapter device */
-+	struct device *physdev;		/* the physical device */
- 	unsigned long locked_flags;	/* owned by the I2C core */
- #define I2C_ALF_IS_SUSPENDED		0
- #define I2C_ALF_SUSPEND_REPORTED	1
-@@ -911,6 +912,8 @@ struct i2c_adapter *i2c_get_adapter(int nr);
- void i2c_put_adapter(struct i2c_adapter *adap);
- unsigned int i2c_adapter_depth(struct i2c_adapter *adapter);
- 
-+struct device *i2c_get_adapter_physdev(struct i2c_adapter *adap);
-+
- void i2c_parse_fw_timings(struct device *dev, struct i2c_timings *t, bool use_defaults);
- 
- /* Return the functionality mask */
+diff --git a/drivers/i2c/i2c-mux.c b/drivers/i2c/i2c-mux.c
+index d59644e50f14..e5ba1c96ccf4 100644
+--- a/drivers/i2c/i2c-mux.c
++++ b/drivers/i2c/i2c-mux.c
+@@ -315,6 +315,7 @@ int i2c_mux_add_adapter(struct i2c_mux_core *muxc,
+ 	priv->adap.algo = &priv->algo;
+ 	priv->adap.algo_data = priv;
+ 	priv->adap.dev.parent = &parent->dev;
++	priv->adap.physdev = muxc->dev;
+ 	priv->adap.retries = parent->retries;
+ 	priv->adap.timeout = parent->timeout;
+ 	priv->adap.quirks = parent->quirks;
 -- 
 2.51.0
 
