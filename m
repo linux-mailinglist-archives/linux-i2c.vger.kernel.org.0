@@ -1,53 +1,53 @@
-Return-Path: <linux-i2c+bounces-13522-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13523-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0A89BDD088
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 Oct 2025 09:29:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61383BDD085
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 Oct 2025 09:29:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D728D506000
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 Oct 2025 07:25:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E1E133B4474
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 Oct 2025 07:26:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC4AF3191CB;
-	Wed, 15 Oct 2025 07:19:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CD5F313523;
+	Wed, 15 Oct 2025 07:20:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="NKaV2Gme"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="HY/Ttvr1"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C611A3191C5
-	for <linux-i2c@vger.kernel.org>; Wed, 15 Oct 2025 07:19:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C59C3195EA;
+	Wed, 15 Oct 2025 07:20:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760512795; cv=none; b=Z8+3qOnAujbptkRJFc2pBfI2+0z9Ue5za7DUyVqaRHrboMnC0u0SkGqbVB1p0S7ZlU0eUIyC8y4BxL6OAdu6OLn3M401r9AEYkeA8tLZxcHUDKRNo9QutfPYz8c4NTXq+KlAvm90my+7iGXXtGetbWy61woRAl44lIlZsNfpNd0=
+	t=1760512809; cv=none; b=Tc/dT7MlUxkvYBrd1igudQjfqExX9BKHV0fCYYg7PdNiM896Zt8SvTT03JP+L1s2Ct8G6alYd94R4UnOJDxBFhbsAB60eIhTyxsG15iXCsm7qMVD2gxawD5vImn0np2ZXXhN6IcxeVwoakPlcnKQgc4PL9Ibdo3Ekj+t/1V6mgY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760512795; c=relaxed/simple;
-	bh=vY17/wtEoNT7/vXd7j1upvohYcOvsvmclIEDLPBtaJM=;
+	s=arc-20240116; t=1760512809; c=relaxed/simple;
+	bh=9ttrNVLkRsSDRCfmp+OkyIDylFexNXHYFc3MB2ymOjI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CqERQfKpLJh9NpxVXk+/MCHeQR6gU4HpugDQT+qD2TTlv2PqLCy5lkXbQPSvs472/IiXU1r4i2ZWRuLJi2sMCcIquBmB3oeaGI0BzhUcXUHvZAtTMMmhAwEeDyFxe9+iHK28vIFCBKkTikf5d//q1sdB+DtaMItTp6tMLeNgrN4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=NKaV2Gme; arc=none smtp.client-ip=185.246.84.56
+	 MIME-Version; b=EOhG9dopTCb3yUOMizMO1jkvDjifT8gJLmOi0F6W+GuicKF5tNpc6BthqEmnUu+kuWDbRA2prpION2o3ZaOa15EuYh4+9u7TxHi2k8pagw3o4iRUYvEjs0k6tyUhO5IMNxBo4jawy7rFJMfl7Mrv9ltuldS93ZUKmQA2HQ/5Mok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=HY/Ttvr1; arc=none smtp.client-ip=185.246.85.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 5DCBF1A13AA
-	for <linux-i2c@vger.kernel.org>; Wed, 15 Oct 2025 07:19:52 +0000 (UTC)
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 5372F4E410C3;
+	Wed, 15 Oct 2025 07:20:06 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 34D56606FA;
-	Wed, 15 Oct 2025 07:19:52 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 4A9F7102F22BC;
-	Wed, 15 Oct 2025 09:19:38 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 291B7606FA;
+	Wed, 15 Oct 2025 07:20:06 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 41F8E102F22AF;
+	Wed, 15 Oct 2025 09:19:50 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1760512789; h=from:subject:date:message-id:to:cc:mime-version:
+	t=1760512803; h=from:subject:date:message-id:to:cc:mime-version:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=FZ718YoKkxeT/YKWxEb/GrmUV56+juoGk1/m487wr9A=;
-	b=NKaV2GmekxUOZrP/Mopx6Wfe4+t4JHta/pR7bI8G1b/wS6FMBvui743kdeGHOb58Yigrl0
-	C4RG5cei/m2W+yW1SUa4v4woVReGGdq+dKvx5wklpWMyHTJfvPJyOCl0m2oz/0+BIksLhn
-	FUrW5aFzIkOCyPJPHkAt/FQSFncdYca/TqkUoMRUZ4nMoub83IKg9XSCdoOfPef+1ijfec
-	MahOCHiUz3wMOyzeYSi+mVBopbVRKFzhlb8qUS7l8tfdpxvp1SndrSB0iy8BpVfiM5Iktv
-	YUeLniNzJi3fZw7dgh7/Jdim5inMqe1+jeFL8upDAXakhoCY/0mjN0VVRa6+ug==
+	bh=9R3lRfdbM4+6S/Dlp2yQbInaGSHf0B0yRJSd8+1498s=;
+	b=HY/Ttvr1IjR23UPcv6L80wsat+zSo70BPXFe2JJkRJx83N8zJLFXvHKXV93+3Cbm7FKknb
+	QyTsxyzeHPmqhLnoFqaElb7jCC+aVWuUJ/+ozqJvNi9wmGEMtRkAgkWUfgXryzITK4SoVZ
+	c1nU0iaw9WiNNb2GkbjD8fG9wcc8d+lIQl67udR5iBpTAf1F+1Bz91eEAS92c0MXBifrPr
+	7aybsOiGNOTrtTfGphFRpr3hO5lGP4lLR1xfxVl9lI6q8l1NwJWODoowB7XRsyS0vUcA2R
+	uKzGkc41CtLI4pfBHHhD4Y+5t2m/blWt2UfvIANhfA/cTwhOqX5kRpSkfjAQkQ==
 From: Herve Codina <herve.codina@bootlin.com>
 To: Andrew Lunn <andrew@lunn.ch>,
 	Rob Herring <robh@kernel.org>,
@@ -108,9 +108,9 @@ Cc: Wolfram Sang <wsa@kernel.org>,
 	Steen Hegelund <steen.hegelund@microchip.com>,
 	Luca Ceresoli <luca.ceresoli@bootlin.com>,
 	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH v4 18/29] i2c: mux: Create missing devlink between mux and adapter physical device
-Date: Wed, 15 Oct 2025 09:14:05 +0200
-Message-ID: <20251015071420.1173068-19-herve.codina@bootlin.com>
+Subject: [PATCH v4 19/29] of: property: Allow fw_devlink device-tree on x86
+Date: Wed, 15 Oct 2025 09:14:06 +0200
+Message-ID: <20251015071420.1173068-20-herve.codina@bootlin.com>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20251015071420.1173068-1-herve.codina@bootlin.com>
 References: <20251015071420.1173068-1-herve.codina@bootlin.com>
@@ -123,103 +123,94 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Last-TLS-Session-Version: TLSv1.3
 
-When removing an i2c controller device handling an i2c bus where an i2c
-mux is connected to, the removal process hangs and is stuck in the
-wait_completion() call done in i2c_del_adapter().
+PCI drivers can use a device-tree overlay to describe the hardware
+available on the PCI board. This is the case, for instance, of the
+LAN966x PCI device driver.
 
-The i2c_del_adapter() tries to removed the i2c adapter related to the
-i2c controller device and the wait_completion() is waiting for the i2c
-adapter device release. This release is performed when the device is no
-more used (i.e. refcount reaches zero).
+Adding some more nodes in the device-tree overlay adds some more
+consumer/supplier relationship between devices instantiated from this
+overlay.
 
-When an i2c mux is involved in an i2c path, the struct dev topology is
-the following:
-    +----------------+                +-------------------+
-    | i2c controller |                |      i2c mux      |
-    |     device     |                |      device       |
-    |       ^        |                |                   |
-    |       |        |                |                   |
-    |  dev's parent  |                |                   |
-    |       |        |                |                   |
-    |   i2c adapter  |                | i2c adapter chanX |
-    |     device  <---- dev's parent ------  device       |
-    |   (no driver)  |                |    (no driver)    |
-    +----------------+                +-------------------+
+Those fw_node consumer/supplier relationships are handled by fw_devlink
+and are created based on the device-tree parsing done by the
+of_fwnode_add_links() function.
 
-When an i2c mux device creates an i2c adapter for its downstream
-channel, a reference is taken to its adapter dev's parent. This parent
-is the i2c mux upstream adapter device.
+Those consumer/supplier links are needed in order to ensure a correct PM
+runtime management and a correct removal order between devices.
 
-No relationship exists between the i2c mux device itself and the i2c
-controller device (physical device) in order to have the i2c mux device
-calling i2c_del_adapter() to remove its downtream adapters and so,
-release references taken to the upstream adapter.
+For instance, without those links a supplier can be removed before its
+consumers is removed leading to all kind of issue if this consumer still
+want the use the already removed supplier.
 
-This consumer/supplier relationship is typically a devlink relationship.
+The support for the usage of an overlay from a PCI driver has been added
+on x86 systems in commit 1f340724419ed ("PCI: of: Create device tree PCI
+host bridge node").
 
-Also, i2c muxes can be chained and so, the upstream adapter can be
-supplied by either an i2c controller device or an other i2c mux device.
+In the past, support for fw_devlink on x86 had been tried but this
+support has been removed in commit 4a48b66b3f52 ("of: property: Disable
+fw_devlink DT support for X86"). Indeed, this support was breaking some
+x86 systems such as OLPC system and the regression was reported in [0].
 
-In order to get the physical device of the adapter a mux is connected
-to, rely on the newly introduced i2c_adapter_get_physdev() and create
-the missing devlink between the i2c mux device and the physical
-device of the adapter the mux is connected to.
+Instead of disabling this support for all x86 system, use a finer grain
+and disable this support only for the possible problematic subset of x86
+systems (at least OLPC and CE4100).
 
-With that done, the i2c mux device is removed before the device
-handling the upstream i2c adapter (i2c controller device or i2c mux
-device). All references are released and the i2c_del_adapter() call
-performed by driver handling the upstream adapter device is not blocking
-anymore.
+Those systems use a device-tree to describe their hardware. Identify
+those systems using key properties in the device-tree.
 
 Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+Link: https://lore.kernel.org/lkml/3c1f2473-92ad-bfc4-258e-a5a08ad73dd0@web.de/ [0]
 ---
- drivers/i2c/i2c-mux.c | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+ drivers/of/property.c | 31 ++++++++++++++++++++++++++++++-
+ 1 file changed, 30 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/i2c/i2c-mux.c b/drivers/i2c/i2c-mux.c
-index e5ba1c96ccf4..8716d7f6a985 100644
---- a/drivers/i2c/i2c-mux.c
-+++ b/drivers/i2c/i2c-mux.c
-@@ -268,7 +268,9 @@ int i2c_mux_add_adapter(struct i2c_mux_core *muxc,
- 			u32 force_nr, u32 chan_id)
- {
- 	struct i2c_adapter *parent = muxc->parent;
-+	struct device *parent_physdev;
- 	struct i2c_mux_priv *priv;
-+	struct device_link *dl;
- 	char symlink_name[20];
- 	int ret;
+diff --git a/drivers/of/property.c b/drivers/of/property.c
+index c1feb631e383..09b568e3b826 100644
+--- a/drivers/of/property.c
++++ b/drivers/of/property.c
+@@ -1600,12 +1600,41 @@ static int of_fwnode_irq_get(const struct fwnode_handle *fwnode,
+ 	return of_irq_get(to_of_node(fwnode), index);
+ }
  
-@@ -375,6 +377,29 @@ int i2c_mux_add_adapter(struct i2c_mux_core *muxc,
- 				      ACPI_COMPANION(muxc->dev),
- 				      chan_id);
- 
-+	/*
-+	 * There is no relationship set between the mux device and the physical
-+	 * device handling the parent adapter. Create this missing relationship
-+	 * in order to remove the i2c mux device (consumer) and so the dowstream
-+	 * channel adapters before removing the physical device (supplier) which
-+	 * handles the i2c mux upstream adapter.
-+	 */
-+	parent_physdev = i2c_get_adapter_physdev(parent);
-+	if (!parent_physdev) {
-+		dev_err(muxc->dev, "failed to get the parent physical device\n");
-+		ret = -EINVAL;
-+		goto err_free_priv;
-+	}
-+	dl = device_link_add(muxc->dev, parent_physdev, DL_FLAG_AUTOREMOVE_CONSUMER);
-+	if (!dl) {
-+		dev_err(muxc->dev, "failed to create device link to %s\n",
-+			dev_name(parent_physdev));
-+		put_device(parent_physdev);
-+		ret = -EINVAL;
-+		goto err_free_priv;
-+	}
-+	put_device(parent_physdev);
++static int match_property_by_path(const char *node_path, const char *prop_name,
++				  const char *value)
++{
++	struct device_node *np __free(device_node) = of_find_node_by_path(node_path);
 +
- 	if (force_nr) {
- 		priv->adap.nr = force_nr;
- 		ret = i2c_add_numbered_adapter(&priv->adap);
++	return of_property_match_string(np, prop_name, value);
++}
++
++static bool of_is_fwnode_add_links_supported(void)
++{
++	static int is_supported = -1;
++
++	if (is_supported != -1)
++		return !!is_supported;
++
++	if (match_property_by_path("/soc", "compatible", "intel,ce4100-cp") >= 0)
++		goto not_supported;
++
++	if (match_property_by_path("/", "architecture", "OLPC") >= 0)
++		goto not_supported;
++
++	is_supported = 1;
++	return !!is_supported;
++
++not_supported:
++	is_supported = 0;
++	return !!is_supported;
++}
++
+ static int of_fwnode_add_links(struct fwnode_handle *fwnode)
+ {
+ 	const struct property *p;
+ 	struct device_node *con_np = to_of_node(fwnode);
+ 
+-	if (IS_ENABLED(CONFIG_X86))
++	if (IS_ENABLED(CONFIG_X86) && !of_is_fwnode_add_links_supported())
+ 		return 0;
+ 
+ 	if (!con_np)
 -- 
 2.51.0
 
