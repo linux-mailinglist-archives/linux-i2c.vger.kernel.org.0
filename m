@@ -1,53 +1,53 @@
-Return-Path: <linux-i2c+bounces-13530-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13531-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95BF2BDD112
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 Oct 2025 09:31:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7FECFBDD133
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 Oct 2025 09:32:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5724019C27B3
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 Oct 2025 07:29:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E5DF63B194D
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 Oct 2025 07:29:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73E7F321F51;
-	Wed, 15 Oct 2025 07:21:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4EB8322556;
+	Wed, 15 Oct 2025 07:21:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="RDFyXbMY"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="vt66Kt+9"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 392F231A542;
-	Wed, 15 Oct 2025 07:21:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B36A314A6A;
+	Wed, 15 Oct 2025 07:21:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760512880; cv=none; b=dHLuytHgJsBGiN4AxvGVv3rHC+ANN6FsdmNc4wohnPzjw4g5x1j2IN4U7nlrxWiB3hTle6UvGmoqqdl2JbGliricN8TaejAabGCAPqbromSeEX94MqOVmCYF10mpQSxSHS3vEsP6KUB2rK5psqZ7N6YhIzIRJhtP5Bk8A0hgBl8=
+	t=1760512888; cv=none; b=X+FYmwtCAcJxE3/aOMJAwXs/pPyEBQszwerumYY3OJPWzcmdO9A2bCzfGY/jvdaEmNCBBuKnII2iktJEvdo470Md21/ocny5ZVSlVsKamEdQx7KioHrjyJ39tqKkRGJuhXxnxryPLUV4uLMhZE5qyKvj+cgxNh+pTUUil8dVoqs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760512880; c=relaxed/simple;
-	bh=ZuHXcIHNvq0FaC27E+Cf07iw95k61K7y0X7fZfDDxPY=;
+	s=arc-20240116; t=1760512888; c=relaxed/simple;
+	bh=TTroOPqXxjG//qKe9A/Wb5fs/I2nb0k+iUtwu7aKCds=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gkAkYT/GtJwzLWNDe7+NCEKNosPe0oOFxkRO9L+urw3aA3pByN+oqnTdNIhh8Hc6dYBa2HBW6ufJcWFzcW1+gWLTLEJag1abzm1bPCVALHiUzMomJtBlq2+1BoZ6R6QxdAIDSsFQj1QQZQRe6oXw1GNUM2PPyFD5m+ssNZ8h2Bc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=RDFyXbMY; arc=none smtp.client-ip=185.246.85.4
+	 MIME-Version; b=k7JysgytF5Yq+83XQcT7NzjlRBvpHJOstFZcfT5jEO9pby8JbIv6OKCPIC+50IG66GaUCoXRb5RMwYVaeL/tpF3KaKYCSbPZsa3AfcUVo6N/D9EfuQ5QU0m1Z+xpzcp2h9H9Jq5hTXrXqst8tItUbdhfw/EPtm7ilanN5/uwfVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=vt66Kt+9; arc=none smtp.client-ip=185.171.202.116
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id BEF3C4E410C3;
-	Wed, 15 Oct 2025 07:21:15 +0000 (UTC)
+	by smtpout-04.galae.net (Postfix) with ESMTPS id EAC96C09FAA;
+	Wed, 15 Oct 2025 07:21:05 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 96969606F9;
-	Wed, 15 Oct 2025 07:21:15 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 3E965102F22BB;
-	Wed, 15 Oct 2025 09:21:05 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 10D86606F9;
+	Wed, 15 Oct 2025 07:21:25 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id D0053102F22BD;
+	Wed, 15 Oct 2025 09:21:13 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1760512873; h=from:subject:date:message-id:to:cc:mime-version:
+	t=1760512882; h=from:subject:date:message-id:to:cc:mime-version:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=9JXZvba91OCi6kDIuwHaUoggqvl4xIOcDR9HZtTRqa4=;
-	b=RDFyXbMYdDG0XXMjUn/oAMMzuFPSpe4jKPArXKk6Zd3uAUrjmXxMVnB/WOGPuHiQkJy2gW
-	nSuh57o23ptATBWP4xHWS9TGnbF4+Rgi84LQbeQj1SVD5KamFuA1rTJ8LINHxRnPkWZpvC
-	DH1EFwFHVYI6UOFDmmKPo3xL9c/OaHgwmiHLVx24xuBRwB9V9y1r3xcVO097sZKcjjtO1N
-	+Gh8dJp517EG5oHjIiV6zNpDVNuVwL3vTR2+xTM7jwOFa4D61Du9lPV+WT/FzXWNGJ2RMB
-	YwyUg8RJUy56J/SmX9hOOTdQTpPwBRG2jEr5O/fqWPtUuzE8FcxVs3ZwEEChVw==
+	bh=u6XTodlRVhMB+xHq2BDcAc16sIRCGFH8BTjMoJeRyUc=;
+	b=vt66Kt+9+XnczuM9TwbuEfHSnwdtFYhrQADDl9WartoJ/osg7yoVOvA1zAGuwE5BHBEzp2
+	fsV17iwx0dMM3wGr8HWY7DHOsxtkUlmtsk/0Q4x1QtS7I5+T6i3Zyw2Q1Rg1vo+QIfVfP4
+	K0MuDGDF17BMlXayPUfpaRtEyXFu5c37Cho9MMHX4l/Lj1xmRZoBRucIkV43rc8tuoDJys
+	elVzNTLiN7Ni2Io/7F9QyGZm7ulPBvIdqxlGUgVg0ytMfpPzu8v3ja/6YCcSKhmIN0gdKc
+	U31AekAaX/Pj/c4U8Jt+80+VgAQD4W7lX5bHP3tmWkAgcKOmA7DMlQafWyUeBA==
 From: Herve Codina <herve.codina@bootlin.com>
 To: Andrew Lunn <andrew@lunn.ch>,
 	Rob Herring <robh@kernel.org>,
@@ -108,9 +108,9 @@ Cc: Wolfram Sang <wsa@kernel.org>,
 	Steen Hegelund <steen.hegelund@microchip.com>,
 	Luca Ceresoli <luca.ceresoli@bootlin.com>,
 	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH v4 26/29] misc: lan966x_pci: Introduce board specific data
-Date: Wed, 15 Oct 2025 09:14:13 +0200
-Message-ID: <20251015071420.1173068-27-herve.codina@bootlin.com>
+Subject: [PATCH v4 27/29] misc: lan966x_pci: Add dtsi/dtso nodes in order to support SFPs
+Date: Wed, 15 Oct 2025 09:14:14 +0200
+Message-ID: <20251015071420.1173068-28-herve.codina@bootlin.com>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20251015071420.1173068-1-herve.codina@bootlin.com>
 References: <20251015071420.1173068-1-herve.codina@bootlin.com>
@@ -123,95 +123,216 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Last-TLS-Session-Version: TLSv1.3
 
-Only one device-tree overlay (lan966x_evb_lan9662_nic.dtbo) is handled
-and this overlay is directly referenced in lan966x_pci_load_overlay().
-
-This avoid to use the code for an other board.
-
-In order to be more generic and to allow support for other boards (PCI
-Vendor/Device IDs), introduce the lan966x_pci_info structure and attach
-it to PCI Vendor/Device IDs handled by the driver.
-
-This structure contains information related to the PCI board such as
-information related to the dtbo describing the board we have to load.
+Add device-tree nodes needed to support SFPs.
+Those nodes are:
+ - the clock controller
+ - the i2c controller
+ - the i2c mux
+ - the SFPs themselves and their related ports in the switch
 
 Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 ---
- drivers/misc/lan966x_pci.c | 30 ++++++++++++++++++++++--------
- 1 file changed, 22 insertions(+), 8 deletions(-)
+ drivers/misc/lan966x_evb_lan9662_nic.dtso | 96 +++++++++++++++++++++++
+ drivers/misc/lan966x_pci.dtsi             | 42 ++++++++++
+ 2 files changed, 138 insertions(+)
 
-diff --git a/drivers/misc/lan966x_pci.c b/drivers/misc/lan966x_pci.c
-index e60ab662b8f3..5fa6af531a53 100644
---- a/drivers/misc/lan966x_pci.c
-+++ b/drivers/misc/lan966x_pci.c
-@@ -18,10 +18,6 @@
- #include <linux/pci_ids.h>
- #include <linux/slab.h>
+diff --git a/drivers/misc/lan966x_evb_lan9662_nic.dtso b/drivers/misc/lan966x_evb_lan9662_nic.dtso
+index 3ad50abee72d..20e1fe4f78bf 100644
+--- a/drivers/misc/lan966x_evb_lan9662_nic.dtso
++++ b/drivers/misc/lan966x_evb_lan9662_nic.dtso
+@@ -4,6 +4,7 @@
+  */
  
--/* Embedded dtbo symbols created by cmd_wrap_S_dtb in scripts/Makefile.lib */
--extern char __dtbo_lan966x_evb_lan9662_nic_begin[];
--extern char __dtbo_lan966x_evb_lan9662_nic_end[];
--
- struct pci_dev_intr_ctrl {
- 	struct pci_dev *pci_dev;
- 	struct irq_domain *irq_domain;
-@@ -118,17 +114,23 @@ static int devm_pci_dev_create_intr_ctrl(struct pci_dev *pdev)
- 	return devm_add_action_or_reset(&pdev->dev, devm_pci_dev_remove_intr_ctrl, intr_ctrl);
- }
+ #include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/mfd/atmel-flexcom.h>
+ #include <dt-bindings/phy/phy-lan966x-serdes.h>
  
-+struct lan966x_pci_info {
-+	void *dtbo_begin;
-+	void *dtbo_end;
-+};
+ /dts-v1/;
+@@ -27,15 +28,94 @@ __overlay__ {
+ 			#size-cells = <2>;
+ 
+ 			#include "lan966x_pci.dtsi"
 +
- struct lan966x_pci {
- 	struct device *dev;
- 	int ovcs_id;
-+	const struct lan966x_pci_info *info;
++			i2c0_emux: i2c0-emux {
++				compatible = "i2c-mux-pinctrl";
++				#address-cells = <1>;
++				#size-cells = <0>;
++				i2c-parent = <&i2c0>;
++				pinctrl-names = "i2c102", "i2c103", "idle";
++				pinctrl-0 = <&i2cmux_0>;
++				pinctrl-1 = <&i2cmux_1>;
++				pinctrl-2 = <&i2cmux_pins>;
++
++				i2c102: i2c@0 {
++					reg = <0>;
++					#address-cells = <1>;
++					#size-cells = <0>;
++				};
++
++				i2c103: i2c@1 {
++					reg = <1>;
++					#address-cells = <1>;
++					#size-cells = <0>;
++				};
++			};
++
++			sfp2: sfp2 {
++				compatible = "sff,sfp";
++				i2c-bus = <&i2c102>;
++				tx-disable-gpios = <&gpio 0 GPIO_ACTIVE_HIGH>;
++				los-gpios = <&gpio 25 GPIO_ACTIVE_HIGH>;
++				mod-def0-gpios = <&gpio 18 GPIO_ACTIVE_LOW>;
++				tx-fault-gpios = <&gpio 2 GPIO_ACTIVE_HIGH>;
++			};
++
++			sfp3: sfp3 {
++				compatible = "sff,sfp";
++				i2c-bus = <&i2c103>;
++				tx-disable-gpios = <&gpio 1 GPIO_ACTIVE_HIGH>;
++				los-gpios = <&gpio 26 GPIO_ACTIVE_HIGH>;
++				mod-def0-gpios = <&gpio 19 GPIO_ACTIVE_LOW>;
++				tx-fault-gpios = <&gpio 3 GPIO_ACTIVE_HIGH>;
++			};
+ 		};
+ 	};
  };
  
- static int lan966x_pci_load_overlay(struct lan966x_pci *data)
- {
--	u32 dtbo_size = __dtbo_lan966x_evb_lan9662_nic_end - __dtbo_lan966x_evb_lan9662_nic_begin;
--	void *dtbo_start = __dtbo_lan966x_evb_lan9662_nic_begin;
-+	const struct lan966x_pci_info *info = data->info;
- 
--	return of_overlay_fdt_apply(dtbo_start, dtbo_size, &data->ovcs_id, dev_of_node(data->dev));
-+	return of_overlay_fdt_apply(info->dtbo_begin, info->dtbo_end - info->dtbo_begin,
-+				    &data->ovcs_id, dev_of_node(data->dev));
- }
- 
- static void lan966x_pci_unload_overlay(struct lan966x_pci *data)
-@@ -169,6 +171,9 @@ static int lan966x_pci_probe(struct pci_dev *pdev, const struct pci_device_id *i
- 
- 	pci_set_drvdata(pdev, data);
- 	data->dev = dev;
-+	data->info = (const struct lan966x_pci_info *)id->driver_data;
-+	if (!data->info)
-+		return -EINVAL;
- 
- 	ret = lan966x_pci_load_overlay(data);
- 	if (ret)
-@@ -196,8 +201,17 @@ static void lan966x_pci_remove(struct pci_dev *pdev)
- 	lan966x_pci_unload_overlay(data);
- }
- 
-+/* Embedded dtbo symbols created by cmd_wrap_S_dtb in scripts/Makefile.lib */
-+extern char __dtbo_lan966x_evb_lan9662_nic_begin[];
-+extern char __dtbo_lan966x_evb_lan9662_nic_end[];
-+
-+static struct lan966x_pci_info evb_lan9662_nic_info = {
-+	.dtbo_begin = __dtbo_lan966x_evb_lan9662_nic_begin,
-+	.dtbo_end = __dtbo_lan966x_evb_lan9662_nic_end,
++&flx0 {
++	atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_TWI>;
++	status = "okay";
 +};
 +
- static struct pci_device_id lan966x_pci_ids[] = {
--	{ PCI_DEVICE(PCI_VENDOR_ID_EFAR, PCI_DEVICE_ID_EFAR_LAN9662) },
-+	{ PCI_DEVICE_DATA(EFAR, LAN9662, &evb_lan9662_nic_info) },
- 	{ }
++&i2c0 {
++	pinctrl-0 = <&fc0_a_pins>;
++	pinctrl-names = "default";
++	i2c-analog-filter;
++	i2c-digital-filter;
++	i2c-digital-filter-width-ns = <35>;
++	status = "okay";
++};
++
+ &gpio {
+ 	tod_pins: tod_pins {
+ 		pins = "GPIO_36";
+ 		function = "ptpsync_1";
+ 	};
++
++	fc0_a_pins: fcb4-i2c-pins {
++		/* RXD, TXD */
++		pins = "GPIO_9", "GPIO_10";
++		function = "fc0_a";
++	};
++
++	i2cmux_pins: i2cmux-pins {
++		pins = "GPIO_76", "GPIO_77";
++		function = "twi_slc_gate";
++		output-low;
++	};
++
++	i2cmux_0: i2cmux-0 {
++		pins = "GPIO_76";
++		function = "twi_slc_gate";
++		output-high;
++	};
++
++	i2cmux_1: i2cmux-1 {
++		pins = "GPIO_77";
++		function = "twi_slc_gate";
++		output-high;
++	};
  };
- MODULE_DEVICE_TABLE(pci, lan966x_pci_ids);
+ 
+ &lan966x_phy0 {
+@@ -64,6 +144,22 @@ &port1 {
+ 	status = "okay";
+ };
+ 
++&port2 {
++	phy-mode = "sgmii";
++	phys = <&serdes 2 SERDES6G(0)>;
++	sfp = <&sfp2>;
++	managed = "in-band-status";
++	status = "okay";
++};
++
++&port3 {
++	phy-mode = "sgmii";
++	phys = <&serdes 3 SERDES6G(1)>;
++	sfp = <&sfp3>;
++	managed = "in-band-status";
++	status = "okay";
++};
++
+ &switch {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&tod_pins>;
+diff --git a/drivers/misc/lan966x_pci.dtsi b/drivers/misc/lan966x_pci.dtsi
+index a7a72218a58c..789bb0ac5704 100644
+--- a/drivers/misc/lan966x_pci.dtsi
++++ b/drivers/misc/lan966x_pci.dtsi
+@@ -3,6 +3,7 @@
+  * Copyright (C) 2025 Microchip UNG
+  */
+ 
++#include <dt-bindings/clock/microchip,lan966x.h>
+ #include <dt-bindings/interrupt-controller/irq.h>
+ 
+ cpu_clk: clock-600000000 {
+@@ -61,6 +62,39 @@ port1: port@1 {
+ 				reg = <1>;
+ 				status = "disabled";
+ 			};
++
++			port2: port@2 {
++				reg = <2>;
++				status = "disabled";
++			};
++
++			port3: port@3 {
++				reg = <3>;
++				status = "disabled";
++			};
++		};
++	};
++
++	flx0: flexcom@e0040000 {
++		compatible = "atmel,sama5d2-flexcom";
++		reg = <0xe0040000 0x100>;
++		clocks = <&clks GCK_ID_FLEXCOM0>;
++		#address-cells = <1>;
++		#size-cells = <1>;
++		ranges = <0x0 0xe0040000 0x800>;
++		status = "disabled";
++
++		i2c0: i2c@600 {
++			compatible = "microchip,sam9x60-i2c";
++			reg = <0x600 0x200>;
++			interrupt-parent = <&oic>;
++			interrupts = <48 IRQ_TYPE_LEVEL_HIGH>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			clocks = <&clks GCK_ID_FLEXCOM0>;
++			assigned-clocks = <&clks GCK_ID_FLEXCOM0>;
++			assigned-clock-rates = <20000000>;
++			status = "disabled";
+ 		};
+ 	};
+ 
+@@ -69,6 +103,14 @@ cpu_ctrl: syscon@e00c0000 {
+ 		reg = <0xe00c0000 0xa8>;
+ 	};
+ 
++	clks: clock-controller@e00c00a8 {
++		compatible = "microchip,lan966x-gck";
++		#clock-cells = <1>;
++		clocks = <&cpu_clk>, <&ddr_clk>, <&sys_clk>;
++		clock-names = "cpu", "ddr", "sys";
++		reg = <0xe00c00a8 0x38>, <0xe00c02cc 0x4>;
++	};
++
+ 	oic: oic@e00c0120 {
+ 		compatible = "microchip,lan966x-oic";
+ 		#interrupt-cells = <2>;
 -- 
 2.51.0
 
