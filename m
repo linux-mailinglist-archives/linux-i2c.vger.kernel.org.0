@@ -1,53 +1,53 @@
-Return-Path: <linux-i2c+bounces-13515-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13516-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB420BDCFAA
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 Oct 2025 09:26:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 654B3BDCFBC
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 Oct 2025 09:26:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id A3196502681
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 Oct 2025 07:23:40 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E5F3E504504
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 Oct 2025 07:23:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CBAA31BC9E;
-	Wed, 15 Oct 2025 07:18:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 690A3316909;
+	Wed, 15 Oct 2025 07:18:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="JRaO4bYz"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="wc337843"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A7313168E5;
-	Wed, 15 Oct 2025 07:18:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 990783168EC;
+	Wed, 15 Oct 2025 07:18:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760512714; cv=none; b=NXQBXa72fUxxaP4wqli78jzp3zmN36CaHRSbuDSdLz0muxow2EAFRMUhfdueAaL5W28+68wc5CoIkaGhlVTNHaxdUV9kv6CLhadB92XU/GDsqP0B5Ny3rV9kN2Zs53o02u3xuKgAdje1G2oVKYEPJE6U6R8mH4c5i2J0o4+ypWg=
+	t=1760512726; cv=none; b=YOrRHO0FVaESnmW21tEO9KOUWpQUso+gjIBg+ADWfGQGgTahdFrzqiC6BBak1bkMH9l3m9f4Dq4Z3lHyAzA03r0uBH1K5Ve1bW9wCfKGKnT8q9XFxBIjyF74hc3TQjrPjEf0k+ud7K6f30ja/IQyeA0SCsUBDHsSskGd6cgo/mI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760512714; c=relaxed/simple;
-	bh=fsEkA9sT0O+b3+lFDQVYTp2zMX1Y5xBEN9bjcddjg9E=;
+	s=arc-20240116; t=1760512726; c=relaxed/simple;
+	bh=089T+XVvDLGw51Ij70cgjLQgUnI1vxnxXDiv9JM9unw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=B1phRM0CYSIPoVdI1Wmu5EdJbpPpeC+GcQeaWnt10h4N+XotuP3kt+6qnNynbLqNrbCl6D7AP14R0737r6B5CJFAcZgckGNIiXfdvNlS/tyQyLUr6OMwWg1e/vDGj4urO5Vi10gkzzg3fWFE5nDGELp0dDen3QIwe91Mp/JGdU8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=JRaO4bYz; arc=none smtp.client-ip=185.171.202.116
+	 MIME-Version; b=oS/UakQjcuRC6M5GNloHcluKUgiY+OkX42EMywbpyq/IGH9GCIFDbXzUxE8rR8ADpxAzbkgfFKVdbXY6NHxM4/HQEB2wqaIEfEpvF0eefp6x82YW8YnUWPxEQ8erXh0i+Zb+YyQDkZc1F5hxJp/pyocr0GID37c+wRkzc7buZsM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=wc337843; arc=none smtp.client-ip=185.246.85.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id 6AAC3C09FAA;
-	Wed, 15 Oct 2025 07:18:11 +0000 (UTC)
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 404EC4E410C2;
+	Wed, 15 Oct 2025 07:18:43 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 80FC3606FA;
-	Wed, 15 Oct 2025 07:18:30 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id C6408102F22AF;
-	Wed, 15 Oct 2025 09:18:15 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 169FD606F9;
+	Wed, 15 Oct 2025 07:18:43 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 7F975102F22BB;
+	Wed, 15 Oct 2025 09:18:28 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1760512707; h=from:subject:date:message-id:to:cc:mime-version:
+	t=1760512719; h=from:subject:date:message-id:to:cc:mime-version:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=XapR7WLR+LqYJDmtqOz+8aG2a7DE7pkUyNlWN34aPr0=;
-	b=JRaO4bYzK+RZhbgcPZkteddx3T4MiiJJ2fig1PU9Scoucq3QZWFuSF28bxmU7k8Ie0ryXx
-	4+m5jhquyqRjTXjVfK4d11p8Mj2qFwaYI9utyYJXeLmq/9a+wjFsBLQRILJbXGKLjkXYoP
-	ZQJCxWNHK9J9m9kckj9s4xKcZxWkokm18hedF+tx1PSwOMrk+VAUB3HvzgCBZtCnO6MUjx
-	HCEHJQ4xXRNLAFtaf/Sc0ChMDdA50700bh094JolnGN5aVvPAdv6YyvOb6vfrtnFV9pa02
-	sNOEYJYgTBiGKAb+51IVXqawxJeZi/r7ggleRnXRTp3r4Ub1hOukueOqiq1mFQ==
+	bh=DnKMfKbrX5oUaF1gdU/ghw3bMFTXnONFF238zGnZAoI=;
+	b=wc3378430UNR0vcyn+uByH1JO/in4/smaBo1m1K2ZFAgtz+7JHPT1NNiy5auIYDgR2HJAS
+	mbmsTBNruHMbqcRqR+aF5I5wq6TN81hrM8o8fvDTGN42FEjAtwBmovmiW0PT0Pnj15M9fh
+	Cw2YNkL1B5/rkuLLQJ86+EbLpe14g2aucJwL+Y31VEawZC9Z1aSrK2dcyIWKrs7iOopS27
+	PDc64OHJ88PWXcohpRe2JiHFFXhzJHBiFP75PsQABnm36w9XL2uU3mCCtLRWj+cgFybbPK
+	XwkJ9d53X07N07KnlTGM33Qn8ofOXim3s2DlsdUUjYncD5DggsWLkxLVM3UFmg==
 From: Herve Codina <herve.codina@bootlin.com>
 To: Andrew Lunn <andrew@lunn.ch>,
 	Rob Herring <robh@kernel.org>,
@@ -108,9 +108,9 @@ Cc: Wolfram Sang <wsa@kernel.org>,
 	Steen Hegelund <steen.hegelund@microchip.com>,
 	Luca Ceresoli <luca.ceresoli@bootlin.com>,
 	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH v4 11/29] cxl/test: Use device_set_node()
-Date: Wed, 15 Oct 2025 09:13:58 +0200
-Message-ID: <20251015071420.1173068-12-herve.codina@bootlin.com>
+Subject: [PATCH v4 12/29] cxl/test: Use fw_devlink_set_device()
+Date: Wed, 15 Oct 2025 09:13:59 +0200
+Message-ID: <20251015071420.1173068-13-herve.codina@bootlin.com>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20251015071420.1173068-1-herve.codina@bootlin.com>
 References: <20251015071420.1173068-1-herve.codina@bootlin.com>
@@ -123,9 +123,10 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Last-TLS-Session-Version: TLSv1.3
 
-The code set directly dev->fwnode.
+The code set directly fwnode.dev field.
 
-Use the dedicated helper to perform this operation.
+Use the dedicated fw_devlink_set_device() helper to perform this
+operation.
 
 Signed-off-by: Herve Codina <herve.codina@bootlin.com>
 Reviewed-by: Dave Jiang <dave.jiang@intel.com>
@@ -134,18 +135,18 @@ Reviewed-by: Dave Jiang <dave.jiang@intel.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/tools/testing/cxl/test/cxl.c b/tools/testing/cxl/test/cxl.c
-index 2d135ca533d0..eef6146a13d7 100644
+index eef6146a13d7..b6007a78a7ae 100644
 --- a/tools/testing/cxl/test/cxl.c
 +++ b/tools/testing/cxl/test/cxl.c
-@@ -1124,7 +1124,7 @@ static void mock_companion(struct acpi_device *adev, struct device *dev)
- {
+@@ -1125,7 +1125,7 @@ static void mock_companion(struct acpi_device *adev, struct device *dev)
  	device_initialize(&adev->dev);
  	fwnode_init(&adev->fwnode, NULL);
--	dev->fwnode = &adev->fwnode;
-+	device_set_node(dev, &adev->fwnode);
- 	adev->fwnode.dev = dev;
+ 	device_set_node(dev, &adev->fwnode);
+-	adev->fwnode.dev = dev;
++	fw_devlink_set_device(&adev->fwnode, dev);
  }
  
+ #ifndef SZ_64G
 -- 
 2.51.0
 
