@@ -1,53 +1,53 @@
-Return-Path: <linux-i2c+bounces-13508-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13509-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B4B7BDCEA2
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 Oct 2025 09:22:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 727D9BDCF35
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 Oct 2025 09:24:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 2072E4F57DC
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 Oct 2025 07:21:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EB2393AF22A
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 Oct 2025 07:21:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD23E31A07B;
-	Wed, 15 Oct 2025 07:16:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E17AC31A554;
+	Wed, 15 Oct 2025 07:17:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="wF0zbsB9"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="mYeoej46"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33065314B7F;
-	Wed, 15 Oct 2025 07:16:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69CD4314B7F;
+	Wed, 15 Oct 2025 07:17:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760512617; cv=none; b=lOQzbYVSxO3Ff4ZRMZxihsbi9pcBtAG96MGgw0oHXv2OsX+JyVTxh+wR+NCE5L2aBoPveAoL8HOzAdEM3fX7Epekj2bsPQrJOQPz12hLG03PKOZhtQHlYnBEMcsGyR4v4WSpOW39SqKdVKvcTDihQf3bcqhncv2FfAuk+dXd+Kw=
+	t=1760512628; cv=none; b=aR6x9VJw8n+8g2qm/f0yI//0VboysUQA6WFx7LjCKbZQ+w6FGvwf/gHmusVXeSQUQFi1MCCWMGyPTX0FaurAalEN73RMwXSawwWmn0BZaUhgfFXcGTCNwkbYSDmTw3zenHG46muNYNqRGKhdqTKga27r0Iqy1y+7xGBjYvMemb4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760512617; c=relaxed/simple;
-	bh=V+iummctOk7jK5ncxqpIAFHCOqEzYZrN3poJkv4LWj8=;
+	s=arc-20240116; t=1760512628; c=relaxed/simple;
+	bh=c59SNoKAf2jx0YBepzA6trFAjeOhj3WeCNa2+9Ie0eM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZcGL8jAasnuaynaOGMHcwqtCzrJBkNw5Cm9u1Mk2vlTO456XYdEkBBv3NWzLPXnFzbZpRasKUCKvZBZko6VjIxGFhWWmqUSfTxvQjJmfA+u5DBLJMUgs40vWGwPCh8T98jKPiAclyruwS9WYlxoB7Udjibk7fDULQQYDgDS14Oo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=wF0zbsB9; arc=none smtp.client-ip=185.246.84.56
+	 MIME-Version; b=m6Y1KREYkQZng+wheZUC4Cn8zL5LyNBI96BoWMaXnq+zJcfGhDCIx09m+DYo6wfbZbW1poooi4/qjSMBvrobZMmW+AfRpTUT7jLv9kVky60kRRvNsdGAdUjDAhRtoV7fGxk3ZtwWuLg+VQS1u8tbBCh0WrLpqc+yQ/YeudHJAgU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=mYeoej46; arc=none smtp.client-ip=185.246.84.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id A8EE41A13AB;
-	Wed, 15 Oct 2025 07:16:53 +0000 (UTC)
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 024A41A13AA;
+	Wed, 15 Oct 2025 07:17:05 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 754AF606FA;
-	Wed, 15 Oct 2025 07:16:53 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 482E7102F22BC;
-	Wed, 15 Oct 2025 09:16:39 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id CC4BC606F9;
+	Wed, 15 Oct 2025 07:17:04 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 559FC102F22BB;
+	Wed, 15 Oct 2025 09:16:51 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1760512610; h=from:subject:date:message-id:to:cc:mime-version:
+	t=1760512621; h=from:subject:date:message-id:to:cc:mime-version:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=X9BnZFYvaDaBrjNH0qmNsDFsMFzgh2toDVIGE3HodzQ=;
-	b=wF0zbsB96L/vcny88gPyvRaUxpZHC7jTsCEDP+BpIT8kJL3wJIhltkX+1JGG5B7Y4ZkccH
-	h79djKbNIuesipGeAwPzhK1XMKW9hBTvwxDVTGfpqDKhn6pNGH/UQwT7iH20TqLjtu2LOd
-	opFdGQ3nnsgWi1PX/mJXptY0L9QodswKu4zcx3Bx+F9E48du48h11KAotI9mympvFACGal
-	20rGBi1mMQTY7F43DdoBAToQ6DADEWms3t+RO3WkGp4pQfnQDp50z7tn5xme6S8cwzSOrl
-	69SZFRxPgC7NTWf91rZWMIZE3MEBiEBoKNIQFW1Dp2PIwig3bweaMlFTUelUqA==
+	bh=fHuXl7R1JDrl2sFImq8rQjfFvo0Z+fh79Pfu/rIAZ88=;
+	b=mYeoej46keYmE1YmeIcFkBPZxlMzp9eUgBkwIor+3ZWopE2KNgfIpzmqgOftiOTCyUMPhC
+	8bPQqn9hpl0fJrJd0YLxhTgUjsg17A1UQlSFzQuAqPq8+BIfyTODPeVxIOEOF6RkpAbJnz
+	+fn+4pXprFr+3uf37l5mkJSACU42hxbP+fzfHEFJaMj4wl3z1YLr5uTE1Leo1RrI6e3q7d
+	uDawIcq8rVhumm1O1YEx7hbFBEMVnuGybd81f6bOFMENGzHxMivmR+oVAjB3ldd5RCvF9E
+	vqNgz2a/H2eMQSRYp+iY4wrh8VSiDs+vmIh62xoQ2T6qq0ehw2WK0fC35g/MwQ==
 From: Herve Codina <herve.codina@bootlin.com>
 To: Andrew Lunn <andrew@lunn.ch>,
 	Rob Herring <robh@kernel.org>,
@@ -108,9 +108,9 @@ Cc: Wolfram Sang <wsa@kernel.org>,
 	Steen Hegelund <steen.hegelund@microchip.com>,
 	Luca Ceresoli <luca.ceresoli@bootlin.com>,
 	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH v4 04/29] driver core: Avoid warning when removing a device while its supplier is unbinding
-Date: Wed, 15 Oct 2025 09:13:51 +0200
-Message-ID: <20251015071420.1173068-5-herve.codina@bootlin.com>
+Subject: [PATCH v4 05/29] dt-bindings: bus: Add simple-platform-bus
+Date: Wed, 15 Oct 2025 09:13:52 +0200
+Message-ID: <20251015071420.1173068-6-herve.codina@bootlin.com>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20251015071420.1173068-1-herve.codina@bootlin.com>
 References: <20251015071420.1173068-1-herve.codina@bootlin.com>
@@ -123,102 +123,77 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Last-TLS-Session-Version: TLSv1.3
 
-During driver removal, the following warning can appear:
-   WARNING: CPU: 1 PID: 139 at drivers/base/core.c:1497 __device_links_no_driver+0xcc/0xfc
-   ...
-   Call trace:
-     __device_links_no_driver+0xcc/0xfc (P)
-     device_links_driver_cleanup+0xa8/0xf0
-     device_release_driver_internal+0x208/0x23c
-     device_links_unbind_consumers+0xe0/0x108
-     device_release_driver_internal+0xec/0x23c
-     device_links_unbind_consumers+0xe0/0x108
-     device_release_driver_internal+0xec/0x23c
-     device_links_unbind_consumers+0xe0/0x108
-     device_release_driver_internal+0xec/0x23c
-     driver_detach+0xa0/0x12c
-     bus_remove_driver+0x6c/0xbc
-     driver_unregister+0x30/0x60
-     pci_unregister_driver+0x20/0x9c
-     lan966x_pci_driver_exit+0x18/0xa90 [lan966x_pci]
+A Simple Platform Bus is a transparent bus that doesn't need a specific
+driver to perform operations at bus level.
 
-This warning is triggered when a consumer is removed because the links
-status of its supplier is not DL_DEV_DRIVER_BOUND and the link flag
-DL_FLAG_SYNC_STATE_ONLY is not set.
+Similar to simple-bus, a Simple Platform Bus allows to automatically
+instantiate devices connected to this bus.
 
-The topology in terms of consumers/suppliers used was the following
-(consumer ---> supplier):
-
-      i2c -----------> OIC ----> PCI device
-       |                ^
-       |                |
-       +---> pinctrl ---+
-
-When the PCI device is removed, the OIC (interrupt controller) has to be
-removed. In order to remove the OIC, pinctrl and i2c need to be removed
-and to remove pinctrl, i2c need to be removed. The removal order is:
-  1) i2c
-  2) pinctrl
-  3) OIC
-  4) PCI device
-
-In details, the removal sequence is the following (with 0000:01:00.0 the
-PCI device):
-  driver_detach: call device_release_driver_internal(0000:01:00.0)...
-    device_links_busy(0000:01:00.0):
-      links->status = DL_DEV_UNBINDING
-    device_links_unbind_consumers(0000:01:00.0):
-      0000:01:00.0--oic link->status = DL_STATE_SUPPLIER_UNBIND
-      call device_release_driver_internal(oic)...
-        device_links_busy(oic):
-          links->status = DL_DEV_UNBINDING
-        device_links_unbind_consumers(oic):
-          oic--pinctrl link->status = DL_STATE_SUPPLIER_UNBIND
-          call device_release_driver_internal(pinctrl)...
-            device_links_busy(pinctrl):
-              links->status = DL_DEV_UNBINDING
-            device_links_unbind_consumers(pinctrl):
-              pinctrl--i2c link->status = DL_STATE_SUPPLIER_UNBIND
-              call device_release_driver_internal(i2c)...
-                device_links_busy(i2c): links->status = DL_DEV_UNBINDING
-                __device_links_no_driver(i2c)...
-                  pinctrl--i2c link->status is DL_STATE_SUPPLIER_UNBIND
-                  oic--i2c link->status is DL_STATE_ACTIVE
-                  oic--i2c link->supplier->links.status is DL_DEV_UNBINDING
-
-The warning is triggered by the i2c removal because the OIC (supplier)
-links status is not DL_DEV_DRIVER_BOUND. Its links status is indeed set
-to DL_DEV_UNBINDING.
-
-It is perfectly legit to have the links status set to DL_DEV_UNBINDING
-in that case. Indeed we had started to unbind the OIC which triggered
-the consumer unbinding and didn't finish yet when the i2c is unbound.
-
-Avoid the warning when the supplier links status is set to
-DL_DEV_UNBINDING and thus support this removal sequence without any
-warnings.
+Those devices are instantiated only by the Simple Platform Bus probe
+function itself.
 
 Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-Reviewed-by: Rafael J. Wysocki <rafael@kernel.org>
-Reviewed-by: Saravana Kannan <saravanak@google.com>
 ---
- drivers/base/core.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ .../bindings/bus/simple-platform-bus.yaml     | 50 +++++++++++++++++++
+ 1 file changed, 50 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/bus/simple-platform-bus.yaml
 
-diff --git a/drivers/base/core.c b/drivers/base/core.c
-index cf157066499b..3e81b1914ce5 100644
---- a/drivers/base/core.c
-+++ b/drivers/base/core.c
-@@ -1491,7 +1491,8 @@ static void __device_links_no_driver(struct device *dev)
- 		if (link->supplier->links.status == DL_DEV_DRIVER_BOUND) {
- 			WRITE_ONCE(link->status, DL_STATE_AVAILABLE);
- 		} else {
--			WARN_ON(!device_link_test(link, DL_FLAG_SYNC_STATE_ONLY));
-+			WARN_ON(link->supplier->links.status != DL_DEV_UNBINDING &&
-+				!device_link_test(link, DL_FLAG_SYNC_STATE_ONLY));
- 			WRITE_ONCE(link->status, DL_STATE_DORMANT);
- 		}
- 	}
+diff --git a/Documentation/devicetree/bindings/bus/simple-platform-bus.yaml b/Documentation/devicetree/bindings/bus/simple-platform-bus.yaml
+new file mode 100644
+index 000000000000..47f0b4e13c2f
+--- /dev/null
++++ b/Documentation/devicetree/bindings/bus/simple-platform-bus.yaml
+@@ -0,0 +1,50 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/bus/simple-platform-bus.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Simple Platform Bus
++
++maintainers:
++  - Herve Codina <herve.codina@bootlin.com>
++
++description: |
++  A Simple Platform Bus is a transparent bus that doesn't need a specific
++  driver to perform operations at bus level.
++
++  Similar to simple-bus, a Simple Platform Bus allows to automatically
++  instantiate devices connected to this bus. Those devices are instantiated
++  only by the Simple Platform Bus probe function itself.
++
++properties:
++  $nodename:
++    pattern: "^bus(@[0-9a-f]+)?$"
++
++  compatible:
++    const: simple-platform-bus
++
++  '#address-cells':
++    enum: [ 1, 2 ]
++
++  '#size-cells':
++    enum: [ 1, 2 ]
++
++  ranges: true
++
++required:
++  - compatible
++  - '#address-cells'
++  - '#size-cells'
++
++additionalProperties: false
++
++examples:
++  - |
++
++    bus {
++        compatible = "simple-platform-bus";
++        #address-cells = <1>;
++        #size-cells = <1>;
++        ranges;
++    };
 -- 
 2.51.0
 
