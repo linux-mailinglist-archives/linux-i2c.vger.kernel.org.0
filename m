@@ -1,87 +1,87 @@
-Return-Path: <linux-i2c+bounces-13595-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13596-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41418BE47F6
-	for <lists+linux-i2c@lfdr.de>; Thu, 16 Oct 2025 18:15:08 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC98BBE4811
+	for <lists+linux-i2c@lfdr.de>; Thu, 16 Oct 2025 18:16:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8A23C1891F11
-	for <lists+linux-i2c@lfdr.de>; Thu, 16 Oct 2025 16:15:31 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E8EB6560D87
+	for <lists+linux-i2c@lfdr.de>; Thu, 16 Oct 2025 16:15:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1256823EA8F;
-	Thu, 16 Oct 2025 16:15:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C1ED23EABE;
+	Thu, 16 Oct 2025 16:15:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CfmYPOQu"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EICEMrVV"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBAAB32D0CA
-	for <linux-i2c@vger.kernel.org>; Thu, 16 Oct 2025 16:15:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9A5623EA99
+	for <linux-i2c@vger.kernel.org>; Thu, 16 Oct 2025 16:15:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760631302; cv=none; b=a0EZ2Ey8i+p0D4Z91U0nJMyezua7orkYbjgsdgmzvxWUST2hYZ87kKnHIzm14yfywhgHlH7oJCw43YF761DRajZp7dJV/r+0W0+0NJ5uZ+89QBNN78fxL8CWjte0os1FqexIEqbMA4qMvzQ1EOPtBwR2XxFI0ziOnTbw+kDJ7Sc=
+	t=1760631309; cv=none; b=RLWYeVHpgrA8dRvAKbGfSGjQQhnSRyOlwUuzzBISr+g+U+qHHGZGkcfRyTE+EQID+PzDVw2/IN+WRvKFZqHXThiY0droA0abc/t4JuxR5MJ4YWGsWBpj02Kizt2TYaCjox+Ly70lSoKFYTPgYAbJu6updd7qaRZZfyIxfIkcf0I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760631302; c=relaxed/simple;
-	bh=CAhmlVpNgjfXOj8lSkUQjgUpSSdRvC/yRyLgyFGBUv4=;
+	s=arc-20240116; t=1760631309; c=relaxed/simple;
+	bh=LHZjH2UMXa92SxXhNcHHvMGpkdxmO+gWMcsE10ROlWg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=s+fvrgTO7/EVfpoADIGsGyA1G4X1yKMpJsFl40Pt3Ev1ze/BI6zOjzBhPHptBqf+GRG6ylVn/Id36GhC3Q4k6dktR73isAQ86vRNPPWKLZIatQdRjNlub4b9ZOGiACkvkvEznAZbS/mfldjexkdrxDEF09S0sNPsuYe8MsyyxHs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CfmYPOQu; arc=none smtp.client-ip=209.85.128.54
+	 MIME-Version; b=X5SFScDI+IGIm3OiZOAjQlX/YqYJIxUmrMovnXFkgcdgrld7bRpHriF1G+/s9k4DBx6D/LiyLpwvpMSSVLNPsyXsyxOOvi9eUT9MwzBYP70xqp+3EbWWLRNhFJZ3HTCgnTpyij08PPMDGGAXZn/WXtnZSstg8et7qS2Iupt/OBA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EICEMrVV; arc=none smtp.client-ip=209.85.128.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-46e2e363118so8016625e9.0
-        for <linux-i2c@vger.kernel.org>; Thu, 16 Oct 2025 09:15:00 -0700 (PDT)
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-47100eae3e5so9335455e9.1
+        for <linux-i2c@vger.kernel.org>; Thu, 16 Oct 2025 09:15:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760631299; x=1761236099; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1760631306; x=1761236106; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=XsjCaRuVjABsOrX7YYvRpKJqzHL0cubRF6Hom6jKdNU=;
-        b=CfmYPOQuAikafPBC05CFasy6cKk0kmj8+cef0TVGMdrsoPsrO0qJKYOqoGGBptXVWQ
-         xhc+HlvAE1pMqbG5viZwR6993tMi1d/MNUmIopfNA6RgesglzF4NdfdwzsA5t1fAyzSH
-         BK7YC5k+0Yf6thHzt+LxGv4+S9ncoxwwWfcrsz/upX71PX52O7WDSAtNZQsZEohnKw2M
-         z2Z3kQ95nMdeekoBC1/yo2BGKOQGQUfHWrAi+A4RAOjrIMZqBPVAatyLkzF5ncmVic9U
-         w6Ey/9nGIk2sp4pbRUNTV6WkDNW2e0ZnZAWS81VkyVzf6fPF+K4q5zqv/ezDCcN7/WMf
-         zDVQ==
+        bh=XH2k5qkD7Z3u1A48Y16IYSnGNDzLTVrlHvL80g4n3eU=;
+        b=EICEMrVVqwZijQMAW2fbczanNC5lCvGCBwU1YjZqYr196Hrc3ejTd1dKfJ9xhev1hd
+         ElmtGDTyhrL+y5LZnW4ld0tLEjDXVDNknyI69fLXDkUYpGeafUUsU5j5YF0PF77Spd/W
+         SqwQOYYNYGF9VqpPvmqakUuXbGfg1iWfEr65bxFwwi572RkADTEhvjRdTINq8RR1ah5m
+         +itsH0X1eMSqA6xCjFHWEuRwke2CNr7BHZTd7/qd0/7RStJnnjg0keTJ2eZMfFLiU0V0
+         dDw3ib05GgRhmUXQS9Y4tkFpugBV7GmMDugzj7di3zQ8J3/YD0qltc762bkt7nmi8sKF
+         RfFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760631299; x=1761236099;
+        d=1e100.net; s=20230601; t=1760631306; x=1761236106;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=XsjCaRuVjABsOrX7YYvRpKJqzHL0cubRF6Hom6jKdNU=;
-        b=k2k7TiRGHVz1ojEj1O8esw3tyGViZb7cb/aP5nz1ZX6PNHkMjs0JPaELIjNEGI7j+U
-         LBFA7eV+qVvVVlLOxq9rAtZaHxOlEglUnhfjFEY5Qv8IT3NTv22SmPnFsvWJAv4a2pSv
-         iHwoXmHZpoqyjHDZF0+Nnxarf7Z1dbwYy2FwSQqHgKpD/qQy5Hcw9/OFGz9NRlcC8OUw
-         X44kxAJuq1xCsBDVAZ6oodzjP995pP3PCq9rguHZqQZPOETeIiJsWt1QpNNyHRxl+Omv
-         KIGvHEEkFBQaLmDOEWuHUlnxckQfqfUjTkBYpEiJshpDUF5diyOoAJOi+umo2bQXs+c+
-         ccvw==
-X-Gm-Message-State: AOJu0YyLjWvIZm1FYls49VTDQEB+r7fdaD2pALqtuMVbE+6LJoxjfoOm
-	U+sfFv2sYxyMem1gB9QjtZiGAmI04QVcJs/p9AgMz/AH8gE0U/HctVDw
-X-Gm-Gg: ASbGnctCviBnHdFkQjV67orW6rLtisqhwoZ0cX5gUN4jhjagsA5X4V8RLsjOP9k9sKD
-	ob8WA5i82a4E2+8o1pv47B24v2rENJtMm20E8M2IhOJq369qjceea4yOo3XzlesEuYhfVWCUIRo
-	oRevT0Wqh+CG5+1zCtfA2Tc759B0srartgy2cnE1EUSs5n8XFlAWiadG9lRuxraudPkdYN2xMYh
-	CvwgsqY5imsMXeDgwJu7E4eUTV5vk3oV1ATh6EO8KhXzp9riQMS1kKVpmda5pT2/IoEqTAAk94R
-	4uAT2RSssZgIiF9BvpyWlRQOtTloNm7rTSzURkZO06I2ltoWbrfJ+BXYy3okB6hPdhMIdtGDyNN
-	pGbu0ggaZ+1tYWQJbJgUMVO2NjNyXkZ1RrsZg/+iVdRMLUNoCxRxQFte0sKfVrFU+8fVnLYsxAs
-	DUIfQMPA==
-X-Google-Smtp-Source: AGHT+IEKty8nwgNyyjLYDrrm1byKY80JX1Lr6PPCNGTkEJg3G1LBRa0WdrhWOustfFNHSRExFFdAew==
-X-Received: by 2002:a05:600c:4710:b0:471:115e:9605 with SMTP id 5b1f17b1804b1-4711791fc13mr4177695e9.35.1760631298908;
-        Thu, 16 Oct 2025 09:14:58 -0700 (PDT)
+        bh=XH2k5qkD7Z3u1A48Y16IYSnGNDzLTVrlHvL80g4n3eU=;
+        b=w2Kn89tgis98gio7aDd7uJ/+DSxFERJlzX3nbpS2d/QDXP3TMhMS23Cw6IQjAJFeTY
+         z7djoXjpCESpiPdesZsiqAKFGSvL+hCyRW01NkmSm6d1rmHc79s9r2TFYrhRyjtzlSVP
+         Pr071LTfidLSYe9ovG/VDEP87saL1ipphipCpzAwKJWbqzZXisGB2IWCcWOIN6diWrnZ
+         pk2D5NTQZRPnDCK4tk1wj0i+FWrZrDbR7sHd4ZxV04KxGJMqdW6o0O+2qL8wWPlcZmnY
+         rSHD/QYm4uFoVcS0A3yxMvLfvQmOD1oZTsKl5X02R6m9i2xpiQwkfU0yRVPHnEC3aLYc
+         S4aA==
+X-Gm-Message-State: AOJu0Yx6rnWmpGuy1W5T9l3BxxoPsQ6CKx8mcNtVXT20rv0vWeNkPUG1
+	zjfiwjIRQGJPwjsHSbdlfhW3TGHfUo79b+vb3ji9Mmbuj938YCijxOJA
+X-Gm-Gg: ASbGncsQkUc0bKHvCXIoz2OISk/Ct27F5cIHicvxTHeybErqGXSDnoBnQg8M0R7//fi
+	JGbrk+sV/VWFxHn9Bv7fE8Yj65KwzwqHw2+hEKu83o1mgzfPwGpA3+lklZbSZ4RY/KtvrYjBSJT
+	1ra5wOkmg42vWUti68mMDeh6VQHrPsMjAldhhlXmUUs+WO6lkvsrP15c9VvFQwtZpDBPQNvlo6J
+	6gX2z0q1PphgUVPgGEXMGOf5yun1RMz7gBYJDZtDrcxppptuyhit7nAwedN8JEqd1yzebGMnH1M
+	lG8JE3eazGxAk4xnTeDgN28WjSYK/xT+I00z4/pStb5uu3QDoa6wXX94nhzBIOSxl2q1FpGl7yF
+	wHSgOndPokh06GDXicheZexL/TfbAX2XOmwnYzGJax8OTIW2tzYAPgqEJmhJCYXp1fdymrcsK0h
+	LgoHLPPA==
+X-Google-Smtp-Source: AGHT+IG3rVGmDp5olNfg9dU57+0wldzU8oxoJTE26xYya7QDoKqMwVqjPrv0UHx0OszQgqPF83LVow==
+X-Received: by 2002:a05:600c:19d4:b0:45d:5c71:769a with SMTP id 5b1f17b1804b1-47117903e2amr4046915e9.26.1760631305709;
+        Thu, 16 Oct 2025 09:15:05 -0700 (PDT)
 Received: from hangmanPC.. ([86.124.201.90])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-471143663afsm35654025e9.0.2025.10.16.09.14.58
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-471143663afsm35654025e9.0.2025.10.16.09.15.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Oct 2025 09:14:58 -0700 (PDT)
+        Thu, 16 Oct 2025 09:15:05 -0700 (PDT)
 From: Cezar Chiru <chiru.cezar.89@gmail.com>
 To: wsa+renesas@sang-engineering.com,
 	andi.shyti@kernel.org
 Cc: linux-i2c@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Cezar Chiru <chiru.cezar.89@gmail.com>
-Subject: [PATCH v6 1/3] i2c: pcf8584: Remove debug macros from i2c-algo-pcf.c
-Date: Thu, 16 Oct 2025 19:14:15 +0300
-Message-ID: <20251016161417.15545-2-chiru.cezar.89@gmail.com>
+Subject: [PATCH v6 2/3] i2c: pcf8584: Fix do not use assignment inside if conditional
+Date: Thu, 16 Oct 2025 19:14:16 +0300
+Message-ID: <20251016161417.15545-3-chiru.cezar.89@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251016161417.15545-1-chiru.cezar.89@gmail.com>
 References: <20250926154520.40583-1-chiru.cezar.89@gmail.com>
@@ -94,215 +94,98 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Remove debug macros and printk and dev_debg function calls from file
-as no change was done for 16 years.
-Request by I2C SUBSYSTEM maintainer Wolfram Sang.
+Assign inside of 'if' conditional is not allowed. Move assignment from
+inside 'if' conditional, to one line before each 'if'conditional statement
+that caused errors.
+Enforce errors fixing based on checkpatch.pl output on file.
 
 Signed-off-by: Cezar Chiru <chiru.cezar.89@gmail.com>
 ---
- drivers/i2c/algos/i2c-algo-pcf.c | 59 --------------------------------
- 1 file changed, 59 deletions(-)
+ drivers/i2c/algos/i2c-algo-pcf.c | 28 +++++++++++++++-------------
+ 1 file changed, 15 insertions(+), 13 deletions(-)
 
 diff --git a/drivers/i2c/algos/i2c-algo-pcf.c b/drivers/i2c/algos/i2c-algo-pcf.c
-index fd563e845d4b..7e2d8ff33d75 100644
+index 7e2d8ff33d75..41a81d37e880 100644
 --- a/drivers/i2c/algos/i2c-algo-pcf.c
 +++ b/drivers/i2c/algos/i2c-algo-pcf.c
-@@ -23,17 +23,8 @@
- #include "i2c-algo-pcf.h"
- 
- 
--#define DEB2(x) if (i2c_debug >= 2) x
--#define DEB3(x) if (i2c_debug >= 3) x /* print several statistical values */
--#define DEBPROTO(x) if (i2c_debug >= 9) x;
--	/* debug the protocol by showing transferred bits */
- #define DEF_TIMEOUT 16
- 
--/*
-- * module parameters:
-- */
--static int i2c_debug;
--
- /* setting states on the bus with the right timing: */
- 
- #define set_pcf(adap, ctl, val) adap->setpcf(adap->data, ctl, val)
-@@ -47,27 +38,21 @@ static int i2c_debug;
- 
- static void i2c_start(struct i2c_algo_pcf_data *adap)
- {
--	DEBPROTO(printk(KERN_DEBUG "S "));
- 	set_pcf(adap, 1, I2C_PCF_START);
- }
- 
- static void i2c_repstart(struct i2c_algo_pcf_data *adap)
- {
--	DEBPROTO(printk(" Sr "));
- 	set_pcf(adap, 1, I2C_PCF_REPSTART);
- }
- 
- static void i2c_stop(struct i2c_algo_pcf_data *adap)
- {
--	DEBPROTO(printk("P\n"));
- 	set_pcf(adap, 1, I2C_PCF_STOP);
- }
- 
- static void handle_lab(struct i2c_algo_pcf_data *adap, const int *status)
- {
--	DEB2(printk(KERN_INFO
--		"i2c-algo-pcf.o: lost arbitration (CSR 0x%02x)\n",
--		*status));
- 	/*
- 	 * Cleanup from LAB -- reset and enable ESO.
- 	 * This resets the PCF8584; since we've lost the bus, no
-@@ -88,9 +73,6 @@ static void handle_lab(struct i2c_algo_pcf_data *adap, const int *status)
- 	if (adap->lab_mdelay)
- 		mdelay(adap->lab_mdelay);
- 
--	DEB2(printk(KERN_INFO
--		"i2c-algo-pcf.o: reset LAB condition (CSR 0x%02x)\n",
--		get_pcf(adap, 1)));
- }
- 
- static int wait_for_bb(struct i2c_algo_pcf_data *adap)
-@@ -151,9 +133,6 @@ static int pcf_init_8584 (struct i2c_algo_pcf_data *adap)
+@@ -129,7 +129,7 @@ static int wait_for_pin(struct i2c_algo_pcf_data *adap, int *status)
+  *
+  * vdovikin: added detect code for PCF8584
+  */
+-static int pcf_init_8584 (struct i2c_algo_pcf_data *adap)
++static int pcf_init_8584(struct i2c_algo_pcf_data *adap)
  {
  	unsigned char temp;
  
--	DEB3(printk(KERN_DEBUG "i2c-algo-pcf.o: PCF state 0x%02x\n",
--				get_pcf(adap, 1)));
--
- 	/* S1=0x80: S0 selected, serial interface off */
- 	set_pcf(adap, 1, I2C_PCF_PIN);
- 	/*
-@@ -161,7 +140,6 @@ static int pcf_init_8584 (struct i2c_algo_pcf_data *adap)
+@@ -139,38 +139,38 @@ static int pcf_init_8584 (struct i2c_algo_pcf_data *adap)
+ 	 * check to see S1 now used as R/W ctrl -
  	 * PCF8584 does that when ESO is zero
  	 */
- 	if (((temp = get_pcf(adap, 1)) & 0x7f) != (0)) {
--		DEB2(printk(KERN_ERR "i2c-algo-pcf.o: PCF detection failed -- can't select S0 (0x%02x).\n", temp));
+-	if (((temp = get_pcf(adap, 1)) & 0x7f) != (0)) {
++	temp = get_pcf(adap, 1);
++	if ((temp & 0x7f) != 0)
  		return -ENXIO; /* definitely not PCF8584 */
- 	}
+-	}
  
-@@ -169,7 +147,6 @@ static int pcf_init_8584 (struct i2c_algo_pcf_data *adap)
+ 	/* load own address in S0, effective address is (own << 1) */
  	i2c_outb(adap, get_own(adap));
  	/* check it's really written */
- 	if ((temp = i2c_inb(adap)) != get_own(adap)) {
--		DEB2(printk(KERN_ERR "i2c-algo-pcf.o: PCF detection failed -- can't set S0 (0x%02x).\n", temp));
+-	if ((temp = i2c_inb(adap)) != get_own(adap)) {
++	temp = i2c_inb(adap);
++	if (temp != get_own(adap))
  		return -ENXIO;
- 	}
+-	}
  
-@@ -177,7 +154,6 @@ static int pcf_init_8584 (struct i2c_algo_pcf_data *adap)
+ 	/* S1=0xA0, next byte in S2 */
  	set_pcf(adap, 1, I2C_PCF_PIN | I2C_PCF_ES1);
  	/* check to see S2 now selected */
- 	if (((temp = get_pcf(adap, 1)) & 0x7f) != I2C_PCF_ES1) {
--		DEB2(printk(KERN_ERR "i2c-algo-pcf.o: PCF detection failed -- can't select S2 (0x%02x).\n", temp));
+-	if (((temp = get_pcf(adap, 1)) & 0x7f) != I2C_PCF_ES1) {
++	temp = get_pcf(adap, 1);
++	if ((temp & 0x7f) != I2C_PCF_ES1)
  		return -ENXIO;
- 	}
+-	}
  
-@@ -185,7 +161,6 @@ static int pcf_init_8584 (struct i2c_algo_pcf_data *adap)
+ 	/* load clock register S2 */
  	i2c_outb(adap, get_clock(adap));
  	/* check it's really written, the only 5 lowest bits does matter */
- 	if (((temp = i2c_inb(adap)) & 0x1f) != get_clock(adap)) {
--		DEB2(printk(KERN_ERR "i2c-algo-pcf.o: PCF detection failed -- can't set S2 (0x%02x).\n", temp));
+-	if (((temp = i2c_inb(adap)) & 0x1f) != get_clock(adap)) {
++	temp = i2c_inb(adap);
++	if ((temp & 0x1f) != get_clock(adap))
  		return -ENXIO;
- 	}
+-	}
  
-@@ -194,7 +169,6 @@ static int pcf_init_8584 (struct i2c_algo_pcf_data *adap)
+ 	/* Enable serial interface, idle, S0 selected */
+ 	set_pcf(adap, 1, I2C_PCF_IDLE);
  
  	/* check to see PCF is really idled and we can access status register */
- 	if ((temp = get_pcf(adap, 1)) != (I2C_PCF_PIN | I2C_PCF_BB)) {
--		DEB2(printk(KERN_ERR "i2c-algo-pcf.o: PCF detection failed -- can't select S1` (0x%02x).\n", temp));
+-	if ((temp = get_pcf(adap, 1)) != (I2C_PCF_PIN | I2C_PCF_BB)) {
++	temp = get_pcf(adap, 1);
++	if (temp != (I2C_PCF_PIN | I2C_PCF_BB))
  		return -ENXIO;
- 	}
+-	}
  
-@@ -210,8 +184,6 @@ static int pcf_sendbytes(struct i2c_adapter *i2c_adap, const char *buf,
- 	int wrcount, status, timeout;
+ 	printk(KERN_DEBUG "i2c-algo-pcf.o: detected and initialized PCF8584.\n");
  
- 	for (wrcount=0; wrcount<count; ++wrcount) {
--		DEB2(dev_dbg(&i2c_adap->dev, "i2c_write: writing %2.2X\n",
--				buf[wrcount] & 0xff));
- 		i2c_outb(adap, buf[wrcount]);
- 		timeout = wait_for_pin(adap, &status);
- 		if (timeout) {
-@@ -307,8 +279,6 @@ static int pcf_xfer(struct i2c_adapter *i2c_adap,
- 	/* Check for bus busy */
- 	timeout = wait_for_bb(adap);
- 	if (timeout) {
--		DEB2(printk(KERN_ERR "i2c-algo-pcf.o: "
--			    "Timeout waiting for BB in pcf_xfer\n");)
- 		i = -EIO;
- 		goto out;
- 	}
-@@ -316,10 +286,6 @@ static int pcf_xfer(struct i2c_adapter *i2c_adap,
- 	for (i = 0;ret >= 0 && i < num; i++) {
- 		pmsg = &msgs[i];
+@@ -218,7 +218,8 @@ static int pcf_readbytes(struct i2c_adapter *i2c_adap, char *buf,
+ 	/* increment number of bytes to read by one -- read dummy byte */
+ 	for (i = 0; i <= count; i++) {
  
--		DEB2(printk(KERN_DEBUG "i2c-algo-pcf.o: Doing %s %d bytes to 0x%02x - %d of %d messages\n",
--		     str_read_write(pmsg->flags & I2C_M_RD),
--		     pmsg->len, pmsg->addr, i + 1, num);)
--
- 		ret = pcf_doAddress(adap, pmsg);
+-		if ((wfp = wait_for_pin(adap, &status))) {
++		wfp = wait_for_pin(adap, &status);
++		if (wfp) {
+ 			if (wfp == -EINTR)
+ 				return -EINTR; /* arbitration lost */
  
- 		/* Send START */
-@@ -335,8 +301,6 @@ static int pcf_xfer(struct i2c_adapter *i2c_adap,
- 				goto out;
- 			}
- 			i2c_stop(adap);
--			DEB2(printk(KERN_ERR "i2c-algo-pcf.o: Timeout waiting "
--				    "for PIN(1) in pcf_xfer\n");)
- 			i = -EREMOTEIO;
- 			goto out;
- 		}
-@@ -344,34 +308,17 @@ static int pcf_xfer(struct i2c_adapter *i2c_adap,
- 		/* Check LRB (last rcvd bit - slave ack) */
- 		if (status & I2C_PCF_LRB) {
- 			i2c_stop(adap);
--			DEB2(printk(KERN_ERR "i2c-algo-pcf.o: No LRB(1) in pcf_xfer\n");)
- 			i = -EREMOTEIO;
- 			goto out;
- 		}
- 
--		DEB3(printk(KERN_DEBUG "i2c-algo-pcf.o: Msg %d, addr=0x%x, flags=0x%x, len=%d\n",
--			    i, msgs[i].addr, msgs[i].flags, msgs[i].len);)
- 
- 		if (pmsg->flags & I2C_M_RD) {
- 			ret = pcf_readbytes(i2c_adap, pmsg->buf, pmsg->len,
- 					    (i + 1 == num));
--
--			if (ret != pmsg->len) {
--				DEB2(printk(KERN_DEBUG "i2c-algo-pcf.o: fail: "
--					    "only read %d bytes.\n",ret));
--			} else {
--				DEB2(printk(KERN_DEBUG "i2c-algo-pcf.o: read %d bytes.\n",ret));
--			}
- 		} else {
- 			ret = pcf_sendbytes(i2c_adap, pmsg->buf, pmsg->len,
- 					    (i + 1 == num));
--
--			if (ret != pmsg->len) {
--				DEB2(printk(KERN_DEBUG "i2c-algo-pcf.o: fail: "
--					    "only wrote %d bytes.\n",ret));
--			} else {
--				DEB2(printk(KERN_DEBUG "i2c-algo-pcf.o: wrote %d bytes.\n",ret));
--			}
- 		}
- 	}
- 
-@@ -401,8 +348,6 @@ int i2c_pcf_add_bus(struct i2c_adapter *adap)
- 	struct i2c_algo_pcf_data *pcf_adap = adap->algo_data;
- 	int rval;
- 
--	DEB2(dev_dbg(&adap->dev, "hw routines registered.\n"));
--
+@@ -351,7 +352,8 @@ int i2c_pcf_add_bus(struct i2c_adapter *adap)
  	/* register new adapter to i2c module... */
  	adap->algo = &pcf_algo;
  
-@@ -418,7 +363,3 @@ EXPORT_SYMBOL(i2c_pcf_add_bus);
- MODULE_AUTHOR("Hans Berglund <hb@spacetec.no>");
- MODULE_DESCRIPTION("I2C-Bus PCF8584 algorithm");
- MODULE_LICENSE("GPL");
--
--module_param(i2c_debug, int, S_IRUGO | S_IWUSR);
--MODULE_PARM_DESC(i2c_debug,
--	"debug level - 0 off; 1 normal; 2,3 more verbose; 9 pcf-protocol");
+-	if ((rval = pcf_init_8584(pcf_adap)))
++	rval = pcf_init_8584(pcf_adap);
++	if (rval)
+ 		return rval;
+ 
+ 	rval = i2c_add_adapter(adap);
 -- 
 2.43.0
 
