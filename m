@@ -1,194 +1,180 @@
-Return-Path: <linux-i2c+bounces-13570-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13571-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 503BDBE215D
-	for <lists+linux-i2c@lfdr.de>; Thu, 16 Oct 2025 10:03:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 383C5BE2374
+	for <lists+linux-i2c@lfdr.de>; Thu, 16 Oct 2025 10:47:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4A9DC3B8301
-	for <lists+linux-i2c@lfdr.de>; Thu, 16 Oct 2025 08:03:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2A60919C0302
+	for <lists+linux-i2c@lfdr.de>; Thu, 16 Oct 2025 08:47:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D0CD2FF651;
-	Thu, 16 Oct 2025 08:03:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7ED242FABF2;
+	Thu, 16 Oct 2025 08:47:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="gWlGH7Os"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="KBje1WTg"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 361A8221299
-	for <linux-i2c@vger.kernel.org>; Thu, 16 Oct 2025 08:03:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D727A2C158F
+	for <linux-i2c@vger.kernel.org>; Thu, 16 Oct 2025 08:47:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760601828; cv=none; b=ohKtlO3KA1T8Li/pH70v3H2HTRR/dTXn+sSm67V4ir5fRaDzWAQT1HFYlXpZlPAMcqgEgOVmG24rAch+Vrlv0xfD3ldMzlpmHKKHoVaEKmxEgP1R4Cfu0BVNDaPAjQZ9x1l8qQ/MYQJ9OHcn5rkFIT+bURhNcGnYOk2gW0kbj7s=
+	t=1760604446; cv=none; b=E1W1qk8yZKYqCErhu5GgqyH2roStRBleRmya6R0nIsUirvhZqZmYpD3yxQIwh0wXMvkDclaE8VBUHfWmUkY4MhxU1dTY+sZMXCkSu6L1+Zgv1WSCqWFZbLo+w8gip4YNP0hX/zLaZCb5TjgqoKBMPDJjYvTlHsAp8ntw57VGFr4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760601828; c=relaxed/simple;
-	bh=Upf+vZPf5FtAc5nFbo/GsuIEVrSiRNpKkQuMnHoDkKY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ChEHVvqUwlTYySByL73yTwBzQKr/FFSeSTryoJdkR3iNzba/voDAChC6l3ZeITlIiWvEx38dId/s4oLPwXRULajvz4/Y+nKkRgdPWuQl/GWcXuS2yNvvGcsheAqxHB8B2awZ609aGrAt6Z54ovHPqP0m8f8+CBd2DWIVa3tJleU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=gWlGH7Os; arc=none smtp.client-ip=209.85.167.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-57bd7f0e2daso72993e87.0
-        for <linux-i2c@vger.kernel.org>; Thu, 16 Oct 2025 01:03:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1760601824; x=1761206624; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SI3iJaG6AehsZaDVHen+J6EpKqRu7s9HPBybFYzEdgw=;
-        b=gWlGH7Os+/ZnhKC7HSZP/PbQmY20AL8hDGE96MbwYi57o/couwbx84q3/gZyYBA4dJ
-         optOTlN5VLfwO+ZaAjT7MX8446a/jfp0CBtJO0LTADsCzz7PvIS3bitSYM6vAviYn8OX
-         SfxXF0zzCqCLrbD3/ARobYWmVM0NU02IqvP2bb87vWi4soAfHwHhHu9c/5ifAkhgnuXg
-         WJI0miFxLcfCFGkMKPQFIJWWIbgluWUPyS34r/wStU7eyf4fvT4Sd4zOg7rSxAiHp7Ah
-         ZZq6EYUUocgvij1x3Vq3SX9KOnTzFSOEfU6Vm3Q1lEEhcqCHaosbJSoJoXM8oy16AYsg
-         mbhg==
+	s=arc-20240116; t=1760604446; c=relaxed/simple;
+	bh=4Cr3hLvCCrouiag43KD+fwe7CAMY7VqZErV48pL/VOA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FB5oh6EI8/eLVBWCYvct9dgarwwUeUVQzs3CZszA94eNkVdbG+5ackTHJmDstQpjO/7MS4Hy75MVlkhW7Fy7f0VH5eLIaMkfgPt3dQ+UgJOIZ2ZLix0dkSv4Es/eFGzL8/kGDJeHtB1+4sf6gFZwJ2Y9mY5ujes+9JLBBt3DYjU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=KBje1WTg; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 59G7eoLx004230
+	for <linux-i2c@vger.kernel.org>; Thu, 16 Oct 2025 08:47:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	DtK2jXcjWQPbKB7OnX2TPJKpHc1AyZMAFUwhHWo+ek4=; b=KBje1WTgyhZ37KRv
+	On83yXBfGXbNXOOwqTu69Gof1xwbOtsQVzIMUOaWhqJAH14FsD+2g3ptjOhhggGG
+	O/G61XyTeZzgFxtpTCcAZsDtiruQ/XX/V1mFqpBuDjVOc+qhEMI4UhVVM9Zhms0C
+	b0qrY+XqgoLLpJg2AIptG//5SEm9TojJTt1A0j+FvvhLqOauzd4xTWw3hsPtgnro
+	qvJz4dT4dW6Gb93cOuYGaocMUfHPXsqxk6YQojuMEWy96m6tvyHdK35CQ0MGSD48
+	ll11UmuQ7eI0qMtstRSSzPML9uyFnqqfiFF9NT9iOSGZ3SnmEJhb/i8FB+PpquFU
+	yM+wPQ==
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com [209.85.219.72])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49s6mwswsh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-i2c@vger.kernel.org>; Thu, 16 Oct 2025 08:47:24 +0000 (GMT)
+Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-78e45d71f05so15894226d6.2
+        for <linux-i2c@vger.kernel.org>; Thu, 16 Oct 2025 01:47:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760601824; x=1761206624;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=SI3iJaG6AehsZaDVHen+J6EpKqRu7s9HPBybFYzEdgw=;
-        b=mHmXimSR1so+X5xTpNGzUvAgvxIU/Lch1TaFvseBXdV3N9Y6I5MByeNow5MDGkhcaK
-         X7wZqYj5ozlbm7SNfaK+Z2QntUFWNtKk8c8GekuZfuSFNfEDZkEk4yvhZSit0c4wsGnP
-         +MYLPNFXjM0R2++FY1mp8JjgBoOWdPV1/4BnCvbw18iqr947eDb4lURYwazTdZ8B4aAv
-         6nA9b/Lhdtc94BSGmH5R7jDwKSvDWwVzo18H2a3PwF8erIXO6XDTCQLVo9zDN/hmk0pK
-         i73UxdDPdv2Lj9ysJ9TsrCOwZjlFb5ctekf+RcmmVbkKriBKcKUvJ/ZhG4BeWVUgdAyi
-         xaBA==
-X-Gm-Message-State: AOJu0YxagNI3Vo86Z31WXPktkCqStTocqikhV/Inlua8Wr27/jvfb5Hz
-	FZryl/KtebzCjZFhKv957tukfkdcZeuTC98zOI9fUqb/McC/jxHJBkQ5nCGJScD3w9s=
-X-Gm-Gg: ASbGncvdqI+81P8LPRKw1Jun3Mg6+YhpvVl4epUO4T7ewoN3wF+Cv4kVg/hC4vJoGZ4
-	QYTVojMxKrCrdnnP02dj/IOq7kf/2ynwJR5X4CorVtwAj5Mr9LRj5MfN1LlGdJW7k1HRWthaSP0
-	SnF4HniL5IZtmIDXesgBGapKcFXhajzNKCH1yO0iQLQ96m8bTGXGjXli5LZ1kR/cI0mv8cZ7/96
-	5Q0L3fY6j0zhpFPVOGIFn6S7WovMuhqV0wZgvVA0aP8j55/PyGXVgsZyvgf6U/Z8sZ0sTlfx8nA
-	jyOU4JRivEMMj9ua00PC43ryATfzfZdGjuNxaV+qTW81hEmF32mCfn7xwHxXK15tV8ieF1kfJAX
-	gqZBm/RdKZGKVcuD26JsGcacfwwKOxkyYysfEO0nsa8GJAsKdhSGE8KBP6oHvdBq7FziOapdycr
-	SVUOlx9xT9DRBEb2NuNZLonah4WP86v9Y+Lc3jCF5giNN8EGM8WpLxNY8eWxNxJ95MWV+jjg==
-X-Google-Smtp-Source: AGHT+IHcAxdLhGzdW1NI2UBF0IVQHMl6HFpUd/jJYBtOzICKf88GKwgE5spfrmYtn/8eULnHs4lGZg==
-X-Received: by 2002:a05:6512:3dac:b0:57a:8ae1:6a8e with SMTP id 2adb3069b0e04-5906d8ec20bmr5447249e87.6.1760601824219;
-        Thu, 16 Oct 2025 01:03:44 -0700 (PDT)
-Received: from [192.168.1.100] (91-159-24-186.elisa-laajakaista.fi. [91.159.24.186])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-590881f88ddsm6922497e87.31.2025.10.16.01.03.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Oct 2025 01:03:43 -0700 (PDT)
-Message-ID: <3202275a-25ec-435a-93ff-80a7ff8a8153@linaro.org>
-Date: Thu, 16 Oct 2025 11:03:42 +0300
+        d=1e100.net; s=20230601; t=1760604443; x=1761209243;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DtK2jXcjWQPbKB7OnX2TPJKpHc1AyZMAFUwhHWo+ek4=;
+        b=nPlj6FEf2VYdIKv+lG9LN2oOn8ZoQVTei3fEHeARJejmNGIpYxVFgijbeAmVfhguh9
+         6THI9loIpj9i1S57y61UwITK727uKyEWHGnXZgdDS45DSCHaBvkX47lJxlYwksPCsBeX
+         /AJuvNQvKY7efirM4H8diycncvddjSEi86UYAL2qBB1NAE2pc+OtAy28it8xPcDvwVfG
+         Bu3vUZk/5+uvEs5etMAFwO8e4ybdYSBRP5bDULQDTiAXG2kYHnJxiEtOZlSPf68J5GHO
+         WeeAop3k5i3X4kr/uydTYWt0yaJ1qwLSOOR1tdak6KAqLgICV9DlW+TA5ebFdhdCF9kC
+         tmMA==
+X-Forwarded-Encrypted: i=1; AJvYcCV30tLosL/yt+1bzRV2LTHuD9MRCzi00Xxwo4wmEtakSxeiH30Acq533boKnCgiQpRUyublR6/GNtY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzsx7sChCyPa9xpCMIuse73ocKjBEAkTOiBC65cSgyK0rsSlA/D
+	1Wt0rYhWeIRxCAETDdFH0khX3b7PqD+qZjHK6cpmiHkLumVZUkZKaeByV6y4PKKkzQcFlTeDxk6
+	vwLZoZ3JeqcsA8JDZDAfYQjMKYJX/yJsdeVRrM9PMT/BlK9t76uODq+IG4BoekjHaFGTEodsEB+
+	YPFxlPWOYJx0qefsx99iQdEEhYx9MSaeZ9zKvJwA==
+X-Gm-Gg: ASbGnctB+/kzllT9ZktFCkhRv8m/0tahz87m8IhRlLUBWrngL8TAXk+qIZ41ytIgGg2
+	C2xlMLyOcJb5M02No595As/qHJouprvPiSJ2DOORKQ3siI+BX89XHe80lRxT4oIusJ1evatCAH6
+	nNrdpf2EnTRoe6IC0qa5jwiJRzlee0j5nf+KPt8PWllowIqK1o3uZUZf1TL0genMXKdXY6DAY23
+	OmcIuGwOqMd9TyFqY6r6Ei6rtBnhR4Ovv/wp17ISBecJA==
+X-Received: by 2002:a05:6214:cc7:b0:879:db53:dd2 with SMTP id 6a1803df08f44-87b2107bdc2mr384170126d6.22.1760604442623;
+        Thu, 16 Oct 2025 01:47:22 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGKIDwd0H080pXEFK1kdHvRTAf/OHzMp8h2JpG4d2oyZ6MvcF5FnRmiKkwvO8LcA8cfNV3BhP6f4FxVJw0D0mg=
+X-Received: by 2002:a05:6214:cc7:b0:879:db53:dd2 with SMTP id
+ 6a1803df08f44-87b2107bdc2mr384169876d6.22.1760604442226; Thu, 16 Oct 2025
+ 01:47:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/6] dt-bindings: media: camss: Add
- qcom,kaanapali-camss binding
-To: Vijay Kumar Tumati <vijay.tumati@oss.qualcomm.com>,
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
- Hangxiang Ma <hangxiang.ma@oss.qualcomm.com>,
- Loic Poulain <loic.poulain@oss.qualcomm.com>, Robert Foss
- <rfoss@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Todor Tomov <todor.too@gmail.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-media@vger.kernel.org, aiqun.yu@oss.qualcomm.com,
- tingwei.zhang@oss.qualcomm.com, trilok.soni@oss.qualcomm.com,
- yijie.yang@oss.qualcomm.com, Jingyi Wang <jingyi.wang@oss.qualcomm.com>,
- Atiya Kailany <atiya.kailany@oss.qualcomm.com>
-References: <20251014-add-support-for-camss-on-kaanapali-v2-0-f5745ba2dff9@oss.qualcomm.com>
- <20251014-add-support-for-camss-on-kaanapali-v2-2-f5745ba2dff9@oss.qualcomm.com>
- <dce1018c-6165-407c-8f3d-40859cb36b11@linaro.org>
- <0b6c157a-3d8d-4251-a704-31f8369f6a4e@linaro.org>
- <a0d9389b-67a5-458a-858b-ffdd95f7ccc6@linaro.org>
- <62a3f09b-50d6-4ace-8229-d71585378ae1@oss.qualcomm.com>
-From: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-In-Reply-To: <62a3f09b-50d6-4ace-8229-d71585378ae1@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20250924-knp-cam-v1-0-b72d6deea054@oss.qualcomm.com>
+ <20250924-knp-cam-v1-2-b72d6deea054@oss.qualcomm.com> <CAFEp6-1o11B9o3HjdJY-xQhDXquOTknXo0JeW=HfpTxXcEaK3g@mail.gmail.com>
+ <a7be3a42-bd4f-46dc-b6de-2b0c0320cb0d@oss.qualcomm.com> <d8dfe11f-c55a-4eb2-930a-bfa31670bef0@kernel.org>
+In-Reply-To: <d8dfe11f-c55a-4eb2-930a-bfa31670bef0@kernel.org>
+From: Loic Poulain <loic.poulain@oss.qualcomm.com>
+Date: Thu, 16 Oct 2025 10:47:11 +0200
+X-Gm-Features: AS18NWDQrzQKYCHdrrwTe9-7hmb4jjMXDlC9wkwV60oUqGOhB-GFpY7hHhqu3ys
+Message-ID: <CAFEp6-1zpobZNLHt1192Ahtn2O7bV+As0P1YvVHrkRsORyH_Aw@mail.gmail.com>
+Subject: Re: [PATCH 2/6] dt-bindings: media: camss: Add qcom,kaanapali-camss binding
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Hangxiang Ma <hangxiang.ma@oss.qualcomm.com>,
+        Jingyi Wang <jingyi.wang@oss.qualcomm.com>,
+        "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
+        Robert Foss <rfoss@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        "Bryan O'Donoghue" <bod@kernel.org>, Todor Tomov <todor.too@gmail.com>,
+        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        aiqun.yu@oss.qualcomm.com, tingwei.zhang@oss.qualcomm.com,
+        trilok.soni@oss.qualcomm.com, yijie.yang@oss.qualcomm.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDEzMDA4MyBTYWx0ZWRfXwnuipExCCM+h
+ srBYA0vdcVvyzza1s4mc7VmgaXB5Aquz6AhEMM+9zRpCrq0m1fo4c0h+Mg4tICQUE0r4Je1l059
+ /Fc8lT5MN43FiD3kCY5WVbIDOOCGtDImd5+gYmx9IfTXgCD69Nq4eqikd66v4PDTMIp5he+aSiN
+ HwSJW5FCa75MGBVt6cw9Bqo35s1mHPQ3oh4cVLRldz/ulMMtJjQPfXpGe9XUdxAT0vwKVQPAHnR
+ oUrNz99Cdm8wTJcdZQTmpgY+ECBljzt3mshST9osn69NXxq1+l65nMFe8zO2ieZj2h5dCSJ9rMC
+ 5wSPZZdRXmWuKzPWJofYVL/Pi8McGUszMzPnasJWyutDtk7w6VZljExAf6Ult4zVGCVLL1Eor1O
+ iEYYwhZOEAGmG12sQ9vdXGlTsBtPCA==
+X-Authority-Analysis: v=2.4 cv=Fr4IPmrq c=1 sm=1 tr=0 ts=68f0b11c cx=c_pps
+ a=7E5Bxpl4vBhpaufnMqZlrw==:117 a=IkcTkHD0fZMA:10 a=x6icFKpwvdMA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=GOxOaFmcAZOYw-Nqf4IA:9
+ a=QEXdDO2ut3YA:10 a=pJ04lnu7RYOZP9TFuWaZ:22
+X-Proofpoint-GUID: ZAt2ors0HQbmhETwI2r9ipsxCpHaXUW0
+X-Proofpoint-ORIG-GUID: ZAt2ors0HQbmhETwI2r9ipsxCpHaXUW0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-10-16_01,2025-10-13_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 impostorscore=0 spamscore=0 phishscore=0 malwarescore=0
+ adultscore=0 lowpriorityscore=0 bulkscore=0 suspectscore=0 clxscore=1015
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2510020000 definitions=main-2510130083
 
-On 10/16/25 06:46, Vijay Kumar Tumati wrote:
-> 
-> On 10/15/2025 4:32 PM, Vladimir Zapolskiy wrote:
->> On 10/16/25 00:43, Bryan O'Donoghue wrote:
->>> On 15/10/2025 20:45, Vladimir Zapolskiy wrote:
->>>>> +  power-domains:
->>>>> +    items:
->>>>> +      - description:
->>>>> +          TFE0 GDSC - Thin Front End, Global Distributed Switch
->>>>> Controller.
->>>>> +      - description:
->>>>> +          TFE1 GDSC - Thin Front End, Global Distributed Switch
->>>>> Controller.
->>>>> +      - description:
->>>>> +          TFE2 GDSC - Thin Front End, Global Distributed Switch
->>>>> Controller.
->>>>> +      - description:
->>>>> +          Titan GDSC - Titan ISP Block Global Distributed Switch
->>>>> Controller.
->>>>> +
->>>>> +  power-domain-names:
->>>>> +    items:
->>>>> +      - const: tfe0
->>>>> +      - const: tfe1
->>>>> +      - const: tfe2
->>>>
->>>> Please remove all 'tfeX' power domains, they are not going to be
->>>> utilized
->>>> any time soon.
->>>>
->>>> When 'power-domains' list is just a single Titan GDSC,
->>>> 'power-domain-names'
->>>> property is not needed.
->>>
->>> Each one of these TFEs powers an individually power-collapsible TFEs.
->>>
->>> This is also so with the other xFE power-domains on previous SoC
->>> generations.
->>
->> This is false, for instance there is no management of SFEx power domains
->> in SM8550 or X1E80100 CAMSS in the upstrem, neither there is no
->> management
->> of SBI, IPE, BPS, CPP and so on GDSC power domans given by CAMCCs.
->>
->> TFEx is no more special, if it's unused, then it should not be added.
-> I agree with Bryan, if I understood the original comment correctly. This
-> is no different to the IFE0/1/2 GDSCs on SM8550. All the other modules
-> listed above (SFE, IPE, BPS etc.) are not supported by the CAMSS driver
-> and hence there is no management. However, we need to manage the TOP and
-> TFE0/1/2 GDSCs for the real time RDI paths.
+On Thu, Oct 16, 2025 at 7:52=E2=80=AFAM Krzysztof Kozlowski <krzk@kernel.or=
+g> wrote:
+>
+> On 15/10/2025 05:21, Hangxiang Ma wrote:
+> >>> +      - const: csiphy4
+> >>> +      - const: csiphy5
+> >>> +      - const: vfe0
+> >>> +      - const: vfe1
+> >>> +      - const: vfe2
+> >>> +      - const: vfe_lite0
+> >>> +      - const: vfe_lite1
+> >> Wouldn't it make sense to simplify this and have different camss nodes
+> >> for the 'main' and 'lite' paths?
+> >>
+> >> [...]
+> > No such plan till now. Other series may take this into consideration.
+>
+> We don't care much about your plan. You are expected to send correct
+> hardware description.
 
-Agreed, at first glance I didn't find the management of the TFE power domains
-in the driver's change 3/6 from this series, however now I see it was added
-along with the 6/6 change.
+To be fair, other platforms like sc8280xp-camss already have the
+all-in big camss node.
+Point is that if Lite and Main blocks are distinct enough we could
+have two simpler nodes.
+Would it make things any better from a dts and camss perspective?
 
-This my comment is answered, thank you.
+ camss: isp@9253000 {
+    compatible =3D "qcom,kaanapali-camss";
+    [...]
+}
 
->>
->>>
->>> You'll need the TFEx power-domain to process any data on TFEx with the
->>> 'lite' versions being tied to the TOP GDSC.
->>
->> When it is needed, the documentation will be updated accordingly,
->> right now
->> it is unknown what a data processing on TFEx looks like, it might happen
->> that there will be separate device tree nodes for TFEx.
->>
->> TFEx power domains shall be removed right now, unti; a usecase in the
->> upstream
->> CAMSS appears to use them, I haven't seen such code at the moment.
->>
-> We attach these power power domains by name in the corresponding driver.
-> For instance, the VFE driver attaches the TFE power domains mentioned
-> here and are exercised from vfe_set_power() -> vfe_get()
-> ->vfe_pm_domain_on(). You can also see the related codes with '.has_pd'
-> and '.pd_name' properties in the CAMSS subdev resource structures. Hope
-> this clarifies.
-> 
+camss-lite:ips@9273000 {
+   compatible =3D "qcom,kaanapali-lite-camss";
+    [...]
+}
 
--- 
-Best wishes,
-Vladimir
+That approach would create two distinct CAMSS instances and separate
+media pipelines.
+However, it may not work with the current implementation, as the CSI
+PHYs would need to be shared between them.
+
+I guess this should be part of the broader discussion around
+splitting/busifying CAMSS.
+
+Regards,
+Loic
 
