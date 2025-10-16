@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-13579-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13580-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id A09D9BE2D92
-	for <lists+linux-i2c@lfdr.de>; Thu, 16 Oct 2025 12:40:42 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92E35BE2E37
+	for <lists+linux-i2c@lfdr.de>; Thu, 16 Oct 2025 12:45:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 4D3D0352C96
-	for <lists+linux-i2c@lfdr.de>; Thu, 16 Oct 2025 10:40:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DA0571A63765
+	for <lists+linux-i2c@lfdr.de>; Thu, 16 Oct 2025 10:45:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77CC22E0903;
-	Thu, 16 Oct 2025 10:40:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 046A632D7F6;
+	Thu, 16 Oct 2025 10:43:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XtoYwC2y"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rGfgIN14"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20161328621;
-	Thu, 16 Oct 2025 10:40:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87BF632E72B;
+	Thu, 16 Oct 2025 10:43:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760611236; cv=none; b=HdY55AQhV7jjuRhi/v7/LEU8nfzTj7W1xDsnMOdvM7N36xqmFqX6RLU1Vb4embbgwN9SyYViHCoq4+Y0vrcjTZkoQpJzgAv8TlZ1fyC6QNJuaXrUKymOl0C0D6CkLwoasxaD94q4WOZf2CJq5DvCDb93sLL4bqesLML+pR2jEtM=
+	t=1760611397; cv=none; b=N365+9TzbRk7/5pfQ+teyTX/2yGdImTKZXdZDYNnsBE172cvFFN/Yj67W33rI8eZtTc6jAMMGWfuEzxHla9/LQFo66xlH1NW3lYR85JgjI9V0ehIOqo8hNGAM053YZlfduFXsKPn5QMAe590uVdIHPjW6rvYvN2L+26MUk8/IYQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760611236; c=relaxed/simple;
-	bh=wbiKwt6TS6CzkPF2AqCXyH71oW6eCePOx9EhG/BPJNk=;
+	s=arc-20240116; t=1760611397; c=relaxed/simple;
+	bh=VYdUnNQv4UwMCdiVPFAPBCShK74Swd+vycVhQcshTKQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=N64TcuUHgBNxezlQDcPkW6s2qcuBlfiByA0MmBDH08eJRE8JuUDCeSXHATOs+mQncvn8MrUZdgG5aS0s/Lg5osWD+jrMh3P5IblaOscXvYwlqM6JEb1s1L8kxH7lFOEMrCOpLZdfok2P/DMuhXRINUqIZmDpS2n5Q0pnao8R0c0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XtoYwC2y; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C39DAC4CEF1;
-	Thu, 16 Oct 2025 10:40:30 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=dNTfhj30hRjYSgdcD0y28DzULdV4Kz1laH6RUlrcXtE9I+T5Amw61j7zqVBCwkmRay+JCLGeIepMFT+D4Odi2fNPsWbfUHq4RQXBDBN9RiJqlqxjdEVXEFpXdbjbeW7ibsfyhvwI66DhDjBwpIchDhAXtK9kK29lg1LGcGj2uQ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rGfgIN14; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E9CBC4CEF9;
+	Thu, 16 Oct 2025 10:43:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760611235;
-	bh=wbiKwt6TS6CzkPF2AqCXyH71oW6eCePOx9EhG/BPJNk=;
+	s=k20201202; t=1760611397;
+	bh=VYdUnNQv4UwMCdiVPFAPBCShK74Swd+vycVhQcshTKQ=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=XtoYwC2yP21BrBlgXJrTIV7Il5/wcWdMeAvYY1LkTB1+L3DiUwwkkTuT+FWpZKeBY
-	 dMcx9Pzs/3ERTiO/FbNPJ/9l5GAD0EEeA0NfK4WfjHYMsJvmIY+jECxrtWI4EisXYS
-	 j1D8WZF2BqPn5nxJ2cXW+qBphxYdrZfvO9cq89/5pwrUp0Im8AHkHkc+/Nt2UC36lW
-	 BlFaoCJ4+dQMhDUk1KDDrcZdvhFgelquMEizJ3J4fDE3I18WOYG1riYAgI9OoDbSTs
-	 PAFDUSw/BjRDdFKWCSkVxB24DBLl45ktjBl5sTyZO2epMyuVbsQvKv3o1RdSC0QpSr
-	 CdacSaTaK8eVg==
-Message-ID: <597a5c19-163c-453d-8f89-f0589de7b23c@kernel.org>
-Date: Thu, 16 Oct 2025 12:40:29 +0200
+	b=rGfgIN14uVUZt2V5YEFe1jYeKfq13FWVwfQgd/1MTgTyEkyBdhzyynyhyaej3+XnU
+	 fkOg/PrIP547iyk+Y9762rS0D2BAiBqsKSThy9gs5z/zZqe5BkRMi2bjyDthjCc81h
+	 0DO4xyWI35CCK6GApcHzWiPpjKKhCohgG/K4MqLqtFbR7muhupGKDZx0WcZxHO2adO
+	 HPOiErrFdYVpdCcoSYDVMbWeEbC7C9v1Hd01dD7ydEbsH3M0l6QJUgE8rmnsfFNZ/G
+	 BgM7pGKLBod+5/fUV4Xmw9q6tDOjNamvnyQXpQn4z/Z53irI6z14lLetfQeu2W8CvU
+	 PYTfG+ywF6D1w==
+Message-ID: <ac96922e-d2a3-4a99-8f34-a822c3dd2d02@kernel.org>
+Date: Thu, 16 Oct 2025 12:43:10 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,26 +50,28 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/6] dt-bindings: i2c: qcom-cci: Document Kaanapali
- compatible
-To: Hangxiang Ma <hangxiang.ma@oss.qualcomm.com>,
- Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
- Loic Poulain <loic.poulain@oss.qualcomm.com>, Robert Foss
+Subject: Re: [PATCH 2/6] dt-bindings: media: camss: Add qcom,kaanapali-camss
+ binding
+To: Loic Poulain <loic.poulain@oss.qualcomm.com>
+Cc: Hangxiang Ma <hangxiang.ma@oss.qualcomm.com>,
+ Jingyi Wang <jingyi.wang@oss.qualcomm.com>,
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>, Robert Foss
  <rfoss@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Todor Tomov <todor.too@gmail.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>,
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc: linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-media@vger.kernel.org, aiqun.yu@oss.qualcomm.com,
- tingwei.zhang@oss.qualcomm.com, trilok.soni@oss.qualcomm.com,
- yijie.yang@oss.qualcomm.com, Jingyi Wang <jingyi.wang@oss.qualcomm.com>,
- Atiya Kailany <atiya.kailany@oss.qualcomm.com>
-References: <20251014-add-support-for-camss-on-kaanapali-v2-0-f5745ba2dff9@oss.qualcomm.com>
- <20251014-add-support-for-camss-on-kaanapali-v2-1-f5745ba2dff9@oss.qualcomm.com>
- <e2c43a8c-a9cc-46a1-9ddd-5d6dfc7e917b@linaro.org>
- <49eaf7ec-ac71-4bf3-9a4e-25fa633d815e@oss.qualcomm.com>
+ Conor Dooley <conor+dt@kernel.org>, Bryan O'Donoghue <bod@kernel.org>,
+ Todor Tomov <todor.too@gmail.com>,
+ Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, linux-i2c@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+ aiqun.yu@oss.qualcomm.com, tingwei.zhang@oss.qualcomm.com,
+ trilok.soni@oss.qualcomm.com, yijie.yang@oss.qualcomm.com
+References: <20250924-knp-cam-v1-0-b72d6deea054@oss.qualcomm.com>
+ <20250924-knp-cam-v1-2-b72d6deea054@oss.qualcomm.com>
+ <CAFEp6-1o11B9o3HjdJY-xQhDXquOTknXo0JeW=HfpTxXcEaK3g@mail.gmail.com>
+ <a7be3a42-bd4f-46dc-b6de-2b0c0320cb0d@oss.qualcomm.com>
+ <d8dfe11f-c55a-4eb2-930a-bfa31670bef0@kernel.org>
+ <CAFEp6-1zpobZNLHt1192Ahtn2O7bV+As0P1YvVHrkRsORyH_Aw@mail.gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -115,27 +117,58 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <49eaf7ec-ac71-4bf3-9a4e-25fa633d815e@oss.qualcomm.com>
+In-Reply-To: <CAFEp6-1zpobZNLHt1192Ahtn2O7bV+As0P1YvVHrkRsORyH_Aw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 16/10/2025 03:56, Hangxiang Ma wrote:
+On 16/10/2025 10:47, Loic Poulain wrote:
+> On Thu, Oct 16, 2025 at 7:52 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
 >>
->> On QCM2290 the macro in front of the vlaue is GCC_CAMSS_TOP_AHB_CLK,
->> and name "ahb" is good for both, I believe.
+>> On 15/10/2025 05:21, Hangxiang Ma wrote:
+>>>>> +      - const: csiphy4
+>>>>> +      - const: csiphy5
+>>>>> +      - const: vfe0
+>>>>> +      - const: vfe1
+>>>>> +      - const: vfe2
+>>>>> +      - const: vfe_lite0
+>>>>> +      - const: vfe_lite1
+>>>> Wouldn't it make sense to simplify this and have different camss nodes
+>>>> for the 'main' and 'lite' paths?
+>>>>
+>>>> [...]
+>>> No such plan till now. Other series may take this into consideration.
 >>
->>>               - const: cci
->>>     - if:
->>>
->>
+>> We don't care much about your plan. You are expected to send correct
+>> hardware description.
 > 
-> On Kaanapali the macro has been changed to CAM_CC_CAM_TOP_AHB_CLK. GCC 
+> To be fair, other platforms like sc8280xp-camss already have the
+> all-in big camss node.
+> Point is that if Lite and Main blocks are distinct enough we could
+> have two simpler nodes.
+> Would it make things any better from a dts and camss perspective?
+> 
+>  camss: isp@9253000 {
+>     compatible = "qcom,kaanapali-camss";
+>     [...]
+> }
+> 
+> camss-lite:ips@9273000 {
+>    compatible = "qcom,kaanapali-lite-camss";
+>     [...]
+> }
+> 
+> That approach would create two distinct CAMSS instances and separate
+> media pipelines.
+> However, it may not work with the current implementation, as the CSI
+> PHYs would need to be shared between them.
+> 
+> I guess this should be part of the broader discussion around
+> splitting/busifying CAMSS.
 
-
-It seems you do not see the difference between GCC output clock and
-actual clock input so some other block.
-
-
+And this discussion CAN happen now, stopping this camss and any future
+camss till we conclude the discussion. Whatever internal plans of that
+teams are, rejecting technical discussion based on "no plans for that"
+is a really bad argument, only stalling this patchset and raising eyebrows.
 
 Best regards,
 Krzysztof
