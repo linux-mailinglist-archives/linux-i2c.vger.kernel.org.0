@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-13559-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13560-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id A59A5BE1935
-	for <lists+linux-i2c@lfdr.de>; Thu, 16 Oct 2025 07:51:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 484EBBE193B
+	for <lists+linux-i2c@lfdr.de>; Thu, 16 Oct 2025 07:51:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3EF2D4F1097
-	for <lists+linux-i2c@lfdr.de>; Thu, 16 Oct 2025 05:50:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9296C1892E0B
+	for <lists+linux-i2c@lfdr.de>; Thu, 16 Oct 2025 05:51:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FA0D24469E;
-	Thu, 16 Oct 2025 05:50:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DE022417F2;
+	Thu, 16 Oct 2025 05:51:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TI0GEe7o"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ueXyveTI"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9FBF242D91;
-	Thu, 16 Oct 2025 05:50:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 393C821D3F2;
+	Thu, 16 Oct 2025 05:51:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760593816; cv=none; b=M6pjIB4FS8lWp1+9Ey39C6OlG6r3wE/R2Hg6HFUQIqLIiEdd5E4AGdV+oIwsHX4uOv29LlEoBpaY24ZeQMPYP11F0UDxu6aRDzm122jHVF0D4TR74nJ8WlXiW+LLPy+K6G6HOOxsiFfGgGivYth2OEiXhpAsMtJUMkh1fdJ6HGo=
+	t=1760593877; cv=none; b=GcQnMux1LUQbNkMNo2WCW4A4LBemJ/YFXchgBM/JCZnPhek8yEQOiKY5qya6nFrmJ/DSRfqJ8akJV7kD1TzvoNUhUUVsmZy1NWZ/q7YwD/QlQhOfabAWy0I98OE8T+So34LFF5mclovaKHKvYldPigNR77AkwQmzfOdcu7ckX7s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760593816; c=relaxed/simple;
-	bh=AlmDx2rdnosVI2ZNbzr4EBTZkca+ygDOkDrx7JegDCs=;
+	s=arc-20240116; t=1760593877; c=relaxed/simple;
+	bh=5F1q7KcPvnliOJTtNCFQPKsf0AJAsLojxOwx6+x7zXw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ePu6HoM8t+4rQDTURp8LwXXS3QlrVFjJ8gPCV4f+8OV9nG2nLmKgOEvClLvwCgdnovrC6iFPuYXlfwHAb3IF5kmtR3ttVoDizQbUjF5zSrUMcnjE3JUvVVkczmZg7Qk6uZ+yajd5uwOVmh71QRUdg9EFdCWgJ+oH/yYPQEO15S0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TI0GEe7o; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58C39C4CEFB;
-	Thu, 16 Oct 2025 05:50:11 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=nSiY9iXUgAFVCjBUt7SBPT/TwMfZKJkknJp5zxskMqvFnyyRq7MAJsa/gm3+tjcmuna6R+ynt8myWNSMQjWTN9EzIR36+Yj7PRp/x3jzmUvg/vxxuqt5lKXFTwXjMWGyqcN7QVArZxq6T2znJjKhAMYhH2vrlf7mTy71dgLCsB8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ueXyveTI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9816C4CEFB;
+	Thu, 16 Oct 2025 05:51:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760593816;
-	bh=AlmDx2rdnosVI2ZNbzr4EBTZkca+ygDOkDrx7JegDCs=;
+	s=k20201202; t=1760593875;
+	bh=5F1q7KcPvnliOJTtNCFQPKsf0AJAsLojxOwx6+x7zXw=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=TI0GEe7oBno3E4ogAI9s9h6hpNzqGNbYxq4hwXal6VxQidLVr2ELqF70qdUcZUOIi
-	 YHVRspbkhmtY+3HdMBtAp6akSl9EU8GGAhRl7Qyzu+D3DIHx0GDmk2SPLzYX4iMuuA
-	 9PdgNkUn+2lVXoHZha8mbaT7BasOKLwNrvIiyJK8Zt/DBGkSyVkBq+4UhCSBsq6DNz
-	 BRdgj53Xh67wLGD6FoXdMmV0y9ehqH4pW9dUmq6ml167NoOmZIlCmodUH8ApRujNjl
-	 Xa5UjloiRWYwbZpyjZCxKH7fmbmOqlyzr3PUg2PeX/8sovu49ulNlzdw2TuUIdlaxL
-	 th7MM82D9ebBA==
-Message-ID: <35e1070b-ba3f-4b19-9214-e2f3b4c32955@kernel.org>
-Date: Thu, 16 Oct 2025 07:50:09 +0200
+	b=ueXyveTIXmd0CCpcuIPTkUPgUQ/2SHEUmEMoch46uIPdobqam3EucGIaIPjq0sCX5
+	 KJrUCet5iYTVAOJ264Pf08B2kBtTkJtdSV0rLYihyaAqZ+lrJj4oVjwrmr5K8EoQml
+	 zOfJLiLnxPlelb972wcyETEyFLAGCM29AeML5vKoiNiR75HAGznroRE057G9snAUOV
+	 FKh1mfPk4Yb42YgHkYthUAolkZTKMyc+BUusz5Y05/Kvoh+agy+/KxHw9JBPBQeGp2
+	 ilZ+oMsB79Fsplwv6hkEQX+q0AtiYgNL3nEBCAjv+mLjkDoDgdR6nqoOzggBAKWNzz
+	 JLwfbNss+t2cQ==
+Message-ID: <aeb65634-aa56-425a-9488-aea2a46efd95@kernel.org>
+Date: Thu, 16 Oct 2025 07:51:09 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -52,23 +52,23 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v2 2/6] dt-bindings: media: camss: Add
  qcom,kaanapali-camss binding
-To: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
- Hangxiang Ma <hangxiang.ma@oss.qualcomm.com>,
- Loic Poulain <loic.poulain@oss.qualcomm.com>, Robert Foss
- <rfoss@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Todor Tomov <todor.too@gmail.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>,
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc: linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-media@vger.kernel.org, aiqun.yu@oss.qualcomm.com,
- tingwei.zhang@oss.qualcomm.com, trilok.soni@oss.qualcomm.com,
- yijie.yang@oss.qualcomm.com, Jingyi Wang <jingyi.wang@oss.qualcomm.com>,
- Atiya Kailany <atiya.kailany@oss.qualcomm.com>
+To: "Rob Herring (Arm)" <robh@kernel.org>,
+ Hangxiang Ma <hangxiang.ma@oss.qualcomm.com>
+Cc: Loic Poulain <loic.poulain@oss.qualcomm.com>,
+ trilok.soni@oss.qualcomm.com, Mauro Carvalho Chehab <mchehab@kernel.org>,
+ linux-arm-msm@vger.kernel.org, Todor Tomov <todor.too@gmail.com>,
+ Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Robert Foss <rfoss@kernel.org>,
+ linux-media@vger.kernel.org, Atiya Kailany <atiya.kailany@oss.qualcomm.com>,
+ Andi Shyti <andi.shyti@kernel.org>, tingwei.zhang@oss.qualcomm.com,
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>, aiqun.yu@oss.qualcomm.com,
+ linux-kernel@vger.kernel.org, Jingyi Wang <jingyi.wang@oss.qualcomm.com>,
+ linux-i2c@vger.kernel.org, yijie.yang@oss.qualcomm.com,
+ devicetree@vger.kernel.org
 References: <20251014-add-support-for-camss-on-kaanapali-v2-0-f5745ba2dff9@oss.qualcomm.com>
  <20251014-add-support-for-camss-on-kaanapali-v2-2-f5745ba2dff9@oss.qualcomm.com>
- <dce1018c-6165-407c-8f3d-40859cb36b11@linaro.org>
+ <176050307578.2006257.1881446437893444962.robh@kernel.org>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -114,57 +114,36 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <dce1018c-6165-407c-8f3d-40859cb36b11@linaro.org>
+In-Reply-To: <176050307578.2006257.1881446437893444962.robh@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 15/10/2025 21:45, Vladimir Zapolskiy wrote:
-> On 10/15/25 05:56, Hangxiang Ma wrote:
->> +
->> +  clock-names:
->> +    items:
->> +      - const: camnoc_nrt_axi
->> +      - const: camnoc_rt_axi
->> +      - const: camnoc_rt_vfe0
->> +      - const: camnoc_rt_vfe1
->> +      - const: camnoc_rt_vfe2
->> +      - const: camnoc_rt_vfe_lite
->> +      - const: cam_top_ahb
->> +      - const: cam_top_fast_ahb
->> +      - const: csid
->> +      - const: csid_csiphy_rx
->> +      - const: csiphy0
->> +      - const: csiphy0_timer
->> +      - const: csiphy1
->> +      - const: csiphy1_timer
->> +      - const: csiphy2
->> +      - const: csiphy2_timer
->> +      - const: csiphy3
->> +      - const: csiphy3_timer
->> +      - const: csiphy4
->> +      - const: csiphy4_timer
->> +      - const: csiphy5
->> +      - const: csiphy5_timer
->> +      - const: gcc_hf_axi
->> +      - const: qdss_debug_xo
->> +      - const: vfe0
->> +      - const: vfe0_fast_ahb
->> +      - const: vfe1
->> +      - const: vfe1_fast_ahb
->> +      - const: vfe2
->> +      - const: vfe2_fast_ahb
->> +      - const: vfe_lite
->> +      - const: vfe_lite_ahb
->> +      - const: vfe_lite_cphy_rx
->> +      - const: vfe_lite_csid
+On 15/10/2025 06:37, Rob Herring (Arm) wrote:
 > 
-> The list of 'clock-names' values is not alphanumerically sorted.
+> On Tue, 14 Oct 2025 19:56:02 -0700, Hangxiang Ma wrote:
+>> Add bindings for qcom,kaanapali-camss in order to support the camera
+>> subsystem for Kaanapali.
+>>
+>> Signed-off-by: Hangxiang Ma <hangxiang.ma@oss.qualcomm.com>
+>> ---
+>>  .../bindings/media/qcom,kaanapali-camss.yaml       | 494 +++++++++++++++++++++
+>>  1 file changed, 494 insertions(+)
+>>
+> 
+> My bot found errors running 'make dt_binding_check' on your patch:
+> 
+> yamllint warnings/errors:
+> 
+> dtschema/dtc warnings/errors:
+> Documentation/devicetree/bindings/media/qcom,kaanapali-camss.example.dts:25:18: fatal error: dt-bindings/clock/qcom,kaanapali-camcc.h: No such file or directory
+>    25 |         #include <dt-bindings/clock/qcom,kaanapali-camcc.h>
+>       |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-We are not doing the same discussion fourth time.
+This patch has completely unnecessary dependencies which makes it
+untestable and unmergeable.
 
-NAK to above comment, stop bringing this up finally.
-
+I won't be reviewing it.
 
 Best regards,
 Krzysztof
