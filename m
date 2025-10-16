@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-13562-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13563-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 480F8BE1965
-	for <lists+linux-i2c@lfdr.de>; Thu, 16 Oct 2025 07:53:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8A3FBE199E
+	for <lists+linux-i2c@lfdr.de>; Thu, 16 Oct 2025 07:54:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3626A4EB591
-	for <lists+linux-i2c@lfdr.de>; Thu, 16 Oct 2025 05:53:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 829DA3AE139
+	for <lists+linux-i2c@lfdr.de>; Thu, 16 Oct 2025 05:54:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0219923E35F;
-	Thu, 16 Oct 2025 05:52:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5AA7246BC6;
+	Thu, 16 Oct 2025 05:54:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Qu0U3vy8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L6QRvd1N"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6BC4227B95;
-	Thu, 16 Oct 2025 05:52:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75D8F23C50A;
+	Thu, 16 Oct 2025 05:54:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760593975; cv=none; b=CpYW1H9a8NtzN0Yk0fTMU2mU+HF3pVqYYZgmbjY2b9+T+GylYs1Xg80HCdQx3xlql0WNzBjUcjk+8yTs1Uu4Dk0IkM2iwx0MbU2yxyvwrob2whxIOpYjY4EWcFkyHR1r+bu3PC2kE8F7daqO1Lap6KGmTXp03WSWfKchL4bEwiw=
+	t=1760594067; cv=none; b=BncyqHb8YfTB5+GSWNs2en4Eqz5Nj2LDd3nvFS/t2MiC2kYTyLcD/R02Fud5DaWg3/OY5oMnmYdv2G1IFcU0ZSU8eme3kiQB9GJvhGIXt1U9Pi+0rBb2aQ1DtrvP8ZJBtIYqw6INuSxhPzcb0BasQHw+Zy0dp7caIBrz1Mm9tfA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760593975; c=relaxed/simple;
-	bh=/lxuxqhggpXmWU59kyRrusvoXcurU1dUAjpAuyhE+GA=;
+	s=arc-20240116; t=1760594067; c=relaxed/simple;
+	bh=D5zJnBL5OqmQt8R7sUGQUSy3OQYhwG7NjZQuwmxLEyI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SQ3yVyOGRcIbsBSMeRSuZBevMPXigjXB3h7+9gHn7qeMAQ+3Pv7NHYAHwnAp6ZWu2iYcZd7Jb1pUKkb7SyUdKp6NnSuKwUdbfysjNNakg26Dg+yU3/gFQPzm5bBDF9NVrY/oRuAc5K7obqKDEi6OIMVGa8CreeQyU5cmHvslkAI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Qu0U3vy8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5ADF7C4CEF1;
-	Thu, 16 Oct 2025 05:52:50 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=VUsjAmgJHCPb+EjIB02tT5LVlMSyef6mEhv8w/MZ3K5kN8bWInvSqt6uyxJZUvOGBtLI9wjO3nQOVYftBSqs0JP3e2iq5FeJUkOSMi+6RzZY8hwWglFdyv36lOs/EfIVT1SevsqAKyQrGU8zIvlBTU33nyFs+2APa/XVeZd1XzE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L6QRvd1N; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 585C3C4CEF1;
+	Thu, 16 Oct 2025 05:54:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760593975;
-	bh=/lxuxqhggpXmWU59kyRrusvoXcurU1dUAjpAuyhE+GA=;
+	s=k20201202; t=1760594067;
+	bh=D5zJnBL5OqmQt8R7sUGQUSy3OQYhwG7NjZQuwmxLEyI=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Qu0U3vy8xYzAZYfUtNw8aQdiwkO9XGifmgaktqQvFrEE7g87DAHbTCf35Aj5lW9Ck
-	 iYhOS90IVOU8eparJ9mlCgVjp3xzGJOU96UgT0qlN9aCH7thM/uSLg0+gVFP8EeQM2
-	 wML14RgCVr0Qa/ftJql6+Cd/CqM/RoubOR/BXQJl6aGLv09yTH8cbSM8psVgwD4UmL
-	 M9XYoFGHwq+XxZV860qBq0iUt+NO9xS4QWJd/GMhs8CGg1m2ynUR22ZTRWry6fz2S6
-	 J6WJXlUJJmE8lXCYUjdC96Rq/D3FjwzAbtsi56hW2ts6PIBGBLY38+fpdBzL7yeZcm
-	 p2lEMpZmazE2g==
-Message-ID: <b506328f-dedf-483b-a1e3-b9c544f5cb5a@kernel.org>
-Date: Thu, 16 Oct 2025 07:52:48 +0200
+	b=L6QRvd1NRXmn9QjJ2XL0i2BSpoan53Dh59S/1vFt6Q/KApARYVte8ocO3SvzFV5/i
+	 yJCTWMxYksjZy43xf9ZA7Z/ci+fA8PuG+kbB+MWrCGdTryxm15nG1bgHf6OC0diq+Z
+	 RR6Kqp9cLuBI0jhTN8dK8Mkfc1MyQPBRQKmNZWR5xYbosqRslJCz1TJhrB2PLIR1E+
+	 Uyo/kQl2gjkeRs4e0qwqW444pK4C26ieV7oAk8zNPFpTbxalbnX5pXA8X4O4UBFRtC
+	 nN7NzOdg0oL/Gg6TXgBj7mjzKnsPBBIc7nSvBlayGP9d2+pwrFc0/BbfN6D9n8++ZO
+	 ILczbiCKpIn1Q==
+Message-ID: <9984bc23-05ef-4d46-aeb8-feb0a18e5762@kernel.org>
+Date: Thu, 16 Oct 2025 07:54:21 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/6] dt-bindings: media: camss: Add
- qcom,kaanapali-camss binding
+Subject: Re: [PATCH] media: qcom: camss: Enable setting the rate to
+ camnoc_rt_axi clock
 To: Hangxiang Ma <hangxiang.ma@oss.qualcomm.com>,
  Loic Poulain <loic.poulain@oss.qualcomm.com>, Robert Foss
  <rfoss@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
@@ -62,12 +62,8 @@ To: Hangxiang Ma <hangxiang.ma@oss.qualcomm.com>,
  Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 Cc: linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-media@vger.kernel.org, aiqun.yu@oss.qualcomm.com,
- tingwei.zhang@oss.qualcomm.com, trilok.soni@oss.qualcomm.com,
- yijie.yang@oss.qualcomm.com, Jingyi Wang <jingyi.wang@oss.qualcomm.com>,
- Atiya Kailany <atiya.kailany@oss.qualcomm.com>
-References: <20251014-add-support-for-camss-on-kaanapali-v2-0-f5745ba2dff9@oss.qualcomm.com>
- <20251014-add-support-for-camss-on-kaanapali-v2-2-f5745ba2dff9@oss.qualcomm.com>
+ linux-media@vger.kernel.org
+References: <20251014-add-new-clock-in-vfe-matching-list-v1-1-0d965ccc8a3a@oss.qualcomm.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -113,21 +109,41 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20251014-add-support-for-camss-on-kaanapali-v2-2-f5745ba2dff9@oss.qualcomm.com>
+In-Reply-To: <20251014-add-new-clock-in-vfe-matching-list-v1-1-0d965ccc8a3a@oss.qualcomm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 15/10/2025 04:56, Hangxiang Ma wrote:
-> Add bindings for qcom,kaanapali-camss in order to support the camera
-> subsystem for Kaanapali.
+On 15/10/2025 04:43, Hangxiang Ma wrote:
+> On hardware architectures where a single CAMNOC module is split into
+> two, one for each of the real time (RT) and non real time (NRT) modules
+> within camera sub system, processing VFE output over the AXI bus
+> requires enabling and setting the appropriate clock rate for the RT
+> CAMNOC. This change lays the groundwork for supporting such
+> configurations.
 > 
 > Signed-off-by: Hangxiang Ma <hangxiang.ma@oss.qualcomm.com>
 > ---
->  .../bindings/media/qcom,kaanapali-camss.yaml       | 494 +++++++++++++++++++++
->  1 file changed, 494 insertions(+)
+> This change lays the groundwork for supporting configurations for
+> hardware architectures that split a single CAMNOC module into real time
+> (RT) and non real time (NRT).
+> ---
+>  drivers/media/platform/qcom/camss/camss-vfe.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/platform/qcom/camss/camss-vfe.c b/drivers/media/platform/qcom/camss/camss-vfe.c
+> index ee08dbbddf88..09b29ba383f1 100644
+> --- a/drivers/media/platform/qcom/camss/camss-vfe.c
+> +++ b/drivers/media/platform/qcom/camss/camss-vfe.c
+> @@ -914,7 +914,8 @@ static int vfe_match_clock_names(struct vfe_device *vfe,
+>  	return (!strcmp(clock->name, vfe_name) ||
+>  		!strcmp(clock->name, vfe_lite_name) ||
+>  		!strcmp(clock->name, "vfe_lite") ||
+> -		!strcmp(clock->name, "camnoc_axi"));
+> +		!strcmp(clock->name, "camnoc_axi") ||
+> +		!strcmp(clock->name, "camnoc_rt_axi"));
 
-Unresolved comment from Dmitry. Again, your plans don't matter the
-community.
+Just use camnoc_axi for both. Look at your bindings - why do you keep
+different names for same signal?
 
 Best regards,
 Krzysztof
