@@ -1,482 +1,404 @@
-Return-Path: <linux-i2c+bounces-13605-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13606-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83B49BE5E1F
-	for <lists+linux-i2c@lfdr.de>; Fri, 17 Oct 2025 02:27:17 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E706BE6EE9
+	for <lists+linux-i2c@lfdr.de>; Fri, 17 Oct 2025 09:29:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 08D0D355140
-	for <lists+linux-i2c@lfdr.de>; Fri, 17 Oct 2025 00:27:17 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0F5124F4E23
+	for <lists+linux-i2c@lfdr.de>; Fri, 17 Oct 2025 07:29:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F11361F4CB3;
-	Fri, 17 Oct 2025 00:27:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 015F82D9ED8;
+	Fri, 17 Oct 2025 07:28:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="XbJunjAZ"
+	dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b="HdzfyxAJ"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpbguseast1.qq.com (smtpbguseast1.qq.com [54.204.34.129])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 629871FE45A
-	for <linux-i2c@vger.kernel.org>; Fri, 17 Oct 2025 00:27:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E404D23B0;
+	Fri, 17 Oct 2025 07:28:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.204.34.129
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760660832; cv=none; b=vF/Am6RYubbP63/gkeM5+65GVXzsVhw7okKMXDB8YhzkDPqxXFCH/W/q1GJ0WR/+1IjF51+DheHqD4TBZBcNlZc9g9knixZr+3wUOFb74NpzZqteA2frVhMhuYK5REWLhpyKnT0HZl3cCGUqJnCt00GRl5XQIRVyqBZKIyem6aw=
+	t=1760686138; cv=none; b=UmVLp8HxwSjNEgzAxvHJ2D9Fd4pYAOzT9E0oCzujEJ16VxNuLAOfqj1EyqV+ntflLCB5uwfRe0gpn1t5N5YaMqWlauog6j1+7W2m6YigCRO6wTR3Uqgf6z8TPX+HQE1x4sLb1hZaSpV70NpqDf1LzL99PYyKm9qA0KffYUUcel4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760660832; c=relaxed/simple;
-	bh=SGlqTmdRqTBLV6e9G0m1nAsiw5n0bwL4N/CZUAMrLJY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=B0ZAkHjMLSjj3uacWJBXceqca2Jse13KO973UauAiAD0DtLFIPH37x4+aAB+WBvFLfQQNGN7RsE1loUmGfKpp6oGXMatfnZWjStwlsD6h2EiPR612cQr0Gq4GFHFpzdAsH9VY/BnGAIpUyFWv2zS4sjYj503CZowSAi6TzsFGnE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=XbJunjAZ; arc=none smtp.client-ip=209.85.208.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-3628a233510so1240081fa.3
-        for <linux-i2c@vger.kernel.org>; Thu, 16 Oct 2025 17:27:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1760660828; x=1761265628; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7AM1XVKxng88e3T2Dan3f4di28jrNPp43d01lCFqTrg=;
-        b=XbJunjAZsFGbvR1w8XDzDmiYyOgQSrrwQ9lUSVGWjxp7P27xcNaQKMez18ebBmXgjt
-         iDD0p8cY9+7083BzDvCg0POG+ecetJHwVEnN2V08jriYY03lI/d16kvevXm8DNt66Koh
-         gPCZGMsTVr45F/sRwZE8S21OvBdVbPZy5q3nFHWWipdce6gceSqmbtmkCwDeXLlBbA3l
-         6KAhx5c3C34bxp2DAPl4NinvDIb+PrNNCl8+9zBqk3xGO/byJCtZBuOFORcDu9/WH0gq
-         jEL033qqdE3g2tfi18zBGrExODbD0k2V1TeaJ+a5aBR4sPb8XmJKd6JafbleIMEfYM9z
-         yqjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760660828; x=1761265628;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=7AM1XVKxng88e3T2Dan3f4di28jrNPp43d01lCFqTrg=;
-        b=wHvyRgmJUA9C1m7ieebQkNXIWqwygGU8IldF97+erThgVRFw5+xR07dXaSB6tlazHN
-         LAzVO9FdaE/6g0CMIfAVwIvEyLTcE15ZU8b8Ixsi2p1gtHixYehb4DhI+a8VLKPX6+xZ
-         j26G8R4xcKTXoNTu0wtAi3p8UyLHS0gwjWhDFa8dkQV35ygM8PGLNpucNFXRS52hIabV
-         Pd4eL/Jd1qsDGbwDwQ41Y+E9h46/nO6gdKGH06JsTdHUIHNWcZ8H/byQDScZ2j7pB8A+
-         jvnvFwQNmo45McfBNeVnmg+SY/XtxDS0vlY2Lh7uOcQ73zpE8PSXxvyFWpKjzdpbLtSZ
-         LcaA==
-X-Gm-Message-State: AOJu0YyA9xtP7nbYuJnEaL37niQqGi4taxCCgqbMV7E2HcicyFc7vda4
-	k8albyouHIWbZwTpliKDz+lYMFQrpqMYdqms8FfFmm4RfIgGWeIfUcaTjVVp8CLO5H4=
-X-Gm-Gg: ASbGnctNl3N1i5a3ixoPWTu4BlmslWQJINP8AroPDX3qOy08AK2zI7KpdtXKWEKpiRG
-	Gum7IWkZkmzfoSRGDIy3ntTQcmOm2pW76uIC19W8M574eg/ThZFyfFJ+UJqmTpkdDV1WAmzM0CR
-	iqSzTw8rB2L6F73VA345UalPD3miYbd57n4xIZaZDes002qUyNvmBnXbwaVhsBX0snXaX+f9xRV
-	V6ga9/hqSH2GWwwv38Qy+khtDUnfYKvzwu0fBsPBLfHj/JeG61dasIcwtHPFJGFETmUztR6lAJt
-	q19471E3VU+L9WgeUY5rqcCFGySs8QLm/QoWn4kJ55H5O4q//t1nUs6HMmqZfW6SVRDYP3DOB9c
-	UZSW4WrRXxBWGpcRMmEGoKxdfnIduE8QP3YJKOGtcgFsOhR3f65f519RE1u9kGAN3zH1PtV75KF
-	FygwX7mRQDME6yGaWvR4d6ibmYQ5TUygJsQv699TxG7J9RL+C37cv77wwfEw9EERr4AA==
-X-Google-Smtp-Source: AGHT+IF6BaEmUIFDUTuqi0v92E1B0jC6+8+mvl/CPlOOi00q4gjTJj38ffVxvsZRUKqnIfBO49lB+Q==
-X-Received: by 2002:a2e:a582:0:b0:377:78cd:e917 with SMTP id 38308e7fff4ca-37797627f60mr3725641fa.0.1760660827594;
-        Thu, 16 Oct 2025 17:27:07 -0700 (PDT)
-Received: from [192.168.1.100] (91-159-24-186.elisa-laajakaista.fi. [91.159.24.186])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-3762ea4449fsm56232641fa.51.2025.10.16.17.27.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Oct 2025 17:27:06 -0700 (PDT)
-Message-ID: <b18fc946-a249-481a-b727-7d3e49d47f8e@linaro.org>
-Date: Fri, 17 Oct 2025 03:27:04 +0300
+	s=arc-20240116; t=1760686138; c=relaxed/simple;
+	bh=k7izFLZOtX/Py2xq/tvUTB74MWgsPUMPXbHHgh+Chu4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=eJS7JpENOjjb45qgc9r3vgoUbzVdUq4b/7nZaYwK/J96zcKc6s4FSXb9QDHcx5ck5TZjcU1/EpaUzkTFbNjBiSQ2VerT/OyK/9l2pEgF42VCTiLY8lbFhgp8G0w7G2/2HUwuPf4Y7Y6RN7VNz7LeLZyo0RFLTc4U0F/2KYuR7ik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com; spf=none smtp.mailfrom=linux.spacemit.com; dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b=HdzfyxAJ; arc=none smtp.client-ip=54.204.34.129
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.spacemit.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.spacemit.com;
+	s=mxsw2412; t=1760686075;
+	bh=LocPT7tM4jWpZccPgKkOmWtgNZGRu44M8WZ3y7gXo6I=;
+	h=From:Date:Subject:MIME-Version:Message-Id:To;
+	b=HdzfyxAJEkko/d1vgrWDGrCjm98USKE2NOzSJ/qjphR4aTFSLAreJNTd4M2PgPQS7
+	 8BNIbUH8A7QchobPOfvQYCpFIgATNynvBehN6DTzGeRbps+SLpawjRSz1O1VQG4Zs0
+	 ON3k5BpnRsaIOLQmhEKSQRc//ECoVKxPbA99vucg=
+X-QQ-mid: zesmtpgz9t1760686069t9b528397
+X-QQ-Originating-IP: 0CWrJBL4vCh7YmGxp/edB72stNdOwX8KvRwJwFgKnao=
+Received: from = ( [14.123.253.52])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Fri, 17 Oct 2025 15:27:47 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 2983751479809764245
+EX-QQ-RecipientCnt: 7
+From: Troy Mitchell <troy.mitchell@linux.spacemit.com>
+Date: Fri, 17 Oct 2025 15:27:39 +0800
+Subject: [PATCH v4] i2c: spacemit: configure ILCR for accurate SCL
+ frequency
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/6] dt-bindings: media: camss: Add
- qcom,kaanapali-camss binding
-To: Vijay Kumar Tumati <vijay.tumati@oss.qualcomm.com>,
- Hangxiang Ma <hangxiang.ma@oss.qualcomm.com>,
- Loic Poulain <loic.poulain@oss.qualcomm.com>, Robert Foss
- <rfoss@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Todor Tomov <todor.too@gmail.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>,
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc: linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-media@vger.kernel.org, aiqun.yu@oss.qualcomm.com,
- tingwei.zhang@oss.qualcomm.com, trilok.soni@oss.qualcomm.com,
- yijie.yang@oss.qualcomm.com, Jingyi Wang <jingyi.wang@oss.qualcomm.com>,
- Atiya Kailany <atiya.kailany@oss.qualcomm.com>
-References: <20251014-add-support-for-camss-on-kaanapali-v2-0-f5745ba2dff9@oss.qualcomm.com>
- <20251014-add-support-for-camss-on-kaanapali-v2-2-f5745ba2dff9@oss.qualcomm.com>
- <dce1018c-6165-407c-8f3d-40859cb36b11@linaro.org>
- <1d6a20d8-b011-4608-a722-a1996b366a56@oss.qualcomm.com>
-From: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-In-Reply-To: <1d6a20d8-b011-4608-a722-a1996b366a56@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20251017-k1-i2c-ilcr-v4-1-eed4903ecdb9@linux.spacemit.com>
+X-B4-Tracking: v=1; b=H4sIAOrv8WgC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyTHQUlJIzE
+ vPSU3UzU4B8JSMDI1NDA0Nz3WxD3UyjZN3MnOQi3WRLI4sUU4NUEwPzNCWgjoKi1LTMCrBp0bG
+ 1tQBzn/6OXQAAAA==
+X-Change-ID: 20251017-k1-i2c-ilcr-c928d50e407f
+To: Andi Shyti <andi.shyti@kernel.org>, Yixun Lan <dlan@gentoo.org>
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-riscv@lists.infradead.org, spacemit@lists.linux.dev, 
+ Troy Mitchell <troy.mitchell@linux.spacemit.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1760686067; l=10627;
+ i=troy.mitchell@linux.spacemit.com; s=20250710; h=from:subject:message-id;
+ bh=k7izFLZOtX/Py2xq/tvUTB74MWgsPUMPXbHHgh+Chu4=;
+ b=ByADNB/Eak52WxCnpxkeTUU8hnGwPG06+OUjTA6GZaQcog4YS8krwnnAOj6JfbtQUwwkaKucu
+ 7O2zuvRgfEFAwJ6WnbDel+rfbI9zLIWviVKbyxTswFKtG7vpmjWeJqo
+X-Developer-Key: i=troy.mitchell@linux.spacemit.com; a=ed25519;
+ pk=lQa7BzLrq8DfZnChqmwJ5qQk8fP2USmY/4xZ2/MSsXc=
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpgz:linux.spacemit.com:qybglogicsvrgz:qybglogicsvrgz3a-0
+X-QQ-XMAILINFO: MTg7kbcnv4eHunCH2h0Eykl3mYFwY6Euvx7w+uo4CS2qP48DJ2J4xh52
+	OrKtzKYvU14K7tFPVbW1oTTyr62yyU2Qd6IJud7SvFxB4nuKlAkF1dEczGp0Z5c49jQ/Wok
+	C29Erw5hYzDThDIhy/YIXIxMZme/ekkGaxF6W2hcURswwILtOK0cyU3KTa7B7UpzotpP5uq
+	aMUCJZMNPmRddKSPSXwW8sU2D6R5HK9jSNAa9GAxqJNMv3vJQL17leaKb79+5vt8gx9KXRH
+	6Mnz/nz/LePUpptNPLZB+Aq3MoNMyTQmGLxDlixJGlqsbZaE06K9x8PVLe1pgrClYSA+Ylv
+	QUjDd6bUu+WB1dyMRI6332DgD1iJ4L8KgztFfoocYS6MQQkLiZna8Dn2KWyw6YKAsjElMY7
+	7JA5k/INPIat1bq5FNtgpD+rSU1tRb8f5m411xflfIcK/BI+WZA8nennNT25Xk3MzXI+u3c
+	UWL0wLgBKdsHyW8mvruA58ggVweDfg6FMYX93BwYhSeco0tMr6fxIwM6E/FQyOKbo5gjvG/
+	TFkcbctqRCIhzs8k7kEOzMPZ40AGGEwd71a2eHJKmFy6Az8GJUjDMRYDsNVu2Um481IRACp
+	fYmMsPM5CP3YNCMYX6JD760SQtD3ggsnHQgY7GSck5qtMH1ghAxahUhitLtCP5UwU7PVLkG
+	EdlSiuykQCOCS1MNgIFLQ8f1u8bNDDjaxiZCHpDAYGqc6AAhG8nbYbMZet1EveUB+w747Ij
+	UWJjd60Uf/vx3TFQrvrgaOullZgJMmpii6XUWVlfN6kMfO38sc8LUHJU06jLeKeESsPuCDp
+	SuKS3fYXdkwvL6walVC9EADaLxDYCeouJDhNKCswS4oSneRY3l2nNIVM+6fgnBbKV9Aw8x/
+	SkfbO+YurcD00RwsuyGRi/gzTmKvLdfy8kOvYug+O2Tpu1bJla7SQ1NgVVGujd9RNlWC9TK
+	+QG9gBiOoI2tDbMOHKK3UCFh5BuxnfDPREEvE348zvnHZ9Rfu862+fxMgt1JRcmAgKIMeEm
+	JawQLFOeED0gm62cdNdnNiQ2A2rBz4+JjfMi2PAXntpGvEdYGIVHd96ObML6Bd3hh4ol3AC
+	9PZ4jj92CaM
+X-QQ-XMRINFO: Nq+8W0+stu50PRdwbJxPCL0=
+X-QQ-RECHKSPAM: 0
 
-On 10/17/25 02:53, Vijay Kumar Tumati wrote:
-> 
-> On 10/15/2025 12:45 PM, Vladimir Zapolskiy wrote:
->> On 10/15/25 05:56, Hangxiang Ma wrote:
->>> Add bindings for qcom,kaanapali-camss in order to support the camera
->>> subsystem for Kaanapali.
->>>
->>> Signed-off-by: Hangxiang Ma <hangxiang.ma@oss.qualcomm.com>
->>> ---
->>>    .../bindings/media/qcom,kaanapali-camss.yaml       | 494
->>> +++++++++++++++++++++
->>>    1 file changed, 494 insertions(+)
->>>
->>> diff --git
->>> a/Documentation/devicetree/bindings/media/qcom,kaanapali-camss.yaml
->>> b/Documentation/devicetree/bindings/media/qcom,kaanapali-camss.yaml
->>> new file mode 100644
->>> index 000000000000..d04c21103cfd
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/media/qcom,kaanapali-camss.yaml
->>> @@ -0,0 +1,494 @@
->>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/media/qcom,kaanapali-camss.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: Qualcomm Kaanapali Camera Subsystem (CAMSS)
->>> +
->>> +maintainers:
->>> +  - Hangxiang Ma <hangxiang.ma@oss.qualcomm.com>
->>> +
->>> +description:
->>> +  The CAMSS IP is a CSI decoder and ISP present on Qualcomm platforms.
->>> +
->>> +properties:
->>> +  compatible:
->>> +    const: qcom,kaanapali-camss
->>> +
->>> +  reg:
->>> +    maxItems: 16
->>> +
->>> +  reg-names:
->>> +    items:
->>> +      - const: csid0
->>> +      - const: csid1
->>> +      - const: csid2
->>> +      - const: csid_lite0
->>> +      - const: csid_lite1
->>> +      - const: csiphy0
->>> +      - const: csiphy1
->>> +      - const: csiphy2
->>> +      - const: csiphy3
->>> +      - const: csiphy4
->>> +      - const: csiphy5
->>> +      - const: vfe0
->>> +      - const: vfe1
->>> +      - const: vfe2
->>> +      - const: vfe_lite0
->>> +      - const: vfe_lite1
->>> +
->>> +  clocks:
->>> +    maxItems: 34
->>> +
->>> +  clock-names:
->>> +    items:
->>> +      - const: camnoc_nrt_axi
->>> +      - const: camnoc_rt_axi
->>> +      - const: camnoc_rt_vfe0
->>> +      - const: camnoc_rt_vfe1
->>> +      - const: camnoc_rt_vfe2
->>> +      - const: camnoc_rt_vfe_lite
->>> +      - const: cam_top_ahb
->>> +      - const: cam_top_fast_ahb
->>> +      - const: csid
->>> +      - const: csid_csiphy_rx
->>> +      - const: csiphy0
->>> +      - const: csiphy0_timer
->>> +      - const: csiphy1
->>> +      - const: csiphy1_timer
->>> +      - const: csiphy2
->>> +      - const: csiphy2_timer
->>> +      - const: csiphy3
->>> +      - const: csiphy3_timer
->>> +      - const: csiphy4
->>> +      - const: csiphy4_timer
->>> +      - const: csiphy5
->>> +      - const: csiphy5_timer
->>> +      - const: gcc_hf_axi
->>> +      - const: qdss_debug_xo
->>> +      - const: vfe0
->>> +      - const: vfe0_fast_ahb
->>> +      - const: vfe1
->>> +      - const: vfe1_fast_ahb
->>> +      - const: vfe2
->>> +      - const: vfe2_fast_ahb
->>> +      - const: vfe_lite
->>> +      - const: vfe_lite_ahb
->>> +      - const: vfe_lite_cphy_rx
->>> +      - const: vfe_lite_csid
->>
->> The list of 'clock-names' values is not alphanumerically sorted.
->>
->>> +
->>> +  interrupts:
->>> +    maxItems: 16
->>> +  interrupt-names:
->>
->> Missing empty line to separate properties.
->>
->>> +    items:
->>> +      - const: csid0
->>> +      - const: csid1
->>> +      - const: csid2
->>> +      - const: csid_lite0
->>> +      - const: csid_lite1
->>> +      - const: csiphy0
->>> +      - const: csiphy1
->>> +      - const: csiphy2
->>> +      - const: csiphy3
->>> +      - const: csiphy4
->>> +      - const: csiphy5
->>> +      - const: vfe0
->>> +      - const: vfe1
->>> +      - const: vfe2
->>> +      - const: vfe_lite0
->>> +      - const: vfe_lite1
->>> +
->>> +  interconnects:
->>> +    maxItems: 2
->>> +
->>> +  interconnect-names:
->>> +    items:
->>> +      - const: ahb
->>> +      - const: hf_0_mnoc
->>
->> Please rename "hf_0_mnoc" to "hf_mnoc", see qcom,qcm2290-camss.yaml etc.
->>
->>> +
->>> +  iommus:
->>> +    maxItems: 1
->>> +
->>> +  power-domains:
->>> +    items:
->>> +      - description:
->>> +          TFE0 GDSC - Thin Front End, Global Distributed Switch
->>> Controller.
->>> +      - description:
->>> +          TFE1 GDSC - Thin Front End, Global Distributed Switch
->>> Controller.
->>> +      - description:
->>> +          TFE2 GDSC - Thin Front End, Global Distributed Switch
->>> Controller.
->>> +      - description:
->>> +          Titan GDSC - Titan ISP Block Global Distributed Switch
->>> Controller.
->>> +
->>> +  power-domain-names:
->>> +    items:
->>> +      - const: tfe0
->>> +      - const: tfe1
->>> +      - const: tfe2
->>
->> Please remove all 'tfeX' power domains, they are not going to be utilized
->> any time soon.
->>
->> When 'power-domains' list is just a single Titan GDSC,
->> 'power-domain-names'
->> property is not needed.
->>
->>> +      - const: top
->>> +
->>> +  vdda-pll-supply:
->>> +    description:
->>> +      Phandle to 1.2V regulator supply to PHY refclk pll block.
->>> +
->>> +  vdda-phy0-supply:
->>> +    description:
->>> +      Phandle to 0.8V regulator supply to PHY core block.
->>> +
->>> +  vdda-phy1-supply:
->>> +    description:
->>> +      Phandle to 0.8V regulator supply to PHY core block.
->>> +
->>> +  vdda-phy2-supply:
->>> +    description:
->>> +      Phandle to 0.8V regulator supply to PHY core block.
->>> +
->>> +  vdda-phy3-supply:
->>> +    description:
->>> +      Phandle to 0.8V regulator supply to PHY core block.
->>> +
->>> +  vdda-phy4-supply:
->>> +    description:
->>> +      Phandle to 0.8V regulator supply to PHY core block.
->>> +
->>> +  vdda-phy5-supply:
->>> +    description:
->>> +      Phandle to 0.8V regulator supply to PHY core block.
->>
->> What is the difference between vdda-phyX-supply properties, why do you
->> need so many of them, when their descriptions say they are all the same?
-> Each of these supply power to a specific CSIPHY and could be different
-> based on the board architecture. But I agree that the description should
-> probably capture that than just relying on the name.
->>
->>> +  ports:
->>> +    $ref: /schemas/graph.yaml#/properties/ports
->>> +
->>> +    description:
->>> +      CSI input ports.
->>> +
->>> +    properties:
->>> +      port@0:
->>
->> Please use
->>
->>      patternProperties:
->>        "^port@[0-3]$":
->>
->>> +        $ref: /schemas/graph.yaml#/$defs/port-base
->>> +        unevaluatedProperties: false
->>> +        description:
->>> +          Input port for receiving CSI data on CSI0.
->>> +
->>> +        properties:
->>> +          endpoint:
->>> +            $ref: video-interfaces.yaml#
->>> +            unevaluatedProperties: false
->>> +
->>> +            properties:
->>> +              clock-lanes:
->>> +                maxItems: 1
->>
->> Please remove 'clock-lanes' property, it is non-configurable, redundant
->> and tends to store some irrelevant value.
->>
->>> +
->>> +              data-lanes:
->>> +                minItems: 1
->>> +                maxItems: 4
->>> +
->>> +              bus-type:
->>> +                enum:
->>> +                  - 1  # MEDIA_BUS_TYPE_CSI2_CPHY
->>> +                  - 4  # MEDIA_BUS_TYPE_CSI2_DPHY
->>> +
->>> +            required:
->>> +              - clock-lanes
->>
->> The 'clock-lanes' property is expected to be removed.
->>
->>> +              - data-lanes
->>> +
->>> +      port@1:
->>> +        $ref: /schemas/graph.yaml#/$defs/port-base
->>> +        unevaluatedProperties: false
->>> +        description:
->>> +          Input port for receiving CSI data on CSI1.
->>> +
->>> +        properties:
->>> +          endpoint:
->>> +            $ref: video-interfaces.yaml#
->>> +            unevaluatedProperties: false
->>> +
->>> +            properties:
->>> +              clock-lanes:
->>> +                maxItems: 1
->>> +
->>> +              data-lanes:
->>> +                minItems: 1
->>> +                maxItems: 4
->>> +
->>> +              bus-type:
->>> +                enum:
->>> +                  - 1  # MEDIA_BUS_TYPE_CSI2_CPHY
->>> +                  - 4  # MEDIA_BUS_TYPE_CSI2_DPHY
->>> +
->>> +            required:
->>> +              - clock-lanes
->>> +              - data-lanes
->>> +
->>> +      port@2:
->>> +        $ref: /schemas/graph.yaml#/$defs/port-base
->>> +        unevaluatedProperties: false
->>> +        description:
->>> +          Input port for receiving CSI data on CSI2.
->>> +
->>> +        properties:
->>> +          endpoint:
->>> +            $ref: video-interfaces.yaml#
->>> +            unevaluatedProperties: false
->>> +
->>> +            properties:
->>> +              clock-lanes:
->>> +                maxItems: 1
->>> +
->>> +              data-lanes:
->>> +                minItems: 1
->>> +                maxItems: 4
->>> +
->>> +              bus-type:
->>> +                enum:
->>> +                  - 1  # MEDIA_BUS_TYPE_CSI2_CPHY
->>> +                  - 4  # MEDIA_BUS_TYPE_CSI2_DPHY
->>> +
->>> +            required:
->>> +              - clock-lanes
->>> +              - data-lanes
->>> +
->>> +      port@3:
->>> +        $ref: /schemas/graph.yaml#/$defs/port-base
->>> +        unevaluatedProperties: false
->>> +        description:
->>> +          Input port for receiving CSI data on CSI3.
->>> +
->>> +        properties:
->>> +          endpoint:
->>> +            $ref: video-interfaces.yaml#
->>> +            unevaluatedProperties: false
->>> +
->>> +            properties:
->>> +              clock-lanes:
->>> +                maxItems: 1
->>> +
->>> +              data-lanes:
->>> +                minItems: 1
->>> +                maxItems: 4
->>> +
->>> +              bus-type:
->>> +                enum:
->>> +                  - 1  # MEDIA_BUS_TYPE_CSI2_CPHY
->>> +                  - 4  # MEDIA_BUS_TYPE_CSI2_DPHY
->>> +
->>> +            required:
->>> +              - clock-lanes
->>> +              - data-lanes
->>> +
->>> +required:
->>> +  - compatible
->>> +  - reg
->>> +  - reg-names
->>> +  - clocks
->>> +  - clock-names
->>> +  - interrupts
->>> +  - interrupt-names
->>> +  - interconnects
->>> +  - interconnect-names
->>> +  - iommus
->>> +  - power-domains
->>> +  - power-domain-names
->>> +  - vdda-pll-supply
->>> +  - vdda-phy0-supply
->>> +  - vdda-phy1-supply
->>> +  - vdda-phy2-supply
->>> +  - vdda-phy3-supply
->>> +  - vdda-phy4-supply
->>> +  - vdda-phy5-supply
->>
->> Please exclude supplies from the list of required properties.
-> One of these supplies is required based which PHY the use case is being
-> run. Can you please advise how to handle that? Thanks.
+The SpacemiT I2C controller's SCL (Serial Clock Line) frequency for
+master mode operations is determined by the ILCR (I2C Load Count Register).
+Previously, the driver relied on the hardware's reset default
+values for this register.
 
-1. Please rename all of them, reference to qcom,x1e80100-camss.yaml,
-qcom,qcm2290-camss.yaml or published on linux-media qcom,sm8650-camss.yaml
+The hardware's default ILCR values (SLV=0x156, FLV=0x5d) yield SCL
+frequencies lower than intended. For example, with the default
+31.5 MHz input clock, these default settings result in an SCL
+frequency of approximately 93 kHz (standard mode) when targeting 100 kHz,
+and approximately 338 kHz (fast mode) when targeting 400 kHz.
+These frequencies are below the 100 kHz/400 kHz nominal speeds.
 
-2. Remove all of them from the list of required properties, and in a board
-specific dts file add only the neccesary ones, that's it.
+This patch integrates the SCL frequency management into
+the Common Clock Framework (CCF). Specifically, the ILCR register,
+which acts as a frequency divider for the SCL clock, is now registered
+as a managed clock (scl_clk) within the CCF.
 
+This patch also cleans up unnecessary whitespace
+in the included header files.
+
+Signed-off-by: Troy Mitchell <troy.mitchell@linux.spacemit.com>
+---
+Changelog in v4:
+- initialize clk_init_data with {} so that init.flags is implicitly set to 0
+- minor cleanup and style fixes for better readability
+- remove unused spacemit_i2c_scl_clk_exclusive_put() cleanup callback
+- replace clk_set_rate_exclusive()/clk_rate_exclusive_put() pair with clk_set_rate()
+- simplify LCR LV field macros by using FIELD_GET/FIELD_MAX helpers
+- Link to v3: https://lore.kernel.org/all/20250814-k1-i2c-ilcr-v3-1-317723e74bcd@linux.spacemit.com/
+
+Changelog in v3:
+- use MASK macro in `recalc_rate` function
+- rename clock name
+- Link to v2: https://lore.kernel.org/r/20250718-k1-i2c-ilcr-v2-1-b4c68f13dcb1@linux.spacemit.com
+
+Changelog in v2:
+- Align line breaks.
+- Check `lv` in `clk_set_rate` function.
+- Force fast mode when SCL frequency is illegal or unavailable.
+- Change "linux/bits.h" to <linux/bits.h>
+- Kconfig: Add dependency on CCF.
+- Link to v1: https://lore.kernel.org/all/20250710-k1-i2c-ilcr-v1-1-188d1f460c7d@linux.spacemit.com/
+---
+ drivers/i2c/busses/Kconfig  |   2 +-
+ drivers/i2c/busses/i2c-k1.c | 159 ++++++++++++++++++++++++++++++++++++++++----
+ 2 files changed, 146 insertions(+), 15 deletions(-)
+
+diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+index fd81e49638aaa161ae264a722e9e06adc7914cda..fedf5d31f9035b73a27a7f8a764bf5c26975d0e1 100644
+--- a/drivers/i2c/busses/Kconfig
++++ b/drivers/i2c/busses/Kconfig
+@@ -798,7 +798,7 @@ config I2C_JZ4780
+ config I2C_K1
+ 	tristate "SpacemiT K1 I2C adapter"
+ 	depends on ARCH_SPACEMIT || COMPILE_TEST
+-	depends on OF
++	depends on OF && COMMON_CLK
+ 	help
+ 	  This option enables support for the I2C interface on the SpacemiT K1
+ 	  platform.
+diff --git a/drivers/i2c/busses/i2c-k1.c b/drivers/i2c/busses/i2c-k1.c
+index 6b918770e612e098b8ad17418f420d87c94df166..e38a0ba71734ca602854c85672dcb61423453515 100644
+--- a/drivers/i2c/busses/i2c-k1.c
++++ b/drivers/i2c/busses/i2c-k1.c
+@@ -4,18 +4,21 @@
+  */
+ 
+ #include <linux/bitfield.h>
+- #include <linux/clk.h>
+- #include <linux/i2c.h>
+- #include <linux/iopoll.h>
+- #include <linux/module.h>
+- #include <linux/of_address.h>
+- #include <linux/platform_device.h>
++#include <linux/bits.h>
++#include <linux/clk.h>
++#include <linux/clk-provider.h>
++#include <linux/i2c.h>
++#include <linux/iopoll.h>
++#include <linux/module.h>
++#include <linux/of_address.h>
++#include <linux/platform_device.h>
+ 
+ /* spacemit i2c registers */
+ #define SPACEMIT_ICR		 0x0		/* Control register */
+ #define SPACEMIT_ISR		 0x4		/* Status register */
+ #define SPACEMIT_IDBR		 0xc		/* Data buffer register */
+ #define SPACEMIT_IRCR		 0x18		/* Reset cycle counter */
++#define SPACEMIT_ILCR		 0x10		/* Load Count Register */
+ #define SPACEMIT_IBMR		 0x1c		/* Bus monitor register */
+ 
+ /* SPACEMIT_ICR register fields */
+@@ -87,6 +90,13 @@
+ #define SPACEMIT_BMR_SDA         BIT(0)		/* SDA line level */
+ #define SPACEMIT_BMR_SCL         BIT(1)		/* SCL line level */
+ 
++#define SPACEMIT_LCR_LV_STANDARD_SHIFT		0
++#define SPACEMIT_LCR_LV_FAST_SHIFT		9
++#define SPACEMIT_LCR_LV_STANDARD_MASK		GENMASK(8, 0)
++#define SPACEMIT_LCR_LV_FAST_MASK		GENMASK(17, 9)
++#define SPACEMIT_LCR_LV_STANDARD_MAX_VALUE	FIELD_MAX(SPACEMIT_LCR_LV_STANDARD_MASK)
++#define SPACEMIT_LCR_LV_FAST_MAX_VALUE		FIELD_MAX(SPACEMIT_LCR_LV_FAST_MASK)
++
+ /* i2c bus recover timeout: us */
+ #define SPACEMIT_I2C_BUS_BUSY_TIMEOUT		100000
+ 
+@@ -104,11 +114,20 @@ enum spacemit_i2c_state {
+ 	SPACEMIT_STATE_WRITE,
+ };
+ 
++enum spacemit_i2c_mode {
++	SPACEMIT_MODE_STANDARD,
++	SPACEMIT_MODE_FAST
++};
++
+ /* i2c-spacemit driver's main struct */
+ struct spacemit_i2c_dev {
+ 	struct device *dev;
+ 	struct i2c_adapter adapt;
+ 
++	struct clk_hw scl_clk_hw;
++	struct clk *scl_clk;
++	enum spacemit_i2c_mode mode;
++
+ 	/* hardware resources */
+ 	void __iomem *base;
+ 	int irq;
+@@ -129,6 +148,79 @@ struct spacemit_i2c_dev {
+ 	u32 status;
+ };
+ 
++static void spacemit_i2c_scl_clk_disable_unprepare(void *data)
++{
++	struct spacemit_i2c_dev *i2c = data;
++
++	clk_disable_unprepare(i2c->scl_clk);
++}
++
++static int spacemit_i2c_clk_set_rate(struct clk_hw *hw, unsigned long rate,
++				     unsigned long parent_rate)
++{
++	struct spacemit_i2c_dev *i2c = container_of(hw, struct spacemit_i2c_dev, scl_clk_hw);
++	u32 lv, lcr, mask, shift, max_lv;
++
++	lv = DIV_ROUND_UP(parent_rate, rate);
++
++	if (i2c->mode == SPACEMIT_MODE_STANDARD) {
++		mask = SPACEMIT_LCR_LV_STANDARD_MASK;
++		shift = SPACEMIT_LCR_LV_STANDARD_SHIFT;
++		max_lv = SPACEMIT_LCR_LV_STANDARD_MAX_VALUE;
++	} else if (i2c->mode == SPACEMIT_MODE_FAST) {
++		mask = SPACEMIT_LCR_LV_FAST_MASK;
++		shift = SPACEMIT_LCR_LV_FAST_SHIFT;
++		max_lv = SPACEMIT_LCR_LV_FAST_MAX_VALUE;
++	}
++
++	if (!lv || lv > max_lv) {
++		dev_err(i2c->dev, "set scl clock failed: lv 0x%x", lv);
++		return -EINVAL;
++	}
++
++	lcr = readl(i2c->base + SPACEMIT_ILCR);
++	lcr &= ~mask;
++	lcr |= lv << shift;
++	writel(lcr, i2c->base + SPACEMIT_ILCR);
++
++	return 0;
++}
++
++static long spacemit_i2c_clk_round_rate(struct clk_hw *hw, unsigned long rate,
++					unsigned long *parent_rate)
++{
++	u32 lv, freq;
++
++	lv = DIV_ROUND_UP(*parent_rate, rate);
++	freq = DIV_ROUND_UP(*parent_rate, lv);
++
++	return freq;
++}
++
++static unsigned long spacemit_i2c_clk_recalc_rate(struct clk_hw *hw,
++						  unsigned long parent_rate)
++{
++	struct spacemit_i2c_dev *i2c = container_of(hw, struct spacemit_i2c_dev, scl_clk_hw);
++	u32 lcr, lv = 0;
++
++	lcr = readl(i2c->base + SPACEMIT_ILCR);
++
++	if (i2c->mode == SPACEMIT_MODE_STANDARD)
++		lv = FIELD_GET(SPACEMIT_LCR_LV_STANDARD_MASK, lcr);
++	else if (i2c->mode == SPACEMIT_MODE_FAST)
++		lv = FIELD_GET(SPACEMIT_LCR_LV_FAST_MASK, lcr);
++	else
++		return 0;
++
++	return DIV_ROUND_UP(parent_rate, lv);
++}
++
++static const struct clk_ops spacemit_i2c_clk_ops = {
++	.set_rate = spacemit_i2c_clk_set_rate,
++	.round_rate = spacemit_i2c_clk_round_rate,
++	.recalc_rate = spacemit_i2c_clk_recalc_rate,
++};
++
+ static void spacemit_i2c_enable(struct spacemit_i2c_dev *i2c)
+ {
+ 	u32 val;
+@@ -147,6 +239,26 @@ static void spacemit_i2c_disable(struct spacemit_i2c_dev *i2c)
+ 	writel(val, i2c->base + SPACEMIT_ICR);
+ }
+ 
++static struct clk *spacemit_i2c_register_scl_clk(struct spacemit_i2c_dev *i2c,
++						 struct clk *parent)
++{
++	struct clk_init_data init = {};
++	char name[32];
++
++	snprintf(name, sizeof(name), "%s_scl_clk", dev_name(i2c->dev));
++
++	init.name = name;
++	init.ops = &spacemit_i2c_clk_ops;
++	init.parent_data = (struct clk_parent_data[]) {
++		{ .fw_name = "func" },
++	};
++	init.num_parents = 1;
++
++	i2c->scl_clk_hw.init = &init;
++
++	return devm_clk_register(i2c->dev, &i2c->scl_clk_hw);
++}
++
+ static void spacemit_i2c_reset(struct spacemit_i2c_dev *i2c)
+ {
+ 	writel(SPACEMIT_CR_UR, i2c->base + SPACEMIT_ICR);
+@@ -246,7 +358,7 @@ static void spacemit_i2c_init(struct spacemit_i2c_dev *i2c)
+ 	 */
+ 	val |= SPACEMIT_CR_DRFIE;
+ 
+-	if (i2c->clock_freq == SPACEMIT_I2C_MAX_FAST_MODE_FREQ)
++	if (i2c->mode == SPACEMIT_MODE_FAST)
+ 		val |= SPACEMIT_CR_MODE_FAST;
+ 
+ 	/* disable response to general call */
+@@ -538,14 +650,15 @@ static int spacemit_i2c_probe(struct platform_device *pdev)
+ 		dev_warn(dev, "failed to read clock-frequency property: %d\n", ret);
+ 
+ 	/* For now, this driver doesn't support high-speed. */
+-	if (!i2c->clock_freq || i2c->clock_freq > SPACEMIT_I2C_MAX_FAST_MODE_FREQ) {
+-		dev_warn(dev, "unsupported clock frequency %u; using %u\n",
+-			 i2c->clock_freq, SPACEMIT_I2C_MAX_FAST_MODE_FREQ);
++	if (i2c->clock_freq > SPACEMIT_I2C_MAX_STANDARD_MODE_FREQ &&
++	    i2c->clock_freq <= SPACEMIT_I2C_MAX_FAST_MODE_FREQ) {
++		i2c->mode = SPACEMIT_MODE_FAST;
++	} else if (i2c->clock_freq && i2c->clock_freq <= SPACEMIT_I2C_MAX_STANDARD_MODE_FREQ) {
++		i2c->mode = SPACEMIT_MODE_STANDARD;
++	} else {
++		dev_warn(i2c->dev, "invalid clock-frequency, fallback to fast mode");
++		i2c->mode = SPACEMIT_MODE_FAST;
+ 		i2c->clock_freq = SPACEMIT_I2C_MAX_FAST_MODE_FREQ;
+-	} else if (i2c->clock_freq < SPACEMIT_I2C_MAX_STANDARD_MODE_FREQ) {
+-		dev_warn(dev, "unsupported clock frequency %u; using %u\n",
+-			 i2c->clock_freq,  SPACEMIT_I2C_MAX_STANDARD_MODE_FREQ);
+-		i2c->clock_freq = SPACEMIT_I2C_MAX_STANDARD_MODE_FREQ;
+ 	}
+ 
+ 	i2c->dev = &pdev->dev;
+@@ -567,10 +680,28 @@ static int spacemit_i2c_probe(struct platform_device *pdev)
+ 	if (IS_ERR(clk))
+ 		return dev_err_probe(dev, PTR_ERR(clk), "failed to enable func clock");
+ 
++	i2c->scl_clk = spacemit_i2c_register_scl_clk(i2c, clk);
++	if (IS_ERR(i2c->scl_clk))
++		return dev_err_probe(&pdev->dev, PTR_ERR(i2c->scl_clk),
++				     "failed to register scl clock\n");
++
+ 	clk = devm_clk_get_enabled(dev, "bus");
+ 	if (IS_ERR(clk))
+ 		return dev_err_probe(dev, PTR_ERR(clk), "failed to enable bus clock");
+ 
++	ret = clk_set_rate(i2c->scl_clk, i2c->clock_freq);
++	if (ret)
++		return dev_err_probe(&pdev->dev, ret, "failed to set rate for SCL clock");
++
++	ret = clk_prepare_enable(i2c->scl_clk);
++	if (ret)
++		return dev_err_probe(&pdev->dev, ret, "failed to prepare and enable clock");
++
++	ret = devm_add_action_or_reset(dev, spacemit_i2c_scl_clk_disable_unprepare, i2c);
++	if (ret)
++		return dev_err_probe(&pdev->dev, ret,
++				     "failed to register cleanup action for clk disable and unprepare");
++
+ 	spacemit_i2c_reset(i2c);
+ 
+ 	i2c_set_adapdata(&i2c->adapt, i2c);
+
+---
+base-commit: 316cb41c2400fbc0584aca75be78556914b66272
+change-id: 20251017-k1-i2c-ilcr-c928d50e407f
+
+Best regards,
 -- 
-Best wishes,
-Vladimir
+Troy Mitchell <troy.mitchell@linux.spacemit.com>
+
 
