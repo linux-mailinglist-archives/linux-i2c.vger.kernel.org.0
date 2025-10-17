@@ -1,57 +1,57 @@
-Return-Path: <linux-i2c+bounces-13613-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13614-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E76F1BE9A21
-	for <lists+linux-i2c@lfdr.de>; Fri, 17 Oct 2025 17:17:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 890C6BE9981
+	for <lists+linux-i2c@lfdr.de>; Fri, 17 Oct 2025 17:15:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8C8C36E7984
-	for <lists+linux-i2c@lfdr.de>; Fri, 17 Oct 2025 15:03:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AD6966E7D79
+	for <lists+linux-i2c@lfdr.de>; Fri, 17 Oct 2025 15:03:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D38EB336EEF;
-	Fri, 17 Oct 2025 15:02:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94F45336ED9;
+	Fri, 17 Oct 2025 15:02:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="IQoZu3gX"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="V6v37aVg"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31FAE33509F;
-	Fri, 17 Oct 2025 15:02:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2262F336EE4
+	for <linux-i2c@vger.kernel.org>; Fri, 17 Oct 2025 15:02:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760713324; cv=none; b=P1yg91NafcBnGlTw4GOGYE/Pox1aNexwjwJ5Vc7E6akEgwpVYQwlu3A0qlBjpGjA1NHGvniyMbJuCEdOObnvCIE1FR/EyoJNomB4I+rJMI5lvgNiZ5zdehg8tHkp6lbrQmvKcVQM3VO9EHzbowCY9teLTcLZcZfYCfPnT/s8z1E=
+	t=1760713326; cv=none; b=HjL+Z1TjV5zaZGVxX4qguAiycBURHQLlW93MZ222rsaEmk/YbzuWZUrwkt27lIVlE7c03h27OBejz08mAl+86tpFthxLoUjQRy+lSeau8/pBAsbOb/RaMZrKiJKfMnf1u9lF0ebdImI8qZx1Xtj01EOfSJPrQhzuql1s5vCchFE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760713324; c=relaxed/simple;
-	bh=CDYayh8Pxyj68cp2eLLP40bJ9vQMBBenjdICB9J5eb8=;
+	s=arc-20240116; t=1760713326; c=relaxed/simple;
+	bh=CLWJhBu9K0krsl2W5BEPYqb1gmwqh8HxemHp6ZEorGM=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=EC+9o0ZT7PTx5ZI1vqdIGOK9nUZhhEX5PDL4sURTkAvutlHY5ZkNp8+2JNd59k3sRpH2sjSIVraLEYlplFlJkQ7tNQvjbBfMiN/RK/A6KwQd7eZvl7emylnor87IcYkA4LzFQHDmG7rklOwHP7MwJ8Tn9PNlnxP3vqoHdL0yVB8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=IQoZu3gX; arc=none smtp.client-ip=185.246.85.4
+	 In-Reply-To:To:Cc; b=UlVCx8Z7ohn5P3Z/H2GbZKSBXzucQxTkDESsF9V+boXisP1YglJkLUxCqOPjuzZErp23HuX1KSTkNt2SluLFgM1tgFVFgzHYqvefgD+/acg1rllejUJSuiLUHwfIMTz6ueLRWLjlw/5+lXrKP9/WPWiIC1tuVVgHyM6mRyOYuE4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=V6v37aVg; arc=none smtp.client-ip=185.171.202.116
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id A1E8F4E41147;
-	Fri, 17 Oct 2025 15:02:00 +0000 (UTC)
+	by smtpout-04.galae.net (Postfix) with ESMTPS id 2B65AC041F9;
+	Fri, 17 Oct 2025 15:01:43 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 70607606DB;
-	Fri, 17 Oct 2025 15:02:00 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 9CD8F102F233F;
-	Fri, 17 Oct 2025 17:01:57 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 727DA606DB;
+	Fri, 17 Oct 2025 15:02:02 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id B1385102F2364;
+	Fri, 17 Oct 2025 17:01:59 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1760713319; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1760713321; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=lqaqDANIG/HsBzrXDtn2cFYQaaghRdRiFDBrzoTMERw=;
-	b=IQoZu3gXUKP8Ss0bOQGB6yA3mdKlITAvNvEcsuVE9sq8P640SB/VBJA5g3TD4jtmPsDT41
-	HQGxjEEnB7V/CY3QRGNAgSxQ1jwdv5SiLzOHYakCWBqO+NYXHBdkcoMOQoLzQrSJOGugVN
-	hfW8PI0WgXa6fvsMJaq4ndcJ5iwmiTYrGPw0EGjPXHwAYvLGGx0iBbD0GozFTWA9gEGpVM
-	BHaSfe0NkzJGm9FVAnqwLh1RqcB1CMlthUIzK/03B8+pco4NejjkNd7cd2QLG0ZFZvP5TC
-	DENm+kDeWSfPXNhBD4MosuKjLaWJLC6hdLVsIztCzQlFrYaxvRJEgjShz3DBQg==
+	bh=OumetMRwPwRmXg7GTajWsCFnQn15iaJvKy3TjGNKXhI=;
+	b=V6v37aVgwogvdcW9UXTbBHOAWJDdPJ7oWTOX6zn3PJRGeZE92VLrH5MicWn7An8n/yL65P
+	lY4YM62v7/t8AEtLNlVTQj9rSJXIrXQlUFIJmM6/9zooVWqE2wZme/HErsqokpwIy0ml7c
+	WA4LXvYoC7MrwKpIMAzIDdobV+CAUFZ1zWBevf9wTTvUAd4NkjCONMBx7t0Ua2LnyjdHu9
+	gy+h9df4mS/rXLNPlcWnCpsRIrVB8+75qZMXW8PzyWPu+fz1mIoZ3aY+V8ACnoluhLhE/q
+	MYWzG1z0pWFWURGhD4238EUruBBewPu3kSqb4VR2c9asyVdkhVSeyUxI23K9pg==
 From: =?utf-8?q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>
-Date: Fri, 17 Oct 2025 16:59:33 +0200
-Subject: [PATCH 2/3] i2c: designware: Enable transfer with different target
- addresses
+Date: Fri, 17 Oct 2025 16:59:34 +0200
+Subject: [PATCH 3/3] i2c: designware: Support of controller with
+ IC_EMPTYFIFO_HOLD_MASTER disabled
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -60,7 +60,7 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20251017-i2c-dw-v1-2-7b85b71c7a87@bootlin.com>
+Message-Id: <20251017-i2c-dw-v1-3-7b85b71c7a87@bootlin.com>
 References: <20251017-i2c-dw-v1-0-7b85b71c7a87@bootlin.com>
 In-Reply-To: <20251017-i2c-dw-v1-0-7b85b71c7a87@bootlin.com>
 To: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>, 
@@ -84,148 +84,151 @@ Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
 X-Mailer: b4 0.14.3
 X-Last-TLS-Session-Version: TLSv1.3
 
-When i2c_dw_xfer() is called with more than one message, it sets the
-target address according to the first message. If any of the following
-messages have a different target address, the transfer finishes with
-an error.
+If IC_EMPTYFIFO_HOLD_MASTER_EN parameter is 0, "Stop" and "Repeated
+Start" bits in command register doesn't exist, thus it is impossible to
+send several consecutive write messages in a single hardware batch. The
+existing implementation worked with such configuration incorrectly: all
+consequent write messages joined into a single message without any
+Start/Stop or Repeated Start conditions. For example, the following
+command:
 
-Instead, if the next message has a different target address, wait until
-all previous messages are sent and the STOP condition is detected. This
-will complete the current part of the transfer. The next part is then
-handled by looping in i2c_dw_xfer(), calling i2c_dw_xfer_init() and
-i2c_dw_wait_transfer() until all messages of the transfer have been
-processed, or an error is detected.
+    i2ctransfer -y 0 w1@0x55 0x00 w1@0x55 0x01
 
-The RESTART bit is now set after the first message of each part of the
-transfer, instead of just after the very first message of the whole
-transfer.
+does the same as
 
-For each address change, i2c_dw_xfer_init() is called, which takes care
-of disabling the adapter before changing the target address register,
-then re-enabling it. Given that we cannot know the value of the
-I2C_DYNAMIC_TAR_UPDATE parameter, this is the only sure way to change
-the target address.
+    i2ctransfer -y 0 w2@0x55 0x00 0x01
+
+To fix it, for the controllers that behave this way, if the next message
+to the same slave device has the same direction as the previous one, it
+is sent to the controller only after the previous message is sent and
+STOP_DET IRQ flag is raised by the controller.
+
+This behavior is activated by compatible entries, because the state of
+the IC_EMPTYFIFO_HOLD_MASTER_EN parameter cannot be detected at runtime.
+Add the compatible entries of Mobileye SoCs needing the work-around and
+sort the entries alphabetically.
+
+There is another possible problem with this controller configuration:
+When the CPU is putting commands to the FIFO, this process must not be
+interrupted because if FIFO buffer gets empty, the controller finishes
+the I2C transaction and generates STOP condition on the bus.
+
+In a PREEMPT-RT kernel, interrupt handlers are by default executed in
+thread and may be interrupted, which can lead to breaking an I2C message
+by inserting an unwanted STOP.
+
+To ensure proper operation on realtime kernel, use IRQF_NO_THREAD flag
+when requesting IRQ.
 
 Based on the work of Dmitry Guzman <dmitry.guzman@mobileye.com>
 
 Signed-off-by: Benoît Monin <benoit.monin@bootlin.com>
 ---
- drivers/i2c/busses/i2c-designware-master.c | 58 ++++++++++++++++--------------
- 1 file changed, 31 insertions(+), 27 deletions(-)
+ drivers/i2c/busses/i2c-designware-core.h    |  1 +
+ drivers/i2c/busses/i2c-designware-master.c  | 45 +++++++++++++++++++++--------
+ drivers/i2c/busses/i2c-designware-platdrv.c |  6 ++--
+ 3 files changed, 38 insertions(+), 14 deletions(-)
 
+diff --git a/drivers/i2c/busses/i2c-designware-core.h b/drivers/i2c/busses/i2c-designware-core.h
+index 347843b4f5dd7..a31a8698e511a 100644
+--- a/drivers/i2c/busses/i2c-designware-core.h
++++ b/drivers/i2c/busses/i2c-designware-core.h
+@@ -311,6 +311,7 @@ struct dw_i2c_dev {
+ #define ACCESS_NO_IRQ_SUSPEND			BIT(1)
+ #define ARBITRATION_SEMAPHORE			BIT(2)
+ #define ACCESS_POLLING				BIT(3)
++#define NO_EMPTYFIFO_HOLD_MASTER		BIT(4)
+ 
+ #define MODEL_MSCC_OCELOT			BIT(8)
+ #define MODEL_BAIKAL_BT1			BIT(9)
 diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
-index c7a72c28786c2..f9a180b145da8 100644
+index f9a180b145da8..e5af0439ec832 100644
 --- a/drivers/i2c/busses/i2c-designware-master.c
 +++ b/drivers/i2c/busses/i2c-designware-master.c
-@@ -436,6 +436,7 @@ i2c_dw_xfer_msg(struct dw_i2c_dev *dev)
- 	u8 *buf = dev->tx_buf;
- 	bool need_restart = false;
- 	unsigned int flr;
-+	int first_idx = dev->msg_write_idx;
+@@ -443,18 +443,6 @@ i2c_dw_xfer_msg(struct dw_i2c_dev *dev)
+ 	for (; dev->msg_write_idx < dev->msgs_num; dev->msg_write_idx++) {
+ 		u32 flags = msgs[dev->msg_write_idx].flags;
  
- 	intr_mask = DW_IC_INTR_MASTER_MASK;
- 
-@@ -446,11 +447,11 @@ i2c_dw_xfer_msg(struct dw_i2c_dev *dev)
- 		 * If target address has changed, we need to
- 		 * reprogram the target address in the I2C
- 		 * adapter when we are done with this transfer.
-+		 * This can be done after STOP_DET IRQ flag is raised.
-+		 * So, disable "TX FIFO empty" interrupt.
- 		 */
- 		if (msgs[dev->msg_write_idx].addr != addr) {
--			dev_err(dev->dev,
--				"%s: invalid target address\n", __func__);
--			dev->msg_err = -EINVAL;
-+			intr_mask &= ~DW_IC_INTR_TX_EMPTY;
- 			break;
- 		}
- 
-@@ -465,7 +466,7 @@ i2c_dw_xfer_msg(struct dw_i2c_dev *dev)
- 			 * set restart bit between messages.
- 			 */
- 			if ((dev->master_cfg & DW_IC_CON_RESTART_EN) &&
--					(dev->msg_write_idx > 0))
-+					(dev->msg_write_idx > first_idx))
+-		/*
+-		 * If target address has changed, we need to
+-		 * reprogram the target address in the I2C
+-		 * adapter when we are done with this transfer.
+-		 * This can be done after STOP_DET IRQ flag is raised.
+-		 * So, disable "TX FIFO empty" interrupt.
+-		 */
+-		if (msgs[dev->msg_write_idx].addr != addr) {
+-			intr_mask &= ~DW_IC_INTR_TX_EMPTY;
+-			break;
+-		}
+-
+ 		if (!(dev->status & STATUS_WRITE_IN_PROGRESS)) {
+ 			/* new i2c_msg */
+ 			buf = msgs[dev->msg_write_idx].buf;
+@@ -470,6 +458,25 @@ i2c_dw_xfer_msg(struct dw_i2c_dev *dev)
  				need_restart = true;
  		}
  
-@@ -822,7 +823,6 @@ i2c_dw_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
- 		break;
++		/*
++		 * If target address has changed, we need to
++		 * reprogram the target address in the I2C
++		 * adapter when we are done with this transfer.
++		 * This can be done after STOP_DET IRQ flag is raised.
++		 * So, disable "TX FIFO empty" interrupt.
++		 * Also force a stop-then-start between two messages
++		 * in the same direction if we need to restart on a
++		 * adapter that does not handle restart.
++		 */
++		if (msgs[dev->msg_write_idx].addr != addr ||
++		    ((need_restart &&
++		     dev->flags & NO_EMPTYFIFO_HOLD_MASTER &&
++		     ((msgs[dev->msg_write_idx].flags & I2C_M_RD) ==
++		      (msgs[dev->msg_write_idx - 1].flags & I2C_M_RD))))) {
++			intr_mask &= ~DW_IC_INTR_TX_EMPTY;
++			break;
++		}
++
+ 		regmap_read(dev->map, DW_IC_TXFLR, &flr);
+ 		tx_limit = dev->tx_fifo_depth - flr;
+ 
+@@ -1062,6 +1069,20 @@ int i2c_dw_probe_master(struct dw_i2c_dev *dev)
+ 		irq_flags = IRQF_SHARED | IRQF_COND_SUSPEND;
  	}
  
--	reinit_completion(&dev->cmd_complete);
- 	dev->msgs = msgs;
- 	dev->msgs_num = num;
- 	dev->cmd_err = 0;
-@@ -841,18 +841,33 @@ i2c_dw_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
- 	if (ret < 0)
- 		goto done;
- 
--	/* Start the transfers */
--	i2c_dw_xfer_init(dev);
-+	do {
-+		reinit_completion(&dev->cmd_complete);
- 
--	/* Wait for tx to complete */
--	ret = i2c_dw_wait_transfer(dev);
--	if (ret) {
--		dev_err(dev->dev, "controller timed out\n");
--		/* i2c_dw_init_master() implicitly disables the adapter */
--		i2c_recover_bus(&dev->adapter);
--		i2c_dw_init_master(dev);
--		goto done;
--	}
-+		/* Start the transfers */
-+		i2c_dw_xfer_init(dev);
++	/*
++	 * The first writing to TX FIFO buffer causes transmission start. If
++	 * IC_EMPTYFIFO_HOLD_MASTER_EN is not set, when TX FIFO gets empty, I2C
++	 * controller finishes the transaction. If writing to FIFO is
++	 * interrupted, FIFO can get empty and the transaction will be finished
++	 * prematurely. FIFO buffer is filled in IRQ handler, but in PREEMPT_RT
++	 * kernel IRQ handler by default is executed in thread that can be
++	 * preempted with another higher priority thread or an interrupt. So,
++	 * IRQF_NO_THREAD flag is required in order to prevent any preemption
++	 * during filling the FIFO buffer and possible data lost.
++	 */
++	if (dev->flags & NO_EMPTYFIFO_HOLD_MASTER)
++		irq_flags |= IRQF_NO_THREAD;
 +
-+		/* Wait for tx to complete */
-+		ret = i2c_dw_wait_transfer(dev);
-+		if (ret) {
-+			dev_err(dev->dev, "controller timed out\n");
-+			/* i2c_dw_init_master() implicitly disables the adapter */
-+			i2c_recover_bus(&dev->adapter);
-+			i2c_dw_init_master(dev);
-+			goto done;
-+		}
-+
-+		if (dev->msg_err) {
-+			ret = dev->msg_err;
-+			goto done;
-+		}
-+
-+		/* We have an error */
-+		if (dev->cmd_err == DW_IC_ERR_TX_ABRT) {
-+			ret = i2c_dw_handle_tx_abort(dev);
-+			goto done;
-+		}
-+	} while (dev->msg_write_idx < num);
+ 	ret = i2c_dw_acquire_lock(dev);
+ 	if (ret)
+ 		return ret;
+diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
+index 34d881572351c..5e459175dcdb2 100644
+--- a/drivers/i2c/busses/i2c-designware-platdrv.c
++++ b/drivers/i2c/busses/i2c-designware-platdrv.c
+@@ -345,9 +345,11 @@ static void dw_i2c_plat_remove(struct platform_device *pdev)
+ }
  
- 	/*
- 	 * This happens rarely (~1:500) and is hard to reproduce. Debug trace
-@@ -874,23 +889,12 @@ i2c_dw_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
- 	 */
- 	__i2c_dw_disable_nowait(dev);
- 
--	if (dev->msg_err) {
--		ret = dev->msg_err;
--		goto done;
--	}
--
- 	/* No error */
- 	if (likely(!dev->cmd_err && !dev->status)) {
- 		ret = num;
- 		goto done;
- 	}
- 
--	/* We have an error */
--	if (dev->cmd_err == DW_IC_ERR_TX_ABRT) {
--		ret = i2c_dw_handle_tx_abort(dev);
--		goto done;
--	}
--
- 	if (dev->status)
- 		dev_err(dev->dev,
- 			"transfer terminated early - interrupt latency too high?\n");
+ static const struct of_device_id dw_i2c_of_match[] = {
+-	{ .compatible = "snps,designware-i2c", },
+-	{ .compatible = "mscc,ocelot-i2c", .data = (void *)MODEL_MSCC_OCELOT },
+ 	{ .compatible = "baikal,bt1-sys-i2c", .data = (void *)MODEL_BAIKAL_BT1 },
++	{ .compatible = "mobileye,eyeq6lplus-i2c", .data = (void *)NO_EMPTYFIFO_HOLD_MASTER },
++	{ .compatible = "mobileye,eyeq7h-i2c", .data = (void *)NO_EMPTYFIFO_HOLD_MASTER },
++	{ .compatible = "mscc,ocelot-i2c", .data = (void *)MODEL_MSCC_OCELOT },
++	{ .compatible = "snps,designware-i2c", },
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(of, dw_i2c_of_match);
 
 -- 
 2.51.0
