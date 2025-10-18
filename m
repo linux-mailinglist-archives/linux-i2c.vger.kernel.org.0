@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-13625-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13626-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F5BDBED316
-	for <lists+linux-i2c@lfdr.de>; Sat, 18 Oct 2025 17:55:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 84243BED31F
+	for <lists+linux-i2c@lfdr.de>; Sat, 18 Oct 2025 17:56:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9526619C374E
-	for <lists+linux-i2c@lfdr.de>; Sat, 18 Oct 2025 15:56:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1CB0F19C38F6
+	for <lists+linux-i2c@lfdr.de>; Sat, 18 Oct 2025 15:56:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86A02239E88;
-	Sat, 18 Oct 2025 15:55:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23C5223F40C;
+	Sat, 18 Oct 2025 15:56:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nSITN2av"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KAH3Ne8U"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3891576026;
-	Sat, 18 Oct 2025 15:55:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAC9A23958A;
+	Sat, 18 Oct 2025 15:56:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760802937; cv=none; b=l9Keq1fQQYbgxwyaW6TXRZ/Q4pgRbGDErC1AMrXUQqwtNWzxKB5SGlMldKKiwGrJPdVidoK1kXaR3oBxvzLvv9Pe4uDotgsepiaagR5DTG8EgMWQpoEufO4stIgN3/rglBHtzuugheUqhDtdU+5GDYalOWtzBuiuQuzdTZIWbW4=
+	t=1760802961; cv=none; b=Ieg08e9jFeayQiPspi/xPEsXT9jRAmx5bczr/pS0oQCWvpJqOhaf8NvNxnA1fyntrNL4KBGyUKBzBF2+vCHlU+nJgDYeJ/CAW4OmfypUINnirh2YezyS+yNNCPjKXY0K1ajyyBkk1u0EXdlB8LCpI+k54p/jd31LbQp7IlgnZeg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760802937; c=relaxed/simple;
-	bh=LPEfYUyGsXVhbHQtIJwDKNX0Ebfd/KMF5lwgnkpKH+g=;
+	s=arc-20240116; t=1760802961; c=relaxed/simple;
+	bh=rANeg7/9tDur3aPT6nLL3Vg3pGWC/QvMvYI+IkkU5QU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lkNCEIMfxX+AEFAzmIAEcQXsXSnubtVwRtXiyKqhNR4/SJ+0bPnSuZZopONlDMWzDpGgUXq24juuCliHK5aPXXSOQ3sphr46iRIUG90HSLMcZ85NhgYsJJIXRupr+D30EPvCX4DoX9J+800HMB+1d1fhtILLdrVpE1QW1LsjxWM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nSITN2av; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 236ADC4CEF8;
-	Sat, 18 Oct 2025 15:55:31 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=lIwQ2i80zdaesyEpGvH5khGgIUDshzaQbrDXNn7D/YxnZu9lmKyaorj5A1ZHIfqpO788SDJEQfUPPX+q6zEw/xI7laQT/rIidoNniLz7YDR2vGbLZEYoF7HsWBjFgyizJNGPf/38SP3CXLU9NF3iuk/EN/rFlusQh9GiTnKnfCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KAH3Ne8U; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2C90C4CEF8;
+	Sat, 18 Oct 2025 15:55:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760802936;
-	bh=LPEfYUyGsXVhbHQtIJwDKNX0Ebfd/KMF5lwgnkpKH+g=;
+	s=k20201202; t=1760802961;
+	bh=rANeg7/9tDur3aPT6nLL3Vg3pGWC/QvMvYI+IkkU5QU=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=nSITN2avlgnNm9s60pbwh4GaaoMjzyYtk78/8wSTFxVL6c/9mbcJB/P6bwKLrAkyG
-	 RHFvbUtwqqZ6/UgNT023fggkMRzFjwLFCjEXNeso9JmetIjeWeCE5+flDRvc2ZZ8VF
-	 TGeu/NeWvz7xjN+Ryku/Th+KDuW8XtkAjY8vORrCkLxUxEMB6yTCpea+S+XpWoDUCd
-	 4+LNOIZAIKmoImAe+GySh3f2bWNu/klIyY8tM0DawBTPV7IyFWfa81ILHqp2hnJqXs
-	 xLf3biQli+HrnyYIQ6FLU9uiKTjnAvk2PstdILS5rZXiLiK5DPKuO4tsD55E0SyVOC
-	 EoBl484tVNI/Q==
-Message-ID: <11711aca-8595-47c5-a16e-1cd990a9a087@kernel.org>
-Date: Sat, 18 Oct 2025 17:55:29 +0200
+	b=KAH3Ne8UzqQ3HFRkQ4+bxBdpamOTpQ2NnlNq0/lBpJS1y5kOYSlmsOhge9CfEoNXd
+	 yRAHz6a2eLoobNUV59Sb7dHCuSZGiMBveZnyrCvPR232luOM42EzKAGqDfho41xW3B
+	 u9QY9Kk/+JJBMc8WeUmZSbLr09RUo8SSQ2kd7hr4f6XfCYOm4tADQHowZGEqp2lxwh
+	 GLlimW8FNON0j7KXE/lSruJ9v2shClDSJk6232ZVaQlYEFOKS+fCUTCWUd3j0z8xY6
+	 T9+CND2EbZ72l4Wp4B0hRAy2Te06/65OWp/6fRO7VCYfZl0UE3SAilr6B0i/f54tq1
+	 pKQGQYa04TWZw==
+Message-ID: <5fca6d24-b84d-408e-874a-e86b811444fc@kernel.org>
+Date: Sat, 18 Oct 2025 17:55:55 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,7 +50,8 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] dt-bindings: i2c: dw: Add Mobileye I2C controllers
+Subject: Re: [PATCH 3/3] i2c: designware: Support of controller with
+ IC_EMPTYFIFO_HOLD_MASTER disabled
 To: =?UTF-8?Q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>,
  Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
@@ -69,7 +70,7 @@ Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-rt-devel@lists.linux.dev
 References: <20251017-i2c-dw-v1-0-7b85b71c7a87@bootlin.com>
- <20251017-i2c-dw-v1-1-7b85b71c7a87@bootlin.com>
+ <20251017-i2c-dw-v1-3-7b85b71c7a87@bootlin.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -115,32 +116,21 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20251017-i2c-dw-v1-1-7b85b71c7a87@bootlin.com>
+In-Reply-To: <20251017-i2c-dw-v1-3-7b85b71c7a87@bootlin.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 On 17/10/2025 16:59, Benoît Monin wrote:
-> Add compatible strings for the I2C controllers present in Mobileye
-> Eyeq6Lplus and EyeQ7H SoCs.
-> 
-> Signed-off-by: Benoît Monin <benoit.monin@bootlin.com>
-> ---
->  Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml b/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml
-> index d904191bb0c6e..6d63dc67f7bf0 100644
-> --- a/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml
-> @@ -36,6 +36,8 @@ properties:
->          const: baikal,bt1-sys-i2c
->        - items:
->            - enum:
-> +              - mobileye,eyeq6lplus-i2c
-> +              - mobileye,eyeq7h-i2c
+>  
+>  static const struct of_device_id dw_i2c_of_match[] = {
+> -	{ .compatible = "snps,designware-i2c", },
+> -	{ .compatible = "mscc,ocelot-i2c", .data = (void *)MODEL_MSCC_OCELOT },
+>  	{ .compatible = "baikal,bt1-sys-i2c", .data = (void *)MODEL_BAIKAL_BT1 },
+> +	{ .compatible = "mobileye,eyeq6lplus-i2c", .data = (void *)NO_EMPTYFIFO_HOLD_MASTER },
+> +	{ .compatible = "mobileye,eyeq7h-i2c", .data = (void *)NO_EMPTYFIFO_HOLD_MASTER },
 
-It seems these are compatible with each other, at least same driver
-match data suggests that, so express it here and in the commit msg.
+That's not necessary. Don't create duplicated entries, express
+compatibility.
 
 Best regards,
 Krzysztof
