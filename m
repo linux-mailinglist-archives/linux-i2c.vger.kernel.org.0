@@ -1,109 +1,123 @@
-Return-Path: <linux-i2c+bounces-13632-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13633-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id B886EBEDA12
-	for <lists+linux-i2c@lfdr.de>; Sat, 18 Oct 2025 21:23:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 216ADBEDB0A
+	for <lists+linux-i2c@lfdr.de>; Sat, 18 Oct 2025 21:49:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 468424ECC74
-	for <lists+linux-i2c@lfdr.de>; Sat, 18 Oct 2025 19:22:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BB98A19A6795
+	for <lists+linux-i2c@lfdr.de>; Sat, 18 Oct 2025 19:50:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 787EE29BDB1;
-	Sat, 18 Oct 2025 19:22:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E210E26D4F8;
+	Sat, 18 Oct 2025 19:49:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PJTO+dF0"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OdedKo8S"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79A682900A8;
-	Sat, 18 Oct 2025 19:22:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05B622417E6;
+	Sat, 18 Oct 2025 19:49:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760815348; cv=none; b=TSOKsiOW8A+3CW82V0tNZV+HOoSvIXtGUNVY1gRRy2YPz9Q3ZSejdTmhvlgqdKleobK+moElhA7C/0WAgy6NUQH9xnKruY6lR69pcovSRZlAhmGGFaYf9FWZL+ZPGtNIPt5E63zJd+iO9m59y0poqlHjk7utaWlSXzYe3dk3kzM=
+	t=1760816978; cv=none; b=Qk+JEblsyN7ISO80MS+UqbdXgOW7YS4vEzMBIGr2YVOUt9uyoorgiRkJAeCG8U3FjdbgaXoGqANb4FDN8E/h6yLI/F/r+hNomNk6NsYRv+IoHHUb913B4LLO8WlIBUtOXexzOlnL5GKBmq6epvDbFsfONhdERuwMsNyFDQWjZzE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760815348; c=relaxed/simple;
-	bh=LyCmdIipytU++1xCmXNYxXqjVJpXEdehmaOhp4HHIBE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Hcnw99H1GCKHGqphPLjB0b7ba1ajEh0J4fbn2P4LpJplmxNp1T4Ti5DLHyvty1LMlPRAZbAWXeRRibuUVixM7sr/T2G0uNEFmJFnajTNynHdBdlRU541XhktECV14tvoufD7z61LFuYAuAkOQPx9oCTxC3Q+rlTl7+eEOkopg5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PJTO+dF0; arc=none smtp.client-ip=198.175.65.20
+	s=arc-20240116; t=1760816978; c=relaxed/simple;
+	bh=mF146nvxhIPhZlhIovDy9Wf7Gzq7ShDPT997Xmh7MGY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Wf90Y4AdygZuF8M4b2vDdJwCdGc50lDfmSFqUi+s/GuIu0cIxRUY1fefDXTdIVgkzHdFydFmF4Y36Si9cEYKGv+k0A8ccZeqZpIje8OFchEvhLaJFgpo/cd49VqttA1CrVkkZlEpwjt75zT65jBB2V7o9pzqXcQqIX6jArU8Au8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OdedKo8S; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760815347; x=1792351347;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=LyCmdIipytU++1xCmXNYxXqjVJpXEdehmaOhp4HHIBE=;
-  b=PJTO+dF0HwFWfAsQVTay21pf1ysdXkCZhgVy3g38utTJDrFzQ0IZvyKo
-   O/9QKuMGYrt7sxe4XFWivccTnY/7a3cwpar/RTbTgkOP4L0akeI3NA8tL
-   0+GTqWDixUe/BVtEPq9GLrw1NZuzIkk56BsJf+yCOZ4YnYYzei0yb2dCD
-   ddqSgJFrGlYKTrimwdTZfSMSj3HmVkh++Dw9AMNsMh5E7m7ygy0n9Agqz
-   JivrZopJLooEB5/iL8wEl/55cufp180ISzkuR25U/pXWAmv2n22tkmh1n
-   scIRKoP2JPVWYcka99KZbb0RwD0Keul1utEb5HRqBXQtSfwgfnciH5cZb
+  t=1760816978; x=1792352978;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=mF146nvxhIPhZlhIovDy9Wf7Gzq7ShDPT997Xmh7MGY=;
+  b=OdedKo8SmXSKFEqPqw6xCTRpzo4bPwqN8klcbB8XmAk40o6kYfKDkCPq
+   SzQiWCnIUzACQ5e8QII52CVRLKRYQ6LyDms/ssbXLHVmPbWHRtzqvCjQV
+   QYBpPlkGmWywKpjrxF0ats7+7AkmEIPPENIvpJf8F2OJx/E1HZ58KnD1Z
+   WMNJU4eTzb/nbvevts7zpO/zVnhS0n+kmT72sTfd88x9KEpYQspRxfMuP
+   vDJKWzEUCJk0u/4OMDQhXAnECY8f6aiIeUdr36kRl3g/4iiKSvT2WIJo2
+   dFydvbuvgJY6rLFLeqfhO2BKmD7SIHV28gJ0Puub29eCRtJ4ObkKNTGgp
    A==;
-X-CSE-ConnectionGUID: gA2FM40HQgyt7rjV/TxiLQ==
-X-CSE-MsgGUID: sUtyi5moRouaGMX9raASVg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="62701147"
+X-CSE-ConnectionGUID: hUCED5QJQD2oa0SepbQIUA==
+X-CSE-MsgGUID: tOVamD6FTG2hu6pY68bchQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="74114801"
 X-IronPort-AV: E=Sophos;i="6.19,239,1754982000"; 
-   d="scan'208";a="62701147"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2025 12:22:26 -0700
-X-CSE-ConnectionGUID: mkNigIwrTji+X+IKWE9Hgw==
-X-CSE-MsgGUID: NKxjGwB3Tyq2wUJfdM4r2A==
+   d="scan'208";a="74114801"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2025 12:49:37 -0700
+X-CSE-ConnectionGUID: e70Wc68JSnC6KsFO4anpnQ==
+X-CSE-MsgGUID: 3mTcsYCaTQqUgbfFTUrMBA==
 X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,239,1754982000"; 
+   d="scan'208";a="183487714"
 Received: from pgcooper-mobl3.ger.corp.intel.com (HELO ashevche-desk.local) ([10.245.244.194])
-  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2025 12:22:24 -0700
+  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2025 12:49:32 -0700
 Received: from andy by ashevche-desk.local with local (Exim 4.98.2)
 	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1vACVR-00000000xRU-3VZe;
-	Sat, 18 Oct 2025 22:22:21 +0300
-Date: Sat, 18 Oct 2025 22:22:21 +0300
+	id 1vACvh-00000000xoA-0lv2;
+	Sat, 18 Oct 2025 22:49:29 +0300
+Date: Sat, 18 Oct 2025 22:49:28 +0300
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Jinhui Guo <guojinhui.liam@bytedance.com>
-Cc: mika.westerberg@linux.intel.com, jsd@semihalf.com,
-	andi.shyti@kernel.org, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] i2c: designware: Disable SMBus interrupts to prevent
- storms from mis-configured firmware
-Message-ID: <aPPo7VWm4HyoHSIE@ashevche-desk.local>
+To: =?iso-8859-1?Q?Beno=EEt?= Monin <benoit.monin@bootlin.com>,
+	Hans Verkuil <hverkuil@kernel.org>
+Cc: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Jan Dabros <jsd@semihalf.com>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Clark Williams <clrkwllms@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Gregory CLEMENT <gregory.clement@bootlin.com>,
+	=?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>,
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	Dmitry Guzman <dmitry.guzman@mobileye.com>,
+	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev
+Subject: Re: [PATCH 0/3] i2c: designware: Improve support of multi-messages
+ transfer
+Message-ID: <aPPvSCNnkzfH-2X7@ashevche-desk.local>
+References: <20251017-i2c-dw-v1-0-7b85b71c7a87@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20251017-i2c-dw-v1-0-7b85b71c7a87@bootlin.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
  krs, Bertel Jungin Aukio 5, 02600 Espoo
 
++Cc: Hans. Hans, isn't it what you wanted to have for your use-case?
 
-On Sat, Oct 11, 2025 at 03:30:57PM +0800, Jinhui Guo wrote:
-> When probing the I2C master, disable SMBus interrupts to prevent
-> storms caused by broken firmware mis-configuring IC_SMBUS=1; the
-> handler never services them and a mis-configured SMBUS Master
-> extend-clock timeout can flood the CPU.
-
-...
-
->  #define DW_IC_TX_ABRT_SOURCE			0x80
->  #define DW_IC_ENABLE_STATUS			0x9c
->  #define DW_IC_CLR_RESTART_DET			0xa8
-> +#define DW_IC_SMBUS_INTR_MASK		0xcc
-
-It seems one TAB too little.
-
->  #define DW_IC_COMP_PARAM_1			0xf4
->  #define DW_IC_COMP_VERSION			0xf8
->  #define DW_IC_SDA_HOLD_MIN_VERS			0x3131312A /* "111*" == v1.11* */
-
-...
-
-The rest LGTM, but let Mika to review.
-FWIW,
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+On Fri, Oct 17, 2025 at 04:59:31PM +0200, Benoît Monin wrote:
+> Extend what can be done when transferring multiple messages in a single
+> call to .xfer().
+> 
+> Allow changing the target address by waiting for a STOP then looping
+> in i2c_dw_xfer() instead of erroring out when a change of address is
+> detected. The loop then re-run i2c_dw_xfer_init() which changes the
+> target address and restart the transfer for the rest of the messages.
+> 
+> Handle controllers that lack the ability to emit a RESTART when two
+> consecutive messages have the same address and direction, by waiting
+> for a STOP and restarting the rest of the transfer.
+> 
+> The i2c controllers found in the EyeQ6Lplus and EyeQ7H SoC from
+> Mobileye lack such capability, so compatible strings are added because
+> this cannot be detected at runtime.
 
 -- 
 With Best Regards,
