@@ -1,145 +1,205 @@
-Return-Path: <linux-i2c+bounces-13669-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13670-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24871BF089D
-	for <lists+linux-i2c@lfdr.de>; Mon, 20 Oct 2025 12:30:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id AD6B5BF0B00
+	for <lists+linux-i2c@lfdr.de>; Mon, 20 Oct 2025 12:56:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D2CE53B97B7
-	for <lists+linux-i2c@lfdr.de>; Mon, 20 Oct 2025 10:30:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 81EC23AA10C
+	for <lists+linux-i2c@lfdr.de>; Mon, 20 Oct 2025 10:56:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4B2B2F6196;
-	Mon, 20 Oct 2025 10:30:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DF73258EE0;
+	Mon, 20 Oct 2025 10:56:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UG2Tn5tc"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="uBhbmlaS"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B56B2F5313;
-	Mon, 20 Oct 2025 10:30:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10549255222
+	for <linux-i2c@vger.kernel.org>; Mon, 20 Oct 2025 10:56:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760956203; cv=none; b=cv8fRJKRd/meiKt1PVEbOmTiVktjs8+mGHvImumDVdVh6DmFmIEh7HQoJ7EQfIPC8dOE1/DruKjyuXrTygvYUyuFTyf5Z5Gse/Of3bCZNmicH7f4EWNHjaldPtEB6IAjNxBYzM1zvaobkJT9rh0K64dz407FrnOxjl5AIqSqRlM=
+	t=1760957771; cv=none; b=KY3gMaOz6KT3NvoANKI3PotcXVpQOrrS/CnpzbwPIEvs/A07TLSrq97188KS2ODpmcHN7U8OagpFUREfJV3Tar/sG2ZXEypfmda3eVeu6IUA/K22Upz2gzhGnsBoaFTkIeDxuUKlNk4bb9yIjktTjqqfLVCNNINKHu3u9lTBD14=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760956203; c=relaxed/simple;
-	bh=O4zsHeZ8S8EDdAZy6SzWfWIxqoZoJ9xVjHhVZHJynGg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Oj1YNSgc0ravEjj3tfpquW2xOe+E2y8YT+9u1vsllA8fMzyzYLdwxdgPHBKOQ6KeNnGuJdvLYtnP3g/yNHHhbrJ+COJLCvQEiSrUuqPs41ZmjHoV3vCvVANqdi96yVJGzs04ziKvcZKduShPmUmW/A5S6vXPNC7OwDuq5Ay/XEI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UG2Tn5tc; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760956201; x=1792492201;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=O4zsHeZ8S8EDdAZy6SzWfWIxqoZoJ9xVjHhVZHJynGg=;
-  b=UG2Tn5tcb6S4jqGWaqzFe+inu8+FqyAXRkZz4FIfSFwrdm/iIXNv+PdU
-   wqbrHwSNUF+k9cj8rYE7E55p1XUq6L6EYGmGlyr4fyTe2/77sLS/OxOH0
-   DsdVwCXgpYGJV9Iy7f10F7pOJYHRHvtCMeoDJYHzL48G/pYXjgySboik9
-   cJ7NVOJ9b9vNLg0n5eeGw5whCPDlPzUeezmqm7Yxq3EftZBIZYorjaarz
-   06Yj83Lb87H8xCLqKvvdoSFivhSXAfwaJISWdaEdRzj03WkwQ1HOFuWCE
-   Y/gOur6hUfh+uj8Nf6lRsdjV7PN84SDlXGu2rXTIl8KwcvhLpqq4J30TJ
-   w==;
-X-CSE-ConnectionGUID: UqaeKbMIQxSly8xXodAGCg==
-X-CSE-MsgGUID: aGn5afrjTx2ahTWZmwgj+A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11587"; a="88537926"
-X-IronPort-AV: E=Sophos;i="6.19,242,1754982000"; 
-   d="scan'208";a="88537926"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2025 03:30:01 -0700
-X-CSE-ConnectionGUID: zWABuonbRbS1ip2ImfbO1g==
-X-CSE-MsgGUID: RU7DY4gOTKKSh/QSk7sUCg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,242,1754982000"; 
-   d="scan'208";a="183707922"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by fmviesa008.fm.intel.com with ESMTP; 20 Oct 2025 03:29:59 -0700
-Received: by black.igk.intel.com (Postfix, from userid 1001)
-	id 67B9895; Mon, 20 Oct 2025 12:29:58 +0200 (CEST)
-Date: Mon, 20 Oct 2025 12:29:58 +0200
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Jinhui Guo <guojinhui.liam@bytedance.com>
-Cc: andriy.shevchenko@linux.intel.com, jsd@semihalf.com,
-	andi.shyti@kernel.org, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] i2c: designware: Disable SMBus interrupts to prevent
- storms from mis-configured firmware
-Message-ID: <20251020102958.GL2912318@black.igk.intel.com>
-References: <20251011073057.2959-1-guojinhui.liam@bytedance.com>
- <20251011073057.2959-2-guojinhui.liam@bytedance.com>
+	s=arc-20240116; t=1760957771; c=relaxed/simple;
+	bh=IydQHlopurRsMIlFXXQnBsVqX59j3tYYZ9wp3B4KoGw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qYEeDxUC9CdoJD5OU2eQkAFJ3JoUA47EDVEYEPE8wZLibwGts0fEhC641c3Y2k7nujiK3E9n7CkpTOOLTjNBU33tRBfr4nC9QUyB+2S+F98HRg8D83VM8pM5Vl6DHU2F9ureZR240TGNDm4Wek5aoJY4tb9550vnfQSAfxc8btM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=uBhbmlaS; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-426ed6f4db5so2783712f8f.0
+        for <linux-i2c@vger.kernel.org>; Mon, 20 Oct 2025 03:56:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1760957767; x=1761562567; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=O50PUVrDxE9ib0IbMfL05smlWaDICzzt8kT2K5/ErZQ=;
+        b=uBhbmlaSfddAoMrlIpZt99EKU4O+QzROEHKWlEWVOhpxCcHpRkv8nGt+Y5c6WPzV4O
+         Ol1gyPNixSQGIIbgldDyhQcmbCTP1shIv9qiScdknkmRQ217UZGu6jTtMJoORQ0XKzoD
+         T+5xbOh8wSiGQutwtzoEABqZYK8C2/MbM57QU7+lmbf7sHUAR6Mw6SEWV7dE78JpYlsq
+         8XQqm+3k2JV6XqGP9uS8wmlKDgBAIApSOziEQ8np6CfKWrIBJ1L94zj+gddnFf2WxKim
+         qT5konw3qIMntlha4nYJMt1ei7UWkhFmRhJf7RnKwAR8lcQT3OPy4O1Qml8FtGi4FFme
+         Pa2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760957767; x=1761562567;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=O50PUVrDxE9ib0IbMfL05smlWaDICzzt8kT2K5/ErZQ=;
+        b=Z+bScB62TbuptFYeQkO6r0U9b7I1kR71jdAodIdnwi8amd8MP8sSVFWTfwwK7hwLru
+         vU96hkxw/OWfaI37tH7a0Pbw7FJoSV/JIKBX923232eYZW/IudVl5MBi8DwEJFUF1Uj4
+         Luox52gdT/cTIOqDfxHyari4inJzXoDY++pjm2emirlffQbNKFCcIBvOZy7j2ADIvPHs
+         VzVh4yhVPN/07x5DuCrVwGskZEJV3OEJvx5JcMFsxWpQoFXu4Wm11Sdw7L/QfRFzrfLj
+         dSZFECVNYVfSFmu0LzlSk/rfYLtstaLJqOu4tYiTEb6BAqedvzJlB5Fb5+zahCNCQbWz
+         eGnw==
+X-Forwarded-Encrypted: i=1; AJvYcCXa6UsE/vWQt8s2IBt2WBdenkHuZWrbRydeEGuO7bwczZHlxzV4UrrC3PGK+nIzhycCMI//0yFDioQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YysnCtSYhtOiNiS1fE6Fg0e6y8OJfBKPHLjsr7n5sYDfPn0wp/g
+	2852g2qtL/ZDnZceQ5SgD+mbbrOreYIwfEwlv9SgzsqQBkC7FOM5Jbhdrez86KgQ0prHb8xAedh
+	q0JMD
+X-Gm-Gg: ASbGncsF1NqejabQTSoY/4x8/G/SnN/myI7VXg4h6nucY8EVu8AFlgn4i7wMg4ORbEM
+	zf/RbgD5OTjL/WWhytzZkFzB4leWqMZ4U4x5YlNhAKOvput3VMIaL+JIugYB8iHjO79HaRKVfOv
+	uvFDqNUXvxCrzjckZ6XcorguFbvg1uwvs6lzDBrBXz6TXZZ2or/n79Kl9vW4VWEF8pH5TZMRYCh
+	QgI581warWrUExmdsCLH/pEaGZq7jklNKIgfNXFRvbjj37/x7oKvmW9lGpXBCb4osdnEgnGHbKs
+	wBeqUKen5jQbbD3tiZU9dYtZWuRFBzZGX9eh1fTJXy0ZgfCRj9mAvdgSZAizbQuTbGaVZQ+4Aq7
+	s5fuibF/rxz5hlTjNE90IEh4ecSbSec9RL58f53V1HsmYzbLCanCPndl7p/I9S2gMPfakDQxytS
+	dU1kYusG/pAsGzPkXdm1IIN9QjbbrfFZnC+UZ/4UNe0N0=
+X-Google-Smtp-Source: AGHT+IEnxRa9WBYZ/xihOvJBRUTwTryLwgmhlm6XUxYYKxvIXYWvfiDdFtfoAj1aZpKnj7X7vI055g==
+X-Received: by 2002:a5d:588b:0:b0:427:1ae:abc7 with SMTP id ffacd0b85a97d-42701aeaffemr10842435f8f.2.1760957767322;
+        Mon, 20 Oct 2025 03:56:07 -0700 (PDT)
+Received: from [192.168.0.163] (188-141-3-146.dynamic.upc.ie. [188.141.3.146])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-427f00ce06bsm14495252f8f.45.2025.10.20.03.56.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Oct 2025 03:56:06 -0700 (PDT)
+Message-ID: <f5a1076f-f06c-404d-88d4-fef4f7694c82@linaro.org>
+Date: Mon, 20 Oct 2025 11:56:05 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20251011073057.2959-2-guojinhui.liam@bytedance.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/6] dt-bindings: media: camss: Add qcom,kaanapali-camss
+ binding
+To: Krzysztof Kozlowski <krzk@kernel.org>,
+ Loic Poulain <loic.poulain@oss.qualcomm.com>
+Cc: Hangxiang Ma <hangxiang.ma@oss.qualcomm.com>,
+ Jingyi Wang <jingyi.wang@oss.qualcomm.com>, Robert Foss <rfoss@kernel.org>,
+ Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Bryan O'Donoghue <bod@kernel.org>,
+ Todor Tomov <todor.too@gmail.com>,
+ Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, linux-i2c@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+ aiqun.yu@oss.qualcomm.com, tingwei.zhang@oss.qualcomm.com,
+ trilok.soni@oss.qualcomm.com, yijie.yang@oss.qualcomm.com
+References: <20250924-knp-cam-v1-0-b72d6deea054@oss.qualcomm.com>
+ <20250924-knp-cam-v1-2-b72d6deea054@oss.qualcomm.com>
+ <CAFEp6-1o11B9o3HjdJY-xQhDXquOTknXo0JeW=HfpTxXcEaK3g@mail.gmail.com>
+ <a7be3a42-bd4f-46dc-b6de-2b0c0320cb0d@oss.qualcomm.com>
+ <d8dfe11f-c55a-4eb2-930a-bfa31670bef0@kernel.org>
+ <CAFEp6-1zpobZNLHt1192Ahtn2O7bV+As0P1YvVHrkRsORyH_Aw@mail.gmail.com>
+ <ac96922e-d2a3-4a99-8f34-a822c3dd2d02@kernel.org>
+ <7140b8a8-1380-4859-84a3-681b3f1ce505@kernel.org>
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Content-Language: en-US
+In-Reply-To: <7140b8a8-1380-4859-84a3-681b3f1ce505@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi,
-
-On Sat, Oct 11, 2025 at 03:30:57PM +0800, Jinhui Guo wrote:
-> When probing the I2C master, disable SMBus interrupts to prevent
-> storms caused by broken firmware mis-configuring IC_SMBUS=1; the
-> handler never services them and a mis-configured SMBUS Master
-> extend-clock timeout can flood the CPU.
+On 20/10/2025 11:16, Krzysztof Kozlowski wrote:
+> On 16/10/2025 12:43, Krzysztof Kozlowski wrote:
+>> On 16/10/2025 10:47, Loic Poulain wrote:
+>>> On Thu, Oct 16, 2025 at 7:52 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+>>>>
+>>>> On 15/10/2025 05:21, Hangxiang Ma wrote:
+>>>>>>> +      - const: csiphy4
+>>>>>>> +      - const: csiphy5
+>>>>>>> +      - const: vfe0
+>>>>>>> +      - const: vfe1
+>>>>>>> +      - const: vfe2
+>>>>>>> +      - const: vfe_lite0
+>>>>>>> +      - const: vfe_lite1
+>>>>>> Wouldn't it make sense to simplify this and have different camss nodes
+>>>>>> for the 'main' and 'lite' paths?
+>>>>>>
+>>>>>> [...]
+>>>>> No such plan till now. Other series may take this into consideration.
+>>>>
+>>>> We don't care much about your plan. You are expected to send correct
+>>>> hardware description.
+>>>
+>>> To be fair, other platforms like sc8280xp-camss already have the
+>>> all-in big camss node.
+>>> Point is that if Lite and Main blocks are distinct enough we could
+>>> have two simpler nodes.
+>>> Would it make things any better from a dts and camss perspective?
+>>>
+>>>   camss: isp@9253000 {
+>>>      compatible = "qcom,kaanapali-camss";
+>>>      [...]
+>>> }
+>>>
+>>> camss-lite:ips@9273000 {
+>>>     compatible = "qcom,kaanapali-lite-camss";
+>>>      [...]
+>>> }
+>>>
+>>> That approach would create two distinct CAMSS instances and separate
+>>> media pipelines.
+>>> However, it may not work with the current implementation, as the CSI
+>>> PHYs would need to be shared between them.
+>>>
+>>> I guess this should be part of the broader discussion around
+>>> splitting/busifying CAMSS.
+>>
+>> And this discussion CAN happen now, stopping this camss and any future
+>> camss till we conclude the discussion. Whatever internal plans of that
+>> teams are, rejecting technical discussion based on "no plans for that"
+>> is a really bad argument, only stalling this patchset and raising eyebrows.
 > 
-> Signed-off-by: Jinhui Guo <guojinhui.liam@bytedance.com>
-> ---
->  drivers/i2c/busses/i2c-designware-core.h   |  1 +
->  drivers/i2c/busses/i2c-designware-master.c | 11 +++++++++++
->  2 files changed, 12 insertions(+)
 > 
-> diff --git a/drivers/i2c/busses/i2c-designware-core.h b/drivers/i2c/busses/i2c-designware-core.h
-> index 347843b4f5dd..d1122ff0a1b7 100644
-> --- a/drivers/i2c/busses/i2c-designware-core.h
-> +++ b/drivers/i2c/busses/i2c-designware-core.h
-> @@ -78,6 +78,7 @@
->  #define DW_IC_TX_ABRT_SOURCE			0x80
->  #define DW_IC_ENABLE_STATUS			0x9c
->  #define DW_IC_CLR_RESTART_DET			0xa8
-> +#define DW_IC_SMBUS_INTR_MASK		0xcc
->  #define DW_IC_COMP_PARAM_1			0xf4
->  #define DW_IC_COMP_VERSION			0xf8
->  #define DW_IC_SDA_HOLD_MIN_VERS			0x3131312A /* "111*" == v1.11* */
-> diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
-> index c7a72c28786c..eeb60536da32 100644
-> --- a/drivers/i2c/busses/i2c-designware-master.c
-> +++ b/drivers/i2c/busses/i2c-designware-master.c
-> @@ -997,6 +997,11 @@ static int i2c_dw_init_recovery_info(struct dw_i2c_dev *dev)
->  	return 0;
->  }
->  
-> +static inline void i2c_dw_disable_smbus_intr(struct dw_i2c_dev *dev)
-> +{
-> +	regmap_write(dev->map, DW_IC_SMBUS_INTR_MASK, 0);
-> +}
+> To be clear, I expect Loic's comment to be fully and technically
+> addressed, not with "no plan for that".
+> 
+> This blocks this patchset and any new versions.
+> 
+> Best regards,
+> Krzysztof
 
-I wonder instead of this wrapper, can you just do this in
-i2c_dw_init_master() right after the adapter has been disabled?
+I think we should stick with the existing bindings.
 
-> +
->  int i2c_dw_probe_master(struct dw_i2c_dev *dev)
->  {
->  	struct i2c_adapter *adap = &dev->adapter;
-> @@ -1063,6 +1068,12 @@ int i2c_dw_probe_master(struct dw_i2c_dev *dev)
->  		return ret;
->  
->  	__i2c_dw_write_intr_mask(dev, 0);
-> +	/*
-> +	 * Mask SMBus interrupts to block storms from broken
-> +	 * firmware that leaves IC_SMBUS=1; the handler never
-> +	 * services them.
-> +	 */
-> +	i2c_dw_disable_smbus_intr(dev);
->  	i2c_dw_release_lock(dev);
->  
->  	if (!(dev->flags & ACCESS_POLLING)) {
-> -- 
-> 2.20.1
+There is no "lite" ISP there are so-called lite blocks within the CAMSS 
+block.
+
+It makes sense to split out the PHYs from this block as they have their 
+own power-rails but, if you look at the block diagrams for this IP there 
+is no specific ISP lite, there are merely blocks within the camera 
+called lite.
+
+It might be nice to structure things like this 
+arch/arm64/boot/dts/rockchip/rk356x-base.dtsi with each component 
+separated out into its own node with its own compat string but, I'd have 
+a hard time justifying changing up the bindings we already have for that 
+reason - aside from anything else - all of those components in CAMSS 
+live inside of the TITAN_TOP_GDSC which is the power-domain for the 
+whole camera system.
+
+So not meaning to answer for Hangxiang but, I think the compelling logic 
+here is to stick to and extend the existing bindings.
+
+So in fact I have no problem with the bindings as submitted - not 
+including the regular fixups these types of submissions entail.
+
+---
+bod
+
+
 
