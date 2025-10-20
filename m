@@ -1,139 +1,198 @@
-Return-Path: <linux-i2c+bounces-13673-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13674-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C7C6BF0F83
-	for <lists+linux-i2c@lfdr.de>; Mon, 20 Oct 2025 14:00:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B65E3BF0FAD
+	for <lists+linux-i2c@lfdr.de>; Mon, 20 Oct 2025 14:02:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4E04A18A3C7B
-	for <lists+linux-i2c@lfdr.de>; Mon, 20 Oct 2025 12:00:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BCB913A4343
+	for <lists+linux-i2c@lfdr.de>; Mon, 20 Oct 2025 12:00:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EEAF3112C0;
-	Mon, 20 Oct 2025 12:00:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CAE42F549E;
+	Mon, 20 Oct 2025 12:00:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BH4Tyx3R"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="pzYULXIp"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mout.web.de (mout.web.de [212.227.17.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49CA030F7EB
-	for <linux-i2c@vger.kernel.org>; Mon, 20 Oct 2025 12:00:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 668D31F3D56;
+	Mon, 20 Oct 2025 12:00:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760961604; cv=none; b=VUVjlAblGEwTrBnJtAKUDeJ2BUyIGGeUrKM5Yx1XUyz+tLw90r3BRtBwqCc+e5B+v+FLnySVS7+Jv7rAR0yUYDcqRdzJfdyB/46h/F+VBw9NDTwptUx8lDO6IQ/eMylRdxJb71XG3etKEbh+3cCJN6KNgOAUMLaHTJdDY3furAs=
+	t=1760961650; cv=none; b=rrdwq+DdXnRilmovARAX+pBqi9QmZxBwMW7QISzaWP3797phYVIIERJBLNAwTmlTUB7qzjgyDDcuCafN+BPNTpYk8VmozuDydKYdWOFF4Tcjnb0zce+PozY6CKJ5bvgMyvI8yEsHWafz/wHhwBQd8cbaxNXnAIwaSzu+3T132rs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760961604; c=relaxed/simple;
-	bh=N5MWoWWyi6QfeoH8IcScFmQPkOGGKUavChWRCI8NQZ4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EIxHRymN/KgBiYDhz006pNS4fJy69sAud32NYeqmU0T/hFMhr0z91Ns2eAoxEre/NDgEbPFiDS6tbnVTJOuHyNYFp0kNf/5HqEiR2+kqTGNfi2QEm51wATw57U9Q1khsFGDr3hZZIWIXY1vuG8j42WWwZQQM83fTvO+/c/BkAVE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BH4Tyx3R; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760961602; x=1792497602;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=N5MWoWWyi6QfeoH8IcScFmQPkOGGKUavChWRCI8NQZ4=;
-  b=BH4Tyx3R39kiKFeErowztEONz97L1pTLpvtAfNEF6nYgD1pgzvfsMzh+
-   UuW7gYp+W3r2O9Uoq2CcQbZLJsexXXmKHl2bGjaFTOMhjy8GYEKV3woLM
-   SQBT8BBgqyxGrcOL6pRLeycxnPrR4DO74IRJH9bMnHFQfsj2df5n5QS9o
-   fD+c/yUwzIx1cGLTWB/EINVkIjjNwah4yBVApydWXotWWUc4qRe8WbujD
-   gtJergBhkLrplIFJMWFpPLdm6Tz1Rv9yj3tkxeqtcgA+kZOkueat7JMeW
-   fOR+HPREYKbzoqDNfBoGlNUmzbnHIqI2LTEvd0dvF+jxjyoeJFRue0smV
-   w==;
-X-CSE-ConnectionGUID: 4WGDA2KHQ1ejdwEdeNcwgg==
-X-CSE-MsgGUID: NyzbpShYS9ixLDRQtoxtYg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="74511824"
-X-IronPort-AV: E=Sophos;i="6.19,242,1754982000"; 
-   d="scan'208";a="74511824"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2025 05:00:01 -0700
-X-CSE-ConnectionGUID: fQYF7PkOSi2bNcicusdqyg==
-X-CSE-MsgGUID: 3jrBB2mGTz2+wnmWTNv3og==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,242,1754982000"; 
-   d="scan'208";a="184080392"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by fmviesa010.fm.intel.com with ESMTP; 20 Oct 2025 05:00:00 -0700
-Received: by black.igk.intel.com (Postfix, from userid 1001)
-	id 657A095; Mon, 20 Oct 2025 13:59:59 +0200 (CEST)
-Date: Mon, 20 Oct 2025 13:59:59 +0200
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Hans Verkuil <hverkuil+cisco@kernel.org>
-Cc: linux-i2c@vger.kernel.org,
-	Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Jan Dabros <jsd@semihalf.com>, Andi Shyti <andi.shyti@kernel.org>
-Subject: Re: i2c-designware: not possible to write to different i2c addresses
- in one transfer?
-Message-ID: <20251020115959.GM2912318@black.igk.intel.com>
-References: <ee6afdd7-3117-43cd-831f-e0ec5ee46f46@kernel.org>
+	s=arc-20240116; t=1760961650; c=relaxed/simple;
+	bh=Z3a389jFMV7KyWO6D7061iHIzY+T/KoYV86JEaSpHbo=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=Hwe90fW1Yln3HZajGqxLc371zZR4vwocFZYZXC+1vtPbyIMC56nOxjb9IW+1M4qM3WhduxLPreCnzxmaL1DmKnvHiKvpfnE8MBVkrh6ma/ZgcXPVIjqA9mIjNsI1Iqdf29q2CzT00DFrl4TSQ1rJhB5Uy3lpkTudT5VyX/PY6aE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=pzYULXIp; arc=none smtp.client-ip=212.227.17.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1760961624; x=1761566424; i=markus.elfring@web.de;
+	bh=wR0/2GDY7PH4f7EL3ehNGkIHb1OEc16UpmJv/AXFlEM=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:From:
+	 Subject:Content-Type:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=pzYULXIpa1aKDh5s29C6h/xiByFsNfGZaxejGzkiXlPItYoench1eBhLmgBEmvFv
+	 XblxS4SvWNwUhRHA1JGFDWS6UElxWZgo3wniA/xzSpqNp2JzCHtmjLav0sfEtUV/l
+	 t4QSNC4IGa7Clc9qSVxJAW9OgZcGKxiLq3VkSTybH55SXeoY932qs6SOx1/Tc3pcY
+	 XwXghRIK5CtmZ7V7GF2eYtPBu8Qo9UpsFzy+1zuzITijA84hHMxDsdFYclOySuTYs
+	 KtoX0n5vRVwXzZOxRtKbz+ldtVPwpOY171+ltRJrZ79sf1cvfP2PCCARsHfFd3FNv
+	 c6bEYK3UtjiTjJVnHA==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.29] ([94.31.69.235]) by smtp.web.de (mrweb105
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1MQPdr-1upB4Q4B17-00WFTc; Mon, 20
+ Oct 2025 14:00:24 +0200
+Message-ID: <f7e0c023-d2d1-40ba-badb-74a7e9c23684@web.de>
+Date: Mon, 20 Oct 2025 14:00:21 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ee6afdd7-3117-43cd-831f-e0ec5ee46f46@kernel.org>
+User-Agent: Mozilla Thunderbird
+To: linux-i2c@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org, Alain Volmat
+ <alain.volmat@foss.st.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ Andi Shyti <andi.shyti@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>,
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Pierre-Yves Mordret <pierre-yves.mordret@foss.st.com>,
+ Wolfram Sang <wsa@kernel.org>
+Content-Language: en-GB, de-DE
+Cc: LKML <linux-kernel@vger.kernel.org>, Anand Moon <linux.amoon@gmail.com>,
+ Christophe Jaillet <christophe.jaillet@wanadoo.fr>
+From: Markus Elfring <Markus.Elfring@web.de>
+Subject: [PATCH] i2c: stm32: Omit two variable reassignments in
+ stm32_i2c_dma_request()
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:3kcerp8Cu5TQ+HhZrHN48BG+Gwrdd5fazreJR3XOmWOQcdK5Oj0
+ RxkyfdlNDEtsNYXUEX8tkt5cPcuOD4j/fOOQzVAhDZttym6UgCb/tRRXNBq1LDgNMsnup7T
+ Q1qb3IKAf6B9ltb4RWu9Pj9j6JXMi0GU01S125KojePSRXEvJzIlWEA9JY3QZ2GpZmH6fiT
+ Grfnu4Pz91RbY2C6eKYBw==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:9qK5WERPxbg=;O8ongV6UJdinuE+6t/wpg4wTbmB
+ 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
+ bTnU4Msx1H0El7ATaVQtop7QEQ=
 
-Hi,
+From: Markus Elfring <elfring@users.sourceforge.net>
+Date: Mon, 20 Oct 2025 13:33:12 +0200
 
-On Wed, Oct 15, 2025 at 01:25:02PM +0200, Hans Verkuil wrote:
-> Hi,
-> 
-> I have this code in a driver (writing display EDID data into an EDID EEPROM):
-> 
->         struct i2c_msg msg[] = {
->                 {
->                         .addr = state->seg_client->addr,        // 0x30
->                         .buf = &seg,
->                         .len = 1,
->                         .flags = 0,
->                 },
->                 {
->                         .addr = state->data_client->addr,       // 0x50
->                         .buf = data,
->                         .len = len,
->                         .flags = 0,
->                 },
->         };
-> 
->         err = i2c_transfer(state->dev_client->adapter, msg, ARRAY_SIZE(msg));
-> 
-> This worked fine for the Raspberry Pi 4B using the broadcom i2c driver, but for
-> the Raspberry Pi 5 using the designware driver it fails with -EINVAL and these
-> kernel messages:
-> 
-> [  272.284689] i2c_designware 1f00074000.i2c: i2c_dw_xfer_msg: invalid target address
-> [  272.305788] i2c_designware 1f00074000.i2c: controller active
-> 
-> Looking in i2c-designware-master.c it seems it cannot handle consecutive messages for
-> different addresses.
-> 
-> The i2c device I'm using is this one:
-> 
-> https://www.onsemi.com/pdf/datasheet/cat24c208-d.pdf
-> 
-> Is this a hardware limitation? Or is this a corner case that was never implemented?
-> Or just simply a bug?
+An error code was assigned to a variable and checked accordingly.
+This value was passed to a dev_err_probe() call in an if branch.
+This function is documented in the way that the same value is returned.
+Thus delete two redundant variable reassignments.
 
-I'm catching up what has happened to this driver since I last did something
-for it so please excuse me if I'm stating obvious things ;-) Also was on
-vacation last week, sorry for the delay.
+The source code was transformed by using the Coccinelle software.
 
-The Intel I2C DW datasheets say that the I2C_TAR register must be
-programmed only when the controller is disabled (I2C_ENABLE=0) or no
-initiator mode operations are active.
+Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
+=2D--
+ drivers/i2c/busses/i2c-stm32.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-I think this explains why the driver does what it does.
+diff --git a/drivers/i2c/busses/i2c-stm32.c b/drivers/i2c/busses/i2c-stm32=
+.c
+index f84ec056e36d..becf8977979f 100644
+=2D-- a/drivers/i2c/busses/i2c-stm32.c
++++ b/drivers/i2c/busses/i2c-stm32.c
+@@ -27,8 +27,8 @@ struct stm32_i2c_dma *stm32_i2c_dma_request(struct devic=
+e *dev,
+ 	if (IS_ERR(dma->chan_tx)) {
+ 		ret =3D PTR_ERR(dma->chan_tx);
+ 		if (ret !=3D -ENODEV)
+-			ret =3D dev_err_probe(dev, ret,
+-					    "can't request DMA tx channel\n");
++			dev_err_probe(dev, ret, "can't request DMA tx channel\n");
++
+ 		goto fail_al;
+ 	}
+=20
+@@ -48,8 +48,7 @@ struct stm32_i2c_dma *stm32_i2c_dma_request(struct devic=
+e *dev,
+ 	if (IS_ERR(dma->chan_rx)) {
+ 		ret =3D PTR_ERR(dma->chan_rx);
+ 		if (ret !=3D -ENODEV)
+-			ret =3D dev_err_probe(dev, ret,
+-					    "can't request DMA rx channel\n");
++			dev_err_probe(dev, ret, "can't request DMA rx channel\n");
+=20
+ 		goto fail_tx;
+ 	}
+=2D-=20
+2.51.1
 
-Since this is I2C EEPROM, pretty standard I guess. I wonder if you have
-tried the at24.c driver instead? If I read it right it splits the chip into
-multiple "clients" per segments thus avoiding limitations like this. IIRC
-this works fine with Intel controllers at least.
 
