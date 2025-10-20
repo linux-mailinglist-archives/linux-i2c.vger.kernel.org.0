@@ -1,316 +1,223 @@
-Return-Path: <linux-i2c+bounces-13662-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13663-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F2B0BEFA76
-	for <lists+linux-i2c@lfdr.de>; Mon, 20 Oct 2025 09:21:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4CAB7BEFD8C
+	for <lists+linux-i2c@lfdr.de>; Mon, 20 Oct 2025 10:13:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id DB5F64F14DD
-	for <lists+linux-i2c@lfdr.de>; Mon, 20 Oct 2025 07:18:46 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 9B7144EDE02
+	for <lists+linux-i2c@lfdr.de>; Mon, 20 Oct 2025 08:13:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60B892DBF5B;
-	Mon, 20 Oct 2025 07:18:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 240FF2E9ED7;
+	Mon, 20 Oct 2025 08:13:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WqnhWe7x"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Dk8h1DEA"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32B582DFA38
-	for <linux-i2c@vger.kernel.org>; Mon, 20 Oct 2025 07:18:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F334F2DECD3
+	for <linux-i2c@vger.kernel.org>; Mon, 20 Oct 2025 08:13:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760944690; cv=none; b=BfsdWB4P0MOLJJ01rw8FW1n+VQLK74R/rWk+/z8HE5DdX9HQKTdbz5EKinUpm93Dpqmzoe5woUwBQFU/pzeFUQ4T35/wIbhXl6YaydgT2rwtbpEfKZNuXpUStG3yrkR01VBy66iyXUnrhArQi2Kwbuzjf793oBpue6vEdHCdFdU=
+	t=1760948009; cv=none; b=m1dzBQT6xE940MWwOPh5FGaRLPK1JvRJNmRuY3rBRnem1yfBwJr6U31JoDuINpgbeIMxt6KQbbopM9z5ZTqd3GwdTcXP0yTzVYqNGHLDFLz26lTsRGzCIr50VXDOGlbMce834eITwzcDZIZuYWfVskW5M0XKWDl+/vAbovL7tgI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760944690; c=relaxed/simple;
-	bh=RcFIrKoSgnto39HXDCzkc41AKHrLdxTXBU7nIzeA4ck=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=HJLCeUA/SRssCCFH1ycPjv2sK58oVjNfvx4+a15RuU0pvO5yvlgvSTYcU2EpqnerXwPlD+xyfMqjBKqKQqW51n1uvw56kppwTvc/JT21/sd/EW9DY+I2maQmueQ1Nv8RdQFd7dPErLsrVxCPDd11WEF6XlHb+KAZtsgf9qulYYk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WqnhWe7x; arc=none smtp.client-ip=209.85.208.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-36ba647ac9fso35616501fa.0
-        for <linux-i2c@vger.kernel.org>; Mon, 20 Oct 2025 00:18:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760944684; x=1761549484; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=//TUA5vuRqCmK3LhoKxiqeBc8EfoelaRnhe5iPSMmkU=;
-        b=WqnhWe7xiVmG7MuI2MHLLUfaYfaM5AdzEBAYUXPW8urn0+i52z3iyMqEsYsB8btTSk
-         YaDo5rcD/BiACFZhSEqonVOTi8HJ1SKWXpEihQvXPB9P3IC2IhEgNvE2z2RR2G+FsvVh
-         gaxlolCTLOAr5HfogFO3mN/sVrsd9HyWO54WUuHmjdQNTt/Y7U+inDOX2P9JRO0ZhYCH
-         nV5LHXd6tn9nYHmPyVK1Fju8RlDA8jv6LSg6HwirBN+RyTbrwVGMAoEHSUwb78MK1CBu
-         VsCdY9qqFZ8Oab4v0CFQr+enJ0ahrQl2Sv2NlydYRGAetrONYJnMIWFaoJynBW8lfnrj
-         mg1w==
+	s=arc-20240116; t=1760948009; c=relaxed/simple;
+	bh=eWUdVUQn4e5pJS+pC4d8RvrZAEG0k5mgZUxDdEUFFTE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=mKo2tCbxoAbnLAM+L6Gw7+R+XyArWRoZKD/noZmrADSdYceZQTRkKruqJOZvpw1moxPUMIJLDaRFV9cnui1pV1KvOiepl9PE07zUZah3VAQmxKK42jq/H9i381arENoGU7zBoEL7mzVJBGJg99OM9nHrU5PvXIVuE9aN2d2eNoE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Dk8h1DEA; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 59JNisru014776
+	for <linux-i2c@vger.kernel.org>; Mon, 20 Oct 2025 08:13:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	eWUdVUQn4e5pJS+pC4d8RvrZAEG0k5mgZUxDdEUFFTE=; b=Dk8h1DEAHhqV3f9c
+	U2MZ4yA4xxBTsMT9lNsIYVR8z+z4Xtzs+3yWAUzzvvgcbE2PunRNa+jDx0l+EbkA
+	gGPC3SJska3WSGb2rorWJYPxpeU0ZV3aeE+E+etGX9Ru0V4PkpDSaHYREbYFwfLa
+	2IL9RZ/YwQsvZnpehN/IjrkVxxepJQdS2AeiCRCILlq65UK5QzIaa6TPy5uTeQ7Q
+	E7a2GHpy3Xy57I9OT2Wb8LffcZMgvbktwo11SvUERh6H/xhT146Ew6o5CfVYg9VG
+	Q6whiaQp8cx+1oZh2CI6y2KGqbYGwzpLQ3ntXKt1b7Tw1kaQ6FhJvueT+TUz16JW
+	HT6LHQ==
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com [209.85.222.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49v08pcb0q-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-i2c@vger.kernel.org>; Mon, 20 Oct 2025 08:13:26 +0000 (GMT)
+Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-88f1dad9992so232076085a.1
+        for <linux-i2c@vger.kernel.org>; Mon, 20 Oct 2025 01:13:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760944684; x=1761549484;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1760948006; x=1761552806;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=//TUA5vuRqCmK3LhoKxiqeBc8EfoelaRnhe5iPSMmkU=;
-        b=SEXTEbczvlW1yVkjHdpqYQXZqP3qQC/K5L6G2lVg1O+SI4kRa8SGv09qxzdCP4VhsF
-         Tqp9nB3rr2wpp3z/XufgkQZe9tcBmq54KjxRQiSFOoYZa2mTdwcs2QmFUb30W11mYVlG
-         1nXqgWYhkXAlM/1jOUh7F1YKa3XT5yMutXKKn1bdbmCngDzU4EuTk7cydaHffNZ4FMtl
-         oWPbvNRVHXtKxZk7KtQjNHFNa8ycW/Kd34qdU5z1+0fouhgJjEDlSZN7LliWW3E+59ST
-         q4bW3KDUb/Ty7K2goCjNTj2e7Ct3pROGRKLmaAyHxv/B/cPuMZJxZxjk5wT7SudydRgf
-         rYzQ==
-X-Gm-Message-State: AOJu0YzQxer4e/TAx7OaBRTELlo7ob1k2FwQFd10JjqFzWiKoDkvT/9A
-	0NRX0VEC5gPdeTa8jNcfTWgm0w1N4yiJzjhiyb0LLrMeXmNIwRv1TFE2
-X-Gm-Gg: ASbGnctu4F/LwLgjKitCntOQESgEjwvWIZHBQinXIqOcX/HM23nRupmzzhxxRZ4ProQ
-	ra8UXwC5+aEecAV37Zi6C5WEmfA3q8pzJomAfVv6U3T8k8RYULNkhsPhYz4uY0YF0+oQwN/Yu66
-	LhtexFbNqcncgQYl7SKV2X9tu79CP1al+FC0tl13WAfosqRwDDISUQeNspQDRtlKSmKKHxcPk70
-	Ds0ysAHarZdXlyRZSdTtsih31sfdRWsybxZrjbADL9zM930hzoITvJwd4177hQjED5BcUDCHoWG
-	ITF6QpFAyKnviatOtbeUHF0FgOjxqWMvlDGq2dl82kydlYRB3pLNPqE8QbyQG+BT+CbNSFRoxCJ
-	Ps6yqt18CGCDRG95pTt1kkSsqlRoejWEUwPMOGiKaxKv8yYpF4OrCreNbJqfBRTpEeHuG2rFiJK
-	KTD48IyNUCChJFW7afxAkBrco7zRYOVWr1c7hnQVgeUd9h6n8B+q9xKrE=
-X-Google-Smtp-Source: AGHT+IHh2wqGu0ExNrwddXEATOjNKtBcULAJBbJEFjC5sgHg1pbE/2OBk6y9xSUU1xLzPcNt/U/tew==
-X-Received: by 2002:a05:651c:1595:b0:372:17eb:1191 with SMTP id 38308e7fff4ca-3779793eaedmr35769721fa.18.1760944683996;
-        Mon, 20 Oct 2025 00:18:03 -0700 (PDT)
-Received: from [192.168.1.168] (83-233-6-197.cust.bredband2.com. [83.233.6.197])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-377a921ae62sm18863341fa.21.2025.10.20.00.18.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Oct 2025 00:18:03 -0700 (PDT)
-From: Marcus Folkesson <marcus.folkesson@gmail.com>
-Date: Mon, 20 Oct 2025 09:17:28 +0200
-Subject: [PATCH v3 5/5] docs: i2c: i2c-topology: add section about bus
- speed
+        bh=eWUdVUQn4e5pJS+pC4d8RvrZAEG0k5mgZUxDdEUFFTE=;
+        b=xD+M20lwQeHeUKUDrvRbPlpG0RL84Qr2joRE+si4KTdn3V/WB+qfRLUz4nDtwzDLNi
+         5g6dwX2oK29jvLSt+dnfl/5W83ejVrJVhdesLjhN4wWsTz1b7JgvAIEmbO/SJNSd9Tki
+         WWOiCn6mdFfDLSIAVlQXyZnK34+bQHoVhMk/PK5FmkR3SueSkp6Y5MfBQ2SQarzCULro
+         uTpvrzcfe2wJ3iWl2Vahgw4Kp1YvKSeRCyH9iAuQSBCac0jboxvqGHDgOarmGi6Wg/uF
+         o+6LzucW/4n+MmxBE+95LWGg+LqgG4i1VtoF6DqzCVijBnr7J91EXq6tGtBSrlnZRjR8
+         DWQg==
+X-Forwarded-Encrypted: i=1; AJvYcCVVb+yy5aft+lO2iIw5MrMa5W23OBHxnZ21/heC4p0EQ/AE7fJgNPFVq8GFW4EucPa/Bw3nFAdNQ58=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxtzRFx40Ye14GINf9qwjMiw3TBkYfX94vr340v6gyEPkKgu6Q5
+	h3A9rMDxuSmsmX5j7rU7Pq5TmSWDz/eNT37G23Kx/GQTiux4GY3sxHubyaC0BHR8/z0MQMuBjOI
+	sUQyY6Zvd1MuP9ThauRzbiKoQSqQmjsnZHGzP0iEIBlchqR+2UvzP5ajd1zMMfk+/iCa3HyMzff
+	sTtGl0U0NyD2rKadjpMkPv4bUTTB1fkcug4aiqDw==
+X-Gm-Gg: ASbGncu790hO1XWkEb/Ygziqja/LORUj87+gk+IuW4GvFFeJwcu+2qiUTn6Tr19Re4m
+	E7Oh77kWVouMzPShjRLMHnaVRz64r/Gb+4QT5F0bvomyJcTRDj0HD6cM01GOdmpxXhWOxUZVV3O
+	I0tU+ZVgsgQmQ28AZOUD37d79qoGG2oEDBYvPugviToFZVvDX5sAdIP9Ed3hVzl7I1O1y0Au2q3
+	WzTsqgGQvM3iWdTVYYn1NfabXArhqMLCXM8+hJG8YrN
+X-Received: by 2002:a05:620a:190e:b0:883:5640:b0da with SMTP id af79cd13be357-8906e2cf39dmr1436903585a.3.1760948005979;
+        Mon, 20 Oct 2025 01:13:25 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEb6zG3EmsKjpqb2r+Qft6H1geCepq6JDWxSiyy4RN7KSOTJqDZAnRX1cclURNEe+Zx+0M8EH233ksa03DnVzI=
+X-Received: by 2002:a05:620a:190e:b0:883:5640:b0da with SMTP id
+ af79cd13be357-8906e2cf39dmr1436901085a.3.1760948005468; Mon, 20 Oct 2025
+ 01:13:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251020-i2c-mux-v3-5-908ac5cf9223@gmail.com>
-References: <20251020-i2c-mux-v3-0-908ac5cf9223@gmail.com>
-In-Reply-To: <20251020-i2c-mux-v3-0-908ac5cf9223@gmail.com>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
- Peter Rosin <peda@axentia.se>, 
- Michael Hennerich <michael.hennerich@analog.com>, 
- Bartosz Golaszewski <brgl@bgdev.pl>, Andi Shyti <andi.shyti@kernel.org>
-Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, 
- Marcus Folkesson <marcus.folkesson@gmail.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=8215;
- i=marcus.folkesson@gmail.com; h=from:subject:message-id;
- bh=RcFIrKoSgnto39HXDCzkc41AKHrLdxTXBU7nIzeA4ck=;
- b=owEBbQKS/ZANAwAKAYiATm9ZXVIyAcsmYgBo9eIeQlAhgS2qIv+uQnFVrYg/iCLMq0RlKE/4e
- wSYKwI9FQ2JAjMEAAEKAB0WIQQFUaLotmy1TWTBLGWIgE5vWV1SMgUCaPXiHgAKCRCIgE5vWV1S
- MldtEADRexPNmR5XRZqMic/rZNCi1v0rUBibNGFESL5UgamBrAak845xal3CxyKG3m3SI5rVXvI
- DS//zyQyKLg+R8KWvq6LG+z4Vp/tTlhaNmlgDd0hlepqQzWdREmNbyFI+p0ojE8mu55ZO1zzBr2
- 6/2bt3n17WgXeijZ1cVb7cetWzCo9Ffx3sKinanq2TDwong0mdUHBWjBCS2xZIJl5d1Q3nbYnPb
- CYCpPI2KRIRPyWpkbOjY+pBUMvnZ0BPgge7LX2TCaz40T+JAcEcDnQP+MW5QmMpW10hd6SX9Tc3
- B5j3hpY+TQU09HrtkLNctxszOMW/sEhIst9Oo8WFaA0vMTVvHhyVIkOvvvpmB68y4TPtNzy74PP
- lElqXlf0pinALTB5BNoaUEKiTn9BfwAUPgLGQn+eySwdGy/EYrXNkffQLUOFi+jljALZvHKrUeR
- CCG3rp94cCFRNLONejMXKqXRPHpg5uM1lwHYOeY2Jj1ukfB+IhiT2VL+Mj9RWI1JmWg/kyJ6w1G
- Ygvrvr0Nj/KyMKZ5YeruFfpdjraUviQLJ3t1aVAnhiiJVFnq3uDgrb1A5pizhP0l0S4mHwuT3aN
- nsO12bVYq7N9qFtKObkYoz0jk62YMGiQGKi5JPu3Cz9bFWfzmWCeHEsuHZmPdRyIWjGS++LuMTR
- BQIJ+K7E9T7mj+g==
-X-Developer-Key: i=marcus.folkesson@gmail.com; a=openpgp;
- fpr=AB91D46C7E0F6E6FB2AB640EC0FE25D598F6C127
+References: <20251014-add-new-clock-in-vfe-matching-list-v1-1-0d965ccc8a3a@oss.qualcomm.com>
+ <9984bc23-05ef-4d46-aeb8-feb0a18e5762@kernel.org> <bc0caeb8-c99b-4bef-a69e-5ce433e6b890@oss.qualcomm.com>
+ <c4fd6bfc-cc9a-4f37-99b3-f36466691a1e@linaro.org> <CAFEp6-2=GJL-gc+PSyAL4=prp_sXdZJS=Ewg5nP2kcp_Gu85Fw@mail.gmail.com>
+ <33513b43-f6d1-4c76-887b-39611a75e1f4@kernel.org> <WnfCknsSyJK68PQZkE2q7COZHRpsLOFlr3dcbwiVR6SBWtF9iRQ4MGzp_9q31O0kyhZwoncQWfHjJQvpz7nyfw==@protonmail.internalid>
+ <ab43c5c9-edc5-459e-8ef7-2aa8bec559c0@oss.qualcomm.com> <0e6e1b8a-d9ae-42d1-b1ad-4314e0d76ab7@kernel.org>
+ <2c0011d3-a692-457c-9ac0-a445fc82df37@oss.qualcomm.com>
+In-Reply-To: <2c0011d3-a692-457c-9ac0-a445fc82df37@oss.qualcomm.com>
+From: Loic Poulain <loic.poulain@oss.qualcomm.com>
+Date: Mon, 20 Oct 2025 10:13:14 +0200
+X-Gm-Features: AS18NWAwySZMB2zZMh-0PxLreQh1uFGY20Blv1uikWAJkb59A8nYis59v_-2Kqo
+Message-ID: <CAFEp6-0c9C8N86HQh2Y1xfOEM5Lc8XV4BE3xX6WROF5F+_-Bvg@mail.gmail.com>
+Subject: Re: [PATCH] media: qcom: camss: Enable setting the rate to
+ camnoc_rt_axi clock
+To: Hangxiang Ma <hangxiang.ma@oss.qualcomm.com>
+Cc: "Bryan O'Donoghue" <bod@kernel.org>,
+        Vijay Kumar Tumati <vijay.tumati@oss.qualcomm.com>,
+        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>, Robert Foss <rfoss@kernel.org>,
+        Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>, Todor Tomov <todor.too@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDE4MDAwMCBTYWx0ZWRfX59+ir+dGdfXo
+ xIVckkSdFE/rDCtOpOBg9AgPDJzSNkF+TFSAFEMW5IkfV7/Y5pLkY59HZ5jdkvbpwFJIUFiqxMA
+ WL8hTM6dmRDyyUSuPK8jhZI1hZ5js7ONhvsSkHYNkIELUl6dFaaNrFB3Bd4fBQCiFAv0/tM8ZIv
+ DHLtXA1irz3N/eQEXLeGdrg+ZNl95WCS6cwIKxTOzIDUvdtoj34eV8uFAcH08CzChPnMyxwmjsp
+ TS1JBAbLj2GTjRtNG4rEzcYs3Fni/uPrnf/Pi9AF440KaicEAlPw49Y+q+kXMf60s1lQohsV/3p
+ LsyHyuxwZaBfbSq6BEfOYvgEKIhVs3WwCvyC/LZ7aZaft0LS6BRp4AoEmFjx3r3n79CZip7Pqkf
+ 2H3sBgJGQZ6ZJmBrasFpCWvi3CdUDg==
+X-Proofpoint-GUID: bX0iOs9xx-XHIkLpVY7mBm7QOlq4PZuc
+X-Authority-Analysis: v=2.4 cv=Up1u9uwB c=1 sm=1 tr=0 ts=68f5ef26 cx=c_pps
+ a=qKBjSQ1v91RyAK45QCPf5w==:117 a=IkcTkHD0fZMA:10 a=x6icFKpwvdMA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=EUspDBNiAAAA:8 a=Y5ZU1JmK0_tTG0nlGdEA:9
+ a=QEXdDO2ut3YA:10 a=NFOGd7dJGGMPyQGDc5-O:22
+X-Proofpoint-ORIG-GUID: bX0iOs9xx-XHIkLpVY7mBm7QOlq4PZuc
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-10-20_02,2025-10-13_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ lowpriorityscore=0 adultscore=0 suspectscore=0 malwarescore=0 clxscore=1015
+ impostorscore=0 bulkscore=0 priorityscore=1501 spamscore=0 phishscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2510020000 definitions=main-2510180000
 
-Describe what needs to be consideraed and taken into account
-when using different bus speeds for different mux channels.
+On Mon, Oct 20, 2025 at 5:23=E2=80=AFAM Hangxiang Ma
+<hangxiang.ma@oss.qualcomm.com> wrote:
+>
+> On 10/17/2025 7:41 PM, Bryan O'Donoghue wrote:
+> > On 16/10/2025 21:53, Vijay Kumar Tumati wrote:
+> >>
+> >> On 10/16/2025 8:31 AM, Bryan O'Donoghue wrote:
+> >>> On 16/10/2025 13:22, Loic Poulain wrote:
+> >>>>> I'm - perhaps naively - assuming this clock really is required ... =
+and
+> >>>>> that both will be needed concurrently.
+> >>>> AFAIU, the NRT clock is not in use for the capture part, and only
+> >>>> required for the offline processing engine (IPE, OPE), which will
+> >>>> likely be described as a separated node.
+> >>>
+> >>> Maybe yeah though we already have bindings.
+> >>>
+> >>> @Hangxiang I thought we had discussed this clock was required for you=
+r
+> >>> setup.
+> >>>
+> >>> Can you confirm with a test and then
+> >>>
+> >>> 1. Repost with my RB - I assume you included this on purpose
+> >>> 2. Respond that you can live without it.
+> >>>
+> >>> ---
+> >>> bod
+> >>>
+> >> @Bryan and others, sorry, I am just trying to understand the exact ask
+> >> here. Just to add a bit more detail here, On certain architectures,
+> >> there is one CAMNOC module that connects all of the camera modules (RT
+> >> and NRT) to MMNOC. In these, there is one 'camnoc_axi' clock that need=
+s
+> >> to be enabled for it's operation. However, on the newer architectures,
+> >> this single CAMNOC is split into two, one for RT modules (TFEs and IFE
+> >> Lites) and the other for NRT (IPE and OFE). So, on a given architectur=
+e,
+> >> we either require 'camnoc_axi' or 'camnoc_rt_axi' for RT operation, no=
+t
+> >> both. And yes, one of them is a must. As you know, adding the support
+> >> for the newer clock in "vfe_match_clock_names" will only enable the
+> >> newer chip sets to define this in it's resource information and set th=
+e
+> >> rate to it based on the pixel clock. In kaanapali vfe resources, we do
+> >> not give the 'camnoc_axi_clk'. Hopefully we are all on the same page
+> >> now, is it the suggestion to use 'camnoc_axi_clk' name for
+> >> CAM_CC_CAMNOC_RT_AXI_CLK ? We thought it would be clearer to use the
+> >> name the matches the exact clock. Please advise and thank you.
+> >
+> > The ask is to make sure this clock is needed @ the same time as the
+> > other camnoc clock.
+> >
+> > If so then update the commit log on v2 to address the concerns given
+> > that it may not be necessary.
+> >
+> > If not then just pining back to this patch "we checked and its not
+> > needed" will do.
+> >
+> > ---
+> > bod
+>
+> @Bryan, I test two scenarios individually that also consider @Vladimir's
+> concern. I confirm this clock rate setting is necessary.
+> 1. Remove 'camnoc_rt_axi' from the vfe clock matching function.
+> 2. Remove 'camnoc_nrt_axi' from the vfe clock resources in camss.c.
+> Both of them block the image buffer write operation. More clearly, we
+> will stuck at the stage when all buffers acquired but CAMSS takes no acti=
+on.
+>
+> I agree with @Vijay to keep 'camnoc_rt_axi' to distinguish between the
+> new one and 'camnoc_axi'. The disagreement concerns how to standardize
+> the camnoc clock name or how to differentiate between RT and NRT clock
+> names if a new RT clock name is introduced. Other chips like sm8550,
+> sm8775p depend on 'camnoc_axi'. Meanwhile, 'camnoc_rt_axi' and
+> 'camnoc_nrt_axi' are both necessary for QCM2290 and X1E80100. But chips
+> like QCM2290 and X1E80100 may not need to set the clock rate but
+> Kaanapali needs. @Vladimir
 
-Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
----
- Documentation/i2c/i2c-topology.rst | 176 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 176 insertions(+)
+Actually NRT clock does not seem necessary for QCM2290 as capture only
+involves RealTime elements.
+I tried without that clock and the capture is working, so I think of
+making it optional in the QCM2290 bindings.
+Also, I thought these clocks could be indirectly scaled via their
+respective interconnects?
 
-diff --git a/Documentation/i2c/i2c-topology.rst b/Documentation/i2c/i2c-topology.rst
-index 48fce0f7491bf1bcd4a851f685b010386c9ce0d2..2c4a1364ce82e353f51608e60d08535f80523fea 100644
---- a/Documentation/i2c/i2c-topology.rst
-+++ b/Documentation/i2c/i2c-topology.rst
-@@ -367,6 +367,182 @@ When D1 or D2 are accessed, accesses to D3 and D4 are locked out while
- accesses to D5 may interleave. When D3 or D4 are accessed, accesses to
- all other devices are locked out.
- 
-+Bus Speed and I2C Multiplexers
-+================================
-+
-+I2C bus multiplexers allows multiple downstream channels to be exposed
-+as separate I2C adapters which also could set their own bus speed.
-+
-+The multiplexer itself cannot change the bus speed as it use the upstream
-+clock and data lines to communicate with the downstream devices. The speed
-+is therfor changed in the root adapter resulting in that the whole bus is
-+affected.
-+
-+This increases the complexity of the topology and some considerations must
-+be taken into.
-+
-+Bus speed
-+----------
-+
-+Downstream channels of an I2C multiplexer can only operate at the same or
-+lower bus speed as the upstream bus. This is because the upstream bus may
-+have devices that cannot operate at higher speeds and those will be affected
-+by the speed change.
-+
-+The example below illustrates the problem.
-+The root adapter is operating at 100kHz. D2 can only operate with 100kHz,
-+but D2 can operate at 400kHz. When D1 is selected, the bus speed of the
-+root adapter would have to be is set to 400kHz, a speed that D2 may not support.
-+
-+This topology is therefor not allowed: ::
-+
-+                          .----------. 400kHz .--------.
-+        .--------. 100kHz |   mux-   |--------| dev D1 |
-+        |  root  |--+-----|  locked  |        '--------'
-+        '--------'  |     |  mux M1  |
-+                    |     '----------'
-+                    |  .--------.
-+                    '--| dev D2 |
-+                       '--------'
-+
-+
-+This topology is allowed: ::
-+
-+                          .----------. 100kHz .--------.
-+        .--------. 400kHz |   mux-   |--------| dev D2 |
-+        |  root  |--+-----|  locked  |        '--------'
-+        '--------'        |  mux M1  |--. 400kHz .--------.
-+                          '----------'  '--------| dev D1 |
-+                                                 '--------'
-+
-+Preferred topology
-+-------------------
-+
-+The preferred topology when using different bus speeds is to have the multiplexer
-+connected directly to the root adapter without any devices as siblings.
-+By this arrangement, the bus speed can be changed without affecting any other devices
-+and many of the caveats are avoided.
-+
-+Other multiplexers in parallell is still okay as those are locked out during transfers.
-+
-+This is the preferred topology: ::
-+
-+                          .----------. 100kHz .--------.
-+        .--------. 400kHz |   mux-   |--------| dev D2 |
-+        |  root  |--+-----|  locked  |        '--------'
-+        '--------'        |  mux M1  |--. 400kHz .--------.
-+                          '----------'  '--------| dev D1 |
-+                                                 '--------'
-+Locking
-+--------
-+
-+If the multiplexer is mux-locked, transfers to D3 may interleave between the
-+select-transfer-deselect to D1 or D2.
-+This results in a situation where the bus speed to D3 may be lower than it
-+is supposed to be. This is usually not a problem.
-+
-+This topology is allowed but some transfers to D3 may be at 100kHz: ::
-+
-+                          .----------. 100kHz .--------.
-+        .--------. 400kHz |   mux-   |--------| dev D1 |
-+        |  root  |--+-----|  locked  |        '--------'
-+        '--------'  |     |  mux M1  |--. 400kHz .--------.
-+                    |     '----------'  '--------| dev D2 |
-+                    |  .--------.                '--------'
-+                    '--| dev D3 |
-+                       '--------'
-+
-+Multiple muxes in series
-+--------------------------
-+
-+When multiple muxes are used in series the same rules applies.
-+
-+Transfers to D3 may interleave between select-transfer-deselect to D1, which
-+results that the bus speed to D2 or D3 will be at 100KHz.
-+
-+Transfers to D2 may interleave between select-transfer-deselect to D1, which
-+results in that the bus speed to D1 may be at 400kHz as the transfer to D2
-+will set the bus speed to before the transfer to D1 starts.
-+
-+This is probably a bad topology ::
-+
-+                     .----------. 400kHz .----------. 100kHz .--------.
-+    .--------.400kHz |   mux-   |--------|   mux-   |--------| dev D1 |
-+    |  root  |--+----|  locked  | 400kHz |  locked  |        '--------'
-+    '--------'  |    |  mux M1  |--.     |  mux M2  |
-+                |    '----------'  |     '----------'
-+                |  .--------.      |  .--------.
-+                '--| dev D3 |      '--| dev D2 |
-+                   '--------'         '--------'
-+
-+Multiple muxes in parallell
-+----------------------------
-+
-+When multiple muxes are used in parallell all access to other muxes are locked out
-+so this is not a problem.
-+
-+If the muxes are mux-locked, access to D3 may still interleave though.
-+
-+In the example below, D3 may not interleave between select-transfer-deselect for D1
-+or D2 as both muxes are parent-locked: ::
-+
-+
-+                   .----------. 100kHz   .--------.
-+                   |  parent- |----------| dev D1 |
-+                .--|  locked  |          '--------'
-+                |  |  mux M1  |
-+                |  '----------'
-+                |      .----------. 400KHz  .--------.
-+    .--------. 400kHz  |  parent- |---------| dev D2 |
-+    |  root  |--+------|  locked  |         '--------'
-+    '--------'  |      |  mux M2  |
-+                |      '----------'
-+                |  .--------.
-+                '--| dev D3 |
-+                   '--------'
-+
-+Idle state
-+-----------
-+
-+Muxes have an idle state, which is the state the channels is put into when no channel
-+is active. The state is typically one of the following:
-+
-+- All channels are disconnected
-+- The last selected channel is left as-is
-+- A predefined channel is selected
-+
-+Muxes that support an idle state where all channels are disconnected are preferred when using
-+different bus speeds. Otherwise high bus speeds may "leak" through to devices that
-+may not support that higher speed.
-+
-+Consider the following example: ::
-+
-+                          .----------. 100kHz .--------.
-+        .--------. 400kHz |   mux-   |--------| dev D1 |
-+        |  root  |--+-----|  locked  |        '--------'
-+        '--------'  |     |  mux M1  |--. 400kHz .--------.
-+                    |     '----------'  '--------| dev D2 |
-+                    |  .--------.                '--------'
-+                    '--| dev D3 |
-+                       '--------'
-+
-+If the idle state of M1 is:
-+- All channels disconnected: No problem, D1 and D2 are not affected by communication
-+  to D3.
-+- Last selected channel: Problem if D1 was the last selected channel. High speed
-+  communication to D3 will be "leaked" to D1.
-+- Predefined channel: Problem, if the predefined channel D1. Set predefined channel
-+  to D2 as D2 may handle 400kHz.
-+
-+Supported controllers
-+-----------------------
-+
-+Not all I2C controllers support setting the bus speed dynamically.
-+At the time of writint, the following controllers has support:
-+
-+============================   =============================================
-+i2c-davinci                    Supports dynamic bus speed
-+============================   =============================================
- 
- Mux type of existing device drivers
- ===================================
-
--- 
-2.50.1
-
+Regards,
+Loic
 
