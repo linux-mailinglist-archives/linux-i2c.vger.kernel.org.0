@@ -1,103 +1,114 @@
-Return-Path: <linux-i2c+bounces-13677-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13678-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C232BF1720
-	for <lists+linux-i2c@lfdr.de>; Mon, 20 Oct 2025 15:08:51 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4300DBF17D2
+	for <lists+linux-i2c@lfdr.de>; Mon, 20 Oct 2025 15:15:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 784E94F6912
-	for <lists+linux-i2c@lfdr.de>; Mon, 20 Oct 2025 13:07:16 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 1C8FC4F534A
+	for <lists+linux-i2c@lfdr.de>; Mon, 20 Oct 2025 13:13:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E99731282A;
-	Mon, 20 Oct 2025 13:07:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D9313191B5;
+	Mon, 20 Oct 2025 13:13:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QZ4QFW6p"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RWKzftpZ"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D6473002D8;
-	Mon, 20 Oct 2025 13:07:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 932072FB615
+	for <linux-i2c@vger.kernel.org>; Mon, 20 Oct 2025 13:13:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760965634; cv=none; b=QqyZZRJppGr1C8nfS9CGkeL89uSZOCQKKzNZJF/HqvTYpRCBq7Kc5oKa0KYpbQYBz0OFJc8b+iLODL8vQoZY3spgMCpsQEpQS0VLlmpBxNlSB7T3FZKqqsHa6zhAsClveQFcS0BaIUEpyaoXTsyKt9Iov5/3Vva1zwiS0kmB6I8=
+	t=1760965999; cv=none; b=Gz+3mcMmHiSyaFwzHiJnDE/7qrgWAecO2sV7kgJYlEXJVcoM4t0oLb0GTD7MWPlB7a9V54EDxZIAINnSfGlEzw/IsFocDX6e1pRaGK240Z6y2hnVS25gmRnacfWmoXUwck9kuJE5TIByMtDLpV73W5NNmGiz2O5Z9QHmgnIwKcA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760965634; c=relaxed/simple;
-	bh=sDt9bY6IJ8VZ0anxq/fNuLEICPIosHo7v/dxSN30r+I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MuiVb5S7atdxBvryi5k+Y9n8VlsNfkAw3UZCrDh3p3QZret7eX/fpo2+bDKuqqPRdymqyTByCTLglXvnMYCg8QrS64KUYEJCxdlm9tjAGThCc8fOxLiajTzTRMelyPD4+JiVOckadtpZVrO5S2T43JEnIKPIeKm9UuocyKIYc1I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QZ4QFW6p; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760965632; x=1792501632;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sDt9bY6IJ8VZ0anxq/fNuLEICPIosHo7v/dxSN30r+I=;
-  b=QZ4QFW6pmv2KAfcqQRuxt6hdb1wS5RfOb7rVyj1pi6j3uSDb+AAh3n26
-   4fbDI5+oNS/y2YC+vIcYZ89k3uyUrLyGKEPU3XcI9YF4XdJKmjzzMD6wa
-   oUWRKDAldZAFvEa3wNvODqzwzFUh7Tl+O1MoiEVBs7kATloQ4DxFDHmi9
-   vq3XZ6j5h3sdoDCTBCNLa43gz43FuYxVmZQoF8LlZ95YviTGe7fJS1zZ5
-   a6fmNZKY/aHQTVgn2DXO1W1lrTL+3LtwcOUav92r84vb78qG5De5lCNEd
-   a6mtGfDQuEFkzMCey1tp9tY2jkVXI/390oWA/YfIzUKmK1bVcMenPw24R
-   A==;
-X-CSE-ConnectionGUID: NyC1IEZRQGeM7aWQ4IlrAw==
-X-CSE-MsgGUID: YYIGcMwNT+yt9tfP3o3nEA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="62780692"
-X-IronPort-AV: E=Sophos;i="6.19,242,1754982000"; 
-   d="scan'208";a="62780692"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2025 06:07:02 -0700
-X-CSE-ConnectionGUID: gKz2po1ETZSS4NqhrWmrCg==
-X-CSE-MsgGUID: OPyi6ZnHTvyc7ZcVEH1Ftg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,242,1754982000"; 
-   d="scan'208";a="188423419"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by orviesa005.jf.intel.com with ESMTP; 20 Oct 2025 06:07:00 -0700
-Received: by black.igk.intel.com (Postfix, from userid 1001)
-	id 889D895; Mon, 20 Oct 2025 15:06:58 +0200 (CEST)
-Date: Mon, 20 Oct 2025 15:06:58 +0200
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Markus Elfring <Markus.Elfring@web.de>
-Cc: linux-i2c@vger.kernel.org, Andi Shyti <andi.shyti@kernel.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	=?utf-8?Q?Beno=C3=AEt?= Monin <benoit.monin@bootlin.com>,
-	Jan Dabros <jsd@semihalf.com>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Anand Moon <linux.amoon@gmail.com>,
-	Christophe Jaillet <christophe.jaillet@wanadoo.fr>
-Subject: Re: [PATCH] i2c: designware: Omit a variable reassignment in
- dw_i2c_plat_probe()
-Message-ID: <20251020130658.GO2912318@black.igk.intel.com>
-References: <bec52694-c755-4d88-aa36-1d96f6d146e4@web.de>
+	s=arc-20240116; t=1760965999; c=relaxed/simple;
+	bh=AfTWvMNKWRx5WxVQtvE/gOVCLgHWI/aXpAmpAir+6FA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uJ6ABFXhFnePSjRVhLMnEaeXHeFqO9+8VsOJFGrWHuDvvA8WTsEmajFXTNO+je7iUkI2ICMGn+vP4N+8TRYZDml3MAHVhptAOBwNHU8TQ5cNunSxvyy18Gty0E9oXU+nuUVc9aPvUJcsVyCskCMiCwrtsRW51dgx/eZUCnGuZPY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RWKzftpZ; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-63c45c11be7so4127539a12.3
+        for <linux-i2c@vger.kernel.org>; Mon, 20 Oct 2025 06:13:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1760965996; x=1761570796; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=AfTWvMNKWRx5WxVQtvE/gOVCLgHWI/aXpAmpAir+6FA=;
+        b=RWKzftpZCKwLRrACgMwerlwf4lY9GljdQw66d3KQsgTkv1InhCpQInhGxBfaw1n8JR
+         4o1CJ7VFsoln+gwUE8JF1gVzzwR3GtuxGkumiQqc21ppksPCfPU1hwyph255WL3/2Pjr
+         tIPHksEWPHwAJPksfrm/sUBjHeWlw7EHnUZ51CPk92jyHY1BQqoaDD7miymytz6bz8c8
+         lW8vgudr+4Ny7VDqzHpMgoHXXUOSXZyy1rzTlT2+p6qIUJ3pTvGamzEqAM0bUpzROIzE
+         ldIGKdESpqXxYRzhCDPw9Fps1ZlIu95g2du1RFMK/UWXVtIXsm8MQXU/yj9IFG3qP1GB
+         TGKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760965996; x=1761570796;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AfTWvMNKWRx5WxVQtvE/gOVCLgHWI/aXpAmpAir+6FA=;
+        b=nQA/DVOo7EIQy3zDJuri+axGDdSlFOa9CeaDKLw1hwaBwYBUwoJVTDrrybG0mMZbMY
+         GdT3duj6VJQJKr2+6/SrQ/+GjLCt4VmTAqrGsWQkQBRpy1x/xnPb4uPWby7QgGdeB+K/
+         czusbB0fUXVp49BG8+mrzGqWuVZl7Ry4+pyDzBnLas5WkFnMQqi7nrWQ7it7pYnHDHmA
+         gcJ6oAHYXcphXazYTT6tal/K4w/1rGmkzkkY+zUYDeodjIr1QgvlbOcOahqyYJ2V4qQ6
+         iBkHOPkRvDnjtNdbJS5Ni1u2oigTsV1/6WS6r8RIatHK/ssujKhnW7BEx2EmvaLpl14e
+         cmng==
+X-Gm-Message-State: AOJu0YxpO6JMlerEP6eLGIOQ4XUFAnobIUIGCOXWX/WyeYiFRICMhh5Z
+	EwrlGsgCV+lEmJlGkZ22O14rGQeFN6MHijwB9KSMHJyRt+kSFEW9TiFD3fcHqnQUsM5XGt7rF6/
+	UOdy9ro/6vsJ8s92lWBxE0MChBGVxZY0=
+X-Gm-Gg: ASbGnctevTGdNzOqpCJFk8QgK7WqMzfwf9ESZq3DsSjI13p5KZBGxfBrCSqCyoYZLpf
+	BBrGJtattIerwJcOgGqA+KVQ739qyBsBg1vElAY1qkndokzckEP1ABWkE/NVsYAWdvdoBSHqQSU
+	FNIsXuonT5MAJUGPgzEPSFSg6zB3donTZ4K2/gGZWkh7VvmYobhznFwu7aoy3ZOghQA4wtjqDC2
+	EWAtDoOcEfEVw2u60rj4wTUu9fTTtB0M9NQ0aRlLEMxSlOQldbaO1/zGSZJgFujO6Ez3g==
+X-Google-Smtp-Source: AGHT+IGkvCcslMuGWcKmmiYvm+IPM089px853MAXbhcNPLqtcQdtbpNvAfvMxwruriFAZmBTYFnqkPO1nTFcpLSsyT0=
+X-Received: by 2002:a05:6402:13d3:b0:634:b4cb:c892 with SMTP id
+ 4fb4d7f45d1cf-63c1f6f5e21mr12850362a12.32.1760965995705; Mon, 20 Oct 2025
+ 06:13:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+References: <bec52694-c755-4d88-aa36-1d96f6d146e4@web.de>
 In-Reply-To: <bec52694-c755-4d88-aa36-1d96f6d146e4@web.de>
+From: Anand Moon <linux.amoon@gmail.com>
+Date: Mon, 20 Oct 2025 18:42:59 +0530
+X-Gm-Features: AS18NWDB1e_FyEckeUmSdlDJl4jkx28fYBY2kJO7NxW6z_MYSbVArRJYBBg5CjA
+Message-ID: <CANAwSgS5ueALsrbV+Oc4x+S=A3Ucaji0WQaKCLoARii3gc355g@mail.gmail.com>
+Subject: Re: [PATCH] i2c: designware: Omit a variable reassignment in dw_i2c_plat_probe()
+To: Markus Elfring <Markus.Elfring@web.de>
+Cc: linux-i2c@vger.kernel.org, Andi Shyti <andi.shyti@kernel.org>, 
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	=?UTF-8?Q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>, 
+	Jan Dabros <jsd@semihalf.com>, Jarkko Nikula <jarkko.nikula@linux.intel.com>, 
+	Mika Westerberg <mika.westerberg@linux.intel.com>, 
+	Wolfram Sang <wsa+renesas@sang-engineering.com>, LKML <linux-kernel@vger.kernel.org>, 
+	Christophe Jaillet <christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Oct 20, 2025 at 01:08:53PM +0200, Markus Elfring wrote:
+Hi Markus
+
+On Mon, 20 Oct 2025 at 16:39, Markus Elfring <Markus.Elfring@web.de> wrote:
+>
 > From: Markus Elfring <elfring@users.sourceforge.net>
 > Date: Mon, 20 Oct 2025 12:56:39 +0200
 > Subject: [PATCH] i2c: designware: Omit a variable reassignment in dw_i2c_plat_probe()
-> 
+>
 > An error code was assigned to a variable and checked accordingly.
 > This value was passed to a dev_err_probe() call in an if branch.
 > This function is documented in the way that the same value is returned.
 > Thus delete a redundant variable reassignment.
-> 
+>
 > The source code was transformed by using the Coccinelle software.
-> 
+>
 > Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
 
-Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Reviewed-by: Anand Moon <linux.amoon@gmail.com>
+
+Thanks
+-Anand
 
