@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-13666-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13667-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2FDB4BF03FA
-	for <lists+linux-i2c@lfdr.de>; Mon, 20 Oct 2025 11:41:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3300BBF04B7
+	for <lists+linux-i2c@lfdr.de>; Mon, 20 Oct 2025 11:47:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 97906400FB9
-	for <lists+linux-i2c@lfdr.de>; Mon, 20 Oct 2025 09:39:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2ADAA3B45AB
+	for <lists+linux-i2c@lfdr.de>; Mon, 20 Oct 2025 09:43:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 759F72F7453;
-	Mon, 20 Oct 2025 09:38:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F18052F6578;
+	Mon, 20 Oct 2025 09:41:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t2MMRvxX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tRDbG4au"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C22DD2F7AA8;
-	Mon, 20 Oct 2025 09:38:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A72F92F6191
+	for <linux-i2c@vger.kernel.org>; Mon, 20 Oct 2025 09:41:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760953125; cv=none; b=I1uVJtn6o5FnE+rfNowEWT8K3+7d9jTnTOon5C0tSEmc12tnRO2MTwN8QLRnKoRE2wB39+I2tfNsuVmyYnYjHN2TatQDDuZIY26AmoJCm/7FnInVDVLry97qFhDIbbrUAH3vCBXtseYcbaXp+FhPmQRkjt9ROEQveX8K1CVJPd4=
+	t=1760953290; cv=none; b=iYMhuBx97RmTESn+7rZSUhSJPlgIH6gbG5w8jGMi9pWNf8FqIVAwPjdRDGyvrtz83yxhV3VlYuLbyOhMHQTFu83z8toUHoGGC1S2URSndOUI/C4IFbHQNwL2e5eRjIE1HK31VA2EGFMURh7feIEAt9cHr/M3AcXkmevJ9w7T59I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760953125; c=relaxed/simple;
-	bh=VKCYuth/NqxGJoPPggikV+GdPYEkZJ8g3GjwRJo8xY4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Tg0KUka04Zde/O5zf0dC7B5OSg4UYt2VhTt6WnajKqpIlBDDfxrv1DD3WPz+Z3NvQIGjXcpI6wc3J+Qy3XiniI9Rep5hGs3x1//PcC51Rma3wWclHROz+5Oq4eCdcOFyLpidq0F2kvPZowp5++bqAObMEW/FLHUGkB0zXIsE4mQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t2MMRvxX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 338F5C4CEF9;
-	Mon, 20 Oct 2025 09:38:40 +0000 (UTC)
+	s=arc-20240116; t=1760953290; c=relaxed/simple;
+	bh=uJ+GkmbjAi/F1168GKscdW3UxhRmGs0C+L2h7Y6lGGE=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=U1TkcESl7obSCEfsEkf0YZPSsx5iRkaaH3cm8vNfV9NSOD5PLBUT4qsBUtQ2WTbMIGZNfqPSFC9c90Z2FycnNZhie5Hu/doN6RPO1JGjOuVO7nq7K0uYM6wUEnjqUJHzzzNOXwzUFVZ+0lI+v7Ls28w/bOIx4jKaFrmcFSEtIy8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tRDbG4au; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 045D5C4CEF9;
+	Mon, 20 Oct 2025 09:41:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760953125;
-	bh=VKCYuth/NqxGJoPPggikV+GdPYEkZJ8g3GjwRJo8xY4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=t2MMRvxXkCGnLs2tcMpgxmjfhn8rEOYvprk0/eWT9SmVw8OadOiZokDelfq2F+/8n
-	 KGolFiXETA/xLXKMKhzt/9aWJGBfKP5R69hZax6lsDOw7+VP4OqbJLOI9sMgYJu6lB
-	 x6F7iZ3qMFheo3XH49PTDW3QePr8kXsX7Njh6uAmWFUp64PRuNLlaH45WUGazMb+3S
-	 vgqKnXN/+Yo1XKgzZV4XMcWGgWtS5HSzSwk43RKhqp6v/4luk+vKQ4m21uTO125GNo
-	 3qylZMK+PKY2+CfEtPtqxSOAH2i5VyyZe3uOqXfM0qMd62wNAwTIYoB66mrTIq2vgh
-	 ZA9WpZVjk/auw==
-Message-ID: <f5e7bb0d-205b-4c10-8c31-bf60e1e42b73@kernel.org>
-Date: Mon, 20 Oct 2025 11:38:38 +0200
+	s=k20201202; t=1760953290;
+	bh=uJ+GkmbjAi/F1168GKscdW3UxhRmGs0C+L2h7Y6lGGE=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=tRDbG4auxY9vM30hsNVDCWNWozsmyqLfnQvvPfnLdTAr6zIeOyaGjfxvsu0utcUdH
+	 Bd737kKnu9GO1SGDDH2W2iESBxIzv0EPxP+vXCb8ZXjgSxZEinXLJDlJxKYFvgjP+o
+	 5akORaMVk+BisSVKSOSp0LuTWuBOv41ayjhHrIiXx8yWFkZyZZStZd0zZjlzKmtkzk
+	 BN2EeMF19kNpqYsS7090vWM+0bngD+jt/EOeTm6S7Se/6JPrCT2+WypYaZOZuQWvG/
+	 aIEDcqu5v9dkxp4jHCLRFP9p6X+EL8KGyZKvRfkEDykT+Q5n/69ziYnnEVWJXGNwEL
+	 6aAJgC6Xd7VlQ==
+Message-ID: <9293b12f-1fbb-407a-b838-ca18a6cd7fa6@kernel.org>
+Date: Mon, 20 Oct 2025 11:41:27 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,199 +50,81 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/3] i2c: designware: Enable transfer with different
- target addresses
-To: =?UTF-8?Q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>,
- Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Jarkko Nikula <jarkko.nikula@linux.intel.com>,
- Mika Westerberg <mika.westerberg@linux.intel.com>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Jan Dabros <jsd@semihalf.com>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Gregory CLEMENT <gregory.clement@bootlin.com>,
- =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
- Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
- Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
- Dmitry Guzman <dmitry.guzman@mobileye.com>, linux-i2c@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-rt-devel@lists.linux.dev
-References: <20251017-i2c-dw-v1-0-7b85b71c7a87@bootlin.com>
- <20251017-i2c-dw-v1-2-7b85b71c7a87@bootlin.com>
+Subject: Re: i2c-designware: not possible to write to different i2c addresses
+ in one transfer?
 From: Hans Verkuil <hverkuil+cisco@kernel.org>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-i2c@vger.kernel.org, Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+ Mika Westerberg <mika.westerberg@linux.intel.com>,
+ Jan Dabros <jsd@semihalf.com>, Andi Shyti <andi.shyti@kernel.org>
+References: <ee6afdd7-3117-43cd-831f-e0ec5ee46f46@kernel.org>
+ <aO-KuJ_T9cXsNpIh@ninjato> <aO-kZUwqcoqnFfTh@smile.fi.intel.com>
+ <a776e232-d26b-405c-b468-0e449296becd@kernel.org>
 Content-Language: en-US, nl
-In-Reply-To: <20251017-i2c-dw-v1-2-7b85b71c7a87@bootlin.com>
+In-Reply-To: <a776e232-d26b-405c-b468-0e449296becd@kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-Hi Benoît,
-
-On 17/10/2025 16:59, Benoît Monin wrote:
-> When i2c_dw_xfer() is called with more than one message, it sets the
-> target address according to the first message. If any of the following
-> messages have a different target address, the transfer finishes with
-> an error.
+On 18/10/2025 20:17, Hans Verkuil wrote:
+> On 15/10/2025 15:40, Andy Shevchenko wrote:
+>> On Wed, Oct 15, 2025 at 01:51:20PM +0200, Wolfram Sang wrote:
+>>> Hi Hans,
+>>>
+>>> lucky you, I happen to have a board with that controller on the table
+>>> currently :)
+>>>
+>>>> This worked fine for the Raspberry Pi 4B using the broadcom i2c driver, but for
+>>>> the Raspberry Pi 5 using the designware driver it fails with -EINVAL and these
+>>>> kernel messages:
+>>>>
+>>>> [  272.284689] i2c_designware 1f00074000.i2c: i2c_dw_xfer_msg: invalid target address
+>>>
+>>> Confirmed.
+>>>
+>>>> Looking in i2c-designware-master.c it seems it cannot handle consecutive messages for
+>>>> different addresses.
+>>>
+>>> I agree. I leave the final judgement to the experts (Andy, Mika), but I
+>>> already anticipate that I need to extend the existing
+>>> I2C_AQ_COMB_SAME_ADDR quirk into a more generic one. And set the quirk
+>>> in this driver.
+>>
+>> May I ask a dumb question? Why do we need such an awkward transaction
+>> to begin with?
+>>
 > 
-> Instead, if the next message has a different target address, wait until
-> all previous messages are sent and the STOP condition is detected. This
-> will complete the current part of the transfer. The next part is then
-> handled by looping in i2c_dw_xfer(), calling i2c_dw_xfer_init() and
-> i2c_dw_wait_transfer() until all messages of the transfer have been
-> processed, or an error is detected.
+> That's how the datasheet defines the transfer. And in turn it is based on the VESA
+> E-DDC standard for reading display EDIDs. By doing it in a single transaction you
+> ensure that the bytes are written to (or read from) the correct EEPROM segment. If
+> it was split in two commands, then someone could change the segment inadvertently.
+> I.e., you set the segment to 1, then someone writes to it as well and sets it to 2,
+> then you write the EDID data to the EEPROM, which has now selected the wrong segment.
 > 
-> The RESTART bit is now set after the first message of each part of the
-> transfer, instead of just after the very first message of the whole
-> transfer.
-> 
-> For each address change, i2c_dw_xfer_init() is called, which takes care
-> of disabling the adapter before changing the target address register,
-> then re-enabling it. Given that we cannot know the value of the
-> I2C_DYNAMIC_TAR_UPDATE parameter, this is the only sure way to change
-> the target address.
+> For now I have split up the transaction into two independent transfers in my driver,
+> one to the segment address, one writing to the EEPROM. This works, but it is not really
+> how it is supposed to be done. And I was actually surprised that it worked, since a
+> write to the EEPROM without writing to the segment pointer first in the same transaction
+> should write to segment 0, according to the cat24c208 datasheet.
 
-I have the problem described here:
+Actually, my hack didn't work. It behaved exactly as the datasheet describes: if it is
+done as two separate transactions, then when writing to the EEPROM will actually write
+to segment 0, not 1.
 
-https://lore.kernel.org/linux-i2c/ee6afdd7-3117-43cd-831f-e0ec5ee46f46@kernel.org/
-
-And it looks like this patch is intended to solve that problem (one transaction
-with two writes to different target addresses).
-
-I tried this patch, but it doesn't work. Instead I get a time out:
-
-[  111.695238] i2c_designware 1f00074000.i2c: controller timed out
-
-Is it indeed meant to solve the problem I have or is it addressing another
-issue?
-
-I'm happy to help test patches.
+My test was buggy, and after fixing it I could clearly see that the segment write and
+EEPROM write must be part of the same transaction.
 
 Regards,
 
 	Hans
 
 > 
-> Based on the work of Dmitry Guzman <dmitry.guzman@mobileye.com>
+> I couldn't tell from the designware driver code whether this was 1) impossible (HW limitation),
+> 2) possible, but not implemented, or 3) a bug. The comment in the code before the
+> "invalid target address" error was rather vague.
 > 
-> Signed-off-by: Benoît Monin <benoit.monin@bootlin.com>
-> ---
->  drivers/i2c/busses/i2c-designware-master.c | 58 ++++++++++++++++--------------
->  1 file changed, 31 insertions(+), 27 deletions(-)
+> Regards,
 > 
-> diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
-> index c7a72c28786c2..f9a180b145da8 100644
-> --- a/drivers/i2c/busses/i2c-designware-master.c
-> +++ b/drivers/i2c/busses/i2c-designware-master.c
-> @@ -436,6 +436,7 @@ i2c_dw_xfer_msg(struct dw_i2c_dev *dev)
->  	u8 *buf = dev->tx_buf;
->  	bool need_restart = false;
->  	unsigned int flr;
-> +	int first_idx = dev->msg_write_idx;
->  
->  	intr_mask = DW_IC_INTR_MASTER_MASK;
->  
-> @@ -446,11 +447,11 @@ i2c_dw_xfer_msg(struct dw_i2c_dev *dev)
->  		 * If target address has changed, we need to
->  		 * reprogram the target address in the I2C
->  		 * adapter when we are done with this transfer.
-> +		 * This can be done after STOP_DET IRQ flag is raised.
-> +		 * So, disable "TX FIFO empty" interrupt.
->  		 */
->  		if (msgs[dev->msg_write_idx].addr != addr) {
-> -			dev_err(dev->dev,
-> -				"%s: invalid target address\n", __func__);
-> -			dev->msg_err = -EINVAL;
-> +			intr_mask &= ~DW_IC_INTR_TX_EMPTY;
->  			break;
->  		}
->  
-> @@ -465,7 +466,7 @@ i2c_dw_xfer_msg(struct dw_i2c_dev *dev)
->  			 * set restart bit between messages.
->  			 */
->  			if ((dev->master_cfg & DW_IC_CON_RESTART_EN) &&
-> -					(dev->msg_write_idx > 0))
-> +					(dev->msg_write_idx > first_idx))
->  				need_restart = true;
->  		}
->  
-> @@ -822,7 +823,6 @@ i2c_dw_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
->  		break;
->  	}
->  
-> -	reinit_completion(&dev->cmd_complete);
->  	dev->msgs = msgs;
->  	dev->msgs_num = num;
->  	dev->cmd_err = 0;
-> @@ -841,18 +841,33 @@ i2c_dw_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
->  	if (ret < 0)
->  		goto done;
->  
-> -	/* Start the transfers */
-> -	i2c_dw_xfer_init(dev);
-> +	do {
-> +		reinit_completion(&dev->cmd_complete);
->  
-> -	/* Wait for tx to complete */
-> -	ret = i2c_dw_wait_transfer(dev);
-> -	if (ret) {
-> -		dev_err(dev->dev, "controller timed out\n");
-> -		/* i2c_dw_init_master() implicitly disables the adapter */
-> -		i2c_recover_bus(&dev->adapter);
-> -		i2c_dw_init_master(dev);
-> -		goto done;
-> -	}
-> +		/* Start the transfers */
-> +		i2c_dw_xfer_init(dev);
-> +
-> +		/* Wait for tx to complete */
-> +		ret = i2c_dw_wait_transfer(dev);
-> +		if (ret) {
-> +			dev_err(dev->dev, "controller timed out\n");
-> +			/* i2c_dw_init_master() implicitly disables the adapter */
-> +			i2c_recover_bus(&dev->adapter);
-> +			i2c_dw_init_master(dev);
-> +			goto done;
-> +		}
-> +
-> +		if (dev->msg_err) {
-> +			ret = dev->msg_err;
-> +			goto done;
-> +		}
-> +
-> +		/* We have an error */
-> +		if (dev->cmd_err == DW_IC_ERR_TX_ABRT) {
-> +			ret = i2c_dw_handle_tx_abort(dev);
-> +			goto done;
-> +		}
-> +	} while (dev->msg_write_idx < num);
->  
->  	/*
->  	 * This happens rarely (~1:500) and is hard to reproduce. Debug trace
-> @@ -874,23 +889,12 @@ i2c_dw_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
->  	 */
->  	__i2c_dw_disable_nowait(dev);
->  
-> -	if (dev->msg_err) {
-> -		ret = dev->msg_err;
-> -		goto done;
-> -	}
-> -
->  	/* No error */
->  	if (likely(!dev->cmd_err && !dev->status)) {
->  		ret = num;
->  		goto done;
->  	}
->  
-> -	/* We have an error */
-> -	if (dev->cmd_err == DW_IC_ERR_TX_ABRT) {
-> -		ret = i2c_dw_handle_tx_abort(dev);
-> -		goto done;
-> -	}
-> -
->  	if (dev->status)
->  		dev_err(dev->dev,
->  			"transfer terminated early - interrupt latency too high?\n");
-> 
+> 	Hans
 
 
