@@ -1,140 +1,137 @@
-Return-Path: <linux-i2c+bounces-13696-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13697-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9EE01BF4F11
-	for <lists+linux-i2c@lfdr.de>; Tue, 21 Oct 2025 09:25:34 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44ECDBF4FD7
+	for <lists+linux-i2c@lfdr.de>; Tue, 21 Oct 2025 09:35:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EDDFB421927
-	for <lists+linux-i2c@lfdr.de>; Tue, 21 Oct 2025 07:25:14 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id E4E25351F20
+	for <lists+linux-i2c@lfdr.de>; Tue, 21 Oct 2025 07:35:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91C8D27A91F;
-	Tue, 21 Oct 2025 07:25:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8880327F74B;
+	Tue, 21 Oct 2025 07:35:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="fdJ3V0jq"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X1zCeEtR"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1552727B355
-	for <linux-i2c@vger.kernel.org>; Tue, 21 Oct 2025 07:25:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ACDA27B331
+	for <linux-i2c@vger.kernel.org>; Tue, 21 Oct 2025 07:35:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761031514; cv=none; b=M1EDRO+Q9qeQXZMCBp7mD4w6Z1pvCpjD8hcDYwU1X2pilo96WIykAp4wmPs/g/N105lGDkhMS3a9ds7JhSKHF7jKW1ikkuX0V9aXzy1TEy09e1lOM/H60Z/1fNKpsaYH+6e2/iXaZAC2BgjZZVv1nRo9bvNqTWrSJuZhdDQz3Pw=
+	t=1761032127; cv=none; b=rMbPSUyuJtDwBEoKLPAtEpvcG57U7kHVMY8A2SNxJ1Z68joTPv14C8G5GPgWj3cAHjS0i4Mc/ZwIdBaY4uRrc6JXgxQGcHBBgm2bj8flFp4DeIWCVgTyhSvLLQdzPNpVCsOHSumsli7ChmlGo23fXx1lPvbsSh1gppY4GVYrTLI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761031514; c=relaxed/simple;
-	bh=v5W+PezWFbbY+aMfAZycePfJ6MzFRg1UFID2DsbQ5es=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=aCirCZSZmYbzDc3b0mKHORDIFwA4ljRpqEs4rEKJQd3PKY0tGdJ64acF7V4CoKZvKpwbyl7SeQoCOi697lbhDD+FQdRHrRwKr+G/RJ6obiTzXy9H8kGtOu4myHUZogXIGbXSNYRFxdDz8T9Jqya0iEtot5FcyrWMPTgLR8EPe3o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=fdJ3V0jq; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-793021f348fso4682062b3a.1
-        for <linux-i2c@vger.kernel.org>; Tue, 21 Oct 2025 00:25:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1761031511; x=1761636311; darn=vger.kernel.org;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=KHwcQhcWUU+WNkFzfBnvB75wkIBZwj0q3GSBNggcMeY=;
-        b=fdJ3V0jq0zG8ummy0RcvkPYxbIcJsY47gAkxOF3sViDqjochYV9/7VF8PuF75AnDcJ
-         DSvRxfA7qv74RktqPlE7G2jXIdmXiy8ac1X9vELkx5Qk0CrXx2RWnLSOv/lzHRUtJajW
-         ekpkm4GHiKEQxntj4w1kEDVCi6zCQRmR93cA/RAsl5uo2yh2z3aYYRRvOeqNlYPJaLvE
-         iNj6HK9hcq5/84xoNdd2LJqlvmvLbIm6RD5c3brb9Yn1ptk3LH7tmGPv5rpCqwnjM6sz
-         ezOiewji3pqV1NlZYFRXs7u097061H3TIabxl34YMkGANUvj/4zmOB/whiEGNcql00uS
-         DJbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761031511; x=1761636311;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KHwcQhcWUU+WNkFzfBnvB75wkIBZwj0q3GSBNggcMeY=;
-        b=QZzTxU/VA+LwRDv11AC4M1Qy7L20I/DcYuDmHzPL3BW6Bb6RApeNNaYeIdm5hCWoTt
-         mtTvh1HfYapEUKzbG64vFh5VTHL1sLuV6i9QkH9EqUg5eRP1bQuoO2GXT1vF22VHj4iR
-         Cjgl2vWVx0lhxNj0d5pQc5SveSntUravFXTLrUj0dsbwZPuuVVLuhxfeHXlSZqmvskKj
-         CbXjNNtHse/qVCSbw8GBhU6s8PwWccQbM0/ru1PQTK38gVnHTSFgrUUdxmS0WufHDs3x
-         TDxgFJoZT3EOWcCu+5o7BpuBMekc0s0fn/Vcoqma45fBtUg/aNqCRKc5105PpA3K536i
-         RFgw==
-X-Forwarded-Encrypted: i=1; AJvYcCU0iBeqs4jXkzdyhU41xE+9NsMMS0Fh0xQGdxyhK/OJIwK25ZgSRdqSI/h3GCKHKg/V9tio089QQEY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzPlMZ0yFYh0hi/d6yAPHXpNfiMoVEzb9vgQUFNT96SGmDYjHIE
-	k0hmpEtElrl7dI0sOwxIjQz0aUOHfP4lGkcu+VV1+e8OCF0hVxTuqiKrSXkpQ/b4BGI=
-X-Gm-Gg: ASbGncuIO/ariZzQqPmewEQrXxisxwGsE2tMqnRs3xD8VxISGYGCAoVd3pDCHhI4vHq
-	E1VBfDgGkD6sACUll8t27yK+S2onMdwVjnK1T7aRlOctdpY+QaC5BIaekVpWKke+qZV4b0Ob6tP
-	ASUI484FLcQfleBAaxG/afljBSPvUZVlGEe04UT6qRWchARWCzawlgnIea7ERfPPSVLRp5b3Tfz
-	gWAmZtz1tcfaZ+gvRkbRYLv6UvNTYDab9+Zw85xO/GqytbnoiW+EVpRvbmpIXENwV0fOf6m+E3t
-	TEa/Lr8uP123JP0vj8f+kDnwSkuTPpAYmFxkJpp3PqGK6bUlUgigjrGVBif/zjZm+QG85hfJDq2
-	1RD11jIvz4zRy2ltvioXrOqRrW/zVtOztaDTYoxYlkMWyN+KhdeUp/vccR9b8oyiTZ56xzqfUlS
-	8ulwtEB51PhtBzAjL4CTiEAWqaY8TU3klpv6O35oPym/Zs
-X-Google-Smtp-Source: AGHT+IEW3GUucNZit6WqpuapaCOEs9zkg77zT4fdoVitcC49LMohym9Orsu/D9cJjo6dGJXKnxnQ7Q==
-X-Received: by 2002:a17:902:eccb:b0:276:842a:f9a7 with SMTP id d9443c01a7336-290cba4db6emr221777225ad.57.1761031511240;
-        Tue, 21 Oct 2025 00:25:11 -0700 (PDT)
-Received: from 5CG3510V44-KVS.bytedance.net ([203.208.189.14])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29246fdbe35sm100207415ad.46.2025.10.21.00.25.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Oct 2025 00:25:10 -0700 (PDT)
-From: Jinhui Guo <guojinhui.liam@bytedance.com>
-To: mika.westerberg@linux.intel.com,
-	andriy.shevchenko@linux.intel.com,
-	jsd@semihalf.com,
-	andi.shyti@kernel.org
-Cc: guojinhui.liam@bytedance.com,
+	s=arc-20240116; t=1761032127; c=relaxed/simple;
+	bh=j0o2FJmXY5xIfYVZFE6LY/YDVfm0W2e79fcCxsmoNwA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=efY+ky+GDyOT+1y1gd8AiP39WL7+sKcOh1LlIVkHvverriz0KdBhzfny/RAihyb0K7KtZMPsI2V3/153vo7kjQgdqZydICGzyj/pInh4CYLqk/t0kvQPqe05E81UpjFstPdTW4wrV2YObKBvMiiBUyCrO4A0+O1tD8m0KrrkIzc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X1zCeEtR; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1761032126; x=1792568126;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=j0o2FJmXY5xIfYVZFE6LY/YDVfm0W2e79fcCxsmoNwA=;
+  b=X1zCeEtRqpiOAknPR7WtiZOBzPEchu54Sg1ZErJ9Jz2QYMyPbiuVO3U6
+   gUDqQPl0FCxl7JlytdY8KdMGvk/C5p6MIFOLvRWECyTAc1tgXr76JX8UI
+   R4atWOurZh0V8FPFQwVykN+jeu450umG7fjYAjA+vrWUWXNnDb8GZd3kY
+   PDfS2pk4SveoM5tSaxb/V5rbhuNstw8HiYA2ZitPiw4do6VPhAPa0shhN
+   moQ4KB64NBr7QSAmPcsRrYATRvP6KkNgLNCJ/T7ZUUi5OFhPcuIqWPvIH
+   KNbe2Oe0IuhaXl1b6oxuEaHAa3J8V4nv9GDhaZWUBsrowcEbfg/1wgy69
+   Q==;
+X-CSE-ConnectionGUID: 6SukOv/oTvqL0bBamT+tYQ==
+X-CSE-MsgGUID: K+eV+zClQTOibIjPnhudMA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="73443562"
+X-IronPort-AV: E=Sophos;i="6.19,244,1754982000"; 
+   d="scan'208";a="73443562"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2025 00:35:25 -0700
+X-CSE-ConnectionGUID: uxdl+SMHQeersBOp6W0oOA==
+X-CSE-MsgGUID: OVipBWmkTj61NsL2igK4pA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,244,1754982000"; 
+   d="scan'208";a="184006681"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by fmviesa009.fm.intel.com with ESMTP; 21 Oct 2025 00:35:23 -0700
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Jean Delvare <jdelvare@suse.com>
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
 	linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/1] i2c: designware: Disable SMBus interrupts to prevent storms from mis-configured firmware
-Date: Tue, 21 Oct 2025 15:24:31 +0800
-Message-Id: <20251021072431.3427-2-guojinhui.liam@bytedance.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20251021072431.3427-1-guojinhui.liam@bytedance.com>
-References: <20251021072431.3427-1-guojinhui.liam@bytedance.com>
+	Zeng Guang <guang.zeng@intel.com>
+Subject: [PATCH] i2c: i801: Add support for Intel Diamond Rapids
+Date: Tue, 21 Oct 2025 09:35:22 +0200
+Message-ID: <20251021073522.3458383-1-heikki.krogerus@linux.intel.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-When probing the I2C master, disable SMBus interrupts to prevent
-storms caused by broken firmware mis-configuring IC_SMBUS=1; the
-handler never services them and a mis-configured SMBUS Master
-extend-clock timeout or SMBUS Slave extend-clock timeout can
-flood the CPU.
+From: Zeng Guang <guang.zeng@intel.com>
 
-Signed-off-by: Jinhui Guo <guojinhui.liam@bytedance.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Add SMBus PCI ID on Intel Diamond Rapids.
+
+Signed-off-by: Zeng Guang <guang.zeng@intel.com>
+Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 ---
- drivers/i2c/busses/i2c-designware-core.h   | 1 +
- drivers/i2c/busses/i2c-designware-master.c | 7 +++++++
- 2 files changed, 8 insertions(+)
+ Documentation/i2c/busses/i2c-i801.rst | 1 +
+ drivers/i2c/busses/Kconfig            | 1 +
+ drivers/i2c/busses/i2c-i801.c         | 2 ++
+ 3 files changed, 4 insertions(+)
 
-diff --git a/drivers/i2c/busses/i2c-designware-core.h b/drivers/i2c/busses/i2c-designware-core.h
-index 347843b4f5dd..436555543c79 100644
---- a/drivers/i2c/busses/i2c-designware-core.h
-+++ b/drivers/i2c/busses/i2c-designware-core.h
-@@ -78,6 +78,7 @@
- #define DW_IC_TX_ABRT_SOURCE			0x80
- #define DW_IC_ENABLE_STATUS			0x9c
- #define DW_IC_CLR_RESTART_DET			0xa8
-+#define DW_IC_SMBUS_INTR_MASK			0xcc
- #define DW_IC_COMP_PARAM_1			0xf4
- #define DW_IC_COMP_VERSION			0xf8
- #define DW_IC_SDA_HOLD_MIN_VERS			0x3131312A /* "111*" == v1.11* */
-diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
-index 41e9b5ecad20..45bfca05bb30 100644
---- a/drivers/i2c/busses/i2c-designware-master.c
-+++ b/drivers/i2c/busses/i2c-designware-master.c
-@@ -220,6 +220,13 @@ static int i2c_dw_init_master(struct dw_i2c_dev *dev)
- 	/* Disable the adapter */
- 	__i2c_dw_disable(dev);
+diff --git a/Documentation/i2c/busses/i2c-i801.rst b/Documentation/i2c/busses/i2c-i801.rst
+index 36c563ad3f06..c939a5bfc8d0 100644
+--- a/Documentation/i2c/busses/i2c-i801.rst
++++ b/Documentation/i2c/busses/i2c-i801.rst
+@@ -51,6 +51,7 @@ Supported adapters:
+   * Intel Arrow Lake (SOC)
+   * Intel Panther Lake (SOC)
+   * Intel Wildcat Lake (SOC)
++  * Intel Diamond Rapids (SOC)
  
-+	/*
-+	 * Mask SMBus interrupts to block storms from broken
-+	 * firmware that leaves IC_SMBUS=1; the handler never
-+	 * services them.
-+	 */
-+	regmap_write(dev->map, DW_IC_SMBUS_INTR_MASK, 0);
-+
- 	/* Write standard speed timing parameters */
- 	regmap_write(dev->map, DW_IC_SS_SCL_HCNT, dev->ss_hcnt);
- 	regmap_write(dev->map, DW_IC_SS_SCL_LCNT, dev->ss_lcnt);
+    Datasheets: Publicly available at the Intel website
+ 
+diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+index fd81e49638aa..8bf0e07aa75c 100644
+--- a/drivers/i2c/busses/Kconfig
++++ b/drivers/i2c/busses/Kconfig
+@@ -166,6 +166,7 @@ config I2C_I801
+ 	    Arrow Lake (SOC)
+ 	    Panther Lake (SOC)
+ 	    Wildcat Lake (SOC)
++	    Diamond Rapids (SOC)
+ 
+ 	  This driver can also be built as a module.  If so, the module
+ 	  will be called i2c-i801.
+diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+index 57fbec1259be..91d4d14605aa 100644
+--- a/drivers/i2c/busses/i2c-i801.c
++++ b/drivers/i2c/busses/i2c-i801.c
+@@ -242,6 +242,7 @@
+ #define PCI_DEVICE_ID_INTEL_ALDER_LAKE_P_SMBUS		0x51a3
+ #define PCI_DEVICE_ID_INTEL_ALDER_LAKE_M_SMBUS		0x54a3
+ #define PCI_DEVICE_ID_INTEL_BIRCH_STREAM_SMBUS		0x5796
++#define PCI_DEVICE_ID_INTEL_DIAMOND_RAPIDS_SMBUS	0x5827
+ #define PCI_DEVICE_ID_INTEL_BROXTON_SMBUS		0x5ad4
+ #define PCI_DEVICE_ID_INTEL_ARROW_LAKE_H_SMBUS		0x7722
+ #define PCI_DEVICE_ID_INTEL_RAPTOR_LAKE_S_SMBUS		0x7a23
+@@ -1054,6 +1055,7 @@ static const struct pci_device_id i801_ids[] = {
+ 	{ PCI_DEVICE_DATA(INTEL, METEOR_LAKE_SOC_S_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
+ 	{ PCI_DEVICE_DATA(INTEL, METEOR_LAKE_PCH_S_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
+ 	{ PCI_DEVICE_DATA(INTEL, BIRCH_STREAM_SMBUS,		FEATURES_ICH5)			 },
++	{ PCI_DEVICE_DATA(INTEL, DIAMOND_RAPIDS_SMBUS,		FEATURES_ICH5 | FEATURE_TCO_CNL) },
+ 	{ PCI_DEVICE_DATA(INTEL, ARROW_LAKE_H_SMBUS,		FEATURES_ICH5 | FEATURE_TCO_CNL) },
+ 	{ PCI_DEVICE_DATA(INTEL, PANTHER_LAKE_H_SMBUS,		FEATURES_ICH5 | FEATURE_TCO_CNL) },
+ 	{ PCI_DEVICE_DATA(INTEL, PANTHER_LAKE_P_SMBUS,		FEATURES_ICH5 | FEATURE_TCO_CNL) },
 -- 
-2.20.1
+2.50.1
 
 
