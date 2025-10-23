@@ -1,88 +1,87 @@
-Return-Path: <linux-i2c+bounces-13749-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13750-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1C03C00F22
-	for <lists+linux-i2c@lfdr.de>; Thu, 23 Oct 2025 14:01:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A0E9EC00F2C
+	for <lists+linux-i2c@lfdr.de>; Thu, 23 Oct 2025 14:02:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5A96C1891879
-	for <lists+linux-i2c@lfdr.de>; Thu, 23 Oct 2025 12:02:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EBE691A06EEB
+	for <lists+linux-i2c@lfdr.de>; Thu, 23 Oct 2025 12:02:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECD7330F7F1;
-	Thu, 23 Oct 2025 12:01:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D229930FF27;
+	Thu, 23 Oct 2025 12:01:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EBZCTjHu"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cb44bygP"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A51330F542
-	for <linux-i2c@vger.kernel.org>; Thu, 23 Oct 2025 12:01:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E695B30FC26
+	for <linux-i2c@vger.kernel.org>; Thu, 23 Oct 2025 12:01:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761220884; cv=none; b=IutykKGjUXx6Yoplln8NOAdkarAeeDBn/N7/CaL28lzGp6tVWpQ7tLPNeKd8q1bojBCjq/LaHUydo4jyvZ8nmLQAJBO2td5UE14W61PG22LI9XH+Qbne4LgmPGirEYdfSoWddcbMiT00wCMtjZPbuXevMuArgY+xNPgdEbrI3yU=
+	t=1761220891; cv=none; b=C7TSvM9gfZXKFBfKL35RZdqy4nttfarXs64hGSbw9DNuozkT9YdT2t26VdXYMKebQ6hVMIsjCaPxhvRVGXPQyoSbaxVcRbGwhShSIVfOK6Ndar/+I1AhBZZNeZNEfklweeLwft7GQ3yPAQLqSHObULmWWM7H88Xrhx5OaWfDAtQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761220884; c=relaxed/simple;
-	bh=Zotq3fevEEaXcuU8hejkE5kYpZkAzx5WWlia8hMMBWo=;
+	s=arc-20240116; t=1761220891; c=relaxed/simple;
+	bh=vBh36brn/2ohhCsvBwa7uMXZhe6qtOYwOG6xdeMELnU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BUPJwUqmZGj/mQ8OXGJZSQB8FyiUnqSN2U0tyaAdjk/urYea0+6+modWZb6868vpOnZVNDf7+XxlibFRmnyfeb1KvHWm4ew9RYhORmblYjXbBLlXMhDbBx4jLmk7o6ecuVRKNqhi9dVxLIXvTmov/jGDaSXnLYk7Rv5JkYVuKGE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EBZCTjHu; arc=none smtp.client-ip=209.85.128.50
+	 MIME-Version; b=Ecss/wNG9kRMAciADc14YYwVmb1T5jGR8GnbgQleMmP8qYRaRIkZomKREQ190qi7lmMCQgisRHcweBwUnTIFVuQvYtL1cHPwEH6cAW3+S6K7umPilGZuWyvQpHY8NqotKeroaC8STGO15RmPxpJy5P5jD1uO7R9AJno8LbkUki4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cb44bygP; arc=none smtp.client-ip=209.85.128.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-471b80b994bso10071585e9.3
-        for <linux-i2c@vger.kernel.org>; Thu, 23 Oct 2025 05:01:22 -0700 (PDT)
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-47100eae3e5so7377195e9.1
+        for <linux-i2c@vger.kernel.org>; Thu, 23 Oct 2025 05:01:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761220881; x=1761825681; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1761220888; x=1761825688; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=aj+uhrCJRmw1vEgTPdOyAa9Y57LutVzk+TCy+Su0xUk=;
-        b=EBZCTjHuYEwsgJRT9UCqFPsl6DeOQs2oZl3fk7/6pUvicQmI9DHqyIiBldJNzvjI7n
-         tmtjMgj1beQ1h0V7oWlttJ97ZFvAhpwb+KCo5bjZmanyY+CKs1J2OH8wul0E7kx9kGdd
-         OA65yGruHKpH9xgfwHGpgsSeQDWcl0qUFb3ONUeIJb7ol5/I5MPGct5mBTeUEgXk/CNw
-         mKk/IAZTse6GZszEpU8EVVEVTCqpGc0kdHUhpd1Wyqh4S8JGg+Ro/67bdWbQbaUhhbNe
-         Oag9LidA6r1Gvn458AL5+w3I0r+Qcyv0KWRBEHtYEQRaeYdMdpRS/Wq6cJ44IlAGCOLP
-         kMjw==
+        bh=jK/cyofPdzUjDgLppGWfFBjWYkuNfB9Yg6RkdFYdOoo=;
+        b=cb44bygPL+CEK6tM0YKEEruR5YL6WELBz51eq43zCWRwXUtLNVA9mYJlDo7K6evMj0
+         FJ1J70vFthYPNPb+3Ziu8GfV0K+MFmk92nTDc+eMIoA3TTEJa1wx3lUfSvko8oG33ouq
+         fHkAX2pq6hXxbaGqpp2/ACUZduE3MMD1E2/svb/xivlX/HI+0po7crx9vXkDDtRGyAJL
+         /bn1kyxEKbZ+ZrqzwDe1EPmxzv4ohY0bj88g2M2Sx0DNvnq4ybxVHEm405FYzdHs1Dmd
+         m9Lnz79inL0m7uQApDdsEN0hilt2u19GEbdw0diHmgdpGOTz6vAK6Oq4+HZDtW8TYUsR
+         2vLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761220881; x=1761825681;
+        d=1e100.net; s=20230601; t=1761220888; x=1761825688;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=aj+uhrCJRmw1vEgTPdOyAa9Y57LutVzk+TCy+Su0xUk=;
-        b=qfHLbpfjn6n+mjwKTdyyJqE23xdVEVKN5pBY5rZ7QT39zqN8KSXd7YRPi3Ad07wvMI
-         /3HV7aRmsmn6hWER3WeoneiE6JFWbM4YVaX9SsDh4o1r2JlbJtsPimyQgeBltJoBuSKU
-         kOWN8hqvi34m8X3IHl4+kYpElVsvluhNbseVk0WYuKfRbIi1kuXuCyhyYYzc+c1V1syB
-         wFxmwRkKnJtx8bPfZkzcdJZX4qPr5zR0NVBKPX+agBDG+/yLf/ydp9KUDxDQVVQ4CeDp
-         qsAiSaJ1Feyp+ZlCOG715+0mXXxD8B7pkUmkKZ3G7ajxL2AiWpsII0KxVCU8XjdYptBa
-         Bpsg==
-X-Gm-Message-State: AOJu0Yz9jPIvSntY8FibB3fEy9k755CkKM06Jg5UFydqAKfIiPO7jStk
-	N+AwziwieDPtPdmWh6Lfe2tKhYZLJXRQ8ed23KMle84Q25ra4vXeS+K8
-X-Gm-Gg: ASbGncvmlm6a8O8fr6QgTmNHPpLG8yt0W9tqRyXUCPi55Jt0+uTUKtd3PDIVRqvN5tn
-	nSH8dIF62TwY7FPDBy6YgZxLLBmroxmOj4CictJIuXnC7LgZGK85YGgVTjGkzAUV1p9IkpP5lLS
-	x35yrDJjhrTfUbIO4JA4rDvD8f5Jut0SjJNSzVwCcGj4OhQpeZqn8F5A5Da1LOcYyy6L5JJJSi9
-	RnptF0ASEWfMuTYOb4gSvSTa1otNoIgytQz8UJVqNQbkrjFMSQz4JdX/N89jq7iWDWxeKzGJmMu
-	kdq+g83KThnZGwxWJ4I9DoNBvWviWQfDSeqchHXJA+rtMAqM4lPGx2c4FiMmNjZFrUZbAeR3sgX
-	fb/hfv+u2RK+FK89Iii6bkRFwUFSZRucSyjV9Lbin73XElpb8aQy3r2UyhEeBvvGoV341GZwU4W
-	MxbR5w
-X-Google-Smtp-Source: AGHT+IEAwBT5oX5Ux4d4Xzd53uHX6f335aO5mjfogtAT2bZBhloBaRh03Cpwn/YtNrO9Oeox9rjkYw==
-X-Received: by 2002:a05:600c:820b:b0:46e:6d5f:f59 with SMTP id 5b1f17b1804b1-47117878465mr182388585e9.4.1761220880791;
-        Thu, 23 Oct 2025 05:01:20 -0700 (PDT)
+        bh=jK/cyofPdzUjDgLppGWfFBjWYkuNfB9Yg6RkdFYdOoo=;
+        b=N/w1wsqEI5wHrOSq8UlDT9mfAFW2HTVrwOPLEZoCxjASt/YbfxEMV6QosCWDkcpCM9
+         2NaUozi1xDD30eFheDWrSUur9VrcFROTVVn0/VuRrsqkbgSRPtKsJLsGe+wXk4j4IQO6
+         HtjBksRURryASLMWKnPD3GM3DYdVPVPkg/OkTMl7HzmNgf6swtEVwLmCDHyopfKc/lew
+         hG4VSc/qGWvbrX1c39ZRzV8+8H2bHEYIWF+8Zy9AZvuHyhbNXynnwjs+JcbpxsZlMZZY
+         3yYPw5OouDUuTi+vOYCxnmP2HLmPJYVBuRba1YRIauANYmxOOvyYDUBYVovApNbF4kzB
+         Tt3A==
+X-Gm-Message-State: AOJu0YxGGy9/2oUrDy/WVPRHpyEm+2GkzlFAQxZ+DJBB4J8a/d3o2219
+	RKPd0lUPVX2JN+/FSnCm3qRnaDFG1TMSvOwce3vgC0U1h62sEfYWgNHGz5X7mAVs
+X-Gm-Gg: ASbGncsnrJOE6M9Vsu8G7IrtB5a+TG8H2HeAbG66pywObKLw/wMCBVCYKkyDgx7Dfng
+	0aN7scRU26rpDi/0bpEKbJeB6OCj+Rs4Ke3i8Q1LDtLs6jCVx8XssMqnXzrKg4PO/nmMclUWenf
+	m8cmKGD60j5oZo3QYR31hpK4pExxE4RMoVuNzEN/kuX/9jfDqIAisSnocP82aXj9gvxFS7kfEKB
+	D6fERQBJJLU739IPoxROtQt/l03/oEA6S5R+xpZEwvIo2L4nuVBUbnoFssvdEO5bJjRjZuvpLtV
+	ScGNpq8mwksQVZWiRA9vtGWbLJ5MSWc9oZMbtV9zs3nQA1j8g/uO5zjp/mKgI/pa5Bbfn0dR78n
+	pRoZ+SdHTdf0t4bB8VLCkzinKs3vt34HwexRNYXgZhDuITR8tfgBqxmRWRMVyZzAuzR0j6/XNXz
+	nfplKNjKlrBBTzlY4=
+X-Google-Smtp-Source: AGHT+IEcN8gKps1aDA2FDOlBdcaY4AnKVsS7T8mKA0uOegdRhW4g58Dhfx121HCKO/EhvjpXPHXBkA==
+X-Received: by 2002:a05:600c:3b24:b0:46e:1abc:1811 with SMTP id 5b1f17b1804b1-47117912b6amr169488155e9.27.1761220888066;
+        Thu, 23 Oct 2025 05:01:28 -0700 (PDT)
 Received: from shift.. ([86.124.201.90])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-475c43900e1sm109604435e9.17.2025.10.23.05.01.19
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-475c43900e1sm109604435e9.17.2025.10.23.05.01.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Oct 2025 05:01:20 -0700 (PDT)
+        Thu, 23 Oct 2025 05:01:27 -0700 (PDT)
 From: Cezar Chiru <chiru.cezar.89@gmail.com>
 To: andi.shyti@kernel.org,
 	wsa+renesas@sang-engineering.com
 Cc: linux-i2c@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Cezar Chiru <chiru.cezar.89@gmail.com>,
-	Andy Shevchenko <andriy.shevchenko@intel.com>
-Subject: [PATCH v9 1/3] i2c: pcf8584: Move 'ret' variable inside for loop, goto out if ret < 0.
-Date: Thu, 23 Oct 2025 15:00:41 +0300
-Message-ID: <20251023120043.8661-2-chiru.cezar.89@gmail.com>
+	Cezar Chiru <chiru.cezar.89@gmail.com>
+Subject: [PATCH v9 2/3] i2c: pcf8584: Make pcf_doAddress() function void
+Date: Thu, 23 Oct 2025 15:00:42 +0300
+Message-ID: <20251023120043.8661-3-chiru.cezar.89@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251023120043.8661-1-chiru.cezar.89@gmail.com>
 References: <20251023120043.8661-1-chiru.cezar.89@gmail.com>
@@ -94,64 +93,50 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Require spaces around '=' and '<'. Add spaces around binary operators.
-Enforce error fixing based on checkpatch.pl output on file.
-Move 'ret' variable inside for loop. Then check if (ret < 0) goto out. This
-improves usage of ret variable.
+Change pcf_doAddress() function's type from int to void as it always
+returns 0. This way there is no need for extra assignment and extra checks
+when the function is called.
+Remove assignment of pcf_doAddress() and replace it with a simple function
+call.
 
 Signed-off-by: Cezar Chiru <chiru.cezar.89@gmail.com>
 Suggested-by: Andi Shyti <andi.shyti@kernel.org>
-Suggested-by: Andy Shevchenko <andriy.shevchenko@intel.com>
 ---
- drivers/i2c/algos/i2c-algo-pcf.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ drivers/i2c/algos/i2c-algo-pcf.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/i2c/algos/i2c-algo-pcf.c b/drivers/i2c/algos/i2c-algo-pcf.c
-index 41a81d37e880..06b9fd355bff 100644
+index 06b9fd355bff..6352314e48ed 100644
 --- a/drivers/i2c/algos/i2c-algo-pcf.c
 +++ b/drivers/i2c/algos/i2c-algo-pcf.c
-@@ -183,7 +183,7 @@ static int pcf_sendbytes(struct i2c_adapter *i2c_adap, const char *buf,
- 	struct i2c_algo_pcf_data *adap = i2c_adap->algo_data;
- 	int wrcount, status, timeout;
-
--	for (wrcount=0; wrcount<count; ++wrcount) {
-+	for (wrcount = 0; wrcount < count; ++wrcount) {
- 		i2c_outb(adap, buf[wrcount]);
- 		timeout = wait_for_pin(adap, &status);
- 		if (timeout) {
-@@ -272,7 +272,7 @@ static int pcf_xfer(struct i2c_adapter *i2c_adap,
- 	struct i2c_algo_pcf_data *adap = i2c_adap->algo_data;
- 	struct i2c_msg *pmsg;
- 	int i;
--	int ret=0, timeout, status;
-+	int timeout, status;
-
- 	if (adap->xfer_begin)
- 		adap->xfer_begin(adap->data);
-@@ -284,9 +284,10 @@ static int pcf_xfer(struct i2c_adapter *i2c_adap,
- 		goto out;
- 	}
-
--	for (i = 0;ret >= 0 && i < num; i++) {
--		pmsg = &msgs[i];
-+	for (i = 0; i < num; i++) {
-+		int ret;
-
-+		pmsg = &msgs[i];
- 		ret = pcf_doAddress(adap, pmsg);
-
+@@ -253,7 +253,7 @@ static int pcf_readbytes(struct i2c_adapter *i2c_adap, char *buf,
+ }
+ 
+ 
+-static int pcf_doAddress(struct i2c_algo_pcf_data *adap,
++static void pcf_doAddress(struct i2c_algo_pcf_data *adap,
+ 			 struct i2c_msg *msg)
+ {
+ 	unsigned char addr = i2c_8bit_addr_from_msg(msg);
+@@ -261,8 +261,6 @@ static int pcf_doAddress(struct i2c_algo_pcf_data *adap,
+ 	if (msg->flags & I2C_M_REV_DIR_ADDR)
+ 		addr ^= 1;
+ 	i2c_outb(adap, addr);
+-
+-	return 0;
+ }
+ 
+ static int pcf_xfer(struct i2c_adapter *i2c_adap,
+@@ -288,7 +286,7 @@ static int pcf_xfer(struct i2c_adapter *i2c_adap,
+ 		int ret;
+ 
+ 		pmsg = &msgs[i];
+-		ret = pcf_doAddress(adap, pmsg);
++		pcf_doAddress(adap, pmsg);
+ 
  		/* Send START */
-@@ -321,6 +322,9 @@ static int pcf_xfer(struct i2c_adapter *i2c_adap,
- 			ret = pcf_sendbytes(i2c_adap, pmsg->buf, pmsg->len,
- 					    (i + 1 == num));
- 		}
-+
-+		if (ret < 0)
-+			goto out;
- 	}
-
- out:
---
+ 		if (i == 0)
+-- 
 2.43.0
 
 
