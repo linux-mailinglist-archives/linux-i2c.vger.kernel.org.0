@@ -1,54 +1,55 @@
-Return-Path: <linux-i2c+bounces-13742-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13743-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 006B6C00957
-	for <lists+linux-i2c@lfdr.de>; Thu, 23 Oct 2025 12:53:47 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id F29AAC00987
+	for <lists+linux-i2c@lfdr.de>; Thu, 23 Oct 2025 12:58:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B938F1A07FD3
-	for <lists+linux-i2c@lfdr.de>; Thu, 23 Oct 2025 10:54:11 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E312C4E7FBB
+	for <lists+linux-i2c@lfdr.de>; Thu, 23 Oct 2025 10:58:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53FBA30ACF1;
-	Thu, 23 Oct 2025 10:53:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5761F309DC4;
+	Thu, 23 Oct 2025 10:58:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LB1JrjFr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EhRmCHL9"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CADA2F0670;
-	Thu, 23 Oct 2025 10:53:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C44543054D3;
+	Thu, 23 Oct 2025 10:58:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761216814; cv=none; b=dAcHKjHNu+Xwao1QM8Dz4ejoW2Bxl4j+ivPXxizpcxWiJuGW52B04/0H+cZRSfpxCSWurh9HbQlaqPbhaRMjxxVMuiQH2pPNPJRws1ydGy8Y6deMN9KJA0THgveAFtRR9/+Ofqf///uj3ohhiEC3DFnHRfmKtVofL6aHRp8KvaY=
+	t=1761217132; cv=none; b=SOJSoI2v8uPO1BtNUaotPsp7Yq9NHfF/hIWsuaF3EaQXuLj0CMFDI6pz5+/2clM4PVb0sl5I31YLh0lBrioG5Q54YNviL3zygWdQOQl33oXwj5T1Zk11hOAR366oJ92FP5c1TQvQEVJmR6FJJHGIO8z3OptDN1y68NYYhHMicfI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761216814; c=relaxed/simple;
-	bh=GR0KQXu3IcBgttzBFIK3m0UxoJSPmogpHAoOEO22v3Y=;
+	s=arc-20240116; t=1761217132; c=relaxed/simple;
+	bh=R6UW0ZVQUKE/m2NNBlAe9KC9Lu26GRWU78BmPRkjRfQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OP+LTCoxgC+c/k4O4VemIYdj0zUDmF9wADbVv8159Eyy0gMQLa/PXfsxntIrFrcDiSrYpyOpmRPHTMFGBDNf21FrMykKRhJDLeomQ0KAYbzI2ng76OQ716HYKGrIbnxf9hsNoQDpQ6WiTq+0qYBdHQ7QAfc0+/qwnFBZiIcwpvA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LB1JrjFr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A103C4CEE7;
-	Thu, 23 Oct 2025 10:53:32 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=AAA5DID/ZES5UFdRBAlo+zFQL/ouo4h0nWTWXFc5PB/VRAuCWrt6dDQbPFDx2p1+oU1sWDK1bqIg0Nq+4L4xhYZtxdtrd3h7fatq9mmgEW4ZUWbQHwe8HtqzU5zZAIA6TrcOT2JNIAgfDkTNZYOHfmAJofpOFyT3JMU3MOi3xHI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EhRmCHL9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE116C4CEE7;
+	Thu, 23 Oct 2025 10:58:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761216813;
-	bh=GR0KQXu3IcBgttzBFIK3m0UxoJSPmogpHAoOEO22v3Y=;
+	s=k20201202; t=1761217132;
+	bh=R6UW0ZVQUKE/m2NNBlAe9KC9Lu26GRWU78BmPRkjRfQ=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LB1JrjFr8IxukftDP18sfUg5iYVH3C+7YIHfBWhUHtXL0cHAaiK/4/xoRE8SWcnae
-	 XD0/ycdFYd2Pt3eY8e7fDsHvn4M+6vyr1QDaoicWSkdQswItRyClL8sjFscmz9ECK3
-	 LeLSVYmjA85Y51JW/Plss+aBkC7nIGUOP0qwfel69XkBfWV/Ook4UL9SRfGjP6jJST
-	 x1ZHN8XrqHtKwoS173YzNVbvz2jvRmT2+Pl9Ca2WpKRYz2qtFl8UL7i80h0a6lZN0h
-	 Pv9qLAZb8HmuNMJZUGpj/ExqXQH4JdCww9lQpE/B1B+LRI8A0dSjd4oXIGMXKaC4ZD
-	 k2MtPyPkwy8ig==
-Date: Thu, 23 Oct 2025 12:53:30 +0200
+	b=EhRmCHL9MtHY2uK7BccTtMz3HJLasv6irs4GVrest4QPeIwY0nG0y4NJR2oDl1W/a
+	 Uztx+EAJpAJd0SyYMXWbc+TlL/PamoyQlCbpH1bW3Yr0ubJ9E70UuN+AvFOUJIY4Si
+	 RQ2aj4LSUCHcuSSLN4uTGuc/1p8B4Z5MsHQ0+i30rVS+SU+cR28thnYKGGtOrO+no4
+	 HmEF3ArxkJM7J6t/jkNuJygz47cbgWVZ0kijhXa7LTX5iEzQ+X2zH2gZaUh2rJL2LP
+	 9DHI3zLz9o7ayMbMbx3e00wbJTIVQDZZ+70d3mvK64mIio7NqLAw+jp342EPaZ0pld
+	 41tS0bLE7WQpA==
+Date: Thu, 23 Oct 2025 12:58:49 +0200
 From: Andi Shyti <andi.shyti@kernel.org>
-To: Cezar Chiru <chiru.cezar.89@gmail.com>
-Cc: wsa+renesas@sang-engineering.com, linux-i2c@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: pcf8584: Make pcf_doAddress() function void
-Message-ID: <6pkzvfpzkg6mriqs7flbs5a2534tc6pk4ujs77h625xwlly5hu@fxxotb4oeh7q>
-References: <20251022015405.7082-1-chiru.cezar.89@gmail.com>
+To: Ma Ke <make24@iscas.ac.cn>
+Cc: syniurge@gmail.com, shyam-sundar.s-k@amd.com, wsa@kernel.org, 
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, akpm@linux-foundation.org, 
+	stable@vger.kernel.org
+Subject: Re: [PATCH v3] i2c: fix reference leak in MP2 PCI device
+Message-ID: <jlvcp2cb2cpdjzkfet5nosusjuvbzvil3zf7csbdfjan3pkidn@jdrneilgrmz7>
+References: <20251022095402.8846-1-make24@iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -57,60 +58,45 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251022015405.7082-1-chiru.cezar.89@gmail.com>
+In-Reply-To: <20251022095402.8846-1-make24@iscas.ac.cn>
 
-Hi Cezar,
+Hi,
 
-thanks for taking care of this.
+I'm sorry I didn't follow up on your last comment. Thanks a lot
+for resending it.
 
-On Wed, Oct 22, 2025 at 04:54:05AM +0300, Cezar Chiru wrote:
-> Change pcf_doAddress() function's type from int to void as it is always
+...
 
-The "is" is not needed.
-
-> returns 0. This way there is no need for extra assignment and extra checks
-> when the function is called.
-> Remove assignment of pcf_doAddress() and replace it with a simple function
-> call.
-> 
-> Signed-off-by: Cezar Chiru <chiru.cezar.89@gmail.com>
-
-It's not that I care much myself, but normally when someone
-suggests a change, you should recognize it with "Suggested-by".
-
-Please insert this patch in the same series with your
-
-"[PATCH v8 1/1] i2c: pcf8584: Move 'ret' ... "
-
-patch.
-
-> ---
->  drivers/i2c/algos/i2c-algo-pcf.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/i2c/algos/i2c-algo-pcf.c b/drivers/i2c/algos/i2c-algo-pcf.c
-> index d1b0e55fd871..7e4a6d19494b 100644
-> --- a/drivers/i2c/algos/i2c-algo-pcf.c
-> +++ b/drivers/i2c/algos/i2c-algo-pcf.c
-> @@ -253,7 +253,7 @@ static int pcf_readbytes(struct i2c_adapter *i2c_adap, char *buf,
->  }
+> diff --git a/drivers/i2c/busses/i2c-amd-mp2-pci.c b/drivers/i2c/busses/i2c-amd-mp2-pci.c
+> index ef7370d3dbea..60edbabc2986 100644
+> --- a/drivers/i2c/busses/i2c-amd-mp2-pci.c
+> +++ b/drivers/i2c/busses/i2c-amd-mp2-pci.c
+> @@ -458,13 +458,16 @@ struct amd_mp2_dev *amd_mp2_find_device(void)
+>  {
+>  	struct device *dev;
+>  	struct pci_dev *pci_dev;
+> +	struct amd_mp2_dev *mp2_dev;
 >  
+>  	dev = driver_find_next_device(&amd_mp2_pci_driver.driver, NULL);
+>  	if (!dev)
+>  		return NULL;
 >  
-> -static int pcf_doAddress(struct i2c_algo_pcf_data *adap,
-> +static void pcf_doAddress(struct i2c_algo_pcf_data *adap,
+>  	pci_dev = to_pci_dev(dev);
+> -	return (struct amd_mp2_dev *)pci_get_drvdata(pci_dev);
+> +	mp2_dev = (struct amd_mp2_dev *)pci_get_drvdata(pci_dev);
+> +	put_device(dev);
+> +	return mp2_dev;
 
-while you are at this you can use the chance to rename this
-function to a more kernel style naming. E.g.:
+I still hold the same opinion, but, it's anyway a small change
+and the difference is trivial.
 
-	pcf_send_address()
+Applied to i2c/i2c-host-fixes. I will include this patch in the
+next week's pull request because I want to keep it a bit longer
+for testing.
 
-I would accept it in the same patch, but if you prefer you can
-send it as a 3/3 patch. Your choice.
-
-In any case, thanks for these cleanups!
-
+Thanks,
 Andi
 
->  			 struct i2c_msg *msg)
->  {
+>  }
+>  EXPORT_SYMBOL_GPL(amd_mp2_find_device);
 
