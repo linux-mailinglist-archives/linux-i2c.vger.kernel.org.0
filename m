@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-13773-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13774-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B31BAC05062
-	for <lists+linux-i2c@lfdr.de>; Fri, 24 Oct 2025 10:20:54 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 72748C051D0
+	for <lists+linux-i2c@lfdr.de>; Fri, 24 Oct 2025 10:43:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DBE463B3B34
-	for <lists+linux-i2c@lfdr.de>; Fri, 24 Oct 2025 08:14:30 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 9FF9456681C
+	for <lists+linux-i2c@lfdr.de>; Fri, 24 Oct 2025 08:38:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBC7A302158;
-	Fri, 24 Oct 2025 08:14:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41B0230649F;
+	Fri, 24 Oct 2025 08:35:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EGJDGUUc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DogRfu03"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DC2C30215F;
-	Fri, 24 Oct 2025 08:14:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFA34306490;
+	Fri, 24 Oct 2025 08:35:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761293665; cv=none; b=R2ZmSYm5TE1fyqer43GarLdVReLHDoUq6BAZ2DmTl3lMDxfbKzfJyjGNM8NWV2AvnQGMHiio0qBagWlcTy3zLjaUCLYZDqG+CnXPOdWDdg+rnFkPL8BIU7Xt6+FbD/CqPZIwg/8A2SLYusFva+dI/xzaNLTj+JW5jY29ul77bwk=
+	t=1761294945; cv=none; b=NEgWtqlyF28r7vF6t0+TzC5oFRL+GAu4faNpswz02Ga7De0xWlLDa/HlkX2OUM8gX/N49krnz/yOT2bp0pSXcFy7QhTuytipmDolCWZuWgng18RDvWIe6KDNvg1Lav4kRHnIPfnQE6hMEaamSfJyb/JEclexNGXfuCxqlflE7+c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761293665; c=relaxed/simple;
-	bh=K66RAMkDTLgivI2eqyzcKzKIclrQDUQ6cSrJ0fMWNew=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=cfL2xvpaZqi2kTK7EyEvWa4TMFKUb6iQh9XE5ktpIOHbCZiDChFdDlw6lg6xT/vIEg4HWW2a6gfQSGeDK+2OwEcJP4O39GzuWh8EiBONEKX9rX5NdG/xE36gdvSQqa7tIN9fxm1PboxprejVz6lAltuh3eHUPFjNg5eTq7mJAVU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EGJDGUUc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52F6FC4CEFB;
-	Fri, 24 Oct 2025 08:14:21 +0000 (UTC)
+	s=arc-20240116; t=1761294945; c=relaxed/simple;
+	bh=9c2iRB5neiNVOA3946Sm/qhXa8txadLCyBjjks59Ijc=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=mkpsoNPdeyJsDRBRDWTLQy1CVsf08gtH0tCYPVkesrbZqPyLJKVezYDa8Z3SKlp39xNiT68Hd2uwfIH+k9BCKW73IYlBUNJieBBsSrs3WVRkEWfh1+8LBhjR/Sf2kfRj44Xr1Dpg4jxuJVhH7iz1Udfuyi8r1VzGFBf6yTBeVMc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DogRfu03; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AA94C4CEF1;
+	Fri, 24 Oct 2025 08:35:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761293665;
-	bh=K66RAMkDTLgivI2eqyzcKzKIclrQDUQ6cSrJ0fMWNew=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=EGJDGUUc4qrfSuggmjx1v1IQGvQxH+AMh0mKWpZExQE619eKv1lb9bDwVm6bCLm0s
-	 AJ1yy1lFCMjhWZht1wbHJuujsz/VCfsVlm4gDk27x8OtO6zpTwqtvvdKUNPql2PJpF
-	 5VKJR2ONDax/8AbvBf6zGNlE2fYF5CgJ+8E2DQNG3gzoxYYrrF3HJHu6RRKYxX9u6j
-	 ZA4jcgkDrEPijs24pwtPxMBGNj5EDpLeXMgeYMgq43QNgjIxrWhTEhQYG3u3UgBPQf
-	 62Bu7UOtM9KTZvcVnztz2Ci61yYjQptyfK0bobT4r8JEpAIIBaV3G25IeN6Wyek4Wj
-	 IOa4VnGn6nPtA==
-Message-ID: <0b76f196-f642-4991-ad5c-717c23938421@kernel.org>
-Date: Fri, 24 Oct 2025 10:14:19 +0200
+	s=k20201202; t=1761294944;
+	bh=9c2iRB5neiNVOA3946Sm/qhXa8txadLCyBjjks59Ijc=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=DogRfu03hCRd5Qkw3C7tdCB0tWuK2TpzQHz2KU1PHJbzPqtjDK3HVNHkhFJMwY5XU
+	 WjrRvzslo/IDNPJXfx71ILowf7e5YWczKqA8H9LmfmlWfbP0meUo4CA68z1zEihAwl
+	 22t5Ex86O8NFvLIp2BMz8c12RR0dZpinXKT6aoUrC3GcfI8Xnx3MBBIhbpnjyfgILw
+	 Ni8NUl1kxmFqYXrZh8++ZcV/RHV/31P3h16qyorEKQvUepCPu7tDFQXvauuyOcigGk
+	 7O6rBS10D9ZLIChw6hpgaErUKxbbupXQV0JZl82Kqr5PjJj8f4mzBTBMc/hqMkB+Cl
+	 tU7bZT8MtT15Q==
+Message-ID: <c20e0b8a-ec59-4359-ba5e-1a616fde9894@kernel.org>
+Date: Fri, 24 Oct 2025 10:35:38 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -52,8 +52,10 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v20 1/4] dt-bindings: i2c: Split AST2600 binding into a
  new YAML
-To: Ryan Chen <ryan_chen@aspeedtech.com>, benh@kernel.crashing.org,
- joel@jms.id.au, andi.shyti@kernel.org, jk@codeconstruct.com.au,
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Jeremy Kerr <jk@codeconstruct.com.au>,
+ Ryan Chen <ryan_chen@aspeedtech.com>
+Cc: benh@kernel.crashing.org, joel@jms.id.au, andi.shyti@kernel.org,
  robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
  andrew@codeconstruct.com.au, p.zabel@pengutronix.de,
  andriy.shevchenko@linux.intel.com, naresh.solanki@9elements.com,
@@ -62,7 +64,10 @@ To: Ryan Chen <ryan_chen@aspeedtech.com>, benh@kernel.crashing.org,
  linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
 References: <20251021013548.2375190-1-ryan_chen@aspeedtech.com>
  <20251021013548.2375190-2-ryan_chen@aspeedtech.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+ <20251024-dark-ringtail-of-defiance-1daabd@kuoka>
+ <2939cae6-2e8a-4528-8e27-8c932e2f82de@kernel.org>
+ <bf3d6690b9124ecf74df6c0f9f1c0f72ae1db9f7.camel@codeconstruct.com.au>
+ <8341a903-639b-471a-8425-a98c473f5ab0@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -107,122 +112,43 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20251021013548.2375190-2-ryan_chen@aspeedtech.com>
+In-Reply-To: <8341a903-639b-471a-8425-a98c473f5ab0@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 21/10/2025 03:35, Ryan Chen wrote:
-> The AST2600 I2C controller is a new hardware design compared to the
-> I2C controllers in previous ASPEED SoCs (e.g., AST2400, AST2500).
+On 24/10/2025 10:06, Krzysztof Kozlowski wrote:
+> On 24/10/2025 09:56, Jeremy Kerr wrote:
+>> Hi Krzysztof,
+>>
+>>> Although now I saw next patch, so clearly this commit is incomplete.
+>>
+>> The split that Ryan has done here - by shifting to an identical separate
+>> binding, then making the changes explicit - allows us to review the
+>> actual changes without losing them in the move. Sounds like a benefit to
+>> me?
 > 
-> It introduces new features such as:
->  - A redesigned register layout
->  - Separation between controller and target mode registers
->  - Transfer mode selection (byte, buffer, DMA)
->  - Support for a shared global register block for configuration
+> Not related. I commented that rationale is incomplete. We do not move
+> parts of bindings because new device is someway different. There are
+> hundreds of bindings which cover different devices. We move them because
+> the binding is different.
 > 
-> Due to these fundamental differences, maintaining a separate
-> devicetree binding file for AST2600 helps to clearly distinguish
-> the hardware capabilities and configuration options from the older
-> controllers.
+>>
+>>> You just need allOf:if:then: section to narrow the
+>>> constraints/presence of properties.
+>>
+>> That seems like a more complex approach. This is separate IP from the
+>> 2500 controllers, wouldn't that warrant a new binding spec?
+>>
 > 
-> Signed-off-by: Ryan Chen <ryan_chen@aspeedtech.com>
-> ---
->  .../devicetree/bindings/i2c/aspeed,i2c.yaml   |  3 +-
->  .../devicetree/bindings/i2c/ast2600-i2c.yaml  | 66 +++++++++++++++++++
->  2 files changed, 67 insertions(+), 2 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/i2c/ast2600-i2c.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml b/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml
-> index 5b9bd2feda3b..d4e4f412feba 100644
-> --- a/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml
-> @@ -4,7 +4,7 @@
->  $id: http://devicetree.org/schemas/i2c/aspeed,i2c.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
->  
-> -title: ASPEED I2C on the AST24XX, AST25XX, and AST26XX SoCs
-> +title: ASPEED I2C on the AST24XX, AST25XX SoCs
->  
->  maintainers:
->    - Rayn Chen <rayn_chen@aspeedtech.com>
-> @@ -17,7 +17,6 @@ properties:
->      enum:
->        - aspeed,ast2400-i2c-bus
->        - aspeed,ast2500-i2c-bus
-> -      - aspeed,ast2600-i2c-bus
->  
->    reg:
->      minItems: 1
-> diff --git a/Documentation/devicetree/bindings/i2c/ast2600-i2c.yaml b/Documentation/devicetree/bindings/i2c/ast2600-i2c.yaml
-
-Why completely breaking naming? Please follow writing bindings carefully.
-
-> new file mode 100644
-> index 000000000000..6ddcec5decdc
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/i2c/ast2600-i2c.yaml
-> @@ -0,0 +1,66 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/i2c/ast2600-i2c.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: ASPEED I2C on the AST26XX SoCs
-> +
-> +maintainers:
-> +  - Ryan Chen <ryan_chen@aspeedtech.com>
-> +
-> +allOf:
-> +  - $ref: /schemas/i2c/i2c-controller.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - aspeed,ast2600-i2c-bus
-> +
-> +  reg:
-> +    minItems: 1
-
-Why?
-
-> +    items:
-> +      - description: address offset and range of bus
-> +      - description: address offset and range of bus buffer
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +    description:
-> +      root clock of bus, should reference the APB
-> +      clock in the second cell
-
-That's not even correct.Either root clock or APB clock, you cannot have
-both. Unless "root clock" is not "clock" but then it is just confusing.
-Drop description and fix the constraints.
-
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-> +  bus-frequency:
-> +    minimum: 500
-> +    maximum: 4000000
-> +    default: 100000
-> +    description: frequency of the bus clock in Hz defaults to 100 kHz when not
-> +      specified
-
-Don't repeat constraints in free form text.
-
-> +
-> +required:
-> +  - reg
-> +  - compatible
+> Not much different than every other soc. All of them are separate IPs.
+> Look at any Samsung, NXP or Qualcomm binding. Separate IPs.
 
 
+So let the move happen, but please explain in the commit msg that
+devices are completely different - nothing in common - and thus the
+binding will be different. We indeed do not keep completely different
+devices in one binding, but based on commit msg I had impression this
+was just major block upgrade.
 
 Best regards,
 Krzysztof
