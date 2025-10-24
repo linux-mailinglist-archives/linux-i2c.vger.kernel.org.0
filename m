@@ -1,444 +1,104 @@
-Return-Path: <linux-i2c+bounces-13779-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13780-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7782BC05436
-	for <lists+linux-i2c@lfdr.de>; Fri, 24 Oct 2025 11:12:24 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D315C0595E
+	for <lists+linux-i2c@lfdr.de>; Fri, 24 Oct 2025 12:31:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0417E18997AE
-	for <lists+linux-i2c@lfdr.de>; Fri, 24 Oct 2025 09:11:15 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id A13E74FBBE7
+	for <lists+linux-i2c@lfdr.de>; Fri, 24 Oct 2025 10:30:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47B933081D0;
-	Fri, 24 Oct 2025 09:10:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8323A3101B8;
+	Fri, 24 Oct 2025 10:30:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l/d2Y+U8"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12D99302162
-	for <linux-i2c@vger.kernel.org>; Fri, 24 Oct 2025 09:10:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D65A72C08C5;
+	Fri, 24 Oct 2025 10:30:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761297048; cv=none; b=fkOG2DQxZymS2OXzC2WNGHLNq4QaGxNLL7GMF9arMbA6VTSAviIYtZhubU0nZ7pFjE6AFvD05cQgs/fzWBH/mniCwJ6F6rZ5VdDAisj6VqJqLUFNLUGe5eGDuz+pRY426B6D0kRe2YV9/geAqsBhhzZ8TMFfYNL+6ajSrBu2OvA=
+	t=1761301843; cv=none; b=WqszXQ8Y1GDhUpTUg/4Blg8h60kIOww2lHd7bdc1E5ECjLi8LEM9hShjyATOBDbKwo7ObuBo6lNVlH1Pn3aHzwn3zx3999FjBRwTzxlOKoFCew6LNvvc7Y5CQrPHfPO6S83gYCcNTy9zDD3g3bN1XJDkiBR0yyOz3t4GtdNYIOY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761297048; c=relaxed/simple;
-	bh=sNmGbJU/a46FObuF0/x2XYSLbmOxGxhsNF5BG1sguIk=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=VNfMnqhDIRYqYY3tXlXaUgk/DExcXkd53904nyoMQp4SrKWwtYJnyO5hvRvqxjAe0jbH/RsN9R9qdNWF6NJtjXeUB3Ks+LeoxMGV+Y6SuP1hdTKjOdGsfXVwXvCKAna/dKbk0nmttwRDx7LyBpWko2+zNNljfWLLzODgahvrfvQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1vCDoK-0000c4-OH; Fri, 24 Oct 2025 11:10:12 +0200
-Received: from lupine.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::4e] helo=lupine)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1vCDoH-005CZo-1j;
-	Fri, 24 Oct 2025 11:10:09 +0200
-Received: from pza by lupine with local (Exim 4.98.2)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1vCDoH-000000004Sc-1vMT;
-	Fri, 24 Oct 2025 11:10:09 +0200
-Message-ID: <c8dda20e51a04367586308d1e8581a76aed9e944.camel@pengutronix.de>
-Subject: Re: [PATCH v20 3/4] i2c: ast2600: Add controller driver for new
- register layout
-From: Philipp Zabel <p.zabel@pengutronix.de>
-To: Ryan Chen <ryan_chen@aspeedtech.com>, benh@kernel.crashing.org, 
-	joel@jms.id.au, andi.shyti@kernel.org, jk@codeconstruct.com.au,
- robh@kernel.org, 	krzk+dt@kernel.org, conor+dt@kernel.org,
- andrew@codeconstruct.com.au, 	andriy.shevchenko@linux.intel.com,
- naresh.solanki@9elements.com, 	linux-i2c@vger.kernel.org,
- openbmc@lists.ozlabs.org, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org, 
-	linux-kernel@vger.kernel.org
-Date: Fri, 24 Oct 2025 11:10:09 +0200
-In-Reply-To: <20251021013548.2375190-4-ryan_chen@aspeedtech.com>
-References: <20251021013548.2375190-1-ryan_chen@aspeedtech.com>
-	 <20251021013548.2375190-4-ryan_chen@aspeedtech.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.1-1 
+	s=arc-20240116; t=1761301843; c=relaxed/simple;
+	bh=xjBMkmI+qsDoGp9ZiRzBUp/jILZSgk47twlvE8podR4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=V3tLwzIjbKeEYPSi2uB1jC8xElcJElsFUQBW+bL3lag82L5dWdGogO0j2ND7PJNmpxax1BRahWTKnVW+FwatlmBO0j0TZaCR8rUzoFUPWoMS+UDuM5Akun5De4LI/orJEy7f4PX/+EC41MlB1w3ZYxwADrK6fwIjDdmBSK+BABM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l/d2Y+U8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E75CC4CEF1;
+	Fri, 24 Oct 2025 10:30:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761301842;
+	bh=xjBMkmI+qsDoGp9ZiRzBUp/jILZSgk47twlvE8podR4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=l/d2Y+U8bQs8VF+XsPwC/lo+bxBE0j4eWS6VDHNCD/dOyGEFM7pOVi7s1xB8wyT1F
+	 jv0kcNfIyneAU7DFc2XMuu8oHJ2C93dqlydWRrXYT3RCBqDbolkiQ18EsFfqCwzdIT
+	 F0FJ+u2jbBRNARJVywQ0ZMr1PM6LZQ50TTD9W4llmkHp0cxkQM8R7YTAZNZuhKj472
+	 K02nhKLn9f/Q1d19EUPlbhQT59235yFCKn8XDWmWaJOjbnUv34C0E0GbdT7yY2B8c1
+	 q4jVSAnw+7Qfl9JCs14YGXOOwUUitTY/lsolUgoznKOAtNMsr23PjYx6i1nIOnN4f/
+	 YsZZGbsmS20jw==
+Date: Fri, 24 Oct 2025 12:30:37 +0200
+From: Andi Shyti <andi.shyti@kernel.org>
+To: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Stephen Boyd <sboyd@kernel.org>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	Andrzej Hajda <andrzej.hajda@intel.com>, Robert Foss <rfoss@kernel.org>, Vinod Koul <vkoul@kernel.org>, 
+	Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>, Guenter Roeck <linux@roeck-us.net>, 
+	Jonathan Cameron <jic23@kernel.org>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
+	Georgi Djakov <djakov@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Joerg Roedel <joro@8bytes.org>, Jassi Brar <jassisinghbrar@gmail.com>, 
+	Mauro Carvalho Chehab <mchehab@kernel.org>, Lee Jones <lee@kernel.org>, 
+	Miquel Raynal <miquel.raynal@bootlin.com>, Richard Weinberger <richard@nod.at>, 
+	Vignesh Raghavendra <vigneshr@ti.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Johannes Berg <johannes@sipsolutions.net>, Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
+	Manivannan Sadhasivam <mani@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
+	Kishon Vijay Abraham I <kishon@kernel.org>, Sebastian Reichel <sre@kernel.org>, 
+	Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, Mark Brown <broonie@kernel.org>, 
+	Mathieu Poirier <mathieu.poirier@linaro.org>, Philipp Zabel <p.zabel@pengutronix.de>, 
+	Olivia Mackall <olivia@selenic.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org, dmaengine@vger.kernel.org, 
+	linux-fpga@vger.kernel.org, linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org, linux-input@vger.kernel.org, 
+	linux-pm@vger.kernel.org, iommu@lists.linux.dev, linux-media@vger.kernel.org, 
+	linux-mtd@lists.infradead.org, netdev@vger.kernel.org, linux-wireless@vger.kernel.org, 
+	linux-pci@vger.kernel.org, linux-phy@lists.infradead.org, linux-pwm@vger.kernel.org, 
+	linux-remoteproc@vger.kernel.org, linux-crypto@vger.kernel.org, linux-sound@vger.kernel.org, 
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Remove extra blank lines
+Message-ID: <fncqrwr6pi3ttxkf44hncy35ogxqdvql52hdcycq4yakbkeose@gv6lxr6a4uri>
+References: <20251023143957.2899600-1-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251023143957.2899600-1-robh@kernel.org>
 
-On Di, 2025-10-21 at 09:35 +0800, Ryan Chen wrote:
-> Add i2c-ast2600 new register mode driver to support AST2600
-> i2c new register mode. This i2c-ast2600 new driver and the
-> legacy i2c-aspeed driver both match the same compatible string
-> "aspeed,ast2600-i2c-bus" because they target the same I2C
-> controller IP on AST2600. However, AST2600 SoCs may configure
-> the controller instances to operate either in the legacy
-> register layout or the new layout (via global register).
-> The new register mode support following.
->=20
-> - Add new clock divider option for more flexible and accurate
->  clock rate generation
-> - Add tCKHighMin timing to guarantee SCL high pulse width.
-> - Add support dual pool buffer mode, split 32 bytes pool buffer
->  of each device into 2 x 16 bytes for Tx and Rx individually.
-> - Increase DMA buffer size to 4096 bytes and support byte alignment.
-> - Re-define the base address of BUS1 ~ BUS16 and Pool buffer.
-> - Re-define registers for separating controller and target
->  mode control.
-> - Support 4 individual DMA buffers for controller Tx and Rx,
->  target Tx and Rx.
->=20
-> And following is new register set for package transfer sequence.
-> - New Master operation mode:
->   S -> Aw -> P
->   S -> Aw -> TxD -> P
->   S -> Ar -> RxD -> P
->   S -> Aw -> TxD -> Sr -> Ar -> RxD -> P
-> - Bus SDA lock auto-release capability for new controller DMA
->  command mode.
-> - Bus auto timeout for new controller/target DMA mode.
->=20
-> Since the register layout is selected via a global register at
-> runtime and both drivers bind to the same compatible string,
-> this patch defines the driver selection at build-time using
-> Kconfig, ensuring that only one driver is compiled into the
-> kernel. This approach avoids ambiguity and ensures consistent
-> behavior for each platform configuration.
->=20
-> The following is two versus register layout.
-> Old register mode:
-> {I2CD00}: Function Control Register
-> {I2CD04}: Clock and AC Timing Control Register
-> {I2CD08}: Clock and AC Timing Control Register
-> {I2CD0C}: Interrupt Control Register
-> {I2CD10}: Interrupt Status Register
-> {I2CD14}: Command/Status Register
-> {I2CD18}: Slave Device Address Register
-> {I2CD1C}: Pool Buffer Control Register
-> {I2CD20}: Transmit/Receive Byte Buffer Register
-> {I2CD24}: DMA Mode Buffer Address Register
-> {I2CD28}: DMA Transfer Length Register
-> {I2CD2C}: Original DMA Mode Buffer Address Setting
-> {I2CD30}: Original DMA Transfer Length Setting and Final Status
->=20
-> New Register mode
-> {I2CC00}: Master/Slave Function Control Register
-> {I2CC04}: Master/Slave Clock and AC Timing Control Register
-> {I2CC08}: Master/Slave Transmit/Receive Byte Buffer Register
-> {I2CC0C}: Master/Slave Pool Buffer Control Register
-> {I2CM10}: Master Interrupt Control Register
-> {I2CM14}: Master Interrupt Status Register
-> {I2CM18}: Master Command/Status Register
-> {I2CM1C}: Master DMA Buffer Length Register
-> {I2CS20}: Slave~ Interrupt Control Register
-> {I2CS24}: Slave~ Interrupt Status Register
-> {I2CS28}: Slave~ Command/Status Register
-> {I2CS2C}: Slave~ DMA Buffer Length Register
-> {I2CM30}: Master DMA Mode Tx Buffer Base Address
-> {I2CM34}: Master DMA Mode Rx Buffer Base Address
-> {I2CS38}: Slave~ DMA Mode Tx Buffer Base Address
-> {I2CS3C}: Slave~ DMA Mode Rx Buffer Base Address
-> {I2CS40}: Slave Device Address Register
-> {I2CM48}: Master DMA Length Status Register
-> {I2CS4C}: Slave  DMA Length Status Register
-> {I2CC50}: Current DMA Operating Address Status
-> {I2CC54}: Current DMA Operating Length  Status
->=20
-> Signed-off-by: Ryan Chen <ryan_chen@aspeedtech.com>
-> ---
->  drivers/i2c/busses/Kconfig       |   23 +-
->  drivers/i2c/busses/Makefile      |    1 +
->  drivers/i2c/busses/i2c-ast2600.c | 1033 ++++++++++++++++++++++++++++++
->  3 files changed, 1049 insertions(+), 8 deletions(-)
->  create mode 100644 drivers/i2c/busses/i2c-ast2600.c
->=20
-[...]
-> diff --git a/drivers/i2c/busses/i2c-ast2600.c b/drivers/i2c/busses/i2c-as=
-t2600.c
-> new file mode 100644
-> index 000000000000..885b451030ac
-> --- /dev/null
-> +++ b/drivers/i2c/busses/i2c-ast2600.c
-> @@ -0,0 +1,1033 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * ASPEED AST2600 new register set I2C controller driver
-> + *
-> + * Copyright (C) ASPEED Technology Inc.
-> + */
-> +#include <linux/array_size.h>
-> +#include <linux/bits.h>
-> +#include <linux/clk.h>
-> +#include <linux/completion.h>
-> +#include <linux/delay.h>
-> +#include <linux/dma-mapping.h>
-> +#include <linux/err.h>
-> +#include <linux/i2c.h>
-> +#include <linux/i2c-smbus.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/io.h>
-> +#include <linux/minmax.h>
-> +#include <linux/mfd/syscon.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/property.h>
-> +#include <linux/regmap.h>
-> +#include <linux/reset.h>
-> +#include <linux/slab.h>
-> +#include <linux/string_helpers.h>
-> +#include <linux/unaligned.h>
-> +
-> +#define AST2600_I2CG_ISR			0x00
-> +#define AST2600_I2CG_SLAVE_ISR		0x04
-> +#define AST2600_I2CG_OWNER		0x08
-> +#define AST2600_I2CG_CTRL		0x0C
-> +#define AST2600_I2CG_CLK_DIV_CTRL	0x10
-> +
-> +#define AST2600_I2CG_SLAVE_PKT_NAK	BIT(4)
-> +#define AST2600_I2CG_M_S_SEPARATE_INTR	BIT(3)
-> +#define AST2600_I2CG_CTRL_NEW_REG	BIT(2)
-> +#define AST2600_I2CG_CTRL_NEW_CLK_DIV	BIT(1)
-> +#define AST2600_GLOBAL_INIT	\
-> +	(AST2600_I2CG_CTRL_NEW_REG | AST2600_I2CG_CTRL_NEW_CLK_DIV)
-> +/*
-> + * APB clk : 100Mhz
-> + * div	: scl		: baseclk [APB/((div/2) + 1)] : tBuf [1/bclk * 16]
-> + * I2CG10[31:24] base clk4 for i2c auto recovery timeout counter (0xC6)
-> + * I2CG10[23:16] base clk3 for Standard-mode (100Khz) min tBuf 4.7us
-> + * 0x3c : 100.8Khz	: 3.225Mhz					  : 4.96us
-> + * 0x3d : 99.2Khz	: 3.174Mhz					  : 5.04us
-> + * 0x3e : 97.65Khz	: 3.125Mhz					  : 5.12us
-> + * 0x40 : 97.75Khz	: 3.03Mhz					  : 5.28us
-> + * 0x41 : 99.5Khz	: 2.98Mhz					  : 5.36us (default)
-> + * I2CG10[15:8] base clk2 for Fast-mode (400Khz) min tBuf 1.3us
-> + * 0x12 : 400Khz	: 10Mhz						  : 1.6us
-> + * I2CG10[7:0] base clk1 for Fast-mode Plus (1Mhz) min tBuf 0.5us
-> + * 0x08 : 1Mhz		: 20Mhz						  : 0.8us
-> + */
-> +#define I2CCG_DIV_CTRL 0xC6411208
-> +
-> +/* 0x00 : I2CC Controller/Target Function Control Register  */
-> +#define AST2600_I2CC_FUN_CTRL		0x00
-> +#define AST2600_I2CC_SLAVE_ADDR_RX_EN		BIT(20)
-> +#define AST2600_I2CC_MASTER_RETRY_MASK		GENMASK(19, 18)
-> +#define AST2600_I2CC_MASTER_RETRY(x)		(((x) & GENMASK(1, 0)) << 18)
-> +#define AST2600_I2CC_BUS_AUTO_RELEASE		BIT(17)
-> +#define AST2600_I2CC_M_SDA_LOCK_EN			BIT(16)
-> +#define AST2600_I2CC_MULTI_MASTER_DIS		BIT(15)
-> +#define AST2600_I2CC_M_SCL_DRIVE_EN			BIT(14)
-> +#define AST2600_I2CC_MSB_STS				BIT(9)
-> +#define AST2600_I2CC_SDA_DRIVE_1T_EN		BIT(8)
-> +#define AST2600_I2CC_M_SDA_DRIVE_1T_EN		BIT(7)
-> +#define AST2600_I2CC_M_HIGH_SPEED_EN		BIT(6)
-> +/* reserver 5 : 2 */
-> +#define AST2600_I2CC_SLAVE_EN			BIT(1)
-> +#define AST2600_I2CC_MASTER_EN			BIT(0)
-> +
-> +/* 0x04 : I2CC Controller/Target Clock and AC Timing Control Register #1=
- */
-> +#define AST2600_I2CC_AC_TIMING		0x04
-> +#define AST2600_I2CC_TTIMEOUT(x)			(((x) & GENMASK(4, 0)) << 24)
-> +#define AST2600_I2CC_TCKHIGHMIN(x)			(((x) & GENMASK(3, 0)) << 20)
-> +#define AST2600_I2CC_TCKHIGH(x)			(((x) & GENMASK(3, 0)) << 16)
-> +#define AST2600_I2CC_TCKLOW(x)			(((x) & GENMASK(3, 0)) << 12)
-> +#define AST2600_I2CC_THDDAT(x)			(((x) & GENMASK(1, 0)) << 10)
-> +#define AST2600_I2CC_TOUTBASECLK(x)			(((x) & GENMASK(1, 0)) << 8)
-> +#define AST2600_I2CC_TBASECLK(x)			((x) & GENMASK(3, 0))
-> +
-> +/* 0x08 : I2CC Controller/Target Transmit/Receive Byte Buffer Register *=
-/
-> +#define AST2600_I2CC_STS_AND_BUFF		0x08
-> +#define AST2600_I2CC_TX_DIR_MASK			GENMASK(31, 29)
-> +#define AST2600_I2CC_SDA_OE				BIT(28)
-> +#define AST2600_I2CC_SDA_O				BIT(27)
-> +#define AST2600_I2CC_SCL_OE				BIT(26)
-> +#define AST2600_I2CC_SCL_O				BIT(25)
-> +
-> +#define AST2600_I2CC_SCL_LINE_STS			BIT(18)
-> +#define AST2600_I2CC_SDA_LINE_STS			BIT(17)
-> +#define AST2600_I2CC_BUS_BUSY_STS			BIT(16)
-> +
-> +#define AST2600_I2CC_GET_RX_BUFF(x)			(((x) >> 8) & GENMASK(7, 0))
-> +
-> +/* 0x0C : I2CC Controller/Target Pool Buffer Control Register  */
-> +#define AST2600_I2CC_BUFF_CTRL		0x0C
-> +#define AST2600_I2CC_GET_RX_BUF_LEN(x)      (((x) & GENMASK(29, 24)) >> =
-24)
-> +#define AST2600_I2CC_SET_RX_BUF_LEN(x)		(((((x) - 1) & GENMASK(4, 0)) <<=
- 16) | BIT(0))
-> +#define AST2600_I2CC_SET_TX_BUF_LEN(x)		(((((x) - 1) & GENMASK(4, 0)) <<=
- 8) | BIT(0))
-> +#define AST2600_I2CC_GET_TX_BUF_LEN(x)      ((((x) & GENMASK(12, 8)) >> =
-8) + 1)
-> +
-> +/* 0x10 : I2CM Controller Interrupt Control Register */
-> +#define AST2600_I2CM_IER			0x10
-> +/* 0x14 : I2CM Controller Interrupt Status Register   : WC */
-> +#define AST2600_I2CM_ISR			0x14
-> +
-> +#define AST2600_I2CM_PKT_TIMEOUT			BIT(18)
-> +#define AST2600_I2CM_PKT_ERROR			BIT(17)
-> +#define AST2600_I2CM_PKT_DONE			BIT(16)
-> +
-> +#define AST2600_I2CM_BUS_RECOVER_FAIL		BIT(15)
-> +#define AST2600_I2CM_SDA_DL_TO			BIT(14)
-> +#define AST2600_I2CM_BUS_RECOVER			BIT(13)
-> +#define AST2600_I2CM_SMBUS_ALT			BIT(12)
-> +
-> +#define AST2600_I2CM_SCL_LOW_TO			BIT(6)
-> +#define AST2600_I2CM_ABNORMAL			BIT(5)
-> +#define AST2600_I2CM_NORMAL_STOP			BIT(4)
-> +#define AST2600_I2CM_ARBIT_LOSS			BIT(3)
-> +#define AST2600_I2CM_RX_DONE			BIT(2)
-> +#define AST2600_I2CM_TX_NAK				BIT(1)
-> +#define AST2600_I2CM_TX_ACK				BIT(0)
-> +
-> +/* 0x18 : I2CM Controller Command/Status Register   */
-> +#define AST2600_I2CM_CMD_STS		0x18
-> +#define AST2600_I2CM_PKT_ADDR(x)			(((x) & GENMASK(6, 0)) << 24)
-> +#define AST2600_I2CM_PKT_EN				BIT(16)
-> +#define AST2600_I2CM_SDA_OE_OUT_DIR			BIT(15)
-> +#define AST2600_I2CM_SDA_O_OUT_DIR			BIT(14)
-> +#define AST2600_I2CM_SCL_OE_OUT_DIR			BIT(13)
-> +#define AST2600_I2CM_SCL_O_OUT_DIR			BIT(12)
-> +#define AST2600_I2CM_RECOVER_CMD_EN			BIT(11)
-> +
-> +#define AST2600_I2CM_RX_DMA_EN			BIT(9)
-> +#define AST2600_I2CM_TX_DMA_EN			BIT(8)
-> +/* Command Bit */
-> +#define AST2600_I2CM_RX_BUFF_EN			BIT(7)
-> +#define AST2600_I2CM_TX_BUFF_EN			BIT(6)
-> +#define AST2600_I2CM_STOP_CMD			BIT(5)
-> +#define AST2600_I2CM_RX_CMD_LAST			BIT(4)
-> +#define AST2600_I2CM_RX_CMD				BIT(3)
-> +
-> +#define AST2600_I2CM_TX_CMD				BIT(1)
-> +#define AST2600_I2CM_START_CMD			BIT(0)
-> +
-> +/* 0x1C : I2CM Controller DMA Transfer Length Register	 */
-> +#define AST2600_I2CM_DMA_LEN		0x1C
-> +/* Tx Rx support length 1 ~ 4096 */
-> +#define AST2600_I2CM_SET_RX_DMA_LEN(x)	((((x) & GENMASK(11, 0)) << 16) |=
- BIT(31))
-> +#define AST2600_I2CM_SET_TX_DMA_LEN(x)	(((x) & GENMASK(11, 0)) | BIT(15)=
-)
-> +
-> +/* 0x20 : I2CS Target Interrupt Control Register   */
-> +#define AST2600_I2CS_IER			0x20
-> +/* 0x24 : I2CS Target Interrupt Status Register	 */
-> +#define AST2600_I2CS_ISR			0x24
-> +
-> +#define AST2600_I2CS_ADDR_INDICATE_MASK	GENMASK(31, 30)
-> +#define AST2600_I2CS_SLAVE_PENDING			BIT(29)
-> +
-> +#define AST2600_I2CS_WAIT_TX_DMA			BIT(25)
-> +#define AST2600_I2CS_WAIT_RX_DMA			BIT(24)
-> +
-> +#define AST2600_I2CS_ADDR3_NAK			BIT(22)
-> +#define AST2600_I2CS_ADDR2_NAK			BIT(21)
-> +#define AST2600_I2CS_ADDR1_NAK			BIT(20)
-> +
-> +#define AST2600_I2CS_ADDR_MASK			GENMASK(19, 18)
-> +#define AST2600_I2CS_PKT_ERROR			BIT(17)
-> +#define AST2600_I2CS_PKT_DONE			BIT(16)
-> +#define AST2600_I2CS_INACTIVE_TO			BIT(15)
-> +
-> +#define AST2600_I2CS_SLAVE_MATCH			BIT(7)
-> +#define AST2600_I2CS_ABNOR_STOP			BIT(5)
-> +#define AST2600_I2CS_STOP				BIT(4)
-> +#define AST2600_I2CS_RX_DONE_NAK			BIT(3)
-> +#define AST2600_I2CS_RX_DONE			BIT(2)
-> +#define AST2600_I2CS_TX_NAK				BIT(1)
-> +#define AST2600_I2CS_TX_ACK				BIT(0)
-> +
-> +/* 0x28 : I2CS Target CMD/Status Register   */
-> +#define AST2600_I2CS_CMD_STS		0x28
-> +#define AST2600_I2CS_ACTIVE_ALL			GENMASK(18, 17)
-> +#define AST2600_I2CS_PKT_MODE_EN			BIT(16)
-> +#define AST2600_I2CS_AUTO_NAK_NOADDR		BIT(15)
-> +#define AST2600_I2CS_AUTO_NAK_EN			BIT(14)
-> +
-> +#define AST2600_I2CS_ALT_EN				BIT(10)
-> +#define AST2600_I2CS_RX_DMA_EN			BIT(9)
-> +#define AST2600_I2CS_TX_DMA_EN			BIT(8)
-> +#define AST2600_I2CS_RX_BUFF_EN			BIT(7)
-> +#define AST2600_I2CS_TX_BUFF_EN			BIT(6)
-> +#define AST2600_I2CS_RX_CMD_LAST			BIT(4)
-> +
-> +#define AST2600_I2CS_TX_CMD				BIT(2)
-> +
-> +#define AST2600_I2CS_DMA_LEN		0x2C
-> +#define AST2600_I2CS_SET_RX_DMA_LEN(x)	(((((x) - 1) & GENMASK(11, 0)) <<=
- 16) | BIT(31))
-> +#define AST2600_I2CS_SET_TX_DMA_LEN(x)	((((x) - 1) & GENMASK(11, 0)) | B=
-IT(15))
-> +
-> +/* I2CM Controller DMA Tx Buffer Register   */
-> +#define AST2600_I2CM_TX_DMA			0x30
-> +/* I2CM Controller DMA Rx Buffer Register	*/
-> +#define AST2600_I2CM_RX_DMA			0x34
-> +/* I2CS Target DMA Tx Buffer Register   */
-> +#define AST2600_I2CS_TX_DMA			0x38
-> +/* I2CS Target DMA Rx Buffer Register   */
-> +#define AST2600_I2CS_RX_DMA			0x3C
-> +
-> +#define AST2600_I2CS_ADDR_CTRL		0x40
-> +
-> +#define	AST2600_I2CS_ADDR3_MASK		GENMASK(22, 16)
-> +#define	AST2600_I2CS_ADDR2_MASK		GENMASK(14, 8)
-> +#define	AST2600_I2CS_ADDR1_MASK		GENMASK(6, 0)
-> +
-> +#define AST2600_I2CM_DMA_LEN_STS		0x48
-> +#define AST2600_I2CS_DMA_LEN_STS		0x4C
-> +
-> +#define AST2600_I2C_GET_TX_DMA_LEN(x)		((x) & GENMASK(12, 0))
-> +#define AST2600_I2C_GET_RX_DMA_LEN(x)        (((x) & GENMASK(28, 16)) >>=
- 16)
-> +
-> +/* 0x40 : Target Device Address Register */
-> +#define AST2600_I2CS_ADDR3_ENABLE			BIT(23)
-> +#define AST2600_I2CS_ADDR3(x)			((x) << 16)
-> +#define AST2600_I2CS_ADDR2_ENABLE			BIT(15)
-> +#define AST2600_I2CS_ADDR2(x)			((x) << 8)
-> +#define AST2600_I2CS_ADDR1_ENABLE			BIT(7)
-> +#define AST2600_I2CS_ADDR1(x)			(x)
-> +
-> +#define I2C_TARGET_MSG_BUF_SIZE		256
-> +
-> +#define AST2600_I2C_DMA_SIZE		4096
-> +
-> +#define CONTROLLER_TRIGGER_LAST_STOP	(AST2600_I2CM_RX_CMD_LAST | AST2600=
-_I2CM_STOP_CMD)
-> +#define TARGET_TRIGGER_CMD	(AST2600_I2CS_ACTIVE_ALL | AST2600_I2CS_PKT_M=
-ODE_EN)
-> +
-> +#define AST_I2C_TIMEOUT_CLK		0x1
-> +
-> +enum xfer_mode {
-> +	BYTE_MODE,
-> +	BUFF_MODE,
-> +	DMA_MODE,
-> +};
-> +
-> +struct ast2600_i2c_bus {
-> +	struct i2c_adapter	adap;
-> +	struct device		*dev;
-> +	void __iomem		*reg_base;
-> +	struct regmap		*global_regs;
-> +	struct reset_control	*rst;
+Hi Rob,
 
-Will this reset control be used by the driver at some point, e.g. for
-suspend/resume support? As of now this could just be a local variable
-in ast2600_i2c_probe().
+On Thu, Oct 23, 2025 at 09:37:56AM -0500, Rob Herring (Arm) wrote:
+> Generally at most 1 blank line is the standard style for DT schema
+> files. Remove the few cases with more than 1 so that the yamllint check
+> for this can be enabled.
+> 
+> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
 
-regards
-Philipp
+Acked-by: Andi Shyti <andi.shyti@kernel.org>
+
+Thanks,
+Andi
 
