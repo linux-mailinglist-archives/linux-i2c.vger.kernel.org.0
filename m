@@ -1,94 +1,94 @@
-Return-Path: <linux-i2c+bounces-13803-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13804-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49391C09B84
-	for <lists+linux-i2c@lfdr.de>; Sat, 25 Oct 2025 18:49:28 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2ED9C09D9D
+	for <lists+linux-i2c@lfdr.de>; Sat, 25 Oct 2025 19:10:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 170B0427A34
-	for <lists+linux-i2c@lfdr.de>; Sat, 25 Oct 2025 16:42:47 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 824965615FF
+	for <lists+linux-i2c@lfdr.de>; Sat, 25 Oct 2025 16:47:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20491307AC7;
-	Sat, 25 Oct 2025 16:33:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B95A3126BF;
+	Sat, 25 Oct 2025 16:40:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lNnPT9JD"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="epYhg3gv"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BDB2305978
-	for <linux-i2c@vger.kernel.org>; Sat, 25 Oct 2025 16:33:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E224310774
+	for <linux-i2c@vger.kernel.org>; Sat, 25 Oct 2025 16:40:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761409999; cv=none; b=NGeSK9jxjbSc3JUeLVk0ZWv1RPASx+/IVSSfa1fjsKtwdSPS0jE/hAXcBxMF0OoaBbB/TlVvFYMaFKmfYxnTi5rA5A84A+tuiYxWJTEUB3rmmWRRf7g6Ppmk3VE/ifgiN71FaG3zG7lcl8EZ1pJRWMQRCIMFv5itLw1uKX1bv8E=
+	t=1761410453; cv=none; b=Tg11ufutzWGLjdDZAobkZL4dyyhAAMgOF1X5Nfd0h+4VLvZRUfHJrHTopGrtiQwJzw+s5Re9rqKzfZ20WULQvXAJl9JaO9bXGCFWaLytt9Ly7A9waD0xE60WWu1VD1tKJ/fIsXHQdVhFc0KU2WMVY0qsjy2qxYX40cV5GyHeLx8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761409999; c=relaxed/simple;
+	s=arc-20240116; t=1761410453; c=relaxed/simple;
 	bh=miSwCWAWlgSls2mz8C4vY/8512hTOCwNwE82bGQwr34=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ewyu/hn0DslIVasYstlBY+e3sSE6x7btxJGCJk3jj2lneYQzn5MdgQ8rs6va1XfIhY80IBoke7cBuAdsSJ4c4zgZGLhz5TRYO39FMz+TL1dx2aThRQOy8Ccznzy4AtFJrm3tzgGoI9LuY8dil0MBDJ1VJdXWkr3h1zXIc36qzdA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lNnPT9JD; arc=none smtp.client-ip=209.85.222.181
+	 MIME-Version; b=cZvlHlvlI1kHdhUylOe3gvGf+/sm9PcUM9ui7UAdcCdfs6F0eFFv9x3zW//JSsxXL1otap3WZRwoHB7a85+KgRldkO6n7efRq3WwEeiOWPoICILVI58aXIAKWwj/KaOiNbCX6Qa03yOhz5Em6y/IFLPvB7M/pNfzKiuEEYV9ROE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=epYhg3gv; arc=none smtp.client-ip=209.85.160.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-88f2b29b651so334508885a.0
-        for <linux-i2c@vger.kernel.org>; Sat, 25 Oct 2025 09:33:15 -0700 (PDT)
+Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-4e4d9fc4316so34504061cf.2
+        for <linux-i2c@vger.kernel.org>; Sat, 25 Oct 2025 09:40:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761409995; x=1762014795; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1761410450; x=1762015250; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
         bh=fhEz+tkYwuCSnU6LNYxfD5DkxTKdrSyEg2dThddkEgo=;
-        b=lNnPT9JDvNdft6l0Uo98joHCwEP2lpuHXb1pBz28Fx4uY1P85iYzNuVFAQdW1533U2
-         t303A0RPZ4Xa1Susp82zygD1snjYmhzHFDDI6dFMAWWIgE6Fr2sWlT3ACXH0NdCcsIn+
-         mHL0+hlilKvqRybrNPWETkmCclOlF8Bw8eWcYOrbPABIyltdAqNEp/gr/WMcoz2CRx17
-         GAqQWUkMCXOdIlQVFV1NPXrdO0rWApm/suR/6Q4hZfP8R0T7m3dp3kW3Gj2sMV5miKe7
-         CTUWckFq12qH47pT2pZdMHkd5y72TNErDhQHaJZrloCGPYbWQc9iK/x2MF7LEeuTc6cS
-         K+mw==
+        b=epYhg3gvZzKHKHOJgQngb8ty+no/S030Bw2bPZcIikPfhcCFkDCvAEuCOudSywR4ZX
+         LjXgG+dhg/7YWCFHvpLjnhqrY2+Zk171kJNnvw6sw7pzI0nqHWuNGWLScLi7m7uBR/Mw
+         lpbzm2P+3j6qMP2vJa+rOOasmnZVYrmEO2VbYfXj6oicn/DHc5HrGMNfcPQsiEgHeIJE
+         zkJhdRoWyhpYj4lSLJibNnztw2+eB9qpSinEqISekDz8gF9rvUSCMnqNLt871pPnTlq6
+         RAnZoTlEmPNEitmJU3AtHUNxD1R90exH3Dytfh2gxad5drz0bSRaFv2U6fjk/xqASl3K
+         OYOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761409995; x=1762014795;
+        d=1e100.net; s=20230601; t=1761410450; x=1762015250;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
         bh=fhEz+tkYwuCSnU6LNYxfD5DkxTKdrSyEg2dThddkEgo=;
-        b=mfrYYcVGX7F0w3SN9wEJxuEjBc6miMZOykVD46E9RGCUj8FNBTYAeqtit7Q2bcXkBh
-         rfe+yVGsEfVp/72co0q0nohsusyvDCs0w7zn1XKMEp0AhAbPraOaOl0WY5QM+cEkL74p
-         sYfB9kzFuwDdrwankyOCMmuwUa3Yyt+qw/xWbhLHweQcs2hFvpvf2JgAY2IHivJi8a8C
-         8iP1DrLxzbWQWZ/eO/W6c+M3PGVKNB5oa1LrNELdwFFeaHcY6wrGi6nGfPI9n7Wvm4EO
-         VTlJn1ES304tRYNsH5wXkF726AVuvCQGFlfVFwWcIf6dzV3LiFx8WyJKfLQBJhsIJxQ6
-         NOQA==
-X-Forwarded-Encrypted: i=1; AJvYcCWeJ5aIiUeFVY8pH8SVg/Bqd1A41YjTBPkAwdM1shNiyhTWdyR/A1egGxdKC2EDDoKT7wlkJBltAto=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz/uRwB71GHsDWdhtnhuSYvXISgF8Hri6ad+nqd/2VaHQ72D3o9
-	3ZK2ORU5V8clkuJgu0GKC2k7jU1CsQoLBb3EmpMtp5IPGINke/zLIYzr
-X-Gm-Gg: ASbGnctWTkMoyYtrPUcCa31VnKpMZkpCaa4EZ0p5HlF1Gmm2F9B7sBoRjnnZowx/Bdo
-	6SJBjCCT7Z0S711NWKFbJba8cS68hzFnz59avt+NQe9RJUg2BQZLo0Vt0tVvA6C4FTsf+gBChQY
-	tMpd54bEcmBMNM8R6kL4MWIQqbZF17cmqGRU1kG0ZMhnBlrCIQVDuNxc88uleI55PiV9yl99H86
-	AjKTvGclhBXLeh6R+mjIBmL89HOoZVnMdLRKaaRSUFzCV0GipGlmnkwfzmRRobnbUC61tDU0JlN
-	QLWzW17zQEq8JjevfVp5xAmicfdPtPVEVj0Az1da+ex0VMwXyXWB1A6rOvRuHoNH6AX8Ls1YIia
-	BUboKswOX7n3XPfI7tBGLokyfTqFfQatIw7MxLEBfBIzPlHyNujHVlVtqo3yA+KxVUr3sDeByVg
-	wnRU8gEwQ=
-X-Google-Smtp-Source: AGHT+IFDvjrbgHR4c+YHa9gstK3rUAjMPa1JntDOFoEPIMpUO9JHPoIw8Cykn+I5mIOdA49QSX5xZw==
-X-Received: by 2002:a05:620a:aa01:b0:8a1:e059:cea0 with SMTP id af79cd13be357-8a1e059d294mr36247085a.84.1761409994607;
-        Sat, 25 Oct 2025 09:33:14 -0700 (PDT)
+        b=Y27wRvAtSSDrNrUVzeOLzFeFvgcNZRzhDtbGsWLzOsLiBXpzM4aiROpAeYuN+sYzvd
+         9ov4dR+B9lLlYKwVc2ATkB+x4wCFMVx3fu07Ubxt3r7mzii0j46VDWPdLjYkZ6yiJ7bA
+         CXibphRtl73qWdWtq7ipTLJu50Fzr7KB+n0w8DQQYFQvd59Y56P0bRsbpaGa+jUILTH/
+         cgmCqYgzx5RP/NLOwWcH8LoL7LGDO75YfdX0ayXSckL5CMxKPmj6l5A+41c6JNf+64aR
+         6d7n0REsV+9MhIu0CeH6RIzO8iHrLFs+iUa5kXFs3SunstslDj2JWP0AkREuVHOVYCUb
+         yA4Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUHEacFzIyVaHyb4Tw/8ORZZl/pPBNhRGCYNjg2efaix7bllHmPTQ4GudurXz5NpKyaaS4K8dToVVs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwZhBDrLwkufpQYeuYB1YlC26V5hXGc1TrfZ27mSuD8k7xLBBiZ
+	pP7NjtVR1e0v1LuwiHa9a9cf6GF3fMVrKl9C0UCJFppfu9vVwoP+eEoV
+X-Gm-Gg: ASbGnctLLCmVx0zBssRPLXaIGtKNiyX1NX5XLe5Kw/eIXKROtz3/9ASU8NabmkntWwq
+	Ty8GUrm1vVXl9vKQQE+8dkOcs9taZnyhgMvxSkQqfKlVOZbo2XCYuaJ3mvBEwvFNp1ts0eZgR7l
+	Iy8UQGoBV4WVYB6cTgLkLwJnsZLOSMhXne5BxLzc17xTXGbL/Vn+xC3XduWIAe5SEnv6AwlrriX
+	qSDiTJCp+Pn2OTpmg0w4YF12OtASef2F1tCUb1t3WkfB21gXoGgpfbry7nPAuY4mRuAaW27ZHev
+	Y6/GaoIAlVG5RCV28mASyr2PtQsmW2dYqZs121Cuyx183Ufr+XD4pkn+WWUnQyczmLymNEl5prB
+	1HVY+ViidCXv8vUfnWb6zyaiRUgYQbaru5hta4EALJZhrtrYMYyoxnzAV3bHx0oEOmNroge0m
+X-Google-Smtp-Source: AGHT+IFg107k/tCYFMcohq67EzH90IUaPmb/gULgz0xOuwcBmv/ppnfnMODk2cLJXAhzPksQP0R0Mw==
+X-Received: by 2002:a05:622a:153:b0:4e8:bae7:4d0a with SMTP id d75a77b69052e-4e8bae74e00mr318957881cf.51.1761410449893;
+        Sat, 25 Oct 2025 09:40:49 -0700 (PDT)
 Received: from localhost ([12.22.141.131])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-89f254a297dsm174758885a.28.2025.10.25.09.33.13
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4eba3860692sm15069131cf.30.2025.10.25.09.40.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Oct 2025 09:33:13 -0700 (PDT)
+        Sat, 25 Oct 2025 09:40:49 -0700 (PDT)
 From: "Yury Norov (NVIDIA)" <yury.norov@gmail.com>
-To: Linus Walleij <linus.walleij@linaro.org>,
-	Lee Jones <lee@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
+To: Linus Torvalds <torvalds@linux-foundation.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Nicolas Frattaroli <nicolas.frattaroli@collabora.com>,
 	Andi Shyti <andi.shyti@kernel.org>,
-	linux-i2c@vger.kernel.org
+	linux-arm-kernel@lists.infradead.org,
+	linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org
 Cc: "Yury Norov (NVIDIA)" <yury.norov@gmail.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>
 Subject: [PATCH 10/21] i2c: nomadik: don't use GENMASK()
-Date: Sat, 25 Oct 2025 12:32:52 -0400
-Message-ID: <20251025163305.306787-3-yury.norov@gmail.com>
+Date: Sat, 25 Oct 2025 12:40:09 -0400
+Message-ID: <20251025164023.308884-11-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20251025162858.305236-1-yury.norov@gmail.com>
-References: <20251025162858.305236-1-yury.norov@gmail.com>
+In-Reply-To: <20251025164023.308884-1-yury.norov@gmail.com>
+References: <20251025164023.308884-1-yury.norov@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
