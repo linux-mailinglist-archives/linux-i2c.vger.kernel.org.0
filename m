@@ -1,133 +1,159 @@
-Return-Path: <linux-i2c+bounces-13822-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13825-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF1BFC0BDD1
-	for <lists+linux-i2c@lfdr.de>; Mon, 27 Oct 2025 06:50:35 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C3FB8C0BDEC
+	for <lists+linux-i2c@lfdr.de>; Mon, 27 Oct 2025 06:54:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2B0723B90A5
-	for <lists+linux-i2c@lfdr.de>; Mon, 27 Oct 2025 05:49:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 780E33BB329
+	for <lists+linux-i2c@lfdr.de>; Mon, 27 Oct 2025 05:54:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4BF9279DB3;
-	Mon, 27 Oct 2025 05:49:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b="V4v9q4xT"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A517C2D6E4A;
+	Mon, 27 Oct 2025 05:54:34 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtpbgsg1.qq.com (smtpbgsg1.qq.com [54.254.200.92])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E9FA23815D
-	for <linux-i2c@vger.kernel.org>; Mon, 27 Oct 2025 05:49:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.254.200.92
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEB80238145
+	for <linux-i2c@vger.kernel.org>; Mon, 27 Oct 2025 05:54:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.205
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761544184; cv=none; b=LSMcTqAtrrl2BZZbZLkNvj5zOdKrjjB6Hp31xrtwzyk+KocMwSDepJNYdJQzYx9gYzbAYjUqRMVBHAsW+fY06F4AwLjj4ja8hzIm+E60EBJoZ0dURx3G1yPWfHfIZY907jc4ssZugFCTdT5gfRirYY2cEFUYP90mBAloeJKta3Q=
+	t=1761544474; cv=none; b=QHMozcwE5FPYVNe10kc1FbFnMB70P06wtbouOiakrQaL9IqE2uaO5CJDnTfk9AcLQpNWjc4AOt+1JP4vKj46c9Ys2mjBJ7FbIAAEljeT8IkRDrLJ0yuYEELyeK9X5xrwaRGVv6lew3XArCMuKuhbnaOOQ8HFdt74yzhEgpsooZo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761544184; c=relaxed/simple;
-	bh=qrtsu10R5LaOPyR2BzaYp1CqzUTsNYF/L5ew05NJJUo=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=bBJDrekqcXk3fRMMaWFA+nSzoZ4jlKMn7mt2ilLdGoy833mDjCFdhE22BOTrHrgnFkRZyvnyt/barwubVEeDLpw/g8lfi1VfuRx5qOCnyIYlffxG5s7Ctc95+5IlXFbGp0yWKIAOi1WxbQvK7DxAz0gV4eHBi4f7emBCOswCUYY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com; spf=none smtp.mailfrom=linux.spacemit.com; dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b=V4v9q4xT; arc=none smtp.client-ip=54.254.200.92
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.spacemit.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.spacemit.com;
-	s=mxsw2412; t=1761544114;
-	bh=8I4+vxckyTpw0x/pY85yqvUPHwDZ9K/bKl+VrKCYDIo=;
-	h=From:Date:Subject:MIME-Version:Message-Id:To;
-	b=V4v9q4xThK+scTtHESrpK4FWZfEHNYUF3dGP/9nf9srNE0YWmWYE47EXzV/23JTT3
-	 y+OHrVOPLxnn+T4lulZaJIl5eFA6yMAAwb01wUz8E8+VT/Qk7+VSTXaT3ygrHlUZgd
-	 kWWhP9u/noGnrBjfOlp3VXsk9XXJ7Qd6LUUhaEBM=
-X-QQ-mid: zesmtpsz3t1761544106t35d805fe
-X-QQ-Originating-IP: YdVZp3ZiWrpL2fgu8XYgSa+iDrxlJLKacoE9GHE4FKE=
-Received: from = ( [183.48.247.177])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Mon, 27 Oct 2025 13:48:23 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 7992623468167245455
-EX-QQ-RecipientCnt: 13
-From: Troy Mitchell <troy.mitchell@linux.spacemit.com>
-Date: Mon, 27 Oct 2025 13:48:08 +0800
-Subject: [PATCH v2 4/4] regulator: spacemit: MFD_SPACEMIT_P1 as
- dependencies
+	s=arc-20240116; t=1761544474; c=relaxed/simple;
+	bh=SNmai1IOLY+pup+5LYY/q0U2eZq7K8fuJB8K0RS7rxQ=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=Yg6b+Mov1jOivOf0qB0lswhSTMH3+itmjfoVA+yANpo9MRG7VF1P41nvYgn9WjRYwWSkrgGniJXaokP4VQBoo14j76SU2qwr28HhMyf8vFmiO0H/TEPiHRBaRCcDb/oSJPM7wXz6AOegJgvc8jqnTPznw4IzEYfTRQLFf+ZGe/c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.205
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f205.google.com with SMTP id e9e14a558f8ab-430b0adb3e2so54259325ab.0
+        for <linux-i2c@vger.kernel.org>; Sun, 26 Oct 2025 22:54:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761544472; x=1762149272;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GKC11teTiEOM5vQjUmVTNkUGadJpuIO6RJHtwgVzfnQ=;
+        b=qpsq2tfyfUCelGcCls6z80f3hKRCKISWt2aKYOPlMRVTdlHBY32o574TTk9rU+oOQ5
+         UnVQ4LIDjWGMZOpEQ3P70XUqazOUPdtMOtCas9pEvkgBU0yUaVPq3OcxJFRBPsgUd5Jt
+         1jdQngN56/A6GZoHezzGPrWsqQrrGJoQX3yyoM2+jVe503/dbt0w4f7DxSv9pPS0d6rJ
+         eesSwBxZvm5kOt5AucZctahVKYQoIpqmkddEj9yzf1YCAQPX11i7xUQp96FlOjekWiRM
+         CKbUwzZNab9Ixv8o744YgUlzeqOv8wSwLHZdrGLaH9RTxAObi+3WMKGMtOkThbswB/Z4
+         tFdg==
+X-Gm-Message-State: AOJu0Yx9/+C4rHt8XYDb9d3bhS6NaZ1/v2y4ryMEC8KjWZQt3ieP3N/a
+	Huprh0GlBi/4kSELpnXEaG2tNy+Pe6g+W1RHFl78b7Gl62XYdHhFPyCjGx39KlA+p/SGPcMuvT4
+	3aYPitRY7TiU2bY/P/J1GP6uVoyLrgX7JmIe8y/iANN/1mByc1+NQG/4ZPfdxKw==
+X-Google-Smtp-Source: AGHT+IFFxWhXZUUoFvo6paTouupqI4Adh7UBpqa2Z4tR45DaNuUz00lT2knpS82K/lGQvBIoUmrin3NOkRlmFo6fQYAfUcRqQ94U
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251027-p1-kconfig-fix-v2-4-49688f30bae8@linux.spacemit.com>
-References: <20251027-p1-kconfig-fix-v2-0-49688f30bae8@linux.spacemit.com>
-In-Reply-To: <20251027-p1-kconfig-fix-v2-0-49688f30bae8@linux.spacemit.com>
-To: Lee Jones <lee@kernel.org>, Yixun Lan <dlan@gentoo.org>, 
- Alex Elder <elder@riscstar.com>, Andi Shyti <andi.shyti@kernel.org>, 
- Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
- spacemit@lists.linux.dev, linux-i2c@vger.kernel.org, 
- linux-rtc@vger.kernel.org, Troy Mitchell <troy.mitchell@linux.spacemit.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1761544088; l=1089;
- i=troy.mitchell@linux.spacemit.com; s=20250710; h=from:subject:message-id;
- bh=qrtsu10R5LaOPyR2BzaYp1CqzUTsNYF/L5ew05NJJUo=;
- b=fllL427rT0KQnek2I4ijNMRL2nD1KYzgbDwqbJPFw7byVGjmzkjK+CbYAhRjGLBzBqGMg/HgP
- zDN2oRRgWXyCpl7YahtbGGmMAbR/PWEpuDyjWxNAvt5IxWAUtxeBZeC
-X-Developer-Key: i=troy.mitchell@linux.spacemit.com; a=ed25519;
- pk=lQa7BzLrq8DfZnChqmwJ5qQk8fP2USmY/4xZ2/MSsXc=
-X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpsz:linux.spacemit.com:qybglogicsvrgz:qybglogicsvrgz3a-0
-X-QQ-XMAILINFO: NQvWsrZNIxX/rFLN6e8wKHD9ld6iPAWsBCpNoSgmg41dgbrfE1M7fFFl
-	E5t0ReQj/LCljHX0hCuEhk9EZkh3stAoS8HF/4Aoveny/USjkmfI7Uwpgqq3sYXb8k0wq0H
-	wFNtp5gjUaGAQ+XBMMv74yZwIKPNVjvmL+6qsj/DsI0YVqdLditIFOQUlh0Rpm0FdCnM3ud
-	4jCLa/ANNBLBX8Y9BY4qSzcFAuSrkTsaB4YrTEtQ94YGtODRtqMFOjyyX6GvTkZDAQ8R6Xu
-	uN47U+aQ+k8kkk/CKta17U+pbBGLIKSy7gXHaH2IjLAVMe1U3Fr9+cRlgeyE8mrtpYZF2RN
-	1Um0TL/NVBwgCZHIaxb8x5o5B8/ZZeJblr5R5XlnQvMPW85jD6VYvr0tJ6UwlY2D/t8kXPe
-	EKf5Zw3ipTtV4eqbO75YwKHrktZwfh+YY7KEaSQFFuamNncyhOS5nt5+95VTumTB8W6wHZu
-	roLAeXfJo41dXYfTqsk7DZg/TzrT8XJnRkU+CFZxD3euI8sVPFPsgvSHDDij6orIoDZF+A4
-	1b3gb73uC0TVu1I5sc6Pzjab1RQmTBfqjnlVamAOCtwO2980QXeye+KvXA0bf2OloNWW791
-	FiRMXjJm6JL0sRewtVf+dJmwQyjwAmOAnWeq0rZgaYta26udBi5vd2juY+lPtna9XKOn4Hf
-	IZS4MJrXTmguukXEyfTs128B3lGO7LRnfDiNTCi51B7MoKB0PW6zV5l5YpDCVfol58Kqf/B
-	7bsxZLHMgKY1HN5wv4Iua3CLfIIWuZmlj7HDeAqdxaD1QxKI3vvcxcQqo/71NyDrN6gbovq
-	jeYk1H0/3KnDtraPyB119bO+0QLUTMPsGai91M371rsxsB5x+IMUoT5X74RbZlLMGEVkRSD
-	ko6+vkjfGB1Ylh/T4fRsHB7wEPTYHQDQR4DGw6pAF84EOuB6T/TcBm13YOHnDSOhZrgzaGZ
-	A1LxAmdJSYbdh7HAkh14JG7GuXVoVX27d4fJwEAdlLryvRRfC999FJVKJL5MDQUgzIypnx1
-	9TNBVb3kJvoHJVrCGyrKdqjGAUAXDrd86Chqj8Z5ecHS9isu7sdzL98PNlV54ffDUXdikeh
-	dua6aOeSDNuX2I0Jbfv4BHWUu8XqXOUPBxrGCVaGJOIU98e40DgytIS9Hsf+u7ytg==
-X-QQ-XMRINFO: OWPUhxQsoeAVDbp3OJHYyFg=
-X-QQ-RECHKSPAM: 0
+X-Received: by 2002:a05:6e02:188f:b0:42f:8bdd:6e9c with SMTP id
+ e9e14a558f8ab-431eb66bd70mr135622495ab.14.1761544472098; Sun, 26 Oct 2025
+ 22:54:32 -0700 (PDT)
+Date: Sun, 26 Oct 2025 22:54:32 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <68ff0918.050a0220.3344a1.0287.GAE@google.com>
+Subject: [syzbot] [i2c?] WARNING: refcount bug in i2c_get_adapter
+From: syzbot <syzbot+76501d32a94a432940a8@syzkaller.appspotmail.com>
+To: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	syzkaller-bugs@googlegroups.com, wsa+renesas@sang-engineering.com
+Content-Type: text/plain; charset="UTF-8"
 
-REGULATOR_SPACEMIT_P1 is a subdevice of P1 and should depend on
-MFD_SPACEMIT_P1 rather than selecting it directly. Using 'select'
-does not always respect the parent's dependencies, so 'depends on'
-is the safer and more correct choice.
+Hello,
 
-Since MFD_SPACEMIT_P1 already depends on I2C_K1, the dependency
-in REGULATOR_SPACEMIT_P1 is now redundant.
+syzbot found the following issue on:
 
-Signed-off-by: Troy Mitchell <troy.mitchell@linux.spacemit.com>
+HEAD commit:    211ddde0823f Linux 6.18-rc2
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=156b4d42580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=216353986aa62c5d
+dashboard link: https://syzkaller.appspot.com/bug?extid=76501d32a94a432940a8
+compiler:       Debian clang version 20.1.8 (++20250708063551+0c9f909b7976-1~exp1~20250708183702.136), Debian LLD 20.1.8
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/07371cf02d4e/disk-211ddde0.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/27220c94ca08/vmlinux-211ddde0.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/12abd01b8291/bzImage-211ddde0.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+76501d32a94a432940a8@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+refcount_t: addition on 0; use-after-free.
+WARNING: CPU: 1 PID: 6572 at lib/refcount.c:25 refcount_warn_saturate+0xfa/0x1d0 lib/refcount.c:25
+Modules linked in:
+CPU: 1 UID: 0 PID: 6572 Comm: syz.2.237 Not tainted syzkaller #0 PREEMPT_{RT,(full)} 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/02/2025
+RIP: 0010:refcount_warn_saturate+0xfa/0x1d0 lib/refcount.c:25
+Code: 00 00 e8 e9 f5 3d fd 5b 41 5e c3 cc cc cc cc cc e8 db f5 3d fd c6 05 b8 91 60 0a 01 90 48 c7 c7 a0 9a 3e 8b e8 e7 3d 02 fd 90 <0f> 0b 90 90 eb d7 e8 bb f5 3d fd c6 05 99 91 60 0a 01 90 48 c7 c7
+RSP: 0018:ffffc9000cdef6d8 EFLAGS: 00010246
+RAX: 07f404c01321b500 RBX: 0000000000000002 RCX: 0000000000080000
+RDX: ffffc90005d09000 RSI: 00000000000008d8 RDI: 00000000000008d9
+RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+R10: dffffc0000000000 R11: ffffed101712487b R12: ffffffff8b995c88
+R13: dffffc0000000000 R14: ffff88805dd48390 R15: dffffc0000000000
+FS:  00007fd67c35e6c0(0000) GS:ffff888126cc2000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b3001eff8 CR3: 000000003a534000 CR4: 00000000003526f0
+Call Trace:
+ <TASK>
+ __refcount_add include/linux/refcount.h:-1 [inline]
+ __refcount_inc include/linux/refcount.h:366 [inline]
+ refcount_inc include/linux/refcount.h:383 [inline]
+ kref_get include/linux/kref.h:45 [inline]
+ kobject_get+0xfd/0x120 lib/kobject.c:643
+ i2c_get_adapter+0x6d/0xa0 drivers/i2c/i2c-core-base.c:2612
+ i2cdev_open+0x48/0x190 drivers/i2c/i2c-dev.c:604
+ chrdev_open+0x4cf/0x5e0 fs/char_dev.c:414
+ do_dentry_open+0x9b1/0x1350 fs/open.c:965
+ vfs_open+0x3b/0x350 fs/open.c:1097
+ do_open fs/namei.c:3975 [inline]
+ path_openat+0x2ef1/0x3840 fs/namei.c:4134
+ do_filp_open+0x1fa/0x410 fs/namei.c:4161
+ do_sys_openat2+0x121/0x1c0 fs/open.c:1437
+ do_sys_open fs/open.c:1452 [inline]
+ __do_sys_openat fs/open.c:1468 [inline]
+ __se_sys_openat fs/open.c:1463 [inline]
+ __x64_sys_openat+0x138/0x170 fs/open.c:1463
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0xfa/0xfa0 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7fd67e0fd810
+Code: 48 89 44 24 20 75 93 44 89 54 24 0c e8 69 95 02 00 44 8b 54 24 0c 89 da 48 89 ee 41 89 c0 bf 9c ff ff ff b8 01 01 00 00 0f 05 <48> 3d 00 f0 ff ff 77 38 44 89 c7 89 44 24 0c e8 bc 95 02 00 8b 44
+RSP: 002b:00007fd67c35db70 EFLAGS: 00000293 ORIG_RAX: 0000000000000101
+RAX: ffffffffffffffda RBX: 0000000000002603 RCX: 00007fd67e0fd810
+RDX: 0000000000002603 RSI: 00007fd67c35dc10 RDI: 00000000ffffff9c
+RBP: 00007fd67c35dc10 R08: 0000000000000000 R09: 00232d6332692f76
+R10: 0000000000000000 R11: 0000000000000293 R12: cccccccccccccccd
+R13: 00007fd67e356038 R14: 00007fd67e355fa0 R15: 00007ffec547dee8
+ </TASK>
+
+
 ---
- drivers/regulator/Kconfig | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
-index d84f3d054c59d86d91d859808aa73a3b609d16d0..f5ee804077cfcb300ca5cf5d865b6684943cd749 100644
---- a/drivers/regulator/Kconfig
-+++ b/drivers/regulator/Kconfig
-@@ -1455,8 +1455,7 @@ config REGULATOR_SLG51000
- config REGULATOR_SPACEMIT_P1
- 	tristate "SpacemiT P1 regulators"
- 	depends on ARCH_SPACEMIT || COMPILE_TEST
--	depends on I2C
--	select MFD_SPACEMIT_P1
-+	depends on MFD_SPACEMIT_P1
- 	default ARCH_SPACEMIT
- 	help
- 	  Enable support for regulators implemented by the SpacemiT P1
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
--- 
-2.51.1
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
