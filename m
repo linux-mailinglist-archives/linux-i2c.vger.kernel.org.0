@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-13836-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13837-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F4F6C10DDE
-	for <lists+linux-i2c@lfdr.de>; Mon, 27 Oct 2025 20:23:09 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 83551C1106C
+	for <lists+linux-i2c@lfdr.de>; Mon, 27 Oct 2025 20:30:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 57D0C4630C9
-	for <lists+linux-i2c@lfdr.de>; Mon, 27 Oct 2025 19:16:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5C91E188FC41
+	for <lists+linux-i2c@lfdr.de>; Mon, 27 Oct 2025 19:26:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BEA03203AF;
-	Mon, 27 Oct 2025 19:14:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 661AA329C7E;
+	Mon, 27 Oct 2025 19:24:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tGN4T1t1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iMp/sCcu"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3DE231BCBC;
-	Mon, 27 Oct 2025 19:14:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10D80328B77;
+	Mon, 27 Oct 2025 19:24:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761592491; cv=none; b=VZ2jNDxhqykZ/KPNhHdd6p0iDT2gDtgtjFQNjRuySoMPpQvji+ur5+3mmswm/GsL3PFgPZsybDQmLQxIc/aqQxUVmKU5qYe101QbdnWyQNqlFMOdrXSjVvvx5w8qx3wI+G7BueNp1ly9Tup8r2jnigTSI8vxj+lBylaKQ0kSMQc=
+	t=1761593088; cv=none; b=nchqTMsFJTqa3W8YKhe9p3YBqZw/U/XOGf0pnNJiKysTQTxAhT6JC/8ZxwFGtBRoPlFhez8DigdV2GQpc7kmwVgR57FmmkiVKxpErs18N2Oln8ZVPm+WKzcl7+y1wLKdzkQKIpMG4rSZln4EUAeQvrdeze7iw5YJGisoieOIXQA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761592491; c=relaxed/simple;
-	bh=UmjC+XeU6cvmCC2kxiH/o29POC8JmoxbEXi0rQcEvtM=;
+	s=arc-20240116; t=1761593088; c=relaxed/simple;
+	bh=blBWTCT+SIFaa8+odPy1K2NT/1/JwxUEuNBKMUHBGBU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=DhDZrPh8wisEOVMU9eu3B0k7o4aFG6VPbC3t19ac4AsQxSuKFvYBuyp478ZFZsc5SGL0h68ShpcHzbNJfnLDE28mGTogCi4LmnGYIVKbCRa8aX21eOfukBaN+/NrLhS/KYzlHFvYBm0CJDmPehy27yFHkNB88ewNbdeSdEFA8+E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tGN4T1t1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 985C7C4CEF1;
-	Mon, 27 Oct 2025 19:14:47 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=PbOWGdJPC4hOoE/jzOmtQ+6vsQD5qHMQcQkR0gOP+ZQ4uAbC0z6dyJ2zeKxGXlrOMIAqnEeCRNFNsXC6VJYlPZAxpPdWw5sDGBXrWdHxXAm9RbC2dzD6/54F9q16eMUY/ARf1Uyf15tZ77wv26o/RTLIMJY0CVlBiS1EOYd9nVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iMp/sCcu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D133C4CEF1;
+	Mon, 27 Oct 2025 19:24:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761592491;
-	bh=UmjC+XeU6cvmCC2kxiH/o29POC8JmoxbEXi0rQcEvtM=;
+	s=k20201202; t=1761593087;
+	bh=blBWTCT+SIFaa8+odPy1K2NT/1/JwxUEuNBKMUHBGBU=;
 	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=tGN4T1t1nWKQzfOAgL6XV6X/ZmM8w6NVxI9LH7pkbpE8CkhW9vGu3YUsTzcxyN9hq
-	 Q0PYNhgYY7gMmYkrCwOybee6FjBNbbnZpjLg5S9w9E8gBq9maFEnrdBCA9vQaCbfBy
-	 FlHQzvZPkf9gc3Vz/h98nekiYBAEFp4WJdKLPd7GcRq0rOQ0equ0V6+iUBzuOTm873
-	 DQK+L7x3mQMM09CmQoWmxemTeonPbcG9/GKm7x30Ktb2JN2VOVVoLIDbpKSR9EdwJJ
-	 BtlUpkFXP4ffjYu9FPyKgvtR3K+uiPBYbENapC1A8cjSFLviQAkivnvU+euU8Und3m
-	 ZeeKx9vWGS59w==
-Message-ID: <93a2ff5f-2f8e-494b-9652-b93bc243c229@kernel.org>
-Date: Mon, 27 Oct 2025 20:14:45 +0100
+	b=iMp/sCcuj8WkwVMinkWWHH+1WE5wIOctkxm4WmKkGOpFB3tlL6dXbKLgjwApaqArE
+	 H/00yx5LviCcddxMag8atyGdVYKVM8VcWEWhgOgiaaZbqc59TqNWXtibCQ9CJJzVd2
+	 feIQMAR10vkDBV3ppruablnt24+Set2AftOQwXDEWLy4rgVCbUNBjgHIMTf8AIkLlE
+	 yl1M4m9ZBgjeF6YxKl2yGqKFQnMXi13P7ipQnSVbC8zaAk/xsLiLL+RADk4SUEF88j
+	 shnLsfHydVzjrwO6xQJ9eVMpGrk072ybXcWmo90tJSLurE/uo95Fk2aVAFyl59DNkl
+	 wp2ymHAgNiEGA==
+Message-ID: <f08b1078-fc8c-4834-984c-813e01291033@kernel.org>
+Date: Mon, 27 Oct 2025 20:24:41 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v21 2/4] dt-bindings: i2c: ast2600-i2c.yaml: Add
- global-regs and transfer-mode properties
+Subject: Re: [PATCH v21 3/4] i2c: ast2600: Add controller driver for new
+ register layout
 To: Ryan Chen <ryan_chen@aspeedtech.com>, bmc-sw@aspeedtech.com,
  benh@kernel.crashing.org, joel@jms.id.au, andi.shyti@kernel.org,
  jk@codeconstruct.com.au, robh@kernel.org, krzk+dt@kernel.org,
@@ -61,7 +61,7 @@ To: Ryan Chen <ryan_chen@aspeedtech.com>, bmc-sw@aspeedtech.com,
  devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
 References: <20251027061240.3427875-1-ryan_chen@aspeedtech.com>
- <20251027061240.3427875-3-ryan_chen@aspeedtech.com>
+ <20251027061240.3427875-4-ryan_chen@aspeedtech.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -107,42 +107,51 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20251027061240.3427875-3-ryan_chen@aspeedtech.com>
+In-Reply-To: <20251027061240.3427875-4-ryan_chen@aspeedtech.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 27/10/2025 07:12, Ryan Chen wrote:
-> The AST2600 I2C controller supports three transfer modes: byte,
-> buffer, and DMA. To allow board designers and firmware to
-> explicitly select the preferred transfer mode for each controller
-> instance. "aspeed,transfer-mode" to allow device tree to specify
-> the desired transfer method used by each I2C controller instance.
-> 
-> And AST2600 i2c controller have two register mode, one is legacy
-> register layout which is mix controller/target register control
-> together, another is new mode which is separate controller/target
-> register control.
-> 
+> Add i2c-ast2600 new register mode driver to support AST2600
+> i2c new register mode. This i2c-ast2600 new driver and the
+> legacy i2c-aspeed driver both match the same compatible string
+> "aspeed,ast2600-i2c-bus" because they target the same I2C
+> controller IP on AST2600. However, AST2600 SoCs may configure
 
-This implies your "reg" properties have now completely different meaning
-and this would be quite an ABI break. We discussed this probably 15
-revisions ago. Where did you document the resolution of that discussion?
+Where did you document ABI compatibility of new driver with old DTS,
+which do not have required properties and uses old reg?
 
->  
->  unevaluatedProperties: false
->  
-> @@ -57,10 +85,12 @@ examples:
->        #address-cells = <1>;
->        #size-cells = <0>;
->        compatible = "aspeed,ast2600-i2c-bus";
-> -      reg = <0x40 0x40>;
-> +      reg = <0x80 0x80>, <0xc00 0x20>;
+I don't see that. I actually clearly see:
 
-Not relevant to this patch. You just added this line in patch #1, so did
-you add incorrect code just to fix it right away?
+> +	i2c_bus = devm_kzalloc(dev, sizeof(*i2c_bus), GFP_KERNEL);
+> +	if (!i2c_bus)
+> +		return -ENOMEM;
+> +
+> +	i2c_bus->reg_base = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(i2c_bus->reg_base))
+> +		return PTR_ERR(i2c_bus->reg_base);
+> +
+> +	rst = devm_reset_control_get_shared_deasserted(dev, NULL);
+> +	if (IS_ERR(rst))
+> +		return dev_err_probe(dev, PTR_ERR(rst), "Missing reset ctrl\n");
+> +
+> +	i2c_bus->global_regs =
+> +		syscon_regmap_lookup_by_phandle(dev_of_node(dev), "aspeed,global-regs");
+> +	if (IS_ERR(i2c_bus->global_regs))
+> +		return PTR_ERR(i2c_bus->global_regs);
 
-No, fix your example when creating it.
 
+ABI break. No explanation of that ABI break, not even mentioning it.
+
+There is no reason to break the ABI. Your new driver *must* support both
+interfaces and both DTB. You *cannot* (please listen carefully, because
+in the past we wasted a lot of time discussing simple statements) rely
+on legacy driver binding to old DTB, because it is the same compatible.
+
+You need to rewrite all this to handle both DTBs in backwards compatible
+way.
+
+NAK
 
 Best regards,
 Krzysztof
