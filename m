@@ -1,142 +1,139 @@
-Return-Path: <linux-i2c+bounces-13819-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13820-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id D2C38C0BA1F
-	for <lists+linux-i2c@lfdr.de>; Mon, 27 Oct 2025 02:50:42 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6BD83C0BDA7
+	for <lists+linux-i2c@lfdr.de>; Mon, 27 Oct 2025 06:48:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 125034EE478
-	for <lists+linux-i2c@lfdr.de>; Mon, 27 Oct 2025 01:50:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8023A3B4AAA
+	for <lists+linux-i2c@lfdr.de>; Mon, 27 Oct 2025 05:48:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C60892C032C;
-	Mon, 27 Oct 2025 01:50:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA2B82D46CE;
+	Mon, 27 Oct 2025 05:48:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SFY3HsTq"
+	dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b="tOeFrQfk"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from smtpbgsg2.qq.com (smtpbgsg2.qq.com [54.254.200.128])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BC9418C02E;
-	Mon, 27 Oct 2025 01:50:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 534E3200BAE;
+	Mon, 27 Oct 2025 05:48:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.254.200.128
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761529826; cv=none; b=kuP22l7rSYTek7b3rcovEYjQNtlD53apUojadl4r4UyC01Gg5dCUMB47Pn6GHwNq3xirgID/EJw+iXuYPFzhit8VzdF5tvgfO4LhsNwfhnSoXd80IIzEwbSH6Fl5Lg5YsrK1PpUV68NkHBTc6WRukPH+wqDEeoAwffuhK3X1BzA=
+	t=1761544105; cv=none; b=YkeNPaMgDSNHaLXuSKtwVRIqZy82sdqZO1N9qjg/UA45sroAwVV+fJNpzKKnrqL0/jBWXM8hf/4OKT1b9k/sOCt8LCHFBP4WD/CHw8vnjI4Rvu8T2rI0fWZarYGmnhkXSj2BQ0+W+1cXNLZdzO4gTyDWpxVQg/uluKmJRebW82Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761529826; c=relaxed/simple;
-	bh=T3pkaI/GJuOsGFoVg5/R4SNriMbvV6bNB454qQaWZQ8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LQAtezO5/4R5PaFcURhdb+93yXLU+udan6DUbahneHDgX/tNmJex+Mke+1RBYEhRPCdTQtpFYVYGW3k9xfSjG6MMT3IG2qPcZH8u8Y5hYyWMc4lpOmj2P73Rc39u6BD9t3mIJRCkwzeaPMTfrHZTzOfKeXirCwGEodO4oyF1bIU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SFY3HsTq; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761529825; x=1793065825;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=T3pkaI/GJuOsGFoVg5/R4SNriMbvV6bNB454qQaWZQ8=;
-  b=SFY3HsTqY2Ry2NQd3zO0yKdoJsln+nTLaiUb4zzF60W8D3fRq3fTXODw
-   vIBdycM9zJwvlhYvqOcGxcNv44Wqhmf9fou4m9uCosnAOkm6KckOTJUSi
-   nkN927iyFhYV3TRCynZEFAVQPkqrYSO/6TtlB7mDEjtvQ1U9lSgvnIdzd
-   XwnRRWL2OjwRSPQ87xHjhLVEbaRdYK45rUr66pRQNTdKsHayxukAQ/5wc
-   dIM67bUNf8kclm4K6Kwww5CDKvMH3gHlYXHgnPehlNFFU8HvWh+phtlbm
-   QuCapYO8U12dwTIYM86QRSxqOuwZLqOC3cCInr5Mx/LWbufk48meZkVPf
-   w==;
-X-CSE-ConnectionGUID: 6YWLrCLOQ/Gu/IAQzfBJ+Q==
-X-CSE-MsgGUID: UMt8ChPkQUa81pml1bmMLQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="75050337"
-X-IronPort-AV: E=Sophos;i="6.19,257,1754982000"; 
-   d="scan'208";a="75050337"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2025 18:50:24 -0700
-X-CSE-ConnectionGUID: RqD3PVgcSpO3hdFc8HdBsw==
-X-CSE-MsgGUID: bAZX7S5kQLGkCNKy4yStdQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,257,1754982000"; 
-   d="scan'208";a="188967609"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orviesa003.jf.intel.com with ESMTP; 26 Oct 2025 18:50:09 -0700
-Date: Mon, 27 Oct 2025 09:36:28 +0800
-From: Xu Yilun <yilun.xu@linux.intel.com>
-To: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Andrzej Hajda <andrzej.hajda@intel.com>,
-	Robert Foss <rfoss@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-	Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Georgi Djakov <djakov@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Joerg Roedel <joro@8bytes.org>,
-	Jassi Brar <jassisinghbrar@gmail.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Lee Jones <lee@kernel.org>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Sebastian Reichel <sre@kernel.org>,
-	Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
-	Mark Brown <broonie@kernel.org>,
-	Mathieu Poirier <mathieu.poirier@linaro.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Olivia Mackall <olivia@selenic.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	linux-fbdev@vger.kernel.org, dmaengine@vger.kernel.org,
-	linux-fpga@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
-	linux-pm@vger.kernel.org, iommu@lists.linux.dev,
-	linux-media@vger.kernel.org, linux-mtd@lists.infradead.org,
-	netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-phy@lists.infradead.org,
-	linux-pwm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-	linux-crypto@vger.kernel.org, linux-sound@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Remove extra blank lines
-Message-ID: <aP7MnJ8mIlZhT//S@yilunxu-OptiPlex-7050>
-References: <20251023143957.2899600-1-robh@kernel.org>
+	s=arc-20240116; t=1761544105; c=relaxed/simple;
+	bh=96aC389yABIKi820ambhl0cjJ7tBBL4EZCK0/odqlGk=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=dVXHHXCNGsiJjRZipVT+ZwEs3b9SU634lZmyaqngU5EbWISC3nsY/0uGbUw4/CdYO1IfBHtCKh1dFHCotbYPUUd2qgUVsW1ounVi2dClmEkpRb2PToiL49ahyIczXkTuZRaXsUVdp8PIdSCzYilRuJ2a0oaWExKxhe16xXfb6x8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com; spf=none smtp.mailfrom=linux.spacemit.com; dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b=tOeFrQfk; arc=none smtp.client-ip=54.254.200.128
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.spacemit.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.spacemit.com;
+	s=mxsw2412; t=1761544096;
+	bh=WfFn7N0mc1wHwAiznNZBnReSRfRT2Yj3MVPqoP4mDEU=;
+	h=From:Subject:Date:Message-Id:MIME-Version:To;
+	b=tOeFrQfkDzo+mH1IhEPC8RHikgfnxJZSt1YUlDmm20f/rwcwj6Y1lR0DyyxVJ3s0X
+	 am4T2T8vs1kZgAAyw7y8aXHWVt4vJD/52gJt/kcnnaTSj+rP8/zrUvq1h5DHEzPy02
+	 rFlgCQUxlBsXFHGgwkwnWMixIJykkrIJsfknWfU4=
+X-QQ-mid: esmtpsz19t1761544091tcb13cbc9
+X-QQ-Originating-IP: E90Q48vY5pZc+ZER2E/GzZ66qCzJUQPL0AnAd+/lUTM=
+Received: from = ( [183.48.247.177])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Mon, 27 Oct 2025 13:48:08 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 13782442783455841640
+EX-QQ-RecipientCnt: 14
+From: Troy Mitchell <troy.mitchell@linux.spacemit.com>
+Subject: [PATCH v2 0/4] fix the SpacemiT P1 Kconfig and resend the K1 I2C
+ ILCR patch.
+Date: Mon, 27 Oct 2025 13:48:04 +0800
+Message-Id: <20251027-p1-kconfig-fix-v2-0-49688f30bae8@linux.spacemit.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251023143957.2899600-1-robh@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJQH/2gC/13MQQ6CMBCF4auQWTukU8WgK+9hWEA7wERpSYsEQ
+ 7i7lcSNy/8l71shchCOcM1WCDxLFO9S6EMGpq9dxyg2NWilC1KacCR8GO9a6bCVBc9WN8XFqmN
+ TtpBOY+A07+C9St1LnHx47/5M3/VH6X9qJiQ0dNK2IKZGlbenuNeSx7E2PMiUGz9AtW3bB4We5
+ YO1AAAA
+X-Change-ID: 20251021-p1-kconfig-fix-6d2b59d03b8f
+To: Lee Jones <lee@kernel.org>, Yixun Lan <dlan@gentoo.org>, 
+ Alex Elder <elder@riscstar.com>, Andi Shyti <andi.shyti@kernel.org>, 
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
+ spacemit@lists.linux.dev, linux-i2c@vger.kernel.org, 
+ linux-rtc@vger.kernel.org, Troy Mitchell <troy.mitchell@linux.spacemit.com>, 
+ kernel test robot <lkp@intel.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1761544088; l=1382;
+ i=troy.mitchell@linux.spacemit.com; s=20250710; h=from:subject:message-id;
+ bh=96aC389yABIKi820ambhl0cjJ7tBBL4EZCK0/odqlGk=;
+ b=97JBHNALbGENyElZmpwiUy7eXNO28dNsBJA/+Ag4XaDhraAr701WQkmJKN7Vllq7Csxl/CdT9
+ NjjCaUwfPUtDen7qvUf1el9pqUmYK0i3xVkY9dndhMapSAoKv97Y1Zq
+X-Developer-Key: i=troy.mitchell@linux.spacemit.com; a=ed25519;
+ pk=lQa7BzLrq8DfZnChqmwJ5qQk8fP2USmY/4xZ2/MSsXc=
+X-QQ-SENDSIZE: 520
+Feedback-ID: esmtpsz:linux.spacemit.com:qybglogicsvrgz:qybglogicsvrgz3a-0
+X-QQ-XMAILINFO: NH+njjzUOij/ZIe26MRjOqDHhwRGRs5beEL7fs8Mpqwe88D5etDoDb4Q
+	GGTeyzIZPV02d7wrEGRPDafKYL95xhER6EE1lu5XMdR/ympZPol9vBBu+nS56a+fbRssU/r
+	oRR3hYuhH1nQBBpg+1CEMXzriAgVL3Cm0N6qhQbBPe8KFdseyqJCK8E2LZJLic5CtZhGZid
+	r1H/bXcCQLOTYrEN+vp3aMkftLGhrvMJHKms6t3jF+vhXxdYEkdaKrTJPyc7223bU/JJv0R
+	XMVUk5bcCtVVOpmt1gSJAvcaDbgc/haR6jk22yoJzPOoFXVYCLOm8Gc2/Nula0ev1xqkdb1
+	aMIEqdII+nOju1sNLxY87OgdDlHGMB2WjU/3h2nY/SvWyIn8jc8VL+WEWnoNsP8to7yezOb
+	TdkQzcWo01flJybgIiHTsKSVEuCaT8KmfdvjqnJdg4Mu5PabyPozXqZj165k+BZDHGNdPkN
+	9OUV3SzRz079f/vXrD5NKdjL35ku1xqBg2Pa1yqgHDppvZE0aEaJU2kCxIH9ehipoMUshjX
+	wf5R4lEM6gOHAOGv0dwAeR2VvRvBgt8Hn1SHnRwht8cBLoQ2VBgnkNYlqN5jfZFhu3tNN45
+	XuzT/4a8VarpvWGvrZCAgBIXB84GaXhDIntKe12tvQDdYp3dXKEweTZz2ZyLyesyrSSsPdV
+	1oSvmbKfNABXuG99YhD19MIbsb0uOyB7OpSTlcNOF8tM99N55pGoNKdzVS3N+DGWUMfByue
+	48fHfdXgK5bWV89FnLLPW4lLWskZ+vF2VEJjkV3k/BGuNHmIulw4G6XsfMVtZJnI+QypLGe
+	RvhPioX9itTrYG1T7ZnzlbLV7vlPqV08tpCL1xtl1iSL/x8wBlqeHbYAGy+gnIJRv8YphgX
+	R+MOX3ijvKDORaOFNuzcOxrnTjH7bRLaSBE47Yv71Dt+/4nZMsUXbNI5D7PHd8Kz0LrARrE
+	I4C34QMLUh40R+Xz3lX6qhSj037UdoP4mzMQ3VEQe3fzSViLNBrrQ4/4zcdY2mXtSDGU+MG
+	718jxQf62AKvOgnEt2zP0cRpu0h2yrM6apUJkTnNXQR2nim7uFhzM8kNKVW2WL8qrnm7MgR
+	uLJ9B3bkc21mc9vOI4QsJfDzAAx3X8qz8pCR22rMr/YtETBpjmzAJbEtZizZeF/6NKkMZ75
+	u4/jP4JiUhSphZT3qwI439r56g==
+X-QQ-XMRINFO: OD9hHCdaPRBwq3WW+NvGbIU=
+X-QQ-RECHKSPAM: 0
 
-On Thu, Oct 23, 2025 at 09:37:56AM -0500, Rob Herring (Arm) wrote:
-> Generally at most 1 blank line is the standard style for DT schema
-> files. Remove the few cases with more than 1 so that the yamllint check
-> for this can be enabled.
-> 
-> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+Since P1 Kconfig directly selects K1_I2C, after the I2C ILCR patch was
+merged, the driver would fail [1] when COMMON_CLK was not selected.
 
-[...]
+This series fixes the P1 Kconfig and resends the I2C ILCR patch(This
+patch has reverted by maintainer [2]). In addition, the Kconfig for
+P1's two subdevices, regulator and RTC, has been updated to use
+'depends on MFD_SPACEMIT_P1' instead of 'select'.
 
->  Documentation/devicetree/bindings/fpga/fpga-region.yaml      | 5 -----
+Link: https://lore.kernel.org/oe-kbuild-all/202510202150.2qXd8e7Y-lkp@intel.com/ [1]
+Link: https://lore.kernel.org/all/sdhkjmi5l2m4ua4zqkwkecbihul5bc2dbmitudwfd57y66mdht@6ipjfyz7dtmx/ [2]
 
-Acked-by: Xu Yilun <yilun.xu@intel.com>
+Signed-off-by: Troy Mitchell <troy.mitchell@linux.spacemit.com>
+---
+Troy Mitchell (4):
+      mfd: simple-mfd-i2c: remove select I2C_K1
+      i2c: spacemit: configure ILCR for accurate SCL frequency
+      rtc: spacemit: MFD_SPACEMIT_P1 as dependencies
+      regulator: spacemit: MFD_SPACEMIT_P1 as dependencies
+
+ drivers/i2c/busses/Kconfig  |   2 +-
+ drivers/i2c/busses/i2c-k1.c | 159 ++++++++++++++++++++++++++++++++++++++++----
+ drivers/mfd/Kconfig         |   1 -
+ drivers/regulator/Kconfig   |   3 +-
+ drivers/rtc/Kconfig         |   2 +-
+ 5 files changed, 148 insertions(+), 19 deletions(-)
+---
+base-commit: 3a8660878839faadb4f1a6dd72c3179c1df56787
+change-id: 20251021-p1-kconfig-fix-6d2b59d03b8f
+
+Best regards,
+-- 
+Troy Mitchell <troy.mitchell@linux.spacemit.com>
+
 
