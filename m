@@ -1,135 +1,142 @@
-Return-Path: <linux-i2c+bounces-13818-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13819-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00690C0B106
-	for <lists+linux-i2c@lfdr.de>; Sun, 26 Oct 2025 20:20:29 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2C38C0BA1F
+	for <lists+linux-i2c@lfdr.de>; Mon, 27 Oct 2025 02:50:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0366C189E508
-	for <lists+linux-i2c@lfdr.de>; Sun, 26 Oct 2025 19:20:54 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 125034EE478
+	for <lists+linux-i2c@lfdr.de>; Mon, 27 Oct 2025 01:50:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 148832877E7;
-	Sun, 26 Oct 2025 19:20:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C60892C032C;
+	Mon, 27 Oct 2025 01:50:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fPxUzkbG"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SFY3HsTq"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C01BA4A1E;
-	Sun, 26 Oct 2025 19:20:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BC9418C02E;
+	Mon, 27 Oct 2025 01:50:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761506423; cv=none; b=sMNG6zcP4EGLe1Q/8WRM5RqvblewPMEU+Uoekfxbqczy2VKS7x8mlVf+QHBNtkSUbanAZ1aXRIKrZPcaET1NdKg5SFmTDkBMZSGCGVZQyUr1i/aXfJ9x0RrUlzUENm+tbd6swxyR6n8ajNqeoe4T/eIovBvZvn1tdJ/V88nVLyo=
+	t=1761529826; cv=none; b=kuP22l7rSYTek7b3rcovEYjQNtlD53apUojadl4r4UyC01Gg5dCUMB47Pn6GHwNq3xirgID/EJw+iXuYPFzhit8VzdF5tvgfO4LhsNwfhnSoXd80IIzEwbSH6Fl5Lg5YsrK1PpUV68NkHBTc6WRukPH+wqDEeoAwffuhK3X1BzA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761506423; c=relaxed/simple;
-	bh=pU8YzPsW1sbf/wDE+3x0lLRoVu/4j7nbLx0+1PXChjo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gyW2RxYIk3mcjMZuMIPDKGLFpAsm+UNf5GD8IuQX2w9n4EI6zxunqiEXDC2UG7655JyUcVUH4kQMYwVzIIxhvjbgtkCcLua+DyhdequQzbwdSwW3Nt/chMuAo/mbwgmxYhE71YadQF6qhOyTxG5sCNLK6aUdqeGIGebSuIqT6rc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fPxUzkbG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DC15C4CEE7;
-	Sun, 26 Oct 2025 19:20:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761506423;
-	bh=pU8YzPsW1sbf/wDE+3x0lLRoVu/4j7nbLx0+1PXChjo=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=fPxUzkbGJj7g13mUSKrhS+C9ilPucqHH9pbWTIdKZ5/OOZD6TLifA4WteDscV7QP7
-	 FzCF8MljPTWUiJtj71x4DSPHUys5fGhKLZNlZx/RmlAxEW90xgkU+JdQIXajY7UBf/
-	 cIORVdn85Buv7J7HKjafGfuAQXiZKf7YTpKKaYM963oxcIcoLbguMPZx1fAt4lcsV5
-	 7yAoJCWMEoQPWXT5IjSnFz/5sVuC08EMggN9aPjmW6Fmh7j1EWoRw5KbmoNkpT91lq
-	 gmxQhn5AWv1tGv4iG/bW2EzG4U4IESH1+0VWXoZM5dw8vG2b6VnhMEgwh/Hkuv6JQP
-	 npWKcwQUBvWyg==
-Message-ID: <4568187f-ab63-4c86-b327-90720ad20ac9@kernel.org>
-Date: Sun, 26 Oct 2025 20:20:17 +0100
+	s=arc-20240116; t=1761529826; c=relaxed/simple;
+	bh=T3pkaI/GJuOsGFoVg5/R4SNriMbvV6bNB454qQaWZQ8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LQAtezO5/4R5PaFcURhdb+93yXLU+udan6DUbahneHDgX/tNmJex+Mke+1RBYEhRPCdTQtpFYVYGW3k9xfSjG6MMT3IG2qPcZH8u8Y5hYyWMc4lpOmj2P73Rc39u6BD9t3mIJRCkwzeaPMTfrHZTzOfKeXirCwGEodO4oyF1bIU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SFY3HsTq; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1761529825; x=1793065825;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=T3pkaI/GJuOsGFoVg5/R4SNriMbvV6bNB454qQaWZQ8=;
+  b=SFY3HsTqY2Ry2NQd3zO0yKdoJsln+nTLaiUb4zzF60W8D3fRq3fTXODw
+   vIBdycM9zJwvlhYvqOcGxcNv44Wqhmf9fou4m9uCosnAOkm6KckOTJUSi
+   nkN927iyFhYV3TRCynZEFAVQPkqrYSO/6TtlB7mDEjtvQ1U9lSgvnIdzd
+   XwnRRWL2OjwRSPQ87xHjhLVEbaRdYK45rUr66pRQNTdKsHayxukAQ/5wc
+   dIM67bUNf8kclm4K6Kwww5CDKvMH3gHlYXHgnPehlNFFU8HvWh+phtlbm
+   QuCapYO8U12dwTIYM86QRSxqOuwZLqOC3cCInr5Mx/LWbufk48meZkVPf
+   w==;
+X-CSE-ConnectionGUID: 6YWLrCLOQ/Gu/IAQzfBJ+Q==
+X-CSE-MsgGUID: UMt8ChPkQUa81pml1bmMLQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="75050337"
+X-IronPort-AV: E=Sophos;i="6.19,257,1754982000"; 
+   d="scan'208";a="75050337"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2025 18:50:24 -0700
+X-CSE-ConnectionGUID: RqD3PVgcSpO3hdFc8HdBsw==
+X-CSE-MsgGUID: bAZX7S5kQLGkCNKy4yStdQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,257,1754982000"; 
+   d="scan'208";a="188967609"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by orviesa003.jf.intel.com with ESMTP; 26 Oct 2025 18:50:09 -0700
+Date: Mon, 27 Oct 2025 09:36:28 +0800
+From: Xu Yilun <yilun.xu@linux.intel.com>
+To: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	Robert Foss <rfoss@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+	Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Georgi Djakov <djakov@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Joerg Roedel <joro@8bytes.org>,
+	Jassi Brar <jassisinghbrar@gmail.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Lee Jones <lee@kernel.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>,
+	Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
+	Mark Brown <broonie@kernel.org>,
+	Mathieu Poirier <mathieu.poirier@linaro.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Olivia Mackall <olivia@selenic.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linux-fbdev@vger.kernel.org, dmaengine@vger.kernel.org,
+	linux-fpga@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
+	linux-pm@vger.kernel.org, iommu@lists.linux.dev,
+	linux-media@vger.kernel.org, linux-mtd@lists.infradead.org,
+	netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
+	linux-pci@vger.kernel.org, linux-phy@lists.infradead.org,
+	linux-pwm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+	linux-crypto@vger.kernel.org, linux-sound@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Remove extra blank lines
+Message-ID: <aP7MnJ8mIlZhT//S@yilunxu-OptiPlex-7050>
+References: <20251023143957.2899600-1-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 2/3] rust: i2c: Add basic I2C driver abstractions
-To: Igor Korotin <igor.korotin.linux@gmail.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
- Wolfram Sang <wsa+renesas@sang-engineering.com>,
- Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
- =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>,
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Viresh Kumar <viresh.kumar@linaro.org>,
- Asahi Lina <lina+kernel@asahilina.net>,
- Wedson Almeida Filho <wedsonaf@gmail.com>, Alex Hung <alex.hung@amd.com>,
- Tamir Duberstein <tamird@gmail.com>,
- Xiangfei Ding <dingxiangfei2009@gmail.com>, linux-kernel@vger.kernel.org,
- rust-for-linux@vger.kernel.org, linux-i2c@vger.kernel.org
-References: <508bd9a1-c75a-4d1d-bed7-ee759ac5a701@kernel.org>
- <20251026184143.280797-1-igor.korotin.linux@gmail.com>
-From: Danilo Krummrich <dakr@kernel.org>
-Content-Language: en-US
-In-Reply-To: <20251026184143.280797-1-igor.korotin.linux@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251023143957.2899600-1-robh@kernel.org>
 
-On 10/26/25 7:41 PM, Igor Korotin wrote:
-> Hello Danilo
+On Thu, Oct 23, 2025 at 09:37:56AM -0500, Rob Herring (Arm) wrote:
+> Generally at most 1 blank line is the standard style for DT schema
+> files. Remove the few cases with more than 1 so that the yamllint check
+> for this can be enabled.
 > 
->> On 10/5/25 12:23 PM, Igor Korotin wrote:
->>> +impl Registration {
->>> +    /// The C `i2c_new_client_device` function wrapper for manual I2C client creation.
->>> +    pub fn new(i2c_adapter: &I2cAdapter, i2c_board_info: &I2cBoardInfo) -> Result<Self> {
->>> +        // SAFETY: the kernel guarantees that `i2c_new_client_device()` returns either a valid
->>> +        // pointer or NULL. `from_err_ptr` separates errors. Following `NonNull::new` checks for NULL.
->>> +        let raw_dev = from_err_ptr(unsafe {
->>> +            bindings::i2c_new_client_device(i2c_adapter.as_raw(), i2c_board_info.as_raw())
->>> +        })?;
->>> +
->>> +        let dev_ptr = NonNull::new(raw_dev).ok_or(ENODEV)?;
->>> +
->>> +        Ok(Self(dev_ptr))
->>> +    }
->>> +}
->>
->> I wonder if we want to ensure that a Registration can't out-live the driver that
->> registers the I2C client device.
->>
->> This should only ever be called by drivers bound to more complex devices, so if
->> the parent driver is unbound I don't think I2C client device registered by this
->> driver should be able to survive.
->>
->> Hence, I think Registration::new() should return
->> impl PinInit<Devres<Self>, Error> instead.
-> 
-> Maybe I'm missing something here, but as far as I understand, Devres is bound to 
-> an existing device. However `Registration::new` creates new device and registers 
-> new i2c_client using function `i2c_new_client_device`. Created i2c_client uses 
-> i2c_adapter as its parent.
+> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
 
-Correct, but the question is what's the correct lifetime boundary for this
-i2c:Registration.
-> The driver that declares Registration doesn't own that i2c_adapter. `Registration` 
-> itself is not part of the new client’s managed resources, so returning 
-> `impl PinInit<Devres<Self>, Error>` wouldn’t make sense here.
+[...]
 
-It does make sense, it's just not required for safety reasons.
+>  Documentation/devicetree/bindings/fpga/fpga-region.yaml      | 5 -----
 
-This is an API that should be used by drivers operating complicated devices
-(DRM, NET, etc.) where there is no point in keeping an i2c::Registration alive
-after the driver that registered the I2C client has been unbound itself.
-
-For instance, a GPU driver may call this in probe() to register an I2C device
-for some redriver, repeater, multiplexer, etc. So, it makes no sense to allow a
-corresponding i2c::Registration to still exist beyond the GPU driver being unbound.
-
-Hence, besides not really being necessary for safety reasons, it still seems
-reasonable to enforce this for semantic reasons.
-
-> Drop for Registration calls `i2c_unregister_client()`, which gracefully unregisters
-> and deallocates the i2c_client.
-
-Not quite, it unregisters the I2C client (which is why we call the object
-Registration), but it does not necessarily free the I2C client. Someone else can
-still hold a reference count of the I2C client.
+Acked-by: Xu Yilun <yilun.xu@intel.com>
 
