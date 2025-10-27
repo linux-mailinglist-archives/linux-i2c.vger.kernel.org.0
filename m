@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-13835-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13836-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E64D3C10C5F
-	for <lists+linux-i2c@lfdr.de>; Mon, 27 Oct 2025 20:19:30 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F4F6C10DDE
+	for <lists+linux-i2c@lfdr.de>; Mon, 27 Oct 2025 20:23:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C7105189C8B1
-	for <lists+linux-i2c@lfdr.de>; Mon, 27 Oct 2025 19:14:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 57D0C4630C9
+	for <lists+linux-i2c@lfdr.de>; Mon, 27 Oct 2025 19:16:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8217D32C317;
-	Mon, 27 Oct 2025 19:11:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BEA03203AF;
+	Mon, 27 Oct 2025 19:14:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SFJRd0DD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tGN4T1t1"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3750435965;
-	Mon, 27 Oct 2025 19:11:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3DE231BCBC;
+	Mon, 27 Oct 2025 19:14:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761592299; cv=none; b=kkFWzvKd1XyMXqxpiENRoDPA/HMbKxKvCJFgtcaalCrtNyXftkkPccdILSkatW2Knvkd+y1TZD9OcUTuzfyG/xzUxp78TLtU9Fyb+OcvdA4phzd32z51CToP+7p3FeCWPXqGBQ+x+31q72OCA/V3XAbhB/Q83apIgM7IbvAbBI4=
+	t=1761592491; cv=none; b=VZ2jNDxhqykZ/KPNhHdd6p0iDT2gDtgtjFQNjRuySoMPpQvji+ur5+3mmswm/GsL3PFgPZsybDQmLQxIc/aqQxUVmKU5qYe101QbdnWyQNqlFMOdrXSjVvvx5w8qx3wI+G7BueNp1ly9Tup8r2jnigTSI8vxj+lBylaKQ0kSMQc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761592299; c=relaxed/simple;
-	bh=I0r/PGOkA9CBXYGDV2/cKM9eHtz2/52iVSKA15Hn4Ps=;
+	s=arc-20240116; t=1761592491; c=relaxed/simple;
+	bh=UmjC+XeU6cvmCC2kxiH/o29POC8JmoxbEXi0rQcEvtM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=FVKxfX8GgvmaL9Mn39qzVc3r8boWm9Ypshlf7yqzMorSqo+5rTvATTxO2TbaJ6zSYFVL+8ANu1cp1kSjZxcVnZHpH13keG6csDet6xB7KnTQn/KP2Y1uC/TY/AP/wVmkITDn80DIMN1erHSwU7LV/FPigXixY3nuwU5POI5Ot4s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SFJRd0DD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F05B4C4CEF1;
-	Mon, 27 Oct 2025 19:11:34 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=DhDZrPh8wisEOVMU9eu3B0k7o4aFG6VPbC3t19ac4AsQxSuKFvYBuyp478ZFZsc5SGL0h68ShpcHzbNJfnLDE28mGTogCi4LmnGYIVKbCRa8aX21eOfukBaN+/NrLhS/KYzlHFvYBm0CJDmPehy27yFHkNB88ewNbdeSdEFA8+E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tGN4T1t1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 985C7C4CEF1;
+	Mon, 27 Oct 2025 19:14:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761592299;
-	bh=I0r/PGOkA9CBXYGDV2/cKM9eHtz2/52iVSKA15Hn4Ps=;
+	s=k20201202; t=1761592491;
+	bh=UmjC+XeU6cvmCC2kxiH/o29POC8JmoxbEXi0rQcEvtM=;
 	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=SFJRd0DDLcEbtS2itBpe0BNk/SAQeO+2O/DMEyB5WnY+ZPzG8/juW69hiR0GvxzI+
-	 kdUd3CMhWtI5WvjpjM/jDK4rOzLt4lTSoA1tt1rze0w8sitO+mnxq+hE0zD+BZb/lr
-	 qYBfs+4VAbiUheLT1TL9vzKgOtIwV8E6HfQ59fhtBBrTJmjWJMxegqZUfsfg1LJw18
-	 0lQ3NlClr3yzpave756k3LWr58c3k56a0hnBgI2zs4lHuJOvf0cBJKfhCRJGscg0bX
-	 bVASkSKaKbobd/PKR5S8P7SCGaiHd853MTxMmOhUGHVEvFPfPmxWxrrAo4uMPzqA4H
-	 FCT2/udFWmPlQ==
-Message-ID: <59d4d107-4f35-4906-8524-f45b9b85f0ff@kernel.org>
-Date: Mon, 27 Oct 2025 20:11:32 +0100
+	b=tGN4T1t1nWKQzfOAgL6XV6X/ZmM8w6NVxI9LH7pkbpE8CkhW9vGu3YUsTzcxyN9hq
+	 Q0PYNhgYY7gMmYkrCwOybee6FjBNbbnZpjLg5S9w9E8gBq9maFEnrdBCA9vQaCbfBy
+	 FlHQzvZPkf9gc3Vz/h98nekiYBAEFp4WJdKLPd7GcRq0rOQ0equ0V6+iUBzuOTm873
+	 DQK+L7x3mQMM09CmQoWmxemTeonPbcG9/GKm7x30Ktb2JN2VOVVoLIDbpKSR9EdwJJ
+	 BtlUpkFXP4ffjYu9FPyKgvtR3K+uiPBYbENapC1A8cjSFLviQAkivnvU+euU8Und3m
+	 ZeeKx9vWGS59w==
+Message-ID: <93a2ff5f-2f8e-494b-9652-b93bc243c229@kernel.org>
+Date: Mon, 27 Oct 2025 20:14:45 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v21 1/4] dt-bindings: i2c: Split AST2600 binding into a
- new YAML
+Subject: Re: [PATCH v21 2/4] dt-bindings: i2c: ast2600-i2c.yaml: Add
+ global-regs and transfer-mode properties
 To: Ryan Chen <ryan_chen@aspeedtech.com>, bmc-sw@aspeedtech.com,
  benh@kernel.crashing.org, joel@jms.id.au, andi.shyti@kernel.org,
  jk@codeconstruct.com.au, robh@kernel.org, krzk+dt@kernel.org,
@@ -61,7 +61,7 @@ To: Ryan Chen <ryan_chen@aspeedtech.com>, bmc-sw@aspeedtech.com,
  devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
 References: <20251027061240.3427875-1-ryan_chen@aspeedtech.com>
- <20251027061240.3427875-2-ryan_chen@aspeedtech.com>
+ <20251027061240.3427875-3-ryan_chen@aspeedtech.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -107,111 +107,42 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20251027061240.3427875-2-ryan_chen@aspeedtech.com>
+In-Reply-To: <20251027061240.3427875-3-ryan_chen@aspeedtech.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 27/10/2025 07:12, Ryan Chen wrote:
-> The AST2600 I2C controller introduces a completely new register
-> map and Separate control/target register sets, unlike the mixed
-> layout used in AST2400/AST2500.
+> The AST2600 I2C controller supports three transfer modes: byte,
+> buffer, and DMA. To allow board designers and firmware to
+> explicitly select the preferred transfer mode for each controller
+> instance. "aspeed,transfer-mode" to allow device tree to specify
+> the desired transfer method used by each I2C controller instance.
 > 
-> In addition, at new AST2600 configuration registers and transfer
-> modes require new DT properties, which are incompatible with
-> existing bindings. Therefore, this patch creates a dedicated
-> binding file for AST2600 to properly describe these new
-> hardware capabilities.
+> And AST2600 i2c controller have two register mode, one is legacy
+> register layout which is mix controller/target register control
+> together, another is new mode which is separate controller/target
+> register control.
 > 
-> A subsequent change will modify this new binding to properly
-> describe the AST2600 hardware.
-> 
-> Signed-off-by: Ryan Chen <ryan_chen@aspeedtech.com>
-> ---
->  .../devicetree/bindings/i2c/aspeed,i2c.yaml   |  3 +-
->  .../devicetree/bindings/i2c/ast2600-i2c.yaml  | 66 +++++++++++++++++++
->  2 files changed, 67 insertions(+), 2 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/i2c/ast2600-i2c.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml b/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml
-> index 5b9bd2feda3b..d4e4f412feba 100644
-> --- a/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml
-> @@ -4,7 +4,7 @@
->  $id: http://devicetree.org/schemas/i2c/aspeed,i2c.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
+
+This implies your "reg" properties have now completely different meaning
+and this would be quite an ABI break. We discussed this probably 15
+revisions ago. Where did you document the resolution of that discussion?
+
 >  
-> -title: ASPEED I2C on the AST24XX, AST25XX, and AST26XX SoCs
-> +title: ASPEED I2C on the AST24XX, AST25XX SoCs
+>  unevaluatedProperties: false
 >  
->  maintainers:
->    - Rayn Chen <rayn_chen@aspeedtech.com>
-> @@ -17,7 +17,6 @@ properties:
->      enum:
->        - aspeed,ast2400-i2c-bus
->        - aspeed,ast2500-i2c-bus
-> -      - aspeed,ast2600-i2c-bus
->  
->    reg:
->      minItems: 1
-> diff --git a/Documentation/devicetree/bindings/i2c/ast2600-i2c.yaml b/Documentation/devicetree/bindings/i2c/ast2600-i2c.yaml
-> new file mode 100644
-> index 000000000000..6ddcec5decdc
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/i2c/ast2600-i2c.yaml
-> @@ -0,0 +1,66 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/i2c/ast2600-i2c.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: ASPEED I2C on the AST26XX SoCs
-> +
-> +maintainers:
-> +  - Ryan Chen <ryan_chen@aspeedtech.com>
-> +
-> +allOf:
-> +  - $ref: /schemas/i2c/i2c-controller.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - aspeed,ast2600-i2c-bus
-> +
-> +  reg:
-> +    minItems: 1
+> @@ -57,10 +85,12 @@ examples:
+>        #address-cells = <1>;
+>        #size-cells = <0>;
+>        compatible = "aspeed,ast2600-i2c-bus";
+> -      reg = <0x40 0x40>;
+> +      reg = <0x80 0x80>, <0xc00 0x20>;
 
-<form letter>
-This is a friendly reminder during the review process.
+Not relevant to this patch. You just added this line in patch #1, so did
+you add incorrect code just to fix it right away?
 
-It seems my or other reviewer's previous comments were not fully
-addressed. Maybe the feedback got lost between the quotes, maybe you
-just forgot to apply it. Please go back to the previous discussion and
-either implement all requested changes or keep discussing them.
+No, fix your example when creating it.
 
-Thank you.
-</form letter>
-
-> +    items:
-> +      - description: address offset and range of bus
-> +      - description: address offset and range of bus buffer
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-
-Nothing improved
-
-> +    description:
-> +      root clock of bus, should reference the APB
-> +      clock in the second cell
-
-Really, you just ignored all the comments.
-
-No wonder this is v21 and there will be more. Please re-think what is
-going wrong in this process that you need 22 or more revisions.
 
 Best regards,
 Krzysztof
