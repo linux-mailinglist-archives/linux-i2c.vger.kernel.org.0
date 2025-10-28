@@ -1,129 +1,179 @@
-Return-Path: <linux-i2c+bounces-13859-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13867-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id DDAE9C15E13
-	for <lists+linux-i2c@lfdr.de>; Tue, 28 Oct 2025 17:41:56 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 647B3C15FD8
+	for <lists+linux-i2c@lfdr.de>; Tue, 28 Oct 2025 17:57:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 8B50E3557D3
-	for <lists+linux-i2c@lfdr.de>; Tue, 28 Oct 2025 16:41:51 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3F2874E2A56
+	for <lists+linux-i2c@lfdr.de>; Tue, 28 Oct 2025 16:57:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79C1A345732;
-	Tue, 28 Oct 2025 16:41:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B128342CB5;
+	Tue, 28 Oct 2025 16:57:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lucaweiss.eu header.i=@lucaweiss.eu header.b="66mPCvAI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SfPj5uxZ"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from ahti.lucaweiss.eu (ahti.lucaweiss.eu [128.199.32.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 665AC305E31;
-	Tue, 28 Oct 2025 16:41:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=128.199.32.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2956D2882B4;
+	Tue, 28 Oct 2025 16:57:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761669698; cv=none; b=TFdRe3XL0khaPjuWln+eSbuO5okP/KqlZcGvp0JJ/aAfUiTq3xAf90GuAAuPqqFNHLiX0DcA/benMPfoGE/Reon/ciO6/z3VFKolIWkBUlwDiKuNCYo0uTsdDHC5/um7caSzgZHTRvshv2G+jO7Ep794iwo1gAQGszyv4IrZirQ=
+	t=1761670623; cv=none; b=Q1nnLWi7ukmD9X9po/Yn8OB8ImfYpyaSmCb8bpDalkdqG4nYz/oG+PTqSbB1QKTOZRJisZtZaBeysaVTO1+mTxTBbcPXduIAyKiLtkWq0SmQKWoGW3j5LPfziExIzeKqMdGTSf2MxpfPByVkm/2IRRQcHGeVYQlxI6eF6QAM8Gc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761669698; c=relaxed/simple;
-	bh=ecnA0KG481FICL1IxqZl/Uq99VZDiX0xPco/otlm9Gw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=DPMicen05DXG3cNz1QiZGca3Jp1ZPIKWYGsR9mjEny/nMgC9xsBKsyzk2YSff1gEYEal8tZGifY53r8rLqoC54uxBrGvbVZVesLas6KmN+hoUMH2FS1wvUtRBy/0G5GACtJ4IAAt2ksfO03VVbLWbyEoL37sesBxdEGQDo40570=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=lucaweiss.eu; spf=pass smtp.mailfrom=lucaweiss.eu; dkim=pass (1024-bit key) header.d=lucaweiss.eu header.i=@lucaweiss.eu header.b=66mPCvAI; arc=none smtp.client-ip=128.199.32.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=lucaweiss.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lucaweiss.eu
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lucaweiss.eu; s=s1;
-	t=1761669691; bh=ecnA0KG481FICL1IxqZl/Uq99VZDiX0xPco/otlm9Gw=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=66mPCvAIA9hoc9ACXaoEmKAXo4oK0mTdFFeT+MrBYeoJbYOwojrRpcCzv/SXpZQ63
-	 Qjb+n+2BhOTYM4F78vTpVjcIHRZ1JQ9hw0EXyJf/mX5ff3sC0mpiUNa0Hq6da9Alkw
-	 yPXHve/7WKAWNVpbftwcjoo6RM5MMBTpdAh5WcLc=
-From: Luca Weiss <luca@lucaweiss.eu>
-Date: Tue, 28 Oct 2025 17:40:52 +0100
-Subject: [PATCH v2 7/7] arm64: dts: qcom: sdm632-fairphone-fp3: Enable CCI
- and add EEPROM
+	s=arc-20240116; t=1761670623; c=relaxed/simple;
+	bh=jL+q+hX5pgclGqLhztaAcUV7Iu4y5c7/CXWShf0neD8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IxPsOXZ+uAB9v7Y+gltNUfnbhqEsOBgjVVlTvxcVuUljl+Ql3noBwYtXC8CW7sztAsZbtuqihUrqxH4xt/m6Oa/vLrqRsXMoIVOwZyXDx93ydNf/6aJ23gOAqVVOv8Clp5lgoPS/fyHaSM/v9vZZTYKKoWnM1pLs2VnILBD/V4k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SfPj5uxZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDCB3C4CEE7;
+	Tue, 28 Oct 2025 16:56:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761670622;
+	bh=jL+q+hX5pgclGqLhztaAcUV7Iu4y5c7/CXWShf0neD8=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=SfPj5uxZTYeiNSCgD2N5QwJpnla587u0XK1spznO96mYoPO7vEMlH2urQbBREBVeJ
+	 M3Z9ub0LaIw3KyVGKmgT758C9UXOo1GfXSYKI7VYTUn2vJgQhOEGVUBGfK0vh7v2kv
+	 JxsmmGa4scR4Iprl0rTeEhKuf4/i/eovCZINXJvU4uAGqmq1gD0c93feU/TfA3sAsP
+	 iFMWQcdUgbMKc/DQjvdUI9GzTtMDY045kkHu1RUDTCnJTCT17ZYxZiOqvg9PV/l0ek
+	 KmT9XgwLfMOXYAgc1+jcsXzXhG3kmLwYlFuuDMDYAJgWrIXSOcDEyeIGfcoMwuw2Qv
+	 qdtiyFwX0jYdw==
+Message-ID: <7efc63ed-9c84-43c0-b524-f7e9e60b2846@kernel.org>
+Date: Tue, 28 Oct 2025 17:56:55 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/6] dt-bindings: media: camss: Add
+ qcom,kaanapali-camss binding
+To: Vijay Kumar Tumati <vijay.tumati@oss.qualcomm.com>,
+ Hangxiang Ma <hangxiang.ma@oss.qualcomm.com>
+Cc: Loic Poulain <loic.poulain@oss.qualcomm.com>,
+ Robert Foss <rfoss@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Todor Tomov <todor.too@gmail.com>,
+ Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>, linux-i2c@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+ aiqun.yu@oss.qualcomm.com, tingwei.zhang@oss.qualcomm.com,
+ trilok.soni@oss.qualcomm.com, yijie.yang@oss.qualcomm.com,
+ Jingyi Wang <jingyi.wang@oss.qualcomm.com>,
+ Atiya Kailany <atiya.kailany@oss.qualcomm.com>
+References: <20251023-add-support-for-camss-on-kaanapali-v3-0-02abc9a107bf@oss.qualcomm.com>
+ <20251023-add-support-for-camss-on-kaanapali-v3-2-02abc9a107bf@oss.qualcomm.com>
+ <20251028-wonderful-olive-muskox-77f98d@kuoka>
+ <ac126c63-f40c-4159-87c9-1b3d7a8dec63@oss.qualcomm.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <ac126c63-f40c-4159-87c9-1b3d7a8dec63@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251028-msm8953-cci-v2-7-b5f9f7135326@lucaweiss.eu>
-References: <20251028-msm8953-cci-v2-0-b5f9f7135326@lucaweiss.eu>
-In-Reply-To: <20251028-msm8953-cci-v2-0-b5f9f7135326@lucaweiss.eu>
-To: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org, 
- Loic Poulain <loic.poulain@oss.qualcomm.com>, 
- Robert Foss <rfoss@kernel.org>, Andi Shyti <andi.shyti@kernel.org>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>, 
- Bjorn Andersson <andersson@kernel.org>, 
- Konrad Dybcio <konradybcio@kernel.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Luca Weiss <luca@lucaweiss.eu>, 
- Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1084; i=luca@lucaweiss.eu;
- h=from:subject:message-id; bh=ecnA0KG481FICL1IxqZl/Uq99VZDiX0xPco/otlm9Gw=;
- b=kA0DAAoBcthDuJ1N11YByyZiAGkA8jSiCLgFvBfKbtvhOkmqKYyjXVuShnNWYUFYagZabQwKq
- IkCMwQAAQoAHRYhBDm60i8ILNqRuhWP+nLYQ7idTddWBQJpAPI0AAoJEHLYQ7idTddWZxcQAJCk
- JEwXQxPtkGNZDs9S6+lMY5j+Z9Hsp3k1Dv75lc2X1YdQ41FRxglzq7pHTiv1YxYbo1vnPmiGkjt
- O9oA+HnoFpo1U46RMb/OgM+p/o9RshEruUSFvrSYofT3uD7yU1CLMw0rOuc6lBao62EIeZSurtj
- OOvHNyHuDekxk/1DQmwN+VNueqp9iqVHFvsqvepg/PeEPTDuLSW6WzXY1gANgeUjR0lRA7asnaT
- 9JQzv1EP/hvFK7rSnFuUKUXJoKsp8ipnuahUz6zam3yrhuzq0rm7RQDCS6LieCm4YdIJIvPhqyw
- SiK4Qc4cN/bZjQrZuJ+Efep3TMjYvrxnLgVDTadjcIvu6UDvODkuRrvGFT+dabKbrrOTgnvWzZL
- ODw2E5fnnbRYVwwr3OPU4Dsc4Oo2XITPUUjvHzS0kwn+OxBfc187eCC7U9GZB9BOid56+M/9eKu
- 93FbNAfnuGz5bZxc2f/5+iCb/YcB3IWFhOC26V8V4tKsJ1i5rPNPcqoPNfYYrsnaYaR2MyKoZ3U
- SBqVumaV/mo8unXTSOy8ntjzICYK3Al7uBUnciLFsrDZfgO/qqodyHPrSfSDkhnHw0bqwb6UqMO
- xBUUFQhlmaIAUeByjLnTYYQEDdBVg9PdIAKVVGXY1hMkptp1023YBBA4ftoyamPuIDp7MBm4dNp
- lzZse
-X-Developer-Key: i=luca@lucaweiss.eu; a=openpgp;
- fpr=BD04DA24C971B8D587B2B8D7FAF69CF6CD2D02CD
 
-Enable the CCI where the camera modules are connected to, and add a node
-for the EEPROM found next to the IMX363 rear camera.
+On 28/10/2025 16:22, Vijay Kumar Tumati wrote:
+>>> +  interconnects:
+>>> +    maxItems: 2
+>>> +
+>>> +  interconnect-names:
+>>> +    items:
+>>> +      - const: ahb
+>>> +      - const: hf_mnoc
+>> Why previously this was called hf_0 but now hf?
+> Hi Krzysztof, the interconnect driver exposes only one node 'camnoc_hf' 
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Signed-off-by: Luca Weiss <luca@lucaweiss.eu>
----
- arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+Drivers don't matter. Interconnect driver does not matter here. You
+describe this hardware, not interconnect driver.
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts b/arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts
-index 557925a66276..0edb2992b902 100644
---- a/arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts
-+++ b/arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts
-@@ -88,6 +88,27 @@ vph_pwr: vph-pwr-regulator {
- 	};
- };
- 
-+&cci {
-+	status = "okay";
-+};
-+
-+&cci_i2c0 {
-+	/* Sony IMX363 (rear) @ 0x10 */
-+
-+	eeprom@50 {
-+		compatible = "belling,bl24s64", "atmel,24c64";
-+		reg = <0x50>;
-+		vcc-supply = <&vreg_cam_io_1p8>;
-+		read-only;
-+	};
-+
-+	/* ON Semi LC898217 VCM @ 0x72 */
-+};
-+
-+&cci_i2c1 {
-+	/* Samsung S5K4H7YX (front) @ 0x10 */
-+};
-+
- &gpu {
- 	status = "okay";
- };
+Keep it consistent with previous devices, whichever these are.
 
--- 
-2.51.2
+> to the camera driver, with it internally managing the voting on hf_0 and 
+> hf_1 clients. The traffic from the Real Time blocks in camera go through 
+> both HF_0 and HF_1, with the former being the primary. This change 
+> correctly represents that the BW voting is for the whole of the HF 
+> client. Please let me know if you have any further questions and we 
+> would be happy to answer. Thank you.
+>>> +
+>>> +  iommus:
+>>> +    maxItems: 1
+>>> +
+>>> +  power-domains:
+>>> +    items:
+>>> +      - description:
+>>> +          TFE0 GDSC - Thin Front End, Global Distributed Switch Controller.
+>>> +      - description:
+>>> +          TFE1 GDSC - Thin Front End, Global Distributed Switch Controller.
+>>> +      - description:
+>>> +          TFE2 GDSC - Thin Front End, Global Distributed Switch Controller.
+>>> +      - description:
+>>> +          Titan GDSC - Titan ISP Block Global Distributed Switch Controller.
+>>> +
+>>> +  power-domain-names:
+>>> +    items:
+>>> +      - const: tfe0
+>>> +      - const: tfe1
+>>> +      - const: tfe2
+>> Why not using the same names as before? It really does not matter that
+>> it is thin or image, all of them are the same because only the
+>> difference against top matters.
+> Right, this is done to maintain the consistency with the clock driver on 
 
+Sorry, this makes no sense. This device has nothing to do with clock
+driver. Don't ever use clock drivers as arguments for doing something in
+completely different place.
+
+Not mentioning that drivers don't matter much for the bindings, so I
+really do not get what you try to explain here.
+
+Best regards,
+Krzysztof
 
