@@ -1,166 +1,110 @@
-Return-Path: <linux-i2c+bounces-13889-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13890-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76F93C19F6D
-	for <lists+linux-i2c@lfdr.de>; Wed, 29 Oct 2025 12:19:59 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85E2EC1CA84
+	for <lists+linux-i2c@lfdr.de>; Wed, 29 Oct 2025 19:03:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id E656C3565C3
-	for <lists+linux-i2c@lfdr.de>; Wed, 29 Oct 2025 11:19:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B51521888F42
+	for <lists+linux-i2c@lfdr.de>; Wed, 29 Oct 2025 18:04:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24C7731B13D;
-	Wed, 29 Oct 2025 11:19:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D8F435505D;
+	Wed, 29 Oct 2025 18:03:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B7EVqC+o"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mWs0dk9C"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF2EB2DC76B;
-	Wed, 29 Oct 2025 11:19:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81B1B2F7ABE;
+	Wed, 29 Oct 2025 18:03:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761736793; cv=none; b=VtkAXrGlWm9cW6POdJMMtrwdUirzOgXf5YGKH9Uf3VJ7E8COsGB5wbKvLOSTX3icK11FQCXoeKNBjgGluadIcWzJFYIAEvvs8e4N+Nr3Ckm3ng3+4Zwc/I90W5Mcx7zuFFMDahzolpe5udG8V/2DbMltkbKK63e6DLVVSCpM6+Q=
+	t=1761761022; cv=none; b=NCai6uhjHHK5EcG62ttn/8vUQklix/GSfMd8lNy1rYhBRXjrkDTCvdSp9s+btCcQ95SxHC1PgZb7H8foQSbeQ3446IWgqiLE9XZp/Rndf+g1yZATngiEF1tBHHq/3CwnhLYck1uful1LmGHUUs4JinFVrAZ/35ArWWMIzZFaZtk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761736793; c=relaxed/simple;
-	bh=Dh+ZcU4ASdDvqiZiGQmIVyEEV0pygfzZVWIqYkkSB78=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=tHgjbwBez38MSRknNMKM1z9sL7zIzZO5SXHU3tJEminh53Ez4ImbMohIYDibbDW03YH2Mw6lwdlGIO2mFyFoQF8wTpfMTX1b1J+4iKZYG6XBjApR2SNhUqdvF28VwWzZKRW0KEOTWAXfhxIG0KuTJCaktHmV4v9dNF45upUXmbI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B7EVqC+o; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2D60C4CEF7;
-	Wed, 29 Oct 2025 11:19:46 +0000 (UTC)
+	s=arc-20240116; t=1761761022; c=relaxed/simple;
+	bh=p2p1mExq+VbfFKSn6yZ7QGZN0xXJpJitifw6k/WPVOk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=drVcAaUhFzhEsna+DLZhyXF9y9qbzx2DfVBw9bPT4us91ge5nB22K9pxVsogEbnp344fuCJiYH4/h/KuuS9h+pt8OswXg0c/Fw/dMDV/XWMhSVSNqkPC02JW+q3HWJ9QEhCK4LbFN6ZV0MHai+kwXeJdAmvYx4MFdxwmVpOKrUk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mWs0dk9C; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06BECC4CEF7;
+	Wed, 29 Oct 2025 18:03:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761736792;
-	bh=Dh+ZcU4ASdDvqiZiGQmIVyEEV0pygfzZVWIqYkkSB78=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=B7EVqC+obkpJ9cwtEEcxn+iPMh/RHAaEh8y5xfgsskC3Un69QoGea8ahrJ7JgNUl0
-	 vplNQl1bHY195dhxlLgNopw/mw/BVkpMHiUekW5wts4juE7MF4d7SqqhdXm1PgAQWg
-	 ik/ewch9b/0OUBhWXqOgEF1RNaWWL6rXqs0nLFn1KpMh39/YiEdzs+1HO22xmeXZOL
-	 jIb7HyhQvnE3btnI8oPRNa70rP3vRZXGWcsg9kYCUIvax4tft/71NLPdpDWsb3TkZY
-	 hiBn6TFT4IPMILYhl6c1nBp+37V6m+iy08qM7xj6O/PjKTSmlo1oMbpIPDuPfPxx/X
-	 lZs6NNNQg3krA==
-Message-ID: <36e2b87f-5567-4bd6-bd1b-789623441461@kernel.org>
-Date: Wed, 29 Oct 2025 12:19:44 +0100
+	s=k20201202; t=1761761022;
+	bh=p2p1mExq+VbfFKSn6yZ7QGZN0xXJpJitifw6k/WPVOk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=mWs0dk9CVveUACfVBHLnH0vvLET//9eyp2+mEZOh0A3qXzZ5Xj487wNb//CtU6nsM
+	 MA7Gzw6qCg3Av8DOuxrluoQSF9/pGWc7D6gaS742ePZ285RAKm0AxTfFZCXUieNM/v
+	 6VAr3hlQUI5DT/RbH6LK/QlzdXUYiXpVMvSJKzksFmhznx6BL7V+5ROyZF7C05X4iN
+	 ldvUO9Fqjq1xtHRuB0xP1Uf59f6gRIgSkhWaGN1jCUjpdakgDgbx1PfQcC7TKFhGgb
+	 E8eJ2PrOrmLvefy1cxgoFrMVBvvrQZtjIELEoBcC3QEGKzDJl7RkJ8Xff7heUvEngZ
+	 lUSIHtZaRw+qQ==
+Date: Wed, 29 Oct 2025 19:03:35 +0100
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Cc: Luca Weiss <luca@lucaweiss.eu>, ~postmarketos/upstreaming@lists.sr.ht, 
+	phone-devel@vger.kernel.org, Loic Poulain <loic.poulain@oss.qualcomm.com>, 
+	Robert Foss <rfoss@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>, Bjorn Andersson <andersson@kernel.org>, 
+	Konrad Dybcio <konradybcio@kernel.org>, linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/7] dt-bindings: i2c: qcom-cci: Document msm8953
+ compatible
+Message-ID: <wgxgjhzbkkzbjz64bshooo7mstnpm7ames66e4ctjwjyx3p52i@j6db4r2x64nm>
+References: <20251028-msm8953-cci-v2-0-b5f9f7135326@lucaweiss.eu>
+ <20251028-msm8953-cci-v2-1-b5f9f7135326@lucaweiss.eu>
+ <48a217db-b85a-411c-81f2-3106b60da86f@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v21 2/4] dt-bindings: i2c: ast2600-i2c.yaml: Add
- global-regs and transfer-mode properties
-To: Ryan Chen <ryan_chen@aspeedtech.com>, BMC-SW <BMC-SW@aspeedtech.com>,
- "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
- "joel@jms.id.au" <joel@jms.id.au>,
- "andi.shyti@kernel.org" <andi.shyti@kernel.org>,
- "jk@codeconstruct.com.au" <jk@codeconstruct.com.au>,
- "robh@kernel.org" <robh@kernel.org>, "krzk+dt@kernel.org"
- <krzk+dt@kernel.org>, "conor+dt@kernel.org" <conor+dt@kernel.org>,
- "andrew@codeconstruct.com.au" <andrew@codeconstruct.com.au>,
- "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
- "andriy.shevchenko@linux.intel.com" <andriy.shevchenko@linux.intel.com>,
- "naresh.solanki@9elements.com" <naresh.solanki@9elements.com>,
- "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
- "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20251027061240.3427875-1-ryan_chen@aspeedtech.com>
- <20251027061240.3427875-3-ryan_chen@aspeedtech.com>
- <93a2ff5f-2f8e-494b-9652-b93bc243c229@kernel.org>
- <TY2PPF5CB9A1BE6DCA78BEDC3178B74FD75F2FAA@TY2PPF5CB9A1BE6.apcprd06.prod.outlook.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <TY2PPF5CB9A1BE6DCA78BEDC3178B74FD75F2FAA@TY2PPF5CB9A1BE6.apcprd06.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <48a217db-b85a-411c-81f2-3106b60da86f@oss.qualcomm.com>
 
-On 29/10/2025 10:25, Ryan Chen wrote:
->> Subject: Re: [PATCH v21 2/4] dt-bindings: i2c: ast2600-i2c.yaml: Add global-regs
->> and transfer-mode properties
->>
->> On 27/10/2025 07:12, Ryan Chen wrote:
->>> The AST2600 I2C controller supports three transfer modes: byte,
->>> buffer, and DMA. To allow board designers and firmware to explicitly
->>> select the preferred transfer mode for each controller instance.
->>> "aspeed,transfer-mode" to allow device tree to specify the desired
->>> transfer method used by each I2C controller instance.
->>>
->>> And AST2600 i2c controller have two register mode, one is legacy
->>> register layout which is mix controller/target register control
->>> together, another is new mode which is separate controller/target
->>> register control.
->>>
->>
->> This implies your "reg" properties have now completely different meaning and
->> this would be quite an ABI break. We discussed this probably 15 revisions ago.
->> Where did you document the resolution of that discussion?
+Hi,
+
+On Wed, Oct 29, 2025 at 10:36:16AM +0100, Konrad Dybcio wrote:
+> On 10/28/25 5:40 PM, Luca Weiss wrote:
+> > Add the msm8953 CCI device string compatible.
+> > 
+> > Signed-off-by: Luca Weiss <luca@lucaweiss.eu>
+> > ---
+> >  Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml | 2 ++
+> >  1 file changed, 2 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
+> > index 9bc99d736343..ef8f5fe3a8e1 100644
+> > --- a/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
+> > +++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
+> > @@ -15,6 +15,7 @@ properties:
+> >      oneOf:
+> >        - enum:
+> >            - qcom,msm8226-cci
+> > +          - qcom,msm8953-cci
+> >            - qcom,msm8974-cci
+> >            - qcom,msm8996-cci
+> >  
+> > @@ -146,6 +147,7 @@ allOf:
+> >              - contains:
+> >                  enum:
+> >                    - qcom,msm8916-cci
+> > +                  - qcom,msm8953-cci
+> >  
+> >              - const: qcom,msm8996-cci
 > 
-> Let me explain more about "reg"
-> The 'reg' property continues to describe the same register regions
-> (bus and buffer) as in the legacy layout. The selection between the legacy
-> and new register layout is controlled by a bit in the SoC-level global
-> register block, referenced through the new 'aspeed,global-regs' property.
-> Therefore, the meaning of the 'reg' property does not change and no DT ABI
-> break occurs.
+> Sorry for only bringing it up now - could you check whether
+> all the clocks that you defined are actually necessary?
 > 
-> Should I add it in commit message about "reg" ?
+> It may be that you can do without CAMSS_AHB_CLK and/or
+> TOP_AHB_CLK
 
-Then why does the address change from 0x40 to 0x80. If it is the same,
-it cannot change.
+I was about to merge this. I'll wait for Luca's confirmation.
 
-You are describing the IO address space, total address space, as defined
-by datasheet. Not whatever is in the driver.
-
-
-Best regards,
-Krzysztof
+Andi
 
