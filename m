@@ -1,47 +1,47 @@
-Return-Path: <linux-i2c+bounces-13906-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13907-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B6FFC20883
-	for <lists+linux-i2c@lfdr.de>; Thu, 30 Oct 2025 15:15:42 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52D8FC20BD2
+	for <lists+linux-i2c@lfdr.de>; Thu, 30 Oct 2025 15:52:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C230D3B5E4B
-	for <lists+linux-i2c@lfdr.de>; Thu, 30 Oct 2025 14:15:21 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C7EAC4F0B64
+	for <lists+linux-i2c@lfdr.de>; Thu, 30 Oct 2025 14:47:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 598CA25A333;
-	Thu, 30 Oct 2025 14:15:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B900927A907;
+	Thu, 30 Oct 2025 14:46:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TZRg3Lcv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FCcQ0B+w"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD73023C513;
-	Thu, 30 Oct 2025 14:14:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F88D14A91;
+	Thu, 30 Oct 2025 14:46:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761833701; cv=none; b=SKWjHsyDdAWWep/tmNZkHK1OVlWGngxy3JyVdyDoBl0idjiT9c2l/yJlydz6565Mbb72bmjrwSpOrJUnuzOVpqqpVI+hLio3mkCwFE8xy5oRJUeUn+aYteD9RCBt5jhPr7ZvXw9LXWy5Xso/9e4N7bwBgqmkX95O509ox2PoCOU=
+	t=1761835617; cv=none; b=bUWjfzZ8JZsrvMjC54vPYJCY/PT230PRPV/ystkJPp3ZB/z7jMprpGk2LPXm0ja47MY7dtFW+f9LePxZqX5eckFqzMogrVJWm96X2CDe8d0gRAEbuQ4sCD0UEcrAQIMXYggpRGtPMdRym4nEc90DUajp3HmIL30+wBnaHNMGr0U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761833701; c=relaxed/simple;
-	bh=ARkbEZwIcjtq3UHgVcwLTAhe5ywrSMfhcggmgV1iso8=;
+	s=arc-20240116; t=1761835617; c=relaxed/simple;
+	bh=ZbD7yOLwW/cgaU5VsklEXPxgoTiYiE4edNqVj6qNico=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pNVNM00lVRKALcENWHxHbHY5k8r2rKMp+mk4MNMxn5U9M5jP8vhYuXxgpfaD2CkScw1vlasg/8gVwPeh7PeEIfqlJIwJsm9hAb2zKcJq7nw/YjjWhVCTTTXRJZ6ipLExsajTdpucrkEYT4atv2gTa63YcCC+BD6L4ZoiuzcrrwA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TZRg3Lcv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43177C4CEFF;
-	Thu, 30 Oct 2025 14:14:57 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=e61Gp111G+88GCHPpvfyACPbeVEa3fw7ujsLioHbfn1WdfNd7WETM3webYkEcQGyQ6FVDOuZ7KhaLYWLd6Iw1jTYl4oa2MAYvRdJuOXqKs1HP2NhNxawgpVvihjzs5FN97DANRLXHYVLhFjb9BbjY83UKfG450dZuq3NFJNIf/0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FCcQ0B+w; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 840B5C4CEF8;
+	Thu, 30 Oct 2025 14:46:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761833699;
-	bh=ARkbEZwIcjtq3UHgVcwLTAhe5ywrSMfhcggmgV1iso8=;
+	s=k20201202; t=1761835616;
+	bh=ZbD7yOLwW/cgaU5VsklEXPxgoTiYiE4edNqVj6qNico=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TZRg3Lcvd8GObcu7mv5GNEOQTP82tLQK9Fl51npkDqQkq8vYqiXjd+sdbWRm+AaKS
-	 KM05NDknRHsO9S3x92lDMWSXtGzaU5EbeIrn74EMy0Vn9dsDaegeR4nvExsA3djLUP
-	 VIgK0Wjr8X+dTo/niyqSMRgbYKTqJXZY0RP0Co/azFwbieXvnh7lwPpyXWLgV7FNWX
-	 twXnIP0x8vUNwSyA96xXCYhrS/xVTBSa143Z2dBIN1G3kq1e9zqrIJRND6e/Nt9r7B
-	 CEPqGJIpLThMFYq2/zDzz6r1MwoPduvgQLuJg5UqqWx2aNvdP/Aj492SQNNbrfTU54
-	 3aj6I/1c7UcYQ==
-Date: Thu, 30 Oct 2025 09:14:48 -0500
+	b=FCcQ0B+w8LJ6ToMaS6Qm6GHAn0D54ovIPp2mSH+uiK/SKSLzgJBCV3Snalz6zFMcp
+	 UUjEDY+D73uxZGayO0srDEnQe6uWD3GHNw3n7bYLcbuxIiA8/sBQTFaoJB7/cI09E2
+	 XxQaY0TUrWYvhLs4KGQYVdvBusWUB9vRkaSu58MVvJheIaPF3suaEBTcmQ/puWLR8C
+	 x0qSrQuC3NGFxPrA7RSI5DXKUzK3z0kbqOVAbyA6CUn+thpA0Y3NC/0rem3AnoO9I/
+	 UblRftK8xQfF4/jViVZT1NPycEdWVdsd+pHU/H15mBM2H2zkXd3RmKIn0omPOZRxHc
+	 Sf80ZkUjpjz5g==
+Date: Thu, 30 Oct 2025 09:46:50 -0500
 From: Rob Herring <robh@kernel.org>
 To: Herve Codina <herve.codina@bootlin.com>
 Cc: Andrew Lunn <andrew@lunn.ch>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -89,10 +89,11 @@ Cc: Andrew Lunn <andrew@lunn.ch>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Steen Hegelund <steen.hegelund@microchip.com>,
 	Luca Ceresoli <luca.ceresoli@bootlin.com>,
 	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v4 05/29] dt-bindings: bus: Add simple-platform-bus
-Message-ID: <20251030141448.GA3853761-robh@kernel.org>
+Subject: Re: [PATCH v4 19/29] of: property: Allow fw_devlink device-tree on
+ x86
+Message-ID: <20251030144650.GA3911092-robh@kernel.org>
 References: <20251015071420.1173068-1-herve.codina@bootlin.com>
- <20251015071420.1173068-6-herve.codina@bootlin.com>
+ <20251015071420.1173068-20-herve.codina@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -101,40 +102,106 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251015071420.1173068-6-herve.codina@bootlin.com>
+In-Reply-To: <20251015071420.1173068-20-herve.codina@bootlin.com>
 
-On Wed, Oct 15, 2025 at 09:13:52AM +0200, Herve Codina wrote:
-> A Simple Platform Bus is a transparent bus that doesn't need a specific
-> driver to perform operations at bus level.
+On Wed, Oct 15, 2025 at 09:14:06AM +0200, Herve Codina wrote:
+> PCI drivers can use a device-tree overlay to describe the hardware
+> available on the PCI board. This is the case, for instance, of the
+> LAN966x PCI device driver.
 > 
-> Similar to simple-bus, a Simple Platform Bus allows to automatically
-> instantiate devices connected to this bus.
+> Adding some more nodes in the device-tree overlay adds some more
+> consumer/supplier relationship between devices instantiated from this
+> overlay.
 > 
-> Those devices are instantiated only by the Simple Platform Bus probe
-> function itself.
+> Those fw_node consumer/supplier relationships are handled by fw_devlink
+> and are created based on the device-tree parsing done by the
+> of_fwnode_add_links() function.
+> 
+> Those consumer/supplier links are needed in order to ensure a correct PM
+> runtime management and a correct removal order between devices.
+> 
+> For instance, without those links a supplier can be removed before its
+> consumers is removed leading to all kind of issue if this consumer still
+> want the use the already removed supplier.
+> 
+> The support for the usage of an overlay from a PCI driver has been added
+> on x86 systems in commit 1f340724419ed ("PCI: of: Create device tree PCI
+> host bridge node").
+> 
+> In the past, support for fw_devlink on x86 had been tried but this
+> support has been removed in commit 4a48b66b3f52 ("of: property: Disable
+> fw_devlink DT support for X86"). Indeed, this support was breaking some
+> x86 systems such as OLPC system and the regression was reported in [0].
+> 
+> Instead of disabling this support for all x86 system, use a finer grain
+> and disable this support only for the possible problematic subset of x86
+> systems (at least OLPC and CE4100).
+> 
+> Those systems use a device-tree to describe their hardware. Identify
+> those systems using key properties in the device-tree.
+> 
+> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> Link: https://lore.kernel.org/lkml/3c1f2473-92ad-bfc4-258e-a5a08ad73dd0@web.de/ [0]
+> ---
+>  drivers/of/property.c | 31 ++++++++++++++++++++++++++++++-
+>  1 file changed, 30 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/of/property.c b/drivers/of/property.c
+> index c1feb631e383..09b568e3b826 100644
+> --- a/drivers/of/property.c
+> +++ b/drivers/of/property.c
+> @@ -1600,12 +1600,41 @@ static int of_fwnode_irq_get(const struct fwnode_handle *fwnode,
+>  	return of_irq_get(to_of_node(fwnode), index);
+>  }
+>  
+> +static int match_property_by_path(const char *node_path, const char *prop_name,
+> +				  const char *value)
+> +{
+> +	struct device_node *np __free(device_node) = of_find_node_by_path(node_path);
+> +
+> +	return of_property_match_string(np, prop_name, value);
+> +}
+> +
+> +static bool of_is_fwnode_add_links_supported(void)
+> +{
+> +	static int is_supported = -1;
+> +
+> +	if (is_supported != -1)
+> +		return !!is_supported;
+> +
 
-Don't let Greg see this... :)
+All of this:
 
-I can't say I'm a fan either. "Platform bus" is a kernel thing, and the 
-distinction here between the 2 compatibles is certainly a kernel thing.
+> +	if (match_property_by_path("/soc", "compatible", "intel,ce4100-cp") >= 0)
+> +		goto not_supported;
+> +
+> +	if (match_property_by_path("/", "architecture", "OLPC") >= 0)
+> +		goto not_supported;
+> +
+> +	is_supported = 1;
+> +	return !!is_supported;
+> +
+> +not_supported:
+> +	is_supported = 0;
 
-I think this needs to be solved within the kernel.
+can be simplified to:
 
-What I previously said is define a list of compatibles to not 
-instantiate the child devices. This would essentially be any case having 
-a specific compatible and having its own driver. So if someone has 
-'compatible = "vendor,not-so-simple-bus", "simple-bus"', when and if 
-they add a driver for "vendor,not-so-simple-bus", then they have to add 
-the compatible to the list in the simple-pm-bus driver. I wouldn't 
-expect this to be a large list. There's only a handful of cases where 
-"simple-bus" has a more specific compatible. And only a few of those 
-have a driver. A more general and complicated solution would be making 
-linux handle 2 (or more) drivers matching a node and picking the driver 
-with most specific match. That gets complicated with built-in vs. 
-modules. I'm not sure we really need to solve that problem.
+is_supported = !((match_property_by_path("/soc", "compatible", "intel,ce4100-cp") >= 0) || 
+                 (match_property_by_path("/", "architecture", "OLPC") >= 0));
 
-If we have to do something in the DT, then I think I prefer a property 
-to control the behavior. That way we have the option to ignore it.
+> +	return !!is_supported;
+> +}
+> +
+>  static int of_fwnode_add_links(struct fwnode_handle *fwnode)
+>  {
+>  	const struct property *p;
+>  	struct device_node *con_np = to_of_node(fwnode);
+>  
+> -	if (IS_ENABLED(CONFIG_X86))
+> +	if (IS_ENABLED(CONFIG_X86) && !of_is_fwnode_add_links_supported())
+
+I would move the IS_ENABLED() check to 
+of_is_fwnode_add_links_supported().
 
 Rob
 
