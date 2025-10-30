@@ -1,86 +1,192 @@
-Return-Path: <linux-i2c+bounces-13901-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13902-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8CB3C1F62C
-	for <lists+linux-i2c@lfdr.de>; Thu, 30 Oct 2025 10:49:35 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 569CCC1F9A4
+	for <lists+linux-i2c@lfdr.de>; Thu, 30 Oct 2025 11:40:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 94CFD34DA3A
-	for <lists+linux-i2c@lfdr.de>; Thu, 30 Oct 2025 09:49:35 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 1D6C44E5B42
+	for <lists+linux-i2c@lfdr.de>; Thu, 30 Oct 2025 10:38:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AF7130E0EF;
-	Thu, 30 Oct 2025 09:49:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC833341648;
+	Thu, 30 Oct 2025 10:38:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="NeG8swoh"
+	dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b="sE9IHtUA"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from mxout1.routing.net (mxout1.routing.net [134.0.28.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D879032B9AB;
-	Thu, 30 Oct 2025 09:49:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A58A23321D8
+	for <linux-i2c@vger.kernel.org>; Thu, 30 Oct 2025 10:38:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.0.28.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761817772; cv=none; b=JqBpXJfQONaqKwbEnbWeLLVJy8UECaR6wXYg6x/JhWx6OQ+gYmSXPUj5Mxj58fPp2iTYg545iufdfcu8g2NTHTA7wUUJwlz7mPsbjrGfgAAguXHxgDPlhKQ/9rhktLviQ1XwhltusdekPRX3B2wAo+Ka7I2Q2KEQrpT7yftWMa8=
+	t=1761820713; cv=none; b=DPt3p3H09pTZlxjHTw4u0Ni98+Aw7L0gO7kD7f9ikCUHHqgBUFWZL4TzrODAkYI6H7tIZSsBUniw4tREmhJLdQRdhkurEbao5LsLCwQliHLYBnZc7A0qHxGF3epMh2RYI43CsJ9+xAq6sovtTKFxtxia5YWgseXUwJJcwklN6OE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761817772; c=relaxed/simple;
-	bh=V5ZhmCAm/cdZVibF7PIYmLYjZQBg5RjTckmSZwa+atQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MwjSXQGrQceAxlZpTm05sPJ3N7yxn6VebEWzcouJQJFIS8ACLRsPhQBQUhRaSYt3zGpuLkBhQdjMSp+8zpWIM5a2C3X9AxDT4TEHNra7hv4KJtTOnU8CoyiYD6pdzhx8GwTO6QvVJ0LfQj0qCwv8JQyP85lMOJesTpXQPWnwxd0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=NeG8swoh; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1761817768;
-	bh=V5ZhmCAm/cdZVibF7PIYmLYjZQBg5RjTckmSZwa+atQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=NeG8swohnFlfiGgInFLvqViaV9n6mdCKVCy7FqA0Byk+V6riFCrCzIjik6HY4QAi7
-	 K+Pwk+d2Mt7praO4+N2hf8CNB8Ldyd4yFFFaudG/X1bbxxyqe2L6o4aCFYAkAb614M
-	 LBoTRN4LWl8FcZTTZBBIA20yBr3BW6MkgfXlx9mNQnukvY4Uy80ZigCaex4oidhh1d
-	 Ec+h2w4GgMom6sjmjUp/kHvhEPpMRjzmnUPES1zLsoKbFHQJu8f8BrHRia09RDgkUG
-	 dZIXKNSYFbj5PfpSktZRurBHwSE6S/Z7SdzakxhcAvGtF/JLmXuURczGx8kIZY3FGe
-	 YJEPkjzE+QYAg==
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 9990717E009B;
-	Thu, 30 Oct 2025 10:49:27 +0100 (CET)
-Message-ID: <f4c3d7e6-22a8-4ef9-8d2b-a40637bc0626@collabora.com>
-Date: Thu, 30 Oct 2025 10:49:27 +0100
+	s=arc-20240116; t=1761820713; c=relaxed/simple;
+	bh=2n4oRYAgDTo6SCXvWvb9SUALnKjRBtTck7p9rL22E4w=;
+	h=MIME-Version:Date:From:To:Cc:Subject:Message-ID:Content-Type; b=MSbbgux7QmFp23FSfLqNM5VBipuTppW9QfilokqBxLef+Gm2b6avmAgA+zrv2WRnUawTP7nzPyT3QsNJ00RYt0ug5DviRMIlr+6WmLKgS4SNmOPxU++xOXgwcWV1vJEJ52j/eeamZPfGRi6v/CUTFlhCmUKpF2wUqbG2pkSVwKo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de; spf=pass smtp.mailfrom=fw-web.de; dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b=sE9IHtUA; arc=none smtp.client-ip=134.0.28.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fw-web.de
+Received: from mxbox2.masterlogin.de (unknown [192.168.10.89])
+	by mxout1.routing.net (Postfix) with ESMTP id A7A7D403B8;
+	Thu, 30 Oct 2025 10:38:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
+	s=routing; t=1761820702;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=i52sX0HHotFg2XyzTxZtJ+4INSV4quoFx5kmuHs4B+4=;
+	b=sE9IHtUA5USnlz0AGJrlK339KDTK/9G4jXNlYDHFZLJnef71hlOnGgcpM5WxE0gbPH9J7y
+	C3JaZWld5KxAtgUx1FXc3Y4I4wf5yqGzRtstUyY4YOApX7FWBykqH+QTt5SWwQWkN7hujI
+	pWZTCZtqQJX4b0aqkd1zoIoKNxA74WQ=
+Received: from webmail.hosting.de (unknown [134.0.26.148])
+	by mxbox2.masterlogin.de (Postfix) with ESMTPSA id 1CD8B100610;
+	Thu, 30 Oct 2025 10:38:22 +0000 (UTC)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] dt-bindings: i2c: i2c-mt65xx: Add compatible for MT8189
- SoC
-To: Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>,
- Qii Wang <qii.wang@mediatek.com>, Andi Shyti <andi.shyti@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>
-Cc: kernel@collabora.com, linux-i2c@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
-References: <20251030-mt8189-dt-bindings-i2c-v1-1-5b60914c6453@collabora.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-In-Reply-To: <20251030-mt8189-dt-bindings-i2c-v1-1-5b60914c6453@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Date: Thu, 30 Oct 2025 11:38:22 +0100
+From: "Frank Wunderlich (linux)" <linux@fw-web.de>
+To: angelogioacchino.delregno@collabora.com, matthias.bgg@kernel.org, Andi
+ Shyti <andi.shyti@kernel.org>, Qii Wang <qii.wang@mediatek.com>
+Cc: linux-mediatek@lists.infradead.org, linux-i2c@vger.kernel.org,
+ daniel@makrotopia.org
+Subject: i2c issues in 6.18 on R4, but not r4pro (both mt7988 with i2c-mux on
+ i2c2)
+Message-ID: <3f5ef2d1336933a87d9761b5ff510a1f@fw-web.de>
+X-Sender: linux@fw-web.de
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+X-Mail-ID: 99a49484-24ae-4c87-857a-8feba7f39e65
 
-Il 30/10/25 08:56, Louis-Alexis Eyraud ha scritto:
-> Add compatible string for MT8189 SoC.
-> Its multiple I2C controller instances are compatible with the ones
-> found in the MT8188 SoC.
-> 
-> Signed-off-by: Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>
+Hi
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+sorry for html-mail, my main email-provider (GMX) sent it as html (have 
+enabled text-mail as default in settings) when using web-mailer.
 
+i've noticed i2c-issues (i2c2) on mt7988 BPI-R4 with 6.18. On most 
+bootups the i2c-mux is not detected.
+ 
+root@bpi-r4-v11:~
+# i2cdetect -y  2
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:                         -- -- -- -- -- -- -- -- 
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+70: -- -- -- -- -- -- -- --
+ 
+i2c-probe is completed successful (no errors and debugs shown before 
+final "return 0;")
+ 
+sometimes the mux came up with same kernel-binary, and i see also other 
+devices on same i2c bus, but mostly all devices are not shown when i use 
+i2cdetect on the bus.
+ 
+root@bpi-r4-v11:~
+# i2cdetect -y  2
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:                         -- -- -- -- -- -- -- -- 
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+50: -- UU -- -- -- -- -- UU -- -- -- -- -- -- -- -- 
+60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+70: UU -- -- -- -- -- -- --                         
+root@bpi-r4-v11:~
+# [   58.594846] sfp sfp1: failed to read EEPROM: -ENXIO
+ 
+6.17 seems ok (have not seen the issue there yet).
+ 
+i looked through many commits, reverted some for clock (my own, lauras 
+clk_gate,...), pinctrl and the i2c-mux (some reset-related) itself but 
+nothing helped.
+ 
+One strange thing is that i have noticed no issues on bpi-r4pro which 
+uses same SoC, same config and should use same drivers and configuration 
+via dt.
+Only diference was the reset for the mux itself in dts as far as i 
+see....so tried to disable it to have it nearly same as on r4pro without 
+any effect.
+ 
+Maybe you have any idea how i can nail it down?
+ 
+root@bpi-r4-v11:~
+# dmesg | grep -i 'sfp\|i2c'
+[    0.000000] Machine model: Banana Pi BPI-R4 (2x SFP+)
+[    1.600387] i2c_dev: i2c /dev entries driver
+[    1.605291] /soc/i2c@11003000/rt5190a@64: Fixed dependency cycle(s) 
+with /soc/i2c@11003000/rt5190a@64/regulators/buck1 #i2c0 seems not 
+affected
+[   12.685157] platform sfp1: deferred probe pending: (reason unknown)
+[   12.691440] platform sfp2: deferred probe pending: (reason unknown)
+ 
+# dmesg | grep -i 'err\|fail\|clk'
+... #nothing related to i2c or clk
+[    1.623805] pca954x 2-0070: probe failed
+....
+ 
+wondered why i2c-clocks are always disabled when i look into the 
+clk_summary (also when i2c was working)
 
+root@bpi-r4-v11:~
+# cat /sys/kernel/debug/clk/clk_summary | grep -i -B2 INFRA_I2C_BCK
+             infra_usb_sys           0       0        0        125000000 
+  0          0     50000      N               deviceless                
+          i2c_sel                    0       1        0        125000000 
+  0          0     50000      N            deviceless                   
+             infra_i2c_bck           0       3        0        125000000 
+  0          0     50000      N               11005000.i2c              
+root@bpi-r4-v11:~
+
+but looking at the driver the clocks are disabled on probe which looks 
+strange to me
+ 
+https://elixir.bootlin.com/linux/v6.18-rc1/source/drivers/i2c/busses/i2c-mt65xx.c#L1477
+ 
+i guess it is some kind of timing issue where clocks are still disabled 
+but not reenabled in mtk_i2c_transfer, but
+my debug in this function shows that is called and ret=0 after the 
+bulk_enable (and of course flooding console :p ).
+maybe some speed-calculation-issue?
+ 
+what i had tried to revert (also my own non-mainline like "convert 
+invalid GATE to MUX"), so they seem not the rootcause:
+ 
+d51e7cfca3fe 2025-09-25 i2c: mt65xx: convert set_speed function to void 
+Wolfram Sang 
+b49218365280 2025-09-06 i2c: mediatek: fix potential incorrect use of 
+I2C_MASTER_WRRD Leilk.Liu 
+614b1c3cbfb0 2025-06-12 i2c: use inclusive callbacks in struct 
+i2c_algorithm Wolfram Sang
+ 
+c90fa5493f7a 2025-07-31 i2c: mux: pca9541: Use I2C adapter timeout value 
+for arbitration timeout Manikanta Guntupalli 
+94c296776403 2025-06-03 i2c: muxes: pca954x: Reset if (de)select fails 
+Wojciech Siudy 
+690de2902dca 2025-06-03 i2c: muxes: pca954x: Use reset controller only 
+Wojciech Siudy 
+ 
+e504d3bdb3d0 2025-09-15 clk: mediatek: clk-gate: Add ops for gates with 
+HW voter Laura Nao 
+8ceff24a754a 2025-09-15 clk: mediatek: clk-gate: Refactor 
+mtk_clk_register_gate to use mtk_gate struct Laura Nao
+ 
+bd6f4a91401f 2025-09-02 pinctrl: mediatek: moore: replace struct 
+function_desc with struct pinfunction Bartosz Golaszewski 
+7a24f1f5b214 2025-09-02 pinctrl: mediatek: mt7988: use 
+PINCTRL_PIN_FUNCTION() Bartosz Golaszewski
+ 
+regards Frank
 
