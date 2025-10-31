@@ -1,130 +1,158 @@
-Return-Path: <linux-i2c+bounces-13936-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13937-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DB06C25C37
-	for <lists+linux-i2c@lfdr.de>; Fri, 31 Oct 2025 16:09:49 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2CF0DC25D04
+	for <lists+linux-i2c@lfdr.de>; Fri, 31 Oct 2025 16:23:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id DB3404F8A4F
-	for <lists+linux-i2c@lfdr.de>; Fri, 31 Oct 2025 15:02:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 242FF189A6E3
+	for <lists+linux-i2c@lfdr.de>; Fri, 31 Oct 2025 15:21:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F087258CE1;
-	Fri, 31 Oct 2025 14:58:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F4C02C326D;
+	Fri, 31 Oct 2025 15:20:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NrcwX7Ps"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ZXX1Bma9"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C22D6192B84;
-	Fri, 31 Oct 2025 14:58:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A8382BEFE8;
+	Fri, 31 Oct 2025 15:20:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761922736; cv=none; b=GeC/pntn5BXBXlRMtIO7Q+Hf9uKVsehALYd2YBdXEMyVso78vb3gLszHFH6sq76OWD1OzvHN+sGu3DGbJ08UJCryQ2HGOYW3YJAbRF61M+Zso0hxKcNkzS2QEFBPxBNkwydhYhi5wDHsBE6ek6pFqq2gtA//xm4bBDGeuEq3jqY=
+	t=1761924030; cv=none; b=ZNEKAbLyroFbt3tBAvQcZY9QYeTiAGiX1SzC8peQ4f8t+sDmwBelAleHe5XPOyzm9NUFeYsreEwcOGds458lXU5MraRIVJ0L6MNSAcyiDNtxm8zqSCuAi2I9F3QLJ22H/qeulh/VWG00arhqpdxT/nw4+xEbdGOGGzK3iXxMfdM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761922736; c=relaxed/simple;
-	bh=uhrdlxXYbAo8AMN1hNHmfe6mVo3BFTeqYCnXrGkeNpI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ge42zReCNZBAKm56ZqsoCG6rGOyr+cWLekOPC26ocv6q1B5UsWeFQxdYaFCaxC9Nx6fcNph+SQwRKWzDgeR+NNArYFohZWwIFOtHExKfrSNps/CxljkvNTcCzDM1oAIcfpUqBsPyznDlhqMPpCknQUPJNUWBuh9jFH00/9SxNGk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NrcwX7Ps; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FAC5C4CEE7;
-	Fri, 31 Oct 2025 14:58:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761922736;
-	bh=uhrdlxXYbAo8AMN1hNHmfe6mVo3BFTeqYCnXrGkeNpI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NrcwX7PsgjjlCzk6jFzcWCxDdKSMl47XA64eKM3sNrRyfDPcpB8E6IWehmUL4uaEs
-	 zVl0C7ahJqgHoFz0KOWeoLKMjaTxg4Oj1gVTZW5LM60+32FDfNMHKoXv7M0LJ5B2QK
-	 7efkiJfImRETflqM9E1NrFX2duLZ2IwbZZgUdK9rMmBDX4VPEmkDmz2A27+AQRVDhV
-	 ejWXw5TlXTkeBawqi4PtiyW8YR3ZVz9PZS3CAIaZQRhEOkvDMVS8Ye8dU2mot0G0/J
-	 87d5xtn43QIJR2juzsIV5j3GNnIMv0lcrkmSWE9oJrgHOhMrshmJQQDUPUKzm4EOTN
-	 a4OdQv8hN4Fmw==
-Date: Fri, 31 Oct 2025 14:58:49 +0000
-From: Conor Dooley <conor@kernel.org>
-To: =?iso-8859-1?Q?Beno=EEt?= Monin <benoit.monin@bootlin.com>
-Cc: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Jan Dabros <jsd@semihalf.com>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Clark Williams <clrkwllms@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	Gregory CLEMENT <gregory.clement@bootlin.com>,
-	=?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>,
-	Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
-	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
-	Dmitry Guzman <dmitry.guzman@mobileye.com>,
-	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev
-Subject: Re: [PATCH v2 1/5] dt-bindings: i2c: dw: Add Mobileye I2C controllers
-Message-ID: <20251031-segment-chance-40ba410eb55a@spud>
-References: <20251031-i2c-dw-v2-0-90416874fcc0@bootlin.com>
- <20251031-i2c-dw-v2-1-90416874fcc0@bootlin.com>
+	s=arc-20240116; t=1761924030; c=relaxed/simple;
+	bh=y3b+wUCsWckPBCTPgAZadRRNBEdlpxrfsSHKNnGesNY=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=IIaBcq2DZFuFNWCJ69Rp0+KvIfpGueRbZrey+b0r4YUEldPX23/cFLYyPXuR7y7OVFEDeUfC36Mk+wy6edhs8knsppObLPKWJzX7olzwvTmKIcm7U2PRpgMev9arNBx8aTv5dw3R4a0H4WpDPy2dAuPOut7Zp8NffcGGgLtXzO8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=ZXX1Bma9; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id B52E14E41440;
+	Fri, 31 Oct 2025 15:20:25 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 8C26D60704;
+	Fri, 31 Oct 2025 15:20:25 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 067DE11818041;
+	Fri, 31 Oct 2025 16:20:05 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1761924023; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=goHQM/1NASiwEpJFuU+gt1w80LtYcWXr5Gc0K9tmMcc=;
+	b=ZXX1Bma9X3KMNXlEJ6m3KmzgeWaoHvqKZUDGbtyXcyczSWNcqa1WxZl7PaaP3QnmzL9gq4
+	h0YuPlq7t/ag22Qc0RV6DUkEOizZ8aU4YvVAi5tQ0oCrNCN9uTlgnrGvmTf6uzjWAFrc/P
+	iOZon5nGEinDurKqvP8UIygDFPUWAiUqm59zHUbmHyOs3e60XOGs63ifmZhf114mLUKRqK
+	bIKj+JoZJxnMO/w5PK2AbEIM7ADXeVegLKetdhc6qx0E6UYxyvcnSln30z+BZXKje9+TfM
+	AmSNEEcgTn5HJwFcJWmSNYyzhr1jXdHX0RhRB0lSnwspgtNFDoD+bFqnfo/hgQ==
+Date: Fri, 31 Oct 2025 16:20:04 +0100
+From: Herve Codina <herve.codina@bootlin.com>
+To: Rob Herring <robh@kernel.org>
+Cc: Andrew Lunn <andrew@lunn.ch>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Danilo Krummrich <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>, Sascha
+ Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team
+ <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, Michael
+ Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Andi
+ Shyti <andi.shyti@kernel.org>, Wolfram Sang
+ <wsa+renesas@sang-engineering.com>, Peter Rosin <peda@axentia.se>, Arnd
+ Bergmann <arnd@arndb.de>, Saravana Kannan <saravanak@google.com>, Bjorn
+ Helgaas <bhelgaas@google.com>, Charles Keepax
+ <ckeepax@opensource.cirrus.com>, Richard Fitzgerald
+ <rf@opensource.cirrus.com>, David Rhodes <david.rhodes@cirrus.com>, Linus
+ Walleij <linus.walleij@linaro.org>, Ulf Hansson <ulf.hansson@linaro.org>,
+ Mark Brown <broonie@kernel.org>, Andy Shevchenko
+ <andriy.shevchenko@linux.intel.com>, Daniel Scally <djrscally@gmail.com>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>, Sakari Ailus
+ <sakari.ailus@linux.intel.com>, Len Brown <lenb@kernel.org>, Davidlohr
+ Bueso <dave@stgolabs.net>, Jonathan Cameron <jonathan.cameron@huawei.com>,
+ Dave Jiang <dave.jiang@intel.com>, Alison Schofield
+ <alison.schofield@intel.com>, Vishal Verma <vishal.l.verma@intel.com>, Ira
+ Weiny <ira.weiny@intel.com>, Dan Williams <dan.j.williams@intel.com>, Geert
+ Uytterhoeven <geert+renesas@glider.be>, Wolfram Sang <wsa@kernel.org>,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org,
+ linux-pci@vger.kernel.org, linux-sound@vger.kernel.org,
+ patches@opensource.cirrus.com, linux-gpio@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-spi@vger.kernel.org,
+ linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org, Allan Nielsen
+ <allan.nielsen@microchip.com>, Horatiu Vultur
+ <horatiu.vultur@microchip.com>, Steen Hegelund
+ <steen.hegelund@microchip.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v4 05/29] dt-bindings: bus: Add simple-platform-bus
+Message-ID: <20251031162004.180d5e3f@bootlin.com>
+In-Reply-To: <20251030141448.GA3853761-robh@kernel.org>
+References: <20251015071420.1173068-1-herve.codina@bootlin.com>
+	<20251015071420.1173068-6-herve.codina@bootlin.com>
+	<20251030141448.GA3853761-robh@kernel.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ST2W6XfdKwMk0moh"
-Content-Disposition: inline
-In-Reply-To: <20251031-i2c-dw-v2-1-90416874fcc0@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Last-TLS-Session-Version: TLSv1.3
 
+Hi Rob,
 
---ST2W6XfdKwMk0moh
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Thu, 30 Oct 2025 09:14:48 -0500
+Rob Herring <robh@kernel.org> wrote:
 
-On Fri, Oct 31, 2025 at 03:35:39PM +0100, Beno=EEt Monin wrote:
-> Add compatible string for the I2C controllers present in Mobileye
-> Eyeq6Lplus SoC. The same controllers are also present in the EyeQ7H.
+> On Wed, Oct 15, 2025 at 09:13:52AM +0200, Herve Codina wrote:
+> > A Simple Platform Bus is a transparent bus that doesn't need a specific
+> > driver to perform operations at bus level.
+> > 
+> > Similar to simple-bus, a Simple Platform Bus allows to automatically
+> > instantiate devices connected to this bus.
+> > 
+> > Those devices are instantiated only by the Simple Platform Bus probe
+> > function itself.  
+> 
+> Don't let Greg see this... :)
+> 
+> I can't say I'm a fan either. "Platform bus" is a kernel thing, and the 
+> distinction here between the 2 compatibles is certainly a kernel thing.
+> 
+> I think this needs to be solved within the kernel.
 
-Then where is the compatible for the q7h?
+I fully agree with that.
 
-pw-bot: changes-requested
+> 
+> What I previously said is define a list of compatibles to not 
+> instantiate the child devices. This would essentially be any case having 
+> a specific compatible and having its own driver. So if someone has 
+> 'compatible = "vendor,not-so-simple-bus", "simple-bus"', when and if 
+> they add a driver for "vendor,not-so-simple-bus", then they have to add 
+> the compatible to the list in the simple-pm-bus driver. I wouldn't 
+> expect this to be a large list. There's only a handful of cases where 
+> "simple-bus" has a more specific compatible. And only a few of those 
+> have a driver. A more general and complicated solution would be making 
+> linux handle 2 (or more) drivers matching a node and picking the driver 
+> with most specific match. That gets complicated with built-in vs. 
+> modules. I'm not sure we really need to solve that problem.
 
->=20
-> Signed-off-by: Beno=EEt Monin <benoit.monin@bootlin.com>
-> ---
->  Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/i2c/snps,designware-i2c.ya=
-ml b/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml
-> index d904191bb0c6..bc84631f28d1 100644
-> --- a/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml
-> @@ -36,6 +36,7 @@ properties:
->          const: baikal,bt1-sys-i2c
->        - items:
->            - enum:
-> +              - mobileye,eyeq6lplus-i2c
->                - mscc,ocelot-i2c
->                - sophgo,sg2044-i2c
->                - thead,th1520-i2c
->=20
-> --=20
-> 2.51.1
->=20
+Right. Let discard the "more general and complicated solution" and focus
+on the list of compatible to avoid child devices instantiation.
 
---ST2W6XfdKwMk0moh
-Content-Type: application/pgp-signature; name="signature.asc"
+Do you mean that, for "simple-bus" compatible we should:
+ - Remove the recursive device instantiation from of_platform_populate().
+ - In simple-bus probe(), check the device we probe against the
+   'no_instantiate_children' list
+      - If it matches, do not instantiate chidren
+      - If it doesn't match instantiate children
 
------BEGIN PGP SIGNATURE-----
+Is that correct?
 
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaQTOqQAKCRB4tDGHoIJi
-0vCsAP0WQefK8Nu5rXO98P4kJI737TCfj36gyYkXgaoPsLPgcgEAi3OUS3CUlm/D
-42OembnIL52BkQSEmlR7Ku1+Uzf87w8=
-=eMaq
------END PGP SIGNATURE-----
-
---ST2W6XfdKwMk0moh--
+Best regards,
+Hervé
 
