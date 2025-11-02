@@ -1,105 +1,127 @@
-Return-Path: <linux-i2c+bounces-13944-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13945-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41FA3C29460
-	for <lists+linux-i2c@lfdr.de>; Sun, 02 Nov 2025 19:00:35 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE314C29463
+	for <lists+linux-i2c@lfdr.de>; Sun, 02 Nov 2025 19:02:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9B421188DAD0
-	for <lists+linux-i2c@lfdr.de>; Sun,  2 Nov 2025 18:00:59 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 928C54E336B
+	for <lists+linux-i2c@lfdr.de>; Sun,  2 Nov 2025 18:02:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF9AA18FDBD;
-	Sun,  2 Nov 2025 18:00:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC553239E81;
+	Sun,  2 Nov 2025 18:02:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b="NF9BT8Bs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p1Vb2X85"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mxout3.routing.net (mxout3.routing.net [134.0.28.8])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE3A170814
-	for <linux-i2c@vger.kernel.org>; Sun,  2 Nov 2025 18:00:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.0.28.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5233E214210;
+	Sun,  2 Nov 2025 18:02:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762106430; cv=none; b=ul4KpglqNI+Yo8ry3FONvAOk029wc+C6mcEadBnmU/SXQO5dQKlMZRos+SX8lH614g2p3OL0n52iRlBUs2nMh+jZpbvAWEXw/LNh+1HiTjf1F3QkEi2oenPvtWXK1r475uDKepWVYDUz0BPVPtj1IDrNKRUuoI4MjvDdtPv7CUQ=
+	t=1762106528; cv=none; b=abtS1/Kw2qSBJPwQqq842vM3qPNJyGw4T+04KJcRXsrjOHYt3f5K+7IG+i1Yo8zxR+iTmyX8zlcfCch08SxDgGXo8+k/FJ46uQ1Y9TvSKYeYBve/qAaL1rfJgnb0tHOvjfzk0FOUE8KO3JP/z1pb3iilC0tfSDaV3WPdsWF0Ewg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762106430; c=relaxed/simple;
-	bh=zgBaCyA95CkCdyVtikVePSEbwr2ylWzkrJylVaeygJM=;
-	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Message-ID:Content-Type; b=dGv3x5DNDI68xKeBlNsV+n/u3XVDx5siDyvJzKlaSYqAynSO5nNz/fig00yUM1Nw8kTs4acyOpGbkSmUlFK6MYsPwfI1q5c4GgMN8pBhh5devLGRioq7t+sE62sLbBSkDm5tBevHo2OUWjz5CaNMW69WgF/V6k6DH7f4aXeTWhA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de; spf=pass smtp.mailfrom=fw-web.de; dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b=NF9BT8Bs; arc=none smtp.client-ip=134.0.28.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fw-web.de
-Received: from mxbox2.masterlogin.de (unknown [192.168.10.89])
-	by mxout3.routing.net (Postfix) with ESMTP id 00BD86010F;
-	Sun,  2 Nov 2025 18:00:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
-	s=routing; t=1762106420;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=XCdxwgvfLLmISGJYvdvJUkKzM2T1HKuVbOCvYfSZJ8Q=;
-	b=NF9BT8BswEY19Ex/H9Jh2/o1Sv3oXdMuBqMZygyeQUNEeWKx9BjaSwJURPKTs5V4dvWKCv
-	IXJAHz0e08ACesdV7SweQB1xBGFYUIoqTaLtwYmR0a2idG6xxvbwfBZI0ir4ouggJbC1IW
-	7j3wMnPcPUpLTz+0adgkxrH/YbhXfWI=
-Received: from webmail.hosting.de (unknown [134.0.26.148])
-	by mxbox2.masterlogin.de (Postfix) with ESMTPSA id 60E9F1005EC;
-	Sun,  2 Nov 2025 18:00:19 +0000 (UTC)
+	s=arc-20240116; t=1762106528; c=relaxed/simple;
+	bh=4gIPtJsfD1XgT7Ae6+RlrfvJUzVyHyS27YURP6HOnzY=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
+	 References:In-Reply-To; b=Iz6A7VYpAcw/fYfylJmSlbzq5IZ53BtmJfVi9C5EoId3fFNkVfPcU4X11QBx96OPugxlakkLWNMn/pUK9B12l/zX7uKmKv8+mLnspPUQt8iEiouHJ92jkYXU6ZNI1U1YMGh6dF5RshbxBCTH7ynPbZdGoa4PdtwZ3x4PgTEOT6U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p1Vb2X85; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F9C1C4CEF7;
+	Sun,  2 Nov 2025 18:02:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762106528;
+	bh=4gIPtJsfD1XgT7Ae6+RlrfvJUzVyHyS27YURP6HOnzY=;
+	h=Date:Subject:Cc:To:From:References:In-Reply-To:From;
+	b=p1Vb2X85yQJrZdfORQKtYM4TLphDPgsdVpSpjkWj7E8nzlTihAPiE0CmbO9aOirfS
+	 cy8g7vyg8GKS6dxqtYvU++A/shDn3/pBWmxuwZoROZkKBd/IzjjiCWMuCjn6P4rmNh
+	 1Litn7rwkm5S8e/ftm48dnlYccbVb4jG4u+Wp4o2X64mcO9On9c/MkPnujEXOIBpN4
+	 j3MU2jCgPB6iBrRuo/hJ3P4mkeDUYXrKPbPD62O8IahBxOPuc5BX25RYrNLz4qN3Qp
+	 gHmH13q0mLM8DVvZelkPU1xSgzSy0v5kXwWPCDW4cKsA7SXdwvrgBUq6CnJ6E8Or2V
+	 vON5VtB8zpENw==
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Date: Sun, 02 Nov 2025 19:00:19 +0100
-From: "Frank Wunderlich (linux)" <linux@fw-web.de>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: angelogioacchino.delregno@collabora.com, matthias.bgg@kernel.org, Andi
- Shyti <andi.shyti@kernel.org>, Qii Wang <qii.wang@mediatek.com>, Wojciech
- Siudy <wojciech.siudy@nokia.com>, linux-mediatek@lists.infradead.org,
- linux-i2c@vger.kernel.org, daniel@makrotopia.org
-Subject: Re: i2c issues in 6.18 on R4, but not r4pro (both mt7988 with i2c-mux
- on i2c2)
-In-Reply-To: <aQdSVcazPQl-shR6@shikoro>
-References: <3f5ef2d1336933a87d9761b5ff510a1f@fw-web.de>
- <64fb54d5f2bc929720d3313f7fa2d8cd@fw-web.de> <aQdSVcazPQl-shR6@shikoro>
-Message-ID: <1144f62ad9886fed60620bce0bbed7ee@fw-web.de>
-X-Sender: linux@fw-web.de
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Mail-ID: f37694be-ee31-4dbf-ac46-b50d472b364f
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Sun, 02 Nov 2025 19:02:02 +0100
+Message-Id: <DDYEMP51XH3M.2XLXW0BRQVQVV@kernel.org>
+Subject: Re: [PATCH v6 2/3] rust: i2c: Add basic I2C driver abstractions
+Cc: "Miguel Ojeda" <ojeda@kernel.org>, "Alex Gaynor"
+ <alex.gaynor@gmail.com>, "Wolfram Sang" <wsa+renesas@sang-engineering.com>,
+ "Boqun Feng" <boqun.feng@gmail.com>, "Gary Guo" <gary@garyguo.net>,
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, "Benno Lossin"
+ <lossin@kernel.org>, "Andreas Hindborg" <a.hindborg@kernel.org>, "Alice
+ Ryhl" <aliceryhl@google.com>, "Trevor Gross" <tmgross@umich.edu>, "Greg
+ Kroah-Hartman" <gregkh@linuxfoundation.org>, "Viresh Kumar"
+ <viresh.kumar@linaro.org>, "Asahi Lina" <lina+kernel@asahilina.net>,
+ "Wedson Almeida Filho" <wedsonaf@gmail.com>, "Alex Hung"
+ <alex.hung@amd.com>, "Tamir Duberstein" <tamird@gmail.com>, "Xiangfei Ding"
+ <dingxiangfei2009@gmail.com>, <linux-kernel@vger.kernel.org>,
+ <rust-for-linux@vger.kernel.org>, <linux-i2c@vger.kernel.org>
+To: "Igor Korotin" <igor.korotin.linux@gmail.com>
+From: "Danilo Krummrich" <dakr@kernel.org>
+References: <508bd9a1-c75a-4d1d-bed7-ee759ac5a701@kernel.org>
+ <20251026184143.280797-1-igor.korotin.linux@gmail.com>
+ <4568187f-ab63-4c86-b327-90720ad20ac9@kernel.org>
+ <30fbb191-5300-45e9-93d3-8b2ef5cf18ef@gmail.com>
+ <DDTFXY5VJCS2.1ZB9EPNLDTPAC@kernel.org>
+ <860306dd-b3b1-4eeb-b8b1-d09f2f7e028d@gmail.com>
+In-Reply-To: <860306dd-b3b1-4eeb-b8b1-d09f2f7e028d@gmail.com>
 
-Am 2025-11-02 13:45, schrieb Wolfram Sang:
-> Can you try enabling CONFIG_RESET_GPIO please? It is probably that this
-> driver is missing. The core relies on that driver for the fallback the
-> above patch makes use of. Sadly, I couldn't convince the reset
-> maintainers of a way to automatically select the driver for existing
-> users :(
+On Sun Nov 2, 2025 at 6:45 PM CET, Igor Korotin wrote:
+> Hello Danilo
+>
+> On 10/27/2025 10:00 PM, Danilo Krummrich wrote:
+>> It's called from other drivers (e.g. DRM drivers [1] or network drivers =
+[2])
+>> that are bound to some bus device themselves, e.g. a platform device or =
+a PCI
+>> device.
+>>=20
+>> This is the device that we can give to i2c:Registration::new() and use f=
+or the
+>> internal call to devres.
+>
+> After the recent change where i2c::Registration::new() returns impl=20
+> PinInit<Devres<Self>, Error> instead of Result<Self>, I=E2=80=99m unsure =
+how to=20
+> adapt the Rust I2C sample driver. The sample doesn=E2=80=99t have a paren=
+t=20
+> device available.
 
-Thanks for pointing to this and indeed i had not enabled this. This is 
-my fault and not
-from reset maintainers as i have my own defconfig. Tested and my mux 
-works now again.
+Indeed, and that's a good thing that this doesn't work now. :)
 
-Maybe this option should be enabled by default or when the i2c-mux is 
-selected?
+I think the best course of action is to make the sample driver closer to a =
+real
+driver.
 
-When moving from specific to a generic aproach (which makes sense) imho 
-it should be
-mentioned in commit description which option needed instead :)
+For this you can do what the debugfs sample (samples/rust/rust_debugfs.rs) =
+does
+and use a platform driver with either ACPI
 
-btw. the Authors Email seems not working, got
+	kernel::acpi_device_table!(
+	    ACPI_TABLE,
+	    MODULE_ACPI_TABLE,
+	    <RustDebugFs as platform::Driver>::IdInfo,
+	    [(acpi::DeviceId::new(c_str!("LNUXBEEF")), ())]
+	);
 
-<wojciech.siudy@nokia.com>: host
-     nokia-com.mail.protection.outlook.com[52.101.73.24] said: 550 5.4.1
-     Recipient address rejected: Access denied.
+or OF
 
-or maybe its inbox has a whitelist from which domains he can receive 
-mails and my
-domain is not added to it.
+	kernel::of_device_table!(
+	    OF_TABLE,
+	    MODULE_OF_TABLE,
+	    <SampleDriver as platform::Driver>::IdInfo,
+	    [(of::DeviceId::new(c_str!("test,rust-device")), Info(42))]
+	);
 
-regards Frank
+and then create an i2c::Registration from platform::Driver::probe().
+
+- Danilo
 
