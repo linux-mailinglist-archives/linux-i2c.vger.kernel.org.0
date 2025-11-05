@@ -1,101 +1,55 @@
-Return-Path: <linux-i2c+bounces-13961-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13962-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D795C3518A
-	for <lists+linux-i2c@lfdr.de>; Wed, 05 Nov 2025 11:29:36 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B13DC355D0
+	for <lists+linux-i2c@lfdr.de>; Wed, 05 Nov 2025 12:30:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A56701899D72
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Nov 2025 10:29:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0D7313B8E84
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Nov 2025 11:25:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE279302CC1;
-	Wed,  5 Nov 2025 10:28:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9B2830F545;
+	Wed,  5 Nov 2025 11:25:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="prQuvqIY";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="PT38v7l6"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="NdjqywNP"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 192FB3019C1
-	for <linux-i2c@vger.kernel.org>; Wed,  5 Nov 2025 10:28:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B11130C370
+	for <linux-i2c@vger.kernel.org>; Wed,  5 Nov 2025 11:25:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762338519; cv=none; b=pi2Ycb9GUKupAIg2Dick9RTAb2dNZLkoY2CYhIa4UrB6fkmdCZ/oT/LKUg4IIsuwb08PNiks4CAXl7nBGKVjpyv3tvALONUihkdtdmNUn8dCQ1uaVU/6vXEGiMaC+fi7NyU7Lg9zY4F8AW0rkRgDKlXJ4mJHpWjz/cAhf0PcL9A=
+	t=1762341911; cv=none; b=lJ68ZHg9VKSmubmsdPzDty5RtYERSMkEtjnsJwfpYREePIG89KC8JVXK56SfRwUvk/+/p3MODD/x9nnqEHMwVVBvUt9S8QhuksAivp8H+xCbm18vdGAnbECYr9Z29avf9Whd8iiSuryWBV9W0/AMe9tXexAQKYIKJ/7dxeNZqLs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762338519; c=relaxed/simple;
-	bh=bHWQGXUwyp0HSxQyUXCn4pC6y2/RjEnuZm/vTzwzUis=;
+	s=arc-20240116; t=1762341911; c=relaxed/simple;
+	bh=YtgwmIuO+S6ko8HFKuMO2fihmVHu0zvVmbmvszGEA0g=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=I8QHh9lflriwW5WktIVYx2gro7ywK1u1cSrJxTCZ4aNjnTri/5FKioFIl5SbdgEJbT9gWpxHTQgxypgclDNCxVhIgf4UzjADpx0eJpivy6+gr+TcsqAV7butHxKQqM+0kG+lc+xFAS1uAK3fqkpFw61RWGDOXw+mt/twHVGF3pk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=prQuvqIY; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=PT38v7l6; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5A58F4Hk3091509
-	for <linux-i2c@vger.kernel.org>; Wed, 5 Nov 2025 10:28:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	JF+KpggyAZ/ITnvctK4l8SdHIQOwsXYkgFSK64qTgoI=; b=prQuvqIY2Amv7BYe
-	cVEn7aZ5txx5vMjo3H/OZ/QYLOQJ2/BvymOuzcAhAesQg0BHcCGsi+dwuKsaQEoQ
-	Cw2/QjIyobAfPE1576rdNBI3vH80JpvwLnh/MbqSFlNezHVsM49NhGfxqY0ILA0R
-	vq/lGyY5bKiJAhO7d7ZhcXzuePYzfFN6ItFouYOAWskDar0pK7WMSu5CUUrfYTXx
-	ouZfweq0n+i0bBRooAwE6KKrakOgnJmryOeMjZhVRLi/d9b3N+ivB72jD3BK3Tjk
-	1up7kXC4a9WZK4t10QVgChHcl7jXXLSItX7jY8tgN4ZyVMGKVngGOMrodpi72iNl
-	kFK+1w==
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com [209.85.216.72])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4a7s5ea0x7-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-i2c@vger.kernel.org>; Wed, 05 Nov 2025 10:28:36 +0000 (GMT)
-Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-336b646768eso7459296a91.1
-        for <linux-i2c@vger.kernel.org>; Wed, 05 Nov 2025 02:28:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1762338515; x=1762943315; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JF+KpggyAZ/ITnvctK4l8SdHIQOwsXYkgFSK64qTgoI=;
-        b=PT38v7l6KPQDnln6ycL+gvRzsKo5gtbr2ymcN68mFCDKFeHS9Ti21ted3wu1KXYraR
-         M9I8eq6vTt5/WiDXmJVYX+WRQcwJT29aQE5XtFBuZMRcjNLJWqUTro/9XykhJH/uiS63
-         hbXOT8Zl3ie8Ycin8Hps1vGQ/U80Q6Qt+kfJu4QmFZQHJNFFS+RPxEvLVSLynh9lXnhq
-         /BZfXUqjzejT03HRpidi0By7lRxnqGXMQnd0qUKZjEMyakUGcdRq1+u4eGo3Qf/UmXi4
-         lP5CKQgFEBjZEIjcF7HuqD8PKn2JB/sXWZ0PJLGKYy8n1xiv+gJfuChjKt0PdLk2gDGu
-         0hoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762338515; x=1762943315;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JF+KpggyAZ/ITnvctK4l8SdHIQOwsXYkgFSK64qTgoI=;
-        b=CV1Z4fRUi9NjlYj3D97T7iBh8opQngqcOnPmSRhqW1S83TPEMI7glHPKQ+3a9Nb3+6
-         FXBsEdsKWaltSzGXx9NWa3F+/1Cwe0P5ntShMWPNmR8i7/UIJAamG3FwWU0A9eW+KNJD
-         8YzkiPDV5j1G5ljLt9xAcsvToWRM/ovhD4ZbGzSWV+MiEBxQEW7DZbFn3t1rY8lCHbMK
-         891qGb4QGr6ZQCHIIFSdbpwVcWUYrHBNypJtfhnfO4VAviCBVxg1KkPtvq1kNpoAhvmg
-         FVtFg/4RZas6VAIO62/Umkomdfn+2LHGVBQ743BkNMMUgl0QpjkdjZKrEQrSk/EHH7JP
-         UfMQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWe6ExVOavp1DaTpveDHkPHTPS5tPruC96WEYgfZBDnUNjaVXlYTyeqWjdAcUbo+DSpOWdNFhYIAS8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz3fn2E3goQKrqLrjMqVPZF0nUcaXGyHvcl9VHHP6ygvme1f9oC
-	7iZhk9S45sZQdprhxcgtGTlprIQYL0iCttUmljZ02kRZAuH6PyJ6AlKTNNyzOAw7zTQejoEEnyM
-	wCbKyyM6THYDMwUtMXQzb4YnZw4PFsKqMEcOd3jMhcPH+IUvxMfP/cXFOOORtVts=
-X-Gm-Gg: ASbGncv4l8RyUHnTXvoLeuMTjKdRunzHVPgcQv856P7i1dL/ym631UrcjFFLCuTrgWp
-	o114W4XlMEr+od8FBtgyJfQI9KFvIIBwlvPis8M+S7wzAm+gSAYfwfSAc7eo01q6VVF6QY57DWt
-	oqfNooFuOt+gGKY0TjX/dI0bqInULRvfUyOMD6SNloohET/RZox+zT/KSPJZ0rwOzdteIRQcxlD
-	rJjsRwJsR05PHLD4+5vAZjC0pbyc72W3S6SQ2Ye1y9OZeOd3HW7RMNGms76paqKfGhi+TL+ihL/
-	EbgW9W2o0pOKwwXJtjWYWEBRy/dM8e+UkeoDTSXyA3z50lIbl4W8NAL6uSw35es4I+2e/Jztyoe
-	p2E2eV28IYO4gXVr4zZJAVe/vPfCNY3FKAQ==
-X-Received: by 2002:a17:90b:2e04:b0:341:6164:c27d with SMTP id 98e67ed59e1d1-341a6bfbc5cmr2752089a91.3.1762338515048;
-        Wed, 05 Nov 2025 02:28:35 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IG0nab8d2/HqREAsJ22farB7T8O/NtwdkVq1ttqTloYL9Mn4A21uAb5ZKhKlMroMgSfVGcy9g==
-X-Received: by 2002:a17:90b:2e04:b0:341:6164:c27d with SMTP id 98e67ed59e1d1-341a6bfbc5cmr2752065a91.3.1762338514552;
-        Wed, 05 Nov 2025 02:28:34 -0800 (PST)
-Received: from [10.217.219.207] ([202.46.22.19])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7acd324680asm5909209b3a.1.2025.11.05.02.28.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Nov 2025 02:28:34 -0800 (PST)
-Message-ID: <77031db5-a94e-49c3-b48f-5f7a5569d1a2@oss.qualcomm.com>
-Date: Wed, 5 Nov 2025 15:58:28 +0530
+	 In-Reply-To:Content-Type; b=E38aUoOM2hdlT+rqtkONz65SKboTsw4ngjGZQJM4Sk3FyMxOYl1GPdQ6cWI/nctmKILN8El3JPIfOLMcpvwRGzUV0y6tfFIQjIoeGdt5Ay9WJjp2An2AUZnWZPql1IijTiUdMcws0bnEKC+cioZ1oxjm84lrVmpUfrUQgk0hdJo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=NdjqywNP; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1762341901;
+	bh=YtgwmIuO+S6ko8HFKuMO2fihmVHu0zvVmbmvszGEA0g=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=NdjqywNPzIMcJbqydpLsqu+OnpMSMuvbXYJ/ZYDU8qQbkhjb8jE/klzudDWB9QTXy
+	 5gTYFaNbjaE/AR/FwoBI2A6CCqFyzhWMuEmgUUhvtddTBDadjN6OWfy5/cGCs4q8wD
+	 3qs8NXxBmp1e1xNLl7GBMq8KbL8PUN6qXRLH+pVaIIIu5wSFEB6kp+y2OTj2CjmAiy
+	 1wTAiZ8zpauVrg+akU52PmStDo+ZeLxjbnw88IsRGe6opy02QfUl/9Tmrz13qEqM7X
+	 CdJL/sRRkj2xbg+Hs4/68zSzn8t8q+UDcEcwe2pES8y5BSZFkzBf7mdmt6qvjuKmq6
+	 k+Zzf41nwsypw==
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 8829617E12AA;
+	Wed,  5 Nov 2025 12:25:01 +0100 (CET)
+Message-ID: <b4ffe62d-34f6-431d-87b1-55ca988b63b7@collabora.com>
+Date: Wed, 5 Nov 2025 12:25:00 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -103,87 +57,184 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] i2c: qcom-geni: make sure I2C hub controllers can't use
- SE DMA
-To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Wolfram Sang <wsa@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
-References: <20251029-topic-sm8x50-geni-i2c-hub-no-dma-v1-1-5e264258a5bd@linaro.org>
- <49f067c0-20d3-4039-95e6-fc19ce48881d@oss.qualcomm.com>
+Subject: Re: i2c issues in 6.18 on R4, but not r4pro (both mt7988 with i2c-mux
+ on i2c2)
+To: "Frank Wunderlich (linux)" <linux@fw-web.de>, matthias.bgg@kernel.org,
+ Andi Shyti <andi.shyti@kernel.org>, Qii Wang <qii.wang@mediatek.com>
+Cc: linux-mediatek@lists.infradead.org, linux-i2c@vger.kernel.org,
+ daniel@makrotopia.org
+References: <3f5ef2d1336933a87d9761b5ff510a1f@fw-web.de>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Content-Language: en-US
-From: Mukesh Savaliya <mukesh.savaliya@oss.qualcomm.com>
-In-Reply-To: <49f067c0-20d3-4039-95e6-fc19ce48881d@oss.qualcomm.com>
+In-Reply-To: <3f5ef2d1336933a87d9761b5ff510a1f@fw-web.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: X_Ccm9-YCT1iOBH2b9lHf3SUFIiawxbO
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTA1MDA3NyBTYWx0ZWRfX9viVYdI953It
- 5KCOLBILIlzAL0nlTofl4rLGhU4ZAHcDqRCGdLkFMwTQXUSFQIGs7nSTezwiIwaruxWtZc2zk/C
- 4fmkKMDS5Uhhaxnd/oozbb8gMeb+F0iWXqLhsx5P8i9x1c1NNTxW4biSLpAwsR3Mdh6lI3ih6Ck
- 9NVhBqU5KnC9avaeaqI96TMD6u9UXuNvf25Oe+NdaKxe+/F9CJinYTLJA3YnpmJFTwYkz0jtmGV
- dSfI0VcWwwXtXkY1vQ00W3soPDbYTsgmvPbPrzCoLYNq5u4KjZYoI0qoCX1GiTD5RJYX4T9y6VK
- 92dyitL2fJIw92QtcSMVrwGfJkBTWCcfLjWUALcQfAozqdNYfCDLn2ENwfJJoL9oPhprFzbKvXa
- U/KYDpMB9c7zMF4ZzFiHvgEiTKZfww==
-X-Authority-Analysis: v=2.4 cv=OayVzxTY c=1 sm=1 tr=0 ts=690b26d4 cx=c_pps
- a=RP+M6JBNLl+fLTcSJhASfg==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
- a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=KKAkSRfTAAAA:8 a=EUspDBNiAAAA:8
- a=wCNI2q6YBtXYwDTL9A4A:9 a=QEXdDO2ut3YA:10 a=iS9zxrgQBfv6-_F4QbHw:22
- a=cvBusfyB2V15izCimMoJ:22
-X-Proofpoint-ORIG-GUID: X_Ccm9-YCT1iOBH2b9lHf3SUFIiawxbO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-05_04,2025-11-03_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 clxscore=1011 phishscore=0 adultscore=0 impostorscore=0
- bulkscore=0 suspectscore=0 spamscore=0 lowpriorityscore=0 malwarescore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2511050077
+Content-Transfer-Encoding: 8bit
 
-
-
-On 10/30/2025 2:56 PM, Konrad Dybcio wrote:
-> On 10/29/25 7:07 PM, Neil Armstrong wrote:
->> The I2C Hub controller is a simpler GENI I2C variant that doesn't
->> support DMA at all, add a no_dma flag to make sure it nevers selects
->> the SE DMA mode with mappable 32bytes long transfers.
->>
->> Fixes: cacd9643eca7 ("i2c: qcom-geni: add support for I2C Master Hub variant")
->> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
->> ---
->>   drivers/i2c/busses/i2c-qcom-geni.c | 11 +++++++----
->>   1 file changed, 7 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
->> index 43fdd89b8beb..bfb352b04902 100644
->> --- a/drivers/i2c/busses/i2c-qcom-geni.c
->> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
->> @@ -97,6 +97,7 @@ struct geni_i2c_dev {
->>   	dma_addr_t dma_addr;
->>   	struct dma_chan *tx_c;
->>   	struct dma_chan *rx_c;
->> +	bool no_dma;
->>   	bool gpi_mode;
->>   	bool abort_done;
->>   };
->> @@ -425,7 +426,7 @@ static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
->>   	size_t len = msg->len;
->>   	struct i2c_msg *cur;
->>   
->> -	dma_buf = i2c_get_dma_safe_msg_buf(msg, 32);
->> +	dma_buf = gi2c->no_dma ? NULL : i2c_get_dma_safe_msg_buf(msg, 32);
+Il 30/10/25 11:38, Frank Wunderlich (linux) ha scritto:
+> Hi
 > 
-> Not a huge fan of putting the ternary operator here, but I don't
-> mind that much either
+> sorry for html-mail, my main email-provider (GMX) sent it as html (have enabled 
+> text-mail as default in settings) when using web-mailer.
 > 
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Reviewed-by: Mukesh Kumar Savaliya <mukesh.savaliya@oss.qualcomm.com>>
-> Konrad
+> i've noticed i2c-issues (i2c2) on mt7988 BPI-R4 with 6.18. On most bootups the i2c- 
+> mux is not detected.
+> 
+> root@bpi-r4-v11:~
+> # i2cdetect -y  2
+>       0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+> 00:                         -- -- -- -- -- -- -- --
+> 10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+> 20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+> 30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+> 40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+> 50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+> 60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+> 70: -- -- -- -- -- -- -- --
+> 
+> i2c-probe is completed successful (no errors and debugs shown before final "return 
+> 0;")
+> 
+> sometimes the mux came up with same kernel-binary, and i see also other devices on 
+> same i2c bus, but mostly all devices are not shown when i use i2cdetect on the bus.
+> 
+> root@bpi-r4-v11:~
+> # i2cdetect -y  2
+>       0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+> 00:                         -- -- -- -- -- -- -- --
+> 10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+> 20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+> 30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+> 40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+> 50: -- UU -- -- -- -- -- UU -- -- -- -- -- -- -- --
+> 60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+> 70: UU -- -- -- -- -- -- --
+> root@bpi-r4-v11:~
+> # [   58.594846] sfp sfp1: failed to read EEPROM: -ENXIO
+> 
+> 6.17 seems ok (have not seen the issue there yet).
+> 
+> i looked through many commits, reverted some for clock (my own, lauras 
+> clk_gate,...), pinctrl and the i2c-mux (some reset-related) itself but nothing helped.
+> 
+> One strange thing is that i have noticed no issues on bpi-r4pro which uses same 
+> SoC, same config and should use same drivers and configuration via dt.
+> Only diference was the reset for the mux itself in dts as far as i see....so tried 
+> to disable it to have it nearly same as on r4pro without any effect.
+> 
+> Maybe you have any idea how i can nail it down?
+> 
+
+Did you check if there's any clock, or power rail, or power domain, that you are
+missing in some node perhaps?
+
+Could be that something is getting powered off temporarily and gifting you with
+this "amazing" issue...
+
+> root@bpi-r4-v11:~
+> # dmesg | grep -i 'sfp\|i2c'
+> [    0.000000] Machine model: Banana Pi BPI-R4 (2x SFP+)
+> [    1.600387] i2c_dev: i2c /dev entries driver
+> [    1.605291] /soc/i2c@11003000/rt5190a@64: Fixed dependency cycle(s) with /soc/ 
+> i2c@11003000/rt5190a@64/regulators/buck1 #i2c0 seems not affected
+> [   12.685157] platform sfp1: deferred probe pending: (reason unknown)
+> [   12.691440] platform sfp2: deferred probe pending: (reason unknown)
+> 
+> # dmesg | grep -i 'err\|fail\|clk'
+> ... #nothing related to i2c or clk
+> [    1.623805] pca954x 2-0070: probe failed
+> ....
+> 
+> wondered why i2c-clocks are always disabled when i look into the clk_summary (also 
+> when i2c was working)
+> 
+
+That is something for which I can give you a clear answer....
+
+> root@bpi-r4-v11:~
+> # cat /sys/kernel/debug/clk/clk_summary | grep -i -B2 INFRA_I2C_BCK
+>               infra_usb_sys           0       0        0        125000000   0       
+>     0     50000      N               deviceless
+>            i2c_sel                    0       1        0        125000000   0       
+>     0     50000      N            deviceless
+>               infra_i2c_bck           0       3        0        125000000   0       
+>     0     50000      N               11005000.i2c
+> root@bpi-r4-v11:~
+> 
+> but looking at the driver the clocks are disabled on probe which looks strange to me
+> 
+> https://elixir.bootlin.com/linux/v6.18-rc1/source/drivers/i2c/busses/i2c- 
+> mt65xx.c#L1477
+
+...Not strange at all...
+
+> 
+> i guess it is some kind of timing issue where clocks are still disabled but not 
+> reenabled in mtk_i2c_transfer, but
+> my debug in this function shows that is called and ret=0 after the bulk_enable (and 
+> of course flooding console :p ).
+
+...because on MediaTek, the I2C controllers are "kinda standalone" - meaning that
+they work as long as they're powered up, with their main clock being either some
+internal XO or the clk26m or a clock derived from that (it's bogus, as that is an
+IP implementation detail that nobody has, if not MediaTek's HW engineering dept,
+and it's not relevant anyway so we don't even need to really know if not for pure
+curiosity).
+
+The basic "unclocked" functionality of the I2C controller(s) in MediaTek SoCs is
+XFER detection (not sure if they can do buffering as well while the AP-driven
+clocks are off).
+
+As a small side note: I think MediaTek are not the only ones doing that, but this
+is an entirely different story and it's just for your own curiosity, in case.
+
+The I2C clocks therefore are only enabling the CPU to perform read/write(/modify)
+operations on the I2C Controller registers, which also include DMA transfers.
+
+Speaking of DMA, is there really no support for apdma_sync in MT7988a? ;-)
+
+> maybe some speed-calculation-issue?
+> 
+
+Could also be, but if it was that, and directly related to I2C, you'd get errors
+during communication even when your PCA954X device actually gets probed, because
+whatever calculation is ran, it's always going to be the same across reboots.
+
+All that I'm saying here, though, ignores hardware issues. So, if you're using a
+board that is not final, or a final board that has HW issues (not only as in your
+own unit, but as a design mistake of some sort) it's a different story.
+
+I am bringing up the HW question just because "better safe than sorry", but if
+using something not final.. I'm mostly sure that you would've said that already
+and tried with.. well, final hardware, before seeking for help here anyway :-)
+
+Cheers!
+Angelo
+
+> what i had tried to revert (also my own non-mainline like "convert invalid GATE to 
+> MUX"), so they seem not the rootcause:
+> 
+> d51e7cfca3fe 2025-09-25 i2c: mt65xx: convert set_speed function to void Wolfram Sang
+> b49218365280 2025-09-06 i2c: mediatek: fix potential incorrect use of 
+> I2C_MASTER_WRRD Leilk.Liu
+> 614b1c3cbfb0 2025-06-12 i2c: use inclusive callbacks in struct i2c_algorithm 
+> Wolfram Sang
+> 
+> c90fa5493f7a 2025-07-31 i2c: mux: pca9541: Use I2C adapter timeout value for 
+> arbitration timeout Manikanta Guntupalli
+> 94c296776403 2025-06-03 i2c: muxes: pca954x: Reset if (de)select fails Wojciech Siudy
+> 690de2902dca 2025-06-03 i2c: muxes: pca954x: Use reset controller only Wojciech Siudy
+> 
+> e504d3bdb3d0 2025-09-15 clk: mediatek: clk-gate: Add ops for gates with HW voter 
+> Laura Nao
+> 8ceff24a754a 2025-09-15 clk: mediatek: clk-gate: Refactor mtk_clk_register_gate to 
+> use mtk_gate struct Laura Nao
+> 
+> bd6f4a91401f 2025-09-02 pinctrl: mediatek: moore: replace struct function_desc with 
+> struct pinfunction Bartosz Golaszewski
+> 7a24f1f5b214 2025-09-02 pinctrl: mediatek: mt7988: use PINCTRL_PIN_FUNCTION() 
+> Bartosz Golaszewski
+> 
+> regards Frank
+
 
 
