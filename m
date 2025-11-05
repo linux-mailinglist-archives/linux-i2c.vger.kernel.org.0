@@ -1,55 +1,51 @@
-Return-Path: <linux-i2c+bounces-13966-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13967-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B258C35A7C
-	for <lists+linux-i2c@lfdr.de>; Wed, 05 Nov 2025 13:30:47 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C972C35FB5
+	for <lists+linux-i2c@lfdr.de>; Wed, 05 Nov 2025 15:10:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 525A53B6B73
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Nov 2025 12:30:45 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 680E73442AF
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Nov 2025 14:10:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98A83314D25;
-	Wed,  5 Nov 2025 12:30:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DFEE328B7E;
+	Wed,  5 Nov 2025 14:10:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="eq5hV6Ga"
+	dkim=pass (2048-bit key) header.d=3mdeb.com header.i=@3mdeb.com header.b="JI+c/paJ"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from 4.mo561.mail-out.ovh.net (4.mo561.mail-out.ovh.net [178.33.46.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3748B54774
-	for <linux-i2c@vger.kernel.org>; Wed,  5 Nov 2025 12:30:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8295D311955
+	for <linux-i2c@vger.kernel.org>; Wed,  5 Nov 2025 14:09:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.33.46.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762345833; cv=none; b=OKPUrnAQvQGBepVDOPlWaUhfZIbfc5hJApYN7TPJB3gU8JaZ45Fsekkqiri6mk4MVSB+buQCddxghYrIcknsSMjio2OBipnKRXX9hhsk0d9alyHITGlgNbJYn83PJhBt+FNf/aNhfGPCiZomWfUJzQvmw/hmPFjGIdS0FfgQ1z4=
+	t=1762351803; cv=none; b=Inkr6BugISekswlhGNu3NY0aydA4sm/KPfb+BxFMxqgQphPuGxz901Ksw2If+oeT4W63F+PaOD2zEZHXKG0bF1JWbTEfGPC+RsIv1MuG/FhZa+YYjkzwg9pXqW5wnnv/DqJNYJP7ItqqCr/W6wn8qxSousheJ7L4rDvxpKoIDD0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762345833; c=relaxed/simple;
-	bh=IiK2mpEii/vR3bgxpZg9qwQ/e83frIZinAdetivBfco=;
+	s=arc-20240116; t=1762351803; c=relaxed/simple;
+	bh=zef3XXPgCtUM/R9vVXKeD7GnXIFoL2xnRPGVGibkhEw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gRD+pCsQqQfF5OOCwoQW6VhLFOyx9DAAfiZBUmxqm6/odsdi6Memz/pjL6otouMsEAv5h4up85A1JCLYb33wdIldezmNLuL8SmCOOurtr0+c1X2TgSZdb/1J47SQ8lg2Zl7WWTmEzH/5vaskY/pRUQbCk/D6lGXz+ClbaM/WKic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=eq5hV6Ga; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1762345829;
-	bh=IiK2mpEii/vR3bgxpZg9qwQ/e83frIZinAdetivBfco=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=eq5hV6GaTEBxYByQcV6bfi1YRReUWlvEOraI6xXzP5Bp//C9TQ0NGKVxlX9Y5gRhU
-	 P+o61Hv+Jf434sqMiJWTj2dgzIJ1CbxWr+/9karGQz5e9Z/jg32eveIzEcZz9Qxm08
-	 AvXXwVdfXY04raDzUIqCInPfTFHlr9Ve5CY1UywxvSQqfK8AmQKLLMKZ9HF2fMusEs
-	 /3Xc2VhXzSPJTVxkYuNWgMm0b+qTcXrJOsjJU8zkDLtNBISVAmj0cg+pw6j1ivoNjj
-	 ZJMoqan3hQWz8Pm58rXlaD+eXKvy096NxEIOO4lOZTrt2WzU1i+WlHqQrz7mbHw3D+
-	 4lqEYKMJiPujQ==
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id E319017E009B;
-	Wed,  5 Nov 2025 13:30:28 +0100 (CET)
-Message-ID: <2162f8a5-e4ca-46e1-baac-e7eaf3e58c11@collabora.com>
-Date: Wed, 5 Nov 2025 13:30:28 +0100
+	 In-Reply-To:Content-Type; b=LRATzQ6d/dvXoAIet/6vj4NUb2PQGdkwp0UMV+gCw0ysd8JFu6dMbVfO4YUQM97ZYDE8HafONuWqIUbn1yhDYeBjkRUqsa1lGF46IRcMYeU3xemHlDBTpti/U6fksUAdGxL+aeZ6uNXghrGLTW1fOsqdCed/HXR4A8gnSBL+oxY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=3mdeb.com; spf=pass smtp.mailfrom=3mdeb.com; dkim=pass (2048-bit key) header.d=3mdeb.com header.i=@3mdeb.com header.b=JI+c/paJ; arc=none smtp.client-ip=178.33.46.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=3mdeb.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=3mdeb.com
+Received: from director3.ghost.mail-out.ovh.net (unknown [10.110.43.172])
+	by mo561.mail-out.ovh.net (Postfix) with ESMTP id 4d1mSd1XBcz6WMp
+	for <linux-i2c@vger.kernel.org>; Wed,  5 Nov 2025 13:31:45 +0000 (UTC)
+Received: from ghost-submission-7d8d68f679-qrlc7 (unknown [10.108.42.32])
+	by director3.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 7D910C0874;
+	Wed,  5 Nov 2025 13:31:44 +0000 (UTC)
+Received: from 3mdeb.com ([37.59.142.114])
+	by ghost-submission-7d8d68f679-qrlc7 with ESMTPSA
+	id GRMhOb9RC2nlwwkAbtJ+CQ
+	(envelope-from <kamil.aronowski@3mdeb.com>); Wed, 05 Nov 2025 13:31:44 +0000
+Authentication-Results:garm.ovh; auth=pass (GARM-114S0087ba82b1e-15c9-47db-b084-8a2e2e73f3c4,
+                    2BC6CAEC4332E05DA7D7458FC6046ABD22138A80) smtp.auth=kamil.aronowski@3mdeb.com
+X-OVh-ClientIp:213.192.77.249
+Message-ID: <cdb56a48-8754-4d9d-9309-8a694c6f148d@3mdeb.com>
+Date: Wed, 5 Nov 2025 14:31:43 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -57,56 +53,243 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: i2c issues in 6.18 on R4, but not r4pro (both mt7988 with i2c-mux
- on i2c2)
-To: Frank Wunderlich <linux@fw-web.de>,
- Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: matthias.bgg@kernel.org, Andi Shyti <andi.shyti@kernel.org>,
- Qii Wang <qii.wang@mediatek.com>, Wojciech Siudy <wojciech.siudy@nokia.com>,
- linux-mediatek@lists.infradead.org, linux-i2c@vger.kernel.org,
- daniel@makrotopia.org
-References: <3f5ef2d1336933a87d9761b5ff510a1f@fw-web.de>
- <64fb54d5f2bc929720d3313f7fa2d8cd@fw-web.de> <aQdSVcazPQl-shR6@shikoro>
- <1144f62ad9886fed60620bce0bbed7ee@fw-web.de> <aQfgEuelvU-8_2rh@shikoro>
- <aQs6O75BqOERMzPJ@ninjato> <9B073F04-0CE1-4870-88B7-9510B3EA5D6F@fw-web.de>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Subject: Re: [PATCH 0/6] decode-dimms: Implement DDR5 decoding
+To: s.horvath@outlook.com.au, linux-i2c@vger.kernel.org
+Cc: Jean Delvare <jdelvare@suse.de>, Guenter Roeck <linux@roeck-us.net>
+References: <20241114-decode-ddr5-v1-0-0ed2db8ef30f@outlook.com.au>
 Content-Language: en-US
-In-Reply-To: <9B073F04-0CE1-4870-88B7-9510B3EA5D6F@fw-web.de>
+From: Kamil Aronowski <kamil.aronowski@3mdeb.com>
+In-Reply-To: <20241114-decode-ddr5-v1-0-0ed2db8ef30f@outlook.com.au>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------reX5x8bCTD0FktsEy9GAIdPL"
+X-Ovh-Tracer-Id: 5890989790629491018
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: dmFkZTERwDQcKDuY3aOxvrznrM9ywUywY6zqlI7ETwr1p0v22D4IqRYVVlHe/oFh5noSVIeq9TzPbpRsvVRvrAEVIKyM6Y98rniFU5XI3QHKZtqgY6khFg6fuLrdjUW8lJhTCXVzBVcyXLm+Wt9q6RdsgRD6TNtx4nuTf7tN9GU97YtjXVRNDwEETty4ChVDHuIZE5WuhKunU3dYQDMJphIZXBMMle5qdR28LMhvKHkp66oZa+PwyNZWijCvFjIQu5Lzy6gGkbvC9HbdeqBlcZlTUFT4lCSzIoFbPqsMQRvtAEoDymjCqq9dCYOdBDGZ4OnrPGm4OWO44UETj/d1LpeATXG0ToAQkL0sfCw0Joaxjq2iINUKLrDnN1iVJKt160sZDRdKHrcK3fFkN+ohnPeAGn9pki0jfG06vWz+bsSYFbzOZmOEFph2rmeHr17VGrf9momi/10RDC/9IvYPxeWDJFNcFbpR5tUJz8nodOkxVJlEX2kH8PRibentJoDL5gXI/vasZD2yfwUhZsQdhNb7LiwY0WFwMOxFgZ/HccNmqbNkMdFNLQqVcLHn6JBKwp+EHJD07hkeeUiCnbMli+Vb+BHbAWFjsS3hfYdSE13bwW5lzzpl2LXQ6lhIRymwQcjx1m6rl3kJhs6i5tzuFDRj1rCZ+3opXorQbCcCFMp1I7jRhg
+DKIM-Signature: a=rsa-sha256; bh=zef3XXPgCtUM/R9vVXKeD7GnXIFoL2xnRPGVGibkhEw=;
+ c=relaxed/relaxed; d=3mdeb.com; h=From; s=ovhmo3617313-selector1;
+ t=1762349505; v=1;
+ b=JI+c/paJ5AIlhH+cs3imo9zSOKaBAVjT57N2Nkomp+gJmFPPeox3sMePaPSlGXWwvCs0BqbB
+ EOAORLIYtlncAheGx+beu6kOKAsI8+XdjvTJP4Xc+tyPK7MbMbHlxTOd5DTIzDkmDMkFTln/3bV
+ VV52/xSHxhNDTwOpzs+X7KOvxLdKAsmQBuxyww4TiY/UrruXal1PQBa5QTxyDlxuesJ56gEGqTS
+ ohaQBclXHPmKE8G75QDMVMauPN1Wt8poHgWWlfRtdWzM8ay0Sj8sAqweeT/9XFseSszQWEJxiUz
+ yJY48zz+JGXCNfB371dvat5JdBI71UbfhiB+bszvhg6ug==
+
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------reX5x8bCTD0FktsEy9GAIdPL
+Content-Type: multipart/mixed; boundary="------------XLWK0I8zizseqtiPG8afSc3L";
+ protected-headers="v1"
+From: Kamil Aronowski <kamil.aronowski@3mdeb.com>
+To: s.horvath@outlook.com.au, linux-i2c@vger.kernel.org
+Cc: Jean Delvare <jdelvare@suse.de>, Guenter Roeck <linux@roeck-us.net>
+Message-ID: <cdb56a48-8754-4d9d-9309-8a694c6f148d@3mdeb.com>
+Subject: Re: [PATCH 0/6] decode-dimms: Implement DDR5 decoding
+References: <20241114-decode-ddr5-v1-0-0ed2db8ef30f@outlook.com.au>
+In-Reply-To: <20241114-decode-ddr5-v1-0-0ed2db8ef30f@outlook.com.au>
+
+--------------XLWK0I8zizseqtiPG8afSc3L
+Content-Type: multipart/mixed; boundary="------------EKSTsCvGcf7fPIqRhRVMfacK"
+
+--------------EKSTsCvGcf7fPIqRhRVMfacK
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: base64
 
-Il 05/11/25 13:08, Frank Wunderlich ha scritto:
-> Am 5. November 2025 12:51:23 MEZ schrieb Wolfram Sang <wsa+renesas@sang-engineering.com>:
->>
->>>> Maybe this option should be enabled by default or when the i2c-mux is
->>>> selected?
->>>
->>> That's what we were discussing. At least a warning will now get printed
->>> to the logs when booting suggesting the above solution.
->>
->> FYI, all the commits leading to this breakage are reverted now. Sorry
->> for your troubles!
-> 
-> Why? My issue was solved by adding GPIO_RESET... So it was fault on my side,sorry for bothering.
-> 
-> @angelo
-> yes it is a final board BPI-R4 v1.1.
-> 
-> Why sometimes it works i guess it is because uboot may previously initialize the device (and without reset working it may be stuck in wrong state).
+T24gMTEvMTQvMjQgMDc6MzcsIFN0ZXBoZW4gSG9ydmF0aCB2aWEgQjQgUmVsYXkgd3JvdGU6
+DQo+IEhpLCB0aGlzIHNlcmllcyBvZiBwYXRjaGVzIGFkZHMgRERSNSBzdXBwb3J0IHRvIGRl
+Y29kZS1kaW1tcy4NCj4NCj4gSSdtIG5vdCB0b28gZXhwZXJpZW5jZWQgd2l0aCBwZXJsIG9y
+IHRoZSBKRURFQyBzcGVjcywgc28gdGhlcmUncyBwcm9iYWJseQ0KPiBnb2luZyB0byBiZSBz
+b21lIHF1ZXN0aW9uYWJsZSBjaG9pY2VzIGhlcmUsIGJ1dCBJJ2QgbG92ZSB0byBoZWFyDQo+
+IGZlZWRiYWNrLg0KDQpUaGUgcGF0Y2hzZXQgZG9lc24ndCBzZWVtIHRvIHdvcmsgb3V0LW9m
+LXRoZS1ib3guIFdoZW4gcnVubmluZyB0aGUgcGF0Y2hlZA0KYGRlY29kZS1kaW1tc2AsIGFu
+IGVycm9yIGlzIHRocm93bjoNCg0KYGBgDQokIHN1ZG8gLi9lZXByb20vZGVjb2RlLWRpbW1z
+DQpDYW5ub3QgcmVhZCAvc3lzL2J1cy9pMmMvZHJpdmVycy9zcGQ1MTE4LzE2LTAwNTAvZWVw
+cm9tIGF0IC4vZWVwcm9tL2RlY29kZS1kaW1tcyBsaW5lIDI5NDAuDQpgYGANCg0KSSd2ZSBj
+aGVja2VkIHdpdGggbW9yZSB0aGFuIG9uZSBtYWNoaW5lIHRvIGNvbmZpcm0sIHRoYXQgaXQn
+cyBub3QgYW4gaW5kaXZpZHVhbA0KY2FzZS4NCg0KTW9kaWZ5aW5nIHRoZSBwYXRjaGVkIHNj
+cmlwdCwgc28gdGhhdCBpdCByZWFkcyBvbmUgYnl0ZSBpbiBhIGxvb3AgZG9lcyBzZWVtIHRv
+DQpmaXggc29tZSB0aGluZ3MsIHRob3VnaCwgYXQgbGVhc3QgZm9yIHRoZSBmaXJzdCAxMjgg
+aXRlcmF0aW9uczoNCg0KYGBgZGlmZg0KZGlmZiAtLWdpdCBhL2VlcHJvbS9kZWNvZGUtZGlt
+bXMgYi9lZXByb20vZGVjb2RlLWRpbW1zDQppbmRleCBhNmExNjY5Li4xZmY2NzQxIDEwMDc1
+NQ0KLS0tIGEvZWVwcm9tL2RlY29kZS1kaW1tcw0KKysrIGIvZWVwcm9tL2RlY29kZS1kaW1t
+cw0KQEAgLTI5MzcsMTMgKzI5MzcsMTggQEAgc3ViIHJlYWRzcGQoJCQkKQ0KICAJCWJpbm1v
+ZGUgSEFORExFOw0KICAJCXN5c3NlZWsoSEFORExFLCAkb2Zmc2V0LCBTRUVLX1NFVCkNCiAg
+CQkJb3IgZGllICJDYW5ub3Qgc2VlayAkZGltbV9pL2VlcHJvbSI7DQotCQkkcmVhZCA9IHN5
+c3JlYWQoSEFORExFLCBteSAkZWVwcm9tLCAkc2l6ZSkNCi0JCQkJb3IgZGllICJDYW5ub3Qg
+cmVhZCAkZGltbV9pL2VlcHJvbSI7DQorCQkjJHJlYWQgPSBzeXNyZWFkKEhBTkRMRSwgbXkg
+JGVlcHJvbSwgJHNpemUpDQorCQkjCQlvciBkaWUgIkNhbm5vdCByZWFkICRkaW1tX2kvZWVw
+cm9tIjsNCisJCW15ICRyZWFkID0gJyc7DQorCQlteSAkYnVmZmVyOw0KKwkJd2hpbGUgKHN5
+c3JlYWQoSEFORExFLCAkYnVmZmVyLCAxKSA9PSAxKSB7DQorCQkJJHJlYWQgLj0gJGJ1ZmZl
+cjsNCisJCX0NCiAgCQljbG9zZSBIQU5ETEU7DQogIAkJaWYgKCRyZWFkIDwgJHNpemUpIHsN
+CiAgCQkJcHJpbnQgU1RERVJSICJXQVJOSU5HOiAkZGltbV9pL2VlcHJvbSBpcyBzbWFsbGVy
+IHRoYW4gZXhwZWN0ZWRcbiI7DQogIAkJfQ0KLQkJQGJ5dGVzID0gdW5wYWNrKCJDKiIsICRl
+ZXByb20pOw0KKwkJQGJ5dGVzID0gdW5wYWNrKCJDKiIsICRidWZmZXIpOw0KICAJfSBlbHNl
+IHsNCiAgCQkjIEtlcm5lbCAyLjQgd2l0aCBwcm9jZnMNCiAgCQlmb3IgbXkgJGkgKDAgLi4g
+KCRzaXplLTEpLzE2KSB7DQpgYGANCg0KTmV2ZXJ0aGVsZXNzLCBpdCBzdGlsbCBkb2Vzbid0
+IHdvcmsgYXMgZXhwZWN0ZWQuIEEgKHRyaW1tZWQpIGxpc3Rpbmcgc2hvd3Mgb25seQ0KdGhl
+IGZvbGxvd2luZywgZXhjZXB0IGFsbCB0aGUgdHJpbW1lZCB3YXJuaW5nczoNCg0KYGBgDQpV
+c2Ugb2YgdW5pbml0aWFsaXplZCB2YWx1ZSBpbiBudW1lcmljIGVxICg9PSkgYXQgLi9lZXBy
+b20vZGVjb2RlLWRpbW1zIGxpbmUgMjk0NS4NCkFyZ3VtZW50ICIwXlBeUl5DXkRcMCBiXDBc
+MFwwXDBNLV5QXkJcMFwwXDBcMFwwXDBlXkHvv71eQ3Lvv71cMFwwXDBcMCwuLi4iIGlzbid0
+IG51bWVyaWMgaW4gbnVtZXJpYyBsdCAoPCkgYXQgLi9lZXByb20vZGVjb2RlLWRpbW1zIGxp
+bmUgMjk0OC4NCldBUk5JTkc6IC9zeXMvYnVzL2kyYy9kcml2ZXJzL3NwZDUxMTgvMjAtMDA1
+MC9lZXByb20gaXMgc21hbGxlciB0aGFuIGV4cGVjdGVkDQpVc2Ugb2YgdW5pbml0aWFsaXpl
+ZCB2YWx1ZSBpbiBhZGRpdGlvbiAoKykgYXQgLi9lZXByb20vZGVjb2RlLWRpbW1zIGxpbmUg
+Mjk2OS4NClVzZSBvZiB1bmluaXRpYWxpemVkIHZhbHVlIGluIGFkZGl0aW9uICgrKSBhdCAu
+L2VlcHJvbS9kZWNvZGUtZGltbXMgbGluZSAyOTY5Lg0KWy4uLl0NClVzZSBvZiB1bmluaXRp
+YWxpemVkIHZhbHVlICRiIGluIG51bWVyaWMgZXEgKD09KSBhdCAuL2VlcHJvbS9kZWNvZGUt
+ZGltbXMgbGluZSA1MDUuDQpVc2Ugb2YgdW5pbml0aWFsaXplZCB2YWx1ZSAkYiBpbiBudW1l
+cmljIGVxICg9PSkgYXQgLi9lZXByb20vZGVjb2RlLWRpbW1zIGxpbmUgNTA2Lg0KVXNlIG9m
+IHVuaW5pdGlhbGl6ZWQgdmFsdWUgJF9bMF0gaW4gc3ByaW50ZiBhdCAuL2VlcHJvbS9kZWNv
+ZGUtZGltbXMgbGluZSAyNTU1Lg0KVXNlIG9mIHVuaW5pdGlhbGl6ZWQgdmFsdWUgJF9bMV0g
+aW4gc3ByaW50ZiBhdCAuL2VlcHJvbS9kZWNvZGUtZGltbXMgbGluZSAyNTU1Lg0KVXNlIG9m
+IHVuaW5pdGlhbGl6ZWQgdmFsdWUgJF9bMl0gaW4gc3ByaW50ZiBhdCAuL2VlcHJvbS9kZWNv
+ZGUtZGltbXMgbGluZSAyNTU1Lg0KVXNlIG9mIHVuaW5pdGlhbGl6ZWQgdmFsdWUgJF9bM10g
+aW4gc3ByaW50ZiBhdCAuL2VlcHJvbS9kZWNvZGUtZGltbXMgbGluZSAyNTU1Lg0KIyBkZWNv
+ZGUtZGltbXMgdmVyc2lvbiA0LjQNCg0KTWVtb3J5IFNlcmlhbCBQcmVzZW5jZSBEZXRlY3Qg
+RGVjb2Rlcg0KQnkgUGhpbGlwIEVkZWxicm9jaywgQ2hyaXN0aWFuIFp1Y2tzY2h3ZXJkdCwg
+QnVya2FydCBMaW5nbmVyLA0KSmVhbiBEZWx2YXJlLCBUcmVudCBQaWVwaG8gYW5kIG90aGVy
+cw0KDQoNCkRlY29kaW5nIEVFUFJPTTogL3N5cy9idXMvaTJjL2RyaXZlcnMvc3BkNTExOC8y
+MC0wMDUwDQpHdWVzc2luZyBESU1NIGlzIGluICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgYmFuayAxDQpLZXJuZWwgZHJpdmVyIHVzZWQgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgc3BkNTExOA0KDQotLS09PT0gU1BEIEVFUFJPTSBJbmZvcm1hdGlvbiA9PT0tLS0N
+CkVFUFJPTSBDaGVja3N1bSBvZiBieXRlcyAwLTYyICAgICAgICAgICAgICAgICAgICBPSyAo
+MHgwMCkNClNQRCBSZXZpc2lvbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICBJbnZhbGlkDQpGdW5kYW1lbnRhbCBNZW1vcnkgdHlwZSAgICAgICAgICAgICAgICAgICAg
+ICAgICAgVW5rbm93biAoMHgwMCkNCg0KLS0tPT09IE1hbnVmYWN0dXJpbmcgSW5mb3JtYXRp
+b24gPT09LS0tDQpNYW51ZmFjdHVyZXIgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgVW5kZWZpbmVkDQpQYXJ0IE51bWJlciAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgVW5kZWZpbmVkDQoNCg0KTnVtYmVyIG9mIFNEUkFNIERJTU1zIGRldGVj
+dGVkIGFuZCBkZWNvZGVkOiAxDQpgYGANCg0KPiBUaGUgZmlyc3QgNCBwYXRjaGVzICgxLCAy
+LCAzLCA0KSBhZGQgdGhlIGVzc2VudGlhbCBpbmZvcm1hdGlvbiB0bw0KPiBkZWNvZGUtZGlt
+bXMuDQo+DQo+IFRoZSBuZXh0IDIgcGF0Y2hlcyAoNSwgNikgaGF2ZW4ndCByZWFsbHkgYmVl
+biB0ZXN0ZWQgb24gaGFyZHdhcmUNCj4gaW1wbGVtZW50YXRpb25zIHNvIEknbSBoYXBweSBm
+b3IgdGhlbSB0byBiZSBkcm9wcGVkIGlmIHRoZXkncmUgbm90DQo+IHVzZWZ1bC4NCg0KV2Fz
+IHRoZSBwYXRjaHNldCB0ZXN0ZWQgb24gYW55IGhhcmR3YXJlIG9yIHNvbWUgb3RoZXIgaW50
+ZW5kZWQgZW52aXJvbm1lbnQNCm91dHNpZGUgb2YgbXkgdXNlIGNhc2U/IFRoZSBsYXR0ZXIg
+aXMgYWJvdXQgdGhlIG1vc3QgcmVjZW50IHJldmlzaW9uIG9mIEZlZG9yYQ0KUmF3aGlkZSB3
+aXRoIHRoZSBzcGQ1MTE4IG1vZHVsZSBvbiB2YXJpb3VzIEREUjUtZXF1aXBwZWQgbGFwdG9w
+cy4NCg0KLS0gDQpLYW1pbCBBcm9ub3dza2kNCkp1bmlvciBFbWJlZGRlZCBGaXJtd2FyZSBF
+bmdpbmVlcg0KR1BHOiAzNTEwMTQ4QTVDRDY3OTA4DQpodHRwczovLzNtZGViLmNvbSB8IEAz
+bWRlYl9jb20NCg0K
+--------------EKSTsCvGcf7fPIqRhRVMfacK
+Content-Type: application/pgp-keys; name="OpenPGP_0x3510148A5CD67908.asc"
+Content-Disposition: attachment; filename="OpenPGP_0x3510148A5CD67908.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
-Heh, this is something that happens frequently.
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
-> I'm not sure if my current flashed version had the i2c and i2cmux support,but i got it working on that board because of the connected eeprom (read mac address via tlv_eeprom as macs do not have fixed macs via efuse afaik).
-> 
-> Thanks for help so far.
-> 
+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
+b3ikfoPzj01UD8qg65aMJyOX/NBfuw=3D=3D
+=3D+WKZ
+-----END PGP PUBLIC KEY BLOCK-----
 
-No worries, my pleasure (but I didn't do all that much anyway :P :P :P)
+--------------EKSTsCvGcf7fPIqRhRVMfacK--
 
-Cheers,
-Angelo
+--------------XLWK0I8zizseqtiPG8afSc3L--
 
-> regards Frank
+--------------reX5x8bCTD0FktsEy9GAIdPL
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
+wsF5BAABCAAjFiEE17Er8MHTMiECVfFxOAwyg6B5WrYFAmkLUb8FAwAAAAAACgkQOAwyg6B5WrYb
+NBAArmBS/Mt+ST8l37EuEJmRLxk/yKGT/VLKocNF9l+1Hdc6cq1hI8CxZTe6LfX4/oFTCz7azhqu
+uDRUo4DrC1ItCfBDbwdBDIqqoLzE3q44p2aWw69nJOkIfsDSwn58rby8hqX5pMKcmLMVvXfs3Hon
+MRqp1bICrFyKJtU55EeHzCTwPZW+fVM6z4FjBujJtGo1WCH7BSm5GmDSCyD96AqTsX7akqC9Ll9o
+iQqHzJ0zq4NRNzJUT+d2x4waZ8/2GUpwxh1WVJLnVXVddtBBlxXS3UkWVMDPJAGE+MyGp6oePfYk
+usHntpO5W8yPRBha8r2HWBhsGFu3GiKeU08zKa8Y9mRqpl58IvrHQso+HQNr7mv8lVhnMcc9jYi4
+wKlM9Hr2YtY1mN5LRas8C5bmOqaxwRNddfjqpjY2MZKlsqRxrLOa45JB5R8Jr2dlgzcaUrxw/CaW
+uFcBQGfIytTXd+vX+k/8qjuBkMPRtU3pVmUl4a7b49wEi2KOaYzbS76P5sBhCbL86oaEc1VMCj6I
+L7nUk9D+HYHEr27+5og5m5Fpz/z09cZxvojIfO9yHfyERbawp+WJPaH6aZE81Nrr5/WLMd0aiDHL
+k6BRgn+Lnw5zebDrrlPY8s3EGiR6TjnQc7Tz9GkjfLc7XqeEB227HcUu2NUGuRnolcEMLcQGdb4E
+b+s=
+=9rhM
+-----END PGP SIGNATURE-----
+
+--------------reX5x8bCTD0FktsEy9GAIdPL--
 
