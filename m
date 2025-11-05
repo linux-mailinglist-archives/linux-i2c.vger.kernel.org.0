@@ -1,295 +1,347 @@
-Return-Path: <linux-i2c+bounces-13967-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13968-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C972C35FB5
-	for <lists+linux-i2c@lfdr.de>; Wed, 05 Nov 2025 15:10:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 580C0C36D79
+	for <lists+linux-i2c@lfdr.de>; Wed, 05 Nov 2025 17:57:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 680E73442AF
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Nov 2025 14:10:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EA9FE642C5E
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Nov 2025 16:21:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DFEE328B7E;
-	Wed,  5 Nov 2025 14:10:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4718E3358D8;
+	Wed,  5 Nov 2025 16:19:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=3mdeb.com header.i=@3mdeb.com header.b="JI+c/paJ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ejaVTFDi"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from 4.mo561.mail-out.ovh.net (4.mo561.mail-out.ovh.net [178.33.46.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8295D311955
-	for <linux-i2c@vger.kernel.org>; Wed,  5 Nov 2025 14:09:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.33.46.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 187F232936B
+	for <linux-i2c@vger.kernel.org>; Wed,  5 Nov 2025 16:19:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762351803; cv=none; b=Inkr6BugISekswlhGNu3NY0aydA4sm/KPfb+BxFMxqgQphPuGxz901Ksw2If+oeT4W63F+PaOD2zEZHXKG0bF1JWbTEfGPC+RsIv1MuG/FhZa+YYjkzwg9pXqW5wnnv/DqJNYJP7ItqqCr/W6wn8qxSousheJ7L4rDvxpKoIDD0=
+	t=1762359543; cv=none; b=h98u846K3yfwgOoll7kQMT2K2fMm70t7LXEFL2zGTP8V6h/NoPTfzvBDWwuYVe5h11H0wUoZCZPT7Vi6K3mXpNjSmFIxu05nNqClwHvHYW1wWALo3MFUQMb/OI1NdPLgXy1pFvJCqa80x1EBbeFQ9bTSj8ksNUuMAO/97BaMPfE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762351803; c=relaxed/simple;
-	bh=zef3XXPgCtUM/R9vVXKeD7GnXIFoL2xnRPGVGibkhEw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LRATzQ6d/dvXoAIet/6vj4NUb2PQGdkwp0UMV+gCw0ysd8JFu6dMbVfO4YUQM97ZYDE8HafONuWqIUbn1yhDYeBjkRUqsa1lGF46IRcMYeU3xemHlDBTpti/U6fksUAdGxL+aeZ6uNXghrGLTW1fOsqdCed/HXR4A8gnSBL+oxY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=3mdeb.com; spf=pass smtp.mailfrom=3mdeb.com; dkim=pass (2048-bit key) header.d=3mdeb.com header.i=@3mdeb.com header.b=JI+c/paJ; arc=none smtp.client-ip=178.33.46.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=3mdeb.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=3mdeb.com
-Received: from director3.ghost.mail-out.ovh.net (unknown [10.110.43.172])
-	by mo561.mail-out.ovh.net (Postfix) with ESMTP id 4d1mSd1XBcz6WMp
-	for <linux-i2c@vger.kernel.org>; Wed,  5 Nov 2025 13:31:45 +0000 (UTC)
-Received: from ghost-submission-7d8d68f679-qrlc7 (unknown [10.108.42.32])
-	by director3.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 7D910C0874;
-	Wed,  5 Nov 2025 13:31:44 +0000 (UTC)
-Received: from 3mdeb.com ([37.59.142.114])
-	by ghost-submission-7d8d68f679-qrlc7 with ESMTPSA
-	id GRMhOb9RC2nlwwkAbtJ+CQ
-	(envelope-from <kamil.aronowski@3mdeb.com>); Wed, 05 Nov 2025 13:31:44 +0000
-Authentication-Results:garm.ovh; auth=pass (GARM-114S0087ba82b1e-15c9-47db-b084-8a2e2e73f3c4,
-                    2BC6CAEC4332E05DA7D7458FC6046ABD22138A80) smtp.auth=kamil.aronowski@3mdeb.com
-X-OVh-ClientIp:213.192.77.249
-Message-ID: <cdb56a48-8754-4d9d-9309-8a694c6f148d@3mdeb.com>
-Date: Wed, 5 Nov 2025 14:31:43 +0100
+	s=arc-20240116; t=1762359543; c=relaxed/simple;
+	bh=Xk+5OAW2iDloQ8vsn6u4M/2pH1xF1chLoPrc11GjWUM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EjXSSoRp5uCrZXD8GWVUMOnIAb/52XrgiVWcd4okDHgMvrZ8Y5XsTDTe7sEuh7J6zuxf97qls/s3aM7L2pEXrhtz3GWopzT7FEnJpyFihd31axr4KE3o1a6rzmBH5oSYYrhxWmmCVCaV9cyyS7BdlTKacWP3sM808D+Npj8pRRU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ejaVTFDi; arc=none smtp.client-ip=209.85.208.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-37902f130e1so68826911fa.1
+        for <linux-i2c@vger.kernel.org>; Wed, 05 Nov 2025 08:19:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1762359539; x=1762964339; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=QkAL7T0BDgsa1zd6a0eYRZUllfTuoqXNMgKEkyRtcpQ=;
+        b=ejaVTFDi5XkkmR2RPr8iXJwsNfaVMA0UnfLujTtUo1wZH5TvwYLG3GYfvulpwmiqmO
+         P0aCQYPNuXGBwutp3xvvV35XOIUQNkM9ivAJDu/xt4hh3V0LGx48cv5ALRAlb/UtN6gl
+         l9+RRZjmraCw5oM6q6UJ6dJR3enwVYgfRoMT0V2rHmjL20gbSlsrwmM90PaUhu7FFIGD
+         oYHOF/r6g5IToLV4QRt1CYoNFMxWVpwqK1InSH/ueqw7ADns8JPfg5OwqUjufw8XZ3Zs
+         zOsRsBNC6ZwbF6PozM59/3tFYdKlzLFteDwhLXrzD6RjTj57ccXSC7AJWCmURRuMY7zR
+         AT9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762359539; x=1762964339;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QkAL7T0BDgsa1zd6a0eYRZUllfTuoqXNMgKEkyRtcpQ=;
+        b=OTMtTAtoP4hHXG7gRYZQvIrLBFSPuBp2wbpnAZCV0VILRIDuaLXCLluLZhxNwrW3/k
+         2zPWAZfQbOnQX982TM0oBIgCfoPXQHEtreri8HuKYbJFdR9SNXPOGu6HueDkpqsLxJZD
+         h2iWBzHDJ/t90S/XMIGHp63aKy4ajvtfmnZspks1j6XPWUNKlpWL5Mo+kLTTFCRMzSwR
+         3Uxn8h3WQIpj/I2ZwadkxYS5xb/eI+Gi8SY8BvVTwJaw+zSlHhNtGGCX+2NKX4H+cHKb
+         tjEG9Amf/oDXGpLECrrAf24lhoNaLis9SUAdnJsspyZWBRs4T1pzOe4zXX2+oP6iyCjo
+         lWCQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUp0T/5j2TGdtogxc0mOTU0Y9nVs9kKe1TBOjp+SoqWwj1SBnRGeA6L6a3uxXVT9ax91sGmXgrxPAI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz5bPI6itKRrED6+GhGwJX0S7QX+vash8I6qi9PS2rYHgQGMM1m
+	9u4hdiC5X+ZPYXw2rz0e8zsmNEvqpuwIMEEgs87fe02crjARdU36uSGW3/XeAOqj3rU=
+X-Gm-Gg: ASbGncs8b5eKJ6L5ApMue6yCS4SxQEzlbflHupiJZYUqz/MRXgYiDxK6jrq0z5U5khF
+	6v5yqrVtJF0dZMlYlBLVpAs+ugWsC86Vkt24gaGwqfUmhfx4RD2BvgvbRVh85janMD8+enKrhtt
+	L8B5lBn1FC5l0CJDop5FAYRV3Cm5IiwJpZKzaQ7ADZlF8RGtUrB9JfwAWCePprMbu6NY52+ccMg
+	qoKZflMVBujiqS7QN8bZwuIeSwEHaWQ4kOGyQkR1iTo5814RAqP7m+tTkhlHh/rrHtDVMBrFXnR
+	B3PpNRpGF65Jl2/ZikqcO1c2vaPIljsOu7V0aPA5XjCXIna1wznnmMwPpFebUGsXx/DIfSwpZcR
+	FcO6BHJqUI2aDjlwTGrTbXpfQc66M0h+JmALvwXwmbXaQMO+0Iqk1LZHLcopeYjap8rrjHX7TtH
+	bwkUHV//DvJJupcHo6Hg==
+X-Google-Smtp-Source: AGHT+IEtnKgSnZXYqkMQq4ZUu98tBn28T7uO9YGbqi0n5t0eQapyuWQ7G+IyQ57DiA+L2paV769GLw==
+X-Received: by 2002:a05:651c:b08:b0:36e:ca93:62b6 with SMTP id 38308e7fff4ca-37a5140d7c2mr12915881fa.12.1762359538770;
+        Wed, 05 Nov 2025 08:18:58 -0800 (PST)
+Received: from NB-6746.corp.yadro.com ([188.243.183.84])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-594492ac7cdsm6258e87.98.2025.11.05.08.18.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Nov 2025 08:18:58 -0800 (PST)
+From: Artem Shimko <a.shimko.dev@gmail.com>
+To: Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Jan Dabros <jsd@semihalf.com>,
+	Andi Shyti <andi.shyti@kernel.org>
+Cc: Artem Shimko <a.shimko.dev@gmail.com>,
+	linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] i2c: designware: Replace magic numbers with named constants
+Date: Wed,  5 Nov 2025 19:18:44 +0300
+Message-ID: <20251105161845.2535367-1-a.shimko.dev@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/6] decode-dimms: Implement DDR5 decoding
-To: s.horvath@outlook.com.au, linux-i2c@vger.kernel.org
-Cc: Jean Delvare <jdelvare@suse.de>, Guenter Roeck <linux@roeck-us.net>
-References: <20241114-decode-ddr5-v1-0-0ed2db8ef30f@outlook.com.au>
-Content-Language: en-US
-From: Kamil Aronowski <kamil.aronowski@3mdeb.com>
-In-Reply-To: <20241114-decode-ddr5-v1-0-0ed2db8ef30f@outlook.com.au>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------reX5x8bCTD0FktsEy9GAIdPL"
-X-Ovh-Tracer-Id: 5890989790629491018
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: dmFkZTERwDQcKDuY3aOxvrznrM9ywUywY6zqlI7ETwr1p0v22D4IqRYVVlHe/oFh5noSVIeq9TzPbpRsvVRvrAEVIKyM6Y98rniFU5XI3QHKZtqgY6khFg6fuLrdjUW8lJhTCXVzBVcyXLm+Wt9q6RdsgRD6TNtx4nuTf7tN9GU97YtjXVRNDwEETty4ChVDHuIZE5WuhKunU3dYQDMJphIZXBMMle5qdR28LMhvKHkp66oZa+PwyNZWijCvFjIQu5Lzy6gGkbvC9HbdeqBlcZlTUFT4lCSzIoFbPqsMQRvtAEoDymjCqq9dCYOdBDGZ4OnrPGm4OWO44UETj/d1LpeATXG0ToAQkL0sfCw0Joaxjq2iINUKLrDnN1iVJKt160sZDRdKHrcK3fFkN+ohnPeAGn9pki0jfG06vWz+bsSYFbzOZmOEFph2rmeHr17VGrf9momi/10RDC/9IvYPxeWDJFNcFbpR5tUJz8nodOkxVJlEX2kH8PRibentJoDL5gXI/vasZD2yfwUhZsQdhNb7LiwY0WFwMOxFgZ/HccNmqbNkMdFNLQqVcLHn6JBKwp+EHJD07hkeeUiCnbMli+Vb+BHbAWFjsS3hfYdSE13bwW5lzzpl2LXQ6lhIRymwQcjx1m6rl3kJhs6i5tzuFDRj1rCZ+3opXorQbCcCFMp1I7jRhg
-DKIM-Signature: a=rsa-sha256; bh=zef3XXPgCtUM/R9vVXKeD7GnXIFoL2xnRPGVGibkhEw=;
- c=relaxed/relaxed; d=3mdeb.com; h=From; s=ovhmo3617313-selector1;
- t=1762349505; v=1;
- b=JI+c/paJ5AIlhH+cs3imo9zSOKaBAVjT57N2Nkomp+gJmFPPeox3sMePaPSlGXWwvCs0BqbB
- EOAORLIYtlncAheGx+beu6kOKAsI8+XdjvTJP4Xc+tyPK7MbMbHlxTOd5DTIzDkmDMkFTln/3bV
- VV52/xSHxhNDTwOpzs+X7KOvxLdKAsmQBuxyww4TiY/UrruXal1PQBa5QTxyDlxuesJ56gEGqTS
- ohaQBclXHPmKE8G75QDMVMauPN1Wt8poHgWWlfRtdWzM8ay0Sj8sAqweeT/9XFseSszQWEJxiUz
- yJY48zz+JGXCNfB371dvat5JdBI71UbfhiB+bszvhg6ug==
+Content-Transfer-Encoding: 8bit
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------reX5x8bCTD0FktsEy9GAIdPL
-Content-Type: multipart/mixed; boundary="------------XLWK0I8zizseqtiPG8afSc3L";
- protected-headers="v1"
-From: Kamil Aronowski <kamil.aronowski@3mdeb.com>
-To: s.horvath@outlook.com.au, linux-i2c@vger.kernel.org
-Cc: Jean Delvare <jdelvare@suse.de>, Guenter Roeck <linux@roeck-us.net>
-Message-ID: <cdb56a48-8754-4d9d-9309-8a694c6f148d@3mdeb.com>
-Subject: Re: [PATCH 0/6] decode-dimms: Implement DDR5 decoding
-References: <20241114-decode-ddr5-v1-0-0ed2db8ef30f@outlook.com.au>
-In-Reply-To: <20241114-decode-ddr5-v1-0-0ed2db8ef30f@outlook.com.au>
+Replace various magic numbers with properly named constants to improve
+code readability and maintainability. This includes constants for
+register access, timing adjustments, timeouts, FIFO parameters,
+and default values.
 
---------------XLWK0I8zizseqtiPG8afSc3L
-Content-Type: multipart/mixed; boundary="------------EKSTsCvGcf7fPIqRhRVMfacK"
+All new constants are documented with clear comments explaining their
+purpose. The change makes the code more self-documenting without
+altering any functionality.
 
---------------EKSTsCvGcf7fPIqRhRVMfacK
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Signed-off-by: Artem Shimko <a.shimko.dev@gmail.com>
+---
+Hello maintainers and reviewers,
 
-T24gMTEvMTQvMjQgMDc6MzcsIFN0ZXBoZW4gSG9ydmF0aCB2aWEgQjQgUmVsYXkgd3JvdGU6
-DQo+IEhpLCB0aGlzIHNlcmllcyBvZiBwYXRjaGVzIGFkZHMgRERSNSBzdXBwb3J0IHRvIGRl
-Y29kZS1kaW1tcy4NCj4NCj4gSSdtIG5vdCB0b28gZXhwZXJpZW5jZWQgd2l0aCBwZXJsIG9y
-IHRoZSBKRURFQyBzcGVjcywgc28gdGhlcmUncyBwcm9iYWJseQ0KPiBnb2luZyB0byBiZSBz
-b21lIHF1ZXN0aW9uYWJsZSBjaG9pY2VzIGhlcmUsIGJ1dCBJJ2QgbG92ZSB0byBoZWFyDQo+
-IGZlZWRiYWNrLg0KDQpUaGUgcGF0Y2hzZXQgZG9lc24ndCBzZWVtIHRvIHdvcmsgb3V0LW9m
-LXRoZS1ib3guIFdoZW4gcnVubmluZyB0aGUgcGF0Y2hlZA0KYGRlY29kZS1kaW1tc2AsIGFu
-IGVycm9yIGlzIHRocm93bjoNCg0KYGBgDQokIHN1ZG8gLi9lZXByb20vZGVjb2RlLWRpbW1z
-DQpDYW5ub3QgcmVhZCAvc3lzL2J1cy9pMmMvZHJpdmVycy9zcGQ1MTE4LzE2LTAwNTAvZWVw
-cm9tIGF0IC4vZWVwcm9tL2RlY29kZS1kaW1tcyBsaW5lIDI5NDAuDQpgYGANCg0KSSd2ZSBj
-aGVja2VkIHdpdGggbW9yZSB0aGFuIG9uZSBtYWNoaW5lIHRvIGNvbmZpcm0sIHRoYXQgaXQn
-cyBub3QgYW4gaW5kaXZpZHVhbA0KY2FzZS4NCg0KTW9kaWZ5aW5nIHRoZSBwYXRjaGVkIHNj
-cmlwdCwgc28gdGhhdCBpdCByZWFkcyBvbmUgYnl0ZSBpbiBhIGxvb3AgZG9lcyBzZWVtIHRv
-DQpmaXggc29tZSB0aGluZ3MsIHRob3VnaCwgYXQgbGVhc3QgZm9yIHRoZSBmaXJzdCAxMjgg
-aXRlcmF0aW9uczoNCg0KYGBgZGlmZg0KZGlmZiAtLWdpdCBhL2VlcHJvbS9kZWNvZGUtZGlt
-bXMgYi9lZXByb20vZGVjb2RlLWRpbW1zDQppbmRleCBhNmExNjY5Li4xZmY2NzQxIDEwMDc1
-NQ0KLS0tIGEvZWVwcm9tL2RlY29kZS1kaW1tcw0KKysrIGIvZWVwcm9tL2RlY29kZS1kaW1t
-cw0KQEAgLTI5MzcsMTMgKzI5MzcsMTggQEAgc3ViIHJlYWRzcGQoJCQkKQ0KICAJCWJpbm1v
-ZGUgSEFORExFOw0KICAJCXN5c3NlZWsoSEFORExFLCAkb2Zmc2V0LCBTRUVLX1NFVCkNCiAg
-CQkJb3IgZGllICJDYW5ub3Qgc2VlayAkZGltbV9pL2VlcHJvbSI7DQotCQkkcmVhZCA9IHN5
-c3JlYWQoSEFORExFLCBteSAkZWVwcm9tLCAkc2l6ZSkNCi0JCQkJb3IgZGllICJDYW5ub3Qg
-cmVhZCAkZGltbV9pL2VlcHJvbSI7DQorCQkjJHJlYWQgPSBzeXNyZWFkKEhBTkRMRSwgbXkg
-JGVlcHJvbSwgJHNpemUpDQorCQkjCQlvciBkaWUgIkNhbm5vdCByZWFkICRkaW1tX2kvZWVw
-cm9tIjsNCisJCW15ICRyZWFkID0gJyc7DQorCQlteSAkYnVmZmVyOw0KKwkJd2hpbGUgKHN5
-c3JlYWQoSEFORExFLCAkYnVmZmVyLCAxKSA9PSAxKSB7DQorCQkJJHJlYWQgLj0gJGJ1ZmZl
-cjsNCisJCX0NCiAgCQljbG9zZSBIQU5ETEU7DQogIAkJaWYgKCRyZWFkIDwgJHNpemUpIHsN
-CiAgCQkJcHJpbnQgU1RERVJSICJXQVJOSU5HOiAkZGltbV9pL2VlcHJvbSBpcyBzbWFsbGVy
-IHRoYW4gZXhwZWN0ZWRcbiI7DQogIAkJfQ0KLQkJQGJ5dGVzID0gdW5wYWNrKCJDKiIsICRl
-ZXByb20pOw0KKwkJQGJ5dGVzID0gdW5wYWNrKCJDKiIsICRidWZmZXIpOw0KICAJfSBlbHNl
-IHsNCiAgCQkjIEtlcm5lbCAyLjQgd2l0aCBwcm9jZnMNCiAgCQlmb3IgbXkgJGkgKDAgLi4g
-KCRzaXplLTEpLzE2KSB7DQpgYGANCg0KTmV2ZXJ0aGVsZXNzLCBpdCBzdGlsbCBkb2Vzbid0
-IHdvcmsgYXMgZXhwZWN0ZWQuIEEgKHRyaW1tZWQpIGxpc3Rpbmcgc2hvd3Mgb25seQ0KdGhl
-IGZvbGxvd2luZywgZXhjZXB0IGFsbCB0aGUgdHJpbW1lZCB3YXJuaW5nczoNCg0KYGBgDQpV
-c2Ugb2YgdW5pbml0aWFsaXplZCB2YWx1ZSBpbiBudW1lcmljIGVxICg9PSkgYXQgLi9lZXBy
-b20vZGVjb2RlLWRpbW1zIGxpbmUgMjk0NS4NCkFyZ3VtZW50ICIwXlBeUl5DXkRcMCBiXDBc
-MFwwXDBNLV5QXkJcMFwwXDBcMFwwXDBlXkHvv71eQ3Lvv71cMFwwXDBcMCwuLi4iIGlzbid0
-IG51bWVyaWMgaW4gbnVtZXJpYyBsdCAoPCkgYXQgLi9lZXByb20vZGVjb2RlLWRpbW1zIGxp
-bmUgMjk0OC4NCldBUk5JTkc6IC9zeXMvYnVzL2kyYy9kcml2ZXJzL3NwZDUxMTgvMjAtMDA1
-MC9lZXByb20gaXMgc21hbGxlciB0aGFuIGV4cGVjdGVkDQpVc2Ugb2YgdW5pbml0aWFsaXpl
-ZCB2YWx1ZSBpbiBhZGRpdGlvbiAoKykgYXQgLi9lZXByb20vZGVjb2RlLWRpbW1zIGxpbmUg
-Mjk2OS4NClVzZSBvZiB1bmluaXRpYWxpemVkIHZhbHVlIGluIGFkZGl0aW9uICgrKSBhdCAu
-L2VlcHJvbS9kZWNvZGUtZGltbXMgbGluZSAyOTY5Lg0KWy4uLl0NClVzZSBvZiB1bmluaXRp
-YWxpemVkIHZhbHVlICRiIGluIG51bWVyaWMgZXEgKD09KSBhdCAuL2VlcHJvbS9kZWNvZGUt
-ZGltbXMgbGluZSA1MDUuDQpVc2Ugb2YgdW5pbml0aWFsaXplZCB2YWx1ZSAkYiBpbiBudW1l
-cmljIGVxICg9PSkgYXQgLi9lZXByb20vZGVjb2RlLWRpbW1zIGxpbmUgNTA2Lg0KVXNlIG9m
-IHVuaW5pdGlhbGl6ZWQgdmFsdWUgJF9bMF0gaW4gc3ByaW50ZiBhdCAuL2VlcHJvbS9kZWNv
-ZGUtZGltbXMgbGluZSAyNTU1Lg0KVXNlIG9mIHVuaW5pdGlhbGl6ZWQgdmFsdWUgJF9bMV0g
-aW4gc3ByaW50ZiBhdCAuL2VlcHJvbS9kZWNvZGUtZGltbXMgbGluZSAyNTU1Lg0KVXNlIG9m
-IHVuaW5pdGlhbGl6ZWQgdmFsdWUgJF9bMl0gaW4gc3ByaW50ZiBhdCAuL2VlcHJvbS9kZWNv
-ZGUtZGltbXMgbGluZSAyNTU1Lg0KVXNlIG9mIHVuaW5pdGlhbGl6ZWQgdmFsdWUgJF9bM10g
-aW4gc3ByaW50ZiBhdCAuL2VlcHJvbS9kZWNvZGUtZGltbXMgbGluZSAyNTU1Lg0KIyBkZWNv
-ZGUtZGltbXMgdmVyc2lvbiA0LjQNCg0KTWVtb3J5IFNlcmlhbCBQcmVzZW5jZSBEZXRlY3Qg
-RGVjb2Rlcg0KQnkgUGhpbGlwIEVkZWxicm9jaywgQ2hyaXN0aWFuIFp1Y2tzY2h3ZXJkdCwg
-QnVya2FydCBMaW5nbmVyLA0KSmVhbiBEZWx2YXJlLCBUcmVudCBQaWVwaG8gYW5kIG90aGVy
-cw0KDQoNCkRlY29kaW5nIEVFUFJPTTogL3N5cy9idXMvaTJjL2RyaXZlcnMvc3BkNTExOC8y
-MC0wMDUwDQpHdWVzc2luZyBESU1NIGlzIGluICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgYmFuayAxDQpLZXJuZWwgZHJpdmVyIHVzZWQgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgc3BkNTExOA0KDQotLS09PT0gU1BEIEVFUFJPTSBJbmZvcm1hdGlvbiA9PT0tLS0N
-CkVFUFJPTSBDaGVja3N1bSBvZiBieXRlcyAwLTYyICAgICAgICAgICAgICAgICAgICBPSyAo
-MHgwMCkNClNQRCBSZXZpc2lvbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICBJbnZhbGlkDQpGdW5kYW1lbnRhbCBNZW1vcnkgdHlwZSAgICAgICAgICAgICAgICAgICAg
-ICAgICAgVW5rbm93biAoMHgwMCkNCg0KLS0tPT09IE1hbnVmYWN0dXJpbmcgSW5mb3JtYXRp
-b24gPT09LS0tDQpNYW51ZmFjdHVyZXIgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgVW5kZWZpbmVkDQpQYXJ0IE51bWJlciAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgVW5kZWZpbmVkDQoNCg0KTnVtYmVyIG9mIFNEUkFNIERJTU1zIGRldGVj
-dGVkIGFuZCBkZWNvZGVkOiAxDQpgYGANCg0KPiBUaGUgZmlyc3QgNCBwYXRjaGVzICgxLCAy
-LCAzLCA0KSBhZGQgdGhlIGVzc2VudGlhbCBpbmZvcm1hdGlvbiB0bw0KPiBkZWNvZGUtZGlt
-bXMuDQo+DQo+IFRoZSBuZXh0IDIgcGF0Y2hlcyAoNSwgNikgaGF2ZW4ndCByZWFsbHkgYmVl
-biB0ZXN0ZWQgb24gaGFyZHdhcmUNCj4gaW1wbGVtZW50YXRpb25zIHNvIEknbSBoYXBweSBm
-b3IgdGhlbSB0byBiZSBkcm9wcGVkIGlmIHRoZXkncmUgbm90DQo+IHVzZWZ1bC4NCg0KV2Fz
-IHRoZSBwYXRjaHNldCB0ZXN0ZWQgb24gYW55IGhhcmR3YXJlIG9yIHNvbWUgb3RoZXIgaW50
-ZW5kZWQgZW52aXJvbm1lbnQNCm91dHNpZGUgb2YgbXkgdXNlIGNhc2U/IFRoZSBsYXR0ZXIg
-aXMgYWJvdXQgdGhlIG1vc3QgcmVjZW50IHJldmlzaW9uIG9mIEZlZG9yYQ0KUmF3aGlkZSB3
-aXRoIHRoZSBzcGQ1MTE4IG1vZHVsZSBvbiB2YXJpb3VzIEREUjUtZXF1aXBwZWQgbGFwdG9w
-cy4NCg0KLS0gDQpLYW1pbCBBcm9ub3dza2kNCkp1bmlvciBFbWJlZGRlZCBGaXJtd2FyZSBF
-bmdpbmVlcg0KR1BHOiAzNTEwMTQ4QTVDRDY3OTA4DQpodHRwczovLzNtZGViLmNvbSB8IEAz
-bWRlYl9jb20NCg0K
---------------EKSTsCvGcf7fPIqRhRVMfacK
-Content-Type: application/pgp-keys; name="OpenPGP_0x3510148A5CD67908.asc"
-Content-Disposition: attachment; filename="OpenPGP_0x3510148A5CD67908.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+Fix replaces magic numbers throughout the DesignWare I2C driver with named 
+constants to improve code readability and maintainability.
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+The change introduces constants for register access, timing adjustments, 
+timeouts, FIFO parameters, and default values, all properly documented 
+with comments.
 
-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
-b3ikfoPzj01UD8qg65aMJyOX/NBfuw=3D=3D
-=3D+WKZ
------END PGP PUBLIC KEY BLOCK-----
+No functional changes.
 
---------------EKSTsCvGcf7fPIqRhRVMfacK--
+Thank you for your consideration.
+--
+Best regards,
+Artem Shimko
 
---------------XLWK0I8zizseqtiPG8afSc3L--
+ drivers/i2c/busses/i2c-designware-common.c | 121 ++++++++++++++++++---
+ 1 file changed, 106 insertions(+), 15 deletions(-)
 
---------------reX5x8bCTD0FktsEy9GAIdPL
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature.asc"
+diff --git a/drivers/i2c/busses/i2c-designware-common.c b/drivers/i2c/busses/i2c-designware-common.c
+index 5b1e8f74c4ac..1d4dccf9a2ce 100644
+--- a/drivers/i2c/busses/i2c-designware-common.c
++++ b/drivers/i2c/busses/i2c-designware-common.c
+@@ -34,6 +34,91 @@
+ 
+ #include "i2c-designware-core.h"
+ 
++/*
++ * Byte offset between consecutive 16-bit registers
++ */
++#define DW_IC_REG_STEP_BYTES			2
++
++/*
++ * Bit shift to combine two 16-bit values into 32-bit word
++ */
++#define DW_IC_REG_WORD_SHIFT			16
++
++/*
++ * Default bus capacitance in picofarads
++ */
++#define DW_IC_DEFAULT_BUS_CAPACITANCE_PF	100
++
++/*
++ * Standard HCNT adjustment
++ */
++#define DW_IC_HCNT_ADJUST_STANDARD		3
++
++/*
++ * Number of disable attempts
++ */
++#define DW_IC_DISABLE_TIMEOUT_ATTEMPTS		100
++
++/*
++ * Minimum retry delay in microseconds
++ */
++#define DW_IC_DISABLE_RETRY_DELAY_MIN		25
++
++/*
++ * Maximum retry delay in microseconds
++ */
++#define DW_IC_DISABLE_RETRY_DELAY_MAX		250
++
++/*
++ * Mask to check if controller is active
++ */
++#define DW_IC_ENABLE_STATUS_ACTIVE_MASK		1
++
++/*
++ * Abort poll timeout in microseconds
++ */
++#define DW_IC_ABORT_TIMEOUT_US			10
++
++/*
++ * Total abort timeout in microseconds
++ */
++#define DW_IC_ABORT_TOTAL_TIMEOUT_US		100
++
++/*
++ * Poll interval in microseconds
++ */
++#define DW_IC_BUSY_POLL_TIMEOUT_US		1100
++
++/*
++ * Total timeout in microseconds
++ */
++#define DW_IC_BUSY_TOTAL_TIMEOUT_US		20000
++
++/*
++ * TX FIFO depth bit shift in DW_IC_COMP_PARAM_1
++ */
++#define DW_IC_TX_FIFO_DEPTH_SHIFT		16
++
++/*
++ * RX FIFO depth bit shift in DW_IC_COMP_PARAM_1
++ */
++#define DW_IC_RX_FIFO_DEPTH_SHIFT		8
++
++/*
++ * FIFO depth field mask
++ */
++#define DW_IC_FIFO_DEPTH_MASK			0xff
++
++/*
++ * FIFO depth value offset (0-based to 1-based)
++ */
++#define DW_IC_FIFO_DEPTH_OFFSET			1
++
++/*
++ * Minimum valid FIFO depth
++ */
++#define DW_IC_MIN_FIFO_DEPTH			2
++
+ static const char *const abort_sources[] = {
+ 	[ABRT_7B_ADDR_NOACK] =
+ 		"slave address not acknowledged (7bit mode)",
+@@ -106,7 +191,7 @@ static int dw_reg_read_word(void *context, unsigned int reg, unsigned int *val)
+ 	struct dw_i2c_dev *dev = context;
+ 
+ 	*val = readw(dev->base + reg) |
+-		(readw(dev->base + reg + 2) << 16);
++		(readw(dev->base + reg + DW_IC_REG_STEP_BYTES) << DW_IC_REG_WORD_SHIFT);
+ 
+ 	return 0;
+ }
+@@ -116,7 +201,7 @@ static int dw_reg_write_word(void *context, unsigned int reg, unsigned int val)
+ 	struct dw_i2c_dev *dev = context;
+ 
+ 	writew(val, dev->base + reg);
+-	writew(val >> 16, dev->base + reg + 2);
++	writew(val >> DW_IC_REG_WORD_SHIFT, dev->base + reg + DW_IC_REG_STEP_BYTES);
+ 
+ 	return 0;
+ }
+@@ -165,7 +250,7 @@ int i2c_dw_init_regmap(struct dw_i2c_dev *dev)
+ 	if (reg == swab32(DW_IC_COMP_TYPE_VALUE)) {
+ 		map_cfg.reg_read = dw_reg_read_swab;
+ 		map_cfg.reg_write = dw_reg_write_swab;
+-	} else if (reg == (DW_IC_COMP_TYPE_VALUE & 0x0000ffff)) {
++	} else if (reg == lower_16_bits(DW_IC_COMP_TYPE_VALUE)) {
+ 		map_cfg.reg_read = dw_reg_read_word;
+ 		map_cfg.reg_write = dw_reg_write_word;
+ 	} else if (reg != DW_IC_COMP_TYPE_VALUE) {
+@@ -223,7 +308,7 @@ static int i2c_dw_validate_speed(struct dw_i2c_dev *dev)
+ 
+ #define MSCC_ICPU_CFG_TWI_DELAY		0x0
+ #define MSCC_ICPU_CFG_TWI_DELAY_ENABLE	BIT(0)
+-#define MSCC_ICPU_CFG_TWI_SPIKE_FILTER	0x4
++#define MSCC_ICPU_CFG_TWI_SPIKE_FILTER	BIT(2)
+ 
+ static int mscc_twi_set_sda_hold_time(struct dw_i2c_dev *dev)
+ {
+@@ -384,7 +469,7 @@ int i2c_dw_fw_parse_and_configure(struct dw_i2c_dev *dev)
+ 	i2c_parse_fw_timings(device, t, false);
+ 
+ 	if (device_property_read_u32(device, "snps,bus-capacitance-pf", &dev->bus_capacitance_pF))
+-		dev->bus_capacitance_pF = 100;
++		dev->bus_capacitance_pF = DW_IC_DEFAULT_BUS_CAPACITANCE_PF;
+ 
+ 	dev->clk_freq_optimized = device_property_read_bool(device, "snps,clk-freq-optimized");
+ 
+@@ -434,7 +519,8 @@ u32 i2c_dw_scl_hcnt(struct dw_i2c_dev *dev, unsigned int reg, u32 ic_clk,
+ 	 * The reason why we need to take into account "tf" here,
+ 	 * is the same as described in i2c_dw_scl_lcnt().
+ 	 */
+-	return DIV_ROUND_CLOSEST_ULL((u64)ic_clk * (tSYMBOL + tf), MICRO) - 3 + offset;
++	return DIV_ROUND_CLOSEST_ULL((u64)ic_clk * (tSYMBOL + tf), MICRO) -
++				     DW_IC_HCNT_ADJUST_STANDARD + offset;
+ }
+ 
+ u32 i2c_dw_scl_lcnt(struct dw_i2c_dev *dev, unsigned int reg, u32 ic_clk,
+@@ -512,7 +598,7 @@ void __i2c_dw_disable(struct dw_i2c_dev *dev)
+ 	struct i2c_timings *t = &dev->timings;
+ 	unsigned int raw_intr_stats, ic_stats;
+ 	unsigned int enable;
+-	int timeout = 100;
++	int timeout = DW_IC_DISABLE_TIMEOUT_ATTEMPTS;
+ 	bool abort_needed;
+ 	unsigned int status;
+ 	int ret;
+@@ -539,8 +625,9 @@ void __i2c_dw_disable(struct dw_i2c_dev *dev)
+ 
+ 		regmap_write(dev->map, DW_IC_ENABLE, enable | DW_IC_ENABLE_ABORT);
+ 		ret = regmap_read_poll_timeout(dev->map, DW_IC_ENABLE, enable,
+-					       !(enable & DW_IC_ENABLE_ABORT), 10,
+-					       100);
++					       !(enable & DW_IC_ENABLE_ABORT),
++					       DW_IC_ABORT_TIMEOUT_US,
++					       DW_IC_ABORT_TOTAL_TIMEOUT_US);
+ 		if (ret)
+ 			dev_err(dev->dev, "timeout while trying to abort current transfer\n");
+ 	}
+@@ -552,7 +639,7 @@ void __i2c_dw_disable(struct dw_i2c_dev *dev)
+ 		 * in that case this test reads zero and exits the loop.
+ 		 */
+ 		regmap_read(dev->map, DW_IC_ENABLE_STATUS, &status);
+-		if ((status & 1) == 0)
++		if (!(status & DW_IC_ENABLE_STATUS_ACTIVE_MASK))
+ 			return;
+ 
+ 		/*
+@@ -560,7 +647,8 @@ void __i2c_dw_disable(struct dw_i2c_dev *dev)
+ 		 * transfer supported by the driver (for 400kHz this is
+ 		 * 25us) as described in the DesignWare I2C databook.
+ 		 */
+-		usleep_range(25, 250);
++		usleep_range(DW_IC_DISABLE_RETRY_DELAY_MIN,
++			     DW_IC_DISABLE_RETRY_DELAY_MAX);
+ 	} while (timeout--);
+ 
+ 	dev_warn(dev->dev, "timeout in disabling adapter\n");
+@@ -635,7 +723,8 @@ int i2c_dw_wait_bus_not_busy(struct dw_i2c_dev *dev)
+ 
+ 	ret = regmap_read_poll_timeout(dev->map, DW_IC_STATUS, status,
+ 				       !(status & DW_IC_STATUS_ACTIVITY),
+-				       1100, 20000);
++				       DW_IC_BUSY_POLL_TIMEOUT_US,
++				       DW_IC_BUSY_TOTAL_TIMEOUT_US);
+ 	if (ret) {
+ 		dev_warn(dev->dev, "timeout waiting for bus ready\n");
+ 
+@@ -699,12 +788,14 @@ int i2c_dw_set_fifo_size(struct dw_i2c_dev *dev)
+ 	if (ret)
+ 		return ret;
+ 
+-	tx_fifo_depth = ((param >> 16) & 0xff) + 1;
+-	rx_fifo_depth = ((param >> 8)  & 0xff) + 1;
++	tx_fifo_depth = ((param >> DW_IC_TX_FIFO_DEPTH_SHIFT) &
++			 DW_IC_FIFO_DEPTH_MASK) + DW_IC_FIFO_DEPTH_OFFSET;
++	rx_fifo_depth = ((param >> DW_IC_RX_FIFO_DEPTH_SHIFT)  &
++			 DW_IC_FIFO_DEPTH_MASK) + DW_IC_FIFO_DEPTH_OFFSET;
+ 	if (!dev->tx_fifo_depth) {
+ 		dev->tx_fifo_depth = tx_fifo_depth;
+ 		dev->rx_fifo_depth = rx_fifo_depth;
+-	} else if (tx_fifo_depth >= 2) {
++	} else if (tx_fifo_depth >= DW_IC_MIN_FIFO_DEPTH) {
+ 		dev->tx_fifo_depth = min_t(u32, dev->tx_fifo_depth,
+ 				tx_fifo_depth);
+ 		dev->rx_fifo_depth = min_t(u32, dev->rx_fifo_depth,
+-- 
+2.43.0
 
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEE17Er8MHTMiECVfFxOAwyg6B5WrYFAmkLUb8FAwAAAAAACgkQOAwyg6B5WrYb
-NBAArmBS/Mt+ST8l37EuEJmRLxk/yKGT/VLKocNF9l+1Hdc6cq1hI8CxZTe6LfX4/oFTCz7azhqu
-uDRUo4DrC1ItCfBDbwdBDIqqoLzE3q44p2aWw69nJOkIfsDSwn58rby8hqX5pMKcmLMVvXfs3Hon
-MRqp1bICrFyKJtU55EeHzCTwPZW+fVM6z4FjBujJtGo1WCH7BSm5GmDSCyD96AqTsX7akqC9Ll9o
-iQqHzJ0zq4NRNzJUT+d2x4waZ8/2GUpwxh1WVJLnVXVddtBBlxXS3UkWVMDPJAGE+MyGp6oePfYk
-usHntpO5W8yPRBha8r2HWBhsGFu3GiKeU08zKa8Y9mRqpl58IvrHQso+HQNr7mv8lVhnMcc9jYi4
-wKlM9Hr2YtY1mN5LRas8C5bmOqaxwRNddfjqpjY2MZKlsqRxrLOa45JB5R8Jr2dlgzcaUrxw/CaW
-uFcBQGfIytTXd+vX+k/8qjuBkMPRtU3pVmUl4a7b49wEi2KOaYzbS76P5sBhCbL86oaEc1VMCj6I
-L7nUk9D+HYHEr27+5og5m5Fpz/z09cZxvojIfO9yHfyERbawp+WJPaH6aZE81Nrr5/WLMd0aiDHL
-k6BRgn+Lnw5zebDrrlPY8s3EGiR6TjnQc7Tz9GkjfLc7XqeEB227HcUu2NUGuRnolcEMLcQGdb4E
-b+s=
-=9rhM
------END PGP SIGNATURE-----
-
---------------reX5x8bCTD0FktsEy9GAIdPL--
 
