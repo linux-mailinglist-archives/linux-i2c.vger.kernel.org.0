@@ -1,226 +1,177 @@
-Return-Path: <linux-i2c+bounces-13973-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13974-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99D38C38B21
-	for <lists+linux-i2c@lfdr.de>; Thu, 06 Nov 2025 02:26:22 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FA7AC38D56
+	for <lists+linux-i2c@lfdr.de>; Thu, 06 Nov 2025 03:15:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 525AF3B4C12
-	for <lists+linux-i2c@lfdr.de>; Thu,  6 Nov 2025 01:26:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2A30D3B7C82
+	for <lists+linux-i2c@lfdr.de>; Thu,  6 Nov 2025 02:15:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C6E5221F24;
-	Thu,  6 Nov 2025 01:26:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D74D923D291;
+	Thu,  6 Nov 2025 02:15:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=OUTLOOK.COM.AU header.i=@OUTLOOK.COM.AU header.b="IwMboWY4"
+	dkim=pass (2048-bit key) header.d=OUTLOOK.COM.AU header.i=@OUTLOOK.COM.AU header.b="FF4JXB4v"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from SY8PR01CU002.outbound.protection.outlook.com (mail-australiaeastazolkn19010023.outbound.protection.outlook.com [52.103.72.23])
+Received: from SY2PR01CU004.outbound.protection.outlook.com (mail-australiaeastazolkn19011031.outbound.protection.outlook.com [52.103.72.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F5AB221545
-	for <linux-i2c@vger.kernel.org>; Thu,  6 Nov 2025 01:26:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.72.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C809D23BD06
+	for <linux-i2c@vger.kernel.org>; Thu,  6 Nov 2025 02:15:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.72.31
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762392377; cv=fail; b=ltj9SYgd15JXqsh5pRStmVbOLwl102/F+0qLXoUeDrx0sjCbpCLOJCEnysINcSjyCC6P+KCcGmLdoVb5hrvTORXUvlzQmcGQ5+y+EWKNKr2R9YcCbk9XgJ8cVd/OWoDFegk23bBT0hnNepB24vP93KzVaw0rET0dY5vZuqp7G48=
+	t=1762395305; cv=fail; b=oWFUYAYppqvDplp3U0p0glcBWBMt0kIf45R10u4NIwmQOIAVpTEz8zzsBguOA3yhHX3CXzQX54LAswG4gYYMu4y8/bbiBVSuryGsPllmwSozbKOvtjh6KQKvlufoOHp3PwNNElDDju5rMZQizIrtFfIUTYiP+2qkrVFrLQNwS8E=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762392377; c=relaxed/simple;
-	bh=YQeThj4V+7xSYzxp6XaZ9kqO2crsRWAumer1k76kCso=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=LJzU2LZU99tX1NLGpyuWC70YE96hzogha9jdNufXbvKKQ9ejGL4M2CtkHRh2DXiCQ0NcTUnXEG1RuebuTOoo0Co5zvNuvJR4uDqUIjWt/1QVJU4O9/cw2/C+WgTnfT8Mnoz/SamJAIXIXa9B2Nz0pzF9l+CV0tph+VBNEGFi09A=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com.au; spf=pass smtp.mailfrom=outlook.com.au; dkim=pass (2048-bit key) header.d=OUTLOOK.COM.AU header.i=@OUTLOOK.COM.AU header.b=IwMboWY4; arc=fail smtp.client-ip=52.103.72.23
+	s=arc-20240116; t=1762395305; c=relaxed/simple;
+	bh=n689lKVJ6q0Pv6oKEtX2wPgQgOuHgRxtKgAycR8MZ9U=;
+	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=uoZtfSqObzXOPuXnN2Z4Lj8wJmSolGpry/qLLx9jJ0gAouldKJ2xYSCUNQ6DvRQvwgtxfUh5G0DTaMvVuRautgVoFRkId+ydujR70BKBEXiZ1Q3TIr1FoUmSHbfVwcWsQDx9rwe7oZm2GKHiQA8LDi1DXRbGyOeMtIotznrLdP8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com.au; spf=pass smtp.mailfrom=outlook.com.au; dkim=pass (2048-bit key) header.d=OUTLOOK.COM.AU header.i=@OUTLOOK.COM.AU header.b=FF4JXB4v; arc=fail smtp.client-ip=52.103.72.31
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com.au
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=JEkXODEq7HDVf8zqIfKBONBfWS//nQfML7v5yAs0cGMjhL/pKQGl4QHYfRCXM3ugdnfyj+sBpZqTlCg3Du5BtsQucY5xMRBuSDWzaVh7T76YVtW4GV8UjUXgq2YbUCKlW/VuQFl4t/wlbvB2oML8bwehQ8VwxHcV5caXq3A130a74WxB1M1+0fnXdXmYzvXQ2yn0fnjuL8advR/p2UgZA0J7aul3AbennMqAflCMuqPI1uDy622WaHfVyjb+ks8ecnzv286oMQaqi9INXzWaibo6nxhrhg+KVhUaJW4sgtDseK4PjLF9FErMmRas7sHImCNHPUc4EXbs7YUw5l8ghQ==
+ b=S9ivyOGMbodbIo5pYbR6j7XlmI2oxDQlw+zor8fSRgRCUXvc9BorM3m2WSOXWJuP+AfHdbjv6lI8DaOa/Y8/abUVYacl+CF9y5EL8Z2eJbhZysYHn6y9j/MWAnBKV2KlFstKGmVhfgS82qbWJW+BF4D8VVVFVf0pQiTBPdIIreOPhXVTUxAztJ2juGMnwESuMoyX604X0IQjgvC+yOJzw5t+co4mKzm4OcJtls+JmWwewq/INg0Vtr0WlnSAJRXRJE90+pdcwATsLJOYgvHS+C1Lsee2msFXAxMI2/e8+Kpm+upBuPl4o1XsOqd+uxvg3sQ+8S5KXyyR55/S2DC+EA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PZjg0FOytupNYkkqgVY3SdH4fjtXaQD3BI3RPch+ESQ=;
- b=MJK1OFVl46FAtLyQjVUauALhw6PxuAiDipDT6Ja5B8/EZrS3b4b0O67zyoA/ACHNtUnSaMc0/YpsQvudSzF6TEarzWN1CQc+fOjYtUspmLy78HX+UHm14l8Tz/7NOdaUj+U2yY7L6mt6FWV5ffAlc5qUwT1289MfdSfABN5VRAwI2MVG/EVlwn8z63ikCrJJkNkCghwtA6Is4+B6uXCtAvEeN7YMa07V/sdQzA6K/NPekWz18vSw2Z15WmWzKKrOWsOaBgu0xtMNxSLLbCSqES0O2vYPjZ7+azXn8nwcI56JfacdCCLvOMtkkLK+QplQE5U2s8cTbaOQ9DY0ayXBaQ==
+ bh=JUNbS4/0eh1vcTSbPg7VDM4cVaQg9eAMXZ9oLBwREz4=;
+ b=ZPoo+MSTLqdiRawkZMpo8cU2T8EewzhGsqLStKp8DQjTedjiPnqAh61/N0DMZDJgKnTudIYtVv64cGohgmbBqFOwRqYmjXD6IQLjrhoADkQKuRqQy0AR7ykmY0UZ00lLjuRoYrhcFp5QRnIbmJpWobkpv/l9pJa9492IoAE1651CZPU3VFY4J8xWwl/ZxY18uHmi/c5kulYrIg69Yd0EfZErQAT/M4TgAxY//cXEuE9YUEzMpmywe2j5uR07wb/CMgQGeWoDK0JNdioB7Y3IO4HZz4wosFL/KejRrU3Hmo8FcrouAYgtYdLmxeDd76Y6a1URckL5C7lmKVAbhQUUUg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=OUTLOOK.COM.AU;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PZjg0FOytupNYkkqgVY3SdH4fjtXaQD3BI3RPch+ESQ=;
- b=IwMboWY43vz9OmfI5kzrEptfVGQ+Dm5KOslxGT3gRjTFvh//ZPdCcansAxKE1BTFKW1CMIAi+JBBG4y5Q4J1rU6Tj8ZRjMrPVKmK4UpRRIcTT2dmpa7mcxTGU25+7KGsnj0/pR/b2FJOhgntoHBP15L73xAxVCJQZqwg4zQPCCaEapAGes6qaP913s6+SarVq8EhyaihelkwQlwNGsZl/nXkyclYuGXHfoYQeCN57jzTQV3WnHe3X0ft0SJa+GCaHot2dtc1vjOKsn9i6rxwAT/4qEzwkyPg5GKzEQqw2O3PxbwAvq39cOpGTN/tdO7AYZUpYMrk/ZjUNcU23skSLQ==
+ bh=JUNbS4/0eh1vcTSbPg7VDM4cVaQg9eAMXZ9oLBwREz4=;
+ b=FF4JXB4voXcOxFpyQHB80NIU5Eo1/RdBKJyN9j1RmxMRzJ96/lrGaNR1M2nxm7JXRhTLnRlVW7KpzAypOoPFOqOzjn38pzaaBSI/lQ9S18z5+ScVWERJn8A3lM3ltNGFpGpPE8T7bJXByh4TRj3MHwmrudqc0RA3T7Up3pgnnn+0oS6w+FVRJV6XAIM6P1Zjnt+TeBGWo0yMQcnoLEscRSDyiEUi1iQWIpDq9cu5LGmM+M6+nZCBDNm6PKH9Tb7PYP/KuW/YZgRA7xBfc0hf+KjmkNjnklb9KuBLG6drQSCKJM9AfL0M4gjQ7+8wx8qUEpjYIFHZx2qAEUErOOPPmA==
 Received: from SYBPR01MB4586.ausprd01.prod.outlook.com (2603:10c6:10:59::12)
- by SY4PR01MB5882.ausprd01.prod.outlook.com (2603:10c6:10:f6::6) with
+ by SY3PPF8E5E02F08.ausprd01.prod.outlook.com (2603:10c6:18::422) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9298.12; Thu, 6 Nov
- 2025 01:26:12 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9298.8; Thu, 6 Nov
+ 2025 02:14:58 +0000
 Received: from SYBPR01MB4586.ausprd01.prod.outlook.com
  ([fe80::630e:e55b:4105:c99b]) by SYBPR01MB4586.ausprd01.prod.outlook.com
  ([fe80::630e:e55b:4105:c99b%7]) with mapi id 15.20.9298.007; Thu, 6 Nov 2025
- 01:26:12 +0000
-Message-ID:
- <SYBPR01MB45864E0B85A6AB0B157E0FAFC5C2A@SYBPR01MB4586.ausprd01.prod.outlook.com>
-Date: Thu, 6 Nov 2025 11:26:10 +1000
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/6] decode-dimms: Implement DDR5 decoding
-To: Kamil Aronowski <kamil.aronowski@3mdeb.com>, linux-i2c@vger.kernel.org
-Cc: Jean Delvare <jdelvare@suse.de>, Guenter Roeck <linux@roeck-us.net>
-References: <20241114-decode-ddr5-v1-0-0ed2db8ef30f@outlook.com.au>
- <cdb56a48-8754-4d9d-9309-8a694c6f148d@3mdeb.com>
+ 02:14:58 +0000
 From: Stephen Horvath <s.horvath@outlook.com.au>
-Content-Language: en-AU, en-US, en-GB
-In-Reply-To: <cdb56a48-8754-4d9d-9309-8a694c6f148d@3mdeb.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SY6PR01CA0067.ausprd01.prod.outlook.com
- (2603:10c6:10:ea::18) To SYBPR01MB4586.ausprd01.prod.outlook.com
- (2603:10c6:10:59::12)
-X-Microsoft-Original-Message-ID:
- <46e765e2-a239-43fd-9be8-79617f8d6327@outlook.com.au>
+To: Jean Delvare <jdelvare@suse.de>, "linux-i2c@vger.kernel.org"
+	<linux-i2c@vger.kernel.org>
+CC: Guenter Roeck <linux@roeck-us.net>, Kamil Aronowski
+	<kamil.aronowski@3mdeb.com>, Stephen Horvath <s.horvath@outlook.com.au>
+Subject: [PATCH v2 0/6] decode-dimms: Implement DDR5 decoding
+Thread-Topic: [PATCH v2 0/6] decode-dimms: Implement DDR5 decoding
+Thread-Index: AQHcTsMm4JZxh6aSG06ImgPUz5UiLQ==
+Date: Thu, 6 Nov 2025 02:14:57 +0000
+Message-ID: <20251106021356.208986-1-s.horvath@outlook.com.au>
+Accept-Language: en-AU, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SYBPR01MB4586:EE_|SY3PPF8E5E02F08:EE_
+x-ms-office365-filtering-correlation-id: 7336b597-cbf4-4ab8-c287-08de1cda489b
+x-microsoft-antispam:
+ BCL:0;ARA:14566002|12121999013|19110799012|8062599012|8060799015|15080799012|461199028|31061999003|38102599003|40105399003|3412199025|440099028|102099032|1710799026;
+x-microsoft-antispam-message-info:
+ =?iso-8859-1?Q?7l8WCqI6RFeKuBHXXwkEfaSghq2NUnFeL4aCsazj5ZoWCO2+6g/3zinsDt?=
+ =?iso-8859-1?Q?a0iwAOFq02DYWoDuI+Nd8uCfsSLuH5AkCdFOjeXQj8YcawaTfIyomETUsE?=
+ =?iso-8859-1?Q?Eeb3A+TiUks+hlvh7VZTi6l/Sds66bSKKbRRMtfiy04GIQzowkkVRrp9M0?=
+ =?iso-8859-1?Q?Doa8X5dR4YCiqQpFXE2FdAcXr0+fJRQSoLoGdflWWNbT6FKryMP2I5mAJS?=
+ =?iso-8859-1?Q?UmtwFoA0p5/7xHFcewuwppjZGJextfYK6BfhvxKJ1ZFXXGrUxGIDTNjdCp?=
+ =?iso-8859-1?Q?1gDJF/TXpxVQJRl7zTMxLgG2a46EwBnxuQHVVxtvZ4DycsezPFoxUukSm2?=
+ =?iso-8859-1?Q?8sdUCZGaFsQ64Piplh7+GAExiSWQikXsq9cPLpstKdECKf/p7LpgiBxwaS?=
+ =?iso-8859-1?Q?IF8H7wJrKmHasE+DBj+cEzY+CSJQtT028FNH2ddvjlCBiNeM/NcVGWPW+b?=
+ =?iso-8859-1?Q?wFbTdjF3VFOaZpCu96G4PET1GivwDxbBEK7mGykxDhk4PsqW8kF3KwUqLU?=
+ =?iso-8859-1?Q?IkS421YZQ+gOAtpgHdAZYwPHs9xmRJCCzxcnnmzGMwl3diS1KPRWp6tLZN?=
+ =?iso-8859-1?Q?zOLASmSkQRSua2IUQnODh5S1F7gYH55/+2mj9Jn0JsC+7r+Bac8+ktK9Mc?=
+ =?iso-8859-1?Q?7AgdBXvjuuxSVxFlJh54CFk7GOAWhTUzcZRLvyVY2T3k2Z+qJIIpZOYC9R?=
+ =?iso-8859-1?Q?n+gCTiuY3fLcBcoizuszrdH2geZ0SnGSk6DKFX18a8RVvJ8i+/JHs45zhy?=
+ =?iso-8859-1?Q?c/FRbzsnbnXrWWQhNiiyllVT/7aFr6K4qkFiKwPrBzqUwqLmSiJ7BUHqXu?=
+ =?iso-8859-1?Q?hS9oxDi3zsRXn3AEdBlv27wKwLn8abkiVH/kHEk64/W/NBqjX23vSpo7Mm?=
+ =?iso-8859-1?Q?YZuM5mgJrWtOM/tY0QTv1r8iNkIg48zB80mTJxQpbbiHoBTD5Phm5GEo6t?=
+ =?iso-8859-1?Q?urm5CEQPdLXAg2PJIvaQcO/uwTMl4IKbupxeGZK+goCXj0n55ZY8LA29Ay?=
+ =?iso-8859-1?Q?jQ0smzAEhGf0s+MH6di0sEMNs3Bi9BdEBOjisfp7yzeGYQhrKaIrq/3lYI?=
+ =?iso-8859-1?Q?LXPP/9hB0gT1eXLvdtGU+Tlk5ibAlnjK9eHGxY+ckVCHrMjqcOXg2Prsfl?=
+ =?iso-8859-1?Q?xep8Gsi2ZBKgUgZfRJhm3cAelrjJSuIO1ZVrfy7+nnPkQEY7yJ9ADqRViJ?=
+ =?iso-8859-1?Q?tMOSUPCigzyfI7g7kc0PpKcNpn99hF9OuUUqGD3Akk2RqP+3GloP8YIVN1?=
+ =?iso-8859-1?Q?d3zLMmu6PeETjJpXo3IXeO7bXEQ3cPIlhDlPD+Rks=3D?=
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?iso-8859-1?Q?rrdDQ7D7ScD0pK8NK4gXuO91JQNZfG9rPXX6ONOu+6qrFV0sNkoFIrg6BW?=
+ =?iso-8859-1?Q?ClEUq3n2SqJUDUzVh2zusMXmbv2RAg4BJzWA9C/DmcwwkMSjIlTqNqLTqH?=
+ =?iso-8859-1?Q?NuSYy9dXxnaD2AkYaHQ7lBA6QoMmDaqNYr6KI+s/uTyvDpH0qRyRGaU/rL?=
+ =?iso-8859-1?Q?H5RBN8Jd0DYCJR2/MD0G1fpjL/34HkseTR2399QfbdcB8SK7wkFoS/Buf6?=
+ =?iso-8859-1?Q?wOsqu193A6VsmBo3iKcGeGrz4uVg+ZYqvd7P5Y4tSlpzh8uJldos3oSWHr?=
+ =?iso-8859-1?Q?AGXbamoV2pICBrzu62WGpSrd429jRDi+tCZbb8dWMuf5jNSzWbglIhFzJd?=
+ =?iso-8859-1?Q?Ibx5DJw2XBBwh+Ed7VA7ZkIPEF+11RgjKjO1k+LCSCbw8EfT2PudXS/QQu?=
+ =?iso-8859-1?Q?ZcyhemBSjQW7h4sV5WVOQa3mstJywPxXLCvrzX7zORFEcWlmToArap5/q5?=
+ =?iso-8859-1?Q?MyV0b3F9Uizywy8Awjfbah2yP2kQg9H0ExlWkPae4GF464rT65lUH9esZ3?=
+ =?iso-8859-1?Q?3i0H+2uHm4BQtcbfCIFAx6rmkNvcH+XceC8az58UT0VGTwyL5OZlTBmDOv?=
+ =?iso-8859-1?Q?V/VRS5NLgl0dUqUC37pL9oDtc8/6Y0SsIO2XvafKS55wXb3+jOf3/bIwxO?=
+ =?iso-8859-1?Q?tslwG7cEdbI9BjFK7yBHtG5Cznmn6gYOUoofl+1zJ3Bp32yRrvQ9ntTr25?=
+ =?iso-8859-1?Q?DXjSoMKCF6s6JJfGiTJ/99O8LjnnRUcoEVy6o23oJnuVid2KUAPvocwT+g?=
+ =?iso-8859-1?Q?8CeJIHwKPiSkT1LUhplrYmMYqbROWopfF3rRp9sLbaaPSGqFyT1ZNHFk2p?=
+ =?iso-8859-1?Q?OD+o3aEi4+F9ddfvTmLrz+avUTpND6CHU1Y7Pk5AqvTIvukZBhiJW8vx5q?=
+ =?iso-8859-1?Q?6eCMk8qNQVvn5rxoWqwWJPVVeATrkuoc8eaaH2GKC6InQSfV9+IgBNJDoS?=
+ =?iso-8859-1?Q?ajZ/rlTaX5v5mmNcN/q6tnt0LVEYG4jljqXK15uA0um1rqxc1ha/xkbusM?=
+ =?iso-8859-1?Q?4O39EUwZxopRUokO5tvheEBIuhX9IhpkOMU8ubWL1AXcfQhElqk6kqLwMH?=
+ =?iso-8859-1?Q?EVkUuyPPK3q5/Nnh4buVzGrPcqEYNn9RSRGK/s2if21+ekhutx2w3z3wkB?=
+ =?iso-8859-1?Q?geadryJhqKUEJPU8nR7ihfBfCIIUVlMBZwiBhR8sdSnLVKoXrDZJl/SpWH?=
+ =?iso-8859-1?Q?vXIVslVRA4jtcXaAmSwR+EpG3IVdiKrhy8EodQmDPqYj+epBht8bK/Yl/9?=
+ =?iso-8859-1?Q?RVfg0iJANVsQUmNUQqaCy6tCAEiaKUAMKR8J52Lcc=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SYBPR01MB4586:EE_|SY4PR01MB5882:EE_
-X-MS-Office365-Filtering-Correlation-Id: c769c0b7-fb89-45dd-9937-08de1cd3789a
-X-Microsoft-Antispam:
-	BCL:0;ARA:14566002|461199028|6090799003|5072599009|8060799015|15080799012|23021999003|19110799012|440099028|3412199025|40105399003|39105399003;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?cnJqcDRQekVHUFVDTDRnSTAzSnVnZTFtQkdNaXVDdEVWM2hpT05DaDc2aU54?=
- =?utf-8?B?WnBMR1hLT3krTWErZ1hIYkhVMGlaeUNPK0ZhM3VLcjhCcUUzRGplR0dIQkNU?=
- =?utf-8?B?a3Q2YU5NN3dBUUtRUktsMUFzRmM4K2REZU1sL3o0YlErYkl5bWdJZ21GWER1?=
- =?utf-8?B?VTd2YUhSYmxFM2lsZTdXaE1UQUlRNnlCVU9iZ0FnV1dRT0tjR01ORnlnNEpD?=
- =?utf-8?B?SUFKWTZ4S3c2TTN6ak9MNnZ1UGhPSlkxZEo4K0luOXA0MmNZMFo2Zm9jN0JK?=
- =?utf-8?B?cFM2Unl3WWhVbHdMbW5jYkY0anpvcnV2YUZzYU96ZHJlZDNvNVNDOWpxekhB?=
- =?utf-8?B?TTJmTGdoOWVzcFd6aEIwQlhHY2IyWWY5Y25iNmM3ZEtMNWphL09RTThDOHZp?=
- =?utf-8?B?N2hxMFhIcXd2ODRWcWppaVdlNzhyU2VRS0VuTEFKQWlxK3FjcWZOR0VlSTFQ?=
- =?utf-8?B?Q0tFempIUitZcExTK2FJM0h0ZVJtZS9WZ3FCRjU1am1jMnd6U0J2Ym1JZ2dK?=
- =?utf-8?B?Q2Q1VFZEVER6Z2hvV3IwWXYxOU5xWWJMdk1BR1IwMHBVTFpiaEI3dEN4VVZw?=
- =?utf-8?B?YzUrbUZRSDArVVBFQW1kc0xOd1Q2eHBkZzhhcHE5OFhrUE5pS0xJZFkwbWJM?=
- =?utf-8?B?cXdIYmVWVlo0UG14MmttMkRjR1ZPY2tBa0RVKzdqa2tySXJLU2JCZ1lMVjM5?=
- =?utf-8?B?RGJ5dGZBa3dPM2Vqb3VESFFFUTFxeXd2NDFqVS9vb3M3NktFT2xTRGFkdjFS?=
- =?utf-8?B?MVV0dFVhZ1I5UDVDaElmdlZxNHhkZDB1NUMxTmRMUCtvRjA5NjZXS0ZFTzRt?=
- =?utf-8?B?SnkweU1KaGdJbUdObnoyeXJWZUswQ2o0aU04RDVka1lBd2ZxQS9UTEY5M2dN?=
- =?utf-8?B?VW9WRUNzc09lbGJReFIzODVrRm0vL2UvQU9pNENtdnQvU3BoLzdtdk84M3dU?=
- =?utf-8?B?U1dkZVlkWFFpT0d3VG9NNVA5MDBKaUZIVjFPSytYRnREWVNSRnlWVXZGVnMw?=
- =?utf-8?B?aTd6RnFIbEFTSjhFVkN6MWxmVkdhdzNqNWR3cG1wenNDb2ZJZUtIem40endv?=
- =?utf-8?B?SmJWR3VtcjJKUEVxeEFidmRNUjhWSGNrbWxRQzhpRVhSNmQ5QmZaZjRqdGNY?=
- =?utf-8?B?RlRHdE9aRXRvcStGWTRrcEdPNUJPRWJVTTRKYk9MaW9RZVlWNHVYc1NJK3Q1?=
- =?utf-8?B?VnBzVjRCVFg2VzFWN2xXZzB6SzVKcjdyVXJkZDRPWXJ2OGZDZE9UUmh2clNH?=
- =?utf-8?B?eHJTdjBzVTZDU0xNc3FRaVVSdFhJcDc1R0hWLzVFM0huek1jWXhKOTNPU1BB?=
- =?utf-8?B?TnFHeTlmRzQ2Y2czakc0NThxM1JlRDBJY2FER2x0ZmZuYlhrUW9zY1VmNVh2?=
- =?utf-8?B?TmdicFN4NWFVV2RpK0tUVzhEUXdFelFtYk9STmFPTmlVeUV6T2g5ODNydVQ1?=
- =?utf-8?B?VzFpV0NPQVFqNEE1SjhDUnZnRHY3bUNIQWZvVEpCSmpTVDFyVlZGdDN4Wldm?=
- =?utf-8?B?bkF0V0kxWUk0M2JuUUhzekhFeFl6eHJPUGxFYWdkd1JRUGViL2NoSzllRUI0?=
- =?utf-8?B?d1orRERwczNiN3RqT09VNU9rd2F0UW9FY0NyUC94ald0WDNBWm4xNjN5R09B?=
- =?utf-8?B?N3l3S2R3bjliMHJNY3h6ZFVvWDJ5aFE9PQ==?=
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?d1l4MXpOSHM2cklxMWk0Z29WU3BtTUE2THJ4NVBSNHdtKzEwUHVOQjZZWk95?=
- =?utf-8?B?bmxkcTBhek80ZC8xb1pCMTE0cDdvOGtzTmQvKzNqaTlrNGNYNk9kbVYrWVdn?=
- =?utf-8?B?RUpuSXhMclplUU14WEhZVk9hOUdqelRCejVNT2k1eXVZTCtkcmlPUzRoc0Qz?=
- =?utf-8?B?aVFMOUZXdlRJbExYaGxHZnNEbXJmV0t0VDNZOG0zcTAyZGJoRFl4YncxQ0Nx?=
- =?utf-8?B?KzVlUmxUSjRLd2pGUFZQREhsWU54M0xYTElNK09QSkl3ZE5IaWhYT2xyV2Nh?=
- =?utf-8?B?c1pqeXVzcStMdEVlaXhjckE0QTBidEFYT09WQ2cvQU4rRC9MY1krQmdpUDA0?=
- =?utf-8?B?TnQ0L0JWUEVNREM3QlJ5K2srQUNoalJPNnkzMlpBZVdEd3BscXgxVHdnOE03?=
- =?utf-8?B?dVZldVN2S282eFdJRHJ6UXQxZUltQzBFUWhuTnh3WU5MUDRCSXZ0RWRoSlBX?=
- =?utf-8?B?Qlo0Z3N5eWdiRlJGZ0tnUWxMOFVuTnZnUEp6ZlF5WDJneTFXQkc5YWlhQnBX?=
- =?utf-8?B?Szh1dkJ5UFRVdXJ5TjNBNGU1aVVaaG5kS1dSZnl4R0VQRE4wMW1xTU16THhl?=
- =?utf-8?B?dXA5VGJXRmZtalFsU3YxOSs5bHhDTi9RbzJ5S0ZMV0hNak1LUU5ZZGZXcnJv?=
- =?utf-8?B?SytjRkdzVTdtYzdvdDdKMEF5WjBKV0RuMjl0QVJKOEpQMjMxVmM0Y1BuUllm?=
- =?utf-8?B?QmlDZ3BRRXM0YkJObzhkTXRYOUdnK1F2OWxqbXpIV0ozaWJHdk9VSWtJc0NV?=
- =?utf-8?B?Q3BLMnMycGVGRytrQktjRWVGQWZybWEwUkFaVVd0MStVV24rQVYwR2NNazBO?=
- =?utf-8?B?bUowL3haUU1ZeWRHejBQOFpuTFdRTTdDRFMzU0M2ai9PL0V3L2M2TjhubE04?=
- =?utf-8?B?NFEzeG1QYVAzRHJ5SmEzUG9qRjBucTU1MVFaZkhXajdBdCtadlM3S0lvRXRL?=
- =?utf-8?B?MkdXTW03cUEwRmx0M0YwM2E2K3YrR1RSVTBFb2h4WnNtWjVQRHhpK1hrY1lR?=
- =?utf-8?B?Rkk0UmFVUmpWQmRRZlJJUUUrUmdUOXp3ektlM0poZndpVDN6RGxrZXpQRDhq?=
- =?utf-8?B?WnZnZmJMV1JiOG1MbDFmMTIvOHA4K01XMjRQOXl0aUpJRlJOV1RmSTl4OUZV?=
- =?utf-8?B?QUdrTzUxVWxteWx6NEpkOFA2YVdLZis1RzFBcTluQmE2NnFhL1AxWklOL0g2?=
- =?utf-8?B?ZENNZFhtN2tCTzZGejA4U3lGODhhUTV1amVoYURLeWY3OWtCbDhwQXFxdWhh?=
- =?utf-8?B?cFBEVmNMNlN3bkhBMldGYjhaeUNuNmh5Y0trckVXL2FlRXRlbGlGNFFpZXoy?=
- =?utf-8?B?aE1uWGY5V2dXVTBOQzhUU3JMaUFROXVjOWFySTBWbnBVSmp0Tld3VWVONUlZ?=
- =?utf-8?B?Z3lrRGJMNUNIMXBteStKaFJNSE9vcVNPblZXSXZWMW5idW9aMjhlRnc1ZWU1?=
- =?utf-8?B?T29oSXR0N1ZpYXBsV2hScTM4WjQ4MnMwL2c5RThiUmlGNFlBL2VneU5rc3hR?=
- =?utf-8?B?VVpsR2ZDWGI0cVZMa3kvT3JKN3k1UE9Qbk5QL3VWQktML1pUb3BsMDhPT0x5?=
- =?utf-8?B?VzFyMk1nQ2tiUlU0M1pJN3NCU29xZEN0MzE2TmhWVWNuWko3UVd5WVNPdTBn?=
- =?utf-8?B?LzdOcFlvaUliRG15QXRaWlRFODFHa09FeHZGbnRGb2JBeHIxbEE5NUhRYXlI?=
- =?utf-8?B?dStONllVNHEwMEJoOFVmSmQycE5POUhUTENSSjFMb3dxZGVTbExBb2FyR2U1?=
- =?utf-8?Q?awoLjNQ+zJ2sOqh0GuAOpu5kSDihF3swkCKIl+l?=
 X-OriginatorOrg: sct-15-20-9115-0-msonline-outlook-64061.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: c769c0b7-fb89-45dd-9937-08de1cd3789a
-X-MS-Exchange-CrossTenant-AuthSource: SYBPR01MB4586.ausprd01.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Nov 2025 01:26:12.5109
+X-MS-Exchange-CrossTenant-AuthSource: SYBPR01MB4586.ausprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7336b597-cbf4-4ab8-c287-08de1cda489b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Nov 2025 02:14:57.9665
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
-	00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SY4PR01MB5882
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SY3PPF8E5E02F08
 
-Hi Kamil,
-
-On 5/11/25 23:31, Kamil Aronowski wrote:
-> On 11/14/24 07:37, Stephen Horvath via B4 Relay wrote:
->> Hi, this series of patches adds DDR5 support to decode-dimms.
->>
->> I'm not too experienced with perl or the JEDEC specs, so there's probably
->> going to be some questionable choices here, but I'd love to hear
->> feedback.
-> 
-> The patchset doesn't seem to work out-of-the-box. When running the patched
-> `decode-dimms`, an error is thrown:
-> 
-> ```
-> $ sudo ./eeprom/decode-dimms
-> Cannot read /sys/bus/i2c/drivers/spd5118/16-0050/eeprom at ./eeprom/
-> decode-dimms line 2940.
-> ```
-
-That sounds like it's having trouble reading the eeprom, not even
-decoding it. I have a feeling this might be related to 'SPD Write
-Protection', does your motherboard let you disable it? It's often
-enabled by default on Intel, and I don't think it exists on AMD.
-
-spd5118 needs to be able to write to the SPD in order to select which
-page to read.
-
-Otherwise, are you able to dump your eeprom and send it?
-e.g. `cat /sys/bus/i2c/drivers/spd5118/16-0050/eeprom > eeprom.rom`
-
-> I've checked with more than one machine to confirm, that it's not an
-> individual
-> case.
-> 
-> Modifying the patched script, so that it reads one byte in a loop does
-> seem to
-> fix some things, though, at least for the first 128 iterations:
-
-> Nevertheless, it still doesn't work as expected. A (trimmed) listing
-> shows only
-> the following, except all the trimmed warnings:
-
-I'm fairly certain it's just reading all zeros.
-
->> The first 4 patches (1, 2, 3, 4) add the essential information to
->> decode-dimms.
->>
->> The next 2 patches (5, 6) haven't really been tested on hardware
->> implementations so I'm happy for them to be dropped if they're not
->> useful.
-> 
-> Was the patchset tested on any hardware or some other intended environment
-> outside of my use case? The latter is about the most recent revision of
-> Fedora
-> Rawhide with the spd5118 module on various DDR5-equipped laptops.
-
-The first 4 patches were tested on my desktop with Kingston DIMMs and
-laptop with Crucial DIMMs, both AMD. I don't have any sort of fancy
-environment, just consumer grade stuff.
-
-I've made some minor changes since originally submitting it, so I'll
-submit a v2 shortly too.
-
-Thanks,
-Steve
+Hi, this series of patches adds DDR5 support to decode-dimms.=0A=
+=0A=
+I'm not too experienced with perl or the JEDEC specs, so there's=0A=
+probably going to be some questionable choices here, but I'd love to=0A=
+hear feedback.=0A=
+=0A=
+The first 4 patches (1, 2, 3, 4) add the essential information to=0A=
+decode-dimms.=0A=
+=0A=
+The next 2 patches (5, 6) haven't been tested on hardware=0A=
+implementations so I'm happy for them to be dropped if they're not=0A=
+useful.=0A=
+=0A=
+V2 has been rebased onto master, and patch 1 has been updated to check=0A=
+byte 2 for DDR5 identification, not just byte 0, and the commit=0A=
+messages have been made more formal.=0A=
+=0A=
+Cc: Guenter Roeck <linux@roeck-us.net>=0A=
+Cc: Kamil Aronowski <kamil.aronowski@3mdeb.com>=0A=
+Signed-off-by: Stephen Horvath <s.horvath@outlook.com.au>=0A=
+---=0A=
+Stephen Horvath (6):=0A=
+  decode-dimms: Implement DDR5 checksum parsing=0A=
+  decode-dimms: Decode DDR5 Manufacturer Data=0A=
+  decode-dimms: Decode timings and other data for DDR5=0A=
+  decode-dimms: Decode DDR5 common module information=0A=
+  decode-dimms: Add basic decoding of type specific information for DDR5=0A=
+  decode-dimms: Decode DDR5 error log=0A=
+=0A=
+ eeprom/decode-dimms | 519 +++++++++++++++++++++++++++++++++++++++++++-=0A=
+ 1 file changed, 515 insertions(+), 4 deletions(-)=0A=
+=0A=
+-- =0A=
+2.51.0=0A=
+=0A=
 
