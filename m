@@ -1,80 +1,80 @@
-Return-Path: <linux-i2c+bounces-14000-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14001-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 294A1C3C2E9
-	for <lists+linux-i2c@lfdr.de>; Thu, 06 Nov 2025 16:53:03 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A43BBC3C32E
+	for <lists+linux-i2c@lfdr.de>; Thu, 06 Nov 2025 16:57:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 609B34F411A
-	for <lists+linux-i2c@lfdr.de>; Thu,  6 Nov 2025 15:52:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7FD3742164B
+	for <lists+linux-i2c@lfdr.de>; Thu,  6 Nov 2025 15:52:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAB0F33C531;
-	Thu,  6 Nov 2025 15:52:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F65D33C531;
+	Thu,  6 Nov 2025 15:52:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Sdq1m1/3"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="d5w73PUt"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from SA9PR02CU001.outbound.protection.outlook.com (mail-southcentralusazon11013016.outbound.protection.outlook.com [40.93.196.16])
+Received: from DM1PR04CU001.outbound.protection.outlook.com (mail-centralusazon11010049.outbound.protection.outlook.com [52.101.61.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB82B303A0D;
-	Thu,  6 Nov 2025 15:52:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.196.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A5C230E0F7;
+	Thu,  6 Nov 2025 15:52:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.61.49
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762444332; cv=fail; b=cLf8me9V4m9uFdzzseolCfl+E7L6XyVR/1Gu0ivsdXg1+fyBqzWAvafYU1N9VDs16/2bcvppKeuuZQ6cpnqgqb0UDB7cd7BYI0IOF17S9D4T3Fqwe8Ukp1NP4LTP0jHm9iA8nh6beu6y9rl/N57J0kByAltirzO/Nall/yZMxNQ=
+	t=1762444355; cv=fail; b=W1v5mavkgRHu4gsZJJUpcD1yoYW8pfDBNUNxDNieXP6DYEh8psEsYKjt7JC+OHBpqZif8ylGbFU7kjOVkOHl176Yrdf1V/N3CfV7mIa93aa0qlq8BQQoxQaCM4hK3s3D/+YrHR4smwlEVQY/9NI6jv0ta3R7VINam9nnVNsUYJg=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762444332; c=relaxed/simple;
-	bh=5JXpefDSUA2JZqDpSbW5E0uShBMHLSMh02MlPvID4Ps=;
+	s=arc-20240116; t=1762444355; c=relaxed/simple;
+	bh=JYNx0TDbycLhIe6/UzdRsFrfP9P1I49cGGwmirP4b1Y=;
 	h=Message-ID:Date:Subject:To:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=iamqzgN275tMfS7SzVTF+m870Uq85SfbHluiZ45eolzS/KQhetL8gqgVkKlEieonq9MLfgqeVg02qWzDB/Z36lRU8jXYMRKS7hglv801PeTbwgjICjyBSHn9Ns+g4Uw/e5/Waaj5Qcd1m9sF0oV1i5etu2S3TwgC4taJRCuaUgE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Sdq1m1/3; arc=fail smtp.client-ip=40.93.196.16
+	 Content-Type:MIME-Version; b=uAK3OQ2dNKkmbs6sutTeNojVxt9wOCSgl1yJZ8jBkwt1+rcOQqnwxZpD3jpCsLEP5sL7meQ57b8oCj9ZF3s2PDzMvyG9aTITCPFCtHuWLYwLSWzgeKJod2TefRvN0PUNlNxYRtGA8MC7026z6NrBbBKb/Qhif3W+nPuxnoFBfqY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=d5w73PUt; arc=fail smtp.client-ip=52.101.61.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=E2DPF2WffQo2tgQWF9cahy3N4AzHqmb/tutTc4yPs4BCEnwRGCInriQAHA7YXpDucs7vqCbTb6IrQrg6OeH6LNVCNe4pD3UMgIi/4hyfchD3l3ONwG17O9+J6OppL0uPE3Om2hMWwmjU9wTjK1qoI7UkV09XtAAhSNEbVtzj2sX+jkeETx1t7jzudPtxjSNn2ryBx/JoU4NPAF3wQbwy7g/8X587CEMicAoRN943rFhh48664brAhluoznBlkvTe/wmRYg06dY1PXl5eSahjW3ZhmjUBDimWB/rakzQ4dJNoHaMlDD7Xdk/Kaj1hV+kWB9rfJwu6KlNC2cJqiFq5AA==
+ b=DO2NnvTINXNTz3hvWbTnprm2pBVZ8WuP2Vn/QyBdWb9xmj0BuKbn1CyuWwk9wlJgDsJyFRBRIOilsgpTnUuomSLG8STGJPEwuYaPMwgdK9pNGx+1B+zdMhSf7sLmLlbE5U3Vj+gNHDrhTr7xozn9uC/k2oiZydvMgwfEVGv2+hyb89shEkslFYhZ//xc6U+PcymZNhXhtpBdnkawNBkTEOp5TjPdPPFMAZ1Na98OyXKiQNTx70zdUf2pN7oKNjhC6lFfqWWpOsh6wtjySXP8G8PisVF4krRUPu8bJbEzGrquG3Fx8OBYhVczMnA8+1XnGmztZyJRZYM3Z4O5VH1tcg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XVZPY6HN2qQSWZd81UcyW7wGk10wX0JIHYNLf+MR3NY=;
- b=RgW+GROq75QDOln5LPEfdWNyTA7fv28/1hS86Nb7YF45w86Au7aX2Uft25zjRXuZADvwZBBwRibI3Z4stoXdPgrqbPAeicS8fF6cG32Wcw8k83zJkfdPEO91KW70HI4woi4t4w7rk4RZP3RIYt2zJgQtj28Gcq3ZcnJV1xOQzPp6ZE3WKjUrW8M0HYUiCkKsQOg17Rr2JeU+VMRX5nVktVUF9d0yp1P2JZ42nRmokHr1JDa5rtkmG1dbsAGe9aXVvoQOrCSe64RpjWbPWNTJF+ZJTHGbJ9jCSSpQAGGIzVZQSUEbz0ZKXMzsfmfb7FtefAiS8p4XdkTX0ge+bolV5A==
+ bh=nmJU8MBtJgPGvH1J7TZ6wU4CGefrR52z4qRoZgLOFKY=;
+ b=hICzqEYf1zbSgNkvPdQSe7xHoJfNtHXGSq8pr4oA//xzCL18Qcm+C7hcRe8ZdJep6pb/UBM30w3qunA5Iunhbsh5WqRffjnqyKbSr/XTejXj5aFv9eQ5RPz9KZegXmHSksiXTj6ByQTl+uYy4Q5i0e0W5sLZpx6lZTMPVaF64tw8+zH4buXKxVsWfBK2bNpehr6Zp9TfXzUfL7U7KXig0YXO4rhbHpS8L6m6uYH3DDjfcF43TlZ966VDXNhTY6Tz9pzzhKxTTAT7wUoI3dtiuQvqrD4pzY8NR3Lc4MrlTNEmPZ5QmU/U2aIaYwSEAxYe3QuWDVgZHbE2jNzyFfj88A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XVZPY6HN2qQSWZd81UcyW7wGk10wX0JIHYNLf+MR3NY=;
- b=Sdq1m1/3/JSQyvUZcRMq051cuX7+8adYmNFJ3lbIScB0F3g7/aKTKSzq1poSM2VffNLQUT4C24nsYSv4tdAL9odcFO0s/Z9f9G4lfOPHcRjD5LUgkvtrMgikmh5yEas61oj9lVK1UUfDskV4czo7MvnR1QIIvQB0pGbLqulflWQW+QJAv54GJTX7QKQLwZgVYnN7Xxx9NK5S5MxbJvx4aI8VBBqvLVjlOBcBet4gJOXEK03kLqrM1nVte9I4DZqN0sqUl4LhmmsL5crOmDuxz4u4w+VLGyJwGBmdPtq52EMOZL6P06NtL1exdhqMClOT9FuGcnvFtZ5xOmrVZ6N2IA==
+ bh=nmJU8MBtJgPGvH1J7TZ6wU4CGefrR52z4qRoZgLOFKY=;
+ b=d5w73PUttESO/NyfCaC62M9LU+wBD1gXY8xKJUxtacddybfgrfozF9tWheT4aw5LRk0BAEHaOLu8LAPgftY0MfcXJB5iWStyyTq0tW8rMMh6zAXTPxZOpe68UPVw3WHq82TfuP5gIdHSxcvEnOhp2gIECBtE8TFhbEbcrixYv5owvC8CwWbxrGmZbedr27Pkw/3lHm+5sxR1frwosjI+PM2LF2bQSKlI4GFPVsu7mNb3Hxy9s7HTKP4/Atg0bNIfLWpV6ZzsCMz8RRbrE15o7jikGjfbnXvO7ZoZg8U9A6szGZgqMVuLENkJPS6VK+LDQuHhwVArD50iHaBSYD+kAg==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from SJ2PR12MB8784.namprd12.prod.outlook.com (2603:10b6:a03:4d0::11)
- by CH3PR12MB8584.namprd12.prod.outlook.com (2603:10b6:610:164::14) with
+ by IA1PR12MB6284.namprd12.prod.outlook.com (2603:10b6:208:3e4::20) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9298.8; Thu, 6 Nov
- 2025 15:52:05 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9298.12; Thu, 6 Nov
+ 2025 15:52:28 +0000
 Received: from SJ2PR12MB8784.namprd12.prod.outlook.com
  ([fe80::1660:3173:eef6:6cd9]) by SJ2PR12MB8784.namprd12.prod.outlook.com
  ([fe80::1660:3173:eef6:6cd9%4]) with mapi id 15.20.9298.007; Thu, 6 Nov 2025
- 15:52:04 +0000
-Message-ID: <ed4e2c5e-370a-4fc1-bde7-507ef74f68a9@nvidia.com>
-Date: Thu, 6 Nov 2025 15:51:58 +0000
+ 15:52:28 +0000
+Message-ID: <6b7d1191-c692-4377-a37e-c087bc7215b3@nvidia.com>
+Date: Thu, 6 Nov 2025 15:52:22 +0000
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 1/4] i2c: tegra: Do not configure DMA if not supported
+Subject: Re: [PATCH v9 3/4] i2c: tegra: Add support for SW mutex register
 To: Kartik Rajput <kkartik@nvidia.com>, akhilrajeev@nvidia.com,
  andi.shyti@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
  conor+dt@kernel.org, thierry.reding@gmail.com, ldewangan@nvidia.com,
  digetx@gmail.com, linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
  linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20251001064759.664630-1-kkartik@nvidia.com>
- <20251001064759.664630-2-kkartik@nvidia.com>
+ <20251001064759.664630-4-kkartik@nvidia.com>
 From: Jon Hunter <jonathanh@nvidia.com>
 Content-Language: en-US
-In-Reply-To: <20251001064759.664630-2-kkartik@nvidia.com>
+In-Reply-To: <20251001064759.664630-4-kkartik@nvidia.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO2P265CA0499.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:13b::6) To SJ2PR12MB8784.namprd12.prod.outlook.com
+X-ClientProxiedBy: LO4P123CA0211.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:1a5::18) To SJ2PR12MB8784.namprd12.prod.outlook.com
  (2603:10b6:a03:4d0::11)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
@@ -83,138 +83,355 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ2PR12MB8784:EE_|CH3PR12MB8584:EE_
-X-MS-Office365-Filtering-Correlation-Id: 60d3f83c-ebc8-453c-3e9b-08de1d4c6eb7
+X-MS-TrafficTypeDiagnostic: SJ2PR12MB8784:EE_|IA1PR12MB6284:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8b50814d-8288-47d9-cd37-08de1d4c7ca1
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|10070799003|7416014|376014|366016|1800799024|921020;
+	BCL:0;ARA:13230040|1800799024|376014|7416014|10070799003|366016|921020;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?YTBVQVUxenpFZVdaUHZtM3FZMDJ6Qkgrb09uUHBaQ3Z1Y2t5VzJFQTBkTXd4?=
- =?utf-8?B?bEoxNnUvT3FhUG9xeGxnam94QWhwcFRvNmR3SnVpWXZrQ1lic3pmZmRQTllp?=
- =?utf-8?B?QXhUQ01saDRKUFZSV3NnMjR2L0VlRXNOSDM0S09FaW9mNGJUS1RxT05LWS9O?=
- =?utf-8?B?ZkFFYk02WHhTdTVEZnJMQTllTnJHTUlRdGRtRVV1cUErbkxKcjFDSmZZVWh1?=
- =?utf-8?B?TkRmVmpjaXQrOHpIdTV3bXVUdmY5dGVQcWlVeDZPeDhXMmtkUG93OUVzMk9k?=
- =?utf-8?B?Nm91RFBPNnk1V2Zmczd2aW45aDY1cHdEbUw2UE1mTFpRdVNNbzdmeGxEem5I?=
- =?utf-8?B?bHNabDBWc0F5VFU4bHlqTGRRTnIrZnovWGorVHRYMytMdzdHTk1hVE5LUlQ2?=
- =?utf-8?B?UzBTQjF4aG5uTVYxOXJRK0dtZEtTdlBUL2hwNlhnckhIRWVtTXpLbXg1UXR5?=
- =?utf-8?B?WVlWUUNFVDgxSUppR3RJZmE1dmpjOEpuZm1aaUd1Z1VremxNR1NEMGpKcGdD?=
- =?utf-8?B?Ni9hWFFaRVFrMyt0RDFkSFdvUEZINklYS0pDRVJLa25VNXBlWEhHOUwySitL?=
- =?utf-8?B?bDZ5TmJPc0xLWlJCRE9LNjUxUXRhRW5xbFdsS1I0VTVMOUpVTnBmV2FpUEVC?=
- =?utf-8?B?N2pJYTVHMERBRnlUTFhHamFzbC9tbHVzeHNRYUdCdVpVNHJzLzlpTzc1YUJZ?=
- =?utf-8?B?YzdxeFdLN3duRUVJUDZvV2kzeWJsUjVaSDdBck56MjNzR0ZpKzY4cTBjdTNT?=
- =?utf-8?B?d29NRjFkdWhzQUYrVVpwS0t2TjRBNGxwOG1mc09UL2UyNE9oRE9KWmdQQmtW?=
- =?utf-8?B?aDVWNzhJK3l5Z2tPbkhXSFlLVmVJWmxpbDlxbGZOdXRINXJxbCt5cEhhcWpF?=
- =?utf-8?B?WFYxNzV5eTV3aVNiSTJJRG5PNjJPak13K1lIYzhaQ2U3TDYxSG12dlVGLzVu?=
- =?utf-8?B?TnArNDVZSXp3ejlOZ3JNeWN3VEJVWVlPdHVrb21WN1o0SDJvd3BNZjBMakhW?=
- =?utf-8?B?MUpZdU41M2xkSjFCZ21BOFdGL1lEZDdmZnZMcGNoYlJ5UmR6SmRRVmhkVVNK?=
- =?utf-8?B?VnFLaUIycFpFK3l6UERIN09lUStCekQyY3ZOQzNCVmxuUkFGRzkyOWFxcFRx?=
- =?utf-8?B?VXBQSDkyYUdmdER5V2FaaHFxSzJqQWNzLzlxcDlvUDJsUjV5cnpDNHlWKzFp?=
- =?utf-8?B?NXUwK2VTOENIMzhIMFRRM3dtRFRaUlpMQ29DYUoySWRZcEh3UXlpNmNDSXZC?=
- =?utf-8?B?L0tFMUM2bFIzMWFDQ1pCRWtETmJScGVqVzRIWDR3R09iNEl2MXZJMmcwaFN5?=
- =?utf-8?B?aW9xb0xwQy90dFpFZytsWFd1dk5EWC9XYThYUW4zb2o0MUhWTEpVZ2ZndnJI?=
- =?utf-8?B?QS9Hbk9lQ0YrYmhPWUpkbHRHZkxRYXdZdTBneFdoSElYMm9kK0ZacVNXM0Fw?=
- =?utf-8?B?a0lhVU53bzFqWWIycHhoWFJjRnZ5VUFpZTlpK0JRMXNyTnF6MG1ib1ZXUDBF?=
- =?utf-8?B?WGd0MFp3UUdSVDNucXk5eTJnVHhEOXIvakhMSm94RXJUblRiRmF5d1ZlTlpk?=
- =?utf-8?B?Q3ZocW4yK2w2SmRkQnBaTmtBTDNEZExRemxsVDNTREY0dXM4TjVrcGNablAw?=
- =?utf-8?B?M3hZekRiZTJyWTBaaVo5Tkx1TWpydzRMVVdPS0dFUzl1cm9tcFJ1Mm9yM3RD?=
- =?utf-8?B?cE5PYTh5UksveVB4RWIzdkVwczE0dlpGU2E1ZlY4Zkt1QnMyWXdiclI0YXIr?=
- =?utf-8?B?cGwwL2szdW5YUlFRcFY4THNBOENZbEJYSXptai9tcVNSMGRKVEtqck1Yanh4?=
- =?utf-8?B?VzJxNUFWQW9ZWjlBVW9JT2lBZk1vWE9DeXJ6SUM2dzNTZitBczRNRkpzd2xW?=
- =?utf-8?B?aHdGa1ZKQ0pPOW5nUElsTW1BQThZS055YThSOGc2Q01DV2hTVzlQS2ZmWldj?=
- =?utf-8?B?b2VhMWE4SVJLOEhHVklzQllJYUdxdlVNejlMT05pdXJWLzY5ZTRub1plM1Jh?=
- =?utf-8?Q?NNphrFXo6NeRStlNLMhfURzDnGNDjA=3D?=
+	=?utf-8?B?bnhGTWg3MExsdDlOY0tqd0t4UmJMNkFFOVplZGZyME9NVFBtUm1sVy8zT2Jp?=
+ =?utf-8?B?aVR1QzNlc3RuSG1xZzVEdS9VcnZCUk1TTnY0MjZadFN3ZHlsaFVVZitBQVJB?=
+ =?utf-8?B?TmEzWlk2WlJFc3loTGJsK3IxWmJYWkNrbXNsdlFkWUZqY3NSZDE3N01pTTlP?=
+ =?utf-8?B?OHB3V1lXenk2a0VteWQ5clZNb0xTd0UySkI0QTl1SS9HN0xURnVWVFZpME16?=
+ =?utf-8?B?UzB0TXZxZVExTVBOaDVIMmlZZmNXRGdRNWthcktoTG8zZC9ISVUwQlNodGkx?=
+ =?utf-8?B?bE5icFl0V0tDQzByYW5IR0Jha0V0ZFBERmFWTThIam8wbzZYeUJWeS8wTThv?=
+ =?utf-8?B?eHV6aTRxbUIwRloyS1dGR0hEem9IS1lzMUViYUFmTThvQUF5bEJGaEZ1UktG?=
+ =?utf-8?B?cFFiOFRvRExkS0NRcmtpQW1KL252bENyNTlGZE1ISnBXT09QZmRUNGR1dWJy?=
+ =?utf-8?B?YUx0Um11UDRsUkV5ejIzNDZJMFJwYTNCNndPZFVwWDI0UGdMcFhIRnRBZnpu?=
+ =?utf-8?B?bTBQYXQ0QzJNd0QvWHk0MmpBVG1GWk5vdWtSdHhMOS9HSUhqUTRMT2dvTjRw?=
+ =?utf-8?B?RkpvbzNVNnpqVUx6aUlGTkhKalBHczRNbmtkSmdmWW52bytJVnhLaXZENlo2?=
+ =?utf-8?B?MVJFVTNudmN1TXNONi9XTDZaQmdzcUY0dFlBZ2VCSENBUFZ4ak1iT2dqSXN1?=
+ =?utf-8?B?ekIwQmMyU1ltcUZXamhhRDlsd0taVGlvaS9ndml1WmFwK3AzTmx6ZHlVaTRJ?=
+ =?utf-8?B?ckZSbStobUhvS2hnZ1J2L0ltekNPK2JsbTJwRjFaS2NZR3JYZTdPUGY3VlNL?=
+ =?utf-8?B?c1Z4aTl0bDNrQy8yZlMxemRBOFNPbVh4MFpROThiSnJZT3Q2WkVSZkNrL3hk?=
+ =?utf-8?B?UWRnQU5PNktTeU9CaEtNN1NBdkdZNzRLTXQwTi9uRXRmaEpvLzN4aVk3Znlo?=
+ =?utf-8?B?bzFhNmZrWjdzUHNpeU5HbWFSbGkyZXVuRnNPckpJVW9JM1ROdnMxUnExM1JL?=
+ =?utf-8?B?VVRYMUhOak52ZmgzOEVNaEp5bUY1ZEdEVXhpTUd1cDVmbjBScXVRbDA2RFFO?=
+ =?utf-8?B?V0I5QnZIdUpBN3l3UjM4SkZFWndBTy9PYXkrb1Jad3V2ckRvSWRpZEh6V3A2?=
+ =?utf-8?B?WWNhYnBMamtHSndtWlNnTkU2aFNJMzJVci9jVkllSUx4bi8wSjhSWUF5c0or?=
+ =?utf-8?B?MVRXVVVjYk1CMVpzM1h5bDIyV2F5SnBPalA3eVZJbDBlWFNSMUxqRUloWHRt?=
+ =?utf-8?B?ZWVvcGwxdGR5SUhSbFYwY09Oc2JkSVphVGdBUU9WeDRSRlNyNmYvVUg3aGNZ?=
+ =?utf-8?B?NXh4ZkNMZ3NGS2NUWnV4THRHVUFwbUZVcFpJbWxVQ0I2Wjhzc09NM1lhVVph?=
+ =?utf-8?B?U0RrT3RkZVVDdUg3RnlSU3hwVE9TVVVLdFR6ak5iMGZXZ2lac2l1WGs0ZU1R?=
+ =?utf-8?B?M0RhMGpQT244ZTJIYUJLSEx5a3JuNE9oOFZGaS9QbWpFUWlIYlJTREd2QWRS?=
+ =?utf-8?B?bTVrWUljVWYwaXRqSEhHTjVMdjFJd1NURTE5dUlra0M0UW5IajZWUlhTN2xE?=
+ =?utf-8?B?Z2xFazVEMEFjazdEcjM2QWd3MDRkYm0xSGx0MkJiV0U4T0pYbHBnZ2JrNnpP?=
+ =?utf-8?B?QVhvYkxWeUd5QXdqOUd2UlFmdGpSM2lhWVFLcUNBN3o2S3ZLaWpnYzQxZkt4?=
+ =?utf-8?B?TFgxRHhVWmdXYWg2RHJYN2w4R29vOVdENGhQZEdHcDBlSFFuYUlTWDhqZVFZ?=
+ =?utf-8?B?N1lTSDczemZ0alJjcTRiQ2lEeGhvdmNybExKaUk2UzNHYVR1b05qNEVQYnoz?=
+ =?utf-8?B?SzQvMEthQS9tZzY1OGg5NWNmbFo4ZWJLR0hMQlVxcGtlQkhJNnI5M0dTU21v?=
+ =?utf-8?B?Y3FIVW1ReDQwZllOUTdYSUN4S0U0K2RsZW1XL1p4cVV2Qkl4c0JBbEVEdDRB?=
+ =?utf-8?B?MVQzTVVoMnlZQTdrVVhEdURWYlh4cURoK3J3RzM0OTFMSFI0eHY5UVoyV0kz?=
+ =?utf-8?Q?I/9nzT29amAJZYp5QDayqLn5VaXuoQ=3D?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR12MB8784.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(10070799003)(7416014)(376014)(366016)(1800799024)(921020);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR12MB8784.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(10070799003)(366016)(921020);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?QmNJQndsU2dBWEtxdjc5bnh5Y3hxK3dNS3poTVJieEF0RW1uak1lanFkTXRB?=
- =?utf-8?B?WGl3T1R5UlhiTEdhbGFSbm4yM3JXUUxjY1YxNGdWRGFHUWYraFNhdVp2TkFu?=
- =?utf-8?B?ZkZCdWhRNkZEWlBjbEwwQUIxNWNZOXdwZnd3OU9nemhPb01FUU11b0wzY1hv?=
- =?utf-8?B?c3BMMlgxc1hkdHJaRFhaZ0lmNzQyUm1PeEU0SzZhS2RtSFh5SFo4aTFUbjI3?=
- =?utf-8?B?Q1pOdkQxT25JdmJnVWVaS25XcGduSC9QK0xJbFdLeHFOZXRHS1J4dFh0ZjN4?=
- =?utf-8?B?aHlHQ2hKN0RIVzdvdWR4QnJ3RjI0dkxMOS9VOSsxdHpwUmVVWFVGTVBPZTQ5?=
- =?utf-8?B?NlY3N2N6VWtwTWFJSTY5L1dVZ0IxUFdzZHBOK1VQTVJYUm9FMzYvS3IraVpW?=
- =?utf-8?B?L3dsUE1Da1VydVNqVkp3ajN2TjFzbzI0YjVROXUzbTNudnZwQU52MUFONU5Y?=
- =?utf-8?B?cTlvNjFsWTlGcXJsL2V2UGduZ2JDVUY1WjZWV0hvTzlpRVh0RDNpT3Zpa1dm?=
- =?utf-8?B?MVNwT2xvK2VjaE9ITUt0Z1JIZTd0K0hYdDZqN2pNVUk5TmFjZSttKzUvVjRj?=
- =?utf-8?B?QU1RcTlHem8xUXJkU1BjVWZnUHpVN3lPaWRMdmpZeXBwNkFPem4zd1lxK0hm?=
- =?utf-8?B?NldmT05sZFpDd2tzeDJkSERvdVpUUlpKMVpNOEMyK0FKNFd0dVk2UFRNS2cr?=
- =?utf-8?B?N21hOVlUaFgrbTZVZURtRGVnU0UvcDNIc1RveWxFWDIzZEM3Rmx3R3VJbFhJ?=
- =?utf-8?B?N0d3RStnb1NIRGFqYmZPaVlMR05lV1BLMTN3QmViM0xRWTFGWTB5S0s3Ulh0?=
- =?utf-8?B?MGkyM3JhUU4yQ0dZU29XQWRhRnNPSnZJRGgxS3J6RjNkRUtJMGhRcjdZMTh1?=
- =?utf-8?B?RzVEM3U0NzNiWEtFMHlHM09kNk9qTDNLR3JHMkhyZmc5MFMwaFY0UTZOdTZD?=
- =?utf-8?B?emtjZmFoM3pPUWJuUEREWmREdjlLTmhpS1czN3lseG9VQzg4SkNMOE84RGh6?=
- =?utf-8?B?U0phem54TGRVME9vbjNCdW5DMmwxMnM4cnlkYmxwdUJQdmNLc0xjeDVYN1Ry?=
- =?utf-8?B?dWlnTGNESGdCSDl1czRvaFBEeWdFVmEvKzNXSk1aZkxQbmMxakdpRDJxU2xR?=
- =?utf-8?B?WFRPOWY2Z3NPSWtwS3p4d1QzY3FrMTNHakJlM05tblpJWjY3TlhLTUpPYUpO?=
- =?utf-8?B?WGxBNU5KdU1vNzBPSURMZTVVaEl4RW9waWpvYTBxSjByNFdiTGNYZ0g4MDlB?=
- =?utf-8?B?TEh3b3hpWG1wdm1zTGRVdWtuUlE3Nnh6U0plc3pBRktwTUYrQkZkLzVlUEh1?=
- =?utf-8?B?VmU0MUNIZ2srL2JKakwzd1g2Q3dFdUQ5QkQxNXNSM3lNTUNNc01ZNlJnYmtm?=
- =?utf-8?B?VHFuS1A0ZFhYcy9RWjFLUVl5azBoOFdRWDVmWTRQTUhEb2dqM3h4WThXZ3BU?=
- =?utf-8?B?S0N5a2tpdjJGWVRLa2x5ODJ2OW1SRmpJOUZKcFFjWjF4akdQdjNaQUNtVmhZ?=
- =?utf-8?B?YU1hTmdGUDFaZ2RIQUxiUjdGb3VNMm04MG9NQWMwNFZaNHlNdkZTZXRpWWVz?=
- =?utf-8?B?RllubkZhNUJNZkpINTRwZjZuaTB5N1ZJMXNzVENHdVdQWlNEOEF2dGxmRUJo?=
- =?utf-8?B?Y0JIdDFyUTYxZG9zdDhZTHduZDJIWmQwbXBEYm5XaDIwck5ySlduVGt0dlVD?=
- =?utf-8?B?eUl5U1FvVzRBS2xCNXBrcFVxYVd0SXRyYkZzTWp3cXVJNTd6TzBuMitpeC9o?=
- =?utf-8?B?cHA5aVZHbSs1dzRDbU43MmxZcG5ZbXlUa0NySVFRSW5uQ0srVktISnA3a3BU?=
- =?utf-8?B?b3VZTnlLUzlRc3JEblE4Q0NQalFZdDF6UFhXdnF2N0t2c2QyYkQvb2dtRXRW?=
- =?utf-8?B?VGlmTnVZenhOUHRod3V6UDRST0t2RTZaa01neVVnZmh4QVhhWjV6M0UvZm1P?=
- =?utf-8?B?QnlZYTVkQ0paeGJCSmZ3czAxOUloeDd2TVpOTzE3UXd6WFd6T1JmeTJTRjUr?=
- =?utf-8?B?NUZpYmtXS29hV1RjZDBoRjl3ZzliTlJzTjNoUEhQSE1hak1IckhDOGZzTzRv?=
- =?utf-8?B?T3NVTmhYU3dtdXBjd0dld1ZNVVZXTTlpWEZXVVNsU1NsNmFVSDUrUlZqbndu?=
- =?utf-8?B?dTE4YXRWcTRrQnZGOGRldHBEN3NPR1ltTEZvQ3hCdFV5ckNJZkoyTEpnQzRj?=
- =?utf-8?B?Z0ZQamcxNDdUSkRoSkIzdjN6Q1llbVpCRktjelBvQ0x6N1d6T0Q1YU4yVjJo?=
- =?utf-8?B?cmxBazZTamNlYS93UzNjUXl4RUpRPT0=?=
+	=?utf-8?B?Yko1QmpadDNFM3p2cFArYzZTWXRQTC8vaFR1U1F4UDIvOFJhN2pOa3dpd2R6?=
+ =?utf-8?B?bGhqZk8xVjVGQm1XQ1J5WlpPL1NyV2NCMkFhUnMzSGJFd2V3c1VDS1lGWE9U?=
+ =?utf-8?B?SE5MYkJIMGxjUTNpcmFYZTNBUFBOYmVjQnVjSW9aSVhkdVp0ZVc5M1NuY1d6?=
+ =?utf-8?B?RkVoSUl4bkZrdzdRMkdZeWtpWUZobjRmWENsS09EVWIvS3NQQzFUWHB0RERu?=
+ =?utf-8?B?OUZFdzg5SjBaaDJ2RzZEYXRFV1RQTGlpMVRwOEhQa041VERZZ2RNZzZYL1I1?=
+ =?utf-8?B?RkdHdSs2TDc5V1IvaGIzdjVucklwQ0NLeDR4a3RpTFdiOU1CZk0rOE8xWXY0?=
+ =?utf-8?B?V2k1ODhEdFlubk9KazlvQzlBSGhWRmM1dDlwYSsvVHhzWU9oT1A2cExyNU45?=
+ =?utf-8?B?aWFTMnVkRTNYRm5rLzlmVWZ2eG5iaDg1Q0xISHg4cG5FUzBrRFIvUENzY1dS?=
+ =?utf-8?B?UUdGZkMrcy9nOWYyVGRUZHQvVFhRQVRGcUFSOHF1empwazdYd1VKbWE4MFdV?=
+ =?utf-8?B?b25tM2QwbWxmdlh0eFRObXpNZGljQWxpM0hkcTRTbXdsK0FNaTJDb2FjMTZ4?=
+ =?utf-8?B?aFg3V1Z6K2lJeVFIejVZMlRYNFRhaHlHcmJRYVdSazFFZmJwb0FkOFZEMWp6?=
+ =?utf-8?B?RFFpYURubEFMcmJEVTJWNDloWExwbWh3VDdBVHRpR2dNUXE2bk04WG9FL0Fp?=
+ =?utf-8?B?MTVVSkNvYmhQQzRYUWdRRG50RmRlWVJCRmwyQ1ZBMUdpb081OUMwSXZGWnFE?=
+ =?utf-8?B?cEtXRVROcVRRcUV0VEUwVy9YZGVlVGcrMzg0cXVGb0tqVjBXRHNJSUhRNUE4?=
+ =?utf-8?B?ZEhzVlRVRmFIYzdNbmFVaWY5YXVRUisrMUZJL0h4VHRyRkh4KzVreng1UTE1?=
+ =?utf-8?B?OE5kR1hYazhlTHV6UFd4S3FGN1JtclUxMjU5M0wvSEZoQUJRSDJiZThnTy9w?=
+ =?utf-8?B?OUlna0QvTTNrR0xXM1U3RHJVMDFvS0U2ZXJnMnFTdU5OenBEaDZ5dVBENnh5?=
+ =?utf-8?B?dWE0OU0wcHBjVGRJaTFSaEJGNWswMUxqeEFyZmROeWNrNVRSSTZzRENjVTF5?=
+ =?utf-8?B?WS9tb3FDMFVQRHdHNFl5NHhKOEVib3IzK0tnam1VRkhOVUZ2UDU1SE84SC83?=
+ =?utf-8?B?WTRWU09ZRGJpalQweFlzT0cxbHlYb21HTE80d3kwSnM2bGdXOVlyQXRGT3VY?=
+ =?utf-8?B?amRaZUxKbElMU25VbjE0ZUtCcUdpdG12Tm9qMkdRaWx5VThmOFBKUDkvMWs0?=
+ =?utf-8?B?eGYrTWRzalFPbFdMZjBPbWd1ZjhXemhvT1pGT2IyejF4QUNES2trUERQM1d4?=
+ =?utf-8?B?eUVRMGpHMUt0RTB5SE54NHVWZUhqRitBZ2dkK0JuWDVoeEJBTUFRV25iRGY4?=
+ =?utf-8?B?eEcwMXFBako3eURibFNDYmFkYUQwSVZYbHd0QWR2MHJnT005dEc2MWlxWXIw?=
+ =?utf-8?B?N0dyakREVTJjbWVNQTZNVExjaW9jaXhMVjZjTkxBS0lBMDI0WVdZUFZtOWtG?=
+ =?utf-8?B?Uzc1UlUzd25VN1VHM2ZydUNITUJKQWhMWjZlTnNvTi92Vlp0cjZyMWxiZGZn?=
+ =?utf-8?B?YU1WcDdWZ2t4NFkvUnE0VW03TmlDT3p0dnd6aU9TS2MxSnExKy9ySWlmUHpX?=
+ =?utf-8?B?NnhrNnBTZlRMREVGNEZ4OGl1QmZmTFpIb2NwVHB1SWtFMndCZW00U0lHdnZ5?=
+ =?utf-8?B?dnhJZUtmbUI1bFdPc3RhZHN5dFQ2TUhnRDRraVROTFNua3NMOHE2RTlTaVNJ?=
+ =?utf-8?B?eTVHVnU5TEJhbUdrSTUzbkREQ1BNTjFFVy84cS9lYThQNVRQRVZjMkp0R0Nr?=
+ =?utf-8?B?WFhPbHp4WGgxY2tnTStJMlh4ci9UVjFsYkE0STBVeGo3KzJ3cXFUMDkyaWtN?=
+ =?utf-8?B?ZUo3eGptVVJjeER4Vk9WYkJORzBrK3FzaXFTOStsTS9RT0JUWExJTjdCdnVp?=
+ =?utf-8?B?SGRhaEdyOEZXN2tzTytnNkk3RncxRDJiOCtLOWZJam9vaGhZZnp0MCtWNXI0?=
+ =?utf-8?B?NC9QdUk0bXpkQWFycDFwdzVkaDNoWFRMRnZtdThzZTE1Z01ZQnRqYmJQb3Iz?=
+ =?utf-8?B?cmdyTmNoam9HanhlZXA1cTJLVE1Qa0VTSjhNTUtQb0hYNC92ZGc4SGwzM1Vs?=
+ =?utf-8?B?RE56MEVtcGlJSDdkS283bVRpN3A4RFQyUnU3emtvTVpVdW12a2pwSVdpcmRB?=
+ =?utf-8?B?TW1sRi9RUnRWQUtEUnJrZWlHS2xYdmZNSHFEcEtMeklpZnBRMHpadGpDcFcz?=
+ =?utf-8?B?UE1XN0ZpdUlkbW92N0pQM2ZhdHVBPT0=?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 60d3f83c-ebc8-453c-3e9b-08de1d4c6eb7
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8b50814d-8288-47d9-cd37-08de1d4c7ca1
 X-MS-Exchange-CrossTenant-AuthSource: SJ2PR12MB8784.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Nov 2025 15:52:04.8530
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Nov 2025 15:52:28.1251
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +CL1v4RDomvtyKxJMwcs+K/nN1sPkDoSbfc/hYuBcOls054XOz5mHpfz8ZPXGrKpc2v1lKZI8py+Z+0w+GReNw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8584
+X-MS-Exchange-CrossTenant-UserPrincipalName: Yc6UMjfg8ZTzfYOJfDPn6xE5hwtJhFA5Dex4Pb8GlsUjyQZjuDHtM1p+iO9p7UvtAH9pRFjOdDybbOYwIoL7cw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6284
 
 
 On 01/10/2025 07:47, Kartik Rajput wrote:
-> On Tegra264, not all I2C controllers have the necessary interface to
-> GPC DMA, this causes failures when function tegra_i2c_init_dma()
-> is called.
+> Add support for SW mutex register introduced in Tegra264 to provide
+> an option to share the interface between multiple firmwares and/or
+> VMs. This involves following steps:
 > 
-> Ensure that "dmas" device-tree property is present before initializing
-> DMA in function tegra_i2c_init_dma().
+>   - A firmware/OS writes its unique ID to the mutex REQUEST field.
+>   - Ownership is established when reading the GRANT field returns the
+>     same ID.
+>   - If GRANT shows a different non-zero ID, the firmware/OS retries
+>     until timeout.
+>   - After completing access, it releases the mutex by writing 0.
+> 
+> However, the hardware does not ensure any protection based on the
+> values. The driver/firmware should honor the peer who already holds
+> the mutex.
 > 
 > Signed-off-by: Kartik Rajput <kkartik@nvidia.com>
+> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
 > ---
-> v4 -> v9: Moved the condition down to have all dma checks together.
-> v2 -> v4:
->          * Add debug print if DMA is not supported by the I2C controller.
+> v7 -> v8:
+>          * Use `bool` instead of `int` for `locked` variable in
+>            tegra_i2c_mutex_lock() function.
+> v6 -> v7:
+>          * Return bool from tegra_i2c_mutex_acquired() and
+>            tegra_i2c_mutex_trylock() functions.
+>          * Move `has_mutex` check inside tegra_i2c_mutex_lock/unlock
+>            functions.
+>          * Remove redundant empty line added in tegra_i2c_xfer() in v6.
+>          * Fix pm_runtime_put() not getting called if mutex unlock fails.
+>          * In tegra_i2c_mutex_lock() simplify the logic to check if the
+>            mutex is acquired or not by checking the value of `ret`
+>            variable.
+>          * Update commit message to describe the functioning of SW mutex
+>            feature.
+> v4 -> v6:
+>          * Guard tegra_i2c_mutex_lock() and tegra_i2c_mutex_unlock() to
+>            ensure that they are called on platforms which support SW
+>            mutex.
+> v3 -> v4:
+>          * Update timeout logic of tegra_i2c_mutex_lock() to use
+>            read_poll_timeout APIs for improving timeout logic.
+>          * Add tegra_i2c_mutex_acquired() to check if mutex is acquired
+>            or not.
+>          * Rename I2C_SW_MUTEX_ID as I2C_SW_MUTEX_ID_CCPLEX.
+>          * Function tegra_i2c_poll_register() was moved unnecessarily, it
+>            has now been moved to its original location.
+>          * Use tegra_i2c_mutex_lock/unlock APIs in the tegra_i2c_xfer()
+>            function. This ensures proper propagation of error in case
+>            mutex lock fails.
+>            Please note that as the function tegra_i2c_xfer() is
+>            already guarded by the bus lock operation there is no need of
+>            additional lock for the tegra_i2c_mutex_lock/unlock APIs.
+> v2 -> v3:
+>          * Update tegra_i2c_mutex_trylock and tegra_i2c_mutex_unlock to
+>            use readl and writel APIs instead of i2c_readl and i2c_writel
+>            which use relaxed APIs.
+>          * Use dev_warn instead of WARN_ON if mutex lock/unlock fails.
 > v1 -> v2:
->          * Update commit message to clarify that some I2C controllers may
->            not have the necessary interface to GPC DMA.
+>          * Fixed typos.
+>          * Fix tegra_i2c_mutex_lock() logic.
+>          * Add a timeout in tegra_i2c_mutex_lock() instead of polling for
+>            mutex indefinitely.
 > ---
->   drivers/i2c/busses/i2c-tegra.c | 5 +++++
->   1 file changed, 5 insertions(+)
+>   drivers/i2c/busses/i2c-tegra.c | 92 ++++++++++++++++++++++++++++++++++
+>   1 file changed, 92 insertions(+)
 > 
 > diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
-> index e533460bccc3..aa7c0d8c0941 100644
+> index cc75340f6cb5..1c8c24ae54ed 100644
 > --- a/drivers/i2c/busses/i2c-tegra.c
 > +++ b/drivers/i2c/busses/i2c-tegra.c
-> @@ -449,6 +449,11 @@ static int tegra_i2c_init_dma(struct tegra_i2c_dev *i2c_dev)
->   	if (IS_VI(i2c_dev))
->   		return 0;
+> @@ -137,6 +137,14 @@
 >   
-> +	if (!of_property_present(i2c_dev->dev->of_node, "dmas")) {
-> +		dev_dbg(i2c_dev->dev, "DMA not available, falling back to PIO\n");
+>   #define I2C_MASTER_RESET_CNTRL			0x0a8
+>   
+> +#define I2C_SW_MUTEX				0x0ec
+> +#define I2C_SW_MUTEX_REQUEST			GENMASK(3, 0)
+> +#define I2C_SW_MUTEX_GRANT			GENMASK(7, 4)
+> +#define I2C_SW_MUTEX_ID_CCPLEX			9
+> +
+> +/* SW mutex acquire timeout value in microseconds. */
+> +#define I2C_SW_MUTEX_TIMEOUT_US			(25 * USEC_PER_MSEC)
+> +
+>   /* configuration load timeout in microseconds */
+>   #define I2C_CONFIG_LOAD_TIMEOUT			1000000
+>   
+> @@ -210,6 +218,7 @@ enum msg_end_type {
+>    * @has_interface_timing_reg: Has interface timing register to program the tuned
+>    *		timing settings.
+>    * @has_hs_mode_support: Has support for high speed (HS) mode transfers.
+> + * @has_mutex: Has mutex register for mutual exclusion with other firmwares or VMs.
+>    */
+>   struct tegra_i2c_hw_feature {
+>   	bool has_continue_xfer_support;
+> @@ -237,6 +246,7 @@ struct tegra_i2c_hw_feature {
+>   	u32 setup_hold_time_hs_mode;
+>   	bool has_interface_timing_reg;
+>   	bool has_hs_mode_support;
+> +	bool has_mutex;
+>   };
+>   
+>   /**
+> @@ -381,6 +391,76 @@ static void i2c_readsl(struct tegra_i2c_dev *i2c_dev, void *data,
+>   	readsl(i2c_dev->base + tegra_i2c_reg_addr(i2c_dev, reg), data, len);
+>   }
+>   
+> +static bool tegra_i2c_mutex_acquired(struct tegra_i2c_dev *i2c_dev)
+> +{
+> +	unsigned int reg = tegra_i2c_reg_addr(i2c_dev, I2C_SW_MUTEX);
+> +	u32 val, id;
+> +
+> +	val = readl(i2c_dev->base + reg);
+> +	id = FIELD_GET(I2C_SW_MUTEX_GRANT, val);
+> +
+> +	return id == I2C_SW_MUTEX_ID_CCPLEX;
+> +}
+> +
+> +static bool tegra_i2c_mutex_trylock(struct tegra_i2c_dev *i2c_dev)
+> +{
+> +	unsigned int reg = tegra_i2c_reg_addr(i2c_dev, I2C_SW_MUTEX);
+> +	u32 val, id;
+> +
+> +	val = readl(i2c_dev->base + reg);
+> +	id = FIELD_GET(I2C_SW_MUTEX_GRANT, val);
+> +	if (id != 0 && id != I2C_SW_MUTEX_ID_CCPLEX)
+> +		return false;
+> +
+> +	val = FIELD_PREP(I2C_SW_MUTEX_REQUEST, I2C_SW_MUTEX_ID_CCPLEX);
+> +	writel(val, i2c_dev->base + reg);
+> +
+> +	return tegra_i2c_mutex_acquired(i2c_dev);
+> +}
+> +
+> +static int tegra_i2c_mutex_lock(struct tegra_i2c_dev *i2c_dev)
+> +{
+> +	bool locked;
+> +	int ret;
+> +
+> +	if (!i2c_dev->hw->has_mutex)
 > +		return 0;
+> +
+> +	if (i2c_dev->atomic_mode)
+> +		ret = read_poll_timeout_atomic(tegra_i2c_mutex_trylock, locked, locked,
+> +					       USEC_PER_MSEC, I2C_SW_MUTEX_TIMEOUT_US,
+> +					       false, i2c_dev);
+> +	else
+> +		ret = read_poll_timeout(tegra_i2c_mutex_trylock, locked, locked, USEC_PER_MSEC,
+> +					I2C_SW_MUTEX_TIMEOUT_US, false, i2c_dev);
+> +
+> +	if (ret)
+> +		dev_warn(i2c_dev->dev, "failed to acquire mutex\n");
+> +
+> +	return ret;
+> +}
+> +
+> +static int tegra_i2c_mutex_unlock(struct tegra_i2c_dev *i2c_dev)
+> +{
+> +	unsigned int reg = tegra_i2c_reg_addr(i2c_dev, I2C_SW_MUTEX);
+> +	u32 val, id;
+> +
+> +	if (!i2c_dev->hw->has_mutex)
+> +		return 0;
+> +
+> +	val = readl(i2c_dev->base + reg);
+> +
+> +	id = FIELD_GET(I2C_SW_MUTEX_GRANT, val);
+> +	if (id && id != I2C_SW_MUTEX_ID_CCPLEX) {
+> +		dev_warn(i2c_dev->dev, "unable to unlock mutex, mutex is owned by: %u\n", id);
+> +		return -EPERM;
 > +	}
 > +
->   	if (i2c_dev->hw->has_apb_dma) {
->   		if (!IS_ENABLED(CONFIG_TEGRA20_APB_DMA)) {
->   			dev_dbg(i2c_dev->dev, "APB DMA support not enabled\n");
+> +	writel(0, i2c_dev->base + reg);
+> +
+> +	return 0;
+> +}
+> +
+>   static void tegra_i2c_mask_irq(struct tegra_i2c_dev *i2c_dev, u32 mask)
+>   {
+>   	u32 int_mask;
+> @@ -1432,6 +1512,10 @@ static int tegra_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[],
+>   		return ret;
+>   	}
+>   
+> +	ret = tegra_i2c_mutex_lock(i2c_dev);
+> +	if (ret)
+> +		return ret;
+> +
+>   	for (i = 0; i < num; i++) {
+>   		enum msg_end_type end_type = MSG_END_STOP;
+>   
+> @@ -1461,6 +1545,7 @@ static int tegra_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[],
+>   			break;
+>   	}
+>   
+> +	ret = tegra_i2c_mutex_unlock(i2c_dev);
+>   	pm_runtime_put(i2c_dev->dev);
+>   
+>   	return ret ?: i;
+> @@ -1537,6 +1622,7 @@ static const struct tegra_i2c_hw_feature tegra20_i2c_hw = {
+>   	.setup_hold_time_hs_mode = 0x0,
+>   	.has_interface_timing_reg = false,
+>   	.has_hs_mode_support = false,
+> +	.has_mutex = false,
+>   };
+>   
+>   static const struct tegra_i2c_hw_feature tegra30_i2c_hw = {
+> @@ -1563,6 +1649,7 @@ static const struct tegra_i2c_hw_feature tegra30_i2c_hw = {
+>   	.setup_hold_time_hs_mode = 0x0,
+>   	.has_interface_timing_reg = false,
+>   	.has_hs_mode_support = false,
+> +	.has_mutex = false,
+>   };
+>   
+>   static const struct tegra_i2c_hw_feature tegra114_i2c_hw = {
+> @@ -1589,6 +1676,7 @@ static const struct tegra_i2c_hw_feature tegra114_i2c_hw = {
+>   	.setup_hold_time_hs_mode = 0x0,
+>   	.has_interface_timing_reg = false,
+>   	.has_hs_mode_support = false,
+> +	.has_mutex = false,
+>   };
+>   
+>   static const struct tegra_i2c_hw_feature tegra124_i2c_hw = {
+> @@ -1615,6 +1703,7 @@ static const struct tegra_i2c_hw_feature tegra124_i2c_hw = {
+>   	.setup_hold_time_hs_mode = 0x0,
+>   	.has_interface_timing_reg = true,
+>   	.has_hs_mode_support = false,
+> +	.has_mutex = false,
+>   };
+>   
+>   static const struct tegra_i2c_hw_feature tegra210_i2c_hw = {
+> @@ -1641,6 +1730,7 @@ static const struct tegra_i2c_hw_feature tegra210_i2c_hw = {
+>   	.setup_hold_time_hs_mode = 0,
+>   	.has_interface_timing_reg = true,
+>   	.has_hs_mode_support = false,
+> +	.has_mutex = false,
+>   };
+>   
+>   static const struct tegra_i2c_hw_feature tegra186_i2c_hw = {
+> @@ -1667,6 +1757,7 @@ static const struct tegra_i2c_hw_feature tegra186_i2c_hw = {
+>   	.setup_hold_time_hs_mode = 0,
+>   	.has_interface_timing_reg = true,
+>   	.has_hs_mode_support = false,
+> +	.has_mutex = false,
+>   };
+>   
+>   static const struct tegra_i2c_hw_feature tegra194_i2c_hw = {
+> @@ -1695,6 +1786,7 @@ static const struct tegra_i2c_hw_feature tegra194_i2c_hw = {
+>   	.setup_hold_time_hs_mode = 0x090909,
+>   	.has_interface_timing_reg = true,
+>   	.has_hs_mode_support = true,
+> +	.has_mutex = false,
+>   };
+>   
+>   static const struct tegra_i2c_hw_feature tegra256_i2c_hw = {
 
 
 Reviewed-by: Jon Hunter <jonathanh@nvidia.com>
