@@ -1,141 +1,114 @@
-Return-Path: <linux-i2c+bounces-13990-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13991-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2781CC3A64D
-	for <lists+linux-i2c@lfdr.de>; Thu, 06 Nov 2025 11:55:45 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id BAF11C3A60E
+	for <lists+linux-i2c@lfdr.de>; Thu, 06 Nov 2025 11:53:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 2379E4EFFF2
-	for <lists+linux-i2c@lfdr.de>; Thu,  6 Nov 2025 10:51:30 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 67514350C1C
+	for <lists+linux-i2c@lfdr.de>; Thu,  6 Nov 2025 10:53:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC16E2E8B7D;
-	Thu,  6 Nov 2025 10:50:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4682B2EDD4D;
+	Thu,  6 Nov 2025 10:53:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n2ivsvww"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="N3wD9YEJ"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 844392E8B8C;
-	Thu,  6 Nov 2025 10:50:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D24C2E8DFC;
+	Thu,  6 Nov 2025 10:53:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762426243; cv=none; b=Hq61mHwPDEv58sxqU5H93TK0YrTo6+KBt37epZP4bAL1rZ5vIK2k9EiL8sYWlVoXwwq9LWGbXQQu15RAZd13Gm6St5i8at7DYUe/e9+igDk6UKLidxP2/vxzt4mZ9SeTK6gSTDeiItWn8qap5XdRiYHqZCwK11MEq0WT3ArHvZY=
+	t=1762426383; cv=none; b=YHsi9Bs1zo0z5Ayx/0EKSWNhsJOCY3f6rX+Jlc+lgjvQkgRy2/oQIe0syMM7WNzKNxisWzC00npi+aMFsOeJ+kIeFVoyBUxeJFFSQTU1WRG+BiZgI7OsJFyDIjlcZp7pjsQ2QrXm0EOdJZxly1gwhP3qdq547lRqJ1cnZoNsk08=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762426243; c=relaxed/simple;
-	bh=vn9vUs6qVEeuzFdhN/5S5+72bL8/AJiMMTbmLwBGVR4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nNX9VMxOpB74pQCSXKsqbjohR/T3uVZxXPC1eLnlx1xeJ+Q6GGVclLRzIq7jGiG/cBL7mWkm/M/Z/8z6+PNK64XtnYwpPSXtjEvXx2GcEy8KB9Fj19/TOGEWt9BneI1ohboTlyZwS73lR+CdY9VJ74+vRsx7fT69uRtE53vbiF8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n2ivsvww; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 468BAC4CEF7;
-	Thu,  6 Nov 2025 10:50:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762426243;
-	bh=vn9vUs6qVEeuzFdhN/5S5+72bL8/AJiMMTbmLwBGVR4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=n2ivsvwwgJxDSoFD9XTkpZhzyJBDcZ3gZuoxeLtz5IlvQNRnKRJHoYWcMaHq1hs7g
-	 2h8h8dCXLDYBB8nlNE6ezKL7d3NH8rURuY0Y+9wKfiHjbJPVJmQu05sYy8NET6ZFY0
-	 iMNkbdzR1YB7FoGd8RhRmXX5jpO3X+7aa1G5K1UQKrkG8WIfO3BkkuAJoJmQ6hQq7I
-	 /+a/VxI7ePkOFFp9cLo+RAnprtQgyxVont0CcZxnjrWdMI47YFYwACuExwKOPIykyo
-	 gwdyzOmizpuXv6qMnKgz3LlGKDxsmb+wGTCsfRTnAqB2b5+zyJagGdz80JCbQSFr75
-	 rVzPBa0Mnw/vw==
-Message-ID: <dce21d03-d6e3-4511-9b1b-5da92efc45a0@kernel.org>
-Date: Thu, 6 Nov 2025 11:50:36 +0100
+	s=arc-20240116; t=1762426383; c=relaxed/simple;
+	bh=r2hF2PvB5PI45qRZ/Meo3WjXC2+7MGN36CB4V/Zvb0A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fbWLTFAyzGlLHXZtMMb4eSvwaZmdCTgm1yOwbIamjaaW8onUn/jFaiIN9P8IlD2XDkU7sKXR+EnA0LoTWW52fckzs+K+xecEymHh2z+GGIrvgROZxLSRPsBkbgLViaW3dUJezOsnKgX7WxDJvYyxb2/fzs0ZTH7Dtw9dTm7wv8g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=N3wD9YEJ; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1762426381; x=1793962381;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=r2hF2PvB5PI45qRZ/Meo3WjXC2+7MGN36CB4V/Zvb0A=;
+  b=N3wD9YEJo25ZGoHDMcvpEbCrPrtUzWeRJGLz7EpmgFR5zbfwulpLtO67
+   /94UG3mXARkAfCTxp96Yc013QawC77Q0bPNRTmBhmxRYBaVd1V/cZoxUm
+   vY1FrR7yn6VTgrdxvfawA7B5wT4rWoRWEU9g8XlMIFg+iPhkLsrMJMHje
+   ZnajGm/wrLvRriRdG3zQBeehfGsCCygvIHZUVq7Gq1bkTKxt/bpYPgxRc
+   BA88hPq3mALZPd9f8LmX1+bUstKp2+w+q0CXqw42neAHf4zC5QrNl9iPW
+   eArchno/MnBcJs0QBs84V4xY2KVG2E/oMmxtr6qV3vCiWckeFZwZ2I3Sw
+   Q==;
+X-CSE-ConnectionGUID: rGsU/CHiSICbQjCawbW8iw==
+X-CSE-MsgGUID: DtxR5NVrRYWOFsFvxD7SvA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11604"; a="64594649"
+X-IronPort-AV: E=Sophos;i="6.19,284,1754982000"; 
+   d="scan'208";a="64594649"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2025 02:53:01 -0800
+X-CSE-ConnectionGUID: pRUXSRkuT+GEm/fkNoRm2g==
+X-CSE-MsgGUID: yZXmObeNSVGNKpkqM88ZtA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,284,1754982000"; 
+   d="scan'208";a="186979567"
+Received: from jjgreens-desk21.amr.corp.intel.com (HELO ashevche-desk.local) ([10.124.221.229])
+  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2025 02:53:00 -0800
+Received: from andy by ashevche-desk.local with local (Exim 4.98.2)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1vGxbr-0000000646H-0OZy;
+	Thu, 06 Nov 2025 12:52:55 +0200
+Date: Thu, 6 Nov 2025 12:52:54 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: Jan Dabros <jsd@semihalf.com>, Andi Shyti <andi.shyti@kernel.org>,
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: designware: Replace magic numbers with named
+ constants
+Message-ID: <aQx-BlL9PjHeR7Dy@smile.fi.intel.com>
+References: <20251105161845.2535367-1-a.shimko.dev@gmail.com>
+ <20251106104228.GP2912318@black.igk.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/5] i2c: designware: Optimize flag reading in
- i2c_dw_read()
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- =?UTF-8?Q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>
-Cc: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Jarkko Nikula <jarkko.nikula@linux.intel.com>,
- Mika Westerberg <mika.westerberg@linux.intel.com>,
- Jan Dabros <jsd@semihalf.com>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Gregory CLEMENT <gregory.clement@bootlin.com>,
- =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
- Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
- Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
- Dmitry Guzman <dmitry.guzman@mobileye.com>, linux-i2c@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-rt-devel@lists.linux.dev
-References: <20251031-i2c-dw-v2-0-90416874fcc0@bootlin.com>
- <20251031-i2c-dw-v2-2-90416874fcc0@bootlin.com>
- <aQTMUrMbfgs59oBQ@smile.fi.intel.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <aQTMUrMbfgs59oBQ@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251106104228.GP2912318@black.igk.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On 31/10/2025 15:48, Andy Shevchenko wrote:
-> On Fri, Oct 31, 2025 at 03:35:40PM +0100, Benoît Monin wrote:
->> Optimize the i2c_dw_read() function by reading the message flags only
->> once per message, rather than for every byte.
->>
->> The message index is only modified by the outer loop, so reading the
->> flags in the inner loop was always getting the same value.
-> 
-> Does it affect the binary (compiled) file?
+On Thu, Nov 06, 2025 at 11:42:28AM +0100, Mika Westerberg wrote:
+> On Wed, Nov 05, 2025 at 07:18:44PM +0300, Artem Shimko wrote:
+
+...
+
+> /* Timeouts in us */
+> #define DW_IC_BUSY_POLL_TIMEOUT		1100
+> #define DW_IC_BUSY_TOTAL_TIMEOUT	20000
+> #define DW_IC_FOO_TIMEOUT		1234
+
+It's in-kernel practice to add units to the definitions and avoid unneeded
+comments. Also it will be clearer to the reader without looking back for any
+comments like above.
+
+...
+
+> All the register offsets, shifts and masks should be in
+> drivers/i2c/busses/i2c-designware-core.h and you don't need to "document"
+> them because all this is available in the datasheet.
+
+Also the benefit could be switch to use bitfield.h.
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-It does not really matter that much, because new code is more readable -
-'flags' depend on the outer (first) loop and they are used there, so
-that's where variable should be defined.
-
-Best regards,
-Krzysztof
 
