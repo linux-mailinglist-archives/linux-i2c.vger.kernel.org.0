@@ -1,178 +1,124 @@
-Return-Path: <linux-i2c+bounces-13970-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13971-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CFEEAC383BF
-	for <lists+linux-i2c@lfdr.de>; Wed, 05 Nov 2025 23:46:05 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E834BC38A64
+	for <lists+linux-i2c@lfdr.de>; Thu, 06 Nov 2025 02:06:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 37BAD18955BC
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Nov 2025 22:44:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B6B843B390B
+	for <lists+linux-i2c@lfdr.de>; Thu,  6 Nov 2025 01:01:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E05A2F1FD0;
-	Wed,  5 Nov 2025 22:44:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 448151F09A5;
+	Thu,  6 Nov 2025 01:01:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=aurel32.net header.i=@aurel32.net header.b="JcyOecms"
+	dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b="N1RHxR5V"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from hall.aurel32.net (hall.aurel32.net [195.154.113.88])
+Received: from smtpbgbr1.qq.com (smtpbgbr1.qq.com [54.207.19.206])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 732832F069E;
-	Wed,  5 Nov 2025 22:44:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.154.113.88
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29E3D57C9F;
+	Thu,  6 Nov 2025 01:01:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.207.19.206
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762382651; cv=none; b=S+zsQRFtH11h8EjQnhZqIAhoxKHidB5Lxh6+Vre2dRRiYZhMZxyUTAHu4ATshXWyvmeYjcwcRh4ZrVLD75nl7OIdaYZ6+sTVTw7y4luMfs1vwwFMw75knRImdqF4Kp0PEhsLl6eyFvXtu+LtXlpGtzrHaDLfpaGUhyrVTvTN9kw=
+	t=1762390905; cv=none; b=ubZ55TEzlt9j8K97UYpoorZ4devLylv7FgPHqTlOBbOBeMvxvLHvvUP7B/q4uc08uJOEGcTlqGUfgfASxcyJlUB3XQ4fATQQUtqIgu7E2TXgtURbDhYlHQER6Toi2fQt2q7NHzfa36W7DWzsyNtq1u62tev8yJrB5XP3rlvBZ5w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762382651; c=relaxed/simple;
-	bh=HJJ+Z6Pcc4eCNf8/RJk1ipVnGmaqj1iMMsHBL1HQYms=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lXSxgptsic8vLJy5slO7QthwwDIfFyl2VNKkRS08S6126Y7bXF+ycBH/DgrHVZJsmrPWg2IX5zSvC4mpTZgpfqpD3TPN9LKJ6cPy5PDgNvVHFiwsneT/JYA4MqWFIs4bpEys5YfWxNrZqM8/XLKkE1M/s/jEtiwbiNTzFmqp+/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=aurel32.net; spf=pass smtp.mailfrom=aurel32.net; dkim=pass (2048-bit key) header.d=aurel32.net header.i=@aurel32.net header.b=JcyOecms; arc=none smtp.client-ip=195.154.113.88
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=aurel32.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aurel32.net
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=aurel32.net
-	; s=202004.hall; h=In-Reply-To:Content-Transfer-Encoding:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:Reply-To:
-	Subject:Content-ID:Content-Description:X-Debbugs-Cc;
-	bh=Rcz9OHWqrkXIvtIUBV6foEU7yY/XR+LTCfFnMpPJAWE=; b=JcyOecmsyvuctmYcsfL2VURPJK
-	ARZA57NqLJM1Ls3zX/oV0/jnhV3xqV+9A9+AobFBMu59TamRLLipjY2jBF3lD6gmQbInegLZgpyqu
-	tlr9NXjnD35fCY3OLg1rNI/UQLcoWFVCJ45WI2DheKW8eVjmJFjvirLCoFoHEwf2MIqYqpkR5zQSH
-	QkParKIUeN3oBmYzXuuJE67Q3UJ3i2yPy9JqWQoLyeQCyFIs53aEmri0981o+Ggw3BmTq/E9JBsge
-	xi1GRtVCPhTbr/5sjrAtlCodfVSifq8FI3wJ25vkOkXK2VGJSb6PQ2/9MIL5bhdVpn4H0icoBpcI/
-	SRvJiNXQ==;
-Received: from [2a01:e34:ec5d:a741:1ee1:92ff:feb4:5ec0] (helo=ohm.rr44.fr)
-	by hall.aurel32.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <aurelien@aurel32.net>)
-	id 1vGmES-0000000AfjF-2E3C;
-	Wed, 05 Nov 2025 23:44:00 +0100
-Date: Wed, 5 Nov 2025 23:44:00 +0100
-From: Aurelien Jarno <aurelien@aurel32.net>
-To: Troy Mitchell <troy.mitchell@linux.spacemit.com>
-Cc: Andi Shyti <andi.shyti@kernel.org>, Yixun Lan <dlan@gentoo.org>,
-	Alex Elder <elder@riscstar.com>,
-	Michael Opdenacker <michael.opdenacker@rootcommit.com>,
-	Troy Mitchell <troymitchell988@gmail.com>,
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev
-Subject: Re: [PATCH] i2c: spacemit: fix detect issue
-Message-ID: <aQvTMM0S16gOdiAN@aurel32.net>
-Mail-Followup-To: Troy Mitchell <troy.mitchell@linux.spacemit.com>,
+	s=arc-20240116; t=1762390905; c=relaxed/simple;
+	bh=qalR+9DmlQsAs3IP1SwoablOTDBE9IfXJzETuc/4s0M=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AD6FUrBATxN+UzGPlkkH2CBU0cYnxNeakmhV4N9Ibyg+TiaCEb32NQscbrScZPZuaZWrpV34h7IiQKjZHyhbD1sdGahL8KlVOz795Cu5MnVilaKlKQQB8dMhrL14vss8cSMND3WY1TaR96x1fgYZUPzouf3GLoEAsXWqktBCOqs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com; spf=none smtp.mailfrom=linux.spacemit.com; dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b=N1RHxR5V; arc=none smtp.client-ip=54.207.19.206
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.spacemit.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.spacemit.com;
+	s=mxsw2412; t=1762390822;
+	bh=3kT/wXXpOECHC7SoUGMt7kZX+LFSbhnovtqEAlsizPY=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version;
+	b=N1RHxR5VgrwIuATZpZeh0hUZQJPYuvxXvoCLicfLJhle2/ECrTHKJU0rjbJ3DqBcm
+	 suwKGnx/n1O/s0YTgSDpL1T5WBX6In7PkQxfMdXmKCrVLiThAu4pvFXdHE7fc+iRR4
+	 aexziE0V1pju3QYuLrqzoZLbid7rrbcm3mFbo3lo=
+X-QQ-mid: zesmtpsz4t1762390815t94e38ff7
+X-QQ-Originating-IP: jh7uI1plMvRhjrULDkiB/2I1zCGQl9LYTt+0qWnurlM=
+Received: from = ( [183.48.244.176])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Thu, 06 Nov 2025 09:00:13 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 5046835240228934872
+EX-QQ-RecipientCnt: 9
+Date: Thu, 6 Nov 2025 09:00:13 +0800
+From: Troy Mitchell <troy.mitchell@linux.spacemit.com>
+To: Troy Mitchell <troy.mitchell@linux.spacemit.com>,
 	Andi Shyti <andi.shyti@kernel.org>, Yixun Lan <dlan@gentoo.org>,
 	Alex Elder <elder@riscstar.com>,
-	Michael Opdenacker <michael.opdenacker@rootcommit.com>,
 	Troy Mitchell <troymitchell988@gmail.com>,
 	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev
-References: <20251103-fix-k1-detect-failure-v1-1-bb07a8d7de7c@linux.spacemit.com>
+Subject: Re: [PATCH v4] i2c: spacemit: introduce pio for k1
+Message-ID: <723F1D1C8151FC6E+aQvzHbueB3FgfaU7@kernel.org>
+References: <20251009-k1-i2c-atomic-v4-1-a89367870286@linux.spacemit.com>
+ <aQvP4HVcpX-MDZBJ@aurel32.net>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20251103-fix-k1-detect-failure-v1-1-bb07a8d7de7c@linux.spacemit.com>
-User-Agent: Mutt/2.2.13 (2024-03-09)
+In-Reply-To: <aQvP4HVcpX-MDZBJ@aurel32.net>
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpsz:linux.spacemit.com:qybglogicsvrgz:qybglogicsvrgz3a-0
+X-QQ-XMAILINFO: NqDbsGEQdAdVWmRY0+uVZ1oy2a7MxfPjSr0Bqs2Ob3JkfXtg8+ca7AJZ
+	PiBCOvKObdKuIytqdC7OM0UWEFuT5Zst37ZDa2GHWR0dEutKgVBNWHkMZeFQkw/opEVyBRk
+	W4yXRJTr9dW7fNL5XSyylS/71ZyARQrzdELIYMXaVX9uJzUQRBexWzSeHrmV4wwEYBNXPLB
+	KMi9bEzd+zZiKEeGy0+XYEHruag9e2YNbWd0XTbtNQSLDJQpobezJAOWx9wj3ssLlBY2d6u
+	uK0FGpfCwcB5CKKfb9orvdWXHcG/qT9GqB2ILzpQqLKi/BJjzSysX4CC0NpvfiU7hhKlo3P
+	EUpbhjbuSh72UUicnuSM7QMHrpto155/nU5lDz59HkS+X36luCrVqbgDclLmvaTlNov2QIv
+	KzbE4NMe2joRDd+i5Skh8b2WQIp+tEmZBJqTd4B8fOPhROtXuJWYF5iNd6WXoIUmPInSWIi
+	ZSsu3UaGKzU+Q3rD5UoKHwaGcyfC4sJy9XJBo6T2rHAP/QJdhcfbqNUPTFWXAvP11WdowQW
+	xpBcluaSA7R5JNV6IwfGtOr/jeTrA3endI4QgR5MJFlXfjriuQCayHZjKXk/dVfwDpbxcNK
+	BDpF7oEQLmmwZaYjJy0fHegpTMppyHv3wCnM4cws5iZaZPTnUN9VLm7YIbxmaidQA1GpLD7
+	t8zJq0WJRRMmmIyWXqcegJgx/+HTV6az1X02EdWPRF69VyFqzqvuXgjgfFwSEjVpW/UuxSq
+	hH0WsWeCeKdd/OZX2jYHgM2nFjtDb9SY8UHqUk3/r6yf3IvfggqzJxI+UBm6Co6bLRmOeGE
+	nIG1qUF9uthzPFNtj0pgdGlLxS+EMGwq3yZxuwnX4K5mx1wy9M5vL+T8s0NBGcUePWWh0SI
+	xvJWi/1N3Qx05psgI9Iu0vU4kHblet5WGKvlon01nrHYx2j2XBgyZBNtee1fSlqS98YW8Rr
+	KCW6Jl9VASmVNF4T5GznHczR7aguCHu/JZ2B0Uah4pAWJkK5y0a8i4tUkn5ewyLtotIOQ4x
+	y+AVLoqdrLAGMRpQav3G9vlpoydBYnIqKhlbiUfwM8XUafnzKtt7ZDmhjcSODEVmGp2djLr
+	Upggly6TeL1
+X-QQ-XMRINFO: NI4Ajvh11aEj8Xl/2s1/T8w=
+X-QQ-RECHKSPAM: 0
 
-Hi,
-
-On 2025-11-03 15:06, Troy Mitchell wrote:
-> This commit addresses two issues causing i2c detect to fail.
->=20
-> The identified issues are:
->=20
-> 1. Incorrect error handling for BED (Bus Error No ACK/NAK):
->    Before this commit, Both ALD (Arbitration Loss Detected) and
->    BED returned -EAGAIN.
-> 2. Missing interrupt status clear after initialization in xfer():
->    On the K1 SoC, simply fixing the first issue changed the error
->    from -EAGAIN to -ETIMEOUT. Through tracing, it was determined that
->    this is likely due to MSD (Master Stop Detected) latency issues.
->=20
->    That means the MSD bit in the ISR may still be set on the next transfe=
-r.
->    As a result, the controller won't work =E2=80=94 we can see from the s=
-cope that
->    it doesn't issue any signal.
->    (This only occurs during rapid consecutive I2C transfers.
->    That explains why the issue only shows up with i2cdetect.)
->=20
-> With these two fixes, i2c device detection now functions correctly on the=
- K1 SoC.
->=20
-> Fixes: 5ea558473fa31 ("i2c: spacemit: add support for SpacemiT K1 SoC")
-> Signed-off-by: Troy Mitchell <troy.mitchell@linux.spacemit.com>
-> ---
-> I checked the vendor version driver and tried commenting out
-> spacemit_i2c_clear_int_status() that runs before xfer starts.
-> Surprisingly, i2cdetect stopped working as well.
-> ---
->  drivers/i2c/busses/i2c-k1.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/i2c/busses/i2c-k1.c b/drivers/i2c/busses/i2c-k1.c
-> index 6b918770e612e098b8ad17418f420d87c94df166..37828323317770ae2f0522d21=
-3dca67342ae166f 100644
-> --- a/drivers/i2c/busses/i2c-k1.c
-> +++ b/drivers/i2c/busses/i2c-k1.c
-> @@ -160,7 +160,8 @@ static int spacemit_i2c_handle_err(struct spacemit_i2=
-c_dev *i2c)
-> =20
->  	if (i2c->status & (SPACEMIT_SR_BED | SPACEMIT_SR_ALD)) {
->  		spacemit_i2c_reset(i2c);
-> -		return -EAGAIN;
-> +		if (i2c->status & SPACEMIT_SR_ALD)
-> +			return -EAGAIN;
->  	}
-
-This makes the resulting code, while correct, complex to understand as=20
-it is now two really different errors, as you explained well in the=20
-commit message.
-
-I therefore suggest to organize the code as:
-
-	/* Arbitration Loss Detected */
-	if (i2c->status & SPACEMIT_SR_ALD) {
-		spacemit_i2c_reset(i2c);
-		return -EAGAIN;
-	}
-
-	/* Bus Error No ACK/NAK */
-	if (i2c->status & SPACEMIT_SR_BED) {
-		spacemit_i2c_reset(i2c);
-	}
-
-
->  	return i2c->status & SPACEMIT_SR_ACKNAK ? -ENXIO : -EIO;
-> @@ -491,6 +492,8 @@ static int spacemit_i2c_xfer(struct i2c_adapter *adap=
-t, struct i2c_msg *msgs, in
-> =20
->  	spacemit_i2c_init(i2c);
-> =20
-> +	spacemit_i2c_clear_int_status(i2c, SPACEMIT_I2C_INT_STATUS_MASK);
-> +
-
-This sounds good to start the transfer with a clean interrupt state. I=20
-just wonder if it should be moved to spacemit_i2c_init(), ie where the=20
-corresponding interrupts are enabled.
-
->  	spacemit_i2c_enable(i2c);
-> =20
->  	ret =3D spacemit_i2c_wait_bus_idle(i2c);
-
-Anyway:
-
-Tested-by: Aurelien Jarno <aurelien@aurel32.net>
-
-
-Regards
-Aurelien
-
---=20
-Aurelien Jarno                          GPG: 4096R/1DDD8C9B
-aurelien@aurel32.net                     http://aurel32.net
+On Wed, Nov 05, 2025 at 11:29:52PM +0100, Aurelien Jarno wrote:
+> Hi,
+> 
+> On 2025-10-09 17:59, Troy Mitchell wrote:
+> > This patch introduces I2C PIO functionality for the Spacemit K1 SoC,
+> > enabling the use of I2C in atomic context.
+> > 
+> > Signed-off-by: Troy Mitchell <troy.mitchell@linux.spacemit.com>
+[...]
+> > +static void spacemit_i2c_err_check(struct spacemit_i2c_dev *i2c);
+> > +static void spacemit_i2c_handle_state(struct spacemit_i2c_dev *i2c);
+> > +
+> 
+> At least for spacemit_i2c_err_check, the forward declaration can be 
+> avoided by moving code, which is anyway probably better done in a 
+> separate patch.
+Maybe I'll handle it later.
+> 
+> Besides this nitpick, this sounds good, so:
+> 
+> Tested-by: Aurelien Jarno <aurelien@aurel32.net>
+> Reviewed-by: Aurelien Jarno <aurelien@aurel32.net>
+Thanks!
+> 
+> Regards
+> Aurelien
+> 
+> -- 
+> Aurelien Jarno                          GPG: 4096R/1DDD8C9B
+> aurelien@aurel32.net                     http://aurel32.net
+> 
 
