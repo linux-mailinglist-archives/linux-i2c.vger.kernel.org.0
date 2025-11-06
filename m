@@ -1,106 +1,128 @@
-Return-Path: <linux-i2c+bounces-13992-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13993-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id BBE39C3A73B
-	for <lists+linux-i2c@lfdr.de>; Thu, 06 Nov 2025 12:07:17 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68388C3A7D1
+	for <lists+linux-i2c@lfdr.de>; Thu, 06 Nov 2025 12:14:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 656F14FE960
-	for <lists+linux-i2c@lfdr.de>; Thu,  6 Nov 2025 11:01:35 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 79EC44FB944
+	for <lists+linux-i2c@lfdr.de>; Thu,  6 Nov 2025 11:09:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C7372BD587;
-	Thu,  6 Nov 2025 11:01:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB95C30E0E3;
+	Thu,  6 Nov 2025 11:08:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P4m31jUk"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b1tyjnuD"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCFC3280024
-	for <linux-i2c@vger.kernel.org>; Thu,  6 Nov 2025 11:01:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B53230E0E5;
+	Thu,  6 Nov 2025 11:08:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762426890; cv=none; b=kbreEB3N1BAyBP+kMXBQzY4W20qSzZy1v0z2/xr1cN9OUxlBam/nILrvgVFYWnZojKj3zycQ3WAnDqINOtZksvfrGieU2mGoW+SwQhQQiZDZdnSJtRDMEt/cTIiS6ERX3OvSX8yOdUq6zPxlEK3e0sZUCngnnlHnBBHL0R7eXyo=
+	t=1762427328; cv=none; b=iT/WHeavq5/gEn+d+u28+/bpmJbm4AHSjAA9XJ9A8l0EsO18DC3oGDBKOMO3izC3FQHKHMsuDxy3zTb7JjG0WbmfaVHbMJZrtvWkydVOvIfnlqE5TS96u5UEAiKnoWb/9LE/ZZhkU9cnqqKt44w/slPAUNx/IqVFaVVOYAgTvQM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762426890; c=relaxed/simple;
-	bh=ir//lFT9wS6wCSvmIE4K+HR90jLm5Sr1r9449X9pQYI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AcvcmO7c2DOUsci5JdRxV+hjgTpx7eeYh5x1kBbjyd8gJIa1Q9wvPNw8sWjLW1PH+pT6CWSP40aqqfhGKtkLKw0O/t0IeX9BfRbZgjA0gvqWJCovXv/Gq24iKHCm7LGHMj8yakMWyrLf25wSahejgvbFKZRuOV/OWR1D209h90Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P4m31jUk; arc=none smtp.client-ip=209.85.208.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-640b0639dabso1633104a12.3
-        for <linux-i2c@vger.kernel.org>; Thu, 06 Nov 2025 03:01:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762426887; x=1763031687; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ir//lFT9wS6wCSvmIE4K+HR90jLm5Sr1r9449X9pQYI=;
-        b=P4m31jUkMQGtagzKYPdHFcoDDe0O3G6tpphUTiCMePdNR28d/YuWzkdD7H1ojp3CIB
-         Y9bbnkby8t4Rc01y5804HlTmXS4fLQFL4suesUgNcyZ8v6oJ2Ad8HBEHMyB1yBjvSGIM
-         KnvF1PwsNuGPYVSOIV1ZQ118qnuN3ZkTk2xaLngsnvGukkHu1XG3pDw1FoZdEgKKVtPS
-         rzht2g8avq/MIhqtsoywQ+6OlBPNIQV/09pisKXF5LqtDla6HWJzCHlBs6+Ht8MTydYm
-         Xqq/dW1YmrJVE3l7BhWq+6rMsQVB3JMnAaxZ2AnWq0F3hUlmDMtsiq1PYZeRSVSWZcKv
-         gWrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762426887; x=1763031687;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ir//lFT9wS6wCSvmIE4K+HR90jLm5Sr1r9449X9pQYI=;
-        b=ce1kGFxKuvd5BuXCSUwkjnBRODX8fhg05UBJjB6lyA6UBi3MdlWdzC6PHvWFG++OHj
-         vmFaZgZQEnKZPLnYzkBsx8RamwK3ZwiZWoHBxYnq12hsvmjw2sKKcp0cJTtCXG99mQpc
-         aO/IbnckEL9XkXbJ9gj6ssTh0nhQScZOWTUuBGvk6vj82FXX6aftXy2Xb+b/drhZRAVG
-         i6NKo9TkfPAl3eaGXfuvzqNHylMayL5RG8K0M03HpJN/DlelUue32ZoJUpU+eytO/l++
-         lwMw3SOci7xqgp/JLQnWkn3XzqDI3N+zCZKrFKvg+J7CKhUGwfMkh/0lH88qhqNCHE4w
-         MyJA==
-X-Forwarded-Encrypted: i=1; AJvYcCV4prGk8TjSuIBnzgQRSL1ytiizTotLdwYceHTU6Fp5M2kfsk10MdtAfIzlJzrFBlM+WiF2vPin23E=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxggGU4Kd0OsJpwHUKqj1CfjrTzrJUF81t6gEyxw81U/Plph9o2
-	Gu8PZjhG4Jzep43FD7QwoSZ1wIOAC99iuPfbI7UR20/9OlaATUhaT5htgHV744NM9buENAg9qgK
-	Zndq3APKn6jVPqqGt9TwbTY0dh4z4fGjgs6PEo/sIVA==
-X-Gm-Gg: ASbGnctNWWPasTu85Lzhgetw5sGfIdAl7lCto3DSAgzvTrYS2DHaAddSpSnFFM6+OIg
-	XGAaCjZEYlQdNg7+9SFkgUR5rZQ9kWEMU9XjYATOEvrrX3ZWRjFVeFC2AvdwcQtejkeJe4l56d8
-	iC79eD7trxAOjRbKymHNVSoVH/swuvel1l1pHj6ETkeXAzwq+HMvyzixQl3EEJQ2Cm8GkZpgifd
-	VTSLrR9ER+HAEOwGAyLx+5NtFrob6mTf7OvGZ4AaCzo6GnyF4xJOS3t0PvfNg==
-X-Google-Smtp-Source: AGHT+IE3ZLXP3+oYOCDOf8HdHiiPIx4UVriZLNHQt5QqAgQyg7lMQ1CUloE2bPCtkRDLKsQ1PmtiKY3RDXWEaZ6PDlg=
-X-Received: by 2002:a05:6402:1eca:b0:640:ceef:7e44 with SMTP id
- 4fb4d7f45d1cf-64105a5c99amr6575408a12.28.1762426886854; Thu, 06 Nov 2025
- 03:01:26 -0800 (PST)
+	s=arc-20240116; t=1762427328; c=relaxed/simple;
+	bh=aOnuTqQUorRRLb6a2Hd6HIldUCCjogwgktc8mrMIcy0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XH3Z1rzDAI9V06X0YBRJn2ljKNoo2rBTsA0hbNKwxdGxnytah/RYMnwxAEPGMYD4EAJijkBVU1p2vGozmE3iec5iCYoec974QFrwYbTCbkRCwvxrkRSHPWilj5BxpJ/KwwN1VzcFsxU3K/I7+HNwMcV2C1RKgNAKHQIRgBJ+ZuE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b1tyjnuD; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1762427327; x=1793963327;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=aOnuTqQUorRRLb6a2Hd6HIldUCCjogwgktc8mrMIcy0=;
+  b=b1tyjnuDM/wxPH++vASAPKW4zlUSaO2NVKWYoqrJVSEhsd6mvT49aAQb
+   TXtHDtY7EdIQ+jCSV7CseCyKYDmsk7ORacdnzMoHNYQN1bUGGwPL0lX2p
+   H2fn7I3mCOqK6/wKT9nyqpIj2T+OKyToWrF8X2C/gg2h0BAWBG6uO9Ipu
+   SHKINPsq+gox0v3WHPp2bQKuAoNBpTUH+Ft2BiheziDBURjgzpjlZAQJ2
+   hyLXsqKd2KCWvCgFVqurkchGEawTbrG6nRr8XEuzyTUA54tSkVX5NBCcV
+   ZOIlpbxr5WtuZ/Ow8S2am2unOFhUBPp55OE7B0ccLD8xz5T3n29kcQXEH
+   g==;
+X-CSE-ConnectionGUID: TL6ZlB5XTf2FXhQ0PuBQtg==
+X-CSE-MsgGUID: XN0JsQLjS1CcCZakVaszSQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11604"; a="82190523"
+X-IronPort-AV: E=Sophos;i="6.19,284,1754982000"; 
+   d="scan'208";a="82190523"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2025 03:08:46 -0800
+X-CSE-ConnectionGUID: +FIoHc4qSVuskx8JZPGEaQ==
+X-CSE-MsgGUID: 0ciulFsvTRGf9dvNiXJrRQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,284,1754982000"; 
+   d="scan'208";a="188011179"
+Received: from jjgreens-desk21.amr.corp.intel.com (HELO ashevche-desk.local) ([10.124.221.229])
+  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2025 03:08:41 -0800
+Received: from andy by ashevche-desk.local with local (Exim 4.98.2)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1vGxr1-000000064My-3nji;
+	Thu, 06 Nov 2025 13:08:35 +0200
+Date: Thu, 6 Nov 2025 13:08:35 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: =?iso-8859-1?Q?Beno=EEt?= Monin <benoit.monin@bootlin.com>,
+	Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Jan Dabros <jsd@semihalf.com>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Clark Williams <clrkwllms@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Gregory CLEMENT <gregory.clement@bootlin.com>,
+	=?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>,
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	Dmitry Guzman <dmitry.guzman@mobileye.com>,
+	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev
+Subject: Re: [PATCH v2 2/5] i2c: designware: Optimize flag reading in
+ i2c_dw_read()
+Message-ID: <aQyBs6H1IHk7fSP2@smile.fi.intel.com>
+References: <20251031-i2c-dw-v2-0-90416874fcc0@bootlin.com>
+ <20251031-i2c-dw-v2-2-90416874fcc0@bootlin.com>
+ <aQTMUrMbfgs59oBQ@smile.fi.intel.com>
+ <dce21d03-d6e3-4511-9b1b-5da92efc45a0@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251105161845.2535367-1-a.shimko.dev@gmail.com> <20251106104228.GP2912318@black.igk.intel.com>
-In-Reply-To: <20251106104228.GP2912318@black.igk.intel.com>
-From: Artem Shimko <a.shimko.dev@gmail.com>
-Date: Thu, 6 Nov 2025 14:01:15 +0300
-X-Gm-Features: AWmQ_bmlkS6-iACEnyny5YPvKbBIRoPsEPwqNcbfawNSc0tFOMLrZxEL14qOOkc
-Message-ID: <CAOPX745kvE-5mh8PjTzwboTR1uKijvgG72YOb4pOjXzE4+3qaQ@mail.gmail.com>
-Subject: Re: [PATCH] i2c: designware: Replace magic numbers with named constants
-To: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Jan Dabros <jsd@semihalf.com>, 
-	Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <dce21d03-d6e3-4511-9b1b-5da92efc45a0@kernel.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On Thu, Nov 6, 2025 at 1:43=E2=80=AFPM Mika Westerberg
-<mika.westerberg@linux.intel.com> wrote:
+On Thu, Nov 06, 2025 at 11:50:36AM +0100, Krzysztof Kozlowski wrote:
+> On 31/10/2025 15:48, Andy Shevchenko wrote:
+> > On Fri, Oct 31, 2025 at 03:35:40PM +0100, Benoît Monin wrote:
+> >> Optimize the i2c_dw_read() function by reading the message flags only
+> >> once per message, rather than for every byte.
+> >>
+> >> The message index is only modified by the outer loop, so reading the
+> >> flags in the inner loop was always getting the same value.
+> > 
+> > Does it affect the binary (compiled) file?
+> 
+> It does not really matter that much, because new code is more readable -
+> 'flags' depend on the outer (first) loop and they are used there, so
+> that's where variable should be defined.
 
-> I think it adds too much to be honest.
+Did I oppose that?
 
-Hi Mika,
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Thank you for the review.
 
- I'll prepare v2 that addresses all your feedback.
-Will send the revised version shortly.
-
-Best regards,
-Artem
 
