@@ -1,105 +1,294 @@
-Return-Path: <linux-i2c+bounces-13994-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-13995-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A33FC3A7DA
-	for <lists+linux-i2c@lfdr.de>; Thu, 06 Nov 2025 12:14:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id EAE5EC3B70F
+	for <lists+linux-i2c@lfdr.de>; Thu, 06 Nov 2025 14:50:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 690095001BC
-	for <lists+linux-i2c@lfdr.de>; Thu,  6 Nov 2025 11:09:55 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3B8804FA0E2
+	for <lists+linux-i2c@lfdr.de>; Thu,  6 Nov 2025 13:45:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75AB830BF67;
-	Thu,  6 Nov 2025 11:09:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB54930E83C;
+	Thu,  6 Nov 2025 13:38:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X5bujq0V"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IEK1O99U"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F4763090F5
-	for <linux-i2c@vger.kernel.org>; Thu,  6 Nov 2025 11:09:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6535C346FA9;
+	Thu,  6 Nov 2025 13:38:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762427382; cv=none; b=Agr62Az3YOkDzGfA9nOUPJSFIcMFPsI9d6Tre+mZp5ifTCcCSP/W6gnqxHGgBy81P/APu4vlLDJa9Z6hfOfRHCqqERN/qtfuzUrIKC2DBocr1WZn2Q1boAh2Naaj2VR4oRhYkhQVjs6K3YrFEuCN4HgZ23kV7LIDAFKBp3ej5zM=
+	t=1762436333; cv=none; b=YXkIs2Xd8/O0MnxpJt3iMF2N6/HBW7mMjFZzQFNRbRgHj3ulqvg2RDf6BuOp6IW6m7TWmyUJkip1UMuwJn9US28tVW0HgOUTDBE/ZCdMt7t5P4CCOC0SsZfwzlEupfFIycv7DzMo/4GKj7ojm7CUj92iwuNDC6TIhrAPhKKJSXo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762427382; c=relaxed/simple;
-	bh=D6MUO7W6K4aiFoZK+kBGR+3MGc+5N522t4xFoo/2dgM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JjFusZL8uGBzkv/sYjykmxYjDoFCkUlWEtYmzfc1J7AE/wYTa1/EUBsZ7eoSbshx1ncsYqNOhJ3hKHiwaLFewHI+47Ftxl6FuE/XxhmjGWB8KTykhrh0nUDR7NtEeMGZWS8sjUPIGrgKy22DIZXt88RefOtfeKDz2fZ9dybvS48=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X5bujq0V; arc=none smtp.client-ip=209.85.167.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-592f7e50da2so1049421e87.0
-        for <linux-i2c@vger.kernel.org>; Thu, 06 Nov 2025 03:09:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762427378; x=1763032178; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=D6MUO7W6K4aiFoZK+kBGR+3MGc+5N522t4xFoo/2dgM=;
-        b=X5bujq0VbSS63g4UR43z9HjbkT8AmzFQmZunVdcRMJwxGma1Kke+hNH6pK6JGiqQx3
-         2836isB7DQNwQ0sjzpoyZd4RHbrpuJJYnlf0XyPAhig9ZgsbKk9XVdoTVUK98ZxyulA7
-         lojuT9FVw9QU88pu45dSuEZFBBCvmiji1nC+Of/+7bIgDpTR/debR4r5PKSeKSxWQfFq
-         mhmqVpwCnW8I/Kz8pCjuyuTj3d/u9owbPbxECMN5aWL+1P7xWroMLy8Mh3f0QRlzfHTf
-         A0IFbAcSLFG2XqLmBEWvnca/N0Ugj6yW+erZUxtiXAEGz+US4W+Cb8ICPNhbV61opybh
-         bRUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762427378; x=1763032178;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=D6MUO7W6K4aiFoZK+kBGR+3MGc+5N522t4xFoo/2dgM=;
-        b=fP3zNA52Rcrcq+zqKieNcXQhdvhEwkMMQoURmZ7/HAmcPTCTWlyZaLSUoSn59DeFjx
-         3P2PNgassJR2OxPUpoXeFFaNLDyj18EYxGC+GyOZnzVc/jU4GT+T8Cg6QiBuFKl4eEtM
-         gtifr7OxQeR681Ydnn+reD5twCxbttg+Y/wvZ8Cj/8Ud5ALYwIy7mxgCeoNbiUGlr4Bn
-         gqWMS0PIZ/dxx/7BmNpZ/ZRClj2cxAqVL5VLhsUWZDSKgpSY5fEPonzxWsV2V6dQT/n+
-         MepWdeP3NDZETARRhKbz+5mLoyaUvbi+n7PcM69XB86egwdmjoTS65uWyCMSgiz/vKQU
-         hEqQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX+2CvyFPmqQnFB1IaWFeDxwkLwZRv2yvfxf2pMI5pbMZXmDdnBfKfB4RB1wwWTb+3PSi8HMPFpNmE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxshINIfrfjjFlNELEg67E/iYJnqxW3pImfVwBDpN65GylAWN1c
-	3Z9ZQ8o1AvXT34UU9Q2saClfBYeo0EdUU1+HU+ZIuKDpjn2Km5VE459R
-X-Gm-Gg: ASbGncs7X5JPVUJu/v+jKCA1rXH0PYdGkeE0nwmtxwlmZIe1CsgYQ9Ntk2Wm2P4byBt
-	fzg8cXXdUaPZdWMq8IHcI7WTdg+Kcje8LVQcERiLLHCUn+hBu25C51Hi/WawKxqMLkl3XCNcuMC
-	tMs000FbDKhvn5N2noFmT7ozfWNifKRxJvkf4cOPxquSkQ0nnCOQRK/5oya9snYghxBcf3DBnps
-	mCN2qr8a14TuA+5f2NNKXlXs5FS4+D1q5ilKIg6WbRUtb/ksefsIapn7I80L8gZ05BmosDVkwoc
-	6IxjmztXtT1gZGu9H+5ffOA0DCQwjlwpkZM13R0s7Cs2Y3mUBIm7/ZQRKRcuYNxv3pLrlxxfNUs
-	rmIC+yIGDZw1ztIlv3rNV9bFHc+O/cQuUqRZv1UrbeBoFcHOZhQScfVgDLjkEFdF46dk5SbWiFW
-	p0dIWUH944kf17y1LqlA==
-X-Google-Smtp-Source: AGHT+IHg7YfzZvEtN6mCngPjh3XRjwH5HKG3Rq+sq1Iz6laR/FfiXWjxHYGZW5Q1gopMiO+TIMUcVw==
-X-Received: by 2002:a05:6512:118d:b0:594:2c42:abd4 with SMTP id 2adb3069b0e04-594493090d3mr889484e87.5.1762427378302;
-        Thu, 06 Nov 2025 03:09:38 -0800 (PST)
-Received: from NB-6746.corp.yadro.com ([188.243.183.84])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5944a013af4sm664510e87.3.2025.11.06.03.09.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Nov 2025 03:09:37 -0800 (PST)
-From: Artem Shimko <a.shimko.dev@gmail.com>
-To: andriy.shevchenko@linux.intel.com
-Cc: andi.shyti@kernel.org,
-	jsd@semihalf.com,
-	linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	mika.westerberg@linux.intel.com,
-	Artem Shimko <a.shimko.dev@gmail.com>
-Subject: Re: [PATCH] i2c: designware: Replace magic numbers with named constants
-Date: Thu,  6 Nov 2025 14:09:35 +0300
-Message-ID: <20251106110935.2563071-1-a.shimko.dev@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <aQx-BlL9PjHeR7Dy@smile.fi.intel.com>
-References: <aQx-BlL9PjHeR7Dy@smile.fi.intel.com>
+	s=arc-20240116; t=1762436333; c=relaxed/simple;
+	bh=PUbGlGve1OY97wLizHOn9zCbOJdRe7DMrLqxKa0Ve94=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KACtr0x43tUm6TthvCi5lZ1zaL2i3SiLxSGcDEYuJ+rPT6sDqufJmqr2HZqRO+P6zMsGrfIa1TErkKp+Kyk9XYzZt+oKQ2LGjo73i5q+NXl+kcQw7WEI8S+du6PPT/wPnVkxd2bxbdpbUoUCURwJFA9RpSpSSdW6dUYTydAF3kA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IEK1O99U; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1262C4AF09;
+	Thu,  6 Nov 2025 13:38:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762436332;
+	bh=PUbGlGve1OY97wLizHOn9zCbOJdRe7DMrLqxKa0Ve94=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=IEK1O99UrYtzBgNj3leFq0xzeFnUTs+Wd/5V2vC2h4AAkZkC09mDodC0bs0CNkslV
+	 09F8yVn85/8hVzA1OEddy/q77khoj6MGwp0uaRGbCxI9OP8toQiOviKmxq5GaHdNGT
+	 cj59IXeNwpvmMx+uhaGk4/jfQnXiYsio+9pC3/VSqd/rJUfdyLjG2T/HBSF2yByFY+
+	 YZ4wPKCMKna2oQdPlwOrWAuDaW6EMB789JPavli82X5zkgAdB9GjLtfCpvaumHv0Yf
+	 LOjnk3AN0BxNrhLSkZMpTLxrIVqCAZQEbGzSVThgvGjzsIroJFozMtllAoYjtdWvji
+	 Uk0SFBzGVxNFQ==
+Date: Thu, 6 Nov 2025 13:38:48 +0000
+From: Lee Jones <lee@kernel.org>
+To: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Cc: Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux@ew.tq-group.com
+Subject: Re: [PATCH v3 2/4] mfd: tqmx86: refactor I2C setup
+Message-ID: <20251106133848.GL8064@google.com>
+References: <bc9ce42883d10d54bc0954024d7e2312ff45fdb6.1761123080.git.matthias.schiffer@ew.tq-group.com>
+ <999718e052b5e600813cefc3ec19ba3028afa034.1761123080.git.matthias.schiffer@ew.tq-group.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <999718e052b5e600813cefc3ec19ba3028afa034.1761123080.git.matthias.schiffer@ew.tq-group.com>
 
-Hi Mika, Andy,
+On Wed, 22 Oct 2025, Matthias Schiffer wrote:
 
-Thank you both for the reviews! I'll prepare v2 that addresses all feedback.
+> Preparation for supporting the second I2C controller, and detecting both
+> ocores and machxo2 controllers.
+> 
+> - Avoid the confusing "soft" I2C controller term - just call it the
+>   ocores I2C
+> - All non-const parts of the MFD cell are moved from global variables
+>   into new functions tqmx86_setup_i2c_ocores() and tqmx86_setup_i2c()
+> - Define TQMX86_REG_I2C_DETECT relative to I2C base register
+> 
+> Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+> ---
+> 
+> v2: no changes
+> v3: no changes
+> 
+>  drivers/mfd/tqmx86.c | 130 ++++++++++++++++++++++++-------------------
+>  1 file changed, 74 insertions(+), 56 deletions(-)
+> 
+> diff --git a/drivers/mfd/tqmx86.c b/drivers/mfd/tqmx86.c
+> index 1cba3b67b0fb9..3c6f158bf1a45 100644
+> --- a/drivers/mfd/tqmx86.c
+> +++ b/drivers/mfd/tqmx86.c
+> @@ -18,7 +18,7 @@
+>  
+>  #define TQMX86_IOBASE	0x180
+>  #define TQMX86_IOSIZE	0x20
+> -#define TQMX86_IOBASE_I2C	0x1a0
+> +#define TQMX86_IOBASE_I2C1	0x1a0
+>  #define TQMX86_IOSIZE_I2C	0xa
+>  #define TQMX86_IOBASE_WATCHDOG	0x18b
+>  #define TQMX86_IOSIZE_WATCHDOG	0x2
+> @@ -54,8 +54,8 @@
+>  #define TQMX86_REG_IO_EXT_INT_GPIO_SHIFT	4
+>  #define TQMX86_REG_SAUC		0x17
+>  
+> -#define TQMX86_REG_I2C_DETECT	0x1a7
+> -#define TQMX86_REG_I2C_DETECT_SOFT		0xa5
+> +#define TQMX86_REG_I2C_DETECT	0x7
+> +#define TQMX86_REG_I2C_DETECT_OCORES	0xa5
+>  
+>  static uint gpio_irq;
+>  module_param(gpio_irq, uint, 0);
+> @@ -65,17 +65,6 @@ static uint i2c1_irq;
+>  module_param(i2c1_irq, uint, 0);
+>  MODULE_PARM_DESC(i2c1_irq, "I2C1 IRQ number (valid parameters: 7, 9, 12)");
+>  
+> -enum tqmx86_i2c1_resource_type {
+> -	TQMX86_I2C1_IO,
+> -	TQMX86_I2C1_IRQ,
+> -};
+> -
+> -static struct resource tqmx_i2c_soft_resources[] = {
+> -	[TQMX86_I2C1_IO] = DEFINE_RES_IO(TQMX86_IOBASE_I2C, TQMX86_IOSIZE_I2C),
+> -	/* Placeholder for IRQ resource */
+> -	[TQMX86_I2C1_IRQ] = {},
+> -};
+> -
+>  static const struct resource tqmx_watchdog_resources[] = {
+>  	DEFINE_RES_IO(TQMX86_IOBASE_WATCHDOG, TQMX86_IOSIZE_WATCHDOG),
+>  };
+> @@ -91,28 +80,13 @@ static struct resource tqmx_gpio_resources[] = {
+>  	[TQMX86_GPIO_IRQ] = {},
+>  };
+>  
+> -static struct i2c_board_info tqmx86_i2c_devices[] = {
+> +static const struct i2c_board_info tqmx86_i2c1_devices[] = {
+>  	{
+>  		/* 4K EEPROM at 0x50 */
+>  		I2C_BOARD_INFO("24c32", 0x50),
+>  	},
+>  };
+>  
+> -static struct ocores_i2c_platform_data ocores_platform_data = {
+> -	.num_devices = ARRAY_SIZE(tqmx86_i2c_devices),
+> -	.devices = tqmx86_i2c_devices,
+> -};
+> -
+> -static const struct mfd_cell tqmx86_i2c_soft_dev[] = {
+> -	{
+> -		.name = "ocores-i2c",
+> -		.platform_data = &ocores_platform_data,
+> -		.pdata_size = sizeof(ocores_platform_data),
+> -		.resources = tqmx_i2c_soft_resources,
+> -		.num_resources = ARRAY_SIZE(tqmx_i2c_soft_resources),
+> -	},
+> -};
+> -
+>  static const struct mfd_cell tqmx86_devs[] = {
+>  	{
+>  		.name = "tqmx86-wdt",
+> @@ -238,13 +212,74 @@ static int tqmx86_setup_irq(struct device *dev, const char *label, u8 irq,
+>  	return 0;
+>  }
+>  
+> +static int tqmx86_setup_i2c(struct device *dev, const char *name,
+> +			    unsigned long i2c_base, const void *platform_data,
+> +			    size_t pdata_size, u8 irq)
+> +{
+> +	const struct resource resources[] = {
+> +		DEFINE_RES_IO(i2c_base, TQMX86_IOSIZE_I2C),
+> +		irq ? DEFINE_RES_IRQ(irq) : (struct resource) {},
+> +	};
+> +	const struct mfd_cell i2c_dev = {
+> +		.name = name,
+> +		.platform_data = platform_data,
+> +		.pdata_size = pdata_size,
+> +		.resources = resources,
+> +		.num_resources = ARRAY_SIZE(resources),
+> +	};
 
-Best regards,
-Artem
+No, please don't do it this way.
+
+Keep as much information as you can in easy to read, easy to reference,
+easy to find, easy to follow, etc static data.  If you have to add a
+couple more static structs above, sobeit, but all of this parameter
+passing through abstracted functions is a regression in readability and
+maintainability IMHO.
+
+> +	return devm_mfd_add_devices(dev, PLATFORM_DEVID_NONE, &i2c_dev, 1,
+> +				    NULL, 0, NULL);
+> +
+> +}
+> +
+> +static int tqmx86_setup_i2c_ocores(struct device *dev, const char *label,
+> +				   unsigned long i2c_base, int clock_khz, u8 irq,
+> +				   const struct i2c_board_info *devices,
+> +				   size_t num_devices)
+> +{
+> +	const struct ocores_i2c_platform_data platform_data = {
+> +		.clock_khz = clock_khz,
+> +		.num_devices = num_devices,
+> +		.devices = devices,
+> +	};
+> +
+> +	return tqmx86_setup_i2c(dev, "ocores-i2c", i2c_base, &platform_data,
+> +				sizeof(platform_data), irq);
+> +}
+> +
+> +static int tqmx86_detect_i2c(struct device *dev, const char *label,
+> +			     unsigned long i2c_base, int clock_khz, u8 irq,
+> +			     const struct i2c_board_info *devices,
+> +			     size_t num_devices, void __iomem *io_base,
+> +			     u8 irq_reg_shift)
+> +{
+> +	u8 i2c_det;
+> +
+> +	if (tqmx86_setup_irq(dev, label, irq, io_base, irq_reg_shift))
+> +		irq = 0;
+> +
+> +	/*
+> +	 * The I2C_DETECT register is in the range assigned to the I2C driver
+> +	 * later, so we don't extend TQMX86_IOSIZE. Use inb() for this one-off
+> +	 * access instead of ioport_map + unmap.
+> +	 */
+> +	i2c_det = inb(i2c_base + TQMX86_REG_I2C_DETECT);
+> +
+> +	if (i2c_det == TQMX86_REG_I2C_DETECT_OCORES)
+> +		return tqmx86_setup_i2c_ocores(dev, label, i2c_base, clock_khz,
+> +					       irq, devices, num_devices);
+> +
+> +	return 0;
+> +}
+> +
+>  static int tqmx86_probe(struct platform_device *pdev)
+>  {
+> -	u8 board_id, sauc, rev, i2c_det;
+> +	u8 board_id, sauc, rev;
+>  	struct device *dev = &pdev->dev;
+>  	const char *board_name;
+>  	void __iomem *io_base;
+> -	int err;
+> +	int err, clock_khz;
+>  
+>  	io_base = devm_ioport_map(dev, TQMX86_IOBASE, TQMX86_IOSIZE);
+>  	if (!io_base)
+> @@ -259,13 +294,6 @@ static int tqmx86_probe(struct platform_device *pdev)
+>  		 "Found %s - Board ID %d, PCB Revision %d, PLD Revision %d\n",
+>  		 board_name, board_id, rev >> 4, rev & 0xf);
+>  
+> -	/*
+> -	 * The I2C_DETECT register is in the range assigned to the I2C driver
+> -	 * later, so we don't extend TQMX86_IOSIZE. Use inb() for this one-off
+> -	 * access instead of ioport_map + unmap.
+> -	 */
+> -	i2c_det = inb(TQMX86_REG_I2C_DETECT);
+> -
+>  	if (gpio_irq) {
+>  		err = tqmx86_setup_irq(dev, "GPIO", gpio_irq, io_base,
+>  				       TQMX86_REG_IO_EXT_INT_GPIO_SHIFT);
+> @@ -273,23 +301,13 @@ static int tqmx86_probe(struct platform_device *pdev)
+>  			tqmx_gpio_resources[TQMX86_GPIO_IRQ] = DEFINE_RES_IRQ(gpio_irq);
+>  	}
+>  
+> -	ocores_platform_data.clock_khz = tqmx86_board_id_to_clk_rate(dev, board_id);
+> -
+> -	if (i2c_det == TQMX86_REG_I2C_DETECT_SOFT) {
+> -		if (i2c1_irq) {
+> -			err = tqmx86_setup_irq(dev, "I2C1", i2c1_irq, io_base,
+> -					       TQMX86_REG_IO_EXT_INT_I2C1_SHIFT);
+> -			if (!err)
+> -				tqmx_i2c_soft_resources[TQMX86_I2C1_IRQ] = DEFINE_RES_IRQ(i2c1_irq);
+> -		}
+> -
+> -		err = devm_mfd_add_devices(dev, PLATFORM_DEVID_NONE,
+> -					   tqmx86_i2c_soft_dev,
+> -					   ARRAY_SIZE(tqmx86_i2c_soft_dev),
+> -					   NULL, 0, NULL);
+> -		if (err)
+> -			return err;
+> -	}
+> +	clock_khz = tqmx86_board_id_to_clk_rate(dev, board_id);
+> +
+> +	err = tqmx86_detect_i2c(dev, "I2C1", TQMX86_IOBASE_I2C1, clock_khz, i2c1_irq,
+> +				tqmx86_i2c1_devices, ARRAY_SIZE(tqmx86_i2c1_devices),
+> +				io_base, TQMX86_REG_IO_EXT_INT_I2C1_SHIFT);
+> +	if (err)
+> +		return err;
+>  
+>  	return devm_mfd_add_devices(dev, PLATFORM_DEVID_NONE,
+>  				    tqmx86_devs,
+> -- 
+> TQ-Systems GmbH | Mühlstraße 2, Gut Delling | 82229 Seefeld, Germany
+> Amtsgericht München, HRB 105018
+> Geschäftsführer: Detlef Schneider, Rüdiger Stahl, Stefan Schneider
+> https://www.tq-group.com/
+
+-- 
+Lee Jones [李琼斯]
 
