@@ -1,271 +1,133 @@
-Return-Path: <linux-i2c+bounces-14014-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14015-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4CC50C3EC23
-	for <lists+linux-i2c@lfdr.de>; Fri, 07 Nov 2025 08:32:22 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id ECCF5C3F3B3
+	for <lists+linux-i2c@lfdr.de>; Fri, 07 Nov 2025 10:45:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4A72F3B11EB
-	for <lists+linux-i2c@lfdr.de>; Fri,  7 Nov 2025 07:30:57 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id A0E464EE7E0
+	for <lists+linux-i2c@lfdr.de>; Fri,  7 Nov 2025 09:44:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86D081C5F13;
-	Fri,  7 Nov 2025 07:30:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DDB13019D8;
+	Fri,  7 Nov 2025 09:42:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F2D0UnXs"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b1W3K4zj"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07B4C2D0283
-	for <linux-i2c@vger.kernel.org>; Fri,  7 Nov 2025 07:30:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29BE1302143;
+	Fri,  7 Nov 2025 09:42:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762500653; cv=none; b=gochNjm89rwUfLjYEzF2cN3HFs0B1YlO3tgqMpKsYb4OSGhAw9PLOgZkUaM23+OFXjT9mIO+PrneQS8U870y11Cz3MCetHc+0qEZ72rR8APRUh9fJGi+RK8uHKXj9QiEFzrSANrPyno5y77J15rH0Ju0VdAqeoK+HaCwTh/sicI=
+	t=1762508569; cv=none; b=T4K2j3z1StL1aTt/9hu1w6ed3eBplX6rCssk919EZLG6JnCgcn6n4Zx4M54uFncHf8v26bRmPv/jCRRWbtEK6whbbbny9E0ojdLOhMSh5CjbL1xY2BbX05RLFYv/k7rWlKL7bkUgoAt4KnblKopz7KSOsYHt2q0RPSRGIuxcz74=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762500653; c=relaxed/simple;
-	bh=f35DbpZpPqMDzZoRIqs7Osgf1PM69yqyjWw/dglp96Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qlFv27PHZ9oPz2AfK/d/NHHbfeiAr+a9vBpNDV/0x4DOa5tZVUTAART9+5aWWbW3VCGpgTxyPDhe/u/ffFV4NKxd6YQrkvIblOU3itR0spZNbxC9Ddbazd+ihxRB/oWV0d67cKmU1+CId3A1hP0nkJTsW9m8dKQ8TLTx23uMDr4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F2D0UnXs; arc=none smtp.client-ip=209.85.208.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-3737d0920e6so5068181fa.1
-        for <linux-i2c@vger.kernel.org>; Thu, 06 Nov 2025 23:30:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762500649; x=1763105449; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4M6PwHQesX19scpYMiKXrQJ0jxJ0uMLe/ADSgAzPkxs=;
-        b=F2D0UnXsBgpmz9PNRt+ECrBo4w7erhNmC97oPwsP4TrPXiT14dHqq1/xwaj+v/WXO3
-         tHFp84/rByrCXxBUz7fDOdtbDrlP6pOBRliRMEUotcj48DiJN/1ogIHVQ4+FSWwYzMPn
-         zPKQ/2396+5I0b9LDc83IOETtz5ZsdI5gyhM1K+yTuYYFpCRnP5S7Yor2h0zEDlUZ/6I
-         eMm8300+YF5g5uhzKCDZWo4SdIWgHN2v+QlSHfowa4PL/VVKSUS6BI46l0rMy2a6jYiB
-         pMZEnOZmACDqwa1ng5wPhfwYHuPxHzpKJA9PI4eKEhzw6nxG2PEfDgcPYByafJCw7r/7
-         2vzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762500649; x=1763105449;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=4M6PwHQesX19scpYMiKXrQJ0jxJ0uMLe/ADSgAzPkxs=;
-        b=hM54hedaXEZukK+kGGtVIYN6ORJEjwxVK+dJR4Tu4qMHmZu6c7fjXgSFF9BqXdypPx
-         X4z3jt5NqHsFVUoahyiXsPgaAM6vFEPlnjYn32KXt1ZJKauSMB9uB/X/q1MNDo2FUrlT
-         Xb8KqB92mpkb7nEmvAdvzL/KF36kyf4WLgNeYwycDbHw/EQneg1dPsfaPJHu5DxEwvlt
-         SfpDkfL4BwSRCli4slpu9TNWnxaOGiMe6RlSYLEAm7kzayM8aUiJE2Jv89XfbwEZmwI5
-         TrLIQN53QBRX7IoCwIivppjvj4x6xyh621bwJnf5D/V+gtyPVhe/kzO5utONs5kU5jKQ
-         E9Zw==
-X-Forwarded-Encrypted: i=1; AJvYcCWaN5HxgvRPgstNJkvUgXITL91hGHersF2hrl9gfqwXOQzCMtqZ7zdXH07cwXSI7f/RxiJRMaa+5YU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywy2vep+1sJ4Iglh+n/SRAGybSxl52/SzXNx3uxiMzwPfsrEP/t
-	sTry4aVoSFmP19w+Ufw3Xj4w2YZ6fNAJj192fiE9BROjuwC6ne0YIRm5sSsy4CvPzg0=
-X-Gm-Gg: ASbGnct4wV6dkHYNMx5AZ8qTghGlVzXhxIXwk9Jyl7NC+Mkt/+Jv2jZYciK6xbZhl7w
-	XxrUdKlFoVVcJ3iXzIa41AK95BaDFxLqYcKIPHxTxqAvE6T6jB7vd0Pu0SZJYg1/B/nRqwk5MDz
-	/ln/74/IQrS4fj6Lh9m/6Xn7O8+b9Pq3w54d0rD7b/kUlM7PeeM2Et2bc6qYojvLFNDG3AK75RT
-	sL9gCW/oessUcNzSITm5DS9XhbfNed0J75boXbhO2VQ9gZA8EMWFyz6sX73RG1GdoEd1ScZtIUk
-	b7QRB7KNL0XHR+Wjr8rq6A3Aom3cvVICiaWSyK6HQvcktCptqVAt4KcuHLy3Ht7TiaiLBTsDnWL
-	sv/V8zMoUaLAOXy0jzXSR0BUn0reVQFS4H6+q+SHtLf2qyOAiTIx6bLgRMYLWhnNs801dP9VRYU
-	coNnrJGYnV60BeuSkE
-X-Google-Smtp-Source: AGHT+IEM6jJW7S0zoNmv87VOalpMKNhTySFhZbseoiHIzvl3ywyxFEtICW2fvawnuW/rzdA1JD3pIA==
-X-Received: by 2002:a05:651c:4194:b0:37a:2e2a:da6f with SMTP id 38308e7fff4ca-37a742ce607mr4452981fa.44.1762500648643;
-        Thu, 06 Nov 2025 23:30:48 -0800 (PST)
-Received: from NB-6746.corp.yadro.com ([188.243.183.84])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5944a013bd8sm1284123e87.1.2025.11.06.23.30.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Nov 2025 23:30:47 -0800 (PST)
-From: Artem Shimko <a.shimko.dev@gmail.com>
-To: mika.westerberg@linux.intel.com
-Cc: a.shimko.dev@gmail.com,
-	andi.shyti@kernel.org,
-	andriy.shevchenko@linux.intel.com,
-	jsd@semihalf.com,
-	linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	oe-kbuild-all@lists.linux.dev,
-	kernel test robot <lkp@intel.com>
-Subject: [PATCH v3] i2c: designware: Replace magic numbers with named constants
-Date: Fri,  7 Nov 2025 10:30:39 +0300
-Message-ID: <20251107073039.2646048-1-a.shimko.dev@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <202511071402.qHS6LLi9-lkp@intel.com>
-References: <202511071402.qHS6LLi9-lkp@intel.com>
+	s=arc-20240116; t=1762508569; c=relaxed/simple;
+	bh=WJXOLztqSo4giTqFOw8G/lBkaE8BpltWb1JC16Iyvfc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qg1T9xmJWySa1vhDvtDA8i3UvdGMhJoi6pi0ODy0zrfSZiPJ/DzQb8Sy2q0QS7TT2O3cwggbhN9m1QF8vykb89mV5krxktQ64oYhWzAbeJCHxC21rvdCxf34ldOuakrQuM/92+XT/+EdeWiOsqRzIfjp6o1cq2fswWRRvVDJs5g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b1W3K4zj; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1762508568; x=1794044568;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WJXOLztqSo4giTqFOw8G/lBkaE8BpltWb1JC16Iyvfc=;
+  b=b1W3K4zjOXJUrVFks0odcScGM8Dape/G3yLyyNc06CzWStiNePvlDi36
+   tSkwy0g5p4AC6xz4BOdHQssSYZlUUXSmH64psa2kaFgozADHbfz9lvkSV
+   SwfMMBbkFZQiLDBx/8FP+LoUM4Mldf6F/DE4POAZD/B2szS7tineInY2i
+   Bbe/jq8c/+RcQ/y8CF4ubTRrzFd131MwOqoY77+7NwCniZtndcl2e739d
+   xjU3krZSReC4UmLE5pFQy6VkrRYxYyPk0DBQ26He8ecuj/TS3cLXx/1hN
+   aSEXxxp9RofsLGbrzYtlv7fGigj1Nl2tuuG5mlTR8xYhhcNaL4RnCdvNm
+   Q==;
+X-CSE-ConnectionGUID: MaXwSwOIQpm4tP0PJKOtbQ==
+X-CSE-MsgGUID: aNu06NvYS8iKx+oYTEJelQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11605"; a="63668030"
+X-IronPort-AV: E=Sophos;i="6.19,286,1754982000"; 
+   d="scan'208";a="63668030"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2025 01:42:47 -0800
+X-CSE-ConnectionGUID: oCQK/vHQQpCJVDh93eyUgw==
+X-CSE-MsgGUID: jz6q+Cp+QiGNuEuTne9Otg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,286,1754982000"; 
+   d="scan'208";a="187253469"
+Received: from vpanait-mobl.ger.corp.intel.com (HELO ashevche-desk.local) ([10.245.245.27])
+  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2025 01:42:43 -0800
+Received: from andy by ashevche-desk.local with local (Exim 4.98.2)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1vHIzQ-00000006QDe-05pD;
+	Fri, 07 Nov 2025 11:42:40 +0200
+Date: Fri, 7 Nov 2025 11:42:39 +0200
+From: "andriy.shevchenko@linux.intel.com" <andriy.shevchenko@linux.intel.com>
+To: Ryan Chen <ryan_chen@aspeedtech.com>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>, BMC-SW <BMC-SW@aspeedtech.com>,
+	"benh@kernel.crashing.org" <benh@kernel.crashing.org>,
+	"joel@jms.id.au" <joel@jms.id.au>,
+	"andi.shyti@kernel.org" <andi.shyti@kernel.org>,
+	"jk@codeconstruct.com.au" <jk@codeconstruct.com.au>,
+	"robh@kernel.org" <robh@kernel.org>,
+	"krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+	"conor+dt@kernel.org" <conor+dt@kernel.org>,
+	"andrew@codeconstruct.com.au" <andrew@codeconstruct.com.au>,
+	"p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+	"naresh.solanki@9elements.com" <naresh.solanki@9elements.com>,
+	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+	"openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	"linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v21 3/4] i2c: ast2600: Add controller driver for new
+ register layout
+Message-ID: <aQ2_D6vs4m1brNk0@smile.fi.intel.com>
+References: <20251027061240.3427875-1-ryan_chen@aspeedtech.com>
+ <20251027061240.3427875-4-ryan_chen@aspeedtech.com>
+ <f08b1078-fc8c-4834-984c-813e01291033@kernel.org>
+ <TY2PPF5CB9A1BE64FEBCCCDC7631B355135F2C3A@TY2PPF5CB9A1BE6.apcprd06.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <TY2PPF5CB9A1BE64FEBCCCDC7631B355135F2C3A@TY2PPF5CB9A1BE6.apcprd06.prod.outlook.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-Replace various magic numbers with properly named constants to improve
-code readability and maintainability. This includes constants for
-register access, timing adjustments, timeouts, FIFO parameters,
-and default values.
+On Fri, Nov 07, 2025 at 06:26:39AM +0000, Ryan Chen wrote:
+> > On 27/10/2025 07:12, Ryan Chen wrote:
 
-The change makes the code more self-documenting without altering any
-functionality.
+...
 
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202511071402.qHS6LLi9-lkp@intel.com/
-Signed-off-by: Artem Shimko <a.shimko.dev@gmail.com>
----
-Hello
+> Add new file i2c-aspeed-core.c to do legacy probe and i2c-ast2600 probe.
+> 
+> 	if (of_device_is_compatible(dev_of_node(dev), "aspeed,ast2600-i2c-bus") &&
 
---
-Best regards,
-Artem Shimko
+	if (device_is_compatible(dev, "aspeed,ast2600-i2c-bus") &&
 
-ChangeLog:
-  v1:
-    * https://lore.kernel.org/all/20251105161845.2535367-1-a.shimko.dev@gmail.com/T/#u
-  v2:
-    * Move register-related constants to i2c-designware-core.h
-    * Remove unnecessary comments to reduce clutter  
-    * Keep only essential timeouts and default parameters in .c file
-    * Use FIELD_GET() for FIFO depth extraction as suggested
-  v3:
-    * Add missing include for linux/bitfield.h
+> 	    of_parse_phandle(dev_of_node(dev), "aspeed,global-regs", 0)) {
 
- drivers/i2c/busses/i2c-designware-common.c | 33 ++++++++++++++--------
- drivers/i2c/busses/i2c-designware-core.h   | 13 +++++++++
- 2 files changed, 35 insertions(+), 11 deletions(-)
+Not sure why do you need this. Isn't it as simple as
 
-diff --git a/drivers/i2c/busses/i2c-designware-common.c b/drivers/i2c/busses/i2c-designware-common.c
-index 5b1e8f74c4ac..3bc55068da03 100644
---- a/drivers/i2c/busses/i2c-designware-common.c
-+++ b/drivers/i2c/busses/i2c-designware-common.c
-@@ -12,6 +12,7 @@
- #define DEFAULT_SYMBOL_NAMESPACE	"I2C_DW_COMMON"
- 
- #include <linux/acpi.h>
-+#include <linux/bitfield.h>
- #include <linux/clk.h>
- #include <linux/delay.h>
- #include <linux/device.h>
-@@ -34,6 +35,14 @@
- 
- #include "i2c-designware-core.h"
- 
-+#define DW_IC_DEFAULT_BUS_CAPACITANCE_PF	100
-+
-+#define DW_IC_ABORT_TIMEOUT_US			10
-+#define DW_IC_ABORT_TOTAL_TIMEOUT_US		100
-+
-+#define DW_IC_BUSY_POLL_TIMEOUT_US		1100
-+#define DW_IC_BUSY_TOTAL_TIMEOUT_US		20000
-+
- static const char *const abort_sources[] = {
- 	[ABRT_7B_ADDR_NOACK] =
- 		"slave address not acknowledged (7bit mode)",
-@@ -106,7 +115,7 @@ static int dw_reg_read_word(void *context, unsigned int reg, unsigned int *val)
- 	struct dw_i2c_dev *dev = context;
- 
- 	*val = readw(dev->base + reg) |
--		(readw(dev->base + reg + 2) << 16);
-+		(readw(dev->base + reg + DW_IC_REG_STEP_BYTES) << DW_IC_REG_WORD_SHIFT);
- 
- 	return 0;
- }
-@@ -116,7 +125,7 @@ static int dw_reg_write_word(void *context, unsigned int reg, unsigned int val)
- 	struct dw_i2c_dev *dev = context;
- 
- 	writew(val, dev->base + reg);
--	writew(val >> 16, dev->base + reg + 2);
-+	writew(val >> DW_IC_REG_WORD_SHIFT, dev->base + reg + DW_IC_REG_STEP_BYTES);
- 
- 	return 0;
- }
-@@ -165,7 +174,7 @@ int i2c_dw_init_regmap(struct dw_i2c_dev *dev)
- 	if (reg == swab32(DW_IC_COMP_TYPE_VALUE)) {
- 		map_cfg.reg_read = dw_reg_read_swab;
- 		map_cfg.reg_write = dw_reg_write_swab;
--	} else if (reg == (DW_IC_COMP_TYPE_VALUE & 0x0000ffff)) {
-+	} else if (reg == lower_16_bits(DW_IC_COMP_TYPE_VALUE)) {
- 		map_cfg.reg_read = dw_reg_read_word;
- 		map_cfg.reg_write = dw_reg_write_word;
- 	} else if (reg != DW_IC_COMP_TYPE_VALUE) {
-@@ -384,7 +393,7 @@ int i2c_dw_fw_parse_and_configure(struct dw_i2c_dev *dev)
- 	i2c_parse_fw_timings(device, t, false);
- 
- 	if (device_property_read_u32(device, "snps,bus-capacitance-pf", &dev->bus_capacitance_pF))
--		dev->bus_capacitance_pF = 100;
-+		dev->bus_capacitance_pF = DW_IC_DEFAULT_BUS_CAPACITANCE_PF;
- 
- 	dev->clk_freq_optimized = device_property_read_bool(device, "snps,clk-freq-optimized");
- 
-@@ -539,8 +548,9 @@ void __i2c_dw_disable(struct dw_i2c_dev *dev)
- 
- 		regmap_write(dev->map, DW_IC_ENABLE, enable | DW_IC_ENABLE_ABORT);
- 		ret = regmap_read_poll_timeout(dev->map, DW_IC_ENABLE, enable,
--					       !(enable & DW_IC_ENABLE_ABORT), 10,
--					       100);
-+					       !(enable & DW_IC_ENABLE_ABORT),
-+					       DW_IC_ABORT_TIMEOUT_US,
-+					       DW_IC_ABORT_TOTAL_TIMEOUT_US);
- 		if (ret)
- 			dev_err(dev->dev, "timeout while trying to abort current transfer\n");
- 	}
-@@ -552,7 +562,7 @@ void __i2c_dw_disable(struct dw_i2c_dev *dev)
- 		 * in that case this test reads zero and exits the loop.
- 		 */
- 		regmap_read(dev->map, DW_IC_ENABLE_STATUS, &status);
--		if ((status & 1) == 0)
-+		if (!(status & 1))
- 			return;
- 
- 		/*
-@@ -635,7 +645,8 @@ int i2c_dw_wait_bus_not_busy(struct dw_i2c_dev *dev)
- 
- 	ret = regmap_read_poll_timeout(dev->map, DW_IC_STATUS, status,
- 				       !(status & DW_IC_STATUS_ACTIVITY),
--				       1100, 20000);
-+				       DW_IC_BUSY_POLL_TIMEOUT_US,
-+				       DW_IC_BUSY_TOTAL_TIMEOUT_US);
- 	if (ret) {
- 		dev_warn(dev->dev, "timeout waiting for bus ready\n");
- 
-@@ -699,12 +710,12 @@ int i2c_dw_set_fifo_size(struct dw_i2c_dev *dev)
- 	if (ret)
- 		return ret;
- 
--	tx_fifo_depth = ((param >> 16) & 0xff) + 1;
--	rx_fifo_depth = ((param >> 8)  & 0xff) + 1;
-+	tx_fifo_depth = FIELD_GET(DW_IC_FIFO_TX_FIELD, param) + 1;
-+	rx_fifo_depth = FIELD_GET(DW_IC_FIFO_RX_FIELD, param) + 1;
- 	if (!dev->tx_fifo_depth) {
- 		dev->tx_fifo_depth = tx_fifo_depth;
- 		dev->rx_fifo_depth = rx_fifo_depth;
--	} else if (tx_fifo_depth >= 2) {
-+	} else if (tx_fifo_depth >= DW_IC_FIFO_MIN_DEPTH) {
- 		dev->tx_fifo_depth = min_t(u32, dev->tx_fifo_depth,
- 				tx_fifo_depth);
- 		dev->rx_fifo_depth = min_t(u32, dev->rx_fifo_depth,
-diff --git a/drivers/i2c/busses/i2c-designware-core.h b/drivers/i2c/busses/i2c-designware-core.h
-index 347843b4f5dd..a699953bf5ae 100644
---- a/drivers/i2c/busses/i2c-designware-core.h
-+++ b/drivers/i2c/busses/i2c-designware-core.h
-@@ -41,6 +41,19 @@
- #define DW_IC_DATA_CMD_DAT			GENMASK(7, 0)
- #define DW_IC_DATA_CMD_FIRST_DATA_BYTE		BIT(11)
- 
-+/*
-+ * Register access parameters
-+ */
-+#define DW_IC_REG_STEP_BYTES			2
-+#define DW_IC_REG_WORD_SHIFT			16
-+
-+/*
-+ * FIFO depth configuration
-+ */
-+#define DW_IC_FIFO_TX_FIELD			GENMASK(23, 16)
-+#define DW_IC_FIFO_RX_FIELD			GENMASK(15, 8)
-+#define DW_IC_FIFO_MIN_DEPTH			2
-+
- /*
-  * Registers offset
-  */
+	    device_property_present(dev, "aspeed,global-regs", 0)) {
+
+or something between these lines?
+
+> 		ret = ast2600_i2c_probe(pdev);
+> 	} else {
+> 		ret = aspeed_i2c_probe(pdev);
+> 	}
+
 -- 
-2.43.0
+With Best Regards,
+Andy Shevchenko
+
 
 
