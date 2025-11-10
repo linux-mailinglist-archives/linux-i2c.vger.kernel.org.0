@@ -1,43 +1,43 @@
-Return-Path: <linux-i2c+bounces-14025-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14026-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id B89D1C454F8
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C89DC454F5
 	for <lists+linux-i2c@lfdr.de>; Mon, 10 Nov 2025 09:06:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D596C4E8E7F
-	for <lists+linux-i2c@lfdr.de>; Mon, 10 Nov 2025 08:06:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CFF0B188F8B6
+	for <lists+linux-i2c@lfdr.de>; Mon, 10 Nov 2025 08:06:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EB0B2F7AD5;
-	Mon, 10 Nov 2025 08:05:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 824422F7479;
+	Mon, 10 Nov 2025 08:05:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="ndwI9EoV"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="bmdeFTks"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from CY3PR05CU001.outbound.protection.outlook.com (mail-westcentralusazon11013026.outbound.protection.outlook.com [40.93.201.26])
+Received: from BYAPR05CU005.outbound.protection.outlook.com (mail-westusazon11010020.outbound.protection.outlook.com [52.101.85.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 100302E92B4;
-	Mon, 10 Nov 2025 08:05:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.201.26
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76A672F693D;
+	Mon, 10 Nov 2025 08:05:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.85.20
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762761940; cv=fail; b=XO8XFwQtOKcVSK/hN52jxmoOn2unaxh+RFL04Gb5cSR+UJDVL8KwB8UDnq4e/RqP72bgayZ+Zn1+8ETxBcDbezVt9I+C2d7PKlqFAsEBypH/vm0huYmvZFm10UN3damBWr3DuIxqPJemg/LxE6oxG48VLSNn+kMKbwCCwmL/knk=
+	t=1762761951; cv=fail; b=LKzuVJm94iaVjCgzlPq3+3Kz0wvRxPiZHlI09qkC40xBtx8tB5wWrEWm3cy2RN8NmdvdZgA2M0lrAfon6VcH9fntbkCMiZhux5Cv8qLYr4pQba9viGtN2M4U9niRbeeyua5pmIyOZoXRpmZb62TjmVjykwOLWwPu5/AgxR0iirY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762761940; c=relaxed/simple;
-	bh=YtijUKS4OVjgxHE2pTWTv88gaS+rABbezORBHXeC7z0=;
+	s=arc-20240116; t=1762761951; c=relaxed/simple;
+	bh=kQAOcqkGBH/4F/xtuua/tjVWmwISs861LDQ51jlPim8=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tTOueBp4Np9EeeuaRIHzosyIcDfqOQRyKQgW3Uu7IDolECufFZuEeJk+6pWbgP1MPu/FY1WvX7TWlO91vuL+B/LNb5W0PRCbBA+6hyrU8EM4lnyLIdI1R4DLLSekPuPT7TO74PKwjqaz6GaNa3tzKGF1pGu7X19vLuE0CgvKDqU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=ndwI9EoV; arc=fail smtp.client-ip=40.93.201.26
+	 MIME-Version:Content-Type; b=CBjCFr3N2YSdjxNuVCDdudnyBoynAaBGHRbLG95aUPevHDB4l3V3nEfhPK2DBGNKy0TRPfYySnfDBzTRNw92R7LLFUcVS6dXEue4wt/TIQyLznRygktLgo4IXt8aYABwMsdHUmJMolFjvvRWJlFNEpRKdOv91cdJPkKv6Ou38gg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=bmdeFTks; arc=fail smtp.client-ip=52.101.85.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=tn/ES5fW2f8pKp4N6Xze1+WYPGt2Txf0cVFPBIvqXACTDn0+N0BYKMA8Zsyo6GGs18iMmDWCXAklMBjSWZCfbJDjq57Cey2hfuGLAzQVtY8ysRbhcTEQDp7eUL+iKj3p9lRNxUQTOOUeAy4/temJ1TCj1bSWz/F1Fr0WVtQwi6BHJYsT2EHJn7xmejO5BF1L5ov4C5omNOO+GIczGrhRd1PrQyVpJMWPOA8lsuWyKXXuFkiTltsYIL+wGj3o4REzdONV19VYLnCU0vAYrGMnoiWVApjNXinr8x0qx+Plk6mGpaupyJlCgASwg6Xr15dDFBn+vqVIcmWutvwc9ZhoiA==
+ b=GeHtlD6rOtGPosf+WfOZMWhgpL/eLiaEObfmArL8tU/0AgBrUHX4g/F54z0NVR1eGQ50YRiEh0sgD0e8UeYLrs/N8xY+JNaMsiHw5iHovd2gVYWOiIci82dSjOTEt0zLMkoR+sc5zH87tD4eyUfkzglrIhFQGOfW3o/AI7k6vhdeWhQthF5j7UiNjcgBS5UB0NcZMDCW9zPXnUKn4nlsyABpkfdKc/cZZnSLYPaFUsko+MC7IIX172KMeOkP8MJza4FGQNpp7JC12zKkurVdJ+fqD26BtqVYlKvs86iJEYY4saQbytb70XIlflNw6WDaFIBA90YQonFs0Yu1B7CenA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OWkKEK1WO0mVoE5r+XtIkA49C5pYUAq8H2sq94aPZMk=;
- b=DWZnizAYY4CaXP1adnm7Q5YZFV8olTtHjQmGPpjIVfWyf8LijmXNBExiFb6nYAu0RDNF7w7J7WEZzcVVR7+NjUn4bpxPmdCD39g0AoswNzEVOUtphwhtVRCrY0zaMeQs4V+wB8Dmp45gXCK36Y6nNliqFI7ndpJhWYqSVqjhk/Ds4KRK7v+HINaYBDTPKszTdhIp7wIoj+dDVwc1ZtNwnAEbzSZQzbWU82dw6OpYWRSjmRiX4aV1w2Msah82GXLehoK3TLMppUKZp4kWjvAhI6DPGsalJoofzwzi+XLfMrxz/l/nRkz95ADiqAFd7TW9FzV8PVDmEF2wBk0BPX52Lg==
+ bh=8LI/jFIMi0mcHjfAsOAvLkWynpLHI7xl4zwnAI5rwt0=;
+ b=i9M8jGFjV6D7YX7Jp/JN+s3NRxMORILB2dSJeQcJUaOodEtoTuW0GH5J6/D8D7m8QLdNkO5u+Hdd88ZgSqkOjtfdQXBZ6Q6sX27feqxJlRu+UC+KHSL7MkvC0XD4vFTHujims3/YT1YmyKCpC3s8LZWikAZWLCEaJGFRr06ko7Gw7ZiGqxRVVZrOqvNIhuXKEkXungA6iuXX8nhbhICxj0w0P+G9ISQOZEgOzrIQQXi/puhUEjedHpm+TUdyLqFmz+OFKvABhXh+lJwuYUaRZ6j3WS27Pr/4qEF7fPLWF71mWnb2fBGmuFxpJ8KGWYEAt5lBgslOOr1AyBB2H2W3NA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  216.228.117.160) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
@@ -45,18 +45,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OWkKEK1WO0mVoE5r+XtIkA49C5pYUAq8H2sq94aPZMk=;
- b=ndwI9EoVfVix89gEPU1FQATKc1wn7LzkJyQlN69TFTrSnAgvM91NyYAj4Qsr8FYGL+QH/POIQ0nz2uBXqu4DKM2HKxJSH5SPtC/3hVKOAV/zEvE1mh8a4cE0opPwffO/8X0E4i/UEIVLbjFHSt+DJLhVWZMVNN+uknjJ+QP6kBBE/Y568Vo4f6AWBXEUsP6kwhl13mjQUm3CGptWGaL4jFNqv00EXtuAxD0qmv3H7zqWiUly5RdYahl/8MZMn2S5p51QQodaAtzYMRnqm0DX3EoeHxkXRQf6fdE1p5044B6b+3xpogzY4/AzOqD+ehdYA5RMLlzM4fIURxVAw3dJaw==
-Received: from SJ0PR13CA0154.namprd13.prod.outlook.com (2603:10b6:a03:2c7::9)
- by SN7PR12MB8001.namprd12.prod.outlook.com (2603:10b6:806:340::5) with
+ bh=8LI/jFIMi0mcHjfAsOAvLkWynpLHI7xl4zwnAI5rwt0=;
+ b=bmdeFTks6OqVw8ZmDy9SwhoAK39SIXszhHbsWgy8jhb8R5IupxWbLtiSmcs6mwVY35gA+1ClDYtCIe5caNadsgYe5uNV1BxEFDEEmkxbqrGSJ7EHVklOVj72Dbru3NKc64DYiwKRW7E6Coz+eUSqWR56qKjIp1LGVRidtXWqhqkMwTmCnQdZ8HWB72yJJ/kxxMrH0M4IM+8oEkuiCOQvcKxNg4VbxX9kjWCTK1PuYJqFTjQd8xnrNKaAis0PAvYsBIhuAyy20sYRFDjVnxCXBabiG+lz+vZMIrRmMQfxX2DAo9y+Bc3XBIKTNuw/B0e/wdpdSD5aUZlzU5GOEwDD+A==
+Received: from BY3PR04CA0025.namprd04.prod.outlook.com (2603:10b6:a03:217::30)
+ by IA1PR12MB7518.namprd12.prod.outlook.com (2603:10b6:208:419::18) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9298.16; Mon, 10 Nov
- 2025 08:05:33 +0000
-Received: from SJ5PEPF000001D5.namprd05.prod.outlook.com
- (2603:10b6:a03:2c7:cafe::d6) by SJ0PR13CA0154.outlook.office365.com
- (2603:10b6:a03:2c7::9) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9320.14 via Frontend Transport; Mon,
- 10 Nov 2025 08:05:33 +0000
+ 2025 08:05:40 +0000
+Received: from SJ5PEPF000001D6.namprd05.prod.outlook.com
+ (2603:10b6:a03:217:cafe::6b) by BY3PR04CA0025.outlook.office365.com
+ (2603:10b6:a03:217::30) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9298.16 via Frontend Transport; Mon,
+ 10 Nov 2025 08:05:08 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
@@ -64,20 +64,20 @@ Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
  216.228.117.160 as permitted sender) receiver=protection.outlook.com;
  client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
 Received: from mail.nvidia.com (216.228.117.160) by
- SJ5PEPF000001D5.mail.protection.outlook.com (10.167.242.57) with Microsoft
+ SJ5PEPF000001D6.mail.protection.outlook.com (10.167.242.58) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9320.13 via Frontend Transport; Mon, 10 Nov 2025 08:05:33 +0000
+ 15.20.9320.13 via Frontend Transport; Mon, 10 Nov 2025 08:05:39 +0000
 Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
  (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 10 Nov
- 2025 00:05:21 -0800
+ 2025 00:05:26 -0800
 Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail202.nvidia.com
  (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 10 Nov
- 2025 00:05:20 -0800
+ 2025 00:05:26 -0800
 Received: from kkartik-desktop.nvidia.com (10.127.8.13) by mail.nvidia.com
  (10.129.68.10) with Microsoft SMTP Server id 15.2.2562.20 via Frontend
- Transport; Mon, 10 Nov 2025 00:05:15 -0800
+ Transport; Mon, 10 Nov 2025 00:05:21 -0800
 From: Kartik Rajput <kkartik@nvidia.com>
 To: <akhilrajeev@nvidia.com>, <andi.shyti@kernel.org>, <robh@kernel.org>,
 	<krzk+dt@kernel.org>, <conor+dt@kernel.org>, <thierry.reding@gmail.com>,
@@ -86,9 +86,9 @@ To: <akhilrajeev@nvidia.com>, <andi.shyti@kernel.org>, <robh@kernel.org>,
 	<devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
 	<linux-kernel@vger.kernel.org>
 CC: <kkartik@nvidia.com>
-Subject: [PATCH v10 2/4] i2c: tegra: Add HS mode support
-Date: Mon, 10 Nov 2025 13:35:00 +0530
-Message-ID: <20251110080502.865953-3-kkartik@nvidia.com>
+Subject: [PATCH v10 3/4] i2c: tegra: Add support for SW mutex register
+Date: Mon, 10 Nov 2025 13:35:01 +0530
+Message-ID: <20251110080502.865953-4-kkartik@nvidia.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251110080502.865953-1-kkartik@nvidia.com>
 References: <20251110080502.865953-1-kkartik@nvidia.com>
@@ -103,259 +103,304 @@ Content-Type: text/plain
 X-NV-OnPremToCloud: ExternallySecured
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ5PEPF000001D5:EE_|SN7PR12MB8001:EE_
-X-MS-Office365-Filtering-Correlation-Id: bc94f704-79bc-4ecd-055f-08de202fec6f
+X-MS-TrafficTypeDiagnostic: SJ5PEPF000001D6:EE_|IA1PR12MB7518:EE_
+X-MS-Office365-Filtering-Correlation-Id: d836173b-0bf1-4eab-651b-08de202fefc2
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|376014|36860700013|1800799024|82310400026|921020;
+	BCL:0;ARA:13230040|1800799024|82310400026|376014|7416014|36860700013|921020;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?9LEEIMgdd14z8o03ZfpwuI5JB/3dG+m2VHjvs7++oq4SjHK8LF/bhnpZ9CZW?=
- =?us-ascii?Q?7AkZiwBxKvxSHJd30ByOT491i5g1FYmc4x366EEvZjyJfl5pxXXG4HArOcSM?=
- =?us-ascii?Q?m66YVSV+x8dFDO5JPAC19QiP9qJF1RVVeyQOoxwqzai+91ARcsKdXATvZ2VK?=
- =?us-ascii?Q?hBsG+kv5IzANRulCrW30bBYXVdsDqbQ90zRJvkdWWiHCa+hQE6Wwn+kY7wck?=
- =?us-ascii?Q?QD5D+2koJuuc+9fTYqT12TO5vseQRL1jHkC1ctkWZm246C/fqGy5b1F3Y51k?=
- =?us-ascii?Q?36FAW0FzHZjn0PVEBIdVY9Qbtlwijfjs9ZzOwd4B0FtXZeG9HYqVYSVPVVPd?=
- =?us-ascii?Q?VTWhX6au7uUQ/rUz1vqB+cgAwP108mKu+JUJ1Rn24SKkzTq5qIjhUqYkursh?=
- =?us-ascii?Q?n4NxzEiD1FTWcBLojzPnudAhcoWtORxmYRzUwiMw0EYvbEdp5TG8jO4HUHgc?=
- =?us-ascii?Q?YlQDaOIG5idtaNZ+l/HhIHjRFZLXLz6ozj2VKtDW97lz/kA0mYT1atKCFDyI?=
- =?us-ascii?Q?mBxcXkH8tmPWdpfpjtErhgWqRqkE+jjZpsbQ1txJRrW5Y1t7Qkq+p2cmh563?=
- =?us-ascii?Q?s1YfjI8Reqwv8Vt591TK80mwdzlPg0rFlJW7HvsTv7gNe6nnUm7rn/xwsyYX?=
- =?us-ascii?Q?JQ7R/x+gV5OL/tDtyRQB1dTFcp7if5srt2ruJ5hUb64Aui4yXKSzwBzOn1Dy?=
- =?us-ascii?Q?KI2IveL1r8medS+0w1uwFeGOFlJLVkgasjL/9my0/gFB8nX+ioyi9TsVOPPX?=
- =?us-ascii?Q?tklSeZcsIZo+5aWrvs83UYNilookzdFzZNGXoY8dSp9RtBMcfdtpVT2eFVIe?=
- =?us-ascii?Q?xPRZS63tUYu1W46lvMiqs7CvbuubpC1peaunOqwbyX6Hi3Jy85EEn0HDrjD+?=
- =?us-ascii?Q?0IUS32FQclAVNeKroy48pSl0GvH5GYKPVb0ddG7+6CEW9XV3iKPtVOk3BVI9?=
- =?us-ascii?Q?qe6125eg55NsNt5lnR7dbm97lTBWbYmrMXgho0DOCrCWSGdATAHhKSN7ZV1V?=
- =?us-ascii?Q?GiyEQplVACNXIr4696TQcn6RipdOtl4vg5HcoqAewPzZrDSiSY7Ej+BfqEYb?=
- =?us-ascii?Q?uij57/IFiucZ1II9gOu58Jd+TwxXQ75I2AyD2TPo+yQM+C+zYuYfQSbqrOS9?=
- =?us-ascii?Q?GDM0NMKUFFpcZIF6TNfhIfEETqDsO/cVNccNFFIM2/huPpdgBmSIEumudkvu?=
- =?us-ascii?Q?l4H9DMvR5Hpz5WieFTp+B9II7VtA/gUo9yH3Ve9VKZXcoSf7mjfOtmLzeqzR?=
- =?us-ascii?Q?aXm+FglCrBG4VvA7hnGBcgbDpOET+KCziChsPU4NwDcb/TRCkRSmU2JUYfOz?=
- =?us-ascii?Q?YIPPIyroVMWyB4NKM3figKdqiJ6TSTwVfx6cQ9nhUXBtqSwbs8UBNd+Dc8f1?=
- =?us-ascii?Q?OPbGQSrNB3H7iseKdUk2La4Yfasy8XllfqJD5dU8NF/eNnTb5NfZtS1L4Vd3?=
- =?us-ascii?Q?wCHrUMNIIfGo9hSYLWFGZGmdZeuyfTc2Oz20qshYm6OMeEB44hr2YRsY+SmQ?=
- =?us-ascii?Q?l4OqVkk72uuPSuM6dbdU7xpV4yfJFZhV9++b5kHF01DK3fckV8T6EVMHeJD4?=
- =?us-ascii?Q?gf44XoTGUb/oJkgmqvKSJn9wg/aI7W7KrV64f2td?=
+	=?us-ascii?Q?tCDaiz5O8SM1nhcEjwMaxjNl8g2IV0wSCyMq4KpfF3rOzA2teMj2hfABNQsc?=
+ =?us-ascii?Q?73Bst++uOrV3a+NNkRe8iEfLcpjee7XflzxzDHx42VJWsjnWV5QUENAjMxK4?=
+ =?us-ascii?Q?M5dLRt03Z8uYUk94QbRNumQDA1bHtyU/Upm3A/cCV7grdZiUM6+TMghj+NAW?=
+ =?us-ascii?Q?YCrvBjKwgkczekf/ukjvkhBXDlKGAfjq16iD5o/RKnUPWy3AOvHuDX+kiM5Q?=
+ =?us-ascii?Q?IsyLAZ49e6mI3OkGKiWPoTtlplgujuhufne+sXVm6I40rMM/MM7qzygVJER5?=
+ =?us-ascii?Q?GvTada8P7nBU7MnB689p9giSMh+8t5YD/Z2NKzHKl4WvP9aoQ3/V/hR2z2dT?=
+ =?us-ascii?Q?NiF7erhZ2wAQNa/R1bvRtP1koOV/gaExH3lY+efCXvpLWvDg1QEw/pAaVIAx?=
+ =?us-ascii?Q?tyA+fReBwqbGVSJMOcrHsYEZIgT0STWeexKn56XU78lHogRsZ7ZdbIRNtUNH?=
+ =?us-ascii?Q?AB5sZz/T+Ahm1fFO/VEw4ZW8vy9FHo+YfcZ4jA5MwzCP1LtExxaauGcKgmYs?=
+ =?us-ascii?Q?ndVOpKug1IImHzSDzHH6GKtOyokk+17xp7Jwi0XE1rTONTtxcczEzjNlFz9F?=
+ =?us-ascii?Q?SIhoQ4qA5PmmovYRtKEdiZQspa6ova/Q+Pl0L7IIxXKY8dRujvRnEPQZyXzc?=
+ =?us-ascii?Q?lHGbbrUJ1psDFf8iTN0RXHlt6TSSPej6e7CRYwfQVzFQW3Osq/9MJh1YpaW0?=
+ =?us-ascii?Q?OsRetKkQ+1+6NrC1R5B0FbSf+zbK7AiTPJeUr5FL0cb0jdJ0g5/98s2znVuu?=
+ =?us-ascii?Q?HT0goUUakSjcw4asCGPcvh9i6rKTHWZY7EOUYrQjp4dtkCDrDbRs9VtJtYTr?=
+ =?us-ascii?Q?lKVucf9OXTbsEC4ogLByqxUOzbT1HmOgVOV7y5woKCEhROCj6vN7VJay+KEg?=
+ =?us-ascii?Q?a5zL6rydehdKyV3Ks2b08Bj1uQ0xRu1c2XZNXAVXhHunhkCj+3EkYG8Ti9gc?=
+ =?us-ascii?Q?u5rMgHjj6YW9mhFUvn/xQJLEGUmv/KzpbWMsXFqX8hSniVaNaGINLbN+yz7W?=
+ =?us-ascii?Q?LYU8Pfq1p+aO87d0JC/z40Pri0H7KYA+nZzbgKW6jNGECSiR7EZxaOIivI1a?=
+ =?us-ascii?Q?j15xrzDkp0MYp4/onCeYqiAySLOM7S2CAJtssAuqqVj6uUmvQcbQz/Bea/J/?=
+ =?us-ascii?Q?zaQylq0wxMxV7fQ3X5ARnaJBfzXigOPrb4JJIz1O20DCR0WouAd1TCUaPZdJ?=
+ =?us-ascii?Q?RLjnvmLQ9mkSHyuXTIVVNMammTrA2xH2ypkDrJiX66aWATDcL1v4cg5ZPojB?=
+ =?us-ascii?Q?xdy0adZX6TpkKrTF+BjAav1N5H2ZFydYayCUk8G3f1VwbNZ4Iap4ZUaikcGT?=
+ =?us-ascii?Q?NEB4mwHF4/qKm1u8yZmywGmUeYmfxm0k2tFYafFty/FRPGJ6AST2g1VBtU+5?=
+ =?us-ascii?Q?DSurBPbH2S/eKw9SMjpuPDMCJj1p52W5l8T+UmFlcvgb/bQHDg9uI8l9sezO?=
+ =?us-ascii?Q?w6K5zAlscqoKzlwuhLzqbMeuA2ZlAt2eHjM9lQ2Cr3Hn7qYCA8tAM2/FyMlG?=
+ =?us-ascii?Q?mnCLTEiT8nJ4FTxDrZFa0qlqUkMG83wI/tc8OjGP6lxfyIlWQncnZvYeY6Re?=
+ =?us-ascii?Q?oj7tHFd52URLRCNZdfYo2RRMVEq5kabGOlPB8Lcn?=
 X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(7416014)(376014)(36860700013)(1800799024)(82310400026)(921020);DIR:OUT;SFP:1101;
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(82310400026)(376014)(7416014)(36860700013)(921020);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Nov 2025 08:05:33.5057
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Nov 2025 08:05:39.0971
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: bc94f704-79bc-4ecd-055f-08de202fec6f
+X-MS-Exchange-CrossTenant-Network-Message-Id: d836173b-0bf1-4eab-651b-08de202fefc2
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	SJ5PEPF000001D5.namprd05.prod.outlook.com
+	SJ5PEPF000001D6.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB8001
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB7518
 
-From: Akhil R <akhilrajeev@nvidia.com>
+Add support for SW mutex register introduced in Tegra264 to provide
+an option to share the interface between multiple firmwares and/or
+VMs. This involves following steps:
 
-Add support for HS (High Speed) mode transfers, which is supported by
-Tegra194 onwards. Also adjust the bus frequency such that it uses the
-fast plus mode when HS mode is not supported.
+ - A firmware/OS writes its unique ID to the mutex REQUEST field.
+ - Ownership is established when reading the GRANT field returns the
+   same ID.
+ - If GRANT shows a different non-zero ID, the firmware/OS retries
+   until timeout.
+ - After completing access, it releases the mutex by writing 0.
 
-Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+However, the hardware does not ensure any protection based on the
+values. The driver/firmware should honor the peer who already holds
+the mutex.
+
 Signed-off-by: Kartik Rajput <kkartik@nvidia.com>
+Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+Reviewed-by: Jon Hunter <jonathanh@nvidia.com>
 ---
-v9 -> v10:
-	* Change switch block to an if-else block.
-v5 -> v9:
-        * In the switch block, handle the case when hs mode is not
-          supported. Also update it to use Fast mode for master code
-          byte as per the I2C spec for HS mode.
-v3 -> v5:
-        * Set has_hs_mode_support to false for unsupported SoCs.
+v7 -> v8:
+        * Use `bool` instead of `int` for `locked` variable in
+          tegra_i2c_mutex_lock() function.
+v6 -> v7:
+        * Return bool from tegra_i2c_mutex_acquired() and
+          tegra_i2c_mutex_trylock() functions.
+        * Move `has_mutex` check inside tegra_i2c_mutex_lock/unlock
+          functions.
+        * Remove redundant empty line added in tegra_i2c_xfer() in v6.
+        * Fix pm_runtime_put() not getting called if mutex unlock fails.
+        * In tegra_i2c_mutex_lock() simplify the logic to check if the
+          mutex is acquired or not by checking the value of `ret`
+          variable.
+        * Update commit message to describe the functioning of SW mutex
+          feature.
+v4 -> v6:
+        * Guard tegra_i2c_mutex_lock() and tegra_i2c_mutex_unlock() to
+          ensure that they are called on platforms which support SW
+          mutex.
+v3 -> v4:
+        * Update timeout logic of tegra_i2c_mutex_lock() to use
+          read_poll_timeout APIs for improving timeout logic.
+        * Add tegra_i2c_mutex_acquired() to check if mutex is acquired
+          or not.
+        * Rename I2C_SW_MUTEX_ID as I2C_SW_MUTEX_ID_CCPLEX.
+        * Function tegra_i2c_poll_register() was moved unnecessarily, it
+          has now been moved to its original location.
+        * Use tegra_i2c_mutex_lock/unlock APIs in the tegra_i2c_xfer()
+          function. This ensures proper propagation of error in case
+          mutex lock fails.
+          Please note that as the function tegra_i2c_xfer() is
+          already guarded by the bus lock operation there is no need of
+          additional lock for the tegra_i2c_mutex_lock/unlock APIs.
 v2 -> v3:
-        * Document tlow_hs_mode and thigh_hs_mode.
+        * Update tegra_i2c_mutex_trylock and tegra_i2c_mutex_unlock to
+          use readl and writel APIs instead of i2c_readl and i2c_writel
+          which use relaxed APIs.
+        * Use dev_warn instead of WARN_ON if mutex lock/unlock fails.
 v1 -> v2:
-        * Document has_hs_mode_support.
-        * Add a check to set the frequency to fastmode+ if the device
-          does not support HS mode but the requested frequency is more
-          than fastmode+.
+        * Fixed typos.
+        * Fix tegra_i2c_mutex_lock() logic.
+        * Add a timeout in tegra_i2c_mutex_lock() instead of polling for
+          mutex indefinitely.
 ---
- drivers/i2c/busses/i2c-tegra.c | 65 ++++++++++++++++++++++++++--------
- 1 file changed, 51 insertions(+), 14 deletions(-)
+ drivers/i2c/busses/i2c-tegra.c | 92 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 92 insertions(+)
 
 diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
-index bd26b232ffb3..2038ab2d8095 100644
+index 2038ab2d8095..3513bd5c7c5b 100644
 --- a/drivers/i2c/busses/i2c-tegra.c
 +++ b/drivers/i2c/busses/i2c-tegra.c
-@@ -91,6 +91,7 @@
- #define I2C_HEADER_IE_ENABLE			BIT(17)
- #define I2C_HEADER_REPEAT_START			BIT(16)
- #define I2C_HEADER_CONTINUE_XFER		BIT(15)
-+#define I2C_HEADER_HS_MODE			BIT(22)
- #define I2C_HEADER_SLAVE_ADDR_SHIFT		1
+@@ -137,6 +137,14 @@
  
- #define I2C_BUS_CLEAR_CNFG			0x084
-@@ -198,6 +199,8 @@ enum msg_end_type {
-  * @thigh_std_mode: High period of the clock in standard mode.
-  * @tlow_fast_fastplus_mode: Low period of the clock in fast/fast-plus modes.
-  * @thigh_fast_fastplus_mode: High period of the clock in fast/fast-plus modes.
-+ * @tlow_hs_mode: Low period of the clock in HS mode.
-+ * @thigh_hs_mode: High period of the clock in HS mode.
-  * @setup_hold_time_std_mode: Setup and hold time for start and stop conditions
-  *		in standard mode.
-  * @setup_hold_time_fast_fast_plus_mode: Setup and hold time for start and stop
-@@ -206,6 +209,7 @@ enum msg_end_type {
-  *		in HS mode.
+ #define I2C_MASTER_RESET_CNTRL			0x0a8
+ 
++#define I2C_SW_MUTEX				0x0ec
++#define I2C_SW_MUTEX_REQUEST			GENMASK(3, 0)
++#define I2C_SW_MUTEX_GRANT			GENMASK(7, 4)
++#define I2C_SW_MUTEX_ID_CCPLEX			9
++
++/* SW mutex acquire timeout value in microseconds. */
++#define I2C_SW_MUTEX_TIMEOUT_US			(25 * USEC_PER_MSEC)
++
+ /* configuration load timeout in microseconds */
+ #define I2C_CONFIG_LOAD_TIMEOUT			1000000
+ 
+@@ -210,6 +218,7 @@ enum msg_end_type {
   * @has_interface_timing_reg: Has interface timing register to program the tuned
   *		timing settings.
-+ * @has_hs_mode_support: Has support for high speed (HS) mode transfers.
+  * @has_hs_mode_support: Has support for high speed (HS) mode transfers.
++ * @has_mutex: Has mutex register for mutual exclusion with other firmwares or VMs.
   */
  struct tegra_i2c_hw_feature {
  	bool has_continue_xfer_support;
-@@ -226,10 +230,13 @@ struct tegra_i2c_hw_feature {
- 	u32 thigh_std_mode;
- 	u32 tlow_fast_fastplus_mode;
- 	u32 thigh_fast_fastplus_mode;
-+	u32 tlow_hs_mode;
-+	u32 thigh_hs_mode;
- 	u32 setup_hold_time_std_mode;
- 	u32 setup_hold_time_fast_fast_plus_mode;
+@@ -237,6 +246,7 @@ struct tegra_i2c_hw_feature {
  	u32 setup_hold_time_hs_mode;
  	bool has_interface_timing_reg;
-+	bool has_hs_mode_support;
+ 	bool has_hs_mode_support;
++	bool has_mutex;
  };
  
  /**
-@@ -677,25 +684,31 @@ static int tegra_i2c_init(struct tegra_i2c_dev *i2c_dev)
- 	if (IS_VI(i2c_dev))
- 		tegra_i2c_vi_init(i2c_dev);
+@@ -381,6 +391,76 @@ static void i2c_readsl(struct tegra_i2c_dev *i2c_dev, void *data,
+ 	readsl(i2c_dev->base + tegra_i2c_reg_addr(i2c_dev, reg), data, len);
+ }
  
--	switch (t->bus_freq_hz) {
--	case I2C_MAX_STANDARD_MODE_FREQ + 1 ... I2C_MAX_FAST_MODE_PLUS_FREQ:
--	default:
-+	if (t->bus_freq_hz < I2C_MAX_STANDARD_MODE_FREQ) {
-+		tlow = i2c_dev->hw->tlow_std_mode;
-+		thigh = i2c_dev->hw->thigh_std_mode;
-+		tsu_thd = i2c_dev->hw->setup_hold_time_std_mode;
-+		non_hs_mode = i2c_dev->hw->clk_divisor_std_mode;
-+	} else if (t->bus_freq_hz <= I2C_MAX_FAST_MODE_PLUS_FREQ) {
- 		tlow = i2c_dev->hw->tlow_fast_fastplus_mode;
- 		thigh = i2c_dev->hw->thigh_fast_fastplus_mode;
- 		tsu_thd = i2c_dev->hw->setup_hold_time_fast_fast_plus_mode;
--
--		if (t->bus_freq_hz > I2C_MAX_FAST_MODE_FREQ)
--			non_hs_mode = i2c_dev->hw->clk_divisor_fast_plus_mode;
--		else
-+		non_hs_mode = i2c_dev->hw->clk_divisor_fast_mode;
-+	} else {
-+		/*
-+		 * When HS mode is supported, the non-hs timing registers will be used for the
-+		 * master code byte for transition to HS mode. As per the spec, the 8 bit master
-+		 * code should be sent at max 400kHz. Therefore, limit the bus speed to fast mode.
-+		 * Whereas when HS mode is not supported, allow the highest speed mode capable.
-+		 */
-+		if (i2c_dev->hw->has_hs_mode_support)
- 			non_hs_mode = i2c_dev->hw->clk_divisor_fast_mode;
--		break;
-+		else
-+			non_hs_mode = i2c_dev->hw->clk_divisor_fast_plus_mode;
- 
--	case 0 ... I2C_MAX_STANDARD_MODE_FREQ:
--		tlow = i2c_dev->hw->tlow_std_mode;
--		thigh = i2c_dev->hw->thigh_std_mode;
--		tsu_thd = i2c_dev->hw->setup_hold_time_std_mode;
--		non_hs_mode = i2c_dev->hw->clk_divisor_std_mode;
--		break;
-+		tlow = i2c_dev->hw->tlow_fast_fastplus_mode;
-+		thigh = i2c_dev->hw->thigh_fast_fastplus_mode;
-+		tsu_thd = i2c_dev->hw->setup_hold_time_fast_fast_plus_mode;
- 	}
- 
- 	/* make sure clock divisor programmed correctly */
-@@ -717,6 +730,18 @@ static int tegra_i2c_init(struct tegra_i2c_dev *i2c_dev)
- 	if (i2c_dev->hw->has_interface_timing_reg && tsu_thd)
- 		i2c_writel(i2c_dev, tsu_thd, I2C_INTERFACE_TIMING_1);
- 
-+	/* Write HS mode registers. These will get used only for HS mode*/
-+	if (i2c_dev->hw->has_hs_mode_support) {
-+		tlow = i2c_dev->hw->tlow_hs_mode;
-+		thigh = i2c_dev->hw->thigh_hs_mode;
-+		tsu_thd = i2c_dev->hw->setup_hold_time_hs_mode;
++static bool tegra_i2c_mutex_acquired(struct tegra_i2c_dev *i2c_dev)
++{
++	unsigned int reg = tegra_i2c_reg_addr(i2c_dev, I2C_SW_MUTEX);
++	u32 val, id;
 +
-+		val = FIELD_PREP(I2C_HS_INTERFACE_TIMING_THIGH, thigh) |
-+			FIELD_PREP(I2C_HS_INTERFACE_TIMING_TLOW, tlow);
-+		i2c_writel(i2c_dev, val, I2C_HS_INTERFACE_TIMING_0);
-+		i2c_writel(i2c_dev, tsu_thd, I2C_HS_INTERFACE_TIMING_1);
++	val = readl(i2c_dev->base + reg);
++	id = FIELD_GET(I2C_SW_MUTEX_GRANT, val);
++
++	return id == I2C_SW_MUTEX_ID_CCPLEX;
++}
++
++static bool tegra_i2c_mutex_trylock(struct tegra_i2c_dev *i2c_dev)
++{
++	unsigned int reg = tegra_i2c_reg_addr(i2c_dev, I2C_SW_MUTEX);
++	u32 val, id;
++
++	val = readl(i2c_dev->base + reg);
++	id = FIELD_GET(I2C_SW_MUTEX_GRANT, val);
++	if (id != 0 && id != I2C_SW_MUTEX_ID_CCPLEX)
++		return false;
++
++	val = FIELD_PREP(I2C_SW_MUTEX_REQUEST, I2C_SW_MUTEX_ID_CCPLEX);
++	writel(val, i2c_dev->base + reg);
++
++	return tegra_i2c_mutex_acquired(i2c_dev);
++}
++
++static int tegra_i2c_mutex_lock(struct tegra_i2c_dev *i2c_dev)
++{
++	bool locked;
++	int ret;
++
++	if (!i2c_dev->hw->has_mutex)
++		return 0;
++
++	if (i2c_dev->atomic_mode)
++		ret = read_poll_timeout_atomic(tegra_i2c_mutex_trylock, locked, locked,
++					       USEC_PER_MSEC, I2C_SW_MUTEX_TIMEOUT_US,
++					       false, i2c_dev);
++	else
++		ret = read_poll_timeout(tegra_i2c_mutex_trylock, locked, locked, USEC_PER_MSEC,
++					I2C_SW_MUTEX_TIMEOUT_US, false, i2c_dev);
++
++	if (ret)
++		dev_warn(i2c_dev->dev, "failed to acquire mutex\n");
++
++	return ret;
++}
++
++static int tegra_i2c_mutex_unlock(struct tegra_i2c_dev *i2c_dev)
++{
++	unsigned int reg = tegra_i2c_reg_addr(i2c_dev, I2C_SW_MUTEX);
++	u32 val, id;
++
++	if (!i2c_dev->hw->has_mutex)
++		return 0;
++
++	val = readl(i2c_dev->base + reg);
++
++	id = FIELD_GET(I2C_SW_MUTEX_GRANT, val);
++	if (id && id != I2C_SW_MUTEX_ID_CCPLEX) {
++		dev_warn(i2c_dev->dev, "unable to unlock mutex, mutex is owned by: %u\n", id);
++		return -EPERM;
 +	}
 +
- 	clk_multiplier = (tlow + thigh + 2) * (non_hs_mode + 1);
- 
- 	err = clk_set_rate(i2c_dev->div_clk,
-@@ -1214,6 +1239,9 @@ static void tegra_i2c_push_packet_header(struct tegra_i2c_dev *i2c_dev,
- 	if (msg->flags & I2C_M_RD)
- 		packet_header |= I2C_HEADER_READ;
- 
-+	if (i2c_dev->timings.bus_freq_hz > I2C_MAX_FAST_MODE_PLUS_FREQ)
-+		packet_header |= I2C_HEADER_HS_MODE;
++	writel(0, i2c_dev->base + reg);
 +
- 	if (i2c_dev->dma_mode && !i2c_dev->msg_read)
- 		*dma_buf++ = packet_header;
- 	else
-@@ -1502,6 +1530,7 @@ static const struct tegra_i2c_hw_feature tegra20_i2c_hw = {
- 	.setup_hold_time_fast_fast_plus_mode = 0x0,
++	return 0;
++}
++
+ static void tegra_i2c_mask_irq(struct tegra_i2c_dev *i2c_dev, u32 mask)
+ {
+ 	u32 int_mask;
+@@ -1426,6 +1506,10 @@ static int tegra_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[],
+ 		return ret;
+ 	}
+ 
++	ret = tegra_i2c_mutex_lock(i2c_dev);
++	if (ret)
++		return ret;
++
+ 	for (i = 0; i < num; i++) {
+ 		enum msg_end_type end_type = MSG_END_STOP;
+ 
+@@ -1455,6 +1539,7 @@ static int tegra_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[],
+ 			break;
+ 	}
+ 
++	ret = tegra_i2c_mutex_unlock(i2c_dev);
+ 	pm_runtime_put(i2c_dev->dev);
+ 
+ 	return ret ?: i;
+@@ -1531,6 +1616,7 @@ static const struct tegra_i2c_hw_feature tegra20_i2c_hw = {
  	.setup_hold_time_hs_mode = 0x0,
  	.has_interface_timing_reg = false,
-+	.has_hs_mode_support = false,
+ 	.has_hs_mode_support = false,
++	.has_mutex = false,
  };
  
  static const struct tegra_i2c_hw_feature tegra30_i2c_hw = {
-@@ -1527,6 +1556,7 @@ static const struct tegra_i2c_hw_feature tegra30_i2c_hw = {
- 	.setup_hold_time_fast_fast_plus_mode = 0x0,
+@@ -1557,6 +1643,7 @@ static const struct tegra_i2c_hw_feature tegra30_i2c_hw = {
  	.setup_hold_time_hs_mode = 0x0,
  	.has_interface_timing_reg = false,
-+	.has_hs_mode_support = false,
+ 	.has_hs_mode_support = false,
++	.has_mutex = false,
  };
  
  static const struct tegra_i2c_hw_feature tegra114_i2c_hw = {
-@@ -1552,6 +1582,7 @@ static const struct tegra_i2c_hw_feature tegra114_i2c_hw = {
- 	.setup_hold_time_fast_fast_plus_mode = 0x0,
+@@ -1583,6 +1670,7 @@ static const struct tegra_i2c_hw_feature tegra114_i2c_hw = {
  	.setup_hold_time_hs_mode = 0x0,
  	.has_interface_timing_reg = false,
-+	.has_hs_mode_support = false,
+ 	.has_hs_mode_support = false,
++	.has_mutex = false,
  };
  
  static const struct tegra_i2c_hw_feature tegra124_i2c_hw = {
-@@ -1577,6 +1608,7 @@ static const struct tegra_i2c_hw_feature tegra124_i2c_hw = {
- 	.setup_hold_time_fast_fast_plus_mode = 0x0,
+@@ -1609,6 +1697,7 @@ static const struct tegra_i2c_hw_feature tegra124_i2c_hw = {
  	.setup_hold_time_hs_mode = 0x0,
  	.has_interface_timing_reg = true,
-+	.has_hs_mode_support = false,
+ 	.has_hs_mode_support = false,
++	.has_mutex = false,
  };
  
  static const struct tegra_i2c_hw_feature tegra210_i2c_hw = {
-@@ -1602,6 +1634,7 @@ static const struct tegra_i2c_hw_feature tegra210_i2c_hw = {
- 	.setup_hold_time_fast_fast_plus_mode = 0,
+@@ -1635,6 +1724,7 @@ static const struct tegra_i2c_hw_feature tegra210_i2c_hw = {
  	.setup_hold_time_hs_mode = 0,
  	.has_interface_timing_reg = true,
-+	.has_hs_mode_support = false,
+ 	.has_hs_mode_support = false,
++	.has_mutex = false,
  };
  
  static const struct tegra_i2c_hw_feature tegra186_i2c_hw = {
-@@ -1627,6 +1660,7 @@ static const struct tegra_i2c_hw_feature tegra186_i2c_hw = {
- 	.setup_hold_time_fast_fast_plus_mode = 0,
+@@ -1661,6 +1751,7 @@ static const struct tegra_i2c_hw_feature tegra186_i2c_hw = {
  	.setup_hold_time_hs_mode = 0,
  	.has_interface_timing_reg = true,
-+	.has_hs_mode_support = false,
+ 	.has_hs_mode_support = false,
++	.has_mutex = false,
  };
  
  static const struct tegra_i2c_hw_feature tegra194_i2c_hw = {
-@@ -1648,10 +1682,13 @@ static const struct tegra_i2c_hw_feature tegra194_i2c_hw = {
- 	.thigh_std_mode = 0x7,
- 	.tlow_fast_fastplus_mode = 0x2,
- 	.thigh_fast_fastplus_mode = 0x2,
-+	.tlow_hs_mode = 0x8,
-+	.thigh_hs_mode = 0x3,
- 	.setup_hold_time_std_mode = 0x08080808,
- 	.setup_hold_time_fast_fast_plus_mode = 0x02020202,
+@@ -1689,6 +1780,7 @@ static const struct tegra_i2c_hw_feature tegra194_i2c_hw = {
  	.setup_hold_time_hs_mode = 0x090909,
  	.has_interface_timing_reg = true,
-+	.has_hs_mode_support = true,
+ 	.has_hs_mode_support = true,
++	.has_mutex = false,
  };
  
  static const struct tegra_i2c_hw_feature tegra256_i2c_hw = {
