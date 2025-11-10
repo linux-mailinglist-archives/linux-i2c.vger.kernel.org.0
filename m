@@ -1,207 +1,168 @@
-Return-Path: <linux-i2c+bounces-14022-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14023-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FAF7C446BD
-	for <lists+linux-i2c@lfdr.de>; Sun, 09 Nov 2025 21:26:50 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3ED43C454D4
+	for <lists+linux-i2c@lfdr.de>; Mon, 10 Nov 2025 09:05:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 180554E12BA
-	for <lists+linux-i2c@lfdr.de>; Sun,  9 Nov 2025 20:26:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DBD87188F6FB
+	for <lists+linux-i2c@lfdr.de>; Mon, 10 Nov 2025 08:06:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50BA01D63EF;
-	Sun,  9 Nov 2025 20:26:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5515A2E92B4;
+	Mon, 10 Nov 2025 08:05:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="VE6dVacQ";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="HZqHc/pK";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="VE6dVacQ";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="HZqHc/pK"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="SVK8ZefK"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from BYAPR05CU005.outbound.protection.outlook.com (mail-westusazon11010069.outbound.protection.outlook.com [52.101.85.69])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E86118C008
-	for <linux-i2c@vger.kernel.org>; Sun,  9 Nov 2025 20:26:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762720005; cv=none; b=exzmrfSu0Oxu5ehTZqY7dxf093ak6F/eO+S/zsYaRvjeyvLdMZQq6OiUgNlWaLFvsljhsDd5TEOTYMHuugoVxGi51/Yw22b4LMH0rxjnIIL6tM9RNu/UKuos08Glenuktqp0bO4if7+hqMOoWFCIH6RTu54DLQmp/NwTJesXtTw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762720005; c=relaxed/simple;
-	bh=AziFf2R9Mo5kNwTjidCP+lCHoXk3MBXVRbCR11TbWJw=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NcBuuqDkolIVi/qgTgXlEUY7bX1nsS2zD/3PKxkyHJ43rMbwmDBWNk4g9GLaeAWP8MN6HTzbmYvwhL2P93KNu4Rn+fqwwn20xA+VUpc4yGac09nt8525e87Gun+bzNqjNw4xwA8hKNOxOzEdkeWkuZHib/I90yQNm8FunOMiaL0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=VE6dVacQ; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=HZqHc/pK; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=VE6dVacQ; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=HZqHc/pK; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 81333219EA;
-	Sun,  9 Nov 2025 20:26:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1762720000; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Odsf+zzjD7md0XsYxXNdo7BOpW5aRnoJkOBX9SHch+4=;
-	b=VE6dVacQ2LPBWf2RHGvxnOQGQ1sYG/HkBBOVXRTQ/ZXSMcsrEmyHQHbPBCSnMaYF7Nlcj0
-	a30/UOUfMF0MJbxOkK2MrQ1wsCkogd8/ynNnBKyJMIgkPzyc2danbo5ewUf2HIfXzyXuKI
-	x2IGt5G25KbEYEfi4YeI0CRBTeep+CU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1762720000;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Odsf+zzjD7md0XsYxXNdo7BOpW5aRnoJkOBX9SHch+4=;
-	b=HZqHc/pKhuFovgU9ggMWQTq0oDdtiKYLQckJEzVizHvZSQatOm+IjTJ2aM2GAV+auY1aRN
-	qBBYJejRHLVa3ZDA==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1762720000; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Odsf+zzjD7md0XsYxXNdo7BOpW5aRnoJkOBX9SHch+4=;
-	b=VE6dVacQ2LPBWf2RHGvxnOQGQ1sYG/HkBBOVXRTQ/ZXSMcsrEmyHQHbPBCSnMaYF7Nlcj0
-	a30/UOUfMF0MJbxOkK2MrQ1wsCkogd8/ynNnBKyJMIgkPzyc2danbo5ewUf2HIfXzyXuKI
-	x2IGt5G25KbEYEfi4YeI0CRBTeep+CU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1762720000;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Odsf+zzjD7md0XsYxXNdo7BOpW5aRnoJkOBX9SHch+4=;
-	b=HZqHc/pKhuFovgU9ggMWQTq0oDdtiKYLQckJEzVizHvZSQatOm+IjTJ2aM2GAV+auY1aRN
-	qBBYJejRHLVa3ZDA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 53DEB140F7;
-	Sun,  9 Nov 2025 20:26:40 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id MjZ7EgD5EGm0HAAAD6G6ig
-	(envelope-from <jdelvare@suse.de>); Sun, 09 Nov 2025 20:26:40 +0000
-Date: Sun, 9 Nov 2025 21:25:01 +0100
-From: Jean Delvare <jdelvare@suse.de>
-To: "Blacktempel (Florian K.)" <florian.blacktempel@gmail.com>
-Cc: linux-i2c@vger.kernel.org, "Blacktempel (Florian K.)"
- <Blacktempel@hotmail.de>
-Subject: Re: [PATCH] i2c: allow ddr5 ram page change with active intel spd
- write protection
-Message-ID: <20251109204759.203ad2f2@endymion>
-In-Reply-To: <20251011123154.2020-1-Blacktempel@hotmail.de>
-References: <20251011123154.2020-1-Blacktempel@hotmail.de>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.43; x86_64-suse-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2AE2212560;
+	Mon, 10 Nov 2025 08:05:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.85.69
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762761930; cv=fail; b=GCTFwDjsQgW4P/kC+aJUopwR85YaDasRQaw/rclp2EmtyJsfJ12z3Timqu/USoywnoDHgrbw2UebfjTlA6orH5NuCXKPoQOC3bC852SmyzY8nI0ddAXaQ6VrwjvCk+EhFi0a71RECEhkros5w0nUEhrQrSkBYnozj49UG1sJUzs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762761930; c=relaxed/simple;
+	bh=DR7PqukhiLh6kHZ4X5uiHr7WsZGiSHvl4xph18plp/0=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=N3qDHKY86FBvHdgxjDLLCds7FpyU97cqWqWdi+vSzOyrMmTcVkhoZgL4Tjo9U60+EYJQxJWpqXqQBqAgNAqYoTA8HDLu7XYfNPdMYmRKaTSjwBnSw8HQ/YU9X75DQC40H3mANKSMYNheJTIwGiel27jAFGj4IvSIQLT5E+m/jQ4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=SVK8ZefK; arc=fail smtp.client-ip=52.101.85.69
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=TeFOxh+tCK7/EGnVaRVuT9E5RxMBR2OI7pajqKfP/CZ00aY+pq9Zsq2LXaLzFRBAYWg8DI7erhvn3KfumRfieP6QYHEV6TPrQ0ugbyd1t+AEfcx/0ruM8SSSHkYZQ/22ad5n63cWBXEKTemWEg8qsd5O//VIBI0UyCbtlIC5fkWxlxaaq19Rb1q16QQpXMbj0l8+xC7AJHCtLpTCNzNyd4fgjY3wGvbmG/IUmkY66HqxjvBTOqz9YuBn5ZcJCtA34n+CHnDUBAfTOcQuUu4P+l/7aePHWAtX0nsaYlJJUUAidpO+HqqEXqmJkbywJ/iEfEryOkIuikwx6ZyWWvZ6Zw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZKpwOCid6E5DB1+dizY0nWpZV+8HfeG3jdpMKWQl0qQ=;
+ b=jSjlf4L3Dp93HQPg2ehBQRRCTBO2v0oM9j99dzK9ZWpu3yXHuKjxk8WjO7LUDo5XtgjO3Z3vv2afUkYDFYGy81VEuTjj0eLFPZiwapESsvu6aPWSqTJB0NEsFinkiugGUAhK36zREemXkdGZMt/6P53o8RJC4RUejpEvJWdP0zeX4Cl3UoeVcyJQc6xJrV9tm/0kxL7W2qS0IIwAjN+QrpjS45Vgvg+HWd7Ywh31Z3l/wfeNUSAy0ITy+VHfRbrYPz48rVHo4SCQ6p6v2cVFfWcUWoTMJsXwWlIKVFrrj1dywjZAkjQYy8nC6sY3w8hD21G7ebZBd/D5kiD7iGdVcA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZKpwOCid6E5DB1+dizY0nWpZV+8HfeG3jdpMKWQl0qQ=;
+ b=SVK8ZefKd5c7/ElE6SgK+PxWiB3IPUhNw2wrD0/0RhqkEBlJSHTLAhtrHfh3R0J2xjOB/5cxDsaC5XAZhgVJkYOavNUlAqra6ap2cjIFsc2g3r2iX7u8lET9BB/+cMbcAwONQ96VPaWA0DFkj+d2mE5BeJy1ThHjwF7fXNEt6vtN5EERkUmv6c77H0QegZ/Ehe/OZNRVz6+BFL+toHxyojGhVtR9Lmo7eEJKu6Nuak7MjqtRSo1aE6yegVmgVShfnUuxZ7kHGeqL1s2393NDcgPKVR67AsnGY1xOqBWEtRUhqA8JasO9RBO6+ilkKAKTh5Ex1zfrY+iw4YgzUvgimA==
+Received: from BYAPR02CA0064.namprd02.prod.outlook.com (2603:10b6:a03:54::41)
+ by MN2PR12MB4357.namprd12.prod.outlook.com (2603:10b6:208:262::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9298.16; Mon, 10 Nov
+ 2025 08:05:26 +0000
+Received: from SJ5PEPF000001D7.namprd05.prod.outlook.com
+ (2603:10b6:a03:54:cafe::d8) by BYAPR02CA0064.outlook.office365.com
+ (2603:10b6:a03:54::41) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9298.16 via Frontend Transport; Mon,
+ 10 Nov 2025 08:05:27 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ SJ5PEPF000001D7.mail.protection.outlook.com (10.167.242.59) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9320.13 via Frontend Transport; Mon, 10 Nov 2025 08:05:25 +0000
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 10 Nov
+ 2025 00:05:10 -0800
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail202.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 10 Nov
+ 2025 00:05:09 -0800
+Received: from kkartik-desktop.nvidia.com (10.127.8.13) by mail.nvidia.com
+ (10.129.68.10) with Microsoft SMTP Server id 15.2.2562.20 via Frontend
+ Transport; Mon, 10 Nov 2025 00:05:04 -0800
+From: Kartik Rajput <kkartik@nvidia.com>
+To: <akhilrajeev@nvidia.com>, <andi.shyti@kernel.org>, <robh@kernel.org>,
+	<krzk+dt@kernel.org>, <conor+dt@kernel.org>, <thierry.reding@gmail.com>,
+	<jonathanh@nvidia.com>, <ldewangan@nvidia.com>, <digetx@gmail.com>,
+	<smangipudi@nvidia.com>, <linux-i2c@vger.kernel.org>,
+	<devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+CC: <kkartik@nvidia.com>
+Subject: [PATCH v10 0/4] Add I2C support for Tegra264
+Date: Mon, 10 Nov 2025 13:34:58 +0530
+Message-ID: <20251110080502.865953-1-kkartik@nvidia.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-3.80 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	RCVD_TLS_ALL(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	ARC_NA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	HAS_ORG_HEADER(0.00)[];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_RCPT(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com,hotmail.de];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,hotmail.de];
-	FREEMAIL_TO(0.00)[gmail.com];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	RCPT_COUNT_THREE(0.00)[3]
-X-Spam-Flag: NO
-X-Spam-Score: -3.80
-X-Spam-Level: 
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ5PEPF000001D7:EE_|MN2PR12MB4357:EE_
+X-MS-Office365-Filtering-Correlation-Id: b2a1062f-9b77-477c-6164-08de202fe7c3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|376014|36860700013|1800799024|82310400026|921020;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?T9ZVenfae5QlkSygKlFANvsZSXw1yPfqKsgZoWFhb5yKePCoPpyN1Uw6vUV4?=
+ =?us-ascii?Q?CtVRHQSFQ9527aL5hJp/MKvpTXW050gOGym8gV62KOsftlKxR/pO0ucIuRPV?=
+ =?us-ascii?Q?HnwThUqk+rmga/nqBAPAdMjbAWFTFGLnU6VngX3W7fyPDzSafw+WW2/Vdkyu?=
+ =?us-ascii?Q?gK+KTmXqJqd8U90WIBOP8Q5wDbWbSFjg0DvtmZ9ssJiKdlS95GpCaxLkdpq4?=
+ =?us-ascii?Q?D5SBCGWg+tiOBapkj6AMdA8Rd5FWlhlUgv7TcgkBtV8q60kMHCQWVzFlhlzW?=
+ =?us-ascii?Q?hn9y7dIzNnpF3Jqo4xNcuTn1Vl5Jg6LSFAqWUsDD+I3+EYOJlfIo+XONE76c?=
+ =?us-ascii?Q?KhhFIS1ITp4qiAOolPY+5HbIdTSeJyT/obG7QdfUW7o9jqMtN78lvrrpZKsz?=
+ =?us-ascii?Q?NyoIRq3v9ekoOKoxRIDRmBzICwWolxOSSMCTg4NNw3nw9CsZgHekKliVDPU8?=
+ =?us-ascii?Q?JDUPEGhPn4ttWNZ4GzDCle6KIhT3+WPQ0fRVxL2hmkGvOcJ5nytNyjB3JtKX?=
+ =?us-ascii?Q?HnNFT7NQ4PC7AaNNDvZDJQ8+Uzob9wZa+Rtvk5pMP7o7Ed1P+VPaoXzvjROA?=
+ =?us-ascii?Q?Yzz6e1faYBPQ7diLd5XhMjxgXVtr2HfU9XilBfqPThnVyp81OThK+mfd49qk?=
+ =?us-ascii?Q?LWAO1JYlZkVUBOu4DbYJpLKWnk/ZkTMq0tXl2/OpuNCac80gohU3Y1yuCWGx?=
+ =?us-ascii?Q?JpUW8MjA+vi/ZcDcHAqZsZ7Ecv7FMo29CKdCQ49LF5JfQkZs3U2qaJrNfT66?=
+ =?us-ascii?Q?IGv0ffPDZEnkQOA2Ej18f9Wufhrcl61+0/gdPnGO/UyNMxgHs3ynQHC8c8Pn?=
+ =?us-ascii?Q?/yYQbbq+ISDbcEAr5WPIMUSLOQJ0P8v11wJWzCWwPIw6Y9iZ2gGOtQhgS0uz?=
+ =?us-ascii?Q?frdt8l7L8K+2Fr6yWNZLkpd5QlmxSAX90glafzlNufAW6vLASjRoQ6GbosP8?=
+ =?us-ascii?Q?iSF/SIW8wl77Ir5lAjQdame6ClvbQuBNkoxb5F5SwPDPVs3PfLbShwFwrSgM?=
+ =?us-ascii?Q?si2CtvrK3rndRC4IfWFFObA0BPfmN1OWgZFvun2NtQu/Z4ZbQu2pAME4FTWU?=
+ =?us-ascii?Q?iNdfXezPHZ9uudpc8MeicMPlyxAs6IghkpLktGFbvjnBFRIhjJ2nEHm80YLy?=
+ =?us-ascii?Q?uuwNdKXNWmfhBeUbJ9dsAbypT09KyhMwBc290VTpLfBenHrQZs1ud965cWHH?=
+ =?us-ascii?Q?iOhuvPhHE/6XRoyPD6BF9lvC11P5Cruxz23LAi3+RJ4bT340NEZiXeiyHnJE?=
+ =?us-ascii?Q?/Zzh8pF6L2iicPJgRzPLuzymYV6TIP6u/VJm0/Kg+w0g835Vos3shmp2s90H?=
+ =?us-ascii?Q?vz7jJjwP0KA1t2r2KktxgOia3tGkd3l3R1bri9tvgG078H3ZD6xuRCWQ8F6c?=
+ =?us-ascii?Q?lJup5hp05nAjPM0n88BwJcW/Mwk/sz6fDoKkF5EOsl7wq0kHoBygF0y6y1IC?=
+ =?us-ascii?Q?SnyI6VDl2FqI4hbD2Z3j9RDUz+RHhU+zAlStqEMlWsR/mpCDXp9TByRM3ykN?=
+ =?us-ascii?Q?NuJUN10U3NyC5pArYpzeLLs1Qm1T2sXqpi5DJqznNB0CDRf2JBe2SmuPNims?=
+ =?us-ascii?Q?8w3x/VXAyi5Cbo1qKyyRFqmdxpq90GFQVsjgoR1J?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(7416014)(376014)(36860700013)(1800799024)(82310400026)(921020);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Nov 2025 08:05:25.6818
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: b2a1062f-9b77-477c-6164-08de202fe7c3
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SJ5PEPF000001D7.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4357
 
-Hi Florian,
+Following series of patches add support for Tegra264 and High Speed (HS)
+Mode in i2c-tegra.c driver.
 
-On Sat, 11 Oct 2025 14:31:53 +0200, Blacktempel (Florian K.) wrote:
-> SPD of most Intel DDR5 systems is write protected.
-> The write protection also includes changing page, via MR11 register, and prevents reading data.
-> 
-> This patch allows page changing with write protection active via a I2C_SMBUS_READ on PROC_CALL.
-> That is a, publicly undocumented, Intel specific way to allow page change.
-> 
-> Link: https://github.com/Blacktempel/RAMSPDToolkit/issues/4
-> Link: https://github.com/Blacktempel/RAMSPDToolkit/blob/9b2aeab9b7637be1874520c74c9873e174fe4947/RAMSPDToolkit/SPD/DDR5AccessorBase.cs#L237
-> Link: https://github.com/namazso/PawnIO.Modules/pull/19/files#diff-43cf449eaf4b834c447bc85ad039882fbd4fc883be00447908b94eb9cc8a9c36R481
-> Signed-off-by: Blacktempel (Florian K.) <Blacktempel@hotmail.de>
-> ---
->  drivers/i2c/busses/i2c-i801.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-> index cba992fa6557..9d8eda8b3287 100644
-> --- a/drivers/i2c/busses/i2c-i801.c
-> +++ b/drivers/i2c/busses/i2c-i801.c
-> @@ -788,7 +788,7 @@ static int i801_simple_transaction(struct i801_priv *priv, union i2c_smbus_data
->  		xact = I801_WORD_DATA;
->  		break;
->  	case I2C_SMBUS_PROC_CALL:
-> -		i801_set_hstadd(priv, addr, I2C_SMBUS_WRITE);
-> +		i801_set_hstadd(priv, addr, read_write);
->  		iowrite8(data->word & 0xff, SMBHSTDAT0(priv));
->  		iowrite8((data->word & 0xff00) >> 8, SMBHSTDAT1(priv));
->  		iowrite8(hstcmd, SMBHSTCMD(priv));
+Akhil R (2):
+  i2c: tegra: Add HS mode support
+  i2c: tegra: Add Tegra264 support
 
-This looks similar to the workaround we applied for AT24-based SPD
-implementations many years ago:
+Kartik Rajput (2):
+  i2c: tegra: Do not configure DMA if not supported
+  i2c: tegra: Add support for SW mutex register
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ba9ad2af7019956b990ad654c56da5bac1e8b71b
-
-Because all datasheets since the 82801AA explicitly say that "for
-process call command, the value written into bit 0 of the Transmit
-Slave Address Register (SMB I/O register, offset 04h) needs to be 0", I
-would prefer to have a similar implementation for the SMBus Process
-Call: check SMBHSTCFG_SPD_WD and only apply the workaround if that bit
-is set. This will avoid risking a regression on older chipsets.
-
-I checked the spd5118 driver (which implements DDR5 SPD EEPROM support)
-and it is NOT using the SMBus Process Call. So the above change alone
-isn't going to allow accessing DDR5 SPD data on Intel systems where SPD
-write protection is enabled. And the spd5118 driver is built on top of
-regmap which is a generic register map access implementation.
-Convincing it to use the SMBus Process Call transfer type for page
-selection won't be trivial, if possible at all.
-
-Are you using a modified spd5118 driver? Or are you accessing the SPD
-EEPROM from user-space using the i2c-dev driver?
-
-I must confess I'm curious how using the SMBus Process Call for the
-purpose of switching the pages could work safely. This transfer type
-will write 3 bytes on the bus, while page switching only expects 2. The
-third written byte could have unexpected side effects, such as writing
-to the following register (MR12). I'm not sure that's a risk I would be
-willing to take. Then the process call will attempt to read 2 bytes
-from the SPD, I'm not sure how the SPD will react, but that should be
-less of a problem.
-
-If Intel messed up their Write Protect implementation for the DDR5 SPD
-standard then they should really fix it in future chipsets.
+ drivers/i2c/busses/i2c-tegra.c | 192 ++++++++++++++++++++++++++++++---
+ 1 file changed, 178 insertions(+), 14 deletions(-)
 
 -- 
-Jean Delvare
-SUSE L3 Support
+2.43.0
+
 
