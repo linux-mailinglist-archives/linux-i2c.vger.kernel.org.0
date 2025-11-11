@@ -1,79 +1,79 @@
-Return-Path: <linux-i2c+bounces-14054-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14055-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F2AEC4D8B3
-	for <lists+linux-i2c@lfdr.de>; Tue, 11 Nov 2025 12:58:08 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id CAE6DC4D886
+	for <lists+linux-i2c@lfdr.de>; Tue, 11 Nov 2025 12:55:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 25D534E611A
-	for <lists+linux-i2c@lfdr.de>; Tue, 11 Nov 2025 11:46:27 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 6F49E4FDE33
+	for <lists+linux-i2c@lfdr.de>; Tue, 11 Nov 2025 11:46:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2D1F3563CC;
-	Tue, 11 Nov 2025 11:46:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AE58357A31;
+	Tue, 11 Nov 2025 11:46:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gaAJ8tSh"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dc7G/FQr"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE2E033F8C9
-	for <linux-i2c@vger.kernel.org>; Tue, 11 Nov 2025 11:46:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 891BB3570A9
+	for <linux-i2c@vger.kernel.org>; Tue, 11 Nov 2025 11:46:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762861575; cv=none; b=kD7oKqrTjqvzkpRKdbfat+B8Vb+WhMXR1N0EYFkQ4X94ow2XxQALxwdsukOHLeO/BCAgOEBQSMrZivJRWhJmTY8qyw+7A+FxXT+P0ZDwJlZ3Nqq5bCS9m13yUYfY6Re+u2c5sPYewQ2HIrK9JbRyGdg4xOGzUbmsQrsrnL/hUSE=
+	t=1762861578; cv=none; b=l3IF16knXnv0h+OCqlDa0Q4YqO+OGYH4EjsqzbV7w6OvFw9ij6RTzuPHgzKAX/QFl4hgNtEsHxzoE9ixHGJkVuQD6/Zmvw6fjqtn2GuvQlQhEs2ZsXvcrg85IculfhgtDWlewxfnDW8niM7RxLal3RCDpyrvZbCupixm4mE2bF8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762861575; c=relaxed/simple;
-	bh=Upj1jWoWgtb3YLXDrmSF6/3Py3j5ozE5cNqipSmKtgE=;
+	s=arc-20240116; t=1762861578; c=relaxed/simple;
+	bh=SbEoUjzRdYSzRtrur4zv59kSlcqgvNU4/0/HoJXMLTQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=eYq5voi4uD2XDU1NFGAsb330a5d3kIw1ygaFmwh/lhDsEWqVjImrzg/mpBxRi48aWtLorp2TmZpXz6uMrVHTXD89Ll5XPNwP+3a/PQpi8LrQ/gSKZj32TCiUpEBGypmAuzzbncEGqh54An4tHI688FSw/ReV9npZXpg6lSSjxcg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gaAJ8tSh; arc=none smtp.client-ip=209.85.218.50
+	 MIME-Version; b=brlzZD9c//n2MdkR7knwww4Rk7okjbsSrbWRHxO/XpnQyHA3Fp1b2AOpvQUYNWjkCpMQDsd864NSxq80VwCxIqsHRfbvDWNu+uPRTcrGgemBruz14DOz2yzohQag6x6kMttSMj5RWrXq/d4fiRiuZUqJgJevL0uo//eRD8GTE+w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dc7G/FQr; arc=none smtp.client-ip=209.85.218.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-b72cbc24637so759558366b.0
-        for <linux-i2c@vger.kernel.org>; Tue, 11 Nov 2025 03:46:13 -0800 (PST)
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-b3e7cc84b82so768395966b.0
+        for <linux-i2c@vger.kernel.org>; Tue, 11 Nov 2025 03:46:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762861572; x=1763466372; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1762861575; x=1763466375; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=lHsaI+8ssP4NAxyErXWlA7Ff3GUFBJnH0j5EJl5VHgM=;
-        b=gaAJ8tShl91Cyr9lvfv8MFAVnMAkhRCFYiuti5eSKDf0DpTmL/i7bdIFi8rXH2j9u5
-         um/iQ6HxQdlv1+euAowH5u2g2Kw1AddOmMcUT9ZtzqsSujoBy5k+y9he8+NilO+zyxtH
-         osc44ice1kYzLVXdp+T0BO9oPBkYB2GzcuXrHXClnqXxTB/i5zH9wJhnp6O3Z2tVi2Ka
-         fQzZoueF81HWZGci1q7/IyFEMeIrThEtefqar9jZJDj0xNI95h0OK4uBL+OlB8C2WKt4
-         NGgvyQfPOkh3TPjBVlFWDMjFWl3pZ2nN0beAf2MCeuVkUVhj4X6narc1NdslXCF5DwTr
-         JkDQ==
+        bh=J5I7f4jaWq/Be7PYF2soJzUGXwHm93DFveuU61+E2QA=;
+        b=dc7G/FQrlwISc3SsEHdZjJ1I/rw6N06+XoF0gXa+624Ca6aK1JJd/iDRAxbAlXJLHS
+         NOpa+MiqoJa/lXzxKlxEQVEG0htOUcufVXbsbOdOzWgdmDEVQx3EylMqanEGSolbf1BA
+         YV9D+PKWsEaXzj2aKdQXVcCJ5FYUvJh8HPx8li7Ys+a9HK4Juvvs5+8J8XDLNIvS2RXr
+         +lO5hO1b/dWM04V+VGwcpfJaBcI1ok0AdfOCIVCwq2/u4E6xniy9uGbcYep7R4G7DDXw
+         JK9ug/lJsI9QUSM4Ceui9HIj/Vtc1oG1zn/wxETf03VBepk7vzv//JxRn/n22hhxFpUR
+         G2gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762861572; x=1763466372;
+        d=1e100.net; s=20230601; t=1762861575; x=1763466375;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=lHsaI+8ssP4NAxyErXWlA7Ff3GUFBJnH0j5EJl5VHgM=;
-        b=SxWp8FPGWkwsLQ5+NN1oCGX6llMc2ZgKju5iqdlFEyx4E2pN8geCWTVD/AKit+Bgr/
-         xEXE2KpVhApEYiO93Q3N8KB4WMJp9DGRjJgL5FoMfU4xLlSvo4GhAftLbSb5K8ZyGk/c
-         /iWi4g3n2CkWZScsabwEEyOAYAPdE1X+JRdL4PSwdbCAfBsgjXor4Fxfe55vebPbcxsW
-         VVvJJdY+OERARp0HvlQ04GnZZ66v/C3y70GD28JIXYpTjS3n/02MPPepkeySvwPLdTom
-         mAYG5vL4vflqb79LVneMtV74ynd2h1NgfxUgIEFcPvz5Z89QPuWRxg76wKEfafTQlEB2
-         3oTA==
-X-Forwarded-Encrypted: i=1; AJvYcCVO34pPgKAyAur0n707agebgYku2FljAsbtyqXyrAPt3Txo7QqxxI6PsaLhNqfbLmrWnpGkzSMoWBI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwzwKA40wnlWhgUmsPgqx6gPCY09eGazEVuV7dnOc6qjjAHNasB
-	92wGxcjGB2aUnq6fk7gBc4hzY5W+4BBykMnyeCMxZh4FuVJN+U4/qgH5
-X-Gm-Gg: ASbGncsiT5qi1smKpxqGoXy8jG1aAW3+UsdbJF30xSAmajwgFdXIXk0+Qiy5XNcEbz3
-	7RONZb+2ukv7SXAEP8riiZuTdjv7x/ThT1pCOALrQaR4fMdoCq9zG3tATNuRXCh+g4p8uUOsS5x
-	FEmXYB/YSyCNOcZ9CP4AF3tjW8BLhUO4cp6nH+BexuaaS8pzH12IQy+j3BX68rI+JB+0FFWaT+j
-	J2RecQJFHAZF+a6eYIOw6w/WQv1tsQZVo6kkmGeT9tN6cr77/ndh5YaKkQr4VZSTB2eiMkSvAfe
-	GPPOy5mR6pcPA/0dk7G+EEMtB4Qd7AG93Mm3A2zZmecSk+SgWqI29Z9sMUbiym5Xyw9pYpcxwKL
-	2lSXfh6uPJRTJi5labQYnLOp+s2u96i00LVfj0Fs2ULB2+67FsaXbZpB+0htNAoKzLrkRUkqXsD
-	Vq3TUETv/p7mYPPrC1hk7aDx+aIa3O
-X-Google-Smtp-Source: AGHT+IEV7fZalGu4772LIAkYKN8AwAJnb1OpT2vlRNHQtmzhU7UOMuLq43dBLQy3Nqdch1TUukA9lA==
-X-Received: by 2002:a17:907:86a9:b0:b72:aa52:6034 with SMTP id a640c23a62f3a-b72e033df48mr1243491966b.21.1762861571740;
-        Tue, 11 Nov 2025 03:46:11 -0800 (PST)
+        bh=J5I7f4jaWq/Be7PYF2soJzUGXwHm93DFveuU61+E2QA=;
+        b=ZG5nL5gmQRC0RXSmMX9w4QJZ9ZijejFo+CEEtWOv9xHTfs3DW0yVcvawd2PfKJ/IPp
+         6YLpQnIu/D3BZhzZ9IVLKa59MxY2BLmSFVI+E55SoMj+IYdvPLo0tpojAjEbefrMUEiK
+         bOEQFqVZuZz1IOuI7oZp/hMtPkOgC9rBf32378pMRd5vYe3Lzwtk5iEFCpRdvnvdZjPS
+         XjnxGsjWIhusebQHpJrcqHeaGoA0bKzR2/qHgOoVMaN99OYZvYVjX2QWdNT+lVs8QNtO
+         1vmmE86KiKKos6Bs2dLAeeMxxyqNIwzxM2Cp2LnPDIUHrpQFXJxA0zFJ2vUB0ab2oDZi
+         6q5Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUvHZP1xqb0qXUUkPhz3cs1Dlki7ecErkrRZPR+lviLZGUu4Zrit52GoKaJQoNXPAM7OnnUawoFjug=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy9gREwXUfQW1L+gOKOYM7/Xip636fdOUtCkB1Bc5Bbk9bHkZwt
+	YGMsFYg+0supGead0+cAxJu4uwukR9swqy7I9dEcWZvnVDSVSVn+ziBM
+X-Gm-Gg: ASbGncvt2w879mMp3Psnu8pLosRrUEe/EPK+2jS7vTyTdzgqAwKeTCKU0Of/Toro0Pv
+	0NtHJ60w6mWiZXk6j0pwdG31YG6+ZaFtk5MDTaolAzTSBaJua3TFmWgpAu7Bwsev1d/aRu03vCc
+	b6lcTfQayhHK6kKfsMM36+p/2d1W57rJ4h/LexG4meJJSTy6IbHc72147kt2vvnLDbv/IjeaW09
+	jMdkJDjlmAlWZbJGmQfHqQHSosbMcC6CYy2k2vaQ+lszNpJPYRypLph4vLsrsqcJ8KP2nAR3IXE
+	gLNmqJW1thZmUgurfGAWgGxSC6zv4Maxvv0T3kGgOXewvToOQlr2FEr60QGHh56vPpAjzIQHXvS
+	V4iwZLgdxUuWGkJnJ3GisIx9JzdoRc17jsI8XyKracEw4SZ4LLqdzZh+v4fANxVAGoeiZRR/bxt
+	+Cc/FQ+ZpnjlDv/3HgBA==
+X-Google-Smtp-Source: AGHT+IFFuE0IpmRKltf3NCJrfvjuMROiYig/x7vdZGNFBWVaI1wobtpu87KOcr6O03jx1C8wR0fYCQ==
+X-Received: by 2002:a17:907:96ab:b0:b70:be0b:6ba8 with SMTP id a640c23a62f3a-b72e0623f36mr1268911866b.61.1762861574774;
+        Tue, 11 Nov 2025 03:46:14 -0800 (PST)
 Received: from NB-6746.corp.yadro.com ([188.243.183.84])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b72fcde0779sm682374466b.40.2025.11.11.03.46.10
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b72fcde0779sm682374466b.40.2025.11.11.03.46.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Nov 2025 03:46:11 -0800 (PST)
+        Tue, 11 Nov 2025 03:46:14 -0800 (PST)
 From: Artem Shimko <a.shimko.dev@gmail.com>
 To: p.zabel@pengutronix.de
 Cc: a.shimko.dev@gmail.com,
@@ -83,9 +83,9 @@ Cc: a.shimko.dev@gmail.com,
 	linux-i2c@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	mika.westerberg@linux.intel.com
-Subject: [PATCH v2 2/3] i2c: designware-platdrv: complete reset control devm conversion
-Date: Tue, 11 Nov 2025 14:45:58 +0300
-Message-ID: <20251111114559.3188740-2-a.shimko.dev@gmail.com>
+Subject: [PATCH v2 3/3] i2c: designware-platdrv: streamline error handling
+Date: Tue, 11 Nov 2025 14:45:59 +0300
+Message-ID: <20251111114559.3188740-3-a.shimko.dev@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251111114559.3188740-1-a.shimko.dev@gmail.com>
 References: <e3c2096459bdd0c1d48c00a837cc7f8c18044631.camel@pengutronix.de>
@@ -98,103 +98,58 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The driver still manually calls reset_control_assert() in error paths and
-remove function. This creates inconsistent resource management and misses
-the benefits of full device-managed approach.
+The probe function uses unnecessary goto statements and error variable
+reassignments that complicate the code flow. The goto exit_probe pattern
+adds indirection for simple error cleanup, while redundant error assignment
+in lock support probe clutters the error handling.
 
-Register devm_add_action_or_reset() callback after acquiring reset control
-to handle automatic assertion on probe errors and driver removal. This
-eliminates all manual reset_control_assert() calls while maintaining
-identical reset behavior through automatic devm resource management.
+Simplify the error paths by removing the goto exit_probe label and handling
+PM runtime cleanup directly after i2c_dw_probe() failure. Additionally,
+replace the error variable reassignment in i2c_dw_probe_lock_support() with
+direct dev_err_probe() return. These changes make the error handling more
+linear and readable while maintaining identical functionality.
 
 Signed-off-by: Artem Shimko <a.shimko.dev@gmail.com>
 ---
- drivers/i2c/busses/i2c-designware-platdrv.c | 34 ++++++++++++---------
- 1 file changed, 19 insertions(+), 15 deletions(-)
+ drivers/i2c/busses/i2c-designware-platdrv.c | 18 ++++++------------
+ 1 file changed, 6 insertions(+), 12 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
-index c77029e520dc..d334af1d7c6f 100644
+index d334af1d7c6f..ab15a924dad5 100644
 --- a/drivers/i2c/busses/i2c-designware-platdrv.c
 +++ b/drivers/i2c/busses/i2c-designware-platdrv.c
-@@ -206,6 +206,13 @@ static void i2c_dw_remove_lock_support(struct dw_i2c_dev *dev)
- 		i2c_dw_semaphore_cb_table[dev->semaphore_idx].remove(dev);
- }
- 
-+static void dw_i2c_plat_assert_reset(void *data)
-+{
-+	struct dw_i2c_dev *dev = data;
-+
-+	reset_control_assert(dev->rst);
-+}
-+
- static int dw_i2c_plat_probe(struct platform_device *pdev)
- {
- 	u32 flags = (uintptr_t)device_get_match_data(&pdev->dev);
-@@ -240,34 +247,34 @@ static int dw_i2c_plat_probe(struct platform_device *pdev)
- 	if (IS_ERR(dev->rst))
- 		return PTR_ERR(dev->rst);
- 
-+	ret = devm_add_action_or_reset(device, dw_i2c_plat_assert_reset, dev);
-+	if (ret)
-+		return ret;
-+
- 	ret = i2c_dw_fw_parse_and_configure(dev);
- 	if (ret)
--		goto exit_reset;
-+		return ret;
+@@ -256,10 +256,8 @@ static int dw_i2c_plat_probe(struct platform_device *pdev)
+ 		return ret;
  
  	ret = i2c_dw_probe_lock_support(dev);
- 	if (ret) {
- 		ret = dev_err_probe(device, ret, "failed to probe lock support\n");
--		goto exit_reset;
-+		return ret;
- 	}
+-	if (ret) {
+-		ret = dev_err_probe(device, ret, "failed to probe lock support\n");
+-		return ret;
+-	}
++	if (ret)
++		return dev_err_probe(device, ret, "failed to probe lock support\n");
  
  	i2c_dw_configure(dev);
  
- 	/* Optional interface clock */
- 	dev->pclk = devm_clk_get_optional(device, "pclk");
--	if (IS_ERR(dev->pclk)) {
--		ret = dev_err_probe(device, PTR_ERR(dev->pclk), "failed to acquire pclk\n");
--		goto exit_reset;
--	}
-+	if (IS_ERR(dev->pclk))
-+		return dev_err_probe(device, PTR_ERR(dev->pclk), "failed to acquire pclk\n");
+@@ -314,14 +312,10 @@ static int dw_i2c_plat_probe(struct platform_device *pdev)
+ 	pm_runtime_enable(device);
  
- 	dev->clk = devm_clk_get_optional(device, NULL);
--	if (IS_ERR(dev->clk)) {
--		ret = dev_err_probe(device, PTR_ERR(dev->clk), "failed to acquire clock\n");
--		goto exit_reset;
--	}
-+	if (IS_ERR(dev->clk))
-+		return dev_err_probe(device, PTR_ERR(dev->clk), "failed to acquire clock\n");
+ 	ret = i2c_dw_probe(dev);
+-	if (ret)
+-		goto exit_probe;
+-
+-	return ret;
+-
+-exit_probe:
+-	dw_i2c_plat_pm_cleanup(dev);
+-	i2c_dw_prepare_clk(dev, false);
++	if (ret) {
++		dw_i2c_plat_pm_cleanup(dev);
++		i2c_dw_prepare_clk(dev, false);
++	}
  
- 	ret = i2c_dw_prepare_clk(dev, true);
- 	if (ret)
--		goto exit_reset;
-+		return ret;
- 
- 	if (dev->clk) {
- 		struct i2c_timings *t = &dev->timings;
-@@ -315,8 +322,7 @@ static int dw_i2c_plat_probe(struct platform_device *pdev)
- exit_probe:
- 	dw_i2c_plat_pm_cleanup(dev);
- 	i2c_dw_prepare_clk(dev, false);
--exit_reset:
--	reset_control_assert(dev->rst);
-+
  	return ret;
  }
- 
-@@ -338,8 +344,6 @@ static void dw_i2c_plat_remove(struct platform_device *pdev)
- 	i2c_dw_prepare_clk(dev, false);
- 
- 	i2c_dw_remove_lock_support(dev);
--
--	reset_control_assert(dev->rst);
- }
- 
- static const struct of_device_id dw_i2c_of_match[] = {
 -- 
 2.43.0
 
