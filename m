@@ -1,123 +1,93 @@
-Return-Path: <linux-i2c+bounces-14045-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14046-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B783BC4C60C
-	for <lists+linux-i2c@lfdr.de>; Tue, 11 Nov 2025 09:25:12 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F126C4C9A7
+	for <lists+linux-i2c@lfdr.de>; Tue, 11 Nov 2025 10:20:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A643E18C3D13
-	for <lists+linux-i2c@lfdr.de>; Tue, 11 Nov 2025 08:21:33 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4AE854F55BC
+	for <lists+linux-i2c@lfdr.de>; Tue, 11 Nov 2025 09:15:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD3872957B6;
-	Tue, 11 Nov 2025 08:21:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jlQQ1i6z"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9A0B2ECE9B;
+	Tue, 11 Nov 2025 09:15:40 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 639ABA944;
-	Tue, 11 Nov 2025 08:21:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FCB7277C86
+	for <linux-i2c@vger.kernel.org>; Tue, 11 Nov 2025 09:15:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762849263; cv=none; b=lILtGyTxahSV/s+3Q47jIi6z3gL7jMUIliL2KAeQmE7UoArFgpZjw/Pl3k4K4WKGAQmM0Yi+Iz7sAF9X7QzM0mPBuTiP4l/iP4J/V02zr1NDd1DHWCmzKL52pIhjhd7UyUB9NEWWVLto2WCehfpP/zsEStEq7HOZgnzUU8WXyQg=
+	t=1762852540; cv=none; b=k2zy8/dDogie4SxMYcW0vyia6WEp6SbzMeVStCS7kWwxSKg1vUkssUU11+t7a0NmNYoeoVed9+quT26g8QzCejT1kSVq9jSfyFMafhV8cBVMQCOVGLSWqg/RQnECCFkEUlP5O7iLGXZCaz4YQ4+P98ZqwdirHDhbGFPj4q80CfE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762849263; c=relaxed/simple;
-	bh=Weu3f3v6jreQW7azhbCbvwSDVTC98LwzGnEO0u3QKdU=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:From:Subject:Cc:
-	 References:In-Reply-To; b=PfU8dTR5waHMu1elaEcnm9Ika4mG9V/c6hqB2gmFutu/AZMy5gPT/NUra/x7ss84fDKjisyR8knnCyTB31EmhN58DJg7uBrBOCXsgl4jg9RkavZ02KBwHMV8/fyEFPyuKgWKP4DrbgMi1qxSx2dxG8Juc880Fk/oiCGEKp+2Js4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jlQQ1i6z; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E875C4CEF7;
-	Tue, 11 Nov 2025 08:20:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762849263;
-	bh=Weu3f3v6jreQW7azhbCbvwSDVTC98LwzGnEO0u3QKdU=;
-	h=Date:To:From:Subject:Cc:References:In-Reply-To:From;
-	b=jlQQ1i6zfiGDI5W/1u3tIfzGr3DodBbuR9ldkMwuJzo0aeQ6mxAU/kPoXtMstZkrN
-	 IvvKtef/y0OTntMdHrdEqXdAnfe8MPfZ+rIdNK/I0V31GcV7pA7KZHfArNo3e7ev6D
-	 vREGaDy/g/8jbSBDXU9smsjbH14ON49f9fBhDeBoqakpFKBS51nntGFpvK5gjCke4N
-	 8zlDG4+lHEW9sboUazg3GfMBt67fa+yIc3QZ1d+MQaml1mbQDIoF6zEaIzNkqETs7G
-	 HRYDe+xkgQHwpgO+MShfnhRznkSFImomWwJZQuVyo5Nur95ptntbeL4Te6zjLRCxBs
-	 ERx6l+wxEBjLw==
+	s=arc-20240116; t=1762852540; c=relaxed/simple;
+	bh=YR0eoIFydfEz+0f3RUaWyHvwfBv/96v6P8ApNu69bHU=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=rEYv0Rvyp4ORTCE73cUgN7rW8/oew+88wwzMQBgmAEAWQIYzhJvrn6ya9shYhZc9o7MrqTHcRbF42DJ/nyS2ywzE7hWUKJn2Vm8Y0rBtmCis3vb4N2vMXubMP6MGkLo1tnsWKu0KKv+hojp7g2Up7L3Cobyz1eUOeaM3Qf73KuM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1vIkTB-00079y-Co; Tue, 11 Nov 2025 10:15:21 +0100
+Received: from lupine.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::4e] helo=lupine)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1vIkTA-008Ass-1m;
+	Tue, 11 Nov 2025 10:15:20 +0100
+Received: from pza by lupine with local (Exim 4.98.2)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1vIkTA-000000002G0-23kI;
+	Tue, 11 Nov 2025 10:15:20 +0100
+Message-ID: <e3c2096459bdd0c1d48c00a837cc7f8c18044631.camel@pengutronix.de>
+Subject: Re: [PATCH RESEND] i2c: designware-platdrv: handle reset control
+ deassert error
+From: Philipp Zabel <p.zabel@pengutronix.de>
+To: Artem Shimko <a.shimko.dev@gmail.com>, Mika Westerberg	
+ <mika.westerberg@linux.intel.com>, Andy Shevchenko	
+ <andriy.shevchenko@linux.intel.com>, Jan Dabros <jsd@semihalf.com>, Andi
+ Shyti	 <andi.shyti@kernel.org>
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Tue, 11 Nov 2025 10:15:20 +0100
+In-Reply-To: <20251111075400.2982270-1-a.shimko.dev@gmail.com>
+References: <20251111075400.2982270-1-a.shimko.dev@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.1-1+deb13u1 
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 11 Nov 2025 19:20:48 +1100
-Message-Id: <DE5PWKX730XK.Q5WZS3DLYXE7@kernel.org>
-To: "Igor Korotin" <igor.korotin.linux@gmail.com>
-From: "Danilo Krummrich" <dakr@kernel.org>
-Subject: Re: [PATCH v7 4/4] samples: rust: add Rust I2C client registration
- sample
-Cc: "Miguel Ojeda" <ojeda@kernel.org>, "Alex Gaynor"
- <alex.gaynor@gmail.com>, "Wolfram Sang" <wsa+renesas@sang-engineering.com>,
- "Boqun Feng" <boqun.feng@gmail.com>, "Gary Guo" <gary@garyguo.net>,
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, "Benno Lossin"
- <lossin@kernel.org>, "Andreas Hindborg" <a.hindborg@kernel.org>, "Alice
- Ryhl" <aliceryhl@google.com>, "Trevor Gross" <tmgross@umich.edu>, "Greg
- Kroah-Hartman" <gregkh@linuxfoundation.org>, "Viresh Kumar"
- <viresh.kumar@linaro.org>, "Asahi Lina" <lina+kernel@asahilina.net>,
- "Wedson Almeida Filho" <wedsonaf@gmail.com>, "Alex Hung"
- <alex.hung@amd.com>, "Tamir Duberstein" <tamird@gmail.com>, "Xiangfei Ding"
- <dingxiangfei2009@gmail.com>, <linux-kernel@vger.kernel.org>,
- <rust-for-linux@vger.kernel.org>, <linux-i2c@vger.kernel.org>
-References: <20251110112437.50405-1-igor.korotin.linux@gmail.com>
- <20251110113125.51785-1-igor.korotin.linux@gmail.com>
-In-Reply-To: <20251110113125.51785-1-igor.korotin.linux@gmail.com>
+MIME-Version: 1.0
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 
-On Mon Nov 10, 2025 at 10:31 PM AEDT, Igor Korotin wrote:
-> +impl platform::Driver for SampleDriver {
-> +    type IdInfo =3D ();
-> +    const OF_ID_TABLE: Option<of::IdTable<Self::IdInfo>> =3D Some(&OF_TA=
-BLE);
-> +    const ACPI_ID_TABLE: Option<acpi::IdTable<Self::IdInfo>> =3D Some(&A=
-CPI_TABLE);
-> +
-> +    fn probe(
-> +        pdev: &platform::Device<device::Core>,
-> +        _info: Option<&Self::IdInfo>,
-> +    ) -> impl PinInit<Self, Error> {
-> +        pin_init::pin_init_scope(move || {
+On Di, 2025-11-11 at 10:53 +0300, Artem Shimko wrote:
+> Handle the error returned by reset_control_deassert() in the probe
+> function to prevent continuing probe when reset deassertion fails.
+>=20
+> Previously, reset_control_deassert() was called without checking its
+> return value, which could lead to probe continuing even when the
+> device reset wasn't properly deasserted.
+>=20
+> The fix checks the return value and returns an error with dev_err_probe()
+> if reset deassertion fails, providing better error handling.
+>=20
+> Signed-off-by: Artem Shimko <a.shimko.dev@gmail.com>
 
-We probably don't need pin_init_scope() here.
+Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
 
-> +            dev_info!(
-> +                pdev.as_ref(),
-> +                "Probe Rust I2C Client registration sample.\n"
-> +            );
-> +
-> +            Ok(kernel::try_pin_init!( Self {
-> +                parent_dev: pdev.into(),
-> +
-> +                idev <- {
-> +                    let adapter =3D i2c::I2cAdapter::get(SAMPLE_I2C_ADAP=
-TER_INDEX)?;
-> +
-> +                    i2c::Registration::new(&adapter, &BOARD_INFO, pdev.a=
-s_ref())
-> +                }
-> +            }))
-> +        })
-> +    }
-> +}
-> +
-> +#[pinned_drop]
-> +impl PinnedDrop for SampleDriver {
-> +    fn drop(self: Pin<&mut Self>) {
-> +        dev_info!(
-> +            self.parent_dev.as_ref(),
-> +            "Remove Rust Platform driver for I2C Client registration sam=
-ple.\n"
-> +        );
-> +    }
+Looking at the surroundings, this driver could be simplified with
+devm_reset_control_get_optional_exclusive_deasserted().
 
-Let's use unbind() here as well.
-
-(Yes, the existing samples need to be updated. :)
+regards
+Philipp
 
