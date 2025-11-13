@@ -1,665 +1,305 @@
-Return-Path: <linux-i2c+bounces-14073-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14075-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04990C56642
-	for <lists+linux-i2c@lfdr.de>; Thu, 13 Nov 2025 09:55:14 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2AA8EC56A88
+	for <lists+linux-i2c@lfdr.de>; Thu, 13 Nov 2025 10:43:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id F31DB348DB1
-	for <lists+linux-i2c@lfdr.de>; Thu, 13 Nov 2025 08:48:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4216A3BE7F3
+	for <lists+linux-i2c@lfdr.de>; Thu, 13 Nov 2025 09:34:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41856330D32;
-	Thu, 13 Nov 2025 08:48:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E745230AAB4;
+	Thu, 13 Nov 2025 09:34:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b="is6hvMUF"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D72EC2C1589;
-	Thu, 13 Nov 2025 08:48:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763023735; cv=none; b=Y94j0e4pxChkWvlgTZ9pKfWNHup+vjYY/QZYOOrpuLSr7YLhu2Y/zXGY8gfgQPjG28v0TvQzmIC3W2i1UGtW3GIGZbHHFOSv5ivZ+keTMdDc87XKP1Ba4edlNm8UUWKifFX4tUcQk9iJsE7mx5tjviJW8tYznQn/cIohsXNISoU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763023735; c=relaxed/simple;
-	bh=vIYoFt+dYAEQdMJvkmAfTYppKiVzDcVak5wU5CbF4Yw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aydEWukDS94QNs9WVUcNJM6SoAErYEfRtZ8uA7sWRz92UEKLm1SFiTV7bNlRGkB9sJYBPX1bV9paIxHaxqG2yQ0V1udPRfu0SAgGIAaPblpzGxnGDbwblSA3PBGsJReo1iZlOfrd/FJdgUpjsVMrXho4h+bCkZ1JC+gdso4XB/4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [223.64.68.45])
-	by gateway (Coremail) with SMTP id _____8AxxtBwmxVpr8oiAA--.8489S3;
-	Thu, 13 Nov 2025 16:48:48 +0800 (CST)
-Received: from localhost.localdomain (unknown [223.64.68.45])
-	by front1 (Coremail) with SMTP id qMiowJAxQMJimxVpkYAxAQ--.3356S4;
-	Thu, 13 Nov 2025 16:48:43 +0800 (CST)
-From: Binbin Zhou <zhoubinbin@loongson.cn>
-To: Binbin Zhou <zhoubb.aaron@gmail.com>,
-	Huacai Chen <chenhuacai@loongson.cn>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	linux-i2c@vger.kernel.org
-Cc: Huacai Chen <chenhuacai@kernel.org>,
-	Xuerui Wang <kernel@xen0n.name>,
-	loongarch@lists.linux.dev,
-	devicetree@vger.kernel.org,
-	Binbin Zhou <zhoubinbin@loongson.cn>
-Subject: [PATCH 2/2] i2c: ls2x-v2: Add driver for Loongson-2K0300 I2C controller
-Date: Thu, 13 Nov 2025 16:48:24 +0800
-Message-ID: <8899e0bf2a008003208dbcb63b4a40ae116fe5d8.1763018288.git.zhoubinbin@loongson.cn>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <cover.1763018288.git.zhoubinbin@loongson.cn>
-References: <cover.1763018288.git.zhoubinbin@loongson.cn>
+Received: from SEYPR02CU001.outbound.protection.outlook.com (mail-koreacentralazon11023100.outbound.protection.outlook.com [40.107.44.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BD7A2D9786;
+	Thu, 13 Nov 2025 09:34:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.44.100
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1763026480; cv=fail; b=ZTX/HMZmI2YaIyUN2GAtIPG/uwjfCtvSS7y+mjt97tUTSA5MTVmBtUiIgbbwfIGOUrpcCvoADJ+q8qSJzbNIg77KgGeuvR9sAcm9Zx6XkNjxS8JH9UCutl/AyW36eN2hkMG3tkxKpkDjj4ogtdcaY/DNYsBwb2UXeWfqQ6TMbqs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1763026480; c=relaxed/simple;
+	bh=QKuA8Tg1FHy/Y7XAF1d7IREgwrZh7LFSZMxSSObxBUk=;
+	h=From:To:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=rrbCTix3tUIzujSk0onieDXNIcxa7KlzM3jZT4k7oHNbt9gP+DpuKkvRtp+I2OIDufcaihcNIYoAQ5Dva2d8h6BBg/JRUNHe8+aHvKMa/pvppHXQVpE6NTZ9IN4CWTyY2HPKnIou2dLcjw0f3pYOxVS6+Sb9O9BIOKYzf+Kgc18=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b=is6hvMUF; arc=fail smtp.client-ip=40.107.44.100
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=eRxHzuwbyhQyknpjzpVXH1j1HRAE7FsSdSwfxDtZAWQkpFlkicsmERGrKW/bK5TanuTuT2dNINr1w8KjR2fpRLqVdIBESd/nl/VUzVkZ9bIylIIqNVfj/BO44lpKHNb32LZbNgi2f9W6Zn9yxxEsgb1XqxFIrozAMFkuj03itTo+nClQ52nUKUXyGHdu3RyxJG42Xal0wnKrJlGod4nLf7ZdQZDxIzQVlLdY0Mi2yVvk2jGehUnTf/UtcCOhFbNJ9GLYgGGTTyxy9LYKQL9lul/dGizvTUmr+P+wo+75afRE8311pIvnEgCPD0uWl/tERhjxQyWlC7QYtgWivS4xdw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QKuA8Tg1FHy/Y7XAF1d7IREgwrZh7LFSZMxSSObxBUk=;
+ b=W2nZyd3damgYm49EaSUqD9D0ITOEykQBKq+rbxl6/tFGjFLLDD65fsEk1QxK/CvO09JxBr19uyi39GWEN3Yxe3hh5vihwG3QZBIK9cOg5IeiTjeArQ9IC7TdUCPMKvVo8dnqJp3WUHHqS+QhB0NPGYTADWaS99/GdH1m+sMmPgmP+b83n00rV3to83G9BAA/8tgoG+NfpOPV5FoWx/zsRoiPM3TyJxOsCnwYxmbVSETHYbRkQVDpbQ/R+r89R3rPJ6luaiS2hJZnASogb5F4Fyc76LMXKfgAG2U243RKpdnumcCWbGHgx5pXD1T5PvjjhenZ3MtXd7SivdC25niWTg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
+ header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QKuA8Tg1FHy/Y7XAF1d7IREgwrZh7LFSZMxSSObxBUk=;
+ b=is6hvMUFMVfqnFeZC2V1gILgnruTeTVqOH2iQAN4yAXLym36n1YJbeWAWOCjjf8eDGzxzNJc8GC7ffRoroLZ2b4dOB70Exie67pgk+yWbPVOE5v2mCnKQunhOjgRvZuKDMkPsFCrG8mmDsdbuksXpbO+P+n+9+78Q9TgQCKkgf1mawRDeWwbB9cnq+0FSSbzToTf6fqL9QOtdUtEmReA+TXb3dPqsus3vmc8IWYxv1Dz5xLWOFbii1L3k54LnxOb7betEGutiNFeU/+Ak4EXdxONW2MqCN0NJI8dmcV8i21qvv/8jnKLJtvlRbik0xv95NlC3T93pZ/NNLqBpOTEEA==
+Received: from TY2PPF5CB9A1BE6.apcprd06.prod.outlook.com (2603:1096:408::791)
+ by SEYPR06MB5350.apcprd06.prod.outlook.com (2603:1096:101:6a::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9320.17; Thu, 13 Nov
+ 2025 09:34:32 +0000
+Received: from TY2PPF5CB9A1BE6.apcprd06.prod.outlook.com
+ ([fe80::df4f:b1a1:1825:4a80]) by TY2PPF5CB9A1BE6.apcprd06.prod.outlook.com
+ ([fe80::df4f:b1a1:1825:4a80%7]) with mapi id 15.20.9298.015; Thu, 13 Nov 2025
+ 09:34:32 +0000
+From: Ryan Chen <ryan_chen@aspeedtech.com>
+To: Ryan Chen <ryan_chen@aspeedtech.com>, Krzysztof Kozlowski
+	<krzk@kernel.org>, "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
+	"joel@jms.id.au" <joel@jms.id.au>, "andi.shyti@kernel.org"
+	<andi.shyti@kernel.org>, "jk@codeconstruct.com.au" <jk@codeconstruct.com.au>,
+	"robh@kernel.org" <robh@kernel.org>, "krzk+dt@kernel.org"
+	<krzk+dt@kernel.org>, "conor+dt@kernel.org" <conor+dt@kernel.org>,
+	"andrew@codeconstruct.com.au" <andrew@codeconstruct.com.au>,
+	"p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+	"andriy.shevchenko@linux.intel.com" <andriy.shevchenko@linux.intel.com>,
+	"naresh.solanki@9elements.com" <naresh.solanki@9elements.com>,
+	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+	"openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "linux-aspeed@lists.ozlabs.org"
+	<linux-aspeed@lists.ozlabs.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v20 1/4] dt-bindings: i2c: Split AST2600 binding into a
+ new YAML
+Thread-Topic: [PATCH v20 1/4] dt-bindings: i2c: Split AST2600 binding into a
+ new YAML
+Thread-Index: AQHcQisKZrgNdIKVU0mDlJSyYndfALTQ+A6AgAfdvQCAACofAIAT7eJAgAOJTnA=
+Date: Thu, 13 Nov 2025 09:34:31 +0000
+Message-ID:
+ <TY2PPF5CB9A1BE67DBBC08424DD062549BDF2CDA@TY2PPF5CB9A1BE6.apcprd06.prod.outlook.com>
+References: <20251021013548.2375190-1-ryan_chen@aspeedtech.com>
+ <20251021013548.2375190-2-ryan_chen@aspeedtech.com>
+ <0b76f196-f642-4991-ad5c-717c23938421@kernel.org>
+ <TY2PPF5CB9A1BE6597ECD46BD4CB7C5F09FF2FAA@TY2PPF5CB9A1BE6.apcprd06.prod.outlook.com>
+ <3c3287f6-1c5c-4c4d-9349-32665a5e1585@kernel.org>
+ <TY2PPF5CB9A1BE6FE06477B9CC51B8133DAF2CFA@TY2PPF5CB9A1BE6.apcprd06.prod.outlook.com>
+In-Reply-To:
+ <TY2PPF5CB9A1BE6FE06477B9CC51B8133DAF2CFA@TY2PPF5CB9A1BE6.apcprd06.prod.outlook.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=aspeedtech.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TY2PPF5CB9A1BE6:EE_|SEYPR06MB5350:EE_
+x-ms-office365-filtering-correlation-id: 59b49ebc-8be4-4646-83cd-08de2297d98f
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|366016|1800799024|376014|7416014|38070700021|921020|13003099007;
+x-microsoft-antispam-message-info:
+ =?utf-8?B?YThPQzhNdzdaa3A3SDV6eFpweHZhQmFiQnBMRkpISG9HZDBCbGp4NCtrZXIx?=
+ =?utf-8?B?dG1xVkprWTJ0aEZ3MFRSZkwvZkhXcWxoT2R1Z2FXZ0hieEhuOEt6dU1hWjhU?=
+ =?utf-8?B?NEI0dHgxdHc0M3hxRGR5L1prMEV4dU8xQUgxWGdka1BCOHZwd1VqY096dDY5?=
+ =?utf-8?B?VHZ3SWZsczRTWVREaGNaNTdkVFBCRWw1cDBLUXJFZVYrU2gyb2hYTlF2QXE2?=
+ =?utf-8?B?NDdMbFJ6QTkvUVBTUUp1cGo3Tnl2WnRoQ1dwUVFmOTR5M1FoRDlBOGtHQU8y?=
+ =?utf-8?B?WXlzdTQxVmVETmhSaHVFT2ZOT0NZb2ZRU3kwRVMySGYxa09LL1U5czI2ZUZ6?=
+ =?utf-8?B?RXNjNHBUa25QNVk0UzFTanJrNS9jSi9sOHNTbzllNG1jOW1wUXBDNG9FbFJi?=
+ =?utf-8?B?Yzg3WjlwUDFBdTBDRXdRR3dYMnk1TEkzenVYMXBNT0VuUjNEb3hWVGNCZzlj?=
+ =?utf-8?B?cEtZVmcwQXNjNXlsdUtLMUx3dlhmUnpNWVBmeXRoQ25KZXZlZmlZL3Zjb28r?=
+ =?utf-8?B?ZlRkbTdNRU9TRS9ieUcrRW1pSitvL2E3U2psMlVWcXR0MVJRU3dsODhtLzVo?=
+ =?utf-8?B?eEk2N2JVRitXTk83NjNzNkxtSk1xVXJLYlFLcWdpZmlROEExUXZ2SlFTMXNE?=
+ =?utf-8?B?b2ZqcmU2WmtiT3BLM3hBWjdrbHVrd0Rld29xVzVBMjV1U2xtVUdsRENhc2ZJ?=
+ =?utf-8?B?OUUxM0NVNTVFZEdCNDdGUEc2bjVZWlpJMUdGOUpDVnhDaEZGNEU5Um9sc1RV?=
+ =?utf-8?B?dXhYV1hWK3hCMHhLOXVuRmdkRVNlTTJ2NVdzaVFRS0VBRjRIM082STZlcFVF?=
+ =?utf-8?B?UjljdGFEWjBjQjdIc00rUmtuaWN4MERMT0taQ1d6MkZpaERQR0FYTHhocFdh?=
+ =?utf-8?B?MEtYYnd3cjAzbldqemdwK2duNDY4QWFaK3VQbUd5OEcyRlprcTdOVmdNenRQ?=
+ =?utf-8?B?QW1DMmg1S1ZlMnEwUVFBOS9PTCtGUUMva2gwTzZwOU5tVWc5U1NFN3JsL1Zn?=
+ =?utf-8?B?eHFPZGZvWjd3ZXBFMXFxM0FGSERwdWFHc0dKN3A0TFNWVElnemMyUVVBOEJm?=
+ =?utf-8?B?SFBiTlh2d3B5bGhUVnRkU2hBd0thMzQzQmZ1UFJQQ0c3L052dFNCWWZsN252?=
+ =?utf-8?B?OGVQdnNRdjVJOXNBSjdETHhsOWdJY0YyVG16ZU9veTFBM1NPUWFNQ1VMeFg3?=
+ =?utf-8?B?R05nbTE1QmxqVkpXQ0N4MDB3a1NlSWc5OVNKMFJlT21yd3F0TGFBRmpBWVpG?=
+ =?utf-8?B?cnR6SmRTWEQyaHErZWVHdjZLRGVoZXQxZjcwcWd6YmFPZUduVUlPUjR3R2JH?=
+ =?utf-8?B?UWV3ZXIxVjN1M2VnVXVPMkxmcjBhWEVGK3FsdHQvTUNqamw5NWprV0p4dE9p?=
+ =?utf-8?B?US8rM1Mxd3NJbERUWVJkbVc0Q0gzd3dsNEIvWm16eTZScXI0VVI4a2dwMUw5?=
+ =?utf-8?B?RXV1UmlrVjhuNk1SUGhaaDRyME1jdUJyOU1QeHcyYXFuVU9uRWhqVWNVeTFI?=
+ =?utf-8?B?ZWJxcVovazQwRU9GcnNqWGNxVkw1S0JWMGM0S2xRS1FoNElNWVhFVjNESjVw?=
+ =?utf-8?B?US9TRmdwdXJ0U3FaSHNHSUdUZ0RJT2NaMm5oWnJqYjByWWwzT044R0FxeDZF?=
+ =?utf-8?B?VkdvdnByVEFFZFhSMTBDMHJUdW9HTkZmaTE4S0NWUW5IaUg5Ym9NaXJ5NEtl?=
+ =?utf-8?B?aHozYkRQdEFhWXU5NmF1dEVZV0RyVVFlQkdSd1duaDh1VUV3RytrQmI4SGI1?=
+ =?utf-8?B?WEE2a0Y0dS9WS0NZcm5odjZwcGVGQ2tzSDJoM3NYdXFIWWZCN20vR2FmS3BB?=
+ =?utf-8?B?S0I0czJHYlFCM01qYjhNemx6dUloRXdXZFFRcS8vL29wS21Va3BVSWNuQy9V?=
+ =?utf-8?B?VllNUVhLN21zMnQyWDdJL0Q4dUtjbm10R3Z1S0VxcG5BTWhRZHlpdnlHMGZ6?=
+ =?utf-8?B?TnkzZ2lzWDdDYmZPSGxSaHpDU2ExanpwQkp2aEVlUzdXSXJabVphUXhQK0dw?=
+ =?utf-8?B?RW1POTJ2N29BPT0=?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:zh-tw;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY2PPF5CB9A1BE6.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(38070700021)(921020)(13003099007);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?RkZSbktTQ0ttRzVLaGNNMmxqY0FUelRNMHZvRVE5aDIxWGZQc2tZSVhhSUxZ?=
+ =?utf-8?B?aDVWY2hGbWZld2lkQ2hGODlvWEhmclhmaVNZL29FYlpBWEtLeWlqNE44a3Ux?=
+ =?utf-8?B?TDluZ3dLMWhTLzVyRjRFWVlOdG83aThOVmxIM1MzUmVFck9DTldvbVZyTW9I?=
+ =?utf-8?B?eExSTThCVGVvSThtUHJJc1daQW9kVElKNHJnaFZxbENKL3czZ3dNa2I3cmY4?=
+ =?utf-8?B?bmtCd0JEN3liMmsyZXNDZU1ZYXhhQTFEQWN6MWhyd3FVZ0RwMldPZGpSd0Rp?=
+ =?utf-8?B?VkpXeUYvYTR1RW5JRzVESDIzckE4eDRDbVNuWVYyN3YvczR3aFZQZWJIRjRN?=
+ =?utf-8?B?S3NveUFsSGhRVmEybDI4clJiWUV1WnZ0SmEvZXlHRnNMM0VmcWt5Z0pOeVJ2?=
+ =?utf-8?B?VHAwVW16akE1R2Z6WXpaWWs0TzdvNFBpZGpUaVRjczY3V2dKMkgzenBJQTBs?=
+ =?utf-8?B?WlQ3M2dYM0RXRUgveW5JM3RPbURBelNDTnpGZVo5bUZBc1BrRkxKRHJyTUVz?=
+ =?utf-8?B?ZkZZaEoyY2lvVmRrakZsUjBDVnNLbDJKYnl0Y25PZC9Ha1BsSXh0bUZtOUpU?=
+ =?utf-8?B?M3hsbDcvZFByMTk5a2xzbUUxS2lycjI5dkxucUN2L1NrZWQrNzVRUG5POEVL?=
+ =?utf-8?B?Y0R0eXN5OEVuOG1FVnZzdHdwTVkwUC9uRDBLZU5WZGdwNFJEOEcwMG43OFQ4?=
+ =?utf-8?B?a05QSnd1Tll4Ry9QU0dzQUNSdlQ5bE4rcnJSWGJNbXlEZDA1SnRVdFlwWXMz?=
+ =?utf-8?B?WURHQjJyNk94cnhPSi85ZGlWL2hsZDI0RnI3ZVdkOXkyR2MvK3d6WWlCS1I1?=
+ =?utf-8?B?eUpYdGowLzNjcytGNENlQWY3bWtpRDFMbXNNczM2VURsa3hKanBudlZHN255?=
+ =?utf-8?B?Y3YyWXVqUTFVWVdia1lMT3VUL1BjNWJmUzJBaWZGSlBnS2NqYk9VSDNrSnpZ?=
+ =?utf-8?B?MFoyVExPbnhXSi9MUm9lQjZNUW82WHNxLzFlb3dtVWt4SzVhdFhaSG02cVpZ?=
+ =?utf-8?B?a2IxaEp1SXdGdXdWNDc4MTJSSERsT3F4SmI0YmRxaWJFNU9IZlFSd2R5b2RF?=
+ =?utf-8?B?eC9wR0YwZ3dTdFpBdkM5SU5aazhHam9YSmV0amFQZU5rdEZnSnZFdDFxTkpB?=
+ =?utf-8?B?cWVTQXQzRHhDU1hFTmlkbG50MzNYWGNkTVBHTjlla1Y3ZWxLVWNwTHZPMWdt?=
+ =?utf-8?B?SHdwRUR1KzQ1OGJ0cDFxSkFsdmNibDMremtwQnZhb3lOS1ZpVTVrZ1NpeGd4?=
+ =?utf-8?B?ckVqdWkzL21OakM3bmRiN1lFaEppQ05OZ0Z5ZUJpczFGcHpFd3U1aGNBc1A3?=
+ =?utf-8?B?VE1hZ1kwV2Nna3BzVzI4VG9Zck93MnBlTFMvZTFJZ2NVN2ZHVEZsUUxCT3hk?=
+ =?utf-8?B?UmtHREFWSStJUmI4WTdsUDQ0ZEJPR21Ma2VuaHZJZjJrSkFXdEJDRExTbWpD?=
+ =?utf-8?B?NTlHcWl4emNNRVdYcHI1cFlaSmswMUhzYlc1RFhTbVVGQUZqd2FxMFJOQWRx?=
+ =?utf-8?B?ZmU3YndwNmZtVzJpQnQxVll6R3FQT3k2SUdqL1RnK0FDU2JXcGNVanV0eTFx?=
+ =?utf-8?B?U3BuejFUWDNUQStTcUNWUGUwWWhKUE1VUnFDR3RPZmJySjdMYkpnckxZWEFM?=
+ =?utf-8?B?bStGam5OVHhiVVlhMjZjdjFDN3o1dnlKQkZxZ2NkaXRlWWhuV0plRjVoY3ZB?=
+ =?utf-8?B?MFcyNjVqdUlKTEVjeWRaS1hzTTFlTXVTK1NXWHRnNFhFL01OeTN6OFZ5bS8z?=
+ =?utf-8?B?MDJ4SFY4RG5SRzYrSjAycGJSZEVPQW45VmFFT3g3K2tsblNIYXJpcFZJdHcz?=
+ =?utf-8?B?eTVKRktGY2tZTGZyOUdzK2UwZFVETW40SDdJV1pxWDRWd0tHUkF1QWFUM09h?=
+ =?utf-8?B?R2JUVXA5eGVtK2s0QytseTRxdHNxYVRaYUs4NGZnRXpzN2xkemVTS3VCd3Nu?=
+ =?utf-8?B?Vk81S2N5b2VyTWp0Y0QzQzdtYWRweVR0dUh4Mjh5SGd2bkhlb1ZkZ3JZcjBU?=
+ =?utf-8?B?YzBwK1VQRXl6M3V3TnNTelBlNXJCWDMxVjVlTkZUUWFacy83WjRWN3ZON2pW?=
+ =?utf-8?B?UXdRSmdRZDdqR24veWNMNnk2NGU3UHhyNHpieVpvR1ZodndRdVRSMkhROXpa?=
+ =?utf-8?Q?+tmLWfgXiRCJmWkvD1y+oT/yy?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJAxQMJimxVpkYAxAQ--.3356S4
-X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/1tbiAQEFCGkVcy8C9AAAsb
-X-Coremail-Antispam: 1Uk129KBj9fXoW3tF13tr1DZFW8Zr4kuw47KFX_yoW8Cryruo
-	WF93Wftr45Jw18u342k34jyr4xXF95Ar1DCw4xJrs7Jryjy3WUKFWkKw13Ca43CryUtr4f
-	ZF95tFWxCFs3t3s8l-sFpf9Il3svdjkaLaAFLSUrUUUU1b8apTn2vfkv8UJUUUU8wcxFpf
-	9Il3svdxBIdaVrn0xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3
-	UjIYCTnIWjp_UUUYG7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI
-	8IcIk0rVWrJVCq3wAFIxvE14AKwVWUAVWUZwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xG
-	Y2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14
-	v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6rxl6s0DM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
-	kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUtVWr
-	XwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI4
-	8JMxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j
-	6r4UMxCIbckI1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwV
-	AFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv2
-	0xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4
-	v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AK
-	xVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8EoGPUUUUU==
+X-OriginatorOrg: aspeedtech.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TY2PPF5CB9A1BE6.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 59b49ebc-8be4-4646-83cd-08de2297d98f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Nov 2025 09:34:31.8120
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Pr12uDFpXbH/yo3VK3xvSHirs2j2NejoeouTDgmsKEicNgNElYIEEGMYdEOom6AgAwEV59BsR061y58sUy3WdMHzM4SR6opSfdkRDlkPWuI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR06MB5350
 
-This I2C module is integrated into the Loongson-2K0300 SoCs.
-
-It provides multi-master functionality and controls all I2C bus-specific
-timing, protocols, arbitration, and timing. It supports both standard
-and fast modes.
-
-Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
----
- MAINTAINERS                      |   1 +
- drivers/i2c/busses/Kconfig       |  10 +
- drivers/i2c/busses/Makefile      |   1 +
- drivers/i2c/busses/i2c-ls2x-v2.c | 513 +++++++++++++++++++++++++++++++
- 4 files changed, 525 insertions(+)
- create mode 100644 drivers/i2c/busses/i2c-ls2x-v2.c
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index ddecf1ef3bed..8badab5d774d 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -14601,6 +14601,7 @@ M:	Binbin Zhou <zhoubinbin@loongson.cn>
- L:	linux-i2c@vger.kernel.org
- S:	Maintained
- F:	Documentation/devicetree/bindings/i2c/loongson,ls2x-i2c.yaml
-+F:	drivers/i2c/busses/i2c-ls2x-v2.c
- F:	drivers/i2c/busses/i2c-ls2x.c
- 
- LOONGSON PWM DRIVER
-diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index fd81e49638aa..f52abbe20ce5 100644
---- a/drivers/i2c/busses/Kconfig
-+++ b/drivers/i2c/busses/Kconfig
-@@ -855,6 +855,16 @@ config I2C_LS2X
- 	  This driver can also be built as a module. If so, the module
- 	  will be called i2c-ls2x.
- 
-+config I2C_LS2X_V2
-+	tristate "Loongson-2 Fast Speed I2C adapter"
-+	depends on LOONGARCH || COMPILE_TEST
-+	help
-+	  If you say yes to this option, support will be included for the
-+	  I2C interface on the Loongson-2K0300 SoCs.
-+
-+	  This driver can also be built as a module. If so, the module
-+	  will be called i2c-ls2x-v2.
-+
- config I2C_MLXBF
-         tristate "Mellanox BlueField I2C controller"
-         depends on (MELLANOX_PLATFORM && ARM64) || COMPILE_TEST
-diff --git a/drivers/i2c/busses/Makefile b/drivers/i2c/busses/Makefile
-index fb985769f5ff..8cdfc30b79e9 100644
---- a/drivers/i2c/busses/Makefile
-+++ b/drivers/i2c/busses/Makefile
-@@ -80,6 +80,7 @@ obj-$(CONFIG_I2C_KEBA)		+= i2c-keba.o
- obj-$(CONFIG_I2C_KEMPLD)	+= i2c-kempld.o
- obj-$(CONFIG_I2C_LPC2K)		+= i2c-lpc2k.o
- obj-$(CONFIG_I2C_LS2X)		+= i2c-ls2x.o
-+obj-$(CONFIG_I2C_LS2X_V2)	+= i2c-ls2x-v2.o
- obj-$(CONFIG_I2C_MESON)		+= i2c-meson.o
- obj-$(CONFIG_I2C_MICROCHIP_CORE)	+= i2c-microchip-corei2c.o
- obj-$(CONFIG_I2C_MPC)		+= i2c-mpc.o
-diff --git a/drivers/i2c/busses/i2c-ls2x-v2.c b/drivers/i2c/busses/i2c-ls2x-v2.c
-new file mode 100644
-index 000000000000..e3b2a7ffe67e
---- /dev/null
-+++ b/drivers/i2c/busses/i2c-ls2x-v2.c
-@@ -0,0 +1,513 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Loongson-2K fast I2C controller driver
-+ *
-+ * Copyright (C) 2025 Loongson Technology Corporation Limited
-+ *
-+ */
-+
-+#include <linux/bitfield.h>
-+#include <linux/bits.h>
-+#include <linux/clk.h>
-+#include <linux/device.h>
-+#include <linux/iopoll.h>
-+#include <linux/i2c.h>
-+#include <linux/init.h>
-+#include <linux/interrupt.h>
-+#include <linux/io.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/property.h>
-+#include <linux/regmap.h>
-+#include <linux/units.h>
-+
-+/* Loongson-2 fast I2C offset registers */
-+#define LOONGSON2_I2C_CR1	0x00	/* I2C control 1 register */
-+#define LOONGSON2_I2C_CR2	0x04	/* I2C control 2 register */
-+#define LOONGSON2_I2C_OAR	0x08	/* I2C slave address register */
-+#define LOONGSON2_I2C_DR	0x10	/* I2C data register */
-+#define LOONGSON2_I2C_SR1	0x14	/* I2C status 1 register */
-+#define LOONGSON2_I2C_SR2	0x18	/* I2C status 2 register */
-+#define LOONGSON2_I2C_CCR	0x1C	/* I2C clock control register */
-+#define LOONGSON2_I2C_TRISE	0x20	/* I2C trise register */
-+#define LOONGSON2_I2C_FLTR	0x24
-+
-+/* Bitfields of I2C control 1 register */
-+#define LOONGSON2_I2C_CR1_PE		BIT(0)
-+#define LOONGSON2_I2C_CR1_START		BIT(8)
-+#define LOONGSON2_I2C_CR1_STOP		BIT(9)
-+#define LOONGSON2_I2C_CR1_ACK		BIT(10)
-+#define LOONGSON2_I2C_CR1_POS		BIT(11)
-+
-+#define LOONGSON2_I2C_CR1_OP_MASK	(LOONGSON2_I2C_CR1_START | LOONGSON2_I2C_CR1_STOP)
-+
-+/* Bitfields of I2C control 2 register */
-+#define LOONGSON2_I2C_CR2_FREQ		GENMASK(5, 0)
-+#define LOONGSON2_I2C_CR2_ITERREN	BIT(8)
-+#define LOONGSON2_I2C_CR2_ITEVTEN	BIT(9)
-+#define LOONGSON2_I2C_CR2_ITBUFEN	BIT(10)
-+
-+#define LOONGSON2_I2C_CR2_IRQ_MASK	(LOONGSON2_I2C_CR2_ITBUFEN | \
-+					 LOONGSON2_I2C_CR2_ITEVTEN | \
-+					 LOONGSON2_I2C_CR2_ITERREN)
-+
-+/* Bitfields of I2C status 1 register */
-+#define LOONGSON2_I2C_SR1_SB		BIT(0)
-+#define LOONGSON2_I2C_SR1_ADDR		BIT(1)
-+#define LOONGSON2_I2C_SR1_BTF		BIT(2)
-+#define LOONGSON2_I2C_SR1_RXNE		BIT(6)
-+#define LOONGSON2_I2C_SR1_TXE		BIT(7)
-+#define LOONGSON2_I2C_SR1_BERR		BIT(8)
-+#define LOONGSON2_I2C_SR1_ARLO		BIT(9)
-+#define LOONGSON2_I2C_SR1_AF		BIT(10)
-+
-+#define LOONGSON2_I2C_SR1_ITEVTEN_MASK	(LOONGSON2_I2C_SR1_BTF | \
-+					 LOONGSON2_I2C_SR1_ADDR | \
-+					 LOONGSON2_I2C_SR1_SB)
-+#define LOONGSON2_I2C_SR1_ITBUFEN_MASK	(LOONGSON2_I2C_SR1_TXE | LOONGSON2_I2C_SR1_RXNE)
-+#define LOONGSON2_I2C_SR1_ITERREN_MASK	(LOONGSON2_I2C_SR1_AF | \
-+					 LOONGSON2_I2C_SR1_ARLO | \
-+					 LOONGSON2_I2C_SR1_BERR)
-+
-+/* Bitfields of I2C status 2 register */
-+#define LOONGSON2_I2C_SR2_BUSY		BIT(1)
-+
-+/* Bitfields of I2C clock control register */
-+#define LOONGSON2_I2C_CCR_CCR		GENMASK(11, 0)
-+#define LOONGSON2_I2C_CCR_DUTY		BIT(14)
-+#define LOONGSON2_I2C_CCR_FS		BIT(15)
-+
-+/* Bitfields of I2C trise register */
-+#define LOONGSON2_I2C_TRISE_SCL		GENMASK(5, 0)
-+
-+#define LOONGSON2_I2C_FREE_SLEEP_US	1000
-+#define LOONGSON2_I2C_FREE_TIMEOUT_US	5000
-+
-+/*
-+ * struct loongson2_i2c_msg - client specific data
-+ * @addr: 8-bit slave addr, including r/w bit
-+ * @count: number of bytes to be transferred
-+ * @buf: data buffer
-+ * @stop: last I2C msg to be sent, i.e. STOP to be generated
-+ * @result: result of the transfer
-+ */
-+struct loongson2_i2c_msg {
-+	u8 addr;
-+	u32 count;
-+	u8 *buf;
-+	bool stop;
-+	int result;
-+};
-+
-+/*
-+ * struct loongson2_i2c_priv - private data of the controller
-+ * @adapter: I2C adapter for this controller
-+ * @dev: device for this controller
-+ * @complete: completion of I2C message
-+ * @regmap: regmap of the I2C device
-+ * @i2c_t: I2C timing information
-+ * @msg: I2C transfer information
-+ */
-+struct loongson2_i2c_priv {
-+	struct i2c_adapter adapter;
-+	struct device *dev;
-+	struct completion complete;
-+	struct regmap *regmap;
-+	struct i2c_timings i2c_t;
-+	struct loongson2_i2c_msg msg;
-+};
-+
-+static void loongson2_i2c_disable_irq(struct loongson2_i2c_priv *priv)
-+{
-+	regmap_update_bits(priv->regmap, LOONGSON2_I2C_CR2, LOONGSON2_I2C_CR2_IRQ_MASK, 0);
-+}
-+
-+static int loongson2_i2c_wait_free_bus(struct loongson2_i2c_priv *priv)
-+{
-+	u32 status;
-+	int ret;
-+
-+	ret = regmap_read_poll_timeout(priv->regmap, LOONGSON2_I2C_SR2, status,
-+				       !(status & LOONGSON2_I2C_SR2_BUSY),
-+				       LOONGSON2_I2C_FREE_SLEEP_US,
-+				       LOONGSON2_I2C_FREE_TIMEOUT_US);
-+	if (ret) {
-+		dev_dbg(priv->dev, "I2C bus free failed.\n");
-+		ret = -EBUSY;
-+	}
-+
-+	return ret;
-+}
-+
-+static void loongson2_i2c_write_byte(struct loongson2_i2c_priv *priv, u8 byte)
-+{
-+	regmap_write(priv->regmap, LOONGSON2_I2C_DR, byte);
-+}
-+
-+static void loongson2_i2c_read_msg(struct loongson2_i2c_priv *priv)
-+{
-+	struct loongson2_i2c_msg *msg = &priv->msg;
-+	u32 rbuf;
-+
-+	regmap_read(priv->regmap, LOONGSON2_I2C_DR, &rbuf);
-+	*msg->buf++ = rbuf;
-+	msg->count--;
-+}
-+
-+static void loongson2_i2c_terminate_xfer(struct loongson2_i2c_priv *priv)
-+{
-+	struct loongson2_i2c_msg *msg = &priv->msg;
-+
-+	loongson2_i2c_disable_irq(priv);
-+	regmap_update_bits(priv->regmap, LOONGSON2_I2C_CR1, LOONGSON2_I2C_CR1_OP_MASK,
-+			   msg->stop ? LOONGSON2_I2C_CR1_STOP : LOONGSON2_I2C_CR1_START);
-+	complete(&priv->complete);
-+}
-+
-+static void loongson2_i2c_handle_write(struct loongson2_i2c_priv *priv)
-+{
-+	struct loongson2_i2c_msg *msg = &priv->msg;
-+
-+	if (msg->count) {
-+		loongson2_i2c_write_byte(priv, *msg->buf++);
-+		msg->count--;
-+		if (!msg->count)
-+			regmap_update_bits(priv->regmap, LOONGSON2_I2C_CR2,
-+					   LOONGSON2_I2C_CR2_ITBUFEN, 0);
-+	} else {
-+		loongson2_i2c_terminate_xfer(priv);
-+	}
-+}
-+
-+static void loongson2_i2c_handle_read(struct loongson2_i2c_priv *priv, int flag)
-+{
-+	struct loongson2_i2c_msg *msg = &priv->msg;
-+	bool changed;
-+	int i;
-+
-+	switch (msg->count) {
-+	case 1:
-+		/* only transmit 1 bytes condition */
-+		loongson2_i2c_disable_irq(priv);
-+		loongson2_i2c_read_msg(priv);
-+		complete(&priv->complete);
-+		break;
-+	case 2:
-+		if (flag != 1) {
-+			/* ensure only transmit 2 bytes condition */
-+			regmap_update_bits(priv->regmap, LOONGSON2_I2C_CR2,
-+					   LOONGSON2_I2C_CR2_ITBUFEN, 0);
-+			break;
-+		}
-+		regmap_update_bits(priv->regmap, LOONGSON2_I2C_CR1, LOONGSON2_I2C_CR1_OP_MASK,
-+				   msg->stop ? LOONGSON2_I2C_CR1_STOP : LOONGSON2_I2C_CR1_START);
-+
-+		loongson2_i2c_disable_irq(priv);
-+
-+		for (i = 2; i > 0; i--)
-+			loongson2_i2c_read_msg(priv);
-+
-+		regmap_update_bits(priv->regmap, LOONGSON2_I2C_CR1, LOONGSON2_I2C_CR1_POS, 0);
-+		complete(&priv->complete);
-+		break;
-+	case 3:
-+		regmap_update_bits_check(priv->regmap, LOONGSON2_I2C_CR2, LOONGSON2_I2C_CR2_ITBUFEN,
-+					 0, &changed);
-+		if (changed)
-+			break;
-+		regmap_update_bits(priv->regmap, LOONGSON2_I2C_CR1, LOONGSON2_I2C_CR1_ACK, 0);
-+		fallthrough;
-+	default:
-+		loongson2_i2c_read_msg(priv);
-+	}
-+}
-+
-+static void loongson2_i2c_handle_rx_addr(struct loongson2_i2c_priv *priv)
-+{
-+	struct loongson2_i2c_msg *msg = &priv->msg;
-+
-+	switch (msg->count) {
-+	case 0:
-+		loongson2_i2c_terminate_xfer(priv);
-+		break;
-+	case 1:
-+		regmap_update_bits(priv->regmap, LOONGSON2_I2C_CR1,
-+				   LOONGSON2_I2C_CR1_ACK | LOONGSON2_I2C_CR1_POS, 0);
-+		/* start or stop */
-+		regmap_update_bits(priv->regmap, LOONGSON2_I2C_CR1, LOONGSON2_I2C_CR1_OP_MASK,
-+				   msg->stop ? LOONGSON2_I2C_CR1_STOP : LOONGSON2_I2C_CR1_START);
-+		break;
-+	case 2:
-+		regmap_update_bits(priv->regmap, LOONGSON2_I2C_CR1, LOONGSON2_I2C_CR1_ACK, 0);
-+		regmap_update_bits(priv->regmap, LOONGSON2_I2C_CR1, LOONGSON2_I2C_CR1_POS,
-+				   LOONGSON2_I2C_CR1_POS);
-+		break;
-+
-+	default:
-+		regmap_update_bits(priv->regmap, LOONGSON2_I2C_CR1, LOONGSON2_I2C_CR1_ACK,
-+				   LOONGSON2_I2C_CR1_ACK);
-+		regmap_update_bits(priv->regmap, LOONGSON2_I2C_CR1, LOONGSON2_I2C_CR1_POS, 0);
-+	}
-+}
-+
-+static irqreturn_t loongson2_i2c_isr_error(u32 status, void *data)
-+{
-+	struct loongson2_i2c_priv *priv = data;
-+	struct loongson2_i2c_msg *msg = &priv->msg;
-+
-+	/* Arbitration lost */
-+	if (status & LOONGSON2_I2C_SR1_ARLO) {
-+		regmap_update_bits(priv->regmap, LOONGSON2_I2C_SR1, LOONGSON2_I2C_SR1_ARLO, 0);
-+		msg->result = -EAGAIN;
-+	}
-+
-+	/*
-+	 * Acknowledge failure:
-+	 * In master transmitter mode a Stop must be generated by software
-+	 */
-+	if (status & LOONGSON2_I2C_SR1_AF) {
-+		regmap_update_bits(priv->regmap, LOONGSON2_I2C_CR1, LOONGSON2_I2C_CR1_STOP,
-+				   LOONGSON2_I2C_CR1_STOP);
-+		regmap_update_bits(priv->regmap, LOONGSON2_I2C_SR1, LOONGSON2_I2C_SR1_AF, 0);
-+		msg->result = -EIO;
-+	}
-+
-+	/* Bus error */
-+	if (status & LOONGSON2_I2C_SR1_BERR) {
-+		regmap_update_bits(priv->regmap, LOONGSON2_I2C_SR1, LOONGSON2_I2C_SR1_BERR, 0);
-+		msg->result = -EIO;
-+	}
-+
-+	loongson2_i2c_disable_irq(priv);
-+	complete(&priv->complete);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static irqreturn_t loongson2_i2c_isr_event(int irq, void *data)
-+{
-+	u32 possible_status = LOONGSON2_I2C_SR1_ITEVTEN_MASK;
-+	struct loongson2_i2c_priv *priv = data;
-+	struct loongson2_i2c_msg *msg = &priv->msg;
-+	u32 status, ien, event, cr2;
-+
-+	regmap_read(priv->regmap, LOONGSON2_I2C_SR1, &status);
-+	if (status & LOONGSON2_I2C_SR1_ITERREN_MASK)
-+		return loongson2_i2c_isr_error(status, data);
-+
-+	regmap_read(priv->regmap, LOONGSON2_I2C_CR2, &cr2);
-+	ien = cr2 & LOONGSON2_I2C_CR2_IRQ_MASK;
-+
-+	/* Update possible_status if buffer interrupt is enabled */
-+	if (ien & LOONGSON2_I2C_CR2_ITBUFEN)
-+		possible_status |= LOONGSON2_I2C_SR1_ITBUFEN_MASK;
-+
-+	event = status & possible_status;
-+	if (!event) {
-+		dev_dbg(priv->dev, "spurious evt irq (status=0x%08x, ien=0x%08x)\n", status, ien);
-+		return IRQ_NONE;
-+	}
-+
-+	/* Start condition generated */
-+	if (event & LOONGSON2_I2C_SR1_SB)
-+		loongson2_i2c_write_byte(priv, msg->addr);
-+
-+	/* I2C Address sent */
-+	if (event & LOONGSON2_I2C_SR1_ADDR) {
-+		if (msg->addr & I2C_M_RD)
-+			loongson2_i2c_handle_rx_addr(priv);
-+		/* Clear ADDR flag */
-+		regmap_read(priv->regmap, LOONGSON2_I2C_SR2, &status);
-+		/* Enable buffer interrupts for RX/TX not empty events */
-+		regmap_update_bits(priv->regmap, LOONGSON2_I2C_CR2, LOONGSON2_I2C_CR2_ITBUFEN,
-+				   LOONGSON2_I2C_CR2_ITBUFEN);
-+	}
-+
-+	if (msg->addr & I2C_M_RD) {
-+		/* RX not empty */
-+		if (event & LOONGSON2_I2C_SR1_RXNE)
-+			loongson2_i2c_handle_read(priv, 0);
-+
-+		if (event & LOONGSON2_I2C_SR1_BTF)
-+			loongson2_i2c_handle_read(priv, 1);
-+	} else {
-+		/* TX empty */
-+		if (event & LOONGSON2_I2C_SR1_TXE)
-+			loongson2_i2c_handle_write(priv);
-+
-+		if (event & LOONGSON2_I2C_SR1_BTF)
-+			loongson2_i2c_handle_write(priv);
-+	}
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int loongson2_i2c_xfer_msg(struct loongson2_i2c_priv *priv, struct i2c_msg *msg,
-+				  bool is_stop)
-+{
-+	struct loongson2_i2c_msg *l_msg = &priv->msg;
-+	unsigned long timeout;
-+	int ret;
-+
-+	l_msg->addr   = i2c_8bit_addr_from_msg(msg);
-+	l_msg->buf    = msg->buf;
-+	l_msg->count  = msg->len;
-+	l_msg->stop   = is_stop;
-+	l_msg->result = 0;
-+
-+	reinit_completion(&priv->complete);
-+
-+	/* Enable events and errors interrupts */
-+	regmap_update_bits(priv->regmap, LOONGSON2_I2C_CR2,
-+			   LOONGSON2_I2C_CR2_ITEVTEN | LOONGSON2_I2C_CR2_ITERREN,
-+			   LOONGSON2_I2C_CR2_ITEVTEN | LOONGSON2_I2C_CR2_ITERREN);
-+
-+	timeout = wait_for_completion_timeout(&priv->complete, priv->adapter.timeout);
-+	ret = l_msg->result;
-+
-+	if (!timeout)
-+		ret = -ETIMEDOUT;
-+
-+	return ret;
-+}
-+
-+static int loongson2_i2c_xfer(struct i2c_adapter *i2c_adap, struct i2c_msg msgs[], int num)
-+{
-+	struct loongson2_i2c_priv *priv = i2c_get_adapdata(i2c_adap);
-+	int ret = 0, i;
-+
-+	ret = loongson2_i2c_wait_free_bus(priv);
-+	if (ret)
-+		return ret;
-+
-+	/* START generation */
-+	regmap_update_bits(priv->regmap, LOONGSON2_I2C_CR1, LOONGSON2_I2C_CR1_START,
-+			   LOONGSON2_I2C_CR1_START);
-+
-+	for (i = 0; i < num && !ret; i++)
-+		ret = loongson2_i2c_xfer_msg(priv, &msgs[i], i == num - 1);
-+
-+	return (ret < 0) ? ret : num;
-+}
-+
-+static u32 loongson2_i2c_func(struct i2c_adapter *adap)
-+{
-+	return I2C_FUNC_I2C | I2C_FUNC_SMBUS_EMUL;
-+}
-+
-+static const struct i2c_algorithm loongson2_i2c_algo = {
-+	.master_xfer = loongson2_i2c_xfer,
-+	.functionality = loongson2_i2c_func,
-+};
-+
-+static void loongson2_i2c_adjust_bus_speed(struct loongson2_i2c_priv *priv)
-+{
-+	struct device *dev = priv->adapter.dev.parent;
-+	struct i2c_timings *t = &priv->i2c_t;
-+	u32 val, ccr = 0;
-+
-+	t->bus_freq_hz = I2C_MAX_STANDARD_MODE_FREQ;
-+
-+	i2c_parse_fw_timings(dev, t, false);
-+
-+	if (t->bus_freq_hz >= I2C_MAX_FAST_MODE_FREQ) {
-+		val = DIV_ROUND_UP(t->bus_freq_hz, I2C_MAX_FAST_MODE_FREQ * 3);
-+
-+		/* Select Fast mode */
-+		ccr |= LOONGSON2_I2C_CCR_FS;
-+	} else {
-+		val = DIV_ROUND_UP(t->bus_freq_hz, I2C_MAX_STANDARD_MODE_FREQ * 2);
-+	}
-+
-+	ccr |= FIELD_GET(LOONGSON2_I2C_CCR_CCR, val);
-+	regmap_write(priv->regmap, LOONGSON2_I2C_CCR, ccr);
-+
-+	/* reference clock determination the configure val(0x3f) */
-+	regmap_update_bits(priv->regmap, LOONGSON2_I2C_CR2, LOONGSON2_I2C_CR2_FREQ,
-+			   LOONGSON2_I2C_CR2_FREQ);
-+	regmap_update_bits(priv->regmap, LOONGSON2_I2C_TRISE, LOONGSON2_I2C_TRISE_SCL,
-+			   LOONGSON2_I2C_TRISE_SCL);
-+
-+	/* Enable I2C */
-+	regmap_update_bits(priv->regmap, LOONGSON2_I2C_CR1, LOONGSON2_I2C_CR1_PE,
-+			   LOONGSON2_I2C_CR1_PE);
-+}
-+
-+static const struct regmap_config loongson2_i2c_regmap_config = {
-+	.reg_bits = 32,
-+	.val_bits = 32,
-+	.reg_stride = 4,
-+	.max_register = LOONGSON2_I2C_TRISE,
-+};
-+
-+static int loongson2_i2c_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct loongson2_i2c_priv *priv;
-+	struct i2c_adapter *adap;
-+	void __iomem *base;
-+	int irq, ret;
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(base))
-+		return dev_err_probe(dev, PTR_ERR(base),
-+				     "devm_platform_ioremap_resource failed\n");
-+
-+	priv->regmap = devm_regmap_init_mmio(dev, base,
-+					     &loongson2_i2c_regmap_config);
-+	if (IS_ERR(priv->regmap))
-+		return dev_err_probe(dev, PTR_ERR(priv->regmap),
-+				     "devm_regmap_init_mmio failed\n");
-+
-+	irq = platform_get_irq(pdev, 0);
-+	if (irq < 0)
-+		return -EINVAL;
-+
-+	priv->dev = dev;
-+
-+	adap = &priv->adapter;
-+	adap->retries = 5;
-+	adap->nr = pdev->id;
-+	adap->dev.parent = dev;
-+	adap->owner = THIS_MODULE;
-+	adap->algo = &loongson2_i2c_algo;
-+	adap->timeout = 2 * HZ;
-+	device_set_node(&adap->dev, dev_fwnode(dev));
-+	i2c_set_adapdata(adap, priv);
-+	strscpy(adap->name, pdev->name, sizeof(adap->name));
-+	init_completion(&priv->complete);
-+	platform_set_drvdata(pdev, priv);
-+
-+	loongson2_i2c_adjust_bus_speed(priv);
-+
-+	ret = devm_request_irq(dev, irq,  loongson2_i2c_isr_event, IRQF_SHARED, pdev->name, priv);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "Unable to request irq %d\n", irq);
-+
-+	return devm_i2c_add_adapter(dev, adap);
-+}
-+
-+static const struct of_device_id loongson2_i2c_id_table[] = {
-+	{ .compatible = "loongson,ls2k0300-i2c" },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, loongson2_i2c_id_table);
-+
-+static struct platform_driver loongson2_i2c_driver = {
-+	.driver = {
-+		.name = "loongson2-i2c-v2",
-+		.of_match_table = loongson2_i2c_id_table,
-+	},
-+	.probe = loongson2_i2c_probe,
-+};
-+
-+module_platform_driver(loongson2_i2c_driver);
-+
-+MODULE_DESCRIPTION("Loongson-2K0300 I2C bus driver");
-+MODULE_AUTHOR("Loongson Technology Corporation Limited");
-+MODULE_LICENSE("GPL");
--- 
-2.47.3
-
+PiBTdWJqZWN0OiBSRTogW1BBVENIIHYyMCAxLzRdIGR0LWJpbmRpbmdzOiBpMmM6IFNwbGl0IEFT
+VDI2MDAgYmluZGluZyBpbnRvIGEgbmV3DQo+IFlBTUwNCj4gDQo+ID4gU3ViamVjdDogUmU6IFtQ
+QVRDSCB2MjAgMS80XSBkdC1iaW5kaW5nczogaTJjOiBTcGxpdCBBU1QyNjAwIGJpbmRpbmcNCj4g
+PiBpbnRvIGEgbmV3IFlBTUwNCj4gPg0KPiA+IE9uIDI5LzEwLzIwMjUgMDk6MjksIFJ5YW4gQ2hl
+biB3cm90ZToNCj4gPiA+PiBTdWJqZWN0OiBSZTogW1BBVENIIHYyMCAxLzRdIGR0LWJpbmRpbmdz
+OiBpMmM6IFNwbGl0IEFTVDI2MDANCj4gPiA+PiBiaW5kaW5nIGludG8gYSBuZXcgWUFNTA0KPiA+
+ID4+DQo+ID4gPj4gT24gMjEvMTAvMjAyNSAwMzozNSwgUnlhbiBDaGVuIHdyb3RlOg0KPiA+ID4+
+PiBUaGUgQVNUMjYwMCBJMkMgY29udHJvbGxlciBpcyBhIG5ldyBoYXJkd2FyZSBkZXNpZ24gY29t
+cGFyZWQgdG8NCj4gPiA+Pj4gdGhlIEkyQyBjb250cm9sbGVycyBpbiBwcmV2aW91cyBBU1BFRUQg
+U29DcyAoZS5nLiwgQVNUMjQwMCwgQVNUMjUwMCkuDQo+ID4gPj4+DQo+ID4gPj4+IEl0IGludHJv
+ZHVjZXMgbmV3IGZlYXR1cmVzIHN1Y2ggYXM6DQo+ID4gPj4+ICAtIEEgcmVkZXNpZ25lZCByZWdp
+c3RlciBsYXlvdXQNCj4gPiA+Pj4gIC0gU2VwYXJhdGlvbiBiZXR3ZWVuIGNvbnRyb2xsZXIgYW5k
+IHRhcmdldCBtb2RlIHJlZ2lzdGVycw0KPiA+ID4+PiAgLSBUcmFuc2ZlciBtb2RlIHNlbGVjdGlv
+biAoYnl0ZSwgYnVmZmVyLCBETUEpDQo+ID4gPj4+ICAtIFN1cHBvcnQgZm9yIGEgc2hhcmVkIGds
+b2JhbCByZWdpc3RlciBibG9jayBmb3IgY29uZmlndXJhdGlvbg0KPiA+ID4+Pg0KPiA+ID4+PiBE
+dWUgdG8gdGhlc2UgZnVuZGFtZW50YWwgZGlmZmVyZW5jZXMsIG1haW50YWluaW5nIGEgc2VwYXJh
+dGUNCj4gPiA+Pj4gZGV2aWNldHJlZSBiaW5kaW5nIGZpbGUgZm9yIEFTVDI2MDAgaGVscHMgdG8g
+Y2xlYXJseSBkaXN0aW5ndWlzaA0KPiA+ID4+PiB0aGUgaGFyZHdhcmUgY2FwYWJpbGl0aWVzIGFu
+ZCBjb25maWd1cmF0aW9uIG9wdGlvbnMgZnJvbSB0aGUgb2xkZXINCj4gPiA+Pj4gY29udHJvbGxl
+cnMuDQo+ID4gPj4+DQo+ID4gPj4+IFNpZ25lZC1vZmYtYnk6IFJ5YW4gQ2hlbiA8cnlhbl9jaGVu
+QGFzcGVlZHRlY2guY29tPg0KPiA+ID4+PiAtLS0NCj4gPiA+Pj4gIC4uLi9kZXZpY2V0cmVlL2Jp
+bmRpbmdzL2kyYy9hc3BlZWQsaTJjLnlhbWwgICB8ICAzICstDQo+ID4gPj4+ICAuLi4vZGV2aWNl
+dHJlZS9iaW5kaW5ncy9pMmMvYXN0MjYwMC1pMmMueWFtbCAgfCA2Ng0KPiA+ID4+PiArKysrKysr
+KysrKysrKysrKysrDQo+ID4gPj4+ICAyIGZpbGVzIGNoYW5nZWQsIDY3IGluc2VydGlvbnMoKyks
+IDIgZGVsZXRpb25zKC0pICBjcmVhdGUgbW9kZQ0KPiA+ID4+PiAxMDA2NDQgRG9jdW1lbnRhdGlv
+bi9kZXZpY2V0cmVlL2JpbmRpbmdzL2kyYy9hc3QyNjAwLWkyYy55YW1sDQo+ID4gPj4+DQo+ID4g
+Pj4+IGRpZmYgLS1naXQgYS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvaTJjL2Fz
+cGVlZCxpMmMueWFtbA0KPiA+ID4+PiBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5n
+cy9pMmMvYXNwZWVkLGkyYy55YW1sDQo+ID4gPj4+IGluZGV4IDViOWJkMmZlZGEzYi4uZDRlNGY0
+MTJmZWJhIDEwMDY0NA0KPiA+ID4+PiAtLS0gYS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmlu
+ZGluZ3MvaTJjL2FzcGVlZCxpMmMueWFtbA0KPiA+ID4+PiArKysgYi9Eb2N1bWVudGF0aW9uL2Rl
+dmljZXRyZWUvYmluZGluZ3MvaTJjL2FzcGVlZCxpMmMueWFtbA0KPiA+ID4+PiBAQCAtNCw3ICs0
+LDcgQEANCj4gPiA+Pj4gICRpZDogaHR0cDovL2RldmljZXRyZWUub3JnL3NjaGVtYXMvaTJjL2Fz
+cGVlZCxpMmMueWFtbCMNCj4gPiA+Pj4gICRzY2hlbWE6IGh0dHA6Ly9kZXZpY2V0cmVlLm9yZy9t
+ZXRhLXNjaGVtYXMvY29yZS55YW1sIw0KPiA+ID4+Pg0KPiA+ID4+PiAtdGl0bGU6IEFTUEVFRCBJ
+MkMgb24gdGhlIEFTVDI0WFgsIEFTVDI1WFgsIGFuZCBBU1QyNlhYIFNvQ3MNCj4gPiA+Pj4gK3Rp
+dGxlOiBBU1BFRUQgSTJDIG9uIHRoZSBBU1QyNFhYLCBBU1QyNVhYIFNvQ3MNCj4gPiA+Pj4NCj4g
+PiA+Pj4gIG1haW50YWluZXJzOg0KPiA+ID4+PiAgICAtIFJheW4gQ2hlbiA8cmF5bl9jaGVuQGFz
+cGVlZHRlY2guY29tPiBAQCAtMTcsNyArMTcsNiBAQA0KPiA+ID4+PiBwcm9wZXJ0aWVzOg0KPiA+
+ID4+PiAgICAgIGVudW06DQo+ID4gPj4+ICAgICAgICAtIGFzcGVlZCxhc3QyNDAwLWkyYy1idXMN
+Cj4gPiA+Pj4gICAgICAgIC0gYXNwZWVkLGFzdDI1MDAtaTJjLWJ1cw0KPiA+ID4+PiAtICAgICAg
+LSBhc3BlZWQsYXN0MjYwMC1pMmMtYnVzDQo+ID4gPj4+DQo+ID4gPj4+ICAgIHJlZzoNCj4gPiA+
+Pj4gICAgICBtaW5JdGVtczogMQ0KPiA+ID4+PiBkaWZmIC0tZ2l0DQo+ID4gPj4+IGEvRG9jdW1l
+bnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2kyYy9hc3QyNjAwLWkyYy55YW1sDQo+ID4gPj4+
+IGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2kyYy9hc3QyNjAwLWkyYy55YW1s
+DQo+ID4gPj4NCj4gPiA+PiBXaHkgY29tcGxldGVseSBicmVha2luZyBuYW1pbmc/IFBsZWFzZSBm
+b2xsb3cgd3JpdGluZyBiaW5kaW5ncw0KPiBjYXJlZnVsbHkuDQo+ID4gPg0KPiA+ID4gV2lsbCB1
+cGRhdGUNCj4gPiA+ICRpZDogImh0dHA6Ly9kZXZpY2V0cmVlLm9yZy9zY2hlbWFzL2kyYy9hc3Bl
+ZWQsYXN0MjYwMC1pMmMueWFtbCMiDQo+ID4gPj4NCj4gPiA+Pj4gbmV3IGZpbGUgbW9kZSAxMDA2
+NDQNCj4gPiA+Pj4gaW5kZXggMDAwMDAwMDAwMDAwLi42ZGRjZWM1ZGVjZGMNCj4gPiA+Pj4gLS0t
+IC9kZXYvbnVsbA0KPiA+ID4+PiArKysgYi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGlu
+Z3MvaTJjL2FzdDI2MDAtaTJjLnlhbWwNCj4gPiA+Pj4gQEAgLTAsMCArMSw2NiBAQA0KPiA+ID4+
+PiArIyBTUERYLUxpY2Vuc2UtSWRlbnRpZmllcjogKEdQTC0yLjAtb25seSBPUiBCU0QtMi1DbGF1
+c2UpICVZQU1MDQo+ID4gPj4+ICsxLjINCj4gPiA+Pj4gKy0tLQ0KPiA+ID4+PiArJGlkOiBodHRw
+Oi8vZGV2aWNldHJlZS5vcmcvc2NoZW1hcy9pMmMvYXN0MjYwMC1pMmMueWFtbCMNCj4gPiA+Pj4g
+KyRzY2hlbWE6IGh0dHA6Ly9kZXZpY2V0cmVlLm9yZy9tZXRhLXNjaGVtYXMvY29yZS55YW1sIw0K
+PiA+ID4+PiArDQo+ID4gPj4+ICt0aXRsZTogQVNQRUVEIEkyQyBvbiB0aGUgQVNUMjZYWCBTb0Nz
+DQo+ID4gPj4+ICsNCj4gPiA+Pj4gK21haW50YWluZXJzOg0KPiA+ID4+PiArICAtIFJ5YW4gQ2hl
+biA8cnlhbl9jaGVuQGFzcGVlZHRlY2guY29tPg0KPiA+ID4+PiArDQo+ID4gPj4+ICthbGxPZjoN
+Cj4gPiA+Pj4gKyAgLSAkcmVmOiAvc2NoZW1hcy9pMmMvaTJjLWNvbnRyb2xsZXIueWFtbCMNCj4g
+PiA+Pj4gKw0KPiA+ID4+PiArcHJvcGVydGllczoNCj4gPiA+Pj4gKyAgY29tcGF0aWJsZToNCj4g
+PiA+Pj4gKyAgICBlbnVtOg0KPiA+ID4+PiArICAgICAgLSBhc3BlZWQsYXN0MjYwMC1pMmMtYnVz
+DQo+ID4gPj4+ICsNCj4gPiA+Pj4gKyAgcmVnOg0KPiA+ID4+PiArICAgIG1pbkl0ZW1zOiAxDQo+
+ID4gPj4NCj4gPiA+PiBXaHk/DQo+ID4gPg0KPiA+ID4gV2lsbCB1cGRhdGUgYXMgZm9sbG93aW5n
+Lg0KPiA+ID4NCj4gPiA+IHJlZzoNCj4gPiA+ICAgbWluSXRlbXM6IDENCj4gPiA+ICAgbWF4SXRl
+bXM6IDINCj4gPg0KPiA+DQo+ID4gTm8uIFlvdSBjaGFuZ2VkIG5vdGhpbmcuIEluc3RlYWQgZXhw
+bGFpbiB3aHkgdGhpcyBpcyBmbGV4aWJsZS4NCj4gPg0KPiA+IFNlZSB3cml0aW5nIGJpbmRpbmdz
+Lg0KPiANCj4gU29ycnksIEkgc3RpbGwgbm90IHVuZGVyc3RhbmQgeW91ciBwb2ludC4gRG8geW91
+IG1lYW4gbmVlZCB0byBleHBsYWluIHdoeSByZWcgaXMNCj4gZmxleGlibGUgMSAtPiAyPw0KPiBJ
+ZiB5ZXMsIEkgd2lsbCB1cGRhdGUgdG8gZm9sbG93aW5nLg0KPiANCj4gcmVnOg0KPiAgIG1pbkl0
+ZW1zOiAxDQo+ICAgbWF4SXRlbXM6IDINCj4gICBkZXNjcmlwdGlvbjoNCj4gICAgIFRoZSBmaXJz
+dCByZWdpb24gY292ZXJzIHRoZSBjb250cm9sbGVyIHJlZ2lzdGVycy4NCj4gICAgIFRoZSBvcHRp
+b25hbCBzZWNvbmQgcmVnaW9uIGNvdmVycyB0aGUgY29udHJvbGxlcidzIGJ1ZmZlciBzcGFjZS4N
+Cg0KQWZ0ZXIgY2hlY2sgdGhlDQpodHRwczovL2RvY3Mua2VybmVsLm9yZy9kZXZpY2V0cmVlL2Jp
+bmRpbmdzL3dyaXRpbmctc2NoZW1hLmh0bWwjYW5ub3RhdGVkLWV4YW1wbGUtc2NoZW1hDQpJIHRo
+aW5rIEkgc2hvdWxkIHVwZGF0ZSB3aXRoIGZvbGxvd2luZywgYW0gSSBjb3JyZWN0ID8NCg0KIHJl
+ZzoNCiAgIGl0ZW1zOg0KICAgICAtIGRlc2NyaXB0aW9uOiBUaGUgZmlyc3QgcmVnaW9uIGNvdmVy
+cyB0aGUgY29udHJvbGxlciByZWdpc3RlcnMuDQoJIC0gZGVzY3JpcHRpb246IFRoZSBvcHRpb25h
+bCBzZWNvbmQgcmVnaW9uIGNvdmVycyB0aGUgY29udHJvbGxlcidzIGJ1ZmZlciBzcGFjZS4NCg0K
+V2hhdCB5b3UgcXVlc3Rpb24gYWJvdXQgDQoiIFBsZWFzZSBleHBsYWluIG1lIGhvdyBvbmUsIHNh
+bWUgU29DIGhhcyBvcHRpb25hbCBJTyBhZGRyZXNzIHNwYWNlPyBJIGFza2VkIHRvIGV4cGxhaW4g
+V0hZIHRoaXMgaXMgZmxleGlibGUiDQpUaGUgQVNUMjYwMCBpMmMgY29udHJvbGxlciBoYXZlIHRo
+cmVlIGlvLGJ1ZmZlcixkbWEgbW9kZS4gDQpUaGUgQVNUMjYwMCBoYXZlIGJ1ZmZlciByZWdpc3Rl
+ciBmb3IgYnVmZmVyIHRyYW5zZmVyLiBUaGF0IGlzIDJuZCByZWcgb2Zmc2V0LiANCklmIGR0c2kg
+bm90IGRlc2NyaXB0IGl0LCB0aGUgZHJpdmVyIHdpbGwgZ28gYmFjayB0byBpbyBtb2RlIHRyYW5z
+ZmVyLiBGbGV4aWJsZSBpbXBsZW1lbnQgaXMgaW4gZHJpdmVyLg0KDQoiDQoNCj4gDQo+IA0KPiA+
+DQo+ID4NCj4gPiAuLi4NCj4gPg0KPiA+DQo+ID4gPj4+ICsgIGJ1cy1mcmVxdWVuY3k6DQo+ID4g
+Pj4+ICsgICAgbWluaW11bTogNTAwDQo+ID4gPj4+ICsgICAgbWF4aW11bTogNDAwMDAwMA0KPiA+
+ID4+PiArICAgIGRlZmF1bHQ6IDEwMDAwMA0KPiA+ID4+PiArICAgIGRlc2NyaXB0aW9uOiBmcmVx
+dWVuY3kgb2YgdGhlIGJ1cyBjbG9jayBpbiBIeiBkZWZhdWx0cyB0byAxMDANCj4gPiA+Pj4gKyBr
+SHogd2hlbg0KPiA+ID4+IG5vdA0KPiA+ID4+PiArICAgICAgc3BlY2lmaWVkDQo+ID4gPj4NCj4g
+PiA+PiBEb24ndCByZXBlYXQgY29uc3RyYWludHMgaW4gZnJlZSBmb3JtIHRleHQuDQo+ID4gPg0K
+PiA+ID4gV2lsbCB1cGRhdGUNCj4gPiA+IGNsb2NrLWZyZXF1ZW5jeToNCj4gPiA+ICAgICBkZXNj
+cmlwdGlvbjogRGVzaXJlZCBJMkMgYnVzIGZyZXF1ZW5jeSBpbiBIeg0KPiA+ID4gICAgIGRlZmF1
+bHQ6IDEwMDAwMA0KPiA+DQo+ID4gSGVoPyBZb3UgYXJlIG1ha2luZyByYW5kb20gc2V0IG9mIGNo
+YW5nZXMgbGlrZSBkaWQgbm90IHJlYWxseSByZWFkIHRoZQ0KPiA+IGZlZWRiYWNrLiBJIG5vdCB0
+byByZXBlYXQgc29tZXRoaW5nLiBXaGF0IGlzIHJlcGVhdGVkPyBDb25zdHJhaW50cy4NCj4gPiBX
+aGVyZSBhcmUgdGhlIHJlcGVhdGVkICJpbiBmcmVlIGZvcm0gdGV4dCIuIFdoYXQgZGlkIHlvdSBk
+bz8gRHJvcHBlZA0KPiA+IGNvbnN0cmFpbnRzLg0KPiANCj4gU29ycnksIEkgbWlzdW5kZXJzdG9v
+ZCB5b3VyIGNvbW1lbnQsDQo+IEkgdGhpbmsgeW91IGFyZSBwb2ludCBvdXQgbXkgZGVzY3JpcHRp
+b24uDQo+IA0KPiBJIHdpbGwgdXBkYXRlIHdpdGggZm9sbG93aW5nLg0KPiANCj4gY2xvY2stZnJl
+cXVlbmN5Og0KPiAgIGRlc2NyaXB0aW9uOiBEZXNpcmVkIG9wZXJhdGluZyBmcmVxdWVuY3kgb2Yg
+dGhlIEkyQyBidXMgaW4gSHouDQo+ICAgbWluaW11bTogNTAwDQo+ICAgbWF4aW11bTogNDAwMDAw
+MA0KPiAgIGRlZmF1bHQ6IDEwMDAwMA0KPiANCj4gPg0KPiA+IEkgZG9uJ3Qga25vdyB3aGF0IHRv
+IHNheS4NCj4gPg0KPiA+IEJlc3QgcmVnYXJkcywNCj4gPiBLcnp5c3p0b2YNCg==
 
