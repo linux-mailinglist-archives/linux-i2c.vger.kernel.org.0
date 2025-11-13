@@ -1,185 +1,195 @@
-Return-Path: <linux-i2c+bounces-14076-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14077-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29946C56F94
-	for <lists+linux-i2c@lfdr.de>; Thu, 13 Nov 2025 11:47:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C0191C57CE3
+	for <lists+linux-i2c@lfdr.de>; Thu, 13 Nov 2025 14:56:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 16DFA421D9E
-	for <lists+linux-i2c@lfdr.de>; Thu, 13 Nov 2025 10:40:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E7398423323
+	for <lists+linux-i2c@lfdr.de>; Thu, 13 Nov 2025 13:24:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F14633321AB;
-	Thu, 13 Nov 2025 10:40:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0892351FAB;
+	Thu, 13 Nov 2025 13:24:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Or3b0ixy"
+	dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b="VSLxr6KF"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpbguseast1.qq.com (smtpbguseast1.qq.com [54.204.34.129])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A15671531F9;
-	Thu, 13 Nov 2025 10:40:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7576033F8D2;
+	Thu, 13 Nov 2025 13:24:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.204.34.129
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763030428; cv=none; b=g+UyjhdO2gts6VELUx0LVzh1Gx8N8166koPnBvEfTxGjAVDUT5mEZn7f4HhyzvEDi7PWfcO7x4dMRAXoSfTLnuW52liS4I9cqT7r4/ZotWTGkobWxqKiJ0vc017PiPGne/6G77v1zmKcU0aHFXPpSDptDdnPCTKhSTjiGD1zkgk=
+	t=1763040246; cv=none; b=pO08QLZUaUTMASzeolUoPm2V2XjHgQVCi+xSDBwaf8+EycxuVH1HTIdjAB/vJK/Awc9/3hSujLOFd0mdH59iYREqjW9aNcTsLbWKY5NmHm4CUp9iy02eWP/TG0sGDv4QX9JMBEgM1Kt5/Pqd7iCdi+Zii2Qbk0UGYA8GCxfv3Nw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763030428; c=relaxed/simple;
-	bh=XAEk2gO6Dgxkt9QVW+uJ7j3ysQrmrx0Zs+nhWoNI+40=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=UwRFrUeHQmV/ZvjZRx/pFbxoRUnztj5+ZFIt7wx1HfjICn0lRHRjUYXYXZ0+n3LZmeayyPquSEk+MSxVBi5MAwhN4ZkOgggGbEnmw2px3Ig2LXHMZWWNIsK9f/PUCAkkl3GNY4IoLYHtKySCOgAX1uqgIqV3j0fgAR6rz2Q3uUI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Or3b0ixy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CAACC113D0;
-	Thu, 13 Nov 2025 10:40:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763030428;
-	bh=XAEk2gO6Dgxkt9QVW+uJ7j3ysQrmrx0Zs+nhWoNI+40=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=Or3b0ixyWVlT1dPdqmaC72tRC7xq4wLgmibR7nhfxqQPwD23TaEMpvfSpRpORd5i4
-	 YjxOs3CDyda2vvRJ5Q5ieKiCN6W4vNkOvSHWGiNIuHEKBBGhzz1T0501nUJ4PXAoka
-	 xSNN549KxsGYWabcjhBatJ8iWDYVovGZTPc+rkIhm0fUTfN84mAHCXw2qwk92AULcs
-	 Ax46ybza4k814xTWkCIGklfNePhtVX3zB0guMs5YHyNA6FasQN9PDvv3/ODelJcjB/
-	 nQ54NDrJpaklq2uT3Q7DPalSWY+ZqZo3SdQ5eEBztnNYKAZl5aHwgFgvNdSY9PGstU
-	 XnlrxmiENxRHQ==
-Message-ID: <28fa635b-f9a6-41c3-8199-9630ed3e7649@kernel.org>
-Date: Thu, 13 Nov 2025 11:40:22 +0100
+	s=arc-20240116; t=1763040246; c=relaxed/simple;
+	bh=/a60LCG9PrF70ChplJbx/syVHIICzDVRIa3uNVVUQus=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=iRkSqdo8zpjyTqsCVo4o5WvTE2IzuNRyYVAdB19nvt0egiZYU+ip9tf+RsmodaPTpRvuCnFfzkRgMfaw5xGlORwG1XNB33b3icpgcfz4hRPUN9OACkc6lDSBx8aHYJCJ7dl7vLHBcVO/7hfVBu6JWUvGs3e5hMtwRzJs48lOUPo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com; spf=none smtp.mailfrom=linux.spacemit.com; dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b=VSLxr6KF; arc=none smtp.client-ip=54.204.34.129
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.spacemit.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.spacemit.com;
+	s=mxsw2412; t=1763040129;
+	bh=iiQHeHD/K/spNsUBdxVuSJcnkwG9NvxKtgVBuXpJ5UA=;
+	h=From:Date:Subject:MIME-Version:Message-Id:To;
+	b=VSLxr6KFFOhXnCD61Lo1g/KdAmhdIrkadD3MiXist87pOW2cvdUhqM4T97vvLYuz+
+	 bYtwPQOtHCFPQVE3mI+G3wfPTqEHHh8TN2s8u/6slkes/0nYUi5TdySO+IKXHKXXmk
+	 AgzEdzrVy0EZt6heri3VMFPd8IxDMRX5U60JxaW8=
+X-QQ-mid: zesmtpip3t1763040119tba5b044c
+X-QQ-Originating-IP: WSzQyCAMDRB+Hc9NMdMMaxfI+JAuDSF0OGMd4+PLci0=
+Received: from = ( [localhost])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Thu, 13 Nov 2025 21:21:58 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 8025135946155333244
+EX-QQ-RecipientCnt: 11
+From: Troy Mitchell <troy.mitchell@linux.spacemit.com>
+Date: Thu, 13 Nov 2025 21:21:50 +0800
+Subject: [PATCH v2] i2c: spacemit: fix detect issue
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v20 1/4] dt-bindings: i2c: Split AST2600 binding into a
- new YAML
-To: Ryan Chen <ryan_chen@aspeedtech.com>,
- "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
- "joel@jms.id.au" <joel@jms.id.au>,
- "andi.shyti@kernel.org" <andi.shyti@kernel.org>,
- "jk@codeconstruct.com.au" <jk@codeconstruct.com.au>,
- "robh@kernel.org" <robh@kernel.org>, "krzk+dt@kernel.org"
- <krzk+dt@kernel.org>, "conor+dt@kernel.org" <conor+dt@kernel.org>,
- "andrew@codeconstruct.com.au" <andrew@codeconstruct.com.au>,
- "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
- "andriy.shevchenko@linux.intel.com" <andriy.shevchenko@linux.intel.com>,
- "naresh.solanki@9elements.com" <naresh.solanki@9elements.com>,
- "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
- "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20251021013548.2375190-1-ryan_chen@aspeedtech.com>
- <20251021013548.2375190-2-ryan_chen@aspeedtech.com>
- <0b76f196-f642-4991-ad5c-717c23938421@kernel.org>
- <TY2PPF5CB9A1BE6597ECD46BD4CB7C5F09FF2FAA@TY2PPF5CB9A1BE6.apcprd06.prod.outlook.com>
- <3c3287f6-1c5c-4c4d-9349-32665a5e1585@kernel.org>
- <TY2PPF5CB9A1BE6FE06477B9CC51B8133DAF2CFA@TY2PPF5CB9A1BE6.apcprd06.prod.outlook.com>
- <TY2PPF5CB9A1BE67DBBC08424DD062549BDF2CDA@TY2PPF5CB9A1BE6.apcprd06.prod.outlook.com>
-Content-Language: en-US
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Autocrypt: addr=krzk@kernel.org; keydata=
- xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
- cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
- JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
- gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
- J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
- NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
- BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
- vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
- Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
- TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
- S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
- FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJoF1BKBQkWlnSaAAoJEBuTQ307
- QWKbHukP/3t4tRp/bvDnxJfmNdNVn0gv9ep3L39IntPalBFwRKytqeQkzAju0whYWg+R/rwp
- +r2I1Fzwt7+PTjsnMFlh1AZxGDmP5MFkzVsMnfX1lGiXhYSOMP97XL6R1QSXxaWOpGNCDaUl
- ajorB0lJDcC0q3xAdwzRConxYVhlgmTrRiD8oLlSCD5baEAt5Zw17UTNDnDGmZQKR0fqLpWy
- 786Lm5OScb7DjEgcA2PRm17st4UQ1kF0rQHokVaotxRM74PPDB8bCsunlghJl1DRK9s1aSuN
- hL1Pv9VD8b4dFNvCo7b4hfAANPU67W40AaaGZ3UAfmw+1MYyo4QuAZGKzaP2ukbdCD/DYnqi
- tJy88XqWtyb4UQWKNoQqGKzlYXdKsldYqrLHGoMvj1UN9XcRtXHST/IaLn72o7j7/h/Ac5EL
- 8lSUVIG4TYn59NyxxAXa07Wi6zjVL1U11fTnFmE29ALYQEXKBI3KUO1A3p4sQWzU7uRmbuxn
- naUmm8RbpMcOfa9JjlXCLmQ5IP7Rr5tYZUCkZz08LIfF8UMXwH7OOEX87Y++EkAB+pzKZNNd
- hwoXulTAgjSy+OiaLtuCys9VdXLZ3Zy314azaCU3BoWgaMV0eAW/+gprWMXQM1lrlzvwlD/k
- whyy9wGf0AEPpLssLVt9VVxNjo6BIkt6d1pMg6mHsUEVzsFNBFVDXDQBEADNkrQYSREUL4D3
- Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
- MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
- OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
- GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
- 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
- YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
- 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
- BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
- JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
- 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
- YpsFAmgXUF8FCRaWWyoACgkQG5NDfTtBYptO0w//dlXJs5/42hAXKsk+PDg3wyEFb4NpyA1v
- qmx7SfAzk9Hf6lWwU1O6AbqNMbh6PjEwadKUk1m04S7EjdQLsj/MBSgoQtCT3MDmWUUtHZd5
- RYIPnPq3WVB47GtuO6/u375tsxhtf7vt95QSYJwCB+ZUgo4T+FV4hquZ4AsRkbgavtIzQisg
- Dgv76tnEv3YHV8Jn9mi/Bu0FURF+5kpdMfgo1sq6RXNQ//TVf8yFgRtTUdXxW/qHjlYURrm2
- H4kutobVEIxiyu6m05q3e9eZB/TaMMNVORx+1kM3j7f0rwtEYUFzY1ygQfpcMDPl7pRYoJjB
- dSsm0ZuzDaCwaxg2t8hqQJBzJCezTOIkjHUsWAK+tEbU4Z4SnNpCyM3fBqsgYdJxjyC/tWVT
- AQ18NRLtPw7tK1rdcwCl0GFQHwSwk5pDpz1NH40e6lU+NcXSeiqkDDRkHlftKPV/dV+lQXiu
- jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
- zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
- XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <TY2PPF5CB9A1BE67DBBC08424DD062549BDF2CDA@TY2PPF5CB9A1BE6.apcprd06.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20251113-fix-k1-detect-failure-v2-1-b02a9a74f65a@linux.spacemit.com>
+X-B4-Tracking: v=1; b=H4sIAG3bFWkC/3XMywqDMBCF4VeRWXfE8U5XvkfpIiZjHapGkiiC+
+ O4NXXXT5Q/nfCd4dsIe7skJjnfxYpcY+S0BParlxSgmNuRZXhFRgYMc+CY0HFgHHJRMm2Osi7I
+ tuKyobnuI39VxHH7dxzP24OyMYXSsfrTsn7YTEvZ91qjWNIYb3U2ybEfqV6V5lpBqO8N1fQCli
+ VWMvQAAAA==
+X-Change-ID: 20251113-fix-k1-detect-failure-63483e45168b
+To: Andi Shyti <andi.shyti@kernel.org>, Yixun Lan <dlan@gentoo.org>, 
+ Alex Elder <elder@riscstar.com>, 
+ Michael Opdenacker <michael.opdenacker@rootcommit.com>, 
+ Aurelien Jarno <aurelien@aurel32.net>
+Cc: Troy Mitchell <troymitchell988@gmail.com>, linux-i2c@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
+ spacemit@lists.linux.dev, Troy Mitchell <troy.mitchell@linux.spacemit.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1763040115; l=3381;
+ i=troy.mitchell@linux.spacemit.com; s=20250712; h=from:subject:message-id;
+ bh=/a60LCG9PrF70ChplJbx/syVHIICzDVRIa3uNVVUQus=;
+ b=DM8fHhZFeWQXvqw7nbmlAsyJlUSjCgsIBu/safkH52iUImXXhZH5f3ebQmsasy+Mthz7ir5FA
+ tbmrLiWBoRhDZuGZCUJSXXktiIPpOq6lUSbKg5fd75d2sYjDV33dgft
+X-Developer-Key: i=troy.mitchell@linux.spacemit.com; a=ed25519;
+ pk=zhRP1xE0bftrurqSWI+SzcSdJGIZ0BTTY9Id0ESzqlI=
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpip:linux.spacemit.com:qybglogicsvrgz:qybglogicsvrgz3a-0
+X-QQ-XMAILINFO: NCMb4wasipbGbqoHIyEbzxZ4qZVClhsnRcSodWTTvyZc7Dj3SX8Mx9gL
+	Xj1tMAuJZtpwAFUJccUmc8TL8DstggYJn6TVgP5UWHHVQJNPDuMiYt5VCzzmdyky8CeHRXM
+	hcugu67WB8Ey5AAh2gwXStczaVh2C4QEclDpZZO0PufCpvxrJVY5DjPE//DJFAidjF5g0rG
+	8L/UGIaDJClytMoyfmq2whIHbfbugYOP/bfkaZrj3ktSHeHQ6Mj2W2NSt3Ub/xT1ksoNeqG
+	PX+5szexPebvyBnP5IOJLDFBoOg2TzCHPndCKqI6hETYb87laynjSt2dPIIYy762ilumhZr
+	YfVuuxfd5oE+upn4hBSaJXr4qd6wkuQJYAQxrKSZwI+4wot9ficKUotlZmvX6DFSkKYMHYq
+	C+b25c0RkW6ZDFh4et6sitgoMlQ3jPTfZeoKNbtEireoj9HhmZ8AXqC/zeJ0Hf6mnI9JE7V
+	7mHzZ95QHjbCIjjlK0k80EiuMEjT0QqKolFzLYgHoeAo9Sig/xER9OTz8hj3UnkLMdwUB+9
+	rE5Rbezb6HD7GqfXPTSY8pbNCTJU5dwAOZKF1aOjXQFwerBRqY6zjR+cu4zI53MCYV5rsa7
+	aH5dgQZFLq+OMXG+qKVXAdQrS5muB7eiPTJX6g8Efo2eigXXONi3NkbaOR6SQHxQ0apInzy
+	mhd3RD7OxYnGVqrT/HpnC2sdiXuSAnfyF4MC0mMUTVmvym0oai8Ky2xsxacigO9avD7qQZf
+	Fz8tUEc4PAL1HsQ92uqWFDKyUDlpTaGwFhxPN+QbbuWWIiEAF0EiHLPprgwhAobL2ZKMqZa
+	N2Mjw0fXWl9r1vSn0qE/KKJaAP3DCM7e55TRQLntsbOApBEk3Rtxr3SLR4etEH1nA/iOsvO
+	CQkpeE1p0jaOMZg77i9gft0jK0ZmwzHR9+d2CKrXUpJhRBJMGYGUdKum3CpEBqcJD0qBfX+
+	yUWkQfiiqkI14IXA7URh90YStSqWC9E4FIBaQ9pH3gVdlwA61Vb5ITcV9WFxOfvki/z5lnS
+	BlnMDORJWKCKL+iW+iuXeCIoU3GoiBk7XOchsEs7HvHaLL+Xvmp7Us0sjJ0QXE7DSwdIiif
+	LTfA6IzXiE0xulVo2LmSabasKKsBp2gaTShFVMRfqQIHcxV/3qBbvwbAaQy3naT2B60qZma
+	pjVPHyEMFvlgXDWXK+4YbnMWbBHs9bjCjuoJ
+X-QQ-XMRINFO: NyFYKkN4Ny6FSmKK/uo/jdU=
+X-QQ-RECHKSPAM: 0
 
-On 13/11/2025 10:34, Ryan Chen wrote:
->>>>>> +  reg:
->>>>>> +    minItems: 1
->>>>>
->>>>> Why?
->>>>
->>>> Will update as following.
->>>>
->>>> reg:
->>>>   minItems: 1
->>>>   maxItems: 2
->>>
->>>
->>> No. You changed nothing. Instead explain why this is flexible.
->>>
->>> See writing bindings.
->>
->> Sorry, I still not understand your point. Do you mean need to explain why reg is
->> flexible 1 -> 2?
->> If yes, I will update to following.
->>
->> reg:
->>   minItems: 1
->>   maxItems: 2
->>   description:
->>     The first region covers the controller registers.
->>     The optional second region covers the controller's buffer space.
-> 
-> After check the
-> https://docs.kernel.org/devicetree/bindings/writing-schema.html#annotated-example-schema
-> I think I should update with following, am I correct ?
-> 
->  reg:
->    items:
->      - description: The first region covers the controller registers.
-> 	 - description: The optional second region covers the controller's buffer space.
+This commit addresses two issues causing i2c detect to fail.
 
-Please drop "The first region covers" and same for the second. Just say
-what is this - controller register and controllers buffer space - and
-second one is not optional now.
+The identified issues are:
 
-> 
-> What you question about 
-> " Please explain me how one, same SoC has optional IO address space? I asked to explain WHY this is flexible"
-> The AST2600 i2c controller have three io,buffer,dma mode. 
-> The AST2600 have buffer register for buffer transfer. That is 2nd reg offset. 
+1. Incorrect error handling for BED (Bus Error No ACK/NAK):
+   Before this commit, Both ALD (Arbitration Loss Detected) and
+   BED returned -EAGAIN.
+2. Missing interrupt status clear after initialization in xfer():
+   On the K1 SoC, simply fixing the first issue changed the error
+   from -EAGAIN to -ETIMEOUT. Through tracing, it was determined that
+   this is likely due to MSD (Master Stop Detected) latency issues.
 
-So the SoC *HAS* it. It is always there. It cannot be missing in the
-hardware.
+   That means the MSD bit in the ISR may still be set on the next transfer.
+   As a result, the controller won't work — we can see from the scope that
+   it doesn't issue any signal.
+   (This only occurs during rapid consecutive I2C transfers.
+   That explains why the issue only shows up with i2cdetect.)
 
-> If dtsi not descript it, the driver will go back to io mode transfer. Flexible implement is in driver.
+With these two fixes, i2c device detection now functions correctly on the K1 SoC.
 
-Describe the hardware.
+Fixes: 5ea558473fa31 ("i2c: spacemit: add support for SpacemiT K1 SoC")
+Tested-by: Aurelien Jarno <aurelien@aurel32.net>
+Signed-off-by: Troy Mitchell <troy.mitchell@linux.spacemit.com>
+---
+Changelog in v2:
+- handle ALD and BED errors separately in spacemit_i2c_handle_err()
+- move clear_int_status() above spacemit_i2c_init()
+- move clear_int_status() from xfer() into spacemit_i2c_init()
+- Link to v1: https://lore.kernel.org/all/20251103-fix-k1-detect-failure-v1-1-bb07a8d7de7c@linux.spacemit.com/
+---
+ drivers/i2c/busses/i2c-k1.c | 19 +++++++++++++------
+ 1 file changed, 13 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-k1.c b/drivers/i2c/busses/i2c-k1.c
+index 6b918770e612e098b8ad17418f420d87c94df166..d42c03ef5db5984ea8e06b3d7eb485b4f899e616 100644
+--- a/drivers/i2c/busses/i2c-k1.c
++++ b/drivers/i2c/busses/i2c-k1.c
+@@ -158,11 +158,16 @@ static int spacemit_i2c_handle_err(struct spacemit_i2c_dev *i2c)
+ {
+ 	dev_dbg(i2c->dev, "i2c error status: 0x%08x\n", i2c->status);
+ 
+-	if (i2c->status & (SPACEMIT_SR_BED | SPACEMIT_SR_ALD)) {
++	/* Arbitration Loss Detected */
++	if (i2c->status & SPACEMIT_SR_ALD) {
+ 		spacemit_i2c_reset(i2c);
+ 		return -EAGAIN;
+ 	}
+ 
++	/* Bus Error No ACK/NAK */
++	if (i2c->status & SPACEMIT_SR_BED)
++		spacemit_i2c_reset(i2c);
++
+ 	return i2c->status & SPACEMIT_SR_ACKNAK ? -ENXIO : -EIO;
+ }
+ 
+@@ -224,6 +229,12 @@ static void spacemit_i2c_check_bus_release(struct spacemit_i2c_dev *i2c)
+ 	}
+ }
+ 
++static inline void
++spacemit_i2c_clear_int_status(struct spacemit_i2c_dev *i2c, u32 mask)
++{
++	writel(mask & SPACEMIT_I2C_INT_STATUS_MASK, i2c->base + SPACEMIT_ISR);
++}
++
+ static void spacemit_i2c_init(struct spacemit_i2c_dev *i2c)
+ {
+ 	u32 val;
+@@ -267,12 +278,8 @@ static void spacemit_i2c_init(struct spacemit_i2c_dev *i2c)
+ 	val = readl(i2c->base + SPACEMIT_IRCR);
+ 	val |= SPACEMIT_RCR_SDA_GLITCH_NOFIX;
+ 	writel(val, i2c->base + SPACEMIT_IRCR);
+-}
+ 
+-static inline void
+-spacemit_i2c_clear_int_status(struct spacemit_i2c_dev *i2c, u32 mask)
+-{
+-	writel(mask & SPACEMIT_I2C_INT_STATUS_MASK, i2c->base + SPACEMIT_ISR);
++	spacemit_i2c_clear_int_status(i2c, SPACEMIT_I2C_INT_STATUS_MASK);
+ }
+ 
+ static void spacemit_i2c_start(struct spacemit_i2c_dev *i2c)
+
+---
+base-commit: 6fa9041b7177f6771817b95e83f6df17b147c8c6
+change-id: 20251113-fix-k1-detect-failure-63483e45168b
 
 Best regards,
-Krzysztof
+-- 
+Troy Mitchell <troy.mitchell@linux.spacemit.com>
+
 
