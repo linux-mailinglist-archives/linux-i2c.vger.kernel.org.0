@@ -1,195 +1,176 @@
-Return-Path: <linux-i2c+bounces-14086-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14087-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5759BC5EC6D
-	for <lists+linux-i2c@lfdr.de>; Fri, 14 Nov 2025 19:12:13 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B9B9C5FFD0
+	for <lists+linux-i2c@lfdr.de>; Sat, 15 Nov 2025 05:27:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 5C70F381066
-	for <lists+linux-i2c@lfdr.de>; Fri, 14 Nov 2025 17:50:26 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 083AE359B79
+	for <lists+linux-i2c@lfdr.de>; Sat, 15 Nov 2025 04:27:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 476A2348899;
-	Fri, 14 Nov 2025 17:48:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02FEC2010EE;
+	Sat, 15 Nov 2025 04:27:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jrRY4ZQr"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="BmX7G73w"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from CY3PR05CU001.outbound.protection.outlook.com (mail-westcentralusazon11013055.outbound.protection.outlook.com [40.93.201.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B16C03451B0;
-	Fri, 14 Nov 2025 17:48:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763142527; cv=none; b=NT/aFXl3SHt0Dxq85VbCrEo/YYhzksJVvgiNn8Bk80KrrtFvKrf3z2nFLkk8QCAwKoOpIIHbluCcL2s3SN/zfEsn9K9WS+C5gfivErLlvPaaK1Gza5Nmr95SMKyT4JZgspqdbRMicVgUSIjdgGszzyQ8V8mw6j/0kJxJriQ5z4Y=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763142527; c=relaxed/simple;
-	bh=yocwTQVHHZ1oHWeawnGjtUSUysV1o9GGmLQY2fd93FA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PwkQfKbYruidPj+x6DurcpMrZzpgF3Ez8A2lwN+CYoDOnoAFHFNlwnx25b3lJfDBA8C6ZmGtb6IAwYZcy+WeOjSu4mL0IT4csg/p/1ohRqGu4eTjphH9udvzbYf8/h7hg1YVjaHY2AHihKzFtKTAnvM9cE7vuI8voQEBAQhjRP4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jrRY4ZQr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20BA5C116D0;
-	Fri, 14 Nov 2025 17:48:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763142526;
-	bh=yocwTQVHHZ1oHWeawnGjtUSUysV1o9GGmLQY2fd93FA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jrRY4ZQrDYvtv6r8RIAFYBCRLxeDPRRQdFhBOSiHfHjEmJEFZwQjQlxLe5Uy5KLpz
-	 weOmScjpMD9XpoOt77SUWH5R7y/xNE8DF6lcEn4qWeNN540vDg+B8LgnWCgRqa4R0T
-	 sib1hd1cIceLKwAzoZlfgOu3daGIE7raxiI1LC5BR0R8roVGqGTQ87bAasz2PxucVh
-	 uMPcUqtO9zxeHeJw8B4UJ2oTIaZbpPI8n2wMKR0p34lGoQGI3RjZ5nLGBE/dkvN7+5
-	 It+4AUl0P8h3pRHUb6PKeo/0OY1eivLQ27zQvNkN66gucGnW3u9he2Gr3NIwXLyYoC
-	 uw7qDwwhB3xLQ==
-Date: Fri, 14 Nov 2025 11:48:44 -0600
-From: Rob Herring <robh@kernel.org>
-To: Herve Codina <herve.codina@bootlin.com>
-Cc: Andrew Lunn <andrew@lunn.ch>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Peter Rosin <peda@axentia.se>, Arnd Bergmann <arnd@arndb.de>,
-	Saravana Kannan <saravanak@google.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Charles Keepax <ckeepax@opensource.cirrus.com>,
-	Richard Fitzgerald <rf@opensource.cirrus.com>,
-	David Rhodes <david.rhodes@cirrus.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Mark Brown <broonie@kernel.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Daniel Scally <djrscally@gmail.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Len Brown <lenb@kernel.org>, Davidlohr Bueso <dave@stgolabs.net>,
-	Jonathan Cameron <jonathan.cameron@huawei.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Alison Schofield <alison.schofield@intel.com>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Ira Weiny <ira.weiny@intel.com>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Wolfram Sang <wsa@kernel.org>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-sound@vger.kernel.org, patches@opensource.cirrus.com,
-	linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-spi@vger.kernel.org, linux-acpi@vger.kernel.org,
-	linux-cxl@vger.kernel.org,
-	Allan Nielsen <allan.nielsen@microchip.com>,
-	Horatiu Vultur <horatiu.vultur@microchip.com>,
-	Steen Hegelund <steen.hegelund@microchip.com>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v4 00/29] lan966x pci device: Add support for SFPs
-Message-ID: <20251114174844.GA3792362-robh@kernel.org>
-References: <20251015071420.1173068-1-herve.codina@bootlin.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2113D11CBA;
+	Sat, 15 Nov 2025 04:27:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.201.55
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1763180855; cv=fail; b=HxrRik18roEkK0DNiryT6wneLmmAWqIQYyDpfopJmcInOsXhENHQ/WL9oSYitl+YIB3Kyo/gOMN+Vf7lqo7ntAIElgJbCd3kjERH6dMwqupmLfU6LBUeQOyki8MgwnW8hVN3EWUZGI1lg3EvH+8WTGeoRq9Zom4BUZwF0B3k2OE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1763180855; c=relaxed/simple;
+	bh=71BN8APuHObYtdk3+4PYPvieojZRa/FPkkOT4kQu46c=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=LB32+3BedrU7mmCVTBkP9xJARMyqDDAe609gT3VXxuiRz3c3HGVdUg9raHL9SrvnExWG5fPbeCemlfgnB4kBQ8+bjiGJps/J/gLNdEmFdQS2/fiwOZJb948ewxwusabcXPciJFzD6lo+JoBA7jnQ/AzFj3DBwXioxo/csenuG9s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=BmX7G73w; arc=fail smtp.client-ip=40.93.201.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=p39LMhEqdObLiN9pwDko+cFcIuIkanyryG5OpzuAaeYvSjKKSA9i0h3txUR+qPKr3DwNRHQE7k3UkRm9CQTMKGmHgsRGiIpuAv7qLuPV+Dpf97Qo4m+AAeoMTBBQkt2SjeBQ41cmfbrXQqsxbPxJJ8CA4Ypr4PHO7M6jSqDeOzEuTZeo4bqMAyAEjzOOEz2RbgELMNqJFHGklQ+lNw6Ak5MB96OnfVwFFeTC51zDRH6cJyY+yyN89+U1A/aGdF51vHbzsjdPoisJHoWxMpDKi4bCHKU0lRAAfzt6l+MLt9EwWz+C7O7R67J1yQCZKwLid/unU8qX0sEpQWBYnFH58g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gMXz+3v+U6Qk2wOKrynNlqBBqW6T4ca7NFyrgAj4nyE=;
+ b=J6K/v+xIb+aLCan8bWZgz5hSfSEQAuGI6uK3u4ZEP4xHPZfu/O8sFbzeENq/KCu4itULqcS1ilJRGUh0EjFuytwUDlQO3kxdfBabTQitsLb4JLY4p4EETN3iq2o/AzdZSh57c9YQM2GYoxIEfuKvSopyf4/94rkVeJfyKeJ3fDn4SHLyrG0ScqJliTF+S+1OqoC6WoTrIRWIVS0XHb3jjpGypv68wbMrXiC7Q9sMETP+CqD2dNtuQrrgJRA3RTieNpI1B/ELOVsnaTrtPdby1RS5TF26NOqT/fDr9uaO3Jk3IajSkC4uM0U4Gl/KrdwaTJjVaxm0M/0XNK72pfG9VQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gMXz+3v+U6Qk2wOKrynNlqBBqW6T4ca7NFyrgAj4nyE=;
+ b=BmX7G73w1Wmjm10ordU7SnX6lQw0rA7d1IID34YHIByytEu9HrlkGLIm4COaZlR986rEZuk49r+GvI8r7FJOA0f7cXxg8hwcHszZ5DxUfH5PAH1YpCD98vjxRwPboNNF08UP3GMPKIdbgNrraj4bdD05xbjDQq2d8hzYNOBUjakMMb8b/KvG2MNtkh697TPfO5aslTaHcFdaNiYNS4vINhHKlc3QmkzU714qV5tZTpRw1ppKoSxNsKoP44ZR2C817tF8kPtfJvwzbB2WQDUNxjvg60mTPAYN1wUingx3klSlwTyuRP1x6bOTEBd+7kXWnQL8pJkJgEsdiHg7MSMXtQ==
+Received: from SA9PR13CA0086.namprd13.prod.outlook.com (2603:10b6:806:23::31)
+ by BL1PR12MB5802.namprd12.prod.outlook.com (2603:10b6:208:392::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9320.15; Sat, 15 Nov
+ 2025 04:27:24 +0000
+Received: from SN1PEPF000397AF.namprd05.prod.outlook.com
+ (2603:10b6:806:23:cafe::bb) by SA9PR13CA0086.outlook.office365.com
+ (2603:10b6:806:23::31) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9343.7 via Frontend Transport; Sat,
+ 15 Nov 2025 04:27:23 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ SN1PEPF000397AF.mail.protection.outlook.com (10.167.248.53) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9320.13 via Frontend Transport; Sat, 15 Nov 2025 04:27:23 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Fri, 14 Nov
+ 2025 20:27:10 -0800
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Fri, 14 Nov
+ 2025 20:27:09 -0800
+Received: from BUILDSERVER-IO-L4T.nvidia.com (10.127.8.9) by mail.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server id 15.2.2562.20 via Frontend
+ Transport; Fri, 14 Nov 2025 20:27:06 -0800
+From: Akhil R <akhilrajeev@nvidia.com>
+To: <andi.shyti@kernel.org>, <digetx@gmail.com>, <jonathanh@nvidia.com>,
+	<linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-tegra@vger.kernel.org>, <thierry.reding@gmail.com>,
+	<wsa+renesas@sang-engineering.com>, <wsa@kernel.org>
+CC: <kkartik@nvidia.com>, <akhilrajeev@nvidia.com>, <ldewangan@nvidia.com>,
+	<smangipudi@nvidia.com>
+Subject: [PATCH v12 0/6] Updates for Tegra264 and Tegra256
+Date: Sat, 15 Nov 2025 09:56:26 +0530
+Message-ID: <20251115042632.69708-1-akhilrajeev@nvidia.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251015071420.1173068-1-herve.codina@bootlin.com>
+X-NVConfidentiality: public
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN1PEPF000397AF:EE_|BL1PR12MB5802:EE_
+X-MS-Office365-Filtering-Correlation-Id: 32525170-5401-4ec4-33a5-08de23ff4650
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|36860700013|376014|82310400026|13003099007;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?Z19thHpWnB08et5plRI7FSec8SKOJVOSIEFubYDY2XKlwmO84AWhgG7L8cpS?=
+ =?us-ascii?Q?Ct+wn+RU/aiqrLmOcjFHvJTM9JQmV1HRlbD40ToI2n4BZ/cPWEDf8dVo2HLP?=
+ =?us-ascii?Q?WT5qRtda8CMAkE6wqjShKPl0zQ6Sda9dgJ2hSAKJLfkddQP48woq9RwG6noC?=
+ =?us-ascii?Q?quUHSq2ALjWdW1X8RkmiF7pv9ZYocbiAjLcSFaznGX9hSAEM4+nBZHF3E3Zz?=
+ =?us-ascii?Q?55WAsMWSrIidZxWqNs7XqiGqn33KNnILt2wJnIOwLwARtTR2kSbnlsqMhOYZ?=
+ =?us-ascii?Q?JQkvlM9HE5fdkgwyi4ZGdqkZNe8Gfeqv8dO3T4uFS9VSLYUq5q4Yjj7b8zCu?=
+ =?us-ascii?Q?xtOJRuaPuu2BhVdBgnNCmo18BvS9Fg1dDtsnvCISwNRCk5o45T67dh6tEKJb?=
+ =?us-ascii?Q?uptUGiF2cw3uyYukaofTOIJdBA1Jrw+emxR90ySE+YjHC16piJ6q/DS3Uhm2?=
+ =?us-ascii?Q?HmYMepRlGy+7zqvCIJ4vHFYcHir/FfAkHbcyuqtUV+qjJ+eUEVRAD1skQT6j?=
+ =?us-ascii?Q?VSNief6UAQQBj72457gDgVduAdWZbvOnlKi47ojeCc299kklsCJNYMQgu6BO?=
+ =?us-ascii?Q?QhNvo+F3tlRKIPcQEyUPFqXDQfKP4QNqeVDM+b2Iclp7X8TsWwF7XQMJ91yk?=
+ =?us-ascii?Q?2eEqu0tAAXsMliN5JD4ta0x8GvMxTJDaNVVoWC9xpAoL4uz410KdnTnFtvNN?=
+ =?us-ascii?Q?UQ4JV9H+72hMcq8l5Msa0AfxnjC7XzTNWovCRMNZeUI9Y6I68uXk4q8qZ0xS?=
+ =?us-ascii?Q?fLh6iv3u6pJxezgNq5tKuG7zAuvdzq8q7j7HEmCj4UjgbxMCnc/FZRyIroVd?=
+ =?us-ascii?Q?pk+6hKDHn2MRTxa7AKwlwlJ9Nv8ALPCKyD2FurTxgge8QvyUpsx/s9VWD2hF?=
+ =?us-ascii?Q?4K59qTYvgyKwhymnMo7LcTOaAzTX1sOTRZjO10AvyIYsTPkpAzDoxLzhd6lk?=
+ =?us-ascii?Q?NX+9wp27X7WNoZsxq4Qz+qnwoIXdnLmC9uzQ15UStB+MKSqdFcxod8zAhRrG?=
+ =?us-ascii?Q?wgdG52AnopPzLQnvtAcpSK4x29PQ/wsmD0odkhS7epD6IG4VqRBT2mVtN+Yi?=
+ =?us-ascii?Q?e3BojSp+/Orqtue8dh0RwM72yanjokbvPiOzMGXTM4kO5j3SRbEQAcXy3ebl?=
+ =?us-ascii?Q?17aXhmZA3cUIWyv0Vg+hleppeo4okiCkD/vH3JXu1Eu2teiz98lDEcpEZj+c?=
+ =?us-ascii?Q?dU94oip6adYkOvietuRlNmNJ1mPT9OxKxPiKaqIvj9R6Wcn8NUVK7oDyQPYY?=
+ =?us-ascii?Q?u8qFMD+tEoM7jfZzzMJiGBNhp2HjyKL/BEJC8QMWhSh1VsrQuTM4J0XU/o3Z?=
+ =?us-ascii?Q?6BzIKAK6lz8CKVGjXhGz4eSJJrQ+3OA1U8lmTVCFmuBgO+/y/Mzw6u02ewaN?=
+ =?us-ascii?Q?KDWupF4OMPLJH2psA7mWCwVbJHsZeYuPpxUEXdSBczpwauhvMz2XyYKzXn2b?=
+ =?us-ascii?Q?Oys1ghDNDSpRcMEb/SkiUKwBSVWLfK/V8Ymuy3utRuuLql+n76DassinPn/C?=
+ =?us-ascii?Q?Rm0t7YEPyH1AWLhljkEOfneZ27rDs/uWYuuva2AvU8eIrRbodo8XM4swzi9d?=
+ =?us-ascii?Q?IFH+jSVWWirH0oviWXjQcpKERY2pJePuCKxV6L5P?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(36860700013)(376014)(82310400026)(13003099007);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Nov 2025 04:27:23.4997
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 32525170-5401-4ec4-33a5-08de23ff4650
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SN1PEPF000397AF.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5802
 
-On Wed, Oct 15, 2025 at 09:13:47AM +0200, Herve Codina wrote:
-> Hi,
-> 
-> This series add support for SFPs ports available on the LAN966x PCI
-> device. In order to have the SFPs supported, additional devices are
-> needed such as clock controller and I2C.
-> 
-> As a reminder, the LAN966x PCI device driver use a device-tree overlay
-> to describe devices available on the PCI board. Adding support for SFPs
-> ports consists in adding more devices in the already existing
-> device-tree overlay.
-> 
-> With those devices added, the device-tree overlay is more complex and
-> some consumer/supplier relationship are needed in order to remove
-> devices in correct order when the LAN966x PCI driver is removed.
-> 
-> Those links are typically provided by fw_devlink and we faced some
-> issues with fw_devlink and overlays.
-> 
-> This series gives the big picture related to the SFPs support from
-> fixing issues to adding new devices. Of course, it can be split if
-> needed.
-> 
-> The first part of the series (patch 1, 2 and 3) fixes fw_devlink when it
-> is used with overlay. Patches 1 and 3 were previously sent by Saravana
-> [0]. I just rebased them on top of v6.18-rc1 and added patch 2 in order
-> to take into account feedback received on the series sent by Saravana.
-> 
-> Those modification were not sufficient in our case and so, on top of
-> that, patches 4 to 7 fix some more issues related to fw_devlink.
-> 
-> Patches 8 to 13 introduce and use fw_devlink_set_device() in already
-> existing code.
-> 
-> Patches 14 and 15 are related also to fw_devlink but specific to PCI and
-> the device-tree nodes created during enumeration.
-> 
-> Patches 16, 17 and 18 are related fw_devlink too but specific to I2C
-> muxes. Patches purpose is to correctly set a link between an adapter
-> supplier and its consumer. Indeed, an i2c mux adapter's parent is not
-> the i2c mux supplier but the adapter the i2c mux is connected to. Adding
-> a new link between the adapter supplier involved when i2c muxes are used
-> avoid a freeze observed during device removal.
-> 
-> Patch 19 adds support for fw_delink on x86. fw_devlink is needed to have
-> the consumer/supplier relationship between devices in order to ensure a
-> correct device removal order. Adding fw_devlink support for x86 has been
-> tried in the past but was reverted [1] because it broke some systems.
-> Instead of enabling fw_devlink on *all* x86 system, enable it on *all*
-> x86 except on those where it leads to issue.
-> 
-> Patches 20 and 21 allow to build clock and i2c controller used by the
-> LAN966x PCI device when the LAN966x PCI device is enabled.
-> 
-> Patches 22 to 26 are specific to the LAN966x. They touch the current
-> dtso, split it in dtsi/dtso files, rename the dtso and improve the
-> driver to allow easier support for other boards.
-> 
-> The next patch (patch 27) update the LAN966x device-tree overlay itself
-> to have the SPF ports and devices they depends on described.
-> 
-> The last two patches (patches 28 and 29) sort the existing drivers in
-> the needed driver list available in the Kconfig help and add new drivers
-> in this list keep the list up to date with the devices described in the
-> device-tree overlay.
-> 
-> We believe some items from the above list can be merged separately, with
-> no build dependencies. We expect:
-> 
->  - Patches 1 to 7 to be taken by driver core maintainers
-> 
->  - Patches 8 to 13 to be taken by driver core maintainers
-> 
->  - Patches 14 and 15 to be taken by driver core or PCI maintainers
->   (depend on patch 8)
-> 
->  - Patches 16 to 18 to be taken by I2C maintainers
-> 
->  - Patch 19 to be taken by driver core or OF maintainers
-> 
->  - Patch 20 to be taken by clock maintainers
-> 
->  - Patch 21 to be taken by I2C maintainers
-> 
->  - Patches 22 to 29 to be taken by misc maintainers
+Following series of patches consist of updates for Tegra264 and Tegra256
+along with adding support for High Speed (HS) Mode in i2c-tegra.c driver.
 
-I don't think this is going to land in 6.19, so I've applied patches 1 
-and 3.
+v11->v12:
+  * Added two more patches to the series which are needed for Tegra256 and
+    also cleans up the timing settings configuration.
+v1->v11: Changelogs are in respective patches.
+v[11] https://lore.kernel.org/linux-tegra/20251111091627.870613-1-kkartik@nvidia.com/T/#t
 
-Rob
+Akhil R (4):
+  i2c: tegra: Use separate variables for fast and fastplus
+  i2c: tegra: Update Tegra256 timing parameters
+  i2c: tegra: Add HS mode support
+  i2c: tegra: Add Tegra264 support
+
+Kartik Rajput (2):
+  i2c: tegra: Do not configure DMA if not supported
+  i2c: tegra: Add support for SW mutex register
+
+ drivers/i2c/busses/i2c-tegra.c | 305 ++++++++++++++++++++++++++++-----
+ 1 file changed, 258 insertions(+), 47 deletions(-)
+
+-- 
+2.50.1
+
 
