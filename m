@@ -1,79 +1,79 @@
-Return-Path: <linux-i2c+bounces-14096-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14097-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D770C61885
-	for <lists+linux-i2c@lfdr.de>; Sun, 16 Nov 2025 17:24:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 88710C61888
+	for <lists+linux-i2c@lfdr.de>; Sun, 16 Nov 2025 17:24:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 92D744ED2D5
-	for <lists+linux-i2c@lfdr.de>; Sun, 16 Nov 2025 16:22:07 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 720414ED96E
+	for <lists+linux-i2c@lfdr.de>; Sun, 16 Nov 2025 16:22:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7FB830E0F2;
-	Sun, 16 Nov 2025 16:22:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F39C30E0E5;
+	Sun, 16 Nov 2025 16:22:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O2IoiMdO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OW0gorWM"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E37BD30DEA1
-	for <linux-i2c@vger.kernel.org>; Sun, 16 Nov 2025 16:21:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2458030DEB9
+	for <linux-i2c@vger.kernel.org>; Sun, 16 Nov 2025 16:22:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763310121; cv=none; b=sA9lGG+W133u22vl15UrLK9sSy+WYSgNTx5s+h7bBUIJJBy2Ti+brTLZ989yvVKZipndB/xE6Y/2J2PvVxUA6RKw52CXeqCf9I5Cl1vELX070jXdhKdiq98BTWp1e81agRt7KheEgDky0LOe8zDMI09+RMKFR8o7gGuFZajrGeg=
+	t=1763310130; cv=none; b=sNnr0SgBsvjZcDy4TDW6H15UIredQsVcmqNWwFjHGhb72pRJwSqxt/Y5owOZgb48pYOij4+6UcjJ8qnS1aL04bR0VEEhoN7k4Fei1k3JK3LMzecGAMlDKvZ39zzos5YY0g2xs61TEVQSCY7EwHp4Wke4vHxJRk0LnafWGbSIauw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763310121; c=relaxed/simple;
-	bh=ApphTV0iM79Tcn+I4kX4k5tNugukbpC+Z7Iqowu12Xw=;
+	s=arc-20240116; t=1763310130; c=relaxed/simple;
+	bh=m8f3ckNXVWpfmWRTR65J04ac7rJbNT4myeZEqsLDmlY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Tg7AVauPrV+zrb96q+6XVC5kCO/06gmMLBVhVv3hR+dTr5QI9nUd0HPsdG1DVazgaf6okBGRJ+KcU1PF68+F00llT/IxSa99BO5uUDVmXJj00KodpdiC8BxO6vS9YEwvVXtNS5OBlLP8BApoogyOLn0Bt5YJ+UUSWUVKLVJg7Jg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O2IoiMdO; arc=none smtp.client-ip=209.85.128.51
+	 MIME-Version; b=W5cT2ClSdO/xPukHV2ySxubhETwF5yijBPZuROROU+mnQng4D4CJHihH7heLZS7nktXXtOcWw1YAwiCMxZfmcK50pvbdC6woe2Y4Xn9m/JYAPo/dgH4JmFHKevIRlI+6DS2EUz0jycS279ctVfyhlrkWVsXS2A+hq1crfWpknJk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OW0gorWM; arc=none smtp.client-ip=209.85.128.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4779d47be12so6878145e9.2
-        for <linux-i2c@vger.kernel.org>; Sun, 16 Nov 2025 08:21:57 -0800 (PST)
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-47758595eecso18968425e9.0
+        for <linux-i2c@vger.kernel.org>; Sun, 16 Nov 2025 08:22:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763310116; x=1763914916; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1763310125; x=1763914925; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Syd7xnGgI92fwp08IiTjBeUE3R8GmiJuYW751z8Y8Tc=;
-        b=O2IoiMdOCb6RxZIBJKWRnOSL7UlVx7AIOWoZJhSdUZ7scaDVpH1bEM4EX5S9ju0WGV
-         0KphX6hi6mT3lfZLfRM+j0vFdovBegoVR6ggMnXRSVcgh/keEL42I4Ng7ZwmaNpu1CPT
-         6B5tTR7a8DErB+LPQ/V3tn6CiBL+eEO8xv+lVgno2jGZCbUfi7WyWx5ek9yYYO8A7dcj
-         lLvbL4/eBHbSXQKVYFtQprAOQfOYBxKcByC7s7NqOMaNgHKC0EyMotw+gA1QIPtIRsoZ
-         AQwA2U0475XG8Lf73HRkHSUfGjcdQqymlYPT+9BP87k5hA+FXuxQLy2x8oIinUw1LLt+
-         cIsQ==
+        bh=GtDZX1ikVCwszhOceYAYwxwSSyFYEhe/dmSKKTM3uq8=;
+        b=OW0gorWMULlV8KSt6lJUzQG0FER2xkqfyAX0+E8qoJt5NwJ2J90OOj2EVDlOQgB4Gd
+         /ribQm9AKCUPo3UPsGrMX4cK9CvwASr9fSSXujovHLIfhetO5Npqcw+HEGmtXfSKpXon
+         2SNC6VuTrVLMbY3oPWIK3gGG2t5dKRmn2kor1hlMDPuMiMXT26L6IDMzVFGtHcdUP2Tp
+         5KzYQhvN9ji5N8QQGlp+MxFvAVqGp9ggRveEDFzzGbZlhS1fEZ3BloqznRzmZiEo7p6E
+         2bwEkH99IVpG4Sn5Rwtwd4O2dlGcSgdNQOC8wyA4S6m0za8pLjlMPHfh8Rj8XLZZMrDR
+         2vew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763310116; x=1763914916;
+        d=1e100.net; s=20230601; t=1763310125; x=1763914925;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=Syd7xnGgI92fwp08IiTjBeUE3R8GmiJuYW751z8Y8Tc=;
-        b=sij5pVTz0A1kOxSJuebiorpSmPhH1tpQJLRb0qAGDJO4JWiIEMK3tFBjs+b/FDYbr2
-         3msZnwzjKQKAs1q9T9cZZd+s3DtGQ4gRk5kOYrsCyESynJXG3b+oYL3Rgf/NlPHscjd3
-         1LFZX/AX/HXcp7Dgzc8bw6iPKrvmYNuhdi5VRG6OTWAzbomLnkclypJWwz8SgdHsBJz2
-         yTxRGaqgRX4hLIe9XVEJzTMNeGNA9DLEwLoIf5pOCZdd1x9ykzptKCpwbccwTI81uV8D
-         30eo8ipT6fbxtNQNOrETOx/Q9qnsWYGGf9C0yzGKEyc1NxDq5ASoz2bSbx6In0QMqLTb
-         NlHA==
-X-Forwarded-Encrypted: i=1; AJvYcCULb9+dIIvR5+93QEDK6/3DRjQPcvBAMT4gtGYS024k7GL3qqbWvox86fHK9KTXb72gEgtKjiJb/C4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxx6USnhb+I5NkIIWzIwyJf43MtQx9VvobQfBhlYqYP5fqlDM3h
-	2RCSuqp4GlZj4KcG5C9iJ+O2NwaZOp32BmKqLOKj1X0a0QdDblTTVhVZ
-X-Gm-Gg: ASbGnctcY2xHmm++DGY4Q0JL/hpYc05NSAzEdW98t/mL36nOZVBvfB0z2hImgYx0Ku5
-	gBIgmS1N8x/ha9xYhwlOJLCQiujGwXhfKN9WYfjcgKuBAvaUcdQKwVjRTfJbCzxfjDBA7C3wX5m
-	YYNHQrn4KbKoFnMwVpBPP8MhEZkZ4BDPpHfcWd44hxLKKO8I2Gh8AB6rqeKYXScvO/6u5tvHVFp
-	/MFbWrIokMD7LkwKH0aQ0ZF9UAOlUE4dqhQvLc9en1aR+07c8ZzBkJdMCKk61TXcWSgDl4HG2ad
-	JqF3PIN+2PbmQzyuqJ/rd+QRrnUy9rlY3yKjt7GWFw9gk5Qg/ZhL/FuH5hV/lN4TxMm3vql5dFD
-	X2d6EgCmKxn0btW/yKdufOgb492KgFQxB3+n+tsxHOnug97WTUPORk39C6jooHcLd03j9xgdW36
-	f6GODiR32v5XTCSvA=
-X-Google-Smtp-Source: AGHT+IHeFaLLw4+NbZrg2fiLx3f31DKAu5da1HwyDYMFVfbHC6H0V27Re0NAWGpYJiz2+IHibZSNFg==
-X-Received: by 2002:a05:600c:1f92:b0:477:73cc:82c3 with SMTP id 5b1f17b1804b1-4778fe9b3c4mr93941715e9.26.1763310116084;
-        Sun, 16 Nov 2025 08:21:56 -0800 (PST)
+        bh=GtDZX1ikVCwszhOceYAYwxwSSyFYEhe/dmSKKTM3uq8=;
+        b=geHQAppct/V4msCrKPUFm2wJM2l4GLxB5osO1iI7Av5nlxMtmBepqGJ3xx+1jcxb1X
+         /bkhzvmF1vG3195HIweOewZwPT8EHO+m3mHG0+/t8jyGGYmnBFiw2NJ+HjYUIfHbsoa7
+         qG342O4AxKRzuVU1XQLf4EQlXWiLMLrdPoTzirLwda3+ml8EfLehOW19hTNEXadAvXq9
+         0uJSwrn59d3+YXuvlk2Rc5Up+o9jaFEWU8jeXkgTzn5G/GBOdCRFrN91gmvqbDWTFpgq
+         v34k94VC30FkeDCWk5vRcxz9pcowJKw6DvzjNDsle48kpTSOydg2JEtmRdQLSWA09zkC
+         TA5A==
+X-Forwarded-Encrypted: i=1; AJvYcCWiv3KjnovhDvHbhZRWnaIbdwamjJyo18rW2f0HmlR3iciwCH+X5+BjBEOKfUNadQgzaQl58EIgBIg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx0YrJ/e7qYJFFTYEGHYMIRrA2G7BIdeacmRd4O9X9huoqPlqIS
+	iLGX3avyiYHw0kPqVL/nXQz4BfCk6WRm87lYmuwVUrlM4SsW/OVeyomj
+X-Gm-Gg: ASbGncs2oOeT+YYJ6k+yfuAP10IAsN/N7WYba8qTUXNeBY8iwC6jNs1bBrTHVCglvov
+	VLPcJS3TGKxOe0FFfwT+AUvOQxRUg2z5OjTDCEwGNlsmPqag+qWDtltTx4e7rukcZgH5/bCEhqq
+	VWNm9g1+hdTfiUn1UJ9NaQQsKzr4uJ2rVURqcjpQE2Qr/4RVFICy0ebD9EvbW3NTADj3mRS8ujD
+	cTPQfhXqePtuTqBKSSsRvGx6XfBKxyYp5y5BFgR6LGO15nQmtiO8puOhQwNEchhnobUwDxETYfk
+	R/Yvz8/2DWnBrXMEHkDHBR/QCny4/G9/w6Qgb7QwToagiZraWYUd33qy4hW6MIw98D4j41OzuAL
+	onzs87HMV0Q+p6aofXZDf99A6PdJgkb9ZLg1zklZDpJboAZne1iS6i8otXhveTA3h/OoHRB7Cv3
+	jjaG8b24cHVXC83BAJmvIAQHMWIg==
+X-Google-Smtp-Source: AGHT+IFne8WEvuURcGzvWOrK3ZiYWL2jvr+Mjmjsc7BjUh6RIZCWEhIQsOUMDSCMBHFaYHy2tGiZeA==
+X-Received: by 2002:a05:600c:45d5:b0:477:7af8:c88b with SMTP id 5b1f17b1804b1-4778fe57241mr89311205e9.11.1763310125155;
+        Sun, 16 Nov 2025 08:22:05 -0800 (PST)
 Received: from Vasilio.Home ([176.26.203.25])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4779fb67e73sm36901375e9.0.2025.11.16.08.21.55
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-477a0f4ff42sm28419445e9.12.2025.11.16.08.22.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Nov 2025 08:21:55 -0800 (PST)
+        Sun, 16 Nov 2025 08:22:04 -0800 (PST)
 From: Igor Korotin <igor.korotin.linux@gmail.com>
 To: Miguel Ojeda <ojeda@kernel.org>,
 	Alex Gaynor <alex.gaynor@gmail.com>,
@@ -96,9 +96,9 @@ Cc: Boqun Feng <boqun.feng@gmail.com>,
 	linux-kernel@vger.kernel.org,
 	rust-for-linux@vger.kernel.org,
 	linux-i2c@vger.kernel.org
-Subject: [PATCH v8 2/4] rust: i2c: add manual I2C device creation abstractions
-Date: Sun, 16 Nov 2025 16:21:54 +0000
-Message-ID: <20251116162154.171493-1-igor.korotin.linux@gmail.com>
+Subject: [PATCH v8 3/4] samples: rust: add Rust I2C sample driver
+Date: Sun, 16 Nov 2025 16:22:04 +0000
+Message-ID: <20251116162204.171518-1-igor.korotin.linux@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251116162104.171420-1-igor.korotin.linux@gmail.com>
 References: <20251116162104.171420-1-igor.korotin.linux@gmail.com>
@@ -108,213 +108,146 @@ List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-In addition to the basic I2C device support, add rust abstractions
-upon `i2c_new_client_device`/`i2c_unregister_device` C functions.
-
-Implement the core abstractions needed for manual creation/deletion
-of I2C devices, including:
-
- * `i2c::Registration` — a NonNull pointer created by the function
-                          `i2c_new_client_device`
-
- * `i2c::I2cAdapter` — a ref counted wrapper around `struct i2c_adapter`
-
- * `i2c::I2cBoardInfo` — a safe wrapper around `struct i2c_board_info`
+Add a new `rust_driver_i2c` sample, showing how to create a new
+i2c driver using ACPI/OF/Legacy ID tables.
 
 Signed-off-by: Igor Korotin <igor.korotin.linux@gmail.com>
 ---
- rust/kernel/i2c.rs | 155 ++++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 154 insertions(+), 1 deletion(-)
+ MAINTAINERS                     |  1 +
+ samples/rust/Kconfig            | 11 +++++
+ samples/rust/Makefile           |  1 +
+ samples/rust/rust_driver_i2c.rs | 74 +++++++++++++++++++++++++++++++++
+ 4 files changed, 87 insertions(+)
+ create mode 100644 samples/rust/rust_driver_i2c.rs
 
-diff --git a/rust/kernel/i2c.rs b/rust/kernel/i2c.rs
-index a5ad8213d9ac..3695b4adf436 100644
---- a/rust/kernel/i2c.rs
-+++ b/rust/kernel/i2c.rs
-@@ -11,6 +11,7 @@
-         RawDeviceId,
-         RawDeviceIdIndex, //
-     },
-+    devres::Devres,
-     driver,
-     error::*,
-     of,
-@@ -23,9 +24,14 @@
+diff --git a/MAINTAINERS b/MAINTAINERS
+index a8dfde2f5633..8133987c4b54 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11750,6 +11750,7 @@ R:	Daniel Almeida <daniel.almeida@collabora.com>
+ L:	rust-for-linux@vger.kernel.org
+ S:	Maintained
+ F:	rust/kernel/i2c.rs
++F:	samples/rust/rust_driver_i2c.rs
  
- use core::{
-     marker::PhantomData,
--    ptr::NonNull, //
-+    ptr::{
-+        from_ref,
-+        NonNull, //
-+    }, //
- };
+ I2C SUBSYSTEM HOST DRIVERS
+ M:	Andi Shyti <andi.shyti@kernel.org>
+diff --git a/samples/rust/Kconfig b/samples/rust/Kconfig
+index c376eb899b7a..181466319588 100644
+--- a/samples/rust/Kconfig
++++ b/samples/rust/Kconfig
+@@ -84,6 +84,17 @@ config SAMPLE_RUST_DEBUGFS_SCOPED
  
-+use kernel::types::ARef;
+ 	  If unsure, say N.
+ 
++config SAMPLE_RUST_DRIVER_I2C
++	tristate "I2C Driver"
++	depends on I2C=y
++	help
++	  This option builds the Rust I2C driver sample.
 +
- /// An I2C device id table.
- #[repr(transparent)]
- #[derive(Clone, Copy)]
-@@ -356,6 +362,102 @@ fn unbind(dev: &I2cClient<device::Core>, this: Pin<&Self>) {
-     }
- }
- 
-+/// The i2c adapter representation.
-+///
-+/// This structure represents the Rust abstraction for a C `struct i2c_adapter`. The
-+/// implementation abstracts the usage of an existing C `struct i2c_adapter` that
-+/// gets passed from the C side
-+///
-+/// # Invariants
-+///
-+/// A [`I2cAdapter`] instance represents a valid `struct i2c_adapter` created by the C portion of
-+/// the kernel.
-+#[repr(transparent)]
-+pub struct I2cAdapter<Ctx: device::DeviceContext = device::Normal>(
-+    Opaque<bindings::i2c_adapter>,
-+    PhantomData<Ctx>,
-+);
++	  To compile this as a module, choose M here:
++	  the module will be called rust_driver_i2c.
 +
-+impl<Ctx: device::DeviceContext> I2cAdapter<Ctx> {
-+    fn as_raw(&self) -> *mut bindings::i2c_adapter {
-+        self.0.get()
-+    }
++	  If unsure, say N.
++
+ config SAMPLE_RUST_DRIVER_PCI
+ 	tristate "PCI Driver"
+ 	depends on PCI
+diff --git a/samples/rust/Makefile b/samples/rust/Makefile
+index cf8422f8f219..aec865e2adef 100644
+--- a/samples/rust/Makefile
++++ b/samples/rust/Makefile
+@@ -7,6 +7,7 @@ obj-$(CONFIG_SAMPLE_RUST_PRINT)			+= rust_print.o
+ obj-$(CONFIG_SAMPLE_RUST_DEBUGFS)		+= rust_debugfs.o
+ obj-$(CONFIG_SAMPLE_RUST_DEBUGFS_SCOPED)	+= rust_debugfs_scoped.o
+ obj-$(CONFIG_SAMPLE_RUST_DMA)			+= rust_dma.o
++obj-$(CONFIG_SAMPLE_RUST_DRIVER_I2C)		+= rust_driver_i2c.o
+ obj-$(CONFIG_SAMPLE_RUST_DRIVER_PCI)		+= rust_driver_pci.o
+ obj-$(CONFIG_SAMPLE_RUST_DRIVER_PLATFORM)	+= rust_driver_platform.o
+ obj-$(CONFIG_SAMPLE_RUST_DRIVER_USB)		+= rust_driver_usb.o
+diff --git a/samples/rust/rust_driver_i2c.rs b/samples/rust/rust_driver_i2c.rs
+new file mode 100644
+index 000000000000..ecefeca3e22f
+--- /dev/null
++++ b/samples/rust/rust_driver_i2c.rs
+@@ -0,0 +1,74 @@
++// SPDX-License-Identifier: GPL-2.0
++
++//! Rust I2C driver sample.
++
++use kernel::{
++    acpi,
++    c_str,
++    device::Core,
++    i2c,
++    of,
++    prelude::*, //
++};
++
++struct SampleDriver;
++
++kernel::acpi_device_table! {
++    ACPI_TABLE,
++    MODULE_ACPI_TABLE,
++    <SampleDriver as i2c::Driver>::IdInfo,
++    [(acpi::DeviceId::new(c_str!("LNUXBEEF")), 0)]
 +}
 +
-+impl I2cAdapter {
-+    /// Returns the I2C Adapter index.
-+    #[inline]
-+    pub fn index(&self) -> i32 {
-+        // SAFETY: `self.as_raw` is a valid pointer to a `struct i2c_adapter`.
-+        unsafe { (*self.as_raw()).nr }
-+    }
-+
-+    /// Gets pointer to an `i2c_adapter` by index.
-+    pub fn get(index: i32) -> Result<ARef<Self>> {
-+        // SAFETY: `index` must refer to a valid I2C adapter; the kernel
-+        // guarantees that `i2c_get_adapter(index)` returns either a valid
-+        // pointer or NULL. `NonNull::new` guarantees the correct check.
-+        let adapter = NonNull::new(unsafe { bindings::i2c_get_adapter(index) }).ok_or(ENODEV)?;
-+
-+        // SAFETY: `adapter` is non-null and points to a live `i2c_adapter`.
-+        // `I2cAdapter` is #[repr(transparent)], so this cast is valid.
-+        Ok(unsafe { (&*adapter.as_ptr().cast::<I2cAdapter<device::Normal>>()).into() })
-+    }
++kernel::i2c_device_table! {
++    I2C_TABLE,
++    MODULE_I2C_TABLE,
++    <SampleDriver as i2c::Driver>::IdInfo,
++    [(i2c::DeviceId::new(c_str!("rust_driver_i2c")), 0)]
 +}
 +
-+// SAFETY: `I2cAdapter` is a transparent wrapper of a type that doesn't depend on
-+// `I2cAdapter`'s generic argument.
-+kernel::impl_device_context_deref!(unsafe { I2cAdapter });
-+kernel::impl_device_context_into_aref!(I2cAdapter);
-+
-+// SAFETY: Instances of `I2cAdapter` are always reference-counted.
-+unsafe impl crate::types::AlwaysRefCounted for I2cAdapter {
-+    fn inc_ref(&self) {
-+        // SAFETY: The existence of a shared reference guarantees that the refcount is non-zero.
-+        unsafe { bindings::i2c_get_adapter(self.index()) };
-+    }
-+
-+    unsafe fn dec_ref(obj: NonNull<Self>) {
-+        // SAFETY: The safety requirements guarantee that the refcount is non-zero.
-+        unsafe { bindings::i2c_put_adapter(obj.as_ref().as_raw()) }
-+    }
++kernel::of_device_table! {
++    OF_TABLE,
++    MODULE_OF_TABLE,
++    <SampleDriver as i2c::Driver>::IdInfo,
++    [(of::DeviceId::new(c_str!("test,rust_driver_i2c")), 0)]
 +}
 +
-+/// The i2c board info representation
-+///
-+/// This structure represents the Rust abstraction for a C `struct i2c_board_info` structure,
-+/// which is used for manual I2C client creation.
-+#[repr(transparent)]
-+pub struct I2cBoardInfo(bindings::i2c_board_info);
++impl i2c::Driver for SampleDriver {
++    type IdInfo = u32;
 +
-+impl I2cBoardInfo {
-+    const I2C_TYPE_SIZE: usize = 20;
-+    /// Create a new [`I2cBoardInfo`] for a kernel driver.
-+    #[inline(always)]
-+    pub const fn new(type_: &'static CStr, addr: u16) -> Self {
-+        build_assert!(
-+            type_.len_with_nul() <= Self::I2C_TYPE_SIZE,
-+            "Type exceeds 20 bytes"
-+        );
-+        let src = type_.as_bytes_with_nul();
-+        // Replace with `bindings::i2c_board_info::default()` once stabilized for `const`.
-+        // SAFETY: FFI type is valid to be zero-initialized.
-+        let mut i2c_board_info: bindings::i2c_board_info = pin_init::zeroed();
-+        let mut i: usize = 0;
-+        while i < src.len() {
-+            i2c_board_info.type_[i] = src[i];
-+            i += 1;
++    const ACPI_ID_TABLE: Option<acpi::IdTable<Self::IdInfo>> = Some(&ACPI_TABLE);
++    const I2C_ID_TABLE: Option<i2c::IdTable<Self::IdInfo>> = Some(&I2C_TABLE);
++    const OF_ID_TABLE: Option<of::IdTable<Self::IdInfo>> = Some(&OF_TABLE);
++
++    fn probe(
++        idev: &i2c::I2cClient<Core>,
++        info: Option<&Self::IdInfo>,
++    ) -> impl PinInit<Self, Error> {
++        let dev = idev.as_ref();
++
++        dev_info!(dev, "Probe Rust I2C driver sample.\n");
++
++        if let Some(info) = info {
++            dev_info!(dev, "Probed with info: '{}'.\n", info);
 +        }
 +
-+        i2c_board_info.addr = addr;
-+        Self(i2c_board_info)
++        Ok(Self)
 +    }
 +
-+    fn as_raw(&self) -> *const bindings::i2c_board_info {
-+        from_ref(&self.0)
-+    }
-+}
-+
- /// The i2c client representation.
- ///
- /// This structure represents the Rust abstraction for a C `struct i2c_client`. The
-@@ -434,3 +536,54 @@ unsafe impl Send for I2cClient {}
- // SAFETY: `I2cClient` can be shared among threads because all methods of `I2cClient`
- // (i.e. `I2cClient<Normal>) are thread safe.
- unsafe impl Sync for I2cClient {}
-+
-+/// The registration of an i2c client device.
-+///
-+/// This type represents the registration of a [`struct i2c_client`]. When an instance of this
-+/// type is dropped, its respective i2c client device will be unregistered from the system.
-+///
-+/// # Invariants
-+///
-+/// `self.0` always holds a valid pointer to an initialized and registered
-+/// [`struct i2c_client`].
-+#[repr(transparent)]
-+pub struct Registration(NonNull<bindings::i2c_client>);
-+
-+impl Registration {
-+    /// The C `i2c_new_client_device` function wrapper for manual I2C client creation.
-+    pub fn new<'a>(
-+        i2c_adapter: &I2cAdapter,
-+        i2c_board_info: &I2cBoardInfo,
-+        parent_dev: &'a device::Device<device::Bound>,
-+    ) -> impl PinInit<Devres<Self>, Error> + 'a {
-+        Devres::new(parent_dev, Self::try_new(i2c_adapter, i2c_board_info))
++    fn shutdown(idev: &i2c::I2cClient<Core>, _this: Pin<&Self>) {
++        dev_info!(idev.as_ref(), "Shutdown Rust I2C driver sample.\n");
 +    }
 +
-+    fn try_new(i2c_adapter: &I2cAdapter, i2c_board_info: &I2cBoardInfo) -> Result<Self> {
-+        // SAFETY: the kernel guarantees that `i2c_new_client_device()` returns either a valid
-+        // pointer or NULL. `from_err_ptr` separates errors. Following `NonNull::new`
-+        // checks for NULL.
-+        let raw_dev = from_err_ptr(unsafe {
-+            bindings::i2c_new_client_device(i2c_adapter.as_raw(), i2c_board_info.as_raw())
-+        })?;
-+
-+        let dev_ptr = NonNull::new(raw_dev).ok_or(ENODEV)?;
-+
-+        Ok(Self(dev_ptr))
++    fn unbind(idev: &i2c::I2cClient<Core>, _this: Pin<&Self>) {
++        dev_info!(idev.as_ref(), "Unbind Rust I2C driver sample.\n");
 +    }
 +}
 +
-+impl Drop for Registration {
-+    fn drop(&mut self) {
-+        // SAFETY: `Drop` is only called for a valid `Registration`, which by invariant
-+        // always contains a non-null pointer to an `i2c_client`.
-+        unsafe { bindings::i2c_unregister_device(self.0.as_ptr()) }
-+    }
++kernel::module_i2c_driver! {
++    type: SampleDriver,
++    name: "rust_driver_i2c",
++    authors: ["Igor Korotin"],
++    description: "Rust I2C driver",
++    license: "GPL v2",
 +}
-+
-+// SAFETY: A `Registration` of a `struct i2c_client` can be released from any thread.
-+unsafe impl Send for Registration {}
-+
-+// SAFETY: `Registration` offers no interior mutability (no mutation through &self
-+// and no mutable access is exposed)
-+unsafe impl Sync for Registration {}
 -- 
 2.43.0
 
