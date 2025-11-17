@@ -1,426 +1,716 @@
-Return-Path: <linux-i2c+bounces-14119-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14120-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9AADBC63BF0
-	for <lists+linux-i2c@lfdr.de>; Mon, 17 Nov 2025 12:15:58 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CFF6C650D0
+	for <lists+linux-i2c@lfdr.de>; Mon, 17 Nov 2025 17:12:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A0BB63AE667
-	for <lists+linux-i2c@lfdr.de>; Mon, 17 Nov 2025 11:14:04 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTPS id 554B82903D
+	for <lists+linux-i2c@lfdr.de>; Mon, 17 Nov 2025 16:12:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F64032E699;
-	Mon, 17 Nov 2025 11:07:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2517A2BEC3A;
+	Mon, 17 Nov 2025 16:12:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="VLHggnVt"
+	dkim=pass (2048-bit key) header.d=posteo.de header.i=@posteo.de header.b="qAdxJqHd"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from CH1PR05CU001.outbound.protection.outlook.com (mail-northcentralusazon11010012.outbound.protection.outlook.com [52.101.193.12])
+Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E66E732AAC0;
-	Mon, 17 Nov 2025 11:07:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.193.12
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763377640; cv=fail; b=Ez9YNfEY+eoUhSj472MLzU3aNBXYHke+n9SVJVW7WObX/0Q/bdIjxerBAvXBTxMCaA2wTFhzlz9vKLLZ+HrAfyY2D9ShkxrdjZNG4sJMvAObF0W5GOOSGTo0R/cRdI8/ycBKeTxQgiUW5WdQZ/Tcyt1XorL6p6PUFQNhYr0JbEs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763377640; c=relaxed/simple;
-	bh=g2bkupYMxpA2ElKZ4/1cVB0qMLeiSU3JWc2J8VEbmUA=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=BOtFJaQJ0N/anJBvJmXp4qOFxy+dwzCO+AwcdwXBofhsgG+ecPo+xfl+bAUZX7ea6Zrx1LRlVb2kZFX1ThnL2VYree5dBc75o/BvxrCuP69YgPstXZAkm81M428v2vqxa6sqekcRyy4zewoxAqVqOGFKnxRpVgVJdJLNPg74dH8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=VLHggnVt; arc=fail smtp.client-ip=52.101.193.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Ie5B7+wwUPt3Cbnj/EhGP3VNDMgpK085dDzjmp2fqICUq4bAlCJisBcBYufFUkyK2eNdzuoGVFFkDIYpCJHG5phzkYaxCxpBe5uz+cfXPxzjx6u0dm1TK46VJaW8K8AZABRjQdCbMBXXRDzZ7yc5PgJRz++zpXE+1z3XfzqNHaqleOzOU1+U4TwtkhtdMYmB3kNzvQxfJM/VwU/phmMxI1kYmbx9iTUnb/J8j/9oqv7skK85xIUO7kjwZ3U0kzDzQTXgtq8nsFU+VgItRU9E1fF0RsFkrCmtF75IBGpNyYDbL6x8VVtve0idJPGgL2AadGmLdQd9Nspat7aKIkfzog==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=opY+Es2FWxBaQxpUhGE0EEYsYuRPO16APcfVsZ4NPSY=;
- b=gfk1M6+BBN6PuLAdX/Fd3XZXf8NOVLmeJ3Cjym7/pf2iCb8gGqtDnSicwukoA3+8DvvdycpKeLNd9x88xgOMFx46lr50GqgkW4ccmRg4wKiTDUhdWB9PWVyAz6y0Axrci24FRKGFd0uiNOq4wLLp94Z93nhwSuEokDlglZMKeokaZPJElF2DDWz+nGX607V1adC4tmlh5FfBDkBJ3gCpwTzjR6ZuTbZRDib0zbgJkAfPOnS/yvUNb++J2Yn79hK1o748MEj/YvJzCEg2j14b6ubCEpr1BG9eYLGy8rTlz9Ycm2EGaqKngjf4sz4IPAJgJRJzq++7NncTSCwdGXxj2w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=opY+Es2FWxBaQxpUhGE0EEYsYuRPO16APcfVsZ4NPSY=;
- b=VLHggnVt0PES930S/GAc8DAjcsg6xfBpPpU+8VDefl/3rxpccyM8Tx0YmhyURlNhzMJxR/dYyj0xxY2yArMGHSeLw9575Ko0CbSr2XJIe3D2fyNwiPXuwdlpxopkNyaP3kSDDJDwU5fKoE87ivYZVhrufp9yTaRssNpNGAaj3UjW24ALPoOlWgJEFI8nmfIdhanYoxzrnctkxCBZ7PjbyGeHprIAS8hrX5XI4epYnkwptBUdfV8U3gkJCatpTECCA+JyhE6dVHXFTKUuAu1Sk0f8rDjDlYG6+pfuWeC0qrHyhQkSNCfX716GWaMM10fOhW9PnSLXC/a/0pyWHzk86A==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from SJ2PR12MB8784.namprd12.prod.outlook.com (2603:10b6:a03:4d0::11)
- by DS0PR12MB6607.namprd12.prod.outlook.com (2603:10b6:8:d1::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9320.22; Mon, 17 Nov
- 2025 11:07:13 +0000
-Received: from SJ2PR12MB8784.namprd12.prod.outlook.com
- ([fe80::1660:3173:eef6:6cd9]) by SJ2PR12MB8784.namprd12.prod.outlook.com
- ([fe80::1660:3173:eef6:6cd9%4]) with mapi id 15.20.9320.021; Mon, 17 Nov 2025
- 11:07:13 +0000
-Message-ID: <828b6131-24bf-4a92-9c86-4c9f0461e6d0@nvidia.com>
-Date: Mon, 17 Nov 2025 11:07:07 +0000
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v12 4/6] i2c: tegra: Add HS mode support
-To: Akhil R <akhilrajeev@nvidia.com>, andi.shyti@kernel.org,
- digetx@gmail.com, linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-tegra@vger.kernel.org, thierry.reding@gmail.com,
- wsa+renesas@sang-engineering.com, wsa@kernel.org
-Cc: kkartik@nvidia.com, ldewangan@nvidia.com, smangipudi@nvidia.com
-References: <20251115042632.69708-1-akhilrajeev@nvidia.com>
- <20251115042632.69708-5-akhilrajeev@nvidia.com>
-From: Jon Hunter <jonathanh@nvidia.com>
-Content-Language: en-US
-In-Reply-To: <20251115042632.69708-5-akhilrajeev@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P123CA0208.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:1a5::15) To SJ2PR12MB8784.namprd12.prod.outlook.com
- (2603:10b6:a03:4d0::11)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 603E629B78D
+	for <linux-i2c@vger.kernel.org>; Mon, 17 Nov 2025 16:12:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.65
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1763395961; cv=none; b=pOzZkwDANo2LMMm+3eBwmgFSIzVuL3/AAIJfVpXeafPSQtV1lKAcXk470DKfrfIE7bIi7zv9CkGuHJHUNZIBswurIPqyINuCS+oKSjeo1ch8CX0QuQiftyILMvM42Ez1c7kaW/As9ROah56rR2H+kuDdgHUXF5rqVml4AiqW2qY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1763395961; c=relaxed/simple;
+	bh=Npy8TROYlKJoDy3EE7haaazJA4Rtc5tlhYl4KZMlB+s=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=uoiPTrT2eJFI0Ewf5lEXrHWqrrKn2fjfUS5NTgubLz5om4vd6QyRbIqmcYLLcfHiqJUZL85nDYwBNnxPiVQSg9bk5n9xQbODm4dozhko2Lx3WWB9G2Nn0ymdB9+IxHn1l1aP4k0rt5k+/NZxBNs0WS4wVawNmHQC9OySqUHQieY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.de; spf=pass smtp.mailfrom=posteo.de; dkim=pass (2048-bit key) header.d=posteo.de header.i=@posteo.de header.b=qAdxJqHd; arc=none smtp.client-ip=185.67.36.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.de
+Received: from submission (posteo.de [185.67.36.169]) 
+	by mout01.posteo.de (Postfix) with ESMTPS id AE231240027
+	for <linux-i2c@vger.kernel.org>; Mon, 17 Nov 2025 17:12:36 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=posteo.de; s=2017;
+	t=1763395956; bh=/BKuEjeCxWfNcidUlr8SMDCqVDIEU5ei+2jZ1XKOarw=;
+	h=Message-ID:Subject:From:To:Cc:Date:Autocrypt:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version:OpenPGP:From;
+	b=qAdxJqHdENUQDdBlLf8r5twCFVI6Bnh9TFKhDDZwRzWoqmT97BQioangbkNq2VVHY
+	 SK2DuK2ShhFAQlIS4mRgQ0ADe0a2JbwZRJ6MNNaXe2OKwT9ySpaPRB5RkoVm96bq1G
+	 Jq+uSIsMW3M+BE5cJiXRUmqBmqBd4z7axU6yos+CPoC4WZ7/+ko4o9USC1sZHF3oGX
+	 pFhLy0y18Hv54tNCCetj+QQYWAaR/cc8ru79ZouKwppYkxhEqklZVpS/mFErGq2DUI
+	 Cb/D0+Xx8pLJGAbeN6KDgKuYO2+BlOsb57N+PHF5ZlWXRDETLqbT0FRR0jEQYTdtES
+	 SD59/lGZuhbXg==
+Received: from customer (localhost [127.0.0.1])
+	by submission (posteo.de) with ESMTPSA id 4d9CSc74Xcz9rxR;
+	Mon, 17 Nov 2025 17:12:32 +0100 (CET)
+Message-ID: <b4092d2693a06526e2b39fd7642e80dd2a7cd0e8.camel@posteo.de>
+Subject: Re: [PATCH v8 1/4] rust: i2c: add basic I2C device and driver
+ abstractions
+From: Markus Probst <markus.probst@posteo.de>
+To: Igor Korotin <igor.korotin.linux@gmail.com>, Miguel Ojeda
+ <ojeda@kernel.org>,  Alex Gaynor <alex.gaynor@gmail.com>, Wolfram Sang
+ <wsa+renesas@sang-engineering.com>
+Cc: Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+ =?ISO-8859-1?Q?Bj=F6rn?= Roy Baron	 <bjorn3_gh@protonmail.com>, Benno
+ Lossin <lossin@kernel.org>, Andreas Hindborg	 <a.hindborg@kernel.org>,
+ Alice Ryhl <aliceryhl@google.com>, Trevor Gross	 <tmgross@umich.edu>,
+ Danilo Krummrich <dakr@kernel.org>, Greg Kroah-Hartman	
+ <gregkh@linuxfoundation.org>, Viresh Kumar <viresh.kumar@linaro.org>, Asahi
+ Lina <lina+kernel@asahilina.net>, Wedson Almeida Filho
+ <wedsonaf@gmail.com>, Alex Hung	 <alex.hung@amd.com>, Tamir Duberstein
+ <tamird@gmail.com>, Xiangfei Ding	 <dingxiangfei2009@gmail.com>,
+ linux-kernel@vger.kernel.org, 	rust-for-linux@vger.kernel.org,
+ linux-i2c@vger.kernel.org
+Date: Mon, 17 Nov 2025 16:12:35 +0000
+In-Reply-To: <20251116162144.171469-1-igor.korotin.linux@gmail.com>
+References: <20251116162104.171420-1-igor.korotin.linux@gmail.com>
+	 <20251116162144.171469-1-igor.korotin.linux@gmail.com>
+Autocrypt: addr=markus.probst@posteo.de; prefer-encrypt=mutual;
+ keydata=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
+ R3rOFHA==
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ2PR12MB8784:EE_|DS0PR12MB6607:EE_
-X-MS-Office365-Filtering-Correlation-Id: c6154995-11e7-4887-a845-08de25c975c0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|10070799003|1800799024|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?OHUzSEpTVkJ6dFJOK2hPL2JyWEU0RVVKNlNiM3NyNmRsbjRteUI0RFNqQmoy?=
- =?utf-8?B?MUR2VXJXcGpwRGF1VmJ1VmErVHdON2lGZU56cmFtYld4T2E5YmNnYjhuQW90?=
- =?utf-8?B?TGRyMzVYclJTS0ZTWDZ2a2Y2bGdobEltK1BBRVQxT3R5UHhQV3FySzk1UmN5?=
- =?utf-8?B?enY2YkhJS01neTFLTTNWTHdoaWpGc1orYWhRQ3NNWnRQQWkrYVZ1N2hQUU1i?=
- =?utf-8?B?RTZzMUcvUTdQTWw0M3haRmpFNHpVeld6M0wrWk9qM2pWTy9lYy8zTmlvS1N5?=
- =?utf-8?B?UDR3T05HaXN6ZGFuT3pxYVg1R2VvdzJiakVyWEtvdGZGMlNyL3dnVlJTbUFo?=
- =?utf-8?B?ek1DQmhGWnlCSW1HcVZxenBsdEg1QVlwWlFDcW9zb3R4VGxwUDhJYjluTFZW?=
- =?utf-8?B?YkhyTGkvN2hKeFdkamNaOEpjWjFxWFBaRXkrbnRtR1Z2L1Z2MG5ZVXl4dnhy?=
- =?utf-8?B?eWZ1SGNlZzUxcEZvaFBMVlNjL0RKeHJJb1psY1MvMVl6dmdROU5EalhaMStY?=
- =?utf-8?B?Sm5rd3pPWnhUOW1FZFFNVVM3UWsvZjdMNTk3Ky9XaWxwNG5oR2lEVVBQRkJx?=
- =?utf-8?B?ZFVRRWh1LzJpYmwwNk9RWmxpRURGc0tINkJyYnI5NGVYdGN5RGhEemVmWXVl?=
- =?utf-8?B?OVYyaHI1Z3MrRUo0MkJTTXJLTWdlbUlpZmFGN1I0Qi8xNHloME4zM3p5Nnla?=
- =?utf-8?B?cCtQQnN3Nm1zZFhNYWpwVUJRbThHNnU4NzFwQ09Td1F5MmJQaWNLemozUjFL?=
- =?utf-8?B?eW16T1B1NVNqTjJhMld6M3FWSmN5NTdwcWlsWFdoYVJLZi96YmNTdnVDOTRp?=
- =?utf-8?B?ejhrOUQvRk9RcFhIdUFUZmJhVGUrMTlzY1NaQVg4cS9Lei9XUzRPbzQrK2F3?=
- =?utf-8?B?VUxXK0Nsbmk1eUQ0S09aYUJaZU5zYkg0a3hpd0xPWTl2WEhhMGNGQ2ovOGNs?=
- =?utf-8?B?eGJraFNPblYvWm41NFBKQThRSGZkOTFGWWMwa3RTcHRtdkdYeFNrM0ZZYjhV?=
- =?utf-8?B?Z0dGNzh6clhqWFo1WGFkNVJsNmxaMDhFK2VYdU5Ua2paYytvTklRdWZ4NzRC?=
- =?utf-8?B?QnFpbGxIOEVBL2xVVDc5MlFxa3phVTF5OGVqcFRWc1ozWHBWYnU1b21Tb3Er?=
- =?utf-8?B?VTFnWkpRTlBTSjZacW1MdlB6Zk1Oc1FjTkg2d1JFUkVXaUhTbU1wSGRsOW0v?=
- =?utf-8?B?Z04wbzh0cFg0Ny9JZk5vajlRU3ZEOVJuS2dVV2R5THM5ZVBWaTJsaEpvU1c2?=
- =?utf-8?B?UVlrcGxLQ25jTHRSZjNqejhDalk5cmZUa3F1RXRPZS9rdzZ6aXBwVFNFN1Nw?=
- =?utf-8?B?aGc2Q0l2eE1IcEwxNWxZcnZadWNPV083Y2dwbXhnTlZjaHIrZXVxckpNdjA3?=
- =?utf-8?B?NXhkUUxKZDZkRXU0bjlETnFkajBWK1RZSkErTlFUMDRMSTU5K2tJb3lVY1ho?=
- =?utf-8?B?NFJxWG14dTVzb2s2R2FtNGpqRFM2NElPUUZxa1FRK0tIRk04K1BvMEJDazU1?=
- =?utf-8?B?MnlieW1sNEZwSjZrTlBkTHF2ejFXSXBGck5JangrZjMwUjZRYXR0bmlJNkla?=
- =?utf-8?B?b25YOCtDSXlGZ3ZtZWw3cEcwaTZMZnNPaWFzOGtxaEthMCtENTdJTkJwV1RX?=
- =?utf-8?B?TnlJcklwaDFlQjN4R21LZ2VDU2UwazUxemt5eE5OdU9TaHhoVGNtNm9GY3ZH?=
- =?utf-8?B?dXI1TDFWTnkyUG1iRVprcFcrRWtkMXhWdEM4ZXBPdy9xTXVDSlNqbjNPaGZD?=
- =?utf-8?B?UkRMVW1kbWVDTW5UV2Fpd2pVeW50UmdpWEhWSlg1WUFrb05sL0tjTG1kNDZa?=
- =?utf-8?B?eXBIdG8yMWZueFVET2F6VkNxdEVFeWpOYUduTmxMZlpnYjdnczVHOXVoMmV3?=
- =?utf-8?B?TE1YbDlhSWJzb2dMcVdJNUV2QjljZWIrVUpaRW02MHc1MEJNeWFteEx3L1Zz?=
- =?utf-8?B?Q1Z5VjRJTHJVOVFWL3JXNEpFS2ZjYUw0Nm5QSU5IcEVmRkNCYXRGMVlUbEdC?=
- =?utf-8?B?bTZIYUVuWE5BPT0=?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR12MB8784.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(10070799003)(1800799024)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?NWZqZTVWTUJJWGZlTVhLWkxJVmlzZDVCTGZVVEtBZ08wMmx4cE0zYTBucHYw?=
- =?utf-8?B?TTFKbnVhblN6VlVJV3JXMXJPUmxlanUyU0tCUDJVVitOdG9yL05IV0h3blhI?=
- =?utf-8?B?YmJxZWJFNjJHRU1IUFNEOHFTZ2w5c0JoaHdMeUl0M3ZvSWd3aklnT0I3T1Ni?=
- =?utf-8?B?UUhQVVFnUFJhcEw0dlk2d2hvTjUwTjJxSk5QR3l4b1JpUDlHcHJPSy9TOURQ?=
- =?utf-8?B?M2RnSW12eWJ2bzhLYWNFOFBBbGNoRDNYV2prbXlzMkNUNTlMd3NZR1VhTTJE?=
- =?utf-8?B?QlY5VGpBakl2bEFHaDlFTGFWTk9KdW1GU0hwdGZwOVJtelR5T1pmaXN1OVZH?=
- =?utf-8?B?b3ZwNHRMNzEySXdydVRZNzduUi9TS1dqajJVWm9kd3hUQVlHSHJRQWNzVi80?=
- =?utf-8?B?ZGpUbkZVeXNXcU5pUXNtYTNQZHRBVmtUSDFnZVU4ZFRrV2FHZUYxQkN3M3Uv?=
- =?utf-8?B?SnpYeTV5RGNGWjNlWTBMVTdCTEF3RGFva0dLdTFrbFJvZk8yU1dKRkxWU2pu?=
- =?utf-8?B?Z1RiM0pvblRKMXJjekNyaE1mRjdWaU84M2g1Mlh4MTJ1cjRtVS9YQzRiZk1M?=
- =?utf-8?B?bWk0ZWJoZFRITkNZWHdRWFBIc2Y5ejBKbnBrajQwdVhVQnkyWURXRjd5U0ZU?=
- =?utf-8?B?UWVqdGdtSFZTWDVPUE5lVUNNekZvSkROb2JqeFhyYjZBMWc3VWVrcVB0UmlZ?=
- =?utf-8?B?cHhJTTJzeDBBK000dUtLUjFORm5TQ0hDdHdNM0M5dlJ1QnRiQTVMNzNncDht?=
- =?utf-8?B?NnlJY0NvelF0VVdob1RweTJ4NVl0SnFHdHJOb2ZqWkZTdG1JRXUzVHZhcWE2?=
- =?utf-8?B?UXhJL1JMc04rK3d3YnVNUjkwd05HY3FLVHFYVkU3aU0xTnQzSkxTTk00bEIx?=
- =?utf-8?B?NUxGQ0Z1a2l5MzZnMENGZ21HblhaN0daSWZOSGZyNFNZT0FWVWhQa0lHaFdM?=
- =?utf-8?B?ZmxPQ3YrRTFERDg2NDBUOVo1dkVhcy9NMWdOODV5djhhTCt1Q1BqcjJ0WWRB?=
- =?utf-8?B?clJxUDBkZDVoVlpuRkVKWmhpTE1Lb1d6SDVmamRCYWQzMUtrVW1ITXVOclZi?=
- =?utf-8?B?c2dTNURNbVdKRXd0MW9qU3JDdm81UVM2L3NJcFdVS2pTUUNMMWpMNlZ2NVMx?=
- =?utf-8?B?ZGFTdFJmMzhydm1GbUhUYWF5ZnU4ZzB5K0JLaFBkOEs4QlF6dFBYV3lHVmZw?=
- =?utf-8?B?OGZmWkJpK1orWnM0YkxiL0FxdEU2OTJTd2Y5RWE3eHljeTFOT2krdUU0WlAz?=
- =?utf-8?B?dWxZc0NERDIzM3hLSnpXeUZ2NnRuMjlTamFMRklMMk1DN2xnQVUxdEZ1cUN4?=
- =?utf-8?B?WUQ0a3huTzFWSlN1eVo4OU0vMllONDFHeXM4ZWc1QmVBMmVzS09DdTl6Ly9F?=
- =?utf-8?B?d1BxQno5eFVXRDZVZGMxbFV2dy9BTXRvR3pSS21Hc0dWZVZsSk5kamU0ZjRQ?=
- =?utf-8?B?OEtMRThPejNMRE5FZE5sandyS2FhSlIwTU9mamQveVJocHRFOG9OWC9oWjc4?=
- =?utf-8?B?WUpSNmc0OVZSY2hFNUVqaGpqdDdLZDI0c1hRYWVvOFl1bk5FSGRqR2tFa0pQ?=
- =?utf-8?B?d2djbkZ1UHdiV2hJUEpDRUF3UDFlWkRvQ2o0RDhtN2NuWFhVRldlNnlseDd1?=
- =?utf-8?B?ZXQ3elN1U1pTMlBKSU5WUXJmT2tCRVVGZXRjWkp5U0hGUVc5M0puYWZ3UHU3?=
- =?utf-8?B?Qk5Pdjk4aDBRd1IxT2VHTVdpV3BEc3JROVduVmZBRVBNZXJZSGw1N0tXQVV1?=
- =?utf-8?B?UXJMT1g0YVh0c1FHdGxCdWJGcjJWcFhHZi9Qb1gxb09MQ0FOVmpoQmsySGZR?=
- =?utf-8?B?Rml5YXQxRWlOMlllUS9aQTNXaSthaXNtTUlnVmJRU01TM1NTeGl6Qm5iWHBn?=
- =?utf-8?B?RlVjc3luS3k2M3RQcG4wNmxxVHY0L291UmQwUmJnOUlQNTFTRlZlTGd1OXNJ?=
- =?utf-8?B?dWcyaDB3ajVzZWp5Qld1eElzaC9DTVltOTFHVmR3YlJLOUwwK205d0NVb2pn?=
- =?utf-8?B?NkZDYlU5elpDUDBBcXRuQXhlR20xY2VCWHMrZVN2UHVsa2dMMVNkTHNpUTFG?=
- =?utf-8?B?S2N0UDJ5alZBbHQwZ2k5RHEyS0orSGR3L1BWeGxYMHlpVFJDQTRDSFExcDUv?=
- =?utf-8?B?Y3Q2aGsxOGxDWUNIajRoMmtrM1F2SUtHbFBLK0hHeXhjbzFBaGE1SjJnVG5s?=
- =?utf-8?Q?K0jPMSQMufTExIUchq1lNzL2VhUkHyOCXTJKAPSMq3fI?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c6154995-11e7-4887-a845-08de25c975c0
-X-MS-Exchange-CrossTenant-AuthSource: SJ2PR12MB8784.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Nov 2025 11:07:13.0337
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Qa2InGaQrw6y+47KoQIDkkzroTFtJ7shK97rMK4lhYbbDHwcm6O4onhknuy0f6Nlod79NqXyI50v47l5ZFw47Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6607
+OpenPGP: url=https://posteo.de/keys/markus.probst@posteo.de.asc; preference=encrypt
 
-
-
-On 15/11/2025 04:26, Akhil R wrote:
-> Add support for HS (High Speed) mode transfers, which is supported by
-> Tegra194 onwards. Also adjust the bus frequency such that it uses the
-> fast plus mode when HS mode is not supported.
-> 
-> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
-> Signed-off-by: Kartik Rajput <kkartik@nvidia.com>
+On Sun, 2025-11-16 at 16:21 +0000, Igor Korotin wrote:
+> Implement the core abstractions needed for I2C drivers, including:
+>=20
+> * `i2c::Driver` =E2=80=94 the trait drivers must implement, including `pr=
+obe`
+>=20
+> * `i2c::I2cClient` =E2=80=94 a safe wrapper around `struct i2c_client`
+>=20
+> * `i2c::Adapter` =E2=80=94 implements `driver::RegistrationOps` to hook i=
+nto the
+>   generic `driver::Registration` machinery
+>=20
+> * `i2c::DeviceId` =E2=80=94 a `RawDeviceIdIndex` implementation for I2C d=
+evice IDs
+>=20
+> Signed-off-by: Igor Korotin <igor.korotin.linux@gmail.com>
 > ---
-> v10 -> v12:
-> 	* Update bus_freq_hz to max supported freq and updates to
-> 	  accomodate the changes from Patch 2/6.
-> v10 -> v11:
-> 	* Update the if condition as per the comments received on:
-> 	  https://lore.kernel.org/linux-tegra/20251110080502.865953-1-kkartik@nvidia.com/T/#t
-> v9 -> v10:
->          * Change switch block to an if-else block.
-> v5 -> v9:
->          * In the switch block, handle the case when hs mode is not
->            supported. Also update it to use Fast mode for master code
->            byte as per the I2C spec for HS mode.
-> v3 -> v5:
->          * Set has_hs_mode_support to false for unsupported SoCs.
-> v2 -> v3:
->          * Document tlow_hs_mode and thigh_hs_mode.
-> v1 -> v2:
->          * Document has_hs_mode_support.
->          * Add a check to set the frequency to fastmode+ if the device
->            does not support HS mode but the requested frequency is more
->            than fastmode+.
-> ---
->   drivers/i2c/busses/i2c-tegra.c | 59 ++++++++++++++++++++++++++++++++--
->   1 file changed, 57 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
-> index 8a696c88882e..9ebeb6a2eaf5 100644
-> --- a/drivers/i2c/busses/i2c-tegra.c
-> +++ b/drivers/i2c/busses/i2c-tegra.c
-> @@ -91,6 +91,7 @@
->   #define I2C_HEADER_IE_ENABLE			BIT(17)
->   #define I2C_HEADER_REPEAT_START			BIT(16)
->   #define I2C_HEADER_CONTINUE_XFER		BIT(15)
-> +#define I2C_HEADER_HS_MODE			BIT(22)
+>  MAINTAINERS                     |   8 +
+>  rust/bindings/bindings_helper.h |   1 +
+>  rust/kernel/i2c.rs              | 436 ++++++++++++++++++++++++++++++++
+>  rust/kernel/lib.rs              |   2 +
+>  4 files changed, 447 insertions(+)
+>  create mode 100644 rust/kernel/i2c.rs
+>=20
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 3da2c26a796b..a8dfde2f5633 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -11743,6 +11743,14 @@ F:	include/linux/i2c.h
+>  F:	include/uapi/linux/i2c-*.h
+>  F:	include/uapi/linux/i2c.h
+> =20
+> +I2C SUBSYSTEM [RUST]
+> +M:	Igor Korotin <igor.korotin.linux@gmail.com>
+> +R:	Danilo Krummrich <dakr@kernel.org>
+> +R:	Daniel Almeida <daniel.almeida@collabora.com>
+> +L:	rust-for-linux@vger.kernel.org
+> +S:	Maintained
+> +F:	rust/kernel/i2c.rs
+> +
+>  I2C SUBSYSTEM HOST DRIVERS
+>  M:	Andi Shyti <andi.shyti@kernel.org>
+>  L:	linux-i2c@vger.kernel.org
+> diff --git a/rust/bindings/bindings_helper.h b/rust/bindings/bindings_hel=
+per.h
+> index a79fd111f886..f92abb578b56 100644
+> --- a/rust/bindings/bindings_helper.h
+> +++ b/rust/bindings/bindings_helper.h
+> @@ -58,6 +58,7 @@
+>  #include <linux/firmware.h>
+>  #include <linux/interrupt.h>
+>  #include <linux/fs.h>
+> +#include <linux/i2c.h>
+>  #include <linux/ioport.h>
+>  #include <linux/jiffies.h>
+>  #include <linux/jump_label.h>
+> diff --git a/rust/kernel/i2c.rs b/rust/kernel/i2c.rs
+> new file mode 100644
+> index 000000000000..a5ad8213d9ac
+> --- /dev/null
+> +++ b/rust/kernel/i2c.rs
+> @@ -0,0 +1,436 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +//! I2C Driver subsystem
+> +
+> +// I2C Driver abstractions.
+> +use crate::{
+> +    acpi,
+> +    container_of,
+> +    device,
+> +    device_id::{
+> +        RawDeviceId,
+> +        RawDeviceIdIndex, //
+> +    },
+> +    driver,
+> +    error::*,
+> +    of,
+> +    prelude::*,
+> +    types::{
+> +        AlwaysRefCounted,
+> +        Opaque, //
+> +    }, //
+> +};
+> +
+> +use core::{
+> +    marker::PhantomData,
+> +    ptr::NonNull, //
+> +};
+> +
+> +/// An I2C device id table.
+> +#[repr(transparent)]
+> +#[derive(Clone, Copy)]
+> +pub struct DeviceId(bindings::i2c_device_id);
+> +
+> +impl DeviceId {
+> +    const I2C_NAME_SIZE: usize =3D 20;
+> +
+> +    /// Create a new device id from an I2C 'id' string.
+> +    #[inline(always)]
+> +    pub const fn new(id: &'static CStr) -> Self {
+> +        build_assert!(
+> +            id.len_with_nul() <=3D Self::I2C_NAME_SIZE,
+> +            "ID exceeds 20 bytes"
+> +        );
+> +        let src =3D id.as_bytes_with_nul();
+> +        // Replace with `bindings::i2c_device_id::default()` once stabil=
+ized for `const`.
+> +        // SAFETY: FFI type is valid to be zero-initialized.
+> +        let mut i2c: bindings::i2c_device_id =3D pin_init::zeroed();
+Clippy throws the error:
 
-This should be ordered according to the value. So place this above 
-I2C_HEADER_CONT_ON_NAK.
+error: statement has unnecessary safety comment
+  --> rust/kernel/i2c.rs:54:9
+   |
+54 |         let mut i2c: bindings::i2c_device_id =3D pin_init::zeroed();
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+help: consider removing the safety comment
+  --> rust/kernel/i2c.rs:53:9
+   |
+53 |         // SAFETY: FFI type is valid to be zero-initialized.
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   =3D help: for further information visit
+https://rust-lang.github.io/rust-clippy/rust-1.91.0/index.html#unnecessary_=
+safety_comment
+   =3D note: `-D clippy::unnecessary-safety-comment` implied by `-D
+warnings`
+   =3D help: to override `-D warnings` add
+`#[allow(clippy::unnecessary_safety_comment)]`
 
->   #define I2C_HEADER_SLAVE_ADDR_SHIFT		1
->   
->   #define I2C_BUS_CLEAR_CNFG			0x084
-> @@ -200,6 +201,8 @@ enum msg_end_type {
->    * @thigh_fast_mode: High period of the clock in fast mode.
->    * @tlow_fastplus_mode: Low period of the clock in fast-plus mode.
->    * @thigh_fastplus_mode: High period of the clock in fast-plus mode.
-> + * @tlow_hs_mode: Low period of the clock in HS mode.
-> + * @thigh_hs_mode: High period of the clock in HS mode.
->    * @setup_hold_time_std_mode: Setup and hold time for start and stop conditions
->    *		in standard mode.
->    * @setup_hold_time_fast_mode: Setup and hold time for start and stop
-> @@ -210,6 +213,7 @@ enum msg_end_type {
->    *		in HS mode.
->    * @has_interface_timing_reg: Has interface timing register to program the tuned
->    *		timing settings.
-> + * @has_hs_mode_support: Has support for high speed (HS) mode transfers.
->    */
->   struct tegra_i2c_hw_feature {
->   	bool has_continue_xfer_support;
-> @@ -232,11 +236,14 @@ struct tegra_i2c_hw_feature {
->   	u32 thigh_fast_mode;
->   	u32 tlow_fastplus_mode;
->   	u32 thigh_fastplus_mode;
-> +	u32 tlow_hs_mode;
-> +	u32 thigh_hs_mode;
->   	u32 setup_hold_time_std_mode;
->   	u32 setup_hold_time_fast_mode;
->   	u32 setup_hold_time_fastplus_mode;
->   	u32 setup_hold_time_hs_mode;
->   	bool has_interface_timing_reg;
-> +	bool has_hs_mode_support;
->   };
->   
->   /**
-> @@ -646,6 +653,7 @@ static int tegra_i2c_master_reset(struct tegra_i2c_dev *i2c_dev)
->   static int tegra_i2c_init(struct tegra_i2c_dev *i2c_dev)
->   {
->   	u32 val, clk_divisor, clk_multiplier, tsu_thd, tlow, thigh, non_hs_mode;
-> +	u32 max_bus_freq_hz;
->   	struct i2c_timings *t = &i2c_dev->timings;
->   	int err;
->   
-> @@ -684,6 +692,14 @@ static int tegra_i2c_init(struct tegra_i2c_dev *i2c_dev)
->   	if (IS_VI(i2c_dev))
->   		tegra_i2c_vi_init(i2c_dev);
->   
-> +	if (i2c_dev->hw->has_hs_mode_support)
-> +		max_bus_freq_hz = I2C_MAX_HIGH_SPEED_MODE_FREQ;
-> +	else
-> +		max_bus_freq_hz = I2C_MAX_FAST_MODE_PLUS_FREQ;
-> +
-> +	if (WARN_ON(t->bus_freq_hz > max_bus_freq_hz))
-> +		t->bus_freq_hz = max_bus_freq_hz;
-> +
->   	if (t->bus_freq_hz <= I2C_MAX_STANDARD_MODE_FREQ) {
->   		tlow = i2c_dev->hw->tlow_std_mode;
->   		thigh = i2c_dev->hw->thigh_std_mode;
-> @@ -694,11 +710,22 @@ static int tegra_i2c_init(struct tegra_i2c_dev *i2c_dev)
->   		thigh = i2c_dev->hw->thigh_fast_mode;
->   		tsu_thd = i2c_dev->hw->setup_hold_time_fast_mode;
->   		non_hs_mode = i2c_dev->hw->clk_divisor_fast_mode;
-> -	} else {
-> +	} else if (t->bus_freq_hz <= I2C_MAX_FAST_MODE_PLUS_FREQ) {
->   		tlow = i2c_dev->hw->tlow_fastplus_mode;
->   		thigh = i2c_dev->hw->thigh_fastplus_mode;
->   		tsu_thd = i2c_dev->hw->setup_hold_time_fastplus_mode;
->   		non_hs_mode = i2c_dev->hw->clk_divisor_fast_plus_mode;
-> +	} else {
-> +		/*
-> +		 * When using HS mode, i.e. when the bus frequency is greater than fast plus mode,
-> +		 * the non-hs timing registers will be used for sending the master code byte for
-> +		 * transition to HS mode. Configure the non-hs timing registers for Fast Mode to
-> +		 * send the master code byte at 400kHz.
-> +		 */
-> +		tlow = i2c_dev->hw->tlow_fast_mode;
-> +		thigh = i2c_dev->hw->thigh_fast_mode;
-> +		tsu_thd = i2c_dev->hw->setup_hold_time_fast_mode;
-> +		non_hs_mode = i2c_dev->hw->clk_divisor_fast_mode;
->   	}
->   
->   	/* make sure clock divisor programmed correctly */
-> @@ -720,6 +747,18 @@ static int tegra_i2c_init(struct tegra_i2c_dev *i2c_dev)
->   	if (i2c_dev->hw->has_interface_timing_reg && tsu_thd)
->   		i2c_writel(i2c_dev, tsu_thd, I2C_INTERFACE_TIMING_1);
->   
-> +	/* Write HS mode registers. These will get used only for HS mode*/
-> +	if (i2c_dev->hw->has_hs_mode_support) {
-> +		tlow = i2c_dev->hw->tlow_hs_mode;
-> +		thigh = i2c_dev->hw->thigh_hs_mode;
-> +		tsu_thd = i2c_dev->hw->setup_hold_time_hs_mode;
-> +
-> +		val = FIELD_PREP(I2C_HS_INTERFACE_TIMING_THIGH, thigh) |
-> +			FIELD_PREP(I2C_HS_INTERFACE_TIMING_TLOW, tlow);
-> +		i2c_writel(i2c_dev, val, I2C_HS_INTERFACE_TIMING_0);
-> +		i2c_writel(i2c_dev, tsu_thd, I2C_HS_INTERFACE_TIMING_1);
-> +	}
-> +
->   	clk_multiplier = (tlow + thigh + 2) * (non_hs_mode + 1);
->   
->   	err = clk_set_rate(i2c_dev->div_clk,
-> @@ -1217,6 +1256,9 @@ static void tegra_i2c_push_packet_header(struct tegra_i2c_dev *i2c_dev,
->   	if (msg->flags & I2C_M_RD)
->   		packet_header |= I2C_HEADER_READ;
->   
-> +	if (i2c_dev->timings.bus_freq_hz > I2C_MAX_FAST_MODE_PLUS_FREQ)
-> +		packet_header |= I2C_HEADER_HS_MODE;
-> +
->   	if (i2c_dev->dma_mode && !i2c_dev->msg_read)
->   		*dma_buf++ = packet_header;
->   	else
-> @@ -1508,6 +1550,7 @@ static const struct tegra_i2c_hw_feature tegra20_i2c_hw = {
->   	.setup_hold_time_fastplus_mode = 0x0,
->   	.setup_hold_time_hs_mode = 0x0,
->   	.has_interface_timing_reg = false,
-> +	.has_hs_mode_support = false,
->   };
->   
->   static const struct tegra_i2c_hw_feature tegra30_i2c_hw = {
-> @@ -1536,6 +1579,7 @@ static const struct tegra_i2c_hw_feature tegra30_i2c_hw = {
->   	.setup_hold_time_fastplus_mode = 0x0,
->   	.setup_hold_time_hs_mode = 0x0,
->   	.has_interface_timing_reg = false,
-> +	.has_hs_mode_support = false,
->   };
->   
->   static const struct tegra_i2c_hw_feature tegra114_i2c_hw = {
-> @@ -1564,6 +1608,7 @@ static const struct tegra_i2c_hw_feature tegra114_i2c_hw = {
->   	.setup_hold_time_fastplus_mode = 0x0,
->   	.setup_hold_time_hs_mode = 0x0,
->   	.has_interface_timing_reg = false,
-> +	.has_hs_mode_support = false,
->   };
->   
->   static const struct tegra_i2c_hw_feature tegra124_i2c_hw = {
-> @@ -1592,6 +1637,7 @@ static const struct tegra_i2c_hw_feature tegra124_i2c_hw = {
->   	.setup_hold_time_fastplus_mode = 0x0,
->   	.setup_hold_time_hs_mode = 0x0,
->   	.has_interface_timing_reg = true,
-> +	.has_hs_mode_support = false,
->   };
->   
->   static const struct tegra_i2c_hw_feature tegra210_i2c_hw = {
-> @@ -1620,6 +1666,7 @@ static const struct tegra_i2c_hw_feature tegra210_i2c_hw = {
->   	.setup_hold_time_fastplus_mode = 0,
->   	.setup_hold_time_hs_mode = 0,
->   	.has_interface_timing_reg = true,
-> +	.has_hs_mode_support = false,
->   };
->   
->   static const struct tegra_i2c_hw_feature tegra186_i2c_hw = {
-> @@ -1648,6 +1695,7 @@ static const struct tegra_i2c_hw_feature tegra186_i2c_hw = {
->   	.setup_hold_time_fastplus_mode = 0,
->   	.setup_hold_time_hs_mode = 0,
->   	.has_interface_timing_reg = true,
-> +	.has_hs_mode_support = false,
->   };
->   
->   static const struct tegra_i2c_hw_feature tegra194_i2c_hw = {
-> @@ -1671,16 +1719,19 @@ static const struct tegra_i2c_hw_feature tegra194_i2c_hw = {
->   	.thigh_fast_mode = 0x2,
->   	.tlow_fastplus_mode = 0x2,
->   	.thigh_fastplus_mode = 0x2,
-> +	.tlow_hs_mode = 0x8,
-> +	.thigh_hs_mode = 0x3,
->   	.setup_hold_time_std_mode = 0x08080808,
->   	.setup_hold_time_fast_mode = 0x02020202,
->   	.setup_hold_time_fastplus_mode = 0x02020202,
->   	.setup_hold_time_hs_mode = 0x090909,
->   	.has_interface_timing_reg = true,
-> +	.has_hs_mode_support = true,
->   };
->   static const struct tegra_i2c_hw_feature tegra256_i2c_hw = {
->   	.has_continue_xfer_support = true,
->   	.has_per_pkt_xfer_complete_irq = true,
-> -	.clk_divisor_hs_mode = 7,
-> +	.clk_divisor_hs_mode = 9,
->   	.clk_divisor_std_mode = 0x7a,
->   	.clk_divisor_fast_mode = 0x40,
->   	.clk_divisor_fast_plus_mode = 0x14,
-> @@ -1698,10 +1749,14 @@ static const struct tegra_i2c_hw_feature tegra256_i2c_hw = {
->   	.thigh_fast_mode = 0x2,
->   	.tlow_fastplus_mode = 0x4,
->   	.thigh_fastplus_mode = 0x4,
-> +	.tlow_hs_mode = 0x3,
-> +	.thigh_hs_mode = 0x2,
->   	.setup_hold_time_std_mode = 0x08080808,
->   	.setup_hold_time_fast_mode = 0x04010101,
->   	.setup_hold_time_fastplus_mode = 0x04020202,
-> +	.setup_hold_time_hs_mode = 0x030303,
->   	.has_interface_timing_reg = true,
-> +	.has_hs_mode_support = true,
->   };
->   
->   static const struct of_device_id tegra_i2c_of_match[] = {
+Thanks
+- Markus Probst
 
--- 
-nvpublic
-
+> +        let mut i =3D 0;
+> +        while i < src.len() {
+> +            i2c.name[i] =3D src[i];
+> +            i +=3D 1;
+> +        }
+> +
+> +        Self(i2c)
+> +    }
+> +}
+> +
+> +// SAFETY: `DeviceId` is a `#[repr(transparent)]` wrapper of `i2c_device=
+_id` and does not add
+> +// additional invariants, so it's safe to transmute to `RawType`.
+> +unsafe impl RawDeviceId for DeviceId {
+> +    type RawType =3D bindings::i2c_device_id;
+> +}
+> +
+> +// SAFETY: `DRIVER_DATA_OFFSET` is the offset to the `driver_data` field=
+.
+> +unsafe impl RawDeviceIdIndex for DeviceId {
+> +    const DRIVER_DATA_OFFSET: usize =3D core::mem::offset_of!(bindings::=
+i2c_device_id, driver_data);
+> +
+> +    fn index(&self) -> usize {
+> +        self.0.driver_data
+> +    }
+> +}
+> +
+> +/// IdTable type for I2C
+> +pub type IdTable<T> =3D &'static dyn kernel::device_id::IdTable<DeviceId=
+, T>;
+> +
+> +/// Create a I2C `IdTable` with its alias for modpost.
+> +#[macro_export]
+> +macro_rules! i2c_device_table {
+> +    ($table_name:ident, $module_table_name:ident, $id_info_type: ty, $ta=
+ble_data: expr) =3D> {
+> +        const $table_name: $crate::device_id::IdArray<
+> +            $crate::i2c::DeviceId,
+> +            $id_info_type,
+> +            { $table_data.len() },
+> +        > =3D $crate::device_id::IdArray::new($table_data);
+> +
+> +        $crate::module_device_table!("i2c", $module_table_name, $table_n=
+ame);
+> +    };
+> +}
+> +
+> +/// An adapter for the registration of I2C drivers.
+> +pub struct Adapter<T: Driver>(T);
+> +
+> +// SAFETY: A call to `unregister` for a given instance of `RegType` is g=
+uaranteed to be valid if
+> +// a preceding call to `register` has been successful.
+> +unsafe impl<T: Driver + 'static> driver::RegistrationOps for Adapter<T> =
+{
+> +    type RegType =3D bindings::i2c_driver;
+> +
+> +    unsafe fn register(
+> +        idrv: &Opaque<Self::RegType>,
+> +        name: &'static CStr,
+> +        module: &'static ThisModule,
+> +    ) -> Result {
+> +        build_assert!(
+> +            T::ACPI_ID_TABLE.is_some() || T::OF_ID_TABLE.is_some() || T:=
+:I2C_ID_TABLE.is_some(),
+> +            "At least one of ACPI/OF/Legacy tables must be present when =
+registering an i2c driver"
+> +        );
+> +
+> +        let i2c_table =3D match T::I2C_ID_TABLE {
+> +            Some(table) =3D> table.as_ptr(),
+> +            None =3D> core::ptr::null(),
+> +        };
+> +
+> +        let of_table =3D match T::OF_ID_TABLE {
+> +            Some(table) =3D> table.as_ptr(),
+> +            None =3D> core::ptr::null(),
+> +        };
+> +
+> +        let acpi_table =3D match T::ACPI_ID_TABLE {
+> +            Some(table) =3D> table.as_ptr(),
+> +            None =3D> core::ptr::null(),
+> +        };
+> +
+> +        // SAFETY: It's safe to set the fields of `struct i2c_client` on=
+ initialization.
+> +        unsafe {
+> +            (*idrv.get()).driver.name =3D name.as_char_ptr();
+> +            (*idrv.get()).probe =3D Some(Self::probe_callback);
+> +            (*idrv.get()).remove =3D Some(Self::remove_callback);
+> +            (*idrv.get()).shutdown =3D Some(Self::shutdown_callback);
+> +            (*idrv.get()).id_table =3D i2c_table;
+> +            (*idrv.get()).driver.of_match_table =3D of_table;
+> +            (*idrv.get()).driver.acpi_match_table =3D acpi_table;
+> +        }
+> +
+> +        // SAFETY: `idrv` is guaranteed to be a valid `RegType`.
+> +        to_result(unsafe { bindings::i2c_register_driver(module.0, idrv.=
+get()) })
+> +    }
+> +
+> +    unsafe fn unregister(idrv: &Opaque<Self::RegType>) {
+> +        // SAFETY: `idrv` is guaranteed to be a valid `RegType`.
+> +        unsafe { bindings::i2c_del_driver(idrv.get()) }
+> +    }
+> +}
+> +
+> +impl<T: Driver + 'static> Adapter<T> {
+> +    extern "C" fn probe_callback(idev: *mut bindings::i2c_client) -> ker=
+nel::ffi::c_int {
+> +        // SAFETY: The I2C bus only ever calls the probe callback with a=
+ valid pointer to a
+> +        // `struct i2c_client`.
+> +        //
+> +        // INVARIANT: `idev` is valid for the duration of `probe_callbac=
+k()`.
+> +        let idev =3D unsafe { &*idev.cast::<I2cClient<device::CoreIntern=
+al>>() };
+> +
+> +        let info =3D
+> +            Self::i2c_id_info(idev).or_else(|| <Self as driver::Adapter>=
+::id_info(idev.as_ref()));
+> +
+> +        from_result(|| {
+> +            let data =3D T::probe(idev, info);
+> +
+> +            idev.as_ref().set_drvdata(data)?;
+> +            Ok(0)
+> +        })
+> +    }
+> +
+> +    extern "C" fn remove_callback(idev: *mut bindings::i2c_client) {
+> +        // SAFETY: `idev` is a valid pointer to a `struct i2c_client`.
+> +        let idev =3D unsafe { &*idev.cast::<I2cClient<device::CoreIntern=
+al>>() };
+> +
+> +        // SAFETY: `remove_callback` is only ever called after a success=
+ful call to
+> +        // `probe_callback`, hence it's guaranteed that `I2cClient::set_=
+drvdata()` has been called
+> +        // and stored a `Pin<KBox<T>>`.
+> +        let data =3D unsafe { idev.as_ref().drvdata_obtain::<T>() };
+> +
+> +        T::unbind(idev, data.as_ref());
+> +    }
+> +
+> +    extern "C" fn shutdown_callback(idev: *mut bindings::i2c_client) {
+> +        // SAFETY: `shutdown_callback` is only ever called for a valid `=
+idev`
+> +        let idev =3D unsafe { &*idev.cast::<I2cClient<device::CoreIntern=
+al>>() };
+> +
+> +        // SAFETY: `shutdown_callback` is only ever called after a succe=
+ssful call to
+> +        // `probe_callback`, hence it's guaranteed that `Device::set_drv=
+data()` has been called
+> +        // and stored a `Pin<KBox<T>>`.
+> +        let data =3D unsafe { idev.as_ref().drvdata_obtain::<T>() };
+> +
+> +        T::shutdown(idev, data.as_ref());
+> +    }
+> +
+> +    /// The [`i2c::IdTable`] of the corresponding driver.
+> +    fn i2c_id_table() -> Option<IdTable<<Self as driver::Adapter>::IdInf=
+o>> {
+> +        T::I2C_ID_TABLE
+> +    }
+> +
+> +    /// Returns the driver's private data from the matching entry in the=
+ [`i2c::IdTable`], if any.
+> +    ///
+> +    /// If this returns `None`, it means there is no match with an entry=
+ in the [`i2c::IdTable`].
+> +    fn i2c_id_info(dev: &I2cClient) -> Option<&'static <Self as driver::=
+Adapter>::IdInfo> {
+> +        let table =3D Self::i2c_id_table()?;
+> +
+> +        // SAFETY:
+> +        // - `table` has static lifetime, hence it's valid for reads
+> +        // - `dev` is guaranteed to be valid while it's alive, and so is=
+ `dev.as_raw()`.
+> +        let raw_id =3D unsafe { bindings::i2c_match_id(table.as_ptr(), d=
+ev.as_raw()) };
+> +
+> +        if raw_id.is_null() {
+> +            return None;
+> +        }
+> +
+> +        // SAFETY: `DeviceId` is a `#[repr(transparent)` wrapper of `str=
+uct i2c_device_id` and
+> +        // does not add additional invariants, so it's safe to transmute=
+.
+> +        let id =3D unsafe { &*raw_id.cast::<DeviceId>() };
+> +
+> +        Some(table.info(<DeviceId as RawDeviceIdIndex>::index(id)))
+> +    }
+> +}
+> +
+> +impl<T: Driver + 'static> driver::Adapter for Adapter<T> {
+> +    type IdInfo =3D T::IdInfo;
+> +
+> +    fn of_id_table() -> Option<of::IdTable<Self::IdInfo>> {
+> +        T::OF_ID_TABLE
+> +    }
+> +
+> +    fn acpi_id_table() -> Option<acpi::IdTable<Self::IdInfo>> {
+> +        T::ACPI_ID_TABLE
+> +    }
+> +}
+> +
+> +/// Declares a kernel module that exposes a single i2c driver.
+> +///
+> +/// # Examples
+> +///
+> +/// ```ignore
+> +/// kernel::module_i2c_driver! {
+> +///     type: MyDriver,
+> +///     name: "Module name",
+> +///     authors: ["Author name"],
+> +///     description: "Description",
+> +///     license: "GPL v2",
+> +/// }
+> +/// ```
+> +#[macro_export]
+> +macro_rules! module_i2c_driver {
+> +    ($($f:tt)*) =3D> {
+> +        $crate::module_driver!(<T>, $crate::i2c::Adapter<T>, { $($f)* })=
+;
+> +    };
+> +}
+> +
+> +/// The i2c driver trait.
+> +///
+> +/// Drivers must implement this trait in order to get a i2c driver regis=
+tered.
+> +///
+> +/// # Example
+> +///
+> +///```
+> +/// # use kernel::{acpi, bindings, c_str, device::Core, i2c, of};
+> +///
+> +/// struct MyDriver;
+> +///
+> +/// kernel::acpi_device_table!(
+> +///     ACPI_TABLE,
+> +///     MODULE_ACPI_TABLE,
+> +///     <MyDriver as i2c::Driver>::IdInfo,
+> +///     [
+> +///         (acpi::DeviceId::new(c_str!("LNUXBEEF")), ())
+> +///     ]
+> +/// );
+> +///
+> +/// kernel::i2c_device_table!(
+> +///     I2C_TABLE,
+> +///     MODULE_I2C_TABLE,
+> +///     <MyDriver as i2c::Driver>::IdInfo,
+> +///     [
+> +///          (i2c::DeviceId::new(c_str!("rust_driver_i2c")), ())
+> +///     ]
+> +/// );
+> +///
+> +/// kernel::of_device_table!(
+> +///     OF_TABLE,
+> +///     MODULE_OF_TABLE,
+> +///     <MyDriver as i2c::Driver>::IdInfo,
+> +///     [
+> +///         (of::DeviceId::new(c_str!("test,device")), ())
+> +///     ]
+> +/// );
+> +///
+> +/// impl i2c::Driver for MyDriver {
+> +///     type IdInfo =3D ();
+> +///     const I2C_ID_TABLE: Option<i2c::IdTable<Self::IdInfo>> =3D Some(=
+&I2C_TABLE);
+> +///     const OF_ID_TABLE: Option<of::IdTable<Self::IdInfo>> =3D Some(&O=
+F_TABLE);
+> +///     const ACPI_ID_TABLE: Option<acpi::IdTable<Self::IdInfo>> =3D Som=
+e(&ACPI_TABLE);
+> +///
+> +///     fn probe(
+> +///         _idev: &i2c::I2cClient<Core>,
+> +///         _id_info: Option<&Self::IdInfo>,
+> +///     ) -> impl PinInit<Self, Error> {
+> +///         Err(ENODEV)
+> +///     }
+> +///
+> +///     fn shutdown(_idev: &i2c::I2cClient<Core>, this: Pin<&Self>) {
+> +///     }
+> +/// }
+> +///```
+> +pub trait Driver: Send {
+> +    /// The type holding information about each device id supported by t=
+he driver.
+> +    // TODO: Use `associated_type_defaults` once stabilized:
+> +    //
+> +    // ```
+> +    // type IdInfo: 'static =3D ();
+> +    // ```
+> +    type IdInfo: 'static;
+> +
+> +    /// The table of device ids supported by the driver.
+> +    const I2C_ID_TABLE: Option<IdTable<Self::IdInfo>> =3D None;
+> +
+> +    /// The table of OF device ids supported by the driver.
+> +    const OF_ID_TABLE: Option<of::IdTable<Self::IdInfo>> =3D None;
+> +
+> +    /// The table of ACPI device ids supported by the driver.
+> +    const ACPI_ID_TABLE: Option<acpi::IdTable<Self::IdInfo>> =3D None;
+> +
+> +    /// I2C driver probe.
+> +    ///
+> +    /// Called when a new i2c client is added or discovered.
+> +    /// Implementers should attempt to initialize the client here.
+> +    fn probe(
+> +        dev: &I2cClient<device::Core>,
+> +        id_info: Option<&Self::IdInfo>,
+> +    ) -> impl PinInit<Self, Error>;
+> +
+> +    /// I2C driver shutdown.
+> +    ///
+> +    /// Called by the kernel during system reboot or power-off to allow =
+the [`Driver`] to bring the
+> +    /// [`Device`] into a safe state. Implementing this callback is opti=
+onal.
+> +    ///
+> +    /// Typical actions include stopping transfers, disabling interrupts=
+, or resetting the hardware
+> +    /// to prevent undesired behavior during shutdown.
+> +    ///
+> +    /// This callback is distinct from final resource cleanup, as the dr=
+iver instance remains valid
+> +    /// after it returns. Any deallocation or teardown of driver-owned r=
+esources should instead be
+> +    /// handled in `Self::drop`.
+> +    fn shutdown(dev: &I2cClient<device::Core>, this: Pin<&Self>) {
+> +        let _ =3D (dev, this);
+> +    }
+> +
+> +    /// I2C driver unbind.
+> +    ///
+> +    /// Called when a [`Device`] is unbound from its bound [`Driver`]. I=
+mplementing this callback
+> +    /// is optional.
+> +    ///
+> +    /// This callback serves as a place for drivers to perform teardown =
+operations that require a
+> +    /// `&Device<Core>` or `&Device<Bound>` reference. For instance, dri=
+vers may try to perform I/O
+> +    /// operations to gracefully tear down the device.
+> +    ///
+> +    /// Otherwise, release operations for driver resources should be per=
+formed in `Self::drop`.
+> +    fn unbind(dev: &I2cClient<device::Core>, this: Pin<&Self>) {
+> +        let _ =3D (dev, this);
+> +    }
+> +}
+> +
+> +/// The i2c client representation.
+> +///
+> +/// This structure represents the Rust abstraction for a C `struct i2c_c=
+lient`. The
+> +/// implementation abstracts the usage of an existing C `struct i2c_clie=
+nt` that
+> +/// gets passed from the C side
+> +///
+> +/// # Invariants
+> +///
+> +/// A [`I2cClient`] instance represents a valid `struct i2c_client` crea=
+ted by the C portion of
+> +/// the kernel.
+> +#[repr(transparent)]
+> +pub struct I2cClient<Ctx: device::DeviceContext =3D device::Normal>(
+> +    Opaque<bindings::i2c_client>,
+> +    PhantomData<Ctx>,
+> +);
+> +
+> +impl<Ctx: device::DeviceContext> I2cClient<Ctx> {
+> +    fn as_raw(&self) -> *mut bindings::i2c_client {
+> +        self.0.get()
+> +    }
+> +}
+> +
+> +// SAFETY: `I2cClient` is a transparent wrapper of a type that doesn't d=
+epend on
+> +// `I2cClient`'s generic argument.
+> +kernel::impl_device_context_deref!(unsafe { I2cClient });
+> +kernel::impl_device_context_into_aref!(I2cClient);
+> +
+> +// SAFETY: Instances of `I2cClient` are always reference-counted.
+> +unsafe impl AlwaysRefCounted for I2cClient {
+> +    fn inc_ref(&self) {
+> +        // SAFETY: The existence of a shared reference guarantees that t=
+he refcount is non-zero.
+> +        unsafe { bindings::get_device(self.as_ref().as_raw()) };
+> +    }
+> +
+> +    unsafe fn dec_ref(obj: NonNull<Self>) {
+> +        // SAFETY: The safety requirements guarantee that the refcount i=
+s non-zero.
+> +        unsafe { bindings::put_device(&raw mut (*obj.as_ref().as_raw()).=
+dev) }
+> +    }
+> +}
+> +
+> +impl<Ctx: device::DeviceContext> AsRef<device::Device<Ctx>> for I2cClien=
+t<Ctx> {
+> +    fn as_ref(&self) -> &device::Device<Ctx> {
+> +        let raw =3D self.as_raw();
+> +        // SAFETY: By the type invariant of `Self`, `self.as_raw()` is a=
+ pointer to a valid
+> +        // `struct i2c_client`.
+> +        let dev =3D unsafe { &raw mut (*raw).dev };
+> +
+> +        // SAFETY: `dev` points to a valid `struct device`.
+> +        unsafe { device::Device::from_raw(dev) }
+> +    }
+> +}
+> +
+> +impl<Ctx: device::DeviceContext> TryFrom<&device::Device<Ctx>> for &I2cC=
+lient<Ctx> {
+> +    type Error =3D kernel::error::Error;
+> +
+> +    fn try_from(dev: &device::Device<Ctx>) -> Result<Self, Self::Error> =
+{
+> +        // SAFETY: By the type invariant of `Device`, `dev.as_raw()` is =
+a valid pointer to a
+> +        // `struct device`.
+> +        if unsafe { bindings::i2c_verify_client(dev.as_raw()).is_null() =
+} {
+> +            return Err(EINVAL);
+> +        }
+> +
+> +        // SAFETY: We've just verified that the type of `dev` equals to
+> +        // `bindings::i2c_client_type`, hence `dev` must be embedded in =
+a valid
+> +        // `struct i2c_client` as guaranteed by the corresponding C code=
+.
+> +        let idev =3D unsafe { container_of!(dev.as_raw(), bindings::i2c_=
+client, dev) };
+> +
+> +        // SAFETY: `idev` is a valid pointer to a `struct i2c_client`.
+> +        Ok(unsafe { &*idev.cast() })
+> +    }
+> +}
+> +
+> +// SAFETY: A `I2cClient` is always reference-counted and can be released=
+ from any thread.
+> +unsafe impl Send for I2cClient {}
+> +
+> +// SAFETY: `I2cClient` can be shared among threads because all methods o=
+f `I2cClient`
+> +// (i.e. `I2cClient<Normal>) are thread safe.
+> +unsafe impl Sync for I2cClient {}
+> diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+> index 3dd7bebe7888..8c0070a8029e 100644
+> --- a/rust/kernel/lib.rs
+> +++ b/rust/kernel/lib.rs
+> @@ -94,6 +94,8 @@
+>  pub mod firmware;
+>  pub mod fmt;
+>  pub mod fs;
+> +#[cfg(CONFIG_I2C =3D "y")]
+> +pub mod i2c;
+>  pub mod id_pool;
+>  pub mod init;
+>  pub mod io;
 
