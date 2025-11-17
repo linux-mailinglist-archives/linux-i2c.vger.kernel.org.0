@@ -1,316 +1,417 @@
-Return-Path: <linux-i2c+bounces-14111-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14112-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 140D0C63102
-	for <lists+linux-i2c@lfdr.de>; Mon, 17 Nov 2025 10:11:56 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7445C6361A
+	for <lists+linux-i2c@lfdr.de>; Mon, 17 Nov 2025 10:59:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 0A40134FAE2
-	for <lists+linux-i2c@lfdr.de>; Mon, 17 Nov 2025 09:07:34 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 6514034559B
+	for <lists+linux-i2c@lfdr.de>; Mon, 17 Nov 2025 09:52:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67463329372;
-	Mon, 17 Nov 2025 09:05:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6268D324B27;
+	Mon, 17 Nov 2025 09:52:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bMO6U8Jb"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="fXeRjMhj"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from CY7PR03CU001.outbound.protection.outlook.com (mail-westcentralusazon11010058.outbound.protection.outlook.com [40.93.198.58])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33656328B42
-	for <linux-i2c@vger.kernel.org>; Mon, 17 Nov 2025 09:05:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763370347; cv=none; b=XowZ3H4RkmJjd+SWbtoCEB7QG31Fejov2RubvlDSoKbtwGBNmxkpurgCzVotzJJko48HoE0W9TMp6AtEhuGna4lS4sLWuEpLX94EUrAp4u0P1XTrKq2KIstkglEIpCx4F+tS+6KPzNl1L93hQ6/2m6Nk8Z8DpgXkW5YFX6RhU7s=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763370347; c=relaxed/simple;
-	bh=Pi8rg8aDh1DzKC60rhi2IjK0Atc4BXPx6hzEn3Z2p8o=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=cOv0aC2Jk0uYq33Y+/wvzKN6OCxb0qMXYiJh/vr9mqSusdXr592YoMZQFZKOaO1uQyAoav9T4Kp3CpaqqxfRjvIVm5ol2nxczWpEHDYQJxWDZP5fI+359Nn4HjdmCe/NCaLr9THE5CpuIwtIwzQBS20kLFfK72q7OCSwPsG9PRs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bMO6U8Jb; arc=none smtp.client-ip=209.85.208.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-37a3340391cso33450081fa.3
-        for <linux-i2c@vger.kernel.org>; Mon, 17 Nov 2025 01:05:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763370343; x=1763975143; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IqroyQdOYaFGXyI0EFoglrlTY6uLJckjii9oPbBz5cs=;
-        b=bMO6U8JbRi7P8ayyWlCgqveHBls8aEM5yiNUTmREfNwMyFeDDXk3CSJxm6A6oHyQn9
-         VOQlrPfprU1NnjqzJAfcGM1Tx2J9W7W3igHjo6o6sPz53UxHYnNHQGhFpmxwKXkPwTBB
-         O/95gsdbe/Qr1T/bPddp80hYXRH0FpUAP5D0sKvwcmBFEn6NrPw6JbriVIs5Tz5vy1BQ
-         /y5aJ5bqCbZM2ZWIXqyccuxu7oLy9fzGG3F2UDyVtAJvTHURbGUSoYKwLrHF2Rf3O2+m
-         7StNPjSYhrw9w/a9MzIVx8CNWyKtXnfzEbWVAF9cujJz+gaEClOkoNWcIu+eEZDGySRI
-         T6Ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763370343; x=1763975143;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=IqroyQdOYaFGXyI0EFoglrlTY6uLJckjii9oPbBz5cs=;
-        b=X8WFkngxmIju2j3uwc5Pg11LO6iGGuc8eH31UgQh0J2B2dhrhkaE3Q+Mvx6TWFu0m7
-         wMPWjY2CfFLwfBAiEd1VIgCWPakHIrh1BZ60xFbBNOXhNsVFACm1D/W9rgrMMp1cCcsf
-         ZAn3qMrdmf3XYN4S9h2mY5R5XyDj2MUgLOwUfvoWRCRn1ngjlgtNlaVMme2pn89cARld
-         EdYStfBRa9mQf6fr0/eKPd3TDHAV4pw92av/tDmJQgmJBoxE64O3iTnf6A+isx/mOwjl
-         DALNUaOr3QK8CHAn1B8aHvKkkoh0z/i2W/CquxoF6DdFn90/FGnvLePiSxXqrmaJUs8P
-         xbDg==
-X-Gm-Message-State: AOJu0YzTg4AcUvPuAoez+rzutFtgUoob6+MJ/6a+lWMC0+b/auVH6y5c
-	xXbG6tw6Fo9cf61dDhvKq5G0A5t4xuY00UqE83MkydeNiOeFgRwp39o1
-X-Gm-Gg: ASbGncumhC/VV7OXn2Xd6J2znujfbcZ/Fu8huXYU+/y+Wb/3PlSBhEFJg7IuWlvCyp9
-	kE8UKKdpMhmiZGjnOKiiacW7tZs1efZhomsrZm1XsYej1M9+HBry2bnBUkcEiGQ6lPUqu9srjMo
-	HNEx36sLgWhxF3kqjvNIh3zw6cApzbkgeD8kkI/2CT04XO2mQt/cM3/dXwK+E7oouL7LDtsiFSs
-	UlHJCgLJvMbs7oG4hlO8rxGtS2dhij5v+9zpH+8rxdltBg+1bmV2eHFm1wPE7BH2Z1y5THturRw
-	64bRLXaeqtQVyVQaW78OT6nrKul4oLsJ1x1Pxk/Erz6dvCWtfz3bD5kk28mL/wb5hNAkKJEG02T
-	lImcLCMSMmORHfmdmqsMIsV7jRsZv13XN75l7wcW4lBXyEd3M94bch6uhRL9aLQACCqag2bA7hc
-	NasqQQYjWu8cczglmGno7kahMh0dcD5pcQeqA3sP8Rkb4WqA==
-X-Google-Smtp-Source: AGHT+IH1QlOEMHn/T48dJG9KlH+9zufr1/cuKa9qEA/HpIN2fSwsKbCmNjV+s1Ae9oWDFiNXgn3XjQ==
-X-Received: by 2002:a05:6512:3054:b0:595:7fed:aae9 with SMTP id 2adb3069b0e04-595841ee9d7mr3951060e87.12.1763370343041;
-        Mon, 17 Nov 2025 01:05:43 -0800 (PST)
-Received: from [192.168.1.168] (83-233-6-197.cust.bredband2.com. [83.233.6.197])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-59580405693sm3023727e87.76.2025.11.17.01.05.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Nov 2025 01:05:42 -0800 (PST)
-From: Marcus Folkesson <marcus.folkesson@gmail.com>
-Date: Mon, 17 Nov 2025 10:05:02 +0100
-Subject: [PATCH RESEND v3 5/5] docs: i2c: i2c-topology: add section about
- bus speed
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C81C18A6CF;
+	Mon, 17 Nov 2025 09:52:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.198.58
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1763373128; cv=fail; b=CVPBRWKJerFGfrWKwvfXjHceKxoqcCcmHUT/ftx91IiU34zL8vOlw4Dw/YDZSB5iSBABH28YDM/VjORdSAVHbYswnoL9eivJ6TjAPskvSn6B4Lbsr2Pdth/dSSARlzo0fstCnORA/joI+ArSyGxTD9/4kwGj+F8q9e9ECNlVnus=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1763373128; c=relaxed/simple;
+	bh=+v8DPjav81VzxuhhThF26lLQp39DZNdsqmbKtaCubak=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=BGxExfywYGdRAalCo76uQ4EEJuzRedJCSs7OEBkhPLhAyGMroS8oYgWOUZ/6+4i33+xB+JeDeJKCQSC+bN3mCbLUUMasLDuewrbTV9YCXxi4Tr5nay6YcofnFNkrVZ1J/7nIESiavSSKTUIXeKUDB3J+z0tU/8WMcl1IcqT1mGI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=fXeRjMhj; arc=fail smtp.client-ip=40.93.198.58
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=jfpvh5/dtc1Yn5pkLNzp2FAbTA0NpdZorPjXKgZu8/8XlrKF1qRdP47EkHQ8QpSqzM9XHN89extBo8kVH6iaZ+mrGTZTpi2kNXtVDmIxzKixtN3nkKAdjQu9f6+0QTkPcLZ6NNLLk5gDpgVHW7TFbyxGNKFJ2ZWCFW2hlpMYZdGnwt0cinnnNKdTkccwfYDf2hpOsSnlrp9JnGbwL+jF7zloaFX6RWwQfrDPQbOjbSRqzVt0fAiqZ2zLTPsByc/c5OXiIMpXe01q14CJgl4m3VJycAIjaqR905DuNp21gHq7HjWTfRbZgm/BQt4qoOyc2a+2RB5MCEQ+/YPJ+Q/shA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mwAEztolJugii23ZwV1u/ZOkwCdBeCZn+4egJwAqknA=;
+ b=owO3+DofOEWJZNMDAS8SERNdEBYw4bffA16FD131oPNk4uUhaGz4Cyj+t3S0XgxTKcsUBrlxA2A+/0vT+CqazsSztq2arogwp9AnFoC2OxjSI7QeuAlls+CjOOo2RIP0fKXpEw2G7TVsCCGaWjZ+PhKJVIeSffrqwAyvRtQ9oJTAo+9JV4cwqheejTja3Jnlvfj6CPdSOlpBbvhKhMYRMsm1bXrD5Kyh1/GG6rtW1IUAqzfM/95WdPfotgjutprFuqeG8JtfJ3hLMvBUD27+jhZXYkHkGjdoJ4f99boeeqaZeutM6zfBAuIjfESh5DMLpe1b+Mbnzrery2izHExxKQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mwAEztolJugii23ZwV1u/ZOkwCdBeCZn+4egJwAqknA=;
+ b=fXeRjMhjZgRbT6SM1MzxxQWSX0xKCoV+KKC1qDp/c+L0EhW+m90CA5k4EG3f0tY5i9SWeBtNEYUJ25qqpQ5YMMuaBQnlB9LZrC3WD+GnyYCJR3KJRBAwx6Eu1wDKC2/h3Swi68pLhVbvOcMpOmjItnWY67irlMINn5+1mTZkZWq/DOH46NhAY3t6dRTsBTQoqxS4maB4YsbHO3CnmHwsfRPQHrwrShT9BjciKcfdqAY0cy35yhAXqyWtdp/i5aFD9Zf8gIDi5Mv66LmwIWpKNoL54kdzGOnSr41Dx+d2kKmOTeq26ZZaBzvzhuPqva29V2nIHfywYOg8LK4uG0F3kA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from SJ2PR12MB8784.namprd12.prod.outlook.com (2603:10b6:a03:4d0::11)
+ by CH3PR12MB8546.namprd12.prod.outlook.com (2603:10b6:610:15f::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9320.17; Mon, 17 Nov
+ 2025 09:52:02 +0000
+Received: from SJ2PR12MB8784.namprd12.prod.outlook.com
+ ([fe80::1660:3173:eef6:6cd9]) by SJ2PR12MB8784.namprd12.prod.outlook.com
+ ([fe80::1660:3173:eef6:6cd9%4]) with mapi id 15.20.9320.021; Mon, 17 Nov 2025
+ 09:52:01 +0000
+Message-ID: <e901986b-572c-427d-9141-dafd14db4fad@nvidia.com>
+Date: Mon, 17 Nov 2025 09:51:55 +0000
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v12 2/6] i2c: tegra: Use separate variables for fast and
+ fastplus
+To: Akhil R <akhilrajeev@nvidia.com>, andi.shyti@kernel.org,
+ digetx@gmail.com, linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-tegra@vger.kernel.org, thierry.reding@gmail.com,
+ wsa+renesas@sang-engineering.com, wsa@kernel.org
+Cc: kkartik@nvidia.com, ldewangan@nvidia.com, smangipudi@nvidia.com
+References: <20251115042632.69708-1-akhilrajeev@nvidia.com>
+ <20251115042632.69708-3-akhilrajeev@nvidia.com>
+From: Jon Hunter <jonathanh@nvidia.com>
+Content-Language: en-US
+In-Reply-To: <20251115042632.69708-3-akhilrajeev@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO2P265CA0191.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:a::35) To SJ2PR12MB8784.namprd12.prod.outlook.com
+ (2603:10b6:a03:4d0::11)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251117-i2c-mux-v3-5-696c83e3505a@gmail.com>
-References: <20251117-i2c-mux-v3-0-696c83e3505a@gmail.com>
-In-Reply-To: <20251117-i2c-mux-v3-0-696c83e3505a@gmail.com>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
- Peter Rosin <peda@axentia.se>, 
- Michael Hennerich <michael.hennerich@analog.com>, 
- Bartosz Golaszewski <brgl@bgdev.pl>, Andi Shyti <andi.shyti@kernel.org>
-Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, 
- Marcus Folkesson <marcus.folkesson@gmail.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=8159;
- i=marcus.folkesson@gmail.com; h=from:subject:message-id;
- bh=Pi8rg8aDh1DzKC60rhi2IjK0Atc4BXPx6hzEn3Z2p8o=;
- b=owEBbQKS/ZANAwAKAYiATm9ZXVIyAcsmYgBpGuVYDNc2zbHJruLUp5iqBcRmx68oP2FwF21ZE
- olHkhj6ysaJAjMEAAEKAB0WIQQFUaLotmy1TWTBLGWIgE5vWV1SMgUCaRrlWAAKCRCIgE5vWV1S
- MnsMD/0dDrtOrZWY7f8n04gRG4qqZeolpcQCyrxdYCd88B8QfjW9T/eFOOEXL0dfOqGs6aTOZT4
- jEda0NvWG7OrdEvfHINxqTlEF8qAhrSrIInMMIphrfF45xdJYYXeaT11R7U4AXjvpuM2glCETAU
- FalnstcWYv2UypkNkJwqaQyB4Vu4PRbD+UiJAKDW+wkWnM26PJ8D0yDLzq58c00RSm2R7ARVWp4
- Nwr0wzUlw2x//y0JzCjF52yI5o6iPiAPMaa7XATtmZz5jR9mJaUQ2hZNtIWXZ2ZCtTjlFVfZEfB
- 8HnnNi9qcZQm/usFqpgqgPywZyv6ClTFdiIW7FJJN6AdrpCOCm0kd5XfP9EC2Lkl2SGuAE0xfFo
- ThOizwU/S2lyQAPwSbdGFe2jrFohMUGwYf7lm08+jcc6wss4bRftPo1z5QbQAZoj0XEvIgTuTzo
- eb8UzVvIvJnPKWbo/1fTBF9VRSKMmWXHGsebm7Bm9WlED0Mfr5kVpRkDxKrL0twE33laabWsd/o
- O9ndpIq0JaxThshPaks6j5GixcvwmCJ6k/pfgKGCmqbiqlhrqbu1F5L8LA/lPQrqoZIZrw82irR
- /CkFgCmM3HN2CjGISZxTf5vn+uHSnlzxl42YGECS50F3tfywiZ68gXtsE/NaXcER3ybXx+mVaAV
- GvVa6kF1eJabsew==
-X-Developer-Key: i=marcus.folkesson@gmail.com; a=openpgp;
- fpr=AB91D46C7E0F6E6FB2AB640EC0FE25D598F6C127
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ2PR12MB8784:EE_|CH3PR12MB8546:EE_
+X-MS-Office365-Filtering-Correlation-Id: 104b04be-3ab9-404f-8eea-08de25bef492
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|10070799003|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?YVRWSEZIN1FxbCtMTENjQTJ1eDRDOUp2UzY0MjNBKzRLc0ZTQUY5UVNrYSts?=
+ =?utf-8?B?OFNrYjBGMVhQMHNnVzdSbDZmYlJYbUVXYkg0ajY5ci95RmZMajlLSmx0YlRx?=
+ =?utf-8?B?YkhXY3RvaHBDbUdZVnVvYmVOVCtLN1Z1UDRMem5lRytsWjI0OTJzMlBVUFcr?=
+ =?utf-8?B?dzhQL3JHR2tFN05GUVFORVI2clhIbXFFTzZEK2JINzg3K2xHcmxRSlE3dzJm?=
+ =?utf-8?B?TDUrTzdoS2phZzF6NXE0M092bHFsV2lRWTZWdCt3VmhoemVJR01NdXZuMGRG?=
+ =?utf-8?B?VDFYTlZNaDRjQVI1cWRmR1lJenRZRElCUEtUdWs4VkF2WkVNdW0yR0hOdVhG?=
+ =?utf-8?B?T2ZmN0NITUJXM1lMZXRyekNMQjlSQlcrQngzdFZpK2RLQXdnaW1CSEQwWXVD?=
+ =?utf-8?B?eFNYWnNoSUVySTdxdlRrSEV2YmJQVDBlTXZhSGRzQjgvMDNsMmJ6K05BSmQ4?=
+ =?utf-8?B?TFR0RGVlLzcwdFRGbWVGRGR4MXc5RVlZN3A5SnliSlJsK3ZTMWt0UVBLSUNI?=
+ =?utf-8?B?UmxmSEpYeXQvZGFuZUZ5NkVxZE5kU0Yrb2Zjd1RqNmdCbnp2eDJKRW54SGJZ?=
+ =?utf-8?B?dE5BUHJWZDFFNHAzUGJtbklFcm9hZkIxZDJKRWVxb3dzM1lzVUxQUVVNTzk1?=
+ =?utf-8?B?OWdnMDNYYm9uN2FtcTRqbVpUaGU1ZTlWRTE1Q2xrTVUrdlNXU2FnM3F4Vk5k?=
+ =?utf-8?B?U3ZPcUtnMVZnSWdlQld2dVEweFNxT3JGaUhVWUlYZVFkRksxWWxKZXJ6N1VD?=
+ =?utf-8?B?NVMrSEdEdXp4bFZESE1WaGwwY0N5ZTNLT0hoVGY3SVJRWWhnU0Uwenc1S25q?=
+ =?utf-8?B?cExvaFRFYXNMNlNjN0JXWUhueWFLVmZHM1MyN25iYjNkcGhNc1VucGlhb3J5?=
+ =?utf-8?B?cVNHenZZWDdrTE5NMElqYVBTd0pWWGNnMFJkWXo3N2JNMDhYWE9WR0E5QTk0?=
+ =?utf-8?B?cTVTSkZVc2laM3hQM1krWnZ6Q2xiRGNhUElQMVVCWDdTdmk3ajNNYk05WVlK?=
+ =?utf-8?B?SElxTFprSU04UXk1RWVNSFpVbzh1a2dQaGQ4Q0haNFQ0NDhhZWRCeUJCbE50?=
+ =?utf-8?B?ZEVIaHhzSFluM3NncHRFN3dxRjlCK3NBZndqQUl6ajNhNmlQbzJWT01BUm5J?=
+ =?utf-8?B?dmpUTXZBS1doQ05OYmNmeVhjdWhmRVpkS2FvbHltMy9IWHp5QXdtU3MzTG56?=
+ =?utf-8?B?Rm9VZTdqVHlsWDdSVEdMaUVCVlM5Ymc0cGJrVVRoeW1yNnlKS0R0M2kybTds?=
+ =?utf-8?B?Tll6RnhBdG9sRHpPTEQwYURBK2h3RVplN1VrVmxTb1RneS9VNW41OG9nNEE3?=
+ =?utf-8?B?Nkx6d3RONmM5OFZBQmdVSGNBdHBtNGRyblJBUkdtM1NzbG84VUdCSDJINkI5?=
+ =?utf-8?B?b243V25oRkF0OGYzSG5yNGdsMGxtZVFiUjRPR0VYL09GQVpyNENVNFJnR3pt?=
+ =?utf-8?B?M05YRGY3WEZZZEdkTVRwenR1ekYxclprbDMvbXc4NGNiLzNKTEhVZGN6LzFX?=
+ =?utf-8?B?MWM5MnpOS2JGZUpHdy9ZVnQ2YWx1VXFqWFlQd3orZ3VOeitvaytaZlZXQjRh?=
+ =?utf-8?B?NXo3QnI2cTdtT1NIMy9FdFVJdWlnMjFncklTQS9IZEV4aEg3REFQNE1sTDRs?=
+ =?utf-8?B?L01HbXV6YVEyMm9aTTJIYU9DV2hUNklObHlVYXB3b1hRbFozQVRnWG1rd1I3?=
+ =?utf-8?B?Q2NZUXd5dUg4dGtiSlY1bDhxVXFGM2llRmJPVzFkNzdLRVZDRlRyTEtteUtt?=
+ =?utf-8?B?bFFweVBud3BxdVJ3RXhtVDlsLzUraVBzTzFKOWYwdTF2VWg4M0R6bUZwc3Rv?=
+ =?utf-8?B?Rlcza1UyNEFWK2hES3ZGUnFGSGpBaWZiUk5pOUV0T1pBaDFlRGZqWk9Oeisw?=
+ =?utf-8?B?K2tVaE1DY0pDbEcrU3BZNE1CSS9LZmlrcTdHWWJjT29DMElvZlNVZkl1Y3pZ?=
+ =?utf-8?Q?ed8Ft8vP7LYjOSolsqsdzoLFn3U2t5yR?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR12MB8784.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(10070799003)(376014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?bFU0RmY2aW1YSE1EVFhQSnF5anc1TXVyRm9Vbk84bWtXcGtlOXE5Q2dUNVZr?=
+ =?utf-8?B?ejVzRlhUUC9ydkJJNUZDY1Ivd01EVklXVGtRcUYwS2NUNjZNNU1TOU4xalc4?=
+ =?utf-8?B?bTFRMkdpTGd6aWFGN2tWbmhZQUlocVdIeU1KaHlRY3NlM3AwNEh0dmhLTFM2?=
+ =?utf-8?B?Rm5ldlFMd2V3Smd5UHpSckkzaHZIZ0JETC9RZC9lQ3ZzNzRocTUwMTdrZGpC?=
+ =?utf-8?B?MnBpdHoxL1dJUVczZTJFRWVyWlo4elVzOXFLZ2toOXo1cHNoNlhkZndpOGZi?=
+ =?utf-8?B?d3JxNHQzUHIxMU80eUlhejBXcWM2WEVHR3Y3TWZoTkt0Q1JmYlRsb1ZiSHc4?=
+ =?utf-8?B?a3JyZU5lRkV4Z3NpdDc4UGQ0Wk9TZ1E4U25XK0d3MC9aQjBNSnJ2aE1sRlM1?=
+ =?utf-8?B?SE4zcGdnOFZlOUJGUHdybXd0aHFYN1FCbGx6K2dMU1hwNDFwaXhlUDI3Tlg1?=
+ =?utf-8?B?RjQ2Mnpoa1VvY091MnIwcU5xeEQ2ZzBPdWc0cW9UQ04rNlJvSUEyK2NOOHVK?=
+ =?utf-8?B?RFdYVEdQbXRnKzdKN3BqSGxDYWdqcndHVTZ6eDA3bGlFbEFNWlVrK1krSUY1?=
+ =?utf-8?B?bmRDdEZDTXNMVy9vdFNxbm8yS3JxWnFCa1MwVEI3ZW9xWU1tek53ejhURHAx?=
+ =?utf-8?B?NXJ6NFFYREx5M3d1SEFFY3o5MUxkODZwZFNtQWxSYTFyVmM0SC9MMksyZkdk?=
+ =?utf-8?B?YW1zcStyUTZSSWZQWDdDc2dSendpcUpIQThjbEdzNWFMKzBYb2xZcXZOanBL?=
+ =?utf-8?B?UDRNMkxzb2lxWnNHcENPZEZoY1BhRjZ3STh5YUt1SUJvUllQRkV6Rnpva3BJ?=
+ =?utf-8?B?Z3JldnZFVGV2dGVVYXJkdzB1Wkc1RVRrRkg3VFpoeFdrYmlpaVhZL0JuYjMr?=
+ =?utf-8?B?ZTEyb2ZsYVhSem5abkc2MTh3ZEJYclVXQ3Q1enVjSnpZSjZOM09CcWpWcEJQ?=
+ =?utf-8?B?SlRqSGpIRHRsUmI5MVBqNXR4RDdvVVdnbWNkeG91eFZqcjV3aUxadm11Mi85?=
+ =?utf-8?B?RUx4VjU2ZTF2VmlhNDg5clZNSnJGOGp5NXJVZkxqcFVlS3JMeUlnWm1nM1Rq?=
+ =?utf-8?B?aldQdHhNN2JIbXdsNGJZS2M0cU1aaG9SMXNzYjRmRkZxdVQ0TGgxaHNWWmRp?=
+ =?utf-8?B?Z0NnVzY0SjJqc2l1Y3hJZzBWd0JjLy8vREgrNUZvZzFaT28vdi9SVlVCQjlh?=
+ =?utf-8?B?SG90UVU1VzFzWlJkL1JMcWNPdHJsVmxiTzB3anBkUFZEc3lyN2VSVnJRRTJs?=
+ =?utf-8?B?MFBtdTYrOWFEaEdyeXN5ZGVrUFlpRmJKMXpKWm5uTlk1SVNnUVk2TlZQelg3?=
+ =?utf-8?B?ZmlrZHI2dVBqT0h0eFVxRHB1RTVHR0F1MHc2YjJiRUZtVkloeWNZVGZkVFht?=
+ =?utf-8?B?WTFjMFphR01aUC9NN0JOUEp4UTdCZnZMTTM4WmEvbFFxZ0Q5WUdWVmZhcktS?=
+ =?utf-8?B?MkVNRGUzTXV3a2xDRHBWTkZBeE5CTmJmQWk1blZwZ1cxL0s4QThDbFdwNWdI?=
+ =?utf-8?B?ck1Sci95VGx6S2pJNG5uRXZtV0o1eVVCTFlxODJXMkFqSTQzUTJSZnZUcVlV?=
+ =?utf-8?B?NFZNem8xS2dpZFI4QzZFQ0FBRm5zazFpUG5wTGdGbHlWRTVLZ1FNdWJzWmx6?=
+ =?utf-8?B?UHdkKzhxY29GYTRrSWlVSUhoQ1pXTDAxM1JQUml4QkI4THQvSmZTVlpTNS9n?=
+ =?utf-8?B?S1VYU1UyVHFkeW1qb21ESFhFYUVFT3dYdFdqb1ZvOXpFNDNDNEloTDQ3TkNP?=
+ =?utf-8?B?TWpyS0NCYWN6TGVCZ1N0bWFSQkYrY0JYWXk3b3g3Y2svYjRaSk1HQW1LT3BB?=
+ =?utf-8?B?TXBPWU5IMjVMM2hzdXZLVFh0N1BUNXA1TVE4MHJrMmhTZUtGcXZUVUM5MW04?=
+ =?utf-8?B?WGhzaU9FSm16eExxU3JEendOVlNIbE14Z2xJbkFYa3QwN1JHc1R1T1dYeENh?=
+ =?utf-8?B?YzBiSThRZzAyekk3cmkvSWZwaGxnWWFuQmhrRkY3UEFhdXZ4U294U09EYTc2?=
+ =?utf-8?B?aXVKNDRsMDNnWTVCWGxwWmo3aG5NVlF0SUQ3Y0dhNDRRa2MvdFgrczBYdkM2?=
+ =?utf-8?B?d2tDaTBTY0hJN0oyZmZoWTkwcHptbkduUVNCbVZ5UmV2SzBKS2gyYWRpUVcr?=
+ =?utf-8?B?Wk5wZ2hnV2lVSUhlbnhIV3NCb1RjbTBpV2tEa0hySlg1ZDdtc3lUY0UrSVh4?=
+ =?utf-8?Q?6t+TyBA0/RjLPXBhsfc/W+NIrY3DGttYsvLbnZp8tr9P?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 104b04be-3ab9-404f-8eea-08de25bef492
+X-MS-Exchange-CrossTenant-AuthSource: SJ2PR12MB8784.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Nov 2025 09:52:01.3688
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: rr52USbig3ueZve95Gdr4w1LpqEI90kNdbtfiyxxklTlvEA/TZdmeHLVAxBPzcUwJg31dmYooQ0yOUnCsVskEw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8546
 
-Describe what needs to be consideraed and taken into account
-when using different bus speeds for different mux channels.
 
-Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
----
- Documentation/i2c/i2c-topology.rst | 176 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 176 insertions(+)
 
-diff --git a/Documentation/i2c/i2c-topology.rst b/Documentation/i2c/i2c-topology.rst
-index 48fce0f7491b..2c4a1364ce82 100644
---- a/Documentation/i2c/i2c-topology.rst
-+++ b/Documentation/i2c/i2c-topology.rst
-@@ -367,6 +367,182 @@ When D1 or D2 are accessed, accesses to D3 and D4 are locked out while
- accesses to D5 may interleave. When D3 or D4 are accessed, accesses to
- all other devices are locked out.
- 
-+Bus Speed and I2C Multiplexers
-+================================
-+
-+I2C bus multiplexers allows multiple downstream channels to be exposed
-+as separate I2C adapters which also could set their own bus speed.
-+
-+The multiplexer itself cannot change the bus speed as it use the upstream
-+clock and data lines to communicate with the downstream devices. The speed
-+is therfor changed in the root adapter resulting in that the whole bus is
-+affected.
-+
-+This increases the complexity of the topology and some considerations must
-+be taken into.
-+
-+Bus speed
-+----------
-+
-+Downstream channels of an I2C multiplexer can only operate at the same or
-+lower bus speed as the upstream bus. This is because the upstream bus may
-+have devices that cannot operate at higher speeds and those will be affected
-+by the speed change.
-+
-+The example below illustrates the problem.
-+The root adapter is operating at 100kHz. D2 can only operate with 100kHz,
-+but D2 can operate at 400kHz. When D1 is selected, the bus speed of the
-+root adapter would have to be is set to 400kHz, a speed that D2 may not support.
-+
-+This topology is therefor not allowed: ::
-+
-+                          .----------. 400kHz .--------.
-+        .--------. 100kHz |   mux-   |--------| dev D1 |
-+        |  root  |--+-----|  locked  |        '--------'
-+        '--------'  |     |  mux M1  |
-+                    |     '----------'
-+                    |  .--------.
-+                    '--| dev D2 |
-+                       '--------'
-+
-+
-+This topology is allowed: ::
-+
-+                          .----------. 100kHz .--------.
-+        .--------. 400kHz |   mux-   |--------| dev D2 |
-+        |  root  |--+-----|  locked  |        '--------'
-+        '--------'        |  mux M1  |--. 400kHz .--------.
-+                          '----------'  '--------| dev D1 |
-+                                                 '--------'
-+
-+Preferred topology
-+-------------------
-+
-+The preferred topology when using different bus speeds is to have the multiplexer
-+connected directly to the root adapter without any devices as siblings.
-+By this arrangement, the bus speed can be changed without affecting any other devices
-+and many of the caveats are avoided.
-+
-+Other multiplexers in parallell is still okay as those are locked out during transfers.
-+
-+This is the preferred topology: ::
-+
-+                          .----------. 100kHz .--------.
-+        .--------. 400kHz |   mux-   |--------| dev D2 |
-+        |  root  |--+-----|  locked  |        '--------'
-+        '--------'        |  mux M1  |--. 400kHz .--------.
-+                          '----------'  '--------| dev D1 |
-+                                                 '--------'
-+Locking
-+--------
-+
-+If the multiplexer is mux-locked, transfers to D3 may interleave between the
-+select-transfer-deselect to D1 or D2.
-+This results in a situation where the bus speed to D3 may be lower than it
-+is supposed to be. This is usually not a problem.
-+
-+This topology is allowed but some transfers to D3 may be at 100kHz: ::
-+
-+                          .----------. 100kHz .--------.
-+        .--------. 400kHz |   mux-   |--------| dev D1 |
-+        |  root  |--+-----|  locked  |        '--------'
-+        '--------'  |     |  mux M1  |--. 400kHz .--------.
-+                    |     '----------'  '--------| dev D2 |
-+                    |  .--------.                '--------'
-+                    '--| dev D3 |
-+                       '--------'
-+
-+Multiple muxes in series
-+--------------------------
-+
-+When multiple muxes are used in series the same rules applies.
-+
-+Transfers to D3 may interleave between select-transfer-deselect to D1, which
-+results that the bus speed to D2 or D3 will be at 100KHz.
-+
-+Transfers to D2 may interleave between select-transfer-deselect to D1, which
-+results in that the bus speed to D1 may be at 400kHz as the transfer to D2
-+will set the bus speed to before the transfer to D1 starts.
-+
-+This is probably a bad topology ::
-+
-+                     .----------. 400kHz .----------. 100kHz .--------.
-+    .--------.400kHz |   mux-   |--------|   mux-   |--------| dev D1 |
-+    |  root  |--+----|  locked  | 400kHz |  locked  |        '--------'
-+    '--------'  |    |  mux M1  |--.     |  mux M2  |
-+                |    '----------'  |     '----------'
-+                |  .--------.      |  .--------.
-+                '--| dev D3 |      '--| dev D2 |
-+                   '--------'         '--------'
-+
-+Multiple muxes in parallell
-+----------------------------
-+
-+When multiple muxes are used in parallell all access to other muxes are locked out
-+so this is not a problem.
-+
-+If the muxes are mux-locked, access to D3 may still interleave though.
-+
-+In the example below, D3 may not interleave between select-transfer-deselect for D1
-+or D2 as both muxes are parent-locked: ::
-+
-+
-+                   .----------. 100kHz   .--------.
-+                   |  parent- |----------| dev D1 |
-+                .--|  locked  |          '--------'
-+                |  |  mux M1  |
-+                |  '----------'
-+                |      .----------. 400KHz  .--------.
-+    .--------. 400kHz  |  parent- |---------| dev D2 |
-+    |  root  |--+------|  locked  |         '--------'
-+    '--------'  |      |  mux M2  |
-+                |      '----------'
-+                |  .--------.
-+                '--| dev D3 |
-+                   '--------'
-+
-+Idle state
-+-----------
-+
-+Muxes have an idle state, which is the state the channels is put into when no channel
-+is active. The state is typically one of the following:
-+
-+- All channels are disconnected
-+- The last selected channel is left as-is
-+- A predefined channel is selected
-+
-+Muxes that support an idle state where all channels are disconnected are preferred when using
-+different bus speeds. Otherwise high bus speeds may "leak" through to devices that
-+may not support that higher speed.
-+
-+Consider the following example: ::
-+
-+                          .----------. 100kHz .--------.
-+        .--------. 400kHz |   mux-   |--------| dev D1 |
-+        |  root  |--+-----|  locked  |        '--------'
-+        '--------'  |     |  mux M1  |--. 400kHz .--------.
-+                    |     '----------'  '--------| dev D2 |
-+                    |  .--------.                '--------'
-+                    '--| dev D3 |
-+                       '--------'
-+
-+If the idle state of M1 is:
-+- All channels disconnected: No problem, D1 and D2 are not affected by communication
-+  to D3.
-+- Last selected channel: Problem if D1 was the last selected channel. High speed
-+  communication to D3 will be "leaked" to D1.
-+- Predefined channel: Problem, if the predefined channel D1. Set predefined channel
-+  to D2 as D2 may handle 400kHz.
-+
-+Supported controllers
-+-----------------------
-+
-+Not all I2C controllers support setting the bus speed dynamically.
-+At the time of writint, the following controllers has support:
-+
-+============================   =============================================
-+i2c-davinci                    Supports dynamic bus speed
-+============================   =============================================
- 
- Mux type of existing device drivers
- ===================================
+On 15/11/2025 04:26, Akhil R wrote:
+> The current implementation uses a single value of THIGH, TLOW and setup
+> hold time for both fast and fastplus. But these values can be different
+> for each speed mode and should be using separate variables. Split the
+> variables used for fast and fast plus mode.
+> 
+> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+> ---
+>   drivers/i2c/busses/i2c-tegra.c | 119 ++++++++++++++++++++-------------
+>   1 file changed, 73 insertions(+), 46 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
+> index bd26b232ffb3..c0382c9a0430 100644
+> --- a/drivers/i2c/busses/i2c-tegra.c
+> +++ b/drivers/i2c/busses/i2c-tegra.c
+> @@ -196,12 +196,16 @@ enum msg_end_type {
+>    * @has_apb_dma: Support of APBDMA on corresponding Tegra chip.
+>    * @tlow_std_mode: Low period of the clock in standard mode.
+>    * @thigh_std_mode: High period of the clock in standard mode.
+> - * @tlow_fast_fastplus_mode: Low period of the clock in fast/fast-plus modes.
+> - * @thigh_fast_fastplus_mode: High period of the clock in fast/fast-plus modes.
+> + * @tlow_fast_mode: Low period of the clock in fast mode.
+> + * @thigh_fast_mode: High period of the clock in fast mode.
+> + * @tlow_fastplus_mode: Low period of the clock in fast-plus mode.
+> + * @thigh_fastplus_mode: High period of the clock in fast-plus mode.
+>    * @setup_hold_time_std_mode: Setup and hold time for start and stop conditions
+>    *		in standard mode.
+> - * @setup_hold_time_fast_fast_plus_mode: Setup and hold time for start and stop
+> - *		conditions in fast/fast-plus modes.
+> + * @setup_hold_time_fast_mode: Setup and hold time for start and stop
+> + *		conditions in fast mode.
+> + * @setup_hold_time_fastplus_mode: Setup and hold time for start and stop
+> + *		conditions in fast-plus mode.
+>    * @setup_hold_time_hs_mode: Setup and hold time for start and stop conditions
+>    *		in HS mode.
+>    * @has_interface_timing_reg: Has interface timing register to program the tuned
+> @@ -224,10 +228,13 @@ struct tegra_i2c_hw_feature {
+>   	bool has_apb_dma;
+>   	u32 tlow_std_mode;
+>   	u32 thigh_std_mode;
+> -	u32 tlow_fast_fastplus_mode;
+> -	u32 thigh_fast_fastplus_mode;
+> +	u32 tlow_fast_mode;
+> +	u32 thigh_fast_mode;
+> +	u32 tlow_fastplus_mode;
+> +	u32 thigh_fastplus_mode;
+>   	u32 setup_hold_time_std_mode;
+> -	u32 setup_hold_time_fast_fast_plus_mode;
+> +	u32 setup_hold_time_fast_mode;
+> +	u32 setup_hold_time_fastplus_mode;
+>   	u32 setup_hold_time_hs_mode;
+>   	bool has_interface_timing_reg;
+>   };
+> @@ -677,25 +684,21 @@ static int tegra_i2c_init(struct tegra_i2c_dev *i2c_dev)
+>   	if (IS_VI(i2c_dev))
+>   		tegra_i2c_vi_init(i2c_dev);
+>   
+> -	switch (t->bus_freq_hz) {
+> -	case I2C_MAX_STANDARD_MODE_FREQ + 1 ... I2C_MAX_FAST_MODE_PLUS_FREQ:
+> -	default:
+> -		tlow = i2c_dev->hw->tlow_fast_fastplus_mode;
+> -		thigh = i2c_dev->hw->thigh_fast_fastplus_mode;
+> -		tsu_thd = i2c_dev->hw->setup_hold_time_fast_fast_plus_mode;
+> -
+> -		if (t->bus_freq_hz > I2C_MAX_FAST_MODE_FREQ)
+> -			non_hs_mode = i2c_dev->hw->clk_divisor_fast_plus_mode;
+> -		else
+> -			non_hs_mode = i2c_dev->hw->clk_divisor_fast_mode;
+> -		break;
+> -
+> -	case 0 ... I2C_MAX_STANDARD_MODE_FREQ:
+> +	if (t->bus_freq_hz <= I2C_MAX_STANDARD_MODE_FREQ) {
+>   		tlow = i2c_dev->hw->tlow_std_mode;
+>   		thigh = i2c_dev->hw->thigh_std_mode;
+>   		tsu_thd = i2c_dev->hw->setup_hold_time_std_mode;
+>   		non_hs_mode = i2c_dev->hw->clk_divisor_std_mode;
+> -		break;
+> +	} else if (t->bus_freq_hz <= I2C_MAX_FAST_MODE_FREQ) {
+> +		tlow = i2c_dev->hw->tlow_fast_mode;
+> +		thigh = i2c_dev->hw->thigh_fast_mode;
+> +		tsu_thd = i2c_dev->hw->setup_hold_time_fast_mode;
+> +		non_hs_mode = i2c_dev->hw->clk_divisor_fast_mode;
+> +	} else {
+> +		tlow = i2c_dev->hw->tlow_fastplus_mode;
+> +		thigh = i2c_dev->hw->thigh_fastplus_mode;
+> +		tsu_thd = i2c_dev->hw->setup_hold_time_fastplus_mode;
+> +		non_hs_mode = i2c_dev->hw->clk_divisor_fast_plus_mode;
+>   	}
+>   
+>   	/* make sure clock divisor programmed correctly */
+> @@ -1496,10 +1499,13 @@ static const struct tegra_i2c_hw_feature tegra20_i2c_hw = {
+>   	.has_apb_dma = true,
+>   	.tlow_std_mode = 0x4,
+>   	.thigh_std_mode = 0x2,
+> -	.tlow_fast_fastplus_mode = 0x4,
+> -	.thigh_fast_fastplus_mode = 0x2,
+> +	.tlow_fast_mode = 0x4,
+> +	.thigh_fast_mode = 0x2,
+> +	.tlow_fastplus_mode = 0x4,
+> +	.thigh_fastplus_mode = 0x2,
+>   	.setup_hold_time_std_mode = 0x0,
+> -	.setup_hold_time_fast_fast_plus_mode = 0x0,
+> +	.setup_hold_time_fast_mode = 0x0,
+> +	.setup_hold_time_fastplus_mode = 0x0,
+>   	.setup_hold_time_hs_mode = 0x0,
+>   	.has_interface_timing_reg = false,
+>   };
+> @@ -1521,10 +1527,13 @@ static const struct tegra_i2c_hw_feature tegra30_i2c_hw = {
+>   	.has_apb_dma = true,
+>   	.tlow_std_mode = 0x4,
+>   	.thigh_std_mode = 0x2,
+> -	.tlow_fast_fastplus_mode = 0x4,
+> -	.thigh_fast_fastplus_mode = 0x2,
+> +	.tlow_fast_mode = 0x4,
+> +	.thigh_fast_mode = 0x2,
+> +	.tlow_fastplus_mode = 0x4,
+> +	.thigh_fastplus_mode = 0x2,
+>   	.setup_hold_time_std_mode = 0x0,
+> -	.setup_hold_time_fast_fast_plus_mode = 0x0,
+> +	.setup_hold_time_fast_mode = 0x0,
+> +	.setup_hold_time_fastplus_mode = 0x0,
+>   	.setup_hold_time_hs_mode = 0x0,
+>   	.has_interface_timing_reg = false,
+>   };
+> @@ -1546,10 +1555,13 @@ static const struct tegra_i2c_hw_feature tegra114_i2c_hw = {
+>   	.has_apb_dma = true,
+>   	.tlow_std_mode = 0x4,
+>   	.thigh_std_mode = 0x2,
+> -	.tlow_fast_fastplus_mode = 0x4,
+> -	.thigh_fast_fastplus_mode = 0x2,
+> +	.tlow_fast_mode = 0x4,
+> +	.thigh_fast_mode = 0x2,
+> +	.tlow_fastplus_mode = 0x4,
+> +	.thigh_fastplus_mode = 0x2,
+>   	.setup_hold_time_std_mode = 0x0,
+> -	.setup_hold_time_fast_fast_plus_mode = 0x0,
+> +	.setup_hold_time_fast_mode = 0x0,
+> +	.setup_hold_time_fastplus_mode = 0x0,
+>   	.setup_hold_time_hs_mode = 0x0,
+>   	.has_interface_timing_reg = false,
+>   };
+> @@ -1571,10 +1583,13 @@ static const struct tegra_i2c_hw_feature tegra124_i2c_hw = {
+>   	.has_apb_dma = true,
+>   	.tlow_std_mode = 0x4,
+>   	.thigh_std_mode = 0x2,
+> -	.tlow_fast_fastplus_mode = 0x4,
+> -	.thigh_fast_fastplus_mode = 0x2,
+> +	.tlow_fast_mode = 0x4,
+> +	.thigh_fast_mode = 0x2,
+> +	.tlow_fastplus_mode = 0x4,
+> +	.thigh_fastplus_mode = 0x2,
+>   	.setup_hold_time_std_mode = 0x0,
+> -	.setup_hold_time_fast_fast_plus_mode = 0x0,
+> +	.setup_hold_time_fast_mode = 0x0,
+> +	.setup_hold_time_fastplus_mode = 0x0,
+>   	.setup_hold_time_hs_mode = 0x0,
+>   	.has_interface_timing_reg = true,
+>   };
+> @@ -1596,10 +1611,13 @@ static const struct tegra_i2c_hw_feature tegra210_i2c_hw = {
+>   	.has_apb_dma = true,
+>   	.tlow_std_mode = 0x4,
+>   	.thigh_std_mode = 0x2,
+> -	.tlow_fast_fastplus_mode = 0x4,
+> -	.thigh_fast_fastplus_mode = 0x2,
+> +	.tlow_fast_mode = 0x4,
+> +	.thigh_fast_mode = 0x2,
+> +	.tlow_fastplus_mode = 0x4,
+> +	.thigh_fastplus_mode = 0x2,
+>   	.setup_hold_time_std_mode = 0,
+> -	.setup_hold_time_fast_fast_plus_mode = 0,
+> +	.setup_hold_time_fast_mode = 0,
+> +	.setup_hold_time_fastplus_mode = 0,
+>   	.setup_hold_time_hs_mode = 0,
+>   	.has_interface_timing_reg = true,
+>   };
+> @@ -1621,10 +1639,13 @@ static const struct tegra_i2c_hw_feature tegra186_i2c_hw = {
+>   	.has_apb_dma = false,
+>   	.tlow_std_mode = 0x4,
+>   	.thigh_std_mode = 0x3,
+> -	.tlow_fast_fastplus_mode = 0x4,
+> -	.thigh_fast_fastplus_mode = 0x2,
+> +	.tlow_fast_mode = 0x4,
+> +	.thigh_fast_mode = 0x2,
+> +	.tlow_fastplus_mode = 0x4,
+> +	.thigh_fastplus_mode = 0x2,
+>   	.setup_hold_time_std_mode = 0,
+> -	.setup_hold_time_fast_fast_plus_mode = 0,
+> +	.setup_hold_time_fast_mode = 0,
+> +	.setup_hold_time_fastplus_mode = 0,
+>   	.setup_hold_time_hs_mode = 0,
+>   	.has_interface_timing_reg = true,
+>   };
+> @@ -1646,10 +1667,13 @@ static const struct tegra_i2c_hw_feature tegra194_i2c_hw = {
+>   	.has_apb_dma = false,
+>   	.tlow_std_mode = 0x8,
+>   	.thigh_std_mode = 0x7,
+> -	.tlow_fast_fastplus_mode = 0x2,
+> -	.thigh_fast_fastplus_mode = 0x2,
+> +	.tlow_fast_mode = 0x2,
+> +	.thigh_fast_mode = 0x2,
+> +	.tlow_fastplus_mode = 0x2,
+> +	.thigh_fastplus_mode = 0x2,
+>   	.setup_hold_time_std_mode = 0x08080808,
+> -	.setup_hold_time_fast_fast_plus_mode = 0x02020202,
+> +	.setup_hold_time_fast_mode = 0x02020202,
+> +	.setup_hold_time_fastplus_mode = 0x02020202,
+>   	.setup_hold_time_hs_mode = 0x090909,
+>   	.has_interface_timing_reg = true,
+>   };
+> @@ -1671,10 +1695,13 @@ static const struct tegra_i2c_hw_feature tegra256_i2c_hw = {
+>   	.has_apb_dma = false,
+>   	.tlow_std_mode = 0x8,
+>   	.thigh_std_mode = 0x7,
+> -	.tlow_fast_fastplus_mode = 0x3,
+> -	.thigh_fast_fastplus_mode = 0x3,
+> +	.tlow_fast_mode = 0x3,
+> +	.thigh_fast_mode = 0x3,
+> +	.tlow_fastplus_mode = 0x3,
+> +	.thigh_fastplus_mode = 0x3,
+>   	.setup_hold_time_std_mode = 0x08080808,
+> -	.setup_hold_time_fast_fast_plus_mode = 0x02020202,
+> +	.setup_hold_time_fast_mode = 0x02020202,
+> +	.setup_hold_time_fastplus_mode = 0x02020202,
+>   	.setup_hold_time_hs_mode = 0x090909,
+>   	.has_interface_timing_reg = true,
+>   };
+
+
+Reviewed-by: Jon Hunter <jonathanh@nvidia.com>
+
+Thanks
+Jon
 
 -- 
-2.51.2
+nvpublic
 
 
