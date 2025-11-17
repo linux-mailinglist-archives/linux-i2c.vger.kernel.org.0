@@ -1,107 +1,54 @@
-Return-Path: <linux-i2c+bounces-14098-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14099-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C8F2C61882
-	for <lists+linux-i2c@lfdr.de>; Sun, 16 Nov 2025 17:24:29 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6942C62250
+	for <lists+linux-i2c@lfdr.de>; Mon, 17 Nov 2025 03:51:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id F0009347F4B
-	for <lists+linux-i2c@lfdr.de>; Sun, 16 Nov 2025 16:22:24 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTPS id E2E8D241A9
+	for <lists+linux-i2c@lfdr.de>; Mon, 17 Nov 2025 02:50:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 017E530E0E9;
-	Sun, 16 Nov 2025 16:22:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O3/sAGSG"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D92CA25228D;
+	Mon, 17 Nov 2025 02:50:52 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from TWMBX01.aspeed.com (mail.aspeedtech.com [211.20.114.72])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D11930E824
-	for <linux-i2c@vger.kernel.org>; Sun, 16 Nov 2025 16:22:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B69BA189F20;
+	Mon, 17 Nov 2025 02:50:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.20.114.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763310136; cv=none; b=NcaUcbSL/7miT8zCoyihfFsLVDa9YpOgvUFlgoWiEel1qXI60YYL1pjp58NizqB+nRr6sVM8/Nofg/0JmWdMEePKSHZ1J1K9ttcX47dknVNhbCUwkuRRSNW9m9yDDOlXFZLP+QqMMZlFXaXz/qN758El88+ozAgDBpj+S3aGYZ4=
+	t=1763347852; cv=none; b=unCrxjl3bUT6oGcFYfLXjGFrhUIqnqJHyVZhTn4NkOepM1Y2GP4qsu/Ah1/7weWdaXg9YYfp4XmJT6q4ewGSxWCQsnOv0ENNhr4IeVdZPj1NdS4J16DeDAz6YeDhYl9Rkqeyduxrl5i0zM9fHjc09mQOkDNeSEvPrPuGGK9NyvY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763310136; c=relaxed/simple;
-	bh=ay/kFlt2hyjWWJHcLDxvEmG2/0U+MsyM6pQh6nbnX+o=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=H9YSfMoqWVTKq07d1prkN4QZ1Sys8hjRbyFrTM403yNsiB+IUUDhYS6KQc5iUHro4uzcv1vjYVWconTwOSeDA6AEJWvV1DwLOZ+O8zA3lA1fxoUg1xUNQ+LXYUhoKQARKHyE9bXCbYgpYgDKYuGrM1Owljcuy/n25skkqaXPNss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O3/sAGSG; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-42b3ac40ae4so1963525f8f.0
-        for <linux-i2c@vger.kernel.org>; Sun, 16 Nov 2025 08:22:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763310132; x=1763914932; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hT82M3k+N9m/xVxJSoUUBoXfZ26HFZn2kkhwu/Rn1Dk=;
-        b=O3/sAGSGtHjgkAsEhq/FznOD0MbLb5ZCceRqyf8HPYUj8kMgk5fHgE7pY107FY8vS4
-         rAX3ZvtwDESND+nbcztBpEA4WMdFDGN75LAnK687HxfjJQFK4CIeDfz/5rYSILX7BXSr
-         MVgW+JqKKrDlGfgpleGfCnoF6ZWIUGSUeZGEwzzDX3u32DxPgMtylWzD8TSsXoAQjs2y
-         Fe+8/iFTijx0RGs4sQnmL/5QWoVjR76ki/kyCrpzTeXXwHOBjjiZnEqGfw3oFAzzMlFn
-         b/8x6NH+Qxx7a7luHxtTlkpAhX4VUhu0dG1JKOYvnPlDXhqP2CKUH5ya4gDQNe2GQBiU
-         hR/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763310132; x=1763914932;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=hT82M3k+N9m/xVxJSoUUBoXfZ26HFZn2kkhwu/Rn1Dk=;
-        b=SjmHaxkwudlWEZAqQTnmcqlVA3oE2+JXh2OIMln7BI1TpuNa5pgoQ4XaCKCcj0o+8a
-         S71gqaHE+UPbQiWOGcjC0+D0i7lLojv5xp6nGqzuQDFlYaYqvY/N5R0EoQRVtHPUsZpD
-         Yctjs5PhJfO+u28MjbDJ2cK4IGlF4DtywKCDkw5o8nF0FPomfcNOYvFW65gnXBnWt9fW
-         UpNZdUl8O7zhUudDaYSkMA68QZAMKWV+u8qJWQdFxcRGg929eJdSQhlyp97bOoVDnbOL
-         SruPzxnXMiFGmZY8XbsKN+btssaS74LZj/PI+hFaNWDniAi3nWsGosFsK0pUZ8VYAy5k
-         dIdQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV1/NNa/dDNsB8r+DoDIpJb5ySJl7lOZAWnO3AmEizG8tNQ0h8VMdWelKlzNiLDFjkXpbTn5toisXU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw+qH6PI6hipZvuCbTgKHW4WJoAW6Z6CP1C7fOVPRwG1GOJIbNF
-	ki5gp5LCiA+W42OH6SoLFXOZVoSvx0YoVEnHFP788q/hr8Cby2/gKzkr
-X-Gm-Gg: ASbGncsmiblv0yeqf/zwB1Br665waLEvdFWFRNq5rap3IvZimDgVxixZow5fJl6DoJO
-	qE4WGoC2M2QSe0F7F9GhAGBf1D4ot9hnH+Ses5QUtxlouemEmiYj9XwovEMelmh4XixQBDk9Uh9
-	owWFuDsXEQoGfSqz59IIjDxU8WI/uAtb/pT9k4hNoPXlDZ3TdvfiD3XZg2XuaRgKhJMPcEiAESG
-	gXVGMBWkbxE+IwJTD0R0gvTd2iE+Cu2EHRLeAf5eCQvy8NEbNrqR7HrX0bR/t+R3K5cywbJvhDL
-	87drUcjMul3zl7Yqz2d0252FTCmzMSHxhAJMRTanFYFgu1Q3JpmuaYul2UunCoL3VLEJyjDwaL7
-	nxc3ZYmf5Gxhs0F+Yrxkz9STA5X2Nc918CWthvIQ3Tu0z0I+zbWHk3d0JCFHiOwvwp5crcq91BH
-	8iif/kwxIS7YCpkhU=
-X-Google-Smtp-Source: AGHT+IG1CU+chF+Dmwtlb+tkH6qNZDcuWAHz+1IuGrX6SBCEIbWbJOD3ZVK4miRXaTzFm0efYX3CMg==
-X-Received: by 2002:a05:6000:1a8d:b0:429:dde3:659d with SMTP id ffacd0b85a97d-42b59388831mr8674544f8f.47.1763310132195;
-        Sun, 16 Nov 2025 08:22:12 -0800 (PST)
-Received: from Vasilio.Home ([176.26.203.25])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42b53f0b617sm21344772f8f.31.2025.11.16.08.22.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Nov 2025 08:22:11 -0800 (PST)
-From: Igor Korotin <igor.korotin.linux@gmail.com>
-To: Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: Boqun Feng <boqun.feng@gmail.com>,
-	Gary Guo <gary@garyguo.net>,
-	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Asahi Lina <lina+kernel@asahilina.net>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	Alex Hung <alex.hung@amd.com>,
-	Tamir Duberstein <tamird@gmail.com>,
-	Xiangfei Ding <dingxiangfei2009@gmail.com>,
-	linux-kernel@vger.kernel.org,
-	rust-for-linux@vger.kernel.org,
-	linux-i2c@vger.kernel.org
-Subject: [PATCH v8 4/4] samples: rust: add Rust I2C client registration sample
-Date: Sun, 16 Nov 2025 16:22:10 +0000
-Message-ID: <20251116162210.171542-1-igor.korotin.linux@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20251116162104.171420-1-igor.korotin.linux@gmail.com>
-References: <20251116162104.171420-1-igor.korotin.linux@gmail.com>
+	s=arc-20240116; t=1763347852; c=relaxed/simple;
+	bh=uH26DGSqt2oewAGS4aEBtvWtNU3o87cb2coBsqSQOQE=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=I/vkekjxViZcipPq0yMd5MuRTZpOYr6t94qwQlXhrOUU1H/4KAwJ8xjIcIl7nEXciVLmGAy+QaTEWrY9IU1iuAvPpi4iAWUzI3HcxHBjFKTctoG+8RC6KyXHMMNfXjExOuRNfjY25qNks39iPIEnYB4b5D0cla7EKVbESCJmpaU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; arc=none smtp.client-ip=211.20.114.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
+Received: from TWMBX01.aspeed.com (192.168.0.62) by TWMBX01.aspeed.com
+ (192.168.0.62) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.10; Mon, 17 Nov
+ 2025 10:50:40 +0800
+Received: from twmbx02.aspeed.com (192.168.10.13) by TWMBX01.aspeed.com
+ (192.168.0.62) with Microsoft SMTP Server id 15.2.1748.10 via Frontend
+ Transport; Mon, 17 Nov 2025 10:50:40 +0800
+From: Ryan Chen <ryan_chen@aspeedtech.com>
+To: <ryan_chen@aspeedtech.com>, <bmc-sw@aspeedtech.com>,
+	<andriy.shevchenko@linux.intel.com>, <robh@kernel.org>, <krzk+dt@kernel.org>,
+	<conor+dt@kernel.org>, <benh@kernel.crashing.org>, <joel@jms.id.au>,
+	<andi.shyti@kernel.org>, <jk@codeconstruct.com.au>,
+	<andrew@codeconstruct.com.au>, <p.zabel@pengutronix.de>,
+	<naresh.solanki@9elements.com>, <linux-i2c@vger.kernel.org>,
+	<openbmc@lists.ozlabs.org>, <devicetree@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-aspeed@lists.ozlabs.org>,
+	<linux-kernel@vger.kernel.org>
+Subject: [PATCH v23 0/4] Add ASPEED AST2600 I2C controller driver
+Date: Mon, 17 Nov 2025 10:50:36 +0800
+Message-ID: <20251117025040.3622984-1-ryan_chen@aspeedtech.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -109,217 +56,241 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-Add a new `rust_i2c_client` sample, showing how to create a new
-i2c client using `i2c::Registration`
+This series add AST2600 i2c new register set driver.
+The i2c driver is new register set that have new clock divider option
+for more flexiable generation. And also have separate i2c controller
+and target register set for control, patch #2 is i2c controller driver
+only, patch #3 is add i2c target mode driver.
 
-Signed-off-by: Igor Korotin <igor.korotin.linux@gmail.com>
----
- samples/rust/Kconfig            |  12 +++
- samples/rust/Makefile           |   1 +
- samples/rust/rust_i2c_client.rs | 157 ++++++++++++++++++++++++++++++++
- 3 files changed, 170 insertions(+)
- create mode 100644 samples/rust/rust_i2c_client.rs
+The legacy register layout is mix controller/target register control
+together. The following is add more detail description about new register
+layout. And new feature set add for register.
 
-diff --git a/samples/rust/Kconfig b/samples/rust/Kconfig
-index 181466319588..a952220cdff7 100644
---- a/samples/rust/Kconfig
-+++ b/samples/rust/Kconfig
-@@ -95,6 +95,18 @@ config SAMPLE_RUST_DRIVER_I2C
+v23:
+- update typo patch (1/4) commit message.
+- aspeed,ast2600-i2c.yaml
+ - update reg and description.
+- i2c-ast2600.c controller
+ - replace ast2600_select_i2c_clock to ast2600_i2c_ac_timing_config.
+- i2c-ast2600.c target
+ - I2C_TARGET_MSG_BUF_SIZE 256 to 4096
+ - remove blank line.
+ - refine Master comment description to controller
+
+v22:
+- update patch (1/4) commit message add dts example reason.
+- aspeed,ast2600-i2c.yaml @patch (1/4)
+ - rename ast2600-i2c.yaml to aspeed,ast2600-i2c.yaml.
+ - update reg, clock-frequency description.
+- aspeed,ast2600-i2c.yaml @patch (2/4)
+ - aspeed,transfer-mode, aspeed,transfer-mode add for ast2600.
+- i2c-aspeed-core.c,h @patch (3/4)
+ - add i2c-aspeed-core allow both old and new device trees using the
+   same compatible string "aspeed,ast2600-i2c-bus".
  
- 	  If unsure, say N.
+v21:
+- update patch (1/4) commit message
+- i2c-ast2600.c
+ - move rst to local variable in ast2600_i2c_probe().
  
-+config SAMPLE_RUST_I2C_CLIENT
-+	tristate "Manual I2C Client"
-+	depends on I2C && I2C_CHARDEV
-+	help
-+	  This option builds the Rust I2C client manual creation
-+	  sample.
-+
-+	  To compile this as a module, choose M here:
-+	  the module will be called rust_i2c_client.
-+
-+	  If unsure, say N.
-+
- config SAMPLE_RUST_DRIVER_PCI
- 	tristate "PCI Driver"
- 	depends on PCI
-diff --git a/samples/rust/Makefile b/samples/rust/Makefile
-index aec865e2adef..f65885d1d62b 100644
---- a/samples/rust/Makefile
-+++ b/samples/rust/Makefile
-@@ -8,6 +8,7 @@ obj-$(CONFIG_SAMPLE_RUST_DEBUGFS)		+= rust_debugfs.o
- obj-$(CONFIG_SAMPLE_RUST_DEBUGFS_SCOPED)	+= rust_debugfs_scoped.o
- obj-$(CONFIG_SAMPLE_RUST_DMA)			+= rust_dma.o
- obj-$(CONFIG_SAMPLE_RUST_DRIVER_I2C)		+= rust_driver_i2c.o
-+obj-$(CONFIG_SAMPLE_RUST_I2C_CLIENT)		+= rust_i2c_client.o
- obj-$(CONFIG_SAMPLE_RUST_DRIVER_PCI)		+= rust_driver_pci.o
- obj-$(CONFIG_SAMPLE_RUST_DRIVER_PLATFORM)	+= rust_driver_platform.o
- obj-$(CONFIG_SAMPLE_RUST_DRIVER_USB)		+= rust_driver_usb.o
-diff --git a/samples/rust/rust_i2c_client.rs b/samples/rust/rust_i2c_client.rs
-new file mode 100644
-index 000000000000..abc6323a5817
---- /dev/null
-+++ b/samples/rust/rust_i2c_client.rs
-@@ -0,0 +1,157 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+//! Rust I2C client registration sample.
-+//!
-+//! An I2C client in Rust cannot exist on its own. To register a new I2C client,
-+//! it must be bound to a parent device. In this sample driver, a platform device
-+//! is used as the parent.
-+//!
-+
-+//! ACPI match table test
-+//!
-+//! This demonstrates how to test an ACPI-based Rust I2C client registration driver
-+//! using QEMU with a custom SSDT.
-+//!
-+//! Steps:
-+//!
-+//! 1. **Create an SSDT source file** (`ssdt.dsl`) with the following content:
-+//!
-+//!     ```asl
-+//!     DefinitionBlock ("", "SSDT", 2, "TEST", "VIRTACPI", 0x00000001)
-+//!     {
-+//!         Scope (\_SB)
-+//!         {
-+//!             Device (T432)
-+//!             {
-+//!                 Name (_HID, "LNUXBEEF")  // ACPI hardware ID to match
-+//!                 Name (_UID, 1)
-+//!                 Name (_STA, 0x0F)        // Device present, enabled
-+//!                 Name (_CRS, ResourceTemplate ()
-+//!                 {
-+//!                     Memory32Fixed (ReadWrite, 0xFED00000, 0x1000)
-+//!                 })
-+//!             }
-+//!         }
-+//!     }
-+//!     ```
-+//!
-+//! 2. **Compile the table**:
-+//!
-+//!     ```sh
-+//!     iasl -tc ssdt.dsl
-+//!     ```
-+//!
-+//!     This generates `ssdt.aml`
-+//!
-+//! 3. **Run QEMU** with the compiled AML file:
-+//!
-+//!     ```sh
-+//!     qemu-system-x86_64 -m 512M \
-+//!         -enable-kvm \
-+//!         -kernel path/to/bzImage \
-+//!         -append "root=/dev/sda console=ttyS0" \
-+//!         -hda rootfs.img \
-+//!         -serial stdio \
-+//!         -acpitable file=ssdt.aml
-+//!     ```
-+//!
-+//!     Requirements:
-+//!     - The `rust_driver_platform` must be present either:
-+//!         - built directly into the kernel (`bzImage`), or
-+//!         - available as a `.ko` file and loadable from `rootfs.img`
-+//!
-+//! 4. **Verify it worked** by checking `dmesg`:
-+//!
-+//!     ```
-+//!     rust_driver_platform LNUXBEEF:00: Probed with info: '0'.
-+//!     ```
-+//!
-+
-+use kernel::{
-+    acpi,
-+    c_str,
-+    device,
-+    devres,
-+    i2c,
-+    of,
-+    platform,
-+    prelude::*,
-+    sync::aref::ARef, //
-+};
-+
-+#[pin_data(PinnedDrop)]
-+struct SampleDriver {
-+    parent_dev: ARef<platform::Device>,
-+    #[pin]
-+    idev: devres::Devres<i2c::Registration>,
-+}
-+
-+kernel::of_device_table!(
-+    OF_TABLE,
-+    MODULE_OF_TABLE,
-+    <SampleDriver as platform::Driver>::IdInfo,
-+    [(of::DeviceId::new(c_str!("test,rust-device")), ())]
-+);
-+
-+kernel::acpi_device_table!(
-+    ACPI_TABLE,
-+    MODULE_ACPI_TABLE,
-+    <SampleDriver as platform::Driver>::IdInfo,
-+    [(acpi::DeviceId::new(c_str!("LNUXBEEF")), ())]
-+);
-+
-+const SAMPLE_I2C_CLIENT_ADDR: u16 = 0x30;
-+const SAMPLE_I2C_ADAPTER_INDEX: i32 = 0;
-+const BOARD_INFO: i2c::I2cBoardInfo =
-+    i2c::I2cBoardInfo::new(c_str!("rust_driver_i2c"), SAMPLE_I2C_CLIENT_ADDR);
-+
-+impl platform::Driver for SampleDriver {
-+    type IdInfo = ();
-+    const OF_ID_TABLE: Option<of::IdTable<Self::IdInfo>> = Some(&OF_TABLE);
-+    const ACPI_ID_TABLE: Option<acpi::IdTable<Self::IdInfo>> = Some(&ACPI_TABLE);
-+
-+    fn probe(
-+        pdev: &platform::Device<device::Core>,
-+        _info: Option<&Self::IdInfo>,
-+    ) -> impl PinInit<Self, Error> {
-+        dev_info!(
-+            pdev.as_ref(),
-+            "Probe Rust I2C Client registration sample.\n"
-+        );
-+
-+        kernel::try_pin_init!( Self {
-+            parent_dev: pdev.into(),
-+
-+            idev <- {
-+                let adapter = i2c::I2cAdapter::get(SAMPLE_I2C_ADAPTER_INDEX)?;
-+
-+                i2c::Registration::new(&adapter, &BOARD_INFO, pdev.as_ref())
-+            }
-+        })
-+    }
-+
-+    fn unbind(pdev: &platform::Device<device::Core>, _this: Pin<&Self>) {
-+        dev_info!(
-+            pdev.as_ref(),
-+            "Unbind Rust I2C Client registration sample.\n"
-+        );
-+    }
-+}
-+
-+#[pinned_drop]
-+impl PinnedDrop for SampleDriver {
-+    fn drop(self: Pin<&mut Self>) {
-+        dev_info!(
-+            self.parent_dev.as_ref(),
-+            "Remove Rust Platform driver for I2C Client registration sample.\n"
-+        );
-+    }
-+}
-+
-+kernel::module_platform_driver! {
-+    type: SampleDriver,
-+    name: "rust_device_i2c",
-+    authors: ["Danilo Krummrich", "Igor Korotin"],
-+    description: "Rust Platform driver",
-+    license: "GPL v2",
-+}
+v20:
+- ast2600-i2c.yaml
+ - fix warning at make dt_binding_check.
+
+v19:
+- Split AST2600 binding into its own YAML file
+ - Removed `aspeed,ast2600-i2c-bus` from `aspeed,i2c.yaml`
+ - Added `aspeed,global-regs` and `aspeed,transfer-mode` to AST2600 binding
+
+v18:
+- refine patch (1/3) commit message (reason for commit not list.)
+- i2c-ast2600.c
+ - remove redundant reset_control_deassert in driver probe.
+ - remove reset_control_assert(i2c_bus->rst) in driver remove.
+
+v17:
+- move i2c new mode register and feature into driver commit message.
+- aspeed,i2c.yaml
+ - remove multi-master properties.
+ - use aspeed,transfer-mode properties for aspeed,enable-byte/enable-dma.
+-i2c-ast2600.c
+ - rename dma_safe_buf to controller_dma_safe_buf.
+ - fix ast2600_i2c_recover_bus return overflow warnings.
+ - add ast2600_i2c_target_packet_buff_irq unhandle case.
+ - add parameter "cmd" in ast2600_i2c_setup_dma_rx,
+   ast2600_i2c_setup_buff_rx, ast2600_i2c_setup_byte_rx
+ - use reset_control_deassert replace
+   devm_reset_control_get_shared_deasserted.
+ - useaspeed,transfer-mode properties for transfer mode setting.
+ - change compatible = "aspeed,ast2600-i2cv2" to "aspeed,ast2600-i2c-bus".
+
+v16:
+- aspeed,i2c.yaml: add aspeed,enable-byte properties for force byte mode.
+- i2c-ast2600.c
+ - change include asm/unaligned.h to linux/unaligned.h.
+ - add reset timeout councter when slave active timeout.
+ - modify issue i2c_recovery_bus before slave re-enable.
+ - add aspeed,enable-byte properties.
+
+v15:
+- i2c-ast2600.c
+ - add include unaligned.h
+ - rename all master -> controller, slave -> target.
+ - keep multi-master to align property.
+ - remove no used element in ast2600_i2c_bus.
+
+v14:
+- aspeed,i2c.yaml
+ - v13 change people reviewed-by tag, v14 fixed to original people tag,
+   modify to Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+ - struct ast2600_i2c_bus layout optimal.
+ - ast2600_select_i2c_clock refine.
+ - ast2600_i2c_recover_bus overridden fix.
+ - dma_mapping_error() returned error code shadowed modify.
+ - buffer register in a 4-byte aligned simplified
+ - remove smbus alert
+
+v13:
+ - separate i2c master and slave driver to be two patchs.
+ - modify include header list, add bits.h include. remove of*.h
+ - modify (((x) >> 24) & GENMASK(5, 0)) to (((x) & GENMASK(29, 24)) >> 24)
+ - modify ast2600_select_i2c_clock function implement.
+ - modify ast2600_i2c_recover_bus function u32 claim to
+   u32 state = readl(i2c_bus->reg_base + AST2600_I2CC_STS_AND_BUFF);
+
+v12:
+- aspeed,i2c.yaml
+ - add Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+- i2c-ast2600.c
+ - update include by alphabetical order
+ - make just a one TAB and put the last two lines on the single one
+ - remove no used timing_table structre
+ - remove enum explicit assinment
+ - rewritten to avoid this and using loop in ast2600_select_i2c_clock
+ - use GENMASK for most 0xffff
+ - remove too many parentheses
+ - use str_read_write replace read write string
+ - remove redundant blank line after ast2600_i2c_bus_of_table
+ - fix wrong multi-line style of the comment
+ - use macro for i2c standard speeds
+ - remove useless noise dev_info
+
+v11:
+- aspeed,i2c.yaml
+ - no change, the same with v10.
+- i2c-ast2600.c
+ - modify alert_enable from int -> boolean.
+ - modify dbg string recovery -> recover.
+ - remove no need to init 0.
+ - remove new line after break.
+ - remove unneeded empty line.
+ - modify dma_alloc_coherent to dmam_alloc_coherent
+ - modify probe nomem return dev_err_probe
+ - modify i2c_add_adapter to devm_i2c_adapter
+ - modify checkpatch: Alignment should match open parenthesis
+ - modify checkpatch: braces {} should be used on all arms of this statement
+ - modify checkpatch: Unbalanced braces around else statement
+
+v10:
+- aspeed,i2c.yaml
+ - move unevaluatedProperties after allOf.
+ - remove extra one blank line.
+- i2c-ast2600.c
+ - no change, the same with v8.
+
+v9:
+- aspeed,i2c.yaml
+ - backoff to v7.
+  - no fix typo in maintainer's name and email. this would be another patch.
+  - no remove address-cells, size-cells, this would be another patch.
+ - use aspeed,enable-dma property instead of aspeed,xfer-mode selection.
+ - fix allOf and else false properties for aspeed,ast2600-i2cv2.
+- i2c-ast2600.c
+ - no change, the same with v8
+
+v8:
+- aspeed,i2c.yaml
+ - modify commit message.
+ - Fix typo in maintainer's name and email.
+ - remove address-cells, size-cells.
+- i2c-ast2600.c
+ - move "i2c timeout counter" comment description before property_read.
+ - remove redundant code "return ret" in probe end.
+
+v7:
+- aspeed,i2c.yaml
+ - Update ASPEED I2C maintainers email.
+ - use aspeed,enable-dma property instead of aspeed,xfer-mode selection.
+ - fix allOf and else false properties for aspeed,ast2600-i2cv2.
+- i2c-ast2600.c
+ - remove aspeed,xfer-mode instead of aspeed,enable-dma mode. buffer mode
+   is default.
+ - remove aspeed,timeout instead of i2c-scl-clk-low-timeout-us for
+   timeout setting.
+
+v6:
+- remove aspeed,i2cv2.yaml, merge to aspeed,i2c.yaml -add support for
+  i2cv2 properites.
+- i2c-ast2600.c
+ - fix ast2600_i2c_remove ordering.
+ - remove ast2600_i2c_probe goto labels, and add dev_err_probe -remove
+   redundant deb_dbg debug message.
+ - rename gr_regmap -> global_regs
+
+v5:
+- remove ast2600-i2c-global.yaml, i2c-ast2600-global.c.
+- i2c-ast2600.c
+ - remove legacy clock divide, all go for new clock divide.
+ - remove duplicated read isr.
+ - remove no used driver match
+ - fix probe return for each labels return.
+ - global use mfd driver, driver use phandle to regmap read/write.
+- rename aspeed,i2c-ast2600.yaml to aspeed,i2cv2.yaml -remove bus-frequency.
+- add required aspeed,gr
+- add timeout, byte-mode, buff-mode properites.
+
+v4:
+- fix i2c-ast2600.c driver buffer mode use single buffer conflit in
+  master slave mode both enable.
+- fix kmemleak issue when use dma mode.
+- fix typo aspeed,i2c-ast2600.yaml compatible is "aspeed,ast2600-i2c"
+- fix typo aspeed,i2c-ast2600.ymal to aspeed,i2c-ast2600.yaml
+
+v3:
+- fix i2c global clock divide default value.
+- remove i2c slave no used dev_dbg info.
+
+v2:
+- add i2c global ymal file commit.
+- rename file name from new to ast2600.
+  aspeed-i2c-new-global.c -> i2c-ast2600-global.c
+  aspeed-i2c-new-global.h -> i2c-ast2600-global.h
+  i2c-new-aspeed.c -> i2c-ast2600.c
+- rename all driver function name to ast2600.
+
+Ryan Chen (4):
+  dt-bindings: i2c: Split AST2600 binding into a new YAML
+  dt-bindings: i2c: ast2600-i2c.yaml: Add global-regs and transfer-mode
+    properties
+  i2c: ast2600: Add controller driver for new register layout
+  i2c: ast2600: Add target mode support
+
+ .../bindings/i2c/aspeed,ast2600-i2c.yaml      |   95 +
+ .../devicetree/bindings/i2c/aspeed,i2c.yaml   |    3 +-
+ drivers/i2c/busses/Makefile                   |    2 +-
+ drivers/i2c/busses/i2c-aspeed-core.c          |   89 +
+ drivers/i2c/busses/i2c-aspeed-core.h          |   19 +
+ drivers/i2c/busses/i2c-aspeed.c               |   43 +-
+ drivers/i2c/busses/i2c-ast2600.c              | 1577 +++++++++++++++++
+ 7 files changed, 1791 insertions(+), 37 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/i2c/aspeed,ast2600-i2c.yaml
+ create mode 100644 drivers/i2c/busses/i2c-aspeed-core.c
+ create mode 100644 drivers/i2c/busses/i2c-aspeed-core.h
+ create mode 100644 drivers/i2c/busses/i2c-ast2600.c
+
 -- 
-2.43.0
+2.34.1
 
 
