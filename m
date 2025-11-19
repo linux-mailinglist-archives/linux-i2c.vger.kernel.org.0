@@ -1,57 +1,57 @@
-Return-Path: <linux-i2c+bounces-14170-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14171-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA143C6FA2A
-	for <lists+linux-i2c@lfdr.de>; Wed, 19 Nov 2025 16:24:47 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1635CC6FA4B
+	for <lists+linux-i2c@lfdr.de>; Wed, 19 Nov 2025 16:26:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 7B73E35541B
-	for <lists+linux-i2c@lfdr.de>; Wed, 19 Nov 2025 15:09:56 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 674BA3460BC
+	for <lists+linux-i2c@lfdr.de>; Wed, 19 Nov 2025 15:10:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14C3936CE0C;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE6753702E8;
 	Wed, 19 Nov 2025 15:06:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="e/in0rUY"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="gx/4zp65"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFC1A36C0C3
-	for <linux-i2c@vger.kernel.org>; Wed, 19 Nov 2025 15:05:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1434F36CDF4;
+	Wed, 19 Nov 2025 15:05:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763564759; cv=none; b=Q7JxyuIopGYB7wClj0pPsCUI5rtcV1N9BvTVlQiJGJwWr6eO4bOxHw/j7k33i3M358F1f/50lt/xXH5SoORArOGmYGgMzLTrFdUnYdqYe8wMnp+AsGS4pHq8ouwa2X/8cxM3/MCvXByNZUx5e0qB1BznrRFFgwKIeE0HnylyUXU=
+	t=1763564760; cv=none; b=SpaOspkhUU/yjJkiw7j4tRl8Wlg3DnCBm/PQPoirwRkPSr3QHcXrfvfmwIUyw5Q2MjhPyFsGHFlnEPqTn4KdmjDeDqz4CibVV7sS51sbJvsFzIzFH94h/fvpXMyZScoYLe6mru+L3LRbe95BvH8QvFAm+QfKJ2KPFDhh4nK2RRY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763564759; c=relaxed/simple;
-	bh=JAD3o+Asv4ra2douzOxGIAujqehO/m/bD7MQB3mKQOo=;
+	s=arc-20240116; t=1763564760; c=relaxed/simple;
+	bh=IHl2DvpSuwQKADH4Pe7EPdpN4Sz/hS3LMkepCgaFm/M=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=BBIPR/c3AWc9TEX0rlQsZxs1PRwrK0jlgx5MD8u9d85Ho7XzDMaFRyKZDKtc4KT+10NO0Gk52Q4O6hNVxrqjyExho+TD0qrIXUNDYeWKNcan2xcomrq1IaDEIolXjK3D7CuQFLeGZ7kNlnTOheQeEI0MmCBSj1ID4G6un4RQ/zE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=e/in0rUY; arc=none smtp.client-ip=185.246.84.56
+	 In-Reply-To:To:Cc; b=g1XNyOYBIdgf8QfYvXJcS4QSrbuspkN7cFTCSyosfuqJd9bN7JOfyAoeKuHB/uea9UIKB0OKOUycvN9uqbf3RozdhLaAIDnAfCjYYvA4b/+45vIfA6PxDP56myWhdJ0Qfx4bqfFs4Bpi1Hry9gmVkBiBGYrYpz6guULKAiUExuc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=gx/4zp65; arc=none smtp.client-ip=185.246.84.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 86DB11A1BB0;
-	Wed, 19 Nov 2025 15:05:55 +0000 (UTC)
+	by smtpout-02.galae.net (Postfix) with ESMTPS id CF9241A1BB1;
+	Wed, 19 Nov 2025 15:05:57 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 5DF7E60699;
-	Wed, 19 Nov 2025 15:05:55 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 1364310371A72;
-	Wed, 19 Nov 2025 16:05:52 +0100 (CET)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id A551560699;
+	Wed, 19 Nov 2025 15:05:57 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 46D3A10371A7A;
+	Wed, 19 Nov 2025 16:05:54 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1763564753; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1763564756; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=Qzc+vWJ+lMZNvL35gxSncb6y0244QxztXKe0Ufrhtu0=;
-	b=e/in0rUYVRnahj3Kiblq14cIxtCSTEa/Ra4dtgZvkAXjiAjGkT/8NoawlhqIIFJaAR4FHH
-	7wG8YFqcmgmYv0AwkEFyJ2d2b0ucd9CcSYr8hh08l+VSe4kv5wFIO7EY60iZFO/npAjis5
-	OGUlSGChwqkzPt51kj3JYAYU/bc4EcKM7rZFriP2BDMpnp0RtQWj95oO/HnLtGsrxof9WD
-	MY6TEh557VbCUIS0uP94JaMhXa6dFXwTj4fWz2n2bfPLRABo02hisG6WIY1chp8Y3f8iIY
-	0K2KjtiWXZCR5PocNocJXrK8VsKCjkKNka8XsuYYzyBYsoYDVmyT79rTC92GAg==
+	bh=65yzdyfBuP2Eg+ljTJ7FEAcjZHmS44KiAE99qDDTtos=;
+	b=gx/4zp65DJdIxVpNefbXa7nUQ/DHwLnpLg39wmIoT/bGhb41MOrs3cLSWUoLK+d7/rDMfV
+	ImPgmfE6uYSXf0a1IfOMNAj5gz2P/1OhuPzoVks2uGuJs0vNuEWx4ZIKs7p9KZWH5m/km3
+	+bXUKkkIUKVrJSdBIiGOIORcf61jajetIEnXb+lEY8CuhAUFwsiPDI0sQ6lgjGJOfJKLx/
+	twWKbu/uS0oppSvOhT5d3/WqmPMm+KqviqgEmENZTEV82ei2FhYBcjokPLrWNy+xZkX214
+	MXouwnWNdJNyiDszd8dY5TP5bZY7PUGWfYM32495oW45/BYlHHApeBOUPII0mQ==
 From: =?utf-8?q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>
-Date: Wed, 19 Nov 2025 16:05:33 +0100
-Subject: [PATCH v3 4/7] i2c: designware: Use runtime PM macro for
- auto-cleanup
+Date: Wed, 19 Nov 2025 16:05:34 +0100
+Subject: [PATCH v3 5/7] i2c: designware: Add dedicated algorithm for AMD
+ NAVI
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -60,7 +60,7 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20251119-i2c-dw-v3-4-bc4bc2a2cbac@bootlin.com>
+Message-Id: <20251119-i2c-dw-v3-5-bc4bc2a2cbac@bootlin.com>
 References: <20251119-i2c-dw-v3-0-bc4bc2a2cbac@bootlin.com>
 In-Reply-To: <20251119-i2c-dw-v3-0-bc4bc2a2cbac@bootlin.com>
 To: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>, 
@@ -84,56 +84,75 @@ Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
 X-Mailer: b4 0.14.3
 X-Last-TLS-Session-Version: TLSv1.3
 
-Simplify runtime PM handling in i2c_dw_xfer() by using the
-pm_runtime_active_auto_try guard. This adds the proper handling for
-runtime PM resume errors and allows us to get rid of the done_nolock
-label.
+Apart from runtime PM, there is nothing in common between i2c_dw_xfer()
+and amd_i2c_dw_xfer_quirk(), so give AMD NAVI controller its own algorithm
+instead of calling the quirk from i2c_dw_xfer().
+
+Add runtime PM handling to amd_i2c_dw_xfer_quirk() and a dedicated
+i2c_algorithm for AMD NAVI controllers. The adapter algorithm is set
+during probe based on the device model.
+
+This way we avoid checking for the device model at the start of every
+transfer.
 
 Signed-off-by: Benoît Monin <benoit.monin@bootlin.com>
 ---
- drivers/i2c/busses/i2c-designware-master.c | 12 +++++-------
- 1 file changed, 5 insertions(+), 7 deletions(-)
+ drivers/i2c/busses/i2c-designware-master.c | 21 +++++++++++++--------
+ 1 file changed, 13 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
-index ec4fc2708d03..fe708c7cd282 100644
+index fe708c7cd282..12a1194bec52 100644
 --- a/drivers/i2c/busses/i2c-designware-master.c
 +++ b/drivers/i2c/busses/i2c-designware-master.c
-@@ -811,12 +811,13 @@ i2c_dw_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
+@@ -354,6 +354,10 @@ static int amd_i2c_dw_xfer_quirk(struct i2c_adapter *adap, struct i2c_msg *msgs,
+ 	u8 *tx_buf;
+ 	unsigned int val;
  
- 	dev_dbg(dev->dev, "%s: msgs: %d\n", __func__, num);
- 
--	pm_runtime_get_sync(dev->dev);
 +	ACQUIRE(pm_runtime_active_auto_try, pm)(dev->dev);
 +	if (ACQUIRE_ERR(pm_runtime_active_auto_try, &pm))
 +		return -ENXIO;
++
+ 	/*
+ 	 * In order to enable the interrupt for UCSI i.e. AMD NAVI GPU card,
+ 	 * it is mandatory to set the right value in specific register
+@@ -815,13 +819,6 @@ i2c_dw_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
+ 	if (ACQUIRE_ERR(pm_runtime_active_auto_try, &pm))
+ 		return -ENXIO;
  
- 	switch (dev->flags & MODEL_MASK) {
- 	case MODEL_AMD_NAVI_GPU:
--		ret = amd_i2c_dw_xfer_quirk(adap, msgs, num);
--		goto done_nolock;
-+		return amd_i2c_dw_xfer_quirk(adap, msgs, num);
- 	default:
- 		break;
- 	}
-@@ -834,7 +835,7 @@ i2c_dw_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
- 
- 	ret = i2c_dw_acquire_lock(dev);
- 	if (ret)
--		goto done_nolock;
-+		return ret;
- 
- 	ret = i2c_dw_wait_bus_not_busy(dev);
- 	if (ret < 0)
-@@ -899,9 +900,6 @@ i2c_dw_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
- done:
- 	i2c_dw_release_lock(dev);
- 
--done_nolock:
--	pm_runtime_put_autosuspend(dev->dev);
+-	switch (dev->flags & MODEL_MASK) {
+-	case MODEL_AMD_NAVI_GPU:
+-		return amd_i2c_dw_xfer_quirk(adap, msgs, num);
+-	default:
+-		break;
+-	}
 -
- 	return ret;
- }
+ 	reinit_completion(&dev->cmd_complete);
+ 	dev->msgs = msgs;
+ 	dev->msgs_num = num;
+@@ -908,6 +905,11 @@ static const struct i2c_algorithm i2c_dw_algo = {
+ 	.functionality = i2c_dw_func,
+ };
  
++static const struct i2c_algorithm amd_i2c_dw_algo = {
++	.xfer = amd_i2c_dw_xfer_quirk,
++	.functionality = i2c_dw_func,
++};
++
+ static const struct i2c_adapter_quirks i2c_dw_quirks = {
+ 	.flags = I2C_AQ_NO_ZERO_LEN,
+ };
+@@ -1043,7 +1045,10 @@ int i2c_dw_probe_master(struct dw_i2c_dev *dev)
+ 		scnprintf(adap->name, sizeof(adap->name),
+ 			  "Synopsys DesignWare I2C adapter");
+ 	adap->retries = 3;
+-	adap->algo = &i2c_dw_algo;
++	if ((dev->flags & MODEL_MASK) == MODEL_AMD_NAVI_GPU)
++		adap->algo = &amd_i2c_dw_algo;
++	else
++		adap->algo = &i2c_dw_algo;
+ 	adap->quirks = &i2c_dw_quirks;
+ 	adap->dev.parent = dev->dev;
+ 	i2c_set_adapdata(adap, dev);
 
 -- 
 2.51.1
