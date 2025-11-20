@@ -1,102 +1,104 @@
-Return-Path: <linux-i2c+bounces-14201-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14202-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9A79C768BA
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 Nov 2025 23:49:27 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B518C76916
+	for <lists+linux-i2c@lfdr.de>; Fri, 21 Nov 2025 00:01:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sea.lore.kernel.org (Postfix) with ESMTPS id 708302B7B4
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 Nov 2025 22:49:26 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 450C74E3FBD
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 Nov 2025 23:00:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 431242D063F;
-	Thu, 20 Nov 2025 22:49:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AB5D28850D;
+	Thu, 20 Nov 2025 23:00:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TYzWl4uu"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="buEp3LHP"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76C58283C8E
-	for <linux-i2c@vger.kernel.org>; Thu, 20 Nov 2025 22:49:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D7D22737E7
+	for <linux-i2c@vger.kernel.org>; Thu, 20 Nov 2025 23:00:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763678962; cv=none; b=L34lP1BrTtIXoI0uRg1lk9MOEHzTLCSe5n4a3zEcYjAMBzgvnTCCS1/Gg+crMIlfN68zBZUB1yKgGdzmVm9UyQ2L4y7fAJoNiTTx0wHzLD3GtZFt07txVId6fGbs0SYwtizOWvZJ/PROqn0r4a64rZVDtYrTlQNbYd3u7UG+Vu8=
+	t=1763679641; cv=none; b=g+b/aLWyVvomIZOmJTspDr51Ix8RPw+yvRwYu9o+Lt6tM+xUCcr1TgJERHV3oPFz6HMjctRoaddbimerls2sr8KR104oIzMra3iTUKGEdXF2LNmFbjWAX6p0NDpqZT4FnmPu1v9Ibu0B9n+OkIXz7Rjj3USuiKJnnZX8oMjJ4+M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763678962; c=relaxed/simple;
-	bh=TZTm1KdXogUuvpv8+/5svcfKByUPlJvaEZ+d+WpSheU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cCGogiI61d/BxWzLGFW8H5r6AceOiyY8PRwH3gLi4PXqFQohMwK8M7FV0udZIEZSmSOZMvfSDMDAacYoZhKOeffY4lE6ysLELY6U969KQz8VxQezMrCmNXOwxF9YW4grTUJCnt3UBQ2W7uY/2cnOCXC5LnYcfCqnLJbjdUdSPts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TYzWl4uu; arc=none smtp.client-ip=209.85.208.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-644f90587e5so2240823a12.0
-        for <linux-i2c@vger.kernel.org>; Thu, 20 Nov 2025 14:49:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763678959; x=1764283759; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=TZTm1KdXogUuvpv8+/5svcfKByUPlJvaEZ+d+WpSheU=;
-        b=TYzWl4uuhligAWhKMktHJf+LYUyy0USA6fqbo5oJrPFdxIVVt9bP5QPKuIqarhX4iN
-         nulFYbDkdUZh7Ebk679nvBz5kRtbBW3tFSwMksinX7jSyN4mof9ubOMEOb/J1c4x8k8X
-         Pwss0mOOK7lP3iu+3NDRxVXBxTN/7lz456hrpLhzKP2CXZpPRIjANHPeRgAHSvBqjblz
-         iwwFpvoXKOb6BZki/fkLAMj2tdmv3Wty4UhGMAgucGAB9OAQrlmQANGLcHwAIsWWJoOS
-         cGHaNd8or9Y1u8/r/O5MQxGyecPMf2D4bRi4E6ozGvzlZwNK/4Ws6Xj+t6FobfLCL4Pn
-         20SA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763678959; x=1764283759;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TZTm1KdXogUuvpv8+/5svcfKByUPlJvaEZ+d+WpSheU=;
-        b=rChgMJpiGq8LJXiu75EAdGEG+P0ztLrV+H1V5VXXCmKncdndmrgO8ZFoPWeIQkDIaJ
-         zbvhFhXAUFoPl9gXvesGystric9zHs7ktEOPR6KsIriU4sYxH8fNsmr1v/okL/OV1gta
-         hCl8O9M2aND0AbhOzStf1r5cOMOUe4El2CBEm7Xkx7bR+2bdSsu77U7aiu7k/17I5ry0
-         NsUtamNdGJgQ1GEuw0Kb1htWBj3ckW6//NkN3vQrmelM+nX4TvGBk1jdpLBbUEK/WUs/
-         OKpgxucT13bPKv11prvgJP47d8Y9eNoEFK+DxJAFv95D2K3Jb1h5sJcDn8eiWkbwxXIk
-         pyxQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVg/a+z5bvYbfgE2vpT3RuZfqimexTOf0bS35nNNCOMxKJjYZJcgtH4lXMpQsVPjs5piJfruvDRlfc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxnClSv6pEl0JiLofFxKknk6VZRdWvoUFU5A7M95D47pUqtyPJz
-	dbqznN9SN/lYxSxQh0ZMWXYOZwqEP12BoFtEVcrs9Nb6VW3DWEUEl9jHIpn9KjP7b3lHb5XeyUo
-	mjVcNCq9/mTlSffxQnmjUX5TtgMcXQS4=
-X-Gm-Gg: ASbGncv5ww/Z0kvqRt01zblGytH/ko1iGL7r78KUvEzhebfbJwobhbNtItPRsh6vhqJ
-	w2bMht3rO07Kec5vt8KxSc4/qVdXwRBP5xzrBw7kWBjsr7v0ECjj5PYf2pqsfIDH08vBW/lODTE
-	nr1Q5DgklKgLgYVHwmDVOznMZC++ki/wVvN7+Cx2Cz90xWIalNUr1DO8FMDB92GPr8cL8Zawjw4
-	sD4dzbfvykGBSC8MC42l0k5f9km/p7gO0xrosUB/S4mypfqYDS1BZN8Km1DQtI0XfKPxb3I
-X-Google-Smtp-Source: AGHT+IHKwpyg+v52f+pHV5U37obFY04/64huJBo6MAD0+TDJvb08kyIiQwLSaQTEzl9foZt1tjFUqd0jDlHtf3+OMRo=
-X-Received: by 2002:a05:6402:35c8:b0:640:952d:f602 with SMTP id
- 4fb4d7f45d1cf-6455431cfdemr324366a12.6.1763678958544; Thu, 20 Nov 2025
- 14:49:18 -0800 (PST)
+	s=arc-20240116; t=1763679641; c=relaxed/simple;
+	bh=x3xVXuI+2BBfRuLXgxY04+hT+VL9KilsXIFqjrkoA8Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uhTrEj9FXSGiOtp2Wnfg7zWjuKtLv8qitpx/Be8eVx+yL3s3w5KvJgwcPoBKPYuGK+x1+Ro2g1u/c3T98EHp0DWZcAx7zAfvImlL+vH0Fpen9EgMywb+qpV16HGd3k1XdSIIPmT6nVDPicu8jgfsweWjs+AnPEE0t5K47vwXzn0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=buEp3LHP; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=x3xV
+	XuI+2BBfRuLXgxY04+hT+VL9KilsXIFqjrkoA8Y=; b=buEp3LHPj6bREvtMS/ZP
+	JGB4o7WX79eVI37FT/95plauGcjs3m89fiVzA3uLCwCyq21892h1gURsp38m6xef
+	JGpPsVLsu3maHGdR4o4ibY4/mQ43Q/rX1WYsLhICATzR7O3YwvEU1lYkr9Q9SnjH
+	5YK6MshrjY9G1KcGHyBKmNXqGdfqHVBBGn8L4eA2uym3tXq6CamPZERtn1VY6xBG
+	+rsRXdL7LvpIUbBxjvCBLo7Il+MZ0HXW77e6disJYNSamkFfhpgPGZdnAPyiSx14
+	yV1PG5aKfS7nXReNuZibaAvUEJPPYQTkV5d7xOY3zrzQPfNTqrVjkFcDBGRsTdwc
+	fA==
+Received: (qmail 548280 invoked from network); 21 Nov 2025 00:00:35 +0100
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 21 Nov 2025 00:00:35 +0100
+X-UD-Smtp-Session: l3s3148p1@6wMmqg5EDOIujnvV
+Date: Fri, 21 Nov 2025 00:00:34 +0100
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Magnus Lindholm <linmag7@gmail.com>
+Cc: andi.shyti@kernel.org, linux-i2c@vger.kernel.org
+Subject: Re: lm75 on i2c-elektor.c
+Message-ID: <aR-dktlDxOem6mOX@shikoro>
+References: <CA+=Fv5T4PqVOFHnad_aLoMcYRZpg4Oenrmn0XYvb=Gjt1+5L7g@mail.gmail.com>
+ <aR-U3kr-IyXlgYdV@shikoro>
+ <CA+=Fv5QbDy_2G3KiXF=asX2+61BWMWE70tz3nr9XE8_KhwRNmg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CA+=Fv5T4PqVOFHnad_aLoMcYRZpg4Oenrmn0XYvb=Gjt1+5L7g@mail.gmail.com>
- <aR-U3kr-IyXlgYdV@shikoro>
-In-Reply-To: <aR-U3kr-IyXlgYdV@shikoro>
-From: Magnus Lindholm <linmag7@gmail.com>
-Date: Thu, 20 Nov 2025 23:49:07 +0100
-X-Gm-Features: AWmQ_bkccRsVP8mo6oyvK6LSHBtKwz14nWfckkRQQ-JXtTRQd1XJ8wueWESeCwY
-Message-ID: <CA+=Fv5QbDy_2G3KiXF=asX2+61BWMWE70tz3nr9XE8_KhwRNmg@mail.gmail.com>
-Subject: Re: lm75 on i2c-elektor.c
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: andi.shyti@kernel.org, linux-i2c@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-
-> But then again, there is also 4b16dac1d9 ("[PATCH] i2c-elektor: get rid
-> of cli/sti") from 2004 which converts the driver from cli/sti to
-> spinlocks. Maybe it just works now?
->
-
-I've been running it for a day or so on my UP2000+ Alpha with an SMP
-kernel and haven't seen any issues (I manually removed the
-BROKEN_ON_SMP from Kconfig). I guess I can keep testing it for a
-while and if everything seems fine I can submit a patch to remove the
-BROKEN_ON_SMP?
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="uyDh4dNlM8wQ3rFO"
+Content-Disposition: inline
+In-Reply-To: <CA+=Fv5QbDy_2G3KiXF=asX2+61BWMWE70tz3nr9XE8_KhwRNmg@mail.gmail.com>
 
 
-/Magnus
+--uyDh4dNlM8wQ3rFO
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+
+> I've been running it for a day or so on my UP2000+ Alpha with an SMP
+> kernel and haven't seen any issues (I manually removed the
+> BROKEN_ON_SMP from Kconfig). I guess I can keep testing it for a
+> while and if everything seems fine I can submit a patch to remove the
+> BROKEN_ON_SMP?
+
+Yes. If possible, stress-test I2C communication a bit. But with the
+spinlocks, I am optimistic anyhow.
+
+
+--uyDh4dNlM8wQ3rFO
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmkfnYoACgkQFA3kzBSg
+KbbbgQ//a/mOshETZDmezEsCuEL0AOUfgJ+n7oQ30wVEUz716S1AHYIz1F38dE40
+cXpsTYu0ftSJ79JCuNF4UwJMiZ0LcWguCCHlG5FSZJnP7F14Y6i+3iNVfBl9B8/V
+ebKi71pytxASqhq8nOCkT+6plMGAjDze5gRvLi5Bg5QGxTNVqBYiNta2l5G7VNyv
+La6j2GiQIxIjH+sjsjSMKwM42WaX1gm3MwRPnn+YYuIjWutfNuVGrsLWBml6OIJ2
+kCrnbosQj+KcFD07a/N52/s5x4XRYbFEUTxzxDxFy78Mf/fRk0w/4jXjj9RCDAm2
+xetPKL0y6lySVAKSK7VXfBJ1pMBImYusZ31uaq243bZxcavL0BzhMsB+cU0Er4yr
+3e8jDEETs9baC5PR7jSZo2/7sKgn8l5L49HU7N4Vexj7G28S5pAFsn53VmHpgx/s
+iDzBs7wKbyW2jCyfT96DXnCG2kuNdhQy5noFFr4+kYNLTm8A8JcG3ghVPplrBCSn
+L257Yt/LqMKNA9endB2uA7mSfAJVM6jZc4dKD7ClYCqQGwE2QjHwFfTjgaOBV8KO
+3qeDM4xohOSTesgIb+CDG7kimpjPHnslgsxOmB6XERktHSE+0sQlqk/hRgwLDG2c
+BV4H+ijY56+j5YHxOYMUshuWnHzPqVKbUP9uJLdId7oWbW1R4nU=
+=HJQb
+-----END PGP SIGNATURE-----
+
+--uyDh4dNlM8wQ3rFO--
 
