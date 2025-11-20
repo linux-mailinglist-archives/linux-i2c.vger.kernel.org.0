@@ -1,122 +1,177 @@
-Return-Path: <linux-i2c+bounces-14194-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14196-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D647C74673
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 Nov 2025 15:01:08 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4E8FC74AB6
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 Nov 2025 15:53:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id E36C734294C
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 Nov 2025 13:53:40 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTPS id 38F202AAC2
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 Nov 2025 14:53:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 519D93451CE;
-	Thu, 20 Nov 2025 13:53:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE25D34887C;
+	Thu, 20 Nov 2025 14:52:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e9oTTCBn"
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="Nlop4bDN"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+Received: from mail-il1-f174.google.com (mail-il1-f174.google.com [209.85.166.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DC543446C6
-	for <linux-i2c@vger.kernel.org>; Thu, 20 Nov 2025 13:53:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4226E341050
+	for <linux-i2c@vger.kernel.org>; Thu, 20 Nov 2025 14:52:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763646804; cv=none; b=OTabpDbwpmml8uPnRQ6p6quJgTMjY/sPOG/PNGmoe8eNAm9LaF4cLjKX7HclHc/f/cSnDiHJOzDsXYiLM3ESeumRjtvc2smvfuwYGm86MPzix5jhksHqosIhzfgi703DlKw04KMTm/2JR/cVMUSUHTi7J3C7YbND5u5COOtUPhg=
+	t=1763650373; cv=none; b=m9IPGVA33Tq0IZWmGjnAnzIoGeA1i0Gkz7Ik7VyxHlvXJor56AkKX0gIdn0bS/O/mCOZOmsyrDsIL78HSVeF0BAu25oip04AcskpPGzuQ8url1pLXstog6qXhP/zLlXti9iF2hUBQ4nkZ/yyeOMeumTjH0Klwi5c/O9GgvoY7lg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763646804; c=relaxed/simple;
-	bh=+ji9rJDb1MvYDh0vNEXCjFc4fTr5v97Yi6vD9q4tUfM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gYtFuC+CE0PnOOCj0sm8d6kxjVMH6IDNOpx9Q6RXtwRiWnOj5Mbsz79lWzg6Ti9XVE3hsrTTqsAr7cZ7NBNSjk0gZhNko/p+3BHfEebeSygzvF6ZYMHTzfcXUITIqjxYMdBAGG11SEM8KLNK+V2Ayfp0AJKyIfVV8LojdqdTiwQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e9oTTCBn; arc=none smtp.client-ip=209.85.210.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-7b6dd81e2d4so844521b3a.0
-        for <linux-i2c@vger.kernel.org>; Thu, 20 Nov 2025 05:53:22 -0800 (PST)
+	s=arc-20240116; t=1763650373; c=relaxed/simple;
+	bh=fJNbQYu7PoiJLsEPpjUYNqAPI6k2geFEJacIKnsv5a4=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=UkdubQzG2VaGuHvXpLgtalU49Xncz4ibTWyjrA7C/9tPCswuwEGMTWwTG/HgGRIyHNkJlbhw94uKyWsn4ZU0c3NhE6By5rnvITrVKSeJ0dUIdaNYEBQvntXoll+uGDStPb9tnpl0sFNyVv3mRhKNvEoS/FjQgGoTxvwrYmIJ8jM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=Nlop4bDN; arc=none smtp.client-ip=209.85.166.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+Received: by mail-il1-f174.google.com with SMTP id e9e14a558f8ab-43346da8817so5269515ab.0
+        for <linux-i2c@vger.kernel.org>; Thu, 20 Nov 2025 06:52:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763646801; x=1764251601; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1763650367; x=1764255167; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+ji9rJDb1MvYDh0vNEXCjFc4fTr5v97Yi6vD9q4tUfM=;
-        b=e9oTTCBn11vwUd9REK0TQJkAkRY63R3apyOHm6ueYypMYcRMY/BAPTaGCJ1PEEFMkH
-         R9UOkiHDBrf1KKpJ6q1pVYkfCLRWz/+zfJ75wujoc8k0VJjXEXiSlpEz8Zrzln5/vO5Q
-         t0lIZmBk8XKuQr5c7xMK+8cMieAfJzwgQa6zYE/sKWRgsust1IbJMF3TJ+iNAjr3bksb
-         oyxHSzc4pB9z1ZvIMa2XN0keoPwBLrSG/OEL6SEJKl64dOn2+Rp7wHgHd4lS8c/AmE/1
-         1iSL8fsklGDjzjVXDgVYsA/rbYhNcNBMVKpv7k76SO/YFxiBTQTaWG1wOkI4MQWv3MDd
-         htAQ==
+        bh=mIp1emodWmrQX+c6TjoXmEBGWcecINECr9nK+dGHBUw=;
+        b=Nlop4bDNIOkjuo0pMhzaqc0ODrEsmRo7XtLqwhp00uyFASxw+sbIvvfDKg63/0WNIr
+         Irgw7i1L5c7f3KspyZuRfY76O51HffIuodvQy5ZIcDN4No7WwIxUOGZ9dpes/M6K+nsd
+         SNLzENdMcdkRpJUmuFjuM9BMlGaR61DPmsUMatu7aVJzbpi7Z/RO6GbliOgOscpBha8S
+         DnzFtV5phPRpPEJgf98WlMFKyzL6CdLykV3ZnkTgBAq3ZRb9M24771+6fglXYKmcEHuj
+         JwzMwrRMP1iOEu/PZF6XSo/nxjqLzdvmfaif9TGvKGR4YXIy2m1LIpokuAZvSHGS7C+s
+         olCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763646801; x=1764251601;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+        d=1e100.net; s=20230601; t=1763650367; x=1764255167;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=+ji9rJDb1MvYDh0vNEXCjFc4fTr5v97Yi6vD9q4tUfM=;
-        b=pk/H+By6PxKenUGcYEdF7cdpb57aFmkNiFt0r4tavDYhSjJPXEZhvPmZlss2BHGQLL
-         pkdR9K2NR4fUypdRUAjgDNMJhzkJbKk3Rv1Rd1uK2Iu5rDhetLeC46h/XuHpvvbKonkK
-         5/sTEzXmjV6jxr2Z0tPt5xAEo6hPT+rz/u2AmfMOk7Oo4Hsv3Abyu/RI680vQAlEnMO5
-         IyPpvaPNswIc0ofO0h1mgYFSjd+dpqWT0WGsgA+eNrGDvfLfKomEVyHee2ZTf0PhANPI
-         vzTzQYC7vxJolzfquiDxKdLDZhvKgtOfoiwkfSgoAEaYyFcZmx1UbNPRRDU1U31PS4MM
-         HcjA==
-X-Forwarded-Encrypted: i=1; AJvYcCXM6A4x+pGP9EyovFyCThxFpaUCNJit5j5hGSKLUKh+/V7XOaLwJtx8G3tgd9ZaqmSkan/cJwHGNrM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzTyBsgGCanWniYxtb5gwCVp/AuTwpOOV6tzWgROQrbXgdxOMqr
-	IXCi/rO7wkMcg+ycgyB1YmJ+SqFO2UIO+CX7SaOJr3Oj589Z+SWAujkGzjn064jm8yNjf73zuUu
-	jn4JwdAtxfKVEoc9+re9TuZ6Tr/pl524=
-X-Gm-Gg: ASbGncuINzbdkyTWzeiSohk4J7Ol7VMB5OPkWUWnQEmN9MmHS+BpT4uW6z0hhd4CvAH
-	NmEzB7UW7U3LyzydSum2OqNnjF2uQwxIESrM/6bt+7d4OWlobMRsloDj3PsZ3bqoEbLyN/AAeda
-	ANd7Q90kBey+ONqWCDqwqZIaXIpcSlCfRtSzXXUyQGV5pnnvxPErT+cI61zKRAMaLnZqdzoD2Yc
-	dHTyVJkKhY06ewq0yUpkBOjdc89Y7sqi5XsRYwdZVmpb4JkkQq3SEO3ejfr68bTESXwDK/mgZqH
-	covLVC7oE1KxZUCgAyqe9hAeVa/wXziuzqvRCgCjeWFplqfyCrvwVaF0PPlERX2nAzoj7G5Zl5R
-	yvf6oOU2jRg==
-X-Google-Smtp-Source: AGHT+IHHiFdkRR2hcs7aI5ty0G7MPp6ZYGVQIosVcIdjzscilsxzXmB//cKbxOhtRhNsGf+CdA6qCE9WHN4qhmI+au8=
-X-Received: by 2002:a05:7022:6714:b0:11a:61ef:8491 with SMTP id
- a92af1059eb24-11c9476aec2mr708193c88.3.1763646801541; Thu, 20 Nov 2025
- 05:53:21 -0800 (PST)
+        bh=mIp1emodWmrQX+c6TjoXmEBGWcecINECr9nK+dGHBUw=;
+        b=pxj2Ozyp1BKQPe27fQSx0Qc/rUzibLkeOw1bJUzzpR/VdtmFlfEvNd8mdCr/2B+KUO
+         qqMyTXwkQCJ9zxEYsjwLuEMPp8HSmKl5JR3fIupB1ITZR1zuEpoOk0Lk6SOG/yV3xJAP
+         xlAfZ/H2Iao1YNMWI4C1TxpJc1BYcdEXXUmWWsK5i5oiMt8U61O0lASdZ9XTgCSnvaHU
+         NZddRhvxranZOtc0ETB+bwwzbkWtGIi2Q1uioyKEZkYpAI6r53mHZ92MPwP11ui+9XZK
+         83ihIFTb7zTIrNY7HqQJ+yXqrVp/94LPEffP9lokMZf+dlPgvtfDwfrwt7377lFxGHnK
+         BTTw==
+X-Forwarded-Encrypted: i=1; AJvYcCWq7m+K8stJqUC2ckbJ8JJbWbL/bIaDHVKDHRIsMd5XgF9SADz+dYLh0g0YaFcXEk0ij77BQYekmho=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyXszqMyB6gg7ROuX6imbrrGJRkCKXdfruSGm/W9goSupNmKXsT
+	aA9T7l/V5RXtahYAW+GE/T8M8M3gULodxmETVfbNTR11dTI5Wy8DseEWM0HYcVT4ZUE=
+X-Gm-Gg: ASbGncv5HMLRxpHTMP6TXX5zTFlqXGMGMXeoApmT9OhT+6GG0RWaDsqHyGnPHXq6qad
+	W7vVGUVpwYGQrGXZx7yilk1GOUfwe63K9y4rOwIxNn0+ki5eUkKRsShQCcfQTw3YwaPmgMjocj1
+	FDO9aNXT1+ppU2tII8znJhdfgwVDiqKH24lbja20wPz0HLFahqgj+7lz+mnJKL1H+y7T3/OZymm
+	7op+HZrq2ivsxVsjFzIkfMbcOiUm04HxROQTNjIz1v2KoWHAZSjM+xc8cxuWdJQr0RopsCwIOFv
+	KihUAUTt3dSN6AGqQx9Y4DoyntOQk8a+7bB9XxuQkErm50ugzVLC/eBDASpnDO5tpM1jPRnh0Ti
+	2t4t6YIDtUDaWEt6HlzBpqkU2e6dqe/e+T9hubQiKAlqolVLEmYYMz9GDvs0y+BgKubokcJOyvQ
+	Ry0g==
+X-Google-Smtp-Source: AGHT+IEmRlVKCe07qbgo1t2w3uFpBKsqx62crTftDC+8sZ0oUBIrcGL53VTRakva//fmnWvcfQrQww==
+X-Received: by 2002:a05:6e02:1c01:b0:433:1d5a:5157 with SMTP id e9e14a558f8ab-435aa88e822mr21434775ab.6.1763650367018;
+        Thu, 20 Nov 2025 06:52:47 -0800 (PST)
+Received: from [127.0.0.1] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-5b954b207d7sm1008611173.33.2025.11.20.06.52.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Nov 2025 06:52:46 -0800 (PST)
+From: Jens Axboe <axboe@kernel.dk>
+To: linux-kernel@vger.kernel.org, david.laight.linux@gmail.com
+Cc: Alan Stern <stern@rowland.harvard.edu>, 
+ Alexander Viro <viro@zeniv.linux.org.uk>, 
+ Alexei Starovoitov <ast@kernel.org>, Andi Shyti <andi.shyti@kernel.org>, 
+ Andreas Dilger <adilger.kernel@dilger.ca>, Andrew Lunn <andrew@lunn.ch>, 
+ Andrew Morton <akpm@linux-foundation.org>, 
+ Andrii Nakryiko <andrii@kernel.org>, 
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+ Ard Biesheuvel <ardb@kernel.org>, 
+ Arnaldo Carvalho de Melo <acme@kernel.org>, 
+ Bjorn Helgaas <bhelgaas@google.com>, Borislav Petkov <bp@alien8.de>, 
+ Christian Brauner <brauner@kernel.org>, 
+ =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+ Christoph Hellwig <hch@lst.de>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Dan Williams <dan.j.williams@intel.com>, 
+ Dave Hansen <dave.hansen@linux.intel.com>, 
+ Dave Jiang <dave.jiang@intel.com>, David Ahern <dsahern@kernel.org>, 
+ Davidlohr Bueso <dave@stgolabs.net>, 
+ "David S. Miller" <davem@davemloft.net>, Dennis Zhou <dennis@kernel.org>, 
+ Eric Dumazet <edumazet@google.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Herbert Xu <herbert@gondor.apana.org.au>, Ingo Molnar <mingo@redhat.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Jakub Sitnicki <jakub@cloudflare.com>, 
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
+ Jarkko Sakkinen <jarkko@kernel.org>, "Jason A. Donenfeld" <Jason@zx2c4.com>, 
+ Jiri Slaby <jirislaby@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
+ John Allen <john.allen@amd.com>, 
+ Jonathan Cameron <jonathan.cameron@huawei.com>, 
+ Juergen Gross <jgross@suse.com>, Kees Cook <kees@kernel.org>, 
+ KP Singh <kpsingh@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, 
+ "Martin K. Petersen" <martin.petersen@oracle.com>, 
+ "Matthew Wilcox (Oracle)" <willy@infradead.org>, 
+ Mika Westerberg <westeri@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
+ Miklos Szeredi <miklos@szeredi.hu>, Namhyung Kim <namhyung@kernel.org>, 
+ Neal Cardwell <ncardwell@google.com>, nic_swsd@realtek.com, 
+ OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>, 
+ Olivia Mackall <olivia@selenic.com>, Paolo Abeni <pabeni@redhat.com>, 
+ Paolo Bonzini <pbonzini@redhat.com>, Peter Huewe <peterhuewe@gmx.de>, 
+ Peter Zijlstra <peterz@infradead.org>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Sean Christopherson <seanjc@google.com>, 
+ Srinivas Kandagatla <srini@kernel.org>, 
+ Stefano Stabellini <sstabellini@kernel.org>, 
+ Steven Rostedt <rostedt@goodmis.org>, Tejun Heo <tj@kernel.org>, 
+ Theodore Ts'o <tytso@mit.edu>, Thomas Gleixner <tglx@linutronix.de>, 
+ Tom Lendacky <thomas.lendacky@amd.com>, 
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>, x86@kernel.org, 
+ Yury Norov <yury.norov@gmail.com>, amd-gfx@lists.freedesktop.org, 
+ bpf@vger.kernel.org, cgroups@vger.kernel.org, 
+ dri-devel@lists.freedesktop.org, io-uring@vger.kernel.org, 
+ kvm@vger.kernel.org, linux-acpi@vger.kernel.org, 
+ linux-block@vger.kernel.org, linux-crypto@vger.kernel.org, 
+ linux-cxl@vger.kernel.org, linux-efi@vger.kernel.org, 
+ linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+ linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
+ linux-integrity@vger.kernel.org, linux-mm@kvack.org, 
+ linux-nvme@lists.infradead.org, linux-pci@vger.kernel.org, 
+ linux-perf-users@vger.kernel.org, linux-scsi@vger.kernel.org, 
+ linux-serial@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+ linux-usb@vger.kernel.org, mptcp@lists.linux.dev, netdev@vger.kernel.org, 
+ usb-storage@lists.one-eyed-alien.net, David Hildenbrand <david@kernel.org>
+In-Reply-To: <20251119224140.8616-1-david.laight.linux@gmail.com>
+References: <20251119224140.8616-1-david.laight.linux@gmail.com>
+Subject: Re: (subset) [PATCH 00/44] Change a lot of min_t() that might mask
+ high bits
+Message-Id: <176365036384.566630.2992984118137417732.b4-ty@kernel.dk>
+Date: Thu, 20 Nov 2025 07:52:43 -0700
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251120103039.1824209-1-carlos.song@nxp.com>
-In-Reply-To: <20251120103039.1824209-1-carlos.song@nxp.com>
-From: Daniel Baluta <daniel.baluta@gmail.com>
-Date: Thu, 20 Nov 2025 15:55:49 +0200
-X-Gm-Features: AWmQ_bnQa7oBzAN6Aw7zvXpCjSq9C--w2oU7R6YmaimQUP4lya11WGpioKQNFS4
-Message-ID: <CAEnQRZDcaWAQTLVHL1q+n2nhk3Cop2-fbOL+BqibrJHze2F9xw@mail.gmail.com>
-Subject: Re: [PATCH v2] i2c: imx-lpi2c: change to PIO mode in system-wide
- suspend/resume progress
-To: Carlos Song <carlos.song@nxp.com>
-Cc: aisheng.dong@nxp.com, andi.shyti@kernel.org, shawnguo@kernel.org, 
-	s.hauer@pengutronix.de, kernel@pengutronix.de, frank.li@nxp.com, 
-	linux-i2c@vger.kernel.org, imx@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.14.3
 
-On Thu, Nov 20, 2025 at 12:31=E2=80=AFPM Carlos Song <carlos.song@nxp.com> =
-wrote:
->
-> EDMA resume is in early stage and suspend is in late stage, but LPI2C
-> resume and suspend are in NOIRQ stage. So LPI2C resource become ready
-> earlier than EDMA. When IRQ enabled, immediately slave will trigger LPI2C
-> to read data and the length meets the requirements for DMA usage, the DMA
-> will be needed at this time. Within a very small time window, EDMA is
-> still not resumed.
->
-> If a system-wide suspend or resume transition is in progress. LPI2C shoul=
-d
-> use PIO to transfer data not DMA to avoid issue caused by not ready DMA H=
-W
-> resource.
->
-> Fixes: a09c8b3f9047 ("i2c: imx-lpi2c: add eDMA mode support for LPI2C")
-> Signed-off-by: Carlos Song <carlos.song@nxp.com>
-> ---
 
-For future patches please add here a small description of what changed sinc=
-e v1:
-e.g
+On Wed, 19 Nov 2025 22:40:56 +0000, david.laight.linux@gmail.com wrote:
+> It in not uncommon for code to use min_t(uint, a, b) when one of a or b
+> is 64bit and can have a value that is larger than 2^32;
+> This is particularly prevelant with:
+> 	uint_var = min_t(uint, uint_var, uint64_expression);
+> 
+> Casts to u8 and u16 are very likely to discard significant bits.
+> 
+> [...]
 
-Changes since v1:
-* updated commit message as per discussion with Frank.
+Applied, thanks!
+
+[12/44] block: use min() instead of min_t()
+        commit: 9420e720ad192c53c8d2803c5a2313b2d586adbd
+
+Best regards,
+-- 
+Jens Axboe
+
+
+
 
