@@ -1,119 +1,124 @@
-Return-Path: <linux-i2c+bounces-14231-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14232-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89F74C7CF9C
-	for <lists+linux-i2c@lfdr.de>; Sat, 22 Nov 2025 13:29:25 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id D09DFC7D191
+	for <lists+linux-i2c@lfdr.de>; Sat, 22 Nov 2025 14:30:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 36256354565
-	for <lists+linux-i2c@lfdr.de>; Sat, 22 Nov 2025 12:29:25 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 922274E5119
+	for <lists+linux-i2c@lfdr.de>; Sat, 22 Nov 2025 13:30:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C280E2F1FDB;
-	Sat, 22 Nov 2025 12:29:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6C362459C9;
+	Sat, 22 Nov 2025 13:30:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TH3A0TtS"
+	dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b="Ga3GYG5A"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0E23298991
-	for <linux-i2c@vger.kernel.org>; Sat, 22 Nov 2025 12:29:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9213148FE6;
+	Sat, 22 Nov 2025 13:29:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.133.4.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763814558; cv=none; b=lU9U93suqgpm4HEzBaXhn3dnsfKsescuaIoJcqHwXyzfqwCL8wc8mpz473eEyY9YOjNi3hw31bA/eKjbGETGDwtfg6cqwfl1wfIR2Ic3zh696GfWZMJ7L08kYLvm35M7TCCGEEwmLeax3IvgNKRAl3UPjmsDv8gDsguzJjqavJo=
+	t=1763818202; cv=none; b=uDJQILpFd/nxYk3LrGutne/oYeBIl9gmBaMAq1uSXL4u3F8Y+Q28b5f2IC+M2xtdfADL26QpMKTK1M1BDhjhyD2uYcT7lB64COW+jtL8kRnWAlxxNnP7jlTIwfDNdZle4uNP7MMFW/jtJ69LBhoJkcaxUl+5Ctdw2bqJq6msd+Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763814558; c=relaxed/simple;
-	bh=Kv34Qhw1M2zx0fQhMPas0HbCW/VUH/y8+M15EkSCoKM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=R+RMeThuGwIndeDISXxEjFPR82BEUUKBNzqQGCjYOUFy+lrcZqwDiu4nuHPq36/HXppt31P1Zt4roXlgESo+/5wmUJxyf3NPcBkiiCAtY/Tq7P6ofM9jc1sxinJ6nLqISV48kl6peA7KwZtELbDzzUTnFgPul0Grpe+fZtk4rV4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TH3A0TtS; arc=none smtp.client-ip=209.85.208.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-37a5ab1e81fso25087531fa.1
-        for <linux-i2c@vger.kernel.org>; Sat, 22 Nov 2025 04:29:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763814555; x=1764419355; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=KE5zzu6+WyidL/pFkBhQCA/eTQnpCwLRhErWx45XT9o=;
-        b=TH3A0TtSslbwUcIqlrkFAmpE9zMsMq1SMiFtMr6ZnnxfCXd1yIe18+o3zfg4qLOmUG
-         gN6IAemsA8dL+hClc3uaN3nzjCPW+1wtRaPpisaZIogbIODg8TWRmdMs75dz03aViVtl
-         qClNInYv2xH9HS8wjXIa+N5ZSBjK+JK8/HDRCopqLwz5+UNeeMT670Qyjoo/Ok3PKY2r
-         PsdPmhaUJoo7/NLIlum3v/uV1WesRzAt/kuJ0OuO6PTsjnHFES0bJ0W/Q9MoQ/Kc28A+
-         Y+Z4agYjyGmerBJVo/g3PEm0knmozL+LcQGtnyTBfXOTGL/indbUC6Kk32GLRlY2QLIJ
-         nRaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763814555; x=1764419355;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KE5zzu6+WyidL/pFkBhQCA/eTQnpCwLRhErWx45XT9o=;
-        b=BqyAgg1Fe52DLM0n8NNThknasTrxgRpnCs6fhM2K35dO+m59rIpq9+INrCvHdhmZ8f
-         GFNVThAqsqo5T26IyIoDp3Bh97GbJC7oFKpP8NSIdAdjjT9RkwPoLVA36hTabA5AuNG0
-         5ZbuXSAwrU0XJa0NZsPLpcy4Zq+3L7NxjjssQtPRS/K//7/qGAmeJSgwHu2W1zXMy33q
-         KLB2FAmvk4NRzoBCL+rbMPapTfU53HMoUV/Yn6cvaQ03cVXHlmzTerRmh3khSixXohzr
-         9mdYdRkgt88Us8HGsMj6f3VxY8xUdH1cnhUR+pE5zOBWOnANUP0lYED/094kRrU1jqpr
-         sL7g==
-X-Gm-Message-State: AOJu0YwixZg6CepRuheIEuSpJN5Cas4tn2rE92sWx+eHko783H1wIU/a
-	TsA27ncJPfBcfWOYilHi7BgDOuhHsy9c1O+TsBkmx4He5mA+NlNvfrONs/4mgHVA
-X-Gm-Gg: ASbGncuIq82OwVagb5Qm+GI/T9sVO92IYie9fOe+/RbQtTYsS1650c9J1hXCvpEL7QF
-	5LCatZYx7IQF7Oov80HNVYR/gAZXK++Dl/scgGyvYRjIGkijGV6q+8VrOzt4JFmt9KDfRbgcTCz
-	TKpy1OVn84eQzPeWeJVHY4n6KRz1nA0YwYXmEOsjiL2/sQvC0OHx95iKtatl9glRoAuwHywAUM1
-	zwmqj8V3mavOkVRYEkQtyeCkuABMW2lv83vVDArWlvTBGZ22AiVg19VOHlC3wiwWIvH5zRvrRHq
-	IkeXPbP804aecg98onT2vlW5rKZIuA5Psnv78iwYaTM3NZHHkD6gx/3xqGJWVGlqEfOqDaJZ9yz
-	vaTKSykzNYGq5fP29tQLRs+aNksub5A2ROM14P84E0NU/LcNV+H5vkhokyEduC2j5IHAXGgG5hN
-	dObCVQ1iR7sFGeg/9go559BE4sQCgHaETWAsxfJKXYg0BpA0kZTtMIqEJmLyreBpM=
-X-Google-Smtp-Source: AGHT+IEfHEd1eKtbkmPVx2iC265Mj7H07T7tOJ7ekf7uuPq4wGrYxeF9XEHvwGQeCxYdDEVuH6afQA==
-X-Received: by 2002:a05:651c:4184:b0:37b:8f05:13bb with SMTP id 38308e7fff4ca-37cd9252e34mr13332011fa.27.1763814554382;
-        Sat, 22 Nov 2025 04:29:14 -0800 (PST)
-Received: from buildhost.darklands.se (h-94-254-104-176.A469.priv.bahnhof.se. [94.254.104.176])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5969db89886sm2437043e87.38.2025.11.22.04.29.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 22 Nov 2025 04:29:13 -0800 (PST)
-From: Magnus Lindholm <linmag7@gmail.com>
-To: linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-alpha@vger.kernel.org
-Cc: andi.shyti@kernel.org,
-	wsa+renesas@sang-engineering.com,
-	Magnus Lindholm <linmag7@gmail.com>
-Subject: [PATCH] i2c: i2c-elektor: Allow building on SMP kernels
-Date: Sat, 22 Nov 2025 13:26:13 +0100
-Message-ID: <20251122122846.28493-1-linmag7@gmail.com>
-X-Mailer: git-send-email 2.51.0
+	s=arc-20240116; t=1763818202; c=relaxed/simple;
+	bh=OmtkCM2kLeICUGvHw1xAM+58jvlwQwT/dAai5cbX+Qs=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=I1U5RnNqUOYGRT4Iz9tjEeLoH+XDBCy6TrXNyknCjp6supghk5noOf8tP0b9ZA47dfl4tdlZoX9PWu3yUVY74m4+/RSg+B5wvmNAUgl4kLOg2nVDt3+iFE4K6zoSMHqvncZ8BRMTEGLLqSZHek9znPMR18g1zT+zNpUqsxDzqGo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de; spf=pass smtp.mailfrom=zedat.fu-berlin.de; dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b=Ga3GYG5A; arc=none smtp.client-ip=130.133.4.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zedat.fu-berlin.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=fu-berlin.de; s=fub01; h=MIME-Version:Content-Transfer-Encoding:
+	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:From:
+	Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+	Content-Transfer-Encoding:Content-ID:Content-Description:In-Reply-To:
+	References; bh=cE54ZHKPrVjQG5qNzo0eEX5d5fsZFx8CcF/U1oqZHmc=; t=1763818198;
+	x=1764422998; b=Ga3GYG5AueW96xI9OEmVGDrO9XwXydftkC8y9TLWgeD/jDRF0azirYRWZSsoH
+	5SDcDEk6JuDbpF/nthuxK2Nzfnow4w/1sCgzXo5Y3h+p4I+gAZA59PavxDTvCFnlOy5+KvTXD7hMf
+	wi1Qgp20wa3A7OvJOy4B9GsGb+jWjrrUl4Yww+ijh8zu2/IDV0+jJ+Sr5bqLbURchwGoQQwtqmPmH
+	BA7lzABiE76mAsr8cvhPT/U2ojUVDBdv8Ln89l36Vgpo+osoIfzxl3XYDHRsrARJ3KdJ976ioPh4P
+	RwqXbt87YPYDacgE4kYXMAJmt5UwHDCchyBVkQhc6Mly7jnoJg==;
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.99)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1vMngU-00000003BnS-3KYL; Sat, 22 Nov 2025 14:29:50 +0100
+Received: from p5b13aa34.dip0.t-ipconnect.de ([91.19.170.52] helo=[192.168.178.61])
+          by inpost2.zedat.fu-berlin.de (Exim 4.99)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1vMngU-00000001rlB-2LW2; Sat, 22 Nov 2025 14:29:50 +0100
+Message-ID: <c468dc2e6f5c4ea132f2bf25e6d6976e0c317005.camel@physik.fu-berlin.de>
+Subject: Re: [PATCH] i2c: i2c-elektor: Allow building on SMP kernels
+From: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To: Magnus Lindholm <linmag7@gmail.com>, linux-i2c@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org
+Cc: andi.shyti@kernel.org, wsa+renesas@sang-engineering.com
+Date: Sat, 22 Nov 2025 14:29:49 +0100
+In-Reply-To: <20251122122846.28493-1-linmag7@gmail.com>
+References: <20251122122846.28493-1-linmag7@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.1 
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-ZEDAT-Hint: PO
 
-It the past the i2c-elektor driver has been broken on SMP, as it seems
-there has since been some fixes/cleanup work to get rid of cli/sti and
-rely on spinlocks instead (as pointed out by Wolfram Sang). Tested this
-driver on SMP kernel on Alpha/UP2000+ for a few days without any problems.
+Hi Magnus,
 
-Signed-off-by: Magnus Lindholm <linmag7@gmail.com>
----
- drivers/i2c/busses/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Sat, 2025-11-22 at 13:26 +0100, Magnus Lindholm wrote:
+> It the past the i2c-elektor driver has been broken on SMP, as it seems
 
-diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index fd81e49638aa..9b1473d720a0 100644
---- a/drivers/i2c/busses/Kconfig
-+++ b/drivers/i2c/busses/Kconfig
-@@ -1474,7 +1474,7 @@ config I2C_ACORN
- 
- config I2C_ELEKTOR
- 	tristate "Elektor ISA card"
--	depends on ISA && HAS_IOPORT_MAP && BROKEN_ON_SMP
-+	depends on ISA && HAS_IOPORT_MAP
- 	select I2C_ALGOPCF
- 	help
- 	  This supports the PCF8584 ISA bus I2C adapter.  Say Y if you own
--- 
-2.51.0
+Typo: s/It/In/ and I think there should be a full stop after "SMP".
 
+> there has since been some fixes/cleanup work to get rid of cli/sti and
+
+s/has/have/
+
+> rely on spinlocks instead (as pointed out by Wolfram Sang). Tested this
+
+The sentence just ends after "instead". I think you meant to say "instead,
+let's allow building the driver on SMP kernels again." or something like
+that.
+
+> driver on SMP kernel on Alpha/UP2000+ for a few days without any problems=
+.
+>=20
+> Signed-off-by: Magnus Lindholm <linmag7@gmail.com>
+> ---
+>  drivers/i2c/busses/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+> index fd81e49638aa..9b1473d720a0 100644
+> --- a/drivers/i2c/busses/Kconfig
+> +++ b/drivers/i2c/busses/Kconfig
+> @@ -1474,7 +1474,7 @@ config I2C_ACORN
+> =20
+>  config I2C_ELEKTOR
+>  	tristate "Elektor ISA card"
+> -	depends on ISA && HAS_IOPORT_MAP && BROKEN_ON_SMP
+> +	depends on ISA && HAS_IOPORT_MAP
+>  	select I2C_ALGOPCF
+>  	help
+>  	  This supports the PCF8584 ISA bus I2C adapter.  Say Y if you own
+
+Adrian
+
+--=20
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
 
