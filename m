@@ -1,83 +1,83 @@
-Return-Path: <linux-i2c+bounces-14234-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14235-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A076C7D20F
-	for <lists+linux-i2c@lfdr.de>; Sat, 22 Nov 2025 15:00:20 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BCA30C7D215
+	for <lists+linux-i2c@lfdr.de>; Sat, 22 Nov 2025 15:00:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 7DC4834A26D
-	for <lists+linux-i2c@lfdr.de>; Sat, 22 Nov 2025 14:00:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 826FC3AA2C1
+	for <lists+linux-i2c@lfdr.de>; Sat, 22 Nov 2025 14:00:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F64E25F988;
-	Sat, 22 Nov 2025 13:59:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C526B23C4FA;
+	Sat, 22 Nov 2025 14:00:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g49oc6cP"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FDFCY4pI"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A10A26B74A
-	for <linux-i2c@vger.kernel.org>; Sat, 22 Nov 2025 13:59:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D538520DD51
+	for <linux-i2c@vger.kernel.org>; Sat, 22 Nov 2025 14:00:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763819998; cv=none; b=bQSfGRK9QHhUktM9fg50L/3CCTtlhHbSqiw1msjVftlJRUhjGCyD8HskkIVHM8wKSUCgB2ZO5Yfzny16Bp8HXI7ceWYJdZ9DAL2+fPW8mROSXOE0NaqDaWxMbQk2xmd3xv6SwnIMtloSFanI2Mf2mf9xkzF2DJSgwMdJAhM0d6s=
+	t=1763820046; cv=none; b=hxX7hWelwevgWAZuw8SujWh3H8ugnrWiBqzLHgc1avUMpz15AdI76rdJcq6VPTyQEJVIuAq8fZS+QVNYayeyd1H15lcqMEXHELZjvwYO7rAiEPGUhR6aOZr7miea9rTBkD41+CHYoJ10mCV2KUB3OHbaf2o5t9YiIP4Iv/zXr7g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763819998; c=relaxed/simple;
-	bh=vKCXMz04DeLJnwEKF8S98dT02xv8eOJK0ArCHIYcYFQ=;
+	s=arc-20240116; t=1763820046; c=relaxed/simple;
+	bh=quy70Ek/g6qrhcqWBI6EKf77vs+SuiqG7tLVTxxmDl0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ObTLZfi9wqXGl731rtJy7+Dm2PVSg1CWFWUj6Wt04r2Zk9Gcye9x57yVti8jAvm5RxUQsp5pyHUbxmQPSH5omXDsu73W4zsODZHQcDD/CbTQaSntTFIkxI09ajg3usHQZjxUd10E+Y+1NThZJUyCXiV+Zk1N2mt23+1Cqq3ruHQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g49oc6cP; arc=none smtp.client-ip=209.85.128.54
+	 In-Reply-To:Content-Type; b=dTOTIu+GmS2NmHDistWbq4TqiAyamqbYjFoqmW63AoXua1kZzyoByRfr9e2R3QbHVr2/VW8REPgajsWUWEy2IznodNdIomvyLwFp0vpgo20DDVTLARLiDXWHkpfQaorIq2Ev16RMPKXAVDkEsGMWTC49yrCAyK/dF7Fmn/sWI64=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FDFCY4pI; arc=none smtp.client-ip=209.85.221.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-477a219dbcaso27669995e9.3
-        for <linux-i2c@vger.kernel.org>; Sat, 22 Nov 2025 05:59:55 -0800 (PST)
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-42b32900c8bso1714524f8f.0
+        for <linux-i2c@vger.kernel.org>; Sat, 22 Nov 2025 06:00:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763819994; x=1764424794; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1763820043; x=1764424843; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=n3RDHdAOWTPHz680YM/cr1HvFmiWY++575d9xo1fZrs=;
-        b=g49oc6cPE/+QHtjyh2nlPblChS/L0kRZ4Wau5nCW/OxFr+t77EuANv/5GnKoVA2RnZ
-         U3t4K8+wCfKsh7UY8h1tuEkK3py4pCoOZSGnFRf3f9mRN4EtAsUu7nyxzG0LInuEvj0p
-         DjUNi319sATk3buxrvArAJEM0UfSRWaEjIhQbhNVrtSSmdj3DcPkHtuvn8s3ht/h6MSe
-         gSXjVFfajx/PSnBhBzXfrESS9pq34IA4aLdUTXdMY6ZotVmPmpzEgw1T+BfnPssvCU9C
-         owikGzCqaYW7M3NmrWTqtRiZ1sxF3U2HI4UsVXwCOxRcXTd0P5M3CFRptAHnRp8NzTXx
-         6MAw==
+        bh=bfwrkbhLrbte3ifsqNDH76QA6U3FeJoA58L19HPvYEo=;
+        b=FDFCY4pIZsO1DFTetcZ/L+iNMWBXtxKVGUWJzcfguUVlqLKXUo7L+J/977cfNysgD+
+         IPssJevSWzwg/7gVqtgtyn6rCjlTSfDfxamIBnBa2CGY5yGJ0QPos35RBAmahiJbMsa4
+         TbmcV5JFCTxNpgy5ETNMuAZDZviiorJPcIxCDiW865IvX/nM2sdKWSRvFI9vWftN4p0Q
+         pgfTFizgiml+HXMnd2LivcDhQNEmofJjjqii7itHUzuiznvOl0VWHfkN5a3x+lJ26/T7
+         QWbY1t0yBQcFBZ32+4KeIsCC0MT+QfzMzTzu6IiK83yuESOtkitcJQ9WoMpPn2rHH9K8
+         Ndiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763819994; x=1764424794;
+        d=1e100.net; s=20230601; t=1763820043; x=1764424843;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=n3RDHdAOWTPHz680YM/cr1HvFmiWY++575d9xo1fZrs=;
-        b=KC1IS5kOx0ztaaZojFY7htfaJZ8sOg64giLLZdJHMMtueX/UqK/yNGu9KztPgAMAIm
-         bfW/84rewyEyAaj8O0WKGKfMUynmlmzPlC8igtLLlrc01qKf3G2hpwGUomY58VhjlIuT
-         pEJVBuOFYw2RC0lpf7MlT7Z5xBaSPGmxpO1u1c/dwOeXqnP7+PpwLjYh1vFHcY5BXe47
-         w2EcgKfek7dU5iMlZUKGBg8eycXtrViSY9GWvfWWG8gySZvEG+rH1OKSx40XRTCWgvXB
-         lG+1M0iGRpKBz/yiaqbnyriYGNd5Wq5vFZfuN58lT+i50yaoQwvVz1CNT8rVUULrKgM4
-         ZAqw==
-X-Forwarded-Encrypted: i=1; AJvYcCVIByEM4rw3rWbh5N04iJlTg2gimwIs3FM0z+sSrj8Gro1MeExKAIgXSBjCd7TeYoj9B5z3r/VRgv4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxUqqGdqfTkzqDJ0DSxuaPTyR7o8FG4U7c/unINVk2IyaaLpD+B
-	NpYRQxtlc4sPeoCDp8POEPWrXRwlqxagftk5p0vZXDoQAW+eC860T9pH
-X-Gm-Gg: ASbGnct1524X5+YTIPAu4KYpIGCNhOwzoQNioeK1vL9PGxPtLN49TudxRH8cCk8ZbNr
-	fW9DkTf3nOaB5aPNC0HsMxKk/1dUKX7XHfexxKUAS1o3FhYudrfwiVqJPfCMo9Hi37f32xn2vfG
-	UsIGNYe5UrOTzbTsT0Z+fVbyIC+N123+py05JihV6IomoEzZmnUCnNG0bLAH3+a0N0441B83VRC
-	ClURnrKABOasozXlDxqRKEmgmrlVJqh4Yjog/Bky1wNoM5POTf1fj+wdcR7YW/TyvuQhf+wwSom
-	2vtJOmgoi8B6azuUfrpjN8aYcRZtssaxL9owuaejH1bBcg49gfDBXCg4Tm1EAzfGqCl6ePUnzFR
-	XKUR7gODfAMJHXXidMsxp1ZKB9tkjIpp5jDA3Wy7M0dtMkqxrwhQVsdGFcUqNctbQu2Va57Qopa
-	d4KVblb1h4S2EYv6yX+LPjogySqMkPkEEC6PWoUWv1s2dTzAGmW3RH2oCMqIpUiH/URB8tPxKDi
-	TCa99B03kTkwWLy
-X-Google-Smtp-Source: AGHT+IGYuA3JTqfejqsIhzZHqJz3Ln1oqoniCKUclnrBoDL1DrIFTZ/UyM8tSRO8lbfuTmQFjQVKMg==
-X-Received: by 2002:a05:600c:4e88:b0:46e:7247:cbc0 with SMTP id 5b1f17b1804b1-477c01d4af2mr60178185e9.18.1763819993601;
-        Sat, 22 Nov 2025 05:59:53 -0800 (PST)
+        bh=bfwrkbhLrbte3ifsqNDH76QA6U3FeJoA58L19HPvYEo=;
+        b=g1L2BXTnkqVWNj/8EPHvQbDa9YR6ke1Clgl6m70U7LXH+N7KNGZl5hZCJkdlTIqSz2
+         y3A6VBm0HXCzDW5rbDeh1KC2UGUcZT+RoTBRH7Uu078A++x23mrtrYj4i3qHYKOa64Sr
+         6UqzIstJ/dLZQk5kp1Hc4D8Ou8e7gG6NaFHBqq1V5w2dLI503kkLbc4XNARUeijIj4Dr
+         zWLOki+NmBgTryxZ7YmyGct3HjnH1tiJt1zczJa+F4I3be6UwkTPCYyyEjFLSUwliZ2s
+         BV15ZRkznp1NGBmZYFu4LacN9z86kL22RmzbkG+hnZIBwTBmIpe3xjoQqEAoITFN9M1U
+         r7RA==
+X-Forwarded-Encrypted: i=1; AJvYcCUTtuVgtJRoVOCTqyFy4/Ah3zD5aJZxbo+JuLsZsUW5UyK7LbOfXF7dbuPXIUTLKE0Dh7H/jxfqLKs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwWJxQsvBQjdFfF6XkEyMaZ2BdgoUxpsU51wHiGT6/I2lwqrnsN
+	2XMyOGjMaCVrDTX19P7/KqOTJoslS+/G+Xd3cr9Vr9gk+PVxne4/O8+o
+X-Gm-Gg: ASbGnctiS/Jxqm0fYV6zTmUesMyciOBjvvfe28R2QFog7dImMBMUtgoQ5fOMDac96G/
+	xZXPUwmkTf/JzCqI6zyAgptg0DpXP1EjwIDdFd9GDvFjmE6SdUZd7QBaX9MBNr6FZ+HaUZE13Ah
+	RvkI9OzWHGwvCyuzJLfPBe6VMwp6a8E2NGUaARs/jbk8fPxeQ7Q0ditON5BybWtg/ImVVAiKJIQ
+	fIKv/XNlNwMu5m07NFhQqPhRgtUzq5lw3wHnNKTR76EJzRxm57+qeKCSzSUel3cbjlbNxBemg/D
+	UzJYbhuGkDz32Iw5OgChKdr91X9jm2HjUKs6oFtg9LlwRgx0Yolh9c817qQrDYdIaoexGFCX0yP
+	WSbjMnf9jMGAcl5iT48HRa1Ae8HCtfDYM+G8r+VO0zZwCjQOoLvRZSJLyTXto/FgjTHAAArGqyP
+	i5wUOJr63lILN+ZgFtyVQQ9soc4QYBaiP6KONG/f7xbDME5P/VqTQCTUWjhHJtr7ASipR6RwaG+
+	XrPdg==
+X-Google-Smtp-Source: AGHT+IGCTRKOT74K0saRhZjnA8SssUcOet/loygSO0mcvZW4qeg4K5sLv0R2XFKB1yMWmNn38c4hpg==
+X-Received: by 2002:a05:6000:22c9:b0:42b:2eb3:c910 with SMTP id ffacd0b85a97d-42cc1cd9466mr5763465f8f.3.1763820042951;
+        Sat, 22 Nov 2025 06:00:42 -0800 (PST)
 Received: from ?IPV6:2a06:5906:2618:cb00:9815:cfad:3c92:4b87? ([2a06:5906:2618:cb00:9815:cfad:3c92:4b87])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-477a9deb126sm106372255e9.9.2025.11.22.05.59.52
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42cb7fba201sm16995503f8f.32.2025.11.22.06.00.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 22 Nov 2025 05:59:53 -0800 (PST)
-Message-ID: <1cb23033-1fa5-4c6b-9cf2-23d26ded18d5@gmail.com>
-Date: Sat, 22 Nov 2025 13:59:52 +0000
+        Sat, 22 Nov 2025 06:00:42 -0800 (PST)
+Message-ID: <2adb1d9e-9891-4318-bbd2-c6537af538c2@gmail.com>
+Date: Sat, 22 Nov 2025 14:00:41 +0000
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -86,61 +86,43 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v8 0/4] rust: i2c: Add basic I2C driver abstractions
-To: Danilo Krummrich <dakr@kernel.org>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
- Wolfram Sang <wsa+renesas@sang-engineering.com>,
- Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+To: Markus Probst <markus.probst@posteo.de>, Miguel Ojeda <ojeda@kernel.org>,
+ Alex Gaynor <alex.gaynor@gmail.com>,
+ Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
  =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
  Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>,
  Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+ Danilo Krummrich <dakr@kernel.org>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
  Viresh Kumar <viresh.kumar@linaro.org>,
  Asahi Lina <lina+kernel@asahilina.net>,
  Wedson Almeida Filho <wedsonaf@gmail.com>, Alex Hung <alex.hung@amd.com>,
  Tamir Duberstein <tamird@gmail.com>,
- Xiangfei Ding <dingxiangfei2009@gmail.com>,
- Markus Probst <markus.probst@posteo.de>, linux-kernel@vger.kernel.org,
+ Xiangfei Ding <dingxiangfei2009@gmail.com>, linux-kernel@vger.kernel.org,
  rust-for-linux@vger.kernel.org, linux-i2c@vger.kernel.org
 References: <20251116162104.171420-1-igor.korotin.linux@gmail.com>
- <DEBAOI46JIOO.B0TGI5HFLVJ2@kernel.org>
+ <25c70010f67e9f0760840e35cc722d3bb89fd703.camel@posteo.de>
 Content-Language: en-US
 From: Igor Korotin <igor.korotin.linux@gmail.com>
-In-Reply-To: <DEBAOI46JIOO.B0TGI5HFLVJ2@kernel.org>
+In-Reply-To: <25c70010f67e9f0760840e35cc722d3bb89fd703.camel@posteo.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
+Hello Markus
 
-Hello Danilo
+On 11/17/2025 4:15 PM, Markus Probst wrote:
+> add me to cc please.
+> 
+> My led driver currently relies on the i2c bindings.
+> 
+> Thanks
+> - Markus Probst
 
-On 11/17/2025 9:40 PM, Danilo Krummrich wrote:
-> (Cc: Markus)
-> 
-> On Mon Nov 17, 2025 at 3:21 AM AEDT, Igor Korotin wrote:
-> 
-> Applied to driver-core-testing, thanks!
-> 
->> Igor Korotin (4):
->>    rust: i2c: add basic I2C device and driver abstractions
-> 
->      [ Remove unnecessary safety comment; fix rustdoc `Device` -> `I2cClient`.
->        - Danilo ]
-> 
->>    rust: i2c: add manual I2C device creation abstractions
-> 
->      [ Remove unnecessary safety comment. - Danilo ]
-> 
->>    samples: rust: add Rust I2C sample driver
->>    samples: rust: add Rust I2C client registration sample
-> 
->      [ * Remove dependency to I2C_CHARDEV, depend on I2C=y.
->        * Remove unnecessary impl Drop for SampleDriver.
->        * Rename i2c::Registration, import Devres.
->        * Fixup module description.
->        * Add new source file to MAINTAINERS.
->        - Danilo ]
+Sure, no problem
 
-Thanks a lot for the review and all the fixes of yours.
-
-Cheers
+Thanks
 Igor
+
+
 
