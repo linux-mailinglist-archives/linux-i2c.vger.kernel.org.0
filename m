@@ -1,128 +1,173 @@
-Return-Path: <linux-i2c+bounces-14235-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14237-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BCA30C7D215
-	for <lists+linux-i2c@lfdr.de>; Sat, 22 Nov 2025 15:00:52 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id BEE1EC7DF6C
+	for <lists+linux-i2c@lfdr.de>; Sun, 23 Nov 2025 11:24:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 826FC3AA2C1
-	for <lists+linux-i2c@lfdr.de>; Sat, 22 Nov 2025 14:00:51 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 14DB334D058
+	for <lists+linux-i2c@lfdr.de>; Sun, 23 Nov 2025 10:24:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C526B23C4FA;
-	Sat, 22 Nov 2025 14:00:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C0D82C3261;
+	Sun, 23 Nov 2025 10:24:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FDFCY4pI"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Q1YJhYT9"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D538520DD51
-	for <linux-i2c@vger.kernel.org>; Sat, 22 Nov 2025 14:00:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03A3F299928;
+	Sun, 23 Nov 2025 10:24:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763820046; cv=none; b=hxX7hWelwevgWAZuw8SujWh3H8ugnrWiBqzLHgc1avUMpz15AdI76rdJcq6VPTyQEJVIuAq8fZS+QVNYayeyd1H15lcqMEXHELZjvwYO7rAiEPGUhR6aOZr7miea9rTBkD41+CHYoJ10mCV2KUB3OHbaf2o5t9YiIP4Iv/zXr7g=
+	t=1763893466; cv=none; b=RS0KHFT0x+Vrg3tyIWfHNGwoHb6wmTw+ty18yIVj8aFyhzsLYMBqApk1rJCzy0p7mINC3mwyn2risbfWqkv06eNo/eAtazC9QZpudPhdQAoqnVSFvaYIBBHEu1Hgtf6ONI3P6xUVPB2TuxNG6HHS4SM0oiVR5QSrsHV7YpzHJuw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763820046; c=relaxed/simple;
-	bh=quy70Ek/g6qrhcqWBI6EKf77vs+SuiqG7tLVTxxmDl0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dTOTIu+GmS2NmHDistWbq4TqiAyamqbYjFoqmW63AoXua1kZzyoByRfr9e2R3QbHVr2/VW8REPgajsWUWEy2IznodNdIomvyLwFp0vpgo20DDVTLARLiDXWHkpfQaorIq2Ev16RMPKXAVDkEsGMWTC49yrCAyK/dF7Fmn/sWI64=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FDFCY4pI; arc=none smtp.client-ip=209.85.221.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-42b32900c8bso1714524f8f.0
-        for <linux-i2c@vger.kernel.org>; Sat, 22 Nov 2025 06:00:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763820043; x=1764424843; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bfwrkbhLrbte3ifsqNDH76QA6U3FeJoA58L19HPvYEo=;
-        b=FDFCY4pIZsO1DFTetcZ/L+iNMWBXtxKVGUWJzcfguUVlqLKXUo7L+J/977cfNysgD+
-         IPssJevSWzwg/7gVqtgtyn6rCjlTSfDfxamIBnBa2CGY5yGJ0QPos35RBAmahiJbMsa4
-         TbmcV5JFCTxNpgy5ETNMuAZDZviiorJPcIxCDiW865IvX/nM2sdKWSRvFI9vWftN4p0Q
-         pgfTFizgiml+HXMnd2LivcDhQNEmofJjjqii7itHUzuiznvOl0VWHfkN5a3x+lJ26/T7
-         QWbY1t0yBQcFBZ32+4KeIsCC0MT+QfzMzTzu6IiK83yuESOtkitcJQ9WoMpPn2rHH9K8
-         Ndiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763820043; x=1764424843;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bfwrkbhLrbte3ifsqNDH76QA6U3FeJoA58L19HPvYEo=;
-        b=g1L2BXTnkqVWNj/8EPHvQbDa9YR6ke1Clgl6m70U7LXH+N7KNGZl5hZCJkdlTIqSz2
-         y3A6VBm0HXCzDW5rbDeh1KC2UGUcZT+RoTBRH7Uu078A++x23mrtrYj4i3qHYKOa64Sr
-         6UqzIstJ/dLZQk5kp1Hc4D8Ou8e7gG6NaFHBqq1V5w2dLI503kkLbc4XNARUeijIj4Dr
-         zWLOki+NmBgTryxZ7YmyGct3HjnH1tiJt1zczJa+F4I3be6UwkTPCYyyEjFLSUwliZ2s
-         BV15ZRkznp1NGBmZYFu4LacN9z86kL22RmzbkG+hnZIBwTBmIpe3xjoQqEAoITFN9M1U
-         r7RA==
-X-Forwarded-Encrypted: i=1; AJvYcCUTtuVgtJRoVOCTqyFy4/Ah3zD5aJZxbo+JuLsZsUW5UyK7LbOfXF7dbuPXIUTLKE0Dh7H/jxfqLKs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwWJxQsvBQjdFfF6XkEyMaZ2BdgoUxpsU51wHiGT6/I2lwqrnsN
-	2XMyOGjMaCVrDTX19P7/KqOTJoslS+/G+Xd3cr9Vr9gk+PVxne4/O8+o
-X-Gm-Gg: ASbGnctiS/Jxqm0fYV6zTmUesMyciOBjvvfe28R2QFog7dImMBMUtgoQ5fOMDac96G/
-	xZXPUwmkTf/JzCqI6zyAgptg0DpXP1EjwIDdFd9GDvFjmE6SdUZd7QBaX9MBNr6FZ+HaUZE13Ah
-	RvkI9OzWHGwvCyuzJLfPBe6VMwp6a8E2NGUaARs/jbk8fPxeQ7Q0ditON5BybWtg/ImVVAiKJIQ
-	fIKv/XNlNwMu5m07NFhQqPhRgtUzq5lw3wHnNKTR76EJzRxm57+qeKCSzSUel3cbjlbNxBemg/D
-	UzJYbhuGkDz32Iw5OgChKdr91X9jm2HjUKs6oFtg9LlwRgx0Yolh9c817qQrDYdIaoexGFCX0yP
-	WSbjMnf9jMGAcl5iT48HRa1Ae8HCtfDYM+G8r+VO0zZwCjQOoLvRZSJLyTXto/FgjTHAAArGqyP
-	i5wUOJr63lILN+ZgFtyVQQ9soc4QYBaiP6KONG/f7xbDME5P/VqTQCTUWjhHJtr7ASipR6RwaG+
-	XrPdg==
-X-Google-Smtp-Source: AGHT+IGCTRKOT74K0saRhZjnA8SssUcOet/loygSO0mcvZW4qeg4K5sLv0R2XFKB1yMWmNn38c4hpg==
-X-Received: by 2002:a05:6000:22c9:b0:42b:2eb3:c910 with SMTP id ffacd0b85a97d-42cc1cd9466mr5763465f8f.3.1763820042951;
-        Sat, 22 Nov 2025 06:00:42 -0800 (PST)
-Received: from ?IPV6:2a06:5906:2618:cb00:9815:cfad:3c92:4b87? ([2a06:5906:2618:cb00:9815:cfad:3c92:4b87])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42cb7fba201sm16995503f8f.32.2025.11.22.06.00.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 22 Nov 2025 06:00:42 -0800 (PST)
-Message-ID: <2adb1d9e-9891-4318-bbd2-c6537af538c2@gmail.com>
-Date: Sat, 22 Nov 2025 14:00:41 +0000
+	s=arc-20240116; t=1763893466; c=relaxed/simple;
+	bh=MqXY389cFH5UMcUPlSXH9uPa/8KZTxgMoJ1/hoC4agI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=t7xhbgfXxH4QqWqXmnyj3wwzFjeuh0K3FgvBCfVrvEPhV50Kc0M0VHmuZ6TPO2oqQ+1XAkdrnWaJIcnFS4TikxMVpORYAAqPcLCxEsiuSWKVQvc8N8UjfAmAv9ggQtM3g8KVt74fgao3/GP0tr1qSKeaORHmE6Dse225ITxKWsA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Q1YJhYT9; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1763893464; x=1795429464;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=MqXY389cFH5UMcUPlSXH9uPa/8KZTxgMoJ1/hoC4agI=;
+  b=Q1YJhYT9qlD4IjyzC8q1xaxszM40u+nYMXxyvm8D5YOyeKkP0klmCRWY
+   tXDKk1U95nkeqWGaRZW5ho19SbXVnV4JvYXzVaJNiLxreLsR8MgV08KqO
+   JYPd+YOCx1U2sFVqoj5LSCMDPLUdCCi1H1a8G3TEMjTKRwVGSL37nG7kh
+   yeB8ifU04x0Id0r9gteyq4AMH8DWczPBy1SZ1MhZFXC3kpDoq3kGrhWy3
+   fYWP6klGQBTDgnc7n1vNjp4zQTAmRxGouYHq0KKPiGk+KLDok5XJ8lWm8
+   a2gucZlyrchrpft1eoOnDa2fxWl7swASRxkwcKgVj4zzzEDYtjPF6Cc84
+   Q==;
+X-CSE-ConnectionGUID: mz2ovoYBTd6Rb4bd/hcmeA==
+X-CSE-MsgGUID: Y3dFu+nLSEiYx+PFWYNt9w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11621"; a="69539478"
+X-IronPort-AV: E=Sophos;i="6.20,220,1758610800"; 
+   d="scan'208";a="69539478"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2025 02:24:23 -0800
+X-CSE-ConnectionGUID: IOlcPXmdTe2zhrKUUd+6tA==
+X-CSE-MsgGUID: wiT+jHJwSv6BnQBDmtjWvA==
+X-ExtLoop1: 1
+Received: from lkp-server01.sh.intel.com (HELO adf6d29aa8d9) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 23 Nov 2025 02:24:19 -0800
+Received: from kbuild by adf6d29aa8d9 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vN7GS-0008D1-1r;
+	Sun, 23 Nov 2025 10:24:16 +0000
+Date: Sun, 23 Nov 2025 18:23:47 +0800
+From: kernel test robot <lkp@intel.com>
+To: Praveen Talari <praveen.talari@oss.qualcomm.com>,
+	Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Mukesh Kumar Savaliya <mukesh.savaliya@oss.qualcomm.com>,
+	Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	psodagud@quicinc.com, djaggi@quicinc.com, quic_msavaliy@quicinc.com,
+	quic_vtanuku@quicinc.com, quic_arandive@quicinc.com,
+	quic_shazhuss@quicinc.com
+Subject: Re: [PATCH v1 03/12] soc: qcom: geni-se: Introduce helper API for
+ resource initialization
+Message-ID: <202511231819.jiLYo6Fl-lkp@intel.com>
+References: <20251122050018.283669-4-praveen.talari@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 0/4] rust: i2c: Add basic I2C driver abstractions
-To: Markus Probst <markus.probst@posteo.de>, Miguel Ojeda <ojeda@kernel.org>,
- Alex Gaynor <alex.gaynor@gmail.com>,
- Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
- =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>,
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
- Danilo Krummrich <dakr@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Viresh Kumar <viresh.kumar@linaro.org>,
- Asahi Lina <lina+kernel@asahilina.net>,
- Wedson Almeida Filho <wedsonaf@gmail.com>, Alex Hung <alex.hung@amd.com>,
- Tamir Duberstein <tamird@gmail.com>,
- Xiangfei Ding <dingxiangfei2009@gmail.com>, linux-kernel@vger.kernel.org,
- rust-for-linux@vger.kernel.org, linux-i2c@vger.kernel.org
-References: <20251116162104.171420-1-igor.korotin.linux@gmail.com>
- <25c70010f67e9f0760840e35cc722d3bb89fd703.camel@posteo.de>
-Content-Language: en-US
-From: Igor Korotin <igor.korotin.linux@gmail.com>
-In-Reply-To: <25c70010f67e9f0760840e35cc722d3bb89fd703.camel@posteo.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251122050018.283669-4-praveen.talari@oss.qualcomm.com>
 
-Hello Markus
+Hi Praveen,
 
-On 11/17/2025 4:15 PM, Markus Probst wrote:
-> add me to cc please.
-> 
-> My led driver currently relies on the i2c bindings.
-> 
-> Thanks
-> - Markus Probst
+kernel test robot noticed the following build errors:
 
-Sure, no problem
+[auto build test ERROR on d724c6f85e80a23ed46b7ebc6e38b527c09d64f5]
 
-Thanks
-Igor
+url:    https://github.com/intel-lab-lkp/linux/commits/Praveen-Talari/soc-qcom-geni-se-Refactor-geni_icc_get-and-make-qup-memory-ICC-path-optional/20251122-130449
+base:   d724c6f85e80a23ed46b7ebc6e38b527c09d64f5
+patch link:    https://lore.kernel.org/r/20251122050018.283669-4-praveen.talari%40oss.qualcomm.com
+patch subject: [PATCH v1 03/12] soc: qcom: geni-se: Introduce helper API for resource initialization
+config: loongarch-randconfig-002-20251123 (https://download.01.org/0day-ci/archive/20251123/202511231819.jiLYo6Fl-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251123/202511231819.jiLYo6Fl-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511231819.jiLYo6Fl-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/soc/qcom/qcom-geni-se.c:1046:10: error: incompatible pointer to integer conversion returning 'void *' from a function with result type 'int' [-Wint-conversion]
+    1046 |                 return ERR_PTR(ret);
+         |                        ^~~~~~~~~~~~
+   1 error generated.
 
 
+vim +1046 drivers/soc/qcom/qcom-geni-se.c
+
+  1015	
+  1016	/**
+  1017	 * geni_se_resources_init() - Initialize resources for a GENI SE device.
+  1018	 * @se: Pointer to the geni_se structure representing the GENI SE device.
+  1019	 *
+  1020	 * This function initializes various resources required by the GENI Serial Engine
+  1021	 * (SE) device, including clock resources (core and SE clocks), interconnect
+  1022	 * paths for communication.
+  1023	 * It retrieves optional and mandatory clock resources, adds an OF-based
+  1024	 * operating performance point (OPP) table, and sets up interconnect paths
+  1025	 * with default bandwidths. The function also sets a flag (`has_opp`) to
+  1026	 * indicate whether OPP support is available for the device.
+  1027	 *
+  1028	 * Return: 0 on success, or a negative errno on failure.
+  1029	 */
+  1030	int geni_se_resources_init(struct geni_se *se)
+  1031	{
+  1032		int ret;
+  1033	
+  1034		se->core_clk = devm_clk_get_optional(se->dev, "core");
+  1035		if (IS_ERR(se->core_clk))
+  1036			return dev_err_probe(se->dev, PTR_ERR(se->core_clk),
+  1037					     "Failed to get optional core clk\n");
+  1038	
+  1039		se->clk = devm_clk_get(se->dev, "se");
+  1040		if (IS_ERR(se->clk) && !has_acpi_companion(se->dev))
+  1041			return dev_err_probe(se->dev, PTR_ERR(se->clk),
+  1042					     "Failed to get SE clk\n");
+  1043	
+  1044		ret = devm_pm_opp_set_clkname(se->dev, "se");
+  1045		if (ret)
+> 1046			return ERR_PTR(ret);
+  1047	
+  1048		ret = devm_pm_opp_of_add_table(se->dev);
+  1049		if (ret && ret != -ENODEV)
+  1050			return dev_err_probe(se->dev, ret, "Failed to add OPP table\n");
+  1051	
+  1052		se->has_opp = (ret == 0);
+  1053	
+  1054		ret = geni_icc_get(se, "qup-memory");
+  1055		if (ret)
+  1056			return ret;
+  1057	
+  1058		return geni_icc_set_bw_ab(se, GENI_DEFAULT_BW, GENI_DEFAULT_BW, GENI_DEFAULT_BW);
+  1059	}
+  1060	EXPORT_SYMBOL_GPL(geni_se_resources_init);
+  1061	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
