@@ -1,309 +1,307 @@
-Return-Path: <linux-i2c+bounces-14240-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14244-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 016EBC7FC5A
-	for <lists+linux-i2c@lfdr.de>; Mon, 24 Nov 2025 10:57:47 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5B8CC813DC
+	for <lists+linux-i2c@lfdr.de>; Mon, 24 Nov 2025 16:08:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 0090834BB4B
-	for <lists+linux-i2c@lfdr.de>; Mon, 24 Nov 2025 09:56:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0E0343A20B8
+	for <lists+linux-i2c@lfdr.de>; Mon, 24 Nov 2025 15:08:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B38562FB99A;
-	Mon, 24 Nov 2025 09:54:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13C812FFF92;
+	Mon, 24 Nov 2025 15:08:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gondor.apana.org.au header.i=@gondor.apana.org.au header.b="P87gnIuA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UObOIC5b"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from abb.hmeau.com (abb.hmeau.com [180.181.231.80])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C901424B28;
-	Mon, 24 Nov 2025 09:54:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=180.181.231.80
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F15BC30BB83
+	for <linux-i2c@vger.kernel.org>; Mon, 24 Nov 2025 15:08:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763978079; cv=none; b=OrhBTwl6BMqS8pYcfarqR9HGAhSeI26vREWeXj7sBtD3362M7aMbqTWKdvA+MacwqTfvv60xSfYJrLX5R7ZY13HB4AG4msj+1X0S9R+Z/MP740gcweSDj6N1kvAhRDqqwqzdmvUcPjbfzOSF6WcoccepgvIZ1DE8k4B1kYcckKQ=
+	t=1763996904; cv=none; b=FGJ6tudfD8IIG4rTPhxCxPQT6yDBD9Ya1LJoOW+4kFUlZZPCZC5XVTk1YpuVamqqJoHkcmFcfdlHuH1QWx/K5oOZk5ko2it3RHI7OqTmiRSUxRuLHXnR6T4jhcN+gWnRoER8p867lNoGgo33qRtoXoF2qzJdZt2UyN2WPdsul4M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763978079; c=relaxed/simple;
-	bh=zgUegguLz9fnh3Kc5FyiFvVdDbDa4+bOp5Www3PDcuc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ctY5ec1pVMPgAQziivIuyNMUNBBzBLjHqXG57D/iuzXjRNcJdrcJjU9kdacC12pvOLum/X7GMW/2XgVUnWfvsJJolpF2qFqE3iXEuv3DrL1T+h/W/fWPLtntbF/kEBoAZhmjDER1oIdcu/C7H+zIkeFDv76zc8PF6r9/vuR0yyU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=gondor.apana.org.au header.i=@gondor.apana.org.au header.b=P87gnIuA; arc=none smtp.client-ip=180.181.231.80
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=gondor.apana.org.au; s=h01; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:cc:to:subject:message-id:date:
-	from:content-type:reply-to; bh=B05uJapQfRMGohKkgF1xNVyERBHmagh8Bd3xg1q2NeI=; 
-	b=P87gnIuANW/TJp73uiT1mmsGlTWnBuH0H7vh23lNqSWq4OBDSGmsQEtkmAFMHotC7U4wL6z8BsM
-	xZhrA2DnJ6Byz1eNq9hCgsl0YlQqjChTspvActJHQABJusXSSyN3NViM7BAWMow9uYLi6/azgr/1S
-	bPNPkqeI4K++8lXngyxVPKygWdoefLDaHUV8R9vP4h+Voyby/LgDfyG/U2ZiZD9XFH7HpGmBTtoYh
-	gxxkqEEHWY1my7y2fTHFr9TydDJrVMgiVb3KBgJmEGPf57jfBn092eZeVh0rkWj5FfVDm/r5gwJdx
-	bl004005PGTqWH4a9OI+Nq6nG2BqQ4oMU7WA==;
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
-	id 1vNTCh-005XNj-0w;
-	Mon, 24 Nov 2025 17:49:52 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Mon, 24 Nov 2025 17:49:51 +0800
-Date: Mon, 24 Nov 2025 17:49:51 +0800
-From: Herbert Xu <herbert@gondor.apana.org.au>
-To: david.laight.linux@gmail.com
-Cc: linux-kernel@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Andreas Dilger <adilger.kernel@dilger.ca>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Bjorn Helgaas <bhelgaas@google.com>, Borislav Petkov <bp@alien8.de>,
-	Christian Brauner <brauner@kernel.org>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	Christoph Hellwig <hch@lst.de>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Dave Jiang <dave.jiang@intel.com>, David Ahern <dsahern@kernel.org>,
-	David Hildenbrand <david@redhat.com>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	"David S. Miller" <davem@davemloft.net>,
-	Dennis Zhou <dennis@kernel.org>, Eric Dumazet <edumazet@google.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Ingo Molnar <mingo@redhat.com>, Jakub Kicinski <kuba@kernel.org>,
-	Jakub Sitnicki <jakub@cloudflare.com>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	"Jason A. Donenfeld" <Jason@zx2c4.com>,
-	Jens Axboe <axboe@kernel.dk>, Jiri Slaby <jirislaby@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	John Allen <john.allen@amd.com>,
-	Jonathan Cameron <jonathan.cameron@huawei.com>,
-	Juergen Gross <jgross@suse.com>, Kees Cook <kees@kernel.org>,
-	KP Singh <kpsingh@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	Mika Westerberg <westeri@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>, Miklos Szeredi <miklos@szeredi.hu>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Neal Cardwell <ncardwell@google.com>, nic_swsd@realtek.com,
-	OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
-	Olivia Mackall <olivia@selenic.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Peter Huewe <peterhuewe@gmx.de>,
-	Peter Zijlstra <peterz@infradead.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Sean Christopherson <seanjc@google.com>,
-	Srinivas Kandagatla <srini@kernel.org>,
-	Stefano Stabellini <sstabellini@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>, Tejun Heo <tj@kernel.org>,
-	Theodore Ts'o <tytso@mit.edu>, Thomas Gleixner <tglx@linutronix.de>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, x86@kernel.org,
-	Yury Norov <yury.norov@gmail.com>, amd-gfx@lists.freedesktop.org,
-	bpf@vger.kernel.org, cgroups@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, io-uring@vger.kernel.org,
-	kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
-	linux-block@vger.kernel.org, linux-crypto@vger.kernel.org,
-	linux-cxl@vger.kernel.org, linux-efi@vger.kernel.org,
-	linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-integrity@vger.kernel.org, linux-mm@kvack.org,
-	linux-nvme@lists.infradead.org, linux-pci@vger.kernel.org,
-	linux-perf-users@vger.kernel.org, linux-scsi@vger.kernel.org,
-	linux-serial@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, mptcp@lists.linux.dev,
-	netdev@vger.kernel.org, usb-storage@lists.one-eyed-alien.net
-Subject: Re: [PATCH 00/44] Change a lot of min_t() that might mask high bits
-Message-ID: <aSQqP6nlqGYOGqcJ@gondor.apana.org.au>
-References: <20251119224140.8616-1-david.laight.linux@gmail.com>
+	s=arc-20240116; t=1763996904; c=relaxed/simple;
+	bh=wSQ341CU5vsOctNXexpEakv7qkoHtZ0v3orCbR3i2WA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WLNYptxvZXE8g2U4lGmd58K4ZLYJ/j2GlQdlyGgV6jlLyxifK4dNbYRj+5Oxxrmhfe39vhrUAhJj0AjtLkYtYjP2goGevdL/ApJztWd4NWoDtPxraxsTSBTjpr+yaNJ0adBbW+JNFKOMucCokhMYDPX8VmGHeaKP4IJjzIcYV9Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UObOIC5b; arc=none smtp.client-ip=209.85.208.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-6406f3dcc66so7108259a12.3
+        for <linux-i2c@vger.kernel.org>; Mon, 24 Nov 2025 07:08:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1763996901; x=1764601701; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DMHuhLQ2+QePhLbxyyov6Mwfn5dk2KsNTjCwuBZ/B2U=;
+        b=UObOIC5bYFmOj7Az5V7DL/862N41I4gE3msvUcMKupud00EYAhuZViWviuXmXBHxiu
+         Tjjel2eYkSqUazB08nnuKayFEDdGdtalPXF3KTPnsxm34Czh7ZpKKQ0UzIYAQoGlzYR1
+         +KONQBxAsZhqQGuL+2C28K+mdgiEsYwoexXsLwVzmfop9Zwn3sS5ebyVL1B63POMS/+C
+         TXRPSoc+Z6/0GSU7dljRhzU1hFRG0d1IylcLWAkbiFYHw3hceXVP3JOPjm+tBuq2Rq6B
+         MN6d4DP8a7HzBOR4Y1z5UdHnfJ36yrCQ92u12+PFnBvQlhr0N1yDsi2ka+97C4kLW9j6
+         1OkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763996901; x=1764601701;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DMHuhLQ2+QePhLbxyyov6Mwfn5dk2KsNTjCwuBZ/B2U=;
+        b=cixUV0zUao08lPgMh4IEG33TMbFQ7Sv6jedEvIijMS11zTjS3P4tFyCrgUXpF9lDNw
+         K3ZIvKhslWdKfNjdaHk9MWS8SOEtoRKkNaOOUp9BrO2vqHfKrGdqjTcU6aPEEvlS3Vud
+         RO99+4Ah4sfTI+D2aNNaeEeFjsUWLOpdjTTgPuF7ZfCVdVKsgQGq0HMtYQS9zAdr6fhp
+         KMEZCW1S/vyPMBTYCj+WQMs+5BxrX5swGZEbj67ZkyDXPDUZ9zkID0BfrpFjwXd44LFH
+         bogVNYhRT4tKd7Ouq4UUw25FatAakL7rCSyRty+X7GoyF/zMDXK2UWYsl0WbGaC70OOC
+         agpQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX/dyAlgnyb76hhXVWqJoINiWORd1oW9TUHhLI5k4w8OEXV7yurI0HgfOd8fasaHmQR2ruVXWEMBZg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx87S8pOmUtMv/wfQXAON7ly/s8fboaXUvz8J4Fol245inZlMKx
+	QDKAQx7lUOQUqflizS1KnvGpj8jtHSEleFcmmYOx9Ny5nefcjBGGZp6xokAozVRw
+X-Gm-Gg: ASbGncu3GJxSJAE6um06mOULQyBTAcm59H1QFMUkVycmkYiMqca5G4SMgO164reSmO5
+	zRUoFt2A09qO35wjoGr3zjoW3U7JE/j0vXS0IZtnDGPRnhDrSlsFUlzaGYpRKV5c0HpHZ1jOT4T
+	Nmw/sgMN4vH/GeoOvRTQ/1aW0e2CarjVbmWDVJKL3QHDdMMMHf65DyozeES5hVl6ii2NZEIpCk9
+	utCo4ERYZQa/UetVlQxkCJ9re4OaTQ+APe6Cq8ip6gBaMXgL2tPYK8zPUY2UpfsJ3G45agRvgOn
+	gKZrl1IKlJqql4ftMYTG5FvX70JyuGgkrhvbLFZ2OO8C+dSChgixBGskZlebfCIn+gJtquR5vyX
+	9NLuFvYmC9sIYHmnc6zv1uoCeGRLsfGMJIJBkmlpH4IDQZStYNh42gxnsYcOGR9MO/MGwWh4iRH
+	rGpDrH9VXYbttVWg==
+X-Google-Smtp-Source: AGHT+IGs/95/cJ+tL3SsaiiXXgcuCaeuAg21ZTVttRpATbc8iAWB4Al2D0iS745iUZOaE4uems77rg==
+X-Received: by 2002:a2e:95d9:0:b0:37a:5bc6:ab9f with SMTP id 38308e7fff4ca-37cd92392c8mr23746331fa.26.1763989401463;
+        Mon, 24 Nov 2025 05:03:21 -0800 (PST)
+Received: from [10.38.18.76] ([213.255.186.37])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-37cc6b48e26sm27317291fa.1.2025.11.24.05.03.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Nov 2025 05:03:21 -0800 (PST)
+Message-ID: <f74ab0a2-b74b-4b96-8469-a716c850e230@gmail.com>
+Date: Mon, 24 Nov 2025 15:03:19 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251119224140.8616-1-david.laight.linux@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 01/29] Revert "treewide: Fix probing of devices in DT
+ overlays"
+To: Herve Codina <herve.codina@bootlin.com>, Andrew Lunn <andrew@lunn.ch>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
+ Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Fabio Estevam <festevam@gmail.com>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
+ Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ Peter Rosin <peda@axentia.se>, Arnd Bergmann <arnd@arndb.de>,
+ Saravana Kannan <saravanak@google.com>, Bjorn Helgaas <bhelgaas@google.com>,
+ Charles Keepax <ckeepax@opensource.cirrus.com>,
+ Richard Fitzgerald <rf@opensource.cirrus.com>,
+ David Rhodes <david.rhodes@cirrus.com>,
+ Linus Walleij <linus.walleij@linaro.org>,
+ Ulf Hansson <ulf.hansson@linaro.org>, Mark Brown <broonie@kernel.org>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Daniel Scally <djrscally@gmail.com>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Sakari Ailus <sakari.ailus@linux.intel.com>, Len Brown <lenb@kernel.org>,
+ Davidlohr Bueso <dave@stgolabs.net>,
+ Jonathan Cameron <jonathan.cameron@huawei.com>,
+ Dave Jiang <dave.jiang@intel.com>,
+ Alison Schofield <alison.schofield@intel.com>,
+ Vishal Verma <vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>,
+ Dan Williams <dan.j.williams@intel.com>,
+ Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: Wolfram Sang <wsa@kernel.org>, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, imx@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-pci@vger.kernel.org,
+ linux-sound@vger.kernel.org, patches@opensource.cirrus.com,
+ linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-spi@vger.kernel.org, linux-acpi@vger.kernel.org,
+ linux-cxl@vger.kernel.org, Allan Nielsen <allan.nielsen@microchip.com>,
+ Horatiu Vultur <horatiu.vultur@microchip.com>,
+ Steen Hegelund <steen.hegelund@microchip.com>,
+ Luca Ceresoli <luca.ceresoli@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20251015071420.1173068-1-herve.codina@bootlin.com>
+ <20251015071420.1173068-2-herve.codina@bootlin.com>
+Content-Language: en-US
+From: Kalle Niemi <kaleposti@gmail.com>
+In-Reply-To: <20251015071420.1173068-2-herve.codina@bootlin.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Nov 19, 2025 at 10:40:56PM +0000, david.laight.linux@gmail.com wrote:
-> From: David Laight <david.laight.linux@gmail.com>
+On 10/15/25 10:13, Herve Codina wrote:
+> From: Saravana Kannan <saravanak@google.com>
 > 
-> It in not uncommon for code to use min_t(uint, a, b) when one of a or b
-> is 64bit and can have a value that is larger than 2^32;
-> This is particularly prevelant with:
-> 	uint_var = min_t(uint, uint_var, uint64_expression);
+> This reverts commit 1a50d9403fb90cbe4dea0ec9fd0351d2ecbd8924.
 > 
-> Casts to u8 and u16 are very likely to discard significant bits.
+> While the commit fixed fw_devlink overlay handling for one case, it
+> broke it for another case. So revert it and redo the fix in a separate
+> patch.
 > 
-> These can be detected at compile time by changing min_t(), for example:
-> #define CHECK_SIZE(fn, type, val) \
-> 	BUILD_BUG_ON_MSG(sizeof (val) > sizeof (type) && \
-> 		!statically_true(((val) >> 8 * (sizeof (type) - 1)) < 256), \
-> 		fn "() significant bits of '" #val "' may be discarded")
+> Fixes: 1a50d9403fb9 ("treewide: Fix probing of devices in DT overlays")
+> Reported-by: Herve Codina <herve.codina@bootlin.com>
+> Closes: https://lore.kernel.org/lkml/CAMuHMdXEnSD4rRJ-o90x4OprUacN_rJgyo8x6=9F9rZ+-KzjOg@mail.gmail.com/
+> Closes: https://lore.kernel.org/all/20240221095137.616d2aaa@bootlin.com/
+> Closes: https://lore.kernel.org/lkml/20240312151835.29ef62a0@bootlin.com/
+> Signed-off-by: Saravana Kannan <saravanak@google.com>
+> Link: https://lore.kernel.org/lkml/20240411235623.1260061-2-saravanak@google.com/
+> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> Acked-by: Mark Brown <broonie@kernel.org>
+> ---
+>   drivers/bus/imx-weim.c    | 6 ------
+>   drivers/i2c/i2c-core-of.c | 5 -----
+>   drivers/of/dynamic.c      | 1 -
+>   drivers/of/platform.c     | 5 -----
+>   drivers/spi/spi.c         | 5 -----
+>   5 files changed, 22 deletions(-)
 > 
-> #define min_t(type, x, y) ({ \
-> 	CHECK_SIZE("min_t", type, x); \
-> 	CHECK_SIZE("min_t", type, y); \
-> 	__cmp_once(min, type, x, y); })
-> 
-> (and similar changes to max_t() and clamp_t().)
-> 
-> This shows up some real bugs, some unlikely bugs and some false positives.
-> In most cases both arguments are unsigned type (just different ones)
-> and min_t() can just be replaced by min().
-> 
-> The patches are all independant and are most of the ones needed to
-> get the x86-64 kernel I build to compile.
-> I've not tried building an allyesconfig or allmodconfig kernel.
-> I've also not included the patch to minmax.h itself.
-> 
-> I've tried to put the patches that actually fix things first.
-> The last one is 0009.
-> 
-> I gave up on fixing sched/fair.c - it is too broken for a single patch!
-> The patch for net/ipv4/tcp.c is also absent because do_tcp_getsockopt()
-> needs multiple/larger changes to make it 'sane'.
-> 
-> I've had to trim the 124 maintainers/lists that get_maintainer.pl finds
-> from 124 to under 100 to be able to send the cover letter.
-> The individual patches only go to the addresses found for the associated files.
-> That reduces the number of emails to a less unsane number.
-> 
-> David Laight (44):
->   x86/asm/bitops: Change the return type of variable__ffs() to unsigned
->     int
->   ext4: Fix saturation of 64bit inode times for old filesystems
->   perf: Fix branch stack callchain limit
->   io_uring/net: Change some dubious min_t()
->   ipc/msg: Fix saturation of percpu counts in msgctl_info()
->   bpf: Verifier, remove some unusual uses of min_t() and max_t()
->   net/core/flow_dissector: Fix cap of __skb_flow_dissect() return value.
->   net: ethtool: Use min3() instead of nested min_t(u16,...)
->   ipv6: __ip6_append_data() don't abuse max_t() casts
->   x86/crypto: ctr_crypt() use min() instead of min_t()
->   arch/x96/kvm: use min() instead of min_t()
->   block: use min() instead of min_t()
->   drivers/acpi: use min() instead of min_t()
->   drivers/char/hw_random: use min3() instead of nested min_t()
->   drivers/char/tpm: use min() instead of min_t()
->   drivers/crypto/ccp: use min() instead of min_t()
->   drivers/cxl: use min() instead of min_t()
->   drivers/gpio: use min() instead of min_t()
->   drivers/gpu/drm/amd: use min() instead of min_t()
->   drivers/i2c/busses: use min() instead of min_t()
->   drivers/net/ethernet/realtek: use min() instead of min_t()
->   drivers/nvme: use min() instead of min_t()
->   arch/x86/mm: use min() instead of min_t()
->   drivers/nvmem: use min() instead of min_t()
->   drivers/pci: use min() instead of min_t()
->   drivers/scsi: use min() instead of min_t()
->   drivers/tty/vt: use umin() instead of min_t(u16, ...) for row/col
->     limits
->   drivers/usb/storage: use min() instead of min_t()
->   drivers/xen: use min() instead of min_t()
->   fs: use min() or umin() instead of min_t()
->   block: bvec.h: use min() instead of min_t()
->   nodemask: use min() instead of min_t()
->   ipc: use min() instead of min_t()
->   bpf: use min() instead of min_t()
->   bpf_trace: use min() instead of min_t()
->   lib/bucket_locks: use min() instead of min_t()
->   lib/crypto/mpi: use min() instead of min_t()
->   lib/dynamic_queue_limits: use max() instead of max_t()
->   mm: use min() instead of min_t()
->   net: Don't pass bitfields to max_t()
->   net/core: Change loop conditions so min() can be used
->   net: use min() instead of min_t()
->   net/netlink: Use umin() to avoid min_t(int, ...) discarding high bits
->   net/mptcp: Change some dubious min_t(int, ...) to min()
-> 
->  arch/x86/crypto/aesni-intel_glue.c            |  3 +-
->  arch/x86/include/asm/bitops.h                 | 18 +++++-------
->  arch/x86/kvm/emulate.c                        |  3 +-
->  arch/x86/kvm/lapic.c                          |  2 +-
->  arch/x86/kvm/mmu/mmu.c                        |  2 +-
->  arch/x86/mm/pat/set_memory.c                  | 12 ++++----
->  block/blk-iocost.c                            |  6 ++--
->  block/blk-settings.c                          |  2 +-
->  block/partitions/efi.c                        |  3 +-
->  drivers/acpi/property.c                       |  2 +-
->  drivers/char/hw_random/core.c                 |  2 +-
->  drivers/char/tpm/tpm1-cmd.c                   |  2 +-
->  drivers/char/tpm/tpm_tis_core.c               |  4 +--
->  drivers/crypto/ccp/ccp-dev.c                  |  2 +-
->  drivers/cxl/core/mbox.c                       |  2 +-
->  drivers/gpio/gpiolib-acpi-core.c              |  2 +-
->  .../gpu/drm/amd/amdgpu/amdgpu_doorbell_mgr.c  |  4 +--
->  drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c        |  2 +-
->  .../gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c |  2 +-
->  drivers/i2c/busses/i2c-designware-master.c    |  2 +-
->  drivers/net/ethernet/realtek/r8169_main.c     |  3 +-
->  drivers/nvme/host/pci.c                       |  3 +-
->  drivers/nvme/host/zns.c                       |  3 +-
->  drivers/nvmem/core.c                          |  2 +-
->  drivers/pci/probe.c                           |  3 +-
->  drivers/scsi/hosts.c                          |  2 +-
->  drivers/tty/vt/selection.c                    |  9 +++---
->  drivers/usb/storage/protocol.c                |  3 +-
->  drivers/xen/grant-table.c                     |  2 +-
->  fs/buffer.c                                   |  2 +-
->  fs/exec.c                                     |  2 +-
->  fs/ext4/ext4.h                                |  2 +-
->  fs/ext4/mballoc.c                             |  3 +-
->  fs/ext4/resize.c                              |  2 +-
->  fs/ext4/super.c                               |  2 +-
->  fs/fat/dir.c                                  |  4 +--
->  fs/fat/file.c                                 |  3 +-
->  fs/fuse/dev.c                                 |  2 +-
->  fs/fuse/file.c                                |  8 ++---
->  fs/splice.c                                   |  2 +-
->  include/linux/bvec.h                          |  3 +-
->  include/linux/nodemask.h                      |  9 +++---
->  include/linux/perf_event.h                    |  2 +-
->  include/net/tcp_ecn.h                         |  5 ++--
->  io_uring/net.c                                |  6 ++--
->  ipc/mqueue.c                                  |  4 +--
->  ipc/msg.c                                     |  6 ++--
->  kernel/bpf/core.c                             |  4 +--
->  kernel/bpf/log.c                              |  2 +-
->  kernel/bpf/verifier.c                         | 29 +++++++------------
->  kernel/trace/bpf_trace.c                      |  2 +-
->  lib/bucket_locks.c                            |  2 +-
->  lib/crypto/mpi/mpicoder.c                     |  2 +-
->  lib/dynamic_queue_limits.c                    |  2 +-
->  mm/gup.c                                      |  4 +--
->  mm/memblock.c                                 |  2 +-
->  mm/memory.c                                   |  2 +-
->  mm/percpu.c                                   |  2 +-
->  mm/truncate.c                                 |  3 +-
->  mm/vmscan.c                                   |  2 +-
->  net/core/datagram.c                           |  6 ++--
->  net/core/flow_dissector.c                     |  7 ++---
->  net/core/net-sysfs.c                          |  3 +-
->  net/core/skmsg.c                              |  4 +--
->  net/ethtool/cmis_cdb.c                        |  7 ++---
->  net/ipv4/fib_trie.c                           |  2 +-
->  net/ipv4/tcp_input.c                          |  4 +--
->  net/ipv4/tcp_output.c                         |  5 ++--
->  net/ipv4/tcp_timer.c                          |  4 +--
->  net/ipv6/addrconf.c                           |  8 ++---
->  net/ipv6/ip6_output.c                         |  7 +++--
->  net/ipv6/ndisc.c                              |  5 ++--
->  net/mptcp/protocol.c                          |  8 ++---
->  net/netlink/genetlink.c                       |  9 +++---
->  net/packet/af_packet.c                        |  2 +-
->  net/unix/af_unix.c                            |  4 +--
->  76 files changed, 141 insertions(+), 176 deletions(-)
+> diff --git a/drivers/bus/imx-weim.c b/drivers/bus/imx-weim.c
+> index 83d623d97f5f..87070155b057 100644
+> --- a/drivers/bus/imx-weim.c
+> +++ b/drivers/bus/imx-weim.c
+> @@ -327,12 +327,6 @@ static int of_weim_notify(struct notifier_block *nb, unsigned long action,
+>   				 "Failed to setup timing for '%pOF'\n", rd->dn);
+>   
+>   		if (!of_node_check_flag(rd->dn, OF_POPULATED)) {
+> -			/*
+> -			 * Clear the flag before adding the device so that
+> -			 * fw_devlink doesn't skip adding consumers to this
+> -			 * device.
+> -			 */
+> -			rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
+>   			if (!of_platform_device_create(rd->dn, NULL, &pdev->dev)) {
+>   				dev_err(&pdev->dev,
+>   					"Failed to create child device '%pOF'\n",
+> diff --git a/drivers/i2c/i2c-core-of.c b/drivers/i2c/i2c-core-of.c
+> index eb7fb202355f..30b48a428c0b 100644
+> --- a/drivers/i2c/i2c-core-of.c
+> +++ b/drivers/i2c/i2c-core-of.c
+> @@ -176,11 +176,6 @@ static int of_i2c_notify(struct notifier_block *nb, unsigned long action,
+>   			return NOTIFY_OK;
+>   		}
+>   
+> -		/*
+> -		 * Clear the flag before adding the device so that fw_devlink
+> -		 * doesn't skip adding consumers to this device.
+> -		 */
+> -		rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
+>   		client = of_i2c_register_device(adap, rd->dn);
+>   		if (IS_ERR(client)) {
+>   			dev_err(&adap->dev, "failed to create client for '%pOF'\n",
+> diff --git a/drivers/of/dynamic.c b/drivers/of/dynamic.c
+> index 2eaaddcb0ec4..b5be7484fb36 100644
+> --- a/drivers/of/dynamic.c
+> +++ b/drivers/of/dynamic.c
+> @@ -225,7 +225,6 @@ static void __of_attach_node(struct device_node *np)
+>   	np->sibling = np->parent->child;
+>   	np->parent->child = np;
+>   	of_node_clear_flag(np, OF_DETACHED);
+> -	np->fwnode.flags |= FWNODE_FLAG_NOT_DEVICE;
+>   
+>   	raw_spin_unlock_irqrestore(&devtree_lock, flags);
+>   
+> diff --git a/drivers/of/platform.c b/drivers/of/platform.c
+> index f77cb19973a5..ef9445ba168b 100644
+> --- a/drivers/of/platform.c
+> +++ b/drivers/of/platform.c
+> @@ -739,11 +739,6 @@ static int of_platform_notify(struct notifier_block *nb,
+>   		if (of_node_check_flag(rd->dn, OF_POPULATED))
+>   			return NOTIFY_OK;
+>   
+> -		/*
+> -		 * Clear the flag before adding the device so that fw_devlink
+> -		 * doesn't skip adding consumers to this device.
+> -		 */
+> -		rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
+>   		/* pdev_parent may be NULL when no bus platform device */
+>   		pdev_parent = of_find_device_by_node(parent);
+>   		pdev = of_platform_device_create(rd->dn, NULL,
+> diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+> index 2e0647a06890..b22944a207c9 100644
+> --- a/drivers/spi/spi.c
+> +++ b/drivers/spi/spi.c
+> @@ -4791,11 +4791,6 @@ static int of_spi_notify(struct notifier_block *nb, unsigned long action,
+>   			return NOTIFY_OK;
+>   		}
+>   
+> -		/*
+> -		 * Clear the flag before adding the device so that fw_devlink
+> -		 * doesn't skip adding consumers to this device.
+> -		 */
+> -		rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
+>   		spi = of_register_spi_device(ctlr, rd->dn);
+>   		put_device(&ctlr->dev);
+>   
+Sorry, some of you will receive this message now for second time. First 
+message was sent to older series of patches.
+-
 
-Patches 10,14,16,37 applied.  Thanks.
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+Hello,
+
+Test system testing drivers for ROHM ICs bisected this commit to cause 
+BD71847 drivers probe to not be called.
+
+The devicetree blob overlay describing bd71847 enables I2C1 bus on 
+BeagleBone Black aswell.
+
+Probe is called when the driver is used with HW connected to I2C2 bus. 
+I2C2 bus is enabled before overlaying devicetree blobs.
+
+
+---- BD71847 Devicetree overlay source ----
+
+/dts-v1/;
+/plugin/;
+
+/{ /* this is our device tree overlay root node */
+
+     compatible = "ti,beaglebone", "ti,beaglebone-black";
+     part-number = "BBB-I2C1";
+      version = "00A0";
+
+     fragment@0 {
+         target = <&am33xx_pinmux>; // this is a link to an already 
+defined node in the device tree, so that node is overlayed with our 
+modification
+
+         __overlay__ {
+             i2c1_pins: pinmux_i2c1_pins {
+                 pinctrl-single,pins = <
+                       0x158 0x72 /* spi0_d1.i2c1_sda */
+                       0x15C 0x72 /* spi0_cs0.i2c1_sdl */
+                     >;
+             };
+         };
+     };
+....
+....
+
+     fragment@2 {
+         target = <&i2c1>;
+
+         __overlay__ {
+             pinctrl-0 = <&i2c1_pins>;
+             clock-frequency = <100000>;
+             status = "okay";
+
+             pmic: pmic@4b { /* the "test" defined as child of the i2c1 
+bus */
+                 compatible = "rohm,bd71847";
+                 reg = <0x4b>;
+                 ....
+                 ....
+}; /* root node end */
+
+---- END OF BD71847 Devicetree overlay source ----
+
+Reverting this patch from linux-next from last friday fixes the issue.
+
+BR
+Kalle Niemi
 
