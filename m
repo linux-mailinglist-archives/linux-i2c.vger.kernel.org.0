@@ -1,102 +1,82 @@
-Return-Path: <linux-i2c+bounces-14251-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14252-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5B58C834E1
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Nov 2025 05:03:52 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65E2DC8383F
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Nov 2025 07:43:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 599C54E1E50
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Nov 2025 04:03:45 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id DBF6F34C859
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Nov 2025 06:43:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B793427FD4B;
-	Tue, 25 Nov 2025 04:03:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB66B29E110;
+	Tue, 25 Nov 2025 06:42:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="iTOjykQM";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="BMA44kIB"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PXM4Oi51"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9BDE223DD6
-	for <linux-i2c@vger.kernel.org>; Tue, 25 Nov 2025 04:03:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC8C429BD89
+	for <linux-i2c@vger.kernel.org>; Tue, 25 Nov 2025 06:42:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764043422; cv=none; b=AEpXjs/0pwrzfaAN0WskSHhdu9ua8zvx6Ezx/LP+50fTxLDlw/N6yU2IRRYnSaz1YaTMG7PwwgTow29W8catxT+XQAM2u6hzfm8kMjwAVHT9YyfIuo+CX/PtuOQIQhd9x8FVv5uj9n+W0ce+NMY4m+tLJMKHglnMUSLJCRnhOlI=
+	t=1764052979; cv=none; b=W+0WS3fQ7wsambgRiUvBM34ymWsv2qU0MpyLI3AYIzDy9Q4nHBtCohmVHSmt6BapFFCSu2MYHDgYrJcv7/rC+YslmB9RoNYRVZKujVlQdMr9l2xwJbX/VZmQyUtWnt6W7uMmADHx+KJbPnE6kwq87kdKCOTq3mIv6MPS+5xuZT4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764043422; c=relaxed/simple;
-	bh=k2GS4P5SjOGTn2hwGSYALJoFfEQ0BxzyyK0D8wDyZv4=;
+	s=arc-20240116; t=1764052979; c=relaxed/simple;
+	bh=bMVM6nwiRnBB3ygequtCXeKaSYZ8JKMr74Alu8bdTfM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=i1+2EjqVgoDHIT1d26ts9T4AnD3ktqBPCSfevlfQYVG/sNGdkEsVbZ/mm1UwYPHiiNfuCkKEx+y0/GhWr23CeqNuRh752wbhS7SOXLCodBnEIhZvlsfuj6w+WP/Wa4S1dRc9xUgLFu4kZA6Vn3WQJFLtFAaJfN518Fl6Giev5+U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=iTOjykQM; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=BMA44kIB; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5AP2gceP1232119
-	for <linux-i2c@vger.kernel.org>; Tue, 25 Nov 2025 04:03:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	iJAan29NfWgHaIXPs2LbrGAwitqmKY5u7Inpq94wzsg=; b=iTOjykQMRLRilt7N
-	UKJCyh8hJwNEfSrRgfe4WmmIwvLn1+jbFFd58QNJocyM/JjqQyTd64mgy4widJyJ
-	vAnKKi4OK7ahfFNl2cyMUvExBZd7Cvgam8vOgIutvNJZ1xaTSyK96VvhX8rK+v63
-	ppKD2MRHFKZOmdeF4T6TjiKAob15X/38nVc3kV+b2ILXUF8xyZ2GKvqflXXfFiXx
-	Yxq6L09XQ8yggiOU0VrLQRwVdLiEIYyyVFDPnUZZv9ppTH5PMIdkqxZr6zToP4ff
-	VcIolwpn6ggcoP4imSC4otiSaTgh2xdicqG1fgzkeVuHVUMjy2TFSSvHc7bCO4EQ
-	bLYI8g==
-Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4an0xygmsw-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-i2c@vger.kernel.org>; Tue, 25 Nov 2025 04:03:40 +0000 (GMT)
-Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-2982dec5ccbso109434865ad.3
-        for <linux-i2c@vger.kernel.org>; Mon, 24 Nov 2025 20:03:40 -0800 (PST)
+	 In-Reply-To:Content-Type; b=t/2zg+mKFIKszBo3EOBmZnU0T9573NQKBfXeHInT/AIXOygtyMGJf6GHpKtgT4K3YeA58exDAl6tR+zj1o6MmNbqfcMIjNGYKsE+cUfANk+R4buXjtq4+SlF/hoJ55EEhIhqHCsFIscfYzmySX/BGvpcrmrTfFQVi2wyZQGZIns=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PXM4Oi51; arc=none smtp.client-ip=209.85.208.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-37bbb36c990so50372951fa.0
+        for <linux-i2c@vger.kernel.org>; Mon, 24 Nov 2025 22:42:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1764043419; x=1764648219; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1764052975; x=1764657775; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=iJAan29NfWgHaIXPs2LbrGAwitqmKY5u7Inpq94wzsg=;
-        b=BMA44kIBvb8mJTQHZauSJFkaX1Fc3gO5QNHqySjCke2zCLKa1RCwD5ROKcYm9tVbNL
-         RX2On7PPWbL38uxCbr8fXs3DnqTd5vyQqeNuakeiSqir4NycjI5cWi+6UVFpvK0kGruc
-         14Hl+c18T06evoqTntQVn6IVwvEm/HVcfQhnpSvQ45H+Wk4ipP6Ee/Vv86X5cuiIfqwI
-         iVvkT2rAjcA6Nee+DkfBYPp7HO1Hh3zL/2XZCk3vJYofWcyIsHmWu9teCVj3Wjw4KWfj
-         ImkeF4vvG6itjRTofND86xpom5Ijm/b6FA2AMLxQx9b0n/kVB08aF+THpWGd1eStDJuQ
-         uC5w==
+        bh=oDwgPrbqR3WPQpKO2RN5Ep6D/2LO+UnqChlfZRK6eKg=;
+        b=PXM4Oi51/FPSyFM+6n3W1MkZ8lRcQmQDf5xTo4W0x/8klPd2i17BG+PpU/k99qVrEd
+         8FhrIhgvL/oMBEixwIderB1Ww0ZYJApyL96SU76Usb+75ViTYcgBbNIJmkdB2sqglt39
+         EHyCtOP7rzTY2LMk/dKOF1maizgzB3exwy6gBuLAE/kfnFoF1jwJzDmiGDfDXLV4J1hr
+         fHJIyFU4x2tpUq0fiJRIhox+RXrqjVWTwCFxxGlJtK13wa3x8sCRrXjhS17HwHoQn1a3
+         abGsydVqkqA5KRHnBiiW/E6itTeHdADHv/d7USbpF/FQoDWy/pxy9oSZYL14nXXU1RoR
+         xnBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764043419; x=1764648219;
+        d=1e100.net; s=20230601; t=1764052975; x=1764657775;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=iJAan29NfWgHaIXPs2LbrGAwitqmKY5u7Inpq94wzsg=;
-        b=m9tHthPVgwsZoxgcdybDkfAy55GI1XKVz0X4+2pMNhE3CxDpG8hNOA4rBD9rRxcQ3E
-         /UyAfe4fhMHqf1U79wLikrTW4rgAAGHTl9nE/04SalLpyiAbtBROijUQf8Sbq+v9zekc
-         cNdrWPhqRGy87UU3SGvZLOGHI8YxGnEqnZCdSkqn4C4SLIeQCNV82ht/26M+YSVK1ib8
-         lF1HrZKCF9nT7XMRf/XqGwLfR3MJoKZ/gX6ot8JGD/tTW91vq/gwjbGPQQrZHLcvlDry
-         XNoIcl6FSR8tP9R6ObdWqgjynRGQSy1LbA86q0DItzHoOZ/WVJ3fp/8MGxP+EtKp5lL1
-         VDug==
-X-Forwarded-Encrypted: i=1; AJvYcCUMklJV5qOH2/ge5H8XiKRDb6ZPRc0BEmCGuus8RXxRlr+I/PnjYufN+gPtOuLF7vsAvcWkVCNANFM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwjOPNQnNFTmK00vpGhS5LfoeOw/Iutud5nKv20zXX+zJEWrLBF
-	uUi/6mQdfYP/cTLN1zcnTp2hww/MHApby9qyt2T9tITqpcUevk48tb2Z0hp4GD0BaIAydQJ81JG
-	SgwG9tmRxVJUxTbJM+py1/FBgIDPpLNdjLS9qBXNX2AkziUCaiScCZA57lrfcjWU=
-X-Gm-Gg: ASbGncs/SDtQfwUTaRhxxGI021YLtwlM1+YyTo832KT0FcpbgTVV0aqMZIBx79Wgrb2
-	kt0GTi5xThRxTDLOU6ncEDgFb31SQaTREJ02Jmqcs/vSvB0AeLl34yFDInxwRYpMZx8YWozv7F7
-	G42KVSuU7qi2fx9xcvduHKSmqMS1qqV/y9jIVOHdBPViHrQ5LC6cJDifVGQ/IHB/zkCKkxiuMSc
-	jZqAYnM3z5bLlS4a9hGnqyqHkteJKoQLf5FM0Ezjax3jh0w2NHS293J+z2PwXTMgHF1SXfjYz0B
-	OPgd8VFB8X3T9CGQ6J6LiuHLlikjd7q13dflsIdVpTQCk3yFuGz0OIhLT60r4AWrvI8tpVHJGW0
-	1xdM3U8Pl1gonBYAE4M/Moy0PLiWNrFdPSiczZfWLzw==
-X-Received: by 2002:a17:903:19d0:b0:295:2276:6704 with SMTP id d9443c01a7336-29b6c6cdf6cmr129665415ad.51.1764043419308;
-        Mon, 24 Nov 2025 20:03:39 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHEd/OVAmEmn14OXrHOQkPdPyyGneeaBeJEM4duM1dJGYj7jDrXbUvk8iKDwsZaTE0sXS7pOg==
-X-Received: by 2002:a17:903:19d0:b0:295:2276:6704 with SMTP id d9443c01a7336-29b6c6cdf6cmr129665135ad.51.1764043418737;
-        Mon, 24 Nov 2025 20:03:38 -0800 (PST)
-Received: from [10.218.32.171] ([202.46.22.19])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29b5b111acfsm152248715ad.19.2025.11.24.20.03.32
+        bh=oDwgPrbqR3WPQpKO2RN5Ep6D/2LO+UnqChlfZRK6eKg=;
+        b=qK5mfzvsYDKiwkug4ZYfnj/FRxYxcShgQTW0+KYQ9odm0+Jaw89OLpZD3ffaH8fW4n
+         RfkZDjEM8Y65WgFgxXBk8OOhmGBLYZvt7ta610v6WMHqtaOznIwwp5jKdztqCqa8j2Yc
+         mQ+2KocCAQi5n+xQd580cuJ+hz31V1yjDyoEBLXdFrumQ5W6UkUN1LMbUm6NdQ4BS1vR
+         XRnZK5esF1DfS3r1KLqMBsoSkiAtnHOTcJ33jxeTQSZzQnXKu2HwbvsDr89u85LJ44w7
+         flaX8IzzNzTNyeEyLBPNHOr3nt4B6zA480gAGzZmkG1vzI0EfMeerUMUKh3g4lYWLPuz
+         p2Lw==
+X-Forwarded-Encrypted: i=1; AJvYcCV/lZpp6GSecQj2ZsUkFOkR8M1qXLWLBOOBVK1mNjRtmBtKwy2WVldIqJOBrV3nZ22t26NoOzenXM4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyFvbUkSiEQd/DP0dNheN5k16j0Jtsy6qsA4UBEgjgaDCwo3+af
+	jUQr9wZvLQy8QMnR75n7YRnG7v6YPbxsXhN+dFzV67vqTJEIohox8E9h
+X-Gm-Gg: ASbGncumBwcMQkkC9u+K3IXhrhgB6eovuubeiIlhTS/WH7JBFzCsnsXgVQ3DYXdYg5G
+	jUUIEWdNX21kn+zYcgTLjCt+4itMxYEsUPdNhjqdbErzQCzd/0ao0HQYYz46ciLD54ZKnY8jWsv
+	/+8dcOBCZfy6JUtcZ//TwEfNg2HpoRccpcAInF0LkwIvh5yYm/3+6w/dnF1X5gFTHFaoGXD1FdI
+	xHyq4yEQ0VT6MTfyr1YPmSABR8bYUUxMYBkIWld/3fl6QXRHykvpPVJC2hXOrSMI/9oJiNgfGO2
+	ZpLel7DEgppjkxX77knjKvC2NWo8TijhVYYE80zaf0TRULlQnvtxuqVu+UfKIMrZ8DOxGlKCA91
+	DUrNMp+oY7I9vQqaAtJtW/sOeHY/n2Cgk3A50k0pGYqGMPQqdtpJck4iqtUevuXI4d/Ay29d+5Z
+	L+STrwGKMV9uxSMjDgWdKiv6r0lZ9mkH9irklMT1kh8ts5XMf+y24zIomJsTsyK6XWcv0U
+X-Google-Smtp-Source: AGHT+IGn4O/LdPwrRfIUFu/wkzsPRHVD6YOLdNx92wJy+rnsWi85zUpEuMS1eU2wO8cl4kItz2sVag==
+X-Received: by 2002:a2e:a805:0:b0:37a:3910:6c77 with SMTP id 38308e7fff4ca-37cc82af4a6mr55071391fa.5.1764052974535;
+        Mon, 24 Nov 2025 22:42:54 -0800 (PST)
+Received: from ?IPV6:2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703? ([2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-37cc6b59ff5sm31356131fa.15.2025.11.24.22.42.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Nov 2025 20:03:37 -0800 (PST)
-Message-ID: <98c74c0e-2ca3-4139-a906-620c061dac5a@oss.qualcomm.com>
-Date: Tue, 25 Nov 2025 09:33:30 +0530
+        Mon, 24 Nov 2025 22:42:53 -0800 (PST)
+Message-ID: <072dde7c-a53c-4525-83ac-57ea38edc0b5@gmail.com>
+Date: Tue, 25 Nov 2025 08:42:50 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -104,123 +84,215 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 07/12] dt-bindings: i2c: Describe SA8255p
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>,
-        Mukesh Kumar Savaliya <mukesh.savaliya@oss.qualcomm.com>,
-        Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, psodagud@quicinc.com, djaggi@quicinc.com,
-        quic_msavaliy@quicinc.com, quic_vtanuku@quicinc.com,
-        quic_arandive@quicinc.com, quic_shazhuss@quicinc.com,
-        Nikunj Kela <quic_nkela@quicinc.com>
-References: <20251122050018.283669-1-praveen.talari@oss.qualcomm.com>
- <20251122050018.283669-8-praveen.talari@oss.qualcomm.com>
- <20251122-rich-imported-buzzard-b7aae7@kuoka>
-Content-Language: en-US
-From: Praveen Talari <praveen.talari@oss.qualcomm.com>
-In-Reply-To: <20251122-rich-imported-buzzard-b7aae7@kuoka>
+Subject: Re: [PATCH v4 01/29] Revert "treewide: Fix probing of devices in DT
+ overlays"
+To: Rob Herring <robh@kernel.org>, Kalle Niemi <kaleposti@gmail.com>
+Cc: Herve Codina <herve.codina@bootlin.com>, Andrew Lunn <andrew@lunn.ch>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
+ Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Fabio Estevam <festevam@gmail.com>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
+ Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ Peter Rosin <peda@axentia.se>, Arnd Bergmann <arnd@arndb.de>,
+ Saravana Kannan <saravanak@google.com>, Bjorn Helgaas <bhelgaas@google.com>,
+ Charles Keepax <ckeepax@opensource.cirrus.com>,
+ Richard Fitzgerald <rf@opensource.cirrus.com>,
+ David Rhodes <david.rhodes@cirrus.com>,
+ Linus Walleij <linus.walleij@linaro.org>,
+ Ulf Hansson <ulf.hansson@linaro.org>, Mark Brown <broonie@kernel.org>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Daniel Scally <djrscally@gmail.com>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Sakari Ailus <sakari.ailus@linux.intel.com>, Len Brown <lenb@kernel.org>,
+ Davidlohr Bueso <dave@stgolabs.net>,
+ Jonathan Cameron <jonathan.cameron@huawei.com>,
+ Dave Jiang <dave.jiang@intel.com>,
+ Alison Schofield <alison.schofield@intel.com>,
+ Vishal Verma <vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>,
+ Dan Williams <dan.j.williams@intel.com>,
+ Geert Uytterhoeven <geert+renesas@glider.be>, Wolfram Sang <wsa@kernel.org>,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org,
+ linux-pci@vger.kernel.org, linux-sound@vger.kernel.org,
+ patches@opensource.cirrus.com, linux-gpio@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-spi@vger.kernel.org,
+ linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org,
+ Allan Nielsen <allan.nielsen@microchip.com>,
+ Horatiu Vultur <horatiu.vultur@microchip.com>,
+ Steen Hegelund <steen.hegelund@microchip.com>,
+ Luca Ceresoli <luca.ceresoli@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20251015071420.1173068-1-herve.codina@bootlin.com>
+ <20251015071420.1173068-2-herve.codina@bootlin.com>
+ <f74ab0a2-b74b-4b96-8469-a716c850e230@gmail.com>
+ <CAL_JsqJDOYuzutMHMeFAogd5a_OX6Hwi8Gwz1Vy7HpXgNeYKsg@mail.gmail.com>
+ <5cf2a12a-7c66-4622-b4a9-14896c6df005@gmail.com>
+ <CAL_JsqJjm12LxpDg6LmpY=Ro_keHwnrWiYMLVnG=s_pSP4X2WQ@mail.gmail.com>
+Content-Language: en-US, en-AU, en-GB, en-BW
+From: Matti Vaittinen <mazziesaccount@gmail.com>
+In-Reply-To: <CAL_JsqJjm12LxpDg6LmpY=Ro_keHwnrWiYMLVnG=s_pSP4X2WQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Authority-Analysis: v=2.4 cv=S+bUAYsP c=1 sm=1 tr=0 ts=69252a9c cx=c_pps
- a=cmESyDAEBpBGqyK7t0alAg==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
- a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=HWnqrvMQCMn6R42oSBoA:9 a=3ZKOabzyN94A:10
- a=QEXdDO2ut3YA:10 a=1OuFwYUASf3TG4hYMiVC:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTI1MDAzMCBTYWx0ZWRfX3MXy6QSDcmSC
- t2TZLDBfO7YFzfEyoifYrbL4gyVDMBhomg8y20RpPKMZI52sEMfxzXL781Jahu8wAQG5ZpSRFcA
- Pb42/wQoCbio5iI5opxjv39fT9f+TMgysvKoR/0Wh1ata3dufydAYXdaJjkpX6SiFu8EizHkF0C
- Drl7J/t1hir0NLb+k+JQ9LBV17dQlmBvzgqe7xfAeS7PU4vgDpo15NgI2i43y8g8mK2+wnBHA+Q
- s9mqN4j1Y28UXqwBL3bg+Fd4j4IGwAZsRtFLLPdwxwzM8zjb1+YwEwCcwTfdS3AEPAxR3fiY4oj
- a4b3Xk1lOfn5a2YtQOxpD3OlYZt+endLt33DLyo4zY4Vpuy+7MsoBclHCNaMX7r3FD3jCIlFmrB
- AupTCh9XFnYvhvl3kOrQJ527YYtV+A==
-X-Proofpoint-ORIG-GUID: Wrop_AsNkgf0SQQyM6iHjvNcoVLn2mRT
-X-Proofpoint-GUID: Wrop_AsNkgf0SQQyM6iHjvNcoVLn2mRT
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-25_01,2025-11-24_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 impostorscore=0 clxscore=1015 suspectscore=0 phishscore=0
- malwarescore=0 lowpriorityscore=0 bulkscore=0 spamscore=0 priorityscore=1501
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2511250030
 
-Hi Krzysztof,
-
-Thank you for review.
-
-On 11/22/2025 5:10 PM, Krzysztof Kozlowski wrote:
-> On Sat, Nov 22, 2025 at 10:30:13AM +0530, Praveen Talari wrote:
->> +  dmas:
->> +    maxItems: 2
->> +
->> +  dma-names:
->> +    items:
->> +      - const: tx
->> +      - const: rx
->> +
->> +  interrupts:
->> +    maxItems: 1
->> +
->> +  power-domains:
->> +    minItems: 2
+On 24/11/2025 19:01, Rob Herring wrote:
+> On Mon, Nov 24, 2025 at 10:44 AM Kalle Niemi <kaleposti@gmail.com> wrote:
+>>
+>>
+>> On 11/24/25 16:53, Rob Herring wrote:
+>>> On Mon, Nov 24, 2025 at 8:48 AM Kalle Niemi <kaleposti@gmail.com> wrote:
+>>>> On 10/15/25 10:13, Herve Codina wrote:
+>>>>> From: Saravana Kannan <saravanak@google.com>
+>>>>>
+>>>>> This reverts commit 1a50d9403fb90cbe4dea0ec9fd0351d2ecbd8924.
+>>>>>
+>>>>> While the commit fixed fw_devlink overlay handling for one case, it
+>>>>> broke it for another case. So revert it and redo the fix in a separate
+>>>>> patch.
+>>>>>
+>>>>> Fixes: 1a50d9403fb9 ("treewide: Fix probing of devices in DT overlays")
+>>>>> Reported-by: Herve Codina <herve.codina@bootlin.com>
+>>>>> Closes: https://lore.kernel.org/lkml/CAMuHMdXEnSD4rRJ-o90x4OprUacN_rJgyo8x6=9F9rZ+-KzjOg@mail.gmail.com/
+>>>>> Closes: https://lore.kernel.org/all/20240221095137.616d2aaa@bootlin.com/
+>>>>> Closes: https://lore.kernel.org/lkml/20240312151835.29ef62a0@bootlin.com/
+>>>>> Signed-off-by: Saravana Kannan <saravanak@google.com>
+>>>>> Link: https://lore.kernel.org/lkml/20240411235623.1260061-2-saravanak@google.com/
+>>>>> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+>>>>> Acked-by: Mark Brown <broonie@kernel.org>
+>>>>> ---
+>>>>>     drivers/bus/imx-weim.c    | 6 ------
+>>>>>     drivers/i2c/i2c-core-of.c | 5 -----
+>>>>>     drivers/of/dynamic.c      | 1 -
+>>>>>     drivers/of/platform.c     | 5 -----
+>>>>>     drivers/spi/spi.c         | 5 -----
+>>>>>     5 files changed, 22 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/bus/imx-weim.c b/drivers/bus/imx-weim.c
+>>>>> index 83d623d97f5f..87070155b057 100644
+>>>>> --- a/drivers/bus/imx-weim.c
+>>>>> +++ b/drivers/bus/imx-weim.c
+>>>>> @@ -327,12 +327,6 @@ static int of_weim_notify(struct notifier_block *nb, unsigned long action,
+>>>>>                                  "Failed to setup timing for '%pOF'\n", rd->dn);
+>>>>>
+>>>>>                 if (!of_node_check_flag(rd->dn, OF_POPULATED)) {
+>>>>> -                     /*
+>>>>> -                      * Clear the flag before adding the device so that
+>>>>> -                      * fw_devlink doesn't skip adding consumers to this
+>>>>> -                      * device.
+>>>>> -                      */
+>>>>> -                     rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
+>>>>>                         if (!of_platform_device_create(rd->dn, NULL, &pdev->dev)) {
+>>>>>                                 dev_err(&pdev->dev,
+>>>>>                                         "Failed to create child device '%pOF'\n",
+>>>>> diff --git a/drivers/i2c/i2c-core-of.c b/drivers/i2c/i2c-core-of.c
+>>>>> index eb7fb202355f..30b48a428c0b 100644
+>>>>> --- a/drivers/i2c/i2c-core-of.c
+>>>>> +++ b/drivers/i2c/i2c-core-of.c
+>>>>> @@ -176,11 +176,6 @@ static int of_i2c_notify(struct notifier_block *nb, unsigned long action,
+>>>>>                         return NOTIFY_OK;
+>>>>>                 }
+>>>>>
+>>>>> -             /*
+>>>>> -              * Clear the flag before adding the device so that fw_devlink
+>>>>> -              * doesn't skip adding consumers to this device.
+>>>>> -              */
+>>>>> -             rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
+>>>>>                 client = of_i2c_register_device(adap, rd->dn);
+>>>>>                 if (IS_ERR(client)) {
+>>>>>                         dev_err(&adap->dev, "failed to create client for '%pOF'\n",
+>>>>> diff --git a/drivers/of/dynamic.c b/drivers/of/dynamic.c
+>>>>> index 2eaaddcb0ec4..b5be7484fb36 100644
+>>>>> --- a/drivers/of/dynamic.c
+>>>>> +++ b/drivers/of/dynamic.c
+>>>>> @@ -225,7 +225,6 @@ static void __of_attach_node(struct device_node *np)
+>>>>>         np->sibling = np->parent->child;
+>>>>>         np->parent->child = np;
+>>>>>         of_node_clear_flag(np, OF_DETACHED);
+>>>>> -     np->fwnode.flags |= FWNODE_FLAG_NOT_DEVICE;
+>>>>>
+>>>>>         raw_spin_unlock_irqrestore(&devtree_lock, flags);
+>>>>>
+>>>>> diff --git a/drivers/of/platform.c b/drivers/of/platform.c
+>>>>> index f77cb19973a5..ef9445ba168b 100644
+>>>>> --- a/drivers/of/platform.c
+>>>>> +++ b/drivers/of/platform.c
+>>>>> @@ -739,11 +739,6 @@ static int of_platform_notify(struct notifier_block *nb,
+>>>>>                 if (of_node_check_flag(rd->dn, OF_POPULATED))
+>>>>>                         return NOTIFY_OK;
+>>>>>
+>>>>> -             /*
+>>>>> -              * Clear the flag before adding the device so that fw_devlink
+>>>>> -              * doesn't skip adding consumers to this device.
+>>>>> -              */
+>>>>> -             rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
+>>>>>                 /* pdev_parent may be NULL when no bus platform device */
+>>>>>                 pdev_parent = of_find_device_by_node(parent);
+>>>>>                 pdev = of_platform_device_create(rd->dn, NULL,
+>>>>> diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+>>>>> index 2e0647a06890..b22944a207c9 100644
+>>>>> --- a/drivers/spi/spi.c
+>>>>> +++ b/drivers/spi/spi.c
+>>>>> @@ -4791,11 +4791,6 @@ static int of_spi_notify(struct notifier_block *nb, unsigned long action,
+>>>>>                         return NOTIFY_OK;
+>>>>>                 }
+>>>>>
+>>>>> -             /*
+>>>>> -              * Clear the flag before adding the device so that fw_devlink
+>>>>> -              * doesn't skip adding consumers to this device.
+>>>>> -              */
+>>>>> -             rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
+>>>>>                 spi = of_register_spi_device(ctlr, rd->dn);
+>>>>>                 put_device(&ctlr->dev);
+>>>>>
+>>>> Sorry, some of you will receive this message now for second time. First
+>>>> message was sent to older series of patches.
+>>>> -
+>>>>
+>>>> Hello,
+>>>>
+>>>> Test system testing drivers for ROHM ICs bisected this commit to cause
+>>>> BD71847 drivers probe to not be called.
+>>> This driver (and overlay support) is in linux-next or something out of
+>>> tree on top of linux-next?
+>>>
+>>> Rob
+>>
+>> Yes the driver is in mainline linux: /drivers/mfd/rohm-bd718x7.c
 > 
-> Drop
+> I don't see any support to apply overlays in that driver.
 
-sure, will do it in next version.
+Ah. Sorry for the confusion peeps. I asked Kalle to report this without 
+proper consideration. 100% my bad.
 
-> 
->> +    maxItems: 2
->> +
->> +  power-domain-names:
->> +    items:
->> +      - const: power
->> +      - const: perf
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - interrupts
->> +  - power-domains
->> +
->> +allOf:
-> 
-> So common SE properties are not applicable? If so explain why in the
-> commit msg.
+While the bd718x7 drive indeed is mainline (and tested), the actual 
+'glue-code' doing the overlay is part of the downstream test 
+infrastructure. So yes, this is not a bug in upstream kernel - this 
+falls in the category of an upstream change causing downstream things to 
+break. So, feel free to say: "Go fix your code" :)
 
-Are you referring to clocks, ICC paths, and pin control?
-Please let me know if I’m mistaken.
+Now that this is sorted, if someone is still interested in helping us to 
+get our upstream drivers tested - the downstream piece is just taking 
+the compiled device-tree overlay at runtime (via bin-attribute file), 
+and applying it using the of_overlay_fdt_apply(). The approach is 
+working for our testing purposes when the device is added to I2C/SPI 
+node which is already enabled. However, in case where we have the I2C 
+disabled, and enable it in the same overlay where we add the new device 
+- then the new device does not get probed.
 
-> 
->> +  - $ref: /schemas/i2c/i2c-controller.yaml#
->> +
->> +unevaluatedProperties: false
->> +
->> +examples:
->> +  - |
->> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
->> +
->> +    i2c@a90000 {
->> +        compatible = "qcom,sa8255p-geni-i2c";
->> +        reg = <0xa90000 0x4000>;
->> +        interrupts = <GIC_SPI 357 IRQ_TYPE_LEVEL_HIGH>;
->> +        power-domains = <&scmi0_pd 0>, <&scmi0_dvfs 0>;
->> +        power-domain-names = "power", "perf";
-> 
-> dmas and dma-names
+I would be really grateful if someone had a pointer for us.
 
-sure.
+Yours,
+	-- Matti
 
-Thanks,
-Praveen
+-- 
+---
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
 
-> 
-> Best regards,
-> Krzysztof
-> 
+~~ When things go utterly wrong vim users can always type :help! ~~
 
