@@ -1,365 +1,352 @@
-Return-Path: <linux-i2c+bounces-14262-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14263-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id C05E4C85FBB
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Nov 2025 17:32:03 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E57E0C86A03
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Nov 2025 19:30:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id AFC1F349AF2
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Nov 2025 16:32:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9F8413B39C7
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Nov 2025 18:30:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7406532937A;
-	Tue, 25 Nov 2025 16:31:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30938125A9;
+	Tue, 25 Nov 2025 18:30:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="iW9KxpoO"
+	dkim=pass (2048-bit key) header.d=nokia.com header.i=@nokia.com header.b="of+sKH9H"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from PA4PR04CU001.outbound.protection.outlook.com (mail-francecentralazon11013012.outbound.protection.outlook.com [40.107.162.12])
+Received: from BL0PR03CU003.outbound.protection.outlook.com (mail-eastusazon11012019.outbound.protection.outlook.com [52.101.53.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F30C6328B76;
-	Tue, 25 Nov 2025 16:31:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.162.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D3B51BBBE5;
+	Tue, 25 Nov 2025 18:30:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.53.19
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764088317; cv=fail; b=WWdPRA9arLSp0JZmrdqa59BxbdbwKbF0KwmvJ0LggCtxRyFxEikgzFuUYUTciI4jNVzvigjemSVE2JzXGRfcPzyBbnbKS4TYXpWz4EMGrDKxnUsAUvM872QfsRnbiaFhbZmP1pXTGwOT0kZBQWUW1y9RSFNfR7uteIkUzY9AS/Q=
+	t=1764095442; cv=fail; b=lMJd0WOl+IABWuvDFnH6SePipI80swge88cxsHkJK4asurQacHqmhkQt8ecqv5yhr+8fOy/5OmpQoII0qDi1o4ougIi1zFLFrQV8TRwErfMAFI1GNPkJgFOuU7uT9yXULRtPUwkZucqh64mbN/c58Btw6ULlFnmML7WIzOHeS9Q=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764088317; c=relaxed/simple;
-	bh=Hv1YQerE/HI9LQ9SRtEX7g8QqRwEttCWACjsCjyoeKQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=rPSZyPnoJ4/DQhWXDgi3V//rSh8/8UQlXrEHC/+rR1yDqFnLnXHdAQS13o3Lnf9PW26GdVq1ZpjukDQgGzcxFhW621il7NL+qUy4i+seUmM0DuRW/Ugub7ar/A0q7flAYUJdg/QBu+qECn4aaotnt2opNtqvWZGfYvLKIrOUxLc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=iW9KxpoO; arc=fail smtp.client-ip=40.107.162.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+	s=arc-20240116; t=1764095442; c=relaxed/simple;
+	bh=ZyYEWmkvz9W1Xhw/sOq0wm+Egmmp41J8NBRtUXvO28Q=;
+	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=dXnHXIoqs6ZfQXRnDCaPoQA+JuLqUNNRKuP/FoETI4rlsxwxJ6IqXBipyrqGtCe5gt1JWOo39Kiv7LjB+QDV7w4L75/7NwHk9Iykz9jDgJP0EW73aPOt7z01FmLYg5/K7adCYf/Z129p/qWuOxc/QqIYG6kMpxJAcPXCp4eKXf4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia.com; spf=fail smtp.mailfrom=nokia.com; dkim=pass (2048-bit key) header.d=nokia.com header.i=@nokia.com header.b=of+sKH9H; arc=fail smtp.client-ip=52.101.53.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ujFA14rvbjhQMIrhPIsrtxHAPk+tWyOIWIEvr1eAIVwv6w8g/zT25nQNzqbPEDRv5sP877bY81KxjigpjKsHe7ZNZAgbx/N1BXUqs3SO0IYjqeXApqYngaFPtY1FoYlcDme4n8UfnyK2k4B2aB63iYjRqMPJltT0eC0XSNtgALc0K8aR74RGO2EvRKlj/3+WqbYS6+txN9LOA64dxwDI43Pzpu4u59L1c0pnePu6qqimzy7E54hh4zj5/fZTgzsFu39nRyfTZ1fngvwtbBdlbFxkWvbQrwoDQ7Rt1yaexuiHo1nPNKl+GHOGQ/9XzQQILMHw+/EnsxCY+CbY74NbEA==
+ b=nN5OPyVb6nImTCUH1BnQZG6ygMxM8PDPhGVXInWvhd76IlSlqXfvICWL6eAg+hzDZB7kcKfYmxDC/zLtfdXA57EVThntVpyHnrbO19pnYiCmrX2CawMUSlxYAKWburlw3oQbamqAOLQqYNCjcB+/QfFzd7HSL0xOnMQJzdoUd6p9LzDKU+SzG2NKFCgG73KzHJQmD4yU4fx9v+yDgyedjr1srXIEHppGbvt1cizE759y7hkCWllKoXC5zwoS7fbOsGHloi2XzRfHiMo85CAwK2gnesgDguN40zsUxYIAzt+3qHkuNq49zzn8X6Wmi9Kn8Ek7DmPnKFFltdRXhlpAQQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1yCAGBNpmSUo5p1q2NjTmfgvppJVG2i/PLStGFE5lUw=;
- b=Of9J4t6wE+5A0AIOXpa6ePRH9rjcVRwWYwB5uK8/iMgSJPCKgx53ksNE3fP83NZXg2ixIicJ0E352wIS5ELdHAXAe6SDeqGMnnvWMPGPpfFMcDU89f9Eub9ntA9Y0pOvwYuJQk9Phjv5hxq6lorja8yoRUDvtv7zPeynWEdalu6uygxxOKrXey3MFaXUGASZm7HfL2atMv+GcFHdDByqp4ifI6NlVpSvbn1ceOwtNe+m+jzNh52M1f/WKFg+n7oKwmvo5vdurBScCkz0Jb2lvIml3TC3U3l9HGWJyh4V0oC/TM4nmTetmh4mOd6//Hfd+B9QlOSKbmzSdLQ3Q30/Tw==
+ bh=L4s8/wHWH29JMxLQmdFxkO6dgLgxxCZMLIAa1nqiD8Y=;
+ b=Qu6uphML5tyBpForvOo2e5B8w0VUDdcWN6tIUddlT2yLZf3x+FTWHbBt15l8bYcPCYpsXBEPuJU7xnDpn+WqCCbZ6tvlSjLBimCe3Jj98RB6+sq6DsJ8xp1HK0VEnFmoyCJMz1jjIrkb9nfU48wgzZpleBti1d/+tpU72sRCwSWcZb2iW8sQeWtq+92NdpW77fGV2t+674x9y//hSqduK8QZ05VcygZgTCDukNPEi50NO84HvlAOGVc3WUCbAjZ4lkRYdMcULXi7TMBdbdU1u9GkLHxmpPkm1xvzZg/xZtcg6xIYn6issu+0ScZIMUatWaMozREYVCfjInLN3Twi6A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ smtp.mailfrom=nokia.com; dmarc=pass action=none header.from=nokia.com;
+ dkim=pass header.d=nokia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1yCAGBNpmSUo5p1q2NjTmfgvppJVG2i/PLStGFE5lUw=;
- b=iW9KxpoOztIQL5J7MjzlVOtlhk555LXeISj3+kdDtPMHdxfUir8cHMJoo0XuOGkrs4PMDIE4fkYvlImZUz7uRFlda8V2OAF8dJXY1api71GJqw89HiQ7CLcu3FLZz7BDsdZXOHyDI30Dl7Du4axfl2WfD/KfzkJWRbR8Ujpct8f6GFKGjm0ibMkEGq9cvJZr0iT4+/TCGPHrddijHvIxpf0pUX2nBIfwdKzSVBc+XgEyV4UL23W0aXM5mvybG6pkt/IWaNbPgtc+lUVNldXHMHgbY9/YPtaRbGgwHbnMX5EWP+ovJikQB7g3QAhYXEU/jW8OyY4Rhl5hstcnT09xWQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from DU2PR04MB8951.eurprd04.prod.outlook.com (2603:10a6:10:2e2::22)
- by PA1PR04MB10367.eurprd04.prod.outlook.com (2603:10a6:102:441::21) with
+ bh=L4s8/wHWH29JMxLQmdFxkO6dgLgxxCZMLIAa1nqiD8Y=;
+ b=of+sKH9H9YHbxHmb38yyjtncd982/aDsg16pw3A8L52xUsdRFfPaqjEPrdtRAxxH9ctcDte7LcsE9GQUzEJSNKeUFqw1bedsq/aP5iTdxd2xRWfjQ5nQ958d/af59sPuk++RoLNvhVMJ/OmfGOWiCAUQAST3X2H8yr/jYylkzcqbZFzwCtCp5LL2Nn3jDTX4R5XaR1QlgWBvMIwDlyJFWsxSvQxQNVfPm9NxEsp1wnRWq5J7OvywEGBMGwKhFVPfdMxMJiRJbN04yzlnMnH4Il7xKVuVXzX0uUJxRdec9gy5Ls+AI0MNIIHI5OXt2PLBNTG+Ey5moxY+53iXRGRbug==
+Received: from BY5PR08MB6296.namprd08.prod.outlook.com (2603:10b6:a03:1f1::20)
+ by SA6PR08MB10355.namprd08.prod.outlook.com (2603:10b6:806:435::22) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9343.17; Tue, 25 Nov
- 2025 16:31:51 +0000
-Received: from DU2PR04MB8951.eurprd04.prod.outlook.com
- ([fe80::753c:468d:266:196]) by DU2PR04MB8951.eurprd04.prod.outlook.com
- ([fe80::753c:468d:266:196%4]) with mapi id 15.20.9366.009; Tue, 25 Nov 2025
- 16:31:51 +0000
-Date: Tue, 25 Nov 2025 11:31:44 -0500
-From: Frank Li <Frank.li@nxp.com>
-To: Carlos Song <carlos.song@nxp.com>
-Cc: aisheng.dong@nxp.com, andi.shyti@kernel.org, shawnguo@kernel.org,
-	s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-	linux-i2c@vger.kernel.org, imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] i2c: imx-lpi2c: Add runtime PM support for IRQ and
- clock management on i.MX8QXP/8QM
-Message-ID: <aSXZ8LntcvsvpKSZ@lizhi-Precision-Tower-5810>
-References: <20251125084718.2156168-1-carlos.song@nxp.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20251125084718.2156168-1-carlos.song@nxp.com>
-X-ClientProxiedBy: PH8PR21CA0013.namprd21.prod.outlook.com
- (2603:10b6:510:2ce::22) To DU2PR04MB8951.eurprd04.prod.outlook.com
- (2603:10a6:10:2e2::22)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9366.11; Tue, 25 Nov
+ 2025 18:30:36 +0000
+Received: from BY5PR08MB6296.namprd08.prod.outlook.com
+ ([fe80::6ee4:c72:353a:9141]) by BY5PR08MB6296.namprd08.prod.outlook.com
+ ([fe80::6ee4:c72:353a:9141%6]) with mapi id 15.20.9366.009; Tue, 25 Nov 2025
+ 18:30:35 +0000
+From: "Jens Stobernack (Nokia)" <jens.stobernack@nokia.com>
+To: "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+CC: "nhorman@tuxdriver.com" <nhorman@tuxdriver.com>, "andi.shyti@kernel.org"
+	<andi.shyti@kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "vasilykh@arista.com" <vasilykh@arista.com>
+Subject: [PATCH] i2c: ismt: add i2c bus recovery on timed out transaction
+Thread-Topic: [PATCH] i2c: ismt: add i2c bus recovery on timed out transaction
+Thread-Index: AdxeOSu5SL1olDlgTE6Xuio/6LLNrg==
+Date: Tue, 25 Nov 2025 18:30:35 +0000
+Message-ID:
+ <BY5PR08MB6296FC84911F1B2F63AC04DAF1D1A@BY5PR08MB6296.namprd08.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nokia.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BY5PR08MB6296:EE_|SA6PR08MB10355:EE_
+x-ms-office365-filtering-correlation-id: c8c21c98-de73-4059-5cfb-08de2c50b952
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|376014|366016|38070700021;
+x-microsoft-antispam-message-info:
+ =?us-ascii?Q?thFPMOYROg+eVRaaBH96JzYl9HLI81hINeAJsOv79XAnZrxAFUD5EZLc916b?=
+ =?us-ascii?Q?VoLVuYkywkKEwFfZx3da3Sty5fAQVTmUHXx7CsaBejDOu8VdbyFPEEFDBPcX?=
+ =?us-ascii?Q?C/JHs4wwbB57k2u2+6mZ/1WldWANyvB4BxYN7uCJ7OWsJ+ynFX4kPkiYz3lS?=
+ =?us-ascii?Q?gQojaTZwZibVmeeXeE/tIqt2WKZxupNZSOKQchmRb1uO9WZ8yDys3E9MyYFU?=
+ =?us-ascii?Q?TjGfQxp7sIUlSwS3xPGF69v6ZF73aaTU/oyGpQ3/66iY0sojF/UTjXCK6eQO?=
+ =?us-ascii?Q?KDFI5NRwMLqs8a2odfSy+QAcpSKASZCQ7PBgECBy7ASq0P8ePxLgEkMQdzrt?=
+ =?us-ascii?Q?kMSQt0MxTVs7iDE2rV0gjNwPpoeMXXZhNfuLt9HRctmiTGJhdKj3vjiPWZQF?=
+ =?us-ascii?Q?BqOfS5JwT1QmrLgLtVZSfPTW2+ZdTfB1vl0xJ5jUv/FlUPjDm1RdoHPhTtGs?=
+ =?us-ascii?Q?M3fmuamZMevObt4GUoAhOEcqQ06uMnUw/iX1TdWEPgzXQNQNgbFgV9ExW1Ce?=
+ =?us-ascii?Q?Q99xoSJ7KvsrIeL/j7XVGrSbFragNHqm26omy9rjI1+GRfzn8GmwkKi1bUiv?=
+ =?us-ascii?Q?EPCCVZ2JmwzTUIsEHlCimy1LmnVp/5ZVvDzYscuWs0kgj2+pXCb+JU88Hxkh?=
+ =?us-ascii?Q?YN7iCWY9MzHRttxzUkaNGHSlOyElBGnXzt2afxt0/Lsg7JBCriWikoNOxh3E?=
+ =?us-ascii?Q?weS9xfVZJRP14ohRfAy6USWYedQkHjENOKBjuDH6rgFxjiEY/Acc+amvZclB?=
+ =?us-ascii?Q?PbW2TDbIc0Amok+DgLE9ltLe1aGKzUVT6Bwy5aMbLBlGZEIBhit1+3l/zRy2?=
+ =?us-ascii?Q?iCxD/P5rg9QzjBhBEvgJ/co7OK4kuB7OVTjliT1YoNpmZ2zdPYrc/Ky0p6Dg?=
+ =?us-ascii?Q?mxfCIXlXGlFy7jC3UdOvU+ZPs3OorgsPvZycxxz5PgQgkyXrMVCsdYj9UjYU?=
+ =?us-ascii?Q?yBaK41kVR2V0NG8rjLh0kNlAIZtStfdLiIaGy3OnNv752QQZufrvVFhBiP1x?=
+ =?us-ascii?Q?i4MX/5dp55UQ+eUBtruYGd+xxJwNqOHoDLuqjsdsbBBSjcNudZs48J+0paB/?=
+ =?us-ascii?Q?6dR1hNUrExcl9Ptgrsc8VYeRpQ1u+VqGJzqytI6E1mdVKnzPH+InwjzTuH82?=
+ =?us-ascii?Q?fP//DOiuldk7FIGILt2SVwrBCWUr4pVZvFvdmfVOmcSH99Wf6wlcwKJwjmE/?=
+ =?us-ascii?Q?Z4YDr9U+HCGhUHSnMEvKf4cRMOMxOU4VF8PlSirnPgoD6Z1MVojH7xlOFpiQ?=
+ =?us-ascii?Q?185f9v2OPtoPwpWh1itpejdcJA/APaeXYRiBCRwpYX7S5fEvC3LumfqKtM+W?=
+ =?us-ascii?Q?duxINg30dvY70cSrnFFDytDhhurEfCvoM350XCpz+523FcZ9A9JCewurKrH0?=
+ =?us-ascii?Q?LSLiEhpDurLWOwDK1Wlh0Mo0WMp5bBAnTsNHy50eACpfJsCpykGk9SAr1VMj?=
+ =?us-ascii?Q?90s8jWwWdE/WdkbjkV76k2DeEb1M5k+39NFKI5yHS4wWC4ALoE/AcOtnehiR?=
+ =?us-ascii?Q?DLiXJsua8nKDHXC5WvMhn0kttKDQaDsPMKKF?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR08MB6296.namprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(38070700021);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?9O8rLTfMaAQdJrr4f7MvvY5QXM5Tq59pMyI+S8Ha4pq/qNjl39UrWKdUF6z0?=
+ =?us-ascii?Q?K14liIg08LOtNZhwnKjI6crzHkEjNbyQYPUs9mUu7xYOBbJXmIHZ2a38Jrbs?=
+ =?us-ascii?Q?LWYAKPIsQMt/bPloK8rBSUs/fqgmz97wEmr/5AeqArUCd3LVnnkY5UZt5den?=
+ =?us-ascii?Q?av6c0ATdJzH2Utub/4AWsPsC1CW5HdwF18h3phg/eKgqjBPv6JqS5rLgvR/U?=
+ =?us-ascii?Q?hVqNXxNlnMGxqxxCOM/mRnwktbAlcjlmf642izkxDXEmiYf/+f+NXfeWa8LI?=
+ =?us-ascii?Q?3u1oYOAHzhYevvcpmfuTv4VUHTvxJzOVLnMr/DzG/sHMOGvsdRRLxjsAR0Bt?=
+ =?us-ascii?Q?u9v3dUDH9I1Q4uMSRUT5zk3+xf3yNf3raNiQQm2ZGx9CFGafwvaTDF+ng7rS?=
+ =?us-ascii?Q?qaVuQqQJz5RubNJi46QPcDKY+G/o4TW6d4r14kB9lwqD4ukI9ZCHqOgqGm3W?=
+ =?us-ascii?Q?tWBvLDx0I0TyXNeOiCofVSldDlcAYcBFwaHcGXjyqhdSnpcjnpgVBE/ia4+k?=
+ =?us-ascii?Q?yHDuP4qK+s89aCmoJYYB6r9vxq7GGpxOSBgFsFmwsvJgaqrF9EVBqWdBVLZv?=
+ =?us-ascii?Q?yqM0M9WG34eMiqr+BlskqXc/aixH0Jxi2YLBIuJbUDubGC9xD6iuJHOGg/P/?=
+ =?us-ascii?Q?G3uMfbBz22pQwBngVW/fp/dLca67Vaw0FsXnX2VPVf4+7EUb466Y6GKalKH3?=
+ =?us-ascii?Q?fiWZmNaww84zjcmn3KJeK74bv+X0J75mODs/LgvgDsrbUnWwu+X+jGCdL5Ht?=
+ =?us-ascii?Q?LcmVxzCqJerTLmfpeI3bBbD2u4m++labQQygkg5e+GqaYkM8xv03bid3ZY6s?=
+ =?us-ascii?Q?nJVuz/szigFS9+u3uFooksc/K3kLUTWTVjyDZ8m1NZZedDp+HnjXo0g4wCI2?=
+ =?us-ascii?Q?9QxcSzA+/UciBahAnHWST+wixvsbQxSRLt9ei5TsyBfrC7VeUgXdZ8XdrZwI?=
+ =?us-ascii?Q?HLgIK+12LDWk6fRMoIdgjAqocSy4uuEY5XItfs6V8ogKHqqVQT2gFoKQVoyI?=
+ =?us-ascii?Q?Dm2LlMp9vPlTAEs/bgot235zlT/gw0th9QFN4QoKxcO6QsOnI1yjcXjqwpoD?=
+ =?us-ascii?Q?gBsGnyy68ZfDJ1mlEaitjh04IzZbTEnOQ4MPzg1Urmoymp/dMogi47mz8VYA?=
+ =?us-ascii?Q?yMtDqgshf+Mvooea7w/NV9e5aDV2kHKTAJsLlbuqVYgWjsr8Nf8SNMyaYZ42?=
+ =?us-ascii?Q?CLLClsgAYzvaum9PGM+BVCwOfL+eEO/o7K2Uo3rG+NCFe3V1HdI6lJVftBaU?=
+ =?us-ascii?Q?0+vfXTkXpVDb1lgBy2FgabB8JRgKNSjieAwt5lHz6oynT4Phzy3T606ZDIRu?=
+ =?us-ascii?Q?1VzSCOLYLaUwU0RxWkqJ7qXnGFP9a/7IgkDfddGqNawwhyzqHROoahbmDYby?=
+ =?us-ascii?Q?LelnWcsEWhSifDGIuDfftqkbn2N9PFutWRZ7MylIjm0Mmuz6uP2WLRhxQO9L?=
+ =?us-ascii?Q?dd9TroO3jxASIIl4xYK0FYVVrXFiLte3K5BZ8g6dfhKCnxzzUQsoiA2UO3F2?=
+ =?us-ascii?Q?Sw2IJSzxSs4gVX9a/pjMQh5bJkM3rlPi0H8ZiwyR9W0SNvB71PKuSlurSJMS?=
+ =?us-ascii?Q?GbQvHtuT9wUHr5z/TOJK5mAjVV7TPKVODIydlYPP?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU2PR04MB8951:EE_|PA1PR04MB10367:EE_
-X-MS-Office365-Filtering-Correlation-Id: 984f5611-42d8-4e56-923d-08de2c4022da
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|19092799006|1800799024|376014|52116014|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?OGNLbnpSYXpaTGk5MzE1MVlydWZQY3Z2TTNpVTRXWVphRnVKUVVHUE5wRmZS?=
- =?utf-8?B?TGdjYkIyejBXckFZbGZUM2FZU2xybjlpTkU0N25ZeG1mWTN1YmxjU053N3E2?=
- =?utf-8?B?QW5FQnc0Qm1QRnRMbVYzOStWWng3TWZ5b29YeXdZOWFLektQQmEybTVHYlpK?=
- =?utf-8?B?RHdhQ1lseE1OKzZMNmM2bzVkVjBOTXh3alB4ZG5MRlhTK2FqZ2tuUkJxYjZQ?=
- =?utf-8?B?bUFVMURmYVBnckQySDJKUW5GVk5la25DSVJwMUtuWjBES1JISS9WR1ZjSEV1?=
- =?utf-8?B?Y01qMUdQVWtUb0pJKy83WmxOWE85YnRtaklqUUdYS1ZGakxYRzczUnZMajl0?=
- =?utf-8?B?dEtLZVUrb3M0d25WNXlEeE5lSjFJcXExNVc2VVVGdG9qRzRCZ3hiQXpiRVRZ?=
- =?utf-8?B?N2t5Ry9jY2NnVWVCTTNmQ2ZRWngzTmJYN2hOalVucEczYWMzNlMrT05RS3ly?=
- =?utf-8?B?TmxscVViejNYcW9KTFdkT3VJL3VIUlZrcWd4QzM5VW82WHFKdFJnUnlieEY4?=
- =?utf-8?B?SzBMcm9NVlZqMWcwN21GVGJYMjRYbVVQVzVIcFJiRXcvNDZxRVhGVjZNL05D?=
- =?utf-8?B?djVuOHMzTFFIRGtEdkVGOU4ycFY2S1Y1U3ZHcllWMHMyOTB5MU1yK1h6WnJM?=
- =?utf-8?B?SmdIV1hrUE82QVF3U1VpK2RiSm01Wlo0K0Zzb3dkYzZ0OGkzWDdmNXJrWDRT?=
- =?utf-8?B?ZEk1UEd3cjJKcVM4WUFybUNtZ3VTcmsvQm1oc0pwQ2lNZ3BWWUlld3dWYU5y?=
- =?utf-8?B?V2xEa0w4L3lSbjArSGZHdm5aNnRxeHlUZ2pjYjBJNy9RVTRxTnFvQVV0d0tu?=
- =?utf-8?B?d2lkZHpnQWt0d1l4bnptaU4wczcwbzE1QnltOE1MdEtpejFMOFR4akZLZzZp?=
- =?utf-8?B?T2E2eWRsa0ZqdmR2S1ZESkdxRytIU1hmTlRQTHJORnFydnEwL0dZU1B6YU9R?=
- =?utf-8?B?TzM5SFpWNVBIVGZrRUZHanIzaDVZWlVFdjEwbHFYaTk4c21GNlhhOTJFSzBX?=
- =?utf-8?B?Ull2U0JFUEhvTGhOS2VJdUtEMEZESWZ4QlpQbytZMVdyL3NCTXpYYmZOTHd1?=
- =?utf-8?B?OVNiaEdXQmtpZnJ3T0tJVE95U0JzZFZJbVlnU0hyRlErRk9ONFNQdWJUbkky?=
- =?utf-8?B?VW42c1llOEdIZTUxaHN1MEhSTHV3M0V4eEtBNERuMlFXNG1JTTNvZDdSMzZx?=
- =?utf-8?B?eDBSSk0ybnYxZUpwU0JTcktxMkllZ3JyYUJKSWJKSU1JQkpyQmFnek5sOFZ6?=
- =?utf-8?B?cnJmR3RiaEUwZ3RZK2J2YnRPbVlyZ3ZCNWJ3VC9oMW9sOVJIbU5vQ2YwUzkv?=
- =?utf-8?B?blFpZ2hlMzJLajI2MHM4SEc4UjVUdGM3UjZaQVVmL3ZrY2g1VzNDRlZwQVdR?=
- =?utf-8?B?aWdNbFZsb2ZoYjBxRDJXUlN2ZjlGSC85YlExcS8rQnh4MXN6eXZ1WjRCQTRy?=
- =?utf-8?B?YzVYNEg2ZXI0TytDdEJPVmRWeVZZOGIxMmVYbUliTU1ua1BRQXhnaktHdklR?=
- =?utf-8?B?QWdoclMrc1BBakdlZ3JkenhISnA5eTkrb3d3RkJkSzRrdFNrR1lLTldvOUNI?=
- =?utf-8?B?YUh1c3o0VnJnYWgvSjVuS0VaS2FQMjQ3bVdKdDBCNDVla3hlTmtrSDJwdFJW?=
- =?utf-8?B?TzVaUW9OWkpVbXlhZ1U5V3RIQm93NHJ6dFUyNmdlNE93b05OR0QzTVU1cGwy?=
- =?utf-8?B?TS9ZcXJBbDJJejN4Wk9oT2QwUnd2NnM4NFlrM2dBRVNRK1NpNmgxSkxHVk1R?=
- =?utf-8?B?SlZZSlhlTTVKbHRjazUxbUdERUk5NWhOdDZjMG05ZDJnY3N5aDFRV1BWcEZJ?=
- =?utf-8?B?Y3hqeFpSNkdpK1RPR3N5SEZhVXBZdjJ4RzRxcVFsb1dGSkxsKzRzeVFuRm4x?=
- =?utf-8?B?TTlGU0N6WkNLRzBaalRKMnQxcVgyUG0vQTVTdi9zdnlPWE5RaUVjc0JCR3lF?=
- =?utf-8?B?djZpdUZCVGVsWmlXb0ZRSS9WY2xBN3pqd3g2d3VDWEFkK2ZNMHdEWFJWOHBI?=
- =?utf-8?B?aGxJaGxkWjNJbXM2U2VsWWgzNXRNbGFRczk5N0J1SUVsSnhYR3pPa1hSckNP?=
- =?utf-8?B?a0EzMkZRTHozZzVQNTB3dmZnczhuanFXaUZsdz09?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8951.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(19092799006)(1800799024)(376014)(52116014)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?U284emE0cjVRT2pKTjN5UXBnT3RpeDlwSVNWSlRBSmpvaTVXUW5CbWd1aE5l?=
- =?utf-8?B?ODRUanRTVFF6Tk9pL3NCNlVENnRnT1NWZ2V0K0p4dmJ0SVVHbWlVMmJpV1Z0?=
- =?utf-8?B?WldrUGFHdXRxUzlZNlhaV3IyU3ZzaEMvakxlUUUvSWRxK1hoRUJXVEtSVHdP?=
- =?utf-8?B?L2ZiZ0RkMmpOeXJPQnlCdm81RVpZUENucHVhaTZEVE16eDRrRlBvVHpNOEV3?=
- =?utf-8?B?ckhNWXI5NElGZy94Vjc1eVFsT1ozUU1MbDJ0Zm1QTDhJWkZXbW1RYlJTejNP?=
- =?utf-8?B?UFZqNUpMK1FMU0thS05SbFNOWkNDbENsRFVpeWJsazJlZVVkUE1FRURPVWJr?=
- =?utf-8?B?U3NpeEs0elc5ZlRIOUlLYnphTnlFQWhvQWtKYUIvbThWM3FYTWtuN3M5V1dp?=
- =?utf-8?B?V1hSZ0xmOEwxRWdvWDRHV3JJZTMzNHVlZmJpOFJnT2JRQlFLOHZSOURGS2lJ?=
- =?utf-8?B?cjJOQ1BTdjZHNjlOM01kK0Jrbi9LbENnM2NMTExpNmozUnlRYUdTa0NWRW5O?=
- =?utf-8?B?M0RaM1JUNnNWSERpSWN4U2hRNFdFcGsxSU1MZS9sWUszRDZVMFhzNFFicjZB?=
- =?utf-8?B?OEdPanBiTjgyaUFsZGcrdCs5U3FOWXBaZEEzWkJWZTFyeGFKVzY3NEswOGxM?=
- =?utf-8?B?SHp3YTF6U2E1Yi9nQ2FPdTFhTUhuVldWT1ExUHJwQ0VBK3crYWpaUmF1WlZZ?=
- =?utf-8?B?eElUQWpNL3VLdXRTT0M1ODlVc01QOEFhVHJZaXM5VStuS1BBRjRkbll1b3li?=
- =?utf-8?B?dmg5aTF1TXk5TnVvWWRNWWFsbHh0WnhGZ2NRTkZNOVgxYTE3RVVqVUFDdGl2?=
- =?utf-8?B?OWhmN3FyYmZ4MTZHRnR2Q2xtOW5sakkzTjU2WXBGNzRMUzhsNjQzSkxUaDFO?=
- =?utf-8?B?ZStBSmRqWENNUzRzd1A2am9RcDJpZDQxQU1lUjNJWXVZV0FrOTJMT2V6K0Zn?=
- =?utf-8?B?Q3hBZFRQYUdiMU83RFJPMk9hSjMrWmVLaUZ6anhHSGtiZ0RGWU1VWjhUTnZh?=
- =?utf-8?B?OUo4OUZTV3l6VkJXcUFWOEJlMUprMk5lV2ZrckU3b3lLUXF2dTBseC81S3Ux?=
- =?utf-8?B?QmJEZEJIemRjaDZlVXh4N1JuNTZLN3AxZ2pWVS9RdU9tMmtNdnBVdGFrYzRp?=
- =?utf-8?B?dXV0SXEweGJjMWFmL0VEMXpPcEh5b3JIYkd3TXgxdmRmbFljaTR5aTJwa3R3?=
- =?utf-8?B?SjN2UEpEYzRUVkE5anQ0Vi9LRWpVU1VzWnIxZDBLVmdCWVRGWjVENDR5bi9h?=
- =?utf-8?B?WTBCTitVSHBoUDZqQmtkRVRoS3NKUWlsV0VDQ1ZNY3poK2JJdWVPMldJc1Nh?=
- =?utf-8?B?Y1Q4RDRHVDltdjRzeUIyUkpzYWcrQjhVajdBVFRERHVodDlIQ3pvYkdmbWJW?=
- =?utf-8?B?aVorT2xPVno5YkJqVnVTcEp1NFcrS0s1eUdmYWpobGJKNDg0N1dYMkwvMGw4?=
- =?utf-8?B?S1c1cGhOMTlxMEhjTlBzRTcvYm92aFV3bXRQc3dtVnNyRTU0RVN1aEQwQTg1?=
- =?utf-8?B?YVl6QnFyY0lIc1RIR0szZGR4eFlJalFPc2RUbEw3SVhGWGpqcklZeGlEOWI4?=
- =?utf-8?B?N08waVB4TWpsdVdsTDNFWm5iYkw2MFkrYk5BNGtUTnBocTVrR0s1UlFxdndM?=
- =?utf-8?B?WEVXZ1pVSk84MXRLdDdISGNtSWlWYXU2TlpRdE93YlhUaUlvbFFoWXJiRG5G?=
- =?utf-8?B?MCs5aTJjUDRpNHpZNkJKUjUwbW9GYjJ3UVdoRzEvQ2JJZG9JdTVOUmpINEhy?=
- =?utf-8?B?Z0FmK2FDaVZ3cW1DT0hFYXZCdURsNUpjM2dqbWxuZWJBUERxeEZWRjJOTWth?=
- =?utf-8?B?WnNKcGlyUEhnRC9VdmprQjRUa3Y4TDB2OUVGWlBNTmdMYSt4aUxyTkhUTlZw?=
- =?utf-8?B?eER4WFlMbFdQdTZ3eFg3TTVTcnlHL3VWakMyWjExNVlLSzJQWDc4OFAvSXBH?=
- =?utf-8?B?eWl6RzQ3Z056TVplYXd4SjJsZkdES1Q0NDduNEFUWVZLZzBOZXlEQXlsNWtO?=
- =?utf-8?B?NWtHdmJjZHBIU1ozM1lSZ090Z2dNSVJYWElVejBqdnpLYWFaQjhxUmxjYzlF?=
- =?utf-8?B?ZFZSbStrRk5YQ0krQk9Oc0IrRXMzQVZNTXVmdHpmTk1pZ1BuMGlsOUJzLzZV?=
- =?utf-8?Q?aoZYGWGEBUJlDPozml14o2Y4O?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 984f5611-42d8-4e56-923d-08de2c4022da
-X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8951.eurprd04.prod.outlook.com
+X-OriginatorOrg: nokia.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Nov 2025 16:31:51.7011
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR08MB6296.namprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c8c21c98-de73-4059-5cfb-08de2c50b952
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Nov 2025 18:30:35.1222
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: bfkOkCiQsFuWerOXXaVr3RKCCgZwkNe0wkYWKlGU3oi60EyM51/AMrhPkK4GCdvFL9hF7d9A9LQCecaXYwZdHQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA1PR04MB10367
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: cHaR9I0RpBKnimUupeadB8ABlRCVykq2T301nERKZhSGBSMADtQJPtDHfqTpaVacTk8d+W0nIJokOSuRYnVMMyH+Lrud/K4MSL6JoZr3DKs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA6PR08MB10355
 
-On Tue, Nov 25, 2025 at 04:47:18PM +0800, Carlos Song wrote:
-> On i.MX8QXP/8QM SoCs, both the lvds/mipi and lvds/mipi-lpi2c power domains
-> must enter low-power mode during runtime suspend to achieve deep power
-> savings.
->
-> LPI2C resides in the lvds-lpi2c/mipi-lpi2c power domain, while its IRQ is
-> routed through an irqsteer located in the lvds/mipi power domain. The LPI2C
-> clock source comes from an LPCG within the lvds-lpi2c domain.
->
-> For example, the hierarchy for lvds0 and lvds0-lpi2c0 domains is:
-> ┌───────────────────────┐
-> │ pm-domain : lvds0     │
-> │                       │
-> │    ┌──────────────┐   │
-> │    │   irqsteer   │   │
-> │    └───────▲──────┘   │
-> │            │irq       │
-> │            │          │
-> └────────────┼──────────┘
-> ┌────────────┼──────────┐
-> │        ┌───┼───┐      │
-> │        │lpi2c0 │      │
-> │        └───┬───┘clk   │
-> │   ┌────────┼───────┐  │
-> │   │       LPCG     │  │
-> │   └────────────────┘  │
-> │pm-domain:lvds0-lpi2c0 │
-> └───────────────────────┘
->
-> To allow these domains to power down in system runtime suspend:
->
-> - All irqsteer clients must release IRQs.
-> - All LPCG clients must disable and unprepare clocks.
->
-> Thus, LPI2C must:
->
-> - Free its IRQ during runtime suspend and re-request it on resume.
-> - Disable and unprepare all clocks during runtime suspend and prepare
->   and rne ble them on resume.
->
-> This enables the lvds/mipi domains to enter deep low-power mode,
-> significantly reducing power consumption compared to active mode.
->
-> Signed-off-by: Carlos Song <carlos.song@nxp.com>
-> ---
-> Changes since V1:
-> * Add unit for I2C_PM_LONG_TIMEOUT to I2C_PM_LONG_TIMEOUT_MS
-> * Reuqest lpi2c_imx->irq uncondtionally
-> * Remove help function and direct put code in original
->   lpi2c_runtime_suspend() and lpi2c_runtime_resume()
-> * Give more comments to explain why prolong PM timeout
-> ---
-> 1. Why not apply prepare and unprepare clocks management for all platforms:
-> As the report from me early:
-> https://lists.openwall.net/linux-kernel/2025/07/01/139
-> Scope of global prepare_lock is too big, it will cause dead clock
-> between RPM and prepare_lock in some specail case. But clock
-> prepare/unprepare is also necessary for low power consumption in I.MX8QXP
-> and 8QM, so I add separate clock management for these platforms to
-> avoid impacting other I.MX platforms. But it's possible that some
-> customers might encounter deadlock issues in IMX8QXP/8QM, so I prolong the
-> runtime PM timeout for 8QXP/QM platforms, which is currently a suitable
-> workaround method I think.
->
-> The dead lock happen as below call stacks
->
-> Task 117                                                Task 120
->
-> schedule()
-> clk_prepare_lock()--> wait prepare_lock(mutex_lock)     schedule() wait for power.runtime_status exit RPM_SUSPENDING
->                            ^^^^ A                       ^^^^ B
-> clk_bulk_unprepare()                                    rpm_resume()
-> lpi2c_runtime_suspend()                                 pm_runtime_resume_and_get()
-> ...                                                     lpi2c_imx_xfer()
->                                                         ...
-> rpm_suspend() set RPM_SUSPENDING                        pcf857x_set();
->                            ^^^^ B                       ...
->                                                         clk_prepare_lock() --> hold prepare_lock
->                                                         ^^^^ A
->                                                         ...
->
-> Task 117 set power.runtime_status to RPM_SUSPENDING (A) and wait for task 120 release clock's global prepare mutex (B).
->
-> Task 120 hold global prepare mutex (B) and wait for power.runtime_status finish suspend (A).
->
-> So if RPM doesn't enter auto suspend too quick after hold prepare lock, this dead lock can be avoided.
-> So I prolong the runtime PM timeout, it can ensure that LPI2C does not enter auto suspend mode too
-> frequently. It has been verified valid for the above case.
->
-> 2. Low power status report
-> Power domain status can be shown in pm_genpd_summary and sc firmware. Take
-> 8QM platform lvds0 and lvds0-lpi2c0 power domain as example, before apply
-> this patch set:
-> root@imx8qmmek:~# cat /sys/kernel/debug/pm_genpd/pm_genpd_summary
-> domain                          status          children        performance
->     /device                         runtime status               managed by
-> ---------------------------------------------------------------------------
-> lvds0-lpi2c0                    on                              0
->     lvds0_i2c0_clk                  active                      0       SW
->     56243014.clock-controller       active                      0       SW
->     56247000.i2c                    suspended                   0       SW
-> lvds0                           on                              0
->     lvds0_bypass_clk                suspended                   0       SW
->     lvds0_pixel_clk                 suspended                   0       SW
->     lvds0_phy_clk                   suspended                   0       SW
->     56240000.interrupt-controller   active                      0       SW
-> sc firmware will show the power domain status:
-> >$ power.r
->     LVDS_0 = on
->     LVDS_0_I2C_0 = on
->
-> After apply this patch set:
-> root@imx8qmmek:~# cat /sys/kernel/debug/pm_genpd/pm_genpd_summary
-> domain                          status          children        performance
->     /device                         runtime status               managed by
-> ---------------------------------------------------------------------------
-> lvds0-lpi2c0                    off-0                           0
->     lvds0_i2c0_clk                  suspended                   0        SW
->     56243014.clock-controller       suspended                   0        SW
->     56247000.i2c                    suspended                   0        SW
-> lvds0                           off-0                           0
->     lvds0_bypass_clk                suspended                   0        SW
->     lvds0_pixel_clk                 suspended                   0        SW
->     lvds0_phy_clk                   suspended                   0        SW
->     56240000.interrupt-controller   suspended                   0        SW
->
-> sc firmware will show the power domain status:
-> >$ power.r
->     LVDS_0 = lp
->     LVDS_0_I2C_0 = lp
-> ---
->  drivers/i2c/busses/i2c-imx-lpi2c.c | 84 +++++++++++++++++++++++++-----
->  1 file changed, 71 insertions(+), 13 deletions(-)
->
-> diff --git a/drivers/i2c/busses/i2c-imx-lpi2c.c b/drivers/i2c/busses/i2c-imx-lpi2c.c
-> index dfacb0aec3c0..41ad82595583 100644
-> --- a/drivers/i2c/busses/i2c-imx-lpi2c.c
-> +++ b/drivers/i2c/busses/i2c-imx-lpi2c.c
-> @@ -132,6 +132,7 @@
->  #define CHUNK_DATA	256
->
->  #define I2C_PM_TIMEOUT		10 /* ms */
-> +#define I2C_PM_LONG_TIMEOUT_MS	1000 /* Avoid dead lock caused by big clock prepare lock */
+In rare occasions the i2c controller will get stuck. This failure is
+described in commit 46b2dfc0aa79 ("i2c: ismt: kill transaction in hardware
+on timeout")
 
-Mark:
-	I don't know where is best place to record clock dead lock issue
-with runtime PM in this patch. There are some thread disucssion this
+The kill operation never resolved the stuck condition in lab testing. A
+traditional i2c bus recovery was required to recover the i2c
+controller and allow it to continue operating as normal.
 
-	https://lore.kernel.org/imx/20250707-careful-pragmatic-quail-e1a2d8-mkl@pengutronix.de/
-	https://lore.kernel.org/all/20230421-kinfolk-glancing-e185fd9c47b4-mkl@pengutronix.de/
-	https://lore.kernel.org/all/20250326-cross-lock-dep-v1-0-3199e49e8652@bootlin.com/
+Signed-off-by: Jens Stobernack <jens.stobernack@nokia.com>
+---
+ drivers/i2c/busses/i2c-ismt.c | 128 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 128 insertions(+)
 
-	Anyways, I am fine with this patch. It takes long time to resolve
-deadlock problem.
-
-Reviewed-by: Frank Li <Frank.Li@nxp.com>
-
->  #define I2C_DMA_THRESHOLD	8 /* bytes */
->
->  enum lpi2c_imx_mode {
-> @@ -149,6 +150,11 @@ enum lpi2c_imx_pincfg {
->  	FOUR_PIN_PP,
->  };
->
-...
->
->  	i2c_set_adapdata(&lpi2c_imx->adapter, lpi2c_imx);
->  	platform_set_drvdata(pdev, lpi2c_imx);
-> @@ -1493,7 +1520,11 @@ static int lpi2c_imx_probe(struct platform_device *pdev)
->  		return dev_err_probe(&pdev->dev, -EINVAL,
->  				     "can't get I2C peripheral clock rate\n");
->
-> -	pm_runtime_set_autosuspend_delay(&pdev->dev, I2C_PM_TIMEOUT);
-> +	if (lpi2c_imx->hwdata->need_prepare_unprepare_clk)
-> +		pm_runtime_set_autosuspend_delay(&pdev->dev, I2C_PM_LONG_TIMEOUT_MS);
-> +	else
-> +		pm_runtime_set_autosuspend_delay(&pdev->dev, I2C_PM_TIMEOUT);
-> +
->  	pm_runtime_use_autosuspend(&pdev->dev);
->  	pm_runtime_get_noresume(&pdev->dev);
->  	pm_runtime_set_active(&pdev->dev);
-...
->
->  	return 0;
-> --
-> 2.34.1
->
+diff --git a/drivers/i2c/busses/i2c-ismt.c b/drivers/i2c/busses/i2c-ismt.c
+index 7aaefb21416a..4bdeb865d569 100644
+--- a/drivers/i2c/busses/i2c-ismt.c
++++ b/drivers/i2c/busses/i2c-ismt.c
+@@ -122,12 +122,17 @@
+=20
+ /* iSMT Miscellaneous Registers */
+ #define ISMT_SPGT	0x300	/* SMBus PHY Global Timing */
++#define ISMT_DBCTRL	0x388	/* Discrete Data Bus Control */
++#define ISMT_DBSTS	0x38C	/* Discrete Data Bus Status */
+=20
+ /* General Control Register (GCTRL) bit definitions */
+ #define ISMT_GCTRL_TRST	0x04	/* Target Reset */
+ #define ISMT_GCTRL_KILL	0x08	/* Kill */
+ #define ISMT_GCTRL_SRST	0x40	/* Soft Reset */
+=20
++/* Error Status Register (ERRSTS) bit definitions */
++#define ISMT_ERRSTS_CKLTO	(0x1 << 24)	/* Clock low timeout */
++
+ /* Master Control Register (MCTRL) bit definitions */
+ #define ISMT_MCTRL_SS	0x01		/* Start/Stop */
+ #define ISMT_MCTRL_MEIE	0x10		/* Master Error Interrupt Enable */
+@@ -153,6 +158,20 @@
+ /* MSI Control Register (MSICTL) bit definitions */
+ #define ISMT_MSICTL_MSIE	0x01	/* MSI Enable */
+=20
++/* Bit Bang Databus Control (DBCTRL) bit definitions */
++#define ISMT_DBCTRL_EN		0x80000000	/* Enable bit banging */
++#define ISMT_DBCTRL_SMBDT	0x00000001	/* SMB Data signal, 0 mean data low *=
+/
++#define ISMT_DBCTRL_SMBCK	0x00000002	/* SMB Clock signal, 0 means clock lo=
+w */
++
++/* Bit Bang Databus Status (DBSTS) bit definitions */
++#define ISMT_DBSTS_LSMBS_MASK	0x00000007	/* Last SMBus state, use with car=
+e */
++#define ISMT_DBSTS_SMBDC	0x00000040	/* SMBus Data Change */
++#define ISMT_DBSTS_SMBCKC	0x00000080	/* SMBus Clock Change */
++#define ISMT_DBSTS_SMBDT	0x00000100	/* Live state of SMBus data signal */
++#define ISMT_DBSTS_SMBDT_SHIFT	8
++#define ISMT_DBSTS_SMBCK	0x00000200	/* Live state of SMBus clock signal */
++#define ISMT_DBSTS_SMBCK_SHIFT	9
++
+ /* iSMT Hardware Descriptor */
+ struct ismt_desc {
+ 	u8 tgtaddr_rw;	/* target address & r/w bit */
+@@ -633,6 +652,7 @@ static int ismt_access(struct i2c_adapter *adap, u16 ad=
+dr,
+=20
+ 	if (unlikely(!time_left)) {
+ 		ismt_kill_transaction(priv);
++		i2c_recover_bus(&priv->adapter);
+ 		ret =3D -ETIMEDOUT;
+ 		goto out;
+ 	}
+@@ -670,6 +690,113 @@ static const struct i2c_algorithm smbus_algorithm =3D=
+ {
+ 	.functionality	=3D ismt_func,
+ };
+=20
++/**
++ * ismt_i2c_get_scl() - get the scl state
++ * @adap: the i2c host adapter
++ */
++static int ismt_i2c_get_scl(struct i2c_adapter *adap)
++{
++	struct ismt_priv *priv =3D i2c_get_adapdata(adap);
++	unsigned int reg;
++
++	reg =3D readl(priv->smba + ISMT_DBSTS) & ISMT_DBSTS_SMBCK;
++	reg >>=3D ISMT_DBSTS_SMBCK_SHIFT;
++	return reg;
++}
++
++/**
++ * ismt_i2c_set_scl() - set the scl state
++ * @adap: the i2c host adapter
++ * @val: the pin state
++ */
++static void ismt_i2c_set_scl(struct i2c_adapter *adap, int val)
++{
++	struct ismt_priv *priv =3D i2c_get_adapdata(adap);
++	unsigned int reg;
++
++	reg =3D readl(priv->smba + ISMT_DBCTRL);
++	if (val =3D=3D 0)
++		reg &=3D ~ISMT_DBCTRL_SMBCK;
++	else
++		reg |=3D ISMT_DBCTRL_SMBCK;
++	writel(reg, priv->smba + ISMT_DBCTRL);
++}
++
++/**
++ * ismt_i2c_get_sda() - get the sda state
++ * @adap: the i2c host adapter
++ */
++static int ismt_i2c_get_sda(struct i2c_adapter *adap)
++{
++	struct ismt_priv *priv =3D i2c_get_adapdata(adap);
++	unsigned int reg;
++
++	reg =3D readl(priv->smba + ISMT_DBSTS) & ISMT_DBSTS_SMBDT;
++	reg >>=3D ISMT_DBSTS_SMBDT_SHIFT;
++	return reg;
++}
++
++/**
++ * ismt_i2c_set_sda() - set the sda state
++ * @adap: the i2c host adapter
++ * @val: the pin state
++ */
++static void ismt_i2c_set_sda(struct i2c_adapter *adap, int val)
++{
++	struct ismt_priv *priv =3D i2c_get_adapdata(adap);
++	unsigned int reg;
++
++	reg =3D readl(priv->smba + ISMT_DBCTRL);
++	if (val =3D=3D 0)
++		reg &=3D ~ISMT_DBCTRL_SMBDT;
++	else
++		reg |=3D ISMT_DBCTRL_SMBDT;
++	writel(reg, priv->smba + ISMT_DBCTRL);
++}
++
++/**
++ * ismt_i2c_prepare_recovery() - configure bit banging mode
++ * @adap: the i2c host adapter
++ */
++static void ismt_i2c_prepare_recovery(struct i2c_adapter *adap)
++{
++	struct ismt_priv *priv =3D i2c_get_adapdata(adap);
++	unsigned int reg;
++
++	/* Enable bit banging, datasheet recommends setting EN without
++	 * changing the values of SMBDT and SMBCK.
++	 */
++	reg =3D readl(priv->smba + ISMT_DBCTRL);
++	writel(reg | ISMT_DBCTRL_EN, priv->smba + ISMT_DBCTRL);
++}
++
++/**
++ * ismt_i2c_prepare_recovery() - clear bit banging mode
++ * @adap: the i2c host adapter
++ */
++static void ismt_i2c_unprepare_recovery(struct i2c_adapter *adap)
++{
++	struct ismt_priv *priv =3D i2c_get_adapdata(adap);
++	unsigned int reg;
++
++	// Disable bit banging
++	reg =3D readl(priv->smba + ISMT_DBCTRL);
++	writel(reg & ~ISMT_DBCTRL_EN, priv->smba + ISMT_DBCTRL);
++
++	// Clear the expected clock low timeout
++	writel(ISMT_ERRSTS_CKLTO, priv->smba + ISMT_GR_ERRSTS);
++}
++
++static struct i2c_bus_recovery_info ismt_i2c_recovery_info =3D {
++	.recover_bus =3D i2c_generic_scl_recovery,
++	.get_scl =3D ismt_i2c_get_scl,
++	.set_scl =3D ismt_i2c_set_scl,
++	.get_sda =3D ismt_i2c_get_sda,
++	.set_sda =3D ismt_i2c_set_sda,
++	.prepare_recovery =3D ismt_i2c_prepare_recovery,
++	.unprepare_recovery =3D ismt_i2c_unprepare_recovery,
++};
++
+ /**
+  * ismt_handle_isr() - interrupt handler bottom half
+  * @priv: iSMT private data
+@@ -899,6 +1026,7 @@ ismt_probe(struct pci_dev *pdev, const struct pci_devi=
+ce_id *id)
+ 	priv->adapter.dev.parent =3D &pdev->dev;
+ 	ACPI_COMPANION_SET(&priv->adapter.dev, ACPI_COMPANION(&pdev->dev));
+ 	priv->adapter.retries =3D ISMT_MAX_RETRIES;
++	priv->adapter.bus_recovery_info =3D &ismt_i2c_recovery_info;
+=20
+ 	priv->pci_dev =3D pdev;
+=20
+--=20
+2.43.0
 
