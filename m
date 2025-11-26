@@ -1,57 +1,56 @@
-Return-Path: <linux-i2c+bounces-14277-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14278-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77259C89603
-	for <lists+linux-i2c@lfdr.de>; Wed, 26 Nov 2025 11:47:33 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40D0BC89630
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 Nov 2025 11:49:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5BED74E3448
-	for <lists+linux-i2c@lfdr.de>; Wed, 26 Nov 2025 10:47:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2E89A3B7806
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 Nov 2025 10:47:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED58E321448;
-	Wed, 26 Nov 2025 10:46:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D74DE31C58A;
+	Wed, 26 Nov 2025 10:46:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="FruETx42"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="IbuBHPUD"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD0DB31ED95;
-	Wed, 26 Nov 2025 10:46:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86E29248F7C
+	for <linux-i2c@vger.kernel.org>; Wed, 26 Nov 2025 10:46:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764154015; cv=none; b=SImm9Ef4Z2skU1jv+toEnRRW0sSY6oV6SHSGeWGMIVmQcXYJeYRC5dVQyl47aHQ90JFoY2KMqUeMdMqvBwTg3DBOnFW8H3Pz6bSE5r1aKdU5Lb3BI/xOVt+NS0ONbfDD9JIAY+M+GDZQm2xHxNErj6KX9Nti/xTMHO4QBSZ5bjg=
+	t=1764154018; cv=none; b=lTTMKIpS/r2Cp/+AzrD9XtDXej+JSJpOl7R/umT9QTEnqUWQPfD+tbm0J/4cBO4xYqGEjpZoIx3o4vuwJJ3qSBm1o3xugM4udQs8O25Vgw1H1E/Mc8tqJSn5ytdv4T/d5TTWef1sKxQUqA6z4ZR1uoSUm1+t1kJDi6q+hDJmX0A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764154015; c=relaxed/simple;
-	bh=LkyYXciWGFRGDaZZsAqr0hUiYlLTuVo9Zf8XUZJtrlU=;
+	s=arc-20240116; t=1764154018; c=relaxed/simple;
+	bh=jUnlaT13/Q+tzgV6K89leD6fPMTnzbqNWI8dZDXdMzU=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=OXwwCmixoboB8PGpihvY0GkAvwV/dlYQpmIqWQOkFWwda7zLt4Su0GMQ5CGIIHxcTsqM+SvPeyNnwcnG/Pevu1FLNm+X5PDFk02xM2yLykJKjq15o5XDF4ooSUf/6gjPP5zr67+CKgkJomfGwQz0MiRkkk72s5tpF4OAksAwoIY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=FruETx42; arc=none smtp.client-ip=185.246.85.4
+	 In-Reply-To:To:Cc; b=ES6omDVdiv1r5ZbkaSHJ+0hUL9yTUtrsjXqtEKs/etzoexsC7LIG+I2L/sIqvJ0WUvqr71SyxT8CN4EQPObCLbUX7h1y3LdlJhKbw/eB86w/d4xrWpm4c81/75k+FbiV5VjAQaoPGpi25wOkKL2Uo4TZf5XnclNIFqpngIzp2mY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=IbuBHPUD; arc=none smtp.client-ip=185.246.84.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 6631D4E418E6;
-	Wed, 26 Nov 2025 10:46:52 +0000 (UTC)
+	by smtpout-02.galae.net (Postfix) with ESMTPS id BC94A1A1D6E;
+	Wed, 26 Nov 2025 10:46:54 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 3BBE560721;
-	Wed, 26 Nov 2025 10:46:52 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id B1850102F08C9;
-	Wed, 26 Nov 2025 11:46:48 +0100 (CET)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 91C0560721;
+	Wed, 26 Nov 2025 10:46:54 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 51F2A102F08DB;
+	Wed, 26 Nov 2025 11:46:51 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1764154011; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1764154013; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=OzKkisXvKa5epQi/flHcP9O680bWIEN4eKFcAiNCdnY=;
-	b=FruETx429Dm1XWoZUET/07FOXP5A5GSr4il2sEDlyaL3jjcHVkEkM7YV8JQ4otYKXQqxIO
-	k/P0Zv7IgYNht2NOzIYAJ0+EjqcabgaIBLdNekgFOLxjfU+vk3A4qz+dAziMpaM0lAQOcT
-	h/V8M2YvA5w9dfB1E4bIch7VxDGORlXfyMbFVbpZKyDZN8I2G1X41bupnCZtUrXF89oPEm
-	4efxMg+ZS0/DkVnQYa0wN4eS8Wptum9wPx8yY7Y7yb60oxI4lkZgp1iZZ1GUbj7Cn0y+dd
-	KyjaIijxSqhIBE5wmbE/YbTpUNaY9mNk2QPHaFfuODpBp2lE9pXuh9aheiEoUg==
+	bh=5qqsKMoS1Gv3QCTB0XeC9vkdS6QI+B8KXlMKGLnPhtw=;
+	b=IbuBHPUDEGctGOtQsaLG69XiPbt0Kn9fMrISI3oQPAygiXB3fKUq1P/Mr68iOOU3Tw99oM
+	br4/0uVsj8+ZKbAldkt/22PEsoV+eG0Wn5Bn/xSze9XvzrOwtICEO+tmd8c+ISdDgwQxqt
+	P29yNEHSfgpXNNQlPEQAH4IV0jawzmlfv13lpdXiU6yQFyGFezF8tqEx0FdoEeYfopbvSs
+	Ce7H0/oG//A4cmlu21lzWamZrLVl69AzRyNIYwODRvGNhPK0jMzFQhR6UJ4CAuNiXADsEM
+	w69YUKAnXTAsUMoXa/z6+Wo1IWq3VKpPdpyJ9PcsOnWpzJdB5MVngv1x2hQalQ==
 From: =?utf-8?q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>
-Date: Wed, 26 Nov 2025 11:46:27 +0100
-Subject: [PATCH v4 4/7] i2c: designware: Add dedicated algorithm for AMD
- NAVI
+Date: Wed, 26 Nov 2025 11:46:28 +0100
+Subject: [PATCH v4 5/7] i2c: designware: Implement I2C_M_STOP support
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -60,7 +59,7 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20251126-i2c-dw-v4-4-b0654598e7c5@bootlin.com>
+Message-Id: <20251126-i2c-dw-v4-5-b0654598e7c5@bootlin.com>
 References: <20251126-i2c-dw-v4-0-b0654598e7c5@bootlin.com>
 In-Reply-To: <20251126-i2c-dw-v4-0-b0654598e7c5@bootlin.com>
 To: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>, 
@@ -84,77 +83,244 @@ Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
 X-Mailer: b4 0.14.3
 X-Last-TLS-Session-Version: TLSv1.3
 
-Apart from runtime PM, there is nothing in common between i2c_dw_xfer()
-and amd_i2c_dw_xfer_quirk(), so give AMD NAVI controller its own algorithm
-instead of calling the quirk from i2c_dw_xfer().
+Add the support of the I2C_M_STOP flag in i2c_msg by splitting
+i2c_dw_xfer() in two: __i2c_dw_xfer_one_part() for the core transfer logic
+and i2c_dw_xfer() for handling the high-level transaction management.
 
-Add runtime PM handling to amd_i2c_dw_xfer_quirk() and a dedicated
-i2c_algorithm for AMD NAVI controllers. The adapter algorithm is set
-during probe based on the device model.
+In detail __i2c_dw_xfer_one_part() starts a transaction and wait for its
+completion, either with a STOP on the bus or an error. i2c_dw_xfer()
+loops over the messages to search for the I2C_M_STOP flag and calls
+__i2c_dw_xfer_one_part() for each part of the messages up to a STOP or
+the end of the messages array.
 
-This way we avoid checking for the device model at the start of every
-transfer.
+i2c_dw_xfer() takes care of runtime PM and holds the hardware lock on
+the bus while calling __i2c_dw_xfer_one_part(), this allows grouping
+multiple accesses to device that support a STOP in a transaction when
+done via i2c_dev I2C_RDWR ioctl.
 
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Also, now that we have a lookup of the messages in i2c_dw_xfer() prior
+to each transaction, we use it to make sure the messages are valid for
+the transaction, via a new function i2c_dw_msg_is_valid(). We check
+that the target address does not change before starting the transaction
+instead of aborting the transfer while it is happening, as it was done
+in i2c_dw_xfer_msg(). The target address can only be changed after an
+I2C_M_STOP flag, i.e after a STOP on the i2c bus.
+
+The I2C_FUNC_PROTOCOL_MANGLING flag is added to the list of
+functionalities supported by the controller, except for the AMD NAVI
+i2c controller which uses its own xfer() function and is left untouched.
+
 Signed-off-by: Benoît Monin <benoit.monin@bootlin.com>
 ---
- drivers/i2c/busses/i2c-designware-master.c | 22 +++++++++++++---------
- 1 file changed, 13 insertions(+), 9 deletions(-)
+ drivers/i2c/busses/i2c-designware-master.c | 130 ++++++++++++++++++++---------
+ 1 file changed, 90 insertions(+), 40 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
-index ec4fc2708d03..c33198ab5018 100644
+index c33198ab5018..f3c87f447dd5 100644
 --- a/drivers/i2c/busses/i2c-designware-master.c
 +++ b/drivers/i2c/busses/i2c-designware-master.c
-@@ -354,6 +354,10 @@ static int amd_i2c_dw_xfer_quirk(struct i2c_adapter *adap, struct i2c_msg *msgs,
- 	u8 *tx_buf;
- 	unsigned int val;
+@@ -435,7 +435,6 @@ i2c_dw_xfer_msg(struct dw_i2c_dev *dev)
+ 	struct i2c_msg *msgs = dev->msgs;
+ 	u32 intr_mask;
+ 	int tx_limit, rx_limit;
+-	u32 addr = msgs[dev->msg_write_idx].addr;
+ 	u32 buf_len = dev->tx_buf_len;
+ 	u8 *buf = dev->tx_buf;
+ 	bool need_restart = false;
+@@ -446,18 +445,6 @@ i2c_dw_xfer_msg(struct dw_i2c_dev *dev)
+ 	for (; dev->msg_write_idx < dev->msgs_num; dev->msg_write_idx++) {
+ 		u32 flags = msgs[dev->msg_write_idx].flags;
  
-+	ACQUIRE(pm_runtime_active_auto_try, pm)(dev->dev);
-+	if (ACQUIRE_ERR(pm_runtime_active_auto_try, &pm))
-+		return -ENXIO;
-+
- 	/*
- 	 * In order to enable the interrupt for UCSI i.e. AMD NAVI GPU card,
- 	 * it is mandatory to set the right value in specific register
-@@ -813,14 +817,6 @@ i2c_dw_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
+-		/*
+-		 * If target address has changed, we need to
+-		 * reprogram the target address in the I2C
+-		 * adapter when we are done with this transfer.
+-		 */
+-		if (msgs[dev->msg_write_idx].addr != addr) {
+-			dev_err(dev->dev,
+-				"%s: invalid target address\n", __func__);
+-			dev->msg_err = -EINVAL;
+-			break;
+-		}
+-
+ 		if (!(dev->status & STATUS_WRITE_IN_PROGRESS)) {
+ 			/* new i2c_msg */
+ 			buf = msgs[dev->msg_write_idx].buf;
+@@ -805,18 +792,15 @@ static int i2c_dw_wait_transfer(struct dw_i2c_dev *dev)
+ }
  
- 	pm_runtime_get_sync(dev->dev);
+ /*
+- * Prepare controller for a transaction and call i2c_dw_xfer_msg.
++ * Prepare controller for a transaction, start the transfer of the msgs
++ * and wait for completion, either a STOP or a error.
++ * Return the number of messages transferred or a negative error code.
+  */
+ static int
+-i2c_dw_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
++__i2c_dw_xfer_one_part(struct dw_i2c_dev *dev, struct i2c_msg *msgs, size_t num)
+ {
+-	struct dw_i2c_dev *dev = i2c_get_adapdata(adap);
+ 	int ret;
  
--	switch (dev->flags & MODEL_MASK) {
--	case MODEL_AMD_NAVI_GPU:
--		ret = amd_i2c_dw_xfer_quirk(adap, msgs, num);
--		goto done_nolock;
--	default:
--		break;
--	}
+-	dev_dbg(dev->dev, "%s: msgs: %d\n", __func__, num);
+-
+-	pm_runtime_get_sync(dev->dev);
 -
  	reinit_completion(&dev->cmd_complete);
  	dev->msgs = msgs;
  	dev->msgs_num = num;
-@@ -910,6 +906,11 @@ static const struct i2c_algorithm i2c_dw_algo = {
- 	.functionality = i2c_dw_func,
- };
+@@ -828,13 +812,9 @@ i2c_dw_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
+ 	dev->abort_source = 0;
+ 	dev->rx_outstanding = 0;
  
-+static const struct i2c_algorithm amd_i2c_dw_algo = {
-+	.xfer = amd_i2c_dw_xfer_quirk,
-+	.functionality = i2c_dw_func,
-+};
+-	ret = i2c_dw_acquire_lock(dev);
+-	if (ret)
+-		goto done_nolock;
+-
+ 	ret = i2c_dw_wait_bus_not_busy(dev);
+ 	if (ret < 0)
+-		goto done;
++		return ret;
+ 
+ 	/* Start the transfers */
+ 	i2c_dw_xfer_init(dev);
+@@ -846,7 +826,7 @@ i2c_dw_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
+ 		/* i2c_dw_init_master() implicitly disables the adapter */
+ 		i2c_recover_bus(&dev->adapter);
+ 		i2c_dw_init_master(dev);
+-		goto done;
++		return ret;
+ 	}
+ 
+ 	/*
+@@ -869,28 +849,93 @@ i2c_dw_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
+ 	 */
+ 	__i2c_dw_disable_nowait(dev);
+ 
+-	if (dev->msg_err) {
+-		ret = dev->msg_err;
+-		goto done;
+-	}
++	if (dev->msg_err)
++		return dev->msg_err;
+ 
+ 	/* No error */
+-	if (likely(!dev->cmd_err && !dev->status)) {
+-		ret = num;
+-		goto done;
+-	}
++	if (likely(!dev->cmd_err && !dev->status))
++		return num;
+ 
+ 	/* We have an error */
+-	if (dev->cmd_err == DW_IC_ERR_TX_ABRT) {
+-		ret = i2c_dw_handle_tx_abort(dev);
+-		goto done;
+-	}
++	if (dev->cmd_err == DW_IC_ERR_TX_ABRT)
++		return i2c_dw_handle_tx_abort(dev);
+ 
+ 	if (dev->status)
+ 		dev_err(dev->dev,
+ 			"transfer terminated early - interrupt latency too high?\n");
+ 
+-	ret = -EIO;
++	return -EIO;
++}
 +
- static const struct i2c_adapter_quirks i2c_dw_quirks = {
- 	.flags = I2C_AQ_NO_ZERO_LEN,
- };
-@@ -1045,7 +1046,10 @@ int i2c_dw_probe_master(struct dw_i2c_dev *dev)
- 		scnprintf(adap->name, sizeof(adap->name),
- 			  "Synopsys DesignWare I2C adapter");
- 	adap->retries = 3;
--	adap->algo = &i2c_dw_algo;
-+	if ((dev->flags & MODEL_MASK) == MODEL_AMD_NAVI_GPU)
-+		adap->algo = &amd_i2c_dw_algo;
-+	else
-+		adap->algo = &i2c_dw_algo;
- 	adap->quirks = &i2c_dw_quirks;
- 	adap->dev.parent = dev->dev;
- 	i2c_set_adapdata(adap, dev);
++/*
++ * Verify that the message at index @idx can be processed as part
++ * of a single transaction. The @msgs array contains the messages
++ * of the transaction. The message is checked against its predecessor
++ * to ensure that it respects the limitation of the controller.
++ */
++static inline bool
++i2c_dw_msg_is_valid(struct dw_i2c_dev *dev, const struct i2c_msg *msgs, size_t idx)
++{
++	/*
++	 * The first message of a transaction is valid,
++	 * no constraint from a previous message.
++	 */
++	if (!idx)
++		return true;
++
++	/*
++	 * We cannot change the target address during a transaction, so make
++	 * sure the address is identical to the one of the previous message.
++	 */
++	if (msgs[idx - 1].addr != msgs[idx].addr) {
++		dev_err(dev->dev, "invalid target address\n");
++		return false;
++	}
++
++	return true;
++}
++
++static int
++i2c_dw_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs, int num)
++{
++	struct dw_i2c_dev *dev = i2c_get_adapdata(adap);
++	struct i2c_msg *msgs_part;
++	size_t cnt;
++	int ret;
++
++	dev_dbg(dev->dev, "msgs: %d\n", num);
++
++	pm_runtime_get_sync(dev->dev);
++
++	ret = i2c_dw_acquire_lock(dev);
++	if (ret)
++		goto done_nolock;
++
++	/*
++	 * If the I2C_M_STOP is present in some the messages,
++	 * we do one transaction for each part up to the STOP.
++	 */
++	for (msgs_part = msgs; msgs_part < msgs + num; msgs_part += cnt) {
++		/*
++		 * Count the messages in a transaction, up to a STOP
++		 * or the end of the msgs.
++		 */
++		for (cnt = 1; ; cnt++) {
++			if (!i2c_dw_msg_is_valid(dev, msgs_part, cnt - 1)) {
++				ret = -EINVAL;
++				goto done;
++			}
++
++			if ((msgs_part[cnt - 1].flags & I2C_M_STOP) ||
++			    (msgs_part + cnt == msgs + num))
++				break;
++		}
++
++		/* transfer one part up to a STOP */
++		ret = __i2c_dw_xfer_one_part(dev, msgs_part, cnt);
++		if (ret < 0)
++			break;
++	}
+ 
+ done:
+ 	i2c_dw_release_lock(dev);
+@@ -898,7 +943,9 @@ i2c_dw_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
+ done_nolock:
+ 	pm_runtime_put_autosuspend(dev->dev);
+ 
+-	return ret;
++	if (ret < 0)
++		return ret;
++	return num;
+ }
+ 
+ static const struct i2c_algorithm i2c_dw_algo = {
+@@ -921,6 +968,9 @@ void i2c_dw_configure_master(struct dw_i2c_dev *dev)
+ 
+ 	dev->functionality = I2C_FUNC_10BIT_ADDR | DW_IC_DEFAULT_FUNCTIONALITY;
+ 
++	if ((dev->flags & MODEL_MASK) != MODEL_AMD_NAVI_GPU)
++		dev->functionality |= I2C_FUNC_PROTOCOL_MANGLING;
++
+ 	dev->master_cfg = DW_IC_CON_MASTER | DW_IC_CON_SLAVE_DISABLE |
+ 			  DW_IC_CON_RESTART_EN;
+ 
 
 -- 
 2.52.0
