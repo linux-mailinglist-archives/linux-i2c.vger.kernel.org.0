@@ -1,352 +1,221 @@
-Return-Path: <linux-i2c+bounces-14263-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14264-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E57E0C86A03
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Nov 2025 19:30:48 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA513C881D5
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 Nov 2025 06:03:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9F8413B39C7
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Nov 2025 18:30:47 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id CF30F4E3254
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 Nov 2025 05:03:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30938125A9;
-	Tue, 25 Nov 2025 18:30:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC7AE3128DC;
+	Wed, 26 Nov 2025 05:02:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nokia.com header.i=@nokia.com header.b="of+sKH9H"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="hcFAy0Zo";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="JIMOTTgC"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from BL0PR03CU003.outbound.protection.outlook.com (mail-eastusazon11012019.outbound.protection.outlook.com [52.101.53.19])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D3B51BBBE5;
-	Tue, 25 Nov 2025 18:30:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.53.19
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764095442; cv=fail; b=lMJd0WOl+IABWuvDFnH6SePipI80swge88cxsHkJK4asurQacHqmhkQt8ecqv5yhr+8fOy/5OmpQoII0qDi1o4ougIi1zFLFrQV8TRwErfMAFI1GNPkJgFOuU7uT9yXULRtPUwkZucqh64mbN/c58Btw6ULlFnmML7WIzOHeS9Q=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764095442; c=relaxed/simple;
-	bh=ZyYEWmkvz9W1Xhw/sOq0wm+Egmmp41J8NBRtUXvO28Q=;
-	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=dXnHXIoqs6ZfQXRnDCaPoQA+JuLqUNNRKuP/FoETI4rlsxwxJ6IqXBipyrqGtCe5gt1JWOo39Kiv7LjB+QDV7w4L75/7NwHk9Iykz9jDgJP0EW73aPOt7z01FmLYg5/K7adCYf/Z129p/qWuOxc/QqIYG6kMpxJAcPXCp4eKXf4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia.com; spf=fail smtp.mailfrom=nokia.com; dkim=pass (2048-bit key) header.d=nokia.com header.i=@nokia.com header.b=of+sKH9H; arc=fail smtp.client-ip=52.101.53.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=nN5OPyVb6nImTCUH1BnQZG6ygMxM8PDPhGVXInWvhd76IlSlqXfvICWL6eAg+hzDZB7kcKfYmxDC/zLtfdXA57EVThntVpyHnrbO19pnYiCmrX2CawMUSlxYAKWburlw3oQbamqAOLQqYNCjcB+/QfFzd7HSL0xOnMQJzdoUd6p9LzDKU+SzG2NKFCgG73KzHJQmD4yU4fx9v+yDgyedjr1srXIEHppGbvt1cizE759y7hkCWllKoXC5zwoS7fbOsGHloi2XzRfHiMo85CAwK2gnesgDguN40zsUxYIAzt+3qHkuNq49zzn8X6Wmi9Kn8Ek7DmPnKFFltdRXhlpAQQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=L4s8/wHWH29JMxLQmdFxkO6dgLgxxCZMLIAa1nqiD8Y=;
- b=Qu6uphML5tyBpForvOo2e5B8w0VUDdcWN6tIUddlT2yLZf3x+FTWHbBt15l8bYcPCYpsXBEPuJU7xnDpn+WqCCbZ6tvlSjLBimCe3Jj98RB6+sq6DsJ8xp1HK0VEnFmoyCJMz1jjIrkb9nfU48wgzZpleBti1d/+tpU72sRCwSWcZb2iW8sQeWtq+92NdpW77fGV2t+674x9y//hSqduK8QZ05VcygZgTCDukNPEi50NO84HvlAOGVc3WUCbAjZ4lkRYdMcULXi7TMBdbdU1u9GkLHxmpPkm1xvzZg/xZtcg6xIYn6issu+0ScZIMUatWaMozREYVCfjInLN3Twi6A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nokia.com; dmarc=pass action=none header.from=nokia.com;
- dkim=pass header.d=nokia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=L4s8/wHWH29JMxLQmdFxkO6dgLgxxCZMLIAa1nqiD8Y=;
- b=of+sKH9H9YHbxHmb38yyjtncd982/aDsg16pw3A8L52xUsdRFfPaqjEPrdtRAxxH9ctcDte7LcsE9GQUzEJSNKeUFqw1bedsq/aP5iTdxd2xRWfjQ5nQ958d/af59sPuk++RoLNvhVMJ/OmfGOWiCAUQAST3X2H8yr/jYylkzcqbZFzwCtCp5LL2Nn3jDTX4R5XaR1QlgWBvMIwDlyJFWsxSvQxQNVfPm9NxEsp1wnRWq5J7OvywEGBMGwKhFVPfdMxMJiRJbN04yzlnMnH4Il7xKVuVXzX0uUJxRdec9gy5Ls+AI0MNIIHI5OXt2PLBNTG+Ey5moxY+53iXRGRbug==
-Received: from BY5PR08MB6296.namprd08.prod.outlook.com (2603:10b6:a03:1f1::20)
- by SA6PR08MB10355.namprd08.prod.outlook.com (2603:10b6:806:435::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9366.11; Tue, 25 Nov
- 2025 18:30:36 +0000
-Received: from BY5PR08MB6296.namprd08.prod.outlook.com
- ([fe80::6ee4:c72:353a:9141]) by BY5PR08MB6296.namprd08.prod.outlook.com
- ([fe80::6ee4:c72:353a:9141%6]) with mapi id 15.20.9366.009; Tue, 25 Nov 2025
- 18:30:35 +0000
-From: "Jens Stobernack (Nokia)" <jens.stobernack@nokia.com>
-To: "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-CC: "nhorman@tuxdriver.com" <nhorman@tuxdriver.com>, "andi.shyti@kernel.org"
-	<andi.shyti@kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "vasilykh@arista.com" <vasilykh@arista.com>
-Subject: [PATCH] i2c: ismt: add i2c bus recovery on timed out transaction
-Thread-Topic: [PATCH] i2c: ismt: add i2c bus recovery on timed out transaction
-Thread-Index: AdxeOSu5SL1olDlgTE6Xuio/6LLNrg==
-Date: Tue, 25 Nov 2025 18:30:35 +0000
-Message-ID:
- <BY5PR08MB6296FC84911F1B2F63AC04DAF1D1A@BY5PR08MB6296.namprd08.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nokia.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BY5PR08MB6296:EE_|SA6PR08MB10355:EE_
-x-ms-office365-filtering-correlation-id: c8c21c98-de73-4059-5cfb-08de2c50b952
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|376014|366016|38070700021;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?thFPMOYROg+eVRaaBH96JzYl9HLI81hINeAJsOv79XAnZrxAFUD5EZLc916b?=
- =?us-ascii?Q?VoLVuYkywkKEwFfZx3da3Sty5fAQVTmUHXx7CsaBejDOu8VdbyFPEEFDBPcX?=
- =?us-ascii?Q?C/JHs4wwbB57k2u2+6mZ/1WldWANyvB4BxYN7uCJ7OWsJ+ynFX4kPkiYz3lS?=
- =?us-ascii?Q?gQojaTZwZibVmeeXeE/tIqt2WKZxupNZSOKQchmRb1uO9WZ8yDys3E9MyYFU?=
- =?us-ascii?Q?TjGfQxp7sIUlSwS3xPGF69v6ZF73aaTU/oyGpQ3/66iY0sojF/UTjXCK6eQO?=
- =?us-ascii?Q?KDFI5NRwMLqs8a2odfSy+QAcpSKASZCQ7PBgECBy7ASq0P8ePxLgEkMQdzrt?=
- =?us-ascii?Q?kMSQt0MxTVs7iDE2rV0gjNwPpoeMXXZhNfuLt9HRctmiTGJhdKj3vjiPWZQF?=
- =?us-ascii?Q?BqOfS5JwT1QmrLgLtVZSfPTW2+ZdTfB1vl0xJ5jUv/FlUPjDm1RdoHPhTtGs?=
- =?us-ascii?Q?M3fmuamZMevObt4GUoAhOEcqQ06uMnUw/iX1TdWEPgzXQNQNgbFgV9ExW1Ce?=
- =?us-ascii?Q?Q99xoSJ7KvsrIeL/j7XVGrSbFragNHqm26omy9rjI1+GRfzn8GmwkKi1bUiv?=
- =?us-ascii?Q?EPCCVZ2JmwzTUIsEHlCimy1LmnVp/5ZVvDzYscuWs0kgj2+pXCb+JU88Hxkh?=
- =?us-ascii?Q?YN7iCWY9MzHRttxzUkaNGHSlOyElBGnXzt2afxt0/Lsg7JBCriWikoNOxh3E?=
- =?us-ascii?Q?weS9xfVZJRP14ohRfAy6USWYedQkHjENOKBjuDH6rgFxjiEY/Acc+amvZclB?=
- =?us-ascii?Q?PbW2TDbIc0Amok+DgLE9ltLe1aGKzUVT6Bwy5aMbLBlGZEIBhit1+3l/zRy2?=
- =?us-ascii?Q?iCxD/P5rg9QzjBhBEvgJ/co7OK4kuB7OVTjliT1YoNpmZ2zdPYrc/Ky0p6Dg?=
- =?us-ascii?Q?mxfCIXlXGlFy7jC3UdOvU+ZPs3OorgsPvZycxxz5PgQgkyXrMVCsdYj9UjYU?=
- =?us-ascii?Q?yBaK41kVR2V0NG8rjLh0kNlAIZtStfdLiIaGy3OnNv752QQZufrvVFhBiP1x?=
- =?us-ascii?Q?i4MX/5dp55UQ+eUBtruYGd+xxJwNqOHoDLuqjsdsbBBSjcNudZs48J+0paB/?=
- =?us-ascii?Q?6dR1hNUrExcl9Ptgrsc8VYeRpQ1u+VqGJzqytI6E1mdVKnzPH+InwjzTuH82?=
- =?us-ascii?Q?fP//DOiuldk7FIGILt2SVwrBCWUr4pVZvFvdmfVOmcSH99Wf6wlcwKJwjmE/?=
- =?us-ascii?Q?Z4YDr9U+HCGhUHSnMEvKf4cRMOMxOU4VF8PlSirnPgoD6Z1MVojH7xlOFpiQ?=
- =?us-ascii?Q?185f9v2OPtoPwpWh1itpejdcJA/APaeXYRiBCRwpYX7S5fEvC3LumfqKtM+W?=
- =?us-ascii?Q?duxINg30dvY70cSrnFFDytDhhurEfCvoM350XCpz+523FcZ9A9JCewurKrH0?=
- =?us-ascii?Q?LSLiEhpDurLWOwDK1Wlh0Mo0WMp5bBAnTsNHy50eACpfJsCpykGk9SAr1VMj?=
- =?us-ascii?Q?90s8jWwWdE/WdkbjkV76k2DeEb1M5k+39NFKI5yHS4wWC4ALoE/AcOtnehiR?=
- =?us-ascii?Q?DLiXJsua8nKDHXC5WvMhn0kttKDQaDsPMKKF?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR08MB6296.namprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(38070700021);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?9O8rLTfMaAQdJrr4f7MvvY5QXM5Tq59pMyI+S8Ha4pq/qNjl39UrWKdUF6z0?=
- =?us-ascii?Q?K14liIg08LOtNZhwnKjI6crzHkEjNbyQYPUs9mUu7xYOBbJXmIHZ2a38Jrbs?=
- =?us-ascii?Q?LWYAKPIsQMt/bPloK8rBSUs/fqgmz97wEmr/5AeqArUCd3LVnnkY5UZt5den?=
- =?us-ascii?Q?av6c0ATdJzH2Utub/4AWsPsC1CW5HdwF18h3phg/eKgqjBPv6JqS5rLgvR/U?=
- =?us-ascii?Q?hVqNXxNlnMGxqxxCOM/mRnwktbAlcjlmf642izkxDXEmiYf/+f+NXfeWa8LI?=
- =?us-ascii?Q?3u1oYOAHzhYevvcpmfuTv4VUHTvxJzOVLnMr/DzG/sHMOGvsdRRLxjsAR0Bt?=
- =?us-ascii?Q?u9v3dUDH9I1Q4uMSRUT5zk3+xf3yNf3raNiQQm2ZGx9CFGafwvaTDF+ng7rS?=
- =?us-ascii?Q?qaVuQqQJz5RubNJi46QPcDKY+G/o4TW6d4r14kB9lwqD4ukI9ZCHqOgqGm3W?=
- =?us-ascii?Q?tWBvLDx0I0TyXNeOiCofVSldDlcAYcBFwaHcGXjyqhdSnpcjnpgVBE/ia4+k?=
- =?us-ascii?Q?yHDuP4qK+s89aCmoJYYB6r9vxq7GGpxOSBgFsFmwsvJgaqrF9EVBqWdBVLZv?=
- =?us-ascii?Q?yqM0M9WG34eMiqr+BlskqXc/aixH0Jxi2YLBIuJbUDubGC9xD6iuJHOGg/P/?=
- =?us-ascii?Q?G3uMfbBz22pQwBngVW/fp/dLca67Vaw0FsXnX2VPVf4+7EUb466Y6GKalKH3?=
- =?us-ascii?Q?fiWZmNaww84zjcmn3KJeK74bv+X0J75mODs/LgvgDsrbUnWwu+X+jGCdL5Ht?=
- =?us-ascii?Q?LcmVxzCqJerTLmfpeI3bBbD2u4m++labQQygkg5e+GqaYkM8xv03bid3ZY6s?=
- =?us-ascii?Q?nJVuz/szigFS9+u3uFooksc/K3kLUTWTVjyDZ8m1NZZedDp+HnjXo0g4wCI2?=
- =?us-ascii?Q?9QxcSzA+/UciBahAnHWST+wixvsbQxSRLt9ei5TsyBfrC7VeUgXdZ8XdrZwI?=
- =?us-ascii?Q?HLgIK+12LDWk6fRMoIdgjAqocSy4uuEY5XItfs6V8ogKHqqVQT2gFoKQVoyI?=
- =?us-ascii?Q?Dm2LlMp9vPlTAEs/bgot235zlT/gw0th9QFN4QoKxcO6QsOnI1yjcXjqwpoD?=
- =?us-ascii?Q?gBsGnyy68ZfDJ1mlEaitjh04IzZbTEnOQ4MPzg1Urmoymp/dMogi47mz8VYA?=
- =?us-ascii?Q?yMtDqgshf+Mvooea7w/NV9e5aDV2kHKTAJsLlbuqVYgWjsr8Nf8SNMyaYZ42?=
- =?us-ascii?Q?CLLClsgAYzvaum9PGM+BVCwOfL+eEO/o7K2Uo3rG+NCFe3V1HdI6lJVftBaU?=
- =?us-ascii?Q?0+vfXTkXpVDb1lgBy2FgabB8JRgKNSjieAwt5lHz6oynT4Phzy3T606ZDIRu?=
- =?us-ascii?Q?1VzSCOLYLaUwU0RxWkqJ7qXnGFP9a/7IgkDfddGqNawwhyzqHROoahbmDYby?=
- =?us-ascii?Q?LelnWcsEWhSifDGIuDfftqkbn2N9PFutWRZ7MylIjm0Mmuz6uP2WLRhxQO9L?=
- =?us-ascii?Q?dd9TroO3jxASIIl4xYK0FYVVrXFiLte3K5BZ8g6dfhKCnxzzUQsoiA2UO3F2?=
- =?us-ascii?Q?Sw2IJSzxSs4gVX9a/pjMQh5bJkM3rlPi0H8ZiwyR9W0SNvB71PKuSlurSJMS?=
- =?us-ascii?Q?GbQvHtuT9wUHr5z/TOJK5mAjVV7TPKVODIydlYPP?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 631FD2765F5
+	for <linux-i2c@vger.kernel.org>; Wed, 26 Nov 2025 05:02:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764133373; cv=none; b=GPUPemlNMCTTxFEyGlpc8YNcd4Qp01b4929NTM85XYoMrvFsnqxmgGPzbLhXFlyFrBk8QMSOOZFUyohing3Ebr8FYlNTpLHw3Zs8Zn9fTYcgK1XhBKCCqv1EayxGAhB2TQPbkpnpZiduLJkkaAJPolJXXS4eI5P/Cl5n2D9JKpM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764133373; c=relaxed/simple;
+	bh=R6z+JuNw17GWK2WWqNmceSWXaJ0ZYu0e1e3N7eCHe7g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SS8wJ9N4z5+o/+0Fc9vOSJ+NFnzt2ZsLLPUMHC98f/EBZOmmgOGoU+qEMUnXV9LVPANvneouYAOHYD3qMSGeHq4P93DS7dPxoTGAo4bSLq8bBITuSKP8HatxD5GYaD6hMMw+Drb2HqAmHYbdF9+sVQjYtPDiuYS8rIskJhsN4qs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=hcFAy0Zo; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=JIMOTTgC; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5APIKYHm2650397
+	for <linux-i2c@vger.kernel.org>; Wed, 26 Nov 2025 05:02:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	mV/kwgq94/oUz0P92yA7lY/+42yYHAlMsyEagn8bYfI=; b=hcFAy0ZoWQIgqcQs
+	TZg8yIrkioJ5Z4LlEaIsi1ikXzxVyA1l6ShH1+u6oZqWAA7OqIwSIUqEz0Fcb2qH
+	I7BoSV4c4bNqrJ0adbxQ5bH+3UDoI2OWPUpoXSg9aHgi+QXDN3MN6iYzelnOHrHU
+	olvGXJr4fv1Kx0rrYyBC+eoTT9okjF/LFFPHOn88wbav1JV1v0QFHZZmIcGlKFW+
+	uL5+rzYvZi86YbwE2+alCY6TPoj0tG26ROw4xu2oBX3DWGvF1HcpysDYAlZ7SkcW
+	Av1n0Zr6SncSNJzoF3D1VMgJZbNGshKekLepTZwFypbzSpC+RwbYKuf+oVHFbJL/
+	5WP3gQ==
+Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4anaabtu32-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-i2c@vger.kernel.org>; Wed, 26 Nov 2025 05:02:46 +0000 (GMT)
+Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-343daf0f38aso6537518a91.3
+        for <linux-i2c@vger.kernel.org>; Tue, 25 Nov 2025 21:02:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1764133365; x=1764738165; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mV/kwgq94/oUz0P92yA7lY/+42yYHAlMsyEagn8bYfI=;
+        b=JIMOTTgCMfvkId2va3wFMfVGIdNbdaAmCOqcrdWyi6tS0bhdWnO4WnJaFk15RwsdAT
+         1TIGWq9xAPvboEH5seexmWpKqpds8OJNl1/eDCmnSK7qQAVCiQUmSpwO1IOgQXLisWfr
+         wJa9tEtGQem2HhIHSBdABUSvlY5M8dwaKSaFSUbt3REomJmfjxwWfym3vTJEzUhd/xbm
+         wWG+r5QpSxutCsy304jqFgHN6G6n3RAb0nOb5bu/3BkXrVITGSZXFIaamEJRRogWLEkx
+         Ac47D2hXD3co9pLn4I36/gBmviyib6os7tI44ksfEyx0LrM4VD2YNIajy01Csn+nU+o9
+         aqTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764133365; x=1764738165;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mV/kwgq94/oUz0P92yA7lY/+42yYHAlMsyEagn8bYfI=;
+        b=feV0C2AS0LvMGS4+zQXvaXaQfAnmIy+OKgJqJ2S3QaQJO7xc+InNnr8ortH+lMMaEw
+         Y2LF1mUhaXL3nWEi3OLxGQ0XGcv72MSCSytZI6LKXregGKwmJPOKPcDhXe1yxdFWlfxH
+         LgknJ8Kl4O4Agi3c3WCliTWCVZyYxRFyLlx5zvdI+Myx/aRehdegHVjs7Tl6oaAyXexa
+         fk0fxmlIwYt7uYVNA+D9DssOXbDgLAdWq5vnb+PZ17cujSx1QTns6fOu84SerkZjO1rU
+         orkvFIyXqhdrvhvAqJ5Zq1aPUzWhMz7z+W/PELoSsX+uQRioR59wQ5ZI556ozY4v5y5J
+         it8w==
+X-Forwarded-Encrypted: i=1; AJvYcCWAtH95W4BY9NJd/zOHSOVH/lRIR2PifxKYg6Ka5Jx79Dl0z49twoOEUxdsYbqpxhLgpH3AoRGXbSY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywt7Mn9q/ZyZ3cc/Lymx2HaGw8tWaTJ8ZY95jtZ8g+uNJUgDiYW
+	h34gXR1I1hHy9h+B22ST43DqWGRWAsXHegPRbeX/DP9Kk9QL6MYIgly75puFh2KtdZXoNZYwHuc
+	C1DSM/833/O55uyUnxEh3E68lUY0JH9QACSoBQ0Ljj/ciSeaDrpbtRfqHXrVB5M2bfIB6Z6U=
+X-Gm-Gg: ASbGnctFcQtVPc11AmYaQlsChxyv3s13qlEf9p+GJiK8sNa+14gPhxpE36//JaCCysS
+	m4NxoesEAJMGtJIcjzw6qf11YCkFVRf6gMtOujQxtLiGLq39QPAMpXDKddFcTQrEAe2EN7g815U
+	zBfGbRK81M5Q0c8iY2ykYHQ5XAW+AsYZMpQCSDNXxvwavEv85ASdEt2TaCIe5Ro8TgEpBxIuErb
+	IUekufpDQbT1ge0tLLgNTsaVT6ytW70Ts9dG6hw4iGOmxBKE/d7ho6tm0lxuYQgyYi1wxfIUoAJ
+	056xXvND807oUsuYLG37rJJw+1UV5yuGYaULesxY+amW9f8l40mf38iLphEpdPwbZJLE2VXGDGm
+	/RikMMQ/bUQkewrsuNPEQ0yYhHStAjW7W+lqw4hxu4A==
+X-Received: by 2002:a17:90b:1c04:b0:340:dd2c:a3da with SMTP id 98e67ed59e1d1-3475ebe6a55mr4902911a91.8.1764133364912;
+        Tue, 25 Nov 2025 21:02:44 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFD5nE8fwNVpEgMkbfCnBkcSgEl++BprsbU95B/wKtEMLewWrDYFhTsIgaLcK4LEfjE1VLzLg==
+X-Received: by 2002:a17:90b:1c04:b0:340:dd2c:a3da with SMTP id 98e67ed59e1d1-3475ebe6a55mr4902869a91.8.1764133364290;
+        Tue, 25 Nov 2025 21:02:44 -0800 (PST)
+Received: from [10.218.32.171] ([202.46.22.19])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3475ff34831sm1928487a91.5.2025.11.25.21.02.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Nov 2025 21:02:43 -0800 (PST)
+Message-ID: <60487c80-c5ea-4c71-8ba3-e638ae3035a2@oss.qualcomm.com>
+Date: Wed, 26 Nov 2025 10:32:36 +0530
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: nokia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR08MB6296.namprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c8c21c98-de73-4059-5cfb-08de2c50b952
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Nov 2025 18:30:35.1222
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 5d471751-9675-428d-917b-70f44f9630b0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: cHaR9I0RpBKnimUupeadB8ABlRCVykq2T301nERKZhSGBSMADtQJPtDHfqTpaVacTk8d+W0nIJokOSuRYnVMMyH+Lrud/K4MSL6JoZr3DKs=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA6PR08MB10355
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 07/12] dt-bindings: i2c: Describe SA8255p
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+ <conor+dt@kernel.org>,
+        Mukesh Kumar Savaliya <mukesh.savaliya@oss.qualcomm.com>,
+        Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, psodagud@quicinc.com, djaggi@quicinc.com,
+        quic_msavaliy@quicinc.com, quic_vtanuku@quicinc.com,
+        quic_arandive@quicinc.com, quic_shazhuss@quicinc.com,
+        Nikunj Kela <quic_nkela@quicinc.com>
+References: <20251122050018.283669-1-praveen.talari@oss.qualcomm.com>
+ <20251122050018.283669-8-praveen.talari@oss.qualcomm.com>
+ <20251122-rich-imported-buzzard-b7aae7@kuoka>
+Content-Language: en-US
+From: Praveen Talari <praveen.talari@oss.qualcomm.com>
+In-Reply-To: <20251122-rich-imported-buzzard-b7aae7@kuoka>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Authority-Analysis: v=2.4 cv=Vd36/Vp9 c=1 sm=1 tr=0 ts=692689f6 cx=c_pps
+ a=vVfyC5vLCtgYJKYeQD43oA==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
+ a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=T-be6ljfY82ZG89evtEA:9 a=QEXdDO2ut3YA:10
+ a=rl5im9kqc5Lf4LNbBjHf:22
+X-Proofpoint-ORIG-GUID: d6DwgbTe57day5vXsPgnnBeRMNKWy5cx
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTI2MDAzOCBTYWx0ZWRfX5HZDdOs0FCCH
+ g6XkZwblHvlcGge4ZUEGxlS22Uzrx4Kk9/oHiYKRXU0k4zUzwRGCCtQvyi+lcR5c/u1esU0Q9QE
+ ec+C0lMJlm/12oUm6SHfmjWauAWEHPTyPpX35o9KeZ9cAZvqJdlRnY2QSVBRa6BusdQgDRArs+J
+ 41g+UOJV1LCZaAp5XwPbETcp9vVuRJDOLPm1r5GO+xpeWko1JMASMPtnRUTPizPja+afAvCHtiO
+ X9TwaGXD1GFACTH8DMq1zYc/CAn45jIZMYZvvE1n3C8g+YIbb3dJcq9e0w1XFsArah/kY45EuNZ
+ uPTHXB/WoIS7HQi4eMYbWapBTzJWNspAxHEtJIpbID2ZCG2N8AztXQ7JdQTI9Lf0NhB8wAwCs83
+ zUtJxPKxAXVKl8sjVs00QzEHUrJs5w==
+X-Proofpoint-GUID: d6DwgbTe57day5vXsPgnnBeRMNKWy5cx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-25_02,2025-11-25_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 spamscore=0 impostorscore=0 adultscore=0 phishscore=0
+ suspectscore=0 malwarescore=0 priorityscore=1501 bulkscore=0
+ lowpriorityscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2510240001
+ definitions=main-2511260038
 
-In rare occasions the i2c controller will get stuck. This failure is
-described in commit 46b2dfc0aa79 ("i2c: ismt: kill transaction in hardware
-on timeout")
+Hi Krzysztof,
 
-The kill operation never resolved the stuck condition in lab testing. A
-traditional i2c bus recovery was required to recover the i2c
-controller and allow it to continue operating as normal.
+On 11/22/2025 5:10 PM, Krzysztof Kozlowski wrote:
+> On Sat, Nov 22, 2025 at 10:30:13AM +0530, Praveen Talari wrote:
+>> +  dmas:
+>> +    maxItems: 2
+>> +
+>> +  dma-names:
+>> +    items:
+>> +      - const: tx
+>> +      - const: rx
+>> +
+>> +  interrupts:
+>> +    maxItems: 1
+>> +
+>> +  power-domains:
+>> +    minItems: 2
+> 
+> Drop
+> 
+>> +    maxItems: 2
+>> +
+>> +  power-domain-names:
+>> +    items:
+>> +      - const: power
+>> +      - const: perf
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - interrupts
+>> +  - power-domains
+>> +
+>> +allOf:
+> 
+> So common SE properties are not applicable? If so explain why in the
+> commit msg.
+> 
+>> +  - $ref: /schemas/i2c/i2c-controller.yaml#
+>> +
+>> +unevaluatedProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+>> +
+>> +    i2c@a90000 {
+>> +        compatible = "qcom,sa8255p-geni-i2c";
+>> +        reg = <0xa90000 0x4000>;
+>> +        interrupts = <GIC_SPI 357 IRQ_TYPE_LEVEL_HIGH>;
+>> +        power-domains = <&scmi0_pd 0>, <&scmi0_dvfs 0>;
+>> +        power-domain-names = "power", "perf";
+> 
+> dmas and dma-names
 
-Signed-off-by: Jens Stobernack <jens.stobernack@nokia.com>
----
- drivers/i2c/busses/i2c-ismt.c | 128 ++++++++++++++++++++++++++++++++++
- 1 file changed, 128 insertions(+)
+For this platform (all Auto targets), we primarily use FIFO/CPU_DMA mode 
+rather than GSI mode, and these are not defined in the Device Tree file 
+as well now. Should we still include the dmas and dma-names properties 
+in the example node?
 
-diff --git a/drivers/i2c/busses/i2c-ismt.c b/drivers/i2c/busses/i2c-ismt.c
-index 7aaefb21416a..4bdeb865d569 100644
---- a/drivers/i2c/busses/i2c-ismt.c
-+++ b/drivers/i2c/busses/i2c-ismt.c
-@@ -122,12 +122,17 @@
-=20
- /* iSMT Miscellaneous Registers */
- #define ISMT_SPGT	0x300	/* SMBus PHY Global Timing */
-+#define ISMT_DBCTRL	0x388	/* Discrete Data Bus Control */
-+#define ISMT_DBSTS	0x38C	/* Discrete Data Bus Status */
-=20
- /* General Control Register (GCTRL) bit definitions */
- #define ISMT_GCTRL_TRST	0x04	/* Target Reset */
- #define ISMT_GCTRL_KILL	0x08	/* Kill */
- #define ISMT_GCTRL_SRST	0x40	/* Soft Reset */
-=20
-+/* Error Status Register (ERRSTS) bit definitions */
-+#define ISMT_ERRSTS_CKLTO	(0x1 << 24)	/* Clock low timeout */
-+
- /* Master Control Register (MCTRL) bit definitions */
- #define ISMT_MCTRL_SS	0x01		/* Start/Stop */
- #define ISMT_MCTRL_MEIE	0x10		/* Master Error Interrupt Enable */
-@@ -153,6 +158,20 @@
- /* MSI Control Register (MSICTL) bit definitions */
- #define ISMT_MSICTL_MSIE	0x01	/* MSI Enable */
-=20
-+/* Bit Bang Databus Control (DBCTRL) bit definitions */
-+#define ISMT_DBCTRL_EN		0x80000000	/* Enable bit banging */
-+#define ISMT_DBCTRL_SMBDT	0x00000001	/* SMB Data signal, 0 mean data low *=
-/
-+#define ISMT_DBCTRL_SMBCK	0x00000002	/* SMB Clock signal, 0 means clock lo=
-w */
-+
-+/* Bit Bang Databus Status (DBSTS) bit definitions */
-+#define ISMT_DBSTS_LSMBS_MASK	0x00000007	/* Last SMBus state, use with car=
-e */
-+#define ISMT_DBSTS_SMBDC	0x00000040	/* SMBus Data Change */
-+#define ISMT_DBSTS_SMBCKC	0x00000080	/* SMBus Clock Change */
-+#define ISMT_DBSTS_SMBDT	0x00000100	/* Live state of SMBus data signal */
-+#define ISMT_DBSTS_SMBDT_SHIFT	8
-+#define ISMT_DBSTS_SMBCK	0x00000200	/* Live state of SMBus clock signal */
-+#define ISMT_DBSTS_SMBCK_SHIFT	9
-+
- /* iSMT Hardware Descriptor */
- struct ismt_desc {
- 	u8 tgtaddr_rw;	/* target address & r/w bit */
-@@ -633,6 +652,7 @@ static int ismt_access(struct i2c_adapter *adap, u16 ad=
-dr,
-=20
- 	if (unlikely(!time_left)) {
- 		ismt_kill_transaction(priv);
-+		i2c_recover_bus(&priv->adapter);
- 		ret =3D -ETIMEDOUT;
- 		goto out;
- 	}
-@@ -670,6 +690,113 @@ static const struct i2c_algorithm smbus_algorithm =3D=
- {
- 	.functionality	=3D ismt_func,
- };
-=20
-+/**
-+ * ismt_i2c_get_scl() - get the scl state
-+ * @adap: the i2c host adapter
-+ */
-+static int ismt_i2c_get_scl(struct i2c_adapter *adap)
-+{
-+	struct ismt_priv *priv =3D i2c_get_adapdata(adap);
-+	unsigned int reg;
-+
-+	reg =3D readl(priv->smba + ISMT_DBSTS) & ISMT_DBSTS_SMBCK;
-+	reg >>=3D ISMT_DBSTS_SMBCK_SHIFT;
-+	return reg;
-+}
-+
-+/**
-+ * ismt_i2c_set_scl() - set the scl state
-+ * @adap: the i2c host adapter
-+ * @val: the pin state
-+ */
-+static void ismt_i2c_set_scl(struct i2c_adapter *adap, int val)
-+{
-+	struct ismt_priv *priv =3D i2c_get_adapdata(adap);
-+	unsigned int reg;
-+
-+	reg =3D readl(priv->smba + ISMT_DBCTRL);
-+	if (val =3D=3D 0)
-+		reg &=3D ~ISMT_DBCTRL_SMBCK;
-+	else
-+		reg |=3D ISMT_DBCTRL_SMBCK;
-+	writel(reg, priv->smba + ISMT_DBCTRL);
-+}
-+
-+/**
-+ * ismt_i2c_get_sda() - get the sda state
-+ * @adap: the i2c host adapter
-+ */
-+static int ismt_i2c_get_sda(struct i2c_adapter *adap)
-+{
-+	struct ismt_priv *priv =3D i2c_get_adapdata(adap);
-+	unsigned int reg;
-+
-+	reg =3D readl(priv->smba + ISMT_DBSTS) & ISMT_DBSTS_SMBDT;
-+	reg >>=3D ISMT_DBSTS_SMBDT_SHIFT;
-+	return reg;
-+}
-+
-+/**
-+ * ismt_i2c_set_sda() - set the sda state
-+ * @adap: the i2c host adapter
-+ * @val: the pin state
-+ */
-+static void ismt_i2c_set_sda(struct i2c_adapter *adap, int val)
-+{
-+	struct ismt_priv *priv =3D i2c_get_adapdata(adap);
-+	unsigned int reg;
-+
-+	reg =3D readl(priv->smba + ISMT_DBCTRL);
-+	if (val =3D=3D 0)
-+		reg &=3D ~ISMT_DBCTRL_SMBDT;
-+	else
-+		reg |=3D ISMT_DBCTRL_SMBDT;
-+	writel(reg, priv->smba + ISMT_DBCTRL);
-+}
-+
-+/**
-+ * ismt_i2c_prepare_recovery() - configure bit banging mode
-+ * @adap: the i2c host adapter
-+ */
-+static void ismt_i2c_prepare_recovery(struct i2c_adapter *adap)
-+{
-+	struct ismt_priv *priv =3D i2c_get_adapdata(adap);
-+	unsigned int reg;
-+
-+	/* Enable bit banging, datasheet recommends setting EN without
-+	 * changing the values of SMBDT and SMBCK.
-+	 */
-+	reg =3D readl(priv->smba + ISMT_DBCTRL);
-+	writel(reg | ISMT_DBCTRL_EN, priv->smba + ISMT_DBCTRL);
-+}
-+
-+/**
-+ * ismt_i2c_prepare_recovery() - clear bit banging mode
-+ * @adap: the i2c host adapter
-+ */
-+static void ismt_i2c_unprepare_recovery(struct i2c_adapter *adap)
-+{
-+	struct ismt_priv *priv =3D i2c_get_adapdata(adap);
-+	unsigned int reg;
-+
-+	// Disable bit banging
-+	reg =3D readl(priv->smba + ISMT_DBCTRL);
-+	writel(reg & ~ISMT_DBCTRL_EN, priv->smba + ISMT_DBCTRL);
-+
-+	// Clear the expected clock low timeout
-+	writel(ISMT_ERRSTS_CKLTO, priv->smba + ISMT_GR_ERRSTS);
-+}
-+
-+static struct i2c_bus_recovery_info ismt_i2c_recovery_info =3D {
-+	.recover_bus =3D i2c_generic_scl_recovery,
-+	.get_scl =3D ismt_i2c_get_scl,
-+	.set_scl =3D ismt_i2c_set_scl,
-+	.get_sda =3D ismt_i2c_get_sda,
-+	.set_sda =3D ismt_i2c_set_sda,
-+	.prepare_recovery =3D ismt_i2c_prepare_recovery,
-+	.unprepare_recovery =3D ismt_i2c_unprepare_recovery,
-+};
-+
- /**
-  * ismt_handle_isr() - interrupt handler bottom half
-  * @priv: iSMT private data
-@@ -899,6 +1026,7 @@ ismt_probe(struct pci_dev *pdev, const struct pci_devi=
-ce_id *id)
- 	priv->adapter.dev.parent =3D &pdev->dev;
- 	ACPI_COMPANION_SET(&priv->adapter.dev, ACPI_COMPANION(&pdev->dev));
- 	priv->adapter.retries =3D ISMT_MAX_RETRIES;
-+	priv->adapter.bus_recovery_info =3D &ismt_i2c_recovery_info;
-=20
- 	priv->pci_dev =3D pdev;
-=20
---=20
-2.43.0
+Thanks,
+Praveen
+
+> 
+> Best regards,
+> Krzysztof
+> 
 
