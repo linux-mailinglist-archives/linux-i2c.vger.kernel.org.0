@@ -1,47 +1,47 @@
-Return-Path: <linux-i2c+bounces-14281-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14282-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 460E2C8A830
-	for <lists+linux-i2c@lfdr.de>; Wed, 26 Nov 2025 16:03:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B2EEBC8A908
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 Nov 2025 16:14:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id E4655357905
-	for <lists+linux-i2c@lfdr.de>; Wed, 26 Nov 2025 15:01:37 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id CBDC2342E81
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 Nov 2025 15:13:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FC293064A1;
-	Wed, 26 Nov 2025 15:01:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53E4C30BBB9;
+	Wed, 26 Nov 2025 15:13:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gSnGmT1m"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iLstSg5K"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4949305969;
-	Wed, 26 Nov 2025 15:01:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09C1E1FF5E3;
+	Wed, 26 Nov 2025 15:13:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764169293; cv=none; b=qwZGzOrUVSNIUoNumgw725UUy0IB/thXOjVzKjPSOaa2F0YnD2n3DOs3BiYHcrEu4akSeYfqwrrPcipCTSXOWeNKsbGDWAb7OQSIBmFDcB5SxExXnHe5HqYeT84sp9h45tB2gG31bLaAXsPg0FGDeAOA6NezREBexmqBbnkgrX4=
+	t=1764170029; cv=none; b=UYpUhrIwS+0qMwymFZJip+qAnryf7/jPAGEQ6+NoOjtcVYcYnzByYPuBtvo6SodTU8t6UgMKyVZdTu0iTm68vRdafOtc81i72AvCbdVJ84ZFEts/z6YtENSXTWCBiHenv80xTrouBFnKZtBcsvGV1nZ1+Hmz6fO75ZULV4ASD3o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764169293; c=relaxed/simple;
-	bh=6zhLnYcBNO7oE7VrqoJCi8J+9W+4pP7HaFmoXrIQEk0=;
+	s=arc-20240116; t=1764170029; c=relaxed/simple;
+	bh=0Xaj35a0XsF4DWHQ15pnFHbOeGKihDS2nj5AWRX4Bdw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WT8Kl9oK1x6HMTvsNa1vL5NX85s+wM6tPha4JzJ/ATN+YiP3IYeODnw9iSo1KyHE7GRZkuf6GgXRnQC+yt8/QTtatoG9lduDE1Mmru+b9OSOAzzrHI4Mgq8x0V7Kx1d3F76m5Qa7VXCP7lu1VEh+NUHUkudyOgoPHr9gVMiBJSs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gSnGmT1m; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50307C4CEF7;
-	Wed, 26 Nov 2025 15:01:31 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=YYAV7Afhk1GmBm6iRzKL+0DHDoOcraJWnPn2OQx2h5WlClntXDtMXGAt2//laTCTXQ4e0rklXkwTE8zPfuahHB1x5E+pamPVRcxJ0SECCT4BWqsW4xL2lSSYRGZXYwVGNyf1ww7p8SxaJr3N99NbPXfwEEs6Jer49Kc3GqbhaRo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iLstSg5K; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B83DC4CEF8;
+	Wed, 26 Nov 2025 15:13:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764169292;
-	bh=6zhLnYcBNO7oE7VrqoJCi8J+9W+4pP7HaFmoXrIQEk0=;
+	s=k20201202; t=1764170028;
+	bh=0Xaj35a0XsF4DWHQ15pnFHbOeGKihDS2nj5AWRX4Bdw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gSnGmT1mGiutRvEa6ss3zMDXzIM/lQGRd5WDJaIuzEIsolfytzyiHLYu2KY4b/Vpp
-	 8mS+gas/fnAWTP3nEnoX8KPlVm7XFQXlKZwx5AvgNKHDdszrU8u/XNFDgv9gE+kGzo
-	 0aMHo1yGql+vdfzvCkpjoxCmLA4L9v1jNy/Tgo4iznekwE5m0Ub0PNj+yP8XfTnrkF
-	 xZyMHOypi2faUgWGlHuUXgJfEY5sdiaBXGj+NQWfXMxjWS4gcSfiu63hfFFvP+vdeD
-	 fSCs2CiV/ceTXK8fh2UCgBajWfWqFVS9xrohzcu6LwMcCVj3wJgZe7MQ2BxC0hYN6j
-	 eilZXrfqiP+RQ==
-Date: Wed, 26 Nov 2025 09:07:02 -0600
+	b=iLstSg5KkdAcT5jXzFjShFZC1XPS8YQXEU2nZ3MLDt0aJQvb/oqXxhjFe6I5Bgj52
+	 dQ6V9uS6iZx3NNvzWnQY7QQ3dAAkIGvXC4sjojBt3fsvgyZ03JfYQUSgDoKc870tEq
+	 peMV20JhtSLVPahxD7qWeiXLpELProPG276ek6NGdKjGKD6mE5RumqXpteuSnsLIS9
+	 TLBlPn513pCa3+UEXLPMzAZVhtpF44Wa45fkMixb0lMnJQJEbHj9AqT+NbYt99Mptn
+	 pMlo6Wc9+6TGLjRkXc0+iRyh4jG0X7e81YimV/iAMFSdc0wvfQPX0E1L1V642tgQWC
+	 Buk4+IJry+TsQ==
+Date: Wed, 26 Nov 2025 09:19:18 -0600
 From: Bjorn Andersson <andersson@kernel.org>
 To: Praveen Talari <praveen.talari@oss.qualcomm.com>
 Cc: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>, 
@@ -50,13 +50,12 @@ Cc: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
 	Konrad Dybcio <konradybcio@kernel.org>, linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org, 
 	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, psodagud@quicinc.com, 
 	djaggi@quicinc.com, quic_msavaliy@quicinc.com, quic_vtanuku@quicinc.com, 
-	quic_arandive@quicinc.com, quic_shazhuss@quicinc.com, 
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Subject: Re: [PATCH v1 01/12] soc: qcom: geni-se: Refactor geni_icc_get() and
- make qup-memory ICC path optional
-Message-ID: <c4qgjg3npsi6dkvqyj2z5drd7mfg2w2o4cjjcgepxdsrgiyiic@qdpkcic56iwv>
+	quic_arandive@quicinc.com, quic_shazhuss@quicinc.com
+Subject: Re: [PATCH v1 04/12] soc: qcom: geni-se: Add
+ geni_se_resource_state() helper
+Message-ID: <bskhxahakxpc74rdoz54eqlplb4obaoleouh4pn6qdy6yjmggw@fojwzct2haxa>
 References: <20251122050018.283669-1-praveen.talari@oss.qualcomm.com>
- <20251122050018.283669-2-praveen.talari@oss.qualcomm.com>
+ <20251122050018.283669-5-praveen.talari@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -65,116 +64,138 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251122050018.283669-2-praveen.talari@oss.qualcomm.com>
+In-Reply-To: <20251122050018.283669-5-praveen.talari@oss.qualcomm.com>
 
-On Sat, Nov 22, 2025 at 10:30:07AM +0530, Praveen Talari wrote:
-> Refactor the geni_icc_get() function to replace the loop-based ICC path
-> initialization with explicit handling of each interconnect path. This
-> improves code readability and allows for different error handling per
-> path type.
-
-I don't think this "improves code readability", IMO you're turning a
-clean loop into a unrolled mess.
-
-
-But then comes the least significant portion of your "problem
-description" (i.e. the last words of it), where you indicate that this
-would allow you to have different error handling for "qup-memory".
-
-This is actually a valid reason to make this change, so say that!
-
-
+On Sat, Nov 22, 2025 at 10:30:10AM +0530, Praveen Talari wrote:
+> The GENI SE protocol drivers (I2C, SPI, UART) implement similar resource
+> activation/deactivation sequences independently, leading to code
+> duplication.
 > 
-> The "qup-core" and "qup-config" paths remain mandatory, while "qup-memory"
-> is now optional and skipped if not defined in DT.
+> Introduce geni_se_resource_state() to control power state of GENI SE
+> resources. This function provides a unified interface that calls either
+> geni_se_resources_activate() to power on resources or
+> geni_se_resources_deactivate() to power off resources based on the
+> power_on parameter.
 > 
-
-Please rewrite this message to _start_ with the problem description.
-Make it clear on the first line/sentence why the change should be done.
-
-E.g. compare with something like this:
-
-"""
-"qup-memory" is an optional interconnect path, unroll the geni_icc_get()
-loop in order to allow specific error handling for this path.
-"""
-
-You only need to read 4 words to understand exactly why this patch
-exists.
-
-> Co-developed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+> The activate function enables ICC, clocks, and TLMM with proper error
+> handling and cleanup paths. The deactivate function disables resources
+> in reverse order including OPP rate reset, clocks, ICC and TLMM.
+> 
 > Signed-off-by: Praveen Talari <praveen.talari@oss.qualcomm.com>
 > ---
->  drivers/soc/qcom/qcom-geni-se.c | 36 +++++++++++++++++----------------
->  1 file changed, 19 insertions(+), 17 deletions(-)
+>  drivers/soc/qcom/qcom-geni-se.c  | 61 ++++++++++++++++++++++++++++++++
+>  include/linux/soc/qcom/geni-se.h |  2 ++
+>  2 files changed, 63 insertions(+)
 > 
 > diff --git a/drivers/soc/qcom/qcom-geni-se.c b/drivers/soc/qcom/qcom-geni-se.c
-> index cd1779b6a91a..b6167b968ef6 100644
+> index 726b77650007..7aee7fd2e240 100644
 > --- a/drivers/soc/qcom/qcom-geni-se.c
 > +++ b/drivers/soc/qcom/qcom-geni-se.c
-> @@ -899,30 +899,32 @@ EXPORT_SYMBOL_GPL(geni_se_rx_dma_unprep);
+> @@ -1013,6 +1013,67 @@ int geni_icc_disable(struct geni_se *se)
+>  }
+>  EXPORT_SYMBOL_GPL(geni_icc_disable);
 >  
->  int geni_icc_get(struct geni_se *se, const char *icc_ddr)
->  {
-> -	int i, err;
-> -	const char *icc_names[] = {"qup-core", "qup-config", icc_ddr};
-> +	struct geni_icc_path *icc_paths = se->icc_paths;
->  
->  	if (has_acpi_companion(se->dev))
->  		return 0;
->  
-> -	for (i = 0; i < ARRAY_SIZE(se->icc_paths); i++) {
-> -		if (!icc_names[i])
-> -			continue;
-> -
-> -		se->icc_paths[i].path = devm_of_icc_get(se->dev, icc_names[i]);
-> -		if (IS_ERR(se->icc_paths[i].path))
-> -			goto err;
-> +	icc_paths[GENI_TO_CORE].path = devm_of_icc_get(se->dev, "qup-core");
-> +	if (IS_ERR(icc_paths[GENI_TO_CORE].path))
-> +		return dev_err_probe(se->dev, PTR_ERR(icc_paths[GENI_TO_CORE].path),
-> +				     "Failed to get 'qup-core' ICC path\n");
+> +static int geni_se_resources_deactivate(struct geni_se *se)
+> +{
+> +	int ret;
+> +
+> +	if (se->has_opp)
+> +		dev_pm_opp_set_rate(se->dev, 0);
+> +
+> +	ret = geni_se_resources_off(se);
 
-To taste, but I think a local variable would be helpful to make this
-less dense.
+Why do we end this series with two different APIs for turning (on/) off
+the GENI resources? Can't there be a single geni_se_resources_"off"()?
 
-	path = devm_of_icc_get(se->dev, "qup-core");
-	if (IS_ERR(path))
-		return dev_err_probe(se->dev, PTR_ERR(path), "Failed to get 'qup-core' ICC path\n");
-	icc_paths[GENI_TO_CORE].path = path;
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (se->core_clk)
+> +		clk_disable_unprepare(se->core_clk);
+> +
+> +	return geni_icc_disable(se);
+> +}
+> +
+> +static int geni_se_resources_activate(struct geni_se *se)
+> +{
+> +	int ret;
+> +
+> +	ret = geni_icc_enable(se);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (se->core_clk) {
+> +		ret = clk_prepare_enable(se->core_clk);
+> +		if (ret)
+> +			goto out_icc_disable;
+> +	}
+> +
+> +	ret = geni_se_resources_on(se);
+> +	if (ret)
+> +		goto out_clk_disable;
+> +
+> +	return 0;
+> +
+> +out_clk_disable:
+> +	if (se->core_clk)
+> +		clk_disable_unprepare(se->core_clk);
+> +out_icc_disable:
+> +	geni_icc_disable(se);
+> +	return ret;
+> +}
+> +
+> +/**
+> + * geni_se_resources_state() - Control power state of GENI SE resources
+> + * @se: Pointer to the geni_se structure
+> + * @power_on: Boolean flag for desired power state (true = on, false = off)
+> + *
+> + * Controls GENI SE resource power state by calling activate or deactivate
+> + * functions based on the power_on parameter.
+> + *
+> + * Return: 0 on success, negative error code on failure
+> + */
+> +int geni_se_resources_state(struct geni_se *se, bool power_on)
+
+It seems the purpose of this "helper function" is to allow replacing
+geni_se_resource_on() with geni_se_resources_state(true) and
+geni_se_resource_off() with geni_se_resources_state(false) in patch 10.
+
+
+Naming a function "on", "activate", or "enable" provides a clear
+indication of what will happen when you call the function. Calling a
+function to "set state to true" is not as clear.
+
+Further, the code paths that needs to have resources turned on should be
+separate from those who signal that those resources can be turned off.
+So there should not be any gain from this function, unless the same
+obfuscation happens further up the stack.
+
+Just call the activate/deactivate in the respective code path.
 
 Regards,
 Bjorn
 
+> +{
+> +	return power_on ? geni_se_resources_activate(se) : geni_se_resources_deactivate(se);
+> +}
+> +EXPORT_SYMBOL_GPL(geni_se_resources_state);
 > +
-> +	icc_paths[CPU_TO_GENI].path = devm_of_icc_get(se->dev, "qup-config");
-> +	if (IS_ERR(icc_paths[CPU_TO_GENI].path))
-> +		return dev_err_probe(se->dev, PTR_ERR(icc_paths[CPU_TO_GENI].path),
-> +				     "Failed to get 'qup-config' ICC path\n");
+>  /**
+>   * geni_se_resources_init() - Initialize resources for a GENI SE device.
+>   * @se: Pointer to the geni_se structure representing the GENI SE device.
+> diff --git a/include/linux/soc/qcom/geni-se.h b/include/linux/soc/qcom/geni-se.h
+> index c182dd0f0bde..d1ca13a4e54c 100644
+> --- a/include/linux/soc/qcom/geni-se.h
+> +++ b/include/linux/soc/qcom/geni-se.h
+> @@ -541,6 +541,8 @@ int geni_icc_disable(struct geni_se *se);
+>  
+>  int geni_se_resources_init(struct geni_se *se);
+>  
+> +int geni_se_resources_state(struct geni_se *se, bool power_on);
 > +
-> +	/* The DDR path is optional, depending on protocol and hw capabilities */
-> +	icc_paths[GENI_TO_DDR].path = devm_of_icc_get(se->dev, "qup-memory");
-> +	if (IS_ERR(icc_paths[GENI_TO_DDR].path)) {
-> +		if (PTR_ERR(icc_paths[GENI_TO_DDR].path) == -ENODATA)
-> +			icc_paths[GENI_TO_DDR].path = NULL;
-> +		else
-> +			return dev_err_probe(se->dev, PTR_ERR(icc_paths[GENI_TO_DDR].path),
-> +					     "Failed to get 'qup-memory' ICC path\n");
->  	}
->  
->  	return 0;
-> -
-> -err:
-> -	err = PTR_ERR(se->icc_paths[i].path);
-> -	if (err != -EPROBE_DEFER)
-> -		dev_err_ratelimited(se->dev, "Failed to get ICC path '%s': %d\n",
-> -					icc_names[i], err);
-> -	return err;
-> -
->  }
->  EXPORT_SYMBOL_GPL(geni_icc_get);
->  
+>  int geni_load_se_firmware(struct geni_se *se, enum geni_se_protocol_type protocol);
+>  #endif
+>  #endif
 > -- 
 > 2.34.1
 > 
