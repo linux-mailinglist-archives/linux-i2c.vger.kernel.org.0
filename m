@@ -1,256 +1,181 @@
-Return-Path: <linux-i2c+bounces-14280-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14281-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9E79C8961E
-	for <lists+linux-i2c@lfdr.de>; Wed, 26 Nov 2025 11:48:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 460E2C8A830
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 Nov 2025 16:03:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id E51503455C4
-	for <lists+linux-i2c@lfdr.de>; Wed, 26 Nov 2025 10:48:16 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id E4655357905
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 Nov 2025 15:01:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E04FF3242CE;
-	Wed, 26 Nov 2025 10:47:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FC293064A1;
+	Wed, 26 Nov 2025 15:01:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="TG8YJP0o"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gSnGmT1m"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5996322A21
-	for <linux-i2c@vger.kernel.org>; Wed, 26 Nov 2025 10:47:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4949305969;
+	Wed, 26 Nov 2025 15:01:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764154023; cv=none; b=jcNwm3UNPeOGeh49Kxr2ALGLfIk3k0KV9UWCy7K4Kj3JGwyg0nEh13o+KQnRivXSz09mLR4nLU4ycbFJwfIL3ib8mWOgIiYsXCH3U7/Gc8Qq7PNblopuaAB58KulinVIYvHQE31Ullfs2YfeG2TK+MtnUgrfuWnkvWZ1tteaJiU=
+	t=1764169293; cv=none; b=qwZGzOrUVSNIUoNumgw725UUy0IB/thXOjVzKjPSOaa2F0YnD2n3DOs3BiYHcrEu4akSeYfqwrrPcipCTSXOWeNKsbGDWAb7OQSIBmFDcB5SxExXnHe5HqYeT84sp9h45tB2gG31bLaAXsPg0FGDeAOA6NezREBexmqBbnkgrX4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764154023; c=relaxed/simple;
-	bh=zfNxIsoGGcHLp4dAZtbBdFX5D0e6AXXZvgFVxvU84fs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=WVTfKAOf/4g1yVdVSY921jN1czcOEY7vK161yECWXPPfMP0RxPCVroEQ0hjFlRjOf12he4ve2sW8W61DFauosWxztMdMwYSIBAsxFWEux+K8sfwWQqn7/pr0dSRM/CEm3AUZ7CaQZwQq5GkZlt4t4n7jWuegsqZYj9xGQWkC6oY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=TG8YJP0o; arc=none smtp.client-ip=185.246.85.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 5EB544E418DE;
-	Wed, 26 Nov 2025 10:46:59 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 35DD660721;
-	Wed, 26 Nov 2025 10:46:59 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id DC19F102F08E5;
-	Wed, 26 Nov 2025 11:46:55 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1764154018; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=aL19MBw9rbt+Wa3zJ/ps4nC2JNiqTqhjMhgiPrDJBog=;
-	b=TG8YJP0o2/imzBbXwob/bYHNMd5Kzoq6+RE73scw4AlMIA0xUvjefKKGhfRAoYUUsRLlpq
-	wf0Fkt/RBgFfl9oZa33bXTR9JVxMWGrSbJHpl5GzoSBTmgDCuMwXx+n039WtTTHhshmB0c
-	utgsV0DohjhFn7XE9FtwEfCeHVwxXfJA0EN7skGh+Hk0JEEzQ1GeVIAeKgVvDjmpy3A/ZJ
-	jKsq9hIZ3LlLBhoB+nwgFE86XfYy9VfN9nUZFsiE9LymvrCGp96eefBROcZagLsGmmOF0A
-	MB4wAaR2WdXyBLypvORJgfjXqkouoOjwkU6olGnU7+ZMuZDZd0zQKhScaqSYgA==
-From: =?utf-8?q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>
-Date: Wed, 26 Nov 2025 11:46:30 +0100
-Subject: [PATCH v4 7/7] i2c: designware: Support of controller with
- IC_EMPTYFIFO_HOLD_MASTER disabled
+	s=arc-20240116; t=1764169293; c=relaxed/simple;
+	bh=6zhLnYcBNO7oE7VrqoJCi8J+9W+4pP7HaFmoXrIQEk0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WT8Kl9oK1x6HMTvsNa1vL5NX85s+wM6tPha4JzJ/ATN+YiP3IYeODnw9iSo1KyHE7GRZkuf6GgXRnQC+yt8/QTtatoG9lduDE1Mmru+b9OSOAzzrHI4Mgq8x0V7Kx1d3F76m5Qa7VXCP7lu1VEh+NUHUkudyOgoPHr9gVMiBJSs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gSnGmT1m; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50307C4CEF7;
+	Wed, 26 Nov 2025 15:01:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764169292;
+	bh=6zhLnYcBNO7oE7VrqoJCi8J+9W+4pP7HaFmoXrIQEk0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=gSnGmT1mGiutRvEa6ss3zMDXzIM/lQGRd5WDJaIuzEIsolfytzyiHLYu2KY4b/Vpp
+	 8mS+gas/fnAWTP3nEnoX8KPlVm7XFQXlKZwx5AvgNKHDdszrU8u/XNFDgv9gE+kGzo
+	 0aMHo1yGql+vdfzvCkpjoxCmLA4L9v1jNy/Tgo4iznekwE5m0Ub0PNj+yP8XfTnrkF
+	 xZyMHOypi2faUgWGlHuUXgJfEY5sdiaBXGj+NQWfXMxjWS4gcSfiu63hfFFvP+vdeD
+	 fSCs2CiV/ceTXK8fh2UCgBajWfWqFVS9xrohzcu6LwMcCVj3wJgZe7MQ2BxC0hYN6j
+	 eilZXrfqiP+RQ==
+Date: Wed, 26 Nov 2025 09:07:02 -0600
+From: Bjorn Andersson <andersson@kernel.org>
+To: Praveen Talari <praveen.talari@oss.qualcomm.com>
+Cc: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Mukesh Kumar Savaliya <mukesh.savaliya@oss.qualcomm.com>, Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>, 
+	Konrad Dybcio <konradybcio@kernel.org>, linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, psodagud@quicinc.com, 
+	djaggi@quicinc.com, quic_msavaliy@quicinc.com, quic_vtanuku@quicinc.com, 
+	quic_arandive@quicinc.com, quic_shazhuss@quicinc.com, 
+	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Subject: Re: [PATCH v1 01/12] soc: qcom: geni-se: Refactor geni_icc_get() and
+ make qup-memory ICC path optional
+Message-ID: <c4qgjg3npsi6dkvqyj2z5drd7mfg2w2o4cjjcgepxdsrgiyiic@qdpkcic56iwv>
+References: <20251122050018.283669-1-praveen.talari@oss.qualcomm.com>
+ <20251122050018.283669-2-praveen.talari@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20251126-i2c-dw-v4-7-b0654598e7c5@bootlin.com>
-References: <20251126-i2c-dw-v4-0-b0654598e7c5@bootlin.com>
-In-Reply-To: <20251126-i2c-dw-v4-0-b0654598e7c5@bootlin.com>
-To: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Jarkko Nikula <jarkko.nikula@linux.intel.com>, 
- Mika Westerberg <mika.westerberg@linux.intel.com>, 
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
- Jan Dabros <jsd@semihalf.com>, 
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
- Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Gregory CLEMENT <gregory.clement@bootlin.com>, 
- =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, 
- Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
- Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
- Dmitry Guzman <dmitry.guzman@mobileye.com>, linux-i2c@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-rt-devel@lists.linux.dev, 
- =?utf-8?q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>
-X-Mailer: b4 0.14.3
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251122050018.283669-2-praveen.talari@oss.qualcomm.com>
 
-If IC_EMPTYFIFO_HOLD_MASTER_EN parameter is 0, "Stop" and "Repeated Start"
-bits in command register does not exist, thus it is impossible to send
-several consecutive write messages in a single hardware batch. The
-existing implementation worked with such configuration incorrectly:
-all consecutive write messages are joined into a single message without
-any Start/Stop or Repeated Start conditions. For example, the following
-command:
+On Sat, Nov 22, 2025 at 10:30:07AM +0530, Praveen Talari wrote:
+> Refactor the geni_icc_get() function to replace the loop-based ICC path
+> initialization with explicit handling of each interconnect path. This
+> improves code readability and allows for different error handling per
+> path type.
 
-    i2ctransfer -y 0 w1@0x55 0x00 w1@0x55 0x01
+I don't think this "improves code readability", IMO you're turning a
+clean loop into a unrolled mess.
 
-does the same as
 
-    i2ctransfer -y 0 w2@0x55 0x00 0x01
+But then comes the least significant portion of your "problem
+description" (i.e. the last words of it), where you indicate that this
+would allow you to have different error handling for "qup-memory".
 
-In i2c_dw_msg_is_valid(), we ensure that we do not have such sequence
-of messages requiring a RESTART, aborting the transfer on controller
-that cannot emit them explicitly.
+This is actually a valid reason to make this change, so say that!
 
-This behavior is activated by compatible entries because the state of
-the IC_EMPTYFIFO_HOLD_MASTER_EN parameter cannot be detected at runtime.
-The new flag emptyfifo_hold_master reflects the state of the parameter,
-it is set to true for all controllers except those found in Mobileye
-SoCs. For now, the controllers in Mobileye SoCs are the only ones known
-to need the workaround. The behavior of the driver is left unmodified
-for other controllers.
 
-There is another possible problem with this controller configuration:
-When the CPU is putting commands to the FIFO, this process must not be
-interrupted because if FIFO buffer gets empty, the controller finishes
-the I2C transaction and generates STOP condition on the bus.
+> 
+> The "qup-core" and "qup-config" paths remain mandatory, while "qup-memory"
+> is now optional and skipped if not defined in DT.
+> 
 
-If we continue writing the remainder of the message to the FIFO, the
-controller will start emitting a new transaction with those data. This
-turns a single a single message into multiple I2C transactions. To
-protect against FIFO underrun, two changes are done:
+Please rewrite this message to _start_ with the problem description.
+Make it clear on the first line/sentence why the change should be done.
 
-First we flag the interrupt with IRQF_NO_THREAD, to prevent it from
-running in a thread on PREEMPT-RT kernel. This ensures that we are not
-interrupted when filling the FIFO as it is very time-senstive. For
-example, being preempted after writing a single byte in the FIFO with
-a 1MHz bus gives us only 18µs before an underrun.
+E.g. compare with something like this:
 
-Second in i2c_dw_process_transfer(), we abort if a STOP is detected
-while a read or a write is in progress. This can occur when processing
-a message larger than the FIFO. In that case the message is processed in
-parts, and rely on the TX EMPTY interrupt to refill the FIFO when it gets
-below a threshold. If servicing this interrupt is delayed for too long,
-it can trigger a FIFO underrun, thus an unwanted STOP.
+"""
+"qup-memory" is an optional interconnect path, unroll the geni_icc_get()
+loop in order to allow specific error handling for this path.
+"""
 
-Originally-by: Dmitry Guzman <dmitry.guzman@mobileye.com>
-Signed-off-by: Benoît Monin <benoit.monin@bootlin.com>
----
- drivers/i2c/busses/i2c-designware-common.c  |  6 ++++++
- drivers/i2c/busses/i2c-designware-core.h    |  3 +++
- drivers/i2c/busses/i2c-designware-master.c  | 32 +++++++++++++++++++++++++++++
- drivers/i2c/busses/i2c-designware-platdrv.c |  1 +
- 4 files changed, 42 insertions(+)
+You only need to read 4 words to understand exactly why this patch
+exists.
 
-diff --git a/drivers/i2c/busses/i2c-designware-common.c b/drivers/i2c/busses/i2c-designware-common.c
-index 5b1e8f74c4ac..446d567eafeb 100644
---- a/drivers/i2c/busses/i2c-designware-common.c
-+++ b/drivers/i2c/busses/i2c-designware-common.c
-@@ -388,6 +388,12 @@ int i2c_dw_fw_parse_and_configure(struct dw_i2c_dev *dev)
- 
- 	dev->clk_freq_optimized = device_property_read_bool(device, "snps,clk-freq-optimized");
- 
-+	/* Mobileye controllers do not hold the clock on empty FIFO */
-+	if (device_is_compatible(device, "mobileye,eyeq6lplus-i2c"))
-+		dev->emptyfifo_hold_master = false;
-+	else
-+		dev->emptyfifo_hold_master = true;
-+
- 	i2c_dw_adjust_bus_speed(dev);
- 
- 	if (is_of_node(fwnode))
-diff --git a/drivers/i2c/busses/i2c-designware-core.h b/drivers/i2c/busses/i2c-designware-core.h
-index 347843b4f5dd..620472b15730 100644
---- a/drivers/i2c/busses/i2c-designware-core.h
-+++ b/drivers/i2c/busses/i2c-designware-core.h
-@@ -246,6 +246,8 @@ struct reset_control;
-  * @clk_freq_optimized: if this value is true, it means the hardware reduces
-  *	its internal clock frequency by reducing the internal latency required
-  *	to generate the high period and low period of SCL line.
-+ * @emptyfifo_hold_master: true if the controller acting as master holds
-+ *	the clock when the Tx FIFO is empty instead of emitting a stop.
-  *
-  * HCNT and LCNT parameters can be used if the platform knows more accurate
-  * values than the one computed based only on the input clock frequency.
-@@ -305,6 +307,7 @@ struct dw_i2c_dev {
- 	struct i2c_bus_recovery_info rinfo;
- 	u32			bus_capacitance_pF;
- 	bool			clk_freq_optimized;
-+	bool			emptyfifo_hold_master;
- };
- 
- #define ACCESS_INTR_MASK			BIT(0)
-diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
-index 907597c7a05c..cef2231a2571 100644
---- a/drivers/i2c/busses/i2c-designware-master.c
-+++ b/drivers/i2c/busses/i2c-designware-master.c
-@@ -710,6 +710,14 @@ static void i2c_dw_process_transfer(struct dw_i2c_dev *dev, unsigned int stat)
- 	if (stat & DW_IC_INTR_TX_EMPTY)
- 		i2c_dw_xfer_msg(dev);
- 
-+	/* Abort if we detect a STOP in the middle of a read or a write */
-+	if ((stat & DW_IC_INTR_STOP_DET) &&
-+	    (dev->status & (STATUS_READ_IN_PROGRESS | STATUS_WRITE_IN_PROGRESS))) {
-+		dev_err(dev->dev, "spurious STOP detected\n");
-+		dev->rx_outstanding = 0;
-+		dev->msg_err = -EIO;
-+	}
-+
- 	/*
- 	 * No need to modify or disable the interrupt mask here.
- 	 * i2c_dw_xfer_msg() will take care of it according to
-@@ -892,6 +900,16 @@ i2c_dw_msg_is_valid(struct dw_i2c_dev *dev, const struct i2c_msg *msgs, size_t i
- 		return false;
- 	}
- 
-+	/*
-+	 * Make sure we don't need explicit RESTART between two messages
-+	 * in the same direction for controllers that cannot emit them.
-+	 */
-+	if (!dev->emptyfifo_hold_master &&
-+	    (msgs[idx - 1].flags & I2C_M_RD) == (msgs[idx].flags & I2C_M_RD)) {
-+		dev_err(dev->dev, "cannot emit RESTART\n");
-+		return false;
-+	}
-+
- 	return true;
- }
- 
-@@ -1110,6 +1128,20 @@ int i2c_dw_probe_master(struct dw_i2c_dev *dev)
- 		irq_flags = IRQF_SHARED | IRQF_COND_SUSPEND;
- 	}
- 
-+	/*
-+	 * The first writing to TX FIFO buffer causes transmission start.
-+	 * If IC_EMPTYFIFO_HOLD_MASTER_EN is not set, when TX FIFO gets
-+	 * empty, I2C controller finishes the transaction. If writing to
-+	 * FIFO is interrupted, FIFO can get empty and the transaction will
-+	 * be finished prematurely. FIFO buffer is filled in IRQ handler,
-+	 * but in PREEMPT_RT kernel IRQ handler by default is executed
-+	 * in thread that can be preempted with another higher priority
-+	 * thread or an interrupt. So, IRQF_NO_THREAD flag is required in
-+	 * order to prevent any preemption when filling the FIFO.
-+	 */
-+	if (!dev->emptyfifo_hold_master)
-+		irq_flags |= IRQF_NO_THREAD;
-+
- 	ret = i2c_dw_acquire_lock(dev);
- 	if (ret)
- 		return ret;
-diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
-index d7d764f7554d..f1714d287462 100644
---- a/drivers/i2c/busses/i2c-designware-platdrv.c
-+++ b/drivers/i2c/busses/i2c-designware-platdrv.c
-@@ -346,6 +346,7 @@ static void dw_i2c_plat_remove(struct platform_device *pdev)
- 
- static const struct of_device_id dw_i2c_of_match[] = {
- 	{ .compatible = "baikal,bt1-sys-i2c", .data = (void *)MODEL_BAIKAL_BT1 },
-+	{ .compatible = "mobileye,eyeq6lplus-i2c" },
- 	{ .compatible = "mscc,ocelot-i2c", .data = (void *)MODEL_MSCC_OCELOT },
- 	{ .compatible = "snps,designware-i2c" },
- 	{}
+> Co-developed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+> Signed-off-by: Praveen Talari <praveen.talari@oss.qualcomm.com>
+> ---
+>  drivers/soc/qcom/qcom-geni-se.c | 36 +++++++++++++++++----------------
+>  1 file changed, 19 insertions(+), 17 deletions(-)
+> 
+> diff --git a/drivers/soc/qcom/qcom-geni-se.c b/drivers/soc/qcom/qcom-geni-se.c
+> index cd1779b6a91a..b6167b968ef6 100644
+> --- a/drivers/soc/qcom/qcom-geni-se.c
+> +++ b/drivers/soc/qcom/qcom-geni-se.c
+> @@ -899,30 +899,32 @@ EXPORT_SYMBOL_GPL(geni_se_rx_dma_unprep);
+>  
+>  int geni_icc_get(struct geni_se *se, const char *icc_ddr)
+>  {
+> -	int i, err;
+> -	const char *icc_names[] = {"qup-core", "qup-config", icc_ddr};
+> +	struct geni_icc_path *icc_paths = se->icc_paths;
+>  
+>  	if (has_acpi_companion(se->dev))
+>  		return 0;
+>  
+> -	for (i = 0; i < ARRAY_SIZE(se->icc_paths); i++) {
+> -		if (!icc_names[i])
+> -			continue;
+> -
+> -		se->icc_paths[i].path = devm_of_icc_get(se->dev, icc_names[i]);
+> -		if (IS_ERR(se->icc_paths[i].path))
+> -			goto err;
+> +	icc_paths[GENI_TO_CORE].path = devm_of_icc_get(se->dev, "qup-core");
+> +	if (IS_ERR(icc_paths[GENI_TO_CORE].path))
+> +		return dev_err_probe(se->dev, PTR_ERR(icc_paths[GENI_TO_CORE].path),
+> +				     "Failed to get 'qup-core' ICC path\n");
 
--- 
-2.52.0
+To taste, but I think a local variable would be helpful to make this
+less dense.
 
+	path = devm_of_icc_get(se->dev, "qup-core");
+	if (IS_ERR(path))
+		return dev_err_probe(se->dev, PTR_ERR(path), "Failed to get 'qup-core' ICC path\n");
+	icc_paths[GENI_TO_CORE].path = path;
+
+Regards,
+Bjorn
+
+> +
+> +	icc_paths[CPU_TO_GENI].path = devm_of_icc_get(se->dev, "qup-config");
+> +	if (IS_ERR(icc_paths[CPU_TO_GENI].path))
+> +		return dev_err_probe(se->dev, PTR_ERR(icc_paths[CPU_TO_GENI].path),
+> +				     "Failed to get 'qup-config' ICC path\n");
+> +
+> +	/* The DDR path is optional, depending on protocol and hw capabilities */
+> +	icc_paths[GENI_TO_DDR].path = devm_of_icc_get(se->dev, "qup-memory");
+> +	if (IS_ERR(icc_paths[GENI_TO_DDR].path)) {
+> +		if (PTR_ERR(icc_paths[GENI_TO_DDR].path) == -ENODATA)
+> +			icc_paths[GENI_TO_DDR].path = NULL;
+> +		else
+> +			return dev_err_probe(se->dev, PTR_ERR(icc_paths[GENI_TO_DDR].path),
+> +					     "Failed to get 'qup-memory' ICC path\n");
+>  	}
+>  
+>  	return 0;
+> -
+> -err:
+> -	err = PTR_ERR(se->icc_paths[i].path);
+> -	if (err != -EPROBE_DEFER)
+> -		dev_err_ratelimited(se->dev, "Failed to get ICC path '%s': %d\n",
+> -					icc_names[i], err);
+> -	return err;
+> -
+>  }
+>  EXPORT_SYMBOL_GPL(geni_icc_get);
+>  
+> -- 
+> 2.34.1
+> 
 
