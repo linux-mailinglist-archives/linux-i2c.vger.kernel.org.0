@@ -1,238 +1,208 @@
-Return-Path: <linux-i2c+bounces-14285-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14288-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CBA20C8ABA6
-	for <lists+linux-i2c@lfdr.de>; Wed, 26 Nov 2025 16:47:29 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64B3FC8B51B
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 Nov 2025 18:48:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 849F13A6B1C
-	for <lists+linux-i2c@lfdr.de>; Wed, 26 Nov 2025 15:47:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 955793B89A8
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 Nov 2025 17:43:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 142AC33BBA0;
-	Wed, 26 Nov 2025 15:47:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB0F933B6EC;
+	Wed, 26 Nov 2025 17:38:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tuiST38E"
+	dkim=pass (2048-bit key) header.d=plexus.com header.i=@plexus.com header.b="F2w8F6PU"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0046e701.pphosted.com (mx0a-0046e701.pphosted.com [67.231.149.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B90DE1FC7C5;
-	Wed, 26 Nov 2025 15:47:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5610433BBC4;
+	Wed, 26 Nov 2025 17:38:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.149.93
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764172029; cv=none; b=hL2z8valUwwLZ4eCgcIEWpIx0WqycEpD2BaNKqLJPetLABAUHCUJ+1WnoobCFVU/luEKqL0MZH3DOagPGUF8blZJc+9b5bG2FXu+V/A/Rt6SWhGIHbPA/+fqwLQvS9iypn6/ZXpPXIjvcyMESi331Bbb0gIHBeNsviFFEA21+rU=
+	t=1764178706; cv=none; b=qy19ZCzLQCJp8CVZ7c7NqpxM6KYn6O2COz6B7r5LFyTCfPJxafnBGSU442pr1JGMQHO3glbLzNL81SPaaXrBGejdaVVIEw2D4+G4cX53B0sUKNmgPzIipIMlAc0oALJtu5Ojc73/DyzQPToH7BuKUot+bx3pkvHTkNe1DL9RIFw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764172029; c=relaxed/simple;
-	bh=DUZirXcwc71Z+jIStyr86QpnCJLfkISWi1F3mf2tlFQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DT/P802NhjjFKIhqcyzmJe7AN1j97LJJyrB680LGn8FMf7PXthSnNK897qmvJc42I38akNP/RzhW4LI31yy0dUoEkbR2IS6BA2Z/gAxumr8uVs7PzlYhBQ+dMI8UJhUdhaJjLb7es9hhnsWKgAsuhIfD1I63sIFOBc1UgMUiY4A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tuiST38E; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A630C4CEF7;
-	Wed, 26 Nov 2025 15:47:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764172029;
-	bh=DUZirXcwc71Z+jIStyr86QpnCJLfkISWi1F3mf2tlFQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=tuiST38EgaBds+eRYUE5ppHAdvIvOu3T9UgkcRaCE0S5BtIkK2BJXA2coxyDl0qGk
-	 ELowJCjvNi3ZXT7sa+ljCLGtXRrg6/DGy4bwujtqxSf+K1HSnj0tHF0l+eoKHZMJwC
-	 NneMrqaT+ERLHBrrg6tpHCvud/3eNe99tpZeXZWZOgwUZlbD0DlacyxBvHZpm63rzx
-	 U96ABKRB3gXcglDCjqtp4P3Y7BWA4aPwIfVY51UJou33mrqzIIMVFbJ1/7M4fUYzHn
-	 /r2aI/XC/KSmG/yDmN1ngJgyJ6vq6K6loMq0NOZOH0TpNU3kWXeUC+Qn4ndDYY40R1
-	 n6mLZa/XGloXg==
-Date: Wed, 26 Nov 2025 09:52:38 -0600
-From: Bjorn Andersson <andersson@kernel.org>
-To: Praveen Talari <praveen.talari@oss.qualcomm.com>
-Cc: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Mukesh Kumar Savaliya <mukesh.savaliya@oss.qualcomm.com>, Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>, 
-	Konrad Dybcio <konradybcio@kernel.org>, linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, psodagud@quicinc.com, 
-	djaggi@quicinc.com, quic_msavaliy@quicinc.com, quic_vtanuku@quicinc.com, 
-	quic_arandive@quicinc.com, quic_shazhuss@quicinc.com
-Subject: Re: [PATCH v1 12/12] i2c: qcom-geni: Enable I2C on SA8255p Qualcomm
- platforms
-Message-ID: <4kjkadmhf67ts4pryhvqdk57b2k27ggwkt2vqdijvhmwygpspb@rpdwcpxpq2up>
-References: <20251122050018.283669-1-praveen.talari@oss.qualcomm.com>
- <20251122050018.283669-13-praveen.talari@oss.qualcomm.com>
+	s=arc-20240116; t=1764178706; c=relaxed/simple;
+	bh=hC4XQasOE7YoRhPK/FYwvCvLI4flmqo59fEi109hg7c=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Pe+2qOEhfPCyrbnjAElyZUYbLVF99fd+n6wvfQfv247338bKruvIpv2oBV51oH+VyLGFE0hHK6t6IKOpGXERA65DFYvxlr2u6md1wylw9hZ1H2FApBZYsq66TVwzIQAmfO3dFRbDbmHdWZILvg0g+2/X4+frz10MceNrAPTVf20=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=plexus.com; spf=pass smtp.mailfrom=plexus.com; dkim=pass (2048-bit key) header.d=plexus.com header.i=@plexus.com header.b=F2w8F6PU; arc=none smtp.client-ip=67.231.149.93
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=plexus.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=plexus.com
+Received: from pps.filterd (m0425989.ppops.net [127.0.0.1])
+	by mx0a-0046e701.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5AQFdwPS1463603;
+	Wed, 26 Nov 2025 11:09:19 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=plexus.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=pps1; bh=qOp1PXRqW8miaOjHt43zYAIZpCc
+	eiWdCXqTGx7xk8z8=; b=F2w8F6PUCI7wI/LmpRw19Vl5ebVg58K3j/qBbwJBY5i
+	6BnUOj22aI9uinEBxmGp4scqOwNhs2/b2PQDzxINQqGg4ldtxGkHPFMkmuXi5gkY
+	4NfKHfJTs8yCaURzrqZhldNqXIwuliRCtUQ9M1lAYft30wGIJ0ezKHWlyJcpCPAX
+	C0qm6R0y7+sqIYA4LKnKDYQYrlJjiwmb9GrZcM6PwM69+SGl+fEh+AOZ2R9JdDUC
+	tvSGAgtHWuKIA/rhOIJIsInhgRfPe8w0tIKzcpmRflf8zEYE2OwVyDanNl7gN4b9
+	waOcXBfz5u7Kldb4PLpaUb7yucPpNWi8RSDw4wRPxIg==
+Received: from intranet-smtp.plexus.com ([64.215.193.254])
+	by mx0a-0046e701.pphosted.com (PPS) with ESMTPS id 4ap4cp8592-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Wed, 26 Nov 2025 11:09:18 -0600 (CST)
+Received: from LNDCL34533.neenah.na.plexus.com (unknown [10.255.48.203])
+	by intranet-smtp.plexus.com (Postfix) with ESMTP id B9A213C84B;
+	Wed, 26 Nov 2025 11:09:17 -0600 (CST)
+From: Danny Kaehn <danny.kaehn@plexus.com>
+Subject: [PATCH v12 0/3] Firmware Support for USB-HID Devices and CP2112
+Date: Wed, 26 Nov 2025 11:05:23 -0600
+Message-Id: <20251126-cp2112-dt-v12-0-2cdba6481db3@plexus.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251122050018.283669-13-praveen.talari@oss.qualcomm.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAFMzJ2kC/23OQQ6DIBAF0KsY1sUABZWueo/GBYGhkLZgwBqN8
+ e5FN+2iyz/z8/JXlCF5yOhSrSjB5LOPoQTKThXSToU7YG/KATHCOGmIwHpglDJsRtxqo6XgvIN
+ OodIfElg/H9itL9mm+MKjS6C+AiOCtkQyUsszlxIXSIWw1A8FLlyHJ8zvXOv42j3n8xjTcmybK
+ N3ZfzPKCxNshLDESi5Uw36dftu2D9wKVlzmAAAA
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Benjamin Tissoires <bentiss@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Danny Kaehn <danny.kaehn@plexus.com>,
+        Andi Shyti <andi.shyti@kernel.org>, Conor Dooley <conor+dt@kernel.org>
+Cc: Jiri Kosina <jikos@kernel.org>, devicetree@vger.kernel.org,
+        linux-input@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Ethan Twardy <ethan.twardy@plexus.com>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Leo Huang <leohu@nvidia.com>,
+        Arun D Patil <arundp@nvidia.com>, Willie Thai <wthai@nvidia.com>,
+        Ting-Kai Chen <tingkaic@nvidia.com>
+X-Mailer: b4 0.14-dev-d4707
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1764176728; l=4172;
+ i=danny.kaehn@plexus.com; s=20251118; h=from:subject:message-id;
+ bh=hC4XQasOE7YoRhPK/FYwvCvLI4flmqo59fEi109hg7c=;
+ b=CJEer4Ba+zjMcxrtX8Tohr3zoc05QS9ynij0ZvbMhQ04pJ6KQYGD4FYjGpj+F+wRUfU43kaAz
+ trV3waKxZapDsSa3AaXzWMWoD3QYh7j3LQ5fKz9Gh6S54rqsF3FSfdA
+X-Developer-Key: i=danny.kaehn@plexus.com; a=ed25519;
+ pk=br2sOmMe9QhpVp1uJw6IxgSNRKZO5khHotS2b+/bX14=
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-ORIG-GUID: mZKWyLKvjzV30Cw60-QvsAYlXQTxurKn
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTI2MDE0MCBTYWx0ZWRfX6udsEhwl0JcA
+ X9Wtkfbn6Gsyzi/YICiOdbpFZj81lquxPC4TpE+V+XTcRGCKmy7ZxpXPldJFpWoMmyBr+H7uSXg
+ 8IXynMqCisladEunJSq4jHDxEmTK9xvd0bgBypycx3XLZW/EnotY1THE5pJaEv5fIc1DVfE8N75
+ J/Z0dajIG+vyyXU9yXeeP/qtAoVu+GVOy21IABMBlvlHkee7Qp+usRl5N50O9y4u0DXoMR3qPlS
+ 0Ki4ojh1zawBiFFNFZ9l2aXtsI2qyjGAD0rr28b7ATdIjsoIUD7/ghamCXvCZaN9KWjHjFAGECo
+ Xb42trgWKRBevqOGuykaVigG8aJ0Lky+DXQHLNaPTcJQ8CMAYHHM5MGmfyAJXnc87Gw4OhB7hNV
+ GnXaePYcDrzY7V28hKUmVyrJ6fWLyA==
+X-Authority-Analysis: v=2.4 cv=IbmKmGqa c=1 sm=1 tr=0 ts=6927343e cx=c_pps
+ a=356DXeqjepxy6lyVU6o3hA==:117 a=356DXeqjepxy6lyVU6o3hA==:17
+ a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=Y_joWELsAAAA:8 a=hxW2N2rBQJarcxKsw-IA:9 a=QEXdDO2ut3YA:10
+ a=g_BQsM8wYJVSTWLOHH1t:22
+X-Proofpoint-GUID: b8X1TgFvt2YG3jk63wtBEntht4F54e20
+X-Proofpoint-Spam-Reason: orgsafe
 
-On Sat, Nov 22, 2025 at 10:30:18AM +0530, Praveen Talari wrote:
-> The Qualcomm automotive SA8255p SoC relies on firmware to configure
-> platform resources, including clocks, interconnects and TLMM.
-> The driver requests resources operations over SCMI using power
-> and performance protocols.
-> 
-> The SCMI power protocol enables or disables resources like clocks,
-> interconnect paths, and TLMM (GPIOs) using runtime PM framework APIs,
-> such as resume/suspend, to control power states(on/off).
-> 
-> The SCMI performance protocol manages I2C frequency, with each
-> frequency rate represented by a performance level. The driver uses
-> geni_se_set_perf_opp() API to request the desired frequency rate..
-> 
-> As part of geni_se_set_perf_opp(), the OPP for the requested frequency
-> is obtained using dev_pm_opp_find_freq_floor() and the performance
-> level is set using dev_pm_opp_set_opp().
-> 
-> Signed-off-by: Praveen Talari <praveen.talari@oss.qualcomm.com>
-> ---
->  drivers/i2c/busses/i2c-qcom-geni.c | 46 +++++++++++++++++++++++-------
->  1 file changed, 35 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
-> index a0f68fdd4078..78154879f02d 100644
-> --- a/drivers/i2c/busses/i2c-qcom-geni.c
-> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
-> @@ -82,6 +82,9 @@ struct geni_i2c_desc {
->  	char *icc_ddr;
->  	bool no_dma_support;
->  	unsigned int tx_fifo_depth;
-> +	int (*resources_init)(struct geni_se *se);
-> +	int (*set_rate)(struct geni_se *se, unsigned long freq);
-> +	int (*power_state)(struct geni_se *se, bool state);
+This patchset allows USB-HID devices to have Firmware bindings through sharing
+the USB fwnode with the HID driver, and adds such a binding and driver
+implementation for the CP2112 USB to SMBus Bridge (which necessitated the
+USB-HID change). This change allows a CP2112 permanently attached in hardware to
+be described in DT and ACPI and interoperate with other drivers.
 
-You have isolated this quite nicely now, so I'd prefer 3 (four to keep
-power on/off separate) if statements, over these function pointers, at
-this point.
+Changes in v12:
+- dt-binding changes:
+  - Drop "on the host controller" from top-level description based on
+      comment from Rob H.
+  - Correct "Properties must precede subnodes" dt_binding_check error by
+      moving gpio_chip-related properties above the i2c subnode in the
+      binding and in the example.
+  - Include `interrupt-controller` property in the example
+- Modify hid-cp2112.c to support separate schemas for DT vs. ACPI - DT
+  combines gpio subnode with the CP2112's node, but will have an I2C
+  subnode; while ACPI will maintain separate child nodes for the GPIO
+  I2C devices
 
-This saves the future reader from having to remember the combination of
-function pointer targets in the various cases - and allow things like
-"jump to definition" in your editor to still work.
+Changes in v11:
+- Eliminate 'gpio' subnode for DT and ACPI for the CP2112 per comment
+    from Rob H.
+- Edit hid-cp2112.c to match for ACPI index and fall back to matching by
+    name (instead of the other way around)
+- Separate CP2112 I2C bus speed configuration into a separate patch
 
->  };
->  
->  #define QCOM_I2C_MIN_NUM_OF_MSGS_MULTI_DESC	2
-> @@ -203,8 +206,9 @@ static int geni_i2c_clk_map_idx(struct geni_i2c_dev *gi2c)
->  	return -EINVAL;
->  }
->  
-> -static void qcom_geni_i2c_conf(struct geni_i2c_dev *gi2c)
-> +static int qcom_geni_i2c_conf(struct geni_se *se, unsigned long freq)
+Changes in v10:
+- Define an enumeration and mapping for CP2112 ACPI _ADRs and devicetree
+    child node names, and use these in the scanning of child nodes
+- Address other miscellaneous
 
-This sounds like a qcom_geni_i2c_set_rate() now that it takes a
-frequency argument.
+Changes in v9:
+- Add _ADR-based ACPI binding of child nodes (I2C is _ADR Zero, GPIO is _ADR One)
+- Use a loop-based approach for assigning child nodes within probe().
+    As a consequence, hid-cp2112.c no longer maintains references to the
+    child fwnodes during the lifetime of the device. (plese correct if this
+    is actually needed for this use-case)
 
-Regards,
-Bjorn
+Changes in v8:
+- Apply Review tags retroactively to patches previously reviewed
 
->  {
-> +	struct geni_i2c_dev *gi2c = dev_get_drvdata(se->dev);
->  	const struct geni_i2c_clk_fld *itr = gi2c->clk_fld;
->  	u32 val;
->  
-> @@ -217,6 +221,7 @@ static void qcom_geni_i2c_conf(struct geni_i2c_dev *gi2c)
->  	val |= itr->t_low_cnt << LOW_COUNTER_SHFT;
->  	val |= itr->t_cycle_cnt;
->  	writel_relaxed(val, gi2c->se.base + SE_I2C_SCL_COUNTERS);
-> +	return 0;
->  }
->  
->  static void geni_i2c_err_misc(struct geni_i2c_dev *gi2c)
-> @@ -908,7 +913,9 @@ static int geni_i2c_xfer(struct i2c_adapter *adap,
->  		return ret;
->  	}
->  
-> -	qcom_geni_i2c_conf(gi2c);
-> +	ret = gi2c->dev_data->set_rate(&gi2c->se, gi2c->clk_freq_out);
-> +	if (ret)
-> +		return ret;
->  
->  	if (gi2c->gpi_mode)
->  		ret = geni_i2c_gpi_xfer(gi2c, msgs, num);
-> @@ -1041,8 +1048,9 @@ static int geni_i2c_init(struct geni_i2c_dev *gi2c)
->  	return ret;
->  }
->  
-> -static int geni_i2c_resources_init(struct geni_i2c_dev *gi2c)
-> +static int geni_i2c_resources_init(struct geni_se *se)
->  {
-> +	struct geni_i2c_dev *gi2c = dev_get_drvdata(se->dev);
->  	int ret;
->  
->  	ret = geni_se_resources_init(&gi2c->se);
-> @@ -1095,7 +1103,7 @@ static int geni_i2c_probe(struct platform_device *pdev)
->  	spin_lock_init(&gi2c->lock);
->  	platform_set_drvdata(pdev, gi2c);
->  
-> -	ret = geni_i2c_resources_init(gi2c);
-> +	ret = gi2c->dev_data->resources_init(&gi2c->se);
->  	if (ret)
->  		return ret;
->  
-> @@ -1165,10 +1173,12 @@ static int __maybe_unused geni_i2c_runtime_suspend(struct device *dev)
->  
->  	disable_irq(gi2c->irq);
->  
-> -	ret = geni_se_resources_state(&gi2c->se, false);
-> -	if (ret) {
-> -		enable_irq(gi2c->irq);
-> -		return ret;
-> +	if (gi2c->dev_data->power_state) {
-> +		ret = gi2c->dev_data->power_state(&gi2c->se, false);
-> +		if (ret) {
-> +			enable_irq(gi2c->irq);
-> +			return ret;
-> +		}
->  	}
->  
->  	gi2c->suspended = 1;
-> @@ -1180,9 +1190,11 @@ static int __maybe_unused geni_i2c_runtime_resume(struct device *dev)
->  	int ret;
->  	struct geni_i2c_dev *gi2c = dev_get_drvdata(dev);
->  
-> -	ret = geni_se_resources_state(&gi2c->se, true);
-> -	if (ret)
-> -		return ret;
-> +	if (gi2c->dev_data->power_state) {
-> +		ret = gi2c->dev_data->power_state(&gi2c->se, true);
-> +		if (ret)
-> +			return ret;
-> +	}
->  
->  	enable_irq(gi2c->irq);
->  	gi2c->suspended = 0;
-> @@ -1221,6 +1233,9 @@ static const struct dev_pm_ops geni_i2c_pm_ops = {
->  
->  static const struct geni_i2c_desc geni_i2c = {
->  	.icc_ddr = "qup-memory",
-> +	.resources_init = geni_i2c_resources_init,
-> +	.set_rate = qcom_geni_i2c_conf,
-> +	.power_state = geni_se_resources_state,
->  };
->  
->  static const struct geni_i2c_desc i2c_master_hub = {
-> @@ -1228,11 +1243,20 @@ static const struct geni_i2c_desc i2c_master_hub = {
->  	.icc_ddr = NULL,
->  	.no_dma_support = true,
->  	.tx_fifo_depth = 16,
-> +	.resources_init = geni_i2c_resources_init,
-> +	.set_rate = qcom_geni_i2c_conf,
-> +	.power_state = geni_se_resources_state,
-> +};
-> +
-> +static const struct geni_i2c_desc sa8255p_geni_i2c = {
-> +	.resources_init = geni_se_domain_attach,
-> +	.set_rate = geni_se_set_perf_opp,
->  };
->  
->  static const struct of_device_id geni_i2c_dt_match[] = {
->  	{ .compatible = "qcom,geni-i2c", .data = &geni_i2c },
->  	{ .compatible = "qcom,geni-i2c-master-hub", .data = &i2c_master_hub },
-> +	{ .compatible = "qcom,sa8255p-geni-i2c", .data = &sa8255p_geni_i2c },
->  	{}
->  };
->  MODULE_DEVICE_TABLE(of, geni_i2c_dt_match);
-> -- 
-> 2.34.1
-> 
+Changes in v7:
+- Use dev_fwnode when calling fwnod_handle_put in i2c_adapter in hid-cp2112.c
+- Capitalize I2C and GPIO in commit message for patch 0003
+
+Changes in v6:
+- Fix fwnode_handle reference leaks in hid-cp21112.c
+- Simplify hog node pattern in silabs,cp2112.yaml
+
+Changes in v5:
+ - Use fwnode API instead of of_node api in hid-core.c and hid-cp2112.c
+ - Include sda-gpios and scl-gpios in silabs,cp2112.yaml
+ - Additional fixups to silabs,cp2112.yaml to address comments
+   - Remove ngpios property
+   - Constrain the hog pattern to a single naming scheme
+   - Remove unneeded properties from the gpio hog which are provided by
+       the parent schema
+ - Submit threaded interrupt bugfix separately from this patchset, as requested
+
+Changes in v4:
+ - Moved silabs,cp2112.yaml to /Documentation/devicetree/bindings/i2c
+
+Changes in v3:
+ - Additional fixups to silabs,cp2112.yaml to address comments
+
+Changes in v2:
+ - Added more detail to silabs,cp2112.yaml dt-binding
+ - Moved silabs,cp2112.yaml to /Documentation/devicetree/bindings/input
+ - Added support for setting smbus clock-frequency from DT in hid-cp2112.c
+ - Added freeing of of_nodes on error paths of _probe in hid-cp2112.c
+
+Danny Kaehn (3):
+  dt-bindings: i2c: Add CP2112 HID USB to SMBus Bridge
+  HID: usbhid: Share USB device firmware node with child HID device
+  HID: cp2112: Fwnode Support
+
+ .../bindings/i2c/silabs,cp2112.yaml           | 113 ++++++++++++++++++
+ drivers/hid/hid-cp2112.c                      |  50 ++++++++
+ drivers/hid/usbhid/hid-core.c                 |   2 +
+ 3 files changed, 165 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/i2c/silabs,cp2112.yaml
+
+--
+2.25.1
+
+---
+Danny Kaehn (3):
+      dt-bindings: i2c: Add CP2112 HID USB to SMBus Bridge
+      HID: cp2112: Fwnode Support
+      HID: cp2112: Configure I2C Bus Speed from Firmware
+
+ .../devicetree/bindings/i2c/silabs,cp2112.yaml     | 107 +++++++++++++++++++++
+ drivers/hid/hid-cp2112.c                           |  36 +++++++
+ 2 files changed, 143 insertions(+)
+---
+base-commit: 1c772200c9dcb23a304f84a9334fe2e0d9529ab0
+change-id: 20240605-cp2112-dt-7cdc95448e8a
+
+Best regards,
+-- 
+Danny Kaehn <danny.kaehn@plexus.com>
+
 
