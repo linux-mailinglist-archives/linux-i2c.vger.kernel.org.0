@@ -1,90 +1,89 @@
-Return-Path: <linux-i2c+bounces-14315-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14316-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E89CAC8D948
-	for <lists+linux-i2c@lfdr.de>; Thu, 27 Nov 2025 10:37:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 99D51C8D963
+	for <lists+linux-i2c@lfdr.de>; Thu, 27 Nov 2025 10:38:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DBF243A44DC
-	for <lists+linux-i2c@lfdr.de>; Thu, 27 Nov 2025 09:37:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4F99B3AF045
+	for <lists+linux-i2c@lfdr.de>; Thu, 27 Nov 2025 09:37:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC07F329383;
-	Thu, 27 Nov 2025 09:36:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 552CE329C7D;
+	Thu, 27 Nov 2025 09:37:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V7McMcWV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ch5sPwdI"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE6CB324718
-	for <linux-i2c@vger.kernel.org>; Thu, 27 Nov 2025 09:36:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7482427FD5B
+	for <linux-i2c@vger.kernel.org>; Thu, 27 Nov 2025 09:37:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764236219; cv=none; b=NMtcAoK+Xsd7Ix//33Slo9hpucL8K7BKJiQDIQdcJN0t9cKuDCyAqOKKoJS2Mmvnz6fra4jySb/1qyfeyIfkNRTCwmwfDeGskjgMVCQDfguqBrubW+UA93ujbLJb5GmyMpMa4f/quTkGrudXM5YU6UwX+t1HAruKK0Ht0wgyQpg=
+	t=1764236271; cv=none; b=NthQrDmZykyWaPaAFvJAkkjAUvrqUp/0D24Csp+tm9B4qcn+w8SnxHCljwev1xYpiEWcPrHHTeDY/2CUdtcRQshXvtsMQrussWPgZHMjVzKP9dVkp4MycCayYSVmNvWTNk/Vxzh3Ybyk9/i1ErWAYXxzTDTCJaJPa3RmAg5UWfw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764236219; c=relaxed/simple;
-	bh=pY3yIpCqHy9NnfvKjK/24G32/d4GhZhQNfpvnRNw04k=;
+	s=arc-20240116; t=1764236271; c=relaxed/simple;
+	bh=9LmyuC/s7oRdVikZDSpF2fV1icZX6r5JHOPL1xkJJ0s=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B0uUEXzhSt48vB/OPCfj7VHoAAqsdqdI7BwwihA3H87k2k/VTKLYd5Q0prvoNjGphaYMqq97BVbjpEOMVJJxA5iu8MqNLBgRkZEpZe8BIxu+sgzXGfNrTQJ17e65f5eIsYFfZYA2oCQoj7bdrUftmGWu57l+x+5OXnSEDyIArxY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V7McMcWV; arc=none smtp.client-ip=209.85.208.45
+	 Content-Type:Content-Disposition:In-Reply-To; b=BpCUzjRNx23pjp0Cd4/oxqrTK14L+OUoh8WtK5LOIX/mIm94nyPU99GlVtMsxI4UEPLtWh+cvzrzXCtqrBFiOQHQzVx1dDAFoyqDoB8ZjK4Eb5Xzx9yw5/rM2HwnLIN9ygUjXEK7tplkLW1jQxfw9D89hZR3TXKsSA/iZeSZe4c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ch5sPwdI; arc=none smtp.client-ip=209.85.218.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-64175dfc338so1430754a12.0
-        for <linux-i2c@vger.kernel.org>; Thu, 27 Nov 2025 01:36:56 -0800 (PST)
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-b735e278fa1so142209966b.0
+        for <linux-i2c@vger.kernel.org>; Thu, 27 Nov 2025 01:37:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764236215; x=1764841015; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1764236267; x=1764841067; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gu5JNlymI+xjkbE7SXCQkiY8aeTYQf5loqFwPHd5EQA=;
-        b=V7McMcWV0LTvwaZz9adtMAXTmTg6dWvGW5iQ6rJ362bkMv0qnK3buREbZKPTlfOFj8
-         0uQRVIDELnTb6Yu67wwRkGGlxN0220Fh3cHrEMsSx6m9z8Hq5nV9lW8wxHGjo+FYBwlz
-         ee5Ssxml9pIldtjuUqLjfc+lW3jzuyjifEK4gkRITx4lq4uqGh6QVtEFC4+T01JI8Snx
-         tTnpnz4rNBg/dBb6u7N7JZbzJj/t0c7jhAUvwBFy1gPO7K8R1ABGQSvnuzC0q7vn3b58
-         k7IN8b2xH4HdwDC8h0t3/ko3YnmQwEK5w73UcqrbvNiECbSeb13Ms5WISU4vkX9Oa/yG
-         4XkA==
+        bh=+qZLiNYJlfS3mb4AeFT1CN4qD2558qTiIMjfDrC2qtE=;
+        b=Ch5sPwdI+AVfVw606YGZuyPmh6TWbcD02E0UsvrbZ3LXSeKv07As0YsJE9CNDLeD1o
+         nBHSportX0v+q6/UmiJxUlcHrCIaUg9Yhux/1R2KRbp8ohIdnvdy86tUzN/jN0baqhjT
+         xhIN58AYIVbYgy85rPfIFppGuBhZhhRUkL93Qbn0yox3DYxp3vxCqn7Dlm8FTrfuRZK1
+         348lTRjs3Tlk9e8CWa3m9IeZO47aNE7wv3nmW/ej1VKv0803HwPe9nz5TV0Y+RXJO4GH
+         dnXt340/YTpp106CDyOZE302Tydv/Phj5zE6Lo66xgjzcwtQ4Ioe9JAWIscc29l6iCo9
+         S7FQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764236215; x=1764841015;
+        d=1e100.net; s=20230601; t=1764236267; x=1764841067;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=gu5JNlymI+xjkbE7SXCQkiY8aeTYQf5loqFwPHd5EQA=;
-        b=bk5oCj9kt8/T/SNCCkXMLBuXw6uZgT9LIDp4wiyNMNFzp6+rWd0UyakpqMh4RUtKe+
-         LJELRxI3D+mP+xTIuh5Fd2t/KetO1ymXxvJDuLL2SQqZFONpI7ZjuAzm54MGzl2H8CbK
-         9hVjJvvMLqs+DZ6tivaRolClB3v4xxpximqXbMF8LpvDAKfPhCUzWqk7x2g4jMVAGzUi
-         qqxZweULkdSgvJzI2id1ll2e1jWdVB4MG6rAO9oHzCn2PrsHvslCw+cK28KtUmTP59e2
-         mnOyuy1/2Onww128zrZZvndxfb67kBqtlYPFSU5JDIlE2lU8SDm/oAbck4qDHJssHH6t
-         7wXA==
-X-Forwarded-Encrypted: i=1; AJvYcCX7PaguHwYkW/SoqDagiR2M/wyd+RsNYu3P062Jqg3RJC5hXZimDIST0SJuVr5kW2n8KEic7Ojn7gU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywv6SDuY7j730pK9LJiOTzLsZug2hAgKoW3z0KQLQhjfM9lVl7w
-	t5XpFSfXLb/Pb31bBRsQUqBLwpcm+NmujD/+mZ0/yqEydtnND146O2DUeTdkLg==
-X-Gm-Gg: ASbGnctdHRcCEbIm8e/zqd4WlUlFmWJermSB2mDnirX4DTOaSynbbZS0p/jFp7xdcP9
-	8Em8ITASY0A0h13xpaxM/K/TYbjohmlBT65BpWveM99KUtcZ+4Em/6Xnfo+Ocr/AY8aknJFJvAq
-	qwMuRQSpWvozW9sZ6DS0j8xyZDesCeq5ZA0zJTMfGVsp8l9hX0V0YofeMkUsYdYXEj4dm04C1WK
-	3QdPTmOA4AbVGIEc163JUcMuzoNsyok/G934urZqkYWmykBWrb4aPl2ekw12owGZOX2ibyEdLo3
-	GZ7t8sEOi+HkVdi0qywZcSn0UJCMpH8pJSz26TP6XigYaNklPkabJ7Jwsc3grJxQ0ArTHjtkiR1
-	DUPQkjM0kL+OEd9BmNrciNTTZZSGessqC2f+1mR8trXREMar6w1Tt14imgthlhaUWcNBACvBnqD
-	zoFMFJvF50WrukHpvT4wT6r2Gz2SDQR3ASefmdKWTk8cZN0eLmXwwzQL28Z8ZLKHyKPUvCZcU2h
-	SftMw==
-X-Google-Smtp-Source: AGHT+IGQ4H+rtLVq+LXq012Qv9pYnjuQXeNvOCcH+r5EbiQnQb/cgntH1MokjpKmaFRo2H6P138cbw==
-X-Received: by 2002:a17:907:6e9e:b0:b73:6d56:7459 with SMTP id a640c23a62f3a-b7671705640mr2690672166b.38.1764236215082;
-        Thu, 27 Nov 2025 01:36:55 -0800 (PST)
+        bh=+qZLiNYJlfS3mb4AeFT1CN4qD2558qTiIMjfDrC2qtE=;
+        b=W1h3S378N2kTfkgaeQXsUzuxIS/3OXMeRUmey0P+10C5rPUu/cNVHdpyOiGyrFhU5f
+         9nJd40UfMptgNdyLE2h4Qn9tOo/UEd3IU0go3EjKz83V++ruswEn0BtktH+9Ni9Pst7k
+         eovDZuQ3XMSrDVBPRZy2MwVPGlK89ixAkbAMrfbxZ/VTf1QLXtjK5X329MlD0sXgSMe+
+         yzDBmDru9xy7y9fd6dsd2UtkHVvsEF1fB1SflrH4xI/1zoaFHRm967PW7SUSVYjOJI2Q
+         t9D0vqfU2OyeBWI4W3lO1BhGhI3QD99cYqPpsSAy1mwfs1fbsO1+XjeOct4fo8FumPOk
+         DnZA==
+X-Forwarded-Encrypted: i=1; AJvYcCUj3TEH9honkaFHKXdPPwvAr/4vMf2zJqMqnpysQOrp+AZBE5N3ly1ODu2X/Lt+EQOm6hsl+XbR+Q4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxdLHp2saqp+G2EBWWooXE7LSAt4eN5TbPTEgZb4Zmt8qsR1rsG
+	7TLnDdWZZVMOlzAJirlQjzTZhMp2oCHZ/YKnLSM0T5kuYRktUXC4r0NHekN3Uw==
+X-Gm-Gg: ASbGncvLTtlf+gl3Z7LU1oBTEgi7gjDdOsakREmcM07IH366eoxltvMrbx3nee4qVqE
+	iiJrTDTv8Bg9ak8kWcTdakEc/IF7XvSABZQA6n2L0KDF5jcdbwhIQq30OBvwB3LkYo4UrnD6xAq
+	lRH2BsuRseMBZMHy7iwIj6Ud0fm8HjgoAj8ge30csDIJH7iCFu2Kpy0KOoLNbAQfV/FJ8v1vXOs
+	zoOUsvRGTILdCYr3op6bWNpNoJsLhbdc3McGDnPp77G4Wg/lb9QXD5ctNcEhJtrje8dVPcbPEPV
+	r+HW/eH0Y5HJEI1zakGHxiq8nHVrG7FavhM1yLFnsNg8h40CmcGEZaO8u9qHyw3UjNsFHaOtRDy
+	+RXXAD6gwcUG9lQ2sWv0KlZiLrMgVvdG9KX5kZc3VnZRA7EvsxMnRxZIxEzgVSfAW+hdwh4wE1C
+	gq6NT2SvuDbFc64Hp4dlmFuyZmR4S3m5u8t5nETGyemvP3MfKHfWBHFDmMp3r9sNpgBXM48NsyB
+	8Xnk3BCYE1eEssY
+X-Google-Smtp-Source: AGHT+IF/UVgvMjdB+KUKiW+HjXKxDlZdBOQy/4DVqhoiv1NHoHtHvjilqqvuAhJ4hwIhw2OcyLYXxA==
+X-Received: by 2002:a17:907:7e9e:b0:b71:1420:334b with SMTP id a640c23a62f3a-b76c546da4bmr892897366b.8.1764236266421;
+        Thu, 27 Nov 2025 01:37:46 -0800 (PST)
 Received: from orome (p200300e41f1abc00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1a:bc00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b76f5199852sm121459866b.15.2025.11.27.01.36.53
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b76f4d533f2sm120777866b.0.2025.11.27.01.37.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Nov 2025 01:36:53 -0800 (PST)
-Date: Thu, 27 Nov 2025 10:36:52 +0100
+        Thu, 27 Nov 2025 01:37:44 -0800 (PST)
+Date: Thu, 27 Nov 2025 10:37:43 +0100
 From: Thierry Reding <thierry.reding@gmail.com>
 To: Akhil R <akhilrajeev@nvidia.com>
 Cc: andi.shyti@kernel.org, digetx@gmail.com, jonathanh@nvidia.com, 
 	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org, 
 	wsa+renesas@sang-engineering.com, wsa@kernel.org, kkartik@nvidia.com, ldewangan@nvidia.com, 
 	smangipudi@nvidia.com
-Subject: Re: [PATCH v13 6/6] i2c: tegra: Add Tegra264 support
-Message-ID: <f5xz4k4udmisatxu4oeymngoy3uyxpoihxlaxd7ymenrvbocmh@cvkgtls3eiej>
+Subject: Re: [PATCH v13 0/6] Updates for Tegra264 and Tegra256
+Message-ID: <rf7m5rwnz75ft65zxy27fmndoxo6cc2hckbgzfltzyz27zt24u@n6hmqstpp6pk>
 References: <20251118140620.549-1-akhilrajeev@nvidia.com>
- <20251118140620.549-7-akhilrajeev@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -92,59 +91,66 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="beon2rnby32vl4ue"
+	protocol="application/pgp-signature"; boundary="o4pnpg6sftsfo7qr"
 Content-Disposition: inline
-In-Reply-To: <20251118140620.549-7-akhilrajeev@nvidia.com>
+In-Reply-To: <20251118140620.549-1-akhilrajeev@nvidia.com>
 
 
---beon2rnby32vl4ue
+--o4pnpg6sftsfo7qr
 Content-Type: text/plain; protected-headers=v1; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v13 6/6] i2c: tegra: Add Tegra264 support
+Subject: Re: [PATCH v13 0/6] Updates for Tegra264 and Tegra256
 MIME-Version: 1.0
 
-On Tue, Nov 18, 2025 at 07:36:20PM +0530, Akhil R wrote:
-> Add support for Tegra264 SoC which supports 17 generic I2C controllers,
-> two of which are in the AON (always-on) partition of the SoC. In
-> addition to the features supported by Tegra194 it also supports a
-> SW mutex register to allow sharing the same I2C instance across
-> multiple firmware.
+On Tue, Nov 18, 2025 at 07:36:14PM +0530, Akhil R wrote:
+> Following series of patches consist of updates for Tegra264 and Tegra256
+> along with adding support for High Speed (HS) Mode in i2c-tegra.c driver.
 >=20
-> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
-> Signed-off-by: Kartik Rajput <kkartik@nvidia.com>
-> Reviewed-by: Jon Hunter <jonathanh@nvidia.com>
-> ---
-> v4 -> v10:
->         * Set has_mst_reset =3D true for Tegra264.
-> v1 -> v4:
->         * Update commit message to mention the SW mutex feature
->           available on Tegra264.
-> ---
->  drivers/i2c/busses/i2c-tegra.c | 33 +++++++++++++++++++++++++++++++++
->  1 file changed, 33 insertions(+)
+> v12->v13: Update has_hs_mode_support to enable_hs_mode_support
+> v11->v12:
+>   * Added two more patches to the series which are needed for Tegra256 and
+>     also cleans up the timing settings configuration.
+> v1->v11: Changelogs are in respective patches.
+> v[11] https://lore.kernel.org/linux-tegra/20251111091627.870613-1-kkartik=
+@nvidia.com/T/#t
+>=20
+> Akhil R (4):
+>   i2c: tegra: Use separate variables for fast and fastplus
+>   i2c: tegra: Update Tegra256 timing parameters
+>   i2c: tegra: Add HS mode support
+>   i2c: tegra: Add Tegra264 support
+>=20
+> Kartik Rajput (2):
+>   i2c: tegra: Do not configure DMA if not supported
+>   i2c: tegra: Add support for SW mutex register
+>=20
+>  drivers/i2c/busses/i2c-tegra.c | 304 ++++++++++++++++++++++++++++-----
+>  1 file changed, 258 insertions(+), 46 deletions(-)
 
-Acked-by: Thierry Reding <treding@nvidia.com>
+I really like how this looks now. Thanks for seeing this through.
 
---beon2rnby32vl4ue
+Thierry
+
+--o4pnpg6sftsfo7qr
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmkoG7QACgkQ3SOs138+
-s6Gm6w/6AgXf5tCWx6wKOvXGVYML8fA6p8cgTTKbMVCL0a9Cb30b6mlITGAwIcWQ
-i0AuIno0SiR5dSNi9L4IzIOUqFlF/SY1sOeGgl+YbGlV8UWkLIsN8Y7t0UVh++RN
-MNVgYxUKhvzJa+ECfM/vnqyITnKPwH9CK3HcaqmwHR1mwO8hEjampx/j1p525Z7l
-r9xkWLbjLHok5+W3H9JE+AMo2/lx/7ZtHFV2HB4Ogl01knKoK2K23NEqilnsF7D3
-PCR21yqRUwCjLS/Id093QOVYTiRhhTpc84srM3cFh5SmrRk4zgLtsKHnu4rnjqum
-5xhsJlEdl5YZgmX3LCs++SCOlybQL+YRTR8zqyDhC71CwMD/vqZNWtlQSuklwr8J
-R/YtjG7gTv5OxUnBsv5Wvr+tTO+ZeWs6qSVcwen+X6+/HdQI773/axFYi4prxA3F
-K7qMg4x7aWwoH6f5pACNFLiyVE1ObOgcgpixCvr0e+s60ZZoUp+IusQ8ilcbS0UE
-OnckUTZfCfn97SS+W3S1fZFxFOA9pzH5AxFs073zILDZU+Sa0EOh7Aa2/YVH/TkC
-5qtrz01pPWymeHvwbP+V+UiIZgN2xNiRm/xFWA4fFfkTV+CUtCjaiPsdZIeC3GO6
-0ISgFBLX8DY0PymnALm8DDZB6a7ncVOaIjlG1TYM7ttN/rRgeHY=
-=xJ5v
+iQIzBAABCgAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmkoG+cACgkQ3SOs138+
+s6FrPg//ZV7UbYm3KX7weTtDnjK2YaMsOBxQEUU+TzHDukwCuR73d73aIyLSetza
+KiB2X44lMt2ULvw5aXTlXrC3+ysJk0HjSDlzFZQptP8Yt0r4B2Gd/yZlGYsgT0BJ
++ftmSXDG6Hza2368SYj3qcpBSeD/HMSoUzZfqSrPmpCGnjHmoxCuTl+J/RMVJFk2
+vuAqBvY9KNJYZq93KRE8pjE9yufLiZeBlmM7b2Zng5l6f3WcEzmJ2joEB4h98TVi
+0H9gLPC3GZnNrFGocFRj3mRLjkINoR5x9ft4SM3CsBCsRLzqdaODn6qSL8SlliBh
+HZ2L1mX4U6dqzgwQuiHnzr5nZc2pE/lr9/bHFhWxDs8soBFot6HLrTYMj+ddZlcB
+0X0OvVU8aJEgBjI6XSvCnJB37686lyXrgA7pVr7Zj3xLhUB0so2du6Hp3dVpoHAr
+TkNbAMpmoLn9KjQ/o2+RZITvFM/3Ji26Ct+l/IWJ3f7Mz4Lakh7kicl7xDW3KtD5
+fo1kt20i7qdEOUQWadsYhbM/DgmjciZEzIKSb9GFp9+kY9I7stsbyD9WnEW85h4K
+s8ZYydzo9BwhkMIRaB4DtaY87uqSJHqxHPHFCbErFMxza2hp0h4fh2Xu8736SYzn
+3MISZmXLIFGG0GUbjfTavCKNf8ybTTdkT5QK93z0+U1zy6W1sVs=
+=kflr
 -----END PGP SIGNATURE-----
 
---beon2rnby32vl4ue--
+--o4pnpg6sftsfo7qr--
 
