@@ -1,100 +1,95 @@
-Return-Path: <linux-i2c+bounces-14299-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14300-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0DD77C8CB8D
-	for <lists+linux-i2c@lfdr.de>; Thu, 27 Nov 2025 04:09:30 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id D3A51C8D10F
+	for <lists+linux-i2c@lfdr.de>; Thu, 27 Nov 2025 08:20:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E2F484E31D5
-	for <lists+linux-i2c@lfdr.de>; Thu, 27 Nov 2025 03:09:28 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 7A7AF34CAFB
+	for <lists+linux-i2c@lfdr.de>; Thu, 27 Nov 2025 07:20:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6026129D295;
-	Thu, 27 Nov 2025 03:09:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2ECB53148DD;
+	Thu, 27 Nov 2025 07:20:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Jju3r+ZQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ta/FGVK6"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from fout-a7-smtp.messagingengine.com (fout-a7-smtp.messagingengine.com [103.168.172.150])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0707324678F
-	for <linux-i2c@vger.kernel.org>; Thu, 27 Nov 2025 03:09:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.150
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D43E8136358;
+	Thu, 27 Nov 2025 07:20:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764212966; cv=none; b=tC06UTb+kQsI1bEmhcVY7TsYPgXmNztfEFHurPOp28q4ZR1pcRfs+OxmdAI+MMmah8YgId349WPaUJNRd5cs6WiIluWhcU4RXbdINtHeqhrSGsSdpBT66mgoVrwFt//KxAuUmm+j+GrB+9RXlvuaCen2/UGMk0doXpYTQXXLy/M=
+	t=1764228010; cv=none; b=dSicEdRK47uZsHqOssct3ILYo2P/MYgtV8k1EK6+NmsBkMdyvUZfWbvZSLeVR77S5fbhIgLIAxwS2UdIjoAtkSUfQxiBdWBiVbyPw1DbXRpmOQN+4ARtBIPBdL+8ovh1Ec4v5xBJLlw8YoR6Besq+VlNmpZlZiNRLj14G2gUxVA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764212966; c=relaxed/simple;
-	bh=edAEa9cC0uIFldUnLr+ZobKWOAeLPaKCL2YFr2KoA5k=;
-	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=KcT9+5Bpaf4BzuWZ34STzSg0R6btUJN4L5tzDjn58ETk6/fN/mXJBjNEU5oHA31k6djifon9qud5ZEkG/QmBuzhlMwk3X29Is3OX9K1wZTmIXxGdkyRJewoD5/ZyOtAzKDY/U8eaWIjBjXrOKjvYyunlTC2wzwX0seSjkkm0qaY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=minsoft.com; spf=none smtp.mailfrom=minsoft.com; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Jju3r+ZQ; arc=none smtp.client-ip=103.168.172.150
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=minsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=minsoft.com
-Received: from phl-compute-07.internal (phl-compute-07.internal [10.202.2.47])
-	by mailfout.phl.internal (Postfix) with ESMTP id EF632EC0201
-	for <linux-i2c@vger.kernel.org>; Wed, 26 Nov 2025 22:09:22 -0500 (EST)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-07.internal (MEProxy); Wed, 26 Nov 2025 22:09:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:content-transfer-encoding:content-type
-	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:message-id:mime-version:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1764212962; x=1764299362; bh=8XZg/AcngL7z9ti5+UbxhGNQOzVK92u97KF
-	oSQJBOjc=; b=Jju3r+ZQtP+JptgQac08xXPWhAJVZTuRhZaxzXc+stq0iqnOneE
-	omjxLpO17baugbp0dPY8qJsxrp9Jq9QIusrW2WktmKznZ3DHKU/U97CfoKRKoZuo
-	UYFhFzLiy2ZzDjjPx1qJ6t/XqjGGIZlb5isvkJLcxeJnBF8xba7vq5DSUvbOdk04
-	957pIj6vZDE8pbJ1RyJxfPpaA/r4Bq11Aw/9o3vuwGbbfOkEeNiD/Al7kMYUCOQG
-	P7s+/ZQw1U4fLLz1eXH5Jd3PHmw2RFi4QxvjtPMjhK6GTAkn6tzeGkPerM1IgeVS
-	b6qLn9Jbi9uPI6jyc0WVnyX/tiL7rQ+R18Q==
-X-ME-Sender: <xms:4sAnaTmMdQ5VF57ELjXLmno9_Jzu5XcG13VWrBWRD73b0BCrFc4oVA>
-    <xme:4sAnadz-Mx0N36ZJ9agF_bvmOoY4Gu63UXKz9m42NQZK7tBZppmiDLsAZNiL-T-KT
-    7z2pjL-p5iP_UBTm4CY4-6Qw1KxANxzsAXmEpjhy1YigNv0q-PYeAkD>
-X-ME-Received: <xmr:4sAnafSWD10qzl95PA1u1K4mr1TGqeuX2VGzt__xr8dTMQFVvrsZhGu8KKiKfIQ->
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddvgeeiudduucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucenucfjughrpefkffggfgfvhffutgfgsehtkeertddtvd
-    ejnecuhfhrohhmpefurghnfhhorhguucftohgtkhhofihithiiuceorhhotghkohifihht
-    iiesmhhinhhsohhfthdrtghomheqnecuggftrfgrthhtvghrnhepvefggefhveeltdekff
-    eiuefhjedvkefgkeegudelgeefffekgfekffdtheffvdehnecuvehluhhsthgvrhfuihii
-    vgeptdenucfrrghrrghmpehmrghilhhfrhhomheprhhotghkohifihhtiiesmhhinhhsoh
-    hfthdrtghomhdpnhgspghrtghpthhtohepuddpmhhouggvpehsmhhtphhouhhtpdhrtghp
-    thhtoheplhhinhhugidqihdvtgesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:4sAnaQv_p8o6xeCTjzUrJ3eR5nIgNCWPETCsw3e9x0h2ijxSyJ3Qlw>
-    <xmx:4sAnaRtv9IErfYS3z2_AC2MjPe2jQBYQwZbYFpQWO6vgNwTgi2cVug>
-    <xmx:4sAnaWx9dImchVkAzKAOgFvreVRgZVhFfmYdiOX7OswSpBX72WA5Zw>
-    <xmx:4sAnaXh414VUJAt6Kde7HyxrFfXXoZYUD7-kAPWMxIoajn69swj6ww>
-    <xmx:4sAnaRm-QKWDWjwk3SOYmkk91ouARlcSvgYhjNU65ywOFXfKkO7__tNn>
-Feedback-ID: i954946e7:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA for
- <linux-i2c@vger.kernel.org>; Wed, 26 Nov 2025 22:09:22 -0500 (EST)
-Message-ID: <fcf287d4-fb67-4333-9eb1-64d28e6d3d9f@minsoft.com>
-Date: Wed, 26 Nov 2025 22:09:22 -0500
+	s=arc-20240116; t=1764228010; c=relaxed/simple;
+	bh=jP31S8Dt4+8qiI2aac4nVcnsADB8VoG9tzhBRujNSS4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dYoZHOkUbofEFp34QxeHVduC5ukGKfX6jvB0N3W4IyHZiNFMC4bE2RiNc3zuvGk2csgEgRKDIsUfc9Fb9vnmkdNYo10idob6LTYMFiX96H3M6FOamkxQtBI/aPCFxOY+Kzc+8SL9ckaLJCXxzrlNLYSOcf1KumJlxHPdbkb1Xgc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ta/FGVK6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4CBAC4CEF8;
+	Thu, 27 Nov 2025 07:20:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764228006;
+	bh=jP31S8Dt4+8qiI2aac4nVcnsADB8VoG9tzhBRujNSS4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ta/FGVK6jTc3POxSH0uKvo2/kTkSmtyN47d/3QFKgFfKgWDjf/w3RXdiuT9aGGYit
+	 Yo5o21TLvUvtNnJ58McCz+InmA5WYIqd5ItBNWDhgWAauCPfuQt92OQPwIxhh9Tc8N
+	 nO+nLL7ZDN8RjYru1om1s19mz49xPvIk5UdbPEWPSIQ1xO4+ITt+u5RCz3oQXLcCvM
+	 1TJOG0zVM/CVJyR3y4JWsOj4M+vKFsryyfBUMVz7dN1AhEAVPHjzWxrReBorMH7E4k
+	 ARo/o1O9JQHfost0MGYkvsWaSjMYr/dhZg/geN1c9+X4LnmjvHdATbK0O70BySYLJp
+	 epd3jjBWWhyZA==
+Date: Thu, 27 Nov 2025 08:20:03 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Danny Kaehn <danny.kaehn@plexus.com>
+Cc: Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>, 
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Andi Shyti <andi.shyti@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Jiri Kosina <jikos@kernel.org>, devicetree@vger.kernel.org, 
+	linux-input@vger.kernel.org, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, Ethan Twardy <ethan.twardy@plexus.com>, 
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, Leo Huang <leohu@nvidia.com>, 
+	Arun D Patil <arundp@nvidia.com>, Willie Thai <wthai@nvidia.com>, 
+	Ting-Kai Chen <tingkaic@nvidia.com>
+Subject: Re: [PATCH v12 0/3] Firmware Support for USB-HID Devices and CP2112
+Message-ID: <20251127-hasty-malkoha-of-science-e5efd5@kuoka>
+References: <20251126-cp2112-dt-v12-0-2cdba6481db3@plexus.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: linux-i2c@vger.kernel.org
-From: Sanford Rockowitz <rockowitz@minsoft.com>
-Subject: bus speed patches
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20251126-cp2112-dt-v12-0-2cdba6481db3@plexus.com>
 
-Recently there was a set of patches to set bus speed for a different 
-devices on a I2C bus, in the context of multiplexers/switches.  I'm the 
-developer of ddcutil, and this caught my attention. There are displays 
-with problematic DDC communication that operate correctly when the bus 
-runs slower than normal, e.g. at 50 kbit. There was once some "proof of 
-concept" code for IIRC i915 that slowed the speed for DDC communication, 
-and experiments with a hacked video driver have shown this indeed can 
-resolve the DDC communication failures.
+On Wed, Nov 26, 2025 at 11:05:23AM -0600, Danny Kaehn wrote:
+> This patchset allows USB-HID devices to have Firmware bindings through sharing
+> the USB fwnode with the HID driver, and adds such a binding and driver
+> implementation for the CP2112 USB to SMBus Bridge (which necessitated the
+> USB-HID change). This change allows a CP2112 permanently attached in hardware to
+> be described in DT and ACPI and interoperate with other drivers.
+> 
+> Changes in v12:
+> - dt-binding changes:
+>   - Drop "on the host controller" from top-level description based on
+>       comment from Rob H.
+>   - Correct "Properties must precede subnodes" dt_binding_check error by
+>       moving gpio_chip-related properties above the i2c subnode in the
+>       binding and in the example.
+>   - Include `interrupt-controller` property in the example
+> - Modify hid-cp2112.c to support separate schemas for DT vs. ACPI - DT
+>   combines gpio subnode with the CP2112's node, but will have an I2C
+>   subnode; while ACPI will maintain separate child nodes for the GPIO
+>   I2C devices
 
-Which leads to the question of whether the recent bus speed patches 
-could be the basis for setting a slower than standard I2C bus speed, and 
-this capability surfaced to user space, perhaps using module i2c-dev?  
-Is this possible, or am I way off base?
+That's a b4 managed patch, so I wonder what happened with all the lore
+links to previous versions.
+
+Best regards,
+Krzysztof
+
 
