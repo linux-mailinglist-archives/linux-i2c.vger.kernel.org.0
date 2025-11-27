@@ -1,180 +1,124 @@
-Return-Path: <linux-i2c+bounces-14319-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14320-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B190C8DA03
-	for <lists+linux-i2c@lfdr.de>; Thu, 27 Nov 2025 10:47:21 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 996B1C8DA5D
+	for <lists+linux-i2c@lfdr.de>; Thu, 27 Nov 2025 10:54:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 13C1034CAC0
-	for <lists+linux-i2c@lfdr.de>; Thu, 27 Nov 2025 09:47:20 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 8CDDF4E569A
+	for <lists+linux-i2c@lfdr.de>; Thu, 27 Nov 2025 09:54:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCC0D324717;
-	Thu, 27 Nov 2025 09:47:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8B65324B3A;
+	Thu, 27 Nov 2025 09:54:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="yqYJuLdl"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FwnixsvY"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F98131771B
-	for <linux-i2c@vger.kernel.org>; Thu, 27 Nov 2025 09:47:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B49BD2FE56B;
+	Thu, 27 Nov 2025 09:54:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764236824; cv=none; b=l3x6P6KxHYIsBJKSgCEdI5xntV3WjsNgd8R5ZmZlj2vxEbZH7N+qkzhDFOPVArj4ljQVlEBumgiCP95+hDXQb0EgOHRG40/9jzdV28XsoAx6D+p4iPyj4JhiiY2SgtVCRjEI382PkQDRjAuaE86pirQ1VR09fGfi/UdjDa9qsWI=
+	t=1764237281; cv=none; b=IQIhEXneDM5PfoVx6ch5zETGnoxQ5AhmphYB2lxreB5MNaumQslawmji7o8Y+NotRLMmRTAJVfiy5VsDnpJzd93KnJRSAqljOgeIzL4lWRsQm9skVIBmb+0rKU911aj5ggvDLo4207J/1R9NG4HjdVDOP86r/3YPHDlDu4/3zZ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764236824; c=relaxed/simple;
-	bh=l0pWWw6Mtmjrm4XRyoFPCA6/H8zhWTKK2uTxTZwTm2A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EgPCfZooeTymC05flN9lrv2PW9ktvHlsdzp2nW+teU0+Sj6L53kVaHpPQt+8tscp6iJI1dgNgKR1XMppQyd1fqC3NSSyBrobyOH/TIF50s1Bz8EtG+uWr/2Pn2/UPT90IbEDgRitEIhFoIeIYanQULg7p3I1Hwfsq9mZKqLdE9I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=yqYJuLdl; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-477ba2c1ca2so6920825e9.2
-        for <linux-i2c@vger.kernel.org>; Thu, 27 Nov 2025 01:47:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1764236821; x=1764841621; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fmZ/TSWvciVxsfI7+nFXv4lsvTUtblkMB8z0XYw5/n8=;
-        b=yqYJuLdlHFdilFVLXqNjPRyIJOOXZXHDfq/+4ZK8aPUhFi+W9EqA/jispuZPxFtoKO
-         rFJPWADK8vw9q99c1CiBErS32tFGKod3NzfKjBjaaFxvRS3IO/s3K2i+mzKVtljiz+IO
-         0XAPymzRcadB/nXg4N1/x1gs2di8cbD1GIzOfxqlw54iN0AQpsB2R3QFX9W2deUGAQGV
-         ja78UQsZgbrhb0e628lmQDNog2UzHJQndtNQqP+8tbzE54VDa04Ib7JCX1NvzwuaC8/0
-         NydRgwc4tresEBklEFxLY4SW1CzNBqkaUnlrpiBwgq7SK41gC0XtwLJKUZA9Qxjj08rK
-         fKmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764236821; x=1764841621;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fmZ/TSWvciVxsfI7+nFXv4lsvTUtblkMB8z0XYw5/n8=;
-        b=BWYAPVSq+0kZlbZCzOcb4LkFQTpRxCTXYWJr6bmAGJS1hlQ37KGUsDg+hQ2h+5QHYw
-         b5G8PzGSt5Ye/escFzosVt2zc8X02G9KtDUTa17AvV6ikenu7VkQxFbf42aygJGa6VNx
-         qFbzEXmIVwb161bXsQEQwdVOzCa9YT55UElUE/qeY/Kerr3byl5YW8FJfIHcKfXkMYHE
-         QcxxwBXIcPqma6EAHLcWp/RgU2tTnX+06VeQGWj1quKCXOx7BZYgQ964M9LqdFaY/dmU
-         koMnMXkNfbHCPp9OKnR9jPuI0lOSnWau/Q7Qers0bFGRVnHA/tlj9j8uEoOd5SnoPdxJ
-         dyHw==
-X-Gm-Message-State: AOJu0YwCk8j7Z3ivEUfTVFa4K9NCyMxW+VfNn+SDWyXAWJQEY2R1zsFH
-	sHDCq1W63C76mOMDw21LhqgulpiDhmExyaHlUWxi7hTPO4xPZG9LANgXjTTb05ZV1tE=
-X-Gm-Gg: ASbGncv82oYEW/rOK3C2wsQVNDSk/oxb7TAUSFUGSoPzbvc5lzhxU/u8i44UCA4OEjZ
-	rQ2VVg8y0W4d22fhP/4WeJPSUBczfIoG/K1A5DEup0AGZY46mxONP/w0wfUsI/QWJD1fJkFTCGa
-	mZ5oiRl9+fgWqOXdKfafqg90MOF8EXSB9RiLYCzlURSVjm/bYUY9CBwWAH35tecdeJtQcTBEI48
-	Wm83xrMiBbOleDXEGLEyWOyR+tI/PPSGUgpbKpbciGvH/BvNlrx+vsrKcK/Hls+TMbZY4h/v90T
-	qPm3WiQ/aAlJ1f1Pr79jp5kf0VYkXxY/tma7YURzSI+ioDXwyaiz8QK67/6GZQZkkZ3IApmtKC4
-	TK2QT8ayOk0uQmv5s1fzEZB7ib0KJxvKoNw+pvh8FNjjmkKvyFj6Q/VqyF5bcQfCgjISxGB4Fwf
-	5Yhe9OCRGF/n1UiaMZz9waoKuKLYSYvaPRKRIZ1fNL2uE5CE/8d28I
-X-Google-Smtp-Source: AGHT+IEpUyF0VjHlDdG/aKA0MuFt9g6fIOEp400ZPRyMSjrw9CzcZ6BZWLodT9J4oQm4t1k8+PHNwg==
-X-Received: by 2002:a05:600c:3152:b0:465:a51d:d4 with SMTP id 5b1f17b1804b1-47904ace283mr97268665e9.6.1764236820813;
-        Thu, 27 Nov 2025 01:47:00 -0800 (PST)
-Received: from [192.168.0.27] (188-141-3-146.dynamic.upc.ie. [188.141.3.146])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42e1c5c3041sm2422058f8f.6.2025.11.27.01.46.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Nov 2025 01:47:00 -0800 (PST)
-Message-ID: <e0ad09b4-0bfc-467d-b93e-892ef8a44a94@linaro.org>
-Date: Thu, 27 Nov 2025 09:46:59 +0000
+	s=arc-20240116; t=1764237281; c=relaxed/simple;
+	bh=72p0+1ozWpWQxM5yfcS7NEq4OSQKSeKc5vmq2m0TLeE=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=hGLiC/bQhzU9bDBB46nePmX6SVDk2ENhZO2z6tAhz6bhE8BQNXUoVOtbOOUFx+8xBVDaNKNIF7U2BdEyJyDZRbB4vaALJWgq+7N7TtMR8MFolOwC9zXgce4Gi6cf5YJVoDOID5yaDhiJL+iR6S3R+pOYjYxuwU4cbNEM7pqrUVI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FwnixsvY; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1764237279; x=1795773279;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=72p0+1ozWpWQxM5yfcS7NEq4OSQKSeKc5vmq2m0TLeE=;
+  b=FwnixsvY8AABgvdwHibtenvqE0rdTuJe8A2Ua+7k63tHbMPt5xIc/4Ox
+   T78PynasFAiMQlxOvTeYodJ5oPrqe3wb3aKjpKAu9oXKQO7lmnD/G28NJ
+   wb4D2rg744CJmE13Bg+Itpfxv46DRxQQEyHMkS+2WmUiosc5r+YDo4Idl
+   xcqntHZZGLQFmB35Vo62yeF28IvYC13wM176xvQLsNnj2hv4jW4gTDAOt
+   tuismHGL2J6Be6X/O9XDyncaBtF+WpfcUh/YfkpdD4crpla2JqGhfLkkW
+   bQw64Oy3+I54eIIuuIMkeCYFR55DmPKWy1wt42ASZHDWpOk4VK1J6OT1A
+   w==;
+X-CSE-ConnectionGUID: kW+maYsPSRK61D6d9MsAUQ==
+X-CSE-MsgGUID: OaU2mBLWTjOuxs5xnTKe3w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11625"; a="65468191"
+X-IronPort-AV: E=Sophos;i="6.20,230,1758610800"; 
+   d="scan'208";a="65468191"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2025 01:54:39 -0800
+X-CSE-ConnectionGUID: y9dTzj9+SLmDaedhckz5eQ==
+X-CSE-MsgGUID: L8wk49+BQ7WlhSndlQ+AxQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,230,1758610800"; 
+   d="scan'208";a="194002280"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.42])
+  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2025 01:54:35 -0800
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Thu, 27 Nov 2025 11:54:32 +0200 (EET)
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+cc: Baojun Xu <baojun.xu@ti.com>, linux-i2c@vger.kernel.org, 
+    linux-acpi@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
+    platform-driver-x86@vger.kernel.org, 
+    Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+    Mika Westerberg <westeri@kernel.org>, Hans de Goede <hansg@kernel.org>
+Subject: Re: [PATCH v1 2/2] platform/x86: serial-multi-instantiate: Remove
+ duplicate check
+In-Reply-To: <20251125094249.1627498-3-andriy.shevchenko@linux.intel.com>
+Message-ID: <71904f34-8f91-0443-00c0-318519840aca@linux.intel.com>
+References: <20251125094249.1627498-1-andriy.shevchenko@linux.intel.com> <20251125094249.1627498-3-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/7] media: qcom: camss: Add SM8750 compatible camss
- driver
-To: Hangxiang Ma <hangxiang.ma@oss.qualcomm.com>,
- Loic Poulain <loic.poulain@oss.qualcomm.com>, Robert Foss
- <rfoss@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Todor Tomov <todor.too@gmail.com>,
- Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
- Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-media@vger.kernel.org, jeyaprakash.soundrapandian@oss.qualcomm.com,
- Vijay Kumar Tumati <vijay.tumati@oss.qualcomm.com>
-References: <20251126-add-support-for-camss-on-sm8750-v1-0-646fee2eb720@oss.qualcomm.com>
- <20251126-add-support-for-camss-on-sm8750-v1-3-646fee2eb720@oss.qualcomm.com>
-From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Content-Language: en-US
-In-Reply-To: <20251126-add-support-for-camss-on-sm8750-v1-3-646fee2eb720@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="8323328-1790419283-1764237225=:8713"
 
-On 26/11/2025 09:38, Hangxiang Ma wrote:
-> Add support for SM8750 in the camss driver. Add high level resource
-> information along with the bus bandwidth votes. Module level detailed
-> resource information will be enumerated in the following patches of the
-> series.
-> 
-> Signed-off-by: Hangxiang Ma <hangxiang.ma@oss.qualcomm.com>
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+
+--8323328-1790419283-1764237225=:8713
+Content-Type: text/plain; charset=ISO-8859-15
+Content-Transfer-Encoding: QUOTED-PRINTABLE
+
+On Tue, 25 Nov 2025, Andy Shevchenko wrote:
+
+> Since i2c_acpi_client_count() stopped returning 0 and instead
+> uses -ENOENT, remove the duplicated check in smi_i2c_probe().
+>=20
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > ---
->   drivers/media/platform/qcom/camss/camss.c | 22 ++++++++++++++++++++++
->   drivers/media/platform/qcom/camss/camss.h |  1 +
->   2 files changed, 23 insertions(+)
-> 
-> diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
-> index 5ee43c8a9ae4..805e2fbd97dd 100644
-> --- a/drivers/media/platform/qcom/camss/camss.c
-> +++ b/drivers/media/platform/qcom/camss/camss.c
-> @@ -3870,6 +3870,20 @@ static const struct resources_icc icc_res_sa8775p[] = {
->   	},
->   };
->   
-> +static const struct resources_icc icc_res_sm8750[] = {
-> +	{
-> +		.name = "ahb",
-> +		.icc_bw_tbl.avg = 150000,
-> +		.icc_bw_tbl.peak = 300000,
-> +	},
-> +	/* Based on 4096 x 3072 30 FPS 2496 Mbps mode */
-> +	{
-> +		.name = "hf_mnoc",
-> +		.icc_bw_tbl.avg = 471860,
-> +		.icc_bw_tbl.peak = 925857,
-> +	},
-> +};
-> +
->   static const struct camss_subdev_resources csiphy_res_x1e80100[] = {
->   	/* CSIPHY0 */
->   	{
-> @@ -5283,6 +5297,13 @@ static const struct camss_resources sm8650_resources = {
->   	.vfe_num = ARRAY_SIZE(vfe_res_sm8650),
->   };
->   
-> +static const struct camss_resources sm8750_resources = {
-> +	.version = CAMSS_8750,
-> +	.pd_name = "top",
-> +	.icc_res = icc_res_sm8750,
-> +	.icc_path_num = ARRAY_SIZE(icc_res_sm8750),
-> +};
-> +
->   static const struct camss_resources x1e80100_resources = {
->   	.version = CAMSS_X1E80100,
->   	.pd_name = "top",
-> @@ -5314,6 +5335,7 @@ static const struct of_device_id camss_dt_match[] = {
->   	{ .compatible = "qcom,sm8250-camss", .data = &sm8250_resources },
->   	{ .compatible = "qcom,sm8550-camss", .data = &sm8550_resources },
->   	{ .compatible = "qcom,sm8650-camss", .data = &sm8650_resources },
-> +	{ .compatible = "qcom,sm8750-camss", .data = &sm8750_resources },
->   	{ .compatible = "qcom,x1e80100-camss", .data = &x1e80100_resources },
->   	{ }
->   };
-> diff --git a/drivers/media/platform/qcom/camss/camss.h b/drivers/media/platform/qcom/camss/camss.h
-> index b1cc4825f027..f87b615ad1a9 100644
-> --- a/drivers/media/platform/qcom/camss/camss.h
-> +++ b/drivers/media/platform/qcom/camss/camss.h
-> @@ -91,6 +91,7 @@ enum camss_version {
->   	CAMSS_845,
->   	CAMSS_8550,
->   	CAMSS_8650,
-> +	CAMSS_8750,
->   	CAMSS_8775P,
->   	CAMSS_KAANAPALI,
->   	CAMSS_X1E80100,
-> 
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+>  drivers/platform/x86/serial-multi-instantiate.c | 3 ---
+>  1 file changed, 3 deletions(-)
+>=20
+> diff --git a/drivers/platform/x86/serial-multi-instantiate.c b/drivers/pl=
+atform/x86/serial-multi-instantiate.c
+> index db030b0f176a..3f6f5d51442c 100644
+> --- a/drivers/platform/x86/serial-multi-instantiate.c
+> +++ b/drivers/platform/x86/serial-multi-instantiate.c
+> @@ -198,9 +198,6 @@ static int smi_i2c_probe(struct platform_device *pdev=
+, struct smi *smi,
+>  =09ret =3D i2c_acpi_client_count(adev);
+>  =09if (ret < 0)
+>  =09=09return ret;
+> -=09if (!ret)
+> -=09=09return -ENOENT;
+> -
+>  =09count =3D ret;
+> =20
+>  =09smi->i2c_devs =3D devm_kcalloc(dev, count, sizeof(*smi->i2c_devs), GF=
+P_KERNEL);
+>=20
+
+Acked-by: Ilpo J=E4rvinen <ilpo.jarvinen@linux.intel.com>
+
+--=20
+ i.
+
+--8323328-1790419283-1764237225=:8713--
 
