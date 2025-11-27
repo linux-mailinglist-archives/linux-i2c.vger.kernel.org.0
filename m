@@ -1,47 +1,47 @@
-Return-Path: <linux-i2c+bounces-14307-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14308-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 578C9C8D4AE
-	for <lists+linux-i2c@lfdr.de>; Thu, 27 Nov 2025 09:12:48 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40861C8D4CC
+	for <lists+linux-i2c@lfdr.de>; Thu, 27 Nov 2025 09:15:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 0253D34AC3B
-	for <lists+linux-i2c@lfdr.de>; Thu, 27 Nov 2025 08:12:48 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 189254E2561
+	for <lists+linux-i2c@lfdr.de>; Thu, 27 Nov 2025 08:15:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8247320382;
-	Thu, 27 Nov 2025 08:12:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78B3732144A;
+	Thu, 27 Nov 2025 08:14:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sYHMqsDD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D0DXdRQf"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62B751F4180;
-	Thu, 27 Nov 2025 08:12:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26F2F1EFF8D;
+	Thu, 27 Nov 2025 08:14:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764231161; cv=none; b=hX+0V6TsV2EnEDJ2P63lqJU988MzZiPIDtCNbpSI/tvnNpSvtbxcP1yd7EcQEXw/h0UXmXsBpwV+GzRZgowkNNY4Wz7K4P0muoi/LPVRfiPG/N5yuChEHHkNcO/ETMAYCaSei8Y0gKB9QTKYL3P078ztloyub5lfUGseNNGelYU=
+	t=1764231295; cv=none; b=diw2PMeljYnJMAskMOT1pNXr2Iexa7st3g5/wMSytoWtnB+eMTVih7f5Lk6fB/ELBC6YL0h4aUP1+/jYLEHg7+BDgCLpkMnMcc4PXI/HlGXoAEpVTm4ewqvY/qL/1wCDGCq8lCxE3WX4FbObOg3/XzgygmbzjmXPUPUjh0cYpdc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764231161; c=relaxed/simple;
-	bh=n60wrRFxmc2+lq/5VFolE4ViUstRu/ZGXCU84RRLtbg=;
+	s=arc-20240116; t=1764231295; c=relaxed/simple;
+	bh=JaaoIvkBV1cOTAYwJfakFViPnNNVHZkwiOsm+EHJ7LE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nrqjxCoj5BIlHckrtuGVI0RbvTm4fhsw3S1Hz1etqVOqmj36QPgVKHrel0bGVovBG3+ZJ1+mz+lj3hO4C2mGBiU1obatUo5xqg75LV8rTlpRJgr8JqUY/ReaIeCtdUQHKaeMsdw9ajsbOcoCmc+etzO4gLI4XZVJ3Em5II5EkIs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sYHMqsDD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57C41C4CEF8;
-	Thu, 27 Nov 2025 08:12:40 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=mkiGJedREmV3nFZOwSfA4kE0lVSa1GS9KvnUztyBzmnJXv+4Lekt/jcVPdWpR0e4y9SIcy/QcIx8dwZ6DNxgqN3JLfqpW5ZQBNwKwGjywf1a48ZoDEYujSrvGCpyWYw3gsDyq78lzYArPTtc4X3azx5IOTjN1bwKSJVMrhJ/GlU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D0DXdRQf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E804C113D0;
+	Thu, 27 Nov 2025 08:14:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764231160;
-	bh=n60wrRFxmc2+lq/5VFolE4ViUstRu/ZGXCU84RRLtbg=;
+	s=k20201202; t=1764231294;
+	bh=JaaoIvkBV1cOTAYwJfakFViPnNNVHZkwiOsm+EHJ7LE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=sYHMqsDDxIEAiVE7n4IF4l3qiz1pYuOba6xSroNpdRgej9ZPOvUPXBM6t7DbQGqz0
-	 yhy/b9RmA0QLVtyDP19JrH/AlnmBHQyhWug7qSfutRfl9Nzp/OX+qGbu58ZR7NMsQ3
-	 uUnzpwCVWet4nZzTUmXC9OK/qgO+G+RFAzeGt63/HXq0JtnAnwSDYClaGgKBifty4V
-	 Cc3bfhc0U1pFFv6KeusMJccAL+qMZaFMHp4q/HL73UFX7IFcOsbZL/VCuNF4np4Gxu
-	 STPt1Jzrpq5lzUX77EH5xNzfFJZ8UPFL+QkoFIgCfGSAx2cKGCQuM/cAtmQDoOm5oA
-	 +OdbZnTA+UYCA==
-Date: Thu, 27 Nov 2025 09:12:38 +0100
+	b=D0DXdRQfGqf1xCggIQ9R0o1m6jguioABT+/KFFipP6sLMYo80XFaugxV8oHbuRE3R
+	 7yOd0oLCAN7mvlmYkToKZ0D9DrNjH4cKqQG2ZuPpbIXMX/rtWcgowNw7gpNA3LSa7s
+	 5aYYHNa03AXueOB9Cdp3hd86cvZp6Wazzpf6tnPbyoXy7aH1ISAH0ma8lvfoPhtUoO
+	 8da8Hl13ihYU7AtRwFAbXllAbYCiycFg3bDUYsfhx3Fpn2pqxU1k3OTwhdoOC3scrF
+	 z5oSqs/xHfr2pzJpmfLTm+aWXrHZ3JyHGWmcRlyvEMyrVbqgYBeN6nYN5jpcQq/enx
+	 JRu4zUXSMVtvQ==
+Date: Thu, 27 Nov 2025 09:14:52 +0100
 From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Hangxiang Ma <hangxiang.ma@oss.qualcomm.com>
 Cc: Loic Poulain <loic.poulain@oss.qualcomm.com>, 
@@ -52,10 +52,11 @@ Cc: Loic Poulain <loic.poulain@oss.qualcomm.com>,
 	Bryan O'Donoghue <bryan.odonoghue@linaro.org>, linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
 	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
 	jeyaprakash.soundrapandian@oss.qualcomm.com, Vijay Kumar Tumati <vijay.tumati@oss.qualcomm.com>
-Subject: Re: [PATCH 7/7] arm64: dts: qcom: sm8750: Add support for camss
-Message-ID: <20251127-steadfast-red-koel-8c9bc8@kuoka>
+Subject: Re: [PATCH 4/7] media: qcom: camss: csiphy: Add support for v2.3.0
+ two-phase CSIPHY
+Message-ID: <20251127-terrestrial-arboreal-bird-5a6d9b@kuoka>
 References: <20251126-add-support-for-camss-on-sm8750-v1-0-646fee2eb720@oss.qualcomm.com>
- <20251126-add-support-for-camss-on-sm8750-v1-7-646fee2eb720@oss.qualcomm.com>
+ <20251126-add-support-for-camss-on-sm8750-v1-4-646fee2eb720@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -64,114 +65,41 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20251126-add-support-for-camss-on-sm8750-v1-7-646fee2eb720@oss.qualcomm.com>
+In-Reply-To: <20251126-add-support-for-camss-on-sm8750-v1-4-646fee2eb720@oss.qualcomm.com>
 
-On Wed, Nov 26, 2025 at 01:38:40AM -0800, Hangxiang Ma wrote:
- +
-> +			cci1_1_default: cci1-1-default-state {
-> +				sda-pins {
-> +					pins = "gpio111";
-> +					function = "cci_i2c_sda";
-> +					drive-strength = <2>;
-> +					bias-pull-up;
-> +				};
-> +
-> +				scl-pins {
-> +					pins = "gpio164";
-> +					function = "cci_i2c_scl";
-> +					drive-strength = <2>;
-> +					bias-pull-up;
-> +				};
-> +			};
-> +
-> +			cci1_1_sleep: cci1-1-sleep-state {
-> +				sda-pins {
-> +					pins = "gpio111";
-> +					function = "cci_i2c_sda";
-> +					drive-strength = <2>;
-> +					bias-pull-down;
-> +				};
-> +
-> +				scl-pins {
-> +					pins = "gpio164";
-> +					function = "cci_i2c_scl";
-> +					drive-strength = <2>;
-> +					bias-pull-down;
-> +				};
-> +			};
-> +
-> +			cci2_0_default: cci2-0-default-state {
-> +				sda-pins {
-> +					pins = "gpio112";
-> +					function = "cci_i2c_sda";
-> +					drive-strength = <2>;
-> +					bias-pull-up;
-> +				};
-> +
-> +				scl-pins {
-> +					pins = "gpio153";
-> +					function = "cci_i2c_scl";
-> +					drive-strength = <2>;
-> +					bias-pull-up;
-> +				};
-> +			};
-> +
-> +			cci2_0_sleep: cci2-0-sleep-state {
-> +				sda-pins {
-> +					pins = "gpio112";
-> +					function = "cci_i2c_sda";
-> +					drive-strength = <2>;
-> +					bias-pull-down;
-> +				};
-> +
-> +				scl-pins {
-> +					pins = "gpio153";
-> +					function = "cci_i2c_scl";
-> +					drive-strength = <2>;
-> +					bias-pull-down;
-> +				};
-> +			};
-> +
-> +			cci2_1_default: cci2-1-default-state {
-> +				sda-pins {
-> +					pins = "gpio119";
-> +					function = "cci_i2c_sda";
-> +					drive-strength = <2>;
-> +					bias-pull-up;
-> +				};
-> +
-> +				scl-pins {
-> +					pins = "gpio120";
-> +					function = "cci_i2c_scl";
-> +					drive-strength = <2>;
-> +					bias-pull-up;
-> +				};
-> +			};
-> +
-> +			cci2_1_sleep: cci2-1-sleep-state {
-> +				sda-pins {
-> +					pins = "gpio119";
-> +					function = "cci_i2c_sda";
-> +					drive-strength = <2>;
-> +					bias-pull-down;
-> +				};
-> +
-> +				scl-pins {
-> +					pins = "gpio120";
-> +					function = "cci_i2c_scl";
-> +					drive-strength = <2>;
-> +					bias-pull-down;
-> +				};
-> +			};
-> +		};
-> +
-> +		cci0: cci@ac7b000 {
+On Wed, Nov 26, 2025 at 01:38:37AM -0800, Hangxiang Ma wrote:
+> Add more detailed resource information for CSIPHY devices in the camss
+> driver along with the support for v2.3.0 in the 2 phase CSIPHY driver
+> that is responsible for the PHY lane register configuration, module
+> reset and interrupt handling.
+> 
+> Additionally, generalize the struct name for the lane configuration that
+> had been added for Kaanapali and use it for SM8750 as well as they share
+> the settings.
+> 
+> Signed-off-by: Hangxiang Ma <hangxiang.ma@oss.qualcomm.com>
+> ---
+>  .../platform/qcom/camss/camss-csiphy-3ph-1-0.c     |  11 ++-
+>  drivers/media/platform/qcom/camss/camss.c          | 107 +++++++++++++++++++++
+>  2 files changed, 114 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c b/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
+> index f9db7e195dfe..157e946f67db 100644
+> --- a/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
+> +++ b/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
+> @@ -684,9 +684,9 @@ csiphy_lane_regs lane_regs_sm8650[] = {
+>  	{0x0c10, 0x52, 0x00, CSIPHY_DEFAULT_PARAMS},
+>  };
+>  
+> -/* 3nm 2PH v 2.4.0 2p5Gbps 4 lane DPHY mode */
+> +/* 3nm 2PH v 2.3.0/2.4.0 2p5Gbps 4 lane DPHY mode */
+>  static const struct
+> -csiphy_lane_regs lane_regs_kaanapali[] = {
 
-Looks completely mis-ordered/sorted. What are the nodes above and below?
+There is no such line in next. Your cover letter does not explain
+dependencies.
 
-
-> +			compatible = "qcom,sm8750-cci", "qcom,msm8996-cci";
-> +			reg = <0x0 0x0ac7b000 0x0 0x1000>;
+> +csiphy_lane_regs lane_regs_v_2_3[] = {
 
 Best regards,
 Krzysztof
