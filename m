@@ -1,47 +1,47 @@
-Return-Path: <linux-i2c+bounces-14300-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14301-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3A51C8D10F
-	for <lists+linux-i2c@lfdr.de>; Thu, 27 Nov 2025 08:20:17 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2874C8D13F
+	for <lists+linux-i2c@lfdr.de>; Thu, 27 Nov 2025 08:24:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 7A7AF34CAFB
-	for <lists+linux-i2c@lfdr.de>; Thu, 27 Nov 2025 07:20:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8ED783A418A
+	for <lists+linux-i2c@lfdr.de>; Thu, 27 Nov 2025 07:24:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2ECB53148DD;
-	Thu, 27 Nov 2025 07:20:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D99B314D1F;
+	Thu, 27 Nov 2025 07:24:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ta/FGVK6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bFwAsE/p"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D43E8136358;
-	Thu, 27 Nov 2025 07:20:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D375E3C1F;
+	Thu, 27 Nov 2025 07:24:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764228010; cv=none; b=dSicEdRK47uZsHqOssct3ILYo2P/MYgtV8k1EK6+NmsBkMdyvUZfWbvZSLeVR77S5fbhIgLIAxwS2UdIjoAtkSUfQxiBdWBiVbyPw1DbXRpmOQN+4ARtBIPBdL+8ovh1Ec4v5xBJLlw8YoR6Besq+VlNmpZlZiNRLj14G2gUxVA=
+	t=1764228258; cv=none; b=cXwFwiVARRnUd403hZh9CGaUm4q5UDuLiQOglY2RFx2KTHb4J2SRcB+HMHrwZF2eTxQWU9X9dB/4iQc2mQjWpQi/HV/cfgHT9nNas/jkeohqTWhqXWmpeKOCXE4JO8wkogzIb5njyTDvAaB+sEBLPYm+Uagzfk/s4B2QO/eN+F4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764228010; c=relaxed/simple;
-	bh=jP31S8Dt4+8qiI2aac4nVcnsADB8VoG9tzhBRujNSS4=;
+	s=arc-20240116; t=1764228258; c=relaxed/simple;
+	bh=DhYRYtBKfaDGGgAu3Z4WJAK/iMJ03cC+RuSpqtCD9Cw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dYoZHOkUbofEFp34QxeHVduC5ukGKfX6jvB0N3W4IyHZiNFMC4bE2RiNc3zuvGk2csgEgRKDIsUfc9Fb9vnmkdNYo10idob6LTYMFiX96H3M6FOamkxQtBI/aPCFxOY+Kzc+8SL9ckaLJCXxzrlNLYSOcf1KumJlxHPdbkb1Xgc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ta/FGVK6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4CBAC4CEF8;
-	Thu, 27 Nov 2025 07:20:05 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=f20OCI6afdgWtbsvTVJjn6Z29sxrBBgpIoO+pz2o461q4l5vofPqM7UwoXX4cl56VmuF+ndzqGevnBKv/33/BhFMw32K6yJiZ435/xoqjIfNcVCyALnCUzqgcSERS5nnQ3OhLakCFvlhXb+UA2d5Pl+EkWLIRXIsApvQf/xX1oE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bFwAsE/p; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A8AAC4CEF8;
+	Thu, 27 Nov 2025 07:24:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764228006;
-	bh=jP31S8Dt4+8qiI2aac4nVcnsADB8VoG9tzhBRujNSS4=;
+	s=k20201202; t=1764228257;
+	bh=DhYRYtBKfaDGGgAu3Z4WJAK/iMJ03cC+RuSpqtCD9Cw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ta/FGVK6jTc3POxSH0uKvo2/kTkSmtyN47d/3QFKgFfKgWDjf/w3RXdiuT9aGGYit
-	 Yo5o21TLvUvtNnJ58McCz+InmA5WYIqd5ItBNWDhgWAauCPfuQt92OQPwIxhh9Tc8N
-	 nO+nLL7ZDN8RjYru1om1s19mz49xPvIk5UdbPEWPSIQ1xO4+ITt+u5RCz3oQXLcCvM
-	 1TJOG0zVM/CVJyR3y4JWsOj4M+vKFsryyfBUMVz7dN1AhEAVPHjzWxrReBorMH7E4k
-	 ARo/o1O9JQHfost0MGYkvsWaSjMYr/dhZg/geN1c9+X4LnmjvHdATbK0O70BySYLJp
-	 epd3jjBWWhyZA==
-Date: Thu, 27 Nov 2025 08:20:03 +0100
+	b=bFwAsE/pfV3Rv3i2KXivcBptGAJ5mR8kIjDc6Uk8EyiuzJTbzWxmQu7M8+1RmHBka
+	 YLLKS93sDjsfaP54BYQoJI+PpbHmWjZaFUBCSwv3oL9seIPs5gz5tp3259AY1zesFr
+	 XGF6H+vYvyIQu3Da0/kvzSz8HWHaQ9yHEu0rw0Y+d2hw4qG9ilPnZF5A7r7q54O+ji
+	 LkmG3BQ35+4QjInxlwJwyc7QKpBbPNNuqv2Tzt7VxGstVPxf+/W/DNXaARRBedm1og
+	 IW7HtS8Uw/IPo0L0QO7tSu4utkPJ8QfJw3Ho/afeu7K64DDmRb2doMQLBWF/SwK7OO
+	 JNCjKIMuw4lDw==
+Date: Thu, 27 Nov 2025 08:24:15 +0100
 From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Danny Kaehn <danny.kaehn@plexus.com>
 Cc: Rob Herring <robh@kernel.org>, 
@@ -53,9 +53,11 @@ Cc: Rob Herring <robh@kernel.org>,
 	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, Leo Huang <leohu@nvidia.com>, 
 	Arun D Patil <arundp@nvidia.com>, Willie Thai <wthai@nvidia.com>, 
 	Ting-Kai Chen <tingkaic@nvidia.com>
-Subject: Re: [PATCH v12 0/3] Firmware Support for USB-HID Devices and CP2112
-Message-ID: <20251127-hasty-malkoha-of-science-e5efd5@kuoka>
+Subject: Re: [PATCH v12 1/3] dt-bindings: i2c: Add CP2112 HID USB to SMBus
+ Bridge
+Message-ID: <20251127-liberal-onyx-shark-eaeab6@kuoka>
 References: <20251126-cp2112-dt-v12-0-2cdba6481db3@plexus.com>
+ <20251126-cp2112-dt-v12-1-2cdba6481db3@plexus.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -64,32 +66,95 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20251126-cp2112-dt-v12-0-2cdba6481db3@plexus.com>
+In-Reply-To: <20251126-cp2112-dt-v12-1-2cdba6481db3@plexus.com>
 
-On Wed, Nov 26, 2025 at 11:05:23AM -0600, Danny Kaehn wrote:
-> This patchset allows USB-HID devices to have Firmware bindings through sharing
-> the USB fwnode with the HID driver, and adds such a binding and driver
-> implementation for the CP2112 USB to SMBus Bridge (which necessitated the
-> USB-HID change). This change allows a CP2112 permanently attached in hardware to
-> be described in DT and ACPI and interoperate with other drivers.
+On Wed, Nov 26, 2025 at 11:05:24AM -0600, Danny Kaehn wrote:
+> +  i2c:
+> +    description: The SMBus/I2C controller node for the CP2112
+> +    $ref: /schemas/i2c/i2c-controller.yaml#
+> +    unevaluatedProperties: false
+> +
+> +    properties:
+> +      sda-gpios:
+> +        maxItems: 1
+> +
+> +      scl-gpios:
+> +        maxItems: 1
+
+Neither scl nor sda-gpios are needed, they are allowed by i2c-controller
+schema, so drop.
+
+> +
+> +      clock-frequency:
+> +        minimum: 10000
+> +        default: 100000
+> +        maximum: 400000
+> +
+> +patternProperties:
+> +  "-hog(-[0-9]+)?$":
+> +    type: object
+> +
+> +    required:
+> +      - gpio-hog
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    #include <dt-bindings/gpio/gpio.h>
+> +
+> +    usb {
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +
+> +      cp2112: device@1 {
+> +        compatible = "usb10c4,ea90";
+> +        reg = <1>;
+> +
+> +        gpio-controller;
+> +        interrupt-controller;
+> +        #interrupt-cells = <2>;
+> +        #gpio-cells = <2>;
+> +        gpio-line-names = "CP2112_SDA", "CP2112_SCL", "TEST2",
+> +          "TEST3","TEST4", "TEST5", "TEST6";
+
+Please align the next line with opening ". See also DTS coding style.
+
+> +
+> +        fan-rst-hog {
+> +            gpio-hog;
+> +            gpios = <7 GPIO_ACTIVE_HIGH>;
+> +            output-high;
+> +            line-name = "FAN_RST";
+> +        };
+> +
+> +        i2c {
+> +          #address-cells = <1>;
+
+Messed indentation, stick to one, preferred is 4 spaces for the example.
+
+> +          #size-cells = <0>;
+> +          sda-gpios = <&cp2112 0 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+> +          scl-gpios = <&cp2112 1 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+> +
+> +          temp@48 {
+> +            compatible = "national,lm75";
+> +            reg = <0x48>;
+> +          };
+> +        };
+> +
+
+Drop blank line
+
+> +      };
+> +    };
 > 
-> Changes in v12:
-> - dt-binding changes:
->   - Drop "on the host controller" from top-level description based on
->       comment from Rob H.
->   - Correct "Properties must precede subnodes" dt_binding_check error by
->       moving gpio_chip-related properties above the i2c subnode in the
->       binding and in the example.
->   - Include `interrupt-controller` property in the example
-> - Modify hid-cp2112.c to support separate schemas for DT vs. ACPI - DT
->   combines gpio subnode with the CP2112's node, but will have an I2C
->   subnode; while ACPI will maintain separate child nodes for the GPIO
->   I2C devices
-
-That's a b4 managed patch, so I wonder what happened with all the lore
-links to previous versions.
-
-Best regards,
-Krzysztof
-
+> -- 
+> 2.25.1
+> 
 
