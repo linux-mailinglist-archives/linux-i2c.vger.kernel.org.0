@@ -1,146 +1,88 @@
-Return-Path: <linux-i2c+bounces-14337-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14338-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A09AC91B24
-	for <lists+linux-i2c@lfdr.de>; Fri, 28 Nov 2025 11:42:41 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id F258BC93D67
+	for <lists+linux-i2c@lfdr.de>; Sat, 29 Nov 2025 13:15:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BFD943A87FC
-	for <lists+linux-i2c@lfdr.de>; Fri, 28 Nov 2025 10:42:38 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 093CE4E1F86
+	for <lists+linux-i2c@lfdr.de>; Sat, 29 Nov 2025 12:15:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0536A2F28E2;
-	Fri, 28 Nov 2025 10:42:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="LaEGJYOm"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 614A1261B6E;
+	Sat, 29 Nov 2025 12:15:39 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 472893054D0
-	for <linux-i2c@vger.kernel.org>; Fri, 28 Nov 2025 10:42:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+Received: from pokefinder.org (pokefinder.org [135.181.139.117])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0DA138DF9
+	for <linux-i2c@vger.kernel.org>; Sat, 29 Nov 2025 12:15:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=135.181.139.117
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764326555; cv=none; b=IQbJg3DU0S52kwsOf6ApCw1l90TdZ1oRlWBnig467J4SO22/qNJu2a8gZBnBWJiU3Yg00iGLjmgvLP9ShVHs98G9wyDwz8RDkwDLMzK5siBiXjGy/8rWZxXbPHXTJYsewE2GksNad1cTyu8oHL4qmsNTOq+LMJTEhBg6WOY70EU=
+	t=1764418539; cv=none; b=lVSPRJGQBvvDbQT0GgZAh0+soTwo8lB/yLZsGPCZAiBY9Mo0zpAiLedNMpdqJQkFGomAxIP1rhbbY9EzGiknzOypYQ6X+YUydtD/MhDVtwWcqOGfQeP8Q0pdlq5seOk7BOdAlbassj41Prnygufu9UUXKBpkJ+LPYJPMHu/gfRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764326555; c=relaxed/simple;
-	bh=NhQrR0foFhn1D711AhPwnlARZ7bmyIub/tVD7Ce0e5c=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=huIXVsWVQPQ2D6pqolgUphHy9VV09VAzhwz4MhvP+N9VTtGTobe6V5UozP1cMFuLjU7AYK/42zMkNBrJNvKD13uCXMenNDhFY2ZxvWde0WJ46GK3H8XE6LVWMpxJVjItMSy6bUENvNoxCA3zO2qpIJOTZ/aZNJFE1Ru93dFK25E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=LaEGJYOm; arc=none smtp.client-ip=185.171.202.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id DFD9AC16A3F
-	for <linux-i2c@vger.kernel.org>; Fri, 28 Nov 2025 10:42:08 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id CA64160706;
-	Fri, 28 Nov 2025 10:42:31 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 13E5A103C8F8C;
-	Fri, 28 Nov 2025 11:42:31 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1764326551; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=5IjsXDx1P/fCwIZ0OfJ0sbEfYZwZWy84wgJtdcw07VI=;
-	b=LaEGJYOmqsF4uk5D3fn85HMFP1aVFbbv2qldSyUIWIBXGfryw2OkZs/UwUCb6jrH2epmV3
-	JDBMZOHR+614hlSjSBXXVsEzbJ1THrBe9JhQvAuxEAY9MGzzskUow5xca8T/bjyXARt6tp
-	xsohJJb8Y05nxo6MSI/BkZsv0m4Ph9HcBy0vEkmlRB1LcZmscQoDNzpNRo99nqp6uUFUQh
-	sAAyThL1K40mHtKp1Mn/EbN0pb0yKtEvBihZsWcKzCvtRnX6tLrDC8R0FHBxAGKxzYG+Ny
-	p+TBVm249mzgWQshwNya6f+Dqi2H1bEKBpdNEdtTQmrHMv5CQdp86VYMNycxsg==
-From: =?utf-8?q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>
-Date: Fri, 28 Nov 2025 11:40:10 +0100
-Subject: [PATCH i2c-tools 2/2] i2ctransfer: Add optional message modifier
- flags
+	s=arc-20240116; t=1764418539; c=relaxed/simple;
+	bh=5LJabd6Xln8NBD/VstwFc7RK/xmS/iTzPdMHjXcwy54=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gYyUbrbcroSd4rw18locMMZ198vP0WAlH1LavkA5ZtTAJ7ZdarZ4keYibzHpYj3jE4fISqREaRn4Lts+t2KRifF/ZOzS+EvLotL/F4oxZUqHUKbDhnBO16cDjthtYuizmz1FGJcj1qYDqfn27DFLA9zSjp2ODl4XBDgHf2M65+0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=the-dreams.de; spf=pass smtp.mailfrom=the-dreams.de; arc=none smtp.client-ip=135.181.139.117
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=the-dreams.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=the-dreams.de
+Received: from localhost (221x250x229x50.ap221.ftth.ucom.ne.jp [221.250.229.50])
+	by pokefinder.org (Postfix) with UTF8SMTPSA id 6E531A44838;
+	Sat, 29 Nov 2025 13:09:34 +0100 (CET)
+Date: Sat, 29 Nov 2025 21:09:28 +0900
+From: Wolfram Sang <wsa@the-dreams.de>
+To: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: linux-i2c@vger.kernel.org,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: Re: [GIT PULL] at24 updates for v6.19-rc1
+Message-ID: <aSrieNBinyWw4KoD@shikoro>
+References: <20251120135430.33476-1-bartosz.golaszewski@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20251128-msg-flags-v1-2-6353f26fa6bc@bootlin.com>
-References: <20251128-msg-flags-v1-0-6353f26fa6bc@bootlin.com>
-In-Reply-To: <20251128-msg-flags-v1-0-6353f26fa6bc@bootlin.com>
-To: linux-i2c@vger.kernel.org
-Cc: Jean Delvare <jdelvare@suse.de>, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- =?utf-8?q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>
-X-Mailer: b4 0.14.3
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="TKwts4e3bd/vcqRi"
+Content-Disposition: inline
+In-Reply-To: <20251120135430.33476-1-bartosz.golaszewski@linaro.org>
 
-Allow setting protocol mangling and repeated start elision flags of an i2c
-message with a set of optional command-line flags. These optional flags
-are parsed at the beginning of the DESC field up to a read or write flag.
 
-For example, to read one byte from address 0x50 followed by a stop, then
-write two bytes at 0x54 on bus 0, one would call i2ctransfer as follow:
+--TKwts4e3bd/vcqRi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-    i2ctransfer 0 pr1@0x50 w2@0x54 0x10 0x20
+On Thu, Nov 20, 2025 at 02:54:30PM +0100, Bartosz Golaszewski wrote:
+> Wolfram,
+>=20
+> Please pull the following AT24 change for the upcoming merge window.
+> It's only a single update to DT bindings.
 
-Since the new flags are optional, this patch preserves the compatibility
-of the i2ctransfer syntax.
+Thanks, pulled!
 
-Signed-off-by: Benoît Monin <benoit.monin@bootlin.com>
----
- tools/i2ctransfer.c | 34 +++++++++++++++++++++++++---------
- 1 file changed, 25 insertions(+), 9 deletions(-)
 
-diff --git a/tools/i2ctransfer.c b/tools/i2ctransfer.c
-index 4db98e3..921ffaa 100644
---- a/tools/i2ctransfer.c
-+++ b/tools/i2ctransfer.c
-@@ -52,9 +52,16 @@ static void help(void)
- 		"           -V version info\n"
- 		"           -y yes to all confirmations\n"
- 		"  I2CBUS is an integer or an I2C bus name\n"
--		"  DESC describes the transfer in the form: {r|w}LENGTH[@address]\n"
--		"    1) read/write-flag 2) LENGTH (range 0-65535, or '?')\n"
--		"    3) I2C address (use last one if omitted)\n"
-+		"  DESC describes the transfer in the form: [inpst]{r|w}LENGTH[@address]\n"
-+		"    1) optional message modifier flags\n"
-+		"       i: ignore NACK from client\n"
-+		"       n: no master ACK/NACK bit in a read message\n"
-+		"       p: emit a STOP after the message\n"
-+		"       s: skip repeated start\n"
-+		"       t: toggle read/write bit\n"
-+		"    2) mandatory read/write flag\n"
-+		"    3) LENGTH (range 0-65535, or '?')\n"
-+		"    4) I2C address (use last one if omitted)\n"
- 		"  DATA are LENGTH bytes for a write message. They can be shortened by a suffix:\n"
- 		"    = (keep value constant until LENGTH)\n"
- 		"    + (increase value by 1 until LENGTH)\n"
-@@ -202,12 +209,21 @@ int main(int argc, char *argv[])
- 		case PARSE_GET_DESC:
- 			flags = 0;
- 
--			switch (*arg_ptr++) {
--			case 'r': flags |= I2C_M_RD; break;
--			case 'w': break;
--			default:
--				fprintf(stderr, "Error: Invalid direction\n");
--				goto err_out_with_arg;
-+			for (int done = 0; !done; ) {
-+				switch (*arg_ptr++) {
-+				/* optional flags */
-+				case 'i': flags |= I2C_M_IGNORE_NAK; break;
-+				case 'n': flags |= I2C_M_NO_RD_ACK; break;
-+				case 'p': flags |= I2C_M_STOP; break;
-+				case 's': flags |= I2C_M_NOSTART; break;
-+				case 't': flags |= I2C_M_REV_DIR_ADDR; break;
-+				/* mandatory flags */
-+				case 'r': flags |= I2C_M_RD; done = 1; break;
-+				case 'w': done = 1; break;
-+				default:
-+					fprintf(stderr, "Error: Invalid flag\n");
-+					goto err_out_with_arg;
-+				}
- 			}
- 
- 			if (*arg_ptr == '?') {
+--TKwts4e3bd/vcqRi
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-2.52.0
+-----BEGIN PGP SIGNATURE-----
 
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmkq4nUACgkQFA3kzBSg
+KbZrihAAqv2Rf+eqsz6BXqVVLmubgcKdvZ0t1/52v6vYRTuvrDaX+7aZfH+8XX8d
+eLeTG1nXTH4YkSiqYDBA7SaeVpY+OA9shaq8sNqY4v3LOF6Q62frD2JpzF0DCzMM
+L6PfbvMUXL5jN6XM1yTCnfZtPJ2lm4T3fSc6HPh63Xm+NlcdZta6UQYG+YTmBPsj
+ugSqztjNQpnMpMpGMxcPHDlwRLtAVht4R35+C586I+XbBTBlOl1pjO+aqvDaTHzf
+3ud/yW0aG1sqfurqi2waPQ1QBvpJ0+ArNSSukizmuXUPSsIQUFYNfVJnlGTzmC+x
+bZEePxiZp4fP8t8FRkQ7Y18WCDefbYix0595SyzKhRIjcvFgFCqE/lPNsQVYLWR9
+GV4CcB6yOgIenJkZpcpjkbnzQ1zJxxehOoBEaERcSBOlPChNmhJ6XEfzPJK5Z3oS
+WAITzZUC/VMVOCqqJ1rmt3x/NXCwv7CTCF5lr5VK10Pz/C09m/Al/iIlV6JZ+IZN
+3JfpAQDpS11wQvLpxK2wnT1ZUnRcOF4GIyX4zY0bAmpWtieAaxCxEerL7YH2s5kW
+6v7L0j6oy9iUeM7JXw+EADXaLWViwXLAQQCz1Yn1gTlCbaoss1UVO6BEOGVogAGK
+QsaX/Q27QKOskI1Ljfn2x0mwadfowq2qtql2e2/gQq7uOrNg5HE=
+=Puwf
+-----END PGP SIGNATURE-----
+
+--TKwts4e3bd/vcqRi--
 
