@@ -1,233 +1,230 @@
-Return-Path: <linux-i2c+bounces-14345-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14346-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6FACC95CC3
-	for <lists+linux-i2c@lfdr.de>; Mon, 01 Dec 2025 07:26:30 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id DEB27C95FB6
+	for <lists+linux-i2c@lfdr.de>; Mon, 01 Dec 2025 08:18:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D24174E1128
-	for <lists+linux-i2c@lfdr.de>; Mon,  1 Dec 2025 06:26:29 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 5531A343222
+	for <lists+linux-i2c@lfdr.de>; Mon,  1 Dec 2025 07:18:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A63727C842;
-	Mon,  1 Dec 2025 06:26:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="ZrPKBz1Z";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="ZK9QTbOJ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C535729C33D;
+	Mon,  1 Dec 2025 07:18:45 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55D35279DCC
-	for <linux-i2c@vger.kernel.org>; Mon,  1 Dec 2025 06:26:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+Received: from invmail4.hynix.com (exvmail4.hynix.com [166.125.252.92])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A89029AB02;
+	Mon,  1 Dec 2025 07:18:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.125.252.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764570383; cv=none; b=OVrMPd6NBwROxfHuHYnVQZ5NSuxHLagnHJCqKuUlpBlT0h9gftKCs32v8dgA5lPinLpoHCvyW0RUt4nG7Q3yZbxBVMICY7a/J+T5hnNnlrFUH9SfNPy4vUnbMgkd7RFd7HkbdsdsOUJvMp+WFWz7+xe1PcJgMkeOtS3uvEkAPHU=
+	t=1764573525; cv=none; b=jFheUykKVUrzXLbVncfUApvjKYpAkcEtoOFBlNwv8Nk0nlS8umKLo9Wq3oyu4LPNhoSeHu0ARbD79gudy972LXBvKt8F2CXYzTnixfCh6oD8YcCbFwU0ARgiAX0zMBBRIZpovBpC/xZ3fYp043mkHhNWrelmWeTabX+5bQAKAnE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764570383; c=relaxed/simple;
-	bh=xwACydKQvgDKuB0v3VRVNVKaf/7fL95Co83H8L4/8V8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=H1eVnN18iG5YFCq7RXBHe5GpEPeEynFUBrpWcJXEw2ZJGn7eK0hrlIQm0uduApV+RqyPDjbwyfUAlDeBmGg4JLuHWanqjZrZJHAnSikIhBX3IQ1LNfE/+7dPNrBiz9pPMe7FYTrtlcuT08aRbxuenv5OBJUy0o9I55QG5b4eXGk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=ZrPKBz1Z; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=ZK9QTbOJ; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5AUNfsp73089253
-	for <linux-i2c@vger.kernel.org>; Mon, 1 Dec 2025 06:26:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=qcppdkim1; bh=Tbyvd4eRGssa6Ha0ecVbsY
-	tSBYVsX1t2xVyxXt94ET0=; b=ZrPKBz1ZqFfUvfy8wsD9OepT0ejCr49l8CJIDB
-	RI037dW52yyhZoF9ddXxh2wvgdU32v/ubnmfN65lPV21f9MhatZFpZRLeSI6gGnj
-	K3+wY1z4Mje8b7ejbBc5lciO4qJAKBMc7PP9if3JBiN5FR9956iYr+V4R8xausS7
-	Bynbq5o+OKiStwLplwydWGMUEGAnARqr7iFDlgSV7dlawMuP3vxQnSOmgRUwV5+r
-	cUmxqsdeF1fK1jiKT01PInpCzJwr7JexXsdPg195/wjVF6E4FW6nH3y2LuMpyBtt
-	gUX4ebdQg5oUmxMoV+U52HM07mFibAAUx7MC0EsD85pCl1gg==
-Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com [209.85.215.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4aqs78um7n-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-i2c@vger.kernel.org>; Mon, 01 Dec 2025 06:26:20 +0000 (GMT)
-Received: by mail-pg1-f199.google.com with SMTP id 41be03b00d2f7-b9b9e8b0812so5479762a12.0
-        for <linux-i2c@vger.kernel.org>; Sun, 30 Nov 2025 22:26:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1764570379; x=1765175179; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Tbyvd4eRGssa6Ha0ecVbsYtSBYVsX1t2xVyxXt94ET0=;
-        b=ZK9QTbOJtrNzjh4EqDX+jTrFO1LjwsfcRek5/Mzc+ZSLhXQIHnW/3NAxqKnc9oIm7D
-         twwQmzQkqXGuXZ2rti1qXMzsJu9VWn+OdsWfujlM5p6O9X/x4sssdGjb0DZOLPvvXyeX
-         vurm15OOdUGLTVLmhZ1/2kXNVC5nHKpIjtQ73nLusBTTUHoTcbt0+DEhr/yQ+lzpAyyN
-         N5+7l4qQO1KSa4p+JJtaHHHzrTTPb+73X6Pu+K6ro55248CAf+80DngjxjZTzg6NznOx
-         0SwKf4JxrWv1DVqnMU5nQvnQTUNaUEj9K/NgFGCudOkkCDl1qCoTKLTTK/3JUfF8Q1Ih
-         +j3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764570379; x=1765175179;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Tbyvd4eRGssa6Ha0ecVbsYtSBYVsX1t2xVyxXt94ET0=;
-        b=leXD3RdFOhZ66Qe8SYXUKRH+0dlPDQERGTRLx/4+X6OfIsgLituRVG0DtFSYiTUZMO
-         AthY4ZZp3Fjks7dAhHMNRENJwU6liSox7YGtDm2dHcuN5iDCwNr8jcrlpmDYYuPGIScH
-         WcvRSqNnxaEmopBssdQ4QnpYVhba0RyCzz6LJ5dGv8irtyw+YOKbvb7K8zCteAK2G0+l
-         lOJzGyeACqKwM4T15k3zlFCh7KlFvigPeWmNY3BQ2pbMM25bNYMTl3EY7AXJc+1/4cXM
-         /hs0yA9Amm0LdBEzMygirQQMoZOvluSU6Hb1+h/bKIvw9bWz6yx4GaVapcbIEq5kBaN3
-         tWUQ==
-X-Gm-Message-State: AOJu0YxQizU+Y3bpSwSe6iJM+SuGXl6LfNKuTBiAsORasH8RzFTSp7Fr
-	HzaE8jpe2rKeetIMBGvcDesMOyYxbDbm9ki4Ufn6NWTbkW1nObzqVj8I247VMELPRd8TLfP/Yt5
-	VvfmzcLeIb1kIIPI972U0yDjmqGUgY/RyaFqnAfoPUXeX/PPcfaqHPlMo5NbTLh0=
-X-Gm-Gg: ASbGncvVdUkUo2uIoyho2MMaMBjBKxHMJBTi6LoMpWyuM3qp+p+ofuMzekE4V1Bk1ch
-	0cxH+LmRTKwJ3jbrU8irdUQ4CHFl7+L0nJ18D6THi7yVhhldz84i6ND0abBsOFrojwdvJpNeJg1
-	+opdHtqeelU+3++HQZk6iOl4HvVBE9eiLU5NGSP7J4zUeSoiQwFZtlPRRr0EdGRQSs0JbSw+bbC
-	4Iaa0Tp9NScIeHV+KdU66tUEgBKHiVa+xu32OUrFoV4UMdGlAl7+JTdOGWMR5wj9cnfJ/3LZMEg
-	AkcLxPT+0k5U5k1/aiu4+pmhj8D29pCX5efPUAxBLzvVwIAoJqjROoX3gvPozWFAJR7ecTnvyG5
-	E/acRQUS9ZmhY2sYEf2S8qMx+XMbFiMnVCr2+ueesHzP8R0/eD7rQ25SYiAS6vZ9y
-X-Received: by 2002:a05:7022:4581:b0:11b:8185:abff with SMTP id a92af1059eb24-11c9d84a4e4mr21503832c88.30.1764570378988;
-        Sun, 30 Nov 2025 22:26:18 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEGiUkQhPHRaozyfqb9PynFx9lYVvOC8kg1YIBrk3c4ptAh69WLgR70tMbUh+zHTWI84tQ9HQ==
-X-Received: by 2002:a05:7022:4581:b0:11b:8185:abff with SMTP id a92af1059eb24-11c9d84a4e4mr21503815c88.30.1764570378459;
-        Sun, 30 Nov 2025 22:26:18 -0800 (PST)
-Received: from hu-hangxian-lv.qualcomm.com (Global_NAT1.qualcomm.com. [129.46.96.20])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11dcb057cb0sm67109081c88.9.2025.11.30.22.26.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Nov 2025 22:26:18 -0800 (PST)
-From: Hangxiang Ma <hangxiang.ma@oss.qualcomm.com>
-Date: Sun, 30 Nov 2025 22:25:36 -0800
-Subject: [PATCH RESEND] media: camss: csiphy: Make CSIPHY status macro
- cross-platform
+	s=arc-20240116; t=1764573525; c=relaxed/simple;
+	bh=9mfff0zf0WYT7Y1m0h9SwdlbThjNAg6ePi3np+RzYlQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XmUiSbkKbWlqc5X6aqvcAoucppiqP33xsXrqcYdIrAc6QoIFYuffmDXyurpkeMaQ2f4eUt6YCoLWqYWCYNh62mCgsVqHWzEZuv7i93fQlZvslTDZBIayc3utQjD/AuRDerEARxqkm3xIWp9v069umj4iLac9QoIzL85ySxpSQfk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com; spf=pass smtp.mailfrom=sk.com; arc=none smtp.client-ip=166.125.252.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sk.com
+X-AuditID: a67dfc5b-c2dff70000001609-83-692d41486292
+Date: Mon, 1 Dec 2025 16:18:27 +0900
+From: Byungchul Park <byungchul@sk.com>
+To: Matthew Wilcox <willy@infradead.org>
+Cc: linux-kernel@vger.kernel.org, kernel_team@skhynix.com,
+	torvalds@linux-foundation.org, damien.lemoal@opensource.wdc.com,
+	linux-ide@vger.kernel.org, adilger.kernel@dilger.ca,
+	linux-ext4@vger.kernel.org, mingo@redhat.com, peterz@infradead.org,
+	will@kernel.org, tglx@linutronix.de, rostedt@goodmis.org,
+	joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
+	duyuyang@gmail.com, johannes.berg@intel.com, tj@kernel.org,
+	tytso@mit.edu, david@fromorbit.com, amir73il@gmail.com,
+	gregkh@linuxfoundation.org, kernel-team@lge.com, linux-mm@kvack.org,
+	akpm@linux-foundation.org, mhocko@kernel.org, minchan@kernel.org,
+	hannes@cmpxchg.org, vdavydov.dev@gmail.com, sj@kernel.org,
+	jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
+	penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
+	ngupta@vflare.org, linux-block@vger.kernel.org,
+	josef@toxicpanda.com, linux-fsdevel@vger.kernel.org, jack@suse.cz,
+	jlayton@kernel.org, dan.j.williams@intel.com, hch@infradead.org,
+	djwong@kernel.org, dri-devel@lists.freedesktop.org,
+	rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
+	hamohammed.sa@gmail.com, harry.yoo@oracle.com,
+	chris.p.wilson@intel.com, gwan-gyeong.mun@intel.com,
+	max.byungchul.park@gmail.com, boqun.feng@gmail.com,
+	longman@redhat.com, yunseong.kim@ericsson.com, ysk@kzalloc.com,
+	yeoreum.yun@arm.com, netdev@vger.kernel.org,
+	matthew.brost@intel.com, her0gyugyu@gmail.com, corbet@lwn.net,
+	catalin.marinas@arm.com, bp@alien8.de, dave.hansen@linux.intel.com,
+	x86@kernel.org, hpa@zytor.com, luto@kernel.org,
+	sumit.semwal@linaro.org, gustavo@padovan.org,
+	christian.koenig@amd.com, andi.shyti@kernel.org, arnd@arndb.de,
+	lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com,
+	rppt@kernel.org, surenb@google.com, mcgrof@kernel.org,
+	petr.pavlu@suse.com, da.gomez@kernel.org, samitolvanen@google.com,
+	paulmck@kernel.org, frederic@kernel.org, neeraj.upadhyay@kernel.org,
+	joelagnelf@nvidia.com, josh@joshtriplett.org, urezki@gmail.com,
+	mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+	qiang.zhang@linux.dev, juri.lelli@redhat.com,
+	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+	bsegall@google.com, mgorman@suse.de, vschneid@redhat.com,
+	chuck.lever@oracle.com, neil@brown.name, okorniev@redhat.com,
+	Dai.Ngo@oracle.com, tom@talpey.com, trondmy@kernel.org,
+	anna@kernel.org, kees@kernel.org, bigeasy@linutronix.de,
+	clrkwllms@kernel.org, mark.rutland@arm.com, ada.coupriediaz@arm.com,
+	kristina.martsenko@arm.com, wangkefeng.wang@huawei.com,
+	broonie@kernel.org, kevin.brodsky@arm.com, dwmw@amazon.co.uk,
+	shakeel.butt@linux.dev, ast@kernel.org, ziy@nvidia.com,
+	yuzhao@google.com, baolin.wang@linux.alibaba.com,
+	usamaarif642@gmail.com, joel.granados@kernel.org,
+	richard.weiyang@gmail.com, geert+renesas@glider.be,
+	tim.c.chen@linux.intel.com, linux@treblig.org,
+	alexander.shishkin@linux.intel.com, lillian@star-ark.net,
+	chenhuacai@kernel.org, francesco@valla.it,
+	guoweikang.kernel@gmail.com, link@vivo.com, jpoimboe@kernel.org,
+	masahiroy@kernel.org, brauner@kernel.org,
+	thomas.weissschuh@linutronix.de, oleg@redhat.com, mjguzik@gmail.com,
+	andrii@kernel.org, wangfushuai@baidu.com, linux-doc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+	linaro-mm-sig@lists.linaro.org, linux-i2c@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
+	rcu@vger.kernel.org, linux-nfs@vger.kernel.org,
+	linux-rt-devel@lists.linux.dev
+Subject: Re: [PATCH v17 44/47] dept: introduce APIs to set page usage and use
+ subclasses_evt for the usage
+Message-ID: <20251201071827.GA70324@system.software.com>
+References: <20251002081247.51255-1-byungchul@sk.com>
+ <20251002081247.51255-45-byungchul@sk.com>
+ <20251119105312.GA11582@system.software.com>
+ <aR3WHf9QZ_dizNun@casper.infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251130-make-csiphy-status-macro-cross-platform-v1-1-334664c6cf70@oss.qualcomm.com>
-To: Loic Poulain <loic.poulain@oss.qualcomm.com>,
-        Robert Foss <rfoss@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>, Todor Tomov <todor.too@gmail.com>,
-        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc: linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org,
-        Hangxiang Ma <hangxiang.ma@oss.qualcomm.com>
-X-Mailer: b4 0.14.3
-X-Proofpoint-ORIG-GUID: JMXQbzBbcA-6kD3T5KBjigx3920oqnLG
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjAxMDA1MCBTYWx0ZWRfXx9fTb+KB7hdv
- 3fR5MXnGE2A7K6qi37Rh4XIlcdq7d0oWkBsZ3sOlVJbCIFVsuV95BLQPB2tSfTsEyDuqXCPqSd/
- eMGAuhYIFt3Nmdzn6KekUHn3ejQJA5z7SVJ1WSNTJOOOelghzH4UHA4jRGOZjaW3BmuMZUlm5Sm
- 20U2Lo45hEO96YocnAowuHUG46d9AXajXTbDIxilxqkT+D89orIqFQYDayDecIpkbaOkbiRwOPF
- 0kfpDdM8uL9LZNhWPYf61nBXIn3m1qGKGLI+9f9M2wM4L84PYb2RNl8kcXcv3X+YpH6CGhwC0Ci
- PxlnjJ5C48nGQHLYoU1pC2XdllvhqmYudg/2T6dgPBKrIhE7KXJsD9C2pQ2/D91LPyq3bmm9+ic
- bmblm/IX3rhAx1PWPSe5vbQZ9ZA0iA==
-X-Authority-Analysis: v=2.4 cv=FdQ6BZ+6 c=1 sm=1 tr=0 ts=692d350c cx=c_pps
- a=Oh5Dbbf/trHjhBongsHeRQ==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
- a=IkcTkHD0fZMA:10 a=wP3pNCr1ah4A:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=EUspDBNiAAAA:8 a=edmtyYkapI0WV9tsjtgA:9
- a=QEXdDO2ut3YA:10 a=_Vgx9l1VpLgwpw_dHYaR:22
-X-Proofpoint-GUID: JMXQbzBbcA-6kD3T5KBjigx3920oqnLG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-28_08,2025-11-27_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 clxscore=1015 spamscore=0 phishscore=0 malwarescore=0
- lowpriorityscore=0 impostorscore=0 bulkscore=0 priorityscore=1501
- suspectscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2510240001
- definitions=main-2512010050
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aR3WHf9QZ_dizNun@casper.infradead.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Brightmail-Tracker: H4sIAAAAAAAAA02SbUxTZxTHfe597tPbjppr5+QO3OLqFjYcbDg+nET34pLF6zcz/KDbktnI
+	jXQrxRRFWGLCpih2jkGXQiwvwTK6hncBCYidlWGxvsSCDDoDxWoHY6WSCK1vtbV3xsxvv5z/
+	P7+ckxyWVtWTFFar3y8a9BqdmiiwIpRkzdi2JUP7/qm5JAgvl2Oo62wj4OloRTATLkdQNhDH
+	8MTkkkHc4UJQPWqiYakrRiD4xz0EZn+AwKLtBIL5i1thMrKAwBaIURBwHkNQY/YgcNh/IHAj
+	sBLGw4sE3OYfCYRG6yi420WgvtaE4HBTJ4HRYJSCqWoTBTO2WQw18wSqTydDbc1hCh7aWmRw
+	tWkKQ9SfBfHGAnC1zslg+mczBrdvgoHgrInAzMhRBpbH/RSUnw1j6L6TCBw3N8DJhikC5xxu
+	DOVPlhG4+m9TcKLrDAO+tjgDpbX3GRhr9WC44rqE4frZdgaaJ0cp8N/yMtBz7SoNkYpU8FT9
+	xIC38m8E7XetidMjNhps4UUZjDkbqU9yhftlFVho6emjhLaGNiQ8fmRCQlllgo70HBSarywQ
+	4VH4TyJUXcsQBizTMqGx+4BwZDjECD32dKHp3Dwl3Ax+KHS3HCfbN3yh2Jwr6rRFouG9j3Yr
+	8qYrl/G+wdeLLWMfl6LZZCOSszyXzdtb/eQ5zw0ZKYkx9yZf7/DJJCZcGu/1PqSNiGVXc2/z
+	C70bjUjB0pw1lW+/fIGROi9zOj4y3PFfX8kBf+P3DloqqbhBxI8fPc08C1bx7pMBLDHNpfPe
+	2DwlSWkulf8txkpjeWKHv6zHaIlf4dbzzr4RSvLw3G05750M0c8WfZW/YPfiSsRZXtBaXtBa
+	/tc2IroFqbT6onyNVpedmVei1xZn7inI70aJp7Udin7Zj+55coYQxyJ1kvISvKtVMZqiwpL8
+	IcSztHq1Ul2cGClzNSXfiYaCrw0HdGLhEEplsTpZuTFyMFfF7dXsF78VxX2i4XlKsfKUUtQ8
+	8XiJ8772zs6R6Bvu2L++rcKEHHfZ085s7t/DpH1a7ZFT/3yQs2bTul2bhCyS6VxheaniutM9
+	8v3ayRWXnb+49Au/horOH+q9deer7OBSThyqjNt2ftbQa36rJnJqQCXboewbXptdxzWtubjl
+	85S8CiZ9av3gg3XWVbs7v3mwMupT48I8TVY6bSjUPAXJGGhesAMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Sa0xTZxjOd77vXOhWc8ZYOIFkP+rM0Igbi0ve3S8/1i8zW/ZvixpHM462
+	tlzSYge6LVxkYFlYaVKILUxWY2VQELlFJCUVJ5s6xFIvbLMi2IGMW8IKCpR27ZZl/nnzvM/l
+	zfPjFXByhE0TdHmFsjFPY1BxCqL48LXyTPpOpu7FR20quFXqI7AcriLQcMbDQVXncRaut7ci
+	GF+uQvBw3Ymhoi9GYMM2xEN49XceYt4hBHV+GwZPdykDf3VEOZi9uITAPhHioH6mlMCi+xsE
+	jiknDzOX1DA/3s9CLDjNwO2VOQTuUJSBkK8SwUadHk64ujhYHx7BUG+/juD7iSCGBx1xsXvo
+	LgJvcxkHf1h7MARCm+DG8iIHl+3VHMz7GxhY6OCgqczLQqPThqD85BkO6ho7CfTdO8+DfzbC
+	wJ06GwOtnR/AuHuKwFWri4n3i7vOpoKzvpyJjwcM2Nv6GVh1t/Dwy8k7BNwlW8A5HGBhstnB
+	Q2QiC2JN+TDUOs1D8Fs7gfb5EfZtO6IPK2oIbenqZWjF6AZHPd95EF1fsyEaPlWOaYU1vl6c
+	W8T0aNfn9NTVOY6uLd/kqHelidArLonWDmfSPkeQp0cHfuM/enW34vUc2aAzy8YX3sxWaIPW
+	MCnof7bIMfpWCZpKtaAkQRJ3StODFiaBific1Oi9yycwJz4vjY2tYgsShBQxQ5rrfsmCFAIW
+	XelS25ULbMLztGiQVn5s/8evFEEKDLTjhClZ7EfSja/Psv8KT0mXj4dIAmNxmzQWnWESR7GY
+	Lp2OCgk6Kd7hV1clTuBnxM2Sr/cnxoqUjsfSjsfSjv/TTQi3oBRdnjlXozO8vMOk1xbn6Yp2
+	fJaf24niP+n+MlJ7DoUD6kEkCkj1pNKXtV2XzGrMpuLcQSQJWJWiVBXFKWWOpviwbMz/1HjI
+	IJsGUbpAVKnK9z+Ws5PFA5pCWS/LBbLxP5URktJK0KUv+gw379uqLT0/74vM9h47uLB1tDn7
+	vVfozO0cbYqbS8uoqVnV7iI7B7aqf2iIXdsYOFK2J0N9f+Keb61Mv3tL4ea9ud1Lfx6RGw9W
+	F+yvqZy/9u4bS/vMh4NVZv9X0U88PXseHTpREqhd2zSyt239Qv2Cfpf3Ftq/3R89P3nsiUm1
+	ipi0mqxt2GjS/A2TVMQejwMAAA==
+X-CFilter-Loop: Reflected
 
-The current value of '0xb0' that represents the offset to the status
-registers within the common registers of the CSIPHY has been changed on
-the newer SOCs and it requires generalizing the macro using a new
-variable 'common_status_offset'. This variable is initialized in the
-csiphy_init() function.
+On Wed, Nov 19, 2025 at 02:37:17PM +0000, Matthew Wilcox wrote:
+> On Wed, Nov 19, 2025 at 07:53:12PM +0900, Byungchul Park wrote:
+> > On Thu, Oct 02, 2025 at 05:12:44PM +0900, Byungchul Park wrote:
+> > > False positive reports have been observed since dept works with the
+> > > assumption that all the pages have the same dept class, but the class
+> > > should be split since the problematic call paths are different depending
+> > > on what the page is used for.
+> > >
+> > > At least, ones in block device's address_space and ones in regular
+> > > file's address_space have exclusively different usages.
+> > >
+> > > Thus, define usage candidates like:
+> > >
+> > >    DEPT_PAGE_REGFILE_CACHE /* page in regular file's address_space */
+> > >    DEPT_PAGE_BDEV_CACHE    /* page in block device's address_space */
+> > >    DEPT_PAGE_DEFAULT       /* the others */
+> >
+> > 1. I'd like to annotate a page to DEPT_PAGE_REGFILE_CACHE when the page
+> >    starts to be associated with a page cache for fs data.
+> >
+> > 2. And I'd like to annotate a page to DEPT_PAGE_BDEV_CACHE when the page
+> >    starts to be associated with meta data of fs e.g. super block.
+> >
+> > 3. Lastly, I'd like to reset the annotated value if any, that has been
+> >    set in the page, when the page ends the assoication with either page
+> >    cache or meta block of fs e.g. freeing the page.
+> >
+> > Can anyone suggest good places in code for the annotation 1, 2, 3?  It'd
+> > be totally appreciated. :-)
+> 
+> I don't think it makes sense to track lock state in the page (nor
+> folio).  Partly bcause there's just so many of them, but also because
+> the locking rules don't really apply to individual folios so much as
+> they do to the mappings (or anon_vmas) that contain folios.
 
-Signed-off-by: Hangxiang Ma <hangxiang.ma@oss.qualcomm.com>
----
-This change introduces common_status_offset to replace the hardcoded
-offset in CSIPHY_3PH_CMN_CSI_COMMON_STATUSn.
----
- .../media/platform/qcom/camss/camss-csiphy-3ph-1-0.c  | 19 +++++++++++++------
- drivers/media/platform/qcom/camss/camss-csiphy.h      |  1 +
- 2 files changed, 14 insertions(+), 6 deletions(-)
+I've been trying to fully understand what you meant but maybe failed.
 
-diff --git a/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c b/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
-index a229ba04b158..9b6a0535cdf8 100644
---- a/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
-+++ b/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
-@@ -46,7 +46,8 @@
- #define CSIPHY_3PH_CMN_CSI_COMMON_CTRL5_CLK_ENABLE	BIT(7)
- #define CSIPHY_3PH_CMN_CSI_COMMON_CTRL6_COMMON_PWRDN_B	BIT(0)
- #define CSIPHY_3PH_CMN_CSI_COMMON_CTRL6_SHOW_REV_ID	BIT(1)
--#define CSIPHY_3PH_CMN_CSI_COMMON_STATUSn(offset, n)	((offset) + 0xb0 + 0x4 * (n))
-+#define CSIPHY_3PH_CMN_CSI_COMMON_STATUSn(offset, common_status_offset, n) \
-+	((offset) + (common_status_offset) + 0x4 * (n))
- 
- #define CSIPHY_DEFAULT_PARAMS		0
- #define CSIPHY_LANE_ENABLE		1
-@@ -714,13 +715,17 @@ static void csiphy_hw_version_read(struct csiphy_device *csiphy,
- 	       CSIPHY_3PH_CMN_CSI_COMMON_CTRLn(regs->offset, 6));
- 
- 	hw_version = readl_relaxed(csiphy->base +
--				   CSIPHY_3PH_CMN_CSI_COMMON_STATUSn(regs->offset, 12));
-+		CSIPHY_3PH_CMN_CSI_COMMON_STATUSn(regs->offset,
-+						  regs->common_status_offset, 12));
- 	hw_version |= readl_relaxed(csiphy->base +
--				   CSIPHY_3PH_CMN_CSI_COMMON_STATUSn(regs->offset, 13)) << 8;
-+		CSIPHY_3PH_CMN_CSI_COMMON_STATUSn(regs->offset,
-+						  regs->common_status_offset, 13)) << 8;
- 	hw_version |= readl_relaxed(csiphy->base +
--				   CSIPHY_3PH_CMN_CSI_COMMON_STATUSn(regs->offset, 14)) << 16;
-+		CSIPHY_3PH_CMN_CSI_COMMON_STATUSn(regs->offset,
-+						  regs->common_status_offset, 14)) << 16;
- 	hw_version |= readl_relaxed(csiphy->base +
--				   CSIPHY_3PH_CMN_CSI_COMMON_STATUSn(regs->offset, 15)) << 24;
-+		CSIPHY_3PH_CMN_CSI_COMMON_STATUSn(regs->offset,
-+						  regs->common_status_offset, 15)) << 24;
- 
- 	dev_dbg(dev, "CSIPHY 3PH HW Version = 0x%08x\n", hw_version);
- }
-@@ -749,7 +754,8 @@ static irqreturn_t csiphy_isr(int irq, void *dev)
- 	for (i = 0; i < 11; i++) {
- 		int c = i + 22;
- 		u8 val = readl_relaxed(csiphy->base +
--				       CSIPHY_3PH_CMN_CSI_COMMON_STATUSn(regs->offset, i));
-+			CSIPHY_3PH_CMN_CSI_COMMON_STATUSn(regs->offset,
-+							  regs->common_status_offset, i));
- 
- 		writel_relaxed(val, csiphy->base +
- 			       CSIPHY_3PH_CMN_CSI_COMMON_CTRLn(regs->offset, c));
-@@ -989,6 +995,7 @@ static int csiphy_init(struct csiphy_device *csiphy)
- 
- 	csiphy->regs = regs;
- 	regs->offset = 0x800;
-+	regs->common_status_offset = 0xb0;
- 
- 	switch (csiphy->camss->res->version) {
- 	case CAMSS_845:
-diff --git a/drivers/media/platform/qcom/camss/camss-csiphy.h b/drivers/media/platform/qcom/camss/camss-csiphy.h
-index 895f80003c44..2d5054819df7 100644
---- a/drivers/media/platform/qcom/camss/camss-csiphy.h
-+++ b/drivers/media/platform/qcom/camss/camss-csiphy.h
-@@ -90,6 +90,7 @@ struct csiphy_device_regs {
- 	const struct csiphy_lane_regs *lane_regs;
- 	int lane_array_size;
- 	u32 offset;
-+	u32 common_status_offset;
- };
- 
- struct csiphy_device {
+FWIW, dept is working based on classification, not instance by instance,
+that is similar to lockdep.  This patch is for resolving issues that
+might come from the fact that there is a **single class** for PG_locked,
+by splitting the class to several ones according to their usages.
 
----
-base-commit: 076fb8624c282c10aa8add9a4ae2d9354d2594cb
-change-id: 20251021-make-csiphy-status-macro-cross-platform-5390dc128aee
+> If you're looking to find deadlock scenarios, I think it makes more
+> sense to track all folio locks in a given mapping as the same lock
+> type rather than track each folio's lock status.
+> 
+> For example, let's suppose we did something like this in the
+> page fault path:
+> 
+> Look up and lock a folio (we need folios locked to insert them into
+> the page tables to avoid a race with truncate)
+> Try to allocate a page table
+> Go into reclaim, attempt to reclaim a folio from this mapping
 
-Best regards,
--- 
-Hangxiang Ma <hangxiang.ma@oss.qualcomm.com>
+I think you are talking about nested lock patterns involving PG_locked.
 
+Even though dept can do much more jobs than just tracking nested lock
+patterns within a single context, of course, nested lock patterns
+involving PG_locked should be handled appropriately, maybe with the
+useful information you gave.  When I work on handling nested locks esp.
+involving PG_locked, I will try to get you again.  Thanks.
+
+However, I have no choice but to keep this approach for the **single
+class** issue.  Feel free to ask if any.
+
+	Byungchul
+
+> We ought to detect that as a potential deadlock, regardless of which
+> folio in the mapping we attempt to reclaim.  So can we track folio
+> locking at the mapping/anon_vma level instead?
+> 
+> ---
+> 
+> My current understanding of folio locking rules:
+> 
+> If you hold a lock on folio A, you can take a lock on folio B if:
+> 
+> 1. A->mapping == B->mapping and A->index < B->index
+>    (for example writeback; we take locks on all folios to be written
+>     back in order)
+> 2. !S_ISBLK(A->mapping->host) and S_ISBLK(B->mapping->host)
+> 3. S_ISREG(A->mapping->host) and S_ISREG(B->mapping->host) with
+>    inode_lock() held on both and A->index < B->index
+>    (the remap_range code)
 
