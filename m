@@ -1,124 +1,174 @@
-Return-Path: <linux-i2c+bounces-14358-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14360-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7FFE2C9A87C
-	for <lists+linux-i2c@lfdr.de>; Tue, 02 Dec 2025 08:44:32 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id C82C5C9AA04
+	for <lists+linux-i2c@lfdr.de>; Tue, 02 Dec 2025 09:12:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 73B034E0222
-	for <lists+linux-i2c@lfdr.de>; Tue,  2 Dec 2025 07:44:29 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id A98A54E4A73
+	for <lists+linux-i2c@lfdr.de>; Tue,  2 Dec 2025 08:11:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAA0B3019CC;
-	Tue,  2 Dec 2025 07:44:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 113DF221FB4;
+	Tue,  2 Dec 2025 08:11:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c4j/rUvJ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QsPy9Mrs"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54042302168;
-	Tue,  2 Dec 2025 07:44:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAEE5305E24
+	for <linux-i2c@vger.kernel.org>; Tue,  2 Dec 2025 08:11:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764661464; cv=none; b=IRgrWLL2ikYr1SgcULMsm1/hcDvFDzQWsYoaP1ErIpy4LcP45qS9R5rdHNtS2xf7uMCviL0tFQaKWqeMr7G5nw/R1Vl/BQOdMbTmMyvp7qkj22Qg1als2F+DuKPHL6jFSYWoCzXOACTVc2BJok9W5R7bVpIAosKU3QjDpBL+rX0=
+	t=1764663073; cv=none; b=sDGQcfjd21d7Gw6BU/rV1jEkhxy4cKOJ/+m//EL4yTrRs5x9BWiuBOQ4ZMiVcPYmV6viLt2CJ8C7qgfYQkZyY06SkSYmXB13eSdN+3FcuaZ2kNtqxoZCqOyifIwwsaeZtPrG3h4tazt13JnV20aqwyWtV+cNjB1vtchzhtiQrZw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764661464; c=relaxed/simple;
-	bh=/hjV7aqFolXgiChCI+abaRPgnYBT6FMpi4NBFF/1/w4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=vDo6rSG0tXELJkPiW6utLFmNfrwWyXo1HsIqTg9uS5rd4xAPV6FMrEjKF9AaPysotfNSX0cT9TJInccKDZioFgrjVbHDNeFMC2qe8B69+kaIOI/1OC+3yrYZGNT4TJJQNLM7uslWnzmAKRS26w3QlRXw5k6xHQDHfOHlUOsGupo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c4j/rUvJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8ACC0C116B1;
-	Tue,  2 Dec 2025 07:44:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764661463;
-	bh=/hjV7aqFolXgiChCI+abaRPgnYBT6FMpi4NBFF/1/w4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=c4j/rUvJrqtiXnpwr/AY9K9GNxVEwzYBh91c9zOh3jfZ2CNkpRSYkOZX/xhH4KfNe
-	 2A8ZsNe61EmclAdh2o4Og6YKIDXcY4Qwle4S6AGoH+ObO6AOskY0owD35gu5m6Ovmu
-	 hdsL9zLBGvGELYBnQxTY6tYTytYNagKgDq53gGBVCA6eJtjRRmWyrD+YTLdoYCW+eg
-	 gR3nVNFf1ri9DkVSkhqxHSrCaST/fInFQdab5v7WVdPs2noL8rY7FWLlRubzKf8bSX
-	 AnS+O0T4mKRfJybf/V73LVPb9UtgGHl32jlRXrTY11gb2MD9xTbkI4xznerqVifXOH
-	 0aXkK8jcnRWdw==
-Message-ID: <cbf9b0db-d1e4-4934-9961-0deb5e4fd001@kernel.org>
-Date: Tue, 2 Dec 2025 08:44:18 +0100
+	s=arc-20240116; t=1764663073; c=relaxed/simple;
+	bh=4QBKB6Il0FtSYd/ap/LeXMOphioqXNw9dMPyFWJ8QJI=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=krOJ4kwz5ijtkeWzfwvhLWj/mYUg3FyZZGZBPeSOrmk8I7aXEsw00+aBfH08BreqIeo9Ns613sw6ST0u+noh4YM5JtUx4jlI7sMUedT229Jy32hmUWIa4KLxurjhjpXnGFxNXtY+JSKJPQqU45rocVUpBVSnXy2zIeMr3T5Gx/0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QsPy9Mrs; arc=none smtp.client-ip=209.85.167.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-5959da48139so5534551e87.1
+        for <linux-i2c@vger.kernel.org>; Tue, 02 Dec 2025 00:11:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1764663068; x=1765267868; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dc0V6uSK5r5A6NQwmKa55NukJxjqQrLEAaKU2mAU2+s=;
+        b=QsPy9Mrs3ntd2vBB3gHW5+w5Vuq5eMUPpuIiAArPz65YPxnHdbdNN/hlmLxp7j+cYA
+         KgdHXp8/haCeykxWwXc4pQkI+108ld9ITbHZJfSl9pk+o4xAqbrzsJhqFSa75MUQTTtb
+         Smc5L+l4KejzkkEayDzWX5an6vNHiu+2CdfGLankfazQKLzrFjcDkHnQdw7sTuXV6ZlW
+         0UJ5v9SfM9pH6TPeRxJn3FVpopfnJ/6XoIgJNCuqNXk3GOhAWX5QMoasr0ehIq7k9uR6
+         Harm3xOOpN1ou9mwAe1IJxBC6ejamQEiQlh4QhAj8CEJ1UdV8GR7RTQj0UUlpLqvWhPM
+         KshA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764663068; x=1765267868;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dc0V6uSK5r5A6NQwmKa55NukJxjqQrLEAaKU2mAU2+s=;
+        b=p19g2GfXR37LuLdcIFLbAE+KFo9MykIyG3Ntk+OM8MqzEPr5GTJVa6jJM+A9hWqd+u
+         3Ryyt6yPTSeyhoTJYEkfftN/KS/U96ewQHlUC6H73RK0PGKW7CfT2RPatpJ6Q1ey3sHb
+         /zcCRdVe2wo1x0fuAwA6rdQrEBwILQGseAnYg3CY1Clc+Lw61+u6YXQwwGYp33ghkuwi
+         lspfoF38gJclvmZtIu/5f2xAFB9x46yqha9bQoZtKaVxGBqS+6vNt5lbh45mKMBew6j3
+         1nbNCNmkWKfuZ9tpWuw+5/3J64nzrOMNtts0ik/8V4t7cFtkFAAmigxRj1vEJrgwoCW9
+         blCg==
+X-Gm-Message-State: AOJu0YwZ5eiKSoM8zYl1XW6YLokMp9GpAJ3NDc2vMP/B9WvaVU03sK4i
+	rJvjUe1dBdbEUIE0VyJTX3A/HMdkcjj/tcSUCT25AENphw1maxaOKDpB
+X-Gm-Gg: ASbGncuDiqRDuLUuAmkrKdl9PN1sDqwLzeccotIgnxIRkpgZf9rQVBrQb+eliN9Jrf+
+	9Yk6V2d2DDHOWo+7zOnb5LDCdGS0Lxf2P+TB6yZsCK/aideroqIcZ3H7TSPCOWJ9qbhZ7CgaII2
+	H2cWHNAv834BtZXjYqPTpohd7RSEeL0CL8MGBWBeXNgHA7ZDi6mCe04279QeZlovU5AFWD0aFqR
+	X4FdO1haFXhm6uqVQZlMP0U/o22PWX81oFwCYtRIeLF+9FjywKhr9O1R6e7tWNRrlZJ4s9TJrqQ
+	oxoL61lY95GNVb2Y/vj3UTnpk5RnnUOqlhRDsc2PAPBXFpX8OIsjkkddwxoWW6co3+OfUfZzEfW
+	R5Uq0Z1UEuNLLURF/b70Zpri4eW+cKPAzWtXj8Ok8bNyYYTs14pFhzCJkWKiirBtYT9asIqXjhL
+	bZnmy+tCJ6YuzLwn/06sb30xWRl9BCVPOg3RZFJLAxGdTrwiYlam2EUi1/
+X-Google-Smtp-Source: AGHT+IGcS7CAMpFll0HDY1O5Zc12OFfNXQCkOaMz5QDXoS3vLroZPpTO+QAD1qGXjYgUcQjKN8+L0Q==
+X-Received: by 2002:a05:6512:238c:b0:595:81c1:c55 with SMTP id 2adb3069b0e04-596b4e5291amr9885439e87.8.1764663067375;
+        Tue, 02 Dec 2025 00:11:07 -0800 (PST)
+Received: from [192.168.1.168] (83-233-6-197.cust.bredband2.com. [83.233.6.197])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-596bfa4f8a2sm4342412e87.88.2025.12.02.00.11.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Dec 2025 00:11:06 -0800 (PST)
+From: Marcus Folkesson <marcus.folkesson@gmail.com>
+Subject: [PATCH RESEND v3 0/5] I2C Mux per channel bus speed
+Date: Tue, 02 Dec 2025 09:09:47 +0100
+Message-Id: <20251202-i2c-mux-v3-0-877dcf478a9f@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/4] dt-bindings: eeprom: at24: Add compatible for Belling
- BL24C16F
-To: FUKAUMI Naoki <naoki@radxa.com>, heiko@sntech.de
-Cc: brgl@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, dsimic@manjaro.org, didi.debian@cknow.org,
- wens@kernel.org, nicolas.frattaroli@collabora.com,
- detlev.casanova@collabora.com, stephen@radxa.com,
- sebastian.reichel@collabora.com, linux-i2c@vger.kernel.org,
- devicetree@vger.kernel.org, linux-rockchip@lists.infradead.org
-References: <20251202045655.154543-1-naoki@radxa.com>
- <20251202045655.154543-3-naoki@radxa.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20251202045655.154543-3-naoki@radxa.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+ Peter Rosin <peda@axentia.se>, 
+ Michael Hennerich <michael.hennerich@analog.com>, 
+ Bartosz Golaszewski <brgl@bgdev.pl>, Andi Shyti <andi.shyti@kernel.org>
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, 
+ Marcus Folkesson <marcus.folkesson@gmail.com>, 
+ Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2666;
+ i=marcus.folkesson@gmail.com; h=from:subject:message-id;
+ bh=4QBKB6Il0FtSYd/ap/LeXMOphioqXNw9dMPyFWJ8QJI=;
+ b=owEBbQKS/ZANAwAKAYiATm9ZXVIyAcsmYgBpLp78pYwoet71tdqujVKWQY+kM7X6WyKFAkliF
+ Xjst0GN/jCJAjMEAAEKAB0WIQQFUaLotmy1TWTBLGWIgE5vWV1SMgUCaS6e/AAKCRCIgE5vWV1S
+ Mv1QD/wMhwHoL7P0C1vQazs6dCzVgyo/k425LFs4zXAn+5CKQ2bz66GMez+ydkttdb5SJBWqSlQ
+ 8MZcZ9f3oMizlyyRkpWSXhfaxWaNjOCX6MZhXu7nblI3jQQQ0xODz3Sr74G+W2iuGJ74gEO4ye9
+ s7+LGvIJ6eJ8DwyRwkYQmaJQA6mRfY6SxH2dMHhPOUNCCRf4QuA4AEnejDhk8QIsqzKZcRpYK4Q
+ 4+W88jRIDFUF4hwbml/Yc+LtLaTJjdWeLKDVatv+/Dq6/RhUHsF8u723mt3+5li4rUk/FVN/fVq
+ 0RMarYoOByISWXzB9D8cbcvJt22Voc5ab3yxWBBgRKApHR7v20CGTG7q6LKq0ONKKkmbZl12OGW
+ Iwy9rB3SDae4gnConpK+1+qmfZQ61MmlnRhbIBO/P1tIZRHh3t/O80FapUz3uP+WTJqvwqn4Oxi
+ CrNZl/bJCNlJrT2OWTJWoTW0D92OD2AfVTsMg+OmDrtlUDthA5U5bDXDotDCwQraaM24TA3KS3J
+ 69tXDM9D+ThyovYITVrMauPapqr2Sp8Taf6RDm3S8b0gJN9GoDkJunVEfXEn+REu4uBJ1brW1AE
+ TLV5T9QspmWzZdq3bT5LzBWgYiTNw0b77foXsHAjZtZyss0T2FzOuJaA5ia5H/M2UGVs+NXV0jP
+ Qqk6GHTaggq6Vlw==
+X-Developer-Key: i=marcus.folkesson@gmail.com; a=openpgp;
+ fpr=AB91D46C7E0F6E6FB2AB640EC0FE25D598F6C127
 
-On 02/12/2025 05:56, FUKAUMI Naoki wrote:
-> Add the compatible for Belling BL24C16F 16Kb EEPROM.
-> 
-> Signed-off-by: FUKAUMI Naoki <naoki@radxa.com>
-> ---
+This was a RFC on how to implement a feature to have different bus
+speeds on different channels with an I2C multiplexer/switch.
+As no major complaints on the design came up during the review, I
+decided to submit the series without the RFC tag.
 
-That's just one patch. No need for two one liners, just unneeded effort
-in acking.
+The benefit with this feature is that you may group devices after
+the fastest bus speed they can handle.
+A real-world example is that you could have e.g. a display running @400kHz
+and a smart battery running @100kHz using the same I2C controller.
+
+There are many corner cases where this may cause a problem for some
+hardware topologies. I've tried to describe those I could think of
+in the documentation, see Patch #5.
+
+E.g. one risk is that if the mux driver does not disconnect channels
+when Idle, this may cause a higher frequency to "leak" through to
+devices that are supposed to run at lower bus speed.
+This is not only a "problem" for changing bus speed but could also be
+an issue for potential address conflicts.
+
+The implementation is split up into several patches:
+
+Patch #1 Introduce a callback for the i2c controller to set bus speed
+Patch #2 Introduce functionality to adjust bus speed depending on mux
+         channel.
+Patch #3 Cleanup i2c-davinci driver a bit to prepare it for set_clk_freq
+Parch #4 Implement set_clk_freq for the i2c-davinci driver
+Parch #5 Update documentation with this feature
+
+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+---
+Changes in v3:
+- Return -EINVAL if channel is faster than parent (kernel test robot)
+- Link to v2: https://lore.kernel.org/r/20251002-i2c-mux-v2-0-b698564cd956@gmail.com
+
+Changes in v2:
+- Changed bus_freq field to bus_freq_hz in davinci_i2c_dev (Bartosz Golaszewski)
+- Removed idle_state from mux core (Peter Rosin)
+- Link to v1: https://lore.kernel.org/r/20250922-i2c-mux-v1-0-28c94a610930@gmail.com
+
+---
+Marcus Folkesson (5):
+      i2c: core: add callback to change bus frequency
+      i2c: mux: add support for per channel bus frequency
+      i2c: davinci: calculate bus freq from Hz instead of kHz
+      i2c: davinci: add support for setting bus frequency
+      docs: i2c: i2c-topology: add section about bus speed
+
+ Documentation/i2c/i2c-topology.rst | 176 +++++++++++++++++++++++++++++++++++++
+ drivers/i2c/busses/i2c-davinci.c   |  41 ++++++---
+ drivers/i2c/i2c-mux.c              | 116 +++++++++++++++++++++---
+ include/linux/i2c.h                |  13 +++
+ 4 files changed, 324 insertions(+), 22 deletions(-)
+---
+base-commit: 22f20375f5b71f30c0d6896583b93b6e4bba7279
+change-id: 20250913-i2c-mux-b0063de2ae4d
 
 Best regards,
-Krzysztof
+-- 
+Marcus Folkesson <marcus.folkesson@gmail.com>
+
 
