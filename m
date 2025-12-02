@@ -1,80 +1,82 @@
-Return-Path: <linux-i2c+bounces-14360-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14359-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id C82C5C9AA04
-	for <lists+linux-i2c@lfdr.de>; Tue, 02 Dec 2025 09:12:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F829C9A9FE
+	for <lists+linux-i2c@lfdr.de>; Tue, 02 Dec 2025 09:12:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id A98A54E4A73
-	for <lists+linux-i2c@lfdr.de>; Tue,  2 Dec 2025 08:11:20 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id ECD714E49A3
+	for <lists+linux-i2c@lfdr.de>; Tue,  2 Dec 2025 08:11:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 113DF221FB4;
-	Tue,  2 Dec 2025 08:11:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC2423064A5;
+	Tue,  2 Dec 2025 08:11:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QsPy9Mrs"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e2tR9mKs"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAEE5305E24
-	for <linux-i2c@vger.kernel.org>; Tue,  2 Dec 2025 08:11:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D557E221FB4
+	for <linux-i2c@vger.kernel.org>; Tue,  2 Dec 2025 08:11:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764663073; cv=none; b=sDGQcfjd21d7Gw6BU/rV1jEkhxy4cKOJ/+m//EL4yTrRs5x9BWiuBOQ4ZMiVcPYmV6viLt2CJ8C7qgfYQkZyY06SkSYmXB13eSdN+3FcuaZ2kNtqxoZCqOyifIwwsaeZtPrG3h4tazt13JnV20aqwyWtV+cNjB1vtchzhtiQrZw=
+	t=1764663073; cv=none; b=qKlAtjpY7ecvyEUo+K4FklONPFYAzj8lZpi/nQe9SMzP7t+FuR3e6SbZgWeuZqb36y/feySrJ4i/FPtHvUq+xdYZrAtcwNJF2CjG78R5k3lkgVINgH6JfeuAsFsDSYaCqr2LuTLwEUUrCOdaUDjvnQHCHdtSQ+NSb2EcnfLQ1yQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1764663073; c=relaxed/simple;
-	bh=4QBKB6Il0FtSYd/ap/LeXMOphioqXNw9dMPyFWJ8QJI=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=krOJ4kwz5ijtkeWzfwvhLWj/mYUg3FyZZGZBPeSOrmk8I7aXEsw00+aBfH08BreqIeo9Ns613sw6ST0u+noh4YM5JtUx4jlI7sMUedT229Jy32hmUWIa4KLxurjhjpXnGFxNXtY+JSKJPQqU45rocVUpBVSnXy2zIeMr3T5Gx/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QsPy9Mrs; arc=none smtp.client-ip=209.85.167.53
+	bh=Nc5M9Z8FNun2aD78Xc5NFxJfLrb5FZRGRBm8Kv/u2lM=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=kUgxyjkrJUSRgbfnRa7yN6h1W3qI4Cn3q53mK29Pxkb/FzWoLPLP9ceCMSr4IFV3brOe5/7Qq3YeNgXJAYeIIqHkKf3SbimfZpz+dljEqRLxCtO/3Ixk1U5qA87wLQYshSS64gh+Ga0juln28mpexlq7960kf7hHpJf1xGgqe0k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e2tR9mKs; arc=none smtp.client-ip=209.85.167.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-5959da48139so5534551e87.1
-        for <linux-i2c@vger.kernel.org>; Tue, 02 Dec 2025 00:11:09 -0800 (PST)
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-59578e38613so3945644e87.2
+        for <linux-i2c@vger.kernel.org>; Tue, 02 Dec 2025 00:11:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764663068; x=1765267868; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=dc0V6uSK5r5A6NQwmKa55NukJxjqQrLEAaKU2mAU2+s=;
-        b=QsPy9Mrs3ntd2vBB3gHW5+w5Vuq5eMUPpuIiAArPz65YPxnHdbdNN/hlmLxp7j+cYA
-         KgdHXp8/haCeykxWwXc4pQkI+108ld9ITbHZJfSl9pk+o4xAqbrzsJhqFSa75MUQTTtb
-         Smc5L+l4KejzkkEayDzWX5an6vNHiu+2CdfGLankfazQKLzrFjcDkHnQdw7sTuXV6ZlW
-         0UJ5v9SfM9pH6TPeRxJn3FVpopfnJ/6XoIgJNCuqNXk3GOhAWX5QMoasr0ehIq7k9uR6
-         Harm3xOOpN1ou9mwAe1IJxBC6ejamQEiQlh4QhAj8CEJ1UdV8GR7RTQj0UUlpLqvWhPM
-         KshA==
+        d=gmail.com; s=20230601; t=1764663069; x=1765267869; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Hjv89plBIlsGmTTvLKA+ZN//B9WD1brqNLmFgcY68x8=;
+        b=e2tR9mKsSb3foVun4gGi2NWsDtprehBo1pCozywJCR4YRlYCpcuuPnbKs5dm6/plfm
+         Wi/EugFyazTqwMgmcSLpdgRNCgqD0tqmSZIkU/bISq/aliaXUL+FZubGSbOLMCrvXmda
+         416M6B+9v5twQSjo8VNgxIniUbyDNfSIYhcyRnHz2ikxX6bNFwpTVrGGH8F6R7oEnoEY
+         pWNZlVy987/MakkMcGyP5vssYBUS+/c2IGOs2na3Qx4cpwyibElZd8cXnZ7jU6gBqL5p
+         LmCpEx1kyRKJksshQCcVursoX0xiPvz3fwF44HcLetsHtN3IqX7eZh9BiSC/GXuWjtXD
+         TIfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764663068; x=1765267868;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dc0V6uSK5r5A6NQwmKa55NukJxjqQrLEAaKU2mAU2+s=;
-        b=p19g2GfXR37LuLdcIFLbAE+KFo9MykIyG3Ntk+OM8MqzEPr5GTJVa6jJM+A9hWqd+u
-         3Ryyt6yPTSeyhoTJYEkfftN/KS/U96ewQHlUC6H73RK0PGKW7CfT2RPatpJ6Q1ey3sHb
-         /zcCRdVe2wo1x0fuAwA6rdQrEBwILQGseAnYg3CY1Clc+Lw61+u6YXQwwGYp33ghkuwi
-         lspfoF38gJclvmZtIu/5f2xAFB9x46yqha9bQoZtKaVxGBqS+6vNt5lbh45mKMBew6j3
-         1nbNCNmkWKfuZ9tpWuw+5/3J64nzrOMNtts0ik/8V4t7cFtkFAAmigxRj1vEJrgwoCW9
-         blCg==
-X-Gm-Message-State: AOJu0YwZ5eiKSoM8zYl1XW6YLokMp9GpAJ3NDc2vMP/B9WvaVU03sK4i
-	rJvjUe1dBdbEUIE0VyJTX3A/HMdkcjj/tcSUCT25AENphw1maxaOKDpB
-X-Gm-Gg: ASbGncuDiqRDuLUuAmkrKdl9PN1sDqwLzeccotIgnxIRkpgZf9rQVBrQb+eliN9Jrf+
-	9Yk6V2d2DDHOWo+7zOnb5LDCdGS0Lxf2P+TB6yZsCK/aideroqIcZ3H7TSPCOWJ9qbhZ7CgaII2
-	H2cWHNAv834BtZXjYqPTpohd7RSEeL0CL8MGBWBeXNgHA7ZDi6mCe04279QeZlovU5AFWD0aFqR
-	X4FdO1haFXhm6uqVQZlMP0U/o22PWX81oFwCYtRIeLF+9FjywKhr9O1R6e7tWNRrlZJ4s9TJrqQ
-	oxoL61lY95GNVb2Y/vj3UTnpk5RnnUOqlhRDsc2PAPBXFpX8OIsjkkddwxoWW6co3+OfUfZzEfW
-	R5Uq0Z1UEuNLLURF/b70Zpri4eW+cKPAzWtXj8Ok8bNyYYTs14pFhzCJkWKiirBtYT9asIqXjhL
-	bZnmy+tCJ6YuzLwn/06sb30xWRl9BCVPOg3RZFJLAxGdTrwiYlam2EUi1/
-X-Google-Smtp-Source: AGHT+IGcS7CAMpFll0HDY1O5Zc12OFfNXQCkOaMz5QDXoS3vLroZPpTO+QAD1qGXjYgUcQjKN8+L0Q==
-X-Received: by 2002:a05:6512:238c:b0:595:81c1:c55 with SMTP id 2adb3069b0e04-596b4e5291amr9885439e87.8.1764663067375;
-        Tue, 02 Dec 2025 00:11:07 -0800 (PST)
+        d=1e100.net; s=20230601; t=1764663069; x=1765267869;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Hjv89plBIlsGmTTvLKA+ZN//B9WD1brqNLmFgcY68x8=;
+        b=fRY8xIwA4G9VXABP4XsuzJIK+slDLJScHQPzEpl3P42jdCfXg946GMEBZ22HlYj6St
+         yB5ihIBYU1AEnWkS98gWcGEUi5lRNPh/S6s2RcXdhmUAF/d6608LuS4CNfSyTu0p1aaX
+         F3HRYbml7vR3ocBmNYfZchY7KUUjcMNoJZ7xsSwPcn3czYJtS9iz7QfAC7ZjTufP/THX
+         xuKwqbck3Xu6oEYjLdUiJjQgeYVEqhXO5vPRTcjyPufvspqj6BTw/zlAAsR5zg+IFf4t
+         7aLb7CE/PryZZq3zUEdjEmIycqGVPdlqYXfdEwI+RualzuAMX4vPJzUr48GceEZ2vduZ
+         1HZw==
+X-Gm-Message-State: AOJu0Yygj57CoTzSNyh1NipATCOJpIYyhhJg2UuoIUtJK9N7kVRXvcRx
+	93i3RiNbSiqS2d/o+2A7v+1cPgtd5ON87DdQyoDCjQImM5BjiM9BIeBv
+X-Gm-Gg: ASbGncssjRV3EzILX8jLs+37RLxUkk8Lbcxvc3V9oa73tLbBlj+tqYGrQs7DAHd54cV
+	HWpht2wbKJp9gV7oFEr3gViWfoLe2BU7RO/Y9TEM4xYG0SkseFtdXILnixjZhlvnhZklgweIjuj
+	ZSMETwcYa54flwmhJhdlIE6bCHxrjwWNEkQV+YDAgNGG9KLxxiMQaV6WtkgcDcUwhADE1JDYwrx
+	MxQ8tlifWNxUs3LrRmjDwTibIdrwRVUZoQGSxRZJVXMPcPJhzFfj2NBRgegaqjU3P+9oCahrFXB
+	53UToXOx6sgxdncRFx7lHzJpeK60AQV/RPrg6ivzT/RclOSW9/FK6pnSHcSiPxxbJDXkSZ3i0bI
+	ME2eRIvKMlbpD6O3gbW+IrZqi4KkPH+9S2uuWROBhOtcRTyST24YNMh7G7oF5msCuElBC/IlyJk
+	mrX5NqjBPfPhq8kxAGJKt0wE1u21vjmBLCnep4WhT+a7YGGVociRLkPZP6YhwZcYyJV1A=
+X-Google-Smtp-Source: AGHT+IE1iJj7SbJwoQiYcFUkDL5bk6OUrmSnL1kBvIgwjRcUBEEuS/lPd1BXU/0MQqrPwB2wqvR9Vg==
+X-Received: by 2002:a05:6512:3e1b:b0:594:25e6:8a61 with SMTP id 2adb3069b0e04-596b4e58cd7mr9910048e87.16.1764663068727;
+        Tue, 02 Dec 2025 00:11:08 -0800 (PST)
 Received: from [192.168.1.168] (83-233-6-197.cust.bredband2.com. [83.233.6.197])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-596bfa4f8a2sm4342412e87.88.2025.12.02.00.11.06
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-596bfa4f8a2sm4342412e87.88.2025.12.02.00.11.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Dec 2025 00:11:06 -0800 (PST)
+        Tue, 02 Dec 2025 00:11:07 -0800 (PST)
 From: Marcus Folkesson <marcus.folkesson@gmail.com>
-Subject: [PATCH RESEND v3 0/5] I2C Mux per channel bus speed
-Date: Tue, 02 Dec 2025 09:09:47 +0100
-Message-Id: <20251202-i2c-mux-v3-0-877dcf478a9f@gmail.com>
+Date: Tue, 02 Dec 2025 09:09:48 +0100
+Subject: [PATCH RESEND v3 1/5] i2c: core: add callback to change bus
+ frequency
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -83,92 +85,84 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20251202-i2c-mux-v3-1-877dcf478a9f@gmail.com>
+References: <20251202-i2c-mux-v3-0-877dcf478a9f@gmail.com>
+In-Reply-To: <20251202-i2c-mux-v3-0-877dcf478a9f@gmail.com>
 To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
  Peter Rosin <peda@axentia.se>, 
  Michael Hennerich <michael.hennerich@analog.com>, 
  Bartosz Golaszewski <brgl@bgdev.pl>, Andi Shyti <andi.shyti@kernel.org>
 Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-arm-kernel@lists.infradead.org, 
- Marcus Folkesson <marcus.folkesson@gmail.com>, 
- Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+ Marcus Folkesson <marcus.folkesson@gmail.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2666;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1616;
  i=marcus.folkesson@gmail.com; h=from:subject:message-id;
- bh=4QBKB6Il0FtSYd/ap/LeXMOphioqXNw9dMPyFWJ8QJI=;
- b=owEBbQKS/ZANAwAKAYiATm9ZXVIyAcsmYgBpLp78pYwoet71tdqujVKWQY+kM7X6WyKFAkliF
- Xjst0GN/jCJAjMEAAEKAB0WIQQFUaLotmy1TWTBLGWIgE5vWV1SMgUCaS6e/AAKCRCIgE5vWV1S
- Mv1QD/wMhwHoL7P0C1vQazs6dCzVgyo/k425LFs4zXAn+5CKQ2bz66GMez+ydkttdb5SJBWqSlQ
- 8MZcZ9f3oMizlyyRkpWSXhfaxWaNjOCX6MZhXu7nblI3jQQQ0xODz3Sr74G+W2iuGJ74gEO4ye9
- s7+LGvIJ6eJ8DwyRwkYQmaJQA6mRfY6SxH2dMHhPOUNCCRf4QuA4AEnejDhk8QIsqzKZcRpYK4Q
- 4+W88jRIDFUF4hwbml/Yc+LtLaTJjdWeLKDVatv+/Dq6/RhUHsF8u723mt3+5li4rUk/FVN/fVq
- 0RMarYoOByISWXzB9D8cbcvJt22Voc5ab3yxWBBgRKApHR7v20CGTG7q6LKq0ONKKkmbZl12OGW
- Iwy9rB3SDae4gnConpK+1+qmfZQ61MmlnRhbIBO/P1tIZRHh3t/O80FapUz3uP+WTJqvwqn4Oxi
- CrNZl/bJCNlJrT2OWTJWoTW0D92OD2AfVTsMg+OmDrtlUDthA5U5bDXDotDCwQraaM24TA3KS3J
- 69tXDM9D+ThyovYITVrMauPapqr2Sp8Taf6RDm3S8b0gJN9GoDkJunVEfXEn+REu4uBJ1brW1AE
- TLV5T9QspmWzZdq3bT5LzBWgYiTNw0b77foXsHAjZtZyss0T2FzOuJaA5ia5H/M2UGVs+NXV0jP
- Qqk6GHTaggq6Vlw==
+ bh=Nc5M9Z8FNun2aD78Xc5NFxJfLrb5FZRGRBm8Kv/u2lM=;
+ b=owEBbQKS/ZANAwAKAYiATm9ZXVIyAcsmYgBpLp8BuoM+ud571wc8WeRvvqmjI7EUERjmmX1g/
+ 2H3AuZw3zOJAjMEAAEKAB0WIQQFUaLotmy1TWTBLGWIgE5vWV1SMgUCaS6fAQAKCRCIgE5vWV1S
+ MrdHEACMzdOg6XFCeOjNi/bb7yWReiTy65HGhwvQgttKUfXWESp20pbKKcalCYnCq1wkYhfE/SW
+ BrPuXoltmEYqeSCWcQ566RR2Zhfvi7/EA8234WwAkPyjRs5IxYr521xbt1iQuKo4q9+jv4ANBnR
+ 0dxWN4jmjdSdEtoH/aDkTec9/SuHZV3rZJbXdep3p7LFZ45Zj0vklwC87WUPfFNTjlC6B+islG8
+ pM92OG5ld0on7Bc7tcSbFx0hSsFK+aRLPJ6Gw3XLNNVvQ0I91/TVJVBMn9rwbW+gkFLB9dVTBYz
+ lY5kR4bZVTqxsOCDhqnYWSKxp52lZHbv+wYJDXhtwQTIcvkL4q0eBcB0UVU+QBAZopZbyYfbZaA
+ YsffxVwpsKKZr45SRziL9Y7Kun5JiFHLM+GT7rBBvYep4fOikfw0PZ9am70zczzkRwAB/EvRzS8
+ IywYCdkGDl8Yzxq3SWWcBK+aVs0HpL8+Zp7CHa9Tr5hXVPK3FgqL1CKBaQI3Rn0bkHcvTJj+TDR
+ 5q8DNHeh64aOmCGGoo7NhD6k3SYsTg91V5NUm5+UxVyyPqVF79DfHtbfpYvNObQSlYEacz3yyX5
+ 0U98NyxEQtdw0a9o9kpoUr7DIFBxoawrYo/8E8aPG0jMCCf72Pl8mpzDEOzctRiGP81bTYQkMFw
+ eiDjGlwptz58ttQ==
 X-Developer-Key: i=marcus.folkesson@gmail.com; a=openpgp;
  fpr=AB91D46C7E0F6E6FB2AB640EC0FE25D598F6C127
 
-This was a RFC on how to implement a feature to have different bus
-speeds on different channels with an I2C multiplexer/switch.
-As no major complaints on the design came up during the review, I
-decided to submit the series without the RFC tag.
+All devices on the same I2C bus share the same clock line and the bus
+frequency has therefor be chosen so that all attached devices are able
+to tolarate that clock rate. IOW, the bus speed must be set for the
+slowest attached device.
 
-The benefit with this feature is that you may group devices after
-the fastest bus speed they can handle.
-A real-world example is that you could have e.g. a display running @400kHz
-and a smart battery running @100kHz using the same I2C controller.
+With I2C multiplexers/switches on the other hand, it would be possible
+to have different "domains" that runs with different speeds.
 
-There are many corner cases where this may cause a problem for some
-hardware topologies. I've tried to describe those I could think of
-in the documentation, see Patch #5.
-
-E.g. one risk is that if the mux driver does not disconnect channels
-when Idle, this may cause a higher frequency to "leak" through to
-devices that are supposed to run at lower bus speed.
-This is not only a "problem" for changing bus speed but could also be
-an issue for potential address conflicts.
-
-The implementation is split up into several patches:
-
-Patch #1 Introduce a callback for the i2c controller to set bus speed
-Patch #2 Introduce functionality to adjust bus speed depending on mux
-         channel.
-Patch #3 Cleanup i2c-davinci driver a bit to prepare it for set_clk_freq
-Parch #4 Implement set_clk_freq for the i2c-davinci driver
-Parch #5 Update documentation with this feature
+Prepare for such a feature by provide an optional callback function to
+change bus frequency.
 
 Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
 ---
-Changes in v3:
-- Return -EINVAL if channel is faster than parent (kernel test robot)
-- Link to v2: https://lore.kernel.org/r/20251002-i2c-mux-v2-0-b698564cd956@gmail.com
+ include/linux/i2c.h | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-Changes in v2:
-- Changed bus_freq field to bus_freq_hz in davinci_i2c_dev (Bartosz Golaszewski)
-- Removed idle_state from mux core (Peter Rosin)
-- Link to v1: https://lore.kernel.org/r/20250922-i2c-mux-v1-0-28c94a610930@gmail.com
+diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+index 20fd41b51d5c..d147e388dbab 100644
+--- a/include/linux/i2c.h
++++ b/include/linux/i2c.h
+@@ -742,6 +742,8 @@ struct i2c_adapter {
+ 	struct rt_mutex mux_lock;
+ 
+ 	int timeout;			/* in jiffies */
++	int clock_hz;
++	int (*set_clk_freq)(struct i2c_adapter *adap, u32 clock_hz); /* Optional */
+ 	int retries;
+ 	struct device dev;		/* the adapter device */
+ 	unsigned long locked_flags;	/* owned by the I2C core */
+@@ -835,6 +837,17 @@ i2c_unlock_bus(struct i2c_adapter *adapter, unsigned int flags)
+ 	adapter->lock_ops->unlock_bus(adapter, flags);
+ }
+ 
++static inline int
++i2c_adapter_set_clk_freq(struct i2c_adapter *adapter, u32 clock_hz)
++{
++	int ret = -EOPNOTSUPP;
++
++	if (adapter->set_clk_freq)
++		ret = adapter->set_clk_freq(adapter, clock_hz);
++
++	return ret;
++}
++
+ /**
+  * i2c_mark_adapter_suspended - Report suspended state of the adapter to the core
+  * @adap: Adapter to mark as suspended
 
----
-Marcus Folkesson (5):
-      i2c: core: add callback to change bus frequency
-      i2c: mux: add support for per channel bus frequency
-      i2c: davinci: calculate bus freq from Hz instead of kHz
-      i2c: davinci: add support for setting bus frequency
-      docs: i2c: i2c-topology: add section about bus speed
-
- Documentation/i2c/i2c-topology.rst | 176 +++++++++++++++++++++++++++++++++++++
- drivers/i2c/busses/i2c-davinci.c   |  41 ++++++---
- drivers/i2c/i2c-mux.c              | 116 +++++++++++++++++++++---
- include/linux/i2c.h                |  13 +++
- 4 files changed, 324 insertions(+), 22 deletions(-)
----
-base-commit: 22f20375f5b71f30c0d6896583b93b6e4bba7279
-change-id: 20250913-i2c-mux-b0063de2ae4d
-
-Best regards,
 -- 
-Marcus Folkesson <marcus.folkesson@gmail.com>
+2.51.2
 
 
