@@ -1,58 +1,59 @@
-Return-Path: <linux-i2c+bounces-14374-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14375-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4EC0BC9C515
-	for <lists+linux-i2c@lfdr.de>; Tue, 02 Dec 2025 17:59:25 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id B5ECEC9C644
+	for <lists+linux-i2c@lfdr.de>; Tue, 02 Dec 2025 18:29:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id C81CF349AC3
-	for <lists+linux-i2c@lfdr.de>; Tue,  2 Dec 2025 16:59:20 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 34161346703
+	for <lists+linux-i2c@lfdr.de>; Tue,  2 Dec 2025 17:29:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0979E2BEFEE;
-	Tue,  2 Dec 2025 16:59:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6582B2C0F92;
+	Tue,  2 Dec 2025 17:29:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="N1mYlPAL"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="JXgL/7g8"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02D1129E10C;
-	Tue,  2 Dec 2025 16:58:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 977152C0F70;
+	Tue,  2 Dec 2025 17:29:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764694742; cv=none; b=SMC0PnevOEZhXPTYwGRyzk6JoeBluBrTP35XR85xZrKPlkcoV4MtFTNpL3Y9ZWD1Hv2ifUvtWayZFR5wSlK/CkgtkGrYGjl1RtjxYOxW+c3lcdKG9gBFRh1ZhapgnX8tHBe4b2BhsD5L2faHG3OsgJWCDL/7CBZbquRMyEw9PbA=
+	t=1764696545; cv=none; b=SExadeegH8rLvc25FQSDxsWAQx5VkJAAASFWcPRjx15yTImbuj5lFT6rAMNpDFZq0/n1nJI7Oy10RHHjGRaMwv+ZPkLVGROmbwmULxFbHkWhdaXIgRFfEueVZgrPKC54suKhyLWjwHtOV94WFADlhCWrug8bnBEqN9JUSVmBNW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764694742; c=relaxed/simple;
-	bh=cJ+0lBBaACY/ruBAXciOILojsdgM4uyZ+IwWjpWT8rE=;
+	s=arc-20240116; t=1764696545; c=relaxed/simple;
+	bh=0CWgiXQjHQ+aAB2ksEpI1/F3O3ikreeGDOLzHq6IPXs=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=VoMCyXrNquc9a9oCGTQP4595NGh9MyiGdMFXgQoVaUkmcNpAKULVtZcx1lK9Gwj3vqYheP7+HsesoliLd1U20CFxtrKC3sTZR49Z+lOkFdKSEWDgT+BCXI42E3/qHJYq/z/2ROnrF5wkHDKKeqHjCO+7lE/L7WHfMdGFOaFU1J4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=N1mYlPAL; arc=none smtp.client-ip=185.246.85.4
+	 MIME-Version:Content-Type; b=LUFdpOPgQoalc1FN02wcRcxkhJEzj2T0CVhRsrC/b1ARQi05DUWZ6YIgK7U6cPTv/uPEa8y0xTKTkYqVZIfGZy0k5mwW3i5tItCZzQPDfIKp3GulhxjmIC9q3ympAWGZ+LjGkcF0v+27UZUSeb4mez52U78lmngrqKsCfkI+acc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=JXgL/7g8; arc=none smtp.client-ip=185.246.84.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 4E7D64E419E1;
-	Tue,  2 Dec 2025 16:58:57 +0000 (UTC)
+	by smtpout-02.galae.net (Postfix) with ESMTPS id D227A1A1EDC;
+	Tue,  2 Dec 2025 17:29:00 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 12D7360706;
-	Tue,  2 Dec 2025 16:58:57 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 533AC11919DE5;
-	Tue,  2 Dec 2025 17:58:37 +0100 (CET)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 9EB6160706;
+	Tue,  2 Dec 2025 17:29:00 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 9122811919DC9;
+	Tue,  2 Dec 2025 18:28:36 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1764694734; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1764696536; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=60d2epEciVcChcX/fhst0++0Pm7K5XN1skvCoKwYwIY=;
-	b=N1mYlPALz8BnTtZIdm1USL0q3OY2IZREyFfDG7zXuFkJYT9sNYehdXOg20XgTaJ63O1RjJ
-	bUmx7cMIqpc/rsqqZCp/8Jj9AormvV8YpywUJYYitC9u6WrsHbugREOW2hNMdu6QkK30ZI
-	M5zoEtIFTofdrhMl04uyDUgpJgkNUh5/bF47WpYIukp33KLifd5rWCuoT+5CIGBihgXYWz
-	DsPea9REd0INtCAQqrWPX5O5uc+tIiKwIbYSAylL2j2Fc9b9Bt+xdiKGYX+ahbsGLZ43OI
-	Mm9hCve73o18r2eaD+yNSlpj1C/GhiEErqVpiHh0OMKPEWU3s2GH3q0FfuC8TA==
-Date: Tue, 2 Dec 2025 17:58:36 +0100
+	bh=4BQ1XtM/oSaifBg16TjvVJ4//gt59MDXZf9Ix2wTO1g=;
+	b=JXgL/7g8k9S4vyskm8xyx1v29w1Me/J6AytYr7l55uyR3/5yDOXjtNyXEpR4wnxzYATmyM
+	vHSSeoX3hQa4vzJXXb6fc5ZendC+ixZc9ZsDBq5nvDbybqEuvHLSPd6L1sl+qyeFU7MMzF
+	Pakz/1p9eIVtQHV4cEBWcCm34HvitG+eThoA2ZyRWEjJuwS9JIrY+uH0GWqHJhx7YDau78
+	0rJqXrBVIAcZoW1khXUNBI6hJAnO3V31IUdVOOPz3tTjjTANzVp+WhhiUK2qKCKK6iRk1y
+	Qi0+GI7U02463lZtkJONer2Ox9Cl+afa+OUmpY8ymeUYGSefeooQJPNbGx16sg==
+Date: Tue, 2 Dec 2025 18:28:34 +0100
 From: Herve Codina <herve.codina@bootlin.com>
-To: Kalle Niemi <kaleposti@gmail.com>, Rob Herring <robh@kernel.org>
-Cc: Matti Vaittinen <mazziesaccount@gmail.com>, Andrew Lunn
- <andrew@lunn.ch>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Kalle Niemi <kaleposti@gmail.com>, Rob Herring <robh@kernel.org>, Matti
+ Vaittinen <mazziesaccount@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
  <conor+dt@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
  "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich
  <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>, Sascha Hauer
@@ -87,8 +88,8 @@ Cc: Matti Vaittinen <mazziesaccount@gmail.com>, Andrew Lunn
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Subject: Re: [PATCH v4 01/29] Revert "treewide: Fix probing of devices in DT
  overlays"
-Message-ID: <20251202175836.747593c0@bootlin.com>
-In-Reply-To: <088af3ff-bd04-4bc9-b304-85f6ed555f2a@gmail.com>
+Message-ID: <20251202182834.65d7f0a1@bootlin.com>
+In-Reply-To: <CAMuHMdXogrkTAm=4pC0B+Sybr=PR3XovnBgmiEyTvUMmJHvBRA@mail.gmail.com>
 References: <20251015071420.1173068-1-herve.codina@bootlin.com>
 	<20251015071420.1173068-2-herve.codina@bootlin.com>
 	<f74ab0a2-b74b-4b96-8469-a716c850e230@gmail.com>
@@ -99,7 +100,7 @@ References: <20251015071420.1173068-1-herve.codina@bootlin.com>
 	<CAL_JsqKyG98pXGKpL=gxSc92izpzN7YCdq62ZJByhE6aFYs1fw@mail.gmail.com>
 	<55076f4b-d523-4f8c-8bd4-0645b790737e@gmail.com>
 	<20251202102619.5cd971cc@bootlin.com>
-	<088af3ff-bd04-4bc9-b304-85f6ed555f2a@gmail.com>
+	<CAMuHMdXogrkTAm=4pC0B+Sybr=PR3XovnBgmiEyTvUMmJHvBRA@mail.gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 Precedence: bulk
@@ -112,117 +113,103 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Last-TLS-Session-Version: TLSv1.3
 
-Hi Kalle, Matti,
+Hi Geert,
 
-On Tue, 2 Dec 2025 13:21:16 +0200
-Kalle Niemi <kaleposti@gmail.com> wrote:
+On Tue, 2 Dec 2025 17:35:35 +0100
+Geert Uytterhoeven <geert@linux-m68k.org> wrote:
 
-> On 12/2/25 11:26, Herve Codina wrote:
-> > Hi Kalle,
-> > 
+> Hi Hervé,
+> 
+> On Tue, 2 Dec 2025 at 10:26, Herve Codina <herve.codina@bootlin.com> wrote:
 > > On Fri, 28 Nov 2025 10:34:57 +0200
-> > Kalle Niemi <kaleposti@gmail.com> wrote:
-> > 
-> > ...  
-> >>>>>>>>
-> >>>>>>>> Hello,
-> >>>>>>>>
-> >>>>>>>> Test system testing drivers for ROHM ICs bisected this commit to cause
-> >>>>>>>> BD71847 drivers probe to not be called.  
-> >>>>>>> This driver (and overlay support) is in linux-next or something out of
-> >>>>>>> tree on top of linux-next?
-> >>>>>>>
-> >>>>>>> Rob  
-> >>>>>> Yes the driver is in mainline linux: /drivers/mfd/rohm-bd718x7.c  
-> >>>>> I don't see any support to apply overlays in that driver.  
-> >>>> Ah. Sorry for the confusion peeps. I asked Kalle to report this without
-> >>>> proper consideration. 100% my bad.
-> >>>>
-> >>>> While the bd718x7 drive indeed is mainline (and tested), the actual
-> >>>> 'glue-code' doing the overlay is part of the downstream test
-> >>>> infrastructure. So yes, this is not a bug in upstream kernel - this
-> >>>> falls in the category of an upstream change causing downstream things to
-> >>>> break. So, feel free to say: "Go fix your code" :)
-> >>>>
-> >>>> Now that this is sorted, if someone is still interested in helping us to
-> >>>> get our upstream drivers tested - the downstream piece is just taking
-> >>>> the compiled device-tree overlay at runtime (via bin-attribute file),
-> >>>> and applying it using the of_overlay_fdt_apply(). The approach is
-> >>>> working for our testing purposes when the device is added to I2C/SPI
-> >>>> node which is already enabled. However, in case where we have the I2C
-> >>>> disabled, and enable it in the same overlay where we add the new device
-> >>>> - then the new device does not get probed.
-> >>>>
-> >>>> I would be really grateful if someone had a pointer for us.  
-> >>> Seems to be fw_devlink related. I suppose if you turn it off it works?
-> >>> There's info about the dependencies in sysfs or maybe debugfs. I don't
-> >>> remember the details, but that should help to tell you why things
-> >>> aren't probing.  
-> > 
+> > Kalle Niemi <kaleposti@gmail.com> wrote:  
+> > > >>>>>> Test system testing drivers for ROHM ICs bisected this commit to cause
+> > > >>>>>> BD71847 drivers probe to not be called.  
+> > > >>>>> This driver (and overlay support) is in linux-next or something out of
+> > > >>>>> tree on top of linux-next?
+> > > >>>>>
+> > > >>>>> Rob  
+> > > >>>> Yes the driver is in mainline linux: /drivers/mfd/rohm-bd718x7.c  
+> > > >>> I don't see any support to apply overlays in that driver.  
+> > > >> Ah. Sorry for the confusion peeps. I asked Kalle to report this without
+> > > >> proper consideration. 100% my bad.
+> > > >>
+> > > >> While the bd718x7 drive indeed is mainline (and tested), the actual
+> > > >> 'glue-code' doing the overlay is part of the downstream test
+> > > >> infrastructure. So yes, this is not a bug in upstream kernel - this
+> > > >> falls in the category of an upstream change causing downstream things to
+> > > >> break. So, feel free to say: "Go fix your code" :)
+> > > >>
+> > > >> Now that this is sorted, if someone is still interested in helping us to
+> > > >> get our upstream drivers tested - the downstream piece is just taking
+> > > >> the compiled device-tree overlay at runtime (via bin-attribute file),
+> > > >> and applying it using the of_overlay_fdt_apply(). The approach is
+> > > >> working for our testing purposes when the device is added to I2C/SPI
+> > > >> node which is already enabled. However, in case where we have the I2C
+> > > >> disabled, and enable it in the same overlay where we add the new device
+> > > >> - then the new device does not get probed.
+> > > >>
+> > > >> I would be really grateful if someone had a pointer for us.  
+> > > > Seems to be fw_devlink related. I suppose if you turn it off it works?
+> > > > There's info about the dependencies in sysfs or maybe debugfs. I don't
+> > > > remember the details, but that should help to tell you why things
+> > > > aren't probing.  
+> >
 > > Rob reverted patches but I plan to continue my work on it.
 > > On my side, I need the reverted patches but I fully understand that, on
 > > your side, you need a working system.
-> > 
+> >
 > > In order to move forward and find a solution for my next iteration, can you
-> > send your overlay (dtso) used in your working and non working cases?
-> > 
-> > Best regards,
-> > Hervé  
+> > send your overlay (dtso) used in your working and non working cases?  
 > 
-> Hello Hervé,
+> Hmm, I must have missed when Rob applied (part of) this series, as I
+> do an overlay test (using the out-of-tree configfs) on top of every
+> (bi-weekly) renesas-drivers release, and saw no issues during the last
+> few months.
 > 
-> I have attached the overlay source file: bd71847_overlay.dts
+> So I applied this series and tested loading my SPI EEPROM overlay.
+> And it indeed breaks, with the culprit being this particular patch.
+> 
+> Interestingly, quoting from this patch:
+> 
+>    "While the commit fixed fw_devlink overlay handling for one case, it
+>     broke it for another case. So revert it and redo the fix in a separate
+>     patch."
+> 
+> Where is the separate patch that redid the fix? I assume it is "[PATCH
+> v4 03/29] of: dynamic: Fix overlayed devices not probing because
+> of fw_devlink"?  Unfortunately that doesn't fix the issue for me.
+> 
+> Quoting more from this patch:
+> 
+>    "Closes: https://lore.kernel.org/lkml/CAMuHMdXEnSD4rRJ-o90x4OprUacN_rJgyo8x6=9F9rZ+-KzjOg@mail.gmail.com/"
+> 
+> Strange that it claims to fix the issue reported there, as the failure
+> mode I am seeing is exactly the same as documented in that report?
+> 
+> Do you know what is wrong? The overlay I am using is referenced in
+> the bug report linked above.
 
-Thanks a lot for your overlay.
+The first patch "Fix probing of devices in DT overlays" didn't fix all cases
+and so Saravana reverted this patch and proposed "of: dynamic: Fix overlayed
+devices not probing because of fw_devlink".
 
-I did an update of the reverted patches and I didn't detect any regression
-with the update applied on my use case but I don't have the needed code to
-perform tests similar to your use case. Indeed, you apply the overlay using
-an out of tree code.
+This second patch was needed to fix my use case even if more modification were
+needed to have my use case fully fixed (other patches in my series).
 
-May I ask you to perform a test of this update on your side?
+Rob applied those first patches from my series and some systems were broken.
+The breakage has been reported my Kalle and Matti and led to a revert of culprit
+patches.
 
-First you can use the last linux-next kernel where reverted patches are present.
-The next-20251127 tag is a good candidate. Indeed both patches are present:
-  - 76841259ac092 ("of: dynamic: Fix overlayed devices not probing because of fw_devlink")
-  - 7d67ddc5f0148 ("Revert "treewide: Fix probing of devices in DT overlays"")
+I tried to understand what was wrong. I am pretty convinced that modification
+done in "of: dynamic: Fix overlayed devices not probing because of fw_devlink"
+are really better than modification available in "treewide: Fix probing of
+devices in DT overlays".
 
-Of course, be sure to have the issue using this kernel with your overlays.
+I proposed an update [0] and I will be glad if you can also test this update 
+on your side and give me your feedback.
 
-Then can you add the following modification on your faulty kernel:
----- 8< ----
-diff --git a/drivers/of/overlay.c b/drivers/of/overlay.c
-index 1528d8ad9f26..aea7bb26d9c4 100644
---- a/drivers/of/overlay.c
-+++ b/drivers/of/overlay.c
-@@ -190,6 +190,20 @@ static void overlay_fw_devlink_refresh(struct overlay_changeset *ovcs)
-        for (int i = 0; i < ovcs->count; i++) {
-                struct device_node *np = ovcs->fragments[i].target;
- 
-+               /*
-+                * The device related to target node itself could have been
-+                * removed and re-added. This happens when the 'status' property
-+                * in the target node has been changed by the overlay.
-+                *
-+                * In that case the parent node needs to be fixed.
-+                *
-+                * Before fixing the target node itself, fix its parent. To keep
-+                * things simple, fix the parent in any case. If nothing needs
-+                * to be fixed, fw_devlink_refresh_fwnode() acts as a no-op.
-+                */
-+               if (np->parent)
-+                       fw_devlink_refresh_fwnode(of_fwnode_handle(np->parent));
-+
-                fw_devlink_refresh_fwnode(of_fwnode_handle(np));
-        }
- }
----- 8< ----
-
-My hope is that this modification will fix your issue.
-If so, I will add it in my next iteration.
-
-If you cannot perform the test on your side, can you provide me the out of
-tree code you use to apply the overlay?
+[0] https://lore.kernel.org/lkml/20251202175836.747593c0@bootlin.com/
 
 Best regards,
 Hervé
