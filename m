@@ -1,212 +1,135 @@
-Return-Path: <linux-i2c+bounces-14395-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14396-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6CA1CA3542
-	for <lists+linux-i2c@lfdr.de>; Thu, 04 Dec 2025 11:56:56 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25CCBCA3682
+	for <lists+linux-i2c@lfdr.de>; Thu, 04 Dec 2025 12:18:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id B4E60302B9B0
-	for <lists+linux-i2c@lfdr.de>; Thu,  4 Dec 2025 10:56:55 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 8B6D4300DC86
+	for <lists+linux-i2c@lfdr.de>; Thu,  4 Dec 2025 11:18:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F28FA3370E3;
-	Thu,  4 Dec 2025 10:56:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55216338926;
+	Thu,  4 Dec 2025 11:18:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="OA8RohSB"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 660213321D0
-	for <linux-i2c@vger.kernel.org>; Thu,  4 Dec 2025 10:56:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A8D72EBDD0
+	for <linux-i2c@vger.kernel.org>; Thu,  4 Dec 2025 11:18:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764845814; cv=none; b=LllK7UOiG67Lw1OK07mVi2ojoY6DB8DriuqrdX7e+6IAHnsjAEO8Tw1IzHhixfs2H/eQw8EzQt7+evehETqnNTNx4uaThjHj+1a5dxU0zqF2taUZvrZ+AyCTKcAZnprnaIkloNLNFr+wk4Cxc2uJcMgHraZmmCYFzksDbED53MQ=
+	t=1764847104; cv=none; b=pPOBiqQZ+cyxkvCF2HQ+o1e9nW0BzP3Uv2jFqrHn4ijxHIfU947SyMIxKrZD/lhEVHG/gRb/8jaZwtDzBB5Ox2NzRq4aca1LEM9jecxOLzQHgzWIgtAjk240c+r88gKqunDjj6yEEN/MOnGkzjvszaPbhJVUy1J7WtPQampp5Ow=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764845814; c=relaxed/simple;
-	bh=6slcK3EQrAXupPVJr9jM3Pcmh+QTUwh+iVFWsaKxXWo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ElJNFbP6rrLeM+gmH8LIqfPJ3l7SSUI0s7kuZFhTAZ7Wrg/5i2j7zB+HIHEKB5qYyLFAPmsMOke15rxrD6fp/gKh9PVhTjicTK5CF+FLrt9oC+PChYpcWTWsOMleRWMmV/ft2jQvPAVM6NJVDVQO1btorYVWSfwZ0sHULlANkKs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-29812589890so11175265ad.3
-        for <linux-i2c@vger.kernel.org>; Thu, 04 Dec 2025 02:56:52 -0800 (PST)
+	s=arc-20240116; t=1764847104; c=relaxed/simple;
+	bh=+LOeBEfr8ZEdGvSNvofGiFrT7OpuozP6mpPTcUt6zJU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=m3EbAwZ2R/sk4jJcg/TQ29GYcnlpUmvpniWPgF0mchP2lEEg/CekMqqPBmJOJCvov/3UtVgRtOh3oNCGvq/yUhyJsbbhodqCFRmOvQk+unyOBmCx0NckMRB6I+1xK6xMEVgtsE17BE5dUnfUzH8cX59GqSHjh0TsmlW6D8awfus=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=OA8RohSB; arc=none smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-42e2e2eccd2so605373f8f.1
+        for <linux-i2c@vger.kernel.org>; Thu, 04 Dec 2025 03:18:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1764847100; x=1765451900; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+LOeBEfr8ZEdGvSNvofGiFrT7OpuozP6mpPTcUt6zJU=;
+        b=OA8RohSBujOiEUqeXuXsloF2g+hRrbzpTai76huy8HXBadjwMsStZu8I2fU66DJ8TO
+         FwnaDs8n0El1DYvJ46uylCtVzUKlkPxmsD3vhxPCF5EiSbPVit0LuMPaO4sXBZcJFoiR
+         mtyG1ZmBoAMLyM2cqApsJZu3xIMTwKe4YNAH65SBW3mBFeDXkM7j9kmuaf/lddfzBN90
+         iTLULxe3+ksTW7sj6xWaZVOi3yWz6IXyuzfUBtE27Zu2tFTFKx795tDrB7Hq6OEALiSV
+         geJZmKLsuwri9n6FviqzsK5nCdpEoGEmBCfQ4ddyR0f/dmwpvZffTTxDS6xKkMgbiQC1
+         SJMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764845812; x=1765450612;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=gfnzYJnOAkS7SHNqKKzIeFzoFbDZmoEYIAPmuyxm7j4=;
-        b=DpO/J0zcx/f/lLYSesk8rINn3B4qmaaGY4g38t/gHsCkimpVa6DgKjVVVJ9F4hgDza
-         w/78rE2PxKhjCKRp7+5TXJmPQKpGLD0YH7eJF64ZZGszPgei7caeiaPUJg9tMW0Ga46b
-         EahBsru0jX+wCimuJ0RbfE7/zNnkiZE4iYYBpyR93rH00bAl3dKLEeqAI8XzypPBozpO
-         aWvEyzt9FU8NjctxbiTWLVZZBr8iwWKpicQPlzfOelM/nrft7PbOBFZw5IFnWxDrBBlB
-         gHt5fNcsBlNva9gAGYyreYyrXnbwKXmDaZI2PgvOazA/8rLwvkysnrGARk1JAeWFHCY7
-         bLhQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUbmfgm71/Bno0U18ReB75VZBgTfcNOVKrXxDNNN8mX3SWIR1zAi6Jy6sFaTIhLQJ14+CvOfdha06U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwSeo7A2FD8hPDHQHqsbk8dnWsdnIV//D6F6bYMpinsh/WLmp9s
-	/z1B8xw8a3Y4CL0HaERpD+D9i2bLmnZB2rIaAdmFlJA1VGsqbMIXYtkyFX8Q+Bct
-X-Gm-Gg: ASbGnctS+lJohpgH50bJeY7JajrXK66qgZ7bkstea0n3fQ2VptaN+BNCcQCTSCLVaJq
-	CmbIlgQ82qq/ybbvP72NhlpNammbFuNxQ8o+dUrfdIXwU3SMJiq2VIx3wEDlMEFd9++H64pmWzC
-	AFji8lVvxtdqls/jXvXB1SyAlg7ziL5eOgH6uMOOxNG729WMQqnocFlVezXRHZHCT6/hLWSIWI6
-	bT0uFCPbQRHvShfkvqCZxGKe4t/k94iI5eFh23fHZ+uvaT8y4DlteThs4QLYhkSVRBLnNNvX+ku
-	bL2lRslQqU5ZgqgR+zQeSCicUq2UHIrpyWAjU5uMUD/QwZRo7Q/P3bfbx1XlduA4JyP9gLIiDbq
-	Y0ZaCr11TtMF0dwgId+bDd+r7n/JTvzh21uZO2unnbkhmDoV5RYY1PFjuRIcRA6RUlFgsolNtDK
-	T5Chg3HiwQ0VIZtwKzJKh8kJATNnNRjrFIi5BhSOQunCCXK9dv1Gig
-X-Google-Smtp-Source: AGHT+IFAVYi9pP7ByS6mdliLKl4TbeeDP4aQpbpgcq5GMpvRqTSYNBSTHyWf83iAtyPn5c+iiBryiA==
-X-Received: by 2002:a17:903:fa4:b0:298:3aa6:c034 with SMTP id d9443c01a7336-29d68411de3mr60370245ad.32.1764845811440;
-        Thu, 04 Dec 2025 02:56:51 -0800 (PST)
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com. [209.85.215.173])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29daeaaba2dsm16594355ad.69.2025.12.04.02.56.51
-        for <linux-i2c@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Dec 2025 02:56:51 -0800 (PST)
-Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-bc169af247eso597334a12.2
-        for <linux-i2c@vger.kernel.org>; Thu, 04 Dec 2025 02:56:51 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVF6ggycXI8WirPWAK/tpgoaPnabQoY4+3O3mC/1UXFgCk1gJj4rdlHEgdqMZK7/igjdjzBmrfgM3o=@vger.kernel.org
-X-Received: by 2002:a05:6102:6889:b0:5dd:b69a:cdce with SMTP id
- ada2fe7eead31-5e48e28ea62mr1665640137.1.1764845364523; Thu, 04 Dec 2025
- 02:49:24 -0800 (PST)
+        d=1e100.net; s=20230601; t=1764847100; x=1765451900;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+LOeBEfr8ZEdGvSNvofGiFrT7OpuozP6mpPTcUt6zJU=;
+        b=ZgH2TRulSh/VU13zqqek9geupaqKVgffs3odYHlq+5pD6ah1PDwLCNM3Qutm1Lf8xx
+         UcoyWPEFrZGgxrwW+xrqQ9SCscofZp9xFoEbu4kYezKfCab6ZissDfaKAZa2uTpjkfWl
+         s/rOEtPzmVX6XUrBOyX8Qx7KfJrmbCSPih/n+Z3d4I5VUDvGDT7VXIpVHx5bfkDT5EE2
+         T0FYNc9UXVMeq4gP2laNL5qnLIO+oNCiEXbr94NKTwpEJ7/Uyyzd4NVfj8KShEU3Ra9M
+         MLUWdEjQy4dyMcOXWn1R4KDh04kUlDF/2ow5o/7tTr8gqReBM/PbF+zLcRwvd52tjieA
+         AhzA==
+X-Forwarded-Encrypted: i=1; AJvYcCVSNA2JF5/qVDGQlgkhcczrlIFzSsDjAcLo7oWlqcLqn9FmkCrw/tv8/KrLgXsJojvhTSIwczsmhTM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxLxZvSxHcaJtG+Fa7nRzcTiNrYxk/VFqlBKAspF5tm5aQNCG+6
+	WgyGXoCljCDbVOtXIfml5hXWdFY5fyqWtQGfiBwlsKpMluRgxA6+KXmbIberziH+w+4=
+X-Gm-Gg: ASbGncvx/1fQBz1QQokDhK7QBR4u6H8CCakZuMp0PYkbHrOSVTRpBPDMGQu8Ozj7QqS
+	V++H21Xkkb8R0PYs8VDrVAlGXZrk1oz64YZjtCKEtpfmtq6Sh3JBskon/4AXWsWXxjwmSF3B63U
+	vVIGljpySFQa7TJfiQt7rJ1tuOVxy545x+g9i8Cu9h8F0Yo7Ru/G7I+moo7RCAVZpsbHve73j/Q
+	X1a7opfLMbXMEkjWHYlHNGlaIMWkOwfSgshhAeFsv0x5m5xegWsArwnWT2AYM1pZxwxZftkD4tZ
+	VK8RMpWTRlp5jEI8FIDiE9C0nwzcWu0+zkGsIufPQFNIh5Y2YKyLCm2H11DZj3F67IXkmfNXCW+
+	WqShMgd9Vk7ew2w4/VDmkIzVeva94F66DqLbvmeF0zIHolJfpmZN/uCDLSk1lXE5wOzlbWFc3LM
+	GGZ1LSXLJmR1U5UsunqMPGx+ZOWRX/Ak9jqZ/98BqfJy5dTcphs7ColxI=
+X-Google-Smtp-Source: AGHT+IH57MsQAl+/XT2gVgjmbcRNCbkMZAWMG/keUEp9la8csas6oJpOYVghaAgaaYbkbn1de2irrQ==
+X-Received: by 2002:a05:6000:1a8a:b0:42b:5628:f4a3 with SMTP id ffacd0b85a97d-42f731678e9mr6043858f8f.1.1764847099664;
+        Thu, 04 Dec 2025 03:18:19 -0800 (PST)
+Received: from localhost (p200300f65f006600000000000000081d.dip0.t-ipconnect.de. [2003:f6:5f00:6600::81d])
+        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-42f7cbff352sm2654474f8f.17.2025.12.04.03.18.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Dec 2025 03:18:18 -0800 (PST)
+Date: Thu, 4 Dec 2025 12:18:17 +0100
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+To: Andi Shyti <andi.shyti@kernel.org>
+Cc: Eddie James <eajames@linux.ibm.com>, 
+	Ninad Palsule <ninad@linux.ibm.com>, linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org, 
+	linux-kernel@vger.kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH 04/12] i2c: fsi: Drop assigning fsi bus
+Message-ID: <lwnjd4a46eypemd6daqitdvmapjjx4c6vr6yeuzf3qpvd2wrs2@bcmxgupsbyj7>
+References: <cover.1764434226.git.ukleinek@kernel.org>
+ <ef38106b5099e92395d5cc84d1bf0b806b53d1dc.1764434226.git.ukleinek@kernel.org>
+ <x4y4m7bclxs3rbb6ptqt6chlg7iaual4wjz2lma5ugdhfp2mr6@phsjcud6vfax>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251015071420.1173068-1-herve.codina@bootlin.com>
- <20251015071420.1173068-2-herve.codina@bootlin.com> <f74ab0a2-b74b-4b96-8469-a716c850e230@gmail.com>
- <CAL_JsqJDOYuzutMHMeFAogd5a_OX6Hwi8Gwz1Vy7HpXgNeYKsg@mail.gmail.com>
- <5cf2a12a-7c66-4622-b4a9-14896c6df005@gmail.com> <CAL_JsqJjm12LxpDg6LmpY=Ro_keHwnrWiYMLVnG=s_pSP4X2WQ@mail.gmail.com>
- <072dde7c-a53c-4525-83ac-57ea38edc0b5@gmail.com> <CAL_JsqKyG98pXGKpL=gxSc92izpzN7YCdq62ZJByhE6aFYs1fw@mail.gmail.com>
- <55076f4b-d523-4f8c-8bd4-0645b790737e@gmail.com> <20251202102619.5cd971cc@bootlin.com>
- <088af3ff-bd04-4bc9-b304-85f6ed555f2a@gmail.com> <20251202175836.747593c0@bootlin.com>
- <dc813fc2-28d2-4f2c-a2a3-08e33eec8ec7@gmail.com> <20251204083839.4fb8a4b1@bootlin.com>
-In-Reply-To: <20251204083839.4fb8a4b1@bootlin.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 4 Dec 2025 11:49:13 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXdwf7La1EYBWTJadsTAJG3nKQVW6wtBn-bUqshA=XHRw@mail.gmail.com>
-X-Gm-Features: AWmQ_blMXTXWTKLb__jRgM2vj510G0Mh23mSqsI1Cojt34ffki3w4wmdXTg_pQg
-Message-ID: <CAMuHMdXdwf7La1EYBWTJadsTAJG3nKQVW6wtBn-bUqshA=XHRw@mail.gmail.com>
-Subject: Re: [PATCH v4 01/29] Revert "treewide: Fix probing of devices in DT overlays"
-To: Herve Codina <herve.codina@bootlin.com>
-Cc: Kalle Niemi <kaleposti@gmail.com>, Rob Herring <robh@kernel.org>, 
-	Matti Vaittinen <mazziesaccount@gmail.com>, linux-arm-kernel@lists.infradead.org, 
-	Andrew Lunn <andrew@lunn.ch>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Danilo Krummrich <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
-	Fabio Estevam <festevam@gmail.com>, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>, 
-	Wolfram Sang <wsa+renesas@sang-engineering.com>, Peter Rosin <peda@axentia.se>, 
-	Arnd Bergmann <arnd@arndb.de>, Bjorn Helgaas <bhelgaas@google.com>, 
-	Charles Keepax <ckeepax@opensource.cirrus.com>, 
-	Richard Fitzgerald <rf@opensource.cirrus.com>, David Rhodes <david.rhodes@cirrus.com>, 
-	Linus Walleij <linus.walleij@linaro.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
-	Mark Brown <broonie@kernel.org>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-	Daniel Scally <djrscally@gmail.com>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Sakari Ailus <sakari.ailus@linux.intel.com>, Len Brown <lenb@kernel.org>, 
-	Davidlohr Bueso <dave@stgolabs.net>, Jonathan Cameron <jonathan.cameron@huawei.com>, 
-	Dave Jiang <dave.jiang@intel.com>, Alison Schofield <alison.schofield@intel.com>, 
-	Vishal Verma <vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>, 
-	Dan Williams <dan.j.williams@intel.com>, Wolfram Sang <wsa@kernel.org>, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, imx@lists.linux.dev, linux-clk@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-pci@vger.kernel.org, 
-	linux-sound@vger.kernel.org, patches@opensource.cirrus.com, 
-	linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-spi@vger.kernel.org, linux-acpi@vger.kernel.org, 
-	linux-cxl@vger.kernel.org, Allan Nielsen <allan.nielsen@microchip.com>, 
-	Horatiu Vultur <horatiu.vultur@microchip.com>, 
-	Steen Hegelund <steen.hegelund@microchip.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>, 
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="ofyrr2hu65mfdg33"
+Content-Disposition: inline
+In-Reply-To: <x4y4m7bclxs3rbb6ptqt6chlg7iaual4wjz2lma5ugdhfp2mr6@phsjcud6vfax>
+
+
+--ofyrr2hu65mfdg33
+Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH 04/12] i2c: fsi: Drop assigning fsi bus
+MIME-Version: 1.0
 
-Hi Herv=C3=A9,
+Hello Andi,
 
-On Thu, 4 Dec 2025 at 08:39, Herve Codina <herve.codina@bootlin.com> wrote:
-> Indeed, Kalle, Geert, I don't have your hardware, your related overlay or
-> a similar one that could be used for test and also I don't have your out =
-of
-> tree code used to handle this overlay.
->
-> I know overlays and fw_devlink have issues. Links created by fw_devlink
-> when an overlay is applied were not correct on my side.
->
-> Can you check your <supplier>--<consumer> links with 'ls /sys/class/devli=
-nks'
->
-> On my side, without my patches some links were not correct.
-> They linked to the parent of the supplier instead of the supplier itself.
-> The consequence is a kernel crash, use after free, refcounting failure, .=
-..
-> when the supplier device is removed.
->
-> Indeed, with wrong links consumers were not removed before suppliers they
-> used.
->
-> Looking at Geert traces:
-> --- 8< ---
-> rcar_sound ec500000.sound: Failed to create device link (0x180) with
-> supplier soc for /soc/sound@ec500000/rcar_sound,src/src-0
-> rcar_sound ec500000.sound: Failed to create device link (0x180) with
-> supplier soc for /soc/sound@ec500000/rcar_sound,src/src-1
-> [...]
-> --- 8< ---
->
-> Even if it is not correct, why the soc device cannot be a provider?
-> I don't have the answer to this question yet.
+On Wed, Dec 03, 2025 at 06:07:11PM +0100, Andi Shyti wrote:
+> On Sat, Nov 29, 2025 at 05:57:40PM +0100, Uwe Kleine-K=F6nig wrote:
+> > Since commit FIXME ("fsi: Assign driver's bus in fsi_driver_register()")
+>=20
+> whoever is going to apply the series needs to remember to replace
+> this FIXME.
 
-I have no idea. These failures (sound) are also not related to the
-device I am adding through the overlay (SPI EEPROM).
-Note that these failures appear only with your suggested fix, and are
-not seen with just the patch in the subject of this email thread.
+Ah right, when I wrote the commit log I made a mental note to point that
+out in the cover letter, but then I forgot. Thanks for the reminder.
 
-> Without having the exact tree structure of the base device-tree, the over=
-lay
-> and the way it is applied, and so without been able to reproduce the issu=
-e
-> on my side, investigating the issue is going to be difficult.
->
-> I hope to find some help to move forward and fix the issue.
+Best regards
+Uwe
 
-Base DTS is [1], overlay DTS is [2].
-Applying and removing the overlay is done using OF_CONFIGFS[3],
-and "overlay [add|rm] 25lc040"[4].
+--ofyrr2hu65mfdg33
+Content-Type: application/pgp-signature; name="signature.asc"
 
-I assume you can reproduce the issue on any board that has an SPI
-EEPROM, after moving the SPI bus enablement and SPI EEPROM node to an
-overlay. Probably even with an I2C EEPROM instead.  Or even without
-an actual EEPROM connected, as even the SPI bus fails to appear.
+-----BEGIN PGP SIGNATURE-----
 
-> Saravana's email (Saravana Kannan <saravanak@google.com>) seems incorrect=
-.
-> Got emails delivery failure with this email address.
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmkxbfcACgkQj4D7WH0S
+/k5bjQf/fgyumKlkXTNHtLYRAcdelQgnmwQq3VoF0X5TFn7pl2FyStUJSgvRZ87Z
+59RLfegSso/0LIjvLUOkEJ8HX/Y9gDmE0pZKyuJ/jOuxHjh0tcKWtbGzwCbR/bh8
+ceQpdwLJo2ZsbUUfMrkfoUTsY27SeDiyhHC9gZnj8KDQDDkZZ0BmLcbStBqvZIKJ
+gnFijsB2j18OkWgd4OV2dmvISQgugOBOFTEsP/pe4CvLClTszpnZ7nSX8f2SJcFU
+ce/x6ejJOGdagpSy+Udnd8TPWh4CGVPtZZEZT6w4gM5FWXG20l5p8TIFdDZC6iW0
+ZmB1RTUTJi/nA9BZIgzKuWicB5Dayw==
+=GVZw
+-----END PGP SIGNATURE-----
 
-Yeah, he moved company.
-He is still alive, I met him in the LPC Training Session yesterday ;-)
-
-Thanks!
-
-[1] https://web.git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drive=
-rs.git/tree/arch/arm64/boot/dts/renesas/r8a77990-ebisu.dts
-[2] https://web.git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drive=
-rs.git/tree/arch/arm64/boot/dts/renesas/r8a77990-ebisu-cn41-msiof0-25lc040.=
-dtso?h=3Dtopic/renesas-overlays-v6.17-rc1
-[3] https://web.git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drive=
-rs.git/log/?h=3Dtopic/overlays-v6.17-rc1
-[4] https://elinux.org/R-Car/DT-Overlays#Helper_Script
-[5] https://lore.kernel.org/CAMuHMdXEnSD4rRJ-o90x4OprUacN_rJgyo8x6=3D9F9rZ+=
--KzjOg@mail.gmail.com/
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+--ofyrr2hu65mfdg33--
 
