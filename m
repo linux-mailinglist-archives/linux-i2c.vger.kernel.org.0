@@ -1,127 +1,177 @@
-Return-Path: <linux-i2c+bounces-14407-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14408-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id CBBAFCA501F
-	for <lists+linux-i2c@lfdr.de>; Thu, 04 Dec 2025 19:56:44 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3111CA5B1E
+	for <lists+linux-i2c@lfdr.de>; Fri, 05 Dec 2025 00:36:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 14EB830A6633
-	for <lists+linux-i2c@lfdr.de>; Thu,  4 Dec 2025 18:54:51 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C22BB309DF0C
+	for <lists+linux-i2c@lfdr.de>; Thu,  4 Dec 2025 23:36:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 582AC3491FB;
-	Thu,  4 Dec 2025 18:54:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CDF71A9FAF;
+	Thu,  4 Dec 2025 23:36:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZppYAIpW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BqxJIHBr"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 273F32F12B5;
-	Thu,  4 Dec 2025 18:54:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 426BC4A32;
+	Thu,  4 Dec 2025 23:36:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764874490; cv=none; b=Blxax8wMgAHomvNZvRVJLWH0ei9+MyIW0VB0AKM1ZkvPFXTN51pVJvCQeYrNwNs9z5dG/aanYgmnyLx1mbltE+6fiK+8SjIkDF7sAyeuApEgtGJenXIQehXlXSHW49x01UUorvkisP2EfVrefu8BnX5fiiuNTaUd7NqsdcwOEeY=
+	t=1764891362; cv=none; b=mK4nfQTqtMEbROJEyXaSXhnAeCvwtbHhzeK+mb+WABPTWqiUfUwPGgES+3HUlDD3BHW70X9l3pRxBaor9zd2REneXtnc4Pd7rEWwRBmlJfNytysoG9S3+sKf2tQjt6JRIt1hLBkdIbCQ+TFGc7/dyTUmJ2L2rVnF7Las7pXksK0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764874490; c=relaxed/simple;
-	bh=ImiduMHCnTBp77in1tppwgIySRFoBPJWpJy0SrzZ1Y8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J24thABuQ3RXHWF7P7gI0Ki++nc3JvyAF23UuyTeiTmoZZJ8saZgDD415CgtU3z5MZOR04qu9BWYEGYjT+NZ5DYq2NiOxTVGfXuLFZ+13jIkV3bilxBOTQ7VcFBQBT/bBt3axJq8AWcsZ8Lem0F+9zCUeiP+kGtLDd1lakECWtI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZppYAIpW; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764874486; x=1796410486;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=ImiduMHCnTBp77in1tppwgIySRFoBPJWpJy0SrzZ1Y8=;
-  b=ZppYAIpWmF5XbTZcgO9em3NUMChyFHqkaUFebAXr8YIG6dS2wFQA8/Z+
-   xGt4DVlhhBYSegQhhJ/HDd+kHnzNpT4fmkvcrdT0LveAmOosCXVu4k7vM
-   7spz3GG1QoO+4r5VAOMm66Am7/zjVuWASy0UzsGEYg2e2qYiTF9gVpn85
-   R8fSkWWniADhHEohZ08QVmFfVrWlgiaDIJ67lnNYskkEuUVzhhrFI9DQP
-   BYrH48KDyLSiUuC773VtA5matzFR96/jKXybXDh0dt6Qh8hxgyC0rGIjq
-   kfGppiU19ZfHDxWDsA7RfqBptpQoVLixHASja4SHPU7Y093wMALzRLXW7
-   Q==;
-X-CSE-ConnectionGUID: xnQgiEhCRdWn3aphTjpPXg==
-X-CSE-MsgGUID: jNKPiSHSTgSvua/z32J7pg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11632"; a="78015794"
-X-IronPort-AV: E=Sophos;i="6.20,249,1758610800"; 
-   d="scan'208";a="78015794"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2025 10:54:45 -0800
-X-CSE-ConnectionGUID: gXI+FC6gSVyKUKzSF0+8sg==
-X-CSE-MsgGUID: EbAUWmxJRw2nFruClqlcbw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,249,1758610800"; 
-   d="scan'208";a="200190901"
-Received: from pgcooper-mobl3.ger.corp.intel.com (HELO localhost) ([10.245.244.25])
-  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2025 10:54:45 -0800
-Date: Thu, 4 Dec 2025 20:54:42 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Artem Shimko <a.shimko.dev@gmail.com>
-Cc: Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Jan Dabros <jsd@semihalf.com>, Andi Shyti <andi.shyti@kernel.org>,
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] i2c: designware: Replace magic numbers with named
- constants
-Message-ID: <aTHY8pP0zjjX1NNB@smile.fi.intel.com>
-References: <20251204161309.750032-1-a.shimko.dev@gmail.com>
+	s=arc-20240116; t=1764891362; c=relaxed/simple;
+	bh=b74pXgNzZn9zE7QB0zAZNdhThx4g3GyKfQZGYLNmCVE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=UTwuUQgnHYk8Q2O+LZ8q2B1bh5x/WnIeWJ8qlgeUpNLpY6fF4RSoVslDTrhsuwyTNKU9YHzDHM/Uv1Q57c/TSuz5avuumPyubHmXKe2cz0amHqmq4wQG+llhyWM7zUEn5YXLO3PVUcVmf5LjpBe5Jb1RyXVTT8bdIn1a0iMEk9Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BqxJIHBr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45486C4CEFB;
+	Thu,  4 Dec 2025 23:36:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764891361;
+	bh=b74pXgNzZn9zE7QB0zAZNdhThx4g3GyKfQZGYLNmCVE=;
+	h=Date:From:To:Cc:Subject:From;
+	b=BqxJIHBr3h+KKbJWS4XIm0xkIlGFF5dIgn2+FrXqBRCleYzewEGcTwJu0ttBtPQSh
+	 QdpauWXSnRtUuSACtfkdciryEpm2cVzynGyO2ZTK3gGZuA972S0MKrKZhs4NUwqwEE
+	 UWMvUgupuvjtqjob6nce8vH0C1IBh601ky5MWTENrnyFlnl23Xe7pUEs8MngCq5dRU
+	 /EnMPGxf8eRhNZ3Je2d1A97nRpgb6sOtCabExy8EGEf0ccDl8krD+Phk9lzXnShHTi
+	 adyvD67SW5w3Eylc2OQMxu3n61LPLtsq1+Zsl3GIyuNhpivG60hOKv1zRCvVxVUxmF
+	 JdmH1YbodJxUw==
+Date: Fri, 5 Dec 2025 00:35:57 +0100
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-i2c <linux-i2c@vger.kernel.org>, 
+	lkml <linux-kernel@vger.kernel.org>, Andi Shyti <andi.shyti@kernel.org>
+Subject: i2c-host for v6.18
+Message-ID: <zzuyemsikzpbntvmgxm2fu7p4vs7uwkawyd5rd732p5ralx2fg@wnqvjg2mi7vu>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=iso-8859-15
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20251204161309.750032-1-a.shimko.dev@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On Thu, Dec 04, 2025 at 07:13:08PM +0300, Artem Shimko wrote:
-> Replace various magic numbers with properly named constants to improve
-> code readability and maintainability. This includes constants for
-> register access, timing adjustments, timeouts, FIFO parameters,
-> and default values.
-> 
-> The change makes the code more self-documenting without altering any
+Hi Wolfram,
 
-s/The change/This/
+here is the pull request for this cycle. I was hoping it would be
+more substantial, but I ran into a nasty issue with my gpg setup
+that blocked me from pushing to kernel.org for several weeks. The
+kernel.org helpdesk helped me sort it out, but unfortunately a
+bit too late, so this is all I managed to gather in time.
 
-> functionality.
+I am sorry for the disruption. I will set up a backup solution so
+that I can avoid this problem in the future.
 
-...
+Thanks and I wish you a great weekend,
+Andi
 
-> +#define DW_IC_DEFAULT_BUS_CAPACITANCE_PF	100
+The following changes since commit 7d0a66e4bb9081d75c82ec4957c50034cb0ea449:
 
-_pF
+  Linux 6.18 (2025-11-30 14:42:10 -0800)
 
-(yes, it's fine to use CamelCase for unit suffixes, some of them historically
- use capital letters, but it's better to follow the actual unit spelling from
- Système International d'Unité)
+are available in the Git repository at:
 
-> +#define DW_IC_ABORT_TIMEOUT_US			10
+  git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git tags/i2c-host-6.19
 
-> +#define DW_IC_ABORT_TOTAL_TIMEOUT_US		100
+for you to fetch changes up to 362e391005a98827a2d98b63f1e9001dd592bc63:
 
-Those TOTAL are not needed, just use a multiplier in place, this will be
-basically the explicit number of "iterations" (yes, I know that the real
-ones are 2x or 4x more).
+  dt-bindings: i2c: qcom-cci: Document SM8750 compatible (2025-12-03 21:50:26 +0100)
 
-> +#define DW_IC_BUSY_POLL_TIMEOUT_US		1100
+----------------------------------------------------------------
+i2c-host for v6.19
 
-Why not 1000?
+- general cleanups in bcmi2835, designware, pcf8584 and stm32
+- amd-mp2: fix device refcount
+- bcm, pxa, rcar: fix void-pointer-to-enum-cast warning
+- designware: avoid interrupt storms caused by bad firmware
+- designware: use dedicated xfer function for AMD NAVI
+- i801: fix supported features
+- spacemit: fix device detection failures
 
-(Yeah, I see the original value, but I think it makes no sense to go
- specifically with 1100).
+New device support:
+- Intel Diamond Rapids and Nova Lake-S (i801)
+- Mobileye
+- Rockchip RK3506
+- Qualcomm Kaanapali, MSM8953 and SM8750
 
-And in this case it might be better to write it as (1 * USEC_PER_MSEC)
-which makes it easier to get that this is 1 millisecond (in µs units).
+----------------------------------------------------------------
+Benoît Monin (4):
+      dt-bindings: i2c: dw: Add Mobileye I2C controllers
+      i2c: designware: Optimize flag reading in i2c_dw_read()
+      i2c: designware: Sort compatible strings in alphabetical order
+      i2c: designware: Add dedicated algorithm for AMD NAVI
 
--- 
-With Best Regards,
-Andy Shevchenko
+Brian Masney (1):
+      i2c: busses: bcm2835: convert from round_rate() to determine_rate()
 
+Cezar Chiru (5):
+      i2c: pcf8584: Remove debug macros from i2c-algo-pcf.c
+      i2c: pcf8584: Fix do not use assignment inside if conditional
+      i2c: pcf8584: Move 'ret' variable inside for loop, goto out if ret < 0.
+      i2c: pcf8584: Make pcf_doAddress() function void
+      i2c: pcf8584: Change pcf_doAdress() to pcf_send_address()
 
+Hangxiang Ma (2):
+      dt-bindings: i2c: qcom-cci: Document Kaanapali compatible
+      dt-bindings: i2c: qcom-cci: Document SM8750 compatible
+
+Heikki Krogerus (1):
+      i2c: i801: Fix the Intel Diamond Rapids features
+
+Heiko Stuebner (1):
+      dt-bindings: i2c: i2c-rk3x: Add compatible string for RK3506
+
+Jarkko Nikula (1):
+      i2c: i801: Add support for Intel Nova Lake-S
+
+Jinhui Guo (1):
+      i2c: designware: Disable SMBus interrupts to prevent storms from mis-configured firmware
+
+Krzysztof Kozlowski (3):
+      i2c: bcm-iproc: Fix Wvoid-pointer-to-enum-cast warning
+      i2c: pxa: Fix Wvoid-pointer-to-enum-cast warning
+      i2c: rcar: Fix Wvoid-pointer-to-enum-cast warning
+
+Luca Weiss (1):
+      dt-bindings: i2c: qcom-cci: Document msm8953 compatible
+
+Ma Ke (1):
+      i2c: fix reference leak in MP2 PCI device
+
+Markus Elfring (2):
+      i2c: designware: Omit a variable reassignment in dw_i2c_plat_probe()
+      i2c: stm32: Omit two variable reassignments in stm32_i2c_dma_request()
+
+Nathan Chancellor (1):
+      i2c: designware: Remove i2c_dw_remove_lock_support()
+
+Troy Mitchell (1):
+      i2c: spacemit: fix detect issue
+
+Zeng Guang (1):
+      i2c: i801: Add support for Intel Diamond Rapids
+
+ Documentation/devicetree/bindings/i2c/i2c-rk3x.yaml            |   1 +
+ Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml        |   6 ++++
+ Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml |   7 +++++
+ Documentation/i2c/busses/i2c-i801.rst                          |   2 ++
+ drivers/i2c/algos/i2c-algo-pcf.c                               | 105 +++++++++++++++++----------------------------------------------------
+ drivers/i2c/busses/Kconfig                                     |   2 ++
+ drivers/i2c/busses/i2c-amd-mp2-pci.c                           |   5 +++-
+ drivers/i2c/busses/i2c-bcm-iproc.c                             |   3 +-
+ drivers/i2c/busses/i2c-bcm2835.c                               |  12 ++++----
+ drivers/i2c/busses/i2c-designware-core.h                       |   2 +-
+ drivers/i2c/busses/i2c-designware-master.c                     |  34 +++++++++++++++--------
+ drivers/i2c/busses/i2c-designware-platdrv.c                    |  17 ++----------
+ drivers/i2c/busses/i2c-i801.c                                  |   6 ++++
+ drivers/i2c/busses/i2c-k1.c                                    |  19 +++++++++----
+ drivers/i2c/busses/i2c-pxa.c                                   |   2 +-
+ drivers/i2c/busses/i2c-rcar.c                                  |   2 +-
+ drivers/i2c/busses/i2c-stm32.c                                 |   7 ++---
+ 17 files changed, 105 insertions(+), 127 deletions(-)
 
