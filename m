@@ -1,151 +1,134 @@
-Return-Path: <linux-i2c+bounces-14400-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14401-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D4CACA38B5
-	for <lists+linux-i2c@lfdr.de>; Thu, 04 Dec 2025 13:08:06 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D8A9ACA38D0
+	for <lists+linux-i2c@lfdr.de>; Thu, 04 Dec 2025 13:09:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B8DB73089008
-	for <lists+linux-i2c@lfdr.de>; Thu,  4 Dec 2025 12:07:04 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 6E87E304A11C
+	for <lists+linux-i2c@lfdr.de>; Thu,  4 Dec 2025 12:08:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28BE933E348;
-	Thu,  4 Dec 2025 12:07:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69A1C33ADA1;
+	Thu,  4 Dec 2025 12:08:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="myUB8jID"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Cw1y2ORH"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B69D338F2F;
-	Thu,  4 Dec 2025 12:07:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CE7128488D
+	for <linux-i2c@vger.kernel.org>; Thu,  4 Dec 2025 12:08:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764850022; cv=none; b=o/sAasjcvCExFeQadeFdNwz44n/BG6yMXAsI9zgmEAqCh4dSAvvantBWA+DTuBzKqFtbcs2OZobkuQSCXLPjfvvy0en7asNdX9JYsyeYjyaFX784IcftcjNWuefDPBkv3GwHOR/txd6db0YnDgHZ1/NffOA9emvu6Ooq7xmFnhQ=
+	t=1764850090; cv=none; b=XS5tyzoGNai955EA8Qh54DvetxTFZ/NV6MENN6UPC9NS6kDcMGcTzqvEp4CTB6FmveYOGa0Vl7NFTQA9KsTMPNykEbXNWqwiCbbKCj4t+5KgScoOzSj3OUk/h+K0TpLTl7ZNuDg32BQkOcomAiGAQkZzAqA1NPDwxCR1+z7/v4k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764850022; c=relaxed/simple;
-	bh=AACMBGkOYNpC0wc7dBl/A97+VH5lB0jqIQofcJw+rV4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IRrOG2nNswGJOJaEYohaRkU+zDkHPl9BOQ1/VisnELKKRMp3NjphZzB8NkZ08m/SxWf2jFI6L2jFmxYI6QxCbw54oxy8FkBiArE0UN6QTOqEcAl3YzI3UsMgr795fAtk4XrbZ/FL9z7P9Y2ZfgNyUbTCUVm1VF+8kdGzbqYH4f8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=myUB8jID; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764850022; x=1796386022;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=AACMBGkOYNpC0wc7dBl/A97+VH5lB0jqIQofcJw+rV4=;
-  b=myUB8jIDTuWr5LLPyVT9Xwr5rRaMwCi+AafuBgaztdtGXHEqoi1+2Ist
-   yuTNIp/kCZ/XQEUMRyMzeY0MeSs5gxW7dtA1uk7Pi70oCfiHZ5zAN+3px
-   s6KA14IS3y+o/Xcprve+uB2glMPp3WmrnJHCGav3gPgqqFfPgLfcRKQoT
-   aBZmGb1tH5ehp52ROwUPBJUNhSZImWwCOLZS++uXI55HLz0TjE9fhKjb8
-   je3Sug5yNMWdOG4ciHJGhQSikqGjNak9U9DFUXDux3R11Fgvz3yg9Qzn7
-   vf9dHTqeMIFTwuZViFuqUcIumG3hLiRisIp7RuxLkAlTXQLq0qxAxeGwl
-   w==;
-X-CSE-ConnectionGUID: ujoGBIBbTQa4rMxZLNs3Xw==
-X-CSE-MsgGUID: z6PPv4ESQiKHyZ6rE1lvGQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11631"; a="66753252"
-X-IronPort-AV: E=Sophos;i="6.20,248,1758610800"; 
-   d="scan'208";a="66753252"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2025 04:06:58 -0800
-X-CSE-ConnectionGUID: cFBEIPl6S9m77mLooVMGkg==
-X-CSE-MsgGUID: zwed11zQRAih9YysX+gTQg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,248,1758610800"; 
-   d="scan'208";a="225924104"
-Received: from egrumbac-mobl6.ger.corp.intel.com (HELO localhost) ([10.245.245.222])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2025 04:06:46 -0800
-Date: Thu, 4 Dec 2025 14:06:44 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Herve Codina <herve.codina@bootlin.com>,
-	Kalle Niemi <kaleposti@gmail.com>, Rob Herring <robh@kernel.org>,
-	Matti Vaittinen <mazziesaccount@gmail.com>,
-	linux-arm-kernel@lists.infradead.org, Andrew Lunn <andrew@lunn.ch>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Peter Rosin <peda@axentia.se>, Arnd Bergmann <arnd@arndb.de>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Charles Keepax <ckeepax@opensource.cirrus.com>,
-	Richard Fitzgerald <rf@opensource.cirrus.com>,
-	David Rhodes <david.rhodes@cirrus.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Mark Brown <broonie@kernel.org>,
-	Daniel Scally <djrscally@gmail.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Len Brown <lenb@kernel.org>, Davidlohr Bueso <dave@stgolabs.net>,
-	Jonathan Cameron <jonathan.cameron@huawei.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Alison Schofield <alison.schofield@intel.com>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Ira Weiny <ira.weiny@intel.com>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Wolfram Sang <wsa@kernel.org>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, imx@lists.linux.dev,
-	linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-sound@vger.kernel.org,
-	patches@opensource.cirrus.com, linux-gpio@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-spi@vger.kernel.org,
-	linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org,
-	Allan Nielsen <allan.nielsen@microchip.com>,
-	Horatiu Vultur <horatiu.vultur@microchip.com>,
-	Steen Hegelund <steen.hegelund@microchip.com>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v4 01/29] Revert "treewide: Fix probing of devices in DT
- overlays"
-Message-ID: <aTF5VN2YSpj5uJsr@smile.fi.intel.com>
-References: <CAL_JsqJjm12LxpDg6LmpY=Ro_keHwnrWiYMLVnG=s_pSP4X2WQ@mail.gmail.com>
- <072dde7c-a53c-4525-83ac-57ea38edc0b5@gmail.com>
- <CAL_JsqKyG98pXGKpL=gxSc92izpzN7YCdq62ZJByhE6aFYs1fw@mail.gmail.com>
- <55076f4b-d523-4f8c-8bd4-0645b790737e@gmail.com>
- <20251202102619.5cd971cc@bootlin.com>
- <088af3ff-bd04-4bc9-b304-85f6ed555f2a@gmail.com>
- <20251202175836.747593c0@bootlin.com>
- <dc813fc2-28d2-4f2c-a2a3-08e33eec8ec7@gmail.com>
- <20251204083839.4fb8a4b1@bootlin.com>
- <CAMuHMdXdwf7La1EYBWTJadsTAJG3nKQVW6wtBn-bUqshA=XHRw@mail.gmail.com>
+	s=arc-20240116; t=1764850090; c=relaxed/simple;
+	bh=N8ywKgvhGfNbTuf59I2eWbO+CBw4hdAqLJ8DaYFh3gQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=iyrn2bK0QBU4tLAgR4BK4dtTcA9rieGFKIEMrJhzHfSu06bIZtRqwfOQSFH/z5kAObE26UYeJQVxpWgCgj6mhPPpZFdDME9AuVrDq2yZs1REvUXCjWKd2Jim84e/EtlG6zxpbxR3YRHzjERFpiPgNSBDY/WqA8k2xbhNfHhJ8BU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Cw1y2ORH; arc=none smtp.client-ip=209.85.208.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-640bd9039fbso1321779a12.2
+        for <linux-i2c@vger.kernel.org>; Thu, 04 Dec 2025 04:08:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1764850087; x=1765454887; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=N8ywKgvhGfNbTuf59I2eWbO+CBw4hdAqLJ8DaYFh3gQ=;
+        b=Cw1y2ORHAsyVtqbVHK615ibsGbzobflUqc8W0wb5lQ+045MLWY5VIDSzzStEgNBsgl
+         cXLjfxmgbV6iznzQH/wexaMzIsnl3lOwizEIE8ODrX3ULr3fU4vebHheVMI5yEGugchs
+         JulWuq1UBb6ehjh4vTYHkTV52TRHCKGyRG5U+nx86OOW8PjiTz6lEIHUc3g8Y5OLQ4/k
+         tNi1O5M1jhcY4t86RV81oj8beNC11A/Szv9vDh/IiSazPgmLKUANcAEcedz26U6ZFz0P
+         XKfvZIFtJon8PzneEUbJ7Pz69B2p3TuSCCkZuzvftiT/2IwrE7LJfzVs7WzIoYncKrsK
+         RP7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764850087; x=1765454887;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=N8ywKgvhGfNbTuf59I2eWbO+CBw4hdAqLJ8DaYFh3gQ=;
+        b=Q5R400nLUTcClV3uaZYNk8FiMpWmLAAhEXTjRZxhDh980xSOH0wC4V5yevY2yEQGCj
+         ZeHLlsipqCZ6VEnA8eT7DEsGVy9w6emROMQrgnV4T9+K1baHLV/yreCa2p48Yhy81fbN
+         52DBvDV0Mwg7Cfj3MmghSnLNQ5jjRn2580KviUoAqY9ynYtPDwO/FyqRVC1vUYuLJ1Ay
+         8kBDghgDMNSZYQjHVwAKWGFxQ4hKHYRzDljPhlzTLB/YD+xD35/Q3oEkE0hYuxqAzJ8b
+         5Gf/6rB2SqhuJ1FDEiBJqvZAiL/XRFFPwKzs2m6dRt1czLMlelMVUKtHiWkoyjUKthVM
+         S7Bg==
+X-Forwarded-Encrypted: i=1; AJvYcCU5FPwwpprGC9yFXkqsMPDrlRs3dYBR0YDxIgAGDqnViDcIsyBDDToyj+OFbc6XQap8rPzewlUrUcA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxVVAc6l9iHSrlr3qVstvKNDCEV0kU1optYWM+7qLRMip/UXSP0
+	dfcecm/jlB01ft9WfZBFkeT0EJqwfnXphKf5N3JPi3tVWlI5zHG41NSUz/d9bX7qDUPRV6vL4Mc
+	ZaEkcipsBtBOUm3eRPnOBN0BXUGpFvDMn25UAKJs=
+X-Gm-Gg: ASbGncviXEoFA0DVhtoPPiUiZQ59B6cLBpqbw+LjIxOMBi55FXGzxr/hRZWZYlzvLt3
+	e7rOVF3oHa6Gfwwk7d+QbUvBQsLSYzQjiWLnfSN/KyjpW8PZTuDTs3u4pZcAWUS3liM/JdxwLZF
+	yS5ITKO5JgFOekIZJzQQMHGZbN6jrnKxXs4bx3rzNMjk/XgxQKNim5CddOOiJaoPG1jX+Oi1ehY
+	oEzoFsV6fhS15hHF9QUcBHRtOlzXhZLACrSofOtoidMs2hLohigq4KGuM1pptFi6lSs1DWu
+X-Google-Smtp-Source: AGHT+IEx/PSrrrXYXzdYKjUJ8Vex21sVIz+i3jugwW6yuGWkH++tLjowsyJqC4ofe+dKcMUm24yCaGfbwki6fJWm6l8=
+X-Received: by 2002:a17:907:7ea0:b0:b72:5bdf:6074 with SMTP id
+ a640c23a62f3a-b79dbe8b05fmr655949366b.20.1764850086694; Thu, 04 Dec 2025
+ 04:08:06 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdXdwf7La1EYBWTJadsTAJG3nKQVW6wtBn-bUqshA=XHRw@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+References: <20251106110935.2563071-1-a.shimko.dev@gmail.com>
+ <20251204114129.607200-1-a.shimko.dev@gmail.com> <20251204120036.GC1613537@black.igk.intel.com>
+In-Reply-To: <20251204120036.GC1613537@black.igk.intel.com>
+From: Artem Shimko <a.shimko.dev@gmail.com>
+Date: Thu, 4 Dec 2025 15:07:55 +0300
+X-Gm-Features: AWmQ_bloo1eDhGUaurEH6TgJp24cnu9XonLDvmKiw2bo0CCYxD05qq2d-onjy3E
+Message-ID: <CAOPX747Y9Dbzdn2PfSU3wqce5iFx_XfJJa+Zoq30iEsgJCRdPQ@mail.gmail.com>
+Subject: Re: [PATCH v2] i2c: designware: Replace magic numbers with named constants
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: andi.shyti@kernel.org, andriy.shevchenko@linux.intel.com, jsd@semihalf.com, 
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Dec 04, 2025 at 11:49:13AM +0100, Geert Uytterhoeven wrote:
-> On Thu, 4 Dec 2025 at 08:39, Herve Codina <herve.codina@bootlin.com> wrote:
+Hi Mika,
 
-...
+Sorry about that, I'm a newbie and might make mistakes.
 
-> > Saravana's email (Saravana Kannan <saravanak@google.com>) seems incorrect.
-> > Got emails delivery failure with this email address.
-> 
-> Yeah, he moved company.
-> He is still alive, I met him in the LPC Training Session yesterday ;-)
+Yes, I'm confused about the versions myself, and yes, there is a v3.
 
-Usually people update the MAINTAINERS and/or .mailcapain such a case.
-Can you ping him about this?
+Am I right? Even though I already sent it in response to the kernel
+robot report, would it be better to forward v3 to a separate thread?
 
--- 
-With Best Regards,
-Andy Shevchenko
+Regards,
+Artem
 
-
+On Thu, Dec 4, 2025 at 3:00=E2=80=AFPM Mika Westerberg
+<mika.westerberg@linux.intel.com> wrote:
+>
+> On Thu, Dec 04, 2025 at 02:41:29PM +0300, Artem Shimko wrote:
+> > Replace various magic numbers with properly named constants to improve
+> > code readability and maintainability. This includes constants for
+> > register access, timing adjustments, timeouts, FIFO parameters,
+> > and default values.
+> >
+> > The change makes the code more self-documenting without altering any
+> > functionality.
+> >
+> > Signed-off-by: Artem Shimko <a.shimko.dev@gmail.com>
+> > ---
+> >
+> > Hello maintainers and reviewers,
+> >
+> > Fix replaces magic numbers throughout the DesignWare I2C driver with na=
+med
+> > constants to improve code readability and maintainability.
+> >
+> > The change introduces constants for register access, timing adjustments=
+,
+> > timeouts, FIFO parameters, and default values, all properly documented
+> > with comments.
+> >
+> > No functional changes.
+>
+> There is already v3 at least of this patch. What changed?
+>
+> Also can you please send new versions on a new thread instead of replying
+> on the existing one? It is really hard to follow.
 
