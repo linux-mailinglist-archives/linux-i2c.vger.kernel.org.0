@@ -1,135 +1,274 @@
-Return-Path: <linux-i2c+bounces-14396-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14397-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25CCBCA3682
-	for <lists+linux-i2c@lfdr.de>; Thu, 04 Dec 2025 12:18:26 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 05394CA3777
+	for <lists+linux-i2c@lfdr.de>; Thu, 04 Dec 2025 12:41:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 8B6D4300DC86
-	for <lists+linux-i2c@lfdr.de>; Thu,  4 Dec 2025 11:18:25 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id BC20B301A734
+	for <lists+linux-i2c@lfdr.de>; Thu,  4 Dec 2025 11:41:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55216338926;
-	Thu,  4 Dec 2025 11:18:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 431A92FF67D;
+	Thu,  4 Dec 2025 11:41:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="OA8RohSB"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="myUayP67"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A8D72EBDD0
-	for <linux-i2c@vger.kernel.org>; Thu,  4 Dec 2025 11:18:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 304012EC08D
+	for <linux-i2c@vger.kernel.org>; Thu,  4 Dec 2025 11:41:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764847104; cv=none; b=pPOBiqQZ+cyxkvCF2HQ+o1e9nW0BzP3Uv2jFqrHn4ijxHIfU947SyMIxKrZD/lhEVHG/gRb/8jaZwtDzBB5Ox2NzRq4aca1LEM9jecxOLzQHgzWIgtAjk240c+r88gKqunDjj6yEEN/MOnGkzjvszaPbhJVUy1J7WtPQampp5Ow=
+	t=1764848497; cv=none; b=RkHhReBVRFjo37zO8q0HXFYOUqlvWYHXRGE43KfMGLee8/1jh3JgGMFcw49qO9AzTCBx5y+tBgYIVdRXNrzTYRi6Or8vQxQebFNlywdZFTr2iUTyUtV/QgNKeZn6XYLs15Chq/2QKYIDDigGjn1pclpCCPpJGzvOCPySd0TW8MQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764847104; c=relaxed/simple;
-	bh=+LOeBEfr8ZEdGvSNvofGiFrT7OpuozP6mpPTcUt6zJU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=m3EbAwZ2R/sk4jJcg/TQ29GYcnlpUmvpniWPgF0mchP2lEEg/CekMqqPBmJOJCvov/3UtVgRtOh3oNCGvq/yUhyJsbbhodqCFRmOvQk+unyOBmCx0NckMRB6I+1xK6xMEVgtsE17BE5dUnfUzH8cX59GqSHjh0TsmlW6D8awfus=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=OA8RohSB; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-42e2e2eccd2so605373f8f.1
-        for <linux-i2c@vger.kernel.org>; Thu, 04 Dec 2025 03:18:21 -0800 (PST)
+	s=arc-20240116; t=1764848497; c=relaxed/simple;
+	bh=8ysDNsy2lkvgQyvTQ2XfxB4qq8ZeLthjTiIJRMygwBo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=lOXe2o6elckploA/hKycNmdeEe9HIKNfuLsiUJpDFl+Uug9ICGojtcwePWF0ya7eJsFbFqBftiDkQcE1EK3md+hQ1nXV2P93taG0N606UaldBvBKPS1KEfYOJcYGJnA9Rb+9hJDtGHlR5YsErOhU29Mn/wLmt9oJ5jLEXtJelko=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=myUayP67; arc=none smtp.client-ip=209.85.167.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-59445ee9738so648082e87.3
+        for <linux-i2c@vger.kernel.org>; Thu, 04 Dec 2025 03:41:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1764847100; x=1765451900; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+LOeBEfr8ZEdGvSNvofGiFrT7OpuozP6mpPTcUt6zJU=;
-        b=OA8RohSBujOiEUqeXuXsloF2g+hRrbzpTai76huy8HXBadjwMsStZu8I2fU66DJ8TO
-         FwnaDs8n0El1DYvJ46uylCtVzUKlkPxmsD3vhxPCF5EiSbPVit0LuMPaO4sXBZcJFoiR
-         mtyG1ZmBoAMLyM2cqApsJZu3xIMTwKe4YNAH65SBW3mBFeDXkM7j9kmuaf/lddfzBN90
-         iTLULxe3+ksTW7sj6xWaZVOi3yWz6IXyuzfUBtE27Zu2tFTFKx795tDrB7Hq6OEALiSV
-         geJZmKLsuwri9n6FviqzsK5nCdpEoGEmBCfQ4ddyR0f/dmwpvZffTTxDS6xKkMgbiQC1
-         SJMA==
+        d=gmail.com; s=20230601; t=1764848493; x=1765453293; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=haiFQ80Yih4RGujm7GCUrVKtIh86tkCb7eluzFIF+KQ=;
+        b=myUayP67IETETvaANiXDWB3JVlkGs5D1658br34sXtDbMJx3C8yM+mDo759IMqvjlU
+         jUGSWICguQOkZ/EwvLc8mR4iTHG1fgcoVEVeiDn5rB0HNp2ekTu7iU7gdSCfTHwS6P5E
+         ksXaXCgrtf75UXNQcImlKQyA4FE4/hcLljsRo8xKDloz4TYMhrMB6aZdTgIitDopCYjJ
+         QgiPr7iJ/4rIkMy4Zx+Npgwk3M3dVQNKOOv15rcULnsxeVEXO4HncV2JBFe8Pg7ONFVb
+         w/pWdjcbEAR9AKrykVtGOXV/xPE4LGGOPskiIXqNnU807t/lyDJIA4Mag0oXsNfN3WuO
+         hr5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764847100; x=1765451900;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+LOeBEfr8ZEdGvSNvofGiFrT7OpuozP6mpPTcUt6zJU=;
-        b=ZgH2TRulSh/VU13zqqek9geupaqKVgffs3odYHlq+5pD6ah1PDwLCNM3Qutm1Lf8xx
-         UcoyWPEFrZGgxrwW+xrqQ9SCscofZp9xFoEbu4kYezKfCab6ZissDfaKAZa2uTpjkfWl
-         s/rOEtPzmVX6XUrBOyX8Qx7KfJrmbCSPih/n+Z3d4I5VUDvGDT7VXIpVHx5bfkDT5EE2
-         T0FYNc9UXVMeq4gP2laNL5qnLIO+oNCiEXbr94NKTwpEJ7/Uyyzd4NVfj8KShEU3Ra9M
-         MLUWdEjQy4dyMcOXWn1R4KDh04kUlDF/2ow5o/7tTr8gqReBM/PbF+zLcRwvd52tjieA
-         AhzA==
-X-Forwarded-Encrypted: i=1; AJvYcCVSNA2JF5/qVDGQlgkhcczrlIFzSsDjAcLo7oWlqcLqn9FmkCrw/tv8/KrLgXsJojvhTSIwczsmhTM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxLxZvSxHcaJtG+Fa7nRzcTiNrYxk/VFqlBKAspF5tm5aQNCG+6
-	WgyGXoCljCDbVOtXIfml5hXWdFY5fyqWtQGfiBwlsKpMluRgxA6+KXmbIberziH+w+4=
-X-Gm-Gg: ASbGncvx/1fQBz1QQokDhK7QBR4u6H8CCakZuMp0PYkbHrOSVTRpBPDMGQu8Ozj7QqS
-	V++H21Xkkb8R0PYs8VDrVAlGXZrk1oz64YZjtCKEtpfmtq6Sh3JBskon/4AXWsWXxjwmSF3B63U
-	vVIGljpySFQa7TJfiQt7rJ1tuOVxy545x+g9i8Cu9h8F0Yo7Ru/G7I+moo7RCAVZpsbHve73j/Q
-	X1a7opfLMbXMEkjWHYlHNGlaIMWkOwfSgshhAeFsv0x5m5xegWsArwnWT2AYM1pZxwxZftkD4tZ
-	VK8RMpWTRlp5jEI8FIDiE9C0nwzcWu0+zkGsIufPQFNIh5Y2YKyLCm2H11DZj3F67IXkmfNXCW+
-	WqShMgd9Vk7ew2w4/VDmkIzVeva94F66DqLbvmeF0zIHolJfpmZN/uCDLSk1lXE5wOzlbWFc3LM
-	GGZ1LSXLJmR1U5UsunqMPGx+ZOWRX/Ak9jqZ/98BqfJy5dTcphs7ColxI=
-X-Google-Smtp-Source: AGHT+IH57MsQAl+/XT2gVgjmbcRNCbkMZAWMG/keUEp9la8csas6oJpOYVghaAgaaYbkbn1de2irrQ==
-X-Received: by 2002:a05:6000:1a8a:b0:42b:5628:f4a3 with SMTP id ffacd0b85a97d-42f731678e9mr6043858f8f.1.1764847099664;
-        Thu, 04 Dec 2025 03:18:19 -0800 (PST)
-Received: from localhost (p200300f65f006600000000000000081d.dip0.t-ipconnect.de. [2003:f6:5f00:6600::81d])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-42f7cbff352sm2654474f8f.17.2025.12.04.03.18.18
+        d=1e100.net; s=20230601; t=1764848493; x=1765453293;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=haiFQ80Yih4RGujm7GCUrVKtIh86tkCb7eluzFIF+KQ=;
+        b=GDOqIiI9utfl6VJGwbZsJvq8PrkwF5ORF8md2kZKvJwzOBrxDyiJUoo6lgxXWxWA/d
+         psYNpjl5IpRZmm7n/JtWiTfX2GKCHI2z8ZdUEAYb7xFpQ4nQapmt5Fvo2vwdvnBQXnfg
+         uIMxzqHDx2HsvPRF8m/j3oivb/s9Hcg3kZqSlS9FrIFbaFdZ05gxPjE9gMgLy8ebYZwy
+         9FcIdXaW4tiCbNZTiZWd+T5vBqj0BBuxEqDIOkhHJ1tBknXpg7rZt8maCC6OcEa7MAf6
+         smPXvWkH8tR1zStSnNVhnaENQnGndzfqjKa3Luwu26EMfwVCUMaTy97pjfbQ4Q4U/TMO
+         MRUQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXxk3VflW6XsmONok21sEEL023UjkoW6udD+Ab0oZ8GNDhPu5RKYUNP8OcsoQExJfRQUkAnVLCJ8Io=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxoHpjjetAWbXcZGJLRqMs9wL/Uhyhd2X3tDwaLeXbafcUg8lqo
+	T18AwsPMiEvrpX4+HtY9JDEs64htKSAoWZ5ZDedVmCRjwJTRvXozdzA0HRVEjem8
+X-Gm-Gg: ASbGncvsmpvr2VKtzZvO7dY2639ZlPPtCmmBfgl+YjwLR9K9pds3b/B6U9RfL+xmiNQ
+	gaaAWfN9QfRR/N9WPNo2lQNMUDmZp5LTfYwoFL5ocnpcx8s8deaGzB7akhzZ2lR9AwfihddDFTJ
+	jWr3ax622DE3n3T0qAPnWjF7u25x2kkLUZCG1Et2fQl6alIySMELVxn+C+Qb2U8BFt5VJwJtHPj
+	BgyxLjAUarzYFIS6cjw3DcBQqPNjCOTGbZ19oRbVe+7XpJq01zQ+QCoW+SAVo5kE+/hCX6U1/iq
+	9quMLvAOWJW4VvI1WGmG0luiMZTrwphWdnCmAuc2AUZcy4nB9rg+jBmrJC3rgYDUqwvvtgotrhN
+	KRQ9b47Q6dwrCvZsxjNtF8BVJRslVHFh7VGJmZRHiYo0NpRb8h0RA4eju+28C8Wm2NdWiibkg35
+	SwixyBnDXYl8LJAVIGVyYXPDpspgMu
+X-Google-Smtp-Source: AGHT+IEtztpJ7iBt4egd3bpkWCCHJ+oz0UMfLgzrvSsmcj/F5M/i7zeaJgUS2DpR+cKLH9oakJpHNg==
+X-Received: by 2002:a05:6512:104f:b0:595:7d95:eaad with SMTP id 2adb3069b0e04-597d3f59bd2mr2466899e87.22.1764848492941;
+        Thu, 04 Dec 2025 03:41:32 -0800 (PST)
+Received: from NB-6746.corp.yadro.com ([188.243.183.84])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-597d7c2eaedsm430736e87.99.2025.12.04.03.41.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Dec 2025 03:18:18 -0800 (PST)
-Date: Thu, 4 Dec 2025 12:18:17 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-To: Andi Shyti <andi.shyti@kernel.org>
-Cc: Eddie James <eajames@linux.ibm.com>, 
-	Ninad Palsule <ninad@linux.ibm.com>, linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org, 
-	linux-kernel@vger.kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH 04/12] i2c: fsi: Drop assigning fsi bus
-Message-ID: <lwnjd4a46eypemd6daqitdvmapjjx4c6vr6yeuzf3qpvd2wrs2@bcmxgupsbyj7>
-References: <cover.1764434226.git.ukleinek@kernel.org>
- <ef38106b5099e92395d5cc84d1bf0b806b53d1dc.1764434226.git.ukleinek@kernel.org>
- <x4y4m7bclxs3rbb6ptqt6chlg7iaual4wjz2lma5ugdhfp2mr6@phsjcud6vfax>
+        Thu, 04 Dec 2025 03:41:32 -0800 (PST)
+From: Artem Shimko <a.shimko.dev@gmail.com>
+To: a.shimko.dev@gmail.com
+Cc: andi.shyti@kernel.org,
+	andriy.shevchenko@linux.intel.com,
+	jsd@semihalf.com,
+	linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	mika.westerberg@linux.intel.com
+Subject: [PATCH v2] i2c: designware: Replace magic numbers with named constants
+Date: Thu,  4 Dec 2025 14:41:29 +0300
+Message-ID: <20251204114129.607200-1-a.shimko.dev@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20251106110935.2563071-1-a.shimko.dev@gmail.com>
+References: <20251106110935.2563071-1-a.shimko.dev@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ofyrr2hu65mfdg33"
-Content-Disposition: inline
-In-Reply-To: <x4y4m7bclxs3rbb6ptqt6chlg7iaual4wjz2lma5ugdhfp2mr6@phsjcud6vfax>
+Content-Transfer-Encoding: 8bit
 
+Replace various magic numbers with properly named constants to improve
+code readability and maintainability. This includes constants for
+register access, timing adjustments, timeouts, FIFO parameters,
+and default values.
 
---ofyrr2hu65mfdg33
-Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH 04/12] i2c: fsi: Drop assigning fsi bus
-MIME-Version: 1.0
+The change makes the code more self-documenting without altering any
+functionality.
 
-Hello Andi,
+Signed-off-by: Artem Shimko <a.shimko.dev@gmail.com>
+---
 
-On Wed, Dec 03, 2025 at 06:07:11PM +0100, Andi Shyti wrote:
-> On Sat, Nov 29, 2025 at 05:57:40PM +0100, Uwe Kleine-K=F6nig wrote:
-> > Since commit FIXME ("fsi: Assign driver's bus in fsi_driver_register()")
->=20
-> whoever is going to apply the series needs to remember to replace
-> this FIXME.
+Hello maintainers and reviewers,
 
-Ah right, when I wrote the commit log I made a mental note to point that
-out in the cover letter, but then I forgot. Thanks for the reminder.
+Fix replaces magic numbers throughout the DesignWare I2C driver with named 
+constants to improve code readability and maintainability.
 
-Best regards
-Uwe
+The change introduces constants for register access, timing adjustments, 
+timeouts, FIFO parameters, and default values, all properly documented 
+with comments.
 
---ofyrr2hu65mfdg33
-Content-Type: application/pgp-signature; name="signature.asc"
+No functional changes.
 
------BEGIN PGP SIGNATURE-----
+Thank you for your consideration.
+--
+Regards,
+Artem
 
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmkxbfcACgkQj4D7WH0S
-/k5bjQf/fgyumKlkXTNHtLYRAcdelQgnmwQq3VoF0X5TFn7pl2FyStUJSgvRZ87Z
-59RLfegSso/0LIjvLUOkEJ8HX/Y9gDmE0pZKyuJ/jOuxHjh0tcKWtbGzwCbR/bh8
-ceQpdwLJo2ZsbUUfMrkfoUTsY27SeDiyhHC9gZnj8KDQDDkZZ0BmLcbStBqvZIKJ
-gnFijsB2j18OkWgd4OV2dmvISQgugOBOFTEsP/pe4CvLClTszpnZ7nSX8f2SJcFU
-ce/x6ejJOGdagpSy+Udnd8TPWh4CGVPtZZEZT6w4gM5FWXG20l5p8TIFdDZC6iW0
-ZmB1RTUTJi/nA9BZIgzKuWicB5Dayw==
-=GVZw
------END PGP SIGNATURE-----
+ChangeLog:
+  v1:
+    * https://lore.kernel.org/all/20251105161845.2535367-1-a.shimko.dev@gmail.com/T/#u
+  v2:
+    * Move register-related constants to i2c-designware-core.h
+    * Remove unnecessary comments to reduce clutter  
+    * Keep only essential timeouts and default parameters in .c file
+    * Use FIELD_GET() for FIFO depth extraction as suggested
 
---ofyrr2hu65mfdg33--
+ drivers/i2c/busses/i2c-designware-common.c | 33 ++++++++++++++--------
+ drivers/i2c/busses/i2c-designware-core.h   | 13 +++++++++
+ 2 files changed, 35 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-designware-common.c b/drivers/i2c/busses/i2c-designware-common.c
+index 5b1e8f74c4ac..3bc55068da03 100644
+--- a/drivers/i2c/busses/i2c-designware-common.c
++++ b/drivers/i2c/busses/i2c-designware-common.c
+@@ -12,6 +12,7 @@
+ #define DEFAULT_SYMBOL_NAMESPACE	"I2C_DW_COMMON"
+ 
+ #include <linux/acpi.h>
++#include <linux/bitfield.h>
+ #include <linux/clk.h>
+ #include <linux/delay.h>
+ #include <linux/device.h>
+@@ -34,6 +35,14 @@
+ 
+ #include "i2c-designware-core.h"
+ 
++#define DW_IC_DEFAULT_BUS_CAPACITANCE_PF	100
++
++#define DW_IC_ABORT_TIMEOUT_US			10
++#define DW_IC_ABORT_TOTAL_TIMEOUT_US		100
++
++#define DW_IC_BUSY_POLL_TIMEOUT_US		1100
++#define DW_IC_BUSY_TOTAL_TIMEOUT_US		20000
++
+ static const char *const abort_sources[] = {
+ 	[ABRT_7B_ADDR_NOACK] =
+ 		"slave address not acknowledged (7bit mode)",
+@@ -106,7 +115,7 @@ static int dw_reg_read_word(void *context, unsigned int reg, unsigned int *val)
+ 	struct dw_i2c_dev *dev = context;
+ 
+ 	*val = readw(dev->base + reg) |
+-		(readw(dev->base + reg + 2) << 16);
++		(readw(dev->base + reg + DW_IC_REG_STEP_BYTES) << DW_IC_REG_WORD_SHIFT);
+ 
+ 	return 0;
+ }
+@@ -116,7 +125,7 @@ static int dw_reg_write_word(void *context, unsigned int reg, unsigned int val)
+ 	struct dw_i2c_dev *dev = context;
+ 
+ 	writew(val, dev->base + reg);
+-	writew(val >> 16, dev->base + reg + 2);
++	writew(val >> DW_IC_REG_WORD_SHIFT, dev->base + reg + DW_IC_REG_STEP_BYTES);
+ 
+ 	return 0;
+ }
+@@ -165,7 +174,7 @@ int i2c_dw_init_regmap(struct dw_i2c_dev *dev)
+ 	if (reg == swab32(DW_IC_COMP_TYPE_VALUE)) {
+ 		map_cfg.reg_read = dw_reg_read_swab;
+ 		map_cfg.reg_write = dw_reg_write_swab;
+-	} else if (reg == (DW_IC_COMP_TYPE_VALUE & 0x0000ffff)) {
++	} else if (reg == lower_16_bits(DW_IC_COMP_TYPE_VALUE)) {
+ 		map_cfg.reg_read = dw_reg_read_word;
+ 		map_cfg.reg_write = dw_reg_write_word;
+ 	} else if (reg != DW_IC_COMP_TYPE_VALUE) {
+@@ -384,7 +393,7 @@ int i2c_dw_fw_parse_and_configure(struct dw_i2c_dev *dev)
+ 	i2c_parse_fw_timings(device, t, false);
+ 
+ 	if (device_property_read_u32(device, "snps,bus-capacitance-pf", &dev->bus_capacitance_pF))
+-		dev->bus_capacitance_pF = 100;
++		dev->bus_capacitance_pF = DW_IC_DEFAULT_BUS_CAPACITANCE_PF;
+ 
+ 	dev->clk_freq_optimized = device_property_read_bool(device, "snps,clk-freq-optimized");
+ 
+@@ -539,8 +548,9 @@ void __i2c_dw_disable(struct dw_i2c_dev *dev)
+ 
+ 		regmap_write(dev->map, DW_IC_ENABLE, enable | DW_IC_ENABLE_ABORT);
+ 		ret = regmap_read_poll_timeout(dev->map, DW_IC_ENABLE, enable,
+-					       !(enable & DW_IC_ENABLE_ABORT), 10,
+-					       100);
++					       !(enable & DW_IC_ENABLE_ABORT),
++					       DW_IC_ABORT_TIMEOUT_US,
++					       DW_IC_ABORT_TOTAL_TIMEOUT_US);
+ 		if (ret)
+ 			dev_err(dev->dev, "timeout while trying to abort current transfer\n");
+ 	}
+@@ -552,7 +562,7 @@ void __i2c_dw_disable(struct dw_i2c_dev *dev)
+ 		 * in that case this test reads zero and exits the loop.
+ 		 */
+ 		regmap_read(dev->map, DW_IC_ENABLE_STATUS, &status);
+-		if ((status & 1) == 0)
++		if (!(status & 1))
+ 			return;
+ 
+ 		/*
+@@ -635,7 +645,8 @@ int i2c_dw_wait_bus_not_busy(struct dw_i2c_dev *dev)
+ 
+ 	ret = regmap_read_poll_timeout(dev->map, DW_IC_STATUS, status,
+ 				       !(status & DW_IC_STATUS_ACTIVITY),
+-				       1100, 20000);
++				       DW_IC_BUSY_POLL_TIMEOUT_US,
++				       DW_IC_BUSY_TOTAL_TIMEOUT_US);
+ 	if (ret) {
+ 		dev_warn(dev->dev, "timeout waiting for bus ready\n");
+ 
+@@ -699,12 +710,12 @@ int i2c_dw_set_fifo_size(struct dw_i2c_dev *dev)
+ 	if (ret)
+ 		return ret;
+ 
+-	tx_fifo_depth = ((param >> 16) & 0xff) + 1;
+-	rx_fifo_depth = ((param >> 8)  & 0xff) + 1;
++	tx_fifo_depth = FIELD_GET(DW_IC_FIFO_TX_FIELD, param) + 1;
++	rx_fifo_depth = FIELD_GET(DW_IC_FIFO_RX_FIELD, param) + 1;
+ 	if (!dev->tx_fifo_depth) {
+ 		dev->tx_fifo_depth = tx_fifo_depth;
+ 		dev->rx_fifo_depth = rx_fifo_depth;
+-	} else if (tx_fifo_depth >= 2) {
++	} else if (tx_fifo_depth >= DW_IC_FIFO_MIN_DEPTH) {
+ 		dev->tx_fifo_depth = min_t(u32, dev->tx_fifo_depth,
+ 				tx_fifo_depth);
+ 		dev->rx_fifo_depth = min_t(u32, dev->rx_fifo_depth,
+diff --git a/drivers/i2c/busses/i2c-designware-core.h b/drivers/i2c/busses/i2c-designware-core.h
+index 347843b4f5dd..a699953bf5ae 100644
+--- a/drivers/i2c/busses/i2c-designware-core.h
++++ b/drivers/i2c/busses/i2c-designware-core.h
+@@ -41,6 +41,19 @@
+ #define DW_IC_DATA_CMD_DAT			GENMASK(7, 0)
+ #define DW_IC_DATA_CMD_FIRST_DATA_BYTE		BIT(11)
+ 
++/*
++ * Register access parameters
++ */
++#define DW_IC_REG_STEP_BYTES			2
++#define DW_IC_REG_WORD_SHIFT			16
++
++/*
++ * FIFO depth configuration
++ */
++#define DW_IC_FIFO_TX_FIELD			GENMASK(23, 16)
++#define DW_IC_FIFO_RX_FIELD			GENMASK(15, 8)
++#define DW_IC_FIFO_MIN_DEPTH			2
++
+ /*
+  * Registers offset
+  */
+-- 
+2.43.0
+
 
