@@ -1,76 +1,74 @@
-Return-Path: <linux-i2c+bounces-14458-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14459-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D246ECA7D82
-	for <lists+linux-i2c@lfdr.de>; Fri, 05 Dec 2025 14:54:10 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 064D5CA7DAB
+	for <lists+linux-i2c@lfdr.de>; Fri, 05 Dec 2025 14:57:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id EF5913117092
-	for <lists+linux-i2c@lfdr.de>; Fri,  5 Dec 2025 13:52:12 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5307130161AE
+	for <lists+linux-i2c@lfdr.de>; Fri,  5 Dec 2025 13:56:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60FF61E98E6;
-	Fri,  5 Dec 2025 13:52:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEE943321C1;
+	Fri,  5 Dec 2025 13:56:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z5WgnEWa"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EvxNrcAj"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 428E632ABC3;
-	Fri,  5 Dec 2025 13:52:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B70D330E836;
+	Fri,  5 Dec 2025 13:56:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764942730; cv=none; b=X3zeH7BRq1LvfJkwYMWv0YQ4CeXW8HFLoMKYrUBtkSltR5k8Gmd+J9uMIB2wGz//LgAC3vPwMNiG/vOYl9jMC5kAXT7BnRaavfN5i7wKiRlmcXKdVvIn/1uj0s1uHms20P9axhRaxyKQLuheV1Jx713MUxhHFm9ArYv9ZIjMK+U=
+	t=1764942970; cv=none; b=hmjHlbgvMq0njf4MgopJxtRr62TA4GTQ7+HInTOuzmw09n279/yZeWCyDiJs37iVYbivwXHG5Oj/0mjstegigVhewz+x5CLmkbHFkjnJ0aWBrXBeK4vsO2PLMiXHT+5l5z6c0mN2/T6eMiX2+TqOMvHsW9aRYKrKhhcNamfzibY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764942730; c=relaxed/simple;
-	bh=k4hgjBGInSxYLHZeFSLPGQ6QSZkjySInF8Q+8uAlTcU=;
+	s=arc-20240116; t=1764942970; c=relaxed/simple;
+	bh=n/BIBT2TQ6QLo2HPDq8SQzsjDi1TV37C1BbUNQ906YI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ebo2mNz0veMpGYMSJBfrvhqeDA2NSFsRh9rNVYNINgOZ3YQpOFDMlir6TZ61bR3X843Jz0iQZG7c8kNZ4NRrK55SHqw7dPXvj3Q4gJSASlnHyXprQSaz5c6DHMh1WJDz55LAVu+PY3N9LTxZ4v8fhP/lAaZ+YiCI2AOmDXioCOg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z5WgnEWa; arc=none smtp.client-ip=192.198.163.17
+	 Content-Type:Content-Disposition:In-Reply-To; b=F6R35cCHIR96Cgzm/6HYqB8+KGXnewfYF5EnUWCIOHPMCHOPHbVyZ6zhpdgJjka/cYUkjJuU3ljKMT1isHqbyjsKD2YjF9PwPoWdteiDqRTXWdjLFyA+m+XvNVzp3NjCE2S0tawDAZApLyZSja23FkWh5YVTnJGRqtfVLbaf8qA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EvxNrcAj; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764942728; x=1796478728;
+  t=1764942968; x=1796478968;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=k4hgjBGInSxYLHZeFSLPGQ6QSZkjySInF8Q+8uAlTcU=;
-  b=Z5WgnEWatNgGQbhJkrjrLeeiooLWVa5mXfQ6rEk/CjpgwCnpLHvoOaUg
-   STNtWhoa7QQZhjC+RjkcYnWbviL+FIRnxsswXfd1g/Nit8iXy2KSy18YJ
-   pAgPhV0pAmuRx48PNNZMpwgb98+MGkCyVPS868U9Kmki2lMmhu1lJMoir
-   ubiNdYqdMGaslaDKy7necUoAheYprTw4Ci6DU1UAJA9z+fb90D2IUWCQP
-   PxVqeS7sr8Mf1A+viM3O5U17+xTACcPLXIBSmwiI/WwdRPFvTEJXvjLZ4
-   K7gXI1xlxFgoTxhi48JyMYb627BISNhZGuh7uotd6xWkauHG9mnggPZZI
-   Q==;
-X-CSE-ConnectionGUID: AAWUQD2hToyMR6Fp2qK06Q==
-X-CSE-MsgGUID: WAP5re4VTLm4ut1wS5jXrg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11632"; a="66870278"
+  bh=n/BIBT2TQ6QLo2HPDq8SQzsjDi1TV37C1BbUNQ906YI=;
+  b=EvxNrcAjSo0fOWGo/5VIOJrdTLgepeakTTRApX6grcCC7VAUL18aKmeN
+   zyFVRIa3mWOMUhFNBWxcp0V58JIGH6uaqC5X3hujkRkZCwXsbtrvDdGDe
+   w+xhzLb6ppjGkP5tvzFiODy6fx+zaypSujq5ZGlWW1Gj9OpujS3J3Nkgg
+   9DRbqP6zBpIYqF9BysjE3BDZ7AaLH0HZAmkI9ETjxAAGSbcd8FeXu2wJO
+   1iph7r5n+kudXuflZR6kM2Uf/uSY9pZ1iD18CRJz+EWy5kuGxXLhzdNCA
+   KaaTqzbYlGdJQukUfz/e4fw4ho2zTAUXE75I27xQowWRRRolNRBnQ5VUv
+   w==;
+X-CSE-ConnectionGUID: z68rOVO8SYuGV0HTBhAHlw==
+X-CSE-MsgGUID: X4n+kWfMRBOWpGBoV5/MXw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11632"; a="78326739"
 X-IronPort-AV: E=Sophos;i="6.20,252,1758610800"; 
-   d="scan'208";a="66870278"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2025 05:52:05 -0800
-X-CSE-ConnectionGUID: mnN5Jk7XTxeZlQ4Xt7iDJg==
-X-CSE-MsgGUID: KyMJQb+eTrWTnIlE4vAyFw==
+   d="scan'208";a="78326739"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2025 05:56:03 -0800
+X-CSE-ConnectionGUID: lQVfrKF8SEGtxxPxGSHIpw==
+X-CSE-MsgGUID: bi/wNcI6RlWASQ7eoOqxCw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.20,252,1758610800"; 
-   d="scan'208";a="194952297"
+   d="scan'208";a="195326665"
 Received: from pgcooper-mobl3.ger.corp.intel.com (HELO localhost) ([10.245.244.83])
-  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2025 05:52:02 -0800
-Date: Fri, 5 Dec 2025 15:52:00 +0200
+  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2025 05:56:00 -0800
+Date: Fri, 5 Dec 2025 15:55:58 +0200
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: "Mario Limonciello (AMD) (kernel.org)" <superm1@kernel.org>
-Cc: Askar Safin <safinaskar@gmail.com>, Dell.Client.Kernel@dell.com,
-	bartosz.golaszewski@linaro.org, benjamin.tissoires@redhat.com,
-	dmitry.torokhov@gmail.com, linux-acpi@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-	regressions@lists.linux.dev, rrangel@chromium.org,
-	wse@tuxedocomputers.com
+To: Askar Safin <safinaskar@gmail.com>
+Cc: Dell.Client.Kernel@dell.com, bartosz.golaszewski@linaro.org,
+	benjamin.tissoires@redhat.com, dmitry.torokhov@gmail.com,
+	linux-acpi@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org, regressions@lists.linux.dev,
+	rrangel@chromium.org, superm1@kernel.org, wse@tuxedocomputers.com
 Subject: Re: [REGRESSION][BISECTED] Dell Precision 7780 wakes up on its own
  from suspend
-Message-ID: <aTLjgEVfLCot0cSm@smile.fi.intel.com>
-References: <f983382a-821c-40f0-a41e-ba9f47ae73c5@kernel.org>
- <20251205040141.1735580-1-safinaskar@gmail.com>
- <8e3ae563-a058-40c5-a721-834d7bda141d@kernel.org>
+Message-ID: <aTLkbgwNFOJT_X1H@smile.fi.intel.com>
+References: <aRDml95nMPeknmUM@smile.fi.intel.com>
+ <20251205021616.1570442-1-safinaskar@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -79,40 +77,41 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8e3ae563-a058-40c5-a721-834d7bda141d@kernel.org>
+In-Reply-To: <20251205021616.1570442-1-safinaskar@gmail.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
  krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On Thu, Dec 04, 2025 at 11:21:32PM -0600, Mario Limonciello (AMD) (kernel.org) wrote:
-> On 12/4/2025 10:01 PM, Askar Safin wrote:
-> > "Mario Limonciello (AMD) (kernel.org)" <superm1@kernel.org>:
-
-...
-
-> > > But yes; failing all that it's viable to make a quirk.  You can follow
-> > > any of the ones I've submitted for modeling how to do it.  Here's the
-> > > most recent one I've done.
-> > > 
-> > > https://github.com/torvalds/linux/commit/23800ad1265f10c2bc6f42154ce4d20e59f2900e
+On Fri, Dec 05, 2025 at 05:16:16AM +0300, Askar Safin wrote:
+> Andy Shevchenko <andriy.shevchenko@linux.intel.com>:
+> > > Sounds like it comes via GPIO, but it's not handled as touchpad IRQ. You may
+> > > try to add a quirk to prevent touchpad IRQ from waking the system. That should
+> > > help I believe.
+> > > Something like "ignore_wake=INTC1085:00@355" in the kernel command line.
+> > > If it helps, update drivers/gpio/gpiolib-acpi-quirks.c accordingly.
 > > 
-> > Thank you! I will write something like this:
+> > It might be actually the touchpad controller name (as I see in the quirk table):
 > > 
-> > +		.matches = {
-> > +			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-> > +			DMI_MATCH(DMI_PRODUCT_FAMILY, "Precision"),
-> > +		},
-> > +		.driver_data = &(struct acpi_gpiolib_dmi_quirk) {
-> > +			.ignore_wake = "VEN_0488:00@355",
-> > +		},
-> > 
-> > I will test it and then properly send (hopefully today or tomorrow).
+> > 	ignore_wake=VEN_0488:00@355
 > 
-> This match it too liberal.  We don't have any evidence it applies to
-> anything more than your single system.  I'd pick some different strings.
-> For example Product SKU is probably a good string to use because that's very
-> unique.
+> It worked!
 
-+1. If we ever see another one, we can then think of a more generic quirk.
+Glad to hear this!
+
+> First, there is no option "ignore_wake". Correct option name is "gpiolib_acpi.ignore_wake".
+
+Sure, sorry for mistake on my part, I never remember the whole names of the
+kernel command line parameters.
+
+> I tried "gpiolib_acpi.ignore_wake=INTC1085:00@355", and it didn't help.
+> 
+> I tried "gpiolib_acpi.ignore_wake=VEN_0488:00@355", and it did help!
+> 
+> Please, somebody (maybe Mario?) author a patch.
+
+You can do it yourself, we may help and I dare to say for Mario and myself
+that we even will be glad to help you to produce and submit patch on your own.
+The expertise in contribution to Linux kernel is valuable thing, and I truly
+believe it will help you in the future.
 
 -- 
 With Best Regards,
