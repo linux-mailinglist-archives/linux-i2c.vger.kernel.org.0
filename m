@@ -1,31 +1,30 @@
-Return-Path: <linux-i2c+bounces-14453-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14455-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6340ECA6A1B
-	for <lists+linux-i2c@lfdr.de>; Fri, 05 Dec 2025 09:13:20 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5558ACA69A9
+	for <lists+linux-i2c@lfdr.de>; Fri, 05 Dec 2025 09:06:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 0651A3363FAC
-	for <lists+linux-i2c@lfdr.de>; Fri,  5 Dec 2025 07:57:37 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1FE1E32956BA
+	for <lists+linux-i2c@lfdr.de>; Fri,  5 Dec 2025 08:00:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03A64342511;
-	Fri,  5 Dec 2025 07:21:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59AD0346770;
+	Fri,  5 Dec 2025 07:22:02 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from invmail4.hynix.com (exvmail4.hynix.com [166.125.252.92])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3E42313E30;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E7C832937E;
 	Fri,  5 Dec 2025 07:21:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.125.252.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764919306; cv=none; b=lmdvrrAEbsOD7iNhw4zp+iQaTUyffl8n8U/xKfvTQ3fXOapJTQ3QzuK3Z0XAU8oYKP0Wmr8PGD4MKo5pY0dbLpYoRdKoXxc+1K97CU1ALPeXiiRydQFmqQCPIuuwkCXD268O/+xbn3W0Ak1uI+kLd2DeBF8k6kRw8Nw/wwHDq8c=
+	t=1764919315; cv=none; b=tXijtxUOldl9F5tC7yH2eYmUeEb33WAflRAd5FnjXv0YcSituXz9ryHehOK6FA9nmk6iV0RrCpswybguPAc56hmonDoWpYiJk456lKQVxbQY7ilhP4NxYCgbalcjGfMNuLILOkV1R4e0Vky5Rfnr3AJs4jh/viPxElhEB1fsFZM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764919306; c=relaxed/simple;
-	bh=jhmrpwTM08yBA9ZoPplcfQMQcK3SVeR5SdyXR0h1+Bo=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FvtSEuk+/XSUPUkoo4SMVsMptQlfQEmNBIZFCcOj9K+ilKNIuvW6HHi5yZrnhoDIB4E/bverop/xc0Keg2wDhICt4LBAfH2orBBrgk9qeT1f/QFVHEpAMApz6IlLpD+Ec0N+VtYWUZPmrdkCS0g4cvFTh0wQTeCT59JGs9b/Iq4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com; spf=fail smtp.mailfrom=sk.com; arc=none smtp.client-ip=166.125.252.92
+	s=arc-20240116; t=1764919315; c=relaxed/simple;
+	bh=IVs7UrTREahv4P4gaL8VNCv4Y1x1l3V8HrPMnx32xWM=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=lo1IY2h7RdeB7oEIYTHBk5QPReD8mui+yDP8m4+PqMCB/RoTUbHrfHJQFTU2gXlBzIb6yGa7VAtfePXO0ZiICsKJwYZk5xiafqXCrF/zX4sCCMNVwY3vaWm7pQqxonHH4oDpcjrPhVBlzxVPOMwSAdzyTrGihgTaZGheEUSi/lI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com; spf=pass smtp.mailfrom=sk.com; arc=none smtp.client-ip=166.125.252.92
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=sk.com
-X-AuditID: a67dfc5b-c45ff70000001609-dd-69328776b787
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sk.com
+X-AuditID: a67dfc5b-c2dff70000001609-fc-69328776c165
 From: Byungchul Park <byungchul@sk.com>
 To: linux-kernel@vger.kernel.org
 Cc: kernel_team@skhynix.com,
@@ -192,113 +191,86 @@ Cc: kernel_team@skhynix.com,
 	aliceryhl@google.com,
 	tmgross@umich.edu,
 	rust-for-linux@vger.kernel.org
-Subject: [PATCH v18 41/42] SUNRPC: relocate struct rcu_head to the first field of struct rpc_xprt
-Date: Fri,  5 Dec 2025 16:18:54 +0900
-Message-Id: <20251205071855.72743-42-byungchul@sk.com>
+Subject: [PATCH v18 42/42] mm: percpu: increase PERCPU_DYNAMIC_SIZE_SHIFT on DEPT and large PAGE_SIZE
+Date: Fri,  5 Dec 2025 16:18:55 +0900
+Message-Id: <20251205071855.72743-43-byungchul@sk.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20251205071855.72743-1-byungchul@sk.com>
 References: <20251205071855.72743-1-byungchul@sk.com>
+X-Brightmail-Tracker: H4sIAAAAAAAAAzWSfUxTZxSHfe/He28ba25qs91pIlpjSNzGhIA5JItiovHGmPhtFrdMuvUG
+	bizVFKRioinRFiTYNGgxlvBRxCIFJquyicyMsVECcdmoH9StDiFS6JBKmgKhlrFS9b8n55zf
+	k5OTw5LKYXoNK+mLRINeo1NjOSWfXtn4qbEsQ9piqVNBYOQlDeauJQoWq7wM2EsRLD3wIpj6
+	NYLgWqiUAkewhoFQ326YHummwfXyPwIWq0/AVPUMhkjoBYK73n8QjNs6SQh3YBh6OIXgwo3b
+	GKprPRR0vbjPwNBUnEjIMCy43Ay4TJsgPpoO3tYJBr6b/oOGkX4LDdHHowS0VQZJePDXx+C0
+	NFFQvhhFYKqZp+H2hJ+AAUcLBXPWtdAebsRwJRxMrDnnIsE1+5oBX08DAcEnFgI6LjoYaKlv
+	RtD5sxlB/+UeAm5GwySUTXZjCFj/pcDS9D0BnranGCYctQRc8TVgeFpVjyHW3Ifg9x8GE5eI
+	l2OoKbUmLH3zDNRG0yHa6sYQtkXpnBzB7FvEQltdGxLexKqQYLYlaLCRF5ouxQihy/GcERo8
+	p4U7tzYLN34KEYIzMksLHvclLDjfTJJC12i24DTZSaFu4MD+lGPyz7WiTioWDZ9ty5Xn+3/z
+	06c6ZWd+LF9iTGiMqUAylucy+fszMfSevY3XqGXGXCrv9y+Qy6zi1vN3LgfpCiRnSe5RCl+2
+	YE02VnMiP1ltwstMcZv49sqBZFjBbeXtobF30hS+taMnOS9brg/Hkqzksvj6ivmklOdqZPxk
+	pZl8G/iI/+WWn7IhRQNa4UZKSV9coJF0mWn5JXrpTNq3Jws8KPFurnPxL++hyJ+HehHHIvVK
+	RY8xXVLSmuLCkoJexLOkWqV4pdsiKRVaTclZ0XDyuOG0TizsRWtZSv2hImPOqFVyeZoi8YQo
+	nhIN77sEK1tjQhmxXN/53KvtK3DLHmPO1yPEhcDhrFlpaOMXAdeqnRu8ewO+5tQhzb76onVs
+	lnG8bHsTMCb7+SPbHubtcB48dlR5zjqWW/csNc+dmaeK+LSvS4/b2nXPbu7/CnYK2YZPxrVp
+	f8/s+kBc/ahfHxg+q3p1L979TYgauH706qBdm31XTRXma9I3k4ZCzf/1TK0/agMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAAzWSa2yLcRTG/d9rVyqvGnszH9CwicxtMTlxJ2FvJERCIi4LxctqbdHabBLs
+	olkNSzXa2boxZSW728VsNGZY3LWG1WXK1Gg2m0y3pe266Sa+nPzOeZ7n5Hw4Alx8mwwXyJRH
+	eJVSKpdQQkK4YUnGnKTMaNn8CnsoaDUn4ZPTRcK7tEYC+jxaAvIrSikImOpo0FblkvC4NZ0A
+	W3kJAmefFsGA34SDpn6YgIC+mQaP9yMNhjQEw9ZmBEa7HgeH7R4OpTVpGPypHKKg80EvAsNX
+	FwU57jQCeixnEeR1mGhwP4qFX847JAy3/cCgtb8LgcU1hIGrMRNBwJgAl83VwbjxNwX+F69w
+	yDHYEFz52oZDr/sLgprmzwisN9Ip+K6rxaHFNR7e9PVQ8MRwhoJf9nwMuispKEy3kmB/3omg
+	wKRH0PHBikHG1QoKjAVVBNR/aaDB3jmIwSejHoOSqvXgtHQQ8ExnxoLnBl03w8CUk4EFy08M
+	DGV3MPBaiumVRYgb0GQTXHH1LYzTvA5QXOmlUsT5fXrEeYoycE6jC7YPunpw7lT1Ua7oWRfF
+	+freUpy1v5DgnppZ7tppH8adfzGHq89rozeu2iZcupeXy5J41bzlu4TxjocO8lBtSHKddphO
+	Re10FgoRsMxCttmcQ4wwxUSyDocXH+FQZhpbfa6DzEJCAc60TGUzvdmjwkSGZ38aU6kRJpiZ
+	bNnZJ6NhEbOINbjb0b+lU9mSysZRf8jIvNU3ymImhr2cNUDqkLAQjSlGoTJlkkIqk8fMVSfE
+	pyhlyXP3HFRUoeA/WY4Pnr+NPC2xTYgRIMk4UePRBTIxKU1SpyiaECvAJaGiLvl8mVi0V5py
+	jFcd3KlKlPPqJjRFQEjCROu28LvEzH7pET6B5w/xqv8qJggJT0WTFIH77pjV3rjT7mX73m+d
+	3ss1dK/1r4xesSb5W/a4qN7N/gNXdksvSmyxm8oPM4P32/s9WkVuuG7D7O113f7oGWz4btOJ
+	6/aauO4hItJ71//YnFtg8/AlLy+caytq3aFR7kkMy4xQRhCzJvgaFua9ipoxdrLhuPremkQn
+	u1hdliAh1PHSBbNxlVr6F6fDGrJLAwAA
+X-CFilter-Loop: Reflected
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA02SbUxTdxSH87/vrXa5rSTcQSJbM2M0G1PCtvNhW7bsxZu9OOO+Tc12t95J
-	QylYkMqWJUVwCmGswZSFlkGF2UHpRtcOURRFDChpmVScFKTlZaWEtYwMKQ0ouhZi5rcnv/N7
-	zvlyGFxRT6Uxam2RqNMKGiUlJaTzm8+8oD+Zpd7lDGAwPhEi4U5pDwGxpVMErFk6abgxcpyA
-	+H0LDksrd2kwlSLwD13BwfF7KQb3nA8pME2FKDCHLTTM9e2BkeUoAlvoIQZrtbnQ2OSm4P7g
-	TRxmjB04DIeegtuxBQrmffUYWI93k+DzRhCEx7oxKGtup6D2RxcBFya7aPBFHmDQ5voQJmxh
-	AjzGJgx+mEsUfksF0y8XMfA2jxNgM2yD6RYzDY+s+dDfNktD4HsTAb/O3yRhIHiHhEi4hoKJ
-	69+S0GmYpME12ofAURXGoa5hnIJTa0sI+s9PYzDcVU9BlbODhKDjEQkGS5yEoR4PCe2zfgw8
-	/TcIGDC3EjA16SfBPejFYbk6HfzGGfSGio+fqCZ4u/scxjsaHIi/Fl3A+XK3nj/riVL8auxP
-	iv+pYhXjL5gDNG91HeXdLTv55ktzGH9mMUbyY5HXeJe9guJdizX0vuc/kb6qEjXqYlH34uuf
-	SXO8rW8WdMuPldccMqAFWSWSMBybzU1f+QM95r+dY1iSKXY75/ev4ElOYZ/h3N+FyUokZXB2
-	OIM7uVK9PtjCCtzcvSiVZILdxi0Gp4gky9iXudHTS9jG0gyuzdmz3pckctPI6jor2Je4xso4
-	udGXcwN1oYTLJA5s59obFMkYT6hlHRY8eZdjgxLu0q1z+MbOp7mrLX7CiFjzE7r5f938hG5F
-	uB0p1NriPEGtyc7MKdGqj2V+kZ/nQomftX3z4MB5tDj0cS9iGaTcLOvR71YrSKG4sCSvF3EM
-	rkyRRTW71AqZSij5StTlf6o7qhELe1E6QyhTZVnLepWCPSwUibmiWCDqHk8xRpJmQKp9FUY2
-	MOvuaw6+n1tl7NrkkRf/tXX43UzrkfKmt9575x/5+N66xlbFs+lyH+/W2gfT8ss+t8Vb7qr0
-	t4/Ud2c5A7Tl360nDp5OPXx571mfcOBt+3VJ7ZfZWT8ve82X93R+7dg/WvZB0abIoQrjrbqu
-	mdhHzy3YUjKEkmCBVxHa8YqSKMwRdu/EdYXCfxdbNeSvAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA02SbUxTVxjHPffce3tpvHrtSLhTo67GuJjoZBnLE3VGv+h1UdRkyYzZJo29
-	SkMB0zKERaNQKxXUYJcWvbWIKI2WbmDxDU21gQ3n1AyGGy8TgaQyC8VOaMHyIt5iFv1y8jvP
-	8/uf83x4GKyaoOYyuqwc0ZCl0atpJalMXW1anlv0qW5lo5MCi/kQPOkOUPB3gZ+EaMRCwtka
-	Dw2TjhsKsHjPUPBbWyEJzT9XI+iOWhCMjjswmOunSJi0NikgEvtHAbYCBFO+JgT2FiuG9ua7
-	GDxXCwgYrn1Nw0DjEAJbb4CGsmABCWHXcQRSn0MBwV83wmD3bQqmuv4loG0khMAVeE1AwF+E
-	YNKeAecq6+S4/T8axh/9gaHM1ozgfG8XhqFgD4KrTU8R+C4V0vCs9BqG1sAseBwN03DfVkLD
-	YMtZAl7U0lBR6KOg5eEAAqfDiqCv00eA6UINDXanl4T6nlsKaBmYIOCJ3UpAtXcLdLv6SHhQ
-	WknI48rWlSRwlJkI+XhOgO2n2wTEXG7FuiokjJpPkoK77johmP+cpAVPuQcJ42NWJESqTFgw
-	l8rXxlAYC0fq9gtVD0K0MBb9ixZ8IxWk8HslL1w8NkYIpx4tF+qlLsW29TuVa7SiXpcrGj5Z
-	m6ZMf3h5/T7fnLwj1m8PozBbjBIYnvuM76/tJOJMc0v59vYYjnMit4ivO9FHFSMlg7nWhXxR
-	7OR04wNOwweHQ3ScSW4JP/S0l4wzy33Od/wYId4+upCvrvVP+wly3dY2Ns0qLoU/VzxKvfXn
-	8PfPBOQsI3+wlK8pV8XLWI6arjlwKWKl9yzpnSW9Z1Ug7EaJuqzcTI1On7LCmJGen6XLW7E7
-	O9OL5J10HZw4dRNFWjc2II5B6pmsf3+yTkVpco35mQ2IZ7A6kQ3pV+pUrFaT/4NoyN5l+F4v
-	GhvQPIZUJ7Fffi2mqbi9mhwxQxT3iYb/uwSTMPcw6nyV8UV2dJOpavTjjus7FvRfvPO415oz
-	Q5JubnC+7J+f73U74cqqxJLsj/Zou0La4VUWIe/Od4de+ljX7JgntXzmL5ulo+7kA5sstxbv
-	Zi8ot4bX4CTvV3vd1L00NlV6Vfbssn173uDd537tYOuinmPf6MV789pHSj48vTiYXjnUqCaN
-	6ZrkZdhg1LwBtNOU7o8DAAA=
-X-CFilter-Loop: Reflected
 
-While compiling Linux kernel with DEPT on, the following error was
-observed:
+Yunseong reported a build failure due to the BUILD_BUG_ON() statement in
+alloc_kmem_cache_cpus().  In the following test:
 
-   ./include/linux/rcupdate.h:1084:17: note: in expansion of macro
-   ‘BUILD_BUG_ON’
-   1084 | BUILD_BUG_ON(offsetof(typeof(*(ptr)), rhf) >= 4096);	\
-        | ^~~~~~~~~~~~
-   ./include/linux/rcupdate.h:1047:29: note: in expansion of macro
-   'kvfree_rcu_arg_2'
-   1047 | #define kfree_rcu(ptr, rhf) kvfree_rcu_arg_2(ptr, rhf)
-        |                             ^~~~~~~~~~~~~~~~
-   net/sunrpc/xprt.c:1856:9: note: in expansion of macro 'kfree_rcu'
-   1856 | kfree_rcu(xprt, rcu);
-        | ^~~~~~~~~
-    CC net/kcm/kcmproc.o
-   make[4]: *** [scripts/Makefile.build:203: net/sunrpc/xprt.o] Error 1
+  PERCPU_DYNAMIC_EARLY_SIZE < NR_KMALLOC_TYPES * KMALLOC_SHIFT_HIGH * sizeof(struct kmem_cache_cpu)
 
-Since kfree_rcu() assumes 'offset of struct rcu_head in a rcu-managed
-struct < 4096', the offest of struct rcu_head in struct rpc_xprt should
-not exceed 4096 but does, due to the debug information added by DEPT.
+The following factors increase the right side of the equation:
 
-Relocate struct rcu_head to the first field of struct rpc_xprt from an
-arbitrary location to avoid the issue and meet the assumption.
+  1. PAGE_SIZE > 4KiB increases KMALLOC_SHIFT_HIGH.
+  2. DEPT increases the size of the local_lock_t in kmem_cache_cpu.
+
+Increase PERCPU_DYNAMIC_SIZE_SHIFT to 11 on configs with PAGE_SIZE
+larger than 4KiB and DEPT enabled.
 
 Reported-by: Yunseong Kim <ysk@kzalloc.com>
 Signed-off-by: Byungchul Park <byungchul@sk.com>
 ---
- include/linux/sunrpc/xprt.h | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ include/linux/percpu.h | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/include/linux/sunrpc/xprt.h b/include/linux/sunrpc/xprt.h
-index f46d1fb8f71a..666e42a17a31 100644
---- a/include/linux/sunrpc/xprt.h
-+++ b/include/linux/sunrpc/xprt.h
-@@ -211,6 +211,14 @@ enum xprt_transports {
- 
- struct rpc_sysfs_xprt;
- struct rpc_xprt {
-+	/*
-+	 * Place struct rcu_head within the first 4096 bytes of struct
-+	 * rpc_xprt if sizeof(struct rpc_xprt) > 4096, so that
-+	 * kfree_rcu() can simply work assuming that.  See the comment
-+	 * in kfree_rcu().
-+	 */
-+	struct rcu_head		rcu;
-+
- 	struct kref		kref;		/* Reference count */
- 	const struct rpc_xprt_ops *ops;		/* transport methods */
- 	unsigned int		id;		/* transport id */
-@@ -317,7 +325,6 @@ struct rpc_xprt {
- #if IS_ENABLED(CONFIG_SUNRPC_DEBUG)
- 	struct dentry		*debugfs;		/* debugfs directory */
+diff --git a/include/linux/percpu.h b/include/linux/percpu.h
+index 85bf8dd9f087..dd74321d4bbd 100644
+--- a/include/linux/percpu.h
++++ b/include/linux/percpu.h
+@@ -43,7 +43,11 @@
+ # define PERCPU_DYNAMIC_SIZE_SHIFT      12
+ #endif /* LOCKDEP and PAGE_SIZE > 4KiB */
+ #else
++#if defined(CONFIG_DEPT) && !defined(CONFIG_PAGE_SIZE_4KB)
++#define PERCPU_DYNAMIC_SIZE_SHIFT      11
++#else
+ #define PERCPU_DYNAMIC_SIZE_SHIFT      10
++#endif /* DEPT and PAGE_SIZE > 4KiB */
  #endif
--	struct rcu_head		rcu;
- 	const struct xprt_class	*xprt_class;
- 	struct rpc_sysfs_xprt	*xprt_sysfs;
- 	bool			main; /*mark if this is the 1st transport */
+ 
+ /*
 -- 
 2.17.1
 
