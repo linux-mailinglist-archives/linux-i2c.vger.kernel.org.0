@@ -1,116 +1,157 @@
-Return-Path: <linux-i2c+bounces-14469-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14470-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48A29CABA76
-	for <lists+linux-i2c@lfdr.de>; Sun, 07 Dec 2025 23:35:38 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92340CABDA6
+	for <lists+linux-i2c@lfdr.de>; Mon, 08 Dec 2025 03:33:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 87D5D30124D4
-	for <lists+linux-i2c@lfdr.de>; Sun,  7 Dec 2025 22:35:33 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id B45253003F87
+	for <lists+linux-i2c@lfdr.de>; Mon,  8 Dec 2025 02:33:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3255028B4FD;
-	Sun,  7 Dec 2025 22:35:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41B0E23E346;
+	Mon,  8 Dec 2025 02:33:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LMHD5TJw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mIwDSLfW"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5DDD4502F;
-	Sun,  7 Dec 2025 22:35:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF58B1DFF0;
+	Mon,  8 Dec 2025 02:33:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765146931; cv=none; b=RQqU831BlccQkfbFQzRC3VlbHfNK1KngPmKdMtAyDifFP8rHSF5PF1Jjyky1OSXMevzINGQ0siZK5KzBjIhl24kiXmbungT+2nuU4kex+aiu/+Prpj33mBUmPm/N7aNAehfL0b561ej/zv4f6QbCdKOzLKPW8Z+uwZnGIcU7Obc=
+	t=1765161182; cv=none; b=b4UvmYbLSzOQ38YIVvfDb2ayB6xKMfz4vRr+wKpG3qr6uxVfx6OalVyTGPsPu4yWLj/3Cc2PBxORLEkE+Dqi2N+hIGtotsqWGyuaYZvXQC2akNcMGRjjo9CdokpC5LgtFpLWR7FHhbyjDBXQlszTlH2yRlnVKGDvq7OovB6Urhc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765146931; c=relaxed/simple;
-	bh=QWkl0kwjBDtREVtvSh0+OJo95vV4EJjMAPJ7sMxTGV4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VwTyVYb2bIaeAWo9yYX1eGJuHmnNpPIEUwmWA3K4lEFGZ5E5ZzYdGD8PTocxF9FhbVsvk6+uZFcj2XAslkgvrwBQaEcwnmwnRHLRqFpwK/522xwLz3TMpBJxOKfReN4ONwSv7Al+m0RREdik80QOhtghNPGGhHe2iYrZJYj+1J4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LMHD5TJw; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1765146929; x=1796682929;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=QWkl0kwjBDtREVtvSh0+OJo95vV4EJjMAPJ7sMxTGV4=;
-  b=LMHD5TJwrcIH2qsoPt9M7ldQnH0yNZxc83FOdcuG2SuuFIeRsaGkNKhN
-   /uhrPbm9LLwfLprzv7qnqBvi3Rz/VuBkQ2a2OY8aPOEbPdrgdqlSLVH/m
-   S4T03FLn9OpqKycNTo5E00vWa72jUWf4B22Fq8v8wRuDnZFAPzxBGG3gc
-   iY9DHvsjLObC+kg5mhpuw/R9e7WVBszyOXhBaCa9u30WG62UsDE42bNnB
-   ILvQpCnnjS3/yZ11/loqzuNc9VdMpUBNZeq72Z9w3P+lLfkbFauCSLBID
-   m6mgi5PVMebNk2Ig3qupmDljOYzC7FVl7Icd0CQtmOavoKT3RPlWiv/5n
-   Q==;
-X-CSE-ConnectionGUID: ylY1m3UbR56P5cx1BeYAJg==
-X-CSE-MsgGUID: 4aVF4HhqTjCKs+NfNXbh/g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11635"; a="67141829"
-X-IronPort-AV: E=Sophos;i="6.20,257,1758610800"; 
-   d="scan'208";a="67141829"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2025 14:35:28 -0800
-X-CSE-ConnectionGUID: ZKmQuc7iQb2yX4tlQzpABQ==
-X-CSE-MsgGUID: yAVTPkqEQLivAU8Rru+AQw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,257,1758610800"; 
-   d="scan'208";a="200258356"
-Received: from abityuts-desk.ger.corp.intel.com (HELO localhost) ([10.245.244.218])
-  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2025 14:35:25 -0800
-Date: Mon, 8 Dec 2025 00:35:23 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Askar Safin <safinaskar@gmail.com>
-Cc: Dell.Client.Kernel@dell.com, bartosz.golaszewski@linaro.org,
-	benjamin.tissoires@redhat.com, dmitry.torokhov@gmail.com,
-	linux-acpi@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-i2c@vger.kernel.org, regressions@lists.linux.dev,
-	rrangel@chromium.org, superm1@kernel.org, wse@tuxedocomputers.com
-Subject: Re: [REGRESSION][BISECTED] Dell Precision 7780 wakes up on its own
- from suspend
-Message-ID: <aTYBKzQXiCeIqaTd@smile.fi.intel.com>
-References: <aTLjgEVfLCot0cSm@smile.fi.intel.com>
- <20251207040459.3581966-1-safinaskar@gmail.com>
- <aTVUakljrd-sysxP@smile.fi.intel.com>
- <CAPnZJGAxhXNOw1V5FTPK2Mrvu0YAPwm0Ph4UHd2aZv=kgx1qWg@mail.gmail.com>
+	s=arc-20240116; t=1765161182; c=relaxed/simple;
+	bh=t6IxQskNZsQUWl+3k+rBKd03DLAz8nw5rjgEHaSd7RE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=i+e12w10t3rAAAMok8WDVxIK4oF0TN2vvuO29BvlUg4mX54Xn8TWEifCEVRKc/6EVbqEwsPA92HsIm0y5V+zLuqC6mmYbVEU5jyydfX03nxTvEddKWejaVkBy8CTcnynVAGi8sO2GK7M1nWLBuQwnbnYFkp2k3r9FU5+rTX13zI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mIwDSLfW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E7EFC4CEFB;
+	Mon,  8 Dec 2025 02:33:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1765161181;
+	bh=t6IxQskNZsQUWl+3k+rBKd03DLAz8nw5rjgEHaSd7RE=;
+	h=Date:From:To:Cc:Subject:From;
+	b=mIwDSLfWTJwoBYQsTNWCz7UVWgMGWe+sAReHc9k0HWTqRrbOUtEswU4DcQCP2Ktjb
+	 7O3R+iGKZW9YM2B9tf3bsTWuH1O+acTJBiucL03zNux8O/X6SiizCJ8UOFL7pT9rO1
+	 XykgiIN+hOvsBeDR9H1jEJxbsI8U2ZsB1WxLAYoJtasCxRr8E7QC+kYctFNSouHhbI
+	 g3gRkO1uUhQuxHbUeXmhKfozIGRCEha7iLNivHgRfpDmfW4dkvpk4R2nvhmnZ6//YP
+	 uDM0c5qvavhXxkat0V2cUcSo9FnLPaYlwkSPnYUQmLTzYAPJmCrS7GbPInOQFpFOIX
+	 V9xjK8MnzZBXQ==
+Date: Mon, 8 Dec 2025 03:32:56 +0100
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-i2c <linux-i2c@vger.kernel.org>, 
+	lkml <linux-kernel@vger.kernel.org>, Andi Shyti <andi.shyti@kernel.org>
+Subject: [GIT PULL v2] i2c-host for v6.19
+Message-ID: <7cpbbfziaj7ez2yi7n2xs6jzyj6w52yp274x5xd742ww3clpov@3mkcm4lmozhy>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAPnZJGAxhXNOw1V5FTPK2Mrvu0YAPwm0Ph4UHd2aZv=kgx1qWg@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On Sun, Dec 07, 2025 at 07:45:28PM +0300, Askar Safin wrote:
-> On Sun, Dec 7, 2025 at 1:18 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
+Hi Wolfram,
 
-> > I think nothing. It's better to try to actually fix the non-working scenarios
-> > rather than remove the feature completely.
+as you requested, I restored from my original reflog the state
+prior to the rebase on top of v6.18.
 
-> > P.S.
-> > I'm sorry, but why are you so eager to remove something? While in many cases
-> > removal of (potentially dead or unused) code is considered a good thing, it's
-> > not always the case.
-> 
-> Removing code is easier than writing new code. :)
-> 
-> Speaking of initrd, I tried to understand Linux init code a long time
-> ago (out of curiosity),
-> and so I wanted to remove initrd (to help me understand the code).
-> Also I saw initrd
-> deprecation notice back in 2020, and I decided to send a patch for its
-> removal back then.
-> But I got time for this only now.
+I therefore removed the patches I applied last week, except for
+two fixes that I cherry-picked. The one from Ma Ke, with a tiny
+change in the commit title in this version, has been in my fixes
+branch since rc3. The one from Troy was applied last week last
+Wednesday.
 
-The initrd support is scheduled to be removed in Jan 2027 IIRC.
+If you are still available for a part 2, I already have something
+ready to be pulled.
 
--- 
-With Best Regards,
-Andy Shevchenko
+Thank you, and sorry for this messy request,
+Andi
 
+The following changes since commit dcb6fa37fd7bc9c3d2b066329b0d27dedf8becaa:
 
+  Linux 6.18-rc3 (2025-10-26 15:59:49 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git tags/i2c-host-6.19-v2
+
+for you to fetch changes up to 25faa5364638b86ec0d0edb4486daa9d40a0be8f:
+
+  i2c: spacemit: fix detect issue (2025-12-08 03:11:57 +0100)
+
+----------------------------------------------------------------
+i2c-host for v6.19
+
+- general cleanups in bcm2835, designware, pcf8584, and stm32
+- amd-mp2: fix device refcount
+- designware: avoid interrupt storms caused by bad firmware
+- i801: fix supported features
+- spacemit: fix device detection failures
+
+New device support:
+- Intel Diamond Rapids
+- Rockchip RK3506
+- Qualcomm Kaanapali, MSM8953
+
+----------------------------------------------------------------
+Brian Masney (1):
+      i2c: busses: bcm2835: convert from round_rate() to determine_rate()
+
+Cezar Chiru (5):
+      i2c: pcf8584: Remove debug macros from i2c-algo-pcf.c
+      i2c: pcf8584: Fix do not use assignment inside if conditional
+      i2c: pcf8584: Move 'ret' variable inside for loop, goto out if ret < 0.
+      i2c: pcf8584: Make pcf_doAddress() function void
+      i2c: pcf8584: Change pcf_doAdress() to pcf_send_address()
+
+Hangxiang Ma (1):
+      dt-bindings: i2c: qcom-cci: Document Kaanapali compatible
+
+Heikki Krogerus (1):
+      i2c: i801: Fix the Intel Diamond Rapids features
+
+Heiko Stuebner (1):
+      dt-bindings: i2c: i2c-rk3x: Add compatible string for RK3506
+
+Jinhui Guo (1):
+      i2c: designware: Disable SMBus interrupts to prevent storms from mis-configured firmware
+
+Luca Weiss (1):
+      dt-bindings: i2c: qcom-cci: Document msm8953 compatible
+
+Ma Ke (1):
+      i2c: amd-mp2: fix reference leak in MP2 PCI device
+
+Markus Elfring (2):
+      i2c: designware: Omit a variable reassignment in dw_i2c_plat_probe()
+      i2c: stm32: Omit two variable reassignments in stm32_i2c_dma_request()
+
+Nathan Chancellor (1):
+      i2c: designware: Remove i2c_dw_remove_lock_support()
+
+Troy Mitchell (1):
+      i2c: spacemit: fix detect issue
+
+Zeng Guang (1):
+      i2c: i801: Add support for Intel Diamond Rapids
+
+ Documentation/devicetree/bindings/i2c/i2c-rk3x.yaml     |   1 +
+ Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml |   4 +++
+ Documentation/i2c/busses/i2c-i801.rst                   |   1 +
+ drivers/i2c/algos/i2c-algo-pcf.c                        | 105 ++++++++++++++++++----------------------------------------------------------
+ drivers/i2c/busses/Kconfig                              |   1 +
+ drivers/i2c/busses/i2c-amd-mp2-pci.c                    |   5 +++-
+ drivers/i2c/busses/i2c-bcm2835.c                        |  12 +++++----
+ drivers/i2c/busses/i2c-designware-core.h                |   2 +-
+ drivers/i2c/busses/i2c-designware-master.c              |   7 ++++++
+ drivers/i2c/busses/i2c-designware-platdrv.c             |  13 +---------
+ drivers/i2c/busses/i2c-i801.c                           |   3 +++
+ drivers/i2c/busses/i2c-k1.c                             |  19 +++++++++-----
+ drivers/i2c/busses/i2c-stm32.c                          |   7 +++---
+ 13 files changed, 71 insertions(+), 109 deletions(-)
 
