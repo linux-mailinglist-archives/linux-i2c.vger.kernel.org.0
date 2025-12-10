@@ -1,139 +1,163 @@
-Return-Path: <linux-i2c+bounces-14487-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14488-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4310ACB1F67
-	for <lists+linux-i2c@lfdr.de>; Wed, 10 Dec 2025 06:24:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 12CAACB275F
+	for <lists+linux-i2c@lfdr.de>; Wed, 10 Dec 2025 09:52:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 038BB30AC67E
-	for <lists+linux-i2c@lfdr.de>; Wed, 10 Dec 2025 05:24:32 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7CE65303A0A2
+	for <lists+linux-i2c@lfdr.de>; Wed, 10 Dec 2025 08:52:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E43062FB97A;
-	Wed, 10 Dec 2025 05:24:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85B2527FD4F;
+	Wed, 10 Dec 2025 08:52:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=frba.utn.edu.ar header.i=@frba.utn.edu.ar header.b="MQ+2QGhZ"
+	dkim=pass (2048-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="ID0HvRN8"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx-relay22-hz2.antispameurope.com (mx-relay22-hz2.antispameurope.com [83.246.65.196])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F6BD271457
-	for <linux-i2c@vger.kernel.org>; Wed, 10 Dec 2025 05:24:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765344269; cv=none; b=ZqV9jXri3rKt6zwybbSJObIyP8Pkg3EaaBseaFcEUS7EeQzqd/UdU9+3NTuhsXJQI/uYvxJ6uCnYDRkIEUIsdaQdfqqXDcuERwsBNv7GNKuleJ07qh1PGIpwsFLkopBJYlLWabEma3RYEc+LvzRwOqyHgPlpH0vM/duyHbjRl9E=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765344269; c=relaxed/simple;
-	bh=kmFhRlOmliGPCjl0tEXP18/laIwlZBhKOJoyLH3kkfo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=AKkBS9eAlYGsAilYR4t3XrwQz9HWm7jSWOqUG8alXyVFkY5Khw3rvdVN7XMIC9TgVT46A2SzZJMs76vpgzv0CWuXp1hTjjBG2dCV2PGp1dBEdGMAH68HZTgv+O6U5dYvqCP60wD0g9p++1ySFoDBsHlZGZ7iQHhuSh6w53HCECg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=frba.utn.edu.ar; spf=pass smtp.mailfrom=frba.utn.edu.ar; dkim=pass (2048-bit key) header.d=frba.utn.edu.ar header.i=@frba.utn.edu.ar header.b=MQ+2QGhZ; arc=none smtp.client-ip=209.85.215.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=frba.utn.edu.ar
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=frba.utn.edu.ar
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-c06cb8004e8so899380a12.0
-        for <linux-i2c@vger.kernel.org>; Tue, 09 Dec 2025 21:24:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=frba.utn.edu.ar; s=google; t=1765344266; x=1765949066; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=QlJtCng94VGpqjba3SuHtU+AS5mW8U5fO5+chTqevbA=;
-        b=MQ+2QGhZ9NdFsXCC9+i2lQWE4Xsbf1/IEg7Hr6QjobrCzDdkDCzLwJPk3l4YxWDBFF
-         2wJ6OEQXEs9hfPSiaQAZBHUP+n0aN7epVJbnE0Cebul516NtSL4kus78c3GDAhDu4VEp
-         lvyvl9Cf+Dx+aeOcCtY5NE5iAHUgc5QG8inu/s6xwDBJCV/Gn8OyZjFaTD/N0h+51TGd
-         FZrCz2Aid9LAtitzfz59A67fL+LVvA2pn8FI2XyAJ65AJK0GYLdMbEJXP+Wwh9Jq6Kh+
-         SUOgapx5EDI+I2tLnZgBPL/JmYD7j/DR6BFL0qcUXhQ78xAVhfkQh4HuBzBAaqILZ7JU
-         yNxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765344266; x=1765949066;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QlJtCng94VGpqjba3SuHtU+AS5mW8U5fO5+chTqevbA=;
-        b=fHBuiJxu7xWLrYEEsh6Mca/UQjdycNleHZjgn6RekNfP521Mfy+YvskcdPfim90CEB
-         b0s3vsfG2JLVFoc0Knp0hEjQpeauBaAH9WB1FAzW5ZgZ/4wAM6hEzq6o8QhP6IQy1UhQ
-         q44WjSVZZ1I7o1OgItZVNSq+BQ0ZfglUWiLMKBlLx7uGPFgmGZM6VSoXItAxgxQV7UD4
-         Afi1TKEHm3z+PCllZ87RAISK4HadHJvIYfWf0O2iadLRhxY6p94o77o7NS5Ort0ZA2FO
-         iaxhYeGBO/a2Jf9iWkvU5QZnql5y0F9/qe/KlHKawVEnc2Wgcpdv9kIFyYQKHX6vNBFI
-         sEJA==
-X-Forwarded-Encrypted: i=1; AJvYcCW2srVVBSbSMXsFgeKN4K6H3wXjshhgj1Hvwj0EKTXT/fqz5JGmzmZD9TBoh/r+QAg7ztx3Hp7V+SQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzu2fnzyGVY+suI95ZZwvl4VMgKCNlYmJk12l9Hyvp2xMqQsR9t
-	OI+l3FkXoA4QXDFP+qJUpDO9lKh6O2O8jIRXiNP6KnBtPhAYnRFrBtuD+4O8iqKYFKU0zdRnq+L
-	a3JYxpS+R3Q==
-X-Gm-Gg: ASbGnctLu6IgZBAlYUwOKIaGGUCC8zSTLV7XVv759oGnhwji9y7B2h1MI1EBjEhLib4
-	xQXtj2T4hvodBauuZkiUAF0GZYuRr8spSFkmrOb3aMZGZveEmue6+R0LaN5Zc/vrOR3A/c+VIQV
-	7gE3JIIA5e05we9PbvY8JgK3laVnizW0OResx2yVu4wM2i8D5enRtgEvl973GAMTRESWROYaLxq
-	gMbGQ/YWJSNsxZSG/5efFehqC6OvTWH/nHJs327jlu3npCLtkumJIuLwWD6v9GPSqmtrgI0zWYQ
-	+BKiXkX4yeEGr+V2I+520uIG6PEv9T3kOBwHlwYWvmy6DavUxgrjYQiX/csqLnwYMkSyWOOpS9F
-	vm1I7Bph0RBA4WyJjpUoC9tyhLHA8O8WlOLjhZJMx0G2DZH380ttknHsW/813yP7QVphes7FM1S
-	rMjfFG+cw0pWQ5oH0W8nNq07iFmLqZIjSo6xnZj8MLRenq4ngCzyOT6A/tjGiwK//OrRmkibWz6
-	Vxa7r7x/PnDTn0GE3dKAW3vlLVt5w==
-X-Google-Smtp-Source: AGHT+IHXFz7KImUQvpjB5n4x5vp6laDwqapGFb1cbrih/2lZ6SLdPLifXhgEwnrmO1ldg9oaopj9Gg==
-X-Received: by 2002:a05:7022:419:b0:11a:3483:4a87 with SMTP id a92af1059eb24-11f2967f3a2mr923201c88.13.1765344266293;
-        Tue, 09 Dec 2025 21:24:26 -0800 (PST)
-Received: from fedora (host40.181-14-227.telecom.net.ar. [181.14.227.40])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11f283d4796sm5358862c88.13.2025.12.09.21.24.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Dec 2025 21:24:25 -0800 (PST)
-From: Fernando Coda <fcoda@frba.utn.edu.ar>
-To: aaro.koskinen@iki.fi,
-	jmkrzyszt@gmail.com,
-	tony@atomide.com,
-	vigneshr@ti.com,
-	andreas@kemnade.info,
-	khilman@baylibre.com,
-	rogerq@kernel.org
-Cc: linux-omap@vger.kernel.org,
-	linux-i2c@vger.kernel.org,
-	Fernando Coda <fcoda@frba.utn.edu.ar>
-Subject: [PATCH] i2c: omap: fix incorrect SCLH timing calculation
-Date: Wed, 10 Dec 2025 02:22:54 -0300
-Message-ID: <20251210052254.279899-1-fcoda@frba.utn.edu.ar>
-X-Mailer: git-send-email 2.52.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5D07242D60
+	for <linux-i2c@vger.kernel.org>; Wed, 10 Dec 2025 08:52:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=83.246.65.196
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1765356728; cv=pass; b=Qxek/tOxklOlAUjUo2raonHE9IL7X4t1Y4Oez1Y5TwsRrFuKgxpjIj/NiUaHCSpDatnc1a8VZ069Ai1cIIU+aGNHTFkc8weMFn7CiyG00z/HjSlBGGOzpAqHqKir37W/vnRz/ZIjukokbj+5FhxW6pGoXZA8ww4NsIbqRo/lm6E=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1765356728; c=relaxed/simple;
+	bh=cffl2y/St3Qh9VumdcAZU6SHmJFRyOOCgpbollTMnb8=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=nSdnIw4Wyv/af+TB4z4vlW845cEYrsQxr0mBPRKDLmP7IKjDNI3UIBuwJIBPzDBlgLDQzCzmRquEEBya083MnK+F05XcAMo5D0XtXbQbaMD+zBcXxsFvcZ73BinzmrBzRJTkYKz6aus2RmZ2e09b593Ne9TOB5QV6ccCx1a2Wbw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=ID0HvRN8; arc=pass smtp.client-ip=83.246.65.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ew.tq-group.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
+ARC-Authentication-Results: i=1; mx-gate22-hz2.hornetsecurity.com 1; spf=pass
+ reason=mailfrom (ip=94.100.132.6, headerfrom=ew.tq-group.com)
+ smtp.mailfrom=ew.tq-group.com
+ smtp.helo=hmail-p-smtp01-out03-hz1.hornetsecurity.com; dmarc=pass
+ header.from=ew.tq-group.com orig.disposition=pass
+ARC-Message-Signature: a=rsa-sha256;
+ bh=AfV50FzUIvqB65zrJkDowrhbGMRTncM9g9m9kFiy1uU=; c=relaxed/relaxed;
+ d=hornetsecurity.com; h=from:to:date:subject:mime-version:; i=1; s=hse1;
+ t=1765356675;
+ b=R0RrBiCeTjraNytlO63ED7wb/n9gbhhUUsMxR1EzcQ+Wn566CqqK3b4tfWNoI1JhpE7MgPGs
+ jA+DhRMGK0nhSs3RVi1KF+QFdLaqYB1m6tJx4a7MVOKTEZTerKE8tgLS0L/xRYBlsXFJS5UkucX
+ NLmS21BEqaf238rD0n3oGk733nDR2g+lJNFyKoJUIbEsN2e74NJKkE3w7/LS7Jp4Rq2fJDaY9C4
+ XGjYJS32xduix5/lSkfVfGMFlk48Xb5QBv5P5EZTHpavkvFw5fWkP+VI1giW+fa62z2TMyB7YJm
+ YG3xk4P4PWrg0RryJ7CVWAZ9YLXCJj2iYYyquT4rzuEoQ==
+ARC-Seal: a=rsa-sha256; cv=none; d=hornetsecurity.com; i=1; s=hse1;
+ t=1765356675;
+ b=hekU2+74M6/rxAQqOZCVo3lRnZ0vRapE2b87fuy/Xc1y2GHb2PAlFJdMaeb8sMLqCGAufCpZ
+ 38MocXriNcHiqG2dzBfVGIR4lYKxEBu2GejCXdoMK3H6iHMnlAlQmmEiP/v5woKGyVcipVuNr9s
+ VFF5zui6mH5EGmmw+To5PRZtkg9Le8VE7KriP0LkyppJeAdh8qL47r1pj1AKRQFNzoDtW7ocJKE
+ H8XIGWCf5C9lKzPj1be7aAXXhzSNUmGVtz2F/NwBuUh5r+P/xsjzvTbQUMRocc1qdMQAygsrwT9
+ yMty5xFl56XogjpX60nk7m900JFRjV9oxqfrGuXpEbm9g==
+Received: from he-nlb01-hz1.hornetsecurity.com ([94.100.132.6]) by mx-relay22-hz2.antispameurope.com;
+ Wed, 10 Dec 2025 09:51:15 +0100
+Received: from [192.168.153.128] (host-82-135-125-110.customer.m-online.net [82.135.125.110])
+	(Authenticated sender: matthias.schiffer@ew.tq-group.com)
+	by hmail-p-smtp01-out03-hz1.hornetsecurity.com (Postfix) with ESMTPSA id AC7D4CC0CC3;
+	Wed, 10 Dec 2025 09:51:07 +0100 (CET)
+Message-ID: <8c596aa4718fa66a949286f0686286a4024a4637.camel@ew.tq-group.com>
+Subject: Re: [PATCH v2 1/2] i2c: ocores: increase poll timeout to total
+ transfer timeout
+From: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+To: Andrew Lunn <andrew@lunn.ch>
+Cc: Peter Korsgaard <peter@korsgaard.com>, Andi Shyti
+ <andi.shyti@kernel.org>,  linux-i2c@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux@ew.tq-group.com
+Date: Wed, 10 Dec 2025 09:51:07 +0100
+In-Reply-To: <a528cdb9c861b8fb97ab1a99901378908f2e0e89.camel@ew.tq-group.com>
+References: 
+	<51a72ceca0154d7be85c3cc67722e7dd0b364a2e.1760000254.git.matthias.schiffer@ew.tq-group.com>
+	 <60744be2-1a22-4056-bf05-22f64fb8b484@lunn.ch>
+	 <a528cdb9c861b8fb97ab1a99901378908f2e0e89.camel@ew.tq-group.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.3-0ubuntu1.1 
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-cloud-security-sender:matthias.schiffer@ew.tq-group.com
+X-cloud-security-recipient:linux-i2c@vger.kernel.org
+X-cloud-security-crypt: load encryption module
+X-cloud-security-Mailarchiv: E-Mail archived for: matthias.schiffer@ew.tq-group.com
+X-cloud-security-Mailarchivtype:outbound
+X-cloud-security-Virusscan:CLEAN
+X-cloud-security-disclaimer: This E-Mail was scanned by E-Mailservice on mx-relay22-hz2.antispameurope.com with 4dR8Zh13j8z3BMpn
+X-cloud-security-connect: he-nlb01-hz1.hornetsecurity.com[94.100.132.6], TLS=1, IP=94.100.132.6
+X-cloud-security-Digest:2a1785e38c4bc209a523cfc05277b86e
+X-cloud-security:scantime:2.121
+DKIM-Signature: a=rsa-sha256;
+ bh=AfV50FzUIvqB65zrJkDowrhbGMRTncM9g9m9kFiy1uU=; c=relaxed/relaxed;
+ d=ew.tq-group.com;
+ h=content-type:mime-version:subject:from:to:message-id:date; s=hse1;
+ t=1765356675; v=1;
+ b=ID0HvRN8qvs5oxc4oTxsATuKJyvYD2HLYU3cqtdgZpWTE02hjg2eZ60mO1mwEDf4tL7FY6KH
+ WsLSE3OLBkUS3wXsPuza+SzjjPunhjQyYVU8aTcIz+pK/V4ZzEgPhoKD8ib/0yILeOR6/aCgMpC
+ N+fZi8ZLCGFzJyWudBGMVwy3jMPjIppxYh4aHOi4jy7vsTW3JiTePlFzTgwrxuBS7j7XpRkTYN7
+ 6Isz5nmDOY96MpznLmV/3zVDUGcOXrdAdycqCuKRMwPXcjWevamxsDPTVAKiFD0rwn1ysnhXldG
+ eKiwr9hMdTRey4PAdsNvaYTOQwToRpV1fPrRZC0Z+SuDQ==
 
-According to the AM335x Technical Reference Manual, which uses the
-i2c-omap driver, in the section 21.4.1.24 (clock timing parameters),
-the SCL high and low periods are defined as:
+On Thu, 2025-10-09 at 15:26 +0200, Matthias Schiffer wrote:
+> On Thu, 2025-10-09 at 15:20 +0200, Andrew Lunn wrote:
+> > On Thu, Oct 09, 2025 at 11:19:49AM +0200, Matthias Schiffer wrote:
+> > > When a target makes use of clock stretching, a timeout of 1ms may not=
+ be
+> > > enough. One extreme example is the NXP PTN3460 eDP to LVDS bridge, wh=
+ich
+> > > takes ~320ms to send its ACK after a flash command has been
+> > > submitted.
+> > >=20
+> > > The behavior in the regular case is unchanged, spinning for up to 1ms=
+,
+> > > but the open-coded poll loop is replaced with read_poll_timeout_atomi=
+c()
+> > > as suggested by Andrew Lunn. In cases where 1ms is not sufficient,
+> > > read_poll_timeout() is used, allowing a total transfer time up to the
+> > > timeout set in struct i2c_adapter (defaulting to 1s, configurable thr=
+ough
+> > > the I2C_TIMEOUT ioctl).
+> >=20
+> > Thanks
+> >=20
+> > Did you test with CONFIG_DEBUG_ATOMIC_SLEEP enabled? I don't think it
+> > is an issue, but the old code could be used in atomic context because
+> > it never slept.
+>=20
+> I did not, but there is only one call chain ocores_xfer_core ->
+> ocores_process_polling -> ocores_poll_wait -> ocores_wait, which is defin=
+itely
+> not used in atomic context (in IRQ mode, ocores_xfer_core calls
+> wait_event_timeout, which might_sleep()).
+>=20
+> Best,
+> Matthias
+>=20
+>=20
+>=20
+> >=20
+> > Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+> >=20
+> >     Andrew
+>=20
 
-    tLOW  = (SCLL + 7) * ICLK period
-    tHIGH = (SCLH + 5) * ICLK period
+Hi everyone,
 
-Every other reference to SCLL and SCLH in the omap_i2c_init() function
-follows the same pattern:
+are these patches still missing anything?
 
-    SCLL = value - 7
-    SCLH = value - 5
+Best,
+Matthias
 
-However, in this line the value of SCLH is computed subtracting 7 instead
-of 5, which will produce an incorrect SCL high period. This appears to be
-a copy and paste error.
 
-Fix by using −5, consistent with both the TRM and the surrounding SCLH formula
 
-Signed-off-by: Fernando Coda <fcoda@frba.utn.edu.ar>
----
- drivers/i2c/busses/i2c-omap.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/i2c/busses/i2c-omap.c b/drivers/i2c/busses/i2c-omap.c
-index d9f590f0c384..d0a33f5f1bb3 100644
---- a/drivers/i2c/busses/i2c-omap.c
-+++ b/drivers/i2c/busses/i2c-omap.c
-@@ -459,7 +459,7 @@ static int omap_i2c_init(struct omap_i2c_dev *omap)
- 		if (psc > 2)
- 			psc = 2;
- 		scll = fclk_rate / (omap->speed * 2) - 7 + psc;
--		sclh = fclk_rate / (omap->speed * 2) - 7 + psc;
-+		sclh = fclk_rate / (omap->speed * 2) - 5 + psc;
- 	}
- 
- 	omap->iestate = (OMAP_I2C_IE_XRDY | OMAP_I2C_IE_RRDY |
--- 
-2.52.0
-
+--=20
+TQ-Systems GmbH | M=C3=BChlstra=C3=9Fe 2, Gut Delling | 82229 Seefeld, Germ=
+any
+Amtsgericht M=C3=BCnchen, HRB 105018
+Gesch=C3=A4ftsf=C3=BChrer: Detlef Schneider, R=C3=BCdiger Stahl, Stefan Sch=
+neider
+https://www.tq-group.com/
 
