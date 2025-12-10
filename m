@@ -1,109 +1,71 @@
-Return-Path: <linux-i2c+bounces-14489-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14493-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41EEACB2E17
-	for <lists+linux-i2c@lfdr.de>; Wed, 10 Dec 2025 13:23:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1575DCB3129
+	for <lists+linux-i2c@lfdr.de>; Wed, 10 Dec 2025 14:55:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 854D731158B2
-	for <lists+linux-i2c@lfdr.de>; Wed, 10 Dec 2025 12:22:19 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2E22E30ED366
+	for <lists+linux-i2c@lfdr.de>; Wed, 10 Dec 2025 13:55:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A563B322DD6;
-	Wed, 10 Dec 2025 12:22:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFBF5325730;
+	Wed, 10 Dec 2025 13:55:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="B2lhjLv0"
+	dkim=pass (2048-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="X8eSvzfT"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+Received: from mx-relay41-hz1.antispameurope.com (mx-relay41-hz1.antispameurope.com [94.100.133.217])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81338322C9D;
-	Wed, 10 Dec 2025 12:22:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765369335; cv=none; b=cDsQo7x6Q/SqG7C1ojqVe8jecBVUfduwWxYimqmScfFFOG8P7wTQ8frPfR3wPkyligo86SUAmfZbbAyVEd5wcoFYJQsOc7t0Q4IzMV2SM0/WgTydH9mkUvL1cJwTsy0XVRimcC6MVECsWQvTe9ftEAk1VuNRYDABplih/GulROg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765369335; c=relaxed/simple;
-	bh=jd9K+mF97WGriGBzAJzag5o6OTccybfMhIaxrYKCKPg=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pUK7I7KRP71apS/W+JKdYWJzznbYyM9IBucSaqlSZv8ayllBajhx4lVLv8WE4C2NA/xdOk69IB4oGTGMp0YACEPC4REZ7LnPby1iC0MWOk6DJidHLYFMcCKKXMZShDsjOtiDzAK4DT9urlmjT0bhPppopqWYXIAG/r9/0qdBGaQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=B2lhjLv0; arc=none smtp.client-ip=185.171.202.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id 56DB1C180F6;
-	Wed, 10 Dec 2025 12:21:39 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 1E7F96072F;
-	Wed, 10 Dec 2025 12:22:03 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 12FF8119315B3;
-	Wed, 10 Dec 2025 13:21:41 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1765369320; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=pOlUsVypsTSlBECjYHHoMGhNKvvFlUu0wSglyApNP7w=;
-	b=B2lhjLv08HCS4nwPMQdM5rtA1PxYKChropbNXfAwuDvzNvXOVjVCwFTmvmtb2ORCVRW7Qi
-	k66+Mas8QHLL/Sd+Ps87vPuBDRCwI7saahl3amPRs7SDyRx2/03xb8vTHThuJw2ga28vUp
-	mWJuGni+C/1JJduukHwT93M8LHqErcT1tCB506+eg0lsH1ug4WelgtBydwGEI8bQLgP21q
-	xgMbfofeVReqc6sRn9VIhYltwLdn5+wRI8qcr7mp32U/cqKfXDSUrrYJn+eHIG12gJQGaT
-	OtIuCTUfZrFJAHa0b3F7XsnAhwmX5iend8orwE0uMkCFCSYS7ZIq32q+F/8bOg==
-Date: Wed, 10 Dec 2025 13:21:40 +0100
-From: Herve Codina <herve.codina@bootlin.com>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Kalle Niemi <kaleposti@gmail.com>, Rob Herring <robh@kernel.org>, Matti
- Vaittinen <mazziesaccount@gmail.com>, linux-arm-kernel@lists.infradead.org,
- Andrew Lunn <andrew@lunn.ch>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Danilo Krummrich <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>, Sascha
- Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team
- <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, Michael
- Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Andi
- Shyti <andi.shyti@kernel.org>, Wolfram Sang
- <wsa+renesas@sang-engineering.com>, Peter Rosin <peda@axentia.se>, Arnd
- Bergmann <arnd@arndb.de>, Bjorn Helgaas <bhelgaas@google.com>, Charles
- Keepax <ckeepax@opensource.cirrus.com>, Richard Fitzgerald
- <rf@opensource.cirrus.com>, David Rhodes <david.rhodes@cirrus.com>, Linus
- Walleij <linus.walleij@linaro.org>, Ulf Hansson <ulf.hansson@linaro.org>,
- Mark Brown <broonie@kernel.org>, Andy Shevchenko
- <andriy.shevchenko@linux.intel.com>, Daniel Scally <djrscally@gmail.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>, Sakari Ailus
- <sakari.ailus@linux.intel.com>, Len Brown <lenb@kernel.org>, Davidlohr
- Bueso <dave@stgolabs.net>, Jonathan Cameron <jonathan.cameron@huawei.com>,
- Dave Jiang <dave.jiang@intel.com>, Alison Schofield
- <alison.schofield@intel.com>, Vishal Verma <vishal.l.verma@intel.com>, Ira
- Weiny <ira.weiny@intel.com>, Dan Williams <dan.j.williams@intel.com>,
- Wolfram Sang <wsa@kernel.org>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, imx@lists.linux.dev,
- linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org,
- linux-pci@vger.kernel.org, linux-sound@vger.kernel.org,
- patches@opensource.cirrus.com, linux-gpio@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-spi@vger.kernel.org,
- linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org, Allan Nielsen
- <allan.nielsen@microchip.com>, Horatiu Vultur
- <horatiu.vultur@microchip.com>, Steen Hegelund
- <steen.hegelund@microchip.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v4 01/29] Revert "treewide: Fix probing of devices in DT
- overlays"
-Message-ID: <20251210132140.32dbc3d7@bootlin.com>
-In-Reply-To: <CAMuHMdXdwf7La1EYBWTJadsTAJG3nKQVW6wtBn-bUqshA=XHRw@mail.gmail.com>
-References: <20251015071420.1173068-1-herve.codina@bootlin.com>
- <20251015071420.1173068-2-herve.codina@bootlin.com>
- <f74ab0a2-b74b-4b96-8469-a716c850e230@gmail.com>
- <CAL_JsqJDOYuzutMHMeFAogd5a_OX6Hwi8Gwz1Vy7HpXgNeYKsg@mail.gmail.com>
- <5cf2a12a-7c66-4622-b4a9-14896c6df005@gmail.com>
- <CAL_JsqJjm12LxpDg6LmpY=Ro_keHwnrWiYMLVnG=s_pSP4X2WQ@mail.gmail.com>
- <072dde7c-a53c-4525-83ac-57ea38edc0b5@gmail.com>
- <CAL_JsqKyG98pXGKpL=gxSc92izpzN7YCdq62ZJByhE6aFYs1fw@mail.gmail.com>
- <55076f4b-d523-4f8c-8bd4-0645b790737e@gmail.com>
- <20251202102619.5cd971cc@bootlin.com>
- <088af3ff-bd04-4bc9-b304-85f6ed555f2a@gmail.com>
- <20251202175836.747593c0@bootlin.com>
- <dc813fc2-28d2-4f2c-a2a3-08e33eec8ec7@gmail.com>
- <20251204083839.4fb8a4b1@bootlin.com>
- <CAMuHMdXdwf7La1EYBWTJadsTAJG3nKQVW6wtBn-bUqshA=XHRw@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE63A322522
+	for <linux-i2c@vger.kernel.org>; Wed, 10 Dec 2025 13:55:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=94.100.133.217
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1765374907; cv=pass; b=sraHIb02ur8Mb8H8abqtTjEFiSsDiqdL6+f5HM9vbs2r438cAIlAZjVmHotNcxzUp3w3DVGQhtkKbAq3qZsrtW0AGMScmaW/v9BoQwz9FysxLBv9pzy654hib56RdgLBfEJcSan/81L9Xol8sEZckwNUC+t71EUeLIP8cFiywaE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1765374907; c=relaxed/simple;
+	bh=AF7RVT7rItwMwr80OJMPcsWEKYnlEqBuDST9NiBa8GM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=YkslCTh4TBKxypsLTnX+7BrrM0geAbIhVXrvsNydcT6uBmwFi/gv/IGdjt4YumNB2DwNcn/5k87EB9QWB0yHiqGBJe91wpE2pAMsrHvMbMZ5IFZ/ev5unCcwB2IqpN13RzYLEX7Mbt8mptTVXUD83FFgQlboBCNEbmdRolYZX9Y=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=X8eSvzfT; arc=pass smtp.client-ip=94.100.133.217
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ew.tq-group.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
+ARC-Authentication-Results: i=1; mx-gate41-hz1.hornetsecurity.com 1; spf=pass
+ reason=mailfrom (ip=94.100.132.6, headerfrom=ew.tq-group.com)
+ smtp.mailfrom=ew.tq-group.com
+ smtp.helo=hmail-p-smtp01-out03-hz1.hornetsecurity.com; dmarc=pass
+ header.from=ew.tq-group.com orig.disposition=pass
+ARC-Message-Signature: a=rsa-sha256;
+ bh=uCwjWq/jC/9cADDh9kAp4FL12VD/NKld7X8Sc0Y/AuA=; c=relaxed/relaxed;
+ d=hornetsecurity.com; h=from:to:date:subject:mime-version:; i=1; s=hse1;
+ t=1765374857;
+ b=jw1JXAmITHOc3YxwOE7d+TaP+ich6W0W+NjSAG91CJnKj0Var4h81Zbfmh1MzTSg+NMLkWwe
+ Hdz20saE1GOcvfYDVwKY78xLMLc3KhqZaYs87yR14gV5b/NLrffIGTOjU35zx7jjCacrQHzjTDN
+ 8jav4jRZYZ866LfxTtza7S4f93gz82XbnjXOGF9Vhbp4gbgZD9dW5BuJIu7pcemgE4LxGxoF0Ji
+ TFjceazP+QfinIrgrZMLGjCbGSrDwlDrnJ3g0rD9xSidFehFZUESdIe4idUUY7ixRA1kuSdk4bT
+ lFmPAjNgg6bCw+NaUuLGdlplxX8xFTLBLVIKwb4PMOkaA==
+ARC-Seal: a=rsa-sha256; cv=none; d=hornetsecurity.com; i=1; s=hse1;
+ t=1765374857;
+ b=nJ3TuBVbcujFt+rRQc+np5hUOgzDQvmEYCBIO3RqYGrdHRR/qDep8fWWFgqp0FzubRfnAVv7
+ zGURiVEl9/48GN4gWUH6hneah1Ap1XEnA9HAo6jQeg9CYEpY8eOP3/PYzDd9RT8vgYZPLJSPxO9
+ ArGuJj41vQI4ZZ6joWKdXAx3LEZOVfLK8/UAYqkTBrp02Vijv0Hj6dGJXFXPPphN1nmZ5EGLX4P
+ NOngUgenqORsdfSg/Di4ctlojzb4O/AbgOfhNNqZQcEhsr/6uLTigCMYozZyU0s1UmNBwVES1hy
+ 6fvrhwV4+rwYIB9NBTG/GG0TuL7KUxEVxrn2cM2v8y9Qg==
+Received: from he-nlb01-hz1.hornetsecurity.com ([94.100.132.6]) by mx-relay41-hz1.antispameurope.com;
+ Wed, 10 Dec 2025 14:54:17 +0100
+Received: from schifferm-ubuntu.tq-net.de (host-82-135-125-110.customer.m-online.net [82.135.125.110])
+	(Authenticated sender: matthias.schiffer@ew.tq-group.com)
+	by hmail-p-smtp01-out03-hz1.hornetsecurity.com (Postfix) with ESMTPSA id 54484CC0CC7;
+	Wed, 10 Dec 2025 14:54:09 +0100 (CET)
+From: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+To: Andi Shyti <andi.shyti@kernel.org>,
+	Lee Jones <lee@kernel.org>
+Cc: linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux@ew.tq-group.com,
+	Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Subject: [PATCH v4 1/4] i2c: machxo2: new driver
+Date: Wed, 10 Dec 2025 14:52:50 +0100
+Message-ID: <128cfc422f60d674f5ced8e8350b794945c8fa59.1765373900.git.matthias.schiffer@ew.tq-group.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -112,146 +74,839 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
+X-cloud-security-sender:matthias.schiffer@ew.tq-group.com
+X-cloud-security-recipient:linux-i2c@vger.kernel.org
+X-cloud-security-crypt: load encryption module
+X-cloud-security-Mailarchiv: E-Mail archived for: matthias.schiffer@ew.tq-group.com
+X-cloud-security-Mailarchivtype:outbound
+X-cloud-security-Virusscan:CLEAN
+X-cloud-security-disclaimer: This E-Mail was scanned by E-Mailservice on mx-relay41-hz1.antispameurope.com with 4dRHJK50JmzKmDs
+X-cloud-security-connect: he-nlb01-hz1.hornetsecurity.com[94.100.132.6], TLS=1, IP=94.100.132.6
+X-cloud-security-Digest:85a7542a0a4bd50847b59e428e01fa25
+X-cloud-security:scantime:2.035
+DKIM-Signature: a=rsa-sha256;
+ bh=uCwjWq/jC/9cADDh9kAp4FL12VD/NKld7X8Sc0Y/AuA=; c=relaxed/relaxed;
+ d=ew.tq-group.com;
+ h=content-type:mime-version:subject:from:to:message-id:date; s=hse1;
+ t=1765374856; v=1;
+ b=X8eSvzfTnNS+d6fefTxhgB6QPCCAhkgPG9RFKoOughqymR5EChf1O75BGvn1LoM8itqHPBKW
+ aZR/GXWI+boVIlcDUB8P2chF18NLbAu0b1zD/4Kz6d1gsd3uYgZoVNLSM8P6adDNeTQkY6+ggie
+ GuHWxAuUU3gUgQBmkDHJBOJf0OF/xWULS6TuE/Ld1uZWblvWZmusMN/uurjOuQDuiKn3laet9Xo
+ SxKsEyAfT5Ku+DLmFPRba3+ctNvrP8n5yzGu6wVL0CWIudmss2aOtA0jnY5pMSVpBAaX4zwI3I0
+ eJvzf+h25Hy0E+Gm217napLcg7Cle2FZATSuK7sbdBrxQ==
 
-Hi Geert, Kalle, Rob,
+Implement a driver for the "Hardened I2C" controller found on Lattice
+MachXO2 family PLDs. The driver can run IRQ-driven or use a timer for
+polling.
 
-On Thu, 4 Dec 2025 11:49:13 +0100
-Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+---
 
-> Hi Hervé,
-> 
-> On Thu, 4 Dec 2025 at 08:39, Herve Codina <herve.codina@bootlin.com> wrote:
-> > Indeed, Kalle, Geert, I don't have your hardware, your related overlay or
-> > a similar one that could be used for test and also I don't have your out of
-> > tree code used to handle this overlay.
-> >
-> > I know overlays and fw_devlink have issues. Links created by fw_devlink
-> > when an overlay is applied were not correct on my side.
-> >
-> > Can you check your <supplier>--<consumer> links with 'ls /sys/class/devlinks'
-> >
-> > On my side, without my patches some links were not correct.
-> > They linked to the parent of the supplier instead of the supplier itself.
-> > The consequence is a kernel crash, use after free, refcounting failure, ...
-> > when the supplier device is removed.
-> >
-> > Indeed, with wrong links consumers were not removed before suppliers they
-> > used.
-> >
-> > Looking at Geert traces:
-> > --- 8< ---
-> > rcar_sound ec500000.sound: Failed to create device link (0x180) with
-> > supplier soc for /soc/sound@ec500000/rcar_sound,src/src-0
-> > rcar_sound ec500000.sound: Failed to create device link (0x180) with
-> > supplier soc for /soc/sound@ec500000/rcar_sound,src/src-1
-> > [...]
-> > --- 8< ---
-> >
-> > Even if it is not correct, why the soc device cannot be a provider?
-> > I don't have the answer to this question yet.  
-> 
-> I have no idea. These failures (sound) are also not related to the
-> device I am adding through the overlay (SPI EEPROM).
-> Note that these failures appear only with your suggested fix, and are
-> not seen with just the patch in the subject of this email thread.
-> 
-> > Without having the exact tree structure of the base device-tree, the overlay
-> > and the way it is applied, and so without been able to reproduce the issue
-> > on my side, investigating the issue is going to be difficult.
-> >
-> > I hope to find some help to move forward and fix the issue.  
-> 
-> Base DTS is [1], overlay DTS is [2].
-> Applying and removing the overlay is done using OF_CONFIGFS[3],
-> and "overlay [add|rm] 25lc040"[4].
-> 
-> I assume you can reproduce the issue on any board that has an SPI
-> EEPROM, after moving the SPI bus enablement and SPI EEPROM node to an
-> overlay. Probably even with an I2C EEPROM instead.  Or even without
-> an actual EEPROM connected, as even the SPI bus fails to appear.
-> 
-> > Saravana's email (Saravana Kannan <saravanak@google.com>) seems incorrect.
-> > Got emails delivery failure with this email address.  
-> 
-> Yeah, he moved company.
-> He is still alive, I met him in the LPC Training Session yesterday ;-)
-> 
-> Thanks!
-> 
-> [1] https://web.git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git/tree/arch/arm64/boot/dts/renesas/r8a77990-ebisu.dts
-> [2] https://web.git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git/tree/arch/arm64/boot/dts/renesas/r8a77990-ebisu-cn41-msiof0-25lc040.dtso?h=topic/renesas-overlays-v6.17-rc1
-> [3] https://web.git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git/log/?h=topic/overlays-v6.17-rc1
-> [4] https://elinux.org/R-Car/DT-Overlays#Helper_Script
-> [5] https://lore.kernel.org/CAMuHMdXEnSD4rRJ-o90x4OprUacN_rJgyo8x6=9F9rZ+-KzjOg@mail.gmail.com/
-> 
+v2:
+- use MODULE_DEVICE_TABLE()
 
-I did some tests with boards I have.
+v3:
+- Prefix enums and register defines
+- Add machxo2_sleep() using fsleep instead of udelay, update machxo2_recover()
+  to use it
+- Add an early return in machxo2_write() to reduce indentation
+- Add a comment regarding limited prescale range
+- Use dev_err_probe() where appropriate
+- Set I2C_CR_I2CEN later, so it doesn't need to be disabled again in case of a
+  IRQ setup error. A clear of the IRQ status register is added to machxo2_init()
+  to ensure that we don't attempt to handle a pending IRQ before I2C_CR_I2CEN is
+  set.
 
-First I used a Marvel board based on an Armada 3720.
+v4:
+- Depend on HAS_IOPORT
+- Use ktime_add() for exponential backoff
+- Prefer spin_lock_irqsave() to spin_lock_irq()
+- Fix platform_get_resource() error handling
 
-In my overlay, I added the pinmux related to the SPI controller, enabled
-this SPI controller and added a SPI flash.
+ drivers/i2c/busses/Kconfig                |  11 +
+ drivers/i2c/busses/Makefile               |   1 +
+ drivers/i2c/busses/i2c-machxo2.c          | 709 ++++++++++++++++++++++
+ include/linux/platform_data/i2c-machxo2.h |  17 +
+ 4 files changed, 738 insertions(+)
+ create mode 100644 drivers/i2c/busses/i2c-machxo2.c
+ create mode 100644 include/linux/platform_data/i2c-machxo2.h
 
-It didn't work with or without culprit patches from my series applied.
-Indeed, the pinctrl driver used is an MFD driver an mixed pinmux definition
-nodes with device description (a clock) node.
+diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+index 09ba55bae1fac..2da894ba4251a 100644
+--- a/drivers/i2c/busses/Kconfig
++++ b/drivers/i2c/busses/Kconfig
+@@ -857,6 +857,17 @@ config I2C_LS2X
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called i2c-ls2x.
+ 
++config I2C_MACHXO2
++	tristate "Lattice MachXO2 I2C Controller"
++	depends on HAS_IOPORT
++	select REGMAP_MMIO
++	help
++	  If you say yes to this option, support will be included for the
++	  "Hardened I2C" controller found on the Lattice MachXO2 PLD family.
++
++	  This driver can also be built as a module.  If so, the module
++	  will be called i2c-machxo2.
++
+ config I2C_MLXBF
+         tristate "Mellanox BlueField I2C controller"
+         depends on (MELLANOX_PLATFORM && ARM64) || COMPILE_TEST
+diff --git a/drivers/i2c/busses/Makefile b/drivers/i2c/busses/Makefile
+index fb985769f5ff7..f9c44406be2e1 100644
+--- a/drivers/i2c/busses/Makefile
++++ b/drivers/i2c/busses/Makefile
+@@ -152,6 +152,7 @@ obj-$(CONFIG_I2C_BRCMSTB)	+= i2c-brcmstb.o
+ obj-$(CONFIG_I2C_CROS_EC_TUNNEL)	+= i2c-cros-ec-tunnel.o
+ obj-$(CONFIG_I2C_ELEKTOR)	+= i2c-elektor.o
+ obj-$(CONFIG_I2C_ICY)		+= i2c-icy.o
++obj-$(CONFIG_I2C_MACHXO2)	+= i2c-machxo2.o
+ obj-$(CONFIG_I2C_MLXBF)		+= i2c-mlxbf.o
+ obj-$(CONFIG_I2C_MLXCPLD)	+= i2c-mlxcpld.o
+ obj-$(CONFIG_I2C_OPAL)		+= i2c-opal.o
+diff --git a/drivers/i2c/busses/i2c-machxo2.c b/drivers/i2c/busses/i2c-machxo2.c
+new file mode 100644
+index 0000000000000..169103c6a221d
+--- /dev/null
++++ b/drivers/i2c/busses/i2c-machxo2.c
+@@ -0,0 +1,709 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * i2c-machxo2.c: I2C bus driver for Lattice MachXO2 I2C controller
++ *
++ * Copyright (c) 2024-2025 TQ-Systems GmbH <linux@ew.tq-group.com>, D-82229 Seefeld, Germany.
++ * Author: Matthias Schiffer
++ *
++ * Based on driver by:
++ *   Vadim V.Vlasov <vvlasov@dev.rtsoft.ru>
++ *
++ * Implementation follows "MachXO2 Family Handbook", HB1010 Version 01.8, with
++ * a few additional undocumented quirks described by comments.
++ *
++ * Basic design:
++ *
++ * All functions returning an enum machxo2_i2c_state are part of a state machine,
++ * each returning the next state to transition to. The state machine reflects
++ * the diagrams found in the aforementioned document.
++ *
++ * All processing is driven by the hrtimer handler machxo2_handle(). The hrtimer
++ * is used to poll the hardware for state transitions. In IRQ mode, the hrtimer
++ * is disabled in states where we are waiting for an IRQ; the IRQ handler does
++ * nothing but restart the timer to keep code paths in polling and IRQ mode as
++ * similar as possible.
++ */
++
++#include <linux/delay.h>
++#include <linux/errno.h>
++#include <linux/err.h>
++#include <linux/hrtimer.h>
++#include <linux/i2c.h>
++#include <linux/interrupt.h>
++#include <linux/io.h>
++#include <linux/iopoll.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/platform_data/i2c-machxo2.h>
++#include <linux/platform_device.h>
++#include <linux/regmap.h>
++#include <linux/wait.h>
++
++enum machxo2_i2c_state {
++	MACHXO2_I2C_STATE_DONE,
++	MACHXO2_I2C_STATE_START,
++	MACHXO2_I2C_STATE_WRITE,
++	MACHXO2_I2C_STATE_READ_WAIT_SRW,
++	MACHXO2_I2C_STATE_READ,
++};
++
++struct machxo2_i2c {
++	struct i2c_adapter adap;
++	struct regmap *regmap;
++	u32 clock_khz;
++	u32 bus_khz;
++	int irq;
++
++	/* Current transfer state */
++	enum machxo2_i2c_state state;
++	struct i2c_msg *msg;
++	int nmsgs;
++	u16 pos;
++
++	wait_queue_head_t wait;
++	ktime_t timer_wait;
++
++	/* lock syncs arming the timer and setting the error field */
++	spinlock_t lock;
++	struct hrtimer timer;
++	int error;
++};
++
++#define MACHXO2_I2C_POST_TIMEOUT_US	1000
++
++/* Registers */
++#define MACHXO2_I2C_CR			0 /* Control, RW */
++#define  MACHXO2_I2C_CR_I2CEN		0x80 /* Enable I2C */
++
++#define MACHXO2_I2C_CMDR		1 /* Command, RW */
++#define  MACHXO2_I2C_CMDR_STA		0x80 /* Start */
++#define  MACHXO2_I2C_CMDR_STO		0x40 /* Stop */
++#define  MACHXO2_I2C_CMDR_RD		0x20 /* Read */
++#define  MACHXO2_I2C_CMDR_WR		0x10 /* Write */
++#define  MACHXO2_I2C_CMDR_ACK		0x08 /* Send NACK if the bit is set */
++#define  MACHXO2_I2C_CMDR_CKSDIS	0x04 /* Clock stretch disable */
++
++#define MACHXO2_I2C_BR0			2 /* Clock Pre-scale, RW */
++#define MACHXO2_I2C_BR1			3 /* Clock Pre-scale, RW */
++#define MACHXO2_I2C_TXDR		4 /* Transmit Data, WO */
++#define MACHXO2_I2C_SR			5 /* Status, RO */
++#define  MACHXO2_I2C_SR_TIP		0x80 /* Transmit In Progress */
++#define  MACHXO2_I2C_SR_BUSY		0x40 /* Bus Busy */
++#define  MACHXO2_I2C_SR_RARC		0x20 /* Received ACK (if unset) */
++#define  MACHXO2_I2C_SR_SRW		0x10 /* Slave Read/Write */
++#define  MACHXO2_I2C_SR_ARBL		0x08 /* Arbitration Lost */
++#define  MACHXO2_I2C_SR_TRRDY		0x04 /* Transmitter/Receiver Ready */
++#define  MACHXO2_I2C_SR_TROE		0x02 /* Transmitter/Receiver Overrun Error */
++#define  MACHXO2_I2C_SR_HGC		0x01 /* Hardware General Call Received */
++#define MACHXO2_I2C_RXDR		7 /* Receive Data, RO */
++#define MACHXO2_I2C_IRQ			8 /* IRQ, RW */
++#define MACHXO2_I2C_IRQEN		9 /* IRQ Enable, RW */
++#define  MACHXO2_I2C_IRQ_ARBL		0x08 /* Arbitration Lost */
++#define  MACHXO2_I2C_IRQ_TRRDY		0x04 /* Transmitter/Receiver Ready */
++#define  MACHXO2_I2C_IRQ_TROE		0x02 /* Transmitter/Receiver Overrun Error */
++#define  MACHXO2_I2C_IRQ_HGC		0x01 /* Hardware General Call Received */
++#define  MACHXO2_I2C_IRQ_MASK		(MACHXO2_I2C_IRQ_ARBL | \
++					 MACHXO2_I2C_IRQ_TRRDY | \
++					 MACHXO2_I2C_IRQ_TROE)
++
++static inline void machxo2_set(struct machxo2_i2c *i2c, unsigned int reg,
++			       u8 value)
++{
++	regmap_write(i2c->regmap, reg, value);
++}
++
++static inline u8 machxo2_get(struct machxo2_i2c *i2c, unsigned int reg)
++{
++	unsigned int val;
++
++	regmap_read(i2c->regmap, reg, &val);
++
++	return val;
++}
++
++static inline unsigned long
++machxo2_cycles_to_usecs(const struct machxo2_i2c *i2c, unsigned int cycles)
++{
++	return DIV_ROUND_UP(cycles * 1000, i2c->bus_khz);
++}
++
++/* Delay by a number of SCL cycles */
++static inline void machxo2_delay(const struct machxo2_i2c *i2c,
++				 unsigned int cycles)
++{
++	udelay(machxo2_cycles_to_usecs(i2c, cycles));
++}
++
++/* Sleep by a number of SCL cycles */
++static inline void machxo2_sleep(const struct machxo2_i2c *i2c,
++				 unsigned int cycles)
++{
++	fsleep(machxo2_cycles_to_usecs(i2c, cycles));
++}
++
++static enum machxo2_i2c_state
++machxo2_error(struct machxo2_i2c *i2c, int error)
++{
++	unsigned long flags;
++
++	spin_lock_irqsave(&i2c->lock, flags);
++	if (!i2c->error)
++		i2c->error = error;
++	spin_unlock_irqrestore(&i2c->lock, flags);
++
++	machxo2_set(i2c, MACHXO2_I2C_CMDR, MACHXO2_I2C_CMDR_STO);
++
++	return MACHXO2_I2C_STATE_DONE;
++}
++
++static void machxo2_reset_timer_wait(struct machxo2_i2c *i2c)
++{
++	/* 10 SCL cycles is a good starting point to wait for 1 byte to get transferred */
++	i2c->timer_wait = ns_to_ktime(machxo2_cycles_to_usecs(i2c, 10) * NSEC_PER_USEC);
++}
++
++static enum machxo2_i2c_state
++machxo2_end_of_message(struct machxo2_i2c *i2c)
++{
++	struct i2c_msg *msg = i2c->msg;
++
++	/* More messages to process? */
++	if (--i2c->nmsgs) {
++		i2c->msg++;
++		i2c->pos = 0;
++		return MACHXO2_I2C_STATE_START;
++	}
++
++	/* End of transaction */
++
++	if (!(msg->flags & I2C_M_RD))
++		machxo2_set(i2c, MACHXO2_I2C_CMDR, MACHXO2_I2C_CMDR_STO);
++
++	return MACHXO2_I2C_STATE_DONE;
++}
++
++static enum machxo2_i2c_state
++machxo2_write(struct machxo2_i2c *i2c, u8 stat)
++{
++	struct i2c_msg *msg = i2c->msg;
++	bool eom = (i2c->pos == msg->len);
++
++	if (!(stat & MACHXO2_I2C_SR_TRRDY))
++		return MACHXO2_I2C_STATE_WRITE;
++
++	if (eom) {
++		machxo2_delay(i2c, 1);
++		stat = machxo2_get(i2c, MACHXO2_I2C_SR);
++	}
++
++	if ((i2c->pos > 0 || eom) && (stat & MACHXO2_I2C_SR_RARC)) {
++		dev_dbg(&i2c->adap.dev, "No ACK at %d\n", i2c->pos);
++		return machxo2_error(i2c, -ENXIO);
++	}
++
++	if (eom)
++		return machxo2_end_of_message(i2c);
++
++	machxo2_set(i2c, MACHXO2_I2C_TXDR, msg->buf[i2c->pos++]);
++	machxo2_set(i2c, MACHXO2_I2C_CMDR, MACHXO2_I2C_CMDR_WR);
++
++	machxo2_reset_timer_wait(i2c);
++
++	return MACHXO2_I2C_STATE_WRITE;
++}
++
++static enum machxo2_i2c_state
++machxo2_prepare_read(struct machxo2_i2c *i2c)
++{
++	struct i2c_msg *msg = i2c->msg;
++
++	/* Prepare to stop if we are waiting for the last byte */
++	if (i2c->pos == (msg->len - 1) && i2c->nmsgs == 1) {
++		if (msg->len == 1)
++			machxo2_delay(i2c, 2);
++		machxo2_set(i2c, MACHXO2_I2C_CMDR,
++			    MACHXO2_I2C_CMDR_RD | MACHXO2_I2C_CMDR_ACK | MACHXO2_I2C_CMDR_STO);
++	} else if (i2c->pos == msg->len) {
++		return machxo2_end_of_message(i2c);
++	}
++
++	machxo2_reset_timer_wait(i2c);
++
++	return MACHXO2_I2C_STATE_READ;
++}
++
++static enum machxo2_i2c_state
++machxo2_read(struct machxo2_i2c *i2c, u8 stat)
++{
++	struct i2c_msg *msg = i2c->msg;
++
++	if (stat & MACHXO2_I2C_SR_TRRDY) {
++		msg->buf[i2c->pos++] = machxo2_get(i2c, MACHXO2_I2C_RXDR);
++		return machxo2_prepare_read(i2c);
++	}
++
++	return MACHXO2_I2C_STATE_READ;
++}
++
++static enum machxo2_i2c_state
++machxo2_read_wait_srw(struct machxo2_i2c *i2c, u8 stat)
++{
++	if (!(stat & MACHXO2_I2C_SR_SRW))
++		return MACHXO2_I2C_STATE_READ_WAIT_SRW;
++
++	machxo2_delay(i2c, 1);
++	stat = machxo2_get(i2c, MACHXO2_I2C_SR);
++	if (stat & MACHXO2_I2C_SR_RARC)
++		return machxo2_error(i2c, -ENXIO);
++
++	machxo2_set(i2c, MACHXO2_I2C_CMDR, MACHXO2_I2C_CMDR_RD);
++	return machxo2_prepare_read(i2c);
++}
++
++static enum machxo2_i2c_state
++machxo2_start(struct machxo2_i2c *i2c)
++{
++	struct i2c_msg *msg = i2c->msg;
++
++	if (!(msg->flags & I2C_M_NOSTART)) {
++		u8 addr = i2c_8bit_addr_from_msg(msg);
++
++		/*
++		 * If too much time passes between the previous write and
++		 * setting the new address, the address may become written
++		 * as a data byte instead of sending a restart first. Removing
++		 * the WR flag first avoids this issue.
++		 */
++		machxo2_set(i2c, MACHXO2_I2C_CMDR, MACHXO2_I2C_CMDR_STA);
++		machxo2_set(i2c, MACHXO2_I2C_TXDR, addr);
++		machxo2_set(i2c, MACHXO2_I2C_CMDR, MACHXO2_I2C_CMDR_STA | MACHXO2_I2C_CMDR_WR);
++	}
++
++	machxo2_reset_timer_wait(i2c);
++
++	return (msg->flags & I2C_M_RD) ? MACHXO2_I2C_STATE_READ_WAIT_SRW : MACHXO2_I2C_STATE_WRITE;
++}
++
++/* I2C state machine - returns the next state to transition to */
++static enum machxo2_i2c_state machxo2_process(struct machxo2_i2c *i2c)
++{
++	unsigned long flags;
++	int error;
++	u8 stat;
++
++	if (i2c->state == MACHXO2_I2C_STATE_DONE)
++		return MACHXO2_I2C_STATE_DONE;
++
++	spin_lock_irqsave(&i2c->lock, flags);
++	error = i2c->error;
++	spin_unlock_irqrestore(&i2c->lock, flags);
++
++	if (error) {
++		/* Error was set from outside of machxo2_process (timeout) */
++		machxo2_set(i2c, MACHXO2_I2C_CMDR, MACHXO2_I2C_CMDR_STO);
++		return MACHXO2_I2C_STATE_DONE;
++	}
++
++	stat = machxo2_get(i2c, MACHXO2_I2C_SR);
++
++	/* Check for errors (arbitration lost / overrun) */
++	if (stat & (MACHXO2_I2C_SR_ARBL | MACHXO2_I2C_SR_TROE))
++		return machxo2_error(i2c, -EIO);
++
++	switch (i2c->state) {
++	case MACHXO2_I2C_STATE_DONE:
++		/* Handled above - should be unreachable */
++		break;
++
++	case MACHXO2_I2C_STATE_START:
++		return machxo2_start(i2c);
++
++	case MACHXO2_I2C_STATE_WRITE:
++		return machxo2_write(i2c, stat);
++
++	case MACHXO2_I2C_STATE_READ_WAIT_SRW:
++		return machxo2_read_wait_srw(i2c, stat);
++
++	case MACHXO2_I2C_STATE_READ:
++		return machxo2_read(i2c, stat);
++	}
++
++	/* Should be unreachable */
++	WARN_ON(1);
++	return machxo2_error(i2c, -EINVAL);
++}
++
++static enum hrtimer_restart machxo2_restart_timer(struct machxo2_i2c *i2c)
++{
++	unsigned long flags;
++
++	spin_lock_irqsave(&i2c->lock, flags);
++	if (!hrtimer_is_queued(&i2c->timer))
++		hrtimer_forward_now(&i2c->timer, i2c->timer_wait);
++	spin_unlock_irqrestore(&i2c->lock, flags);
++
++	/* Exponential backoff for timer */
++	i2c->timer_wait = ktime_add(i2c->timer_wait, i2c->timer_wait);
++
++	return HRTIMER_RESTART;
++}
++
++static enum hrtimer_restart machxo2_handle(struct hrtimer *timer)
++{
++	struct machxo2_i2c *i2c = container_of(timer, struct machxo2_i2c, timer);
++
++	/*
++	 * If the new state is MACHXO2_I2C_STATE_START, we're at a restart and want to
++	 * run process again right away.
++	 */
++	do {
++		i2c->state = machxo2_process(i2c);
++	} while (i2c->state == MACHXO2_I2C_STATE_START);
++
++	switch (i2c->state) {
++	case MACHXO2_I2C_STATE_DONE:
++		wake_up(&i2c->wait);
++		return HRTIMER_NORESTART;
++
++	case MACHXO2_I2C_STATE_READ_WAIT_SRW:
++		/* There is no IRQ for the SRW flag, so we always use the timer here */
++		return machxo2_restart_timer(i2c);
++
++	case MACHXO2_I2C_STATE_WRITE:
++	case MACHXO2_I2C_STATE_READ:
++		/* If we have an IRQ, it is used to drive the state machine */
++		if (i2c->irq > 0)
++			return HRTIMER_NORESTART;
++
++		return machxo2_restart_timer(i2c);
++
++	default:
++		/* Unreachable */
++		WARN_ON(1);
++		return HRTIMER_NORESTART;
++	}
++}
++
++static irqreturn_t machxo2_isr(int irq, void *dev_id)
++{
++	struct machxo2_i2c *i2c = dev_id;
++	u8 irq_stat = machxo2_get(i2c, MACHXO2_I2C_IRQ);
++
++	if (!(irq_stat & MACHXO2_I2C_IRQ_MASK))
++		return IRQ_NONE;
++
++	/*
++	 * Due to a race condition in the I2C controller, no edge on the IRQ
++	 * line may be generated if an event comes in right at the moment when
++	 * the IRQs are cleared. Loop to ensure that IRQs are actually cleared.
++	 */
++	do {
++		machxo2_set(i2c, MACHXO2_I2C_IRQ, MACHXO2_I2C_IRQ_MASK);
++		irq_stat = machxo2_get(i2c, MACHXO2_I2C_IRQ);
++	} while (irq_stat & MACHXO2_I2C_IRQ_MASK);
++
++	spin_lock(&i2c->lock);
++	hrtimer_start(&i2c->timer, 0, HRTIMER_MODE_REL);
++	spin_unlock(&i2c->lock);
++
++	return IRQ_HANDLED;
++}
++
++static void machxo2_recover(struct machxo2_i2c *i2c)
++{
++	/*
++	 * This is happening somewhat often after reads, in particular at
++	 * 100kHz. Further investigation is necessary, but for now the recovery
++	 * sequence keeps the bus usable.
++	 */
++	dev_dbg(&i2c->adap.dev, "stuck transaction, recovering\n");
++
++	machxo2_set(i2c, MACHXO2_I2C_CR, 0);
++	machxo2_set(i2c, MACHXO2_I2C_CR, MACHXO2_I2C_CR_I2CEN);
++	machxo2_sleep(i2c, 1);
++
++	machxo2_set(i2c, MACHXO2_I2C_CMDR, 0);
++	machxo2_set(i2c, MACHXO2_I2C_TXDR, 0);
++	machxo2_set(i2c, MACHXO2_I2C_CMDR, MACHXO2_I2C_CMDR_STA | MACHXO2_I2C_CMDR_WR);
++	machxo2_sleep(i2c, 2);
++	machxo2_set(i2c, MACHXO2_I2C_CMDR, MACHXO2_I2C_CMDR_STO);
++	machxo2_sleep(i2c, 10);
++
++	machxo2_set(i2c, MACHXO2_I2C_CR, 0);
++	machxo2_set(i2c, MACHXO2_I2C_CR, MACHXO2_I2C_CR_I2CEN);
++	machxo2_sleep(i2c, 1);
++}
++
++static void machxo2_wait_not_busy(struct machxo2_i2c *i2c, unsigned long sleep,
++				  u64 timeout)
++{
++	u8 status;
++
++	read_poll_timeout(machxo2_get, status, (status & MACHXO2_I2C_SR_BUSY) == 0,
++			  sleep, timeout, false, i2c, MACHXO2_I2C_SR);
++
++	if (status & (MACHXO2_I2C_SR_BUSY | MACHXO2_I2C_SR_TROE))
++		machxo2_recover(i2c);
++}
++
++static int machxo2_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs, int num)
++{
++	struct machxo2_i2c *i2c = i2c_get_adapdata(adap);
++	unsigned long flags;
++
++	machxo2_wait_not_busy(i2c, 1000, jiffies_to_usecs(adap->timeout) + 1);
++
++	dev_dbg(&adap->dev, "new msg: addr %02x, flags %x, nmsgs %d, len %d\n",
++		msgs->addr, msgs->flags, num, msgs[0].len);
++
++	i2c->msg = msgs;
++	i2c->pos = 0;
++	i2c->nmsgs = num;
++	i2c->error = 0;
++	i2c->state = MACHXO2_I2C_STATE_START;
++	/* Ensure that the hrtimer sees the state change */
++	smp_wmb();
++
++	spin_lock_irqsave(&i2c->lock, flags);
++	hrtimer_start(&i2c->timer, 0, HRTIMER_MODE_REL);
++	spin_unlock_irqrestore(&i2c->lock, flags);
++
++	if (!wait_event_timeout(i2c->wait, i2c->state == MACHXO2_I2C_STATE_DONE,
++				adap->timeout)) {
++		spin_lock_irqsave(&i2c->lock, flags);
++		i2c->error = -ETIMEDOUT;
++		/* Run handler once more to send STOP */
++		hrtimer_start(&i2c->timer, 0, HRTIMER_MODE_REL);
++		spin_unlock_irqrestore(&i2c->lock, flags);
++
++		if (!wait_event_timeout(i2c->wait, i2c->state == MACHXO2_I2C_STATE_DONE,
++					usecs_to_jiffies(MACHXO2_I2C_POST_TIMEOUT_US))) {
++
++			if (i2c->irq > 0)
++				disable_irq(i2c->irq);
++			hrtimer_cancel(&i2c->timer);
++			i2c->state = MACHXO2_I2C_STATE_DONE;
++			/*
++			 * Ensure that the hrtimer sees the state change (if
++			 * started again by pending IRQ)
++			 */
++			smp_wmb();
++			if (i2c->irq > 0)
++				enable_irq(i2c->irq);
++		}
++	}
++
++	machxo2_wait_not_busy(i2c, 100, MACHXO2_I2C_POST_TIMEOUT_US);
++
++	if (i2c->error) {
++		dev_dbg(&adap->dev, "end msg: error %d, nmsgs %d, pos %d\n",
++			i2c->error, i2c->nmsgs, i2c->pos);
++		return i2c->error;
++	}
++
++	return num;
++}
++
++static int machxo2_init(struct machxo2_i2c *i2c)
++{
++	unsigned int prescale;
++
++	/* Make sure the device is disabled */
++	machxo2_set(i2c, MACHXO2_I2C_CR, 0);
++
++	/* I2C bus frequencies officially supported by MachXO2 are 400, 100 and 50 kHz */
++	if (i2c->bus_khz >= 400)
++		i2c->bus_khz = 400;
++	else if (i2c->bus_khz >= 100)
++		i2c->bus_khz = 100;
++	else
++		i2c->bus_khz = 50;
++
++	prescale = DIV_ROUND_UP(i2c->clock_khz, 4 * i2c->bus_khz);
++	/* prescale field is 10 bits wide */
++	if (prescale > 0x3ff)
++		return dev_err_probe(&i2c->adap.dev, -EINVAL,
++				     "unsupported prescale: %d\n", prescale);
++
++	machxo2_set(i2c, MACHXO2_I2C_BR0, prescale & 0xff);
++	machxo2_set(i2c, MACHXO2_I2C_BR1, prescale >> 8);
++
++	/* Disable and clear interrupts to make sure none is pending */
++	machxo2_set(i2c, MACHXO2_I2C_IRQEN, 0);
++	machxo2_set(i2c, MACHXO2_I2C_IRQ, MACHXO2_I2C_IRQ_MASK);
++
++	return 0;
++}
++
++static u32 machxo2_func(struct i2c_adapter *adap)
++{
++	return I2C_FUNC_I2C | I2C_FUNC_SMBUS_EMUL | I2C_FUNC_NOSTART;
++}
++
++static const struct i2c_algorithm machxo2_algorithm = {
++	.master_xfer = machxo2_xfer,
++	.functionality = machxo2_func,
++};
++
++static const struct regmap_config machxo2_regmap_config = {
++	.reg_bits = 8,
++	.reg_stride = 1,
++	.val_bits = 8,
++	/*
++	 * No locking is necessary for ioport access, and we don't have a
++	 * regcache (caching doesn't make sense for this driver, as all
++	 * registers ever read are volatile)
++	 */
++	.disable_locking = true,
++	.io_port = true,
++	.max_register = 9,
++};
++
++static int machxo2_i2c_probe(struct platform_device *pdev)
++{
++	struct machxo2_i2c_platform_data *pdata;
++	struct machxo2_i2c *i2c;
++	struct resource *res;
++	void __iomem *regs;
++	int ret;
++
++	i2c = devm_kzalloc(&pdev->dev, sizeof(*i2c), GFP_KERNEL);
++	if (!i2c)
++		return -ENOMEM;
++
++	pdata = dev_get_platdata(&pdev->dev);
++	if (!pdata || !pdata->clock_khz)
++		return -EINVAL;
++
++	i2c->clock_khz = pdata->clock_khz;
++	i2c->bus_khz = pdata->bus_khz;
++
++	res = platform_get_resource(pdev, IORESOURCE_IO, 0);
++	if (!res)
++		return dev_err_probe(&pdev->dev, -EINVAL, "Missing I/O resource\n");
++
++	if (!devm_request_region(&pdev->dev, res->start, resource_size(res),
++				 pdev->name))
++		return dev_err_probe(&pdev->dev, -EBUSY, "Can't get I/O resource\n");
++
++	regs = devm_ioport_map(&pdev->dev, res->start, resource_size(res));
++	if (!regs)
++		return dev_err_probe(&pdev->dev, -EBUSY, "Can't map I/O resource\n");
++
++	i2c->regmap = devm_regmap_init_mmio(&pdev->dev, regs, &machxo2_regmap_config);
++	if (IS_ERR(i2c->regmap))
++		return dev_err_probe(&pdev->dev, PTR_ERR(i2c->regmap),
++				     "Unable to initialize register map\n");
++
++	i2c->irq = platform_get_irq_optional(pdev, 0);
++	if (i2c->irq < 0 && i2c->irq != -ENXIO)
++		return i2c->irq;
++
++	ret = machxo2_init(i2c);
++	if (ret)
++		return ret;
++
++	init_waitqueue_head(&i2c->wait);
++	spin_lock_init(&i2c->lock);
++	hrtimer_setup(&i2c->timer, machxo2_handle, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
++
++	if (i2c->irq > 0) {
++		ret = devm_request_irq(&pdev->dev, i2c->irq, machxo2_isr, 0,
++				       pdev->name, i2c);
++		if (ret)
++			return dev_err_probe(&pdev->dev, ret, "Cannot claim IRQ\n");
++
++		machxo2_set(i2c, MACHXO2_I2C_IRQEN, MACHXO2_I2C_IRQ_MASK);
++
++		dev_info(&pdev->dev,
++			 "Using IRQ %d, bus speed %dKHz, clock %dKHz\n",
++			 i2c->irq, i2c->bus_khz, i2c->clock_khz);
++	} else {
++		dev_info(&pdev->dev,
++			 "Running in polling mode, bus speed %dKHz, clock %dKHz\n",
++			 i2c->bus_khz, i2c->clock_khz);
++	}
++
++	platform_set_drvdata(pdev, i2c);
++
++	strscpy(i2c->adap.name, "i2c-machxo2", sizeof(i2c->adap.name));
++	i2c->adap.algo = &machxo2_algorithm;
++	i2c->adap.dev.parent = &pdev->dev;
++	i2c->adap.nr = pdev->id;
++	i2c->adap.owner = THIS_MODULE;
++	i2c_set_adapdata(&i2c->adap, i2c);
++
++	machxo2_set(i2c, MACHXO2_I2C_CR, MACHXO2_I2C_CR_I2CEN);
++
++	ret = i2c_add_adapter(&i2c->adap);
++	if (ret) {
++		machxo2_set(i2c, MACHXO2_I2C_CR, 0);
++		machxo2_set(i2c, MACHXO2_I2C_IRQEN, 0);
++
++		if (i2c->irq > 0)
++			disable_irq(i2c->irq);
++		hrtimer_cancel(&i2c->timer);
++
++		return ret;
++	}
++
++	return 0;
++}
++
++static void machxo2_i2c_remove(struct platform_device *pdev)
++{
++	struct machxo2_i2c *i2c = platform_get_drvdata(pdev);
++
++	i2c_del_adapter(&i2c->adap);
++
++	/* Disable I2C logic */
++	machxo2_set(i2c, MACHXO2_I2C_CR, 0);
++	machxo2_set(i2c, MACHXO2_I2C_IRQEN, 0);
++
++	if (i2c->irq > 0)
++		disable_irq(i2c->irq);
++	hrtimer_cancel(&i2c->timer);
++}
++
++static int machxo2_i2c_suspend(struct device *dev)
++{
++	struct machxo2_i2c *i2c = dev_get_drvdata(dev);
++
++	machxo2_set(i2c, MACHXO2_I2C_CR, 0);
++
++	return 0;
++}
++
++static int machxo2_i2c_resume(struct device *dev)
++{
++	struct machxo2_i2c *i2c = dev_get_drvdata(dev);
++
++	machxo2_set(i2c, MACHXO2_I2C_CR, MACHXO2_I2C_CR_I2CEN);
++
++	return 0;
++}
++
++static DEFINE_NOIRQ_DEV_PM_OPS(machxo2_i2c_pm,
++			       machxo2_i2c_suspend, machxo2_i2c_resume);
++
++static const struct platform_device_id machxo2_i2c_driver_ids[] = {
++	{ .name = "i2c-machxo2", },
++	{ /* sentinel */ }
++};
++MODULE_DEVICE_TABLE(platform, machxo2_i2c_driver_ids);
++
++static struct platform_driver machxo2_i2c_driver = {
++	.probe = machxo2_i2c_probe,
++	.remove = machxo2_i2c_remove,
++	.id_table = machxo2_i2c_driver_ids,
++	.driver  = {
++		.name = "i2c-machxo2",
++		.pm = pm_sleep_ptr(&machxo2_i2c_pm),
++	},
++};
++
++module_platform_driver(machxo2_i2c_driver);
++
++MODULE_AUTHOR("TQ-Systems GmbH <linux@ew.tq-group.com>");
++MODULE_DESCRIPTION("Lattice MachXO2 I2C bus driver");
++MODULE_LICENSE("GPL");
+diff --git a/include/linux/platform_data/i2c-machxo2.h b/include/linux/platform_data/i2c-machxo2.h
+new file mode 100644
+index 0000000000000..5cbfbe9d81b46
+--- /dev/null
++++ b/include/linux/platform_data/i2c-machxo2.h
+@@ -0,0 +1,17 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * i2c-machxo2.h: Platform data for Lattice MachXO2 I2C controller
++ *
++ * Copyright (c) 2024 TQ-Systems GmbH <linux@ew.tq-group.com>, D-82229 Seefeld, Germany.
++ * Author: Matthias Schiffer
++ */
++
++#ifndef _LINUX_I2C_MACHXO2_H
++#define _LINUX_I2C_MACHXO2_H
++
++struct machxo2_i2c_platform_data {
++	u32 clock_khz; /* input clock in kHz */
++	u32 bus_khz; /* I2C bus clock in kHz */
++};
++
++#endif /* _LINUX_I2C_MACHXO2_H */
+-- 
+TQ-Systems GmbH | Mühlstraße 2, Gut Delling | 82229 Seefeld, Germany
+Amtsgericht München, HRB 105018
+Geschäftsführer: Detlef Schneider, Rüdiger Stahl, Stefan Schneider
+https://www.tq-group.com/
 
-When a new node is added, a new device is created. Indeed, because the
-driver is an MFD driver, it is a bus driver and handled by of_platform bus.
-
-My new node is considered by devlink as a node that will have a device ready
-to work (driver attached and device probed). A link is created between this
-node and the consumers of this node (i.e. the SPI controller). devlink is
-waiting for this provider to be ready before allowing the its consumer to probe.
-This node (simple pinmux description) will never lead to a device and devlink
-will never see this "provider" ready.
-
-Did a test with a Renesas RZ/N1D (r9a06g032) based board and built a similar
-overlay involving I2C controller pinmux, I2C controller and an EEPROM.
-
-Here, also the overlay didn't work but the issue is different.
-
-The pinmux definition for pinctrl (i.e. pinctrl subnodes) are looked when
-the pinctrl driver probes. Adding a new node later is not handled by the
-pinctrl driver.
-Applying the overlay leads to a simple:
-  [   16.934168] rzn1-pinctrl 40067000.pinctrl: unable to find group for node /soc/pinctrl@40067000/pins_i2c2
-
-Indeed, the 'pins_i2c2' has been added by the overlay and was not present
-when the pinctrl probed.
-
-Tried without adding a new pinmux node (pinctrl subnode) from the overlay
-and used nodes already existing in the base DT.
-
-On my Marvell Armada 3720 board, it works with or without my patches.
-No regression detected due to my patches.
-
-On my RZ/N1D board, it works also with or without my patches.
-Here also, no regression detected.
-
-Also, on my Marvell Armada 3720 board, I can plug my LAN966x PCI board.
-The LAN966x PCI driver used an overlay to describe the LAN966x PCI board.
-
-With the upstream patch not reverted, i.e. 1a50d9403fb9 ("treewide: Fix
-probing of devices in DT overlays")" applied, devlinks created for the
-LAN966x PCI board internal devices are incorrect and lead to crashes when
-the LAN966x PCI driver is removed due to wrong provider/consumer dependencies.
-
-When this patch is reverted and replaced by "of: dynamic: Fix overlayed
-devices not probing because of fw_devlink", devlinks created for the LAN966x
-PCI board internal devices are corrects and crashes are no more present on
-removal.
-
-Kalle, Geert, can you perform a test on your hardware with my patches
-applied and moving your pinmux definition from the overlay to the base
-device-tree?
-
-The kernel you can use is for instance the kernel at the next-20251127 tag.
-Needed patches for test are present in this kernel:
-    - 76841259ac092 ("of: dynamic: Fix overlayed devices not probing because of fw_devlink")
-    - 7d67ddc5f0148 ("Revert "treewide: Fix probing of devices in DT overlays"")
-
-Best regards,
-Hervé
 
