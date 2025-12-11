@@ -1,59 +1,68 @@
-Return-Path: <linux-i2c+bounces-14510-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14511-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 215C7CB692F
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 Dec 2025 17:55:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1629DCB740E
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 Dec 2025 23:06:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 40A943012779
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 Dec 2025 16:55:57 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 16C123011B34
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 Dec 2025 22:06:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70D362D5A14;
-	Thu, 11 Dec 2025 16:55:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB09123BD06;
+	Thu, 11 Dec 2025 22:06:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DA7Jz8sI"
+	dkim=pass (2048-bit key) header.d=aurel32.net header.i=@aurel32.net header.b="tKxLktc6"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from hall.aurel32.net (hall.aurel32.net [195.154.119.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13D0222A813;
-	Thu, 11 Dec 2025 16:55:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29AF818C31;
+	Thu, 11 Dec 2025 22:06:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.154.119.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765472155; cv=none; b=bYZ+cB3HStDtKv5mqvteHEnzR3E1zSSduF+uuVwtZZNNwGxcZZUIV38KsMNv6YFi7u24Un3BDVyo8LZweDWz7UbHqQvbt/uLpW6d9+cYiwA7/NAxB2h16VC9gjNWAcaMs5bAWOMfrPpSb3Xiby7oZX0p/2TuDcVefGs9QmrkRLM=
+	t=1765490788; cv=none; b=U9BqOy42oYMLc+iqwDe7ZW9V8/SsfUqi+NAklm71rOjMlUQIshLMrglFBUzfZvIo885rWz2s9aP4M3p/GvMpEMBF+W1NnL0XGydiXsf2r39aK7gjDljKJ9ZM78YIoLlkzMno1jqEyAoRBV1avZj2/6mOKtqc646zzX5hPCJjOtA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765472155; c=relaxed/simple;
-	bh=p1wXN1Wr+B3KKDcmzUhjXYWeO1t5k47iSeRckuWz7jY=;
+	s=arc-20240116; t=1765490788; c=relaxed/simple;
+	bh=HUwoC6CVTcbqumCXp/yxtfU4jvVFNity/lNoZPKkEa4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n0Y2/FPc4HeakZ9yiVd5f+nPIxwYOrE5PfM3xQav5HR20+Ght1h/23SuV38wexdKPkJ7KomMml91KCwGadh/CDw3VQXpVY4ykGGp7LbXFzebBRuH4kAuJu145W2bjV2Htjb3Q93qsvBjwk7smRGBRwuQjjR4sjVP+12k5onRh9s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DA7Jz8sI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C15FC4CEF7;
-	Thu, 11 Dec 2025 16:55:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765472154;
-	bh=p1wXN1Wr+B3KKDcmzUhjXYWeO1t5k47iSeRckuWz7jY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DA7Jz8sIqptqoXVCIONcKg4aA00Jo+7Ibmpw0oib4G7Q+yZCMIEi/VJByqKAWXwZH
-	 06Racp2pVu6pGrzoFBUbrhMs1vl5f1Zz8AERcYjsMG5dlVHUe0oCwbRgzYYe929Pgh
-	 t6Gy1J/135ONdyfqDsVx9E+w4ZgtorTb7fRVf30FbSV+YNjEOWcs8sZRLOICOt1tf3
-	 rTlKPn09wRhBpdyfN0NpquK4XG+ckriorFLZXyDP6P911T56i7UyqCKbetHbwROZ8D
-	 jSo/B3N0GWfdjGWzwcS+gLiFvZLqrz4b8yQMlDKSykpI3yDmvTR6Y3S8SSCjYfQnbs
-	 nPx1bGntv8zdg==
-Date: Thu, 11 Dec 2025 10:55:45 -0600
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Luca Weiss <luca.weiss@fairphone.com>
-Cc: Bartosz Golaszewski <brgl@kernel.org>, linux-arm-msm@vger.kernel.org,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	~postmarketos/upstreaming@lists.sr.ht, linux-i2c@vger.kernel.org,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	linux-kernel@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
-	devicetree@vger.kernel.org, phone-devel@vger.kernel.org
-Subject: Re: [PATCH 1/4] dt-bindings: eeprom: at24: Add compatible for
- Giantec GT24P64A
-Message-ID: <176547214530.1553950.16205619497487516656.robh@kernel.org>
-References: <20251210-fp4-cam-prep-v1-0-0eacbff271ec@fairphone.com>
- <20251210-fp4-cam-prep-v1-1-0eacbff271ec@fairphone.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=BlLbwhUU7D7HZnOlGN1yGFvZLoHmT55YJeicZKy3IBNjSdAsUNFWMV+ZeHRFifbxCCGIcURyTribjKVwfHFfoYOgYUIvLYRvVOfiQxemwEMjBifne44iNNpteP9c0/Zhz45oh4ZpMoVm4oPueGSwPdFw3/S68MLs6b0KzDNNqnc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=aurel32.net; spf=pass smtp.mailfrom=aurel32.net; dkim=pass (2048-bit key) header.d=aurel32.net header.i=@aurel32.net header.b=tKxLktc6; arc=none smtp.client-ip=195.154.119.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=aurel32.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aurel32.net
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=aurel32.net
+	; s=202004.hall; h=In-Reply-To:Content-Type:MIME-Version:References:
+	Message-ID:Subject:Cc:To:From:Date:Content-Transfer-Encoding:From:Reply-To:
+	Subject:Content-ID:Content-Description:X-Debbugs-Cc;
+	bh=6MsdFVVQ8jNSVrsm8cEGsnJYlrkCyq+u89Nh4N01Z3A=; b=tKxLktc6JJWcsUQBFJ9/YE5ABz
+	0UiekIOO2eZG2uie0nZ2etX23Gn+vTBJzzBbcPRVQB3aOdLw3Frxmb7TuSMcjx0QgvhroYHV8MggF
+	PvlN/O7RCIs0ZjO5IhwLeCD9EA2Opyig4gbDjI9hzU2SvNIiBzCzarW743CPSbdbF0FMR5mk67wRb
+	iolpysIpPi7cQu+WvLeEe2IBheZzBY15qc+JQE+XNTi3XxcnF+MaJSMLfGWCjtofSnfitvfmO4JMW
+	CNgP0ApCD3osL/sKvzXYrlaXvQRgS0wrlWM/x+w7OMoVsHyP8a64Tq212u6Hn+ntEIv4UndR3NkPs
+	Qg8SmRVg==;
+Received: from [2a01:e34:ec5d:a741:1ee1:92ff:feb4:5ec0] (helo=ohm.rr44.fr)
+	by hall.aurel32.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <aurelien@aurel32.net>)
+	id 1vToD2-0000000FzHb-3yBj;
+	Thu, 11 Dec 2025 22:28:24 +0100
+Date: Thu, 11 Dec 2025 22:28:24 +0100
+From: Aurelien Jarno <aurelien@aurel32.net>
+To: Troy Mitchell <troy.mitchell@linux.spacemit.com>
+Cc: Alex Elder <elder@riscstar.com>, Andi Shyti <andi.shyti@kernel.org>,
+	Yixun Lan <dlan@gentoo.org>,
+	Troy Mitchell <troymitchell988@gmail.com>,
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev
+Subject: Re: [PATCH v4] i2c: spacemit: introduce pio for k1
+Message-ID: <aTs3eNLCKTR5boro@aurel32.net>
+Mail-Followup-To: Troy Mitchell <troy.mitchell@linux.spacemit.com>,
+	Alex Elder <elder@riscstar.com>, Andi Shyti <andi.shyti@kernel.org>,
+	Yixun Lan <dlan@gentoo.org>,
+	Troy Mitchell <troymitchell988@gmail.com>,
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev
+References: <20251009-k1-i2c-atomic-v4-1-a89367870286@linux.spacemit.com>
+ <613db920-6025-43cb-a733-d58f65363caa@riscstar.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -62,18 +71,35 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251210-fp4-cam-prep-v1-1-0eacbff271ec@fairphone.com>
+In-Reply-To: <613db920-6025-43cb-a733-d58f65363caa@riscstar.com>
+User-Agent: Mutt/2.2.13 (2024-03-09)
 
+Hi Troy,
 
-On Wed, 10 Dec 2025 10:05:27 +0900, Luca Weiss wrote:
-> Add the compatible for another 64Kb EEPROM from Giantec.
+On 2025-11-07 09:50, Alex Elder wrote:
+> On 10/9/25 4:59 AM, Troy Mitchell wrote:
+> > This patch introduces I2C PIO functionality for the Spacemit K1 SoC,
+> > enabling the use of I2C in atomic context.
 > 
-> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-> ---
->  Documentation/devicetree/bindings/eeprom/at24.yaml | 1 +
->  1 file changed, 1 insertion(+)
+> (Sorry I haven't commented on your earlier versions.  They
+> included other changes to prepare for this; I'm looking at
+> this patch in isolation and haven't reviewed the others.)
 > 
+> An aside:  I notice the #includes are indented an additional
+> space in this source file;  perhaps you can get rid of those
+> (in a separate patch) at some point.
+> 
+> You really need to provide more information about how this
+> is implemented.  This patch makes non-trivial changes to
+> the logic.
 
-Acked-by: Rob Herring (Arm) <robh@kernel.org>
+What is the status on implementing the changes asked by Alex? Do you 
+need some help with that?
 
+Thanks
+Aurelien
+
+-- 
+Aurelien Jarno                          GPG: 4096R/1DDD8C9B
+aurelien@aurel32.net                     http://aurel32.net
 
