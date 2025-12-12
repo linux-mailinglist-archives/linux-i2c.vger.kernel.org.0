@@ -1,66 +1,66 @@
-Return-Path: <linux-i2c+bounces-14518-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14519-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6934FCB94A5
-	for <lists+linux-i2c@lfdr.de>; Fri, 12 Dec 2025 17:41:51 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42533CB9525
+	for <lists+linux-i2c@lfdr.de>; Fri, 12 Dec 2025 17:44:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 3F16A3003BF6
-	for <lists+linux-i2c@lfdr.de>; Fri, 12 Dec 2025 16:41:33 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 80E8C30B9BCC
+	for <lists+linux-i2c@lfdr.de>; Fri, 12 Dec 2025 16:41:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4727A296BDA;
-	Fri, 12 Dec 2025 16:41:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77B7B2D24AC;
+	Fri, 12 Dec 2025 16:41:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=advantech.com header.i=@advantech.com header.b="Q2cZcvgZ"
+	dkim=pass (2048-bit key) header.d=advantech.com header.i=@advantech.com header.b="eBLPd70g"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from TYDPR03CU002.outbound.protection.outlook.com (mail-japaneastazon11023122.outbound.protection.outlook.com [52.101.127.122])
+Received: from TYDPR03CU002.outbound.protection.outlook.com (mail-japaneastazon11023092.outbound.protection.outlook.com [52.101.127.92])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 984FF25C821;
-	Fri, 12 Dec 2025 16:41:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.127.122
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6C392D0C85;
+	Fri, 12 Dec 2025 16:41:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.127.92
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765557692; cv=fail; b=gMgrAC7+ng7eU16dt59BBVUyaAxCO69kjhezQBLSXwmAEGeQuGsAAdDJ8d5zAlWKuu3Ul0508N1fzweBbCQhAwUa5F9baO2tHhSbMz/0I9sAQOYXjQnevVZyS01lI0e3LF5TExm4MZgp2nSkBNMyR/SKFDMs6HCiODWHfcnVdHA=
+	t=1765557699; cv=fail; b=foaIn6WfchqiHw/fwRfSUMBX6sEACiGjCQ6KNu28T6TctzeLXWoWXRnh7mgP1GXjLjWqNX96Jw/qogrcr+zaxLNjLufo4f9BMBSK7et69wH98SeM1gujaKArgP4O2xeZCLceX1fkJlxpfULSw/aBPqIt2fGWiI1+yQ6KgU66iG8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765557692; c=relaxed/simple;
-	bh=q6wa7ZjhA7DO7xNYwNG50IKMS8562P6Qm3UwUjgwYrQ=;
+	s=arc-20240116; t=1765557699; c=relaxed/simple;
+	bh=lQM7Zvt0uk1UgbA1S5B02YrrGq66MHgNIx8FkVfsMMw=;
 	h=From:Date:Subject:Content-Type:Message-Id:References:In-Reply-To:
-	 To:Cc:MIME-Version; b=dsGkgTwApsZqImxQpKxAXNxAkkwlFuB6CpQFQuTE873971Z/P0lyDv3l0uYv8e45K5iIhw6m3kgKtJDlajX6Fj5zfXzYi/exNExNxG2m16wVjNwaww7jKA+VNZ6H5JpDeyYIePMVgGjxyF/PNcgoSbh20aZfC0OfYFtOfagl9ts=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=advantech.com; spf=pass smtp.mailfrom=advantech.de; dkim=pass (2048-bit key) header.d=advantech.com header.i=@advantech.com header.b=Q2cZcvgZ; arc=fail smtp.client-ip=52.101.127.122
+	 To:Cc:MIME-Version; b=m2tQXSZaTlbGEj9/xOw7RgsqHUh7rqaloVrYkpkcEIHv2jnHts1VPeujLC5NB703oIW5PDwvIfgiQtWimWvSmZDjRx1OppbPCVvxWmnJhAgQpGQ+UKWnUA2nRr7YPBcvI49+cJe26XmiwE1yW+zo1Fh4ou0ojLwfb0zptE5Sgno=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=advantech.com; spf=pass smtp.mailfrom=advantech.de; dkim=pass (2048-bit key) header.d=advantech.com header.i=@advantech.com header.b=eBLPd70g; arc=fail smtp.client-ip=52.101.127.92
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=advantech.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=advantech.de
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=S7jtCS19bMFDVvJ3VpggTMCNtycWveE6aCz2oqEvaCZvjy+5ok19v9de145Ea6m/RlnY4TN9lVsWRwpBm+YiJMb1cVGz8CY2iR11oNPhvOoqOATWsmacWzFZlzq5OMW0ZaWf2DazY6RcaZ2VGelkBKYS3Bhzotu52/7rDBzwngG4w7y3MVDRPRdeHIOIoMOC3vqne2h1W9HbXdEqmBTuUGQC2qJ1pa8a/ZrzbFfmy9D4a4EaAox7ZJ8EOLMXXBgppPPedOc4ZopyKOnlXeSdW7haOGU/aRkV5LDl+zEuiSE03kZBwrFdnm6w5ygRrhM91zg5syeuyVYIrPqAtFr6SA==
+ b=PyFchG4+4Bt9VioVtL3/0EpMgTLVK3uJODPdIocAKI0mcymgB3jSgAQmva35cQUTRnJRy9SWDnhwp3XVY32xoNimY+y1WOYkYBKGkUdNU+zwvNyTz1pw/qjTiD/GhJpu/N3OlDwKUy6vpjaIL3B9pMFN6eG+H4OR+wtVxkPaIQmDy+AW/pZFfwN/Bg+9UwXpASNB1/Z9rtjOVjMr/b/dGluMG1N+y7lx5j2Rb7LaiGorK2w3SWoa5pPGZ4UphkiC9M8n6xqbtB2NjniuYZsQ8RLV0u7dWUpI0KP8agGmhZTAJmk32rvnLl4CYi5GU+FJXh88lM4t3sG0PdgxVbwy4g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=slJgHHGMHOS4Qi9U7h5cbySlj/f2icD044PV+7i7KvA=;
- b=megg39Fc9dFY4+nKjHmd+BhpGB3DDu7gR0aKgq/KndxheBsp87/3wk4FZAVcEJLgm35Bnk+pm+4P48jRJKZ8YypMZVDOmHOGo9JVUy0ifq3Gt+uezXjjLzmHCYKwFYprIF97a3+rG11f5g5JRBdTdH9ynoa74ZfRtT8LVAaWyvq1i7Q73q5F8flilsyCMVJx6wBf+ooCktsrbkNmgHInKMvTdsf+iyCE1t35B8UOMXbZdH29PgfB1lsbIn6TcbEzMihFoytERPf6OvVWJSqpIrtkhuBbRV/+WYl5X1IwNl1wEwgyFJkrg1c+u9mPdY54pGbOlaQMBizrDluAiHffPA==
+ bh=UiEEJ5gy5Muv/Yg+R46RHmTq/PhJ7kPOP5XmcVpUvrE=;
+ b=Hxh0PvY+NNA/ic+7CYbjX2SVma5w6kX/pGtyGUU2A4B8nRXYC5yE8JWyU0atvQ/f6211+NxZqJqBjK2B5Dfwx1qn/mnKXOIpui6P4owHq8OaxZ+x/zx9Rs+dSAlBuOZ1CIQftf4hrF9Gf03RFfdSuxkiftksjw4jAy+b9shJlDN4zu+UUQ5OS8JyFAh49eNgAnOlOdJ3f1LysvQ3zey60BLeWhaem9RiyV5+JFWBnjf8P/ND/DeTXt1WYH2vVcN035QTrYaO4WfLAVXkzfF0Yb+Kkhz2aB5GjnxlnpLo7kOOzeMVxp0nFp45nX/PC7oQ7qAxcd/k5wppgkzNE97GNA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=advantech.de; dmarc=pass action=none header.from=advantech.com;
  dkim=pass header.d=advantech.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=advantech.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=slJgHHGMHOS4Qi9U7h5cbySlj/f2icD044PV+7i7KvA=;
- b=Q2cZcvgZ1jqci+9oseadv2IRg3IGKdY9QdqpaU8QRmvuTZFEsFkuYOhKeqJFdH008pd7zmGBql4OHMbl26hNXOpxINm4jO//jaW3LiF27ey3zPaE4kGtaS4+/es8DsGNkFAD0IB1dhLdV7pxjc53yC0RBakomz1spq6Ktnk7S+v73LpSM8K3ji4yU1+YfACu163l+hb+e4KtN8bhTjJw5MBDlQMPJ9psJ/5NS2tET/WMlNJgw3gCWRIOF0+fcyPNinwLo4EWJb/nHD0+ry61k636G/7TMX/j/EKgEEz6Yc0dHr5K1POSEQvoT8ROOf2bra+Fd6jOQKqxD26f8HHpXQ==
+ bh=UiEEJ5gy5Muv/Yg+R46RHmTq/PhJ7kPOP5XmcVpUvrE=;
+ b=eBLPd70gAxTC1X6IBuYk9nvwDpke9eaDRKZMXCCBw4bobmi+QdEDareM2KxCkeP45agMiTalYUiTRc5AULiYawI7+n1NPWDvMFkyU1d7m0p7QzsLwEIlHFKlrLOZxACFSgAEqBbp+G9tMxsZNethhitqNnLoJpmuxqTypt7qdOTVdHW+pUdkOyZIw38BAhfgbNoADlJCjYOLe7mJWZb0K29CMT4W2Zu2IV8CBU457EJlNKFicGsEriDjeeh/QQDvpS/UPXB7W5UIvcyD5ublucf7ywROVm2WbJ69MU+T4ImXp5luNB5a/1/dKWLazAJFJy0V0tPuN+9oG8ES0O7c9A==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=advantech.com;
 Received: from PSAPR02MB4502.apcprd02.prod.outlook.com (2603:1096:301:21::6)
  by JH0PR02MB6564.apcprd02.prod.outlook.com (2603:1096:990:3f::9) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9412.11; Fri, 12 Dec
- 2025 16:41:26 +0000
+ 2025 16:41:33 +0000
 Received: from PSAPR02MB4502.apcprd02.prod.outlook.com
  ([fe80::59c9:fe0:25f6:702b]) by PSAPR02MB4502.apcprd02.prod.outlook.com
  ([fe80::59c9:fe0:25f6:702b%6]) with mapi id 15.20.9412.005; Fri, 12 Dec 2025
- 16:41:26 +0000
+ 16:41:33 +0000
 From: Ramiro Oliveira <ramiro.oliveira@advantech.com>
-Date: Fri, 12 Dec 2025 17:40:53 +0100
-Subject: [PATCH 2/8] Add Advantech EIO GPIO driver
+Date: Fri, 12 Dec 2025 17:40:54 +0100
+Subject: [PATCH 3/8] Add Advantech EIO Hardware Monitor driver
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251212-upstream-v1-v1-2-d50d40ec8d8a@advantech.com>
+Message-Id: <20251212-upstream-v1-v1-3-d50d40ec8d8a@advantech.com>
 References: <20251212-upstream-v1-v1-0-d50d40ec8d8a@advantech.com>
 In-Reply-To: <20251212-upstream-v1-v1-0-d50d40ec8d8a@advantech.com>
 To: Lee Jones <lee@kernel.org>, Linus Walleij <linusw@kernel.org>, 
@@ -82,18 +82,18 @@ Cc: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
  Thomas Kastner <thomas.kastner@advantech.com>, 
  Ramiro Oliveira <ramiro.oliveira@advantech.com>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=8215;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=10783;
  i=ramiro.oliveira@advantech.com; h=from:subject:message-id;
- bh=q6wa7ZjhA7DO7xNYwNG50IKMS8562P6Qm3UwUjgwYrQ=;
- b=owEB7QES/pANAwAKAc7t0Ke8vbAJAcsmYgBpPEWggb/tK8mBEyTV/JmgJmq6JhdHCUTe/LhdQ
- QRRaQ2DbI+JAbMEAAEKAB0WIQS1Nkng0ZvJmBKh6GLO7dCnvL2wCQUCaTxFoAAKCRDO7dCnvL2w
- CZReC/4y6qkdnWeQ5ze9BOXE6+E8/fWQ21Mk5Emm55k29muLzc+cVEMuhA4jtmBmh8XVEaK6yMT
- 8Fa4WiwYBJhR04803SAWAcqtL0BQpIEyXSs0E3om3KEhHDP5reCIsePUKkpRojC+VjKHzPIj2yS
- CbhHNaGJhGlHmphouO/mVjAZW6oe69pzc67rt1mT/FjaNd1XocjBbplOIo0IECIhYDt1/v+1l7S
- gCnuzJ0awsq5dvSECX9o9+Vqm3MmvQ4NxIbGxTbSqX4N5juLU2omA29IQwEOeUE4XVLiNALITaq
- 9XWx57q4txiA88uJ+TNwamLF/lJvCC56mCb+6li05yzeIJAY4TDRQ7ng8hk6+zhQLDLZNlzucrt
- m302GfTUUCcqczpgKL5xFfIPbDqcagEcvaleUD7VAfplJ6J13U95RM+jODJ7i0CiKTcrl47lfh0
- RVYwvIqPkwJtOMQM7m8Nx26qG7M4jX3fWwkgsVHgPD6uF2EaKAHSni2Za2RhNoCqDeN8k=
+ bh=lQM7Zvt0uk1UgbA1S5B02YrrGq66MHgNIx8FkVfsMMw=;
+ b=owEB7QES/pANAwAKAc7t0Ke8vbAJAcsmYgBpPEWgkZy4sHStD9pAY+x/DYrU4+ajgM6pPyF5V
+ UDiE/kjd0SJAbMEAAEKAB0WIQS1Nkng0ZvJmBKh6GLO7dCnvL2wCQUCaTxFoAAKCRDO7dCnvL2w
+ CS88DACL7fuBfWPP2G3hS5zDcGDcEBDQJ6dv5Goi9d4EB1eXar8B6AEN8rmH3rDY5Jb8FvvUJNO
+ 7JqsTF+P1HCH22Feb96N/ry26pdM9d26GkJhdCjkz3XT0QpWbRMMI3IYCGqRzdZg716t/BwMomQ
+ iqPlqf0HjG2PfqvpCcRr7TNLnr36rJXHpjQ6ZoP8583uN0BBCkBJvEWZQJAv4EtKvi9g5+Ql9xe
+ qHQqWDlKPBq7R5vXX+BFMCeKgr1qYMvQbKuQLrci8p0vX/iCJXZJqnLa9HXgrv+sWQZc2ummLOo
+ 4BvmLJXphZZSiC2xat9p7RcTGT4CebpBC6FClhKCTsZ8yD0//6lLlnvkaTbXZMXOOIcKtcILiMB
+ DnvjuRLQ2t+ZClXjaaDJFYECDQ6KL6gtDKZWs1awx76A17NQRGMr7cS8kLsMWyxB1KVmu5eJhCg
+ IZiOcHnGu19NPmHHWfBFSUwu6OBj+8oMEwS0rcycqJts0sJm5Sx8ZT7h2pOB/mjVBOWkc=
 X-Developer-Key: i=ramiro.oliveira@advantech.com; a=openpgp;
  fpr=B53649E0D19BC99812A1E862CEEDD0A7BCBDB009
 X-ClientProxiedBy: FR4P281CA0175.DEUP281.PROD.OUTLOOK.COM
@@ -107,431 +107,506 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: PSAPR02MB4502:EE_|JH0PR02MB6564:EE_
-X-MS-Office365-Filtering-Correlation-Id: 15b65323-0eff-4b48-38bb-08de399d4b1d
+X-MS-Office365-Filtering-Correlation-Id: d6dcd453-bfbe-4b52-a37b-08de399d4f5a
 X-MS-Exchange-AtpMessageProperties: SA
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|1800799024|7416014|366016|52116014|376014|38350700014|921020;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?TVRGcjN2VUVsOFhIamhxajhDOWl0dXU2NU1yQlFXa0UvVGE2RUNUMFgxVUl4?=
- =?utf-8?B?Q25xVUFrMW9CZGc2MGVjc3BSQm9YWEZ1THRZYWRkVkU3TkRxSy8rWWpyY0lI?=
- =?utf-8?B?Qmx4dFJUNVpWUkNyN2pldUVMaWhFN3o2eHFKcmhpZ3pNeWRsN0FwaWhYd0NW?=
- =?utf-8?B?TU8yNy80aTFSYThQKzlEZnFWTkxua0lJKy9mcTVJQVN5TkpWdmY3dGs3YjFP?=
- =?utf-8?B?a3JJZzBXSS9jMlpLVGNOUUZSdVEyVlY0ZFF4RG0ybXlXeWszaExiaUZqdFNo?=
- =?utf-8?B?blV0eWxrREUwT3ltTXRHcGY1NEEycFdiUDNOVnVoSEpyTmxtNzRhWjEzYWQv?=
- =?utf-8?B?eEVncDhORng2WDkzeUoxL3Fzc0JsQnEvbGNlR2didzhBZXJtMGd2cU5JNUh5?=
- =?utf-8?B?SnJTTGNJTlpzMVgyTXZJWDFNdGYrZnpnbHpGeDVKcFdxVjV6RnVpd2hRbUtr?=
- =?utf-8?B?dGduRGRuQnFSTVVuMlRnZmVZcE9DUVM0bG42ZWYrZXE1cmRtVjY2NVFpcGxE?=
- =?utf-8?B?cVhXZDBKMnRyNjROaDZUbXZCeUdkRDZIWHQ2cU1JYys2TDhaNGl4eXhBd2lW?=
- =?utf-8?B?KzdYcDNlVFBLTjBwcHJ3bWF3akdxWXNLM2hnSzJ3TS9jS1QxQktlS1FuRmJo?=
- =?utf-8?B?SnhJeFRIWXVlS1dGUDhWaS9KdFZJcjI2R2hKT1JwTHE2S2paV3B3NUlOWEp1?=
- =?utf-8?B?azF1dDRNWlpWcFk5SElzVGNuc0l4NWJDOTNDV3hNbEpLT1ZXSEZkbjFxN1d1?=
- =?utf-8?B?aDRWVnJzVkxESElKbXRrSEVtYUhydDBIaW82bkdlREVWRjI2ZDgzdGx6bUg2?=
- =?utf-8?B?OHJDSmhKNHRSUHVVK0xwUktmVzRSTytJOHRBYmFHTFRLeDRvVU15bjR3aWl3?=
- =?utf-8?B?Y0xEbmhRNi9temRHc3A5dFRoTzZocW9GYmpRa0w3S214bVlzS1lvWXlIbE5r?=
- =?utf-8?B?SjdRVytGTy8yKzVkUGtlRUhneDZkRzhCRHhTWE9QaFNOOEVZZDFZSjNsK3ZG?=
- =?utf-8?B?Z2hDWXdLdTdLTSthalZBSnR5SDYvdy9QSUlMdEFXVGxXSlY4aTVqQVI3ZEp5?=
- =?utf-8?B?bTNwakVlL25oZHB4MW9rZS8walp4VmpKblYwbnN0K3FmWjg5N05xU0FKb3Rj?=
- =?utf-8?B?WjltanY0RE5WMmplRmp5a3Q1WjNNcUlveHozYlJpc0VPNzJXYzh6SUFTajdw?=
- =?utf-8?B?bXpnaytrS1FjTWRZNXFoYllLRGZFQzFGVXRQcWxoRTBDNzZZc01VNTFyZWhG?=
- =?utf-8?B?d08rSThEbm5Yb0ZhUW1yT0c4cFQwS3NYR09XRzFtZkc2azhtajNwOVFKckJ3?=
- =?utf-8?B?b1BZRkxHMlcvMVRXQ0RrNXo1cjE4djVNYXJzK2JtbjRkeGVram1DU0xzdnpF?=
- =?utf-8?B?cE1KRHEwNHpzNFdpUFNTUVZTV1QweStVYlRGV1Q5dWZ2L3g5UW9URkxuaUk5?=
- =?utf-8?B?OFlidU5kTGlrTG5iUlNCV0Y1NVpPMGV5MXNKS2g3MC9NMGEwUFN6K3RXQ0RM?=
- =?utf-8?B?enN0RHBPcEZXWlppR1pLSC9jajA1NDdkQndQUWlsWklBT0luSXd5Z0pnQWxx?=
- =?utf-8?B?bFZLOC84RmhwY1VlYWpBcXJLV0dSQnBoNkpMd25xRlpObWNBUXBFcFkwc0hY?=
- =?utf-8?B?THZMR3VuclVGRk5jSlRGeEs5ZXZta2dtbXhTaHdPUTc2YWtWRitUZ3grcTdE?=
- =?utf-8?B?V1pJYStUYlpQL0ZpUHFWdmozZTlNblpUUU51SXd3MzFQaCtRUGQyemhneThH?=
- =?utf-8?B?WTcvVDhPYXJxU2R4ZkpvTmV6eGZJQllpVHpBa3dIeERId2ppYWg2L0Z6akd4?=
- =?utf-8?B?bFVjZm5UcUpYcTlUZHRkL2J4OE1hYytoQkQzWTJFOG55alE2QkpWQUNMWi9Y?=
- =?utf-8?B?WEZLMWIvbkI0b1ZkVmhnSFBkUU5idHNFR1gwbHcySm1FRnM1NFdSeSsreEJv?=
- =?utf-8?B?Q1FhRkQ3NnJGYWJybEZHcVdQUC9YYzBoY3dHVjEvcG9jWEgvN1dTZ2cxWE1D?=
- =?utf-8?B?MUNlY0pWK2laQzFIUEFMc2xRdjNldk10TGx5cS9MRVJJUWlxSTk2SFgvRSts?=
- =?utf-8?B?UzRhOUVYaUpqZWFpbXFwRkFGakh1S1JySkJMUT09?=
+	=?utf-8?B?SDQycWJiMEpsb1F2OW9BckdEVEpUdzlCa09RWmtaY3N2QXpoRWdmNy9SNURz?=
+ =?utf-8?B?U3hlUXR3WG96MXlLQ1Nwc2tpNGg5OHloK1dkNFlONzhCZGdHalNYd1FRTURI?=
+ =?utf-8?B?SFFOTlJ2NzlZRGFjQmRiS051TlRoVkxGWFQ1MmhnbVgvSWkyb3BaeEViRHA0?=
+ =?utf-8?B?TXptNWhaUmZsbUJhMXUvb3NHcU1MNGNReUZVMkZYM1p1RC9NWmlxdFY1Y3Uz?=
+ =?utf-8?B?MCs2aFJqbmJIWHBhRnFIUlNGc0UwbUJCdjNJczBmM2NYUlZvS3llWlVnNmZs?=
+ =?utf-8?B?bVBYSlV3d0tHc0JFWSszV2pmZnoyOUc0YWZVV216M295RUFmL0VSWjNsanZs?=
+ =?utf-8?B?ampXaGdOUENBRE1OeVB2KzhRdTBOaUdlbWdUT0ZmZDQxZVNmc2tYMmhCbkM5?=
+ =?utf-8?B?ekc1cGJpWGNRWk9UTEV1am92a0xCc2IyM0QxKzI4WWpCckNpbHV2L3ZYZncx?=
+ =?utf-8?B?YzhDOWlLa2NuWmpkOGRSbXdyYU41UUE0SjkyUHdNeDR3TlFOUFlsTGlEbmtl?=
+ =?utf-8?B?MDFvK0dmZEtnN1NYZFRtVWhLdW9aOG9STTNKUmNTeW96Y0Q1UVYvOW95cDRj?=
+ =?utf-8?B?eERad29ETTVWWWY1WWROQ29PcVBiY0pPUWZueWIvVmlnMVJNbjBKVjZ2S3BZ?=
+ =?utf-8?B?LzEzeHRTWk5MZkhub3JiZk9lajQ0VzBONzhXTnRlQWlxRDdKMnpTeGxtYlVh?=
+ =?utf-8?B?Wm9zSmlSbURNeVk4ME9aenR6c0NoRjVsbHgreFhtaW9RL0dnaWNUa3ovQlNi?=
+ =?utf-8?B?dU4wMVpHODhOSzdDQklxVDNDUXEvYktMazYyOEVIS0hxK3UrNXoyVzFFNUZI?=
+ =?utf-8?B?RTRUR2xFZVdjdEMyY0c4NHMwWWxsSUxJMHFKQ0lQT3hYekZMWjdrQWJBWExZ?=
+ =?utf-8?B?VjJ4UGJVV1hNTTlOaTJ6b2RoZXpvMk5mbXVxSEhDTFNsUlZNYW96UXdVemdD?=
+ =?utf-8?B?anp0OUNrTUMwSUFBWmZFZVlJU0hXaisyZ1NyQ0QyYWZ5OE9QcGNBZVhhWDlG?=
+ =?utf-8?B?QVdiNWpLQ2d3Nkprb2xkSjZST0FKbU1pOTVZdUhsNlRHZ1ZvdTMwdG9aWlVI?=
+ =?utf-8?B?bVFya0hjeEQ0YU9ZblhSS1hhR3hRY2ZGZ0loRTVmenhZVmlubW1yUkdOeUJH?=
+ =?utf-8?B?c1JJQzRQc0lLdElvLzNlTEhTa3VzNVNqbWUxS1BseXRDRzFONld1ME4vNzlQ?=
+ =?utf-8?B?MDBBQ3R4V0lIUE82bVdVTVdxYW1ZZWJPTHBRYWxaaW5OUkxDdWY5clJiWEpT?=
+ =?utf-8?B?M0luTkpKQ0o2cGJldk1wMXRUVURvQkFVazJsZVJVMUxwOVZFcnBBRTF6L2Jn?=
+ =?utf-8?B?bzlCODNVMHZDZUNuYXEvaXp5WHZJRDlpMTJ2eVRYNEpoaWNkOG0zeFptMzEr?=
+ =?utf-8?B?MUJMMHhoY3cvWkxtQzE4QVE5cFg3OVRUeitJQW5KYjF0aTBYNno4K28xdFpY?=
+ =?utf-8?B?NFFKUERMTlAvbENXa0ZCZ1hyZnJhSFpBNDNXczBZaHZ4cjZGbTVRaVVCVUJz?=
+ =?utf-8?B?MURJQzUySDduRGIzYXpvaG5xeTV2ck9KVkRNZkFnZ3RsWXQ1M296M1ZodTZw?=
+ =?utf-8?B?SXRtUVhMZlVlM3dXN1JZRVJJand5TTl4bElDSy9wbStlUGhqWC9mdm5FZ3o4?=
+ =?utf-8?B?NVRpb3MyeU1tUSszWEEzNHRFbzhhU2VRSk82T1RlcDV3Y0d0RVNnM2NRTFM1?=
+ =?utf-8?B?RGVHMmdyZHRsby9FaStFYU9vTGMrNk1uTHVkTWx5MkoySHU4dEN5cW91bjJW?=
+ =?utf-8?B?bHlXMElWQm9oSEhhSEtSYk44ektOZ0hxdjZyRGZCN3FIWDBPK0pLbXlQdndR?=
+ =?utf-8?B?T2VVSERzYkV4WUE1WnZGZEQ0MTY3R01zQXgxN2VVbGpMOXp6aVdUTTVORUlB?=
+ =?utf-8?B?b0NVdm1HZ3BoZ2Rud2k0WHM3eExSeFZGdmJvdkpjMExrRjd1Qm5iWkF5VFFF?=
+ =?utf-8?B?WUYxcFJ1M1BlVWtEV0w0dnBPQjBuclFGd0VyYndpSVd3S0x5K2pIM0tMMmNO?=
+ =?utf-8?B?OFkvVVlOa0VVUGkvUEhPdHZTYjEzbkJVVjdWS2c2dWtJVmlTS0hBWXVZblpm?=
+ =?utf-8?B?SlZhYVpXc2tjd0lneEdoenJKRUloY3kzSVRxUT09?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PSAPR02MB4502.apcprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(366016)(52116014)(376014)(38350700014)(921020);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?S0hUNTBaczF6VTVnUThUQ2x5eXM2OGRqem5IQ3B6RFVpVEMrcVFBNGpSUE1I?=
- =?utf-8?B?YzNWcTFuV25qUk5FaTZwTTg0TWduZXViUDlGNTE4NUxEZFNqaHBaaDc5ZVI5?=
- =?utf-8?B?VTR1ZzhSTW9EZ24vaU9VZWc1NFAyc25NNE9wb09tZ2N6amtyUFh1eEJkdUNY?=
- =?utf-8?B?dVBTUDJsRUNqSHpEWHoweW9BODBRSW5OYXU0RlJYdldsUllXVUVCRE0vTWFT?=
- =?utf-8?B?OXlDWFNxb3BnYzhTVS8ydWNSbDhxNDVFVlBmTnRIR3gxWU1mcHAxV2E0aEVN?=
- =?utf-8?B?RUZzd3pMemlIOFRCaFkrZVI4Y05RQkJDU3hEUDBDbWVhdG51Lzh4VFAwU2Zq?=
- =?utf-8?B?SU9IMEhCTk10eEpyQ3FlQkxIK0d5dHJEMGNoRnBrNDdWZmU2T0tCTmNWNmJ6?=
- =?utf-8?B?L0x1RlFUZW9Vc3NDcnR1NWJieVZ0eVcwZ1NnTFhIa25jckIzVEJZWWJ6Q0xv?=
- =?utf-8?B?RENTNXNQOGNIeTZYN2xlRFhKZFhZS01zcDhVUXBBdUxOZG1uc0FUak5yakpF?=
- =?utf-8?B?RmlvRDNyRllKWm9POGUrYVRqb1dIZWUzWVN4d3krcFE3cUNtOGFUZUJZc2dn?=
- =?utf-8?B?NGNrVGxNSWJFZGFFN3ZTdHFYellBRFNPRlhYcUZTWEJtLzZRaHNKWEZldTNN?=
- =?utf-8?B?aFV2VmxSMXRoWFZxWnpHRmUvSnUzUHc0Wk5VL3g0S1NJV0ZIMFRGVTNUb2NL?=
- =?utf-8?B?OEs1VnUvNGEybGxkZFRPYit0TWxZbnNha0NsRVVuRjFQR21NeXFPOHp3ZTdD?=
- =?utf-8?B?b0paRkZRVXJZbmJKTGZvemYvb3hBcG1tTFRXUGlYZ1cwQTNzbnpIcUhGUFRB?=
- =?utf-8?B?T1ZlQUx3TWFaSXRIUCtLdzVMSWVGNFFmeGV1UEpSZkM2ZUZITnEvQXNzdlFt?=
- =?utf-8?B?WWtUdnhVbFZmeDhVWHVhK0xZQ05ZU1k5ZW1BeWRrbDByY1ZncUhYaFBHYi8v?=
- =?utf-8?B?N3A5SFhvUk4wUyt0U2dNUVlYbStQVjdOYVlMdDJCcDJ2SjJsMnNZTUVLbERk?=
- =?utf-8?B?anRaaGFpNWJJZnI3dEVBa3BhRHJYS08xeHY3K25iK0ZjdFRYNmh6ZHVqNmN3?=
- =?utf-8?B?eDFlL1AzYjRIL2VIRnRRMlhFRkd5RlVFNTc3ZVFHR3JBbDNZZ3VhTURWQkFF?=
- =?utf-8?B?Vm5ZcmpCRFY1Q3B4SnZpSWFmdzNLMndCMmpYbnRvMjJwRFF1YkpyczQxSG92?=
- =?utf-8?B?OW45bUYxSk1SaVl4N0w2UGo2S21rbHRaTlZvNVdPZk1qRmQrV1Vtdkd0YWk1?=
- =?utf-8?B?cFQ3RHI1ZEtOckVDYitnVlVsRTd4NzlKbGJERkFBcllydEVnK1ZpQVl6UEJM?=
- =?utf-8?B?VEtmeUttLzVQNDIzQjFrdzdVaEZtbDRuTi9WdUhlTVYvZWJNcHpLL0t6TUxF?=
- =?utf-8?B?R2pkS1BHQ3RYaDlFTFB3VGkxOUFPeG1kd3VBTVU3VHNyUHAyd3JtMnZwZmRV?=
- =?utf-8?B?cUJqQlA2Q1hMdHRVeHErUUhSdXk3YjVkelNuM05FRHFndElWK1VLSmFhdzk5?=
- =?utf-8?B?b3BiazZWWVNsWmNmUnlFSEZmQTJFU1hiZXhKd01oSVNQS3dicldXdy9JM3lU?=
- =?utf-8?B?YUxhUkVjM0YzeEZUOWxtdmZtZk0yTkZrbTlwbVdxUjBlUkI5dHlUUzBDUEhU?=
- =?utf-8?B?elBJOUhydjBqV3llMFJQUGNKQ3dPblEwSTNGL1BBS21Ec1lrbVdwRE0ycWxq?=
- =?utf-8?B?TXBqRE8zRVVHYkJLQ3NEc2pKMnNjSFBJMVV3OTgvOHRiQlJLdjhkaU9NRHBB?=
- =?utf-8?B?NTQ4ZkNUNFdwQzlKVGpkdjc4R2ptbWdqMHlvcldQNnYyNGJSZGdCY0VyVmVz?=
- =?utf-8?B?TFhZTTN4UjN6N0x5V01xU2VNZHNWeWhUVUZ1dFcxbmxhVFZ6TnBlWUFGSkpk?=
- =?utf-8?B?cnNvelhqSEJRZFdsTTA0Vkl5eHdFMGFML280dTVNZkorYTJnNmJlVnBJNE1V?=
- =?utf-8?B?anc5eVVlMVFXS2hEbWs4K0dMaUs2SWZUcEJubTc2UzVZOThPcXdyTXBsN01a?=
- =?utf-8?B?ajBIU3NXd296dDlrQnFxOTgxU3VOT1dwT0tCZlpuTWNaZzFuazRCb1ZUTEJR?=
- =?utf-8?B?MisxTm1kcUJZTFQ4V0xGQStEcWQvYW5rTTRMSnEwMGg0N3NUQ3Y0VjVuWFJx?=
- =?utf-8?B?eGM5UEZnQzJ5MjlxcGwxeVlzZTBpbUFsREhqb1dqb2syaDNaanBNMU9mZytm?=
- =?utf-8?Q?zm3Dhn40b8lvD+HdK18dpaU=3D?=
+	=?utf-8?B?cmlVc3ZSME95akNMbXpGNjZ3bXg5TForN1FLbng1SGlRd3FyUVNSeUZXRXZW?=
+ =?utf-8?B?WnVUcW9JWnZzMGFuczI2UjI5cXcvb1pyby9icGZIZ0FjdHpNZW1RY3czUTIw?=
+ =?utf-8?B?K3I4UUNwUjJTL1RXMDZpWGRxeWF2N1JxMy93bndkVFUwZ1BKbDNEelpvWHJS?=
+ =?utf-8?B?WFJjN2ZQanNRQUpaRnlvWFFYTmQ5dEJoYkVsNWs2RDJYbkF3MmtSN0JDTkV5?=
+ =?utf-8?B?ek5QZFBKYlFpZVJHc1RPTTFNaDRUVnVOdnVtS3U0ZkNTYWxnYW1HZjFkVnlv?=
+ =?utf-8?B?Z2dDdm9udGl3M3V3M1FqUnNhS0czTWtJZXE4Y3Bqa2ZPd04zR3VFQ0tkQTl2?=
+ =?utf-8?B?M0s3Qkl2UmxIWTFWTFQ0Zlkwb0dJbjNyYlBoTnFPN0w0cm1sd2ozd3dvWi8y?=
+ =?utf-8?B?ODZvaHZHamlpYnhJWkJBTFFnMStVTkVsdk5nV3dDaFJjSEhXdmVYRU5nYkdl?=
+ =?utf-8?B?UnNDTFFzUW1pa2VaRWhMc04xMVJJVUNlN084VWl6YWI4aElBeTdIZVZtQUdB?=
+ =?utf-8?B?elpIaHR5UlcwZFg1RXJMeW13MXJWeVpNK3c5UmZ3QlE0WnZwOTBscHYxck9M?=
+ =?utf-8?B?M2ZsRkVKalhJUFA1dzhqM3B4Y3I4NEprRDdpV1liQm1RblB6Sm00Mi8ydWZ5?=
+ =?utf-8?B?NnViZXdoYmNrclc1RXlvVGZQZiszY3RYZzM3TWVKRU5FMkR3OFh3YmhBc0I3?=
+ =?utf-8?B?dEN1NWgyVDJ5VitSekwwR3F1NEdzZUVsVWdXL0VtczAyNFdzZnU2MmpIZU1u?=
+ =?utf-8?B?dFQxMEptS3g5SU5lSEEzQWdOMVBzNzdycUhSZmh5YlNwQW00aDVvWjRaZ1l1?=
+ =?utf-8?B?enMzUjBpckFiK0ZZQk9hNFlXQTVtZWlMYk8vU05icmsrS2xtYjZKVFlzREY2?=
+ =?utf-8?B?UmNqUGVsSDh1dTY0SUpsUWdoVVBUZ3UyaXlSOEZCbTlJOStuZDF3Z0JFa2pE?=
+ =?utf-8?B?Y0FPa3VweFozak5tQWk0Q01oczljSGFEQTAzZ1NnUVM1RVMzWGhDNGQrQ1h5?=
+ =?utf-8?B?YkpwY2t1VFoyZHNjVWszcXM5YUFUdEErTTJLN0pSSkgzcUJ5MXg3TkY0OXh2?=
+ =?utf-8?B?eFJ3ZVRyZ0lXWmxZOVlPb2NuNElxL2MyNDhyeHdPeE9YYVJOTEFLbCtvcUs1?=
+ =?utf-8?B?UUVvdWZvSzFHb2x5VTFLaEd6bEgyUFRDaTM2c24xUS9hdnRCcWFHRGxpYk5I?=
+ =?utf-8?B?N1JxakNsYVpCQnRiK1dzSmFBV2NXdjFKOUNzck8wanVnZGVtaVU0MFdtZUR5?=
+ =?utf-8?B?UkJ2Mnc4WU9rY2JSSldMRHM3RXZDUmxyTmtleW02SC9vV1NwK205LytWOExR?=
+ =?utf-8?B?c2YrU3lLU0l4azE1RTlTQzdKNFJZbTVYeVl3ZC9nSzYwUWhlV0Y0QjdWRXlm?=
+ =?utf-8?B?OXRZNzk1SW8zWGtSYmRhQzhteFJQdk1vR3h4eEs4TThIaGF6UXFuR3pFSm15?=
+ =?utf-8?B?Q3NxYk96d3NJeWxPOWRrMGRiSzg1elY5S2VKb0ZQQXJHN2xHSXFpUTcyMVRO?=
+ =?utf-8?B?eE1INDZweGluOXRMemZNY05jcVkyTmZadDV0dU1xNElVUDZHVkN3dEMvODdr?=
+ =?utf-8?B?R3ozUXNITjM5c1VOL0NUVURXWCtoOWxsNnFiOXVLUk5oRlFjWVdydjMrYVNC?=
+ =?utf-8?B?WHlwZTVydkJrM29kQVhBT1ZlQkpMSnpuaHBwWDRTSGxoY1VTaTRlWjNwcWhr?=
+ =?utf-8?B?d0l3MzZxVGlXUzIvazZpajdaTm1DRFROKytyVUo1RG9wdlZVci9tdlhpYm1t?=
+ =?utf-8?B?cWZ1YUhoMmpCVklsd0ZiZUt3VTBzcGlHMERDYVdnYk4vSGt1VElCWENENFpT?=
+ =?utf-8?B?TzBSdnJuY09GeDA0Rk9Mb1loUzNDUEJqcFB5aWN0OTZzTWNJc00rcHZVb1lO?=
+ =?utf-8?B?TlNnTEFhTEtuclNhV1lLeGZ5Z01hQ1NJY1JST3VuOWY2MWpQam5hTkt6ajdr?=
+ =?utf-8?B?KzJGbjM5Z2IxLzY4WDV0eWRqZ0V1eTExTCs5Y3A2Nk0rNVVNM0RnZzM4dDNy?=
+ =?utf-8?B?dmREVlhRWXh3ZldScHhvazNzditVMXQ4MDNGZDFueTBOTTVvSnNuMXl1bG42?=
+ =?utf-8?B?ek1xN24vbWdpa2tOaGhEUkRBVXE5ZVBjbEpUWFY5M3hpM1Z2ZE1ldnFNVmpQ?=
+ =?utf-8?B?WkJSblhRcnBQaUJpTEZzb1E5SStMNXB5TTQ5NGUwelRROWh6dW5tKytzNFJJ?=
+ =?utf-8?Q?6qVN5dDiMhmzEc/77ckpKHI=3D?=
 X-OriginatorOrg: advantech.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 15b65323-0eff-4b48-38bb-08de399d4b1d
+X-MS-Exchange-CrossTenant-Network-Message-Id: d6dcd453-bfbe-4b52-a37b-08de399d4f5a
 X-MS-Exchange-CrossTenant-AuthSource: PSAPR02MB4502.apcprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Dec 2025 16:41:26.7458
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Dec 2025 16:41:33.8286
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: a77d40d9-dcba-4dda-b571-5f18e6da853f
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: sGL25qnqpfYID+hMYoDrPNqNAXWem03s6nTlKfws+dyIXjNbLXQpiiWTwmnBp5QqUIGIjmfFirlz6UDFI1SrX8xT4bgYQZehfHSTalP0YD0=
+X-MS-Exchange-CrossTenant-UserPrincipalName: J4O/586Qpr6tGjJMPxtOsfGyVRTufL5Xdz4x/aaZMOGlJhuNUdnEb+s+ryZFp6SeZvQfVfafUEcP8n0RRDBK3IwLcPs9VzpYAEV9Ytp2wfA=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: JH0PR02MB6564
 
-This driver controls the GPIO component of the Advantech EIO chip.
+This driver controls the Hardware Monitor block of the Advantech EIO chip.
 
 Signed-off-by: Ramiro Oliveira <ramiro.oliveira@advantech.com>
 ---
- MAINTAINERS             |   1 +
- drivers/gpio/Kconfig    |   6 ++
- drivers/gpio/Makefile   |   1 +
- drivers/gpio/gpio-eio.c | 273 ++++++++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 281 insertions(+)
+ MAINTAINERS               |   1 +
+ drivers/hwmon/Kconfig     |  10 ++
+ drivers/hwmon/Makefile    |   1 +
+ drivers/hwmon/eio-hwmon.c | 344 ++++++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 356 insertions(+)
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index bd9279796c2f..359d4a13f212 100644
+index 359d4a13f212..fdd39b152f41 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -619,6 +619,7 @@ F:	drivers/platform/x86/adv_swbutton.c
- ADVANTECH EIO DRIVER
+@@ -620,6 +620,7 @@ ADVANTECH EIO DRIVER
  M:	Ramiro Oliveira <ramiro.oliveira@advantech.com>
  S:	Maintained
-+F:	drivers/gpio/gpio-eio.c
+ F:	drivers/gpio/gpio-eio.c
++F:	drivers/hwmon/eio-hwmon.c
  F:	drivers/mfd/eio_core.c
  F:	include/linux/mfd/eio.h
  
-diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-index bd185482a7fd..628a914842bd 100644
---- a/drivers/gpio/Kconfig
-+++ b/drivers/gpio/Kconfig
-@@ -277,6 +277,12 @@ config GPIO_DWAPB
- 	  Say Y or M here to build support for the Synopsys DesignWare APB
- 	  GPIO block.
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 157678b821fc..08993b993596 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -2043,6 +2043,16 @@ config SENSORS_DME1737
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called dme1737.
  
-+config GPIO_EIO
-+	tristate "Advantech EIO GPIO"
++config SENSORS_EIO
++	tristate "Advantech EIO HWMON"
 +	depends on MFD_EIO
 +	help
-+	  Say Y or M to build support for Advantech EIO GPIO block.
++	  If you say yes here you get support for the Advantech EIO
++	  temperature, voltage and fan speed monitoring block.
 +
- config GPIO_EIC_SPRD
- 	tristate "Spreadtrum EIC support"
- 	depends on ARCH_SPRD || COMPILE_TEST
-diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
-index 2421a8fd3733..ba3883d5e4a0 100644
---- a/drivers/gpio/Makefile
-+++ b/drivers/gpio/Makefile
-@@ -64,6 +64,7 @@ obj-$(CONFIG_GPIO_DLN2)			+= gpio-dln2.o
- obj-$(CONFIG_GPIO_DS4520)		+= gpio-ds4520.o
- obj-$(CONFIG_GPIO_DWAPB)		+= gpio-dwapb.o
- obj-$(CONFIG_GPIO_EIC_SPRD)		+= gpio-eic-sprd.o
-+obj-$(CONFIG_GPIO_EIO)			+= gpio-eio.o
- obj-$(CONFIG_GPIO_ELKHARTLAKE)		+= gpio-elkhartlake.o
- obj-$(CONFIG_GPIO_EM)			+= gpio-em.o
- obj-$(CONFIG_GPIO_EN7523)		+= gpio-en7523.o
-diff --git a/drivers/gpio/gpio-eio.c b/drivers/gpio/gpio-eio.c
++	  This driver can also be built as a module. If so, the module
++	  will be called eio-hwmon
++
+ config SENSORS_EMC1403
+ 	tristate "SMSC EMC1403/23 thermal sensor"
+ 	depends on I2C
+diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+index eade8e3b1bde..e69f03b41fae 100644
+--- a/drivers/hwmon/Makefile
++++ b/drivers/hwmon/Makefile
+@@ -72,6 +72,7 @@ obj-$(CONFIG_SENSORS_DME1737)	+= dme1737.o
+ obj-$(CONFIG_SENSORS_DRIVETEMP)	+= drivetemp.o
+ obj-$(CONFIG_SENSORS_DS620)	+= ds620.o
+ obj-$(CONFIG_SENSORS_DS1621)	+= ds1621.o
++obj-$(CONFIG_SENSORS_EIO)	+= eio-hwmon.o
+ obj-$(CONFIG_SENSORS_EMC1403)	+= emc1403.o
+ obj-$(CONFIG_SENSORS_EMC2103)	+= emc2103.o
+ obj-$(CONFIG_SENSORS_EMC2305)	+= emc2305.o
+diff --git a/drivers/hwmon/eio-hwmon.c b/drivers/hwmon/eio-hwmon.c
 new file mode 100644
-index 000000000000..50f66a325e8f
+index 000000000000..164591aa31a7
 --- /dev/null
-+++ b/drivers/gpio/gpio-eio.c
-@@ -0,0 +1,273 @@
++++ b/drivers/hwmon/eio-hwmon.c
+@@ -0,0 +1,344 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
-+ * GPIO driver for Advantech EIO Embedded controller.
++ * GPIO driver for Advantech EIO embedded controller.
 + *
 + * Copyright (C) 2025 Advantech Corporation. All rights reserved.
 + */
 +
 +#include <linux/errno.h>
-+#include <linux/gpio.h>
-+#include <linux/gpio/driver.h>
++#include <linux/hwmon.h>
++#include <linux/hwmon-sysfs.h>
 +#include <linux/mfd/core.h>
 +#include <linux/mfd/eio.h>
 +#include <linux/module.h>
 +
-+#define GPIO_MAX_PINS	48
-+#define GPIO_WRITE	0x18
-+#define GPIO_READ	0x19
++#define MAX_DEV 128
++#define MAX_NAME 32
 +
-+struct eio_gpio_dev {
-+	u64 avail;
-+	int max;
-+	struct gpio_chip chip;
-+	struct device *dev;
++static uint timeout;
++module_param(timeout, uint, 0444);
++MODULE_PARM_DESC(timeout,
++		 "Default pmc command timeout in micro-seconds.\n");
++
++struct eio_hwmon_dev {
++	struct device *mfd;
 +};
 +
-+struct {
-+	int size;
++enum _sen_type {
++	NONE,
++	VOLTAGE,
++	CURRENT,
++	TEMP,
++	PWM,
++	TACHO,
++	FAN,
++	CASEOPEN,
++};
++
++struct eio_key {
++	enum _sen_type type;
++	u8 chan;
++	u8 item;
++	u8 label_idx;
++};
++
++struct eio_attr {
++	struct sensor_device_attribute sda;
++	struct eio_key key;
++};
++
++static struct {
++	u8   cmd;
++	u8   max;
++	signed int shift;
++	char name[32];
++	u8   ctrl[16];
++	u16  multi[16];
++	char item[16][32];
++	char labels[32][32];
++
++} sen_info[] = {
++	{ 0x00, 0, 0, "none" },
++	{ 0x12, 8, 0, "in",
++		{ 0xFF, 0x10, 0x11, 0x12 },
++		{ 1,    10,   10,   10 },
++		{ "label", "input", "max", "min" },
++		{ "5V", "5Vs5", "12V", "12Vs5",
++		  "3V3", "3V3", "5Vsb", "3Vsb",
++		  "Vcmos", "Vbat", "Vdc", "Vstb",
++		  "Vcore_a", "Vcore_b", "", "",
++		  "Voem0", "Voem1", "Voem2", "Voem3"
++		},
++	},
++	{ 0x1a, 2, 0, "curr",
++		{ 0xFF, 0x10, 0x11, 0x12 },
++		{ 1,    10,   10,   10 },
++		{ "label", "input", "max", "min" },
++		{ "dc", "oem0" },
++	},
++	{ 0x10, 4, -2731, "temp",
++		{ 0xFF, 0x10, 0x11, 0x12, 0x21, 0x41 },
++		{ 1,    100,  100,  100,  100,  100 },
++		{ "label", "input", "max", "min", "crit", "emergency" },
++		{ "cpu0", "cpu1", "cpu2", "cpu3",
++		  "sys0", "sys1", "sys2", "sys3",
++		  "aux0", "aux1", "aux2", "aux3",
++		  "dimm0", "dimm1", "dimm2", "dimm3",
++		  "pch", "gpu", "", "",
++		  "", "", "", "",
++		  "", "", "", "",
++		  "oem0", "oem1", "oem", "oem3" },
++	},
++	{ 0x14, 0, 0, "pwm",
++		{ 0xFF, 0x11, 0x12 },
++		{ 1, 1, 1 },
++		{ "label", "polarity", "freq" },
++		{ "pwm0", "pwm0", "pwm0", "pwm0" },
++	},
++	{ 0x16, 2, 0, "tacho",
++		{ 0xFF, 0x10 },
++		{ 1, 1 },
++		{ "label", "input"},
++		{ "cpu0", "cpu1", "cpu2", "cpu3",
++		  "sys0", "sys1", "sys2", "sys3",
++		  "", "", "", "", "", "", "", "",
++		  "", "", "", "", "", "", "", "",
++		  "", "", "", "",
++		  "oem0", "oem1", "oem2", "oem3"
++		},
++	},
++	{ 0x24, 4, 0, "fan",
++		{ 0xFF, 0x1A },
++		{ 1, 1 },
++		{ "label", "input"},
++		{ "cpu0", "cpu1", "cpu2", "cpu3",
++		  "sys0", "sys1", "sys2", "sys3",
++		  "", "", "", "", "", "", "", "",
++		  "", "", "", "", "", "", "", "",
++		  "", "", "", "",
++		  "oem0", "oem1", "oem2", "oem3",
++		},
++	},
++	{ 0x28, 1, 0, "intrusion",
++		{ 0xFF, 0x02 },
++		{ 1, 1 },
++		{ "label", "input" },
++		{ "case_open" }
++	}
++};
++
++static struct {
++	enum _sen_type type;
++	u8   ctrl;
++	int  size;
 +	bool write;
++
 +} ctrl_para[] = {
-+	{ 0x01, false }, { 0x00, false }, { 0x00, false }, { 0x02, false },
-+	{ 0x01, false }, { 0x00, false }, { 0x00, false }, { 0x00, false },
-+	{ 0x00, false }, { 0x00, false }, { 0x00, false }, { 0x00, false },
-+	{ 0x00, false }, { 0x00, false }, { 0x00, false }, { 0x00, false },
-+	{ 0x01, true  }, { 0x01, true  }, { 0x02, true  }, { 0x02, true  },
-+	{ 0x02, false }, { 0x10, false }
++	{ NONE,     0x00, 0, false },
++
++	{ VOLTAGE,  0x00, 1, false }, { VOLTAGE,  0x01, 1, false },
++	{ VOLTAGE,  0x10, 2, false }, { VOLTAGE,  0x11, 2, false },
++	{ VOLTAGE,  0x12, 2, false },
++
++	{ CURRENT,  0x00, 1, false }, { CURRENT,  0x01, 1, false },
++	{ CURRENT,  0x10, 2, false }, { CURRENT,  0x11, 2, false },
++	{ CURRENT,  0x12, 2, false },
++
++	{ TEMP,	    0x00, 2, false }, { TEMP,	  0x01, 1, false },
++	{ TEMP,     0x04, 1, false }, { TEMP,	  0x10, 2, false },
++	{ TEMP,     0x11, 2, false }, { TEMP,	  0x12, 2, false },
++	{ TEMP,     0x21, 2, false }, { TEMP,	  0x41, 2, false },
++
++	{ PWM,      0x00, 1, false }, { PWM,	  0x10, 1, true  },
++	{ PWM,      0x11, 1, true  }, { PWM,	  0x12, 4, true  },
++
++	{ TACHO,    0x00, 1, false }, { TACHO,	  0x01, 1, false },
++	{ TACHO,    0x10, 4, true  },
++
++	{ FAN,      0x00, 1, false }, { FAN,	  0x01, 1, false },
++	{ FAN,      0x03, 1, true  }, { FAN,	  0x1A, 2, false },
++
++	{ CASEOPEN, 0x00, 1, false }, { CASEOPEN, 0x02, 1, true  },
 +};
 +
-+enum {
-+	GPIO_STATUS	 = 0,
-+	GPIO_GROUP_AVAIL = 3,
-+	GPIO_ERROR	 = 0x04,
-+	GPIO_PIN_DIR	 = 0x10,
-+	GPIO_PIN_LEVEL	 = 0x11,
-+	GPIO_GROUP_DIR	 = 0x12,
-+	GPIO_GROUP_LEVEL = 0x13,
-+	GPIO_MAPPING	 = 0x14,
-+	GPIO_NAME	 = 0x15
-+} gpio_ctrl;
-+
-+struct {
-+	int group;
-+	int port;
-+} group_map[] = {
-+	{ 0, 0 }, { 0, 1 },
-+	{ 1, 0 }, { 1, 1 },
-+	{ 2, 0 }, { 2, 1 },
-+	{ 3, 0 }, { 3, 1 },
-+	{ 3, 2 }, { 3, 3 },
-+	{ 3, 4 }, { 3, 5 },
-+	{ 3, 6 }, { 3, 7 }
-+};
-+
-+static int timeout;
-+module_param(timeout, int, 0444);
-+MODULE_PARM_DESC(timeout, "Set PMC command timeout value.\n");
-+
-+static int pmc_write(struct device *mfd_dev, u8 ctrl, u8 dev_id, void *data)
++static int para_idx(enum _sen_type type, u8 ctrl)
 +{
-+	struct pmc_op op = {
-+		 .cmd       = GPIO_WRITE,
-+		 .control   = ctrl,
-+		 .device_id = dev_id,
-+		 .payload   = (u8 *)data,
-+		 .timeout   = timeout,
-+	};
-+
-+	if (ctrl > ARRAY_SIZE(ctrl_para))
-+		return -ENOMEM;
-+
-+	if (!ctrl_para[ctrl].write)
-+		return -EINVAL;
-+
-+	op.size = ctrl_para[ctrl].size;
-+
-+	return eio_core_pmc_operation(mfd_dev, &op);
-+}
-+
-+static int pmc_read(struct device *mfd_dev, u8 ctrl, u8 dev_id, void *data)
-+{
-+	struct pmc_op op = {
-+		 .cmd       = GPIO_READ,
-+		 .control   = ctrl,
-+		 .device_id = dev_id,
-+		 .payload   = (u8 *)data,
-+		 .timeout   = timeout,
-+	};
-+
-+	if (ctrl > ARRAY_SIZE(ctrl_para))
-+		return -ENOMEM;
-+
-+	op.size = ctrl_para[ctrl].size;
-+
-+	return eio_core_pmc_operation(mfd_dev, &op);
-+}
-+
-+static int get_dir(struct gpio_chip *chip, unsigned int offset)
-+{
-+	u8 dir;
-+	int ret;
-+
-+	ret = pmc_read(chip->parent, GPIO_PIN_DIR, offset, &dir);
-+	if (ret)
-+		return ret;
-+
-+	return dir ? 0 : 1;
-+}
-+
-+static int dir_input(struct gpio_chip *chip, unsigned int offset)
-+{
-+	u8 dir = 0;
-+
-+	return pmc_write(chip->parent, GPIO_PIN_DIR, offset, &dir);
-+}
-+
-+static int dir_output(struct gpio_chip *chip, unsigned int offset, int value)
-+{
-+	u8 dir = 1;
-+	u8 val = value;
-+
-+	pmc_write(chip->parent, GPIO_PIN_DIR, offset, &dir);
-+
-+	return pmc_write(chip->parent, GPIO_PIN_LEVEL, offset, &val);
-+}
-+
-+static int gpio_get(struct gpio_chip *chip, unsigned int offset)
-+{
-+	u8 level;
-+	int ret;
-+
-+	ret = pmc_read(chip->parent, GPIO_PIN_LEVEL, offset, &level);
-+	if (ret)
-+		return ret;
-+
-+	return level;
-+}
-+
-+static int gpio_set(struct gpio_chip *chip, unsigned int offset, int value)
-+{
-+	u8 val = value;
-+
-+	pmc_write(chip->parent, GPIO_PIN_LEVEL, offset, &val);
-+
-+	return 0;
-+}
-+
-+static int check_support(struct device *dev)
-+{
-+	u8  data;
-+	int ret;
-+
-+	ret = pmc_read(dev, GPIO_STATUS, 0, &data);
-+	if (!ret)
-+		return ret;
-+
-+	if ((data & 0x01) == 0)
-+		return -EOPNOTSUPP;
-+
-+	return 0;
-+}
-+
-+static int check_pin(struct device *dev, int pin)
-+{
-+	int ret;
-+	int group, bit;
-+	u16 data;
-+
-+	/* Get pin mapping */
-+	ret = pmc_read(dev, GPIO_MAPPING, pin, &data);
-+	if (ret)
-+		return ret;
-+
-+	if ((data & 0xFF) > ARRAY_SIZE(group_map))
-+		return -EINVAL;
-+
-+	group = group_map[data & 0xFF].group;
-+	bit   = data >> 8;
-+
-+	/* Check mapped pin */
-+	ret = pmc_read(dev, GPIO_GROUP_AVAIL, group, &data);
-+	if (ret)
-+		return ret;
-+
-+	return data & BIT(bit) ? 0 : -EOPNOTSUPP;
-+}
-+
-+static int gpio_init(struct device *mfd, struct eio_gpio_dev *eio_gpio)
-+{
-+	int ret;
 +	int i;
-+	char str[GPIO_MAX_PINS + 1];
 +
-+	memset(str, 0x30, sizeof(str));
++	for (i = 1 ; i < ARRAY_SIZE(ctrl_para) ; i++)
++		if (type == ctrl_para[i].type &&
++		    ctrl == ctrl_para[i].ctrl)
++			return i;
 +
-+	ret = check_support(mfd);
-+	if (ret) {
-+		dev_err(eio_gpio->dev, "GPIO not supported (%d)\n", ret);
-+		return ret;
-+	}
-+
-+	eio_gpio->avail = 0;
-+
-+	for (i = 0 ; i <  GPIO_MAX_PINS ; i++) {
-+		ret = check_pin(mfd, i);
-+		if (ret)
-+			continue;
-+
-+		eio_gpio->avail |= BIT(i);
-+		eio_gpio->max = i + 1;
-+		str[GPIO_MAX_PINS - i] = '1';
-+	}
-+
-+	dev_info(eio_gpio->dev, "GPIO pins=%s\n", str);
-+
-+	return eio_gpio->max ? 0 : -EOPNOTSUPP;
++	return 0;
 +}
 +
-+static const struct gpio_chip eio_gpio_chip = {
-+	.label		  = KBUILD_MODNAME,
-+	.owner		  = THIS_MODULE,
-+	.direction_input  = dir_input,
-+	.get		  = gpio_get,
-+	.direction_output = dir_output,
-+	.set		  = gpio_set,
-+	.get_direction	  = get_dir,
-+	.base		  = -1,
-+	.can_sleep	  = true,
++static int pmc_read(struct device *mfd, enum _sen_type type, u8 dev_id, u8 ctrl, void *data)
++{
++	int idx = para_idx(type, ctrl);
++	int ret = 0;
++
++	if (idx == 0)
++		return -EINVAL;
++
++	if (WARN_ON(!data))
++		return -EINVAL;
++
++	struct pmc_op op = {
++		 .cmd       = sen_info[type].cmd | EIO_FLAG_PMC_READ,
++		 .control   = ctrl,
++		 .device_id = dev_id,
++		 .size	    = ctrl_para[idx].size,
++		 .payload   = (u8 *)data,
++		 .timeout   = timeout,
++	};
++
++	ret = eio_core_pmc_operation(mfd, &op);
++	return ret;
++}
++
++static ssize_t eio_show(struct device *dev, struct device_attribute *attr,
++			char *buf)
++{
++	struct eio_hwmon_dev *eio_hwmon = dev_get_drvdata(dev);
++	struct eio_attr *eio_attr =
++		container_of(attr, struct eio_attr, sda.dev_attr);
++	const struct eio_key *eio_key = &eio_attr->key;
++	int ret;
++	u8 data[2];
++	u32 temp_val;
++	signed int final_val;
++
++	switch (eio_key->item) {
++	case 0:
++		return sysfs_emit(buf, "%s\n",
++				  sen_info[eio_key->type].labels[eio_key->label_idx]);
++
++	default:
++		ret = pmc_read(eio_hwmon->mfd, eio_key->type, eio_key->chan,
++			       sen_info[eio_key->type].ctrl[eio_key->item],
++			       &data);
++		if (ret)
++			return ret;
++
++		temp_val = data[0] | data[1] << 8;
++
++		final_val = (signed int)temp_val + (signed int)(sen_info[eio_key->type].shift);
++		final_val = final_val * (signed int)sen_info[eio_key->type].multi[eio_key->item];
++
++		return sysfs_emit(buf, "%d\n", final_val);
++	}
++
++	return -EINVAL;
++}
++
++static char devname[MAX_DEV][MAX_NAME];
++static struct eio_attr devattrs[MAX_DEV];
++static struct attribute *attrs[MAX_DEV];
++
++static struct attribute_group group = {
++	.attrs = attrs,
 +};
 +
-+static int gpio_probe(struct platform_device *pdev)
++static const struct attribute_group *groups[] = {
++	&group,
++	NULL
++};
++
++static int hwmon_init(struct device *mfd, struct eio_hwmon_dev *eio_hwmon)
++{
++	enum _sen_type type;
++	u8 i, j, data[16];
++	int sum = 0;
++	int ret;
++
++	for (type = VOLTAGE ; type <= CASEOPEN ; type++) {
++		int cnt = 1;
++
++		for (i = 0 ; i < sen_info[type].max ; i++) {
++			if (pmc_read(mfd, type, i, 0x00, data) ||
++			    (data[0] & 0x01) == 0)
++				continue;
++
++			memset(data, 0, sizeof(data));
++			ret = pmc_read(mfd, type, i, 0x01, data);
++			if (ret != 0 && ret != -EINVAL) {
++				dev_info(mfd, "read type id error\n");
++				continue;
++			}
++
++			for (j = 0 ; j < ARRAY_SIZE(sen_info->item) ; j++) {
++				struct eio_attr *eio_attr;
++
++				if (sen_info[type].item[j][0] == 0)
++					continue;
++
++				eio_attr = &devattrs[sum];
++
++				eio_attr->key.type      = type;
++				eio_attr->key.chan      = i;
++				eio_attr->key.item      = j;
++				eio_attr->key.label_idx = data[0];
++
++				snprintf(devname[sum], sizeof(devname[sum]),
++					 "%s%d_%s", sen_info[type].name, cnt,
++					 sen_info[type].item[j]);
++
++				eio_attr->sda.dev_attr.attr.name = devname[sum];
++				eio_attr->sda.dev_attr.attr.mode = 0444;
++				eio_attr->sda.dev_attr.show      = eio_show;
++
++				attrs[sum] = &eio_attr->sda.dev_attr.attr;
++
++				if (++sum >= MAX_DEV)
++					break;
++			}
++			cnt++;
++		}
++	}
++
++	return sum;
++}
++
++static int hwmon_probe(struct platform_device *pdev)
 +{
 +	struct device *dev =  &pdev->dev;
-+	struct eio_gpio_dev *eio_gpio;
++	struct eio_hwmon_dev *eio_hwmon;
 +	struct eio_dev *eio_dev = dev_get_drvdata(dev->parent);
++	struct device *hwmon;
 +
 +	if (!eio_dev) {
 +		dev_err(dev, "Error contact eio_core\n");
 +		return -ENODEV;
 +	}
 +
-+	eio_gpio = devm_kzalloc(dev, sizeof(*eio_gpio), GFP_KERNEL);
-+	eio_gpio->dev = dev;
++	eio_hwmon = devm_kzalloc(dev, sizeof(*eio_hwmon), GFP_KERNEL);
++	if (!eio_hwmon)
++		return -ENOMEM;
 +
-+	if (gpio_init(dev->parent, eio_gpio))
-+		return -EIO;
++	eio_hwmon->mfd = dev->parent;
++	platform_set_drvdata(pdev, eio_hwmon);
 +
-+	eio_gpio->chip	   = eio_gpio_chip;
-+	eio_gpio->chip.parent = dev->parent;
-+	eio_gpio->chip.ngpio  = eio_gpio->max;
++	if (hwmon_init(dev->parent, eio_hwmon) <= 0)
++		return -ENODEV;
 +
-+	return devm_gpiochip_add_data(dev, &eio_gpio->chip, eio_gpio);
++	hwmon =	devm_hwmon_device_register_with_groups(dev, KBUILD_MODNAME,
++						       eio_hwmon,
++						       groups);
++	return PTR_ERR_OR_ZERO(hwmon);
 +}
 +
-+static struct platform_driver gpio_driver = {
-+	.probe  = gpio_probe,
-+	.driver = { .name = KBUILD_MODNAME, },
++static struct platform_driver eio_hwmon_driver = {
++	.probe  = hwmon_probe,
++	.driver = {
++		.name = "eio_hwmon",
++	},
 +};
 +
-+module_platform_driver(gpio_driver);
++module_platform_driver(eio_hwmon_driver);
 +
 +MODULE_AUTHOR("Wenkai Chung <wenkai.chung@advantech.com.tw>");
 +MODULE_AUTHOR("Ramiro Oliveira <ramiro.oliveira@advantech.com>");
-+MODULE_DESCRIPTION("GPIO driver for Advantech EIO embedded controller");
++MODULE_DESCRIPTION("Hardware monitor driver for Advantech EIO embedded controller");
 +MODULE_LICENSE("GPL");
++
 
 -- 
 2.43.0
