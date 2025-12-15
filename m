@@ -1,216 +1,326 @@
-Return-Path: <linux-i2c+bounces-14533-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14534-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 316DECBC8C6
-	for <lists+linux-i2c@lfdr.de>; Mon, 15 Dec 2025 06:15:51 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9E41CBC928
+	for <lists+linux-i2c@lfdr.de>; Mon, 15 Dec 2025 06:44:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 14E09300F31B
-	for <lists+linux-i2c@lfdr.de>; Mon, 15 Dec 2025 05:15:35 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 259013010E32
+	for <lists+linux-i2c@lfdr.de>; Mon, 15 Dec 2025 05:44:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82381322B83;
-	Mon, 15 Dec 2025 05:15:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 852B7326923;
+	Mon, 15 Dec 2025 05:44:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b="LxhNB6KN"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from invmail4.hynix.com (exvmail4.hynix.com [166.125.252.92])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75831322537;
-	Mon, 15 Dec 2025 05:15:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.125.252.92
+Received: from smtpbgbr2.qq.com (smtpbgbr2.qq.com [54.207.22.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E06E86359;
+	Mon, 15 Dec 2025 05:44:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.207.22.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765775730; cv=none; b=mNSPL2LGqvKGjxTG4kpBJfjUtXklu0MPf9tbvEwMS3yhMqA4k8a3D6h66UBg1DYwyGI0NNmww6VXQKu6R9sDUdcQBGpRjS5156Gh8E0Fq+aK58UYaFJIQZGogF6EIKD1xd4lcNBRXhuvjXpGLbTMDsF66wXy0iMNqJEnK2682jU=
+	t=1765777460; cv=none; b=uHagifUmSQsq5NN5i5D9wBehRWjMI31UlBhpaB7SlXzLXdk57x/UpL5xJFaUBW4wJyjnm+RpislnZ2uz1o6LMYuiN8772plwIkR2voREMthMlLROLH+ziWilgyC2/SNOhedLPVQdp+2AIHTLseB7+cup45Fth47IO/d4nCO0jo4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765775730; c=relaxed/simple;
-	bh=axbVRlmpoqHXKy7D9DYTP2RH8Eh/CvptUY+r60J/TOg=;
+	s=arc-20240116; t=1765777460; c=relaxed/simple;
+	bh=QPvB4kHja07Xy0ogH5Ym3ZLvXASXupJFH70Dp4cOLyk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=He6zUHzYCiKlaxCIrlTtOO7YsD6PqM2XRq4hDJkTx8Iisu2hGUN1PsE0B9A22AQWUXCXnmCkux1ut5t9EsRgHnaAwL8ajQQWGxHmSfMGIf7hptJzPJ6qzMTFFebRX7anPK4VZKNUNwsFCRkMO5/MStdP45aHiaEi8dReODr1Q/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com; spf=pass smtp.mailfrom=sk.com; arc=none smtp.client-ip=166.125.252.92
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sk.com
-X-AuditID: a67dfc5b-c2dff70000001609-de-693f996afb50
-Date: Mon, 15 Dec 2025 14:15:17 +0900
-From: Byungchul Park <byungchul@sk.com>
-To: Jeff Layton <jlayton@kernel.org>
-Cc: linux-kernel@vger.kernel.org, kernel_team@skhynix.com,
-	torvalds@linux-foundation.org, damien.lemoal@opensource.wdc.com,
-	linux-ide@vger.kernel.org, adilger.kernel@dilger.ca,
-	linux-ext4@vger.kernel.org, mingo@redhat.com, peterz@infradead.org,
-	will@kernel.org, tglx@linutronix.de, rostedt@goodmis.org,
-	joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
-	duyuyang@gmail.com, johannes.berg@intel.com, tj@kernel.org,
-	tytso@mit.edu, willy@infradead.org, david@fromorbit.com,
-	amir73il@gmail.com, gregkh@linuxfoundation.org, kernel-team@lge.com,
-	linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
-	minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
-	sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
-	penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
-	ngupta@vflare.org, linux-block@vger.kernel.org,
-	josef@toxicpanda.com, linux-fsdevel@vger.kernel.org, jack@suse.cz,
-	dan.j.williams@intel.com, hch@infradead.org, djwong@kernel.org,
-	dri-devel@lists.freedesktop.org, rodrigosiqueiramelo@gmail.com,
-	melissa.srw@gmail.com, hamohammed.sa@gmail.com,
-	harry.yoo@oracle.com, chris.p.wilson@intel.com,
-	gwan-gyeong.mun@intel.com, max.byungchul.park@gmail.com,
-	boqun.feng@gmail.com, longman@redhat.com, yunseong.kim@ericsson.com,
-	ysk@kzalloc.com, yeoreum.yun@arm.com, netdev@vger.kernel.org,
-	matthew.brost@intel.com, her0gyugyu@gmail.com, corbet@lwn.net,
-	catalin.marinas@arm.com, bp@alien8.de, x86@kernel.org,
-	hpa@zytor.com, luto@kernel.org, sumit.semwal@linaro.org,
-	gustavo@padovan.org, christian.koenig@amd.com,
-	andi.shyti@kernel.org, arnd@arndb.de, lorenzo.stoakes@oracle.com,
-	Liam.Howlett@oracle.com, rppt@kernel.org, surenb@google.com,
-	mcgrof@kernel.org, petr.pavlu@suse.com, da.gomez@kernel.org,
-	samitolvanen@google.com, paulmck@kernel.org, frederic@kernel.org,
-	neeraj.upadhyay@kernel.org, joelagnelf@nvidia.com,
-	josh@joshtriplett.org, urezki@gmail.com,
-	mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-	qiang.zhang@linux.dev, juri.lelli@redhat.com,
-	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-	bsegall@google.com, mgorman@suse.de, vschneid@redhat.com,
-	chuck.lever@oracle.com, neil@brown.name, okorniev@redhat.com,
-	Dai.Ngo@oracle.com, tom@talpey.com, trondmy@kernel.org,
-	anna@kernel.org, kees@kernel.org, bigeasy@linutronix.de,
-	clrkwllms@kernel.org, mark.rutland@arm.com, ada.coupriediaz@arm.com,
-	kristina.martsenko@arm.com, wangkefeng.wang@huawei.com,
-	broonie@kernel.org, kevin.brodsky@arm.com, dwmw@amazon.co.uk,
-	shakeel.butt@linux.dev, ast@kernel.org, ziy@nvidia.com,
-	yuzhao@google.com, baolin.wang@linux.alibaba.com,
-	usamaarif642@gmail.com, joel.granados@kernel.org,
-	richard.weiyang@gmail.com, geert+renesas@glider.be,
-	tim.c.chen@linux.intel.com, linux@treblig.org,
-	alexander.shishkin@linux.intel.com, lillian@star-ark.net,
-	chenhuacai@kernel.org, francesco@valla.it,
-	guoweikang.kernel@gmail.com, link@vivo.com, jpoimboe@kernel.org,
-	masahiroy@kernel.org, brauner@kernel.org,
-	thomas.weissschuh@linutronix.de, oleg@redhat.com, mjguzik@gmail.com,
-	andrii@kernel.org, wangfushuai@baidu.com, linux-doc@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-	linaro-mm-sig@lists.linaro.org, linux-i2c@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
-	rcu@vger.kernel.org, linux-nfs@vger.kernel.org,
-	linux-rt-devel@lists.linux.dev, 2407018371@qq.com, dakr@kernel.org,
-	miguel.ojeda.sandonis@gmail.com, neilb@ownmail.net,
-	bagasdotme@gmail.com, wsa+renesas@sang-engineering.com,
-	dave.hansen@intel.com, geert@linux-m68k.org, ojeda@kernel.org,
-	alex.gaynor@gmail.com, gary@garyguo.net, bjorn3_gh@protonmail.com,
-	lossin@kernel.org, a.hindborg@kernel.org, aliceryhl@google.com,
-	tmgross@umich.edu, rust-for-linux@vger.kernel.org
-Subject: Re: [PATCH v18 41/42] SUNRPC: relocate struct rcu_head to the first
- field of struct rpc_xprt
-Message-ID: <20251215051517.GB49936@system.software.com>
-References: <20251205071855.72743-1-byungchul@sk.com>
- <20251205071855.72743-42-byungchul@sk.com>
- <cd65b963dd4edade3afb2e7d27eb33af1c62682e.camel@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=HX4wn8yK9jE57VxNzP9dCyMg0XKbHsg8VhRLmN7SSLBv8eiDQUj+PQ0tapy7KNMD2mATDRZDa1+xSN3FZRTmISgs4iK5r5UsKcHNHMlDWagNUay30GcLCvsXuTqeqp3X6s22dxS+Y+vlPPxtnFWo16oxnqi8HE3PxSXOf2HgT3c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com; spf=none smtp.mailfrom=linux.spacemit.com; dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b=LxhNB6KN; arc=none smtp.client-ip=54.207.22.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.spacemit.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.spacemit.com;
+	s=mxsw2412; t=1765777349;
+	bh=7/v1AHp7ETagX1mpcxBqNuxe1AHAbWNnCz90pyxs+iQ=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version;
+	b=LxhNB6KNkjNsGT14J3i2hsafQH60gPsrxIcZ+kpyMUbIDZKXWccjtAAhK8o6dxF2m
+	 F81YqT4mrTzV3+hesi8DkMoeqnDorIgKCBpmA0TtjQ43Dj2QEbOgN4uuhJDJ72YGeS
+	 UUBbapi3VVJr84zA2oHxNy8FcSicoriVBjomd73U=
+X-QQ-mid: esmtpsz20t1765777341t3b4a168c
+X-QQ-Originating-IP: +Mmtspt6z7F8uojFBjQIxWik8MaTcVWNGK/uU8N3P6Y=
+Received: from = ( [183.48.246.103])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Mon, 15 Dec 2025 13:42:20 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 11472735917233781318
+EX-QQ-RecipientCnt: 9
+Date: Mon, 15 Dec 2025 13:42:19 +0800
+From: Troy Mitchell <troy.mitchell@linux.spacemit.com>
+To: Alex Elder <elder@riscstar.com>,
+	Troy Mitchell <troy.mitchell@linux.spacemit.com>,
+	Andi Shyti <andi.shyti@kernel.org>, Yixun Lan <dlan@gentoo.org>,
+	Troy Mitchell <troymitchell988@gmail.com>
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev
+Subject: Re: [PATCH v4] i2c: spacemit: introduce pio for k1
+Message-ID: <7413B6F44E526F60+aT-fu7gTS6YjEEKy@kernel.org>
+References: <20251009-k1-i2c-atomic-v4-1-a89367870286@linux.spacemit.com>
+ <613db920-6025-43cb-a733-d58f65363caa@riscstar.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <cd65b963dd4edade3afb2e7d27eb33af1c62682e.camel@kernel.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Sa0yTZxiG837nFko+OpivsOhSJXMaRBe3PMmM29yPfdkfl+3Hkrlk68Y3
-	aTjVFtCaGMtJGauu0xRC67RF6JgrhnHY5NCIzBQZNC0QpTOwFsQKKbCNCKZIZf0gy/jz5M79
-	3M99vT9ejlS2M2mcpqBI1BWo81SMnJLPJzoyc+ve0uw7P/gSjAenabhf2kvB3bEyCoJLVQjW
-	3B4EAf8tElztpQTUzpZS8JfThMAatrEwH+ymIVaTC1fr2xiI1PzNwDOvj4Raix+BY3KChMXZ
-	EIJ2z58I3E1lDDwyd5AwOp0ECy0M2MvcNAwPRRB8b7uIIPzATUBnqIuF4cgqAUFnmIJBc70E
-	ZaDm5y1gqy0n4mOGAEtzNwFR53UWhq6NU+A0ZoDNO0rDVJOVhdXJ/bBmLwTPT49ZuDHvoyES
-	vshAsP8sDb8aQyy4TGESqrqWKGh9eJ+GHvcABVWxJwg8N6cIGO26zICppYMGo+0pDf7eQRoa
-	x4YJmAwFaGjzDpGwfCEdAuZHCC4thNHb2ULlSIwRXFdcSHjSWE4Klea4ahycY4SVpXuM4F62
-	U8Lv9Vho+HqFEL7zZgqd1glWsLcWCxV35mmhrWm3cK1nlhAci0v0B5mfyA9mi3maElGXdehz
-	ec5i+TirvfriyWj3diP6lq9GMg7zB3DFmoeuRty6dj/fJdkUn4HH7sUYSTP8KzgQiJJSJIXf
-	iR8YNdVIzpG8ZRuem1mhpMwL/DHc0mkhJa3gAbtnbpFSSMnbEXbUuNiNRTIeqJtePyDjpatX
-	RtZLST4d//Cc27C34/IO27ot4wU8+41BslP5Hbj3l35CqsT8ggw77/rIjedvxbebApQZJVs3
-	EaybCNb/CdZNBDuiriOlpqAkX63JO7A3x1CgObn3y8L8VhT/y87Tq0dvokX/R32I55AqUeFv
-	P6RR0uoSvSG/D2GOVKUoqgJxS5GtNpwSdYWf6YrzRH0fSuco1RbFa8snspX8MXWRmCuKWlH3
-	35bgZGlGtGeX1p/00PJ0YLL49X9efTfhi/7pZhe7w3TYPJZwPulc8puhUpt4JrIno/qr2+Ej
-	lcffSHy5Qryckko0RHs+ftw/fvTH0760DynXH+zUkRsOx05edkcbeC/fkDV3JrjNxDSMZA1/
-	OnNB8U7dYdbrS0htvjQR5bfqi96P/aaVTXSaM1SUPke9fzep06v/BfYi22nHAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA02SbUxbZRTH89zn9t5LtcsFcTzZjDOdi2buReNMjlG3GZPxxDizxA/LFhOp
-	2824AwppkVGNSqnName2rqZF2rG1KJVAHW/bFEldAxOdE0YZSMPLgKwyCEwMFrYWCrYsRr6c
-	/M///M8v58MRcMaX3AZB1hZLOq0mX80pWeXbr5i2H6/cIz/fFdgKFvOnMDwaUcAfxiAL81EL
-	C+ca/Bwk3N/zYGmuVMCvA+Us9FysRzA6b0Fwf9GNwdy6wkLC3slDNDbEg8OIYCXQicAZsmMI
-	91zF4L9kZOCfxmUOpjvmEDjGIxxUTBlZmPV9gcA14eZh6udsuDfapoCVkbsMDCzMIPBFlhmI
-	BE8iSDjz4EJ1S3Ld+TcHi103MVQ4ehB4x0cwzE2NIbjUeRtBoLacgz9tlzHciqyDvvlZDq47
-	TnFwL3SOgb8aOfCUBxQQ+n0aQZXbjmBiMMCA6esGDpxVzSy0jv3IQ2h6iYFhp52B+ub9MOqb
-	YOGGrZpJnptMNWWBu8LEJMskA47v2hiI+er4vTWI3jefZmldyxWGmnsTHPWf9yO6GLcjGq0x
-	YWq2JduOmVlMP2s5QWtuzHA0Pt/P0cCCh6W/VRP6zedxhp7t2k5bXSP8gdcPK189KuXLJZJu
-	5+4cZe6caZgvurC+NNa2qQydEa1IEIi4iwSWn7WiNIEVt5CB/gSX0pz4DAmHYzgVyRSfJoNl
-	shUpBSw6niQzk3E2lXlMPEYaWx04pVUikMDkVZwKZYgeRLxOP/9wkE6uV0ZWF3ASunS+dxWK
-	xY3k22Xhob2JmC67V+00kZKpU4aU/bi4mQSv/MLY0DrXGpBrDcj1P8i1BuRBbB3KlLUlBRo5
-	/6Ud+rxcg1Yu3XGksKAZJV/V9/HS2R9Q9FZ2OxIFpH5UFW7bLWcoNCV6Q0E7IgJWZ6os4aSl
-	OqoxfCjpCt/TfZAv6dvRRoFVZ6nePCjlZIjHNMVSniQVSbr/poyQtqEMXfvkq13vW2ZdQWuY
-	dMefe6Ij54j13TdO9598ai5EFofEvvTgcPYd7519fnrxTJWye/Px2sOG17r3+uvWNyTe2jlo
-	Gw9n5WiMRfv3NDnQOx/x3n1jL9tevG3sS1uY8Dy4+WDbCm1K9/Qe3PbIoWis9NqQ8W7Em1Vf
-	LGsLa/UlP52wqVl9ruaFrVin1/wLMb4wZaYDAAA=
-X-CFilter-Loop: Reflected
+In-Reply-To: <613db920-6025-43cb-a733-d58f65363caa@riscstar.com>
+X-QQ-SENDSIZE: 520
+Feedback-ID: esmtpsz:linux.spacemit.com:qybglogicsvrgz:qybglogicsvrgz3a-0
+X-QQ-XMAILINFO: N4WhQbLQyIqSuIpHePOmbUvP03EF+IW1Eo8Em4MkQiA4VtOUt0n/Lsvx
+	9euNI2JHxAz1c2Rx0id9ZSkjAilgHp/Lim4i9E9/0sCE3rjnH3bg5TGPamgmd5h0qZi2VXr
+	S/JM2RrawfZVi3dFQAFqBzY/D6fgH4OWuYra6OaKQr2Lvs9qELyfRVNNtei5/KWXk3TeEvL
+	rDXnvBWv7g5Z2McFWctMUy++JraLWO7jClQ3no2hGtZIcCn/XMLlVsOXxa1A0+EAKWUtMnl
+	OHkrkD4UMQSXCrvMqafACZ+YElvAzlkJLPDNN/bEzNpxc82jSgNd/OJclPx0yF0RQy+JrTb
+	yS29MEZ/8YvssgR1PGKZkPxuBGEB/72fHqvxWPvJQEZe9JiH6E/0B7Zr/X/Ku6Jk9cJ0QYU
+	qvpbYWCMD1KT73T6uDufWk60zozlqSozk++iPquPOO0LAgtlIGpKiky8f63uPBVJb/H2wCJ
+	dFpNwzr3/Y7upuE+IqAOOrueISF0Q72cdW3rTNAlUMuThZ8SU98TZ6vzaaVvWi+mZTFzhKe
+	8caBE/LtLzzCbIvJ74gptdp5b1iRPGELPK50sWa0DZEPnJLs1ahVa8++Sq0ksJ78ZwOhyD2
+	aS1/RTIOWGvPYFF+KiUbww0+OM0EDV1zMFE6sqEHMxagWUGDJi5cNsFXwTENthGBxj8YTk/
+	rEzMqMKIjlXLgzJcw/ePbIcmmRpze8GVduP37+b/5vKIG2lG46Bkg/LjSw7vcfdFwIvjDTy
+	QmTJ11CjeCsWIl82rdMpN8XyxD6Mssv+kZHNrPrQJxUkywK2d7/eM4QxoquKVAanWM5fI/J
+	yLsfRRyZeRPTg21s6VmgpjBxojtS+PdoinwRLFjupCYter7GaRGzTCFU0S1BamS2q/MhYMT
+	i/Skhu9m8xbnaFCrX9hUqty7JQKUxeZa2vOT0TTQfN45gRQOJQUJvsAx2GMgpKO9WD8qFWL
+	Aiu/cyzSHEbVYlFS9IoRsohcIbyefnnVy32ZMI8v4aQtKudriu74OmaUhgw0PJHDx9FyPmL
+	cn3E8TLE/o4oFdnbLhv4owZEYFtj6mrmxPx+Q1+rlH540/ltcXzsgQNLjdAJz7p5rad7/mJ
+	5p2J4bIgYwf88/pcFNZ6HZHvyrr2ThwBg==
+X-QQ-XMRINFO: OD9hHCdaPRBwq3WW+NvGbIU=
+X-QQ-RECHKSPAM: 0
 
-On Fri, Dec 05, 2025 at 04:27:52AM -0500, Jeff Layton wrote:
-> On Fri, 2025-12-05 at 16:18 +0900, Byungchul Park wrote:
-> > While compiling Linux kernel with DEPT on, the following error was
-> > observed:
-> >
-> >    ./include/linux/rcupdate.h:1084:17: note: in expansion of macro
-> >    ‘BUILD_BUG_ON’
-> >    1084 | BUILD_BUG_ON(offsetof(typeof(*(ptr)), rhf) >= 4096);        \
-> >         | ^~~~~~~~~~~~
-> >    ./include/linux/rcupdate.h:1047:29: note: in expansion of macro
-> >    'kvfree_rcu_arg_2'
-> >    1047 | #define kfree_rcu(ptr, rhf) kvfree_rcu_arg_2(ptr, rhf)
-> >         |                             ^~~~~~~~~~~~~~~~
-> >    net/sunrpc/xprt.c:1856:9: note: in expansion of macro 'kfree_rcu'
-> >    1856 | kfree_rcu(xprt, rcu);
-> >         | ^~~~~~~~~
-> >     CC net/kcm/kcmproc.o
-> >    make[4]: *** [scripts/Makefile.build:203: net/sunrpc/xprt.o] Error 1
-> >
-> > Since kfree_rcu() assumes 'offset of struct rcu_head in a rcu-managed
-> > struct < 4096', the offest of struct rcu_head in struct rpc_xprt should
-> > not exceed 4096 but does, due to the debug information added by DEPT.
-> >
-> > Relocate struct rcu_head to the first field of struct rpc_xprt from an
-> > arbitrary location to avoid the issue and meet the assumption.
-> >
-> > Reported-by: Yunseong Kim <ysk@kzalloc.com>
-> > Signed-off-by: Byungchul Park <byungchul@sk.com>
-> > ---
-> >  include/linux/sunrpc/xprt.h | 9 ++++++++-
-> >  1 file changed, 8 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/include/linux/sunrpc/xprt.h b/include/linux/sunrpc/xprt.h
-> > index f46d1fb8f71a..666e42a17a31 100644
-> > --- a/include/linux/sunrpc/xprt.h
-> > +++ b/include/linux/sunrpc/xprt.h
-> > @@ -211,6 +211,14 @@ enum xprt_transports {
-> >
-> >  struct rpc_sysfs_xprt;
-> >  struct rpc_xprt {
-> > +     /*
-> > +      * Place struct rcu_head within the first 4096 bytes of struct
-> > +      * rpc_xprt if sizeof(struct rpc_xprt) > 4096, so that
-> > +      * kfree_rcu() can simply work assuming that.  See the comment
-> > +      * in kfree_rcu().
-> > +      */
-> > +     struct rcu_head         rcu;
+On Fri, Nov 07, 2025 at 09:50:26AM -0600, Alex Elder wrote:
+> On 10/9/25 4:59 AM, Troy Mitchell wrote:
+> > This patch introduces I2C PIO functionality for the Spacemit K1 SoC,
+> > enabling the use of I2C in atomic context.
+> 
+> (Sorry I haven't commented on your earlier versions.  They
+> included other changes to prepare for this; I'm looking at
+> this patch in isolation and haven't reviewed the others.)
+> 
+> An aside:  I notice the #includes are indented an additional
+> space in this source file;  perhaps you can get rid of those
+> (in a separate patch) at some point.
+Uh? Where?
+I didn't do that in this patch.
+> 
+> You really need to provide more information about how this
+> is implemented.  This patch makes non-trivial changes to
+> the logic.
+I'll provide more infomation in the next version.
+
+[...]
+
+> >   static void spacemit_i2c_init(struct spacemit_i2c_dev *i2c)
+> >   {
+> > -	u32 val;
+> > -
+> > -	/*
+> > -	 * Unmask interrupt bits for all xfer mode:
+> > -	 * bus error, arbitration loss detected.
+> > -	 * For transaction complete signal, we use master stop
+> > -	 * interrupt, so we don't need to unmask SPACEMIT_CR_TXDONEIE.
+> > -	 */
+> > -	val = SPACEMIT_CR_BEIE | SPACEMIT_CR_ALDIE;
+> > -
+> > -	/*
+> > -	 * Unmask interrupt bits for interrupt xfer mode:
+> > -	 * When IDBR receives a byte, an interrupt is triggered.
+> > -	 *
+> > -	 * For the tx empty interrupt, it will be enabled in the
+> > -	 * i2c_start function.
+> > -	 * Otherwise, it will cause an erroneous empty interrupt before i2c_start.
+> > -	 */
+> > -	val |= SPACEMIT_CR_DRFIE;
+> > +	u32 val = 0;
 > > +
-> >       struct kref             kref;           /* Reference count */
-> >       const struct rpc_xprt_ops *ops;         /* transport methods */
-> >       unsigned int            id;             /* transport id */
-> > @@ -317,7 +325,6 @@ struct rpc_xprt {
-> >  #if IS_ENABLED(CONFIG_SUNRPC_DEBUG)
-> >       struct dentry           *debugfs;               /* debugfs directory */
-> >  #endif
-> > -     struct rcu_head         rcu;
-> >       const struct xprt_class *xprt_class;
-> >       struct rpc_sysfs_xprt   *xprt_sysfs;
-> >       bool                    main; /*mark if this is the 1st transport */
+> > +	if (!i2c->use_pio) {
 > 
-> Seems fine to me.
+> Why does this block of initialization only need to be done
+> when not using PIO?  What happens in the PIO case?  I think
+> the answer is that you don't want any interrupts when using
+> PIO.  But... what if these conditions occur in PIO mode?
+We always read ISR register in the pio_xfer().
+Disabling the interrupt for a error bit only prevents the interrupt from
+firing; it does not prevent the error bit itself from being set in the
+ISR.
+And we reused handle_state() so the error check is still there.
+
 > 
-> Reviewed-by: Jeff Layton <jlayton@kernel.org>
+> > +		/*
+> > +		 * Unmask interrupt bits for all xfer mode:
+> > +		 * bus error, arbitration loss detected.
+> > +		 * For transaction complete signal, we use master stop
+> > +		 * interrupt, so we don't need to unmask SPACEMIT_CR_TXDONEIE.
+> > +		 */
+> > +		val |= SPACEMIT_CR_BEIE | SPACEMIT_CR_ALDIE;
+> > +
+> > +		/*
+> > +		 * Unmask interrupt bits for interrupt xfer mode:
+> > +		 * When IDBR receives a byte, an interrupt is triggered.
+> > +		 *
+> > +		 * For the tx empty interrupt, it will be enabled in the
+> > +		 * i2c_start function.
+> > +		 * Otherwise, it will cause an erroneous empty interrupt before i2c_start.
+> > +		 */
+> > +		val |= SPACEMIT_CR_DRFIE;
+> 
+> It's worth explaining (somewhere, possibly in the patch
+> header) that this is different from what was done before.
+> As a reviewer I didn't realize this at first; I thought
+> you were simply making a block of code conditional on
+> the value of use_pio.
+See above. And I'll put them into commit message.
 
-Thank you, Jeff.
+> 
+> > +		/* unmask master stop interrupt bit */
+> > +		val |= SPACEMIT_CR_MSDIE;
+> > +	}
+> 
+> I would find it easier to follow if you set up the
+> common bit assignments to the SPACEMIT_ICR register
+> first, and then do the non-PIO specific ones afterward.
+I don't think so. I think it should be configured on demand; otherwise
+we will need to do the same thing again when FIFO support or high-speed
+transfer modes are added in the future.
+Moreover, in the PIO path we would still have to disable the FIFO and
+high-speed bits, which makes the approach counterproductive.
 
-	Byungchul
+[...]
+
+> > +static int spacemit_i2c_wait_pio_xfer(struct spacemit_i2c_dev *i2c)
+> > +{
+> > +	u32 mask, msec = jiffies_to_msecs(i2c->adapt.timeout);
+> > +	ktime_t timeout = ktime_add_ms(ktime_get(), msec);
+> > +	int ret;
+> > +
+> > +	mask = SPACEMIT_SR_IRF | SPACEMIT_SR_ITE;
+> 
+> I think this can be a do..while block instead.  Both conditions
+> will certainly be true initially.
+> 
+> > +	while (i2c->unprocessed && ktime_compare(ktime_get(), timeout) < 0) {
+> > +		udelay(10);
+> 
+> Why do you delay *first*?  I think you should read the status
+> and only if you're not done, insert the delay.
+> 
+> > +		i2c->status = readl(i2c->base + SPACEMIT_ISR);
+> > +
+> > +		spacemit_i2c_clear_int_status(i2c, i2c->status);
+> > +
+> > +		if (!(i2c->status & mask))
+> > +			continue;
+> > +
+> > +		spacemit_i2c_handle_state(i2c);
+> > +
+> > +		/*
+> > +		 * This is the last byte to write of the current message.
+> 
+> You mean *if* this is the last byte to write in the message, ...
+Yes I lost *if*.
+
+[...]
+> 
+> > @@ -445,7 +547,10 @@ static irqreturn_t spacemit_i2c_irq_handler(int irq, void *devid)
+> >   	}
+> >   	if (i2c->state != SPACEMIT_STATE_IDLE) {
+> > -		val |= SPACEMIT_CR_TB | SPACEMIT_CR_ALDIE;
+> > +		val |= SPACEMIT_CR_TB;
+> > +		if (i2c->use_pio)
+> > +			val |= SPACEMIT_CR_ALDIE;
+> > +
+> >   		if (spacemit_i2c_is_last_msg(i2c)) {
+> >   			/* trigger next byte with stop */
+> > @@ -459,6 +564,23 @@ static irqreturn_t spacemit_i2c_irq_handler(int irq, void *devid)
+> >   err_out:
+> >   	spacemit_i2c_err_check(i2c);
+> > +}
+> > +
+> > +static irqreturn_t spacemit_i2c_irq_handler(int irq, void *devid)
+> 
+> Introducing spacemit_i2c_handle_state() as a simple separate
+> initial patch would simplify review.  (Not a big deal, but
+> something to think about for future patch series.)
+I will. Thanks.
+> 
+> > +{
+> > +	struct spacemit_i2c_dev *i2c = devid;
+> > +	u32 status;
+> > +
+> > +	status = readl(i2c->base + SPACEMIT_ISR);
+> > +	if (!status)
+> > +		return IRQ_HANDLED;
+> > +
+> > +	i2c->status = status;
+> > +
+> > +	spacemit_i2c_clear_int_status(i2c, status);
+> > +
+> > +	spacemit_i2c_handle_state(i2c);
+> > +
+> >   	return IRQ_HANDLED;
+> >   }
+> > @@ -467,6 +589,11 @@ static void spacemit_i2c_calc_timeout(struct spacemit_i2c_dev *i2c)
+> >   	unsigned long timeout;
+> >   	int idx = 0, cnt = 0;
+> 
+> Why is the timeout a fixed constant for PIO, but a fairly
+> precise calculation based on message length otherwise?
+We have talked about here [1]
+
+                - Troy
+
+Link: https://lore.kernel.org/all/2ADE8BFFC8EF40BC+aNH0fplBawrkLp3Z@LT-Guozexi/ [1]
+> 
+> 					-Alex
+> 
+> > +	if (i2c->use_pio) {
+> > +		i2c->adapt.timeout = msecs_to_jiffies(SPACEMIT_WAIT_TIMEOUT);
+> > +		return;
+> > +	}
+> > +
+> >   	for (; idx < i2c->msg_num; idx++)
+> >   		cnt += (i2c->msgs + idx)->len + 1;
+> > @@ -479,11 +606,14 @@ static void spacemit_i2c_calc_timeout(struct spacemit_i2c_dev *i2c)
+> >   	i2c->adapt.timeout = usecs_to_jiffies(timeout + USEC_PER_SEC / 10) / i2c->msg_num;
+> >   }
+> > -static int spacemit_i2c_xfer(struct i2c_adapter *adapt, struct i2c_msg *msgs, int num)
+> > +static inline int
+> > +spacemit_i2c_xfer_common(struct i2c_adapter *adapt, struct i2c_msg *msgs, int num, bool use_pio)
+> >   {
+> >   	struct spacemit_i2c_dev *i2c = i2c_get_adapdata(adapt);
+> >   	int ret;
+> > +	i2c->use_pio = use_pio;
+> > +
+> >   	i2c->msgs = msgs;
+> >   	i2c->msg_num = num;
+> > @@ -511,6 +641,16 @@ static int spacemit_i2c_xfer(struct i2c_adapter *adapt, struct i2c_msg *msgs, in
+> >   	return ret < 0 ? ret : num;
+> >   }
+> > +static int spacemit_i2c_xfer(struct i2c_adapter *adapt, struct i2c_msg *msgs, int num)
+> > +{
+> > +	return spacemit_i2c_xfer_common(adapt, msgs, num, false);
+> > +}
+> > +
+> > +static int spacemit_i2c_pio_xfer_atomic(struct i2c_adapter *adapt, struct i2c_msg *msgs, int num)
+> > +{
+> > +	return spacemit_i2c_xfer_common(adapt, msgs, num, true);
+> > +}
+> > +
+> >   static u32 spacemit_i2c_func(struct i2c_adapter *adap)
+> >   {
+> >   	return I2C_FUNC_I2C | (I2C_FUNC_SMBUS_EMUL & ~I2C_FUNC_SMBUS_QUICK);
+> > @@ -518,6 +658,7 @@ static u32 spacemit_i2c_func(struct i2c_adapter *adap)
+> >   static const struct i2c_algorithm spacemit_i2c_algo = {
+> >   	.xfer = spacemit_i2c_xfer,
+> > +	.xfer_atomic = spacemit_i2c_pio_xfer_atomic,
+> >   	.functionality = spacemit_i2c_func,
+> >   };
+> > 
+> > ---
+> > base-commit: bc574b64121525b24d52e9bab747184181c808dc
+> > change-id: 20250814-k1-i2c-atomic-f1a90cd34364
+> > 
+> > Best regards,
+> 
+> 
 
