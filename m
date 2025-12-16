@@ -1,46 +1,46 @@
-Return-Path: <linux-i2c+bounces-14582-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14583-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5177CC41CA
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Dec 2025 17:05:47 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id A42B0CC4248
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 Dec 2025 17:10:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 0A82A303789A
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Dec 2025 16:04:51 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 4448E30FBA3D
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 Dec 2025 16:04:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A6AA2F25F2;
-	Tue, 16 Dec 2025 15:55:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A1533491FB;
+	Tue, 16 Dec 2025 15:56:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KnJY5LCi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ixcMz5Qc"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E32E92D3737;
-	Tue, 16 Dec 2025 15:55:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 953A4348445;
+	Tue, 16 Dec 2025 15:56:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765900507; cv=none; b=R7zzo6vz3SY1YGXki1+fsK8v0Kio3tXel1Td53nqpD2jk+W0RqDm8flVRL9N8+v6jW5j5B3StfPbWMFCdUrmNz0eQHXFLzxfSYV26Qvbj3aCowEmOFJwzvIfuDPnfWNx/lPjLdVrWLbF4a/962n/cE/ZbeGATwveOifsdmGZ+x0=
+	t=1765900560; cv=none; b=mSjymUK9+GHAKLDRgoyhIhgJFm7I4PE74UT3pMpxtc4A1oLh3E9J3IyNv020VlcKAewXuKlFbJer57rOizKISSq3rgN3fi/3R0Ap+G84Qtv02DgzDQRir/1UMzsvhbTBC2+dw2czQ/8Q0W4o6DoWG7eN15YTFsAOUtIlRRL25q8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765900507; c=relaxed/simple;
-	bh=01o5UEZSfkctZGOC5qlwlYDaww6GquCTHK/kGSGT9Qs=;
+	s=arc-20240116; t=1765900560; c=relaxed/simple;
+	bh=0W/0Xa0Slv3UXEfMkgi0QaZVMXEWA0wSD/U2rTj2ctw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JnQYZrp2x0OZdMWLvktVyfnHViFljIF0q27YRYy4jYP7zJzXOfWANh4ZO3WwSYT4BtiBPdsn/40biBdXsmAqYeCAmnb1l2cS9xO45/5IZdC9Y9UP8mN0GZnH88P6PHRucLGzHQRWKbfvWH1QZ/4XCSYy8Qg7PydWltFBmV5xPig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KnJY5LCi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1484C4CEF1;
-	Tue, 16 Dec 2025 15:54:56 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=pF6qIfn66dWndilQzqnUMW266X+cx9h2jVB8+GAZzhcIFrDvfJ93TuZrF+RxN4qyF6j50ZWf9icQboqAPqpDXMAFuU8cDsn2ZWWHpMcjb1z/07hM+h7CQArOVpPg5i+RTcwoHA58sestygkic7yNMY8A5MKv1UjZwG1owNdp5yY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ixcMz5Qc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A411C19422;
+	Tue, 16 Dec 2025 15:55:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765900506;
-	bh=01o5UEZSfkctZGOC5qlwlYDaww6GquCTHK/kGSGT9Qs=;
+	s=k20201202; t=1765900560;
+	bh=0W/0Xa0Slv3UXEfMkgi0QaZVMXEWA0wSD/U2rTj2ctw=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=KnJY5LCi/daDI436cW11l2Wqr+RJlCMtWNkJk2AtzanmHz93rQJ124FWk4sFUtsA6
-	 iVo4ZZWRFT4V/zqvlbP7Mu/vlS+xtrtlI7SYy3E04iqXohV2Oe4HUDa6isZCRbzxTc
-	 /mvQXq7uA8hGmtra8djoYst0s2tt0EfGlkx6wwR7MTb0KQ4BY4unq4LgWmGXccHlMy
-	 ZHbUYJRJJh3TZgot7Lt2gxaABElqBUyrBX2iIfqM6dvs/N9XGlNoObcZlgTWXH9FO7
-	 9E6+x2wXTqTogPi50AcxgqckAp2FL7Su9wOSPLWvnUCCQAPFKrt8DexSDUaYg5cK1x
-	 HTM+jBrwl41cA==
-Message-ID: <d9665340-5a96-4105-88e9-ec14a715df5a@kernel.org>
-Date: Tue, 16 Dec 2025 16:54:54 +0100
+	b=ixcMz5QcfgVZLlP9jQgDIAWbZ7vuI8xCStyHwmlobnfruIe71wmh1nq3j+Dq/RFVr
+	 SYwuNoc2x9twbFf84Fvh3SE4kC9TfNgGS/+liqmqGKAQysWxsbFvSuDGi4zj4R5SLK
+	 c+H2sOer7XGnZ4c4j7eAEwVTN55QsO9j0CL/ryCBsj3onHF38lm6DET+i+qD/cL7Gr
+	 yTodbyAWZG/utaPXMngNAfEAjA75rNmLv+rc8aLfpRj3KtVlxrfcK0ZeCmRi5o0ahR
+	 4NM+cX3T4ABB7KYZAVSLTlZxrYqYR5McjEzNgDlS65V39wdJTR7gH1VTXEI5uCdA2g
+	 0azhRXxkW4v8w==
+Message-ID: <39d5371a-ed3e-4262-9cc9-e76c039f352c@kernel.org>
+Date: Tue, 16 Dec 2025 16:55:48 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -48,8 +48,8 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 03/19] dt-bindings: arm: AT91: relicense to dual
- GPL-2.0/BSD-2-Clause
+Subject: Re: [PATCH v2 04/19] dt-bindings: arm: move AT91 to generic Microchip
+ binding
 To: Robert Marko <robert.marko@sartura.hr>, robh@kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org, nicolas.ferre@microchip.com,
  alexandre.belloni@bootlin.com, claudiu.beznea@tuxon.dev,
@@ -73,7 +73,7 @@ To: Robert Marko <robert.marko@sartura.hr>, robh@kernel.org,
  linux-usb@vger.kernel.org, linux-clk@vger.kernel.org, mwalle@kernel.org
 Cc: luka.perkov@sartura.hr
 References: <20251215163820.1584926-1-robert.marko@sartura.hr>
- <20251215163820.1584926-3-robert.marko@sartura.hr>
+ <20251215163820.1584926-4-robert.marko@sartura.hr>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -119,17 +119,18 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20251215163820.1584926-3-robert.marko@sartura.hr>
+In-Reply-To: <20251215163820.1584926-4-robert.marko@sartura.hr>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 15/12/2025 17:35, Robert Marko wrote:
-> As it is preferred to have bindings dual licensed, lets relicense the AT91
-> bindings from GPL-2.0 only to GPL-2.0/BSD-2 Clause.
+> Create a new binding file named microchip.yaml, to which all Microchip
+> based devices will be moved to.
 > 
-> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+> Start by moving AT91, next will be SparX-5.
 
-You need all contributors to ack this...
+
+I don't understand why. Previous layout was correct.
 
 Best regards,
 Krzysztof
