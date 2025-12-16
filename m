@@ -1,113 +1,176 @@
-Return-Path: <linux-i2c+bounces-14579-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14580-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0DD2CC34F5
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Dec 2025 14:44:53 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id DFCFACC362F
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 Dec 2025 15:01:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 21D643035A41
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Dec 2025 13:39:00 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B9E2E305D7BA
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 Dec 2025 13:59:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03F86393DF2;
-	Tue, 16 Dec 2025 13:14:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21AF83B75F7;
+	Tue, 16 Dec 2025 13:51:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ElWVQPTA"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="H0sQo4tQ";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="CO9OZs40"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45E05393786;
-	Tue, 16 Dec 2025 13:14:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73B8D3901EF
+	for <linux-i2c@vger.kernel.org>; Tue, 16 Dec 2025 13:51:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765890898; cv=none; b=RSKorZirMA6qbWkF97xPIhbTDiL4/ejIxRPJVSfR6kDxShpj5aNFh4i+x8Ms9Exy9p2/2WTOTEf/UYkgy8YjLTWniKHb54SPHfMpjl3poaxFomRZD5cKJ9UQCi7AZRURa2wVj4Y6KgXmzkTSWXUAaoqOvGYHsOFgu4d1J/c8BqQ=
+	t=1765893081; cv=none; b=ZwIVL4/T0u6rsCJvl0FZgm2yBsglSKTJt1fiUrM+Hry72u1CaZlsBsKoPlz9VIoMQr9RQqFBPRP88jsA5iGjKNkQCLbJzUuXury8jYZgLHGSwsXhUuT3WFSO4dD2tl4hD6mufMM1Dr9nIRwpZfjWrzK+h1gMEecpxIJQ8TIWb5s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765890898; c=relaxed/simple;
-	bh=0h1eC1lmvQOz1bOKx+cUVuZEUfivwprQcZPj5o6d014=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=j7MYCxqVk0petofFLiVGzlxA9RHin2iDmaQT+Cx/oqkDYIuwgZ/rkz8yQvhlupsLs02kC3CKcEAxfmYuTtzmX7RTho1SJI6kbamv/kkHrCYbqIBO+E2x8rFiBXawsW6wxqH2MEhppOEtoLT1Hl7r5E0/Q0E1BYXGsXnhPOI36hk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ElWVQPTA; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1765890897; x=1797426897;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=0h1eC1lmvQOz1bOKx+cUVuZEUfivwprQcZPj5o6d014=;
-  b=ElWVQPTAqzf7HjxEXIuCoZI55N4eEFmbTkbbz9kQXy1zNuGOz4B+2hwa
-   WDrvr6lz2YRL2r+Xep6geeXhvoIbzwwBvG7/EuC9T9bgCpktXQbsefjdr
-   Ro1a8axtOl0qeDk1rLGYmSXtBk5eNo+XCbLpWuruQVBs9rYlR6WoLlOAH
-   IGQvrq2yz3RJaGM3F03cEdDfVmNCyKfnT3eH6tBww7OAquHjlVsxPL4U6
-   MxrWJts7MMtWCnRVK1yqWfEj2qr+9nvu35PHe7UWRbILSXXpjzaG6UIOq
-   3pq3jsg7XMEEDgKqEvuZ0q7A4tNHVUc3GElSe/0fpjBDwmzs8tA15gajn
-   Q==;
-X-CSE-ConnectionGUID: ElN0KTqdS12vLj0S+S3Wjw==
-X-CSE-MsgGUID: HVG6nixoTe6rkFmolV6glg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11643"; a="78444927"
-X-IronPort-AV: E=Sophos;i="6.21,153,1763452800"; 
-   d="scan'208";a="78444927"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2025 05:14:57 -0800
-X-CSE-ConnectionGUID: 13KbGT/MSTy8z6B0UqTq3Q==
-X-CSE-MsgGUID: Ic5AX7zlT26+e+6dzB1shw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,153,1763452800"; 
-   d="scan'208";a="198274426"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by fmviesa008.fm.intel.com with ESMTP; 16 Dec 2025 05:14:55 -0800
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Andi Shyti <andi.shyti@kernel.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: Jan Dabros <jsd@semihalf.com>,
-	Raag Jadav <raag.jadav@intel.com>,
-	linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v1 6/6] i2c: designware: Remove an unnecessary condition
-Date: Tue, 16 Dec 2025 14:14:41 +0100
-Message-ID: <20251216131442.8464-7-heikki.krogerus@linux.intel.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20251216131442.8464-1-heikki.krogerus@linux.intel.com>
-References: <20251216131442.8464-1-heikki.krogerus@linux.intel.com>
+	s=arc-20240116; t=1765893081; c=relaxed/simple;
+	bh=kqefaEAINqf9ddsXkYYvoPTUSPTPMuBy/+O6QH0DNwc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jCS3nlNDP6FGlC0fT0tHWsYC/13mnISzHDFtkO7w14xOtVSfdapgpp2QM/jB/iaJRtQ0D0A+GuXBW0D2aK9N8ntze9/DdUv+I/bzOScVz1hVVGcKuACa32vWrydIYXY5owbbEgRGofxuyZEAVm+LkvNoSCoVFmaMms7LjvhWRVs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=H0sQo4tQ; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=CO9OZs40; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5BGC3WtD2810423
+	for <linux-i2c@vger.kernel.org>; Tue, 16 Dec 2025 13:51:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	INRsKK1zePcdI3MxN+3hX4QLQffn2295G25DNvsrZrk=; b=H0sQo4tQVbc15Jgy
+	yzUdm3FiOBzttSL2D2BWVJ6qw4i7YROcnjirWnndq6pqHGRb2wcAL2Gei+B3Ie0S
+	B3xm3J9goHoZQItQV9zI4EZvge14K0NKCO7u/YWgzCW3RXSnIQmed0G4xxsfdDoU
+	wrKHXFfl5KZUFPPPNs0X9ahAx1kDH64W4GaThUk9KlkGlG/SjPYDL1UmcVsZ3pld
+	MVCwEHzyyHRBDvQ+C8EhgWXmNZuiu19arpnx15B27OM6KEX9YTGkE0sBbZuFJKmH
+	jxjxChkn4W5xuUg5/S+YW5o/gs44PpGW+NJ4M89oFdrOEDVNv+b71fQkq5vtZys9
+	jM6thQ==
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4b32gasnht-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-i2c@vger.kernel.org>; Tue, 16 Dec 2025 13:51:19 +0000 (GMT)
+Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-2a0891f819aso12907965ad.3
+        for <linux-i2c@vger.kernel.org>; Tue, 16 Dec 2025 05:51:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1765893079; x=1766497879; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=INRsKK1zePcdI3MxN+3hX4QLQffn2295G25DNvsrZrk=;
+        b=CO9OZs40IhrDCiqIU6Ag94dSmI1yLMQ2oRY3xSb8Ct1r+bNgtvqfXKGaUs148f1AnV
+         mEkCE3rxQsoFQZcIaE7IUmLfnOiXEcS/bIDM2Cg9A26D6dSsDaP4AdbOIphfAQjKtglk
+         Xh0SMM9zzfD42UFdhAlN6o9FStO/JwqUcQ/eYOuNc4ohuvTT5JvLjUPQhlCMauoWgmfg
+         s9k+wiQdi6PHBRhT2t6vqqwbIxzqVIRJ0rMYQASdMh6+ZNMKcOo6tbXnZmVTP2CtZij/
+         nHPBrz57OCXvKHpJgP122xjiL14v+x4/w0w8Due3aBY4MPtvmWNwY9I9m1yTF0jrTskG
+         cQKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765893079; x=1766497879;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=INRsKK1zePcdI3MxN+3hX4QLQffn2295G25DNvsrZrk=;
+        b=RRPEsBqyTjwoOjdvzfexQ/k0RE8+4V0MiIXrPychWMhJKi5GhE1Rn1oFvPVrLmdYjK
+         bIP22EGbJUzI8IajvlDRm6COEuguwzA9GujLlY9HKyITj1sN5uJvTMlm9RBvmc9MZ47d
+         J0BI+CXnzQbyNmbBFXR1ERnaW5SiNoED+F+sOPrfu3oqZCSY8XC0apT1qT0gx6MYXxbh
+         QxFR5fZaFsDAzLaR4MpLQos07e6FdmsI0eP4v3ndMG/d+z0LNH+XOFte8OmLbajVCxcv
+         rB74/fOHYqQXwaRZZau8dr+Qw8ETZkSa9j++LefB7EnMO7MiGDIM3jC1edxJ4dUukwvg
+         2nIg==
+X-Forwarded-Encrypted: i=1; AJvYcCWYlPv+JVyRVCuaudYzeXcBee7IVhM2sfk0Bjzxn9FQDakxpzYpwbpXlePV6ZXT141jaalJ1wU2WPQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxJFSSlwVgeHvYpVJb51uSh2Am5BqUxBUetPtwldlW1wRml4/HJ
+	k6m0mV8dmY9Ds+nY5drLFSsfVDJGziMAUg8UguWIMqEBKybIHAheiaeQKo/2FWGjjDxvXqC4ZsG
+	uzz6aOoOJXV5dpoUH6864Z2pIG5Yj6hoW45ROCgwYdfAbfcLLuGu/HJ7F+vh1al4=
+X-Gm-Gg: AY/fxX77Puw+WDM3lJqG3cfgUm+sXDMqqGpcKtqbirThgMYZPBmeCQWrLmS/7KFimaV
+	m6+T3JfwyaNui4gyblbQTnvZbJSXEx3eaI/8h5TBsH4F9YSyE0mgIvaZmvTtxbW6Rfti4TCjvQu
+	QVOVccbHmclsKhywH0BBEsl33yHu34Da/o+CXa0rqyJnWBv8HHHecrqJbUqiWNU1/6h3WQ4SudH
+	rEQeSBmxaKXyAghHkjhJ+UEl1zJHnyWHhJek52IBi3ovxpaYvZvNDMnyH1nORkQgVw0UNFbvDVO
+	LDhEIUf7P6Ni1bA6nsSvfL4M5mOvA4I0+QghtTTMLuxeArEl18RjYZDcQ51fFgVNS3OLEPadYfo
+	p/0HhIsofayXoy9Qwqj8dAKH0AXjQ53MetrwMd0XrykdiWqZ2wOjOUqAJQWHcb4pMSA==
+X-Received: by 2002:a17:903:2bcc:b0:29d:7e23:629 with SMTP id d9443c01a7336-29f23807a27mr108321825ad.0.1765893079187;
+        Tue, 16 Dec 2025 05:51:19 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHBOq5l2eisqWzuziHOLKqJEQPy0Brj00XHCZuNMqzhum37I6UYsbBPPvOquk5iaGRcXQavjw==
+X-Received: by 2002:a17:903:2bcc:b0:29d:7e23:629 with SMTP id d9443c01a7336-29f23807a27mr108321695ad.0.1765893078766;
+        Tue, 16 Dec 2025 05:51:18 -0800 (PST)
+Received: from [192.168.119.72] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b7cfa2ea57csm1688588866b.22.2025.12.16.05.51.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Dec 2025 05:51:18 -0800 (PST)
+Message-ID: <932a87de-ab2d-4a60-a188-04cc2c00898c@oss.qualcomm.com>
+Date: Tue, 16 Dec 2025 14:51:15 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/4] arm64: dts: qcom: sm7225-fairphone-fp4: Add camera
+ fixed regulators
+To: Luca Weiss <luca.weiss@fairphone.com>,
+        Bartosz Golaszewski <brgl@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+ <conor+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>
+Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+References: <20251210-fp4-cam-prep-v1-0-0eacbff271ec@fairphone.com>
+ <20251210-fp4-cam-prep-v1-3-0eacbff271ec@fairphone.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20251210-fp4-cam-prep-v1-3-0eacbff271ec@fairphone.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Authority-Analysis: v=2.4 cv=Vcb6/Vp9 c=1 sm=1 tr=0 ts=694163d7 cx=c_pps
+ a=JL+w9abYAAE89/QcEU+0QA==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=wP3pNCr1ah4A:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=6H0WHjuAAAAA:8 a=7PjLcmBxODYuNRU7m5cA:9
+ a=QEXdDO2ut3YA:10 a=324X-CrmTo6CU4MGRt3R:22 a=Soq9LBFxuPC4vsCAQt-j:22
+X-Proofpoint-GUID: clTe84e6FdHpSYsEmlT_IHXgjHRZMcWi
+X-Proofpoint-ORIG-GUID: clTe84e6FdHpSYsEmlT_IHXgjHRZMcWi
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjE2MDExOSBTYWx0ZWRfX+ydNC3aPKxVr
+ yj7pMYlGTwETGxsN92B+vDIkpHwqd3ukMfzL6swtd5m13yXUmm/2m5NbIR0u4hbjtSKgpeGTfXh
+ HI67QBfqvQIbc8Gz33gvafhcS6/MXLtp8jdfOM//gtLDnjPHCt3cx5mWIYAq8NiShvv2MPDt0pc
+ 2MrdcOkztOuwVMQPVkc4Y+cCNko3SnB3uCNawRXGrXXtQCOE0mGMHvA+/7FWStP3OxqmdVI9HrI
+ MJLURqMD0rtN7AEi6X9aJ7x3S1FZCBN5ydr++VugRminU49AgZ/tY8uAFITjbeV/kQHRSAWHWSL
+ ffCylze7clRE27nAfFPoF5D6Q8wcZquduExtD35CT1ICGquH6xPZeTZ7W2dVKdEqFOFcZ6uzPmc
+ PLoQEcn/rqIdcsPe/XQK5QqvYBhd4g==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-12-16_02,2025-12-16_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ suspectscore=0 priorityscore=1501 adultscore=0 lowpriorityscore=0 spamscore=0
+ clxscore=1015 impostorscore=0 phishscore=0 malwarescore=0 bulkscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2512160119
 
-Writing also the high speed timing registers unconditionally.
-The reset value for these registers is 0, so this should
-always be safe.
+On 12/10/25 2:05 AM, Luca Weiss wrote:
+> Add multiple fixed regulators that are found on the phone, which provide
+> power to the cameras.
+> 
+> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+> ---
+>  arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts | 40 +++++++++++++++++++++++
+>  1 file changed, 40 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts b/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
+> index c2f856a56b2b..0cfb24e3941d 100644
+> --- a/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
+> +++ b/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
+> @@ -246,6 +246,46 @@ active-config0 {
+>  			};
+>  		};
+>  	};
+> +
+> +	vreg_32m_cam_dvdd_1p05: regulator-32m-cam-dvdd-1p05 {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "32M_CAM_DVDD_1P05";
+> +		regulator-min-microvolt = <1050000>;
+> +		regulator-max-microvolt = <1050000>;
+> +		gpio = <&pm6150l_gpios 2 GPIO_ACTIVE_HIGH>;
 
-Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
----
- drivers/i2c/busses/i2c-designware-common.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+It'd be useful to also explicitly describe the pinmux/cfg states
+of the PMIC pins, since these can be a little surprising at boot
 
-diff --git a/drivers/i2c/busses/i2c-designware-common.c b/drivers/i2c/busses/i2c-designware-common.c
-index ca229202a4d7..a62395571349 100644
---- a/drivers/i2c/busses/i2c-designware-common.c
-+++ b/drivers/i2c/busses/i2c-designware-common.c
-@@ -391,11 +391,9 @@ static void i2c_dw_write_timings(struct dw_i2c_dev *dev)
- 	regmap_write(dev->map, DW_IC_FS_SCL_HCNT, dev->fs_hcnt);
- 	regmap_write(dev->map, DW_IC_FS_SCL_LCNT, dev->fs_lcnt);
- 
--	/* Write high speed timing parameters if supported */
--	if (dev->hs_hcnt && dev->hs_lcnt) {
--		regmap_write(dev->map, DW_IC_HS_SCL_HCNT, dev->hs_hcnt);
--		regmap_write(dev->map, DW_IC_HS_SCL_LCNT, dev->hs_lcnt);
--	}
-+	/* Write high speed timing parameters */
-+	regmap_write(dev->map, DW_IC_HS_SCL_HCNT, dev->hs_hcnt);
-+	regmap_write(dev->map, DW_IC_HS_SCL_LCNT, dev->hs_lcnt);
- }
- 
- /**
--- 
-2.50.1
-
+Konrad
 
