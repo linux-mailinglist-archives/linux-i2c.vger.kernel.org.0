@@ -1,134 +1,116 @@
-Return-Path: <linux-i2c+bounces-14572-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14573-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02478CC33AE
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Dec 2025 14:30:33 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9331CC3399
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 Dec 2025 14:29:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 3092630491C3
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Dec 2025 13:25:28 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id AAE9930B8E2C
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 Dec 2025 13:23:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 248983559C8;
-	Tue, 16 Dec 2025 13:11:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2BFB382577;
+	Tue, 16 Dec 2025 13:14:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fFwjwqyl"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IuXlYXQ1"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89538354AF1;
-	Tue, 16 Dec 2025 13:11:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6030237A3E8;
+	Tue, 16 Dec 2025 13:14:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765890711; cv=none; b=JJqjVcrzVs6ePmYLduXmlxXfnRcZNuN0e89qpUznwgkDPFJjFeqn3DZV3e2pdY4I/B+RgMHli6ReqCEZZkb0za/mqCIUgP38fP/PQzSYY7TkWxFRn3XytXs9fllG6I7M+3pEXFGU6q457V8W8/fOATc9Mp1YGcxGL4ropPps7rE=
+	t=1765890887; cv=none; b=DESici0emlif+6PlvadYu1pArggcjBjpW10LFXxoUxD9wBDnaM0pESHQRgVLfIQA1D7EnLZnIEi+xu7r0XsPlnJlxCZhu3ZQqsmqurHYcpDanfIn1RnQ7K1rp8lDhz/U0kw82yhjDnwtfPC9Y1gvoTI5CC6VcvfnzXx6tOnJEXE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765890711; c=relaxed/simple;
-	bh=uK7rtQd0fuH8HIq2iyTTKTpcKJsEkMoXU53XE1O8rzg=;
-	h=From:Date:Content-Type:MIME-Version:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=WjqNvnPVSnnLYiNDt9GKiqMAKsWDOG/gLl3KPDJ8QB7RZCSLCzVw1Z6uGsIVJrJKVreTbmuj7Kx7qRtlcKRDF6le3uEkRXGbxKKR7iHhCIHBTZ7EQqDQ9Jn1go3aD7Zm0KsRDqI/fv5sK2ufufz8docbp0UhoOQH0To2SvwJUOw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fFwjwqyl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB05BC19423;
-	Tue, 16 Dec 2025 13:11:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765890711;
-	bh=uK7rtQd0fuH8HIq2iyTTKTpcKJsEkMoXU53XE1O8rzg=;
-	h=From:Date:Cc:To:In-Reply-To:References:Subject:From;
-	b=fFwjwqyl4XciRQVPx8XogJowdRcsdYKb/ioKdv1BlYgi1o+jrg3aT4TAjJOxcokcI
-	 QsSoL7E/aTwp0Xx89fUuxiHPnEWOL+3YP75h9bjRELSdSMWlSEQ92eq4Dd4ceSznxM
-	 FA0++iF6bDiu+t9pjncqus1HTUPK3svYbIJYzU9lKuMSr/WEguQljrDJAZRNzhNg42
-	 v7hCHoWhSvks4wsNhavYOp/zj1CynIbu8P4b+tzQRYE66RX9T0NwB8sBSiXWwnDEBo
-	 MIlWjd8LzSrypRzNesJoMN6k5blOrxuig+/T5bgwizw08Jd3RqQ5mQlMx9Ug7dba8M
-	 js45kMZa3qkiw==
-From: Rob Herring <robh@kernel.org>
-Date: Tue, 16 Dec 2025 07:11:49 -0600
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1765890887; c=relaxed/simple;
+	bh=sxKNMc8f6wC938bRvv4zHOFJLqTs6byHPL2W5YURLUs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mzGrRoI9LUr+nuXHhb/MhEKDwNUDK9VtFBei8R78RJ4NJHvglvfkhyh7NH1pUBxtMf/ihjthfF8fYUcNMEyoaUTbETHHooDZHTcXowsElKABSE4EkdMeyMQEEyErSwvYSQ0528GVsn5osG7KnIYy8vPu/pzIDdNjvx2WIuAyk4g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IuXlYXQ1; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1765890885; x=1797426885;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=sxKNMc8f6wC938bRvv4zHOFJLqTs6byHPL2W5YURLUs=;
+  b=IuXlYXQ1bCLZR8nRVS2YWWmIft1l2Il5nCFiS5mjnQ+s8G2zIHyYr1cA
+   Bfsz94U8Is8EVtzAJQQuPYnktqW1NER2n0ZHluBJuWb4UqNYEtcP0oyPA
+   /E+15y7XpaVuLxOc1qw4Ayt+iEgiu/hgC2lDAtwdR0pDB9tmB/N8+xZUL
+   51PotXWwGtWcnDMfOQw+cN3KKFoLCNModSz+60VRImebXgXUgCCUFyLsx
+   hhmBOXVsHaGFdNumQd2Vf1o8OWYT4C9WCHtS38xkRu0j4Aglri+VJkQm3
+   dkj45cAh24aogMMbDkIkOoszTvhOpMVgJ2I7HTkh33QoXVDU7uhEdVBsJ
+   w==;
+X-CSE-ConnectionGUID: b5OpmgS+QjWrsvC8FarIOQ==
+X-CSE-MsgGUID: UTe8QcReRzu6Qoy611QJIg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11643"; a="78444881"
+X-IronPort-AV: E=Sophos;i="6.21,153,1763452800"; 
+   d="scan'208";a="78444881"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2025 05:14:45 -0800
+X-CSE-ConnectionGUID: irA0YG0rT/mpLc2d5H4zZA==
+X-CSE-MsgGUID: wlxGlNt6SlWY2VRNCQYDJA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,153,1763452800"; 
+   d="scan'208";a="198274400"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by fmviesa008.fm.intel.com with ESMTP; 16 Dec 2025 05:14:43 -0800
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Andi Shyti <andi.shyti@kernel.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: Jan Dabros <jsd@semihalf.com>,
+	Raag Jadav <raag.jadav@intel.com>,
+	linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v1 0/6] i2c: designware: Enable mode swapping
+Date: Tue, 16 Dec 2025 14:14:35 +0100
+Message-ID: <20251216131442.8464-1-heikki.krogerus@linux.intel.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Cc: netdev@vger.kernel.org, linusw@kernel.org, vkoul@kernel.org, 
- pabeni@redhat.com, jirislaby@kernel.org, lars.povlsen@microchip.com, 
- linux-arm-kernel@lists.infradead.org, claudiu.beznea@tuxon.dev, 
- kuba@kernel.org, mturquette@baylibre.com, Steen.Hegelund@microchip.com, 
- mwalle@kernel.org, tudor.ambarus@linaro.org, devicetree@vger.kernel.org, 
- UNGLinuxDriver@microchip.com, edumazet@google.com, 
- linux-clk@vger.kernel.org, andi.shyti@kernel.org, olivia@selenic.com, 
- conor+dt@kernel.org, luka.perkov@sartura.hr, richard.genoud@bootlin.com, 
- linux-hwmon@vger.kernel.org, krzk+dt@kernel.org, 
- wsa+renesas@sang-engineering.com, Ryan.Wanner@microchip.com, 
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
- alexandre.belloni@bootlin.com, lee@kernel.org, linux@roeck-us.net, 
- davem@davemloft.net, gregkh@linuxfoundation.org, 
- kavyasree.kotagiri@microchip.com, nicolas.ferre@microchip.com, 
- andrew+netdev@lunn.ch, romain.sioen@microchip.com, sboyd@kernel.org, 
- linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org, 
- linux-serial@vger.kernel.org, daniel.machon@microchip.com, 
- dmaengine@vger.kernel.org, richardcochran@gmail.com, 
- herbert@gondor.apana.org.au, charan.pedumuru@microchip.com, 
- linux-crypto@vger.kernel.org, linux-i2c@vger.kernel.org, 
- radu_nicolae.pirea@upb.ro
-To: Robert Marko <robert.marko@sartura.hr>
-In-Reply-To: <20251215163820.1584926-1-robert.marko@sartura.hr>
-References: <20251215163820.1584926-1-robert.marko@sartura.hr>
-Message-Id: <176589052274.1815136.7513475493879599819.robh@kernel.org>
-Subject: Re: [PATCH v2 01/19] include: dt-bindings: add LAN969x clock
- bindings
+Content-Transfer-Encoding: 8bit
 
+Hi,
 
-On Mon, 15 Dec 2025 17:35:18 +0100, Robert Marko wrote:
-> Add the required LAN969x clock bindings.
-> 
-> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
-> ---
-> Changes in v2:
-> * Rename file to microchip,lan9691.h
-> 
->  include/dt-bindings/clock/microchip,lan9691.h | 24 +++++++++++++++++++
->  1 file changed, 24 insertions(+)
->  create mode 100644 include/dt-bindings/clock/microchip,lan9691.h
-> 
+It's currently not possible to support MCTP or any other protocol that
+requires support for both modes with the DesignWare I2C because the
+driver can only be used in one mode. I'm assuming that the driver was
+designed this way because the DesignWare I2C can not be operated as
+I2C master and I2C slave simultaneously, however, that does not
+actually mean both modes could not be supported at the same time. See
+the patch 5/6 for more detailed explanation.
 
+This series will enable support for both modes in the driver by
+utilising a simple mode swap method, and that way make it possible to
+support MCTP, IPMI, SMBus Host Notification Protocol, and any other
+protocol requires the support for both modes with the DesignWare I2C.
 
-My bot found new DTB warnings on the .dts files added or changed in this
-series.
+I've prepared these on top of Andi's i2c-host branch.
 
-Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
-are fixed by another series. Ultimately, it is up to the platform
-maintainer whether these warnings are acceptable or not. No need to reply
-unless the platform maintainer has comments.
+thanks,
 
-If you already ran DT checks and didn't see these error(s), then
-make sure dt-schema is up to date:
+Heikki Krogerus (6):
+  i2c: designware: Remove useless driver specific option for I2C target
+  i2c: designware: Remove unnecessary function exports
+  i2c: designware: Combine some of the common functions
+  i2c: designware: Combine the init functions
+  i2c: designware: Enable mode swapping
+  i2c: designware: Remove an unnecessary condition
 
-  pip3 install dtschema --upgrade
+ drivers/i2c/busses/Kconfig                 |  10 +-
+ drivers/i2c/busses/Makefile                |   2 +-
+ drivers/i2c/busses/i2c-designware-common.c | 210 +++++++++++++++++++--
+ drivers/i2c/busses/i2c-designware-core.h   |  25 +--
+ drivers/i2c/busses/i2c-designware-master.c | 174 ++---------------
+ drivers/i2c/busses/i2c-designware-slave.c  | 125 ++----------
+ 6 files changed, 249 insertions(+), 297 deletions(-)
 
-
-This patch series was applied (using b4) to base:
- Base: attempting to guess base-commit...
- Base: tags/next-20251215 (best guess, 14/15 blobs matched)
- Base: tags/next-20251215 (use --merge-base to override)
-
-If this is not the correct base, please add 'base-commit' tag
-(or use b4 which does this automatically)
-
-New warnings running 'make CHECK_DTBS=y for arch/arm64/boot/dts/microchip/' for 20251215163820.1584926-1-robert.marko@sartura.hr:
-
-arch/arm64/boot/dts/microchip/sparx5_pcb135_emmc.dtb: / (microchip,sparx5-pcb135): compatible: ['microchip,sparx5-pcb135', 'microchip,sparx5'] is valid under each of {'items': [{'const': 'microchip,sparx5-pcb135'}, {'const': 'microchip,sparx5'}], 'maxItems': 2, 'minItems': 2, 'type': 'array'}, {}
-	from schema $id: http://devicetree.org/schemas/arm/microchip.yaml
-arch/arm64/boot/dts/microchip/sparx5_pcb135.dtb: / (microchip,sparx5-pcb135): compatible: ['microchip,sparx5-pcb135', 'microchip,sparx5'] is valid under each of {'items': [{'const': 'microchip,sparx5-pcb135'}, {'const': 'microchip,sparx5'}], 'maxItems': 2, 'minItems': 2, 'type': 'array'}, {}
-	from schema $id: http://devicetree.org/schemas/arm/microchip.yaml
-arch/arm64/boot/dts/microchip/sparx5_pcb134.dtb: / (microchip,sparx5-pcb134): compatible: ['microchip,sparx5-pcb134', 'microchip,sparx5'] is valid under each of {'items': [{'const': 'microchip,sparx5-pcb134'}, {'const': 'microchip,sparx5'}], 'maxItems': 2, 'minItems': 2, 'type': 'array'}, {}
-	from schema $id: http://devicetree.org/schemas/arm/microchip.yaml
-arch/arm64/boot/dts/microchip/sparx5_pcb134_emmc.dtb: / (microchip,sparx5-pcb134): compatible: ['microchip,sparx5-pcb134', 'microchip,sparx5'] is valid under each of {'items': [{'const': 'microchip,sparx5-pcb134'}, {'const': 'microchip,sparx5'}], 'maxItems': 2, 'minItems': 2, 'type': 'array'}, {}
-	from schema $id: http://devicetree.org/schemas/arm/microchip.yaml
-arch/arm64/boot/dts/microchip/sparx5_pcb125.dtb: / (microchip,sparx5-pcb125): compatible: ['microchip,sparx5-pcb125', 'microchip,sparx5'] is valid under each of {'items': [{'const': 'microchip,sparx5-pcb125'}, {'const': 'microchip,sparx5'}], 'maxItems': 2, 'minItems': 2, 'type': 'array'}, {}
-	from schema $id: http://devicetree.org/schemas/arm/microchip.yaml
-
-
-
-
+-- 
+2.50.1
 
 
