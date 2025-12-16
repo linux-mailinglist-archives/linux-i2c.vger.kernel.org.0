@@ -1,46 +1,46 @@
-Return-Path: <linux-i2c+bounces-14585-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14586-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23E42CC4284
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Dec 2025 17:12:34 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F6FCCC4206
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 Dec 2025 17:08:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C3F90312B489
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Dec 2025 16:06:52 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 99BA33007A92
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 Dec 2025 16:08:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95D62355042;
-	Tue, 16 Dec 2025 15:57:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C612D34EF03;
+	Tue, 16 Dec 2025 15:58:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K+gjxUox"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uzvgoXSx"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2254E34FF6A;
-	Tue, 16 Dec 2025 15:57:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5032D34E25C;
+	Tue, 16 Dec 2025 15:58:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765900646; cv=none; b=deKiKXJ//9OrEk47a/+BCExGRAePcfdkl2Cf+lQgeIwxDm9VXelQltBJdnSBFISFqzaNMuUij46HZqWLEExLKfFpY7d60pP9V6HZxL17h3k+ImdKHGQoKD4PO2kn6QJaHkOloLQl0qeDvMKSb79AIPGQBzWcKERkpq7QPBf+xcU=
+	t=1765900717; cv=none; b=MATSwdlDe3jVeu3YScRJfn278oQOJ12kZGwMHZ6dZalHsSHnIXzwd7YsshAmVksxxQaGNLOYO2fQgvrgBModXvJmSXmD0IhjIvCzrFJn42zx4HIeSBqTrhBfEjVssKoWbgVncelAYYf02Pkp8P43nureW6bRPcgdjzUifttIIr4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765900646; c=relaxed/simple;
-	bh=40BS5f3olMR0Xlri6FQNj2so12kgnBJIfiaxIAmldwc=;
+	s=arc-20240116; t=1765900717; c=relaxed/simple;
+	bh=FoGkFvPI30UFCJ36SpXYyzKXdoONF4L7CQ41Dk+tn9M=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fgi6E+/lOiEFqRQCqaqI6Bsj06ntudqNJLJ2dbzlrucBzgimFgO6fa0UxSf0CBlHhuxQ1+XqxLPDkNrYOW6JF3S/XsIc3IyIRan5Gl80QXdncI3e2vvQbA0/vaFZpVzd9BW/pgI9z5WWaT3asuv8xMvJut9H5T8XDINuL4QX3fU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K+gjxUox; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42239C113D0;
-	Tue, 16 Dec 2025 15:57:16 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=haQ/+1cH1tBZHqgxTcIYBvVoajasgCgdOtjFZbxcXW3IXtCkRxPFk+95ouzqq+eqeNy8byGGoZfY6Cy0+P/DfZuX+fEpXdfL0YDZRqKHzAt4b0MAO7hrOSRQu1jG1ZkZ74oOLfv5r/GI6OArTQAhkeHz+YUtvXsWTqu+wi6RGdU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uzvgoXSx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5480C113D0;
+	Tue, 16 Dec 2025 15:58:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765900645;
-	bh=40BS5f3olMR0Xlri6FQNj2so12kgnBJIfiaxIAmldwc=;
+	s=k20201202; t=1765900717;
+	bh=FoGkFvPI30UFCJ36SpXYyzKXdoONF4L7CQ41Dk+tn9M=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=K+gjxUoxGAGFNlbSFY1dnpAT8Ad9tIpV8eFRwBOSuTS2whDP5WQLD+c3rWnQ5IqfL
-	 t7CP/kyVzxn7x0P9BW1zuDVgxZMgcFxYBdYAwVS1OFrJXgc3rs0NU41l0QaE9o4++7
-	 bfHgQ/EchlgTyn94V8bXk9f2G6r5Z47bYnM9w6pbAkWFd0Y0sZ7CEiShCH9kB5Mhd6
-	 0G2MWzXmFGXt+aBThhkAzjsQCckNSJZb0vwGRnnTqi8HteJsLuyG/vEq6Ls6ziAu30
-	 OkgbMNw8Cwc4AtZ2Kh3rgzZpw1F++/qrCHl0SIEVi/ynWkDmogG2X+n1fLUbkb5EVy
-	 pT/jvcYGLNz3Q==
-Message-ID: <23e02efa-bb94-48ba-9b6c-acee5d8f6576@kernel.org>
-Date: Tue, 16 Dec 2025 16:57:14 +0100
+	b=uzvgoXSx+bQiqW2zigAwzmKLzfTX85z5JXu5vVz4bZQbUQj4TTBICPj5+11WX7QCj
+	 6RvGZXC9LX49G6wsI1gOHCNVOUBCF4dVzdrCFWDQo1U2OLw1/zEBoKVUwT7VxxlfEx
+	 cTUzLYJGJQZRbZhBMFIbx6Hvu2YsxnTufoEdDTvd77JfuvsfDkPLZZOvAR9SRz+Fsg
+	 iHhFnJlDgdWjRucKNaDF3cRI6FzuIyAmgrVw8wgNAelQwwWf0B6ZJn/rggR2JsCerd
+	 /0swZqAarPBkyic7/CvbJCqJcvfWndmKYfGTbCEpQHJy2EbHFUlaqvdvPp2GWibM0A
+	 JhBko8CxoacWw==
+Message-ID: <fe15fcce-865a-4969-9b6f-95920fcaa5c7@kernel.org>
+Date: Tue, 16 Dec 2025 16:58:25 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -48,7 +48,8 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 01/19] include: dt-bindings: add LAN969x clock bindings
+Subject: Re: [PATCH v2 05/19] dt-bindings: arm: microchip: move SparX-5 to
+ generic Microchip binding
 To: Robert Marko <robert.marko@sartura.hr>, robh@kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org, nicolas.ferre@microchip.com,
  alexandre.belloni@bootlin.com, claudiu.beznea@tuxon.dev,
@@ -72,6 +73,7 @@ To: Robert Marko <robert.marko@sartura.hr>, robh@kernel.org,
  linux-usb@vger.kernel.org, linux-clk@vger.kernel.org, mwalle@kernel.org
 Cc: luka.perkov@sartura.hr
 References: <20251215163820.1584926-1-robert.marko@sartura.hr>
+ <20251215163820.1584926-5-robert.marko@sartura.hr>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -117,21 +119,97 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20251215163820.1584926-1-robert.marko@sartura.hr>
+In-Reply-To: <20251215163820.1584926-5-robert.marko@sartura.hr>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 15/12/2025 17:35, Robert Marko wrote:
-> Add the required LAN969x clock bindings.
+> Now that we have a generic Microchip binding, lets move SparX-5 as well as
+> there is no reason to have specific binding file for each SoC series.
+> 
+> The check for AXI node was dropped.
+
+Why?
+
 > 
 > Signed-off-by: Robert Marko <robert.marko@sartura.hr>
 > ---
-> Changes in v2:
+>  .../bindings/arm/microchip,sparx5.yaml        | 67 -------------------
+>  .../devicetree/bindings/arm/microchip.yaml    | 22 ++++++
+>  2 files changed, 22 insertions(+), 67 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/arm/microchip,sparx5.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/microchip,sparx5.yaml b/Documentation/devicetree/bindings/arm/microchip,sparx5.yaml
+> deleted file mode 100644
+> index 9a0d54e9799c..000000000000
+> --- a/Documentation/devicetree/bindings/arm/microchip,sparx5.yaml
+> +++ /dev/null
+> @@ -1,67 +0,0 @@
+> -# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> -%YAML 1.2
+> ----
+> -$id: http://devicetree.org/schemas/arm/microchip,sparx5.yaml#
+> -$schema: http://devicetree.org/meta-schemas/core.yaml#
+> -
+> -title: Microchip Sparx5 Boards
+> -
+> -maintainers:
+> -  - Lars Povlsen <lars.povlsen@microchip.com>
+> -
+> -description: |+
+> -   The Microchip Sparx5 SoC is a ARMv8-based used in a family of
+> -   gigabit TSN-capable gigabit switches.
+> -
+> -   The SparX-5 Ethernet switch family provides a rich set of switching
+> -   features such as advanced TCAM-based VLAN and QoS processing
+> -   enabling delivery of differentiated services, and security through
+> -   TCAM-based frame processing using versatile content aware processor
+> -   (VCAP)
+> -
+> -properties:
+> -  $nodename:
+> -    const: '/'
+> -  compatible:
+> -    oneOf:
+> -      - description: The Sparx5 pcb125 board is a modular board,
+> -          which has both spi-nor and eMMC storage. The modular design
+> -          allows for connection of different network ports.
+> -        items:
+> -          - const: microchip,sparx5-pcb125
+> -          - const: microchip,sparx5
+> -
+> -      - description: The Sparx5 pcb134 is a pizzabox form factor
+> -          gigabit switch with 20 SFP ports. It features spi-nor and
+> -          either spi-nand or eMMC storage (mount option).
+> -        items:
+> -          - const: microchip,sparx5-pcb134
+> -          - const: microchip,sparx5
+> -
+> -      - description: The Sparx5 pcb135 is a pizzabox form factor
+> -          gigabit switch with 48+4 Cu ports. It features spi-nor and
+> -          either spi-nand or eMMC storage (mount option).
+> -        items:
+> -          - const: microchip,sparx5-pcb135
+> -          - const: microchip,sparx5
+> -
+> -  axi@600000000:
+> -    type: object
+> -    description: the root node in the Sparx5 platforms must contain
+> -      an axi bus child node. They are always at physical address
+> -      0x600000000 in all the Sparx5 variants.
+> -    properties:
+> -      compatible:
+> -        items:
+> -          - const: simple-bus
+> -
+> -    required:
+> -      - compatible
+> -
+> -required:
+> -  - compatible
+> -  - axi@600000000
 
-
-Where is cover letter for this patch bomb explaining previous history,
-giving lore link and providing any background/rationale for making it
-one huge patchset?
+Nothing explains the rationale for doing this.
 
 Best regards,
 Krzysztof
