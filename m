@@ -1,48 +1,49 @@
-Return-Path: <linux-i2c+bounces-14606-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14607-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 402A0CC4EE5
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Dec 2025 19:39:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 03797CC4F33
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 Dec 2025 19:50:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3F8903051175
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Dec 2025 18:38:16 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5471D30528F5
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 Dec 2025 18:50:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAB3B33CE83;
-	Tue, 16 Dec 2025 18:38:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C144733DECE;
+	Tue, 16 Dec 2025 18:50:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eWKlZqzU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TzDa+35c"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60ECE8634C;
-	Tue, 16 Dec 2025 18:38:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4267E33D6DF;
+	Tue, 16 Dec 2025 18:50:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765910292; cv=none; b=Ikm65lej3kTTVHtaha1cc64FSYc1OodqGzfHSk0x+4egVZLQzT7YsUdX7+7KGxA1P0lSq4ytXkfP64oqRojBBbWkMCWL6CgZOGAMFCM2kLy9oNjjuCAmPudY7FoVD+M8CCE8HBNFi38bU3V8YvE+Hwq7iw+yMzuDTOXP+JYCaro=
+	t=1765911017; cv=none; b=uyUrAa4yutza4zEM2o3Y4bb/HzuSzT36sjBvkYywe8HJwIKs/ILZ9ENFj0vKPoDH44/KRpidqq+eZSJ4i9amEYzmr0Tlqdgd6Hm0/yHrJy8oNCMfW76MJv7bJTgnHdX14sMiS7kIBfPRS6eoVuP1yfUYUtW7bXZon75q1LKd0JE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765910292; c=relaxed/simple;
-	bh=uUu6H5TYAhD221JmNAoBMSiDEB9CQuEi4+EAEOm/oMQ=;
+	s=arc-20240116; t=1765911017; c=relaxed/simple;
+	bh=73NvDbreX+FEusW3ivYeGPD9eGPFlxGEynckH7g0OW0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TgFF86nC0r2KG7kJWRBbSan5pkrnwCGH8nju+hZq13b66EPgknMgYsMOxKzlKDd2IHkC+VcjV/8kolsiH8jAHBZl38TTWH38gDR+OXgrZIkbo/P/9gwIYoBkcxGA9qoWh1ylKDLWztFdHCa1Pfj6K5IQ1kY+kSyDWwitUizQfKg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eWKlZqzU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 073EFC4CEFB;
-	Tue, 16 Dec 2025 18:38:02 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=fj7A5sg9zsyFK8ecIq/Zq4wADltJ4S3Yno9zhMZUDVeGH/LEays3NCXOeWaDtKiIpIFTKdwmpZQBQx/D3ZGGOE43Phd9Gk4GEVJ7vYUSCMdS38ciEdVzSdw32rkT8CkL7LFIhBOi9YG7svhdYOPaIP20nbz7KyrjcOE4fJNopg0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TzDa+35c; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2CEEC4CEF1;
+	Tue, 16 Dec 2025 18:50:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765910291;
-	bh=uUu6H5TYAhD221JmNAoBMSiDEB9CQuEi4+EAEOm/oMQ=;
+	s=k20201202; t=1765911015;
+	bh=73NvDbreX+FEusW3ivYeGPD9eGPFlxGEynckH7g0OW0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=eWKlZqzUJnT2BfO9u3DodIh4+Wj1NVasmxtxn1ivfXxFfaAzXVe1bFTOXFUIKQe71
-	 VB6VqPjTAneOcWmZ3napgB1N3NLQLu4i3tvaqbPOthdDABHOr0WKI63MKoLfSdtc7M
-	 1TEnnHtzsaXe6M1aFpkDmMjLq+d4rAafLAkJzEm8Fwv1Z/VezYQEqoyfycVEsSOJ8M
-	 tQwuoIj5p/+V1nRvBL+adGM1cH0uej5DlH/Uujoz+sy8hN8xVb1X0gLEQaJ/H5wNCn
-	 eTaHYtJPJHX/LObWi9uFOscvXUjaHDOg/LUPkPvEKUTS2IOyMSlpLAAeUiZZBlFZC1
-	 y9pH2riWjd+OA==
-Date: Tue, 16 Dec 2025 18:38:00 +0000
+	b=TzDa+35chZFByyVjzsfnOqTZAhHdiRKJA0K+AvWG7S8wNf/HcRQKezmRsXaFAezdN
+	 Q673JE4a2z5IR0Q0CEuUA9V409zECkXGpqpAT1fbIafTMbEA2Lx7atVT5u//McnAqI
+	 HpiYJ5h01/HytQ4m8MWaJVMeVxbLOcneuucsg6RWCyxzW5dOYS/hOLvdKz84v9xLkz
+	 42dOTq7tmEDD64kfq5amFriJRRJh+3BG1RgTcOUTZ8hb3QvSi0q+CXZSsxSJoOxGPc
+	 aDEVjkJXHN03Z1iPr/lANm1qNSmRztMjbglH4b/8DIA5PRzF37wHiBzZznfvIAG2M9
+	 bR4eLoiL2b/qQ==
+Date: Tue, 16 Dec 2025 18:50:04 +0000
 From: Conor Dooley <conor@kernel.org>
 To: Robert Marko <robert.marko@sartura.hr>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+Cc: Krzysztof Kozlowski <krzk@kernel.org>, robh@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org,
 	nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
 	claudiu.beznea@tuxon.dev, Steen.Hegelund@microchip.com,
 	daniel.machon@microchip.com, UNGLinuxDriver@microchip.com,
@@ -64,11 +65,13 @@ Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
 	linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
 	linux-usb@vger.kernel.org, linux-clk@vger.kernel.org,
 	mwalle@kernel.org, luka.perkov@sartura.hr
-Subject: Re: [PATCH v2 06/19] dt-bindings: mfd: atmel,sama5d2-flexcom: add
- microchip,lan9691-flexcom
-Message-ID: <20251216-fantastic-ignore-d1e06f5b222b@spud>
+Subject: Re: [PATCH v2 05/19] dt-bindings: arm: microchip: move SparX-5 to
+ generic Microchip binding
+Message-ID: <20251216-subheader-headstone-f374157d02b3@spud>
 References: <20251215163820.1584926-1-robert.marko@sartura.hr>
- <20251215163820.1584926-6-robert.marko@sartura.hr>
+ <20251215163820.1584926-5-robert.marko@sartura.hr>
+ <fe15fcce-865a-4969-9b6f-95920fcaa5c7@kernel.org>
+ <CA+HBbNGNMGRL11kdg14LwkiTazXJYXOZeVCKsmW6-XF6k5+sVA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -76,34 +79,51 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="9ZFytLnJNcL8quyY"
+	protocol="application/pgp-signature"; boundary="jYbLw3BJwhyPV9Uj"
 Content-Disposition: inline
-In-Reply-To: <20251215163820.1584926-6-robert.marko@sartura.hr>
+In-Reply-To: <CA+HBbNGNMGRL11kdg14LwkiTazXJYXOZeVCKsmW6-XF6k5+sVA@mail.gmail.com>
 
 
---9ZFytLnJNcL8quyY
-Content-Type: text/plain; charset=us-ascii
+--jYbLw3BJwhyPV9Uj
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Dec 15, 2025 at 05:35:23PM +0100, Robert Marko wrote:
-> Add binding documentation for Microchip LAN969x.
+On Tue, Dec 16, 2025 at 06:01:02PM +0100, Robert Marko wrote:
+> On Tue, Dec 16, 2025 at 4:58=E2=80=AFPM Krzysztof Kozlowski <krzk@kernel.=
+org> wrote:
+> >
+> > On 15/12/2025 17:35, Robert Marko wrote:
+> > > Now that we have a generic Microchip binding, lets move SparX-5 as we=
+ll as
+> > > there is no reason to have specific binding file for each SoC series.
+> > >
+> > > The check for AXI node was dropped.
+> >
+> > Why?
 >=20
-> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+> According to Conor, it is pointless [1]
+>=20
+> [1] https://patchwork.kernel.org/project/linux-arm-kernel/patch/202512031=
+22313.1287950-2-robert.marko@sartura.hr/#26691879
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
-pw-bot: not-applicable
+Right, but you should say why it is being removed in the commit message.
+There's probably a bunch of things you could cite for that, but mainly
+it's just not something that is done for "simple-bus" devices. The
+address they start at just doesn't matter for functionality and the node
+itself does nothing without having children of its own (the presence of
+which is enforced nowhere).
 
---9ZFytLnJNcL8quyY
+--jYbLw3BJwhyPV9Uj
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaUGnCAAKCRB4tDGHoIJi
-0rulAQCH83EvFae7mxsfxlbl4ZzO5pUzpCq1+qXYzRQa3cWmMAD5AYxP7uMKIeQ5
-x+oTNJr64FUUjUes0W6yjNhHEwSXxgc=
-=UM+s
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaUGp3AAKCRB4tDGHoIJi
+0iDDAQCfPty1kkcLp/3j5Q4v6Hxcajpf7sT4mk3AeZeUhoJzBAD/Vtzah85wk+AI
+i86l3jFQsgeNLAYX74DPMv9P27jBHAs=
+=q6XF
 -----END PGP SIGNATURE-----
 
---9ZFytLnJNcL8quyY--
+--jYbLw3BJwhyPV9Uj--
 
