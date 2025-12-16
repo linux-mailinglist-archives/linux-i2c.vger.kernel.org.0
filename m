@@ -1,122 +1,136 @@
-Return-Path: <linux-i2c+bounces-14581-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14582-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7056BCC3DB1
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Dec 2025 16:16:09 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5177CC41CA
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 Dec 2025 17:05:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E8CBF3103E6B
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Dec 2025 15:09:26 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 0A82A303789A
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 Dec 2025 16:04:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49ED433DED0;
-	Tue, 16 Dec 2025 15:01:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A6AA2F25F2;
+	Tue, 16 Dec 2025 15:55:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mYGx0Ccr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KnJY5LCi"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F135133D513;
-	Tue, 16 Dec 2025 15:01:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E32E92D3737;
+	Tue, 16 Dec 2025 15:55:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765897318; cv=none; b=sv8LDScvllFJW1H9qYp/1pRazw0YgB91gPVDNwPEVhZSpSWnnChCDbXca40fonxkfeWkEIND6zIpfDMfYXpriJ09Wpg6RAFXtdM3ibORTrD4hwF8N65Y+L7zWolu45i5cmnx5GudIwv9BQWBG2PLlnkw7SzIwKsxCRtB0P5onuo=
+	t=1765900507; cv=none; b=R7zzo6vz3SY1YGXki1+fsK8v0Kio3tXel1Td53nqpD2jk+W0RqDm8flVRL9N8+v6jW5j5B3StfPbWMFCdUrmNz0eQHXFLzxfSYV26Qvbj3aCowEmOFJwzvIfuDPnfWNx/lPjLdVrWLbF4a/962n/cE/ZbeGATwveOifsdmGZ+x0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765897318; c=relaxed/simple;
-	bh=l6BsXuUQhKVvOvNQVNusVS5RLyr3LsVQL3METhXptkM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ErH+WdbKy+WNk2nYZQvITj4sEq9OM8mlm7/wHkdclvNkDmRDh2cGuS23OPdu61cY0Je0ZRWm02SOuhV/94/D2S0uFAZdvoUMGxCHGCA+Rrc8iQ3pCA9WjCAzLyqrb4WKh4RYICFkfRekTRAIjjjyXVbtLSDvys5I50Oin4VW5vw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mYGx0Ccr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2628EC4CEF1;
-	Tue, 16 Dec 2025 15:01:56 +0000 (UTC)
+	s=arc-20240116; t=1765900507; c=relaxed/simple;
+	bh=01o5UEZSfkctZGOC5qlwlYDaww6GquCTHK/kGSGT9Qs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JnQYZrp2x0OZdMWLvktVyfnHViFljIF0q27YRYy4jYP7zJzXOfWANh4ZO3WwSYT4BtiBPdsn/40biBdXsmAqYeCAmnb1l2cS9xO45/5IZdC9Y9UP8mN0GZnH88P6PHRucLGzHQRWKbfvWH1QZ/4XCSYy8Qg7PydWltFBmV5xPig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KnJY5LCi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1484C4CEF1;
+	Tue, 16 Dec 2025 15:54:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765897317;
-	bh=l6BsXuUQhKVvOvNQVNusVS5RLyr3LsVQL3METhXptkM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mYGx0CcroGx+8n06A1aiaZqq4+chW41i1tx54gQ6z3/T5zHt55tvXEFa2vuQEcXe2
-	 Af3ucF7wj1DbxMHQ+f6pzwHYMEyZ7g3EVjkXuPBW2N2gzexqlklcONWJMzeRDYiZmh
-	 N2i9sityb9jgDYljDPBPifwuuQFa285GMh2k//q42YRSsrm7b1mzNFreY8b/Wal3kt
-	 aqLszFgTsVGqVLLQKMA/C5yoZBFELxhQRtMDKKvRYjZU6kLVUEFGTjlNdBA/rgU95d
-	 XQcKiZOhlQuzOzy5V4YZ0CWCmBwH/VUUCkh/cdKYxhnhOETyR+sWL3hgHEH7AwsXKU
-	 1uSkfhtJ/uVLg==
-Date: Tue, 16 Dec 2025 20:31:54 +0530
-From: Vinod Koul <vkoul@kernel.org>
-To: Dave Jiang <dave.jiang@intel.com>
-Cc: Frank Li <Frank.li@nxp.com>, Dong Aisheng <aisheng.dong@nxp.com>,
-	Andi Shyti <andi.shyti@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>, dmaengine@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	carlos.song@nxp.com
-Subject: Re: [PATCH v2 1/2] dmaengine: Add cleanup FREE defines for
- dma_async_tx_descriptor
-Message-ID: <aUF0Yu5Cexvm7JFe@vaman>
-References: <20251003-dma_chan_free-v2-0-564946b6c563@nxp.com>
- <20251003-dma_chan_free-v2-1-564946b6c563@nxp.com>
- <2c457a46-2b7f-4d66-8555-3b3cb52afe64@intel.com>
- <aTDkODHZg0JfrZJC@lizhi-Precision-Tower-5810>
- <77ff15d7-cdb9-46f7-9f05-97aff2dc8ee9@intel.com>
+	s=k20201202; t=1765900506;
+	bh=01o5UEZSfkctZGOC5qlwlYDaww6GquCTHK/kGSGT9Qs=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=KnJY5LCi/daDI436cW11l2Wqr+RJlCMtWNkJk2AtzanmHz93rQJ124FWk4sFUtsA6
+	 iVo4ZZWRFT4V/zqvlbP7Mu/vlS+xtrtlI7SYy3E04iqXohV2Oe4HUDa6isZCRbzxTc
+	 /mvQXq7uA8hGmtra8djoYst0s2tt0EfGlkx6wwR7MTb0KQ4BY4unq4LgWmGXccHlMy
+	 ZHbUYJRJJh3TZgot7Lt2gxaABElqBUyrBX2iIfqM6dvs/N9XGlNoObcZlgTWXH9FO7
+	 9E6+x2wXTqTogPi50AcxgqckAp2FL7Su9wOSPLWvnUCCQAPFKrt8DexSDUaYg5cK1x
+	 HTM+jBrwl41cA==
+Message-ID: <d9665340-5a96-4105-88e9-ec14a715df5a@kernel.org>
+Date: Tue, 16 Dec 2025 16:54:54 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <77ff15d7-cdb9-46f7-9f05-97aff2dc8ee9@intel.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 03/19] dt-bindings: arm: AT91: relicense to dual
+ GPL-2.0/BSD-2-Clause
+To: Robert Marko <robert.marko@sartura.hr>, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, nicolas.ferre@microchip.com,
+ alexandre.belloni@bootlin.com, claudiu.beznea@tuxon.dev,
+ Steen.Hegelund@microchip.com, daniel.machon@microchip.com,
+ UNGLinuxDriver@microchip.com, herbert@gondor.apana.org.au,
+ davem@davemloft.net, vkoul@kernel.org, linux@roeck-us.net,
+ andi.shyti@kernel.org, lee@kernel.org, andrew+netdev@lunn.ch,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, linusw@kernel.org,
+ olivia@selenic.com, radu_nicolae.pirea@upb.ro, richard.genoud@bootlin.com,
+ gregkh@linuxfoundation.org, jirislaby@kernel.org, mturquette@baylibre.com,
+ sboyd@kernel.org, richardcochran@gmail.com,
+ wsa+renesas@sang-engineering.com, romain.sioen@microchip.com,
+ Ryan.Wanner@microchip.com, lars.povlsen@microchip.com,
+ tudor.ambarus@linaro.org, charan.pedumuru@microchip.com,
+ kavyasree.kotagiri@microchip.com, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
+ netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-clk@vger.kernel.org, mwalle@kernel.org
+Cc: luka.perkov@sartura.hr
+References: <20251215163820.1584926-1-robert.marko@sartura.hr>
+ <20251215163820.1584926-3-robert.marko@sartura.hr>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20251215163820.1584926-3-robert.marko@sartura.hr>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 04-12-25, 08:07, Dave Jiang wrote:
+On 15/12/2025 17:35, Robert Marko wrote:
+> As it is preferred to have bindings dual licensed, lets relicense the AT91
+> bindings from GPL-2.0 only to GPL-2.0/BSD-2 Clause.
 > 
-> 
-> On 12/3/25 6:30 PM, Frank Li wrote:
-> > On Wed, Dec 03, 2025 at 03:48:41PM -0700, Dave Jiang wrote:
-> >>
-> >>
-> >> On 10/3/25 9:26 AM, Frank Li wrote:
-> >>> Add cleanup FREE defines for dma_async_tx_descriptor to support automatic
-> >>> cleanup and simplify error handling.
-> >>>
-> >>> Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> >>> ---
-> >>> Check patch report exceed 100 chars, but it's still better put into one
-> >>> line to keep consistent with other DEFINE_FREE and better readablity
-> >>>
-> >>> change in v2
-> >>> - remove surpoiouse remove empty line
-> >>> ---
-> >>>  include/linux/dmaengine.h | 3 +++
-> >>>  1 file changed, 3 insertions(+)
-> >>>
-> >>> diff --git a/include/linux/dmaengine.h b/include/linux/dmaengine.h
-> >>> index 99efe2b9b4ea9844ca6161208362ef18ef111d96..27fa1646a807c49c781e1bce9e3e7d9a3c66f41d 100644
-> >>> --- a/include/linux/dmaengine.h
-> >>> +++ b/include/linux/dmaengine.h
-> >>> @@ -5,6 +5,7 @@
-> >>>  #ifndef LINUX_DMAENGINE_H
-> >>>  #define LINUX_DMAENGINE_H
-> >>>
-> >>> +#include <linux/cleanup.h>
-> >>>  #include <linux/device.h>
-> >>>  #include <linux/err.h>
-> >>>  #include <linux/uio.h>
-> >>> @@ -1612,6 +1613,8 @@ static inline int dmaengine_desc_free(struct dma_async_tx_descriptor *desc)
-> >>>  	return desc->desc_free(desc);
-> >>>  }
-> >>>
-> >>> +DEFINE_FREE(dma_async_tx_descriptor, struct dma_async_tx_descriptor *, if (_T) dmaengine_desc_free(_T))
-> >>
-> >> maybe free_dma_async_tx may be clearer as the name vs dma_async_tx_descriptor.
-> > 
-> > If that, 'dmaengine_desc_free' is better because avoid create new name for
-> > it.
-> 
-> That works too.
+> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
 
-Agree, it is better name
+You need all contributors to ack this...
 
--- 
-~Vinod
+Best regards,
+Krzysztof
 
