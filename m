@@ -1,46 +1,46 @@
-Return-Path: <linux-i2c+bounces-14584-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14585-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 28956CC4221
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Dec 2025 17:09:52 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23E42CC4284
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 Dec 2025 17:12:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C685530E1237
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Dec 2025 16:03:49 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C3F90312B489
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 Dec 2025 16:06:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0D5B34D391;
-	Tue, 16 Dec 2025 15:56:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95D62355042;
+	Tue, 16 Dec 2025 15:57:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r4OFKUIo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K+gjxUox"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6535934C981;
-	Tue, 16 Dec 2025 15:56:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2254E34FF6A;
+	Tue, 16 Dec 2025 15:57:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765900593; cv=none; b=ddEvhXwVE2M/XMtmoQ5Cg7s2cji+knlPGOMOPIWZFR6XXaXo6qGAanBlc/MJuBvUnA5xMmL1BJnGhAeIgNNw3QNIf/ecqSBVZo2oqFE9y+s5InFfhoguuXWxXyis8ZLc9RA1HVe67OlFOWvD9s4okR4fnNrRzn/kCoDkM85QIek=
+	t=1765900646; cv=none; b=deKiKXJ//9OrEk47a/+BCExGRAePcfdkl2Cf+lQgeIwxDm9VXelQltBJdnSBFISFqzaNMuUij46HZqWLEExLKfFpY7d60pP9V6HZxL17h3k+ImdKHGQoKD4PO2kn6QJaHkOloLQl0qeDvMKSb79AIPGQBzWcKERkpq7QPBf+xcU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765900593; c=relaxed/simple;
-	bh=jz0CLQTDr87vUYdiI9rTSk3p+VtPv/Xbbdrj4PUw3nM=;
+	s=arc-20240116; t=1765900646; c=relaxed/simple;
+	bh=40BS5f3olMR0Xlri6FQNj2so12kgnBJIfiaxIAmldwc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AEwmRc6naFfSjH8WSCDl4GeIDersMKN00kYAGUc/6xDSawmKAzCe269JFgmMjLT3vKz4wwGhrLeyFhKuTgXj+Iv1QP2N0HCz1m0SuypRl7pfPdnhqi63jSe87Rv2O4BAp7KVPgvlMqjbzbwNviGhJuHrKwRofaZ/0N800GEdlnQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r4OFKUIo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52A6FC4CEF1;
-	Tue, 16 Dec 2025 15:56:22 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=fgi6E+/lOiEFqRQCqaqI6Bsj06ntudqNJLJ2dbzlrucBzgimFgO6fa0UxSf0CBlHhuxQ1+XqxLPDkNrYOW6JF3S/XsIc3IyIRan5Gl80QXdncI3e2vvQbA0/vaFZpVzd9BW/pgI9z5WWaT3asuv8xMvJut9H5T8XDINuL4QX3fU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K+gjxUox; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42239C113D0;
+	Tue, 16 Dec 2025 15:57:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765900592;
-	bh=jz0CLQTDr87vUYdiI9rTSk3p+VtPv/Xbbdrj4PUw3nM=;
+	s=k20201202; t=1765900645;
+	bh=40BS5f3olMR0Xlri6FQNj2so12kgnBJIfiaxIAmldwc=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=r4OFKUIo+ywBBbjT6+JxbFXT72BatZ2hQCGE7v0t81hMC2+cbvi9OQIZkwINe2MoC
-	 jrNrueexRatM6wlGJAYayEIx1m94h2F+/EFycgkUIR+88e+eAaQ7/UfLF8Y9Csjo9u
-	 Op7iTw5sPyzVLgIsKXE/YpOdM56kx+CwBuKfSeoHkeT9Q5E+eOnbjQWZHe8ucqBEIS
-	 APqlSuNrzvhii4dxO6lIEpqN8KQENOS/i1rpfFvGHeXWJ8ATOSRioAwBqNpQokQUPJ
-	 tpQiEJqOUPza4Yr+OdCKRIe5c7u5SP5RqmcuJmBXd/hTWvEMnXizJNjCLHcfqWg+5B
-	 ynyevLS5LIx/A==
-Message-ID: <3094a8c7-4877-4f86-a224-d7c902ae6819@kernel.org>
-Date: Tue, 16 Dec 2025 16:56:20 +0100
+	b=K+gjxUoxGAGFNlbSFY1dnpAT8Ad9tIpV8eFRwBOSuTS2whDP5WQLD+c3rWnQ5IqfL
+	 t7CP/kyVzxn7x0P9BW1zuDVgxZMgcFxYBdYAwVS1OFrJXgc3rs0NU41l0QaE9o4++7
+	 bfHgQ/EchlgTyn94V8bXk9f2G6r5Z47bYnM9w6pbAkWFd0Y0sZ7CEiShCH9kB5Mhd6
+	 0G2MWzXmFGXt+aBThhkAzjsQCckNSJZb0vwGRnnTqi8HteJsLuyG/vEq6Ls6ziAu30
+	 OkgbMNw8Cwc4AtZ2Kh3rgzZpw1F++/qrCHl0SIEVi/ynWkDmogG2X+n1fLUbkb5EVy
+	 pT/jvcYGLNz3Q==
+Message-ID: <23e02efa-bb94-48ba-9b6c-acee5d8f6576@kernel.org>
+Date: Tue, 16 Dec 2025 16:57:14 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -123,11 +123,15 @@ Content-Transfer-Encoding: 7bit
 
 On 15/12/2025 17:35, Robert Marko wrote:
 > Add the required LAN969x clock bindings.
+> 
+> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+> ---
+> Changes in v2:
 
-Why?
 
-This is not a separate commit. It comes with the bindings doc.
-
+Where is cover letter for this patch bomb explaining previous history,
+giving lore link and providing any background/rationale for making it
+one huge patchset?
 
 Best regards,
 Krzysztof
