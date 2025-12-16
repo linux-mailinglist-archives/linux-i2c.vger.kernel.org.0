@@ -1,122 +1,137 @@
-Return-Path: <linux-i2c+bounces-14593-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14594-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 210EFCC4A6A
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Dec 2025 18:27:19 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F921CC4B38
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 Dec 2025 18:34:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 8BAE63022582
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Dec 2025 17:27:15 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C4CB63058626
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 Dec 2025 17:33:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39FA1330B28;
-	Tue, 16 Dec 2025 17:27:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CD78333720;
+	Tue, 16 Dec 2025 17:32:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="PpezN6fg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DbEEfG/e"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96C32330B18;
-	Tue, 16 Dec 2025 17:27:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2FE4126C02;
+	Tue, 16 Dec 2025 17:32:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765906030; cv=none; b=tH/Sgn74sJTHC4B90oortZkmvCoxM911fjNS7hOT+IWQzqtRXKBCx0P8KScXIfkiD3ZMFk2ZkezKPWTYaEqq+tMffPVmHi4tx6dgXv7Vl/B/O6Lqc4oN7JSK2l1NTpUp8reClb9GTS2LRdjM4mMmqzLCuFpEsLmw0lxBSem9TYo=
+	t=1765906379; cv=none; b=G/gkTomugjUbLdoTErAHhtDHluo0zRkcK9DkGCcdWTFmDS9nCyTHQIQtv+xrE6xjVLMEcGAzV0VPTaiAH1uqzaBwLljUIVvo0LqX+2OiDk4dvQR6bob18z5cRKNXxZ5xlzrCjjbmk0E1UkDwJA22OZK+qZc5uGccTzZqq5wvOVo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765906030; c=relaxed/simple;
-	bh=LOoNsfgtqQFSm+0gZYo/RrK4QnqByvGvMQcD4Xfny+o=;
+	s=arc-20240116; t=1765906379; c=relaxed/simple;
+	bh=EcJWT/Y11hSteIxvRAaAA5sSSN1V5ZsTUetswisKyqg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TTJZd8/l9xFDgMd8MrYLA0Aaaa7B0P92rAicBnaRNJjJ+5KLbz7uHKf3PT1OVLHUh5F4rFIWTx5/RO9BRV7M3cl6OHOzGHPJTivgBMkmjpUHRVS/kx3ZPcfEzdkKWA9D7djMAQ07reHQsaoaeWJrrgiTuO3PtQR8T7FRV7In+ns=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=PpezN6fg; arc=none smtp.client-ip=185.171.202.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id DF192C1A583;
-	Tue, 16 Dec 2025 17:26:38 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 557F26071C;
-	Tue, 16 Dec 2025 17:27:03 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id A9AD3119A9759;
-	Tue, 16 Dec 2025 18:26:44 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1765906017; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=EmrY+TtKs52sxJBoXVm7+OMPrZ2mV5ot/olhs/S4NT8=;
-	b=PpezN6fgd+3PEQFLhd6fNgyfQKDlPVICMLyWK1hTZw7smVZG3VMfI3/lykbKBvnCQgDxvf
-	DRA1bIlc4wxUxz+bs0dkav6nr9jnHdl70bQhIXsRhWXvYNPqlSVVT/ZEK913ctS7cn/k4I
-	Nd/R/OFduTnhKVFoTJH+TjJOwKQoCebd9g88kfA+0QCBkmSWDQDWy0vfHiyneCUqyf38YJ
-	Bo3gBkdvkFRDkvnm1oJyOe4CafHvM8u8Na/fyKn+vlXHYSdZMlIsPMVx9pBrh4Dyr53yR9
-	re5OTg4aWBY5HDcz4U6PMuQQTqJOk/EPLQ+torGwHiqi34ySsxXe2G2r7vB9VQ==
-Date: Tue, 16 Dec 2025 18:26:44 +0100
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=jCZ+MiNtVQvfr0aHeh8cDejycLX58AjV3QoP+XmAPvChXc90NszvaRawT7IItJUcX6MeGp/cPCAKMpywCJmFnl0O1GY0Iangsii9T+U7h6iVUu0DwZAgZDzUwsZ0nW0hTb93yugNjehtMUiuLv9oIDdkzyUG2cJPyD6uNNm7vvQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DbEEfG/e; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7978C4CEFB;
+	Tue, 16 Dec 2025 17:32:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1765906378;
+	bh=EcJWT/Y11hSteIxvRAaAA5sSSN1V5ZsTUetswisKyqg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=DbEEfG/e/O3e94JLIDKKtFRclstRKFq868Ts5kKH/qiJnxfvu//KLo523Dy4sZs1W
+	 nUvSKbhjIutNCvLGqSFGB460cHVthqQA1Fl4KyCCcho0fcDR2a+2Iw2smemT8NcjKe
+	 dIzyvyFyKSoHcNasT2BcSDbEKNXwWGsG/3y5Cm7mOYeLJJ3iOOWhXwjWcyHLoCPFOl
+	 PjT3ED4oeekrBt4aSFCOHpW8X3eyCNuhb5tzqQmjn8uO+KHeC1rXUonZVUG05PVrJG
+	 f7J/J/4OIpdeRNXR0AlOy+paNP99sqbSq7ecsPxtqQsb3L1M3N09K8V5j/OXxe22sA
+	 s+x1uHUrDXqWQ==
+Date: Tue, 16 Dec 2025 17:32:47 +0000
+From: Conor Dooley <conor@kernel.org>
 To: Robert Marko <robert.marko@sartura.hr>
 Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	nicolas.ferre@microchip.com, claudiu.beznea@tuxon.dev,
-	Steen.Hegelund@microchip.com, daniel.machon@microchip.com,
-	UNGLinuxDriver@microchip.com, herbert@gondor.apana.org.au,
-	davem@davemloft.net, vkoul@kernel.org, linux@roeck-us.net,
-	andi.shyti@kernel.org, lee@kernel.org, andrew+netdev@lunn.ch,
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-	linusw@kernel.org, olivia@selenic.com, radu_nicolae.pirea@upb.ro,
-	richard.genoud@bootlin.com, gregkh@linuxfoundation.org,
-	jirislaby@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-	richardcochran@gmail.com, wsa+renesas@sang-engineering.com,
-	romain.sioen@microchip.com, Ryan.Wanner@microchip.com,
-	lars.povlsen@microchip.com, tudor.ambarus@linaro.org,
-	charan.pedumuru@microchip.com, kavyasree.kotagiri@microchip.com,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-	dmaengine@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-i2c@vger.kernel.org, netdev@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org,
-	linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-clk@vger.kernel.org, mwalle@kernel.org,
-	luka.perkov@sartura.hr
-Subject: Re: [PATCH v2 04/19] dt-bindings: arm: move AT91 to generic
- Microchip binding
-Message-ID: <202512161726449fe42d71@mail.local>
+	nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+	claudiu.beznea@tuxon.dev, Steen.Hegelund@microchip.com,
+	daniel.machon@microchip.com, UNGLinuxDriver@microchip.com,
+	herbert@gondor.apana.org.au, davem@davemloft.net, vkoul@kernel.org,
+	linux@roeck-us.net, andi.shyti@kernel.org, lee@kernel.org,
+	andrew+netdev@lunn.ch, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, linusw@kernel.org, olivia@selenic.com,
+	radu_nicolae.pirea@upb.ro, richard.genoud@bootlin.com,
+	gregkh@linuxfoundation.org, jirislaby@kernel.org,
+	mturquette@baylibre.com, sboyd@kernel.org, richardcochran@gmail.com,
+	wsa+renesas@sang-engineering.com, romain.sioen@microchip.com,
+	Ryan.Wanner@microchip.com, lars.povlsen@microchip.com,
+	tudor.ambarus@linaro.org, charan.pedumuru@microchip.com,
+	kavyasree.kotagiri@microchip.com, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
+	netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-clk@vger.kernel.org,
+	mwalle@kernel.org, luka.perkov@sartura.hr
+Subject: Re: [PATCH v2 18/19] dt-bindings: arm: microchip: document EV23X71A
+ board
+Message-ID: <20251216-endorse-password-ae692dda5a9c@spud>
 References: <20251215163820.1584926-1-robert.marko@sartura.hr>
- <20251215163820.1584926-4-robert.marko@sartura.hr>
- <202512161628415e9896d1@mail.local>
- <CA+HBbNFG+xNokn5VY5G6Cgh41NZ=KteRi0D9c0B15xb77mzv8w@mail.gmail.com>
+ <20251215163820.1584926-18-robert.marko@sartura.hr>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="eu+QXVmIK+7elvwE"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+HBbNFG+xNokn5VY5G6Cgh41NZ=KteRi0D9c0B15xb77mzv8w@mail.gmail.com>
-X-Last-TLS-Session-Version: TLSv1.3
+In-Reply-To: <20251215163820.1584926-18-robert.marko@sartura.hr>
 
-On 16/12/2025 17:56:20+0100, Robert Marko wrote:
-> On Tue, Dec 16, 2025 at 5:29 PM Alexandre Belloni
-> <alexandre.belloni@bootlin.com> wrote:
-> >
-> > On 15/12/2025 17:35:21+0100, Robert Marko wrote:
-> > > Create a new binding file named microchip.yaml, to which all Microchip
-> > > based devices will be moved to.
-> > >
-> > > Start by moving AT91, next will be SparX-5.
-> >
-> > Both lines of SoCs are designed by different business units and are
-> > wildly different and while both business units are currently owned by
-> > the same company, there are no guarantees this will stay this way so I
-> > would simply avoid merging both.
-> 
-> Hi Alexandre,
-> 
-> The merge was requested by Conor instead of adding a new binding for LAN969x [1]
-> 
-> [1] https://patchwork.kernel.org/project/linux-arm-kernel/patch/20251203122313.1287950-2-robert.marko@sartura.hr/
-> 
 
-I would still keep them separate, SparX-5 is closer to what is
-devicetree/bindings/mips/mscc.txt than to any atmel descended SoCs.
+--eu+QXVmIK+7elvwE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+On Mon, Dec 15, 2025 at 05:35:35PM +0100, Robert Marko wrote:
+> Microchip EV23X71A board is an LAN9696 based evaluation board.
+>=20
+> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+> ---
+>  Documentation/devicetree/bindings/arm/microchip.yaml | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/arm/microchip.yaml b/Docum=
+entation/devicetree/bindings/arm/microchip.yaml
+> index 910ecc11d5d7..b20441edaac7 100644
+> --- a/Documentation/devicetree/bindings/arm/microchip.yaml
+> +++ b/Documentation/devicetree/bindings/arm/microchip.yaml
+> @@ -239,6 +239,14 @@ properties:
+>            - const: microchip,lan9668
+>            - const: microchip,lan966
+> =20
+> +      - description: The LAN969x EVB (EV23X71A) is a 24x 1G + 4x 10G
+> +          Ethernet development system board.
+> +      - items:
+> +          - enum:
+> +              - microchip,ev23x71a
+> +              - microchip,lan9696
+
+This looks wrong, unless "microchip,lan9696" is a board (which I suspect
+it isn't).
+
+> +          - const: microchip,lan9691
+> +
+>        - description: The Sparx5 pcb125 board is a modular board,
+>            which has both spi-nor and eMMC storage. The modular design
+>            allows for connection of different network ports.
+> --=20
+> 2.52.0
+>=20
+
+--eu+QXVmIK+7elvwE
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaUGXvwAKCRB4tDGHoIJi
+0vzsAP9o0wjRIx80sLvMsT3xQVcG7EuQTVrW1u9TApBVK+c3TwEA9h74P320YLBM
+mpkWc+jP9Fiu7F/VIizZfeawyYjvOww=
+=+dx2
+-----END PGP SIGNATURE-----
+
+--eu+QXVmIK+7elvwE--
 
