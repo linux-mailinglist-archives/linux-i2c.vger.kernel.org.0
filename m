@@ -1,172 +1,137 @@
-Return-Path: <linux-i2c+bounces-14567-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14568-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3817CC101B
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Dec 2025 06:26:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9AA65CC1987
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 Dec 2025 09:36:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 58C9630813E3
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Dec 2025 05:22:22 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 62F0A303D324
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 Dec 2025 08:31:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D214C335077;
-	Tue, 16 Dec 2025 05:22:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A201E30F80F;
+	Tue, 16 Dec 2025 08:31:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SjFdVCfU"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dPUTvZsQ"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C27D2E0B77
-	for <linux-i2c@vger.kernel.org>; Tue, 16 Dec 2025 05:22:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20B6430E829
+	for <linux-i2c@vger.kernel.org>; Tue, 16 Dec 2025 08:31:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765862537; cv=none; b=UPTDsIic3+OFpYrYsYdIUWNGGcLwHd6//qTZKtqpDh0GG9y51E3cG7wQHYzIH6C3Zouabu3TWLaUbgAvsKmumwV93PCK+E0RElm0ITKk/V7Eku1FuecURb3OACNsDxbrCG6JchM5wtjZ8WokfKFGhuA9jfVz1WJSitAg7ikcr0Q=
+	t=1765873888; cv=none; b=ru3hoK2Q/0oLn8EpEZadydN9/iKc8WzgHldaVfsX4jupBUagP/hFahLRMasZD+6C5SnxQXy+/5QvFjzJT0Gbv0Cew0xrhbLoFIx4YUFK1/xbhe3kJL3uXn0FLvAUicO9MJ2Mt6JR7JRV90DPlCf3W01yfO/0/RqFFqVW5qIyjD4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765862537; c=relaxed/simple;
-	bh=3bfVF7cqEIEY6T2vhjKvm3WS7PN9zCOvWF1W1Amy+0Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Mmj7KFK/tI0PMHmNnBHPMIKtirDN9BTP2FFbY8OfdyS4GuDnkez8Wl1fuC0q1e5JWoGQTeaFYmEwJsvY5W271YfMYB8RxtQl0kygzvrJ+iItOA5JtiHZ0YR1FZ9qfSRLd2kmli4lwsVu9b10ENCZYGog9Vf/6Rv7/odrgyavr5U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SjFdVCfU; arc=none smtp.client-ip=209.85.216.43
+	s=arc-20240116; t=1765873888; c=relaxed/simple;
+	bh=Ne8lJ2W9R9L98LT3IXnbXQmyBQHpIK5exT1M5+MN3nc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AxuLb11dS7n3ntBfdSupuqGnfPzf+UlAnp7533WdO9AZUW96dSMN6LvNAiBmsncza5+jXw1Opg+8B/rZm520mxKLlpAWC/mSKOXiRdQZ7nls4ESaALhZmlznIlk83dfHRmkuZ0sx2sa55hX0wxP1nOHWNQEPdPwZO+dwyiCQrTc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dPUTvZsQ; arc=none smtp.client-ip=209.85.208.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-34ab8e0df53so4455209a91.3
-        for <linux-i2c@vger.kernel.org>; Mon, 15 Dec 2025 21:22:06 -0800 (PST)
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-640c6577120so5925273a12.1
+        for <linux-i2c@vger.kernel.org>; Tue, 16 Dec 2025 00:31:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765862523; x=1766467323; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=g0IdpBtg/JhdmjSRlVsZcTYVx5UhfvoA9V35JLo5kNg=;
-        b=SjFdVCfUI8T0Q5YtMK3YKeyYMyWvXLYFJj3VX4yr+EqZY4KYZYjAtTzL44G36M1sld
-         FWWKpwNejHYfB7LCqtokPaMwad4hR59OP2wwfGeAZT7qF+Maktpfsc2rBqdQZJoERsH2
-         VN9J0X76HsYhjTiyYrxYehmuf+EiBvWX25XQDQ0WG1nvhzGDcSzyKYy47oL3hDUkYirm
-         C94y30QjmEtvipO4gYAWVQJ1+w/SdX6/pAyGBvNZ17iuwj2iwy64XOFNVXfqR33KUQp3
-         F4vq8jiqRxaGCoM83C2ug/9P/4JVH11WtCqDvk2WJj6ZtH8KtE4C/7n1JemtY5SDAYle
-         bYVA==
+        d=gmail.com; s=20230601; t=1765873875; x=1766478675; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GQojXGe1Xon9EVHvdwzM1mIfwrJqJkUgQsQeeW7RD5g=;
+        b=dPUTvZsQe8fYWGyydhkf1cvyneHSrfKljJFuGuXcfWiuKNxU+LNiaWBih7LNQfAJzx
+         QrzOHzgL8hjUjRpxCOlPVReqy/IF8lD8hBOxM7DxoCsZLLwDuKcxrJhYoXSfFnHpnWLC
+         80s7AFuoZoYu0MBNrlNeiezqUyk+sib1FNkLjIuJQoUo+O8MmKuYbciVQ0QaQm7u43ay
+         xFqfTH4sOrzGmeM8TDToNFl0MziS3Rw+pWoSNO1kfpbHct4Tw+fAFRMWs09GRrI2hS8O
+         YHB8s/txHKzDBP0BGDr+GTbkRpPhVSn6E8BafnVyDakquuqPFYoA6KvxTBPbJC2cwaJs
+         BkrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765862523; x=1766467323;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=g0IdpBtg/JhdmjSRlVsZcTYVx5UhfvoA9V35JLo5kNg=;
-        b=lCyYCrLDQmJH14+CMLEwYjjcc+s53p6R6Tps1LC694yJzTmBNa4EnJI+82JO5evc2Z
-         ONBRXztZGG47FVBFTQviuHzGam7m898hQgPZGn3+4UP6vMCSyvVtTPK9FCEo1qSWLTEJ
-         qx70dUAFQD1i2DI67tcdwGhiASi92iIBfLerwINY2g1ukPL3FpFFBIv1mdb48yLJDLt3
-         BlpEWldrLamdsx8rWWQJ1UraNcTQFcEj/ouu9pPnGHcT9Z4M7isjE6l3h5Z6ZFlpO9zK
-         +irrLKGx0F7UoaAPE3h7QwJF+O57o4epgab4f1iIHT6SzgwELha0ad0PQFtGxVLmnXTe
-         BmKQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVO+GanPa1O3NQRR4b3ErKoWA4mw0WOb8i6EXNKpJ69X64emI9oGCan09Jr9eN5SDqznXEGYyiq7pE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxqVwhtTuLBXGkXbabGSTAKAuDUQDrulfYtFcspDjJopYmKGO0g
-	ztEQGxm+j/jhPI2slssHwTX6neBOxbpbePz32FRDGUAKUBVYTqw3k8yY
-X-Gm-Gg: AY/fxX56qk3Am1/Wen0FtYhWsSCQkmfEByRyeD273zipzmKjUngDMYYVRoUa+q93aX2
-	y7mVWhz8H3z9l7fxnFue+WpHlvyHS2nvBBsSAzI4eMPlJmcv0E6fY/PjCNhFmvTAdkvwSrPFp4P
-	+hP8UcsKrTyn21wcLdyOL5GX39pFgqJMF2PdMrybwV9Y6nQB7wOfqNuczU6icggr597bZ5qs8LU
-	nZURbLffbCr4w9ONjGNQfCPMLcPR7j4BuQx9hwvEyi4MDoJf207TEjKSU5im446u4tWTNPKzQxl
-	buvBj4eFV60BawcMjeSbdpTwnU6rS6NIXrzqfJVk0assNrbT1mS59lyCQB6L7wNJeMeShDjoGQc
-	EcV78kmrVVn1Z8f9ozYGD8TjIyz06laEjcuSh4DHP/Wttdhu1Ngxe4WHWdLQ4at3q
-X-Google-Smtp-Source: AGHT+IH7rgc/KiTJTKPFRn//6KTwpo0aXlM6RPxFGdwYRhguaslwU6dfICFDwUD8TCCvmZpUxPVrDg==
-X-Received: by 2002:a17:90b:1fc6:b0:349:7fc6:18 with SMTP id 98e67ed59e1d1-34abd6e0193mr11861601a91.13.1765862522998;
-        Mon, 15 Dec 2025 21:22:02 -0800 (PST)
-Received: from localhost ([221.192.179.227])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-34cd4bd9987sm109226a91.4.2025.12.15.21.22.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Dec 2025 21:22:02 -0800 (PST)
-Date: Tue, 16 Dec 2025 13:21:56 +0800
-From: Encrow Thorne <jyc0019@gmail.com>
-To: Guodong Xu <guodong@riscstar.com>
-Cc: alex@ghiti.fr, andi.shyti@kernel.org, aou@eecs.berkeley.edu,
-	conor+dt@kernel.org, devicetree@vger.kernel.org, dlan@gentoo.org,
-	krzk+dt@kernel.org, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-	p.zabel@pengutronix.de, palmer@dabbelt.com, pjw@kernel.org,
-	robh@kernel.org, spacemit@lists.linux.dev,
-	troy.mitchell@linux.spacemit.com, troymitchell988@gmail.com
-Subject: Re: [PATCH 2/3] i2c: k1: add reset support
-Message-ID: <20251216052156.GB6413@hailin-HP-Pavilion-Laptop-14-dv0xxx>
-References: <20251119-i2c-k1_reset-support-v1-2-0e9e82bf9b65@gmail.com>
- <20251211073526.3164875-1-guodong@riscstar.com>
+        d=1e100.net; s=20230601; t=1765873875; x=1766478675;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=GQojXGe1Xon9EVHvdwzM1mIfwrJqJkUgQsQeeW7RD5g=;
+        b=VyQ8Am+AgqxF9m3H8mUS82eXDvlk+X9UswFEIff0nXDHKoAfMHqFrKJ72miJ9CI/oA
+         YaQE76DS/TY2KZlac8byvo/gM/6G6m3jaQZhrSCaQSSwfsMnsBhCes+md0MMYmnIvFwu
+         vLCzRqzCJrPdOBjzjVnbt/Z1kRvxR1oGkn3p12Y3YfvAsipFz7Q1FfGq2M64H4PRrVWf
+         /9nD9AhpastARADXJlyauHciLhmJo6PyMm8i2NYpZnUKPzJ8+V4OmPNvdCfEL5LOTHOA
+         jOUuJxiT0jHO9QJcbJL9yj8e9axYYxRBSX9wYlp0R4w/o7kjKTD8nqZAoLTqGbFqpHFo
+         ibYg==
+X-Forwarded-Encrypted: i=1; AJvYcCW1f/KmFYKRUs40SifePB7MGqyJzHxJF69XgmETVxfiGy51mHPe12xjN5ujBnTeEOjap8vOO8IMPl0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxedA3bs+bI0OgfQCAV9ct/mmr1MyLECbGzPEgezdk4sYArNaQi
+	k1kM5kHPAX0yDNk0z3/hmbPZQAYg/tnnY5KnXZBoTB2M4xF+h65O9npf5e0MVl4LG7+baQebTfD
+	OMO0FPGuU7N71cIt7y2T9s6zN3fs59ZH749Gh
+X-Gm-Gg: AY/fxX4DFmQqM+hAAoSgO2GMS1i5aXZ0GKN3H3skgyoCbXWetlnVtk+BYVNMlIfjoDR
+	+NDgyqjpha3uUp9v6CKRkgtTdXEXbBI3zYoue5xqJQs3Ew6lvBCtwGfUJtFp64He9BJmlZcbbMA
+	2hS8FDVINi1r3Ffy6RuLl/cx22tB+aPopGqymTfov3kr8YvDaviJeMoBn+ElLFdkqKXppKDprO0
+	g4nY3ZhighEspw5Qf9kBDqzwjf7vooE8NrpjnqLB27RGcI9ff7K7R6zRmGU64UlkavLtlVCJg==
+X-Google-Smtp-Source: AGHT+IF9oQk2FiXL5zw3SFPOMjxnMAfpDixNAE5HmYPi/w8LYep12XKMVrteyQ+sNlIsL0XbXIk47PaTSEnkkhrP/LE=
+X-Received: by 2002:a17:907:2dab:b0:b71:29f7:47dd with SMTP id
+ a640c23a62f3a-b7d23a61d28mr1488792866b.46.1765873874874; Tue, 16 Dec 2025
+ 00:31:14 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251211073526.3164875-1-guodong@riscstar.com>
+References: <cover.1763018288.git.zhoubinbin@loongson.cn>
+In-Reply-To: <cover.1763018288.git.zhoubinbin@loongson.cn>
+From: Binbin Zhou <zhoubb.aaron@gmail.com>
+Date: Tue, 16 Dec 2025 16:31:03 +0800
+X-Gm-Features: AQt7F2oYbSmMbrluLzV8GzEoG22ADpKx58O5i82UYBt5JYEe8XjPc_KZEsh9Cl0
+Message-ID: <CAMpQs4+W+kLbbm2ELpLbZEFq0mK-x0ftLYJ+xd3MM1uDz+DUuA@mail.gmail.com>
+Subject: Re: [PATCH 0/2] i2c: Add Loongson-2K0300 I2C controller support
+To: Binbin Zhou <zhoubinbin@loongson.cn>
+Cc: Huacai Chen <chenhuacai@loongson.cn>, Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Andi Shyti <andi.shyti@kernel.org>, Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+	linux-i2c@vger.kernel.org, Huacai Chen <chenhuacai@kernel.org>, 
+	Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Dec 11, 2025 at 03:35:26PM +0800, Guodong Xu wrote:
-> On Wed, Nov 19, 2025 at 07:46:44PM +0800, Encrow Thorne wrote:
-> > Add reset control handling to the K1 I2C driver.
-> >
-> > Signed-off-by: Encrow Thorne <jyc0019@gmail.com>
-> > ---
-> >  drivers/i2c/busses/i2c-k1.c | 11 +++++++++++
-> >  1 file changed, 11 insertions(+)
-> >
-> > diff --git a/drivers/i2c/busses/i2c-k1.c b/drivers/i2c/busses/i2c-k1.c
-> > index 6b918770e612..64d817d8315d 100644
-> > --- a/drivers/i2c/busses/i2c-k1.c
-> > +++ b/drivers/i2c/busses/i2c-k1.c
-> > @@ -10,6 +10,7 @@
-> >   #include <linux/module.h>
-> >   #include <linux/of_address.h>
-> >   #include <linux/platform_device.h>
-> > + #include <linux/reset.h>
-> >
-> >  /* spacemit i2c registers */
-> >  #define SPACEMIT_ICR		 0x0		/* Control register */
-> > @@ -113,6 +114,7 @@ struct spacemit_i2c_dev {
-> >  	void __iomem *base;
-> >  	int irq;
-> >  	u32 clock_freq;
-> > +	struct reset_control *resets;
-> 
-> Thanks for the patch! A few suggestions to simplify this:
-> 
-> The reset_control structure doesn't need to be stored in the device
-> struct since the devm API automatically manages the resource lifecycle.
-> 
-> >
-> >  	struct i2c_msg *msgs;
-> >  	u32 msg_num;
-> > @@ -571,6 +573,15 @@ static int spacemit_i2c_probe(struct platform_device *pdev)
-> 
-> Please use a local variable in the probe function instead:
-> 
->        struct reset_control *rst;
-> 
-> >  	if (IS_ERR(clk))
-> >  		return dev_err_probe(dev, PTR_ERR(clk), "failed to enable bus clock");
-> >
-> > +	i2c->resets = devm_reset_control_get_optional(dev, NULL);
+Hi all:
+
+On Thu, Nov 13, 2025 at 4:48=E2=80=AFPM Binbin Zhou <zhoubinbin@loongson.cn=
+> wrote:
 >
-  
-> There is a new API, I would suggest this:
->        rst = devm_reset_control_get_optional_exclusive_deasserted(dev, NULL);
-> 
-> 
-> > +	if (IS_ERR(i2c->resets))
-> > +		return dev_err_probe(dev, PTR_ERR(i2c->resets),
-> > +				    "failed to get reset\n");
-> > +
-> > +	reset_control_assert(i2c->resets);
-> > +	udelay(2);
-> > +	reset_control_deassert(i2c->resets);
-> > +
-> 
-> Why you need to call assert() then deassert()?
-> Wouldn't the single API fit?
-> 
- Good point.
- 
- Thank you for your suggestions, I will fix them in v2.
+> Hi all:
+>
+> This patch set describes the I2C controller integrated into the Loongson-=
+2K0300 chip.
+>
+> It has a significantly different design from the previous I2C controller =
+(i2c-ls2x),
+> such as support for master-slave transfer mode, and DMA transfers (implem=
+entation
+> in progress), etc. Therefore, we try to name it i2c-ls2x-v2.
+>
+> Therefore we try to name it i2c-ls2x-v2.
+>
+> Thanks.
+>
+> Binbin Zhou (2):
+>   dt-bindings: i2c: loongson,ls2x: Add ls2k0300-i2c compatible
+>   i2c: ls2x-v2: Add driver for Loongson-2K0300 I2C controller
 
- 				- Encrow
-> Best regards,
-> Guodong
-> 
-> >  	spacemit_i2c_reset(i2c);
-> >
-> >  	i2c_set_adapdata(&i2c->adapt, i2c);
-> >
+Gentle ping.
+Any comments about this patchset ?
+
+>
+>  .../bindings/i2c/loongson,ls2x-i2c.yaml       |   1 +
+>  MAINTAINERS                                   |   1 +
+>  drivers/i2c/busses/Kconfig                    |  10 +
+>  drivers/i2c/busses/Makefile                   |   1 +
+>  drivers/i2c/busses/i2c-ls2x-v2.c              | 513 ++++++++++++++++++
+>  5 files changed, 526 insertions(+)
+>  create mode 100644 drivers/i2c/busses/i2c-ls2x-v2.c
+>
+>
+> base-commit: e9a6fb0bcdd7609be6969112f3fbfcce3b1d4a7c
+> --
+> 2.47.3
+>
+
+--
+Thanks.
+Binbin
 
