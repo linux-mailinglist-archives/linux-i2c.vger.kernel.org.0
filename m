@@ -1,86 +1,54 @@
-Return-Path: <linux-i2c+bounces-14619-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14620-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id C80EECC6418
-	for <lists+linux-i2c@lfdr.de>; Wed, 17 Dec 2025 07:31:04 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8AC87CC6909
+	for <lists+linux-i2c@lfdr.de>; Wed, 17 Dec 2025 09:27:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id BD9FE3016893
-	for <lists+linux-i2c@lfdr.de>; Wed, 17 Dec 2025 06:30:57 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 97C09312F6D1
+	for <lists+linux-i2c@lfdr.de>; Wed, 17 Dec 2025 08:20:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 210BC30C601;
-	Wed, 17 Dec 2025 06:30:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40EFD339877;
+	Wed, 17 Dec 2025 08:16:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RTsU85Al"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="Dr0mjOxE"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out30-111.freemail.mail.aliyun.com (out30-111.freemail.mail.aliyun.com [115.124.30.111])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC32630C347
-	for <linux-i2c@vger.kernel.org>; Wed, 17 Dec 2025 06:30:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3F1633A9CB;
+	Wed, 17 Dec 2025 08:16:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.111
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765953051; cv=none; b=rUprT4XTsy+7Mme/aQeAuEmtfsThV1NC4Fo5T0qTN7rES1Ev6ewl82EXQPRjG89tEGDGW6r4NsmVA7LAfJ34J3B3kErsk0yNfar2KBtWH2TtKmXrz4gsDAt2QtZCS3WccWQ3zjRwEAS9EDhb4rOYYAkBC6YIRi5e8NNUdBp8Nlw=
+	t=1765959380; cv=none; b=fiJhcaIXOjvdaPW7oeCEu/3UoDeN75zjnGiXyjqspB8hvQkS7cNmbAjGDaeYaCiEsr/wGNS8CSP3sj4noKraFjjbdmn3sNsaq898X/N0/2u+Ki7GVIlNYdboQ1krUvusEcd7Y5w0x29g09tRiKQ5TRhZKfLJVSekU7f5meOZQk0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765953051; c=relaxed/simple;
-	bh=BKCGGkCIogfhhQC9s1I+BRs/zADpJ6Pj0AbDCqFLIDU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uHtGe2980TsjMl/MPjyx83qD3ghxyGrOPV0xLC/TnApq25dr7FHABGIxAyUNbXTOHOvecTEMymFNfFNJM/dAiAV+Z9CZXi8NyKcBT/KLSzT5qx0igTVFK+k+MwE4PvlXimsHRQvQR87zFyq0oFQTwdvlL1JLnqQQfceVUXSyCHQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RTsU85Al; arc=none smtp.client-ip=209.85.215.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-c0bccb8037eso4558101a12.1
-        for <linux-i2c@vger.kernel.org>; Tue, 16 Dec 2025 22:30:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765953047; x=1766557847; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ylRM1U4MMGRSOvQPR+On5jioG4hsiZTnPVhDoCW0brQ=;
-        b=RTsU85AldwnR8QONi1/HlVis+OeWWKVKCbuv/NjVXyVqqFG8caFDJteySYWnjHhDAf
-         5evXyYnufLwFJ6b485n8WrFtLzPmtZ58g5qYdeu9Ginj2AThspxeq46QIgrEkLJXeslc
-         o2l4WsJZ3LNjLtEFPOfJiD7uOgtXpX9GbAB9idwoGIK1qnFId1YWO85kzo3J6KYY0f55
-         plSkAqpzGY0MhtV3+rfjrEVA/oBzXRlJ1VPBLKOzNoiV9eF2VwaS8FwNUFOx304MSRJ4
-         qrJrCInOVXbQp281sv9nBdBhoDC6eNgFZFgJcN7bNK7FYUFO+JeUUYnAFKU0iAggNxfd
-         ZTxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765953047; x=1766557847;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=ylRM1U4MMGRSOvQPR+On5jioG4hsiZTnPVhDoCW0brQ=;
-        b=AJMBrBtl3+1EyFjDBozLQm9xoCDYeN98kUzBDqysvRWmPQ9M78o1GrnPWQxfa72Z0H
-         9ZhjvEAInRvtAThL/tU9yK7gk7DfmaMn5plqG/H1xVcSCT64oS1AIf3dluPiWnpxbN+V
-         j3LwBNs9vJGBoCULt3vUIKhfbyrIzMWr8POWbkbJ9ut30fAR0dsjz4n7YqQiQjXdYUON
-         y+8nTXdMSo1a/vkagK8Sp3shkA421rhTeZzA4DuihCSTt+Snn880V+06qAnaPz/3D90f
-         TA8y6pvUisgSENLk4f2eh4zJi++yhZ5MFvfJiKIBFuTCEckCa7WrYOOr5qudQacMQrXy
-         pdbQ==
-X-Gm-Message-State: AOJu0Yw64d113nXVOnHRO8Z+yCa+azYCxtUqcJck2/pvD2R+rx4Rp7hP
-	qA9YIXGYKKk80K85ZwdQFVcASSD+P4TdlSI1bQ4Lc2BtH1QTSY600bKvmGUKpg==
-X-Gm-Gg: AY/fxX6Sn3Kf6BUL/YlTlGSvuQUdpyWzqp+bRhMoBWdi0IbroM6+PPzu1hac310hIWA
-	oXHr6ElpWJE8pZzV9QBb15zqUmGipJiU+mjYstvCzqVgACuSSCwosaqNMWY5+j0AflkdwoxygXq
-	IqyNGAI+okY0mq+oj410m2k7HmmUyULCTdwBo9engOLYrU2UIbIBEqSUghVzucS70h9tCWktxtt
-	b8YMRB+tAhHQDeuJjW95P9euE3OkzYypVLvU8FgJGxuPCnhvJuEJBmLQs80ifnlDo++IRvVnkZ5
-	dMQ4gHTktJlsMFfn8GscaQDDKpNHQuYxw+LTuMEKo1kDthqD1pPTO5HibgCYzevxsjK0xdOSAX3
-	5IoSZXI6GCk18bVYyGTvWNy+SKG9M3x3oEYFcvhQy38Uy6hkoHr9LYaLoloX/+8sWa2FO
-X-Google-Smtp-Source: AGHT+IGyHUVtFpcFd5Z73Us+pntiVw+FgIuFO+DpOcQDZYmAx0PzCTgLGReFIW5FKwwkZUuUNChQHQ==
-X-Received: by 2002:a05:7301:29ae:b0:2a4:3593:9690 with SMTP id 5a478bee46e88-2ac322251e1mr8419943eec.13.1765953046927;
-        Tue, 16 Dec 2025 22:30:46 -0800 (PST)
-Received: from ryzen ([2601:644:8000:8e26::c20])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11f2e1bb45csm61585357c88.1.2025.12.16.22.30.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Dec 2025 22:30:46 -0800 (PST)
-From: Rosen Penev <rosenp@gmail.com>
-To: linux-i2c@vger.kernel.org
-Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>,
+	s=arc-20240116; t=1765959380; c=relaxed/simple;
+	bh=ndFj2/VBaLvB0PIaxljeZW+fwoxS9OjFWv+5Tz+R8f4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pMjQdiXAUgZsjejN/JNwG6OZaEVWPgSY5iFBnChSRyr18HOJHVKP3aN9Mqqt5OZnZdfNmET9GYK6aqWLD+DBppi0yh8JtvyvQEY9ebZK+0yvQH58eAqDsAEuWpCDoiNLCPAey5T7jj+HIEPmeTA46tyvk4hzlE7YKBqnQWjyEg4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=Dr0mjOxE; arc=none smtp.client-ip=115.124.30.111
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1765959367; h=From:To:Subject:Date:Message-ID:MIME-Version;
+	bh=EnjkgsuHneXoZUzoXJxbQZgrKKLC87jcGoRy+MS+Jaw=;
+	b=Dr0mjOxEnane2onJUZkWFQ20fiF+AXUWXU+4D1i23PTfZIwc7YSLvFXufVz/+3qBk/5+28QCP7BWgEipxz+VMQjGVEValc8q8cfTVZ7BmCUBO2prlLSZUECwSZXDG/DGcZsPcj4nwQ2JXU2n92DH26KE0jamiuAhOhEEKuTodL0=
+Received: from localhost(mailfrom:kanie@linux.alibaba.com fp:SMTPD_---0Wv2kLz9_1765959361 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Wed, 17 Dec 2025 16:16:06 +0800
+From: Guixin Liu <kanie@linux.alibaba.com>
+To: Laxman Dewangan <ldewangan@nvidia.com>,
+	Dmitry Osipenko <digetx@gmail.com>,
 	Andi Shyti <andi.shyti@kernel.org>,
-	linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 2/2] i2c: rtl9300: use of instead of fwnode
-Date: Tue, 16 Dec 2025 22:30:27 -0800
-Message-ID: <20251217063027.37987-3-rosenp@gmail.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20251217063027.37987-1-rosenp@gmail.com>
-References: <20251217063027.37987-1-rosenp@gmail.com>
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>
+Cc: linux-i2c@vger.kernel.org,
+	linux-tegra@vger.kernel.org
+Subject: [PATCH] i2c: tegra: remove unused rst
+Date: Wed, 17 Dec 2025 16:16:01 +0800
+Message-ID: <20251217081601.93856-1-kanie@linux.alibaba.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -89,57 +57,36 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Avoids having to use to_of_node and just assign directly. This is an OF
-only driver anyway.
+Since commit 56344e241c54 ("i2c: tegra: Fix reset error handling with
+ACPI") replace reset_control_reset() with device_reset(), the rst
+is no longer used, remove it.
 
-Use _scoped for the for each loop to avoid refcount leaks.
-
-Signed-off-by: Rosen Penev <rosenp@gmail.com>
+Signed-off-by: Guixin Liu <kanie@linux.alibaba.com>
 ---
- drivers/i2c/busses/i2c-rtl9300.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ drivers/i2c/busses/i2c-tegra.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-rtl9300.c b/drivers/i2c/busses/i2c-rtl9300.c
-index f2aa341a7cdd..672cb978066d 100644
---- a/drivers/i2c/busses/i2c-rtl9300.c
-+++ b/drivers/i2c/busses/i2c-rtl9300.c
-@@ -371,7 +371,6 @@ static int rtl9300_i2c_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
- 	struct rtl9300_i2c *i2c;
--	struct fwnode_handle *child;
- 	const struct rtl9300_i2c_drv_data *drv_data;
- 	struct reg_field fields[F_NUM_FIELDS];
- 	u32 clock_freq, scl_num, sda_num;
-@@ -415,15 +414,15 @@ static int rtl9300_i2c_probe(struct platform_device *pdev)
- 		return ret;
+diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
+index e533460bccc3..9e39ac7a0a69 100644
+--- a/drivers/i2c/busses/i2c-tegra.c
++++ b/drivers/i2c/busses/i2c-tegra.c
+@@ -240,7 +240,6 @@ struct tegra_i2c_hw_feature {
+  * @div_clk: clock reference for div clock of I2C controller
+  * @clocks: array of I2C controller clocks
+  * @nclocks: number of clocks in the array
+- * @rst: reset control for the I2C controller
+  * @base: ioremapped registers cookie
+  * @base_phys: physical base address of the I2C controller
+  * @cont_id: I2C controller ID, used for packet header
+@@ -269,7 +268,6 @@ struct tegra_i2c_dev {
+ 	struct i2c_adapter adapter;
  
- 	i = 0;
--	device_for_each_child_node(dev, child) {
-+	for_each_child_of_node_scoped(dev->of_node, child) {
- 		struct rtl9300_i2c_chan *chan = &i2c->chans[i];
- 		struct i2c_adapter *adap = &chan->adap;
- 
--		ret = fwnode_property_read_u32(child, "reg", &sda_num);
-+		ret = of_property_read_u32(child, "reg", &sda_num);
- 		if (ret)
- 			return ret;
- 
--		ret = fwnode_property_read_u32(child, "clock-frequency", &clock_freq);
-+		ret = of_property_read_u32(child, "clock-frequency", &clock_freq);
- 		if (ret)
- 			clock_freq = I2C_MAX_STANDARD_MODE_FREQ;
- 
-@@ -449,7 +448,7 @@ static int rtl9300_i2c_probe(struct platform_device *pdev)
- 		adap->retries = 3;
- 		adap->dev.parent = dev;
- 		i2c_set_adapdata(adap, chan);
--		adap->dev.of_node = to_of_node(child);
-+		adap->dev.of_node = child;
- 		snprintf(adap->name, sizeof(adap->name), "%s SDA%d\n", dev_name(dev), sda_num);
- 		i++;
+ 	const struct tegra_i2c_hw_feature *hw;
+-	struct reset_control *rst;
+ 	unsigned int cont_id;
+ 	unsigned int irq;
  
 -- 
-2.52.0
+2.43.0
 
 
