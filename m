@@ -1,166 +1,129 @@
-Return-Path: <linux-i2c+bounces-14630-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14636-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78807CC8122
-	for <lists+linux-i2c@lfdr.de>; Wed, 17 Dec 2025 15:06:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B33C3CCAA9F
+	for <lists+linux-i2c@lfdr.de>; Thu, 18 Dec 2025 08:33:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 5885D30811E9
-	for <lists+linux-i2c@lfdr.de>; Wed, 17 Dec 2025 14:02:10 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 86BF33046BBB
+	for <lists+linux-i2c@lfdr.de>; Thu, 18 Dec 2025 07:32:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 306F134F25C;
-	Wed, 17 Dec 2025 13:43:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D511629BD9A;
+	Thu, 18 Dec 2025 07:32:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="p3Rlr0+T"
+	dkim=pass (1024-bit key) header.d=nvent.com header.i=@nvent.com header.b="Xat16x0S"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from DM5PR21CU001.outbound.protection.outlook.com (mail-centralusazon11021102.outbound.protection.outlook.com [52.101.62.102])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC04434F480
-	for <linux-i2c@vger.kernel.org>; Wed, 17 Dec 2025 13:43:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765978983; cv=none; b=a1yD/+w6xuLk5XGLXZX8KIN/Z2MW6rnnNRhx4+c/Xdbame37mYZw6e/GAIqFdkq3PxrSXd03JcVk9xnGmiJkEjilM13wCIo4o+4eVH+UPtZ6v4o69HyCXREDkzGfWKMlK4bPRnBwEVGdLsXNSXezUlN9uhLB+Kt/5RGBFvHwztI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765978983; c=relaxed/simple;
-	bh=nre4+f/1qweJxFoeeHsRIflrATunEW5LWrhj6Pv/YRQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ki9zisAFByHynU1EgFSbBT5NJ8fyhW3loLWzPsenL8oQkzP3CKWokdMfDg4HJ4Xzte750IY1VEL4MLjw1TpHiTilrerkoal9F8TH1qlI3p6a0dFhGYRNWTtlSsylDBMKWhXBLBhXcON9Ft+syCLPs9ytEUihuNNJb+XJIgtVwCk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=p3Rlr0+T; arc=none smtp.client-ip=209.85.167.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-597c83bb5c2so5118995e87.3
-        for <linux-i2c@vger.kernel.org>; Wed, 17 Dec 2025 05:43:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1765978979; x=1766583779; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=i+2rCMNUHkZI89lP4N4BumifdRKTsaBf6MC8t3850FA=;
-        b=p3Rlr0+T95LKZQayrzXYTvbUvv6N3iakcHQxpWx65eUd8+lUCwS9f/6Vq8MUTJdvlz
-         7HBLv9cPHp0cj23HbmJUS2Dh4U+l0qYdvF3aaPSH5JhrZ7YwOrobUVipOLHpwW7ccrIf
-         zJ+8xK/8D5t6y3s2jCWDJHgv/e+jJdAWR8rd3sUGUxoNuroOChb1flv7wxO4rM6o3+YN
-         9bffZEShBR52yarjv9mW5IuaDnM93Nl2nAyIZVXA1W7zJbGNr+KOAczd0O2ufav4PF0J
-         Zz8oMvmmVmyPwHwvBQtuaBJquDvPpGmglAzCfZ8Kc7HPVa437NOe0NjK+mIGVYzE6vk0
-         B10Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765978979; x=1766583779;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=i+2rCMNUHkZI89lP4N4BumifdRKTsaBf6MC8t3850FA=;
-        b=wTetQQ74LOUDU/8old6bmLZgQQChjWS3VBAn5qRYB48ZYB1k3XelD23nB4fiUJla1m
-         1Qzb7SxhTabIOPG1C8cJb3SMK/u/uKGpqXFijUdhfP7dkL2rtn4xzFZ4HvsPtuG1uFTS
-         rY312XomgZkbybyOZziPkAvg/utTeL6cYTRnEYVr/9ZUNgStrIqnlAy875QkaYThv4Ca
-         RkBOe4nxoiHav6mBdeYqn3tAgys8pK4UEuY2slzMZ1ZiPlyQKA/Ed08Bc17T+EOcJ82F
-         RSLB/7KfvegArj1fWESMGaopGVCyuWO72zVwqRnkRZbktha+HcHxjuxcVlsolh2gAamR
-         gYBQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUSe58SPEQHto0rCUTZU8zpTKDSP8Psund2rRga3vchaAdBiN7idiDYQClX+i5d9daaW3fV3+0PzeU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyXND+RijmWnyhXF+WlKhCHADrFUfZ6MnBZ7htZvIgek2X93Q5R
-	llkhrK0bcRt28wsKv47VPX4ZkApaVcElpo/E1PoJo3Lna52KDKhcqOhvYZEZwulWgCnFbSrWIol
-	a6Ws//AOh2adqdf09LOd0A4EtmbxQltRL9lzHvLAxmA==
-X-Gm-Gg: AY/fxX4wxHF61+ftcDakBSD1nY0rD/28ku6mK2ptm5xFTSz9aAs7DT2FRX9rbMOWWDe
-	e19uWV6Mwv5irbuoEnY/dvD8oPvzOrCqOn5Nttu6eziWwQZ+B+5HC/ApLl58sf80KspIaZX+OB/
-	meag6uU2gAMMvDHWLZ+mYgb1glmdH+8lhQg5Zjy6VpnJSMoE6Y1kLygEfcb7jMCl3PTmYTFEtTo
-	nrb0KskS34vO+TKH7xuTYLW4h/ckjuRqG02DBPC7Q8uKl0NdviPbuaYSAgnmPQh2UhujZI=
-X-Google-Smtp-Source: AGHT+IFQ7RFU2XYjhNpz4zPlGBfxB8IQy25jb9NHzoC5kJ0seGo5jh0pCCbvJquopiBKgSSVm6gg0z6EMwvFTEugGus=
-X-Received: by 2002:a05:6512:3a89:b0:598:f262:15c7 with SMTP id
- 2adb3069b0e04-598faa4d4c4mr4998838e87.25.1765978978821; Wed, 17 Dec 2025
- 05:42:58 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22CAF2BD033;
+	Thu, 18 Dec 2025 07:32:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.62.102
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1766043150; cv=fail; b=PCMYHyCLLkANm0Px2Hd727iAaWnpKO6VqmAbDkFhS57umvu07oeY2gjB4Zhi91flF0mAzpIfup0ruZRwX7qxKTsMG6BJVpstqGgIaR8hgQ7FGeN07BRYvlA+ylrUWxclqMXGvSnaUFXiDk+i+WpSAx1QRIHlNcgTy+x02HfNzrc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1766043150; c=relaxed/simple;
+	bh=Svl7fcZMm4cBhwC4MmYZE+xYSm9suoJJZSUqR8ZMfIQ=;
+	h=From:Date:Subject:Message-Id:To:Cc:MIME-Version:Content-Type; b=QpMcryiG4MaTJs3eIxp7fp++yLXKJPMXt6U64kGAwRV3dmkDcdbgp+FoqujBtk9ElcdZlGUfkhQPG9p30c3jINEKjiGPmV1mX8YHN9j1X3vyX1UZVzd6Nui1KR/8XMJ42do7xIm7zg7VCPMLRlKKnKW1wtE4Du8OKR0BnMks/w4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvent.com; spf=pass smtp.mailfrom=nvent.com; dkim=pass (1024-bit key) header.d=nvent.com header.i=@nvent.com header.b=Xat16x0S; arc=fail smtp.client-ip=52.101.62.102
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvent.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nvent.com
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvent.com;
+Received: from SJ2PR18MB5660.namprd18.prod.outlook.com (2603:10b6:a03:563::20)
+ by LV8PR18MB5937.namprd18.prod.outlook.com (2603:10b6:408:226::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9434.7; Thu, 18 Dec
+ 2025 03:59:11 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=tOU4xcvptKQkorxa5Mjs/Rc/mSLNj21oiuKO9qExyBff+0tLlmf2zy95cY3vNajmf18/cMdw1JSlqI6Ei0oOE/fZoh/+eykGzwmTYsBz/egdt7LjkKKzCcsZRoveiuPCzjQms5oc2vQTLbTEBkOlhJ61vzYfzZiWRZaNI9ngeW15U/LiJ0IJdayr77AA3fyLx+jvsm29T2Tks+DMjwdVhvJoVoydf9hBea6HtT4pkGsPGAsQzrqUZVlacADBNeZgZ0+pOyk5sZ3OvHEt3lYojexT10THhMjCReCQAHOxGHqDn4xUHgK9cO5f7Laki6J3bw28sfspHQSQOuC6tI2RPQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Svl7fcZMm4cBhwC4MmYZE+xYSm9suoJJZSUqR8ZMfIQ=;
+ b=u6LikPKvxh1JA8aCKM46NvOKwMtCi94s0Pw1+3jgDouqGh4KivaZHSm2HsOaRgSXVz+kF/RmLBThcXdDSEjHM7QNBOQrZbJc6GNDBdFMUrg43x4kvx1ILqn7DTLKn1j5Xvs7o7S4tKrjQZD90xwcCAzeq8T9iiO/M0d45TQvt/YTliDniA149BrPEmcT/UBpVAZQlJ2RJIIW5l+PhZU8sEVQcpsL+jtQZyGDcPz+LUQgWLLwLLuc+fUUeX1wpeypt5RW+aUkFtWGruyRWlEd7VDkU/1Qr+Ij2nPETi9uRFJb2uwHqwqvq8e5dHLksIJKPEHij/GzXf11GDo6MJX1dQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvent.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Svl7fcZMm4cBhwC4MmYZE+xYSm9suoJJZSUqR8ZMfIQ=;
+ b=Xat16x0S1zwr19KKtF9n+GRKMMBd8QSWEBmgK8pF+QE17HB+xtRUX/tWfvZt1jqRG+U8mYeAyK7w6AN4oRq1a244lZlBEBuRBKLFdMjevYfnrRZn8QvCl4LQ4J0YVaVpbDdDXy9Tv+2e6jMos0w7XvnOfU1mfV6zKLHlcgKHXrE=
+Received: from substrate-int.office.com (2603:10b6:a03:563::20) by
+ SJ2PR18MB5660.namprd18.prod.outlook.com with HTTP via
+ BN9PR03CA0684.NAMPRD03.PROD.OUTLOOK.COM; Wed, 17 Dec 2025 16:50:09 +0000
+From: "Kishore, Bayyavarapu" <Bayyavarapu.Kishore@nvent.com>
+Date: Wed, 17 Dec 2025 16:50:08 +0000
+Subject: Recall: EEPROM: at24: Why is at24_io_limit capped at 128 B? Safe to
+ allow 256 B on fast =?utf-8?b?ScKyQw==?= for M24M02DR?
+Message-Id: <RWWNQ2Y70SU4.503SZEVKAV0R2@sa1pr18mb5901>
+To: linux-i2c@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251210-rz-sdio-mux-v3-0-ca628db56d60@solid-run.com>
-In-Reply-To: <20251210-rz-sdio-mux-v3-0-ca628db56d60@solid-run.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Wed, 17 Dec 2025 14:42:21 +0100
-X-Gm-Features: AQt7F2rn4fUAIJmNzeBvaDU3HopJ0wrtd_f0H7TRKpgHGGrU8bW-ugZfTBQ1TVc
-Message-ID: <CAPDyKFr7DCRs_E4VfrY9-NY8-bStT9oAZaYhUZDg_y3KEW9DWQ@mail.gmail.com>
-Subject: Re: [PATCH v3 0/6] mmc: host: renesas_sdhi_core: support configuring
- an optional sdio mux
-To: Josua Mayer <josua@solid-run.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Geert Uytterhoeven <geert+renesas@glider.be>, 
-	Magnus Damm <magnus.damm@gmail.com>, Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	Marc Kleine-Budde <mkl@pengutronix.de>, Vincent Mailhol <mailhol@kernel.org>, Vinod Koul <vkoul@kernel.org>, 
-	Kishon Vijay Abraham I <kishon@kernel.org>, Peter Rosin <peda@axentia.se>, 
-	Aaro Koskinen <aaro.koskinen@iki.fi>, Andreas Kemnade <andreas@kemnade.info>, 
-	Kevin Hilman <khilman@baylibre.com>, Roger Quadros <rogerq@kernel.org>, 
-	Tony Lindgren <tony@atomide.com>, Vignesh R <vigneshr@ti.com>, 
-	Janusz Krzysztofik <jmkrzyszt@gmail.com>, Andi Shyti <andi.shyti@kernel.org>, 
-	Mikhail Anikin <mikhail.anikin@solid-run.com>, Yazan Shhady <yazan.shhady@solid-run.com>, 
-	Jon Nettleton <jon@solid-run.com>, linux-mmc@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
-	linux-can@vger.kernel.org, linux-phy@lists.infradead.org, 
-	linux-omap@vger.kernel.org, linux-i2c@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+X-MS-PublicTrafficType: Email
+client-request-id: 46fbe815-3cd6-07b0-ca6c-3d911d21dc68
+request-id: 46fbe815-3cd6-07b0-ca6c-3d911d21dc68
+X-MS-TrafficTypeDiagnostic:
+	SJ2PR18MB5660:EE_MessageRecallEmail|LV8PR18MB5937:EE_MessageRecallEmail
+X-MS-Exchange-RecallReportGenerated: true
+X-MS-Exchange-RecallReportCfmGenerated: true
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024;
+X-Microsoft-Antispam-Message-Info:
+ =?utf-8?B?V3UwMDhMUDA3MmQwVEhRVUdaVUpQQ0ZvdGVqeXhXYUtqZXRiN2xpTGZXQk5V?=
+ =?utf-8?B?TW42OFF2ZEMwWTg1b3lvanRncHBPRW1FUUdzSmNjR2N1Sm03SmhqU0JXVnBw?=
+ =?utf-8?B?ZFUvenlRN04wMkthZ2VRbWFPWHl6Q3JXb0FaWkpTRndoTW9ucTB0VGIrdFRZ?=
+ =?utf-8?B?S2xsRmU5WTZrNUxrbW1Dc2NNR3ZZQWZmclE4WFNGU1hzR3pXVUZGbk94TUtF?=
+ =?utf-8?B?clVhOUV2WXpUZTZRTlA1MGdiSEt2QWxrVUhsb3YxQk1NbEtqV2pScktvNWlB?=
+ =?utf-8?B?bXVNUTJuS0lPb1FWU1k0dnlJN01WcFlGRHVQVnJ0T2dUUEZuNmFqRWNQcjdH?=
+ =?utf-8?B?SlhXLzFJMmgzZ0p2Q3hVSTBFRUUrWnF6cjJ5Yld1QjMzZWFjRDJ1aTh5MVdi?=
+ =?utf-8?B?cDJBZmQ3UjlwZEh6WE5MNG9SeHJ0YWpldEcyS3QzRjVyMkhBYzZhTEZqVjNQ?=
+ =?utf-8?B?ZnFpRG0xRnREcVZYaHFIQ29wN1pSZ2hsZXlDRGlQQVRVaERFc2Rwd3cydElB?=
+ =?utf-8?B?TFhzZnhsMVlEUmM3R2x6REVPVlozSTFHK2FVVkJyUnF4UUFzNnc0NGRXMFow?=
+ =?utf-8?B?eU9NdHZYcmE4SW81Wi9ybGUrQUpyVVkwSFY3ZTNvVDJ2d09aN1VTQlkrbDdR?=
+ =?utf-8?B?WGtNb1RkczhHMjFwVENFdUZIekh1YmJvcVowN0JWRmpDR2UrKzNpajFyMWM0?=
+ =?utf-8?B?b1hGdmZaTmt5NmJkTXJWSGFEdzlwTUlGVEpaczZlZUl0ekhuN0NhWGJJMjR3?=
+ =?utf-8?B?TUs3NEtVTTFHV0VkdWQ3MWVpL1ptOTRWbkdOZ2FrV0V2WlB1SXhDRVFhTmpS?=
+ =?utf-8?B?c0QrN3pocDVEZDJaa0NwV1ptWnVSTzd1YzUwcjNuRi9MZGxzdUdaSHhvRkhX?=
+ =?utf-8?B?WEtHN3hiSUJUQ2VadEkzZGJ1RzlWVkl0elFpZ1NDUVh3MkpaTXllWFRWMit2?=
+ =?utf-8?B?Q2czYmN6R082UlhQZVhrL3lSWnlvYVRMd003KzRYNEhnR1RBRGZkU0x5a2xO?=
+ =?utf-8?B?YTYvbnRnb0tTMUN3TE51UHF1b08rZUFkNmJFSi9ld25YU3ljTktpNGxMUWZi?=
+ =?utf-8?B?ejFPL3N6NkE5YXc3R1kxT1U2NVkwbVpRWlQvRStsaEpZRnZnMHJXek1KTXVU?=
+ =?utf-8?B?UW02SURXR3o4QTJUSjA2ZFE3NjlQUzBiRHJPdVZURzVvU3Erc2VEU3p2YmU4?=
+ =?utf-8?B?djdBTm5FZzlxbHZYRlVKcWhvWkZ0VmVJb3I5dDdHK0FMbGNUVUhRTXdUK1lS?=
+ =?utf-8?B?NW5qR3N0MHJ0UndoRUwrWEZmZlVMbjhqVXA5YW5GU1pyeVlNWHZ1dXp1QWwx?=
+ =?utf-8?B?YjVRWHZ3dzZ6UnEyMzkydEhTSmxJOGxUdWRzakhMZ0xqck5QWVZoSHAwc2d1?=
+ =?utf-8?B?VmZsOWdNYmsxbXp5ZEZCRytoZmo3WXkxcU5hTlVvVHlXVWt4Um5MVjI1VUlY?=
+ =?utf-8?B?Mm9nRGY1Tm5ZZUtOMlp1cTNlelIySy9LMS8xdEd1aER1RjlzM2pKdGJRMzA3?=
+ =?utf-8?B?QkZweHh6MVFnRWZNWllQMi9tVUJlU3EwSUVBNmxNZDlxM2hJSm5lU2xxMktr?=
+ =?utf-8?B?QVltOE03NTJyYTM1RlVpUlNsOVpINXlsWFRBaXhuU1N4TkJmWjFDM2daUEpW?=
+ =?utf-8?B?ZFFOdVl4QTdNSVZUZ21WbWY3VVU4eEVTQ1R1U0JZNHFxaHZvaGVYNElwYXdI?=
+ =?utf-8?B?azhrYnFKVDJlNldNWDhNT2RRcUduSDNMN2krWnBNMXJNL3ZxOW5vV3I2NFpY?=
+ =?utf-8?B?Z29pUFJOTThuT2xRZHRDYVRWZEJOcFF4ZG9uZXloZlJUb0c0bjRONTFkOUNv?=
+ =?utf-8?B?eFdueStCNWNVblVVcFg3MDhJVDAzY3QxVHd6M0lPUERoYnNCK0Q2cFl3eGNi?=
+ =?utf-8?B?VDUwek1BMkxlUng3UWRzcDZHTGxGdXpTM09rVlUyUkNTUFEzMWh2b2lzZ3d5?=
+ =?utf-8?Q?5KXobtuBEdWzFxl7cZt6V3SX/4L6tHVu?=
+X-Forefront-Antispam-Report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+ /1cV1BI8JGLQqAW84qzwYiS44/r/wYGGkb4QayTi1DSNJL/NmkgcAKFmWLf6vOBNPBttDi8NwbeHu3q+/ZY0xHAUbFAqJWMcWXcXymFrJ6N94GLmv7lrW7kls3dEoTc1VQH94uxRXUF6GShcdu8Xrl893CmQt9yrm00af7CM7HF2dpPcua7a2bsduDvzH+HbpwhwZR1+RL3amXvTDT57JtOxQ79IyeSoKInNOvdTkx3KQ5rWOvieipC43mGx96+Ht9ZlI0QuWYjmnI1TWqzNMF0URTBJIHToyHtegZdwzV6xcokLvun6DM5MumFzNqU1S35uYd7OPEMrFfSXXFgb27sWzRSn1wiX0tm035hXERNk9zhpGBL5bjma06x4kUpWM+j6r5V304sS8QmZ5C+IgDu/uEZTwv8s2i/Qf8z+yuw=
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: HttpSubmission-SJ2PR18MB5660
+X-MS-Exchange-CrossTenant-Id: 383182c1-2cb8-4f06-be5c-5d1a58e2137d
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Dec 2025 16:50:08.3142 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id:
+ 4046e55a-2309-4b88-747a-08de3d8c570e
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR18MB5660
+X-MS-Office365-Filtering-Correlation-Id: 4046e55a-2309-4b88-747a-08de3d8c570e
+X-OriginatorOrg: nvent.com
 
-On Wed, 10 Dec 2025 at 18:39, Josua Mayer <josua@solid-run.com> wrote:
->
-> Some Renesas SoC based boards mux SD and eMMC on a single sdio
-> controller, exposing user control by dip switch and software control by
-> gpio.
->
-> Purpose is to simplify development and provisioning by selecting boot
-> media at power-on, and again before starting linux.
->
-> Add binding and driver support for linking a (gpio) mux to renesas sdio
-> controller.
->
-> Introduce generic helper functions for getting managed and selected
-> mux-state objects, and switch i2c-omap and phy-can-transceiver drivers.
->
-> Signed-off-by: Josua Mayer <josua@solid-run.com>
-> ---
-> Changes in v3:
-> - updated omap-i2c and phy-can-transceiver to use new helpers.
-> - created generic helper functions for getting managed optional mux-state.
->   (Reported-by: Rob Herring <robh@kernel.org>)
-> - picked up binding ack by Rob Herring.
-> - replaced use of "SDIO" with "SD/SDIO/eMMC" in binding document and
->   commit descriptions.
->   (Reported-by: Ulf Hansson <ulf.hansson@linaro.org>)
-> - Link to v2: https://lore.kernel.org/r/20251201-rz-sdio-mux-v2-0-bcb581b88dd7@solid-run.com
->
-> Changes in v2:
-> - dropped mux-controller node from dt binding example
->   (Reported-by: Conor Dooley <conor@kernel.org>
->    Reported-by: Krzysztof Kozlowski <krzk@kernel.org>)
-> - Link to v1: https://lore.kernel.org/r/20251128-rz-sdio-mux-v1-0-1ede318d160f@solid-run.com
->
-> ---
-> Josua Mayer (6):
->       phy: can-transceiver: rename temporary helper function to avoid conflict
->       mux: Add helper functions for getting optional and selected mux-state
->       phy: can-transceiver: drop temporary helper getting optional mux-state
->       i2c: omap: switch to new generic helper for getting selected mux-state
->       dt-bindings: mmc: renesas,sdhi: Add mux-states property
->       mmc: host: renesas_sdhi_core: support selecting an optional mux
->
->  .../devicetree/bindings/mmc/renesas,sdhi.yaml      |  6 ++
->  drivers/i2c/busses/i2c-omap.c                      | 19 ++----
->  drivers/mmc/host/Kconfig                           |  1 +
->  drivers/mmc/host/renesas_sdhi.h                    |  1 +
->  drivers/mmc/host/renesas_sdhi_core.c               | 16 +++++-
->  drivers/mux/core.c                                 | 67 +++++++++++++++++++---
->  drivers/phy/phy-can-transceiver.c                  | 10 ----
->  include/linux/mux/consumer.h                       |  4 ++
->  8 files changed, 89 insertions(+), 35 deletions(-)
-> ---
-> base-commit: 3a8660878839faadb4f1a6dd72c3179c1df56787
-> change-id: 20251128-rz-sdio-mux-acc5137f1618
->
-> Best regards,
-> --
-> Josua Mayer <josua@solid-run.com>
-
-Looks like this needs to go together or if someone can host the common
-parts via an immutable branch.
-
-Anyway, I am expecting some discussion or update for patch2 first.
-
-Kind regards
-Uffe
+Bayyavarapu.Kishore@nvent.com would like to recall the message, "EEPROM: at24: Why is at24_io_limit capped at 128 B? Safe to allow 256 B on fast I²C for M24M02DR?".
 
