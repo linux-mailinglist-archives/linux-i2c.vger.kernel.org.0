@@ -1,163 +1,187 @@
-Return-Path: <linux-i2c+bounces-14633-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14635-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A623CC9763
-	for <lists+linux-i2c@lfdr.de>; Wed, 17 Dec 2025 21:11:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 31F50CC9851
+	for <lists+linux-i2c@lfdr.de>; Wed, 17 Dec 2025 21:50:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 64C2F3022F11
-	for <lists+linux-i2c@lfdr.de>; Wed, 17 Dec 2025 20:11:48 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B898A3011766
+	for <lists+linux-i2c@lfdr.de>; Wed, 17 Dec 2025 20:50:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF4F72FDC5E;
-	Wed, 17 Dec 2025 20:11:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 464202C08C2;
+	Wed, 17 Dec 2025 20:50:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U2uLDuH3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kQAnPx7B"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3EDD28DB76
-	for <linux-i2c@vger.kernel.org>; Wed, 17 Dec 2025 20:11:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3A18203710
+	for <linux-i2c@vger.kernel.org>; Wed, 17 Dec 2025 20:50:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766002307; cv=none; b=akz8/LQ4lyAq36gi4bJb1rFxK+GMyH7Akzn43uJzSD8/jdhhnxhnMDag/KsJrr0hiIaRzJa3hyPsOwIjZVThk7Z49wmAKl9M+uPiyCOOzi7Ai9K53s3PfUVemYMrMHAjyPaKu8eg4rUgflzuuff2pkw/I9WIZR7jXSe9j+A2TRs=
+	t=1766004605; cv=none; b=UiNFZvczaksVH7obGU1xYBqI5BTjK9IbBFdp9fGB6roiiANVvoD6lMItOcSU2D1Pbl7nr5Wvham158P5ha3ZqAMXw7unUe3htWT4IvEaa1IRB2l87hSDPV1XROcGTUxsmSN9Ag8eNpLMoJv/v6PlelbxYzsvGJoWnlgqLnzzo58=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766002307; c=relaxed/simple;
-	bh=1wqbLrmTsqabNBh3vicn4GMNQDBBlE5lOizlvcD0qhQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=m9lLwmtmVxaryy8DaD9H2/XjGZ3CANnpoyls3nZCS9VZ7WSFsdwVl0iik5Wa2wj4bL7m0TBK7B38RazKKE7vmvZrq7r2CZcETHOmBlccWHIgRtfuuNcLIr59w1Vo5QPX7hRdGyhJoCPOhQiQEOtZe8SavlwrsJvwmEu8rtP12Cc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U2uLDuH3; arc=none smtp.client-ip=209.85.208.45
+	s=arc-20240116; t=1766004605; c=relaxed/simple;
+	bh=uZmeU6/lH+Oyx+HJkcBRoHj9KuSaQoSzqyS+vqTlh18=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Fhh9kctCKKDoOoLtFTnztdFvYi/Br8vJuplo1v26BuIF+2mHLusWz6A1iW8GUWqFWk6zhlIttz1YP+XpYbeO5Uk/iLBJb1YdPEGWA6kLoh7JhN1oZMHz7PPuajDL3y5hR+kI9F08i8suyGXs/3iNATaY9mWuZ8Ne/TCPp1s/vS0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kQAnPx7B; arc=none smtp.client-ip=209.85.216.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-6498850d3f6so7955747a12.0
-        for <linux-i2c@vger.kernel.org>; Wed, 17 Dec 2025 12:11:45 -0800 (PST)
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-34c902f6845so4916867a91.2
+        for <linux-i2c@vger.kernel.org>; Wed, 17 Dec 2025 12:50:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766002304; x=1766607104; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CjMTRFXSIIwwu0CfvU8Gn+sD387060ylgnfIqVwMb2A=;
-        b=U2uLDuH3zz/3Qef/1pTYJa9uAP7VWWNXBsgxnV8Zoruh5+jRcdYYS7JRuEEBHYAmc4
-         umCsaGIySRD/w2U42ZAx4PzbusxAzbM6+9aKtQgUlltV+UHk7G/Oe4BJG8pMDYZ9SbiB
-         mGHW1Qgm1310fGaJIDA54mU76hIXg7sXwCjeRc9mqzU2LDl0daYxzSlSlV14E1k5+V9a
-         3emTWpmQfGwA+X185fwfUz002B3nc0TgwioKbO/hSjXxEIibNTzeJLDfmkq0G+PuyIya
-         9heQ0fTs+QKFiwHzIGpUUdCPoJ3EyUs7FOhSN8hS+Md+tjb2pyy+B+DjrJgqeX6QSOVu
-         O8Lg==
+        d=gmail.com; s=20230601; t=1766004602; x=1766609402; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9Vqf2Irqa47r0MODYS/qJupfOYkoqLvIbxbr/hC0OZI=;
+        b=kQAnPx7BigFTGUF9lbe3jYFGWCvd7IeQBoFWIs6m/bYzVtPLwnNxBfo0zxYPQfHmRE
+         YeTyHLXvBmUqEOU61Ys2Utx2zXsB/F38zEi8bc9Pn+Ezb8RHiOKC1nXt+jCp+RDq5l7k
+         dc5bK+3lFlT5NyWfSQ/dKekToBlFCsJaxRPzP6dbfh3OBgaiLJME0x/juG4121hKPN4S
+         AOQS8B8kXn3rcD0pB0RBHFp7YyIRakHrToggdHv33mYG4qTY07VcTuTmsuE4kQUxVZbv
+         47bzw9HmQD1mw2i6k6jv8FIBrPYjzB5AkEq+ps1IAocy9eg0Cz3EdEVhjOOG1SuC5lmr
+         NWew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766002304; x=1766607104;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=CjMTRFXSIIwwu0CfvU8Gn+sD387060ylgnfIqVwMb2A=;
-        b=cFpDAK7jXZM6nkld8hMStFFJnLIi5BysvKPQUeiFmcorN5mNuoCyC9cilHVkUlf/++
-         WjUJLnJXNvtMAC1djVu87TQTaYOZQJ+KiGTgpU57aUePG/VTYlpcH30VxfLTZA6S4WjA
-         eFW2pZFVY2k+uUSJ/ykC+oQRXY5LlvG7aiwkJRRvK9TrTQRVUOMTQgSt0oASRRcQxPLW
-         AKmp1NEtLAICH9jLBKmaja8Go6fdgUQqeTPV8MHXJfuSY38DQaWOYO/pxmZ12jl/Qz0J
-         M1ZaB9mBqdeKGDZ/mP1ydD+W2JEvTIJPSEKoAs/PS750MUCLg95zkV9O/nnwjzyF4naE
-         WPbA==
-X-Gm-Message-State: AOJu0YxCrSVQ/WqjJs2IOOGEW9TsPmj0OrPkvnyjPlrkkHHmXQX4v/e/
-	G3nQVJ18tNPM5PhqV/1afgw5DQbwyngnjSjRgtaDDN6Lw94FJBMKFA37h844njmmMb+7heg5jDp
-	1Kx0Xze3HEMrg2uH5cLf9Jtpl5fQDass=
-X-Gm-Gg: AY/fxX5pvlEIpexm1yd/e32X6Y8gxcHViwRB5yuKeZd11on70x2CQ2rf9UXyN6CeG07
-	LmLzZRxvKf93nsa90dVAcNrUOAYMsoREP5BSrFFTO6oac2N1S8M0mV7x5Nx4s6h4ziKSyBs+CiC
-	jwFaPueuV+4F3wE2T+TZQN3Y3JpJtsIk3qNb1rGKc4SM2lVyCu6NYW74h83Mc8yy73RBieN4jHg
-	0j7dSJrWKGt0heitLpqWN6fwGt6u0UFbkyh6c5wnFWIKoda+zvpHnwrV+k8Dazc1A522RTku3m2
-	QunAUMXf
-X-Google-Smtp-Source: AGHT+IHo8p3aJC8H2lJqwNXZrwCesauwRST/cl6nQuObKpl7dr5JAOOMHwAP1daH7lSvbZjZKoimQS5u37D/VsUd9Ko=
-X-Received: by 2002:a05:6402:40ce:b0:64b:4624:779c with SMTP id
- 4fb4d7f45d1cf-64b462479e3mr2125449a12.26.1766002303779; Wed, 17 Dec 2025
- 12:11:43 -0800 (PST)
+        d=1e100.net; s=20230601; t=1766004602; x=1766609402;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9Vqf2Irqa47r0MODYS/qJupfOYkoqLvIbxbr/hC0OZI=;
+        b=Lf9kztQGjowVkw12/1i4X8UlpZAP4O/2EGxg7t1pOQxQuQgJ70oqoCCeXSv7kHQl8A
+         WtNJd9CC4Rchr9e7tEnEzGpTaJB2cGTa0osk9dAN2pvXlvpTkIbASl34LVgf7rUvdEaK
+         kszqwU7xV6yrk9ZztUfhI2/544wt+fUMBA0hs29xJUgaNBvgClWrVrOtsqdhyCMbIOrj
+         Zsyu4Uw97kpbqEqp6+6XPBV/yIbON4bpuBLVifthvG+weik/Q1emBH5K8OCRc/U1vLl1
+         GzdnCgTa/QSnynV3OP1CA5e0c5F+xeYJAtfKJrQ8MxZbVEYLZVY5YLUOqY2q+4JOBLTQ
+         bMyA==
+X-Gm-Message-State: AOJu0YyKKZNwu1vsBBVF/q7BrEvHhGGdNx/ofzrZi7sc2WvnSZklPSPL
+	hGFz0SmJhiu7qi/3ZpliUHeKkcVc9dQjeM35U77BBucdfWiAaujZMoeD80h7lA==
+X-Gm-Gg: AY/fxX71twBRhjccJsSVFP/oTjNsRupamAvgJmNyttbiy69R53JR5YMYcC5yLDaCXLW
+	+rLvPbh8oegXrAXkQgK9jfug21CW5zeE2dlqxHFBhIhxGQblv6fLm2BP769PvhhaiefGzgUfZjM
+	7PdF1m9yeFLGrxqFWjQD3AuAJn2OhMvS+719+Gejp1nwZRwW1Q6hzo8fJvVzPdeblQulNk+Hd/i
+	pF3Kn8W/YJJ1veOYQGBVloiyfJxcDKoT4VzBsbu5GZPKjRRksEr6OuJeGglQARRwZkM1e8P/8kV
+	03mIT5XB9djLqRVTPK1o8VB/hvK0XA+haJgpGxt11O1Unqnc1Rg87XfHqymi4QZ+bJpG3Y/bGRN
+	296odE3rZCBCGh9t+GnlXkLqdty0vAknkV/4gVOQRFC8zFYBS6k0iLf2vKQ==
+X-Google-Smtp-Source: AGHT+IGUYpYXdBuUIy2BGU5YINHw7vHPbEi5/3qNwcr/8j7+nQe807tukrqvmnkcXYlc9GyRKCPBGA==
+X-Received: by 2002:a17:90b:3f4f:b0:34a:4cc0:9e38 with SMTP id 98e67ed59e1d1-34abd71f4dfmr17296990a91.10.1766004602462;
+        Wed, 17 Dec 2025 12:50:02 -0800 (PST)
+Received: from ryzen ([2601:644:8000:8e26::ea0])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-34e70dcc7bcsm434558a91.13.2025.12.17.12.50.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Dec 2025 12:50:01 -0800 (PST)
+From: Rosen Penev <rosenp@gmail.com>
+To: linux-i2c@vger.kernel.org
+Cc: Andi Shyti <andi.shyti@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	linux-arm-kernel@lists.infradead.org (moderated list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES),
+	linux-samsung-soc@vger.kernel.org (open list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES),
+	linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] i2c: exynos5: simplify probe with devm
+Date: Wed, 17 Dec 2025 12:49:44 -0800
+Message-ID: <20251217204944.10862-1-rosenp@gmail.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251217063027.37987-1-rosenp@gmail.com> <20251217063027.37987-3-rosenp@gmail.com>
- <e3276f37-a7e0-46f5-8f64-fa9e5919b5d8@alliedtelesis.co.nz>
-In-Reply-To: <e3276f37-a7e0-46f5-8f64-fa9e5919b5d8@alliedtelesis.co.nz>
-From: Rosen Penev <rosenp@gmail.com>
-Date: Wed, 17 Dec 2025 12:11:32 -0800
-X-Gm-Features: AQt7F2oLiQIz2msKPEv9cFRF4CDRJPOAb79TxK9KZHVPiTP-z27580ditzAYkgQ
-Message-ID: <CAKxU2N_Z_HdHCtcG3B7i0zEn-XPnb+-LTuFL3nG=nt0k8O6DxA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] i2c: rtl9300: use of instead of fwnode
-To: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-Cc: "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>, Andi Shyti <andi.shyti@kernel.org>, 
-	open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Wed, Dec 17, 2025 at 11:43=E2=80=AFAM Chris Packham
-<Chris.Packham@alliedtelesis.co.nz> wrote:
->
-> Hi Rosen,
->
-> On 17/12/2025 19:30, Rosen Penev wrote:
-> > Avoids having to use to_of_node and just assign directly. This is an OF
-> > only driver anyway.
-> >
-> > Use _scoped for the for each loop to avoid refcount leaks.
-> >
-> > Signed-off-by: Rosen Penev <rosenp@gmail.com>
->
-> I thought the trend was to move to the more generic device properties
-> rather than using of_ specific APIs which is why I wrote the driver
-> using them. I agree that this driver is unlikely to be used on any
-> platform that doesn't use a device tree so if Andi is happy with this
-> I'm fine with the change.
-I've gotten the opposite advice on netdev before.
->
-> Reviewed-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
->
-> > ---
-> >   drivers/i2c/busses/i2c-rtl9300.c | 9 ++++-----
-> >   1 file changed, 4 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/drivers/i2c/busses/i2c-rtl9300.c b/drivers/i2c/busses/i2c-=
-rtl9300.c
-> > index f2aa341a7cdd..672cb978066d 100644
-> > --- a/drivers/i2c/busses/i2c-rtl9300.c
-> > +++ b/drivers/i2c/busses/i2c-rtl9300.c
-> > @@ -371,7 +371,6 @@ static int rtl9300_i2c_probe(struct platform_device=
- *pdev)
-> >   {
-> >       struct device *dev =3D &pdev->dev;
-> >       struct rtl9300_i2c *i2c;
-> > -     struct fwnode_handle *child;
-> >       const struct rtl9300_i2c_drv_data *drv_data;
-> >       struct reg_field fields[F_NUM_FIELDS];
-> >       u32 clock_freq, scl_num, sda_num;
-> > @@ -415,15 +414,15 @@ static int rtl9300_i2c_probe(struct platform_devi=
-ce *pdev)
-> >               return ret;
-> >
-> >       i =3D 0;
-> > -     device_for_each_child_node(dev, child) {
-> > +     for_each_child_of_node_scoped(dev->of_node, child) {
-> >               struct rtl9300_i2c_chan *chan =3D &i2c->chans[i];
-> >               struct i2c_adapter *adap =3D &chan->adap;
-> >
-> > -             ret =3D fwnode_property_read_u32(child, "reg", &sda_num);
-> > +             ret =3D of_property_read_u32(child, "reg", &sda_num);
-> >               if (ret)
-> >                       return ret;
-> >
-> > -             ret =3D fwnode_property_read_u32(child, "clock-frequency"=
-, &clock_freq);
-> > +             ret =3D of_property_read_u32(child, "clock-frequency", &c=
-lock_freq);
-> >               if (ret)
-> >                       clock_freq =3D I2C_MAX_STANDARD_MODE_FREQ;
-> >
-> > @@ -449,7 +448,7 @@ static int rtl9300_i2c_probe(struct platform_device=
- *pdev)
-> >               adap->retries =3D 3;
-> >               adap->dev.parent =3D dev;
-> >               i2c_set_adapdata(adap, chan);
-> > -             adap->dev.of_node =3D to_of_node(child);
-> > +             adap->dev.of_node =3D child;
-> >               snprintf(adap->name, sizeof(adap->name), "%s SDA%d\n", de=
-v_name(dev), sda_num);
-> >               i++;
-> >
+Cleans up probe a little bit and separates preparation from enablement.
+
+Also use devm for i2c_add_adapter to get rid of the remove function.
+
+Fix return code for failed clk_get_prepared. It returns PTR_ERR.
+
+Signed-off-by: Rosen Penev <rosenp@gmail.com>
+---
+ drivers/i2c/busses/i2c-exynos5.c | 41 ++++++++------------------------
+ 1 file changed, 10 insertions(+), 31 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-exynos5.c b/drivers/i2c/busses/i2c-exynos5.c
+index 9c1c5f3c09f6..fcc062910497 100644
+--- a/drivers/i2c/busses/i2c-exynos5.c
++++ b/drivers/i2c/busses/i2c-exynos5.c
+@@ -903,23 +903,20 @@ static int exynos5_i2c_probe(struct platform_device *pdev)
+ 	i2c->adap.retries = 3;
+ 
+ 	i2c->dev = &pdev->dev;
+-	i2c->clk = devm_clk_get(&pdev->dev, "hsi2c");
+-	if (IS_ERR(i2c->clk)) {
+-		dev_err(&pdev->dev, "cannot get clock\n");
+-		return -ENOENT;
+-	}
++	i2c->clk = devm_clk_get_prepared(&pdev->dev, "hsi2c");
++	if (IS_ERR(i2c->clk))
++		return dev_err_probe(&pdev->dev, PTR_ERR(i2c->clk), "cannot get clock\n");
+ 
+-	i2c->pclk = devm_clk_get_optional(&pdev->dev, "hsi2c_pclk");
+-	if (IS_ERR(i2c->pclk)) {
++	i2c->pclk = devm_clk_get_optional_prepared(&pdev->dev, "hsi2c_pclk");
++	if (IS_ERR(i2c->pclk))
+ 		return dev_err_probe(&pdev->dev, PTR_ERR(i2c->pclk),
+ 				     "cannot get pclk");
+-	}
+ 
+-	ret = clk_prepare_enable(i2c->pclk);
++	ret = clk_enable(i2c->pclk);
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = clk_prepare_enable(i2c->clk);
++	ret = clk_enable(i2c->clk);
+ 	if (ret)
+ 		goto err_pclk;
+ 
+@@ -958,35 +955,18 @@ static int exynos5_i2c_probe(struct platform_device *pdev)
+ 
+ 	exynos5_i2c_reset(i2c);
+ 
+-	ret = i2c_add_adapter(&i2c->adap);
+-	if (ret < 0)
+-		goto err_clk;
++	ret = devm_i2c_add_adapter(&pdev->dev, &i2c->adap);
+ 
+ 	platform_set_drvdata(pdev, i2c);
+ 
+-	clk_disable(i2c->clk);
+-	clk_disable(i2c->pclk);
+-
+-	return 0;
+-
+  err_clk:
+-	clk_disable_unprepare(i2c->clk);
++	clk_disable(i2c->clk);
+ 
+  err_pclk:
+-	clk_disable_unprepare(i2c->pclk);
++	clk_disable(i2c->pclk);
+ 	return ret;
+ }
+ 
+-static void exynos5_i2c_remove(struct platform_device *pdev)
+-{
+-	struct exynos5_i2c *i2c = platform_get_drvdata(pdev);
+-
+-	i2c_del_adapter(&i2c->adap);
+-
+-	clk_unprepare(i2c->clk);
+-	clk_unprepare(i2c->pclk);
+-}
+-
+ static int exynos5_i2c_suspend_noirq(struct device *dev)
+ {
+ 	struct exynos5_i2c *i2c = dev_get_drvdata(dev);
+@@ -1036,7 +1016,6 @@ static const struct dev_pm_ops exynos5_i2c_dev_pm_ops = {
+ 
+ static struct platform_driver exynos5_i2c_driver = {
+ 	.probe		= exynos5_i2c_probe,
+-	.remove		= exynos5_i2c_remove,
+ 	.driver		= {
+ 		.name	= "exynos5-hsi2c",
+ 		.pm	= pm_sleep_ptr(&exynos5_i2c_dev_pm_ops),
+-- 
+2.52.0
+
 
