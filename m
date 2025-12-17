@@ -1,83 +1,83 @@
-Return-Path: <linux-i2c+bounces-14618-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14619-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1823ACC641E
-	for <lists+linux-i2c@lfdr.de>; Wed, 17 Dec 2025 07:31:13 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id C80EECC6418
+	for <lists+linux-i2c@lfdr.de>; Wed, 17 Dec 2025 07:31:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 1B7A5300A8CC
-	for <lists+linux-i2c@lfdr.de>; Wed, 17 Dec 2025 06:30:54 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id BD9FE3016893
+	for <lists+linux-i2c@lfdr.de>; Wed, 17 Dec 2025 06:30:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4B0630C631;
-	Wed, 17 Dec 2025 06:30:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 210BC30C601;
+	Wed, 17 Dec 2025 06:30:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i8sKF/T7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RTsU85Al"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EC3030B536
-	for <linux-i2c@vger.kernel.org>; Wed, 17 Dec 2025 06:30:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC32630C347
+	for <linux-i2c@vger.kernel.org>; Wed, 17 Dec 2025 06:30:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765953050; cv=none; b=W+orsBYEB/+44ElbVOuPjcUSGJulg2jV6WETIpeEkNLOOhFMuw05a9RV9uf8KNOpG/omhVcPHsWvtF1ILKDc+or1GyLfXRz6OE0RHm4lPiFEFobKbnXcip4or7b96lGrIMI8bzKKWmFPVS67XNK/cESweyD4RiQbV6iqJ7qx0IY=
+	t=1765953051; cv=none; b=rUprT4XTsy+7Mme/aQeAuEmtfsThV1NC4Fo5T0qTN7rES1Ev6ewl82EXQPRjG89tEGDGW6r4NsmVA7LAfJ34J3B3kErsk0yNfar2KBtWH2TtKmXrz4gsDAt2QtZCS3WccWQ3zjRwEAS9EDhb4rOYYAkBC6YIRi5e8NNUdBp8Nlw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765953050; c=relaxed/simple;
-	bh=m9lGFFqXYj//oKEcp7wu52ulCezQ86DMkY+pBK1RPiQ=;
+	s=arc-20240116; t=1765953051; c=relaxed/simple;
+	bh=BKCGGkCIogfhhQC9s1I+BRs/zADpJ6Pj0AbDCqFLIDU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QOe6gCPLZMs3+XtPv58T9+zz6b/k1jAHjcrLQbUO1ZB9Qq0Rpor8GGv2QUD9+8P+vvW7Q6cSJrmhaO86B6yqkGgS6cGRBHywQ9gQ3R8r73TACO1ZkIE9HaorFpBGNxX1lh6jLF6dlU8XCW8A/FLAuLfXM0EmTgxBLlPWjz56pd4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i8sKF/T7; arc=none smtp.client-ip=209.85.216.46
+	 MIME-Version; b=uHtGe2980TsjMl/MPjyx83qD3ghxyGrOPV0xLC/TnApq25dr7FHABGIxAyUNbXTOHOvecTEMymFNfFNJM/dAiAV+Z9CZXi8NyKcBT/KLSzT5qx0igTVFK+k+MwE4PvlXimsHRQvQR87zFyq0oFQTwdvlL1JLnqQQfceVUXSyCHQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RTsU85Al; arc=none smtp.client-ip=209.85.215.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-34c708702dfso3419468a91.1
-        for <linux-i2c@vger.kernel.org>; Tue, 16 Dec 2025 22:30:47 -0800 (PST)
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-c0bccb8037eso4558101a12.1
+        for <linux-i2c@vger.kernel.org>; Tue, 16 Dec 2025 22:30:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765953046; x=1766557846; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1765953047; x=1766557847; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Up+MXp1S73xUe3fM3leG5ONITobzvQqFUKCH5Mxa1ds=;
-        b=i8sKF/T77ClP38RoZ2yWcD/nIX54C4q4xL8vFNsedbueam0RT9OhNXLOnREMqGYHRV
-         e2gDIi6VoYZ2vwCtE6b9Oyau8omdfkG2h2vrWb/tExGOIv+yKvnpluNGUiqeFjPWAP/G
-         niiFEGbKIsoPTw6an3/YmsCIc2XaIbcWLfrmuy9kVYs8142NOmr+DR3zcpdfM2c0XLKG
-         7D3OJljjiqwC6NkmK5xZKpLsxR4vp/G0uwS4YF03xTFMcqLUgFSjSF9y472TTzL9UkJV
-         72ZWEcwalZoqLSpGUj0k6NP9SrpfGFnLunpmDPbsn3nDyz+8gP0Ulrqn8t+O2/KMBgKr
-         Y75g==
+        bh=ylRM1U4MMGRSOvQPR+On5jioG4hsiZTnPVhDoCW0brQ=;
+        b=RTsU85AldwnR8QONi1/HlVis+OeWWKVKCbuv/NjVXyVqqFG8caFDJteySYWnjHhDAf
+         5evXyYnufLwFJ6b485n8WrFtLzPmtZ58g5qYdeu9Ginj2AThspxeq46QIgrEkLJXeslc
+         o2l4WsJZ3LNjLtEFPOfJiD7uOgtXpX9GbAB9idwoGIK1qnFId1YWO85kzo3J6KYY0f55
+         plSkAqpzGY0MhtV3+rfjrEVA/oBzXRlJ1VPBLKOzNoiV9eF2VwaS8FwNUFOx304MSRJ4
+         qrJrCInOVXbQp281sv9nBdBhoDC6eNgFZFgJcN7bNK7FYUFO+JeUUYnAFKU0iAggNxfd
+         ZTxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765953046; x=1766557846;
+        d=1e100.net; s=20230601; t=1765953047; x=1766557847;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=Up+MXp1S73xUe3fM3leG5ONITobzvQqFUKCH5Mxa1ds=;
-        b=V8E9RBtOrlRDKPOT/SZSNPyl8NQB5xenoc/R3/IftJLgZIbC1TD4YF5V3ZFc8dTfUR
-         u94FlOQb0x4J5GaMgXFiUmd1V8TtCfgKm14JIl25fVY3wOo7/+93Y22CFMMygk/K9dqO
-         wpzbxB2MLIybSuVGS3pbRxOD/93R0bArRjGaxQEBNTRFN1740o0YzZAY6cUqBVHmuOqu
-         LZzOnVWI6DrLzBVGM3CwaMhm8MR7kv3AGwHcnBXlCHqfDK3pcAx1GhRW68RjKMRcmJ0l
-         7vIh5hCw3BVnkaUv0E3Esp/WZqnHIhEeo0VO1G6jlTr5bNPrL0uYTg2al6jfnbBxThxT
-         zRiw==
-X-Gm-Message-State: AOJu0YzrK7PlbV0k2CLSsljkz52hHXN5NgZz1M2GPZxGgU0Ue8a8oK6V
-	e0jQKNyHpiRBrutt/T9Byvc/gpn2ewFAZnd01UD4Tq0b754DFIPe2cauofZq5w==
-X-Gm-Gg: AY/fxX4868Zb4mrA/iQz5+8mjimi8vKZoIDOwYUVOX4YBGYGGBEvumpkMowkaUSt4lz
-	4ERMYyBk188j7C89zsGCgTkV+kVaA4JeO34fpNMjRDoR4IAYXsd9tALZeItHQnvNZbnAOay1Ejy
-	VEAV7ExoUkqGMmkzmQYpAIDRCArPQGPD/nZ2xKzvuN2vlfdMl7YxOc2iBak5jdljXyTEo/FbtoY
-	gT2BXaxkFGZoxXMyv2biJeECQ/VlgAuT7PDBSHQQcJkAea+B6Ev/ZXsAR5GQ5m0yj0P6F54e3Ov
-	osiMh8yd3hyKj2IDDb9wFAwB0d8IbivJBWH1MVGgZP0oDwVs/SqCcOCgCBo34M7eipNgpE7PmR6
-	FThIzFelNRkG+MCFfQB4AuJFC46R9FET9/uelbDlb1CJdM0Efr0A4i0ukaA==
-X-Google-Smtp-Source: AGHT+IGMDEj9S/3j4e2k+6y4PBuznFhugbi5r257/hfwvZzCF0c0qd5zPSpDnkWcRNP70gnlMkCDSw==
-X-Received: by 2002:a05:7022:98d:b0:119:e56b:9583 with SMTP id a92af1059eb24-11f34bd9048mr13515132c88.8.1765953045757;
-        Tue, 16 Dec 2025 22:30:45 -0800 (PST)
+        bh=ylRM1U4MMGRSOvQPR+On5jioG4hsiZTnPVhDoCW0brQ=;
+        b=AJMBrBtl3+1EyFjDBozLQm9xoCDYeN98kUzBDqysvRWmPQ9M78o1GrnPWQxfa72Z0H
+         9ZhjvEAInRvtAThL/tU9yK7gk7DfmaMn5plqG/H1xVcSCT64oS1AIf3dluPiWnpxbN+V
+         j3LwBNs9vJGBoCULt3vUIKhfbyrIzMWr8POWbkbJ9ut30fAR0dsjz4n7YqQiQjXdYUON
+         y+8nTXdMSo1a/vkagK8Sp3shkA421rhTeZzA4DuihCSTt+Snn880V+06qAnaPz/3D90f
+         TA8y6pvUisgSENLk4f2eh4zJi++yhZ5MFvfJiKIBFuTCEckCa7WrYOOr5qudQacMQrXy
+         pdbQ==
+X-Gm-Message-State: AOJu0Yw64d113nXVOnHRO8Z+yCa+azYCxtUqcJck2/pvD2R+rx4Rp7hP
+	qA9YIXGYKKk80K85ZwdQFVcASSD+P4TdlSI1bQ4Lc2BtH1QTSY600bKvmGUKpg==
+X-Gm-Gg: AY/fxX6Sn3Kf6BUL/YlTlGSvuQUdpyWzqp+bRhMoBWdi0IbroM6+PPzu1hac310hIWA
+	oXHr6ElpWJE8pZzV9QBb15zqUmGipJiU+mjYstvCzqVgACuSSCwosaqNMWY5+j0AflkdwoxygXq
+	IqyNGAI+okY0mq+oj410m2k7HmmUyULCTdwBo9engOLYrU2UIbIBEqSUghVzucS70h9tCWktxtt
+	b8YMRB+tAhHQDeuJjW95P9euE3OkzYypVLvU8FgJGxuPCnhvJuEJBmLQs80ifnlDo++IRvVnkZ5
+	dMQ4gHTktJlsMFfn8GscaQDDKpNHQuYxw+LTuMEKo1kDthqD1pPTO5HibgCYzevxsjK0xdOSAX3
+	5IoSZXI6GCk18bVYyGTvWNy+SKG9M3x3oEYFcvhQy38Uy6hkoHr9LYaLoloX/+8sWa2FO
+X-Google-Smtp-Source: AGHT+IGyHUVtFpcFd5Z73Us+pntiVw+FgIuFO+DpOcQDZYmAx0PzCTgLGReFIW5FKwwkZUuUNChQHQ==
+X-Received: by 2002:a05:7301:29ae:b0:2a4:3593:9690 with SMTP id 5a478bee46e88-2ac322251e1mr8419943eec.13.1765953046927;
+        Tue, 16 Dec 2025 22:30:46 -0800 (PST)
 Received: from ryzen ([2601:644:8000:8e26::c20])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11f2e1bb45csm61585357c88.1.2025.12.16.22.30.44
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11f2e1bb45csm61585357c88.1.2025.12.16.22.30.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Dec 2025 22:30:45 -0800 (PST)
+        Tue, 16 Dec 2025 22:30:46 -0800 (PST)
 From: Rosen Penev <rosenp@gmail.com>
 To: linux-i2c@vger.kernel.org
 Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>,
 	Andi Shyti <andi.shyti@kernel.org>,
 	linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 1/2] i2c: rtl9300: remove const cast
-Date: Tue, 16 Dec 2025 22:30:26 -0800
-Message-ID: <20251217063027.37987-2-rosenp@gmail.com>
+Subject: [PATCH 2/2] i2c: rtl9300: use of instead of fwnode
+Date: Tue, 16 Dec 2025 22:30:27 -0800
+Message-ID: <20251217063027.37987-3-rosenp@gmail.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20251217063027.37987-1-rosenp@gmail.com>
 References: <20251217063027.37987-1-rosenp@gmail.com>
@@ -89,53 +89,55 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-These casts are used to remove const for no good reason. Fix the types
-instead.
+Avoids having to use to_of_node and just assign directly. This is an OF
+only driver anyway.
+
+Use _scoped for the for each loop to avoid refcount leaks.
 
 Signed-off-by: Rosen Penev <rosenp@gmail.com>
 ---
- drivers/i2c/busses/i2c-rtl9300.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/i2c/busses/i2c-rtl9300.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-rtl9300.c b/drivers/i2c/busses/i2c-rtl9300.c
-index 4723e48cfe18..f2aa341a7cdd 100644
+index f2aa341a7cdd..672cb978066d 100644
 --- a/drivers/i2c/busses/i2c-rtl9300.c
 +++ b/drivers/i2c/busses/i2c-rtl9300.c
-@@ -129,7 +129,7 @@ static int rtl9310_i2c_select_scl(struct rtl9300_i2c *i2c, u8 scl)
- 
- static int rtl9300_i2c_config_chan(struct rtl9300_i2c *i2c, struct rtl9300_i2c_chan *chan)
+@@ -371,7 +371,6 @@ static int rtl9300_i2c_probe(struct platform_device *pdev)
  {
--	struct rtl9300_i2c_drv_data *drv_data;
-+	const struct rtl9300_i2c_drv_data *drv_data;
- 	int ret;
- 
- 	if (i2c->sda_num == chan->sda_num)
-@@ -139,7 +139,7 @@ static int rtl9300_i2c_config_chan(struct rtl9300_i2c *i2c, struct rtl9300_i2c_c
- 	if (ret)
- 		return ret;
- 
--	drv_data = (struct rtl9300_i2c_drv_data *)device_get_match_data(i2c->dev);
-+	drv_data = device_get_match_data(i2c->dev);
- 	ret = drv_data->select_scl(i2c, i2c->scl_num);
- 	if (ret)
- 		return ret;
-@@ -372,7 +372,7 @@ static int rtl9300_i2c_probe(struct platform_device *pdev)
  	struct device *dev = &pdev->dev;
  	struct rtl9300_i2c *i2c;
- 	struct fwnode_handle *child;
--	struct rtl9300_i2c_drv_data *drv_data;
-+	const struct rtl9300_i2c_drv_data *drv_data;
+-	struct fwnode_handle *child;
+ 	const struct rtl9300_i2c_drv_data *drv_data;
  	struct reg_field fields[F_NUM_FIELDS];
  	u32 clock_freq, scl_num, sda_num;
- 	int ret, i = 0;
-@@ -399,7 +399,7 @@ static int rtl9300_i2c_probe(struct platform_device *pdev)
+@@ -415,15 +414,15 @@ static int rtl9300_i2c_probe(struct platform_device *pdev)
+ 		return ret;
  
- 	platform_set_drvdata(pdev, i2c);
+ 	i = 0;
+-	device_for_each_child_node(dev, child) {
++	for_each_child_of_node_scoped(dev->of_node, child) {
+ 		struct rtl9300_i2c_chan *chan = &i2c->chans[i];
+ 		struct i2c_adapter *adap = &chan->adap;
  
--	drv_data = (struct rtl9300_i2c_drv_data *)device_get_match_data(i2c->dev);
-+	drv_data = device_get_match_data(i2c->dev);
- 	if (device_get_child_node_count(dev) > drv_data->max_nchan)
- 		return dev_err_probe(dev, -EINVAL, "Too many channels\n");
+-		ret = fwnode_property_read_u32(child, "reg", &sda_num);
++		ret = of_property_read_u32(child, "reg", &sda_num);
+ 		if (ret)
+ 			return ret;
+ 
+-		ret = fwnode_property_read_u32(child, "clock-frequency", &clock_freq);
++		ret = of_property_read_u32(child, "clock-frequency", &clock_freq);
+ 		if (ret)
+ 			clock_freq = I2C_MAX_STANDARD_MODE_FREQ;
+ 
+@@ -449,7 +448,7 @@ static int rtl9300_i2c_probe(struct platform_device *pdev)
+ 		adap->retries = 3;
+ 		adap->dev.parent = dev;
+ 		i2c_set_adapdata(adap, chan);
+-		adap->dev.of_node = to_of_node(child);
++		adap->dev.of_node = child;
+ 		snprintf(adap->name, sizeof(adap->name), "%s SDA%d\n", dev_name(dev), sda_num);
+ 		i++;
  
 -- 
 2.52.0
