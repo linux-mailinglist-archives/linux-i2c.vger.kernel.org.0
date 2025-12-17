@@ -1,297 +1,178 @@
-Return-Path: <linux-i2c+bounces-14625-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14626-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A199CC6DE3
-	for <lists+linux-i2c@lfdr.de>; Wed, 17 Dec 2025 10:46:11 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 493AACC7A6D
+	for <lists+linux-i2c@lfdr.de>; Wed, 17 Dec 2025 13:38:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 40A8230CBE99
-	for <lists+linux-i2c@lfdr.de>; Wed, 17 Dec 2025 09:41:54 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7C69530A8964
+	for <lists+linux-i2c@lfdr.de>; Wed, 17 Dec 2025 12:34:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5D4A33B95E;
-	Wed, 17 Dec 2025 09:41:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B807342C9E;
+	Wed, 17 Dec 2025 12:33:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="fov1zlhX"
+	dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b="A2rYCXgU"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B168338F45
-	for <linux-i2c@vger.kernel.org>; Wed, 17 Dec 2025 09:41:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E2DB341657
+	for <linux-i2c@vger.kernel.org>; Wed, 17 Dec 2025 12:33:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765964511; cv=none; b=NYuZuultSOR8ZE6fjGoPkRX0OPdhzMNDU1K7sukQzRU11XxhO9CrU7D5B3zdVYh1BpC7bsNjKYMMDkaMXbtpxhgT0XcqmICp1hq0qgX9Wz6T6U4u9y6xcXAxLnhX6G2MNPXoWbSKCqMb+k9SJXjbs6pLher/WWtMypaNUdQBsNc=
+	t=1765974839; cv=none; b=OfZrwTv+Hq9xYGUPx4Cc/swAcTUeGinTOdaBCOCnhydmBn08sJFCnePOQtX3FNOV650r+MfQZNE9x572KY6u/kvqxz7o07IYkQWMSJE204W3SZaUHsF5WsVyz08Zoed4xCaXjMXmGsd9XRUG4sp+NW6DN9o1sbz8p2MhB7H7lPI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765964511; c=relaxed/simple;
-	bh=WB1FIXZ+ZTDeazxvypntHYbSHS0KL2l6sKZxn9djhTI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iBDuovkwLflSC66TtRtHtFumsiTjNd7ODXG7W78o6o6eHHALZw0GC14sgu38eFfwkPHVajGOGsMLxEnLIgUJZOEH92lEJRq4+pDjBRewfx7ZdozkowHAHhvs7hhRp4OKAsS/fEjSwqIgmlYIRJBggYP4E7sfyp7Mra32+9oVgRw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=fov1zlhX; arc=none smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-42f9ece6387so2178968f8f.0
-        for <linux-i2c@vger.kernel.org>; Wed, 17 Dec 2025 01:41:47 -0800 (PST)
+	s=arc-20240116; t=1765974839; c=relaxed/simple;
+	bh=s8GEKXnaSXfLaP2KVal8xoX7Yub2x5YeO61XyI9SmwQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DoXPja0smA5iYzCkRdc8QGjHm6pi5/2LnK7y4iA2uzM9WeUawNPYuqHsipoprAH1p7Mp7ChRqFu3V+xy3EgSS0EPpSZYaVThZMGFLNTh/olrJ3sZ6WqowxtosV3pZez1BcvIp7/JQOidMgKKdAN3YPlaWqUs4seKHxt+TRtzXik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr; spf=pass smtp.mailfrom=sartura.hr; dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b=A2rYCXgU; arc=none smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sartura.hr
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-b79f98adea4so829826466b.0
+        for <linux-i2c@vger.kernel.org>; Wed, 17 Dec 2025 04:33:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1765964505; x=1766569305; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lcxqYG6DoWTCtUBGDosjwKS+VJWtzCM2tGuWprBPGSs=;
-        b=fov1zlhXM6HCs9RgqT+9cbrPtptQKNmoi2JaVABRmPrPbBeSWpFYnW/YbHyLj1f+e1
-         EMsV450QJnTtuOoqJD4Ix/vBj9hhM5d8ApUzha2FqtDY8yFE2qRIGnabH7ZhVPn351Pt
-         ZN35P8OJ07lDSGH4XGV6ZAM+Ul7EU5Bcr7gyYfwOTXk9zgtqHFLVXTW5N9uzJtARi9es
-         DVj961dZlC9qnpQgQ3bcX101H3FdsoSDp6EKzzPydOsIOVAvH+mKTDyIRlsij2YDl2Sg
-         9dcRHTXfMU73zXsnQ/sQLizBNYKVmtqe/5pXwE60BAL9O+4weNl7NQS7X1ZeYKZXKgMS
-         Rodw==
+        d=sartura.hr; s=sartura; t=1765974835; x=1766579635; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=s8GEKXnaSXfLaP2KVal8xoX7Yub2x5YeO61XyI9SmwQ=;
+        b=A2rYCXgUYr9ALJpNgKYHWr7vJr+BFYlLRilkjQiry5X9M3LQQ88mX4hFh1RagqJ6lZ
+         uLtt7f7uVrILg7+B+4YELj4FONtVCFqJA7XwsLHNNYAUI6dirg68L6UOFtUVg/pflSZn
+         976Z2ay8EvD2m28JR88LPxi35onEJ8E+FN4FGVILCcgQKmTMqb22K5nAnVyqmLxQDd6O
+         LbFKdJDvIY/Y8kWMUSdGNCbLVuKFxZCVvOnWjidEXE282hJwaojoXOnOsdvcE8Yo8AOE
+         MRm/wjI6RrNDNxlhO3goPl87r39rYRTEA/cEsAWTInxIkFYA/Fm8IQlepQjUUy1g/gnO
+         RIDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765964506; x=1766569306;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lcxqYG6DoWTCtUBGDosjwKS+VJWtzCM2tGuWprBPGSs=;
-        b=eFPvuXyAP/d04DOwZv5XGonUOERdF7WCabeEKEQj6owNh6kHHtvmxqN4MT+8ro3MAE
-         SowfJK2S97V7HIo+jLRibT7pyPWSxM4iR/9BKVWfavRhXOHNoT+8b3jM2G/k3+bJi8SV
-         NbnO5yOrUHV4LbxWZvTDDrL/agjaFeNl0Lo+veZSXp2skuK4XKqOUMuDnUntjFMXqxkS
-         O3rnbjWKRAxueh9TIy5FoLSxAWJkrx3hyI8ecwWmd0Pih1lwqBXiGpNUs3WvMjSxDHxS
-         KE/QyatlOMNGMukRISzjIarmyvj47JlHFDzaxAxhACow9Vq+RHd1f0QixP38t2PGtuUP
-         8r6w==
-X-Forwarded-Encrypted: i=1; AJvYcCUas5jes/OaKQI10SO95EnN06s4rqNgFvBaQ4ffAw7c6CPfBjhHQlPsK/ZJe6dRt9yBtPiboFwO3+4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzfj70ct+t6HVn+yygrhRf9IT/8ytGzkk3cP6TqMh3I5oVAZ8l+
-	7xdd2LaD/qjSvHXmeajv1oAe1mzwheKAVVhGChn5GMbzoMq0Ol+TCDj/rrS+pHEHzelweYO0fcF
-	kpL02
-X-Gm-Gg: AY/fxX4kDJ9In99CHUx9EzScCM9THBCx9OzC8uuhx6KEAsRqfeUQ6XNLuN2v6VX88WI
-	7ckmfyxn0jnmcfQoD1FNKYc0XmmddTBjYYhrZ/0yrKP8AnbAqolWUUtERVPsvp5l1mPYVJ50bJc
-	x2jDhIUM6+EWJTldjCoNrkJTLk4MUWxhhsdgek6YN3pN9LVnEtBSVgtiii/Ip7c7SJU51LMpS2d
-	ZXCyLRG1TbCSBimyfPdIpvCaocIhMssa/HEVHSNJQjklXqjOhjCTAQkH6nVIUeyp/N5DCQnruVO
-	eFNkqjWOhkIR/WPSkncvFgJJnRviDWmKiowepp7dF7yzTmt/2S5Ud1GJ1SjphbvrHSf52wVtVG9
-	aKGM7EvunMlvxhGeHb3Bg5frBXIfz/DIi1ZX8bf1hS7Pnd9nCxHJ88EYWVhbkK6W2M5F3jnb5jG
-	JWPvkJ2PsNu5XmSVAK8fHOAgcGujXuWw==
-X-Google-Smtp-Source: AGHT+IF42TMTZgmmYQk4G4FzEmAK1kBBZ8FqBRaaQX5i9kN2bMEeNbgZxuBI29NZ+Nw7ntqssvwEoA==
-X-Received: by 2002:a05:6000:18a6:b0:430:fd84:3179 with SMTP id ffacd0b85a97d-430fd8434b3mr9106013f8f.33.1765964505423;
-        Wed, 17 Dec 2025 01:41:45 -0800 (PST)
-Received: from [192.168.50.4] ([82.78.167.134])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4310ade7c4asm3757054f8f.28.2025.12.17.01.41.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Dec 2025 01:41:44 -0800 (PST)
-Message-ID: <74a801d3-8653-404f-8531-cb99108eac33@tuxon.dev>
-Date: Wed, 17 Dec 2025 11:41:43 +0200
+        d=1e100.net; s=20230601; t=1765974835; x=1766579635;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=s8GEKXnaSXfLaP2KVal8xoX7Yub2x5YeO61XyI9SmwQ=;
+        b=wcOl8Ti1SRtYS2NGe5lFxKn/khzC8FdzgFp7hYw5OnT1sUahVYaQ9mDH+BloYf3Uyx
+         bcrP8aL3qP3iLloSI+WwwAqyT5pcLxguVLn6jAQKDXB11FxIdTSb8QSt5gcE/LUY4M8X
+         dGnvxXE2QLYfSfdXjLEYc0SCE+RpwmWrvYjTnDgf6kLsQSzvIwrB1iPuAOePQ0k5fn7+
+         7cU0I37v/cnZiCyw7l617RmrpOdVTzYaFEDu7pEp3UARxL9MyFhlvSUVM7OVphcGxU1i
+         l9cz+6eybFCDHuk/2+Zud0fOYRGEyHR3gJmiDjhS1w6diTbb98vCgvgiQAqWgg/PjyS+
+         coYg==
+X-Forwarded-Encrypted: i=1; AJvYcCUyemjhxEq5lsHj75d8WkyWytfp6lg0MAq7CbXPzOcUBStpsBwjax+SiNEdUxn9kzk+TVcsQyuklgE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz8oBbNNz/k2oVNzraXv9U3c7R3QjCYcMJpYs7DU5I9rk6JKRmv
+	zW/+Vw5EQXKrtEcMl3fZ+nrXzIyg68j87A/eksZBA6elNjeDMJaOLeaDsUQNzfFshD7hP7osE6L
+	W081uV9tKznQV5VwaY2K8c9ZK6RAlZk7Sh1Q52+Pe3A==
+X-Gm-Gg: AY/fxX7BwPDVlRGnjhC+BPuJBDbafMnSUmVVhoCQ+uXcPWmk9jRE+PmJQwWInI4MdUH
+	96UYWZzj58++C1trgj2xewR4HouX7RpB4zAIja+uIucRh6UfeU4KH9T5w54MZLHFjaj3aFe/KVs
+	qHgrB5+qaH26et5G3wcaFyxuLSfPH94exMmhExzp3BA7cl0zMgaYKCdW+LjyPHelmivLYFUC5oz
+	cGtxDtv6Yr/XLr/uQcC5TBStOgr61/bXo+U+wnoHl4Xa3v0mOpnNwCBfoxRIS7PqL8u3JXu6WAM
+	jny55J9KfvhuC+XZqc8EBTsuuRRKhMIVHEsuWCJhBRL5L8ysDpYt
+X-Google-Smtp-Source: AGHT+IE7Hjde/+kkViqYv1A0LhGo3fNDzXkWHEO+dWmCgW+32Gp4be+4LUgDpSNymwFzE86qvkEGL0RYLcWs3u76qoo=
+X-Received: by 2002:a17:907:3d43:b0:b7c:e320:5250 with SMTP id
+ a640c23a62f3a-b7d238ebd71mr1711209066b.7.1765974834580; Wed, 17 Dec 2025
+ 04:33:54 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] i2c: riic: Move suspend handling to NOIRQ phase
-To: Tommaso Merciai <tommaso.merciai.xr@bp.renesas.com>,
- tomm.merciai@gmail.com
-Cc: linux-renesas-soc@vger.kernel.org, biju.das.jz@bp.renesas.com,
- Chris Brandt <chris.brandt@renesas.com>, Andi Shyti <andi.shyti@kernel.org>,
- Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
- linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
- stable@vger.kernel.org
-References: <05a31af3d6caba51e8237a49853281aa49bed916.1765540678.git.tommaso.merciai.xr@bp.renesas.com>
-From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
-Content-Language: en-US
-In-Reply-To: <05a31af3d6caba51e8237a49853281aa49bed916.1765540678.git.tommaso.merciai.xr@bp.renesas.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20251215163820.1584926-1-robert.marko@sartura.hr>
+ <20251215163820.1584926-4-robert.marko@sartura.hr> <202512161628415e9896d1@mail.local>
+ <CA+HBbNFG+xNokn5VY5G6Cgh41NZ=KteRi0D9c0B15xb77mzv8w@mail.gmail.com>
+ <202512161726449fe42d71@mail.local> <20251216-underarm-trapped-626f16d856f5@spud>
+ <2025121622404642e6f789@mail.local>
+In-Reply-To: <2025121622404642e6f789@mail.local>
+From: Robert Marko <robert.marko@sartura.hr>
+Date: Wed, 17 Dec 2025 13:33:42 +0100
+X-Gm-Features: AQt7F2rRCO2ytZ0VdvYzTGe4b0Ox8AKF-v29YqVKrXuogSLDfcjlg9rn0S9yxlg
+Message-ID: <CA+HBbNGPWcwzCSGbMCU-n8Y+g6SjBSKcS7p6Mmrn3gFCWCSCeA@mail.gmail.com>
+Subject: Re: [PATCH v2 04/19] dt-bindings: arm: move AT91 to generic Microchip binding
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Conor Dooley <conor@kernel.org>, robh@kernel.org, krzk+dt@kernel.org, 
+	conor+dt@kernel.org, nicolas.ferre@microchip.com, claudiu.beznea@tuxon.dev, 
+	Steen.Hegelund@microchip.com, daniel.machon@microchip.com, 
+	UNGLinuxDriver@microchip.com, herbert@gondor.apana.org.au, 
+	davem@davemloft.net, vkoul@kernel.org, linux@roeck-us.net, 
+	andi.shyti@kernel.org, lee@kernel.org, andrew+netdev@lunn.ch, 
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, linusw@kernel.org, 
+	olivia@selenic.com, radu_nicolae.pirea@upb.ro, richard.genoud@bootlin.com, 
+	gregkh@linuxfoundation.org, jirislaby@kernel.org, mturquette@baylibre.com, 
+	sboyd@kernel.org, richardcochran@gmail.com, wsa+renesas@sang-engineering.com, 
+	romain.sioen@microchip.com, Ryan.Wanner@microchip.com, 
+	lars.povlsen@microchip.com, tudor.ambarus@linaro.org, 
+	kavyasree.kotagiri@microchip.com, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org, 
+	linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org, 
+	linux-serial@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-clk@vger.kernel.org, mwalle@kernel.org, luka.perkov@sartura.hr
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi, Tommaso,
+On Tue, Dec 16, 2025 at 11:40=E2=80=AFPM Alexandre Belloni
+<alexandre.belloni@bootlin.com> wrote:
+>
+> On 16/12/2025 19:21:27+0000, Conor Dooley wrote:
+> > On Tue, Dec 16, 2025 at 06:26:44PM +0100, Alexandre Belloni wrote:
+> > > On 16/12/2025 17:56:20+0100, Robert Marko wrote:
+> > > > On Tue, Dec 16, 2025 at 5:29=E2=80=AFPM Alexandre Belloni
+> > > > <alexandre.belloni@bootlin.com> wrote:
+> > > > >
+> > > > > On 15/12/2025 17:35:21+0100, Robert Marko wrote:
+> > > > > > Create a new binding file named microchip.yaml, to which all Mi=
+crochip
+> > > > > > based devices will be moved to.
+> > > > > >
+> > > > > > Start by moving AT91, next will be SparX-5.
+> > > > >
+> > > > > Both lines of SoCs are designed by different business units and a=
+re
+> > > > > wildly different and while both business units are currently owne=
+d by
+> > > > > the same company, there are no guarantees this will stay this way=
+ so I
+> > > > > would simply avoid merging both.
+> > > >
+> > > > Hi Alexandre,
+> > > >
+> > > > The merge was requested by Conor instead of adding a new binding fo=
+r LAN969x [1]
+> > > >
+> > > > [1] https://patchwork.kernel.org/project/linux-arm-kernel/patch/202=
+51203122313.1287950-2-robert.marko@sartura.hr/
+> > > >
+> > >
+> > > I would still keep them separate, SparX-5 is closer to what is
+> > > devicetree/bindings/mips/mscc.txt than to any atmel descended SoCs.
+> >
+> > If you don't want the sparx-5 stuff in with the atmel bits, that's fine=
+,
+> > but I stand over my comments about this lan969x stuff not getting a fil=
+e
+> > of its own.
+> > Probably that means putting it in the atmel file, alongside the lan966x
+> > boards that are in there at the moment.
+>
+> I'm fine with this.
 
-On 12/12/25 13:58, Tommaso Merciai wrote:
-> Commit 53326135d0e0 ("i2c: riic: Add suspend/resume support") added
-> suspend support for the Renesas I2C driver and following this change
-> on RZ/G3E the following WARNING is seen on entering suspend ...
-> 
-> [  134.275704] Freezing remaining freezable tasks completed (elapsed 0.001 seconds)
-> [  134.285536] ------------[ cut here ]------------
-> [  134.290298] i2c i2c-2: Transfer while suspended
-> [  134.295174] WARNING: drivers/i2c/i2c-core.h:56 at __i2c_smbus_xfer+0x1e4/0x214, CPU#0: systemd-sleep/388
-> [  134.365507] Tainted: [W]=WARN
-> [  134.368485] Hardware name: Renesas SMARC EVK version 2 based on r9a09g047e57 (DT)
-> [  134.375961] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> [  134.382935] pc : __i2c_smbus_xfer+0x1e4/0x214
-> [  134.387329] lr : __i2c_smbus_xfer+0x1e4/0x214
-> [  134.391717] sp : ffff800083f23860
-> [  134.395040] x29: ffff800083f23860 x28: 0000000000000000 x27: ffff800082ed5d60
-> [  134.402226] x26: 0000001f4395fd74 x25: 0000000000000007 x24: 0000000000000001
-> [  134.409408] x23: 0000000000000000 x22: 000000000000006f x21: ffff800083f23936
-> [  134.416589] x20: ffff0000c090e140 x19: ffff0000c090e0d0 x18: 0000000000000006
-> [  134.423771] x17: 6f63657320313030 x16: 2e30206465737061 x15: ffff800083f23280
-> [  134.430953] x14: 0000000000000000 x13: ffff800082b16ce8 x12: 0000000000000f09
-> [  134.438134] x11: 0000000000000503 x10: ffff800082b6ece8 x9 : ffff800082b16ce8
-> [  134.445315] x8 : 00000000ffffefff x7 : ffff800082b6ece8 x6 : 80000000fffff000
-> [  134.452495] x5 : 0000000000000504 x4 : 0000000000000000 x3 : 0000000000000000
-> [  134.459672] x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffff0000c9ee9e80
-> [  134.466851] Call trace:
-> [  134.469311]  __i2c_smbus_xfer+0x1e4/0x214 (P)
-> [  134.473715]  i2c_smbus_xfer+0xbc/0x120
-> [  134.477507]  i2c_smbus_read_byte_data+0x4c/0x84
-> [  134.482077]  isl1208_i2c_read_time+0x44/0x178 [rtc_isl1208]
-> [  134.487703]  isl1208_rtc_read_time+0x14/0x20 [rtc_isl1208]
-> [  134.493226]  __rtc_read_time+0x44/0x88
-> [  134.497012]  rtc_read_time+0x3c/0x68
-> [  134.500622]  rtc_suspend+0x9c/0x170
-> 
-> The warning is triggered because I2C transfers can still be attempted
-> while the controller is already suspended, due to inappropriate ordering
-> of the system sleep callbacks.
-> 
-> Fix this by moving the system sleep suspend/resume callbacks to the NOIRQ
-> phase, ensuring the adapter is fully quiesced after late suspend and
-> properly resumed before the early resume phase.
-> 
-> To support NOIRQ resume, the hardware initialization path must not invoke
-> runtime PM APIs. Split the init code so that the low-level hardware setup
-> can be executed without pm_runtime_get/put(). This avoids violating the
-> constraint introduced by commit 1e2ef05bb8cf ("PM: Limit race conditions
-> between runtime PM and system sleep (v2)"), which forbids runtime PM
-> calls during early resume.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 53326135d0e0 ("i2c: riic: Add suspend/resume support")
-> Signed-off-by: Tommaso Merciai <tommaso.merciai.xr@bp.renesas.com>
-> ---
->  drivers/i2c/busses/i2c-riic.c | 65 ++++++++++++++++++++++-------------
->  1 file changed, 41 insertions(+), 24 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-riic.c b/drivers/i2c/busses/i2c-riic.c
-> index 3e8f126cb7f7..9acc8936cdf7 100644
-> --- a/drivers/i2c/busses/i2c-riic.c
-> +++ b/drivers/i2c/busses/i2c-riic.c
-> @@ -349,9 +349,8 @@ static const struct i2c_algorithm riic_algo = {
->  	.functionality = riic_func,
->  };
->  
-> -static int riic_init_hw(struct riic_dev *riic)
-> +static int __riic_init_hw(struct riic_dev *riic)
->  {
-> -	int ret;
->  	unsigned long rate;
->  	unsigned long ns_per_tick;
->  	int total_ticks, cks, brl, brh;
-> @@ -431,10 +430,6 @@ static int riic_init_hw(struct riic_dev *riic)
->  		 rate / total_ticks, ((brl + 3) * 100) / (brl + brh + 6),
->  		 t->scl_fall_ns / ns_per_tick, t->scl_rise_ns / ns_per_tick, cks, brl, brh);
->  
-> -	ret = pm_runtime_resume_and_get(dev);
-> -	if (ret)
-> -		return ret;
-> -
->  	/* Changing the order of accessing IICRST and ICE may break things! */
->  	riic_writeb(riic, ICCR1_IICRST | ICCR1_SOWP, RIIC_ICCR1);
->  	riic_clear_set_bit(riic, 0, ICCR1_ICE, RIIC_ICCR1);
-> @@ -451,10 +446,25 @@ static int riic_init_hw(struct riic_dev *riic)
->  
->  	riic_clear_set_bit(riic, ICCR1_IICRST, 0, RIIC_ICCR1);
->  
-> -	pm_runtime_put_autosuspend(dev);
->  	return 0;
->  }
->  
-> +static int riic_init_hw(struct riic_dev *riic)
-> +{
-> +	struct device *dev = riic->adapter.dev.parent;
-> +	int ret;
-> +
-> +	ret = pm_runtime_resume_and_get(dev);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = __riic_init_hw(riic);
-> +
-> +	pm_runtime_put_autosuspend(dev);
-> +
-> +	return ret;
-> +}
-> +
->  static int riic_get_scl(struct i2c_adapter *adap)
->  {
->  	struct riic_dev *riic = i2c_get_adapdata(adap);
-> @@ -572,6 +582,8 @@ static int riic_i2c_probe(struct platform_device *pdev)
->  
->  	i2c_parse_fw_timings(dev, &riic->i2c_t, true);
->  
-> +	platform_set_drvdata(pdev, riic);
-> +
->  	/* Default 0 to save power. Can be overridden via sysfs for lower latency. */
->  	pm_runtime_set_autosuspend_delay(dev, 0);
->  	pm_runtime_use_autosuspend(dev);
-> @@ -585,8 +597,6 @@ static int riic_i2c_probe(struct platform_device *pdev)
->  	if (ret)
->  		goto out;
->  
-> -	platform_set_drvdata(pdev, riic);
-> -
->  	dev_info(dev, "registered with %dHz bus speed\n", riic->i2c_t.bus_freq_hz);
->  	return 0;
->  
-> @@ -668,27 +678,17 @@ static const struct riic_of_data riic_rz_t2h_info = {
->  	.num_irqs = ARRAY_SIZE(riic_rzt2h_irqs),
->  };
->  
-> -static int riic_i2c_suspend(struct device *dev)
-> +static int riic_i2c_runtime_suspend(struct device *dev)
->  {
->  	struct riic_dev *riic = dev_get_drvdata(dev);
-> -	int ret;
-> -
-> -	ret = pm_runtime_resume_and_get(dev);
-> -	if (ret)
-> -		return ret;
-> -
-> -	i2c_mark_adapter_suspended(&riic->adapter);
->  
->  	/* Disable output on SDA, SCL pins. */
->  	riic_clear_set_bit(riic, ICCR1_ICE, 0, RIIC_ICCR1);
->  
-> -	pm_runtime_mark_last_busy(dev);
-> -	pm_runtime_put_sync(dev);
-> -
->  	return reset_control_assert(riic->rstc);
+Works for me, will switch to it in v3.
 
-Reset assert/de-assert was moved to the RPM callbacks. Is this intended?
-You may want to at least mention it in the commit description.
+Regards,
+Robert
 
->  }
->  
-> -static int riic_i2c_resume(struct device *dev)
-> +static int riic_i2c_runtime_resume(struct device *dev)
->  {
->  	struct riic_dev *riic = dev_get_drvdata(dev);
->  	int ret;
-> @@ -697,7 +697,7 @@ static int riic_i2c_resume(struct device *dev)
->  	if (ret)
->  		return ret;
->  
-> -	ret = riic_init_hw(riic);
-> +	ret = __riic_init_hw(riic);
+>
+> --
+> Alexandre Belloni, co-owner and COO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
 
-Moving reset assert/de-assert and controller deinit/re-initialization on
-runtime suspend/resume may increase the runtime suspend/resume latency. In
-case of consecutive requests this may translate into controller performance
-downgrade. If you keep it like this, you may want to increase the default
-autosuspend delay, at least, to avoid controller reconfiguration after each
-individual struct i2c_algorithm::xfer() call.
 
->  	if (ret) {
->  		/*
->  		 * In case this happens there is no way to recover from this
-> @@ -708,13 +708,30 @@ static int riic_i2c_resume(struct device *dev)
->  		return ret;
 
-This one could be dropped
-
->  	}
->  
-> +	return 0;
-
-And use here directly, like:
-
-	return ret;
-
-Thank you,
-Claudiu
+--=20
+Robert Marko
+Staff Embedded Linux Engineer
+Sartura d.d.
+Lendavska ulica 16a
+10000 Zagreb, Croatia
+Email: robert.marko@sartura.hr
+Web: www.sartura.hr
 
