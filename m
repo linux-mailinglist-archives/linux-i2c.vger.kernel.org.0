@@ -1,92 +1,80 @@
-Return-Path: <linux-i2c+bounces-14620-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14621-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8AC87CC6909
-	for <lists+linux-i2c@lfdr.de>; Wed, 17 Dec 2025 09:27:41 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A4A8CC6A0E
+	for <lists+linux-i2c@lfdr.de>; Wed, 17 Dec 2025 09:42:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 97C09312F6D1
-	for <lists+linux-i2c@lfdr.de>; Wed, 17 Dec 2025 08:20:50 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id CAD753061E9B
+	for <lists+linux-i2c@lfdr.de>; Wed, 17 Dec 2025 08:39:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40EFD339877;
-	Wed, 17 Dec 2025 08:16:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49947336EC5;
+	Wed, 17 Dec 2025 08:39:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="Dr0mjOxE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RR3WUVhi"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from out30-111.freemail.mail.aliyun.com (out30-111.freemail.mail.aliyun.com [115.124.30.111])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3F1633A9CB;
-	Wed, 17 Dec 2025 08:16:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.111
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00AC7257829;
+	Wed, 17 Dec 2025 08:39:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765959380; cv=none; b=fiJhcaIXOjvdaPW7oeCEu/3UoDeN75zjnGiXyjqspB8hvQkS7cNmbAjGDaeYaCiEsr/wGNS8CSP3sj4noKraFjjbdmn3sNsaq898X/N0/2u+Ki7GVIlNYdboQ1krUvusEcd7Y5w0x29g09tRiKQ5TRhZKfLJVSekU7f5meOZQk0=
+	t=1765960762; cv=none; b=PyoTb7zNUfTGJK5zUArg5O9gc+P+jP2wAie5YZTIdFIQkQtSYRhujU4FjWWn7HLizXN8O81OWAjfASyXpeBCGj4L31PfNvv4LOfkAc0BU6qf05W3XvkFy6n6lwo8hibn2gguoj+TSleeudHDvyjM1TXkejcyN7AI/mziAsAuvhI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765959380; c=relaxed/simple;
-	bh=ndFj2/VBaLvB0PIaxljeZW+fwoxS9OjFWv+5Tz+R8f4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pMjQdiXAUgZsjejN/JNwG6OZaEVWPgSY5iFBnChSRyr18HOJHVKP3aN9Mqqt5OZnZdfNmET9GYK6aqWLD+DBppi0yh8JtvyvQEY9ebZK+0yvQH58eAqDsAEuWpCDoiNLCPAey5T7jj+HIEPmeTA46tyvk4hzlE7YKBqnQWjyEg4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=Dr0mjOxE; arc=none smtp.client-ip=115.124.30.111
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1765959367; h=From:To:Subject:Date:Message-ID:MIME-Version;
-	bh=EnjkgsuHneXoZUzoXJxbQZgrKKLC87jcGoRy+MS+Jaw=;
-	b=Dr0mjOxEnane2onJUZkWFQ20fiF+AXUWXU+4D1i23PTfZIwc7YSLvFXufVz/+3qBk/5+28QCP7BWgEipxz+VMQjGVEValc8q8cfTVZ7BmCUBO2prlLSZUECwSZXDG/DGcZsPcj4nwQ2JXU2n92DH26KE0jamiuAhOhEEKuTodL0=
-Received: from localhost(mailfrom:kanie@linux.alibaba.com fp:SMTPD_---0Wv2kLz9_1765959361 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Wed, 17 Dec 2025 16:16:06 +0800
-From: Guixin Liu <kanie@linux.alibaba.com>
-To: Laxman Dewangan <ldewangan@nvidia.com>,
-	Dmitry Osipenko <digetx@gmail.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>
-Cc: linux-i2c@vger.kernel.org,
-	linux-tegra@vger.kernel.org
-Subject: [PATCH] i2c: tegra: remove unused rst
-Date: Wed, 17 Dec 2025 16:16:01 +0800
-Message-ID: <20251217081601.93856-1-kanie@linux.alibaba.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1765960762; c=relaxed/simple;
+	bh=P1/AuVYmxD5Hc7VivtWTqrUgU3GCgwxZ6VxvvVURvEw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=K7WRI0vUmyjHpzyvtaheo/7aL2ydZFfPe0UjRofjYJa9l0lb7BqYE8LyBzXgP7G4rtHr1C49KJIOJ0xdRQ71xFUb6PPaL3Fv4wZbdwj0oqqJPAq1ECrDv7ftD5YaWlDDcMowTZLz2B1ONQ8Y9f+Obe17x5JUr7u6eMP9MGjx3J0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RR3WUVhi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1016CC4CEF5;
+	Wed, 17 Dec 2025 08:39:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1765960761;
+	bh=P1/AuVYmxD5Hc7VivtWTqrUgU3GCgwxZ6VxvvVURvEw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=RR3WUVhihr6Jgvo/DDzh/2DLXMO1r7qMT4yZ+O367/+F08RxAAMch2EUAeNgndaoM
+	 xYYqXCYdIImjEBKdimX+YPl+anPqY9mXT2R8mURlyyEHPFVfB35AKDf/GAo7Cx0Um3
+	 TRkEl74aCpA/YliDb24TDQl3CNhjhKLn21eqs5DK4Fkd+3AK5DQPSgG5EolNqHPLvT
+	 tBaA5Gd3QVQXaV3+OgaN/KrcIGym/+PlwW2SaobWRpOK65bVdgWKAkVjCMJTUdRqqu
+	 9E84GgEbenm3v/P6fdAEgNxXPL8KIkC+L8gOQwRwRO5P6CcTdrRCOTGe20Ch100e4t
+	 bIKeQGko5V5Nw==
+Date: Wed, 17 Dec 2025 09:39:19 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Alain Volmat <alain.volmat@foss.st.com>
+Cc: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+	Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>, linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-stm32@st-md-mailman.stormreply.com, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/5] dt-bindings: i2c: st,stm32-i2c: add 'power-domains'
+ property
+Message-ID: <20251217-realistic-pug-of-glory-dd4fb1@quoll>
+References: <20251215-stm32-i2c-mp2x-dt-updates-v1-0-2738a05a7af8@foss.st.com>
+ <20251215-stm32-i2c-mp2x-dt-updates-v1-1-2738a05a7af8@foss.st.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20251215-stm32-i2c-mp2x-dt-updates-v1-1-2738a05a7af8@foss.st.com>
 
-Since commit 56344e241c54 ("i2c: tegra: Fix reset error handling with
-ACPI") replace reset_control_reset() with device_reset(), the rst
-is no longer used, remove it.
+On Mon, Dec 15, 2025 at 01:19:40PM +0100, Alain Volmat wrote:
+> STM32 I2C may be in a power domain which is the case for the STM32MP2x
+> based boards. Allow a single 'power-domains' entry for STM32 I2C.
+> 
+> Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+> ---
+>  Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml | 3 +++
+>  1 file changed, 3 insertions(+)
 
-Signed-off-by: Guixin Liu <kanie@linux.alibaba.com>
----
- drivers/i2c/busses/i2c-tegra.c | 2 --
- 1 file changed, 2 deletions(-)
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 
-diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
-index e533460bccc3..9e39ac7a0a69 100644
---- a/drivers/i2c/busses/i2c-tegra.c
-+++ b/drivers/i2c/busses/i2c-tegra.c
-@@ -240,7 +240,6 @@ struct tegra_i2c_hw_feature {
-  * @div_clk: clock reference for div clock of I2C controller
-  * @clocks: array of I2C controller clocks
-  * @nclocks: number of clocks in the array
-- * @rst: reset control for the I2C controller
-  * @base: ioremapped registers cookie
-  * @base_phys: physical base address of the I2C controller
-  * @cont_id: I2C controller ID, used for packet header
-@@ -269,7 +268,6 @@ struct tegra_i2c_dev {
- 	struct i2c_adapter adapter;
- 
- 	const struct tegra_i2c_hw_feature *hw;
--	struct reset_control *rst;
- 	unsigned int cont_id;
- 	unsigned int irq;
- 
--- 
-2.43.0
+Best regards,
+Krzysztof
 
 
