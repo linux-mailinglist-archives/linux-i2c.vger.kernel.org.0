@@ -1,46 +1,46 @@
-Return-Path: <linux-i2c+bounces-14655-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14656-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2422CCEDF3
-	for <lists+linux-i2c@lfdr.de>; Fri, 19 Dec 2025 09:03:26 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id F33F8CCEE0E
+	for <lists+linux-i2c@lfdr.de>; Fri, 19 Dec 2025 09:05:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id BF3B93015035
-	for <lists+linux-i2c@lfdr.de>; Fri, 19 Dec 2025 08:03:25 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 080473016998
+	for <lists+linux-i2c@lfdr.de>; Fri, 19 Dec 2025 08:04:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D1F425CC6C;
-	Fri, 19 Dec 2025 08:03:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9BEF2868AB;
+	Fri, 19 Dec 2025 08:03:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vr19UHqU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ipfz3YZ2"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B239723EA99;
-	Fri, 19 Dec 2025 08:03:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDEAE1B808;
+	Fri, 19 Dec 2025 08:03:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766131403; cv=none; b=VumtMq+pRVYWbSrqvWmGenTnWF7K+De87CGUg5IYSmGxXhn6Ne/qupZ08uF1/eymqGl9K2NznJZtoti9Mnp+37/rkmYy0KKvJTQ7CPyzdN3fW7tA5yePNyJzD/cXFmmYpljzrnReLpPSvvRGgWmt5cyaysQ/UfuJWzzW3LDL7Ow=
+	t=1766131439; cv=none; b=owoOSV6CLeYbr2rXyJASY6bEXBg7H76HnDzlKBoLUFQbAlbR9dC4CViAKOCsd8XV0+Ev2GUvugwWCLev4NkYzfRzhfGC0KrKQxzpbTp/AU1b8c/ERgb4QCudmqrqydf3u5WXcURUDJ0Rc1RlcEgFmEDvlRodNBy9g/8RsKy+Hlk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766131403; c=relaxed/simple;
-	bh=5oHCMAYXk9mhgPSXArbGQbtKkWJe8cng3obhdOQEGxw=;
+	s=arc-20240116; t=1766131439; c=relaxed/simple;
+	bh=zXOryCWFhEl8Ab+6mPQPjcBfG82cdijROqqxSWbfyec=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Irg8zkgl0NjghcNp/2N2T//+UdV0lCt1pongMemzXhVED/sYrBbf/AzG07QC8oxFyrvTwkDnkC7CdP3oFSm/V8AAlgjb7Vc1xeuS7HGhbHYXHVO59qtVaMf76Y4G+JnU0/vSwX3NZjecuXFVRWKq++RmBY7GHRSlMa+G8KjzlpQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vr19UHqU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3BFBC4CEF1;
-	Fri, 19 Dec 2025 08:03:16 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=hBKJlP+O9fVI1HcvY/xySFapZfszdO0Bx0nlpo+qxB9qJxrxuO4OpQz6J7FWgSMUkNRRO5Vq98ja/5cufRJvE9jvJSkfgxahIIinOUfsRJ9nuCTtref/Lmh8Z4rmfijvW0D6JzYl/qW3KoSalERMAZ2oKtSFmgtxI0s0DDIwryA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ipfz3YZ2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7818CC4CEF1;
+	Fri, 19 Dec 2025 08:03:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766131403;
-	bh=5oHCMAYXk9mhgPSXArbGQbtKkWJe8cng3obhdOQEGxw=;
+	s=k20201202; t=1766131438;
+	bh=zXOryCWFhEl8Ab+6mPQPjcBfG82cdijROqqxSWbfyec=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Vr19UHqUu7zEExd0eVSpBfeh20mZIRPWXXIcm7MbKNe7Cr3rps9M+CkF5aXTHvtYc
-	 l1IpkhdAICU/5RoW6rGaqExai6PVmDYILY7NOHWcWf4XGdF6fd8MV7eHuGToo7hOU+
-	 JCbvbzj1qMalfqQYLUjHVB3aVzwEEgrcq++bhzxBQT03NoiKVfiTyxfSyJaQdYIAch
-	 r60gbmvb+WnW6CuqaKw8ExfZR0nt8toYsQKqo6IxtIax1GdyozlEM+FOT0HFz/hO5N
-	 hxAG0/zmxOclDOLYMgKhaKU+OOuxw4OgsGwvFLR3nQhjmNFiNOuL2h9nDSk0z8MIG2
-	 n5rHhQdj3akqQ==
-Message-ID: <04880c83-0b3a-4197-9043-d657db91f922@kernel.org>
-Date: Fri, 19 Dec 2025 09:03:14 +0100
+	b=Ipfz3YZ2+YzK4UsikTFRwneDagfOUFLtvH0ii9DRGUQEL6a+3SsB2014dva+XFbsC
+	 7IEZB9atRLokYDW1Lkad7jQkPN4hRHTH1nWcozkcCIfG3vxMVpU6mG7BblV5LKOSrX
+	 +pY8iDuCIQJ7wCYKWb7NkLv63Vov1qnQ2lrWYsusaPQdxaKfhWYWoLtXi148nc4nya
+	 htK+bpxuYUvXrolZNsQAaZo+rJj5cH6OY1hdRW9eWYdDzEnTcsUqUyrvRH/OCcJDJH
+	 WRJfQ5i16SbyTBQ7RE2MywrgU/wTsA9/acmLyJzqxaoUhIXldUHNlC4SKe5N19lRoA
+	 80usW1D5By+mw==
+Message-ID: <604e5781-5c59-422f-9c5a-ee4be6f8b329@kernel.org>
+Date: Fri, 19 Dec 2025 09:03:49 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -48,7 +48,7 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/3] dt-bindings: i2c: spacemit: add optional resets
+Subject: Re: [PATCH v2 0/3] i2c: spacemit: add reset support
 To: Encrow Thorne <jyc0019@gmail.com>,
  Troy Mitchell <troy.mitchell@linux.spacemit.com>,
  Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
@@ -62,7 +62,6 @@ Cc: Troy Mitchell <troymitchell988@gmail.com>,
  devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
  spacemit@lists.linux.dev, linux-kernel@vger.kernel.org
 References: <20251219-i2c-reset-v2-0-ad201a602e74@gmail.com>
- <20251219-i2c-reset-v2-1-ad201a602e74@gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -108,39 +107,24 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20251219-i2c-reset-v2-1-ad201a602e74@gmail.com>
+In-Reply-To: <20251219-i2c-reset-v2-0-ad201a602e74@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 19/12/2025 08:42, Encrow Thorne wrote:
-> The I2C controller requires a reset to ensure it starts from a clean state.
+> Add reset support for the K1 I2C driver. A reset ensures that the
+> controller starts in a clean and known state.
 > 
-> Add the 'resets' property to support this hardware requirement.
+> Reset ensures that the I2C hardware is in a clean state. We cannot assume
+> that no program used I2C before the kernel booted.
 > 
 > Signed-off-by: Encrow Thorne <jyc0019@gmail.com>
 > ---
->  Documentation/devicetree/bindings/i2c/spacemit,k1-i2c.yaml | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/i2c/spacemit,k1-i2c.yaml b/Documentation/devicetree/bindings/i2c/spacemit,k1-i2c.yaml
-> index b7220fff2235..1290106e28e6 100644
-> --- a/Documentation/devicetree/bindings/i2c/spacemit,k1-i2c.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/spacemit,k1-i2c.yaml
-> @@ -32,6 +32,9 @@ properties:
->        - const: func
->        - const: bus
->  
-> +  resets:
-> +    maxItems: 1
-> +
+> Changes in v2:
+> - Replace reset property in dt-bindings.
 
-Still between other clock-related properties. You already got such
-comment...
-
->    clock-frequency:
->      description: |
->        K1 support three different modes which running different frequencies
-> 
+Replace with what? I don't see anything else there - you still have
+reset property.
 
 
 Best regards,
