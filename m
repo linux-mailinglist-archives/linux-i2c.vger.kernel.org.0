@@ -1,235 +1,196 @@
-Return-Path: <linux-i2c+bounces-14683-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14684-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBD4ACD699D
-	for <lists+linux-i2c@lfdr.de>; Mon, 22 Dec 2025 16:45:33 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 349E3CD705E
+	for <lists+linux-i2c@lfdr.de>; Mon, 22 Dec 2025 20:57:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id E676C30133FF
-	for <lists+linux-i2c@lfdr.de>; Mon, 22 Dec 2025 15:45:24 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id EA2E5301C3FC
+	for <lists+linux-i2c@lfdr.de>; Mon, 22 Dec 2025 19:57:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6A10149C6F;
-	Mon, 22 Dec 2025 15:45:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1863D33C1A3;
+	Mon, 22 Dec 2025 19:57:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lbo//aU3"
+	dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b="pFZJUB+P"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9399A31AAA3
-	for <linux-i2c@vger.kernel.org>; Mon, 22 Dec 2025 15:45:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AE4A33A9D8
+	for <linux-i2c@vger.kernel.org>; Mon, 22 Dec 2025 19:57:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766418322; cv=none; b=iFD+nN4XuTeFqk0GpOtH5cn+SLxRW/TMOTef9pvu7YfMC0Ewkzq5Ez6deqA/4J/gTLInazYWKUl++38nUBqWHmy5Rylij5EmCh8Ed98YlVKrrj2n20Q+Tj1ZgTv+5umXykGLPOnoMQWsx3a3GERzHtK16Udyj9zWqjPQgDSMe30=
+	t=1766433448; cv=none; b=tTt4NMujYnyxDgwB+kg4wRr4w+a+YBvg2WPyFUDBZWfwFE//ExxYXa1b6DP4MnPriYy/1UBWJ6h5+OJGiMeIwTVYhb8ss8LjPyDsT58NsI6IOB1+KGnfSzGsUFuGemtQq2JMEekX5GXDi1DR4VnbDJJlfO0cRWeUd4eRx39AbSY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766418322; c=relaxed/simple;
-	bh=tGcJJtQIWOQL7kqmOQjdpBhyQjgqnzYpX8nXShFX66k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JxJYMUGiVv2yVm/gPUsRhuwcSU//BfUoLaRKKrcfg1UNtD+JcwtqmF+gxwy1I/IHELqQ/g72eWNbdRer8qBQ1wLd9OkgbS9JFHy/vErlCbTXKHz1ich7t0vVmRjeU7RzW7S9vDarrj6N80raFjpAnZZVq/EhDdOtodPoTE9708Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=lbo//aU3; arc=none smtp.client-ip=209.85.208.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-37a990ec4e5so4255441fa.3
-        for <linux-i2c@vger.kernel.org>; Mon, 22 Dec 2025 07:45:19 -0800 (PST)
+	s=arc-20240116; t=1766433448; c=relaxed/simple;
+	bh=gqq7zNg4tUJJ0SmUCTR/rfb6bSKF7C5JMh5yMLNWhsw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FQkAgCxaHdIcGHJdQHBhtfdTxXsBVAWj47zlXv3RYQRd8v2CaF45qJ780i7sUsC0FUKbmtBS002i8K1HNepsdg1PaVypaiWc+cf3oBL2mU3RxgVoQ8A6LTr83mi3G0tjPgsPwIuRdvgLe8Wc/jPpXB8QHVB0S6rHnE7/eC/RpW4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr; spf=pass smtp.mailfrom=sartura.hr; dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b=pFZJUB+P; arc=none smtp.client-ip=209.85.218.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sartura.hr
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-b802d5e9f06so543311266b.1
+        for <linux-i2c@vger.kernel.org>; Mon, 22 Dec 2025 11:57:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1766418318; x=1767023118; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+        d=sartura.hr; s=sartura; t=1766433445; x=1767038245; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=UMuqFt6V0IzeFc5cbPsgJJwBQ8b3x0/Nca76P9XgoyE=;
-        b=lbo//aU3vEZOiIVVQLR1X/wUKhE/VPS+Mc+W+Pd5dOKlUb+qx/jj2GwjF9s/3X7I90
-         owFtPyJimOqhA/Nkr13TKqw3fzfXtylp94DzB833WwCCxPjbxgeAsr8Az5smMWVhBzsK
-         VvuJN/7pohCYKzik+a+x1zhYZyj9zitGmdG+MTUTMRzrADCBK6kByMiP45Iu4bblC0wV
-         NnaQGzDeZ7NUHAP681PB60uvIYRkoFcv8E1gJjdAUZT7zQwwdxdBlnPPaa//Na5tIpnS
-         gROLyzCL84oHIfdnPdCDVW8U5kgFH9Bsbs68Fqc+RFbr0lNi2TQeRdLBrRXvbT9FQs3+
-         6Oww==
+        bh=h1Ffz7SUjA9uiSla9hHoS8dAeCi7tewQV/vP2Eehn8A=;
+        b=pFZJUB+PHZWLjPcQpowiytkshEGhxGj5eXPYicVBekCOyv5edtd/D/8QBRD4WducvS
+         rVpLJLuIAiUIWS2Km205Ah9T/sgmRQOZ9OER7gw0sEWH7OPUrzpo5AnmT6KDq00vmhqT
+         rBAs+UNDSUzDVSyWeqrZ7/t88wbpQXA7+rjHwGcjOD8V5mBeydw3VSesk/wA0KPiQC2/
+         tjj+RokSHTTJfyDwGuAWCGrrUkqM8ridBPmhsAs205vnT73lATgHhsCYpiusiPmgDrnx
+         3SiCZo4Noj8qZLChLZyEKiDBavbPc5IJU72tnwwaSUuh+9kbmKY3J/twONeia8BofiN+
+         Y9Gg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766418318; x=1767023118;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UMuqFt6V0IzeFc5cbPsgJJwBQ8b3x0/Nca76P9XgoyE=;
-        b=fZwee7lZlFISb4dSVZLdhlm3oh1u7GcqQJlX2FJtnKwVzyTCC8ZDyoFRXhnR1f1koJ
-         rgautwvoyKJ6363RvJMySyBCQ2B1yWS53v21tcKSyM9qo4H26SrZjw9GoGbKUf0FHAbI
-         C1TlvuJsd1hRXmoHLM2lS8ZL7ObN12voJmo/26WjTk11ODF5BIPuZOCQC1F87/zU5+7t
-         H0FX42cVnIq+GIPrKRzhg2VR/qDAWwG37AZKNUtkQcCVG6mhr9TLrbw503hiMsvkljij
-         eLl/9wvHbKlLQe15kaPxwVorKRaOZ1g+2l5sjBdxwphfdDiIj3UOXyKurTNN3u/N+KKy
-         6iSQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXy7xZ7j3hRBLq/7UyfPc+6qDN7HkmZvPmoQ8kNCsnBfXhwyWqQi46NwhcVm7qqTxzARumqcZuAiYc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy5ozjAmEl5vIeJ3FooybBfzX+lvU5G50acXSuBLVQdnOeaRNN4
-	y+2ecjbbdPlAmWGf2v3O/vvefGm77ocBPKuJmZ9YnViT22uDPP+iZ77jsRakSxU8AO8=
-X-Gm-Gg: AY/fxX6zR0pCRMFhYCyv1Ctfu4cVOPO5eXDaAl1TQG+TA4CaoBymSLShreApCnNd0VS
-	eJnNw/Oo8IE0+pjnWlragx3bTK5duO0+Syjh6U4lC6HDTpBLc0Gz/py50Dt+qUHOQR9mPfpZ69A
-	kKc+HY70FarO8p7xDgpkBN3+2TuX+/KWsRn2XqdNKQG/avwtgiJ5NYbv7Ajm7TTuI1JPi+dTofb
-	2uqAZLR0EXZL7O3hpfJtdc0rKF97ga3aQp7IHG/KWVWFD9osRf5qMQ9qtKe9A8/YFYZsYp/kOwp
-	ssWgcv90UmTHDDDRIwRoWve3BQcj8wTQYSozV0R1Gvfv60A4Mp8sh21LWxdUvTbwXePoalbLYbU
-	VUYLtrLX0FRJ/lI4+6sjgByrD+llootfIFBcUUzEvTXH2VoJwSymN4GgqxSTKz7CwDn5M0e0IDU
-	Q53lFsoeMpGhoPplZvRHGzICEvvv14mLSX+NTRv2ATqeK+CYiO4lRUlclYbWG05fA+hg==
-X-Google-Smtp-Source: AGHT+IHEreMefgVZs02UZwhZN/8T0ly29BM+V8xxSKTeK3gzyXwjk92eE8YSbX1LnQ/PYAR4eL/7Kw==
-X-Received: by 2002:a05:651c:1542:b0:37e:6e31:c9bc with SMTP id 38308e7fff4ca-3812173480amr20316101fa.8.1766418317548;
-        Mon, 22 Dec 2025 07:45:17 -0800 (PST)
-Received: from [192.168.1.100] (91-159-24-186.elisa-laajakaista.fi. [91.159.24.186])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-59a1861f85dsm3255925e87.73.2025.12.22.07.45.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Dec 2025 07:45:17 -0800 (PST)
-Message-ID: <091b863b-fa0a-4d3c-8461-60cdc4970992@linaro.org>
-Date: Mon, 22 Dec 2025 17:45:14 +0200
+        d=1e100.net; s=20230601; t=1766433445; x=1767038245;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=h1Ffz7SUjA9uiSla9hHoS8dAeCi7tewQV/vP2Eehn8A=;
+        b=wlad5AB80Ex34Ag6Kk0HmzDw7S1WJChAgzS3WtjBNbpTRFilrayjoi9Qt5lDIFcsm7
+         3uOZpKcyQI3+sPxyvUKCwV0gkA1XmhShn8qzZ7UTGKjcgXXNGHY9ZZZHGpkY7ITHW29j
+         Kw6BT3Vd+387aJ4hhiOX7PYCASX1pX/Ev6SIl5my6X9nzMHLLHZqFViHLFfhg/Ka3YhQ
+         nZRMNOhrcIebTB1pUOdWQ7z2WLXKpv9K99nS4njGacIMzxSox9fBNqkYUMBCXlYXAgpF
+         RlRVZPwzfwroXg6GHWSKeopj7CnC7u17L0sGP5YYQNypgfHQNv2hgVZl9cFynM4RchWe
+         Zwbw==
+X-Forwarded-Encrypted: i=1; AJvYcCUp6tYTD0R3JZEc82rnKuiPSFOB+19ZH2KGzaJlE+fYyU7cWNfcdqdYmoAAV5WJk9uH1bZRGXeH86Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz3+hFSFMtfFh3e1b7uVRcgJnuLha0vqpkjpSbHGYiSR6Ct/J/8
+	OKB4/mpQbWkF62uS6281a95J1NOj/A1xlyisNRxep1jCaNWofh+5NIrlXFhD8LMbPIszK9kwsS4
+	UvW2Js/bd4Uqh2x/KyjNJEOAzpLCwElcILHfCjzCE6Q==
+X-Gm-Gg: AY/fxX78eC2KB7A71+CKK0O1mbiH88SaTa3EsBSheadU6aAcd+0rwHUhOpMKU4q6Gsq
+	RdPP8NbaUof3qLsiV4tT+dNPq6VsVRlcd3KxQM9v5Ry5qYDD1R3ZtxPyQD6PvHwT8tjnMyC85qR
+	L/i/DkxgRPi3Q6wGRCjj6BbFaXiIhIEoA7GL6xqbE4qHvPBxucmVgahN9reusgZY8LPb/NU++X0
+	crm2IQwHVWGkcBsRDfs6KQSzQxEO0dolT+0ZtqVUn9pnhPguEVMuxDzMht0b0M6IVkdrtpQV5Uy
+	cBGnoqbGJpNhvqaaMTPbv0c8d/YG8rIfFYBuvVUySVDnKxEN1Q==
+X-Google-Smtp-Source: AGHT+IEdtGGJL6owR7mmmwSv2zTvtla84ek3MFk4eZNiNP2lYiWN2sfcs6M8h0fxDoYpaxxvqE+4ieXBeUSoFs/4WBA=
+X-Received: by 2002:a17:907:3ccb:b0:b73:8cea:62bb with SMTP id
+ a640c23a62f3a-b80371a3d87mr1355933366b.31.1766433444769; Mon, 22 Dec 2025
+ 11:57:24 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] arm64: dts: qcom: talos-evk-camera: Add DT overlay
-To: Wenmeng Liu <wenmeng.liu@oss.qualcomm.com>,
- Loic Poulain <loic.poulain@oss.qualcomm.com>, Robert Foss
- <rfoss@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>,
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-media@vger.kernel.org
-References: <20251222-sm6150_evk-v1-0-4d260a31c00d@oss.qualcomm.com>
- <20251222-sm6150_evk-v1-3-4d260a31c00d@oss.qualcomm.com>
- <cfb8f192-b327-4bb9-993e-a28184571712@linaro.org>
- <703a502c-883d-434a-8bcf-f785080f5102@oss.qualcomm.com>
-From: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-In-Reply-To: <703a502c-883d-434a-8bcf-f785080f5102@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20251215163820.1584926-1-robert.marko@sartura.hr>
+ <20251215163820.1584926-16-robert.marko@sartura.hr> <20251216-payback-ceremony-cfb7adad8ef1@spud>
+In-Reply-To: <20251216-payback-ceremony-cfb7adad8ef1@spud>
+From: Robert Marko <robert.marko@sartura.hr>
+Date: Mon, 22 Dec 2025 20:57:14 +0100
+X-Gm-Features: AQt7F2rDm7ZgyJ9ixNo09GJcdYbsF1DFNHNC0FIPR01SjncTPp1tTulCOrRyRyg
+Message-ID: <CA+HBbNESUZ6KB0BbpZUMfh1rjZTZMgY1SwmFQbx+CRP+a_1x9g@mail.gmail.com>
+Subject: Re: [PATCH v2 16/19] dt-bindings: pinctrl: pinctrl-microchip-sgpio:
+ add LAN969x
+To: Conor Dooley <conor@kernel.org>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+	nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com, 
+	claudiu.beznea@tuxon.dev, Steen.Hegelund@microchip.com, 
+	daniel.machon@microchip.com, UNGLinuxDriver@microchip.com, 
+	herbert@gondor.apana.org.au, davem@davemloft.net, vkoul@kernel.org, 
+	linux@roeck-us.net, andi.shyti@kernel.org, lee@kernel.org, 
+	andrew+netdev@lunn.ch, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, linusw@kernel.org, olivia@selenic.com, 
+	radu_nicolae.pirea@upb.ro, richard.genoud@bootlin.com, 
+	gregkh@linuxfoundation.org, jirislaby@kernel.org, mturquette@baylibre.com, 
+	sboyd@kernel.org, richardcochran@gmail.com, wsa+renesas@sang-engineering.com, 
+	romain.sioen@microchip.com, Ryan.Wanner@microchip.com, 
+	lars.povlsen@microchip.com, tudor.ambarus@linaro.org, 
+	charan.pedumuru@microchip.com, kavyasree.kotagiri@microchip.com, 
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org, 
+	dmaengine@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, netdev@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-spi@vger.kernel.org, linux-serial@vger.kernel.org, 
+	linux-usb@vger.kernel.org, linux-clk@vger.kernel.org, mwalle@kernel.org, 
+	luka.perkov@sartura.hr
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 12/22/25 13:41, Wenmeng Liu wrote:
-> 
-> 
-> On 12/22/2025 7:19 PM, Vladimir Zapolskiy wrote:
->> On 12/22/25 10:44, Wenmeng Liu wrote:
->>> Enable IMX577 via CCI on Taloss EVK Core Kit.
->>>
->>> The Talos EVK board does not include a camera sensor
->>> by default, this overlay reflects the possibility of
->>> attaching an optional camera sensor.
->>> For this reason, the camera sensor configuration is
->>> placed in talos-evk-camera.dtso, rather than
->>> modifying the base talos-evk.dts.
->>>
->>> Signed-off-by: Wenmeng Liu <wenmeng.liu@oss.qualcomm.com>
->>> ---
->>>    arch/arm64/boot/dts/qcom/Makefile              |  2 +
->>>    arch/arm64/boot/dts/qcom/talos-evk-camera.dtso | 64 ++++++++++++++++
->>> ++++++++++
->>>    arch/arm64/boot/dts/qcom/talos.dtsi            | 21 +++++++++
->>
->> Please split QCS615 MCLK definitions change into a separate commit.
-> ACK.>
->>>    3 files changed, 87 insertions(+)
->>>
->>> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/
->>> qcom/Makefile
->>> index
->>> 60121f133078b2754f98e6f45a3db4031b478cc8..b1d85b1f4a94714f2a5c976d162482d70ae920f2 100644
->>> --- a/arch/arm64/boot/dts/qcom/Makefile
->>> +++ b/arch/arm64/boot/dts/qcom/Makefile
->>> @@ -325,7 +325,9 @@ dtb-$(CONFIG_ARCH_QCOM)    += sm8650-qrd.dtb
->>>    dtb-$(CONFIG_ARCH_QCOM)    += sm8750-mtp.dtb
->>>    dtb-$(CONFIG_ARCH_QCOM)    += sm8750-qrd.dtb
->>>    dtb-$(CONFIG_ARCH_QCOM)    += talos-evk.dtb
->>> +talos-evk-camera-dtbs        := talos-evk.dtb talos-evk-camera.dtbo
->>>    talos-evk-lvds-auo,g133han01-dtbs    := talos-evk.dtb talos-evk-
->>> lvds-auo,g133han01.dtbo
->>> +dtb-$(CONFIG_ARCH_QCOM)    += talos-evk-camera.dtb
->>>    dtb-$(CONFIG_ARCH_QCOM)    += talos-evk-lvds-auo,g133han01.dtb
->>>    x1e001de-devkit-el2-dtbs    := x1e001de-devkit.dtb x1-el2.dtbo
->>>    dtb-$(CONFIG_ARCH_QCOM)    += x1e001de-devkit.dtb x1e001de-devkit-
->>> el2.dtb
->>> diff --git a/arch/arm64/boot/dts/qcom/talos-evk-camera.dtso b/arch/
->>> arm64/boot/dts/qcom/talos-evk-camera.dtso
->>> new file mode 100644
->>> index
->>> 0000000000000000000000000000000000000000..ae1a02295b4dc48212aad40980a329ff458fe69a
->>> --- /dev/null
->>> +++ b/arch/arm64/boot/dts/qcom/talos-evk-camera.dtso
->>> @@ -0,0 +1,64 @@
->>> +// SPDX-License-Identifier: BSD-3-Clause
->>> +/*
->>> + * Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
->>
->> Please add a missing year of the change.
-> Now our requirement is a yearless copyright.>
+On Tue, Dec 16, 2025 at 6:34=E2=80=AFPM Conor Dooley <conor@kernel.org> wro=
+te:
+>
+> On Mon, Dec 15, 2025 at 05:35:33PM +0100, Robert Marko wrote:
+> > Document LAN969x compatibles for SGPIO.
+> >
+> > Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+> > ---
+> >  .../pinctrl/microchip,sparx5-sgpio.yaml       | 20 ++++++++++++++-----
+> >  1 file changed, 15 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/Documentation/devicetree/bindings/pinctrl/microchip,sparx5=
+-sgpio.yaml b/Documentation/devicetree/bindings/pinctrl/microchip,sparx5-sg=
+pio.yaml
+> > index fa47732d7cef..9fbbafcdc063 100644
+> > --- a/Documentation/devicetree/bindings/pinctrl/microchip,sparx5-sgpio.=
+yaml
+> > +++ b/Documentation/devicetree/bindings/pinctrl/microchip,sparx5-sgpio.=
+yaml
+> > @@ -21,10 +21,15 @@ properties:
+> >      pattern: '^gpio@[0-9a-f]+$'
+> >
+> >    compatible:
+> > -    enum:
+> > -      - microchip,sparx5-sgpio
+> > -      - mscc,ocelot-sgpio
+> > -      - mscc,luton-sgpio
+> > +    oneOf:
+> > +      - enum:
+> > +          - microchip,sparx5-sgpio
+> > +          - mscc,ocelot-sgpio
+> > +          - mscc,luton-sgpio
+> > +      - items:
+> > +          - enum:
+> > +              - microchip,lan9691-sgpio
+> > +          - const: microchip,sparx5-sgpio
+> >
+> >    '#address-cells':
+> >      const: 1
+> > @@ -80,7 +85,12 @@ patternProperties:
+> >      type: object
+> >      properties:
+> >        compatible:
+> > -        const: microchip,sparx5-sgpio-bank
+>
+> This should just be able to become "compatible: contains: const: microchi=
+p,sparx5-sgpio-bank.
+> pw-bot: changes-requested
 
-Ack. It's a lawyers' domain anyway.
+Hi Conor,
+I have tried using contains, but it would fail to match with the
+following error:
+arch/arm64/boot/dts/microchip/lan9696-ev23x71a.dtb:
+/axi/gpio@e2010230/gpio@0: failed to match any schema with compatible:
+['microchip,lan9691-sgpio-bank', 'microchip,sparx5-sgpio-bank']
+arch/arm64/boot/dts/microchip/lan9696-ev23x71a.dtb:
+/axi/gpio@e2010230/gpio@1: failed to match any schema with compatible:
+['microchip,lan9691-sgpio-bank', 'microchip,sparx5-sgpio-bank']
 
->>> + */
->>> +
->>> +/dts-v1/;
->>> +/plugin/;
->>> +
->>> +#include <dt-bindings/clock/qcom,qcs615-camcc.h>
->>> +#include <dt-bindings/gpio/gpio.h>
->>> +
->>> +&camss {
->>> +    vdd-csiphy-1p2-supply = <&vreg_l11a>;
->>> +    vdd-csiphy-1p8-supply = <&vreg_l12a>;
->>> +
->>> +    status = "okay";
->>> +
->>> +    ports {
->>> +        #address-cells = <1>;
->>> +        #size-cells = <0>;
->>> +
->>> +        port@1 {
->>> +            reg = <1>;
->>> +
->>> +            csiphy1_ep: endpoint {
->>> +                clock-lanes = <7>;
->>
->> Please remove 'clock-lanes' property.
-> ACK.>
->>> +                data-lanes = <0 1 2 3>;
->>> +                remote-endpoint = <&imx577_ep1>;
->>> +            };
->>> +        };
->>> +    };
->>> +};
->>> +
->>> +&cci {
->>> +    status = "okay";
->>> +};
->>> +
->>> +&cci_i2c1 {
->>> +    #address-cells = <1>;
->>> +    #size-cells = <0>;
->>> +
->>> +    camera@1a {
->>> +        compatible = "sony,imx577";
->>> +        reg = <0x1a>;
->>> +
->>> +        reset-gpios = <&tlmm 29 GPIO_ACTIVE_LOW>;
->>> +        pinctrl-0 = <&cam2_default>;
->>> +        pinctrl-names = "default";
->>> +
->>> +        clocks = <&camcc CAM_CC_MCLK2_CLK>;
->>> +        assigned-clocks = <&camcc CAM_CC_MCLK2_CLK>;
->>> +        assigned-clock-rates = <24000000>;
->>> +
->>> +        avdd-supply = <&vreg_s4a>;
->>
->> Just one voltage supply?
-> yes, 22pin camera module only have one pin for power.>
+Regards,
+Robert
+>
+> > +        oneOf:
+> > +          - items:
+> > +              - enum:
+> > +                  - microchip,lan9691-sgpio-bank
+> > +              - const: microchip,sparx5-sgpio-bank
+> > +          - const: microchip,sparx5-sgpio-bank
+> >
+> >        reg:
+> >          description: |
+> > --
+> > 2.52.0
+> >
 
-It's common that mezzanine boards are supplied with power from S4A or VBAT,
-I've never seen a camera module supplied with just one voltage regulator,
-that's why it attracts attention.
 
-What is a camera module here, is it on an attachable vision mezzanine like
-on RBx series or a part of Talos EVK PCB like on QRD series?
 
-If it is a mezzanine, the support of mezzanine boards should be done as
-a DT overlay.
-
--- 
-Best wishes,
-Vladimir
+--=20
+Robert Marko
+Staff Embedded Linux Engineer
+Sartura d.d.
+Lendavska ulica 16a
+10000 Zagreb, Croatia
+Email: robert.marko@sartura.hr
+Web: www.sartura.hr
 
