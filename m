@@ -1,158 +1,235 @@
-Return-Path: <linux-i2c+bounces-14682-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14683-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 886F6CD672D
-	for <lists+linux-i2c@lfdr.de>; Mon, 22 Dec 2025 15:59:02 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id EBD4ACD699D
+	for <lists+linux-i2c@lfdr.de>; Mon, 22 Dec 2025 16:45:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C35FC308ED0D
-	for <lists+linux-i2c@lfdr.de>; Mon, 22 Dec 2025 14:56:43 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id E676C30133FF
+	for <lists+linux-i2c@lfdr.de>; Mon, 22 Dec 2025 15:45:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4025B32ED49;
-	Mon, 22 Dec 2025 14:47:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6A10149C6F;
+	Mon, 22 Dec 2025 15:45:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="DAB/Amyf"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lbo//aU3"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE2C832ED4B
-	for <linux-i2c@vger.kernel.org>; Mon, 22 Dec 2025 14:47:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9399A31AAA3
+	for <linux-i2c@vger.kernel.org>; Mon, 22 Dec 2025 15:45:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766414865; cv=none; b=svI/43pdEy3czQegMDNF7hoN4OZOQNiHYrOZIZzSojMFe2eUPh8ZpPcrUqjfRxpoRAjst/72+mzb9+7RcBvmR0bccQAYOGvQvQ0/Lid0j64n9klQpj/+ZGwZQtJqlsx6Eq2P3FRtd9m/XpsPiUxTFJAeWRVXpXbg+gp/fal/fbA=
+	t=1766418322; cv=none; b=iFD+nN4XuTeFqk0GpOtH5cn+SLxRW/TMOTef9pvu7YfMC0Ewkzq5Ez6deqA/4J/gTLInazYWKUl++38nUBqWHmy5Rylij5EmCh8Ed98YlVKrrj2n20Q+Tj1ZgTv+5umXykGLPOnoMQWsx3a3GERzHtK16Udyj9zWqjPQgDSMe30=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766414865; c=relaxed/simple;
-	bh=IwLjLCoIOYSxZJTADglHFhXYcy2He7W4GE2tlYf0bXA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pvum8dc3ZTTAJE2OBV9NbkaSmzyZOo4fjAARgzOz2j5GH56FcqNYmUDZiGNS/Gv0hMLKuG8xpVdopn0DCMhQLv/pImw2eDChAO8QIFNznZue3gZPDlTq1y/RynNdL43XUJXkQ4yVqQwGBA1coiqeAIraWRr7V+TfwsKJFbvBeDM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=DAB/Amyf; arc=none smtp.client-ip=209.85.167.53
+	s=arc-20240116; t=1766418322; c=relaxed/simple;
+	bh=tGcJJtQIWOQL7kqmOQjdpBhyQjgqnzYpX8nXShFX66k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JxJYMUGiVv2yVm/gPUsRhuwcSU//BfUoLaRKKrcfg1UNtD+JcwtqmF+gxwy1I/IHELqQ/g72eWNbdRer8qBQ1wLd9OkgbS9JFHy/vErlCbTXKHz1ich7t0vVmRjeU7RzW7S9vDarrj6N80raFjpAnZZVq/EhDdOtodPoTE9708Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=lbo//aU3; arc=none smtp.client-ip=209.85.208.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-59a10ef758aso3299065e87.2
-        for <linux-i2c@vger.kernel.org>; Mon, 22 Dec 2025 06:47:41 -0800 (PST)
+Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-37a990ec4e5so4255441fa.3
+        for <linux-i2c@vger.kernel.org>; Mon, 22 Dec 2025 07:45:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1766414860; x=1767019660; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=lNpWj6TBvVji/fHBEAyDcOFnMWFot5zrE/hRwsxnXVY=;
-        b=DAB/Amyf1kdMghWpvNsR5yNnMf+GdDvgb0bA4+59mA0CrIcjf0meQgWipWa4qgI0+u
-         QzmXsaKh4CDGdPAVFemA6mB0PY7nYeYTfFKf08TKNBK7/79eZ+/5axG1Oj+c5gAmAFfg
-         T6+CWEWvYf5iQFoFrZGr06kU0xwOi/gsXNB3kQcCCxDDaqnVlheA/H95h4OGQdIrQD1T
-         DuSAeDBryQG0Va3VNcLhpD2f+qW6b93O1bCz7Ls5M2R8ZzuC60dez2dFPM0QaMrYu6X1
-         4TJcc1dZY6C1qQanrLgSyh2HkvSgJUb+rXBU+gv3hnl/FjGW4kxTqLG3nbaKx9Smpezy
-         zmVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766414860; x=1767019660;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=linaro.org; s=google; t=1766418318; x=1767023118; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=lNpWj6TBvVji/fHBEAyDcOFnMWFot5zrE/hRwsxnXVY=;
-        b=ndEi3OOJw4eZATRh8EWOK0HBkNRSp6L7A4CszGRrWx1vG+oO+JvuBg3pukZ0UZDgng
-         u1rKZiiMbejMgME2BQH76dcqKluJJlO8i5DhjLG7TvluN3+YsepLb0l3Avniozh3bdAV
-         eGr7YRGwh9aG97XNC5TwO2j5m6Ttarq3AU0lVyBRulxkqmbwX0di73rODXACORfUduz/
-         t/ezbBt9ug2MdAQKrpz9rrGb4nrjTXtqHw3NMEf4z2rpR3nvPPUUyisjEQRRwiV1MfFG
-         pKJ3q1qeiPhBFIvHKM23H7kInu5modKZ9BD2c13w2x0MfYN/w/LZP1s+DRK3jAPKgEv0
-         8d3Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVrTzxYJSsusr28xK8bcLQe49LmanwE0ZhWq1RDexD7kkg45+6Po0tP17jI9yECfUl7x58MU+Eqwqs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxrUj++b9/yjPzddCpp23j8goXwAl25Yforce+TMA3bGTMHpvqy
-	2PEJ4smaqaYRX6EdTrmqltyl6/ohlQ51R7htK7mbyjDsnAcME/ROu8sXWvJWKmwkbyRKX0DLfa/
-	5JcpQtk6DCutx7OCOGXGMM9v4GtNzVj5jKICKkJ8SaQ==
-X-Gm-Gg: AY/fxX51ojZjTS29ObKVfELT1t6k8Tiyoi71JrKfnPyfHpOL3Y85/Hx2QtmVCdQWdgB
-	hnBygusqtr+ufhfjz1T0M/u/D8KkHe2t0A+45ysB7jb2OTQfWOCifv8g6oDxUzQki8q0/pbwZl6
-	tw224FBIcvJvKyKHdKg8ZlGBJ9YbaEUEnIRN4N560XuNjtjah10NxZTbWhTjBDzwqSOaOsFBdK4
-	Ua9ImFlPsbehyetJjaxUsK7QpZN3+/RoM30XQsLcalPYy2fXxY+FEUp5Y5x0cRdBVKX1IWQ
-X-Google-Smtp-Source: AGHT+IEmZoekCpdFdxCX6++mG8wezcWmjXxPG5ogJ3p4YsZ2il+JIIqimrrt74JmCImmja/XHDzRdip0knGEk5MWYgo=
-X-Received: by 2002:a05:6512:e9c:b0:598:faba:c8fa with SMTP id
- 2adb3069b0e04-59a17d006e1mr4286628e87.10.1766414859977; Mon, 22 Dec 2025
- 06:47:39 -0800 (PST)
+        bh=UMuqFt6V0IzeFc5cbPsgJJwBQ8b3x0/Nca76P9XgoyE=;
+        b=lbo//aU3vEZOiIVVQLR1X/wUKhE/VPS+Mc+W+Pd5dOKlUb+qx/jj2GwjF9s/3X7I90
+         owFtPyJimOqhA/Nkr13TKqw3fzfXtylp94DzB833WwCCxPjbxgeAsr8Az5smMWVhBzsK
+         VvuJN/7pohCYKzik+a+x1zhYZyj9zitGmdG+MTUTMRzrADCBK6kByMiP45Iu4bblC0wV
+         NnaQGzDeZ7NUHAP681PB60uvIYRkoFcv8E1gJjdAUZT7zQwwdxdBlnPPaa//Na5tIpnS
+         gROLyzCL84oHIfdnPdCDVW8U5kgFH9Bsbs68Fqc+RFbr0lNi2TQeRdLBrRXvbT9FQs3+
+         6Oww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1766418318; x=1767023118;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UMuqFt6V0IzeFc5cbPsgJJwBQ8b3x0/Nca76P9XgoyE=;
+        b=fZwee7lZlFISb4dSVZLdhlm3oh1u7GcqQJlX2FJtnKwVzyTCC8ZDyoFRXhnR1f1koJ
+         rgautwvoyKJ6363RvJMySyBCQ2B1yWS53v21tcKSyM9qo4H26SrZjw9GoGbKUf0FHAbI
+         C1TlvuJsd1hRXmoHLM2lS8ZL7ObN12voJmo/26WjTk11ODF5BIPuZOCQC1F87/zU5+7t
+         H0FX42cVnIq+GIPrKRzhg2VR/qDAWwG37AZKNUtkQcCVG6mhr9TLrbw503hiMsvkljij
+         eLl/9wvHbKlLQe15kaPxwVorKRaOZ1g+2l5sjBdxwphfdDiIj3UOXyKurTNN3u/N+KKy
+         6iSQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXy7xZ7j3hRBLq/7UyfPc+6qDN7HkmZvPmoQ8kNCsnBfXhwyWqQi46NwhcVm7qqTxzARumqcZuAiYc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy5ozjAmEl5vIeJ3FooybBfzX+lvU5G50acXSuBLVQdnOeaRNN4
+	y+2ecjbbdPlAmWGf2v3O/vvefGm77ocBPKuJmZ9YnViT22uDPP+iZ77jsRakSxU8AO8=
+X-Gm-Gg: AY/fxX6zR0pCRMFhYCyv1Ctfu4cVOPO5eXDaAl1TQG+TA4CaoBymSLShreApCnNd0VS
+	eJnNw/Oo8IE0+pjnWlragx3bTK5duO0+Syjh6U4lC6HDTpBLc0Gz/py50Dt+qUHOQR9mPfpZ69A
+	kKc+HY70FarO8p7xDgpkBN3+2TuX+/KWsRn2XqdNKQG/avwtgiJ5NYbv7Ajm7TTuI1JPi+dTofb
+	2uqAZLR0EXZL7O3hpfJtdc0rKF97ga3aQp7IHG/KWVWFD9osRf5qMQ9qtKe9A8/YFYZsYp/kOwp
+	ssWgcv90UmTHDDDRIwRoWve3BQcj8wTQYSozV0R1Gvfv60A4Mp8sh21LWxdUvTbwXePoalbLYbU
+	VUYLtrLX0FRJ/lI4+6sjgByrD+llootfIFBcUUzEvTXH2VoJwSymN4GgqxSTKz7CwDn5M0e0IDU
+	Q53lFsoeMpGhoPplZvRHGzICEvvv14mLSX+NTRv2ATqeK+CYiO4lRUlclYbWG05fA+hg==
+X-Google-Smtp-Source: AGHT+IHEreMefgVZs02UZwhZN/8T0ly29BM+V8xxSKTeK3gzyXwjk92eE8YSbX1LnQ/PYAR4eL/7Kw==
+X-Received: by 2002:a05:651c:1542:b0:37e:6e31:c9bc with SMTP id 38308e7fff4ca-3812173480amr20316101fa.8.1766418317548;
+        Mon, 22 Dec 2025 07:45:17 -0800 (PST)
+Received: from [192.168.1.100] (91-159-24-186.elisa-laajakaista.fi. [91.159.24.186])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-59a1861f85dsm3255925e87.73.2025.12.22.07.45.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Dec 2025 07:45:17 -0800 (PST)
+Message-ID: <091b863b-fa0a-4d3c-8461-60cdc4970992@linaro.org>
+Date: Mon, 22 Dec 2025 17:45:14 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251210-rz-sdio-mux-v3-0-ca628db56d60@solid-run.com>
- <20251210-rz-sdio-mux-v3-2-ca628db56d60@solid-run.com> <CAPDyKFoYd3WKGrjD3DEzZH8EfgZPmRkrqL=rdoKNuAADrvz3Eg@mail.gmail.com>
- <20f2128c-c6cb-4b13-aa08-b93e540f5bd9@solid-run.com>
-In-Reply-To: <20f2128c-c6cb-4b13-aa08-b93e540f5bd9@solid-run.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Mon, 22 Dec 2025 15:47:03 +0100
-X-Gm-Features: AQt7F2pGUIPrw4OqWueh78ppZDBGwQc_mhY3RygUrq6e1L74fXopGZ4K0V_QvZo
-Message-ID: <CAPDyKFo2jsV02qSDBSZTewJjV09AMO8iETU5Uxqz+GBnd0JY6g@mail.gmail.com>
-Subject: Re: [PATCH v3 2/6] mux: Add helper functions for getting optional and
- selected mux-state
-To: Josua Mayer <josua@solid-run.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Geert Uytterhoeven <geert+renesas@glider.be>, 
-	Magnus Damm <magnus.damm@gmail.com>, Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	Marc Kleine-Budde <mkl@pengutronix.de>, Vincent Mailhol <mailhol@kernel.org>, Vinod Koul <vkoul@kernel.org>, 
-	Kishon Vijay Abraham I <kishon@kernel.org>, Peter Rosin <peda@axentia.se>, 
-	Aaro Koskinen <aaro.koskinen@iki.fi>, Andreas Kemnade <andreas@kemnade.info>, 
-	Kevin Hilman <khilman@baylibre.com>, Roger Quadros <rogerq@kernel.org>, 
-	Tony Lindgren <tony@atomide.com>, Vignesh R <vigneshr@ti.com>, 
-	Janusz Krzysztofik <jmkrzyszt@gmail.com>, Andi Shyti <andi.shyti@kernel.org>, 
-	Mikhail Anikin <mikhail.anikin@solid-run.com>, Yazan Shhady <yazan.shhady@solid-run.com>, 
-	Jon Nettleton <jon@solid-run.com>, "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>, 
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>, 
-	"linux-can@vger.kernel.org" <linux-can@vger.kernel.org>, 
-	"linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>, 
-	"linux-omap@vger.kernel.org" <linux-omap@vger.kernel.org>, 
-	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/3] arm64: dts: qcom: talos-evk-camera: Add DT overlay
+To: Wenmeng Liu <wenmeng.liu@oss.qualcomm.com>,
+ Loic Poulain <loic.poulain@oss.qualcomm.com>, Robert Foss
+ <rfoss@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konradybcio@kernel.org>,
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-media@vger.kernel.org
+References: <20251222-sm6150_evk-v1-0-4d260a31c00d@oss.qualcomm.com>
+ <20251222-sm6150_evk-v1-3-4d260a31c00d@oss.qualcomm.com>
+ <cfb8f192-b327-4bb9-993e-a28184571712@linaro.org>
+ <703a502c-883d-434a-8bcf-f785080f5102@oss.qualcomm.com>
+From: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+In-Reply-To: <703a502c-883d-434a-8bcf-f785080f5102@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Sun, 21 Dec 2025 at 11:38, Josua Mayer <josua@solid-run.com> wrote:
->
-> Hi Ulf,
->
-> Am 17.12.25 um 14:38 schrieb Ulf Hansson:
-> > On Wed, 10 Dec 2025 at 18:39, Josua Mayer <josua@solid-run.com> wrote:
->
-> cut
->
-> >>  /*
-> >>   * Using subsys_initcall instead of module_init here to try to ensure - for
-> >>   * the non-modular case - that the subsystem is initialized when mux consumers
-> >> diff --git a/include/linux/mux/consumer.h b/include/linux/mux/consumer.h
-> >> index 2e25c838f8312..a5da2e33a45c0 100644
-> >> --- a/include/linux/mux/consumer.h
-> >> +++ b/include/linux/mux/consumer.h
-> >> @@ -60,5 +60,9 @@ struct mux_control *devm_mux_control_get(struct device *dev,
-> >>                                          const char *mux_name);
-> >>  struct mux_state *devm_mux_state_get(struct device *dev,
-> >>                                      const char *mux_name);
-> >> +struct mux_state *devm_mux_state_get_optional(struct device *dev,
-> >> +                                             const char *mux_name);
-> >> +struct mux_state *devm_mux_state_get_optional_selected(struct device *dev,
-> >> +                                                      const char *mux_name);
-> > Seems like we need stub-functions of these too. Otherwise
-> > subsystems/drivers need to have a "depends on MULTIPLEXER" in their
-> > Kconfigs.
->
-> Currently the drivers that can use a mux select MULTIPLEXER in Kconfig.
+On 12/22/25 13:41, Wenmeng Liu wrote:
+> 
+> 
+> On 12/22/2025 7:19 PM, Vladimir Zapolskiy wrote:
+>> On 12/22/25 10:44, Wenmeng Liu wrote:
+>>> Enable IMX577 via CCI on Taloss EVK Core Kit.
+>>>
+>>> The Talos EVK board does not include a camera sensor
+>>> by default, this overlay reflects the possibility of
+>>> attaching an optional camera sensor.
+>>> For this reason, the camera sensor configuration is
+>>> placed in talos-evk-camera.dtso, rather than
+>>> modifying the base talos-evk.dts.
+>>>
+>>> Signed-off-by: Wenmeng Liu <wenmeng.liu@oss.qualcomm.com>
+>>> ---
+>>>    arch/arm64/boot/dts/qcom/Makefile              |  2 +
+>>>    arch/arm64/boot/dts/qcom/talos-evk-camera.dtso | 64 ++++++++++++++++
+>>> ++++++++++
+>>>    arch/arm64/boot/dts/qcom/talos.dtsi            | 21 +++++++++
+>>
+>> Please split QCS615 MCLK definitions change into a separate commit.
+> ACK.>
+>>>    3 files changed, 87 insertions(+)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/
+>>> qcom/Makefile
+>>> index
+>>> 60121f133078b2754f98e6f45a3db4031b478cc8..b1d85b1f4a94714f2a5c976d162482d70ae920f2 100644
+>>> --- a/arch/arm64/boot/dts/qcom/Makefile
+>>> +++ b/arch/arm64/boot/dts/qcom/Makefile
+>>> @@ -325,7 +325,9 @@ dtb-$(CONFIG_ARCH_QCOM)    += sm8650-qrd.dtb
+>>>    dtb-$(CONFIG_ARCH_QCOM)    += sm8750-mtp.dtb
+>>>    dtb-$(CONFIG_ARCH_QCOM)    += sm8750-qrd.dtb
+>>>    dtb-$(CONFIG_ARCH_QCOM)    += talos-evk.dtb
+>>> +talos-evk-camera-dtbs        := talos-evk.dtb talos-evk-camera.dtbo
+>>>    talos-evk-lvds-auo,g133han01-dtbs    := talos-evk.dtb talos-evk-
+>>> lvds-auo,g133han01.dtbo
+>>> +dtb-$(CONFIG_ARCH_QCOM)    += talos-evk-camera.dtb
+>>>    dtb-$(CONFIG_ARCH_QCOM)    += talos-evk-lvds-auo,g133han01.dtb
+>>>    x1e001de-devkit-el2-dtbs    := x1e001de-devkit.dtb x1-el2.dtbo
+>>>    dtb-$(CONFIG_ARCH_QCOM)    += x1e001de-devkit.dtb x1e001de-devkit-
+>>> el2.dtb
+>>> diff --git a/arch/arm64/boot/dts/qcom/talos-evk-camera.dtso b/arch/
+>>> arm64/boot/dts/qcom/talos-evk-camera.dtso
+>>> new file mode 100644
+>>> index
+>>> 0000000000000000000000000000000000000000..ae1a02295b4dc48212aad40980a329ff458fe69a
+>>> --- /dev/null
+>>> +++ b/arch/arm64/boot/dts/qcom/talos-evk-camera.dtso
+>>> @@ -0,0 +1,64 @@
+>>> +// SPDX-License-Identifier: BSD-3-Clause
+>>> +/*
+>>> + * Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
+>>
+>> Please add a missing year of the change.
+> Now our requirement is a yearless copyright.>
 
-Yes, but that's not generally how we do this. The driver may not need
-MULTIPLEXER for all platforms that driver is being used on.
+Ack. It's a lawyers' domain anyway.
 
->
-> There already exist a few mux helpers both for mux-state and for mux-control,
-> and they might all need stubs.
+>>> + */
+>>> +
+>>> +/dts-v1/;
+>>> +/plugin/;
+>>> +
+>>> +#include <dt-bindings/clock/qcom,qcs615-camcc.h>
+>>> +#include <dt-bindings/gpio/gpio.h>
+>>> +
+>>> +&camss {
+>>> +    vdd-csiphy-1p2-supply = <&vreg_l11a>;
+>>> +    vdd-csiphy-1p8-supply = <&vreg_l12a>;
+>>> +
+>>> +    status = "okay";
+>>> +
+>>> +    ports {
+>>> +        #address-cells = <1>;
+>>> +        #size-cells = <0>;
+>>> +
+>>> +        port@1 {
+>>> +            reg = <1>;
+>>> +
+>>> +            csiphy1_ep: endpoint {
+>>> +                clock-lanes = <7>;
+>>
+>> Please remove 'clock-lanes' property.
+> ACK.>
+>>> +                data-lanes = <0 1 2 3>;
+>>> +                remote-endpoint = <&imx577_ep1>;
+>>> +            };
+>>> +        };
+>>> +    };
+>>> +};
+>>> +
+>>> +&cci {
+>>> +    status = "okay";
+>>> +};
+>>> +
+>>> +&cci_i2c1 {
+>>> +    #address-cells = <1>;
+>>> +    #size-cells = <0>;
+>>> +
+>>> +    camera@1a {
+>>> +        compatible = "sony,imx577";
+>>> +        reg = <0x1a>;
+>>> +
+>>> +        reset-gpios = <&tlmm 29 GPIO_ACTIVE_LOW>;
+>>> +        pinctrl-0 = <&cam2_default>;
+>>> +        pinctrl-names = "default";
+>>> +
+>>> +        clocks = <&camcc CAM_CC_MCLK2_CLK>;
+>>> +        assigned-clocks = <&camcc CAM_CC_MCLK2_CLK>;
+>>> +        assigned-clock-rates = <24000000>;
+>>> +
+>>> +        avdd-supply = <&vreg_s4a>;
+>>
+>> Just one voltage supply?
+> yes, 22pin camera module only have one pin for power.>
 
-Correct. I think we should add subs for all of them.
+It's common that mezzanine boards are supplied with power from S4A or VBAT,
+I've never seen a camera module supplied with just one voltage regulator,
+that's why it attracts attention.
 
->
-> I'd prefer the restructuring of kconfig dependencies being independent from
-> adding mux-state functionality to renesas sdhi driver.
+What is a camera module here, is it on an attachable vision mezzanine like
+on RBx series or a part of Talos EVK PCB like on QRD series?
 
-I understand your point, but adding the stubs isn't really a big thing
-- unless someone has some good arguments not to!?
+If it is a mezzanine, the support of mezzanine boards should be done as
+a DT overlay.
 
-Moreover, since the series changes the mux-core anyways - and
-subsequent changes depend on it, I don't see an issue to fold in yet
-another patch to add the stubs.
-
-Kind regards
-Uffe
+-- 
+Best wishes,
+Vladimir
 
