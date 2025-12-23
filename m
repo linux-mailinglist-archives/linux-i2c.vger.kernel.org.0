@@ -1,100 +1,99 @@
-Return-Path: <linux-i2c+bounces-14697-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14698-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1801CCD8BB5
-	for <lists+linux-i2c@lfdr.de>; Tue, 23 Dec 2025 11:10:00 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 88496CD8B6A
+	for <lists+linux-i2c@lfdr.de>; Tue, 23 Dec 2025 11:05:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1603230A0D4A
-	for <lists+linux-i2c@lfdr.de>; Tue, 23 Dec 2025 10:05:15 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id A0FFA301CE45
+	for <lists+linux-i2c@lfdr.de>; Tue, 23 Dec 2025 10:05:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B26533D4FF;
-	Tue, 23 Dec 2025 10:03:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFA6033E37D;
+	Tue, 23 Dec 2025 10:03:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="lgtVVrCR";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="hP+uNyHe"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="F2GLm8R2";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="QOkhn6OW"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6669F33A6F7
-	for <linux-i2c@vger.kernel.org>; Tue, 23 Dec 2025 10:03:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 963B133B6D2
+	for <linux-i2c@vger.kernel.org>; Tue, 23 Dec 2025 10:03:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766484186; cv=none; b=PE5N3hfhd6ZN/P0cJAsGJQISX8HQOkLKYpbmE1o/sRoKcyBYnhfMR1EWreSsUqEw0sTHaOqofb1kaLyjqK4/Tf3NK1qEF2V2vnLVveHACFjvUpC3BhO8NrTNe0aC9BFa1bA1FHrIEW0utapodMub23+g14nOvN0As5zBvH7mRco=
+	t=1766484188; cv=none; b=srQGD9GFhMc3UpcyWj7M3FDSYg8n0wxaurGjmwA9qfyV6dLqVCUirG5nPsKpqIhPxEsmM3C/jxf7nE7viHwdjomq2Gnk+3dIoNPWzgDZHk7Cn4PsgJxC6YKpcAtFUqjf/EStE8lQIh7d+C2Hb5Jw7taPc+MUPmEuPApIgDlD3HA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766484186; c=relaxed/simple;
-	bh=1RcMgKhoVIDH/uvlkjR4k8BRDeSqy3Z1wqmJ/Zg7uPQ=;
+	s=arc-20240116; t=1766484188; c=relaxed/simple;
+	bh=dI851BmOduiioly8u4iYfe+Rr//GzNIkYCteXmln3Ng=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=tbeYzLeouXKphwdhdP7y/QxgGr+xc3Vt2bkctNjep//vVbbEQJcclGi2fSZ5h8dUdDboOmfA5i86ZiMo16Jd6C6lEinBGIzpYlSMl+UAOJkHVVjJOsKN7tyeSa/RlqgKoxoduT+7l8N8BoslgpqVsgsMxDS2aQZC+0owdo+RLv0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=lgtVVrCR; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=hP+uNyHe; arc=none smtp.client-ip=205.220.180.131
+	 In-Reply-To:To:Cc; b=cuNm7tb5K6thhtUlKXMPBCUPof2GZHKPqAjv998q8SaOHnrWLDjtI+W1FHZmH6ZR077QyAJuncTQ3IKDlaDVII0BkI+KlxXhHHesoqLljAPGQ+1BMe9rkByHoaxrfFaD7QcH5EmA1lB6lzrxpQCJpDHyXP80MMKJIn+uC6VlgkQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=F2GLm8R2; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=QOkhn6OW; arc=none smtp.client-ip=205.220.180.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5BN2dMev2199053
-	for <linux-i2c@vger.kernel.org>; Tue, 23 Dec 2025 10:03:01 GMT
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5BN345NX1891267
+	for <linux-i2c@vger.kernel.org>; Tue, 23 Dec 2025 10:03:02 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	Kn07S0VFJ00r1Opp95FLhCfso4raJ3godCnzzNkTUdQ=; b=lgtVVrCRDEEhbVLA
-	bu1fxLTBApMnXU4Io5Rs7UxlEpP4lv20AZm80EjrI6PAMZvpCBjCN/RrpU2aydOL
-	g0vyT5gMOrqNJiYyX+5UjqmHbGn8dMJbc8BplkwFup1dzZnaRiKrxV9wmSjanO+5
-	DAV8tqUDtGipXSWN/91KJm2nSQtUFCtkt+YZ4M8XDjdSA/Nrb8pwgRj3S1RPeblX
-	O2ENydHSe6u8kcw6kNgqkiKc9x8rPElPzUPsxhK41Q0bMN0QMNciQW9HOdMdDHzq
-	QZlmEU8TXuKRxRf76vttD6biAOOikTeEIAE5DoAFlKqjR/y8mG+ajwHT1pavw7Zi
-	aYLMgw==
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4b73fwurg6-1
+	or9DvhQwaxtsrAqBQKF2R4HMkZA0UWyOfpa2BBt7/z4=; b=F2GLm8R2dREg5sck
+	zgwCv6IffFw5EQxdkz6nZX9+TnNyy8LZcekauJxst7CNm8WdkKpH/ZVHkj+qS/px
+	GDbP6yrTQNayaiBAkb/FwCXjoYPP4IeJ8jjaPBc2jMUIXkL/lj7vMWlD/Axn4D0l
+	rCjL/MvYhL3NNd9iF8EdRvRVZwxSfaUUqhuOFLiDDWRKnPWgf2q9DzEnYJJmF03b
+	zH9+8N8WFL6TFMqn7tqwZIo/0lxAR0ZA8mh77yxxGs1g2ItJ1k99KAFxIAjftPcN
+	XKqKe/l9ArxoAmdi6nrgzWDkW/iV6O7Gldkg6pYtMi4shkzKgT5f0vUZaj8iT+bE
+	ZOwRmg==
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com [209.85.222.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4b770ak4uk-1
 	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-i2c@vger.kernel.org>; Tue, 23 Dec 2025 10:03:01 +0000 (GMT)
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-4ed79dd4a47so103664021cf.3
-        for <linux-i2c@vger.kernel.org>; Tue, 23 Dec 2025 02:03:01 -0800 (PST)
+	for <linux-i2c@vger.kernel.org>; Tue, 23 Dec 2025 10:03:02 +0000 (GMT)
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-8bb0ae16a63so538071785a.3
+        for <linux-i2c@vger.kernel.org>; Tue, 23 Dec 2025 02:03:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1766484180; x=1767088980; darn=vger.kernel.org;
+        d=oss.qualcomm.com; s=google; t=1766484182; x=1767088982; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Kn07S0VFJ00r1Opp95FLhCfso4raJ3godCnzzNkTUdQ=;
-        b=hP+uNyHexRsCiEeXpWGXdj7qf2yRXX/btA1el4xtBFjPXmDFsLt0tAoi3pac4dIj2u
-         iB5D/adtVE6PqZEHea3X4+mt0S4sBX7PmIH8iFfR7I6JyGnNcprhp2jAVuXrHLMthCKs
-         lRNlpRDuUG6Rp5RWg8iSvdfHKKLk8vFkov5s4W8Mxp363LwxZFzUuMtNHf7VD64r5jrY
-         LYK6/+ygGn7BqhyyKtJM0UIcJiCb6wuCMPhufRddR5BqtnJWjHEJ67iG7X3ZbDsYNGuD
-         2H891tqy3Ib0Hqdx1roTrw5+xx8M/g7O360VgDzlPWKMpa782tCxxUl9K7fSrdOkLDXA
-         SKWA==
+        bh=or9DvhQwaxtsrAqBQKF2R4HMkZA0UWyOfpa2BBt7/z4=;
+        b=QOkhn6OWZEiTQUFW5JzSgiQ3KnXGVTms6m/dVvIfHQqqudmCVV1MT04ZToFStZwOpL
+         jZbDdZXepAPFEdKo//CAw9CQRDy3KGwXfQLJ6K3Yod+NgPtud26as6IexTPZrQsFiOW1
+         chYl/64zYoPAMzPmywR1DWUqTRUVhHsDdyTj7ULnZZjTqEjEzf/mLr9drbCqElMtS+Hp
+         37u0rx3rDclbBjwMJ038Hyf4TPE12BvHGj04Nq4pQ+LexncQhObQMJiT6PSs/mFspDRv
+         7G26wyRUj3Xyqm4MhgwDzuXDSkHcyw4wW8ptPiK60XnQRrQh2CGcq+9YHLPdiIdrBfq8
+         qV4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766484180; x=1767088980;
+        d=1e100.net; s=20230601; t=1766484182; x=1767088982;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=Kn07S0VFJ00r1Opp95FLhCfso4raJ3godCnzzNkTUdQ=;
-        b=SjXa/oZ1DcaeLs3PKYhJd4h86itD7zpsbvTqBxR46lYiUMquPVUCO9gfDlC+Wqt6Bq
-         /6H0saLNEbyCiGY2rf41NAWbk5C/XA6rI+uepJB9Zpj1V6ah5zC/iKM+YcZcqNyKxCPz
-         bLjdLVV7E1tI6d3BxGbRciXRbG0zR/FiawFyd+0ciK6gkv+l4bPHOgCvudFNiXjlc2kC
-         00IpFgmBqvswcdYFlCMOYKW2mMGyK+nyryuA+B5vmdV1KGdEcjUlS1/cIrcsYHB35Ndl
-         o1vI+I1HJwN223YtxHrlEh+NnDG6n58KWro8xDoMfMBYq52pyCjSdOlt+GDleUFKXjw5
-         +6YQ==
-X-Gm-Message-State: AOJu0YxrTCGHOGa462do1d+1LVmN6ZauGK18H2NQucZxrRRnGVoVbqOK
-	cX9I1gxb3ofv8WFKoKMshDBRoM2Dif87Z5P1c8xKeS2aDsrhclDr/g2EwvLk6+gDlMo7mjQX1qJ
-	jDbw9S2+WYJV34XSlpTuTWvQjKgO4QLi0giORDFfuVdYhERFlTfaUA5azOwJ863g=
-X-Gm-Gg: AY/fxX7+/669oyQkTJwB3CGmzxfDxdrbwlAJrP8KH56lKbVwG2ghlVEM2poGhW5BJ8l
-	Tqkcdydj/gSjltb/XPE7sm/XAsYqMIR3I1Dnae7QhuaKsFhty30MkaDxq1MqLIHGP+dg28QmHk7
-	bwz4kSE6BwzuE2kC7CZ8czHuWxgXcBuf3D1+k+d5wXxAxBW25+X+crW9QgQDfvYBVMFzYDGkv25
-	hdnZdU4LP3GO9wQi83Ev3ZDIo2b6MsZnm3A8DkTTHZeenZYFmtHgZLO2QcM/liyrPmpA96TK0zr
-	HpSzYV7Mz2L7ITCbKIhDx9AOL8rbZa1sX5tVhHngZ7C2jksLCz3LNY/98KYNlEPaL07MIiXRIxA
-	JtUwMOvNbyE2pLDviWADeTdvfAIvX2WqB0uiT/w==
-X-Received: by 2002:a05:622a:250:b0:4f3:5346:5d54 with SMTP id d75a77b69052e-4f4abd78d8fmr199055501cf.50.1766484180392;
-        Tue, 23 Dec 2025 02:03:00 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEb/XwjqmlNu6biskXJYdXx7yRjIVunYQjmGPYAWmA2yv1ld3r5jkFpRaOKuHbmJJD/SAxQsA==
-X-Received: by 2002:a05:622a:250:b0:4f3:5346:5d54 with SMTP id d75a77b69052e-4f4abd78d8fmr199055071cf.50.1766484179952;
-        Tue, 23 Dec 2025 02:02:59 -0800 (PST)
+        bh=or9DvhQwaxtsrAqBQKF2R4HMkZA0UWyOfpa2BBt7/z4=;
+        b=Nn6K7y2ckZNIE/xnVcrDfc0q2a1W30EGJgMwofVRDD+qofO2WfF6v7bgiwOjhXaLs5
+         JspTZLfpy5djrF6/jRp39cBOQ6NfeFjG0lKzyWsuYeFjMRVvm4veEneoMLClFjH9EUpg
+         nrog9H7PdTGNwZpHNMGq6Yr5m+HVb0jwmAf+mDcv/fqZYXnfd4nrJD0h+NxlmlzJ1VjE
+         Djg5ADU2qVfWhX3C+Qn2QKg6E4e+1wzy6FRz1MQC+yzkOuNiSIT4LAqkehD0wVYY6Xiy
+         Hm3neyLP5M2qSVHOyPp5jBKceosotT6ZOibpbg5kmp8GS+FHCHUxLO/gsdf2/59rpxf4
+         9Spw==
+X-Gm-Message-State: AOJu0YyrcjtPmMv2KDy5WGmhMEhf1Y6gqaqxU5jf10qnJqUxITZidDBM
+	l1RSlD3u3LU4lQVP550NEdeIZnPquraWNZ2nR+EQTdOywf8uaYkc8HozU9c5UOgew/UNQa3Rek+
+	mAEkFtAg0Ut8Ke6XSNaxYmLN6K3Zg4BngeL+Ij6Zkg/aaXLsRDzVnPiHMC0+yjr8=
+X-Gm-Gg: AY/fxX5EPXK7ozrkuQ5iSpuJVByo8PwwLojmmsyWqbL3QPKpiCSoRD0O+Beh4mcdDWK
+	KjaGJAiI4vpuefbOdMJQTC2vEBL2VmtEVjq/vcw2LjFzyzN65TUBw4zZ+4Nm0uglqacEDFCdA0E
+	+SBGUMWIpkyK8hOY/PEOQhlDpW8tUxPIrmGU/SShRan8SCsvet3P3+WzRzzfl7jXxzUzHlJBFNE
+	mZROR4Zf1NcXLRI/g7r+PmhcQS3yrqYRcdqb+LwlQ8HFh3Vb2S7nAIAJ91Kjrlh5yKtgEm+oys/
+	xhaQF4hKlSwxQbQhvExzY83jyVec49Uwx4iqA0AKCxO5WUmNhHBMU1JEXO/64PHVOGd4OBbt3jU
+	IKQpsQlg9Ya0bAvau+G97YQdOAHV/Q6aSKnrYiw==
+X-Received: by 2002:a05:622a:2609:b0:4f1:e46b:9dcf with SMTP id d75a77b69052e-4f4abcdf56emr174602011cf.26.1766484182022;
+        Tue, 23 Dec 2025 02:03:02 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFYmKh9q3TVpBvPGG04xNQnPAJXRKn+MV5cm9azWZmmq9WoPxX1CHwGyf0VG3WWqkcEF5gNgg==
+X-Received: by 2002:a05:622a:2609:b0:4f1:e46b:9dcf with SMTP id d75a77b69052e-4f4abcdf56emr174601651cf.26.1766484181594;
+        Tue, 23 Dec 2025 02:03:01 -0800 (PST)
 Received: from brgl-qcom.local ([2a01:cb1d:dc:7e00:190a:1976:65e2:c61])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4324ea1b36fsm26794625f8f.5.2025.12.23.02.02.58
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4324ea1b36fsm26794625f8f.5.2025.12.23.02.03.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Dec 2025 02:02:59 -0800 (PST)
+        Tue, 23 Dec 2025 02:03:01 -0800 (PST)
 From: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-Date: Tue, 23 Dec 2025 11:02:32 +0100
-Subject: [PATCH 10/12] i2c: nforce2: use i2c_adapter-specific printk
- helpers
+Date: Tue, 23 Dec 2025 11:02:33 +0100
+Subject: [PATCH 11/12] i2c: amd756: use i2c_adapter-specific printk helpers
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -103,7 +102,7 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251223-i2c-printk-helpers-v1-10-46a08306afdb@oss.qualcomm.com>
+Message-Id: <20251223-i2c-printk-helpers-v1-11-46a08306afdb@oss.qualcomm.com>
 References: <20251223-i2c-printk-helpers-v1-0-46a08306afdb@oss.qualcomm.com>
 In-Reply-To: <20251223-i2c-printk-helpers-v1-0-46a08306afdb@oss.qualcomm.com>
 To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
@@ -124,44 +123,44 @@ Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
         Bartosz Golaszewski <brgl@kernel.org>,
         Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2796;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3679;
  i=bartosz.golaszewski@oss.qualcomm.com; h=from:subject:message-id;
- bh=1RcMgKhoVIDH/uvlkjR4k8BRDeSqy3Z1wqmJ/Zg7uPQ=;
- b=owEBbQKS/ZANAwAKAQWdLsv/NoTDAcsmYgBpSmjAWS6dV2oSrIJN/8EGc+7W8i9AyzXFZaPPi
- mcV5IzVlFiJAjMEAAEKAB0WIQSR5RMt5bVGHXuiZfwFnS7L/zaEwwUCaUpowAAKCRAFnS7L/zaE
- wy0dEAClg4CncFPQN0S3c+U7UOudBSZbQgLmP6HOhyUtZ3U9OLbCsKadAQFgEhSwX1jECTm5dNF
- 0RdoIoG+fF0GCw60nKZXgiUzxNUalzHyZjn3MgzLiNqR/BAr3Fe55XuV4sKpYT6yU1xAZ1D0AS0
- WB+Cuxnns2XBnbCeu8KX2+jXTE4EspmlwPkIwNTPlrAlof76u8Fyj815z/OQA/0uApNYkRudhth
- 8X0O57dlCLpgrWcFelojmLpkvLBhwA3ug9kSOZS5GlNWt9tC7n8yEBuUGnu8+MG+yfjadZSdiGY
- FI/2l6PvAgagfWA6020GUjaUrTrdzHQr57t80WmhjeCdzxZht4XNHlQGykb1O4pHcC9FQoSsK1/
- Ua5Ilo556Drv7i1I7H8wPdl3MyXIb2mphWJCjOR3kD/v2xvLIqwnApfjb1z+6ag9RZHTuZBzsch
- h700sSioPBCeNDSEl8K/MX2Q6LnXgJHDfoXh0dQWUt0WV2kziDw7ZQCFJMAL8MU11fniAfWtnLu
- 0zkk4hjESymk+Muoy340vMIrgjGBzwhm/KxR9h3yN2OPcYeZBQ6RTKGDc0TXwrufHCZ3m2YcYPU
- zB8cbguyyVBO5QUmGddwtTBc2xiWqtP6i75lMrsX7aWcquTAWMGnXWUt2zTV+fbXqmMuyOwazC6
- QswEw5+ooZn9yfA==
+ bh=dI851BmOduiioly8u4iYfe+Rr//GzNIkYCteXmln3Ng=;
+ b=owEBbQKS/ZANAwAKAQWdLsv/NoTDAcsmYgBpSmjB5UVNcmc611VKtySZweLgh03lH4CqLyep8
+ HN5EDTCCTaJAjMEAAEKAB0WIQSR5RMt5bVGHXuiZfwFnS7L/zaEwwUCaUpowQAKCRAFnS7L/zaE
+ w7K7D/4+c+Fz0nx+enSy+0T4yYkJZdn0nkZfXEFvgWl9SaytNp+VrFeIZFFCXXMRHJLHzQ9F6yE
+ 6grb+AXEzou95fx6/DnPZnO4gmcgKK1vIR5ea8WocpwnbE0BV8n5SCeDwJtTMqb/i7ESl/L6Uw9
+ 7YdYJWNS2IXMX7FN7fE/Nc+ibmyHtIv5QHZQbD4L4NEDUBDXt3L/u1EKGsqMyUp5C/3qAtSkXH1
+ ix1sU8F1hiF4ppon9nlTAxe6MOmla3QRgWCA0i6WoPuIYU+LtfFBSz9PlLMFSQi3/Tb9pTJojmv
+ sZyt0uBuvEPgfDyh9D4q5y8scZeFgW6/roKmrAmktmOPfu69d600IhvNzHX1/53yk2+ruS4HAWe
+ jr2xoMOReoaIb6zkzEE0K90I4fJNM8eFCx08mnXqg1typ4jMHuTRK26+T2kLlreUWiNAHYXbg8W
+ NintnTN9h/k5RLXA8M0Imm1bBI1yXyxIp7EejP6p+7y4WMjVDx+KmJsnYtWI5qwSIgG0EGvrG8n
+ HzEAMhq4EHGZ21GoCeWNKI0uXpcwJSls/9lQfmgT29CNmnigZgBM8/PW8iEsLmgHAFwlt1BpTZn
+ VIO7KE9o3UipYVObALa592Fk9Ye+4KVwPvy4fepnLyrsTInjb15j8hoaKeYzfo7Zei9+IYYPHAR
+ cv/14KJKs7ruXCA==
 X-Developer-Key: i=bartosz.golaszewski@oss.qualcomm.com; a=openpgp;
  fpr=169DEB6C0BC3C46013D2C79F11A72EA01471D772
-X-Authority-Analysis: v=2.4 cv=ELgLElZC c=1 sm=1 tr=0 ts=694a68d5 cx=c_pps
- a=WeENfcodrlLV9YRTxbY/uA==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjIzMDA4MCBTYWx0ZWRfX9ZgrEgxg8e5G
+ KTEwuICeplfVo+BBGGLkV2HTp2XubLZ36Hshiq10ssnPum5zKlzMSkEZ4mts8UQuQKlScf3VdPK
+ bDIvvjZ2hyVL71mTWbU3Ong5zvgTDsbemupGs3f0NCHl8qG+ZMw1VjwSJu5V5gqc1/VsRU9MFVE
+ tx9AZENqyvfdkQPwBMFQp1h3/Mj7vQP6PWnIjVoSTa/Nk8AwrL4oU4TFArWCmgWH4Qxsv7UtZu0
+ jZsOMFNJPc1zFkajPdsdDj1MF+R9IVxJgroWveIHzn9+bopIfFEZ5x90B6WjqqP93Y8+fuXj7/8
+ PA5RMoHk7op3+CczPXLCu3HTQZ6IfME/ay3IDIoHSljsdlh84qDid04YCQs0Obt2y/hsiwI6d7x
+ ErmWkQHiNUPpgzBm/4i2+0WrEX28OnIcjtC/DA8ZftSkgu2mMGL2iy5rBeUjRMWaTR0H+/OmpNy
+ MDiHhnsgT/yeG8sU2Rw==
+X-Authority-Analysis: v=2.4 cv=VqAuwu2n c=1 sm=1 tr=0 ts=694a68d6 cx=c_pps
+ a=50t2pK5VMbmlHzFWWp8p/g==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
  a=wP3pNCr1ah4A:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=EUspDBNiAAAA:8 a=ULAvDvZivfA9C-ZB8fsA:9 a=QEXdDO2ut3YA:10
- a=kacYvNCVWA4VmyqE58fU:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjIzMDA4MCBTYWx0ZWRfX4747khrnw2Sf
- 7gl2MqpYi13UvAu7TOKf1aW7DEkuDWml3C4M4p7G81R0naT2/QLijSiYSFsQvr+iOoj/5rIDoV3
- 9hZSe3A5NEqG0rsxf4TfC5Nkznv+gbbmVZVfbz+h2/550iSn7aCVo5stHehFfZHDjK5AH7E31CD
- Y7oelqG+amU822pg+RpLstoCRC5nq0M7FMXFDzkSwhUflzH+VMc1nTDy+NfMxV2T51nhA4fW0XU
- w8ObxROTRG4FoTE7D9nO5uEt6kE8hchEZsASAT3bdjirGM2jZo6imrkhWFhKs44KgrDKBW9w4L3
- Au9aFixp/gPd9dbGUE9GVPoQB93g9Ib5VVTH0K/Yb4KXMtpzthFfRkWi1Ltt2IGTmq7+Cj+Bw+/
- ZON/OYhuvsMdpmr3/flNuoKea0gXnv5JB7A4V6BqTO7ngmahTiE4eo63mJ8WKcVYMJaNuiWWno4
- 1940U20UoFxRkAECwEw==
-X-Proofpoint-GUID: _ql84gtz4rZ8M_VG93XDr3Cl7kAVtBVJ
-X-Proofpoint-ORIG-GUID: _ql84gtz4rZ8M_VG93XDr3Cl7kAVtBVJ
+ a=EUspDBNiAAAA:8 a=IUzV_G_aAFXi5cZUTYgA:9 a=QEXdDO2ut3YA:10
+ a=IoWCM6iH3mJn3m4BftBB:22
+X-Proofpoint-GUID: H4VlY8CAKq7jsDMiIEQHeL6kQLbr8rzf
+X-Proofpoint-ORIG-GUID: H4VlY8CAKq7jsDMiIEQHeL6kQLbr8rzf
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
  definitions=2025-12-23_02,2025-12-22_01,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- lowpriorityscore=0 malwarescore=0 spamscore=0 phishscore=0 impostorscore=0
- suspectscore=0 adultscore=0 clxscore=1015 priorityscore=1501 bulkscore=0
+ suspectscore=0 bulkscore=0 impostorscore=0 malwarescore=0 adultscore=0
+ priorityscore=1501 phishscore=0 clxscore=1015 lowpriorityscore=0 spamscore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
  reason=mlx scancount=1 engine=8.22.0-2512120000 definitions=main-2512230080
 
@@ -171,74 +170,103 @@ that dereference.
 
 Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
 ---
- drivers/i2c/busses/i2c-nforce2.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ drivers/i2c/busses/i2c-amd756.c | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-nforce2.c b/drivers/i2c/busses/i2c-nforce2.c
-index d58a308582e47650238312537d2d721261d3bca4..2fa6f1dbd27a92c2d67915775e588e4bab675d76 100644
---- a/drivers/i2c/busses/i2c-nforce2.c
-+++ b/drivers/i2c/busses/i2c-nforce2.c
-@@ -123,7 +123,7 @@ static void nforce2_abort(struct i2c_adapter *adap)
+diff --git a/drivers/i2c/busses/i2c-amd756.c b/drivers/i2c/busses/i2c-amd756.c
+index 3621c02f1cbabd8c5e9d8a4ae1494ada78726b15..629da0b8024b88cc4d51ea5e785147b462a1281c 100644
+--- a/drivers/i2c/busses/i2c-amd756.c
++++ b/drivers/i2c/busses/i2c-amd756.c
+@@ -99,14 +99,14 @@ static int amd756_transaction(struct i2c_adapter *adap)
+ 	int result = 0;
  	int timeout = 0;
- 	unsigned char temp;
  
--	dev_dbg(&adap->dev, "Aborting current transaction\n");
-+	i2c_dbg(adap, "Aborting current transaction\n");
+-	dev_dbg(&adap->dev, "Transaction (pre): GS=%04x, GE=%04x, ADD=%04x, "
++	i2c_dbg(adap, "Transaction (pre): GS=%04x, GE=%04x, ADD=%04x, "
+ 		"DAT=%04x\n", inw_p(SMB_GLOBAL_STATUS),
+ 		inw_p(SMB_GLOBAL_ENABLE), inw_p(SMB_HOST_ADDRESS),
+ 		inb_p(SMB_HOST_DATA));
  
- 	outb_p(NVIDIA_SMB_CTRL_ABORT, NVIDIA_SMB_CTRL);
- 	do {
-@@ -132,7 +132,7 @@ static void nforce2_abort(struct i2c_adapter *adap)
- 	} while (!(temp & NVIDIA_SMB_STATUS_ABRT_STS) &&
- 			(timeout++ < MAX_TIMEOUT));
- 	if (!(temp & NVIDIA_SMB_STATUS_ABRT_STS))
--		dev_err(&adap->dev, "Can't reset the smbus\n");
-+		i2c_err(adap, "Can't reset the smbus\n");
- 	outb_p(NVIDIA_SMB_STATUS_ABRT_STS, NVIDIA_SMB_STATUS_ABRT);
- }
+ 	/* Make sure the SMBus host is ready to start transmitting */
+ 	if ((temp = inw_p(SMB_GLOBAL_STATUS)) & (GS_HST_STS | GS_SMB_STS)) {
+-		dev_dbg(&adap->dev, "SMBus busy (%04x). Waiting...\n", temp);
++		i2c_dbg(adap, "SMBus busy (%04x). Waiting...\n", temp);
+ 		do {
+ 			msleep(1);
+ 			temp = inw_p(SMB_GLOBAL_STATUS);
+@@ -114,7 +114,7 @@ static int amd756_transaction(struct i2c_adapter *adap)
+ 		         (timeout++ < MAX_TIMEOUT));
+ 		/* If the SMBus is still busy, we give up */
+ 		if (timeout > MAX_TIMEOUT) {
+-			dev_dbg(&adap->dev, "Busy wait timeout (%04x)\n", temp);
++			i2c_dbg(adap, "Busy wait timeout (%04x)\n", temp);
+ 			goto abort;
+ 		}
+ 		timeout = 0;
+@@ -131,38 +131,38 @@ static int amd756_transaction(struct i2c_adapter *adap)
  
-@@ -148,13 +148,13 @@ static int nforce2_check_status(struct i2c_adapter *adap)
- 	} while ((!temp) && (timeout++ < MAX_TIMEOUT));
- 
+ 	/* If the SMBus is still busy, we give up */
  	if (timeout > MAX_TIMEOUT) {
--		dev_dbg(&adap->dev, "SMBus Timeout!\n");
-+		i2c_dbg(adap, "SMBus Timeout!\n");
- 		if (smbus->can_abort)
- 			nforce2_abort(adap);
- 		return -ETIMEDOUT;
+-		dev_dbg(&adap->dev, "Completion timeout!\n");
++		i2c_dbg(adap, "Completion timeout!\n");
+ 		goto abort;
  	}
- 	if (!(temp & NVIDIA_SMB_STS_DONE) || (temp & NVIDIA_SMB_STS_STATUS)) {
--		dev_dbg(&adap->dev, "Transaction failed (0x%02x)!\n", temp);
-+		i2c_dbg(adap, "Transaction failed (0x%02x)!\n", temp);
- 		return -EIO;
- 	}
- 	return 0;
-@@ -207,7 +207,7 @@ static s32 nforce2_access(struct i2c_adapter *adap, u16 addr,
- 		if (read_write == I2C_SMBUS_WRITE) {
- 			len = data->block[0];
- 			if ((len == 0) || (len > I2C_SMBUS_BLOCK_MAX)) {
--				dev_err(&adap->dev,
-+				i2c_err(adap,
- 					"Transaction failed (requested block size: %d)\n",
- 					len);
- 				return -EINVAL;
-@@ -221,7 +221,7 @@ static s32 nforce2_access(struct i2c_adapter *adap, u16 addr,
- 		break;
  
+ 	if (temp & GS_PRERR_STS) {
+ 		result = -ENXIO;
+-		dev_dbg(&adap->dev, "SMBus Protocol error (no response)!\n");
++		i2c_dbg(adap, "SMBus Protocol error (no response)!\n");
+ 	}
+ 
+ 	if (temp & GS_COL_STS) {
+ 		result = -EIO;
+-		dev_warn(&adap->dev, "SMBus collision!\n");
++		i2c_warn(adap, "SMBus collision!\n");
+ 	}
+ 
+ 	if (temp & GS_TO_STS) {
+ 		result = -ETIMEDOUT;
+-		dev_dbg(&adap->dev, "SMBus protocol timeout!\n");
++		i2c_dbg(adap, "SMBus protocol timeout!\n");
+ 	}
+ 
+ 	if (temp & GS_HCYC_STS)
+-		dev_dbg(&adap->dev, "SMBus protocol success!\n");
++		i2c_dbg(adap, "SMBus protocol success!\n");
+ 
+ 	outw_p(GS_CLEAR_STS, SMB_GLOBAL_STATUS);
+ 
+ #ifdef DEBUG
+ 	if (((temp = inw_p(SMB_GLOBAL_STATUS)) & GS_CLEAR_STS) != 0x00) {
+-		dev_dbg(&adap->dev,
++		i2c_dbg(adap,
+ 			"Failed reset at end of transaction (%04x)\n", temp);
+ 	}
+ #endif
+ 
+-	dev_dbg(&adap->dev,
++	i2c_dbg(adap,
+ 		"Transaction (post): GS=%04x, GE=%04x, ADD=%04x, DAT=%04x\n",
+ 		inw_p(SMB_GLOBAL_STATUS), inw_p(SMB_GLOBAL_ENABLE),
+ 		inw_p(SMB_HOST_ADDRESS), inb_p(SMB_HOST_DATA));
+@@ -170,7 +170,7 @@ static int amd756_transaction(struct i2c_adapter *adap)
+ 	return result;
+ 
+  abort:
+-	dev_warn(&adap->dev, "Sending abort\n");
++	i2c_warn(adap, "Sending abort\n");
+ 	outw_p(inw(SMB_GLOBAL_ENABLE) | GE_ABORT, SMB_GLOBAL_ENABLE);
+ 	msleep(100);
+ 	outw_p(GS_CLEAR_STS, SMB_GLOBAL_STATUS);
+@@ -233,7 +233,7 @@ static s32 amd756_access(struct i2c_adapter * adap, u16 addr,
+ 		size = AMD756_BLOCK_DATA;
+ 		break;
  	default:
--		dev_err(&adap->dev, "Unsupported transaction %d\n", size);
-+		i2c_err(adap, "Unsupported transaction %d\n", size);
+-		dev_warn(&adap->dev, "Unsupported transaction %d\n", size);
++		i2c_warn(adap, "Unsupported transaction %d\n", size);
  		return -EOPNOTSUPP;
  	}
  
-@@ -249,7 +249,7 @@ static s32 nforce2_access(struct i2c_adapter *adap, u16 addr,
- 	case I2C_SMBUS_BLOCK_DATA:
- 		len = inb_p(NVIDIA_SMB_BCNT);
- 		if ((len <= 0) || (len > I2C_SMBUS_BLOCK_MAX)) {
--			dev_err(&adap->dev,
-+			i2c_err(adap,
- 				"Transaction failed (received block size: 0x%02x)\n",
- 				len);
- 			return -EPROTO;
 
 -- 
 2.47.3
