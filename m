@@ -1,165 +1,142 @@
-Return-Path: <linux-i2c+bounces-14728-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14729-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4CAF0CD8D71
-	for <lists+linux-i2c@lfdr.de>; Tue, 23 Dec 2025 11:37:57 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F7CDCD9034
+	for <lists+linux-i2c@lfdr.de>; Tue, 23 Dec 2025 12:04:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1BC1130446BA
-	for <lists+linux-i2c@lfdr.de>; Tue, 23 Dec 2025 10:35:15 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 073E330194D9
+	for <lists+linux-i2c@lfdr.de>; Tue, 23 Dec 2025 11:04:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE45D352F84;
-	Tue, 23 Dec 2025 10:35:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DCC233F8BD;
+	Tue, 23 Dec 2025 11:04:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b="GF2uS7wi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r4iFTtyU"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CF9D34DB71
-	for <linux-i2c@vger.kernel.org>; Tue, 23 Dec 2025 10:35:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB4B833F37E
+	for <linux-i2c@vger.kernel.org>; Tue, 23 Dec 2025 11:04:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766486111; cv=none; b=MtO5vhVDF+WGVuPfh++yUI2cQleZGE/gcbjsgvOTbYo/4uLYnkmcz5tR4t5isDa1yafLU7GariyXf0rEvzwkNpxkgl9TfMCm1cL9EStYHzJdgBv1wHWJKg2CkcmKVNOUEuOkTlcN4aKT37+IiHtHt7U4b9/jhTtUkGlKl7qsQRM=
+	t=1766487866; cv=none; b=Rb9+MISghfYFMyDFeV2WIPsIaK0mbRzJyz3AholdCe1kpDlPMBPO2hUXsFR6A/zz9cBTBGR4TZktzQs8mjieG+xoq07n6m6E0R64VxVRRrMxQ04sRuqSiL7d8PgTkf+Ft6FBaHShkwYO3QuERACCvUXll6HSrDufVqsnobQBMFI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766486111; c=relaxed/simple;
-	bh=nhnhn/ujbA1yivMUlMSXRd1v6Sz4LmmXkvWUytEJhUI=;
+	s=arc-20240116; t=1766487866; c=relaxed/simple;
+	bh=biUgEjzTLA2qxnGKmM6Ej5xs7lQ2WYxGQ9yr+adss88=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FsJvGZqlUtJQykykutN1RnSknM6124wxRNxIYPcQFth8cuUxO9uB4QjjIJMRHqBFOec0kKoxlZODKzPuLDj9iiaQuhbZxg9TrosZkRh+1pCRoWKNx9IBj4NhdQJa8chI6sqvlx8J2pFN6XCrMGbu3J5rWjRIhNCH/Q6wCFG06l4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr; spf=pass smtp.mailfrom=sartura.hr; dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b=GF2uS7wi; arc=none smtp.client-ip=209.85.218.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sartura.hr
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-b7cee045187so870263066b.0
-        for <linux-i2c@vger.kernel.org>; Tue, 23 Dec 2025 02:35:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sartura.hr; s=sartura; t=1766486106; x=1767090906; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SWwHgDUayFaSdSqe2T6d6UFJFmjd2ZLae5KHc+yXH7I=;
-        b=GF2uS7wiRyhBmf1kLR0gIF3Rip3N0z7rurwMgvhBqXkpElhZHM//c4ztfkOfl34VXQ
-         1X14GkorXLzezj84xr2Y/dQLW+EfbQhQVOVhtnuM3M454FOIn2PNXJXS36N8bH/whQBV
-         zY0fHit1GfAmUbUyKlPfmB88R6AoVgxYJryPviR3Xhc9pr/mmX1utNgHaFZ5HiT/+TFT
-         EPfJeiatuCcTI+Wko2Rrfq/cDBpi0ycNUhFAp5hGmFIf/u3Ol72pdr/MxF3qgwek5A2i
-         SlQTW3sCFS0UxINftvR9ief03PbV1fiyjZferC+QgdFvMpknr46FIg9k8YC+cFlkaq8w
-         fJHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766486106; x=1767090906;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=SWwHgDUayFaSdSqe2T6d6UFJFmjd2ZLae5KHc+yXH7I=;
-        b=UDyiByqr/NT0u1LBCyBSrws3oWDFz5yG88uYrjywmdKGI1KQoaywrLbc8JyMMvVMUP
-         lYG9hTRR9YOaZCGHxdcTbRrI1Myk4Quegk7ZewtKw74dL9KnIP2V4teAJzxgLOoaWmAc
-         nVOIwO+h3Lq+kInw4UFc4KHGNQ6SBvT4D9xSsXQrJj9nZK2FkrzCx9i6m3nOGsFRcKfM
-         XWcqq0yutabJm9uAwSnLPz4ngQHe0ufV3iz6cCuCxVxComA6ObBJTYUyQZOk52dD+Wsl
-         Y8+mJUe1KxYxHA/OMdB0qLxk7iT2oy+TYAJl9NVqGbtl6aS3ktTMerMNCrw0Km/qXGXH
-         Llng==
-X-Forwarded-Encrypted: i=1; AJvYcCXvqbxJK/oDbk2eVGmN1mmo/ebvJBBK8HekPC+46g1wChXq87U7XAWvmkxuwPTe13IOcsx+lHUGXHw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyyBFVvtPrJDfQeU5vmsHnfP2OlYbqYCIMINrEBXZoiVNU5YDX0
-	ygSrqcDzRHumJt5CTEzeOjGuq6EYOJWCxeSbH9QoQtfY8O39VQInDcckxHt1qYK6Ja94kR3KvOT
-	7TMCqy8OWDqjFu6Ix/ZDSr4SMlDbxn6CAZwa5zE3nBQ==
-X-Gm-Gg: AY/fxX5Og93ia52Y/ntPLFCHQfJ0t5sVO4Gl9ZoDkgr+PC36s0X8YKiMTN5QsjR3sZT
-	r8ujwWS+h5yoUg3WUwgaVI8P2692Mqn4wme8sc8d6+uR6OzJRVBSYDUl8ZRgjuimljhOyGk/YwZ
-	1PJTYC2aR2ZJHj6Ep/KSvO7Sz7MDfAtUrSFY+6dxM07P9odiqSjkG5bAILDtCQOUB6iQcdtdrN7
-	zrtu8NzkCm7ftW0VqjixUJN5Y25g3QWPVeydETr4FSKkF6gNkJby2LYcs0YL5Z3NlaMbxywsT3S
-	bu0ugIpWriK9CNZqEbIx+/hWY/ou+inDS+k2X346fhD9RRcpfQ==
-X-Google-Smtp-Source: AGHT+IEJHssgBNa10sdxlMZ0RfBcXjnBKXrp4KRUpqNBX0cKMLRNtJZXOvlDmXwgBRgg1wr13xel6K2BxjWOkHuOL+E=
-X-Received: by 2002:a17:907:a45:b0:b81:ec7c:31fd with SMTP id
- a640c23a62f3a-b81ec7c321bmr332573366b.13.1766486105902; Tue, 23 Dec 2025
- 02:35:05 -0800 (PST)
+	 To:Cc:Content-Type; b=bOgX/uLVVunJGQU2+4gj3woy4XQFRUdSCErirgPD19f5IqLkzuk2YVricMkVfhSbkfOJHnoCHFGBi8unDhUZ/DoEXYcQJEV6SK6rHqzTrjzHjnmqKNkCVGexpnlrodSpgDQHjyK0EGrp0X8sh5D/8UkXbN/JIcByAJj64/Y+VNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r4iFTtyU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FB34C116C6
+	for <linux-i2c@vger.kernel.org>; Tue, 23 Dec 2025 11:04:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1766487865;
+	bh=biUgEjzTLA2qxnGKmM6Ej5xs7lQ2WYxGQ9yr+adss88=;
+	h=References:In-Reply-To:Reply-To:From:Date:Subject:To:Cc:From;
+	b=r4iFTtyUaJSeS53r1g6gYRFQ7LBaaU420AqItPgA01WKlV5q/GSaZwo5Y56adUcE8
+	 u2d8PJaKvSBlyIoSlSx9EBMkmTqI5lE7OhtEd3m0mt0ypIdXUu86yEReqPgADay1Wu
+	 1TnsXU79RRm0GCehzjxo1DccTqpYKDFimY3zRVGjBpBp140cl2IXt8llhHYbkzj44P
+	 qS0WPx5fFkv3eVcFgNTxYag6jaHPWTkeJ/ATaaWXfpJNzDAbCJOolk76PdEn3+RgFT
+	 6TM0VIWEe4Bs2OipQqftao//8I0zJxrPlQ1NbUAPqeZEUiBGfxuVW3LxW5SuVxbQy7
+	 Ut4XKpDb0EqCQ==
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-59584301f0cso5254665e87.0
+        for <linux-i2c@vger.kernel.org>; Tue, 23 Dec 2025 03:04:25 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUTgCDAADOFR9wKBf0BUMFm62FWE0zePbBu/lmMTb/YZTW4T12faHITfF5iQkDN7KgxeuaTmRheyTg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxSBqdryza3SCyq/NUHynPaoJfWpVatbfD6THwFBU3XDhWgJm/d
+	9WStsT0a3yBLClOg5fF0ZFMt7ZoRrms2oaHSblHXgfZRJAtezf9x97PK7DQwIB7TH3j2/whc8HZ
+	OCaNBUoU3ggsoG+ijmG1bFg6iCfpOGyE=
+X-Google-Smtp-Source: AGHT+IHFRCOw1OndrHUP8fu/5Pu86rNoly2fZw9WpBncVYiaNKQ4oxRlCC+E8Yk0b5wLZeLJPra7VnbPIBMd4pnW17A=
+X-Received: by 2002:a05:6512:b85:b0:598:853e:4865 with SMTP id
+ 2adb3069b0e04-59a17d670demr5354973e87.50.1766487863823; Tue, 23 Dec 2025
+ 03:04:23 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251215163820.1584926-1-robert.marko@sartura.hr>
- <20251215163820.1584926-18-robert.marko@sartura.hr> <20251216-endorse-password-ae692dda5a9c@spud>
-In-Reply-To: <20251216-endorse-password-ae692dda5a9c@spud>
-From: Robert Marko <robert.marko@sartura.hr>
-Date: Tue, 23 Dec 2025 11:34:55 +0100
-X-Gm-Features: AQt7F2rp1ybXWw2BWzfekoJJeczrMeV1nO2lvHuguNeXKU1awsBcuKjFcFE-_B8
-Message-ID: <CA+HBbNF-=W7A3Joftsqn+A6s170sqOZ77jpS105s5HPqkskQzA@mail.gmail.com>
-Subject: Re: [PATCH v2 18/19] dt-bindings: arm: microchip: document EV23X71A board
-To: Conor Dooley <conor@kernel.org>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
-	nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com, 
-	claudiu.beznea@tuxon.dev, Steen.Hegelund@microchip.com, 
-	daniel.machon@microchip.com, UNGLinuxDriver@microchip.com, 
-	herbert@gondor.apana.org.au, davem@davemloft.net, vkoul@kernel.org, 
-	linux@roeck-us.net, andi.shyti@kernel.org, lee@kernel.org, 
-	andrew+netdev@lunn.ch, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, linusw@kernel.org, olivia@selenic.com, 
-	radu_nicolae.pirea@upb.ro, richard.genoud@bootlin.com, 
-	gregkh@linuxfoundation.org, jirislaby@kernel.org, mturquette@baylibre.com, 
-	sboyd@kernel.org, richardcochran@gmail.com, wsa+renesas@sang-engineering.com, 
-	romain.sioen@microchip.com, Ryan.Wanner@microchip.com, 
-	lars.povlsen@microchip.com, tudor.ambarus@linaro.org, 
-	kavyasree.kotagiri@microchip.com, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org, 
-	linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org, 
-	linux-serial@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-clk@vger.kernel.org, mwalle@kernel.org, luka.perkov@sartura.hr
+References: <20251223-i2c-printk-helpers-v1-0-46a08306afdb@oss.qualcomm.com> <20251223-i2c-printk-helpers-v1-2-46a08306afdb@oss.qualcomm.com>
+In-Reply-To: <20251223-i2c-printk-helpers-v1-2-46a08306afdb@oss.qualcomm.com>
+Reply-To: wens@kernel.org
+From: Chen-Yu Tsai <wens@kernel.org>
+Date: Tue, 23 Dec 2025 19:04:11 +0800
+X-Gmail-Original-Message-ID: <CAGb2v65_bC23uVNdXXy0OW3Zx4wxO+CAuae5zPR4m2zt29kYXA@mail.gmail.com>
+X-Gm-Features: AQt7F2oTKoNzOiHRkxSJE0lLrLQx6-2c3kaid1cyT2kNWjPKTkvyybHt0ZNsvmc
+Message-ID: <CAGb2v65_bC23uVNdXXy0OW3Zx4wxO+CAuae5zPR4m2zt29kYXA@mail.gmail.com>
+Subject: Re: [PATCH 02/12] i2c: sun6i-p2wi: use i2c_adapter-specific printk helpers
+To: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>, Andi Shyti <andi.shyti@kernel.org>, 
+	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, 
+	Khalil Blaiech <kblaiech@nvidia.com>, Asmaa Mnebhi <asmaa@nvidia.com>, Jean Delvare <jdelvare@suse.com>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Nicholas Piggin <npiggin@gmail.com>, "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, 
+	=?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>, 
+	Manivannan Sadhasivam <mani@kernel.org>, linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev, 
+	linuxppc-dev@lists.ozlabs.org, linux-actions@lists.infradead.org, 
+	Bartosz Golaszewski <brgl@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Dec 16, 2025 at 6:32=E2=80=AFPM Conor Dooley <conor@kernel.org> wro=
-te:
+On Tue, Dec 23, 2025 at 6:02=E2=80=AFPM Bartosz Golaszewski
+<bartosz.golaszewski@oss.qualcomm.com> wrote:
 >
-> On Mon, Dec 15, 2025 at 05:35:35PM +0100, Robert Marko wrote:
-> > Microchip EV23X71A board is an LAN9696 based evaluation board.
-> >
-> > Signed-off-by: Robert Marko <robert.marko@sartura.hr>
-> > ---
-> >  Documentation/devicetree/bindings/arm/microchip.yaml | 8 ++++++++
-> >  1 file changed, 8 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/arm/microchip.yaml b/Doc=
-umentation/devicetree/bindings/arm/microchip.yaml
-> > index 910ecc11d5d7..b20441edaac7 100644
-> > --- a/Documentation/devicetree/bindings/arm/microchip.yaml
-> > +++ b/Documentation/devicetree/bindings/arm/microchip.yaml
-> > @@ -239,6 +239,14 @@ properties:
-> >            - const: microchip,lan9668
-> >            - const: microchip,lan966
-> >
-> > +      - description: The LAN969x EVB (EV23X71A) is a 24x 1G + 4x 10G
-> > +          Ethernet development system board.
-> > +      - items:
-> > +          - enum:
-> > +              - microchip,ev23x71a
-> > +              - microchip,lan9696
+> Convert all instances of using device printk helpers with struct device
+> embedded in struct i2c_adapter to the new i2c-specific macros that hide
+> that dereference.
 >
-> This looks wrong, unless "microchip,lan9696" is a board (which I suspect
-> it isn't).
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
 
-Hi,
-No, LAN9696 is the exact SoC SKU used on the board.
-I will drop it in v3.
+Acked-by: Chen-Yu Tsai <wens@kernel.org>
 
-Regards
-Robert
+> ---
+>  drivers/i2c/busses/i2c-sun6i-p2wi.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 >
-> > +          - const: microchip,lan9691
-> > +
-> >        - description: The Sparx5 pcb125 board is a modular board,
-> >            which has both spi-nor and eMMC storage. The modular design
-> >            allows for connection of different network ports.
-> > --
-> > 2.52.0
-> >
-
-
-
---=20
-Robert Marko
-Staff Embedded Linux Engineer
-Sartura d.d.
-Lendavska ulica 16a
-10000 Zagreb, Croatia
-Email: robert.marko@sartura.hr
-Web: www.sartura.hr
+> diff --git a/drivers/i2c/busses/i2c-sun6i-p2wi.c b/drivers/i2c/busses/i2c=
+-sun6i-p2wi.c
+> index fb5280b8cf7fc0e3cba8ea6a318172ea2b011a02..845ca56cdae2d056c122eb648=
+c082f319d955b5e 100644
+> --- a/drivers/i2c/busses/i2c-sun6i-p2wi.c
+> +++ b/drivers/i2c/busses/i2c-sun6i-p2wi.c
+> @@ -122,7 +122,7 @@ static int p2wi_smbus_xfer(struct i2c_adapter *adap, =
+u16 addr,
+>         unsigned long dlen =3D P2WI_DLEN_DATA_LENGTH(1);
+>
+>         if (p2wi->target_addr >=3D 0 && addr !=3D p2wi->target_addr) {
+> -               dev_err(&adap->dev, "invalid P2WI address\n");
+> +               i2c_err(adap, "invalid P2WI address\n");
+>                 return -EINVAL;
+>         }
+>
+> @@ -139,7 +139,7 @@ static int p2wi_smbus_xfer(struct i2c_adapter *adap, =
+u16 addr,
+>         writel(dlen, p2wi->regs + P2WI_DLEN);
+>
+>         if (readl(p2wi->regs + P2WI_CTRL) & P2WI_CTRL_START_TRANS) {
+> -               dev_err(&adap->dev, "P2WI bus busy\n");
+> +               i2c_err(adap, "P2WI bus busy\n");
+>                 return -EBUSY;
+>         }
+>
+> @@ -154,12 +154,12 @@ static int p2wi_smbus_xfer(struct i2c_adapter *adap=
+, u16 addr,
+>         wait_for_completion(&p2wi->complete);
+>
+>         if (p2wi->status & P2WI_INTS_LOAD_BSY) {
+> -               dev_err(&adap->dev, "P2WI bus busy\n");
+> +               i2c_err(adap, "P2WI bus busy\n");
+>                 return -EBUSY;
+>         }
+>
+>         if (p2wi->status & P2WI_INTS_TRANS_ERR) {
+> -               dev_err(&adap->dev, "P2WI bus xfer error\n");
+> +               i2c_err(adap, "P2WI bus xfer error\n");
+>                 return -ENXIO;
+>         }
+>
+>
+> --
+> 2.47.3
+>
 
