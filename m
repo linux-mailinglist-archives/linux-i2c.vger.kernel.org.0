@@ -1,54 +1,53 @@
-Return-Path: <linux-i2c+bounces-14766-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14767-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48FDECDD793
-	for <lists+linux-i2c@lfdr.de>; Thu, 25 Dec 2025 08:50:28 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18596CDD796
+	for <lists+linux-i2c@lfdr.de>; Thu, 25 Dec 2025 08:50:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8A4BA3027DA9
-	for <lists+linux-i2c@lfdr.de>; Thu, 25 Dec 2025 07:50:19 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id CF66F3024E5B
+	for <lists+linux-i2c@lfdr.de>; Thu, 25 Dec 2025 07:50:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F04122FD694;
-	Thu, 25 Dec 2025 07:50:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3E3A2FD694;
+	Thu, 25 Dec 2025 07:50:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b="JfFmbyQY"
+	dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b="pcVwHU+w"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
+Received: from smtpbgau1.qq.com (smtpbgau1.qq.com [54.206.16.166])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02B3D2F83B7
-	for <linux-i2c@vger.kernel.org>; Thu, 25 Dec 2025 07:50:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.243.244.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C6992FDC29
+	for <linux-i2c@vger.kernel.org>; Thu, 25 Dec 2025 07:50:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.206.16.166
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766649017; cv=none; b=W6qydrmtCDDTqxBs1JIwCNPw8TQkorNEOw6Rce4a13QvDbI/st6WWxOibkUQkhMtZWB/QslTZP2HD090QDvZkRwTDZh17gH/i3ctC/yWvlxpYQ+gS+2A+vDNPZD75Noy8FlozuFgjSNffFrOAsASt0pT8ZclFp+it48I5g9pQgw=
+	t=1766649028; cv=none; b=cs54TUxpWJpIDXykGNpMGo4ZgcWVmpmj2b7eYDXCYs57Tf6erLAuklnmeGNXXOxqN99gaJAdM2eZ937lB4EUMvusNiEXaMhOMEARmMTzxGQbGr8AF4dFhiOcYpK7E/JIwhSsi708yW/jvIJ9UxrJ1jv0xZS5FVdrsZY+apTR2kU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766649017; c=relaxed/simple;
-	bh=iMg6wwDsweWCVKfGU6Yuji1Fc0E8bijBQy5ZTPi76/Y=;
+	s=arc-20240116; t=1766649028; c=relaxed/simple;
+	bh=xM27GTuey2voa4c/ivGBVxMn1od2yxNMdtHcPdo4Cco=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=NL9qxF8V34mmrSr8QTctnvantBH9b79PrjLykfyt923NlPVZkBOCMiOEjIiRmDDOY0wnIq/25HAFBaWtu82i/qWJDv3Hfw5AFWRC/swPBSTJYSG5oOW6udUU04d/bXx2xPh0d11ajHyQQI0q8ajZjoAa6i/8SDbcxl7KvrWt+TQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com; spf=none smtp.mailfrom=linux.spacemit.com; dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b=JfFmbyQY; arc=none smtp.client-ip=54.243.244.52
+	 In-Reply-To:To:Cc; b=L77yT7hx1CYFWOIpjKvH4V/LJEweAuKLT6KWTXmoDin5FgF19jzrb94hwLA8Nmai7XsjtKjH4+s208Iv7nMLET3kzfOJJPccQpiLIaLXVVfHTFy3I+yq7pSGOVB2TrfYjiHC17f6b46PIon0hwSe5azIKXZVDkJlpxb1GtDVOWE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com; spf=none smtp.mailfrom=linux.spacemit.com; dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b=pcVwHU+w; arc=none smtp.client-ip=54.206.16.166
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.spacemit.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.spacemit.com;
-	s=mxsw2412; t=1766648922;
-	bh=Bt9+AAj1WTdGjnYn2EX4UcCvWfJz1QvVTOHob6fVY4A=;
+	s=mxsw2412; t=1766648925;
+	bh=eEymra0qzBDOvP4K/PwzhLAzm6ZoyhboNV8QqUN0V+A=;
 	h=From:Date:Subject:MIME-Version:Message-Id:To;
-	b=JfFmbyQYvwKTx0/VRKjRwVDqfMdVPGGlzfz74BJATmJE0F7zwFx06G5dKkXEXz0Of
-	 ABkFRP3dUC69sSj0oOQDt/e9OjGOZR2OmzNU28Rxn1/jlg9JwLryf78HH3gvP9kR5S
-	 y5s0tM5upefhgXggxVyt2MGudqEo25Gt2D6NCxto=
-X-QQ-mid: esmtpsz10t1766648913tcbacc2ac
-X-QQ-Originating-IP: 3r9bwkTFX1T3U6eigVRSJNklhH7Vc2HXfb9poEvfdc4=
+	b=pcVwHU+wNOGQjMcElbECCmQcZcdOYwOW50SauoCZ8C9N8+u+NRrs6mLH3/McPU277
+	 pbLG4Hwp0G3bdgFgox2si2GiASZKDkVViqV2j3IJZeakTTckanVit7lOVrAM691fIF
+	 Mu9JfoE1BcmG+tezmHIulJKEqSTlFToUs5e2IT1c=
+X-QQ-mid: zesmtpsz6t1766648917td0345b37
+X-QQ-Originating-IP: WYKXruI1A1CMaQX4ORLBBq/CCXBheEu1KxZcpi7QXFM=
 Received: from = ( [120.239.196.19])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Thu, 25 Dec 2025 15:48:30 +0800 (CST)
+	id ; Thu, 25 Dec 2025 15:48:34 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 10865565144095889897
+X-BIZMAIL-ID: 5726861883151983815
 EX-QQ-RecipientCnt: 13
 From: Troy Mitchell <troy.mitchell@linux.spacemit.com>
-Date: Thu, 25 Dec 2025 15:46:31 +0800
-Subject: [PATCH v4 1/3] regulator: spacemit: MFD_SPACEMIT_P1 as
- dependencies
+Date: Thu, 25 Dec 2025 15:46:32 +0800
+Subject: [PATCH v4 2/3] mfd: simple-mfd-i2c: add default value
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -57,7 +56,7 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251225-p1-kconfig-fix-v4-1-44b6728117c1@linux.spacemit.com>
+Message-Id: <20251225-p1-kconfig-fix-v4-2-44b6728117c1@linux.spacemit.com>
 References: <20251225-p1-kconfig-fix-v4-0-44b6728117c1@linux.spacemit.com>
 In-Reply-To: <20251225-p1-kconfig-fix-v4-0-44b6728117c1@linux.spacemit.com>
 To: Lee Jones <lee@kernel.org>, Yixun Lan <dlan@gentoo.org>, 
@@ -68,79 +67,61 @@ Cc: linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
  spacemit@lists.linux.dev, linux-i2c@vger.kernel.org, 
  linux-rtc@vger.kernel.org, Troy Mitchell <troy.mitchell@linux.spacemit.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1766648906; l=1771;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1766648906; l=1007;
  i=troy.mitchell@linux.spacemit.com; s=20250710; h=from:subject:message-id;
- bh=iMg6wwDsweWCVKfGU6Yuji1Fc0E8bijBQy5ZTPi76/Y=;
- b=wi4kT3hFhqwpJwe5zdJD7BDfxtV7mw+eeGP0USovdXh522DDsTRZ6aTn7PDACALex4Jj1EGZM
- 1er6vMpLut/CwqOy8VimKPIom+Y7NS8OivrC7pJsJ8BnVmVjD/e78ZG
+ bh=xM27GTuey2voa4c/ivGBVxMn1od2yxNMdtHcPdo4Cco=;
+ b=mUhg/yb5BZn95GBRopReXfuKzpAZupqgNvD7KcYxDGkydKAzmuR3gi+K+o7OKYUjsPAQ6g54z
+ BwtBkPoioIWCBjpWCzP9JkBcAvMKxxtQl4Vfkg0EubnaBOz0HsqfDoa
 X-Developer-Key: i=troy.mitchell@linux.spacemit.com; a=ed25519;
  pk=lQa7BzLrq8DfZnChqmwJ5qQk8fP2USmY/4xZ2/MSsXc=
 X-QQ-SENDSIZE: 520
-Feedback-ID: esmtpsz:linux.spacemit.com:qybglogicsvrgz:qybglogicsvrgz3a-0
-X-QQ-XMAILINFO: MIssWYSUO/yFF6u6vDNwYRdCj18r1eMp/OdBFzTe3ocgJwCITLFxc6vX
-	gTzlhTes5BkRTLeVjHSlioRHYGIMbAJ34ltyctVnpHQl6MqdNJ3Uvqu6SDPjb5QJFZaKGIR
-	kCg2OvoYcO4vDAP7cZ7Be8clG1AYqWe67phYmNMyi1ASF3DfPnksuizxD2tG09AUZ7MqJda
-	yJieARRWyBz+8H4YUlqY5wJ/i72ycl1wkbmDDIW9zLfgYxQyFjBfQ/41219OYSY85oVIpsD
-	yEWCTh86GYHPluU/Sa7Jn8/BNM5TDu/OLMzi2V8Zfpo4pC2HG7TqIt6cECWfXG/7om8AHKp
-	LrpKLDV5Pe2pQqP6jlV1v0kXij0QNTLBXOdtdoGvY1xT23RO25tbG3RQLTWX4cRUgGoEx02
-	OCWcJyP3VHQhG8ie9nv/mE3oowlnR111LBJCpllpOzpZBDrMJC2LdHrqTlnTiH4RbVk0Pl/
-	M46B2YaewlJJP3pVIHAVVU3rh2/tqNBGN/fmiMoQbwBn3v2PkEuKd+EOTT3QC87Nru3OGuE
-	gQOsuU9l+IqdkoNJduyrFOQ9DkLceLVmt/borhi5jPipltaiC4U7SDt4XTFOk6vyeklqmpz
-	E+/jKoJ0iyyC/YUwItEjMQpK8nXQy7VB/AfWTEDRwcDBM2YGuW9tEr50f6Ru1PkIA9STfzb
-	2RlG7elyYo1swhltQ/8VY1s3lXxFH/RVZtnEJcDUonI5fMv4sgwTpg2RnJTV2pr0OSK6r9d
-	5INyOFxpRuSa3NgHLbtQi8ndld44ovJSbc7u0XGy+l+jXMFn1jFsXTyicL6+F5AMonChHsP
-	ioDsnEw9Kyu1evKRjOMOJuCF77Zn3Gr/JL1bBE92lOcrFt7SnnIdGNi+UGVFoUtYXDOB3v0
-	YOgiQs5+H9zm4FbnLJBF60WCA1mysrEsQE2rdzN4LktFLzfIVP10DulYFYoiGZhWW6ktSkd
-	G/eYtAubcBX41ud5mu1YIDXWNzmAnDl4D3Solho2R3VuO9J4zEuC24bCyjQoFydgzGA357k
-	ZuPB+5l5HeyAl8UiPPePDKIejaplv69wbsvKQ/fHSRsco/9FdEHyMaPRG5RER8cWhcxyj4k
-	3TYEFjiEuCt7wJyXfg905skav2WOpC1+tzXpaieWCM5S0H6UhVQRfhPrIlH+WAF+yQthwi3
-	BUuKfKSg+MSayz8=
-X-QQ-XMRINFO: MPJ6Tf5t3I/ylTmHUqvI8+Wpn+Gzalws3A==
+Feedback-ID: zesmtpsz:linux.spacemit.com:qybglogicsvrgz:qybglogicsvrgz3a-0
+X-QQ-XMAILINFO: NvIr6BtGSx+/VIfv2E63sGeHaAkHEoTUahhz8hkmxZWpqDfVrE/uksQ7
+	Ga6NyMctX+S3crf5pOWS+D+MXPJf9cwihNilJ6VfhE2F5sAA9UJeuxE5XzCkPYhCLd36j2G
+	bnuB0Yk5hUSThIvaCYU7mfnhShjP8fSTjSXgqCUE2rCzmTxNJS6Oac1nopyoS6Kxl1Uv9kS
+	9NsQ7fHZ84XILhGw/LIyOJRbNX7Huvq/7KLK//W0AvAw4CmvghxEx/lEhwsAKdtxc6YOiKO
+	WqiGmPYNV1UA312YTAMdNeIWkf+J273kPNu3JjakzYhplNjSFv61SlGrtoY/SuwX0EiuqB/
+	slw8fsyw+U7AIE9P6DlWtcrJxy1eY3uo6XLAhpn2Ri7TdO9YLq+vGWW5GlET0OaNQ4/42gL
+	Cvk3s9MQqcpvomD9l4KSOPi6FxO7oeyzSuUEoxO6+6Mdu2gtfmFOpZDQtLbECoMN/PN3Rnd
+	vs6PjEhM4Rgx+B2nz7tFuUqJNfGwXHNCVUPh3CKFXCLq45xmT7xOJzGt13xopWYbfaXof9i
+	GDxBUXAtP4KAZdFPAqjq/2V8/CRk1USacFcnRMnbnt1o7yFoovoCCFUTkLOG35GtspDsyLR
+	IHGm/QuhdvbetNBGHIgZoPOXWW/7D3lAxZ9XTHr1HE7gGmECgUJJ9+AVatGyKSMvDvP2yri
+	x/LV/xQIeQ9DTErzLUvuM5PseKrceJRdOtLCEEED7d9ZN3XOfR7TjqpBX1RLngMb04y6v+l
+	I6SBSTXTgpRLhVXuc9NHd1pW9HvBtpohRKHTMJws8BM2Od5jJb8eiS9JseBttVxxjbdtS42
+	8cx0oSwQe5ZlKgaRvmxdwqDDhAoEkOzyvfL2H7OeIZQZrFJ9X7K7bl8RK22LrVy7NCFWseu
+	IM0A+QIbJfBXxBGSs5MR26SHxTS88alMRLHz/qf0j0IADqqjsDkjgGMFm5yjqvqNjSeBKoA
+	LpGbv3TcmD/WqDUxYI8dxvPH6z44on89VDoio2Zdbhh+MjdHEGlPMKKZ5F05secR+2cL2Yl
+	11JxIk2/cgagz6VJdu/e7MOBYgWE7FgbtyVHQ3Wwi+5pfKIZ6TF0vcCftK5DdWSj7azB2aI
+	CTcgP94C7L1HRlhi2jMiNdiK8P6rM69vDQ6h2E56ZHJ91XWuBm2/YvtlTiD8Zv4nsh7qSIo
+	orxxgf612t4NPXMF2ulbI0ORM5yXKFmKNQBw2bvxOEyPl4c=
+X-QQ-XMRINFO: NS+P29fieYNwqS3WCnRCOn9D1NpZuCnCRA==
 X-QQ-RECHKSPAM: 0
 
-REGULATOR_SPACEMIT_P1 is a subdevice of P1 and should depend on
-MFD_SPACEMIT_P1 rather than selecting it directly. Using 'select'
-does not always respect the parent's dependencies, so 'depends on'
-is the safer and more correct choice.
+The default value of the P1 sub-device depends on the value
+of P1, so P1 should have a default value here.
 
-Since MFD_SPACEMIT_P1 already depends on I2C_K1, the dependency
-in REGULATOR_SPACEMIT_P1 is now redundant.
-
-Additionally, the default value depends on MFD_SPACEMIT_P1 rather
-than ARCH_SPACEMIT.
-
-Acked-by: Mark Brown <broonie@kernel.org>
 Acked-by: Alex Elder <elder@riscstar.com>
 Signed-off-by: Troy Mitchell <troy.mitchell@linux.spacemit.com>
 ---
 Change log in v4:
-- default m if MFD_SPACEMIT_P1 instead of default MFD_SPACEMIT_P1
-Link to v3: https://lore.kernel.org/all/20251118-p1-kconfig-fix-v3-3-8839c5ac5db3@linux.spacemit.com/
-
-Changelog in v3:
-- modify commit message
-- change default value from ARCH_SPACEMIT to MFD_SPACEMIT_P1
-- Link to v2: https://lore.kernel.org/all/20251027-p1-kconfig-fix-v2-4-49688f30bae8@linux.spacemit.com/
+- default m if ARCH_SPACEMIT instead of default ARCH_SPACEMIT
+- Link to v3: https://lore.kernel.org/all/20251118-p1-kconfig-fix-v3-4-8839c5ac5db3@linux.spacemit.com/
 ---
- drivers/regulator/Kconfig | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/mfd/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
-index d2335276cce5ffbd500bbaf251d1761a9116aee9..b51888a9a78f399a6af3294fc19f60792576332c 100644
---- a/drivers/regulator/Kconfig
-+++ b/drivers/regulator/Kconfig
-@@ -1496,9 +1496,8 @@ config REGULATOR_SLG51000
- config REGULATOR_SPACEMIT_P1
- 	tristate "SpacemiT P1 regulators"
+diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+index aace5766b38aa5e46e32a8a7b42eea238159fbcf..c757bc365029dc794c658fc5b10084a0f29ac9b6 100644
+--- a/drivers/mfd/Kconfig
++++ b/drivers/mfd/Kconfig
+@@ -1276,6 +1276,7 @@ config MFD_SPACEMIT_P1
  	depends on ARCH_SPACEMIT || COMPILE_TEST
--	depends on I2C
--	select MFD_SPACEMIT_P1
--	default ARCH_SPACEMIT
-+	depends on MFD_SPACEMIT_P1
-+	default m if MFD_SPACEMIT_P1
+ 	depends on I2C
+ 	select MFD_SIMPLE_MFD_I2C
++	default m if ARCH_SPACEMIT
  	help
- 	  Enable support for regulators implemented by the SpacemiT P1
- 	  power controller.  The P1 implements 6 high-efficiency buck
+ 	  This option supports the I2C-based SpacemiT P1 PMIC, which
+ 	  contains regulators, a power switch, GPIOs, an RTC, and more.
 
 -- 
 2.52.0
