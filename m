@@ -1,53 +1,53 @@
-Return-Path: <linux-i2c+bounces-14784-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14785-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC7EECDE7F2
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Dec 2025 09:33:32 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5F83CDE7FB
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Dec 2025 09:33:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id D88253007C91
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Dec 2025 08:33:31 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B6F85300A1FF
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Dec 2025 08:33:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7AB3313276;
-	Fri, 26 Dec 2025 08:33:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7566D314A83;
+	Fri, 26 Dec 2025 08:33:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b="JaysVk8M"
+	dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b="mJhcpjrb"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtpbgeu1.qq.com (smtpbgeu1.qq.com [52.59.177.22])
+Received: from smtpbgjp3.qq.com (smtpbgjp3.qq.com [54.92.39.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F494188CC9;
-	Fri, 26 Dec 2025 08:33:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.59.177.22
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9FFC31326C;
+	Fri, 26 Dec 2025 08:33:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.92.39.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766738009; cv=none; b=T4ehfOYgsgvgUJh/u2txg3n+cKklWbZYYr/1WWnXY1D6W+ROZzcwt77IbLCPQYjbfJf6vzl/q3C9/cdUSrvkJLeSAt1fq7BpXzu55mu3qx6/0aykacseTIoUEbCxYrdxRDa4fIOTPEgIvop7Q/4su997MFB7+aC8WesNkD2BTfQ=
+	t=1766738017; cv=none; b=Nbo3luDHVfJkGL9823zcCQ8c4hRY4HPh//vV4E6JbtIZ066cM4C3AnzDVu1xyNTWoTzHqeawJsRgx2g4q66wcaXQu0YlhFZYvL3K4aAX5xrLpyRrrnZibE+SFoXdI2uGVwueXSM5o5N2Z71XhbGI2zaUP2T99UQ8jObuxRcygJU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766738009; c=relaxed/simple;
-	bh=QdK+ioxJYZOUfej9gZ6o7Vdbqq5r1P+ouqs79rCNmWw=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=FMwKLE/D5LYTYPcdRHD98eRnxwGq0UiucnlHZ+ol5hbpvnzIkPdW8SyBxlGJeBtev/vLJdRweuVhKY+bcZqLOVDzj8mGfw3Cd61OlQ50I4CwlX15X0ZgW4ZotZZuKssg3+1hKVUa+LsFZVBnmlhymufALg7v9MEXfweMFGn9j5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com; spf=none smtp.mailfrom=linux.spacemit.com; dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b=JaysVk8M; arc=none smtp.client-ip=52.59.177.22
+	s=arc-20240116; t=1766738017; c=relaxed/simple;
+	bh=4WF7PpSbGiAEocf+vpDDLvscterKabWsWS0qOo26+rs=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=gC/pZ9i0o8Q+dV1nt7VdVCCjHe31ViCT7UBvLXeoW35vq/va/Envon9yHMUYZw86Mo6RiUnq1JzsDSS8C7ewOqgy2+DzaFZbogYOIeJUnM+dTzJcJBkA/KO7ceTf60F6yDELSJDd/q8IUo6R8V+iWY15DVQKvW+xUM0aBZ6TTJM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com; spf=none smtp.mailfrom=linux.spacemit.com; dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b=mJhcpjrb; arc=none smtp.client-ip=54.92.39.34
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.spacemit.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.spacemit.com;
-	s=mxsw2412; t=1766737934;
-	bh=WjnZoQgubG/w/UFsn+p1ZQ0l/F3FJ/kjz4hHUkUfm/k=;
-	h=From:Subject:Date:Message-Id:MIME-Version:To;
-	b=JaysVk8Mm82dWkf7n1f83dOVCz4zdftaHq7wsMZ6uJxRbi0RnQPpLXA5bpl/gM3qy
-	 3FxMtu031luaFMl9JDEvO4ZeTqOpuFyG8wmU2PyiGS/mT6AZUMBdT4TnTZhjuvxig2
-	 aotDqBVq1/ST9Pjv+GYS1neJNqU8aliIF4/AgRN8=
-X-QQ-mid: zesmtpsz4t1766737926t9cb7b6e4
-X-QQ-Originating-IP: dIxHJoTdAeMTTH62ybgH7z40gRrrQjFbaucAFSflfcc=
+	s=mxsw2412; t=1766737936;
+	bh=UeRZTj3RgL+C0LFt7dsn6u9FGTvGMeuehM6rrW+shiI=;
+	h=From:Date:Subject:MIME-Version:Message-Id:To;
+	b=mJhcpjrbeGThy0ehyJV+9LUlK+DF/FsBL80FztQfBY/Z6BhFIFe+WktLCNS0aAzBT
+	 hjwkZL0wb1Y7kOQzU7/uv1xtLISs6fkRiW9quFsGQsr2syyAFKctUy6VhRQ0kTDKSg
+	 GCyKl5U4tkYwCEaKxxlqDjI90QUJ44J+BZnXZhZI=
+X-QQ-mid: esmtpsz18t1766737930t654bff71
+X-QQ-Originating-IP: xxPuGQWHfUB+ZjzOWJRulHKNXe3Xaa+AWCBb4JYA1Pw=
 Received: from = ( [120.239.196.19])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Fri, 26 Dec 2025 16:32:04 +0800 (CST)
+	id ; Fri, 26 Dec 2025 16:32:08 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 15364710950003848342
+X-BIZMAIL-ID: 4478349540645840041
 EX-QQ-RecipientCnt: 8
 From: Troy Mitchell <troy.mitchell@linux.spacemit.com>
-Subject: [PATCH v5 0/3] i2c: spacemit: improve clock handling and cleanups
-Date: Fri, 26 Dec 2025 16:31:58 +0800
-Message-Id: <20251226-k1-i2c-ilcr-v5-0-b5807b7dd0e6@linux.spacemit.com>
+Date: Fri, 26 Dec 2025 16:31:59 +0800
+Subject: [PATCH v5 1/3] i2c: spacemit: drop useless spaces
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -56,78 +56,78 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAP5HTmkC/23MQQ6CMBCF4auQWTukrSWIK+9hWOB0kIlASYsEQ
- 7i7lbXL/yXv2yByEI5wzTYIvEgUP6YoThlQ14xPRnGpwShTaKVLfGkUQyg9BaTKXFyh2KqyhfS
- YAreyHtq9Tt1JnH34HPhif+t/Z7GokdnZSp2Z3KO69TK+1zxODfEgc05+gHrf9y+6t77+rwAAA
- A==
-X-Change-ID: 20251017-k1-i2c-ilcr-c928d50e407f
+Message-Id: <20251226-k1-i2c-ilcr-v5-1-b5807b7dd0e6@linux.spacemit.com>
+References: <20251226-k1-i2c-ilcr-v5-0-b5807b7dd0e6@linux.spacemit.com>
+In-Reply-To: <20251226-k1-i2c-ilcr-v5-0-b5807b7dd0e6@linux.spacemit.com>
 To: Andi Shyti <andi.shyti@kernel.org>, Yixun Lan <dlan@gentoo.org>, 
  Alex Elder <elder@riscstar.com>
 Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-riscv@lists.infradead.org, spacemit@lists.linux.dev, 
  Troy Mitchell <troy.mitchell@linux.spacemit.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1766737924; l=1266;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1766737924; l=1067;
  i=troy.mitchell@linux.spacemit.com; s=20250710; h=from:subject:message-id;
- bh=QdK+ioxJYZOUfej9gZ6o7Vdbqq5r1P+ouqs79rCNmWw=;
- b=Z2YbsHsGXTjvGiUgFaKcZIEAaaoI3oEua0YOdPQ81oSVXRyS0IsMh1JF0Kpo3kHHxOHZLLL6E
- uEkvnDWJW1fB8MZd58RPoZ87d+JG7ZTuoTkV6SWBIX09Wz6Ye78bi2/
+ bh=4WF7PpSbGiAEocf+vpDDLvscterKabWsWS0qOo26+rs=;
+ b=KJMJPL6qdCMVv2K9MWdKfiPFYf7zIVqzvL6gfg4ecAxDEfxEgo4gP9417pUbzM07yL6rSG/3q
+ 7f3PLcX914TDjDXzmDvTmMK70AbxOpS1DVZyxTUocqQ7UYAmuY3e63I
 X-Developer-Key: i=troy.mitchell@linux.spacemit.com; a=ed25519;
  pk=lQa7BzLrq8DfZnChqmwJ5qQk8fP2USmY/4xZ2/MSsXc=
 X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpsz:linux.spacemit.com:qybglogicsvrgz:qybglogicsvrgz3a-0
-X-QQ-XMAILINFO: OBVtUtvshiqcoOH0IeVbbJEivhw42zcHa+Pu5w/4dQj4s5Fo3yW57xxt
-	ltRSItltj36/aaGl34ye5FHAPs1HbDu97V3C7l+E6H/VD+U+ob4nSleFSdhH0F7yaQcmy78
-	OVvhh3vTmqUDDutmnGkHwaIekSfkI1eL6uKHeceBRI1KueZn4YFfXS3TQkJTmGQH6yGilpG
-	q6okbdSw/URr3BQGcKb45/3wgAEX56nSCEv6LHZsM4CWnOUorLK+ZFp+enY7CWjFKu3PkaO
-	hbFnFYfRrclWhdMoVpJiI1tsexELEGt63R7kIo5Cqo3QgX7DTx421ugb7R4qSpdcIZurRfv
-	G6x6Va0O0+J3itjJPuWV/iUl2/lrl/ilioETEbVVBpsWJAMmC8mztItqCIEyNNKU/NggyeK
-	XlziZGntFydEkt9byTFNbISGw4vc/Q21pvlWMhH5WxBCR91ipTwAYdSFLmx274ps+0CEGo5
-	6LkBuEqfOQcCk6w9oRL02EnaZS+8T6ol2HCyt/IljCDdh113BCzXOwBLUBRyVnAV3yIubfB
-	DYUnS4XpPVkpWcSO/xusDdMHBNWKjHRZQcXu0lsge1WFu+XmpM9bLhue6Rb5gf41JPFYaWM
-	1s6vuWGSEJTdVDuJ7G2ejwfXdrZyVE3ehXraopdsM1ChnAvyNmcv6JUlO9tfKybhgqOX6SM
-	CSothzQ/pQbFdc2KHHPFuBT5AU0xcGBfiRpaHSL5S/fApUs4bgNcU2w9VGwfyRp9YeuM/rF
-	xo/zje6b06pBCx/6YrkRSXWXNTpOyckAbHlDG3lx0brqLOD54DsJswpwlYTrMnX9q6XOXun
-	ACQo5dFM5CU8sJ7Po6McOWBObMPe33OQ3TO/LW6tAw77meK+ChvyoUGqH2uSmq/XfcQEJ6F
-	AMAdZLDBk5krdsuaRcLqzHrSRsr0cxAOQug9MITRFuw+2pZlagrBVdWN9e/4exai8x641M3
-	3/GF0xiZDUyfoxeQnwEcrb+HbCFX4/taqTrY8B0Bm1uM1qW9pkcR8FsnrL8xQqT6Lmlpvz+
-	Hv30jmClAzlgtlBLk13SM7NwkejgvARGNg9sCS4R7W1f2wKGvb8R01VWrzEjkIH8MskWWWz
-	pRnaB4Z1gYbGm1AjS0tDxcTcxSOrC44uWO6e+aIVzaij1bLpn+133KPsKy1Nz+SaD+dTs2h
-	Bx7Uh06H2Q9yibItmGma3T3u/g==
-X-QQ-XMRINFO: MPJ6Tf5t3I/ylTmHUqvI8+Wpn+Gzalws3A==
+Feedback-ID: esmtpsz:linux.spacemit.com:qybglogicsvrgz:qybglogicsvrgz3a-0
+X-QQ-XMAILINFO: MQaNw+J8Qgodt8wxrv8k7I9ZNKv8IuZP0w2xAALaZmv8umk0faUXObGI
+	V/IQT0hhFYpDQ5SFPY9BZeO17BhzLtTJm2UINXRsHsJFn4jn9NzGJ44DM6ikrP753RCky6L
+	uh9SwxsKrI/nYtkha0V8l+sQwToFrVWOtl9PW8VgvPPSmqpi39lwy71h1SH6bhlM1qzk/Cp
+	vIGFmizy6Qov3h7QlTnhf8SOu/lQLx7HkzGmhExxH21BLUtvjo0zKyq+qdZhCp8KpvvmNIK
+	bjt4ptZzbXYX/MHA1/wln5xJ4ahsEheNfA0g+umA5KSShXR53QhuCRE3E+Gg1ezx1uL7nls
+	lI7duOtetNqxb7rpuKw2FRon0l9SHK9LIqEX9Ul+b03fNNgJw4oS3fWptB5ngsZ6bWBWhpt
+	K6R7AESJy4vp02EI6OZM+tcHooHw5URJt3icq4/rrXUiEt+5DB28JWCKOsjp8hZAKMTmtgA
+	RGoObos3qqdTjnoOoGY3C61kPeX+4TPJgnuc8qfBRslOscOhdrCj7LvFaHPDMOTDV0T1kM8
+	MC/ysC58DERFTshc1/Kvrg7sgOwzAx3qujIIfrNMeWNUHE/I5EK+m5tr4umb/aQp5QZFGPI
+	7ILL9Pfelaopmr+gv1ndKjENgNg+KyYBvHbWeVfCqC83ebFGBfb6nxlbefVEPcQ/kX0DG69
+	mueAVHNiLv4Qdw8lwLCgSfBA7N1wW91xdrYuWjFuvLSdZckVkQT63KBg9sTCsPOHc0X1bQI
+	Y9dXesWdB7LURb33wUwqp+aQaF7A7hfOQiMFvG/LaBezesFgHkmp7wcX2uKKmkBFFbQIIfl
+	oX7Wh2eqhUoPty9XTzFnVJ/4eQhQJWsRHYdMDUTX07OE0yLCjjhzQapOWjn81OYvxk5VReL
+	8ognfjQ3JJcxTvHOpZBiA/cPnmxyqKN9rMxutZwZ+yGZxp+PVkQrUg9eIG29j3L340Wc+oi
+	KR7o915D6podvNewCjnxWpC5Hx1KSsHkGhj8FkYQ18Rzaik5L03tP8CFFXejO/0DYKcuNsN
+	Fqa4XcP+A0Tz2HO87htYoXZfnNhaoGRLi93n9JCBUJ7mZGH2x9+IzzMHFaWRJNwhWhUsHuU
+	sP4OkWiGh8ejRgsxsxmWjAGahi3Uzdqvhu9MAb4ykO6yPk+stAlo25WdMyBirur1oT71ozf
+	CfvF
+X-QQ-XMRINFO: NyFYKkN4Ny6FuXrnB5Ye7Aabb3ujjtK+gg==
 X-QQ-RECHKSPAM: 0
 
-This patch series contains a set of small improvements and cleanups for
-the SpacemiT I2C controller driver.
-
-The main change in this series is to improve SCL frequency accuracy by
-configuring the ILCR register based on the requested clock rate, rather
-than relying on the hardware reset defaults.
-
-The ILCR is exposed as a managed clock via the Common Clock Framework,
-allowing the driver to program appropriate divider values for standard
-and fast modes.
-
-In addition, the series removes a spurious warning when the optional
-clock-frequency DT property is absent, and performs minor whitespace
-cleanup in the driver source.
+Previously, the I2C driver had an extra leading space in column 0 of
+included header lines. This commit removes the redundant whitespace.
 
 Signed-off-by: Troy Mitchell <troy.mitchell@linux.spacemit.com>
 ---
-Troy Mitchell (3):
-      i2c: spacemit: drop useless spaces
-      i2c: spacemit: configure ILCR for accurate SCL frequency
-      i2c: spacemit: drop warning when clock-frequency property is absent
+ drivers/i2c/busses/i2c-k1.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
- drivers/i2c/busses/Kconfig  |   2 +-
- drivers/i2c/busses/i2c-k1.c | 162 +++++++++++++++++++++++++++++++++++++++-----
- 2 files changed, 146 insertions(+), 18 deletions(-)
----
-base-commit: 138e17a35265a036c4cbf7d4a6afcaf69e5d8b2e
-change-id: 20251017-k1-i2c-ilcr-c928d50e407f
+diff --git a/drivers/i2c/busses/i2c-k1.c b/drivers/i2c/busses/i2c-k1.c
+index d42c03ef5db5984ea8e06b3d7eb485b4f899e616..30cdf733deef264061c8ea565634c5a17f5aebfd 100644
+--- a/drivers/i2c/busses/i2c-k1.c
++++ b/drivers/i2c/busses/i2c-k1.c
+@@ -4,12 +4,12 @@
+  */
+ 
+ #include <linux/bitfield.h>
+- #include <linux/clk.h>
+- #include <linux/i2c.h>
+- #include <linux/iopoll.h>
+- #include <linux/module.h>
+- #include <linux/of_address.h>
+- #include <linux/platform_device.h>
++#include <linux/clk.h>
++#include <linux/i2c.h>
++#include <linux/iopoll.h>
++#include <linux/module.h>
++#include <linux/of_address.h>
++#include <linux/platform_device.h>
+ 
+ /* spacemit i2c registers */
+ #define SPACEMIT_ICR		 0x0		/* Control register */
 
-Best regards,
 -- 
-Troy Mitchell <troy.mitchell@linux.spacemit.com>
+2.52.0
 
 
