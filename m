@@ -1,128 +1,126 @@
-Return-Path: <linux-i2c+bounces-14786-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14788-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D7F0CDE801
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Dec 2025 09:34:00 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65DA5CDF8C4
+	for <lists+linux-i2c@lfdr.de>; Sat, 27 Dec 2025 12:17:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id C786D300EDD3
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Dec 2025 08:33:41 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id E3CBB3001628
+	for <lists+linux-i2c@lfdr.de>; Sat, 27 Dec 2025 11:17:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A83E2314B82;
-	Fri, 26 Dec 2025 08:33:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47FEA311C31;
+	Sat, 27 Dec 2025 11:17:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b="Ufla0bYw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mp7Vf87Q"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtpbgjp3.qq.com (smtpbgjp3.qq.com [54.92.39.34])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29AB6314B88;
-	Fri, 26 Dec 2025 08:33:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.92.39.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9CC92853E9;
+	Sat, 27 Dec 2025 11:17:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766738020; cv=none; b=EFdlXifNM5u/apWug2q+20uHt6sbE71z2OnZNzI3fwb9fZ1j+gNDLoLQCGTPNQkvMZvnGxYMNJO81HGJry5N62Q8tMqj0bm8HZa8r+Ank28BMnbue2WfuLpVcHx9uE6PQxq3D+L5x7h6ag3POLrK/d981rfB5TsePflYj4DMDKc=
+	t=1766834242; cv=none; b=uhe4DrJrk75m79+0UDM0BwCiS6ANvW8eGqYX61HQFEfOkNRvX2TeCyB52HECIZmkz9gpit9gLJBJZPpNBOm9V3HX24+XspYGkYfS8WhsqYG1ki22Y153sU81Fz3neAv+zZJS1aer2zUhlDQRjfymETOPyL6SLa1BDrPQ8tuDHWE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766738020; c=relaxed/simple;
-	bh=rZVjpRq6diTZDodTgrmoHPQRzPHbVK6nvZDYYBcO8PI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=HDopCA1SqqnGiIwyKt788+WfRWPIi7z3m/tC3zBXqKi4k81E0WEji3hZvy3Q+lbJ/7l5ednL+cFqFoc1muIc2go7PtwF8dQAebwdG6vZKIIr1k75voHkG2c/Ee9fzdNn8Vxwxrf2Fr6foD3Mhe01CFGLM8eX28RYWdybpLrLAbE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com; spf=none smtp.mailfrom=linux.spacemit.com; dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b=Ufla0bYw; arc=none smtp.client-ip=54.92.39.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.spacemit.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.spacemit.com;
-	s=mxsw2412; t=1766737943;
-	bh=q144s+Pxl/YxIsHlfK2SeNs5pf4/4KxmIRh1XcAJfTw=;
-	h=From:Date:Subject:MIME-Version:Message-Id:To;
-	b=Ufla0bYwSK2amOo7gEdg199je3q4b9owsWUHJZct1Ik/6gW13XSNREramQi5gso4D
-	 Z+dttbxEpFHSYIh7eXCJ5V6B0+aDm0U6DDy0UUp/vyNraqN2fMJFviQZjoFS+08yoe
-	 xoNxHu8bo5b11EPztRn9yBYCs75s2wetCJ00fno8=
-X-QQ-mid: zesmtpsz3t1766737937tf0740520
-X-QQ-Originating-IP: fBMC0oz+qlcaXygVvZVVCJP+JsZzqHCoEj+yiZMonz4=
-Received: from = ( [120.239.196.19])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Fri, 26 Dec 2025 16:32:15 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 1856170875034812761
-EX-QQ-RecipientCnt: 8
-From: Troy Mitchell <troy.mitchell@linux.spacemit.com>
-Date: Fri, 26 Dec 2025 16:32:01 +0800
-Subject: [PATCH v5 3/3] i2c: spacemit: drop warning when clock-frequency
- property is absent
+	s=arc-20240116; t=1766834242; c=relaxed/simple;
+	bh=mkTJBdGWaaGFXpk4ABan/EOXP8frmcAGWpzfe9DTQsY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RHdvuj2XjjAJUdzKsASVVjPnTmzXKv0m8dNl+CQdZxXSe1HLlFDbCXsKPV9eUur4dK/dm3kgTtrZHXIVqPBY4YsorIRmVKlu4yv2Nh+vm21pp69jPbjnRQ5XWJmIQCxnoGdp3RNTprAbmc/9KYc2Fx9On5/StfvYvCH++XGaa0k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mp7Vf87Q; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F9FCC4CEF1;
+	Sat, 27 Dec 2025 11:17:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1766834241;
+	bh=mkTJBdGWaaGFXpk4ABan/EOXP8frmcAGWpzfe9DTQsY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=mp7Vf87QB6NclKUBLSZgG25HwjCXi0w1BFQg/Xi32LC2n/3/VELl6cCodVL+Uaohv
+	 knt2f4OAFECmBI2yR6QaJKc4Fu3a0RgdjeQelMCbEngpVtwWKTYTsHw2W1Iz+bxEWv
+	 0zWs04mKwiyvgUvPwIasj1QjjKsDJq89hdt7OjelzvGxzL+3ihvEu5fdHBabQtgXr8
+	 DllSXXTp5/+fVCOegZ18LBeyKqUAgJDvKyYQhRds9kFnFYu05Qmf5FSqSpvj2eGiJS
+	 UXpqSihw//fBPaMJNj+nca6ZTcB88RkYwMxJpkTmCUhvWbKSEP90A++xF9C0FO43Cv
+	 F68a/aRlgpAVQ==
+Date: Sat, 27 Dec 2025 12:17:18 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Robert Marko <robert.marko@sartura.hr>, robh@kernel.org, 
+	krzk+dt@kernel.org, conor+dt@kernel.org, nicolas.ferre@microchip.com, 
+	claudiu.beznea@tuxon.dev, herbert@gondor.apana.org.au, davem@davemloft.net, 
+	vkoul@kernel.org, andi.shyti@kernel.org, lee@kernel.org, andrew+netdev@lunn.ch, 
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, linusw@kernel.org, 
+	Steen.Hegelund@microchip.com, daniel.machon@microchip.com, UNGLinuxDriver@microchip.com, 
+	olivia@selenic.com, radu_nicolae.pirea@upb.ro, richard.genoud@bootlin.com, 
+	gregkh@linuxfoundation.org, jirislaby@kernel.org, broonie@kernel.org, 
+	mturquette@baylibre.com, sboyd@kernel.org, lars.povlsen@microchip.com, 
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, netdev@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-spi@vger.kernel.org, linux-serial@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-clk@vger.kernel.org, luka.perkov@sartura.hr
+Subject: Re: [PATCH v3 01/15] include: dt-bindings: add LAN969x clock bindings
+Message-ID: <20251227-splendid-striped-starfish-ece074@quoll>
+References: <20251223201921.1332786-1-robert.marko@sartura.hr>
+ <20251223201921.1332786-2-robert.marko@sartura.hr>
+ <20251224-berserk-mackerel-of-snow-4cae54@quoll>
+ <CA+HBbNGym6Q9b166n-P=h_JssOHm0yfyL73JZ+G9P81muK=g4A@mail.gmail.com>
+ <78bf252c-fd5e-4a36-b1a3-ca8ed26fde7a@kernel.org>
+ <CA+HBbNG+ZVD6grGDp32Ninx7H1AyEbGvP0nwc0zUv94tOV8hYg@mail.gmail.com>
+ <d210552f-c8bf-4084-9317-b743075d9946@kernel.org>
+ <2025122516245554f59e2e@mail.local>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251226-k1-i2c-ilcr-v5-3-b5807b7dd0e6@linux.spacemit.com>
-References: <20251226-k1-i2c-ilcr-v5-0-b5807b7dd0e6@linux.spacemit.com>
-In-Reply-To: <20251226-k1-i2c-ilcr-v5-0-b5807b7dd0e6@linux.spacemit.com>
-To: Andi Shyti <andi.shyti@kernel.org>, Yixun Lan <dlan@gentoo.org>, 
- Alex Elder <elder@riscstar.com>
-Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-riscv@lists.infradead.org, spacemit@lists.linux.dev, 
- Troy Mitchell <troy.mitchell@linux.spacemit.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1766737924; l=1201;
- i=troy.mitchell@linux.spacemit.com; s=20250710; h=from:subject:message-id;
- bh=rZVjpRq6diTZDodTgrmoHPQRzPHbVK6nvZDYYBcO8PI=;
- b=jpYwIH4OkDuOt9w3reh51VpSYcGMuiHBl4FOC9ZnknYAMeR/Jfjh6jb3/8XpNJc7l6KDPBqa/
- P7cZc0uEvIaCx0slzGfd4VRRQe1kBmTTldGeq5hE9zgY7BTPAZemize
-X-Developer-Key: i=troy.mitchell@linux.spacemit.com; a=ed25519;
- pk=lQa7BzLrq8DfZnChqmwJ5qQk8fP2USmY/4xZ2/MSsXc=
-X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpsz:linux.spacemit.com:qybglogicsvrgz:qybglogicsvrgz3a-0
-X-QQ-XMAILINFO: Ngwq0BL9nhqbWZY7lCf2IIsITybFV6mN3zjf6mm7u6sz+zDtwZEc5qCm
-	weyQSRfbzJqWlEMvpiqF4EqQnoNdPyWQFUtxe+7FunXLTesJ1PVzHem5BU3vHgZYrfEOoIG
-	BA4Qny/qpPLl4cT5tHN4qB82bektIxshyLQNs70nWauDXEPGQ9C+iAOiau/hTfVjsk/8O7G
-	HDXdCfFzU+h31ps2x61p8C7UHe8hqITez+RgFUXyC7SgJMNjT5T8NeKJ0EjKdqh3RLDKdAk
-	SCHXmDuClwU+tbaHyxn7BOmYvB0cGHvtccvNO/xtEVWkst2GN4paiHwiRz+hlVeGGjPw2Y4
-	KAX+TpT2BRU70qxuhC49ozulFQKgnroRTi0cSfmoEm/7Q8HkXwHBL9bB7w0dHiNdBvpzhEZ
-	i4azMgfpu+jU0Tb8wx164yOGqud+kpOxU/7PVKONHbCrxv+F6fPIcyrarQY9aP2xaN2nmBP
-	qertTE6Emsyt0I9B/sHTuke4PmVJSHlRQ69SUnH6+r/8PWi+I1e+Q4H2B9BoUzKy72AJwHD
-	cCmLlNlYF/tbHzqC71Rq8XGHYYxt7oorvsKPYMC8+X/HYgEBw0udk73mj8pQZCZG3AOivgH
-	wiIriZfzPO52QHWV4DkM4kC0bOLvQApkjo2lzGO1UteOPn9az72lJ6kTMlmwaRuTM+I/3pN
-	ZcRI9qNgjo3i3xeqc00k/9UejFpnZVrWRdwEBnnhjFkjyl0N4zC8NMwxkGKFD+V1JkclVdg
-	yElZ921Xm8XCqDZ5sh8OtVh/PDwAmSJY2j8BiReN3bawcbSQOH2EBwoZFFbG0VgDeQTjCOf
-	W8ogXPLZ1E8DNRLO7OiEbARCMDcAkklMeG2aup8heYWNUVv9XfMAZZgHsFhvHMYHFB4lhzo
-	WmlCKKugsc2U8+WIv2La36VSvCYCC5Bo0Vi6ZXyFUWv4DwfZNbRWABX+ovUq7mtkrXM0DV2
-	Xl0zLD/BLgheBScj2skLMG2IvI3oxhlOYJDERn6xGf5lCmYFXcfxeBDlV+Fi5RccBXqaxmf
-	pktHzib4DyiYn5aFaN1dviqvjPedlh+HvvSft3va/UHOWriot8b9tbPsFGG2xqUy/yra68f
-	OliGDZxupXspFEo8fhH7kw1n4XyH+GkPP3kLsAfi2HA
-X-QQ-XMRINFO: OWPUhxQsoeAVwkVaQIEGSKwwgKCxK/fD5g==
-X-QQ-RECHKSPAM: 0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <2025122516245554f59e2e@mail.local>
 
-The clock-frequency property is optional according to the DT binding.
-Do not emit a warning when the property is missing and fall back to the
-default frequency instead.
+On Thu, Dec 25, 2025 at 05:24:55PM +0100, Alexandre Belloni wrote:
+> On 25/12/2025 09:47:34+0100, Krzysztof Kozlowski wrote:
+> > On 24/12/2025 15:01, Robert Marko wrote:
+> > > On Wed, Dec 24, 2025 at 2:05=E2=80=AFPM Krzysztof Kozlowski <krzk@ker=
+nel.org> wrote:
+> > >>
+> > >> On 24/12/2025 11:30, Robert Marko wrote:
+> > >>> On Wed, Dec 24, 2025 at 11:21=E2=80=AFAM Krzysztof Kozlowski <krzk@=
+kernel.org> wrote:
+> > >>>>
+> > >>>> On Tue, Dec 23, 2025 at 09:16:12PM +0100, Robert Marko wrote:
+> > >>>>> Add the required LAN969x clock bindings.
+> > >>>>
+> > >>>> I do not see clock bindings actually here. Where is the actual bin=
+ding?
+> > >>>> Commit msg does not help me at all to understand why you are doing=
+ this
+> > >>>> without actual required bindings.
+> > >>>
+> > >>> I guess it is a bit confusing, there is no schema here, these are t=
+he
+> > >>> clock indexes that
+> > >>> reside in dt-bindings and are used by the SoC DTSI.
+> > >>
+> > >> I understand as not used by drivers? Then no ABI and there is no poi=
+nt
+> > >> in putting them into bindings.
+> > >=20
+> > > It is not included by the driver directly, but it requires these exact
+> > > indexes to be passed
+> > > so its effectively ABI.
+> >=20
+> > How it requires the exact index? In what way? I do not see anything in
+> > the gck driver using/relying on these values. Nothing. Please point me
+> > to the line which directly uses these values.... or how many times I
+> > will need to write this is not ABI?
+> >=20
+>=20
+> The index here is the exact id that needs to be set in the PMC_PCR
+> register and so it is dictated by the hardware.
 
-Fixes: 5ea558473fa31 ("i2c: spacemit: add support for SpacemiT K1 SoC")
-Suggested-by: Alex Elder <elder@riscstar.com>
-Signed-off-by: Troy Mitchell <troy.mitchell@linux.spacemit.com>
----
- drivers/i2c/busses/i2c-k1.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+So not a binding between Linux and DTS.
 
-diff --git a/drivers/i2c/busses/i2c-k1.c b/drivers/i2c/busses/i2c-k1.c
-index f0c35e23f4f2e139da0d09f314f3eb0e0462a382..c829618a66a214a12b46d63bf06ba7947b9dbbb8 100644
---- a/drivers/i2c/busses/i2c-k1.c
-+++ b/drivers/i2c/busses/i2c-k1.c
-@@ -651,9 +651,7 @@ static int spacemit_i2c_probe(struct platform_device *pdev)
- 	if (!i2c)
- 		return -ENOMEM;
- 
--	ret = of_property_read_u32(of_node, "clock-frequency", &i2c->clock_freq);
--	if (ret && ret != -EINVAL)
--		dev_warn(dev, "failed to read clock-frequency property: %d\n", ret);
-+	of_property_read_u32(of_node, "clock-frequency", &i2c->clock_freq);
- 
- 	/* For now, this driver doesn't support high-speed. */
- 	if (i2c->clock_freq > SPACEMIT_I2C_MAX_STANDARD_MODE_FREQ &&
-
--- 
-2.52.0
+Best regards,
+Krzysztof
 
 
