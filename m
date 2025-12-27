@@ -1,62 +1,62 @@
-Return-Path: <linux-i2c+bounces-14789-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14790-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6B52CDFDA8
-	for <lists+linux-i2c@lfdr.de>; Sat, 27 Dec 2025 15:29:49 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F535CDFDAE
+	for <lists+linux-i2c@lfdr.de>; Sat, 27 Dec 2025 15:31:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9D8523010AA2
-	for <lists+linux-i2c@lfdr.de>; Sat, 27 Dec 2025 14:29:47 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 8A6923001E1E
+	for <lists+linux-i2c@lfdr.de>; Sat, 27 Dec 2025 14:30:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9329731A7F4;
-	Sat, 27 Dec 2025 14:29:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E61B71C8626;
+	Sat, 27 Dec 2025 14:30:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cU/xlPkR"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JptQwevC"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00D83F9E8;
-	Sat, 27 Dec 2025 14:29:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22A2D1F19A;
+	Sat, 27 Dec 2025 14:30:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766845786; cv=none; b=K7aGZ+dGfVKgoziZ2h+o4CkudZ8g1EfYPU5QFJFEnERNyddKduH4dr51Qe2P8A/RO1ilcxIiJiPTBvDUnNZ2+NJ3oaMGsYAB01ku7YkEvnHUwdRIXTf0ftHdmylkf9TE6gl/niK1Nr2f8ZA0/M6b+T7sBTnhuh+N/MknyuhMFUc=
+	t=1766845851; cv=none; b=hIZqCpffFqa324DaEulEQ/Mg5Tq++JsSl2VYyVDn5/qzcT+1/yZES6rGt8EUoyfjbm5C0uxTAqTxMyrBzZ0vxTqr1Q5lOuEo4C3amWI8KFw56dJ1zozhxIkr9ksTF5jfGBWj8eVYTouka24pFwCXkxeLPKRGozCQOleERdKwkkY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766845786; c=relaxed/simple;
-	bh=qBvvZUA/uc+vipih6SXmKDrluaeQLYJk8K7CdoywDo0=;
+	s=arc-20240116; t=1766845851; c=relaxed/simple;
+	bh=f+DTWYt4YGWkgK+0+Ht38Zh3Uu3YP9dOn2v4dMNXl54=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ANGDl2CCEgO5dIG2haanuB0sxfpDiSkxRTpkvpExJMUIRXLC4JQR7xzjYolxvWOwbEvoD5tYkmQUcb7sp9/FzNt8cMXDNCN30TCjgYRs9bsBiKNSbg77qvQzqjqTIbEPoPxb3qoFce0P7Y6G+XPzDss8J5OPASth9Vhk8uPX7C4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cU/xlPkR; arc=none smtp.client-ip=192.198.163.11
+	 Content-Type:Content-Disposition:In-Reply-To; b=pCUYVW5tMbqUwPgbVMPcC+gHaYo8WPYZRyq75hUXIPHTZBhjVvTabIHBVrf3yQNFGYfpprp3YjIHxnOi3d0ahl6wuR/SQ/l9ylSqYatB4gBwRw0AYOCmBz2pZog3Gh68k6sNkFlt5KrqOgyG3vmSHRI3zvG3VRMhCClxHGbfTX0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JptQwevC; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766845784; x=1798381784;
+  t=1766845851; x=1798381851;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=qBvvZUA/uc+vipih6SXmKDrluaeQLYJk8K7CdoywDo0=;
-  b=cU/xlPkRICbSub4oLTbWveG4Yt2wAuSpEO6RICQRAdVr0/P2eZ42lmAw
-   QrKfIFsAM3PEoOQlS1i+wThPrrAL7MqWczpTukqlPLfxcqz583eH9KVwa
-   kew4Bt50CG9J1awY21uH3u2OIWQy2SJrLNtOsxXCcBPYkEN3NPDVoqtR4
-   yQxVdyDAvdV+XM72snlHV5gIUe5i6dQ2+QwBcqeX13NpP7byBeQEseOMy
-   l9iHst/Uv56ltbSJTRSJ3w17HOFsfjsa515MVwYDVtb7OZKR9XW+6SZbd
-   04QJxJmYXli0v7GVXBucIZGgTXoG3Cg8g1miTJUUXAolCBRmnENKqh4Ud
-   Q==;
-X-CSE-ConnectionGUID: wFChVSJdQCa8zHaiik0/vw==
-X-CSE-MsgGUID: LPh1FcC7TSGvMgU9diol8A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11654"; a="79177585"
+  bh=f+DTWYt4YGWkgK+0+Ht38Zh3Uu3YP9dOn2v4dMNXl54=;
+  b=JptQwevCqbO+AOt8t3f9qmmWoTfd8BE/v6B8X7aIn2cDcgLOSIMLBlOo
+   4MocROirSb+lfhnzu66tOQzG/aemT+ZjRp4MN0aJuP8qNyUySSjRghXgs
+   gWNWDoVPZOVbO26hpksCZZowBvu+hoXr3d/qvE6+r0gXthMsCtqT0HxCa
+   1FmCL1h+u3C+SCQlsVvLyiaByBxa4jHVoXxYHLMqOOGS6RKqWVhQ33Hgd
+   ZinMV69JZ3N4h6KNSCzgIQw3mGKK8eaiRUvfpy6JYyPbYVVo525TSHd8B
+   pg/aNt8Kl7QeBAn9Zvdbh6i1l1sHjCTI68NHaWUqOxW3TAhE27VKk2Mkq
+   A==;
+X-CSE-ConnectionGUID: J6WpsntrRUaD8zc/bX9Sdg==
+X-CSE-MsgGUID: kmV5q38MQgOovB2vgKp0Wg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11654"; a="72398064"
 X-IronPort-AV: E=Sophos;i="6.21,180,1763452800"; 
-   d="scan'208";a="79177585"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2025 06:29:43 -0800
-X-CSE-ConnectionGUID: L4XnsXXHRDaOJ5mQNly/RQ==
-X-CSE-MsgGUID: ZxfrGjWXRwm0EQm8/uLnrw==
+   d="scan'208";a="72398064"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2025 06:30:49 -0800
+X-CSE-ConnectionGUID: 0U+wzOfzR7KkTZ1jIXDV2A==
+X-CSE-MsgGUID: hE4BhxccRJqXVyu5vCqQMw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,180,1763452800"; 
-   d="scan'208";a="237963422"
+   d="scan'208";a="200297804"
 Received: from egrumbac-mobl6.ger.corp.intel.com (HELO localhost) ([10.245.244.211])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2025 06:29:40 -0800
-Date: Sat, 27 Dec 2025 16:29:37 +0200
+  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2025 06:30:45 -0800
+Date: Sat, 27 Dec 2025 16:30:42 +0200
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
 Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
@@ -70,9 +70,10 @@ Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	Hans Hu <hanshu@zhaoxin.com>, Bartosz Golaszewski <brgl@kernel.org>,
 	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH 4/6] i2c: designware-amdisp: use i2c_adapter_dev()
-Message-ID: <aU_tUUSucAQsi5mq@smile.fi.intel.com>
+Message-ID: <aU_tki7wsUH51rLe@smile.fi.intel.com>
 References: <20251223-i2c-adapter-dev-wrapper-v1-0-bcf960a48fa9@oss.qualcomm.com>
  <20251223-i2c-adapter-dev-wrapper-v1-4-bcf960a48fa9@oss.qualcomm.com>
+ <aU_tUUSucAQsi5mq@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -81,22 +82,23 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251223-i2c-adapter-dev-wrapper-v1-4-bcf960a48fa9@oss.qualcomm.com>
+In-Reply-To: <aU_tUUSucAQsi5mq@smile.fi.intel.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
  krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On Tue, Dec 23, 2025 at 11:08:21AM +0100, Bartosz Golaszewski wrote:
-> Use i2c_adapter_dev() where applicable in order to avoid direct
-> dereferencing of struct device embedded within struct i2c_adapter.
+On Sat, Dec 27, 2025 at 04:29:43PM +0200, Andy Shevchenko wrote:
+> On Tue, Dec 23, 2025 at 11:08:21AM +0100, Bartosz Golaszewski wrote:
 
 ...
 
-> -	ACPI_COMPANION_SET(&adap->dev, ACPI_COMPANION(&pdev->dev));
-> +	ACPI_COMPANION_SET(i2c_adapter_dev(adap), ACPI_COMPANION(&pdev->dev));
->  	adap->dev.of_node = pdev->dev.of_node;
+> > -	ACPI_COMPANION_SET(&adap->dev, ACPI_COMPANION(&pdev->dev));
+> > +	ACPI_COMPANION_SET(i2c_adapter_dev(adap), ACPI_COMPANION(&pdev->dev));
+> >  	adap->dev.of_node = pdev->dev.of_node;
+> 
+> Why not just replace these with i2c_dev_set_node()?
 
-Why not just replace these with i2c_dev_set_node()?
-
+Oh, I meant the i2c_adapter_set_node() that you just introduced in the previous
+series. Effectively this makes a patch of that series.
 
 -- 
 With Best Regards,
