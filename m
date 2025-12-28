@@ -1,161 +1,201 @@
-Return-Path: <linux-i2c+bounces-14803-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14805-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id CCE65CE4AD1
-	for <lists+linux-i2c@lfdr.de>; Sun, 28 Dec 2025 11:34:58 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86FF6CE58B8
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Dec 2025 00:24:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9B18E300C0F9
-	for <lists+linux-i2c@lfdr.de>; Sun, 28 Dec 2025 10:34:57 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id D537730087BC
+	for <lists+linux-i2c@lfdr.de>; Sun, 28 Dec 2025 23:24:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CD852C11E8;
-	Sun, 28 Dec 2025 10:34:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20F3F29D281;
+	Sun, 28 Dec 2025 23:24:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lUOYiB2k"
+	dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b="T/mZusvd"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
+Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C69FF28CF7C
-	for <linux-i2c@vger.kernel.org>; Sun, 28 Dec 2025 10:34:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAA772874FE
+	for <linux-i2c@vger.kernel.org>; Sun, 28 Dec 2025 23:24:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766918096; cv=none; b=WpVvxg/1B6p6Boq85vZQ3U2xp36wsy8mDaOzHl1LI9le2RBvJskTw21rWWfu58SC0sUu7NV+7kNAHskgBc5PccSldY/CPTIlN+B5FL7v6LxQI5DaTXdKhHXqJc1Jdp7YmCA9/A1fx6bMRXK29VrzCbuGclZPQsGMNFK1McsGDIk=
+	t=1766964267; cv=none; b=jpUa0UdwHsRfu5QM0K4WyeT5BReevJP1h9zgU9V7DWKznw1ghrVT49SQU5wMotlUXkraI82eXinz6DRJFpPJUNtdAAddpauvSNcNO5lBWiQPtgBwobbBXJ0TwxGmq02b9ijlslrvhm+95sMj53yN6Ucl44zrhYxJVCKDj/za9mk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766918096; c=relaxed/simple;
-	bh=NXvI+P5VpbmmE59nTCwRvFpwVBPrE4C+iM7ziryf0Vo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KKZA1hlU1p46maEqc7Go+FJag8nUGLIwHBfgvN1CcPYLZXvMPxWdBI9OAi1jT07rRpGvs15p3rtyDX7PFZ57+G/TWItwscRMMAA5xTagt6TfJyrYbSbzUnOwpMZfhW/6crw+ZXOsqIaH9tuMhw36OZ9YJ0uJY1IBBwm+56Y+0/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lUOYiB2k; arc=none smtp.client-ip=209.85.208.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-37bbb36c990so80473071fa.0
-        for <linux-i2c@vger.kernel.org>; Sun, 28 Dec 2025 02:34:54 -0800 (PST)
+	s=arc-20240116; t=1766964267; c=relaxed/simple;
+	bh=OyujpZZsgmaCODovITjtJcQsqNER1AQhipqOJMTC0eE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OuzaHcT9GE4AFLchL9vXWFpByNNvddO+gR548Flz2IGCu1kbnurZjCjkLVCY7jfvCX8RpY+GcZM/mq42Ogspaa3ex9K116BTUPaLmEHG1kOefZjo2mC4QDykmR2dbFNPB06AMwi5ntz5RaG76q/YGKxAiJSNcfFIxBWBpc+bFog=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b=T/mZusvd; arc=none smtp.client-ip=209.85.160.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
+Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-4f8a6b37b2dso6564681cf.0
+        for <linux-i2c@vger.kernel.org>; Sun, 28 Dec 2025 15:24:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766918093; x=1767522893; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2JxxmkTi4FGoSoE6oHcsfNmtpGy25wMUBs6fj3QNMwA=;
-        b=lUOYiB2k1tzx4FVu9mSsSqp9eCkxePi2cDrfaIR0QIqEaV8Uyf1lXVaFoLZKUPNNGg
-         EJV5iK5AWc8xAeqJlhuzTBPujHAIu9BaOy5Wjl2H+F2V4w3/IM97Zf3e6gIv99rMuT1h
-         v2hYqTqcuzF1ax1p8jK5DWayuLctWtq9eWC/spKUqjlDaJ5x1IVelyyHw5MXhaZy71Ia
-         KLl4dA2LkdWlrg5Ig1Wsb/fH9azcbvj0orBHc1fFip4Trn043HQt86Mh018qxPZNj/lV
-         7mCz0dBO4VTtrTM2P6VKLLZeyakiUwk5926Ogqk2RQ4uA5Kfu60PckU24zGwzM2sz8jz
-         rsfw==
+        d=riscstar-com.20230601.gappssmtp.com; s=20230601; t=1766964265; x=1767569065; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xydt6mikMK7J/ACpt60zKlMdVmmHvuDTKG/LIZvEl0Q=;
+        b=T/mZusvdlHaSdU/UttSOWuMIAuVPthwF0kC44rgUujKr21pGaX/s8sDAp2T8+WXprU
+         dVCW0sSR2SEXA4K6YLmdgosw1v/b+XUriOMrDo9Ndx12hfV7GdA7gPAswSdbW8t9wMfi
+         8LLUmTWY1bFwUyLzNIf+HeN+JHnfGzUqL57PkRy6TnTeyc+J+T686/8xKy6UygQ6rzv2
+         8vZyEVRjscCPeUrz5hhWNIyELKD9c2qZZ/X/0eTRF9quumXZ5qWH5wexJaYB38wA7HRi
+         dbOo3CdRIwKt8+YoM+99skUEiQE83TyD5eI5P1JBir8f1+ExJynGg1XWGPqM6y4S+Es2
+         2Lzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766918093; x=1767522893;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2JxxmkTi4FGoSoE6oHcsfNmtpGy25wMUBs6fj3QNMwA=;
-        b=B9G2OTVkT6kyTmjVSTj9WMskrKPI49Cbx8CUJa34xOCvGNW8xAdl/w0LmzriGTOESv
-         1rrKgGQk5jjmu7JRTqbZ+aa2RUeVVbjmtzaIiNjQ9Vkpfi0jPR7QmX6V5JfjaEjOk6PS
-         eX75el6xPxtW5Wq5rJoqHB/KYOu0rVw54bRhshX6FmtMlg7GN41ThsPx3OOSUdKCobtY
-         rjAl4A3mfZlKn+b0EyoF1eA57HRQkOtUBONaxwScRqdGW2jt9eTlKw5uztGBnrcUJkDc
-         F9sX9EQ8uSLYK+u/q7leTlJIdNWDZih80SVYJUb+KrfMRjf4BzA8FRb21JX8lZbQo4um
-         sA6g==
-X-Gm-Message-State: AOJu0YwpcIDlnZ98IJu0G6i8yZD54ODo8yIkqbC/8D5XSiGZYnoim7WO
-	/vNuPtVlHaElQivUqsK/w4yoU7kI5y2O7/Ly9ID+vsmug56MKAyfjhBG
-X-Gm-Gg: AY/fxX4yJUcT6S7ztvjlOk7cjYtu1KLK6qvLz6jg9RZpqVSWF6LyknkkLjy4RQVITaT
-	h02EhpPuaSiSblRa1D56UPvj6e/6K9k9JCIsDdCwV28h9XL6VUdZnyHQcjqI7j38ezEN9+lnH5e
-	a+KobrUsiXjn4IRdtPgfQo5VhU2584K4t8cocNrJxRZ81EXWD9Ufz4l+LacR7fiKP63B0wLhNzq
-	V2wmJJKYJGmbWl5bQYOtXbwN1EeG6mGFsT3oY7bsZDOFBxzye96mZyYDmy3wzflwHE9ginph9TY
-	E2puBH/eegBKkQMbZ+uf1TWAp5Le5cqTI3KvlkJUon3Jt6ZG8bmvfDIV7uNdE+sQc94Oz1EF7V6
-	GEM1aFYAY5xCIEpadjo6DzL3yVy1wstlhF7xGlozzT9dTCu7l3FYhYmHbmeijIN+eUokhb9Dqv8
-	S5/Jgz5HaMMqyAlnYBcscnWal9mVTmudwLyDJsCoiaS/07bkGe
-X-Google-Smtp-Source: AGHT+IGnORvckzTpLa52QolfTAqA8mGzGUAPMaAuOTsKJD+KE4VlIltzyntZT3IUZ+4D/FxrPPT7lA==
-X-Received: by 2002:a05:651c:1506:b0:378:f3b6:f762 with SMTP id 38308e7fff4ca-3812079a3c5mr84928361fa.8.1766918092714;
-        Sun, 28 Dec 2025 02:34:52 -0800 (PST)
-Received: from gmail.com (83-233-6-197.cust.bredband2.com. [83.233.6.197])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-3812251b2b0sm75897681fa.18.2025.12.28.02.34.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Dec 2025 02:34:50 -0800 (PST)
-Date: Sun, 28 Dec 2025 11:34:49 +0100
-From: Marcus Folkesson <marcus.folkesson@gmail.com>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Peter Rosin <peda@axentia.se>,
-	Michael Hennerich <michael.hennerich@analog.com>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Andi Shyti <andi.shyti@kernel.org>
-Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH RESEND v3 0/5] I2C Mux per channel bus speed
-Message-ID: <aVEHyUsijrnFUWfD@gmail.com>
-References: <20251202-i2c-mux-v3-0-877dcf478a9f@gmail.com>
+        d=1e100.net; s=20230601; t=1766964265; x=1767569065;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xydt6mikMK7J/ACpt60zKlMdVmmHvuDTKG/LIZvEl0Q=;
+        b=noIao7qarrnbIYrHKVzYQ5RC05qHW5KA60O8CiI0BB96ok7jhiCfppqNmXxRnoz8w/
+         //LmhqepN1ts7oZKAwkih0NvrGadr2RmKM/eAPT2Go8vf2BCPK836/6HZZ4EP9xEE3XY
+         Z9+AnyUhQbsjNC+DKy0yxbgxtwQJUTmEFB6Q+e0Dle4EnPRQ2tW/Ven4Pxi4No5uuouB
+         GCWIza+1+xJU1dZHldZZTuHp5N9g11B1W4fP2XeFTzRZ6UXg8xHLmIZ/XKHCX152yFfc
+         GnvPciAWiNQ7Md+L/rEF9/48umd56UP3kDktbFDABE/fKcrH60L05vL7LXaq0ZnCHAiz
+         1zZQ==
+X-Gm-Message-State: AOJu0YwXE+XAcv+E8azuC/yEvsCQXNbNIvQ3Q006bIWYdS5RfXlRRcBw
+	SAv0l6deEpg02hr1lZf5tRtrHKAaKFC+ntgYM/8Io/O8pJtOzX4OuXLp8uEJxBv1v+U=
+X-Gm-Gg: AY/fxX5vDx2je5/m8sPMxdT3sVvitbiRW/H6QudKdstYsXekUFiUBRkZY38aynl9lBY
+	aHfthzvExc3oc1HNkwrQ5BgtOcIQvkRRNFOAMR1Cp2A0hWRS+TPgqF4eIVLenks6H+MKsz8dIy4
+	RP/BpoLVLIUJvqaHiXpv9pnY67CMsGH2ALFjyalmoPgzUE8hkbNogUMBalv5G1+8cZA2j2IKFc4
+	dCbow7nT0O+vOAM2/WBYNCizL4wdcE09Io3TThgSLlgRFGN5RlSLhEBzuRks95sTgo22v5Ps7pj
+	rHvGVgDKSuHWgw/lTYYk51dsGPUD/pJJ/2mu5J8gBokNVdcQM4vdx++70t6iLhdgxgCKGM+L7Ls
+	HLM3B3XbpAb+xDO0U5KNg9LbD8qUGX0vpCR40DlbsA6NS/y8mo8MktiwXvXgipHJvTpM/AJesmt
+	k6Kq4TD0JGWFYKYb5KPxTUjExV1XR5GW90HFNrL18qTJvwyolPvqQ=
+X-Google-Smtp-Source: AGHT+IFxndCaQ3g5mQEld9CJ+Zg2xTQQHo+r3w56Ps2u11p4W4wTawdR8ANKUOQfAZjJSvAqZ/++TQ==
+X-Received: by 2002:a05:622a:7502:b0:4f4:df23:ab5d with SMTP id d75a77b69052e-4f4e39243a4mr169416911cf.75.1766964264478;
+        Sun, 28 Dec 2025 15:24:24 -0800 (PST)
+Received: from [172.22.22.28] (c-75-72-117-212.hsd1.mn.comcast.net. [75.72.117.212])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4f4ac64c011sm207819451cf.25.2025.12.28.15.24.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 28 Dec 2025 15:24:24 -0800 (PST)
+Message-ID: <bb6665f2-e4c5-455c-b6d0-9acf41aa9e30@riscstar.com>
+Date: Sun, 28 Dec 2025 17:24:22 -0600
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="7rFkj6zIm9eFzZmB"
-Content-Disposition: inline
-In-Reply-To: <20251202-i2c-mux-v3-0-877dcf478a9f@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 1/2] i2c: spacemit: replace i2c_xfer_msg()
+To: Troy Mitchell <troy.mitchell@linux.spacemit.com>,
+ Andi Shyti <andi.shyti@kernel.org>, Yixun Lan <dlan@gentoo.org>,
+ Aurelien Jarno <aurelien@aurel32.net>,
+ Michael Opdenacker <michael.opdenacker@rootcommit.com>,
+ Troy Mitchell <troymitchell988@gmail.com>
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-riscv@lists.infradead.org, spacemit@lists.linux.dev
+References: <20251226-k1-i2c-atomic-v5-0-023c798c5523@linux.spacemit.com>
+ <20251226-k1-i2c-atomic-v5-1-023c798c5523@linux.spacemit.com>
+Content-Language: en-US
+From: Alex Elder <elder@riscstar.com>
+In-Reply-To: <20251226-k1-i2c-atomic-v5-1-023c798c5523@linux.spacemit.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
+On 12/25/25 9:31 PM, Troy Mitchell wrote:
+> The upcoming PIO support requires a wait_pio_xfer() helper, which is
+> invoked from xfer_msg().
+> 
+> Since wait_pio_xfer() depends on err_check(), move the definition of
+> xfer_msg() after err_check() to avoid a forward declaration of
+> err_check().
+> 
+> Signed-off-by: Troy Mitchell <troy.mitchell@linux.spacemit.com>
 
---7rFkj6zIm9eFzZmB
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Other than fixing "replace" with "move" as Andi mentioned,
+this looks good.
 
-On Tue, Dec 02, 2025 at 09:09:47AM +0100, Marcus Folkesson wrote:
-> This was a RFC on how to implement a feature to have different bus
-> speeds on different channels with an I2C multiplexer/switch.
-> As no major complaints on the design came up during the review, I
-> decided to submit the series without the RFC tag.
->=20
-> The benefit with this feature is that you may group devices after
-> the fastest bus speed they can handle.
-> A real-world example is that you could have e.g. a display running @400kHz
-> and a smart battery running @100kHz using the same I2C controller.
->=20
-> There are many corner cases where this may cause a problem for some
-> hardware topologies. I've tried to describe those I could think of
-> in the documentation, see Patch #5.
->=20
-> E.g. one risk is that if the mux driver does not disconnect channels
-> when Idle, this may cause a higher frequency to "leak" through to
-> devices that are supposed to run at lower bus speed.
-> This is not only a "problem" for changing bus speed but could also be
-> an issue for potential address conflicts.
->=20
-> The implementation is split up into several patches:
->=20
-> Patch #1 Introduce a callback for the i2c controller to set bus speed
-> Patch #2 Introduce functionality to adjust bus speed depending on mux
->          channel.
-> Patch #3 Cleanup i2c-davinci driver a bit to prepare it for set_clk_freq
-> Parch #4 Implement set_clk_freq for the i2c-davinci driver
-> Parch #5 Update documentation with this feature
->=20
-> Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+Reviewed-by: Alex Elder <elder@riscstar.com>
 
-Ping on this series.
+> ---
+>   drivers/i2c/busses/i2c-k1.c | 62 ++++++++++++++++++++++-----------------------
+>   1 file changed, 31 insertions(+), 31 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-k1.c b/drivers/i2c/busses/i2c-k1.c
+> index d42c03ef5db5984ea8e06b3d7eb485b4f899e616..accef6653b56bd3505770328af17e441fad613a7 100644
+> --- a/drivers/i2c/busses/i2c-k1.c
+> +++ b/drivers/i2c/busses/i2c-k1.c
+> @@ -304,37 +304,6 @@ static void spacemit_i2c_start(struct spacemit_i2c_dev *i2c)
+>   	writel(val, i2c->base + SPACEMIT_ICR);
+>   }
+>   
+> -static int spacemit_i2c_xfer_msg(struct spacemit_i2c_dev *i2c)
+> -{
+> -	unsigned long time_left;
+> -	struct i2c_msg *msg;
+> -
+> -	for (i2c->msg_idx = 0; i2c->msg_idx < i2c->msg_num; i2c->msg_idx++) {
+> -		msg = &i2c->msgs[i2c->msg_idx];
+> -		i2c->msg_buf = msg->buf;
+> -		i2c->unprocessed = msg->len;
+> -		i2c->status = 0;
+> -
+> -		reinit_completion(&i2c->complete);
+> -
+> -		spacemit_i2c_start(i2c);
+> -
+> -		time_left = wait_for_completion_timeout(&i2c->complete,
+> -							i2c->adapt.timeout);
+> -		if (!time_left) {
+> -			dev_err(i2c->dev, "msg completion timeout\n");
+> -			spacemit_i2c_conditionally_reset_bus(i2c);
+> -			spacemit_i2c_reset(i2c);
+> -			return -ETIMEDOUT;
+> -		}
+> -
+> -		if (i2c->status & SPACEMIT_SR_ERR)
+> -			return spacemit_i2c_handle_err(i2c);
+> -	}
+> -
+> -	return 0;
+> -}
+> -
+>   static bool spacemit_i2c_is_last_msg(struct spacemit_i2c_dev *i2c)
+>   {
+>   	if (i2c->msg_idx != i2c->msg_num - 1)
+> @@ -418,6 +387,37 @@ static void spacemit_i2c_err_check(struct spacemit_i2c_dev *i2c)
+>   	complete(&i2c->complete);
+>   }
+>   
+> +static int spacemit_i2c_xfer_msg(struct spacemit_i2c_dev *i2c)
+> +{
+> +	unsigned long time_left;
+> +	struct i2c_msg *msg;
+> +
+> +	for (i2c->msg_idx = 0; i2c->msg_idx < i2c->msg_num; i2c->msg_idx++) {
+> +		msg = &i2c->msgs[i2c->msg_idx];
+> +		i2c->msg_buf = msg->buf;
+> +		i2c->unprocessed = msg->len;
+> +		i2c->status = 0;
+> +
+> +		reinit_completion(&i2c->complete);
+> +
+> +		spacemit_i2c_start(i2c);
+> +
+> +		time_left = wait_for_completion_timeout(&i2c->complete,
+> +							i2c->adapt.timeout);
+> +		if (!time_left) {
+> +			dev_err(i2c->dev, "msg completion timeout\n");
+> +			spacemit_i2c_conditionally_reset_bus(i2c);
+> +			spacemit_i2c_reset(i2c);
+> +			return -ETIMEDOUT;
+> +		}
+> +
+> +		if (i2c->status & SPACEMIT_SR_ERR)
+> +			return spacemit_i2c_handle_err(i2c);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>   static irqreturn_t spacemit_i2c_irq_handler(int irq, void *devid)
+>   {
+>   	struct spacemit_i2c_dev *i2c = devid;
+> 
 
-Best regards,
-Marcus Folkesson
-
---7rFkj6zIm9eFzZmB
-Content-Type: application/pgp-signature; name=signature.asc
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEEBVGi6LZstU1kwSxliIBOb1ldUjIFAmlRB8MACgkQiIBOb1ld
-UjKa/w/9EMK7/UO6JtAlL56xG5HWlpyOxFHWUAO9UIWno2hVyQynqNH4v7diLRBc
-BsDhmURF6cuyUB+vmhczfA4CKXRSPiVju8mWMBu4XP4s3hGg7HTIezwxIFUwGHWN
-hsLRWYFIJXcxXmM+kc0/GUdxKtZnB/LtB/vBtt/hP1PqCy2PXgDoohrRoziudpcC
-c2WfApN1ouNEWggVNlvHLYks+IKY/KDDRU8K00uhqLtVLeBeHXZbn2l2U3vBAxw9
-UFjBGOTCIlSHKOQ9WXOqBo0UkiAsgAokWVn2RQ31NJHkBZpW8U/XYeYPIbjulUB8
-V8FRwEy1az7dPIGRybgl1OA3DSQxxI76KMBoUZCWXRxZUKtnVoOd72b//TUvsJ7C
-wtdRjslcTWInxdOS3n+muvaH+oOHuoUw1lidEJWF5V0z840VPFDl/IJHETIRj0AP
-9EWrz2bPlMQYi8WcwKmKmpTybU9cytA5N1uaOHUKKqYDhAFT+TQ8zAXvPN4tQJgR
-Kt5hJ+TxtzU7mHp/Q18K1T6V/Mp0SGAhysNdjEUzgSEyngN462tirHrIRIqQ54Y9
-iSUkIx3faPeQOttSzlwrW68gVxhqb+m/CGR0oLFtQ4J1gC+qP8dghQ2+NCQImIYd
-JdFL5CaaSBphpsbYDgDL1Is5APPRoURE5zCqzmqBgwyemOQXUY0=
-=kP3i
------END PGP SIGNATURE-----
-
---7rFkj6zIm9eFzZmB--
 
