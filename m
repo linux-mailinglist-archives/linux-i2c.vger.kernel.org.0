@@ -1,118 +1,89 @@
-Return-Path: <linux-i2c+bounces-14828-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14829-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7EA9ECE5F73
-	for <lists+linux-i2c@lfdr.de>; Mon, 29 Dec 2025 06:10:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 148F6CE63A6
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Dec 2025 09:18:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9DE2130443F6
-	for <lists+linux-i2c@lfdr.de>; Mon, 29 Dec 2025 05:06:56 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B541F3008FA6
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Dec 2025 08:18:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABFF52773D9;
-	Mon, 29 Dec 2025 04:56:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC2CB23EAB4;
+	Mon, 29 Dec 2025 08:18:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="KlUozORT";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="EMqXMeyZ"
+	dkim=pass (1024-bit key) header.d=leica-geosystems.com.cn header.i=@leica-geosystems.com.cn header.b="jOtQuIh1"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazon11011033.outbound.protection.outlook.com [52.101.70.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E33E12D0C6C
-	for <linux-i2c@vger.kernel.org>; Mon, 29 Dec 2025 04:56:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766984187; cv=none; b=KjRH1NnJo0NNNl+4CG7DY3gEk3K+uD+X8WOdrWbZ2we4rJ8LPZtqkxEGN6+aiNm856j1KXLJ68UZEyf33XJcq/gjwDMHabWB+xpQPC60r5IKDIN0llBd/TJg0yshNrURX4fWn7KwcsVEdvlTTmODu+fn7Zpbln0KMocDgr/zJ2s=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766984187; c=relaxed/simple;
-	bh=YIHYMofa7MM1n5uKKT/qVy70UWWioCFNHYGxbHnXI7g=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=N2CXzNjK396zRzpRFDpVIZUCO406slp3wptRmKMdNxla93662ZhLTmMsauFlH0js3NK5jjFwwYrC3VrpbDo3yjKzBw9kN6APBSKwZwfekfYqVQhDd5EWBBlXOp59fUzAAI5FIZIfU3SoVTkZqv15Gcl3xVVRrwJTfaAGloPuCUk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=KlUozORT; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=EMqXMeyZ; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5BSNrhfp123547
-	for <linux-i2c@vger.kernel.org>; Mon, 29 Dec 2025 04:56:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=qcppdkim1; bh=jQcAcBkjL0G
-	3tUxlp42cxgokHnjt05AgkeoLcV3XnyY=; b=KlUozORT+mV6bkf2/dncVjRouhK
-	lHYaXcQYphzBLlHZr6MAWj7287qyj76f1BIYXBm2XWED0QJpxFSVyP1IuCsFs79o
-	qHqK4onMIX6cIZtn3tT3wLZBEf8H/E+L8N2tqBs4NCQ8lpGTYrcnT9qHjhvcr9Y1
-	dDQij3IcYk/jvqXfLLTEGtf9q/8WWJpO89dsIaodpec4MZXnrOtLsjMRwE5W9VMu
-	POQHo10sgx+ZpSFGgN1BGKyH5SH7etk0abapdxIJxpTf5ltaLWQEpZCKshZWx1p3
-	v+AFz3h08zJtwiKJ3WMya06gg5uJn7UESbKEWbRmIaxC4+gYACsEZAdzuyw==
-Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com [209.85.210.198])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4ba7u5kbdg-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-i2c@vger.kernel.org>; Mon, 29 Dec 2025 04:56:24 +0000 (GMT)
-Received: by mail-pf1-f198.google.com with SMTP id d2e1a72fcca58-7d481452732so17134891b3a.1
-        for <linux-i2c@vger.kernel.org>; Sun, 28 Dec 2025 20:56:24 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6C92221FCF;
+	Mon, 29 Dec 2025 08:18:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.70.33
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1766996286; cv=fail; b=d2r5pRewLgBU9HE4D6skoVvFn2Kq5tTyOcEHlCe6kU5YLU6oaqCLQP69jBGOlxavZivQtRkduq+A6Q1vvKy6wil+qma4HrA/BYde9XvnxLlPD5VCCYB/51nP0Kk6bHSzoyjbBbDP1DaEcQe9E2O6kH9peHAZwVOk/0OHlqUZkjY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1766996286; c=relaxed/simple;
+	bh=owDlthlgpBQmDi70KMRR4YLl3yBiJXJJRI3dalSrVbg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Wsz6hxGQ3ioK0i1XolQvkW5dgQIZMtZ/jnDFX2Gk1MsNN46VV6v/GYFHSJqi5Y++CUvhdT8KvGq5V6jsU5gvgCSMZ1W9WikMGvaNPYpznY4XzqVwTr6u+9EhsUctsmT0IoA6nET0d/fZFg669MGLf0SK5vcGNmCUvJKcjOLh22Y=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=leica-geosystems.com.cn; spf=fail smtp.mailfrom=leica-geosystems.com.cn; dkim=pass (1024-bit key) header.d=leica-geosystems.com.cn header.i=@leica-geosystems.com.cn header.b=jOtQuIh1; arc=fail smtp.client-ip=52.101.70.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=leica-geosystems.com.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=leica-geosystems.com.cn
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=QUCHgWlBeJKBeW009rkFVPGh/MEj1B8RMEFry7/s65P6ibIUeEeAQHuTJBwFbBdfKcPS/TFL8YPJ+B4ydz/vze6Q1bmYW/pu5qKUuBuLe4v012YapUYCSVXkHc3H3ZlAmzGw3UcE2SAfvzbRS4kLxSesawSA0Xi7BJgpx4jHuCRHj5OkKrLJq0oqBzULl5Khdb8eUX3hsruhymPdjIziN0C9z70M9sr2wgu/CPI74Ay2PR7LOHkW7F1um64mAW5WkfH04VN1BvLHPKDUifbcDjkrcfHYvDMqESHrNvoliYDMXPleeqGA23D3gHRYsTjJgLaMFzTdDqhzs75LVP/7/g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=K/I6RRUjm9il6mjPH1XUvwoEPmNbJiY+iUUsgWRezhY=;
+ b=mHo/AoDJvCDAa7R635tlh0f5IKOeJIcsQ7+aEr5ItYPEkSudsO+hNdRSZRXz+wrdBzs15X7KtuxxYO4V62k8VvZioEkCEGrLHTAzM7cCIuh8J4Z9ZJMU7XlowBaEd/hQ6CNAPEOZd/7o26yB81xg1FDKW9CvjdMahD6iHLTcA/z9bpeB+1kz6y0KtgyFt6sGpNMdYwgt9B+kVxgNrPrKCUUPCaSHitVaCjdu1XiLaAXPdI11tVTMBr/kWX35ZWeaSjYrmfg9al1f6/9rG4FgiyyKbn8j8rWE3smqSA7Mo2KW+viD0iiIEFQWumV1LGvXD/i7EFsAJu4xyKeCVZguJg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 193.8.40.99) smtp.rcpttodomain=vger.kernel.org
+ smtp.mailfrom=leica-geosystems.com.cn; dmarc=pass (p=reject sp=reject
+ pct=100) action=none header.from=leica-geosystems.com.cn; dkim=none (message
+ not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1766984184; x=1767588984; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jQcAcBkjL0G3tUxlp42cxgokHnjt05AgkeoLcV3XnyY=;
-        b=EMqXMeyZnMTJGbwcckwnQpxSboyVHBi4tJ28NRx6JKByg29ONnoWAVXDuJTf3uUpKR
-         LKXRU8KtBrXG7LfGxYurtYi2C+65EpjFnWcoOVZLkaADX1R/XOcoX4N7V4gweanO+Wtd
-         FORCav7v1o0wYthE9j9pbKph/VJWmdHUiFjnX9bESWTlma9VfiTJlBmfoZecez1yj6mT
-         LAbSf9B1CiUoIfHIoHPnFAURRV5iXFaommJWq7JsZnUEImU9hN+RBdsOmrWRUmPZ/7kV
-         NTFLFWPhSaL92DnV/FGTbCSTJt7XRy3SefM938AkJaQxzopO68BIkmKgC5nOkmvXe2Pu
-         hpPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766984184; x=1767588984;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=jQcAcBkjL0G3tUxlp42cxgokHnjt05AgkeoLcV3XnyY=;
-        b=S4lmm5WEqSEskVe/11efPrmkxTGdBgP5A+edtIEm8TnmR8r/pddEgEqwwFl8LsKaBV
-         SYNvOo8jFI5XqNKZgNMOEHEfRL164YHbhjtDSIbW9/naijFTifgpvOgB/aLmCZZ6pTl/
-         OID7ij07Xu1IHXpF5zwb2jFWG9yCG9CYx1DRF4NkeIuD3TQjKekYpetxmoFLN80hee4N
-         ITZJih3Z/EeFc/bUZ9V8IIWxm3xSbGL8vdDA3FeQQnOedUmL8nHehEBkXupoHkhA9DtJ
-         vh4Q/3TXoFNJ0PZBRvyQqKbl8EnTjxJWxaknWQpNhB6RfmUhu7glR1Qy52QhEap7I68n
-         zeiA==
-X-Forwarded-Encrypted: i=1; AJvYcCXy89dF3G4JHlNewQ+mSwBwK3kbMmR/A/7rjsFrb5xLdgMFUybNLVlS3yHyaxD+56NUS6iG/tq2rBU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxCqiGZwefr9dsFiMZuyREu+DKrYIgszobKivmktG8voU3H736e
-	xU7yd22G3jUXXfHofzn2dRcJOyRW6aYxf9s20rYXgZgvDmH2Wvc+FO3w22RPbXvVZx4SsHo89zm
-	2neRsBXoJrmS0TzsCeI+53CSMGdHnffkOMAT+YP8Ae7XWpcOCCJfPmf7aj6uQTbQ=
-X-Gm-Gg: AY/fxX74cgzKqHAgAMvg7YgHy3Pn8ewisFt+hUfPDSDZff62uhsqNEn0zue4cCMAITm
-	T/Ua37aIFQsJ7q/5BIHZFC5krpi7Zc9efwciqlkB2yqwHR5UDSRAUTur8sEWWiFpkmL4IUSKlme
-	zxGi90JG4HKD4B35oWW51jsuASBqHZecdMMDR7c+uJZp16ojDmO7k1zLe3dw0XDnPe7HUvx/KHE
-	PY13Gx44IjtibHzNGhh4NzyOOZmKzST/jDFVWXUT7zQYQUZ2mMRCZiQC/xEgaSGNlvmOudFc9su
-	GtAWSAN/YLAPKraLIYx74/syEqaELVe2keYbdghOJ57YTT0/BjP+TTYrQL7DlFfeREBdl+D66f+
-	sg1jtZKBA83PefouQp385fgO+2qWgz3fzouVZFjBkxhA=
-X-Received: by 2002:a05:6a00:808c:b0:7e8:450c:61b5 with SMTP id d2e1a72fcca58-7ff6607b7e7mr25052038b3a.37.1766984183559;
-        Sun, 28 Dec 2025 20:56:23 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IH2Im2N5utl57u5unWBSgURqzOVdOWAS9FpqgH0c6WfdB4d8UmoshJqLGq4PSmYCtSzhPUoPg==
-X-Received: by 2002:a05:6a00:808c:b0:7e8:450c:61b5 with SMTP id d2e1a72fcca58-7ff6607b7e7mr25052010b3a.37.1766984182790;
-        Sun, 28 Dec 2025 20:56:22 -0800 (PST)
-Received: from hu-ptalari-hyd.qualcomm.com ([202.46.22.19])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7ff7dfac29bsm27902080b3a.39.2025.12.28.20.56.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Dec 2025 20:56:22 -0800 (PST)
-From: Praveen Talari <praveen.talari@oss.qualcomm.com>
-To: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Mukesh Kumar Savaliya <mukesh.savaliya@oss.qualcomm.com>,
-        Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Praveen Talari <praveen.talari@oss.qualcomm.com>,
-        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alexey.klimov@linaro.org, krzk@kernel.org, bryan.odonoghue@linaro.org,
-        jorge.ramirez@oss.qualcomm.com, dmitry.baryshkov@oss.qualcomm.com
-Cc: psodagud@quicinc.com, djaggi@quicinc.com, quic_msavaliy@quicinc.com,
-        quic_vtanuku@quicinc.com, quic_arandive@quicinc.com,
-        quic_shazhuss@quicinc.com, quic_cchiluve@quicinc.com
-Subject: [PATCH v2 12/12] i2c: qcom-geni: Enable I2C on SA8255p Qualcomm platforms
-Date: Mon, 29 Dec 2025 10:24:46 +0530
-Message-Id: <20251229045446.3227667-13-praveen.talari@oss.qualcomm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20251229045446.3227667-1-praveen.talari@oss.qualcomm.com>
-References: <20251229045446.3227667-1-praveen.talari@oss.qualcomm.com>
+ d=leica-geosystems.com.cn; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=K/I6RRUjm9il6mjPH1XUvwoEPmNbJiY+iUUsgWRezhY=;
+ b=jOtQuIh1hwMTHQoz3MsQXjV/1Wwt8s/6D6ZdDIun2Chc9w/5X6BhPr3aAlkHPL1e1hV048enZglc2zysmdUfOinDrKeAW/IfUKZwxzdNsQUa9+bEWP4yu3t3rRBBmEltWvtQQ5R+KgmpQXa1/BgnIRvWNRHR1m1MD6ckTxf1r7I=
+Received: from DU2PR04CA0260.eurprd04.prod.outlook.com (2603:10a6:10:28e::25)
+ by VI2PR06MB9427.eurprd06.prod.outlook.com (2603:10a6:800:21f::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9456.11; Mon, 29 Dec
+ 2025 08:17:57 +0000
+Received: from DU6PEPF0000B61D.eurprd02.prod.outlook.com
+ (2603:10a6:10:28e:cafe::cd) by DU2PR04CA0260.outlook.office365.com
+ (2603:10a6:10:28e::25) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9456.14 via Frontend Transport; Mon,
+ 29 Dec 2025 08:17:29 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 193.8.40.99)
+ smtp.mailfrom=leica-geosystems.com.cn; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=leica-geosystems.com.cn;
+Received-SPF: Pass (protection.outlook.com: domain of leica-geosystems.com.cn
+ designates 193.8.40.99 as permitted sender) receiver=protection.outlook.com;
+ client-ip=193.8.40.99; helo=hexagon.com; pr=C
+Received: from hexagon.com (193.8.40.99) by
+ DU6PEPF0000B61D.mail.protection.outlook.com (10.167.8.137) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9478.4 via Frontend Transport; Mon, 29 Dec 2025 08:17:56 +0000
+Received: from aherlnxbspsrv01.lgs-net.com ([10.61.228.61]) by hexagon.com with Microsoft SMTPSVC(10.0.17763.1697);
+	 Mon, 29 Dec 2025 09:17:56 +0100
+From: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
+To: o.rempel@pengutronix.de,
+	kernel@pengutronix.de,
+	andi.shyti@kernel.org,
+	shawnguo@kernel.org,
+	s.hauer@pengutronix.de,
+	festevam@gmail.com,
+	linux-i2c@vger.kernel.org,
+	imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Cc: bsp-development.geo@leica-geosystems.com,
+	LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
+Subject: [PATCH V1] i2c: imx: Fix SMBus block read hang on zero length
+Date: Mon, 29 Dec 2025 08:16:29 +0000
+Message-ID: <20251229081629.4081452-1-Qing-wu.Li@leica-geosystems.com.cn>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -120,199 +91,119 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: tgk31s-2GAepo81AMZ5DuiPbSNd2xLHM
-X-Proofpoint-ORIG-GUID: tgk31s-2GAepo81AMZ5DuiPbSNd2xLHM
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjI5MDA0MiBTYWx0ZWRfX9fkWKtDABJhR
- 9+tIhPDGeOgFYEcOiaYOEG3xO6Srp8CPGUintFWKN71x0EINU+6lBvfp9Pj/GsbvP8vbu0KdYMo
- X/dPKBjUUJhytuMOHJhfTvqv/JtsKFi5PiJpzae/z9LXuLGK5+8PIpsb5UxM/3SNdr9jWD4TfTy
- NGEK2iMN25E7qHQQ18wrW99dzn8F8fONO3ot8XS0rmbARgQ8GHxswlUrTPpA12oqOfI06lKnC0g
- Re7mRoN2RKhVFymDmfwXnnpD/MW4tMkmDN+qYHMK9V0X8bQPE6F7rOQCNK5EsZbXuTaahqT0C8O
- UI75yOnFGTGiWisYqS8UJN5J6d2qZcetfbd7gLoxUQWyrcfdmGhKboSX/IjLbP29mbioiKlegUV
- rDiGlJGAbpr0TjcRY3sYx7VDwr+j7S1jp+Wjp3ICqQGFPMYO0xfXCGhbgFlmwKQSXSr1M+6BDMd
- wricwSvcA/P8RkK5VPQ==
-X-Authority-Analysis: v=2.4 cv=DptbOW/+ c=1 sm=1 tr=0 ts=695209f8 cx=c_pps
- a=m5Vt/hrsBiPMCU0y4gIsQw==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
- a=wP3pNCr1ah4A:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=EUspDBNiAAAA:8 a=zgZzUwpPmSg69XYvEVoA:9 a=IoOABgeZipijB_acs4fv:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-12-29_01,2025-12-26_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 adultscore=0 clxscore=1015 spamscore=0 priorityscore=1501
- suspectscore=0 bulkscore=0 impostorscore=0 lowpriorityscore=0 phishscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2512120000 definitions=main-2512290042
+X-OriginalArrivalTime: 29 Dec 2025 08:17:56.0436 (UTC) FILETIME=[A3021940:01DC789B]
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU6PEPF0000B61D:EE_|VI2PR06MB9427:EE_
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: 4087c894-df46-496b-e8c7-08de46b2c5c7
+X-SET-LOWER-SCL-SCANNER: YES
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|376014|36860700013|1800799024|921020;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?uEznyyOAlOhFrHOYn3OqWafG71AR9MiMmUU4R6bFD/5kMNfo8+zmT6RnMzmS?=
+ =?us-ascii?Q?qczDh3Xtgnb+7Ruq5MgynJUhO8mfMVrpDsoXLeJkjHBuMuUeNjY+EA67LGmr?=
+ =?us-ascii?Q?21MGwStZTLKpWdvfo/PoIUAWf6sA8ZIcb9+HOXpwnCHINR4Ho1LC5N/+gfL4?=
+ =?us-ascii?Q?Kcp7OiYWq6BiYTWN2QdoUkTyDLowQsM8p8trZFA+dBWSDIaA/lLKfqmY9ijM?=
+ =?us-ascii?Q?it0c/X/4SEvc1NJlrGwOEQi7Lk/r3mcA33gnVLV9CJHR5YBZ9/0JVVy1Facf?=
+ =?us-ascii?Q?xsL9y3LjwesjgNK+9W7j661Kv8Qw91fWDMyepqy6wyJCXsqi5zlqHuVkuWZi?=
+ =?us-ascii?Q?7L/2kpWiur9bxKBeZrs/Wmd1tIClruYndnbScSvFGaQSzE+XCzcwh/9OTje4?=
+ =?us-ascii?Q?cCEuChhTloTPHyTVg8exVdz0F8AN8Crv87IZlTobDzjrGfMVpoS2H48PL07w?=
+ =?us-ascii?Q?h2YNTe80L6ysdi6gT0eM74NSipu8WJacrTn7lHpiD4vUiuCWcLJAvyJ8J9zj?=
+ =?us-ascii?Q?TbbPLSltqt88oxOnVvSQBv/LDFf9mNVzFDSZWqoVsRXD5SoZtp6bDPDZEdXz?=
+ =?us-ascii?Q?zLhKaDziY6f86PgUUwvxILY9eZug/AueLhHbOmkBiyja/V65EToktSVbqhgb?=
+ =?us-ascii?Q?wgFuM4ICXMJ53BC7Mi5WTkb1WcFklq9zfYiSpKspyBZWfV/B1zidKgG2slSS?=
+ =?us-ascii?Q?Rshd8qg+7PsGzXfzQsgWRPaL1sHkv2RVhuKYqI7YjfshJuQYjUrNOpOeQ3SC?=
+ =?us-ascii?Q?8WTFd8djRrF9+zXd5OXUtmuov/9O51IF/2pmwnA2xujByo61KjeeAImU6wxk?=
+ =?us-ascii?Q?jONtYN7nV0PEmhXbMxt2cZP5EPS+k6FfJCYx+uziJ77JrZHGEV2OZQeQrCsC?=
+ =?us-ascii?Q?axO4eiE/fcnWw/QEtrepXmTBJz6MKe5gKSJiuLJduv5ppm2N0cy/Vr7eQOGz?=
+ =?us-ascii?Q?KX7DO/gXWVGY6T4IuBuLI6YT339bLiodrzXf5t2v/rz8r58MceGbFGvHUCaz?=
+ =?us-ascii?Q?51AyCFgU2Tiqxmnz9YojNCSWJ3q2BwnneljsnRdlllBqKrHfsBDlwm4jWDRR?=
+ =?us-ascii?Q?rZHWZ9z7nHcoVbXoyCzqLkFpnQNwV5sEOrla6VHlKbqwdmnBgDB6Y+Aao0KX?=
+ =?us-ascii?Q?Y6y4GRsu+qha4oY2jI8LAT0XNjdw9FrU3uvY9CEMyDcGnSCkAaNEl5zDzcR4?=
+ =?us-ascii?Q?15jGFZkEU6hQsvwZEr01iBM9ABLU3no/ETNgFtUyJjfhhJqMwgW4r4hHvO6z?=
+ =?us-ascii?Q?hCMyFh8Tz3+PH5WxW7O6D+TEht2zodTH2MCxdFU2N1FUMwox5o6Wc1Jo2DlW?=
+ =?us-ascii?Q?wQFRAv36K9LEGZblE5XIljdydo4UnrTFqCHxs23S6oyAmBBRqqhh241IPNdv?=
+ =?us-ascii?Q?WbCaxCDtXjE/fYzEMDlJ17cuLCgp/EDrNXCGUqvWv01+gfl6uWBvbl22rO35?=
+ =?us-ascii?Q?vxdMAS3n73qIlFIPMCCh/IXKU3TsuDUoukB99bRnTIajn7Jqk7FRJ+4C2Ken?=
+ =?us-ascii?Q?ea4LKzkK929wAMyBhRp+V2x16TjsdWh40NE4MVT9Am7m+7G9iK21Nyq3BPOG?=
+ =?us-ascii?Q?FfdjAz8UkAHpu5B4DPelJvAwn8+B+6ELtw5JG4xY?=
+X-Forefront-Antispam-Report:
+	CIP:193.8.40.99;CTRY:CH;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:hexagon.com;PTR:ahersrvdom51.leica-geosystems.com;CAT:NONE;SFS:(13230040)(82310400026)(376014)(36860700013)(1800799024)(921020);DIR:OUT;SFP:1101;
+X-OriginatorOrg: leica-geosystems.com.cn
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Dec 2025 08:17:56.8127
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4087c894-df46-496b-e8c7-08de46b2c5c7
+X-MS-Exchange-CrossTenant-Id: 1b16ab3e-b8f6-4fe3-9f3e-2db7fe549f6a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=1b16ab3e-b8f6-4fe3-9f3e-2db7fe549f6a;Ip=[193.8.40.99];Helo=[hexagon.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DU6PEPF0000B61D.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI2PR06MB9427
 
-The Qualcomm automotive SA8255p SoC relies on firmware to configure
-platform resources, including clocks, interconnects and TLMM.
-The driver requests resources operations over SCMI using power
-and performance protocols.
+SMBus block read transfers encode the payload length in the first data
+byte. When this first byte is zero, there is no payload and the
+transaction should terminate immediately.
 
-The SCMI power protocol enables or disables resources like clocks,
-interconnect paths, and TLMM (GPIOs) using runtime PM framework APIs,
-such as resume/suspend, to control power on/off.
+On i.MX, if the first byte of an SMBus block read is zero, the driver
+unconditionally overwrites the state with IMX_I2C_STATE_READ_CONTINUE.
+This causes the state machine to enter an endless read loop, eventually
+overrunning internal buffers and leading to a crash.
 
-The SCMI performance protocol manages I2C frequency, with each
-frequency rate represented by a performance level. The driver uses
-geni_se_set_perf_opp() API to request the desired frequency rate..
+At the same time, the controller remains in master receive mode and
+never generates a proper STOP condition, leaving the I2C bus permanently
+busy and preventing any further transfers on the bus.
 
-As part of geni_se_set_perf_opp(), the OPP for the requested frequency
-is obtained using dev_pm_opp_find_freq_floor() and the performance
-level is set using dev_pm_opp_set_opp().
+Fix this by handling the zero-length case explicitly: when the first
+byte is zero, ensure that a clean STOP is generated. In this situation
+the controller is in master receive mode, so it must be switched to
+master transmit mode before stopping. This is done by draining the
+pending received byte from I2DR, setting I2CR_MTX to enter transmit
+mode, waiting briefly for the mode change, and then proceeding with the
+normal STOP sequence.
 
-Signed-off-by: Praveen Talari <praveen.talari@oss.qualcomm.com>
+This change has been tested on i.MX 8M Plus platform.
+
+Signed-off-by: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
 ---
-V1->v2:
-From kernel test robot:
-- Initialized ret to "0" in resume/suspend callbacks.
+ drivers/i2c/busses/i2c-imx.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-Bjorn:
-- Used seperate APIs for the resouces enable/disable.
----
- drivers/i2c/busses/i2c-qcom-geni.c | 53 ++++++++++++++++++++++--------
- 1 file changed, 40 insertions(+), 13 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
-index 1c9356e13b97..72457b98f155 100644
---- a/drivers/i2c/busses/i2c-qcom-geni.c
-+++ b/drivers/i2c/busses/i2c-qcom-geni.c
-@@ -82,6 +82,10 @@ struct geni_i2c_desc {
- 	char *icc_ddr;
- 	bool no_dma_support;
- 	unsigned int tx_fifo_depth;
-+	int (*resources_init)(struct geni_se *se);
-+	int (*set_rate)(struct geni_se *se, unsigned long freq);
-+	int (*power_on)(struct geni_se *se);
-+	int (*power_off)(struct geni_se *se);
- };
- 
- #define QCOM_I2C_MIN_NUM_OF_MSGS_MULTI_DESC	2
-@@ -203,8 +207,9 @@ static int geni_i2c_clk_map_idx(struct geni_i2c_dev *gi2c)
- 	return -EINVAL;
- }
- 
--static void qcom_geni_i2c_conf(struct geni_i2c_dev *gi2c)
-+static int qcom_geni_i2c_conf(struct geni_se *se, unsigned long freq)
- {
-+	struct geni_i2c_dev *gi2c = dev_get_drvdata(se->dev);
- 	const struct geni_i2c_clk_fld *itr = gi2c->clk_fld;
- 	u32 val;
- 
-@@ -217,6 +222,7 @@ static void qcom_geni_i2c_conf(struct geni_i2c_dev *gi2c)
- 	val |= itr->t_low_cnt << LOW_COUNTER_SHFT;
- 	val |= itr->t_cycle_cnt;
- 	writel_relaxed(val, gi2c->se.base + SE_I2C_SCL_COUNTERS);
-+	return 0;
- }
- 
- static void geni_i2c_err_misc(struct geni_i2c_dev *gi2c)
-@@ -908,7 +914,9 @@ static int geni_i2c_xfer(struct i2c_adapter *adap,
- 		return ret;
- 	}
- 
--	qcom_geni_i2c_conf(gi2c);
-+	ret = gi2c->dev_data->set_rate(&gi2c->se, gi2c->clk_freq_out);
-+	if (ret)
-+		return ret;
- 
- 	if (gi2c->gpi_mode)
- 		ret = geni_i2c_gpi_xfer(gi2c, msgs, num);
-@@ -1041,8 +1049,9 @@ static int geni_i2c_init(struct geni_i2c_dev *gi2c)
- 	return ret;
- }
- 
--static int geni_i2c_resources_init(struct geni_i2c_dev *gi2c)
-+static int geni_i2c_resources_init(struct geni_se *se)
- {
-+	struct geni_i2c_dev *gi2c = dev_get_drvdata(se->dev);
- 	int ret;
- 
- 	ret = geni_se_resources_init(&gi2c->se);
-@@ -1095,7 +1104,7 @@ static int geni_i2c_probe(struct platform_device *pdev)
- 	spin_lock_init(&gi2c->lock);
- 	platform_set_drvdata(pdev, gi2c);
- 
--	ret = geni_i2c_resources_init(gi2c);
-+	ret = gi2c->dev_data->resources_init(&gi2c->se);
- 	if (ret)
- 		return ret;
- 
-@@ -1154,15 +1163,17 @@ static void geni_i2c_shutdown(struct platform_device *pdev)
- 
- static int __maybe_unused geni_i2c_runtime_suspend(struct device *dev)
- {
--	int ret;
-+	int ret = 0;
- 	struct geni_i2c_dev *gi2c = dev_get_drvdata(dev);
- 
- 	disable_irq(gi2c->irq);
- 
--	ret = geni_se_resources_deactivate(&gi2c->se);
--	if (ret) {
--		enable_irq(gi2c->irq);
--		return ret;
-+	if (gi2c->dev_data->power_off) {
-+		ret = gi2c->dev_data->power_off(&gi2c->se);
-+		if (ret) {
-+			enable_irq(gi2c->irq);
-+			return ret;
+diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
+index dcce882f3eba..f40deecf0f66 100644
+--- a/drivers/i2c/busses/i2c-imx.c
++++ b/drivers/i2c/busses/i2c-imx.c
+@@ -735,6 +735,16 @@ static void i2c_imx_stop(struct imx_i2c_struct *i2c_imx, bool atomic)
+ 		temp = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2CR);
+ 		if (!(temp & I2CR_MSTA))
+ 			i2c_imx->stopped = 1;
++		if ((temp & I2CR_MSTA) && !(temp & I2CR_MTX)) {
++			(void)imx_i2c_read_reg(i2c_imx, IMX_I2C_I2DR);
++			temp |= I2CR_MTX;
++			imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2CR);
++			if (atomic)
++				udelay(25);
++			else
++				usleep_range(25, 50);
++			temp = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2CR);
 +		}
- 	}
+ 		temp &= ~(I2CR_MSTA | I2CR_MTX);
+ 		if (i2c_imx->dma)
+ 			temp &= ~I2CR_DMAEN;
+@@ -1103,7 +1113,8 @@ static irqreturn_t i2c_imx_master_isr(struct imx_i2c_struct *i2c_imx, unsigned i
  
- 	gi2c->suspended = 1;
-@@ -1171,12 +1182,14 @@ static int __maybe_unused geni_i2c_runtime_suspend(struct device *dev)
+ 	case IMX_I2C_STATE_READ_BLOCK_DATA_LEN:
+ 		i2c_imx_isr_read_block_data_len(i2c_imx);
+-		i2c_imx->state = IMX_I2C_STATE_READ_CONTINUE;
++		if (i2c_imx->state == IMX_I2C_STATE_READ_BLOCK_DATA_LEN)
++			i2c_imx->state = IMX_I2C_STATE_READ_CONTINUE;
+ 		break;
  
- static int __maybe_unused geni_i2c_runtime_resume(struct device *dev)
- {
--	int ret;
-+	int ret = 0;
- 	struct geni_i2c_dev *gi2c = dev_get_drvdata(dev);
- 
--	ret = geni_se_resources_activate(&gi2c->se);
--	if (ret)
--		return ret;
-+	if (gi2c->dev_data->power_on) {
-+		ret = gi2c->dev_data->power_on(&gi2c->se);
-+		if (ret)
-+			return ret;
-+	}
- 
- 	enable_irq(gi2c->irq);
- 	gi2c->suspended = 0;
-@@ -1215,6 +1228,10 @@ static const struct dev_pm_ops geni_i2c_pm_ops = {
- 
- static const struct geni_i2c_desc geni_i2c = {
- 	.icc_ddr = "qup-memory",
-+	.resources_init = geni_i2c_resources_init,
-+	.set_rate = qcom_geni_i2c_conf,
-+	.power_on = geni_se_resources_activate,
-+	.power_off = geni_se_resources_deactivate,
- };
- 
- static const struct geni_i2c_desc i2c_master_hub = {
-@@ -1222,11 +1239,21 @@ static const struct geni_i2c_desc i2c_master_hub = {
- 	.icc_ddr = NULL,
- 	.no_dma_support = true,
- 	.tx_fifo_depth = 16,
-+	.resources_init = geni_i2c_resources_init,
-+	.set_rate = qcom_geni_i2c_conf,
-+	.power_on = geni_se_resources_activate,
-+	.power_off = geni_se_resources_deactivate,
-+};
-+
-+static const struct geni_i2c_desc sa8255p_geni_i2c = {
-+	.resources_init = geni_se_domain_attach,
-+	.set_rate = geni_se_set_perf_opp,
- };
- 
- static const struct of_device_id geni_i2c_dt_match[] = {
- 	{ .compatible = "qcom,geni-i2c", .data = &geni_i2c },
- 	{ .compatible = "qcom,geni-i2c-master-hub", .data = &i2c_master_hub },
-+	{ .compatible = "qcom,sa8255p-geni-i2c", .data = &sa8255p_geni_i2c },
- 	{}
- };
- MODULE_DEVICE_TABLE(of, geni_i2c_dt_match);
+ 	case IMX_I2C_STATE_WRITE:
 -- 
-2.34.1
+2.43.0
 
 
