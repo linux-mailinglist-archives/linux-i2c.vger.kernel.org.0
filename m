@@ -1,51 +1,51 @@
-Return-Path: <linux-i2c+bounces-14814-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14815-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D8A6CE5B99
-	for <lists+linux-i2c@lfdr.de>; Mon, 29 Dec 2025 03:06:46 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C20BECE5B9F
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Dec 2025 03:09:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id CF63D3003F83
-	for <lists+linux-i2c@lfdr.de>; Mon, 29 Dec 2025 02:06:44 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 83A653000DED
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Dec 2025 02:09:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49C571EB5E3;
-	Mon, 29 Dec 2025 02:06:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 010511FE45A;
+	Mon, 29 Dec 2025 02:09:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b="O12pKL+G"
+	dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b="CTVgvUJy"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtpbgjp3.qq.com (smtpbgjp3.qq.com [54.92.39.34])
+Received: from smtpbg154.qq.com (smtpbg154.qq.com [15.184.224.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 893908BEC;
-	Mon, 29 Dec 2025 02:06:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.92.39.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74DA08BEC;
+	Mon, 29 Dec 2025 02:09:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=15.184.224.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766974003; cv=none; b=MRi9p1I5Lk2GFKdPazTQJ9/bpmnGM9I3gPEEtn0oMEatgaPwdFnDDzdJdD9XRqJidVMdWCYRZ/UvVyL061mZXku9TmCSayaTlim3PDFJZtszp/pSB9ZetyIZ1/bexAk5sSwgq5dgkGJUj39fZrRItHzTxOEUbWnMnxzXR+aNKnM=
+	t=1766974157; cv=none; b=e4TwpNWil9aMY+TuuKcWpZzOJ3M86CSPzhk2btnuGS/BekYOD0XP89OQCkxICBMSfaUuRsc7DNQ2BoMt1zn5JWw3jVHHhkqi7LWC+DhKEwlwTwe2kWn39hn/ik2/jfWdZEFXBUkThunDMUsCVxlpO4gXYdraRbtTs+Udm7lnPqI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766974003; c=relaxed/simple;
-	bh=lC4wh1JEg5hhJd1Cm1U9iC2wKYREKH16HdqlMFxc5Ns=;
+	s=arc-20240116; t=1766974157; c=relaxed/simple;
+	bh=Ly17IRCXf+PpezMZj2RubN6m9ia+kDuxgx/+ao5pAWY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H/NXgJB9SikQmZTF+pkQ3rDDLbiFPPpaWV9qCw9DfWUs13qi0h8w8+i/+avA44EWjvUBxCrcPduJJJkSHIkFcKzPeoU+8YRL3oDlqqoekuACLDJxBIEIi3dADdx7ml8GZI7TdN5fLKtXAMhDzVjsZJeHcOKnr0wCwRAGFqmTLzw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com; spf=none smtp.mailfrom=linux.spacemit.com; dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b=O12pKL+G; arc=none smtp.client-ip=54.92.39.34
+	 Content-Type:Content-Disposition:In-Reply-To; b=ogmhLQ6rFiDfY9ynbSPow9Azj5pVJjU5tPAqR6/s3BnmNqRYSzigSJUKl/iPQ7xaI9DYiyPzPZ+kafgC5Tbzu112s1twnBw9uRsyuTJd6tug8zXdZF1Yx0qdHNBKDDSsm34vp+/jAOVt6lGxj5McHFSE8Gf77QYAkQ88caMw2/8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com; spf=none smtp.mailfrom=linux.spacemit.com; dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b=CTVgvUJy; arc=none smtp.client-ip=15.184.224.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.spacemit.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.spacemit.com;
-	s=mxsw2412; t=1766973842;
-	bh=OqWMuLjdapot//N3NvuB4l+zklMrdOffEYwGgfD2C90=;
+	s=mxsw2412; t=1766974065;
+	bh=PQImGFjWOUyAK1IDHTVdJv3c+SXK+cKNa1d2Bg+qzF0=;
 	h=Date:From:To:Subject:Message-ID:MIME-Version;
-	b=O12pKL+GYsdHKo5EWgLdpZaDQ3sxefz3x6lmXWSYCTuCewSTnpj0jw/kG+VhkComT
-	 z8I5d75r2/6Ar7+57CX0CUea+UXYu3M5/gbPnfaNyB4XMAvukQNYYoUBieF6FzLWNq
-	 XVE5Guxs9XAYQPWHLLZWddMjyLBYp+hzY4pozPPs=
-X-QQ-mid: esmtpsz10t1766973833t9bb2683d
-X-QQ-Originating-IP: S/Zy3Pu7yfoJ+ndNXakBGuGQdXCO8KvbiFwk2sGnHVQ=
+	b=CTVgvUJyYaZeGjZC/u4hjDTwwV2zC7HCIHFsxhEe/UoIH7/rKKcTegrTSWdQ00r2f
+	 6Q5JZmLdHIVLW5rYWaEwc4pj42rO3ChoL/AEExiQGAwUuIPZZnvRbwh2wwABX6/4Fi
+	 54lkRtye26qaWwj5Ym10cDC6Yz6WdKTLNrdEK1+0=
+X-QQ-mid: zesmtpsz2t1766974056tbc048f24
+X-QQ-Originating-IP: 4ECW4Bo3pMvb33vEOeyUaEHe2Q3GyIVA8m5u3tnBJRs=
 Received: from = ( [120.239.196.19])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Mon, 29 Dec 2025 10:03:51 +0800 (CST)
+	id ; Mon, 29 Dec 2025 10:07:35 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 17634020045709217909
+X-BIZMAIL-ID: 16099099167800225801
 EX-QQ-RecipientCnt: 11
-Date: Mon, 29 Dec 2025 10:03:51 +0800
+Date: Mon, 29 Dec 2025 10:07:35 +0800
 From: Troy Mitchell <troy.mitchell@linux.spacemit.com>
 To: Alex Elder <elder@riscstar.com>,
 	Troy Mitchell <troy.mitchell@linux.spacemit.com>,
@@ -56,7 +56,7 @@ To: Alex Elder <elder@riscstar.com>,
 Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev
 Subject: Re: [PATCH v5 2/2] i2c: spacemit: introduce pio for k1
-Message-ID: <68BEF1A67DD3F4D0+aVHhhzvaM49Mm-0d@kernel.org>
+Message-ID: <6D29D0765AB5632A+aVHiZ9Wph0hNzqDY@kernel.org>
 References: <20251226-k1-i2c-atomic-v5-0-023c798c5523@linux.spacemit.com>
  <20251226-k1-i2c-atomic-v5-2-023c798c5523@linux.spacemit.com>
  <86c5e338-e630-4933-a123-cfa1201495ed@riscstar.com>
@@ -70,143 +70,44 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <86c5e338-e630-4933-a123-cfa1201495ed@riscstar.com>
 X-QQ-SENDSIZE: 520
-Feedback-ID: esmtpsz:linux.spacemit.com:qybglogicsvrgz:qybglogicsvrgz3a-0
-X-QQ-XMAILINFO: OURTxbnUKnoogJPvoj13Ldped4AdrgCiqhWgyUFG+beu09Aa3dKauLyg
-	7ot5VkX8jeDuaN3hTyrtilEEgprGAEwkCi71eIadFgm+R7PWYdr9KFOs5s1Ac7JeDYEkBOy
-	oBp0mWigBuSVdCJU6NcbwyZu516r4rU+N80iR7ULwOj5O/ZKvg+9LdqlAdZL3Js96MBBF1C
-	nQsD4rQB7FthZsSvoZgRiNK+QU7tVO0zA+RcBgEkZyRBiA7ynEzSseBPQIM3Zx6uH8Xk93g
-	yH40/RVK3B3gUsdSBtsCvKGcfwZHsGqHT0bLvLVyuaKc43RHL2dsqLcmsRuBWTCX7rOKJGf
-	BXUo2TAB9w9Vh2Zb0SyNfdBAuRxMI3d98XM0jXuD7WhtXHEKRTsqHn7EThzwr0DcxmDg93/
-	iNU6FXXz+ATuJFKRTz3vLVqUF93fnrzyKbEb/BBd+bHzkS5v6kBqE7SbklchhsJRV72tu4H
-	tCqbt7rfmWKGtvy0Tq+ZYfbivE8iOUlzpJ6puEbUeSt279hxivXtmdVyh+gzhvRxt9SnF8D
-	9ZvIBqv+aSk5YIJuAl+KO8PiZNB8LqwrKec9IjvsjiGOho5Y2qakjvUNuqrv+jmDCd/u+uS
-	yv1K5+F55AUgrq+RbpXO1WI2QQS1CO37fgDeMINpUxe1h5ONT/o54jYH4jEmBctn+u7q6nk
-	sRLLR1LMyP2u4lZWJqwo65wJqeMKrf9lkj8VdMOtTyEzl7KyrYbUA04bShZVtAX9KJSJPv4
-	kI6WG+ADmgP+qFpCShJ/cEA4/tuBjyfBzkYQICr2SVLzh8erm75CibMRRmNGZ1YuSIheJ7u
-	8T6PfS2qfO9N6Yfd2BwOzKK+3v/KJdbLSwrOolyey0MAqKkDRMj4zIyO8lZfRdqjojeEVnr
-	Kgh590EQJBuL7cJQPoX6dx5vtnGqYxeT/5aCxDzphfeCRNys9N9j0xqMODxjaqb8IhcGrTj
-	VPQTwGVEIfyHfwTFaWBLHxD9Xcz5PUyUQB8DUaTO+gzcCILSup9fan6bm7IoBl8pSUV/aOJ
-	12jgu1/ASBPY5WjTKnHphrKw0/FdOJaGqRBK5nZpTI4PrbxJXzRocAhfWaAGempX5e08LYo
-	TQzLL5tEsTxDrDibZiFVvIJKn7HshmWeQ==
-X-QQ-XMRINFO: M/715EihBoGS47X28/vv4NpnfpeBLnr4Qg==
+Feedback-ID: zesmtpsz:linux.spacemit.com:qybglogicsvrgz:qybglogicsvrgz3a-0
+X-QQ-XMAILINFO: MtJoEQFRGvIzjRIpniR076rR5J1pEXAcgJ2vLhffiUUfkbJ14q8rJ6+x
+	FutnnVzxbI8qxvGlMFgCobaEGw0Pqqaemdb5E52XstXPGrN321lQxV/C3pHskddpev6m6iu
+	OiaVYLonevwiaudytfv6cwNQsc9hGqa0LizAgPhiNisM6s0biIurXr0xCOySZHdLd2BGLyP
+	YPMyCafe+hZKaf8hctd03VbZgm/v5Hl+znhKLv0CKY/Hp4gUm8t+4FjhLT8VmWQ9L5HY1Xo
+	YJphrGl1BNhgfvG5fJovAsGq3VNypF5hIwcA8eg6CllVvwHzTwxw4DFYv2UFBiTNNFrrR3z
+	PkGd6gzwOV/3xn2CUaUqt9+apGn9k29lq1Iy3jZpfb1oFRAjEdkN386WRiO3r1+gtpS30ex
+	wptS26mMi7J+mIVLDDpNFUjhr+rpIGWm9QVnuCiRfyx1+6Y3uINAc51i/uRarPGXVQ8NMyK
+	h1M6Uzl1/9UiG/OfnCWO96txuN8ZnVtk3wjir486V2zusG9N2WZ7tx4ynNvae69y1bB6OrH
+	8ir3TkZYYt4cFYekwcl9vw19cwhI9kW7esKduKG1+odz2FZbqG9eYcx2R2zDQUqUQDU5Lco
+	AtuluTMUsYG2jNxR52pZNHvG58W39sf0OQ5QSVyOTLTNjRDLCPr9SV0j5+m3g2wICCY5ITB
+	JM2jAcgF6mEkjoFRHifmZy79LjwJNzLyjo9VobvEdep+fbrfwfVB0xUybUY9dUt/9rp/o86
+	2TYCI7D8xgmoSvM37pDxXTf+YNkJCef4b+uRM+z9cQ8iD6Z/bRyU9EIZ6AR7NDfHt+HTTCd
+	fj5vptzmHPnXxopoS+qO/1vP78Jsw361oOUnUiv281Yzni2Rukh66rE05lW4pisWIoXvCPv
+	KSc8SIXDEEWwwJK5/Wd2r1rNvycmy7khyeYK1LI1p4aqouqup3GbTM5JP0BMC2Lhnu43dF7
+	ABkaeHd9/c8h5wywjF0ZvuNxcca7FZtH1LRP1h//9QOjo3Uh5GLuL3jH+K8EsoUCz+bDqD5
+	7TvLr9xiW1zdwdhHqis4u0ed+wmRn2gPMk4Ezcg6Xke1oL/AVVKUs2xep+HmY=
+X-QQ-XMRINFO: NI4Ajvh11aEjEMj13RCX7UuhPEoou2bs1g==
 X-QQ-RECHKSPAM: 0
 
-On Sun, Dec 28, 2025 at 05:24:26PM -0600, Alex Elder wrote:
-> On 12/25/25 9:31 PM, Troy Mitchell wrote:
-> > This patch introduces I2C PIO functionality for the Spacemit K1 SoC,
-> > enabling the use of I2C in atomic context.
-> > 
-> > When i2c xfer_atomic is invoked, use_pio is set accordingly.
-> > 
-> > Since an atomic context is required, all interrupts are disabled when
-> > operating in PIO mode. Even with interrupts disabled, the bits in the
-> > ISR (Interrupt Status Register) will still be set, so error handling can
-> > be performed by polling the relevant status bits in the ISR.
-> > 
-> > Signed-off-by: Troy Mitchell <troy.mitchell@linux.spacemit.com>
+> > @@ -474,6 +608,11 @@ static void spacemit_i2c_calc_timeout(struct spacemit_i2c_dev *i2c)
+> >   	unsigned long timeout;
+> >   	int idx = 0, cnt = 0;
+> > +	if (i2c->use_pio) {
+> > +		i2c->adapt.timeout = msecs_to_jiffies(SPACEMIT_WAIT_TIMEOUT);
 > 
-> This generally looks good and what I say below doesn't
-> really ask for functional changes.
-> 
-> I have some suggestions on comments to improve readability
-> of the code.  I still have a few questions related to delays
-> and timeouts, and when you enable TX and RX interrupts.
-> These are more about explaining/justifying what's going on,
-> though in some cases they might imply an improvement that
-> could be made.
-> 
-[...]
-> > +		 *
-> > +		 * For the tx empty interrupt, it will be enabled in the
-> > +		 * i2c_start function.
-> > +		 * Otherwise, it will cause an erroneous empty interrupt before i2c_start.
-> 
-> I don't think the TX FIFO empty interrupt is "erroneous" in
-NO FIFO NOW. Data Byte Register(DBR).
-But the comments below still suitable.
+> Again, why is a rough 1000 millisecond timeout OK for PIO, while a
+> fairly precise timeout value based on the number of bytes to be
+> transferred and the transfer bit rate computed for interrupt mode?
+Sorry I didn't see this.
 
-> > +static int spacemit_i2c_wait_pio_xfer(struct spacemit_i2c_dev *i2c)
-> > +{
-> > +	u32 mask, msec = jiffies_to_msecs(i2c->adapt.timeout);
-> > +	ktime_t timeout = ktime_add_ms(ktime_get(), msec);
-> > +	int ret;
-> > +
-> > +	mask = SPACEMIT_SR_IRF | SPACEMIT_SR_ITE;
-> > +
-> > +	do {
-> > +		i2c->status = readl(i2c->base + SPACEMIT_ISR);
-> > +
-> > +		spacemit_i2c_clear_int_status(i2c, i2c->status);
-> > +
-> > +		if (!(i2c->status & mask)) {
-> > +			udelay(10);
-> 
-> You are looking only for TX FIFO empty and RX FIFO full
-> interrupts.  In this situation I *think* you have several
-> possible interrupt conditions occurring.  Some questions:
-> - Would observing one of the other possibly conditions
->   at this point be an error?
-> - If so, is it OK to simply ignore (and acknowledge) these?
-actualy, we can.
-but I think it's better to check error here.
-> - Why is the 10 microsecond delay required?
-To ensure hardware stability, even in interrupt mode, the bit is set
-first before the interrupt occurs.
-> - Is it reasonable to delay if you see the RXHF condition?
-The delay is only taken when none of the expected bits are observed.
-> 
-> > +			continue;
-> > +		}
-> > +
-> > +		spacemit_i2c_handle_state(i2c);
-> > +
-> > +
-> 
-> Delete the extra blank lines here.
-> 
-> > +	} while (i2c->unprocessed && ktime_compare(ktime_get(), timeout) < 0);
-> > +
-> > +	if (i2c->unprocessed)
-> > +		return 0;
-> > +
-> > +	if (i2c->read)
-> > +		return 1;
-> > +
-> > +	/*
-> > +	 * If this is the last byte to write of the current message,
-> > +	 * we have to wait here. Otherwise, control will proceed directly
-> > +	 * to start(), which would overwrite the current data.
-> > +	 */
-> > +	ret = readl_poll_timeout_atomic(i2c->base + SPACEMIT_ISR,
-> > +					i2c->status, i2c->status & SPACEMIT_SR_ITE,
-> > +					30, 1000);
-> 
-> Why is 1000 microseconds the correct timeout period here?
-1000us is sufficient for the hardware to respond; if it still doesn't
-work by then, it's considered a hardware timeout.
-> 
-> > +	if (ret)
-> > +		return 0;
-> > +
-> > +	/*
-> > +	 * For writes: in interrupt mode, an ITE (write-empty) interrupt is triggered
-> > +	 * after the last byte, and the MSD-related handling takes place there.
-> > +	 * In PIO mode, however, we need to explicitly call err_check() to emulate this
-> > +	 * step, otherwise the next transfer will fail.
-> > +	 */
-> > +	if (i2c->msg_idx == i2c->msg_num - 1) {
-> > +		mask = SPACEMIT_SR_MSD | SPACEMIT_SR_ERR;
-> > +		/*
-> > +		 * In some cases, MSD may not arrive immediately;
-> > +		 * wait here to handle that.
-> > +		 */
-> > +		ret = readl_poll_timeout_atomic(i2c->base + SPACEMIT_ISR,
-> > +						i2c->status, i2c->status & mask,
-> > +						30, 1000);
-> 
-> Same question in this case.  Also, symbolic constants for
-> timeouts are often better.
-See above. Thanks. I'll define it.
+In interrupt-driven mode we wait for a single completion event, so the
+timeout needs to reflect the worst-case transfer duration to avoid
+spurious timeouts.
+In PIO mode the loop is driven by FIFO/status progress, and the timeout
+is only a safeguard against a stalled bus rather than an exact transfer
+time.
+Therefore a simple conservative value is sufficient there.
 
-                    - Troy
+                                  - Troy
 
