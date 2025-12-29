@@ -1,71 +1,63 @@
-Return-Path: <linux-i2c+bounces-14811-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14812-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15BC7CE5AA1
-	for <lists+linux-i2c@lfdr.de>; Mon, 29 Dec 2025 02:22:07 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id ADD25CE5AA8
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Dec 2025 02:22:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D68B03005FED
-	for <lists+linux-i2c@lfdr.de>; Mon, 29 Dec 2025 01:22:05 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id D7D2F3000DFF
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Dec 2025 01:22:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFB8D212B2F;
-	Mon, 29 Dec 2025 01:22:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 344F721E0AF;
+	Mon, 29 Dec 2025 01:22:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b="aVScxXB5"
+	dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b="GaxrQobz"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtpbgeu1.qq.com (smtpbgeu1.qq.com [52.59.177.22])
+Received: from smtpbgbr1.qq.com (smtpbgbr1.qq.com [54.207.19.206])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73D9A3A1E99
-	for <linux-i2c@vger.kernel.org>; Mon, 29 Dec 2025 01:22:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.59.177.22
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BC7221E082;
+	Mon, 29 Dec 2025 01:22:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.207.19.206
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766971324; cv=none; b=iZpfGMmBvRb11TE1O2qaNORlq2WzyiDPpBymqKcDoKFDYWKQdfoOLDibkdeYbG7XMyQ6L7/tbuXJWrFc9jKnA1iHtcPFr5uMZmeQ0/fdDFLPEvfnzddXEDXucHmKwRhAUypanfTDxoyv4OJY0ED3SqGVU6mOywS2W8WeOVi8+Ms=
+	t=1766971338; cv=none; b=H2qoagaNl/4a9MM9pYuqoZ2VaxAn+gtIrKEWXsz/d0hCzmCbQNAbDGt7t41rR1emcrlLjxUO87Ns1ADEArteMJxa5uOfhRQoVORBMIk5++3sNmI0b4S9DsMwKWrRCqeo936W3aCpXzSE5HeH2z9nDDsA8r9v7Kdasg1NN6LL3EA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766971324; c=relaxed/simple;
-	bh=hsmClUGEQA7rZBxAXqKjeDz/XtsH0eUv/RPooz6i4Bc=;
+	s=arc-20240116; t=1766971338; c=relaxed/simple;
+	bh=CTG3RA5dNu0tn6GzseubWUAP6yWeJnp/KpByxdOMMLw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BjwIu0kP5zJ5TzvpBU7qqz3RrpGdwbSd9He6z9vb2V/fy44LfrGcJD2PGTHRZZqCJFUZSr2hHRR+ToaFCEmkFGmi5BDX+CogHDXhKi2Jcf9YOlGw6ITzAue8JJH+ZwlY/UgsTIP7MTeSviM2sSZmXBOUbf2lV+VpLmZZ72+ACY0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com; spf=none smtp.mailfrom=linux.spacemit.com; dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b=aVScxXB5; arc=none smtp.client-ip=52.59.177.22
+	 Content-Type:Content-Disposition:In-Reply-To; b=MLXZnPEPHmsT2hpL4FtBeq1qAJyHE19izqGup/uAjxyi/zJ58tALlY/bIYvONYbyxbmNyIPcjm+fYF6k+Ku0kpiWRCe9VgBMob0CEtQsaktiWQaPJxe4705jm31CG9itzX0YmuN2PSIgzW9bHTCdqZAFDbGGrdOMj+cccwAWm5U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com; spf=none smtp.mailfrom=linux.spacemit.com; dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b=GaxrQobz; arc=none smtp.client-ip=54.207.19.206
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.spacemit.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.spacemit.com;
-	s=mxsw2412; t=1766971218;
-	bh=HjPCSciAn5sVVRUOoQBxpkF3fdcwbHn1thnE3om09YI=;
+	s=mxsw2412; t=1766971265;
+	bh=aGnIEv/VfEP+D5B2aIP/tXEv3CMUGWzK3F2vJ4iKjFo=;
 	h=Date:From:To:Subject:Message-ID:MIME-Version;
-	b=aVScxXB5ajk8nsyHVbqyulChahzfyWHuZ6EOvh4MvFwVIc/AKTm5IIWPzh6kmQMSe
-	 h0mCTaJGqJM8fchETHBns4nQJE/59IUULp6f1zgbJtvkQkDqqRELbYkwRoNkOv+3bF
-	 YoiPVThoW4rTJ8Oj3JlkrtytPP5apOWe57ktXwD8=
-X-QQ-mid: zesmtpgz9t1766971209t9fc9de5a
-X-QQ-Originating-IP: fT6Q8r14RLfcZbpJL9RtazBttNJy4iPas1PtPR2xOX0=
+	b=GaxrQobzjj0QuFERK1btmGExE6jg3+RKxoOkfVVmJ7FRfSej/ycgOhoZp3D3wxWDc
+	 UqNNpiNfOmgoujmDSz9OtXNjgHI5c+rgqBEexD9r5d0RLzJr5TWd1RgY6/Aq1wjwOo
+	 R3yWrBrjbfr3fNkkxugvh8R91xwjQgx9ql+7gwGE=
+X-QQ-mid: zesmtpgz4t1766971259teee092f5
+X-QQ-Originating-IP: PKgYghdT8oi3a6sFLOe74HJmgNBRtvW503vk0OEHnps=
 Received: from = ( [183.48.244.56])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Mon, 29 Dec 2025 09:20:08 +0800 (CST)
+	id ; Mon, 29 Dec 2025 09:20:57 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 16357926230597589350
-EX-QQ-RecipientCnt: 13
-Date: Mon, 29 Dec 2025 09:20:08 +0800
+X-BIZMAIL-ID: 10468442197477288879
+EX-QQ-RecipientCnt: 8
+Date: Mon, 29 Dec 2025 09:20:57 +0800
 From: Troy Mitchell <troy.mitchell@linux.spacemit.com>
 To: Alex Elder <elder@riscstar.com>,
 	Troy Mitchell <troy.mitchell@linux.spacemit.com>,
-	Lee Jones <lee@kernel.org>, Yixun Lan <dlan@gentoo.org>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-	spacemit@lists.linux.dev, linux-i2c@vger.kernel.org,
-	linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v3 1/4] i2c: spacemit: configure ILCR for accurate SCL
- frequency
-Message-ID: <20BB6D852C5C87DF+aVHXSI7Mn5GH-xBF@kernel.org>
-References: <20251118-p1-kconfig-fix-v3-0-8839c5ac5db3@linux.spacemit.com>
- <20251118-p1-kconfig-fix-v3-1-8839c5ac5db3@linux.spacemit.com>
- <81eca0ab-47a3-4b12-98ae-fbd46a15ff93@riscstar.com>
- <BD74A47E5BB66010+aU4j6CgGxebcBV5I@kernel.org>
- <569E6DA87DE510D5+aU4-1Jl9XxjAWQq4@kernel.org>
- <4a76e9bf-926e-4b77-a2f8-ee4a72b2f1dd@riscstar.com>
+	Andi Shyti <andi.shyti@kernel.org>, Yixun Lan <dlan@gentoo.org>
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev
+Subject: Re: [PATCH v5 3/3] i2c: spacemit: drop warning when clock-frequency
+ property is absent
+Message-ID: <E42FFF2530F73556+aVHXeY6PlQt40uY1@kernel.org>
+References: <20251226-k1-i2c-ilcr-v5-0-b5807b7dd0e6@linux.spacemit.com>
+ <20251226-k1-i2c-ilcr-v5-3-b5807b7dd0e6@linux.spacemit.com>
+ <b09d6add-40d8-4deb-b63e-31adc9f327b1@riscstar.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -74,48 +66,46 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4a76e9bf-926e-4b77-a2f8-ee4a72b2f1dd@riscstar.com>
+In-Reply-To: <b09d6add-40d8-4deb-b63e-31adc9f327b1@riscstar.com>
 X-QQ-SENDSIZE: 520
 Feedback-ID: zesmtpgz:linux.spacemit.com:qybglogicsvrgz:qybglogicsvrgz3a-0
-X-QQ-XMAILINFO: OXvkGtaK08fGzVyBcvDPqJcIA53HT9A+ZpqG1btxeAnhOYGYpEPMnSfv
-	DGcIhq5g6sZKK3vJAWTtne04ZOQZf0wbR/mNi4KJDfbl2N/KScZjlkpO986CQ5ZXGFPXIh2
-	ioZ31RNhXYNUrliC1i49dquCM/I+1VmEy5OvhaKnzZ9YuMW69lowfvbHm421qbdZz77yJ9Z
-	2c0xL1hKMdqFeAilR6kG6v1gDcsAW6r8mEa0zjetDJJTj7Vsn/q1GTeDkh4HNcVFGuZZGfx
-	1z/g0hyvAfMSd0AlKytiaZ/gCFsSQ2RMYKpl2St2K4267pvYcdpCHShDj81scxHacKQ1UdX
-	LdZEjdxVYnxzbHE1jAR3rp48orvIBnkeXQLtpkJER/JcJ7Hn12I+I9ka+5cb/5BfxIvoqut
-	3BNB+DSfmrDKBarbE7cOtJ/A/13vzeYXawFnV2YIk61JQdGr+yJKcDMxD8XMC5ydutzL4JK
-	kJnyc4xThYficgFm21pjvX0K9G6C7YfCsx5fm47mXiVUlMPtgZZZc6Aa1XKxY2mtQmffrJK
-	re4yQsZkhJ2bt7mvtBPBZ1NH2k4G8+5C4jxYRt7eYaUtWvy7RLc+9a6fVS7LcUGnOpnOlhB
-	2Uf0zTNCU9jTdkjAlp/kwJJhzol7zikVaPstUAGni4Fd/xWAz4jVd8BEKMHEj79ZqIVf+TM
-	nSJsE0kqRK0TLN6jAUJ3ZHLGGTAC8HjhCf1zUhuoAPrCcDAh5WB/fivyEdLTWsU1ijvCAKM
-	4V1lEzatn7S7NZNFizdcUQl0gM7w6GzhCJpYqo1xLcxZtOYoE6VJVxcgmrv42uIAL7+RuOP
-	i5sxzZd49LDtE3DzkE3UGbLatJWn8aelU6qFOVUMMciafueaMlUIlJHNQX/k8EBtLr5CC3l
-	xJnYAUAekK4F/JUI9miS35uFQMXXA5EzdozhP5RA2qUVedvSzrMT8VIFY332p5HGIVE/K72
-	Qac2whpmTxtzBrAv+7eTPtz9gN+E+FoYKBHKzGzjheDFhCmZsEbFtnjdy/r0mIUQ7nuWVWz
-	+fzla//JJ8r3Awr2Re3NMWV7UpHjrxrk0G1bjTm9pzFx9n/uYW
-X-QQ-XMRINFO: NS+P29fieYNwqS3WCnRCOn9D1NpZuCnCRA==
+X-QQ-XMAILINFO: NfykWmRlrd2ohhphnxX6ChVDp4TdAkCrjxT8zUVXJJWSXj/T2Hme8pJI
+	HgEW6eaM4hMSwaiRrJbzhQKa9oarP0cmO5ZYNadUJ6jCqDqpIyUJ2chxVXT6txNQnWMNyid
+	Y+RdWqZyCQmM1l5YCgkQRPjZNEzSCjwnFD9we3AHao0w7fijGm5eqwhYgbahBviVwu58oCg
+	nBXJ+6j7NRCDJA0dcFqxFL6Br/kdtpirMeiZBhyM1ji+No+SEY1Z8X+DNQ/5xqgsr1FGCwO
+	ovjpB2wIYKnJfsSRN6lm3eyoZlRC8Adcc3bW3lbllRgvJ16oWW6x+ZrX2uyGx5XGaXZJOGb
+	foTXFjAHzM61mrsrvwBpobZYCTnS9BalfPCdQvJVQndsKtMMPkecHLCbMjJtA1fAJ93wA6d
+	bshlKgbjL39RjCBjCSeb95VwhgaKJXSyAirar4CeASGPRFJ1eManlkVb7QyXnegcMQus/tP
+	5evAj8Zw8f+vnxNKnDuLgEZHBTrkQhVF+qi9cS7PofnmyZtqa0i5a00GcGA3DSEKauo3DLs
+	RVYsGcWXxnErcuuVSda/ztlT6xRGmAfTWnVnB2ju+AcARz8oS1Ife+OV7fOkyjnECXJxfIx
+	FhkEWL/ArvFsyzmunFhtjTy+PCg/XY7XQPQKOI0wwvcYzzYgzzxFOjO7VhMeuEvDUTFQVyZ
+	rzJhjoilRU9lcTuuBenL+j5DxuWbsjIT31581kOquSr4wVSpXJBODz1ZRrNqUWjff44g3+8
+	m0kIFhqdnYBbGY31MCz/rzWiGQKK7sDL7DIe92W0/6CHKkyAbYgMjVlwBv5Hm5rZ+hnNqTe
+	okYOz/tLAxTiw18KrNHXtG4laNjI5dpR/xaBpNaSWGnUge+v7Xq6SKo6icVyJKXzdLxKj96
+	cPl/9lEZA6e3WmPG7xHylonCEdCQT74zwfTV9KGxrEd5f152MUSVC6EIrNujheA4d9JAnhp
+	g2SR0bVOV85chuZpsXItMT48h1qONysWk7zXhPnALv86RoJAJigtfDYcYMtj2itMdmbo+2M
+	GstpVblvxpepwIFqGlHUSo1caOSKV73E/3WGOezVeD92B0u6tX
+X-QQ-XMRINFO: MSVp+SPm3vtSI1QTLgDHQqIV1w2oNKDqfg==
 X-QQ-RECHKSPAM: 0
 
-On Sun, Dec 28, 2025 at 06:58:00PM -0600, Alex Elder wrote:
-> On 12/26/25 1:52 AM, Troy Mitchell wrote:
-> > > > > +static int spacemit_i2c_clk_set_rate(struct clk_hw *hw, unsigned long rate,
-> > > > > +				     unsigned long parent_rate)
-> > > > > +{
-> > > > > +	struct spacemit_i2c_dev *i2c = container_of(hw, struct spacemit_i2c_dev, scl_clk_hw);
-> > > > > +	u32 lv, lcr, mask, shift, max_lv;
-> > > > > +
-> > > > > +	lv = DIV_ROUND_UP(parent_rate, rate);
-> > > > 
-> > > > Would DIV_ROUND_CLOSEST() give a more accurate value?
-> > > I'll test it.
-> > Same result. So I'll keep it.
+On Sun, Dec 28, 2025 at 06:56:38PM -0600, Alex Elder wrote:
+> On 12/26/25 2:32 AM, Troy Mitchell wrote:
+> > The clock-frequency property is optional according to the DT binding.
+> > Do not emit a warning when the property is missing and fall back to the
+> > default frequency instead.
+> > 
+> > Fixes: 5ea558473fa31 ("i2c: spacemit: add support for SpacemiT K1 SoC")
+> > Suggested-by: Alex Elder <elder@riscstar.com>
+> > Signed-off-by: Troy Mitchell <troy.mitchell@linux.spacemit.com>
 > 
-> Is that true for all clock rates? 
-I only test 400k.
-> Anyway, it's not
-> a huge deal, but especially when the number of rates
-> isn't very high this can make a difference.
-I'll test more. Thanks!
+> Any error reading the "clock-frequency" property will simply leave
+> i2c->clock_freq alone.  This is good.
+> 
+> But the lines that follow this issue a warning if i2c->clock_freq
+> is 0.  If it's optional, you should simply use a default value,
+> and although you could state that rate with dev_info(), you should
+> not warn about it.
+Thanks! I get your point!
 
-                          - Troy
+              - Troy
 
