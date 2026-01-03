@@ -1,138 +1,101 @@
-Return-Path: <linux-i2c+bounces-14891-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14892-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7FFF6CEFE96
-	for <lists+linux-i2c@lfdr.de>; Sat, 03 Jan 2026 12:57:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 49D30CF04B1
+	for <lists+linux-i2c@lfdr.de>; Sat, 03 Jan 2026 20:05:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 2A4FD3028DA9
-	for <lists+linux-i2c@lfdr.de>; Sat,  3 Jan 2026 11:56:58 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1990C3017F30
+	for <lists+linux-i2c@lfdr.de>; Sat,  3 Jan 2026 19:05:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8909283C9D;
-	Sat,  3 Jan 2026 11:56:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 669722D3750;
+	Sat,  3 Jan 2026 19:04:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VXans+HO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="atupu6XD"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB6021F0994
-	for <linux-i2c@vger.kernel.org>; Sat,  3 Jan 2026 11:56:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2667E221710
+	for <linux-i2c@vger.kernel.org>; Sat,  3 Jan 2026 19:04:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767441416; cv=none; b=hqAVpIMviIPi00uFrmX94eyEljl4ldn4KBrXJq7Hif3OtE+F0jXVQJoRW+1GNjrvv5uqO21YX0puV0VsAU8V24Z9i9WL1HEY7RhP4g0M9YppMcDwOK4ExS1FG/qW8n2qYBfe8QxmOO6Hdsahm4C/hlL2/n6agEoOvSPFDL8cMvo=
+	t=1767467099; cv=none; b=UwPilR+jLWe6NrXsB/scakpk5SFVOsqSsVlYFHkr3s39Ffvc82rC2SRGEWCUulZ2EvEtZtM1t2W9Zf8hS1zWrnDAEzBGoS1UOqneTeXCLybku66PMziY3kJqElFbbUGgStSaUNiOIRmqviqDMsi2VzeI4HEV7xPtFbBitT6Qk/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767441416; c=relaxed/simple;
-	bh=gmnAKAfv29ulmMb0BC0UKs0MVt+IkK2zMRYsdR6rhaE=;
+	s=arc-20240116; t=1767467099; c=relaxed/simple;
+	bh=1ocYjoxF+BmL+4lAR0aruV6XJ3WNgsR/AMGWfp36r6k=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YKsHqVKPm3FRou8EVf9+gk89Ko3P1A5laklxdvBrvpRMtZlKtGhBLJcIGw6sAPDz7SptLNxr6IoVM7a8FQieEAA/GRv3v3W5wDzpZHV561PVhTcrqhRQNKtT9gkGNTL3VJUKDxGqe+V0JzuGkUTUExtQ/wszuqqPFJkAwRsw6eI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VXans+HO; arc=none smtp.client-ip=209.85.208.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-64d80a47491so1342854a12.1
-        for <linux-i2c@vger.kernel.org>; Sat, 03 Jan 2026 03:56:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767441413; x=1768046213; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gmnAKAfv29ulmMb0BC0UKs0MVt+IkK2zMRYsdR6rhaE=;
-        b=VXans+HODO3A0hzkgzV/H2RZ1jm6MPx45vymaa+R869XKL+WKqSSIdzFamYInDxS7x
-         2tVQbllbLd5VPDgmHfi2nMvllrIO/v5k8g6qtpl1qg7OUY08wUFfkz+03DI15wc1zCr1
-         HzbXXXdhFyrcRCI1zpRzt38wwkQuVcmxDrdRkv2tU72ETRjTC1VK2/4F69S+w1l/2wta
-         IU9smS5fqF9A+KGEGQluJ+804mZSAXGezEEKedr4fVMD8voCkn+8RB7weDQvt4L54/GD
-         IyinsIDSTjgXmB9JnquaHEoTE2YV/HnySzaerIZNiVdCODd/kyJqNVxhIvyyqZ8MEQxZ
-         js9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767441413; x=1768046213;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=gmnAKAfv29ulmMb0BC0UKs0MVt+IkK2zMRYsdR6rhaE=;
-        b=IbNlJdoTOoSAJe3hC8gh1QF+JCCsdksZp0tLP2zMMm5k5zP2/4/fITIsGav/MZMdfa
-         1T82a/tqeqGJFX1D08LegR7oFX5GcKXx1xOu35f+bnXR3HLGV+ZBjPkBNoM/fIyUhhTZ
-         Y6FeXwbei2qumGL4bFfGD9uSlu7RaOBWw3Y2V0MOGjt/SgyqSIvuKs9lq9vENyaLAJx2
-         Thhjtjui2Zm+o+bstkGlbcr71/3B8pQTPGBvGN5jBFeAB7RcvfLDBmZfeSgog1l6RBa4
-         a6BhM9vClEhzMsteF6YvVjJFvY86pYf1nACq/StCmS9PkMhYSvBFFB/o8ifZ/ULwychN
-         IZLA==
-X-Forwarded-Encrypted: i=1; AJvYcCXxlaBXX7CrhCdOCeFANDDH+xDsP08WJ2c1a06wKfwKUd4K/v62H1Yo3qIHE/QCchqTX0bxl/Me7No=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwfJ9WPcS3tLhhZEd2soRaADxie1ozv1WQ2c+K9GocsuQcCK+DY
-	CKlbEOgjKAFPDCvmfMKsOXZ3ZCZVcdenSPPztw+29sL0Dd7ZAEKi+XUQSybgJ6UW/EUsGZrZy8p
-	hy95SDBW25DGaLzcF7Mc1yqsc3Wr2+bM=
-X-Gm-Gg: AY/fxX4KOGQ8Z3z3PsPpj5mtiyRUpKOG+akDR412G3VtLkVA1GIOuDIwFzo1ls0sLrI
-	KjZ4IVen2lZ3hpqPIZKFHvKD+hYC39pkoNoaXhDJtpDLKDtv61XZIU2//wbhJl7sS2w99lfPA4u
-	RjOe0AF9bPfgVknrBxyWmA9Lq1Pw2AVQnLLLt/D7qhSby9YoS+vwOAGmlGuvR0dlUYgUiDfpkPd
-	V/IIiQ31Bqnh4gr9Pow7lBGaXZXBQaooRCzc5m+50Kl0BUHfhA7TlOl4vQARMzZ8uQ=
-X-Google-Smtp-Source: AGHT+IF2b3MvhL62iZeikJ+ttx+pza0Q8AuLmmDSQvLMMwKTmV2H/BFIvhu8dzQh+T0cfdAPWyIo8+97JC3VbvgZOtQ=
-X-Received: by 2002:a05:6402:2750:b0:64d:4149:4924 with SMTP id
- 4fb4d7f45d1cf-64fd4929c52mr2235323a12.4.1767441412727; Sat, 03 Jan 2026
- 03:56:52 -0800 (PST)
+	 To:Cc:Content-Type; b=egMnh118MMR1+KRWm71V8PsJWycthZPelvtihpgYVnjdCKvQjm70TzbZm5hcq7try4emQFItuM+dJ39rjrWyvFO8+wL7CXgNa0P0lnfWkqwkemz6S3gV+HTnzf92+xxBAJ4TCEXbjGNbxu0aLtIdorNyV8yYT6F7u9mF8yDOWWA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=atupu6XD; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE6D6C16AAE
+	for <linux-i2c@vger.kernel.org>; Sat,  3 Jan 2026 19:04:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767467098;
+	bh=1ocYjoxF+BmL+4lAR0aruV6XJ3WNgsR/AMGWfp36r6k=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=atupu6XDFP7652PVUmPfZud6aDwhqa/ShrQ05Y5wN5/LaENexfNbtOJpU21SLDuad
+	 /JrplqpISURr8E0EFo//+aQfbu0WpIEwBnc//lv7Fk6eSisrxTDRuDyHClC57/KLhe
+	 /PeqMO9Ar+QLK45G0k5H6a3Ht7wKy9LTSU5M2GIFfjkpUqRd03FbSazoqC5cxl5Uts
+	 atpvL9HfSGux6SeoYUEWTVxQH/JAnmUVCSzk3JlV1e2aeGlSW3Za+5BPso5xXwwaiI
+	 728xCJ9TWLDA6INS8x/bI26MpiCFM8uxprYdwhOvarojhbHJ9H3MaoLuaeZw8MBQUv
+	 VllevLzEnt6Zg==
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-787da30c53dso121186467b3.0
+        for <linux-i2c@vger.kernel.org>; Sat, 03 Jan 2026 11:04:58 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWn8bIAKzCUIgROT98FP4XaWRvPMBtc7p9F0xM9N/AbJv5oFHuHTKLsUG5ASlYs9mF2SpZMS+6jcls=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyq4yWZ/kCeysB6FH0/t8MXegVvCPK6+oL1wpZKJPJ3UusqLbKV
+	afenRMbsF8yEZ3qo3V1hcgWwAUuBpPl1jI5tacb7AXF9ZyVMUvOwOSSbZlBAZHcmpjBXmEXR2pb
+	9vtkGoGXuL86FQZnB3ZET5EL2iU9vLAc=
+X-Google-Smtp-Source: AGHT+IHbZhHaHEdWDQjutRDr8SPOwbSZ030Zf28/79XflrWl5n95Y1lTs89sR/aKwmdnEx8TvadlNTwYTO0FXJaNx3U=
+X-Received: by 2002:a05:690c:c93:b0:78f:a7aa:b67e with SMTP id
+ 00721157ae682-78fb3e6370amr383069257b3.0.1767467097982; Sat, 03 Jan 2026
+ 11:04:57 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260103052506.6743-1-linux.amoon@gmail.com> <1802774.yIU609i1g2@diego>
-In-Reply-To: <1802774.yIU609i1g2@diego>
-From: Anand Moon <linux.amoon@gmail.com>
-Date: Sat, 3 Jan 2026 17:26:37 +0530
-X-Gm-Features: AQt7F2ro1kfUI7JqsGT_zw2XVqyjk2_hY7-ZX3rtcNoyAWEVImrlYTmVULYv9uo
-Message-ID: <CANAwSgR5RxmeUA-XdTCD5tr9SjPt4EqdH0W305tzsgh+73F7bw@mail.gmail.com>
-Subject: Re: [PATCH v1] i2c: rk3x: Add support for SCL output enable debounce
-To: =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>
-Cc: Andi Shyti <andi.shyti@kernel.org>, 
-	"moderated list:ARM/Rockchip SoC support" <linux-arm-kernel@lists.infradead.org>, 
-	"open list:ARM/Rockchip SoC support" <linux-rockchip@lists.infradead.org>, 
-	"open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>, 
-	David Wu <david.wu@rock-chips.com>
+References: <20251223-i2c-adap-dev-config-v1-0-4829b1cf0834@oss.qualcomm.com> <20251223-i2c-adap-dev-config-v1-11-4829b1cf0834@oss.qualcomm.com>
+In-Reply-To: <20251223-i2c-adap-dev-config-v1-11-4829b1cf0834@oss.qualcomm.com>
+From: Linus Walleij <linusw@kernel.org>
+Date: Sat, 3 Jan 2026 20:04:47 +0100
+X-Gmail-Original-Message-ID: <CAD++jLn+vWZ=BrHEcYLDVKkOjt8W7NcVziYgFkeyoC7ZBYHOWw@mail.gmail.com>
+X-Gm-Features: AQt7F2o3USLd11IPN75yO0DWWTRzw0lHx5hiKCrp6xftEOAkEo84jaNFImuzgt4
+Message-ID: <CAD++jLn+vWZ=BrHEcYLDVKkOjt8W7NcVziYgFkeyoC7ZBYHOWw@mail.gmail.com>
+Subject: Re: [PATCH 11/12] i2c: nomadik: set device parent and of_node through
+ the adapter struct
+To: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+	Mukesh Kumar Savaliya <mukesh.savaliya@oss.qualcomm.com>, 
+	Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>, Andi Shyti <andi.shyti@kernel.org>, 
+	Florian Fainelli <florian.fainelli@broadcom.com>, Ray Jui <rjui@broadcom.com>, 
+	Scott Branden <sbranden@broadcom.com>, 
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Vignesh R <vigneshr@ti.com>, 
+	Aaro Koskinen <aaro.koskinen@iki.fi>, Janusz Krzysztofik <jmkrzyszt@gmail.com>, 
+	Tony Lindgren <tony@atomide.com>, Andreas Kemnade <andreas@kemnade.info>, 
+	Kevin Hilman <khilman@baylibre.com>, Roger Quadros <rogerq@kernel.org>, 
+	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
+	Patrice Chotard <patrice.chotard@foss.st.com>, Shawn Guo <shawnguo@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
+	Fabio Estevam <festevam@gmail.com>, Bartosz Golaszewski <brgl@kernel.org>, linux-i2c@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+	linux-omap@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev, 
+	linux-rpi-kernel@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Heiko,
+On Tue, Dec 23, 2025 at 11:05=E2=80=AFAM Bartosz Golaszewski
+<bartosz.golaszewski@oss.qualcomm.com> wrote:
 
-Thanks for your review comment.
+> Configure the parent device and the OF-node using dedicated fields in
+> struct i2c_adapter and avoid dereferencing the internal struct device.
+>
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
 
-On Sat, 3 Jan 2026 at 16:09, Heiko St=C3=BCbner <heiko@sntech.de> wrote:
->
-> Am Samstag, 3. Januar 2026, 06:25:04 Mitteleurop=C3=A4ische Normalzeit sc=
-hrieb Anand Moon:
-> > From: David Wu <david.wu@rock-chips.com>
-> >
-> > As per the RK3399 and RK3588 datasheets Rockchip I2C controllers featur=
-e
-> > a SCL_OE_DB register (0x24). This register is used to configure the
-> > debounce time for the SCL output enable signal, which helps prevent
-> > glitches and ensures timing compliance during bus handover or slave clo=
-ck
-> > stretching.
-> >
-> > Introduce a 'has_scl_oe_debounce' flag to rk3x_i2c_soc_data to
-> > distinguish between hardware versions. For supported SoCs, calculate
-> > the debounce counter dynamically based on the current clock rate
-> > and program it during divider adaptation.
-> >
-> > Signed-off-by: Anand Moon <linux.amoon@gmail.com>
-> > Signed-off-by: David Wu <david.wu@rock-chips.com>
->
-> Signed-off-by lines are in the wrong order.
->
-> Original author first, then yours as you're the one handling
-> the patch last.
->
-Ok, I will fix this in the next version, with a new feedback,
->
-> Also, does this fix a problem for you, or is this more a case of
-> "this looks useful"?
->
-Actually, I am investigating a boot reset issue on the Radxa Rock 5B,
-Specifically related to the fusb302 Type-C driver. So I was looking for
-type-c fusb302 module to communicate with the I2C protocol.
-I submitted small changes for this, waiting for feedback
+Provided the overall concept is deemed sound:
+Acked-by: Linus Walleij <linusw@kernel.org>
 
-> Thanks
-> Heiko
-
-Thanks
--Anand
+Yours,
+Linus Walleij
 
