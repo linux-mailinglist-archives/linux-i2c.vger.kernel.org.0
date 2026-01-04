@@ -1,101 +1,95 @@
-Return-Path: <linux-i2c+bounces-14892-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14893-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49D30CF04B1
-	for <lists+linux-i2c@lfdr.de>; Sat, 03 Jan 2026 20:05:06 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99B49CF0916
+	for <lists+linux-i2c@lfdr.de>; Sun, 04 Jan 2026 04:05:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1990C3017F30
-	for <lists+linux-i2c@lfdr.de>; Sat,  3 Jan 2026 19:05:03 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 118F0300AFC5
+	for <lists+linux-i2c@lfdr.de>; Sun,  4 Jan 2026 03:05:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 669722D3750;
-	Sat,  3 Jan 2026 19:04:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEF632BE02B;
+	Sun,  4 Jan 2026 03:05:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="atupu6XD"
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=stu.xidian.edu.cn header.i=@stu.xidian.edu.cn header.b="Bbp5cHPE"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2667E221710
-	for <linux-i2c@vger.kernel.org>; Sat,  3 Jan 2026 19:04:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from sgoci-sdnproxy-4.icoremail.net (sgoci-sdnproxy-4.icoremail.net [129.150.39.64])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AAB4126F0A;
+	Sun,  4 Jan 2026 03:05:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=129.150.39.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767467099; cv=none; b=UwPilR+jLWe6NrXsB/scakpk5SFVOsqSsVlYFHkr3s39Ffvc82rC2SRGEWCUulZ2EvEtZtM1t2W9Zf8hS1zWrnDAEzBGoS1UOqneTeXCLybku66PMziY3kJqElFbbUGgStSaUNiOIRmqviqDMsi2VzeI4HEV7xPtFbBitT6Qk/o=
+	t=1767495925; cv=none; b=jgbKs2TB/zYIK5oMRmSchGD6o0eQKwfDCNVedSasrQ+5Ny1pVxKtcsHOzmgqC9Vps3+TFYrvKShyv6nh3/bqKM8JZEm1+dPL1aeMFK7vFc2//Iz7dRb1jo9R1KZeDtPp5bFhXKeG9owU0eSvWJPG21dFdDSWsard4e8O7BBbDfY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767467099; c=relaxed/simple;
-	bh=1ocYjoxF+BmL+4lAR0aruV6XJ3WNgsR/AMGWfp36r6k=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=egMnh118MMR1+KRWm71V8PsJWycthZPelvtihpgYVnjdCKvQjm70TzbZm5hcq7try4emQFItuM+dJ39rjrWyvFO8+wL7CXgNa0P0lnfWkqwkemz6S3gV+HTnzf92+xxBAJ4TCEXbjGNbxu0aLtIdorNyV8yYT6F7u9mF8yDOWWA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=atupu6XD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE6D6C16AAE
-	for <linux-i2c@vger.kernel.org>; Sat,  3 Jan 2026 19:04:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767467098;
-	bh=1ocYjoxF+BmL+4lAR0aruV6XJ3WNgsR/AMGWfp36r6k=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=atupu6XDFP7652PVUmPfZud6aDwhqa/ShrQ05Y5wN5/LaENexfNbtOJpU21SLDuad
-	 /JrplqpISURr8E0EFo//+aQfbu0WpIEwBnc//lv7Fk6eSisrxTDRuDyHClC57/KLhe
-	 /PeqMO9Ar+QLK45G0k5H6a3Ht7wKy9LTSU5M2GIFfjkpUqRd03FbSazoqC5cxl5Uts
-	 atpvL9HfSGux6SeoYUEWTVxQH/JAnmUVCSzk3JlV1e2aeGlSW3Za+5BPso5xXwwaiI
-	 728xCJ9TWLDA6INS8x/bI26MpiCFM8uxprYdwhOvarojhbHJ9H3MaoLuaeZw8MBQUv
-	 VllevLzEnt6Zg==
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-787da30c53dso121186467b3.0
-        for <linux-i2c@vger.kernel.org>; Sat, 03 Jan 2026 11:04:58 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWn8bIAKzCUIgROT98FP4XaWRvPMBtc7p9F0xM9N/AbJv5oFHuHTKLsUG5ASlYs9mF2SpZMS+6jcls=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyq4yWZ/kCeysB6FH0/t8MXegVvCPK6+oL1wpZKJPJ3UusqLbKV
-	afenRMbsF8yEZ3qo3V1hcgWwAUuBpPl1jI5tacb7AXF9ZyVMUvOwOSSbZlBAZHcmpjBXmEXR2pb
-	9vtkGoGXuL86FQZnB3ZET5EL2iU9vLAc=
-X-Google-Smtp-Source: AGHT+IHbZhHaHEdWDQjutRDr8SPOwbSZ030Zf28/79XflrWl5n95Y1lTs89sR/aKwmdnEx8TvadlNTwYTO0FXJaNx3U=
-X-Received: by 2002:a05:690c:c93:b0:78f:a7aa:b67e with SMTP id
- 00721157ae682-78fb3e6370amr383069257b3.0.1767467097982; Sat, 03 Jan 2026
- 11:04:57 -0800 (PST)
+	s=arc-20240116; t=1767495925; c=relaxed/simple;
+	bh=JJDF+zHh+ooUD3jEo1UqXXYZnRiVa1q6G29Nq7d35Dk=;
+	h=Date:From:To:Cc:Subject:Content-Type:MIME-Version:Message-ID; b=liYxLMxayvB8R8H+tbu6XQwZQ4A0cam+u9PzmrrL8T7cBfEKT7RaY2YGeqtPFKYFCVylYlLgcyyRjF2Gqq1prsPpHpLXcH3OnNUeB3FY+yR8U4j4Dj97/p8KVrX/3RUq221Yie87BYsVwsOBbuzyRbDbyPHHTGphWKyzUP2O7dk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=stu.xidian.edu.cn; spf=pass smtp.mailfrom=stu.xidian.edu.cn; dkim=fail (0-bit key) header.d=stu.xidian.edu.cn header.i=@stu.xidian.edu.cn header.b=Bbp5cHPE reason="key not found in DNS"; arc=none smtp.client-ip=129.150.39.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=stu.xidian.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=stu.xidian.edu.cn
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=stu.xidian.edu.cn; s=dkim; h=Received:Date:From:To:Cc:Subject:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID;
+	bh=e+OI0CfBEe3uCLwHmwN94RJTfLw3OWSjwvKhlrLHzOo=; b=Bbp5cHPE6xCvJ
+	SG31WifVGbkBniVcxxGD/m1+8ZL1xDLu1Xjs5IO0EgdLgKDJhGkEVf7wBEh5/ftM
+	0W/OfueHHzfT7Kh/oIQE2uU+yUoLe1L7ghSLHy9ssLy45nOC7W6dnWxvvT3ScY9U
+	FJ3Br1d8BBYd3at1NIt3/iiY7yPvBA=
+Received: from wangzhi_xd$stu.xidian.edu.cn ( [113.200.174.102] ) by
+ ajax-webmail-hzbj-edu-front-4.icoremail.net (Coremail) ; Sun, 4 Jan 2026
+ 11:05:13 +0800 (GMT+08:00)
+Date: Sun, 4 Jan 2026 11:05:13 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From: =?UTF-8?B?546L5b+X?= <wangzhi_xd@stu.xidian.edu.cn>
+To: linux-i2c@vger.kernel.org
+Cc: "Wolfram Sang" <wsa+renesas@sang-engineering.com>,
+	linux-media@vger.kernel.org,
+	"Mauro Carvalho Chehab" <mchehab@kernel.org>,
+	"Hans Verkuil" <hverkuil@kernel.org>, syzkaller@googlegroups.com,
+	linux-kernel@vger.kernel.org
+Subject: [BUG] I2C: hung task in i2c_transfer via i2c-dev ioctl (bit-banging
+ adapter)
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version 2024.3-cmXT6 build
+ 20250410(2f5ccd7f) Copyright (c) 2002-2026 www.mailtech.cn
+ mispb-8dfce572-2f24-404d-b59d-0dd2e304114c-icoremail.cn
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251223-i2c-adap-dev-config-v1-0-4829b1cf0834@oss.qualcomm.com> <20251223-i2c-adap-dev-config-v1-11-4829b1cf0834@oss.qualcomm.com>
-In-Reply-To: <20251223-i2c-adap-dev-config-v1-11-4829b1cf0834@oss.qualcomm.com>
-From: Linus Walleij <linusw@kernel.org>
-Date: Sat, 3 Jan 2026 20:04:47 +0100
-X-Gmail-Original-Message-ID: <CAD++jLn+vWZ=BrHEcYLDVKkOjt8W7NcVziYgFkeyoC7ZBYHOWw@mail.gmail.com>
-X-Gm-Features: AQt7F2o3USLd11IPN75yO0DWWTRzw0lHx5hiKCrp6xftEOAkEo84jaNFImuzgt4
-Message-ID: <CAD++jLn+vWZ=BrHEcYLDVKkOjt8W7NcVziYgFkeyoC7ZBYHOWw@mail.gmail.com>
-Subject: Re: [PATCH 11/12] i2c: nomadik: set device parent and of_node through
- the adapter struct
-To: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	Mukesh Kumar Savaliya <mukesh.savaliya@oss.qualcomm.com>, 
-	Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>, Andi Shyti <andi.shyti@kernel.org>, 
-	Florian Fainelli <florian.fainelli@broadcom.com>, Ray Jui <rjui@broadcom.com>, 
-	Scott Branden <sbranden@broadcom.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Vignesh R <vigneshr@ti.com>, 
-	Aaro Koskinen <aaro.koskinen@iki.fi>, Janusz Krzysztofik <jmkrzyszt@gmail.com>, 
-	Tony Lindgren <tony@atomide.com>, Andreas Kemnade <andreas@kemnade.info>, 
-	Kevin Hilman <khilman@baylibre.com>, Roger Quadros <rogerq@kernel.org>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
-	Patrice Chotard <patrice.chotard@foss.st.com>, Shawn Guo <shawnguo@kernel.org>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
-	Fabio Estevam <festevam@gmail.com>, Bartosz Golaszewski <brgl@kernel.org>, linux-i2c@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	linux-omap@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev, 
-	linux-rpi-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Message-ID: <3e4f9b37.9264.19b86f74f9e.Coremail.wangzhi_xd@stu.xidian.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID:BrQMCkBWudzp2FlpvsrqAA--.13346W
+X-CM-SenderInfo: qstqimqsqqliuu6v33wo0lvxldqovvfxof0/1tbiAgUDCGlZJs0y1
+	QAAsw
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+	CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+	daVFxhVjvjDU=
 
-On Tue, Dec 23, 2025 at 11:05=E2=80=AFAM Bartosz Golaszewski
-<bartosz.golaszewski@oss.qualcomm.com> wrote:
-
-> Configure the parent device and the OF-node using dedicated fields in
-> struct i2c_adapter and avoid dereferencing the internal struct device.
->
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-
-Provided the overall concept is deemed sound:
-Acked-by: Linus Walleij <linusw@kernel.org>
-
-Yours,
-Linus Walleij
+SGVsbG8gSTJDIG1haW50YWluZXJzLAoKSSBhbSByZXBvcnRpbmcgYSBodW5nIHRhc2sgaXNzdWUg
+Zm91bmQgYnkgc3l6a2FsbGVyIG9uIExpbnV4IHY2LjE4LgoKVGhlIGlzc3VlIG1hbmlmZXN0cyBh
+cyB0YXNrcyBibG9ja2VkIGZvciBtb3JlIHRoYW4gMTQwIHNlY29uZHMgaW4gaTJjX3RyYW5zZmVy
+KCksIHRyaWdnZXJlZCB2aWEgL2Rldi9pMmMtKiBpb2N0bCBmcm9tIHN5emthbGxlci4gTXVsdGlw
+bGUgc3l6LWV4ZWN1dG9yIHRocmVhZHMgYmVjb21lIHN0dWNrIGluIEQgc3RhdGUsIGhvbGRpbmcg
+dGhlIGkyYyBidXMgbG9jay4KCktlcm5lbDoKTGludXggNi4xOC4wIChiYXNlZCBvbiB2Ni4xOCkK
+Tm90IHRhaW50ZWQKQ09ORklHX1BSRUVNUFQ9eQpUZXN0ZWQgdW5kZXIgUUVNVSAoaTQ0MEZYKQoK
+T2JzZXJ2ZWQgYmVoYXZpb3I6CgoqIEh1bmcgdGFzayB3YXJuaW5ncyBmcm9tIGtodW5ndGFza2QK
+KiBUYXNrcyBibG9ja2VkIGluIGkyY190cmFuc2ZlcigpIHdhaXRpbmcgb24gcnRfbXV0ZXgKKiBp
+MmMgY29udHJvbGxlciByZXBvcnRzICJVbnN1cHBvcnRlZCB0cmFuc2FjdGlvbiIKKiBUaGUgc3Rh
+bGwgaW52b2x2ZXMgdGhlIGJpdC1iYW5naW5nIEkyQyBhbGdvcml0aG0gYW5kIGN4ODggaTJjIGRy
+aXZlcgoKRXhhbXBsZSBodW5nIHRhc2sgYmFja3RyYWNlOgoKSU5GTzogdGFzayBzeXouMy4zNTcg
+YmxvY2tlZCBmb3IgbW9yZSB0aGFuIDE0MyBzZWNvbmRzLgpDYWxsIFRyYWNlOgpydF9tdXRleF9z
+bG93bG9ja19ibG9jawpydF9tdXRleF9sb2NrX25lc3RlZAppMmNfbG9ja19idXMKaTJjX3RyYW5z
+ZmVyCmkyY2Rldl9pb2N0bF9yZHdyCmkyY2Rldl9pb2N0bApfX3g2NF9zeXNfaW9jdGwKCkFub3Ro
+ZXIgQ1BVIGlzIHNwaW5uaW5nIGluc2lkZSB0aGUgSTJDIGJpdC1iYW5naW5nIGFsZ29yaXRobToK
+CmBgYApjeDg4MDBfYml0X2dldHNjbApzY2xoaQppMmNfc3RvcApiaXRfeGZlcgpfX2kyY190cmFu
+c2ZlcgpgYGAKClRoaXMgc3VnZ2VzdHMgYSBwb3NzaWJsZSBkZWFkbG9jayBvciB1bmJvdW5kZWQg
+d2FpdCBpbiB0aGUgYml0LWJhbmdpbmcgSTJDIHRyYW5zZmVyIHBhdGggd2hlbiBoYW5kbGluZyB1
+bnN1cHBvcnRlZCBvciBtYWxmb3JtZWQgdHJhbnNhY3Rpb25zIGZyb20gdXNlciBzcGFjZS4KCkkg
+aGF2ZSBhIGZ1bGwga2VybmVsIGxvZyBhdmFpbGFibGUgYW5kIGNhbiBwcm92aWRlIHRoZW0gaWYg
+bmVlZGVkLgoKUGxlYXNlIGxldCBtZSBrbm93IGlmIHlvdSB3b3VsZCBsaWtlIG1lIHRvIHRlc3Qg
+YSBwYXRjaCBvciBwcm92aWRlIGFkZGl0aW9uYWwgZGVidWdnaW5nIGluZm9ybWF0aW9uLgoKVGhh
+bmsgeW91IGZvciB5b3VyIHRpbWUuCgpCZXN0IHJlZ2FyZHMsIApaaGkgV2FuZwo=
 
