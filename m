@@ -1,127 +1,91 @@
-Return-Path: <linux-i2c+bounces-14901-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14902-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9A73CF3F0E
-	for <lists+linux-i2c@lfdr.de>; Mon, 05 Jan 2026 14:51:47 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id DBB6ACF41F7
+	for <lists+linux-i2c@lfdr.de>; Mon, 05 Jan 2026 15:32:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 3543C30090C8
-	for <lists+linux-i2c@lfdr.de>; Mon,  5 Jan 2026 13:51:47 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 3C0CA302F918
+	for <lists+linux-i2c@lfdr.de>; Mon,  5 Jan 2026 14:31:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E77BE29ACF0;
-	Mon,  5 Jan 2026 13:51:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 596D9339B43;
+	Mon,  5 Jan 2026 14:08:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="rZEvYgk9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D3KqJ2cG"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A340D286D4D;
-	Mon,  5 Jan 2026 13:51:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9166F339879;
+	Mon,  5 Jan 2026 14:08:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767621105; cv=none; b=CCqzGS55SFBX7I2PwqQx2ezVbYKXucheonJHWKDsv9i9LhKlPSvRKyx50YRblqauVlzNwsS4pwHhSqOIbs/NOWa4yH/PErc+WaHhwZb5O6nIUjBDV4McBX5SxG/LK6tajAJ3Ev2eUIt5UlzZc83pfx5jbxHWfiun8OrGg2BpuyI=
+	t=1767622106; cv=none; b=hIJlDmBTdpxcA21oQN/QYdf65yIRhg+nF3dDnCZWgotDmQIr7OleferxYa9czg4WEcAc9tS/rS/9V7nIu1wmHMgCWhPkeuvqeAymY1quSaM0lrU/CW1Cn29lyYNUj38W/IEk1Xng8LhYnjzOVTwUnjB7f/EJtNLMSB6pPTqGjTc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767621105; c=relaxed/simple;
-	bh=zXfqqxKGvqLAXvWaOSIWtb83q/F8n+kGmnfoKYdBv3U=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=QN/4brOrAgeCs9Cl3z0+iDXZUdg/aqV3nP47n5GqD9xcJex4jUF7AwxPNWGvq45VwptADEO5z43xdVe+4v1jgTEfpcL4xmddaDEQpPNFCRiySm/LfyflzGBFi0rfj2nEkn82HHXQ2pJxm3k1+EQsIUm2arTDhr//H57rmFqm1rI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=rZEvYgk9; arc=none smtp.client-ip=185.246.84.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 0CFFF1A2662;
-	Mon,  5 Jan 2026 13:51:41 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id D379660726;
-	Mon,  5 Jan 2026 13:51:40 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 94961103C847C;
-	Mon,  5 Jan 2026 14:51:33 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1767621100; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=y5fucLpk96yKYcdh3/2CBBQtM/ZmD+R9MJ6TiQMXBRI=;
-	b=rZEvYgk9R8H4C+utFLF0eWvetmLdZu2vv8mOh2vuvin+fh6NJ1/HYiLi6UhGLSrS5pfdcZ
-	e+1LC4oVxlrYtg2v+FwJGtcxTTmZvtvYRRl6Q1O7ts3OhkkRrOUOBhFdd/9kD8hgcC0ZfR
-	40KIA0Zh+2ftL+eL6xyKdh86wkg1p33bcXvXyRqLy6/RZpKhrac+bnlBGZFdB+UMpyWoSr
-	DM+uN+gy+IhcRFpoMSRzI8XbP28qLp1nZUqPvrGlhF/UZrpPnca6s3fLYwqXjGMxEC4ru/
-	VwySPIE5qSJSULG3oiqT14Z5ZYIfQIwuNXGmXlUdmZISfMAqaJYf8siNDhGgUA==
-From: Gregory CLEMENT <gregory.clement@bootlin.com>
-To: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>, Wolfram Sang
- <wsa+renesas@sang-engineering.com>, Jean Delvare <jdelvare@suse.com>, Andi
- Shyti <andi.shyti@kernel.org>, Shyam Sundar S K
- <shyam-sundar.s-k@amd.com>, Nirujogi Pratap <pratap.nirujogi@amd.com>, Bin
- Du <bin.du@amd.com>, Mika Westerberg <mika.westerberg@linux.intel.com>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Jan Dabros
- <jsd@semihalf.com>, Hans Hu <hanshu@zhaoxin.com>
-Cc: Bartosz Golaszewski <brgl@kernel.org>, linux-i2c@vger.kernel.org,
- linux-kernel@vger.kernel.org, Bartosz Golaszewski
- <bartosz.golaszewski@oss.qualcomm.com>
-Subject: Re: [PATCH 5/6] i2c: mv64xxx: use i2c_adapter_dev()
-In-Reply-To: <20251223-i2c-adapter-dev-wrapper-v1-5-bcf960a48fa9@oss.qualcomm.com>
-References: <20251223-i2c-adapter-dev-wrapper-v1-0-bcf960a48fa9@oss.qualcomm.com>
- <20251223-i2c-adapter-dev-wrapper-v1-5-bcf960a48fa9@oss.qualcomm.com>
-Date: Mon, 05 Jan 2026 14:51:33 +0100
-Message-ID: <87pl7oqiai.fsf@BLaptop.bootlin.com>
+	s=arc-20240116; t=1767622106; c=relaxed/simple;
+	bh=KJ3/OSaFFQcTSMOCTZ+h8tfTkIoUsMzdCb9AU8yW8yg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=VCpZyqExFMsFl7GNs0M3/752FI+UFQA51BLqGMQiC+pICEXEjJpO7zyIP2dgif2XIQy43Vg1Ffx5A547wMEho+Qthd9Warvri+9YyeL/VoQxJ8Sh5ziKz+c3xsVcBWE18FIxDrHoQp5VGsPKcOhh4VX3xe5BhkHK+u0zBbv8Xm8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D3KqJ2cG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E447C19425;
+	Mon,  5 Jan 2026 14:08:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767622105;
+	bh=KJ3/OSaFFQcTSMOCTZ+h8tfTkIoUsMzdCb9AU8yW8yg=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=D3KqJ2cGV4APyaS59rUJtpGSHVSFDxglqls7hKl9QqRFTzwJyo2Tooo6uPwh3crGO
+	 befSaAfNSNeCJt8Pgmdf31THCm8OFGOYqMNgnaF27i6pw9TbWXuVnyS2//qzsRVRqv
+	 pyA4zzdSCbKViaaBWawxpGTUkXMeKfHiSL4C96RhWNQAiIRcBHDj0rT3ZQ1EUAkDNX
+	 15dpdXCaPVHL8/9fQw3eHT4XmrGpBMCOpClQTKqvp2crJz3vLJHndhpA4TRGZGoAM0
+	 9Ed8c5ZGLqZyBRe6rtTaosnB9/WipBGZxV+Hs1lJ35HlXqT58iuXgwXj60JnclqpDr
+	 tWKCqJvh4SRJA==
+From: Bjorn Andersson <andersson@kernel.org>
+To: Bartosz Golaszewski <brgl@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Luca Weiss <luca.weiss@fairphone.com>
+Cc: ~postmarketos/upstreaming@lists.sr.ht,
+	phone-devel@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org
+Subject: Re: (subset) [PATCH 0/4] Preparations for camera support on Fairphone 4
+Date: Mon,  5 Jan 2026 08:07:32 -0600
+Message-ID: <176762206374.2923194.14364085953938262000.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20251210-fp4-cam-prep-v1-0-0eacbff271ec@fairphone.com>
+References: <20251210-fp4-cam-prep-v1-0-0eacbff271ec@fairphone.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com> writes:
 
-> Use i2c_adapter_dev() where applicable in order to avoid direct
-> dereferencing of struct device embedded within struct i2c_adapter.
->
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+On Wed, 10 Dec 2025 10:05:26 +0900, Luca Weiss wrote:
+> Start adding some camera-related parts which can easily be upstreamed.
+> 
+> This contains the EEPROMs, fixed-regulators and enabling the CCI pull-up
+> voltage source.
+> 
+> 
 
-Reviewed-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+Applied, thanks!
 
-Thanks,
+[2/4] arm64: dts: qcom: sm7225-fairphone-fp4: Add camera EEPROMs
+      commit: 89bce44320b4c39f3ea48591f7c04c961e404eae
+[3/4] arm64: dts: qcom: sm7225-fairphone-fp4: Add camera fixed regulators
+      commit: e1d3aeff520638d9d286f66e734c2cc8b489d5ee
+[4/4] arm64: dts: qcom: sm7225-fairphone-fp4: Enable CCI pull-up
+      commit: 7a53133ac4b5b26924146bc1b044594894ccc400
 
-Gregory
-> ---
->  drivers/i2c/busses/i2c-mv64xxx.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/i2c/busses/i2c-mv64xxx.c b/drivers/i2c/busses/i2c-mv=
-64xxx.c
-> index 1acba628e16c3bd1dbf82c777162870cbe3815ef..7892793d2a1cabf3376efcec1=
-d031c3d764f7731 100644
-> --- a/drivers/i2c/busses/i2c-mv64xxx.c
-> +++ b/drivers/i2c/busses/i2c-mv64xxx.c
-> @@ -747,7 +747,7 @@ mv64xxx_i2c_xfer_core(struct i2c_adapter *adap, struc=
-t i2c_msg msgs[], int num)
->  	struct mv64xxx_i2c_data *drv_data =3D i2c_get_adapdata(adap);
->  	int rc, ret =3D num;
->=20=20
-> -	rc =3D pm_runtime_resume_and_get(&adap->dev);
-> +	rc =3D pm_runtime_resume_and_get(i2c_adapter_dev(adap));
->  	if (rc)
->  		return rc;
->=20=20
-> @@ -766,7 +766,7 @@ mv64xxx_i2c_xfer_core(struct i2c_adapter *adap, struc=
-t i2c_msg msgs[], int num)
->  	drv_data->num_msgs =3D 0;
->  	drv_data->msgs =3D NULL;
->=20=20
-> -	pm_runtime_put_autosuspend(&adap->dev);
-> +	pm_runtime_put_autosuspend(i2c_adapter_dev(adap));
->=20=20
->  	return ret;
->  }
->
-> --=20
-> 2.47.3
->
-
---=20
-Gr=C3=A9gory CLEMENT, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Best regards,
+-- 
+Bjorn Andersson <andersson@kernel.org>
 
