@@ -1,110 +1,127 @@
-Return-Path: <linux-i2c+bounces-14900-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14901-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27FC7CF42B1
-	for <lists+linux-i2c@lfdr.de>; Mon, 05 Jan 2026 15:38:03 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id B9A73CF3F0E
+	for <lists+linux-i2c@lfdr.de>; Mon, 05 Jan 2026 14:51:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id D9238305B5E0
-	for <lists+linux-i2c@lfdr.de>; Mon,  5 Jan 2026 14:33:53 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 3543C30090C8
+	for <lists+linux-i2c@lfdr.de>; Mon,  5 Jan 2026 13:51:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FEF3346E7B;
-	Mon,  5 Jan 2026 12:47:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E77BE29ACF0;
+	Mon,  5 Jan 2026 13:51:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Nz5BKJw/"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="rZEvYgk9"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2445346E64;
-	Mon,  5 Jan 2026 12:47:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A340D286D4D;
+	Mon,  5 Jan 2026 13:51:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767617231; cv=none; b=FJKe3vEm/4n+ZKx2rhjh+QAtFT3M4+qxaRp5NGRkfNshiZqlNkncRb6S6d8z0AHHbSTU+GVsWqoIemOSx4qBebrORoPlTNexs28VMo11Ne/iRkK/ks5tb5+q7AIrn9dBSkSfPMMz26FqObyiktWBEhQvVOPpe+dBSpvtCgcMNTw=
+	t=1767621105; cv=none; b=CCqzGS55SFBX7I2PwqQx2ezVbYKXucheonJHWKDsv9i9LhKlPSvRKyx50YRblqauVlzNwsS4pwHhSqOIbs/NOWa4yH/PErc+WaHhwZb5O6nIUjBDV4McBX5SxG/LK6tajAJ3Ev2eUIt5UlzZc83pfx5jbxHWfiun8OrGg2BpuyI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767617231; c=relaxed/simple;
-	bh=DcK9JhgklTlks/dbMU+80cGJYIWzHkB6Fy6SWnC+6X4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HoCR0KRRlpdsPBo9c2/AmpDVc+hkbQ0MKouk5w5QDWI9LHiKBkM5wcjwyFUbk6SoPHDpo2qywan8s/ULpcLGKbmpEpKr1WuuGwzBcS7xoFP8O2YOYTpUuh5qWGoJIS2ooQMmUTpzIlFtcosgB0PxYjVSweFvV0y8ki+wR1bCS3A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Nz5BKJw/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3606CC116D0;
-	Mon,  5 Jan 2026 12:47:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767617227;
-	bh=DcK9JhgklTlks/dbMU+80cGJYIWzHkB6Fy6SWnC+6X4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Nz5BKJw/SW7aFh5PDOn4mjTKTV+LFDrfIA0RGg+0ukrtI/PWWaAkWyRxPhjHOORJ2
-	 F/w6WBFrMWFgCSU2ISdgFwjDlN6RJQGUpNtbSDFRgxj0nCBCNDcP/L8EDfUCsH9gEc
-	 mlu4FBl2Ci2EU2Ws0he3TS3VVhUptlYr949Nb1Pt3prNClT7c60WGSzHXKmRhXNJ6j
-	 AahYn0rfC6Gh2cHn5zTWUzZEAv/8eKMksb2N723rGz9Dh7iCNZ/zP1/Y/1u5wxBIyA
-	 1Un3saqGObtBBTQaXpEhtVjmp3anbCGER1NIrZ5yjgzlo4HO5YIiuhg64BQYow0aEu
-	 K25kQXvV5JU6Q==
-Date: Mon, 5 Jan 2026 12:46:57 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Robert Marko <robert.marko@sartura.hr>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-	claudiu.beznea@tuxon.dev, herbert@gondor.apana.org.au,
-	davem@davemloft.net, vkoul@kernel.org, andi.shyti@kernel.org,
-	lee@kernel.org, andrew+netdev@lunn.ch, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, linusw@kernel.org,
-	Steen.Hegelund@microchip.com, daniel.machon@microchip.com,
-	UNGLinuxDriver@microchip.com, olivia@selenic.com,
-	radu_nicolae.pirea@upb.ro, richard.genoud@bootlin.com,
-	gregkh@linuxfoundation.org, jirislaby@kernel.org,
-	lars.povlsen@microchip.com, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org,
-	linux-i2c@vger.kernel.org, netdev@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org,
-	linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-	luka.perkov@sartura.hr, Conor Dooley <conor.dooley@microchip.com>
-Subject: Re: [PATCH v4 04/15] dt-bindings: spi: at91: add
- microchip,lan9691-spi
-Message-ID: <2ff4b417-871b-4b0e-a4f5-424ce535ebd3@sirena.org.uk>
-References: <20251229184004.571837-1-robert.marko@sartura.hr>
- <20251229184004.571837-5-robert.marko@sartura.hr>
+	s=arc-20240116; t=1767621105; c=relaxed/simple;
+	bh=zXfqqxKGvqLAXvWaOSIWtb83q/F8n+kGmnfoKYdBv3U=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=QN/4brOrAgeCs9Cl3z0+iDXZUdg/aqV3nP47n5GqD9xcJex4jUF7AwxPNWGvq45VwptADEO5z43xdVe+4v1jgTEfpcL4xmddaDEQpPNFCRiySm/LfyflzGBFi0rfj2nEkn82HHXQ2pJxm3k1+EQsIUm2arTDhr//H57rmFqm1rI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=rZEvYgk9; arc=none smtp.client-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 0CFFF1A2662;
+	Mon,  5 Jan 2026 13:51:41 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id D379660726;
+	Mon,  5 Jan 2026 13:51:40 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 94961103C847C;
+	Mon,  5 Jan 2026 14:51:33 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1767621100; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=y5fucLpk96yKYcdh3/2CBBQtM/ZmD+R9MJ6TiQMXBRI=;
+	b=rZEvYgk9R8H4C+utFLF0eWvetmLdZu2vv8mOh2vuvin+fh6NJ1/HYiLi6UhGLSrS5pfdcZ
+	e+1LC4oVxlrYtg2v+FwJGtcxTTmZvtvYRRl6Q1O7ts3OhkkRrOUOBhFdd/9kD8hgcC0ZfR
+	40KIA0Zh+2ftL+eL6xyKdh86wkg1p33bcXvXyRqLy6/RZpKhrac+bnlBGZFdB+UMpyWoSr
+	DM+uN+gy+IhcRFpoMSRzI8XbP28qLp1nZUqPvrGlhF/UZrpPnca6s3fLYwqXjGMxEC4ru/
+	VwySPIE5qSJSULG3oiqT14Z5ZYIfQIwuNXGmXlUdmZISfMAqaJYf8siNDhGgUA==
+From: Gregory CLEMENT <gregory.clement@bootlin.com>
+To: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>, Wolfram Sang
+ <wsa+renesas@sang-engineering.com>, Jean Delvare <jdelvare@suse.com>, Andi
+ Shyti <andi.shyti@kernel.org>, Shyam Sundar S K
+ <shyam-sundar.s-k@amd.com>, Nirujogi Pratap <pratap.nirujogi@amd.com>, Bin
+ Du <bin.du@amd.com>, Mika Westerberg <mika.westerberg@linux.intel.com>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Jan Dabros
+ <jsd@semihalf.com>, Hans Hu <hanshu@zhaoxin.com>
+Cc: Bartosz Golaszewski <brgl@kernel.org>, linux-i2c@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Bartosz Golaszewski
+ <bartosz.golaszewski@oss.qualcomm.com>
+Subject: Re: [PATCH 5/6] i2c: mv64xxx: use i2c_adapter_dev()
+In-Reply-To: <20251223-i2c-adapter-dev-wrapper-v1-5-bcf960a48fa9@oss.qualcomm.com>
+References: <20251223-i2c-adapter-dev-wrapper-v1-0-bcf960a48fa9@oss.qualcomm.com>
+ <20251223-i2c-adapter-dev-wrapper-v1-5-bcf960a48fa9@oss.qualcomm.com>
+Date: Mon, 05 Jan 2026 14:51:33 +0100
+Message-ID: <87pl7oqiai.fsf@BLaptop.bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="L5qsEAHx6q9dJj52"
-Content-Disposition: inline
-In-Reply-To: <20251229184004.571837-5-robert.marko@sartura.hr>
-X-Cookie: So many women
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Last-TLS-Session-Version: TLSv1.3
 
+Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com> writes:
 
---L5qsEAHx6q9dJj52
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> Use i2c_adapter_dev() where applicable in order to avoid direct
+> dereferencing of struct device embedded within struct i2c_adapter.
+>
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
 
-On Mon, Dec 29, 2025 at 07:37:45PM +0100, Robert Marko wrote:
+Reviewed-by: Gregory CLEMENT <gregory.clement@bootlin.com>
 
-> Document Microchip LAN969x SPI compatible.
+Thanks,
 
-Please submit patches using subject lines reflecting the style for the
-subsystem, this makes it easier for people to identify relevant patches.
-Look at what existing commits in the area you're changing are doing and
-make sure your subject lines visually resemble what they're doing.
-There's no need to resubmit to fix this alone.
+Gregory
+> ---
+>  drivers/i2c/busses/i2c-mv64xxx.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/i2c/busses/i2c-mv64xxx.c b/drivers/i2c/busses/i2c-mv=
+64xxx.c
+> index 1acba628e16c3bd1dbf82c777162870cbe3815ef..7892793d2a1cabf3376efcec1=
+d031c3d764f7731 100644
+> --- a/drivers/i2c/busses/i2c-mv64xxx.c
+> +++ b/drivers/i2c/busses/i2c-mv64xxx.c
+> @@ -747,7 +747,7 @@ mv64xxx_i2c_xfer_core(struct i2c_adapter *adap, struc=
+t i2c_msg msgs[], int num)
+>  	struct mv64xxx_i2c_data *drv_data =3D i2c_get_adapdata(adap);
+>  	int rc, ret =3D num;
+>=20=20
+> -	rc =3D pm_runtime_resume_and_get(&adap->dev);
+> +	rc =3D pm_runtime_resume_and_get(i2c_adapter_dev(adap));
+>  	if (rc)
+>  		return rc;
+>=20=20
+> @@ -766,7 +766,7 @@ mv64xxx_i2c_xfer_core(struct i2c_adapter *adap, struc=
+t i2c_msg msgs[], int num)
+>  	drv_data->num_msgs =3D 0;
+>  	drv_data->msgs =3D NULL;
+>=20=20
+> -	pm_runtime_put_autosuspend(&adap->dev);
+> +	pm_runtime_put_autosuspend(i2c_adapter_dev(adap));
+>=20=20
+>  	return ret;
+>  }
+>
+> --=20
+> 2.47.3
+>
 
---L5qsEAHx6q9dJj52
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmlbssAACgkQJNaLcl1U
-h9D4Xwf/SR39qhC6yLd9TVLdTbJvbv9td/1UUXSFHjr1far0W1wTnHIk9agrEcs+
-/CUvNmq9Xga7s68neH9NM4e3phBnJZt74a3J3zzhvBekn3xXCyKfmhw9WFU+rGGC
-dLJg/c/VyK4Dzfq6tzvajmvH8NYGkfWsf8TDYMAQkWfyFf3iASqrWODzvobA5l8D
-f4Q5wCZqo6GnSlAfW2+galQbUNMK85g0ponFRfi1JfjuTyYb2ZKghpKWLJGOTJzj
-PMinOleBkv3jp7jH4T6Lh+DiCyhddXuYJhoGGfDIlnhZrm+1fCifyVtpxwbXKXH3
-bT3c73me1CxD3Ncn8Q6E2gOrpidxdg==
-=VKTA
------END PGP SIGNATURE-----
-
---L5qsEAHx6q9dJj52--
+--=20
+Gr=C3=A9gory CLEMENT, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
