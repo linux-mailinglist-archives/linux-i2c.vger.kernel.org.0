@@ -1,208 +1,267 @@
-Return-Path: <linux-i2c+bounces-14895-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14896-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E3CECF239F
-	for <lists+linux-i2c@lfdr.de>; Mon, 05 Jan 2026 08:31:38 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 79AB2CF272C
+	for <lists+linux-i2c@lfdr.de>; Mon, 05 Jan 2026 09:35:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D39A2302D53B
-	for <lists+linux-i2c@lfdr.de>; Mon,  5 Jan 2026 07:26:19 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 4CFBE3029C54
+	for <lists+linux-i2c@lfdr.de>; Mon,  5 Jan 2026 08:31:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C424F261B83;
-	Mon,  5 Jan 2026 07:26:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="E6E457/n"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 224A0333737;
+	Mon,  5 Jan 2026 08:31:27 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from AM0PR02CU008.outbound.protection.outlook.com (mail-westeuropeazon11013014.outbound.protection.outlook.com [52.101.72.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f80.google.com (mail-oo1-f80.google.com [209.85.161.80])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A08226B741;
-	Mon,  5 Jan 2026 07:26:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.72.14
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767597975; cv=fail; b=XnJGbcJ0Kek8+ORik+gUvd+t61ZKhHdR49AcspQykbwK2oEFWZYhubVyT1T9G3oSLOuIJ3Zb1Jg9RI1z81VU0nJaCe7Ar8EDT3Fh+sYbAQ00VFay8Wv/qHkU9ApR6Rg/mPIeGk/OEL6unOOT07aDSGBk1mdCImVlj6ZpQDpKxmc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767597975; c=relaxed/simple;
-	bh=CmC+8b93av85PPbcnBTKPZ01Sv8q86ECBnYEgpu0kbU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=seI1FcWBp877y1AI2KV+9fbXzeDbBmWzuatEPBCbDKdtPXwxOez8fKK5DLFUkfDy11yuLr743fDh8KWsHXG6D576u3JfK2ObDNYJiKSIQf/AeX5muWyvatbdgOTU5NE4OO85S69qpLR3c17eTHOwIA/nbquL60Ow05DnC0UGYNU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=E6E457/n; arc=fail smtp.client-ip=52.101.72.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=WCu9kpszoEsb9w1cDelbtczseOAz4bmshWmrVAoFVCai6PVCLHn3l2kxxTzl+QHKZrgQzM+Cw7NyZjwbsWDycluW1FLsn0xagtc/PYqi5Mlmm05uBz6BiGzq7BxSbiENaAwMgVkPV2+ayKbiV18b9ccUToWF+D+3YPG6TSSQU+z71z4PcYfeN5GpnnutYUzKKq+WT7AVCd8k2iToPZVEWmuBDmQLycqzQJVnRCCbn3QKD8QSD6HAPMh3lrQxHqaaMg+TzD3B8eUepTSKPBTwSem4dRnLqaxtB+kDwFUXd75IHsJgYA4Jn17hxn6BGJuTTRTAv3RnDlK85eWsOWOUBQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tYUEi3AMBgCtF4FBqUes8AGHKBEoECwNZpocuLpSrSk=;
- b=LZ9OQJat/Aiw6MEZLWyzfI68lMZ9AJA+QhmQMX45oHovcmkgSq22to7cleyUQn2dKNkQzx1nAli3A1L6AkQOap16YwlUU38shOPmnc02scqvxK6It3u0g2sPNSCo2y0BBYI3Rx4Jc9U7rO10eYWQfIB3CDdd4zIz4bdAOza+kwGUACE/u57TdL5SzOZBCuMoTYvELCV0n6qjAMB+1Om0GFSgAshPs8gNTMAVO2E+w9JpjacFkN1WgqRTfGTAsTM9xnjxvjnFjCUUyvSLIwLawtTOT9uoHIbo0S5Lupjq+g11dc2yQN7dpk0gLoKKZFyG6kcfDYA6c0AJ4pmSlRsbjA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
- 164.130.1.60) smtp.rcpttodomain=oss.qualcomm.com smtp.mailfrom=foss.st.com;
- dmarc=fail (p=none sp=none pct=100) action=none header.from=foss.st.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tYUEi3AMBgCtF4FBqUes8AGHKBEoECwNZpocuLpSrSk=;
- b=E6E457/n64iyq84BJrbjfORSAQcYGhiW3B6M8qCiinDDkuFlu1z+ZVdfGEJE2CMvTmkATY95Hd2yaNQKDCw5oicx8wIIgFthf8/HKEluon9lEWKvTklTZvbDbIIimhqTdE8kDWSTCwwhCyVsOuwpfw0J6aPPN7P1g78MowPPZtk4i46NMwzitbYF5Jm4OOH7OzTCbWHCVycWPuavw6iU3PlO/CVRwG+lnYvpQO9Ja80N376qBQJYCyMLxLkvrIkFXa7Beg5zQGIBYsqQLNXkpxYVRbyDVsIgbWROzwSjBRI0cXzQbzCYiltxOKJa8wTa6Avq4P8sjxcM21m+GN9RvA==
-Received: from DB9PR06CA0021.eurprd06.prod.outlook.com (2603:10a6:10:1db::26)
- by DB8PR10MB3306.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:11f::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9478.4; Mon, 5 Jan
- 2026 07:26:06 +0000
-Received: from DU6PEPF0000A7E4.eurprd02.prod.outlook.com
- (2603:10a6:10:1db:cafe::22) by DB9PR06CA0021.outlook.office365.com
- (2603:10a6:10:1db::26) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9478.4 via Frontend Transport; Mon, 5
- Jan 2026 07:25:49 +0000
-X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 164.130.1.60)
- smtp.mailfrom=foss.st.com; dkim=none (message not signed)
- header.d=none;dmarc=fail action=none header.from=foss.st.com;
-Received-SPF: Fail (protection.outlook.com: domain of foss.st.com does not
- designate 164.130.1.60 as permitted sender) receiver=protection.outlook.com;
- client-ip=164.130.1.60; helo=smtpO365.st.com;
-Received: from smtpO365.st.com (164.130.1.60) by
- DU6PEPF0000A7E4.mail.protection.outlook.com (10.167.8.43) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9499.1 via Frontend Transport; Mon, 5 Jan 2026 07:26:05 +0000
-Received: from STKDAG1NODE1.st.com (10.75.128.132) by smtpO365.st.com
- (10.250.44.72) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.29; Mon, 5 Jan
- 2026 08:27:18 +0100
-Received: from [10.48.87.93] (10.48.87.93) by STKDAG1NODE1.st.com
- (10.75.128.132) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Mon, 5 Jan
- 2026 08:26:03 +0100
-Message-ID: <92c8b930-adc2-4204-b9c1-0dc1e31115f3@foss.st.com>
-Date: Mon, 5 Jan 2026 08:26:02 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDEEA333443
+	for <linux-i2c@vger.kernel.org>; Mon,  5 Jan 2026 08:31:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.80
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767601886; cv=none; b=Iq6MNUi2KVhKIlHld5UY4bRxdlDBmPZFsvwi0Zwrj451yAfknSmcrxR7dUaZd9J9UUpPS6bN91mZ8XTEAIm8qUAa9cMPYXAlQKYLyft9EeNUHkHWuPQHDiOJ58Dxjt6JRrLmoGkVNMC6kGgCbC5OpBTIBjvx8lvAx1aEwt2oT2c=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767601886; c=relaxed/simple;
+	bh=HcAlwS+AV2o/A//29DwbmP8bCmpP8X9igXpsqxEwSuE=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=tw4cNhofKvVuXBk8mpz5Wyslf2BZGbqnVqvBFcrgsPmCSb5HNSBPARwlgD+m9VpPU0TmEhnleKC3WCYadIu6JbkVNFh7aeHgnx/WpxkKQFZpCCgnT59Sgt8y3lsMIk9gbgLqUsnchp7DPdmus3jJ7B1Um+OeAlwLfoHwjJEpGw8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.80
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oo1-f80.google.com with SMTP id 006d021491bc7-6574d564a9eso28948612eaf.2
+        for <linux-i2c@vger.kernel.org>; Mon, 05 Jan 2026 00:31:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767601884; x=1768206684;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PzqKtV3QrXW4mDqxs+pnEDVVKS7Aapa7xlD3p2eA18o=;
+        b=mnG2nzmVUe0WJ5RcCexDg/UYtu6G3RAwzUFdiEsgloxMCKaFD5MeC3MMOwvXKVrUSZ
+         3vejeQyAjETOm6Me8Hl5AbeXNCxR+zDNEiYEbyY8pr7AzQALfOqXU7MZRlafdfM1VtfU
+         0E3ZexJFqNsLeSFFrzNrKTbH0OYR41HylbYWhHCO3jFC7RGc7ODPJaiHdhmgT58vgotl
+         /q3A22WXWUbpz2JZJxoH36EiujBdmJWOYNk220udjnBf37ZsIInKAGsHZ/DN2WuBFWod
+         OhX5CpiTmUu+Lp9kN+YsmTnHKzI+TkXSbJEgySJDsqW6DlJtg6nv63QPoZzFxPs841Aa
+         Tcqg==
+X-Gm-Message-State: AOJu0Yzbo8yI18BDJHhgSoabwOwYyDx3tCyLPRwPwAZFTx6vHgAXrAWc
+	uwlkZ9EX4C9ztPfD9thr5g8O4+O8rulo1563QkpePYG7lQ4vFHi7l0qbuljWqUz0CKZRQUzbGrZ
+	cRPC/mE8bZElT4Xyq1qsKnCe+AXZ8NhrmtLyQyC0+J5sldAAEA8hfluvdf43hxA==
+X-Google-Smtp-Source: AGHT+IGP/IttUT5F4X13TEA97h9+/7FDmpYlZUa6t1PpZtXkSMvqYt/VvLWFwYzY0si8Yf0VzxuAcYsf6IMmuwaC0i1wqTxw5PFx
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 07/12] i2c: st: set device parent and of_node through the
- adapter struct
-To: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>, Wolfram Sang
-	<wsa+renesas@sang-engineering.com>, Mukesh Kumar Savaliya
-	<mukesh.savaliya@oss.qualcomm.com>, Viken Dadhaniya
-	<viken.dadhaniya@oss.qualcomm.com>, Andi Shyti <andi.shyti@kernel.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>, Ray Jui
-	<rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>, "Broadcom
- internal kernel review list" <bcm-kernel-feedback-list@broadcom.com>, Vignesh
- R <vigneshr@ti.com>, Aaro Koskinen <aaro.koskinen@iki.fi>, Janusz Krzysztofik
-	<jmkrzyszt@gmail.com>, Tony Lindgren <tony@atomide.com>, Andreas Kemnade
-	<andreas@kemnade.info>, Kevin Hilman <khilman@baylibre.com>, Roger Quadros
-	<rogerq@kernel.org>, Geert Uytterhoeven <geert+renesas@glider.be>, "Magnus
- Damm" <magnus.damm@gmail.com>, Shawn Guo <shawnguo@kernel.org>, Sascha Hauer
-	<s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>, Linus Walleij <linusw@kernel.org>
-CC: Bartosz Golaszewski <brgl@kernel.org>, <linux-i2c@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-	<linux-omap@vger.kernel.org>, <linux-renesas-soc@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <imx@lists.linux.dev>,
-	<linux-rpi-kernel@lists.infradead.org>
-References: <20251223-i2c-adap-dev-config-v1-0-4829b1cf0834@oss.qualcomm.com>
- <20251223-i2c-adap-dev-config-v1-7-4829b1cf0834@oss.qualcomm.com>
-Content-Language: en-US
-From: Patrice CHOTARD <patrice.chotard@foss.st.com>
-In-Reply-To: <20251223-i2c-adap-dev-config-v1-7-4829b1cf0834@oss.qualcomm.com>
+X-Received: by 2002:a05:6820:2225:b0:65d:4d:422c with SMTP id
+ 006d021491bc7-65d0eb22dcamr22478023eaf.78.1767601884035; Mon, 05 Jan 2026
+ 00:31:24 -0800 (PST)
+Date: Mon, 05 Jan 2026 00:31:24 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <695b76dc.050a0220.1c9965.0028.GAE@google.com>
+Subject: [syzbot] [i2c?] [usb?] INFO: trying to register non-static key in i2c_register_adapter
+From: syzbot <syzbot+4718cc0f82054afeea8f@syzkaller.appspotmail.com>
+To: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com, 
+	wsa+renesas@sang-engineering.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: ENXCAS1NODE2.st.com (10.75.128.138) To STKDAG1NODE1.st.com
- (10.75.128.132)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU6PEPF0000A7E4:EE_|DB8PR10MB3306:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3c0cac0e-5012-4f9a-14b2-08de4c2bb02f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|1800799024|36860700013|82310400026|921020|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?U1JCU0Zsc1BIRHVJVCtTakx1bFM1ZWlWR1Vwd2RtZ0NVVjR2SEhkcXA1UE03?=
- =?utf-8?B?aFVGekNBSjdScUdKS0oyeVcxZlVBWmk3K1Ezd1crKzR2dnRMQnltU1NCdTUv?=
- =?utf-8?B?YlFMYkErZGFpNEJJaHAvQ3duQmpWWm93RURBVEpuS1hLMXFUZGJzT1VhOEEy?=
- =?utf-8?B?eGtHSWJsSGNVaWMvU0xsMnBRQ3ZhQlZPZ0lHOUdpRkNBODM3bDVudHF4cENk?=
- =?utf-8?B?cE9sS3Y1cGowbjRSU3V5UjFjRGxXSWllMldYU2h0VGUydnpWeTdMUGk2ZWt4?=
- =?utf-8?B?dFNvOFVIeVcxZElCb2xnVUxpSlIzSlVIQ0FYZU4yaEVmSUtrSmxHeVZ4Tnph?=
- =?utf-8?B?RTlnVzdyQWgwTStySGMrWGU3dXhXcFM1eUxpYmdRSnROTmZQUUdPR2hzeVdM?=
- =?utf-8?B?a05GWXFYM0gydGhwWVBxR29oaGF3d1R0RWFyVVZ0K0lHMnJFeGV0S3dKQm1R?=
- =?utf-8?B?MktCRjRBZkhXTTYvdW1ZaDdNVzRwUGsraVdmbVBFOGROSDhzWDNwYU9aOWJH?=
- =?utf-8?B?TVBSY3MycExlYW9aVkVDTm5ZMGdvL05TV1R6eUhweXlHSi9jcDMreVNtSGR4?=
- =?utf-8?B?cXBROHAzNEpIdVhHQ0JpN1VzNGhEMjZYK0VvWEQyMkk3K2d0bHFrN1NhTjB5?=
- =?utf-8?B?bUlkazU4czJzUlVTUmdESWFyUHk1VU4vTWFkMWs0UnJMWlhJTzZPTXJmZUpz?=
- =?utf-8?B?Yy94SU1RQTV5SlRjUkFFR0N1bHh3cTZyVU5ieFV5cStDQ0YvMEQ2WnQvNkgx?=
- =?utf-8?B?amhPOTYwcWdjbXN5WFN6VmMvUytWbE9FcHd3L0krZVlscWlDR1VEaEp6NE1x?=
- =?utf-8?B?M29iNGxOanN1TWFBV0d3TWNTRk95b1NYOEN3UzJpV0lqWHRDdzNTOHM3WUhx?=
- =?utf-8?B?TEt4M1dUWkx3WW5kcFFLeGFaRytQd1FJVlFZeUxKclZ0ZXQ4eml5UE8wMXh2?=
- =?utf-8?B?aml1d0d1Q1B5bFo4YlFUbkwrYlROOTFWY3hmakRmd1J4eWNTQnF1M1ZRZ1Br?=
- =?utf-8?B?VmdWMHM2SklmbzZ3RUcrZ2NNK0hTKzlXdFJuSVZpd3Z4MXhCZkdTSnF3K0Nh?=
- =?utf-8?B?SXo5elA5VWxKV0dPQzNSSlNibEcwVlltSzE4b3RlSzV2RFhaMWVGREJIUnNB?=
- =?utf-8?B?aVYvZ0NuN3NDWTl6V2pORHlJNStYeDMwR3pFZTNvSHlJc3pjLzd5eXlhbkFo?=
- =?utf-8?B?Ti80TUZlRG9OZEdVVENtVzV0NVhNQnBjVS90dERIcitKNWdzMEJlV0xZeEZ2?=
- =?utf-8?B?S1N4THoxdTVoZm1ieXVpNTJWQUlJOWd5cWFyWDdtTUxIdklzdHhmZmpOc3Nk?=
- =?utf-8?B?R1ZjeHdSdDJYRjExb1Q1VVdFWDNWUGRWdTdyTUpocHh1ZW5hck1wNFQrZ000?=
- =?utf-8?B?VWppSWxHY0wwVURBSEZjQjZrdnBEU2EwZmFuRWowU0N4MjRFRy9wb1h0SWcx?=
- =?utf-8?B?cXJ3eFYyUGlaVERZT1FXZFl0emZoVDNlTExVNFFrUjV1TlgyMlVxMWE3Y0Ft?=
- =?utf-8?B?SzliTHoxQkIvM0hST1BRTHpXWXc5UU1haDNWSXd5bTBESnkwRGRiVXArSzF3?=
- =?utf-8?B?OUVzOEN0cDVaMHQvWFVrY3drK0h0S2NHYW1lMHlna0RablVNNTlsZUh2cjJZ?=
- =?utf-8?B?OTN2TUJBZmhiWHBYWGQvNi9XMENRMkZXUCttUDdSd3VNcHE4b0U3VHhQRUha?=
- =?utf-8?B?WFNFdlR1SzdhVVB4QlNCMFZ2RkVwWWlIOVlabGw3d3l0RXpyZWpzTFRnTE1i?=
- =?utf-8?B?OE5vVDU1a0h0aERCQW1BSUVqeUQxQ0phaC9xcGxPOUtxckE5WWxZSzNrcDVT?=
- =?utf-8?B?aXdjZXA3eHV0VW91Tk5sUkdTT0pCeGU3Vy9UY1k1NGlQSlRYd2hmVU83WjB5?=
- =?utf-8?B?VWNsSHdOOStFUlRYT3V5UjNZQjFNRnppTUFwbnVWMGhOWFRYeVA3UUp2bGdR?=
- =?utf-8?B?TFFuVno4c0lDY0VzYnlOOElFWSs1bTBSM1dUMTQ3M2ZvQ2Y0QjNhb29td29K?=
- =?utf-8?B?ckh0bjA5bkRlcDNBUTFvbTA5SHF5bzkwc0w1VU9QU24xQmVOdVJ3RlZpWVFP?=
- =?utf-8?B?SUtuRHBQa2IxemF1NlYyQ0lpVmFUYWI4eXFTRFRxVjJrdHZBeG1jV3RGVnQ0?=
- =?utf-8?Q?dCkLI7yqYPYS6AvM+ckZbErSs?=
-X-Forefront-Antispam-Report:
-	CIP:164.130.1.60;CTRY:IT;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:smtpO365.st.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(36860700013)(82310400026)(921020)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	XhOIkKigiqcgBC4YONy8k00dBReqFN3Dao+NmHFl+fQrxIN3tHsnEI8MWfYyPy0IYibIDTMDMar1uYpi4Jm5nBY9IhzBJmfoMIEGyIDOBgIasF7d2TWq5NchNtknip5M9cJDAkUwgjnizgQrqznK3GSY+yLd1K7Chpjcl7plM/p2Zm815000zu20YrMtltLguN3ePqOqpHMuTvAefGymZGOtLLe9VGAJgzMTJL/KfjXjbUwVFXMIusaoBGLkArRr8dh2w7ktVG3NJ4Jfz7hvLTi7wssY2rzZY1HMf1FrPNOvz6fmy1nFS7Cd1OfJk4mU5Fq3ejBfRAy9WkmEnTSaHBYR5ivvNZBwQp/D9hsXVxoUSnTp4Lm04tT1wEPEq5IhHl5cR1jTP9h2N0Zy58VM7VLjXbNe+I4FS5u+8ZBM0yz4nspouO6SuhxWoJh05Lwl/WPNtJDGKVIkAPuS7sN6C6/R43WCab3ifFiD7L6mCbbKS/3hALpWJK1zde8mh6uLmkRaZ+G6ca7ARrEDfXMROI+2S31i4x00xXY2QqKewcXcdbifBpDbMlfKNP8rgF31qDJ7ITtphodNMRWqTofuqkXrTo+Owi1YuX2YrR7tj572EA5KMsrQojYK3d+O1JI2ixf0AQ8DYcdCK/wRMuPb6b/gIJvrYUcmnmKlVYXiDk0EQFHFSoUgWOl44VmQoUvt
-X-OriginatorOrg: foss.st.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2026 07:26:05.5599
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3c0cac0e-5012-4f9a-14b2-08de4c2bb02f
-X-MS-Exchange-CrossTenant-Id: 75e027c9-20d5-47d5-b82f-77d7cd041e8f
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=75e027c9-20d5-47d5-b82f-77d7cd041e8f;Ip=[164.130.1.60];Helo=[smtpO365.st.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	DU6PEPF0000A7E4.eurprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR10MB3306
+
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    b69053dd3ffb wifi: mt76: Remove blank line after mt792x fi..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=151caa9a580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=513255d80ab78f2b
+dashboard link: https://syzkaller.appspot.com/bug?extid=4718cc0f82054afeea8f
+compiler:       Debian clang version 20.1.8 (++20250708063551+0c9f909b7976-1~exp1~20250708183702.136), Debian LLD 20.1.8
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=131caa9a580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=122377da580000
+
+Downloadable assets:
+disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/d900f083ada3/non_bootable_disk-b69053dd.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/1b892254af04/vmlinux-b69053dd.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/731f0d4ee97f/bzImage-b69053dd.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+4718cc0f82054afeea8f@syzkaller.appspotmail.com
+
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000002
+R13: 00007f297d9e5fa0 R14: 00007f297d9e5fa0 R15: 0000000000000003
+ </TASK>
+i2c-core: adapter 'DigitalNow DVB-T Dual USB': can't register device (-22)
+INFO: trying to register non-static key.
+The code is fine but needs lockdep annotation, or maybe
+you didn't initialize this object before use?
+turning off the locking correctness validator.
+CPU: 0 UID: 0 PID: 5486 Comm: syz.0.17 Not tainted syzkaller #0 PREEMPT(full) 
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.3-debian-1.16.3-2~bpo12+1 04/01/2014
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0xe8/0x150 lib/dump_stack.c:120
+ assign_lock_key+0x133/0x150 kernel/locking/lockdep.c:984
+ register_lock_class+0xcc/0x2e0 kernel/locking/lockdep.c:1299
+ __lock_acquire+0xae/0x2cf0 kernel/locking/lockdep.c:5112
+ lock_acquire+0x107/0x340 kernel/locking/lockdep.c:5868
+ __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+ _raw_spin_lock_irqsave+0x40/0x60 kernel/locking/spinlock.c:162
+ complete_with_flags kernel/sched/completion.c:25 [inline]
+ complete+0x28/0x1b0 kernel/sched/completion.c:52
+ device_release+0x9e/0x1d0 drivers/base/core.c:-1
+ kobject_cleanup lib/kobject.c:689 [inline]
+ kobject_release lib/kobject.c:720 [inline]
+ kref_put include/linux/kref.h:65 [inline]
+ kobject_put+0x228/0x570 lib/kobject.c:737
+ i2c_register_adapter+0x75f/0x1150 drivers/i2c/i2c-core-base.c:1576
+ dvb_usb_i2c_init+0x202/0x2f0 drivers/media/usb/dvb-usb/dvb-usb-i2c.c:31
+ dvb_usb_init drivers/media/usb/dvb-usb/dvb-usb-init.c:183 [inline]
+ dvb_usb_device_init+0xf23/0x2580 drivers/media/usb/dvb-usb/dvb-usb-init.c:310
+ cxusb_probe+0xff/0x700 drivers/media/usb/dvb-usb/cxusb.c:1630
+ usb_probe_interface+0x668/0xc90 drivers/usb/core/driver.c:396
+ call_driver_probe drivers/base/dd.c:-1 [inline]
+ really_probe+0x26d/0xad0 drivers/base/dd.c:659
+ __driver_probe_device+0x18c/0x320 drivers/base/dd.c:801
+ driver_probe_device+0x4f/0x240 drivers/base/dd.c:831
+ __device_attach_driver+0x279/0x430 drivers/base/dd.c:959
+ bus_for_each_drv+0x251/0x2e0 drivers/base/bus.c:500
+ __device_attach+0x2b8/0x430 drivers/base/dd.c:1031
+ proc_ioctl+0x447/0x6c0 drivers/usb/core/devio.c:2368
+ proc_ioctl_default+0xbc/0x100 drivers/usb/core/devio.c:2403
+ usbdev_do_ioctl drivers/usb/core/devio.c:2767 [inline]
+ usbdev_ioctl+0x1367/0x20b0 drivers/usb/core/devio.c:2827
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:597 [inline]
+ __se_sys_ioctl+0xfc/0x170 fs/ioctl.c:583
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0xec/0xf80 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f297d78f7c9
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 a8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffef89f6238 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00007f297d9e5fa0 RCX: 00007f297d78f7c9
+RDX: 0000200000000200 RSI: 00000000c0105512 RDI: 0000000000000004
+RBP: 00007ffef89f6290 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000002
+R13: 00007f297d9e5fa0 R14: 00007f297d9e5fa0 R15: 0000000000000003
+ </TASK>
+BUG: unable to handle page fault for address: fffffffffffffff8
+#PF: supervisor read access in kernel mode
+#PF: error_code(0x0000) - not-present page
+PGD dd3f067 P4D dd3f067 PUD dd41067 PMD 0 
+Oops: Oops: 0000 [#1] SMP KASAN NOPTI
+CPU: 0 UID: 0 PID: 5486 Comm: syz.0.17 Not tainted syzkaller #0 PREEMPT(full) 
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.3-debian-1.16.3-2~bpo12+1 04/01/2014
+RIP: 0010:swake_up_locked kernel/sched/swait.c:30 [inline]
+RIP: 0010:complete_with_flags kernel/sched/completion.c:29 [inline]
+RIP: 0010:complete+0x99/0x1b0 kernel/sched/completion.c:52
+Code: 89 e7 e8 8a ab 8d 00 4d 8b 3c 24 4d 39 e7 0f 84 d4 00 00 00 49 8d 7f f8 48 89 f8 48 c1 e8 03 80 3c 28 00 74 05 e8 67 ab 8d 00 <49> 8b 7f f8 be 03 00 00 00 31 d2 e8 b7 60 f6 ff 4c 89 ff e8 df 51
+RSP: 0018:ffffc900083cf3f8 EFLAGS: 00010046
+RAX: 1fffffffffffffff RBX: ffff888040481638 RCX: dffffc0000000000
+RDX: 0000000000000001 RSI: 0000000000000004 RDI: fffffffffffffff8
+RBP: dffffc0000000000 R08: 0000000000000003 R09: 0000000000000004
+R10: dffffc0000000000 R11: fffff52001079e6c R12: ffff888040481678
+R13: 0000000000000001 R14: 0000000000000286 R15: 0000000000000000
+FS:  00005555621b9500(0000) GS:ffff88808d416000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: fffffffffffffff8 CR3: 000000001a1ba000 CR4: 0000000000352ef0
+Call Trace:
+ <TASK>
+ device_release+0x9e/0x1d0 drivers/base/core.c:-1
+ kobject_cleanup lib/kobject.c:689 [inline]
+ kobject_release lib/kobject.c:720 [inline]
+ kref_put include/linux/kref.h:65 [inline]
+ kobject_put+0x228/0x570 lib/kobject.c:737
+ i2c_register_adapter+0x75f/0x1150 drivers/i2c/i2c-core-base.c:1576
+ dvb_usb_i2c_init+0x202/0x2f0 drivers/media/usb/dvb-usb/dvb-usb-i2c.c:31
+ dvb_usb_init drivers/media/usb/dvb-usb/dvb-usb-init.c:183 [inline]
+ dvb_usb_device_init+0xf23/0x2580 drivers/media/usb/dvb-usb/dvb-usb-init.c:310
+ cxusb_probe+0xff/0x700 drivers/media/usb/dvb-usb/cxusb.c:1630
+ usb_probe_interface+0x668/0xc90 drivers/usb/core/driver.c:396
+ call_driver_probe drivers/base/dd.c:-1 [inline]
+ really_probe+0x26d/0xad0 drivers/base/dd.c:659
+ __driver_probe_device+0x18c/0x320 drivers/base/dd.c:801
+ driver_probe_device+0x4f/0x240 drivers/base/dd.c:831
+ __device_attach_driver+0x279/0x430 drivers/base/dd.c:959
+ bus_for_each_drv+0x251/0x2e0 drivers/base/bus.c:500
+ __device_attach+0x2b8/0x430 drivers/base/dd.c:1031
+ proc_ioctl+0x447/0x6c0 drivers/usb/core/devio.c:2368
+ proc_ioctl_default+0xbc/0x100 drivers/usb/core/devio.c:2403
+ usbdev_do_ioctl drivers/usb/core/devio.c:2767 [inline]
+ usbdev_ioctl+0x1367/0x20b0 drivers/usb/core/devio.c:2827
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:597 [inline]
+ __se_sys_ioctl+0xfc/0x170 fs/ioctl.c:583
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0xec/0xf80 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f297d78f7c9
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 a8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffef89f6238 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00007f297d9e5fa0 RCX: 00007f297d78f7c9
+RDX: 0000200000000200 RSI: 00000000c0105512 RDI: 0000000000000004
+RBP: 00007ffef89f6290 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000002
+R13: 00007f297d9e5fa0 R14: 00007f297d9e5fa0 R15: 0000000000000003
+ </TASK>
+Modules linked in:
+CR2: fffffffffffffff8
+---[ end trace 0000000000000000 ]---
+RIP: 0010:swake_up_locked kernel/sched/swait.c:30 [inline]
+RIP: 0010:complete_with_flags kernel/sched/completion.c:29 [inline]
+RIP: 0010:complete+0x99/0x1b0 kernel/sched/completion.c:52
+Code: 89 e7 e8 8a ab 8d 00 4d 8b 3c 24 4d 39 e7 0f 84 d4 00 00 00 49 8d 7f f8 48 89 f8 48 c1 e8 03 80 3c 28 00 74 05 e8 67 ab 8d 00 <49> 8b 7f f8 be 03 00 00 00 31 d2 e8 b7 60 f6 ff 4c 89 ff e8 df 51
+RSP: 0018:ffffc900083cf3f8 EFLAGS: 00010046
+RAX: 1fffffffffffffff RBX: ffff888040481638 RCX: dffffc0000000000
+RDX: 0000000000000001 RSI: 0000000000000004 RDI: fffffffffffffff8
+RBP: dffffc0000000000 R08: 0000000000000003 R09: 0000000000000004
+R10: dffffc0000000000 R11: fffff52001079e6c R12: ffff888040481678
+R13: 0000000000000001 R14: 0000000000000286 R15: 0000000000000000
+FS:  00005555621b9500(0000) GS:ffff88808d416000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: fffffffffffffff8 CR3: 000000001a1ba000 CR4: 0000000000352ef0
+----------------
+Code disassembly (best guess):
+   0:	89 e7                	mov    %esp,%edi
+   2:	e8 8a ab 8d 00       	call   0x8dab91
+   7:	4d 8b 3c 24          	mov    (%r12),%r15
+   b:	4d 39 e7             	cmp    %r12,%r15
+   e:	0f 84 d4 00 00 00    	je     0xe8
+  14:	49 8d 7f f8          	lea    -0x8(%r15),%rdi
+  18:	48 89 f8             	mov    %rdi,%rax
+  1b:	48 c1 e8 03          	shr    $0x3,%rax
+  1f:	80 3c 28 00          	cmpb   $0x0,(%rax,%rbp,1)
+  23:	74 05                	je     0x2a
+  25:	e8 67 ab 8d 00       	call   0x8dab91
+* 2a:	49 8b 7f f8          	mov    -0x8(%r15),%rdi <-- trapping instruction
+  2e:	be 03 00 00 00       	mov    $0x3,%esi
+  33:	31 d2                	xor    %edx,%edx
+  35:	e8 b7 60 f6 ff       	call   0xfff660f1
+  3a:	4c 89 ff             	mov    %r15,%rdi
+  3d:	e8                   	.byte 0xe8
+  3e:	df                   	.byte 0xdf
+  3f:	51                   	push   %rcx
 
 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-On 12/23/25 11:04, Bartosz Golaszewski wrote:
-> Configure the parent device and the OF-node using dedicated fields in
-> struct i2c_adapter and avoid dereferencing the internal struct device.
-> 
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-> ---
->  drivers/i2c/busses/i2c-st.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-st.c b/drivers/i2c/busses/i2c-st.c
-> index 97d70e66722706f242cd97153387c3a865abc12d..b50be2c39eaa4b9b95a71b038a4d63f3c5fd7c4b 100644
-> --- a/drivers/i2c/busses/i2c-st.c
-> +++ b/drivers/i2c/busses/i2c-st.c
-> @@ -849,8 +849,8 @@ static int st_i2c_probe(struct platform_device *pdev)
->  	adap->retries = 0;
->  	adap->algo = &st_i2c_algo;
->  	adap->bus_recovery_info = &st_i2c_recovery_info;
-> -	adap->dev.parent = &pdev->dev;
-> -	adap->dev.of_node = pdev->dev.of_node;
-> +	adap->parent = &pdev->dev;
-> +	adap->of_node = pdev->dev.of_node;
->  
->  	init_completion(&i2c_dev->complete);
->  
-> 
-Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-Thanks
-Patrice
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
