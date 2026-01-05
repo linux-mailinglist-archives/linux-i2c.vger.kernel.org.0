@@ -1,267 +1,228 @@
-Return-Path: <linux-i2c+bounces-14896-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14897-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 79AB2CF272C
-	for <lists+linux-i2c@lfdr.de>; Mon, 05 Jan 2026 09:35:40 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 38CF6CF2A84
+	for <lists+linux-i2c@lfdr.de>; Mon, 05 Jan 2026 10:15:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4CFBE3029C54
-	for <lists+linux-i2c@lfdr.de>; Mon,  5 Jan 2026 08:31:28 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id D493F30021E9
+	for <lists+linux-i2c@lfdr.de>; Mon,  5 Jan 2026 09:15:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 224A0333737;
-	Mon,  5 Jan 2026 08:31:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E332E32694E;
+	Mon,  5 Jan 2026 09:15:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=renesas.com header.i=@renesas.com header.b="ig2MYZqR"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-oo1-f80.google.com (mail-oo1-f80.google.com [209.85.161.80])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from OS0P286CU010.outbound.protection.outlook.com (mail-japanwestazon11011004.outbound.protection.outlook.com [40.107.74.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDEEA333443
-	for <linux-i2c@vger.kernel.org>; Mon,  5 Jan 2026 08:31:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.80
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767601886; cv=none; b=Iq6MNUi2KVhKIlHld5UY4bRxdlDBmPZFsvwi0Zwrj451yAfknSmcrxR7dUaZd9J9UUpPS6bN91mZ8XTEAIm8qUAa9cMPYXAlQKYLyft9EeNUHkHWuPQHDiOJ58Dxjt6JRrLmoGkVNMC6kGgCbC5OpBTIBjvx8lvAx1aEwt2oT2c=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767601886; c=relaxed/simple;
-	bh=HcAlwS+AV2o/A//29DwbmP8bCmpP8X9igXpsqxEwSuE=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=tw4cNhofKvVuXBk8mpz5Wyslf2BZGbqnVqvBFcrgsPmCSb5HNSBPARwlgD+m9VpPU0TmEhnleKC3WCYadIu6JbkVNFh7aeHgnx/WpxkKQFZpCCgnT59Sgt8y3lsMIk9gbgLqUsnchp7DPdmus3jJ7B1Um+OeAlwLfoHwjJEpGw8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.80
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-oo1-f80.google.com with SMTP id 006d021491bc7-6574d564a9eso28948612eaf.2
-        for <linux-i2c@vger.kernel.org>; Mon, 05 Jan 2026 00:31:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767601884; x=1768206684;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PzqKtV3QrXW4mDqxs+pnEDVVKS7Aapa7xlD3p2eA18o=;
-        b=mnG2nzmVUe0WJ5RcCexDg/UYtu6G3RAwzUFdiEsgloxMCKaFD5MeC3MMOwvXKVrUSZ
-         3vejeQyAjETOm6Me8Hl5AbeXNCxR+zDNEiYEbyY8pr7AzQALfOqXU7MZRlafdfM1VtfU
-         0E3ZexJFqNsLeSFFrzNrKTbH0OYR41HylbYWhHCO3jFC7RGc7ODPJaiHdhmgT58vgotl
-         /q3A22WXWUbpz2JZJxoH36EiujBdmJWOYNk220udjnBf37ZsIInKAGsHZ/DN2WuBFWod
-         OhX5CpiTmUu+Lp9kN+YsmTnHKzI+TkXSbJEgySJDsqW6DlJtg6nv63QPoZzFxPs841Aa
-         Tcqg==
-X-Gm-Message-State: AOJu0Yzbo8yI18BDJHhgSoabwOwYyDx3tCyLPRwPwAZFTx6vHgAXrAWc
-	uwlkZ9EX4C9ztPfD9thr5g8O4+O8rulo1563QkpePYG7lQ4vFHi7l0qbuljWqUz0CKZRQUzbGrZ
-	cRPC/mE8bZElT4Xyq1qsKnCe+AXZ8NhrmtLyQyC0+J5sldAAEA8hfluvdf43hxA==
-X-Google-Smtp-Source: AGHT+IGP/IttUT5F4X13TEA97h9+/7FDmpYlZUa6t1PpZtXkSMvqYt/VvLWFwYzY0si8Yf0VzxuAcYsf6IMmuwaC0i1wqTxw5PFx
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7B4532B995;
+	Mon,  5 Jan 2026 09:14:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.74.4
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767604501; cv=fail; b=Yj96p70VfFYzRysTiwu0P5BHwFNBLg6kY8MFnBJ6ovnEO78sRFq92963athaDxj1O1DXgZBadznS3TXF3VOyKOCqeRRxH16XF1NmepQFSoXhmV0XEO7cz33WFOdgeutLrlCbPuSm/yJjER9YSDxivrBoa39+YCA5aFzJs6AXcE0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767604501; c=relaxed/simple;
+	bh=FMdAGAXiJbwHWctWMsAE/jXTk2MT5Exl2FjTUwmUHZM=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=tEfuCaxOmxzqfzLv2shMLaZ35PR6RN2XXwJ3cz58vq50HoOwR2MZUFNvQ7pxSGDascHAoqcFs9Xq1N24P5oLpDL/Dtl/0QOiUALleae7oRPUswEm47QQOIJ3RYhZjO/XWDwruPeRsibsxlfPKl5de3o+xOkRgJOYE4tJHlX5c8s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; dkim=pass (1024-bit key) header.d=renesas.com header.i=@renesas.com header.b=ig2MYZqR; arc=fail smtp.client-ip=40.107.74.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=renesas.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=V377ISnXqxbwpXopdAGSNSG5Uxue5WVGJkwTMjYkalQavOfVGPtrDhiOXo4LsfwxJZc6L7eXJPmQWF3g+8zB5UwxEIjF9iENCLa9YrTXONG4ThyvikrmMvr+S6rZ1gNw0NiElhA8btaQgymKSHIewZZF79MPxmrBbHknIaEq6Rs8iT/cj5OTOJPx3p2haqr+0tnVjlVSsMhxov8mnc1upJk4YuG42+5Vtdl+i2DOypOF2hY/3s6pFUkRwqGT0bO9/3fG8koFDC5EoMXqkKTNT3t5jnh7F8WbrVko3Rn7x4+qKxrUG0ojnW+RxlRuN5/iw7XObQIFpNfffja4El/8mg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FMdAGAXiJbwHWctWMsAE/jXTk2MT5Exl2FjTUwmUHZM=;
+ b=I91GUMBOIBNQrWh3/+u15gMALBVoW52UdD/n8e28UtjUQMqM7/cThGYA2XQSN5zk3+7MEvRo2ETI5sVhvtT9M0ZnHu/sQxajrs2O6w7Lue2GRi/1O7NN67I/HgzxCuu6MDq8LgsNElq7ifVsSQbQBKDdTq2dDDZSvQgfK19nRZhWPcNHFm9MZgjGWRdpfpBKadE4XwgVbH9qmt3tygqhVV2JRbH4WaxRnXhVcjhU0RTe9EGXWEvN4Q4pY6spZEF3GXYqV/W/o4RjGTv28jLChFoUHcEjFR7xpV0EsPQLCRx88Y5PI/JeqYhrVcYo/IxaEvf+wiO66d9RjIhtT9SNHQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FMdAGAXiJbwHWctWMsAE/jXTk2MT5Exl2FjTUwmUHZM=;
+ b=ig2MYZqREvXStVZOSHftPCGnItOeitTatzS4CuewUtZZREYz2V2vW+6OHt3RzpR/2yeazrJYHPnMRXg4cIiPnNzOubR8EooN5XYqYyVWm92Q0mAW+DWPfseOv29Psez1nO8+c2DEXOpFK8fq7snyGirExiK/xBpFagOkNSUA6So=
+Received: from TYCPR01MB12093.jpnprd01.prod.outlook.com (2603:1096:400:448::7)
+ by OSCPR01MB13063.jpnprd01.prod.outlook.com (2603:1096:604:32d::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9499.1; Mon, 5 Jan
+ 2026 09:14:55 +0000
+Received: from TYCPR01MB12093.jpnprd01.prod.outlook.com
+ ([fe80::439:42dd:2bf:a430]) by TYCPR01MB12093.jpnprd01.prod.outlook.com
+ ([fe80::439:42dd:2bf:a430%4]) with mapi id 15.20.9499.001; Mon, 5 Jan 2026
+ 09:14:55 +0000
+From: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+To: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>, wsa+renesas
+	<wsa+renesas@sang-engineering.com>, Mika Westerberg
+	<mika.westerberg@linux.intel.com>, Andy Shevchenko
+	<andriy.shevchenko@linux.intel.com>, Jan Dabros <jsd@semihalf.com>, Andi
+ Shyti <andi.shyti@kernel.org>, Lixu Zhang <lixu.zhang@intel.com>, Sakari
+ Ailus <sakari.ailus@linux.intel.com>, Binbin Zhou <zhoubinbin@loongson.cn>,
+	Israel Cepeda <israel.a.cepeda.lopez@intel.com>, Hans de Goede
+	<hansg@kernel.org>
+CC: Bartosz Golaszewski <brgl@kernel.org>, "linux-i2c@vger.kernel.org"
+	<linux-i2c@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "linux-renesas-soc@vger.kernel.org"
+	<linux-renesas-soc@vger.kernel.org>
+Subject: RE: [PATCH 6/7] i2c: rzv2m: use i2c_adapter_set_node()
+Thread-Topic: [PATCH 6/7] i2c: rzv2m: use i2c_adapter_set_node()
+Thread-Index: AQHcc/PsNffoqWiN7ESJQn00FrdP3LVDX4pw
+Date: Mon, 5 Jan 2026 09:14:54 +0000
+Message-ID:
+ <TYCPR01MB12093A4C04FD1EF44805065D4C286A@TYCPR01MB12093.jpnprd01.prod.outlook.com>
+References: <20251223-i2c-ada-dev-set-node-v1-0-2e36e0e785b4@oss.qualcomm.com>
+ <20251223-i2c-ada-dev-set-node-v1-6-2e36e0e785b4@oss.qualcomm.com>
+In-Reply-To:
+ <20251223-i2c-ada-dev-set-node-v1-6-2e36e0e785b4@oss.qualcomm.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=renesas.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TYCPR01MB12093:EE_|OSCPR01MB13063:EE_
+x-ms-office365-filtering-correlation-id: 59e66c5b-0ce5-4b96-b79d-08de4c3ae3fa
+x-ld-processed: 53d82571-da19-47e4-9cb4-625a166a4a2a,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|376014|1800799024|7416014|366016|921020|38070700021;
+x-microsoft-antispam-message-info:
+ =?utf-8?B?bkVFQmNiaXdqMThWcThpN3NhVkt6SjRyNjVFcmRUYTJFYkd2OUo2T2hIOXZ6?=
+ =?utf-8?B?SjRIQXc1SnZWeXhFZU9jaDNER3hrdU1SRDdpMlBVN0hzaFk5Y1gwNnY3ZTdj?=
+ =?utf-8?B?MjNRZ0N4bTR2TTR0elR4Y1JIUUprTWE4d3A5WFVwVVMvZE1HV2E2a2J1Y2RP?=
+ =?utf-8?B?RGIrbnUvT3Y4Z3l1b2hKZXh2ejhBWjJqUnpOVytQYXRtbU92bG40d0pjeDdL?=
+ =?utf-8?B?Ymg4VDR2M0ZKNzZHK2hVWjlCaDBHZFAxVHFEc0FMRkNRNU5QNjFhdHljQ2RU?=
+ =?utf-8?B?SVdjQzk0N0JBQU5OZHFhbm5HcE0zVXhNY2M5ZHdNeEE1cDFwOFhuenhmZWpZ?=
+ =?utf-8?B?WmtZcFNaYkp3aCtoOG93dXd2WU4zc2FBRWRXT3pDaHZ2NGdET2tKQk1DNVhI?=
+ =?utf-8?B?WnRlSDgwRnZVRTlGb2hNL1lsVGd5KzFNclZMTjBMbFQ5NmVKNU1JWFdnaitJ?=
+ =?utf-8?B?U25XOERSQkt5akdtdzlsTW9UazJTUWozV1dpY1YvY2JLM2JrQTA2YnVvWVBv?=
+ =?utf-8?B?N1dXKzZUQzkwSGNRbkl6WVFGM1pTd2Z2YUdnWG1VWnIrc2ozRXRSSzZnOVRW?=
+ =?utf-8?B?bkNZYklFdW11eHdwaTJ4WTlyOFJUMUhVNFIxOUF2NEprekY0OEd2TmJqY2dv?=
+ =?utf-8?B?dlFWZUg4RGVrMDllcHBPUjkrTXhYSUJsSjZBSW54VXJPK1hWS1BrNzVqUnFi?=
+ =?utf-8?B?VGNrUGRHSGwwY3JxZWlLbjYrRVdNdklXYjhEVjNkSTBuVXdLektBdHc3bFgy?=
+ =?utf-8?B?V0NMSG5STERqOW51SDVQZUIzcURuVEpmK1VWaE04dnNnd2cvcFQ4ZDlmMFRs?=
+ =?utf-8?B?QWNPL3VPejNnUVJUTms0UExhSUFPUHdZUkpwWURwRkdaOTEzZFNQZlQ3N1Bt?=
+ =?utf-8?B?K0liMmZobWJEQkYyRUtmT3I2ZmpYMHF0RGJUUWxmb2xpSGZCdnVTNEJsZWdJ?=
+ =?utf-8?B?VUNUU3dTWURaNXZISDZGQ1VUbllMVEh3TEFNWHA2T0llaklvTEgyZTg5L1Z0?=
+ =?utf-8?B?bG10NHk3TzJ1UmhHZUVpQjFvaHE4MGM5U1dzb0lIUjFMQ2graGpFZzFYM25V?=
+ =?utf-8?B?WTU2a2Jnd2JvbEhxR2pNN3dzK1FrK0VXOS9FV05JRUFPeXdNTkV2RHk0REdI?=
+ =?utf-8?B?NXp0eXhZOXBrT0FNNmFQQ2YrUkRHcFd1VndacWpzbmpZczMzZFNtKzc3dzhn?=
+ =?utf-8?B?YTdVbEpnWjBsMHJaNnFTUCthNFJEeTNiN0IzZS9ickNYcjNQQmpLR2FMZ0p0?=
+ =?utf-8?B?dG5xeUxCN0cwcnpHZk9lcGk4QkZHMkZSRDRTYnZaTlNJaDgzMHVqcEdKS2hR?=
+ =?utf-8?B?TENyT1A2UENnVXp2OGY5bVlaNDZlMCtHR2Z6Y01iNHhRdU1QVFdlWGpqV25T?=
+ =?utf-8?B?S2ptUHVoR0FSVjA4OXQxUVR0TllmSWFSRGQ0UXlObkt2dHViUHN3Y1d4M01R?=
+ =?utf-8?B?Z0YvU3daY3JCQTJjcjJjUGN0NVF3bGRra2RyeWxvbEtaWUZVSlZqdk9SSXgr?=
+ =?utf-8?B?S09GMnBCZS96dGdtQ1pGYjZ3RWdsRE9PdEd0THpPbW42N0ZrQURqNUw2Q3Bt?=
+ =?utf-8?B?clR4WGFMaWhzT0ZrSjlkd3VjUmJ0UGVaeTViRjJ1cTFBdTluSlFrMmFKemhE?=
+ =?utf-8?B?UC9LalVLNUs1UHAraUN3M3NxSkVNNCs5cFhwMUVQTGtqWXAxZ1kxTzhnNmNy?=
+ =?utf-8?B?R3FLYjUzdXE0bDR0ZmhpYjhDY3dqalh0dU5XZ1R2WGxmQmdNWUxUR01NMDY0?=
+ =?utf-8?B?QXlJcFNhY3NUVWFJVjEzakZZcmdkOVo2eHFIclo5YjNGYlJsbE1FUG9IRTBI?=
+ =?utf-8?B?WVBQUHRFRmVDTXQwN1FWN2pCcE9OMm1GRlcwR3dlUXBnbklRU2NsdnJHY2hO?=
+ =?utf-8?B?RkZBVlJveFB3ZTA3ZElUbjY4TUFPSkUrZEJMalJzaGdMZ0JGYjkydzluWVJy?=
+ =?utf-8?B?ZG9PTG9rVTVPMUJkYnAzNE4yZ3lzQTB0RTNqbkV2Wk9kbjZrNldjS2dqbTNr?=
+ =?utf-8?B?b3A3MlNiL1Z6andmUGFENDdQdkplQ3BCV0x6RWpRTUxaOUw0OXlXdmxrdm5u?=
+ =?utf-8?B?SVIvSHFtQXBPTmhQVUUzTFlxaENEWEh3STNmUT09?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYCPR01MB12093.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(7416014)(366016)(921020)(38070700021);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?YlhMV3pWSmRRTGVHakFsWHFlWERCbjhrcjI0S0ZXSHQ1cnNUTUlCdUlIK2RR?=
+ =?utf-8?B?OHZaUmlnZnhhSVk3TWk1QmRLWGIxYWpuRFFqUjVHcEgyVXBxaXlIa3IvV1Yw?=
+ =?utf-8?B?S0xHaWNQblpHK1hWWHRHL1RrZ2hxTFFWQTNQV3ZxNkNxT0ExU1ZOdGN2N1dE?=
+ =?utf-8?B?QXgzYmRFQlpMQWZjSzVPbzZwLy9LQ0htWXR4TzJRc0ozQzZyVGRLeUUxM2I5?=
+ =?utf-8?B?aEE0MHFmOTE2MFhSNmxIbEc0bWM0TklXV2dWcmN4UWhHSDB3WUVIb1pkTGt0?=
+ =?utf-8?B?QUx0UWIxWDMxNGdWNENlbzIxcCtOVlJ5Ym1BbnZDNnpST1BXZ05UeVJmcUVF?=
+ =?utf-8?B?WGdWK0hTcWFUS2NXblVvVTFELy91SC9Qb1hTYkVZOWR2VEpXZ3pMbStqVHlo?=
+ =?utf-8?B?UUo2RjMxMURHS0txWFRNOTFxQjlyZkh2QldNa3VxcithL1kvMHhubWdFTmhE?=
+ =?utf-8?B?U29zWXdtNVd0ZkJtbU44U2c1RkMrclFka0pUR0l3clk2dG5NUHZXeHpuL2NS?=
+ =?utf-8?B?SktyQTl4TGQyV0hkZVFzcjd3M09uVyszaE1JdFMyK0xYR2JWcHJEdTJOUEpS?=
+ =?utf-8?B?d25zOWtiQWpXaG5DdlpqM25mV3pwUmNQQXBhZFJxb1pFS21WZ2RuRk83SGlq?=
+ =?utf-8?B?L0hpaFZTUjdpcFJJVEdaQm05ZHBzTnpIMS9DTVRRME9nVmJjRTZDbVVMRnN1?=
+ =?utf-8?B?aitCZnV1SFhlQzlwSEx2Y0EzNUtoQlF6Wkp2ZkNIVzVUbEh5NVc4UTdYKzNk?=
+ =?utf-8?B?aUZwc2hISmVKdksycmxvNnZkSUNNUE51Rlo4cTVualhCVnZLVnRia1B6Z201?=
+ =?utf-8?B?UXAyeVFsZ2lNcjNmQ1o3bzJzOVZjS2lkUTNYRy9kNzRhU1V2YWErZEsxNDBW?=
+ =?utf-8?B?NFpNSWdIdDh3TjR0ZTFHM21uS2VYSHRHNUlKTFIvelkxSVo2M0RVNjJRZFda?=
+ =?utf-8?B?SlVNdXFvRXdOeDY5RnpzZHZhRmVKOWlyaXlHSTdkUXluTmpvYWRCWmlDdzdk?=
+ =?utf-8?B?M3FFQUVQT3E2QjlSYktmNlY0Q241T0FQS0ExYmJRMi9RTFZldFE0ZktidFRG?=
+ =?utf-8?B?WWI1d0p2OWhZRmdMR1IwRGx5cHdRTlY4QWgzMFNMS0NDaVl4WlRNTVlGMHdS?=
+ =?utf-8?B?T3lUTkJHN1g5MHhtdXNRYmdIbExXcFJFWnpJeUM5MkNCMmdZdkhWSmcwbDFL?=
+ =?utf-8?B?SHhrdkxrWjh0a0syeFZ5VHBFNXBvWXdHeDJ6YWZFdjd4MVRZaUpncXhLRDZp?=
+ =?utf-8?B?cjVnTXNzV1BLR1BiaE9oZDVHNWt3WnR2OFZzclIrV3E0bkdVejNzNUlPV1pX?=
+ =?utf-8?B?U2V1YU5hb1EwY2dHVUpvMU56N0V5YjIzT2lVSEZRWVNtUmdYNTUvT1VyZ0Rr?=
+ =?utf-8?B?QnBzSituS0VyYVIvRzg1djJucG1TcGtlM2hpRVZqcEhVQTE2Wm94VytBb2Fh?=
+ =?utf-8?B?bnJxNkVmYk1TUU42QklsNENYZSt3VlBEUUxkaThhOWdib3NMbEtMemlNZ1Nx?=
+ =?utf-8?B?TzdpVzlqdENTVTZsU2R5S0luYk9yYXB5TTMvVXVxSXY0Ni91M3VWVW1qQnRF?=
+ =?utf-8?B?K0Z0NGk3Rm1NcExwVndaSTlibmQ3L3JzWURwVlJkaTdUNHlTNzdNRnV1STZC?=
+ =?utf-8?B?NWg5bUtESDRoV05aUDR2TlVJemRXejJrVnlZTGVpWk0yUWI0djQxUnJLWXp5?=
+ =?utf-8?B?UklsbjA4SkhhUEhBY3d4cngvRDNNMVBZMmtXejlKcmFDSnpycW5Pcml6aXB4?=
+ =?utf-8?B?TmJnMWU1aG5nZWZ4c2RrVWxJODJVcFFqZW8xbkYzakxpeEhJVHpoNWYzekZv?=
+ =?utf-8?B?LzBDVXd3cTJhUVh3cDNZeTA2YnZ5RmFPWENHNC8xR2I5a3g0QW1rbG9ZTHpv?=
+ =?utf-8?B?b21OaGFHNEFaYkdHWmFDUVRkVThMcEhBNitOMXJzSnpwTmtFbGF0dG9uWWor?=
+ =?utf-8?B?VGRjNmVnVjVJZmNraFVXR1pEQm1ZTHBOeHlQNlpLbzV0NWJ0TlRhaWZzN0pq?=
+ =?utf-8?B?ZHdmNmt3YWFKYmJUdUZTVHduNjJyNjZHZDVXQnN2ZDd1UStZZEVzV0xJZmRT?=
+ =?utf-8?B?eno5VlNleVo1N0FsdU1xS0ZISmN3Z1RoN1ZnZmhoVG0zTmhXdTdBOXpZM1Ba?=
+ =?utf-8?B?T2xLWGJxOU5zTm1XU2pERlN2OFJ1TVh3YjJFSFhERWNFbXRNVlozVkI5dVpS?=
+ =?utf-8?B?UkozZ21GcTNDNldKdEJ2LzZFNTFoWjA0NjZkS25vUjJvdThqQXA2K0p6RitU?=
+ =?utf-8?B?Ujc2ZE1CdzRrS2RQZ3NGZkhFV0t5eituVVlCWXdNUlVPNnkwZStxQWVzc1hq?=
+ =?utf-8?B?V2o2OWVMUFVnSmJ1d0hSZ0dsdWtHOXN2QXp0bm0xdE00YVBWTkpsM1NxdmRP?=
+ =?utf-8?Q?7+OUjexx8jVUCt8k=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6820:2225:b0:65d:4d:422c with SMTP id
- 006d021491bc7-65d0eb22dcamr22478023eaf.78.1767601884035; Mon, 05 Jan 2026
- 00:31:24 -0800 (PST)
-Date: Mon, 05 Jan 2026 00:31:24 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <695b76dc.050a0220.1c9965.0028.GAE@google.com>
-Subject: [syzbot] [i2c?] [usb?] INFO: trying to register non-static key in i2c_register_adapter
-From: syzbot <syzbot+4718cc0f82054afeea8f@syzkaller.appspotmail.com>
-To: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com, 
-	wsa+renesas@sang-engineering.com
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYCPR01MB12093.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 59e66c5b-0ce5-4b96-b79d-08de4c3ae3fa
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Jan 2026 09:14:54.9473
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 31XJnZDqqShbr0td6W48ryOlSCm0Bc0mysT6SpD1FONf5obYXTwDNhAgI2B2iqOIi6WFjobIf+Q+wsapZZKDd6ORNTeZDJ3JqIXu9Izx1dI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSCPR01MB13063
 
-Hello,
-
-syzbot found the following issue on:
-
-HEAD commit:    b69053dd3ffb wifi: mt76: Remove blank line after mt792x fi..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=151caa9a580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=513255d80ab78f2b
-dashboard link: https://syzkaller.appspot.com/bug?extid=4718cc0f82054afeea8f
-compiler:       Debian clang version 20.1.8 (++20250708063551+0c9f909b7976-1~exp1~20250708183702.136), Debian LLD 20.1.8
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=131caa9a580000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=122377da580000
-
-Downloadable assets:
-disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/d900f083ada3/non_bootable_disk-b69053dd.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/1b892254af04/vmlinux-b69053dd.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/731f0d4ee97f/bzImage-b69053dd.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+4718cc0f82054afeea8f@syzkaller.appspotmail.com
-
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000002
-R13: 00007f297d9e5fa0 R14: 00007f297d9e5fa0 R15: 0000000000000003
- </TASK>
-i2c-core: adapter 'DigitalNow DVB-T Dual USB': can't register device (-22)
-INFO: trying to register non-static key.
-The code is fine but needs lockdep annotation, or maybe
-you didn't initialize this object before use?
-turning off the locking correctness validator.
-CPU: 0 UID: 0 PID: 5486 Comm: syz.0.17 Not tainted syzkaller #0 PREEMPT(full) 
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.3-debian-1.16.3-2~bpo12+1 04/01/2014
-Call Trace:
- <TASK>
- dump_stack_lvl+0xe8/0x150 lib/dump_stack.c:120
- assign_lock_key+0x133/0x150 kernel/locking/lockdep.c:984
- register_lock_class+0xcc/0x2e0 kernel/locking/lockdep.c:1299
- __lock_acquire+0xae/0x2cf0 kernel/locking/lockdep.c:5112
- lock_acquire+0x107/0x340 kernel/locking/lockdep.c:5868
- __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
- _raw_spin_lock_irqsave+0x40/0x60 kernel/locking/spinlock.c:162
- complete_with_flags kernel/sched/completion.c:25 [inline]
- complete+0x28/0x1b0 kernel/sched/completion.c:52
- device_release+0x9e/0x1d0 drivers/base/core.c:-1
- kobject_cleanup lib/kobject.c:689 [inline]
- kobject_release lib/kobject.c:720 [inline]
- kref_put include/linux/kref.h:65 [inline]
- kobject_put+0x228/0x570 lib/kobject.c:737
- i2c_register_adapter+0x75f/0x1150 drivers/i2c/i2c-core-base.c:1576
- dvb_usb_i2c_init+0x202/0x2f0 drivers/media/usb/dvb-usb/dvb-usb-i2c.c:31
- dvb_usb_init drivers/media/usb/dvb-usb/dvb-usb-init.c:183 [inline]
- dvb_usb_device_init+0xf23/0x2580 drivers/media/usb/dvb-usb/dvb-usb-init.c:310
- cxusb_probe+0xff/0x700 drivers/media/usb/dvb-usb/cxusb.c:1630
- usb_probe_interface+0x668/0xc90 drivers/usb/core/driver.c:396
- call_driver_probe drivers/base/dd.c:-1 [inline]
- really_probe+0x26d/0xad0 drivers/base/dd.c:659
- __driver_probe_device+0x18c/0x320 drivers/base/dd.c:801
- driver_probe_device+0x4f/0x240 drivers/base/dd.c:831
- __device_attach_driver+0x279/0x430 drivers/base/dd.c:959
- bus_for_each_drv+0x251/0x2e0 drivers/base/bus.c:500
- __device_attach+0x2b8/0x430 drivers/base/dd.c:1031
- proc_ioctl+0x447/0x6c0 drivers/usb/core/devio.c:2368
- proc_ioctl_default+0xbc/0x100 drivers/usb/core/devio.c:2403
- usbdev_do_ioctl drivers/usb/core/devio.c:2767 [inline]
- usbdev_ioctl+0x1367/0x20b0 drivers/usb/core/devio.c:2827
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:597 [inline]
- __se_sys_ioctl+0xfc/0x170 fs/ioctl.c:583
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0xec/0xf80 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7f297d78f7c9
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 a8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffef89f6238 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007f297d9e5fa0 RCX: 00007f297d78f7c9
-RDX: 0000200000000200 RSI: 00000000c0105512 RDI: 0000000000000004
-RBP: 00007ffef89f6290 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000002
-R13: 00007f297d9e5fa0 R14: 00007f297d9e5fa0 R15: 0000000000000003
- </TASK>
-BUG: unable to handle page fault for address: fffffffffffffff8
-#PF: supervisor read access in kernel mode
-#PF: error_code(0x0000) - not-present page
-PGD dd3f067 P4D dd3f067 PUD dd41067 PMD 0 
-Oops: Oops: 0000 [#1] SMP KASAN NOPTI
-CPU: 0 UID: 0 PID: 5486 Comm: syz.0.17 Not tainted syzkaller #0 PREEMPT(full) 
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.3-debian-1.16.3-2~bpo12+1 04/01/2014
-RIP: 0010:swake_up_locked kernel/sched/swait.c:30 [inline]
-RIP: 0010:complete_with_flags kernel/sched/completion.c:29 [inline]
-RIP: 0010:complete+0x99/0x1b0 kernel/sched/completion.c:52
-Code: 89 e7 e8 8a ab 8d 00 4d 8b 3c 24 4d 39 e7 0f 84 d4 00 00 00 49 8d 7f f8 48 89 f8 48 c1 e8 03 80 3c 28 00 74 05 e8 67 ab 8d 00 <49> 8b 7f f8 be 03 00 00 00 31 d2 e8 b7 60 f6 ff 4c 89 ff e8 df 51
-RSP: 0018:ffffc900083cf3f8 EFLAGS: 00010046
-RAX: 1fffffffffffffff RBX: ffff888040481638 RCX: dffffc0000000000
-RDX: 0000000000000001 RSI: 0000000000000004 RDI: fffffffffffffff8
-RBP: dffffc0000000000 R08: 0000000000000003 R09: 0000000000000004
-R10: dffffc0000000000 R11: fffff52001079e6c R12: ffff888040481678
-R13: 0000000000000001 R14: 0000000000000286 R15: 0000000000000000
-FS:  00005555621b9500(0000) GS:ffff88808d416000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: fffffffffffffff8 CR3: 000000001a1ba000 CR4: 0000000000352ef0
-Call Trace:
- <TASK>
- device_release+0x9e/0x1d0 drivers/base/core.c:-1
- kobject_cleanup lib/kobject.c:689 [inline]
- kobject_release lib/kobject.c:720 [inline]
- kref_put include/linux/kref.h:65 [inline]
- kobject_put+0x228/0x570 lib/kobject.c:737
- i2c_register_adapter+0x75f/0x1150 drivers/i2c/i2c-core-base.c:1576
- dvb_usb_i2c_init+0x202/0x2f0 drivers/media/usb/dvb-usb/dvb-usb-i2c.c:31
- dvb_usb_init drivers/media/usb/dvb-usb/dvb-usb-init.c:183 [inline]
- dvb_usb_device_init+0xf23/0x2580 drivers/media/usb/dvb-usb/dvb-usb-init.c:310
- cxusb_probe+0xff/0x700 drivers/media/usb/dvb-usb/cxusb.c:1630
- usb_probe_interface+0x668/0xc90 drivers/usb/core/driver.c:396
- call_driver_probe drivers/base/dd.c:-1 [inline]
- really_probe+0x26d/0xad0 drivers/base/dd.c:659
- __driver_probe_device+0x18c/0x320 drivers/base/dd.c:801
- driver_probe_device+0x4f/0x240 drivers/base/dd.c:831
- __device_attach_driver+0x279/0x430 drivers/base/dd.c:959
- bus_for_each_drv+0x251/0x2e0 drivers/base/bus.c:500
- __device_attach+0x2b8/0x430 drivers/base/dd.c:1031
- proc_ioctl+0x447/0x6c0 drivers/usb/core/devio.c:2368
- proc_ioctl_default+0xbc/0x100 drivers/usb/core/devio.c:2403
- usbdev_do_ioctl drivers/usb/core/devio.c:2767 [inline]
- usbdev_ioctl+0x1367/0x20b0 drivers/usb/core/devio.c:2827
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:597 [inline]
- __se_sys_ioctl+0xfc/0x170 fs/ioctl.c:583
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0xec/0xf80 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7f297d78f7c9
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 a8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffef89f6238 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007f297d9e5fa0 RCX: 00007f297d78f7c9
-RDX: 0000200000000200 RSI: 00000000c0105512 RDI: 0000000000000004
-RBP: 00007ffef89f6290 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000002
-R13: 00007f297d9e5fa0 R14: 00007f297d9e5fa0 R15: 0000000000000003
- </TASK>
-Modules linked in:
-CR2: fffffffffffffff8
----[ end trace 0000000000000000 ]---
-RIP: 0010:swake_up_locked kernel/sched/swait.c:30 [inline]
-RIP: 0010:complete_with_flags kernel/sched/completion.c:29 [inline]
-RIP: 0010:complete+0x99/0x1b0 kernel/sched/completion.c:52
-Code: 89 e7 e8 8a ab 8d 00 4d 8b 3c 24 4d 39 e7 0f 84 d4 00 00 00 49 8d 7f f8 48 89 f8 48 c1 e8 03 80 3c 28 00 74 05 e8 67 ab 8d 00 <49> 8b 7f f8 be 03 00 00 00 31 d2 e8 b7 60 f6 ff 4c 89 ff e8 df 51
-RSP: 0018:ffffc900083cf3f8 EFLAGS: 00010046
-RAX: 1fffffffffffffff RBX: ffff888040481638 RCX: dffffc0000000000
-RDX: 0000000000000001 RSI: 0000000000000004 RDI: fffffffffffffff8
-RBP: dffffc0000000000 R08: 0000000000000003 R09: 0000000000000004
-R10: dffffc0000000000 R11: fffff52001079e6c R12: ffff888040481678
-R13: 0000000000000001 R14: 0000000000000286 R15: 0000000000000000
-FS:  00005555621b9500(0000) GS:ffff88808d416000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: fffffffffffffff8 CR3: 000000001a1ba000 CR4: 0000000000352ef0
-----------------
-Code disassembly (best guess):
-   0:	89 e7                	mov    %esp,%edi
-   2:	e8 8a ab 8d 00       	call   0x8dab91
-   7:	4d 8b 3c 24          	mov    (%r12),%r15
-   b:	4d 39 e7             	cmp    %r12,%r15
-   e:	0f 84 d4 00 00 00    	je     0xe8
-  14:	49 8d 7f f8          	lea    -0x8(%r15),%rdi
-  18:	48 89 f8             	mov    %rdi,%rax
-  1b:	48 c1 e8 03          	shr    $0x3,%rax
-  1f:	80 3c 28 00          	cmpb   $0x0,(%rax,%rbp,1)
-  23:	74 05                	je     0x2a
-  25:	e8 67 ab 8d 00       	call   0x8dab91
-* 2a:	49 8b 7f f8          	mov    -0x8(%r15),%rdi <-- trapping instruction
-  2e:	be 03 00 00 00       	mov    $0x3,%esi
-  33:	31 d2                	xor    %edx,%edx
-  35:	e8 b7 60 f6 ff       	call   0xfff660f1
-  3a:	4c 89 ff             	mov    %r15,%rdi
-  3d:	e8                   	.byte 0xe8
-  3e:	df                   	.byte 0xdf
-  3f:	51                   	push   %rcx
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+PiBGcm9tOiBCYXJ0b3N6IEdvbGFzemV3c2tpIDxiYXJ0b3N6LmdvbGFzemV3c2tpQG9zcy5xdWFs
+Y29tbS5jb20+DQo+IFNlbnQ6IDIzIERlY2VtYmVyIDIwMjUgMTA6MDcNCj4gVG86IHdzYStyZW5l
+c2FzIDx3c2ErcmVuZXNhc0BzYW5nLWVuZ2luZWVyaW5nLmNvbT47IE1pa2EgV2VzdGVyYmVyZyA8
+bWlrYS53ZXN0ZXJiZXJnQGxpbnV4LmludGVsLmNvbT47DQo+IEFuZHkgU2hldmNoZW5rbyA8YW5k
+cml5LnNoZXZjaGVua29AbGludXguaW50ZWwuY29tPjsgSmFuIERhYnJvcyA8anNkQHNlbWloYWxm
+LmNvbT47IEFuZGkgU2h5dGkNCj4gPGFuZGkuc2h5dGlAa2VybmVsLm9yZz47IExpeHUgWmhhbmcg
+PGxpeHUuemhhbmdAaW50ZWwuY29tPjsgU2FrYXJpIEFpbHVzDQo+IDxzYWthcmkuYWlsdXNAbGlu
+dXguaW50ZWwuY29tPjsgQmluYmluIFpob3UgPHpob3ViaW5iaW5AbG9vbmdzb24uY24+OyBGYWJy
+aXppbyBDYXN0cm8NCj4gPGZhYnJpemlvLmNhc3Ryby5qekByZW5lc2FzLmNvbT47IElzcmFlbCBD
+ZXBlZGEgPGlzcmFlbC5hLmNlcGVkYS5sb3BlekBpbnRlbC5jb20+OyBIYW5zIGRlIEdvZWRlDQo+
+IDxoYW5zZ0BrZXJuZWwub3JnPg0KPiBDYzogQmFydG9zeiBHb2xhc3pld3NraSA8YnJnbEBrZXJu
+ZWwub3JnPjsgbGludXgtaTJjQHZnZXIua2VybmVsLm9yZzsgbGludXgta2VybmVsQHZnZXIua2Vy
+bmVsLm9yZzsNCj4gbGludXgtcmVuZXNhcy1zb2NAdmdlci5rZXJuZWwub3JnOyBCYXJ0b3N6IEdv
+bGFzemV3c2tpIDxiYXJ0b3N6LmdvbGFzemV3c2tpQG9zcy5xdWFsY29tbS5jb20+DQo+IFN1Ympl
+Y3Q6IFtQQVRDSCA2LzddIGkyYzogcnp2Mm06IHVzZSBpMmNfYWRhcHRlcl9zZXRfbm9kZSgpDQo+
+IA0KPiBVc2UgdGhlIGRlZGljYXRlZCB3cmFwcGVyIGZvciBzZXR0aW5nIHRoZSBmd25vZGUgb2Yg
+dGhlIGkyY19hZGFwdGVyLg0KPiBUaGlzIGFsbG93cyB1cyB0byBoaWRlIHRoZSBkZXJlZmVyZW5j
+aW5nIG9mIHRoZSBlbWJlZGRlZCBzdHJ1Y3QgZGV2aWNlLg0KPiANCj4gU2lnbmVkLW9mZi1ieTog
+QmFydG9zeiBHb2xhc3pld3NraSA8YmFydG9zei5nb2xhc3pld3NraUBvc3MucXVhbGNvbW0uY29t
+Pg0KDQpSZXZpZXdlZC1ieTogRmFicml6aW8gQ2FzdHJvIDxmYWJyaXppby5jYXN0cm8uanpAcmVu
+ZXNhcy5jb20+DQoNCj4gLS0tDQo+ICBkcml2ZXJzL2kyYy9idXNzZXMvaTJjLXJ6djJtLmMgfCAy
+ICstDQo+ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkNCj4g
+DQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2kyYy9idXNzZXMvaTJjLXJ6djJtLmMgYi9kcml2ZXJz
+L2kyYy9idXNzZXMvaTJjLXJ6djJtLmMNCj4gaW5kZXggMjM4NzE0ODUwNjczNmE2NTM3ODgwOTk3
+MWJmYmRkZmI0MzZiNmM0ZC4uZjMxZDViOTA4MDI0NzdhM2QyNzU1N2E0YTkyY2EyYjI2MDIzZTM0
+MyAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1yenYybS5jDQo+ICsrKyBi
+L2RyaXZlcnMvaTJjL2J1c3Nlcy9pMmMtcnp2Mm0uYw0KPiBAQCAtNDUxLDcgKzQ1MSw3IEBAIHN0
+YXRpYyBpbnQgcnp2Mm1faTJjX3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpDQo+
+ICAJYWRhcC0+cXVpcmtzID0gJnJ6djJtX2kyY19xdWlya3M7DQo+ICAJYWRhcC0+ZGV2LnBhcmVu
+dCA9IGRldjsNCj4gIAlhZGFwLT5vd25lciA9IFRISVNfTU9EVUxFOw0KPiAtCWRldmljZV9zZXRf
+bm9kZSgmYWRhcC0+ZGV2LCBkZXZfZndub2RlKGRldikpOw0KPiArCWkyY19hZGFwdGVyX3NldF9u
+b2RlKGFkYXAsIGRldl9md25vZGUoZGV2KSk7DQo+ICAJaTJjX3NldF9hZGFwZGF0YShhZGFwLCBw
+cml2KTsNCj4gIAlzdHJzY3B5KGFkYXAtPm5hbWUsIHBkZXYtPm5hbWUsIHNpemVvZihhZGFwLT5u
+YW1lKSk7DQo+ICAJaW5pdF9jb21wbGV0aW9uKCZwcml2LT5tc2dfdGlhX2RvbmUpOw0KPiANCj4g
+LS0NCj4gMi40Ny4zDQoNCg==
 
