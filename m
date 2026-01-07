@@ -1,44 +1,44 @@
-Return-Path: <linux-i2c+bounces-14960-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14962-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24C69CFD3D9
-	for <lists+linux-i2c@lfdr.de>; Wed, 07 Jan 2026 11:46:21 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 24137CFD4D5
+	for <lists+linux-i2c@lfdr.de>; Wed, 07 Jan 2026 12:02:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 9AFD3300EDC9
-	for <lists+linux-i2c@lfdr.de>; Wed,  7 Jan 2026 10:45:49 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 456BA30727D4
+	for <lists+linux-i2c@lfdr.de>; Wed,  7 Jan 2026 11:01:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFAA830276A;
-	Wed,  7 Jan 2026 10:35:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E0B430E83E;
+	Wed,  7 Jan 2026 10:35:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JSQ50ZwX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r+mBiSsk"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E071301037;
-	Wed,  7 Jan 2026 10:35:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41C8430CDAE;
+	Wed,  7 Jan 2026 10:35:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767782137; cv=none; b=gp0ZERn8CJ9sAKJ9uc4fUGUFeaSadZ4bjVHuTqVeFTdhCCQgGrIAojKnlCW08VTPTm8QdGhQbQRQBS59SUINpdgx8ctRmQoZodrEjZRmtLT/CvkNN4HfBdiyd7wZ5atl2FJ3uiYSOyOSXWhs+shZU2RGYyTDH732lJjPMUNQX9I=
+	t=1767782147; cv=none; b=oQ5RmDw0FBkXrwA8tvC/HVW3sN8h95MknfCVBzzhtMYL3s6EElpLbDLAifuZK0neekTU0ElLQn7ZAYew9MlPxtEDAH9J4ZXHwdH/nFK6FvkZ40xdKHvg5gIwaK7SY4bAaeoQH/T+XKJyKKe9fRf0KELfnYer5iYA0swtVc960MA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767782137; c=relaxed/simple;
-	bh=UrLC3ImC0rFV+2liGhx/jCiQxmj7gIB4UnCVUnC/S1M=;
+	s=arc-20240116; t=1767782147; c=relaxed/simple;
+	bh=nKi5JZBd4Qk8YIPjid5tlqj4dzXK6qTcsyr69Qf6nDA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Fdtn4WHdmPlw/bjMmZyO/mdp6H5mnzCh/N7syvbTf6NBIo6Xldlwn04BrOQApWL82Sr82b3SdknnlzwthLEifpnw26miyNIoUKA/tA7S/QZcPOsyspjIkmNbxaaxH6IbBEGWoTtVerbUYVH/GZYI6/SFiAihNrDmYOZfLcpaJB0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JSQ50ZwX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A74A9C4CEF7;
-	Wed,  7 Jan 2026 10:35:32 +0000 (UTC)
+	 MIME-Version; b=l/3bvHZVH74IbOiedYlVF1gWqaDhLzjLHrzwmif8ZqZhxh7+4k013CWeqYez1x/3eNh9dlsTreAGMas4GcABvGNSF5kBiiaWgmZtykc8kraRIY+q+Pt6btii9yUyzaPx1qmRSFbxjmTSPT4u+ZYnlXrbw7qmfNMK0i4uZQ4HrsU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r+mBiSsk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67854C4CEF7;
+	Wed,  7 Jan 2026 10:35:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767782137;
-	bh=UrLC3ImC0rFV+2liGhx/jCiQxmj7gIB4UnCVUnC/S1M=;
+	s=k20201202; t=1767782146;
+	bh=nKi5JZBd4Qk8YIPjid5tlqj4dzXK6qTcsyr69Qf6nDA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=JSQ50ZwXMKZcLWiBQQtmKoFnSudxMxgQ9mNHoxA9dU/xiN9qTIqrDkBLbWPNXkKxz
-	 fuahCVkdHnmPljBGfVc+PkIG2Vyept8vzUaPl7Go+xta5cxde/azhgwn2JEak2Hom+
-	 1S0WV0pRfagA59n+Q8fvkdRgyUIzBjOId02IAO0+BbWF2FjGfrG4JLFRd+V1JIfxwa
-	 hwMhzlQ5K4psogXzeAO5aPYjDso4G1xi/NNIn2QkmXOlZIwC07jzYLcSsU6BbrK1qz
-	 DmUn0avEpXTNfG5wMIY3znKgX98gpykFvA+IlCb741n6RITWDGY//EXKwRNnjJeErs
-	 mh6CPdl0xZbfw==
+	b=r+mBiSsk5pT2PDoez9jdXvUDuOz5SBSzJa4x+uu+vPQbLAZt/W1ILE2h92MagbJau
+	 r5A01hhBHIBeUcotbR0EDJsl6W2Xb0IYKDgxP3yVglfwqvQTaXXih4zXqJ5NY8VbWS
+	 1aUQGUg7zSuYJa9VbkcfIp/LtcQNOpThMie4L+xoMHeY+QmmDf8+lVva2DPAXnPcdd
+	 1tImBwGh/TLZHUdaoBTwlfAJwOtAUv/9/6Vu53kMybQIW2b6NDLWZeIglTIyztUoTj
+	 TOUblttDkuAPqIN+s55lJK00oBEfYP0qdOP8YOk3yNRu7jnJRtMsGtxekTkMrBYKuO
+	 4H0ElNJy5YUrA==
 From: Danilo Krummrich <dakr@kernel.org>
 To: gregkh@linuxfoundation.org,
 	rafael@kernel.org,
@@ -63,9 +63,9 @@ Cc: linux-kernel@vger.kernel.org,
 	linux-usb@vger.kernel.org,
 	linux-i2c@vger.kernel.org,
 	Danilo Krummrich <dakr@kernel.org>
-Subject: [PATCH 2/6] rust: auxiliary: add Driver::unbind() callback
-Date: Wed,  7 Jan 2026 11:35:01 +0100
-Message-ID: <20260107103511.570525-3-dakr@kernel.org>
+Subject: [PATCH 4/6] rust: driver: add DEVICE_DRIVER_OFFSET to the Driver trait
+Date: Wed,  7 Jan 2026 11:35:03 +0100
+Message-ID: <20260107103511.570525-5-dakr@kernel.org>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260107103511.570525-1-dakr@kernel.org>
 References: <20260107103511.570525-1-dakr@kernel.org>
@@ -77,55 +77,123 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add missing unbind() callback to auxiliary::Driver, since it will be
-needed by drivers eventually (e.g. the Nova DRM driver).
+Add an associated const DEVICE_DRIVER_OFFSET to the Driver trait
+indicating the offset of the embedded struct device_driver within
+Self::DriverType, i.e. the specific driver structs, such as
+struct pci_driver or struct platform_driver.
 
 Signed-off-by: Danilo Krummrich <dakr@kernel.org>
 ---
- Strictly speaking, this is not a dependency, but without this patch the main
- fix of this series leaves the remove() callback of the auxiliary bus
- abstraction with either dead code or quite some code removed; code that we
- would otherwise add back immediately afterwards.
----
- rust/kernel/auxiliary.rs | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+ rust/kernel/auxiliary.rs | 3 +++
+ rust/kernel/driver.rs    | 8 +++++++-
+ rust/kernel/i2c.rs       | 3 +++
+ rust/kernel/pci.rs       | 3 +++
+ rust/kernel/platform.rs  | 3 +++
+ rust/kernel/usb.rs       | 3 +++
+ 6 files changed, 22 insertions(+), 1 deletion(-)
 
 diff --git a/rust/kernel/auxiliary.rs b/rust/kernel/auxiliary.rs
-index 56f3c180e8f6..6931f8a4267f 100644
+index 4636b6f41195..e712d1b89dc3 100644
 --- a/rust/kernel/auxiliary.rs
 +++ b/rust/kernel/auxiliary.rs
-@@ -87,7 +87,9 @@ extern "C" fn remove_callback(adev: *mut bindings::auxiliary_device) {
-         // SAFETY: `remove_callback` is only ever called after a successful call to
-         // `probe_callback`, hence it's guaranteed that `Device::set_drvdata()` has been called
-         // and stored a `Pin<KBox<T>>`.
--        drop(unsafe { adev.as_ref().drvdata_obtain::<T>() });
-+        let data = unsafe { adev.as_ref().drvdata_obtain::<T>() };
-+
-+        T::unbind(adev, data.as_ref());
-     }
+@@ -25,8 +25,11 @@
+ 
+ // SAFETY:
+ // - `bindings::auxiliary_driver` is a C type declared as `repr(C)`.
++// - `struct auxiliary_driver` embeds a `struct device_driver`.
++// - `DEVICE_DRIVER_OFFSET` is the correct byte offset to the embedded `struct device_driver`.
+ unsafe impl<T: Driver + 'static> driver::Driver for Adapter<T> {
+     type DriverType = bindings::auxiliary_driver;
++    const DEVICE_DRIVER_OFFSET: usize = core::mem::offset_of!(Self::DriverType, driver);
  }
  
-@@ -187,6 +189,20 @@ pub trait Driver {
-     ///
-     /// Called when an auxiliary device is matches a corresponding driver.
-     fn probe(dev: &Device<device::Core>, id_info: &Self::IdInfo) -> impl PinInit<Self, Error>;
+ // SAFETY: A call to `unregister` for a given instance of `DriverType` is guaranteed to be valid if
+diff --git a/rust/kernel/driver.rs b/rust/kernel/driver.rs
+index cd1d36c313e1..4b0c53b7d22a 100644
+--- a/rust/kernel/driver.rs
++++ b/rust/kernel/driver.rs
+@@ -107,10 +107,16 @@
+ /// # Safety
+ ///
+ /// Implementors must guarantee that:
+-/// - `DriverType` is `repr(C)`.
++/// - `DriverType` is `repr(C)`,
++/// - `DriverType` embeds a valid `struct device_driver` at byte offset `DEVICE_DRIVER_OFFSET`.
+ pub unsafe trait Driver {
+     /// The specific driver type embedding a `struct device_driver`.
+     type DriverType: Default;
 +
-+    /// Auxiliary driver unbind.
++    /// Byte offset of the embedded `struct device_driver` within `DriverType`.
 +    ///
-+    /// Called when a [`Device`] is unbound from its bound [`Driver`]. Implementing this callback
-+    /// is optional.
-+    ///
-+    /// This callback serves as a place for drivers to perform teardown operations that require a
-+    /// `&Device<Core>` or `&Device<Bound>` reference. For instance, drivers may try to perform I/O
-+    /// operations to gracefully tear down the device.
-+    ///
-+    /// Otherwise, release operations for driver resources should be performed in `Self::drop`.
-+    fn unbind(dev: &Device<device::Core>, this: Pin<&Self>) {
-+        let _ = (dev, this);
-+    }
++    /// This must correspond exactly to the location of the embedded `struct device_driver` field.
++    const DEVICE_DRIVER_OFFSET: usize;
  }
  
- /// The auxiliary device representation.
+ /// The [`RegistrationOps`] trait serves as generic interface for subsystems (e.g., PCI, Platform,
+diff --git a/rust/kernel/i2c.rs b/rust/kernel/i2c.rs
+index de35961c6903..56f1ed8163a0 100644
+--- a/rust/kernel/i2c.rs
++++ b/rust/kernel/i2c.rs
+@@ -94,8 +94,11 @@ macro_rules! i2c_device_table {
+ 
+ // SAFETY:
+ // - `bindings::i2c_driver` is a C type declared as `repr(C)`.
++// - `struct i2c_driver` embeds a `struct device_driver`.
++// - `DEVICE_DRIVER_OFFSET` is the correct byte offset to the embedded `struct device_driver`.
+ unsafe impl<T: Driver + 'static> driver::Driver for Adapter<T> {
+     type DriverType = bindings::i2c_driver;
++    const DEVICE_DRIVER_OFFSET: usize = core::mem::offset_of!(Self::DriverType, driver);
+ }
+ 
+ // SAFETY: A call to `unregister` for a given instance of `DriverType` is guaranteed to be valid if
+diff --git a/rust/kernel/pci.rs b/rust/kernel/pci.rs
+index f58ce35d9c60..68466150ef20 100644
+--- a/rust/kernel/pci.rs
++++ b/rust/kernel/pci.rs
+@@ -52,8 +52,11 @@
+ 
+ // SAFETY:
+ // - `bindings::pci_driver` is a C type declared as `repr(C)`.
++// - `struct pci_driver` embeds a `struct device_driver`.
++// - `DEVICE_DRIVER_OFFSET` is the correct byte offset to the embedded `struct device_driver`.
+ unsafe impl<T: Driver + 'static> driver::Driver for Adapter<T> {
+     type DriverType = bindings::pci_driver;
++    const DEVICE_DRIVER_OFFSET: usize = core::mem::offset_of!(Self::DriverType, driver);
+ }
+ 
+ // SAFETY: A call to `unregister` for a given instance of `DriverType` is guaranteed to be valid if
+diff --git a/rust/kernel/platform.rs b/rust/kernel/platform.rs
+index e48d055fdc8a..56d9e968634e 100644
+--- a/rust/kernel/platform.rs
++++ b/rust/kernel/platform.rs
+@@ -28,8 +28,11 @@
+ 
+ // SAFETY:
+ // - `bindings::platform_driver` is a C type declared as `repr(C)`.
++// - `struct platform_driver` embeds a `struct device_driver`.
++// - `DEVICE_DRIVER_OFFSET` is the correct byte offset to the embedded `struct device_driver`.
+ unsafe impl<T: Driver + 'static> driver::Driver for Adapter<T> {
+     type DriverType = bindings::platform_driver;
++    const DEVICE_DRIVER_OFFSET: usize = core::mem::offset_of!(Self::DriverType, driver);
+ }
+ 
+ // SAFETY: A call to `unregister` for a given instance of `DriverType` is guaranteed to be valid if
+diff --git a/rust/kernel/usb.rs b/rust/kernel/usb.rs
+index 32f4b2d55dfb..a9a9d2298d87 100644
+--- a/rust/kernel/usb.rs
++++ b/rust/kernel/usb.rs
+@@ -29,8 +29,11 @@
+ 
+ // SAFETY:
+ // - `bindings::usb_driver` is a C type declared as `repr(C)`.
++// - `struct usb_driver` embeds a `struct device_driver`.
++// - `DEVICE_DRIVER_OFFSET` is the correct byte offset to the embedded `struct device_driver`.
+ unsafe impl<T: Driver + 'static> driver::Driver for Adapter<T> {
+     type DriverType = bindings::usb_driver;
++    const DEVICE_DRIVER_OFFSET: usize = core::mem::offset_of!(Self::DriverType, driver);
+ }
+ 
+ // SAFETY: A call to `unregister` for a given instance of `DriverType` is guaranteed to be valid if
 -- 
 2.52.0
 
