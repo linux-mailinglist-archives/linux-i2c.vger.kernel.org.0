@@ -1,145 +1,121 @@
-Return-Path: <linux-i2c+bounces-14969-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14970-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id F18F2CFDC83
-	for <lists+linux-i2c@lfdr.de>; Wed, 07 Jan 2026 13:57:18 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D0F01CFDF1B
+	for <lists+linux-i2c@lfdr.de>; Wed, 07 Jan 2026 14:29:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1FA6C3025FBE
-	for <lists+linux-i2c@lfdr.de>; Wed,  7 Jan 2026 12:50:53 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id C575C300BDA7
+	for <lists+linux-i2c@lfdr.de>; Wed,  7 Jan 2026 13:29:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F6F431A55F;
-	Wed,  7 Jan 2026 12:50:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B68A33F8CF;
+	Wed,  7 Jan 2026 13:28:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="flAh5htV"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="LfLxdgSL"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0DF51B142D;
-	Wed,  7 Jan 2026 12:50:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB55B329370
+	for <linux-i2c@vger.kernel.org>; Wed,  7 Jan 2026 13:28:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767790250; cv=none; b=i5DrCRxt8Il0v5VmBqsb2MGrrUtlLy647341MtNDpSfL9cyqgYchZndylwREz9UqZcU/vDh+XyFxekkdsu4ocYribpKcY+bln5I5K7lgQ+54zuuWe0FtmsOv4vm3NgBNInEjzM0rIDcf6xJ1oyuE/e2dwUOvPoU/PFeWTWbbt6M=
+	t=1767792512; cv=none; b=jV2H6jWiKR+wFCbiYKnkBdpe287Enq3K71rNjL5W4SdG/wlcYeW4cquY6T8xZqm8AP4caDQsHoWkxvis2F8nG1Af0zndRd0OclEx9EUE2ochaVT2BZcgWSDPT2TrwcphBt+tr7pSYdEAtdwDOzOm9f8w4a7hWfXwgJuf8cEsgR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767790250; c=relaxed/simple;
-	bh=LrCttn75laUEARHSY9uq0348C+BZ/PrAY/VxWiFQf3A=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=BVPCxC4leQvDoebsFeJJCF7OIQNhEXLMGs3b+H0XMdKGaR11z45nqujvXwMIYcDYBlcKB5yo2cnEOOIv40vXgea/1QzIWLzmJBDTOL4NhaP9nVfZquHhYpouvkkmqz4Xjf1vKCngaeyep+V+j+jW/LLl46Jqpr/3FjS8kHZ7+ec=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=flAh5htV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5529BC4CEF7;
-	Wed,  7 Jan 2026 12:50:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767790249;
-	bh=LrCttn75laUEARHSY9uq0348C+BZ/PrAY/VxWiFQf3A=;
-	h=Date:Subject:Cc:To:From:References:In-Reply-To:From;
-	b=flAh5htVM+Oo/T088+PXWkGHVSz/y4TJwNObPO/WKTea44Th3Dt+UvslGsW1x9Chu
-	 z/8XcS7JsRu7w8jHqQXoYR5xrLZqPDWeLVZjd/0dnDNqraJ/d665w8F4ZO1wyH5IUP
-	 2uIKLGP5c5N2wgqWjS9+C2x9xcv0y7rafy/HY55UnKjb15I1MX5HTxRtg0i8Ae5gkl
-	 Wo4ymcxkAkOuEaJvjrnySs4w5UpM9ucJbBD6NKdbW8TZ4Sb2BuYRrAncWqgbkDvlgR
-	 MTNydXt7Hd1wka3czmXVpO/dEyjKySSkvjfXt/i+UkGp0YWY3FCKExWc3Au1m8G+cF
-	 I3YtVmKGAp5Rw==
+	s=arc-20240116; t=1767792512; c=relaxed/simple;
+	bh=4043nn6qswbC3R1CDYRZmMZVB+UZoK9L+jeskiyq/IQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Q7J8EVEQ5cEWn82OqUmblJPoaT6iBv2PBkg5tw4nvpbWNIFANI+XyszkWGOjXl/r4f6DyMIoln+Bxiw//vnJWDwr39K8TqFDRbtoFpLWc67DajtrsdX9ELykbVU+WoBIPpjwcLO262Tjr3GkdTiPaLdrTMRq+ZqrxFD0EWkihhw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=LfLxdgSL; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-477ba2c1ca2so21921445e9.2
+        for <linux-i2c@vger.kernel.org>; Wed, 07 Jan 2026 05:28:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1767792508; x=1768397308; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=N8DjhrIBjxiw5uwIMKqO1RXHujHZ57yqKGJRAwZxaGU=;
+        b=LfLxdgSLHowF9BD93MXtMEea6vhrKlX9yuQ7UjaPTJY+5BoMYyRcbTvNavC3tf4QFN
+         0EGaUHQLNyZRcGcZj8u02jtc2WkJDzpoARR1i4ING/6nVvXjztt6KvNlIhjrBWF6MJYL
+         7AEDfWrSDewXpwqyd5nFyE/bJpHWxfnIRJyRyZbSvXwBSfKchcI/Q7ASIqEipcAVeFKx
+         tiXKqVcpg6eRdeZug4rTz9SagXaYb8le66NjQBq63iYXCP7MHaLMBAhOAD9BnRXkPtu3
+         4FU7GZZ5U03d8QJuOsFQWA+AUWOBnZlsRHr7aXuzKDmz9rR8d4mJLTbGTmeVFp+7CryV
+         wUWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767792508; x=1768397308;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=N8DjhrIBjxiw5uwIMKqO1RXHujHZ57yqKGJRAwZxaGU=;
+        b=G0cC4npKeSLctfWtjPHMsGobsUYaR2cY4TSxSRdrkrcyUJfdqSts+LLh8g4P4qZTvH
+         zehJsV2lDfsjlBGtDmP+D7aTsf4uPQCx3e+Dugz4YSYdG8M+BA5oBhuoJe+D0l9jbaQt
+         5wqdGMeFlPW4q2XXqddBNSUOdnVUUb87d7UHQebcto+rJ43ptyP/EhsHnVOsoXiWJFaZ
+         e0hbiw7rjeLiNZJNsNN1BSwnDAVtuuC8PVBkamypzz8GUghJgZVVxeT2TZYglrmJqPKZ
+         Loa+m9vhx/OOC5p4kB6ev75LI5tKeSsF+0oSPGMcwrFw7gB77fj176Bx9GOPtlHaUqg3
+         WULw==
+X-Gm-Message-State: AOJu0YwhrIzqpDk/zoIlJ8eVzKNUjeYTtni4w5YcWzMODVcTTGz4Ki1S
+	PZjiFu4nX2t1SMips0oVttC67/0PN2C82d7wbSfuhplac6qmino69Dals3K+gkTgXtM=
+X-Gm-Gg: AY/fxX62cecFqnkUggR0WuRRVcwIzAIDdkhitWkNRfnRXQiATWqSQJDLnsm+PA2+/6u
+	HeG3Mnr/J8CLwE/8uNMfkcA/P1BWHhV//7NBN416Uq2QpExJSryh98OGm4QKBAl8bQ4zC2MWJz2
+	vozFaJ8Fk0KkOuZhMbmBbGcCJVyUaWApyNnbh3DvSrycQeTYJYFq4QqbAFVf4ktZLod+zWwKBzr
+	zTEIjKCugrdeaMouAi7oUpu9EYuqSq3us0ch2TIkvrRsE7JYy5Hv3Fvb/sSs+mu0om1gyYgzeHG
+	x5ba+4nsXM6uXSG43m/Y1rfVBuy8BuFQ5moOmLWVdnqsZCS4P5F9whjdgo2lUwhfgFbmYrweCO9
+	heoPD4amQyrwldXpYUUIDw/g+8Z21UcKACfXUgm5nVoMsM7eahU+MBmf8CINsEMjhQIObpbSWmJ
+	MbxTYfhpNGBlsmZeI70PMlm2xLiFMYpB7XrjAXAOY7FA9GpmiS/DArDnabcdTQzSw=
+X-Google-Smtp-Source: AGHT+IF+Nsaoa5Avs43YfgZgEUZD/BpbPQ3IhAdlo4fic+DilL/m+MXb7BEEQIQBujANzszqHLm1rA==
+X-Received: by 2002:a05:600c:3b90:b0:45d:d8d6:7fcc with SMTP id 5b1f17b1804b1-47d84b3864cmr32189615e9.27.1767792508026;
+        Wed, 07 Jan 2026 05:28:28 -0800 (PST)
+Received: from [192.168.0.40] (188-141-3-146.dynamic.upc.ie. [188.141.3.146])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47d865f84besm14380385e9.1.2026.01.07.05.28.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Jan 2026 05:28:27 -0800 (PST)
+Message-ID: <87c2ac96-5c30-40e2-8f89-55b7c3417db8@linaro.org>
+Date: Wed, 7 Jan 2026 13:28:26 +0000
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 07 Jan 2026 13:50:43 +0100
-Message-Id: <DFIDCAL68R7N.8SYKSAF0JO4C@kernel.org>
-Subject: Re: [PATCH 6/6] rust: driver: drop device private data post unbind
-Cc: <rafael@kernel.org>, <igor.korotin.linux@gmail.com>, <ojeda@kernel.org>,
- <boqun.feng@gmail.com>, <gary@garyguo.net>, <bjorn3_gh@protonmail.com>,
- <lossin@kernel.org>, <a.hindborg@kernel.org>, <aliceryhl@google.com>,
- <tmgross@umich.edu>, <david.m.ertman@intel.com>, <ira.weiny@intel.com>,
- <leon@kernel.org>, <bhelgaas@google.com>, <kwilczynski@kernel.org>,
- <wsa+renesas@sang-engineering.com>, <linux-kernel@vger.kernel.org>,
- <rust-for-linux@vger.kernel.org>, <linux-pci@vger.kernel.org>,
- <linux-usb@vger.kernel.org>, <linux-i2c@vger.kernel.org>
-To: "Greg KH" <gregkh@linuxfoundation.org>
-From: "Danilo Krummrich" <dakr@kernel.org>
-References: <20260107103511.570525-1-dakr@kernel.org>
- <20260107103511.570525-7-dakr@kernel.org>
- <2026010741-wiry-trophy-46ec@gregkh>
-In-Reply-To: <2026010741-wiry-trophy-46ec@gregkh>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 4/4] arm64: dts: qcom: talos-evk-camera: Add DT overlay
+To: Wenmeng Liu <wenmeng.liu@oss.qualcomm.com>,
+ Loic Poulain <loic.poulain@oss.qualcomm.com>, Robert Foss
+ <rfoss@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konradybcio@kernel.org>, Todor Tomov <todor.too@gmail.com>,
+ Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+Cc: linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-media@vger.kernel.org
+References: <20260106-sm6150_evk-v2-0-bb112cb83d74@oss.qualcomm.com>
+ <20260106-sm6150_evk-v2-4-bb112cb83d74@oss.qualcomm.com>
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Content-Language: en-US
+In-Reply-To: <20260106-sm6150_evk-v2-4-bb112cb83d74@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed Jan 7, 2026 at 1:22 PM CET, Greg KH wrote:
-> On Wed, Jan 07, 2026 at 11:35:05AM +0100, Danilo Krummrich wrote:
->> @@ -548,6 +548,10 @@ static DEVICE_ATTR_RW(state_synced);
->>  static void device_unbind_cleanup(struct device *dev)
->>  {
->>  	devres_release_all(dev);
->> +#ifdef CONFIG_RUST
->
-> Nit, let's not put #ifdef in .c files, the overhead of an empty pointer
-> for all drivers is not a big deal.
+On 06/01/2026 09:39, Wenmeng Liu wrote:
+> Enable IMX577 via CCI on Taloss EVK Core Kit.
+> 
+> The Talos EVK board does not include a camera sensor
+> by default, this overlay reflects the possibility of
+> attaching an optional camera sensor.
+> For this reason, the camera sensor configuration is
+> placed in talos-evk-camera.dtso, rather than
+> modifying the base talos-evk.dts.
+I'm not sure how many headers there are on this board but could you 
+include in the commit log which one of those ports the sensor should be 
+attached to.
 
-I agree, I mainly did it to make it clear that, as by now, this is only use=
-d by
-Rust driver-core code. However, ...
+As I look at the RB5 board for example we have CAM1, CAM2 where as it 
+happens CAM2 == imx577 for that mezzanine.
 
->> +	if (dev->driver->p_cb.post_unbind)
->> +		dev->driver->p_cb.post_unbind(dev);
->> +#endif
-
-<snip>
-
->> +	struct {
->> +		/*
->> +		 * Called after remove() and after all devres entries have been
->> +		 * processed.
->> +		 */
->> +		void (*post_unbind)(struct device *dev);
->
-> post_unbind_rust_only()?
-
-...this works as well. We can always rename it, in case we start using it i=
-n C
-too.
-
-So, I'm fine with either. :)
-
->> -impl<T: RegistrationOps> Registration<T> {
->> +impl<T: RegistrationOps + 'static> Registration<T> {
->> +    extern "C" fn post_unbind_callback(dev: *mut bindings::device) {
->> +        // SAFETY: The driver core only ever calls the post unbind call=
-back with a valid pointer to
->> +        // a `struct device`.
->> +        //
->> +        // INVARIANT: `dev` is valid for the duration of the `post_unbi=
-nd_callback()`.
->> +        let dev =3D unsafe { &*dev.cast::<device::Device<device::CoreIn=
-ternal>>() };
->> +
->> +        // `remove()` and all devres callbacks have been completed at t=
-his point, hence drop the
->> +        // driver's device private data.
->> +        //
->> +        // SAFETY: By the safety requirements of the `Driver` trait, `T=
-::DriverData` is the
->> +        // driver's device private data.
->> +        drop(unsafe { dev.drvdata_obtain::<T::DriverData>() });
->
-> I don't mind this, but why don't we also do this for all C drivers?
-
-What exactly do you mean? Manage the lifetime of the device private data
-commonly in driver-core code?
-
-> Just null out the pointer at this point in time so that no one can touch
-> it, just like you are doing here (in a way.)
-
-I think device_unbind_cleanup() already calls dev_set_drvdata(dev, NULL) [1=
-], so
-technically we do not have to do it necessarily in Device::drvdata_obtain()=
- as
-well.
-
-However, with Device::drvdata_obtain() we take back ownership of the
-Pin<KBox<T>> stored in dev->driver_data, so it makes sense to null out the
-pointer at exactly this point in time.
-
-[1] https://elixir.bootlin.com/linux/v6.19-rc4/source/drivers/base/dd.c#L55=
-5
+---
+bod
 
