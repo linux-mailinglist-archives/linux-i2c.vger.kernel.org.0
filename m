@@ -1,90 +1,93 @@
-Return-Path: <linux-i2c+bounces-14941-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14942-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74A59CFBEEC
-	for <lists+linux-i2c@lfdr.de>; Wed, 07 Jan 2026 05:25:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 70DE3CFBEF8
+	for <lists+linux-i2c@lfdr.de>; Wed, 07 Jan 2026 05:25:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E7D4F30262B8
-	for <lists+linux-i2c@lfdr.de>; Wed,  7 Jan 2026 04:24:56 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 732743027D95
+	for <lists+linux-i2c@lfdr.de>; Wed,  7 Jan 2026 04:25:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0850D22FDE6;
-	Wed,  7 Jan 2026 04:24:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B29E22FDE6;
+	Wed,  7 Jan 2026 04:25:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Fg7bBiJM"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="trw1uUj6"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from DM5PR21CU001.outbound.protection.outlook.com (mail-centralusazon11011014.outbound.protection.outlook.com [52.101.62.14])
+Received: from SN4PR0501CU005.outbound.protection.outlook.com (mail-southcentralusazon11011061.outbound.protection.outlook.com [40.93.194.61])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A9131F3FEC;
-	Wed,  7 Jan 2026 04:24:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.62.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7972C1F3FEC;
+	Wed,  7 Jan 2026 04:24:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.194.61
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767759895; cv=fail; b=p9rTB4V/N7o2DrcYuJdMhSz3xxq2Ylyo7EJJn7QAihBby3TOjY9AHHRhBZ1epE1S07ut/JT2frZ6/5prxXjJAdeI1qDaxL70md5FJaQ6m2viQbd8q7jrtn2MMl0XPTG9CJLiCfJtTjrc1pPBsA8ssUmM05hMqPce7OOVPOsO6DU=
+	t=1767759903; cv=fail; b=EvW5wIzgffcTBiRf9IYc8qwObcPsvqLpuJ4jjib6f+i67K+c4h2yCzUJoUur0ikD0J9lgLLDpjfYty08Z15rGXBqFeIsPD7DSRAkvW576iyxeMxiLnw38mOvurNLWZoHtIfRsowl8gUqXZvftUYeprHrn2xD56jiaCao244QnQU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767759895; c=relaxed/simple;
-	bh=NOd2u++a/pPz6QiBeZ2t0W1F3MazajdRBoNKY7rGNzI=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=QaxTmYyMdiBW+c13N3nO8H9BcmWg8bhquAghXHmBYc6t0//DxpJW1SJH902fj98bnBBjOcvt8YHi716LFGR+3P4zT358BLarFMMpul3cW3kKNBNEKltdEb5qecn2m/9cSBOn1OzO+U0GX7y5uVs6sZD/c7G+IrKuDTc4UBE4PjA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Fg7bBiJM; arc=fail smtp.client-ip=52.101.62.14
+	s=arc-20240116; t=1767759903; c=relaxed/simple;
+	bh=Gefb5u4ND+xHQIaOGg8sK9WocwhXImHLyAi0AYUCuVQ=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Wv1lOCQ4X2YTIHIb2QllBOJXQipocpDGWYtD6sJRQ+CW+rrpLid1FY1qOdDC2gN3MjWAMz5/pqVbG5lN7IAl4r1tZT6cwFJHLERFVX3Q+xfA0EkReKcav3FM+wWCXk+C24DHJVYM4aqSppwk1MxW9UI10pCxy+dYa9xlCU6Jj04=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=trw1uUj6; arc=fail smtp.client-ip=40.93.194.61
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=dYpErApW1zj9gk25tXPDL6Wc+wUGTT6fxc5PLvcOhPuCWD1BWgcE3ztl7QLPvUw6VocQYmKOW63bsMQ7+Xz5Z165ymZRSaU68g+xtTZmh0Jh08CYtae3ASzS8px+sczQn7lYdJZEb6zfZjGcyUB9u5fhgq18qRu2ZLgyZ26QZwJlZihiCdhMJtzb9aWLbApCb2Se4kF+gGGaONVgflekxfxPyyikwuC4gy7OtwGdaKHacfu7PlOzYBfGApgTf7QnmrdgT34ENcXvVWrkgwObnA6gyA7gG9BmY4VoVlmXP+ESRw+Mwt0Ru/5iYrASL5hMY4RMPQtJGLC6nl1mrFQczg==
+ b=N4+uu9Etzwi+GqMOzesrLqKTbEmIPvXkYKdVolzwytR633pEJ4BBUhPzU7xwIkEaeR3JgokoZffraIeoAUXmH6am3+DK3V/O1UJ/1NcOGj17M9T8phMmO3pNJLlF5b9dh7KvYTZgJCSnH4+6w+dAtZmC2sht+SsJazQNWuANhx2aj1wC0QLUdqB/036LmOlT98RrT65T8DGVGiG83Ch+KYBXjRwAR5i6NgcbkrVpofLtyXEBQzz8ji4OgRkzG1NOL1QrrTbZHVsfFcz708uV19Vy8wKVr6LvFGe4cnwOcp5BZC0NBfrnyOyRipMmRnPdl0jYPcSIoQnKyRc3TbklZg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OGIOnvYPuG8wyHbP89pQeLkh/Enx3/en4BRgbSXNUZc=;
- b=vV3r+GDtc0/xKv7TGSAPGoy15rwG9lOCcwKiYw24koyA4jlF+b2NlgH935LUleE2TrQuFQqSRzgpakWdrGK5SPdfBj9WdsScVnZUdCJ78Dz64PPT54Q0Gc6+0Y0dgphpHDr+cjz75B7PCsFsMN0IYA1NPcVMixDQD7186H3Tsyh+66XsKW1uvbArsW2MxbOghmcrVQX1rIsv3daxlxMsvcMoj5EI9cbON9MPwTm60BdIf3dbg/laTjmiPotf4ZEtec1k+onb680x/7t2aur2RRQ1WJqiv4YxW+m+FCXCsOYco8xVj1DBDmyMTW8kyO4UN1NEAmAo/omniqsdeyVDaw==
+ bh=wTYT6/ojseOosIBH1Asu8ri6UO68D/EWH72BQhod3RU=;
+ b=fZhN9kYx8aseeRqzk0nqbtN4nZjEJIfZJquG30Q4eJPCUdSfPovoGdJXURS3vBMx6I9+8HbjULfTuxtya+2u+wvtRqBTrenzEDbm2v3U3StcxRzynWUi/43MUbLW2wxUCMx3BpWI9ZPWHQjpfjHUs4/MUKaox1myQY+KVTdR7thJc5sbqy5EQhqBs1QIJ1wKv3y3Wl1mUfQ3NLt4I4ccA2toix31+ZoYg5u6hNb2aNueiiTWFBKB3jjiC1/8qlWAduS6v2tQd3fQO1hnPS0/WjnVaCTM6gxgC9xgGGO5vkiIB25u54rxT86P+rKF6DOTP84NMRoIjr2UiWXFofiFtw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.232) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
+ 216.228.118.233) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OGIOnvYPuG8wyHbP89pQeLkh/Enx3/en4BRgbSXNUZc=;
- b=Fg7bBiJMe18JyG6jDNqVSN5nenVoTdbowQIkxv6nRCC7tYM0ZqvI+khJIVmICWBsnd7aV7nJUsYX9jekdFxHzMn4fZUJRTnLKwF3rgGmt7r9vcyV+SBid1HlMBLH6Vxh/ZlKXfCzsZ8OW5pPrAmeWaDNbLDghGSz7peaf/mFEKCW1nL9u3/8iIEwJZqJbfOyEzsVgZmPlCj2awhvcEwOHYwkFQZCvzGmNAvBggRTJJKVIDI3HvVzMnGD/OFNjJyMd+SMA/sKa/kTCKkVo9ZEsiJCmqDBQAF/Se7y7gEvysUs3lkchvzDdPOX9xmvWvjKLcWGUhvCXWrKLyyJY3rSJg==
-Received: from BL1PR13CA0025.namprd13.prod.outlook.com (2603:10b6:208:256::30)
- by SJ5PPF8AECCE022.namprd12.prod.outlook.com (2603:10b6:a0f:fc02::99c) with
+ bh=wTYT6/ojseOosIBH1Asu8ri6UO68D/EWH72BQhod3RU=;
+ b=trw1uUj6HFrevvuHOUAs2a+GvUfSgv3EUGG3YZUoi/WcqVCpnOnZXX54YNYn0jgJ7OrazZyWtDQlndF8RhtDpnwg/y1oPxFrg5H9d690YW7ZerT8BBhXvuD2W0BUKugn97EKTaNuH/E+N8xqdGPuBdNrZfmmkMrdfCOkLgKMEDHWutRZikE9ee1Pl4yYe8Qmtm1HyJZX7ZPOJSeKksR6p4ZkBNlIA5KgSgAm4kJCY5SeOsfIt8kNBfmuu0A3WilxYBkFDCXAkWedlrtx01u7y+gKfCo6cTxKfxnJP/ey5wi6nKBg2iMFHYLbBI/fI01NbpnjU6Ebqq5RbROySplvmw==
+Received: from CH2PR02CA0018.namprd02.prod.outlook.com (2603:10b6:610:4e::28)
+ by CH3PR12MB8712.namprd12.prod.outlook.com (2603:10b6:610:171::20) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9478.4; Wed, 7 Jan
- 2026 04:24:50 +0000
-Received: from BN3PEPF0000B06A.namprd21.prod.outlook.com
- (2603:10b6:208:256:cafe::de) by BL1PR13CA0025.outlook.office365.com
- (2603:10b6:208:256::30) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9478.5; Wed, 7 Jan
+ 2026 04:24:54 +0000
+Received: from CH3PEPF0000000F.namprd04.prod.outlook.com
+ (2603:10b6:610:4e:cafe::fb) by CH2PR02CA0018.outlook.office365.com
+ (2603:10b6:610:4e::28) with Microsoft SMTP Server (version=TLS1_3,
  cipher=TLS_AES_256_GCM_SHA384) id 15.20.9499.2 via Frontend Transport; Wed, 7
  Jan 2026 04:24:49 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
 Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.232) by
- BN3PEPF0000B06A.mail.protection.outlook.com (10.167.243.69) with Microsoft
+ 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.233) by
+ CH3PEPF0000000F.mail.protection.outlook.com (10.167.244.40) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9520.0 via Frontend Transport; Wed, 7 Jan 2026 04:24:49 +0000
+ 15.20.9499.1 via Frontend Transport; Wed, 7 Jan 2026 04:24:53 +0000
 Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
- (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
+ (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Tue, 6 Jan
- 2026 20:24:41 -0800
+ 2026 20:24:45 -0800
 Received: from drhqmail202.nvidia.com (10.126.190.181) by
  drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.20; Tue, 6 Jan 2026 20:24:40 -0800
+ 15.2.2562.20; Tue, 6 Jan 2026 20:24:44 -0800
 Received: from kkartik-desktop.nvidia.com (10.127.8.13) by mail.nvidia.com
  (10.126.190.181) with Microsoft SMTP Server id 15.2.2562.20 via Frontend
- Transport; Tue, 6 Jan 2026 20:24:37 -0800
+ Transport; Tue, 6 Jan 2026 20:24:41 -0800
 From: Kartik Rajput <kkartik@nvidia.com>
 To: <ldewangan@nvidia.com>, <digetx@gmail.com>, <andi.shyti@kernel.org>,
 	<thierry.reding@gmail.com>, <jonathanh@nvidia.com>, <akhilrajeev@nvidia.com>,
 	<smangipudi@nvidia.com>, <linux-i2c@vger.kernel.org>,
 	<linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>
 CC: Kartik Rajput <kkartik@nvidia.com>
-Subject: [PATCH v4 0/4] Add I2C support for Tegra410
-Date: Wed, 7 Jan 2026 09:54:30 +0530
-Message-ID: <20260107042434.10587-1-kkartik@nvidia.com>
+Subject: [PATCH v4 1/4] i2c: tegra: Introduce tegra_i2c_variant to identify DVC and VI
+Date: Wed, 7 Jan 2026 09:54:31 +0530
+Message-ID: <20260107042434.10587-2-kkartik@nvidia.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260107042434.10587-1-kkartik@nvidia.com>
+References: <20260107042434.10587-1-kkartik@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -96,70 +99,133 @@ Content-Type: text/plain
 X-NV-OnPremToCloud: ExternallySecured
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN3PEPF0000B06A:EE_|SJ5PPF8AECCE022:EE_
-X-MS-Office365-Filtering-Correlation-Id: 25961ec4-dac3-471c-94f2-08de4da4b28e
+X-MS-TrafficTypeDiagnostic: CH3PEPF0000000F:EE_|CH3PR12MB8712:EE_
+X-MS-Office365-Filtering-Correlation-Id: e4de686a-d597-4781-277a-08de4da4b50a
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|376014|36860700013|1800799024|921020|13003099007;
+	BCL:0;ARA:13230040|36860700013|376014|1800799024|82310400026|921020;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?AsNA0AqSQxy1mRnWXV2ob0HWcOUDfaPNNFOhTBfbK95Ae38xQv4q8pxPxtRs?=
- =?us-ascii?Q?LP8kr6W9xS5FJ0t3/i+sKRMh1Rd7XhkF8Wa4gTH/I6QQO6M0yADYbVy46C9j?=
- =?us-ascii?Q?QV9YmUK6aisyT8ODjzxhhQmb+eGqMcJCOrnEBIrq8UurmdLCFAZTkrINuU+w?=
- =?us-ascii?Q?6rh2nMsvLvY8XY1XGXBwkGwhQ2FIQmAh8RFvVWGT4RSNeCun6NOepJMI+rGc?=
- =?us-ascii?Q?jZS9m619QRCkW7mzumy1NQJWfRG6Q/j0F3I5BGmQwBswPerHCug2VxuK40E9?=
- =?us-ascii?Q?gdieyKiXCPcHXKv9Zx33KVgaZCqR/8clGDRiHlAyL6XkYbJcswNrAJBKZ+DT?=
- =?us-ascii?Q?uUbLnwErtffWuSYBJ6D1daN2Xpy3SepT7dnznEY+wBiJ560+Qo3rKgIAjlnL?=
- =?us-ascii?Q?tdyzxSKcWYLfCU7xcRDYiT346a8vWCC7iqqvYs0QoYwMrnReNBUf9lfvFMjx?=
- =?us-ascii?Q?gK8od+h4q7DjQSZN+cC+/HOPxuSEvgfKjjh4BXQW1dcrLNvG993BepyltNIG?=
- =?us-ascii?Q?0oVdzf/XuhlaMq3pqUUv3IVxHTit9B4cdUoNT9oWaNj6uIWcisvQ7lbUMDdG?=
- =?us-ascii?Q?99oQKOEgv0+41IyDrmONXi9semwmLqmGhT4gj0GRlAkK6iADXR7vO3rfUTfg?=
- =?us-ascii?Q?HFnrZbS9Lfc1kCAm75Cb4GJmnudHgZSRhkGfMxyKwMbAs2LLjGUePmVkfnxT?=
- =?us-ascii?Q?BxbR4/DkToKtQJNBmJTL5BmRUD3YEm9V0BgC69kZm5n54qrS57TnQLtc6pPH?=
- =?us-ascii?Q?PJ8BpwCbIgI5VD4FW6G8OyxXqPmsjECiwMqtowJkvW02KgeoMnWHSihUySKR?=
- =?us-ascii?Q?FANz8ObVVnZvilWsGpKOeKK1Kz9qZWtPF64a8KO3OJS3XZKCo4ifSy9A278K?=
- =?us-ascii?Q?G/7EFmNJrOWedYns4w/ezJJyExtFzn3aHQqmScuFius6qF2nfNSiWIw/pVLW?=
- =?us-ascii?Q?KTdBzSqKcOVzL9SF7qNL3Uq89JfyPxYJdKe6Ro/idGzHa1v4p+o8vIYix006?=
- =?us-ascii?Q?fAvVfMMFkQNFDhtkILqyRW/eycRAeFSba9baFXqoAyeQS6/P0ObKWb3xNGxE?=
- =?us-ascii?Q?Kd1HpCx6PiU5k9wY4XMoJV93TuMqmxCpjobIScwrUoWnWoE3MiPPubcjqJps?=
- =?us-ascii?Q?G67bmPwrQXwe0oCl9xfVDVJ5L9lSSd7aGOQt53EtHTvbqD6oOiZg2xoecZxA?=
- =?us-ascii?Q?BqtCLf743eVdvWlnwpzkHcT4PGNNK2sO0Y8sYbhNGTf/bEjQZJo0Rns57YY9?=
- =?us-ascii?Q?+uJwFwR1Kpf+vLRACAehI9YrrlNKqXYhPBOV7xI+8elNXGmo0MV5AisfoVFi?=
- =?us-ascii?Q?aNzSDKqCcA7A5I3GH6yp0MT8tVH8mnADxS3mA57IqwgSD5BB5YAcHIcaEbDW?=
- =?us-ascii?Q?aL5JWmWpMZh317w/uqqrFFJNClTxZkzgkankhEYToUf5t/m5IVZTcmsEnnal?=
- =?us-ascii?Q?D0MD/UUDz6kPxqNQ+cZ9xpXyWiT5dVfgNmqoOtfbGuOm+0fLEvqxekK9uLs7?=
- =?us-ascii?Q?SR8aJzClnWCZgReHv2fIYWiv9A5d66JtF3mFqNJaa08cfhmGtRYO0NWcyBls?=
- =?us-ascii?Q?hXwbd4m6+uPrrgoUOUJc+SsU8465RGLUL12T4cdV?=
+	=?us-ascii?Q?oog0duCb/+LZPqWhHY/Xo384R8qLZgoUoggYqvdBb3H971jo76TXy5wlTHjW?=
+ =?us-ascii?Q?5sr+6ICNiIL/wowcEvJQsrYmSmkf7xACjvPKfbi7Iib4IduL4gHYk+N+y1c3?=
+ =?us-ascii?Q?uNpj3MnrhqIY91wqLNoKK9A3Aa8+9OTLd4JG6ObSDJFl1A//u6c45MXrebAb?=
+ =?us-ascii?Q?GGwG7+91ok4RJ0MqgbnpuEp3z/ZRk0P/EUl6tIOLDRMxUr0E1j2qqrkHQTTb?=
+ =?us-ascii?Q?3b6xALcIvaJXiXScyKprKQ7M8CBoaHFxJIUK1RDHUU8sVnRVLTubQPnLN7Ib?=
+ =?us-ascii?Q?v+o5Grl8EFetdWXMbmVb1H0EcgLYmVaZV2eHgqmnYHBYUs4kmueSAWxGD2iw?=
+ =?us-ascii?Q?+0cd3okuF+M0mdWgfpF55MMO8TmLzTa1xt0aWXIRInYHuEkqBXjgUYyTJI12?=
+ =?us-ascii?Q?udu4A1Fs6i8R0dsqMcMgljvZ8lYrrA2NNwXcpWjDNW2B3eBTYFu1kuo9eUyT?=
+ =?us-ascii?Q?DgDDxVK78ePu+pg6YnbNYSw4U99Y7POx+QMJQ3MMwd6H8pnZWMnysA8W46N0?=
+ =?us-ascii?Q?GdMEuI6KgbWGKvSDKAIgaCiUx1SWwTcLYGgsJkg5C3ZDkIE3nSXmvDcz4sov?=
+ =?us-ascii?Q?gRu1CDbhvnXw/S+kCs50p6FlTT+TlJ68Vcp5ipvGlcOiNGofkGX9TEaDdfaw?=
+ =?us-ascii?Q?sYFG31v1aatppwirkCPiRJ63ORRKDjTDJVY6XH8WSsWnx5SjfG4pQ7rhEzXf?=
+ =?us-ascii?Q?anFW3NSyIpzV6Iz68sWbctAv07EcuQYClJ8xkbL2WAK6gBNEShi/XTZzb294?=
+ =?us-ascii?Q?4p9sGwL+rsLpDsvga3AEH4netHFAoknPiyvhYEcYzxZj2E0onWlDu6wPIadu?=
+ =?us-ascii?Q?vfPsqkoNPJTd8/VUmG28sHBfoT4ZsdvLAp5Pj9tFiEROfNNFFArOBImWiBzk?=
+ =?us-ascii?Q?og6Ew3sDFk0OsBudj63I70IJ2dsj+IRVsKG7/TXILWQ/v3HVr1z+/zlGJBvc?=
+ =?us-ascii?Q?/MRfAUKKABwz7sRDhJSnO1vQgEMystBE+EuqsJ0LzBCjezO2OM/RXBKlrUJ5?=
+ =?us-ascii?Q?aB1Y7slWCEKQEQjVkW+kESuTiZP1B94fZlnRxftQ2MtlTzviJuwhzKI/RDlx?=
+ =?us-ascii?Q?As0wbpQop0yf7idSUr8zvUMT/8EwepLZprd3OTFWBNZcJ6ScYEsbCRPRxnuB?=
+ =?us-ascii?Q?td4cqk6fdO7whXTxxSnrwOHrSqK2Nn5dE0rDgTHhuwUbfqrY3BVHL5vqE9eA?=
+ =?us-ascii?Q?ezVvgSVXjMR/Sts5MyC5SfEKQW4CuwJfasPFBrGcksU7eu8RkYknDVr25fvX?=
+ =?us-ascii?Q?HwvluiYZA3+6J05APwrXdMghod1lYPeGK3oNsOsppSdGL7fQhMFhLLb7KKBX?=
+ =?us-ascii?Q?aU4Suq4JEspparWbUPvDWZqOSluJappLPNEQpM+n0NEzMZvgGj+4I0XNS676?=
+ =?us-ascii?Q?s0ucGYMnGYuTl2C89fnodXgcNjDqReZ+KSI9Vd9kvS5bHCHkcwK1KvoQH14Z?=
+ =?us-ascii?Q?C65ASEtWKg9tH2QO4F2rNytlBMZxWnxzxasVkh+clrCAq8CxYus9E4vUzQrj?=
+ =?us-ascii?Q?4xU/NvxwtZZQxOLcTFFN5sWOD93SDYDt30QlezinsJwza1vOHnwbGP1KryR0?=
+ =?us-ascii?Q?x18+8aTadjSF/rj/vAwEsTcMUl4jqRckbXw46xTC?=
 X-Forefront-Antispam-Report:
-	CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(376014)(36860700013)(1800799024)(921020)(13003099007);DIR:OUT;SFP:1101;
+	CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230040)(36860700013)(376014)(1800799024)(82310400026)(921020);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jan 2026 04:24:49.7196
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jan 2026 04:24:53.9080
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 25961ec4-dac3-471c-94f2-08de4da4b28e
+X-MS-Exchange-CrossTenant-Network-Message-Id: e4de686a-d597-4781-277a-08de4da4b50a
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	BN3PEPF0000B06A.namprd21.prod.outlook.com
+	CH3PEPF0000000F.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ5PPF8AECCE022
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8712
 
-Add support for the Tegra410 SoC, which has 4 I2C controllers. The
-controllers are feature-equivalent to Tegra264; only the register
-offsets differ.
+Replace the per-instance boolean flags with an enum tegra_i2c_variant
+since DVC and VI are mutually exclusive. Update IS_DVC/IS_VI and variant
+initialization accordingly.
 
-Please note that this series is rebased on:
-https://lore.kernel.org/linux-tegra/20260106062811.894-1-akhilrajeev@nvidia.com
+Suggested-by: Jon Hunter <jonathanh@nvidia.com>
+Signed-off-by: Kartik Rajput <kkartik@nvidia.com>
+---
+ drivers/i2c/busses/i2c-tegra.c | 30 ++++++++++++++++++++++--------
+ 1 file changed, 22 insertions(+), 8 deletions(-)
 
-Kartik Rajput (4):
-  i2c: tegra: Introduce tegra_i2c_variant to identify DVC and VI
-  i2c: tegra: Move variant to tegra_i2c_hw_feature
-  i2c: tegra: Add logic to support different register offsets
-  i2c: tegra: Add support for Tegra410
-
- drivers/i2c/busses/i2c-tegra.c | 569 ++++++++++++++++++++++++---------
- 1 file changed, 410 insertions(+), 159 deletions(-)
-
+diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
+index d05015ef425d..9a09079dcc9c 100644
+--- a/drivers/i2c/busses/i2c-tegra.c
++++ b/drivers/i2c/busses/i2c-tegra.c
+@@ -171,6 +171,18 @@ enum msg_end_type {
+ 	MSG_END_CONTINUE,
+ };
+ 
++/*
++ * tegra_i2c_variant: Identifies the variant of I2C controller.
++ * @TEGRA_I2C_VARIANT_DEFAULT: Identifies the default I2C controller.
++ * @TEGRA_I2C_VARIANT_DVC: Identifies the DVC I2C controller, has a different register layout.
++ * @TEGRA_I2C_VARIANT_VI: Identifies the VI I2C controller, has a different register layout.
++ */
++enum tegra_i2c_variant {
++	TEGRA_I2C_VARIANT_DEFAULT,
++	TEGRA_I2C_VARIANT_DVC,
++	TEGRA_I2C_VARIANT_VI,
++};
++
+ /**
+  * struct tegra_i2c_hw_feature : per hardware generation features
+  * @has_continue_xfer_support: continue-transfer supported
+@@ -269,8 +281,7 @@ struct tegra_i2c_hw_feature {
+  * @base_phys: physical base address of the I2C controller
+  * @cont_id: I2C controller ID, used for packet header
+  * @irq: IRQ number of transfer complete interrupt
+- * @is_dvc: identifies the DVC I2C controller, has a different register layout
+- * @is_vi: identifies the VI I2C controller, has a different register layout
++ * @variant: This represents the I2C controller variant.
+  * @msg_complete: transfer completion notifier
+  * @msg_buf_remaining: size of unsent data in the message buffer
+  * @msg_len: length of message in current transfer
+@@ -323,12 +334,13 @@ struct tegra_i2c_dev {
+ 	bool atomic_mode;
+ 	bool dma_mode;
+ 	bool msg_read;
+-	bool is_dvc;
+-	bool is_vi;
++	enum tegra_i2c_variant variant;
+ };
+ 
+-#define IS_DVC(dev) (IS_ENABLED(CONFIG_ARCH_TEGRA_2x_SOC) && (dev)->is_dvc)
+-#define IS_VI(dev)  (IS_ENABLED(CONFIG_ARCH_TEGRA_210_SOC) && (dev)->is_vi)
++#define IS_DVC(dev) (IS_ENABLED(CONFIG_ARCH_TEGRA_2x_SOC) && \
++		     (dev)->variant == TEGRA_I2C_VARIANT_DVC)
++#define IS_VI(dev)  (IS_ENABLED(CONFIG_ARCH_TEGRA_210_SOC) && \
++		     (dev)->variant == TEGRA_I2C_VARIANT_VI)
+ 
+ static void dvc_writel(struct tegra_i2c_dev *i2c_dev, u32 val,
+ 		       unsigned int reg)
+@@ -1915,13 +1927,15 @@ static void tegra_i2c_parse_dt(struct tegra_i2c_dev *i2c_dev)
+ 	multi_mode = device_property_read_bool(i2c_dev->dev, "multi-master");
+ 	i2c_dev->multimaster_mode = multi_mode;
+ 
++	i2c_dev->variant = TEGRA_I2C_VARIANT_DEFAULT;
++
+ 	if (IS_ENABLED(CONFIG_ARCH_TEGRA_2x_SOC) &&
+ 	    of_device_is_compatible(np, "nvidia,tegra20-i2c-dvc"))
+-		i2c_dev->is_dvc = true;
++		i2c_dev->variant = TEGRA_I2C_VARIANT_DVC;
+ 
+ 	if (IS_ENABLED(CONFIG_ARCH_TEGRA_210_SOC) &&
+ 	    of_device_is_compatible(np, "nvidia,tegra210-i2c-vi"))
+-		i2c_dev->is_vi = true;
++		i2c_dev->variant = TEGRA_I2C_VARIANT_VI;
+ }
+ 
+ static int tegra_i2c_init_clocks(struct tegra_i2c_dev *i2c_dev)
 -- 
 2.43.0
 
