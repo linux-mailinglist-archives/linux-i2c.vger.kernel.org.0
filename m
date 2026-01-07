@@ -1,240 +1,147 @@
-Return-Path: <linux-i2c+bounces-14980-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14982-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D629BCFF222
-	for <lists+linux-i2c@lfdr.de>; Wed, 07 Jan 2026 18:36:15 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73B84CFF094
+	for <lists+linux-i2c@lfdr.de>; Wed, 07 Jan 2026 18:15:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1254E3228FF2
-	for <lists+linux-i2c@lfdr.de>; Wed,  7 Jan 2026 16:22:02 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 82E813174312
+	for <lists+linux-i2c@lfdr.de>; Wed,  7 Jan 2026 17:02:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F32D396D01;
-	Wed,  7 Jan 2026 15:52:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69CA4348447;
+	Wed,  7 Jan 2026 16:40:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="sVG+Gvxz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eWRXAf6v"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08EF9396D0F
-	for <linux-i2c@vger.kernel.org>; Wed,  7 Jan 2026 15:52:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 663343A0B08;
+	Wed,  7 Jan 2026 16:40:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767801132; cv=none; b=Q7sZ36X0SlrMWAlv5IazIV+BIKupvunpQxaIs1EikS7qg4GagbLjCwZtzL08g4ECdOD6YS57dCmH3uyU0kEyGuX6k14ptXPNkFj7mR0NI6JvRe6187zgJuUqDq6LFPV+2zfr7bHgYaQ5C43p1mgtDdByMz2pbCCuLLq5yoWqMBk=
+	t=1767804028; cv=none; b=kPEJHBKt37hRI6/C79A5/VI9XvSNYHo8SvT81NFpIVt+zPpj+eqo4/wgmkd5esS1bwQ/KYQL5HBFjG8ZvG8e8RlWvfC0scUtEoRdJsCMMs2cZMgNH4YpTNykUa1e3kp1U3qpbrVtfAZl1hMWt1PLL0vRcusTWPSYvhbgou2oZBk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767801132; c=relaxed/simple;
-	bh=WXZMe4HP3vNPReOPTMwzVrsjCdvjsyH5VjpRkjOfyhU=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Nc5NCJc48rb2F0z7Il+OA0U+Z0r1CwO++aymKSMefNBLGLU4tk0LBKLmyiMFZpSmmhiBXJN63ISyke5wKXj6H8EHEe8d6y2kSn8Arao3xkb51famMUQ/y50DR+/tK1uvo2zjKBljmxl5HdJqKlQxpW9JqpDLeygMk/nWftv9GWY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=sVG+Gvxz; arc=none smtp.client-ip=209.85.128.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
-Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-47d3c4468d8so15773735e9.2
-        for <linux-i2c@vger.kernel.org>; Wed, 07 Jan 2026 07:52:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1767801120; x=1768405920; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=KzJooJr2ofQffqYH6J44S/NyT0tH1jNqXbKY2GqyAaM=;
-        b=sVG+GvxzA/bIWQCZReXPeS1jCtipHwLFJ8H3+TTr7IHjtw9oscdftuiV7uHVLznSrt
-         ZzbtUYvJiZ03Mf2u/b2ceb9RzILJgjR+prkpzAViQCrI25G/PNz9zCUZLE18eE+KTBl1
-         NjBQDCD8M6YFO7oPZIsM4A++l3HnCICPOZ8DlgwUkjALAlVXlN71d4lm3VwGY7lfSKIw
-         KvSemEGGw8aFqsvdu0U1ml42nsIUGG3Azl4CCSARJLj6rUzdXQrw92zFIe3AhqpukNi8
-         LsShOMI+p8mAfOkMtMqHFEdBRngLc0FWko5NYzAg8WQn2jW9kRVKlJeljJsvRgJsafDZ
-         Yb+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767801120; x=1768405920;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KzJooJr2ofQffqYH6J44S/NyT0tH1jNqXbKY2GqyAaM=;
-        b=ZMtOa6szM532w/Ms8r86wE5aIIlDF2cIcEQE7eFpYp1eUu9tcds8+1/7JPiwbo311h
-         7Nx5FHOc/VP6JV/T+JAyl6hKrCWtg45fxLxLrX7Qbl/XW3NbWRWA7uEIAFuA5DhT6Vt5
-         trfc8IDXYZltnHgOt9aBXEuOVje4yA+u7BxBoH1R00OqEJQBTX0eM395oAEIyGnNg6RE
-         qX/TLvqpECV67yasfUPMivC+wbfR1Ai0PJvAbZdI9lxocSmcWtQ5jvnsfEJY0/9qRPZ+
-         JTOPzRJ98yuG9eWtp4sO2Vt0ly6geXeGVg6L225tIe/aRNTwTEYAQjvBl99Rb4cGEuUf
-         DBRA==
-X-Forwarded-Encrypted: i=1; AJvYcCWt5VEcppUp7Fe45LFxZxyeBAZY0aE6uO/9gjJcfBlV5G1OHVduqbtSJIaXuZpeNtiSTcNgBP5QhmI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxrQXCUBASHNz25MIOO5rkQYGey4TJ35zs84ILDG3OwsnU788/l
-	BbqtBL4gLgQaz1D3kD+Q7WzXPVpwYmmtlzh4FThjXRfTel0ue9GrDkfe/IPkWRskWLCZbculhSR
-	1tkvjpy1/l3tfc5w0fg==
-X-Google-Smtp-Source: AGHT+IGf7S57fwqtaG/Y63VwksZsm6MPDrdn5BaGxjtMY+WZa3f+qrbuzEydbLZth9rk78JW5kkgVrJK4VKyKM0=
-X-Received: from wmbz13.prod.google.com ([2002:a05:600c:c08d:b0:479:3624:3472])
- (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:82c3:b0:477:9392:8557 with SMTP id 5b1f17b1804b1-47d84b3463fmr32388425e9.18.1767801120462;
- Wed, 07 Jan 2026 07:52:00 -0800 (PST)
-Date: Wed, 7 Jan 2026 15:51:59 +0000
-In-Reply-To: <20260107103511.570525-1-dakr@kernel.org>
+	s=arc-20240116; t=1767804028; c=relaxed/simple;
+	bh=z3POv5J4x+meLVYbsQCf7mB/6gWPZ96vXCB8Job/Vvs=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
+	 References:In-Reply-To; b=axs/PjgMijKadLf9YG8M733ZFbJO7ro6viyxvbIiZfGtXbWNO+Dxo+M3gLpSoD7FvrxrzLOdGz5HiVrlCqra6wDgLZ8n6OkMwZXxuOvGBJQPpts+XmgxcfhQFaH7IlGMBPsh6AzGPztHLIEB4LVe7+yVyi98OxNQMGA5OYJ230o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eWRXAf6v; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A99E7C4CEF1;
+	Wed,  7 Jan 2026 16:40:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767804026;
+	bh=z3POv5J4x+meLVYbsQCf7mB/6gWPZ96vXCB8Job/Vvs=;
+	h=Date:Subject:Cc:To:From:References:In-Reply-To:From;
+	b=eWRXAf6v4PEvZFPNQ9MSIq4mhg/lKsxd/ojHLmtL2/9VcVDlrbVbiA6snO1GiXnbT
+	 /iNW0LDo1Dz0qk+FFbvfyzNtvX+elFdZITVNrrTvhKVyf/LVuWfqkhsfVQnnYPtiU0
+	 Vnb4F482tZaEa6J/nyNruw4kS+S4lRntIo1DLkfvW7STpDVoBqQARyTGc7zWnmdrb1
+	 o7+QJUM2BvERsQ9+vZbgeOxEiE1VL1Uyg3meBjb3sebKBGMokS+eLWqd2MIVUC4D0C
+	 r/1djN+F3ERXtW3oDP2zqj/ApnebxGZ4HqbnDJX7zrf/gMIL7w8/WtL7SVbyuy07tb
+	 ptDO8D4095e0A==
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20260107103511.570525-1-dakr@kernel.org>
-Message-ID: <aV6BHw-Liv0SVAwO@google.com>
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 07 Jan 2026 17:40:20 +0100
+Message-Id: <DFII83QY76O0.2PKZ73WCTVGPR@kernel.org>
 Subject: Re: [PATCH 0/6] Address race condition with Device::drvdata()
-From: Alice Ryhl <aliceryhl@google.com>
-To: Danilo Krummrich <dakr@kernel.org>
-Cc: gregkh@linuxfoundation.org, rafael@kernel.org, 
-	igor.korotin.linux@gmail.com, ojeda@kernel.org, boqun.feng@gmail.com, 
-	gary@garyguo.net, bjorn3_gh@protonmail.com, lossin@kernel.org, 
-	a.hindborg@kernel.org, tmgross@umich.edu, david.m.ertman@intel.com, 
-	ira.weiny@intel.com, leon@kernel.org, bhelgaas@google.com, 
-	kwilczynski@kernel.org, wsa+renesas@sang-engineering.com, 
-	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	linux-pci@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-i2c@vger.kernel.org
-Content-Type: text/plain; charset="utf-8"
+Cc: <gregkh@linuxfoundation.org>, <rafael@kernel.org>,
+ <igor.korotin.linux@gmail.com>, <ojeda@kernel.org>, <boqun.feng@gmail.com>,
+ <gary@garyguo.net>, <bjorn3_gh@protonmail.com>, <lossin@kernel.org>,
+ <a.hindborg@kernel.org>, <tmgross@umich.edu>, <david.m.ertman@intel.com>,
+ <ira.weiny@intel.com>, <leon@kernel.org>, <bhelgaas@google.com>,
+ <kwilczynski@kernel.org>, <wsa+renesas@sang-engineering.com>,
+ <linux-kernel@vger.kernel.org>, <rust-for-linux@vger.kernel.org>,
+ <linux-pci@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+ <linux-i2c@vger.kernel.org>
+To: "Alice Ryhl" <aliceryhl@google.com>
+From: "Danilo Krummrich" <dakr@kernel.org>
+References: <20260107103511.570525-1-dakr@kernel.org>
+ <aV6BHw-Liv0SVAwO@google.com>
+In-Reply-To: <aV6BHw-Liv0SVAwO@google.com>
 
-On Wed, Jan 07, 2026 at 11:34:59AM +0100, Danilo Krummrich wrote:
-> Currently, the driver's device private data is allocated and initialized
-> from driver core code called from bus abstractions after the driver's
-> probe() callback returned the corresponding initializer.
-> 
-> Similarly, the driver's device private data is dropped within the
-> remove() callback of bus abstractions after calling the remove()
-> callback of the corresponding driver.
-> 
-> However, commit 6f61a2637abe ("rust: device: introduce
-> Device::drvdata()") introduced an accessor for the driver's device
-> private data for a Device<Bound>, i.e. a device that is currently bound
-> to a driver.
-> 
-> Obviously, this is in conflict with dropping the driver's device private
-> data in remove(), since a device can not be considered to be fully
-> unbound after remove() has finished:
-> 
-> We also have to consider registrations guarded by devres - such as IRQ
-> or class device registrations - which are torn down after remove() in
-> devres_release_all().
-> 
-> Thus, it can happen that, for instance, a class device or IRQ callback
-> still calls Device::drvdata(), which then runs concurrently to remove()
-> (which sets dev->driver_data to NULL and drops the driver's device
-> private data), before devres_release_all() started to tear down the
-> corresponding registration. This is because devres guarded registrations
-> can, as expected, access the corresponding Device<Bound> that defines
-> their scope.
-> 
-> In C it simply is the driver's responsibility to ensure that its device
-> private data is freed after e.g. an IRQ registration is unregistered.
-> 
-> Typically, C drivers achieve this by allocating their device private data
-> with e.g. devm_kzalloc() before doing anything else, i.e. before e.g.
-> registering an IRQ with devm_request_threaded_irq(), relying on the
-> reverse order cleanup of devres [1].
-> 
-> Technically, we could do something similar in Rust. However, the
-> resulting code would be pretty messy:
-> 
-> In Rust we have to differentiate between allocated but uninitialized
-> memory and initialized memory in the type system. Thus, we would need to
-> somehow keep track of whether the driver's device private data object
-> has been initialized (i.e. probe() was successful and returned a valid
-> initializer for this memory) and conditionally call the destructor of
-> the corresponding object when it is freed.
-> 
-> This is because we'd need to allocate and register the memory of the
-> driver's device private data *before* it is initialized by the
-> initializer returned by the driver's probe() callback, because the
-> driver could already register devres guarded registrations within
-> probe() outside of the driver's device private data initializer.
-> 
-> Luckily there is a much simpler solution: Instead of dropping the
-> driver's device private data at the end of remove(), we just drop it
-> after the device has been fully unbound, i.e. after all devres callbacks
-> have been processed.
-> 
-> For this, we introduce a new post_unbind() callback private to the
-> driver-core, i.e. the callback is neither exposed to drivers, nor to bus
-> abstractions.
-> 
-> This way, the driver-core code can simply continue to conditionally
-> allocate the memory for the driver's device private data when the
-> driver's initializer is returned from probe() - no change needed - and
-> drop it when the driver-core code receives the post_unbind() callback.
-> 
-> --
-> 
-> Dependency wise we need a common Driver trait that describes the layout of a
-> specific driver structure, such as struct pci_driver or struct platform_driver.
-> Additional to this specific driver type (which was previously the associated
-> type RegType of the RegistrationOps) it provides the offset to the embedded
-> struct device_driver and the type of the driver's device private data.
-> 
-> This patch series contains two additional dependencies:
-> 
->   (1) A fix for i2c::Driver::shutdown() to not free the driver's device
->       private data at all, which otherwise causes the exact same bug, and
->       is not necessary in the first place anyways.
-> 
->   (2) Add the auxiliary::Driver::unbind() callback. Strictly speaking,
->       this is not a dependency, but without this patch the main fix of this
->       series leaves the remove() callback of the auxiliary bus
->       abstraction with either dead code or quite some code removed;
->       code that we would otherwise add back immediately afterwards.
-> 
-> --
-> 
-> [1] In fact, the cleanup ordering of devres is a separate challenge in
->     Rust, since it is technically unsound to rely on the driver to pick
->     the correct order. I am already working on a solution for this;
->     luckily this also has some synergies with optimizing the required
->     synchronize_rcu() calls required by the Rust Devres container
->     structure down to exactly one per driver unbind.
+On Wed Jan 7, 2026 at 4:51 PM CET, Alice Ryhl wrote:
+> If a &Device<Bound> lets you access a given value, then we must not
+> destroy that value until after the last &Device<Bound> has expired.
+>
+> A &Device<Bound> lets you access the driver private data. And a
+> &Device<Bound> lets you access the contents of a Devres<T>.
+>
+> Thus, the last &Device<Bound> must expire before we destroy driver
+> private data or values inside of Devres<T>. Etc.
 
-I don't think these are really separate problems. And I think this may
-be the wrong fix.
+Yes, the last &Device<Bound> must expire before we destroy the device priva=
+te
+data. This is exactly what is achieved by this patch. The device private da=
+ta is
+destroyed after all devres callbacks have been processed, which guarantees =
+that
+there can't be any contexts left that provide a &Device<Bound>.
 
-If a &Device<Bound> lets you access a given value, then we must not
-destroy that value until after the last &Device<Bound> has expired.
+As for the values inside of a Devres<T>, this is exactly what I refer to in=
+ my
+paragraph above talking about the unsoundness of the devres cleanup orderin=
+g in
+Rust.
 
-A &Device<Bound> lets you access the driver private data. And a
-&Device<Bound> lets you access the contents of a Devres<T>.
+I also mention that I'm already working on a solution and it is in fact pre=
+tty
+close to the solution you propose below, i.e. a generic mechanism to suppor=
+t
+multiple devres domains (which I also see advantages for in C code).
 
-Thus, the last &Device<Bound> must expire before we destroy driver
-private data or values inside of Devres<T>. Etc.
+As mentioned, this will also help with getting the required synchronize_rcu=
+()
+calls down to exactly one per device unbind.
 
-What are sources of &Device<Bound> today?
+Technically, we could utilize such a devres domain for dropping the device
+private data, but there is no need to have a separate domain just for this,=
+ we
+already have a distinct place for dropping and freeing the device private d=
+ata
+after the device has been fully unbound, which is much simpler than a separ=
+ate
+devres domain.
 
-* Most driver callbacks.
-* IRQ callbacks.
-* Workqueue callbacks. (In the future.)
-* I think that's it ...?
+Now, you may argue we don't need a separate devres domain, and that we coul=
+d use
+the non-early devres domain. However, this would have the following implica=
+tion:
 
-Thus, we must call free_irq() before we destroy *the first* Devres<T>
-resource or the driver private data.
+In the destructor of the device private data, drivers could still try to us=
+e
+device resources stored in the device private data through try_access(), wh=
+ich
+may or may not succeed depending on whether the corresponding Devres<T>
+containers are part of the device private data initializer or whether they =
+have
+been allocated separately.
 
-Thus, we must ensure that driver callbacks are somehow synchronized to
-exit before we destroy *the first* Devres<T> resource or the driver
-private data.
+Or in other words it would leave room for drivers to abuse this behavior.
 
-One thing is that this means that using a Devres<_> container and
-callback as the mechanism for calling free_irq() is not possible.
+Therefore, the desired order is:
 
-I'm thinking that we may need two domains of callbacks:
+  1. Driver::unbind() (A place for drivers to tear down the device;
+     registrations are up - unless explicitly revoked by the driver (this i=
+s a
+     semantic choice) - and device resources are accessible.)
 
-1. devm_early_*
-2. DEVICE IS NOW CONSIDERED UNBOUND - there must no longer be any &Device<Bound> left
-3. free driver private data
-4. devm_*
+  2. devm_early_* (Drop all devres guarded registrations.)
 
-And devm_early_*() would be a new set of callbacks where we can run
-things such as free_irq(). It would use a separate DevresEarly<_>
-container, for which &Device<Bound> does *not* let you peek inside. And
-the usual Devres<_> is cleaned up in step 4, where it is legal to peek
-inside given a &Device<Bound>.
+  3. No more &Device<Bound> left.
 
-We could potentially revoke Devres<_> containers during devm_early_*,
-but actually destroy their contents in devm_*. This gives you a clean
-mechanism to replace the per-Devres<_> synchronize_rcu() calls with a
-single one. (By declaring step 2 must last at least one rcu grace
-period.)
+  4. devm_* (Drop all device resources.)
 
-Not sure whether remove() should run before or after step (2). If it
-runs before, then it does not need to be synchronized with other device
-callbacks and can free the driver private data. If it runs after (2),
-then we can't destroy driver private data in remove().
+  5. No more device resources left.
 
-Alice
+  6. Drop and free device private data. (try_access() will never succeed in=
+ the
+     destructor of the device private data.
+
+- Danilo
 
