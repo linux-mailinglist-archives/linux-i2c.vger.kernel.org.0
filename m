@@ -1,198 +1,239 @@
-Return-Path: <linux-i2c+bounces-14939-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14940-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id DDECBCFBCCE
-	for <lists+linux-i2c@lfdr.de>; Wed, 07 Jan 2026 04:07:28 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2DF63CFBEAE
+	for <lists+linux-i2c@lfdr.de>; Wed, 07 Jan 2026 05:10:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 60F3230386A5
-	for <lists+linux-i2c@lfdr.de>; Wed,  7 Jan 2026 03:07:01 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 6ABD330034BE
+	for <lists+linux-i2c@lfdr.de>; Wed,  7 Jan 2026 04:10:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92F26255F57;
-	Wed,  7 Jan 2026 03:06:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E10419C566;
+	Wed,  7 Jan 2026 04:10:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="lDlxSXkt";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="SwQqZx5x"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="sDOFw1zG"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from BL2PR02CU003.outbound.protection.outlook.com (mail-eastusazon11011008.outbound.protection.outlook.com [52.101.52.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA7CB2459ED
-	for <linux-i2c@vger.kernel.org>; Wed,  7 Jan 2026 03:06:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767755219; cv=none; b=TYqLdyJ/cKI3hw8XF5pezS1FLTP4FrnALgeUR39VH2XALpjGmG5NUGxaBtFoLyYYH+zlp+8rhyhyEyuXiV7bTcLdeZ9vXmd/TN+ygMOoMOU3Xe9EsHqVPvvpDTMlmfNxL5gJQl9yZH0qjsZE8dnNWveox0BM2gjon1UHqD9UcX8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767755219; c=relaxed/simple;
-	bh=wWG/+iM60aN6jRFY9oLk0sPaldjfqc6lbv5zT46e3dc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=r2GCi0Xyhg64Ho7EcONPrZVcHOkwc5U9+O5RcusnCqhAysPAKXYOFTEt02StstPBp8O0shoQUrcUc/EJBYwqx9mi5W3yZKhC/wW6sSgPNDDHVNPZKVKUDZNrwdvgBpL4Se3rJfONMQ+8dti2YuS7fHEr90RbZK9DVXIbsnCLivU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=lDlxSXkt; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=SwQqZx5x; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 606NXQ5n322965
-	for <linux-i2c@vger.kernel.org>; Wed, 7 Jan 2026 03:06:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	6/WCZqC1dn94RJMZksnlRPZYt/+qztP8BiWgjfVsWxE=; b=lDlxSXktCe52+TSm
-	74/LwSRaXLPkfz/SnuQdXf18csy3SARG2UyW1yOV7TSe7GJhKxN1eGObiaLn6BZS
-	EVkzjA/0z/SABcylValnf3PInfPtxTk23hUA8N23w33Dn82d3+8YURQp4Ya3L7GU
-	MgyyOxFBiIr0hjOdaFQx/r0PHRT/oZA9nEN/3EFtNBTvlXmBhzB9rBVX340bNzXL
-	OvUodKBle4ouV+KyXhr9tyEZmpQ86sGZKEbK/28ZwIEPusRBziBqTjPlEvoM+8bk
-	M7/WF9dXXbKJrmUC5gizvVsaxx3gDNgmtyGvaqiHocs/70mAeXAEAfQJg4V5EV/7
-	UdQiPg==
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bh4crhw1u-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-i2c@vger.kernel.org>; Wed, 07 Jan 2026 03:06:57 +0000 (GMT)
-Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-8b51db8ebd9so556417185a.2
-        for <linux-i2c@vger.kernel.org>; Tue, 06 Jan 2026 19:06:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1767755216; x=1768360016; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6/WCZqC1dn94RJMZksnlRPZYt/+qztP8BiWgjfVsWxE=;
-        b=SwQqZx5xAA+qzTlpaY6wH2k6GUqAW2Z6His81EaVTbGdFL6VqAGjdeJiIHqbtud4HX
-         jIdHdTi3rzFFZf8kUWOUK9Pk4heejO2C3wYxCMmtpDhVhwk8diV/RgQttw7RlsQA/vPq
-         uW72xBUt7LgAkvUcSwILmStH/6zyM8y9lPB61zBxyRMEVpJuj6Pj/e6+qUeBXI0DKZ69
-         o13oEwFBk1x84D7YRkXNU3cMw6EdSK4TB0n6BJt92u+YYZ5nUAMxkvVqLtfLNpGhw+Px
-         rXi6+Zm2xy/NNfuZHgyCOsXnEEVdtM4ctQw3KKMG6Z2Y2AjEhdYpJM0EkiiHXmTQHvz5
-         9CXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767755216; x=1768360016;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6/WCZqC1dn94RJMZksnlRPZYt/+qztP8BiWgjfVsWxE=;
-        b=lyKLY2VAddTYAjm39xUETqxNRdCQ9IRBJbicBbfVEs1TYgRleWEnfOn8Yx9Nv5LLJ+
-         vcuPztNLQV+xv8utKsIg432dfDACDbrHrXvLU9E3emDrG8cX3gHu5GeV320EN9QEsRo7
-         O8Ayg5ZxdZSeoVedXi7iPLS9XYpFIVmPGArGrXcp/oDVMD4A2KrG5d45h1mAvboHzxtD
-         wpWN0IMfaek4dBy8wZBhMhaGSvzSQ6QpO3G8uwRKLA12dVbnWZ3tUF5vGVRdWBbHsBw4
-         PlHu4V1rXSe87CTK8TYu2X2L/8WxXm9DPX5wJICp5PGr5MnP4wzvxPRPzHWZdVzEDa8x
-         cr/g==
-X-Forwarded-Encrypted: i=1; AJvYcCUbZ/I6+AtX8Api0okLCff8I9py04rwPMvdnHCE3KIaSn4rdJX0i8WzjTni6OeI5sJESWV7WD158Es=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzkT0wDajjgkpo1nqDHXCKbEQHAwl5S0p+KmLbslCFwFmNIbRvZ
-	u5GrOkwc9I50pJXua5SlKCsajQwfbHBaGlKv8RPpJyNSU349vnh0QRb27sGRZvZrJIUw/V/3T7E
-	dbsCuwleOSOjz1Ctx//1nk8KndmroUs0AYoDgYULj77AUWedx4s3eBejxhSgC7xc=
-X-Gm-Gg: AY/fxX5kzytVCRP4DtI6rDbSftQ5ZsY1LtIGKu7Tc2DJyVN/Wf6k32s3Ni6UMjSb2sP
-	Sun5O3YkZbHdDMK/vJtSZx7gUZzJ1Be3KZihyGX/gy4JaK4lkdExA44ZWAGJ1vbZOtWfvFG/nFd
-	COnKevKEEE27ARUvIxFyGLDaDUBw0Mz5fpUp/9tKAcophPOuGSu4k8Fa1hpDGe/b0wNLpqJ9XR4
-	I1jkeovN8B0M0x8kGwX16ePRVxWkQLTOtkp3S2SVKd9e0Y8ncw5k88fHW2CrXo/rOpKfoLo7ECI
-	pEi/yaLukQXukNXQBxoyfsm3dXMUsLDVNOdTyw0/BEsEXYpxRcmdrZr7f3w+7bDHohoWT3fq79J
-	s0E+d8X6s1e6qGhrMtBMzpuq6aftPhHCln2UM19P0wuwDBmQQJ/lzt4Fp4McOJpCMWJkKJ2HT
-X-Received: by 2002:a05:620a:4145:b0:8b1:1585:2252 with SMTP id af79cd13be357-8c389379d10mr145745685a.1.1767755215990;
-        Tue, 06 Jan 2026 19:06:55 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEkrbOP3pew5z1yemj/keUd/L05CmKhUKWFQIvhbUiGyiMtZnJ4i3zNlrw2hEVMpdT9iDsqzA==
-X-Received: by 2002:a05:620a:4145:b0:8b1:1585:2252 with SMTP id af79cd13be357-8c389379d10mr145743385a.1.1767755215591;
-        Tue, 06 Jan 2026 19:06:55 -0800 (PST)
-Received: from [10.38.247.225] (Global_NAT1_IAD_FW.qualcomm.com. [129.46.232.65])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8907725ffc7sm25347946d6.44.2026.01.06.19.06.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Jan 2026 19:06:55 -0800 (PST)
-Message-ID: <ac431daa-a9d1-4415-929b-87c1b9a08f0d@oss.qualcomm.com>
-Date: Wed, 7 Jan 2026 11:06:48 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0797542A9D;
+	Wed,  7 Jan 2026 04:10:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.52.8
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767759040; cv=fail; b=Un4ENGxHZ05DziZygzblALrA+yZth83ey6iFfC9HCiWP8Tu7cKPffYOeICFEXRmbn+r2HRgb1p9crXFoNIgOznHSVWw0lJxe9yYsUqYLBZ0GRaK2zFlBzkdxQMOQAxc8xZn8uEFmfO+0R32EoopoEGUkNdWQ2TfB9+vEurUvA44=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767759040; c=relaxed/simple;
+	bh=oLka733ksWygLKMGrf9hlZTaG1w5rw50fmdvc9uyW7g=;
+	h=Message-ID:Date:Subject:To:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=WFASbjNPlwznFGXsT/NFV0mqwnKMl9wX5u/uNAa0+OWihogJZP50MH5qcfTJvP3hdXmqHEJW8Z7N+hM86m6hfEzYeBqNawOo3d/J2Fb+YBD/8kc3Ybr5YYyeXCfUuAZW7a7Rvh00MqytAPoHfncSN5rUFZNGklNSlCq4PUhzLtM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=sDOFw1zG; arc=fail smtp.client-ip=52.101.52.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=i7RQSZHJzxggXmkS3iUA8ZjbEmkdn3cMePZZ5nvwM0MLL8MpQqcgqVn+Z/quAGJPRMVcWKM1VrTa7m+NfptQ/uQKIGKoM9alt1d6w6RvvuCpjZ256PDjK8geHpBOsYpppalg1T8Gs+mHLrZee3JILe/TduxX2QzmSJ/PvAlqnmBSGNcP1JyyFZ41FYKLwAVUT4lv4hxAidv/IDY4a63RrRLp7SBkNsV377tQogSD/GMbrex+5ycCRYJbrLE2cjWfCMGuh2sd+20cF98L/rPZPojXrWZBPcDx6wcWnxigkWOEp/v7dnwaiQ7WnRMwtAtFRCCbm/mnQF+lk974zFljwg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JuklfLNcAZtqVtmatrpx4RiBm4YijVgIobC7WP0YlHM=;
+ b=L79tG9Z12KgHBb+rcYoKI2sKw0Cua5X+qqqoBTtAGZMTi3RpIMbjB77qZxo8D1lwBQR0QFBo0hxwpebg5lN2i2Jqw6do7YWJN3NR4oYo4AsFqIA2MiN5f0ZIciwxXdy9XRHc1YRM/nKmNlff/zPWDeld9xTMApCdGHZIqFYRafITgdGSbrj6EuuOwrCbSOqP92jTRlUiT1bjAqtlJJ4S6lSuYdLjzGDWYARKOjYDuOKkfIWVYaTehSzRoNQXY+BbzeTOx4Pd1eGHkhTlu/ckOIZvx6qbQTam6SS/LpiWW4BYsmnC7klK5P7rCv7FAMgfbADmVucg4tyMfEkjJvBzJg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JuklfLNcAZtqVtmatrpx4RiBm4YijVgIobC7WP0YlHM=;
+ b=sDOFw1zGJZnixmXfBIk+Gj8QsoJ/aZBAV29C7mCjVLflR/ib6IO6AFmTj4cte8QXbCIoJR90uFtRB39LmzErQDw1pJ977cqjajWnLWoZtDIPcvMqv5JiS3KRMzXOe+SjyKFZFfW7rN5IJSzA5XFDprh25OdthKsFg3TWAkk1lq3G2M+5UQzlCp8Aw3v2Sbo0MvzVGLBsKOTNS2HsUI0YTTUPtxfXxVrgueu9JxZpusGSH9cRKN4QUDoBkwfcNCbIE2OCZrlp1g49m6B6b46hMM+/FJpmeQuSIN4W0ArBDrEsmqwrDsn9/L+UXvqLOT/ScQqiQ14nDrZsVpwdqdzmaQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN0PR12MB5716.namprd12.prod.outlook.com (2603:10b6:208:373::14)
+ by PH7PR12MB8427.namprd12.prod.outlook.com (2603:10b6:510:242::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9478.4; Wed, 7 Jan
+ 2026 04:10:36 +0000
+Received: from MN0PR12MB5716.namprd12.prod.outlook.com
+ ([fe80::bac8:2b43:2a64:4c76]) by MN0PR12MB5716.namprd12.prod.outlook.com
+ ([fe80::bac8:2b43:2a64:4c76%6]) with mapi id 15.20.9478.004; Wed, 7 Jan 2026
+ 04:10:36 +0000
+Message-ID: <e3a6d4f5-87cc-4d22-bf3a-f1067fe152e9@nvidia.com>
+Date: Wed, 7 Jan 2026 09:40:28 +0530
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/4] i2c: tegra: Move variant to tegra_i2c_hw_feature
+To: Jon Hunter <jonathanh@nvidia.com>, ldewangan@nvidia.com,
+ digetx@gmail.com, andi.shyti@kernel.org, thierry.reding@gmail.com,
+ akhilrajeev@nvidia.com, smangipudi@nvidia.com, linux-i2c@vger.kernel.org,
+ linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260106111033.5556-1-kkartik@nvidia.com>
+ <20260106111033.5556-3-kkartik@nvidia.com>
+ <e4be900b-207e-49b1-a7d4-5cf88e0caf2e@nvidia.com>
+Content-Language: en-US
+From: Kartik Rajput <kkartik@nvidia.com>
+In-Reply-To: <e4be900b-207e-49b1-a7d4-5cf88e0caf2e@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: PN4P287CA0124.INDP287.PROD.OUTLOOK.COM
+ (2603:1096:c01:2b2::10) To MN0PR12MB5716.namprd12.prod.outlook.com
+ (2603:10b6:208:373::14)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 4/4] arm64: dts: qcom: talos-evk-camera: Add DT overlay
-To: Rob Herring <robh@kernel.org>
-Cc: Loic Poulain <loic.poulain@oss.qualcomm.com>,
-        Robert Foss <rfoss@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Todor Tomov <todor.too@gmail.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-References: <20260106-sm6150_evk-v2-0-bb112cb83d74@oss.qualcomm.com>
- <20260106-sm6150_evk-v2-4-bb112cb83d74@oss.qualcomm.com>
- <20260106192609.GA2581379-robh@kernel.org>
-Content-Language: en-US
-From: Wenmeng Liu <wenmeng.liu@oss.qualcomm.com>
-In-Reply-To: <20260106192609.GA2581379-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Authority-Analysis: v=2.4 cv=V9FwEOni c=1 sm=1 tr=0 ts=695dcdd1 cx=c_pps
- a=hnmNkyzTK/kJ09Xio7VxxA==:117 a=C3Dk8TwHQYyIj7nOf9RCJw==:17
- a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=EUspDBNiAAAA:8 a=vx6dLVQq4s5TLBKspagA:9
- a=QEXdDO2ut3YA:10 a=PEH46H7Ffwr30OY-TuGO:22
-X-Proofpoint-ORIG-GUID: YrYHLPNsUu5SVGaKbiWOYdgv_u4gGIyL
-X-Proofpoint-GUID: YrYHLPNsUu5SVGaKbiWOYdgv_u4gGIyL
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTA3MDAyNCBTYWx0ZWRfX8iyORlkY/Ry0
- i7xNySaTwDL6A45ANORKskz2ihZGfa/zrQKRyOubqrVnxUgZIw2nQhYSiG8syt7YVmG9fDIWb++
- uIX9Ggo7aVWRLwaWHoHxgKUr/6hPMGf1TAoFo1IFVlZa3u/hkJd2tETaZ1vmJ/NJ2Ae0V2BJhKz
- mFiMoIamqCxjMVh1wFgQeeoBdef9qDpJu/Jdku3rovBsoX7Dk5rqGJhbRPyuGt+lhUwzVRt2hNg
- 1ot7//a1Pzc5t4YyBTSU3qQuY8F+D4HNhrk6zieddzR8b/0+C/yLXxX8/h2xOW95Rf1BAkh2UpY
- 6lLz7PVwqI/EUfA+H9TJza6Rh86QWQKzxpzjNiPSFVD+Q+9vuuqqx809RMybZmeM9SXTpJUJURE
- jmptWtrfygQulNFto/z7EaFnBhxVGe0itqAttWFMAa9ArzOAxZm1AjiPx+bSxq6EdymgyVNK/q3
- 5GAIpIYbysrbqPLTOTg==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2026-01-06_03,2026-01-06_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- lowpriorityscore=0 priorityscore=1501 suspectscore=0 phishscore=0 bulkscore=0
- adultscore=0 malwarescore=0 spamscore=0 clxscore=1015 impostorscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2512120000 definitions=main-2601070024
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR12MB5716:EE_|PH7PR12MB8427:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4dfc1fa5-5ca1-4708-9575-08de4da2b57c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024|921020;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?Y3VWOVZyUXdLMXB4Q1pJMUFMeHhQcnZ2VlNoWmhNN2YzMFBtRzZJM1kyeEVa?=
+ =?utf-8?B?OXFXR2w5Q1FrTkozWGIzdG1NMDhWWEFwMzZ0TVUvNUo3WE94ZU9OdnFZSWtY?=
+ =?utf-8?B?ZHRkOTRUVG9mV2x0NTFmNXRIOWo2NTdKRlMzRjNjaHRZUVR2L25MVG5BZU9F?=
+ =?utf-8?B?aXZSVG1yeFdIWjV3SGY0UzVVd1l4UnBsTW9LZUVJc0ZZWWZWNzVYK3NHbS9k?=
+ =?utf-8?B?WG50SXBwVHgraXd0OEw4eUtnMENsR3M5OXMyRi9OZ3ArWjJBbUU1SWRrYURV?=
+ =?utf-8?B?WnJoWXgxUlBJZHZiS2RjTUR0QSt0aHI2OEhjQkJzRmZqUmlJTFVWTWVuS2hm?=
+ =?utf-8?B?SmlqWks2ZW1HVHhEVW96aTBLZ0F3UW96eTlVbUpGTGpvbURQNmQ2KytsRzAz?=
+ =?utf-8?B?M0MyTjZrcXJxZ1l3dUlVMHYvVkM3UmFPRGNLaXYwdmhPKytpa05UdmE4RHFy?=
+ =?utf-8?B?RFBJckdoNzdtbVZabHU5emQ5VFA3RXhMcXlMQmQwTVJSemwyQU9LcVVISUhO?=
+ =?utf-8?B?T0JNN3h0RDFZaVB5eWMybklmSEJGUlZwb21iM3hUV05hekNUNjFERHdoR2FE?=
+ =?utf-8?B?SHZyeG5xUm5lVnRIT0JOc25Ka0o3WG00R24xdXk1Z2ZlTERlakdQTkN3NG9Y?=
+ =?utf-8?B?am5tVnV6M3BTdGJ1ZzFRVG5RbWUvOW5MZnhUeGplaWpWSlpkcFArVzdURHF1?=
+ =?utf-8?B?UWJTcjlBNi9QMW5QTnQ3YkdvTUpqbnlRTkpqVjE2R1dyVXdnV05ucDZZN0xJ?=
+ =?utf-8?B?V25PVzNocm1YUUhKRldlcytSL3prSXFBWGk5d0FZOThGRWhLREJ3Ly9neUZT?=
+ =?utf-8?B?akVSZjBDVGJpOG5yN3ZhclNMNHppRUdJNFFnYk1kR2h0bjdFQ2hvc21FMGpy?=
+ =?utf-8?B?VGpJcHdHaGYyQXRnZlczYTFzckQzN3o3WlRIQkFyRlpKZytXbmpvTDlYWEVC?=
+ =?utf-8?B?UGhOMUUvV2Vzd3ozbzZ3cTQ4YytFc0kxRk1SZ2ljNVQybEZvWUg4ZG9mazNm?=
+ =?utf-8?B?bU9ROGV3R1ZuN21ZZVdrKzNqdDlGazBOYytGaW5TWHFoMEhBUEphMFFDaVhK?=
+ =?utf-8?B?UFkxT2FLRFhzU2wwSXJzWTIrcXRmUHdIZlhkcyt5YWVEUWFqUkw0N1N0aXBx?=
+ =?utf-8?B?R3J3UXExazQ2c296R3YzNkRZZ093Q2R5Z3B5clo2L3BYVFZtdjQxK0hVTnN6?=
+ =?utf-8?B?Yjc1RUFITzV4SUpwK3RYL1cwcXlaQ3IxbC8wRVcyOWFINjgrU1FJVExKUm8x?=
+ =?utf-8?B?ejdVYUhhQnorRS9pSUpVLytCTUVCVjZBVTR1RFdKSmNMd2pSU1BDVCtxVlFl?=
+ =?utf-8?B?alZoNy8vR3JyT1FreWFoeC9XZyt1QXBadXJ2Y0Q0cHhVdHlpdUwwK1JsTXl5?=
+ =?utf-8?B?Rjh6OGQwN3pBa0IycVE1dEpGc0xYamFuVEVPUnZxQytUeTdzUEJnSGNydmZI?=
+ =?utf-8?B?Slh6Wk5vQzQ5MENvN0g2dndCUWhKQjl4N2h3VEpYQWU2T1ZSa2hVTWJiVndK?=
+ =?utf-8?B?TFpOTXBLVVVWTitGUTlxUm5tOHNTMW80VmhNbko1em9WNzl1ZVhZYzlRKzc1?=
+ =?utf-8?B?YkdKVkxuVnNVZ3Y2U3l3NXJiS29sZHFkUjJDajNZRi84QnFGNzE5ZUtpdVMx?=
+ =?utf-8?B?Rm9sd1lWLzRmZkRuSERBQWhsRWpWMUtYVDE4Yk5TK0pHNHBDWkd0Tk9HaG13?=
+ =?utf-8?B?NVdzNnltSTl2VEFMQkN3ai9QV0V2VGptaDNFTXMwcTJmOStsV1lKOWEwcGpX?=
+ =?utf-8?B?Ukx2U3NkTnZqT1JEV3BiNXR4VWE1MnV1cEpTSWxMdDZaOUw3ZStPR1NhbUJs?=
+ =?utf-8?B?TGpEOE9kRzFadUZjd0s3b2dJRmVSSjFXb243d0hueS9DRGJ2Y0VRcGVNcThh?=
+ =?utf-8?B?ZjUwWEI5bysvU1E3OGFLM3lQcUlmRmwyMGxDbmZFQlROUXRYRjlCOHVrRjE1?=
+ =?utf-8?B?VEVYY0IxSWpkeEVTU0tjNkJvaDVRd05qZXVsZ0liTTlPNUFDd0YxZXR0TVlR?=
+ =?utf-8?Q?DrA70XgpZF8hKCR0103f5UoFUXwFlI=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB5716.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(921020);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?aWxRYVA2MXFUa05oVUdJSktEclBlZ1lobWUrZEppL0tLTXU4RFJsMGNCelps?=
+ =?utf-8?B?eGJTbEg0c1hMNUtrd2RUNW1vL29WdVRESVo2U1p1ZTdscU03T2p3WWRJS3c2?=
+ =?utf-8?B?N2ovN1FjVWx3RktoUzFGT1JhUWtETE1rWlVIYW5vdDRURlc1NGFvVUxHYWFI?=
+ =?utf-8?B?KzhOdk1tWTVxTytFdUdXSk5aVlNiT2xyN00rS21oUVJxZTVGSm9Ua1ExcHhs?=
+ =?utf-8?B?MFo4aURCeWZYRnRBbUJwWlE0bGlhNWh2UWFTdWtTbCs5YWNCOEplWWU1Rnlk?=
+ =?utf-8?B?K2VydWZCc0QzQ2c1LyttclBNaWJ2eHRDSmRZNURWbmtrRmxBNmxsRVpWQWlY?=
+ =?utf-8?B?WDJ4TFFyeHlSZTVDeUNNc2FLcGJSUTg2bkFqSUJhWkZ2bGxIN0Q3U0VwZmZT?=
+ =?utf-8?B?T3JxZ0V0Q0tKUHRHWUJzQkZjY1UrN01CUXdXbVpyK3BxTGQrTE5vQXBmeDQv?=
+ =?utf-8?B?VENYR0tVajZPcjEyMFBhenF4aFVCcFUySFJUdER5eGpGa0FVaTU5R2xxYk0w?=
+ =?utf-8?B?NzcxdEVHU3lrU2dLRE94Q2tvb1lIUWJYMnVLUmNJWElxT21mZ1FOU3lqR3Y4?=
+ =?utf-8?B?WlBkYzdhUWc0QTcvbjJ6dElPeGVJQUtDdzUrM1o4S0NDeVozV2pPMkFMMmpQ?=
+ =?utf-8?B?eUxBb2Nic0NrZFdUM05OTHZJZVlWV0ttcHk0TFcwNDZWcmNXcTVidkV6QUM2?=
+ =?utf-8?B?WXZBeHpiSlNTUkZpdzZHWlpYNytxaStBZ2FqYko0YkNkeEkyV3JlTjUyNGNW?=
+ =?utf-8?B?SkVUcUszZUIzUlA0SmVGdXJWUDFFU1RSQnVsSU1lSkYvRnVvcEZCaGRyY3NR?=
+ =?utf-8?B?VkZZN21NQ01hVHM1NGxEdUJmMzI4Q0daa01YaFkxU3FRRWt5d2pORXI2YVhl?=
+ =?utf-8?B?a2RYNmFZMWxEcHRYMERJVHVCd3pHakZPek1Ia29BVjVEd05lSm9oRkhZaUV5?=
+ =?utf-8?B?ZUpPODEwdWJ3eG5vYnNZQ2lhYloralhlR3BHMVk3enVHR1oxM2Y5YU8waGRM?=
+ =?utf-8?B?S0UrKzBmenNKbGxsVjhMdGVUYlpwazNvZTNiVjl1ME9Tc2gwTXVUQ0RkNGhI?=
+ =?utf-8?B?YmlpZFgvLzE2VUFZQm1qdDUzQ2FUSnZFTnJkd1NjbWZHcWdsSEd0RXU2V3Zy?=
+ =?utf-8?B?VGhuT09iQzY3K0gzbWdzNit2cmJOT2ViUXFSRFg0YmxEaElrWVNhWkdLcHpo?=
+ =?utf-8?B?eVNnUWRFc0xLWitEaHpKTG1HWDlLZDZBNDVXUEw4UmtURE5BWElNT1hMWTBr?=
+ =?utf-8?B?KzRISzM4cGl6NFRwZHRCVVRVNnVLeERqOURDa09IbDlYR0UxSEFGV00wSitP?=
+ =?utf-8?B?b3JKWkVpUXBGUzRJR2dJY1RKMjl2TUFkWDlhZXc1MEFraUlnUHRzSEdpbHJ1?=
+ =?utf-8?B?c2FTN1pNdE5OZ2NaUG10NGs5THJJVnNtdXY5cjhrMkNDTWFyUTJaYjZ1dEFM?=
+ =?utf-8?B?Z1VMZmYvUlFEMklRdC9RSjZMTXNaVW1nclBsWjBYb255VmJ6YTJmRkFZNFNY?=
+ =?utf-8?B?WmwrVUpCL1RWcFhYdUVlQndYNnZYb0FveWdMMlVMdCtDSGdEMHhLNkx0NXBM?=
+ =?utf-8?B?SXpLckZXaFRjU3VJdjBDU210RXBBSkhnYmdlb2pINzk1VzB1TkZlVHJVbjRr?=
+ =?utf-8?B?VjhIVWdKQVVPQXpOSGQ2UDFkNWVqOU9XMURMSXRSN3VZMWNzd1hFcHJka3p3?=
+ =?utf-8?B?djliWFAzMG8rS1FxUFBGWUU0NWdpeXdYZlRjY1A4cmNPdkRlZkFoMFI1ZEpE?=
+ =?utf-8?B?YkF5VTdrT2s4NlpwUy84aGNtWnBGVU4vQzRpbFR2enloTzMxZDJMeGlaNHA0?=
+ =?utf-8?B?S2F1MjEyOXBuLzBPOXp1VFdra0U2bWF4WFh6cHZiT1d6bUlXb3VKMldBTnFr?=
+ =?utf-8?B?RkR0V2RXcnpEMk1TTW00V0NHb1VWbGtWSzJrWjBlU2JmYm1jZFdLZlZLSXdV?=
+ =?utf-8?B?NWdLTzVTbUNCVVRMQ240WEJ5SnkyVnhZWFZIR0p4ZmZudzRNYlZTUktFd1ZI?=
+ =?utf-8?B?OEUvUmVpRHpONlFmeWIwTVFINitZMEhCWGErR1NVUTVBRGgzNm1kRHdNY2tX?=
+ =?utf-8?B?a2FUYVYySFQwNDhGaUFEOEdobmxDVHdiWEZvakgwT0QvaTl2Zmd5UGFQcEJr?=
+ =?utf-8?B?Zml0N0ZDaHZxRWdmenBVbDdLSkNBTldVMFZJTlU4WUpVZmVvKyt6OERYTGdz?=
+ =?utf-8?B?R0VWVTljT2w5MWZEVFcvcHlnUE8wVFV4TlNBNmdKai9CUVZkcGphcTdDalY4?=
+ =?utf-8?B?aWJHRzl3czI2aGgybHFVblZzNnphZVNLN01nTE9zTjNKalFzV0llN3JSSVZT?=
+ =?utf-8?B?YVlKTEc2a21Kem1UNHh6a0hRMXFLejZqK3B2YzRORitIcTY3WUVJUT09?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4dfc1fa5-5ca1-4708-9575-08de4da2b57c
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB5716.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jan 2026 04:10:36.2095
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: rM/WIw8VIz20H4AjCnDjm1RPiN1y9wT5GwtPUgfA0Vk1BCzzSHr5b5iTqYIAnP6C/9GqiNwLCN2hqYUUzxSx5g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB8427
 
-
-
-On 1/7/2026 3:26 AM, Rob Herring wrote:
-> On Tue, Jan 06, 2026 at 05:39:56PM +0800, Wenmeng Liu wrote:
->> Enable IMX577 via CCI on Taloss EVK Core Kit.
+On 06/01/26 17:04, Jon Hunter wrote:
+> 
+> On 06/01/2026 11:10, Kartik Rajput wrote:
+>> Move the variant field into tegra_i2c_hw_feature and populate it for all
+>> SoCs. Add dedicated SoC data for "nvidia,tegra20-i2c-dvc" and
+>> "nvidia,tegra210-i2c-vi" compatibles. Drop the compatible-string checks
+>> from tegra_i2c_parse_dt to initialize the Tegra I2C variant. Also remove
+>> the redundant config checks from IS_VI and IS_DVC macros.
 >>
->> The Talos EVK board does not include a camera sensor
->> by default, this overlay reflects the possibility of
->> attaching an optional camera sensor.
->> For this reason, the camera sensor configuration is
->> placed in talos-evk-camera.dtso, rather than
->> modifying the base talos-evk.dts.
->>
->> Signed-off-by: Wenmeng Liu <wenmeng.liu@oss.qualcomm.com>
+>> Signed-off-by: Kartik Rajput <kkartik@nvidia.com>
 >> ---
->>   arch/arm64/boot/dts/qcom/Makefile              |  2 +
->>   arch/arm64/boot/dts/qcom/talos-evk-camera.dtso | 63 ++++++++++++++++++++++++++
->>   2 files changed, 65 insertions(+)
+>>   drivers/i2c/busses/i2c-tegra.c | 100 ++++++++++++++++++++++++++-------
+>>   1 file changed, 81 insertions(+), 19 deletions(-)
 >>
->> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
->> index 4258776b71bdba351de8cefa33eb29a0fe3ec6f3..bfaa0b47ab5cabc9aa1c6fba29faa3e6fd18f913 100644
->> --- a/arch/arm64/boot/dts/qcom/Makefile
->> +++ b/arch/arm64/boot/dts/qcom/Makefile
->> @@ -333,8 +333,10 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sm8650-qrd.dtb
->>   dtb-$(CONFIG_ARCH_QCOM)	+= sm8750-mtp.dtb
->>   dtb-$(CONFIG_ARCH_QCOM)	+= sm8750-qrd.dtb
->>   dtb-$(CONFIG_ARCH_QCOM)	+= talos-evk.dtb
->> +talos-evk-camera-dtbs	:= talos-evk.dtb talos-evk-camera.dtbo
+>> diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
+>> index 9a09079dcc9c..4ab991a22350 100644
+>> --- a/drivers/i2c/busses/i2c-tegra.c
+>> +++ b/drivers/i2c/busses/i2c-tegra.c
+>> @@ -235,6 +235,7 @@ enum tegra_i2c_variant {
+>>    *        timing settings.
+>>    * @enable_hs_mode_support: Enable support for high speed (HS) mode transfers.
+>>    * @has_mutex: Has mutex register for mutual exclusion with other firmwares or VMs.
+>> + * @variant: This represents the I2C controller variant.
+>>    */
+>>   struct tegra_i2c_hw_feature {
+>>       bool has_continue_xfer_support;
+>> @@ -266,6 +267,7 @@ struct tegra_i2c_hw_feature {
+>>       bool has_interface_timing_reg;
+>>       bool enable_hs_mode_support;
+>>       bool has_mutex;
+>> +    enum tegra_i2c_variant variant;
+>>   };
+>>   /**
+>> @@ -281,7 +283,6 @@ struct tegra_i2c_hw_feature {
+>>    * @base_phys: physical base address of the I2C controller
+>>    * @cont_id: I2C controller ID, used for packet header
+>>    * @irq: IRQ number of transfer complete interrupt
+>> - * @variant: This represents the I2C controller variant.
+>>    * @msg_complete: transfer completion notifier
+>>    * @msg_buf_remaining: size of unsent data in the message buffer
+>>    * @msg_len: length of message in current transfer
+>> @@ -334,13 +335,10 @@ struct tegra_i2c_dev {
+>>       bool atomic_mode;
+>>       bool dma_mode;
+>>       bool msg_read;
+>> -    enum tegra_i2c_variant variant;
+>>   };
+>> -#define IS_DVC(dev) (IS_ENABLED(CONFIG_ARCH_TEGRA_2x_SOC) && \
+>> -             (dev)->variant == TEGRA_I2C_VARIANT_DVC)
+>> -#define IS_VI(dev)  (IS_ENABLED(CONFIG_ARCH_TEGRA_210_SOC) && \
+>> -             (dev)->variant == TEGRA_I2C_VARIANT_VI)
+>> +#define IS_DVC(dev) ((dev)->hw->variant == TEGRA_I2C_VARIANT_DVC)
+>> +#define IS_VI(dev)  ((dev)->hw->variant == TEGRA_I2C_VARIANT_VI)
 > 
-> You need to add talos-evk-camera.dtbo to dtb-y if you want it preserved
-> and able to be installed (via dtbs_install). If you don't want that,
-> then why is it a .dtbo?
+> I was thinking about this and actually, I am wondering if we should leave these checks present because if these are not enabled, then the compiler should be enable to drop all the associated code at compile time. So there could be some value to keeping this as is.
 > 
-> Looks like other .dtbo's might have the same issue.
+> Jon
+> 
 
-Will fix it in next version.
-
-Thanks,
-Wenmeng>
->>   talos-evk-lvds-auo,g133han01-dtbs	:= \
->>   	talos-evk.dtb talos-evk-lvds-auo,g133han01.dtbo
->> +dtb-$(CONFIG_ARCH_QCOM)	+= talos-evk-camera.dtb
->>   dtb-$(CONFIG_ARCH_QCOM)	+= talos-evk-lvds-auo,g133han01.dtb
->>   x1e001de-devkit-el2-dtbs	:= x1e001de-devkit.dtb x1-el2.dtbo
->>   dtb-$(CONFIG_ARCH_QCOM)	+= x1e001de-devkit.dtb x1e001de-devkit-el2.dtb
-
+Ack.
 
