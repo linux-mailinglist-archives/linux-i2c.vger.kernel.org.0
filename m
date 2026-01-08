@@ -1,272 +1,201 @@
-Return-Path: <linux-i2c+bounces-14988-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14990-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1121FD017E3
-	for <lists+linux-i2c@lfdr.de>; Thu, 08 Jan 2026 09:01:48 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 38A19D01852
+	for <lists+linux-i2c@lfdr.de>; Thu, 08 Jan 2026 09:11:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id E823C30EE105
-	for <lists+linux-i2c@lfdr.de>; Thu,  8 Jan 2026 07:54:19 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5559D30AF9F6
+	for <lists+linux-i2c@lfdr.de>; Thu,  8 Jan 2026 08:09:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E1BA36C588;
-	Thu,  8 Jan 2026 07:45:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC74D38BF6B;
+	Thu,  8 Jan 2026 07:54:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b="yuZtF/CA"
+	dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b="PV3GGcoI"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtpbgsg1.qq.com (smtpbgsg1.qq.com [54.254.200.92])
+Received: from smtpbgbr2.qq.com (smtpbgbr2.qq.com [54.207.22.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2A82369201;
-	Thu,  8 Jan 2026 07:45:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.254.200.92
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4B4D38A735;
+	Thu,  8 Jan 2026 07:54:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.207.22.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767858348; cv=none; b=L/YzPF8mkZZxBBXWTbX2UMmX8gHyDp+X07HZe2HUJxRCi43PWjirWfvyU1uR1LB0vPRNJCDSL/eKkHIUSLgMDZadPuVbf3KGAz0Lin6korwcMYl+X3ENpRs6oX/lDXYVaVPmoVEbae93mYu6QcSsi9wW0q4/eEaqcbKjwwdu7ew=
+	t=1767858850; cv=none; b=Egqs8nDWHztciRdLap3g/vXkSHc1ZhVc/C0x87WdnaaGaGViSVJJA3bgx09nJqRf2yvH/HzFX612ls0RM4LttK3sKIXDXZUJh2o6DRNkwneLU1GkjPY4VgwCOnwxCiAv4WBNSkrmDeghH/J5iwZOak/Xx/vWKh9JaSfTcE5DOIs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767858348; c=relaxed/simple;
-	bh=jVCb94nzYjSo7CQnFBetxGZny+Hyyslelwa5Cnx0CDI=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X1gxYifO/3JnEAuJkbNxFwIA4tqL2nVNaXRrag6riQ0VPfYXY0amwrKkPpLqfgIPvgDWqGHQEOX7YmyWvXYl6eYC9q7A4KcA4SLgRvk/L6odtObefQShUBRb0n2Ktvw2HC4sH9xu93E9m/Rz5H15Xmo3NvMAarZ7OnZmpBW85bk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com; spf=none smtp.mailfrom=linux.spacemit.com; dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b=yuZtF/CA; arc=none smtp.client-ip=54.254.200.92
+	s=arc-20240116; t=1767858850; c=relaxed/simple;
+	bh=tbIGjlDaxXLlK3CGW7YL2KnO3OY9L0q1RD5Ci1tLoMc=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=JppijklmXvMrbtqb0IsguYksk5afHinSSa1Xl7TeKTdOAHmhIX/cwu/8kZPoK+AZAj3nfnXXK1XlVkJfUyCWDw8K+rJ0EG29s2HtuMMG/gIKip95LsbYcvAoNwIypFW70TQPVr2tAFUvxEx/WNhbry+P9PrYLKcoQmk/rq7x7BQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com; spf=none smtp.mailfrom=linux.spacemit.com; dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b=PV3GGcoI; arc=none smtp.client-ip=54.207.22.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.spacemit.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.spacemit.com;
-	s=mxsw2412; t=1767858224;
-	bh=gmPLxFNB7PwZVYw3lcnPElLWsgdJCt7CvgwsN7UTtf0=;
-	h=Date:From:To:Subject:Message-ID:MIME-Version;
-	b=yuZtF/CANbuXFaPOSS6APmAQiDZ5p8PSb1rxkehCVI6O+Rha8xKvCHPmcLm3729kQ
-	 XNtjQZItcIV+Y2XSf3eQWVjT28m+8FAKwTaWigXamJXs/pXROAh0+D2ASGS4Sbf5ZK
-	 6Bp+Fg8MvSIR5ScQRXy9N32lX1tJxVgKziUIDE1I=
-X-QQ-mid: esmtpsz19t1767858216t642a04b1
-X-QQ-Originating-IP: 17o6U6Qsxjsav1MFN3Xqj+2GCXT9qk0RWU0f5TMEWJs=
+	s=mxsw2412; t=1767858746;
+	bh=OQKF6a57dtViu/PGidKs4z6esTer4gYIuSWOBB4u8V4=;
+	h=From:Date:Subject:MIME-Version:Message-Id:To;
+	b=PV3GGcoIxrpqBrul5/SOSdwzsQhkHR3PwHlm2aQmSNs9aPciOMHeKn/EVHv6qUv6t
+	 s1olHfcjslBhsLZ6WMok6xTuvKm6Gox5G8cOGU7E70s3RF8ZFSV8nOUCz3e4IzCigj
+	 +7b84JoTNw3MfAB8xl9E+B5AkMQvWl/9pGKbsjyo=
+X-QQ-mid: esmtpsz20t1767858739t501e3a4a
+X-QQ-Originating-IP: Q9MYu1rJefOIBIX0EiUlNYVnMd56z1u5UxopIxrdviM=
 Received: from = ( [120.239.196.107])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Thu, 08 Jan 2026 15:43:35 +0800 (CST)
+	id ; Thu, 08 Jan 2026 15:52:17 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 13065356209076285472
-EX-QQ-RecipientCnt: 10
-Date: Thu, 8 Jan 2026 15:43:35 +0800
+X-BIZMAIL-ID: 5555458612639012329
+EX-QQ-RecipientCnt: 11
 From: Troy Mitchell <troy.mitchell@linux.spacemit.com>
-To: Troy Mitchell <troy.mitchell@linux.spacemit.com>,
-	Andi Shyti <andi.shyti@kernel.org>, Yixun Lan <dlan@gentoo.org>,
-	Alex Elder <elder@riscstar.com>,
-	Michael Opdenacker <michael.opdenacker@rootcommit.com>,
-	Troy Mitchell <troymitchell988@gmail.com>,
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev
-Subject: Re: [PATCH v5 2/2] i2c: spacemit: introduce pio for k1
-Message-ID: <DBE079430D146D2A+aV9gJ2Ws1y24y-1E@kernel.org>
-References: <20251226-k1-i2c-atomic-v5-0-023c798c5523@linux.spacemit.com>
- <20251226-k1-i2c-atomic-v5-2-023c798c5523@linux.spacemit.com>
- <aVKZIwZf6_NJJRz8@aurel32.net>
+Date: Thu, 08 Jan 2026 15:52:11 +0800
+Subject: [PATCH v6 1/2] i2c: spacemit: move i2c_xfer_msg()
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aVKZIwZf6_NJJRz8@aurel32.net>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260108-k1-i2c-atomic-v6-1-41b132b70f68@linux.spacemit.com>
+References: <20260108-k1-i2c-atomic-v6-0-41b132b70f68@linux.spacemit.com>
+In-Reply-To: <20260108-k1-i2c-atomic-v6-0-41b132b70f68@linux.spacemit.com>
+To: Andi Shyti <andi.shyti@kernel.org>, Yixun Lan <dlan@gentoo.org>, 
+ Alex Elder <elder@riscstar.com>, Aurelien Jarno <aurelien@aurel32.net>, 
+ Michael Opdenacker <michael.opdenacker@rootcommit.com>, 
+ Troy Mitchell <troymitchell988@gmail.com>
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-riscv@lists.infradead.org, spacemit@lists.linux.dev, 
+ Troy Mitchell <troy.mitchell@linux.spacemit.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1767858732; l=2987;
+ i=troy.mitchell@linux.spacemit.com; s=20250710; h=from:subject:message-id;
+ bh=tbIGjlDaxXLlK3CGW7YL2KnO3OY9L0q1RD5Ci1tLoMc=;
+ b=iv/VwVfba0jDgoFizy6ZVeTjzmJ9+RmrC3djzGroqWNBoCPOXZzhHQns5VDd6AZILvSXRWNte
+ nt8twu9OoMPB3dl9G71r4gb3tSN7vXpAHfytLh+hu7OScEUfnXdyV9J
+X-Developer-Key: i=troy.mitchell@linux.spacemit.com; a=ed25519;
+ pk=lQa7BzLrq8DfZnChqmwJ5qQk8fP2USmY/4xZ2/MSsXc=
 X-QQ-SENDSIZE: 520
 Feedback-ID: esmtpsz:linux.spacemit.com:qybglogicsvrgz:qybglogicsvrgz3a-0
-X-QQ-XMAILINFO: MfDY8OK1Yq+TgBbSl6LavdY4Y+7vnGMgyfiK8hr7BXvWo5xNIZGCfW9O
-	YyW3y80vy83JzpNRR5ZAQMgmpZavm+BpOR2hKvl4NBfAmpIIS9ni4AGcJIgIa8Zt0dcGFyX
-	2k2DfxyUeHrxGwqMrP3shUf0GWf368jdAyHaFk01hVYCYZHIfuk653reFp4W9Ak0gVftuOO
-	yB1Vozqh2jHAV5SJD97rWh0ijhV170BBaHJYjE7rpSdo0j643JpBbt8jplvEuDM9t5mSsmd
-	cy1DeNy8eUFuQbBH3XxvpBpbxYicXfamneU/XoOtw9hAEDhHbVIAF8SIcT0jiOawToMOAVZ
-	yMw+g78vUiNpr4KvobkrTOBfpc2tsOyvPLInC0vk7cpaB3TvPvCpn3REl4BUuEjGmJuKf76
-	Cs89iEcqJbqQs4t76G3uwh91KrXtYidE7YoFsCf1jpE6hUu8am3F4f7OgiXvYIQ+/O+4YZz
-	1+41Q2aABnK1nxWx6zcdnbyCNpxpH7XFzEX1f2zgXH4EJWNqxaynEEYwBZK5R2rKCu6q+oS
-	5wQuvxD3HUXT8HP/4Q2eBEn/GkWJGBtZ+XCdxVWjW6F7uGZSwLNA6eC8v2yS3FEeeI+w77Y
-	eZeeRvYIxONrQINJ5bq/+oDmmOWSqGjj0YejePlxbp7iBG47PGQ/sAvhm30Ya4avA5k/iE3
-	AeDXqHYZ9BtzNaHOIvlta2t3EiRgoQPb186LTro1R52b+sQqRdoP5c+QM/iGnUprVTq4LEn
-	HxmS0qaAbUT6OvCuOThbIpdPoJ8OApNjK2Y0xYYI0etLLO5PEw+2MAahyVIVX3XGmL1Y8xi
-	w0u5EmCYh96JwXk6KMMtBwF6HiFDv82gkp/3EotKHFPSmBYAiXFnrUtkPhdFXnkQ4tjgWaa
-	KM2BETIBq8+EO+H3rFt4aweLkknAfohRAtIc+vjVujpBiG1xLiQ5i3utdTMGl3EVr0Ki7J6
-	UTZeyp32yZmFrNLvK9DQRfJFckZqlkhLhfqdTLdNCUXDKxElC7xD3VMTvBrPi8XzZBc2Xim
-	KArLROC3qPoK8yOW21dpvscyVJxY0CibEVRHW4pNsDTqzylMBfNqNHEBlR1sCRAz+ZyLF8o
-	7JujHWCn64dzmHH1RTWe6c=
-X-QQ-XMRINFO: NS+P29fieYNwqS3WCnRCOn9D1NpZuCnCRA==
+X-QQ-XMAILINFO: NoTnWcAlB075yW1wVq4GDLMNSMnq2O1vkNmA15iSvqoA0z4x7bZuRtQe
+	2hn4Dc/JrMOA0P1of2hdx/ZvdKnN8N1JHmAO1y8pOgOUv04jWro26e8jSYW8B1Nuuok/4tR
+	gQ6h+kcVHOd9ohy0gK9ycI3MBW1LTpY1/qgQA5oibhrGcsElH7CtR8bIFroXlifnbxUEgKn
+	8BBLgTSTpVKHSREUJJDgEzhCSjyeuSNUiP0DF/27WbZk5mXA8dU3P489a15nNyNypMYAdeR
+	2wua+6Z0A0y6RHsL8//8RAsjNWw61yF6Y8ypmgpW1+52Z1TQsDDKbRCYFIdl3399IIVZ4oy
+	xiZ5fbcXP3/fbP9rKUmhyqsLMk3tD4tgbRh0GcCbOPktwv7rKq/hGprBOdZ2WRenqZ3Lmy3
+	+IZmKck2Yi9wObwucmCaChrYxLiJQHLLqKkSKC8zCJJl2/Y6Wb0Zx3bp49vn4OZeNUg8zxt
+	UMY6fE4pnhbYtq+ZUTlhN3La2FwP6Qs56Wc/85HcCIGK9b48cuQQheWZdBzyj78eYZx5aQ4
+	cbP0lUXLXoa+iQ9fCnO/UkVOuaWm/M4DpZDJNnjWJMmmjT75gc+mg1W/LBNa3+saLGi9ejZ
+	H/asqZg4xH07W4eDrSJwSI6nwRk9jB8ZrHHfb5H5AeNvnvKLZH6hVdDBZVLpUA987ws/Tym
+	B2SYgWQ3+mPUuRcBKRA8G2ZkFmA0650Q+m7LRf2w9bq0LDH+JF3Fd9TIgdY5OLERHU+Y1jx
+	TGqztGjf6nnN8vXQVAjyZ1u3Wp+NcfFlFCMsp3wtDsurnlHNHB2DDTPO5BmXACxYbZGQwkF
+	x6AJpAvX4dT0SXJ44NspY0loU4n0jvHDwsbEWNYf49Com6uhB103rDdIyZISxSCmeSprKe/
+	qcsDx+99AJN2h+AXHpdVgcKeVwWM9uecVD1w5nHP0pbma+SBjqHqKYmK4Jrkyl7nvXzG0TZ
+	7pZ3AJIRo/J7Bel5mEGBM+Rrbo9LwpuBK1G8KZX2qTm3CdZKKKlmOlariS1Ho39YopB4rmF
+	Dh9L2KnYTVSzxfgCn45V8wLrjayCnikLk3naBv+5w9WvGc235RN/oKImnLdZm9oD6zsOmkr
+	dlrVvG7qcuFtF8rOicPAwTLFoB+lXU99HSXrdWX1MPyKco4cy+3MQZCPCBOvH99jw==
+X-QQ-XMRINFO: Nq+8W0+stu50tPAe92KXseR0ZZmBTk3gLg==
 X-QQ-RECHKSPAM: 0
 
-On Mon, Dec 29, 2025 at 04:07:15PM +0100, Aurelien Jarno wrote:
-> Hi,
-> 
-> On 2025-12-26 11:31, Troy Mitchell wrote: This patch introduces I2C PIO functionality for the Spacemit K1 SoC,
-> > enabling the use of I2C in atomic context.
-> > 
-> > When i2c xfer_atomic is invoked, use_pio is set accordingly.
-> > 
-> > Since an atomic context is required, all interrupts are disabled when
-> > operating in PIO mode. Even with interrupts disabled, the bits in the
-> > ISR (Interrupt Status Register) will still be set, so error handling can
-> > be performed by polling the relevant status bits in the ISR.
-> > 
-> > Signed-off-by: Troy Mitchell <troy.mitchell@linux.spacemit.com>
-> > ---
-> > Changes in v5:
-> > - optimize code logic
-> > - refactor delay handling into spacemit_i2c_delay() helper
-> > - introduce spacemit_i2c_complete() to centralize transfer completion
-> > - rework PIO transfer wait logic for clarity and correctness
-> > - modify and add some comments
-> > - modify commit message
-> > - Link to v4: https://lore.kernel.org/all/20251009-k1-i2c-atomic-v4-1-a89367870286@linux.spacemit.com/
-> > 
-> > Changes in v4:
-> > - refactor for better readability: simplify condition check and moving if/else (timeout/
-> >   wait_xfer_complete) logic into a function
-> > - remove irrelevant changes
-> > - remove the status clear call in spacemit_i2c_xfer_common()
-> > - sort functions to avoid forward declarations,
-> >   move unavoidable ones above function definitions
-> > - use udelay() in atomic context to avoid sleeping
-> > - wait for MSD on the last byte in wait_pio_xfer()
-> > - Link to v3: https://lore.kernel.org/r/20250929-k1-i2c-atomic-v3-1-f7e660c138b6@linux.spacemit.com
-> > 
-> > Changes in v3:
-> > - drop 1-5 patches (have been merged)
-> > - modify commit message
-> > - use readl_poll_timeout_atomic() in wait_pio_xfer()
-> > - use msecs_to_jiffies() when get PIO mode timeout value
-> > - factor out transfer state handling into spacemit_i2c_handle_state().
-> > - do not disable/enable the controller IRQ around PIO transfers.
-> > - consolidate spacemit_i2c_init() interrupt setup
-> > - rename is_pio -> use_pio
-> > - rename spacemit_i2c_xfer() -> spacemit_i2c_xfer_common()
-> > - rename spacemit_i2c_int_xfer() -> spacemit_i2c_xfer()
-> > - rename spacemit_i2c_pio_xfer() -> spacemit_i2c_pio_xfer_atomic()
-> > - call spacemit_i2c_err_check() in wait_pio_xfer() when write last byte
-> > - Link to v2: https://lore.kernel.org/r/20250925-k1-i2c-atomic-v2-0-46dc13311cda@linux.spacemit.com
-> > 
-> > Changes in v2:
-> > - add is_pio judgement in irq_handler()
-> > - use a fixed timeout value when PIO
-> > - use readl_poll_timeout() in  spacemit_i2c_wait_bus_idle() when PIO
-> > - Link to v1: https://lore.kernel.org/r/20250827-k1-i2c-atomic-v1-0-e59bea02d680@linux.spacemit.com
-> > ---
-> >  drivers/i2c/busses/i2c-k1.c | 297 +++++++++++++++++++++++++++++++++-----------
-> >  1 file changed, 225 insertions(+), 72 deletions(-)
-> > 
-> > diff --git a/drivers/i2c/busses/i2c-k1.c b/drivers/i2c/busses/i2c-k1.c
-> > index accef6653b56bd3505770328af17e441fad613a7..78a2de2c517e51e6ff997cc21402eb8f85054f85 100644
-> > --- a/drivers/i2c/busses/i2c-k1.c
-> > +++ b/drivers/i2c/busses/i2c-k1.c
-> 
-> ...
-> 
-> > @@ -383,8 +424,134 @@ static void spacemit_i2c_err_check(struct spacemit_i2c_dev *i2c)
-> >  
-> >  	spacemit_i2c_clear_int_status(i2c, SPACEMIT_I2C_INT_STATUS_MASK);
-> >  
-> > -	i2c->state = SPACEMIT_STATE_IDLE;
-> > -	complete(&i2c->complete);
-> > +	spacemit_i2c_complete(i2c);
-> > +}
-> > +
-> > +static void spacemit_i2c_handle_state(struct spacemit_i2c_dev *i2c)
-> > +{
-> > +	u32 val;
-> > +
-> > +	if (i2c->status & SPACEMIT_SR_ERR)
-> > +		goto err_out;
-> > +
-> > +	val = readl(i2c->base + SPACEMIT_ICR);
-> > +	val &= ~(SPACEMIT_CR_TB | SPACEMIT_CR_ACKNAK | SPACEMIT_CR_STOP | SPACEMIT_CR_START);
-> > +
-> > +	switch (i2c->state) {
-> > +	case SPACEMIT_STATE_START:
-> > +		spacemit_i2c_handle_start(i2c);
-> > +		break;
-> > +	case SPACEMIT_STATE_READ:
-> > +		spacemit_i2c_handle_read(i2c);
-> > +		break;
-> > +	case SPACEMIT_STATE_WRITE:
-> > +		spacemit_i2c_handle_write(i2c);
-> > +		break;
-> > +	default:
-> > +		break;
-> > +	}
-> > +
-> > +	if (i2c->state != SPACEMIT_STATE_IDLE) {
-> > +		val |= SPACEMIT_CR_TB;
-> > +		if (i2c->use_pio)
-> > +			val |= SPACEMIT_CR_ALDIE;
-> > +
-> > +
-> > +		if (spacemit_i2c_is_last_msg(i2c)) {
-> > +			/* trigger next byte with stop */
-> > +			val |= SPACEMIT_CR_STOP;
-> > +
-> > +			if (i2c->read)
-> > +				val |= SPACEMIT_CR_ACKNAK;
-> > +		}
-> > +		writel(val, i2c->base + SPACEMIT_ICR);
-> > +	}
-> > +
-> > +err_out:
-> > +	spacemit_i2c_err_check(i2c);
-> > +}
-> > +
-> > +/*
-> > + * In PIO mode, this function is used as a replacement for
-> > + * wait_for_completion_timeout(), whose return value indicates
-> > + * the remaining time.
-> > + *
-> > + * We do not have a meaningful remaining-time value here, so
-> > + * return a non-zero value on success to indicate "not timed out".
-> > + * Returning 1 ensures callers treating the return value as
-> > + * time_left will not incorrectly report a timeout.
-> > + */
-> > +static int spacemit_i2c_wait_pio_xfer(struct spacemit_i2c_dev *i2c)
-> > +{
-> > +	u32 mask, msec = jiffies_to_msecs(i2c->adapt.timeout);
-> > +	ktime_t timeout = ktime_add_ms(ktime_get(), msec);
-> > +	int ret;
-> > +
-> > +	mask = SPACEMIT_SR_IRF | SPACEMIT_SR_ITE;
-> > +
-> > +	do {
-> > +		i2c->status = readl(i2c->base + SPACEMIT_ISR);
-> > +
-> > +		spacemit_i2c_clear_int_status(i2c, i2c->status);
-> 
-> Do we actually need to clear the interrupt status even if none of above 
-> bits are set? Said otherwise, can we move this line after the if and 
-> before the handle_state?
-No, if other bits is pending, we need to clear them here.
-> 
-> > +
-> > +		if (!(i2c->status & mask)) {
-> > +			udelay(10);
-> 
-> It seems that the poll delay elsewhere in this patch is 30 µs. 
-> Maybe use a consistent value.
-> 
-> > +			continue;
-> > +		}
-> > +
-> > +		spacemit_i2c_handle_state(i2c);
-> > +
-> > +
-> 
-> Please delete the extra blank lines here.
-> 
-> > +	} while (i2c->unprocessed && ktime_compare(ktime_get(), timeout) < 0);
-> > +
-> 
-> Otherwise it sounds good, thanks for the changes.
-Thanks.
+The upcoming PIO support requires a wait_pio_xfer() helper, which is
+invoked from xfer_msg().
 
-                              - Troy
-> 
-> Regards
-> Aurelien
-> 
-> -- 
-> Aurelien Jarno                          GPG: 4096R/1DDD8C9B
-> aurelien@aurel32.net                     http://aurel32.net
-> 
+Since wait_pio_xfer() depends on err_check(), move the definition of
+xfer_msg() after err_check() to avoid a forward declaration of
+err_check().
+
+Reviewed-by: Aurelien Jarno <aurelien@aurel32.net>
+Reviewed-by: Alex Elder <elder@riscstar.com>
+Signed-off-by: Troy Mitchell <troy.mitchell@linux.spacemit.com>
+---
+Changes in v6:
+- fix wrong subject
+- Link to v5: https://lore.kernel.org/all/20251226-k1-i2c-atomic-v5-1-023c798c5523@linux.spacemit.com/
+---
+ drivers/i2c/busses/i2c-k1.c | 62 ++++++++++++++++++++++-----------------------
+ 1 file changed, 31 insertions(+), 31 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-k1.c b/drivers/i2c/busses/i2c-k1.c
+index d42c03ef5db5984ea8e06b3d7eb485b4f899e616..accef6653b56bd3505770328af17e441fad613a7 100644
+--- a/drivers/i2c/busses/i2c-k1.c
++++ b/drivers/i2c/busses/i2c-k1.c
+@@ -304,37 +304,6 @@ static void spacemit_i2c_start(struct spacemit_i2c_dev *i2c)
+ 	writel(val, i2c->base + SPACEMIT_ICR);
+ }
+ 
+-static int spacemit_i2c_xfer_msg(struct spacemit_i2c_dev *i2c)
+-{
+-	unsigned long time_left;
+-	struct i2c_msg *msg;
+-
+-	for (i2c->msg_idx = 0; i2c->msg_idx < i2c->msg_num; i2c->msg_idx++) {
+-		msg = &i2c->msgs[i2c->msg_idx];
+-		i2c->msg_buf = msg->buf;
+-		i2c->unprocessed = msg->len;
+-		i2c->status = 0;
+-
+-		reinit_completion(&i2c->complete);
+-
+-		spacemit_i2c_start(i2c);
+-
+-		time_left = wait_for_completion_timeout(&i2c->complete,
+-							i2c->adapt.timeout);
+-		if (!time_left) {
+-			dev_err(i2c->dev, "msg completion timeout\n");
+-			spacemit_i2c_conditionally_reset_bus(i2c);
+-			spacemit_i2c_reset(i2c);
+-			return -ETIMEDOUT;
+-		}
+-
+-		if (i2c->status & SPACEMIT_SR_ERR)
+-			return spacemit_i2c_handle_err(i2c);
+-	}
+-
+-	return 0;
+-}
+-
+ static bool spacemit_i2c_is_last_msg(struct spacemit_i2c_dev *i2c)
+ {
+ 	if (i2c->msg_idx != i2c->msg_num - 1)
+@@ -418,6 +387,37 @@ static void spacemit_i2c_err_check(struct spacemit_i2c_dev *i2c)
+ 	complete(&i2c->complete);
+ }
+ 
++static int spacemit_i2c_xfer_msg(struct spacemit_i2c_dev *i2c)
++{
++	unsigned long time_left;
++	struct i2c_msg *msg;
++
++	for (i2c->msg_idx = 0; i2c->msg_idx < i2c->msg_num; i2c->msg_idx++) {
++		msg = &i2c->msgs[i2c->msg_idx];
++		i2c->msg_buf = msg->buf;
++		i2c->unprocessed = msg->len;
++		i2c->status = 0;
++
++		reinit_completion(&i2c->complete);
++
++		spacemit_i2c_start(i2c);
++
++		time_left = wait_for_completion_timeout(&i2c->complete,
++							i2c->adapt.timeout);
++		if (!time_left) {
++			dev_err(i2c->dev, "msg completion timeout\n");
++			spacemit_i2c_conditionally_reset_bus(i2c);
++			spacemit_i2c_reset(i2c);
++			return -ETIMEDOUT;
++		}
++
++		if (i2c->status & SPACEMIT_SR_ERR)
++			return spacemit_i2c_handle_err(i2c);
++	}
++
++	return 0;
++}
++
+ static irqreturn_t spacemit_i2c_irq_handler(int irq, void *devid)
+ {
+ 	struct spacemit_i2c_dev *i2c = devid;
+
+-- 
+2.52.0
+
 
