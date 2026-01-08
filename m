@@ -1,156 +1,92 @@
-Return-Path: <linux-i2c+bounces-14986-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-14987-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22754D0028F
-	for <lists+linux-i2c@lfdr.de>; Wed, 07 Jan 2026 22:26:19 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42602D01156
+	for <lists+linux-i2c@lfdr.de>; Thu, 08 Jan 2026 06:29:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 530773015A91
-	for <lists+linux-i2c@lfdr.de>; Wed,  7 Jan 2026 21:24:30 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id EAD343083C7B
+	for <lists+linux-i2c@lfdr.de>; Thu,  8 Jan 2026 05:25:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 598D9332EC7;
-	Wed,  7 Jan 2026 21:24:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="a5nxX0hI"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 636AF2D9EF4;
+	Thu,  8 Jan 2026 05:25:17 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
+Received: from smtp.gentoo.org (woodpecker.gentoo.org [140.211.166.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE4A627EFEE
-	for <linux-i2c@vger.kernel.org>; Wed,  7 Jan 2026 21:24:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51F862D7DF3;
+	Thu,  8 Jan 2026 05:25:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=140.211.166.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767821068; cv=none; b=tGjzw4mf2Cds6dIlWNiuZRz7z6Hp36yV6TcbzkO+CewklpYDc6NadF0yvJsYRCxzs1cGULsOUUwHcZFbdzBSwLqrJ6zPqH7JQOgonvGkqgvuRz2IPbblLfPBynQyknt82KQYMYdO83TGXxzJP6XyToDWu77M080IGrxufgfMGz0=
+	t=1767849917; cv=none; b=WinSMcsq6sQ6hsnRgORbAUe/nqjRUrkrXM+TYnP4n+mFAUBhXKQ5FK6gT3xsyoYfGSXtwE7z896T/+y1QppijD913bvTzlclqshEJwOHgZ/9k6/QspyMcS7XMjLdBdNfxNUxHRqzeMjABHK1L8agXbkrluWutyetKbr+aoi1I88=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767821068; c=relaxed/simple;
-	bh=xuhPSFxHT5dicps+AzXUc5xZwOnIs5QdImrqvGMjdcY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Q28E5wPebzGKjuvITHu031Z0Uyq6fi2Pq/tQqXb49kOiMzdvDz55XE2H/K2ckYI7Q+jxDEkI7Tp9MW7drH7YMxzVkFqzJrFPwNd+T/uTKf9oNrClUouV0ppDYoJoKyLnoWaOPl5G8xSEQXDiG+FDbe5NK7rdcy6XpPfsnX7u/DA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=a5nxX0hI; arc=none smtp.client-ip=209.85.208.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-382fb1e257bso1703111fa.3
-        for <linux-i2c@vger.kernel.org>; Wed, 07 Jan 2026 13:24:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1767821063; x=1768425863; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=f/TDnZeMqywPB6R9BWNPYGT+EayXhfAhq0K6Z+LpKaw=;
-        b=a5nxX0hIAJ7aPbLMg7vlyFUOibQiu4qYt8ZBwnIxOwZ8k9dR7oCCCp1EyKKsSrXeq1
-         B11XTAWscz6iDk0WdBAzV369nddJIYyibBLDzoov3b/neArkP+UkFujLlkdyU+m6/gCq
-         R0+lKQkQtOBpCx4uokSDMUJroxyBGtPbjy5W7uPjw25NWyG2ze1JlzziWQ8f8n4ts2rJ
-         7bLc9ePxZo60ovhicFtEMmvKJfZGxZ/PB+mKPKRMnly6QL9PI/6RxrM0cMxdhjxP2wWS
-         4Zqo/NCH3w28WQaKZFr5QufFwkzGyZFjWrwIapHE30F4Ftfr2D0EvTeQLS18OKayaP90
-         5Ijw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767821063; x=1768425863;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=f/TDnZeMqywPB6R9BWNPYGT+EayXhfAhq0K6Z+LpKaw=;
-        b=f5o8xmrddMqH7YPHS8N2V8BwmgnLS2BwI/+kmuVVcs1IPxOyzFVGLcDZTOaG7/RIm9
-         NMKPPB8VF3wHLstyZiUInMRBulDdYKQhrdt1qApSCpQXtK4PaWDjbqS9oYOoTvowVLeH
-         Nj49n5uTEKvadLaF/heIfxx9qAKgI+bDW18ULeEFClo7oawGSCoqmEbGHLsjuQcQq6xs
-         7mN9RB8O2jw+s5gqQmY6RTWns4rv7ffBxs96mBQ8+YsP7/gQj+WfGDcp26hga68cVRmV
-         t54z7LFIHM9/d4nWyjXzIp09/tonLlpfO0FOrg7jrvaxyXVwryE3rNrdQagokI9DdWY8
-         rNsg==
-X-Forwarded-Encrypted: i=1; AJvYcCX1jyP8ONVpg92lLdJM2yZjypTLsI33RjnIOOu5Z7H+obqlcrTEoFUCNf4/65ucBcR19VTKdbUzqJ4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzSPiCnRC9YPR56CPZPQIcij0uPFys2bpUpymPGPMIXkNgDWMLQ
-	dTV+vdPEziKq2Fzk4zwz4CiSqJkmscoXHJEwM92QwQdux9tqUnBbURjKV/n8HVHGTwQ=
-X-Gm-Gg: AY/fxX5aID6fF0QF+Vq/uzXxZVpzRDGcbTF8SKi35uoPb0zDAWZArYE0mq7PnEP4iNA
-	KoiAL29+/b1s7YhacQ+R5fGjAusEpyerKVzxVGpBTZV0kKbEgXCk4IlmTkIm0OnPgCrD+sC99lB
-	5QtUOAt650D4P8vkxou+zQSEcJ9e3fvxpkG/tQO6zdr3i6WFfjv/AI3FDOUWPXa1TfaYxd3yUy5
-	+sQ/1yZNtZ3rH8tGm28HRphZInD/OkSAn29t6XMoHWwxveUpRqo2IMBWKO1vLk4LqDhDDtHnxPo
-	IW1IKEo86PIJwgKPdxZZvTvAVksla7lRkqdpuiGZXEeL7lCYH31Nez+eGIthJs867Sxy/dK5m1B
-	xMWEdT9GKhUIIYQuNNAE2ZSrt9OvhrC2MHWaJJdsKRYZtP4Ekm7I05Mc94cYYtydkrrPlVRv9aF
-	YiD6cqCHV5uu6utazmTE5F+LBG2sjB9p+cKaI9IQaicdgF9jp/inLf96d3O4Tu/rphQg==
-X-Google-Smtp-Source: AGHT+IFfcRWxAkywDeN2SZBwl0HWgo5W5lepeGrLd7xnmJgoH3TiNoELSgeJNH2HwayG/aI4gRkMSw==
-X-Received: by 2002:a2e:bc15:0:b0:37e:6e31:c9bc with SMTP id 38308e7fff4ca-382ff8256famr6465671fa.8.1767821062911;
-        Wed, 07 Jan 2026 13:24:22 -0800 (PST)
-Received: from [192.168.1.100] (91-159-24-186.elisa-laajakaista.fi. [91.159.24.186])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-382eb3a0039sm11811641fa.4.2026.01.07.13.24.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jan 2026 13:24:21 -0800 (PST)
-Message-ID: <6d2a582d-a738-4f1e-97c1-d8ee6d9b0882@linaro.org>
-Date: Wed, 7 Jan 2026 23:24:11 +0200
+	s=arc-20240116; t=1767849917; c=relaxed/simple;
+	bh=cUDJ/Jq0808hTirUXhDv4kOOAPo94VpL0FqcReG1YSg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=tMYZtBQgOUSkhRtfACz61I5cU+OKJK6y+8RynDmZ09UVbOBX2qpjnW5ngS9zpqKpDu0SmljiIlqz4TfHEEgsjeg+K+gnudfu19x3icAswJanZOaZi8frJ6pckILdkKeyEr0UJjp+ODJJUewxOGruaSx9gVlDjS9DL3lVF6DQGzo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org; spf=pass smtp.mailfrom=gentoo.org; arc=none smtp.client-ip=140.211.166.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentoo.org
+Received: from ofsar (unknown [116.232.18.222])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: dlan)
+	by smtp.gentoo.org (Postfix) with ESMTPSA id E62FE340F55;
+	Thu, 08 Jan 2026 05:25:06 +0000 (UTC)
+From: Yixun Lan <dlan@gentoo.org>
+To: Troy Mitchell <troy.mitchell@linux.spacemit.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	Encrow Thorne <jyc0019@gmail.com>
+Cc: Yixun Lan <dlan@gentoo.org>,
+	Troy Mitchell <troymitchell988@gmail.com>,
+	Guodong Xu <guodong@riscstar.com>,
+	linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	spacemit@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: Re: (subset) [PATCH v3 0/3] i2c: spacemit: add reset support
+Date: Thu,  8 Jan 2026 13:24:37 +0800
+Message-ID: <176784920500.341655.1244714161729055220.b4-ty@gentoo.org>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20251230-i2c-reset-v3-0-7500eb93b06e@gmail.com>
+References: <20251230-i2c-reset-v3-0-7500eb93b06e@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 4/4] arm64: dts: qcom: talos-evk-camera: Add DT overlay
-To: Wenmeng Liu <wenmeng.liu@oss.qualcomm.com>,
- Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Cc: Loic Poulain <loic.poulain@oss.qualcomm.com>,
- Robert Foss <rfoss@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>, Todor Tomov <todor.too@gmail.com>,
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>, linux-i2c@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-References: <20260106-sm6150_evk-v2-0-bb112cb83d74@oss.qualcomm.com>
- <20260106-sm6150_evk-v2-4-bb112cb83d74@oss.qualcomm.com>
- <ndexzb5bo2rxjsj7jkf3bevbb6vmtjpuuhxbonpf3v5csxnjtu@sotufkkvfc4r>
- <f09670ed-1aba-4622-94b2-85ade831f7fa@oss.qualcomm.com>
- <e91414c6-fc89-4b38-a5be-f282c8601b5f@linaro.org>
- <3a8e8327-1a55-4822-885a-86fec029952d@oss.qualcomm.com>
-From: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-In-Reply-To: <3a8e8327-1a55-4822-885a-86fec029952d@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-On 1/7/26 07:55, Wenmeng Liu wrote:
-> On 1/7/2026 1:16 PM, Vladimir Zapolskiy wrote:
->> On 1/7/26 05:05, Wenmeng Liu wrote:
->>> On 1/7/2026 2:23 AM, Dmitry Baryshkov wrote:
->>>> On Tue, Jan 06, 2026 at 05:39:56PM +0800, Wenmeng Liu wrote:
->>>>> Enable IMX577 via CCI on Taloss EVK Core Kit.
->>>>>
->>>>> The Talos EVK board does not include a camera sensor
->>>>> by default, this overlay reflects the possibility of
->>>>> attaching an optional camera sensor.
->>>>> For this reason, the camera sensor configuration is
->>>>> placed in talos-evk-camera.dtso, rather than
->>>>> modifying the base talos-evk.dts.
->>>>>
->>>>> Signed-off-by: Wenmeng Liu <wenmeng.liu@oss.qualcomm.com>
->>>>> ---
->>>>>     arch/arm64/boot/dts/qcom/Makefile              |  2 +
->>>>>     arch/arm64/boot/dts/qcom/talos-evk-camera.dtso | 63 +++++++++++++
->>>>> +++++++++++++
->>>>
->>>> Is it possible to attach other sensors? If so, overlay name should
->>>> depicit which sensors are attached (compare this to the RBn boards where
->>>> specifying "vision kit" defines all sensors attached to the device).
->>>
->>> Okay, we previously had a discussion on this. I will rename the file to
->>> talos-evk-camera-imx577.dtso.
->>>
->>
->> Other camera or display .dtso names commonly repeat the name given by
->> the vendor, and the bare minimum is to name it the commit message or in
->> the code. Is it Arducam 12.3MP IMX577 Mini Camera Module or something else?
->>
+
+On Tue, 30 Dec 2025 22:29:01 +0800, Encrow Thorne wrote:
+> Add reset support for the K1 I2C driver. A reset ensures that the
+> controller starts in a clean and known state.
 > 
-> I believe that modifications for the sensor do not need to include
-> Arducam descriptions, because this DTS is intended to support this
-> sensor module. Even if it is replaced with another vendor`s IMX577
-> sensor, it should still work.
+> Reset ensures that the I2C hardware is in a clean state. We cannot assume
+> that no program used I2C before the kernel booted.
 > 
+> 
+> [...]
 
-Most probably yes, if the connector type and its pads are one-to-one equal,
-but before such another camera sensor module appears, it makes sense to
-mention at least in the commit message the exact type of the sensor module,
-which has been tested and supported by your change.
+Applied, thanks!
 
-Hopefully, it should not be too complicated to add a line into the commit
-message, that the change supports Arducam 12.3MP IMX577 Mini Camera Module.
+[3/3] riscv: dts: spacemit: add reset property
+      https://github.com/spacemit-com/linux/commit/91c444d4285c07dbf2e6e4bf954d9a0282157f1f
 
+Best regards,
 -- 
-Best wishes,
-Vladimir
+Yixun Lan
+
 
