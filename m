@@ -1,274 +1,287 @@
-Return-Path: <linux-i2c+bounces-15005-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-15006-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B188DD06E6D
-	for <lists+linux-i2c@lfdr.de>; Fri, 09 Jan 2026 04:02:17 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F279D077C7
+	for <lists+linux-i2c@lfdr.de>; Fri, 09 Jan 2026 08:02:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 935B6300E4FE
-	for <lists+linux-i2c@lfdr.de>; Fri,  9 Jan 2026 03:02:13 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id CB7FE3012E92
+	for <lists+linux-i2c@lfdr.de>; Fri,  9 Jan 2026 07:02:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8D467E105;
-	Fri,  9 Jan 2026 03:02:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CADE22E7BB6;
+	Fri,  9 Jan 2026 07:02:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="WUI+1uUv"
+	dkim=pass (1024-bit key) header.d=vigem.onmicrosoft.com header.i=@vigem.onmicrosoft.com header.b="Tzpqb7eI"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from DU2PR03CU002.outbound.protection.outlook.com (mail-northeuropeazon11011053.outbound.protection.outlook.com [52.101.65.53])
+Received: from mx-relay23-hz1-if1.hornetsecurity.com (mx-relay23-hz1-if1.hornetsecurity.com [94.100.128.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2468C7262E;
-	Fri,  9 Jan 2026 03:02:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.65.53
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767927729; cv=fail; b=Aj79jgBrWNgdPGYM1TAnzpt98vhn4bT1C+hT5Muql24DLzPaygacXmsil83CClzTwBjhy9QoF9N79MGdpLNqLWNTYxxWLhFDUPlfdFYb6XATsF1ZELuyJxwsB0rcimxg+EvOX9bHG8MqcqBcObxTIngMmvN9IUgixvSei1kYq/U=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767927729; c=relaxed/simple;
-	bh=Runsr9x9x9qy9ZCNwgcS2z7yIJHQLdrboYszO7/mWFg=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=ryKqEwpFjUR3Fc8FPc/IuoUN2cYVU4V3xtHedqK3ijrrrmzUmuwsS0to8X1NC1sEnyM2WGjL17x2FQTmiu4KjnTVb5a6LUFjeJPj5baSHKwRB4UexMR5dpBYpFI7k/+NEz9+PATc9inGtv7rXk430WJLQ5aCENQDyfv5Cflt+TA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=WUI+1uUv; arc=fail smtp.client-ip=52.101.65.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0203939FD9
+	for <linux-i2c@vger.kernel.org>; Fri,  9 Jan 2026 07:02:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=94.100.128.33
+ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767942125; cv=fail; b=AOf9RE/VWYTC4JBTkkxVIXUVqhA/oMCvAaGaw3rPb2vE6dAvtEwsnjZg3wxCARWv7ZG/54zZzQYtROEuNiGgstQ8yjhf5XoRndL1LhdZZMlg++d5E/Ydio2d5Fk2P8X0MCL36nP6KB2AeFlXTDWNJDdpLa+oNDAVXnMzOfoLy7I=
+ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767942125; c=relaxed/simple;
+	bh=un7zLbt5unolIkPvZnGwRFYZGdPT2akPSUewqv8INK4=;
+	h=Date:From:To:Subject:Message-ID:Content-Type:MIME-Version; b=lrigYNFgEMKailpsJXxh4S08cvP2aE9NTzjFGTsuMFCZBdxmCGLV1GZO9bzt3YdX2LhoR8WCWWhrSAjqwGAJWMSrkYTZIAz0FclUNYpKfqIVXqAAlS19DIFVBVTAaGdcGoH+Xut3Vd7LA2/oDZMdE13uv3+dBHm7uW+/+rN0fWs=
+ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=vigem.de; spf=pass smtp.mailfrom=vigem.de; dkim=pass (1024-bit key) header.d=vigem.onmicrosoft.com header.i=@vigem.onmicrosoft.com header.b=Tzpqb7eI; arc=fail smtp.client-ip=94.100.128.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=vigem.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vigem.de
+ARC-Authentication-Results: i=2; mx-gate23-hz1.hornetsecurity.com 1; spf=pass
+ reason=mailfrom (ip=52.101.65.113, headerfrom=vigem.de)
+ smtp.mailfrom=vigem.de
+ smtp.helo=du2pr03cu002.outbound.protection.outlook.com; dkim=pass
+ header.d=vigem.onmicrosoft.com header.s=selector2-vigem-onmicrosoft-com
+ header.a=rsa-sha256; dmarc=pass header.from=vigem.de orig.disposition=pass
+ARC-Message-Signature: a=rsa-sha256;
+ bh=Xz6gfjjy/doJUzBGhPGpBb28N+u+N34a1oX12T+ugrM=; c=relaxed/relaxed;
+ d=hornetsecurity.com; h=from:to:date:subject:mime-version:; i=2; s=hse1;
+ t=1767942070;
+ b=GWoCA3N1WhSGgDEEyfvVixybngUL1qkHDQnnv4tvAvpZUe0hLUljwquq87MyhldTAZj4mSVo
+ xyeuxVIbzFc9jKXlF4mHDombPVontz3Yn4xehLqNNQuGN2UsJJr8tlo92dnuXORofufdWHgKi5/
+ JyzHz5DsoUT05FuoX4wfWzP8G7+x1Ya1xTJGLD166t+Hv09988S9EwB+lLWh8iYW5COm2dojRmP
+ HKqojr6fVxAcOC7V3KgjP25h2wGk1F+Nyt8STNYdYfBBYJwZ2q6SNfDMafQm1K1vMNEO1NxApZz
+ YDdYZaG/2UqtuOFFwWVyRkCCK2+CmmUltIyMOEg07GcBA==
+ARC-Seal: a=rsa-sha256; cv=pass; d=hornetsecurity.com; i=2; s=hse1;
+ t=1767942070;
+ b=ONT/lHw5mJ6NJFdD1ePYcLe0kOtDsX6dSdMTjjVTf7dJoDAynw6DLSazmQ0v7N0p/Gp4BlzS
+ zi3mrD1cJftVSaAfEA1V9iXdbRxOOLCzi3cNuPD6fW/CfXJzcITfd4UsfQdHAxrkIlunBWzQGkv
+ EOp963TveDhp7x3iDkWkRmD4kzn3zbzBTQRjxOZtJemtamJ4rjxOkn9m9Im9hH+yahOQ4oCGjHG
+ K/GZt7PzhuKIVtDmUmFKaFJSmY9duk30FXSjvpap+IoxKIqKpoCRayKuGAEvpnfwRlaxY2CqKOT
+ aBdmlmfEdFBy5HwHT/JZ6LBiuTkcR73xMK/Pw5vk8ZoKA==
+Received: from mail-northeuropeazon11021113.outbound.protection.outlook.com ([52.101.65.113]) by mx-relay23-hz1.antispameurope.com;
+ Fri, 09 Jan 2026 08:01:10 +0100
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=GE3tj5FVg83Z8lMeqNY+MrTq+7KaLv+8K7tAIYif6oU8n91VXe0gJk9X81sfX4cKhuCGSg+z1iAXzTg7F1MJpjgUnfDvOowQxx4x4gKXuxGx9RfOMdV2HNFawTBmlRvVFB1GpOnwiFW1+vcnPWHWnHzRXBHzLGp+DVlTUPTSr2eeOQb4Ub07XTXI4nvdQwbtiZxt3JTeeZ9BCa/ESZe+BoHWTqyXZX2ItWG+iPO/IXZUiPdTbVRz9gRXt6ccfemjAYQo+me8xX5Oi8I6Hx4LrpwhqirNrC6/ddxig8LpmCY8MwTMF3EuarzrV8IAKJleguWEnzDZsyzOL5UwGO1vcQ==
+ b=s8DnRYDdP+ZRkBPO/7LUy5vVhBNFoqPjKMuJx0BwBdK8WdlMgrdlq23XkRMsHgHE0yOpafs6P48yZ/GnEUto09xiaBEzinwJlzqZsnmwkY0tS0cLIx1YSuarYDZlcdZ/uVIKophw5kTt46s0IPlQRgl+oNlfW0qKc2LgoIXt3SKWntuD4WyXafLPvZVADsmUpFrCgMJss8j+EeGzDY+lE0yC2ufYqI2EvMsUWkMmJDsa887F4mcieP/qAvEYbUFrk2JMUVbWLnXSzhmuKnGggr9uDtlLSxxuPXK3fM0vIXfH3SxhJkHjXrdbKMaFDvNdfmPxrKni3TnPNVSyGr44Fg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LmxEKtrfQkKqnx76SnQSAa3e6fmX7JxTGz4OyECBqu0=;
- b=UNqXdR900+Lb2vhjzONIrqXbqA4qrkqTQbPnxrBZIaiP5WH6Y9FMCwf1+I66CQ02QdXVfh8M5yd4YSlkI23JcaXDbfxBzgx31alggPs5LeC5BWOd7r3ENgl181gV300sULNKIgYyZGt+Fl+QNn3II+qAqIFdQMBoead1NKJeV6sSwvs7s+JKL8OhTsT/fMvkM3qrZ/MRcc6MKp0LiCsQgskPx5qQibgKp3ejsz8taAj1ioJGz02BIqsbPlWvVtf7jiWwQvj0SlvmnOea8B8qjLfcolwqndcTUoPb4OmWl8kFBE2UO/OujOvNImaJkt1rAXelaSjiGd5TOkHiuFSUXQ==
+ bh=Xz6gfjjy/doJUzBGhPGpBb28N+u+N34a1oX12T+ugrM=;
+ b=kBqWZ1Byq5d8dAhz/SKIhupq/NlKEoYz68AktlGDy944DKdQt5qF39WjOPu2MKnsEdVVlwE54l17IJB3OPjw+U/CA69LwbtBqCrAebYrLP3j6KDnoc0WlWoAeRPSJVu889SvTxU9vk14Yylp18HVQ9hW2lsP55zJ7sjRvgp67j0z2Xu0ii9Hmb+/vWTUH8tZBp+J0m6UzLhY2CnKhxAEYp6/AD6/THniHrYZmII/hwljRaLgQGDFx9NqFjt1OBq35bIqVJ4qd/mo+cH1Mq7+wImRUe5xWWF0iUhn9KfhHiiGhp0GbElcgZLLyMjPANdNpEi4EouSqKVgNnSQ1F3IJQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ smtp.mailfrom=vigem.de; dmarc=pass action=none header.from=vigem.de;
+ dkim=pass header.d=vigem.de; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vigem.onmicrosoft.com;
+ s=selector2-vigem-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LmxEKtrfQkKqnx76SnQSAa3e6fmX7JxTGz4OyECBqu0=;
- b=WUI+1uUvBWE1V0SdSPoiv0kPYvkxbUn9vpL0S/rHmg5fJw6LsaD1zTz9nEoTKw/SSO/8f+uT2/oY9E2eMKfOetOwA4Ud8Dc96SkEs8dRVHonnT40wHGmaAeAPoe5yGlzXR+a5IlwfCBjkXydZ4roswrllko79Bq7ddMPsFOUE1Rn9rCP8213V65LnsBvHjjMvrXdj71A9kllOX0Izs7a2+rb80Ph1xe+sQMhucNdyhNj1v9FELHr1jgrbZ5RBU7pv5Hi+3Ep2tLbflI9l+rCBlxg9LzVLJepS9eevop49D9UQDu9GOjNava+LkXstppWkOtcO9BUqFikeKzn5/C9+Q==
-Received: from VI2PR04MB11147.eurprd04.prod.outlook.com
- (2603:10a6:800:293::14) by PA6PR04MB11950.eurprd04.prod.outlook.com
- (2603:10a6:102:516::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9499.4; Fri, 9 Jan
- 2026 03:02:05 +0000
-Received: from VI2PR04MB11147.eurprd04.prod.outlook.com
- ([fe80::c859:7e6d:9345:afe1]) by VI2PR04MB11147.eurprd04.prod.outlook.com
- ([fe80::c859:7e6d:9345:afe1%3]) with mapi id 15.20.9499.003; Fri, 9 Jan 2026
- 03:02:05 +0000
-From: Carlos Song <carlos.song@nxp.com>
-To: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>, "o.rempel@pengutronix.de"
-	<o.rempel@pengutronix.de>, "kernel@pengutronix.de" <kernel@pengutronix.de>,
-	"andi.shyti@kernel.org" <andi.shyti@kernel.org>, "shawnguo@kernel.org"
-	<shawnguo@kernel.org>, "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-	"festevam@gmail.com" <festevam@gmail.com>, "linux-i2c@vger.kernel.org"
-	<linux-i2c@vger.kernel.org>, "imx@lists.linux.dev" <imx@lists.linux.dev>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>
-CC: "bsp-development.geo@leica-geosystems.com"
-	<bsp-development.geo@leica-geosystems.com>
-Subject: [PATCH V1] i2c: imx: Fix SMBus block read hang on zero length
-Thread-Topic: [PATCH V1] i2c: imx: Fix SMBus block read hang on zero length
-Thread-Index: AQHcgRRVxgWquXA80EG2D4yuP1alcw==
-Date: Fri, 9 Jan 2026 03:02:04 +0000
-Message-ID:
- <VI2PR04MB11147E578957B70705DC14AEAE882A@VI2PR04MB11147.eurprd04.prod.outlook.com>
-References: <20251229081629.4081452-1-Qing-wu.Li@leica-geosystems.com.cn>
-In-Reply-To: <20251229081629.4081452-1-Qing-wu.Li@leica-geosystems.com.cn>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: VI2PR04MB11147:EE_|PA6PR04MB11950:EE_
-x-ms-office365-filtering-correlation-id: 92dc2842-77ff-4042-5387-08de4f2b77f3
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|366016|19092799006|7416014|1800799024|376014|38070700021|921020;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?a4+oOqttVHgne5ENxGPFoIYfp3C3N+VcChYZUwo4lEwpsJt8DQ07IMHAeDRa?=
- =?us-ascii?Q?WHhtgpBUOF9raD8lAYWI683K//cxN9Vhg5ScnseOcXjgoGg/X4XUNOkpJNoU?=
- =?us-ascii?Q?K11VCbmIAz4GMIeYcQtxMYsfDvl1UvA0119Y6BJ+ciCdgv0tc5dSksuvHiU0?=
- =?us-ascii?Q?Oj1gX+1SCBNagLagfYTUrAvwsPP5fsr7qGjqBMxqNYlwMpYN/pK4SUyoUhSR?=
- =?us-ascii?Q?EG6vjb+5Nf2BRZPztnSRV2Uf7j10FUg5XkHbSg1XtQc/k6tNJt29rfpMFZfr?=
- =?us-ascii?Q?zR6ag74r7X2CjzxDNwMLX0xSJNrftWlTEkaep9OELVOSlYrguU0ruXguKfkD?=
- =?us-ascii?Q?fFagy6BvZj1CkZhqhxsn/jucutXcGqlmBSpMCWR0ae901OZ+VbYurmSTSuAG?=
- =?us-ascii?Q?429ITfrI4x9s0wYgkzRp3wuS2WzYy76OSgtSyQY2pUdO9qMgkyC0eae0OxGr?=
- =?us-ascii?Q?D4uuxIkQsRaZ5HRf40F2rtt5XUjuZqIPRiqdmAnCG9Fu9VbeVuZNr7FD5hGi?=
- =?us-ascii?Q?nbE4qYRxps6eWOEJ0cFbTPcWCYHQFUvjQW/0kuHWwF4BaSG/Tdtv0BfrgIfj?=
- =?us-ascii?Q?3ATRxn8R73Os5AwnCCF+3O6AjS3DC3SZGbZR/FBJYQ0RCOmd7xRulv+Pybu/?=
- =?us-ascii?Q?KK2fADRsVcbaHNf91yu1n47OaKWCV2rKMnwsxBjGKS+CjPFwtELkblccug1c?=
- =?us-ascii?Q?3b23DN4U8fE6UuNPbQfxtq+h89nP0F5Cm5wDlm9MLZ2Zv2tzIlmZU0FYK2Ha?=
- =?us-ascii?Q?5xVTbpve+opMDLcqh9u330xYq8KRuXWVKg27VmGzYyPheY/sRGx3QQpNhXHY?=
- =?us-ascii?Q?SA06zSOakN/9hmdfk+ZGb1ux3HoChM9DcNfBD5CAJXLiR6hfqySVRoqMc3A6?=
- =?us-ascii?Q?j/xOSoVKGEu0TvcffI92TlePniI3WIk7URt+62dln9K3EewSdiDVonot5DOE?=
- =?us-ascii?Q?8cUIqplvz+X43x0vrULGzUAcbHev3obektNFHS5bz//DiqmXCFk9RPcRwQoB?=
- =?us-ascii?Q?J96oe2eN0Uh4WN4M6gkv20uVwvyo9twObkToUePEoowZZUli6PrlWnKLqCpu?=
- =?us-ascii?Q?/L4B1Pv30ZlTOXSakQk08XOQnhEPpCDwQ3rvjlfkMQ0l6PZo457/l9LIA6lt?=
- =?us-ascii?Q?z6zM7tfmIUMI5imoFR5oNObOZwSuIn8pHVQ7LIM+/cd7SeTJ7QrqnNDgf4Me?=
- =?us-ascii?Q?F8hW0uTEIre5/qBXnrAZGKm0ehTo9TN3lNpfLitKspVf/hJ/dTfFiHN2W0rF?=
- =?us-ascii?Q?W4o6DRD1Lt592tlJ/vB46c2VNMNOBaZ9rwUEZfhCPXqj+WuNhQmgoplXufp9?=
- =?us-ascii?Q?cTll2knaM0MXYEkhXvGm+1GdFqUndwXkcbhHJ+MXZQsFPlVnThRbKmHg6WSq?=
- =?us-ascii?Q?KUfo3h1b59HvEqsE9yp9r6TCR3TF4znrG6U4tf3qAAp/leHl5o3ypyoxV5mn?=
- =?us-ascii?Q?ornvMCwzJR3WyVZhT1I/Iao45BUJLncAbdyzm7fv9v/t5UImVzOw9EgIlB/S?=
- =?us-ascii?Q?OYoD1n3po2HhTFJ52VTO7ZqFRnMQRZbPaw9fTmIoxBUJTNMpxrP4w+0mcQ?=
- =?us-ascii?Q?=3D=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI2PR04MB11147.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(19092799006)(7416014)(1800799024)(376014)(38070700021)(921020);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?/eHF8PxjNKSdyFfmvCfAFSMyQAqK6rlsQMzkjEU3AaUfnkahct/0rs6zMISz?=
- =?us-ascii?Q?pqhgSyOfUzdstNrOia9nSSEbUPtXkOZ9Kj6pFvyB8TdHw3TmPw1D4pAZx/zw?=
- =?us-ascii?Q?lrswvdvvx+EBdy55seTuTSpIjkDHgYSc7La7CdyIfx3yXbNHw0fU5ZDgXhge?=
- =?us-ascii?Q?6pCoEvJY6Rv7pjxLnI2eeJBQ2IEQWsKIcSenD+1E2vIU1BNE+JsYooiLPpLz?=
- =?us-ascii?Q?r+24yn/Sqdr/Ycpk/BZSv8z/Hk2/V+B8QWKS+bwnIHeGbZzJ5uNnjDJRZ5/P?=
- =?us-ascii?Q?tLGm2HyundKSpTT1uhPFgzw5STGOAQ/7uhM7yDb0nK/8UN/luHLPOmEjKvVj?=
- =?us-ascii?Q?vOZjqXY7GU0yPynJplKTBDv1vE5gNNhtzmrtMc9IecnCZsjqJBvNmsDYvEJG?=
- =?us-ascii?Q?Hl7/WvfyIVDV9TPo9Jq8FulhCDDvk+wChR9fJ2+8vnoaSlbI1LVyhpegqvSP?=
- =?us-ascii?Q?4jixhqNaRm8Wl3sh9QVNV0YQK1+4ZNalIS+4QLg+smjOUINWduPw+7tBGiIF?=
- =?us-ascii?Q?ngByYhf1OEk2QOZ1iHLHJ8Hk6vrpZ2IKmq8nclApOtcVj0p3+uBS8XuP6aHj?=
- =?us-ascii?Q?IzXKuf6M/NFPLab2psJcn9OFw6yUHqarX8bDcHo3gXN9FYBx84bsaNF2R3/J?=
- =?us-ascii?Q?TirjsAP153MAJHppRfwr1KHYoPuj4CvrYiGWpLwe3AIujZkojc7/IrkTNxGW?=
- =?us-ascii?Q?idDVfZjqB2grcBMd0J06751XjZRq+/SVKKRmr9G9OQPHjBmNu41GptShE5EI?=
- =?us-ascii?Q?TH1qZ+Ol1iKUkFy+wuu5mEloqRob3kmlw3G4inzbhUuqekoBogCEScVjv52Z?=
- =?us-ascii?Q?RaEQyNNGmFwQHli/oP8LxHh+zJZAYqRcm0P92lGX7MN9l6GW+9nxkD3N+DV5?=
- =?us-ascii?Q?rPSB9k4pWXQyLdOVjot2Ryus4etfivxCNmwT0jzKUFeqOI73zajIVb7dnKHt?=
- =?us-ascii?Q?BZOvrE4y0pXNjEdyo4IsUVrevjcJrXCrNmYWEZMsbxUuQWmRstOX0j59iUa5?=
- =?us-ascii?Q?yqMjcwWvlMH8osuJrbQld9FhgfViIZWeqd2/ihR7iYuVB8eNBZWovLfRVWuZ?=
- =?us-ascii?Q?yMeHColklJyqA9wSk7ZRZ/v6NiU43BCiAUPYYpfVlw18cM+rcWVNWfV0p0rO?=
- =?us-ascii?Q?cuDPntkrjavgf2NUKbUhgCxkX7NUjvu1f/UY9B5bIzut29weRcOBOEYxRYnk?=
- =?us-ascii?Q?wEsJnkvNw+cZ2yH5HwPuiEu14XJ4dh1+aRAZhinJZaH7SlXx0wZbzsLhRA2x?=
- =?us-ascii?Q?p/RKuvAdeGccQZgvkW148dXttpL64/YysCmr8Ag49Dcegf+NvyTNjWSLroLf?=
- =?us-ascii?Q?je5AD4B0Fsx8pOxIQa62njjtG+cwsEGOLMXoguHZnwrFqN4V0hcZHWP7pW4e?=
- =?us-ascii?Q?ynEZZrvHCRjp7Aq5YuR4sNy45D3/45z9HOMrZGQGlJBYfaMuHFBUhHnwS9nn?=
- =?us-ascii?Q?Er0nEvrcE83Uf4b5UtjBpngoM/xKl+qjdsu9Hq2RNQ+2G8IWt8mR5lJzbCM2?=
- =?us-ascii?Q?L6uD/IiLd0OmAcCuSApAhpFlSDjynPMgr6X6mxgqfAy9PYwPI5svx4M5/87+?=
- =?us-ascii?Q?ulJi5uypLsMma4qfAeXhLubnexEm7Rb6xhQaxTxFhbapAWCFebcZsmQfTnqI?=
- =?us-ascii?Q?O7y4BFs1JB757+pmXpQ5Nyxn/RU8fEsvr6Mtqu/+kNw6cLHoIltJDJwcPDP2?=
- =?us-ascii?Q?GEY9rQvE3KzDK63PTo74nrGo+PaIPuuGnDm2iifukF6aqPb7?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+ bh=Xz6gfjjy/doJUzBGhPGpBb28N+u+N34a1oX12T+ugrM=;
+ b=Tzpqb7eIBfyjZ1vR2gzGtnzYX5fUcosRBFE4QMBZuYYXEWDBJXT6N1Lwmoz5RWdhySJoTNYLuvoTT0VXWR5NVbauE7zbWVjGPQifXHBZi08Xjp4f5YHpYzuG/MXwk6C2qGTYkK+0NuuBD7mF2eqU9P73lNB6kUOD+BkNEGPdSrs=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vigem.de;
+Received: from PA1P190MB2609.EURP190.PROD.OUTLOOK.COM (2603:10a6:102:4f8::10)
+ by DU5P190MB2051.EURP190.PROD.OUTLOOK.COM (2603:10a6:10:524::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9520.1; Fri, 9 Jan
+ 2026 07:01:01 +0000
+Received: from PA1P190MB2609.EURP190.PROD.OUTLOOK.COM
+ ([fe80::ec87:d57:c9ea:24f6]) by PA1P190MB2609.EURP190.PROD.OUTLOOK.COM
+ ([fe80::ec87:d57:c9ea:24f6%6]) with mapi id 15.20.9520.000; Fri, 9 Jan 2026
+ 07:01:01 +0000
+Date: Fri, 9 Jan 2026 08:00:14 +0100 (CET)
+From: =?UTF-8?Q?Sven_Z=C3=BChlsdorf?= <sven.zuehlsdorf@vigem.de>
+To: Rishi Gupta <gupt21@gmail.com>, Jiri Kosina <jikos@kernel.org>, 
+    Benjamin Tissoires <bentiss@kernel.org>, linux-i2c@vger.kernel.org, 
+    linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] HID: mcp2221: free I2C bus after failed transactions
+Message-ID: <0302dd6a-3f04-c340-5b6d-5003c6d08026@vigem.de>
+Content-Type: multipart/mixed; boundary="8323329-1019163610-1767942061=:511054"
+X-ClientProxiedBy: FR5P281CA0023.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:f1::15) To PA1P190MB2609.EURP190.PROD.OUTLOOK.COM
+ (2603:10a6:102:4f8::10)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PA1P190MB2609:EE_|DU5P190MB2051:EE_
+X-MS-Office365-Filtering-Correlation-Id: f2d5942c-4a7e-4a83-19d3-08de4f4cd905
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|10070799003|366016|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?Z2l1SWJEQXp0OFlPSE9nRXpUUEk2cUJ6SWdKeGRPdityd3lLSzFJbUlROW1n?=
+ =?utf-8?B?eVM0RVZYQnVQb0ppdHdIZVo0d2Y0KzZuS2xtcHpuQVNvWTExZEIrRjN3ZnJn?=
+ =?utf-8?B?SzJWQnI0VWdFL2RqQ3M1Zmtya25CY1NmUzljRnZZdnoySUxaMVNTMWtVT2RS?=
+ =?utf-8?B?RmtCNFhhSGd0ek43VE1sa0Z1RExOcFVVaVYvTk93aGMvWldEaS9NOHZPN1gr?=
+ =?utf-8?B?MXc2ZXpLTHcxR2g2d1JKUGh2MmZkakZaeWNsTjRoM2J0SXZzZDd4MThOUlBu?=
+ =?utf-8?B?NXNZRzF3eHlEN0VQTnQxQzIxK1FWeXVqc1J0RDE3TXFGbEpDMlh2LzUzUVZi?=
+ =?utf-8?B?UHIwMThQRU9mQW5QL29hRWR5a3cwWVNOU3d4U2Z3M1phQ1lKUGZwSDBwR3dU?=
+ =?utf-8?B?U3NNbzFjVjh0S0lEYUJtQjhlSUE3WGRUOWcrN3grdlNzT2hZMzlXZnl5OGJH?=
+ =?utf-8?B?OWNKQU5tOEpQYTJ4cG02bGJ5WUQrQjZ2akFXcHFNN1NTRzZKQWsrT1I2cmts?=
+ =?utf-8?B?dDBlZ0VjOUZjUTYzdmdNZnh3c29NYXBjSkxpbkRrL1A3UzAzUTEwanEwR3dZ?=
+ =?utf-8?B?Vzg4UHNEZjdrOTE1cWNvQlpMcnd6aENaellZWHR0VXh6ci90WGZwc3I0dUhZ?=
+ =?utf-8?B?a093dFpHcHlHZTB3UVYyMUxiaU04NHNjNEcrMm1KaHk1SVIzUW5PeGxzTGQ1?=
+ =?utf-8?B?VnRyczFQSGJTWitBd2Z5Yndxd2tVbGtza3E1ekdWUjBFWUN6a3hwWGgyNEhq?=
+ =?utf-8?B?VHZzZ3RFdHM2NG40eko4eWFWemxhbnVqZ01YbUo2Y2F3UUllZkFadXo1SnFr?=
+ =?utf-8?B?dFdkUllEL3BUUkpvMFRaWWJic0ZSMC8wUllCcnc4c0FWKzYwRE9GdlRGNkhO?=
+ =?utf-8?B?Z1AvbVhXTXN1NHIwUlFxUHh2bWdCdldtYzRlMmpoUTN3ZnFadm81NXVpSGpS?=
+ =?utf-8?B?UGdPVFNCbFdMdEdnVjNNenlPNjl1cDNQd05XeWt5Y0EvUEFoSEZwQW1CZTgx?=
+ =?utf-8?B?OEhYWTVNd2N3bXRoSHJwbHJoQURxRnJiQ3pqMXI4cytlaWdPbmdCZTN4WGln?=
+ =?utf-8?B?R3VwZFBmenE0dnQ5Z3V5RE8wdmY3MVBMMitCOVJvc056dTd4Y1c4bjlYczF6?=
+ =?utf-8?B?VWpEbWUrWndKN3N3OHFmYVZXTy9VQmlmQTZsL25sdlVxa0wzZTZtWWt3dTBK?=
+ =?utf-8?B?QnFKd1h2VExFTm8vTU5EQ1VJSzIrYURPaEEwQkw0aXQ1S2hPT3p0dHBGYmk5?=
+ =?utf-8?B?bGtVcmJnK01MaGxzMWdwb052YmVMQUI3U3htVWt5MFhyUmVoQUZmRWJxOUV5?=
+ =?utf-8?B?NVk4QnEweG1kbjU5QTdBdjFDSjJNcVNncmx6WGhCbHA0cm1LbTg4azZBNVpG?=
+ =?utf-8?B?cmQ5alN4VFRqb1NCUWpiTmJqeE5ZVzN4UmN5V0ROczQ5V2lBKzJHejBOczhO?=
+ =?utf-8?B?a2Q4a3dvSFdEYjNXZElYQ0JGeVk5ZUUrbzhhR2ZVdDhkaDlmek82dkxyK1Jk?=
+ =?utf-8?B?WmhFeHpKSVNNdnJ6cXdHRkZaY3NsUVBPZWlFbWhGUEllenBMQ0NNbENLeW9y?=
+ =?utf-8?B?em01dFI2NUtWeVJpSmUyYzNzSVdGRG1Zb01SaUd0Um4zQjJLRVVZZEJCZEV2?=
+ =?utf-8?B?c20weXpzTDRYNC9UTHF1N3YvWU5wWjVtMFlYQnlIRzA2Qm4xZW5DaHVrTDJN?=
+ =?utf-8?B?WE0rK2JVZGE4ZVJNcmJVTkRVN3hDQnFFTGJJNk5vV1g3MmpTeXQraEZzYWtC?=
+ =?utf-8?B?M0h6b3NYN1NDWHJ1QWNuaUM5UjJjRWV0Rm1vcExua1hHRWZMSTQ4UTJqcWl5?=
+ =?utf-8?B?aWRxTTN6NVNCRjh3RUdBWldTejBXaElvaEFNZzliRmVwQlU3OC9yV3JjTXJG?=
+ =?utf-8?B?MzF0TEVLaTNDL3BSd3lYWkxKdFFMQmFEMjc4MVdoa3lhOUhPWDh4eFNCZjlZ?=
+ =?utf-8?Q?BOmDOPGoJmgPaLZLoweF8X+B+m+W0UyS?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA1P190MB2609.EURP190.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(10070799003)(366016)(1800799024);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?R29yMzJBdUdibHB6eXFnNklVYjBMU0Z1b1BHbXZwalNWd1pBbzBKdi9vd1JM?=
+ =?utf-8?B?RlRsMkh0OUxHWkMwdkNUM092dTNwdWRiMVA0ODRHNDNvT2ZhYlNCZEpyaUNt?=
+ =?utf-8?B?eDNNT200cWFvcStHbzBNUm96MWhFUjE1amJEOEtwZDA1dWFDRytTUVNoUFNK?=
+ =?utf-8?B?dHZOUnhxREYvdEUxOGw0RHVJMXpWQ01jL3pVMXJSb25idHJBMm9aMFNyVnR0?=
+ =?utf-8?B?YVJEamtiL1RDZU0rdFgraG9EQUc5RFoxZlM5dVFqa2ovRXRZcTZBWG5oMW5m?=
+ =?utf-8?B?eVBLejVFL3oyMjNCOWJRV3o2dHc3VFQ1NjFSazYwMzRnVSs4RzNackJCVWlV?=
+ =?utf-8?B?NG9kZTR1RjVrSmkzWE9FMDYxd01idXpkcXJHRkZRS2NPMWpXY0MreUtXamdO?=
+ =?utf-8?B?QXB6ZjBRVGhEZXRiODloaDcxd2pVeHZGMkxsZjByQWdCVzBxaFJFTkJZdncv?=
+ =?utf-8?B?c0p3Y1ZIeC9TdllyTGFxWFdYeGxlZGFUekFsTTRiRG1vdlhrVGQ0UDdDUjhM?=
+ =?utf-8?B?L1R6TTRaQU81N1Z0WHIxLzczQ1UzVkhhb043SGw2R2lOR3hBNVduaGpGV1pz?=
+ =?utf-8?B?Tkt4dWRlemIvNkVyQXg4U0prNVdjZllEbWd2bk5tMmNTNDZzTUxiaW1HQmd1?=
+ =?utf-8?B?MFNCSlFFTlB3TUpTSkkzNnNnNjJpV3R2UXo4ZDlkTWswSUt4dEpnb1d3L0xP?=
+ =?utf-8?B?Zy9QRzNSWU1CVmgzYzAyOHc5bHNFaW12cXBaVk5uTmtSUzhjdSsvR3FsbVcv?=
+ =?utf-8?B?WDI1TFZua1ZndEhHNmgvRFJ0SFNGWE56VVhRU2VRZ2dUMzgzWUZtRkxlT3lG?=
+ =?utf-8?B?K2JlQS84ZUdPWlczME5say90YUpCK0FJdnZUVTNlYzgyYlkzMWYrSTA0UTNV?=
+ =?utf-8?B?Q0RHSEhpa0Nibk13UEZNY3Z3amRiZEkvZm92U0xFUGlOTFJjMXo4eHllRU1h?=
+ =?utf-8?B?b0JyekFodHNTSEh6NC9mNDdYM2xKTm9qSTVQc1FrLy8wSU9JbkV1d2oxSWxq?=
+ =?utf-8?B?MnZzcU52QXpUb3d0QmNGRzd0RFZIRzZoMDhkNXUzYmloUG4yZC96L2MvR1RJ?=
+ =?utf-8?B?VHFlR1JIUGR2aVB2MTlpK2JOd2dRU00xZFR2NkZ0QlNKMnBySi85Nzlobkcz?=
+ =?utf-8?B?THlpMTF0K1N0eWhNVVJnRVlCYmJXcFJXQU1LTkZIR0N2WEdDbkVIWVlPdEtm?=
+ =?utf-8?B?cWFyUlladWI2OFRtVDNaY2dZNlEzRWF3SUtpbExTcTlodWwvV29VSVdzTVdh?=
+ =?utf-8?B?K1dmZ0d4UzVNTHBLVFhJUTE3bHB5MFFsdUF5NXFGanZQWUhNZHgyZG9oSmoz?=
+ =?utf-8?B?UU1XS2VlcC9VUFlCeFA0TWR3RFZRbXoxV2F0clZDSmhEVVk4NXBzUzg4U2NE?=
+ =?utf-8?B?a1FBVlhVc1dNa2tnYmNFTTdIaWZvY1ZQYnNRanhmOWEvd1lLcG41YlN5SE1I?=
+ =?utf-8?B?bEh6ZUc0eENHZzgzcVFPTEVGRS9YTHpHOEg4S00wV1QreEhDSERKRis1aTJL?=
+ =?utf-8?B?a2pXZUUyc1FqWlpJUXJDYjdXd1UrZ0RycHBEQ2UvVW1Xb0Z5RUZDT2QvWVNH?=
+ =?utf-8?B?RjAra21YYjArcHErWCtrVG0xelBpSHdDbjc1NnN1S1BGNFRzRXpoSGZRZ0h2?=
+ =?utf-8?B?dW9QaFk4bUpRbGx1SjBoSjZPMytORU1pV08zalBoWkY3S2g2b050VzFwUEJz?=
+ =?utf-8?B?SmVGQ3JjU2EvT3NyVGZxcHp2MkdHckxvN2NKZG1lem9FSzkwczJ2Vjd0MldW?=
+ =?utf-8?B?cFc4cnJSb04xbWV6dUdiMmdBZmhOTjROUlptTnk5WGhSc2FNaGdMVHovMW5h?=
+ =?utf-8?B?UlZzdlZrUkYrQnFscjJBMXNqZVBvYlZGc3JTRE1YeFo4MkZCTWdITTVGWHFR?=
+ =?utf-8?B?eXFDdGkwdHN1cHJ0WGtnVVhsUlNiNFprS1pIamc2dkJ6NHJmRkxtalVrY2ly?=
+ =?utf-8?B?SjFYOE91bWJrck1wT25CKzNUdGZhSk1CV1VPNENUQUN4WnVZdHhZNi9wUVF5?=
+ =?utf-8?B?NVBOOGUyMnNjUXBjZEt6cWdjYXByVzhHMXcwUVF1SXFjWEszT2plZk1wcUIr?=
+ =?utf-8?B?NDUyclpRWUY4RHQyT2pEbVFVSDZmWXpuNCthZVc0VEdmaW55d0NmMHJlMnA4?=
+ =?utf-8?B?MUYwdnVLNmkxa1dVWWcwWEZPSDcvbXV0VmR0VVh6S0ViWTBFYzEwTTBJOWFs?=
+ =?utf-8?B?VmZkTmlDTEc1THJxMkVjbSs4bGZkTWdnd3hXWmVNZFBCdEZuYnVIMEVubWFC?=
+ =?utf-8?B?QTdzbXBNOFAxdDBLTmRKZnYxZkQ2VDFWVjZ1UHRGK0h6WTlQVGFPSmVaWVR3?=
+ =?utf-8?B?am5pTXVXazVXUG1CYnM0WG9BNThFak02SFUvY0wxT2c1Zi9OUGg1aW5sMkIz?=
+ =?utf-8?Q?NWq061j7a4lM/r7tiJxOpYaTBM3LqtwMjLr2p15tcoLhq?=
+X-MS-Exchange-AntiSpam-MessageData-1: t9v7ff8LYWKY8aKrFOTnqRwo8VsGbkE52qc=
+X-OriginatorOrg: vigem.de
+X-MS-Exchange-CrossTenant-Network-Message-Id: f2d5942c-4a7e-4a83-19d3-08de4f4cd905
+X-MS-Exchange-CrossTenant-AuthSource: PA1P190MB2609.EURP190.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI2PR04MB11147.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 92dc2842-77ff-4042-5387-08de4f2b77f3
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Jan 2026 03:02:04.7691
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jan 2026 07:01:01.1498
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: uA3ovyTTJx6hfHh9QyQaWYzDmelsRIBE/OEXTYevS+xP9NEQ8s6tQZsJlLda++nk659QFZ6sjK2LlvkcejnBdA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA6PR04MB11950
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: dc3cc44e-876e-4b98-9250-42df44be4933
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: AXzJYsiJ5MMT9IWaZbfQ1ac0AyQpe0+JIAblKVW2D9TZnIF6DjMJJcDzezsxpc4aqi9QzLhYH14+1YK90B/GuZCZ4NP2h4cnpyDD6NsVXJo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU5P190MB2051
+X-cloud-security-sender:sven.zuehlsdorf@vigem.de
+X-cloud-security-recipient:linux-i2c@vger.kernel.org
+X-cloud-security-crypt: load encryption module
+X-cloud-security-Mailarchiv: E-Mail archived for: sven.zuehlsdorf@vigem.de
+X-cloud-security-Mailarchivtype:outbound
+X-cloud-security-Virusscan:CLEAN
+X-cloud-security-disclaimer: This E-Mail was scanned by E-Mailservice on mx-relay23-hz1.antispameurope.com with 4dnXjq1v6nz4NS6W
+X-cloud-security-connect: mail-northeuropeazon11021113.outbound.protection.outlook.com[52.101.65.113], TLS=1, IP=52.101.65.113
+X-cloud-security-Digest:c61dc0b63792c0929c3f92a4f8a82e2e
+X-cloud-security:scantime:1.513
 
+--8323329-1019163610-1767942061=:511054
+Content-Type: text/plain; format=flowed; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 
+The conversion of unnecessary speed reconfigurations to actual error cleanup
+has missed the timeout case in mcp_i2c_smbus_read. While we give up on
+waiting for the requested data, the chip is still executing the transaction.
+Attempts to initiate further transactions will be rejected with
+"I2C engine busy" (translated to -EAGAIN by the driver). This can be
+reproduced by attempting a read from a nonexistent device, as e.g. i2cdetect
+does by default for the 0x30-0x3f and 0x50-0x5f address ranges.
+Explicitly canceling the current transaction fixes this.
 
-> -----Original Message-----
-> From: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
-> Sent: Monday, December 29, 2025 4:16 PM
-> To: o.rempel@pengutronix.de; kernel@pengutronix.de; andi.shyti@kernel.org=
-;
-> shawnguo@kernel.org; s.hauer@pengutronix.de; festevam@gmail.com;
-> linux-i2c@vger.kernel.org; imx@lists.linux.dev;
-> linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org
-> Cc: bsp-development.geo@leica-geosystems.com; LI Qingwu
-> <Qing-wu.Li@leica-geosystems.com.cn>
-> Subject: [EXT] [PATCH V1] i2c: imx: Fix SMBus block read hang on zero len=
-gth
->=20
-> Caution: This is an external email. Please take care when clicking links =
-or
-> opening attachments. When in doubt, report the message using the 'Report
-> this email' button
->=20
->=20
-> SMBus block read transfers encode the payload length in the first data by=
-te.
-> When this first byte is zero, there is no payload and the transaction sho=
-uld
-> terminate immediately.
->=20
-> On i.MX, if the first byte of an SMBus block read is zero, the driver
-> unconditionally overwrites the state with IMX_I2C_STATE_READ_CONTINUE.
-> This causes the state machine to enter an endless read loop, eventually
-> overrunning internal buffers and leading to a crash.
->=20
-> At the same time, the controller remains in master receive mode and never
-> generates a proper STOP condition, leaving the I2C bus permanently busy a=
-nd
-> preventing any further transfers on the bus.
->=20
-> Fix this by handling the zero-length case explicitly: when the first byte=
- is zero,
-> ensure that a clean STOP is generated. In this situation the controller i=
-s in
-> master receive mode, so it must be switched to master transmit mode befor=
-e
-> stopping. This is done by draining the pending received byte from I2DR, s=
-etting
-> I2CR_MTX to enter transmit mode, waiting briefly for the mode change, and
-> then proceeding with the normal STOP sequence.
->=20
-> This change has been tested on i.MX 8M Plus platform.
->=20
-> Signed-off-by: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
-> ---
->  drivers/i2c/busses/i2c-imx.c | 13 ++++++++++++-
->  1 file changed, 12 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c =
-index
-> dcce882f3eba..f40deecf0f66 100644
-> --- a/drivers/i2c/busses/i2c-imx.c
-> +++ b/drivers/i2c/busses/i2c-imx.c
-> @@ -735,6 +735,16 @@ static void i2c_imx_stop(struct imx_i2c_struct
-> *i2c_imx, bool atomic)
->                 temp =3D imx_i2c_read_reg(i2c_imx, IMX_I2C_I2CR);
->                 if (!(temp & I2CR_MSTA))
->                         i2c_imx->stopped =3D 1;
-> +               if ((temp & I2CR_MSTA) && !(temp & I2CR_MTX)) {
-> +                       (void)imx_i2c_read_reg(i2c_imx, IMX_I2C_I2DR);
-> +                       temp |=3D I2CR_MTX;
-> +                       imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2CR);
-> +                       if (atomic)
-> +                               udelay(25);
-> +                       else
-> +                               usleep_range(25, 50);
-> +                       temp =3D imx_i2c_read_reg(i2c_imx, IMX_I2C_I2CR);
-> +               }
-Hi,
+In addition, when initiating an I2C transaction and the chip accepts the
+command, i.e. doesn't return "I2C engine busy"/-EAGAIN, we still need to
+explicitly free the bus, if we detect an error condition in the HID
+report's I2C engine state.
 
-for fix a smbus block read stop, you added these codes to normal stop logic=
-. Could you help check if it will effect stop in other path like i2c DMA/CP=
-U read/write stop logic except for smbus block read?
+Fixes: 02a46753601a ("HID: mcp2221: Don't set bus speed on every transfer")
+Signed-off-by: Sven Zühlsdorf <sven.zuehlsdorf@vigem.de>
+---
+  drivers/hid/hid-mcp2221.c | 19 ++++++++++++++++---
+  1 file changed, 16 insertions(+), 3 deletions(-)
 
-And do you have mind to move this logic to smbus block read error path? Thi=
-s may be a minimal fix?
+diff --git a/drivers/hid/hid-mcp2221.c b/drivers/hid/hid-mcp2221.c
+index 33603b019f975..50237b31c781c 100644
+--- a/drivers/hid/hid-mcp2221.c
++++ b/drivers/hid/hid-mcp2221.c
+@@ -274,8 +274,11 @@ static int mcp_i2c_write(struct mcp2221 *mcp,
+  		memcpy(&mcp->txbuf[4], &msg->buf[idx], len);
 
-Carlos
->                 temp &=3D ~(I2CR_MSTA | I2CR_MTX);
->                 if (i2c_imx->dma)
->                         temp &=3D ~I2CR_DMAEN; @@ -1103,7 +1113,8
-> @@ static irqreturn_t i2c_imx_master_isr(struct imx_i2c_struct *i2c_imx,
-> unsigned i
->=20
->         case IMX_I2C_STATE_READ_BLOCK_DATA_LEN:
->                 i2c_imx_isr_read_block_data_len(i2c_imx);
-> -               i2c_imx->state =3D IMX_I2C_STATE_READ_CONTINUE;
-> +               if (i2c_imx->state =3D=3D
-> IMX_I2C_STATE_READ_BLOCK_DATA_LEN)
-> +                       i2c_imx->state =3D
-> IMX_I2C_STATE_READ_CONTINUE;
->                 break;
->=20
->         case IMX_I2C_STATE_WRITE:
-> --
-> 2.43.0
->=20
+  		ret = mcp_send_data_req_status(mcp, mcp->txbuf, len + 4);
+-		if (ret)
++		if (ret) {
++			if (ret != -EAGAIN)
++				mcp_cancel_last_cmd(mcp);
+  			return ret;
++		}
 
+  		usleep_range(980, 1000);
+
+@@ -332,8 +335,11 @@ static int mcp_i2c_smbus_read(struct mcp2221 *mcp,
+  	}
+
+  	ret = mcp_send_data_req_status(mcp, mcp->txbuf, 4);
+-	if (ret)
++	if (ret) {
++		if (ret != -EAGAIN)
++			mcp_cancel_last_cmd(mcp);
+  		return ret;
++	}
+
+  	mcp->rxbuf_idx = 0;
+
+@@ -353,6 +359,10 @@ static int mcp_i2c_smbus_read(struct mcp2221 *mcp,
+  				usleep_range(90, 100);
+  				retries++;
+  			} else {
++				/* Too many retries.
++				 * Give up and free the bus.
++				 */
++				mcp_cancel_last_cmd(mcp);
+  				return ret;
+  			}
+  		} else {
+@@ -454,8 +464,11 @@ static int mcp_smbus_write(struct mcp2221 *mcp, u16 addr,
+  	}
+
+  	ret = mcp_send_data_req_status(mcp, mcp->txbuf, data_len);
+-	if (ret)
++	if (ret) {
++		if (ret != -EAGAIN)
++			mcp_cancel_last_cmd(mcp);
+  		return ret;
++	}
+
+  	if (last_status) {
+  		usleep_range(980, 1000);
+-- 
+2.52.0
+
+--8323329-1019163610-1767942061=:511054--
 
