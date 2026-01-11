@@ -1,80 +1,79 @@
-Return-Path: <linux-i2c+bounces-15016-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-15017-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A9B3D0F0BE
-	for <lists+linux-i2c@lfdr.de>; Sun, 11 Jan 2026 15:07:18 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17D4AD0F257
+	for <lists+linux-i2c@lfdr.de>; Sun, 11 Jan 2026 15:42:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D48DC3017395
-	for <lists+linux-i2c@lfdr.de>; Sun, 11 Jan 2026 14:05:45 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 36F433016F82
+	for <lists+linux-i2c@lfdr.de>; Sun, 11 Jan 2026 14:42:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FC8D33F8CA;
-	Sun, 11 Jan 2026 14:05:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9619D349B0B;
+	Sun, 11 Jan 2026 14:42:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="A5h3J93L"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="c77L/krc"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE83933CEB0
-	for <linux-i2c@vger.kernel.org>; Sun, 11 Jan 2026 14:05:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5507372617
+	for <linux-i2c@vger.kernel.org>; Sun, 11 Jan 2026 14:42:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768140343; cv=none; b=u6t0AattVMvCqHW/xrFEzSe7hQILYxGRtKXaNeJhL3RDDZxO3F21vPiCBZmCSI2vRzfQMU/B0U6re2BHyFzAU1z5NeKxyG/Nj7r9RgxcXzJDoVvmO0MKn9alL5egP9AwpYzBRNIm+74DQ1t8NezgwSGqMH5UhikEobN7KxKyVAM=
+	t=1768142550; cv=none; b=QSjoIE2kzRehKWtE8B+cgocnjPRO9SJXtHPGtVqOEs+w/+iKUcVXbuTL9WN2KKXSu563Hh9wE6RTq3EA9bx6p4tQvb2AfvlBAAyWdrcMHAaA6cBf9ImyKlVlGXB8PNq+LrVjhbnR+k8n6amR+pangmxo2v6/7MUWoe1HWk/hB6g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768140343; c=relaxed/simple;
-	bh=La7kZA2oSwRqBuL7cT5ghruILrR4PN0GG8fEmUQohxU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EwUX4v2sPZAh7448fKBe7l4eVISnrodM/R/PfqDLd7cqFQnyjgFBwbvfFD2CxIHdeyGPi+Adp4lg3dMK9pOSrnEGIKOkS+94rHf7OZtHhshez8Dh0e97HKn/TYDr32bz8OZOSVrDcB5To9J1kkOeCsXLbvlWMik9V2VRZWTJp+o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=A5h3J93L; arc=none smtp.client-ip=209.85.218.53
+	s=arc-20240116; t=1768142550; c=relaxed/simple;
+	bh=nwibogWEaRHQR0G0uXO7BApOaM+RxcF4pitpiLWDTZg=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=Q/b/qv0SLwjTh/YvVN4yH6yWAQ8hAVe8F1QjmAbECCqDSLPZ0xfqdaTzP0BjtJvUTK1cigdSpqj0uGeiYZ29BUwVYXHKvaBy/gVdFlMuLO57QSDO/zXEDDsasCn8XpEcpjCrnhRAnHhZ1Gira68DO4FhqADxZWa0hLqVq0XaEFM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=c77L/krc; arc=none smtp.client-ip=209.85.208.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-b8708930695so81522566b.3
-        for <linux-i2c@vger.kernel.org>; Sun, 11 Jan 2026 06:05:41 -0800 (PST)
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-64b9b0b4d5dso11681253a12.1
+        for <linux-i2c@vger.kernel.org>; Sun, 11 Jan 2026 06:42:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1768140340; x=1768745140; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TXunsOKck5NLaqPP1pj13fhYNQN15zYs+l2jwEoFO8U=;
-        b=A5h3J93LIBKbImOKSk/PuMD1cA9Z5C6EZEowbXbuQQWRqoIAibYcsoDlQw3TBJfR+T
-         u0BiOjCEJXktgpsZjOdLv3j4NKLAL6vWzf02hINhGw9gtNLdyMqKWd3DOyEcZSvo3jYX
-         8ZK4HrP0vXDrFAoG6NVNSCZ3YaSVLqWlNr0VD2t95cLlw4Jh61dPCSWNeQ6oulesS2tN
-         wj79fRG7ILgJ3A7li2jIzTbZtZZjrXs2jKlLHtMo0WNwEe++CfnFmumACmX2K4HiMsrY
-         hZYR2bZ1STtKcGYBa3SuMqw2+bwsgdTMBUMyBFpULbdi1sES9VrFIvs1UBE/wqWbzzwP
-         APAA==
+        d=tuxon.dev; s=google; t=1768142546; x=1768747346; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=MkabSAxRfLn0dHpHfPolIqVil9ZYQkOUo+uqCMKmtA0=;
+        b=c77L/krcX+Mfr24+FUl4++gD6P5i5AGxy0m+b1eI91GhsDm0sayjulKachXmaIlYnj
+         wCOILRVKwoNMqwNVxiWqRG/2EpusMOG+6mI5UGjqQhrvQX/0x8TiI6/sD/LxA6Hib49A
+         w1bH1nFUZyZHE7gn2ZaU+W23FBJAHpOkkENkXq3dyjTbNfVtcnT0ibchItmEiZ1Np1qd
+         rc0qk+dTF5Uvu980fQlLsCVoritMg6f6VP48BGlFIXsO11MCq0nYJAdrEc8pu+EFAWms
+         a9jgZUFbr9W0Mz4E+TgG2PBR7kf7gSyNi/WRoJKvSsndQ8k0T0kWq1Tnsly+JbkLGMdO
+         RD9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768140340; x=1768745140;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TXunsOKck5NLaqPP1pj13fhYNQN15zYs+l2jwEoFO8U=;
-        b=i8NMut6Plk7qCi1VAgfSGWuAvq2G3sFRocDX5FBwU+MIJOlIw9NbjuPd5wIT+b2Srd
-         9RF25ZBVJh6efJ/v0S4iRhzG7NsB+EUzxTZnpDdh0tLz/W7JWx2EBtz3n1IS4Qd/yBp3
-         ZJYrgWnj7EUG7zTGroojhBd9f9hat+WmTrYwUdeC54r66Gdr7bRA0HiZmG4k2uRlba7E
-         BLDU8JHQZSFKqU1iIV4Ar//s8shaVu38gS8SoJ2MR1EzmUvnAMgJ6GSbB3GTqtl80N7o
-         D5lmZ9DVNChSQdgSXh9jrMqQn4GmSjfnkZcRlVSlwINcC3QQa2wseqENqBTUC1X2PVMJ
-         BV7Q==
-X-Forwarded-Encrypted: i=1; AJvYcCW1NCAwZ+Rfny4bOXlHzi1j7fkmwnwm7F8DvB/KiWvV3nEH+eSbw1TnBTGqiM/Jz/vaYg7N87fLQvg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzzNpLU275FwS/donrEQSSWBo/0zpKj7yVtfIaZnXqeHcqUEF7h
-	9e8TIF2szq4AK/69ol0VELO7MuaJy5ArIJRZ1WWqpFO5A0fcrlhVibzhoqpAMHHgctI=
-X-Gm-Gg: AY/fxX5FLDRZPYTB5xmnRGP1zMDWai1u8AvH9EVRrrcgkWi7hjoXKsaI3gdxlt3JYi9
-	G8sJ4zF2L9vvhifM4udW9JEsNg8OQG1fBKCl8jgpiR+yXQ20qSGieebpMvsn94ODU5V1DWI3+pb
-	VYdDo/2Svga6phUM+rpF567YMBR7dtCd6Ix+bFTtdy71PBlfNhqMP2AbCXq3qi4SAyFpoF3gU1x
-	0KkKzj4EpvT/el9hMfBp76lv2kHVlREGGkEWYrJDc0A6LhWBLT7nQVeh0kJmnNWRi9Z7u1iDvnY
-	URvi++6EMr3IG+iS1tAltnfEuyCIKTF8qVqeYsSUGAZC6ZcSbgKPmL1P5lnr/fg/dYfpeKqWqTC
-	dVR/cuoBCOuZQGqLNsgnhfvHXoqkg6ccDEJemAC0qsFsyIm4/zhhpHpgGsA1vaY3WAgakV2mheJ
-	BZYSkAYbP770sl3zOrOylzx8NMoP3aD5rUtg==
-X-Google-Smtp-Source: AGHT+IGAomJOik8MqjiZHm7eirNShLlujIRGUrfTNhxgz3sez9ZGd+euk5Raj7DyHYRFF75x4SXADw==
-X-Received: by 2002:a17:907:3fa1:b0:b87:908:9aca with SMTP id a640c23a62f3a-b870908b37bmr200612566b.9.1768140340256;
-        Sun, 11 Jan 2026 06:05:40 -0800 (PST)
+        d=1e100.net; s=20230601; t=1768142546; x=1768747346;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MkabSAxRfLn0dHpHfPolIqVil9ZYQkOUo+uqCMKmtA0=;
+        b=ikcNb+rEGXjwWOjvF9wxxgeorKTr+UdHvM2dxwso+OxlS3Cwifh+XPnJd8fdNr9GbR
+         nvm86jmWlJr35NYTog82DQdJRZr07HgpMC+olGxwAapsvoNHFHgcFdhAdExCbVYfnk/y
+         7lXNV9oA941tWm2FGE+nPtJPXTKmWodx2pPaFg50iuKqNTq0p52qoVlS3OI03tZrqY2u
+         M2VUFpjKj9iIvdJjKZ1GDPjAQ9FOOrtbL3uhVUt1nDXZH+RvjZjG83IqkVEhJN/4IM6u
+         hCTkOdEZ76JfORmN/lTSr/PWarPuppGYzTejlE522UqfBKGQm0xJ7rCQdk7g47IGlC/B
+         siEA==
+X-Forwarded-Encrypted: i=1; AJvYcCX2lEbiJkK+x1UtSS1V5+J7bDE7RBZt+7gCl6vrZIjYqACtz2EonzpiYaGKPBWSkYfq5ETZph4UnOU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzcF2sI7sF/Sk8Ha9JwD6e9kd92sv4wq9T+sCpQytaEtKuUUx3H
+	U76qs7L6R5DCZgtewqnZZr0NpLkr0eteM00e57xj9gkDDda2IC5yjvNLqaKv+h5W7pU=
+X-Gm-Gg: AY/fxX66joujJPDzs8jc5JqT7grJMyYcoZoJ9On8QbGl6HrXy1rFPlhOtFSuKnw7Twu
+	HfmznLDHVChDPLKs5FyFw+aONzNpM75mf4WohMu2hH4WaNU6v1o2xyLOFRuWGczDpKGk9LriN3T
+	+QBKzzLA7mpsVcMs6bJPvTCjH+RTJWCm4n6Opha97Y39eTXpHeQUwt8lvtq+MvVKm3skBjW8ODH
+	zyM5qiFtLYP+WPCLPGPgCV8C0q3np/YXb6d4O+B9Vch9I/kN9Q8p/g7Az091XZdwt1Ed+bW9mVP
+	wki/NiZ3M15eD2gdx8ue2XewHl5vc9Qq/kJ+RSj2MaFMkHzv3C0pdKPE2BpjqKyJ2WCQIU8WrC8
+	uRL+ZVZ5024HUO7nvqKgoZZ6LUKvJw+oo5SeX/5D9zoDkqpM1NOL4EoRkBRi5Rcf76wHjHGN2U5
+	4zmitgEZkBqJwee950JyWr05nwlSh/lJpqUw==
+X-Google-Smtp-Source: AGHT+IFonU/ClDvId9huEtx8OVZbpqDSrZa3cVBTJbulbnKxAZxCbWxaUM02TgbsxBJ1Mah6guhUAA==
+X-Received: by 2002:a05:6402:1469:b0:641:8a92:9334 with SMTP id 4fb4d7f45d1cf-65097dceb25mr14589135a12.6.1768142545311;
+        Sun, 11 Jan 2026 06:42:25 -0800 (PST)
 Received: from [10.216.106.246] ([213.233.110.57])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b86f1e95273sm439916866b.62.2026.01.11.06.05.34
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6507be658b3sm14914417a12.18.2026.01.11.06.42.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 11 Jan 2026 06:05:39 -0800 (PST)
-Message-ID: <05184245-9767-45ef-a4a6-d221f90fd20b@tuxon.dev>
-Date: Sun, 11 Jan 2026 16:05:33 +0200
+        Sun, 11 Jan 2026 06:42:24 -0800 (PST)
+Message-ID: <2cdac084-4924-4ca2-85d6-2e6d9bf284aa@tuxon.dev>
+Date: Sun, 11 Jan 2026 16:42:18 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -82,7 +81,9 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 13/15] arm64: dts: microchip: add LAN969x support
+From: claudiu beznea <claudiu.beznea@tuxon.dev>
+Subject: Re: [PATCH v4 12/15] arm64: dts: microchip: add LAN969x clock header
+ file
 To: Robert Marko <robert.marko@sartura.hr>, robh@kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org, nicolas.ferre@microchip.com,
  alexandre.belloni@bootlin.com, herbert@gondor.apana.org.au,
@@ -100,19 +101,62 @@ To: Robert Marko <robert.marko@sartura.hr>, robh@kernel.org,
  linux-serial@vger.kernel.org, linux-usb@vger.kernel.org
 Cc: luka.perkov@sartura.hr
 References: <20251229184004.571837-1-robert.marko@sartura.hr>
- <20251229184004.571837-14-robert.marko@sartura.hr>
+ <20251229184004.571837-13-robert.marko@sartura.hr>
 Content-Language: en-US
-From: claudiu beznea <claudiu.beznea@tuxon.dev>
-In-Reply-To: <20251229184004.571837-14-robert.marko@sartura.hr>
+In-Reply-To: <20251229184004.571837-13-robert.marko@sartura.hr>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
 
 On 12/29/25 20:37, Robert Marko wrote:
-> Add support for Microchip LAN969x switch SoC series by adding the SoC DTSI.
+> LAN969x uses hardware clock indexes, so document theses in a header to make
+> them humanly readable.
 > 
-> Signed-off-by: Robert Marko<robert.marko@sartura.hr>
+> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+> ---
+> Changes in v4:
+> * Move clock indexes from dt-bindings to a DTS header
+> 
+> Changes in v2:
+> * Rename file to microchip,lan9691.h
+> 
+>   arch/arm64/boot/dts/microchip/clk-lan9691.h | 24 +++++++++++++++++++++
+>   1 file changed, 24 insertions(+)
+>   create mode 100644 arch/arm64/boot/dts/microchip/clk-lan9691.h
+> 
+> diff --git a/arch/arm64/boot/dts/microchip/clk-lan9691.h b/arch/arm64/boot/dts/microchip/clk-lan9691.h
+> new file mode 100644
+> index 000000000000..f0006a603747
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/microchip/clk-lan9691.h
+> @@ -0,0 +1,24 @@
+> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
 
-Reviewed-by: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+Shouldn't this use the same license as the dtsi including it?
+
+> +
+> +#ifndef _DTS_CLK_LAN9691_H
+> +#define _DTS_CLK_LAN9691_H
+> +
+> +#define GCK_ID_QSPI0		0
+> +#define GCK_ID_QSPI2		1
+> +#define GCK_ID_SDMMC0		2
+> +#define GCK_ID_SDMMC1		3
+> +#define GCK_ID_MCAN0		4
+> +#define GCK_ID_MCAN1		5
+> +#define GCK_ID_FLEXCOM0		6
+> +#define GCK_ID_FLEXCOM1		7
+> +#define GCK_ID_FLEXCOM2		8
+> +#define GCK_ID_FLEXCOM3		9
+> +#define GCK_ID_TIMER		10
+> +#define GCK_ID_USB_REFCLK	11
+> +
+> +/* Gate clocks */
+> +#define GCK_GATE_USB_DRD	12
+> +#define GCK_GATE_MCRAMC		13
+> +#define GCK_GATE_HMATRIX	14
+> +
+> +#endif
+
 
