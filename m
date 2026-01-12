@@ -1,181 +1,116 @@
-Return-Path: <linux-i2c+bounces-15079-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-15080-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63A3CD142E8
-	for <lists+linux-i2c@lfdr.de>; Mon, 12 Jan 2026 17:53:04 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id D3A20D14394
+	for <lists+linux-i2c@lfdr.de>; Mon, 12 Jan 2026 18:01:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id DA9733008C9E
-	for <lists+linux-i2c@lfdr.de>; Mon, 12 Jan 2026 16:53:03 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E155A30285F5
+	for <lists+linux-i2c@lfdr.de>; Mon, 12 Jan 2026 16:57:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C3A02D7DCE;
-	Mon, 12 Jan 2026 16:53:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40ADB2EBDE9;
+	Mon, 12 Jan 2026 16:57:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aolkf+cT"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X0LAdumC"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D92D36E46C;
-	Mon, 12 Jan 2026 16:53:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5737D374163
+	for <linux-i2c@vger.kernel.org>; Mon, 12 Jan 2026 16:57:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768236781; cv=none; b=rfB26lI2hDFSZK4qhayxM5tSVCK0nzancIvnrPE8WZGJSEAUybA/1TR6oKzBVy8gVqv3aMgCts4bkQYYT/e/MoX/stjqw3aWsdrwIUHzhNPOkESM/7JcEQaWwv8/d6nimZ/thYoO+aoDAIGwbghnOvAf1xJuPlaJ4iK4R1kjvns=
+	t=1768237063; cv=none; b=as2oMSYfgD76FDqI844y0wlk8GW3x3d8TSMow42SQKPGJNfDB7eQNN/jbUGXOOHWLUSyaW1TA4Ho8gBkgiWcSb2dja9m5DM9Zni9yXAE5VvtlISS7/NK4KVrdaN2OVla8xdyPuYhXLl6M8T3tKRlM9qAqVUMTtBcPBssY9RAYQc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768236781; c=relaxed/simple;
-	bh=laV8xz/6V9G3zKvzYctIE/Zg4SHdexkGs0xwcwO8fzM=;
+	s=arc-20240116; t=1768237063; c=relaxed/simple;
+	bh=kNppd47ObN/Y9YUccsPV+vgYLfG0z/UDbQLhf6oX0Bo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=N4D0XpGDl9tP6VfY5L7ZXyBZymb4m86VGgN23ZbzRbO71Y7V2IAgJrp99fVBs//S6T5UOBt8ueIJ+N2q19ljAQH6xasqrImq1qu8n6pwEpZH32SQn3gr4p8YWKbhQnVMPf03vgi43NwXstdO+d89ivWDbV5/XfDjaWJ+im9Laog=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aolkf+cT; arc=none smtp.client-ip=198.175.65.17
+	 Content-Type:Content-Disposition:In-Reply-To; b=ncx34thYn940xh+yBpY5lfYwCMEYkNXP9GHMas0do66Gba4ZSE8hFARWgnh7OHhmy9E6hSwegP01WrT+KO9HK3qPdEWH+Ax1Tg2bN3c7xJ7tqewtKpBftn7zv0bhchsC6zKmBp/cRwWOK7TH/5UsprL6kA5+C/+1W18Lyb2yEOs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X0LAdumC; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768236780; x=1799772780;
+  t=1768237061; x=1799773061;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=laV8xz/6V9G3zKvzYctIE/Zg4SHdexkGs0xwcwO8fzM=;
-  b=aolkf+cT6beSadffBBwt7cwokN52UurUF9lmUfAZFU8UIcXpcKvvY35Y
-   45rT4Xq38Fym0D468XNITHzSYxOh/k+f/n04euuDUlFHsOe9unlfj0Aps
-   fwRPGFaQIX8wULae+zeyQQwawX4k4r81ZF0pZqTqGQy1pQO0XSq8WkFoV
-   hnB6H/HsCb98UZ7N2Hq/FXNzmdkAeeVoQNS86MhpUnv3MywdqAhkiDGwZ
-   4zBmS6D2u6WhEFarAoxaTNbP1sicl76c+haCqyg+a51+fUpLbIn/kOXHL
-   Hx5rLl8E3JbEGO7GCicS6jP7lKQqoKayWgv/HbRKkHjuZemV8mq9wMdbC
-   w==;
-X-CSE-ConnectionGUID: JkaWjF46Rcyg0EYbw91BTw==
-X-CSE-MsgGUID: q6E2KvS1TgCtsZmu3MoTwA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11669"; a="69499557"
+   mime-version:in-reply-to;
+  bh=kNppd47ObN/Y9YUccsPV+vgYLfG0z/UDbQLhf6oX0Bo=;
+  b=X0LAdumCNNl/BE7veM7t40uaeBIrzP1MsB2pYKnaURMxVY0LE7tIcvQG
+   pjImtbdg5DSVaJxc0PiBEvT+uxJTpBKs3QeLIP/4UlU+qQAMuPSxkTI4K
+   /NmxO3CWlnJjxEPZNf6IU6HZJ/Mb4hQ6dLC2P6z56dHKDFK4eDTws+k4X
+   lI+4NfH57637RM6UXk56qPHCS8X1VN209EummMkOWDRh4MioL1CW2b2qe
+   O3MuSQ/KF0clqD0OyGKrtS/soOZmPYd7w0uGthIFmdncjgEjq30zTsRZI
+   ikj9npQsxG4gt/yRN0DF2BT01yFHNkiZDF8Z98pZFm0AKAWnpr/6GlUA8
+   A==;
+X-CSE-ConnectionGUID: Tn/DKe4ZRR65Enh05TipgA==
+X-CSE-MsgGUID: i3mQ0toMQdSQ8fsv5WkQug==
+X-IronPort-AV: E=McAfee;i="6800,10657,11669"; a="68719690"
 X-IronPort-AV: E=Sophos;i="6.21,221,1763452800"; 
-   d="scan'208";a="69499557"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2026 08:53:00 -0800
-X-CSE-ConnectionGUID: 6yMCn+3DSnGtPVZ4MqnqCg==
-X-CSE-MsgGUID: pFAlkfMLR3C3UGbxBjlfMQ==
+   d="scan'208";a="68719690"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2026 08:57:40 -0800
+X-CSE-ConnectionGUID: M0LdXGh/Qf69W4gfoabciA==
+X-CSE-MsgGUID: gRae6VGURUC/qG97OJ9Pdw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,221,1763452800"; 
-   d="scan'208";a="208288084"
+   d="scan'208";a="204149300"
 Received: from dhhellew-desk2.ger.corp.intel.com (HELO localhost) ([10.245.245.37])
-  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2026 08:52:58 -0800
-Date: Mon, 12 Jan 2026 18:52:56 +0200
+  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2026 08:57:32 -0800
+Date: Mon, 12 Jan 2026 18:57:30 +0200
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: correctmost <cmlists@sent.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: dmaengine@vger.kernel.org, regressions@lists.linux.dev,
-	vkoul@kernel.org, linux-i2c@vger.kernel.org
-Subject: Re: [REGRESSION][BISECTED] Lenovo IdeaPad touchpad does not work
- when idma64 is present in initramfs
-Message-ID: <aWUm6DLDADMX1m-H@smile.fi.intel.com>
-References: <51388859-bf5f-484c-9937-8f6883393b4d@app.fastmail.com>
- <aWUGmfcjWpFJs3-X@smile.fi.intel.com>
+To: Alex Ivy <whu2gh@gmail.com>
+Cc: jarkko.nikula@linux.intel.com, mika.westerberg@linux.intel.com,
+	wsa@kernel.org, jsd@semihalf.com, p.zabel@pengutronix.de,
+	linux-i2c@vger.kernel.org
+Subject: Re: [QUESTION] i2c: designware: Why use GPIOD_OUT_HIGH instead of
+ OPEN_DRAIN for recovery?
+Message-ID: <aWUn-m56_SUw9nei@smile.fi.intel.com>
+References: <CAN8T_P09Qe4091eq+YXnqzCtSxLQgxcw=jH2bH7uw20N4_DsbQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aWUGmfcjWpFJs3-X@smile.fi.intel.com>
+In-Reply-To: <CAN8T_P09Qe4091eq+YXnqzCtSxLQgxcw=jH2bH7uw20N4_DsbQ@mail.gmail.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
  krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-+Cc: Mika
+On Mon, Jan 12, 2026 at 10:10:02PM +0800, Alex Ivy wrote:
 
-On Mon, Jan 12, 2026 at 04:35:08PM +0200, Andy Shevchenko wrote:
-> On Tue, Dec 16, 2025 at 12:57:10PM -0500, correctmost wrote:
+> I am currently looking at the bus recovery implementation in
+> drivers/i2c/busses/i2c-designware-master.c. I noticed that
+> i2c_dw_init_recovery_info() seems to manually reimplement much of the logic
+> already present in the I2C core's i2c_gpio_init_generic_recovery().
 > 
-> > The following commit
+> However, there are two key differences that caught my attention:
 > 
-> No, it's false positive. The reality is that something else is going on
-> there on this and other similar laptops.
+> GPIO Flags: The I2C core uses GPIOD_OUT_HIGH_OPEN_DRAIN, while
+> i2c-designware uses GPIOD_OUT_HIGH. Is this specifically intended to
+> support SoC GPIO controllers that do not implement the OPEN_DRAIN flag,
+> which would otherwise cause devm_gpiod_get() to fail in the core's generic
+> helper?
 > 
-> > causes my Lenovo IdeaPad touchpad not to work when
-> > kernel/drivers/dma/idma64.ko.zst is present in the initramfs image:
-> > 
-> > #regzbot introduced: 9140ce47872bfd89fca888c2f992faa51d20c2bc
-> > 
-> > "idma64: Don't try to serve interrupts when device is powered off"
+> Initialization Flow: The core's helper performs a pinctrl state toggle
+> (GPIO -> Default) during initialization, whereas i2c-designware only looks
+> up the states and defers the actual switching to prepare_recovery.
+
+This might affect the workflow. Note, in the past one of such conversion was
+presumably done without real testing and brought a regression (I'm talking
+about PXA version).
+
+> My question is: Would it be possible (or welcomed) to refactor this to use
+> the core's generic helper, or is the current manual initialization required
+> to maintain compatibility with specific DesignWare-integrated SoCs (like
+> certain Intel or ARM platforms) that have restrictive GPIO/Pinctrl
+> requirements?
 > 
-> So, the touchpad is an I²C device, which is connected to an Intel SoC.
-> The I²C host controller is Synopsys DesignWare. On Intel SoCs the above
-> mentioned IP is generated with private DMA engine, that's called Intel
-> iDMA 64-bit. Basically it's two devices under a single PCI hood.
-> The problem here is that when PCI device is in D3, both devices are
-> powered off, but something sends an interrupt and it's not recognized
-> being the one, send by a device (touchpad).
-> 
-> There is one of the following potential issues (or their combinations):
-> 
-> - the I²C host controller hardware got off too early
-> - the line is shared with something else that generates interrupt storm
-> - the BIOS does weird (wrong) things at a boot time, like not properly
->   shutting down and disabling interrupt sources; also may have wrong
->   pin control settings
-> - the touchpad is operating on higher frequency like 400kHz (because
->   BIOS told to use that one instead of 100kHz) than the HW is designed
->   for and hence unreliable with all possible side effects
-> - the touchpad firmware behaves wrongly on some sequences (see also
->   note about the bus speed above), try to upgrade touchpad FW
-> 
-> With my experience with the case of the above mentioned commit that it
-> may be BIOS thingy. Also consider the bus speed, there are quirks in
-> the kernel for that.
-> 
-> > Here are the related logs:
-> > 
-> > ---
-> > 
-> > irq 27: nobody cared (try booting with the "irqpoll" option)
-> 
-> Almost all below is not so interesting.
-> 
-> ...
-> 
-> > handlers:
-> > [<00000000104a7621>] idma64_irq [idma64]
-> > [<00000000bd8d08e9>] i2c_dw_isr
-> > Disabling IRQ #27
-> 
-> Yes, this line at least shared between those two and might be more.
-> 
-> ...
-> 
-> > i2c_designware i2c_designware.0: controller timed out
-> > hid (null): reading report descriptor failed
-> > i2c_hid_acpi i2c-ELAN06FA:00: can't add hid device: -110
-> > i2c_hid_acpi i2c-ELAN06FA:00: probe with driver i2c_hid_acpi failed with error -110
-> 
-> Yes, sounds familiar with the speed settings. Try to down it to 100kHz in case
-> it's confirmed to be 400kHz.
-> 
-> > ---
-> > 
-> > Hardware info:
-> > - Lenovo 16" IdeaPad Slim 5 - 16IRU9
-> >   - Hardware name: LENOVO 83FW/LNVNB161216, BIOS PFCN14WW 09/20/2024
-> >   - ELAN06FA:00 04F3:327E Touchpad
-> > 
-> > Steps to reproduce:
-> > - Cold boot the laptop on Arch Linux
-> > 
-> > The bug is still present with the 6.19.0-rc1-1-git kernel.
-> > 
-> > The bisected commit is from March 2024, but I only recently noticed the issue
-> > because the initramfs images on Arch Linux now include these additional
-> > drivers (as of November 2025):
-> > - kernel/drivers/dma/idma64.ko.zst
-> > - kernel/drivers/mfd/intel-lpss-pci.ko.zst
-> > - kernel/drivers/mfd/intel-lpss.ko.zst
-> > 
-> > Two other users have reported the issue on the Arch Linux and CachyOS forums,
-> 
-> Any pointers to that thread, please?
-> 
-> > so I don't think this is a hardware issue with my individual laptop.
-> 
-> I don't know how this conclusion is came here. You mean HW as laptop model?
-> But are the involved components the same (I²C host controller + touchpad)?
+> I would appreciate your insights on the historical background of these
+> choices.
+
+Do you have an access to real HW?
 
 -- 
 With Best Regards,
