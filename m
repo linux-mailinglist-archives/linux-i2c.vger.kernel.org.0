@@ -1,173 +1,95 @@
-Return-Path: <linux-i2c+bounces-15072-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-15073-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 792D0D13CE6
-	for <lists+linux-i2c@lfdr.de>; Mon, 12 Jan 2026 16:52:22 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A6D8D13D8E
+	for <lists+linux-i2c@lfdr.de>; Mon, 12 Jan 2026 16:59:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 5D7343024D72
-	for <lists+linux-i2c@lfdr.de>; Mon, 12 Jan 2026 15:47:40 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 595E7304D35B
+	for <lists+linux-i2c@lfdr.de>; Mon, 12 Jan 2026 15:49:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7186E362156;
-	Mon, 12 Jan 2026 15:47:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE29834252C;
+	Mon, 12 Jan 2026 15:49:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I6ynwmkl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DundEaS1"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 312A2322B7F;
-	Mon, 12 Jan 2026 15:47:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E4BE3033D1
+	for <linux-i2c@vger.kernel.org>; Mon, 12 Jan 2026 15:49:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768232858; cv=none; b=vC08wZWiUyvzqtptZVU5e12ThQlzACJrSW5GDu8a6RERIsHrnMWrOSKlr4/aWW7qxMRVqHPAOpj6THsfW5oNrU9KbyeYoOxTpUPSwE2TMHKP81+18/jDMU1pL1El3CumWozXz2TfD0s1ZKlOzaHM//ynbImrmn4oif7bvSkzVUE=
+	t=1768232952; cv=none; b=HQ6HdzPivsl7PViILQwXAYaHksLEUFkjj7ebF9sAWOEkqbq+rwkp+GAO4GUymIVS3tHEqmWRG14VQGxIVJJy3A7aNBYLkFioPnmJAT8BP01h2HgxIi06veBIA3D1Pw8wntSxeiEXUOt94rlW3oJnc2Dnt2c7YUY0/EOSVw4paUA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768232858; c=relaxed/simple;
-	bh=bJREwxXbcrH/YGIWEMocIbkIa9r3pbvOUP7xP2PbaS0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=UJCmzenGMxp+ZsCShT3WRAou4Yo/34PTIKnqFeVrqvBDh5sHJGuPhRA8QckGgmOWEKbbpZmMX2AoL2NvHyABEFFG1ziXaOVPD8HcM2dlzjge+GocezRBp0oKlxD7qlU/Bc0ZLOSBHYbXH/9p2h1VfljKaB1bvgoNMCpoz2Qopls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I6ynwmkl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A65A6C16AAE;
-	Mon, 12 Jan 2026 15:47:33 +0000 (UTC)
+	s=arc-20240116; t=1768232952; c=relaxed/simple;
+	bh=g3qVMOf4h7r5oPNNYlK3bIOu73r1qNBGBIVfGAnDN44=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WKnLTRnf/14gKRVdeUZFSfzvpjWkcOwhr5pr1UiHmGFa9Ri0kKL0Ux4qSperPA+Q1eEHhZgbsN4J2d2Um+mpM9hoH8uTzj2KMM9SQQE0dVbi660DOkae71z/Rs0wVU16lPOL4Il29cTPF7AiDi7t/HwnrDAPHiHjVoHnAqw5cyg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DundEaS1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40C7BC19423
+	for <linux-i2c@vger.kernel.org>; Mon, 12 Jan 2026 15:49:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768232857;
-	bh=bJREwxXbcrH/YGIWEMocIbkIa9r3pbvOUP7xP2PbaS0=;
-	h=Date:Subject:Cc:To:From:References:In-Reply-To:From;
-	b=I6ynwmklDaOgk7Qsb8h4QcAkboCulj5JfjQAEFYpjMdc21v7aEHtDQ0aimloeZIP+
-	 VfnrUdQwkSF8iOdsR+JV4CQnpUPcz62w+LqJO7gsIPn0GqinAgmHFeasOcrxerd9Aw
-	 yNZSnjhUokT8N2Y279efbZ7iLz92YnZ3FMWTUN74mFrp4a5LEJaXUjRLaVmlHJtrXz
-	 k8UiLujPJS/jHQEebyw5frUyaG4FcbGWdsfdf07421ECM97fOZTOySugHCo1gO+0N3
-	 spf//9SrTafrvQdVqtSXdQXdlCFSIY5d7CjKhjsYYejlRhX1s3Z3QyhAxKTDGd8anu
-	 gaHYw7ZvK6qmg==
+	s=k20201202; t=1768232952;
+	bh=g3qVMOf4h7r5oPNNYlK3bIOu73r1qNBGBIVfGAnDN44=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=DundEaS1NAS3+LPc/kxdJ2yGGomCc9xbKC9k1YG6fs0A1ILvlzTAtzITL4qvI3l7f
+	 p9JgbJHFAiC26fKfk22rPFMWLzp9CQxUPcJZIBpXL7U4pvINJfJX/NHfcOsaf9yX6T
+	 y1Un4vS/kayDeU4qkHi2UwVzBuNtTfOaFmilKeHzR7DY0ihKWyt3hwY8VZwrq2wW5o
+	 GA+VJ1nDezZ9AoHIP8+sdbfpsgSYX4asdKCLOXj7F0WfKpESQGJ6nslcTlu63g7mko
+	 bUa7JW1pwUW74dbDbb6TJErhuDbrjFrex4rdk38C8JNZmDbNarsi0ruW4erNk0EU3t
+	 0wgDmSevaugEQ==
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-59a10df8027so7767045e87.0
+        for <linux-i2c@vger.kernel.org>; Mon, 12 Jan 2026 07:49:12 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVVRfXSc+gtZrJOozKwmQ7Iu0FBXI7gsSqnrekABTi4B5KsxTze9CbmsilCRm7nVk0LzXC71JzkBYs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwLr9/JnLk9W57MUU2l0wVEnUdjdK5/DE8OzN7hE/lNLMz0JwoY
+	t6bA3pjVmat2vJBHb9fnLP9vpUXU8h0R97VuBPd+cF6Y9Q5LwWBuqxVskP6pet7Np6K7/dMk6U1
+	VP6eDu2mV9qYxHV0tzNGypFh14R9CbkY=
+X-Google-Smtp-Source: AGHT+IGrmhpZ8nXRdgojkHsyjUv61lqeNWnDH4LALSgozKK/V99agmF5Af5tLfoDGn/rKgr4N6cPGy0VL/XBPqOTq/E=
+X-Received: by 2002:a05:6512:2312:b0:59b:67b9:3989 with SMTP id
+ 2adb3069b0e04-59b6f01c67emr6662469e87.16.1768232950905; Mon, 12 Jan 2026
+ 07:49:10 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+References: <20260112134900.4142954-1-andriy.shevchenko@linux.intel.com> <20260112134900.4142954-2-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20260112134900.4142954-2-andriy.shevchenko@linux.intel.com>
+From: Linus Walleij <linusw@kernel.org>
+Date: Mon, 12 Jan 2026 16:48:58 +0100
+X-Gmail-Original-Message-ID: <CAD++jLkQo_1HM2=FM8uw5FLdGo_dyNi7mq55O+Ea62am8nk-uw@mail.gmail.com>
+X-Gm-Features: AZwV_QiRK9ToY_JI65YTXBjF0MrmuQc7bAxxJwuy2RaXI4VD3YSpEG_xcWGIoX0
+Message-ID: <CAD++jLkQo_1HM2=FM8uw5FLdGo_dyNi7mq55O+Ea62am8nk-uw@mail.gmail.com>
+Subject: Re: [PATCH v1 1/7] units: Add HZ_PER_GHZ
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Andi Shyti <andi@smida.it>, Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+	Qianfeng Rong <rongqianfeng@vivo.com>, linux-i2c@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-mediatek@lists.infradead.org, linux-rockchip@lists.infradead.org, 
+	Khalil Blaiech <kblaiech@nvidia.com>, Asmaa Mnebhi <asmaa@nvidia.com>, 
+	Andi Shyti <andi.shyti@kernel.org>, Qii Wang <qii.wang@mediatek.com>, 
+	Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Heiko Stuebner <heiko@sntech.de>, 
+	Patrice Chotard <patrice.chotard@foss.st.com>, Ard Biesheuvel <ardb@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 12 Jan 2026 16:47:31 +0100
-Message-Id: <DFMQ8E2A5J7F.1IBBTOX9E1R1G@kernel.org>
-Subject: Re: [PATCH 0/6] Address race condition with Device::drvdata()
-Cc: <gregkh@linuxfoundation.org>, <rafael@kernel.org>,
- <igor.korotin.linux@gmail.com>, <ojeda@kernel.org>, <boqun.feng@gmail.com>,
- <gary@garyguo.net>, <bjorn3_gh@protonmail.com>, <lossin@kernel.org>,
- <a.hindborg@kernel.org>, <tmgross@umich.edu>, <david.m.ertman@intel.com>,
- <ira.weiny@intel.com>, <leon@kernel.org>, <bhelgaas@google.com>,
- <kwilczynski@kernel.org>, <wsa+renesas@sang-engineering.com>,
- <linux-kernel@vger.kernel.org>, <rust-for-linux@vger.kernel.org>,
- <linux-pci@vger.kernel.org>, <linux-usb@vger.kernel.org>,
- <linux-i2c@vger.kernel.org>
-To: "Alice Ryhl" <aliceryhl@google.com>
-From: "Danilo Krummrich" <dakr@kernel.org>
-References: <20260107103511.570525-1-dakr@kernel.org>
- <aV6BHw-Liv0SVAwO@google.com> <DFII83QY76O0.2PKZ73WCTVGPR@kernel.org>
- <aWUUkvdKsRVJqfE2@google.com>
-In-Reply-To: <aWUUkvdKsRVJqfE2@google.com>
 
-On Mon Jan 12, 2026 at 4:34 PM CET, Alice Ryhl wrote:
-> On Wed, Jan 07, 2026 at 05:40:20PM +0100, Danilo Krummrich wrote:
->> On Wed Jan 7, 2026 at 4:51 PM CET, Alice Ryhl wrote:
->> > If a &Device<Bound> lets you access a given value, then we must not
->> > destroy that value until after the last &Device<Bound> has expired.
->> >
->> > A &Device<Bound> lets you access the driver private data. And a
->> > &Device<Bound> lets you access the contents of a Devres<T>.
->> >
->> > Thus, the last &Device<Bound> must expire before we destroy driver
->> > private data or values inside of Devres<T>. Etc.
->>=20
->> Yes, the last &Device<Bound> must expire before we destroy the device pr=
-ivate
->> data. This is exactly what is achieved by this patch. The device private=
- data is
->> destroyed after all devres callbacks have been processed, which guarante=
-es that
->> there can't be any contexts left that provide a &Device<Bound>.
->>=20
->> As for the values inside of a Devres<T>, this is exactly what I refer to=
- in my
->> paragraph above talking about the unsoundness of the devres cleanup orde=
-ring in
->> Rust.
->>=20
->> I also mention that I'm already working on a solution and it is in fact =
-pretty
->> close to the solution you propose below, i.e. a generic mechanism to sup=
-port
->> multiple devres domains (which I also see advantages for in C code).
->>=20
->> As mentioned, this will also help with getting the required synchronize_=
-rcu()
->> calls down to exactly one per device unbind.
->>=20
->> Technically, we could utilize such a devres domain for dropping the devi=
-ce
->> private data, but there is no need to have a separate domain just for th=
-is, we
->> already have a distinct place for dropping and freeing the device privat=
-e data
->> after the device has been fully unbound, which is much simpler than a se=
-parate
->> devres domain.
->>=20
->> Now, you may argue we don't need a separate devres domain, and that we c=
-ould use
->> the non-early devres domain. However, this would have the following impl=
-ication:
->>=20
->> In the destructor of the device private data, drivers could still try to=
- use
->> device resources stored in the device private data through try_access(),=
- which
->> may or may not succeed depending on whether the corresponding Devres<T>
->> containers are part of the device private data initializer or whether th=
-ey have
->> been allocated separately.
->>=20
->> Or in other words it would leave room for drivers to abuse this behavior=
-.
->>=20
->> Therefore, the desired order is:
->>=20
->>   1. Driver::unbind() (A place for drivers to tear down the device;
->>      registrations are up - unless explicitly revoked by the driver (thi=
-s is a
->>      semantic choice) - and device resources are accessible.)
->>=20
->>   2. devm_early_* (Drop all devres guarded registrations.)
->>=20
->>   3. No more &Device<Bound> left.
->>=20
->>   4. devm_* (Drop all device resources.)
->>=20
->>   5. No more device resources left.
->>=20
->>   6. Drop and free device private data. (try_access() will never succeed=
- in the
->>      destructor of the device private data.
+On Mon, Jan 12, 2026 at 2:49=E2=80=AFPM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+
+> The is going to be a new user of the HZ_PER_GHZ definition besides
+> possibly existing ones. Add that one to the header.
 >
-> so your private data is just the first devres resource ;)
-
-Correct, that would work as well. However, I have a paragraph in the cover
-letter explaining why this implementation is not desirable, i.e. more error
-prone implementation and more explicit handling required by bus code.
-
-> Ok. I'm worried that when you fix Devres, you have to undo changes you
-> made here. But I guess that's not the end of the world (and maybe you
-> don't have to).
-
-For the reasons above this will remain as is even with the Devres rework. W=
-ith a
-separate devres stage it would become less error prone and we could also av=
-oid
-bus code involvement, but it would still be more complicated than a simple
-callback.
-
-> Concept SGTM. I have not yet reviewed patches in details, but
+> While at it, split Hz and kHz groups of the multipliers for better
+> maintenance and readability.
 >
-> Acked-by: Alice Ryhl <aliceryhl@google.com>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Thanks for taking a look! :)
+This looks right to me:
+Reviewed-by: Linus Walleij <linusw@kernel.org>
+
+Yours,
+Linus Walleij
 
