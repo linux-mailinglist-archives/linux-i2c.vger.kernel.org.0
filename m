@@ -1,71 +1,72 @@
-Return-Path: <linux-i2c+bounces-15080-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-15081-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3A20D14394
-	for <lists+linux-i2c@lfdr.de>; Mon, 12 Jan 2026 18:01:27 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id EBF7ED153D2
+	for <lists+linux-i2c@lfdr.de>; Mon, 12 Jan 2026 21:34:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E155A30285F5
-	for <lists+linux-i2c@lfdr.de>; Mon, 12 Jan 2026 16:57:43 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D50F830463B3
+	for <lists+linux-i2c@lfdr.de>; Mon, 12 Jan 2026 20:33:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40ADB2EBDE9;
-	Mon, 12 Jan 2026 16:57:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 601FF310763;
+	Mon, 12 Jan 2026 20:33:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X0LAdumC"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Uq2i1OAU"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5737D374163
-	for <linux-i2c@vger.kernel.org>; Mon, 12 Jan 2026 16:57:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8385C31AF07;
+	Mon, 12 Jan 2026 20:33:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768237063; cv=none; b=as2oMSYfgD76FDqI844y0wlk8GW3x3d8TSMow42SQKPGJNfDB7eQNN/jbUGXOOHWLUSyaW1TA4Ho8gBkgiWcSb2dja9m5DM9Zni9yXAE5VvtlISS7/NK4KVrdaN2OVla8xdyPuYhXLl6M8T3tKRlM9qAqVUMTtBcPBssY9RAYQc=
+	t=1768250038; cv=none; b=FbyjHJyjEGJ0y/44uynuLsPDQCdpgVfPuI2i9b6Yqmz3wTCkZWTXTYZirkxBrBA/uWrjSFwsxDxNNrF/IK1F00BWp4fAs5EktivSOSvj3d1PW5//evcg8OPJEu4LtroLe8IxKhia4phWpBmDuhZH7wCClb7yZW80VZ8M6xxcL2U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768237063; c=relaxed/simple;
-	bh=kNppd47ObN/Y9YUccsPV+vgYLfG0z/UDbQLhf6oX0Bo=;
+	s=arc-20240116; t=1768250038; c=relaxed/simple;
+	bh=T9ckJangESB9K1Z0yCWBCJwIyaDWgCZWLnmLdwNbkqc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ncx34thYn940xh+yBpY5lfYwCMEYkNXP9GHMas0do66Gba4ZSE8hFARWgnh7OHhmy9E6hSwegP01WrT+KO9HK3qPdEWH+Ax1Tg2bN3c7xJ7tqewtKpBftn7zv0bhchsC6zKmBp/cRwWOK7TH/5UsprL6kA5+C/+1W18Lyb2yEOs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X0LAdumC; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=SKT490NNrnXOVqa51tuNbdPQdDxb3Lz9/he8bv+xSpChx1UuPaB4ZCtvGV7Fuxs71QF2vhyqC2xybw2Qd/kHJmb2dJm2ZKV6Yd9aMyTxskuMNsmiZVo9TnBIeA2R3Uy+7qNSvC5IleqekkNpu1fFsfCEg+NyxUUDxdfzqRKJTTw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Uq2i1OAU; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768237061; x=1799773061;
+  t=1768250035; x=1799786035;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=kNppd47ObN/Y9YUccsPV+vgYLfG0z/UDbQLhf6oX0Bo=;
-  b=X0LAdumCNNl/BE7veM7t40uaeBIrzP1MsB2pYKnaURMxVY0LE7tIcvQG
-   pjImtbdg5DSVaJxc0PiBEvT+uxJTpBKs3QeLIP/4UlU+qQAMuPSxkTI4K
-   /NmxO3CWlnJjxEPZNf6IU6HZJ/Mb4hQ6dLC2P6z56dHKDFK4eDTws+k4X
-   lI+4NfH57637RM6UXk56qPHCS8X1VN209EummMkOWDRh4MioL1CW2b2qe
-   O3MuSQ/KF0clqD0OyGKrtS/soOZmPYd7w0uGthIFmdncjgEjq30zTsRZI
-   ikj9npQsxG4gt/yRN0DF2BT01yFHNkiZDF8Z98pZFm0AKAWnpr/6GlUA8
-   A==;
-X-CSE-ConnectionGUID: Tn/DKe4ZRR65Enh05TipgA==
-X-CSE-MsgGUID: i3mQ0toMQdSQ8fsv5WkQug==
-X-IronPort-AV: E=McAfee;i="6800,10657,11669"; a="68719690"
+  bh=T9ckJangESB9K1Z0yCWBCJwIyaDWgCZWLnmLdwNbkqc=;
+  b=Uq2i1OAUR1nssVqfEMNbKfzoiYI83xe98pFFCZd8qxq6GH8u2A7qGm0P
+   LTXIBH9XqTlRRU0fSLdFUTZP9VD/7gae6650/cR470sqXqcdxLDxjtxF9
+   Whym1R5wUUu470uGWaZxiKSHp+jklxkxUKoypxUvtBeWIE6VSZrLpnlG+
+   9fCU0BdT8uDRa0z5B5H4OlGTZBTwUTaRgrtCq9bG5TzCgd88zBRO/NAW2
+   YbfX5LSpvTp5hdN+FgfhyJsaLMPkWLTwb/Wulmtg0x1TMX414L1CbkxI6
+   P+a5FQnhBrSoFkTJasqf0f6r+OyxPbO1yKNd7cNv9HFSSiEBCMGzTxQ8I
+   w==;
+X-CSE-ConnectionGUID: 5d+N7FH0T+iRGLxNKWnAYA==
+X-CSE-MsgGUID: c5UlYLFOTIe51LBa5lQNTA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11669"; a="80173530"
 X-IronPort-AV: E=Sophos;i="6.21,221,1763452800"; 
-   d="scan'208";a="68719690"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2026 08:57:40 -0800
-X-CSE-ConnectionGUID: M0LdXGh/Qf69W4gfoabciA==
-X-CSE-MsgGUID: gRae6VGURUC/qG97OJ9Pdw==
+   d="scan'208";a="80173530"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2026 12:33:54 -0800
+X-CSE-ConnectionGUID: NLs7PlCyRDK73k019IQyvQ==
+X-CSE-MsgGUID: v+bGvwmDQNytenZ6mZU71Q==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,221,1763452800"; 
-   d="scan'208";a="204149300"
-Received: from dhhellew-desk2.ger.corp.intel.com (HELO localhost) ([10.245.245.37])
-  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2026 08:57:32 -0800
-Date: Mon, 12 Jan 2026 18:57:30 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Alex Ivy <whu2gh@gmail.com>
-Cc: jarkko.nikula@linux.intel.com, mika.westerberg@linux.intel.com,
-	wsa@kernel.org, jsd@semihalf.com, p.zabel@pengutronix.de,
-	linux-i2c@vger.kernel.org
-Subject: Re: [QUESTION] i2c: designware: Why use GPIOD_OUT_HIGH instead of
- OPEN_DRAIN for recovery?
-Message-ID: <aWUn-m56_SUw9nei@smile.fi.intel.com>
-References: <CAN8T_P09Qe4091eq+YXnqzCtSxLQgxcw=jH2bH7uw20N4_DsbQ@mail.gmail.com>
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 12 Jan 2026 12:33:52 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vfObm-00000000Dqm-1Vmc;
+	Mon, 12 Jan 2026 20:33:50 +0000
+Date: Tue, 13 Jan 2026 04:33:04 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, Khalil Blaiech <kblaiech@nvidia.com>,
+	Asmaa Mnebhi <asmaa@nvidia.com>, Andi Shyti <andi.shyti@kernel.org>
+Subject: Re: [PATCH v1 2/2] i2c: mlxbf: Use HZ_PER_KHZ in the driver
+Message-ID: <202601130414.VJyCNWzI-lkp@intel.com>
+References: <20260112135603.4150952-3-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -74,47 +75,75 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAN8T_P09Qe4091eq+YXnqzCtSxLQgxcw=jH2bH7uw20N4_DsbQ@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+In-Reply-To: <20260112135603.4150952-3-andriy.shevchenko@linux.intel.com>
 
-On Mon, Jan 12, 2026 at 10:10:02PM +0800, Alex Ivy wrote:
+Hi Andy,
 
-> I am currently looking at the bus recovery implementation in
-> drivers/i2c/busses/i2c-designware-master.c. I noticed that
-> i2c_dw_init_recovery_info() seems to manually reimplement much of the logic
-> already present in the I2C core's i2c_gpio_init_generic_recovery().
-> 
-> However, there are two key differences that caught my attention:
-> 
-> GPIO Flags: The I2C core uses GPIOD_OUT_HIGH_OPEN_DRAIN, while
-> i2c-designware uses GPIOD_OUT_HIGH. Is this specifically intended to
-> support SoC GPIO controllers that do not implement the OPEN_DRAIN flag,
-> which would otherwise cause devm_gpiod_get() to fail in the core's generic
-> helper?
-> 
-> Initialization Flow: The core's helper performs a pinctrl state toggle
-> (GPIO -> Default) during initialization, whereas i2c-designware only looks
-> up the states and defers the actual switching to prepare_recovery.
+kernel test robot noticed the following build errors:
 
-This might affect the workflow. Note, in the past one of such conversion was
-presumably done without real testing and brought a regression (I'm talking
-about PXA version).
+[auto build test ERROR on andi-shyti/i2c/i2c-host]
+[also build test ERROR on linus/master v6.19-rc5 next-20260109]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> My question is: Would it be possible (or welcomed) to refactor this to use
-> the core's generic helper, or is the current manual initialization required
-> to maintain compatibility with specific DesignWare-integrated SoCs (like
-> certain Intel or ARM platforms) that have restrictive GPIO/Pinctrl
-> requirements?
-> 
-> I would appreciate your insights on the historical background of these
-> choices.
+url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/i2c-mlxbf-Remove-unused-bus-speed-definitions/20260112-220605
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
+patch link:    https://lore.kernel.org/r/20260112135603.4150952-3-andriy.shevchenko%40linux.intel.com
+patch subject: [PATCH v1 2/2] i2c: mlxbf: Use HZ_PER_KHZ in the driver
+config: i386-buildonly-randconfig-001-20260112 (https://download.01.org/0day-ci/archive/20260113/202601130414.VJyCNWzI-lkp@intel.com/config)
+compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260113/202601130414.VJyCNWzI-lkp@intel.com/reproduce)
 
-Do you have an access to real HW?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601130414.VJyCNWzI-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   drivers/i2c/busses/i2c-mlxbf.c: In function 'mlxbf_i2c_probe':
+>> drivers/i2c/busses/i2c-mlxbf.c:68:44: error: 'HZ_PER_MHZ' undeclared (first use in this function)
+      68 | #define MLXBF_I2C_TYU_PLL_OUT_FREQ  (400 * HZ_PER_MHZ)
+         |                                            ^~~~~~~~~~
+   drivers/i2c/busses/i2c-mlxbf.c:173:41: note: in expansion of macro 'MLXBF_I2C_TYU_PLL_OUT_FREQ'
+     173 | #define MLXBF_I2C_COREPLL_FREQ          MLXBF_I2C_TYU_PLL_OUT_FREQ
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/i2c/busses/i2c-mlxbf.c:2325:35: note: in expansion of macro 'MLXBF_I2C_COREPLL_FREQ'
+    2325 |                 priv->frequency = MLXBF_I2C_COREPLL_FREQ;
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~
+   drivers/i2c/busses/i2c-mlxbf.c:68:44: note: each undeclared identifier is reported only once for each function it appears in
+      68 | #define MLXBF_I2C_TYU_PLL_OUT_FREQ  (400 * HZ_PER_MHZ)
+         |                                            ^~~~~~~~~~
+   drivers/i2c/busses/i2c-mlxbf.c:173:41: note: in expansion of macro 'MLXBF_I2C_TYU_PLL_OUT_FREQ'
+     173 | #define MLXBF_I2C_COREPLL_FREQ          MLXBF_I2C_TYU_PLL_OUT_FREQ
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/i2c/busses/i2c-mlxbf.c:2325:35: note: in expansion of macro 'MLXBF_I2C_COREPLL_FREQ'
+    2325 |                 priv->frequency = MLXBF_I2C_COREPLL_FREQ;
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/HZ_PER_MHZ +68 drivers/i2c/busses/i2c-mlxbf.c
+
+    55	
+    56	/*
+    57	 * Note that the following SMBus, CAUSE, GPIO and PLL register addresses
+    58	 * refer to their respective offsets relative to the corresponding
+    59	 * memory-mapped region whose addresses are specified in either the DT or
+    60	 * the ACPI tables or above.
+    61	 */
+    62	
+    63	/*
+    64	 * SMBus Master core clock frequency. Timing configurations are
+    65	 * strongly dependent on the core clock frequency of the SMBus
+    66	 * Master. Default value is set to 400MHz.
+    67	 */
+  > 68	#define MLXBF_I2C_TYU_PLL_OUT_FREQ  (400 * HZ_PER_MHZ)
+    69	/* Reference clock for Bluefield - 156 MHz. */
+    70	#define MLXBF_I2C_PLL_IN_FREQ       156250000ULL
+    71	
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
