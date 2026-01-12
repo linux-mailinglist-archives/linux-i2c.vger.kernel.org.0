@@ -1,96 +1,96 @@
-Return-Path: <linux-i2c+bounces-15039-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-15040-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2EE4FD12029
-	for <lists+linux-i2c@lfdr.de>; Mon, 12 Jan 2026 11:49:50 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 684A3D12056
+	for <lists+linux-i2c@lfdr.de>; Mon, 12 Jan 2026 11:50:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id C6CC630532B0
-	for <lists+linux-i2c@lfdr.de>; Mon, 12 Jan 2026 10:48:25 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 7C298307B823
+	for <lists+linux-i2c@lfdr.de>; Mon, 12 Jan 2026 10:48:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0639347BB4;
-	Mon, 12 Jan 2026 10:48:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A49E134AB06;
+	Mon, 12 Jan 2026 10:48:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="HcJUd6e2";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="iX7uCDZV"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Ip6wlg1T";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="frfmlEvJ"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4630E34BA31
-	for <linux-i2c@vger.kernel.org>; Mon, 12 Jan 2026 10:48:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C056334A78F
+	for <linux-i2c@vger.kernel.org>; Mon, 12 Jan 2026 10:48:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768214889; cv=none; b=U2qZN/emW89GRqNYRelAZxoWLipECgTALel+nuO8q83JlCArWK6Tro+7jZ+F0vIm/RL8WqH95077efxsc9An5ZKbp0pzNRwTIgfnzeDx7Zy1QHak5DqS/mE21lbda5oK9QoiYyhuVv52ex19RgYjTFl2HBA5kdxL/yGUKo4zvAw=
+	t=1768214896; cv=none; b=O532P7MXmb+lTqFFBLFNAPgHeijLhTIo0ZlSUoGFpEhdhU6Z4K1J5BtHyib6o1DBFvyKy2CEq+rA8gyYDc8ZAR8MsMclZEu5dDNyAbWOElAUONYJw0dt4uire1OAdfE3e9qZjwkw73RbAHsDKb6YGO0N3Lu1YZex+kHO42VyN9o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768214889; c=relaxed/simple;
-	bh=Lwi6am73hjEwuGPfyvhOjnNLgF31XvyybDUt3Q5oDo0=;
+	s=arc-20240116; t=1768214896; c=relaxed/simple;
+	bh=wIOve8uFF48Gb62JHvsj+fQjMU469T7IW0zeUBXokU8=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=VbSei3YvK+zEIrKCpWaASO4oZajhbfFhBEnj+3u8YfOjGX+8PtGpYkteHtx3HUVXK4kZcJY4ZTVKdPgAXaoNBNQr5v4bgHgqhXQn4IK0oFQXj/zZYye8rd+GkG6qjxkbLDoyiMwOfy8IaCKqL/eAaiPB5VTxg27Rt86p/qOSObk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=HcJUd6e2; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=iX7uCDZV; arc=none smtp.client-ip=205.220.168.131
+	 MIME-Version; b=R10KxP2lu8FVfNJ+Bvud33bK3nu1ITdzeyHVokuTynrS8sYs7FD/des/irf/LomEVvVtNDcUa6a2T8qLjXhWcdgggvKdy6WYkEhIEj4b2WK1etsgGOmdMZs/1EiBEUy95NOK0zAh0gWDequ5RCJ3STRzdNJifby0YdvJ02WvZxc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Ip6wlg1T; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=frfmlEvJ; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60CAEW2n1315821
-	for <linux-i2c@vger.kernel.org>; Mon, 12 Jan 2026 10:48:06 GMT
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60C83BiP3072041
+	for <linux-i2c@vger.kernel.org>; Mon, 12 Jan 2026 10:48:13 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
 	cc:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=qcppdkim1; bh=FfRF4LeyJZ3
-	FwFeIROUGTd7gbQBf7UNdgeI1+r4l9oI=; b=HcJUd6e2kEUVmn5Wub5jhStXnrE
-	GfDtyoCfiAKW81mC+V/o3IobW7PGnZwlHgHOeF6jy8NC6D0fuYns2vuo3SWB6iwa
-	6LRnC98xkWQYnonh0rtETAVwQBpe/sUgETUMW0F8sqK1gp4ybX3YXuynitZv1vYl
-	AfGuFWGs1ea35bcjr/wpm7/uTbItkjUIyurXD4TlEVkjz/OC6+AEsuwHQf90BXn8
-	2O8EZm1zIHI6TpLZahwmCCsGrQyV23KPE9EN2gb6bpMt67u6GGTQQbMfugcA91n1
-	HKv8wBCBqaxRnaRs/mnEhoCZmHF2P2pNVRGjFKxNsaNJMk4VIdiyp5Sp2Xw==
-Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com [209.85.215.198])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bmy1hg2tf-1
+	:mime-version:references:subject:to; s=qcppdkim1; bh=iwjTgNOIt2X
+	RAWcDsdp1tFrhZSbG+UyPsyYGOmD1OGQ=; b=Ip6wlg1T4fquA9BFa5EFiZxwRK8
+	2yDzGbQ/K4xNTlZXKoc7faIr5NJSOFESCCHjtt0OxHfRA1tW9moEkMwQ3NXdjywd
+	Z8E1WkiQ0v/jjQbfQHWyxJtmNr/gbk3U3j6F8WrhTq7dw7+CSsqOl7WOXB5VJckE
+	LGIYzs6+Q+Jms4zAvY6HWZAWW86Et5sZwSLWgFwFe02l4oaaPKeJcSNxDoe+GY4q
+	cl/z5kM2kZDwW+4cCrEQk94m663yVyYntzkEO7t5VI6OWNQhsrZZ1lvKWFSucaHp
+	PuquQYJEvgBpHfUDK6oP3l2p/SXu3ZpA/dG4xSRj0VThVcGU9obwonfZ0xQ==
+Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bkntum1wg-1
 	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-i2c@vger.kernel.org>; Mon, 12 Jan 2026 10:48:06 +0000 (GMT)
-Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-c337cde7e40so3528299a12.1
-        for <linux-i2c@vger.kernel.org>; Mon, 12 Jan 2026 02:48:06 -0800 (PST)
+	for <linux-i2c@vger.kernel.org>; Mon, 12 Jan 2026 10:48:12 +0000 (GMT)
+Received: by mail-pf1-f197.google.com with SMTP id d2e1a72fcca58-81dd077ca65so2183358b3a.2
+        for <linux-i2c@vger.kernel.org>; Mon, 12 Jan 2026 02:48:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1768214886; x=1768819686; darn=vger.kernel.org;
+        d=oss.qualcomm.com; s=google; t=1768214892; x=1768819692; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FfRF4LeyJZ3FwFeIROUGTd7gbQBf7UNdgeI1+r4l9oI=;
-        b=iX7uCDZVTVaZHN+GBRQPm2dXGUgSd+EpptqIi7gebLLE8widNISPKxKX6L3lXjhQss
-         WAn17AA5U4/0B/JlP7Qmjs2PL8No8ba59ALTW/1dZD/X2Arfyob1/3WxkLBeDn/FnE8g
-         mGVFFnaBZ5C/6jUuvAXTfVUcj31jj/AmCqo6tceDr1QFd5CqLIec3y+8kpqvvP1ppX5y
-         iMeo0DSIFKAHMAe6NYkhzUqqDSKOR/mh8XUM+AOJdI0MUpG/CuHwhrENOE4hK8ANCfrf
-         dSoDMsvcDV1SWtBSUw3oFP1OuLWl62tBN5EWc+JDHcK+l7NmjROg7+UH+uqvlx1j0/5s
-         WvrA==
+        bh=iwjTgNOIt2XRAWcDsdp1tFrhZSbG+UyPsyYGOmD1OGQ=;
+        b=frfmlEvJnsKZ/zyiOJzxQV0Gjvhv/N89iorKgU5wQMRnRJaqZScFIYspDW5Otz5LxC
+         J2lbND2HzI1VaHo911Qr8zs5G4KDUXXsnu3GWnaG7dg0JncIaqV4AOKmW9RXmmeng4qs
+         EOfq4X61QLmzmOuQQjhHTidjxYJ5Ym+Fgzf/KgNPAyBB/dIWtCfIZesXtqA5d/3nOZ1R
+         d6o2+Os9HOxQCJe0llBaCRIEk9nQ/uA7pAAmJ7uAo0f6QV0yFuBzuuvsb44L6LuJEeVT
+         MkqyFLotqS6NLG37Pc2cxVFjiovJxQmitD9ndFaDpDnwP9OZeOthRTqVpFD0qGnBvV0V
+         cWdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768214886; x=1768819686;
+        d=1e100.net; s=20230601; t=1768214892; x=1768819692;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=FfRF4LeyJZ3FwFeIROUGTd7gbQBf7UNdgeI1+r4l9oI=;
-        b=keNjdvSHf4NffD87hZn1dmfVf7dOItnLbyjVgYGP4RDgiZKjziJVeTb7RH0n85SxVd
-         B5wMP3SPOzOlqEwegSg3Ma2V9pYxSg+ISrWDyOLGTWlwl8cCI+DPRnUFG5Rm3XdAdxLU
-         4xwFp1NCfNODVEMFlyknO9+UD0iKgT+izE/Ffcrj6VqtldfFYsWqDv/9j2Me2+lTA504
-         eGPwE6DjehP+FZTTGjVngnXJ68bJ3EaDpgMzLIy96a3UGtCOTS/1IZZaa+a2kaf3nv49
-         c0MYIyUBxl5iUirs9yBUw+U9phMcKB7SXUpvUo2m29SYq5MOSyZ/Afat0zW7gFHqX9EJ
-         WXwA==
-X-Forwarded-Encrypted: i=1; AJvYcCU+/oZn8GwUbuE2KSlV0+hOZ1DZKuzf44viwS394ZdRaj92MH464sWbOYrxRLAB6vPgVl+GaxYnwWw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzq7T+xZCymN05aIg+DKVmIReL1oU6BNrYB1/KCT5gFUgQ8zCbL
-	rnZ6qGC7I3IukpEjvyllKijEG12wx6nHPP4qgQLJODJemk4EVv9xhGbgPa9dzdQMJMOYglf089H
-	Fzjl6QJGip6Os+mC8aCYzdd1RyL3YvuFrsGeGeSLYPqkNDSBFqwRSGIomt48q/0k=
-X-Gm-Gg: AY/fxX7zf+ZQMuFsYLyhWbS/Ko4o5UfgdhyZFgS0gMW2O1JbAS0dilMceYcjnd936Qp
-	7dyEKTAoWUCKuN0auGYLQaIaBfUB/w/gH++v+IDkI5Eri12kvTOCe8b9sdrRS8EY25+Z06UhwT7
-	X+RxHB+qbv7X6wx7sffWyv7O/DDiODOSXrc8EdZXfbXNMna9ldpFv9f/1I5PEcMN6I052+k+gAD
-	VObaJSwGhS+KZHvZmsS99KtFrXYuz8EXR/UWDOCAI7k20EY1BuuEDMXJacW8BVViYg5Zkrj5RK1
-	I0D1k3oXGkK5foMfDxY2rXJG8llGaLowQtYYG1sDV3/PWQxYTCMtcZ4MMt4CJdzuuTJXdSoA/vi
-	RHKzM39vPlThx43kZiGC4jJv20R8LNY3F/tsEwo3/09c=
-X-Received: by 2002:a05:6a00:ac0b:b0:7ff:f0c2:816e with SMTP id d2e1a72fcca58-81b7de5c2ccmr14022577b3a.28.1768214885729;
-        Mon, 12 Jan 2026 02:48:05 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHocyz6/ZWprgoCOzZAnw6wT0PTlCZZY7sl6z95J5UwJxKH+JBol/vDeHwTissvdOTmIsyrFA==
-X-Received: by 2002:a05:6a00:ac0b:b0:7ff:f0c2:816e with SMTP id d2e1a72fcca58-81b7de5c2ccmr14022559b3a.28.1768214885135;
-        Mon, 12 Jan 2026 02:48:05 -0800 (PST)
+        bh=iwjTgNOIt2XRAWcDsdp1tFrhZSbG+UyPsyYGOmD1OGQ=;
+        b=DnMR8B6wdvShvm+xfcBclYqk0x8ZhqOPUFFm1S8M6ZSFvcn7/4FmtyM4Rao7UwyZzM
+         1MXOVteLYDgTT0V4NU8nHuEiBlwzyfQu05SAe7e+lwLzQFOYgFRoraFFvEldkmFgUqMg
+         4Xoa01TCMFibb4OAmqB4lAc0+990w1WAJEx8ScNESZUskTdERBPqUCXzWQVQQ0UU8YUQ
+         rvqstvJCtT8md9XZ7YXR/z93OtJdKv4HrWrzeJmTjb6fygcY1oVwaLMLI1H+Y62Qcgf+
+         QbXXiSneXdBzP/a9XwlGcPhfySt1Nbon8kLz9n7zHTOBr8nsLKsJgjSEYv3/V88ytsbp
+         ylig==
+X-Forwarded-Encrypted: i=1; AJvYcCVvksC6VEVAvo0UuShhGz0VLToHBg9wfFqBHR4pvtgboSlqs2dN/1PTpoXOxG2UFKqdOVVlJAFBxYA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yysb0rzgK2mhmQNiaTrBceMm9B/7D02cm1r71nJW81ko+lsr2TU
+	HprRG34k0MkulPtnbdGh2EAMGK8CUfGl2OnidKBa2oktjKem8+P5pa7fpSOgC6Hm758f10Dppo5
+	C8gaujlrUNmC+Gc7j2PDAtpCtPVD2h/LVO6bAKgRSuL61uQ+DiA4yZ3pNZ5KEfBY=
+X-Gm-Gg: AY/fxX7710QpNMRIS9/5c1A7vL5XRCdIzHnvJM2GhpqLJFOboIIVCFlcCQhJtYySvEy
+	YSjPAKSIp8QVbFDHJLJHL+DXAY6lOpOmMv7TbIo4yL2jlcFa87og4GlgXFVLFfimtakC0yEduK/
+	uEsuqwk+wYI1RGbDw2DtxNz/08S06FqiJrRhGny/aHKkG/T/SCJCKgYF3CnTxEB09TpKMPImOmQ
+	wvZ5xY4ANAad/yh/+u1/f7gjjNZuGnHw/ZeNc297gdsIF/hPW11lwKdQxJqmJ3kiAQK0j42g7KB
+	FM5/ReoM930vnao3jEy8uOERBd2l4xW2WBqLqGAmLwlm4+k9qMkczi3oOVvTlbuc9285bwcX/c6
+	mjGgq4GzvwM49OEzzlRRR+eCOhUi//s2yXaLMbd3oaiA=
+X-Received: by 2002:a05:6a00:3318:b0:81f:5a3a:c91a with SMTP id d2e1a72fcca58-81f5a3acad1mr1991314b3a.46.1768214892108;
+        Mon, 12 Jan 2026 02:48:12 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGKv3xBIm6s5ePW5y4EswrA32UfOINAI3FD4tECMqPmJmhR6sDEedYYPxOalf4G8wJfq62Tew==
+X-Received: by 2002:a05:6a00:3318:b0:81f:5a3a:c91a with SMTP id d2e1a72fcca58-81f5a3acad1mr1991292b3a.46.1768214891531;
+        Mon, 12 Jan 2026 02:48:11 -0800 (PST)
 Received: from hu-ptalari-hyd.qualcomm.com ([202.46.22.19])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-819bafe9b8dsm17288681b3a.22.2026.01.12.02.47.59
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-819bafe9b8dsm17288681b3a.22.2026.01.12.02.48.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jan 2026 02:48:04 -0800 (PST)
+        Mon, 12 Jan 2026 02:48:11 -0800 (PST)
 From: Praveen Talari <praveen.talari@oss.qualcomm.com>
 To: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -106,9 +106,9 @@ To: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
         bjorn.andersson@oss.qualcomm.com
 Cc: prasad.sodagudi@oss.qualcomm.com, quic_vtanuku@quicinc.com,
         aniket.randive@oss.qualcomm.com, chandana.chiluveru@oss.qualcomm.com
-Subject: [PATCH v3 05/12] soc: qcom: geni-se: Introduce helper API for attaching power domains
-Date: Mon, 12 Jan 2026 16:17:15 +0530
-Message-Id: <20260112104722.591521-6-praveen.talari@oss.qualcomm.com>
+Subject: [PATCH v3 06/12] soc: qcom: geni-se: Introduce helper APIs for performance control
+Date: Mon, 12 Jan 2026 16:17:16 +0530
+Message-Id: <20260112104722.591521-7-praveen.talari@oss.qualcomm.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260112104722.591521-1-praveen.talari@oss.qualcomm.com>
 References: <20260112104722.591521-1-praveen.talari@oss.qualcomm.com>
@@ -119,117 +119,125 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: I6HKO3yjwBBz6GApoZk3OmRMOkhIoNeL
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTEyMDA4NSBTYWx0ZWRfXybzZ6SHNKmFr
- HQcr9ySE3pG7xlLidfWaG53qiVxzD4D1UQ0sbzZwBMLevekrr5pfiqgYw9e2C18bFNcuZHIPQBE
- j/N+kRbn0T6vaYe8XOgGaRf7avKE2CxQ+3sHdZlxDvTYnIlLXqfJMePNfgWj1lz1f5AY+DXLlJB
- F9BdouYE2ZQVGpUadDGkfoFoQfGrYgSXxBAbFYnqphctxHnPeLxPFlm1ZGbgX5KouUWEAVABKMO
- ddLNG8nF1kGYOI+0u0HdZEpKhl+vjmGG+DM4908TYQgmk/TgsMXpYvlx2SnbWASXTDm4eEd1NS8
- V5eCyGZkOLjr6573h74rTw7+55NMR7uNGF9PGEU4d5CzF1+iZfDo4b4DuEFo8qM1+dWxdfPXl4X
- 9I9YYLzRGbfxL/sYeeaolQZ9euqZVyV9DP4v1YiupNqjC9qxgAaexFmHmIHr89riDPY+GsRy/x+
- 8o8I7Bt5AkxPs0Q4xBw==
-X-Proofpoint-ORIG-GUID: I6HKO3yjwBBz6GApoZk3OmRMOkhIoNeL
-X-Authority-Analysis: v=2.4 cv=EovfbCcA c=1 sm=1 tr=0 ts=6964d166 cx=c_pps
- a=Qgeoaf8Lrialg5Z894R3/Q==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTEyMDA4NSBTYWx0ZWRfXyb9paJ73YkiW
+ BB3DGsDaJQbBbWhTj0Ap7b4+HCUdHhpFa06Iza1WmIkTXy30GU8MMxTc/qlAhtrWL4jwC+edvxW
+ iVAPtD3pYPkz6pOX4tuoHJtLpJ60ZZS/1CzNuI4qp7DazH3LEwxWUaUf0yP4HsXspB0WQbpwYsu
+ aFt4yrTaXu42nxwnmuSsFi0kbcGyN/yB7dyi9auLRbe/S1TImZ6ERxxjC3oCv9iuBrP/GClyURn
+ lDG0TNkS2Oag7fV9YICvuoQ2cd2RARYEz4/orxI5OqHJXgknnbE0abMp2Dpx/XQvlSmiaybZ+GG
+ umZgVM6lzPmOCTsqItLAuDNE7nDynfU8BXODNct/pEKX/ctv2u24CzLSD1WUdSQyEMJsK2hAgw3
+ tcgTvJdOPCl5c/+701EFwOGZscgUgCs6lSptfKSAjbl6HnbljvQGFgNderyVezazBokrZ+s754X
+ su876dYC6MXJcEGF34g==
+X-Authority-Analysis: v=2.4 cv=R6AO2NRX c=1 sm=1 tr=0 ts=6964d16c cx=c_pps
+ a=rEQLjTOiSrHUhVqRoksmgQ==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
  a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=EUspDBNiAAAA:8 a=WUWHbvwt6nHlCWk_UTEA:9 a=x9snwWr2DeNwDh03kgHS:22
+ a=EUspDBNiAAAA:8 a=NwCh5GMA9Nt760FYQHkA:9 a=2VI0MkxyNR6bbpdq8BZq:22
+X-Proofpoint-ORIG-GUID: a0SotZZlaJqSjoTGVZ2GKMuXXXFB4wKG
+X-Proofpoint-GUID: a0SotZZlaJqSjoTGVZ2GKMuXXXFB4wKG
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
  definitions=2026-01-12_03,2026-01-09_02,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 bulkscore=0 adultscore=0 lowpriorityscore=0
- impostorscore=0 clxscore=1015 suspectscore=0 malwarescore=0 phishscore=0
- spamscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.22.0-2512120000
- definitions=main-2601120085
+ malwarescore=0 bulkscore=0 spamscore=0 clxscore=1015 priorityscore=1501
+ adultscore=0 phishscore=0 suspectscore=0 lowpriorityscore=0 impostorscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2512120000 definitions=main-2601120085
 
-The GENI Serial Engine drivers (I2C, SPI, and SERIAL) currently handle
-the attachment of power domains. This often leads to duplicated code
-logic across different driver probe functions.
+The GENI Serial Engine (SE) drivers (I2C, SPI, and SERIAL) currently
+manage performance levels and operating points directly. This resulting
+in code duplication across drivers. such as configuring a specific level
+or find and apply an OPP based on a clock frequency.
 
-Introduce a new helper API, geni_se_domain_attach(), to centralize
-the logic for attaching "power" and "perf" domains to the GENI SE
-device.
+Introduce two new helper APIs, geni_se_set_perf_level() and
+geni_se_set_perf_opp(), addresses this issue by providing a streamlined
+method for the GENI Serial Engine (SE) drivers to find and set the OPP
+based on the desired performance level, thereby eliminating redundancy.
 
 Signed-off-by: Praveen Talari <praveen.talari@oss.qualcomm.com>
 ---
- drivers/soc/qcom/qcom-geni-se.c  | 29 +++++++++++++++++++++++++++++
- include/linux/soc/qcom/geni-se.h |  4 ++++
- 2 files changed, 33 insertions(+)
+ drivers/soc/qcom/qcom-geni-se.c  | 50 ++++++++++++++++++++++++++++++++
+ include/linux/soc/qcom/geni-se.h |  4 +++
+ 2 files changed, 54 insertions(+)
 
 diff --git a/drivers/soc/qcom/qcom-geni-se.c b/drivers/soc/qcom/qcom-geni-se.c
-index 3341bc98df09..b8e5066d4881 100644
+index b8e5066d4881..dc5f5bb52915 100644
 --- a/drivers/soc/qcom/qcom-geni-se.c
 +++ b/drivers/soc/qcom/qcom-geni-se.c
-@@ -19,6 +19,7 @@
- #include <linux/of_platform.h>
- #include <linux/pinctrl/consumer.h>
- #include <linux/platform_device.h>
-+#include <linux/pm_domain.h>
- #include <linux/pm_opp.h>
- #include <linux/soc/qcom/geni-se.h>
+@@ -282,6 +282,12 @@ struct se_fw_hdr {
+ #define geni_setbits32(_addr, _v) writel(readl(_addr) |  (_v), _addr)
+ #define geni_clrbits32(_addr, _v) writel(readl(_addr) & ~(_v), _addr)
  
-@@ -1092,6 +1093,34 @@ int geni_se_resources_activate(struct geni_se *se)
++enum domain_idx {
++	DOMAIN_IDX_POWER,
++	DOMAIN_IDX_PERF,
++	DOMAIN_IDX_MAX
++};
++
+ /**
+  * geni_se_get_qup_hw_version() - Read the QUP wrapper Hardware version
+  * @se:	Pointer to the corresponding serial engine.
+@@ -1093,6 +1099,50 @@ int geni_se_resources_activate(struct geni_se *se)
  }
  EXPORT_SYMBOL_GPL(geni_se_resources_activate);
  
 +/**
-+ * geni_se_domain_attach() - Attach power domains to a GENI SE device.
-+ * @se: Pointer to the geni_se structure representing the GENI SE device.
++ * geni_se_set_perf_level() - Set performance level for GENI SE.
++ * @se: Pointer to the struct geni_se instance.
++ * @level: The desired performance level.
 + *
-+ * This function attaches the necessary power domains ("power" and "perf")
-+ * to the GENI Serial Engine device. It initializes `se->pd_list` with the
-+ * attached domains.
++ * Sets the performance level by directly calling dev_pm_opp_set_level
++ * on the performance device associated with the SE.
 + *
 + * Return: 0 on success, or a negative error code on failure.
 + */
-+int geni_se_domain_attach(struct geni_se *se)
++int geni_se_set_perf_level(struct geni_se *se, unsigned long level)
 +{
-+	struct dev_pm_domain_attach_data pd_data = {
-+		.pd_flags = PD_FLAG_DEV_LINK_ON,
-+		.pd_names = (const char*[]) { "power", "perf" },
-+		.num_pd_names = 2,
-+	};
++	return dev_pm_opp_set_level(se->pd_list->pd_devs[DOMAIN_IDX_PERF], level);
++}
++EXPORT_SYMBOL_GPL(geni_se_set_perf_level);
++
++/**
++ * geni_se_set_perf_opp() - Set performance OPP for GENI SE by frequency.
++ * @se: Pointer to the struct geni_se instance.
++ * @clk_freq: The requested clock frequency.
++ *
++ * Finds the nearest operating performance point (OPP) for the given
++ * clock frequency and applies it to the SE's performance device.
++ *
++ * Return: 0 on success, or a negative error code on failure.
++ */
++int geni_se_set_perf_opp(struct geni_se *se, unsigned long clk_freq)
++{
++	struct device *perf_dev = se->pd_list->pd_devs[DOMAIN_IDX_PERF];
++	struct dev_pm_opp *opp;
 +	int ret;
 +
-+	ret = dev_pm_domain_attach_list(se->dev,
-+					&pd_data, &se->pd_list);
-+	if (ret <= 0)
-+		return -EINVAL;
++	opp = dev_pm_opp_find_freq_floor(perf_dev, &clk_freq);
++	if (IS_ERR(opp)) {
++		dev_err(se->dev, "failed to find opp for freq %lu\n", clk_freq);
++		return PTR_ERR(opp);
++	}
 +
-+	return 0;
++	ret = dev_pm_opp_set_opp(perf_dev, opp);
++	dev_pm_opp_put(opp);
++	return ret;
 +}
-+EXPORT_SYMBOL_GPL(geni_se_domain_attach);
++EXPORT_SYMBOL_GPL(geni_se_set_perf_opp);
 +
  /**
-  * geni_se_resources_init() - Initialize resources for a GENI SE device.
+  * geni_se_domain_attach() - Attach power domains to a GENI SE device.
   * @se: Pointer to the geni_se structure representing the GENI SE device.
 diff --git a/include/linux/soc/qcom/geni-se.h b/include/linux/soc/qcom/geni-se.h
-index 36a68149345c..5f75159c5531 100644
+index 5f75159c5531..c5e6ab85df09 100644
 --- a/include/linux/soc/qcom/geni-se.h
 +++ b/include/linux/soc/qcom/geni-se.h
-@@ -64,6 +64,7 @@ struct geni_icc_path {
-  * @num_clk_levels:	Number of valid clock levels in clk_perf_tbl
-  * @clk_perf_tbl:	Table of clock frequency input to serial engine clock
-  * @icc_paths:		Array of ICC paths for SE
-+ * @pd_list:		Power domain list for managing power domains
-  * @has_opp:		Indicates if OPP is supported
-  */
- struct geni_se {
-@@ -75,6 +76,7 @@ struct geni_se {
- 	unsigned int num_clk_levels;
- 	unsigned long *clk_perf_tbl;
- 	struct geni_icc_path icc_paths[3];
-+	struct dev_pm_domain_list *pd_list;
- 	bool has_opp;
- };
- 
-@@ -546,5 +548,7 @@ int geni_se_resources_activate(struct geni_se *se);
- int geni_se_resources_deactivate(struct geni_se *se);
- 
+@@ -550,5 +550,9 @@ int geni_se_resources_deactivate(struct geni_se *se);
  int geni_load_se_firmware(struct geni_se *se, enum geni_se_protocol_type protocol);
+ 
+ int geni_se_domain_attach(struct geni_se *se);
 +
-+int geni_se_domain_attach(struct geni_se *se);
++int geni_se_set_perf_level(struct geni_se *se, unsigned long level);
++
++int geni_se_set_perf_opp(struct geni_se *se, unsigned long clk_freq);
  #endif
  #endif
 -- 
