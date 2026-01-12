@@ -1,63 +1,63 @@
-Return-Path: <linux-i2c+bounces-15059-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-15060-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 47F09D12E52
-	for <lists+linux-i2c@lfdr.de>; Mon, 12 Jan 2026 14:49:29 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4233D12EA0
+	for <lists+linux-i2c@lfdr.de>; Mon, 12 Jan 2026 14:52:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id B182B300CAFA
-	for <lists+linux-i2c@lfdr.de>; Mon, 12 Jan 2026 13:49:19 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id CDE1630738AE
+	for <lists+linux-i2c@lfdr.de>; Mon, 12 Jan 2026 13:49:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 006C235C1AE;
-	Mon, 12 Jan 2026 13:49:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDE59359FA1;
+	Mon, 12 Jan 2026 13:49:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kzK6gpft"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XdhBpf5k"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6304035B15F;
-	Mon, 12 Jan 2026 13:49:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7517F35BDDF;
+	Mon, 12 Jan 2026 13:49:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768225755; cv=none; b=Ny9OkplctdR+EeJNL7bbh0XB8XxozxXN4Rz+zzrCcLcsXHq0bXkk4RcyEe7ibAxtfhaI0X8kW/MIv9ZrCYFIgRO3ear+TFyHSwV3Edorhos9fOCYHag0c7gZgl5YoWCQ3SsAg7rzMITmJ2QSANGeUu+gcITJu6sF5PXf2CAdPyE=
+	t=1768225762; cv=none; b=QRCqDBXBYFTzX89dnIbb/IGaZZYuiHMf3+H/IiMJ9LS8WdI0wbC0NmdVqXit+CdX4I5L1PaQtiBlf8rXC8ZP9IZyOIru3qKhignmMMf6Ps7xo8q+fvyqggcrQgyPabsH1I0PY/ZEecwoxt4WGQl5cDcN3THlcFEqjX1VATataQM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768225755; c=relaxed/simple;
-	bh=QQ0qqH3VNmZu+wMQEzW+Nf85tDjOXZ++eEjaIO+FgcA=;
+	s=arc-20240116; t=1768225762; c=relaxed/simple;
+	bh=aiS8gJGj98x4YF0TjH5ep93m3zw75AdG3q/DYsX48BU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uRtbtpyQWspeZ51wTwJGjUwaLTeVd617bn9/lc4bU8e/kUIfg/cw/nsF7YDyczPICYWjyovrfPn2e4ZevFDO/O7sa2J4wtgxY15nVliVSp0coG0sqbZ6I4lDFQXEJr1iH9BtclbhxJxH2vTst66rUWbOB3YRNyFqWgf8Xaebx1o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kzK6gpft; arc=none smtp.client-ip=192.198.163.16
+	 MIME-Version; b=N17FZnlgtxfAyktfa2r/Pyxp/MY34mSNulspKM19wZZVjaurPzMpzjG0xAPnkKjRHwgygQCCnMUaGtcLQixetuSMUjZ7gNWHpnqaFmjFEOHVh5Oyw2t7L79Hwl4XT5zhrNn81bBuWjzih0qeIdBkGCHWCVaHAIEAgiMWY66nIzA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XdhBpf5k; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768225754; x=1799761754;
+  t=1768225755; x=1799761755;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=QQ0qqH3VNmZu+wMQEzW+Nf85tDjOXZ++eEjaIO+FgcA=;
-  b=kzK6gpft/gJqPCMc+m/q4Epj05AZPepfNxRQpnH4XzYWqXKYZQ4++Y6v
-   advRO5MqXBZw1Dn7xQC46VcQo/rT5kl6SBcwydVREYXX02FHfBkeSci1H
-   V/of1q2uGCfiJzCH96fH8m/JOeh72ZkaheddYKr78xvMSWRJGo1dkQ7pK
-   8YgmR7TVu2kSdYy/mYfxYU8YQdHrduT9LcJyChcOXK3NdQiTax83JRUS0
-   02HbTRpC53ucnLkHl4sQR7c3YtvOepQVU1t8xZmhKKUuksb93PcMKVssu
-   LP4uOrxjGNV481FeF6jL/9YXp4FQZpgHBlxlFB3YmNqSi+8rlDWjQ0pa6
-   w==;
-X-CSE-ConnectionGUID: KstXn0+fQcabQJZP2bvo0Q==
-X-CSE-MsgGUID: Ba2gj9Q9THWiHmEbfWFdsQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11669"; a="57048292"
+  bh=aiS8gJGj98x4YF0TjH5ep93m3zw75AdG3q/DYsX48BU=;
+  b=XdhBpf5k2WYN8eCnvWdxa3QokeYcdJuG0ItNBfY6DeALnimTN/RV/3zH
+   CorCqdTZxbk/KYy2fFaTgF3qpeI9WmEEE1bM9NnkNNZijmxYWL7mbboI0
+   YEwJVpJhRehpVN6bT5NfWUkRFQ53aFIr6sxFh7F6KwAlnbVKjY1OZvDfo
+   9UXlDAIy6iS5FIMwtB2Cn1QTH6ZoBRSfhxLcRPvqdO3O7cev2eCMHWxew
+   PWz5Mvv8hOcUy74+mT/4nsN3UFXRCDuxFtLgDKeq4IAiuojNDX7b6g3N5
+   daq4hFh/9qhi46h9dGu7dzaZsME5ma4WWErOigtoSLSWJwMtG0zJczEnd
+   A==;
+X-CSE-ConnectionGUID: mSPI5K6bSk6i9Mg4gckvEg==
+X-CSE-MsgGUID: jsJXyv+jSXCWJdP99XhnBA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11669"; a="57048304"
 X-IronPort-AV: E=Sophos;i="6.21,221,1763452800"; 
-   d="scan'208";a="57048292"
+   d="scan'208";a="57048304"
 Received: from orviesa004.jf.intel.com ([10.64.159.144])
   by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2026 05:49:12 -0800
-X-CSE-ConnectionGUID: noLH1GPoT2e5iwBFL7qsDg==
-X-CSE-MsgGUID: TPNbfTbKTRWsr+6apHjc9Q==
+X-CSE-ConnectionGUID: z96OLkJSTgCwr15rdYtM+A==
+X-CSE-MsgGUID: T0ekkUYUT62isAvklhoXVA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,221,1763452800"; 
-   d="scan'208";a="208618613"
+   d="scan'208";a="208618612"
 Received: from black.igk.intel.com ([10.91.253.5])
   by orviesa004.jf.intel.com with ESMTP; 12 Jan 2026 05:49:08 -0800
 Received: by black.igk.intel.com (Postfix, from userid 1003)
-	id B87469B; Mon, 12 Jan 2026 14:49:06 +0100 (CET)
+	id BD2BE9D; Mon, 12 Jan 2026 14:49:06 +0100 (CET)
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Andi Shyti <andi@smida.it>,
 	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -78,9 +78,9 @@ Cc: Khalil Blaiech <kblaiech@nvidia.com>,
 	Heiko Stuebner <heiko@sntech.de>,
 	Patrice Chotard <patrice.chotard@foss.st.com>,
 	Ard Biesheuvel <ardb@kernel.org>
-Subject: [PATCH v1 2/7] i2c: mlxbf: Use HZ_PER_GHZ constant instead of custom one
-Date: Mon, 12 Jan 2026 14:46:10 +0100
-Message-ID: <20260112134900.4142954-3-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 3/7] i2c: mt65xx: Use HZ_PER_GHZ constant instead of plain number
+Date: Mon, 12 Jan 2026 14:46:11 +0100
+Message-ID: <20260112134900.4142954-4-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20260112134900.4142954-1-andriy.shevchenko@linux.intel.com>
 References: <20260112134900.4142954-1-andriy.shevchenko@linux.intel.com>
@@ -92,43 +92,58 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Use HZ_PER_GHZ constant instead of custom one. No functional changes.
+Use defined constant to avoid the possible mistakes and to provide
+an additional information on the units.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/i2c/busses/i2c-mlxbf.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/i2c/busses/i2c-mt65xx.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-mlxbf.c b/drivers/i2c/busses/i2c-mlxbf.c
-index 8345f7e6385d..746f65989138 100644
---- a/drivers/i2c/busses/i2c-mlxbf.c
-+++ b/drivers/i2c/busses/i2c-mlxbf.c
-@@ -20,6 +20,7 @@
- #include <linux/platform_device.h>
- #include <linux/string.h>
- #include <linux/string_choices.h>
+diff --git a/drivers/i2c/busses/i2c-mt65xx.c b/drivers/i2c/busses/i2c-mt65xx.c
+index aefdbee1f03c..cb4d3aa709d0 100644
+--- a/drivers/i2c/busses/i2c-mt65xx.c
++++ b/drivers/i2c/busses/i2c-mt65xx.c
+@@ -24,6 +24,7 @@
+ #include <linux/scatterlist.h>
+ #include <linux/sched.h>
+ #include <linux/slab.h>
 +#include <linux/units.h>
  
- /* Defines what functionality is present. */
- #define MLXBF_I2C_FUNC_SMBUS_BLOCK \
-@@ -72,8 +73,6 @@
- /* Constant used to determine the PLL frequency. */
- #define MLNXBF_I2C_COREPLL_CONST    16384ULL
+ #define I2C_RS_TRANSFER			(1 << 4)
+ #define I2C_ARB_LOST			(1 << 3)
+@@ -685,7 +686,7 @@ static int mtk_i2c_get_clk_div_restri(struct mtk_i2c *i2c,
+  * Check and Calculate i2c ac-timing
+  *
+  * Hardware design:
+- * sample_ns = (1000000000 * (sample_cnt + 1)) / clk_src
++ * sample_ns = (HZ_PER_GHZ * (sample_cnt + 1)) / clk_src
+  * xxx_cnt_div =  spec->min_xxx_ns / sample_ns
+  *
+  * Sample_ns is rounded down for xxx_cnt_div would be greater
+@@ -701,9 +702,8 @@ static int mtk_i2c_check_ac_timing(struct mtk_i2c *i2c,
+ {
+ 	const struct i2c_spec_values *spec;
+ 	unsigned int su_sta_cnt, low_cnt, high_cnt, max_step_cnt;
+-	unsigned int sda_max, sda_min, clk_ns, max_sta_cnt = 0x3f;
+-	unsigned int sample_ns = div_u64(1000000000ULL * (sample_cnt + 1),
+-					 clk_src);
++	unsigned int sda_max, sda_min, max_sta_cnt = 0x3f;
++	unsigned int clk_ns, sample_ns;
  
--#define MLXBF_I2C_FREQUENCY_1GHZ  1000000000ULL
--
- /* PLL registers. */
- #define MLXBF_I2C_CORE_PLL_REG1         0x4
- #define MLXBF_I2C_CORE_PLL_REG2         0x8
-@@ -1083,7 +1082,7 @@ static u32 mlxbf_i2c_get_ticks(struct mlxbf_i2c_priv *priv, u64 nanoseconds,
- 	 *         Frequency
- 	 */
- 	frequency = priv->frequency;
--	ticks = div_u64(nanoseconds * frequency, MLXBF_I2C_FREQUENCY_1GHZ);
-+	ticks = div_u64(nanoseconds * frequency, HZ_PER_GHZ);
- 	/*
- 	 * The number of ticks is rounded down and if minimum is equal to 1
- 	 * then add one tick.
+ 	if (!i2c->dev_comp->timing_adjust)
+ 		return 0;
+@@ -713,8 +713,9 @@ static int mtk_i2c_check_ac_timing(struct mtk_i2c *i2c,
+ 
+ 	spec = mtk_i2c_get_spec(check_speed);
+ 
++	sample_ns = div_u64(1ULL * HZ_PER_GHZ * (sample_cnt + 1), clk_src);
+ 	if (i2c->dev_comp->ltiming_adjust)
+-		clk_ns = 1000000000 / clk_src;
++		clk_ns = HZ_PER_GHZ / clk_src;
+ 	else
+ 		clk_ns = sample_ns / 2;
+ 
 -- 
 2.50.1
 
