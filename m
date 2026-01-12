@@ -1,317 +1,612 @@
-Return-Path: <linux-i2c+bounces-15046-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-15047-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 096ABD12062
-	for <lists+linux-i2c@lfdr.de>; Mon, 12 Jan 2026 11:50:47 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C6608D12B58
+	for <lists+linux-i2c@lfdr.de>; Mon, 12 Jan 2026 14:15:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id E44E4302476D
-	for <lists+linux-i2c@lfdr.de>; Mon, 12 Jan 2026 10:49:23 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 04975300E7AB
+	for <lists+linux-i2c@lfdr.de>; Mon, 12 Jan 2026 13:12:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 160CB283C87;
-	Mon, 12 Jan 2026 10:48:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51EDF3587D7;
+	Mon, 12 Jan 2026 13:12:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="RIuQxxh/";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="i1tTuZSD"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SDK6PXZg"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8AAE34BA22
-	for <linux-i2c@vger.kernel.org>; Mon, 12 Jan 2026 10:48:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1FFF32572F
+	for <linux-i2c@vger.kernel.org>; Mon, 12 Jan 2026 13:12:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768214934; cv=none; b=Ek+JX96QOz4EQfi9CQE6XPAkFzfBMvX/8LLPF18MRJVdAXorKb6TzIVAlqJ0K5gq9n0yYN/1aAX8iMz1kmlDx0G6WpGFgnSZtxZq50rMuiO+gnR6agF+8kZ8V57xab/ZPr53MshsvIB0Xvr4uBbPBJtPpmkihJ+jnhp5p2KG++s=
+	t=1768223526; cv=none; b=f6XKUIvU37Xc1WU07Ve6Vdrwp1Mf3QLF/BEJt6qLZo+CEckkLh4wxyxVPt+mEYMv5Lmlrwixz2me8GEyOc09m3qkJC7a7iXO+pUsq0bjBQ+CHsfxlEnLCuHUuWtjjg3LlHtym/+2uMlk7gMwDgdJDY4pVvJ2CLF1eMuIMo/qBZc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768214934; c=relaxed/simple;
-	bh=YIHYMofa7MM1n5uKKT/qVy70UWWioCFNHYGxbHnXI7g=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=POyOgJPS5JNvyJZuwp5grpvu1YPzSOMGMmqNjceJFIcdVPirZ0wtKeL6OSaOL69FfKnk+Q+09UocO8/52ohiGl1IKk78brk7cwJrx/0Ot5G6AGr4biOlyvcZTN1/0lkd1xiIE4N80xwZfZXYKP+E/pj7eoGlDsRwpIoIAQPnYK0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=RIuQxxh/; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=i1tTuZSD; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60C9WktR309309
-	for <linux-i2c@vger.kernel.org>; Mon, 12 Jan 2026 10:48:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=qcppdkim1; bh=jQcAcBkjL0G
-	3tUxlp42cxgokHnjt05AgkeoLcV3XnyY=; b=RIuQxxh/ie3IlZVW0qIi/nCTwRc
-	jT8YXmt8WIwiS+WwMHTXYYJfElvS2hWv5KXkGcroO3aGkOwrkN23h3YG5zv2DLpH
-	PlRGksFC8zApdNakjaOSnFytI98UoPrsCUo3sMQ9xoYYWHEQYGj8PFuxJVuzJcAm
-	9fVBkhj/SKLXMNJ1KEG3hSiseI6PdMFrZzi7ZpibFDj3zaPiu4ijvfyMbE7ZkPLN
-	hXKZZhgdbI+Pb2hmqzHsVVTlK2j+PA6Gr0jG+K622xe0CPK78OKX0sP1jf/R+z9C
-	YyoLppFv0P6+mpzt7cFrxaWIgn/Edov6ZpLLt0SX5SMtY9j3r/ApbTgRupw==
-Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com [209.85.215.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bmxdvr7am-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-i2c@vger.kernel.org>; Mon, 12 Jan 2026 10:48:51 +0000 (GMT)
-Received: by mail-pg1-f200.google.com with SMTP id 41be03b00d2f7-b630b4d8d52so4462978a12.3
-        for <linux-i2c@vger.kernel.org>; Mon, 12 Jan 2026 02:48:51 -0800 (PST)
+	s=arc-20240116; t=1768223526; c=relaxed/simple;
+	bh=6nuczvPrn2IgArqiQezFr9jtoXxC6FpLvhyVfBSGj0g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:Cc:From:
+	 In-Reply-To:Content-Type; b=FZJS6/VTNCD+Zv33Sw2PQcMnzjcPM6XA8Xu2AIVtMfnOSW5/SwxQ2iySYODo7FfWe00GyTGB3E0luNq777UGo0X7c8imiSowokKi2tyvbcb8FrFUrIJQVnt2D/R8dOjyCd4xt9IHoqBwPAwad/9OkgfhOe2T4iNE1acw/9qCnXg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SDK6PXZg; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2a3e79fe2b8so9371515ad.1
+        for <linux-i2c@vger.kernel.org>; Mon, 12 Jan 2026 05:12:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1768214931; x=1768819731; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jQcAcBkjL0G3tUxlp42cxgokHnjt05AgkeoLcV3XnyY=;
-        b=i1tTuZSDXcvKf6D5i0hC4SwrSeVXEQMayyughCQERul4EbCMLHDRvoB55fRQT1GCk/
-         Xsv2Lz6GA5bZBqSTe4Pf6NGQ59BhzPor+5y19/jqR+0NIkBuzvWF8+dEnpiSoAAaHaIM
-         /7auQy4fkf8n7bnEFQ1ceD1Uu8LMu5Er9HGAKX8/I4XUTjdDMBR7U6jnMrhkTcEWOcWg
-         ftf+jpxTRvNcmt6vjxUHVHm3IWvQJA/d5X3g5kfxF40ug5SzVB7eo/mTb8Fx+qkxDz4Z
-         Mj/ULCvP2kSQMx6w+ob2PvWtK64oG62ci1nPUym7PVUUq+Ln99GRY4WDvvH2X8CEBbxd
-         fXBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768214931; x=1768819731;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+        d=gmail.com; s=20230601; t=1768223523; x=1768828323; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:cc:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=jQcAcBkjL0G3tUxlp42cxgokHnjt05AgkeoLcV3XnyY=;
-        b=BQRM5A+OASqqVWioazV6SRVb+8Xqer62TIkvx8xXqSLGXLgQQntNA/6MRjXLdjc/eE
-         FG4kFBVwlxx4e4Zljkz9bb6+s5veooYK6cufA2rXgbhcC5yeYnUFoszVRWcKEa2RwGYk
-         Z8BODP0r7xr4EB6s9oFpUel7lqLDoEJzT15RMQ/OouP0J/MeGoj85I3fX9LIFQP/ahvI
-         fu4LVddLQyxRwTwUMc3HBmGzdemkkTK3TXEqfk3mw4DY2CQAlIBitXBp04Zqyh9HKSrj
-         B0xvpdc6vvbkyPjYbNckPTVQxeuBr0ZL5iMlmeI08k8fv8xcWI2GlRdUxjetr3VJsNK9
-         FgSg==
-X-Forwarded-Encrypted: i=1; AJvYcCVSnIXF5Ga8832rwUmQDsDHOBAeHGa3zgsfXppJ/CmOPLUjWxBZtwEx/sxlJPexdGdRRkyR8dfici0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx9YWKXtrHkhKBjAoOWrIqHlWwgDHG9llbtWKgarU8uF7Oy9Q2W
-	rPpmyqGNTtq1hbux/J6+vC7Jwrd4HDl/52ohf6LQyvyoXViMaU+LDeziNeSxOlVGEou5V2WS634
-	RrvHuWF2wFwJ2Dpml2gjPM4B2zWwc4kCWml+jrwBq0MMP9S+bzqn7PHc5+oTP7WQ=
-X-Gm-Gg: AY/fxX5aPqa03/WA59IxdLq6dfDbgV9gxnVwsb7VyoV4c02DIUneVQ4xkMQR2QtNyBi
-	hNAaOz9j984gL6L8uNLfDMRMCEaLX+eG2ZyfTyQPjXURK9mtD52QN91pm0ii3+dT0F+uJqUFTqJ
-	CWaZyt8x5wOzzLKWGue/K6ijbdB+2iZszG9dJXWqOQjYVAp/Jtk3vWsDdja4r4uO4Rc9wvgAehd
-	jp/CXIyKzrOUAZZKiJJB42tNoeIZsF8AsAAqhjYR0LGjPFC++YnbshQAHEkwzgq8meCt2n6EWsz
-	AcPjZIOW5BwYMgTfdOw5SJ4lhTVE4OT+CuxH6iofHGYKsgJjqPTG/SypWM9uISZUzu9aTOLmgid
-	Sbd/2gpW49XQ9rtW0ZxKRP0IF+SztzdWW/3WgnWMh8P0=
-X-Received: by 2002:a05:6a00:ace:b0:81b:ad93:a874 with SMTP id d2e1a72fcca58-81bad93a9d0mr14171016b3a.16.1768214930695;
-        Mon, 12 Jan 2026 02:48:50 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHhPyAERmzr9Dw2x35aSuyt4PyrwayfBvLR+kwrYNIeRwGfH7SfDHmMlNc3aMJf2XF21+hvew==
-X-Received: by 2002:a05:6a00:ace:b0:81b:ad93:a874 with SMTP id d2e1a72fcca58-81bad93a9d0mr14171003b3a.16.1768214930105;
-        Mon, 12 Jan 2026 02:48:50 -0800 (PST)
-Received: from hu-ptalari-hyd.qualcomm.com ([202.46.22.19])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-819bafe9b8dsm17288681b3a.22.2026.01.12.02.48.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jan 2026 02:48:49 -0800 (PST)
-From: Praveen Talari <praveen.talari@oss.qualcomm.com>
-To: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Mukesh Kumar Savaliya <mukesh.savaliya@oss.qualcomm.com>,
-        Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Praveen Talari <praveen.talari@oss.qualcomm.com>,
-        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bryan.odonoghue@linaro.org, dmitry.baryshkov@oss.qualcomm.com,
-        bjorn.andersson@oss.qualcomm.com
-Cc: prasad.sodagudi@oss.qualcomm.com, quic_vtanuku@quicinc.com,
-        aniket.randive@oss.qualcomm.com, chandana.chiluveru@oss.qualcomm.com
-Subject: [PATCH v3 12/12] i2c: qcom-geni: Enable I2C on SA8255p Qualcomm platforms
-Date: Mon, 12 Jan 2026 16:17:22 +0530
-Message-Id: <20260112104722.591521-13-praveen.talari@oss.qualcomm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260112104722.591521-1-praveen.talari@oss.qualcomm.com>
-References: <20260112104722.591521-1-praveen.talari@oss.qualcomm.com>
+        bh=34fyBDU5e33PxulWg60Z3EmvoVxTl0GF48Qxgk3BXXg=;
+        b=SDK6PXZgqmuJX1sj7nH1XZIu8mfC8hnnlZr/PuQC1S3aT49Zv7gz3IGf06tj9/A8HC
+         LtVjcbcIwQWa9OivhTa94H1Wpzw59bmrbdnynFv/dlneKtMfGb4957j1nvQryTbm2FX7
+         HREvUvzjapmr59N+K5fYach0dycQQU6lpNF/V4CcDnNz30yCwKyvvYQ6lDm/SAdhpb05
+         08+g8fFRVJh0EkuUXu3nfC6dEW7IdcSxj9w9bEbSyNXML1p+fWUQzm6Vn5atzzLcTGvh
+         8lCSueatsyDPa3Xmg6zwqUmr4YlmmbA0ztzwCsgEW4j3El3fiMG7EEMZC5M321N0sKV0
+         z4Hg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768223523; x=1768828323;
+        h=content-transfer-encoding:in-reply-to:from:cc:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=34fyBDU5e33PxulWg60Z3EmvoVxTl0GF48Qxgk3BXXg=;
+        b=lYDhSvZLCMLjPo9LB9PlD3Q6xF9kfQGdi3yWx6Iyj6zPRBCv+6OMsEi0QO6EPOQ1Rx
+         6/N+ABrA498QZIBhU0fEvaLGSlMPtlN4u8hJ6Ny6WI9hWcxi3FxnFNexHKhXEuGwcB4v
+         ANGEaMYeOYh2JNbXo3hvrIvsJ8JwfzqKq8YSwbX6jdl6Qunua52x4qOEEsHW4gkleSFO
+         G4v/9eKZyvTj1N+IDyEvct4FQW4ZMVwfRegYDB6g2PcWneq8wjx052Gg6Eecu8LzBGO0
+         ilMSId9u7f51sDmqMGuRnsI8fJsnHcv+3oeFnC+55m414zVdo8LiyNzPVo/jw/JCQjad
+         PTUw==
+X-Forwarded-Encrypted: i=1; AJvYcCXeq38XWYLX04pIJJMlupM20CakG3NFSSm+s1Gv6N/cuHWhFpqgcambuLnWf1eWCZCTmk+OYiU3ROE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwBm8TZ0LhTGvUf/YgVJUg4YUGtdRCyzgGlfqrfOVyl9Mspx2Jp
+	sAuglzQKBDzN4IZ0dCqnCTx0t+has2L7x19z3uBNXe/UPvOlU/3R3PA+
+X-Gm-Gg: AY/fxX6SQsx53oKrNI8MMajwh7n+cUUuFZNNMfm6SGCX0K5gZbyLd4RmWlNgx84vB43
+	F0CiZFWdY4NzcSikcXkJ1fqPPZWTX8sMcr87Km4xb7PE0qImB3YNH8C/Y2lMXdU9RwTxNL0YygB
+	DIgyH0BK9a5GyUgseVwqMsAcUNcJNTf3rJvTjQzYK23JOqSidMUSXpOQd2qVR8kBpOj0Wr6rvyr
+	3Owka8pSWZ5zPaLBEvh2RUjdu0gEQm6OFxz5IS/J0blKW/O1CbWzQ8640uNnMwG8UraihbWRbV/
+	h/tXyVYhjmJ3hAuxcjYYKmcgzkh7b1tdW+jLkMyIhj4tPiBZcTWpHjvKZgQaaZ3IJ31aarjfzTB
+	YaijyCug8JcSZDcdgtrwxEOpLVhz7qWdcBnglMGmlxTiCV0is9j56/0eUScbVNuMH2TG0jpjxLY
+	6u0pOI0BHd5oLGPCU0qQ==
+X-Google-Smtp-Source: AGHT+IH2+IrFmfi3NKGyj0bnkZn3HYkLAD+A3C0mqqYXS8QhaN1FrkTILMq+H/vee1V6uHXjTUH22w==
+X-Received: by 2002:a17:902:db08:b0:29a:56a:8b81 with SMTP id d9443c01a7336-2a3ee4e2e1dmr131365355ad.8.1768223522898;
+        Mon, 12 Jan 2026 05:12:02 -0800 (PST)
+Received: from [172.20.48.71] ([47.246.98.222])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-81dab89f2a5sm10141173b3a.56.2026.01.12.05.12.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Jan 2026 05:12:02 -0800 (PST)
+Message-ID: <8703d83e-b658-4d95-b6ef-ca5f18aea152@gmail.com>
+Date: Mon, 12 Jan 2026 21:11:59 +0800
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: aOQJZ4TGZ8l6MqwZYi8YjuoniDrDjqlE
-X-Proofpoint-GUID: aOQJZ4TGZ8l6MqwZYi8YjuoniDrDjqlE
-X-Authority-Analysis: v=2.4 cv=HoZ72kTS c=1 sm=1 tr=0 ts=6964d193 cx=c_pps
- a=oF/VQ+ItUULfLr/lQ2/icg==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
- a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=EUspDBNiAAAA:8 a=zgZzUwpPmSg69XYvEVoA:9 a=3WC7DwWrALyhR5TkjVHa:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTEyMDA4NSBTYWx0ZWRfXwyiGyRGU6jEZ
- tS0WOt/FIa2+n59a8F3MwBH+tatdcGL3WTOo/S8HUythzto8b9YRh6kBb4muwN9QMDFxMrRhIbN
- JPKxpn6iqfXckD3cVBvKMerObd0+pgBASDH4p+tR49h2eERNdtY8GZ8irFUa6AtHvhPj0xHHl1o
- vpIkJDxFRwFmLfTAobbXAhx+CEot56ltWc+275cuwzrit8ZmzECoEJBz19xmUeI5weMTKALV9FZ
- B3B+53CxBhdXBVTS2c6gANa94bDwZHzgF4PePuKoIUJHHyfD0zh23Xe0OUeSfSw+vFMoPh6Lj3g
- o2K3H6vhA6tg5PgDdupzbTclK5oIqkZXW9PDZluqSiw/WvtWOiLYtR/w/akc6nTVmEUfuu3b+W2
- L4evmCApxSBtk2/FvRiX51/sYpz8pWaTnzUq3wZ05OxcCw0zijK1FwZJYSTqV/tqynSLnmNCwB3
- 9fM3KZHDF76bQOGKk0Q==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2026-01-12_03,2026-01-09_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 lowpriorityscore=0 phishscore=0 suspectscore=0 clxscore=1015
- bulkscore=0 malwarescore=0 spamscore=0 priorityscore=1501 impostorscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2512120000 definitions=main-2601120085
+User-Agent: Mozilla Thunderbird
+Subject: Re: [syzbot] [usb?] INFO: task hung in i2c_tiny_usb_disconnect
+To: syzbot <syzbot+30b78308ba7e64647ff8@syzkaller.appspotmail.com>
+References: <6963d09e.050a0220.eaf7.0070.GAE@google.com>
+Content-Language: en-US
+Cc: linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
+From: Wei Peng <coderlogicwei@gmail.com>
+In-Reply-To: <6963d09e.050a0220.eaf7.0070.GAE@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-The Qualcomm automotive SA8255p SoC relies on firmware to configure
-platform resources, including clocks, interconnects and TLMM.
-The driver requests resources operations over SCMI using power
-and performance protocols.
-
-The SCMI power protocol enables or disables resources like clocks,
-interconnect paths, and TLMM (GPIOs) using runtime PM framework APIs,
-such as resume/suspend, to control power on/off.
-
-The SCMI performance protocol manages I2C frequency, with each
-frequency rate represented by a performance level. The driver uses
-geni_se_set_perf_opp() API to request the desired frequency rate..
-
-As part of geni_se_set_perf_opp(), the OPP for the requested frequency
-is obtained using dev_pm_opp_find_freq_floor() and the performance
-level is set using dev_pm_opp_set_opp().
-
-Signed-off-by: Praveen Talari <praveen.talari@oss.qualcomm.com>
----
-V1->v2:
-From kernel test robot:
-- Initialized ret to "0" in resume/suspend callbacks.
-
-Bjorn:
-- Used seperate APIs for the resouces enable/disable.
----
- drivers/i2c/busses/i2c-qcom-geni.c | 53 ++++++++++++++++++++++--------
- 1 file changed, 40 insertions(+), 13 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
-index 1c9356e13b97..72457b98f155 100644
---- a/drivers/i2c/busses/i2c-qcom-geni.c
-+++ b/drivers/i2c/busses/i2c-qcom-geni.c
-@@ -82,6 +82,10 @@ struct geni_i2c_desc {
- 	char *icc_ddr;
- 	bool no_dma_support;
- 	unsigned int tx_fifo_depth;
-+	int (*resources_init)(struct geni_se *se);
-+	int (*set_rate)(struct geni_se *se, unsigned long freq);
-+	int (*power_on)(struct geni_se *se);
-+	int (*power_off)(struct geni_se *se);
- };
- 
- #define QCOM_I2C_MIN_NUM_OF_MSGS_MULTI_DESC	2
-@@ -203,8 +207,9 @@ static int geni_i2c_clk_map_idx(struct geni_i2c_dev *gi2c)
- 	return -EINVAL;
- }
- 
--static void qcom_geni_i2c_conf(struct geni_i2c_dev *gi2c)
-+static int qcom_geni_i2c_conf(struct geni_se *se, unsigned long freq)
- {
-+	struct geni_i2c_dev *gi2c = dev_get_drvdata(se->dev);
- 	const struct geni_i2c_clk_fld *itr = gi2c->clk_fld;
- 	u32 val;
- 
-@@ -217,6 +222,7 @@ static void qcom_geni_i2c_conf(struct geni_i2c_dev *gi2c)
- 	val |= itr->t_low_cnt << LOW_COUNTER_SHFT;
- 	val |= itr->t_cycle_cnt;
- 	writel_relaxed(val, gi2c->se.base + SE_I2C_SCL_COUNTERS);
-+	return 0;
- }
- 
- static void geni_i2c_err_misc(struct geni_i2c_dev *gi2c)
-@@ -908,7 +914,9 @@ static int geni_i2c_xfer(struct i2c_adapter *adap,
- 		return ret;
- 	}
- 
--	qcom_geni_i2c_conf(gi2c);
-+	ret = gi2c->dev_data->set_rate(&gi2c->se, gi2c->clk_freq_out);
-+	if (ret)
-+		return ret;
- 
- 	if (gi2c->gpi_mode)
- 		ret = geni_i2c_gpi_xfer(gi2c, msgs, num);
-@@ -1041,8 +1049,9 @@ static int geni_i2c_init(struct geni_i2c_dev *gi2c)
- 	return ret;
- }
- 
--static int geni_i2c_resources_init(struct geni_i2c_dev *gi2c)
-+static int geni_i2c_resources_init(struct geni_se *se)
- {
-+	struct geni_i2c_dev *gi2c = dev_get_drvdata(se->dev);
- 	int ret;
- 
- 	ret = geni_se_resources_init(&gi2c->se);
-@@ -1095,7 +1104,7 @@ static int geni_i2c_probe(struct platform_device *pdev)
- 	spin_lock_init(&gi2c->lock);
- 	platform_set_drvdata(pdev, gi2c);
- 
--	ret = geni_i2c_resources_init(gi2c);
-+	ret = gi2c->dev_data->resources_init(&gi2c->se);
- 	if (ret)
- 		return ret;
- 
-@@ -1154,15 +1163,17 @@ static void geni_i2c_shutdown(struct platform_device *pdev)
- 
- static int __maybe_unused geni_i2c_runtime_suspend(struct device *dev)
- {
--	int ret;
-+	int ret = 0;
- 	struct geni_i2c_dev *gi2c = dev_get_drvdata(dev);
- 
- 	disable_irq(gi2c->irq);
- 
--	ret = geni_se_resources_deactivate(&gi2c->se);
--	if (ret) {
--		enable_irq(gi2c->irq);
--		return ret;
-+	if (gi2c->dev_data->power_off) {
-+		ret = gi2c->dev_data->power_off(&gi2c->se);
-+		if (ret) {
-+			enable_irq(gi2c->irq);
-+			return ret;
-+		}
- 	}
- 
- 	gi2c->suspended = 1;
-@@ -1171,12 +1182,14 @@ static int __maybe_unused geni_i2c_runtime_suspend(struct device *dev)
- 
- static int __maybe_unused geni_i2c_runtime_resume(struct device *dev)
- {
--	int ret;
-+	int ret = 0;
- 	struct geni_i2c_dev *gi2c = dev_get_drvdata(dev);
- 
--	ret = geni_se_resources_activate(&gi2c->se);
--	if (ret)
--		return ret;
-+	if (gi2c->dev_data->power_on) {
-+		ret = gi2c->dev_data->power_on(&gi2c->se);
-+		if (ret)
-+			return ret;
+#syz test
+diff --git a/drivers/i2c/busses/i2c-tiny-usb.c b/drivers/i2c/busses/i2c-tiny-usb.c
+index 57dfe5f1a7d9..ee41d0469882 100644
+--- a/drivers/i2c/busses/i2c-tiny-usb.c
++++ b/drivers/i2c/busses/i2c-tiny-usb.c
+@@ -12,6 +12,7 @@
+  #include <linux/slab.h>
+  #include <linux/string_choices.h>
+  #include <linux/types.h>
++#include <linux/workqueue.h>
+  
+  /* include interfaces to usb layer */
+  #include <linux/usb.h>
+@@ -172,6 +173,8 @@ struct i2c_tiny_usb {
+  	struct usb_device *usb_dev; /* the usb device for this device */
+  	struct usb_interface *interface; /* the interface for this device */
+  	struct i2c_adapter adapter; /* i2c related things */
++	bool disconnected; /* set to true on disconnect */
++	struct work_struct release_work; /* work struct to release the adapter */
+  };
+  
+  static int usb_read(struct i2c_adapter *adapter, int cmd,
+@@ -184,6 +187,11 @@ static int usb_read(struct i2c_adapter *adapter, int cmd,
+  	if (!dmadata)
+  		return -ENOMEM;
+  
++	if (READ_ONCE(dev->disconnected)) {
++		kfree(dmadata);
++		return -ENODEV;
 +	}
- 
- 	enable_irq(gi2c->irq);
- 	gi2c->suspended = 0;
-@@ -1215,6 +1228,10 @@ static const struct dev_pm_ops geni_i2c_pm_ops = {
- 
- static const struct geni_i2c_desc geni_i2c = {
- 	.icc_ddr = "qup-memory",
-+	.resources_init = geni_i2c_resources_init,
-+	.set_rate = qcom_geni_i2c_conf,
-+	.power_on = geni_se_resources_activate,
-+	.power_off = geni_se_resources_deactivate,
- };
- 
- static const struct geni_i2c_desc i2c_master_hub = {
-@@ -1222,11 +1239,21 @@ static const struct geni_i2c_desc i2c_master_hub = {
- 	.icc_ddr = NULL,
- 	.no_dma_support = true,
- 	.tx_fifo_depth = 16,
-+	.resources_init = geni_i2c_resources_init,
-+	.set_rate = qcom_geni_i2c_conf,
-+	.power_on = geni_se_resources_activate,
-+	.power_off = geni_se_resources_deactivate,
-+};
 +
-+static const struct geni_i2c_desc sa8255p_geni_i2c = {
-+	.resources_init = geni_se_domain_attach,
-+	.set_rate = geni_se_set_perf_opp,
- };
- 
- static const struct of_device_id geni_i2c_dt_match[] = {
- 	{ .compatible = "qcom,geni-i2c", .data = &geni_i2c },
- 	{ .compatible = "qcom,geni-i2c-master-hub", .data = &i2c_master_hub },
-+	{ .compatible = "qcom,sa8255p-geni-i2c", .data = &sa8255p_geni_i2c },
- 	{}
- };
- MODULE_DEVICE_TABLE(of, geni_i2c_dt_match);
--- 
-2.34.1
+  	/* do control transfer */
+  	ret = usb_control_msg(dev->usb_dev, usb_rcvctrlpipe(dev->usb_dev, 0),
+  			       cmd, USB_TYPE_VENDOR | USB_RECIP_INTERFACE |
+@@ -204,6 +212,11 @@ static int usb_write(struct i2c_adapter *adapter, int cmd,
+  	if (!dmadata)
+  		return -ENOMEM;
+  
++	if (READ_ONCE(dev->disconnected)) {
++		kfree(dmadata);
++		return -ENODEV;
++	}
++
+  	/* do control transfer */
+  	ret = usb_control_msg(dev->usb_dev, usb_sndctrlpipe(dev->usb_dev, 0),
+  			       cmd, USB_TYPE_VENDOR | USB_RECIP_INTERFACE,
+@@ -219,6 +232,15 @@ static void i2c_tiny_usb_free(struct i2c_tiny_usb *dev)
+  	kfree(dev);
+  }
+  
++static void i2c_tiny_usb_release(struct work_struct *work)
++{
++	struct i2c_tiny_usb *dev = container_of(work, struct i2c_tiny_usb,
++					       release_work);
++
++	i2c_del_adapter(&dev->adapter);
++	i2c_tiny_usb_free(dev);
++}
++
+  static int i2c_tiny_usb_probe(struct usb_interface *interface,
+  			      const struct usb_device_id *id)
+  {
+@@ -268,6 +290,8 @@ static int i2c_tiny_usb_probe(struct usb_interface *interface,
+  
+  	dev->adapter.dev.parent = &dev->interface->dev;
+  
++	INIT_WORK(&dev->release_work, i2c_tiny_usb_release);
++
+  	/* and finally attach to i2c layer */
+  	i2c_add_adapter(&dev->adapter);
+  
+@@ -287,9 +311,9 @@ static void i2c_tiny_usb_disconnect(struct usb_interface *interface)
+  {
+  	struct i2c_tiny_usb *dev = usb_get_intfdata(interface);
+  
+-	i2c_del_adapter(&dev->adapter);
+  	usb_set_intfdata(interface, NULL);
+-	i2c_tiny_usb_free(dev);
++	atomic_set(&dev->disconnected, 1);
++	queue_work(system_long_wq, &dev->release_work);
+  
+  	dev_dbg(&interface->dev, "disconnected\n");
+  }
 
+On 2026/1/12 00:32, syzbot wrote:
+> Hello,
+>
+> syzbot found the following issue on:
+>
+> HEAD commit:    f0b9d8eb98df Merge tag 'nfsd-6.19-3' of git://git.kernel.o..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=11086922580000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=a11e0f726bfb6765
+> dashboard link: https://syzkaller.appspot.com/bug?extid=30b78308ba7e64647ff8
+> compiler:       gcc (Debian 12.2.0-14+deb12u1) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=179ba83a580000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=113511fc580000
+>
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/4dbba2a806a3/disk-f0b9d8eb.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/2a52c0f94de7/vmlinux-f0b9d8eb.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/5ddf9a24988b/bzImage-f0b9d8eb.xz
+>
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+30b78308ba7e64647ff8@syzkaller.appspotmail.com
+>
+> INFO: task kworker/1:0:24 blocked for more than 143 seconds.
+>        Not tainted syzkaller #0
+> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+> task:kworker/1:0     state:D stack:24120 pid:24    tgid:24    ppid:2      task_flags:0x4288060 flags:0x00080000
+> Workqueue: usb_hub_wq hub_event
+> Call Trace:
+>   <TASK>
+>   context_switch kernel/sched/core.c:5256 [inline]
+>   __schedule+0x1139/0x6150 kernel/sched/core.c:6863
+>   __schedule_loop kernel/sched/core.c:6945 [inline]
+>   schedule+0xe7/0x3a0 kernel/sched/core.c:6960
+>   schedule_timeout+0x257/0x290 kernel/time/sleep_timeout.c:75
+>   do_wait_for_common kernel/sched/completion.c:100 [inline]
+>   __wait_for_common+0x2fc/0x4e0 kernel/sched/completion.c:121
+>   i2c_del_adapter+0x640/0x850 drivers/i2c/i2c-core-base.c:1814
+>   i2c_tiny_usb_disconnect+0x42/0x100 drivers/i2c/busses/i2c-tiny-usb.c:290
+>   usb_unbind_interface+0x1dd/0x9e0 drivers/usb/core/driver.c:458
+>   device_remove drivers/base/dd.c:571 [inline]
+>   device_remove+0x125/0x170 drivers/base/dd.c:563
+>   __device_release_driver drivers/base/dd.c:1282 [inline]
+>   device_release_driver_internal+0x44b/0x620 drivers/base/dd.c:1305
+>   bus_remove_device+0x22f/0x450 drivers/base/bus.c:616
+>   device_del+0x396/0x9f0 drivers/base/core.c:3878
+>   usb_disable_device+0x355/0x820 drivers/usb/core/message.c:1418
+>   usb_disconnect+0x2e1/0x9e0 drivers/usb/core/hub.c:2345
+>   hub_port_connect drivers/usb/core/hub.c:5407 [inline]
+>   hub_port_connect_change drivers/usb/core/hub.c:5707 [inline]
+>   port_event drivers/usb/core/hub.c:5871 [inline]
+>   hub_event+0x1d84/0x52f0 drivers/usb/core/hub.c:5953
+>   process_one_work+0x9ba/0x1b20 kernel/workqueue.c:3257
+>   process_scheduled_works kernel/workqueue.c:3340 [inline]
+>   worker_thread+0x6c8/0xf10 kernel/workqueue.c:3421
+>   kthread+0x3c5/0x780 kernel/kthread.c:463
+>   ret_from_fork+0x983/0xb10 arch/x86/kernel/process.c:158
+>   ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:246
+>   </TASK>
+> INFO: task syz.0.273:6595 blocked for more than 143 seconds.
+>        Not tainted syzkaller #0
+> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+> task:syz.0.273       state:D stack:26256 pid:6595  tgid:6595  ppid:5924   task_flags:0x400040 flags:0x00080002
+> Call Trace:
+>   <TASK>
+>   context_switch kernel/sched/core.c:5256 [inline]
+>   __schedule+0x1139/0x6150 kernel/sched/core.c:6863
+>   __schedule_loop kernel/sched/core.c:6945 [inline]
+>   schedule+0xe7/0x3a0 kernel/sched/core.c:6960
+>   schedule_preempt_disabled+0x13/0x30 kernel/sched/core.c:7017
+>   __mutex_lock_common kernel/locking/mutex.c:692 [inline]
+>   __mutex_lock+0xc69/0x1ca0 kernel/locking/mutex.c:776
+>   device_lock include/linux/device.h:895 [inline]
+>   usbdev_open+0x1b6/0x8b0 drivers/usb/core/devio.c:1054
+>   chrdev_open+0x234/0x6a0 fs/char_dev.c:414
+>   do_dentry_open+0x748/0x1590 fs/open.c:962
+>   vfs_open+0x82/0x3f0 fs/open.c:1094
+>   do_open fs/namei.c:4628 [inline]
+>   path_openat+0x2078/0x3140 fs/namei.c:4787
+>   do_filp_open+0x20b/0x470 fs/namei.c:4814
+>   do_sys_openat2+0x121/0x290 fs/open.c:1430
+>   do_sys_open fs/open.c:1436 [inline]
+>   __do_sys_openat fs/open.c:1452 [inline]
+>   __se_sys_openat fs/open.c:1447 [inline]
+>   __x64_sys_openat+0x174/0x210 fs/open.c:1447
+>   do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+>   do_syscall_64+0xcd/0xf80 arch/x86/entry/syscall_64.c:94
+>   entry_SYSCALL_64_after_hwframe+0x77/0x7f
+> RIP: 0033:0x7f3b2d38df90
+> RSP: 002b:00007ffdb4e6d020 EFLAGS: 00000293 ORIG_RAX: 0000000000000101
+> RAX: ffffffffffffffda RBX: 0000000000188301 RCX: 00007f3b2d38df90
+> RDX: 0000000000188301 RSI: 00007ffdb4e6d0c0 RDI: 00000000ffffff9c
+> RBP: 00007ffdb4e6d0c0 R08: 0000000000000000 R09: 0000000000000000
+> R10: 0000000000000000 R11: 0000000000000293 R12: cccccccccccccccd
+> R13: 00007f3b2d5e5fa0 R14: 00007f3b2d5e5fa0 R15: 0000000000000003
+>   </TASK>
+> INFO: task syz.2.274:6596 blocked for more than 144 seconds.
+>        Not tainted syzkaller #0
+> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+> task:syz.2.274       state:D stack:26224 pid:6596  tgid:6596  ppid:5932   task_flags:0x400040 flags:0x00080002
+> Call Trace:
+>   <TASK>
+>   context_switch kernel/sched/core.c:5256 [inline]
+>   __schedule+0x1139/0x6150 kernel/sched/core.c:6863
+>   __schedule_loop kernel/sched/core.c:6945 [inline]
+>   schedule+0xe7/0x3a0 kernel/sched/core.c:6960
+>   schedule_preempt_disabled+0x13/0x30 kernel/sched/core.c:7017
+>   __mutex_lock_common kernel/locking/mutex.c:692 [inline]
+>   __mutex_lock+0xc69/0x1ca0 kernel/locking/mutex.c:776
+>   device_lock include/linux/device.h:895 [inline]
+>   usbdev_open+0x1b6/0x8b0 drivers/usb/core/devio.c:1054
+>   chrdev_open+0x234/0x6a0 fs/char_dev.c:414
+>   do_dentry_open+0x748/0x1590 fs/open.c:962
+>   vfs_open+0x82/0x3f0 fs/open.c:1094
+>   do_open fs/namei.c:4628 [inline]
+>   path_openat+0x2078/0x3140 fs/namei.c:4787
+>   do_filp_open+0x20b/0x470 fs/namei.c:4814
+>   do_sys_openat2+0x121/0x290 fs/open.c:1430
+>   do_sys_open fs/open.c:1436 [inline]
+>   __do_sys_openat fs/open.c:1452 [inline]
+>   __se_sys_openat fs/open.c:1447 [inline]
+>   __x64_sys_openat+0x174/0x210 fs/open.c:1447
+>   do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+>   do_syscall_64+0xcd/0xf80 arch/x86/entry/syscall_64.c:94
+>   entry_SYSCALL_64_after_hwframe+0x77/0x7f
+> RIP: 0033:0x7fd7cbb8df90
+> RSP: 002b:00007fff0be25800 EFLAGS: 00000293 ORIG_RAX: 0000000000000101
+> RAX: ffffffffffffffda RBX: 0000000000188301 RCX: 00007fd7cbb8df90
+> RDX: 0000000000188301 RSI: 00007fff0be258a0 RDI: 00000000ffffff9c
+> RBP: 00007fff0be258a0 R08: 0000000000000000 R09: 0000000000000000
+> R10: 0000000000000000 R11: 0000000000000293 R12: cccccccccccccccd
+> R13: 00007fd7cbde5fa0 R14: 00007fd7cbde5fa0 R15: 0000000000000003
+>   </TASK>
+> INFO: task syz.3.275:6597 blocked for more than 144 seconds.
+>        Not tainted syzkaller #0
+> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+> task:syz.3.275       state:D stack:26256 pid:6597  tgid:6597  ppid:5934   task_flags:0x400040 flags:0x00080002
+> Call Trace:
+>   <TASK>
+>   context_switch kernel/sched/core.c:5256 [inline]
+>   __schedule+0x1139/0x6150 kernel/sched/core.c:6863
+>   __schedule_loop kernel/sched/core.c:6945 [inline]
+>   schedule+0xe7/0x3a0 kernel/sched/core.c:6960
+>   schedule_preempt_disabled+0x13/0x30 kernel/sched/core.c:7017
+>   __mutex_lock_common kernel/locking/mutex.c:692 [inline]
+>   __mutex_lock+0xc69/0x1ca0 kernel/locking/mutex.c:776
+>   device_lock include/linux/device.h:895 [inline]
+>   usbdev_open+0x1b6/0x8b0 drivers/usb/core/devio.c:1054
+>   chrdev_open+0x234/0x6a0 fs/char_dev.c:414
+>   do_dentry_open+0x748/0x1590 fs/open.c:962
+>   vfs_open+0x82/0x3f0 fs/open.c:1094
+>   do_open fs/namei.c:4628 [inline]
+>   path_openat+0x2078/0x3140 fs/namei.c:4787
+>   do_filp_open+0x20b/0x470 fs/namei.c:4814
+>   do_sys_openat2+0x121/0x290 fs/open.c:1430
+>   do_sys_open fs/open.c:1436 [inline]
+>   __do_sys_openat fs/open.c:1452 [inline]
+>   __se_sys_openat fs/open.c:1447 [inline]
+>   __x64_sys_openat+0x174/0x210 fs/open.c:1447
+>   do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+>   do_syscall_64+0xcd/0xf80 arch/x86/entry/syscall_64.c:94
+>   entry_SYSCALL_64_after_hwframe+0x77/0x7f
+> RIP: 0033:0x7f6f3df8df90
+> RSP: 002b:00007ffe4db0dd90 EFLAGS: 00000293 ORIG_RAX: 0000000000000101
+> RAX: ffffffffffffffda RBX: 0000000000188301 RCX: 00007f6f3df8df90
+> RDX: 0000000000188301 RSI: 00007ffe4db0de30 RDI: 00000000ffffff9c
+> RBP: 00007ffe4db0de30 R08: 0000000000000000 R09: 0000000000000000
+> R10: 0000000000000000 R11: 0000000000000293 R12: cccccccccccccccd
+> R13: 00007f6f3e1e5fa0 R14: 00007f6f3e1e5fa0 R15: 0000000000000003
+>   </TASK>
+> INFO: task syz.1.276:6598 blocked for more than 144 seconds.
+>        Not tainted syzkaller #0
+> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+> task:syz.1.276       state:D stack:25704 pid:6598  tgid:6598  ppid:5930   task_flags:0x400040 flags:0x00080002
+> Call Trace:
+>   <TASK>
+>   context_switch kernel/sched/core.c:5256 [inline]
+>   __schedule+0x1139/0x6150 kernel/sched/core.c:6863
+>   __schedule_loop kernel/sched/core.c:6945 [inline]
+>   schedule+0xe7/0x3a0 kernel/sched/core.c:6960
+>   schedule_preempt_disabled+0x13/0x30 kernel/sched/core.c:7017
+>   __mutex_lock_common kernel/locking/mutex.c:692 [inline]
+>   __mutex_lock+0xc69/0x1ca0 kernel/locking/mutex.c:776
+>   device_lock include/linux/device.h:895 [inline]
+>   usbdev_open+0x1b6/0x8b0 drivers/usb/core/devio.c:1054
+>   chrdev_open+0x234/0x6a0 fs/char_dev.c:414
+>   do_dentry_open+0x748/0x1590 fs/open.c:962
+>   vfs_open+0x82/0x3f0 fs/open.c:1094
+>   do_open fs/namei.c:4628 [inline]
+>   path_openat+0x2078/0x3140 fs/namei.c:4787
+>   do_filp_open+0x20b/0x470 fs/namei.c:4814
+>   do_sys_openat2+0x121/0x290 fs/open.c:1430
+>   do_sys_open fs/open.c:1436 [inline]
+>   __do_sys_openat fs/open.c:1452 [inline]
+>   __se_sys_openat fs/open.c:1447 [inline]
+>   __x64_sys_openat+0x174/0x210 fs/open.c:1447
+>   do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+>   do_syscall_64+0xcd/0xf80 arch/x86/entry/syscall_64.c:94
+>   entry_SYSCALL_64_after_hwframe+0x77/0x7f
+> RIP: 0033:0x7f36b5b8df90
+> RSP: 002b:00007ffd7720b280 EFLAGS: 00000293 ORIG_RAX: 0000000000000101
+> RAX: ffffffffffffffda RBX: 0000000000188301 RCX: 00007f36b5b8df90
+> RDX: 0000000000188301 RSI: 00007ffd7720b320 RDI: 00000000ffffff9c
+> RBP: 00007ffd7720b320 R08: 0000000000000000 R09: 0000000000000000
+> R10: 0000000000000000 R11: 0000000000000293 R12: cccccccccccccccd
+> R13: 00007f36b5de5fa0 R14: 00007f36b5de5fa0 R15: 0000000000000003
+>   </TASK>
+>
+> Showing all locks held in the system:
+> 5 locks held by kworker/1:0/24:
+>   #0: ffff8880212a0948 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work+0x128d/0x1b20 kernel/workqueue.c:3232
+>   #1: ffffc900001e7c90 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work+0x914/0x1b20 kernel/workqueue.c:3233
+>   #2: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:895 [inline]
+>   #2: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: hub_event+0x1c0/0x52f0 drivers/usb/core/hub.c:5899
+>   #3: ffff888073ad6198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:895 [inline]
+>   #3: ffff888073ad6198 (&dev->mutex){....}-{4:4}, at: usb_disconnect+0x10a/0x9e0 drivers/usb/core/hub.c:2336
+>   #4: ffff88807976e160 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:895 [inline]
+>   #4: ffff88807976e160 (&dev->mutex){....}-{4:4}, at: __device_driver_lock drivers/base/dd.c:1104 [inline]
+>   #4: ffff88807976e160 (&dev->mutex){....}-{4:4}, at: device_release_driver_internal+0xa4/0x620 drivers/base/dd.c:1302
+> 1 lock held by khungtaskd/31:
+>   #0: ffffffff8e3c96a0 (rcu_read_lock){....}-{1:3}, at: rcu_lock_acquire include/linux/rcupdate.h:331 [inline]
+>   #0: ffffffff8e3c96a0 (rcu_read_lock){....}-{1:3}, at: rcu_read_lock include/linux/rcupdate.h:867 [inline]
+>   #0: ffffffff8e3c96a0 (rcu_read_lock){....}-{1:3}, at: debug_show_all_locks+0x36/0x1c0 kernel/locking/lockdep.c:6775
+> 1 lock held by klogd/5174:
+>   #0: ffff8880b853ac98 (&rq->__lock){-.-.}-{2:2}, at: raw_spin_rq_lock_nested+0x29/0x130 kernel/sched/core.c:639
+> 2 locks held by getty/5581:
+>   #0: ffff88814d52e0a0 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x24/0x80 drivers/tty/tty_ldisc.c:243
+>   #1: ffffc9000332b2f0 (&ldata->atomic_read_lock){+.+.}-{4:4}, at: n_tty_read+0x41b/0x1510 drivers/tty/n_tty.c:2211
+> 1 lock held by syz.0.273/6595:
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:895 [inline]
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: usbdev_open+0x1b6/0x8b0 drivers/usb/core/devio.c:1054
+> 1 lock held by syz.2.274/6596:
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:895 [inline]
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: usbdev_open+0x1b6/0x8b0 drivers/usb/core/devio.c:1054
+> 1 lock held by syz.3.275/6597:
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:895 [inline]
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: usbdev_open+0x1b6/0x8b0 drivers/usb/core/devio.c:1054
+> 1 lock held by syz.1.276/6598:
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:895 [inline]
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: usbdev_open+0x1b6/0x8b0 drivers/usb/core/devio.c:1054
+> 1 lock held by syz.5.282/6719:
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:895 [inline]
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: usbdev_open+0x1b6/0x8b0 drivers/usb/core/devio.c:1054
+> 1 lock held by syz.6.283/6721:
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:895 [inline]
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: usbdev_open+0x1b6/0x8b0 drivers/usb/core/devio.c:1054
+> 1 lock held by syz.7.284/6723:
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:895 [inline]
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: usbdev_open+0x1b6/0x8b0 drivers/usb/core/devio.c:1054
+> 1 lock held by syz.8.285/6726:
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:895 [inline]
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: usbdev_open+0x1b6/0x8b0 drivers/usb/core/devio.c:1054
+> 1 lock held by syz.0.293/6836:
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:895 [inline]
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: usbdev_open+0x1b6/0x8b0 drivers/usb/core/devio.c:1054
+> 1 lock held by syz.2.294/6840:
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:895 [inline]
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: usbdev_open+0x1b6/0x8b0 drivers/usb/core/devio.c:1054
+> 1 lock held by syz.1.295/6841:
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:895 [inline]
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: usbdev_open+0x1b6/0x8b0 drivers/usb/core/devio.c:1054
+> 1 lock held by syz.9.292/6842:
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:895 [inline]
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: usbdev_open+0x1b6/0x8b0 drivers/usb/core/devio.c:1054
+> 1 lock held by syz.3.303/6904:
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:895 [inline]
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: usbdev_open+0x1b6/0x8b0 drivers/usb/core/devio.c:1054
+> 1 lock held by syz.7.305/6951:
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:895 [inline]
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: usbdev_open+0x1b6/0x8b0 drivers/usb/core/devio.c:1054
+> 1 lock held by syz.5.304/6961:
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:895 [inline]
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: usbdev_open+0x1b6/0x8b0 drivers/usb/core/devio.c:1054
+> 1 lock held by syz.6.306/6964:
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:895 [inline]
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: usbdev_open+0x1b6/0x8b0 drivers/usb/core/devio.c:1054
+> 1 lock held by syz.8.313/7018:
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:895 [inline]
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: usbdev_open+0x1b6/0x8b0 drivers/usb/core/devio.c:1054
+> 1 lock held by syz.0.315/7049:
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:895 [inline]
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: usbdev_open+0x1b6/0x8b0 drivers/usb/core/devio.c:1054
+> 1 lock held by syz.2.317/7073:
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:895 [inline]
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: usbdev_open+0x1b6/0x8b0 drivers/usb/core/devio.c:1054
+> 1 lock held by syz.9.316/7078:
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:895 [inline]
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: usbdev_open+0x1b6/0x8b0 drivers/usb/core/devio.c:1054
+> 1 lock held by syz.1.323/7112:
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:895 [inline]
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: usbdev_open+0x1b6/0x8b0 drivers/usb/core/devio.c:1054
+> 1 lock held by syz.3.325/7142:
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:895 [inline]
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: usbdev_open+0x1b6/0x8b0 drivers/usb/core/devio.c:1054
+> 1 lock held by syz.7.326/7193:
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:895 [inline]
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: usbdev_open+0x1b6/0x8b0 drivers/usb/core/devio.c:1054
+> 1 lock held by syz.5.328/7194:
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:895 [inline]
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: usbdev_open+0x1b6/0x8b0 drivers/usb/core/devio.c:1054
+> 1 lock held by syz.6.333/7234:
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:895 [inline]
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: usbdev_open+0x1b6/0x8b0 drivers/usb/core/devio.c:1054
+> 1 lock held by syz.8.335/7260:
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:895 [inline]
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: usbdev_open+0x1b6/0x8b0 drivers/usb/core/devio.c:1054
+> 1 lock held by syz.0.337/7304:
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:895 [inline]
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: usbdev_open+0x1b6/0x8b0 drivers/usb/core/devio.c:1054
+> 1 lock held by syz.2.338/7305:
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:895 [inline]
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: usbdev_open+0x1b6/0x8b0 drivers/usb/core/devio.c:1054
+> 1 lock held by syz.9.343/7345:
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:895 [inline]
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: usbdev_open+0x1b6/0x8b0 drivers/usb/core/devio.c:1054
+> 1 lock held by syz.1.344/7367:
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:895 [inline]
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: usbdev_open+0x1b6/0x8b0 drivers/usb/core/devio.c:1054
+> 1 lock held by syz.3.347/7416:
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:895 [inline]
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: usbdev_open+0x1b6/0x8b0 drivers/usb/core/devio.c:1054
+> 2 locks held by kworker/u8:53/7419:
+>   #0: ffff8880b853ac98 (&rq->__lock){-.-.}-{2:2}, at: raw_spin_rq_lock_nested+0x29/0x130 kernel/sched/core.c:639
+>   #1: ffff8880b8524608 (psi_seq){-.-.}-{0:0}, at: psi_sched_switch kernel/sched/stats.h:225 [inline]
+>   #1: ffff8880b8524608 (psi_seq){-.-.}-{0:0}, at: __schedule+0x19b1/0x6150 kernel/sched/core.c:6857
+> 1 lock held by syz.5.348/7421:
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:895 [inline]
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: usbdev_open+0x1b6/0x8b0 drivers/usb/core/devio.c:1054
+> 1 lock held by syz.7.352/7454:
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:895 [inline]
+>   #0: ffff88802a025198 (&dev->mutex){....}-{4:4}, at: usbdev_open+0x1b6/0x8b0 drivers/usb/core/devio.c:1054
+> 1 lock held by syz-executor/7455:
+>   #0: ffffffff8e3d4df8 (rcu_state.exp_mutex){+.+.}-{4:4}, at: exp_funnel_lock+0x284/0x3c0 kernel/rcu/tree_exp.h:311
+> 3 locks held by kworker/0:14/7462:
+>   #0: ffff88813ff51948 ((wq_completion)events){+.+.}-{0:0}, at: process_one_work+0x128d/0x1b20 kernel/workqueue.c:3232
+>   #1: ffffc9000f2c7c90 ((work_completion)(&data->fib_event_work)){+.+.}-{0:0}, at: process_one_work+0x914/0x1b20 kernel/workqueue.c:3233
+>   #2: ffff888035684240 (&data->fib_lock){+.+.}-{4:4}, at: nsim_fib_event_work+0x1b8/0x65f0 drivers/net/netdevsim/fib.c:1490
+>
+> =============================================
+>
+> NMI backtrace for cpu 0
+> CPU: 0 UID: 0 PID: 31 Comm: khungtaskd Not tainted syzkaller #0 PREEMPT(full)
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/25/2025
+> Call Trace:
+>   <TASK>
+>   __dump_stack lib/dump_stack.c:94 [inline]
+>   dump_stack_lvl+0x116/0x1f0 lib/dump_stack.c:120
+>   nmi_cpu_backtrace+0x27b/0x390 lib/nmi_backtrace.c:113
+>   nmi_trigger_cpumask_backtrace+0x29c/0x300 lib/nmi_backtrace.c:62
+>   trigger_all_cpu_backtrace include/linux/nmi.h:160 [inline]
+>   __sys_info lib/sys_info.c:157 [inline]
+>   sys_info+0x133/0x180 lib/sys_info.c:165
+>   check_hung_uninterruptible_tasks kernel/hung_task.c:346 [inline]
+>   watchdog+0xe66/0x1180 kernel/hung_task.c:515
+>   kthread+0x3c5/0x780 kernel/kthread.c:463
+>   ret_from_fork+0x983/0xb10 arch/x86/kernel/process.c:158
+>   ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:246
+>   </TASK>
+> Sending NMI from CPU 0 to CPUs 1:
+> NMI backtrace for cpu 1
+> CPU: 1 UID: 0 PID: 7485 Comm: syz.6.354 Not tainted syzkaller #0 PREEMPT(full)
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/25/2025
+> RIP: 0010:io_serial_in+0x87/0xb0 drivers/tty/serial/8250/8250_port.c:401
+> Code: 75 8c fc 48 8d 7d 40 44 89 e1 48 b8 00 00 00 00 00 fc ff df 48 89 fa d3 e3 48 c1 ea 03 80 3c 02 00 75 1a 66 03 5d 40 89 da ec <5b> 0f b6 c0 5d 41 5c e9 3d d0 48 06 e8 38 4a f6 fc eb a2 e8 c1 4a
+> RSP: 0018:ffffc9000f2a78c8 EFLAGS: 00000002
+> RAX: dffffc0000000000 RBX: 00000000000003fd RCX: 0000000000000000
+> RDX: 00000000000003fd RSI: ffffffff85327330 RDI: ffffffff9aeedc40
+> RBP: ffffffff9aeedc00 R08: 0000000000000001 R09: 000000000000001f
+> R10: 0000000000000000 R11: ffff888087e80b30 R12: 0000000000000000
+> R13: 0000000000000020 R14: fffffbfff35ddbda R15: dffffc0000000000
+> FS:  0000555573d50500(0000) GS:ffff8881249f5000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007f00b51733e0 CR3: 00000000a834a000 CR4: 00000000003526f0
+> Call Trace:
+>   <TASK>
+>   serial_in drivers/tty/serial/8250/8250.h:128 [inline]
+>   serial_lsr_in drivers/tty/serial/8250/8250.h:150 [inline]
+>   wait_for_lsr+0x13a/0x210 drivers/tty/serial/8250/8250_port.c:1961
+>   fifo_wait_for_lsr drivers/tty/serial/8250/8250_port.c:3234 [inline]
+>   serial8250_console_fifo_write drivers/tty/serial/8250/8250_port.c:3257 [inline]
+>   serial8250_console_write+0xf81/0x1890 drivers/tty/serial/8250/8250_port.c:3342
+>   console_emit_next_record kernel/printk/printk.c:3129 [inline]
+>   console_flush_one_record+0x796/0xc60 kernel/printk/printk.c:3215
+>   console_flush_all kernel/printk/printk.c:3289 [inline]
+>   __console_flush_and_unlock kernel/printk/printk.c:3319 [inline]
+>   console_unlock+0xef/0x240 kernel/printk/printk.c:3359
+>   vprintk_emit+0x407/0x6b0 kernel/printk/printk.c:2426
+>   _printk+0xc7/0x100 kernel/printk/printk.c:2451
+>   usb_gadget_register_driver_owner+0x1fb/0x330 drivers/usb/gadget/udc/core.c:1729
+>   raw_ioctl_run drivers/usb/gadget/legacy/raw_gadget.c:596 [inline]
+>   raw_ioctl+0x17ec/0x2e60 drivers/usb/gadget/legacy/raw_gadget.c:1307
+>   vfs_ioctl fs/ioctl.c:51 [inline]
+>   __do_sys_ioctl fs/ioctl.c:597 [inline]
+>   __se_sys_ioctl fs/ioctl.c:583 [inline]
+>   __x64_sys_ioctl+0x18e/0x210 fs/ioctl.c:583
+>   do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+>   do_syscall_64+0xcd/0xf80 arch/x86/entry/syscall_64.c:94
+>   entry_SYSCALL_64_after_hwframe+0x77/0x7f
+> RIP: 0033:0x7f00b518f34b
+> Code: 00 48 89 44 24 18 31 c0 48 8d 44 24 60 c7 04 24 10 00 00 00 48 89 44 24 08 48 8d 44 24 20 48 89 44 24 10 b8 10 00 00 00 0f 05 <89> c2 3d 00 f0 ff ff 77 1c 48 8b 44 24 18 64 48 2b 04 25 28 00 00
+> RSP: 002b:00007ffe8bc9e9d0 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+> RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f00b518f34b
+> RDX: 0000000000000000 RSI: 0000000000005501 RDI: 0000000000000003
+> RBP: 00007ffe8bc9faa0 R08: 0000000000000000 R09: 00362e6364755f79
+> R10: 0000000000000011 R11: 0000000000000246 R12: 0000000000000000
+> R13: 00007ffe8bc9ea70 R14: 0000200000000440 R15: 00007f00b5510320
+>   </TASK>
+>
+>
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+>
+> If the report is already addressed, let syzbot know by replying with:
+> #syz fix: exact-commit-title
+>
+> If you want syzbot to run the reproducer, reply with:
+> #syz test: git://repo/address.git branch-or-commit-hash
+> If you attach or paste a git patch, syzbot will apply it before testing.
+>
+> If you want to overwrite report's subsystems, reply with:
+> #syz set subsystems: new-subsystem
+> (See the list of subsystem names on the web dashboard)
+>
+> If the report is a duplicate of another one, reply with:
+> #syz dup: exact-subject-of-another-report
+>
+> If you want to undo deduplication, reply with:
+> #syz undup
+>
 
