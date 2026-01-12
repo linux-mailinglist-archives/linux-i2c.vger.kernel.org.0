@@ -1,162 +1,128 @@
-Return-Path: <linux-i2c+bounces-15069-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-15070-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6DD5D13524
-	for <lists+linux-i2c@lfdr.de>; Mon, 12 Jan 2026 15:53:03 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id B320AD13952
+	for <lists+linux-i2c@lfdr.de>; Mon, 12 Jan 2026 16:18:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0D17E306F8EF
-	for <lists+linux-i2c@lfdr.de>; Mon, 12 Jan 2026 14:48:07 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D5E3831EA6AE
+	for <lists+linux-i2c@lfdr.de>; Mon, 12 Jan 2026 15:04:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14A342D8396;
-	Mon, 12 Jan 2026 14:47:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0255C2DCBF4;
+	Mon, 12 Jan 2026 15:04:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="iUXN7uSf"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="LoELtewe"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C60D82C0272;
-	Mon, 12 Jan 2026 14:47:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B37572C0F84;
+	Mon, 12 Jan 2026 15:04:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768229278; cv=none; b=uHg7XXZYivJ3iDf97bIcPmtn/5mP5wxM/rmMVUxKDtbUnuhOx5DAgjJTSlLCHEDLGyZtevYxePLqtIq896PPBN3nP77YDa0DsYbEArQrKWWNJA7+95hGIC7VbIvUMYW/PmiqIT0urm6vHgkxThnaWSGjuAkRVGolxln/elyvM3I=
+	t=1768230241; cv=none; b=hJ1MvtIUtS7Vamo1IWJF+XznOD/mVhoYWbp+GKyATB1yZ0fMcRJru5aFLkHqyfqLCKjWmf2eyVZ+ynrLgSYDJupKKUDenkthTTXZllwhNogEs9vgFkZKIAWKfsxlig0pTq7MCqWnB4t8EBRVM/1xjXpyHQSPMIoUC3SardeHMdw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768229278; c=relaxed/simple;
-	bh=nUGXhmxfk4xVstkedOcb8jdC/4d8W+cXsb3tcmVsSFc=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Ben6dkvqyniUjb21tjEwpevylp4fyRujP0lOpVPxKxLirB9XW/bIAjBmUmDwgVtPUFL5I1PUGiywgx5xmZFvSqwcdUtm+yEN9qz3fJ6TmPctCbJ4z+tS1MNmWEsPAk/S9B1fZ4nefmcs6urXkiXVU5ZA/26AswsA7Ai4QoZN+Rk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=iUXN7uSf; arc=none smtp.client-ip=185.246.85.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 7334E4E4207F;
-	Mon, 12 Jan 2026 14:47:54 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 42F05606FA;
-	Mon, 12 Jan 2026 14:47:54 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id A0B3F103C8A5B;
-	Mon, 12 Jan 2026 15:47:32 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1768229271; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=q/WLPrz5mCQaWOceOk8Ks2oQ15KuKRHou0wGW5c209g=;
-	b=iUXN7uSfeXgQl4nNnPIxxArDY5Gzbwtk5FBobBJO+ueYTKc1/BEPsvLsksdtAAQpqIsWQO
-	/cnIaP1yp40XU+4otLwInaG3Ccgw4ZjdYuBZpKDSxPUmWLKE7SIJzjlyOttIjV5+FmXYBq
-	R26TBX76EEVjpW2JNaMKjbn9Bg5Hc0m/7+OqUYza1Mg8WIkIk5gJ9KPNwyEZMv8Yjfzikr
-	sTt+xW+RYnH9eZug2OQgC+nbK+tcnBHgnDLk+ZgL/pp++VYX0gvJquvTFjdbT3L5ZBtzCj
-	N8BCh1TaOXz9DcWQNxj+3/dOOdCe3qyYIz/NXGcGMfeq+14pb1zJbp2/pCkjtg==
-Date: Mon, 12 Jan 2026 15:47:31 +0100
-From: Herve Codina <herve.codina@bootlin.com>
-To: Saravana Kannan <saravanak@kernel.org>
-Cc: Matti Vaittinen <mazziesaccount@gmail.com>, Geert Uytterhoeven
- <geert@linux-m68k.org>, Rob Herring <robh@kernel.org>, "Rafael J. Wysocki"
- <rafael@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, Kalle Niemi
- <kaleposti@gmail.com>, linux-arm-kernel@lists.infradead.org, Andrew Lunn
- <andrew@lunn.ch>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Danilo Krummrich <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>, Sascha
- Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team
- <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, Michael
- Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Andi
- Shyti <andi.shyti@kernel.org>, Wolfram Sang
- <wsa+renesas@sang-engineering.com>, Peter Rosin <peda@axentia.se>, Arnd
- Bergmann <arnd@arndb.de>, Bjorn Helgaas <bhelgaas@google.com>, Charles
- Keepax <ckeepax@opensource.cirrus.com>, Richard Fitzgerald
- <rf@opensource.cirrus.com>, David Rhodes <david.rhodes@cirrus.com>, Linus
- Walleij <linus.walleij@linaro.org>, Mark Brown <broonie@kernel.org>, Andy
- Shevchenko <andriy.shevchenko@linux.intel.com>, Daniel Scally
- <djrscally@gmail.com>, Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Sakari Ailus <sakari.ailus@linux.intel.com>, Len Brown <lenb@kernel.org>,
- Davidlohr Bueso <dave@stgolabs.net>, Jonathan Cameron
- <jonathan.cameron@huawei.com>, Dave Jiang <dave.jiang@intel.com>, Alison
- Schofield <alison.schofield@intel.com>, Vishal Verma
- <vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>, Dan Williams
- <dan.j.williams@intel.com>, Wolfram Sang <wsa@kernel.org>,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- imx@lists.linux.dev, linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org,
- linux-pci@vger.kernel.org, linux-sound@vger.kernel.org,
- patches@opensource.cirrus.com, linux-gpio@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-spi@vger.kernel.org,
- linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org, Allan Nielsen
- <allan.nielsen@microchip.com>, Horatiu Vultur
- <horatiu.vultur@microchip.com>, Steen Hegelund
- <steen.hegelund@microchip.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v4 01/29] Revert "treewide: Fix probing of devices in DT
- overlays"
-Message-ID: <20260112154731.6540453b@bootlin.com>
-In-Reply-To: <20251211161902.11ef4248@bootlin.com>
-References: <20251015071420.1173068-1-herve.codina@bootlin.com>
-	<f74ab0a2-b74b-4b96-8469-a716c850e230@gmail.com>
-	<CAL_JsqJDOYuzutMHMeFAogd5a_OX6Hwi8Gwz1Vy7HpXgNeYKsg@mail.gmail.com>
-	<5cf2a12a-7c66-4622-b4a9-14896c6df005@gmail.com>
-	<CAL_JsqJjm12LxpDg6LmpY=Ro_keHwnrWiYMLVnG=s_pSP4X2WQ@mail.gmail.com>
-	<072dde7c-a53c-4525-83ac-57ea38edc0b5@gmail.com>
-	<CAL_JsqKyG98pXGKpL=gxSc92izpzN7YCdq62ZJByhE6aFYs1fw@mail.gmail.com>
-	<55076f4b-d523-4f8c-8bd4-0645b790737e@gmail.com>
-	<20251202102619.5cd971cc@bootlin.com>
-	<088af3ff-bd04-4bc9-b304-85f6ed555f2a@gmail.com>
-	<20251202175836.747593c0@bootlin.com>
-	<dc813fc2-28d2-4f2c-a2a3-08e33eec8ec7@gmail.com>
-	<20251204083839.4fb8a4b1@bootlin.com>
-	<CAMuHMdXdwf7La1EYBWTJadsTAJG3nKQVW6wtBn-bUqshA=XHRw@mail.gmail.com>
-	<20251210132140.32dbc3d7@bootlin.com>
-	<c50c40cc-69f6-436c-a94e-94a3a10f6727@gmail.com>
-	<20251211132044.10f5b1ea@bootlin.com>
-	<1b9fa77b-d74a-4fa7-b2e7-8b389d59a5a0@gmail.com>
-	<20251211161902.11ef4248@bootlin.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-redhat-linux-gnu)
+	s=arc-20240116; t=1768230241; c=relaxed/simple;
+	bh=l3wU/YltdXyjGvYTGpFOtQTbsPS+I6Qr9b5BgtqGHvM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Xli+jOJ/83v+2gXMma5U/EeJv5y9sbvwnkA9br9oo5mRoNW2pcItLNes/o6d5yJklKiurX8oFrDGCh1wzs9a0+2dx7dGa7G73Tnw+CjEy7+BK0FPlvwUN/e1G1Wir8LDd9mQr+5+qVrI1c9+CUnzQUdQQMBfXjeB882RdvTqVT0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=LoELtewe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C865FC16AAE;
+	Mon, 12 Jan 2026 15:04:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1768230241;
+	bh=l3wU/YltdXyjGvYTGpFOtQTbsPS+I6Qr9b5BgtqGHvM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=LoELtewetAbgrLkflbxok9h01WXupfznF1esL15DKDKhWZM2GC54MUfd3lKi/kBtM
+	 WNQLqvFTR7OvAi+m6cECsLjnrkdCn96hOqqVUoK3a9Po9OL+p7AsEdRRU8JVtZiFmL
+	 KGmbvUUrgIKEswueJLWYGefM5aSK81Ns/sRpDP+A=
+Date: Mon, 12 Jan 2026 16:03:58 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Danilo Krummrich <dakr@kernel.org>
+Cc: rafael@kernel.org, igor.korotin.linux@gmail.com, ojeda@kernel.org,
+	boqun.feng@gmail.com, gary@garyguo.net, bjorn3_gh@protonmail.com,
+	lossin@kernel.org, a.hindborg@kernel.org, aliceryhl@google.com,
+	tmgross@umich.edu, david.m.ertman@intel.com, ira.weiny@intel.com,
+	leon@kernel.org, bhelgaas@google.com, kwilczynski@kernel.org,
+	wsa+renesas@sang-engineering.com, linux-kernel@vger.kernel.org,
+	rust-for-linux@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH 6/6] rust: driver: drop device private data post unbind
+Message-ID: <2026011231-kitten-stainable-7206@gregkh>
+References: <20260107103511.570525-1-dakr@kernel.org>
+ <20260107103511.570525-7-dakr@kernel.org>
+ <2026010741-wiry-trophy-46ec@gregkh>
+ <DFIDCAL68R7N.8SYKSAF0JO4C@kernel.org>
+ <2026010701-rearview-retriever-3268@gregkh>
+ <DFMOIU3FC48L.17P3TCF92CEZZ@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DFMOIU3FC48L.17P3TCF92CEZZ@kernel.org>
 
-Hi Saravana,
-
-(+To Saravana using his new email address)
-
-We still have issues related to devlink and overlays.
-
-In order to move forward on the topic, I think I need your help.
-
-Can you have a look and share any ideas to fix them?
-
-On Thu, 11 Dec 2025 16:19:02 +0100
-Herve Codina <herve.codina@bootlin.com> wrote:
-...
+On Mon, Jan 12, 2026 at 03:27:08PM +0100, Danilo Krummrich wrote:
+> On Wed Jan 7, 2026 at 3:54 PM CET, Greg KH wrote:
+> > I say name it with "rust_" and take out the #ifdef, that makes it
+> > simpler/easier to understand.
 > 
-> IMHO, I think the issue is related to overlays and fw_devlink.
-> The distinction between "a new node is going to lead to a device" vs "a new
-> node is just data and will never been attached to a new device" when an
-> overlay is applied is broken.
+> diff --git a/drivers/base/dd.c b/drivers/base/dd.c
+> index 2d9871503614..bea8da5f8a3a 100644
+> --- a/drivers/base/dd.c
+> +++ b/drivers/base/dd.c
+> @@ -548,10 +548,8 @@ static DEVICE_ATTR_RW(state_synced);
+>  static void device_unbind_cleanup(struct device *dev)
+>  {
+>         devres_release_all(dev);
+> -#ifdef CONFIG_RUST
+> -       if (dev->driver->p_cb.post_unbind)
+> -               dev->driver->p_cb.post_unbind(dev);
+> -#endif
+> +       if (dev->driver->p_cb.post_unbind_rust)
+> +               dev->driver->p_cb.post_unbind_rust(dev);
+>         arch_teardown_dma_ops(dev);
+>         kfree(dev->dma_range_map);
+>         dev->dma_range_map = NULL;
+> diff --git a/include/linux/device/driver.h b/include/linux/device/driver.h
+> index 51a9ebdd8a2d..bbc67ec513ed 100644
+> --- a/include/linux/device/driver.h
+> +++ b/include/linux/device/driver.h
+> @@ -121,15 +121,13 @@ struct device_driver {
+>         void (*coredump) (struct device *dev);
 > 
-> This is broken with the upstream "treewide: Fix probing of devices in DT
-> overlays" commit I've tried to revert. Indeed, on the LAN966x PCI device
-> use case devlinks created are not correct with this commit applied.
+>         struct driver_private *p;
+> -#ifdef CONFIG_RUST
+>         struct {
+>                 /*
+>                  * Called after remove() and after all devres entries have been
+> -                * processed.
+> +                * processed. This is a Rust only callback.
+>                  */
+> -               void (*post_unbind)(struct device *dev);
+> +               void (*post_unbind_rust)(struct device *dev);
+>         } p_cb;
+> -#endif
+>  };
 > 
-> I am not sure also that devlinks created with a more complex overlay will be
-> correct. For instance, Matti, with your overlay not sure that a phandle from
-> the oscillator node referencing the pmic node will lead to a correct
-> provider/consumer devlink between the pmic device and the oscillator device.
 > 
-> On the other hand, this is broken with "of: dynamic: Fix overlayed devices
-> not probing because of fw_devlink" works for the LAN966x PCI device use case
-> an lead to correct devlinks but breaks your use cases.
+> diff --git a/rust/kernel/driver.rs b/rust/kernel/driver.rs
+> index 6e32376d4c7c..26095d7bd0d9 100644
+> --- a/rust/kernel/driver.rs
+> +++ b/rust/kernel/driver.rs
+> @@ -207,7 +207,7 @@ fn callbacks_attach(drv: &Opaque<T::DriverType>) {
+>          let base = base.cast::<bindings::device_driver>();
 > 
-> Does anyone have an idea about how to fix those issues?
+>          // SAFETY: It is safe to set the fields of `struct device_driver` on initialization.
+> -        unsafe { (*base).p_cb.post_unbind = Some(Self::post_unbind_callback) };
+> +        unsafe { (*base).p_cb.post_unbind_rust = Some(Self::post_unbind_callback) };
+>      }
 > 
+>      /// Creates a new instance of the registration object.
 
-The commit "of: dynamic: Fix overlayed devices not probing because of fw_devlink"
-can be found in this series (patch 3)
-  https://lore.kernel.org/all/20251015071420.1173068-4-herve.codina@bootlin.com/
+Looks good to me, thanks!
 
-Best regards,
-Hervé
 
