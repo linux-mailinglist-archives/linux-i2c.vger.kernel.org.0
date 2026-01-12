@@ -1,129 +1,180 @@
-Return-Path: <linux-i2c+bounces-15067-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-15068-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF27DD134B8
-	for <lists+linux-i2c@lfdr.de>; Mon, 12 Jan 2026 15:50:36 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 51850D13548
+	for <lists+linux-i2c@lfdr.de>; Mon, 12 Jan 2026 15:54:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id D86A53024B55
-	for <lists+linux-i2c@lfdr.de>; Mon, 12 Jan 2026 14:33:13 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 3FAF531F498F
+	for <lists+linux-i2c@lfdr.de>; Mon, 12 Jan 2026 14:36:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 740B42E7185;
-	Mon, 12 Jan 2026 14:27:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3C3E2BE033;
+	Mon, 12 Jan 2026 14:35:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I8d/wXMz"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="f3GAvpEG"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 338C52E2DF2;
-	Mon, 12 Jan 2026 14:27:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B92327F4F5;
+	Mon, 12 Jan 2026 14:35:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768228034; cv=none; b=d1wN5WaNe6zPYyA6gRCmCAx/y/ul0eLMv+p3Vcy504gE/kfEyxyl3GNHe4Qdm/Z+RY3x6ccpOrNG8nEaIlfRQIdDw/x+v3Rr034XFd7tyRJkKqjqnkKOcdlJrAUW0EzJmu7cV2VbQ+ROmzbJRyurZot0sXWhPqrrxI7JGaKpgcs=
+	t=1768228510; cv=none; b=NDTmFS1l/PKfW6JTyqI4P2F+cMXUEtbFnhHAN+sPhEMoW4+S780iaJtxe/VEl+KUIRUBU3ikB9Ugliu7XMFbZHEfQaACdRXZCRsNUWrhRBuBKY9ENowne396SXr7V4JT8SgSIhST6FeqAMUb35AJyhaFe20N8N1hIehlu2fecfA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768228034; c=relaxed/simple;
-	bh=ZGnxsgK/5Z1p93I0FWNkfWilUaIajuvcnQz79Vyaozk=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:From:Subject:Cc:
-	 References:In-Reply-To; b=OrR7F7gibO57QVbxRMXgmQXv1yzdVQPJkXj5T9C2CCtZgiVpwN5qsQIDxMZ1hAey9hVPn98njksQs8tIT1OWk4cErBvTSDidxp34tFn8dRbbIdDCehURRUs8UrNJIoyTIAbV3HtCMC9MxfdmMtmizGnqg1kTOjsVCn1muB7hllY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I8d/wXMz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06B80C16AAE;
-	Mon, 12 Jan 2026 14:27:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768228034;
-	bh=ZGnxsgK/5Z1p93I0FWNkfWilUaIajuvcnQz79Vyaozk=;
-	h=Date:To:From:Subject:Cc:References:In-Reply-To:From;
-	b=I8d/wXMz6YIIxsvkh75J33zs9/A2zJU+9qS3WnskjVYZEQ9Oo+4iIXUgwyzB7usNE
-	 sESlh8fPLukij1AER+4U/zVnjKcdv3D/gMpOUBKtvjpG5xMqQ2Ekx3L+waCocpYBMe
-	 WNPC4uSU3DUdAaAJMhHJqvdnxAnLFybkpOPMpwcsIVrkWNpCyaGuhRX5Xke5k8fkxv
-	 /brdcSMV7AVVP9t18c+SwEUkjS5X8mMNvNiKww8CB9HjG6TXqdaFPc7ruWgAvu6993
-	 xvh/uMx4KRc/vRVdyFWFejQTRz7LyJ+yEq/uTlawVchsfNlGHvBOg2MMp8Iy2C9AQ2
-	 W8wKJQC8GJbyA==
+	s=arc-20240116; t=1768228510; c=relaxed/simple;
+	bh=CcKwT1f6+g65+WAdcan+bOmjmZsRnEsccq0m+MJx7sg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=i/8XFlD1DxoqkvATvsSd/IaFbdZ49aOeuE/e/4NDf0hEAO8Ip4UltIUbtIEbidouorImA5DR7VxWkoAmMbn9mhNivVg+EQZEGH50Q1gNobDuj4JA92Yr/ORnKUt3KmAHdsAObXWxi98DYBmdSuaRiXyNKD9LxYnNYl/HkOj2BDQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=f3GAvpEG; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1768228509; x=1799764509;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=CcKwT1f6+g65+WAdcan+bOmjmZsRnEsccq0m+MJx7sg=;
+  b=f3GAvpEGO53XIaiyx96fxf3BPPG44maIGQebHWlWOnKTLF9ASC1U2h6k
+   j82EXntFhoOhRmIwT8OW5KieXGCl5m84jyuWszmeOs8iP/H63+S+exk73
+   +YaeIFgEwnHUHH/CsjQnjYKGnCFgfWYy8yQ0/TlMz+trj2W9yE0xJuDD6
+   uQZPzjTcJ0kQrtoF1RZMKOb+bOPGX/IImQmox7rpgcXUnRgUWA1mO9i7m
+   uFGGlSuO7OvTEQdLezjii6Qsw1gJn9OycUch979lxhEHhkG+Z4Bw6IhOi
+   FjxHQR5if4ekjVQptuC2yQ/4J+fLGC8vUZTyHmBvfXFZ6Wwy1apNMeV1Y
+   Q==;
+X-CSE-ConnectionGUID: TKSCnUh0S2O1C0kSdcmlCw==
+X-CSE-MsgGUID: lyfL8nkGS5yfV92nrQ8d9w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11669"; a="80138095"
+X-IronPort-AV: E=Sophos;i="6.21,221,1763452800"; 
+   d="scan'208";a="80138095"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2026 06:35:08 -0800
+X-CSE-ConnectionGUID: PPHZO89MQD6AJhca5prrwA==
+X-CSE-MsgGUID: 02R4gdQERmeLuuKV6vgePw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,221,1763452800"; 
+   d="scan'208";a="204009002"
+Received: from dhhellew-desk2.ger.corp.intel.com (HELO localhost) ([10.245.245.37])
+  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2026 06:35:07 -0800
+Date: Mon, 12 Jan 2026 16:35:05 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: correctmost <cmlists@sent.com>
+Cc: dmaengine@vger.kernel.org, regressions@lists.linux.dev,
+	vkoul@kernel.org, linux-i2c@vger.kernel.org
+Subject: Re: [REGRESSION][BISECTED] Lenovo IdeaPad touchpad does not work
+ when idma64 is present in initramfs
+Message-ID: <aWUGmfcjWpFJs3-X@smile.fi.intel.com>
+References: <51388859-bf5f-484c-9937-8f6883393b4d@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 12 Jan 2026 15:27:08 +0100
-Message-Id: <DFMOIU3FC48L.17P3TCF92CEZZ@kernel.org>
-To: "Greg KH" <gregkh@linuxfoundation.org>
-From: "Danilo Krummrich" <dakr@kernel.org>
-Subject: Re: [PATCH 6/6] rust: driver: drop device private data post unbind
-Cc: <rafael@kernel.org>, <igor.korotin.linux@gmail.com>, <ojeda@kernel.org>,
- <boqun.feng@gmail.com>, <gary@garyguo.net>, <bjorn3_gh@protonmail.com>,
- <lossin@kernel.org>, <a.hindborg@kernel.org>, <aliceryhl@google.com>,
- <tmgross@umich.edu>, <david.m.ertman@intel.com>, <ira.weiny@intel.com>,
- <leon@kernel.org>, <bhelgaas@google.com>, <kwilczynski@kernel.org>,
- <wsa+renesas@sang-engineering.com>, <linux-kernel@vger.kernel.org>,
- <rust-for-linux@vger.kernel.org>, <linux-pci@vger.kernel.org>,
- <linux-usb@vger.kernel.org>, <linux-i2c@vger.kernel.org>
-References: <20260107103511.570525-1-dakr@kernel.org>
- <20260107103511.570525-7-dakr@kernel.org>
- <2026010741-wiry-trophy-46ec@gregkh> <DFIDCAL68R7N.8SYKSAF0JO4C@kernel.org>
- <2026010701-rearview-retriever-3268@gregkh>
-In-Reply-To: <2026010701-rearview-retriever-3268@gregkh>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <51388859-bf5f-484c-9937-8f6883393b4d@app.fastmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On Wed Jan 7, 2026 at 3:54 PM CET, Greg KH wrote:
-> I say name it with "rust_" and take out the #ifdef, that makes it
-> simpler/easier to understand.
+On Tue, Dec 16, 2025 at 12:57:10PM -0500, correctmost wrote:
 
-diff --git a/drivers/base/dd.c b/drivers/base/dd.c
-index 2d9871503614..bea8da5f8a3a 100644
---- a/drivers/base/dd.c
-+++ b/drivers/base/dd.c
-@@ -548,10 +548,8 @@ static DEVICE_ATTR_RW(state_synced);
- static void device_unbind_cleanup(struct device *dev)
- {
-        devres_release_all(dev);
--#ifdef CONFIG_RUST
--       if (dev->driver->p_cb.post_unbind)
--               dev->driver->p_cb.post_unbind(dev);
--#endif
-+       if (dev->driver->p_cb.post_unbind_rust)
-+               dev->driver->p_cb.post_unbind_rust(dev);
-        arch_teardown_dma_ops(dev);
-        kfree(dev->dma_range_map);
-        dev->dma_range_map =3D NULL;
-diff --git a/include/linux/device/driver.h b/include/linux/device/driver.h
-index 51a9ebdd8a2d..bbc67ec513ed 100644
---- a/include/linux/device/driver.h
-+++ b/include/linux/device/driver.h
-@@ -121,15 +121,13 @@ struct device_driver {
-        void (*coredump) (struct device *dev);
+> The following commit
 
-        struct driver_private *p;
--#ifdef CONFIG_RUST
-        struct {
-                /*
-                 * Called after remove() and after all devres entries have =
-been
--                * processed.
-+                * processed. This is a Rust only callback.
-                 */
--               void (*post_unbind)(struct device *dev);
-+               void (*post_unbind_rust)(struct device *dev);
-        } p_cb;
--#endif
- };
+No, it's false positive. The reality is that something else is going on
+there on this and other similar laptops.
+
+> causes my Lenovo IdeaPad touchpad not to work when
+> kernel/drivers/dma/idma64.ko.zst is present in the initramfs image:
+> 
+> #regzbot introduced: 9140ce47872bfd89fca888c2f992faa51d20c2bc
+> 
+> "idma64: Don't try to serve interrupts when device is powered off"
+
+So, the touchpad is an I²C device, which is connected to an Intel SoC.
+The I²C host controller is Synopsys DesignWare. On Intel SoCs the above
+mentioned IP is generated with private DMA engine, that's called Intel
+iDMA 64-bit. Basically it's two devices under a single PCI hood.
+The problem here is that when PCI device is in D3, both devices are
+powered off, but something sends an interrupt and it's not recognized
+being the one, send by a device (touchpad).
+
+There is one of the following potential issues (or their combinations):
+
+- the I²C host controller hardware got off too early
+- the line is shared with something else that generates interrupt storm
+- the BIOS does weird (wrong) things at a boot time, like not properly
+  shutting down and disabling interrupt sources; also may have wrong
+  pin control settings
+- the touchpad is operating on higher frequency like 400kHz (because
+  BIOS told to use that one instead of 100kHz) than the HW is designed
+  for and hence unreliable with all possible side effects
+- the touchpad firmware behaves wrongly on some sequences (see also
+  note about the bus speed above), try to upgrade touchpad FW
+
+With my experience with the case of the above mentioned commit that it
+may be BIOS thingy. Also consider the bus speed, there are quirks in
+the kernel for that.
+
+> Here are the related logs:
+> 
+> ---
+> 
+> irq 27: nobody cared (try booting with the "irqpoll" option)
+
+Almost all below is not so interesting.
+
+...
+
+> handlers:
+> [<00000000104a7621>] idma64_irq [idma64]
+> [<00000000bd8d08e9>] i2c_dw_isr
+> Disabling IRQ #27
+
+Yes, this line at least shared between those two and might be more.
+
+...
+
+> i2c_designware i2c_designware.0: controller timed out
+> hid (null): reading report descriptor failed
+> i2c_hid_acpi i2c-ELAN06FA:00: can't add hid device: -110
+> i2c_hid_acpi i2c-ELAN06FA:00: probe with driver i2c_hid_acpi failed with error -110
+
+Yes, sounds familiar with the speed settings. Try to down it to 100kHz in case
+it's confirmed to be 400kHz.
+
+> ---
+> 
+> Hardware info:
+> - Lenovo 16" IdeaPad Slim 5 - 16IRU9
+>   - Hardware name: LENOVO 83FW/LNVNB161216, BIOS PFCN14WW 09/20/2024
+>   - ELAN06FA:00 04F3:327E Touchpad
+> 
+> Steps to reproduce:
+> - Cold boot the laptop on Arch Linux
+> 
+> The bug is still present with the 6.19.0-rc1-1-git kernel.
+> 
+> The bisected commit is from March 2024, but I only recently noticed the issue
+> because the initramfs images on Arch Linux now include these additional
+> drivers (as of November 2025):
+> - kernel/drivers/dma/idma64.ko.zst
+> - kernel/drivers/mfd/intel-lpss-pci.ko.zst
+> - kernel/drivers/mfd/intel-lpss.ko.zst
+> 
+> Two other users have reported the issue on the Arch Linux and CachyOS forums,
+
+Any pointers to that thread, please?
+
+> so I don't think this is a hardware issue with my individual laptop.
+
+I don't know how this conclusion is came here. You mean HW as laptop model?
+But are the involved components the same (I²C host controller + touchpad)?
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-diff --git a/rust/kernel/driver.rs b/rust/kernel/driver.rs
-index 6e32376d4c7c..26095d7bd0d9 100644
---- a/rust/kernel/driver.rs
-+++ b/rust/kernel/driver.rs
-@@ -207,7 +207,7 @@ fn callbacks_attach(drv: &Opaque<T::DriverType>) {
-         let base =3D base.cast::<bindings::device_driver>();
-
-         // SAFETY: It is safe to set the fields of `struct device_driver` =
-on initialization.
--        unsafe { (*base).p_cb.post_unbind =3D Some(Self::post_unbind_callb=
-ack) };
-+        unsafe { (*base).p_cb.post_unbind_rust =3D Some(Self::post_unbind_=
-callback) };
-     }
-
-     /// Creates a new instance of the registration object.
 
