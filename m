@@ -1,49 +1,49 @@
-Return-Path: <linux-i2c+bounces-15029-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-15030-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id E79A7D10488
-	for <lists+linux-i2c@lfdr.de>; Mon, 12 Jan 2026 02:51:52 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18C47D1049D
+	for <lists+linux-i2c@lfdr.de>; Mon, 12 Jan 2026 02:53:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id E7C6D30230DA
-	for <lists+linux-i2c@lfdr.de>; Mon, 12 Jan 2026 01:51:51 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 88E943012641
+	for <lists+linux-i2c@lfdr.de>; Mon, 12 Jan 2026 01:53:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E6CE22A7F9;
-	Mon, 12 Jan 2026 01:51:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C7E022FE0A;
+	Mon, 12 Jan 2026 01:53:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b="ljS1iWNy"
+	dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b="ZoBjGaIJ"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtpbguseast1.qq.com (smtpbguseast1.qq.com [54.204.34.129])
+Received: from smtpbgeu1.qq.com (smtpbgeu1.qq.com [52.59.177.22])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56B46B672
-	for <linux-i2c@vger.kernel.org>; Mon, 12 Jan 2026 01:51:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.204.34.129
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F3421A724C
+	for <linux-i2c@vger.kernel.org>; Mon, 12 Jan 2026 01:53:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.59.177.22
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768182711; cv=none; b=W2LVPVIP0wvfRbLbOA8ls5OgZLLgKLE+YXSR6yk92ywY3v2dC6X/R6cgxuZtCqNe37eqsouXuG3vdpl85UDyb6FkHZD2rjFn2QTYPcvxEcHkqdcwrec6qpHuQ0e7HOoq/RHeGNJFum79qcoOYGw/409xdv+8t7dC0fk9B6nOnbo=
+	t=1768182817; cv=none; b=twWzhbm9byr2lGLDCjmT4zL0+LXnUwkteXSZDso7JuSeY5wL/zYUZ6XZ7xmDYe7A7V7Ywlq8dSNm4YALHRbQKPqGATcBMqlC7vjwGO6SM7T6pGFXHOhVe9N1qQRfkzFrAKgFVlAVevoNaW8WpnjaAlReUtUDZ2ZV3gVkYbZdIJ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768182711; c=relaxed/simple;
-	bh=ojSmuF3bZThAalVPD7IUaTZ+sCk8cbn5RsgGUwN9KTc=;
+	s=arc-20240116; t=1768182817; c=relaxed/simple;
+	bh=R+GMRo3QUZPJ9JA2NR/BUVoI1i0BCUZeh7qUo9qKP5Y=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=skJIXWnIyH7MbwzCN0J4T6QdDX0rK/IRRAstxmv1SBTkVj6RWWOmdLBEC4KUm6YCWCQoGuNLeFViv5BI52tWobmNFgA/KazsQ9t8Q2Hz9ZxhTQrplEA1z9QtjyJXfPRh5Tv1TuYicRlngot55BfzzJC7E2sf6dbfaYWIWzgJq3w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com; spf=none smtp.mailfrom=linux.spacemit.com; dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b=ljS1iWNy; arc=none smtp.client-ip=54.204.34.129
+	 References:In-Reply-To; b=WEH8TwqCsrEDj7ffA9WBQIrGkA5BIJhjxm+5pfcsc5bl5sqLwONPztikA1MWBCLY+HeVl9CKVGGYT+Vb9GVpXsAOHqSCBt76aT/36MDhFC649+SK/Onw0jpeYewTEKRbWpMyvdFNdmbOo4s8wsWUureM3totQI1fVHJ88rke4fU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com; spf=none smtp.mailfrom=linux.spacemit.com; dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b=ZoBjGaIJ; arc=none smtp.client-ip=52.59.177.22
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.spacemit.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.spacemit.com;
-	s=mxsw2412; t=1768182609;
-	bh=vXgizy4wIkS+ntIQMrsglm/OU4vxbvEgmvJk8CbngJo=;
+	s=mxsw2412; t=1768182728;
+	bh=2V0YGG8KS5edIV8RrxQAVz+N/+s7k9aPRaIemnpjyes=;
 	h=Mime-Version:Date:Message-Id:Subject:From:To;
-	b=ljS1iWNyyDP7Izbtve5uuShlNoMFo+GAVtivObDIdHgOrEB+IDuMnhbK4tzroiNeQ
-	 M4fyUn6pyPDqBsCx1m8dQOmVO/DsVSxNgb7fRCUSJvcMj9pkidm+DyFkbCWEIVQM6U
-	 ayzcO9Z/nz06f+i5CcC0osniPle4r6NqMnNvlArU=
-X-QQ-mid: zesmtpgz7t1768182601td230d057
-X-QQ-Originating-IP: d/IJDIFXP7NV4/kPf6kV6P2D6IG5d8UiUn9KgZOiZR8=
+	b=ZoBjGaIJlwVYNZVS5E72MHODV60jF+C5fUweMJs0SuXpoagXD/mw3UZJB2rYC5RhU
+	 DJcsd9R6N02Khe0cv9fnsn44flyvJhK0ib/4/a+5tVt7FNteVRMZY4BtVlG5tx/k2s
+	 9LMraGQ/1aTgQb5TNqYpFfSkSAW8bCm2AQ/oR90c=
+X-QQ-mid: zesmtpgz6t1768182720t29d70f31
+X-QQ-Originating-IP: NgU/OvI8KlXz8Hx7N7o9ZcfY708cpKw5XNTQ/HHR3QU=
 Received: from = ( [183.48.247.110])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Mon, 12 Jan 2026 09:49:59 +0800 (CST)
+	id ; Mon, 12 Jan 2026 09:51:58 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 52625910496199400
+X-BIZMAIL-ID: 5413789781877142214
 EX-QQ-RecipientCnt: 13
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
@@ -53,116 +53,67 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Mon, 12 Jan 2026 09:49:59 +0800
-Message-Id: <DFM8F4B9RK3A.1RG65AV3UCWC6@linux.spacemit.com>
-Cc: "Troy Mitchell" <troy.mitchell@linux.spacemit.com>, "Lee Jones"
- <lee@kernel.org>, "Yixun Lan" <dlan@gentoo.org>, "Andi Shyti"
- <andi.shyti@kernel.org>, "Liam Girdwood" <lgirdwood@gmail.com>, "Mark
- Brown" <broonie@kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-riscv@lists.infradead.org>, <spacemit@lists.linux.dev>,
- <linux-i2c@vger.kernel.org>, <linux-rtc@vger.kernel.org>
-Subject: Re: [PATCH v4 3/3] rtc: spacemit: default module when
- MFD_SPACEMIT_P1 is enabled
+Date: Mon, 12 Jan 2026 09:51:58 +0800
+Message-Id: <DFM8GN2AWH1A.1FWVNVF5FLDSH@linux.spacemit.com>
+Cc: "Lee Jones" <lee@kernel.org>, "Yixun Lan" <dlan@gentoo.org>, "Alex
+ Elder" <elder@riscstar.com>, "Andi Shyti" <andi.shyti@kernel.org>, "Liam
+ Girdwood" <lgirdwood@gmail.com>, "Mark Brown" <broonie@kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+ <spacemit@lists.linux.dev>, <linux-i2c@vger.kernel.org>,
+ <linux-rtc@vger.kernel.org>
+Subject: Re: [PATCH v5 1/3] regulator: spacemit: MFD_SPACEMIT_P1 as
+ dependencies
 From: "Troy Mitchell" <troy.mitchell@linux.spacemit.com>
-To: "Alex Elder" <elder@riscstar.com>, "Alexandre Belloni"
- <alexandre.belloni@bootlin.com>
+To: "Alexandre Belloni" <alexandre.belloni@bootlin.com>, "Troy Mitchell"
+ <troy.mitchell@linux.spacemit.com>
 X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20251225-p1-kconfig-fix-v4-0-44b6728117c1@linux.spacemit.com>
- <20251225-p1-kconfig-fix-v4-3-44b6728117c1@linux.spacemit.com>
- <202512251653368b33c7e7@mail.local>
- <4c7c0f69-4732-4f62-970a-2a9273b3b5c7@riscstar.com>
- <20251230005142d1bfc6f7@mail.local>
- <6ca28183-1687-4ddc-8b3c-5e5be4255561@riscstar.com>
- <20260109223627b566d2b0@mail.local>
- <a383dbc8-5d14-4654-933d-5dfa73a23b12@riscstar.com>
-In-Reply-To: <a383dbc8-5d14-4654-933d-5dfa73a23b12@riscstar.com>
+References: <20260108-p1-kconfig-fix-v5-0-6fe19f460269@linux.spacemit.com>
+ <20260108-p1-kconfig-fix-v5-1-6fe19f460269@linux.spacemit.com>
+ <20260109224147267169ba@mail.local>
+In-Reply-To: <20260109224147267169ba@mail.local>
 X-QQ-SENDSIZE: 520
 Feedback-ID: zesmtpgz:linux.spacemit.com:qybglogicsvrgz:qybglogicsvrgz3a-0
-X-QQ-XMAILINFO: McnXz9EssJMzD/tsDuf0SJgGVRu2/Sr5Aev4csbGYmINtatJRn/yTKTL
-	cNkXWVDoFueM4TVfh6PAh9T6B7H2BcO/zhEpGHhDcfaE1XAhW0FDBTh13hBCjvxs+t5+KAe
-	eghkzXOqqygdwRlmrrv0IoxuB8PCCjG/8s2PytbvUURTSgZxKy4+ZbK+3UnfZ/FuFn/Bc9s
-	mquaP6DzSwUmIyT50OlBMd2+AY9kMbrUVl39DrV18HyppEHDeo2tkb8lCiCmNDO/KhzVLXg
-	tLb6lqDRSHJLcESE7kfdMqy9tdICtzSdbUEfanF1fLxCf9cQEeqLkDSHYiKeRIoR2zPWUYa
-	N+nW946yuS9j20kkzFJ1PbMzRWt+cjF7X5ZhKwLgh1qei9lD7N+JfiBYbe5oL2GXnBBpZgN
-	bJQGUDlviHccrlwUGEl8UfhQeKPeMXMic6rUXND3gQWg+DYsmA/PwesKJ5Gs28jLGApipDq
-	Sgky0qOtYPX8n6zPHJIEPfdLLUjQOxWEvl9qYgwqm7SdGZaS2yuOKMwv7ttz5e8i4hvh5mL
-	tFpiHt0fO3CRNVbxWVK2ipBcwWR0n0MBwwe34zVS+8YyG9So2trXap9x0VOC/Gdck4SbMIF
-	EEyWF/I3XwFDJaq8Fst4EIdwGGNPF18e7b/T3XaqP2SDW6wgIqGSz5pkhfj/a9fFc8xfgDV
-	R16I2uTxtWjAq+2grfpo3NUWV8JKwSnRGd9b53A6JAKarIZP3gf1jYUkRD3AgTbfhuv3/i3
-	QNTnyLOdN6QHYabGhjl9B8htdsaToruu2dw+FUtyAXJedW/iVbjD0q3N4nPRtSeLlWJql3S
-	QcJQorXvyFcnM87Qn6HoinDI6+zCLLE26YjvWB9jCtLhTD69KpiB6PN3HWaxEVmFXbCk1na
-	3bwCq2vtdLkfDwc6v6WJNNthmXlWND9GA42FUK/8tXYfW7UTbyXoiuzDwHFt9tOeOlIWccR
-	0q/5qztWVjHZIJ0wdpwbWaN/UZgUz1zFArlZ9mTvuzPSQ3rOS7Y9qsrpcVy/DLoZs2TcQog
-	tt9ArqhXhN2PFyhNOREtOhapGnp4lR3eQjmObhF3AvYBkwLbU5B0mrK0QFRL4=
-X-QQ-XMRINFO: OWPUhxQsoeAVwkVaQIEGSKwwgKCxK/fD5g==
+X-QQ-XMAILINFO: MYi332yUMvzJVTjIZZ6KBo1XNwwLoJ/FzOEarEZg0sPadd7m+1+9d5AD
+	XoRNSaUzYFK9+eWt0hrrucOUdiHcJ/4YKl/pqQ0EOLUXeibCaeFBRPZS9hJ2EfDVusspiiL
+	g7y4wPXRiGoO1WbTfcfys8FPD3BnRzbOQhbto8cnnI5CbAYl0RjS9yGEgu1aMvdrs6cm98/
+	oui71iMGtgn+0BUVRWBKDzhWHuMth8J7XgwK6DP5Kc20NM2aDvYrJQ/yVXO3vz769pMBQ2J
+	4bPExZps/uvl2++xNLEELA85FQrDeSRLLVcLBYzbh4D1yvS87vV+ssUPZPKnyxjoUsX9H46
+	vrpGGw40zYRuiykFxg0WGAmWLUgF+mFSUcsjwlWhu7i25TKEFmMQYiHcR94gjwVBMQBr7WT
+	czCLMywxNtoXRGtSAonIRN8iYM50ZjDj5FKgidsRHuO57BPrdOHJJzTdkOCevcQ7gvg/Wl2
+	Jk/lpV5iSeRdlL06iB383CXW7bMyf6aUx8pY3p5hmkYIBNG4kC9Swa2w/ADRADQRFVS5oj/
+	PDe7PtQwUOoB/h1ay8lKbiPES0co9uprfF2Z4aya6STCyrppUc7zmJHtv47zsPDpJHeHGop
+	H9i3sJk020k9Do26RYpeCszXwWd8gDIg0zxeQAdi+3HMQkrzdf0502FhPSewT55Ba0ss1HR
+	rQ+ri+/w2qdPP/mIX9efj8HwyIek5zpPpfcjrH3vZF+JzKtnNC2lf8ZPBSLVcB7Fm3YuoSA
+	7LDHHNODz7zJugC0bYxJQSBZzc+SZgJpWAeu0LHfbNUiYsosnRQEyXWv0rcL9XVPuKPxpg0
+	OKVOFQQXrZB8jzp14su2nuASHVSV6v83I3KkU7P+C3Tyd6z++6wcFXpTpwFlKb/Y3hr/FzI
+	YtbuGAmJwK4Jalyip0jMpbyuC5IJ0uaOCsj6Nnir/GcNm/wq1MplO7r3xhOmukx0n/USv4+
+	LSbeq4lFv8I4wolzpT6iHrb+dmddnS7iM4y3MbXgYzaDDEYiHm6yJS7LwXvq8/bL3abIqu4
+	UPJqdGIbCBiLWoxmBHqM1W5ba6Dc7viOKXz3LussXdV+c2CG58avjRxJmHYWEdZk63RapnU
+	kPuZab0l0eR5Ok0TW5ZrWg=
+X-QQ-XMRINFO: NS+P29fieYNwqS3WCnRCOn9D1NpZuCnCRA==
 X-QQ-RECHKSPAM: 0
 
-On Mon Jan 12, 2026 at 3:55 AM CST, Alex Elder wrote:
-> On 1/9/26 4:36 PM, Alexandre Belloni wrote:
->>> The purpose is to make the driver a module (not built-in)
->>> when "defconfig" is used (without the need for any Kconfig
->>> fragments to unselect things).
->>>
->>>
->>> In arch/riscv/configs/defconfig, we have this:
->>>      CONFIG_ARCH_SPACEMIT=3Dy
->>>
->>> In drivers/mfd/Kconfig b/drivers/mfd/Kconfig, we have this
->>> (added by patch 2 in this series):
->>>      config MFD_SPACEMIT_P1
->>> 	default m if ARCH_SPACEMIT
->>>
->>> So when using defconfig (alone), MFD_SPACEMIT_P1 is set to m,
->>> to benefit non-SpacemiT RISC-V platforms.
->>>
->>> This patch is trying to do the same thing for the RTC,
->>> i.e. having RTC_DRV_SPACEMIT_P1 be defined as a module
->>> by default.
->>>
->>> I think you understand.
->> I'm sorry, I must be dumb but I don't understand. The current behaviour
+On Sat Jan 10, 2026 at 6:41 AM CST, Alexandre Belloni wrote:
+> On 08/01/2026 16:38:54+0800, Troy Mitchell wrote:
+>> diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
+>> index d2335276cce5ffbd500bbaf251d1761a9116aee9..b51888a9a78f399a6af3294f=
+c19f60792576332c 100644
+>> --- a/drivers/regulator/Kconfig
+>> +++ b/drivers/regulator/Kconfig
+>> @@ -1496,9 +1496,8 @@ config REGULATOR_SLG51000
+>>  config REGULATOR_SPACEMIT_P1
+>>  	tristate "SpacemiT P1 regulators"
+>>  	depends on ARCH_SPACEMIT || COMPILE_TEST
+>> -	depends on I2C
+>> -	select MFD_SPACEMIT_P1
+>> -	default ARCH_SPACEMIT
+>> +	depends on MFD_SPACEMIT_P1
+>> +	default m if MFD_SPACEMIT_P1
 >
-> I think I'm the dumb one.  I think I finally understand your
-> point.
->
->> is that when MFD_SPACEMIT_P1 is m, then the default value for
->> RTC_DRV_SPACEMIT_P1 will be m. Since patch 2 makes it exactly that way
->> (MFD_SPACEMIT_P set to m), I don't get why it is necessary to mess with
->> the default of RTC_DRV_SPACEMIT_P1.
->
-> Your point is that patch has no real effect, at least not
-> on the scenario I was talking about.
->
-> I.e., I was saying this mattered for using defconfig alone.
-> But, as you point out, using defconfig alone gives us:
->
->    ARCH_SPACMIT=3Dy	(in defconfig)
->    MFD_SPACEMIT_P1=3Dm	(from patch 2)
->
-> And then, *without* this patch:
->    RTC_DRV_SPACEMIT_P1=3DMFD_SPACEMIT_P1
-> meaning
->    RTC_DRV_SPACEMIT_P1=3Dm
->
-> And therefore there's no need for this patch to set the
-> default to m rather than MFD_SPACEMIT_P1.
->
-Thanks Alex and Alexandre for the clarification. You're absolutely right -=
-=20
-the patch is indeed redundant since RTC_DRV_SPACEMIT_P1 already inherits=20
-the correct default value (m) through its dependency on MFD_SPACEMIT_P1.
+> default MFD_SPACEMIT_P1 is certainly enough here.
+Yes, Thanks!
+I'll use it in the next version.
 
-I'll drop this patch in the next version and review the rest of the series
-for similar unnecessary default overrides.
-
-                                          - Troy
->
->
->> The current default behaviour of RTC_DRV_SPACEMIT_P1 seems to be the
->> correct one and the proper fix is then patch 2.
->
-> Yes, now I understand.  I'm sorry about my confusion.
->
-> 					-Alex
+                    - Troy
 
 
