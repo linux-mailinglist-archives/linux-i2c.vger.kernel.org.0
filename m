@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-15117-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-15118-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74EE6D19FAE
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Jan 2026 16:44:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A7EDD19FB7
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Jan 2026 16:44:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 2AD2430873BB
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Jan 2026 15:42:33 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 41D473093B0F
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Jan 2026 15:42:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D665E29AB15;
-	Tue, 13 Jan 2026 15:42:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 133313939C8;
+	Tue, 13 Jan 2026 15:42:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="Qt/H4kTb"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="CatY5qCo"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B23D129D27D
-	for <linux-i2c@vger.kernel.org>; Tue, 13 Jan 2026 15:42:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCFF73939B7
+	for <linux-i2c@vger.kernel.org>; Tue, 13 Jan 2026 15:42:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768318952; cv=none; b=NcQvGVwzx52tMKOV3ljc7K8QiDdcOtAQO+rfuKbuD2kKGl1jOiwqk7qex4hypPNvSm1g5Pe/76yWIc1sGIDj6ohvHJs3k7PcfQ358z5zgkTKAG5sOSCMLa6m6Bfs736YqVrYbHAFkWDJBe38VvhNhjyzp9iGOLn5B35+EplqmGU=
+	t=1768318956; cv=none; b=sisbudEbM4iPRoo9ATSc8c4eIP/p08yqxwDX/vN0AH/6CNNcIzuGPreDgW12jsVd4edn5qd6IvV42CHL/MqOJO9j8Y+iJpmNZY9SUB/KM/JL2WIXowjoPkwoUqB3OVElmEi/8a6FWzdDxWsYYyyCZgDDDRHGEaEWkENs8RM5Gew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768318952; c=relaxed/simple;
-	bh=5zDztjlTldmOAs0kvRHuxdoEMmOaloCA72FKKaZlivw=;
+	s=arc-20240116; t=1768318956; c=relaxed/simple;
+	bh=tPdWW4vU8ltIfv+T9GwVm3KlWqgXUNO6lQEguPepehw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aRKxCnBC6/j9s2ytimF/1E05dNu2Bv5tvaZayyBpgXxXjbeRPFnn0uS3pjjDoeEKZJ77m3aefaujH6G8PlcGejbaJCTFIpCEzX6VC2s5rNhBEkEmtzGrZKmZNLQ55q5//SXJg5ZOJ346ZCJeJi/7c5ZOQvjexkLfn3jDOtN9fho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=Qt/H4kTb; arc=none smtp.client-ip=194.117.254.33
+	 Content-Type:Content-Disposition:In-Reply-To; b=KpxYDveaxQ3oz5ijP6+Ua5JRlqmKokneZNC2RqkAYyY4CmJbFwdQgLm/C7H+zFJwXF5bXxo/2ZbiCtBBOBKgcXLQLp/uL3fGDnKaZJNW14YgxYwneZ9FYDrbSXLv+FX/vFouHKXaJGBmyVFOeQvuJ/d2imTMj0zPF+axnwp/WXU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=CatY5qCo; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=5zDz
-	tjlTldmOAs0kvRHuxdoEMmOaloCA72FKKaZlivw=; b=Qt/H4kTb71lFh7cWfJUW
-	dOViSE6x6gH/TAEdUzMYMISkWPFLmdRqHBVbzopi4Q+hSxdEUU11FFwl8CX4gNzl
-	8nVcdX4u4jRA+Opk4liagcUEWEk/VYrsiow8MprwaNFEHrpSV7D2hENJ/c6KEX8r
-	Uy0YMeiZulCbGT1HtOmcRQnsQFCc9hLRFIRU01HH2NnVcBcpq/9V0IMoiUInP8D0
-	qnEgIVIEaXvunxhL+lYHsYoFab5HbRT2ql5u3aSvEPj607tuIizNtSgruOC6klO5
-	9KPKWpMdGvBuKilXjLQ5Ha4oiZKk+82K7Ihz5LNAG+vtR7TNFL5vdl7wcp94AnPx
-	Qw==
-Received: (qmail 1757831 invoked from network); 13 Jan 2026 16:42:25 +0100
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 13 Jan 2026 16:42:25 +0100
-X-UD-Smtp-Session: l3s3148p1@NUyZ1kZIxqsujnvx
-Date: Tue, 13 Jan 2026 16:42:25 +0100
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=tPdW
+	W4vU8ltIfv+T9GwVm3KlWqgXUNO6lQEguPepehw=; b=CatY5qCoIiYEpotS6xxe
+	fY35QwhNrQ5dOKSASXK2nBhT1vOyToYd8CTFIPfLHBaODbfL3VRytgeKc9Rx7j2R
+	L4h/DmYfWvWaENeIjQ4h0V8mSTmJQJcFzD1XLpkveyV0oA5zHzQ3XK3rm6IMevQH
+	kCpS0Z3MqExfMnKqCg+RLbfFxtPTWmikiHlbuK3YR1HlOg6RH8OgXN/cl4cegyyg
+	8fw//wLu2liOOmG0EgJfXz8pTybQji+mZ1GyLkh6qEXRzEGwZpqqGjc5mQPwGA4C
+	1zaQbaDu4iZbDXwZ5+oa3odOu8fp5D+splnhrOjjpRAcYZ/yoWfuZwEqPo19ZGup
+	tA==
+Received: (qmail 1757942 invoked from network); 13 Jan 2026 16:42:30 +0100
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 13 Jan 2026 16:42:30 +0100
+X-UD-Smtp-Session: l3s3148p1@xoPa1kZIGJgujnvx
+Date: Tue, 13 Jan 2026 16:42:29 +0100
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 To: Akhil R <akhilrajeev@nvidia.com>
 Cc: andi.shyti@kernel.org, digetx@gmail.com, jonathanh@nvidia.com,
@@ -50,10 +50,10 @@ Cc: andi.shyti@kernel.org, digetx@gmail.com, jonathanh@nvidia.com,
 	linux-tegra@vger.kernel.org, thierry.reding@gmail.com,
 	wsa@kernel.org, kkartik@nvidia.com, ldewangan@nvidia.com,
 	smangipudi@nvidia.com
-Subject: Re: [PATCH v13 3/6] i2c: tegra: Update Tegra256 timing parameters
-Message-ID: <aWZn4V3gemViGvG_@ninjato>
+Subject: Re: [PATCH v13 4/6] i2c: tegra: Add HS mode support
+Message-ID: <aWZn5VdufWw8np4l@ninjato>
 References: <20251118140620.549-1-akhilrajeev@nvidia.com>
- <20251118140620.549-4-akhilrajeev@nvidia.com>
+ <20251118140620.549-5-akhilrajeev@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -61,46 +61,51 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="MPfh5wBqY4LxNIPx"
+	protocol="application/pgp-signature"; boundary="Fhc5SUEgDctk4dRK"
 Content-Disposition: inline
-In-Reply-To: <20251118140620.549-4-akhilrajeev@nvidia.com>
+In-Reply-To: <20251118140620.549-5-akhilrajeev@nvidia.com>
 
 
---MPfh5wBqY4LxNIPx
+--Fhc5SUEgDctk4dRK
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 18, 2025 at 07:36:17PM +0530, Akhil R wrote:
-> Update the timing parameters of Tegra256 so that the signals are complaint
-> with the I2C specification for SCL low time.
+On Tue, Nov 18, 2025 at 07:36:18PM +0530, Akhil R wrote:
+> Add support for High Speed (HS) mode transfers for Tegra194 and later
+> chips. While HS mode has been documented in the technical reference
+> manuals since Tegra20, the hardware implementation appears to be broken
+> on all chips prior to Tegra194.
+>=20
+> When HS mode is not supported, set the frequency to FM+ instead.
 >=20
 > Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+> Signed-off-by: Kartik Rajput <kkartik@nvidia.com>
 > Reviewed-by: Jon Hunter <jonathanh@nvidia.com>
 > Acked-by: Thierry Reding <treding@nvidia.com>
 
 Applied to for-next, thanks!
 
 
---MPfh5wBqY4LxNIPx
+--Fhc5SUEgDctk4dRK
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmlmZ+EACgkQFA3kzBSg
-KbbXSRAAh8cmbQ8AZAToVGJYBlo5a+9UZhoioWJxG2ZYnO28JrSliYzVPa6YXhBT
-xErBgGEv7q/kFBXiRhu9sQKFQAvQhZUzQlLWbWN9ahSb8ZiCAxjDAN8dNgEEidlD
-TxGof48Xc0SCUHRNTIi4J/euDXBC97Y9powQ1LmYz4NLmUBxTB3vYQhfU7lCcHOr
-YTLuyimyoEqvCbtUGuHRyx/e6dy7MMcKWMSqO8M/iqrMpiRqWZo8X0WZdWYPp328
-KuT/Q8z+E75E5sRrFXyaTSryEpo3MBBgJvYnifdfzUCQewa18V+ko6aIMiReve0L
-f92KF4mMOFxtLJUAm4F8MEhk8UzR+bElVwT3+kx4X1+sVhwcZN4eA9t18FRRJ3jn
-KNGE0S2asHOYeO3lFEfccEnmSNJUrLJovcCp0l1BGaGpZGh9MxXS/b/ZB/wMUd/Q
-omMptMVzI85pMbJ5Vq7+GqpJGgC5iagKVK1HbsHiVQCv/DWzMEiWCLHnib5nL1jY
-npmHtTNfQSoR+yRPPIE9CYcp2oCSvjeHLzWgojxOrjEziOC7q0L9Jq9D6E8i/K5b
-ltwbYdDzTsrzF77X8Z0lXMDmqP4akXzI7LWZ/0xUs2q2pPFhM5hboG5lmFTX8cEi
-EuydIyyh98j+ICjSo3N2TiIGM3epMDrpGSl611FafPgHiQwyUs8=
-=gL//
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmlmZ+UACgkQFA3kzBSg
+KbY1ew//YQ0eToGZmyxqvHB2AVoujev2Xs8TFrDcu178tBjyIquEOwoD1zqvFjLX
+1sdstC+yqfPkwago/K1B8ZwCu4ekr9afDUWlPQ9m3nN1zzUO7EY5xWpLZFPWgj5p
+6cdyxYWT2v0QzVk9315IvdQPBGD2xyLvsrLceRQHneceBsYgkTsVYo1KmE5+x8qc
+FOxEe2eR5bLj0wFddL0e3mnGEtLDkhM0qf9xpeDZqYfHCiL1e3CGhn55LhFnXQBl
+Yr6uVn/tcKF5ERaK/YWI12B/qLOP2ocPqSNfko0vA2jBwn0OefNT78XvSz6f65uD
+xROBJc+uQMfQ9AyoRgz4N8X5eEOQMmONOU1tHLXweBdRvZK+hWGMx91uGAGKP6+G
+k5jThhnN7XV/sIPuaRHFgQs+2eNdNjKgulZSupjBX5q35nrvJTQg7UmsFWwPyHXs
+5F33/p7L1HaQlAQCHTZQ+mIwf6WVp0t4ch0JkQ2gy4qkfuB/FCtSIvvALkusI0nP
+bvJjob+wZbutnrZphvyf7NPoh5NJRWAEE9Gl+HOfnYl0toFI1YEHEvf4koj1Apic
+JJsoxrkRDNlnWaF7VZHxmonA7hvVQAckQ90N6nlReFnF7TBhrkt1Z9q1bioO6GEk
+FOpoywFrQEEwIoYZ2fbk/cfj2P+f+q1wxNm3QxTfooCEzRXAsbE=
+=r12Q
 -----END PGP SIGNATURE-----
 
---MPfh5wBqY4LxNIPx--
+--Fhc5SUEgDctk4dRK--
 
