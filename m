@@ -1,281 +1,105 @@
-Return-Path: <linux-i2c+bounces-15137-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-15138-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27CEFD1B272
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Jan 2026 21:09:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5ACD0D1B470
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Jan 2026 21:45:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id DA8E8301E142
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Jan 2026 20:09:55 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1EA12301FFBD
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Jan 2026 20:42:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2393F36E481;
-	Tue, 13 Jan 2026 20:09:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71EEC311977;
+	Tue, 13 Jan 2026 20:42:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b="zIz8nYJt"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bfQ/+RTm"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D24942F1FCA
-	for <linux-i2c@vger.kernel.org>; Tue, 13 Jan 2026 20:09:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9B3530DECA;
+	Tue, 13 Jan 2026 20:42:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768334994; cv=none; b=OFy3Eo3BG9bv0Bq4oyrPVvCtCGcyTvSO08c70O0L2KqA0fH9+BHZJd3a2RnXljvqwFkbtQGxiYMl7XII3Nyf890idigI6/So4/8intspNW+MOym0Q+d+QLtYBzslGqmWHqyh+NRvHf+XLp+wBBY47CASlrtXvC5IW4YiVK4m0eU=
+	t=1768336968; cv=none; b=TMwxaj3W4gYf2bCzk29eToD9InhkJ4CAXe9hnwMc1P0MmcBvw1jSZHJaC29pvibuX53V/5qdLkg7HCgT+lcl66fkgfvsm38GdK9wxt6TxslWOtUPIUW6wmU9f3lfFuXA+qOmemdFOqKayx6SB+0gqApiP9/l+wi8tQEfa4+OczQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768334994; c=relaxed/simple;
-	bh=pyMp5oFQEzQGlgpWodh5m5sUhmJKSJMmcF9EpqTle4o=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EfDRDc7j+3cPsmDZkQZobQT4lIQCQozYLqBh6pm4KksJTDeMx1PsciAsK4lVycRfTjNK5fbri7/yKO2L/+5OGlqIQ6c+k25tr7t2M/kx4XX3WIjbv5I6ZnagWlaaW6X9qaR1B+/uHtxxuBzTMf/mpiiYeoZbKQ5qamj4v0KyB7E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr; spf=pass smtp.mailfrom=sartura.hr; dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b=zIz8nYJt; arc=none smtp.client-ip=209.85.218.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sartura.hr
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-b86f81d8051so30009066b.1
-        for <linux-i2c@vger.kernel.org>; Tue, 13 Jan 2026 12:09:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sartura.hr; s=sartura; t=1768334991; x=1768939791; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=X3PB19UpbesWMeT0R3+l59gQeDUb0GCMAUDX3FFcChs=;
-        b=zIz8nYJtuj84rCwrR4h2rYUNtQy0kQi3Vs6Pa4eyUFvYBSmR3JdcK91Z5LcbNLJJbd
-         KBv1zpWpctONSZSIZfox4XBRJ3RoOniV3X3ufcycnUMgiQws9qL2iJTLfcYz/6ywcGtF
-         IEbL5rTF894Idp+8ULCgygVGYo7r2T+AndIh1IP7v3vgatT1IQO43J17idGJA2xunR2Y
-         7fJ9k/8LfGQoxc/GCDnq0d/fOOs+esgxOp4GdBC/tXJBsPbMEB8jlL/iIMNJVyMCIozF
-         aMqv/iMccUIy3JOOqaYhzVETvgeYFGAbN22kE3vQ40Dtdd6YFQhBIm6KtULuMQfYbl9n
-         eBaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768334991; x=1768939791;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=X3PB19UpbesWMeT0R3+l59gQeDUb0GCMAUDX3FFcChs=;
-        b=q2rrLTMULC3HpsdrU0UOcY9LpiF4fn0E6TSYf/Bt54s5LLPXJO3bZIyx3/nWKIZblL
-         S77VdH2Er/XKiY19hB/mARUmaBUhPmVMWD8Kmh29OAidqXN/8zqLDY/60cPe+XSjcJxb
-         83fnOhBIcfJUf9URzClQuyAfDSBRXy0Ja+4+P6ES2UNzMF95IUuwJkpr0tCiYHVtxJ1m
-         PelWrKMcWc7OlImTol1mCMthxoX3LmBPGNOedyzcDMYcwrnNTlHvjxsA4qp68t89XHRs
-         wrurEz36lvOs5OcnRFYJKn3bZTu4UMVvx2sqY1dnP7SDcdTC9rhL/SZiR87k3D5gs1bH
-         zcQA==
-X-Forwarded-Encrypted: i=1; AJvYcCX0NS8LqMM/JmRHKwFkqHxX09K/Iz94z26HET6u/QBgc4JgAGzXTsteGkx1MvMp9wezkzpkyzg0lUI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxE7go7wQH/FgCDUZG1KwTrQdy7Zd+t87eBm1k6spffMC/CqsvC
-	Bcl1za6Nd5jR6YTWyxru6nL4UeepXiklz/5ES1WAFt3Xl+0dS1ict7X2MeoBVpiD4qH9wtp3pDF
-	Du/4o2hDOV98zIq1zmJsN0l9yBazSMMNxkFjXqxPhsQ==
-X-Gm-Gg: AY/fxX62HE7KqQ9mftYfLtJ+0O8vnDir+AELgEjgIrnqGdMkCa27zUZF2ASFLwWEvdL
-	tEs23fBaX14iy4dypmB6tXIRgCbqkmZ8eWIl1kGBkAEWDGzh2Jn3KqavotlVbBhW+sYlrWc4Gnn
-	a86avn/ZhzZOtfsUlSqdAIYfEJIgCEBdB5uJ+BheH5nhhb2MqYQFKr+fnjM2u0Bqw7bGzjC3XE6
-	2kpoiMnG5Wvw/5mxfQyAMu7taICCInXykWcRp165Zoa4gD0jgJR/tDHWiqADBF8e93eY4OZZQXw
-	DeAPYrldODRVcoL/f2oG42m1gvq2wdXsz6NKLujynl4BiqQ60OFr/UY2EE/S
-X-Received: by 2002:a17:907:9483:b0:b87:191f:4fab with SMTP id
- a640c23a62f3a-b8761d928b1mr18947166b.26.1768334991113; Tue, 13 Jan 2026
- 12:09:51 -0800 (PST)
+	s=arc-20240116; t=1768336968; c=relaxed/simple;
+	bh=6rqISX3PQdxf/S9wv4Zc0TtGffYXK+SwYdj3XNqPPV8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ImLfKoELr8cDEtTGIIGfue+j1MDV9oF0VXezKS0ALr6qkcD3mZzrpaa2NInxQwll3kXu9D7GIFs9vM6rgf7fGbG1XPCh2UsC591DrwL1nWbi5hDGg9xEOey9sJmmSt6I3jAfQ3LyxJ77xAR1mNkYS+NJIOpEvQ4hLlVXuER1XX0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bfQ/+RTm; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1768336967; x=1799872967;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6rqISX3PQdxf/S9wv4Zc0TtGffYXK+SwYdj3XNqPPV8=;
+  b=bfQ/+RTmDcS3VJTiRV+Zw5+684kaUyvf3hBEjkd+MgLW8RGC4E6g4VLB
+   vBBD2tePBeMDkOf8OA2N5auF3uE5HOw1/7q9IsQGlKGx+l8CMeLG6QYiA
+   6MZaHbeEoQVLCYc9RjCO03jFe5FPygVKX2RHyg4mISG8arZ6SYGRelB9/
+   NR50QVqzhk7tcJCwp+dy013vXN/N/YSGbydI3O8/cXtOotW997R15MKTE
+   R6KFlsxW50V4j/tghyJNgsRMq1/3oAB7Z3RULaEZTTjCS+gTx5lznDF6Y
+   gORHwA9x2ABYbPOIjpLgkjmnR3eB9YIRD1pgS7c6+t8bT1wi4s87po2gy
+   A==;
+X-CSE-ConnectionGUID: 7PK6oe+lQ/GN4Jr4ZT1VSQ==
+X-CSE-MsgGUID: Ih+rwwR4TOeiPzqi90MVHA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11670"; a="80353191"
+X-IronPort-AV: E=Sophos;i="6.21,222,1763452800"; 
+   d="scan'208";a="80353191"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2026 12:42:46 -0800
+X-CSE-ConnectionGUID: rjOsWxJYReu6orOmsh/Mrw==
+X-CSE-MsgGUID: Cuh+LkaySmiPreIVIHW0ww==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,222,1763452800"; 
+   d="scan'208";a="208645997"
+Received: from dhhellew-desk2.ger.corp.intel.com (HELO localhost) ([10.245.245.177])
+  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2026 12:42:44 -0800
+Date: Tue, 13 Jan 2026 22:42:41 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Philip Li <philip.li@intel.com>
+Cc: kernel test robot <lkp@intel.com>, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org, oe-kbuild-all@lists.linux.dev,
+	Khalil Blaiech <kblaiech@nvidia.com>,
+	Asmaa Mnebhi <asmaa@nvidia.com>, Andi Shyti <andi.shyti@kernel.org>
+Subject: Re: [PATCH v1 2/2] i2c: mlxbf: Use HZ_PER_KHZ in the driver
+Message-ID: <aWauQVSkQsqvS_rT@smile.fi.intel.com>
+References: <20260112135603.4150952-3-andriy.shevchenko@linux.intel.com>
+ <202601130414.VJyCNWzI-lkp@intel.com>
+ <aWVbYYusNh_q_91o@smile.fi.intel.com>
+ <aWZNHKeXFMPMG9q1@rli9-mobl>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251229184004.571837-1-robert.marko@sartura.hr>
- <20251229184004.571837-16-robert.marko@sartura.hr> <858ca139-61c5-45e3-a2c9-d0af414e3592@tuxon.dev>
-In-Reply-To: <858ca139-61c5-45e3-a2c9-d0af414e3592@tuxon.dev>
-From: Robert Marko <robert.marko@sartura.hr>
-Date: Tue, 13 Jan 2026 21:09:40 +0100
-X-Gm-Features: AZwV_QhCSNrQ25JXSm6moAYHvYjCfUUDQoR1FC1MV_mP0oSiXaM4vWsMWx6MKV0
-Message-ID: <CA+HBbNFYBhtvUxd45O7eP_1JYENxeGZOkA+yUsEdztOSSi9Gdg@mail.gmail.com>
-Subject: Re: [PATCH v4 15/15] arm64: dts: microchip: add EV23X71A board
-To: claudiu beznea <claudiu.beznea@tuxon.dev>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
-	nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com, 
-	herbert@gondor.apana.org.au, davem@davemloft.net, vkoul@kernel.org, 
-	andi.shyti@kernel.org, lee@kernel.org, andrew+netdev@lunn.ch, 
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, linusw@kernel.org, 
-	Steen.Hegelund@microchip.com, daniel.machon@microchip.com, 
-	UNGLinuxDriver@microchip.com, olivia@selenic.com, radu_nicolae.pirea@upb.ro, 
-	richard.genoud@bootlin.com, gregkh@linuxfoundation.org, jirislaby@kernel.org, 
-	broonie@kernel.org, lars.povlsen@microchip.com, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, netdev@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-spi@vger.kernel.org, linux-serial@vger.kernel.org, 
-	linux-usb@vger.kernel.org, luka.perkov@sartura.hr
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aWZNHKeXFMPMG9q1@rli9-mobl>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On Sun, Jan 11, 2026 at 3:42=E2=80=AFPM claudiu beznea <claudiu.beznea@tuxo=
-n.dev> wrote:
->
-> Hi, Robert,
->
-> On 12/29/25 20:37, Robert Marko wrote:
-> > Microchip EV23X71A is an LAN9696 based evaluation board.
-> >
-> > Signed-off-by: Robert Marko <robert.marko@sartura.hr>
-> > ---
-> > Changes in v2:
-> > * Split from SoC DTSI commit
-> > * Apply DTS coding style
-> > * Enclose array in i2c-mux
-> > * Alphanumericaly sort nodes
-> > * Change management port mode to RGMII-ID
-> >
-> >   arch/arm64/boot/dts/microchip/Makefile        |   1 +
-> >   .../boot/dts/microchip/lan9696-ev23x71a.dts   | 757 +++++++++++++++++=
-+
-> >   2 files changed, 758 insertions(+)
-> >   create mode 100644 arch/arm64/boot/dts/microchip/lan9696-ev23x71a.dts
-> >
-> > diff --git a/arch/arm64/boot/dts/microchip/Makefile b/arch/arm64/boot/d=
-ts/microchip/Makefile
-> > index c6e0313eea0f..09d16fc1ce9a 100644
-> > --- a/arch/arm64/boot/dts/microchip/Makefile
-> > +++ b/arch/arm64/boot/dts/microchip/Makefile
-> > @@ -1,4 +1,5 @@
-> >   # SPDX-License-Identifier: GPL-2.0
-> > +dtb-$(CONFIG_ARCH_LAN969X) +=3D lan9696-ev23x71a.dtb
-> >   dtb-$(CONFIG_ARCH_SPARX5) +=3D sparx5_pcb125.dtb
-> >   dtb-$(CONFIG_ARCH_SPARX5) +=3D sparx5_pcb134.dtb sparx5_pcb134_emmc.d=
-tb
-> >   dtb-$(CONFIG_ARCH_SPARX5) +=3D sparx5_pcb135.dtb sparx5_pcb135_emmc.d=
-tb
-> > diff --git a/arch/arm64/boot/dts/microchip/lan9696-ev23x71a.dts b/arch/=
-arm64/boot/dts/microchip/lan9696-ev23x71a.dts
-> > new file mode 100644
-> > index 000000000000..435df455b078
-> > --- /dev/null
-> > +++ b/arch/arm64/boot/dts/microchip/lan9696-ev23x71a.dts
->
-> [ ...]
->
-> > +&gpio {
-> > +     emmc_sd_pins: emmc-sd-pins {
-> > +             /* eMMC_SD - CMD, CLK, D0, D1, D2, D3, D4, D5, D6, D7, RS=
-TN */
-> > +             pins =3D "GPIO_14", "GPIO_15", "GPIO_16", "GPIO_17",
-> > +                    "GPIO_18", "GPIO_19", "GPIO_20", "GPIO_21",
-> > +                    "GPIO_22", "GPIO_23", "GPIO_24";
-> > +             function =3D "emmc_sd";
-> > +     };
-> > +
-> > +     fan_pins: fan-pins {
-> > +             pins =3D "GPIO_25", "GPIO_26";
-> > +             function =3D "fan";
-> > +     };
-> > +
-> > +     fc0_pins: fc0-pins {
-> > +             pins =3D "GPIO_3", "GPIO_4";
-> > +             function =3D "fc";
-> > +     };
-> > +
-> > +     fc2_pins: fc2-pins {
-> > +             pins =3D "GPIO_64", "GPIO_65", "GPIO_66";
-> > +             function =3D "fc";
-> > +     };
-> > +
-> > +     fc3_pins: fc3-pins {
-> > +             pins =3D "GPIO_55", "GPIO_56";
-> > +             function =3D "fc";
-> > +     };
-> > +
-> > +     mdio_pins: mdio-pins {
-> > +             pins =3D "GPIO_9", "GPIO_10";
-> > +             function =3D "miim";
-> > +     };
-> > +
-> > +     mdio_irq_pins: mdio-irq-pins {
-> > +             pins =3D "GPIO_11";
-> > +             function =3D "miim_irq";
-> > +     };
-> > +
-> > +     sgpio_pins: sgpio-pins {
-> > +             /* SCK, D0, D1, LD */
-> > +             pins =3D "GPIO_5", "GPIO_6", "GPIO_7", "GPIO_8";
-> > +             function =3D "sgpio_a";
-> > +     };
-> > +
-> > +     usb_ulpi_pins: usb-ulpi-pins {
-> > +             pins =3D "GPIO_30", "GPIO_31", "GPIO_32", "GPIO_33",
-> > +                    "GPIO_34", "GPIO_35", "GPIO_36", "GPIO_37",
-> > +                    "GPIO_38", "GPIO_39", "GPIO_40", "GPIO_41";
-> > +             function =3D "usb_ulpi";
-> > +     };
-> > +
-> > +     usb_rst_pins: usb-rst-pins {
-> > +             pins =3D "GPIO_12";
-> > +             function =3D "usb2phy_rst";
-> > +     };
-> > +
-> > +     usb_over_pins: usb-over-pins {
-> > +             pins =3D "GPIO_13";
-> > +             function =3D "usb_over_detect";
-> > +     };
-> > +
-> > +     usb_power_pins: usb-power-pins {
-> > +             pins =3D "GPIO_1";
-> > +             function =3D "usb_power";
-> > +     };
-> > +
-> > +     ptp_out_pins: ptp-out-pins {
-> > +             pins =3D "GPIO_58";
-> > +             function =3D "ptpsync_4";
-> > +     };
->
-> Could you please move this one upper to have all the entries in the gpio
-> container alphanumerically sorted?
->
-> > +
-> > +     ptp_ext_pins: ptp-ext-pins {
-> > +             pins =3D "GPIO_59";
-> > +             function =3D "ptpsync_5";
-> > +     };
->
-> Same here.
+On Tue, Jan 13, 2026 at 09:48:12PM +0800, Philip Li wrote:
+> On Mon, Jan 12, 2026 at 10:36:49PM +0200, Andy Shevchenko wrote:
+> > On Tue, Jan 13, 2026 at 04:33:04AM +0800, kernel test robot wrote:
+> > > Hi Andy,
+> > > 
+> > > kernel test robot noticed the following build errors:
+> > 
+> > Ah, okay, this needs to be based on the series that adds HZ_PER_GHZ as it
+> > provides the needed header inclusion.
+> 
+> Thanks for the info, and sorry for the false report.
 
-Sure, I will make sure that pin nodes are alphabetical (I found some
-more that are not) in v5.
+No problem, can you remind the syntax on how I can mark the series that
+LKP knows the dependency on another series (which is available only in
+the mailing list)? I assume it needs message-id to the email thread?
 
->
-> [ ...]
->
-> > +             port29: port@29 {
-> > +                     reg =3D <29>;
-> > +                     phys =3D <&serdes 11>;
-> > +                     phy-handle =3D <&phy3>;
-> > +                     phy-mode =3D "rgmii-id";
-> > +                     microchip,bandwidth =3D <1000>;
->
-> There are some questions around this node from Andrew in v1 of this serie=
-s,
-> which I don't see an answer for in any of the following versions. Could y=
-ou
-> please clarify?
-
-Sure, as for the RGMII I switched to rgmii-id so the PHY is adding the dela=
-ys.
-Though, I am not sure if its better to add them via MAC as it can add
-the delays instead of the PHY,
-so I am open to suggestions here.
-
-As for the phys property, yes that is not required here as RGMII ports
-are dedicated, there are no
-SERDES lanes being used for them.
-
-I have updated the bindings to account for this and it will be part of v5.
-
-Regards,
-Robert
-
->
-> The rest looks good to me.
->
-> Thank you,
-> Claudiu
->
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
---=20
-Robert Marko
-Staff Embedded Linux Engineer
-Sartura d.d.
-Lendavska ulica 16a
-10000 Zagreb, Croatia
-Email: robert.marko@sartura.hr
-Web: www.sartura.hr
 
