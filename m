@@ -1,61 +1,61 @@
-Return-Path: <linux-i2c+bounces-15105-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-15106-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D70D3D19479
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Jan 2026 15:05:54 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB1B8D194B8
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Jan 2026 15:07:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 0E0D1301679D
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Jan 2026 14:04:52 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 99718306CCE3
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Jan 2026 14:05:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FD8C392C26;
-	Tue, 13 Jan 2026 14:04:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E62AA392C5E;
+	Tue, 13 Jan 2026 14:04:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WtiHItD+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KHspr5b9"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0813392B7E;
-	Tue, 13 Jan 2026 14:04:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFB66392C33;
+	Tue, 13 Jan 2026 14:04:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768313080; cv=none; b=g5n34k5Hcuy8Aiu54hbSw2QkkW34UJl2G1yrk4gKPRjBuZq81e2uz3D47LASE1ohsmsniNnvexGHKyc9r0KxlX06kBdnzfftHGhvbbBFL2MxXFQ2Jz4/5ZhobiNLu7Qpu8klKjLVnQ5vxFH42r4SN6V7UbGxJzKVmgT3yFwVPj0=
+	t=1768313081; cv=none; b=tHQtc6Pm1eAipJbvU0MHNoxd0A3CScZNQMAtDA8qcWqxdxGrKUCHArcytL5nXU9L8IqZiozFUFyCL4j9okmwJ6nwoxwVEejsKHT9oTGjvx/843uR86OfDTx23ctm+wU+Dj3GcXm2hPJyizkzZF94zscUlN7AYbrdacHxDPtuWMc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768313080; c=relaxed/simple;
-	bh=Qxt7df73JWrwJSICgGr9I1eeQABKyG8t6l3ir7lsl3A=;
+	s=arc-20240116; t=1768313081; c=relaxed/simple;
+	bh=xPZgH+6k11INydhdKYKex+vUnjrgixG/yfbcEXiepGs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NES69IOvTowKCBnDV2modpfKHwNXyaWqdzgmGcaHfP/YUtGMyYyBGxmPFDsTwLCmHYWKwffahOVBHfMyBv+FJxVAebrOtnuVMSbBG8FhfD4E8hpQBbfLknwPSGyZti+3j3yZFsCAWdE4g+KcQs6yo80o6vSMW+iXCx1UlMGblHM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WtiHItD+; arc=none smtp.client-ip=192.198.163.7
+	 MIME-Version; b=gherR2OVmAotneuVNUOYQWMRDuVLl+a/WeAvXIorMPytuYdWB9fsOY1ZsFKnypnuMlxv3mx2JFLeaHF0vxaxODuPXkOkuZrTVrDgkzOUMhPoL6A0ZgazNcsEcVkCpvjKAwqGqElaKGgHgluCDxLyaGMS/nmN8nEq1V8T96Y+jmE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KHspr5b9; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768313078; x=1799849078;
+  t=1768313080; x=1799849080;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Qxt7df73JWrwJSICgGr9I1eeQABKyG8t6l3ir7lsl3A=;
-  b=WtiHItD+BZkzAVfAL8gWdq9BtROUllmfy71KBWM+8ZRkp9m3BP0w5HUT
-   fWVdjhqD9oUKiPtxcz25MEdbpn4JSDS3eZ/MZZm9MtcBmBK9f2xOMXWym
-   rKZjvpszterA/InvBIW9hOknNbNnNaBOlEr8Zjj/+/RMSVseOtLzcIFfi
-   zekDwBKCupJPAtEz/mIYVGl7lWOS78r48BXZKDbNNeuOUbS3+mC6uO0Y5
-   TcL1I4HlwSUXpnvI9zF/eLR7V5EMAaysXElxj8+Uu7H7906Xxd8Vv4YPK
-   R65jFYobohRXfdJrXhbqu6z87Vif/M/Hwp4ErwLyg4aRi/umX0MhQDPbA
+  bh=xPZgH+6k11INydhdKYKex+vUnjrgixG/yfbcEXiepGs=;
+  b=KHspr5b9yP/8+bbuQCirZqoyz1SZxNzvgcbielCEn5fDz4AUu9m0Gc/y
+   XxaOuYZietA+SzzXo1derKXwd787tbzX9Aomgv44EOpngFIR7o4Q/R83Q
+   UFzjg9TyCb4BHL2uPLguynXPTr/eQzBPy26wj7O5TotMil547gv0h5Gjv
+   R1m6aUiSJlHLjvftKW82VBLji4t+c6bGDqHaqAXrtD8BJOtJsjNndCYjR
+   rpuwSNJx/YdDKWRxHoBD3/5GZWYafa4vjsWJJpl4GG6XUnunsSuooDQiC
+   sbuagw+ciKutSQ//qix09fahTBCKMTTY4+mvt2yAFGe23btISDyfbl9J6
    g==;
-X-CSE-ConnectionGUID: ed2b9P+TTl6XASbUOFNdzA==
-X-CSE-MsgGUID: rEmJvCJxRRiyoMlcA2sg3A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11670"; a="95072079"
+X-CSE-ConnectionGUID: y6Bttmj/SUeOi2RtVrVQ+A==
+X-CSE-MsgGUID: zZ0fcPP4RPW4ppRcSKPfmw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11670"; a="95072082"
 X-IronPort-AV: E=Sophos;i="6.21,222,1763452800"; 
-   d="scan'208";a="95072079"
+   d="scan'208";a="95072082"
 Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2026 06:04:37 -0800
-X-CSE-ConnectionGUID: NfwDFGNsTf2VD9dfrDhv4w==
-X-CSE-MsgGUID: KETPDm+7RtyFMeaHAIOyGw==
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2026 06:04:39 -0800
+X-CSE-ConnectionGUID: Iu7DwpsHR/ahdzqXLjsDQA==
+X-CSE-MsgGUID: Qz1LK305SSqBGlac1jsuJg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,222,1763452800"; 
-   d="scan'208";a="204667385"
+   d="scan'208";a="204667391"
 Received: from black.igk.intel.com ([10.91.253.5])
-  by fmviesa008.fm.intel.com with ESMTP; 13 Jan 2026 06:04:35 -0800
+  by fmviesa008.fm.intel.com with ESMTP; 13 Jan 2026 06:04:37 -0800
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To: Wolfram Sang <wsa+renesas@sang-engineering.com>
 Cc: Jeremy Kerr <jk@codeconstruct.com.au>,
@@ -63,9 +63,9 @@ Cc: Jeremy Kerr <jk@codeconstruct.com.au>,
 	linux-i2c@vger.kernel.org,
 	netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v1 2/4] i2c: Sysfs attribute files for the Unique Device Identifier fields
-Date: Tue, 13 Jan 2026 15:04:28 +0100
-Message-ID: <20260113140430.207990-3-heikki.krogerus@linux.intel.com>
+Subject: [PATCH v1 3/4] mctp i2c: Enable SMBus ARP discovery
+Date: Tue, 13 Jan 2026 15:04:29 +0100
+Message-ID: <20260113140430.207990-4-heikki.krogerus@linux.intel.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20260113140430.207990-1-heikki.krogerus@linux.intel.com>
 References: <20260113140430.207990-1-heikki.krogerus@linux.intel.com>
@@ -77,211 +77,56 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-In order to utilise the SMBus Address Resolution Protocol's
-(ARP) Unique Device Identifier (UDID) also in user space,
-the UDID details need to be exposed. With ARP the address is
-also dynamically assigned (and may be reset) so it also
-needs to be exposed to the user space with its own file.
+Since the SMBus Address Resolution Protocol (ARP) is now
+supported with all I2C host adapters, every ARP-capable MCTP
+device will get automatically enumerated. Those devices just
+need to be bind to this driver.
 
-The UDID details are only visible with ARP devices, but the
-address file is made always visible for all I2C client
-devices.
+The SMBus ARP-capable MCTP devices are identified by
+checking the interface (MCTP SMBus/I2C Transport Binding
+Specification section 6.5). The interface must match the ASF
+protocol, so all devices that use the ASF protocol as their
+interface will be probed by this driver.
 
+Link: https://www.dmtf.org/sites/default/files/standards/documents/DSP0237_1.2.0.pdf
 Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 ---
- Documentation/ABI/testing/sysfs-bus-i2c |  53 ++++++++++++
- drivers/i2c/i2c-core-base.c             | 107 +++++++++++++++++++++++-
- 2 files changed, 159 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/ABI/testing/sysfs-bus-i2c
+ drivers/net/mctp/mctp-i2c.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/Documentation/ABI/testing/sysfs-bus-i2c b/Documentation/ABI/testing/sysfs-bus-i2c
-new file mode 100644
-index 000000000000..b9ebfc2e1b9d
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-bus-i2c
-@@ -0,0 +1,53 @@
-+What:		/sys/bus/i2c/devices/.../address
-+Date:		September 2025
-+Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
-+Description:
-+		This file has the target address the I2C client responds to.
-+
-+What:		/sys/bus/i2c/devices/.../vendor
-+Date:		September 2025
-+Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
-+Description:
-+		This file is only visible for ARP devices. It returns the Vendor
-+		ID field from the SMBus ARP Unique Device Identifier. It is the
-+		device manufacturer's ID assigned by the SBS Implementers Forum
-+		or the PCI SIG.
-+
-+What:		/sys/bus/i2c/devices/.../device
-+Date:		September 2025
-+Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
-+Description:
-+		This file is only visible for ARP devices. It returns the Device
-+		ID field from the SMBus ARP Unique Device Identifier. The
-+		device ID is assigned by the device manufacturer.
-+
-+What:		/sys/bus/i2c/devices/.../interface
-+Date:		September 2025
-+Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
-+Description:
-+		This file is only visible for ARP devices. It returns the
-+		Interface field from the SMBus ARP Unique Device Identifier.
-+
-+What:		/sys/bus/i2c/devices/.../subsystem_vendor
-+Date:		September 2025
-+Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
-+Description:
-+		This file is only visible for ARP devices. It returns the
-+		Subsystem Vendor ID field from the SMBus ARP Unique Device
-+		Identifier.
-+
-+What:		/sys/bus/i2c/devices/.../subsystem_device
-+Date:		September 2025
-+Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
-+Description:
-+		This file is only visible for ARP devices. It returns the
-+		Subsystem Device ID field from the SMBus ARP Unique Device
-+		Identifier.
-+
-+What:		/sys/bus/i2c/devices/.../vendor_specific_id
-+Date:		September 2025
-+Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
-+Description:
-+		This file is only visible for ARP devices. It returns the
-+		Vendor Specific ID field from the SMBus ARP Unique Device
-+		Identifier.
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index 2e61f1be8de6..6a3452a25972 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -685,6 +685,13 @@ name_show(struct device *dev, struct device_attribute *attr, char *buf)
- }
- static DEVICE_ATTR_RO(name);
- 
-+static ssize_t
-+address_show(struct device *dev, struct device_attribute *attr, char *buf)
-+{
-+	return sysfs_emit(buf, "0x%02x\n", to_i2c_client(dev)->addr);
-+}
-+static DEVICE_ATTR_RO(address);
-+
- static ssize_t
- modalias_show(struct device *dev, struct device_attribute *attr, char *buf)
- {
-@@ -712,11 +719,109 @@ static DEVICE_ATTR_RO(modalias);
- 
- static struct attribute *i2c_dev_attrs[] = {
- 	&dev_attr_name.attr,
-+	&dev_attr_address.attr,
- 	/* modalias helps coldplug:  modprobe $(cat .../modalias) */
- 	&dev_attr_modalias.attr,
- 	NULL
+diff --git a/drivers/net/mctp/mctp-i2c.c b/drivers/net/mctp/mctp-i2c.c
+index f782d93f826e..3a0ffe941c76 100644
+--- a/drivers/net/mctp/mctp-i2c.c
++++ b/drivers/net/mctp/mctp-i2c.c
+@@ -21,6 +21,7 @@
+ #include <linux/netdevice.h>
+ #include <linux/i2c.h>
+ #include <linux/i2c-mux.h>
++#include <linux/i2c-smbus.h>
+ #include <linux/if_arp.h>
+ #include <net/mctp.h>
+ #include <net/mctpdevice.h>
+@@ -1096,6 +1097,12 @@ static const struct i2c_device_id mctp_i2c_id[] = {
  };
--ATTRIBUTE_GROUPS(i2c_dev);
-+
-+static const struct attribute_group i2c_dev_group = {
-+	.attrs = i2c_dev_attrs,
-+};
-+
-+static ssize_t
-+capabilities_show(struct device *dev, struct device_attribute *attr, char *buf)
-+{
-+	struct i2c_client *client = to_i2c_client(dev);
-+
-+	return sysfs_emit(buf, "0x%02x\n", client->udid->capabilities);
-+}
-+static DEVICE_ATTR_RO(capabilities);
-+
-+static ssize_t
-+vendor_show(struct device *dev, struct device_attribute *attr, char *buf)
-+{
-+	struct i2c_client *client = to_i2c_client(dev);
-+
-+	return sysfs_emit(buf, "0x%04x\n", client->udid->vendor);
-+}
-+static DEVICE_ATTR_RO(vendor);
-+
-+static ssize_t
-+device_show(struct device *dev, struct device_attribute *attr, char *buf)
-+{
-+	struct i2c_client *client = to_i2c_client(dev);
-+
-+	return sysfs_emit(buf, "0x%04x\n", client->udid->device);
-+}
-+static DEVICE_ATTR_RO(device);
-+
-+static ssize_t
-+interface_show(struct device *dev, struct device_attribute *attr, char *buf)
-+{
-+	struct i2c_client *client = to_i2c_client(dev);
-+
-+	return sysfs_emit(buf, "0x%04x\n", client->udid->interface);
-+}
-+static DEVICE_ATTR_RO(interface);
-+
-+static ssize_t
-+subsystem_vendor_show(struct device *dev, struct device_attribute *attr, char *buf)
-+{
-+	struct i2c_client *client = to_i2c_client(dev);
-+
-+	return sysfs_emit(buf, "0x%04x\n", client->udid->subvendor);
-+}
-+static DEVICE_ATTR_RO(subsystem_vendor);
-+
-+static ssize_t
-+subsystem_device_show(struct device *dev, struct device_attribute *attr, char *buf)
-+{
-+	struct i2c_client *client = to_i2c_client(dev);
-+
-+	return sysfs_emit(buf, "0x%04x\n", client->udid->subdevice);
-+}
-+static DEVICE_ATTR_RO(subsystem_device);
-+
-+static ssize_t
-+vendor_specific_id_show(struct device *dev, struct device_attribute *attr, char *buf)
-+{
-+	struct i2c_client *client = to_i2c_client(dev);
-+
-+	return sysfs_emit(buf, "0x%08x\n", client->udid->vendor_specific_id);
-+}
-+static DEVICE_ATTR_RO(vendor_specific_id);
-+
-+static struct attribute *udid_attrs[] = {
-+	&dev_attr_capabilities.attr,
-+	&dev_attr_vendor.attr,
-+	&dev_attr_device.attr,
-+	&dev_attr_interface.attr,
-+	&dev_attr_subsystem_vendor.attr,
-+	&dev_attr_subsystem_device.attr,
-+	&dev_attr_vendor_specific_id.attr,
-+	NULL
-+};
-+
-+static umode_t
-+udid_is_visible(struct kobject *kobj, struct attribute *attr, int n)
-+{
-+	if (to_i2c_client(kobj_to_dev(kobj))->udid)
-+		return attr->mode;
-+
-+	return 0;
-+}
-+
-+static const struct attribute_group udid_group = {
-+	.is_visible = udid_is_visible,
-+	.attrs = udid_attrs,
-+};
-+
-+static const struct attribute_group *i2c_dev_groups[] = {
-+	&i2c_dev_group,
-+	&udid_group,
-+	NULL
-+};
+ MODULE_DEVICE_TABLE(i2c, mctp_i2c_id);
  
- const struct bus_type i2c_bus_type = {
- 	.name		= "i2c",
++static const struct smbus_device_id mctp_smbus_id[] = {
++	{ SMBUS_INTERFACE_ASF },
++	{}
++};
++MODULE_DEVICE_TABLE(smbus, mctp_smbus_id);
++
+ static const struct of_device_id mctp_i2c_of_match[] = {
+ 	{ .compatible = "mctp-i2c-controller" },
+ 	{},
+@@ -1110,6 +1117,7 @@ static struct i2c_driver mctp_i2c_driver = {
+ 	.probe = mctp_i2c_probe,
+ 	.remove = mctp_i2c_remove,
+ 	.id_table = mctp_i2c_id,
++	.smbus_id_table = mctp_smbus_id,
+ };
+ 
+ static __init int mctp_i2c_mod_init(void)
 -- 
 2.50.1
 
