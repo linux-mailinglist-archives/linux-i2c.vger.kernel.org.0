@@ -1,59 +1,55 @@
-Return-Path: <linux-i2c+bounces-15122-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-15124-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 85B77D1A243
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Jan 2026 17:16:04 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A3D8D1A36D
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Jan 2026 17:26:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 463B230453BA
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Jan 2026 16:14:38 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id DBE4A3043539
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Jan 2026 16:25:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DA6538F247;
-	Tue, 13 Jan 2026 16:14:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D4822ED161;
+	Tue, 13 Jan 2026 16:25:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="h8jm1zC5"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="l9A/Ryvt"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0229B378D8F
-	for <linux-i2c@vger.kernel.org>; Tue, 13 Jan 2026 16:14:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73DEC2EBBB0
+	for <linux-i2c@vger.kernel.org>; Tue, 13 Jan 2026 16:25:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768320877; cv=none; b=X8V/HYy7A58nE9xVOwkk15788N8YnSWl3GQqJ1FAIuOdjbzFdcoAo+Yh+xFAS2jv0524OjbCKD22VZiX4cJ7FJjNVtGzbj4IZOr7JB+xMb4392tYaQNds6IGb37OLn+cCQVlGKIi+HMJ9EFS964IBIlX21k2i6GPjsrTLzU7aZk=
+	t=1768321539; cv=none; b=pxozegb2jGjVp4dtfYjM9FKtKxGQtgnYmGR1JqejGn6ViQ8dNv/DYtCTI7ikeSJiQbKhfWbuGfYRWsleCjJbZXjybUDrUOMmbYIY29/0ehxMJR1X9dHPxi+Z2W2MQlrftMlorVBNmz7PtvHAuUQ7qE6bsj9ZHdREguSh9Mv/Kqw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768320877; c=relaxed/simple;
-	bh=8DNhfEXVdDCjEeE1QnbDWBIe6Kul+k1kIhVeC3QfrIY=;
+	s=arc-20240116; t=1768321539; c=relaxed/simple;
+	bh=Rveznh0c57+e7yhhtvquzzydLBtcn75EtJDYfJdT8as=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Yph5qOkxFi9EHFz/iwjaSKAgp07RY9iSlj7SVfxPqTFjifg5V4W8ia5oTAbVK8dR9mkQUcEWYUBeikooM29H8egA6EDsK2K2D1EpAihEF6sdmzVtcCpLQHZJ+7bXkuge9AjC+MOG6GKMkRlFzSLH2o2B7Owi8Tgn1JLfc8DVd+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=h8jm1zC5; arc=none smtp.client-ip=194.117.254.33
+	 Content-Type:Content-Disposition:In-Reply-To; b=dalQUw9BhVaVkavP9zrtv+/PqamIhXw1nfQoQ7zVo/kG1ALYWWNSt362uPJ/rVvChUnTyy1F+lah4xX6z4p1kc8i/q/EZktPt9H0YYguHuPln9nGbu/jAdYD7tRTX7tLXxton8jRQediZOQJqo056zzlniAvRd3l8aOCPWuGXGU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=l9A/Ryvt; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=KcEY
-	mv/jkGMRk96ueI/s8b4rGq5FhWuEKIEs+twFyQk=; b=h8jm1zC5bZ9aGv9S412W
-	aEst41eD9C+7j40pTikgQJ5kCD2sqTGteCL1nOLM71jWiTVLT7pPy1pwUUmAPSGy
-	cpm6af2LCf2M52JZoP594ox89uzdZYMJxL19UNPYCaT+kuEYlckFSqqK2bUu5937
-	M+V+b2QwtYsAkYcfly9Q+JAAujGzTiQd4s6DLUcmznBGydQmvqnzk9vzIk6WYQvd
-	rZRtB2xnqt4/joOyDyx7yAVu+xUSfOwzevKt2brIxlMQSrMqWvaD54ETE41Sg/Xb
-	e4aB3Tm46PS3OkfZu2t0MzQkekL5N4whe7XN1yyhtnS4TAdoYE762gX+fDDhefxM
-	Pw==
-Received: (qmail 1773305 invoked from network); 13 Jan 2026 17:14:33 +0100
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 13 Jan 2026 17:14:33 +0100
-X-UD-Smtp-Session: l3s3148p1@EsZ5SUdIyJ0ujnvx
-Date: Tue, 13 Jan 2026 17:14:32 +0100
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=qV8M
+	JY7h38iiuS7Jd13t8g1lVUmLb7qNuzO3kA20jwM=; b=l9A/RyvtXI7d+/0XOt6Q
+	PyM9oaGB2YOiBu+kUjYUlwM+yaJWzA8dbi8JQQ7OXhMOLa46uhQoNkqYVE2jE49o
+	eYNHXKqP/VpnZTSzuXbqpTytfwnoLW27hR3miUBF+YdyyWfHCJPVQPJif2G6oNB6
+	s7O5DJyJmjrgOioTnqybQ9vxkv60/z0ohfS1FGl29kER1jBy2q+qCN8m7ak0J91L
+	6zJS40+UY3G/0yiHOieVoue5dO3W7ZNirOg6cUisM2hdLrfKzgcOie5ZT4t3pFw0
+	W6lY1yBzOTHqc4mUe+UaJrAiEFTJZVSp+3m3uFv56qPOXPbp2Ru+pAkGhh685YWY
+	kA==
+Received: (qmail 1777409 invoked from network); 13 Jan 2026 17:25:30 +0100
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 13 Jan 2026 17:25:30 +0100
+X-UD-Smtp-Session: l3s3148p1@rCyqcEdIFKQujnvx
+Date: Tue, 13 Jan 2026 17:25:30 +0100
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Tommaso Merciai <tommaso.merciai.xr@bp.renesas.com>
-Cc: tomm.merciai@gmail.com, linux-renesas-soc@vger.kernel.org,
-	biju.das.jz@bp.renesas.com, Chris Brandt <chris.brandt@renesas.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH v2] i2c: riic: Move suspend handling to NOIRQ phase
-Message-ID: <aWZvaEpxQVTIMKYQ@ninjato>
-References: <20251218151022.728661-1-tommaso.merciai.xr@bp.renesas.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/3] i2c: core: Check for error pointer for fwnode
+Message-ID: <aWZx-l3YPHRdtljl@ninjato>
+References: <20260112132346.4087258-1-andriy.shevchenko@linux.intel.com>
+ <20260112132346.4087258-2-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -62,15 +58,18 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251218151022.728661-1-tommaso.merciai.xr@bp.renesas.com>
+In-Reply-To: <20260112132346.4087258-2-andriy.shevchenko@linux.intel.com>
 
-On Thu, Dec 18, 2025 at 04:10:21PM +0100, Tommaso Merciai wrote:
-> Commit 53326135d0e0 ("i2c: riic: Add suspend/resume support") added
-> suspend support for the Renesas I2C driver and following this change
-> on RZ/G3E the following WARNING is seen on entering suspend ...
+On Mon, Jan 12, 2026 at 02:22:40PM +0100, Andy Shevchenko wrote:
+> Theoretically it's possible that fwnode is returned by some API,
+> that may return an error pointer (and we have, for example,
+> fwnode_find_reference() which does that). If such an fwnode
+> is supplied to the i2c core APIs the functions will perform
+> unneeded loops and checks. Avoid this by preventively checking
+> for an error pointer and bail out immediately.
 > 
-> [  134.275704] Freezing remaining freezable tasks completed (elapsed 0.001 seconds)
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Applied to for-current, thanks!
+Applied to for-next, thanks!
 
 
