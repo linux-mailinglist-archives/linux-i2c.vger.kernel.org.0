@@ -1,194 +1,99 @@
-Return-Path: <linux-i2c+bounces-15083-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-15084-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD95BD16ED9
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Jan 2026 07:58:15 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60D12D1704C
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Jan 2026 08:30:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id CF3C0302FBDB
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Jan 2026 06:58:14 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id D60A230119A7
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Jan 2026 07:30:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28338369220;
-	Tue, 13 Jan 2026 06:58:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33F1B19CD0A;
+	Tue, 13 Jan 2026 07:30:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hOd7Vi7a"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J8K5ueo5"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E4D825F98B
-	for <linux-i2c@vger.kernel.org>; Tue, 13 Jan 2026 06:58:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79C881E4AB;
+	Tue, 13 Jan 2026 07:30:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768287491; cv=none; b=k/rgNQ9495ujYmLCRXA+7F0KLRjt7zsJQXj5ql/qmJDLvHPpF1+eupMWJKptLP7Hb7K/2EZpyidUrYsQGXIpXE2tZkcyuckHQKh7R76p70b9UW975Nb5qL/OFm4TpFQmNUZ3lPC9vEiLVtjRgPlDsFh1KfXxKdFrtPXmgcu064Q=
+	t=1768289435; cv=none; b=aFxOmFiRb+LoFTN3ebMch2LXLezopV1ZxZv48g7fvlZdXxLPiYvGod/ttLv42jbHebHvGL6w7zSLKhTg3OcPAq/Ki3spnxjyu6RI8AEo1Aheoqj7ixDGl6uYmxy4V+g1erXMXB/gS46Ge1YqohzGyQ8s02m5l3RuyjXeJAqm3yw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768287491; c=relaxed/simple;
-	bh=6jminxr0DqliOriiX/8zDfPseX+qizqx22OM4epuqIg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LdvBspEIgLYW330V4PtdP2Ry4jsxnSXOpSL5rJpjvwdQP+0BodZnDjGkcIBXfZO3C1oR0y6+JcZUMQaVAQ4jCKraQ6Ax6oNvIi6NxENB9HIF+/MRSryhdf2RVJCTKC83O38wCRKZbfLDrDfHJ0WXrJ9VzJyFIqANWzfKK7N4NsU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hOd7Vi7a; arc=none smtp.client-ip=209.85.160.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-4ee14ba3d9cso80622171cf.1
-        for <linux-i2c@vger.kernel.org>; Mon, 12 Jan 2026 22:58:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768287489; x=1768892289; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iVmHxFnFhL2XXOOX/MiJ22lQR7Yt/NWHSFhuQYbbBYA=;
-        b=hOd7Vi7aEjjgLvSRi2l8PbF1/dyfptW3tYwdgxmDdKvICq5eeeQz/j5l9IZsX5NNPx
-         2yoWt2/eXyqwKhPu44qD7loGtG43riRcJ8TeHqtoD6EUrCxOX7bB09o/WW6CqPqZQ9DJ
-         M/uXzBROAYNRDEt7p3uz9b6VfJpcA7N3cav32+ZlPlEGnqkIRwL1B1ZZ/KGyHsvKwvKd
-         nkINi8QytVXJV2/vEuL9NWRkBmKlDMoCY1/pMePU3iGkYnAntLSgO0DBoyAH7B+7/hDD
-         mCxH6xwPcc0aUAhs7I5pg9bz8vjnEw7f7OXGOnXN3lmY9oXdANrIw1h5hwiiOY9l8YWK
-         SRTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768287489; x=1768892289;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=iVmHxFnFhL2XXOOX/MiJ22lQR7Yt/NWHSFhuQYbbBYA=;
-        b=k6ED7v2MnBVTLQ+Ak+Hl92Q+NHS3tMARaLrVvjBG3T32Vww172FH8k92yFC5HhakMO
-         9d/h42JFpZmC/EpRxef4YBoV5cas1MgH7N2SWUGZUpHrzHdN7X7Ou+Uw088KTaxlNsaW
-         X0BXdM0JuqM4N0JchhHXxa2E8giDP2vJGJ67R0BjODGn2YO8pk2HFvIavvlfUsCzKEqV
-         QB+dMTvmE6Qe2PdcFv+9fVrBKXr9PFd0HbBR/jGCjDfeSMbHiJgpZdohB5lfucXg4YsK
-         wx9giWPr8ZgijypWVkiNGXOV58v5lmA1WRUGyBVBNw8jIXo/xqVJTi1DTHWdUhvwHiDj
-         gKSw==
-X-Forwarded-Encrypted: i=1; AJvYcCXAIffEkcerEu8H9RxXwb8SFuWbBuCpBfGdaX0ooATu7pcA+iL1wCCdv/L7ssR440X4Fuxiva5z4/Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyIaHyjM4ksuWMCLnivtFw3EHxHhTIqhoOAg1pfVFO+LfZ4cNyb
-	7J1LKDjCddr9w2u6UfhrY8CHn9t/dxzZcfhphIcrGQ66nMcZvNpo9DI7m3oR1HJAqRM1xxrBqzd
-	vKhzjlJGnKYHIyKsWapb0K856TF2/pF3u9L/LHMI=
-X-Gm-Gg: AY/fxX4yQyvShzcD55JGPdP9eF83q06b9h+uHsIAECWi/mhuM70TnxFn+BUcZFSWmHP
-	uLFlRueDEAOELM9LJXnQiTaemRd6l4cbtXN/iIzVA2opW+Hjws7cODMYltw01vPt9YdYuUzs3pT
-	lKN6iQh5Dn+xBF/QQc9CYK2OmIxbq22qV8IrFOxoOSvV+f3ntNKyHD8djIG7x69Jk0ts5u5gUqx
-	wvBjKf0zWY7mhjB1F4TfZ6ugnOyPbDw7Z0q6/r2Ije5l7jhukM/nVawHV6jElagWa/TUqU=
-X-Google-Smtp-Source: AGHT+IE+DIedWEdJqsiLtHII2NK9kHa47Xaow05C4OozW+YoOAAtbJO4vmCweYGmNlUvwZG4L90DgTJDB2+8ihAAlMw=
-X-Received: by 2002:ac8:590c:0:b0:4ee:ce3:6c9d with SMTP id
- d75a77b69052e-4ffb4824c02mr301069101cf.19.1768287489353; Mon, 12 Jan 2026
- 22:58:09 -0800 (PST)
+	s=arc-20240116; t=1768289435; c=relaxed/simple;
+	bh=czkJHgYktCMPxNiUVyD13nCpnqhBJSxVqGanmLlLGXk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ChkMbgDe2eYH0776BVhsjk536ROzdoFvcNGuyvuwpjenpqnmvvQkDzUfgQeheZYqCTAHsj2o8OpC/FDrFrEzgF82VHguiO8YVmvmtCxO+4GisTwd2fsfqWviwB2QbKaxCyrIIGRYqhbz8psAmEryovb/LfYf1mALt7McjBuUnKw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=J8K5ueo5; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1768289434; x=1799825434;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=czkJHgYktCMPxNiUVyD13nCpnqhBJSxVqGanmLlLGXk=;
+  b=J8K5ueo5/2exlO1CuGn1CH9Cgb5wRC08xngl8NFHqeea7HJudxk8ec8I
+   jaxc/+Hlw6DHR16FqWod2M3w6pUYvHHf6efPeQAlbuRUQ2PfnQFIjYYzN
+   f5ejgCf1nAYtcBXZly+AtBp5kECpVheSN+5/qtDOhxCHnc9uu7zXxYO3e
+   BFhM9ehiSx3Yd+QZcoCTaYLatwsn4LlkdXseBvgZan6CSubI0/B55V1Yy
+   bwO/6nuPA19bBRBTqt4Nz7S48dz0WqBDJ8t0YIVx7azOUi+NpcvcWBhmK
+   1QWdkLUZBLTfmyhTfU7OZR4paNxmUKXtF4eV8M7l+Kz8mXNApkInuvLIO
+   Q==;
+X-CSE-ConnectionGUID: pXnUZ3TYQq+ua3rnseNLmQ==
+X-CSE-MsgGUID: WCagTAqvTci60K0Be5SO0A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11669"; a="73422248"
+X-IronPort-AV: E=Sophos;i="6.21,222,1763452800"; 
+   d="scan'208";a="73422248"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2026 23:30:33 -0800
+X-CSE-ConnectionGUID: mKG1wo8QST+cXxaI2gy/Lg==
+X-CSE-MsgGUID: BimtrAh4RWOnZtDE1ZI6Cg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,222,1763452800"; 
+   d="scan'208";a="208824799"
+Received: from dhhellew-desk2.ger.corp.intel.com (HELO localhost) ([10.245.245.177])
+  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2026 23:30:30 -0800
+Date: Tue, 13 Jan 2026 09:30:28 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: kernel test robot <lkp@intel.com>
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+	oe-kbuild-all@lists.linux.dev, Khalil Blaiech <kblaiech@nvidia.com>,
+	Asmaa Mnebhi <asmaa@nvidia.com>, Andi Shyti <andi.shyti@kernel.org>
+Subject: Re: [PATCH v1 2/2] i2c: mlxbf: Use HZ_PER_KHZ in the driver
+Message-ID: <aWX0lB99XtdpHgqy@smile.fi.intel.com>
+References: <20260112135603.4150952-3-andriy.shevchenko@linux.intel.com>
+ <202601130414.VJyCNWzI-lkp@intel.com>
+ <aWVbYYusNh_q_91o@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAN8T_P09Qe4091eq+YXnqzCtSxLQgxcw=jH2bH7uw20N4_DsbQ@mail.gmail.com>
- <aWUn-m56_SUw9nei@smile.fi.intel.com>
-In-Reply-To: <aWUn-m56_SUw9nei@smile.fi.intel.com>
-From: Alex Ivy <whu2gh@gmail.com>
-Date: Tue, 13 Jan 2026 14:57:58 +0800
-X-Gm-Features: AZwV_Qi4uZPmIbslpj9Jb4Th8F1FWTr_nwk4Cbdtvfa_7kIXpX4_sIw7plrLih8
-Message-ID: <CAN8T_P2n5f0FJRi44r+pKcRQbF4SGVLv6H2W_w7JGcD3tDVhjw@mail.gmail.com>
-Subject: Re: [QUESTION] i2c: designware: Why use GPIOD_OUT_HIGH instead of
- OPEN_DRAIN for recovery?
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: jarkko.nikula@linux.intel.com, mika.westerberg@linux.intel.com, 
-	wsa@kernel.org, jsd@semihalf.com, p.zabel@pengutronix.de, 
-	linux-i2c@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aWVbYYusNh_q_91o@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-Hi Andy,
+On Mon, Jan 12, 2026 at 10:36:54PM +0200, Andy Shevchenko wrote:
+> On Tue, Jan 13, 2026 at 04:33:04AM +0800, kernel test robot wrote:
+> > Hi Andy,
+> > 
+> > kernel test robot noticed the following build errors:
+> 
+> Ah, okay, this needs to be based on the series that adds HZ_PER_GHZ as it
+> provides the needed header inclusion.
 
-As for the  GPIOD FLAGS, I solved my problem  by using GPIO_INPUT to
-simulate OPEN_DRAIN for i2c recovery, by just updating the Device Tree
-to include GPIO_OPEN_DRAIN for the recovery gpios.
+The series I mentioned is this one:
+https://lore.kernel.org/r/20260112134900.4142954-1-andriy.shevchenko@linux.intel.com
 
-Board: ARM64 linux 6.1.158 , with snps,designware-i2c and snps,dw-apb-gpio.
-
-STEP1:
-I performed a test on my ARM board using the logic found in commit
-d2d0ad2aec4a ("i2c: imx: use open drain for recovery
-GPIO").https://lkml.org/lkml/2018/7/13/682
-diff --git a/drivers/i2c/busses/i2c-designware-master.c
-b/drivers/i2c/busses/i2c-designware-master.c
-index ddf9673ec742..2cd257bc06f5 100644
---- a/drivers/i2c/busses/i2c-designware-master.c
-+++ b/drivers/i2c/busses/i2c-designware-master.c
-@@ -914,7 +914,7 @@ static int i2c_dw_init_recovery_info(struct dw_i2c_dev =
-*dev)
-                return -1;
-        }
-
--       gpio =3D devm_gpiod_get_optional(dev->dev, "scl", GPIOD_OUT_HIGH);
-+       gpio =3D devm_gpiod_get_optional(dev->dev, "scl",
-GPIOD_OUT_HIGH_OPEN_DRAIN);
-        if (IS_ERR_OR_NULL(gpio))
-                return PTR_ERR_OR_ZERO(gpio);
-
-Then "[    0.653908] gpio-496 (scl): enforced open drain please flag
-it properly in DT/ACPI DSDT/board file"
-
-STEP2:
-I updated the Device Tree to include GPIO_OPEN_DRAIN for the recovery gpios=
-.
-
-Result: The gpiolib warning (enforced open drain...) has disappeared,
-and the bus recovery still functions correctly.
-
-STEP3:
-Then I discard the modification in i2c-designware-master.c and use the
-Device Tree change only, and the GPIO_OPEN_DRAIN flags remain in the
-gpio's desc.
-
-This solved my problem.
-
-However, my question still remains why the imx changes get merged. Is
-it needed to apply the same patch for the designware i2c?(which my
-need many dts change)
-
-Best regards, Alex Ivy
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-Andy Shevchenko <andriy.shevchenko@linux.intel.com> =E4=BA=8E2026=E5=B9=B41=
-=E6=9C=8813=E6=97=A5=E5=91=A8=E4=BA=8C 00:57=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Mon, Jan 12, 2026 at 10:10:02PM +0800, Alex Ivy wrote:
->
-> > I am currently looking at the bus recovery implementation in
-> > drivers/i2c/busses/i2c-designware-master.c. I noticed that
-> > i2c_dw_init_recovery_info() seems to manually reimplement much of the l=
-ogic
-> > already present in the I2C core's i2c_gpio_init_generic_recovery().
-> >
-> > However, there are two key differences that caught my attention:
-> >
-> > GPIO Flags: The I2C core uses GPIOD_OUT_HIGH_OPEN_DRAIN, while
-> > i2c-designware uses GPIOD_OUT_HIGH. Is this specifically intended to
-> > support SoC GPIO controllers that do not implement the OPEN_DRAIN flag,
-> > which would otherwise cause devm_gpiod_get() to fail in the core's gene=
-ric
-> > helper?
-> >
-> > Initialization Flow: The core's helper performs a pinctrl state toggle
-> > (GPIO -> Default) during initialization, whereas i2c-designware only lo=
-oks
-> > up the states and defers the actual switching to prepare_recovery.
->
-> This might affect the workflow. Note, in the past one of such conversion =
-was
-> presumably done without real testing and brought a regression (I'm talkin=
-g
-> about PXA version).
->
-> > My question is: Would it be possible (or welcomed) to refactor this to =
-use
-> > the core's generic helper, or is the current manual initialization requ=
-ired
-> > to maintain compatibility with specific DesignWare-integrated SoCs (lik=
-e
-> > certain Intel or ARM platforms) that have restrictive GPIO/Pinctrl
-> > requirements?
-> >
-> > I would appreciate your insights on the historical background of these
-> > choices.
->
-> Do you have an access to real HW?
->
-> --
-> With Best Regards,
-> Andy Shevchenko
->
->
 
