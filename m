@@ -1,75 +1,75 @@
-Return-Path: <linux-i2c+bounces-15160-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-15161-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 938B5D1F53D
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Jan 2026 15:14:34 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CF2ED1F534
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Jan 2026 15:14:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A473F306A0EC
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Jan 2026 14:14:02 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 9180D30049EA
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Jan 2026 14:14:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F9CA2D595B;
-	Wed, 14 Jan 2026 14:14:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB7CA2D594F;
+	Wed, 14 Jan 2026 14:14:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dm462atB"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D1+Kkgc4"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 660B12D3A7B
-	for <linux-i2c@vger.kernel.org>; Wed, 14 Jan 2026 14:14:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35E0B2D595B
+	for <linux-i2c@vger.kernel.org>; Wed, 14 Jan 2026 14:14:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768400042; cv=none; b=B32UXVmRmodIH4OmRH5DshDcjyzQ8IDG1/jkZzXB75c8MMnHavXu3TYwA/BMnOx+tARijivRDJF0r5LHO1wneCAUpmyoDLBCDocy2fypKuEOE6tQ1q1T4gMckyj6xw0Sw9PBZH8fkIT2ytMn5ObpLTrsh1QrGXhHHj9GFi6ah1Q=
+	t=1768400049; cv=none; b=b0QMNp/tKP/KMQ/ZEHvwiEj4qbVGPbcOAKh3+tEAnHRQSUDpGQpOTAFidFELlvHUxpbBUvnVmPwPT5OT1mKT8uWr+xgu7dSgE2mSqC6UOqVtzPJIH7JhuYtS8spTpbjL6+ZpNC/ipVFXycryi5KM+cwmRDcZudTuVE0nODfaCMs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768400042; c=relaxed/simple;
-	bh=6HChBFN3+eN58bAfM528LWbrmEuRIcjyzHO9UkHjyc8=;
+	s=arc-20240116; t=1768400049; c=relaxed/simple;
+	bh=uI5UZ4Fop9VKEyQ8e7Vhlvs+3JV7DOHuBqbOoz+T8Js=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fZ0kzwJzKz5Gw8TqhL4dSh/Xj/zibcnlFZbQ4rfQ/5SMgY0iglp6yw0PUefA1ksrbtGQwcmpx4Yd6eVQAUjg0cQfuu2B8H7fEyEvb0yaITkVgufg9vXYRRnZXffIobhyZtmQ7xZIPTWg/cVx9rSnRw/VHT9QuaHrj2OSpwWaZ1U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dm462atB; arc=none smtp.client-ip=209.85.208.43
+	 MIME-Version; b=VWZyvHoV0VPMHMr07HCM8pkd5Vj5ZKZroduhnqk37hHwG88WQYEA74fWbyoUXsrscmVGUEGZh93w0Sapjni8d3LrzwWQwu7cs7fGztH1bNITsrFjr9KLrAEUXU9n/nESemI6ierzzyJRBv9hSdvYns/Ps+CiNrwGk1Rzdg9+aVY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D1+Kkgc4; arc=none smtp.client-ip=209.85.208.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-64baaa754c6so12796039a12.3
-        for <linux-i2c@vger.kernel.org>; Wed, 14 Jan 2026 06:14:00 -0800 (PST)
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-64b8123c333so14010047a12.3
+        for <linux-i2c@vger.kernel.org>; Wed, 14 Jan 2026 06:14:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768400039; x=1769004839; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1768400047; x=1769004847; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=lw0lSbQFfSBadWYIdCR1R+5LqktQW19yPPn8YWeadt0=;
-        b=dm462atBvWYnP4TW2NKp5IfBlfYYyQ/+rCCzx1tXMlfrh17gWwXDkRgbAN9G/sZhw5
-         OscQpVegGXG3h3/ZxfqSrawqdwknzqfNeQIaih1ZBM8qLABEVvMetxuU+BeKFzT2r7zP
-         JN+336wWiFtmH/fWLQbej13tDskZIf2WLN3civGprHAhfl11U/kPQZbcNCgZn2sRKBWu
-         UfNYefgwUH9aF2bN6bitJCcRmP9ugaMeJKxuVW0jsyTsO9U2KIF3Om9U9St+/YJWE3Bm
-         fYRqnerqsWpQ5WjemM8dvdDowb1rPOES9+aVsSuHT2FH36iP7BtyTyNSYWndl/+cH9Y3
-         g/mg==
+        bh=THHBPsnJ5h41RArKKPut42z3fPvZexdj9Mfmq6vuelM=;
+        b=D1+Kkgc4N5Hf2VYP4ZAtPG+BZA4mOc23ozH+iTMdAh2SVyQ+Id2RsNv0wK5dtREfOm
+         pt2W2Ql0cCkjGYz3ZRjtGiMYKFTmcxHFyTu5zV6YcvwM7pgOnFMVW01oYyT16oXYGgBC
+         CsDa21NSE+Bto/LtGPFxgoxK+Tj84RXzDSJ/rqrWfDPuEywjRBCQJamxjNJD8LhzStxI
+         XhuBLsRd5MvEAJQvSskWcDP5ny96FmWTYUj2p0t2hKUAOO6RtLZZWRhpMAie09Ud349Y
+         ANyfUr/w9R9uPkppexe47De3gwfIMpzpYshbeUsPIdjqUmEDQOJY+aEipm3MQI01fOx1
+         sQSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768400039; x=1769004839;
+        d=1e100.net; s=20230601; t=1768400047; x=1769004847;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=lw0lSbQFfSBadWYIdCR1R+5LqktQW19yPPn8YWeadt0=;
-        b=Ob/9jWRApVjL1K5UEj+K7VtKKfotxFmBZDo7FuBPIIL4ObGQoxsNW0i4yyYwlV3chi
-         d73lIsNp1oKSenf4F0v0FO5B/v1mQSHoQTYOOBAbFSigdP2E22Zz4LEogPF9ua1LY70q
-         oDg1ogmJn92+lRlEl/KLr1RCmJ/MdCRH4lUeLX6/5WJPkvCzAeBu3DzIIy4aNmrWzAio
-         QIaYfcG/RBVbooklt0NJOix/NDkRdjqd5D3vtjgcRhcdBiAGe2o4T3fo2R5WSirFvixY
-         VW/s7Fbw4thoS2JsnIzi3NqUmiVVfYDqAuwFk0pc0fdlXZ2SKDlWwkmFbLnKDfoD7BSI
-         01+g==
-X-Gm-Message-State: AOJu0Yzo+28eNDDzFsmEAQM23LAjW4QWh/qruRw44XjDL9wX4fs1e2uL
-	dTgDokyx9Z7bD6eF5OFrscf4IO3TXgZxn86Utb69zR5FeU1CZq58qean
-X-Gm-Gg: AY/fxX6nwnGApqD7S4EfTdLgKTSHH58hPggLKwa37OLwHVlV9WUbTnUBPyPDvvXTYbQ
-	vJh9go+X+mZLOiIqHcNJCz1Wqxxmf9ZHYf4lmahGtJs7vyqpPmHkVyDdiF0jPbuz208Ezq+Cu+8
-	queMQtP+jkX2zpyZgdsExSSeErs8pqV85FhUqI0WHOwGBh5pxCUDxI+L0SkYyusU5LnMkyXfe/s
-	OqJDPBBWxghs+TxUOux5Rpp8GBHKdkmkWTpjhAUHMTktBopThScYIRrKzxyKKH07aCAlQu+XPRh
-	LpnIOi4BvykEpBEYfJZgscudDCE+GyOfNakuvPFWXbj12fzCeOX7P/BsPts7MXfSThMWtch0pqV
-	58kZ7ahe7DZg9hlBuA64Q+k2TPVMsIHj4/A+eeC873jR8lH0dX+0JlSxT1m7Kd5TcWY7iN25UXW
-	cTqJtXpMi0LoKHDRf327PeXg==
-X-Received: by 2002:a05:6402:1e94:b0:649:69da:6218 with SMTP id 4fb4d7f45d1cf-653ebf7a2e1mr2353585a12.0.1768400038618;
-        Wed, 14 Jan 2026 06:13:58 -0800 (PST)
+        bh=THHBPsnJ5h41RArKKPut42z3fPvZexdj9Mfmq6vuelM=;
+        b=XlIBYhIy7xnG9sn/nebbCcbqhgqgBj2TYIZq2ZTlyPUOEWM2OESAXvgWfY16jKMe7e
+         jEbj/kRIY0UwrELGSdHLpGDNX9ffJK4SvTO0vNGSenlUZyY3hrP7V1vBQ/2+Nw8vwz0f
+         ROtkUW9vY2lrN8N/xJYddZ9c34ahOEgj9Z9XrymzHAqSvSErUSzxUvwW+mlWGNGX8wNH
+         ukeHjzIakPhW84fDqmGJecRo3Y1IdMbTOArI6GKk86l0SvUV22qyrpj1shvoVZCqyf3X
+         KETWtJ5Cyg1pJY18S7t23eANRvMiSFwbfMUO7bHQdf/HIju3yxpWKVaF4+ZNNFDVqsu+
+         stiw==
+X-Gm-Message-State: AOJu0YzZf+VOWAslCpHyhmFnz+q0OpRBBi2opM4PvsF0ZYz5jISJ8SYI
+	NHctexw8XVfZskaOZluKya3YOwYTnH17lX8p6veEqUpmwu7mvxmQMY4U
+X-Gm-Gg: AY/fxX59St2o/KZH3oVef1Q/9EwNJkPKCTcmCptmcLed/txpwLAS9B+QRN8EMcn4wJa
+	/V8bkkZ75QKQu09idlTcoqiHD0dlZKg0aIOt4u8Wkzv+hzfrDN7DjZyV2YdWP+a7oWDEQYFYwc3
+	rZ61saXwjTd48hWivyXmedPcJx0cx4cseaabS/VgqvUJMDhVm5I9oUNN2e3V8Hmi8u09cMzYNV+
+	d06q6JN9FErzToHEI+hXBbKGRRQOn3mZuw/TvBMsmhu2ecdOZ0YeQW1gCSWXXw3VD4c8rMQ66XK
+	2R/mWNzKMSvo/JQn7Xupk7GKgqAobiSFtkXx3ChqD3zsAkfymSCB//eVXrYO/WLWT5BQSqy01Up
+	7jfPtA9XNeMNhHtVQyal9b5S+MI87/WlCWj+msCnZAA/Jjy6x+ap0cwQkx5svHIdkHBlrcGt0qO
+	8RO6qNAgzM5f+LaqXN1FOelg==
+X-Received: by 2002:a05:6402:1ecd:b0:64b:7b73:7d50 with SMTP id 4fb4d7f45d1cf-653ec1021femr2004998a12.1.1768400046483;
+        Wed, 14 Jan 2026 06:14:06 -0800 (PST)
 Received: from C-PF5D4647.localdomain ([147.161.248.88])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6507bf667fcsm22651950a12.29.2026.01.14.06.13.57
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6507bf667fcsm22651950a12.29.2026.01.14.06.14.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jan 2026 06:13:58 -0800 (PST)
+        Wed, 14 Jan 2026 06:14:06 -0800 (PST)
 From: Jie Li <lj29312931@gmail.com>
 X-Google-Original-From: Jie Li <jie.i.li@nokia.com>
 To: wsa@kernel.org
@@ -81,9 +81,9 @@ Cc: linux-i2c@vger.kernel.org,
 	linus.walleij@linaro.org,
 	linux-kernel@vger.kernel.org,
 	Jie Li <jie.i.li@nokia.com>
-Subject: [PATCH v1 1/2] i2c: core: add "force-set-sda" flag for open-drain SDA without "FLAG_IS_OUT" bit
-Date: Wed, 14 Jan 2026 15:13:51 +0100
-Message-ID: <20260114141352.103425-2-jie.i.li@nokia.com>
+Subject: [PATCH v1 2/2] dt-bindings: i2c: add force-set-sda property
+Date: Wed, 14 Jan 2026 15:13:52 +0100
+Message-ID: <20260114141352.103425-3-jie.i.li@nokia.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260114141352.103425-1-jie.i.li@nokia.com>
 References: <20260114141352.103425-1-jie.i.li@nokia.com>
@@ -95,76 +95,34 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On certain specialized SoC platforms, the I2C SDA pin is physically
-open-drain but lacks the "FLAG_IS_OUT" bit in the GPIO subsystem.
-In such cases, the set_sda function isn't assigned, causing bus
-recovery to fail.
-
-This patch introduces a new optional pinctrl flag "force-set-sda".
-When this flag is present in the device tree, the I2C recovery
-mechanism will explicitly attempt to toggle the SDA line through
-the pinctrl state, ensuring the bus can be freed even when the
-default recovery logic is insufficient for this specific hardware
-implementation.
-
-This change is necessary to improve the robustness of I2C
-communication on hardware where the SDA line can remain stuck
-low and standard recovery fails.
+Document the new "force-set-sda" optional property.
+This property is used for hardware where the SDA line is open-drain
+but the standard driver-level check (like gpiod_get_direction) might
+not correctly reflect the ability to drive the line for bus recovery.
 
 Signed-off-by: Jie Li <jie.i.li@nokia.com>
 ---
- drivers/i2c/i2c-core-base.c | 21 ++++++++++++++++++++-
- 1 file changed, 20 insertions(+), 1 deletion(-)
+ Documentation/devicetree/bindings/i2c/i2c-gpio.yaml | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index ae7e9c8b65a6..ffbab3e4528d 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -42,6 +42,9 @@
- #include <linux/rwsem.h>
- #include <linux/slab.h>
- #include <linux/string_choices.h>
-+#include <linux/device.h>
-+#include <linux/gpio/driver.h>
-+#include <linux/fwnode.h>
+diff --git a/Documentation/devicetree/bindings/i2c/i2c-gpio.yaml b/Documentation/devicetree/bindings/i2c/i2c-gpio.yaml
+index afd4925c2a7d..82713fcf87e4 100644
+--- a/Documentation/devicetree/bindings/i2c/i2c-gpio.yaml
++++ b/Documentation/devicetree/bindings/i2c/i2c-gpio.yaml
+@@ -37,6 +37,13 @@ properties:
+     description: sda as output only
+     type: boolean
  
- #include "i2c-core.h"
- 
-@@ -422,9 +425,25 @@ static int i2c_gpio_init_recovery(struct i2c_adapter *adap)
- 	return i2c_gpio_init_generic_recovery(adap);
- }
- 
-+/* Check if SDA can be driven for recovery when
-+ * GPIO direction reporting is unavailable.
-+ * Usage: add new flag "force-set-sda" in dts pinctrl.
-+ */
-+static bool force_set_sda(struct device *dev)
-+{
-+	if (!dev || !dev->of_node)
-+		return false;
++  force-set-sda:
++    type: boolean
++    description:
++      Force the use of the SDA output toggle during I2C bus recovery.
++      This is needed for some hardware where the SDA pin is open-drain
++      but the GPIO subsystem cannot automatically detect its output capability.
 +
-+	if (of_property_read_bool(dev->of_node, "force-set-sda"))
-+		return true;
-+	else
-+		return false;
-+}
-+
- static int i2c_init_recovery(struct i2c_adapter *adap)
- {
- 	struct i2c_bus_recovery_info *bri = adap->bus_recovery_info;
-+	struct device *dev = &adap->dev;
- 	bool is_error_level = true;
- 	char *err_str;
- 
-@@ -446,7 +465,7 @@ static int i2c_init_recovery(struct i2c_adapter *adap)
- 		if (bri->sda_gpiod) {
- 			bri->get_sda = get_sda_gpio_value;
- 			/* FIXME: add proper flag instead of '0' once available */
--			if (gpiod_get_direction(bri->sda_gpiod) == 0)
-+			if (gpiod_get_direction(bri->sda_gpiod) == 0 || force_set_sda(dev))
- 				bri->set_sda = set_sda_gpio_value;
- 		}
- 	} else if (bri->recover_bus == i2c_generic_scl_recovery) {
+   i2c-gpio,scl-output-only:
+     description: scl as output only
+     type: boolean
 -- 
 2.43.0
 
