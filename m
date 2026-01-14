@@ -1,102 +1,150 @@
-Return-Path: <linux-i2c+bounces-15154-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-15155-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1E8AD1E9B8
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Jan 2026 13:00:18 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0ABC1D1E8F2
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Jan 2026 12:53:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 21E5A308BA40
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Jan 2026 11:52:31 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C04DD30034A7
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Jan 2026 11:53:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58673396D1B;
-	Wed, 14 Jan 2026 11:52:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C054D396B86;
+	Wed, 14 Jan 2026 11:53:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="AA8cnIAy"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LneZHLSk"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D37D23815D5
-	for <linux-i2c@vger.kernel.org>; Wed, 14 Jan 2026 11:52:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 355CE335542;
+	Wed, 14 Jan 2026 11:53:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768391540; cv=none; b=QqTHdm1TeN8II3sDWPaHlhmYTc3HnihVSP2vv6CntVssXq+DDG06t6fh+T/OCwNMwpgxLL5WLNq0OKi6ES9uy76+Ay823Ohet7ny0sArAR/hXTuF+/zDCR+MzUxnoPKWLiXCAECCeoeP9hyRmf72qpKL159Vioi0PZYTSpE2u0M=
+	t=1768391609; cv=none; b=RV/rBq5H67lLjBm09/amu4M3K3OpqD6+Eg2vbImMiDE49e2lMXdiq4ugA680dY11/D5po1cj59+1ACfotWPOPAjK8jlTECLpDFAJj7lrB2U6pN9yq31VNECoAcdbsPSDp8plhjd1x+M728dedzzgm0izCc4CUkf7gtbrNq4wdEY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768391540; c=relaxed/simple;
-	bh=x41W9sfytGVKn5Dnw2ED9SlJy9/zuqHB/qFAvmU+OSk=;
+	s=arc-20240116; t=1768391609; c=relaxed/simple;
+	bh=zvET7IaVfhQ1RPfvMNwMlFZZ82ZNpf5ywkZcCztOsNU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OcWJ456j/GvARocfirZh1C6Mp9CiuHqbW2lXsMbKwi5T8rvzc/+nCV+GsVUU4gARPADm6Pua5sHfOW3nAGox1kcotbJmmI8VxvuPA8An93nldIeaLmYeKEG36yY99ME15yUU3bIkNBVHbDb/+0LOjMVhWlKK9nCy8x4DafVY6Ac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=AA8cnIAy; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=BTPE
-	LIS8djx1OvkVEDR+BzQIn/xiv3BxFTaCezloF98=; b=AA8cnIAylx1xeiFkNT4T
-	ZIrmdY27f3LYoZO3GRgu9YyNYNLzRuyeH48q3dx+Ek0PAHENTGgXTSyzrtt7vTQt
-	n5325scCcMepdnx/OYcgu8QMPQSzDguoUnV4dh34+BqqD2S4YDZqMbR6OIkqkT/v
-	OxW4Fx9WoayurfG3rqbz05Td1BBdLEXFVfIIAbFtH8PATca+96Bbmfi0zb9+TNpu
-	hIe2YYAbjs89/lwtJuw0mhom4UPGL0S9inZomLXBsrPNCCRFf76yHn2NmqF4popp
-	LOTgKHK8dQS1+uPIIGLkxC7nZNlt4kjn1fXF2v+J4e2tCtpdmNZVwC6ISSxq5cpp
-	Mw==
-Received: (qmail 2114186 invoked from network); 14 Jan 2026 12:52:12 +0100
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 14 Jan 2026 12:52:12 +0100
-X-UD-Smtp-Session: l3s3148p1@WQkZvVdI3K8ujnsM
-Date: Wed, 14 Jan 2026 12:52:11 +0100
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Josua Mayer <josua@solid-run.com>
-Cc: Ulf Hansson <ulf.hansson@linaro.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Peter Rosin <peda@axentia.se>, Aaro Koskinen <aaro.koskinen@iki.fi>,
-	Andreas Kemnade <andreas@kemnade.info>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Roger Quadros <rogerq@kernel.org>, Tony Lindgren <tony@atomide.com>,
-	Vignesh R <vigneshr@ti.com>,
-	Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Mikhail Anikin <mikhail.anikin@solid-run.com>,
-	Yazan Shhady <yazan.shhady@solid-run.com>,
-	Jon Nettleton <jon@solid-run.com>, linux-mmc@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org, linux-can@vger.kernel.org,
-	linux-phy@lists.infradead.org, linux-omap@vger.kernel.org,
-	linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v4 5/7] i2c: omap: switch to new generic helper for
- getting selected mux-state
-Message-ID: <aWeDa6o0fOh1pGW5@ninjato>
-References: <20251229-rz-sdio-mux-v4-0-a023e55758fe@solid-run.com>
- <20251229-rz-sdio-mux-v4-5-a023e55758fe@solid-run.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=PgUFwZn2rrPmyKLiZpvnqMNKyzLn+PEUGuKnIg3RE37bAA0YhXn249g1EPNPsCkACnoDfQ08wmBBNdLIVrUHRI3MwTP23XrS0Sthet5mVKs+sqdCVaUVEL2X7sFek7DJ83mJRttmmltk2tp3qUMm81G56UlrldSJfn5KahR7OiE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LneZHLSk; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1768391605; x=1799927605;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zvET7IaVfhQ1RPfvMNwMlFZZ82ZNpf5ywkZcCztOsNU=;
+  b=LneZHLSkpMiZtZND6U3s5Urbr3RY9xGn8rxwHzNoZmrgnWT9dOgqQbbm
+   TKDX+C2zGaCst3G144dF/9U34FVj0XaDI18FhS3BlCiZ5GPyJS/0XZE3S
+   mod5Ql9WU4JSMieGAbPdB7sGD40x6DLygTW5KNQXQh9tqPNfz5dE0Tb5Y
+   EfWe+04bLwv4xga6iKsbDzQCo9aKJFFPdJXHRYIzqMvoBaEcdjF0M5ey4
+   f6+dr6+ctEdVrb4dJ5jaIi3e5vRDtqmL9M3BuvCHV6OjstSspl/4NzEJo
+   IPrhELcIkWU69dxUP+ytNU+VMHwWWyrx2ReaP7H5snc+zRQTqpHWskFdz
+   w==;
+X-CSE-ConnectionGUID: rKqXzXZfRwiKap1pXPtBGA==
+X-CSE-MsgGUID: ufmgizkKS1mAFBAvijZPjQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11670"; a="69597321"
+X-IronPort-AV: E=Sophos;i="6.21,225,1763452800"; 
+   d="scan'208";a="69597321"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2026 03:53:18 -0800
+X-CSE-ConnectionGUID: HJhoFJGATamNRxP9seYqhw==
+X-CSE-MsgGUID: C95i6pClRKOMy9n5rPRnKg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,225,1763452800"; 
+   d="scan'208";a="205082558"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by fmviesa009.fm.intel.com with ESMTP; 14 Jan 2026 03:53:05 -0800
+Received: by black.igk.intel.com (Postfix, from userid 1001)
+	id 4430C98; Wed, 14 Jan 2026 12:53:04 +0100 (CET)
+Date: Wed, 14 Jan 2026 12:53:04 +0100
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Andi Shyti <andi.shyti@kernel.org>, Jan Dabros <jsd@semihalf.com>
+Subject: Re: [PATCH v1 2/2] i2c: designware: Use device_is_compatible()
+ instead of custom approach
+Message-ID: <20260114115304.GC2275908@black.igk.intel.com>
+References: <20260114081954.252160-1-andriy.shevchenko@linux.intel.com>
+ <20260114081954.252160-3-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20251229-rz-sdio-mux-v4-5-a023e55758fe@solid-run.com>
+In-Reply-To: <20260114081954.252160-3-andriy.shevchenko@linux.intel.com>
 
-On Mon, Dec 29, 2025 at 03:27:29PM +0100, Josua Mayer wrote:
-> Multiplexer subsystem has added generic helper functions for getting an
-> already selected mux-state object.
+On Wed, Jan 14, 2026 at 09:17:51AM +0100, Andy Shevchenko wrote:
+> We use MODEL_MSCC_OCELOT effectively is a flag for comparing against
+
+as a flag?
+
+> "compatible" property. Use device_is_compatible() directly to make it
+> clear.
+
+Okay but if something else ever needs this same quirk then we would need to
+add new entry here and also to the IDs list.
+
+With the flag you can have the IDs in a single place not all over the
+driver.
+
 > 
-> Replace existing logic in probe with the equivalent helper function.
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/i2c/busses/i2c-designware-common.c  | 6 +-----
+>  drivers/i2c/busses/i2c-designware-core.h    | 1 -
+>  drivers/i2c/busses/i2c-designware-platdrv.c | 2 +-
+>  3 files changed, 2 insertions(+), 7 deletions(-)
 > 
-> This change is only compile-tested.
-> 
-> Reviewed-by: Andreas Kemnade <andreas@kemnade.info>
-> Signed-off-by: Josua Mayer <josua@solid-run.com>
-
-Despite the pending discussion about the function name, it is clear that
-the final patch will not go via i2c but some other tree. So, already:
-
-Acked-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-
+> diff --git a/drivers/i2c/busses/i2c-designware-common.c b/drivers/i2c/busses/i2c-designware-common.c
+> index 5b1e8f74c4ac..c766d9821975 100644
+> --- a/drivers/i2c/busses/i2c-designware-common.c
+> +++ b/drivers/i2c/busses/i2c-designware-common.c
+> @@ -238,14 +238,10 @@ static void i2c_dw_of_configure(struct device *device)
+>  	struct platform_device *pdev = to_platform_device(device);
+>  	struct dw_i2c_dev *dev = dev_get_drvdata(device);
+>  
+> -	switch (dev->flags & MODEL_MASK) {
+> -	case MODEL_MSCC_OCELOT:
+> +	if (device_is_compatible(dev->dev, "mscc,ocelot-i2c")) {
+>  		dev->ext = devm_platform_ioremap_resource(pdev, 1);
+>  		if (!IS_ERR(dev->ext))
+>  			dev->set_sda_hold_time = mscc_twi_set_sda_hold_time;
+> -		break;
+> -	default:
+> -		break;
+>  	}
+>  }
+>  
+> diff --git a/drivers/i2c/busses/i2c-designware-core.h b/drivers/i2c/busses/i2c-designware-core.h
+> index cf0364079b55..10055f0e0ec3 100644
+> --- a/drivers/i2c/busses/i2c-designware-core.h
+> +++ b/drivers/i2c/busses/i2c-designware-core.h
+> @@ -313,7 +313,6 @@ struct dw_i2c_dev {
+>  #define ARBITRATION_SEMAPHORE			BIT(2)
+>  #define ACCESS_POLLING				BIT(3)
+>  
+> -#define MODEL_MSCC_OCELOT			BIT(8)
+>  #define MODEL_AMD_NAVI_GPU			BIT(10)
+>  #define MODEL_WANGXUN_SP			BIT(11)
+>  #define MODEL_MASK				GENMASK(11, 8)
+> diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
+> index 2e532f16691b..4e6fe3b55322 100644
+> --- a/drivers/i2c/busses/i2c-designware-platdrv.c
+> +++ b/drivers/i2c/busses/i2c-designware-platdrv.c
+> @@ -267,7 +267,7 @@ static void dw_i2c_plat_remove(struct platform_device *pdev)
+>  }
+>  
+>  static const struct of_device_id dw_i2c_of_match[] = {
+> -	{ .compatible = "mscc,ocelot-i2c", .data = (void *)MODEL_MSCC_OCELOT },
+> +	{ .compatible = "mscc,ocelot-i2c" },
+>  	{ .compatible = "snps,designware-i2c" },
+>  	{}
+>  };
+> -- 
+> 2.50.1
 
