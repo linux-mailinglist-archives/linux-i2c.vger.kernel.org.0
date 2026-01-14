@@ -1,123 +1,122 @@
-Return-Path: <linux-i2c+bounces-15149-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-15150-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4B89D1D494
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Jan 2026 09:57:04 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C2FBD1D95F
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Jan 2026 10:36:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 833233068DC0
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Jan 2026 08:51:47 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id D0345302350F
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Jan 2026 09:35:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51AA537FF50;
-	Wed, 14 Jan 2026 08:51:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3C543876B1;
+	Wed, 14 Jan 2026 09:35:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R3mbw00g"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="gPUGJx7F"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43F8337F8D5
-	for <linux-i2c@vger.kernel.org>; Wed, 14 Jan 2026 08:51:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B31C23803CF
+	for <linux-i2c@vger.kernel.org>; Wed, 14 Jan 2026 09:35:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768380694; cv=none; b=RiOsHgry08yiqff9ROidrc6WS3TL+gOJndTOOkqydENhpuTeEVoZ06w2elRsMcC4I7UuJbhj9HZ0C+XE4Lcop6EwF0oLbHNIqAtHxFX4f6MmhALMwjOWnBC0ZE0Ff4MkUbzhYsViISndWzIjEWuMhhVnyayFsDPqg9BkoRmdTd0=
+	t=1768383312; cv=none; b=VblCG6lAmSI3wwlacR+UcKWq9clue8INTyE5LMn48G9yAOYLdU/NLlFQJLmq4cQa4+2VVYY/4kS8gImooZEFV5PKeVaWPIm0VWqMpU0oQRzQwMHRZnUcIPimYI8MdV3OrMUfqPkGxZkR5edwwxIzE5SVcbbwLVKavohGXwjnp+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768380694; c=relaxed/simple;
-	bh=OE9GZ1UPGg7x7F49i2t3FY2UpVoS6kq5wHMQbbxduyg=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=V2jiVnYE4EF30xHaD8UG9gqGclSVlF6AkJ77TatwiyfS1sDdUKqiYXcE6uk4vHOUD2EUaIXKSIO3YNKv1dDQg/pR7RWnqi4JOkx3Cwfx5K4/8Xjr2eEMW6rKT91L7hHwK/YPJvlMSGxGVXRzsNhwsYmAe59Ji098rpC3+HFXTh8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R3mbw00g; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-81e86d7ff8eso193432b3a.1
-        for <linux-i2c@vger.kernel.org>; Wed, 14 Jan 2026 00:51:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768380691; x=1768985491; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oAEfI6V7TMd6SFDq7Kd7N1hzP70TqG2e4M3DDJvaCMY=;
-        b=R3mbw00gYLLw44nuQc11i1E/7eT9u4cd2W/vxYoNh+xu5XuaS4N+8civsS+orTiATw
-         SIa1c033rU9SUh6DP7s2HgSNuvX4Xnjcr+Jltx66HF18Hh9LljzM9z+s4qhtjwJJHmPX
-         OZgpHQxsi7YYzq5p61n6wTaghmRrhQGX4AN1WZf9fp+UWAVnXAynJWqFfsqrLwErASMn
-         IzezYCvAPHMCtUSj8PN2ZWhyFM/EOgtR+joNA30SMnO2K2GlEk8IB4EbApAcFHYW+zaa
-         3zq94v2UXITZWb0U6D9KqWuIOcwZWhQNO6Ix5yHGBgjiA4QFOSN/rByPOPiWJGAAPXj9
-         aNOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768380691; x=1768985491;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=oAEfI6V7TMd6SFDq7Kd7N1hzP70TqG2e4M3DDJvaCMY=;
-        b=bXltzTdSVwYbmfM2TODm9DiywD46I/fcReMUYrMb4pmytxZIM2OYgDBUl8/MkPGVVT
-         SPjiBBGarJVgfalOQvyqJYG5dZsfYiLX9EGaGW05Uug/TS/C5DxMTou5k5hvxQC2wvYr
-         KNzUzpj43fB7t3eJ1MJfWUyOCFvngtPbsEzD9gYCPcnERB0d5UXZi/B0xMcsp4l4G2Pp
-         RBCsUzdffa/vUSK6MbE8l9wjuC+F81SfWUF2d2HG+SZ3pPQRJquBUxfHAwpuYj5ifRHI
-         Tduej6VsAZ7pV2GJJSE46oi3MDV0eZz0B5xAoNo7RiDlwZF7Ls3rTMuLtWsEoccJaaAe
-         /+Sg==
-X-Forwarded-Encrypted: i=1; AJvYcCVihZ/YpGbLodxEyP3QjoTIG1P9BkEEAU6R/9qgb4z01b8mbpmFaBfcV2IKzmgmsZ2hqdzSIB628Ag=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxkeeOsD3SQw2cQuBgCcmV+VLJqECoOwRuclnwlHU1Vp+bh9tq7
-	M2UJWlUpp9CdTfdFnIlt+5b392tfk+IP/KfM8tMPfjQHFwDzgAJkzNcA
-X-Gm-Gg: AY/fxX7lAqxbPSTzbL6mYmN8WnFqU+RkE6feZBquwf50ZtVK4nwXUJKI/Qm5zFe0IxS
-	wPggnDWI6t6zojZX9T/73ygdkkXM/vReyLdeQPCIEDqOohNwoN+M1VECs75R4uCTmaQWGIlB2xL
-	v71feHdxBQKOWZSN9iGj0NACL0oZ5hiIju2RYMfgiKXlI/d7cDOgcwutotqG8x9lr1+4RrIbQZJ
-	Zl/1hyh1Zjzza6RgaCigTYi0xXwpfaYKpTbqTiYz6wTgOIIW2C+KugDUqYMbHwmO0B5xDsgw/VQ
-	6LXw/gnC/I/6jd40AmaGC3HZsbqtaqXjusItIBNKciZ6BxC7umc/5mZJoO5BXmftTZP7HzTlznY
-	tlSr/PNR7BGS/TSXJlpsFV/r7U5jZLxaXrF0exWCPn/3i9kNVymOahP0Tsn4QMgjSvuRd45d+8A
-	rcFv3pa7bo3w==
-X-Received: by 2002:a05:6a21:164a:b0:342:8c38:ec2 with SMTP id adf61e73a8af0-38bed0b2884mr1498192637.1.1768380691048;
-        Wed, 14 Jan 2026 00:51:31 -0800 (PST)
-Received: from MiniPC.. ([47.246.98.222])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-819c52fc9bdsm22557474b3a.32.2026.01.14.00.51.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jan 2026 00:51:30 -0800 (PST)
-From: weipeng <coderlogicwei@gmail.com>
-To: oneukum@suse.com,
-	linux-i2c@vger.kernel.org
-Cc: anna-maria@linutronix.de,
-	coderlogicwei@gmail.com,
-	frederic@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	syzkaller-bugs@googlegroups.com,
-	tglx@linutronix.de
-Subject: Re: [syzbot] [usb?] INFO: task hung in i2c_tiny_usb_disconnect
-Date: Wed, 14 Jan 2026 16:51:25 +0800
-Message-Id: <20260114085125.859740-1-coderlogicwei@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <8bed5082-0aef-4dee-8239-c3e8aba50f9f@suse.com>
-References: <8bed5082-0aef-4dee-8239-c3e8aba50f9f@suse.com>
+	s=arc-20240116; t=1768383312; c=relaxed/simple;
+	bh=2vPacHpYMnfR54LllQCxqQpy7/J2KHhBeWvY65hiPho=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qEHWmRRwRF1t2iGCXM1CqVKHmjawNrv4/Odo96jj4cy1THtscq0qw7b/ue+wauD4gLYICpYPMx23YJYKCsp46R5mSGkO0x7gzc3rQWLeztgYDWVNrruFPoMvfhvSWWRETdiZJyE55nagQFjYbxJ3mIqi9z92YvO3gHx0kaiiDv4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=gPUGJx7F; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=R7rt
+	HOgU7ZjoLQrdMm2TvqWYN5h2Pmk/L/n1E1vlqmU=; b=gPUGJx7F66WvwG69Bl1X
+	+ePm+u0vHDWIM6SHodlWLY3WQZWOZORnK/+Nttnc5JI+Z+DygO3uAezuNiQB9F9B
+	Q4PA9VAmtgbElBNzQRL5Y7nN4r6O16N4HSAQ0iVhhFHOEx2hlsGSaj5sgkzw3vHH
+	4nDN96/9jASL4JlZl5RZOWyz0ODgpI15MFcysoI0zDCNBEBwtFKHXnD07oZA2fIK
+	W8+k1L0TNDFXk5g/BdqzEuvdIbsGzbhCWhsZEHqrYun7SmYtSmlyCS5bYY3a49c9
+	Uu2k2JbnrAz4JfvbaTkl9/307HHSH9sDaxZEFULqM1NQjyuIfQFrp90+yTEtU/x0
+	pw==
+Received: (qmail 2063523 invoked from network); 14 Jan 2026 10:34:59 +0100
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 14 Jan 2026 10:34:59 +0100
+X-UD-Smtp-Session: l3s3148p1@cOlm0lVIPJEujnsM
+Date: Wed, 14 Jan 2026 10:34:59 +0100
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Cc: Andrew Lunn <andrew@lunn.ch>, Peter Korsgaard <peter@korsgaard.com>,
+	Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux@ew.tq-group.com
+Subject: Re: [PATCH v2 1/2] i2c: ocores: increase poll timeout to total
+ transfer timeout
+Message-ID: <aWdjQ1mubxk3m0JY@ninjato>
+References: <51a72ceca0154d7be85c3cc67722e7dd0b364a2e.1760000254.git.matthias.schiffer@ew.tq-group.com>
+ <aWZCT0JQfvX1LAMC@ninjato>
+ <f428f437-80ec-4587-9f6a-7508a8153e79@lunn.ch>
+ <5c535725c5e4761e6f16ff4016affe8ddcc79d88.camel@ew.tq-group.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="F2xeV0/mYIOnPv8a"
+Content-Disposition: inline
+In-Reply-To: <5c535725c5e4761e6f16ff4016affe8ddcc79d88.camel@ew.tq-group.com>
 
-Hi,
 
-i2c_del_adapter in i2c-core-base.c:
+--F2xeV0/mYIOnPv8a
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> void i2c_del_adapter(struct i2c_adapter *adap)
-> {
-> ...
-> /* wait until all references to the device are gone
->  *
->  * FIXME: This is old code and should ideally be replaced by an
->  * alternative which results in decoupling the lifetime of the struct
->  * device from the i2c_adapter, like spi or netdev do. Any solution
->  * should be thoroughly tested with DEBUG_KOBJECT_RELEASE enabled!
->  */
-> init_completion(&adap->dev_released);
-> device_unregister(&adap->dev);
-> wait_for_completion(&adap->dev_released);
-> ...
-> }
+Hi Matthias,
 
-This issue looks like caused by i2c_del_adapter(). It waits for too long so
-it may cause the hung.
+> This code does not have interrupts disabled, we could not fall back from
+> read_poll_timeout_atomic() to read_poll_timeout() otherwise.
 
-Thanks,
-weipeng
+Yes, that's what I thought as well.
+
+> that a sleeping wait would make it more likely for a switch to a different task
+> to happen after every byte, negatively impacting I2C performance; this is not
+> something I have verified however.
+
+Quite some prominent controller drivers use readX_poll_timeout(), so it
+really seems there is no huge penalty in practice. Especially not with
+cores so fast these days that tasks can be served even in 100us.
+
+> It is spinning for 1ms because that's what the old code did (which only spun
+> without fallback to sleeping).
+
+I understand. Yet, I think the spinning is legacy behaviour and I would
+prefer plain readX_poll_timeout(). Unless there is something I
+overlooked. Makes the code simpler and easier to maintain.
+
+Thanks and happy hacking,
+
+   Wolfram
+
+
+--F2xeV0/mYIOnPv8a
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmlnYz8ACgkQFA3kzBSg
+KbaEKg/+NDoMeg1qZgg/7HXZ6AyZ7+baCa9O85W9Pt2hMxV3GIo+mKJkn1nyR8Uy
+8klB9UN7oKmJap8GbxbS+qamYPYn4SWofaxoD2ZBhZRXWjzlIFWWIol/hKvWBnzb
+pCunyYM0zKSg6nt/BhErvOJYDoA+2Qi7Fr+mkihQTCCiDu1zwbytcuajIgZJBmme
+iCVmUR03vtWXJoTT3xDALPqUzWsK6mF2rb+Hpg1CA9/XPl75RKgmpWQJl47gPxxy
+hjfnvahn6I1tlUx2I8LuJi3X3yVsKZEx9V72oM7m5DHEHh3PVIAdc1zl/CgrPSuB
+83Ar1XNDVwGLZ5BaM9WRm1UGwObDzSP+8snEm4H2jUOBQgPvdZ4Hk+IvgA1JiErg
+51o3mYY1bo6mAeMdER/3faVuOEWwfkNnlUZWVY2PBzi+5AUKSIuaJykptn8eafOF
+tFz2ntz5PRSKwi8/e0lyGrdASF3yBMKshxygjstdn1G1qPaJusDLSXkTb/NE0iUb
+35rkVROKT3RxscaCxinB0TcVIEMJWPW5tupDbYMtIPokNoiarFI9etS7I2jJu3Fe
+RWgMjD3N4SaDAMDbDsD3+Nb02Ty+FHWgf/EeqzJWObzpH1XLHVicelj6UIAo/0Sk
+RWP8yWic6x31QI5WYEpKY14tpGdy69xb7dW0pQeocydeqHz7qS0=
+=P7Qe
+-----END PGP SIGNATURE-----
+
+--F2xeV0/mYIOnPv8a--
 
