@@ -1,149 +1,123 @@
-Return-Path: <linux-i2c+bounces-15148-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-15149-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10511D1D1D0
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Jan 2026 09:29:34 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4B89D1D494
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Jan 2026 09:57:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 19812300ACD7
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Jan 2026 08:29:18 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 833233068DC0
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Jan 2026 08:51:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EE4637E2F0;
-	Wed, 14 Jan 2026 08:29:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51AA537FF50;
+	Wed, 14 Jan 2026 08:51:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="rOcR4hXE"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R3mbw00g"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx-relay48-hz3.antispameurope.com (mx-relay48-hz3.antispameurope.com [94.100.134.237])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58BE137E301
-	for <linux-i2c@vger.kernel.org>; Wed, 14 Jan 2026 08:29:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=94.100.134.237
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768379356; cv=pass; b=pVymlzSCwY4IZytR/vBuDdi8aEDHT5LHatknY/1FhTGnJo5dIjP4eV3fVGOagO9ICaTyeUMxfIeUVTbD1/E1dVRb3Xj4RXpqN3ACrWfA7iI6YGVyftNdCmNl0ABnEnBW+d4r7N1XsVghllZ5hmkBPzNyrZGZ4skF+PJS3j3EH98=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768379356; c=relaxed/simple;
-	bh=Iab4ndsrAF7+D8T7DsGLaQLWPukilR+SNny04f/NueA=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=kNkGVsNVNUq3/7dFCxlN7FaA0jwISuuRtAJ65fgYv5xbp2mxNaVSfoevTVnayJDKYMXi8Nvnq0QpumegGDLFDMInW8heZxMWUmX81lZEjXLuhswfwffZpLz8egscSv9oiotiwzs5jDK/KT/PgaBRdAX1WlnX1UbLqNXsYgnOmaI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=rOcR4hXE; arc=pass smtp.client-ip=94.100.134.237
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ew.tq-group.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
-ARC-Authentication-Results: i=1; mx-gate48-hz3.hornetsecurity.com 1; spf=pass
- reason=mailfrom (ip=94.100.132.6, headerfrom=ew.tq-group.com)
- smtp.mailfrom=ew.tq-group.com smtp.helo=smtp-out02-hz1.hornetsecurity.com;
- dmarc=pass header.from=ew.tq-group.com orig.disposition=pass
-ARC-Message-Signature: a=rsa-sha256;
- bh=bwSNtwuxzn6iZJ9JU/ff8xk/XC7ukkHtkWY1re96guo=; c=relaxed/relaxed;
- d=hornetsecurity.com; h=from:to:date:subject:mime-version:; i=1; s=hse1;
- t=1768379337;
- b=G0VyEFPRHPS6ZRUvYLVISZtRPCGZvs92nleAbILa/A3Y5kjRzZYDYIS88Gwn75tZIw5MaRe0
- nrSJ2F6ngtDLZXPo+uSOPHQk7Rajc+MncrH3Ykw/NBue8WD5VhE/wIBHPehn3GrxtLTwWFdS3vZ
- LwqbNcZ3IeklKbDe0LI1wVat56dGIg92LZ6JYTEOr9mInA/cpQXAY3DbIBP6GKJTpbng21Gj4QO
- LL/qAboG5TWlMGnm2dMj0MtDgMghCoRAq1QzUhflc9YF/ZmKs7+5DbvAO5460qxljA5t1QSRAe/
- TyQLCH6cvYGhqJre5N059UMmn6MEPdbWVFNxV+5frF+hg==
-ARC-Seal: a=rsa-sha256; cv=none; d=hornetsecurity.com; i=1; s=hse1;
- t=1768379337;
- b=NdNJDVtYWw5xZjFTyILJ2mbJ9KMpJfyxIYfC85qHpt9E5OOZGl+cA6zDggQw9cdz6s+PCLbf
- kt/qPVpM8on92CK6QiwrVdzRM4CpC+Yvy/Bbaprm9idMWQIhAYLdgLrKFh5/fo7KyG+BeD/zCzY
- LSn9AkbiiPuUSIB24Lx64wlNjMlS455M1S19mcOCGoGlZ1AOGtwd7S3KhKzaAk/ZEFHqBj1xub0
- JuH7pDHl8o91qB4HOYrgFfJUUc0Sl3JqIofAwBl4AWCxQu+tmgLBtS3dmJ6PJBPK08yMCblhm+C
- FTc5iOL6EW7uIUSue0/JsB6awXrrRG9NmJLR3JTu8As4A==
-Received: from he-nlb01-hz1.hornetsecurity.com ([94.100.132.6]) by mx-relay48-hz3.antispameurope.com;
- Wed, 14 Jan 2026 09:28:57 +0100
-Received: from [192.168.153.128] (host-82-135-125-110.customer.m-online.net [82.135.125.110])
-	(Authenticated sender: matthias.schiffer@ew.tq-group.com)
-	by smtp-out02-hz1.hornetsecurity.com (Postfix) with ESMTPSA id 1068B5A0A13;
-	Wed, 14 Jan 2026 09:28:49 +0100 (CET)
-Message-ID: <5c535725c5e4761e6f16ff4016affe8ddcc79d88.camel@ew.tq-group.com>
-Subject: Re: [PATCH v2 1/2] i2c: ocores: increase poll timeout to total
- transfer timeout
-From: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: Peter Korsgaard <peter@korsgaard.com>, Andi Shyti
- <andi.shyti@kernel.org>,  linux-i2c@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux@ew.tq-group.com,  Wolfram Sang
- <wsa+renesas@sang-engineering.com>
-Date: Wed, 14 Jan 2026 09:28:48 +0100
-In-Reply-To: <f428f437-80ec-4587-9f6a-7508a8153e79@lunn.ch>
-References: 
-	<51a72ceca0154d7be85c3cc67722e7dd0b364a2e.1760000254.git.matthias.schiffer@ew.tq-group.com>
-	 <aWZCT0JQfvX1LAMC@ninjato> <f428f437-80ec-4587-9f6a-7508a8153e79@lunn.ch>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.3-0ubuntu1.1 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43F8337F8D5
+	for <linux-i2c@vger.kernel.org>; Wed, 14 Jan 2026 08:51:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768380694; cv=none; b=RiOsHgry08yiqff9ROidrc6WS3TL+gOJndTOOkqydENhpuTeEVoZ06w2elRsMcC4I7UuJbhj9HZ0C+XE4Lcop6EwF0oLbHNIqAtHxFX4f6MmhALMwjOWnBC0ZE0Ff4MkUbzhYsViISndWzIjEWuMhhVnyayFsDPqg9BkoRmdTd0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768380694; c=relaxed/simple;
+	bh=OE9GZ1UPGg7x7F49i2t3FY2UpVoS6kq5wHMQbbxduyg=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=V2jiVnYE4EF30xHaD8UG9gqGclSVlF6AkJ77TatwiyfS1sDdUKqiYXcE6uk4vHOUD2EUaIXKSIO3YNKv1dDQg/pR7RWnqi4JOkx3Cwfx5K4/8Xjr2eEMW6rKT91L7hHwK/YPJvlMSGxGVXRzsNhwsYmAe59Ji098rpC3+HFXTh8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R3mbw00g; arc=none smtp.client-ip=209.85.210.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-81e86d7ff8eso193432b3a.1
+        for <linux-i2c@vger.kernel.org>; Wed, 14 Jan 2026 00:51:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1768380691; x=1768985491; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oAEfI6V7TMd6SFDq7Kd7N1hzP70TqG2e4M3DDJvaCMY=;
+        b=R3mbw00gYLLw44nuQc11i1E/7eT9u4cd2W/vxYoNh+xu5XuaS4N+8civsS+orTiATw
+         SIa1c033rU9SUh6DP7s2HgSNuvX4Xnjcr+Jltx66HF18Hh9LljzM9z+s4qhtjwJJHmPX
+         OZgpHQxsi7YYzq5p61n6wTaghmRrhQGX4AN1WZf9fp+UWAVnXAynJWqFfsqrLwErASMn
+         IzezYCvAPHMCtUSj8PN2ZWhyFM/EOgtR+joNA30SMnO2K2GlEk8IB4EbApAcFHYW+zaa
+         3zq94v2UXITZWb0U6D9KqWuIOcwZWhQNO6Ix5yHGBgjiA4QFOSN/rByPOPiWJGAAPXj9
+         aNOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768380691; x=1768985491;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=oAEfI6V7TMd6SFDq7Kd7N1hzP70TqG2e4M3DDJvaCMY=;
+        b=bXltzTdSVwYbmfM2TODm9DiywD46I/fcReMUYrMb4pmytxZIM2OYgDBUl8/MkPGVVT
+         SPjiBBGarJVgfalOQvyqJYG5dZsfYiLX9EGaGW05Uug/TS/C5DxMTou5k5hvxQC2wvYr
+         KNzUzpj43fB7t3eJ1MJfWUyOCFvngtPbsEzD9gYCPcnERB0d5UXZi/B0xMcsp4l4G2Pp
+         RBCsUzdffa/vUSK6MbE8l9wjuC+F81SfWUF2d2HG+SZ3pPQRJquBUxfHAwpuYj5ifRHI
+         Tduej6VsAZ7pV2GJJSE46oi3MDV0eZz0B5xAoNo7RiDlwZF7Ls3rTMuLtWsEoccJaaAe
+         /+Sg==
+X-Forwarded-Encrypted: i=1; AJvYcCVihZ/YpGbLodxEyP3QjoTIG1P9BkEEAU6R/9qgb4z01b8mbpmFaBfcV2IKzmgmsZ2hqdzSIB628Ag=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxkeeOsD3SQw2cQuBgCcmV+VLJqECoOwRuclnwlHU1Vp+bh9tq7
+	M2UJWlUpp9CdTfdFnIlt+5b392tfk+IP/KfM8tMPfjQHFwDzgAJkzNcA
+X-Gm-Gg: AY/fxX7lAqxbPSTzbL6mYmN8WnFqU+RkE6feZBquwf50ZtVK4nwXUJKI/Qm5zFe0IxS
+	wPggnDWI6t6zojZX9T/73ygdkkXM/vReyLdeQPCIEDqOohNwoN+M1VECs75R4uCTmaQWGIlB2xL
+	v71feHdxBQKOWZSN9iGj0NACL0oZ5hiIju2RYMfgiKXlI/d7cDOgcwutotqG8x9lr1+4RrIbQZJ
+	Zl/1hyh1Zjzza6RgaCigTYi0xXwpfaYKpTbqTiYz6wTgOIIW2C+KugDUqYMbHwmO0B5xDsgw/VQ
+	6LXw/gnC/I/6jd40AmaGC3HZsbqtaqXjusItIBNKciZ6BxC7umc/5mZJoO5BXmftTZP7HzTlznY
+	tlSr/PNR7BGS/TSXJlpsFV/r7U5jZLxaXrF0exWCPn/3i9kNVymOahP0Tsn4QMgjSvuRd45d+8A
+	rcFv3pa7bo3w==
+X-Received: by 2002:a05:6a21:164a:b0:342:8c38:ec2 with SMTP id adf61e73a8af0-38bed0b2884mr1498192637.1.1768380691048;
+        Wed, 14 Jan 2026 00:51:31 -0800 (PST)
+Received: from MiniPC.. ([47.246.98.222])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-819c52fc9bdsm22557474b3a.32.2026.01.14.00.51.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jan 2026 00:51:30 -0800 (PST)
+From: weipeng <coderlogicwei@gmail.com>
+To: oneukum@suse.com,
+	linux-i2c@vger.kernel.org
+Cc: anna-maria@linutronix.de,
+	coderlogicwei@gmail.com,
+	frederic@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	syzkaller-bugs@googlegroups.com,
+	tglx@linutronix.de
+Subject: Re: [syzbot] [usb?] INFO: task hung in i2c_tiny_usb_disconnect
+Date: Wed, 14 Jan 2026 16:51:25 +0800
+Message-Id: <20260114085125.859740-1-coderlogicwei@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <8bed5082-0aef-4dee-8239-c3e8aba50f9f@suse.com>
+References: <8bed5082-0aef-4dee-8239-c3e8aba50f9f@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-cloud-security-sender:matthias.schiffer@ew.tq-group.com
-X-cloud-security-recipient:linux-i2c@vger.kernel.org
-X-cloud-security-crypt: load encryption module
-X-cloud-security-Mailarchiv: E-Mail archived for: matthias.schiffer@ew.tq-group.com
-X-cloud-security-Mailarchivtype:outbound
-X-cloud-security-Virusscan:CLEAN
-X-cloud-security-disclaimer: This E-Mail was scanned by E-Mailservice on mx-relay48-hz3.antispameurope.com with 4drfQn42Ttz1kNkWB
-X-cloud-security-connect: he-nlb01-hz1.hornetsecurity.com[94.100.132.6], TLS=1, IP=94.100.132.6
-X-cloud-security-Digest:97731e2c4315403f6ab53d234caf3ca6
-X-cloud-security:scantime:2.082
-DKIM-Signature: a=rsa-sha256;
- bh=bwSNtwuxzn6iZJ9JU/ff8xk/XC7ukkHtkWY1re96guo=; c=relaxed/relaxed;
- d=ew.tq-group.com;
- h=content-type:mime-version:subject:from:to:message-id:date; s=hse1;
- t=1768379336; v=1;
- b=rOcR4hXEYiKn7zLHaH0iBnSttAJkmylkjttJO3IZHLAkjNqYCoM7eiTzlW+B1AfnArx1gwxj
- MoRplI4GK5jwDRdYZ2bU5BDEAT0n+1z1uxwUaccENH+mGml1EhGZTf7VeLdB6a0NtoqwUiZU46F
- tqu2Y+FI3bxGf3Q7HyXBr/1hziExXYfQTnKqMW73ArkMS3ozghBaN8uR6jhNXfaMs+Z5clP+ub9
- JmPEHQGokMCsTpBqCBHoLMK2fBaO3b2t7/lDyf71pTVqFKAHDWynamzXkPxaLchpqkAdYMoNiWd
- SaX/ZE8DBgIwYEaTb426T8f2wtifP6ZT59+2T5yG6JAXw==
+Content-Transfer-Encoding: 8bit
 
-On Tue, 2026-01-13 at 15:21 +0100, Andrew Lunn wrote:
-> On Tue, Jan 13, 2026 at 02:02:07PM +0100, Wolfram Sang wrote:
-> >=20
-> > > The behavior in the regular case is unchanged, spinning for up to 1ms=
-,
-> > > but the open-coded poll loop is replaced with read_poll_timeout_atomi=
-c()
-> > > as suggested by Andrew Lunn.
-> >=20
-> > Hmm, spinning 1ms is still a lot. Can't we just use read_poll_timeout()
-> > for the whole timeout? I can't see that it will cause a regression. But
-> > please correct me if I am wrong.
->=20
-> I've forgotten the context, but
->=20
-> /**
->  * ocores_poll_wait() - Wait until is possible to process some data
->  * @i2c: ocores I2C device instance
+Hi,
+
+i2c_del_adapter in i2c-core-base.c:
+
+> void i2c_del_adapter(struct i2c_adapter *adap)
+> {
+> ...
+> /* wait until all references to the device are gone
 >  *
->  * Used when the device is in polling mode (interrupts disabled).
->=20
-> If interrupts are disabled, you cannot use read_poll_timeout().  You
-> have to use read_poll_timeout_atomic(). And that spins anyway.
->=20
->      Andrew
+>  * FIXME: This is old code and should ideally be replaced by an
+>  * alternative which results in decoupling the lifetime of the struct
+>  * device from the i2c_adapter, like spi or netdev do. Any solution
+>  * should be thoroughly tested with DEBUG_KOBJECT_RELEASE enabled!
+>  */
+> init_completion(&adap->dev_released);
+> device_unregister(&adap->dev);
+> wait_for_completion(&adap->dev_released);
+> ...
+> }
 
+This issue looks like caused by i2c_del_adapter(). It waits for too long so
+it may cause the hung.
 
-This code does not have interrupts disabled, we could not fall back from
-read_poll_timeout_atomic() to read_poll_timeout() otherwise. My understandi=
-ng is
-that a sleeping wait would make it more likely for a switch to a different =
-task
-to happen after every byte, negatively impacting I2C performance; this is n=
-ot
-something I have verified however.
-
-It is spinning for 1ms because that's what the old code did (which only spu=
-n
-without fallback to sleeping). Reducing this to the time needed to transfer=
- 1
-byte in the absence of clock stretching should not cause issues (200us for
-50kHz; could also be made to depend on the clock rate, so it would be even =
-less
-spinning at higher frequencies).
-
-Best,
-Matthias
+Thanks,
+weipeng
 
