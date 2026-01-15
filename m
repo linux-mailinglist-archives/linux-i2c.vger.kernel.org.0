@@ -1,124 +1,107 @@
-Return-Path: <linux-i2c+bounces-15186-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-15187-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9272FD24C68
-	for <lists+linux-i2c@lfdr.de>; Thu, 15 Jan 2026 14:42:41 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2E34D24E72
+	for <lists+linux-i2c@lfdr.de>; Thu, 15 Jan 2026 15:18:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 68A323048EDE
-	for <lists+linux-i2c@lfdr.de>; Thu, 15 Jan 2026 13:39:51 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 618B8301FF5C
+	for <lists+linux-i2c@lfdr.de>; Thu, 15 Jan 2026 14:16:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF071376BE1;
-	Thu, 15 Jan 2026 13:39:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5EBD36C598;
+	Thu, 15 Jan 2026 14:16:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sevenlab-de.20230601.gappssmtp.com header.i=@sevenlab-de.20230601.gappssmtp.com header.b="zVuaaYXY"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="YCHEx58W"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02B2B334C14
-	for <linux-i2c@vger.kernel.org>; Thu, 15 Jan 2026 13:39:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE4E83A1E64
+	for <linux-i2c@vger.kernel.org>; Thu, 15 Jan 2026 14:16:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768484390; cv=none; b=jY8uSGNYtZD21fciR7JAE8uql3te96I3rSP52b6eV9RkxHtymABkIr/vhWMrndi2v4SDl4mgvLb6PmDkCf4sqNtT0hsPsrol9H0GC56UePJceD6o7jAn5ST90/ExrRue88GcmEIX6ER+YfrS4MYi8K1TIRUK8SB25zW8j7P79gk=
+	t=1768486588; cv=none; b=Rlgnpm8KSYGBBz8GQYVXLY43ZxITUaRDNRGZ2C1R8foZvm0nWBAkCpbP43BE9lHhybrwj2wj8HOKwzvvWvisi2cHbNUW5bcYcnHlksu7YlpvOOwYqjO5n29ANMRYdqiRZxfczCyj+q0PS5vjkmJqxR1aVbAiCDCQ0SOBMm5sk7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768484390; c=relaxed/simple;
-	bh=ttUrWF5Yy8NlteK90gn1B4LBQLQ7IuXpJIAwJWQeBkg=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=LWuPf7mOApnm477k09QuQRP2SmWK556Oe9uofLjTj/0XVzj9XK38APyDaFHBsgrkaJIYvi5AyeJ7K9TOCrph5HSk4/TPjLTxNmhZJGQU8plY8z3Gg3LGNkd3tXJFd/j5ewULYOj7boTakyO3B2EdhCoPRQVnvUGvHw1bGpsULeE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sevenlab.de; spf=pass smtp.mailfrom=sevenlab.de; dkim=pass (2048-bit key) header.d=sevenlab-de.20230601.gappssmtp.com header.i=@sevenlab-de.20230601.gappssmtp.com header.b=zVuaaYXY; arc=none smtp.client-ip=209.85.218.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sevenlab.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sevenlab.de
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-b86ed375d37so123963766b.3
-        for <linux-i2c@vger.kernel.org>; Thu, 15 Jan 2026 05:39:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sevenlab-de.20230601.gappssmtp.com; s=20230601; t=1768484387; x=1769089187; darn=vger.kernel.org;
-        h=in-reply-to:references:from:to:cc:subject:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zw5GHn+xllnurg1foWoqrPaoDHupvhAUrTC/zMdEzDA=;
-        b=zVuaaYXYxN2IwyuQ2bjhT3BeD2eXqDRIAAOnzV9l3eWNjDtbgp7KQkHqXeWFjyljss
-         aorE0J/cKPFHDMurE8v4aT8l+WErFzD9nvDFO8JtS+TLw/ob70cF1wMlbHZMCWoim9/Z
-         Uc7KeFD5U7u9f968XF/UREWeU2WrzY3jZNsnQhVoY6sRAOgJ45Khzaw7oC9MlM/f2eu8
-         a+I1LoaF17HpzZ+yMvMENsxzooeg6o1Fifb9cBtD3qFAdzsbtIKy/Y3NiyeMRONSO9nn
-         JpB+uMvO4FBzq2zWyLVP4T/PCx9vq1ZIBI+Y3Zqa7MOTyHDdXFRW6RXAlaECRL21+Ole
-         WL3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768484387; x=1769089187;
-        h=in-reply-to:references:from:to:cc:subject:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zw5GHn+xllnurg1foWoqrPaoDHupvhAUrTC/zMdEzDA=;
-        b=JufGEDWzQztjZzcGJNtLgyI7XJ90Qevy3fZ0sINiu+T8Xsy+p+0R2lt6Nbt3l3Nzfd
-         q+rGEs38psAIgnWGsUTUnRCbVWygU0ZQrm5obDib+kqwmkDAWdL6DYIzPJ9W/lAdCM6j
-         GnonfiGvUc5LnM+w7l7WIXlYWfGTuiep5oU0KXV/jC3EfWpRlaGWPFpS4gb4oADPw66d
-         Pm/WNDp21c60oekNQbHEYbl4ducoMfdJtUIwKriR/zVqvxmMdaId3p4I7N4nBixiJwOi
-         y5xVI1IUJNPcqXxPyL+gSALxKn5055PsY8sRsxoXdajtTVuA6S0Oy54rf6TgXwDaxxNb
-         kY/Q==
-X-Gm-Message-State: AOJu0Yx7fza79CIHbvVawhshfkY/7/1TxYEP7Jj7Lz0VLrciXur2Mm0S
-	DG43wKXn/JNQgkdgd0Qi8ERBlxi0YmOE85EfV8v8hjOY1CjgCI/Hcto73ve6HZBJFQ4=
-X-Gm-Gg: AY/fxX7H26DeK33IdVQp5CruEk65j1HAuSDQVumi1ZlqkGJol6pPaTxbaztO4ziyQF2
-	QdFJHJilp04/2W92JjR9t7MpWCiTXrcIskLV6g/woJU0qGAUv+a+IChB1GekIHymIDFebTlS3Ai
-	6EKwhFC+q9LNYxbVHtzgGvMjZfQSLvcvSdmjNWK+jdDaBv8zPz5L3zevzhKn//AS5oCGIXqyDvX
-	8ZhxJt5dQReZ/AsIhleSSD9pyIdlazgzTYK3CEqhE3q4C4SYUlU1qFKI3biiozRfL345mDbuI/O
-	zg3M6FMEYI2N53zmC+JLsOtFzRw9v+OS9yJZci9FHFrkeAGuuas2AWrdRsN2EhmWxZTtFt9h8lW
-	0l09lQ9iMrk/i9mfmCL69dvMak/G2ipSScznS9+Ux+wBu4YoybwDwQFyNIKjGiWvVpc3f9Zy4Kw
-	q9SxB4vL2I8ExUfNPNtd8BC2j3AlRt9eAMzw==
-X-Received: by 2002:a17:907:6eab:b0:b87:34e3:a795 with SMTP id a640c23a62f3a-b8761028880mr531174966b.26.1768484386904;
-        Thu, 15 Jan 2026 05:39:46 -0800 (PST)
-Received: from localhost ([2a02:8109:8a91:de00:3860:4306:f616:8f87])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b86f9a9103bsm1458424066b.30.2026.01.15.05.39.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Jan 2026 05:39:46 -0800 (PST)
+	s=arc-20240116; t=1768486588; c=relaxed/simple;
+	bh=D+K2A4etlNeroSQ2Ovys55QUK/lQ+5yXwF8QoseIZfw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=okM3GW3K43ldaIzdzAPyN3M6T5D2+7Ul4cxLMH2GowxZXMZK+Mb00un4GnZueX7zOpBSV41ZVhEteMQOIQyqQActk38mWWduFNNmje841dwxQlDJbOuldoDuLczuTrn44iknHhr5hQIgv4gZ7vg5U0vBXsllM9BnU/1efPx0fwY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=YCHEx58W; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=HFrO
+	TLFiVzOjkHSapJmcAyWe5EM1jzgnrCKz4RMxoDs=; b=YCHEx58WzOpXPF9cOQpj
+	byv4nz6aVo9dCFVPq9628hqwPZIp8T/lKzOvjKRzdx2U1JW+loXs0wktf1EjrCaW
+	20mQmRRvYYoiNHpliABmvCmcOv9MTCADE/Rf+ZR+SafacdVQMctHMCPiCPG5wUIo
+	0UBNJ3I2+iUp6vQOCjtE4QvCs+X/Lqx8PQ2jXdBcAx+FQ0Kj2N/tPIbeGHNHamRq
+	GA+mQ9UKWvQoOnYOi/1ikJvXMCBTsc//lhUCszv0IdYnrN35NBUA+rsxiZwzp9vd
+	zMlpJKfuDMdmLQ/qhDSff+04lGn5P9naR/AAfqBiDQSkAyrquB1e7PwrsEa+uD43
+	bg==
+Received: (qmail 2569104 invoked from network); 15 Jan 2026 15:16:20 +0100
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 15 Jan 2026 15:16:20 +0100
+X-UD-Smtp-Session: l3s3148p1@QHBh3m1IDMi5aIqj
+Date: Thu, 15 Jan 2026 15:16:18 +0100
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Gero =?utf-8?Q?Schw=C3=A4ricke?= <gero.schwaericke@sevenlab.de>
+Cc: linux-i2c@vger.kernel.org, Jean Delvare <jdelvare@suse.de>
+Subject: Re: [RFC][i2c-tools] Accept device-node path as alternative to bus
+ number
+Message-ID: <aWj2WmYeOrr7YbEa@shikoro>
+References: <DE53PTBTBBBY.24N093ZM03IKQ@sevenlab.de>
+ <aRIPsOOgs5jtxv9D@shikoro>
+ <aUAUAG3KwQHHqgKq@shikoro>
+ <aWaDBzAOm86XSZgP@ninjato>
+ <DFP7E7BGWMP0.T3BHEX68KHFJ@sevenlab.de>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 15 Jan 2026 14:39:46 +0100
-Message-Id: <DFP7E7BGWMP0.T3BHEX68KHFJ@sevenlab.de>
-Subject: Re: [RFC][i2c-tools] Accept device-node path as alternative to bus
- number
-Cc: <linux-i2c@vger.kernel.org>, "Jean Delvare" <jdelvare@suse.de>
-To: "Wolfram Sang" <wsa+renesas@sang-engineering.com>
-From: =?utf-8?q?Gero_Schw=C3=A4ricke?= <gero.schwaericke@sevenlab.de>
-X-Mailer: aerc 0.20.1-26-gcbffbc9ac803
-References: <DE53PTBTBBBY.24N093ZM03IKQ@sevenlab.de>
- <aRIPsOOgs5jtxv9D@shikoro> <aUAUAG3KwQHHqgKq@shikoro>
- <aWaDBzAOm86XSZgP@ninjato>
-In-Reply-To: <aWaDBzAOm86XSZgP@ninjato>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="8IRwo+Sjj9Y4ngEg"
+Content-Disposition: inline
+In-Reply-To: <DFP7E7BGWMP0.T3BHEX68KHFJ@sevenlab.de>
 
-Hi Wolfram,
 
-On Tue Jan 13, 2026 at 6:38 PM CET, Wolfram Sang wrote:
-> Hi Gero,
->
-> On Mon, Dec 15, 2025 at 10:58:24PM +0900, Wolfram Sang wrote:
->>=20
->> > > I'm working with multiple hotpluggable I2C adapters and have the
->> > > following proposal:
->> >=20
->> > From my side, this all sounds reasonable. But we need Jean's opinion
->> > here, too.
->>=20
->> Seems Jean is busy. So, from my side, let's go. I can apply it if all is
->> well...
->
-> Did you have time to develop this?
+--8IRwo+Sjj9Y4ngEg
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-thanks for following up on this and sorry for the late response, I'm
-currently occupied with other work, but I have this still on my TODO
-list. I intend to tackle this once I find some uninterrupted time.
+Hi Gero,
 
-Best,
-Gero
+> thanks for following up on this and sorry for the late response, I'm
+> currently occupied with other work, but I have this still on my TODO
+> list. I intend to tackle this once I find some uninterrupted time.
 
->
-> Happy hacking,
->
->    Wolfram
+Sure thing. Thanks for the heads up. I will stop pinging and just wait.
 
+Happy hacking,
+
+   Wolfram
+
+
+--8IRwo+Sjj9Y4ngEg
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmlo9rIACgkQFA3kzBSg
+KbaSMRAAmlNvgDhQOU0NUZdU0fQ3hIvlwKpKOxCWxTw/1UHmzm0k/SrQ66ET5FTL
+uJ7Yvh3j19ErIUA+2fUm2H/5WdEmW082rjzUQhK3kmiMGJG4QE1rI+hNlI6LXoHk
+kHZWPdDvGUUdApKoTvQSBZPsHOA8uUMnHtyRFvpMCUK2IBafa3wtqVgm89FE7rl9
+5A2u6jKdDYxElGW88G93kDewznyyxNQxDD94BD9I9xRUOBe8ExXgeeBBHfK7zAMU
+OTGONXNq9ovOdw1dIT02AxIjZL1PEQpL+6vZffMNIJqoVuTMSfDKSN9ox4IhfwNO
+Kbfrk+MdmK0EkY9DLR4FV4jBUKEAuz98zep9RANvktW3DJFrUWZFIZXNqhUxiXOK
+ItcGzLJGzKkzHyUY2tDbk7v2RX7cxzXQLV+rIn7MRl1iVV1n2H81Bf+y7lE5fam6
+kCadxo+FyKLFkoSLRg+tQ//px+HzKqkm9/A8DrH9yk5vuCn4gfEgCAN9DK/64qWQ
+PKl8pMA//mP7U9ToFoMudIkfNUbuBJEYgOhcw+hkPECQJLQxBaG+uho6/hjFWw3B
+rQJOu47mx/b/liSMlH5xnVvumCAwPBt3jfGHtmbmWj13YOeipmqZmcTXd3fOMhN/
+l2ktnWtciG8MCQj2UhlIVUcdwqjlWB4VmPEpaAkmH3rmkkYUoJY=
+=qjc7
+-----END PGP SIGNATURE-----
+
+--8IRwo+Sjj9Y4ngEg--
 
