@@ -1,107 +1,153 @@
-Return-Path: <linux-i2c+bounces-15187-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-15188-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2E34D24E72
-	for <lists+linux-i2c@lfdr.de>; Thu, 15 Jan 2026 15:18:46 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C040D24E7E
+	for <lists+linux-i2c@lfdr.de>; Thu, 15 Jan 2026 15:20:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 618B8301FF5C
-	for <lists+linux-i2c@lfdr.de>; Thu, 15 Jan 2026 14:16:29 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id BBFA230164EF
+	for <lists+linux-i2c@lfdr.de>; Thu, 15 Jan 2026 14:20:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5EBD36C598;
-	Thu, 15 Jan 2026 14:16:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD14C39C64A;
+	Thu, 15 Jan 2026 14:20:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="YCHEx58W"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZjIQZKIf"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE4E83A1E64
-	for <linux-i2c@vger.kernel.org>; Thu, 15 Jan 2026 14:16:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A08E624DFF3;
+	Thu, 15 Jan 2026 14:20:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768486588; cv=none; b=Rlgnpm8KSYGBBz8GQYVXLY43ZxITUaRDNRGZ2C1R8foZvm0nWBAkCpbP43BE9lHhybrwj2wj8HOKwzvvWvisi2cHbNUW5bcYcnHlksu7YlpvOOwYqjO5n29ANMRYdqiRZxfczCyj+q0PS5vjkmJqxR1aVbAiCDCQ0SOBMm5sk7c=
+	t=1768486825; cv=none; b=s7mcg46BloaJoAdDAxjbCznPN7bKqq/VLSiRx5sdGelKJF7/VlNXCnjOBG63CJWSFCfiNP3us0+uXL0ybwqb14Qq2frlngwZyMmiofpmQFz/OCzh6il6mxN6gKSMRBK0+7jAyKfXhiqZtz5Vl5g8OyTijKIVARJV8uq92iE019E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768486588; c=relaxed/simple;
-	bh=D+K2A4etlNeroSQ2Ovys55QUK/lQ+5yXwF8QoseIZfw=;
+	s=arc-20240116; t=1768486825; c=relaxed/simple;
+	bh=bBvZmsX0wAehXmXp8vsbL52cWSEybjGheyGdcVDaPZ0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=okM3GW3K43ldaIzdzAPyN3M6T5D2+7Ul4cxLMH2GowxZXMZK+Mb00un4GnZueX7zOpBSV41ZVhEteMQOIQyqQActk38mWWduFNNmje841dwxQlDJbOuldoDuLczuTrn44iknHhr5hQIgv4gZ7vg5U0vBXsllM9BnU/1efPx0fwY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=YCHEx58W; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=HFrO
-	TLFiVzOjkHSapJmcAyWe5EM1jzgnrCKz4RMxoDs=; b=YCHEx58WzOpXPF9cOQpj
-	byv4nz6aVo9dCFVPq9628hqwPZIp8T/lKzOvjKRzdx2U1JW+loXs0wktf1EjrCaW
-	20mQmRRvYYoiNHpliABmvCmcOv9MTCADE/Rf+ZR+SafacdVQMctHMCPiCPG5wUIo
-	0UBNJ3I2+iUp6vQOCjtE4QvCs+X/Lqx8PQ2jXdBcAx+FQ0Kj2N/tPIbeGHNHamRq
-	GA+mQ9UKWvQoOnYOi/1ikJvXMCBTsc//lhUCszv0IdYnrN35NBUA+rsxiZwzp9vd
-	zMlpJKfuDMdmLQ/qhDSff+04lGn5P9naR/AAfqBiDQSkAyrquB1e7PwrsEa+uD43
-	bg==
-Received: (qmail 2569104 invoked from network); 15 Jan 2026 15:16:20 +0100
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 15 Jan 2026 15:16:20 +0100
-X-UD-Smtp-Session: l3s3148p1@QHBh3m1IDMi5aIqj
-Date: Thu, 15 Jan 2026 15:16:18 +0100
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Gero =?utf-8?Q?Schw=C3=A4ricke?= <gero.schwaericke@sevenlab.de>
-Cc: linux-i2c@vger.kernel.org, Jean Delvare <jdelvare@suse.de>
-Subject: Re: [RFC][i2c-tools] Accept device-node path as alternative to bus
- number
-Message-ID: <aWj2WmYeOrr7YbEa@shikoro>
-References: <DE53PTBTBBBY.24N093ZM03IKQ@sevenlab.de>
- <aRIPsOOgs5jtxv9D@shikoro>
- <aUAUAG3KwQHHqgKq@shikoro>
- <aWaDBzAOm86XSZgP@ninjato>
- <DFP7E7BGWMP0.T3BHEX68KHFJ@sevenlab.de>
+	 Content-Type:Content-Disposition:In-Reply-To; b=LSsPASIdhlkuUOQ9So0F9oUKq4ask5bhw/hfLv2FY329XPCaDiUt2JwOyXvleOM+DenXrX1x81yxa2EsyreIdLkYU1YKt5pWCVcQhMzm8LwtKUrxebjdnY0L25kIE2iCunY5o1TMqjBbuh+aQ9os4/byBWOOlGTdd3qZsnejlvA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZjIQZKIf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0B02C116D0;
+	Thu, 15 Jan 2026 14:20:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768486825;
+	bh=bBvZmsX0wAehXmXp8vsbL52cWSEybjGheyGdcVDaPZ0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ZjIQZKIf39w2H5NMIoJbgakDo0fUa3tcX6YDSZfbtGg7GABS+EgMqkKr8ucnc3xse
+	 2VAN8nQ50b4q70oARSEd3VqsHWJ3TDGdiNp0IgimNoW10s+xN/Z5f8Pj/Y35EJIyq2
+	 X2f30GJUn4WBbXBEYtel2NTS4zjJxj/rOm5M+YbJPWZsrzuNSnEPK9qJC3aXOJYyq2
+	 9csGzZAkNALYvxDKCT8EFmB2mfnEK0zjdEJpXraLOsAV6A9C9JyHBtXQkOMIVaqTmE
+	 F3NV4ksGjX3uGlkZJ7fPxK3VOmyT2k4+olwjb3Rt3I72hIycVeIviXfHA/qaRjMo8L
+	 JIOxKq/PBOWPQ==
+Date: Thu, 15 Jan 2026 15:20:21 +0100
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Francesco Lavra <flavra@baylibre.com>
+Cc: linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH] i2c: Add FTDI FT4222H USB I2C adapter
+Message-ID: <aWjodd1Vm_pDIvif@zenone.zhora.eu>
+References: <20260106170807.3964886-1-flavra@baylibre.com>
+ <aV5aM4OgIeJtsxlb@zenone.zhora.eu>
+ <a503fea8fdf4156526d473ee2208b42b896b50c1.camel@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="8IRwo+Sjj9Y4ngEg"
+Content-Type: text/plain; charset=iso-8859-15
 Content-Disposition: inline
-In-Reply-To: <DFP7E7BGWMP0.T3BHEX68KHFJ@sevenlab.de>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a503fea8fdf4156526d473ee2208b42b896b50c1.camel@baylibre.com>
 
+> On Wed, 2026-01-07 at 14:38 +0100, Andi Shyti wrote:
+> > Hi Francesco,
+> > 
+> > I did just a quick initial review.
+> 
+> ...
+> 
+> > > +static int ft4222_i2c_get_status(struct ft4222_i2c *ftdi)
+> > > +{
+> > > +       u8 status;
+> > > +       int retry;
+> > > +       const int max_retries = 512;
+> > 
+> > why 512?
+> 
+> These retries are needed mostly when retrieving the status after doing a
+> write with the I2C bus operating at a low speed.
+> Doing various tests at 100 kHz, I saw that after a maximum-sized (512-byte)
+> write, up to 11 retries are needed before the chip clears its CTRL_BUSY
+> flag. But under certain conditions we may need more retries, for example if
+> I disconnect the SCL line and then try to do a write, I see that up to 64
+> retries are needed.
+> So I guess 512 max_retries is too much, but we need a value > 64. Does 128
+> sound OK to you? Perhaps I can add a comment with the above observations.
 
---8IRwo+Sjj9Y4ngEg
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+All constants need to have a comment or defined or both. A good
+comment would definitely help. As for the number of retries it
+looks a bit too much to me, but you definitely know better.
 
-Hi Gero,
+> > > +       for (retry = 0; retry < max_retries; retry++) {
+> > > +               int ret = ft4222_cmd_get(ftdi, 0xf5b4, &status);
+> > > +
+> > > +               if (ret < 0)
+> > > +                       return ret;
+> > > +               if (!(status & FT4222_I2C_CTRL_BUSY))
+> > > +                       break;
+> > > +       }
+> > > +       dev_dbg(&ftdi->adapter.dev, "status 0x%02x (%d retries)",
+> > > status,
+> > > +               retry);
+> > 
+> > whould this debug message be printed after the check below?
+> 
+> Not sure I understood your question. Are you suggesting to move the
+> dev_dbg() call after the check below? I put it before the check so that I
+> get a debug message even if the maximum number of retries has been reached.
 
-> thanks for following up on this and sorry for the late response, I'm
-> currently occupied with other work, but I have this still on my TODO
-> list. I intend to tackle this once I find some uninterrupted time.
+It looks to me more like a spam message or a spurious printout
+after a debugging session, rather than an informative message.
 
-Sure thing. Thanks for the heads up. I will stop pinging and just wait.
+I'd remove it, but if you think that's really useful, then you
+can keep it.
 
-Happy hacking,
+> > > +       if (retry == max_retries) {
+> > > +               ft4222_i2c_reset(ftdi);
+> > > +               return -ETIMEDOUT;
+> > > +       }
+> > > +       if (!(status & FT4222_I2C_ERROR))
+> > > +               return 0;
+> > > +       if (status & FT4222_I2C_ADDR_NACK)
+> > > +               return -ENXIO;
+> > > +       else if (status & FT4222_I2C_DATA_NACK)
+> > > +               return -EIO;
+> > > +       else
+> > > +               return -EBUSY;
+> > > +}
+> 
+> ...
+> 
+> > > +static int ft4222_i2c_probe(struct usb_interface *interface,
+> > > +                           const struct usb_device_id *id)
+> > > +{
+> > > +       enum ft4222_conf_mode conf_mode;
+> > > +       int ret = ft4222_get_conf(interface, &conf_mode);
+> > > +       int intf = interface->cur_altsetting->desc.bInterfaceNumber;
+> > > +
+> > > +       if (ret)
+> > > +               return ret;
+> > > +       if (((conf_mode == ft4222_conf0) || (conf_mode ==
+> > > ft4222_conf3)) &&
+> > 
+> > what about conf12?
+> 
+> As mentioned in the commit message, the I2C functionality is available only
+> when the chip is configured in mode 0 or 3. In modes 1 and 2, the chip
+> implements other functionalities, e.g. SPI.
+> I will add a comment in this function.
 
-   Wolfram
+What prevents us from removing conf12 at all?
 
-
---8IRwo+Sjj9Y4ngEg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmlo9rIACgkQFA3kzBSg
-KbaSMRAAmlNvgDhQOU0NUZdU0fQ3hIvlwKpKOxCWxTw/1UHmzm0k/SrQ66ET5FTL
-uJ7Yvh3j19ErIUA+2fUm2H/5WdEmW082rjzUQhK3kmiMGJG4QE1rI+hNlI6LXoHk
-kHZWPdDvGUUdApKoTvQSBZPsHOA8uUMnHtyRFvpMCUK2IBafa3wtqVgm89FE7rl9
-5A2u6jKdDYxElGW88G93kDewznyyxNQxDD94BD9I9xRUOBe8ExXgeeBBHfK7zAMU
-OTGONXNq9ovOdw1dIT02AxIjZL1PEQpL+6vZffMNIJqoVuTMSfDKSN9ox4IhfwNO
-Kbfrk+MdmK0EkY9DLR4FV4jBUKEAuz98zep9RANvktW3DJFrUWZFIZXNqhUxiXOK
-ItcGzLJGzKkzHyUY2tDbk7v2RX7cxzXQLV+rIn7MRl1iVV1n2H81Bf+y7lE5fam6
-kCadxo+FyKLFkoSLRg+tQ//px+HzKqkm9/A8DrH9yk5vuCn4gfEgCAN9DK/64qWQ
-PKl8pMA//mP7U9ToFoMudIkfNUbuBJEYgOhcw+hkPECQJLQxBaG+uho6/hjFWw3B
-rQJOu47mx/b/liSMlH5xnVvumCAwPBt3jfGHtmbmWj13YOeipmqZmcTXd3fOMhN/
-l2ktnWtciG8MCQj2UhlIVUcdwqjlWB4VmPEpaAkmH3rmkkYUoJY=
-=qjc7
------END PGP SIGNATURE-----
-
---8IRwo+Sjj9Y4ngEg--
+Andi
 
