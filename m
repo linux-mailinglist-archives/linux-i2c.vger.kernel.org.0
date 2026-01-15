@@ -1,118 +1,139 @@
-Return-Path: <linux-i2c+bounces-15202-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-15203-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id B95EED27FC7
-	for <lists+linux-i2c@lfdr.de>; Thu, 15 Jan 2026 20:16:38 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8802BD2833C
+	for <lists+linux-i2c@lfdr.de>; Thu, 15 Jan 2026 20:46:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 8EC5A300BA05
-	for <lists+linux-i2c@lfdr.de>; Thu, 15 Jan 2026 19:16:37 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 6520C30E76FA
+	for <lists+linux-i2c@lfdr.de>; Thu, 15 Jan 2026 19:42:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A2632EB873;
-	Thu, 15 Jan 2026 19:16:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F289F31A80E;
+	Thu, 15 Jan 2026 19:41:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nexthop.ai header.i=@nexthop.ai header.b="QzPo/5YE"
+	dkim=pass (2048-bit key) header.d=oasis-open-org.20230601.gappssmtp.com header.i=@oasis-open-org.20230601.gappssmtp.com header.b="0u8wu089"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 135D01A840A
-	for <linux-i2c@vger.kernel.org>; Thu, 15 Jan 2026 19:16:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0832931A808
+	for <linux-i2c@vger.kernel.org>; Thu, 15 Jan 2026 19:41:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768504594; cv=none; b=mDxG27djJ/paYC2Na0id2JDbED1LfhprCpaXyLt9IBjUCt8rhAipX4/mHsaLWbw+nmWv15r/d0HfeoWnEuyfTdTxr1X+CyaOLAB/7jEgvZG5dQj8elcgwp4wjIpYiM92c1D+9+N1DWSXQPuZ6Cl1h7Q7yX57lnmzX8AtJuzYtvQ=
+	t=1768506116; cv=none; b=Sv0WTVirkJnBEy1PXQCPVzuHVOADZpy6YUwRXwOKaXy10r9GMQXgF7nmcpfZZBkVk0xURC6UAd7tdU+0ooyL7EbK0AJWWRF2lRtD9ern6ufWGd20w8YU+abu5gI98tHdDiarxmm4X7ghTOUPdx2nDHkaVIrBlekp+OSLhaNz27I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768504594; c=relaxed/simple;
-	bh=lo79Jc+8GawfI2eDcTERJ9/Xge+CVfWIAHQ1kiPAZpk=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=Uu5O3qi6YwGN7RURB4Mo+VF4dwh6Al0XXEM2BIiNrFXBOSVGcJFXhtvvxpLHG13DWQLuHNcimq1uqJGBSPLuAKvNZalmemXLMLKZO0pTRJ6WJlGQ2nl/SehEd4own3f5xJM/1D/q9NkaOfcMyT/gNzvJsZZjo24km7Gewv/WebU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nexthop.ai; spf=pass smtp.mailfrom=nexthop.ai; dkim=pass (2048-bit key) header.d=nexthop.ai header.i=@nexthop.ai header.b=QzPo/5YE; arc=none smtp.client-ip=209.85.210.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nexthop.ai
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nexthop.ai
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-81db1530173so623648b3a.1
-        for <linux-i2c@vger.kernel.org>; Thu, 15 Jan 2026 11:16:29 -0800 (PST)
+	s=arc-20240116; t=1768506116; c=relaxed/simple;
+	bh=BVuRcIp9C9aDs7YujmRCIsJWyiCOSqmqC7FZNs5wMUU=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=hTbqFmayUmm3rS7lTzUeSoWFEFp8J0mUm9EzSX3mClLwDkwxCCGsdXTuc/DM2bcjWoEn+WB9ejuqX00npwLhAHJxtofELR8iF77rfMpzJL/mYBVggTprKzcgQUkxrGo2K+bVwaJdvgos/w0PtDwvnisa5LvIXc+zqHBSZF9xy1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oasis-open.org; spf=pass smtp.mailfrom=oasis-open.org; dkim=pass (2048-bit key) header.d=oasis-open-org.20230601.gappssmtp.com header.i=@oasis-open-org.20230601.gappssmtp.com header.b=0u8wu089; arc=none smtp.client-ip=209.85.219.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oasis-open.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oasis-open.org
+Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-88a2fe9e200so11431556d6.0
+        for <linux-i2c@vger.kernel.org>; Thu, 15 Jan 2026 11:41:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nexthop.ai; s=google; t=1768504588; x=1769109388; darn=vger.kernel.org;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lo79Jc+8GawfI2eDcTERJ9/Xge+CVfWIAHQ1kiPAZpk=;
-        b=QzPo/5YEZKfDebdlsoZ4ojTCgrmlnf6ql6qWyuctj3iOaGfTLDHx7pnYIPA2bkBNbQ
-         LShBq0hO0qOInPbc5FxBwaSobkQgtUaVtd59ZdRZFf0p0My4o00aPVDA3mZwX2ytCWL9
-         oKpsqsADBHT+DIa7ge7h1dwKn/g01lpT1yHBA6gFWwBouU1HRqyp0D/IobcxINYXnz5g
-         mFe9PVqLAWAmC9aaWaP8RgQ4agMbUjUMc3UVITR/biu5jIZ6XltiM6+lo88VClJ8MsQs
-         EXccTIzfCQiPfBeEWTCcAPpPz7L705FM6KedAm6lXkvjoYqQfymDHL5KEseluPTh5wtV
-         6dWQ==
+        d=oasis-open-org.20230601.gappssmtp.com; s=20230601; t=1768506113; x=1769110913; darn=vger.kernel.org;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=BVuRcIp9C9aDs7YujmRCIsJWyiCOSqmqC7FZNs5wMUU=;
+        b=0u8wu089NGUUtyJXF7iT6L297HDrZw8Mkuv7XDTwjOA3afEpEYTQ3I3PsBf5WI9CJO
+         aD+W7g/u53GywRK33lDn6bIbo12xTx5dQ5EayvzGTPKsCCgQCAmLtwgXwq2PQNBeu7Ap
+         H5wd2UGDcZpeyhfTOCfFJHmPurFRLpC5ehKLMrmsRDLzWjzmau8axNX9oDL/u+9BXCTQ
+         v09ifB3/HSXtKInqpil2Lblq/d6ZAG0HL77Xf6Hcl5jb6C1QU3JMFn6vdtkB14H5Tmpp
+         u9kuJO4XbkgAweCJaUDO61/i9+UinAntT9VGyG2o5snE4eAmlBhk03M75aSdj164EaOo
+         a+xA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768504588; x=1769109388;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lo79Jc+8GawfI2eDcTERJ9/Xge+CVfWIAHQ1kiPAZpk=;
-        b=lVXsbqFWuQ4lqnMFEvJ7QRKNUFXMNawzzc2KfKw8AwORY+Zk7gjSNo4PBZ1LdA9dNG
-         xm624tkCluYQ/5D09YGn7x3ZDp8J4eVP4QlbmHwAnjs3pfXN8ScHIStSKikBN/GYBnDw
-         LdOoJQrdvhfOwIUTdR1f/rxbw+RoxB2n6Ms/MTFhnUWl90xfGobCQm+fg54+byqORW//
-         jSOEg7Gty472VyVG4IZWwFUE/1fzXWj/rMgfhoRjzJD/W8RvIIDoMUhziIH4IBFSrMwN
-         KWAbkZEh67X7CYntqjQoHbHiZTm8VE6vA+ri4JOnvrpzc6bOFoRphpBV+JOJTXy111vC
-         wBAA==
-X-Gm-Message-State: AOJu0YyDTn5CZjLt3dJzPxAvunS6LjFh3YcrFTUZ8zhx+ds3nZug/Vrr
-	g40ZzZkx3Y70Deg1xw14AW+SaFIa0fusaaLRic0fKBaYUIt4U2ZPv9TvprilgxYJ7K/xzUTyOX5
-	s2K6HVu8=
-X-Gm-Gg: AY/fxX7HMQibO9DcmO7Jpqz7aQi5J6DP/SrD6e4O2uGoWl/WORSCgdgYx+qyMORV+HY
-	UCv8xlz8OEYQyKFA++LeDL8C1933w9F1qhpbZyZCHhd2WD1VpcmoRbFdMAb/UC+hSMl75H5yU8k
-	JwVfAGr3yYfE1fp9w0LK0DKLdavvZqjh8KlJ+NMUdT2GaINvmK9pCFDXmYtxyqg8a7TG0KmRlg8
-	mLfwOA8EqRHVukg7FOugGELxCSSNM3wpdRqH2t/kFER9M3er1MbGK7a933MK5eXNsIVz7JAEacj
-	pSojQ0j60tPX9vDFLLYhXehvVvVibLxHqv3+nOUl8k3DAN2DF+2YjmZ2SLfOdHZZ8a880K3WUl5
-	fhYGFbF6yTaTkTZOpx86sA9UONFu4DSwUVmdnx+dag3f94cdzdMTtZc4WNdVjeW2KyWqXDc5Y8l
-	5HfVWbyTG/zRpQWFK45535LWFtwoU6+fDJMbxqrrA2bld9qAMEMvrsQn93AZs9kSJUpGsKnBs=
-X-Received: by 2002:a05:6a00:14c5:b0:81f:3eda:9d69 with SMTP id d2e1a72fcca58-81f9f6a9ab9mr544646b3a.22.1768504587662;
-        Thu, 15 Jan 2026 11:16:27 -0800 (PST)
-Received: from smtpclient.apple (c-24-16-26-157.hsd1.wa.comcast.net. [24.16.26.157])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-81fa10efc6asm135694b3a.29.2026.01.15.11.16.26
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 15 Jan 2026 11:16:27 -0800 (PST)
-Content-Type: text/plain;
-	charset=utf-8
+        d=1e100.net; s=20230601; t=1768506113; x=1769110913;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BVuRcIp9C9aDs7YujmRCIsJWyiCOSqmqC7FZNs5wMUU=;
+        b=wgGvnheRJj/9RYFMse+2ks/ne5kd0ZjLbzyCegsvhGmhPRZTdbwxma8aY7KnSNqHjK
+         x3dGd0PsRoSE7ifsoQfMVN6AJqRBtOKTWR90TV+htaGQ9nm3xGjaSMA5GqzKfFH/cl6n
+         vWVqxsr1jqNnySY0aMTUb2L2+hFUpkM+op7RXyNAfimQUudEWsU89CasxGI6wJoXpXT/
+         91aoaEf2KN+mBuJX8ABnYQ9hSM9niJP8d/u1GO820o+BxB8hNKgp1yBQtEUN09WP8VO0
+         SxDBpvmPak62BV9GxJL7+qhBeEmJH2/bj7w01Umz9feubn1ldxULsgox7z9rfvjQkB+d
+         y1Tg==
+X-Gm-Message-State: AOJu0Ywie0dI8M7/Xl/5bemROFQhYIRP8b4Vr9ybPWvtqCZU8HpWpi+2
+	Ymowes3lULd9CjksIj0iwpWTAr3emY8ouTjV3VS8/wm9xhCw61sMLaMeC3QJu+kNopmZSfAJArH
+	JftI3GIflMnaDQFF2N1sRmfiVykufF80AtWd2u4mc7siTeOAqjLrL2KA=
+X-Gm-Gg: AY/fxX5wywOqi146wKPDYYE3v/1LtQDIcSbFORQTWQkg7TsCdV0kXS8GRlbyCtqscKs
+	4XOaWKp+gbwb3i94cdiYE7wdXm99eF4bDWsPk2kQYZZgjRwp3hWAWAB3/Czwsh1msBEv1/4yi6d
+	/TbbX1fd4KhRo0RYn9OexUsqiitRMSh5daIubmi0AlfBeL/x8phmcPE+jrv9YPJ9N+ba0WYusnS
+	zyiOgozZHE/CHir0hcwoBtxDtswtpmAaI09t0Ux6gIjQ/FYIObQ9ggcqjGz0VrMgqPsPbWkjlYB
+	khVLYAqBbo649syeGd2sy5mIyJPpBxOWf0Z6zC3EBFEg7OiS6ZB1Ec1uINd1
+X-Received: by 2002:a05:6214:411c:b0:890:38b4:d9ff with SMTP id
+ 6a1803df08f44-8942ddad732mr8891756d6.43.1768506112889; Thu, 15 Jan 2026
+ 11:41:52 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3864.300.41.1.7\))
-Subject: Re: [PATCH] i2c: mux: reg: use device property accessors
-From: Abdurrahman Hussain <abdurrahman@nexthop.ai>
-In-Reply-To: <0e85c0d7-3fa1-62cd-f09a-1712ca7c03b3@axentia.se>
-Date: Thu, 15 Jan 2026 11:16:16 -0800
-Cc: linux-i2c@vger.kernel.org,
- linux-kernel@vger.kernel.org
+MIME-Version: 1.0
+From: Kelly Cullinane <kelly.cullinane@oasis-open.org>
+Date: Thu, 15 Jan 2026 14:41:16 -0500
+X-Gm-Features: AZwV_QjyGCCmMCB3mdeNTjuhBjyWTCKMKlzibWf0eLiMp_nrR2AOfKDcTa0M43E
+Message-ID: <CAAiF600p=9c=rjiOitaMr+iGhvC-Au0q=grUq3OJ-Z_wm9Hmmg@mail.gmail.com>
+Subject: Invitation to comment on VIRTIO v1.4 CSD01
+To: linux-i2c@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <1013EAA3-CA3B-4CCF-8FDA-2D5839F9C0B3@nexthop.ai>
-References: <20260115003523.26660-1-abdurrahman@nexthop.ai>
- <0e85c0d7-3fa1-62cd-f09a-1712ca7c03b3@axentia.se>
-To: Peter Rosin <peda@axentia.se>
-X-Mailer: Apple Mail (2.3864.300.41.1.7)
 
+OASIS members and other interested parties,
 
+OASIS and the VIRTIO TC are pleased to announce that VIRTIO v1.4 CSD01
+is now available for public review and comment.
 
-> On Jan 15, 2026, at 3:03=E2=80=AFAM, Peter Rosin <peda@axentia.se> =
-wrote:
->=20
-> Hi!
->=20
-> 2026-01-15 at 01:35, Abdurrahman Hussain wrote:
->> [You don't often get email from abdurrahman@nexthop.ai. Learn why =
-this is important at https://aka.ms/LearnAboutSenderIdentification ]
->>=20
->> This makes the driver work on non-OF platforms.
->=20
-> What measures have been taken to make sure that things continues
-> to work on OF platforms?
->=20
-> Cheers,
-> Peter
+VIRTIO TC aims to enhance the performance of virtual devices by
+standardizing key features of the VIRTIO (Virtual I/O) Device
+Specification.
 
-Unfortunately, I don=E2=80=99t have an OF platform available where I =
-could test this.
-I am open to give this a try though if I could borrow a device that uses =
-the driver.=
+Virtual I/O Device (VIRTIO) Version 1.4
+Committee Specification Draft 01 / Public Review Draft 01
+09 December 2025
+
+TEX: https://docs.oasis-open.org/virtio/virtio/v1.4/csprd01/virtio-v1.4-csp=
+rd01.html
+(Authoritative)
+HTML: https://docs.oasis-open.org/virtio/virtio/v1.4/csprd01/virtio-v1.4-cs=
+prd01.html
+PDF: https://docs.oasis-open.org/virtio/virtio/v1.4/csprd01/virtio-v1.4-csp=
+rd01.pdf
+
+The ZIP containing the complete files of this release is found in the direc=
+tory:
+https://docs.oasis-open.org/virtio/virtio/v1.4/csprd01/virtio-v1.4-csprd01.=
+zip
+
+How to Provide Feedback
+OASIS and the VIRTIO TC value your feedback. We solicit input from
+developers, users and others, whether OASIS members or not, for the
+sake of improving the interoperability and quality of its technical
+work.
+
+The public review is now open and ends Friday, February 13 2026 at 23:59 UT=
+C.
+
+Comments may be submitted to the project=E2=80=99s comment mailing list at
+virtio-comment@lists.linux.dev. You can subscribe to the list by
+sending an email to
+virtio-comment+subscribe@lists.linux.dev.
+
+All comments submitted to OASIS are subject to the OASIS Feedback
+License, which ensures that the feedback you provide carries the same
+obligations at least as the obligations of the TC members. In
+connection with this public review, we call your attention to the
+OASIS IPR Policy applicable especially to the work of this technical
+committee. All members of the TC should be familiar with this
+document, which may create obligations regarding the disclosure and
+availability of a member's patent, copyright, trademark and license
+rights that read on an approved OASIS specification.
+
+OASIS invites any persons who know of any such claims to disclose
+these if they may be essential to the implementation of the above
+specification, so that notice of them may be posted to the notice page
+for this TC's work.
+
+Additional information about the specification and the VIRTIO TC can
+be found at the TC=E2=80=99s public homepage.
 
