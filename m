@@ -1,178 +1,75 @@
-Return-Path: <linux-i2c+bounces-15196-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-15198-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9EBD8D26294
-	for <lists+linux-i2c@lfdr.de>; Thu, 15 Jan 2026 18:12:21 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E0CACD26C6B
+	for <lists+linux-i2c@lfdr.de>; Thu, 15 Jan 2026 18:49:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id EAA16311EBDC
-	for <lists+linux-i2c@lfdr.de>; Thu, 15 Jan 2026 17:02:24 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 5C520312E708
+	for <lists+linux-i2c@lfdr.de>; Thu, 15 Jan 2026 17:31:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 970792D73BE;
-	Thu, 15 Jan 2026 17:02:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 983C23BFE2A;
+	Thu, 15 Jan 2026 17:27:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b="ALNNE+yo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fnz4slaN"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D51C62D7D47
-	for <linux-i2c@vger.kernel.org>; Thu, 15 Jan 2026 17:02:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B6B786334;
+	Thu, 15 Jan 2026 17:27:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768496543; cv=none; b=uiVntKXcHtyTUAWbd4hQzSSrAJXdpL1ijcqVMJJL3LyHGDgqRh/w7aJJWuGr7lmUNRlJERJBzER4zSV87PjB48aOGE0w39pFji84X7n5VQC72aZggH0RLxpBK9hm4kQJQ/STQEc5C8/tVwKOXzG9QmxxRYxOIXdkWEF9zJ52a+g=
+	t=1768498079; cv=none; b=CUFXmgYAsadmMJK3yM3akwbIpsRvm2a5bnrBe71lI5kOtFYEd7cwb7XROq0Qn8zsm9Zkn6C/XnNR/fv7EkDQhk7ra+vYCu14kMMV43cKIFG2+MKys8hw06MfOXY8NnPznxIH95c7l103wfYjk8M6Ab6rVuOvJMM7cPO2c5yUXUw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768496543; c=relaxed/simple;
-	bh=IpwDIvhr5VuqgX4fdAxB6xXe39k/dnAVORQtSR3VM7I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eKGYAjQFZhQG+qSoDybiXI+g4xVeGcjLqmpfmx89fNCTcA8LvDgwndYPPbNBHdctc1mGt72CVVBbr/OT0F6leLUilAOfDXBTDqeotRHN4tHey43PpED0KhUc099x5F/0UIMOUzk8VT7vwiUuc4RiAa28M6YQwmbJq/vEyl88Xic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b=ALNNE+yo; arc=none smtp.client-ip=209.85.222.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
-Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-8c655e0ee70so110986885a.3
-        for <linux-i2c@vger.kernel.org>; Thu, 15 Jan 2026 09:02:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=riscstar-com.20230601.gappssmtp.com; s=20230601; t=1768496541; x=1769101341; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9lmL4wVgyCel4RaZm/YDnYaY71CyzahaKuw46/jDcwA=;
-        b=ALNNE+yovVDKHLBFyd18PDX63XXG8lZgT1V2adakll4e3MdsUUgg5Hm76hLBNYhWnW
-         MhDjSDPAk3KnuEFtKmlRGT4jWJD++PrdhIydUbbRaiWsorDBxJNWXqX68fiB4vR2t6Uu
-         U+cN1wmHBS3qJLD6LGBirPUX6izHFUiMJYUXexRVrwgwJFxTFXi/xYB/FYvbr2XXw1Rm
-         3UZ4sf29L/BYyrcKk33TqRIhSm4n0S5NjRBB2a/LyzXqMijht+92OHWTqQK8AkvHvHnN
-         QMEbd9CBSHtNucIxbeinikyDZLMYG/e71pjEXBulvKu9YwM0k2jlL3l5l2vhNJ/f6ZtG
-         hDwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768496541; x=1769101341;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9lmL4wVgyCel4RaZm/YDnYaY71CyzahaKuw46/jDcwA=;
-        b=WIxzLjSASc3MfbBwAlKtpNs19H2gZ7KfsnugnNJOibf2UFgWZPM2n2rzpwOOm0co0Y
-         VGpeY1pV3/XFbfb5Nx+OhtjXRpEv0cm30A0HdrlJqFPeIEY7zqvESBC2lf8yCBPAoKfx
-         gZICTBe7wI3hzghBlrvVkRjqr0Pou+jtH1xp6ONCEmmLIIT8lwYjYVh2EHAtKEKv347i
-         BxLXvY89kvoUd2FzqpcJ1AsIFml3lorVS8f2SduE6DO/BI1whU/ykvVvVEeLcVVNWnB6
-         doOnsaeTMEYz22CT81qHOlFhNQJoQWPiCLMsOTRrfhBd1Xjfi4IKiMEiUk8jS2f1muGO
-         QlCw==
-X-Forwarded-Encrypted: i=1; AJvYcCXmgdbvYYZL6w49sCmJkjZZnHSkFmwBkMSreuSYphWr+rafVUVbXSUIZleT5E3t3N2k4f8AAQOzL94=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxm/HRmmqHM0w0Ix5pl62ooeZp3/AGK45l7dagOQTjJv+AxBDwz
-	HzqqsXmSzuN/vHnU6SuAd1buGbrr1iblWk8D7RDzgs8IALCVIAymBk6xep3llMn97Yg=
-X-Gm-Gg: AY/fxX4OMkg163X5dhi5wZrdr0DAikVrSFbWRX3k0dt7A+TUhM9npm3Ih9m+mS8ubjo
-	1YD+PnaVZav8xF6WEKlNLKYJMDpi09/Mer9cweuOFcGqT9EulqyZMrZTnMz9geXZY3SOn4n+6a+
-	jTXe5YDv1u+UpZDd9IapaPaATIL0fti4CaoXKRyH7TOcQI8e0WJu0jddScw8XMq8I7eldmnJ8h+
-	wD+KVvdArH8SSA+3fa5AhamkV7HNOnd6NmI6ri2M7AKmD0hBV38Rvxu5VbD/WvkJURpEJb8rNHp
-	PGPw2HE4INv70MbG8XSRl4bAD3XQ17hAFEP2FxhbH27+Qgb/USRPaM4T8Lkng2mkch1PqVpGgM4
-	eK0n0Ae5AJz3AgyRk7YC80Cv23mLuBcfqfrjLobtl1+UfeEHViLDNplyv19E3smLnQpNMJYZ3hV
-	PG6EL6NOf7rg8p1A2PyQPGLWZi71/RKmx54coilybCCOngRmdoyBnD
-X-Received: by 2002:a05:620a:700b:b0:8c5:3376:3326 with SMTP id af79cd13be357-8c6a67c857amr5981285a.80.1768496540568;
-        Thu, 15 Jan 2026 09:02:20 -0800 (PST)
-Received: from [172.22.22.234] (c-75-72-117-212.hsd1.mn.comcast.net. [75.72.117.212])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8c530b74bc4sm455422485a.32.2026.01.15.09.02.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Jan 2026 09:02:20 -0800 (PST)
-Message-ID: <00f42b6c-857b-4eef-a0da-83053998135a@riscstar.com>
-Date: Thu, 15 Jan 2026 11:02:17 -0600
+	s=arc-20240116; t=1768498079; c=relaxed/simple;
+	bh=2MIxhTeTIkXtgqp/3M7z+E6nNAcvyJ9x84R2tHJBSbw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LZEGPWDeUBJ8PCpsPQlphKHvXEydPPVoNFHavSCWLU+uR0H1ujx+eIFjE1+HlhJGJeC/gCs0Vrdtc/XQxT8D8Z6et1DXKd+TVeTSffIc3do9djX4Zn6vMQN211++Ro0Wfqwnv7BeMryaaHzsTV+ZVOtKYy6aSz05XDPHQKq5GKs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fnz4slaN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 890D5C16AAE;
+	Thu, 15 Jan 2026 17:27:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768498079;
+	bh=2MIxhTeTIkXtgqp/3M7z+E6nNAcvyJ9x84R2tHJBSbw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Fnz4slaNncwzsOL1HnSWqhi2J1NbxCzRXFh1bSgRjlr1MM38bqv7Kihmz5zdsjKqg
+	 vFfHzWQP2JLWXh2/7eMrqxRw1O7Z1l09H0IDsGnZV/mliOJh62PZepZutTgfzCgA40
+	 u09r5PMn5hzFiuHDnc4CDx14XPPbeJ8nDV5jbK9iEi1QfIs3m5IlvzdGykTqmJZDoi
+	 AMafsQNw7KS+IltfZBi+lVnWr9quxXa+Fe/SePrbxBvVOYJcWFWuu2HOSLM9njt2MW
+	 pHqDe34ps1d+6q2R9nFny+Pxxzn/AML06VOnt3qOJEXHGCMklepIe2ubamdFjZiO7X
+	 ogsiNL1zHXYwQ==
+Date: Thu, 15 Jan 2026 18:27:54 +0100
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Guixin Liu <kanie@linux.alibaba.com>
+Cc: Laxman Dewangan <ldewangan@nvidia.com>, 
+	Dmitry Osipenko <digetx@gmail.com>, Thierry Reding <thierry.reding@gmail.com>, 
+	Jonathan Hunter <jonathanh@nvidia.com>, Philipp Zabel <p.zabel@pengutronix.de>, 
+	linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: Re: [PATCH] i2c: tegra: remove unused rst
+Message-ID: <aWkjiXG4UPiPyVkw@zenone.zhora.eu>
+References: <20251217081601.93856-1-kanie@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 2/2] i2c: spacemit: introduce pio for k1
-To: Andi Shyti <andi.shyti@kernel.org>,
- Troy Mitchell <troy.mitchell@linux.spacemit.com>
-Cc: Yixun Lan <dlan@gentoo.org>, Aurelien Jarno <aurelien@aurel32.net>,
- Michael Opdenacker <michael.opdenacker@rootcommit.com>,
- Troy Mitchell <troymitchell988@gmail.com>, linux-i2c@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
- spacemit@lists.linux.dev
-References: <20260108-k1-i2c-atomic-v6-0-41b132b70f68@linux.spacemit.com>
- <20260108-k1-i2c-atomic-v6-2-41b132b70f68@linux.spacemit.com>
- <aWeyT8gb8Z31S_V9@zenone.zhora.eu>
-Content-Language: en-US
-From: Alex Elder <elder@riscstar.com>
-In-Reply-To: <aWeyT8gb8Z31S_V9@zenone.zhora.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251217081601.93856-1-kanie@linux.alibaba.com>
 
-On 1/14/26 9:47 AM, Andi Shyti wrote:
-> Hi Troy,
+Hi Guixin,
+
+On Wed, Dec 17, 2025 at 04:16:01PM +0800, Guixin Liu wrote:
+> Since commit 56344e241c54 ("i2c: tegra: Fix reset error handling with
+> ACPI") replace reset_control_reset() with device_reset(), the rst
+> is no longer used, remove it.
 > 
-> ...
-> 
->> @@ -171,6 +176,16 @@ static int spacemit_i2c_handle_err(struct spacemit_i2c_dev *i2c)
->>   	return i2c->status & SPACEMIT_SR_ACKNAK ? -ENXIO : -EIO;
->>   }
->>   
->> +static inline void spacemit_i2c_delay(struct spacemit_i2c_dev *i2c,
->> +				      unsigned int min_us,
->> +				      unsigned int max_us)
->> +{
->> +	if (i2c->use_pio)
->> +		udelay(max_us);
-> 
-> We need some control on how much we want to sleep in atomic. This
-> can have effects on the whole system.
-> 
->> +	else
->> +		usleep_range(min_us, max_us);
-> 
-> If we assume that max_us = min_us * 2 we don't need to pass it as
-> a parameter. Even better you can use fsleep here which does it
-> for you.
+> Signed-off-by: Guixin Liu <kanie@linux.alibaba.com>
 
-I agree with both of these comments/suggestions.
+merged to i2c/i2c-host.
 
-And if fsleep() were used, spacemit_i2c_delay() might be able
-to just go away.  (The range used in fsleep() isn't quite the
-same as what you're using, but this is heuristic anyway.)
-
-However the delay used in spacemit_i2c_check_bus_release() is
-90-150 microseconds, which would lead to sleeping in fsleep().
-Is there any chance 10 microseconds (or less) could be used
-for all delays?  Even if not, fsleep() might help here.
-
->> +}
-> 
-> ...
-
-. . .
-
->> -	if (i2c->state != SPACEMIT_STATE_IDLE) {
->> -		val |= SPACEMIT_CR_TB | SPACEMIT_CR_ALDIE;
->> -
->> -		if (spacemit_i2c_is_last_msg(i2c)) {
->> -			/* trigger next byte with stop */
->> -			val |= SPACEMIT_CR_STOP;
->> -
->> -			if (i2c->read)
->> -				val |= SPACEMIT_CR_ACKNAK;
->> -		}
->> -		writel(val, i2c->base + SPACEMIT_ICR);
->> -	}
->> +	spacemit_i2c_handle_state(i2c);
-> 
-> Next time this can be on a separate patch as a preparatory patch
-> to make the review of this one a bit easier.
-
-Yes!  It's a next-level skill:  beyond just changing the
-code, breaking the change into good, independent pieces
-that build on each other, to facilitate review.
-
-Thanks!
-					-Alex
-
-> 
->>   
->> -err_out:
->> -	spacemit_i2c_err_check(i2c);
->>   	return IRQ_HANDLED;
->>   }
-> 
-> Thanks,
-> Andi
-
+Thanks,
+Andi
 
