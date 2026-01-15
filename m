@@ -1,205 +1,124 @@
-Return-Path: <linux-i2c+bounces-15185-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-15186-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED590D24B25
-	for <lists+linux-i2c@lfdr.de>; Thu, 15 Jan 2026 14:15:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9272FD24C68
+	for <lists+linux-i2c@lfdr.de>; Thu, 15 Jan 2026 14:42:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4154E30B2B9E
-	for <lists+linux-i2c@lfdr.de>; Thu, 15 Jan 2026 13:13:14 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 68A323048EDE
+	for <lists+linux-i2c@lfdr.de>; Thu, 15 Jan 2026 13:39:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66DAF39E6F3;
-	Thu, 15 Jan 2026 13:13:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF071376BE1;
+	Thu, 15 Jan 2026 13:39:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cdC/tP9V"
+	dkim=pass (2048-bit key) header.d=sevenlab-de.20230601.gappssmtp.com header.i=@sevenlab-de.20230601.gappssmtp.com header.b="zVuaaYXY"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A48B1399A5B
-	for <linux-i2c@vger.kernel.org>; Thu, 15 Jan 2026 13:13:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02B2B334C14
+	for <linux-i2c@vger.kernel.org>; Thu, 15 Jan 2026 13:39:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768482793; cv=none; b=eF334VZAZPek6vo43ank4gvrz6NXYw2Alo7cdoal3lYTsh+acrums5dP8WiwX0LUjtErLxiajEEoYOsaqOKIus4Ww3qbZ1fym3woIwSvohXcwrkMzDQUFb4rrGebmd/TnRisja0T0pH0/FuWpjj/epWEDyyBdveVfwIKgOexXis=
+	t=1768484390; cv=none; b=jY8uSGNYtZD21fciR7JAE8uql3te96I3rSP52b6eV9RkxHtymABkIr/vhWMrndi2v4SDl4mgvLb6PmDkCf4sqNtT0hsPsrol9H0GC56UePJceD6o7jAn5ST90/ExrRue88GcmEIX6ER+YfrS4MYi8K1TIRUK8SB25zW8j7P79gk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768482793; c=relaxed/simple;
-	bh=/7C1vhRdASPTMDMfdQtrm3XwzYwj0bOEBGu+5yC3C+4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KAsWEzENnT8JaKBJwK9rTDDjQHG2eLm+4iYdtP5xPWWYLKrTGxwnHE7rE2S4Wc0aMq2hkfIL4XZuKHlrJNvWGV0R93bD+EzmlE8t6xlr/SyyDlgk8lzyu0Yl5mIYQADFUduIBH39OHUZpNGSbZ5vGa34xGFX0tA3fB7CmyTD0Tw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cdC/tP9V; arc=none smtp.client-ip=209.85.218.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-b8718187eb6so129185966b.2
-        for <linux-i2c@vger.kernel.org>; Thu, 15 Jan 2026 05:13:11 -0800 (PST)
+	s=arc-20240116; t=1768484390; c=relaxed/simple;
+	bh=ttUrWF5Yy8NlteK90gn1B4LBQLQ7IuXpJIAwJWQeBkg=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
+	 References:In-Reply-To; b=LWuPf7mOApnm477k09QuQRP2SmWK556Oe9uofLjTj/0XVzj9XK38APyDaFHBsgrkaJIYvi5AyeJ7K9TOCrph5HSk4/TPjLTxNmhZJGQU8plY8z3Gg3LGNkd3tXJFd/j5ewULYOj7boTakyO3B2EdhCoPRQVnvUGvHw1bGpsULeE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sevenlab.de; spf=pass smtp.mailfrom=sevenlab.de; dkim=pass (2048-bit key) header.d=sevenlab-de.20230601.gappssmtp.com header.i=@sevenlab-de.20230601.gappssmtp.com header.b=zVuaaYXY; arc=none smtp.client-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sevenlab.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sevenlab.de
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-b86ed375d37so123963766b.3
+        for <linux-i2c@vger.kernel.org>; Thu, 15 Jan 2026 05:39:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768482790; x=1769087590; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=sevenlab-de.20230601.gappssmtp.com; s=20230601; t=1768484387; x=1769089187; darn=vger.kernel.org;
+        h=in-reply-to:references:from:to:cc:subject:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/7C1vhRdASPTMDMfdQtrm3XwzYwj0bOEBGu+5yC3C+4=;
-        b=cdC/tP9VG6Fu6XchNGG6s1URIXhHftXqubwKYyvmj76o+B5OM6gXGd4/zGZdXuDy4m
-         k/zqv1BEH2Mu//rMxXXhLyrTXAxI437UEtbqJmmQ6+dX1BcYTYfgkuaO2IRrxW/lmCYg
-         M0hvTYgN97VGgj6eh/lARSrO/il6921c7mUNGsLIWOz69c2305yXbw+9gBZpiU2gRVrC
-         D4DGc+2c4QYf/nYPvQJbs9MjyBa/3fQ65++yg19F/Y3ajNmyl2xoxjuIiPyN3VjG+0Hq
-         grc0lJZomNbBiWSjXSSO8vMBVyxSN6McFKNu4OD8xPmvTQ1DCoAAlWIl58mwdyz8Tk5s
-         YnLQ==
+        bh=zw5GHn+xllnurg1foWoqrPaoDHupvhAUrTC/zMdEzDA=;
+        b=zVuaaYXYxN2IwyuQ2bjhT3BeD2eXqDRIAAOnzV9l3eWNjDtbgp7KQkHqXeWFjyljss
+         aorE0J/cKPFHDMurE8v4aT8l+WErFzD9nvDFO8JtS+TLw/ob70cF1wMlbHZMCWoim9/Z
+         Uc7KeFD5U7u9f968XF/UREWeU2WrzY3jZNsnQhVoY6sRAOgJ45Khzaw7oC9MlM/f2eu8
+         a+I1LoaF17HpzZ+yMvMENsxzooeg6o1Fifb9cBtD3qFAdzsbtIKy/Y3NiyeMRONSO9nn
+         JpB+uMvO4FBzq2zWyLVP4T/PCx9vq1ZIBI+Y3Zqa7MOTyHDdXFRW6RXAlaECRL21+Ole
+         WL3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768482790; x=1769087590;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=/7C1vhRdASPTMDMfdQtrm3XwzYwj0bOEBGu+5yC3C+4=;
-        b=ajNCwbrzsioN8DSyKbazODJMpLSozkr5qontqn8g8nPkOpRejBprCazP7clCvMK66g
-         U/R2eiSSaPfb8Su9mzBJhkebvEjaP55B4ccAr9rTLdKvmVIQ+hdbzRAlmL8PwcGxNcMv
-         R0MGzu0JdkTXDCyC9+QXSpcTy2UJuWo/A6dW4oDDI7dRsmDIksw+go3D65851JojBqqW
-         jkxEt4YHbWO5XhOpMqWzlQtl4q6GPVm8r2TALsz0BifGk7yGtRMdRjbU7jF5YWPfpFkh
-         Fb1RVYMlV8FL2/wr/YAEvE/Xc6AG9paVeVZvw1xkutOo4W708Qz8r4AMANtwk9Db65Sk
-         Svng==
-X-Forwarded-Encrypted: i=1; AJvYcCWSZx/T0e6swD6nXlTlfWq8B/SX4wcSnmSvZCq0ryhmA31wrBzEnnrwcewz6lzwQaXIkjS+Uffr9fw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzJQPIuEbphkShWlxMnsc4UVS7povEhLqURRCgyJGv2VSF2hqTD
-	tkDfo3tkpdfHGzdBTmLGQI0dCEehPBf12szwiKjpI4B9RaJaaqcWl+0I+/FNA6voK/QbvnSeSwm
-	Q/48DXB6cv8drqJW3vEqXoaUL53c7LPo=
-X-Gm-Gg: AY/fxX63IeYzsLwyTgBp5NctuZOSeMpiey45LzBGloelN0qX1KpBUVy7cFzWvJ+fmmx
-	D5OK1I1l5p8D0Ur2gmOKUbVIQzVfypfEvnpxBu0fy6uSSExycNeemn3Bbm9xD/T7MzD/Z3xjHF0
-	CJjHgZeJgMqWdAYbxL3kpT6+YV96fyxcJ48VYUqmot3YPqWTRiTwWS0M/+PuIkqpoA4cJBrUvDO
-	ObkcIg8yV3YDOY9bQSKrz599mq1Zeiq1bKZRPOEWvj5bigp3L2Yp3eZpZmwaO2TV3HE0a+7h9ar
-	dz027RbSUCo=
-X-Received: by 2002:a17:906:6a01:b0:b86:f81d:66b1 with SMTP id
- a640c23a62f3a-b8760fdf7dcmr483161766b.2.1768482789913; Thu, 15 Jan 2026
- 05:13:09 -0800 (PST)
+        d=1e100.net; s=20230601; t=1768484387; x=1769089187;
+        h=in-reply-to:references:from:to:cc:subject:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zw5GHn+xllnurg1foWoqrPaoDHupvhAUrTC/zMdEzDA=;
+        b=JufGEDWzQztjZzcGJNtLgyI7XJ90Qevy3fZ0sINiu+T8Xsy+p+0R2lt6Nbt3l3Nzfd
+         q+rGEs38psAIgnWGsUTUnRCbVWygU0ZQrm5obDib+kqwmkDAWdL6DYIzPJ9W/lAdCM6j
+         GnonfiGvUc5LnM+w7l7WIXlYWfGTuiep5oU0KXV/jC3EfWpRlaGWPFpS4gb4oADPw66d
+         Pm/WNDp21c60oekNQbHEYbl4ducoMfdJtUIwKriR/zVqvxmMdaId3p4I7N4nBixiJwOi
+         y5xVI1IUJNPcqXxPyL+gSALxKn5055PsY8sRsxoXdajtTVuA6S0Oy54rf6TgXwDaxxNb
+         kY/Q==
+X-Gm-Message-State: AOJu0Yx7fza79CIHbvVawhshfkY/7/1TxYEP7Jj7Lz0VLrciXur2Mm0S
+	DG43wKXn/JNQgkdgd0Qi8ERBlxi0YmOE85EfV8v8hjOY1CjgCI/Hcto73ve6HZBJFQ4=
+X-Gm-Gg: AY/fxX7H26DeK33IdVQp5CruEk65j1HAuSDQVumi1ZlqkGJol6pPaTxbaztO4ziyQF2
+	QdFJHJilp04/2W92JjR9t7MpWCiTXrcIskLV6g/woJU0qGAUv+a+IChB1GekIHymIDFebTlS3Ai
+	6EKwhFC+q9LNYxbVHtzgGvMjZfQSLvcvSdmjNWK+jdDaBv8zPz5L3zevzhKn//AS5oCGIXqyDvX
+	8ZhxJt5dQReZ/AsIhleSSD9pyIdlazgzTYK3CEqhE3q4C4SYUlU1qFKI3biiozRfL345mDbuI/O
+	zg3M6FMEYI2N53zmC+JLsOtFzRw9v+OS9yJZci9FHFrkeAGuuas2AWrdRsN2EhmWxZTtFt9h8lW
+	0l09lQ9iMrk/i9mfmCL69dvMak/G2ipSScznS9+Ux+wBu4YoybwDwQFyNIKjGiWvVpc3f9Zy4Kw
+	q9SxB4vL2I8ExUfNPNtd8BC2j3AlRt9eAMzw==
+X-Received: by 2002:a17:907:6eab:b0:b87:34e3:a795 with SMTP id a640c23a62f3a-b8761028880mr531174966b.26.1768484386904;
+        Thu, 15 Jan 2026 05:39:46 -0800 (PST)
+Received: from localhost ([2a02:8109:8a91:de00:3860:4306:f616:8f87])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b86f9a9103bsm1458424066b.30.2026.01.15.05.39.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Jan 2026 05:39:46 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260114141352.103425-1-jie.i.li@nokia.com> <CAD++jLkyTMXAE_M2JFF5jzzLZ2Z-CV89uEGh4xHopWrGoYncbA@mail.gmail.com>
-In-Reply-To: <CAD++jLkyTMXAE_M2JFF5jzzLZ2Z-CV89uEGh4xHopWrGoYncbA@mail.gmail.com>
-From: =?UTF-8?B?5p2O5p2w?= <lj29312931@gmail.com>
-Date: Thu, 15 Jan 2026 14:12:54 +0100
-X-Gm-Features: AZwV_QjKsJ_TH_EzWpJMMMax33gEHVuvQEPtXjiun3u76fWkZ3qK7mZFa73MhiE
-Message-ID: <CAO3NRJgNi88uhtN0RfbUUKPz_SSoceQyBTbScS-LV=9oYkDJqw@mail.gmail.com>
-Subject: Re: [PATCH v1 0/2] i2c: add support for forced SDA recovery
-To: Linus Walleij <linusw@kernel.org>
-Cc: wsa@kernel.org, linux-i2c@vger.kernel.org, robh@kernel.org, 
-	krzk+dt@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org, 
-	linus.walleij@linaro.org, linux-kernel@vger.kernel.org, 
-	Bartosz Golaszewski <brgl@kernel.org>, Linux pin control <linux-gpio@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 15 Jan 2026 14:39:46 +0100
+Message-Id: <DFP7E7BGWMP0.T3BHEX68KHFJ@sevenlab.de>
+Subject: Re: [RFC][i2c-tools] Accept device-node path as alternative to bus
+ number
+Cc: <linux-i2c@vger.kernel.org>, "Jean Delvare" <jdelvare@suse.de>
+To: "Wolfram Sang" <wsa+renesas@sang-engineering.com>
+From: =?utf-8?q?Gero_Schw=C3=A4ricke?= <gero.schwaericke@sevenlab.de>
+X-Mailer: aerc 0.20.1-26-gcbffbc9ac803
+References: <DE53PTBTBBBY.24N093ZM03IKQ@sevenlab.de>
+ <aRIPsOOgs5jtxv9D@shikoro> <aUAUAG3KwQHHqgKq@shikoro>
+ <aWaDBzAOm86XSZgP@ninjato>
+In-Reply-To: <aWaDBzAOm86XSZgP@ninjato>
 
-Dear Linus,
+Hi Wolfram,
 
-Thank you for your feedback and the insightful suggestion regarding
-GPIO_OPEN_DRAIN.
+On Tue Jan 13, 2026 at 6:38 PM CET, Wolfram Sang wrote:
+> Hi Gero,
+>
+> On Mon, Dec 15, 2025 at 10:58:24PM +0900, Wolfram Sang wrote:
+>>=20
+>> > > I'm working with multiple hotpluggable I2C adapters and have the
+>> > > following proposal:
+>> >=20
+>> > From my side, this all sounds reasonable. But we need Jean's opinion
+>> > here, too.
+>>=20
+>> Seems Jean is busy. So, from my side, let's go. I can apply it if all is
+>> well...
+>
+> Did you have time to develop this?
 
-I have analyzed the current implementation of gpiod_get_direction() in
-the kernel, and I believe that relying solely on standard GPIO flags
-cannot resolve the "deadlock" on this specific hardware.
+thanks for following up on this and sorry for the late response, I'm
+currently occupied with other work, but I have this still on my TODO
+list. I intend to tackle this once I find some uninterrupted time.
 
-The issue lies in how gpiod_get_direction() interacts with certain
-open-drain controllers. As seen in the source code:
+Best,
+Gero
 
-Even if FLAG_OPEN_DRAIN is set, the function falls back to
-gc->get_direction() if the FLAG_IS_OUT bit hasn't been established
-yet. Crucially, some ASICs do not even implement a readable direction
-bit in hardware.
+>
+> Happy hacking,
+>
+>    Wolfram
 
-In many true open-drain hardware implementations, a line driven "high"
-(high-impedance) is physically reported as an Input by the hardware
-register.
-
-Consequently, gc->get_direction() returns 1 (Input), and the following
-assign_bit(FLAG_IS_OUT, &desc->flags, !ret) explicitly clears the
-output flag in the kernel's descriptor.
-
-This creates a logic loop in i2c_init_recovery():
-
-The I2C core queries the direction via gpiod_get_direction().
-
-The function returns 1 because the line is currently high/floating or
-the hardware lacks direction reporting.
-
-The I2C core then assumes the pin is "Input-only" and skips the
-assignment of bri->set_sda.
-
-Bus recovery becomes impossible even though the hardware is fully
-capable of driving the line low.
-
-Regarding the suggestion to use GPIOD_OUT_HIGH_OPEN_DRAIN in the I2C
-core: I am concerned that forcing the line to "Output" globally in the
-core might be too aggressive for all platforms. My proposed
-force-set-sda property provides a safe, explicit way for a specific
-board to say: "I know this pin reports as Input, but it is safe to
-treat it as an Output for recovery."
-
-I believe this explicit opt-in mechanism is more robust than relying
-on an automatic detection that is fundamentally tied to the
-instantaneous state of a high-impedance line.
-
-What do you think about this perspective?
-
-Best regards,
-Jie Li
-
-
-On Thu, Jan 15, 2026 at 10:27=E2=80=AFAM Linus Walleij <linusw@kernel.org> =
-wrote:
->
-> Hi Jie,
->
-> thanks for your patch!
->
-> On Wed, Jan 14, 2026 at 3:13=E2=80=AFPM Jie Li <lj29312931@gmail.com> wro=
-te:
->
-> > This series addresses a limitation in the I2C bus recovery mechanism wh=
-en
-> > dealing with certain open-drain GPIO configurations where the direction
-> > cannot be automatically detected.
->
-> I'm sorry but I don't understand the premise. How can we even get here?
->
-> So the mechanism is about I2C that is using a regular I2C block, and
-> the pins get re-muxed to GPIO to drive recovery using the I2C
-> core GPIO-mode recovery mechanism with bridge->sda_gpiod
-> which is retrieved in the core from "sda" which in DT is
-> sda-gpios =3D <....>; (calong with similarly named SCL) for
-> GPIO-mode recovery.
->
-> So if that is set in an input mode, such as during devm_gpiod_get()
-> reading the initial direction of the line,
-> so gpiod_get_direction(bri->sda_gpiod) =3D=3D 1.
-> this patch set will go and write output values to the line
-> *anyway* because "it works".
->
-> This is how I understand the patch set.
->
-> In which scenario do you have a device tree where you can add
-> "force-set-sda" to a DT node, but you *can't* just fix up the
-> SCL/SDA flags like this:
->
-> #include <dt-bindings/gpio/gpio.h>
->
-> sda-gpios =3D <&gpio0 5 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
-> scl-gpios =3D <&gpio0 6 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
->
-> ?
->
-> We should possibly also enforce it from the I2C recovery core,
-> for SDA we are currently doing:
->
-> gpiod =3D devm_gpiod_get(dev, "sda", GPIOD_IN);
->
-> what happens if you patch i2c-core-base.c to simply do:
->
-> gpiod =3D devm_gpiod_get(dev, "sda", GPIOD_OUT_HIGH_OPEN_DRAIN);
->
-> (Based on SDA resting polarity being high.)
-> I'm more uncertain about that one because I don't know exactly
-> how hardware behaves in response to this, but can you test this
-> first if you have to hack around in the core?
->
-> Yours,
-> Linus Walleij
 
