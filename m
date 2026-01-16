@@ -1,124 +1,92 @@
-Return-Path: <linux-i2c+bounces-15232-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-15233-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74913D31754
-	for <lists+linux-i2c@lfdr.de>; Fri, 16 Jan 2026 14:02:13 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C477D31F56
+	for <lists+linux-i2c@lfdr.de>; Fri, 16 Jan 2026 14:39:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 76567300FEFE
-	for <lists+linux-i2c@lfdr.de>; Fri, 16 Jan 2026 13:02:07 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id B0B3E3019862
+	for <lists+linux-i2c@lfdr.de>; Fri, 16 Jan 2026 13:38:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 469DB238C0B;
-	Fri, 16 Jan 2026 13:02:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12510283CA3;
+	Fri, 16 Jan 2026 13:38:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="tL+I8D4Q"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pmbvb0jW"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA18823D7F7
-	for <linux-i2c@vger.kernel.org>; Fri, 16 Jan 2026 13:02:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA6EE276058;
+	Fri, 16 Jan 2026 13:38:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768568524; cv=none; b=K2kAgvDbSAqCH9SRymYIpANJG/kmKz0ZP/U1uEmXeoGO7IZHkvjakWM7+GQopBkRJOz8TDmGVdjd8ZPVnrQLOmSyJr8ur2LMC8xtYZ6qbTyNrVwwLPZEg3NKyZsaApn+/PSDP0bcsxs4VBmEmnfbLyPDV2f6I6OIQCsjHVUvoO0=
+	t=1768570706; cv=none; b=ubvA5omvSh8N+G26oapS9pifsPA3R7ttcKZO0LYFLQI7tmnIWLla4VtjX6QkYO59fF5bH3Z6Bp8lpz+2NbzihqiMP4DcbW9PG44GlWfsmanxRA4KqSunkzFzvOcNn90BKREybKG79PC1PPNOJ3FhLLdQ4tjmc2rjzbm4c6i61fQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768568524; c=relaxed/simple;
-	bh=LGBH4ijVE/oW1hhc8swM1hLobiNjY4wRo2OSK8be/m0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ZSHEDm6adxI4H13akTa0I1WJoJfI9Vzztatn5tvoUzx+7pwsftrV+DxHcNSDhaYkW2ljVMnC7qLApV/sHYM/ezctuq/GQui2tzRD2dS5Td/oQ99QT6/4eHyaeYJTE/GBM0OT496shbPuiFglaoprlHivjet4TMgnWL7soj5BCmY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=tL+I8D4Q; arc=none smtp.client-ip=185.246.85.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 166634E42118;
-	Fri, 16 Jan 2026 13:01:59 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id E077D60732;
-	Fri, 16 Jan 2026 13:01:58 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 013C110B68AA6;
-	Fri, 16 Jan 2026 14:01:57 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1768568518; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=crrcUpqd0XHN0VeM8dgfcODR9SDwzlUPnv11lsf44nI=;
-	b=tL+I8D4QhgS8RzRKhrgq7ra1mSI8YMuIn7K1Bt98CQGvpVwI53zTAXHiZySaoTyr29qHQV
-	xcTRAHByocu8uvgF8sljguNVy/+prIeJd13X0P08JV/LJ4rfYgvLIjdWFZSbsF10uA/0eT
-	ZE0hvjBIa+IZC3wsiJqNVO43X3ZYmAsgnYBzyJCR4labe+EtSmEiwGV1qAnneSOZ9Sd7KI
-	eJpv/Nu986cLUepX6SU+oxJsC7zhWbl3JIRnSiLp9bYdS0fdfhkypcQ/7S1pvjBlF3LMT/
-	3A0ory/ikv1gND5He2nGuGVH3tGk+d3hnZiHiI4vdNbDAzBp9CzElT1gz/eFdA==
-From: =?UTF-8?B?QmVub8OudA==?= Monin <benoit.monin@bootlin.com>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: linux-i2c@vger.kernel.org, Jean Delvare <jdelvare@suse.de>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject:
- Re: [PATCH i2c-tools v2 2/2] i2ctransfer: Add optional message modifier flags
-Date: Fri, 16 Jan 2026 14:01:57 +0100
-Message-ID: <2768446.lGaqSPkdTl@benoit.monin>
-In-Reply-To: <aWaCAV4preoIPcih@ninjato>
-References:
- <20251223-msg-flags-v2-0-8d934a4366e2@bootlin.com>
- <20251223-msg-flags-v2-2-8d934a4366e2@bootlin.com> <aWaCAV4preoIPcih@ninjato>
+	s=arc-20240116; t=1768570706; c=relaxed/simple;
+	bh=YZ21gRQkXORC1LT9ESeDmgdSRH4zCzRBTC0PjE4ThlU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dh3F/e8wliZ5mse2h8IJCl4z3UmjJwnHcidw7DcQeGa9lQ/uStt/gB9CWi1dQopJZ43biAXMNSxV8GmvdvjKpExJwrXMcdkIaJ4x3y2fMQMOqfDXakjqIKOBQeKuOT4K2/WmcJrEGdZHoxqF06/nIUjPQiCi4J9kY3Mk05QLjt8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pmbvb0jW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3EDEC116C6;
+	Fri, 16 Jan 2026 13:38:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768570706;
+	bh=YZ21gRQkXORC1LT9ESeDmgdSRH4zCzRBTC0PjE4ThlU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=pmbvb0jWpMqtBhs5Ln5D46PGPexzsn5CmU92S7vLRcwnLyBph3x7gKFDo++Ad+TS0
+	 omfcJu1K/CQEBczfREACYxL+LR9ZxARy2IQZAxTxSEAZtIbgjTp319Xgsbe4WUx8JO
+	 JB7CRXta05/J5XRMdGOyOQPykVt+MQzFpTE0GsQsxtIWz4dWwnOsOsJ0EC17JkPYBS
+	 b2hQPFaZj4Sn7kkYwtm8Cuv1nqa1QLwzEJ4hC5JuHMQATaMIS5BdAc0MG/bBsEd6FC
+	 TIKJ/okqlWRQ2+pKjcwHDWVfrSPEA1TF/aYfzRGlOUxCM43x1cisAQGXLdozerogeH
+	 HBdM5fYXBuOww==
+Date: Fri, 16 Jan 2026 14:38:22 +0100
+From: Andi Shyti <andi.shyti@kernel.org>
+To: "Qing Chang (qinchang)" <qinchang@cisco.com>
+Cc: "Jean Delvare   (maintainer:I2C/SMBUS CONTROLLER DRIVERS FOR PC)" <jdelvare@suse.com>, 
+	"open list:I2C/SMBUS CONTROLLER DRIVERS FOR PC" <linux-i2c@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] i2c: piix4: Add support for I2C block data transactions
+Message-ID: <aWo_DJRp_GwRG7p1@zenone.zhora.eu>
+References: <458484CD-01AC-4155-8687-D628A19D6493@cisco.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <458484CD-01AC-4155-8687-D628A19D6493@cisco.com>
 
-On Tuesday, 13 January 2026 at 18:33:53 CET, Wolfram Sang wrote:
-[...]
-> >  		"  DATA are LENGTH bytes for a write message. They can be shortened =
-by a suffix:\n"
-> >  		"    =3D (keep value constant until LENGTH)\n"
-> >  		"    + (increase value by 1 until LENGTH)\n"
-> > @@ -202,12 +209,21 @@ int main(int argc, char *argv[])
-> >  		case PARSE_GET_DESC:
-> >  			flags =3D 0;
-> > =20
-> > -			switch (*arg_ptr++) {
-> > -			case 'r': flags |=3D I2C_M_RD; break;
-> > -			case 'w': break;
-> > -			default:
-> > -				fprintf(stderr, "Error: Invalid direction\n");
-> > -				goto err_out_with_arg;
-> > +			for (int done =3D 0; !done; ) {
-> > +				switch (*arg_ptr++) {
-> > +				/* optional flags */
-> > +				case 'i': flags |=3D I2C_M_IGNORE_NAK; break;
-> > +				case 'n': flags |=3D I2C_M_NO_RD_ACK; break;
-> > +				case 'p': flags |=3D I2C_M_STOP; break;
-> > +				case 's': flags |=3D I2C_M_NOSTART; break;
-> > +				case 't': flags |=3D I2C_M_REV_DIR_ADDR; break;
->=20
-> Brainstorming here: maybe a macro could help:
->=20
-> 	case 'i': add_flag_if_supported(flags, I2C_M_IGNORE_NAK);
->=20
-> ?
->=20
-I am having a hard time coming up with something here. There is the
-__is_defined() macro in the kernel source[1], it only returns 0 or 1, not
-the value of the define.
+Hi Jean,
 
-Maybe defining as zero the flags that are undefined would be acceptable?
-E.g.
+any thought on this?
+On Tue, Dec 09, 2025 at 03:30:31AM +0000, Qing Chang (qinchang) wrote:
+> From 329a0f951071c03b75a92e6b3c5746d9ee002935 Mon Sep 17 00:00:00 2001
+> 
+> -
+> From: Qing Chang <qinchang@cisco.com>
+> Date: Sun, 30 Nov 2025 19:30:36 -0800
+> Subject: [PATCH] i2c: piix4: Add support for I2C block data transactions
+> 
+> Add support for I2C_SMBUS_I2C_BLOCK_DATA protocol to the PIIX4 SMBus
+> driver. This enables I2C block read/write operations where the master
+> specifies the transfer length, unlike SMBus block data where the slave
+> provides the length.
+> 
+> Key changes:
+> - Add PIIX4_I2C_BLOCK_DATA protocol constant (0x18)
+> - Implement I2C block write: first data byte to SMBHSTDAT0, rest to SMBBLKDAT
+> - Implement I2C block read: pre-specify length, read first byte from
+>   SMBHSTDAT0, rest from SMBBLKDAT
+> - Update piix4_func() to advertise I2C_FUNC_SMBUS_I2C_BLOCK support
+> - Add IMC notification for SB800 series chips
+> 
+> Signed-off-by: Qing Chang <qinchang@cisco.com>
 
-#ifndef I2C_M_IGNORE_NAK
-#define I2C_M_IGNORE_NAK 0
-#endif
+the commit log is a bit screwed up, but nothing that can't be
+fixed without resending :-)
 
-Or you have another idea?
+Let's wait for Jean.
 
-[1]: https://elixir.bootlin.com/linux/v6.19-rc5/source/tools/include/linux/=
-kconfig.h#L35
-
-Thanks for the review!
-=2D-=20
-Beno=C3=AEt
-
-
-
+Andi
 
