@@ -1,186 +1,159 @@
-Return-Path: <linux-i2c+bounces-15243-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-15244-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92512D32F9C
-	for <lists+linux-i2c@lfdr.de>; Fri, 16 Jan 2026 15:59:11 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id C537DD386FB
+	for <lists+linux-i2c@lfdr.de>; Fri, 16 Jan 2026 21:18:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 58CEC3009296
-	for <lists+linux-i2c@lfdr.de>; Fri, 16 Jan 2026 14:55:07 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 66B7C308599E
+	for <lists+linux-i2c@lfdr.de>; Fri, 16 Jan 2026 20:13:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D0223939AE;
-	Fri, 16 Jan 2026 14:55:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D15A339A7E0;
+	Fri, 16 Jan 2026 20:12:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b="AxESZ4IZ"
+	dkim=pass (2048-bit key) header.d=nexthop.ai header.i=@nexthop.ai header.b="HxwPvHmd"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97D85337119
-	for <linux-i2c@vger.kernel.org>; Fri, 16 Jan 2026 14:55:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C83D839E6E3
+	for <linux-i2c@vger.kernel.org>; Fri, 16 Jan 2026 20:12:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768575302; cv=none; b=sxiHAlaiIHbzQnb7ircIYXe6rZvnyZV2l/KtTMDgYfyNf2c73jk7HKGGMa5IJ/rQ5tNA9Olfi8rudfGXYUARirqftzhaTthbGhG+Qj9xea7cZBK0tJ7RUZ/Ey6gWSmyU6uvd6QZMf7rD4ikQ9JO5Bhb68M4D1AIUdVqeoz8uokg=
+	t=1768594378; cv=none; b=qB0oJ/wHXnSir0UJ0bmMSJTiPFsxnEjt/U+sXS9EZx4hJ1kM+UgHLuFiYeoxxnkUgCaCXQ9RlYfVDC48nLP5YxkPGSKejTm6Jw/gc8hHy4GFey7hySeGm+hqoigPOB/4Tz6vbcIGad5dwIgTQvsH+lpgO7tV1kOc78oCnzGixdE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768575302; c=relaxed/simple;
-	bh=afqiXye3bQTM2c0rYf8KqRRgmpX3C5xIebIObRjkBlA=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=FXHdp8UzbQF2AlsDpeITnZ9h0PEFZbD5rTuioAblsGFOHQoOQdSA7iPmodj9jYqYytMZi3iY0AVFkriP8tnABoVo2gpODVd+8K3ZwGsGMgDIqfsobVL5qUBPg+XnzbD2MBjt0gNp/NVNhKSQ1GN0tGVOBgdJJdcFrtUFJYaLs5k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fairphone.com; spf=pass smtp.mailfrom=fairphone.com; dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b=AxESZ4IZ; arc=none smtp.client-ip=209.85.208.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fairphone.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fairphone.com
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-64b92abe63aso4268505a12.0
-        for <linux-i2c@vger.kernel.org>; Fri, 16 Jan 2026 06:55:00 -0800 (PST)
+	s=arc-20240116; t=1768594378; c=relaxed/simple;
+	bh=zLO74AQRRhv6b2SwuidBKaYwkKHYtwbUsw11WJWSWjg=;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Message-Id:References:To; b=M3//pl20GtFIeTejqhMAxqFUlChSRFMbUl97bi51VjUs7jqbmQiPx7q7SvfoRZiwET3HIW5O9+SbdsmtNaLHO+/Xy6mkZby+BSSU+EquAYKLZRCbRUlQBRK0PPe5zcfJX46zC4qnSTKc3oVvuiKPUXU/dcyzntw70CT4pzQkKUM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nexthop.ai; spf=pass smtp.mailfrom=nexthop.ai; dkim=pass (2048-bit key) header.d=nexthop.ai header.i=@nexthop.ai header.b=HxwPvHmd; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nexthop.ai
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nexthop.ai
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2a137692691so15747175ad.0
+        for <linux-i2c@vger.kernel.org>; Fri, 16 Jan 2026 12:12:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair; t=1768575299; x=1769180099; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+        d=nexthop.ai; s=google; t=1768594375; x=1769199175; darn=vger.kernel.org;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=tQ2usQPIwau+GnGSjCyCyo2cCWUw5N5ULi+Fp0gH+7k=;
-        b=AxESZ4IZkHieOOqKH74x3EHBxLe+okH3r1fPeJ/DRRkgTfuLs1Csa9PRv/SKVrrkoT
-         JqazoxG/ZW00QqJEEkQYYj3eulakMPc/ol1o/SLecm4SVr/Seo/Pi0bltfgIrfiFx0X1
-         sWvybhIO2pfFl0wHUkwLRwnOvXxANJBOdOmGYYW+dshcy1hM7qF21Nckb9poWZVbQiw7
-         mMFyunB/VyZ/9raOmu/6vx0MP/4FBgp3prW1CRdldrI6MQ87corV9M8KIWRFoq3z6IUw
-         i932Ga9cH27/oBZvwYEtItAzKHjZcd3VguMm5fxhgVlSBRn1G3U7ay4y4rE8t7a1LVGe
-         btiA==
+        bh=W0CbbXgsbOfBJ8N7OtD9ZcjSFwk0Z5dOnisL/uMONXk=;
+        b=HxwPvHmdaKBRpoR0hkBgE4KUPfc3ZkthH0qNtCvVPoM0KuWVjR1Neh2+r08uQzw40e
+         I6gMEt5p1G3a50tkE1lbzEr2G0jD8BzqUQRd1weIq4sCT+Z72q8WA75g1I25AdEg9zUA
+         kJjtLsaMHfd2MdtrR/USpFzzSqwa5lN+gQmm8QXONmvE/iHvxGxhsya9PhxychjG5TSA
+         8vKkMo/IGNg8jT30PMTtfytF5xo4lqte9CNnMaK+u00fKN/oiRN+AHoRvEOqiZhLaWZO
+         MkDPBw+q5iPD+SStnEAwmGpuX3kzL6mIYw82iEmHlIxopJkGKyyza0YFBdSxn/3u9aSC
+         FhBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768575299; x=1769180099;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+        d=1e100.net; s=20230601; t=1768594375; x=1769199175;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-gg:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=tQ2usQPIwau+GnGSjCyCyo2cCWUw5N5ULi+Fp0gH+7k=;
-        b=vUU62KQIn9vBsIZ3alisdlAu7E19Zlo+0vClGFOdwTnJavgeHdhSY3CLwtLWdluQc+
-         z+fkM2eTHDk8H1WSP3BKbgBKfv8aN0luD/Lk6bQHh6OlKo6blq8wj1P5p6kUfYA9LkuN
-         JOIwCeIKWOGdQnN70qKX+eU2jBuhSxv0IY9JAJ4uVhqPjPH9LVr0pkFYzQhCjzbbZEdi
-         a71ZsBcl48eBlT3kzeFuhJfKmRLMKqIlRX38XkN1pecuNGpMBZsPMHtgP5JyEkjN+j1p
-         a9LsidmSoCTVyKknilKfRLvw/iFP94KZdq64cUGcVGszrbhgk1y5sCtbEKXii6+48BWD
-         w7eA==
-X-Forwarded-Encrypted: i=1; AJvYcCW61COvX1exQKl0IUiPlUSVJgJOydvf9AnFCKJthP49M5a6WShizOUWexYoSVlqEgo0DDax9evnoEw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx6q3SiY2otPuzQyHDyHRNvhue/zU2zxYBvH4PgLQ+xbbSWJeYR
-	Y8UjlqM00cQqDfx9Fp6oFQB1Lng1Wpizn3+A82Aeg++McA6pHr7IGT6RNwDJ1asRquM=
-X-Gm-Gg: AY/fxX7d7CpeahZu/SgAIK+xZdSFwSqSHx1vEJMLlI/2Yj1QWxn7QjwU13q5gZw84SV
-	l2j/jVoHDuypmpIyzv21mfHOzUpfNcCXxQ51K7iQxithKBBzGfZ0jqDW3gw/DS3ZibTjr+LyBzh
-	CmhHlzd++1NXQ07GnXu1y6xDYLIfHpD1a8m1PR1cTy7wPZu/ffLWK+7SFKjPtnlUDtNDlU3UmdH
-	MIhVbiZr3EWQXFpb5bgm2zVEG78hPeco2mope9SpPsHUpCAjc76SZIrgBWuP5+eLi+kf4b7E/8x
-	ACZH70QmUgAb/yMGlGgONtf/w91EQKTl0snV/RNOe1H2Xf3y08uFaVciVlV9vnBDUkJYD55Onvb
-	v/FKkeTEwpRgUmsdFsZ198O2jNxUZ7JZZJ75lGozJplQVM8rtyOE5J/Ts/qVZbHePR53p5t40ji
-	6m74nozj00suuaWDPuqRp/oXvjWe7olNiHta7NnBRhRa5HPYPstgIKurNO
-X-Received: by 2002:a05:6402:1e93:b0:64d:1bbf:954a with SMTP id 4fb4d7f45d1cf-654526cc242mr2815270a12.15.1768575298921;
-        Fri, 16 Jan 2026 06:54:58 -0800 (PST)
-Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-654535c49f4sm2585127a12.31.2026.01.16.06.54.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Jan 2026 06:54:58 -0800 (PST)
+        bh=W0CbbXgsbOfBJ8N7OtD9ZcjSFwk0Z5dOnisL/uMONXk=;
+        b=ER/QYQz2yik9pm8r9Z/8X2vZjifL9Vi6X22MC5nIZoAOvblmrTjM1daIbQ32fAkDtH
+         /PbVMuKLOoxgdDXVDsg/mxkj7kzrft/7qfacBIJCE6mooEXUZc3y+kF/ml2E8wcsUJMX
+         Dl8YFMshnBG9wP2QgQLCSeFlRkG+oVF6ooI8WLEbMG7aC/ndibirepig6l0DMT9+3ZRn
+         3Yd4KfKsB5YDt6RSjmTsfbFWOqdGT3mbcTKKCwlviRBpXgH89tuXZc4C1awo+iG9EFnC
+         UVbD7Hsj4Vcml9T4vsJbsl/Juwonko5cBAxlVCrPvpz05F91pjC060c5Fs8u/RsAyzwa
+         ubVw==
+X-Forwarded-Encrypted: i=1; AJvYcCWfFCJm+CzR55O3G1gYUpm132rOt/stml5ZhBFUlK1k6pWqssfCH2jmcGqpRsFOsjDIfecUfc7f/s0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzVjAPhhHaiTfkXiHO7lPkQcQj3BW/XBgeA3UDOEJVOTsmr5YAP
+	7bMnCugu2ZkelVsOq+KoLOz1pIGJ5Oo8SMNZaqW3Z/bMzWOIrmm5fc7S3uUzpenwSOI=
+X-Gm-Gg: AY/fxX7hDAGmiqxswFmhDSSRREOf+FzZ3K4ZvTZpx5h0LO0zDZxpDmah5Wu0PkQi5SW
+	WIXJrt6orW2LHnFcT42UXQFCvmdoowYUIaD1vmTORqvM/hseYA7PYlOISn/6N4nPg+y08H7pLXB
+	1/ElGoIB3uMbnV2p0G66Vf9ciwoNOoD08o9bWF0UD8832FWp/R+qXWQ2MnGMDwN/oiEnyI4lhBJ
+	e0BakbCQSEKYwPBFHGKR3dNZ81RJwBCoabdZGRFHp3R9KJguYKBNP2M1mPtDWM0eYPIKv80JcnA
+	+1U6nA3WhRNF9J4bhFawUHBHlreep5fiqHqQ21waX2Btvlsr/fNCNMIoBLbNJ/k47WlE5rzSIzY
+	WCbaOkNty4q283jIQ1XVGoNvWSaidv9Kucw/1mps33pp4eF/5ggqF3I+lf2xYIr+1pOQmFVqVAV
+	AZTP2mcx8+//0cyTRa2XDFz15uZZPK1FC01Qso2tleN9vR1/z6i/4z1VbiHvsR3drVJoQPbcs=
+X-Received: by 2002:a17:902:da8d:b0:29f:2b8a:d3d with SMTP id d9443c01a7336-2a71751a47cmr39358445ad.4.1768594374971;
+        Fri, 16 Jan 2026 12:12:54 -0800 (PST)
+Received: from smtpclient.apple (c-24-16-26-157.hsd1.wa.comcast.net. [24.16.26.157])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a7194164dfsm27613535ad.88.2026.01.16.12.12.54
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 16 Jan 2026 12:12:54 -0800 (PST)
+Content-Type: text/plain;
+	charset=utf-8
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3864.300.41.1.7\))
+Subject: Re: [PATCH] i2c: xiic: add ACPI support
+From: Abdurrahman Hussain <abdurrahman@nexthop.ai>
+In-Reply-To: <4c3f28e1-69a2-410b-abe7-ed163e97eedd@amd.com>
+Date: Fri, 16 Jan 2026 12:12:43 -0800
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ Andi Shyti <andi.shyti@kernel.org>,
+ linux-arm-kernel@lists.infradead.org,
+ linux-i2c@vger.kernel.org,
+ linux-kernel@vger.kernel.org
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 16 Jan 2026 15:54:58 +0100
-Message-Id: <DFQ3MBO2EAYF.1PRF2111N0U1I@fairphone.com>
-From: "Luca Weiss" <luca.weiss@fairphone.com>
-To: "Konrad Dybcio" <konrad.dybcio@oss.qualcomm.com>, "Luca Weiss"
- <luca.weiss@fairphone.com>, "Bartosz Golaszewski" <brgl@kernel.org>, "Rob
- Herring" <robh@kernel.org>, "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
- "Conor Dooley" <conor+dt@kernel.org>, "Loic Poulain"
- <loic.poulain@oss.qualcomm.com>, "Robert Foss" <rfoss@kernel.org>, "Andi
- Shyti" <andi.shyti@kernel.org>, "Bjorn Andersson" <andersson@kernel.org>,
- "Konrad Dybcio" <konradybcio@kernel.org>
-Cc: <~postmarketos/upstreaming@lists.sr.ht>, <phone-devel@vger.kernel.org>,
- <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>
-Subject: Re: [PATCH 4/4] arm64: dts: qcom: milos-fairphone-fp6: Add camera
- EEPROMs on CCI busses
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260116-milos-cci-v1-0-28e01128da9c@fairphone.com>
- <20260116-milos-cci-v1-4-28e01128da9c@fairphone.com>
- <ae73eac1-4e27-404d-af73-88eed699db0b@oss.qualcomm.com>
-In-Reply-To: <ae73eac1-4e27-404d-af73-88eed699db0b@oss.qualcomm.com>
+Message-Id: <C89C33BE-55F1-4588-ABFC-EE9B79FBAC0D@nexthop.ai>
+References: <20260115002846.25389-1-abdurrahman@nexthop.ai>
+ <aWjlTKrM34lfDsfC@shikoro> <AAB5CE7A-9264-4CE1-8A49-2FD3043B0A80@nexthop.ai>
+ <4c3f28e1-69a2-410b-abe7-ed163e97eedd@amd.com>
+To: Michal Simek <michal.simek@amd.com>
+X-Mailer: Apple Mail (2.3864.300.41.1.7)
 
-On Fri Jan 16, 2026 at 2:59 PM CET, Konrad Dybcio wrote:
-> On 1/16/26 2:38 PM, Luca Weiss wrote:
->> Enable the CCI I2C busses and add nodes for the EEPROMs found on the
->> camera that are connected there.
->>=20
->> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
->> ---
->>  arch/arm64/boot/dts/qcom/milos-fairphone-fp6.dts | 50 +++++++++++++++++=
-+++++++
->>  1 file changed, 50 insertions(+)
->>=20
->> diff --git a/arch/arm64/boot/dts/qcom/milos-fairphone-fp6.dts b/arch/arm=
-64/boot/dts/qcom/milos-fairphone-fp6.dts
->> index 7629ceddde2a..c4a706e945ba 100644
->> --- a/arch/arm64/boot/dts/qcom/milos-fairphone-fp6.dts
->> +++ b/arch/arm64/boot/dts/qcom/milos-fairphone-fp6.dts
->> @@ -529,6 +529,56 @@ vreg_l11f: ldo11 {
->>  	};
->>  };
->> =20
->> +&cci0 {
->> +	status =3D "okay";
->> +};
->> +
->> +&cci0_i2c0 {
->> +	/* Main cam: Sony IMX896 @ 0x1a */
->> +
->> +	eeprom@50 {
->> +		compatible =3D "puya,p24c128f", "atmel,24c128";
->> +		reg =3D <0x50>;
->> +		vcc-supply =3D <&vreg_l6p>;
->> +		read-only;
->> +	};
->> +
->> +	/* Dongwoon DW9784 VCM/OIS @ 0x72 */
->> +};
->> +
->> +
->> +&cci0_i2c1 {
->> +	/* Awinic AW86017 VCM @ 0x0c */
->> +	/* UW cam: OmniVision OV13B10 @ 0x36 */
->
-> There's a driver for this one!
 
-Yep! Already got patches to add the required regulators & devicetree
-support to the driver, but since I've got zero on CAMSS so far, I
-couldn't test it more than reading chip ID.
 
->
->> +
->> +	eeprom@52 {
->> +		compatible =3D "puya,p24c128f", "atmel,24c128";
->> +		reg =3D <0x52>;
->> +		vcc-supply =3D <&vreg_l6p>;
->> +		read-only;
->> +	};
->> +};
->> +
->> +&cci1 {
->> +	/* cci1_i2c0 is not used for CCI */
->> +	pinctrl-0 =3D <&cci1_1_default>;
->> +	pinctrl-1 =3D <&cci1_1_sleep>;
->
-> Let's keep them per-bus-subnode so we don't have to override it
+> On Jan 15, 2026, at 11:30=E2=80=AFPM, Michal Simek =
+<michal.simek@amd.com> wrote:
+>=20
+>=20
+>=20
+> On 1/15/26 20:04, Abdurrahman Hussain wrote:
+>>> On Jan 15, 2026, at 5:02=E2=80=AFAM, Wolfram Sang =
+<wsa+renesas@sang-engineering.com> wrote:
+>>>=20
+>>> On Thu, Jan 15, 2026 at 12:28:46AM +0000, Abdurrahman Hussain wrote:
+>>>> Use generic device property accessors.
+>>>> Make the clock optional assuming it's managed by firmware.
+>>>>=20
+>>>> Signed-off-by: Abdurrahman Hussain <abdurrahman@nexthop.ai>
+>>>=20
+>>> On which hardware has this been tested?
+>>>=20
+>> This was tested on nexthop.ai data-center NH-4010 switch with Xilinx =
+based FPGA.
+>> The following ACPI ASL fragment was used to describe the device:
+>>             Device (I2C2) {
+>>                 Name (_HID, "PRP0001")
+>>                 Name (_CRS, ResourceTemplate () {
+>>                     Memory32Fixed (ReadWrite, 0x80a40400, 0x00000200)
+>>                     GpioInt (Level, ActiveHigh, Exclusive, PullNone, =
+0,
+>>                         "\\_SB.PCI0.GPP5.FPGA") { 10 }
+>>                 })
+>>                 Name (_DSD, Package () {
+>>                     ToUUID ("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+>>                     Package () {
+>>                        Package () { "compatible", "xlnx,axi-iic-2.1" =
+},
+>>                        Package () { "single-master", 1 },
+>>                     }
+>>                 })
+>>             }
+>=20
+> can you share more details about cpu and bootflow?
+>=20
+> Thanks,
+> Michal
+>=20
 
-I don't see any upstream example of that, would the pinctrl work
-correctly with that?
+Hi Michal,
 
-While this isn't necessarily pretty like that, it does work :)
+This is an AMD Ryzen Embedded V3C48 platform with Xilinx Artix 7 FPGA =
+with multiple I2C and SPI IP blocks.
 
->
-> otherwise
->
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+The FPGA sits on PCIE bus and has all the IP blocks memory mapped. I2C =
+blocks also generate PCI MSI interrupts and we have implemented a custom =
+irq_chip/gpio driver that creates the irq_domain hierarchy.
 
-Thanks!
+Adding these changes allowed us to benefit from the existing ACPI device =
+enumeration in the kernel and re-use the existing drivers.
 
-Regards
-Luca
-
->
-> Konrad
-
+Thanks,
+Abdurrahman=
 
