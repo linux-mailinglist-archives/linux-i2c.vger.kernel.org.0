@@ -1,213 +1,171 @@
-Return-Path: <linux-i2c+bounces-15213-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-15215-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id EADB9D2E8D8
-	for <lists+linux-i2c@lfdr.de>; Fri, 16 Jan 2026 10:12:30 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 648E1D2EA2D
+	for <lists+linux-i2c@lfdr.de>; Fri, 16 Jan 2026 10:19:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 810BA3040644
-	for <lists+linux-i2c@lfdr.de>; Fri, 16 Jan 2026 09:12:13 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 3E43630D317E
+	for <lists+linux-i2c@lfdr.de>; Fri, 16 Jan 2026 09:17:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 449B231D393;
-	Fri, 16 Jan 2026 09:12:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56384346AC6;
+	Fri, 16 Jan 2026 09:17:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="pi8JlhvX"
+	dkim=pass (1024-bit key) header.d=leica-geosystems.com.cn header.i=@leica-geosystems.com.cn header.b="1Dz9CtEi"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from DU2PR03CU002.outbound.protection.outlook.com (mail-northeuropeazon11011002.outbound.protection.outlook.com [52.101.65.2])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2372731BC94
-	for <linux-i2c@vger.kernel.org>; Fri, 16 Jan 2026 09:12:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768554733; cv=none; b=SHPvgYszjC7JE73YBnih5+gj35k2NssgGJV346Uzw6pdKq0qzOrLPEMLHGc3xu2GVD5Y+6ijY4cZJ/o7t5JoAGGWo/prS/9z+D9hhQnhEgWSr1xE/u5Eb6h1nKp7KT7HdbI/mYnOA/MwR8NMFpCtb4e9gFe2MGm1qZ7myPJFtJA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768554733; c=relaxed/simple;
-	bh=/HeROcY+wue/RnfDCzGh5TkygmGivHiZHG7v8KNDXNQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PDGAFwm5CGL3XFaemDih5zGPTZQIQPy7ATLUxJQ7MXiT2FbRUYTEZQmGNmK5svfxhTqZadmOy53W0t3a9B/PS1G5W1cMKZ3Gz25tMuIil4yXugXmF+6Y2Rk4AdGhFI4XYIlz8KaqSItCia2P03ihLwbUY+LiJrCqb04JP2Ob3HI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=pi8JlhvX; arc=none smtp.client-ip=209.85.208.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-38316b89455so2576701fa.2
-        for <linux-i2c@vger.kernel.org>; Fri, 16 Jan 2026 01:12:10 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75C6731ED73;
+	Fri, 16 Jan 2026 09:17:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.65.2
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768555035; cv=fail; b=mkWt+Gi/QQNXF3WLCXEcqY9jPxvxc0aXxKHd0evuuewC4ToPxWi786R+cDAg/B2yh8YBIN7L+2HcQ2WrdbtC0KE2577J/Wmt60whxv4AktSnfWOtb6eG6g97icKoYqdp0hDxeXaNuulkyb2QcTWYknb6ad8H94v8BoVAavBZZvA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768555035; c=relaxed/simple;
+	bh=zenxyCnrk2PkVimw63TYeDFyU5E/XODwKaV/Rk6O6wk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=pzJQuZ4XTFysohgzn6+fm6NWQpr8Nc/vNarAMORnZX8enhe+37o8NJE7+aGi6GeXthmnQR/fHPEUKaH4al14r4xdKO4c16rkZZ3alTQ/I3yMNSfF1rfSWF95hxZAo6mXlV/RWDj9Jx/TAJdhsA2XtWRGdrHDCS6I7Z2gxtUwUyg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=leica-geosystems.com.cn; spf=fail smtp.mailfrom=leica-geosystems.com.cn; dkim=pass (1024-bit key) header.d=leica-geosystems.com.cn header.i=@leica-geosystems.com.cn header.b=1Dz9CtEi; arc=fail smtp.client-ip=52.101.65.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=leica-geosystems.com.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=leica-geosystems.com.cn
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=RvzHEuaVP4G6EOvcLyk/3jCjEjqEix957DaWGG01wn1HqK5qbVLeJDzEeQA4bwdMkO6cWPTFK0HMOwxHwP699YgxCsa7+bTX4iMRAthsr2no81/76//FJYFvl+J8cjk7D9z/dixuGdzN73tloRxnLsJ6YDVdezJBQyIvgMz8I/aaJweAa7cpqEZ/9P71uS9B/h5QD95Kdy2D5zzt3HlC6zzSxG2En2y78ITnCeqXvUDTTtIv2vYoB0m1mB7mXfQPQz33xOGz1o+xT1NjK68sa0qzB13nA++OJNn68miiypRmOe5iMMD0XiiDM3DZK6AogBqKArZBzMNZhVf0bswFYA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YvOLKgBt0iIkqmp00gos0etEo79aDgCs4FvkScVEjIQ=;
+ b=wR+WTvUTEj+jMU5zItpo09s91PXqAXvTgTtp3NgSRyUAAuHdGTF2Pr4Kj29tzDJXriYOYLGbWW11i+8Qr5A8tTQuN2km65y2RUwW/ijH9rI3gGMdK9tBkIVMU5X2moiWtwj8KYSPtHU0vWwpn1wzSpfOvwykCHySqkfIbwjzBvre8o3z0uXuJusUueSO0OEFMrgS+BXxpqCaMVnSupnqTrgRxF5mIrd1XfGiHK6UEeIybiMUBxTm0yHvfVd6oHf9+K5PhL212KWJSXOuLp1H/mM4Yl/5KkgZ6O6UJJmjemXqSmx7zWg+30jhizoMfPyDt3ANZS/bnv2Gd6VxJexOWA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 193.8.40.99) smtp.rcpttodomain=vger.kernel.org
+ smtp.mailfrom=leica-geosystems.com.cn; dmarc=pass (p=reject sp=reject
+ pct=100) action=none header.from=leica-geosystems.com.cn; dkim=none (message
+ not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1768554729; x=1769159529; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pqAbJs5DEIYF5QCBGJfgcurtZvGAMM7ELYVo8ENiu9M=;
-        b=pi8JlhvXn++3rJEQ8Wv+3wopz/ouDG0V6LlCBdNEckYz7gLn9hS4zOS8yFN4JVTuj6
-         eUgVu2KVJlxZnSzR1uD6lqWeK/wEaVuWDmndR/TxKCBm3gBH8soWuXOFCsxpVKgYkChl
-         C87Vmhym4AvFaMuTl4VvwU5NZdS2rqiEFvMLu9QLy/Hd7lSLu+k+DifphE13QGO4pXMT
-         hT2wgq7+snBL3wFBYhoYhLF5Gd9x3v+/aSKD7VtkDI+uCMG/Ovi36zSTCmvrEQZFslzN
-         nOIqU6sxfdpeFhC/OFi15iANK6tfQir0yJkV8T8oevHvKGLwTZOASigK+1rtO1j/o5pn
-         skww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768554729; x=1769159529;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pqAbJs5DEIYF5QCBGJfgcurtZvGAMM7ELYVo8ENiu9M=;
-        b=HQYiruzJYRwlWgtVfOwb6aDed25dQUEo1iZExG1DSABrxofF52bkX/AL0jOJTxYDww
-         qPH3iRbTgpmBTAxJy0z/zPdZf3bB84VKbqCie3hpHS/Tki0smmKPrzYfNFr6XYYjmDIn
-         Q+zAqYF0wkYKEYA4Q63MmJqZgB1B5ISj81r5tEcIWs4h4R5sq5sr6MNIavhwOl8zEruX
-         Uzt+10GM5LCPhrng5sL+g+9H2AU178+T1nFr1an9MkJWH4Efb5DMMCR3FyrS3vkfZa7Z
-         oYAJz8n/TnP2pUdBXgvxxWnM4pMtNFxxc2kUUqu05AdaMG7G3nOh8gW9g9ib3dnpkZCK
-         IYxA==
-X-Gm-Message-State: AOJu0Yw1eYRXJ9nswcTbjSXIEV3A0Ye0QOqsUZJYXSiHwGqEpYuKJ5/8
-	6AdDXaKDe8cC8EqfTC5EPyO5QlXzpoic12zjSNIBlh5IkiP+9XpB73RKAXX2iSJkD9I=
-X-Gm-Gg: AY/fxX4UPBwt1Zz691oM5Ntcf5i1YQc/4H6yvSryO8XTrG/lvyaeYDdaFGfE8rmmtMn
-	KYUY1i0ALc4j7EMnA6e/YudguWVAFgqEMaf83i8KpU4ou+XVOXDZydkVutm9Mh3YaiCtQadxJ44
-	f/WyLiaMmTrocUDy2ctLFVkS0o6I6AUGjXsqe74CUsEJ0ZiN9pEZy2Hnlzu4g4P60zw+WgEIkaD
-	j5lcWpdZmlcpJKsHL33D8eWbN3yd9xTGZnelQquXgr6zCUFWaoeQ45nPF/+kYLnoC66pTvE/uqF
-	3ov4CUog6/tV1zM6UYGkcA8ccQrogzNWnYa8Pn0CdFm0ucUqvo/7nvnG+/RRWqIggrc3ogyh5kl
-	Pj4trtdUmeAs9C/bpvIwRYa/BFPCGIlJ7GOvrhuYtG2veLwDVx50AAFuIEss4klzdhRKHYcBttj
-	X/P4BQJ7KkFHk3ECfE5md0HVmox2+3ftuxPu+5Q0lQ3f647j/pC6omO4AmYqRqzboX1g==
-X-Received: by 2002:a05:651c:991:b0:380:a1c:7039 with SMTP id 38308e7fff4ca-38383fe5fbemr4683611fa.0.1768554729185;
-        Fri, 16 Jan 2026 01:12:09 -0800 (PST)
-Received: from [192.168.1.100] (91-159-24-186.elisa-laajakaista.fi. [91.159.24.186])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-38384d8e0e5sm5608701fa.17.2026.01.16.01.12.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Jan 2026 01:12:08 -0800 (PST)
-Message-ID: <3b16ffa2-1580-426c-aa9c-f377d913d49c@linaro.org>
-Date: Fri, 16 Jan 2026 11:12:07 +0200
+ d=leica-geosystems.com.cn; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YvOLKgBt0iIkqmp00gos0etEo79aDgCs4FvkScVEjIQ=;
+ b=1Dz9CtEiPvUXqH/Je0XMKHcVPKLPO5pO6rQXa6TjsLtr5XznKwbHn85+OUBO/LyvMou/5mpPBkK++JJ0EZTn7Rc5aPvXPZyGK9ybXBmbdDOQn2tkr0YcABBLfjIme8cH/MKhU5fH/v6qK3ZUPji5p4OFj7UPV+dDxLC4foHW5uY=
+Received: from AM0PR02CA0198.eurprd02.prod.outlook.com (2603:10a6:20b:28e::35)
+ by DB9PR06MB7705.eurprd06.prod.outlook.com (2603:10a6:10:252::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9520.6; Fri, 16 Jan
+ 2026 09:17:07 +0000
+Received: from AMS0EPF0000019F.eurprd05.prod.outlook.com
+ (2603:10a6:20b:28e:cafe::bc) by AM0PR02CA0198.outlook.office365.com
+ (2603:10a6:20b:28e::35) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9520.5 via Frontend Transport; Fri,
+ 16 Jan 2026 09:16:58 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 193.8.40.99)
+ smtp.mailfrom=leica-geosystems.com.cn; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=leica-geosystems.com.cn;
+Received-SPF: Pass (protection.outlook.com: domain of leica-geosystems.com.cn
+ designates 193.8.40.99 as permitted sender) receiver=protection.outlook.com;
+ client-ip=193.8.40.99; helo=hexagon.com; pr=C
+Received: from hexagon.com (193.8.40.99) by
+ AMS0EPF0000019F.mail.protection.outlook.com (10.167.16.251) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9542.4 via Frontend Transport; Fri, 16 Jan 2026 09:17:06 +0000
+Received: from aherlnxbspsrv01.lgs-net.com ([10.61.228.61]) by hexagon.com with Microsoft SMTPSVC(10.0.17763.1697);
+	 Fri, 16 Jan 2026 10:17:06 +0100
+From: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
+To: o.rempel@pengutronix.de,
+	kernel@pengutronix.de,
+	andi.shyti@kernel.org,
+	shawnguo@kernel.org,
+	s.hauer@pengutronix.de,
+	festevam@gmail.com,
+	linux-i2c@vger.kernel.org,
+	imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Cc: bsp-development.geo@leica-geosystems.com,
+	LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
+Subject: [PATCH V2 0/2] i2c: imx: Fix block read handling for invalid length
+Date: Fri, 16 Jan 2026 09:17:02 +0000
+Message-ID: <20260116091704.3399142-1-Qing-wu.Li@leica-geosystems.com.cn>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 5/5] arm64: dts: qcom: talos-evk-camera: Add DT overlay
-To: Wenmeng Liu <wenmeng.liu@oss.qualcomm.com>,
- Loic Poulain <loic.poulain@oss.qualcomm.com>,
- Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>, Robert Foss <rfoss@kernel.org>,
- Todor Tomov <todor.too@gmail.com>,
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
- Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>
-Cc: linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-media@vger.kernel.org, imx@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org
-References: <20260115-sm6150_evk-v3-0-81526dd15543@oss.qualcomm.com>
- <20260115-sm6150_evk-v3-5-81526dd15543@oss.qualcomm.com>
-From: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-In-Reply-To: <20260115-sm6150_evk-v3-5-81526dd15543@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-OriginalArrivalTime: 16 Jan 2026 09:17:06.0386 (UTC) FILETIME=[E260FB20:01DC86C8]
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AMS0EPF0000019F:EE_|DB9PR06MB7705:EE_
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: 5155faa4-3390-485b-7b87-08de54e00503
+X-SET-LOWER-SCL-SCANNER: YES
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|82310400026|36860700013|1800799024|921020;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?KKqPsXpGg2AcOFCjQ4gR4fgDkYadGtaxKopKA0/2vmiZSfneezp5JNOUl3b8?=
+ =?us-ascii?Q?EB8sbBxSMtv8DnHFzpLgFSlsJC4nyyx+25AsRStvsQ6bay7z5Ut3onl64JRF?=
+ =?us-ascii?Q?8U2yqBd0b2Dut05UBddzcgij2eSgw8qPeCXOaKxCWFb33L9epO4LaI51fXnO?=
+ =?us-ascii?Q?RybSN3JUN2WialBCG5nFKqRUaHfoc4rjaC787fzDDvxpFIITk76eaXDzjscU?=
+ =?us-ascii?Q?f3yLzAdSv9oVocmaMA7GwmCCC0OKwN9o1tyBLSeNKOTZAxZB8f34/K+SitH0?=
+ =?us-ascii?Q?QO8bHjK3j8OUsQmRhy9iOvGEbJ0cU7VvfgYXaHgkqGA+Hhij5EGLV/DXTYwb?=
+ =?us-ascii?Q?XaRFPrxXggFwReikKXOQ8qXnuutTkRRHhjgiVyqB+4ZYETVCnxysnNSeYGXp?=
+ =?us-ascii?Q?heUdmMjofmbku/CPB4CH83aaXLFhEaeGP8qylci0BBzYflapF6yGJEsDzcHL?=
+ =?us-ascii?Q?QfH8emhAEYOzkUZ9NUAX/mkNi+/RFp5LD9jvdqiMJRfkxCzAlfyu4wFbW4mh?=
+ =?us-ascii?Q?OjmxMXl4RUr2wGp1J++KljsNdo4Zkysn4xtHNUghGl3SWb095cx+5sLNwo7g?=
+ =?us-ascii?Q?h6zcnWTG86PwuP8H9tectmPPNbM9GqI10UlFq+zIhE9RWZu0SM+eAA27XVqC?=
+ =?us-ascii?Q?QdH1e+0xeRaAJh0cNxPuKlNtxRGhW3e8DmeCeFJvAGvNPYaqTDnrjpYNAnjl?=
+ =?us-ascii?Q?Gks4PDeQYyQEpmeB8eout5YDdCeVpWOh/7gwhUG0zwyBvvr9zixnS4VVVU99?=
+ =?us-ascii?Q?I31UAaJa0eF0fCPOM2YzDL0of44yqzHC1zJZGYUlE0h5m4KBJgFH3Ph/Xhhy?=
+ =?us-ascii?Q?4TRz6mo2lWcu9iGFXo8DWYQ8KXdBmfbUGePuo9ENcaRHlioZVGxSm5w4wsjV?=
+ =?us-ascii?Q?JuaxD8qKoI8guH5GVh7rsg7gOum7vME73nR6kpxWDHQlqgj3ssyTGjfULWpt?=
+ =?us-ascii?Q?SZ2J8xl+ZgQ/uS0uHPgkp8mu5vlGhKi8BNrCfR1kxfHkB9liIxRwd2ciUJS3?=
+ =?us-ascii?Q?ixRNvelZhYjmN7bfDdL7f8I/6PswdFTM66sEX/KQdeRs3G601k4PKRJK0pmf?=
+ =?us-ascii?Q?OIr2iJwmyjfxMbWDWHBHL+p0cSYWcu9BWKdIf2CZ4L2xRSi3gcQ7IeKcefbq?=
+ =?us-ascii?Q?DiaXblEjVB4RA0T+Bz9ROie3B5/2aG7Sss3iHsbat5VNWLzciItupwI0gWGy?=
+ =?us-ascii?Q?xg7JL3vcy3gSDOrHAd2Rre7xUHSzYGiVJXbD2FTenPVwIul+x7VsHk1zymBb?=
+ =?us-ascii?Q?+CcFdGDVZQHh8U00sphSctlAtzxpM/rdXJWRIZqv2R37K8wSU9S6EeKzTQOg?=
+ =?us-ascii?Q?wsB7HEAwk2G1QIT8/QWjAqLj3bn8VATxMOyD6v/uqy8l3l3nkJrvnzJOomfg?=
+ =?us-ascii?Q?q0HPUj7EjVw1j9j1UloqFXE03W/C6ei0OFMwr9JRdj69NPoIbcNZG19v9LzZ?=
+ =?us-ascii?Q?6zRflEjdsFIkYphRBjuxSIo3Xbj9+d3S4F20OsFl78J25TE/dMYE1e6sDBeT?=
+ =?us-ascii?Q?1iPmLoVHnLi4Xn34ncCb6ptbRwUkt9boOBZ0oCsFsjO4m4j98qdtdOCCK/Nd?=
+ =?us-ascii?Q?lO8DHZteqkoGs7/74A6uE5UKhF4ptzKxoucx8WMfUetn7dAinmOXafCCT9wX?=
+ =?us-ascii?Q?ih0qjsgCP0X89jvBDih26BtLvgo6ymQRILdGF1sYiWYxkTSQMRBuTjXZT4vO?=
+ =?us-ascii?Q?qujbvE7L68gdVgTa2tjvUC5bhUA=3D?=
+X-Forefront-Antispam-Report:
+	CIP:193.8.40.99;CTRY:CH;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:hexagon.com;PTR:ahersrvdom51.leica-geosystems.com;CAT:NONE;SFS:(13230040)(376014)(82310400026)(36860700013)(1800799024)(921020);DIR:OUT;SFP:1101;
+X-OriginatorOrg: leica-geosystems.com.cn
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jan 2026 09:17:06.5744
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5155faa4-3390-485b-7b87-08de54e00503
+X-MS-Exchange-CrossTenant-Id: 1b16ab3e-b8f6-4fe3-9f3e-2db7fe549f6a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=1b16ab3e-b8f6-4fe3-9f3e-2db7fe549f6a;Ip=[193.8.40.99];Helo=[hexagon.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	AMS0EPF0000019F.eurprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR06MB7705
 
-On 1/15/26 12:12, Wenmeng Liu wrote:
-> Enable IMX577 via CCI on Taloss EVK Core Kit.
-> 
-> The Talos EVK board does not include a camera sensor
-> by default, this DTSO has enabled the Arducam 12.3MP
-> IMX577 Mini Camera Module on the CSI-1 interface.
-> 
-> Signed-off-by: Wenmeng Liu <wenmeng.liu@oss.qualcomm.com>
-> ---
->   arch/arm64/boot/dts/qcom/Makefile                  |  3 ++
->   .../boot/dts/qcom/talos-evk-camera-imx577.dtso     | 63 ++++++++++++++++++++++
->   2 files changed, 66 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-> index 00652614e73582fa9bd5fbeff4836b9496721d2d..be9aeff2cd1555bc436e1b8eb78d8e1c9b84f9c4 100644
-> --- a/arch/arm64/boot/dts/qcom/Makefile
-> +++ b/arch/arm64/boot/dts/qcom/Makefile
-> @@ -339,8 +339,11 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sm8650-qrd.dtb
->   dtb-$(CONFIG_ARCH_QCOM)	+= sm8750-mtp.dtb
->   dtb-$(CONFIG_ARCH_QCOM)	+= sm8750-qrd.dtb
->   dtb-$(CONFIG_ARCH_QCOM)	+= talos-evk.dtb
-> +dtbo-$(CONFIG_ARCH_QCOM)	+= talos-evk-camera-imx577.dtbo
+This series fixes a crash and bus lockup when SMBus block read operations
+encounter invalid length values (zero or greater than I2C_SMBUS_BLOCK_MAX).
 
-Please remind me, what does dtbo-y Makefile target serve for?
+Both patches have been tested on i.MX 8M Plus with continuous block read
+operations from battery and keyboard devices sharing the same I2C bus.
 
-> +talos-evk-camera-imx577-dtbs	:= talos-evk.dtb talos-evk-camera-imx577.dtbo
->   talos-evk-lvds-auo,g133han01-dtbs	:= \
->   	talos-evk.dtb talos-evk-lvds-auo,g133han01.dtbo
-> +dtb-$(CONFIG_ARCH_QCOM)	+= talos-evk-camera-imx577.dtb
->   dtb-$(CONFIG_ARCH_QCOM)	+= talos-evk-lvds-auo,g133han01.dtb
->   x1e001de-devkit-el2-dtbs	:= x1e001de-devkit.dtb x1-el2.dtbo
->   dtb-$(CONFIG_ARCH_QCOM)	+= x1e001de-devkit.dtb x1e001de-devkit-el2.dtb
-> diff --git a/arch/arm64/boot/dts/qcom/talos-evk-camera-imx577.dtso b/arch/arm64/boot/dts/qcom/talos-evk-camera-imx577.dtso
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..53006a861878f9112673b9a0ad954bed7a5fdca5
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/talos-evk-camera-imx577.dtso
-> @@ -0,0 +1,63 @@
-> +// SPDX-License-Identifier: BSD-3-Clause
-> +/*
-> + * Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
-> + */
-> +
-> +/dts-v1/;
-> +/plugin/;
-> +
-> +#include <dt-bindings/clock/qcom,qcs615-camcc.h>
-> +#include <dt-bindings/gpio/gpio.h>
-> +
-> +&camss {
-> +	vdd-csiphy-1p2-supply = <&vreg_l11a>;
-> +	vdd-csiphy-1p8-supply = <&vreg_l12a>;
-> +
-> +	status = "okay";
-> +
-> +	ports {
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-> +		port@1 {
-> +			reg = <1>;
-> +
-> +			csiphy1_ep: endpoint {
-> +				data-lanes = <0 1 2 3>;
-> +				remote-endpoint = <&imx577_ep1>;
-> +			};
-> +		};
-> +	};
-> +};
-> +
-> +&cci {
-> +	status = "okay";
-> +};
-> +
-> +&cci_i2c1 {
-> +	#address-cells = <1>;
-> +	#size-cells = <0>;
-> +
-> +	camera@1a {
-> +		compatible = "sony,imx577";
-> +		reg = <0x1a>;
-> +
-> +		reset-gpios = <&tlmm 29 GPIO_ACTIVE_LOW>;
-> +		pinctrl-0 = <&cam2_default>;
-> +		pinctrl-names = "default";
-> +
-> +		clocks = <&camcc CAM_CC_MCLK2_CLK>;
-> +		assigned-clocks = <&camcc CAM_CC_MCLK2_CLK>;
-> +		assigned-clock-rates = <24000000>;
-> +
-> +		avdd-supply = <&vreg_s4a>;
-> +
-> +		port {
-> +			imx577_ep1: endpoint {
-> +				link-frequencies = /bits/ 64 <600000000>;
-> +				data-lanes = <1 2 3 4>;
-> +				remote-endpoint = <&csiphy1_ep>;
-> +			};
-> +		};
-> +	};
-> +};
-> 
+Changes in v2:
+  - Split into two patches for clearer separation of concerns
+  - Add detailed comments with reference manual citations
+  - Implement abort handling in a dedicated ISR state and handler function
+  - Remove modifications to i2c_imx_stop() to avoid affecting normal stop
 
-Reviewed-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+LI Qingwu (2):
+  i2c: imx: preserve error state in block data length handler
+  i2c: imx: add abort path for invalid block length
+
+ drivers/i2c/busses/i2c-imx.c | 58 ++++++++++++++++++++++++++++++++++--
+ 1 file changed, 55 insertions(+), 3 deletions(-)
 
 -- 
-Best wishes,
-Vladimir
+2.43.0
+
 
