@@ -1,169 +1,95 @@
-Return-Path: <linux-i2c+bounces-15267-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-15268-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4860ED3A6E8
-	for <lists+linux-i2c@lfdr.de>; Mon, 19 Jan 2026 12:32:41 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 09A45D3A95A
+	for <lists+linux-i2c@lfdr.de>; Mon, 19 Jan 2026 13:49:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 8172730074AB
-	for <lists+linux-i2c@lfdr.de>; Mon, 19 Jan 2026 11:32:38 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 009A1309CB58
+	for <lists+linux-i2c@lfdr.de>; Mon, 19 Jan 2026 12:46:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F30D83128AC;
-	Mon, 19 Jan 2026 11:32:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QklYNyBi"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C95035FF65;
+	Mon, 19 Jan 2026 12:46:27 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com [209.85.210.70])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B15953126CA;
-	Mon, 19 Jan 2026 11:32:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7D8135EDBA
+	for <linux-i2c@vger.kernel.org>; Mon, 19 Jan 2026 12:46:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768822356; cv=none; b=XeaiZa1CPhYGjjkUyhkvbYq1PYQ904J7817ALX3/EFB/o4Fxj74JXuEg0Eyw6+8ftMg7mvp+M7O4H54uaEJ8+on5Tv7/qE8+n3jmDqyjOhzFrF5FUaLiXkNf2ksNd+mxO7V3HElDsMXVWWqPSPZyvA2nBmvv/64Nxn2KPIPjRTI=
+	t=1768826787; cv=none; b=DmGhuLittuqDRJRahp20pk2HEiCkYRwwTYPqn7o8WAa9LcIesqcCu1IRB9F+9AA8DrFYpENo27+K/zPGHSihZ6RhSlUTYW9TxBxz7y6AhN4X54jY8LAof/DbDlXQzefOmPvTguP2I8Gl8Z20hIYN35q2u2ndBH12gdW5bBXxZxw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768822356; c=relaxed/simple;
-	bh=DvzlZA0wArsQBqRk/g9C45k6eQwlXTf9pRhS6v/hblE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X9+Zkx2qCu+kR6EL9ZBvBfTKduhvQ8yMPYDZkZ2wdWtBnFG0bqi1cfeDOTOaKDsd9sP+0MCHHNjm6/dzDEO7m4oZvlYDtCPJD0biDk3pe53rRztfntgIppYdjNJqpYOIorKDsSyphAYVwfiVdtYPLF9j8dyv4TtSHArXHUiyNdw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QklYNyBi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EED2C19423;
-	Mon, 19 Jan 2026 11:32:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768822356;
-	bh=DvzlZA0wArsQBqRk/g9C45k6eQwlXTf9pRhS6v/hblE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QklYNyBiLyNbVDv5pAYHYJyk0bj7HuLxm4RdnPQlB7NM/byxMQHr6dcjpJgEUyaSi
-	 vDbPmhnDe5joODlAWMctXZ6yukk52rtxus9ROOKC8+uW6Zz9rkB3U1FCbKxMAd1SLO
-	 tcMS3f15BrZcp/hfGt2YzRik01eHwcVJB5ksNBnn5MI/YOz/rjlbx1xjSQmriXDJCz
-	 mCC6hUD3Hbhqy5DJMwqrHBUS74BZ0nrN+jXvOj735XhdwGzxxP2lQjsRPCVP+nqvgb
-	 F7/ZxhldSHFJFDx7fDy/LzwQHUbtvzJrXkvbN6+q6bXDCTsh/YCP+EhYBRPFlLXlPa
-	 bc4SSKgYPThhA==
-Received: from johan by xi.lan with local (Exim 4.98.2)
-	(envelope-from <johan@kernel.org>)
-	id 1vhnUi-000000001IZ-3bew;
-	Mon, 19 Jan 2026 12:32:29 +0100
-Date: Mon, 19 Jan 2026 12:32:28 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Bartosz Golaszewski <brgl@kernel.org>
-Cc: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Andi Shyti <andi.shyti@kernel.org>, Chen-Yu Tsai <wens@kernel.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>,
-	Khalil Blaiech <kblaiech@nvidia.com>,
-	Asmaa Mnebhi <asmaa@nvidia.com>, Jean Delvare <jdelvare@suse.com>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-	Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
-	Manivannan Sadhasivam <mani@kernel.org>, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-sunxi@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
-	linux-actions@lists.infradead.org
-Subject: Re: [PATCH 00/12] i2c: add and start using i2c_adapter-specific
- printk helpers
-Message-ID: <aW4WTP8ZJXIe4Mg1@hovoldconsulting.com>
-References: <20251223-i2c-printk-helpers-v1-0-46a08306afdb@oss.qualcomm.com>
- <aUql_tZisfH8E1bq@hovoldconsulting.com>
- <CAMRc=MeHL5=s=ciUjHGw_poKpeVMWVi_2LBDFY_ugvXBaaE0vA@mail.gmail.com>
- <aW4PajoKqmyjkciY@hovoldconsulting.com>
- <CAMRc=McfiKGT9RSJqZtCtHHHjwDLGPkNwA4Kot9-9frfpCGVmQ@mail.gmail.com>
+	s=arc-20240116; t=1768826787; c=relaxed/simple;
+	bh=VynyOq5eNt7k8lABQPh5UVRXFOYbtiUHRfMzaUJ+qhA=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=Ik7Ce0cBVELt/Q3Hu65ef0syB66OnsJy61Lt0taHdqJ0HVAvDmFMGK9qYNyIetN65ckzHrtparYJHCm8c2F+sIfDIqRd/xupMmUH3NEl8rJvfOJ92cVdjqP9n5KxO0Uxv4v3GtQAiB9wradyMC3G1RbxGoL2STF27Lqvnej+9q0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.210.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-ot1-f70.google.com with SMTP id 46e09a7af769-7cfd14607b0so7904999a34.0
+        for <linux-i2c@vger.kernel.org>; Mon, 19 Jan 2026 04:46:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768826785; x=1769431585;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ufA+U+Qi1VJL0gtcSKv7pb7miX4NN3f0kCP8qtgeZ4E=;
+        b=JZNkq15PMeHBxYho7hYMZ9KaiHwiGQcHENALDS6Z0QuhbuAqnkwGKB2jcUBEtZ3C2U
+         rA1q0IlYPJBbN0/jv3o67YIyjtsYlgxbgeEyqY4H/Xe2qSXlGH6NC2apcwG88xPLkKvn
+         x7oYM6BWHsiTZ73IpOgtyS9cUiiwy8Me/dNV67rCRQjTbc+wmWmc7Kum3UjMQ1w6MpIJ
+         03Yp7ozfho3rNDr9AYdPPwbbh92S1WFNx4QFEYUqELhiJEL24wbpVSolWbL6mVaN29Tx
+         pMW9XOAVxANkV+P7WETn/Fx5BnxSuA3kHOK7AsXSr/dL/9tyEb4Hb7065EUvelGEhjlo
+         SsIg==
+X-Gm-Message-State: AOJu0Yxo+3LCBk20PwFj/I0xTq24kTqXh059OMaSWYCphDhG7mUrujjs
+	f0cftLzeYV0eL0p91Q4RKH7H1WqhlfTYX1VAYj7fcf7ePz9wFbmp28Lh8VWHdNmgnKhplbehyhS
+	TGxLEbBEjSIxgcH7yoWTYWfZ2rCj+iTCB45w3Za7RW6D0nI+JaRAsfIsXBbw=
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMRc=McfiKGT9RSJqZtCtHHHjwDLGPkNwA4Kot9-9frfpCGVmQ@mail.gmail.com>
+X-Received: by 2002:a05:6820:6ae3:b0:659:9a49:8e02 with SMTP id
+ 006d021491bc7-661189b2f4bmr4976810eaf.68.1768826784860; Mon, 19 Jan 2026
+ 04:46:24 -0800 (PST)
+Date: Mon, 19 Jan 2026 04:46:24 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <696e27a0.050a0220.3390f1.0049.GAE@google.com>
+Subject: [syzbot] Monthly i2c report (Jan 2026)
+From: syzbot <syzbot+listcfea26b37e6395424056@syzkaller.appspotmail.com>
+To: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Jan 19, 2026 at 12:17:49PM +0100, Bartosz Golaszewski wrote:
-> On Mon, Jan 19, 2026 at 12:03 PM Johan Hovold <johan@kernel.org> wrote:
-> >
-> > On Tue, Dec 23, 2025 at 04:11:08PM +0100, Bartosz Golaszewski wrote:
-> > > On Tue, Dec 23, 2025 at 3:24 PM Johan Hovold <johan@kernel.org> wrote:
-> > > >
-> > > > On Tue, Dec 23, 2025 at 11:02:22AM +0100, Bartosz Golaszewski wrote:
-> > > > > It's been another year of discussing the object life-time problems at
-> > > > > conferences. I2C is one of the offenders and its problems are more
-> > > > > complex than those of some other subsystems. It seems the revocable[1]
-> > > > > API may make its way into the kernel this year but even with it in
-> > > > > place, I2C won't be able to use it as there's currently nothing to
-> > > > > *revoke*. The struct device is embedded within the i2c_adapter struct
-> > > > > whose lifetime is tied to the provider device being bound to its driver.
-> > > > >
-> > > > > Fixing this won't be fast and easy but nothing's going to happen if we
-> > > > > don't start chipping away at it. The ultimate goal in order to be able
-> > > > > to use an SRCU-based solution (revocable or otherwise) is to convert the
-> > > > > embedded struct device in struct i2c_adapter into an __rcu pointer that
-> > > > > can be *revoked*. To that end we need to hide all dereferences of
-> > > > > adap->dev in drivers.
-> > > >
-> > > > No, this is not the way to do it. You start with designing and showing
-> > > > what the end result will look like *before* you start rewriting world
-> > > > like you are doing here.
-> > >
-> > > The paragraph you're commenting under explains exactly what I propose
-> > > to do: move struct device out of struct i2c_adapter and protect the
-> > > pointer storing its address with SRCU. This is a well-known design
-> > > that's being generalized to a common "revocable" API which will
-> > > possibly be available upstream by the time we're ready to use it.
-> >
-> > Revocable, as presented in plumbers, is not going upstream.
-> >
-> 
-> Oh really? :)
-> 
-> https://lore.kernel.org/all/2026011607-canister-catalyst-9fdd@gregkh/
+Hello i2c maintainers/developers,
 
-Looks like a bad call as Laurent immediately pointed out:
+This is a 31-day syzbot report for the i2c subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/i2c
 
-	https://lore.kernel.org/all/20260116160454.GN30544@pendragon.ideasonboard.com/#t
+During the period, 1 new issues were detected and 0 were fixed.
+In total, 5 issues are still open and 4 have already been fixed.
 
-Let's see where that goes.
+Some of the still happening issues:
 
-> > > You know I can't possibly *show* the end result in a single series
-> > > because - as the paragraph before explains - we need to first hide all
-> > > direct dereferences of struct device in struct i2c_adapter behind
-> > > dedicated interfaces so that we when do the conversion, it'll affect
-> > > only a limited number of places. It can't realistically be done at
-> > > once.
-> >
-> > You can post an RFC converting one driver with a proper description of
-> > the problem you're trying to solve.
-> >
-> 
-> It's not a one-driver problem. It's a subsystem-wide problem requiring
-> a subsystem-wide solution. Wolfram explained it really well in his
-> summary, I'm not going to repeat it here.
+Ref Crashes Repro Title
+<1> 848     Yes   KMSAN: kernel-infoleak in i2cdev_ioctl_smbus
+                  https://syzkaller.appspot.com/bug?extid=08b819a87faa6def6dfb
+<2> 103     Yes   KMSAN: uninit-value in __i2c_smbus_xfer
+                  https://syzkaller.appspot.com/bug?extid=0a36c1fec090c67a9885
+<3> 4       Yes   INFO: trying to register non-static key in i2c_register_adapter
+                  https://syzkaller.appspot.com/bug?extid=4718cc0f82054afeea8f
 
-Of course it is, but you still don't have to rewrite world to post an
-RFC where the problem can be discussed. A single driver is more than
-enough.
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-> I also don't agree that i2c-specific helpers make code harder to read.
-> Is device_set_node() harder to read than
-> 
-> dev->fwnode = fwnode;
-> dev->of_node = to_of_node(fwnode);
-> 
-> ?
-> 
-> Even if you answer yes - it at least helps hide the implementation
-> details of the OF layer where fwnode-level is preferred. We do it all
-> the time in the kernel. This kind of helpers allows easier transitions
-> when some implementation detail needs to change - as is the case here.
+To disable reminders for individual bugs, reply with the following command:
+#syz set <Ref> no-reminders
 
-Magic helpers that hide what's really going on hurts readability. So
-introducing them when they are not really needed should be avoided.
+To change bug's subsystems, reply with:
+#syz set <Ref> subsystems: new-subsystem
 
-(But yeah, we have a problem with developers introducing esoteric
-helpers while seemingly thinking all that matters is LOC count, and too
-few people raising their voice against bad ideas.)
-
-Johan
+You may send multiple commands in a single email message.
 
