@@ -1,247 +1,228 @@
-Return-Path: <linux-i2c+bounces-15274-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-15275-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A8BFD3B901
-	for <lists+linux-i2c@lfdr.de>; Mon, 19 Jan 2026 22:02:49 +0100 (CET)
-Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 8F425302FCEE
-	for <lists+linux-i2c@lfdr.de>; Mon, 19 Jan 2026 21:01:57 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0D502D3A69;
-	Mon, 19 Jan 2026 21:01:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="gPhj9ZYZ"
-X-Original-To: linux-i2c@vger.kernel.org
-Received: from CH4PR04CU002.outbound.protection.outlook.com (mail-northcentralusazon11013012.outbound.protection.outlook.com [40.107.201.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3AB46D3BDAD
+	for <lists+linux-i2c@lfdr.de>; Tue, 20 Jan 2026 03:52:38 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15BEA27F756;
-	Mon, 19 Jan 2026 21:01:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.201.12
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768856516; cv=fail; b=uSBWGe3cNP0omYqKgOv2oxxUX7JcFzic6stLnL2GW6QX1AA+LpDWhTX98yXMecZux6c2eQgPzqlDrS2soZCKrL/E+zelJWtt1jhw2pYeENDyrVKe24tg1ceBlqXDo7Lsxlqar/hnV9ShyLsK6tTrnAxShSxygs8ZYSfu3LJOlVM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768856516; c=relaxed/simple;
-	bh=AJMwK+k+OU8okqfxzwAumtrjBFBOSfQ62UawT/G0peE=;
-	h=Message-ID:Date:Subject:To:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=OiKOoojyOSNAehzM9DSKuiprcNF59VpGUPc/tL9bCfReU+KYEKC6mZ/jW0EeNweawePbwWNUBVxbLd6UjCOGAGzTAUKMXTgGyCd3UzFGTik5VyGfvNOJQDQt+KYu13p633F+Rj2abt3BLGx9V4v2cUYn9B0Jhz29tOyx0/xlW9k=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=gPhj9ZYZ; arc=fail smtp.client-ip=40.107.201.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=tWJeZPfnQbGdcrEvCSEQteRx66qn6jLJ4agA46/U+MH2pWUBuVFwVN4Y+RNvIW+JCkjGDoRUYeVdtrx2a0HDB3x1DOzFplcPpsYXvASGq3Sn7lB2dqwCTZWCySX10JD+0cCgl6KB+oxYS/kaUB8xVJ2O6ZsJulzjSqRYJJ/+ttL0zzONLUP0b5JJ/pbkCAj/i+5GZTVMBgpWzii2gN3vksfZf4gmckjGzmQzjiIsnaFIS3LUZoMUVna7ApJQScbYJyHE4CdwlKcVcpWilnYHLedI1qJE1dUZoP9W+zGbTyWWY2xUQRK2z9+mT0K7Ntnf3FhkFuS5zqkSzYdAk7m4FQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BZaP+vwDg9b0m5SGWWMWqBSTVNMY7ZGTSYVivdNPk/g=;
- b=TbHtmdsCZb4x0iezaouJmKl+1cJcnP59uly4zDOtOLqSQOwSvfXpQgplDwQ5JRi+OfS9tnrGfbGwq6K82FpsIJdnT4By5FzuEObYobCvx9wmW6JvXLpTDcFW7SEZST7KDFC9TNNHwTYOxfa+gWvw2kUjMsFgUS0sEocUTH8d2a0F1Nh2mLPrIvyvkeCZv5+UMyQn8MJjyKYnufps6CumtZ/s6E5JgRsFkMSVim7kRa3JYFY8jYSAeaaaCqleonxUT9QkVYfkTipBRv0IpPqL+Ca+l4Hu10wOvwcWMKHMpWOLKdOpCRNPWkuybIN5HsyP10j0H9BnV7qLd6FpbHq7PA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BZaP+vwDg9b0m5SGWWMWqBSTVNMY7ZGTSYVivdNPk/g=;
- b=gPhj9ZYZQgFaHfRqOX8gxQskpfzTyrUQaeGSnsQeflEs6tCFWwHyjELdpsIAxq3oMHBAjsQjg6eymUzsEJy06i0az6zivH1x46h1NiNbCaEGDmpvbyvx83bt8fWL/iCXI6fSiEk34822z0BI+3j+nACHo7pMqzuKtlZUgKAoo+hFFofBa1p/MDI0klNjgTtkQM8Hze/fMfGcsuIfgSV4DNsqsZzNK1bVlu6qRStvRz7TwSmKrjNhVH7UCofou6PWRQFd+Jk6J0FdacencOvIi7XYAYJKeJwmUJ2jhjT6gzTPnHGYyJLDhiilDz/QL/4RN8ZondsTPOJ+13EllHmx/g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DS2PR12MB9750.namprd12.prod.outlook.com (2603:10b6:8:2b0::12)
- by SJ2PR12MB7893.namprd12.prod.outlook.com (2603:10b6:a03:4cc::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9520.12; Mon, 19 Jan
- 2026 21:01:50 +0000
-Received: from DS2PR12MB9750.namprd12.prod.outlook.com
- ([fe80::56a8:d6bf:e24c:b391]) by DS2PR12MB9750.namprd12.prod.outlook.com
- ([fe80::56a8:d6bf:e24c:b391%5]) with mapi id 15.20.9520.011; Mon, 19 Jan 2026
- 21:01:49 +0000
-Message-ID: <089e771d-a4fb-45b0-8c34-5393a4082def@nvidia.com>
-Date: Mon, 19 Jan 2026 21:01:45 +0000
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 3/4] i2c: tegra: Add logic to support different
- register offsets
-To: Kartik Rajput <kkartik@nvidia.com>, ldewangan@nvidia.com,
- digetx@gmail.com, andi.shyti@kernel.org, thierry.reding@gmail.com,
- akhilrajeev@nvidia.com, smangipudi@nvidia.com, linux-i2c@vger.kernel.org,
- linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260113165929.43888-1-kkartik@nvidia.com>
- <20260113165929.43888-4-kkartik@nvidia.com>
-From: Jon Hunter <jonathanh@nvidia.com>
-Content-Language: en-US
-In-Reply-To: <20260113165929.43888-4-kkartik@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P123CA0155.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:188::16) To DS2PR12MB9750.namprd12.prod.outlook.com
- (2603:10b6:8:2b0::12)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id B75A5341AE2
+	for <lists+linux-i2c@lfdr.de>; Tue, 20 Jan 2026 02:52:37 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 381FC248886;
+	Tue, 20 Jan 2026 02:52:31 +0000 (UTC)
+X-Original-To: linux-i2c@vger.kernel.org
+Received: from mail-oo1-f79.google.com (mail-oo1-f79.google.com [209.85.161.79])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 425F119F135
+	for <linux-i2c@vger.kernel.org>; Tue, 20 Jan 2026 02:52:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.79
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768877551; cv=none; b=Zxli7AovbpIjTd0k1QeliyWs+H9YLG93Mu/wf0HK0iLRJJOtWfUq1JA91bhrm4vwidI/bOR1hyEZMZS2/MK7NcqylHRoY+xbhqmBR059+i8UGIAX48YtYt8OGkFs2W7A4igwnmv83HjCE6mI7Rf+1EXrArjhjsOAyAbZ2tvXZDM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768877551; c=relaxed/simple;
+	bh=Oh73X5+NQ2jDCCin2sbq8dmzEg6Dok30Nv8VWC+3OWo=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=jg6Q2rx6bWwZzxcQFOpOcV2T0OkLV+K9XCAMeVOL4YxweiF6flJLp9eN0FhUl72bwL+6JnDeoNj0c/TlRrIWzY6iIsA+fQixpIRqin0vN0Z5PdVwEFqapgp4KB0T/mlQ+rK4wGuTfB37Qyx4rAZtK++wUDpR1rx87+RivFhbGj8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.79
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oo1-f79.google.com with SMTP id 006d021491bc7-66106988006so12035135eaf.0
+        for <linux-i2c@vger.kernel.org>; Mon, 19 Jan 2026 18:52:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768877548; x=1769482348;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/G5DWevz9BYgcyAlcdYIBASIOjStNMz7iH3Bs0VvPXQ=;
+        b=PJDVePtAmblTHbJLZXOqjmHJ3sETA+MYD8ea3nRP//CmBFLfWl+b3m3xHG7F540D2g
+         1Ee7+Ena8T0wgtFkYrLP3Zwey0Ls2kyTPtp/rd0aYrrme7Ps2AgNnCxhYs7vCD7qO4O5
+         s17jRE2+QT4TSszg0pcaKuynidt0BZpJyvsCyOtcjMNIBTmIqD8VlfzdHqx8ZYFyLeKT
+         SEVd1yJMQxN7BDDioY7pBARKJrrJt67gN9Fp2WxiPEiBCDnJ7NQSpwxStYmZDFh4tf/Q
+         6aYd5lWWONemWGV/Fg1zRp6fhVBxbKOUXBXhOfJDbdqdonwk6D8b9jVu5O8WAAzc7wD9
+         t4HQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVyKVKS2Yw54BI4ZLJMVpK7VIRuUgM4jzcyHb/eLo2QyQrdpDNv1mFj3K5n+/NdEeerh170QftdZy8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxnl7fN81tt4wa6fgpbBhKMIt+JaMeNmbjtKvHO7cvLDGLNQrye
+	ndQJJVhnilTCsTNNgw7XWVr4y9ceao0nATgbZ5vUm66yvQ7lK5b8R0ppxhqVnnN6mUjU+Ea968/
+	h/8gUHlhSYmWGmA0+Q4Iym5SlQgkVFOYEhTRS9H5ozTUYY5rSxLE/SJG8inE=
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS2PR12MB9750:EE_|SJ2PR12MB7893:EE_
-X-MS-Office365-Filtering-Correlation-Id: 20a6596f-1f1f-42f6-ad34-08de579df6c9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|366016|10070799003|1800799024|921020;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?cnEySlNILzZ5bEc0c01hTWFSMDljZmJmQnpvNUVYT2MzVDYyY010ZEEzNlRp?=
- =?utf-8?B?cUNuUm53YU10NXBOTFlRS2ZjcDVrNWRaL2ErYU1yVGZwRjZoRXlRRkRPTVg1?=
- =?utf-8?B?aXEzMXRsNGQxV3BKN0xOeVVmZ2dYMnU2aVQ3THdXREd6TythWlNaK3ljZ3RY?=
- =?utf-8?B?OHEwanNhT0lwbjVSNVB0RGp0NW5wNkdUeS84OWJybEVyMDl4ZGdaZUJKbm85?=
- =?utf-8?B?WjVZMUhocDBXMGVzMWhTWGdFQnY0bU5kaWRiSFdzNWtxaURRdWlxYlA5S3BS?=
- =?utf-8?B?NHdxcFN5a3diK1BQdUYxUU5QdEdTOU1sY201dDBaWk9oK1VoVFdwTGpSSm9B?=
- =?utf-8?B?ZFBIWG9tdWlPaWp4ZVM0Z1hLdlJNeWd5ODhwUEF2eHNjVTdEZ1J2dUptSzdR?=
- =?utf-8?B?YzNvNXI4ZFdncjVlZTJRNmNFUGpXWmhvRHA3ekx6QUlGekVlUjlXc2h5WHVq?=
- =?utf-8?B?R0ZNY1lxR0d3bjFGZzhPSjZRRWxxNllJRFNocGplWjhnQmRoMWxnN0FmQXZW?=
- =?utf-8?B?YlpKUnJKZEgwSFd2YitnYjVQRngzRWVNUGN2aG9LV2pHbExrRW9TMmRGbEZt?=
- =?utf-8?B?dDV4MUNqNWs4dHpDNk40a0JaVmJzV05PaU1vM2NSSFJzbVNwUzg2aWdLSTRj?=
- =?utf-8?B?bm5aV201WXNlOUxpcFVNSDhjQXNLejZpQXl6S25wQ0NlNFd1R0FoU1Bzdm1B?=
- =?utf-8?B?OEgzcXhEZlRqR1JxMWZHWnVTcG9xOS9YRjJpL1hUdGdpeTc5TlJFeWgrT2w3?=
- =?utf-8?B?ZVAyNkNwS0gzMG0zTUNodHdZeFBPenZSM2UzZmc0N08rMndjMWl0bkpUOHlx?=
- =?utf-8?B?WE8wZFQ2NjZweHRMRTJlaEo3T0kwNVpVZHhPcUlXVmZEMmRiTWJWcmoybnFC?=
- =?utf-8?B?eVlmeXdSdjNsdHl4RUVRV2t6bHc0VnYrMWhJYzZDUFl4dmQ3R3YxZUdzZDFl?=
- =?utf-8?B?SllVQnVMOEpxbmN5MFQ2T2ZUNm42Q1BKZE5pVG9nQVBwYm5UeHpvZitNQWVX?=
- =?utf-8?B?SjNsU1NER2ptMHZ2Rzh4WC9rejV1UUdPZTAzWFo2NmFYeGVjL1VkWHhRakpn?=
- =?utf-8?B?KytRV1p5NFJPb2VzcU9wMmZNbWtFeURianZqRytGQmlnWTRPMzY1aUcwVzZ1?=
- =?utf-8?B?SDMrT3FOQTB3d1Y0ZTY3Mkxld0R1bzZwRG5Gd1h5ZUlBejNHMHZ3VnlQZ29R?=
- =?utf-8?B?MEFjSjlaZldLUjhmWlo0UUU0elNRaC9hZTUrSlZndzl3cFhLTllvenlDak9p?=
- =?utf-8?B?NGVONldDWEdTNVFHckNFNUpCZGwxck5zc2x6Slljem1xVTVJcU1Qd2drMU5y?=
- =?utf-8?B?c1ZzUU1tTW9uTEs3R0llZy9jQ2UxNktwKzF2RW1rTERJZU91eXM1RThQa3gr?=
- =?utf-8?B?SVdDcUJpYTh0cmlvNkRPZ2laWlJmWWgrSGc0bU45bXdDeklPOGFBUTNqR3k3?=
- =?utf-8?B?bm9TUk41L0xHWjhmOHpDc0dGK1h3US8rQWlwc0xoYWxYMFhTeXk3Q2lKMHQ4?=
- =?utf-8?B?NHZ1WW9ubUdhekljTFcwQ29QekJQejZLLzMzblFHWUFqRlhGZGxjZEgwRWVN?=
- =?utf-8?B?djgxMGFyc1FhNHFORnVQOUZhSXVSMkttYk55Y09maDB3ZkRId0pJL3lKOWxz?=
- =?utf-8?B?Wmg4MTE4dVh5cXJwZG0zS3cxRWUyMDU0dHA5WC9OVjdyVUhhYUVvaFlJdU5h?=
- =?utf-8?B?V1JmZktNUXg4YU00K1lQb0pBc2xvVlA2OEIzZjV1dFZiZTZhWGxiWTAzWHFp?=
- =?utf-8?B?UFBDbGVlY2t6czZGWmhnOEVTOWdFSE1Xd1JKbWxWU1o4RXFaMlkzcDhUNW9p?=
- =?utf-8?B?OVNySXB0bzl0ZGI5NXlZcXB3RXpqL1Qvd01TcUdKSVo0SC9JOE5SVXV6dXlp?=
- =?utf-8?B?WC9pcEUyOG9MRHVEenE0RE5PN0xjN0t6anI5UHBPdWNxY3Fockp0K29pZFI0?=
- =?utf-8?B?ZTd6WVNJN091bW1MNjZuWlZOYWIrcUZzeFJCUW5ESnRmSVBaTFZmWXcvY0t1?=
- =?utf-8?B?TXE5Zkw0S0xkRTNMY21oUGZpQ0traEc0VzBLaFh6TFRDK2tkcXRCRzVyT2hP?=
- =?utf-8?B?T1VHQ05oOTY2eHNtZTdmOEswZW04U0J3L21VZkJPOFI5czlIY3RYSklNWUVl?=
- =?utf-8?B?TGFuYjd6ajcxYWh4ZEovYWIvbldJbG5HRFFPQXE0N1I2SGhRcjVvazVNQkFt?=
- =?utf-8?B?dkE9PQ==?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS2PR12MB9750.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(10070799003)(1800799024)(921020);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?cnc0cGxkcGpOWFZ2N2NJSW42S0xsMC82bExvRTJxc1BMYjNGcVM0REFHb3lu?=
- =?utf-8?B?bGtXaGE3RHVSRi9wY2ZSMVl0ZFVhZlVGOFJwdWFETnhSL0ZRRmF0TnVlN2lS?=
- =?utf-8?B?OS84czNKOHlHU3RHdTlSVFNMbUk2emd3RnJMcVBhV00xdFVLbEdQTWhCMGRs?=
- =?utf-8?B?c0JJSjdDcTEvbmVrNlZ2aFdMQ3BucXBxc3E0Z2ZoTTNrcjlVWVByWGhGSTlV?=
- =?utf-8?B?T2x2U1pTd0pQY0RkZjgxUk11dlVMSXJnYTJTcDFiMVF2U1NIakQ0OUtKM1Fa?=
- =?utf-8?B?d1pCeGtuaUhCUHJiZDNBQ3dMYkp1Y0J5ZlVid2VnNExxWThLVDZaZnhTaWR4?=
- =?utf-8?B?Q29PVHA1RmJCUW9BbmRZUmp3a0tsRDdhcjlNdkJGNm55WmR5OURCZkNkSkQ5?=
- =?utf-8?B?alpYM1M2QStzc3R3VEJNVklJWWtqblM0NDY1cUZValFTcEk0Smp0eHlORG1O?=
- =?utf-8?B?cS94Y3F1MDJuZW16TXpNcTdUQjQ1OG5EbXZRZmpZcEZDeEQvcWYzMXdudG1Y?=
- =?utf-8?B?ekhweXZIYnlETkg3NEpWdUR1a3RZaEtSbTRQbndEYlFwZ0w2Q1hMRVVFUmtJ?=
- =?utf-8?B?MW5FUGlteWRMNWJockFNWmVRZzg0TVJGNUliZVhGU01Xb0p4My93bERnNTU3?=
- =?utf-8?B?V21BOENQOTduYzZpelBtcnlQVmQ0MHIrRDE1SnhmS3JQQ05aaFRZb25aaG1D?=
- =?utf-8?B?cGllK1FMYWRScjJmU21rY1FFMzJUTjY4VXJGejYrNDNNRUE2bHBBcVRmbUV4?=
- =?utf-8?B?RzlaNXk5TWJYYkZHV1pmSnM0SVViZGZSR1pZYjhsOTFZZ3MzcTdSRWp4R00y?=
- =?utf-8?B?MGpEd1hPTHdkT2J4bDFRWXRrRDcweUxRcTBjODNLVUVnZEVBRXc0ekNLa2lR?=
- =?utf-8?B?UXZuTXZlOG9FdE5TUGtHd3NrVGcvUlIvTVExanZVMWVlNHNYUXhiRnRNdEtP?=
- =?utf-8?B?SkFFZWpORjJPMitwZmx2c0E2Y2E3N1dtcVk1b0UrbjM3VUplalIwQzlHanpM?=
- =?utf-8?B?cXdsVXFRdzZEWE1sbTJqUGpBL1YvMmYvd1hFbVVqZnJpS1hyQ1k5b3ZKc0dS?=
- =?utf-8?B?SEFUbS96dCtabHlxajRtV2VVbFYzT01kemFHRmNOZzFHbkliUU10dFpZNzhN?=
- =?utf-8?B?OU1QcXoybGZWdzgxalBjWEQvRHlXOWk4YWNTS25QRkpnU2JFL0Y1dHIwd1Zs?=
- =?utf-8?B?N2FHOHoxY3JweUZZcEZtalhsOFFNVHZ6MUlzZWhFb1YzQUI1d3Y1bDBRbXlk?=
- =?utf-8?B?dnR4QkdLamwzekVQQVVmUFhiTzBvOFV5Um5uOUF2K0pyRmJQbFc2VndoMHpW?=
- =?utf-8?B?STVreUNJN2dIVlRSbjJBMDBaMEptZVpuQ0R6WHlaVS9KZTR4Vk50WUdtUWZM?=
- =?utf-8?B?dmpjY0ppNmxKUXJNZDl3a3JKZWYwN3FBbWtJOWVkdW1SS1ZQM29SNm4xbHlr?=
- =?utf-8?B?NHhoUFVsQmFpaVJ6VmY2dTV0c0NmckhmTlV6UDJiR2ptK3RoUDdVQVB0ZVpQ?=
- =?utf-8?B?YjVVQnlYandBUXFpaGRMSWVUTUhYQnhXa24xdldtSHQvd09QTWFmSCtJeUpr?=
- =?utf-8?B?Q0JkdHV6eEczSWZzVXpUTnRnUllsWlBkTFAxVG45NDBJellzQXR0SWpjNWRB?=
- =?utf-8?B?Nmp1emRVQVBxTzQvNVhIQ05sZllCcEJVRTFtMkcxTnpGYklKeUkrK1IyY2VH?=
- =?utf-8?B?TDk2TE5sYlE3a1hXdmlDOWR0ZjFJcDBJVlNzbkVuWUoxZ21xWlhLVFJtYVJG?=
- =?utf-8?B?Mk9kNTFUazFvZHBaT0RUQ3RtSEFMSFl4L1FCRDRDMG5NOTQ2QUdCdC81T2tw?=
- =?utf-8?B?c09oYXJrcjFhR2FzYlNiMDlmdWxqcENBUjhHbTdjWGc2YldhZHVmZUJ4K3l4?=
- =?utf-8?B?ME9sWll6aHkzY0VXZEZkM09qYjB1ZXdYSlg5SWFMang4SmFjM1gzVGovWWZi?=
- =?utf-8?B?VXVHK3NDNTYwQ2RhaTd0Y2F3OHVsR0ZibWxaUDJheUttM1IySGtxZ3FtVWhF?=
- =?utf-8?B?alpnWEtjQ3lOVGkzR0xVSXQ3RWNNMmsyV0lOOHRxL0VJWDRGY0d6TFJsbHMv?=
- =?utf-8?B?RGlGQkc0VHEvdDZ1VTFleGUvVWJYd1g2dmlueDZhOWxMQnlhU1pUTnc5aHVC?=
- =?utf-8?B?eWlnZVB3QmR6RkZxQjJ6ZTJONFpKVHh2WFdUdEMvWkQyeFcrbDdRRHhiSnZ4?=
- =?utf-8?B?YmZrYUVBOU12dmFNVzMrNWxOa2hTWFlsUWJnU1EvZEM3ZzNaRmNpVGdWTG4r?=
- =?utf-8?B?UWRnS0tLeFA3ZEJJZEZGL0xHU2Jqc1NvZGVYZDFkTkFKUlJxOGhETkpOSDdD?=
- =?utf-8?B?ZUdMeGFJWDVTVkF1WTl2NW5CQ0IwYUthMi9CeFdYdzBKMjRiWWQyUHdsT0Ft?=
- =?utf-8?Q?cYgNy7GBK7ARPK+XtdiXhlWEWfRV1tTtgGqUVaGkKkERW?=
-X-MS-Exchange-AntiSpam-MessageData-1: gszjATkPwH/Ybg==
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 20a6596f-1f1f-42f6-ad34-08de579df6c9
-X-MS-Exchange-CrossTenant-AuthSource: DS2PR12MB9750.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2026 21:01:49.6443
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Ks+COsYb4NCtxcv+l0G1m9H6mO8Ty32b6GYbLXLyW8thsr6vT868msm5sKvCYsRQp//2zFxbkPwe3y8Cyfc0eg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB7893
+X-Received: by 2002:a05:6820:6ae4:b0:659:9a49:8e8a with SMTP id
+ 006d021491bc7-662affa1216mr230770eaf.14.1768877548186; Mon, 19 Jan 2026
+ 18:52:28 -0800 (PST)
+Date: Mon, 19 Jan 2026 18:52:28 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <696eedec.a00a0220.203946.0001.GAE@google.com>
+Subject: [syzbot] [input?] KASAN: stack-out-of-bounds Read in ft260_smbus_write
+From: syzbot <syzbot+64ca69977b37604cd6d9@syzkaller.appspotmail.com>
+To: bentiss@kernel.org, jikos@kernel.org, linux-i2c@vger.kernel.org, 
+	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	michael.zaidman@gmail.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    603c05a1639f Merge tag 'nfs-for-6.19-2' of git://git.linux..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=120d339a580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=1859476832863c41
+dashboard link: https://syzkaller.appspot.com/bug?extid=64ca69977b37604cd6d9
+compiler:       gcc (Debian 12.2.0-14+deb12u1) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=161e0852580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13115522580000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/b694f12a8d6f/disk-603c05a1.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/91efc898c41a/vmlinux-603c05a1.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/d0cbdf66f29d/bzImage-603c05a1.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+64ca69977b37604cd6d9@syzkaller.appspotmail.com
+
+==================================================================
+BUG: KASAN: stack-out-of-bounds in ft260_smbus_write+0x19b/0x2f0 drivers/hid/hid-ft260.c:486
+Read of size 42 at addr ffffc90003427d81 by task syz.2.65/6119
+
+CPU: 0 UID: 0 PID: 6119 Comm: syz.2.65 Not tainted syzkaller #0 PREEMPT(full) 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/25/2025
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:94 [inline]
+ dump_stack_lvl+0x116/0x1f0 lib/dump_stack.c:120
+ print_address_description mm/kasan/report.c:378 [inline]
+ print_report+0xcd/0x630 mm/kasan/report.c:482
+ kasan_report+0xe0/0x110 mm/kasan/report.c:595
+ check_region_inline mm/kasan/generic.c:194 [inline]
+ kasan_check_range+0x100/0x1b0 mm/kasan/generic.c:200
+ __asan_memcpy+0x23/0x60 mm/kasan/shadow.c:105
+ ft260_smbus_write+0x19b/0x2f0 drivers/hid/hid-ft260.c:486
+ ft260_smbus_xfer+0x22c/0x640 drivers/hid/hid-ft260.c:736
+ __i2c_smbus_xfer drivers/i2c/i2c-core-smbus.c:591 [inline]
+ __i2c_smbus_xfer+0x4f0/0xf60 drivers/i2c/i2c-core-smbus.c:554
+ i2c_smbus_xfer drivers/i2c/i2c-core-smbus.c:546 [inline]
+ i2c_smbus_xfer+0x200/0x3c0 drivers/i2c/i2c-core-smbus.c:536
+ i2cdev_ioctl_smbus+0x237/0x990 drivers/i2c/i2c-dev.c:389
+ i2cdev_ioctl+0x361/0x840 drivers/i2c/i2c-dev.c:478
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:597 [inline]
+ __se_sys_ioctl fs/ioctl.c:583 [inline]
+ __x64_sys_ioctl+0x18e/0x210 fs/ioctl.c:583
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0xcd/0xf80 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f88dd98f749
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 a8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffeebbe43a8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00007f88ddbe5fa0 RCX: 00007f88dd98f749
+RDX: 0000200000000200 RSI: 0000000000000720 RDI: 0000000000000004
+RBP: 00007f88dda13f91 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007f88ddbe5fa0 R14: 00007f88ddbe5fa0 R15: 0000000000000003
+ </TASK>
+
+The buggy address belongs to stack of task syz.2.65/6119
+ and is located at offset 49 in frame:
+ i2cdev_ioctl_smbus+0x0/0x990 drivers/i2c/i2c-dev.c:632
+
+This frame has 1 object:
+ [48, 82) 'temp'
+
+The buggy address belongs to a 8-page vmalloc region starting at 0xffffc90003420000 allocated at kernel_clone+0xfc/0x910 kernel/fork.c:2651
+The buggy address belongs to the physical page:
+page: refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x22397
+memcg:ffff888074f11282
+flags: 0xfff00000000000(node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000000000 0000000000000000 ffffea000088e5c8 0000000000000000
+raw: 0000000000000000 0000000000000000 00000001ffffffff ffff888074f11282
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Unmovable, gfp_mask 0x29c2(GFP_NOWAIT|__GFP_HIGHMEM|__GFP_IO|__GFP_FS|__GFP_ZERO), pid 5928, tgid 5928 (syz-executor), ts 80598654650, free_ts 80595057505
+ set_page_owner include/linux/page_owner.h:32 [inline]
+ post_alloc_hook+0x1af/0x220 mm/page_alloc.c:1884
+ prep_new_page mm/page_alloc.c:1892 [inline]
+ get_page_from_freelist+0xd0b/0x31a0 mm/page_alloc.c:3945
+ __alloc_frozen_pages_noprof+0x25f/0x2430 mm/page_alloc.c:5240
+ alloc_pages_mpol+0x1fb/0x550 mm/mempolicy.c:2486
+ alloc_frozen_pages_noprof mm/mempolicy.c:2557 [inline]
+ alloc_pages_noprof+0x131/0x390 mm/mempolicy.c:2577
+ vm_area_alloc_pages mm/vmalloc.c:3649 [inline]
+ __vmalloc_area_node mm/vmalloc.c:3863 [inline]
+ __vmalloc_node_range_noprof+0xe6c/0x16b0 mm/vmalloc.c:4051
+ __vmalloc_node_noprof+0xad/0xf0 mm/vmalloc.c:4111
+ alloc_thread_stack_node kernel/fork.c:354 [inline]
+ dup_task_struct kernel/fork.c:923 [inline]
+ copy_process+0x619/0x7430 kernel/fork.c:2052
+ kernel_clone+0xfc/0x910 kernel/fork.c:2651
+ __do_sys_clone+0xce/0x120 kernel/fork.c:2792
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0xcd/0xf80 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+page last free pid 5928 tgid 5928 stack trace:
+ reset_page_owner include/linux/page_owner.h:25 [inline]
+ free_pages_prepare mm/page_alloc.c:1433 [inline]
+ __free_frozen_pages+0x7df/0x1170 mm/page_alloc.c:2973
+ discard_slab mm/slub.c:3346 [inline]
+ __put_partials+0x130/0x170 mm/slub.c:3886
+ qlink_free mm/kasan/quarantine.c:163 [inline]
+ qlist_free_all+0x4c/0xf0 mm/kasan/quarantine.c:179
+ kasan_quarantine_reduce+0x195/0x1e0 mm/kasan/quarantine.c:286
+ __kasan_slab_alloc+0x69/0x90 mm/kasan/common.c:350
+ kasan_slab_alloc include/linux/kasan.h:253 [inline]
+ slab_post_alloc_hook mm/slub.c:4953 [inline]
+ slab_alloc_node mm/slub.c:5263 [inline]
+ __kmalloc_cache_node_noprof+0x299/0x830 mm/slub.c:5784
+ kmalloc_node_noprof include/linux/slab.h:983 [inline]
+ __get_vm_area_node+0x101/0x330 mm/vmalloc.c:3208
+ __vmalloc_node_range_noprof+0x247/0x16b0 mm/vmalloc.c:4011
+ __vmalloc_node_noprof+0xad/0xf0 mm/vmalloc.c:4111
+ xt_counters_alloc+0x4c/0x70 net/netfilter/x_tables.c:1381
+ __do_replace+0x97/0x9e0 net/ipv4/netfilter/ip_tables.c:1046
+ do_replace net/ipv4/netfilter/ip_tables.c:1141 [inline]
+ do_ipt_set_ctl+0x93b/0xc40 net/ipv4/netfilter/ip_tables.c:1635
+ nf_setsockopt+0x8d/0xf0 net/netfilter/nf_sockopt.c:101
+ ip_setsockopt+0xcb/0xf0 net/ipv4/ip_sockglue.c:1424
+ tcp_setsockopt+0xa7/0x100 net/ipv4/tcp.c:4164
+ do_sock_setsockopt+0xf3/0x1d0 net/socket.c:2322
+
+Memory state around the buggy address:
+ ffffc90003427c80: f3 f3 f3 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffffc90003427d00: 00 00 00 00 00 00 00 00 00 00 f1 f1 f1 f1 f1 f1
+>ffffc90003427d80: 00 00 00 00 02 f3 f3 f3 f3 f3 00 00 00 00 00 00
+                               ^
+ ffffc90003427e00: 00 00 00 00 00 00 f1 f1 f1 f1 f1 f1 04 f2 00 00
+ ffffc90003427e80: f3 f3 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+==================================================================
 
 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-On 13/01/2026 16:59, Kartik Rajput wrote:
-> Tegra410 use different offsets for existing I2C registers, update
-> the logic to use appropriate offsets per SoC.
-> 
-> As the registers offsets are now also defined for dvc and vi, following
-> function are not required and they are removed:
->   - tegra_i2c_reg_addr(): No translation required.
->   - dvc_writel(): Replaced with i2c_writel() with DVC check.
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-This says dvc_writel is replace, but ...
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
->   - dvc_readl(): Replaced with i2c_readl().
-> 
-> Signed-off-by: Kartik Rajput <kkartik@nvidia.com>
-> ---
-> Changes in v7:
-> 	* Fix Tegra256 reg offsets, change it to tegra264_i2c_regs as it
-> 	  supports SW mutex.
-> Changes in v6:
-> 	* Do not remove dvc_writel().
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
 
-This says it isn't and ...
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
 
->   /**
-> @@ -348,45 +466,26 @@ static void dvc_writel(struct tegra_i2c_dev *i2c_dev, u32 val,
->   	writel_relaxed(val, i2c_dev->base + reg);
->   }
->   
-> -static u32 dvc_readl(struct tegra_i2c_dev *i2c_dev, unsigned int reg)
-> -{
-> -	return readl_relaxed(i2c_dev->base + reg);
-> -}
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
 
-If we are removing dvc_readl() I am not sure why we have not removed 
-dvc_writel().
-
->   static void tegra_i2c_dma_complete(void *args)
-> @@ -621,12 +720,12 @@ static void tegra_dvc_init(struct tegra_i2c_dev *i2c_dev)
->   {
->   	u32 val;
->   
-> -	val = dvc_readl(i2c_dev, DVC_CTRL_REG3);
-> +	val = i2c_readl(i2c_dev, DVC_CTRL_REG3);
->   	val |= DVC_CTRL_REG3_SW_PROG;
->   	val |= DVC_CTRL_REG3_I2C_DONE_INTR_EN;
->   	dvc_writel(i2c_dev, val, DVC_CTRL_REG3);
->   
-> -	val = dvc_readl(i2c_dev, DVC_CTRL_REG1);
-> +	val = i2c_readl(i2c_dev, DVC_CTRL_REG1);
->   	val |= DVC_CTRL_REG1_INTR_EN;
->   	dvc_writel(i2c_dev, val, DVC_CTRL_REG1);
->   }
-
-We could just call writel_relaxed() directly if we can't use i2c_writel().
-	
-Jon
-
--- 
-nvpublic
-
+If you want to undo deduplication, reply with:
+#syz undup
 
