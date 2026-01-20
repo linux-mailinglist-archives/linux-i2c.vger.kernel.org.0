@@ -1,134 +1,212 @@
-Return-Path: <linux-i2c+bounces-15294-lists+linux-i2c=lfdr.de@vger.kernel.org>
-X-Original-To: lists+linux-i2c@lfdr.de
+Return-Path: <linux-i2c+bounces-15306-lists+linux-i2c=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-i2c@lfdr.de
+Received: from mail.lfdr.de
+	by lfdr with LMTP
+	id gF1EGvKnb2ndEgAAu9opvQ
+	(envelope-from <linux-i2c+bounces-15306-lists+linux-i2c=lfdr.de@vger.kernel.org>)
+	for <lists+linux-i2c@lfdr.de>; Tue, 20 Jan 2026 17:06:10 +0100
+X-Original-To: lists+linux-i2c@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD42ED3C4E5
-	for <lists+linux-i2c@lfdr.de>; Tue, 20 Jan 2026 11:18:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C3EC5470B2
+	for <lists+linux-i2c@lfdr.de>; Tue, 20 Jan 2026 17:06:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id ED3D5723BB8
-	for <lists+linux-i2c@lfdr.de>; Tue, 20 Jan 2026 10:03:16 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 57FBD948AA5
+	for <lists+linux-i2c@lfdr.de>; Tue, 20 Jan 2026 14:25:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF9863D7D7F;
-	Tue, 20 Jan 2026 10:01:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 677C8449ED5;
+	Tue, 20 Jan 2026 14:15:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mqrHbvay"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="FMceTW1w";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="fj2heuNk";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="xxOknPZH";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="s8D0qnXS"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5FB63D412E;
-	Tue, 20 Jan 2026 10:01:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7770F42188E
+	for <linux-i2c@vger.kernel.org>; Tue, 20 Jan 2026 14:15:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768903297; cv=none; b=fAF2Jeuf0/6pSccIq8hM182kl3tZj8Ch3+w5cCmRpqEn0j572pAJklI/f2MZVQVmP2u02+/7hgbYQE1sBYj1PfQ1Arw86C7heyv03/9YAHLBk/E9LLYohM2zJgRypwwpAUx/DIr6mfv3lgVCPT+lixrL2zmRLnh17Am/mU8KsVI=
+	t=1768918548; cv=none; b=AK4hTYkUH4Bn2kafnsXA5XtnU4QQ3kEBkEkva6M2ZSnRbDRP6wmqJC3xzX5O4nXAZyyeCdlZmF2x4obTRwX3v1ExkHCmIZZeUr3jQbCyVojY2LImHdzDSVGUaKYrY3DlKxv5pOqN+Cnci77ZVOCeSYnc1ktgcVLz+Q7vkaIu24M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768903297; c=relaxed/simple;
-	bh=+X0h56XU5/azG0M2KzUqf8MzqY88HsxxWWxtsaGmng4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jq0hPYoSxZ14PLCWghS1eznxC1OnNhfsRBGZ7SuE8D9bMbOO2+XpY7CusOGf99IbQLQ4h5Y2K8GIjYm0aYwZHOvdi4GvpIdk51cs6oY16v9ahIcV6qQYr1Dg06xXYpAhbSPAWKkXLds+Hsl2rry5F8lkFapPhob+pWAyP6FeGqg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mqrHbvay; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768903295; x=1800439295;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=+X0h56XU5/azG0M2KzUqf8MzqY88HsxxWWxtsaGmng4=;
-  b=mqrHbvay6NHwJ+oWZtv1vqcicIEc8US4zTu+mIvSEkxerZVsbB8Hihzw
-   G+/CJTghq+mohjTKI6duBq24OH+Jh5WzgnGF7m/0GhcAV/XMYAfqVgOlm
-   yjrHybegI3BcY68MlLnvsPV/zhXKtOVBhvADjndHnaydWd14igO5X5f7G
-   Pb+Abvm9nMJUOvF24XCwadeKSFyPzvxS7au74OK4O6MDq07wwQljAVnvy
-   /31CR20DvnRO/fzp+pE+7oH5BLjBNd/DHr3EH3O8oTYmGN0jRXovWa821
-   kh2rJw+U9cxyH8vRyWCvj6RVsEE5fr0SRToBZOMM7LPFkIG9SKzjqVcuf
-   w==;
-X-CSE-ConnectionGUID: vND9XrpBSz67fPaVnZGq8Q==
-X-CSE-MsgGUID: 9dh574mqRZeV6u9Rjd90pA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11676"; a="95581541"
-X-IronPort-AV: E=Sophos;i="6.21,240,1763452800"; 
-   d="scan'208";a="95581541"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2026 02:01:34 -0800
-X-CSE-ConnectionGUID: 5KGSluaQTvOJ45fav1N4vA==
-X-CSE-MsgGUID: eGeswcwiSt6zAGFBlzgMHw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,240,1763452800"; 
-   d="scan'208";a="205330026"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by orviesa010.jf.intel.com with ESMTP; 20 Jan 2026 02:01:30 -0800
-Received: by black.igk.intel.com (Postfix, from userid 1001)
-	id B86DC99; Tue, 20 Jan 2026 11:01:29 +0100 (CET)
-Date: Tue, 20 Jan 2026 11:01:29 +0100
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: =?utf-8?Q?Beno=C3=AEt?= Monin <benoit.monin@bootlin.com>
-Cc: Andi Shyti <andi.shyti@kernel.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Jan Dabros <jsd@semihalf.com>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Clark Williams <clrkwllms@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	Gregory CLEMENT <gregory.clement@bootlin.com>,
-	=?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>,
-	Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
-	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
-	Dmitry Guzman <dmitry.guzman@mobileye.com>,
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-rt-devel@lists.linux.dev
-Subject: Re: [PATCH v5 0/6] i2c: designware: Improve support of
- multi-messages transfer
-Message-ID: <20260120100129.GH2275908@black.igk.intel.com>
-References: <20260120-i2c-dw-v5-0-0e34d6d9455c@bootlin.com>
+	s=arc-20240116; t=1768918548; c=relaxed/simple;
+	bh=zFcd7yMjFnmEmNDNXfoz/tqfA7edF8f1uAI1JJCLW8M=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=hEbFUdC1LGfGZk0JUaqvPa4H5hkKrCsUma9HO5YMVwux1pMSXUfgsW5Xi6ZCpkiDyZ/V1lomObVbEe/DpVLYLTvpQSBBa9rt2M+rgVst2scFRfHEqu46ts4NeGuUMyU2ImWvwzGowom3SN3J8SNQrz9U6ZdVpBDazeCDgpmdabA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=FMceTW1w; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=fj2heuNk; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=xxOknPZH; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=s8D0qnXS; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 904165BCC3;
+	Tue, 20 Jan 2026 14:15:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1768918543; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=zia8qI46EgB8u0dXa5r/BV0ImwNXDEE7RpEPTqPIHOI=;
+	b=FMceTW1w9eJVJ4eKpc45DpwcY176XD1B9+Cpgav0Mv0YQSySEqsZqxhH+V5K87mA5zvMx2
+	GCfCtKFGOBlyNOuqm1HOeER/15vCHrA2CBnfMg66vLcDAYeXgr2AV1m7iZuwkVSUWG94Bu
+	WWuK1u4JcXCMw/h05kK9TlSAcBe2PxM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1768918543;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=zia8qI46EgB8u0dXa5r/BV0ImwNXDEE7RpEPTqPIHOI=;
+	b=fj2heuNkGxSfOMlfW93uA6KOvN3I8ryS4pm3Ecxrjd34kYo6SHcPhWYztw1AO9xZFr/945
+	8Mf1tBCcEQqODDCA==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=xxOknPZH;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=s8D0qnXS
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1768918542; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=zia8qI46EgB8u0dXa5r/BV0ImwNXDEE7RpEPTqPIHOI=;
+	b=xxOknPZHpcWNfYK7B2xo6WWwyctabeeiP1NvUJOM+TnOyBvqD3a9yh//b0Xu4mzH9MgFy3
+	Fcb1xz+e2fQM0XlxmwfAJGzB3VpttNUJ4FQsonFcsgN4qyWU3S67KPSJ2CaL/GZ7F2b1h4
+	cgQ2Vu4QdFI0rZS8iRvXyLeT0NuUbxA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1768918542;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=zia8qI46EgB8u0dXa5r/BV0ImwNXDEE7RpEPTqPIHOI=;
+	b=s8D0qnXSrT1G2Ep7JYvhaA7En9kag8WzqCALMOrWjwTK8fQZIu9RMR1A4Acmp/rRYWyhTS
+	e7gMAO+NAWG7N9Bw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 50EB33EA63;
+	Tue, 20 Jan 2026 14:15:42 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id hhayEQ6Ob2l5UgAAD6G6ig
+	(envelope-from <jdelvare@suse.de>); Tue, 20 Jan 2026 14:15:42 +0000
+Date: Tue, 20 Jan 2026 15:15:36 +0100
+From: Jean Delvare <jdelvare@suse.de>
+To: =?UTF-8?B?QmVub8OudA==?= Monin <benoit.monin@bootlin.com>
+Cc: linux-i2c@vger.kernel.org, Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>, Wolfram Sang
+ <wsa+renesas@sang-engineering.com>
+Subject: Re: [PATCH i2c-tools v2 0/2] Add support for message modifier flags
+Message-ID: <20260120151536.7de21098@endymion>
+In-Reply-To: <20251223-msg-flags-v2-0-8d934a4366e2@bootlin.com>
+References: <20251223-msg-flags-v2-0-8d934a4366e2@bootlin.com>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.43; x86_64-suse-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260120-i2c-dw-v5-0-0e34d6d9455c@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Score: -4.01
+X-Spam-Level: 
+X-Spam-Flag: NO
+X-Spamd-Result: default: False [-1.46 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
+	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-15306-lists,linux-i2c=lfdr.de];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	HAS_ORG_HEADER(0.00)[];
+	DMARC_POLICY_ALLOW(0.00)[suse.de,none];
+	DKIM_TRACE(0.00)[suse.de:+];
+	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	R_SPF_SOFTFAIL(0.00)[~all:c];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[jdelvare@suse.de,linux-i2c@vger.kernel.org];
+	RCPT_COUNT_THREE(0.00)[4];
+	RCVD_COUNT_FIVE(0.00)[6];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-i2c,renesas];
+	ASN(0.00)[asn:7979, ipnet:2605:f480::/32, country:US];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[dfw.mirrors.kernel.org:rdns,dfw.mirrors.kernel.org:helo,bootlin.com:email,suse.de:dkim]
+X-Rspamd-Queue-Id: C3EC5470B2
+X-Rspamd-Action: no action
+X-Rspamd-Server: lfdr
 
-On Tue, Jan 20, 2026 at 10:28:00AM +0100, Benoît Monin wrote:
-> Add support for the I2C_M_STOP flag to the .xfer() function of the
-> designware driver. This allows grouping multiple accesses in a single
-> call and changing the target address after a STOP flag. This is achieved
-> by splitting i2c_dw_xfer() in two functions. The core logic handling
-> the transaction is now in __i2c_dw_xfer_one_part(), while i2c_dw_xfer()
-> loops over the messages to search for the I2C_M_STOP flag and calls
-> __i2c_dw_xfer_one_part().
-> 
-> Handle controllers that lack the ability to emit a RESTART when two
-> consecutive messages have the same address and direction by aborting
-> transfers that contain such a sequence of messages. For those controllers,
-> we also check that we do not get any unwanted STOP caused by a Tx FIFO
-> underrun, as they lack the ability to hold the clock during a transaction.
-> And we set the irq as non-threaded to prevent underrun on PREEMPT-RT
-> kernel when filling the FIFO.
-> 
-> The I2C controllers found in the EyeQ6Lplus and EyeQ7H SoCs from Mobileye
-> lack such capability, so a compatible string is added because this cannot
-> be detected at runtime.
-> 
-> This patch series also brings four cleanups:
-> * Optimize the read of the message flags in i2c_dw_read().
-> * Sort the compatible strings alphabetically in dw_i2c_of_match[].
-> * Simplify runtime PM handling in i2c_dw_xfer() with guard.
-> * Add a dedicated i2c_algorithm for AMD NAVI controller.
-> 
-> Signed-off-by: Benoît Monin <benoit.monin@bootlin.com>
+Hi Beno=C3=AFt, hi Wolfram,
+
+On Tue, 23 Dec 2025 14:22:41 +0100, Beno=C3=AEt Monin wrote:
+> I2C messages can be modified with a set of flags covered by the protocol
+> mangling and the skip repeated start functionalities. This series add
+> support for such flags to i2cdetect and i2ctransfer.
+>=20
+> The first patch shows the support of protocol mangling and repeated
+> start skipping in the output of 'i2cdetect -F'.
+>=20
+> The second patch adds the parsing of optional flags to i2ctransfer
+> message description. Those command-line flags then set the i2c message
+> flags alongside the read/write flag.
+>=20
+> I wrote these changes to test the insertion of I2C_M_STOP flag in
+> multi-message transactions with i2ctransfer, but the other flags can be
+> useful for various test scenarios.
+
+Out of curiosity, did you have an actual scenario where you needed to
+do this? Protocol mangling is supposed to be rarely needed and avoided
+as much as possible.
+
+> The patches use defines that have been present in the kernel since
+> v3.6 released in 2012. If compatibility with older kernel is required,
+> we will need to wrap some of them with #ifndef ... #endif.
+>=20
+> Maybe a minimum kernel version can be documented in the README?
+
+Be careful if you do. Kernel versions are a very broad indicator,
+distribution kernel maintainers keep backporting features so an older
+kernel can actually support something when its version suggests it
+wouldn't. A kernel version should always be complemented with the actual
+feature or flag so that users can look it up if needed.
+
+>=20
+> Signed-off-by: Beno=C3=AEt Monin <benoit.monin@bootlin.com>
 > ---
-> Changes in v5:
-> - Rebased on v6.19-rc6 and fully retested on EyeQ6Lplus.
-> - Drop dt-binding patch: already merged upstream in v6.19-rc2.
-> - From Andi Shyti's review:
->   - __i2c_dw_xfer_one_part() now returns 0 on success instead
->     of the number of messages transferred.
->   - Drop inline keyword from i2c_dw_msg_is_valid() declaration.
-> - Link to v4: https://lore.kernel.org/r/20251126-i2c-dw-v4-0-b0654598e7c5@bootlin.com
+> Changes in v2:
+> - Document the flags in i2ctransfer.8 man page.
+> - Link to v1: https://lore.kernel.org/r/20251128-msg-flags-v1-0-6353f26fa=
+6bc@bootlin.com
+>=20
+> ---
+> Beno=C3=AEt Monin (2):
+>       i2cdetect: Display mangling and nostart support
+>       i2ctransfer: Add optional message modifier flags
+>=20
+>  tools/i2cdetect.c   |  4 ++++
+>  tools/i2ctransfer.8 | 26 +++++++++++++++++++++++++-
+>  tools/i2ctransfer.c | 34 +++++++++++++++++++++++++---------
+>  3 files changed, 54 insertions(+), 10 deletions(-)
+> ---
+> base-commit: ea51da725b743da00b894dfdc4ab189f5a51e90e
+> change-id: 20251127-msg-flags-3d2b2da9ae28
 
-Why you dropped my ack?
+I have read Wolfram's review of your patch set (thanks Wolfram!) and
+must say I agree with everything he wrote.
+
+--=20
+Jean Delvare
+SUSE L3 Support
 
