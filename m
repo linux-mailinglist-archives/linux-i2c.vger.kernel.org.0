@@ -1,126 +1,121 @@
-Return-Path: <linux-i2c+bounces-15291-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-15290-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 967A1D3C460
-	for <lists+linux-i2c@lfdr.de>; Tue, 20 Jan 2026 10:59:47 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1AA46D3C4E1
+	for <lists+linux-i2c@lfdr.de>; Tue, 20 Jan 2026 11:18:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 10949460618
-	for <lists+linux-i2c@lfdr.de>; Tue, 20 Jan 2026 09:46:06 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 7989A701476
+	for <lists+linux-i2c@lfdr.de>; Tue, 20 Jan 2026 09:45:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E32363D6498;
-	Tue, 20 Jan 2026 09:42:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 696C42F9985;
+	Tue, 20 Jan 2026 09:39:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XP60UBWF"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-vs1-f47.google.com (mail-vs1-f47.google.com [209.85.217.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 389A73D649A
-	for <linux-i2c@vger.kernel.org>; Tue, 20 Jan 2026 09:42:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 518C92E972B;
+	Tue, 20 Jan 2026 09:39:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768902142; cv=none; b=RklBkEVxXXo+hrDMBkNjW8PGSHbza6aC5IopNV94JMwaJhBz5wTIOBh+dtIlgJI/KEm0zonpb1AGqbPJrrnSi6AZEmgF/0XE8FeTlUAlXTGVgisaxKI9FqiryV2MwXlSA9RWS2EPVWVKXZWF6FvhXG3noBwmiYABDTXjTo9uRS0=
+	t=1768901996; cv=none; b=aVajvA/avla0WTJ5hEgMAaBejYhBQGrFu8kvLc46mQ5RJWRGCsOzgQwGpC5Z4oi82d1k0So1ta0lJJrB4ZzQ9vps6rM/ZbjJzWBPB48nzlxg1AIZUGtqxYKPqx1hDjOUVXQz9qbTnZBdiu1am24MD4TyQJlEkD3UNqBQVkXtkMM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768902142; c=relaxed/simple;
-	bh=8oF7WvkLTpbnCP6yb2DMCynlFu+13M83ZUzjQuNxXOc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Gc/I8hZQ9oBT/+41ccmCk49hVetyP7Bp1Rb5mSRg0ijD6yTQWzy6y5+TdxjzAl2qkKmJKy1nLlJTOelHsO+bQrjuasR1D3VV4Xz3ksEcapJcFz+DGdsjlHSPrf9OG8hYW6OqETvcoRXBjWNiYt8kgEvAjRMe5CmdgJ5jB1NJlK4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f47.google.com with SMTP id ada2fe7eead31-5eea9f9c29bso3586333137.2
-        for <linux-i2c@vger.kernel.org>; Tue, 20 Jan 2026 01:42:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768902140; x=1769506940;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=97LNh80TR77S8pwS2e4ZBU/MTmpHjj3Q16znIrdsedk=;
-        b=lVAS0I58cpBx4JyGj3jA41+/ORTLchBVGYoq2iY3Cs1OiDV1ehkxKHAuoz1WzKprZ/
-         NJOSnMxK9rF3SY5TWqHBA9a1jGoZYqitoXFAwEdrnIPbxWYaeTwCFIe30aKz1ywL+tH7
-         5tIGfpGisrgvF32n9XOioh1lWPA35SqIp1nj0FK210QwZjXvmUnD71+xUATJ1IX0XDoQ
-         iapw6ZxkCG60fXnqvy6zVVnsTxmaYsnMVXBDPjz2F0etMfTHecupibwsNy6DkYBWMOuD
-         42J16XtAMkILVaqkPadIbXC6TMOo6hRupkBO9H3UDKPEH2ItJjEXhaCiMSkDfzWzOhrL
-         yFqQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUDb2Z9VTbP2Z2MvGPyZhz6/q6iWy1Y2YaW7AVktMUIw73XCmR95HtJDB/sTsKd+OEJftY8xpbgX2U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzPvI0dn0oFYhnjUEuDtiBtlPIPQihqGqZs1YuVJPTzi52xOTiT
-	08DrxsdgHLIBZIM2P4dIzVJNRkvV1lmyteY2GtkG4uqANfPWv5clphd3lX+HD/R5
-X-Gm-Gg: AZuq6aI9Qgu4cIrqov7ktxHIf4X3JAqUjWBD6mVGvf10xJs7vRGnTmMpeYsTfQy3KbA
-	vlSwvYEUtiY19s3iTDXceS4Ecu6GzU1pJGsdibethnonqJ0XixkDzN3xFalcPb+e3vnYESmy4ta
-	em5HWe3LDeCEh8IGfGKGxVJJzCHw+YCALdp1dTUMfqHglvro9Q2Cg304+WUON9UZXg1r2fvr3Wk
-	RMD2dEnvPf1QpVQzH2ho55uMQ/c45HFZfX+0otg3D4S0806rqh6RktV6JbB517ztJ+MUz7DlN2w
-	NN0fflowYxIsiOPQYFUk0OF2wEEivoL759CaKlq/Mqa0m7xrPyNQqPbJgYhWkVsWPGQBG9ssBQj
-	7ntYzJEc8p4O3SKer0FlwQy7GdcDadXawY39ATzyXQr6tx6VPnJU9F25jiyhXgtiCZ/xhBD24OQ
-	vh07VxuaJ2PV1KK4C4m/emNwYtbrx8dDjccFh07DYK271dtkNA
-X-Received: by 2002:a05:6102:3f0f:b0:5ee:9f7e:b3c7 with SMTP id ada2fe7eead31-5f1a6fde3e8mr4395166137.13.1768902139995;
-        Tue, 20 Jan 2026 01:42:19 -0800 (PST)
-Received: from mail-vs1-f53.google.com (mail-vs1-f53.google.com. [209.85.217.53])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-5f1a68ff962sm4366836137.1.2026.01.20.01.42.19
-        for <linux-i2c@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Jan 2026 01:42:19 -0800 (PST)
-Received: by mail-vs1-f53.google.com with SMTP id ada2fe7eead31-5eb8f9be588so4673639137.3
-        for <linux-i2c@vger.kernel.org>; Tue, 20 Jan 2026 01:42:19 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUUWAma0y0FAucbJ5EXLdgyGUb2pggQrgZm/yWxoLbngh1Bg1ItpZH+rkm1NoriTAaOq1EmFkRDsg4=@vger.kernel.org
-X-Received: by 2002:a05:6102:1610:b0:530:f657:c40 with SMTP id
- ada2fe7eead31-5f1a712440dmr4338759137.22.1768901715766; Tue, 20 Jan 2026
- 01:35:15 -0800 (PST)
+	s=arc-20240116; t=1768901996; c=relaxed/simple;
+	bh=Q2NDBA8DWAw6H9uJLr1PAYQxtVM80rdP/ovdl3g6t+4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EWqgUwvWO34b1agZr1801SCvouUAWkjJZxqV0LLgUgu5gkaeCNE8WGgeks9cLuDc22+1i2/aYdaAP2J8TDtuzJUnSAma50tu1Q6uQ80Ays6S/qftSqJE74tf4nHFL0/k5jCbDi3g2RUDpKKWs1+/II2j7RpZ1DzOXm+iPMDCEWI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XP60UBWF; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1768901995; x=1800437995;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=Q2NDBA8DWAw6H9uJLr1PAYQxtVM80rdP/ovdl3g6t+4=;
+  b=XP60UBWFUSK+ReglHsHkY9DrIdG4ROtQfb3+Fhyw25hGQuejp+lvWP3i
+   KB5sC5LX3KazIP8uWziMygo8GzdMML+P9E4T5HmSl7A9hUfcsSRy0iK+7
+   LmuRAcjkj+UXwOZLO6bWi71ZtgV4u86Vgo3Dpu+u4sGlMK/cHnbdhB4qv
+   dNmF8ckJY6oP41K6dI7HndOaPE71iVylU2EvRcu3fZJxuT8n7h4An4llH
+   bfYKCG60H7uZTlzWPEqcz3KLXIL4Y4DFUF91qbxwpRNkecpnMBB4WZt2V
+   +6ijEvfBaMhnhriW25xpP1QNQtkmHZA+Bg+fqDgXGSDzpGDM0yAv5cKSJ
+   g==;
+X-CSE-ConnectionGUID: T+DIEbp4QCmoFAk4rTTfig==
+X-CSE-MsgGUID: W6ovPkfVS6qksijOV7XtAw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11676"; a="81215233"
+X-IronPort-AV: E=Sophos;i="6.21,240,1763452800"; 
+   d="scan'208";a="81215233"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2026 01:39:54 -0800
+X-CSE-ConnectionGUID: fjxOl55tThOxp64cAJ9PDQ==
+X-CSE-MsgGUID: bSiIKYrbSSWJeXhjfwcJsA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,240,1763452800"; 
+   d="scan'208";a="206123219"
+Received: from dalessan-mobl3.ger.corp.intel.com (HELO localhost) ([10.245.244.179])
+  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2026 01:39:49 -0800
+Date: Tue, 20 Jan 2026 11:39:46 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: =?iso-8859-1?Q?Beno=EEt?= Monin <benoit.monin@bootlin.com>
+Cc: Andi Shyti <andi.shyti@kernel.org>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Jan Dabros <jsd@semihalf.com>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Clark Williams <clrkwllms@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Gregory CLEMENT <gregory.clement@bootlin.com>,
+	=?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>,
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	Dmitry Guzman <dmitry.guzman@mobileye.com>,
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-rt-devel@lists.linux.dev
+Subject: Re: [PATCH v5 3/6] i2c: designware: Add dedicated algorithm for AMD
+ NAVI
+Message-ID: <aW9NYkADDRju1cgJ@smile.fi.intel.com>
+References: <20260120-i2c-dw-v5-0-0e34d6d9455c@bootlin.com>
+ <20260120-i2c-dw-v5-3-0e34d6d9455c@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260118-rz-sdio-mux-v5-0-3c37e8872683@solid-run.com> <20260118-rz-sdio-mux-v5-1-3c37e8872683@solid-run.com>
-In-Reply-To: <20260118-rz-sdio-mux-v5-1-3c37e8872683@solid-run.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 20 Jan 2026 10:35:04 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVf7MjEAaTAy3kgaTcfs240UcnL_yFWfYH_eqVfp-6jvA@mail.gmail.com>
-X-Gm-Features: AZwV_QifN5dzgWIfmsNWfdw085d37JEd6a5y3M-TObPOlkszfcRmE9SintqdNzo
-Message-ID: <CAMuHMdVf7MjEAaTAy3kgaTcfs240UcnL_yFWfYH_eqVfp-6jvA@mail.gmail.com>
-Subject: Re: [PATCH v5 1/7] phy: can-transceiver: rename temporary helper
- function to avoid conflict
-To: Josua Mayer <josua@solid-run.com>
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>, Vincent Mailhol <mailhol@kernel.org>, 
-	Vinod Koul <vkoul@kernel.org>, Neil Armstrong <neil.armstrong@linaro.org>, 
-	Peter Rosin <peda@axentia.se>, Aaro Koskinen <aaro.koskinen@iki.fi>, 
-	Andreas Kemnade <andreas@kemnade.info>, Kevin Hilman <khilman@baylibre.com>, 
-	Roger Quadros <rogerq@kernel.org>, Tony Lindgren <tony@atomide.com>, 
-	Janusz Krzysztofik <jmkrzyszt@gmail.com>, Vignesh R <vigneshr@ti.com>, 
-	Andi Shyti <andi.shyti@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
-	Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	Yazan Shhady <yazan.shhady@solid-run.com>, Jon Nettleton <jon@solid-run.com>, 
-	Mikhail Anikin <mikhail.anikin@solid-run.com>, linux-can@vger.kernel.org, 
-	linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-omap@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-mmc@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260120-i2c-dw-v5-3-0e34d6d9455c@bootlin.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-Hi Josua,
+On Tue, Jan 20, 2026 at 10:28:03AM +0100, Benoît Monin wrote:
+> Apart from runtime PM, there is nothing in common between i2c_dw_xfer()
+> and amd_i2c_dw_xfer_quirk(), so give AMD NAVI controller its own algorithm
+> instead of calling the quirk from i2c_dw_xfer().
+> 
+> Add runtime PM handling to amd_i2c_dw_xfer_quirk() and a dedicated
+> i2c_algorithm for AMD NAVI controllers. The adapter algorithm is set
+> during probe based on the device model.
+> 
+> This way we avoid checking for the device model at the start of every
+> transfer.
 
-On Sun, 18 Jan 2026 at 11:29, Josua Mayer <josua@solid-run.com> wrote:
-> Rename the temporary devm_mux_state_get_optional function to avoid
-> conflict with upcoming implementation in multiplexer subsystem.
->
-> Acked-by: Vinod Koul <vkoul@kernel.org>
-> Signed-off-by: Josua Mayer <josua@solid-run.com>
+...
 
-My
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-on v3 is still valid.
+> +	ACQUIRE(pm_runtime_active_auto_try, pm)(dev->dev);
+> +	if (ACQUIRE_ERR(pm_runtime_active_auto_try, &pm))
+> +		return -ENXIO;
 
-Gr{oetje,eeting}s,
-
-                        Geert
+There are PM_ACQUIRE_*() macros available now.
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+With Best Regards,
+Andy Shevchenko
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+
 
